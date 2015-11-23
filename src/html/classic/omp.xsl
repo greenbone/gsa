@@ -23602,37 +23602,43 @@ should not have received it.
 </xsl:template>
 
 <xsl:template match="group" mode="details">
-  <div class="gb_window">
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">
-      <xsl:value-of select="gsa:i18n('Group Details', 'Group')"/>
-      <xsl:call-template name="details-header-icons">
-        <xsl:with-param name="cap-type" select="'Group'"/>
-        <xsl:with-param name="type" select="'group'"/>
-      </xsl:call-template>
-    </div>
-    <div class="gb_window_part_content">
-      <xsl:call-template name="minor-details"/>
-      <table>
-        <tr>
-          <td><b><xsl:value-of select="gsa:i18n ('Name', 'Property')"/>:</b></td>
-          <td><b><xsl:value-of select="name"/></b></td>
-        </tr>
-        <tr>
-          <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/>:</td>
-          <td><xsl:value-of select="comment"/></td>
-        </tr>
-        <tr>
-          <td><xsl:value-of select="gsa:i18n ('Users', 'User')"/>:</td>
-          <td><xsl:value-of select="users/text()"/></td>
-        </tr>
-      </table>
-    </div>
+  <div class="toolbar">
+    <xsl:call-template name="details-header-icons">
+      <xsl:with-param name="cap-type" select="'Group'"/>
+      <xsl:with-param name="type" select="'group'"/>
+    </xsl:call-template>
   </div>
+
+  <div class="section-header">
+    <xsl:call-template name="minor-details"/>
+    <h1>
+      <a href="/omp?cmd=get_groups&amp;token={/envelope/token}"
+         title="{gsa:i18n ('Groups', 'Group')}">
+        <img id="big-icon" src="/img/group.svg" border="0" style="margin-right:5px" alt="Groups"/>
+      </a>
+      <xsl:value-of select="gsa:i18n ('Group', 'Group')"/>:
+      <xsl:value-of select="name"/>
+      <xsl:text> </xsl:text>
+    </h1>
+  </div>
+
+  <div class="section-box">
+    <table>
+      <tr>
+        <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/>:</td>
+        <td><xsl:value-of select="comment"/></td>
+      </tr>
+      <tr>
+        <td><xsl:value-of select="gsa:i18n ('Users', 'User')"/>:</td>
+        <td><xsl:value-of select="users/text()"/></td>
+      </tr>
+    </table>
+  </div>
+
   <xsl:call-template name="user-tags-window">
     <xsl:with-param name="resource_type" select="'group'"/>
   </xsl:call-template>
+
   <xsl:call-template name="resource-permissions-window">
     <xsl:with-param name="resource_type" select="'group'"/>
     <xsl:with-param name="permissions" select="../../permissions/get_permissions_response"/>
@@ -32423,100 +32429,126 @@ var toggleFilter = function(){
 </xsl:template>
 
 <xsl:template match="role" mode="details">
-  <div class="gb_window">
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">
-      <xsl:value-of select="gsa:i18n ('Role Details', 'Role')"/>
-      <xsl:call-template name="details-header-icons">
-        <xsl:with-param name="cap-type" select="'Role'"/>
-        <xsl:with-param name="type" select="'role'"/>
-      </xsl:call-template>
-    </div>
-    <div class="gb_window_part_content">
-      <xsl:call-template name="minor-details"/>
-      <table>
-        <tr>
-          <td><b><xsl:value-of select="gsa:i18n ('Name', 'Property')"/>:</b></td>
-          <td><b><xsl:value-of select="name"/></b></td>
-        </tr>
-        <tr>
-          <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/>:</td>
-          <td><xsl:value-of select="comment"/></td>
-        </tr>
-        <tr>
-          <td><xsl:value-of select="gsa:i18n ('Users', 'User')"/>:</td>
-          <td><xsl:value-of select="users/text()"/></td>
-        </tr>
-      </table>
+  <div class="toolbar">
+    <xsl:call-template name="details-header-icons">
+      <xsl:with-param name="cap-type" select="'Role'"/>
+      <xsl:with-param name="type" select="'role'"/>
+    </xsl:call-template>
+  </div>
+
+  <div class="section-header">
+    <xsl:call-template name="minor-details"/>
+    <h1>
+      <a href="/omp?cmd=get_roles&amp;token={/envelope/token}"
+         title="{gsa:i18n ('Roles', 'Role')}">
+        <img id="big-icon" src="/img/role.svg" border="0" style="margin-right:5px" alt="Roles"/>
+      </a>
+      <xsl:value-of select="gsa:i18n ('Role', 'Role')"/>:
+      <xsl:value-of select="name"/>
+      <xsl:text> </xsl:text>
+    </h1>
+  </div>
+
+  <div class="section-box">
+    <table>
+      <tr>
+        <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/>:</td>
+        <td><xsl:value-of select="comment"/></td>
+      </tr>
+      <tr>
+        <td><xsl:value-of select="gsa:i18n ('Users', 'User')"/>:</td>
+        <td><xsl:value-of select="users/text()"/></td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="section-header">
+    <a href="#"
+       class="toggle-action-icon" data-target="#perm-box" data-name="Permissions" data-variable="perm-box--collapsed">
+        <img src="/img/fold.png"/>
+    </a>
+    <h3>
       <xsl:choose>
         <xsl:when test="not (gsa:may-op ('get_permissions'))"/>
         <xsl:when test="count(../../get_permissions_response/permission) = 0">
-          <h1><xsl:value-of select="gsa:i18n ('General Command Permissions', 'Permission')"/>: <xsl:value-of select="gsa:i18n ('None', 'Permissions')"/></h1>
+          <xsl:value-of select="gsa:i18n ('General Command Permissions', 'Permission')"/>: <xsl:value-of select="gsa:i18n ('None', 'Permissions')"/>
         </xsl:when>
         <xsl:when test="boolean (../../get_permissions_response/permission[name='Everything'])">
-          <h1><xsl:value-of select="gsa:i18n ('General Command Permissions', 'Permission')"/> (<xsl:value-of select="gsa:i18n ('Role has Everything', 'Role')"/>)</h1>
-          <table class="gbntable" cellspacing="2" cellpadding="4">
-            <xsl:variable name="id" select="../../get_permissions_response/permission[name='Everything']/@id"/>
-            <tr class="gbntablehead2">
-              <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
-              <td><xsl:value-of select="gsa:i18n ('Description', 'Property')"/></td>
-            </tr>
-            <xsl:if test="boolean (../../get_permissions_response/permission[name = 'Super' and resource = 0])">
-              <tr class="{gsa:table-row-class (1)}">
-                <td>
-                  <a href="/omp?cmd=get_permission&amp;permission_id={$id}&amp;token={/envelope/token}" title="{gsa:i18n ('Details', 'Generic Resource')}">
-                    <xsl:text>Super</xsl:text>
-                  </a>
-                </td>
-                <td>
-                  <xsl:value-of select="gsa:capitalise (gsa:permission-description ('Super', false ()))"/>
-                </td>
-              </tr>
-            </xsl:if>
-            <xsl:variable name="offset"
-                          select="count (../../get_permissions_response/permission[name = 'Super' and resource = 0])"/>
-            <xsl:for-each select="/envelope/capabilities/help_response/schema/command[name != 'HELP' and name != 'GET_VERSION']">
-              <tr class="{gsa:table-row-class (position () + $offset)}">
-                <td>
-                  <a href="/omp?cmd=get_permission&amp;permission_id={$id}&amp;token={/envelope/token}" title="{gsa:i18n ('Details', 'Generic Resource')}">
-                    <xsl:value-of select="gsa:lower-case (name)"/>
-                  </a>
-                </td>
-                <td>
-                  <xsl:value-of select="gsa:capitalise (gsa:permission-description (gsa:lower-case (name), false ()))"/>
-                </td>
-              </tr>
-            </xsl:for-each>
-          </table>
+          <xsl:value-of select="gsa:i18n ('General Command Permissions', 'Permission')"/> (<xsl:value-of select="gsa:i18n ('Role has Everything', 'Role')"/>)
         </xsl:when>
         <xsl:otherwise>
-          <h1><xsl:value-of select="gsa:i18n ('General Command Permissions', 'Permission')"/></h1>
-          <table class="gbntable" cellspacing="2" cellpadding="4">
-            <tr class="gbntablehead2">
-              <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
-              <td><xsl:value-of select="gsa:i18n ('Description', 'Property')"/></td>
-            </tr>
-            <xsl:for-each select="../../get_permissions_response/permission">
-              <tr class="{gsa:table-row-class(position())}">
-                <td>
-                  <a href="/omp?cmd=get_permission&amp;permission_id={@id}&amp;token={/envelope/token}" title="{gsa:i18n ('Details', 'Generic Resource')}">
-                    <xsl:value-of select="gsa:lower-case (name)"/>
-                  </a>
-                </td>
-                <td>
-                  <xsl:value-of select="gsa:capitalise (gsa:permission-description (name, resource))"/>
-                </td>
-              </tr>
-            </xsl:for-each>
-          </table>
+          <xsl:value-of select="gsa:i18n ('General Command Permissions', 'Permission')"/>
         </xsl:otherwise>
       </xsl:choose>
-    </div>
+    </h3>
   </div>
+
+  <div class="section-box" id="perm-box">
+    <xsl:choose>
+      <xsl:when test="not (gsa:may-op ('get_permissions'))"/>
+      <xsl:when test="count(../../get_permissions_response/permission) = 0"/>
+      <xsl:when test="boolean (../../get_permissions_response/permission[name='Everything'])">
+        <table class="gbntable" cellspacing="2" cellpadding="4">
+          <xsl:variable name="id" select="../../get_permissions_response/permission[name='Everything']/@id"/>
+          <tr class="gbntablehead2">
+            <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Description', 'Property')"/></td>
+          </tr>
+          <xsl:if test="boolean (../../get_permissions_response/permission[name = 'Super' and resource = 0])">
+            <tr class="{gsa:table-row-class (1)}">
+              <td>
+                <a href="/omp?cmd=get_permission&amp;permission_id={$id}&amp;token={/envelope/token}" title="{gsa:i18n ('Details', 'Generic Resource')}">
+                  <xsl:text>Super</xsl:text>
+                </a>
+              </td>
+              <td>
+                <xsl:value-of select="gsa:capitalise (gsa:permission-description ('Super', false ()))"/>
+              </td>
+            </tr>
+          </xsl:if>
+          <xsl:variable name="offset"
+                        select="count (../../get_permissions_response/permission[name = 'Super' and resource = 0])"/>
+          <xsl:for-each select="/envelope/capabilities/help_response/schema/command[name != 'HELP' and name != 'GET_VERSION']">
+            <tr class="{gsa:table-row-class (position () + $offset)}">
+              <td>
+                <a href="/omp?cmd=get_permission&amp;permission_id={$id}&amp;token={/envelope/token}" title="{gsa:i18n ('Details', 'Generic Resource')}">
+                  <xsl:value-of select="gsa:lower-case (name)"/>
+                </a>
+              </td>
+              <td>
+                <xsl:value-of select="gsa:capitalise (gsa:permission-description (gsa:lower-case (name), false ()))"/>
+              </td>
+            </tr>
+          </xsl:for-each>
+        </table>
+      </xsl:when>
+      <xsl:otherwise>
+        <table class="gbntable" cellspacing="2" cellpadding="4">
+          <tr class="gbntablehead2">
+            <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Description', 'Property')"/></td>
+          </tr>
+          <xsl:for-each select="../../get_permissions_response/permission">
+            <tr class="{gsa:table-row-class(position())}">
+              <td>
+                <a href="/omp?cmd=get_permission&amp;permission_id={@id}&amp;token={/envelope/token}" title="{gsa:i18n ('Details', 'Generic Resource')}">
+                  <xsl:value-of select="gsa:lower-case (name)"/>
+                </a>
+              </td>
+              <td>
+                <xsl:value-of select="gsa:capitalise (gsa:permission-description (name, resource))"/>
+              </td>
+            </tr>
+          </xsl:for-each>
+        </table>
+      </xsl:otherwise>
+    </xsl:choose>
+  </div>
+
   <xsl:call-template name="user-tags-window">
     <xsl:with-param name="resource_type" select="'role'"/>
   </xsl:call-template>
+
   <xsl:call-template name="resource-permissions-window">
     <xsl:with-param name="resource_type" select="'role'"/>
     <xsl:with-param name="permissions" select="../../permissions/get_permissions_response"/>
@@ -33683,148 +33715,154 @@ var toggleFilter = function(){
 </xsl:template>
 
 <xsl:template match="user" mode="details">
-  <div class="gb_window">
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">
-       <xsl:value-of select="gsa:i18n ('User Details', 'User')"/>
-       <xsl:call-template name="details-header-icons">
-         <xsl:with-param name="cap-type" select="'User'"/>
-         <xsl:with-param name="type" select="'user'"/>
-         <xsl:with-param name="grey-clone" select="boolean (role[@id = '9c5a6ec6-6fe2-11e4-8cb6-406186ea4fc5'])"/>
-       </xsl:call-template>
-    </div>
-    <div class="gb_window_part_content">
-      <xsl:call-template name="minor-details"/>
-      <table>
-        <tr>
-          <td><b><xsl:value-of select="gsa:i18n ('Login Name', 'Auth Data')"/>:</b></td>
-          <td><b><xsl:value-of select="name"/></b></td>
-        </tr>
-        <tr>
-          <td><xsl:value-of select="gsa:i18n ('Roles', 'Role')"/>:</td>
-          <td>
-            <xsl:for-each select="role">
-              <xsl:choose>
-                <xsl:when test="boolean (permissions) and count (permissions/permission) = 0">
-                  <xsl:value-of select="name"/> (<xsl:value-of select="gsa:i18n('Unavailable', 'Property')"/>, <xsl:value-of select="gsa:i18n('UUID', 'Property')"/>: <xsl:value-of select="@id"/>)
-                </xsl:when>
-                <xsl:otherwise>
-                  <a href="/omp?cmd=get_role&amp;role_id={@id}&amp;token={/envelope/token}">
-                    <xsl:value-of select="name"/>
-                  </a>
-                </xsl:otherwise>
-              </xsl:choose>
-              <xsl:if test="position() != last()">, </xsl:if>
-            </xsl:for-each>
-          </td>
-        </tr>
-        <tr>
-          <td><xsl:value-of select="gsa:i18n ('Groups', 'Group')"/>:</td>
-          <td>
-            <xsl:for-each select="groups/group">
-              <xsl:choose>
-                <xsl:when test="boolean (permissions) and count (permissions/permission) = 0">
-                  <xsl:value-of select="name"/> (<xsl:value-of select="gsa:i18n('Unavailable', 'Property')"/>, <xsl:value-of select="gsa:i18n('UUID', 'Property')"/>: <xsl:value-of select="@id"/>)
-                </xsl:when>
-                <xsl:otherwise>
-                  <a href="/omp?cmd=get_group&amp;group_id={@id}&amp;token={/envelope/token}">
-                    <xsl:value-of select="name"/>
-                  </a>
-                </xsl:otherwise>
-              </xsl:choose>
-              <xsl:if test="position() != last()">, </xsl:if>
-            </xsl:for-each>
-          </td>
-        </tr>
-        <tr>
-          <td><xsl:value-of select="gsa:i18n ('Host Access', 'User')"/>:</td>
-          <td>
+  <div class="toolbar">
+    <xsl:call-template name="details-header-icons">
+      <xsl:with-param name="cap-type" select="'User'"/>
+      <xsl:with-param name="type" select="'user'"/>
+      <xsl:with-param name="grey-clone" select="boolean (role[@id = '9c5a6ec6-6fe2-11e4-8cb6-406186ea4fc5'])"/>
+    </xsl:call-template>
+  </div>
+
+  <div class="section-header">
+    <xsl:call-template name="minor-details"/>
+    <h1>
+      <a href="/omp?cmd=get_users&amp;token={/envelope/token}"
+         title="{gsa:i18n ('Users', 'User')}">
+        <img id="big-icon" src="/img/user.svg" border="0" style="margin-right:5px" alt="Users"/>
+      </a>
+      <xsl:value-of select="gsa:i18n ('User', 'User')"/>:
+      <xsl:value-of select="name"/>
+      <xsl:text> </xsl:text>
+    </h1>
+  </div>
+
+  <div class="section-box">
+    <table>
+      <tr>
+        <td><xsl:value-of select="gsa:i18n ('Roles', 'Role')"/>:</td>
+        <td>
+          <xsl:for-each select="role">
             <xsl:choose>
-              <xsl:when test="hosts/@allow = 0">
-                <xsl:value-of select="gsa:i18n ('Allow all and deny', 'User')"/>:
-                <xsl:value-of select="hosts/text()"/>
-              </xsl:when>
-              <xsl:when test="hosts/@allow = 1">
-                <xsl:value-of select="gsa:i18n ('Deny all and allow', 'User')"/>:
-                <xsl:value-of select="hosts/text()"/>
-              </xsl:when>
-            </xsl:choose>
-          </td>
-        </tr>
-        <tr>
-          <td><xsl:value-of select="gsa:i18n ('Interface Access', 'User')"/>:</td>
-          <td>
-            <xsl:choose>
-              <xsl:when test="ifaces/@allow = 0">
-                <xsl:value-of select="gsa:i18n ('Allow all and deny', 'User')"/>:
-                <xsl:value-of select="ifaces/text()"/>
-              </xsl:when>
-              <xsl:when test="ifaces/@allow = 1">
-                <xsl:value-of select="gsa:i18n ('Deny all and allow', 'User')"/>:
-                <xsl:value-of select="ifaces/text()"/>
-              </xsl:when>
-            </xsl:choose>
-          </td>
-        </tr>
-        <tr>
-          <td><xsl:value-of select="gsa:i18n ('Authentication Type', 'User')"/>:</td>
-          <td>
-            <xsl:choose>
-              <xsl:when test="sources/source/text() = 'ldap_connect'">
-                <xsl:value-of select="gsa:i18n ('LDAP', 'User')"/>
-              </xsl:when>
-              <xsl:when test="sources/source/text() = 'radius_connect'">
-                <xsl:value-of select="gsa:i18n ('RADIUS', 'User')"/>
+              <xsl:when test="boolean (permissions) and count (permissions/permission) = 0">
+                <xsl:value-of select="name"/> (<xsl:value-of select="gsa:i18n('Unavailable', 'Property')"/>, <xsl:value-of select="gsa:i18n('UUID', 'Property')"/>: <xsl:value-of select="@id"/>)
               </xsl:when>
               <xsl:otherwise>
-                <xsl:value-of select="gsa:i18n ('Local', 'User')"/>
+                <a href="/omp?cmd=get_role&amp;role_id={@id}&amp;token={/envelope/token}">
+                  <xsl:value-of select="name"/>
+                </a>
               </xsl:otherwise>
             </xsl:choose>
-          </td>
-        </tr>
-      </table>
+            <xsl:if test="position() != last()">, </xsl:if>
+          </xsl:for-each>
+        </td>
+      </tr>
+      <tr>
+        <td><xsl:value-of select="gsa:i18n ('Groups', 'Group')"/>:</td>
+        <td>
+          <xsl:for-each select="groups/group">
+            <xsl:choose>
+              <xsl:when test="boolean (permissions) and count (permissions/permission) = 0">
+                <xsl:value-of select="name"/> (<xsl:value-of select="gsa:i18n('Unavailable', 'Property')"/>, <xsl:value-of select="gsa:i18n('UUID', 'Property')"/>: <xsl:value-of select="@id"/>)
+              </xsl:when>
+              <xsl:otherwise>
+                <a href="/omp?cmd=get_group&amp;group_id={@id}&amp;token={/envelope/token}">
+                  <xsl:value-of select="name"/>
+                </a>
+              </xsl:otherwise>
+            </xsl:choose>
+            <xsl:if test="position() != last()">, </xsl:if>
+          </xsl:for-each>
+        </td>
+      </tr>
+      <tr>
+        <td><xsl:value-of select="gsa:i18n ('Host Access', 'User')"/>:</td>
+        <td>
+          <xsl:choose>
+            <xsl:when test="hosts/@allow = 0">
+              <xsl:value-of select="gsa:i18n ('Allow all and deny', 'User')"/>:
+              <xsl:value-of select="hosts/text()"/>
+            </xsl:when>
+            <xsl:when test="hosts/@allow = 1">
+              <xsl:value-of select="gsa:i18n ('Deny all and allow', 'User')"/>:
+              <xsl:value-of select="hosts/text()"/>
+            </xsl:when>
+          </xsl:choose>
+        </td>
+      </tr>
+      <tr>
+        <td><xsl:value-of select="gsa:i18n ('Interface Access', 'User')"/>:</td>
+        <td>
+          <xsl:choose>
+            <xsl:when test="ifaces/@allow = 0">
+              <xsl:value-of select="gsa:i18n ('Allow all and deny', 'User')"/>:
+              <xsl:value-of select="ifaces/text()"/>
+            </xsl:when>
+            <xsl:when test="ifaces/@allow = 1">
+              <xsl:value-of select="gsa:i18n ('Deny all and allow', 'User')"/>:
+              <xsl:value-of select="ifaces/text()"/>
+            </xsl:when>
+          </xsl:choose>
+        </td>
+      </tr>
+      <tr>
+        <td><xsl:value-of select="gsa:i18n ('Authentication Type', 'User')"/>:</td>
+        <td>
+          <xsl:choose>
+            <xsl:when test="sources/source/text() = 'ldap_connect'">
+              <xsl:value-of select="gsa:i18n ('LDAP', 'User')"/>
+            </xsl:when>
+            <xsl:when test="sources/source/text() = 'radius_connect'">
+              <xsl:value-of select="gsa:i18n ('RADIUS', 'User')"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="gsa:i18n ('Local', 'User')"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </td>
+      </tr>
+    </table>
 
 <!--
-      <xsl:choose>
-        <xsl:when test="count(tasks/task) = 0">
-          <h1>Tasks managed by this User: None</h1>
-        </xsl:when>
-        <xsl:otherwise>
-          <h1>Tasks managed by this User</h1>
-          <table class="gbntable" cellspacing="2" cellpadding="4">
-            <tr class="gbntablehead2">
-              <td>Name</td>
-              <td>Actions</td>
+    <xsl:choose>
+      <xsl:when test="count(tasks/task) = 0">
+        <h1>Tasks managed by this User: None</h1>
+      </xsl:when>
+      <xsl:otherwise>
+        <h1>Tasks managed by this User</h1>
+        <table class="gbntable" cellspacing="2" cellpadding="4">
+          <tr class="gbntablehead2">
+            <td>Name</td>
+            <td>Actions</td>
+          </tr>
+          <xsl:for-each select="tasks/task">
+            <xsl:variable name="class">
+              <xsl:choose>
+                <xsl:when test="position() mod 2 = 0">even</xsl:when>
+                <xsl:otherwise>odd</xsl:otherwise>
+              </xsl:choose>
+            </xsl:variable>
+            <tr class="{$class}">
+              <td><xsl:value-of select="name"/></td>
+              <td width="100">
+                <a href="/omp?cmd=get_tasks&amp;task_id={@id}&amp;token={/envelope/token}" title="Reports">
+                  <img src="/img/list.png"
+                       border="0"
+                       alt="Reports"
+                       style="margin-left:3px;"/>
+                </a>
+              </td>
             </tr>
-            <xsl:for-each select="tasks/task">
-              <xsl:variable name="class">
-                <xsl:choose>
-                  <xsl:when test="position() mod 2 = 0">even</xsl:when>
-                  <xsl:otherwise>odd</xsl:otherwise>
-                </xsl:choose>
-              </xsl:variable>
-              <tr class="{$class}">
-                <td><xsl:value-of select="name"/></td>
-                <td width="100">
-                  <a href="/omp?cmd=get_tasks&amp;task_id={@id}&amp;token={/envelope/token}" title="Reports">
-                    <img src="/img/list.png"
-                         border="0"
-                         alt="Reports"
-                         style="margin-left:3px;"/>
-                  </a>
-                </td>
-              </tr>
-            </xsl:for-each>
-          </table>
-        </xsl:otherwise>
-      </xsl:choose>
+          </xsl:for-each>
+        </table>
+      </xsl:otherwise>
+    </xsl:choose>
 -->
-    </div>
   </div>
+
   <xsl:call-template name="user-tags-window">
     <xsl:with-param name="resource_type" select="'user'"/>
   </xsl:call-template>
+
   <xsl:call-template name="resource-permissions-window">
     <xsl:with-param name="resource_type" select="'user'"/>
     <xsl:with-param name="permissions" select="../../permissions/get_permissions_response"/>
