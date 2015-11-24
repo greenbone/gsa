@@ -1112,6 +1112,7 @@ init_validator ()
   openvas_validator_add (validator, "alive_tests", "^(Scan Config Default|ICMP Ping|TCP-ACK Service Ping|TCP-SYN Service Ping|ARP Ping|ICMP & TCP-ACK Service Ping|ICMP & ARP Ping|TCP-ACK Service & ARP Ping|ICMP, TCP-ACK Service & ARP Ping|Consider Alive)$");
   openvas_validator_add (validator, "apply_filter", "^(no|no_pagination|full)$");
   /* Defined in RFC 2253. */
+  openvas_validator_add (validator, "auth_method",  "^(0|1|2)$");
   openvas_validator_add (validator, "authdn",       "^.{0,200}%s.{0,200}$");
   openvas_validator_add (validator, "autofp",       "^(0|1|2)$");
   openvas_validator_add (validator, "autofp_value", "^(1|2)$");
@@ -1164,7 +1165,7 @@ init_validator ()
   openvas_validator_add (validator, "filter",       "^(.*){0,1000}$");
   openvas_validator_add (validator, "format_id", "^[a-z0-9\\-]+$");
   /* Validator for  save_auth group, e.g. "method:ldap_connect". */
-  openvas_validator_add (validator, "group",        "^method:(ldap_connect)$");
+  openvas_validator_add (validator, "group",        "^method:(ldap_connect|radius_connect)$");
   openvas_validator_add (validator, "group_column", "^[_[:alnum:]]{1,80}$");
   openvas_validator_add (validator, "max",          "^(-?[0-9]+|)$");
   openvas_validator_add (validator, "max_results",  "^[0-9]+$");
@@ -1229,6 +1230,7 @@ init_validator ()
   openvas_validator_add (validator, "ca_pub",   "(?s)^.*$");
   openvas_validator_add (validator, "key_pub",   "(?s)^.*$");
   openvas_validator_add (validator, "key_priv",   "(?s)^.*$");
+  openvas_validator_add (validator, "radiuskey",   "^.{0,40}$");
   openvas_validator_add (validator, "related:name",  "^(.*){0,400}$");
   openvas_validator_add (validator, "related:value", "^(.*){0,400}$");
   openvas_validator_add (validator, "report_id",  "^[a-z0-9\\-]+$");
@@ -1327,7 +1329,6 @@ init_validator ()
   openvas_validator_alias (validator, "duration_unit", "calendar_unit");
   openvas_validator_alias (validator, "dynamic_severity", "boolean");
   openvas_validator_alias (validator, "enable",       "boolean");
-  openvas_validator_alias (validator, "enable_ldap_connect",     "boolean");
   openvas_validator_alias (validator, "enable_stop",             "boolean");
   openvas_validator_alias (validator, "esc_apply_min_cvss_base", "boolean");
   openvas_validator_alias (validator, "esc_apply_min_qod", "boolean");
@@ -1407,6 +1408,7 @@ init_validator ()
   openvas_validator_alias (validator, "port_range_end",    "number");
   openvas_validator_alias (validator, "port_range_start",  "number");
   openvas_validator_alias (validator, "pos",               "number");
+  openvas_validator_alias (validator, "radiushost",     "hostport");
   openvas_validator_alias (validator, "restrict_type", "resource_type");
   openvas_validator_alias (validator, "result_hosts_only", "boolean");
   openvas_validator_alias (validator, "result_task_id", "optional_task_id");

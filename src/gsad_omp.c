@@ -21501,7 +21501,7 @@ char *
 create_user_omp (credentials_t * credentials, params_t *params)
 {
   const char *name, *password, *hosts, *hosts_allow, *ifaces, *ifaces_allow;
-  const char *enable_ldap_connect, *submit;
+  const char *auth_method, *submit;
   int ret;
   params_t *groups, *roles;
   GString *group_elements, *role_elements, *string;
@@ -21514,7 +21514,7 @@ create_user_omp (credentials_t * credentials, params_t *params)
   hosts_allow = params_value (params, "hosts_allow");
   ifaces = params_value (params, "access_ifaces");
   ifaces_allow = params_value (params, "ifaces_allow");
-  enable_ldap_connect = params_value (params, "enable_ldap_connect");
+  auth_method = params_value (params, "auth_method");
 
   submit = params_value (params, "submit_plus_group");
   if (submit && (strcmp (submit, "+") == 0))
@@ -21622,11 +21622,12 @@ create_user_omp (credentials_t * credentials, params_t *params)
                                  hosts_allow, hosts, ifaces_allow, ifaces);
   g_string_append (string, buf);
   g_free (buf);
-  if ((enable_ldap_connect) && (strcmp (enable_ldap_connect, "1") == 0))
-    {
-      g_string_append (string,
-        "<sources><source>ldap_connect</source></sources>");
-    }
+  if (auth_method && !strcmp (auth_method, "1"))
+    g_string_append
+     (string, "<sources><source>ldap_connect</source></sources>");
+  else if (auth_method && !strcmp (auth_method, "2"))
+    g_string_append
+     (string, "<sources><source>radius_connect</source></sources>");
   g_string_append (string, "</create_user>");
 
   buf = g_string_free (string, FALSE);
@@ -21888,7 +21889,7 @@ save_user_omp (credentials_t * credentials, params_t *params,
   int ret;
   gchar *html, *response, *buf;
   const char *user_id, *login, *modify_password, *password, *submit;
-  const char *hosts, *hosts_allow, *enable_ldap_connect, *ifaces, *ifaces_allow;
+  const char *hosts, *hosts_allow, *ifaces, *ifaces_allow;
   entity_t entity;
   GString *command, *group_elements, *role_elements;
   params_t *groups, *roles;
@@ -21907,6 +21908,13 @@ save_user_omp (credentials_t * credentials, params_t *params,
   password = params_value (params, "password");
   user_id = params_value (params, "user_id");
 
+  CHECK_PARAM (user_id, "Edit User", edit_user);
+  CHECK_PARAM (modify_password, "Edit User", edit_user);
+  CHECK_PARAM (password, "Edit User", edit_user);
+  CHECK_PARAM (hosts, "Edit User", edit_user);
+  CHECK_PARAM (hosts_allow, "Edit User", edit_user);
+  CHECK_PARAM (ifaces, "Save User", edit_user);
+  CHECK_PARAM (ifaces_allow, "Save User", edit_user);
   submit = params_value (params, "submit_plus_group");
   if (submit && (strcmp (submit, "+") == 0))
     {
@@ -21921,14 +21929,6 @@ save_user_omp (credentials_t * credentials, params_t *params,
         }
       else
         params_add (params, "groups", "2");
-
-      CHECK_PARAM (user_id, "Edit User", edit_user);
-      CHECK_PARAM (modify_password, "Edit User", edit_user);
-      CHECK_PARAM (password, "Edit User", edit_user);
-      CHECK_PARAM (hosts, "Edit User", edit_user);
-      CHECK_PARAM (hosts, "Edit User", edit_user);
-      CHECK_PARAM (hosts_allow, "Edit User", edit_user);
-
       return edit_user_omp (credentials, params);
     }
 
@@ -21946,26 +21946,11 @@ save_user_omp (credentials_t * credentials, params_t *params,
         }
       else
         params_add (params, "roles", "2");
-
-      CHECK_PARAM (user_id, "Edit User", edit_user);
-      CHECK_PARAM (modify_password, "Edit User", edit_user);
-      CHECK_PARAM (password, "Edit User", edit_user);
-      CHECK_PARAM (hosts, "Edit User", edit_user);
-      CHECK_PARAM (hosts, "Edit User", edit_user);
-      CHECK_PARAM (hosts_allow, "Edit User", edit_user);
-
       return edit_user_omp (credentials, params);
     }
 
-  CHECK_PARAM (user_id, "Save User", edit_user);
   if (params_given (params, "login"))
     CHECK_PARAM (login, "Save User", edit_user);
-  CHECK_PARAM (modify_password, "Save User", edit_user);
-  CHECK_PARAM (password, "Save User", edit_user);
-  CHECK_PARAM (hosts, "Save User", edit_user);
-  CHECK_PARAM (hosts_allow, "Save User", edit_user);
-  CHECK_PARAM (ifaces, "Save User", edit_user);
-  CHECK_PARAM (ifaces_allow, "Save User", edit_user);
 
   /* Modify the user. */
 
@@ -21993,17 +21978,12 @@ save_user_omp (credentials_t * credentials, params_t *params,
   g_string_append (command, buf);
   g_free (buf);
 
-  enable_ldap_connect = params_value (params, "enable_ldap_connect");
-  if ((enable_ldap_connect && strcmp (enable_ldap_connect, "1") == 0)
-      || (modify_password && strcmp (modify_password, "2") == 0)
-      || (modify_password && strcmp (modify_password, "3") == 0))
-    {
-      g_string_append (command, "<sources><source>ldap_connect</source></sources>");
-    }
+  if (modify_password && !strcmp (modify_password, "2"))
+    g_string_append (command, "<sources><source>ldap_connect</source></sources>");
+  else if (modify_password && !strcmp (modify_password, "3"))
+    g_string_append (command, "<sources><source>radius_connect</source></sources>");
   else
-    {
-      g_string_append (command, "<sources><source>file</source></sources>");
-    }
+    g_string_append (command, "<sources><source>file</source></sources>");
 
   group_elements = g_string_new ("<groups>");
   groups = params_values (params, "group_id_optional:");
@@ -22055,6 +22035,7 @@ save_user_omp (credentials_t * credentials, params_t *params,
     {
       case 0:
         if (strcmp (modify_password, "0")
+            && strcmp (modify_password, "2")
             && strcmp (modify_password, "3")
             && params_given (params, "current_user"))
           {
@@ -22095,7 +22076,8 @@ save_user_omp (credentials_t * credentials, params_t *params,
 
   if (omp_success (entity))
     {
-      if (strcmp (modify_password, "2") == 0
+      if ((!strcmp (modify_password, "2")
+           || !strcmp (modify_password, "3"))
           && params_given (params, "current_user"))
         html = logout (credentials,
                        "Authentication method changed."
@@ -22327,10 +22309,9 @@ char*
 save_auth_omp (credentials_t* credentials, params_t *params)
 {
   int ret;
-  entity_t entity;
-  char *truefalse;
-  gchar *html, *response;
-  const char *ldaphost, *method, *authdn;
+  entity_t entity = NULL;
+  char *html, *response = NULL, *truefalse;
+  const char *method;
 
   if (params_value (params, "enable")
       && (strcmp (params_value (params, "enable"), "1") == 0))
@@ -22338,35 +22319,49 @@ save_auth_omp (credentials_t* credentials, params_t *params)
   else
     truefalse = "false";
 
-  ldaphost = params_value (params, "ldaphost");
   method = params_value (params, "group");
-  authdn = params_value (params, "authdn");
+  CHECK_PARAM (method, "Save Authentication", get_users);
+  if (!strcmp (method, "method:ldap_connect"))
+    {
+      const char *ldaphost, *authdn;
+      ldaphost = params_value (params, "ldaphost");
+      authdn = params_value (params, "authdn");
 
-  if (ldaphost == NULL || method == NULL
-      || (strcmp (method, "method:ldap_connect") == 0 && authdn == NULL))
+      CHECK_PARAM (ldaphost, "Save Authentication", get_users);
+      CHECK_PARAM (authdn, "Save Authentication", get_users);
+      /** @warning authdn shall contain a single %s, handle with care. */
+      ret = ompf (credentials, &response, &entity,
+                  "<modify_auth>"
+                  "<group name=\"%s\">"
+                  "<auth_conf_setting key=\"enable\" value=\"%s\"/>"
+                  "<auth_conf_setting key=\"ldaphost\" value=\"%s\"/>"
+                  "<auth_conf_setting key=\"authdn\" value=\"%s\"/>"
+                  "</group>"
+                  "</modify_auth>", method, truefalse, ldaphost, authdn);
+    }
+  else if (!strcmp (method, "method:radius_connect"))
+    {
+      const char *radiushost, *radiuskey;
+      radiushost = params_value (params, "radiushost");
+      radiuskey = params_value (params, "radiuskey");
+
+      CHECK_PARAM (radiushost, "Save Authentication", get_users);
+      CHECK_PARAM (radiuskey, "Save Authentication", get_users);
+      /** @warning authdn shall contain a single %s, handle with care. */
+      ret = ompf (credentials, &response, &entity,
+                  "<modify_auth>"
+                  "<group name=\"%s\">"
+                  "<auth_conf_setting key=\"enable\" value=\"%s\"/>"
+                  "<auth_conf_setting key=\"radiushost\" value=\"%s\"/>"
+                  "<auth_conf_setting key=\"radiuskey\" value=\"%s\"/>"
+                  "</group>"
+                  "</modify_auth>", method, truefalse, radiushost, radiuskey);
+    }
+  else
     return get_users (credentials, params,
                       GSAD_MESSAGE_INVALID_PARAM
                        ("Save Authentication Configuration"));
 
-  /* Input is valid. Save settings. */
-
-  /** @warning authdn shall contain a single %s, handle with care. */
-  response = NULL;
-  entity = NULL;
-  ret = ompf (credentials,
-              &response,
-              &entity,
-              "<modify_auth>"
-              "<group name=\"%s\">"
-              "<auth_conf_setting key=\"enable\" value=\"%s\"/>"
-              "<auth_conf_setting key=\"ldaphost\" value=\"%s\"/>"
-              "<auth_conf_setting key=\"authdn\" value=\"%s\"/>"
-              "</group>"
-              "</modify_auth>",
-              method,
-              truefalse,
-              ldaphost,
-              authdn);
   switch (ret)
     {
       case 0:

@@ -32064,31 +32064,29 @@ should not have received it.
             </td>
           </tr>
           <tr class="even">
-            <xsl:choose>
-              <xsl:when test="//group[@name='method:ldap_connect']/auth_conf_setting[@key='enable']/@value = 'true'">
-                <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Authentication', 'Auth Data')"/></td>
-                <td>
-                  <label>
-                    <input type="radio" name="enable_ldap_connect" value="0"/>
-                    <xsl:value-of select="gsa:i18n ('Password', 'Auth Data')"/>
-                  </label>
-                  <input type="password" name="password" value="" size="30"
-                         maxlength="40"/>
-                  <br/>
-                  <label>
-                    <input type="radio" name="enable_ldap_connect" value="1" checked="1"/>
-                    <xsl:value-of select="gsa:i18n ('Allow LDAP Authentication Only', 'User')"/>
-                  </label>
-                </td>
-              </xsl:when>
-              <xsl:otherwise>
-                <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Password', 'Auth Data')"/></td>
-                <td>
-                  <input type="password" name="password" value="" size="30"
-                         maxlength="40"/>
-                </td>
-              </xsl:otherwise>
-            </xsl:choose>
+            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Authentication', 'Auth Data')"/></td>
+            <td>
+              <label>
+                <input type="radio" name="auth_method" value="0" checked="1"/>
+                <xsl:value-of select="gsa:i18n ('Password', 'Auth Data')"/>
+              </label>
+              <input type="password" name="password" value="" size="30"
+                     maxlength="40"/>
+              <xsl:if test="//group[@name='method:ldap_connect']/auth_conf_setting[@key='enable']/@value = 'true'">
+                <br/>
+                <label>
+                  <input type="radio" name="auth_method" value="1"/>
+                  <xsl:value-of select="gsa:i18n ('Allow LDAP Authentication Only', 'User')"/>
+                </label>
+              </xsl:if>
+              <xsl:if test="//group[@name='method:radius_connect']/auth_conf_setting[@key='enable']/@value = 'true'">
+                <br/>
+                <label>
+                  <input type="radio" name="auth_method" value="2"/>
+                  <xsl:value-of select="gsa:i18n ('Allow RADIUS Authentication Only', 'User')"/>
+                </label>
+              </xsl:if>
+            </td>
           </tr>
           <xsl:if test="gsa:may-op ('get_roles')">
             <tr class="odd">
@@ -32268,48 +32266,26 @@ should not have received it.
     <xsl:with-param name="filtered-count" select="user_count/filtered"/>
     <xsl:with-param name="full-count" select="user_count/text ()"/>
     <xsl:with-param name="columns">
-      <xsl:choose>
-        <xsl:when test="//group[@name='method:ldap_connect']/auth_conf_setting[@key='enable']/@value = 'true'">
-          <column>
-            <name><xsl:value-of select="gsa:i18n('Name', 'Property')"/></name>
-            <field>name</field>
-          </column>
-          <column>
-            <name><xsl:value-of select="gsa:i18n('Roles', 'Role')"/></name>
-            <field>roles</field>
-          </column>
-          <column>
-            <name><xsl:value-of select="gsa:i18n('Groups', 'Group')"/></name>
-            <field>groups</field>
-          </column>
-          <column>
-            <name><xsl:value-of select="gsa:i18n('Host Access', 'User')"/></name>
-            <field>host_access</field>
-          </column>
-          <column>
-            <name><xsl:value-of select="gsa:i18n('LDAP Authentication', 'User')"/></name>
-            <field>ldap</field>
-          </column>
-        </xsl:when>
-        <xsl:otherwise>
-          <column>
-            <name><xsl:value-of select="gsa:i18n('Name', 'Property')"/></name>
-            <field>name</field>
-          </column>
-          <column>
-            <name><xsl:value-of select="gsa:i18n('Roles', 'Role')"/></name>
-            <field>roles</field>
-          </column>
-          <column>
-            <name><xsl:value-of select="gsa:i18n('Groups', 'Group')"/></name>
-            <field>groups</field>
-          </column>
-          <column>
-            <name><xsl:value-of select="gsa:i18n('Host Access', 'User')"/></name>
-            <field>host_access</field>
-          </column>
-        </xsl:otherwise>
-      </xsl:choose>
+      <column>
+        <name><xsl:value-of select="gsa:i18n('Name', 'Property')"/></name>
+        <field>name</field>
+      </column>
+      <column>
+        <name><xsl:value-of select="gsa:i18n('Roles', 'Role')"/></name>
+        <field>roles</field>
+      </column>
+      <column>
+        <name><xsl:value-of select="gsa:i18n('Groups', 'Group')"/></name>
+        <field>groups</field>
+      </column>
+      <column>
+        <name><xsl:value-of select="gsa:i18n('Host Access', 'User')"/></name>
+        <field>host_access</field>
+      </column>
+      <column>
+        <name><xsl:value-of select="gsa:i18n('Authentication Type', 'User')"/></name>
+        <field>ldap</field>
+      </column>
     </xsl:with-param>
     <xsl:with-param name="icon-count" select="4"/>
   </xsl:call-template>
@@ -32433,18 +32409,19 @@ should not have received it.
         </xsl:when>
       </xsl:choose>
     </td>
-    <xsl:if test="//group[@name='method:ldap_connect']/auth_conf_setting[@key='enable']/@value = 'true'">
-      <td>
-        <xsl:choose>
-          <xsl:when test="sources/source/text() = 'ldap_connect'">
-            <input type="checkbox" name="-" value="-" checked="checked" disabled="true"/>
-          </xsl:when>
-          <xsl:otherwise>
-            <input type="checkbox" name="-" value="-" disabled="true"/>
-          </xsl:otherwise>
-        </xsl:choose>
-      </td>
-    </xsl:if>
+    <td>
+      <xsl:choose>
+        <xsl:when test="sources/source/text() = 'ldap_connect'">
+          <xsl:value-of select="gsa:i18n ('LDAP', 'User')"/>
+        </xsl:when>
+        <xsl:when test="sources/source/text() = 'radius_connect'">
+          <xsl:value-of select="gsa:i18n ('RADIUS', 'User')"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="gsa:i18n ('Local', 'User')"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
     <xsl:choose>
       <xsl:when test="/envelope/params/bulk_select = 1">
         <td style="text-align:center">
@@ -32579,22 +32556,22 @@ should not have received it.
             </xsl:choose>
           </td>
         </tr>
-        <xsl:if test="//group[@name='method:ldap_connect']/auth_conf_setting[@key='enable']/@value = 'true'">
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('LDAP Authentication', 'User')"/>:</td>
-            <td>
-              <xsl:choose>
-                <xsl:when test="sources/source/text() = 'ldap_connect'">
-                  <xsl:value-of select="gsa:i18n ('Yes', 'Binary Choice')"/>
-                </xsl:when>
-                <xsl:otherwise>
-                  <xsl:value-of select="gsa:i18n ('No', 'Binary Choice')"/>
-                </xsl:otherwise>
-              </xsl:choose>
-            </td>
-          </tr>
-        </xsl:if>
-
+        <tr>
+          <td><xsl:value-of select="gsa:i18n ('Authentication Type', 'User')"/>:</td>
+          <td>
+            <xsl:choose>
+              <xsl:when test="sources/source/text() = 'ldap_connect'">
+                <xsl:value-of select="gsa:i18n ('LDAP', 'User')"/>
+              </xsl:when>
+              <xsl:when test="sources/source/text() = 'radius_connect'">
+                <xsl:value-of select="gsa:i18n ('RADIUS', 'User')"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="gsa:i18n ('Local', 'User')"/>
+              </xsl:otherwise>
+            </xsl:choose>
+          </td>
+        </tr>
       </table>
 
 <!--
@@ -32678,51 +32655,38 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <xsl:choose>
-              <xsl:when test="//group[@name='method:ldap_connect']/auth_conf_setting[@key='enable']/@value = 'true'">
-                <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Authentication', 'Auth Data')"/></td>
-                <td>
-                  <xsl:choose>
-                    <xsl:when test="sources/source/text() = 'ldap_connect'">
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <label>
-                        <input type="radio" name="modify_password" value="0" checked="1"/>
-                        <xsl:value-of select="concat (gsa:i18n ('Password', 'Auth Data'), ': ', gsa:i18n ('Use existing value', 'User'))"/>
-                      </label>
-                      <br/>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                  <input type="radio" name="modify_password" value="1"/>
-                  <xsl:value-of select="concat (gsa:i18n ('Password', 'Auth Data'), ': ')"/>
-                  <input type="password" name="password" value="" size="30"
-                         maxlength="40"/>
-                  <br/>
-                  <xsl:choose>
-                    <xsl:when test="sources/source/text() = 'ldap_connect'">
-                      <input type="radio" name="modify_password" value="3" checked="1"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <input type="radio" name="modify_password" value="2"/>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                  <xsl:value-of select="gsa:i18n ('Allow LDAP Authentication Only', 'User')"/>
-                </td>
-              </xsl:when>
-              <xsl:otherwise>
-                <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Password', 'Auth Data')"/></td>
-                <td>
+            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Authentication', 'Auth Data')"/></td>
+            <td>
+              <xsl:choose>
+                <xsl:when test="sources/source/text() = 'ldap_connect'"></xsl:when>
+                <xsl:when test="sources/source/text() = 'radius_connect'"></xsl:when>
+                <xsl:otherwise>
                   <label>
-                    <input type="radio" name="modify_password" value="0" checked="1"/>
-                    <xsl:value-of select="gsa:i18n ('Use existing value', 'Auth Data|Password')"/>
+                    <input type="radio" name="modify_password" value="0"/>
+                    <xsl:value-of select="concat (gsa:i18n ('Password', 'Auth Data'), ': ', gsa:i18n ('Use existing value', 'User'))"/>
                   </label>
                   <br/>
-                  <input type="radio" name="modify_password" value="1"/>
-                  <input type="password" name="password" value="" size="30"
-                         maxlength="40"/>
-                </td>
-              </xsl:otherwise>
-            </xsl:choose>
+                </xsl:otherwise>
+              </xsl:choose>
+              <input type="radio" name="modify_password" value="1" checked="1"/>
+              <xsl:value-of select="concat (gsa:i18n ('Password', 'Auth Data'), ': ')"/>
+              <input type="password" name="password" value="" size="30"
+                     maxlength="40"/>
+              <xsl:if test="//group[@name='method:ldap_connect']/auth_conf_setting[@key='enable']/@value = 'true'">
+                <br/>
+                <label>
+                  <input type="radio" name="modify_password" value="2"/>
+                  <xsl:value-of select="gsa:i18n ('Allow LDAP Authentication Only', 'User')"/>
+                </label>
+              </xsl:if>
+              <xsl:if test="//group[@name='method:radius_connect']/auth_conf_setting[@key='enable']/@value = 'true'">
+                <br/>
+                <label>
+                  <input type="radio" name="modify_password" value="3"/>
+                  <xsl:value-of select="gsa:i18n ('Allow RADIUS Authentication Only', 'User')"/>
+                </label>
+              </xsl:if>
+            </td>
           </tr>
           <tr class="odd">
             <td><xsl:value-of select="gsa:i18n ('Roles', 'Role')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
@@ -33043,7 +33007,7 @@ should not have received it.
 
 <!-- AUTHENTICATION DESCRIPTION -->
 
-<xsl:template match="group" mode="auth">
+<xsl:template match="group" mode="ldapauth">
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
@@ -33114,6 +33078,71 @@ should not have received it.
   </div>
 </xsl:template>
 
+<xsl:template match="group" mode="radiusauth">
+  <div class="gb_window">
+    <div class="gb_window_part_left"></div>
+    <div class="gb_window_part_right"></div>
+    <div class="gb_window_part_center">
+      <xsl:value-of select="gsa:i18n ('RADIUS Authentication', 'Group')"/>
+      <a href="/help/users.html?token={/envelope/token}#radiusauthentication"
+         title="{concat(gsa:i18n('Help', 'Help'),': ')}({gsa:i18n ('RADIUS Authentication', 'Group')})">
+      <img src="/img/help.png"/></a>
+    </div>
+    <div class="gb_window_part_content_no_pad">
+      <div>
+        <form action="/omp" method="post" enctype="multipart/form-data">
+          <input type="hidden" name="token" value="{/envelope/token}"/>
+          <input type="hidden" name="cmd" value="save_auth"/>
+          <input type="hidden" name="caller" value="{/envelope/current_page}"/>
+          <input type="hidden" name="next" value="get_users"/>
+          <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
+          <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
+          <!-- group name is e.g. of method:radius_connect -->
+          <input type="hidden" name="group" value="{@name}"/>
+          <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
+            <tr class="gbntablehead2">
+              <td><xsl:value-of select="gsa:i18n ('Setting', 'Group')"/></td>
+              <td><xsl:value-of select="gsa:i18n ('Value', 'Property')"/></td>
+            </tr>
+              <tr class="odd">
+                <td><xsl:value-of select="gsa:i18n ('Enable', 'Group')"/></td>
+                <td>
+                  <xsl:choose>
+                    <xsl:when test="auth_conf_setting[@key='enable']/@value = 'true'">
+                      <input type="checkbox" name="enable" value="1" checked="1"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <input type="checkbox" name="enable" value="1"/>
+                    </xsl:otherwise>
+                 </xsl:choose>
+                 </td>
+              </tr>
+              <tr class="even">
+                <td>
+                <xsl:choose>
+                  <xsl:when test="@name='method:radius_connect'">RADIUS </xsl:when>
+                </xsl:choose>
+                <xsl:value-of select="gsa:i18n ('Host', 'Host')"/></td>
+                <td><input type="text" name="radiushost" size="30"
+                     value="{auth_conf_setting[@key='radiushost']/@value}"/></td>
+              </tr>
+              <tr class="odd">
+                <td><xsl:value-of select="gsa:i18n ('Secret Key', 'Group')"/></td>
+                <td><input type="password" name="radiuskey" size="30"
+                     value="{auth_conf_setting[@key='radiuskey']/@value}"/></td>
+              </tr>
+            <tr>
+              <td colspan="2" style="text-align:right;">
+                <input type="submit" name="submit" value="{gsa:i18n ('Save', 'Group')}"/>
+              </td>
+            </tr>
+          </table>
+        </form>
+      </div>
+    </div>
+  </div>
+</xsl:template>
+
 <xsl:template match="describe_auth_response">
 </xsl:template>
 
@@ -33130,7 +33159,8 @@ should not have received it.
 </xsl:template>
 
 <xsl:template name="describe_auth_response" mode="show">
-  <xsl:apply-templates select="describe_auth_response/group[@name='method:ldap_connect']" mode="auth"/>
+  <xsl:apply-templates select="describe_auth_response/group[@name='method:ldap_connect']" mode="ldapauth"/>
+  <xsl:apply-templates select="describe_auth_response/group[@name='method:radius_connect']" mode="radiusauth"/>
 </xsl:template>
 
 

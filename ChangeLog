@@ -1,5 +1,25 @@
+2015-11-24  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	Backport r23817, r23825 and r23846.
+
+	* src/gsad.c (init_validator): Add radius form related parameters. Add
+	auth_method parameter. Remove enable_ldap_connect parameter.
+
+	* src/gsad_omp.c (create_user_omp): Add support for radius_connect
+	authentication method.
+	(save_user_omp): Support RADIUS authentication method. Improve code
+	style.
+	(save_auth_omp): Adjust to handle RADIUS Authentication form too.
+
+	* src/html/classic/omp.xsl (html-users-table, html-create-user-form, user)
+	(user [details], user [edit]): Add RADIUS authentication support and
+	adjust interface accordingly.
+	(group [auth]): Change mode name to ldapauth.
+	(group [radiusauth]): New template.
+	(describe_auth_response [show]): Handle method:radius_connect case too.
+
 2015-11-13  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
- 
+
 	Backport r23787.
 
 	* src/gsad.c (exec_omp_post): Changed wording for case of OMP service
