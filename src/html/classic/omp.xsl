@@ -37132,68 +37132,75 @@ var toggleFilter = function(){
 <xsl:include href="omp-doc.xsl"/>
 
 <xsl:template name="protocol">
-  <div class="gb_window">
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">Help: OMP
-      <div class="small_inline_form" style="display: inline; margin-left: 40px; font-weight: normal;">
-        <form action="" method="get" enctype="multipart/form-data">
-          <input type="hidden" name="token" value="{/envelope/token}"/>
-          <input type="hidden" name="cmd" value="export_omp_doc"/>
-          <select style="margin-bottom: 0px;" name="protocol_format" size="1">
-            <option value="html" selected="1">HTML</option>
-            <option value="rnc">RNC</option>
-            <option value="xml">XML</option>
-          </select>
-          <input type="image"
-                 name="Download OMP documentation"
-                 src="/img/download.png"
-                 alt="Download" style="margin-left:3px;margin-right:3px;"/>
-        </form>
-      </div>
+  <div class="toolbar">
+    <div class="small_inline_form" style="display: inline; font-weight: normal;">
+      <form action="" method="get" enctype="multipart/form-data">
+        <input type="hidden" name="token" value="{/envelope/token}"/>
+        <input type="hidden" name="cmd" value="export_omp_doc"/>
+        <select style="margin-bottom: 0px;" name="protocol_format" size="1">
+          <option value="html" selected="1">HTML</option>
+          <option value="rnc">RNC</option>
+          <option value="xml">XML</option>
+        </select>
+        <input type="image"
+               name="Download OMP documentation"
+               src="/img/download.png"
+               alt="Download" style="margin-left:3px;margin-right:3px;"/>
+      </form>
     </div>
-    <div class="gb_window_part_content">
-      <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
-      <div style="text-align:left">
+  </div>
 
-        <br/>
+  <div class="section-header">
+    <h1>
+      <a href="/omp?cmd=get_protocol_doc&amp;token={/envelope/token}"
+         title="{gsa:i18n ('Help: OMP', 'Help')}">
+        <img id="big-icon" src="/img/help.svg" border="0" style="margin-right:5px" alt="Help: OMP"/>
+      </a>
+      <xsl:value-of select="gsa:i18n ('Help: OMP', 'Help')"/>
+    </h1>
+  </div>
 
-        <h1>OMP</h1>
+  <div class="section-box">
+    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div style="text-align:left">
 
-        <xsl:if test="version">
-          <p>Version: <xsl:value-of select="normalize-space(version)"/></p>
-        </xsl:if>
+      <br/>
 
-        <xsl:if test="summary">
-          <p><xsl:value-of select="normalize-space(summary)"/>.</p>
-        </xsl:if>
+      <h1>OMP</h1>
 
-        <h2 id="contents">Contents</h2>
-        <ol>
-          <li><a href="#type_summary">Summary of Data Types</a></li>
-          <li><a href="#element_summary">Summary of Elements</a></li>
-          <li><a href="#command_summary">Summary of Commands</a></li>
-          <li><a href="#rnc_preamble">RNC Preamble</a></li>
-          <li><a href="#type_details">Data Type Details</a></li>
-          <li><a href="#element_details">Element Details</a></li>
-          <li><a href="#command_details">Command Details</a></li>
-          <li>
-            <a href="#changes">
-              Compatibility Changes in Version
-              <xsl:value-of select="version"/>
-            </a>
-          </li>
-        </ol>
+      <xsl:if test="version">
+        <p>Version: <xsl:value-of select="normalize-space(version)"/></p>
+      </xsl:if>
 
-        <xsl:call-template name="type-summary"/>
-        <xsl:call-template name="element-summary"/>
-        <xsl:call-template name="command-summary"/>
-        <xsl:call-template name="rnc-preamble"/>
-        <xsl:call-template name="type-details"/>
-        <xsl:call-template name="element-details"/>
-        <xsl:call-template name="command-details"/>
-        <xsl:call-template name="changes"/>
-      </div>
+      <xsl:if test="summary">
+        <p><xsl:value-of select="normalize-space(summary)"/>.</p>
+      </xsl:if>
+
+      <h2 id="contents">Contents</h2>
+      <ol>
+        <li><a href="#type_summary">Summary of Data Types</a></li>
+        <li><a href="#element_summary">Summary of Elements</a></li>
+        <li><a href="#command_summary">Summary of Commands</a></li>
+        <li><a href="#rnc_preamble">RNC Preamble</a></li>
+        <li><a href="#type_details">Data Type Details</a></li>
+        <li><a href="#element_details">Element Details</a></li>
+        <li><a href="#command_details">Command Details</a></li>
+        <li>
+          <a href="#changes">
+            Compatibility Changes in Version
+            <xsl:value-of select="version"/>
+          </a>
+        </li>
+      </ol>
+
+      <xsl:call-template name="type-summary"/>
+      <xsl:call-template name="element-summary"/>
+      <xsl:call-template name="command-summary"/>
+      <xsl:call-template name="rnc-preamble"/>
+      <xsl:call-template name="type-details"/>
+      <xsl:call-template name="element-details"/>
+      <xsl:call-template name="command-details"/>
+      <xsl:call-template name="changes"/>
     </div>
   </div>
 </xsl:template>
