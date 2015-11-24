@@ -32761,6 +32761,7 @@ var toggleFilter = function(){
 
 <xsl:template match="get_system_reports_response">
   <xsl:variable name="duration" select="../duration"/>
+
   <xsl:call-template name="command_result_dialog">
     <xsl:with-param name="operation">Get System Reports</xsl:with-param>
     <xsl:with-param name="status">
@@ -32770,129 +32771,137 @@ var toggleFilter = function(){
       <xsl:value-of select="@status_text"/>
     </xsl:with-param>
   </xsl:call-template>
-  <div class="gb_window">
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n ('Performance', 'Performance')"/>
-      <a href="/help/performance.html?token={/envelope/token}"
-         title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('Performance', 'Performance'))}">
-        <img src="/img/help.png"/>
+
+  <div class="toolbar">
+    <a href="/help/performance.html?token={/envelope/token}"
+       title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('Performance', 'Performance'))}">
+      <img src="/img/help.png"/>
+    </a>
+  </div>
+
+  <div class="section-header">
+    <h1>
+      <a href="/omp?cmd=get_system_report&amp;duration=86400&amp;slave_id=0&amp;token={/envelope/token}"
+         title="{gsa:i18n ('Performance', 'Performance')}">
+        <img id="big-icon" src="/img/performance.svg" border="0" style="margin-right:5px" alt="Performance"/>
       </a>
-    </div>
-    <div class="gb_window_part_content_no_pad">
-      <table>
+      <xsl:value-of select="gsa:i18n ('Performance', 'Performance')"/>
+    </h1>
+  </div>
+
+  <div class="section-box">
+    <table>
+      <tr>
+        <td>
+          <xsl:value-of select="gsa:i18n ('Reports span the last', 'Performance')"/>:
+        </td>
+        <td>
+          <xsl:choose>
+            <xsl:when test="$duration='3600'">
+              <xsl:value-of select="gsa:i18n ('hour', 'Time')"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <a href="/omp?cmd=get_system_reports&amp;duration={3600}&amp;slave_id={../slave/@id}&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('hour', 'Time')"/></a>
+            </xsl:otherwise>
+          </xsl:choose>
+          <xsl:text> | </xsl:text>
+          <xsl:choose>
+            <xsl:when test="$duration='86400'">
+              <xsl:value-of select="gsa:i18n ('day', 'Time')"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <a href="/omp?cmd=get_system_reports&amp;duration={86400}&amp;slave_id={../slave/@id}&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('day', 'Time')"/></a>
+            </xsl:otherwise>
+          </xsl:choose>
+          <xsl:text> | </xsl:text>
+          <xsl:choose>
+            <xsl:when test="$duration='604800'">
+              <xsl:value-of select="gsa:i18n ('week', 'Time')"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <a href="/omp?cmd=get_system_reports&amp;duration={604800}&amp;slave_id={../slave/@id}&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('week', 'Time')"/></a>
+            </xsl:otherwise>
+          </xsl:choose>
+          <xsl:text> | </xsl:text>
+          <xsl:choose>
+            <xsl:when test="$duration='2592000'">
+              <xsl:value-of select="gsa:i18n ('month', 'Time')"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <a href="/omp?cmd=get_system_reports&amp;duration={2592000}&amp;slave_id={../slave/@id}&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('month', 'Time')"/></a>
+            </xsl:otherwise>
+          </xsl:choose>
+          <xsl:text> | </xsl:text>
+          <xsl:choose>
+            <xsl:when test="$duration='31536000'">
+              <xsl:value-of select="gsa:i18n ('year', 'Time')"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <a href="/omp?cmd=get_system_reports&amp;duration={31536000}&amp;slave_id={../slave/@id}&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('year', 'Time')"/></a>
+            </xsl:otherwise>
+          </xsl:choose>
+        </td>
+      </tr>
+      <xsl:if test="gsa:may-op ('get_slaves')">
         <tr>
           <td>
-            <xsl:value-of select="gsa:i18n ('Reports span the last', 'Performance')"/>:
+            <xsl:value-of select="gsa:i18n ('Reports for slave', 'Performance')"/>:
           </td>
           <td>
-            <xsl:choose>
-              <xsl:when test="$duration='3600'">
-                <xsl:value-of select="gsa:i18n ('hour', 'Time')"/>
-              </xsl:when>
-              <xsl:otherwise>
-                <a href="/omp?cmd=get_system_reports&amp;duration={3600}&amp;slave_id={../slave/@id}&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('hour', 'Time')"/></a>
-              </xsl:otherwise>
-            </xsl:choose>
-            <xsl:text> | </xsl:text>
-            <xsl:choose>
-              <xsl:when test="$duration='86400'">
-                <xsl:value-of select="gsa:i18n ('day', 'Time')"/>
-              </xsl:when>
-              <xsl:otherwise>
-                <a href="/omp?cmd=get_system_reports&amp;duration={86400}&amp;slave_id={../slave/@id}&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('day', 'Time')"/></a>
-              </xsl:otherwise>
-            </xsl:choose>
-            <xsl:text> | </xsl:text>
-            <xsl:choose>
-              <xsl:when test="$duration='604800'">
-                <xsl:value-of select="gsa:i18n ('week', 'Time')"/>
-              </xsl:when>
-              <xsl:otherwise>
-                <a href="/omp?cmd=get_system_reports&amp;duration={604800}&amp;slave_id={../slave/@id}&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('week', 'Time')"/></a>
-              </xsl:otherwise>
-            </xsl:choose>
-            <xsl:text> | </xsl:text>
-            <xsl:choose>
-              <xsl:when test="$duration='2592000'">
-                <xsl:value-of select="gsa:i18n ('month', 'Time')"/>
-              </xsl:when>
-              <xsl:otherwise>
-                <a href="/omp?cmd=get_system_reports&amp;duration={2592000}&amp;slave_id={../slave/@id}&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('month', 'Time')"/></a>
-              </xsl:otherwise>
-            </xsl:choose>
-            <xsl:text> | </xsl:text>
-            <xsl:choose>
-              <xsl:when test="$duration='31536000'">
-                <xsl:value-of select="gsa:i18n ('year', 'Time')"/>
-              </xsl:when>
-              <xsl:otherwise>
-                <a href="/omp?cmd=get_system_reports&amp;duration={31536000}&amp;slave_id={../slave/@id}&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('year', 'Time')"/></a>
-              </xsl:otherwise>
-            </xsl:choose>
-          </td>
-        </tr>
-        <xsl:if test="gsa:may-op ('get_slaves')">
-          <tr>
-            <td>
-              <xsl:value-of select="gsa:i18n ('Reports for slave', 'Performance')"/>:
-            </td>
-            <td>
-              <div id="small_form" style="float:left;">
-                <form action="" method="get" name="switch_slave" enctype="multipart/form-data">
-                  <input type="hidden" name="token" value="{/envelope/token}"/>
-                  <input type="hidden" name="cmd" value="get_system_reports"/>
-                  <input type="hidden" name="duration" value="{$duration}"/>
-                  <select name="slave_id" onchange="switch_slave.submit ()">
-                    <xsl:variable name="slave_id">
-                      <xsl:value-of select="../slave/@id"/>
-                    </xsl:variable>
+            <div id="small_form" style="float:left;">
+              <form action="" method="get" name="switch_slave" enctype="multipart/form-data">
+                <input type="hidden" name="token" value="{/envelope/token}"/>
+                <input type="hidden" name="cmd" value="get_system_reports"/>
+                <input type="hidden" name="duration" value="{$duration}"/>
+                <select name="slave_id" onchange="switch_slave.submit ()">
+                  <xsl:variable name="slave_id">
+                    <xsl:value-of select="../slave/@id"/>
+                  </xsl:variable>
+                  <xsl:choose>
+                    <xsl:when test="string-length ($slave_id) &gt; 0">
+                      <option value="0">--</option>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <option value="0" selected="1">--</option>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                  <xsl:for-each select="../get_slaves_response/slave">
                     <xsl:choose>
-                      <xsl:when test="string-length ($slave_id) &gt; 0">
-                        <option value="0">--</option>
+                      <xsl:when test="@id = $slave_id">
+                        <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
                       </xsl:when>
                       <xsl:otherwise>
-                        <option value="0" selected="1">--</option>
+                        <option value="{@id}"><xsl:value-of select="name"/></option>
                       </xsl:otherwise>
                     </xsl:choose>
-                    <xsl:for-each select="../get_slaves_response/slave">
-                      <xsl:choose>
-                        <xsl:when test="@id = $slave_id">
-                          <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
-                        </xsl:when>
-                        <xsl:otherwise>
-                          <option value="{@id}"><xsl:value-of select="name"/></option>
-                        </xsl:otherwise>
-                      </xsl:choose>
-                    </xsl:for-each>
-                  </select>
-                  <input type="image"
-                         name="Update"
-                         title="{gsa:i18n ('Update', 'Action Verb')}"
-                         src="/img/refresh.png"
-                         alt="{gsa:i18n ('Update', 'Action Verb')}" style="margin-left:3px;margin-right:3px;"/>
-                </form>
-              </div>
-            </td>
-          </tr>
-        </xsl:if>
-      </table>
-      <xsl:choose>
-        <xsl:when test="@status = '500'">
-          <p>
-            <xsl:value-of select="gsa:i18n ('The selected Scan Slave can currently not be reached for retrieval of performance data.', 'Performance')"/>
-          </p>
-          <p>
-            <xsl:value-of select="gsa:i18n ('Please check network connection or Slave configuration.  The problem may also be temporary, so you could try again at a later time.', 'Performance')"/>
-          </p>
-        </xsl:when>
-        <xsl:otherwise>
-          <table>
-            <xsl:apply-templates select="system_report"/>
-          </table>
-        </xsl:otherwise>
-      </xsl:choose>
-    </div>
+                  </xsl:for-each>
+                </select>
+                <input type="image"
+                       name="Update"
+                       title="{gsa:i18n ('Update', 'Action Verb')}"
+                       src="/img/refresh.png"
+                       alt="{gsa:i18n ('Update', 'Action Verb')}" style="margin-left:3px;margin-right:3px;"/>
+              </form>
+            </div>
+          </td>
+        </tr>
+      </xsl:if>
+    </table>
+    <xsl:choose>
+      <xsl:when test="@status = '500'">
+        <p>
+          <xsl:value-of select="gsa:i18n ('The selected Scan Slave can currently not be reached for retrieval of performance data.', 'Performance')"/>
+        </p>
+        <p>
+          <xsl:value-of select="gsa:i18n ('Please check network connection or Slave configuration.  The problem may also be temporary, so you could try again at a later time.', 'Performance')"/>
+        </p>
+      </xsl:when>
+      <xsl:otherwise>
+        <table>
+          <xsl:apply-templates select="system_report"/>
+        </table>
+      </xsl:otherwise>
+    </xsl:choose>
   </div>
 </xsl:template>
 
@@ -33169,318 +33178,325 @@ var toggleFilter = function(){
   <xsl:apply-templates select="delete_task_response"/>
   <xsl:apply-templates select="empty_trashcan_response"/>
   <xsl:apply-templates select="restore_response"/>
-  <div class="gb_window">
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">
-      <xsl:value-of select="concat(gsa:i18n ('Trashcan', 'Trashcan'), ' ')"/>
-      <a href="/help/trashcan.html?token={/envelope/token}"
-        title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('Trashcan', 'Trashcan'))}">
-        <img src="/img/help.png"/>
+
+  <div class="toolbar">
+    <a href="/help/trashcan.html?token={/envelope/token}"
+      title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('Trashcan', 'Trashcan'))}">
+      <img src="/img/help.png"/>
+    </a>
+  </div>
+
+  <div class="section-header">
+    <h1>
+      <a href="/omp?cmd=get_trash&amp;token={/envelope/token}"
+         title="{gsa:i18n ('Trashcan', 'Trashcan')}">
+        <img id="big-icon" src="/img/trashcan.svg" border="0" style="margin-right:5px" alt="Trashcan"/>
       </a>
-    </div>
-    <div class="gb_window_part_content">
-      <xsl:if test="gsa:may-op ('empty_trashcan')">
-        <div style="text-align:right">
-          <form action="" method="post" enctype="multipart/form-data">
-            <input type="hidden" name="token" value="{/envelope/token}"/>
-            <input type="hidden" name="cmd" value="empty_trashcan"/>
-            <input type="hidden" name="caller" value="{/envelope/current_page}"/>
-            <input type="submit"
-                   name="submit"
-                   value="{gsa:i18n ('Empty Trashcan', 'Action Verb')}"
-                   title="{gsa:i18n ('Empty Trashcan', 'Action Verb')}"/>
-          </form>
-        </div>
-      </xsl:if>
+      <xsl:value-of select="gsa:i18n ('Trashcan', 'Trashcan')"/>
+    </h1>
+  </div>
 
-      <h1><xsl:value-of select="gsa:i18n ('Contents', 'Trashcan')"/></h1>
-      <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
-        <tr class="gbntablehead2">
-          <td><xsl:value-of select="gsa:i18n ('Type', 'Property')"/></td>
-          <td><xsl:value-of select="gsa:i18n ('Items', 'Trashcan')"/></td>
+  <div class="section-box">
+    <xsl:if test="gsa:may-op ('empty_trashcan')">
+      <div style="text-align:right">
+        <form action="" method="post" enctype="multipart/form-data">
+          <input type="hidden" name="token" value="{/envelope/token}"/>
+          <input type="hidden" name="cmd" value="empty_trashcan"/>
+          <input type="hidden" name="caller" value="{/envelope/current_page}"/>
+          <input type="submit"
+                 name="submit"
+                 value="{gsa:i18n ('Empty Trashcan', 'Action Verb')}"
+                 title="{gsa:i18n ('Empty Trashcan', 'Action Verb')}"/>
+        </form>
+      </div>
+    </xsl:if>
+
+    <h1><xsl:value-of select="gsa:i18n ('Contents', 'Trashcan')"/></h1>
+    <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
+      <tr class="gbntablehead2">
+        <td><xsl:value-of select="gsa:i18n ('Type', 'Property')"/></td>
+        <td><xsl:value-of select="gsa:i18n ('Items', 'Trashcan')"/></td>
+      </tr>
+      <xsl:variable name="items">
+        <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_AGENTS']">
+          <item>
+            <type>agent</type>
+            <count><xsl:value-of select="count(get_agents_response/agent)"/></count>
+          </item>
+        </xsl:if>
+        <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_ALERTS']">
+          <item>
+            <type>alert</type>
+            <count><xsl:value-of select="count(get_alerts_response/alert)"/></count>
+          </item>
+        </xsl:if>
+        <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_CONFIGS']">
+          <item>
+            <type>config</type>
+            <count><xsl:value-of select="count(get_configs_response/config)"/></count>
+          </item>
+        </xsl:if>
+        <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_CREDENTIALS']">
+          <item>
+            <type>credential</type>
+            <count><xsl:value-of select="count(get_credentials_response/credential)"/></count>
+          </item>
+        </xsl:if>
+        <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_FILTERS']">
+          <item>
+            <type>filter</type>
+            <count><xsl:value-of select="count(get_filters_response/filter)"/></count>
+          </item>
+        </xsl:if>
+        <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_GROUPS']">
+          <item>
+            <type>group</type>
+            <count><xsl:value-of select="count(get_groups_response/group)"/></count>
+          </item>
+        </xsl:if>
+        <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_NOTES']">
+          <item>
+            <type>note</type>
+            <count><xsl:value-of select="count(get_notes_response/note)"/></count>
+          </item>
+        </xsl:if>
+        <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_OVERRIDES']">
+          <item>
+            <type>override</type>
+            <count><xsl:value-of select="count(get_overrides_response/override)"/></count>
+          </item>
+        </xsl:if>
+        <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_PERMISSIONS']">
+          <item>
+            <type>permission</type>
+            <count><xsl:value-of select="count(get_permissions_response/permission)"/></count>
+          </item>
+        </xsl:if>
+        <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_PORT_LISTS']">
+          <item>
+            <type>port_list</type>
+            <count><xsl:value-of select="count(get_port_lists_response/port_list)"/></count>
+          </item>
+        </xsl:if>
+        <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_REPORT_FORMATS']">
+          <item>
+            <type>report_format</type>
+            <count><xsl:value-of select="count(get_report_formats_response/report_format)"/></count>
+          </item>
+        </xsl:if>
+        <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_ROLES']">
+          <item>
+            <type>role</type>
+            <count><xsl:value-of select="count(get_roles_response/role)"/></count>
+          </item>
+        </xsl:if>
+        <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_SCANNERS']">
+          <item>
+            <type>scanner</type>
+            <count><xsl:value-of select="count(get_scanners_response/scanner)"/></count>
+          </item>
+        </xsl:if>
+        <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_SCHEDULES']">
+          <item>
+            <type>schedule</type>
+            <count><xsl:value-of select="count(get_schedules_response/schedule)"/></count>
+          </item>
+        </xsl:if>
+        <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_SLAVES']">
+          <item>
+            <type>slave</type>
+            <count><xsl:value-of select="count(get_slaves_response/slave)"/></count>
+          </item>
+        </xsl:if>
+        <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_TAGS']">
+          <item>
+            <type>tag</type>
+            <count><xsl:value-of select="count(get_tags_response/tag)"/></count>
+          </item>
+        </xsl:if>
+        <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_TARGETS']">
+          <item>
+            <type>target</type>
+            <count><xsl:value-of select="count(get_targets_response/target)"/></count>
+          </item>
+        </xsl:if>
+        <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_TASKS']">
+          <item>
+            <type>task</type>
+            <count><xsl:value-of select="count(get_tasks_response/task)"/></count>
+          </item>
+        </xsl:if>
+      </xsl:variable>
+      <xsl:for-each select="exslt:node-set ($items)/item">
+        <!-- i18n with concat : see dynamic_strings.xsl - type-name-plural -->
+        <tr class="{gsa:table-row-class(position())}">
+          <td><a href="#{type}s"><xsl:value-of select="gsa:i18n(concat(gsa:type-name (type), 's'), gsa:type-name (type))"/></a></td>
+          <td><xsl:value-of select="count"/></td>
         </tr>
-        <xsl:variable name="items">
-          <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_AGENTS']">
-            <item>
-              <type>agent</type>
-              <count><xsl:value-of select="count(get_agents_response/agent)"/></count>
-            </item>
-          </xsl:if>
-          <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_ALERTS']">
-            <item>
-              <type>alert</type>
-              <count><xsl:value-of select="count(get_alerts_response/alert)"/></count>
-            </item>
-          </xsl:if>
-          <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_CONFIGS']">
-            <item>
-              <type>config</type>
-              <count><xsl:value-of select="count(get_configs_response/config)"/></count>
-            </item>
-          </xsl:if>
-          <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_CREDENTIALS']">
-            <item>
-              <type>credential</type>
-              <count><xsl:value-of select="count(get_credentials_response/credential)"/></count>
-            </item>
-          </xsl:if>
-          <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_FILTERS']">
-            <item>
-              <type>filter</type>
-              <count><xsl:value-of select="count(get_filters_response/filter)"/></count>
-            </item>
-          </xsl:if>
-          <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_GROUPS']">
-            <item>
-              <type>group</type>
-              <count><xsl:value-of select="count(get_groups_response/group)"/></count>
-            </item>
-          </xsl:if>
-          <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_NOTES']">
-            <item>
-              <type>note</type>
-              <count><xsl:value-of select="count(get_notes_response/note)"/></count>
-            </item>
-          </xsl:if>
-          <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_OVERRIDES']">
-            <item>
-              <type>override</type>
-              <count><xsl:value-of select="count(get_overrides_response/override)"/></count>
-            </item>
-          </xsl:if>
-          <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_PERMISSIONS']">
-            <item>
-              <type>permission</type>
-              <count><xsl:value-of select="count(get_permissions_response/permission)"/></count>
-            </item>
-          </xsl:if>
-          <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_PORT_LISTS']">
-            <item>
-              <type>port_list</type>
-              <count><xsl:value-of select="count(get_port_lists_response/port_list)"/></count>
-            </item>
-          </xsl:if>
-          <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_REPORT_FORMATS']">
-            <item>
-              <type>report_format</type>
-              <count><xsl:value-of select="count(get_report_formats_response/report_format)"/></count>
-            </item>
-          </xsl:if>
-          <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_ROLES']">
-            <item>
-              <type>role</type>
-              <count><xsl:value-of select="count(get_roles_response/role)"/></count>
-            </item>
-          </xsl:if>
-          <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_SCANNERS']">
-            <item>
-              <type>scanner</type>
-              <count><xsl:value-of select="count(get_scanners_response/scanner)"/></count>
-            </item>
-          </xsl:if>
-          <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_SCHEDULES']">
-            <item>
-              <type>schedule</type>
-              <count><xsl:value-of select="count(get_schedules_response/schedule)"/></count>
-            </item>
-          </xsl:if>
-          <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_SLAVES']">
-            <item>
-              <type>slave</type>
-              <count><xsl:value-of select="count(get_slaves_response/slave)"/></count>
-            </item>
-          </xsl:if>
-          <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_TAGS']">
-            <item>
-              <type>tag</type>
-              <count><xsl:value-of select="count(get_tags_response/tag)"/></count>
-            </item>
-          </xsl:if>
-          <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_TARGETS']">
-            <item>
-              <type>target</type>
-              <count><xsl:value-of select="count(get_targets_response/target)"/></count>
-            </item>
-          </xsl:if>
-          <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_TASKS']">
-            <item>
-              <type>task</type>
-              <count><xsl:value-of select="count(get_tasks_response/task)"/></count>
-            </item>
-          </xsl:if>
-        </xsl:variable>
-        <xsl:for-each select="exslt:node-set ($items)/item">
-          <!-- i18n with concat : see dynamic_strings.xsl - type-name-plural -->
-          <tr class="{gsa:table-row-class(position())}">
-            <td><a href="#{type}s"><xsl:value-of select="gsa:i18n(concat(gsa:type-name (type), 's'), gsa:type-name (type))"/></a></td>
-            <td><xsl:value-of select="count"/></td>
-          </tr>
-        </xsl:for-each>
-      </table>
+      </xsl:for-each>
+    </table>
 
-      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_AGENTS']">
-        <a name="agents"></a>
-        <h1><xsl:value-of select="gsa:i18n ('Agents', 'Agent')"/></h1>
-        <!-- The for-each makes the get_agents_response the current node. -->
-        <xsl:for-each select="get_agents_response">
-          <xsl:call-template name="html-agents-trash-table"/>
-        </xsl:for-each>
-      </xsl:if>
+    <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_AGENTS']">
+      <a name="agents"></a>
+      <h1><xsl:value-of select="gsa:i18n ('Agents', 'Agent')"/></h1>
+      <!-- The for-each makes the get_agents_response the current node. -->
+      <xsl:for-each select="get_agents_response">
+        <xsl:call-template name="html-agents-trash-table"/>
+      </xsl:for-each>
+    </xsl:if>
 
-      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_ALERTS']">
-        <a name="alerts"></a>
-        <h1><xsl:value-of select="gsa:i18n ('Alerts', 'Alert')"/></h1>
-        <!-- The for-each makes the get_alerts_response the current node. -->
-        <xsl:for-each select="get_alerts_response">
-          <xsl:call-template name="html-alerts-trash-table"/>
-        </xsl:for-each>
-      </xsl:if>
+    <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_ALERTS']">
+      <a name="alerts"></a>
+      <h1><xsl:value-of select="gsa:i18n ('Alerts', 'Alert')"/></h1>
+      <!-- The for-each makes the get_alerts_response the current node. -->
+      <xsl:for-each select="get_alerts_response">
+        <xsl:call-template name="html-alerts-trash-table"/>
+      </xsl:for-each>
+    </xsl:if>
 
-      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_CONFIGS']">
-        <a name="configs"></a>
-        <h1><xsl:value-of select="gsa:i18n ('Scan Configs', 'Scan Config')"/></h1>
-        <!-- The for-each makes the get_configs_response the current node. -->
-        <xsl:for-each select="get_configs_response">
-          <xsl:call-template name="html-configs-trash-table"/>
-        </xsl:for-each>
-      </xsl:if>
+    <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_CONFIGS']">
+      <a name="configs"></a>
+      <h1><xsl:value-of select="gsa:i18n ('Scan Configs', 'Scan Config')"/></h1>
+      <!-- The for-each makes the get_configs_response the current node. -->
+      <xsl:for-each select="get_configs_response">
+        <xsl:call-template name="html-configs-trash-table"/>
+      </xsl:for-each>
+    </xsl:if>
 
-      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_CREDENTIALS']">
-        <a name="credentials"></a>
-        <h1><xsl:value-of select="gsa:i18n ('Credentials', 'Credential')"/></h1>
-        <!-- The for-each makes the get_credentials_response the current node. -->
-        <xsl:for-each select="get_credentials_response">
-          <xsl:call-template name="html-credentials-trash-table"/>
-        </xsl:for-each>
-      </xsl:if>
+    <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_CREDENTIALS']">
+      <a name="credentials"></a>
+      <h1><xsl:value-of select="gsa:i18n ('Credentials', 'Credential')"/></h1>
+      <!-- The for-each makes the get_credentials_response the current node. -->
+      <xsl:for-each select="get_credentials_response">
+        <xsl:call-template name="html-credentials-trash-table"/>
+      </xsl:for-each>
+    </xsl:if>
 
-      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_FILTERS']">
-        <a name="filters"></a>
-        <h1><xsl:value-of select="gsa:i18n ('Filters', 'Filter')"/></h1>
-        <!-- The for-each makes the get_filters_response the current node. -->
-        <xsl:for-each select="get_filters_response">
-          <xsl:call-template name="html-filters-trash-table"/>
-        </xsl:for-each>
-      </xsl:if>
+    <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_FILTERS']">
+      <a name="filters"></a>
+      <h1><xsl:value-of select="gsa:i18n ('Filters', 'Filter')"/></h1>
+      <!-- The for-each makes the get_filters_response the current node. -->
+      <xsl:for-each select="get_filters_response">
+        <xsl:call-template name="html-filters-trash-table"/>
+      </xsl:for-each>
+    </xsl:if>
 
-      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_GROUPS']">
-        <a name="groups"></a>
-        <h1><xsl:value-of select="gsa:i18n ('Groups', 'Group')"/></h1>
-        <!-- The for-each makes the get_groups_response the current node. -->
-        <xsl:for-each select="get_groups_response">
-          <xsl:call-template name="html-groups-trash-table"/>
-        </xsl:for-each>
-      </xsl:if>
+    <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_GROUPS']">
+      <a name="groups"></a>
+      <h1><xsl:value-of select="gsa:i18n ('Groups', 'Group')"/></h1>
+      <!-- The for-each makes the get_groups_response the current node. -->
+      <xsl:for-each select="get_groups_response">
+        <xsl:call-template name="html-groups-trash-table"/>
+      </xsl:for-each>
+    </xsl:if>
 
-      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_NOTES']">
-        <a name="notes"></a>
-        <h1><xsl:value-of select="gsa:i18n ('Notes', 'Note')"/></h1>
-        <!-- The for-each makes the get_notes_response the current node. -->
-        <xsl:for-each select="get_notes_response">
-          <xsl:call-template name="html-notes-trash-table"/>
-        </xsl:for-each>
-      </xsl:if>
+    <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_NOTES']">
+      <a name="notes"></a>
+      <h1><xsl:value-of select="gsa:i18n ('Notes', 'Note')"/></h1>
+      <!-- The for-each makes the get_notes_response the current node. -->
+      <xsl:for-each select="get_notes_response">
+        <xsl:call-template name="html-notes-trash-table"/>
+      </xsl:for-each>
+    </xsl:if>
 
-      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_OVERRIDES']">
-        <a name="overrides"></a>
-        <h1><xsl:value-of select="gsa:i18n ('Overrides', 'Override')"/></h1>
-        <!-- The for-each makes the get_overrides_response the current node. -->
-        <xsl:for-each select="get_overrides_response">
-          <xsl:call-template name="html-overrides-trash-table"/>
-        </xsl:for-each>
-      </xsl:if>
+    <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_OVERRIDES']">
+      <a name="overrides"></a>
+      <h1><xsl:value-of select="gsa:i18n ('Overrides', 'Override')"/></h1>
+      <!-- The for-each makes the get_overrides_response the current node. -->
+      <xsl:for-each select="get_overrides_response">
+        <xsl:call-template name="html-overrides-trash-table"/>
+      </xsl:for-each>
+    </xsl:if>
 
-      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_PERMISSIONS']">
-        <a name="permissions"></a>
-        <h1><xsl:value-of select="gsa:i18n ('Permissions', 'Permission')"/></h1>
-        <!-- The for-each makes the get_permissions_response the current node. -->
-        <xsl:for-each select="get_permissions_response">
-          <xsl:call-template name="html-permissions-trash-table"/>
-        </xsl:for-each>
-      </xsl:if>
+    <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_PERMISSIONS']">
+      <a name="permissions"></a>
+      <h1><xsl:value-of select="gsa:i18n ('Permissions', 'Permission')"/></h1>
+      <!-- The for-each makes the get_permissions_response the current node. -->
+      <xsl:for-each select="get_permissions_response">
+        <xsl:call-template name="html-permissions-trash-table"/>
+      </xsl:for-each>
+    </xsl:if>
 
-      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_PORT_LISTS']">
-        <a name="port_lists"></a>
-        <h1><xsl:value-of select="gsa:i18n ('Port Lists', 'Port List')"/></h1>
-        <!-- The for-each makes the get_port_lists_response the current node. -->
-        <xsl:for-each select="get_port_lists_response">
-          <xsl:call-template name="html-port-lists-trash-table"/>
-        </xsl:for-each>
-      </xsl:if>
+    <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_PORT_LISTS']">
+      <a name="port_lists"></a>
+      <h1><xsl:value-of select="gsa:i18n ('Port Lists', 'Port List')"/></h1>
+      <!-- The for-each makes the get_port_lists_response the current node. -->
+      <xsl:for-each select="get_port_lists_response">
+        <xsl:call-template name="html-port-lists-trash-table"/>
+      </xsl:for-each>
+    </xsl:if>
 
-      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_REPORT_FORMATS']">
-        <a name="report_formats"></a>
-        <h1><xsl:value-of select="gsa:i18n ('Report Formats', 'Report Format')"/></h1>
-        <!-- The for-each makes the get_report_formats_response the current node. -->
-        <xsl:for-each select="get_report_formats_response">
-          <xsl:call-template name="html-report-formats-trash-table"/>
-        </xsl:for-each>
-      </xsl:if>
+    <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_REPORT_FORMATS']">
+      <a name="report_formats"></a>
+      <h1><xsl:value-of select="gsa:i18n ('Report Formats', 'Report Format')"/></h1>
+      <!-- The for-each makes the get_report_formats_response the current node. -->
+      <xsl:for-each select="get_report_formats_response">
+        <xsl:call-template name="html-report-formats-trash-table"/>
+      </xsl:for-each>
+    </xsl:if>
 
-      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_ROLES']">
-        <a name="roles"></a>
-        <h1><xsl:value-of select="gsa:i18n ('Roles', 'Role')"/></h1>
-        <!-- The for-each makes the get_roles_response the current node. -->
-        <xsl:for-each select="get_roles_response">
-          <xsl:call-template name="html-roles-trash-table"/>
-        </xsl:for-each>
-      </xsl:if>
+    <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_ROLES']">
+      <a name="roles"></a>
+      <h1><xsl:value-of select="gsa:i18n ('Roles', 'Role')"/></h1>
+      <!-- The for-each makes the get_roles_response the current node. -->
+      <xsl:for-each select="get_roles_response">
+        <xsl:call-template name="html-roles-trash-table"/>
+      </xsl:for-each>
+    </xsl:if>
 
-      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_SCANNERS']">
-        <a name="scanners"></a>
-        <h1><xsl:value-of select="gsa:i18n ('Scanners', 'Scanner')"/></h1>
-        <!-- The for-each makes the get_scanners_response the current node. -->
-        <xsl:for-each select="get_scanners_response">
-          <xsl:call-template name="html-scanners-trash-table"/>
-        </xsl:for-each>
-      </xsl:if>
+    <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_SCANNERS']">
+      <a name="scanners"></a>
+      <h1><xsl:value-of select="gsa:i18n ('Scanners', 'Scanner')"/></h1>
+      <!-- The for-each makes the get_scanners_response the current node. -->
+      <xsl:for-each select="get_scanners_response">
+        <xsl:call-template name="html-scanners-trash-table"/>
+      </xsl:for-each>
+    </xsl:if>
 
-      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_SCHEDULES']">
-        <a name="schedules"></a>
-        <h1><xsl:value-of select="gsa:i18n ('Schedules', 'Schedule')"/></h1>
-        <!-- The for-each makes the get_schedules_response the current node. -->
-        <xsl:for-each select="get_schedules_response">
-          <xsl:call-template name="html-schedules-trash-table"/>
-        </xsl:for-each>
-      </xsl:if>
+    <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_SCHEDULES']">
+      <a name="schedules"></a>
+      <h1><xsl:value-of select="gsa:i18n ('Schedules', 'Schedule')"/></h1>
+      <!-- The for-each makes the get_schedules_response the current node. -->
+      <xsl:for-each select="get_schedules_response">
+        <xsl:call-template name="html-schedules-trash-table"/>
+      </xsl:for-each>
+    </xsl:if>
 
-      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_SLAVES']">
-        <a name="slaves"></a>
-        <h1><xsl:value-of select="gsa:i18n ('Slaves', 'Slave')"/></h1>
-        <!-- The for-each makes the get_slaves_response the current node. -->
-        <xsl:for-each select="get_slaves_response">
-          <xsl:call-template name="html-slaves-trash-table"/>
-        </xsl:for-each>
-      </xsl:if>
+    <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_SLAVES']">
+      <a name="slaves"></a>
+      <h1><xsl:value-of select="gsa:i18n ('Slaves', 'Slave')"/></h1>
+      <!-- The for-each makes the get_slaves_response the current node. -->
+      <xsl:for-each select="get_slaves_response">
+        <xsl:call-template name="html-slaves-trash-table"/>
+      </xsl:for-each>
+    </xsl:if>
 
-      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_TAGS']">
-        <a name="tags"></a>
-        <h1><xsl:value-of select="gsa:i18n ('Tags', 'Tag')"/></h1>
-        <!-- The for-each makes the get_tags_response the current node. -->
-        <xsl:for-each select="get_tags_response">
-          <xsl:call-template name="html-tags-trash-table"/>
-        </xsl:for-each>
-      </xsl:if>
+    <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_TAGS']">
+      <a name="tags"></a>
+      <h1><xsl:value-of select="gsa:i18n ('Tags', 'Tag')"/></h1>
+      <!-- The for-each makes the get_tags_response the current node. -->
+      <xsl:for-each select="get_tags_response">
+        <xsl:call-template name="html-tags-trash-table"/>
+      </xsl:for-each>
+    </xsl:if>
 
-      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_TARGETS']">
-        <a name="targets"></a>
-        <h1><xsl:value-of select="gsa:i18n ('Targets', 'Target')"/></h1>
-        <!-- The for-each makes the get_targets_response the current node. -->
-        <xsl:for-each select="get_targets_response">
-          <xsl:call-template name="html-targets-trash-table"/>
-        </xsl:for-each>
-      </xsl:if>
+    <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_TARGETS']">
+      <a name="targets"></a>
+      <h1><xsl:value-of select="gsa:i18n ('Targets', 'Target')"/></h1>
+      <!-- The for-each makes the get_targets_response the current node. -->
+      <xsl:for-each select="get_targets_response">
+        <xsl:call-template name="html-targets-trash-table"/>
+      </xsl:for-each>
+    </xsl:if>
 
-      <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_TASKS']">
-        <a name="tasks"></a>
-        <h1><xsl:value-of select="gsa:i18n ('Tasks', 'Task')"/></h1>
-        <!-- The for-each makes the get_tasks_response the current node. -->
-        <xsl:for-each select="get_tasks_response">
-          <xsl:call-template name="html-tasks-trash-table"/>
-        </xsl:for-each>
-      </xsl:if>
-    </div>
+    <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_TASKS']">
+      <a name="tasks"></a>
+      <h1><xsl:value-of select="gsa:i18n ('Tasks', 'Task')"/></h1>
+      <!-- The for-each makes the get_tasks_response the current node. -->
+      <xsl:for-each select="get_tasks_response">
+        <xsl:call-template name="html-tasks-trash-table"/>
+      </xsl:for-each>
+    </xsl:if>
   </div>
 </xsl:template>
 
@@ -34462,98 +34478,105 @@ var toggleFilter = function(){
 </xsl:template>
 
 <xsl:template name="html-feed-form">
-  <div class="gb_window">
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n ('NVT Feed Management', 'Feed Sync')"/>
-      <a href="/help/feed_management.html?token={/envelope/token}"
-         title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('NVT Feed Management', 'Feed Sync'))}">
-        <img src="/img/help.png"/>
+  <div class="toolbar">
+    <a href="/help/feed_management.html?token={/envelope/token}"
+       title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('NVT Feed Management', 'Feed Sync'))}">
+      <img src="/img/help.png"/>
+    </a>
+  </div>
+
+  <div class="section-header">
+    <h1>
+      <a href="/omp?cmd=get_feed&amp;token={/envelope/token}"
+         title="{gsa:i18n ('NVT Feed Management', 'Feed Sync')}">
+        <img id="big-icon" src="/img/feed.svg" border="0" style="margin-right:5px" alt="NVT Feed Management"/>
       </a>
-    </div>
-    <div class="gb_window_part_content">
-      <form action="/omp" method="post" enctype="multipart/form-data">
-        <input type="hidden" name="token" value="{/envelope/token}"/>
-        <input type="hidden" name="cmd" value="sync_feed"/>
-        <input type="hidden" name="caller" value="{/envelope/current_page}"/>
-        <table border="0" cellspacing="0" cellpadding="3" width="100%">
-          <tr>
-            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
-            <td>
-              <b><xsl:value-of select="feed/name"/></b><br/>
-            </td>
-          </tr>
-          <tr>
-            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Feed Version', 'Feed Sync')"/></td>
-            <td>
-              <xsl:value-of select="feed/version"/>
-            </td>
-          </tr>
-          <xsl:choose>
-            <xsl:when test="feed/currently_syncing">
-              <tr>
-                <td valign="top" width="125"></td>
-                <td>
-                  <xsl:value-of select="gsa:i18n ('Synchronization', 'Feed Sync')"/>
-                  <b><xsl:value-of select="gsa:i18n (' in progress', 'Feed Sync')"/></b>
-                  <xsl:text>. </xsl:text>
-                  <xsl:value-of select="gsa:i18n ('Started ', 'Feed Sync')"/>
-                  <b>
-                    <xsl:value-of select="feed/currently_syncing/timestamp"/>
-                  </b>
-                  <xsl:value-of select="gsa:i18n (' by ', 'Feed Sync')"/>
-                  <b><xsl:value-of select="feed/currently_syncing/user"/></b>
-                  <xsl:text>.</xsl:text>
-                </td>
-              </tr>
-            </xsl:when>
-          </xsl:choose>
-          <tr>
-            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Description', 'Property')"/></td>
-            <td>
-              <xsl:value-of select="feed/description"/>
-            </td>
-          </tr>
-          <xsl:choose>
-            <xsl:when test="feed/sync_not_available">
-              <tr>
-                <td valign="top" width="125"></td>
-                <td>
-                  <b><xsl:value-of select="gsa:i18n ('Warning:', 'Feed Sync')"/></b>
-                  <xsl:text> </xsl:text>
-                  <xsl:value-of select="gsa:i18n ('Synchronization with this feed is currently not possible.', 'Feed Sync')"/><br/>
-                  <xsl:choose>
-                    <xsl:when test="feed/sync_not_available/error/text()">
-                      <xsl:value-of select="gsa:i18n ('The synchronization script returned the following error message:', 'Feed Sync')"/>
-                      <xsl:text> </xsl:text>
-                      <i><xsl:value-of select="feed/sync_not_available/error/text()"/></i>
-                    </xsl:when>
-                  </xsl:choose>
-                </td>
-              </tr>
-            </xsl:when>
-          </xsl:choose>
-          <tr>
-            <td colspan="2" style="text-align:right;">
-              <xsl:choose>
-                <xsl:when test="feed/currently_syncing">
-                  <input type="submit" name="submit" value="{gsa:i18n ('Synchronize with Feed now', 'Feed Sync')}" disabled="disabled"/>
-                </xsl:when>
-                <xsl:when test="feed/sync_not_available">
-                  <input type="submit" name="submit" value="{gsa:i18n ('Synchronize with Feed now', 'Feed Sync')}" disabled="disabled"/>
-                </xsl:when>
-                <xsl:otherwise>
-                  <input type="submit" name="submit" value="{gsa:i18n ('Synchronize with Feed now', 'Feed Sync')}"/>
-                </xsl:otherwise>
-              </xsl:choose>
-              <p>
-                <a style="background-color: #ff6;" href="/help/feed_management.html?token={/envelope/token}#side_effects" title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('Feed Management', 'Feed Sync'))}"><xsl:value-of select="gsa:i18n ('Learn about the side effects of Feed synchronization!', 'Feed Sync')"/></a>
-              </p>
-            </td>
-          </tr>
-        </table>
-      </form>
-    </div>
+      <xsl:value-of select="gsa:i18n ('NVT Feed Management', 'Feed Sync')"/>
+    </h1>
+  </div>
+
+  <div class="section-box">
+    <form action="/omp" method="post" enctype="multipart/form-data">
+      <input type="hidden" name="token" value="{/envelope/token}"/>
+      <input type="hidden" name="cmd" value="sync_feed"/>
+      <input type="hidden" name="caller" value="{/envelope/current_page}"/>
+      <table border="0" cellspacing="0" cellpadding="3" width="100%">
+        <tr>
+          <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
+          <td>
+            <b><xsl:value-of select="feed/name"/></b><br/>
+          </td>
+        </tr>
+        <tr>
+          <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Feed Version', 'Feed Sync')"/></td>
+          <td>
+            <xsl:value-of select="feed/version"/>
+          </td>
+        </tr>
+        <xsl:choose>
+          <xsl:when test="feed/currently_syncing">
+            <tr>
+              <td valign="top" width="125"></td>
+              <td>
+                <xsl:value-of select="gsa:i18n ('Synchronization', 'Feed Sync')"/>
+                <b><xsl:value-of select="gsa:i18n (' in progress', 'Feed Sync')"/></b>
+                <xsl:text>. </xsl:text>
+                <xsl:value-of select="gsa:i18n ('Started ', 'Feed Sync')"/>
+                <b>
+                  <xsl:value-of select="feed/currently_syncing/timestamp"/>
+                </b>
+                <xsl:value-of select="gsa:i18n (' by ', 'Feed Sync')"/>
+                <b><xsl:value-of select="feed/currently_syncing/user"/></b>
+                <xsl:text>.</xsl:text>
+              </td>
+            </tr>
+          </xsl:when>
+        </xsl:choose>
+        <tr>
+          <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Description', 'Property')"/></td>
+          <td>
+            <xsl:value-of select="feed/description"/>
+          </td>
+        </tr>
+        <xsl:choose>
+          <xsl:when test="feed/sync_not_available">
+            <tr>
+              <td valign="top" width="125"></td>
+              <td>
+                <b><xsl:value-of select="gsa:i18n ('Warning:', 'Feed Sync')"/></b>
+                <xsl:text> </xsl:text>
+                <xsl:value-of select="gsa:i18n ('Synchronization with this feed is currently not possible.', 'Feed Sync')"/><br/>
+                <xsl:choose>
+                  <xsl:when test="feed/sync_not_available/error/text()">
+                    <xsl:value-of select="gsa:i18n ('The synchronization script returned the following error message:', 'Feed Sync')"/>
+                    <xsl:text> </xsl:text>
+                    <i><xsl:value-of select="feed/sync_not_available/error/text()"/></i>
+                  </xsl:when>
+                </xsl:choose>
+              </td>
+            </tr>
+          </xsl:when>
+        </xsl:choose>
+        <tr>
+          <td colspan="2" style="text-align:right;">
+            <xsl:choose>
+              <xsl:when test="feed/currently_syncing">
+                <input type="submit" name="submit" value="{gsa:i18n ('Synchronize with Feed now', 'Feed Sync')}" disabled="disabled"/>
+              </xsl:when>
+              <xsl:when test="feed/sync_not_available">
+                <input type="submit" name="submit" value="{gsa:i18n ('Synchronize with Feed now', 'Feed Sync')}" disabled="disabled"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <input type="submit" name="submit" value="{gsa:i18n ('Synchronize with Feed now', 'Feed Sync')}"/>
+              </xsl:otherwise>
+            </xsl:choose>
+            <p>
+              <a style="background-color: #ff6;" href="/help/feed_management.html?token={/envelope/token}#side_effects" title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('Feed Management', 'Feed Sync'))}"><xsl:value-of select="gsa:i18n ('Learn about the side effects of Feed synchronization!', 'Feed Sync')"/></a>
+            </p>
+          </td>
+        </tr>
+      </table>
+    </form>
   </div>
 </xsl:template>
 
@@ -34596,113 +34619,120 @@ var toggleFilter = function(){
 </xsl:template>
 
 <xsl:template name="html-scap-form">
-  <div class="gb_window">
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n ('SCAP Feed Management', 'Feed Sync')"/>
-      <a href="/help/scap_management.html?token={/envelope/token}"
-         title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('SCAP Feed Management', 'Feed Sync'))}">
-        <img src="/img/help.png"/>
+  <div class="toolbar">
+    <a href="/help/scap_management.html?token={/envelope/token}"
+       title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('SCAP Feed Management', 'Feed Sync'))}">
+      <img src="/img/help.png"/>
+    </a>
+  </div>
+
+  <div class="section-header">
+    <h1>
+      <a href="/omp?cmd=get_scap&amp;token={/envelope/token}"
+         title="{gsa:i18n ('SCAP Feed Management', 'Feed Sync')}">
+        <img id="big-icon" src="/img/feed.svg" border="0" style="margin-right:5px" alt="SCAP Feed Management"/>
       </a>
-    </div>
-    <div class="gb_window_part_content">
-      <form action="/omp" method="post" enctype="multipart/form-data">
-        <input type="hidden" name="token" value="{/envelope/token}"/>
-        <input type="hidden" name="cmd" value="sync_scap"/>
-        <input type="hidden" name="caller" value="{/envelope/current_page}"/>
-        <table border="0" cellspacing="0" cellpadding="3" width="100%">
-          <tr>
-            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
-            <td>
-              <b><xsl:value-of select="scap/name"/></b><br/>
-            </td>
-          </tr>
-          <tr>
-            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Feed Version', 'Feed Sync')"/></td>
-            <td>
-              <xsl:value-of select="scap/version"/>
-            </td>
-          </tr>
-          <xsl:choose>
-            <xsl:when test="scap/currently_syncing">
-              <tr>
-                <td valign="top" width="125"></td>
-                <td>
-                  <xsl:choose>
-                    <xsl:when test="string-length (scap/currently_syncing/user) = 0">
-                      <xsl:value-of select="gsa:i18n ('Migration', 'Feed Sync')"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <xsl:value-of select="gsa:i18n ('Synchronization', 'Feed Sync')"/>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                  <b><xsl:value-of select="gsa:i18n (' in progress', 'Feed Sync')"/></b>
-                  <xsl:text>. </xsl:text>
-                  <xsl:value-of select="gsa:i18n ('Started ', 'Feed Sync')"/>
-                  <b>
-                    <xsl:value-of select="scap/currently_syncing/timestamp"/>
-                  </b>
-                  <xsl:choose>
-                    <xsl:when test="string-length (scap/currently_syncing/user) = 0">
-                      <xsl:value-of select="gsa:i18n (' on the command line', 'Feed Sync')"/>
-                      <xsl:text>.</xsl:text>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <xsl:value-of select="gsa:i18n (' by ', 'Feed Sync')"/>
-                      <b><xsl:value-of select="scap/currently_syncing/user"/></b>
-                      <xsl:text>.</xsl:text>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                </td>
-              </tr>
-            </xsl:when>
-          </xsl:choose>
-          <tr>
-            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Description', 'Property')"/></td>
-            <td>
-              <xsl:value-of select="scap/description"/>
-            </td>
-          </tr>
-          <xsl:choose>
-            <xsl:when test="scap/sync_not_available">
-              <tr>
-                <td valign="top" width="125"></td>
-                <td>
-                  <b><xsl:value-of select="gsa:i18n ('Warning:', 'Feed Sync')"/></b>
-                  <xsl:text> </xsl:text>
-                  <xsl:value-of select="gsa:i18n ('Synchronization with this feed is currently not possible.', 'Feed Sync')"/><br/>
-                  <xsl:choose>
-                    <xsl:when test="scap/sync_not_available/error/text()">
-                      <xsl:value-of select="gsa:i18n ('The synchronization script returned the following error message:', 'Feed Sync')"/>
-                      <xsl:text> </xsl:text>
-                      <i><xsl:value-of select="scap/sync_not_available/error/text()"/></i>
-                    </xsl:when>
-                  </xsl:choose>
-                </td>
-              </tr>
-            </xsl:when>
-          </xsl:choose>
-          <tr>
-            <td colspan="2" style="text-align:right;">
-              <xsl:choose>
-                <xsl:when test="scap/currently_syncing">
-                  <input type="submit" name="submit" value="{gsa:i18n ('Synchronize with SCAP Feed now', 'Feed Sync')}" disabled="disabled"/>
-                </xsl:when>
-                <xsl:when test="scap/sync_not_available">
-                  <input type="submit" name="submit" value="{gsa:i18n ('Synchronize with SCAP Feed now', 'Feed Sync')}" disabled="disabled"/>
-                </xsl:when>
-                <xsl:otherwise>
-                  <input type="submit" name="submit" value="{gsa:i18n ('Synchronize with SCAP Feed now', 'Feed Sync')}"/>
-                </xsl:otherwise>
-              </xsl:choose>
-              <p>
-                <a style="background-color: #ff6;" href="/help/scap_management.html?token={/envelope/token}#side_effects" title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('SCAP Feed Management', 'Feed Sync'))}"><xsl:value-of select="gsa:i18n ('Learn about the side effects of SCAP Feed synchronization!', 'Feed Sync')"/></a>
-              </p>
-            </td>
-          </tr>
-        </table>
-      </form>
-    </div>
+      <xsl:value-of select="gsa:i18n ('SCAP Feed Management', 'Feed Sync')"/>
+    </h1>
+  </div>
+
+  <div class="section-box">
+    <form action="/omp" method="post" enctype="multipart/form-data">
+      <input type="hidden" name="token" value="{/envelope/token}"/>
+      <input type="hidden" name="cmd" value="sync_scap"/>
+      <input type="hidden" name="caller" value="{/envelope/current_page}"/>
+      <table border="0" cellspacing="0" cellpadding="3" width="100%">
+        <tr>
+          <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
+          <td>
+            <b><xsl:value-of select="scap/name"/></b><br/>
+          </td>
+        </tr>
+        <tr>
+          <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Feed Version', 'Feed Sync')"/></td>
+          <td>
+            <xsl:value-of select="scap/version"/>
+          </td>
+        </tr>
+        <xsl:choose>
+          <xsl:when test="scap/currently_syncing">
+            <tr>
+              <td valign="top" width="125"></td>
+              <td>
+                <xsl:choose>
+                  <xsl:when test="string-length (scap/currently_syncing/user) = 0">
+                    <xsl:value-of select="gsa:i18n ('Migration', 'Feed Sync')"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <xsl:value-of select="gsa:i18n ('Synchronization', 'Feed Sync')"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+                <b><xsl:value-of select="gsa:i18n (' in progress', 'Feed Sync')"/></b>
+                <xsl:text>. </xsl:text>
+                <xsl:value-of select="gsa:i18n ('Started ', 'Feed Sync')"/>
+                <b>
+                  <xsl:value-of select="scap/currently_syncing/timestamp"/>
+                </b>
+                <xsl:choose>
+                  <xsl:when test="string-length (scap/currently_syncing/user) = 0">
+                    <xsl:value-of select="gsa:i18n (' on the command line', 'Feed Sync')"/>
+                    <xsl:text>.</xsl:text>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <xsl:value-of select="gsa:i18n (' by ', 'Feed Sync')"/>
+                    <b><xsl:value-of select="scap/currently_syncing/user"/></b>
+                    <xsl:text>.</xsl:text>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </td>
+            </tr>
+          </xsl:when>
+        </xsl:choose>
+        <tr>
+          <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Description', 'Property')"/></td>
+          <td>
+            <xsl:value-of select="scap/description"/>
+          </td>
+        </tr>
+        <xsl:choose>
+          <xsl:when test="scap/sync_not_available">
+            <tr>
+              <td valign="top" width="125"></td>
+              <td>
+                <b><xsl:value-of select="gsa:i18n ('Warning:', 'Feed Sync')"/></b>
+                <xsl:text> </xsl:text>
+                <xsl:value-of select="gsa:i18n ('Synchronization with this feed is currently not possible.', 'Feed Sync')"/><br/>
+                <xsl:choose>
+                  <xsl:when test="scap/sync_not_available/error/text()">
+                    <xsl:value-of select="gsa:i18n ('The synchronization script returned the following error message:', 'Feed Sync')"/>
+                    <xsl:text> </xsl:text>
+                    <i><xsl:value-of select="scap/sync_not_available/error/text()"/></i>
+                  </xsl:when>
+                </xsl:choose>
+              </td>
+            </tr>
+          </xsl:when>
+        </xsl:choose>
+        <tr>
+          <td colspan="2" style="text-align:right;">
+            <xsl:choose>
+              <xsl:when test="scap/currently_syncing">
+                <input type="submit" name="submit" value="{gsa:i18n ('Synchronize with SCAP Feed now', 'Feed Sync')}" disabled="disabled"/>
+              </xsl:when>
+              <xsl:when test="scap/sync_not_available">
+                <input type="submit" name="submit" value="{gsa:i18n ('Synchronize with SCAP Feed now', 'Feed Sync')}" disabled="disabled"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <input type="submit" name="submit" value="{gsa:i18n ('Synchronize with SCAP Feed now', 'Feed Sync')}"/>
+              </xsl:otherwise>
+            </xsl:choose>
+            <p>
+              <a style="background-color: #ff6;" href="/help/scap_management.html?token={/envelope/token}#side_effects" title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('SCAP Feed Management', 'Feed Sync'))}"><xsl:value-of select="gsa:i18n ('Learn about the side effects of SCAP Feed synchronization!', 'Feed Sync')"/></a>
+            </p>
+          </td>
+        </tr>
+      </table>
+    </form>
   </div>
 </xsl:template>
 
@@ -34745,113 +34775,120 @@ var toggleFilter = function(){
 </xsl:template>
 
 <xsl:template name="html-cert-form">
-  <div class="gb_window">
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n ('CERT Feed Management', 'Feed Sync')"/>
-      <a href="/help/cert_management.html?token={/envelope/token}"
-         title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('CERT Feed Management', 'Feed Sync'))}">
-        <img src="/img/help.png"/>
+  <div class="toolbar">
+    <a href="/help/cert_management.html?token={/envelope/token}"
+       title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('CERT Feed Management', 'Feed Sync'))}">
+      <img src="/img/help.png"/>
+    </a>
+  </div>
+
+  <div class="section-header">
+    <h1>
+      <a href="/omp?cmd=get_feed&amp;token={/envelope/token}"
+         title="{gsa:i18n ('CERT Feed Management', 'Feed Sync')}">
+        <img id="big-icon" src="/img/feed.svg" border="0" style="margin-right:5px" alt="CERT Feed Management"/>
       </a>
-    </div>
-    <div class="gb_window_part_content">
-      <form action="/omp" method="post" enctype="multipart/form-data">
-        <input type="hidden" name="token" value="{/envelope/token}"/>
-        <input type="hidden" name="cmd" value="sync_cert"/>
-        <input type="hidden" name="caller" value="{/envelope/current_page}"/>
-        <table border="0" cellspacing="0" cellpadding="3" width="100%">
-          <tr>
-            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
-            <td>
-              <b><xsl:value-of select="cert/name"/></b><br/>
-            </td>
-          </tr>
-          <tr>
-            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Feed Version', 'Feed Sync')"/></td>
-            <td>
-              <xsl:value-of select="cert/version"/>
-            </td>
-          </tr>
-          <xsl:choose>
-            <xsl:when test="cert/currently_syncing">
-              <tr>
-                <td valign="top" width="125"></td>
-                <td>
-                  <xsl:choose>
-                    <xsl:when test="string-length (cert/currently_syncing/user) = 0">
-                      <xsl:value-of select="gsa:i18n ('Migration', 'Feed Sync')"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <xsl:value-of select="gsa:i18n ('Synchronization', 'Feed Sync')"/>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                  <b><xsl:value-of select="gsa:i18n (' in progress', 'Feed Sync')"/></b>
-                  <xsl:text>. </xsl:text>
-                  <xsl:value-of select="gsa:i18n ('Started ', 'Feed Sync')"/>
-                  <b>
-                    <xsl:value-of select="cert/currently_syncing/timestamp"/>
-                  </b>
-                  <xsl:choose>
-                    <xsl:when test="string-length (cert/currently_syncing/user) = 0">
-                      <xsl:value-of select="gsa:i18n (' on the command line', 'Feed Sync')"/>
-                      <xsl:text>.</xsl:text>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <xsl:value-of select="gsa:i18n (' by ', 'Feed Sync')"/>
-                      <b><xsl:value-of select="cert/currently_syncing/user"/></b>
-                      <xsl:text>.</xsl:text>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                </td>
-              </tr>
-            </xsl:when>
-          </xsl:choose>
-          <tr>
-            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Description', 'Property')"/></td>
-            <td>
-              <xsl:value-of select="cert/description"/>
-            </td>
-          </tr>
-          <xsl:choose>
-            <xsl:when test="cert/sync_not_available">
-              <tr>
-                <td valign="top" width="125"></td>
-                <td>
-                  <b><xsl:value-of select="gsa:i18n ('Warning:', 'Feed Sync')"/></b>
-                  <xsl:text> </xsl:text>
-                  <xsl:value-of select="gsa:i18n ('Synchronization with this feed is currently not possible.', 'Feed Sync')"/><br/>
-                  <xsl:choose>
-                    <xsl:when test="cert/sync_not_available/error/text()">
-                      <xsl:value-of select="gsa:i18n ('The synchronization script returned the following error message:', 'Feed Sync')"/>
-                      <xsl:text> </xsl:text>
-                      <i><xsl:value-of select="cert/sync_not_available/error/text()"/></i>
-                    </xsl:when>
-                  </xsl:choose>
-                </td>
-              </tr>
-            </xsl:when>
-          </xsl:choose>
-          <tr>
-            <td colspan="2" style="text-align:right;">
-              <xsl:choose>
-                <xsl:when test="cert/currently_syncing">
-                  <input type="submit" name="submit" value="{gsa:i18n ('Synchronize with CERT Feed now', 'Feed Sync')}" disabled="disabled"/>
-                </xsl:when>
-                <xsl:when test="cert/sync_not_available">
-                  <input type="submit" name="submit" value="{gsa:i18n ('Synchronize with CERT Feed now', 'Feed Sync')}" disabled="disabled"/>
-                </xsl:when>
-                <xsl:otherwise>
-                  <input type="submit" name="submit" value="{gsa:i18n ('Synchronize with CERT Feed now', 'Feed Sync')}"/>
-                </xsl:otherwise>
-              </xsl:choose>
-              <p>
-                <a style="background-color: #ff6;" href="/help/cert_management.html?token={/envelope/token}#side_effects" title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('CERT Feed Management', 'Feed Sync'))}"><xsl:value-of select="gsa:i18n ('Learn about the side effects of CERT Feed synchronization!', 'Feed Sync')"/></a>
-              </p>
-            </td>
-          </tr>
-        </table>
-      </form>
-    </div>
+      <xsl:value-of select="gsa:i18n ('CERT Feed Management', 'Feed Sync')"/>
+    </h1>
+  </div>
+
+  <div class="section-box">
+    <form action="/omp" method="post" enctype="multipart/form-data">
+      <input type="hidden" name="token" value="{/envelope/token}"/>
+      <input type="hidden" name="cmd" value="sync_cert"/>
+      <input type="hidden" name="caller" value="{/envelope/current_page}"/>
+      <table border="0" cellspacing="0" cellpadding="3" width="100%">
+        <tr>
+          <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
+          <td>
+            <b><xsl:value-of select="cert/name"/></b><br/>
+          </td>
+        </tr>
+        <tr>
+          <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Feed Version', 'Feed Sync')"/></td>
+          <td>
+            <xsl:value-of select="cert/version"/>
+          </td>
+        </tr>
+        <xsl:choose>
+          <xsl:when test="cert/currently_syncing">
+            <tr>
+              <td valign="top" width="125"></td>
+              <td>
+                <xsl:choose>
+                  <xsl:when test="string-length (cert/currently_syncing/user) = 0">
+                    <xsl:value-of select="gsa:i18n ('Migration', 'Feed Sync')"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <xsl:value-of select="gsa:i18n ('Synchronization', 'Feed Sync')"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+                <b><xsl:value-of select="gsa:i18n (' in progress', 'Feed Sync')"/></b>
+                <xsl:text>. </xsl:text>
+                <xsl:value-of select="gsa:i18n ('Started ', 'Feed Sync')"/>
+                <b>
+                  <xsl:value-of select="cert/currently_syncing/timestamp"/>
+                </b>
+                <xsl:choose>
+                  <xsl:when test="string-length (cert/currently_syncing/user) = 0">
+                    <xsl:value-of select="gsa:i18n (' on the command line', 'Feed Sync')"/>
+                    <xsl:text>.</xsl:text>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <xsl:value-of select="gsa:i18n (' by ', 'Feed Sync')"/>
+                    <b><xsl:value-of select="cert/currently_syncing/user"/></b>
+                    <xsl:text>.</xsl:text>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </td>
+            </tr>
+          </xsl:when>
+        </xsl:choose>
+        <tr>
+          <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Description', 'Property')"/></td>
+          <td>
+            <xsl:value-of select="cert/description"/>
+          </td>
+        </tr>
+        <xsl:choose>
+          <xsl:when test="cert/sync_not_available">
+            <tr>
+              <td valign="top" width="125"></td>
+              <td>
+                <b><xsl:value-of select="gsa:i18n ('Warning:', 'Feed Sync')"/></b>
+                <xsl:text> </xsl:text>
+                <xsl:value-of select="gsa:i18n ('Synchronization with this feed is currently not possible.', 'Feed Sync')"/><br/>
+                <xsl:choose>
+                  <xsl:when test="cert/sync_not_available/error/text()">
+                    <xsl:value-of select="gsa:i18n ('The synchronization script returned the following error message:', 'Feed Sync')"/>
+                    <xsl:text> </xsl:text>
+                    <i><xsl:value-of select="cert/sync_not_available/error/text()"/></i>
+                  </xsl:when>
+                </xsl:choose>
+              </td>
+            </tr>
+          </xsl:when>
+        </xsl:choose>
+        <tr>
+          <td colspan="2" style="text-align:right;">
+            <xsl:choose>
+              <xsl:when test="cert/currently_syncing">
+                <input type="submit" name="submit" value="{gsa:i18n ('Synchronize with CERT Feed now', 'Feed Sync')}" disabled="disabled"/>
+              </xsl:when>
+              <xsl:when test="cert/sync_not_available">
+                <input type="submit" name="submit" value="{gsa:i18n ('Synchronize with CERT Feed now', 'Feed Sync')}" disabled="disabled"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <input type="submit" name="submit" value="{gsa:i18n ('Synchronize with CERT Feed now', 'Feed Sync')}"/>
+              </xsl:otherwise>
+            </xsl:choose>
+            <p>
+              <a style="background-color: #ff6;" href="/help/cert_management.html?token={/envelope/token}#side_effects" title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('CERT Feed Management', 'Feed Sync'))}"><xsl:value-of select="gsa:i18n ('Learn about the side effects of CERT Feed synchronization!', 'Feed Sync')"/></a>
+            </p>
+          </td>
+        </tr>
+      </table>
+    </form>
   </div>
 </xsl:template>
 
@@ -34888,525 +34925,530 @@ var toggleFilter = function(){
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:apply-templates select="modify_setting_response"/>
 
-  <div class="gb_window">
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n ('My Settings', 'My Settings')"/>
-      <a href="/help/my_settings.html?token={/envelope/token}"
-         title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('My Settings', 'My Settings'))}">
-        <img src="/img/help.png"/>
+  <div class="toolbar">
+    <a href="/help/my_settings.html?token={/envelope/token}"
+       title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('My Settings', 'My Settings'))}">
+      <img src="/img/help.png"/>
+    </a>
+    <xsl:if test="gsa:may-op ('modify_setting')">
+      <a href="/omp?cmd=edit_my_settings&amp;token={/envelope/token}"
+         title="{gsa:i18n ('Edit My Settings', 'My Settings')}"
+         class="edit-action-icon" data-type="my_settings"
+         style="margin-left:3px;">
+        <img src="/img/edit.png"/>
       </a>
-      <xsl:if test="gsa:may-op ('modify_setting')">
-        <a href="/omp?cmd=edit_my_settings&amp;token={/envelope/token}"
-           title="{gsa:i18n ('Edit My Settings', 'My Settings')}"
-           class="edit-action-icon" data-type="my_settings"
-           style="margin-left:3px;">
-          <img src="/img/edit.png"/>
-        </a>
-      </xsl:if>
-    </div>
-    <div class="gb_window_part_content_no_pad">
-      <div>
-        <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
-          <tr class="gbntablehead2">
-            <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
-            <td><xsl:value-of select="gsa:i18n ('Value', 'Property')"/></td>
-          </tr>
-          <tr class="odd">
-            <td><xsl:value-of select="gsa:i18n ('Timezone', 'Time')"/></td>
+    </xsl:if>
+  </div>
+
+  <div class="section-header">
+    <h1>
+      <a href="/omp?cmd=get_my_settings&amp;token={/envelope/token}"
+         title="{gsa:i18n ('My Settings', 'My Settings')}">
+        <img id="big-icon" src="/img/mysettings.svg" border="0" style="margin-right:5px" alt="My Settings"/>
+      </a>
+      <xsl:value-of select="gsa:i18n ('My Settings', 'My Settings')"/>
+    </h1>
+  </div>
+
+  <div class="section-box">
+    <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
+      <tr class="gbntablehead2">
+        <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
+        <td><xsl:value-of select="gsa:i18n ('Value', 'Property')"/></td>
+      </tr>
+      <tr class="odd">
+        <td><xsl:value-of select="gsa:i18n ('Timezone', 'Time')"/></td>
+        <td>
+          <xsl:variable name="abbrev"
+                        select="(str:split (/envelope/time, ' '))[last ()]"/>
+          <xsl:value-of select="/envelope/timezone"/>
+          <xsl:if test="$abbrev != /envelope/timezone">
+            <xsl:text> (</xsl:text>
+            <xsl:value-of select="(str:split (/envelope/time, ' '))[last ()]"/>
+            <xsl:text>)</xsl:text>
+          </xsl:if>
+        </td>
+      </tr>
+      <tr class="even">
+        <td><xsl:value-of select="gsa:i18n ('Password', 'Auth Data')"/></td>
+        <td>********</td>
+      </tr>
+      <xsl:if test="gsa:may-op ('get_settings')">
+        <tr class="odd">
+          <td><xsl:value-of select="gsa:i18n ('User Interface Language', 'My Settings')"/></td>
+          <td>
+            <xsl:variable name="lang">
+              <xsl:choose>
+                <xsl:when test="string-length (get_settings_response/setting[name='User Interface Language']/value) &gt; 0">
+                  <xsl:value-of select="get_settings_response/setting[name='User Interface Language']/value"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:text>Browser Language</xsl:text>
+                </xsl:otherwise>
+              </xsl:choose>
+            </xsl:variable>
+            <xsl:variable name="lang_entry" select="gsa_languages/language[code = $lang or name = $lang]"/>
+            <xsl:choose>
+              <xsl:when test="$lang_entry and ($lang_entry/code != $lang_entry/name) and ($lang_entry/native_name != $lang_entry/name)">
+                <xsl:value-of select="$lang"/> - <xsl:value-of select="$lang_entry/native_name"/> [<xsl:value-of select="$lang_entry/name"/>]
+              </xsl:when>
+              <xsl:when test="$lang_entry and ($lang_entry/code != $lang_entry/name)">
+                <xsl:value-of select="$lang"/> - <xsl:value-of select="$lang_entry/name"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="$lang"/>
+              </xsl:otherwise>
+            </xsl:choose>
+          </td>
+        </tr>
+        <tr class="even">
+          <td><xsl:value-of select="gsa:i18n ('Rows Per Page', 'My Settings')"/></td>
+          <td><xsl:value-of select="get_settings_response/setting[name='Rows Per Page']/value"/></td>
+        </tr>
+        <tr class="odd">
+          <td><xsl:value-of select="gsa:i18n ('Wizard Rows', 'My Settings')"/></td>
+          <td><xsl:value-of select="get_settings_response/setting[name='Wizard Rows']/value"/></td>
+        </tr>
+        <tr class="even">
+          <td><xsl:value-of select="gsa:i18n ('Details Export File Name', 'My Settings')"/></td>
+          <td><xsl:value-of select="get_settings_response/setting[name='Details Export File Name']/value"/></td>
+        </tr>
+        <tr class="odd">
+          <td><xsl:value-of select="gsa:i18n ('List Export File Name', 'My Settings')"/></td>
+          <td><xsl:value-of select="get_settings_response/setting[name='List Export File Name']/value"/></td>
+        </tr>
+        <tr class="even">
+          <td><xsl:value-of select="gsa:i18n ('Report Export File Name', 'My Settings')"/></td>
+          <td><xsl:value-of select="get_settings_response/setting[name='Report Export File Name']/value"/></td>
+        </tr>
+        <tr class="odd">
+          <td><xsl:value-of select="gsa:i18n ('Severity Class', 'My Settings')"/></td>
+          <td>
+            <xsl:call-template name="severity-settings-name">
+              <xsl:with-param name="type"
+                              select="get_settings_response/setting[name='Severity Class']/value"/>
+            </xsl:call-template>
+          </td>
+        </tr>
+        <tr class="even">
+          <td><xsl:value-of select="gsa:i18n ('Dynamic Severity', 'My Settings')"/></td>
+          <td>
+            <xsl:variable name="dynamic_severity"                              select="get_settings_response/setting[name='Dynamic Severity']/value"/>
+            <xsl:choose>
+              <xsl:when test="$dynamic_severity = 0"><xsl:value-of select="gsa:i18n ('No', 'Binary Choice')"/></xsl:when>
+              <xsl:when test="$dynamic_severity = 1"><xsl:value-of select="gsa:i18n ('Yes', 'Binary Choice')"/></xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="$dynamic_severity"/>
+              </xsl:otherwise>
+            </xsl:choose>
+          </td>
+        </tr>
+        <tr class="odd">
+          <td><xsl:value-of select="gsa:i18n ('Default Severity', 'My Settings')"/></td>
+          <td><xsl:value-of select="get_settings_response/setting[name='Default Severity']/value"/></td>
+        </tr>
+
+        <xsl:if test="gsa:may-op ('get_alerts')">
+          <tr class="even">
+            <td><xsl:value-of select="gsa:i18n ('Default Alert', 'Alert')"/></td>
             <td>
-              <xsl:variable name="abbrev"
-                            select="(str:split (/envelope/time, ' '))[last ()]"/>
-              <xsl:value-of select="/envelope/timezone"/>
-              <xsl:if test="$abbrev != /envelope/timezone">
-                <xsl:text> (</xsl:text>
-                <xsl:value-of select="(str:split (/envelope/time, ' '))[last ()]"/>
-                <xsl:text>)</xsl:text>
-              </xsl:if>
+              <xsl:call-template name="get-settings-resource">
+                <xsl:with-param name="id"
+                                select="get_settings_response/setting[name='Default Alert']/value"/>
+                <xsl:with-param name="resources" select="commands_response/get_alerts_response/alert"/>
+                <xsl:with-param name="type" select="'alert'"/>
+              </xsl:call-template>
+            </td>
+          </tr>
+        </xsl:if>
+
+        <xsl:if test="gsa:may-op ('get_configs')">
+          <tr class="odd">
+            <td><xsl:value-of select="gsa:i18n ('Default OpenVAS Scan Config', 'Scan Config')"/></td>
+            <td>
+              <xsl:call-template name="get-settings-resource">
+                <xsl:with-param name="id"
+                                select="get_settings_response/setting[name='Default OpenVAS Scan Config']/value"/>
+                <xsl:with-param name="resources" select="commands_response/get_configs_response/config"/>
+                <xsl:with-param name="type" select="'config'"/>
+              </xsl:call-template>
+            </td>
+          </tr>
+
+          <tr class="even">
+            <td><xsl:value-of select="gsa:i18n ('Default OSP Scan Config', 'Scan Config')"/></td>
+            <td>
+              <xsl:call-template name="get-settings-resource">
+                <xsl:with-param name="id"
+                                select="get_settings_response/setting[name='Default OSP Scan Config']/value"/>
+                <xsl:with-param name="resources" select="commands_response/get_configs_response/config"/>
+                <xsl:with-param name="type" select="'config'"/>
+              </xsl:call-template>
+            </td>
+          </tr>
+        </xsl:if>
+
+        <xsl:if test="gsa:may-op ('get_credentials')">
+          <tr class="odd">
+            <td><xsl:value-of select="gsa:i18n ('Default SSH Credential', 'Credential')"/></td>
+            <td>
+              <xsl:call-template name="get-settings-resource">
+                <xsl:with-param name="id"
+                                select="get_settings_response/setting[name='Default SSH Credential']/value"/>
+                <xsl:with-param name="resources" select="commands_response/get_credentials_response/credential"/>
+                <xsl:with-param name="type" select="'credential'"/>
+              </xsl:call-template>
+            </td>
+          </tr>
+
+          <tr class="even">
+            <td><xsl:value-of select="gsa:i18n ('Default SMB Credential', 'Credential')"/></td>
+            <td>
+              <xsl:call-template name="get-settings-resource">
+                <xsl:with-param name="id"
+                                select="get_settings_response/setting[name='Default SMB Credential']/value"/>
+                <xsl:with-param name="resources" select="commands_response/get_credentials_response/credential"/>
+                <xsl:with-param name="type" select="'credential'"/>
+              </xsl:call-template>
+            </td>
+          </tr>
+
+          <tr class="odd">
+            <td><xsl:value-of select="gsa:i18n ('Default ESXi Credential', 'Credential')"/></td>
+            <td>
+              <xsl:call-template name="get-settings-resource">
+                <xsl:with-param name="id"
+                                select="get_settings_response/setting[name='Default ESXi Credential']/value"/>
+                <xsl:with-param name="resources" select="commands_response/get_credentials_response/credential"/>
+                <xsl:with-param name="type" select="'credential'"/>
+              </xsl:call-template>
+            </td>
+          </tr>
+
+          <tr class="even">
+            <td><xsl:value-of select="gsa:i18n ('Default SNMP Credential', 'Credential')"/></td>
+            <td>
+              <xsl:call-template name="get-settings-resource">
+                <xsl:with-param name="id"
+                                select="get_settings_response/setting[name='Default SNMP Credential']/value"/>
+                <xsl:with-param name="resources" select="commands_response/get_credentials_response/credential"/>
+                <xsl:with-param name="type" select="'credential'"/>
+              </xsl:call-template>
+            </td>
+          </tr>
+        </xsl:if>
+
+        <xsl:if test="gsa:may-op ('get_port_lists')">
+          <tr class="odd">
+            <td><xsl:value-of select="gsa:i18n ('Default Port List', 'Port List')"/></td>
+            <td>
+              <xsl:call-template name="get-settings-resource">
+                <xsl:with-param name="id"
+                                select="get_settings_response/setting[name='Default Port List']/value"/>
+                <xsl:with-param name="resources" select="commands_response/get_port_lists_response/port_list"/>
+                <xsl:with-param name="type" select="'port_list'"/>
+              </xsl:call-template>
+            </td>
+          </tr>
+        </xsl:if>
+
+        <xsl:if test="gsa:may-op ('get_scanners')">
+          <tr class="even">
+            <td><xsl:value-of select="gsa:i18n ('Default OpenVAS Scanner', 'Scanner')"/></td>
+            <td>
+              <xsl:call-template name="get-settings-resource">
+                <xsl:with-param name="id"
+                                select="get_settings_response/setting[name='Default OpenVAS Scanner']/value"/>
+                <xsl:with-param name="resources" select="commands_response/get_scanners_response/scanner"/>
+                <xsl:with-param name="type" select="'scanner'"/>
+              </xsl:call-template>
+            </td>
+          </tr>
+
+          <tr class="odd">
+            <td><xsl:value-of select="gsa:i18n ('Default OSP Scanner', 'Scanner')"/></td>
+            <td>
+              <xsl:call-template name="get-settings-resource">
+                <xsl:with-param name="id"
+                                select="get_settings_response/setting[name='Default OSP Scanner']/value"/>
+                <xsl:with-param name="resources" select="commands_response/get_scanners_response/scanner"/>
+                <xsl:with-param name="type" select="'scanner'"/>
+              </xsl:call-template>
+            </td>
+          </tr>
+        </xsl:if>
+
+        <xsl:if test="gsa:may-op ('get_schedules')">
+          <tr class="even">
+            <td><xsl:value-of select="gsa:i18n ('Default Schedule', 'Schedule')"/></td>
+            <td>
+              <xsl:call-template name="get-settings-resource">
+                <xsl:with-param name="id"
+                                select="get_settings_response/setting[name='Default Schedule']/value"/>
+                <xsl:with-param name="resources" select="commands_response/get_schedules_response/schedule"/>
+                <xsl:with-param name="type" select="'schedule'"/>
+              </xsl:call-template>
+            </td>
+          </tr>
+        </xsl:if>
+
+        <xsl:if test="gsa:may-op ('get_slaves')">
+          <tr class="odd">
+            <td><xsl:value-of select="gsa:i18n ('Default Slave', 'Slave')"/></td>
+            <td>
+              <xsl:call-template name="get-settings-resource">
+                <xsl:with-param name="id"
+                                select="get_settings_response/setting[name='Default Slave']/value"/>
+                <xsl:with-param name="resources" select="commands_response/get_slaves_response/slave"/>
+                <xsl:with-param name="type" select="'slave'"/>
+              </xsl:call-template>
+            </td>
+          </tr>
+        </xsl:if>
+
+        <xsl:if test="gsa:may-op ('get_targets')">
+          <tr class="even">
+            <td><xsl:value-of select="gsa:i18n ('Default Target', 'Target')"/></td>
+            <td>
+              <xsl:call-template name="get-settings-resource">
+                <xsl:with-param name="id"
+                                select="get_settings_response/setting[name='Default Target']/value"/>
+                <xsl:with-param name="resources" select="commands_response/get_targets_response/target"/>
+                <xsl:with-param name="type" select="'target'"/>
+              </xsl:call-template>
+            </td>
+          </tr>
+        </xsl:if>
+
+        <xsl:if test="gsa:may-op ('get_filters')">
+          <tr class="odd">
+            <td><xsl:value-of select="gsa:i18n ('Agents Filter', 'Agent')"/></td>
+            <td>
+              <xsl:call-template name="get-settings-filter">
+                <xsl:with-param name="filter"
+                                select="get_settings_response/setting[name='Agents Filter']/value"/>
+              </xsl:call-template>
             </td>
           </tr>
           <tr class="even">
-            <td><xsl:value-of select="gsa:i18n ('Password', 'Auth Data')"/></td>
-            <td>********</td>
+            <td><xsl:value-of select="gsa:i18n ('Alerts Filter', 'Alert')"/></td>
+            <td>
+              <xsl:call-template name="get-settings-filter">
+                <xsl:with-param name="filter"
+                                select="get_settings_response/setting[name='Alerts Filter']/value"/>
+              </xsl:call-template>
+            </td>
           </tr>
-          <xsl:if test="gsa:may-op ('get_settings')">
-            <tr class="odd">
-              <td><xsl:value-of select="gsa:i18n ('User Interface Language', 'My Settings')"/></td>
-              <td>
-                <xsl:variable name="lang">
-                  <xsl:choose>
-                    <xsl:when test="string-length (get_settings_response/setting[name='User Interface Language']/value) &gt; 0">
-                      <xsl:value-of select="get_settings_response/setting[name='User Interface Language']/value"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <xsl:text>Browser Language</xsl:text>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                </xsl:variable>
-                <xsl:variable name="lang_entry" select="gsa_languages/language[code = $lang or name = $lang]"/>
-                <xsl:choose>
-                  <xsl:when test="$lang_entry and ($lang_entry/code != $lang_entry/name) and ($lang_entry/native_name != $lang_entry/name)">
-                    <xsl:value-of select="$lang"/> - <xsl:value-of select="$lang_entry/native_name"/> [<xsl:value-of select="$lang_entry/name"/>]
-                  </xsl:when>
-                  <xsl:when test="$lang_entry and ($lang_entry/code != $lang_entry/name)">
-                    <xsl:value-of select="$lang"/> - <xsl:value-of select="$lang_entry/name"/>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <xsl:value-of select="$lang"/>
-                  </xsl:otherwise>
-                </xsl:choose>
-              </td>
-            </tr>
-            <tr class="even">
-              <td><xsl:value-of select="gsa:i18n ('Rows Per Page', 'My Settings')"/></td>
-              <td><xsl:value-of select="get_settings_response/setting[name='Rows Per Page']/value"/></td>
-            </tr>
-            <tr class="odd">
-              <td><xsl:value-of select="gsa:i18n ('Wizard Rows', 'My Settings')"/></td>
-              <td><xsl:value-of select="get_settings_response/setting[name='Wizard Rows']/value"/></td>
-            </tr>
-            <tr class="even">
-              <td><xsl:value-of select="gsa:i18n ('Details Export File Name', 'My Settings')"/></td>
-              <td><xsl:value-of select="get_settings_response/setting[name='Details Export File Name']/value"/></td>
-            </tr>
-            <tr class="odd">
-              <td><xsl:value-of select="gsa:i18n ('List Export File Name', 'My Settings')"/></td>
-              <td><xsl:value-of select="get_settings_response/setting[name='List Export File Name']/value"/></td>
-            </tr>
-            <tr class="even">
-              <td><xsl:value-of select="gsa:i18n ('Report Export File Name', 'My Settings')"/></td>
-              <td><xsl:value-of select="get_settings_response/setting[name='Report Export File Name']/value"/></td>
-            </tr>
-            <tr class="odd">
-              <td><xsl:value-of select="gsa:i18n ('Severity Class', 'My Settings')"/></td>
-              <td>
-                <xsl:call-template name="severity-settings-name">
-                  <xsl:with-param name="type"
-                                  select="get_settings_response/setting[name='Severity Class']/value"/>
-                </xsl:call-template>
-              </td>
-            </tr>
-            <tr class="even">
-              <td><xsl:value-of select="gsa:i18n ('Dynamic Severity', 'My Settings')"/></td>
-              <td>
-                <xsl:variable name="dynamic_severity"                              select="get_settings_response/setting[name='Dynamic Severity']/value"/>
-                <xsl:choose>
-                  <xsl:when test="$dynamic_severity = 0"><xsl:value-of select="gsa:i18n ('No', 'Binary Choice')"/></xsl:when>
-                  <xsl:when test="$dynamic_severity = 1"><xsl:value-of select="gsa:i18n ('Yes', 'Binary Choice')"/></xsl:when>
-                  <xsl:otherwise>
-                    <xsl:value-of select="$dynamic_severity"/>
-                  </xsl:otherwise>
-                </xsl:choose>
-              </td>
-            </tr>
-            <tr class="odd">
-              <td><xsl:value-of select="gsa:i18n ('Default Severity', 'My Settings')"/></td>
-              <td><xsl:value-of select="get_settings_response/setting[name='Default Severity']/value"/></td>
-            </tr>
-
-            <xsl:if test="gsa:may-op ('get_alerts')">
-              <tr class="even">
-                <td><xsl:value-of select="gsa:i18n ('Default Alert', 'Alert')"/></td>
-                <td>
-                  <xsl:call-template name="get-settings-resource">
-                    <xsl:with-param name="id"
-                                    select="get_settings_response/setting[name='Default Alert']/value"/>
-                    <xsl:with-param name="resources" select="commands_response/get_alerts_response/alert"/>
-                    <xsl:with-param name="type" select="'alert'"/>
-                  </xsl:call-template>
-                </td>
-              </tr>
-            </xsl:if>
-
-            <xsl:if test="gsa:may-op ('get_configs')">
-              <tr class="odd">
-                <td><xsl:value-of select="gsa:i18n ('Default OpenVAS Scan Config', 'Scan Config')"/></td>
-                <td>
-                  <xsl:call-template name="get-settings-resource">
-                    <xsl:with-param name="id"
-                                    select="get_settings_response/setting[name='Default OpenVAS Scan Config']/value"/>
-                    <xsl:with-param name="resources" select="commands_response/get_configs_response/config"/>
-                    <xsl:with-param name="type" select="'config'"/>
-                  </xsl:call-template>
-                </td>
-              </tr>
-
-              <tr class="even">
-                <td><xsl:value-of select="gsa:i18n ('Default OSP Scan Config', 'Scan Config')"/></td>
-                <td>
-                  <xsl:call-template name="get-settings-resource">
-                    <xsl:with-param name="id"
-                                    select="get_settings_response/setting[name='Default OSP Scan Config']/value"/>
-                    <xsl:with-param name="resources" select="commands_response/get_configs_response/config"/>
-                    <xsl:with-param name="type" select="'config'"/>
-                  </xsl:call-template>
-                </td>
-              </tr>
-            </xsl:if>
-
-            <xsl:if test="gsa:may-op ('get_credentials')">
-              <tr class="odd">
-                <td><xsl:value-of select="gsa:i18n ('Default SSH Credential', 'Credential')"/></td>
-                <td>
-                  <xsl:call-template name="get-settings-resource">
-                    <xsl:with-param name="id"
-                                    select="get_settings_response/setting[name='Default SSH Credential']/value"/>
-                    <xsl:with-param name="resources" select="commands_response/get_credentials_response/credential"/>
-                    <xsl:with-param name="type" select="'credential'"/>
-                  </xsl:call-template>
-                </td>
-              </tr>
-
-              <tr class="even">
-                <td><xsl:value-of select="gsa:i18n ('Default SMB Credential', 'Credential')"/></td>
-                <td>
-                  <xsl:call-template name="get-settings-resource">
-                    <xsl:with-param name="id"
-                                    select="get_settings_response/setting[name='Default SMB Credential']/value"/>
-                    <xsl:with-param name="resources" select="commands_response/get_credentials_response/credential"/>
-                    <xsl:with-param name="type" select="'credential'"/>
-                  </xsl:call-template>
-                </td>
-              </tr>
-
-              <tr class="odd">
-                <td><xsl:value-of select="gsa:i18n ('Default ESXi Credential', 'Credential')"/></td>
-                <td>
-                  <xsl:call-template name="get-settings-resource">
-                    <xsl:with-param name="id"
-                                    select="get_settings_response/setting[name='Default ESXi Credential']/value"/>
-                    <xsl:with-param name="resources" select="commands_response/get_credentials_response/credential"/>
-                    <xsl:with-param name="type" select="'credential'"/>
-                  </xsl:call-template>
-                </td>
-              </tr>
-
-              <tr class="even">
-                <td><xsl:value-of select="gsa:i18n ('Default SNMP Credential', 'Credential')"/></td>
-                <td>
-                  <xsl:call-template name="get-settings-resource">
-                    <xsl:with-param name="id"
-                                    select="get_settings_response/setting[name='Default SNMP Credential']/value"/>
-                    <xsl:with-param name="resources" select="commands_response/get_credentials_response/credential"/>
-                    <xsl:with-param name="type" select="'credential'"/>
-                  </xsl:call-template>
-                </td>
-              </tr>
-            </xsl:if>
-
-            <xsl:if test="gsa:may-op ('get_port_lists')">
-              <tr class="odd">
-                <td><xsl:value-of select="gsa:i18n ('Default Port List', 'Port List')"/></td>
-                <td>
-                  <xsl:call-template name="get-settings-resource">
-                    <xsl:with-param name="id"
-                                    select="get_settings_response/setting[name='Default Port List']/value"/>
-                    <xsl:with-param name="resources" select="commands_response/get_port_lists_response/port_list"/>
-                    <xsl:with-param name="type" select="'port_list'"/>
-                  </xsl:call-template>
-                </td>
-              </tr>
-            </xsl:if>
-
-            <xsl:if test="gsa:may-op ('get_scanners')">
-              <tr class="even">
-                <td><xsl:value-of select="gsa:i18n ('Default OpenVAS Scanner', 'Scanner')"/></td>
-                <td>
-                  <xsl:call-template name="get-settings-resource">
-                    <xsl:with-param name="id"
-                                    select="get_settings_response/setting[name='Default OpenVAS Scanner']/value"/>
-                    <xsl:with-param name="resources" select="commands_response/get_scanners_response/scanner"/>
-                    <xsl:with-param name="type" select="'scanner'"/>
-                  </xsl:call-template>
-                </td>
-              </tr>
-
-              <tr class="odd">
-                <td><xsl:value-of select="gsa:i18n ('Default OSP Scanner', 'Scanner')"/></td>
-                <td>
-                  <xsl:call-template name="get-settings-resource">
-                    <xsl:with-param name="id"
-                                    select="get_settings_response/setting[name='Default OSP Scanner']/value"/>
-                    <xsl:with-param name="resources" select="commands_response/get_scanners_response/scanner"/>
-                    <xsl:with-param name="type" select="'scanner'"/>
-                  </xsl:call-template>
-                </td>
-              </tr>
-            </xsl:if>
-
-            <xsl:if test="gsa:may-op ('get_schedules')">
-              <tr class="even">
-                <td><xsl:value-of select="gsa:i18n ('Default Schedule', 'Schedule')"/></td>
-                <td>
-                  <xsl:call-template name="get-settings-resource">
-                    <xsl:with-param name="id"
-                                    select="get_settings_response/setting[name='Default Schedule']/value"/>
-                    <xsl:with-param name="resources" select="commands_response/get_schedules_response/schedule"/>
-                    <xsl:with-param name="type" select="'schedule'"/>
-                  </xsl:call-template>
-                </td>
-              </tr>
-            </xsl:if>
-
-            <xsl:if test="gsa:may-op ('get_slaves')">
-              <tr class="odd">
-                <td><xsl:value-of select="gsa:i18n ('Default Slave', 'Slave')"/></td>
-                <td>
-                  <xsl:call-template name="get-settings-resource">
-                    <xsl:with-param name="id"
-                                    select="get_settings_response/setting[name='Default Slave']/value"/>
-                    <xsl:with-param name="resources" select="commands_response/get_slaves_response/slave"/>
-                    <xsl:with-param name="type" select="'slave'"/>
-                  </xsl:call-template>
-                </td>
-              </tr>
-            </xsl:if>
-
-            <xsl:if test="gsa:may-op ('get_targets')">
-              <tr class="even">
-                <td><xsl:value-of select="gsa:i18n ('Default Target', 'Target')"/></td>
-                <td>
-                  <xsl:call-template name="get-settings-resource">
-                    <xsl:with-param name="id"
-                                    select="get_settings_response/setting[name='Default Target']/value"/>
-                    <xsl:with-param name="resources" select="commands_response/get_targets_response/target"/>
-                    <xsl:with-param name="type" select="'target'"/>
-                  </xsl:call-template>
-                </td>
-              </tr>
-            </xsl:if>
-
-            <xsl:if test="gsa:may-op ('get_filters')">
-              <tr class="odd">
-                <td><xsl:value-of select="gsa:i18n ('Agents Filter', 'Agent')"/></td>
-                <td>
-                  <xsl:call-template name="get-settings-filter">
-                    <xsl:with-param name="filter"
-                                    select="get_settings_response/setting[name='Agents Filter']/value"/>
-                  </xsl:call-template>
-                </td>
-              </tr>
-              <tr class="even">
-                <td><xsl:value-of select="gsa:i18n ('Alerts Filter', 'Alert')"/></td>
-                <td>
-                  <xsl:call-template name="get-settings-filter">
-                    <xsl:with-param name="filter"
-                                    select="get_settings_response/setting[name='Alerts Filter']/value"/>
-                  </xsl:call-template>
-                </td>
-              </tr>
-              <tr class="odd">
-                <td><xsl:value-of select="gsa:i18n ('Configs Filter', 'Scan Config')"/></td>
-                <td>
-                  <xsl:call-template name="get-settings-filter">
-                    <xsl:with-param name="filter"
-                                    select="get_settings_response/setting[name='Configs Filter']/value"/>
-                  </xsl:call-template>
-                </td>
-              </tr>
-              <tr class="even">
-                <td><xsl:value-of select="gsa:i18n ('Credentials Filter', 'Credential')"/></td>
-                <td>
-                  <xsl:call-template name="get-settings-filter">
-                    <xsl:with-param name="filter"
-                                    select="get_settings_response/setting[name='Credentials Filter']/value"/>
-                  </xsl:call-template>
-                </td>
-              </tr>
-              <tr class="odd">
-                <td><xsl:value-of select="gsa:i18n ('Filters Filter', 'Filter')"/></td>
-                <td>
-                  <xsl:call-template name="get-settings-filter">
-                    <xsl:with-param name="filter"
-                                    select="get_settings_response/setting[name='Filters Filter']/value"/>
-                  </xsl:call-template>
-                </td>
-              </tr>
-              <tr class="even">
-                <td><xsl:value-of select="gsa:i18n ('Notes Filter', 'Note')"/></td>
-                <td>
-                  <xsl:call-template name="get-settings-filter">
-                    <xsl:with-param name="filter"
-                                    select="get_settings_response/setting[name='Notes Filter']/value"/>
-                  </xsl:call-template>
-                </td>
-              </tr>
-              <tr class="odd">
-                <td><xsl:value-of select="gsa:i18n ('Overrides Filter', 'Override')"/></td>
-                <td>
-                  <xsl:call-template name="get-settings-filter">
-                    <xsl:with-param name="filter"
-                                    select="get_settings_response/setting[name='Overrides Filter']/value"/>
-                  </xsl:call-template>
-                </td>
-              </tr>
-              <tr class="even">
-                <td><xsl:value-of select="gsa:i18n ('Permissions Filter', 'Permission')"/></td>
-                <td>
-                  <xsl:call-template name="get-settings-filter">
-                    <xsl:with-param name="filter"
-                                    select="get_settings_response/setting[name='Permissions Filter']/value"/>
-                  </xsl:call-template>
-                </td>
-              </tr>
-              <tr class="odd">
-                <td><xsl:value-of select="gsa:i18n ('Port Lists Filter', 'Port List')"/></td>
-                <td>
-                  <xsl:call-template name="get-settings-filter">
-                    <xsl:with-param name="filter"
-                                    select="get_settings_response/setting[name='Port Lists Filter']/value"/>
-                  </xsl:call-template>
-                </td>
-              </tr>
-              <tr class="even">
-                <td><xsl:value-of select="gsa:i18n ('Reports Filter', 'Report')"/></td>
-                <td>
-                  <xsl:call-template name="get-settings-filter">
-                    <xsl:with-param name="filter"
-                                    select="get_settings_response/setting[name='Reports Filter']/value"/>
-                  </xsl:call-template>
-                </td>
-              </tr>
-              <tr class="odd">
-                <td><xsl:value-of select="gsa:i18n ('Report Formats Filter', 'Report Format')"/></td>
-                <td>
-                  <xsl:call-template name="get-settings-filter">
-                    <xsl:with-param name="filter"
-                                    select="get_settings_response/setting[name='Report Formats Filter']/value"/>
-                  </xsl:call-template>
-                </td>
-              </tr>
-              <tr class="even">
-                <td><xsl:value-of select="gsa:i18n ('Results Filter', 'Result')"/></td>
-                <td>
-                  <xsl:call-template name="get-settings-filter">
-                    <xsl:with-param name="filter"
-                                    select="get_settings_response/setting[name='Results Filter']/value"/>
-                  </xsl:call-template>
-                </td>
-              </tr>
-              <tr class="odd">
-                <td><xsl:value-of select="gsa:i18n ('Roles Filter', 'Role')"/></td>
-                <td>
-                  <xsl:call-template name="get-settings-filter">
-                    <xsl:with-param name="filter"
-                                    select="get_settings_response/setting[name='Roles Filter']/value"/>
-                  </xsl:call-template>
-                </td>
-              </tr>
-              <tr class="even">
-                <td><xsl:value-of select="gsa:i18n ('Schedules Filter', 'Schedule')"/></td>
-                <td>
-                  <xsl:call-template name="get-settings-filter">
-                    <xsl:with-param name="filter"
-                                    select="get_settings_response/setting[name='Schedules Filter']/value"/>
-                  </xsl:call-template>
-                </td>
-              </tr>
-              <tr class="odd">
-                <td><xsl:value-of select="gsa:i18n ('Slaves Filter', 'Slave')"/></td>
-                <td>
-                  <xsl:call-template name="get-settings-filter">
-                    <xsl:with-param name="filter"
-                                    select="get_settings_response/setting[name='Slaves Filter']/value"/>
-                  </xsl:call-template>
-                </td>
-              </tr>
-              <tr class="even">
-                <td><xsl:value-of select="gsa:i18n ('Tags Filter', 'Tag')"/></td>
-                <td>
-                  <xsl:call-template name="get-settings-filter">
-                    <xsl:with-param name="filter"
-                                    select="get_settings_response/setting[name='Tags Filter']/value"/>
-                  </xsl:call-template>
-                </td>
-              </tr>
-              <tr class="odd">
-                <td><xsl:value-of select="gsa:i18n ('Targets Filter', 'Target')"/></td>
-                <td>
-                  <xsl:call-template name="get-settings-filter">
-                    <xsl:with-param name="filter"
-                                    select="get_settings_response/setting[name='Targets Filter']/value"/>
-                  </xsl:call-template>
-                </td>
-              </tr>
-              <tr class="even">
-                <td><xsl:value-of select="gsa:i18n ('Tasks Filter', 'Task')"/></td>
-                <td>
-                  <xsl:call-template name="get-settings-filter">
-                    <xsl:with-param name="filter"
-                                    select="get_settings_response/setting[name='Tasks Filter']/value"/>
-                  </xsl:call-template>
-                </td>
-              </tr>
-              <tr class="odd">
-                <td><xsl:value-of select="gsa:i18n ('CPE Filter', 'CPE')"/></td>
-                <td>
-                  <xsl:call-template name="get-settings-filter">
-                    <xsl:with-param name="filter"
-                                    select="get_settings_response/setting[name='CPE Filter']/value"/>
-                  </xsl:call-template>
-                </td>
-              </tr>
-              <tr class="even">
-                <td><xsl:value-of select="gsa:i18n ('CVE Filter', 'CVE')"/></td>
-                <td>
-                  <xsl:call-template name="get-settings-filter">
-                    <xsl:with-param name="filter"
-                                    select="get_settings_response/setting[name='CVE Filter']/value"/>
-                  </xsl:call-template>
-                </td>
-              </tr>
-              <tr class="odd">
-                <td><xsl:value-of select="gsa:i18n ('NVT Filter', 'NVT')"/></td>
-                <td>
-                  <xsl:call-template name="get-settings-filter">
-                    <xsl:with-param name="filter"
-                                    select="get_settings_response/setting[name='NVT Filter']/value"/>
-                  </xsl:call-template>
-                </td>
-              </tr>
-              <tr class="even">
-                <td><xsl:value-of select="gsa:i18n ('OVAL Filter', 'OVAL Definition')"/></td>
-                <td>
-                  <xsl:call-template name="get-settings-filter">
-                    <xsl:with-param name="filter"
-                                    select="get_settings_response/setting[name='OVAL Filter']/value"/>
-                  </xsl:call-template>
-                </td>
-              </tr>
-              <tr class="odd">
-                <td><xsl:value-of select="gsa:i18n ('CERT-Bund Filter', 'CERT-Bund Advisory')"/></td>
-                <td>
-                  <xsl:call-template name="get-settings-filter">
-                    <xsl:with-param name="filter"
-                                    select="get_settings_response/setting[name='CERT-Bund Filter']/value"/>
-                  </xsl:call-template>
-                </td>
-              </tr>
-              <tr class="even">
-                <td><xsl:value-of select="gsa:i18n ('DFN-CERT Filter', 'DFN-CERT Advisory')"/></td>
-                <td>
-                  <xsl:call-template name="get-settings-filter">
-                    <xsl:with-param name="filter"
-                                    select="get_settings_response/setting[name='DFN-CERT Filter']/value"/>
-                  </xsl:call-template>
-                </td>
-              </tr>
-              <tr class="odd">
-                <td><xsl:value-of select="gsa:i18n ('All SecInfo Filter', 'SecInfo')"/></td>
-                <td>
-                  <xsl:call-template name="get-settings-filter">
-                    <xsl:with-param name="filter"
-                                    select="get_settings_response/setting[name='All SecInfo Filter']/value"/>
-                  </xsl:call-template>
-                </td>
-              </tr>
-            </xsl:if>
-          </xsl:if>
-        </table>
-      </div>
-    </div>
+          <tr class="odd">
+            <td><xsl:value-of select="gsa:i18n ('Configs Filter', 'Scan Config')"/></td>
+            <td>
+              <xsl:call-template name="get-settings-filter">
+                <xsl:with-param name="filter"
+                                select="get_settings_response/setting[name='Configs Filter']/value"/>
+              </xsl:call-template>
+            </td>
+          </tr>
+          <tr class="even">
+            <td><xsl:value-of select="gsa:i18n ('Credentials Filter', 'Credential')"/></td>
+            <td>
+              <xsl:call-template name="get-settings-filter">
+                <xsl:with-param name="filter"
+                                select="get_settings_response/setting[name='Credentials Filter']/value"/>
+              </xsl:call-template>
+            </td>
+          </tr>
+          <tr class="odd">
+            <td><xsl:value-of select="gsa:i18n ('Filters Filter', 'Filter')"/></td>
+            <td>
+              <xsl:call-template name="get-settings-filter">
+                <xsl:with-param name="filter"
+                                select="get_settings_response/setting[name='Filters Filter']/value"/>
+              </xsl:call-template>
+            </td>
+          </tr>
+          <tr class="even">
+            <td><xsl:value-of select="gsa:i18n ('Notes Filter', 'Note')"/></td>
+            <td>
+              <xsl:call-template name="get-settings-filter">
+                <xsl:with-param name="filter"
+                                select="get_settings_response/setting[name='Notes Filter']/value"/>
+              </xsl:call-template>
+            </td>
+          </tr>
+          <tr class="odd">
+            <td><xsl:value-of select="gsa:i18n ('Overrides Filter', 'Override')"/></td>
+            <td>
+              <xsl:call-template name="get-settings-filter">
+                <xsl:with-param name="filter"
+                                select="get_settings_response/setting[name='Overrides Filter']/value"/>
+              </xsl:call-template>
+            </td>
+          </tr>
+          <tr class="even">
+            <td><xsl:value-of select="gsa:i18n ('Permissions Filter', 'Permission')"/></td>
+            <td>
+              <xsl:call-template name="get-settings-filter">
+                <xsl:with-param name="filter"
+                                select="get_settings_response/setting[name='Permissions Filter']/value"/>
+              </xsl:call-template>
+            </td>
+          </tr>
+          <tr class="odd">
+            <td><xsl:value-of select="gsa:i18n ('Port Lists Filter', 'Port List')"/></td>
+            <td>
+              <xsl:call-template name="get-settings-filter">
+                <xsl:with-param name="filter"
+                                select="get_settings_response/setting[name='Port Lists Filter']/value"/>
+              </xsl:call-template>
+            </td>
+          </tr>
+          <tr class="even">
+            <td><xsl:value-of select="gsa:i18n ('Reports Filter', 'Report')"/></td>
+            <td>
+              <xsl:call-template name="get-settings-filter">
+                <xsl:with-param name="filter"
+                                select="get_settings_response/setting[name='Reports Filter']/value"/>
+              </xsl:call-template>
+            </td>
+          </tr>
+          <tr class="odd">
+            <td><xsl:value-of select="gsa:i18n ('Report Formats Filter', 'Report Format')"/></td>
+            <td>
+              <xsl:call-template name="get-settings-filter">
+                <xsl:with-param name="filter"
+                                select="get_settings_response/setting[name='Report Formats Filter']/value"/>
+              </xsl:call-template>
+            </td>
+          </tr>
+          <tr class="even">
+            <td><xsl:value-of select="gsa:i18n ('Results Filter', 'Result')"/></td>
+            <td>
+              <xsl:call-template name="get-settings-filter">
+                <xsl:with-param name="filter"
+                                select="get_settings_response/setting[name='Results Filter']/value"/>
+              </xsl:call-template>
+            </td>
+          </tr>
+          <tr class="odd">
+            <td><xsl:value-of select="gsa:i18n ('Roles Filter', 'Role')"/></td>
+            <td>
+              <xsl:call-template name="get-settings-filter">
+                <xsl:with-param name="filter"
+                                select="get_settings_response/setting[name='Roles Filter']/value"/>
+              </xsl:call-template>
+            </td>
+          </tr>
+          <tr class="even">
+            <td><xsl:value-of select="gsa:i18n ('Schedules Filter', 'Schedule')"/></td>
+            <td>
+              <xsl:call-template name="get-settings-filter">
+                <xsl:with-param name="filter"
+                                select="get_settings_response/setting[name='Schedules Filter']/value"/>
+              </xsl:call-template>
+            </td>
+          </tr>
+          <tr class="odd">
+            <td><xsl:value-of select="gsa:i18n ('Slaves Filter', 'Slave')"/></td>
+            <td>
+              <xsl:call-template name="get-settings-filter">
+                <xsl:with-param name="filter"
+                                select="get_settings_response/setting[name='Slaves Filter']/value"/>
+              </xsl:call-template>
+            </td>
+          </tr>
+          <tr class="even">
+            <td><xsl:value-of select="gsa:i18n ('Tags Filter', 'Tag')"/></td>
+            <td>
+              <xsl:call-template name="get-settings-filter">
+                <xsl:with-param name="filter"
+                                select="get_settings_response/setting[name='Tags Filter']/value"/>
+              </xsl:call-template>
+            </td>
+          </tr>
+          <tr class="odd">
+            <td><xsl:value-of select="gsa:i18n ('Targets Filter', 'Target')"/></td>
+            <td>
+              <xsl:call-template name="get-settings-filter">
+                <xsl:with-param name="filter"
+                                select="get_settings_response/setting[name='Targets Filter']/value"/>
+              </xsl:call-template>
+            </td>
+          </tr>
+          <tr class="even">
+            <td><xsl:value-of select="gsa:i18n ('Tasks Filter', 'Task')"/></td>
+            <td>
+              <xsl:call-template name="get-settings-filter">
+                <xsl:with-param name="filter"
+                                select="get_settings_response/setting[name='Tasks Filter']/value"/>
+              </xsl:call-template>
+            </td>
+          </tr>
+          <tr class="odd">
+            <td><xsl:value-of select="gsa:i18n ('CPE Filter', 'CPE')"/></td>
+            <td>
+              <xsl:call-template name="get-settings-filter">
+                <xsl:with-param name="filter"
+                                select="get_settings_response/setting[name='CPE Filter']/value"/>
+              </xsl:call-template>
+            </td>
+          </tr>
+          <tr class="even">
+            <td><xsl:value-of select="gsa:i18n ('CVE Filter', 'CVE')"/></td>
+            <td>
+              <xsl:call-template name="get-settings-filter">
+                <xsl:with-param name="filter"
+                                select="get_settings_response/setting[name='CVE Filter']/value"/>
+              </xsl:call-template>
+            </td>
+          </tr>
+          <tr class="odd">
+            <td><xsl:value-of select="gsa:i18n ('NVT Filter', 'NVT')"/></td>
+            <td>
+              <xsl:call-template name="get-settings-filter">
+                <xsl:with-param name="filter"
+                                select="get_settings_response/setting[name='NVT Filter']/value"/>
+              </xsl:call-template>
+            </td>
+          </tr>
+          <tr class="even">
+            <td><xsl:value-of select="gsa:i18n ('OVAL Filter', 'OVAL Definition')"/></td>
+            <td>
+              <xsl:call-template name="get-settings-filter">
+                <xsl:with-param name="filter"
+                                select="get_settings_response/setting[name='OVAL Filter']/value"/>
+              </xsl:call-template>
+            </td>
+          </tr>
+          <tr class="odd">
+            <td><xsl:value-of select="gsa:i18n ('CERT-Bund Filter', 'CERT-Bund Advisory')"/></td>
+            <td>
+              <xsl:call-template name="get-settings-filter">
+                <xsl:with-param name="filter"
+                                select="get_settings_response/setting[name='CERT-Bund Filter']/value"/>
+              </xsl:call-template>
+            </td>
+          </tr>
+          <tr class="even">
+            <td><xsl:value-of select="gsa:i18n ('DFN-CERT Filter', 'DFN-CERT Advisory')"/></td>
+            <td>
+              <xsl:call-template name="get-settings-filter">
+                <xsl:with-param name="filter"
+                                select="get_settings_response/setting[name='DFN-CERT Filter']/value"/>
+              </xsl:call-template>
+            </td>
+          </tr>
+          <tr class="odd">
+            <td><xsl:value-of select="gsa:i18n ('All SecInfo Filter', 'SecInfo')"/></td>
+            <td>
+              <xsl:call-template name="get-settings-filter">
+                <xsl:with-param name="filter"
+                                select="get_settings_response/setting[name='All SecInfo Filter']/value"/>
+              </xsl:call-template>
+            </td>
+          </tr>
+        </xsl:if>
+      </xsl:if>
+    </table>
   </div>
 </xsl:template>
 
@@ -37164,211 +37206,218 @@ var toggleFilter = function(){
 </xsl:template>
 
 <xsl:template match="cvss_calculator">
-  <div class="gb_window">
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n ('CVSS Base Score Calculator', 'CVSS Calculator')"/>
-      <a href="/help/cvss_calculator.html?token={/envelope/token}"
-         title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('CVSS Base Score Calculator', 'CVSS Calculator'))}">
-        <img src="/img/help.png"/>
+  <div class="toolbar">
+    <a href="/help/cvss_calculator.html?token={/envelope/token}"
+       title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('CVSS Base Score Calculator', 'CVSS Calculator'))}">
+      <img src="/img/help.png"/>
+    </a>
+  </div>
+
+  <div class="section-header">
+    <h1>
+      <a href="/omp?cmd=cvss_calculator&amp;token={/envelope/token}"
+         title="{gsa:i18n ('CVSS Base Scor Calculator', 'CVSS Calculator')}">
+        <img id="big-icon" src="/img/cvss_calculator.svg" border="0" style="margin-right:5px" alt="CVSS Base Scor Calculator"/>
       </a>
-    </div>
-    <div class="gb_window_part_content">
-      <table border="0" cellspacing="0" cellpadding="3" width="100%">
-        <tr>
-          <form action="/omp" method="get" enctype="multipart/form-data" name="calc_from_metrics">
-            <input type="hidden" name="cmd" value="cvss_calculator"/>
-              <td valign="top" width="125">
-                <b><xsl:value-of select="gsa:i18n ('From Metrics', 'CVSS Calculator')"/>:</b>
-              </td>
+      <xsl:value-of select="gsa:i18n ('CVSS Base Scor Calculator', 'CVSS Calculator')"/>
+    </h1>
+  </div>
+
+  <div class="section-box">
+    <table border="0" cellspacing="0" cellpadding="3" width="100%">
+      <tr>
+        <form action="/omp" method="get" enctype="multipart/form-data" name="calc_from_metrics">
+          <input type="hidden" name="cmd" value="cvss_calculator"/>
+            <td valign="top" width="125">
+              <b><xsl:value-of select="gsa:i18n ('From Metrics', 'CVSS Calculator')"/>:</b>
+            </td>
+            <td>
+              <table border="0" cellspacing="0" cellpadding="3" width="50%">
+                <tr>
+                  <td><xsl:value-of select="gsa:i18n('Access Vector', 'CVSS Vector')"/>:</td>
+                  <td>
+                    <select name="cvss_av" style="width:100px;" onchange="calc_from_metrics.submit()">
+                      <xsl:call-template name="opt">
+                        <xsl:with-param name="value" select="'L'"/>
+                        <xsl:with-param name="content" select="'Local'"/>
+                        <xsl:with-param name="select-value" select="cvss_av"/>
+                      </xsl:call-template>
+                      <xsl:call-template name="opt">
+                        <xsl:with-param name="value" select="'A'"/>
+                        <xsl:with-param name="content" select="'Adjacent'"/>
+                        <xsl:with-param name="select-value" select="cvss_av"/>
+                      </xsl:call-template>
+                      <xsl:call-template name="opt">
+                        <xsl:with-param name="value" select="'N'"/>
+                        <xsl:with-param name="content" select="'Network'"/>
+                        <xsl:with-param name="select-value" select="cvss_av"/>
+                      </xsl:call-template>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td><xsl:value-of select="gsa:i18n('Access Complexity', 'CVSS Vector')"/>:</td>
+                  <td>
+                    <select name="cvss_ac" style="width:100px;" onchange="calc_from_metrics.submit()">
+                      <xsl:call-template name="opt">
+                        <xsl:with-param name="value" select="'H'"/>
+                        <xsl:with-param name="content" select="'High'"/>
+                        <xsl:with-param name="select-value" select="cvss_ac"/>
+                      </xsl:call-template>
+                      <xsl:call-template name="opt">
+                        <xsl:with-param name="value" select="'M'"/>
+                        <xsl:with-param name="content" select="'Medium'"/>
+                        <xsl:with-param name="select-value" select="cvss_ac"/>
+                      </xsl:call-template>
+                      <xsl:call-template name="opt">
+                        <xsl:with-param name="value" select="'L'"/>
+                        <xsl:with-param name="content" select="'Low'"/>
+                        <xsl:with-param name="select-value" select="cvss_ac"/>
+                      </xsl:call-template>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td><xsl:value-of select="gsa:i18n('Authentication', 'CVSS Vector')"/>:</td>
+                  <td>
+                    <select name="cvss_au" style="width:100px;" onchange="calc_from_metrics.submit()">
+                      <xsl:call-template name="opt">
+                        <xsl:with-param name="value" select="'M'"/>
+                        <xsl:with-param name="content" select="'Multiple'"/>
+                        <xsl:with-param name="select-value" select="cvss_au"/>
+                      </xsl:call-template>
+                      <xsl:call-template name="opt">
+                        <xsl:with-param name="value" select="'S'"/>
+                        <xsl:with-param name="content" select="'Single'"/>
+                        <xsl:with-param name="select-value" select="cvss_au"/>
+                      </xsl:call-template>
+                      <xsl:call-template name="opt">
+                        <xsl:with-param name="value" select="'N'"/>
+                        <xsl:with-param name="content" select="'None'"/>
+                        <xsl:with-param name="select-value" select="cvss_au"/>
+                      </xsl:call-template>
+                    </select><br/>
+                  </td>
+                </tr>
+                <tr>
+                  <td><xsl:value-of select="gsa:i18n('Confidentiality', 'CVSS Vector')"/>:</td>
+                  <td>
+                    <select name="cvss_c" style="width:100px;" onchange="calc_from_metrics.submit()">
+                      <xsl:call-template name="opt">
+                        <xsl:with-param name="value" select="'N'"/>
+                        <xsl:with-param name="content" select="'None'"/>
+                        <xsl:with-param name="select-value" select="cvss_c"/>
+                      </xsl:call-template>
+                      <xsl:call-template name="opt">
+                        <xsl:with-param name="value" select="'P'"/>
+                        <xsl:with-param name="content" select="'Partial'"/>
+                        <xsl:with-param name="select-value" select="cvss_c"/>
+                      </xsl:call-template>
+                      <xsl:call-template name="opt">
+                        <xsl:with-param name="value" select="'C'"/>
+                        <xsl:with-param name="content" select="'Complete'"/>
+                        <xsl:with-param name="select-value" select="cvss_c"/>
+                      </xsl:call-template>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td><xsl:value-of select="gsa:i18n('Integrity', 'CVSS Vector')"/>:</td>
+                  <td>
+                    <select name="cvss_i" style="width:100px;" onchange="calc_from_metrics.submit()">
+                      <xsl:call-template name="opt">
+                        <xsl:with-param name="value" select="'N'"/>
+                        <xsl:with-param name="content" select="'None'"/>
+                        <xsl:with-param name="select-value" select="cvss_i"/>
+                      </xsl:call-template>
+                      <xsl:call-template name="opt">
+                        <xsl:with-param name="value" select="'P'"/>
+                        <xsl:with-param name="content" select="'Partial'"/>
+                        <xsl:with-param name="select-value" select="cvss_i"/>
+                      </xsl:call-template>
+                      <xsl:call-template name="opt">
+                        <xsl:with-param name="value" select="'C'"/>
+                        <xsl:with-param name="content" select="'Complete'"/>
+                        <xsl:with-param name="select-value" select="cvss_i"/>
+                      </xsl:call-template>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td><xsl:value-of select="gsa:i18n('Availability', 'CVSS Vector')"/>:</td>
+                  <td>
+                    <select name="cvss_a" style="width:100px;" onchange="calc_from_metrics.submit()">
+                      <xsl:call-template name="opt">
+                        <xsl:with-param name="value" select="'N'"/>
+                        <xsl:with-param name="content" select="'None'"/>
+                        <xsl:with-param name="select-value" select="cvss_a"/>
+                      </xsl:call-template>
+                      <xsl:call-template name="opt">
+                        <xsl:with-param name="value" select="'P'"/>
+                        <xsl:with-param name="content" select="'Partial'"/>
+                        <xsl:with-param name="select-value" select="cvss_a"/>
+                      </xsl:call-template>
+                      <xsl:call-template name="opt">
+                        <xsl:with-param name="value" select="'C'"/>
+                        <xsl:with-param name="content" select="'Complete'"/>
+                        <xsl:with-param name="select-value" select="cvss_a"/>
+                      </xsl:call-template>
+                    </select>
+                  </td>
+                </tr>
+              </table>
+            </td>
+            <td style="text-align:right; vertical-align:bottom;">
+              <input type="hidden" name="name" value="metrics"/>
+              <input type="submit" name="submit_button" value="{gsa:i18n ('Calculate', 'CVSS Calculator')}"/>
+            </td>
+          <input type="hidden" name="token" value="{/envelope/token}"/>
+        </form>
+      </tr>
+      <tr height="50">
+        <form action="/omp" method="get" enctype="multipart/form-data">
+          <input type="hidden" name="cmd" value="cvss_calculator"/>
+            <td width="125">
+              <b><xsl:value-of select="gsa:i18n ('From Vector', 'CVSS Calculator')"/>:</b>
+            </td>
+            <td>
+              <input type="text" name="cvss_vector" value="{cvss_vector}"
+                     size="30" maxlength="80" style="vertical-align:middle"/>
+            </td>
+            <td style="text-align:right;">
+              <input type="hidden" name="name" value="vector"/>
+              <input type="submit" name="submit" value="{gsa:i18n ('Calculate', 'CVSS Calculator')}"/>
+            </td>
+          <input type="hidden" name="token" value="{/envelope/token}"/>
+        </form>
+      </tr>
+    </table>
+    <xsl:choose>
+      <xsl:when test="cvss_score">
+        <xsl:if test="cvss_score != '-1.0'">
+          <br/>
+          <table>
+            <tr>
+              <td><b><xsl:value-of select="gsa:i18n ('Base Vector', 'CVSS Calculator')"/>:</b></td>
               <td>
-                <table border="0" cellspacing="0" cellpadding="3" width="50%">
-                  <tr>
-                    <td><xsl:value-of select="gsa:i18n('Access Vector', 'CVSS Vector')"/>:</td>
-                    <td>
-                      <select name="cvss_av" style="width:100px;" onchange="calc_from_metrics.submit()">
-                        <xsl:call-template name="opt">
-                          <xsl:with-param name="value" select="'L'"/>
-                          <xsl:with-param name="content" select="'Local'"/>
-                          <xsl:with-param name="select-value" select="cvss_av"/>
-                        </xsl:call-template>
-                        <xsl:call-template name="opt">
-                          <xsl:with-param name="value" select="'A'"/>
-                          <xsl:with-param name="content" select="'Adjacent'"/>
-                          <xsl:with-param name="select-value" select="cvss_av"/>
-                        </xsl:call-template>
-                        <xsl:call-template name="opt">
-                          <xsl:with-param name="value" select="'N'"/>
-                          <xsl:with-param name="content" select="'Network'"/>
-                          <xsl:with-param name="select-value" select="cvss_av"/>
-                        </xsl:call-template>
-                      </select>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td><xsl:value-of select="gsa:i18n('Access Complexity', 'CVSS Vector')"/>:</td>
-                    <td>
-                      <select name="cvss_ac" style="width:100px;" onchange="calc_from_metrics.submit()">
-                        <xsl:call-template name="opt">
-                          <xsl:with-param name="value" select="'H'"/>
-                          <xsl:with-param name="content" select="'High'"/>
-                          <xsl:with-param name="select-value" select="cvss_ac"/>
-                        </xsl:call-template>
-                        <xsl:call-template name="opt">
-                          <xsl:with-param name="value" select="'M'"/>
-                          <xsl:with-param name="content" select="'Medium'"/>
-                          <xsl:with-param name="select-value" select="cvss_ac"/>
-                        </xsl:call-template>
-                        <xsl:call-template name="opt">
-                          <xsl:with-param name="value" select="'L'"/>
-                          <xsl:with-param name="content" select="'Low'"/>
-                          <xsl:with-param name="select-value" select="cvss_ac"/>
-                        </xsl:call-template>
-                      </select>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td><xsl:value-of select="gsa:i18n('Authentication', 'CVSS Vector')"/>:</td>
-                    <td>
-                      <select name="cvss_au" style="width:100px;" onchange="calc_from_metrics.submit()">
-                        <xsl:call-template name="opt">
-                          <xsl:with-param name="value" select="'M'"/>
-                          <xsl:with-param name="content" select="'Multiple'"/>
-                          <xsl:with-param name="select-value" select="cvss_au"/>
-                        </xsl:call-template>
-                        <xsl:call-template name="opt">
-                          <xsl:with-param name="value" select="'S'"/>
-                          <xsl:with-param name="content" select="'Single'"/>
-                          <xsl:with-param name="select-value" select="cvss_au"/>
-                        </xsl:call-template>
-                        <xsl:call-template name="opt">
-                          <xsl:with-param name="value" select="'N'"/>
-                          <xsl:with-param name="content" select="'None'"/>
-                          <xsl:with-param name="select-value" select="cvss_au"/>
-                        </xsl:call-template>
-                      </select><br/>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td><xsl:value-of select="gsa:i18n('Confidentiality', 'CVSS Vector')"/>:</td>
-                    <td>
-                      <select name="cvss_c" style="width:100px;" onchange="calc_from_metrics.submit()">
-                        <xsl:call-template name="opt">
-                          <xsl:with-param name="value" select="'N'"/>
-                          <xsl:with-param name="content" select="'None'"/>
-                          <xsl:with-param name="select-value" select="cvss_c"/>
-                        </xsl:call-template>
-                        <xsl:call-template name="opt">
-                          <xsl:with-param name="value" select="'P'"/>
-                          <xsl:with-param name="content" select="'Partial'"/>
-                          <xsl:with-param name="select-value" select="cvss_c"/>
-                        </xsl:call-template>
-                        <xsl:call-template name="opt">
-                          <xsl:with-param name="value" select="'C'"/>
-                          <xsl:with-param name="content" select="'Complete'"/>
-                          <xsl:with-param name="select-value" select="cvss_c"/>
-                        </xsl:call-template>
-                      </select>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td><xsl:value-of select="gsa:i18n('Integrity', 'CVSS Vector')"/>:</td>
-                    <td>
-                      <select name="cvss_i" style="width:100px;" onchange="calc_from_metrics.submit()">
-                        <xsl:call-template name="opt">
-                          <xsl:with-param name="value" select="'N'"/>
-                          <xsl:with-param name="content" select="'None'"/>
-                          <xsl:with-param name="select-value" select="cvss_i"/>
-                        </xsl:call-template>
-                        <xsl:call-template name="opt">
-                          <xsl:with-param name="value" select="'P'"/>
-                          <xsl:with-param name="content" select="'Partial'"/>
-                          <xsl:with-param name="select-value" select="cvss_i"/>
-                        </xsl:call-template>
-                        <xsl:call-template name="opt">
-                          <xsl:with-param name="value" select="'C'"/>
-                          <xsl:with-param name="content" select="'Complete'"/>
-                          <xsl:with-param name="select-value" select="cvss_i"/>
-                        </xsl:call-template>
-                      </select>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td><xsl:value-of select="gsa:i18n('Availability', 'CVSS Vector')"/>:</td>
-                    <td>
-                      <select name="cvss_a" style="width:100px;" onchange="calc_from_metrics.submit()">
-                        <xsl:call-template name="opt">
-                          <xsl:with-param name="value" select="'N'"/>
-                          <xsl:with-param name="content" select="'None'"/>
-                          <xsl:with-param name="select-value" select="cvss_a"/>
-                        </xsl:call-template>
-                        <xsl:call-template name="opt">
-                          <xsl:with-param name="value" select="'P'"/>
-                          <xsl:with-param name="content" select="'Partial'"/>
-                          <xsl:with-param name="select-value" select="cvss_a"/>
-                        </xsl:call-template>
-                        <xsl:call-template name="opt">
-                          <xsl:with-param name="value" select="'C'"/>
-                          <xsl:with-param name="content" select="'Complete'"/>
-                          <xsl:with-param name="select-value" select="cvss_a"/>
-                        </xsl:call-template>
-                      </select>
-                    </td>
-                  </tr>
-                </table>
+                <xsl:value-of select="cvss_vector"/><br/>
               </td>
-              <td style="text-align:right; vertical-align:bottom;">
-                <input type="hidden" name="name" value="metrics"/>
-                <input type="submit" name="submit_button" value="{gsa:i18n ('Calculate', 'CVSS Calculator')}"/>
-              </td>
-            <input type="hidden" name="token" value="{/envelope/token}"/>
-          </form>
-        </tr>
-        <tr height="50">
-          <form action="/omp" method="get" enctype="multipart/form-data">
-            <input type="hidden" name="cmd" value="cvss_calculator"/>
-              <td width="125">
-                <b><xsl:value-of select="gsa:i18n ('From Vector', 'CVSS Calculator')"/>:</b>
-              </td>
+            </tr>
+            <tr>
+              <td><b><xsl:value-of select="gsa:i18n ('Base Score', 'CVSS Calculator')"/>:</b></td>
               <td>
-                <input type="text" name="cvss_vector" value="{cvss_vector}"
-                       size="30" maxlength="80" style="vertical-align:middle"/>
+                <xsl:call-template name="severity-bar">
+                  <xsl:with-param name="cvss" select="cvss_score"/>
+                </xsl:call-template>
               </td>
-              <td style="text-align:right;">
-                <input type="hidden" name="name" value="vector"/>
-                <input type="submit" name="submit" value="{gsa:i18n ('Calculate', 'CVSS Calculator')}"/>
-              </td>
-            <input type="hidden" name="token" value="{/envelope/token}"/>
-          </form>
-        </tr>
-      </table>
-      <xsl:choose>
-        <xsl:when test="cvss_score">
-          <xsl:if test="cvss_score != '-1.0'">
-            <br/>
-            <table>
-              <tr>
-                <td><b><xsl:value-of select="gsa:i18n ('Base Vector', 'CVSS Calculator')"/>:</b></td>
-                <td>
-                  <xsl:value-of select="cvss_vector"/><br/>
-                </td>
-              </tr>
-              <tr>
-                <td><b><xsl:value-of select="gsa:i18n ('Base Score', 'CVSS Calculator')"/>:</b></td>
-                <td>
-                  <xsl:call-template name="severity-bar">
-                    <xsl:with-param name="cvss" select="cvss_score"/>
-                  </xsl:call-template>
-                </td>
-              </tr>
-            </table>
-          </xsl:if>
-          <xsl:if test="cvss_score = '-1.0'">
-            <br/><xsl:value-of select="gsa:i18n ('Invalid CVSS Base Vector value provided.  Use back button of your browser to edit the vector.', 'CVSS Calculator')"/><br/><br/>
-          </xsl:if>
-        </xsl:when>
-      </xsl:choose>
-    </div>
+            </tr>
+          </table>
+        </xsl:if>
+        <xsl:if test="cvss_score = '-1.0'">
+          <br/><xsl:value-of select="gsa:i18n ('Invalid CVSS Base Vector value provided.  Use back button of your browser to edit the vector.', 'CVSS Calculator')"/><br/><br/>
+        </xsl:if>
+      </xsl:when>
+    </xsl:choose>
   </div>
 </xsl:template>
 
