@@ -90,6 +90,7 @@ typedef struct
  */
 typedef struct {
   int http_status_code;  ///> HTTP status code.
+  gchar *redirect;       ///> Redirect URL or NULL.
 } cmd_response_data_t;
 
 int gsad_base_init ();

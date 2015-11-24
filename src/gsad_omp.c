@@ -1139,6 +1139,60 @@ page_url_append_param (credentials_t *credentials, const gchar *name,
 /* Generic page handlers. */
 
 /**
+ * @brief Generate a page URL for a redirect.
+ *
+ * @param[in]  credentials    Username and password for authentication.
+ * @param[in]  params         Request parameters.
+ * @param[in]  override_next  Command to redirect to, ignoring "next" or NULL.
+ * @param[in]  default_next   Command to redirect to if next" is missing.
+ *
+ * @return  Newly allocated redirect URL.
+ */
+static gchar *
+next_page_url (credentials_t *credentials, params_t *params,
+               const char* override_next, const char *default_next)
+{
+  GString *url;
+  const char *next_cmd;
+  params_iterator_t iter;
+  gchar *param_name;
+  param_t *current_param;
+
+  url = g_string_new ("/omp?cmd=");
+
+  if (override_next)
+    next_cmd = override_next;
+  else if (params_valid (params, "next"))
+    next_cmd = params_value (params, "next");
+  else if (default_next)
+    next_cmd = default_next;
+  else
+    next_cmd = "get_tasks";
+
+  g_string_append (url, next_cmd);
+
+  params_iterator_init (&iter, params);
+  while (params_iterator_next (&iter, &param_name, &current_param))
+    {
+      if (strcmp (param_name, "filter") == 0
+          || strcmp (param_name, "filt_id") == 0
+          || (strstr (param_name, "_id")
+                == param_name + strlen (param_name) - strlen ("_id")))
+        {
+          g_string_append_printf (url, "&%s=%s",
+                                  param_name,
+                                  current_param->value
+                                    ? current_param->value
+                                    : "");
+        }
+    }
+
+  g_string_append_printf (url, "&token=%s", credentials->token);
+
+  return g_string_free (url, FALSE);
+}
+
+/**
  * @brief Generate a page.
  *
  * @param[in]  credentials  Username and password for authentication.
@@ -2681,7 +2735,7 @@ export_many (const char *type, credentials_t * credentials, params_t *params,
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  ultimate     0 move to trash, 1 remove entirely.
- * @param[in]  get          Next page get function.
+ * @param[in]  get          Next page get command.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
@@ -2689,9 +2743,7 @@ export_many (const char *type, credentials_t * credentials, params_t *params,
 char *
 delete_resource (const char *type, credentials_t * credentials,
                  params_t *params, int ultimate,
-                 char *get (credentials_t *, params_t *, const char *,
-                            cmd_response_data_t*),
-                 cmd_response_data_t* response_data)
+                 const char *get, cmd_response_data_t* response_data)
 {
   gnutls_session_t session;
   int socket;
@@ -2803,39 +2855,51 @@ delete_resource (const char *type, credentials_t * credentials,
                            "Diagnostics: Failure to read response from manager daemon.",
                            "/omp?cmd=get_tasks", response_data);
     }
-  if (!omp_success (entity))
-    set_http_status_from_entity (entity, response_data);
 
-  free_entity (entity);
+  if (omp_success (entity))
+    {
+      g_free (response);
+      free_entity (entity);
+      openvas_server_close (socket, session);
 
-  openvas_server_close (socket, session);
-
-  /* Cleanup, and return transformed XML. */
-
-  if (get)
-    html = get (credentials, params, response, response_data);
+      gchar *default_next = g_strdup_printf ("get_%ss", type);
+      response_data->redirect = next_page_url (credentials, params,
+                                               get, default_next);
+      return NULL;
+    }
   else
     {
-      if (params_given (params, "next") == 0)
+      set_http_status_from_entity (entity, response_data);
+      if (get)
+        html = generate_page (credentials, params, response, get,
+                              response_data);
+      else
         {
-          gchar *next;
-          next = g_strdup_printf ("get_%ss", type);
-          params_add (params, "next", next);
-          g_free (next);
+          if (params_given (params, "next") == 0)
+            {
+              gchar *next;
+              next = g_strdup_printf ("get_%ss", type);
+              params_add (params, "next", next);
+              g_free (next);
+            }
+          html = next_page (credentials, params, response, response_data);
         }
-      html = next_page (credentials, params, response, response_data);
+      g_free (response);
+      free_entity (entity);
+      openvas_server_close (socket, session);
+
+      if (html == NULL)
+        {
+          response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+          return gsad_message (credentials,
+                              "Internal error", __FUNCTION__, __LINE__,
+                              "An internal error occurred while deleting a resource. "
+                              "Diagnostics: Error in parameter next.",
+                              "/omp?cmd=get_tasks", response_data);
+        }
+
+      return html;
     }
-  g_free (response);
-  if (html == NULL)
-    {
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while deleting a resource. "
-                           "Diagnostics: Error in parameter next.",
-                           "/omp?cmd=get_tasks", response_data);
-    }
-  return html;
 }
 
 /**
@@ -6390,7 +6454,7 @@ delete_credential_omp (credentials_t * credentials, params_t *params,
                        cmd_response_data_t* response_data)
 {
   return delete_resource ("credential", credentials, params, 0,
-                          get_credentials, response_data);
+                          "get_credentials", response_data);
 }
 
 /**
@@ -6830,7 +6894,7 @@ char *
 delete_agent_omp (credentials_t * credentials, params_t *params,
                   cmd_response_data_t* response_data)
 {
-  return delete_resource ("agent", credentials, params, 0, get_agents,
+  return delete_resource ("agent", credentials, params, 0, "get_agents",
                           response_data);
 }
 
@@ -7994,7 +8058,7 @@ char *
 delete_alert_omp (credentials_t * credentials, params_t *params,
                   cmd_response_data_t* response_data)
 {
-  return delete_resource ("alert", credentials, params, 0, get_alerts,
+  return delete_resource ("alert", credentials, params, 0, "get_alerts",
                           response_data);
 }
 
@@ -9344,9 +9408,6 @@ clone_omp (credentials_t *credentials, params_t *params,
 
   /* Cleanup, and return next page. */
 
-  if (omp_success (entity) == 0)
-    set_http_status_from_entity (entity, response_data);
-
   if (omp_success (entity) == 0 || params_given (params, "next") == 0)
     {
       gchar *next;
@@ -9354,20 +9415,50 @@ clone_omp (credentials_t *credentials, params_t *params,
       params_add (params, "next", next);
       g_free (next);
     }
-  free_entity (entity);
-  html = next_page (credentials, params, response, response_data);
-  g_free (response);
-  if (html == NULL)
+
+  if (omp_success (entity))
     {
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while cloning a resource. "
-                           "The resource remains the same. "
-                           "Diagnostics: Error in parameter next.",
-                           "/omp?cmd=get_tasks", response_data);
+      gchar *next_id_name;
+      const char* next_id;
+      next_id = entity_attribute (entity, "id");
+      if (next_id == NULL)
+        {
+          free_entity (entity);
+          g_free (response);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          return gsad_message (credentials,
+                              "Internal error", __FUNCTION__, __LINE__,
+                              "An internal error occurred while cloning a resource. "
+                              "The resource remains the same. "
+                              "Diagnostics: Error getting new resource.",
+                              "/omp?cmd=get_tasks", response_data);
+        }
+      next_id_name = g_strdup_printf ("%s_id", type);
+      params_add (params, next_id_name, next_id);
+      g_free (next_id_name);
+      response_data->redirect = next_page_url (credentials, params, NULL, NULL);
+      free_entity (entity);
+      g_free (response);
+      return NULL;
     }
-  return html;
+  else
+    {
+      set_http_status_from_entity (entity, response_data);
+      free_entity (entity);
+      html = next_page (credentials, params, response, response_data);
+      g_free (response);
+      if (html == NULL)
+        {
+          response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+          return gsad_message (credentials,
+                              "Internal error", __FUNCTION__, __LINE__,
+                              "An internal error occurred while cloning a resource. "
+                              "The resource remains the same. "
+                              "Diagnostics: Error in parameter next.",
+                              "/omp?cmd=get_tasks", response_data);
+        }
+      return html;
+    }
 }
 
 #undef CHECK
@@ -9385,7 +9476,7 @@ char *
 delete_target_omp (credentials_t * credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
-  return delete_resource ("target", credentials, params, 0, get_targets,
+  return delete_resource ("target", credentials, params, 0, "get_targets",
                           response_data);
 }
 
@@ -9402,7 +9493,7 @@ char *
 delete_trash_agent_omp (credentials_t * credentials, params_t *params,
                         cmd_response_data_t* response_data)
 {
-  return delete_resource ("agent", credentials, params, 1, get_trash,
+  return delete_resource ("agent", credentials, params, 1, "get_trash",
                           response_data);
 }
 
@@ -9419,7 +9510,7 @@ char *
 delete_trash_config_omp (credentials_t * credentials, params_t *params,
                          cmd_response_data_t* response_data)
 {
-  return delete_resource ("config", credentials, params, 1, get_trash,
+  return delete_resource ("config", credentials, params, 1, "get_trash",
                           response_data);
 }
 
@@ -9436,7 +9527,7 @@ char *
 delete_trash_alert_omp (credentials_t * credentials, params_t *params,
                         cmd_response_data_t* response_data)
 {
-  return delete_resource ("alert", credentials, params, 1, get_trash,
+  return delete_resource ("alert", credentials, params, 1, "get_trash",
                           response_data);
 }
 
@@ -9453,7 +9544,7 @@ char *
 delete_trash_credential_omp (credentials_t * credentials, params_t *params,
                              cmd_response_data_t* response_data)
 {
-  return delete_resource ("credential", credentials, params, 1, get_trash,
+  return delete_resource ("credential", credentials, params, 1, "get_trash",
                           response_data);
 }
 
@@ -9470,7 +9561,7 @@ char *
 delete_trash_report_format_omp (credentials_t * credentials, params_t *params,
                                 cmd_response_data_t* response_data)
 {
-  return delete_resource ("report_format", credentials, params, 1, get_trash,
+  return delete_resource ("report_format", credentials, params, 1, "get_trash",
                           response_data);
 }
 
@@ -9487,7 +9578,7 @@ char *
 delete_trash_schedule_omp (credentials_t * credentials, params_t *params,
                            cmd_response_data_t* response_data)
 {
-  return delete_resource ("schedule", credentials, params, 1, get_trash,
+  return delete_resource ("schedule", credentials, params, 1, "get_trash",
                           response_data);
 }
 
@@ -9504,7 +9595,7 @@ char *
 delete_trash_slave_omp (credentials_t * credentials, params_t *params,
                         cmd_response_data_t* response_data)
 {
-  return delete_resource ("slave", credentials, params, 1, get_trash,
+  return delete_resource ("slave", credentials, params, 1, "get_trash",
                           response_data);
 }
 
@@ -9521,7 +9612,7 @@ char *
 delete_trash_target_omp (credentials_t * credentials, params_t *params,
                          cmd_response_data_t* response_data)
 {
-  return delete_resource ("target", credentials, params, 1, get_trash,
+  return delete_resource ("target", credentials, params, 1, "get_trash",
                           response_data);
 }
 
@@ -9538,7 +9629,7 @@ char *
 delete_trash_task_omp (credentials_t * credentials, params_t *params,
                        cmd_response_data_t* response_data)
 {
-  return delete_resource ("task", credentials, params, 1, get_trash,
+  return delete_resource ("task", credentials, params, 1, "get_trash",
                           response_data);
 }
 
@@ -9559,6 +9650,7 @@ restore_omp (credentials_t * credentials, params_t *params,
   gchar *ret;
   gnutls_session_t session;
   int socket;
+  entity_t entity;
   gchar *html;
   const char *target_id;
 
@@ -9615,7 +9707,7 @@ restore_omp (credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_trash", response_data);
     }
 
-  if (read_string (&session, &xml))
+  if (read_entity_and_string (&session, &entity, &xml))
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
@@ -9631,7 +9723,17 @@ restore_omp (credentials_t * credentials, params_t *params,
   /* Cleanup, and return trash page. */
 
   openvas_server_close (socket, session);
-  ret = get_trash (credentials, params, xml->str, response_data);
+  if (omp_success (entity))
+    {
+      ret = NULL;
+      response_data->redirect = next_page_url (credentials, params,
+                                               "get_trash", NULL);
+    }
+  else
+    {
+      ret = get_trash (credentials, params, xml->str, response_data);
+    }
+  free_entity (entity);
   g_string_free (xml, FALSE);
   return ret;
 }
@@ -9653,6 +9755,7 @@ empty_trashcan_omp (credentials_t * credentials, params_t *params,
   gchar *ret;
   gnutls_session_t session;
   int socket;
+  entity_t entity;
   gchar *html;
 
   switch (manager_connect (credentials, &socket, &session, &html,
@@ -9691,7 +9794,7 @@ empty_trashcan_omp (credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_trash", response_data);
     }
 
-  if (read_string (&session, &xml))
+  if (read_entity_and_string (&session, &entity, &xml))
     {
       g_string_free (xml, TRUE);
       openvas_server_close (socket, session);
@@ -9706,7 +9809,17 @@ empty_trashcan_omp (credentials_t * credentials, params_t *params,
   /* Cleanup, and return trash page. */
 
   openvas_server_close (socket, session);
-  ret = get_trash (credentials, params, xml->str, response_data);
+  if (omp_success (entity))
+    {
+      ret = NULL;
+      response_data->redirect = next_page_url (credentials, params,
+                                               "get_trash", NULL);
+    }
+  else
+    {
+      ret = get_trash (credentials, params, xml->str, response_data);
+    }
+  free_entity (entity);
   g_string_free (xml, FALSE);
   return ret;
 }
@@ -9906,7 +10019,7 @@ char *
 delete_trash_tag_omp (credentials_t * credentials, params_t *params,
                       cmd_response_data_t* response_data)
 {
-  return delete_resource ("tag", credentials, params, 1, get_trash,
+  return delete_resource ("tag", credentials, params, 1, "get_trash",
                           response_data);
 }
 
@@ -12744,7 +12857,7 @@ char *
 delete_config_omp (credentials_t * credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
-  return delete_resource ("config", credentials, params, 0, get_configs,
+  return delete_resource ("config", credentials, params, 0, "get_configs",
                           response_data);
 }
 
@@ -15722,7 +15835,7 @@ char *
 delete_trash_note_omp (credentials_t * credentials, params_t *params,
                        cmd_response_data_t* response_data)
 {
-  return delete_resource ("note", credentials, params, 1, get_trash,
+  return delete_resource ("note", credentials, params, 1, "get_trash",
                           response_data);
 }
 
@@ -16494,7 +16607,7 @@ char *
 delete_trash_override_omp (credentials_t * credentials, params_t *params,
                            cmd_response_data_t* response_data)
 {
-  return delete_resource ("override", credentials, params, 1, get_trash,
+  return delete_resource ("override", credentials, params, 1, "get_trash",
                           response_data);
 }
 
@@ -17005,7 +17118,7 @@ char *
 delete_slave_omp (credentials_t * credentials, params_t *params,
                   cmd_response_data_t* response_data)
 {
-  return delete_resource ("slave", credentials, params, 0, get_slaves,
+  return delete_resource ("slave", credentials, params, 0, "get_slaves",
                           response_data);
 }
 
@@ -17684,7 +17797,7 @@ char *
 delete_scanner_omp (credentials_t * credentials, params_t *params,
                     cmd_response_data_t* response_data)
 {
-  return delete_resource ("scanner", credentials, params, 0, get_scanners,
+  return delete_resource ("scanner", credentials, params, 0, "get_scanners",
                           response_data);
 }
 
@@ -17701,7 +17814,7 @@ char *
 delete_trash_scanner_omp (credentials_t * credentials, params_t *params,
                           cmd_response_data_t* response_data)
 {
-  return delete_resource ("scanner", credentials, params, 1, get_trash,
+  return delete_resource ("scanner", credentials, params, 1, "get_trash",
                           response_data);
 }
 
@@ -18214,7 +18327,7 @@ char *
 delete_schedule_omp (credentials_t * credentials, params_t *params,
                      cmd_response_data_t* response_data)
 {
-  return delete_resource ("schedule", credentials, params, 0, get_schedules,
+  return delete_resource ("schedule", credentials, params, 0, "get_schedules",
                           response_data);
 }
 
@@ -18563,7 +18676,7 @@ delete_report_format_omp (credentials_t * credentials, params_t *params,
                           cmd_response_data_t* response_data)
 {
   return delete_resource ("report_format", credentials, params, 0,
-                          get_report_formats, response_data);
+                          "get_report_formats", response_data);
 }
 
 /**
@@ -20667,7 +20780,7 @@ char *
 delete_trash_group_omp (credentials_t * credentials, params_t *params,
                         cmd_response_data_t* response_data)
 {
-  return delete_resource ("group", credentials, params, 1, get_trash,
+  return delete_resource ("group", credentials, params, 1, "get_trash",
                           response_data);
 }
 
@@ -20685,7 +20798,7 @@ delete_group_omp (credentials_t * credentials, params_t *params,
                   cmd_response_data_t* response_data)
 {
   return delete_resource ("group", credentials, params, 0,
-                          get_groups, response_data);
+                          "get_groups", response_data);
 }
 
 /**
@@ -21047,7 +21160,7 @@ char *
 delete_trash_permission_omp (credentials_t * credentials, params_t *params,
                              cmd_response_data_t* response_data)
 {
-  return delete_resource ("permission", credentials, params, 1, get_trash,
+  return delete_resource ("permission", credentials, params, 1, "get_trash",
                           response_data);
 }
 
@@ -23197,7 +23310,7 @@ char *
 delete_port_list_omp (credentials_t * credentials, params_t *params,
                       cmd_response_data_t* response_data)
 {
-  return delete_resource ("port_list", credentials, params, 0, get_port_lists,
+  return delete_resource ("port_list", credentials, params, 0, "get_port_lists",
                           response_data);
 }
 
@@ -23214,7 +23327,7 @@ char *
 delete_trash_port_list_omp (credentials_t * credentials, params_t *params,
                             cmd_response_data_t* response_data)
 {
-  return delete_resource ("port_list", credentials, params, 1, get_trash,
+  return delete_resource ("port_list", credentials, params, 1, "get_trash",
                           response_data);
 }
 
@@ -23231,8 +23344,8 @@ char *
 delete_port_range_omp (credentials_t * credentials, params_t *params,
                        cmd_response_data_t* response_data)
 {
-  return delete_resource ("port_range", credentials, params, 1, edit_port_list,
-                          response_data);
+  return delete_resource ("port_range", credentials, params, 1,
+                          "edit_port_list", response_data);
 }
 
 /**
@@ -23369,7 +23482,7 @@ char *
 delete_trash_role_omp (credentials_t * credentials, params_t *params,
                        cmd_response_data_t* response_data)
 {
-  return delete_resource ("role", credentials, params, 1, get_trash,
+  return delete_resource ("role", credentials, params, 1, "get_trash",
                           response_data);
 }
 
@@ -23386,7 +23499,7 @@ char *
 delete_role_omp (credentials_t * credentials, params_t *params,
                  cmd_response_data_t* response_data)
 {
-  return delete_resource ("role", credentials, params, 0, get_roles,
+  return delete_resource ("role", credentials, params, 0, "get_roles",
                           response_data);
 }
 
@@ -24475,7 +24588,7 @@ char *
 delete_trash_filter_omp (credentials_t * credentials, params_t *params,
                          cmd_response_data_t* response_data)
 {
-  return delete_resource ("filter", credentials, params, 1, get_trash,
+  return delete_resource ("filter", credentials, params, 1, "get_trash",
                           response_data);
 }
 
@@ -24501,7 +24614,7 @@ delete_filter_omp (credentials_t * credentials, params_t *params,
     // TODO: Add params_remove.
     filt_id->value = NULL;
 
-  return delete_resource ("filter", credentials, params, 0, get_filters,
+  return delete_resource ("filter", credentials, params, 0, "get_filters",
                           response_data);
 }
 
@@ -25147,7 +25260,7 @@ char *
 delete_user_omp (credentials_t * credentials, params_t *params,
                  cmd_response_data_t* response_data)
 {
-  return delete_resource ("user", credentials, params, 0, get_users,
+  return delete_resource ("user", credentials, params, 0, "get_users",
                           response_data);
 }
 

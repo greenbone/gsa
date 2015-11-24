@@ -1,3 +1,37 @@
+2015-11-24  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Redirect on successful clone, delete and restore requests instead of
+	responding with the next page directly.
+
+	* src/gsad_base.h (cmd_response_data_t): Add field "redirect".
+
+	* src/gsad_omp.c (next_page_url): New function.
+	(delete_resource): Change type of "get" parameter to "const char*".
+	Redirect to next page on success instead of generating it.
+	(delete_credential_omp, delete_agent_omp, delete_alert_omp): Adjust
+	delete_resource call.
+	(clone_omp): Redirect to next page on success instead of generating it.
+	(delete_target_omp, delete_trash_agent_omp, delete_trash_config_omp)
+	(delete_trash_alert_omp, delete_trash_credential_omp)
+	(delete_trash_report_format_omp, delete_trash_schedule_omp)
+	(delete_trash_slave_omp, delete_trash_target_omp)
+	(delete_trash_task_omp): Adjust delete_resource call.
+	(restore_omp, empty_trashcan_omp): Redirect to next page on success
+	instead of generating it.
+	(delete_trash_tag_omp, delete_trash_note_omp, delete_trash_override_omp)
+	(delete_slave_omp, delete_scanner_omp, delete_trash_scanner_omp)
+	(delete_schedule_omp, delete_report_format_omp, delete_trash_group_omp)
+	(delete_group_omp, delete_trash_permission_omp, delete_port_list_omp)
+	(delete_trash_port_list_omp, delete_port_range_omp)
+	(delete_trash_role_omp, delete_role_omp, delete_trash_filter_omp)
+	(delete_filter_omp, delete_user_omp): Adjust delete_resource call.
+
+	* src/gsad.c (gsad_connection_info): Add field "redirect".
+	(exec_omp_post): Copy redirect to con_info and set answercode to
+	MHD_HTTP_SEE_OTHER if redirect is set in response_data.
+	(request_handler): If redirect is set in con_info send a redirect HTTP
+	response and reset it.
+
 2015-11-24  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/classic/omp.xsl (name="protocol"):

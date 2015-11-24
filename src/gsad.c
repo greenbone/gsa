@@ -1576,6 +1576,7 @@ struct gsad_connection_info
   enum content_type content_type;          ///< Content type of response.
   char *content_disposition;               ///< Content disposition of reponse.
   size_t content_length;                   ///< Content length.
+  gchar *redirect;                         ///< Redirect URL.
 };
 
 /**
@@ -2543,7 +2544,13 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                                          "/omp?cmd=get_tasks", &response_data);
     }
 
-  con_info->answercode = response_data.http_status_code;
+  if (response_data.redirect)
+    {
+      con_info->answercode = MHD_HTTP_SEE_OTHER;
+      con_info->redirect = response_data.redirect;
+    }
+  else
+    con_info->answercode = response_data.http_status_code;
 
   cmd_response_data_reset (&response_data);
   credentials_free (credentials);
@@ -4694,11 +4701,19 @@ request_handler (void *cls, struct MHD_Connection *connection,
           return MHD_YES;
         }
 
-      ret = send_response (connection, con_info->response, con_info->answercode,
-                           new_sid ? new_sid : "0",
-                           con_info->content_type,
-                           con_info->content_disposition,
-                           con_info->content_length);
+      if (con_info->redirect)
+        {
+          ret = send_redirect_to_uri (connection, con_info->redirect, user);
+          g_free (con_info->redirect);
+          con_info->redirect = NULL;
+        }
+      else
+        ret = send_response (connection, con_info->response,
+                             con_info->answercode,
+                             new_sid ? new_sid : "0",
+                             con_info->content_type,
+                             con_info->content_disposition,
+                             con_info->content_length);
       g_free (new_sid);
       return ret;
     }
