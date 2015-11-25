@@ -668,7 +668,7 @@ check_modify_config (credentials_t *credentials, gnutls_session_t *session,
                g_strdup ("<gsad_msg status_text=\"Config is in use.\""
                          " operation=\"Save Config\">"
                          "The config is now in use by a task,"
-                         " so modification of the config is forbidden."
+                         " so only name and comment can be modified."
                          "</gsad_msg>"),
                response_data);
     }

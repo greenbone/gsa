@@ -15480,7 +15480,7 @@ should not have received it.
                    value="{$config/comment}"/>
           </td>
         </tr>
-        <xsl:if test="$config/type = 1">
+        <xsl:if test="not($config/in_use != 0) and $config/type = 1">
           <tr>
             <td valign="top"><xsl:value-of select="gsa:i18n ('Scanner', 'Scanner')"/></td>
             <td>
@@ -15498,7 +15498,7 @@ should not have received it.
         </xsl:if>
       </table>
 
-      <xsl:if test="$config/type = 0">
+      <xsl:if test="not($config/in_use != 0) and $config/type = 0">
         <h1><xsl:value-of select="gsa:i18n ('Edit Network Vulnerability Test Families', 'Scan Config')"/></h1>
 
         <xsl:call-template name="edit-families">
@@ -15510,6 +15510,7 @@ should not have received it.
       </xsl:if>
 
       <xsl:choose>
+        <xsl:when test="$config/in_use != 0"/>
         <xsl:when test="count($config/preferences/preference[string-length(nvt)=0]) = 0">
           <h1><xsl:value-of select="gsa:i18n ('Edit Scanner Preferences', 'Scan Config')"/>: <xsl:value-of select="gsa:i18n ('None', 'Scanner|Preferences')"/></h1>
           <xsl:if test="$config/type = 0">
