@@ -2985,27 +2985,34 @@ resource_action (credentials_t *credentials, params_t *params, const char *type,
                              "/omp?cmd=get_tasks", response_data);
     }
 
-  html = next_page (credentials, params, response, response_data);
-  if (html == NULL)
+  if (omp_success (entity))
     {
-      int success;
-      success = omp_success (entity);
+      gchar *get_cmd = g_strdup_printf ("get_%ss", type);
+      html = NULL;
       free_entity (entity);
       g_free (response);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           success
-                            ? "An internal error occurred while performing an action. "
-                              "The action, however, succeeded. "
-                              "Diagnostics: Error in parameter next."
-                            : "An internal error occurred while performing an action. "
+      response_data->redirect = next_page_url (credentials, params,
+                                               NULL, get_cmd);
+      g_free (get_cmd);
+    }
+  else
+    {
+      html = next_page (credentials, params, response, response_data);
+      if (html == NULL)
+        {
+          free_entity (entity);
+          g_free (response);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          return gsad_message (credentials,
+                              "Internal error", __FUNCTION__, __LINE__,
+                              "An internal error occurred while performing an action. "
                               "The action, furthermore, failed. "
                               "Diagnostics: Error in parameter next.",
-                           "/omp?cmd=get_tasks", response_data);
+                              "/omp?cmd=get_tasks", response_data);
+        }
+      free_entity (entity);
+      g_free (response);
     }
-  free_entity (entity);
-  g_free (response);
   return html;
 }
 
