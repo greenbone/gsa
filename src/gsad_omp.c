@@ -25286,8 +25286,8 @@ delete_user_confirm (credentials_t *credentials, params_t *params,
                      const char *extra_xml, cmd_response_data_t* response_data)
 {
   GString *xml;
-  gchar *response;
-  entity_t entity;
+  gchar *response = NULL;
+  entity_t entity = NULL;
 
   if (command_enabled (credentials, "GET_USERS"))
     {
@@ -25325,7 +25325,8 @@ delete_user_confirm (credentials_t *credentials, params_t *params,
   if (extra_xml)
     g_string_append (xml, extra_xml);
 
-  g_string_append (xml, response);
+  if (response)
+    g_string_append (xml, response);
   free_entity (entity);
   g_free (response);
 
