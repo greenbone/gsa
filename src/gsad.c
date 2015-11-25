@@ -2121,11 +2121,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
               return 1;
             }
         }
-      else if ((params_value (con_info->params, "login") == NULL)
-               && ((params_original_value (con_info->params, "login") == NULL)
-                   || (strcmp (params_original_value (con_info->params, "login"),
-                               "")
-                       == 0)))
+      else
         {
           time_t now;
           gchar *xml;
@@ -2157,19 +2153,6 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
           g_warning ("Authentication failure for '%s' from %s",
                      params_value (con_info->params, "login") ?: "",
                      client_address);
-        }
-      else
-        {
-          response_data.http_status_code = MHD_HTTP_BAD_REQUEST;
-          con_info->response = gsad_message (NULL,
-                                             "Internal error",
-                                             __FUNCTION__,
-                                             __LINE__,
-                                             "An internal error occurred inside GSA daemon. "
-                                             "Diagnostics: Error in login or password.",
-                                             "/omp?cmd=get_tasks",
-                                             &response_data);
-          con_info->answercode = response_data.http_status_code;
         }
       cmd_response_data_reset (&response_data);
       return 3;

@@ -1,5 +1,10 @@
 2015-11-25  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/gsad.c (exec_omp_post): Also return the login form if the
+	username or password contains invalid characters.
+
+2015-11-25  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/gsad.c (request_handler): Initialize con_info->redirect and
 	user in POST case.
 
