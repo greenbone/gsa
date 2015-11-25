@@ -1,5 +1,10 @@
 2015-11-25  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/gsad.c (request_handler): Initialize con_info->redirect and
+	user in POST case.
+
+2015-11-25  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/gsad_omp.c (delete_user_confirm): Initialize response and entity
 	and skip output of GET_USERS response when the command is disabled.
 

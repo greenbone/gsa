@@ -4653,6 +4653,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
           con_info->content_type = GSAD_CONTENT_TYPE_TEXT_HTML;
           con_info->content_disposition = NULL;
           con_info->content_length = 0;
+          con_info->redirect = NULL;
 
           *con_cls = (void *) con_info;
           return MHD_YES;
@@ -4686,6 +4687,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
                                       : DEFAULT_GSAD_LANGUAGE);
       g_free (language);
 
+      user = NULL;
       new_sid = NULL;
       ret = exec_omp_post (con_info, &user, &new_sid, client_address);
 
