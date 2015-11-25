@@ -11865,6 +11865,7 @@ save_config_omp (credentials_t * credentials, params_t *params,
 {
   gnutls_session_t session;
   int socket;
+  int omp_ret;
   char *ret;
   gchar *html;
   params_t *preferences, *selects, *trends;
@@ -11900,17 +11901,28 @@ save_config_omp (credentials_t * credentials, params_t *params,
 
   /* Save name and comment. */
 
-  if (openvas_server_sendf_xml (&session,
-                                "<modify_config config_id=\"%s\">"
-                                "<name>%s</name>"
-                                "<comment>%s</comment>"
-                                "%s%s%s"
-                                "</modify_config>",
-                                params_value (params, "config_id"), name,
-                                comment, scanner_id ? "<scanner>" : "",
-                                scanner_id ?: "",
-                                scanner_id ? "</scanner>" : "")
-      == -1)
+  if (scanner_id)
+    omp_ret = openvas_server_sendf_xml (&session,
+                                        "<modify_config config_id=\"%s\">"
+                                        "<name>%s</name>"
+                                        "<comment>%s</comment>"
+                                        "<scanner>%s</scanner>"
+                                        "</modify_config>",
+                                        params_value (params, "config_id"),
+                                        name,
+                                        comment,
+                                        scanner_id);
+  else
+    omp_ret = openvas_server_sendf_xml (&session,
+                                        "<modify_config config_id=\"%s\">"
+                                        "<name>%s</name>"
+                                        "<comment>%s</comment>"
+                                        "</modify_config>",
+                                        params_value (params, "config_id"),
+                                        name,
+                                        comment);
+
+  if (omp_ret == -1)
     {
       openvas_server_close (socket, session);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;

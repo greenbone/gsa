@@ -1,5 +1,9 @@
 2015-11-25  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/gsad_omp.c (save_config_omp): Fix scanner element in OMP command.
+
+2015-11-25  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Allow modifying name and comment of configs that are in use.
 
 	* src/gsad_omp.c (check_modify_config): Change message to say that
