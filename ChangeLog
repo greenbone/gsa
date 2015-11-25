@@ -1,3 +1,8 @@
+2015-11-25  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (get_reports): Remove the GET_TASKS call.  It does not
+	seem to be used, and can be slow when there are lots of tasks.
+
 2015-11-25  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/gsad_omp.c (save_config_omp): Fix scanner element in OMP command.
