@@ -2219,7 +2219,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 | <a href="/logout?token={$token}">Logout</a>
               </xsl:when>
               <xsl:otherwise>
-                | <a href="/login/login.html">Login</a>
+                | <a href="/logout">Logout</a>
               </xsl:otherwise>
             </xsl:choose>
           </div>
