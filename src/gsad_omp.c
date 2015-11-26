@@ -310,6 +310,7 @@ omp_init (const gchar *address_manager, int port_manager)
 void cmd_response_data_init (cmd_response_data_t* data)
 {
   data->http_status_code = MHD_HTTP_OK;
+  data->redirect = NULL;
 }
 
 /**

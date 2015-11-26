@@ -1,3 +1,7 @@
+2015-11-26  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/gsad_omp.c (cmd_response_data_init): Init redirect with NULL.
+
 2015-11-25  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (get_reports): Remove the GET_TASKS call.  It does not
