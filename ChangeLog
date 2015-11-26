@@ -1,5 +1,11 @@
 2015-11-26  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
+	* src/html/classic/img/feed.svg: New.
+
+	* CMakeLists.txt: Install new icon.
+
+2015-11-26  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
 	* src/html/classic/gsad.xsl (name="error_dialog"): Instead of
 	the login form, use a simple logout as fallback when no token
 	is available. This will automatically lead to the login page.
