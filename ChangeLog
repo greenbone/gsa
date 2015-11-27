@@ -1,5 +1,9 @@
 2015-11-27  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c: File from last commit.
+
+2015-11-27  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Backport r23869.
 
 	* src/gsad_omp.c (get_reports): Remove the GET_TASKS call.  It does not

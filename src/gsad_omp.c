@@ -12328,8 +12328,6 @@ static char *
 get_reports (credentials_t * credentials, params_t *params,
              const char *extra_xml)
 {
-  gchar *html;
-  GString *extra;
   const char *overrides;
 
   overrides = params_value (params, "overrides");
@@ -12337,50 +12335,7 @@ get_reports (credentials_t * credentials, params_t *params,
     /* User toggled overrides.  Set the overrides value in the filter. */
     params_toggle_overrides (params, overrides);
 
-  extra = g_string_new ("");
-  if (command_enabled (credentials, "GET_TASKS"))
-    {
-      gchar *response;
-      entity_t entity;
-
-      response = NULL;
-      entity = NULL;
-      switch (omp (credentials, &response, &entity,
-                   "<get_tasks details=\"0\"/>"))
-        {
-          case 0:
-          case -1:
-            break;
-          case 1:
-            return gsad_message (credentials,
-                                 "Internal error", __FUNCTION__, __LINE__,
-                                 "An internal error occurred getting the reports. "
-                                 "Diagnostics: Failure to send command to manager daemon.",
-                                 "/omp?cmd=get_tasks");
-          case 2:
-            return gsad_message (credentials,
-                                 "Internal error", __FUNCTION__, __LINE__,
-                                 "An internal error occurred getting the reports. "
-                                 "Diagnostics: Failure to receive response from manager daemon.",
-                                 "/omp?cmd=get_tasks");
-          default:
-            return gsad_message (credentials,
-                                 "Internal error", __FUNCTION__, __LINE__,
-                                 "An internal error occurred getting the reports. "
-                                 "Diagnostics: Internal Error.",
-                                 "/omp?cmd=get_tasks");
-        }
-
-      g_string_append (extra, response);
-
-      free_entity (entity);
-      g_free (response);
-    }
-  if (extra_xml)
-    g_string_append (extra, extra_xml);
-  html = get_many ("report", credentials, params, extra->str, NULL);
-  g_string_free (extra, TRUE);
-  return html;
+  return get_many ("report", credentials, params, extra_xml, NULL);
 }
 
 /**
