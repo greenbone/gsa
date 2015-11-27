@@ -2092,7 +2092,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template mode="help" match="configs.html">
   <xsl:call-template name="help-header">
     <xsl:with-param name="title" select="'Scan Configs'"/>
-    <xsl:with-param name="type" select="'scan_config'"/>
+    <xsl:with-param name="type" select="'config'"/>
   </xsl:call-template>
 
   <div class="selection-box">
@@ -2182,7 +2182,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template mode="help" match="new_config.html">
   <xsl:call-template name="help-header">
     <xsl:with-param name="title" select="'New Scan Config'"/>
-    <xsl:with-param name="type" select="'scan_config'"/>
+    <xsl:with-param name="type" select="'config'"/>
   </xsl:call-template>
 
   <div class="selection-box">
@@ -8031,7 +8031,7 @@ Public License instead of this License.
 <xsl:template mode="help" match="config_details.html">
   <xsl:call-template name="help-header">
     <xsl:with-param name="title" select="'Scan Config Details'"/>
-    <xsl:with-param name="asset-type" select="'scan_config'"/>
+    <xsl:with-param name="type" select="'config'"/>
   </xsl:call-template>
 
   <div class="section-box">
@@ -8058,8 +8058,21 @@ Public License instead of this License.
       <h4>Sync Config</h4>
       <p>
         Pressing the sync config icon <img src="/img/refresh.png" alt="Sync Config" title="Sync Config"/> will
-        synchronize the OSP config with its scanner.
+        synchronize the OSP config with its scanner. This icon is only visible for OSP configurations.
       </p>
+
+      <p>
+      The synchronization follows these rules:
+      </p>
+
+      <ul>
+      <li>New scanner parameters are added to the config and the default will be applied.</li>
+      <li>Removed parameters (present in the config, but not in the scanner) are removed.</li>
+      <li>Parameters that were already present, are not changed, even if the default changed.</li>
+      <li>Parameter presence/absence is based on parameter name AND type AND default value.
+          For example, if an OSP scanner changes only a parameter's type, the old one is
+          removed and a new one is inserted.</li>
+      </ul>
 
       <h2>Network Vulnerability Test Families</h2>
       <p>
@@ -8165,7 +8178,7 @@ Public License instead of this License.
 <xsl:template mode="help" match="config_editor.html">
   <xsl:call-template name="help-header">
     <xsl:with-param name="title" select="'Scan Config Editor'"/>
-    <xsl:with-param name="asset-type" select="'scan_config'"/>
+    <xsl:with-param name="asset-type" select="'config'"/>
   </xsl:call-template>
 
   <div class="section-box">
