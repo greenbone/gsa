@@ -159,7 +159,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </p>
   </xsl:if>
 
-  <h4>Exporting</h4>
+  <h4>Export <xsl:value-of select="$name"/> as XML</h4>
   <p>
     Export the <xsl:value-of select="$name"/> as XML by clicking on the
     export icon <img src="/img/download.png" alt="Export" title="Export XML"/>.
@@ -2175,11 +2175,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="type" select="'Scan Config'"/>
         <xsl:with-param name="used_by" select="'Task'"/>
       </xsl:call-template>
-      <h4>Sync Config</h4>
-      <p>
-        Pressing the sync config icon <img src="/img/refresh.png" alt="Sync Config" title="Sync Config"/> will
-        synchronize the OSP config with its scanner.
-      </p>
     </div>
   </div>
 </xsl:template>
@@ -8059,6 +8054,12 @@ Public License instead of this License.
         <xsl:with-param name="type" select="'config'"/>
         <xsl:with-param name="name" select="'Scan Config'"/>
       </xsl:call-template>
+
+      <h4>Sync Config</h4>
+      <p>
+        Pressing the sync config icon <img src="/img/refresh.png" alt="Sync Config" title="Sync Config"/> will
+        synchronize the OSP config with its scanner.
+      </p>
 
       <h2>Network Vulnerability Test Families</h2>
       <p>

@@ -1,3 +1,13 @@
+2015-11-27  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/classic/omp.xsl (html-config-table): Move sync config button
+	inside the div.
+	(config): Remove Sync Config button from actions table.
+
+	* src/html/classic/help.xsl: Move sync config documentation to
+	config_details.html page.
+	(details-window-line-actions): Fix exporting header.
+
 2015-11-27  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (upload_report): Get only container tasks.

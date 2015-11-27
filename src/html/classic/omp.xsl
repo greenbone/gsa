@@ -15241,13 +15241,13 @@ should not have received it.
          style="margin-left:3px;">
         <img src="/img/download.png" border="0" alt="{gsa:i18n ('Export XML', 'Action Verb')}"/>
       </a>
+      <xsl:if test="$config/type = 1">
+        <a href="/omp?cmd=sync_config&amp;config_id={$config/@id}&amp;next=get_config&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+          title="{gsa:i18n ('Sync Config', 'Config')}" style="margin-left:3px;">
+          <img src="/img/refresh.png" border="0" alt="{gsa:i18n ('Sync Config', 'Config')}"/>
+        </a>
+      </xsl:if>
     </div>
-    <xsl:if test="$config/type = 1">
-      <a href="/omp?cmd=sync_config&amp;config_id={$config/@id}&amp;next=get_config&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-        title="{gsa:i18n ('Sync Config', 'Config')}" style="margin-left:3px;">
-        <img src="/img/refresh.png" border="0" alt="{gsa:i18n ('Sync Config', 'Config')}"/>
-      </a>
-    </xsl:if>
   </div>
 
   <div class="section-header">
@@ -15722,12 +15722,6 @@ should not have received it.
             <xsl:with-param name="type" select="'config'"/>
             <xsl:with-param name="id" select="@id"/>
           </xsl:call-template>
-          <xsl:if test="type = 1">
-            <a href="/omp?cmd=sync_config&amp;config_id={@id}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-              title="{gsa:i18n ('Sync Config', 'Config')}" style="margin-left:3px;">
-              <img src="/img/refresh.png" border="0" alt="{gsa:i18n ('Sync Config', 'Config')}"/>
-            </a>
-          </xsl:if>
         </td>
       </xsl:otherwise>
     </xsl:choose>
