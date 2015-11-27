@@ -1,5 +1,13 @@
 2015-11-27  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Backport r23880.
+
+	* src/gsad_omp.c (new_note, new_override): Add schedules_only to
+	GET_TASKS because only name and ID is required, and getting all the
+	other info is slower.
+
+2015-11-27  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c: File from last commit.
 
 2015-11-27  Matthew Mundell <matthew.mundell@greenbone.net>

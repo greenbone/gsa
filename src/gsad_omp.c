@@ -12977,6 +12977,7 @@ new_note (credentials_t *credentials, params_t *params, const char *extra_xml)
 
       if (openvas_server_sendf (&session,
                                 "<get_tasks"
+                                " schedules_only=\"1\""
                                 " details=\"0\"/>")
           == -1)
         {
@@ -13659,6 +13660,7 @@ new_override (credentials_t *credentials, params_t *params, const char *extra_xm
 
       if (openvas_server_sendf (&session,
                                 "<get_tasks"
+                                " schedules_only=\"1\""
                                 " details=\"0\"/>")
           == -1)
         {
