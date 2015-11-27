@@ -1,3 +1,10 @@
+2015-11-27  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (upload_report): Get only container tasks.
+	(new_alert, get_alert, get_alerts, edit_alert, new_note)
+	(new_override): Add schedules_only to GET_TASKS because only name
+	and ID is required, and getting all the other info is slower.
+
 2015-11-26  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/classic/img/feed.svg: New.

@@ -3644,7 +3644,9 @@ upload_report (credentials_t *credentials, params_t *params,
       gchar *response;
 
       if (simple_ompf ("getting Tasks", credentials, &response, response_data,
-                       "<get_tasks/>"))
+                       "<get_tasks"
+                       /* All container tasks. */
+                       " filter=\"target= rows=-1 owner=any permission=any\"/>"))
         {
           g_string_free (xml, TRUE);
           return response;
@@ -7676,7 +7678,9 @@ new_alert (credentials_t *credentials, params_t *params, const char *extra_xml,
   /* Get Tasks. */
 
   ret = omp (credentials, &response, &entity, response_data,
-             "<get_tasks filter=\"owner=any permission=start_task rows=-1\"/>");
+             "<get_tasks"
+             " schedules_only=\"1\""
+             " filter=\"owner=any permission=start_task rows=-1\"/>");
 
   switch (ret)
     {
@@ -8146,6 +8150,7 @@ get_alert (credentials_t * credentials, params_t *params,
       entity = NULL;
       switch (omp (credentials, &response, &entity, response_data,
                    "<get_tasks"
+                   " schedules_only=\"1\""
                    " filter=\"owner=any permission=start_task rows=-1\"/>"))
         {
           case 0:
@@ -8279,8 +8284,9 @@ get_alerts (credentials_t * credentials, params_t *params,
       response = NULL;
       entity = NULL;
       switch (omp (credentials, &response, &entity, response_data,
-                   "<get_tasks filter=\"owner=any permission=start_task"
-                   "                    rows=-1\"/>"))
+                   "<get_tasks"
+                   " schedules_only=\"1\""
+                   " filter=\"owner=any permission=start_task rows=-1\"/>"))
         {
           case 0:
           case -1:
@@ -8567,8 +8573,9 @@ edit_alert (credentials_t * credentials, params_t *params,
 
       if (openvas_server_sendf (&session,
                                 "<get_tasks"
+                                " schedules_only=\"1\""
                                 " filter=\"owner=any permission=start_task"
-                                " rows=-1\"/>")
+                                "          rows=-1\"/>")
           == -1)
         {
           g_string_free (xml, TRUE);
@@ -15474,6 +15481,7 @@ new_note (credentials_t *credentials, params_t *params, const char *extra_xml,
 
       if (openvas_server_sendf (&session,
                                 "<get_tasks"
+                                " schedules_only=\"1\""
                                 " details=\"0\"/>")
           == -1)
         {
@@ -16216,6 +16224,7 @@ new_override (credentials_t *credentials, params_t *params,
 
       if (openvas_server_sendf (&session,
                                 "<get_tasks"
+                                " schedules_only=\"1\""
                                 " details=\"0\"/>")
           == -1)
         {
