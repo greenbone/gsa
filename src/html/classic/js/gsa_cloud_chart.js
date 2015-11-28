@@ -315,7 +315,7 @@ function CloudChartGenerator ()
                                .attr("onclick", "blob_img_window (\"" + svg_url + "\")")
                                .text("Show copyable SVG");
 
-                    display.create_or_get_menu_item ("svg_dl")
+                    display.create_or_get_menu_item ("svg_dl", true /* Last. */)
                                .attr("href", svg_url)
                                .attr("download", "gsa_bubble_chart-" + new Date().getTime() + ".svg")
                                .text("Download SVG");

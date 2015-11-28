@@ -1,3 +1,22 @@
+2015-11-28  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/classic/gsad.xsl (html-gsa-navigation): Remove stray
+	BR that was causing extra space at the bottom of the Administration
+	menu.
+
+	* src/html/classic/js/gsa_graphics_base.js
+	(create_or_get_menu_item): Add arg "last".  If true then give the LI
+	attribute "last", so that the green hover overlay is rounded.
+
+	* src/html/classic/js/gsa_bar_chart.js,
+	src/html/classic/js/gsa_bubble_chart.js,
+	src/html/classic/js/gsa_cloud_chart.js,
+	src/html/classic/js/gsa_donut_chart.js,
+	src/html/classic/js/gsa_gantt_chart.js,
+	src/html/classic/js/gsa_h_bar_chart.js,
+	src/html/classic/js/gsa_line_chart.js (generate): Flag last menu item,
+	so that green hover overlay is rounded.
+
 2015-11-27  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/classic/help.xsl (configs.html, new_config.html):

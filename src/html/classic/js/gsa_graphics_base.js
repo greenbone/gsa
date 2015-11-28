@@ -553,15 +553,18 @@ function Display (p_container)
     }
 
   /* Gets a menu item or creates it if it does not exist */
-  my.create_or_get_menu_item = function (id)
+  my.create_or_get_menu_item = function (id, last)
     {
       var item = menu.select ("li #" + name + "_" + id)
                       .select ("a");
 
       if (item.empty ())
-        item = menu.append ("li")
-                     .attr ("id", name + "_" + id)
-                     .append ("a")
+	    {
+	      var li = menu.append ("li");
+	      if (last)
+            li.attr ("class", "last");
+          item = li.attr ("id", name + "_" + id).append ("a");
+	    }
 
       return item;
     }
