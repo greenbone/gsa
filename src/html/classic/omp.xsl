@@ -4502,7 +4502,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
   <div id="list-window-header" class="clearfix">
     <div id="list-window-title">
-      <img id="list-window-img" src="/img/{$type}.svg"/>
+      <xsl:choose>
+        <xsl:when test="$subtype != ''">
+          <img id="list-window-img" src="/img/{$subtype}.svg"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <img id="list-window-img" src="/img/{$type}.svg"/>
+        </xsl:otherwise>
+      </xsl:choose>
+
       <div id="list-window-details">
         <h2>
           <xsl:value-of select="gsa:i18n ($cap-type-plural)"/>
