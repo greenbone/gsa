@@ -1,5 +1,14 @@
 2015-11-29  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
+	* src/html/classic/img/alert.svg,
+	src/html/classic/img/credential.svg,
+	src/html/classic/img/port_list.svg,
+	src/html/classic/img/report_format.svg: New.
+
+	* CMakeLists.txt: Install the new icons.
+
+2015-11-29  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
 	* src/html/classic/img/cvss_calculator.svg,
 	src/html/classic/img/mysettings.svg,
 	src/html/classic/img/performance.svg: New.

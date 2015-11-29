@@ -473,6 +473,10 @@ install (FILES src/html/classic/img/agent.png
                src/html/classic/img/cvss_calculator.svg
                src/html/classic/img/mysettings.svg
                src/html/classic/img/performance.svg
+               src/html/classic/img/port_list.svg
+               src/html/classic/img/alert.svg
+               src/html/classic/img/report_format.svg
+               src/html/classic/img/credential.svg
                src/html/classic/img/os.svg
                src/html/classic/img/host.svg
                src/html/classic/img/feed.svg
