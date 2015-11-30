@@ -1998,6 +1998,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:choose>
 </xsl:template>
 
+<!-- GENERAL ERROR MESSAGES -->
+
+<xsl:template match="action_status">
+  <xsl:call-template name="command_result_dialog">
+    <xsl:with-param name="operation" select="../prev_action"/>
+    <xsl:with-param name="status" select="text()"/>
+    <xsl:with-param name="msg" select="../action_message"/>
+  </xsl:call-template>
+</xsl:template>
+
 <!-- BEGIN GENERAL TAGS VIEWS -->
 
 <xsl:template name="user-tags-window-checked">

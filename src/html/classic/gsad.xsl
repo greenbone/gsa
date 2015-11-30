@@ -202,6 +202,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <!-- Manager indicators. -->
 
+<xsl:template match="action_status" mode="response-indicator">
+  <xsl:call-template name="indicator">
+    <xsl:with-param name="status" select="text()"/>
+    <xsl:with-param name="status_text" select="../action_message"/>
+    <xsl:with-param name="command" select="../prev_action"/>
+  </xsl:call-template>
+</xsl:template>
+
 <xsl:template match="create_agent_response" mode="response-indicator">
   <xsl:call-template name="indicator">
     <xsl:with-param name="status" select="@status"/>
@@ -927,7 +935,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <div class="status_panel">
         <xsl:apply-templates select="gsad_msg"
                              mode="response-indicator"/>
-
+        <xsl:apply-templates select="/envelope/params/action_status"
+                             mode="response-indicator"/>
         <!-- Manager -->
         <xsl:apply-templates select="commands_response/create_agent_response"
                              mode="response-indicator"/>
@@ -2256,9 +2265,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="status">(Status code is missing)</xsl:param>
   <xsl:param name="msg">(Status message is missing)</xsl:param>
   <xsl:param name="details"></xsl:param>
+  <xsl:param name="always-visible"></xsl:param>
 
   <xsl:choose>
-    <xsl:when test="$status = '200' or $status = '201' or $status = '202'">
+    <xsl:when test="not ($always-visible) and ($status = '200' or $status = '201' or $status = '202')">
     </xsl:when>
     <xsl:otherwise>
       <div class="gb_window">
@@ -2382,6 +2392,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div> <!-- /.gb_login_dialog_container -->
 </xsl:template>
 
+<!-- Action result -->
+<xsl:template match="action_result">
+  <xsl:call-template name="command_result_dialog">
+    <xsl:with-param name="operation" select="action"/>
+    <xsl:with-param name="status" select="status"/>
+    <xsl:with-param name="msg" select="message"/>
+    <xsl:with-param name="details"/>
+    <xsl:with-param name="always-visible" select="1"/>
+  </xsl:call-template>
+</xsl:template>
+
 <!-- ROOT, ENVELOPE -->
 
 <xsl:template match="backend_operation">
@@ -2444,6 +2465,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:with-param>
       </xsl:call-template>
       <xsl:call-template name="html-gsa-navigation"/>
+      <xsl:apply-templates select="/envelope/params/action_status"/>
       <xsl:apply-templates/>
       <xsl:call-template name="html-footer"/>
     </xsl:otherwise>

@@ -1,3 +1,35 @@
+2015-11-30  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Add status messages and indicators on pages redirected to. In New Tag
+	and Edit Tag dialogs, get status messages directly without requesting
+	next page.
+
+	* src/gsad_omp.c (CHECK_PARAM_REDIRECT): New function-like macro.
+	(capitalize): New function.
+	(next_page_url): Add parameters prev_action, action_status,
+	action_message to allow delivering short error messages via the URL.
+	(action_result_page): New function.
+	(delete_resource, resource_action, clone_omp, restore_omp)
+	(empty_trashcan_omp, create_tag_omp, save_tag_omp, toggle_tag_omp):
+	Handle no_redirect request param and respond with redirect or
+	action_message.
+
+	* src/gsad.c (init_validator): Add params action_message,
+	action_status, prev_action and no_redirect.
+
+	* src/html/classic/gsad.xsl (action_status [response-indicator]): New
+	template.
+	(html-gsa-logo): Add case for action_status param.
+	(command_result_dialog): Add always-visible param.
+	(action_result): New template.
+	(envelope): Add case for action_status param.
+
+	* src/html/classic/omp.xsl (action_status): New template.
+
+	* src/html/classic/js/greenbone.js (OMPDialog.prototype.postForm):
+	Handle new error types.
+	(OMPDialog.prototype.show): Add hidden no_redirect field.
+
 2015-11-29  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/classic/img/alert.svg,

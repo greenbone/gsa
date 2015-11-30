@@ -1131,7 +1131,8 @@ init_validator ()
                          "|(wizard)"
                          "|(wizard_get)$");
 
-
+  openvas_validator_add (validator, "action_message", "(?s)^.*$");
+  openvas_validator_add (validator, "action_status", "(?s)^.*$");
   openvas_validator_add (validator, "active", "^(-1|-2|[0-9]+)$");
   openvas_validator_add (validator, "agent_format", "^(installer)$");
   openvas_validator_add (validator, "agent_id",     "^[a-z0-9\\-]+$");
@@ -1263,6 +1264,7 @@ init_validator ()
   openvas_validator_add (validator, "preference_name", "^(.*){0,400}$");
   openvas_validator_add (validator, "preference:name",  "^([^[]*\\[[^]]*\\]:.*){0,400}$");
   openvas_validator_add (validator, "preference:value", "(?s)^.*$");
+  openvas_validator_add (validator, "prev_action", "(?s)^.*$");
   openvas_validator_add (validator, "privacy_algorithm",   "^(aes)|(des)$");
   openvas_validator_add (validator, "private_key",      "(?s)^.*$");
   openvas_validator_add (validator, "protocol_format",  "^(html|rnc|xml)$");
@@ -1454,6 +1456,7 @@ init_validator ()
   openvas_validator_alias (validator, "note_task_id", "optional_task_id");
   openvas_validator_alias (validator, "note_task_uuid", "note_task_id");
   openvas_validator_alias (validator, "note_result_uuid", "note_result_id");
+  openvas_validator_alias (validator, "no_redirect", "boolean");
   openvas_validator_alias (validator, "nvt:value",         "uuid");
   openvas_validator_alias (validator, "old_password", "password");
   openvas_validator_alias (validator, "original_overrides",  "boolean");

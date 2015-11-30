@@ -1048,6 +1048,38 @@ setting_get_value (gnutls_session_t *session, const char *setting_id,
     }
 
 /**
+ * @brief Check a param using the redirect or direct response method.
+ *
+ * @param[in]  name     Param name.
+ * @param[in]  op_name  Operation name.
+ * @param[in]  ret_func Function to return message.
+ */
+#define CHECK_PARAM_REDIRECT(name, op_name, next_cmd)                          \
+  if (name == NULL)                                                            \
+    {                                                                          \
+      gchar *ret;                                                              \
+      gchar *next_url                                                          \
+        = next_page_url (credentials, params, next_cmd, NULL, op_name,         \
+                         G_STRINGIFY (MHD_HTTP_BAD_REQUEST),                   \
+                         "Given " G_STRINGIFY (name) " was invalid");          \
+      if (no_redirect && strcmp (no_redirect, "0"))                            \
+        {                                                                      \
+          ret = action_result_page (credentials, response_data, op_name,       \
+                                    G_STRINGIFY (MHD_HTTP_BAD_REQUEST),        \
+                                    "Given " G_STRINGIFY (name) " was invalid",\
+                                    next_url);                                 \
+          g_free (next_url);                                                   \
+        }                                                                      \
+      else                                                                     \
+        {                                                                      \
+          ret = NULL;                                                          \
+          response_data->redirect = next_url;                                  \
+        }                                                                      \
+      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;                  \
+      return ret;                                                              \
+    }
+
+/**
  * @brief Get an URL for the current page.
  *
  * @param[in]  credentials  Username and password for authentication.
@@ -1136,6 +1168,43 @@ page_url_append_param (credentials_t *credentials, const gchar *name,
     }
 }
 
+/**
+ * @brief Capitalize a type or command name and replace underscores.
+ *
+ * @param[in]  input  The input string.
+ *
+ * @return The newly allocated capitalized type or command name.
+ */
+static gchar*
+capitalize (const char* input)
+{
+  gchar *output;
+  if (input == NULL)
+    return NULL;
+  else
+    {
+      int first_letter = 1;
+      int pos = 0;
+      output = g_strdup (input);
+
+      while (output[pos])
+        {
+          if (g_ascii_isalpha (output[pos]) && first_letter)
+            {
+              output[pos] = g_ascii_toupper (output[pos]);
+              first_letter = 0;
+            }
+          else if (output[pos] == '_')
+            {
+              output[pos] = ' ';
+              first_letter = 1;
+            }
+          pos++;
+        }
+      return output;
+    }
+}
+
 
 /* Generic page handlers. */
 
@@ -1146,12 +1215,17 @@ page_url_append_param (credentials_t *credentials, const gchar *name,
  * @param[in]  params         Request parameters.
  * @param[in]  override_next  Command to redirect to, ignoring "next" or NULL.
  * @param[in]  default_next   Command to redirect to if next" is missing.
+ * @param[in]  prev_action    Previous action.
+ * @param[in]  action_status  Status code of previous action.
+ * @param[in]  action_message Status message of previous action.
  *
  * @return  Newly allocated redirect URL.
  */
 static gchar *
 next_page_url (credentials_t *credentials, params_t *params,
-               const char* override_next, const char *default_next)
+               const char* override_next, const char *default_next,
+               const char* prev_action, const char* action_status,
+               const char* action_message)
 {
   GString *url;
   const char *next_cmd;
@@ -1188,9 +1262,63 @@ next_page_url (credentials_t *credentials, params_t *params,
         }
     }
 
+  if (action_status)
+    {
+      gchar *escaped = g_uri_escape_string (action_status, NULL, FALSE);
+      g_string_append_printf (url, "&action_status=%s", escaped);
+      g_free (escaped);
+    }
+
+  if (action_message)
+    {
+      gchar *escaped = g_uri_escape_string (action_message, NULL, FALSE);
+      g_string_append_printf (url, "&action_message=%s", escaped);
+      g_free (escaped);
+    }
+
+  if (prev_action)
+    {
+      gchar *escaped = g_uri_escape_string (prev_action, NULL, FALSE);
+      g_string_append_printf (url, "&prev_action=%s", escaped);
+      g_free (escaped);
+    }
+
+
   g_string_append_printf (url, "&token=%s", credentials->token);
 
   return g_string_free (url, FALSE);
+}
+
+/**
+ * @brief Generate a page containing a result.
+ *
+ * @param[in]  credentials    Username and password for authentication.
+ * @param[out] response_data  Extra data return for the HTTP response.
+ * @param[in]  action         Name of the action.
+ * @param[in]  status         Status code.
+ * @param[in]  message        Status message.
+ * @param[in]  next_url       URL of next page.
+ *
+ * @return Result of XSL transformation.
+ */
+static gchar *
+action_result_page (credentials_t *credentials,
+                    cmd_response_data_t *response_data,
+                    const char* action, const char* status,
+                    const char* message, const char* next_url)
+{
+  gchar *xml;
+  xml = g_markup_printf_escaped ("<action_result>"
+                                 "<action>%s</action>"
+                                 "<status>%s</status>"
+                                 "<message>%s</message>"
+                                 "<next>%s</next>"
+                                 "</action_result>",
+                                 action ? action : "",
+                                 status ? status : "",
+                                 message ? message : "",
+                                 next_url ? next_url : "");
+  return xsl_transform_omp (credentials, xml, response_data);
 }
 
 /**
@@ -2749,9 +2877,11 @@ delete_resource (const char *type, credentials_t * credentials,
   gnutls_session_t session;
   int socket;
   gchar *html, *response, *id_name, *resource_id, *extra_attribs;
-  const char *next_id;
+  const char *no_redirect, *next_id;
   entity_t entity;
+  gchar *cap_type, *default_next, *prev_action, *next_url;
 
+  no_redirect = params_value (params, "no_redirect");
   id_name = g_strdup_printf ("%s_id", type);
   if (params_value (params, id_name))
     resource_id = g_strdup (params_value (params, id_name));
@@ -2857,50 +2987,39 @@ delete_resource (const char *type, credentials_t * credentials,
                            "/omp?cmd=get_tasks", response_data);
     }
 
-  if (omp_success (entity))
-    {
-      g_free (response);
-      free_entity (entity);
-      openvas_server_close (socket, session);
+  if (!omp_success (entity))
+    set_http_status_from_entity (entity, response_data);
+  openvas_server_close (socket, session);
 
-      gchar *default_next = g_strdup_printf ("get_%ss", type);
-      response_data->redirect = next_page_url (credentials, params,
-                                               get, default_next);
-      return NULL;
+  cap_type = capitalize (type);
+  default_next = g_strdup_printf ("get_%ss", type);
+  prev_action = g_strdup_printf ("Delete %s", cap_type);
+  next_url = next_page_url (credentials, params, get, default_next,
+                            prev_action,
+                            entity_attribute (entity, "status"),
+                            entity_attribute (entity, "status_text"));
+
+  if (no_redirect && strcmp (no_redirect, "0"))
+    {
+      html = action_result_page (credentials, response_data, prev_action,
+                                 entity_attribute (entity, "status"),
+                                 entity_attribute (entity, "status_text"),
+                                 next_url);
+      g_free (next_url);
     }
   else
     {
-      set_http_status_from_entity (entity, response_data);
-      if (get)
-        html = generate_page (credentials, params, response, get,
-                              response_data);
-      else
-        {
-          if (params_given (params, "next") == 0)
-            {
-              gchar *next;
-              next = g_strdup_printf ("get_%ss", type);
-              params_add (params, "next", next);
-              g_free (next);
-            }
-          html = next_page (credentials, params, response, response_data);
-        }
-      g_free (response);
-      free_entity (entity);
-      openvas_server_close (socket, session);
-
-      if (html == NULL)
-        {
-          response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
-          return gsad_message (credentials,
-                              "Internal error", __FUNCTION__, __LINE__,
-                              "An internal error occurred while deleting a resource. "
-                              "Diagnostics: Error in parameter next.",
-                              "/omp?cmd=get_tasks", response_data);
-        }
-
-      return html;
+      response_data->redirect = next_url;
+      html = NULL;
     }
+
+  g_free (response);
+  free_entity (entity);
+  g_free (cap_type);
+  g_free (default_next);
+  g_free (prev_action);
+
+  return html;
 }
 
 /**
@@ -2919,13 +3038,16 @@ resource_action (credentials_t *credentials, params_t *params, const char *type,
                  const char *action, cmd_response_data_t* response_data)
 {
   gchar *html, *response, *param_name;
-  const char *resource_id;
+  const char *no_redirect, *resource_id;
+  gchar *cap_action, *cap_type, *get_cmd, *prev_action, *next_url;
+
   int ret;
   entity_t entity;
 
   assert (type);
 
   param_name = g_strdup_printf ("%s_id", type);
+  no_redirect = params_value (params, "no_redirect");
   resource_id = params_value (params, param_name);
 
   if (resource_id == NULL)
@@ -2986,34 +3108,39 @@ resource_action (credentials_t *credentials, params_t *params, const char *type,
                              "/omp?cmd=get_tasks", response_data);
     }
 
-  if (omp_success (entity))
+  if (!omp_success (entity))
+    set_http_status_from_entity (entity, response_data);
+
+  cap_action = capitalize (action);
+  cap_type = capitalize (type);
+  get_cmd = g_strdup_printf ("get_%ss", type);
+  prev_action = g_strdup_printf ("%s %s", cap_action, cap_type);
+  next_url = next_page_url (credentials, params, NULL, get_cmd,
+                            prev_action,
+                            entity_attribute (entity, "status"),
+                            entity_attribute (entity, "status_text"));
+
+  if (no_redirect && strcmp (no_redirect, "0"))
     {
-      gchar *get_cmd = g_strdup_printf ("get_%ss", type);
-      html = NULL;
-      free_entity (entity);
-      g_free (response);
-      response_data->redirect = next_page_url (credentials, params,
-                                               NULL, get_cmd);
-      g_free (get_cmd);
+      html = action_result_page (credentials, response_data, prev_action,
+                                 entity_attribute (entity, "status"),
+                                 entity_attribute (entity, "status_text"),
+                                 next_url);
+      g_free (next_url);
     }
   else
     {
-      html = next_page (credentials, params, response, response_data);
-      if (html == NULL)
-        {
-          free_entity (entity);
-          g_free (response);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-          return gsad_message (credentials,
-                              "Internal error", __FUNCTION__, __LINE__,
-                              "An internal error occurred while performing an action. "
-                              "The action, furthermore, failed. "
-                              "Diagnostics: Error in parameter next.",
-                              "/omp?cmd=get_tasks", response_data);
-        }
-      free_entity (entity);
-      g_free (response);
+      response_data->redirect = next_url;
+      html = NULL;
     }
+
+  g_free (response);
+  free_entity (entity);
+  g_free (cap_action);
+  g_free (cap_type);
+  g_free (get_cmd);
+  g_free (prev_action);
+
   return html;
 }
 
@@ -9334,12 +9461,14 @@ clone_omp (credentials_t *credentials, params_t *params,
   gnutls_session_t session;
   int socket;
   gchar *html, *response;
-  const char *id, *type, *alterable;
+  const char *id, *type, *alterable, *no_redirect, *next_id;
+  gchar *next_id_name, *cap_type, *prev_action, *next_url;
   entity_t entity;
 
   id = params_value (params, "id");
   type = params_value (params, "resource_type");
   alterable = params_value (params, "alterable");
+  no_redirect = params_value (params, "no_redirect");
 
   CHECK (id);
   CHECK (type);
@@ -9433,8 +9562,6 @@ clone_omp (credentials_t *credentials, params_t *params,
 
   if (omp_success (entity))
     {
-      gchar *next_id_name;
-      const char* next_id;
       next_id = entity_attribute (entity, "id");
       if (next_id == NULL)
         {
@@ -9451,29 +9578,41 @@ clone_omp (credentials_t *credentials, params_t *params,
       next_id_name = g_strdup_printf ("%s_id", type);
       params_add (params, next_id_name, next_id);
       g_free (next_id_name);
-      response_data->redirect = next_page_url (credentials, params, NULL, NULL);
-      free_entity (entity);
-      g_free (response);
-      return NULL;
     }
   else
     {
       set_http_status_from_entity (entity, response_data);
-      free_entity (entity);
-      html = next_page (credentials, params, response, response_data);
-      g_free (response);
-      if (html == NULL)
-        {
-          response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
-          return gsad_message (credentials,
-                              "Internal error", __FUNCTION__, __LINE__,
-                              "An internal error occurred while cloning a resource. "
-                              "The resource remains the same. "
-                              "Diagnostics: Error in parameter next.",
-                              "/omp?cmd=get_tasks", response_data);
-        }
-      return html;
+      next_id_name = NULL;
+      next_id = NULL;
     }
+
+  cap_type = capitalize (type);
+  prev_action = g_strdup_printf ("Clone %s", cap_type);
+  next_url = next_page_url (credentials, params, NULL, NULL,
+                            prev_action,
+                            entity_attribute (entity, "status"),
+                            entity_attribute (entity, "status_text"));
+
+  if (no_redirect && strcmp (no_redirect, "0"))
+    {
+      html = action_result_page (credentials, response_data, prev_action,
+                                 entity_attribute (entity, "status"),
+                                 entity_attribute (entity, "status_text"),
+                                 next_url);
+      g_free (next_url);
+    }
+  else
+    {
+      response_data->redirect = next_url;
+      html = NULL;
+    }
+
+  free_entity (entity);
+  g_free (cap_type);
+  g_free (prev_action);
+  g_free (response);
+
+  return html;
 }
 
 #undef CHECK
@@ -9662,14 +9801,15 @@ restore_omp (credentials_t * credentials, params_t *params,
              cmd_response_data_t* response_data)
 {
   GString *xml;
-  gchar *ret;
+  gchar *ret, *next_url;
   gnutls_session_t session;
   int socket;
   entity_t entity;
   gchar *html;
-  const char *target_id;
+  const char *target_id, *no_redirect;
 
   target_id = params_value (params, "target_id");
+  no_redirect = params_value (params, "no_redirect");
 
   if (target_id == NULL)
     {
@@ -9738,15 +9878,26 @@ restore_omp (credentials_t * credentials, params_t *params,
   /* Cleanup, and return trash page. */
 
   openvas_server_close (socket, session);
-  if (omp_success (entity))
+  if (! omp_success (entity))
+    set_http_status_from_entity (entity, response_data);
+
+  next_url = next_page_url (credentials, params, "get_trash", NULL,
+                            "Restore",
+                            entity_attribute (entity, "status"),
+                            entity_attribute (entity, "status_text"));
+
+  if (no_redirect && strcmp (no_redirect, "0"))
     {
-      ret = NULL;
-      response_data->redirect = next_page_url (credentials, params,
-                                               "get_trash", NULL);
+      ret = action_result_page (credentials, response_data, "Restore",
+                                entity_attribute (entity, "status"),
+                                entity_attribute (entity, "status_text"),
+                                next_url);
+      g_free (next_url);
     }
   else
     {
-      ret = get_trash (credentials, params, xml->str, response_data);
+      ret = NULL;
+      response_data->redirect = next_url;
     }
   free_entity (entity);
   g_string_free (xml, FALSE);
@@ -9767,11 +9918,14 @@ empty_trashcan_omp (credentials_t * credentials, params_t *params,
                     cmd_response_data_t* response_data)
 {
   GString *xml;
-  gchar *ret;
+  const char* no_redirect;
+  gchar *next_url, *ret;
   gnutls_session_t session;
   int socket;
   entity_t entity;
   gchar *html;
+
+  no_redirect = params_value (params, "no_redirect");
 
   switch (manager_connect (credentials, &socket, &session, &html,
                            response_data))
@@ -9824,15 +9978,25 @@ empty_trashcan_omp (credentials_t * credentials, params_t *params,
   /* Cleanup, and return trash page. */
 
   openvas_server_close (socket, session);
-  if (omp_success (entity))
+  if (! omp_success (entity))
+    set_http_status_from_entity (entity, response_data);
+  next_url = next_page_url (credentials, params, "get_trash", NULL,
+                            "Empty Trashcan",
+                            entity_attribute (entity, "status"),
+                            entity_attribute (entity, "status_text"));
+
+  if (no_redirect && strcmp (no_redirect, "0"))
     {
-      ret = NULL;
-      response_data->redirect = next_page_url (credentials, params,
-                                               "get_trash", NULL);
+      ret = action_result_page (credentials, response_data, "Empty Trashcan",
+                                entity_attribute (entity, "status"),
+                                entity_attribute (entity, "status_text"),
+                                next_url);
+      g_free (next_url);
     }
   else
     {
-      ret = get_trash (credentials, params, xml->str, response_data);
+      ret = NULL;
+      response_data->redirect = next_url;
     }
   free_entity (entity);
   g_string_free (xml, FALSE);
@@ -9920,10 +10084,12 @@ create_tag_omp (credentials_t *credentials, params_t *params,
                 cmd_response_data_t* response_data)
 {
   char *ret;
-  gchar *response;
+  const char* no_redirect;
+  gchar *response, *next_url;
   const char *name, *comment, *value, *resource_type, *resource_id, *active;
   entity_t entity;
 
+  no_redirect = params_value (params, "no_redirect");
   name = params_value (params, "tag_name");
   comment = params_value (params, "comment");
   value = params_value (params, "tag_value");
@@ -9931,12 +10097,12 @@ create_tag_omp (credentials_t *credentials, params_t *params,
   resource_id = params_value (params, "resource_id");
   active = params_value (params, "active");
 
-  CHECK_PARAM (name, "Create Tag", new_tag)
-  CHECK_PARAM (comment, "Create Tag", new_tag)
-  CHECK_PARAM (value, "Create Tag", new_tag)
-  CHECK_PARAM (resource_type, "Create Tag", new_tag)
-  CHECK_PARAM (resource_id, "Create Tag", new_tag)
-  CHECK_PARAM (active, "Create Tag", new_tag)
+  CHECK_PARAM_REDIRECT (name, "Create Tag", "new_tag")
+  CHECK_PARAM_REDIRECT (comment, "Create Tag", "new_tag")
+  CHECK_PARAM_REDIRECT (value, "Create Tag", "new_tag")
+  CHECK_PARAM_REDIRECT (resource_type, "Create Tag", "new_tag")
+  CHECK_PARAM_REDIRECT (resource_id, "Create Tag", "new_tag")
+  CHECK_PARAM_REDIRECT (active, "Create Tag", "new_tag")
 
   response = NULL;
   entity = NULL;
@@ -9989,17 +10155,27 @@ create_tag_omp (credentials_t *credentials, params_t *params,
                              "/omp?cmd=get_tags", response_data);
     }
 
-  if (omp_success (entity))
+  if (! omp_success (entity))
+    set_http_status_from_entity (entity, response_data);
+  next_url = next_page_url (credentials, params, NULL, "new_tag",
+                            "Create Tag",
+                            entity_attribute (entity, "status"),
+                            entity_attribute (entity, "status_text"));
+
+  if (no_redirect && strcmp (no_redirect, "0"))
     {
-      ret = next_page (credentials, params, response, response_data);
-      if (ret == NULL)
-        ret = get_tags (credentials, params, response, response_data);
+      ret = action_result_page (credentials, response_data, "Create Tag",
+                                entity_attribute (entity, "status"),
+                                entity_attribute (entity, "status_text"),
+                                next_url);
+      g_free (next_url);
     }
   else
     {
-      set_http_status_from_entity (entity, response_data);
-      ret = new_tag (credentials, params, response, response_data);
+      ret = NULL;
+      response_data->redirect = next_url;
     }
+
   free_entity (entity);
   g_free (response);
   return ret;
@@ -10166,12 +10342,13 @@ char *
 save_tag_omp (credentials_t * credentials, params_t *params,
               cmd_response_data_t* response_data)
 {
-  gchar *response;
+  gchar *response, *next_url;
   const char *name, *comment, *value, *resource_type, *resource_id, *active;
-  const char *tag_id;
+  const char *tag_id, *no_redirect;
   entity_t entity;
   char* ret;
 
+  no_redirect = params_value (params, "no_redirect");
   tag_id = params_value (params, "tag_id");
   name = params_value (params, "tag_name");
   comment = params_value (params, "comment");
@@ -10180,13 +10357,13 @@ save_tag_omp (credentials_t * credentials, params_t *params,
   resource_id = params_value (params, "resource_id");
   active = params_value (params, "active");
 
-  CHECK_PARAM (tag_id, "Save Tag", edit_tag)
-  CHECK_PARAM (name, "Save Tag", edit_tag)
-  CHECK_PARAM (comment, "Save Tag", edit_tag)
-  CHECK_PARAM (value, "Save Tag", edit_tag)
-  CHECK_PARAM (resource_type, "Save Tag", edit_tag)
-  CHECK_PARAM (resource_id, "Save Tag", edit_tag)
-  CHECK_PARAM (active, "Save Tag", edit_tag)
+  CHECK_PARAM_REDIRECT (tag_id, "Save Tag", "edit_tag")
+  CHECK_PARAM_REDIRECT (name, "Save Tag", "edit_tag")
+  CHECK_PARAM_REDIRECT (comment, "Save Tag", "edit_tag")
+  CHECK_PARAM_REDIRECT (value, "Save Tag", "edit_tag")
+  CHECK_PARAM_REDIRECT (resource_type, "Save Tag", "edit_tag")
+  CHECK_PARAM_REDIRECT (resource_id, "Save Tag", "edit_tag")
+  CHECK_PARAM_REDIRECT (active, "Save Tag", "edit_tag")
 
   response = NULL;
   entity = NULL;
@@ -10244,16 +10421,25 @@ save_tag_omp (credentials_t * credentials, params_t *params,
                              "/omp?cmd=get_tags", response_data);
     }
 
-  if (omp_success (entity))
+  if (! omp_success (entity))
+    set_http_status_from_entity (entity, response_data);
+  next_url = next_page_url (credentials, params, NULL, "edit_tag",
+                            "Create Tag",
+                            entity_attribute (entity, "status"),
+                            entity_attribute (entity, "status_text"));
+
+  if (no_redirect && strcmp (no_redirect, "0"))
     {
-      ret = next_page (credentials, params, response, response_data);
-      if (ret == NULL)
-        ret = get_tags (credentials, params, response, response_data);
+      ret = action_result_page (credentials, response_data, "Create Tag",
+                                entity_attribute (entity, "status"),
+                                entity_attribute (entity, "status_text"),
+                                next_url);
+      g_free (next_url);
     }
   else
     {
-      set_http_status_from_entity (entity, response_data);
-      ret = edit_tag (credentials, params, response, response_data);
+      ret = NULL;
+      response_data->redirect = next_url;
     }
 
   free_entity (entity);
@@ -10387,10 +10573,11 @@ toggle_tag_omp (credentials_t * credentials, params_t *params,
 {
   gnutls_session_t session;
   int socket;
-  gchar *html, *response;
-  const char *tag_id, *enable;
+  gchar *html, *next_url, *response;
+  const char *no_redirect, *tag_id, *enable;
   entity_t entity;
 
+  no_redirect = params_value (params, "no_redirect");
   tag_id = params_value (params, "tag_id");
   enable = params_value (params, "enable");
 
@@ -10471,16 +10658,32 @@ toggle_tag_omp (credentials_t * credentials, params_t *params,
                            " manager daemon.",
                            "/omp?cmd=get_tasks", response_data);
     }
-  free_entity (entity);
 
+  if (! omp_success (entity))
+    set_http_status_from_entity (entity, response_data);
+  next_url = next_page_url (credentials, params, NULL, "get_tags",
+                            "Toggle Tag",
+                            entity_attribute (entity, "status"),
+                            entity_attribute (entity, "status_text"));
+
+  if (no_redirect && strcmp (no_redirect, "0"))
+    {
+      html = action_result_page (credentials, response_data, "Toggle Tag",
+                                entity_attribute (entity, "status"),
+                                entity_attribute (entity, "status_text"),
+                                next_url);
+      g_free (next_url);
+    }
+  else
+    {
+      html = NULL;
+      response_data->redirect = next_url;
+    }
+
+  free_entity (entity);
+  g_free (response);
   openvas_server_close (socket, session);
 
-  /* Cleanup, and return transformed XML. */
-
-  html = next_page (credentials, params, response, response_data);
-  if (html == NULL)
-    html = get_tags (credentials, params, response, response_data);
-  g_free (response);
   return html;
 }
 

@@ -168,9 +168,12 @@
             html = $(jqXHR.responseText),
             response = xml.find(RESPONSE_SELECTORS[self.command]),
             gsad_msg = xml.find('gsad_msg'),
+            action_result = xml.find('action_result'),
             generic_omp_response = xml.find ('omp_response'),
             internal_error_html
               = html.find (".gb_error_dialog .gb_window_part_content_error"),
+            top_line_error_html
+              = html.find (".gb_window .gb_window_part_content_error"),
             login_form_html
               = html.find (".gb_login_dialog .gb_window_part_content"),
             error_title = "Error:",
@@ -188,12 +191,22 @@
           {
             error = generic_omp_response.attr('status_text')
           }
+        else if (action_result.length)
+          {
+            error_title = "Operation \"" + action_result.find ("action").text () + "\" failed";
+            error = "<br/>" + action_result.find ("message").text ()
+          }
         else if (internal_error_html.length)
           {
             error_title = internal_error_html.find ("span div").text ()
             if (! (error_title))
               error_title = "Internal Error";
             error = "<br/>" + internal_error_html.find ("span")[0].lastChild.textContent;
+          }
+        else if (top_line_error_html.length)
+          {
+            error_title = "Operation \"" + top_line_error_html.find ("#operation").text () + "\" failed";
+            error = "<br/>" + top_line_error_html.find ("#message").text ();
           }
         else if (login_form_html.length)
           {
@@ -265,6 +278,8 @@
 
       if (submit.length)
         submit.remove ();
+
+      self.dialog.find ("form").append ('<input name="no_redirect" value="1" type="hidden"/>');
 
       // show the dialog !
       self.dialog.dialog({
