@@ -5,6 +5,7 @@
       xmlns:gsa="http://openvas.org"
       xmlns:exslt="http://exslt.org/common"
       xmlns:str="http://exslt.org/strings"
+      xmlns="http://www.w3.org/1999/xhtml"
       extension-element-prefixes="gsa exslt str">
      <xsl:output
       method="html"

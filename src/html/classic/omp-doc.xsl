@@ -4,6 +4,7 @@
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:str="http://exslt.org/strings"
     xmlns:func = "http://exslt.org/functions"
+    xmlns="http://www.w3.org/1999/xhtml"
     extension-element-prefixes="str func">
   <xsl:output method="html"
               doctype-system="http://www.w3.org/TR/html4/strict.dtd"

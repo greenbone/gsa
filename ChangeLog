@@ -1,5 +1,14 @@
 2015-12-01  Benoît Allard  <benoit.allard@greenbone.net>
 
+	* src/html/classic/graphics.xsl, src/html/classic/gsad.xsl,
+	  src/html/classic/help.xsl, src/html/classic/help_de.xsl,
+	  src/html/classic/help_ru.xsl, src/html/classic/help_zh_CN.xsl,
+	  src/html/classic/omp-doc.xsl, src/html/classic/omp.xsl,
+	  src/html/classic/wizard.xsl: Cleanup xmlns declaration. Now the
+	  whole document is under the same namespace (XHTML).
+
+2015-12-01  Benoît Allard  <benoit.allard@greenbone.net>
+
 	* src/html/classic/gsad.xsl: No need to introduce extra div.
 
 2015-12-01  Benoît Allard  <benoit.allard@greenbone.net>

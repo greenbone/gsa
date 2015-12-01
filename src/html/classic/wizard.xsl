@@ -6,6 +6,7 @@
     xmlns:func="http://exslt.org/functions"
     xmlns:gsa="http://openvas.org"
     xmlns:date="http://exslt.org/dates-and-times"
+    xmlns="http://www.w3.org/1999/xhtml"
     extension-element-prefixes="str func date">
     <xsl:output
       method="html"

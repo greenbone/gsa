@@ -6,6 +6,7 @@
     xmlns:gsa="http://openvas.org"
     xmlns:gsa-i18n="http://openvas.org/i18n"
     xmlns:exslt="http://exslt.org/common"
+    xmlns="http://www.w3.org/1999/xhtml"
     extension-element-prefixes="func exslt gsa gsa-i18n">
     <xsl:output
       method="html"
@@ -2489,7 +2490,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="/">
-  <html xmlns="http://www.w3.org/1999/xhtml" lang="{$html-lang}">
+  <html lang="{$html-lang}">
     <xsl:call-template name="html-head"/>
     <body>
       <xsl:apply-templates/>
