@@ -1,5 +1,9 @@
 2015-12-01  Benoît Allard  <benoit.allard@greenbone.net>
 
+	* src/html/classic/gsad.xsl: No need to introduce extra div.
+
+2015-12-01  Benoît Allard  <benoit.allard@greenbone.net>
+
 	* src/html/classic/js/greenbone.js: Make it possible to select top-level
 	  elements.
 

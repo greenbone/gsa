@@ -2492,9 +2492,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <html xmlns="http://www.w3.org/1999/xhtml" lang="{$html-lang}">
     <xsl:call-template name="html-head"/>
     <body>
-      <div> <!-- just to absorb the bloody xmlns attribute -->
-        <xsl:apply-templates/>
-      </div>
+      <xsl:apply-templates/>
     </body>
   </html>
 </xsl:template>
