@@ -5,6 +5,10 @@
 
 2015-12-01  Benoît Allard  <benoit.allard@greenbone.net>
 
+	* src/html/classic/omp.xsl: Fix typo in the tag name.
+
+2015-12-01  Benoît Allard  <benoit.allard@greenbone.net>
+
 	* src/html/classic/graphics.xsl, src/html/classic/gsad.xsl,
 	  src/html/classic/help.xsl, src/html/classic/help_de.xsl,
 	  src/html/classic/help_ru.xsl, src/html/classic/help_zh_CN.xsl,

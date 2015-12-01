@@ -1069,7 +1069,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
    </xsl:for-each>
    <div style="padding: 2px;">
      <b><xsl:value-of select="gsa:i18n ('Filter')"/></b>:
-     <xsl-text> </xsl-text>
+     <xsl:text> </xsl:text>
      <input type="text" name="filter" size="53"
             value="{$criteria}"
             maxlength="1000"/>
