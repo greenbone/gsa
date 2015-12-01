@@ -4105,7 +4105,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <td>
           <a href="/omp?cmd=get_results&amp;filter=severity&gt;Error and task_id={@id} sort=nvt&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
              title="{gsa-i18n:strformat (gsa:i18n ('Results on Task %1', 'Task'), name)}">
-            <xsl:value-of select="sum (reports/report/result_count/*)"/>
+            <xsl:value-of select="result_count/text ()"/>
           </a>
         </td>
       </tr>

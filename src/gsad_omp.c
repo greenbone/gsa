@@ -5629,7 +5629,7 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml,
                             "<get_tasks"
                             " task_id=\"%s\""
                             " filter=\"apply_overrides=%i\""
-                            " details=\"1\"/>"
+                            " details=\"0\"/>"
                             "%s%s%s"
                             "%s%s%s"
                             "</commands>",

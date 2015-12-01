@@ -1,3 +1,11 @@
+2015-12-01  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (get_task): Skip details, because there may be many
+	reports, and counts are now available in RESULT_COUNT.
+
+	* src/html/classic/omp.xsl (task [details]): Get result count from new
+	RESULT_COUNT element.
+
 2015-11-30  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Add status messages and indicators on pages redirected to. In New Tag
@@ -56,7 +64,7 @@
 2015-11-29  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/classic/omp.xsl (name="list-window"): Use the subtype
-	for the icon in case a subtype is defined. 
+	for the icon in case a subtype is defined.
 
 2015-11-28  Matthew Mundell <matthew.mundell@greenbone.net>
 
