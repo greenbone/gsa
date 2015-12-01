@@ -1,3 +1,8 @@
+2015-12-01  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/classic/omp.xsl (match="cvss_calculator"): Fixed typo,
+	found by Timo Pollmeier.
+
 2015-12-01  Benoît Allard  <benoit.allard@greenbone.net>
 
 	* src/html/classic/graphics.xsl, src/html/classic/gsad.xsl,

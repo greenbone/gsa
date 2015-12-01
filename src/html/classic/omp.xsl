@@ -37237,10 +37237,10 @@ var toggleFilter = function(){
   <div class="section-header">
     <h1>
       <a href="/omp?cmd=cvss_calculator&amp;token={/envelope/token}"
-         title="{gsa:i18n ('CVSS Base Scor Calculator', 'CVSS Calculator')}">
-        <img id="big-icon" src="/img/cvss_calculator.svg" border="0" style="margin-right:5px" alt="CVSS Base Scor Calculator"/>
+         title="{gsa:i18n ('CVSS Base Score Calculator', 'CVSS Calculator')}">
+        <img id="big-icon" src="/img/cvss_calculator.svg" border="0" style="margin-right:5px" alt="CVSS Base Score Calculator"/>
       </a>
-      <xsl:value-of select="gsa:i18n ('CVSS Base Scor Calculator', 'CVSS Calculator')"/>
+      <xsl:value-of select="gsa:i18n ('CVSS Base Score Calculator', 'CVSS Calculator')"/>
     </h1>
   </div>
 
