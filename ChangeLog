@@ -1,3 +1,13 @@
+2015-12-01  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Backport r23901.
+
+	* src/gsad_omp.c (get_task): Skip details, because there may be many
+	reports, and counts are now available in RESULT_COUNT.
+
+	* src/html/classic/omp.xsl (task [details]): Get result count from new
+	RESULT_COUNT element.
+
 2015-11-27  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Backport r23880.
