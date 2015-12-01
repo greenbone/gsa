@@ -259,7 +259,8 @@
 
     done_func = function(html){
       // get the content of the (first) window
-      var gb_windows = $(html).find('.gb_window'),
+      // needs to wrap it in a div to be able to select the top-level elements.
+      var gb_windows = $('<div/>', {html: html}).find('.gb_window'),
           gb_window = gb_windows.first();
           // create a new div
       self.dialog = $("<div/>", {

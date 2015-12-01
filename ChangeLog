@@ -1,3 +1,8 @@
+2015-12-01  Benoît Allard  <benoit.allard@greenbone.net>
+
+	* src/html/classic/js/greenbone.js: Make it possible to select top-level
+	  elements.
+
 2015-12-01  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (get_task): Skip details, because there may be many
