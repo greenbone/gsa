@@ -636,7 +636,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="data_source_name" select="'report-high-results-timeline-source'"/>
         <xsl:with-param name="aggregate_type" select="$type"/>
         <xsl:with-param name="group_column" select="'date'"/>
-        <xsl:with-param name="data_columns">
+        <xsl:with-param name="data_columns" xmlns="">
           <data_columns>
             <column>high</column>
             <column>high_per_host</column>
@@ -654,28 +654,28 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="data_source_name" select="'report-high-results-timeline-source'"/>
         <xsl:with-param name="aggregate_type" select="$type"/>
         <xsl:with-param name="group_column" select="'date'"/>
-        <xsl:with-param name="data_columns">
+        <xsl:with-param name="data_columns" xmlns="">
           <data_columns>
             <column>high</column>
             <column>high_per_host</column>
           </data_columns>
         </xsl:with-param>
-        <xsl:with-param name="y_fields">
+        <xsl:with-param name="y_fields" xmlns="">
           <fields>
             <field>high_max</field>
           </fields>
         </xsl:with-param>
-        <xsl:with-param name="z_fields">
+        <xsl:with-param name="z_fields" xmlns="">
           <fields>
             <field>high_per_host_max</field>
           </fields>
         </xsl:with-param>
-        <xsl:with-param name="init_params">
+        <xsl:with-param name="init_params" xmlns="">
           <params>
             <param name="title_text">Reports: 'High' results timeline</param>
           </params>
         </xsl:with-param>
-        <xsl:with-param name="gen_params">
+        <xsl:with-param name="gen_params" xmlns="">
           <params>
             <param name="show_stat_type">0</param>
           </params>
@@ -689,28 +689,28 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="data_source_name" select="'report-high-results-timeline-source'"/>
         <xsl:with-param name="aggregate_type" select="$type"/>
         <xsl:with-param name="group_column" select="'date'"/>
-        <xsl:with-param name="data_columns">
+        <xsl:with-param name="data_columns" xmlns="">
           <data_columns>
             <column>high</column>
             <column>high_per_host</column>
           </data_columns>
         </xsl:with-param>
-        <xsl:with-param name="y_fields">
+        <xsl:with-param name="y_fields" xmlns="">
           <fields>
             <field>high_max</field>
           </fields>
         </xsl:with-param>
-        <xsl:with-param name="z_fields">
+        <xsl:with-param name="z_fields" xmlns="">
           <fields>
             <field>high_per_host_max</field>
           </fields>
         </xsl:with-param>
-        <xsl:with-param name="init_params">
+        <xsl:with-param name="init_params" xmlns="">
           <params>
             <param name="title_text">Reports: 'High' results timeline</param>
           </params>
         </xsl:with-param>
-        <xsl:with-param name="gen_params">
+        <xsl:with-param name="gen_params" xmlns="">
           <params>
             <param name="show_stat_type">0</param>
           </params>
@@ -726,13 +726,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="data_source_name" select="'task-high-results-source'"/>
         <xsl:with-param name="aggregate_type" select="$type"/>
         <xsl:with-param name="group_column" select="'uuid'"/>
-        <xsl:with-param name="data_columns">
+        <xsl:with-param name="data_columns" xmlns="">
           <data_columns>
             <column>severity</column>
             <column>high_per_host</column>
           </data_columns>
         </xsl:with-param>
-        <xsl:with-param name="text_columns">
+        <xsl:with-param name="text_columns" xmlns="">
           <text_columns>
             <column>name</column>
           </text_columns>
@@ -776,22 +776,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="display_name" select="'top-visualization-left'"/>
         <xsl:with-param name="aggregate_type" select="$type"/>
         <xsl:with-param name="x_field" select="'name'"/>
-        <xsl:with-param name="y_fields">
+        <xsl:with-param name="y_fields" xmlns="">
           <fields>
             <field>high_per_host_max</field>
           </fields>
         </xsl:with-param>
-        <xsl:with-param name="z_fields">
+        <xsl:with-param name="z_fields" xmlns="">
           <fields>
             <field>severity_max</field>
           </fields>
         </xsl:with-param>
-        <xsl:with-param name="init_params">
+        <xsl:with-param name="init_params" xmlns="">
           <params>
             <param name="title_text">Tasks: 'High' results per host</param>
           </params>
         </xsl:with-param>
-        <xsl:with-param name="gen_params">
+        <xsl:with-param name="gen_params" xmlns="">
           <params>
             <param name="empty_text">No Tasks with 'High' severity found</param>
           </params>
@@ -805,22 +805,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="data_source_name" select="'task-high-results-source'"/>
         <xsl:with-param name="aggregate_type" select="$type"/>
         <xsl:with-param name="x_field" select="'name'"/>
-        <xsl:with-param name="y_fields">
+        <xsl:with-param name="y_fields" xmlns="">
           <fields>
             <field>high_per_host_max</field>
           </fields>
         </xsl:with-param>
-        <xsl:with-param name="z_fields">
+        <xsl:with-param name="z_fields" xmlns="">
           <fields>
             <field>severity_max</field>
           </fields>
         </xsl:with-param>
-        <xsl:with-param name="init_params">
+        <xsl:with-param name="init_params" xmlns="">
           <params>
             <param name="title_text">Tasks: 'High' results per host</param>
           </params>
         </xsl:with-param>
-        <xsl:with-param name="gen_params">
+        <xsl:with-param name="gen_params" xmlns="">
           <params>
             <param name="empty_text">No Tasks with 'High' severity found</param>
           </params>
@@ -835,22 +835,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="data_source_name" select="'task-high-results-source'"/>
         <xsl:with-param name="aggregate_type" select="$type"/>
         <xsl:with-param name="x_field" select="'name'"/>
-        <xsl:with-param name="y_fields">
+        <xsl:with-param name="y_fields" xmlns="">
           <fields>
             <field>high_per_host_max</field>
           </fields>
         </xsl:with-param>
-        <xsl:with-param name="z_fields">
+        <xsl:with-param name="z_fields" xmlns="">
           <fields>
             <field>severity_max</field>
           </fields>
         </xsl:with-param>
-        <xsl:with-param name="init_params">
+        <xsl:with-param name="init_params" xmlns="">
           <params>
             <param name="title_text">Tasks with most 'High' results per host</param>
           </params>
         </xsl:with-param>
-        <xsl:with-param name="gen_params">
+        <xsl:with-param name="gen_params" xmlns="">
           <params>
             <param name="empty_text">No Tasks with 'High' severity found</param>
           </params>
@@ -864,22 +864,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="data_source_name" select="'task-high-results-source'"/>
         <xsl:with-param name="aggregate_type" select="$type"/>
         <xsl:with-param name="x_field" select="'name'"/>
-        <xsl:with-param name="y_fields">
+        <xsl:with-param name="y_fields" xmlns="">
           <fields>
             <field>high_per_host_max</field>
           </fields>
         </xsl:with-param>
-        <xsl:with-param name="z_fields">
+        <xsl:with-param name="z_fields" xmlns="">
           <fields>
             <field>severity_max</field>
           </fields>
         </xsl:with-param>
-        <xsl:with-param name="init_params">
+        <xsl:with-param name="init_params" xmlns="">
           <params>
             <param name="title_text">Tasks with most 'High' results per host</param>
           </params>
         </xsl:with-param>
-        <xsl:with-param name="gen_params">
+        <xsl:with-param name="gen_params" xmlns="">
           <params>
             <param name="empty_text">No Tasks with 'High' severity found</param>
           </params>
@@ -893,7 +893,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="data_source_name" select="'task-schedules-source'"/>
         <xsl:with-param name="display_name" select="'top-visualization-left'"/>
         <xsl:with-param name="chart_type" select="'gantt'"/>
-        <xsl:with-param name="gen_params">
+        <xsl:with-param name="gen_params" xmlns="">
           <params>
             <param name="empty_text">No scheduled Tasks found</param>
           </params>
@@ -905,7 +905,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="data_source_name" select="'task-schedules-source'"/>
         <xsl:with-param name="display_name" select="'top-visualization-right'"/>
         <xsl:with-param name="chart_type" select="'gantt'"/>
-        <xsl:with-param name="gen_params">
+        <xsl:with-param name="gen_params" xmlns="">
           <params>
             <param name="empty_text">No scheduled Tasks found</param>
           </params>
@@ -1378,7 +1378,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:call-template name="init-d3charts"/>
 
         <xsl:variable name="envelope" select="/envelope"/>
-        <xsl:variable name="chart_defaults">
+        <xsl:variable name="chart_defaults" xmlns="">
           <chart auto_load="secinfo_1_nvt_bar_chart">secinfo_1</chart>
           <chart auto_load="secinfo_2_nvt_donut_chart">secinfo_2</chart>
           <chart auto_load="secinfo_3_cve_bar_chart">secinfo_3</chart>

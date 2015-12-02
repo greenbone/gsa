@@ -8437,14 +8437,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:with-param name="aggregate_type" select="/envelope/params/aggregate_type"/>
       <xsl:with-param name="group_column" select="/envelope/params/group_column"/>
       <xsl:with-param name="data_column" select="/envelope/params/data_column"/>
-      <xsl:with-param name="data_columns">
+      <xsl:with-param name="data_columns" xmlns="">
         <data_columns>
           <xsl:for-each select="/envelope/params/_param[starts-with (name, 'data_columns:')]">
             <column><xsl:value-of select="value"/></column>
           </xsl:for-each>
         </data_columns>
       </xsl:with-param>
-      <xsl:with-param name="text_columns">
+      <xsl:with-param name="text_columns" xmlns="">
         <text_columns>
           <xsl:for-each select="/envelope/params/_param[starts-with (name, 'text_columns:')]">
             <column><xsl:value-of select="value"/></column>
@@ -8470,7 +8470,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:with-param name="group_column" select="/envelope/params/group_column"/>
       <xsl:with-param name="data_column" select="/envelope/params/data_column"/>
       <xsl:with-param name="chart_type" select="/envelope/params/chart_type"/>
-      <xsl:with-param name="init_params">
+      <xsl:with-param name="init_params" xmlns="">
         <xsl:if test="/envelope/params/_param[starts-with (name, 'chart_init:')]">
           <params>
             <xsl:for-each select="/envelope/params/_param[starts-with (name, 'chart_init:')]">
@@ -8479,7 +8479,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </params>
         </xsl:if>
       </xsl:with-param>
-      <xsl:with-param name="gen_params">
+      <xsl:with-param name="gen_params" xmlns="">
         <xsl:if test="/envelope/params/_param[starts-with (name, 'chart_gen:')]">
           <params>
             <xsl:for-each select="/envelope/params/_param[starts-with (name, 'chart_gen:')]">
@@ -8489,7 +8489,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:if>
       </xsl:with-param>
       <xsl:with-param name="x_field" select="/envelope/params/x_field"/>
-      <xsl:with-param name="y_fields">
+      <xsl:with-param name="y_fields" xmlns="">
         <xsl:if test="/envelope/params/_param[starts-with (name, 'y_fields:')]">
           <fields>
             <xsl:for-each select="/envelope/params/_param[starts-with (name, 'y_fields:')]">
@@ -8498,7 +8498,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </fields>
         </xsl:if>
       </xsl:with-param>
-      <xsl:with-param name="z_fields">
+      <xsl:with-param name="z_fields" xmlns="">
         <xsl:if test="/envelope/params/_param[starts-with (name, 'z_fields:')]">
           <fields>
             <xsl:for-each select="/envelope/params/_param[starts-with (name, 'z_fields:')]">
