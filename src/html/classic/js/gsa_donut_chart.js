@@ -221,7 +221,7 @@ function DonutChartGenerator ()
                         .attr ("transform", "translate(" + (width + 10.5) + ", 0)")
 
       var legend_y = 0;
-      for (var i = 0; i < x_data.length; i++)
+      for (var i = 0; i < slices.length; i++)
         {
           var d = slices [i];
           var x;

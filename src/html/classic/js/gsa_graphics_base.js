@@ -372,13 +372,13 @@ function DataSource (command, params, prefix)
                                     }
                                   else
                                     {
-                                      output_error (chart, "HTTP error", "Error: HTTP request returned status " + error.status + " for URL: " + data_src.data_uri);
+                                      output_error (chart, "HTTP error " + error.status, "Error: HTTP request returned status " + error.status + " for URL: " + data_uri);
                                       return;
                                     }
                                 }
                               else
                                 {
-                                  output_error (chart, "Error reading XML", "Error reading XML from URL '" + data_src.data_uri + "': " + error);
+                                  output_error (chart, "Error reading XML", "Error reading XML from URL '" + data_uri + "': " + error);
                                   return;
                                 }
                             }

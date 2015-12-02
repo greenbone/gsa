@@ -1,3 +1,12 @@
+2015-12-02  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/js/gsa_donut_chart.js (generate): Use length of
+	actual slices array in condition of slice drawing loop.
+
+	* src/html/classic/js/gsa_graphics_base.js (DataSource [request_data]):
+	Correct insertion of data_uri into error messages and add HTTP
+	status code to chart title.
+
 2015-12-02  Benoît Allard  <benoit.allard@greenbone.net>
 
 	* src/html/classic/omp.xsl: Two more namespace corrections.
