@@ -17,6 +17,7 @@
    inkscape:version="0.91 r13725"
    sodipodi:docname="alert.svg"
    version="1.0"
+   inkscape:export-filename="F:\BackUp300714\intevation\green\gb-graphcis\Icons\new_svgs\64x64\alert_16.png"
    inkscape:export-xdpi="27.42"
    inkscape:export-ydpi="27.42">
   <defs
@@ -1316,8 +1317,8 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="7.9170475"
-     inkscape:cx="48.754625"
+     inkscape:zoom="28.173556"
+     inkscape:cx="40.999125"
      inkscape:cy="14.417825"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -1372,7 +1373,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -2008,16 +2009,13 @@
        d="m 30.317343,18.358991 c -7.764657,0 -14.064526,6.30314 -14.064526,14.068114 0,7.764975 6.299874,14.065721 14.064526,14.065721 7.764657,3e-6 14.068112,-6.300746 14.068112,-14.065721 0,-7.764974 -6.303455,-14.068114 -14.068112,-14.068114 z"
        id="path2252-7"
        inkscape:connector-curvature="0" />
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:800;font-stretch:normal;font-size:30.47013474px;line-height:100%;font-family:Greenbone;-inkscape-font-specification:'Greenbone Ultra-Bold';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;"
-       x="25.763851"
-       y="43.014278"
-       id="text20994"
-       sodipodi:linespacing="100%"><tspan
-         sodipodi:role="line"
-         id="tspan20996"
-         x="25.763851"
-         y="43.014278">!</tspan></text>
+    <g
+       style="font-style:normal;font-variant:normal;font-weight:800;font-stretch:normal;font-size:30.47013474px;line-height:100%;font-family:Greenbone;-inkscape-font-specification:'Greenbone Ultra-Bold';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       id="text20994">
+      <path
+         d="m 33.320445,29.455068 0,-7.617533 -5.515095,0 0,7.617533 0.578933,6.76437 4.357229,0 0.578933,-6.76437 z m -3.382185,8.379288 c -1.432097,0 -1.889149,0.457052 -1.889149,1.919618 l 0,1.340686 c 0,1.462566 0.457052,1.919618 1.889149,1.919618 l 1.279745,0 c 1.432097,0 1.889149,-0.457052 1.889149,-1.919618 l 0,-1.340686 c 0,-1.462566 -0.457052,-1.919618 -1.889149,-1.919618 l -1.279745,0 z"
+         style=""
+         id="path6940" />
+    </g>
   </g>
 </svg>

@@ -1,3 +1,17 @@
+2015-12-02  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/classic/img/alert.svg,
+	src/html/classic/img/os.svg: Updated with fonts
+	converted to paths.
+
+	* src/html/classic/img/agent.svg, src/html/classic/img/config.svg,
+	src/html/classic/img/permission.svg, src/html/classic/img/scanner.svg:
+	New.
+
+	* CMakeLists.txt: Install the new icons.
+
+	* src/html/classic/omp.xsl (name="html-config-table"): Fix icon name.
+
 2015-12-02  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/js/gsa_donut_chart.js (generate): Use length of

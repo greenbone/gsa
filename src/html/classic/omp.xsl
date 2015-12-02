@@ -15290,7 +15290,7 @@ should not have received it.
     <h1>
       <a href="/omp?cmd=get_configs&amp;token={/envelope/token}"
          title="{gsa:i18n ('Scan Configs', 'Scan Config')}">
-        <img id="big-icon" src="/img/scanconfig.svg" border="0" style="margin-right:5px" alt="Scan Configs"/>
+        <img id="big-icon" src="/img/config.svg" border="0" style="margin-right:5px" alt="Scan Configs"/>
       </a>
       <xsl:value-of select="gsa:i18n ('Scan Config', 'Scan Config')"/>:
       <xsl:value-of select="$config/name"/>
