@@ -921,8 +921,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <a href="/logout?token={/envelope/token}" title="{gsa:i18n('Logout', 'Action Verb')}" style="margin-left:3px;">
           <xsl:value-of select="gsa:i18n('Logout', 'Action Verb')"/>
         </a>
-        <br/>
-        <xsl:value-of select="$time"/>
+        <div><xsl:value-of select="$time"/></div>
       </div>
       <div class="pull-right">
         <select id="autorefresh">
