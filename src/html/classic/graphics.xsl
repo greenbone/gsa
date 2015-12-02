@@ -1332,6 +1332,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </div>
     </div>
   </noscript>
+
   <xsl:choose>
     <xsl:when test="name='' or name='secinfo'">
       <xsl:apply-templates select="." mode="secinfo"/>
@@ -1352,394 +1353,392 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="dashboard" mode="secinfo">
-  <div class="gb_window">
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">
-      <xsl:value-of select="'SecInfo Dashboard'"/>
+  <div class="section-header">
+    <h1>
+      <img id="big-icon" src="/img/secinfo.svg" border="0" style="margin-right:5px" alt="SecInfo Dashboard"/>
+      <xsl:value-of select="gsa:i18n ('SecInfo Dashboard', 'Dashboard')"/>
+    </h1>
+  </div>
+
+  <div class="visualization" id="dashboard">
+    <div class="visualization-row">
+      <div class="visualization-spacer"/>
+      <div class="visualization-box" id="dashboard-box-1"/>
+      <div class="visualization-spacer"/>
+      <div class="visualization-box" id="dashboard-box-2"/>
+      <div class="visualization-spacer"/>
     </div>
-    <div class="gb_window_part_content">
-      <div class="visualization" id="dashboard">
-        <div class="visualization-row">
-          <div class="visualization-spacer"/>
-          <div class="visualization-box" id="dashboard-box-1"/>
-          <div class="visualization-spacer"/>
-          <div class="visualization-box" id="dashboard-box-2"/>
-          <div class="visualization-spacer"/>
-        </div>
-        <div class="visualization-row">
-          <div class="visualization-spacer"/>
-          <div class="visualization-box" id="dashboard-box-3"/>
-          <div class="visualization-spacer"/>
-          <div class="visualization-box" id="dashboard-box-4"/>
-          <div class="visualization-spacer"/>
-        </div>
+    <div class="visualization-row">
+      <div class="visualization-spacer"/>
+      <div class="visualization-box" id="dashboard-box-3"/>
+      <div class="visualization-spacer"/>
+      <div class="visualization-box" id="dashboard-box-4"/>
+      <div class="visualization-spacer"/>
+    </div>
 
-        <xsl:call-template name="init-d3charts"/>
+    <xsl:call-template name="init-d3charts"/>
 
-        <xsl:variable name="envelope" select="/envelope"/>
-        <xsl:variable name="chart_defaults" xmlns="">
-          <chart auto_load="secinfo_1_nvt_bar_chart">secinfo_1</chart>
-          <chart auto_load="secinfo_2_nvt_donut_chart">secinfo_2</chart>
-          <chart auto_load="secinfo_3_cve_bar_chart">secinfo_3</chart>
-          <chart auto_load="secinfo_4_cve_donut_chart">secinfo_4</chart>
+    <xsl:variable name="envelope" select="/envelope"/>
+    <xsl:variable name="chart_defaults" xmlns="">
+      <chart auto_load="secinfo_1_nvt_bar_chart">secinfo_1</chart>
+      <chart auto_load="secinfo_2_nvt_donut_chart">secinfo_2</chart>
+      <chart auto_load="secinfo_3_cve_bar_chart">secinfo_3</chart>
+      <chart auto_load="secinfo_4_cve_donut_chart">secinfo_4</chart>
+    </xsl:variable>
+
+    <xsl:variable name="filters" select="get_filters_response/filter[type='SecInfo']"/>
+
+    <script>
+      <xsl:for-each select="exslt:node-set ($chart_defaults)/chart">
+        <xsl:variable name="display_name" select="concat (text(), '_display')"/>
+        <xsl:variable name="auto_load_pref_id">
+          <xsl:choose>
+            <xsl:when test="text() = 'secinfo_1'">84ab32da-fe69-44d8-8a8f-70034cf28d4e</xsl:when>
+            <xsl:when test="text() = 'secinfo_2'">42d48049-3153-43bf-b30d-72ca5ab1eb49</xsl:when>
+            <xsl:when test="text() = 'secinfo_3'">76f34fe0-254a-4481-97aa-c6f1da2f842b</xsl:when>
+            <xsl:when test="text() = 'secinfo_4'">71106ed7-b677-414e-bf67-2e7716441db3</xsl:when>
+          </xsl:choose>
+        </xsl:variable>
+        <xsl:variable name="auto_load">
+          <xsl:choose>
+            <xsl:when test="$envelope/chart_preferences/chart_preference[@id = $auto_load_pref_id]">
+              <xsl:value-of select="$envelope/chart_preferences/chart_preference[@id = $auto_load_pref_id]/value"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="@auto_load"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:variable>
+        <xsl:variable name="auto_filter_pref_id">
+          <xsl:choose>
+            <xsl:when test="text() = 'secinfo_1'">517d0efe-426e-49a9-baa7-eda2832c93e8</xsl:when>
+            <xsl:when test="text() = 'secinfo_2'">3c693fb2-4f87-4b1f-a09e-cb9aa66440f4</xsl:when>
+            <xsl:when test="text() = 'secinfo_3'">bffa72a5-8110-49f9-aa5e-f431ce834826</xsl:when>
+            <xsl:when test="text() = 'secinfo_4'">268079c6-f353-414f-9b7c-43f5419edf2d</xsl:when>
+          </xsl:choose>
+        </xsl:variable>
+        <xsl:variable name="auto_filter">
+          <xsl:choose>
+            <xsl:when test="$envelope/chart_preferences/chart_preference[@id = $auto_filter_pref_id]">
+              <xsl:value-of select="$envelope/chart_preferences/chart_preference[@id = $auto_filter_pref_id]/value"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="''"/>
+            </xsl:otherwise>
+          </xsl:choose>
         </xsl:variable>
 
-        <xsl:variable name="filters" select="get_filters_response/filter[type='SecInfo']"/>
+        <xsl:call-template name="js-create-chart-box">
+          <xsl:with-param name="container_id" select="$display_name"/>
+          <xsl:with-param name="parent_id" select="concat ('dashboard-box-', position())"/>
+          <xsl:with-param name="select_pref_id" select="$auto_load_pref_id"/>
+          <xsl:with-param name="filter_pref_id" select="$auto_filter_pref_id"/>
+        </xsl:call-template>
 
-        <script>
-          <xsl:for-each select="exslt:node-set ($chart_defaults)/chart">
-            <xsl:variable name="display_name" select="concat (text(), '_display')"/>
-            <xsl:variable name="auto_load_pref_id">
-              <xsl:choose>
-                <xsl:when test="text() = 'secinfo_1'">84ab32da-fe69-44d8-8a8f-70034cf28d4e</xsl:when>
-                <xsl:when test="text() = 'secinfo_2'">42d48049-3153-43bf-b30d-72ca5ab1eb49</xsl:when>
-                <xsl:when test="text() = 'secinfo_3'">76f34fe0-254a-4481-97aa-c6f1da2f842b</xsl:when>
-                <xsl:when test="text() = 'secinfo_4'">71106ed7-b677-414e-bf67-2e7716441db3</xsl:when>
-              </xsl:choose>
-            </xsl:variable>
-            <xsl:variable name="auto_load">
-              <xsl:choose>
-                <xsl:when test="$envelope/chart_preferences/chart_preference[@id = $auto_load_pref_id]">
-                  <xsl:value-of select="$envelope/chart_preferences/chart_preference[@id = $auto_load_pref_id]/value"/>
-                </xsl:when>
-                <xsl:otherwise>
-                  <xsl:value-of select="@auto_load"/>
-                </xsl:otherwise>
-              </xsl:choose>
-            </xsl:variable>
-            <xsl:variable name="auto_filter_pref_id">
-              <xsl:choose>
-                <xsl:when test="text() = 'secinfo_1'">517d0efe-426e-49a9-baa7-eda2832c93e8</xsl:when>
-                <xsl:when test="text() = 'secinfo_2'">3c693fb2-4f87-4b1f-a09e-cb9aa66440f4</xsl:when>
-                <xsl:when test="text() = 'secinfo_3'">bffa72a5-8110-49f9-aa5e-f431ce834826</xsl:when>
-                <xsl:when test="text() = 'secinfo_4'">268079c6-f353-414f-9b7c-43f5419edf2d</xsl:when>
-              </xsl:choose>
-            </xsl:variable>
-            <xsl:variable name="auto_filter">
-              <xsl:choose>
-                <xsl:when test="$envelope/chart_preferences/chart_preference[@id = $auto_filter_pref_id]">
-                  <xsl:value-of select="$envelope/chart_preferences/chart_preference[@id = $auto_filter_pref_id]/value"/>
-                </xsl:when>
-                <xsl:otherwise>
-                  <xsl:value-of select="''"/>
-                </xsl:otherwise>
-              </xsl:choose>
-            </xsl:variable>
+        <xsl:call-template name="js-aggregate-chart">
+          <xsl:with-param name="chart_name" select="concat(text(), '_nvt_bar_chart')"/>
+          <xsl:with-param name="data_source_name" select="concat(text(), '_nvt_severity_src')"/>
+          <xsl:with-param name="aggregate_type" select="'nvt'"/>
+          <xsl:with-param name="display_name" select="$display_name"/>
+          <xsl:with-param name="chart_type" select="'bar'"/>
+          <xsl:with-param name="chart_template" select="'info_by_cvss'"/>
+          <xsl:with-param name="auto_load" select="''"/>
+          <xsl:with-param name="create_data_source" select="1"/>
+        </xsl:call-template>
+        <xsl:call-template name="js-aggregate-chart">
+          <xsl:with-param name="chart_name" select="concat(text(), '_nvt_donut_chart')"/>
+          <xsl:with-param name="data_source_name" select="concat(text(), '_nvt_severity_src')"/>
+          <xsl:with-param name="aggregate_type" select="'nvt'"/>
+          <xsl:with-param name="display_name" select="$display_name"/>
+          <xsl:with-param name="chart_type" select="'donut'"/>
+          <xsl:with-param name="chart_template" select="'info_by_class'"/>
+          <xsl:with-param name="auto_load" select="0"/>
+          <xsl:with-param name="create_data_source" select="0"/>
+        </xsl:call-template>
 
-            <xsl:call-template name="js-create-chart-box">
-              <xsl:with-param name="container_id" select="$display_name"/>
-              <xsl:with-param name="parent_id" select="concat ('dashboard-box-', position())"/>
-              <xsl:with-param name="select_pref_id" select="$auto_load_pref_id"/>
-              <xsl:with-param name="filter_pref_id" select="$auto_filter_pref_id"/>
-            </xsl:call-template>
+        <xsl:call-template name="js-aggregate-chart">
+          <xsl:with-param name="chart_name" select="concat(text(), '_nvt_timeline_chart')"/>
+          <xsl:with-param name="data_source_name" select="concat(text(), '_nvt_timeline_src')"/>
+          <xsl:with-param name="aggregate_type" select="'nvt'"/>
+          <xsl:with-param name="display_name" select="$display_name"/>
+          <xsl:with-param name="chart_type" select="'line'"/>
+          <xsl:with-param name="group_column" select="'created'"/>
+          <xsl:with-param name="data_column" select="''"/>
+          <xsl:with-param name="chart_template" select="''"/>
+          <xsl:with-param name="auto_load" select="0"/>
+          <xsl:with-param name="create_data_source" select="1"/>
+        </xsl:call-template>
 
-            <xsl:call-template name="js-aggregate-chart">
-              <xsl:with-param name="chart_name" select="concat(text(), '_nvt_bar_chart')"/>
-              <xsl:with-param name="data_source_name" select="concat(text(), '_nvt_severity_src')"/>
-              <xsl:with-param name="aggregate_type" select="'nvt'"/>
-              <xsl:with-param name="display_name" select="$display_name"/>
-              <xsl:with-param name="chart_type" select="'bar'"/>
-              <xsl:with-param name="chart_template" select="'info_by_cvss'"/>
-              <xsl:with-param name="auto_load" select="''"/>
-              <xsl:with-param name="create_data_source" select="1"/>
-            </xsl:call-template>
-            <xsl:call-template name="js-aggregate-chart">
-              <xsl:with-param name="chart_name" select="concat(text(), '_nvt_donut_chart')"/>
-              <xsl:with-param name="data_source_name" select="concat(text(), '_nvt_severity_src')"/>
-              <xsl:with-param name="aggregate_type" select="'nvt'"/>
-              <xsl:with-param name="display_name" select="$display_name"/>
-              <xsl:with-param name="chart_type" select="'donut'"/>
-              <xsl:with-param name="chart_template" select="'info_by_class'"/>
-              <xsl:with-param name="auto_load" select="0"/>
-              <xsl:with-param name="create_data_source" select="0"/>
-            </xsl:call-template>
+        <xsl:call-template name="js-aggregate-chart">
+          <xsl:with-param name="chart_name" select="concat(text(), '_nvt_bubble_chart')"/>
+          <xsl:with-param name="data_source_name" select="concat(text(), '_nvt_families_src')"/>
+          <xsl:with-param name="aggregate_type" select="'nvt'"/>
+          <xsl:with-param name="display_name" select="$display_name"/>
+          <xsl:with-param name="chart_type" select="'bubbles'"/>
+          <xsl:with-param name="group_column" select="'family'"/>
+          <xsl:with-param name="data_column" select="'severity'"/>
+          <xsl:with-param name="chart_template" select="''"/>
+          <xsl:with-param name="auto_load" select="0"/>
+          <xsl:with-param name="create_data_source" select="1"/>
+        </xsl:call-template>
+        <xsl:call-template name="js-aggregate-chart">
+          <xsl:with-param name="chart_name" select="concat(text(), '_nvt_solution_type')"/>
+          <xsl:with-param name="data_source_name" select="concat(text(), '_nvt_solution_type_src')"/>
+          <xsl:with-param name="aggregate_type" select="'nvt'"/>
+          <xsl:with-param name="group_column" select="'solution_type'"/>
+          <xsl:with-param name="display_name" select="$display_name"/>
+          <xsl:with-param name="chart_type" select="'donut'"/>
+          <xsl:with-param name="chart_template" select="''"/>
+          <xsl:with-param name="auto_load" select="0"/>
+          <xsl:with-param name="create_data_source" select="1"/>
+        </xsl:call-template>
+        <xsl:call-template name="js-aggregate-chart">
+          <xsl:with-param name="chart_name" select="concat(text(), '_nvt_qod_type')"/>
+          <xsl:with-param name="data_source_name" select="concat(text(), '_nvt_qod_type_src')"/>
+          <xsl:with-param name="aggregate_type" select="'nvt'"/>
+          <xsl:with-param name="group_column" select="'qod_type'"/>
+          <xsl:with-param name="display_name" select="$display_name"/>
+          <xsl:with-param name="chart_type" select="'donut'"/>
+          <xsl:with-param name="chart_template" select="'qod_type_counts'"/>
+          <xsl:with-param name="auto_load" select="0"/>
+          <xsl:with-param name="create_data_source" select="1"/>
+        </xsl:call-template>
+        <xsl:call-template name="js-aggregate-chart">
+          <xsl:with-param name="chart_name" select="concat(text(), '_nvt_qod')"/>
+          <xsl:with-param name="data_source_name" select="concat(text(), '_nvt_qod_src')"/>
+          <xsl:with-param name="aggregate_type" select="'nvt'"/>
+          <xsl:with-param name="group_column" select="'qod'"/>
+          <xsl:with-param name="display_name" select="$display_name"/>
+          <xsl:with-param name="chart_type" select="'donut'"/>
+          <xsl:with-param name="chart_template" select="'percentage_counts'"/>
+          <xsl:with-param name="auto_load" select="0"/>
+          <xsl:with-param name="create_data_source" select="1"/>
+        </xsl:call-template>
 
-            <xsl:call-template name="js-aggregate-chart">
-              <xsl:with-param name="chart_name" select="concat(text(), '_nvt_timeline_chart')"/>
-              <xsl:with-param name="data_source_name" select="concat(text(), '_nvt_timeline_src')"/>
-              <xsl:with-param name="aggregate_type" select="'nvt'"/>
-              <xsl:with-param name="display_name" select="$display_name"/>
-              <xsl:with-param name="chart_type" select="'line'"/>
-              <xsl:with-param name="group_column" select="'created'"/>
-              <xsl:with-param name="data_column" select="''"/>
-              <xsl:with-param name="chart_template" select="''"/>
-              <xsl:with-param name="auto_load" select="0"/>
-              <xsl:with-param name="create_data_source" select="1"/>
-            </xsl:call-template>
+        <xsl:call-template name="js-aggregate-chart">
+          <xsl:with-param name="chart_name" select="concat(text(), '_cve_bar_chart')"/>
+          <xsl:with-param name="data_source_name" select="concat(text(), '_cve_severity_src')"/>
+          <xsl:with-param name="aggregate_type" select="'cve'"/>
+          <xsl:with-param name="display_name" select="$display_name"/>
+          <xsl:with-param name="chart_type" select="'bar'"/>
+          <xsl:with-param name="chart_template" select="'info_by_cvss'"/>
+          <xsl:with-param name="auto_load" select="''"/>
+          <xsl:with-param name="create_data_source" select="1"/>
+        </xsl:call-template>
+        <xsl:call-template name="js-aggregate-chart">
+          <xsl:with-param name="chart_name" select="concat(text(), '_cve_donut_chart')"/>
+          <xsl:with-param name="data_source_name" select="concat(text(), '_cve_severity_src')"/>
+          <xsl:with-param name="aggregate_type" select="'cve'"/>
+          <xsl:with-param name="display_name" select="$display_name"/>
+          <xsl:with-param name="chart_type" select="'donut'"/>
+          <xsl:with-param name="chart_template" select="'info_by_class'"/>
+          <xsl:with-param name="auto_load" select="0"/>
+          <xsl:with-param name="create_data_source" select="0"/>
+        </xsl:call-template>
+        <xsl:call-template name="js-aggregate-chart">
+          <xsl:with-param name="chart_name" select="concat(text(), '_cve_timeline_chart')"/>
+          <xsl:with-param name="data_source_name" select="concat(text(), '_cve_timeline_src')"/>
+          <xsl:with-param name="aggregate_type" select="'cve'"/>
+          <xsl:with-param name="display_name" select="$display_name"/>
+          <xsl:with-param name="chart_type" select="'line'"/>
+          <xsl:with-param name="group_column" select="'created'"/>
+          <xsl:with-param name="data_column" select="''"/>
+          <xsl:with-param name="chart_template" select="''"/>
+          <xsl:with-param name="auto_load" select="0"/>
+          <xsl:with-param name="create_data_source" select="1"/>
+        </xsl:call-template>
 
-            <xsl:call-template name="js-aggregate-chart">
-              <xsl:with-param name="chart_name" select="concat(text(), '_nvt_bubble_chart')"/>
-              <xsl:with-param name="data_source_name" select="concat(text(), '_nvt_families_src')"/>
-              <xsl:with-param name="aggregate_type" select="'nvt'"/>
-              <xsl:with-param name="display_name" select="$display_name"/>
-              <xsl:with-param name="chart_type" select="'bubbles'"/>
-              <xsl:with-param name="group_column" select="'family'"/>
-              <xsl:with-param name="data_column" select="'severity'"/>
-              <xsl:with-param name="chart_template" select="''"/>
-              <xsl:with-param name="auto_load" select="0"/>
-              <xsl:with-param name="create_data_source" select="1"/>
-            </xsl:call-template>
-            <xsl:call-template name="js-aggregate-chart">
-              <xsl:with-param name="chart_name" select="concat(text(), '_nvt_solution_type')"/>
-              <xsl:with-param name="data_source_name" select="concat(text(), '_nvt_solution_type_src')"/>
-              <xsl:with-param name="aggregate_type" select="'nvt'"/>
-              <xsl:with-param name="group_column" select="'solution_type'"/>
-              <xsl:with-param name="display_name" select="$display_name"/>
-              <xsl:with-param name="chart_type" select="'donut'"/>
-              <xsl:with-param name="chart_template" select="''"/>
-              <xsl:with-param name="auto_load" select="0"/>
-              <xsl:with-param name="create_data_source" select="1"/>
-            </xsl:call-template>
-            <xsl:call-template name="js-aggregate-chart">
-              <xsl:with-param name="chart_name" select="concat(text(), '_nvt_qod_type')"/>
-              <xsl:with-param name="data_source_name" select="concat(text(), '_nvt_qod_type_src')"/>
-              <xsl:with-param name="aggregate_type" select="'nvt'"/>
-              <xsl:with-param name="group_column" select="'qod_type'"/>
-              <xsl:with-param name="display_name" select="$display_name"/>
-              <xsl:with-param name="chart_type" select="'donut'"/>
-              <xsl:with-param name="chart_template" select="'qod_type_counts'"/>
-              <xsl:with-param name="auto_load" select="0"/>
-              <xsl:with-param name="create_data_source" select="1"/>
-            </xsl:call-template>
-            <xsl:call-template name="js-aggregate-chart">
-              <xsl:with-param name="chart_name" select="concat(text(), '_nvt_qod')"/>
-              <xsl:with-param name="data_source_name" select="concat(text(), '_nvt_qod_src')"/>
-              <xsl:with-param name="aggregate_type" select="'nvt'"/>
-              <xsl:with-param name="group_column" select="'qod'"/>
-              <xsl:with-param name="display_name" select="$display_name"/>
-              <xsl:with-param name="chart_type" select="'donut'"/>
-              <xsl:with-param name="chart_template" select="'percentage_counts'"/>
-              <xsl:with-param name="auto_load" select="0"/>
-              <xsl:with-param name="create_data_source" select="1"/>
-            </xsl:call-template>
+        <xsl:call-template name="js-aggregate-chart">
+          <xsl:with-param name="chart_name" select="concat(text(), '_cpe_bar_chart')"/>
+          <xsl:with-param name="data_source_name" select="concat(text(), '_cpe_severity_src')"/>
+          <xsl:with-param name="aggregate_type" select="'cpe'"/>
+          <xsl:with-param name="display_name" select="$display_name"/>
+          <xsl:with-param name="chart_type" select="'bar'"/>
+          <xsl:with-param name="chart_template" select="'info_by_cvss'"/>
+          <xsl:with-param name="auto_load" select="''"/>
+          <xsl:with-param name="create_data_source" select="1"/>
+        </xsl:call-template>
+        <xsl:call-template name="js-aggregate-chart">
+          <xsl:with-param name="chart_name" select="concat(text(), '_cpe_donut_chart')"/>
+          <xsl:with-param name="data_source_name" select="concat(text(), '_cpe_severity_src')"/>
+          <xsl:with-param name="aggregate_type" select="'cpe'"/>
+          <xsl:with-param name="display_name" select="$display_name"/>
+          <xsl:with-param name="chart_type" select="'donut'"/>
+          <xsl:with-param name="chart_template" select="'info_by_class'"/>
+          <xsl:with-param name="auto_load" select="0"/>
+          <xsl:with-param name="create_data_source" select="0"/>
+        </xsl:call-template>
+        <xsl:call-template name="js-aggregate-chart">
+          <xsl:with-param name="chart_name" select="concat(text(), '_cpe_timeline_chart')"/>
+          <xsl:with-param name="data_source_name" select="concat(text(), '_cpe_timeline_src')"/>
+          <xsl:with-param name="aggregate_type" select="'cpe'"/>
+          <xsl:with-param name="display_name" select="$display_name"/>
+          <xsl:with-param name="chart_type" select="'line'"/>
+          <xsl:with-param name="group_column" select="'created'"/>
+          <xsl:with-param name="data_column" select="''"/>
+          <xsl:with-param name="chart_template" select="''"/>
+          <xsl:with-param name="auto_load" select="0"/>
+          <xsl:with-param name="create_data_source" select="1"/>
+        </xsl:call-template>
 
-            <xsl:call-template name="js-aggregate-chart">
-              <xsl:with-param name="chart_name" select="concat(text(), '_cve_bar_chart')"/>
-              <xsl:with-param name="data_source_name" select="concat(text(), '_cve_severity_src')"/>
-              <xsl:with-param name="aggregate_type" select="'cve'"/>
-              <xsl:with-param name="display_name" select="$display_name"/>
-              <xsl:with-param name="chart_type" select="'bar'"/>
-              <xsl:with-param name="chart_template" select="'info_by_cvss'"/>
-              <xsl:with-param name="auto_load" select="''"/>
-              <xsl:with-param name="create_data_source" select="1"/>
-            </xsl:call-template>
-            <xsl:call-template name="js-aggregate-chart">
-              <xsl:with-param name="chart_name" select="concat(text(), '_cve_donut_chart')"/>
-              <xsl:with-param name="data_source_name" select="concat(text(), '_cve_severity_src')"/>
-              <xsl:with-param name="aggregate_type" select="'cve'"/>
-              <xsl:with-param name="display_name" select="$display_name"/>
-              <xsl:with-param name="chart_type" select="'donut'"/>
-              <xsl:with-param name="chart_template" select="'info_by_class'"/>
-              <xsl:with-param name="auto_load" select="0"/>
-              <xsl:with-param name="create_data_source" select="0"/>
-            </xsl:call-template>
-            <xsl:call-template name="js-aggregate-chart">
-              <xsl:with-param name="chart_name" select="concat(text(), '_cve_timeline_chart')"/>
-              <xsl:with-param name="data_source_name" select="concat(text(), '_cve_timeline_src')"/>
-              <xsl:with-param name="aggregate_type" select="'cve'"/>
-              <xsl:with-param name="display_name" select="$display_name"/>
-              <xsl:with-param name="chart_type" select="'line'"/>
-              <xsl:with-param name="group_column" select="'created'"/>
-              <xsl:with-param name="data_column" select="''"/>
-              <xsl:with-param name="chart_template" select="''"/>
-              <xsl:with-param name="auto_load" select="0"/>
-              <xsl:with-param name="create_data_source" select="1"/>
-            </xsl:call-template>
+        <xsl:call-template name="js-aggregate-chart">
+          <xsl:with-param name="chart_name" select="concat(text(), '_ovaldef_bar_chart')"/>
+          <xsl:with-param name="data_source_name" select="concat(text(), '_ovaldef_severity_src')"/>
+          <xsl:with-param name="aggregate_type" select="'ovaldef'"/>
+          <xsl:with-param name="display_name" select="$display_name"/>
+          <xsl:with-param name="chart_type" select="'bar'"/>
+          <xsl:with-param name="chart_template" select="'info_by_cvss'"/>
+          <xsl:with-param name="create_data_source" select="1"/>
+        </xsl:call-template>
+        <xsl:call-template name="js-aggregate-chart">
+          <xsl:with-param name="chart_name" select="concat(text(), '_ovaldef_donut_chart')"/>
+          <xsl:with-param name="data_source_name" select="concat(text(), '_ovaldef_severity_src')"/>
+          <xsl:with-param name="aggregate_type" select="'ovaldef'"/>
+          <xsl:with-param name="display_name" select="$display_name"/>
+          <xsl:with-param name="chart_type" select="'donut'"/>
+          <xsl:with-param name="chart_template" select="'info_by_class'"/>
+          <xsl:with-param name="create_data_source" select="0"/>
+        </xsl:call-template>
+        <xsl:call-template name="js-aggregate-chart">
+          <xsl:with-param name="chart_name" select="concat(text(), '_ovaldef_timeline_chart')"/>
+          <xsl:with-param name="data_source_name" select="concat(text(), '_ovaldef_timeline_src')"/>
+          <xsl:with-param name="aggregate_type" select="'ovaldef'"/>
+          <xsl:with-param name="display_name" select="$display_name"/>
+          <xsl:with-param name="chart_type" select="'line'"/>
+          <xsl:with-param name="group_column" select="'created'"/>
+          <xsl:with-param name="data_column" select="''"/>
+          <xsl:with-param name="chart_template" select="''"/>
+          <xsl:with-param name="auto_load" select="0"/>
+          <xsl:with-param name="create_data_source" select="1"/>
+        </xsl:call-template>
+        <xsl:call-template name="js-aggregate-chart">
+          <xsl:with-param name="chart_name" select="concat(text(), '_ovaldef_class_donut_chart')"/>
+          <xsl:with-param name="data_source_name" select="concat(text(), '_ovaldef_class_src')"/>
+          <xsl:with-param name="aggregate_type" select="'ovaldef'"/>
+          <xsl:with-param name="group_column" select="'class'"/>
+          <xsl:with-param name="display_name" select="$display_name"/>
+          <xsl:with-param name="chart_type" select="'donut'"/>
+          <xsl:with-param name="create_data_source" select="1"/>
+        </xsl:call-template>
 
-            <xsl:call-template name="js-aggregate-chart">
-              <xsl:with-param name="chart_name" select="concat(text(), '_cpe_bar_chart')"/>
-              <xsl:with-param name="data_source_name" select="concat(text(), '_cpe_severity_src')"/>
-              <xsl:with-param name="aggregate_type" select="'cpe'"/>
-              <xsl:with-param name="display_name" select="$display_name"/>
-              <xsl:with-param name="chart_type" select="'bar'"/>
-              <xsl:with-param name="chart_template" select="'info_by_cvss'"/>
-              <xsl:with-param name="auto_load" select="''"/>
-              <xsl:with-param name="create_data_source" select="1"/>
-            </xsl:call-template>
-            <xsl:call-template name="js-aggregate-chart">
-              <xsl:with-param name="chart_name" select="concat(text(), '_cpe_donut_chart')"/>
-              <xsl:with-param name="data_source_name" select="concat(text(), '_cpe_severity_src')"/>
-              <xsl:with-param name="aggregate_type" select="'cpe'"/>
-              <xsl:with-param name="display_name" select="$display_name"/>
-              <xsl:with-param name="chart_type" select="'donut'"/>
-              <xsl:with-param name="chart_template" select="'info_by_class'"/>
-              <xsl:with-param name="auto_load" select="0"/>
-              <xsl:with-param name="create_data_source" select="0"/>
-            </xsl:call-template>
-            <xsl:call-template name="js-aggregate-chart">
-              <xsl:with-param name="chart_name" select="concat(text(), '_cpe_timeline_chart')"/>
-              <xsl:with-param name="data_source_name" select="concat(text(), '_cpe_timeline_src')"/>
-              <xsl:with-param name="aggregate_type" select="'cpe'"/>
-              <xsl:with-param name="display_name" select="$display_name"/>
-              <xsl:with-param name="chart_type" select="'line'"/>
-              <xsl:with-param name="group_column" select="'created'"/>
-              <xsl:with-param name="data_column" select="''"/>
-              <xsl:with-param name="chart_template" select="''"/>
-              <xsl:with-param name="auto_load" select="0"/>
-              <xsl:with-param name="create_data_source" select="1"/>
-            </xsl:call-template>
+        <xsl:call-template name="js-aggregate-chart">
+          <xsl:with-param name="chart_name" select="concat(text(), '_cert_bund_adv_bar_chart')"/>
+          <xsl:with-param name="data_source_name" select="concat(text(), '_cert_bund_adv_severity_src')"/>
+          <xsl:with-param name="aggregate_type" select="'cert_bund_adv'"/>
+          <xsl:with-param name="display_name" select="$display_name"/>
+          <xsl:with-param name="chart_type" select="'bar'"/>
+          <xsl:with-param name="chart_template" select="'info_by_cvss'"/>
+          <xsl:with-param name="create_data_source" select="1"/>
+        </xsl:call-template>
+        <xsl:call-template name="js-aggregate-chart">
+          <xsl:with-param name="chart_name" select="concat(text(), '_cert_bund_adv_donut_chart')"/>
+          <xsl:with-param name="data_source_name" select="concat(text(), '_cert_bund_adv_severity_src')"/>
+          <xsl:with-param name="aggregate_type" select="'cert_bund_adv'"/>
+          <xsl:with-param name="display_name" select="$display_name"/>
+          <xsl:with-param name="chart_type" select="'donut'"/>
+          <xsl:with-param name="chart_template" select="'info_by_class'"/>
+          <xsl:with-param name="create_data_source" select="0"/>
+        </xsl:call-template>
+        <xsl:call-template name="js-aggregate-chart">
+          <xsl:with-param name="chart_name" select="concat(text(), '_cert_bund_adv_timeline_chart')"/>
+          <xsl:with-param name="data_source_name" select="concat(text(), '_cert_bund_adv_timeline_src')"/>
+          <xsl:with-param name="aggregate_type" select="'cert_bund_adv'"/>
+          <xsl:with-param name="display_name" select="$display_name"/>
+          <xsl:with-param name="chart_type" select="'line'"/>
+          <xsl:with-param name="group_column" select="'created'"/>
+          <xsl:with-param name="data_column" select="''"/>
+          <xsl:with-param name="chart_template" select="''"/>
+          <xsl:with-param name="auto_load" select="0"/>
+          <xsl:with-param name="create_data_source" select="1"/>
+        </xsl:call-template>
 
-            <xsl:call-template name="js-aggregate-chart">
-              <xsl:with-param name="chart_name" select="concat(text(), '_ovaldef_bar_chart')"/>
-              <xsl:with-param name="data_source_name" select="concat(text(), '_ovaldef_severity_src')"/>
-              <xsl:with-param name="aggregate_type" select="'ovaldef'"/>
-              <xsl:with-param name="display_name" select="$display_name"/>
-              <xsl:with-param name="chart_type" select="'bar'"/>
-              <xsl:with-param name="chart_template" select="'info_by_cvss'"/>
-              <xsl:with-param name="create_data_source" select="1"/>
-            </xsl:call-template>
-            <xsl:call-template name="js-aggregate-chart">
-              <xsl:with-param name="chart_name" select="concat(text(), '_ovaldef_donut_chart')"/>
-              <xsl:with-param name="data_source_name" select="concat(text(), '_ovaldef_severity_src')"/>
-              <xsl:with-param name="aggregate_type" select="'ovaldef'"/>
-              <xsl:with-param name="display_name" select="$display_name"/>
-              <xsl:with-param name="chart_type" select="'donut'"/>
-              <xsl:with-param name="chart_template" select="'info_by_class'"/>
-              <xsl:with-param name="create_data_source" select="0"/>
-            </xsl:call-template>
-            <xsl:call-template name="js-aggregate-chart">
-              <xsl:with-param name="chart_name" select="concat(text(), '_ovaldef_timeline_chart')"/>
-              <xsl:with-param name="data_source_name" select="concat(text(), '_ovaldef_timeline_src')"/>
-              <xsl:with-param name="aggregate_type" select="'ovaldef'"/>
-              <xsl:with-param name="display_name" select="$display_name"/>
-              <xsl:with-param name="chart_type" select="'line'"/>
-              <xsl:with-param name="group_column" select="'created'"/>
-              <xsl:with-param name="data_column" select="''"/>
-              <xsl:with-param name="chart_template" select="''"/>
-              <xsl:with-param name="auto_load" select="0"/>
-              <xsl:with-param name="create_data_source" select="1"/>
-            </xsl:call-template>
-            <xsl:call-template name="js-aggregate-chart">
-              <xsl:with-param name="chart_name" select="concat(text(), '_ovaldef_class_donut_chart')"/>
-              <xsl:with-param name="data_source_name" select="concat(text(), '_ovaldef_class_src')"/>
-              <xsl:with-param name="aggregate_type" select="'ovaldef'"/>
-              <xsl:with-param name="group_column" select="'class'"/>
-              <xsl:with-param name="display_name" select="$display_name"/>
-              <xsl:with-param name="chart_type" select="'donut'"/>
-              <xsl:with-param name="create_data_source" select="1"/>
-            </xsl:call-template>
+        <xsl:call-template name="js-aggregate-chart">
+          <xsl:with-param name="chart_name" select="concat(text(), '_dfn_cert_adv_bar_chart')"/>
+          <xsl:with-param name="data_source_name" select="concat(text(), '_dfn_cert_adv_severity_src')"/>
+          <xsl:with-param name="aggregate_type" select="'dfn_cert_adv'"/>
+          <xsl:with-param name="display_name" select="$display_name"/>
+          <xsl:with-param name="chart_type" select="'bar'"/>
+          <xsl:with-param name="chart_template" select="'info_by_cvss'"/>
+          <xsl:with-param name="create_data_source" select="1"/>
+        </xsl:call-template>
+        <xsl:call-template name="js-aggregate-chart">
+          <xsl:with-param name="chart_name" select="concat(text(), '_dfn_cert_adv_donut_chart')"/>
+          <xsl:with-param name="data_source_name" select="concat(text(), '_dfn_cert_adv_severity_src')"/>
+          <xsl:with-param name="aggregate_type" select="'dfn_cert_adv'"/>
+          <xsl:with-param name="display_name" select="$display_name"/>
+          <xsl:with-param name="chart_type" select="'donut'"/>
+          <xsl:with-param name="chart_template" select="'info_by_class'"/>
+          <xsl:with-param name="create_data_source" select="0"/>
+        </xsl:call-template>
+        <xsl:call-template name="js-aggregate-chart">
+          <xsl:with-param name="chart_name" select="concat(text(), '_dfn_cert_adv_timeline_chart')"/>
+          <xsl:with-param name="data_source_name" select="concat(text(), '_dfn_cert_adv_timeline_src')"/>
+          <xsl:with-param name="aggregate_type" select="'dfn_cert_adv'"/>
+          <xsl:with-param name="display_name" select="$display_name"/>
+          <xsl:with-param name="chart_type" select="'line'"/>
+          <xsl:with-param name="group_column" select="'created'"/>
+          <xsl:with-param name="data_column" select="''"/>
+          <xsl:with-param name="chart_template" select="''"/>
+          <xsl:with-param name="auto_load" select="0"/>
+          <xsl:with-param name="create_data_source" select="1"/>
+        </xsl:call-template>
 
-            <xsl:call-template name="js-aggregate-chart">
-              <xsl:with-param name="chart_name" select="concat(text(), '_cert_bund_adv_bar_chart')"/>
-              <xsl:with-param name="data_source_name" select="concat(text(), '_cert_bund_adv_severity_src')"/>
-              <xsl:with-param name="aggregate_type" select="'cert_bund_adv'"/>
-              <xsl:with-param name="display_name" select="$display_name"/>
-              <xsl:with-param name="chart_type" select="'bar'"/>
-              <xsl:with-param name="chart_template" select="'info_by_cvss'"/>
-              <xsl:with-param name="create_data_source" select="1"/>
-            </xsl:call-template>
-            <xsl:call-template name="js-aggregate-chart">
-              <xsl:with-param name="chart_name" select="concat(text(), '_cert_bund_adv_donut_chart')"/>
-              <xsl:with-param name="data_source_name" select="concat(text(), '_cert_bund_adv_severity_src')"/>
-              <xsl:with-param name="aggregate_type" select="'cert_bund_adv'"/>
-              <xsl:with-param name="display_name" select="$display_name"/>
-              <xsl:with-param name="chart_type" select="'donut'"/>
-              <xsl:with-param name="chart_template" select="'info_by_class'"/>
-              <xsl:with-param name="create_data_source" select="0"/>
-            </xsl:call-template>
-            <xsl:call-template name="js-aggregate-chart">
-              <xsl:with-param name="chart_name" select="concat(text(), '_cert_bund_adv_timeline_chart')"/>
-              <xsl:with-param name="data_source_name" select="concat(text(), '_cert_bund_adv_timeline_src')"/>
-              <xsl:with-param name="aggregate_type" select="'cert_bund_adv'"/>
-              <xsl:with-param name="display_name" select="$display_name"/>
-              <xsl:with-param name="chart_type" select="'line'"/>
-              <xsl:with-param name="group_column" select="'created'"/>
-              <xsl:with-param name="data_column" select="''"/>
-              <xsl:with-param name="chart_template" select="''"/>
-              <xsl:with-param name="auto_load" select="0"/>
-              <xsl:with-param name="create_data_source" select="1"/>
-            </xsl:call-template>
+        <xsl:call-template name="js-aggregate-chart">
+          <xsl:with-param name="chart_name" select="concat(text(), '_allinfo_chart')"/>
+          <xsl:with-param name="data_source_name" select="concat(text(), '_allinfo_severity_src')"/>
+          <xsl:with-param name="aggregate_type" select="'allinfo'"/>
+          <xsl:with-param name="display_name" select="$display_name"/>
+          <xsl:with-param name="chart_type" select="'bar'"/>
+          <xsl:with-param name="chart_template" select="'info_by_cvss'"/>
+          <xsl:with-param name="create_data_source" select="1"/>
+        </xsl:call-template>
+        <xsl:call-template name="js-aggregate-chart">
+          <xsl:with-param name="chart_name" select="concat(text(), '_allinfo_donut_chart')"/>
+          <xsl:with-param name="data_source_name" select="concat(text(), '_allinfo_severity_src')"/>
+          <xsl:with-param name="aggregate_type" select="'allinfo'"/>
+          <xsl:with-param name="display_name" select="$display_name"/>
+          <xsl:with-param name="chart_type" select="'donut'"/>
+          <xsl:with-param name="chart_template" select="'info_by_class'"/>
+          <xsl:with-param name="create_data_source" select="0"/>
+        </xsl:call-template>
+        <xsl:call-template name="js-aggregate-chart">
+          <xsl:with-param name="chart_name" select="concat(text(), '_allinfo_timeline_chart')"/>
+          <xsl:with-param name="data_source_name" select="concat(text(), '_allinfo_timeline_src')"/>
+          <xsl:with-param name="aggregate_type" select="'allinfo'"/>
+          <xsl:with-param name="display_name" select="$display_name"/>
+          <xsl:with-param name="chart_type" select="'line'"/>
+          <xsl:with-param name="group_column" select="'created'"/>
+          <xsl:with-param name="data_column" select="''"/>
+          <xsl:with-param name="chart_template" select="''"/>
+          <xsl:with-param name="auto_load" select="0"/>
+          <xsl:with-param name="create_data_source" select="1"/>
+        </xsl:call-template>
 
-            <xsl:call-template name="js-aggregate-chart">
-              <xsl:with-param name="chart_name" select="concat(text(), '_dfn_cert_adv_bar_chart')"/>
-              <xsl:with-param name="data_source_name" select="concat(text(), '_dfn_cert_adv_severity_src')"/>
-              <xsl:with-param name="aggregate_type" select="'dfn_cert_adv'"/>
-              <xsl:with-param name="display_name" select="$display_name"/>
-              <xsl:with-param name="chart_type" select="'bar'"/>
-              <xsl:with-param name="chart_template" select="'info_by_cvss'"/>
-              <xsl:with-param name="create_data_source" select="1"/>
-            </xsl:call-template>
-            <xsl:call-template name="js-aggregate-chart">
-              <xsl:with-param name="chart_name" select="concat(text(), '_dfn_cert_adv_donut_chart')"/>
-              <xsl:with-param name="data_source_name" select="concat(text(), '_dfn_cert_adv_severity_src')"/>
-              <xsl:with-param name="aggregate_type" select="'dfn_cert_adv'"/>
-              <xsl:with-param name="display_name" select="$display_name"/>
-              <xsl:with-param name="chart_type" select="'donut'"/>
-              <xsl:with-param name="chart_template" select="'info_by_class'"/>
-              <xsl:with-param name="create_data_source" select="0"/>
-            </xsl:call-template>
-            <xsl:call-template name="js-aggregate-chart">
-              <xsl:with-param name="chart_name" select="concat(text(), '_dfn_cert_adv_timeline_chart')"/>
-              <xsl:with-param name="data_source_name" select="concat(text(), '_dfn_cert_adv_timeline_src')"/>
-              <xsl:with-param name="aggregate_type" select="'dfn_cert_adv'"/>
-              <xsl:with-param name="display_name" select="$display_name"/>
-              <xsl:with-param name="chart_type" select="'line'"/>
-              <xsl:with-param name="group_column" select="'created'"/>
-              <xsl:with-param name="data_column" select="''"/>
-              <xsl:with-param name="chart_template" select="''"/>
-              <xsl:with-param name="auto_load" select="0"/>
-              <xsl:with-param name="create_data_source" select="1"/>
-            </xsl:call-template>
+        <xsl:call-template name="js-aggregate-chart">
+          <xsl:with-param name="chart_name" select="concat(text(),'-allinfo-by-info-type')"/>
+          <xsl:with-param name="data_source_name" select="concat(text(), '_allinfo-by-info-type-source')"/>
+          <xsl:with-param name="aggregate_type" select="'allinfo'"/>
+          <xsl:with-param name="group_column" select="'type'"/>
+          <xsl:with-param name="data_column" select="''"/>
+          <xsl:with-param name="display_name" select="$display_name"/>
+          <xsl:with-param name="chart_type" select="'donut'"/>
+          <xsl:with-param name="chart_template" select="'resource_type_counts'"/>
+          <xsl:with-param name="create_data_source" select="1"/>
+        </xsl:call-template>
 
-            <xsl:call-template name="js-aggregate-chart">
-              <xsl:with-param name="chart_name" select="concat(text(), '_allinfo_chart')"/>
-              <xsl:with-param name="data_source_name" select="concat(text(), '_allinfo_severity_src')"/>
-              <xsl:with-param name="aggregate_type" select="'allinfo'"/>
-              <xsl:with-param name="display_name" select="$display_name"/>
-              <xsl:with-param name="chart_type" select="'bar'"/>
-              <xsl:with-param name="chart_template" select="'info_by_cvss'"/>
-              <xsl:with-param name="create_data_source" select="1"/>
-            </xsl:call-template>
-            <xsl:call-template name="js-aggregate-chart">
-              <xsl:with-param name="chart_name" select="concat(text(), '_allinfo_donut_chart')"/>
-              <xsl:with-param name="data_source_name" select="concat(text(), '_allinfo_severity_src')"/>
-              <xsl:with-param name="aggregate_type" select="'allinfo'"/>
-              <xsl:with-param name="display_name" select="$display_name"/>
-              <xsl:with-param name="chart_type" select="'donut'"/>
-              <xsl:with-param name="chart_template" select="'info_by_class'"/>
-              <xsl:with-param name="create_data_source" select="0"/>
-            </xsl:call-template>
-            <xsl:call-template name="js-aggregate-chart">
-              <xsl:with-param name="chart_name" select="concat(text(), '_allinfo_timeline_chart')"/>
-              <xsl:with-param name="data_source_name" select="concat(text(), '_allinfo_timeline_src')"/>
-              <xsl:with-param name="aggregate_type" select="'allinfo'"/>
-              <xsl:with-param name="display_name" select="$display_name"/>
-              <xsl:with-param name="chart_type" select="'line'"/>
-              <xsl:with-param name="group_column" select="'created'"/>
-              <xsl:with-param name="data_column" select="''"/>
-              <xsl:with-param name="chart_template" select="''"/>
-              <xsl:with-param name="auto_load" select="0"/>
-              <xsl:with-param name="create_data_source" select="1"/>
-            </xsl:call-template>
+        gsa.displays ["<xsl:value-of select="$display_name"/>"].create_chart_selector ();
+        <xsl:if test="$filters">
+          gsa.displays ["<xsl:value-of select="$display_name"/>"].create_filter_selector ();
 
-            <xsl:call-template name="js-aggregate-chart">
-              <xsl:with-param name="chart_name" select="concat(text(),'-allinfo-by-info-type')"/>
-              <xsl:with-param name="data_source_name" select="concat(text(), '_allinfo-by-info-type-source')"/>
-              <xsl:with-param name="aggregate_type" select="'allinfo'"/>
-              <xsl:with-param name="group_column" select="'type'"/>
-              <xsl:with-param name="data_column" select="''"/>
-              <xsl:with-param name="display_name" select="$display_name"/>
-              <xsl:with-param name="chart_type" select="'donut'"/>
-              <xsl:with-param name="chart_template" select="'resource_type_counts'"/>
-              <xsl:with-param name="create_data_source" select="1"/>
-            </xsl:call-template>
-
-            gsa.displays ["<xsl:value-of select="$display_name"/>"].create_chart_selector ();
-            <xsl:if test="$filters">
-              gsa.displays ["<xsl:value-of select="$display_name"/>"].create_filter_selector ();
-
-              <xsl:for-each select="$filters">
-                gsa.displays ["<xsl:value-of select="$display_name"/>"].add_filter ("<xsl:value-of select="@id"/>", "<xsl:value-of select="gsa:escape-js (name)"/>", "<xsl:value-of select="gsa:escape-js (term)"/>");
-              </xsl:for-each>
-              gsa.displays ["<xsl:value-of select="$display_name"/>"].select_filter ("<xsl:value-of select="$auto_filter"/>", false);
-            </xsl:if>
-
-            gsa.displays ["<xsl:value-of select="$display_name"/>"].select_chart ("<xsl:value-of select="$auto_load"/>", false, true);
+          <xsl:for-each select="$filters">
+            gsa.displays ["<xsl:value-of select="$display_name"/>"].add_filter ("<xsl:value-of select="@id"/>", "<xsl:value-of select="gsa:escape-js (name)"/>", "<xsl:value-of select="gsa:escape-js (term)"/>");
           </xsl:for-each>
-        </script>
-      </div>
-    </div>
+          gsa.displays ["<xsl:value-of select="$display_name"/>"].select_filter ("<xsl:value-of select="$auto_filter"/>", false);
+        </xsl:if>
+
+        gsa.displays ["<xsl:value-of select="$display_name"/>"].select_chart ("<xsl:value-of select="$auto_load"/>", false, true);
+      </xsl:for-each>
+    </script>
   </div>
 </xsl:template>
 

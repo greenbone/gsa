@@ -19644,7 +19644,7 @@ should not have received it.
   </xsl:if>
   <xsl:call-template name="list-window">
     <xsl:with-param name="type" select="'info'"/>
-    <xsl:with-param name="subtype" select="'allinfo'"/>
+    <xsl:with-param name="subtype" select="'secinfo'"/>
     <xsl:with-param name="cap-type" select="'All SecInfo Information'"/>
     <xsl:with-param name="cap-type-plural" select="'All SecInfo Information'"/>
     <xsl:with-param name="resources-summary" select="info"/>

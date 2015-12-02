@@ -1,5 +1,17 @@
 2015-12-02  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
+	* src/html/classic/img/secinfo.svg: New.
+
+	* CMakeLists.txt: Install new icon.
+
+	* src/html/classic/graphics.xsl (match="dashboard" mode="secinfo"):
+	Apply new section header.
+
+	* src/html/classic/omp.xsl (name="html-allinfo-table"): Fix
+	subtype name to show the new icon.
+
+2015-12-02  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
 	* src/html/classic/img/alert.svg,
 	src/html/classic/img/os.svg: Updated with fonts
 	converted to paths.
