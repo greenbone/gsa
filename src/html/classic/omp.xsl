@@ -4540,7 +4540,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="subtype" select="$subtype"/>
         <xsl:with-param name="list" select="$resources-summary"/>
         <xsl:with-param name="columns" select="$columns" xmlns=""/>
-        <xsl:with-param name="extra_params">
+        <xsl:with-param name="extra_params" xmlns="">
           <xsl:copy-of select="$extra_params"/>
           <xsl:if test="$subtype != ''">
             <param>
@@ -7077,7 +7077,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <sort-reverse/>
         <html>
           <before>
-            <xsl:choose>
+            <xsl:choose xmlns="http://www.w3.org/1999/xhtml">
               <xsl:when test="/envelope/params/bulk_select = 1">
                 <div style="float: right; display: inline">
                   <xsl:choose>

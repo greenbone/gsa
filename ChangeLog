@@ -1,5 +1,9 @@
 2015-12-02  Benoît Allard  <benoit.allard@greenbone.net>
 
+	* src/html/classic/omp.xsl: Two more namespace corrections.
+
+2015-12-02  Benoît Allard  <benoit.allard@greenbone.net>
+
 	* src/html/classic/graphics.xsl, src/html/classic/omp.xsl: More
 	  explicit usage of the empty namespace around graphic charts.
 
