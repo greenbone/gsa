@@ -1719,7 +1719,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div id="gb_menu" class="clearfix">
    <ul>
     <li>
-      <xsl:variable name="items">
+      <xsl:variable name="items" xmlns="">
         <xsl:if test="gsa:may-op ('GET_TASKS')">
           <item>
             <page>get_tasks</page>
@@ -1872,7 +1872,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </script>
     </li>
     <li>
-      <xsl:variable name="items">
+      <xsl:variable name="items" xmlns="">
         <xsl:if test="gsa:may-op ('GET_TARGETS')">
           <item>
             <page>get_targets</page>
@@ -2051,7 +2051,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
      </ul>
     </li>
     <li>
-      <xsl:variable name="items">
+      <xsl:variable name="items" xmlns="">
         <xsl:if test="gsa:may-op ('GET_USERS')">
           <item>
             <page>get_users</page>
