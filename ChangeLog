@@ -1,5 +1,10 @@
 2015-12-02  Benoît Allard  <benoit.allard@greenbone.net>
 
+	* src/html/classic/omp.xsl: Explicitely put our custom elements
+	  (columns) in an empty namespace to get them through.
+
+2015-12-02  Benoît Allard  <benoit.allard@greenbone.net>
+
 	* src/html/classic/gsad.xsl: Set the namespace to an empty one when
 	  constructing custom elements.
 

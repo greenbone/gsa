@@ -4539,7 +4539,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="type" select="$type"/>
         <xsl:with-param name="subtype" select="$subtype"/>
         <xsl:with-param name="list" select="$resources-summary"/>
-        <xsl:with-param name="columns" select="$columns"/>
+        <xsl:with-param name="columns" select="$columns" xmlns=""/>
         <xsl:with-param name="extra_params">
           <xsl:copy-of select="$extra_params"/>
           <xsl:if test="$subtype != ''">
@@ -7049,7 +7049,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="count" select="count (task)"/>
     <xsl:with-param name="filtered-count" select="task_count/filtered"/>
     <xsl:with-param name="full-count" select="task_count/text ()"/>
-    <xsl:with-param name="columns">
+    <xsl:with-param name="columns" xmlns="">
       <column>
         <name><xsl:value-of select="gsa:i18n('Name', 'Property')"/></name>
         <field>name</field>
@@ -7404,7 +7404,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="count" select="count (credential)"/>
     <xsl:with-param name="filtered-count" select="credential_count/filtered"/>
     <xsl:with-param name="full-count" select="credential_count/text ()"/>
-    <xsl:with-param name="columns">
+    <xsl:with-param name="columns" xmlns="">
       <column>
         <name><xsl:value-of select="gsa:i18n('Name', 'Property')"/></name>
         <field>name</field>
@@ -8093,7 +8093,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="count" select="count (agent)"/>
     <xsl:with-param name="filtered-count" select="agent_count/filtered"/>
     <xsl:with-param name="full-count" select="agent_count/text ()"/>
-    <xsl:with-param name="columns">
+    <xsl:with-param name="columns" xmlns="">
       <column>
         <name><xsl:value-of select="gsa:i18n('Name', 'Property')"/></name>
         <field>name</field>
@@ -9205,7 +9205,7 @@ should not have received it.
     <xsl:with-param name="count" select="count (alert)"/>
     <xsl:with-param name="filtered-count" select="alert_count/filtered"/>
     <xsl:with-param name="full-count" select="alert_count/text ()"/>
-    <xsl:with-param name="columns">
+    <xsl:with-param name="columns" xmlns="">
       <column>
         <name><xsl:value-of select="gsa:i18n('Name', 'Property')"/></name>
         <field>name</field>
@@ -10915,7 +10915,7 @@ should not have received it.
     <xsl:with-param name="count" select="count (filter)"/>
     <xsl:with-param name="filtered-count" select="filter_count/filtered"/>
     <xsl:with-param name="full-count" select="filter_count/text ()"/>
-    <xsl:with-param name="columns">
+    <xsl:with-param name="columns" xmlns="">
       <column>
         <name><xsl:value-of select="gsa:i18n('Name', 'Property')"/></name>
         <field>name</field>
@@ -11241,7 +11241,7 @@ should not have received it.
     <xsl:with-param name="count" select="count (tag)"/>
     <xsl:with-param name="filtered-count" select="tag_count/filtered"/>
     <xsl:with-param name="full-count" select="tag_count/text ()"/>
-    <xsl:with-param name="columns">
+    <xsl:with-param name="columns" xmlns="">
       <column>
         <name><xsl:value-of select="gsa:i18n('Name', 'Property')"/></name>
         <field>name</field>
@@ -13113,7 +13113,7 @@ should not have received it.
     <xsl:with-param name="count" select="count (target)"/>
     <xsl:with-param name="filtered-count" select="target_count/filtered"/>
     <xsl:with-param name="full-count" select="target_count/text ()"/>
-    <xsl:with-param name="columns">
+    <xsl:with-param name="columns" xmlns="">
       <column>
         <name><xsl:value-of select="gsa:i18n('Name', 'Property')"/></name>
         <field>name</field>
@@ -15568,7 +15568,7 @@ should not have received it.
     <xsl:with-param name="count" select="count (config)"/>
     <xsl:with-param name="filtered-count" select="config_count/filtered"/>
     <xsl:with-param name="full-count" select="config_count/text ()"/>
-    <xsl:with-param name="columns">
+    <xsl:with-param name="columns" xmlns="">
       <column>
         <name><xsl:value-of select="gsa:i18n('Name', 'Property')"/></name>
         <field>name</field>
@@ -16155,7 +16155,7 @@ should not have received it.
     <xsl:with-param name="count" select="count (schedule)"/>
     <xsl:with-param name="filtered-count" select="schedule_count/filtered"/>
     <xsl:with-param name="full-count" select="schedule_count/text ()"/>
-    <xsl:with-param name="columns">
+    <xsl:with-param name="columns" xmlns="">
       <column>
         <name><xsl:value-of select="gsa:i18n('Name', 'Property')"/></name>
         <field>name</field>
@@ -17198,7 +17198,7 @@ should not have received it.
     <xsl:with-param name="count" select="count (scanner)"/>
     <xsl:with-param name="filtered-count" select="scanner_count/filtered"/>
     <xsl:with-param name="full-count" select="scanner_count/text ()"/>
-    <xsl:with-param name="columns">
+    <xsl:with-param name="columns" xmlns="">
       <column>
         <name><xsl:value-of select="gsa:i18n('Name', 'Property')"/></name>
         <field>name</field>
@@ -17884,7 +17884,7 @@ should not have received it.
     <xsl:with-param name="count" select="count (slave)"/>
     <xsl:with-param name="filtered-count" select="slave_count/filtered"/>
     <xsl:with-param name="full-count" select="slave_count/text ()"/>
-    <xsl:with-param name="columns">
+    <xsl:with-param name="columns" xmlns="">
       <column>
         <name><xsl:value-of select="gsa:i18n('Name', 'Property')"/></name>
         <field>name</field>
@@ -19260,7 +19260,7 @@ should not have received it.
         <xsl:with-param name="type" select="'cpe'"/>
       </xsl:call-template>
     </xsl:with-param>
-    <xsl:with-param name="columns">
+    <xsl:with-param name="columns" xmlns="">
       <column>
         <name><xsl:value-of select="gsa:i18n('Name', 'Property')"/></name>
         <field>name</field>
@@ -19318,7 +19318,7 @@ should not have received it.
         <xsl:with-param name="type" select="'cve'"/>
       </xsl:call-template>
     </xsl:with-param>
-    <xsl:with-param name="columns">
+    <xsl:with-param name="columns" xmlns="">
       <column>
         <name><xsl:value-of select="gsa:i18n('Name', 'Property')"/></name>
         <field>name</field>
@@ -19391,7 +19391,7 @@ should not have received it.
         <xsl:with-param name="type" select="'nvt'"/>
       </xsl:call-template>
     </xsl:with-param>
-    <xsl:with-param name="columns">
+    <xsl:with-param name="columns" xmlns="">
       <column>
         <name><xsl:value-of select="gsa:i18n('Name', 'Property')"/></name>
         <field>name</field>
@@ -19467,7 +19467,7 @@ should not have received it.
         <xsl:with-param name="type" select="'ovaldef'"/>
       </xsl:call-template>
     </xsl:with-param>
-    <xsl:with-param name="columns">
+    <xsl:with-param name="columns" xmlns="">
       <column>
         <name><xsl:value-of select="gsa:i18n('Name', 'Property')"/></name>
         <field>name</field>
@@ -19540,7 +19540,7 @@ should not have received it.
       </xsl:call-template>
     </xsl:with-param>
 
-    <xsl:with-param name="columns">
+    <xsl:with-param name="columns" xmlns="">
       <column>
         <name><xsl:value-of select="gsa:i18n('Name', 'Property')"/></name>
         <field>name</field>
@@ -19600,7 +19600,7 @@ should not have received it.
       </xsl:call-template>
     </xsl:with-param>
 
-    <xsl:with-param name="columns">
+    <xsl:with-param name="columns" xmlns="">
       <column>
         <name><xsl:value-of select="gsa:i18n('Name', 'Property')"/></name>
         <field>name</field>
@@ -19659,7 +19659,7 @@ should not have received it.
         <xsl:with-param name="type" select="'allinfo'"/>
       </xsl:call-template>
     </xsl:with-param>
-    <xsl:with-param name="columns">
+    <xsl:with-param name="columns" xmlns="">
       <column>
         <name><xsl:value-of select="gsa:i18n('Name', 'Property')"/></name>
         <field>name</field>
@@ -22280,7 +22280,7 @@ should not have received it.
     <xsl:with-param name="count" select="count (note)"/>
     <xsl:with-param name="filtered-count" select="note_count/filtered"/>
     <xsl:with-param name="full-count" select="note_count/text ()"/>
-    <xsl:with-param name="columns">
+    <xsl:with-param name="columns" xmlns="">
       <column>
         <name><xsl:value-of select="gsa:i18n('Text', 'Note or Override')"/></name>
         <field>text</field>
@@ -23527,7 +23527,7 @@ should not have received it.
     <xsl:with-param name="count" select="count (override)"/>
     <xsl:with-param name="filtered-count" select="override_count/filtered"/>
     <xsl:with-param name="full-count" select="override_count/text ()"/>
-    <xsl:with-param name="columns">
+    <xsl:with-param name="columns" xmlns="">
       <column>
         <name><xsl:value-of select="gsa:i18n('Text', 'Note or Override')"/></name>
         <field>text</field>
@@ -23790,7 +23790,7 @@ should not have received it.
     <xsl:with-param name="grouped-count" select="group_count/grouped"/>
     <xsl:with-param name="full-count" select="group_count/text ()"/>
     <xsl:with-param name="filtered-count" select="group_count/filtered"/>
-    <xsl:with-param name="columns">
+    <xsl:with-param name="columns" xmlns="">
       <column>
         <name><xsl:value-of select="gsa:i18n('Name', 'Property')"/></name>
         <field>name</field>
@@ -24765,7 +24765,7 @@ should not have received it.
     <xsl:with-param name="count" select="count (permission)"/>
     <xsl:with-param name="filtered-count" select="permission_count/filtered"/>
     <xsl:with-param name="full-count" select="permission_count/text ()"/>
-    <xsl:with-param name="columns">
+    <xsl:with-param name="columns" xmlns="">
       <column>
         <name><xsl:value-of select="gsa:i18n('Name', 'Property')"/></name>
         <field>name</field>
@@ -25139,7 +25139,7 @@ should not have received it.
     <xsl:with-param name="count" select="count (port_list)"/>
     <xsl:with-param name="filtered-count" select="port_list_count/filtered"/>
     <xsl:with-param name="full-count" select="port_list_count/text ()"/>
-    <xsl:with-param name="columns">
+    <xsl:with-param name="columns" xmlns="">
       <column>
         <name><xsl:value-of select="gsa:i18n('Name', 'Property')"/></name>
         <field>name</field>
@@ -25758,7 +25758,7 @@ should not have received it.
     <xsl:with-param name="count" select="count (report_format)"/>
     <xsl:with-param name="filtered-count" select="report_format_count/filtered"/>
     <xsl:with-param name="full-count" select="report_format_count/text ()"/>
-    <xsl:with-param name="columns">
+    <xsl:with-param name="columns" xmlns="">
       <column>
         <name><xsl:value-of select="gsa:i18n('Name', 'Property')"/></name>
         <field>name</field>
@@ -26976,7 +26976,7 @@ should not have received it.
       </xsl:call-template>
     </xsl:with-param>
     <xsl:with-param name="upload-icon" select="true ()"/>
-    <xsl:with-param name="columns">
+    <xsl:with-param name="columns" xmlns="">
       <column>
         <name><xsl:value-of select="gsa:i18n('Date', 'Date')"/></name>
         <field>date</field>
@@ -29041,7 +29041,7 @@ should not have received it.
         <xsl:with-param name="type" select="'result'"/>
       </xsl:call-template>
     </xsl:with-param>
-    <xsl:with-param name="columns">
+    <xsl:with-param name="columns" xmlns="">
       <column>
         <name><xsl:value-of select="gsa:i18n('Vulnerability', 'Result')"/></name>
         <field>vulnerability</field>
@@ -32702,7 +32702,7 @@ var toggleFilter = function(){
     <xsl:with-param name="count" select="count (role)"/>
     <xsl:with-param name="filtered-count" select="role_count/filtered"/>
     <xsl:with-param name="full-count" select="role_count/text ()"/>
-    <xsl:with-param name="columns">
+    <xsl:with-param name="columns" xmlns="">
       <column>
         <name><xsl:value-of select="gsa:i18n('Name', 'Property')"/></name>
         <field>name</field>
@@ -33649,7 +33649,7 @@ var toggleFilter = function(){
     <xsl:with-param name="count" select="count (user)"/>
     <xsl:with-param name="filtered-count" select="user_count/filtered"/>
     <xsl:with-param name="full-count" select="user_count/text ()"/>
-    <xsl:with-param name="columns">
+    <xsl:with-param name="columns" xmlns="">
       <column>
         <name><xsl:value-of select="gsa:i18n('Name', 'Property')"/></name>
         <field>name</field>
@@ -36739,7 +36739,7 @@ var toggleFilter = function(){
     <xsl:with-param name="count" select="count (asset/host)"/>
     <xsl:with-param name="filtered-count" select="asset_count/filtered"/>
     <xsl:with-param name="full-count" select="asset_count/text ()"/>
-    <xsl:with-param name="columns">
+    <xsl:with-param name="columns" xmlns="">
       <column>
         <name><xsl:value-of select="gsa:i18n('Name', 'Property')"/></name>
         <field>name</field>
@@ -36780,7 +36780,7 @@ var toggleFilter = function(){
     <xsl:with-param name="count" select="count (asset/os)"/>
     <xsl:with-param name="filtered-count" select="asset_count/filtered"/>
     <xsl:with-param name="full-count" select="asset_count/text ()"/>
-    <xsl:with-param name="columns">
+    <xsl:with-param name="columns" xmlns="">
       <column>
         <name><xsl:value-of select="gsa:i18n('Name', 'Property')"/></name>
         <field>name</field>
