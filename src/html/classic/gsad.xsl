@@ -2340,56 +2340,59 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <!-- Beware: This page has its own CSS -->
 
 <xsl:template match="login_page">
-  <div class="gb_login_dialog_container">
-   <div>
-    <div class="gb_window gb_login_dialog">
-      <div class="gb_window_part_left"></div>
-      <div class="gb_window_part_right"></div>
-      <div class="gb_window_part_center">Greenbone Security Assistant</div>
-      <div class="gb_window_part_content">
-        <img src="/img/gsa_splash.png" alt="" />
-        <div>
-          <div class="error_message"><xsl:value-of select="gsa:i18n (message, 'Login Message')"/></div>
-          <form action="/omp" method="post" enctype="multipart/form-data">
-            <input type="hidden" name="cmd" value="login" />
-            <xsl:choose>
-              <xsl:when test="string-length(url) = 0">
-                <input type="hidden" name="text" value="/omp?r=1" />
-              </xsl:when>
-              <xsl:otherwise>
-                <input type="hidden" name="text" value="{url}" />
-              </xsl:otherwise>
-            </xsl:choose>
-            <table>
-              <tr>
-                <td><label for="login"><xsl:value-of select="gsa:i18n ('Username', 'Auth Data')"/></label></td>
-                <td><input type="text" autocomplete="off" id="login" name="login" value="" autofocus="autofocus"/></td>
-              </tr>
-              <tr>
-                <td><label for="password"><xsl:value-of select="gsa:i18n ('Password', 'Auth Data')"/></label></td>
-                <td><input type="password" autocomplete="off" id="password" name="password" value="" /></td>
-              </tr>
-            </table>
-            <div style="text-align:center;"><input type="submit" value="{gsa:i18n ('Login', 'Action Verb')}" /></div>
-            <br clear="all" />
-          </form>
-        </div>
-        <xsl:if test="string-length (guest/username) &gt; 0">
-          <div style="text-align: right">
-            <xsl:choose>
-              <xsl:when test="string-length(url) = 0">
-                <a href="/omp?r=1&amp;token=guest"><xsl:value-of select="gsa:i18n ('Login as a guest', 'Action Verb')"/></a>
-              </xsl:when>
-              <xsl:otherwise>
-                <a href="{url}&amp;token=guest"><xsl:value-of select="gsa:i18n ('Login as a guest', 'Action Verb')"/></a>
-              </xsl:otherwise>
-            </xsl:choose>
-          </div>
-        </xsl:if>
+ <div class="page-wrap">
+  <header>
+   <div class="title"><xsl:value-of select="gsa:i18n('Greenbone Security Assistant')"/></div>
+   <span class="version"></span>
+  </header>
+  <div class="logo_box">
+     <img src="/img/head.svg" />
+  </div>
+  <div class="login_box">
+    <div class="logo">
+      <img height="130" width="94"/>
+    </div>
+    <div class="login">
+      <div class="error_message">
+        <xsl:value-of select="gsa:i18n (message, 'Login Message')"/>
+        &#160; <!-- nbsp in order to keep the div even when no messages -->
       </div>
-    </div> <!-- /.gb_login_dialog -->
-   </div>
-  </div> <!-- /.gb_login_dialog_container -->
+      <form action="/omp" method="post">
+        <input type="hidden" name="cmd" value="login" />
+        <xsl:choose>
+          <xsl:when test="string-length(url) = 0">
+            <input type="hidden" name="text" value="/omp?r=1" />
+          </xsl:when>
+          <xsl:otherwise>
+            <input type="hidden" name="text" value="{url}" />
+          </xsl:otherwise>
+        </xsl:choose>
+        <div>
+          <label for="login"><xsl:value-of select="gsa:i18n('Username:')"/></label>
+          <input type="text" autocomplete="off" id="login" name="login" value="" autofocus="autofocus"/>
+        </div>
+        <div>
+          <label for="password"><xsl:value-of select="gsa:i18n('Password:')"/></label>
+          <input type="password" 
+                 autocomplete="off" id="password" name="password" 
+                 onkeydown="if (event.keyCode == 13) {{ this.form.submit(); return false; }}"/>
+        </div>
+      </form>
+      <xsl:if test="string-length (guest/username) &gt; 0">
+        <div style="text-align: right">
+          <xsl:choose>
+            <xsl:when test="string-length(url) = 0">
+              <a href="/omp?r=1&amp;token=guest"><xsl:value-of select="gsa:i18n ('Login as a guest', 'Action Verb')"/></a>
+            </xsl:when>
+            <xsl:otherwise>
+              <a href="{url}&amp;token=guest"><xsl:value-of select="gsa:i18n ('Login as a guest', 'Action Verb')"/></a>
+            </xsl:otherwise>
+          </xsl:choose>
+        </div>
+      </xsl:if>
+    </div>
+  </div>
+ </div>
 </xsl:template>
 
 <!-- Action result -->

@@ -24,85 +24,94 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+html,
 body {
- background: #FFFFFF;
+  height: 100%;
+}
+
+body {
  margin: 0px;
  font: small Verdana, sans-serif;
  font-size: 12px;
  color: #1A1A1A;
+ background: #393637;
 }
 
-img {
- border: 0px;
+.page-wrap {
+ min-height: 100%;
+/* background-color: rgba(255,255,255,0.4);*/
 }
 
-/* BEGIN Window decorations */
-
-.gb_window {
+header {
+  line-height: 80px;
+  font-size: 38pt;
+  background-color: #99CE48;
+  color: #393637;
 }
 
-.gb_window_part_left {
- background: url('/img/style/window_dec_a.png') no-repeat;
- width:6px;
- height:32px;
- float:left;
- margin:0px;
+header .title {
+  margin-left: 20px;
+  font-weight: bold;
 }
 
-.gb_window_part_center {
- background: url('/img/style/window_dec_b.png') repeat-x;
- height: 32px;
- background-color: #70C000;
- color: #FFFFFF;
- font-weight: bold;
- padding-top:5px;
- text-align:left;
- margin:0px;
- font-size:13px;
+header .version {
+  position: absolute;
+  font-size: 12pt;
+  line-height: initial;
+  right: 0;
+  top: 55px;
+  padding: 5px;
 }
 
-.gb_window_part_right {
- background: url('/img/style/window_dec_c.png') no-repeat;
- width: 76px;
- height: 32px;
- float: right;
- margin:0px;
+.logo_box {
+  position: fixed;
+  top: 30%;
+  left: 50%;
 }
 
-.gb_window_part_content {
- background: #f9f9f9;
- border: 1px solid #7c7c7c;
- border-top: none;
- padding: 5px;
- text-align: left;
- position:relative;
- top:-5px;
- font-size:12px;
+.logo_box img {
+  width: 500px;
 }
 
-.gb_login_dialog_container {
-  display: table;
-  width: 100vw;
-  height: 100vh;
+.login_box {
+  width: 450px;
+  height: 150px;
+  background-color: #dddddd;
+  margin-top: 10%;
+  margin-left: 20%;
+  border-radius: 15px;
+  box-shadow: 10px 10px 15px #1a1a1a;
 }
 
-/* Vertical centering */
-.gb_login_dialog_container > div {
-  display:table-cell;
-  vertical-align:middle;
+.logo {
+  float: left
 }
 
-/* Horizontal centering */
-.gb_login_dialog {
-  margin-left:auto;
-  margin-right:auto;
-  width:315px;
+.logo > img {
+  padding: 10px;
 }
 
-
-/* END Window decorations */
+.login {
+  margin-left: 115px;
+  padding: 10px;
+}
 
 .error_message {
   color: red;
+  font-weight: bold;
   text-align: center;
 }
+
+.login div {
+  margin-bottom: 20px;
+}
+
+.login label {
+  float: left;
+  position: absolute;
+}
+
+.login input {
+  margin-left: 80px;
+}
+

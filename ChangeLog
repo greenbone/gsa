@@ -1,3 +1,11 @@
+2015-12-03  Benoît Allard  <benoit.allard@greenbone.net>
+
+	Rework the login page.
+
+	* CMakeLists.txt, src/html/classic/css/gsa-login.css,
+	  src/html/classic/gsad.xsl: Updated
+	* src/html/classic/img/greenbone.svg: Added
+
 2015-12-02  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/classic/img/secinfo.svg: New.
