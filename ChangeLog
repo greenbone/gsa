@@ -1,5 +1,9 @@
 2015-12-03  Benoît Allard  <benoit.allard@greenbone.net>
 
+	* src/html/classic/gsad.xsl: Fix image name.
+
+2015-12-03  Benoît Allard  <benoit.allard@greenbone.net>
+
 	Rework the login page.
 
 	* CMakeLists.txt, src/html/classic/css/gsa-login.css,
