@@ -1,3 +1,9 @@
+2015-12-03  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/classic/img/report.svg: New.
+
+	* CMakeLists.txt: Install new icon.
+
 2015-12-03  Benoît Allard  <benoit.allard@greenbone.net>
 
 	* src/html/classic/gsad.xsl: Fix image name.

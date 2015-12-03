@@ -481,6 +481,7 @@ install (FILES src/html/classic/img/agent.png
                src/html/classic/img/scanner.svg
                src/html/classic/img/config.svg
                src/html/classic/img/secinfo.svg
+               src/html/classic/img/report.svg
                src/html/classic/img/agent.svg
                src/html/classic/img/os.svg
                src/html/classic/img/host.svg
