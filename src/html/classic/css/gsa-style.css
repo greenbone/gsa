@@ -1106,6 +1106,17 @@ text-align:right;
  display: block;
 }
 
+#wizardess {
+  float: left;
+  padding: 10px;
+}
+
+.wizard_hint {
+  color: #8cacc7; /* a light grey blend */
+  text-align: center;
+  font-size: large;
+}
+
 /* Styles for icon menus */
 
 .menu_icon {

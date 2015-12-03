@@ -469,6 +469,16 @@
       });
     });
 
+    doc.find(".wizard-action-icon").each(function(){
+      var elem = $(this),
+          name = elem.data('name'),
+          params = {name: name};
+      elem.on('click', function(event){
+        event.preventDefault();
+        new OMPDialog('wizard', true, params).show();
+      });
+    });
+
     var datepicker = doc.find("#datepicker");
     if (datepicker.length) {
       var curDate = doc.find('input[name=month]').val() + '/' + doc.find('input[name=day_of_month]').val() + '/' + doc.find('input[name=year]').val();

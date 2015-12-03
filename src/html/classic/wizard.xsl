@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet
     version="1.0"
+    xmlns="http://www.w3.org/1999/xhtml"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:str="http://exslt.org/strings"
     xmlns:func="http://exslt.org/functions"
     xmlns:gsa="http://openvas.org"
     xmlns:date="http://exslt.org/dates-and-times"
-    xmlns="http://www.w3.org/1999/xhtml"
     extension-element-prefixes="str func date">
-    <xsl:output
+  <xsl:output
       method="html"
       doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"
       doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN"
@@ -45,23 +45,27 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:choose>
     <xsl:when test="name (..) = 'get_tasks'">
       <span class="menu_icon wizard_list">
-        <a href="/omp?cmd=wizard&amp;name=quick_first_scan&amp;refresh_interval={/envelope/autorefresh/@interval}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-            title="{gsa:i18n ('Wizard', 'Wizard')}">
+        <a href="/omp?cmd=wizard&amp;name=quick_first_scan&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+            title="{gsa:i18n ('Wizard', 'Wizard')}"
+            class="wizard-action-icon" data-name="quick_first_scan">
           <img src="/img/wizard.png" border="0" style="margin-left:3px;"/>
         </a>
         <ul>
           <li>
-            <a href="/omp?cmd=wizard&amp;name=quick_first_scan&amp;refresh_interval={/envelope/autorefresh/@interval}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}" class="first">
+            <a href="/omp?cmd=wizard&amp;name=quick_first_scan&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+               class="first wizard-action-icon" data-name="quick_first_scan">
               <xsl:value-of select="gsa:i18n ('Task Wizard', 'Task Wizard')"/>
             </a>
           </li>
           <li>
-            <a href="/omp?cmd=wizard&amp;name=quick_task&amp;refresh_interval={/envelope/autorefresh/@interval}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}">
+            <a href="/omp?cmd=wizard&amp;name=quick_task&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+               class="wizard-action-icon" data-name="quick_task">
               <xsl:value-of select="gsa:i18n ('Advanced Task Wizard', 'Advanced Task Wizard')"/>
             </a>
           </li>
           <li class="last">
-            <a href="/omp?cmd=wizard&amp;name=modify_task&amp;refresh_interval={/envelope/autorefresh/@interval}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}" class="last">
+            <a href="/omp?cmd=wizard&amp;name=modify_task&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+               class="last wizard-action-icon" data-name="modify_task">
               <xsl:value-of select="gsa:i18n ('Modify Task Wizard', 'Modify Task Wizard')"/>
             </a>
           </li>
@@ -73,112 +77,78 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template name="wizard">
   <xsl:param name="force-wizard" select="/envelope/params/force_wizard"/>
-  <xsl:param name="wizard-rows"
-             select="../get_settings_response/setting[name='Wizard Rows']/value"/>
   <xsl:choose>
-    <xsl:when test="(/envelope/role != 'Observer') and (name (..) = 'get_tasks') and (number (task_count/text ()) &lt;= number ($wizard-rows)) or ($force-wizard = 1)">
-      <xsl:call-template name="quick-first-scan-wizard"/>
+    <xsl:when test="(/envelope/role != 'Observer') and (name (..) = 'get_tasks') and (number (task_count/text ()) = 0) or ($force-wizard = 1)">
+      <p class="wizard_hint">There are no tasks there (yet), you can create a pre-configured one using the wizard via the <img src="/img/wizard.png" /> button on top of this page.</p>
     </xsl:when>
   </xsl:choose>
 </xsl:template>
 
 <xsl:template name="quick-first-scan-wizard">
   <a name="wizard"></a>
-  <table>
-    <tr>
-      <td valign="top"><b><xsl:value-of select="gsa:i18n('Welcome dear new user!', 'Task Wizard')"/></b>
-        <p>
-          <xsl:value-of select="gsa:i18n('To explore this powerful application and to have a quick start for doing things the first time, I am here to assist you with some hints and short-cuts.', 'Task Wizard')"/>
-        </p>
-        <p>
-          <xsl:value-of select="gsa:i18n('I will appear automatically in areas where you have created no or only a few objects. And disappear when you have more than', 'Task Wizard')"/>
-          <xsl:text> </xsl:text>
-          <xsl:value-of select="../get_settings_response/setting[@id='20f3034c-e709-11e1-87e7-406186ea4fc5']/value"/>
-          <xsl:text> </xsl:text>
-          <xsl:value-of select="gsa:i18n('objects. You can call me with this icon', 'Task Wizard')"/>
-          <xsl:text> </xsl:text>
-          <a href="/omp?cmd=wizard&amp;name=quick_first_scan&amp;refresh_interval={/envelope/params/refresh_interval}&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-             title="{gsa:i18n ('Wizard', 'Wizard')}">
-            <img src="img/wizard.png"/>
-          </a>
-          <xsl:text> </xsl:text>
-          <xsl:value-of select="gsa:i18n('any time later on.', 'Task Wizard')"/>
-        </p>
-        <p><xsl:value-of select="gsa:i18n('If you want help creating new scan tasks but also more options, you can select &quot;Advanced Task Wizard&quot; from the wizard selection menu at the top of this window where it currently says &quot;Task Wizard&quot; marked with a small arrow.', 'Task Wizard')"/></p>
-        <p>
-          <xsl:value-of select="gsa:i18n('For more detailed information on functionality, please try the integrated help system. It is always available as a context sensitive link as icon', 'Task Wizard')"/>
-          <xsl:text> </xsl:text>
-          <a href="/help/contents.html?token={/envelope/token}"
-             title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('Contents', 'Help'))}">
-            <img src="/img/help.png"/>
-          </a>.
-        </p>
-      </td>
-      <td valign="top"><img src="img/enchantress.png"/></td>
-      <td valign="top"><b><xsl:value-of select="gsa:i18n('Quick start: Immediately scan an IP address', 'Task Wizard')"/> </b>
-        <p>
-          <xsl:value-of select="gsa:i18n('IP address or hostname:', 'Task Wizard')"/>
-          <form action="" method="post" enctype="multipart/form-data">
-            <input type="hidden" name="token" value="{/envelope/token}"/>
-            <input type="hidden" name="cmd" value="run_wizard"/>
-            <input type="hidden" name="caller" value="{/envelope/caller}"/>
-            <input type="hidden" name="name" value="quick_first_scan"/>
-            <input type="hidden" name="refresh_interval" value="{30}"/>
-            <input type="hidden" name="overrides" value="{/envelope/params/overrides}"/>
-            <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
-            <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-            <input type="hidden" name="next" value="get_tasks"/>
-            <input type="text" name="event_data:hosts" value="{/envelope/client_address}" size="30" maxlength="80"/>
-            <input type="hidden" name="event_data:port_list_id" value="{../run_wizard_response/response/get_settings_response/setting[name = 'Default Port List']/value}"/>
-            <input type="hidden" name="event_data:alert_id" value="{../run_wizard_response/response/get_settings_response/setting[name = 'Default Alert']/value}"/>
-            <input type="hidden" name="event_data:config_id" value="{../run_wizard_response/response/get_settings_response/setting[name = 'Default OpenVAS Scan Config']/value}"/>
-            <input type="hidden" name="event_data:ssh_credential" value="{../run_wizard_response/response/get_settings_response/setting[name = 'Default SSH Credential']/value}"/>
-            <input type="hidden" name="event_data:smb_credential" value="{../run_wizard_response/response/get_settings_response/setting[name = 'Default SMB Credential']/value}"/>
-            <input type="hidden" name="event_data:esxi_credential" value="{../run_wizard_response/response/get_settings_response/setting[name = 'Default ESXi Credential']/value}"/>
-            <input type="hidden" name="event_data:scanner_id" value="{../run_wizard_response/response/get_settings_response/setting[name = 'Default OpenVAS Scanner']/value}"/>
-            <input type="hidden" name="event_data:slave_id" value="{../run_wizard_response/response/get_settings_response/setting[name = 'Default Slave']/value}"/>
-            <input type="submit" name="submit" value="{gsa:i18n ('Start Scan', 'Task Wizard')}"/>
-          </form>
-        </p>
-        <p>
-          <xsl:value-of select="gsa:i18n('For this short-cut I will do the following for you:', 'Task Wizard')"/>
-          <ol>
-            <li><xsl:value-of select="gsa:i18n('Create a new Target with default Port List', 'Task Wizard')"/></li>
-            <li><xsl:value-of select="gsa:i18n('Create a new Task using this target with default Scan Configuration', 'Task Wizard')"/></li>
-            <li><xsl:value-of select="gsa:i18n('Start this scan task right away', 'Task Wizard')"/></li>
-            <li><xsl:value-of select="gsa:i18n('Switch the view to reload every 30 seconds so you can lean back and watch the scan progress', 'Task Wizard')"/></li>
-          </ol>
-        </p>
-        <p>
-          <xsl:value-of select="gsa:i18n('In fact, you must not lean back. As soon as the scan progress is beyond 1%, you can already jump into the scan report via the link in the Reports Total column and review the results collected so far.', 'Task Wizard')"/>
-        </p>
-        <p>
-          <xsl:value-of select="gsa:i18n('When creating the Target and Task I will use the default Port List, Alert, OpenVAS Scan Config, Credentials, OpenVAS Scanner and Slave configured in &quot;My Settings&quot;.', 'Task Wizard')"/>
-        </p>
-        <p>
-          <xsl:value-of select="gsa:i18n('By clicking the New Task icon', 'Task Wizard')"/>
-          <xsl:text> </xsl:text>
-          <a href="/omp?cmd=new_task&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-            title="{gsa:i18n ('New Task', 'Task')}">
-            <img src="/img/new.png" border="0"/>
-          </a>
-          <xsl:text> </xsl:text>
-          <xsl:value-of select="gsa:i18n('you can also create a new Task yourself. However, you will need a Target first, which you can create by going to the Targets page found in the Configuration menu using the New icon there.', 'Task Wizard')"/>
-        </p>
-      </td>
-    </tr>
-  </table>
+  <div id="wizardess"><img src="img/enchantress.png"/></div>
+  <div class="clearfix">
+    <b><xsl:value-of select="gsa:i18n('Quick start: Immediately scan an IP address', 'Task Wizard')"/> </b>
+    <div>
+      <xsl:value-of select="gsa:i18n('IP address or hostname:', 'Task Wizard')"/>
+      <form action="" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="token" value="{/envelope/token}"/>
+        <input type="hidden" name="cmd" value="run_wizard"/>
+        <input type="hidden" name="caller" value="{/envelope/caller}"/>
+        <input type="hidden" name="name" value="quick_first_scan"/>
+        <input type="hidden" name="refresh_interval" value="{30}"/>
+        <input type="hidden" name="overrides" value="{/envelope/params/overrides}"/>
+        <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+        <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
+        <input type="hidden" name="next" value="get_tasks"/>
+        <input type="text" name="event_data:hosts" value="{/envelope/client_address}" size="30" maxlength="80"/>
+        <input type="hidden" name="event_data:port_list_id" value="{../run_wizard_response/response/get_settings_response/setting[name = 'Default Port List']/value}"/>
+        <input type="hidden" name="event_data:alert_id" value="{../run_wizard_response/response/get_settings_response/setting[name = 'Default Alert']/value}"/>
+        <input type="hidden" name="event_data:config_id" value="{../run_wizard_response/response/get_settings_response/setting[name = 'Default OpenVAS Scan Config']/value}"/>
+        <input type="hidden" name="event_data:ssh_credential" value="{../run_wizard_response/response/get_settings_response/setting[name = 'Default SSH Credential']/value}"/>
+        <input type="hidden" name="event_data:smb_credential" value="{../run_wizard_response/response/get_settings_response/setting[name = 'Default SMB Credential']/value}"/>
+        <input type="hidden" name="event_data:esxi_credential" value="{../run_wizard_response/response/get_settings_response/setting[name = 'Default ESXi Credential']/value}"/>
+        <input type="hidden" name="event_data:scanner_id" value="{../run_wizard_response/response/get_settings_response/setting[name = 'Default OpenVAS Scanner']/value}"/>
+        <input type="hidden" name="event_data:slave_id" value="{../run_wizard_response/response/get_settings_response/setting[name = 'Default Slave']/value}"/>
+        <input type="submit" name="submit" value="{gsa:i18n ('Start Scan', 'Task Wizard')}"/>
+      </form>
+    </div>
+    <div>
+      <xsl:value-of select="gsa:i18n('For this short-cut I will do the following for you:', 'Task Wizard')"/>
+      <ol>
+        <li><xsl:value-of select="gsa:i18n('Create a new Target with default Port List', 'Task Wizard')"/></li>
+        <li><xsl:value-of select="gsa:i18n('Create a new Task using this target with default Scan Configuration', 'Task Wizard')"/></li>
+        <li><xsl:value-of select="gsa:i18n('Start this scan task right away', 'Task Wizard')"/></li>
+        <li><xsl:value-of select="gsa:i18n('Switch the view to reload every 30 seconds so you can lean back and watch the scan progress', 'Task Wizard')"/></li>
+      </ol>
+    </div>
+    <p>
+      <xsl:value-of select="gsa:i18n('In fact, you must not lean back. As soon as the scan progress is beyond 1%, you can already jump into the scan report via the link in the Reports Total column and review the results collected so far.', 'Task Wizard')"/>
+    </p>
+    <p>
+      <xsl:value-of select="gsa:i18n('When creating the Target and Task I will use the default Port List, Alert, OpenVAS Scan Config, Credentials, OpenVAS Scanner and Slave configured in &quot;My Settings&quot;.', 'Task Wizard')"/>
+    </p>
+    <p>
+      <xsl:value-of select="gsa:i18n('By clicking the New Task icon', 'Task Wizard')"/>
+      <xsl:text> </xsl:text>
+      <a href="/omp?cmd=new_task&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+         title="{gsa:i18n ('New Task', 'Task')}">
+        <img src="/img/new.png" border="0"/>
+      </a>
+      <xsl:text> </xsl:text>
+      <xsl:value-of select="gsa:i18n('you can also create a new Task yourself. However, you will need a Target first, which you can create by going to the Targets page found in the Configuration menu using the New icon there.', 'Task Wizard')"/>
+    </p>
+  </div>
 </xsl:template>
 
 <xsl:template match="wizard/quick_first_scan">
   <xsl:apply-templates select="gsad_msg"/>
 
+ <div class="gb_window">
   <div class="gb_window_part_left"></div>
   <div class="gb_window_part_right"></div>
   <div class="gb_window_part_center">
-    <xsl:call-template name="wizard_list">
-      <xsl:with-param name="title" select="'Task Wizard'"/>
-    </xsl:call-template>
+    <xsl:value-of select="gsa:i18n('Task Wizard')"/>
 
     <a href="/help/tasks.html?token={/envelope/token}#wizard" title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('Task Wizard', 'Task Wizard'))}">
       <img src="/img/help.png" style="margin-left:3px;"/>
@@ -195,6 +165,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="gb_window_part_content">
     <xsl:call-template name="quick-first-scan-wizard"/>
   </div>
+ </div>
 </xsl:template>
 
 <xsl:template name="quick-task-wizard">
@@ -785,13 +756,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template match="wizard/quick_task">
   <xsl:apply-templates select="gsad_msg"/>
-
+ <div class="gb_window">
   <div class="gb_window_part_left"></div>
   <div class="gb_window_part_right"></div>
   <div class="gb_window_part_center">
-    <xsl:call-template name="wizard_list">
-      <xsl:with-param name="title" select="'Advanced Task Wizard'"/>
-    </xsl:call-template>
+    <xsl:value-of select="gsa:i18n('Advanced Task Wizard')"/>
 
     <a href="/help/tasks.html?token={/envelope/token}#wizard" title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('Task Wizard', 'Task Wizard'))}">
       <img src="/img/help.png" style="margin-left:3px;"/>
@@ -808,6 +777,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="gb_window_part_content">
     <xsl:call-template name="quick-task-wizard"/>
   </div>
+ </div>
 </xsl:template>
 
 
@@ -1274,13 +1244,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template match="wizard/modify_task">
   <xsl:apply-templates select="gsad_msg"/>
-
+ <div class="gb_window">
   <div class="gb_window_part_left"></div>
   <div class="gb_window_part_right"></div>
   <div class="gb_window_part_center">
-    <xsl:call-template name="wizard_list">
-      <xsl:with-param name="title" select="'Modify Task Wizard'"/>
-    </xsl:call-template>
+    <xsl:value-of select="gsa:i18n('Modify Task Wizard')"/>
 
     <a href="/help/tasks.html?token={/envelope/token}#wizard" title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('Task Wizard', 'Task Wizard'))}">
       <img src="/img/help.png" style="margin-left:3px;"/>
@@ -1297,6 +1265,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="gb_window_part_content">
     <xsl:call-template name="modify-task-wizard"/>
   </div>
+ </div>
 </xsl:template>
 
 <xsl:template name="wizard_list">

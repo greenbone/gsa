@@ -6,6 +6,13 @@
 
 2015-12-03  Benoît Allard  <benoit.allard@greenbone.net>
 
+	Make the Wizard a js dialog.
+
+	* src/html/classic/css/gsa-style.css, src/html/classic/js/greenbone.js,
+	  src/html/classic/omp.xsl, src/html/classic/wizard.xsl: Updated
+
+2015-12-03  Benoît Allard  <benoit.allard@greenbone.net>
+
 	* src/html/classic/gsad.xsl: Fix image name.
 
 2015-12-03  Benoît Allard  <benoit.allard@greenbone.net>
