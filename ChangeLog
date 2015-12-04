@@ -1,3 +1,9 @@
+2015-12-04  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	Backport r23940.
+
+	* src/gsad.c (redirect_handler): Handle IPv4-mapped IPv6 addresses too.
+
 2015-12-01  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Backport r23901.
