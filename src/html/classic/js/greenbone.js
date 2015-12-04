@@ -104,7 +104,7 @@
     }
   };
 
-  OMPDialog.prototype.waiting = function(){
+  var waiting = function(){
     // I believe there have to be a better way to find this.
     var buttons = this.dialog.closest('.ui-dialog').find('button.ui-button');
     buttons.each (function () {
@@ -119,6 +119,8 @@
         }
     });
   }
+
+  OMPDialog.prototype.waiting = waiting;
 
   OMPDialog.prototype.done = function(){
     // I believe there have to be a better way to find this.
@@ -375,13 +377,16 @@
   window.OMPDialog = OMPDialog;
 
   var FilterDialog = function(id, title){
-    self.id = id;
-    self.title = title;
+    this.id = id;
+    this.title = title;
   };
 
+  FilterDialog.prototype.waiting = waiting;
+
   FilterDialog.prototype.show = function(){
-    var content = $('#' + self.id).closest('form').clone();
-    content.find('#' + self.id).show();
+    var self = this,
+        content = $('#' + this.id).closest('form').clone();
+    content.find('#' + this.id).show();
     content.find('a, div.footnote, input[type=image], input[type=submit]').remove();
 
     // Update the form parameter
@@ -390,21 +395,22 @@
       input.val(input.val() ^ 1);
     }
 
-    self.dialog = $("<div/>", {
+    this.dialog = $("<div/>", {
         'class': "dialog-form",
-        title:  self.title,
+        title:  this.title,
         html: content,
       });
     stopAutoRefresh();
 
     // show the dialog !
-    self.dialog.dialog({
+    this.dialog.dialog({
       modal: true,
       width: 800,
       buttons:[
         {
           text: 'Update',
           click: function(){
+            self.waiting();
             self.dialog.find('form').submit();
           },
         }
