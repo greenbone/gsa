@@ -3654,8 +3654,9 @@ redirect_handler (void *cls, struct MHD_Connection *connection,
                                       "Host");
   if (host == NULL)
     return MHD_NO;
-  /* [IPv6]:port */
-  if (sscanf (host, "[%" G_STRINGIFY(MAX_HOST_LEN) "[0-9a-f:]]:%*i", name) == 1)
+  /* [IPv6 or IPv4-mapped IPv6]:port */
+  if (sscanf (host, "[%" G_STRINGIFY(MAX_HOST_LEN) "[0-9a-f:.]]:%*i", name)
+      == 1)
     {
       char *name6 = g_strdup_printf ("[%s]", name);
       location = g_strdup_printf (redirect_location, name6);
