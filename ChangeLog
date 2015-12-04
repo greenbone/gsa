@@ -1,5 +1,9 @@
 2015-12-04  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/gsad_omp.c (toggle_tag_omp): Remove unused next_url.
+
+2015-12-04  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Use redirect or short responses for most creation, modification and
 	deletion commands and make param checks more consistent.
 

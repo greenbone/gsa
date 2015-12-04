@@ -10491,7 +10491,7 @@ toggle_tag_omp (credentials_t * credentials, params_t *params,
 {
   gnutls_session_t session;
   int socket;
-  gchar *html, *next_url, *response;
+  gchar *html, *response;
   const char *no_redirect, *tag_id, *enable;
   entity_t entity;
 
@@ -10579,11 +10579,6 @@ toggle_tag_omp (credentials_t * credentials, params_t *params,
 
   if (! omp_success (entity))
     set_http_status_from_entity (entity, response_data);
-  next_url = next_page_url (credentials, params, NULL, "get_tags",
-                            "Toggle Tag",
-                            entity_attribute (entity, "status"),
-                            entity_attribute (entity, "status_text"));
-
   html = response_from_entity (credentials, params, entity,
                                (no_redirect && strcmp (no_redirect, "0")),
                                NULL, "get_tags",
