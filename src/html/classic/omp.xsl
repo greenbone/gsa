@@ -34386,67 +34386,70 @@ var toggleFilter = function(){
 </xsl:template>
 
 <xsl:template match="group" mode="radiusauth">
-  <div class="gb_window">
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">
+  <div class="section-header">
+    <a href="#"
+       class="toggle-action-icon" data-target="#radius-box" data-name="RADIUS Authentication" data-variable="ldap-box--collapsed">
+      <img src="/img/fold.png"/>
+    </a>
+    <a href="/help/users.html?token={/envelope/token}#radiusauthentication"
+       class="icon"
+       title="{concat(gsa:i18n('Help', 'Help'),': ')}({gsa:i18n ('RADIUS Authentication', 'Group')})">
+      <img src="/img/help.png"/>
+    </a>
+    <h3>
       <xsl:value-of select="gsa:i18n ('RADIUS Authentication', 'Group')"/>
-      <a href="/help/users.html?token={/envelope/token}#radiusauthentication"
-         title="{concat(gsa:i18n('Help', 'Help'),': ')}({gsa:i18n ('RADIUS Authentication', 'Group')})">
-      <img src="/img/help.png"/></a>
-    </div>
-    <div class="gb_window_part_content_no_pad">
-      <div>
-        <form action="/omp" method="post" enctype="multipart/form-data">
-          <input type="hidden" name="token" value="{/envelope/token}"/>
-          <input type="hidden" name="cmd" value="save_auth"/>
-          <input type="hidden" name="caller" value="{/envelope/current_page}"/>
-          <input type="hidden" name="next" value="get_users"/>
-          <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-          <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
-          <!-- group name is e.g. of method:radius_connect -->
-          <input type="hidden" name="group" value="{@name}"/>
-          <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
-            <tr class="gbntablehead2">
-              <td><xsl:value-of select="gsa:i18n ('Setting', 'Group')"/></td>
-              <td><xsl:value-of select="gsa:i18n ('Value', 'Property')"/></td>
-            </tr>
-              <tr class="odd">
-                <td><xsl:value-of select="gsa:i18n ('Enable', 'Group')"/></td>
-                <td>
-                  <xsl:choose>
-                    <xsl:when test="auth_conf_setting[@key='enable']/@value = 'true'">
-                      <input type="checkbox" name="enable" value="1" checked="1"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <input type="checkbox" name="enable" value="1"/>
-                    </xsl:otherwise>
-                 </xsl:choose>
-                 </td>
-              </tr>
-              <tr class="even">
-                <td>
-                <xsl:choose>
-                  <xsl:when test="@name='method:radius_connect'">RADIUS </xsl:when>
-                </xsl:choose>
-                <xsl:value-of select="gsa:i18n ('Host', 'Host')"/></td>
-                <td><input type="text" name="radiushost" size="30"
-                     value="{auth_conf_setting[@key='radiushost']/@value}"/></td>
-              </tr>
-              <tr class="odd">
-                <td><xsl:value-of select="gsa:i18n ('Secret Key', 'Group')"/></td>
-                <td><input type="password" name="radiuskey" size="30"
-                     value="{auth_conf_setting[@key='radiuskey']/@value}"/></td>
-              </tr>
-            <tr>
-              <td colspan="2" style="text-align:right;">
-                <input type="submit" name="submit" value="{gsa:i18n ('Save', 'Group')}"/>
-              </td>
-            </tr>
-          </table>
-        </form>
-      </div>
-    </div>
+    </h3>
+  </div>
+     
+  <div class="section-box" id="radius-box">
+    <form action="/omp" method="post" enctype="multipart/form-data">
+      <input type="hidden" name="token" value="{/envelope/token}"/>
+      <input type="hidden" name="cmd" value="save_auth"/>
+      <input type="hidden" name="caller" value="{/envelope/current_page}"/>
+      <input type="hidden" name="next" value="get_users"/>
+      <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
+      <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
+      <!-- group name is e.g. of method:radius_connect -->
+      <input type="hidden" name="group" value="{@name}"/>
+      <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
+        <tr class="gbntablehead2">
+          <td><xsl:value-of select="gsa:i18n ('Setting', 'Group')"/></td>
+          <td><xsl:value-of select="gsa:i18n ('Value', 'Property')"/></td>
+        </tr>
+          <tr class="odd">
+            <td><xsl:value-of select="gsa:i18n ('Enable', 'Group')"/></td>
+            <td>
+              <xsl:choose>
+                <xsl:when test="auth_conf_setting[@key='enable']/@value = 'true'">
+                  <input type="checkbox" name="enable" value="1" checked="1"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <input type="checkbox" name="enable" value="1"/>
+                </xsl:otherwise>
+             </xsl:choose>
+             </td>
+          </tr>
+          <tr class="even">
+            <td>
+            <xsl:choose>
+              <xsl:when test="@name='method:radius_connect'">RADIUS </xsl:when>
+            </xsl:choose>
+            <xsl:value-of select="gsa:i18n ('Host', 'Host')"/></td>
+            <td><input type="text" name="radiushost" size="30"
+                 value="{auth_conf_setting[@key='radiushost']/@value}"/></td>
+          </tr>
+          <tr class="odd">
+            <td><xsl:value-of select="gsa:i18n ('Secret Key', 'Group')"/></td>
+            <td><input type="password" name="radiuskey" size="30"
+                 value="{auth_conf_setting[@key='radiuskey']/@value}"/></td>
+          </tr>
+        <tr>
+          <td colspan="2" style="text-align:right;">
+            <input type="submit" name="submit" value="{gsa:i18n ('Save', 'Group')}"/>
+          </td>
+        </tr>
+      </table>
+    </form>
   </div>
 </xsl:template>
 

@@ -1,3 +1,8 @@
+2015-12-04  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/classic/omp.xsl (match="group" mode="radiusauth"): Apply
+	the new style.
+
 2015-12-04  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/omp.xsl (get_my_settings, edit_my_settings): Remove
