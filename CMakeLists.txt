@@ -469,6 +469,7 @@ install (FILES src/html/classic/img/agent.png
                src/html/classic/img/st_nonavailable.png
                src/html/classic/img/st_mitigate.png
                src/html/classic/img/p_bar_gray.png
+               src/html/classic/img/login-label.png
                src/html/classic/img/loading.gif
                src/html/classic/img/cvss_calculator.svg
                src/html/classic/img/mysettings.svg

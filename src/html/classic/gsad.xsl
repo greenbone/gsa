@@ -2350,7 +2350,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
   <div class="login_box">
     <div class="logo">
-      <img height="130" width="94"/>
+      <img height="130" width="94" src="/img/login-label.png"/>
     </div>
     <div class="login">
       <div class="error_message">
