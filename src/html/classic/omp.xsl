@@ -34311,21 +34311,24 @@ var toggleFilter = function(){
 <!-- AUTHENTICATION DESCRIPTION -->
 
 <xsl:template match="group" mode="ldapauth">
-  <div class="gb_window">
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">
-      <xsl:choose>
-        <xsl:when test="@name='method:ldap_connect'">
+  <xsl:choose>
+    <xsl:when test="@name='method:ldap_connect'">
+      <div class="section-header">
+        <a href="#"
+           class="toggle-action-icon" data-target="#ldap-box" data-name="LDAP per-User Authentication" data-variable="ldap-box--collapsed">
+          <img src="/img/fold.png"/>
+        </a>
+        <a href="/help/users.html?token={/envelope/token}#peruserldapauthentication"
+           class="icon"
+           title="{concat(gsa:i18n('Help', 'Help'),': ')}({gsa:i18n ('LDAP per-User Authentication', 'Group')})">
+          <img src="/img/help.png"/>
+        </a>
+        <h3>
           <xsl:value-of select="gsa:i18n ('LDAP per-User Authentication', 'Group')"/>
-          <a href="/help/users.html?token={/envelope/token}#peruserldapauthentication"
-             title="{concat(gsa:i18n('Help', 'Help'),': ')}({gsa:i18n ('LDAP per-User Authentication', 'Group')})">
-          <img src="/img/help.png"/></a>
-        </xsl:when>
-      </xsl:choose>
-    </div>
-    <div class="gb_window_part_content_no_pad">
-      <div>
+        </h3>
+      </div>
+     
+      <div class="section-box" id="ldap-box">
         <form action="/omp" method="post" enctype="multipart/form-data">
           <input type="hidden" name="token" value="{/envelope/token}"/>
           <input type="hidden" name="cmd" value="save_auth"/>
@@ -34377,8 +34380,8 @@ var toggleFilter = function(){
           </table>
         </form>
       </div>
-    </div>
-  </div>
+    </xsl:when>
+  </xsl:choose>
 </xsl:template>
 
 <xsl:template match="group" mode="radiusauth">
