@@ -1,3 +1,10 @@
+2015-12-04  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/omp.xsl (get_my_settings, edit_my_settings): Remove
+	setting "Wizard rows".
+
+	* src/gsad_omp.c (save_my_settings_omp): Remove setting "Wizard rows".
+
 2015-12-04  Benoît Allard  <benoit.allard@greenbone.net>
 
 	* src/html/classic/js/greenbone.js: Write 'Updating...' when reloading

@@ -20179,52 +20179,6 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_my_settings", response_data);
     }
 
-  /* Send Wizard Rows */
-  max = params_value (params, "max_results");
-  max_64 = (max
-             ? g_base64_encode ((guchar*) max, strlen (max))
-             : g_strdup (""));
-
-  if (openvas_server_sendf (&session,
-                            "<modify_setting"
-                            " setting_id"
-                            "=\"20f3034c-e709-11e1-87e7-406186ea4fc5\">"
-                            "<value>%s</value>"
-                            "</modify_setting>",
-                            max_64 ? max_64 : "")
-      == -1)
-    {
-      g_free (max_64);
-      openvas_server_close (socket, session);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while saving settings. "
-                           "It is unclear whether all the settings were saved. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_my_settings", response_data);
-    }
-  g_free (max_64);
-
-  entity = NULL;
-  if (read_entity_and_string (&session, &entity, &xml))
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while saving settings. "
-                           "It is unclear whether all the settings were saved. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_my_settings", response_data);
-    }
-  if (! omp_success (entity))
-    {
-      set_http_status_from_entity (entity, response_data);
-      modify_failed = 1;
-    }
-
   /* Send Severity Class. */
   text = params_value (params, "severity_class");
   text_64 = (text

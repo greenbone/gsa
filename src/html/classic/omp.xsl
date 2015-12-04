@@ -35024,22 +35024,18 @@ var toggleFilter = function(){
           <td><xsl:value-of select="get_settings_response/setting[name='Rows Per Page']/value"/></td>
         </tr>
         <tr class="odd">
-          <td><xsl:value-of select="gsa:i18n ('Wizard Rows', 'My Settings')"/></td>
-          <td><xsl:value-of select="get_settings_response/setting[name='Wizard Rows']/value"/></td>
-        </tr>
-        <tr class="even">
           <td><xsl:value-of select="gsa:i18n ('Details Export File Name', 'My Settings')"/></td>
           <td><xsl:value-of select="get_settings_response/setting[name='Details Export File Name']/value"/></td>
         </tr>
-        <tr class="odd">
+        <tr class="even">
           <td><xsl:value-of select="gsa:i18n ('List Export File Name', 'My Settings')"/></td>
           <td><xsl:value-of select="get_settings_response/setting[name='List Export File Name']/value"/></td>
         </tr>
-        <tr class="even">
+        <tr class="odd">
           <td><xsl:value-of select="gsa:i18n ('Report Export File Name', 'My Settings')"/></td>
           <td><xsl:value-of select="get_settings_response/setting[name='Report Export File Name']/value"/></td>
         </tr>
-        <tr class="odd">
+        <tr class="even">
           <td><xsl:value-of select="gsa:i18n ('Severity Class', 'My Settings')"/></td>
           <td>
             <xsl:call-template name="severity-settings-name">
@@ -35048,7 +35044,7 @@ var toggleFilter = function(){
             </xsl:call-template>
           </td>
         </tr>
-        <tr class="even">
+        <tr class="odd">
           <td><xsl:value-of select="gsa:i18n ('Dynamic Severity', 'My Settings')"/></td>
           <td>
             <xsl:variable name="dynamic_severity"                              select="get_settings_response/setting[name='Dynamic Severity']/value"/>
@@ -35061,13 +35057,13 @@ var toggleFilter = function(){
             </xsl:choose>
           </td>
         </tr>
-        <tr class="odd">
+        <tr class="even">
           <td><xsl:value-of select="gsa:i18n ('Default Severity', 'My Settings')"/></td>
           <td><xsl:value-of select="get_settings_response/setting[name='Default Severity']/value"/></td>
         </tr>
 
         <xsl:if test="gsa:may-op ('get_alerts')">
-          <tr class="even">
+          <tr class="odd">
             <td><xsl:value-of select="gsa:i18n ('Default Alert', 'Alert')"/></td>
             <td>
               <xsl:call-template name="get-settings-resource">
@@ -35081,7 +35077,7 @@ var toggleFilter = function(){
         </xsl:if>
 
         <xsl:if test="gsa:may-op ('get_configs')">
-          <tr class="odd">
+          <tr class="even">
             <td><xsl:value-of select="gsa:i18n ('Default OpenVAS Scan Config', 'Scan Config')"/></td>
             <td>
               <xsl:call-template name="get-settings-resource">
@@ -35093,7 +35089,7 @@ var toggleFilter = function(){
             </td>
           </tr>
 
-          <tr class="even">
+          <tr class="odd">
             <td><xsl:value-of select="gsa:i18n ('Default OSP Scan Config', 'Scan Config')"/></td>
             <td>
               <xsl:call-template name="get-settings-resource">
@@ -35107,7 +35103,7 @@ var toggleFilter = function(){
         </xsl:if>
 
         <xsl:if test="gsa:may-op ('get_credentials')">
-          <tr class="odd">
+          <tr class="even">
             <td><xsl:value-of select="gsa:i18n ('Default SSH Credential', 'Credential')"/></td>
             <td>
               <xsl:call-template name="get-settings-resource">
@@ -35119,7 +35115,7 @@ var toggleFilter = function(){
             </td>
           </tr>
 
-          <tr class="even">
+          <tr class="odd">
             <td><xsl:value-of select="gsa:i18n ('Default SMB Credential', 'Credential')"/></td>
             <td>
               <xsl:call-template name="get-settings-resource">
@@ -35131,7 +35127,7 @@ var toggleFilter = function(){
             </td>
           </tr>
 
-          <tr class="odd">
+          <tr class="even">
             <td><xsl:value-of select="gsa:i18n ('Default ESXi Credential', 'Credential')"/></td>
             <td>
               <xsl:call-template name="get-settings-resource">
@@ -35143,7 +35139,7 @@ var toggleFilter = function(){
             </td>
           </tr>
 
-          <tr class="even">
+          <tr class="odd">
             <td><xsl:value-of select="gsa:i18n ('Default SNMP Credential', 'Credential')"/></td>
             <td>
               <xsl:call-template name="get-settings-resource">
@@ -35157,7 +35153,7 @@ var toggleFilter = function(){
         </xsl:if>
 
         <xsl:if test="gsa:may-op ('get_port_lists')">
-          <tr class="odd">
+          <tr class="even">
             <td><xsl:value-of select="gsa:i18n ('Default Port List', 'Port List')"/></td>
             <td>
               <xsl:call-template name="get-settings-resource">
@@ -35171,7 +35167,7 @@ var toggleFilter = function(){
         </xsl:if>
 
         <xsl:if test="gsa:may-op ('get_scanners')">
-          <tr class="even">
+          <tr class="odd">
             <td><xsl:value-of select="gsa:i18n ('Default OpenVAS Scanner', 'Scanner')"/></td>
             <td>
               <xsl:call-template name="get-settings-resource">
@@ -35183,7 +35179,7 @@ var toggleFilter = function(){
             </td>
           </tr>
 
-          <tr class="odd">
+          <tr class="even">
             <td><xsl:value-of select="gsa:i18n ('Default OSP Scanner', 'Scanner')"/></td>
             <td>
               <xsl:call-template name="get-settings-resource">
@@ -35197,7 +35193,7 @@ var toggleFilter = function(){
         </xsl:if>
 
         <xsl:if test="gsa:may-op ('get_schedules')">
-          <tr class="even">
+          <tr class="odd">
             <td><xsl:value-of select="gsa:i18n ('Default Schedule', 'Schedule')"/></td>
             <td>
               <xsl:call-template name="get-settings-resource">
@@ -35211,7 +35207,7 @@ var toggleFilter = function(){
         </xsl:if>
 
         <xsl:if test="gsa:may-op ('get_slaves')">
-          <tr class="odd">
+          <tr class="even">
             <td><xsl:value-of select="gsa:i18n ('Default Slave', 'Slave')"/></td>
             <td>
               <xsl:call-template name="get-settings-resource">
@@ -35225,7 +35221,7 @@ var toggleFilter = function(){
         </xsl:if>
 
         <xsl:if test="gsa:may-op ('get_targets')">
-          <tr class="even">
+          <tr class="odd">
             <td><xsl:value-of select="gsa:i18n ('Default Target', 'Target')"/></td>
             <td>
               <xsl:call-template name="get-settings-resource">
@@ -35239,7 +35235,7 @@ var toggleFilter = function(){
         </xsl:if>
 
         <xsl:if test="gsa:may-op ('get_filters')">
-          <tr class="odd">
+          <tr class="even">
             <td><xsl:value-of select="gsa:i18n ('Agents Filter', 'Agent')"/></td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -35248,7 +35244,7 @@ var toggleFilter = function(){
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="even">
+          <tr class="odd">
             <td><xsl:value-of select="gsa:i18n ('Alerts Filter', 'Alert')"/></td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -35257,7 +35253,7 @@ var toggleFilter = function(){
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="odd">
+          <tr class="even">
             <td><xsl:value-of select="gsa:i18n ('Configs Filter', 'Scan Config')"/></td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -35266,7 +35262,7 @@ var toggleFilter = function(){
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="even">
+          <tr class="odd">
             <td><xsl:value-of select="gsa:i18n ('Credentials Filter', 'Credential')"/></td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -35275,7 +35271,7 @@ var toggleFilter = function(){
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="odd">
+          <tr class="even">
             <td><xsl:value-of select="gsa:i18n ('Filters Filter', 'Filter')"/></td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -35284,7 +35280,7 @@ var toggleFilter = function(){
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="even">
+          <tr class="odd">
             <td><xsl:value-of select="gsa:i18n ('Notes Filter', 'Note')"/></td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -35293,7 +35289,7 @@ var toggleFilter = function(){
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="odd">
+          <tr class="even">
             <td><xsl:value-of select="gsa:i18n ('Overrides Filter', 'Override')"/></td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -35302,7 +35298,7 @@ var toggleFilter = function(){
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="even">
+          <tr class="odd">
             <td><xsl:value-of select="gsa:i18n ('Permissions Filter', 'Permission')"/></td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -35311,7 +35307,7 @@ var toggleFilter = function(){
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="odd">
+          <tr class="even">
             <td><xsl:value-of select="gsa:i18n ('Port Lists Filter', 'Port List')"/></td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -35320,7 +35316,7 @@ var toggleFilter = function(){
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="even">
+          <tr class="odd">
             <td><xsl:value-of select="gsa:i18n ('Reports Filter', 'Report')"/></td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -35329,7 +35325,7 @@ var toggleFilter = function(){
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="odd">
+          <tr class="even">
             <td><xsl:value-of select="gsa:i18n ('Report Formats Filter', 'Report Format')"/></td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -35338,7 +35334,7 @@ var toggleFilter = function(){
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="even">
+          <tr class="odd">
             <td><xsl:value-of select="gsa:i18n ('Results Filter', 'Result')"/></td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -35347,7 +35343,7 @@ var toggleFilter = function(){
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="odd">
+          <tr class="even">
             <td><xsl:value-of select="gsa:i18n ('Roles Filter', 'Role')"/></td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -35356,7 +35352,7 @@ var toggleFilter = function(){
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="even">
+          <tr class="odd">
             <td><xsl:value-of select="gsa:i18n ('Schedules Filter', 'Schedule')"/></td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -35365,7 +35361,7 @@ var toggleFilter = function(){
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="odd">
+          <tr class="even">
             <td><xsl:value-of select="gsa:i18n ('Slaves Filter', 'Slave')"/></td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -35374,7 +35370,7 @@ var toggleFilter = function(){
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="even">
+          <tr class="odd">
             <td><xsl:value-of select="gsa:i18n ('Tags Filter', 'Tag')"/></td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -35383,7 +35379,7 @@ var toggleFilter = function(){
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="odd">
+          <tr class="even">
             <td><xsl:value-of select="gsa:i18n ('Targets Filter', 'Target')"/></td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -35392,7 +35388,7 @@ var toggleFilter = function(){
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="even">
+          <tr class="odd">
             <td><xsl:value-of select="gsa:i18n ('Tasks Filter', 'Task')"/></td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -35401,7 +35397,7 @@ var toggleFilter = function(){
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="odd">
+          <tr class="even">
             <td><xsl:value-of select="gsa:i18n ('CPE Filter', 'CPE')"/></td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -35410,7 +35406,7 @@ var toggleFilter = function(){
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="even">
+          <tr class="odd">
             <td><xsl:value-of select="gsa:i18n ('CVE Filter', 'CVE')"/></td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -35419,7 +35415,7 @@ var toggleFilter = function(){
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="odd">
+          <tr class="even">
             <td><xsl:value-of select="gsa:i18n ('NVT Filter', 'NVT')"/></td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -35428,7 +35424,7 @@ var toggleFilter = function(){
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="even">
+          <tr class="odd">
             <td><xsl:value-of select="gsa:i18n ('OVAL Filter', 'OVAL Definition')"/></td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -35437,7 +35433,7 @@ var toggleFilter = function(){
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="odd">
+          <tr class="even">
             <td><xsl:value-of select="gsa:i18n ('CERT-Bund Filter', 'CERT-Bund Advisory')"/></td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -35446,7 +35442,7 @@ var toggleFilter = function(){
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="even">
+          <tr class="odd">
             <td><xsl:value-of select="gsa:i18n ('DFN-CERT Filter', 'DFN-CERT Advisory')"/></td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -35455,7 +35451,7 @@ var toggleFilter = function(){
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="odd">
+          <tr class="even">
             <td><xsl:value-of select="gsa:i18n ('All SecInfo Filter', 'SecInfo')"/></td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -35617,13 +35613,6 @@ var toggleFilter = function(){
               <td>
                 <input type="text" name="max" size="40" maxlength="800"
                        value="{gsa:param-or ('max', get_settings_response/setting[name='Rows Per Page']/value)}"/>
-              </td>
-            </tr>
-            <tr>
-              <td><xsl:value-of select="gsa:i18n ('Wizard Rows', 'My Settings')"/></td>
-              <td>
-                <input type="text" name="max_results" size="40" maxlength="800"
-                       value="{gsa:param-or ('max_results', get_settings_response/setting[name='Wizard Rows']/value)}"/>
               </td>
             </tr>
             <tr>
