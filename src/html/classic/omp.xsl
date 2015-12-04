@@ -11465,7 +11465,7 @@ should not have received it.
               <td>
                 <select name="lsc_smb_credential_id">
                   <option value="--">--</option>
-                  <xsl:apply-templates select="$lsc-credentials/lsc_credential [type = 'pass']" mode="select">
+                  <xsl:apply-templates select="$lsc-credentials" mode="select">
                     <xsl:with-param name="select_id" select="lsc_smb_credential_id"/>
                   </xsl:apply-templates>
                 </select>
@@ -11476,7 +11476,7 @@ should not have received it.
               <td>
                 <select name="lsc_esxi_credential_id">
                   <option value="--">--</option>
-                  <xsl:apply-templates select="$lsc-credentials/lsc_credential [type = 'pass']" mode="select">
+                  <xsl:apply-templates select="$lsc-credentials" mode="select">
                     <xsl:with-param name="select_id" select="lsc_esxi_credential_id"/>
                   </xsl:apply-templates>
                 </select>
@@ -11782,7 +11782,7 @@ should not have received it.
                           <option value="0" selected="1">--</option>
                         </xsl:otherwise>
                       </xsl:choose>
-                      <xsl:for-each select="get_lsc_credentials_response/lsc_credential [type = 'pass']">
+                      <xsl:for-each select="get_lsc_credentials_response/lsc_credential">
                         <xsl:choose>
                           <xsl:when test="@id = $lsc_credential_id">
                             <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
@@ -11810,7 +11810,7 @@ should not have received it.
                           <option value="0" selected="1">--</option>
                         </xsl:otherwise>
                       </xsl:choose>
-                      <xsl:for-each select="get_lsc_credentials_response/lsc_credential [type = 'pass']">
+                      <xsl:for-each select="get_lsc_credentials_response/lsc_credential">
                         <xsl:choose>
                           <xsl:when test="@id = $lsc_credential_id">
                             <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
