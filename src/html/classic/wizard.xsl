@@ -89,6 +89,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div id="wizardess"><img src="img/enchantress.png"/></div>
   <div class="clearfix">
     <b><xsl:value-of select="gsa:i18n('Quick start: Immediately scan an IP address', 'Task Wizard')"/> </b>
+    <br />
     <div>
       <xsl:value-of select="gsa:i18n('IP address or hostname:', 'Task Wizard')"/>
       <form action="" method="post" enctype="multipart/form-data">
@@ -113,11 +114,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="submit" name="submit" value="{gsa:i18n ('Start Scan', 'Task Wizard')}"/>
       </form>
     </div>
+    <xsl:value-of select="gsa:i18n('The default address is either your computer or your network gateway.', 'Task Wizard')"/>
+    <br />
     <div>
-      <xsl:value-of select="gsa:i18n('For this short-cut I will do the following for you:', 'Task Wizard')"/>
+      <xsl:value-of select="gsa:i18n('As a short-cut I will do the following for you:', 'Task Wizard')"/>
       <ol>
-        <li><xsl:value-of select="gsa:i18n('Create a new Target with default Port List', 'Task Wizard')"/></li>
-        <li><xsl:value-of select="gsa:i18n('Create a new Task using this target with default Scan Configuration', 'Task Wizard')"/></li>
+        <li><xsl:value-of select="gsa:i18n('Create a new Target', 'Task Wizard')"/></li>
+        <li><xsl:value-of select="gsa:i18n('Create a new Task', 'Task Wizard')"/></li>
         <li><xsl:value-of select="gsa:i18n('Start this scan task right away', 'Task Wizard')"/></li>
         <li><xsl:value-of select="gsa:i18n('Switch the view to reload every 30 seconds so you can lean back and watch the scan progress', 'Task Wizard')"/></li>
       </ol>
@@ -126,7 +129,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:value-of select="gsa:i18n('In fact, you must not lean back. As soon as the scan progress is beyond 1%, you can already jump into the scan report via the link in the Reports Total column and review the results collected so far.', 'Task Wizard')"/>
     </p>
     <p>
-      <xsl:value-of select="gsa:i18n('When creating the Target and Task I will use the default Port List, Alert, OpenVAS Scan Config, Credentials, OpenVAS Scanner and Slave configured in &quot;My Settings&quot;.', 'Task Wizard')"/>
+      <xsl:value-of select="gsa:i18n('When creating the Target and Task I will use the defaults as configured in &quot;My Settings&quot;.', 'Task Wizard')"/>
     </p>
     <p>
       <xsl:value-of select="gsa:i18n('By clicking the New Task icon', 'Task Wizard')"/>
@@ -136,7 +139,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <img src="/img/new.png" border="0"/>
       </a>
       <xsl:text> </xsl:text>
-      <xsl:value-of select="gsa:i18n('you can also create a new Task yourself. However, you will need a Target first, which you can create by going to the Targets page found in the Configuration menu using the New icon there.', 'Task Wizard')"/>
+      <xsl:value-of select="gsa:i18n('you can create a new Task yourself.', 'Task Wizard')"/>
     </p>
   </div>
 </xsl:template>
@@ -199,7 +202,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:value-of select="gsa:i18n ('Finally, you can select a slave which will run the scan.', 'Advanced Task Wizard')"/>
           </xsl:if></p>
           <p>
-            <xsl:value-of select="gsa:i18n('When creating the Target and Task I will use the default Port List and OpenVAS Scanner configured in &quot;My Settings&quot;.', 'Advanced Task Wizard')"/>
+            <xsl:value-of select="gsa:i18n('For any other setting I will apply the defaults from &quot;My Settings&quot;.', 'Advanced Task Wizard')"/>
           </p>
         </td>
         <td valign="center" rowspan="15">

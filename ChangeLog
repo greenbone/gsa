@@ -1,5 +1,12 @@
 2015-12-04  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
+	* src/html/classic/wizard.xsl (name="quick-first-scan-wizard"):
+	Simplified the text a bit. With the new dialog in dialog
+	concept we don't need the hint about the sequence anymore.
+	(name="quick-task-wizard"): Slightly simplified.
+
+2015-12-04  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
 	* src/html/classic/omp.xsl (match="group" mode="ldapauth"): Apply
 	the new style.
 
