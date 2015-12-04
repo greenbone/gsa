@@ -1,3 +1,36 @@
+2015-12-04  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Use redirect or short responses for most creation, modification and
+	deletion commands and make param checks more consistent.
+
+	* src/gsad_omp.c (MESSAGE_REDIRECT): New function macro. Message
+	and redirect generation from CHECK_PARAM_REDIRECT.
+	(CHECK_PARAM_REDIRECT): Use MESSAGE_REDIRECT.
+	(next_page_url): Use command in "next_error" if the action_status
+	indicates an error.
+	(response_from_entity): New function.
+	(next_page_error): Remove as it's now unused.
+	(delete_resource, resource_action, create_report_omp, CHECK)
+	(create_container_task_omp, create_task_omp, save_task_omp)
+	(save_container_task_omp, move_task_omp, create_credential_omp)
+	(save_credential_omp, create_agent_omp, save_agent_omp)
+	(create_alert_omp, save_alert_omp, test_alert_omp, create_target_omp)
+	(clone_omp, restore_omp, empty_trashcan_omp, create_tag_omp)
+	(save_tag_omp, toggle_tag_omp, save_target_omp, create_config_omp)
+	(import_config_omp, save_config_omp, create_note_omp, save_note_omp)
+	(create_override_omp, save_override_omp, create_slave_omp)
+	(save_slave_omp, create_scanner_omp, save_scanner_omp)
+	(create_schedule_omp, import_report_format_omp, save_report_format_omp):
+	(run_wizard_omp, create_group_omp, save_group_omp)
+	(create_permission_omp, CHECK_OMPF_RET, new_permissions)
+	(create_permissions_omp, save_permission_omp, create_port_list_omp)
+	(create_port_range_omp, save_port_list_omp, import_port_list_omp)
+	(create_role_omp, save_role_omp, create_filter_omp, save_filter_omp)
+	(save_schedule_omp, create_user_omp, save_user_omp, save_auth_omp)
+	(bulk_delete_omp, create_host_omp, create_asset_omp, save_asset_omp):
+	Use new macros for param checking and response_from_entity for
+	generating the main responses.
+
 2015-12-04  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad.c (redirect_handler): Handle IPv4-mapped IPv6 addresses too.

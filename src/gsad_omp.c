@@ -1050,18 +1050,18 @@ setting_get_value (gnutls_session_t *session, const char *setting_id,
 /**
  * @brief Check a param using the redirect or direct response method.
  *
- * @param[in]  name     Param name.
+ * @param[in]  message  Message.
+ * @param[in]  status   Status code.
  * @param[in]  op_name  Operation name.
  * @param[in]  ret_func Function to return message.
  */
-#define CHECK_PARAM_REDIRECT(name, op_name, next_cmd)                          \
-  if (name == NULL)                                                            \
+#define MESSAGE_REDIRECT(message, status, op_name, next_cmd)                   \
+  do                                                                           \
     {                                                                          \
       gchar *ret;                                                              \
       gchar *next_url                                                          \
         = next_page_url (credentials, params, next_cmd, NULL, op_name,         \
-                         G_STRINGIFY (MHD_HTTP_BAD_REQUEST),                   \
-                         "Given " G_STRINGIFY (name) " was invalid");          \
+                         status, message);                                     \
       if (no_redirect && strcmp (no_redirect, "0"))                            \
         {                                                                      \
           ret = action_result_page (credentials, response_data, op_name,       \
@@ -1077,6 +1077,22 @@ setting_get_value (gnutls_session_t *session, const char *setting_id,
         }                                                                      \
       response_data->http_status_code = MHD_HTTP_BAD_REQUEST;                  \
       return ret;                                                              \
+    }                                                                          \
+  while (0);
+
+/**
+ * @brief Check a param using the redirect or direct response method.
+ *
+ * @param[in]  name     Param name.
+ * @param[in]  op_name  Operation name.
+ * @param[in]  ret_func Function to return message.
+ */
+#define CHECK_PARAM_REDIRECT(name, op_name, next_cmd)                          \
+  if (name == NULL)                                                            \
+    {                                                                          \
+      MESSAGE_REDIRECT ("Given " G_STRINGIFY (name) " was invalid",            \
+                        G_STRINGIFY (MHD_HTTP_BAD_REQUEST),                    \
+                        op_name, next_cmd)                                     \
     }
 
 /**
@@ -1232,12 +1248,19 @@ next_page_url (credentials_t *credentials, params_t *params,
   params_iterator_t iter;
   gchar *param_name;
   param_t *current_param;
+  int error;
+  if (action_status && strcmp (action_status, "") && action_status[0] != '2')
+    error = 1;
+  else
+    error = 0;
 
   url = g_string_new ("/omp?cmd=");
 
   if (override_next)
     next_cmd = override_next;
-  else if (params_valid (params, "next"))
+  else if (error && params_valid (params, "next_error"))
+    next_cmd = params_value (params, "next_error");
+  else if (!error && params_valid (params, "next"))
     next_cmd = params_value (params, "next");
   else if (default_next)
     next_cmd = default_next;
@@ -1319,6 +1342,53 @@ action_result_page (credentials_t *credentials,
                                  message ? message : "",
                                  next_url ? next_url : "");
   return xsl_transform_omp (credentials, xml, response_data);
+}
+
+/**
+ * @brief Set redirect or return a basic action_result page based on entity.
+ */
+static gchar*
+response_from_entity (credentials_t* credentials, params_t *params,
+                      entity_t entity, int no_redirect,
+                      const char* override_next, const char *default_next,
+                      const char* override_fail_next,
+                      const char* default_fail_next,
+                      const char* action, cmd_response_data_t *response_data)
+{
+  gchar *res, *next_url;
+
+  if (omp_success (entity))
+    {
+      next_url = next_page_url (credentials, params,
+                                override_next, default_next,
+                                action,
+                                entity_attribute (entity, "status"),
+                                entity_attribute (entity, "status_text"));
+    }
+  else
+    {
+      set_http_status_from_entity (entity, response_data);
+      next_url = next_page_url (credentials, params,
+                                override_fail_next, default_fail_next,
+                                action,
+                                entity_attribute (entity, "status"),
+                                entity_attribute (entity, "status_text"));
+    }
+
+  if (no_redirect)
+    {
+      res = action_result_page (credentials, response_data, action,
+                                entity_attribute (entity, "status"),
+                                entity_attribute (entity, "status_text"),
+                                next_url);
+      g_free (next_url);
+    }
+  else
+    {
+      res = NULL;
+      response_data->redirect = next_url;
+    }
+  return res;
 }
 
 /**
@@ -1526,29 +1596,6 @@ next_page (credentials_t *credentials, params_t *params, gchar *response,
   const char *next;
 
   next = params_value (params, "next");
-  if (next == NULL)
-    return NULL;
-
-  return generate_page (credentials, params, response, next, response_data);
-}
-
-/**
- * @brief Generate next page.
- *
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- * @param[in]  response     Extra XML to insert inside page element for XSLT.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Result of XSL transformation.
- */
-static char *
-next_page_error (credentials_t *credentials, params_t *params, gchar *response,
-                 cmd_response_data_t* response_data)
-{
-  const char *next;
-
-  next = params_value (params, "next_error");
   if (next == NULL)
     return NULL;
 
@@ -2879,7 +2926,7 @@ delete_resource (const char *type, credentials_t * credentials,
   gchar *html, *response, *id_name, *resource_id, *extra_attribs;
   const char *no_redirect, *next_id;
   entity_t entity;
-  gchar *cap_type, *default_next, *prev_action, *next_url;
+  gchar *cap_type, *default_next, *prev_action;
 
   no_redirect = params_value (params, "no_redirect");
   id_name = g_strdup_printf ("%s_id", type);
@@ -2994,24 +3041,12 @@ delete_resource (const char *type, credentials_t * credentials,
   cap_type = capitalize (type);
   default_next = g_strdup_printf ("get_%ss", type);
   prev_action = g_strdup_printf ("Delete %s", cap_type);
-  next_url = next_page_url (credentials, params, get, default_next,
-                            prev_action,
-                            entity_attribute (entity, "status"),
-                            entity_attribute (entity, "status_text"));
 
-  if (no_redirect && strcmp (no_redirect, "0"))
-    {
-      html = action_result_page (credentials, response_data, prev_action,
-                                 entity_attribute (entity, "status"),
-                                 entity_attribute (entity, "status_text"),
-                                 next_url);
-      g_free (next_url);
-    }
-  else
-    {
-      response_data->redirect = next_url;
-      html = NULL;
-    }
+  html = response_from_entity (credentials, params, entity,
+                               (no_redirect && strcmp (no_redirect, "0")),
+                               NULL, default_next,
+                               NULL, default_next,
+                               prev_action, response_data);
 
   g_free (response);
   free_entity (entity);
@@ -3039,7 +3074,7 @@ resource_action (credentials_t *credentials, params_t *params, const char *type,
 {
   gchar *html, *response, *param_name;
   const char *no_redirect, *resource_id;
-  gchar *cap_action, *cap_type, *get_cmd, *prev_action, *next_url;
+  gchar *cap_action, *cap_type, *get_cmd, *prev_action;
 
   int ret;
   entity_t entity;
@@ -3115,24 +3150,11 @@ resource_action (credentials_t *credentials, params_t *params, const char *type,
   cap_type = capitalize (type);
   get_cmd = g_strdup_printf ("get_%ss", type);
   prev_action = g_strdup_printf ("%s %s", cap_action, cap_type);
-  next_url = next_page_url (credentials, params, NULL, get_cmd,
-                            prev_action,
-                            entity_attribute (entity, "status"),
-                            entity_attribute (entity, "status_text"));
-
-  if (no_redirect && strcmp (no_redirect, "0"))
-    {
-      html = action_result_page (credentials, response_data, prev_action,
-                                 entity_attribute (entity, "status"),
-                                 entity_attribute (entity, "status_text"),
-                                 next_url);
-      g_free (next_url);
-    }
-  else
-    {
-      response_data->redirect = next_url;
-      html = NULL;
-    }
+  html = response_from_entity (credentials, params, entity,
+                               (no_redirect && strcmp (no_redirect, "0")),
+                               NULL, get_cmd,
+                               NULL, get_cmd,
+                               prev_action, response_data);
 
   g_free (response);
   free_entity (entity);
@@ -3820,21 +3842,20 @@ create_report_omp (credentials_t * credentials, params_t *params,
   entity_t entity;
   int ret;
   gchar *command, *html, *response;
-  const char *task_id, *name, *comment, *xml_file;
+  const char *no_redirect, *cmd, *task_id, *name, *comment, *xml_file;
 
+  no_redirect = params_value (params, "no_redirect");
   task_id = params_value (params, "task_id");
   xml_file = params_value (params, "xml_file");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
 
-  if (((task_id == NULL) && (name == NULL))
-      || ((task_id == NULL) && (comment == NULL))
-      || (xml_file == NULL))
+  if (task_id == NULL)
     {
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
-      return new_task (credentials, "Invalid parameter", params, NULL,
-                      response_data);
+      CHECK_PARAM_REDIRECT (name, "Create Report", "new_container_task");
+      CHECK_PARAM_REDIRECT (comment, "Create Report", "new_container_task");
     }
+  CHECK_PARAM_REDIRECT (xml_file, "Create Report", "new_container_task");
 
   if (strlen (xml_file) == 0)
     {
@@ -3918,24 +3939,14 @@ create_report_omp (credentials_t * credentials, params_t *params,
                              "/omp?cmd=get_tasks", response_data);
     }
 
-  if (omp_success (entity))
-    {
-      html = next_page (credentials, params, response, response_data);
-      if (html == NULL)
-        html = get_tasks (credentials, params, response, response_data);
-    }
-  else
-    {
-      const char *cmd;
-
-      set_http_status_from_entity (entity, response_data);
-      cmd = params_value (params, "cmd");
-      if (cmd && strcmp (cmd, "import_report"))
-        html = new_container_task (credentials, NULL, params, response,
-                                   response_data);
-      else
-        html = upload_report (credentials, params, response, response_data);
-    }
+  cmd = params_value (params, "cmd");
+  html = response_from_entity (credentials, params, entity,
+                               (no_redirect && strcmp (no_redirect, "0")),
+                               NULL, "get_tasks",
+                               NULL,
+                               (cmd && strcmp (cmd, "import_report"))
+                                  ? "new_container_task" : "upload_report",
+                               "Import Report", response_data);
   free_entity (entity);
   g_free (response);
   return html;
@@ -3958,16 +3969,7 @@ import_report_omp (credentials_t * credentials, params_t *params,
 }
 
 #define CHECK(name)                                                        \
-  do {                                                                     \
-    if (name == NULL)                                                      \
-      {                                                                    \
-        response_data->http_status_code = MHD_HTTP_BAD_REQUEST;            \
-        return new_task (credentials,                                      \
-                         "Given " G_STRINGIFY (name) " was invalid",       \
-                         params,                                           \
-                         NULL, response_data);                             \
-      }                                                                    \
-  } while (0)
+CHECK_PARAM_REDIRECT (name, "Create Task", "new_task")
 
 /**
  * @brief Create a container task, serve next page.
@@ -3985,8 +3987,9 @@ create_container_task_omp (credentials_t * credentials, params_t *params,
   entity_t entity;
   int ret;
   gchar *command, *html, *response;
-  const char *name, *comment;
+  const char *no_redirect, *name, *comment;
 
+  no_redirect = params_value (params, "no_redirect");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
 
@@ -4035,18 +4038,13 @@ create_container_task_omp (credentials_t * credentials, params_t *params,
                              "/omp?cmd=get_tasks", response_data);
     }
 
-  if (omp_success (entity))
-    {
-      html = next_page (credentials, params, response, response_data);
-      if (html == NULL)
-        html = get_tasks (credentials, params, response, response_data);
-    }
-  else
-    {
-      set_http_status_from_entity (entity, response_data);
-      html = new_container_task (credentials, NULL, params, response,
-                                 response_data);
-    }
+  if (entity_attribute (entity, "id"))
+    params_add (params, "task_id", entity_attribute (entity, "id"));
+  html = response_from_entity (credentials, params, entity,
+                               (no_redirect && strcmp (no_redirect, "0")),
+                               NULL, "get_tasks",
+                               NULL, "new_container_task",
+                               "Create Container Task", response_data);
   free_entity (entity);
   g_free (response);
   return html;
@@ -4069,6 +4067,7 @@ create_task_omp (credentials_t * credentials, params_t *params,
   int ret;
   gchar *schedule_element, *slave_element, *command;
   gchar *response, *html;
+  const char *no_redirect;
   const char *name, *comment, *config_id, *target_id, *scanner_type;
   const char *slave_id, *scanner_id, *schedule_id, *schedule_periods;
   const char *max_checks, *max_hosts;
@@ -4077,6 +4076,7 @@ create_task_omp (credentials_t * credentials, params_t *params,
   params_t *alerts;
   GString *alert_element;
 
+  no_redirect = params_value (params, "no_redirect");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
   target_id = params_value (params, "target_id");
@@ -4158,7 +4158,9 @@ create_task_omp (credentials_t * credentials, params_t *params,
   CHECK (scanner_id);
   CHECK (schedule_id);
   if (params_given (params, "schedule_periods"))
-    CHECK (schedule_periods);
+    {
+      CHECK (schedule_periods);
+    }
   else
     schedule_periods = "0";
   CHECK (in_assets);
@@ -4295,7 +4297,7 @@ create_task_omp (credentials_t * credentials, params_t *params,
       if (add_tag && strcmp (add_tag, "0"))
         {
           const char *new_task_id = entity_attribute (entity, "id");
-          gchar *tag_command, *tag_response, *combined_response;
+          gchar *tag_command, *tag_response;
           entity_t tag_entity;
 
           if (tag_value && strcmp (tag_value, ""))
@@ -4367,29 +4369,36 @@ create_task_omp (credentials_t * credentials, params_t *params,
                                     "/omp?cmd=get_tasks", response_data);
             }
 
-          combined_response = g_strconcat (response, tag_response, NULL);
-          set_http_status_from_entity (tag_entity, response_data);
+          if (entity_attribute (entity, "id"))
+            params_add (params, "task_id", entity_attribute (entity, "id"));
+          html
+            = response_from_entity (credentials, params, tag_entity,
+                                    (no_redirect && strcmp (no_redirect, "0")),
+                                    NULL, "get_tasks",
+                                    NULL, "new_tasks",
+                                    "Create Task and Tag", response_data);
           free_entity (tag_entity);
           g_free (tag_response);
-
-          html = next_page (credentials, params, combined_response,
-                            response_data);
-          if (html == NULL)
-            html = get_tasks (credentials, params, combined_response,
-                              response_data);
-          g_free (combined_response);
         }
       else
         {
-          html = next_page (credentials, params, response, response_data);
-          if (html == NULL)
-            html = get_tasks (credentials, params, response, response_data);
+          if (entity_attribute (entity, "id"))
+            params_add (params, "task_id", entity_attribute (entity, "id"));
+          html
+            = response_from_entity (credentials, params, entity,
+                                    (no_redirect && strcmp (no_redirect, "0")),
+                                    NULL, "get_tasks",
+                                    NULL, "new_task",
+                                    "Create Task", response_data);
         }
     }
   else
     {
-      set_http_status_from_entity (entity, response_data);
-      html = new_task (credentials, NULL, params, response, response_data);
+      html = response_from_entity (credentials, params, entity,
+                                   (no_redirect && strcmp (no_redirect, "0")),
+                                   NULL, "get_tasks",
+                                   NULL, "new_task",
+                                   "Create Task", response_data);
     }
   free_entity (entity);
   g_free (response);
@@ -4597,6 +4606,7 @@ save_task_omp (credentials_t * credentials, params_t *params,
                cmd_response_data_t* response_data)
 {
   gchar *html, *response, *format;
+  const char *no_redirect;
   const char *comment, *name, *next, *schedule_id, *in_assets, *submit;
   const char *slave_id, *scanner_id, *task_id, *max_checks, *max_hosts;
   const char *config_id, *target_id, *hosts_ordering, *alterable, *source_iface;
@@ -4606,6 +4616,7 @@ save_task_omp (credentials_t * credentials, params_t *params,
   GString *alert_element;
   entity_t entity;
 
+  no_redirect = params_value (params, "no_redirect");
   comment = params_value (params, "comment");
   name = params_value (params, "name");
   task_id = params_value (params, "task_id");
@@ -4623,7 +4634,7 @@ save_task_omp (credentials_t * credentials, params_t *params,
   source_iface = params_value (params, "source_iface");
   max_hosts = params_value (params, "max_hosts");
   alterable = params_value (params, "alterable");
-  CHECK_PARAM (scanner_type, "Save Task", edit_task);
+  CHECK_PARAM_REDIRECT (scanner_type, "Save Task", "edit_task");
   if (!strcmp (scanner_type, "1"))
     {
       scanner_id = params_value (params, "osp_scanner_id");
@@ -4660,41 +4671,43 @@ save_task_omp (credentials_t * credentials, params_t *params,
       else
         params_add (params, "alerts", "2");
 
-      CHECK_PARAM (name, "Edit Task", edit_task);
-      CHECK_PARAM (comment, "Edit Task", edit_task);
-      CHECK_PARAM (target_id, "Edit Task", edit_task);
-      CHECK_PARAM (config_id, "Edit Task", edit_task);
-      CHECK_PARAM (schedule_id, "Edit Task", edit_task);
-      CHECK_PARAM (slave_id, "Edit Task", edit_task);
-      CHECK_PARAM (scanner_id, "Edit Task", edit_task);
-      CHECK_PARAM (next, "Edit Task", edit_task);
-      CHECK_PARAM (task_id, "Edit Task", edit_task);
-      CHECK_PARAM (max_checks, "Edit Task", edit_task);
-      CHECK_PARAM (source_iface, "Edit Task", edit_task);
-      CHECK_PARAM (max_hosts, "Edit Task", edit_task);
-      CHECK_PARAM (in_assets, "Edit Task", edit_task);
+      CHECK_PARAM_REDIRECT (name, "Edit Task", "edit_task");
+      CHECK_PARAM_REDIRECT (comment, "Edit Task", "edit_task");
+      CHECK_PARAM_REDIRECT (target_id, "Edit Task", "edit_task");
+      CHECK_PARAM_REDIRECT (config_id, "Edit Task", "edit_task");
+      CHECK_PARAM_REDIRECT (schedule_id, "Edit Task", "edit_task");
+      CHECK_PARAM_REDIRECT (slave_id, "Edit Task", "edit_task");
+      CHECK_PARAM_REDIRECT (scanner_id, "Edit Task", "edit_task");
+      CHECK_PARAM_REDIRECT (next, "Edit Task", "edit_task");
+      CHECK_PARAM_REDIRECT (task_id, "Edit Task", "edit_task");
+      CHECK_PARAM_REDIRECT (max_checks, "Edit Task", "edit_task");
+      CHECK_PARAM_REDIRECT (source_iface, "Edit Task", "edit_task");
+      CHECK_PARAM_REDIRECT (max_hosts, "Edit Task", "edit_task");
+      CHECK_PARAM_REDIRECT (in_assets, "Edit Task", "edit_task");
 
       return edit_task_omp (credentials, params, response_data);
     }
 
-  CHECK_PARAM (name, "Save Task", edit_task);
-  CHECK_PARAM (comment, "Save Task", edit_task);
-  CHECK_PARAM (target_id, "Save Task", edit_task);
-  CHECK_PARAM (hosts_ordering, "Save Task", edit_task);
-  CHECK_PARAM (config_id, "Save Task", edit_task);
-  CHECK_PARAM (schedule_id, "Save Task", edit_task);
+  CHECK_PARAM_REDIRECT (name, "Save Task", "edit_task");
+  CHECK_PARAM_REDIRECT (comment, "Save Task", "edit_task");
+  CHECK_PARAM_REDIRECT (target_id, "Save Task", "edit_task");
+  CHECK_PARAM_REDIRECT (hosts_ordering, "Save Task", "edit_task");
+  CHECK_PARAM_REDIRECT (config_id, "Save Task", "edit_task");
+  CHECK_PARAM_REDIRECT (schedule_id, "Save Task", "edit_task");
   if (params_given (params, "schedule_periods"))
-    CHECK (schedule_periods);
+    {
+      CHECK (schedule_periods);
+    }
   else
     schedule_periods = "0";
-  CHECK_PARAM (slave_id, "Save Task", edit_task);
-  CHECK_PARAM (scanner_id, "Save Task", edit_task);
-  CHECK_PARAM (next, "Save Task", edit_task);
-  CHECK_PARAM (task_id, "Save Task", edit_task);
-  CHECK_PARAM (max_checks, "Save Task", edit_task);
-  CHECK_PARAM (source_iface, "Save Task", edit_task);
-  CHECK_PARAM (max_hosts, "Save Task", edit_task);
-  CHECK_PARAM (in_assets, "Save Task", edit_task);
+  CHECK_PARAM_REDIRECT (slave_id, "Save Task", "edit_task");
+  CHECK_PARAM_REDIRECT (scanner_id, "Save Task", "edit_task");
+  CHECK_PARAM_REDIRECT (next, "Save Task", "edit_task");
+  CHECK_PARAM_REDIRECT (task_id, "Save Task", "edit_task");
+  CHECK_PARAM_REDIRECT (max_checks, "Save Task", "edit_task");
+  CHECK_PARAM_REDIRECT (source_iface, "Save Task", "edit_task");
+  CHECK_PARAM_REDIRECT (max_hosts, "Save Task", "edit_task");
+  CHECK_PARAM_REDIRECT (in_assets, "Save Task", "edit_task");
 
   alert_element = g_string_new ("");
   if (params_given (params, "alert_id_optional:"))
@@ -4813,17 +4826,11 @@ save_task_omp (credentials_t * credentials, params_t *params,
                              "/omp?cmd=get_tasks", response_data);
     }
 
-  if (omp_success (entity))
-    {
-      html = next_page (credentials, params, response, response_data);
-      if (html == NULL)
-        html = get_tasks (credentials, params, response, response_data);
-    }
-  else
-    {
-      set_http_status_from_entity (entity, response_data);
-      html = edit_task (credentials, params, response, response_data);
-    }
+  html = response_from_entity (credentials, params, entity,
+                               (no_redirect && strcmp (no_redirect, "0")),
+                               NULL, "get_tasks",
+                               NULL, "edit_task",
+                               "Save Task", response_data);
   free_entity (entity);
   g_free (response);
   return html;
@@ -4845,19 +4852,20 @@ save_container_task_omp (credentials_t * credentials, params_t *params,
                          cmd_response_data_t* response_data)
 {
   gchar *format, *response, *html;
-  const char *comment, *name, *task_id;
+  const char *no_redirect, *comment, *name, *task_id;
   const char *in_assets;
   int ret;
   entity_t entity;
 
+  no_redirect = params_value (params, "no_redirect");
   comment = params_value (params, "comment");
   in_assets = params_value (params, "in_assets");
   name = params_value (params, "name");
   task_id = params_value (params, "task_id");
-  CHECK_PARAM (name, "Save Task", edit_task)
-  CHECK_PARAM (comment, "Save Task", edit_task)
-  CHECK_PARAM (task_id, "Save Task", edit_task)
-  CHECK_PARAM (in_assets, "Save Task", edit_task)
+  CHECK_PARAM_REDIRECT (name, "Save Task", "edit_task")
+  CHECK_PARAM_REDIRECT (comment, "Save Task", "edit_task")
+  CHECK_PARAM_REDIRECT (task_id, "Save Task", "edit_task")
+  CHECK_PARAM_REDIRECT (in_assets, "Save Task", "edit_task")
 
   format = g_strdup_printf ("<modify_task task_id=\"%%s\">"
                             "<name>%%s</name>"
@@ -4907,17 +4915,11 @@ save_container_task_omp (credentials_t * credentials, params_t *params,
                              "/omp?cmd=get_tasks", response_data);
     }
 
-  if (omp_success (entity))
-    {
-      html = next_page (credentials, params, response, response_data);
-      if (html == NULL)
-        html = get_tasks (credentials, params, response, response_data);
-    }
-  else
-    {
-      set_http_status_from_entity (entity, response_data);
-      html = edit_task (credentials, params, response, response_data);
-    }
+  html = response_from_entity (credentials, params, entity,
+                               (no_redirect && strcmp (no_redirect, "0")),
+                               NULL, "get_tasks",
+                               NULL, "edit_task",
+                               "Save Container Task", response_data);
   free_entity (entity);
   g_free (response);
   return html;
@@ -5028,10 +5030,11 @@ move_task_omp (credentials_t * credentials, params_t *params,
                cmd_response_data_t* response_data)
 {
   gchar *command, *response, *html;
-  const char *task_id, *slave_id;
+  const char *no_redirect, *task_id, *slave_id;
   int ret;
   entity_t entity;
 
+  no_redirect = params_value (params, "no_redirect");
   slave_id = params_value (params, "slave_id");
   task_id = params_value (params, "task_id");
 
@@ -5074,13 +5077,14 @@ move_task_omp (credentials_t * credentials, params_t *params,
                              "/omp?cmd=get_tasks", response_data);
     }
 
-  if (!omp_success (entity))
-    set_http_status_from_entity (entity, response_data);
-  free_entity (entity);
+  html = response_from_entity (credentials, params, entity,
+                               (no_redirect && strcmp (no_redirect, "0")),
+                               NULL, "get_tasks",
+                               NULL, "get_tasks",
+                               "Move Task", response_data);
 
-  html = next_page (credentials, params, response, response_data);
-  if (html == NULL)
-    html = get_tasks (credentials, params, response, response_data);
+  free_entity (entity);
+  g_free (response);
   return html;
 }
 
@@ -5994,12 +5998,14 @@ create_credential_omp (credentials_t * credentials, params_t *params,
 {
   int ret;
   gchar *html, *response;
+  const char *no_redirect;
   const char *name, *comment, *login, *type, *password, *passphrase;
   const char *private_key, *certificate, *community, *privacy_password;
   const char *auth_algorithm, *privacy_algorithm;
   int autogenerate;
   entity_t entity;
 
+  no_redirect = params_value (params, "no_redirect");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
   login = params_value (params, "credential_login");
@@ -6017,19 +6023,14 @@ create_credential_omp (credentials_t * credentials, params_t *params,
     autogenerate = strcmp (params_value (params, "autogenerate"), "0");
   else
     {
-      gchar *msg;
-      msg = g_strdup_printf (GSAD_MESSAGE_INVALID,
-                            "Given autogenerate was invalid",
-                            "Create Credential");
-      html = new_credential (credentials, params, msg, response_data);
-      g_free (msg);
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
-      return html;
+      MESSAGE_REDIRECT ("Given autogenerate was invalid",
+                        G_STRINGIFY (MHD_HTTP_BAD_REQUEST),
+                        "Create Credential", "new_credential");
     }
 
-  CHECK_PARAM (name, "Create Credential", new_credential);
-  CHECK_PARAM (comment, "Create Credential", new_credential);
-  CHECK_PARAM (type, "Create Credential", new_credential);
+  CHECK_PARAM_REDIRECT (name, "Create Credential", "new_credential");
+  CHECK_PARAM_REDIRECT (comment, "Create Credential", "new_credential");
+  CHECK_PARAM_REDIRECT (type, "Create Credential", "new_credential");
 
   if (autogenerate)
     {
@@ -6052,7 +6053,7 @@ create_credential_omp (credentials_t * credentials, params_t *params,
       else
         {
           // Auto-generate types with username
-          CHECK_PARAM (login, "Create Credential", new_credential);
+          CHECK_PARAM_REDIRECT (login, "Create Credential", "new_credential");
 
           ret = ompf (credentials,
                       &response,
@@ -6074,8 +6075,10 @@ create_credential_omp (credentials_t * credentials, params_t *params,
     {
       if (type && (strcmp (type, "up") == 0))
         {
-          CHECK_PARAM (login, "Create Credential", new_credential);
-          CHECK_PARAM (password, "Create Credential", new_credential);
+          CHECK_PARAM_REDIRECT (login,
+                                "Create Credential", "new_credential");
+          CHECK_PARAM_REDIRECT (password,
+                                "Create Credential", "new_credential");
 
           ret = ompf (credentials,
                       &response,
@@ -6096,9 +6099,12 @@ create_credential_omp (credentials_t * credentials, params_t *params,
         }
       else if (type && (strcmp (type, "usk") == 0))
         {
-          CHECK_PARAM (login, "Create Credential", new_credential);
-          CHECK_PARAM (passphrase, "Create Credential", new_credential);
-          CHECK_PARAM (private_key, "Create Credential", new_credential);
+          CHECK_PARAM_REDIRECT (login,
+                                "Create Credential", "new_credential");
+          CHECK_PARAM_REDIRECT (passphrase,
+                                "Create Credential", "new_credential");
+          CHECK_PARAM_REDIRECT (private_key,
+                                "Create Credential", "new_credential");
 
           ret = ompf (credentials,
                       &response,
@@ -6123,8 +6129,10 @@ create_credential_omp (credentials_t * credentials, params_t *params,
         }
       else if (type && (strcmp (type, "cc") == 0))
         {
-          CHECK_PARAM (certificate, "Create Credential", new_credential);
-          CHECK_PARAM (private_key, "Create Credential", new_credential);
+          CHECK_PARAM_REDIRECT (certificate,
+                                "Create Credential", "new_credential");
+          CHECK_PARAM_REDIRECT (private_key,
+                                "Create Credential", "new_credential");
 
           ret = ompf (credentials,
                       &response,
@@ -6148,12 +6156,18 @@ create_credential_omp (credentials_t * credentials, params_t *params,
         }
       else if (type && (strcmp (type, "snmp") == 0))
         {
-          CHECK_PARAM (community, "Create Credential", new_credential);
-          CHECK_PARAM (login, "Create Credential", new_credential);
-          CHECK_PARAM (password, "Create Credential", new_credential);
-          CHECK_PARAM (privacy_password, "Create Credential", new_credential);
-          CHECK_PARAM (auth_algorithm, "Create Credential", new_credential);
-          CHECK_PARAM (privacy_algorithm, "Create Credential", new_credential);
+          CHECK_PARAM_REDIRECT (community,
+                                "Create Credential", "new_credential");
+          CHECK_PARAM_REDIRECT (login,
+                                "Create Credential", "new_credential");
+          CHECK_PARAM_REDIRECT (password,
+                                "Create Credential", "new_credential");
+          CHECK_PARAM_REDIRECT (privacy_password,
+                                "Create Credential", "new_credential");
+          CHECK_PARAM_REDIRECT (auth_algorithm,
+                                "Create Credential", "new_credential");
+          CHECK_PARAM_REDIRECT (privacy_algorithm,
+                                "Create Credential", "new_credential");
 
           ret = ompf (credentials,
                       &response,
@@ -6226,18 +6240,14 @@ create_credential_omp (credentials_t * credentials, params_t *params,
                              "/omp?cmd=get_credentials", response_data);
     }
 
-  if (omp_success (entity))
-    {
-      html = next_page (credentials, params, response, response_data);
-      if (html == NULL)
-        html = get_credentials (credentials, params, response,
-                                    response_data);
-    }
-  else
-    {
-      set_http_status_from_entity (entity, response_data);
-      html = new_credential (credentials, params, response, response_data);
-    }
+  if (entity_attribute (entity, "id"))
+    params_add (params, "credential_id", entity_attribute (entity, "id"));
+  html = response_from_entity (credentials, params, entity,
+                               (no_redirect && strcmp (no_redirect, "0")),
+                               NULL, "get_credentials",
+                               NULL, "new_credential",
+                               "Create Credential",
+                               response_data);
   free_entity (entity);
   g_free (response);
   return html;
@@ -6660,13 +6670,14 @@ save_credential_omp (credentials_t * credentials, params_t *params,
   int ret, change_password, change_passphrase;
   int change_community, change_privacy_password;
   gchar *html, *response;
-  const char *credential_id;
+  const char *no_redirect, *credential_id;
   const char *name, *comment, *login, *password, *passphrase;
   const char *private_key, *certificate, *community, *privacy_password;
   const char *auth_algorithm, *privacy_algorithm;
   GString *command;
   entity_t entity;
 
+  no_redirect = params_value (params, "no_redirect");
   credential_id = params_value (params, "credential_id");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
@@ -6681,33 +6692,35 @@ save_credential_omp (credentials_t * credentials, params_t *params,
   privacy_algorithm  = params_value (params, "privacy_algorithm");
   community  = params_value (params, "community");
 
-  CHECK_PARAM (credential_id, "Save Credential", edit_credential);
-  CHECK_PARAM (name, "Save Credential", edit_credential);
-  CHECK_PARAM (comment, "Save Credential", edit_credential);
+  CHECK_PARAM_REDIRECT (credential_id, "Save Credential", "edit_credential");
+  CHECK_PARAM_REDIRECT (name, "Save Credential", "edit_credential");
+  CHECK_PARAM_REDIRECT (comment, "Save Credential", "edit_credential");
   if (params_given (params, "certificate"))
-    CHECK_PARAM (certificate, "Save Credential", edit_credential);
+    CHECK_PARAM_REDIRECT (certificate, "Save Credential", "edit_credential");
   if (params_given (params, "private_key"))
-    CHECK_PARAM (private_key, "Save Credential", edit_credential);
+    CHECK_PARAM_REDIRECT (private_key, "Save Credential", "edit_credential");
   if (params_given (params, "login"))
-    CHECK_PARAM (login, "Save Credential", edit_credential);
+    CHECK_PARAM_REDIRECT (login, "Save Credential", "edit_credential");
   if (params_given (params, "auth_algorithm"))
-    CHECK_PARAM (auth_algorithm, "Save Credential", edit_credential);
+    CHECK_PARAM_REDIRECT (auth_algorithm, "Save Credential", "edit_credential");
   if (params_given (params, "privacy_algorithm"))
-    CHECK_PARAM (privacy_algorithm, "Save Credential", edit_credential);
+    CHECK_PARAM_REDIRECT (privacy_algorithm,
+                          "Save Credential", "edit_credential");
 
   change_community = (params_value (params, "change_community") ? 1 : 0);
   if (change_community)
-    CHECK_PARAM (community, "Save Credential", edit_credential);
+    CHECK_PARAM_REDIRECT (community, "Save Credential", "edit_credential");
   change_passphrase = (params_value (params, "change_passphrase") ? 1 : 0);
   if (change_passphrase)
-    CHECK_PARAM (passphrase, "Save Credential", edit_credential);
+    CHECK_PARAM_REDIRECT (passphrase, "Save Credential", "edit_credential");
   change_password = (params_value (params, "change_password") ? 1 : 0);
   if (change_password)
-    CHECK_PARAM (password, "Save Credential", edit_credential);
+    CHECK_PARAM_REDIRECT (password, "Save Credential", "edit_credential");
   change_privacy_password
     = (params_value (params, "change_privacy_password") ? 1 : 0);
   if (change_privacy_password)
-    CHECK_PARAM (privacy_password, "Save Credential", edit_credential);
+    CHECK_PARAM_REDIRECT (privacy_password,
+                          "Save Credential", "edit_credential");
 
   /* Prepare command */
   command = g_string_new ("");
@@ -6821,17 +6834,11 @@ save_credential_omp (credentials_t * credentials, params_t *params,
                              "/omp?cmd=get_credentials", response_data);
     }
 
-  if (omp_success (entity))
-    {
-      html = next_page (credentials, params, response, response_data);
-      if (html == NULL)
-        html = get_credentials (credentials, params, response, response_data);
-    }
-  else
-    {
-      set_http_status_from_entity (entity, response_data);
-      html = edit_credential (credentials, params, response, response_data);
-    }
+  html = response_from_entity (credentials, params, entity,
+                               (no_redirect && strcmp (no_redirect, "0")),
+                               NULL, "get_credentials",
+                               NULL, "edit_credential",
+                               "Save Credential", response_data);
   free_entity (entity);
   g_free (response);
   return html;
@@ -6891,10 +6898,12 @@ create_agent_omp (credentials_t * credentials, params_t *params,
 {
   entity_t entity;
   gchar *response, *html;
+  const char *no_redirect; 
   const char *name, *comment, *installer, *installer_filename, *installer_sig;
   const char *howto_install, *howto_use;
   int installer_size, installer_sig_size, howto_install_size, howto_use_size;
 
+  no_redirect = params_value (params, "no_redirect");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
   installer = params_value (params, "installer");
@@ -6907,11 +6916,10 @@ create_agent_omp (credentials_t * credentials, params_t *params,
   howto_use = params_value (params, "howto_use");
   howto_use_size = params_value_size (params, "howto_use");
 
-  if (name == NULL || comment == NULL)
-    return get_agents (credentials, params,
-                       GSAD_MESSAGE_INVALID_PARAM ("Create Agent"),
-                       response_data);
-  else
+  CHECK_PARAM_REDIRECT (name, "Create Agent", "new_agent");
+  CHECK_PARAM_REDIRECT (comment, "Create Agent", "new_agent");
+
+  if (name && comment)
     {
       int ret;
       gchar *installer_64, *installer_sig_64, *howto_install_64, *howto_use_64;
@@ -7002,17 +7010,13 @@ create_agent_omp (credentials_t * credentials, params_t *params,
         }
     }
 
-  if (omp_success (entity))
-    {
-      html = next_page (credentials, params, response, response_data);
-      if (html == NULL)
-        html = get_agents (credentials, params, response, response_data);
-    }
-  else
-    {
-      set_http_status_from_entity (entity, response_data);
-      html = new_agent (credentials, params, response, response_data);
-    }
+  if (entity_attribute (entity, "id"))
+    params_add (params, "agent_id", entity_attribute (entity, "id"));
+  html = response_from_entity (credentials, params, entity,
+                               (no_redirect && strcmp (no_redirect, "0")),
+                               NULL, "get_agents",
+                               NULL, "new_agent",
+                               "Create Agent", response_data);
   free_entity (entity);
   g_free (response);
   return html;
@@ -7282,16 +7286,17 @@ save_agent_omp (credentials_t * credentials, params_t *params,
 {
   int ret;
   gchar *html, *response;
-  const char *agent_id, *name, *comment;
+  const char *no_redirect, *agent_id, *name, *comment;
   entity_t entity;
 
+  no_redirect = params_value (params, "no_redirect");
   agent_id = params_value (params, "agent_id");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
 
-  CHECK_PARAM (agent_id, "Save Agent", edit_agent);
-  CHECK_PARAM (name, "Save Agent", edit_agent);
-  CHECK_PARAM (comment, "Save Agent", edit_agent);
+  CHECK_PARAM_REDIRECT (agent_id, "Save Agent", "edit_agent");
+  CHECK_PARAM_REDIRECT (name, "Save Agent", "edit_agent");
+  CHECK_PARAM_REDIRECT (comment, "Save Agent", "edit_agent");
 
   /* Modify the agent. */
 
@@ -7340,17 +7345,11 @@ save_agent_omp (credentials_t * credentials, params_t *params,
                              "/omp?cmd=get_agents", response_data);
     }
 
-  if (omp_success (entity))
-    {
-      html = next_page (credentials, params, response, response_data);
-      if (html == NULL)
-        html = get_agents (credentials, params, response, response_data);
-    }
-  else
-    {
-      set_http_status_from_entity (entity, response_data);
-      html = edit_agent (credentials, params, response, response_data);
-    }
+  html = response_from_entity (credentials, params, entity,
+                               (no_redirect && strcmp (no_redirect, "0")),
+                               NULL, "get_agents",
+                               NULL, "edit_agent",
+                               "Save Agent", response_data);
   free_entity (entity);
   g_free (response);
   return html;
@@ -8074,11 +8073,13 @@ create_alert_omp (credentials_t * credentials, params_t *params,
 {
   int ret;
   gchar *html, *response;
+  const char *no_redirect;
   const char *name, *comment, *condition, *event, *method, *filter_id;
   params_t *method_data, *event_data, *condition_data;
   entity_t entity;
   GString *xml;
 
+  no_redirect = params_value (params, "no_redirect");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
   condition = params_value (params, "condition");
@@ -8086,11 +8087,12 @@ create_alert_omp (credentials_t * credentials, params_t *params,
   method = params_value (params, "method");
   filter_id = params_value (params, "filter_id");
 
-  if (name == NULL || comment == NULL || condition == NULL || event == NULL
-      || method == NULL || filter_id == NULL)
-    return new_alert (credentials, params,
-                      GSAD_MESSAGE_INVALID_PARAM ("Create Alert"),
-                      response_data);
+  CHECK_PARAM_REDIRECT (name, "Create Alert", "new_alert");
+  CHECK_PARAM_REDIRECT (comment, "Create Alert", "new_alert");
+  CHECK_PARAM_REDIRECT (condition, "Create Alert", "new_alert");
+  CHECK_PARAM_REDIRECT (event, "Create Alert", "new_alert");
+  CHECK_PARAM_REDIRECT (method, "Create Alert", "new_alert");
+  CHECK_PARAM_REDIRECT (filter_id, "Create Alert", "new_alert");
 
   /* Create the alert. */
 
@@ -8168,17 +8170,13 @@ create_alert_omp (credentials_t * credentials, params_t *params,
                             "/omp?cmd=get_alerts", response_data);
     }
 
-  if (omp_success (entity))
-    {
-      html = next_page (credentials, params, response, response_data);
-      if (html == NULL)
-        html = get_alerts (credentials, params, response, response_data);
-    }
-  else
-    {
-      set_http_status_from_entity (entity, response_data);
-      html = new_alert (credentials, params, response, response_data);
-    }
+  if (entity_attribute (entity, "id"))
+    params_add (params, "alert_id", entity_attribute (entity, "id"));
+  html = response_from_entity (credentials, params, entity,
+                               (no_redirect && strcmp (no_redirect, "0")),
+                               NULL, "get_alerts",
+                               NULL, "new_alert",
+                               "Create Alert", response_data);
   free_entity (entity);
   g_free (response);
   return html;
@@ -8772,12 +8770,13 @@ save_alert_omp (credentials_t * credentials, params_t *params,
   GString *xml;
   int ret;
   gchar *html, *response;
-  const char *name, *comment, *alert_id;
+  const char *no_redirect, *name, *comment, *alert_id;
   const char *event, *condition, *method;
   const char *filter_id;
   params_t *event_data, *condition_data, *method_data;
   entity_t entity;
 
+  no_redirect = params_value (params, "no_redirect");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
   condition = params_value (params, "condition");
@@ -8786,13 +8785,13 @@ save_alert_omp (credentials_t * credentials, params_t *params,
   alert_id = params_value (params, "alert_id");
   filter_id = params_value (params, "filter_id");
 
-  CHECK_PARAM (name, "Save Alert", edit_alert);
-  CHECK_PARAM (comment, "Save Alert", edit_alert);
-  CHECK_PARAM (alert_id, "Save Alert", edit_alert);
-  CHECK_PARAM (condition, "Save Alert", edit_alert);
-  CHECK_PARAM (event, "Save Alert", edit_alert);
-  CHECK_PARAM (method, "Save Alert", edit_alert);
-  CHECK_PARAM (filter_id, "Save Alert", edit_alert);
+  CHECK_PARAM_REDIRECT (name, "Save Alert", "edit_alert");
+  CHECK_PARAM_REDIRECT (comment, "Save Alert", "edit_alert");
+  CHECK_PARAM_REDIRECT (alert_id, "Save Alert", "edit_alert");
+  CHECK_PARAM_REDIRECT (condition, "Save Alert", "edit_alert");
+  CHECK_PARAM_REDIRECT (event, "Save Alert", "edit_alert");
+  CHECK_PARAM_REDIRECT (method, "Save Alert", "edit_alert");
+  CHECK_PARAM_REDIRECT (filter_id, "Save Alert", "edit_alert");
 
   xml = g_string_new ("");
 
@@ -8871,17 +8870,11 @@ save_alert_omp (credentials_t * credentials, params_t *params,
                             "/omp?cmd=get_alerts", response_data);
     }
 
-  if (omp_success (entity))
-    {
-      html = next_page (credentials, params, response, response_data);
-      if (html == NULL)
-        html = get_alerts (credentials, params, response, response_data);
-    }
-  else
-    {
-      set_http_status_from_entity (entity, response_data);
-      html = edit_alert (credentials, params, response, response_data);
-    }
+  html = response_from_entity (credentials, params, entity,
+                               (no_redirect && strcmp (no_redirect, "0")),
+                               NULL, "get_alerts",
+                               NULL, "edit_alert",
+                               "Save Alert", response_data);
   free_entity (entity);
   g_free (response);
   return html;
@@ -8903,9 +8896,10 @@ test_alert_omp (credentials_t * credentials, params_t *params,
   gnutls_session_t session;
   int socket;
   gchar *html, *response;
-  const char *alert_id;
+  const char *no_redirect, *alert_id;
   entity_t entity;
 
+  no_redirect = params_value (params, "no_redirect");
   alert_id = params_value (params, "alert_id");
 
   if (alert_id == NULL)
@@ -8962,12 +8956,17 @@ test_alert_omp (credentials_t * credentials, params_t *params,
                            "Diagnostics: Failure to receive response from manager daemon.",
                            "/omp?cmd=get_alerts", response_data);
     }
-  free_entity (entity);
 
   /* Cleanup, and return transformed XML. */
 
   openvas_server_close (socket, session);
-  html = get_alerts (credentials, params, response, response_data);
+  html = response_from_entity (credentials, params, entity,
+                               (no_redirect && strcmp (no_redirect, "0")),
+                               NULL, "get_alerts",
+                               NULL, "get_alerts",
+                               "Test Alert", response_data);
+
+  free_entity (entity);
   g_free (response);
   return html;
 }
@@ -9233,7 +9232,7 @@ create_target_omp (credentials_t * credentials, params_t *params,
 {
   int ret;
   gchar *html, *response, *command;
-  const char *name, *hosts, *exclude_hosts, *comment;
+  const char *no_redirect, *name, *hosts, *exclude_hosts, *comment;
   const char *target_ssh_credential, *port, *target_smb_credential;
   const char *target_esxi_credential, *target_snmp_credential, *target_source;
   const char *port_list_id, *reverse_lookup_only, *reverse_lookup_unify;
@@ -9245,6 +9244,7 @@ create_target_omp (credentials_t * credentials, params_t *params,
   entity_t entity;
   GString *xml;
 
+  no_redirect = params_value (params, "no_redirect");
   name = params_value (params, "name");
   hosts = params_value (params, "hosts");
   exclude_hosts = params_value (params, "exclude_hosts");
@@ -9261,37 +9261,30 @@ create_target_omp (credentials_t * credentials, params_t *params,
   alive_tests = params_value (params, "alive_tests");
   hosts_filter = params_value (params, "hosts_filter");
 
-  CHECK_PARAM (name, "Create Target", new_target);
-  CHECK_PARAM (target_source, "Create Target", new_target)
+  CHECK_PARAM_REDIRECT (name, "Create Target", "new_target");
+  CHECK_PARAM_REDIRECT (target_source, "Create Target", "new_target")
   if (hosts == NULL && strcmp (target_source, "manual") == 0)
-    return new_target (credentials, params,
-                       GSAD_MESSAGE_INVALID_PARAM ("Create Target"),
-                       response_data);
+    MESSAGE_REDIRECT ("Given target_source was invalid",
+                      G_STRINGIFY (MHD_HTTP_BAD_REQUEST),
+                      "Create Target", "new_target")
   if (strcmp (target_source, "import") == 0 && name == NULL)
-    {
-      gchar *msg;
-      msg = g_strdup_printf (GSAD_MESSAGE_INVALID,
-                            "Given target_source was invalid",
-                            "Create Target");
-      html = new_target (credentials, params, msg, response_data);
-      g_free (msg);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-      return html;
-    }
-  CHECK_PARAM (hosts_filter, "Create Target", new_target);
+    MESSAGE_REDIRECT ("Given target_source was invalid",
+                      G_STRINGIFY (MHD_HTTP_BAD_REQUEST),
+                      "Create Target", "new_target")
+  CHECK_PARAM_REDIRECT (hosts_filter, "Create Target", "new_target");
   if (hosts_filter == NULL && strcmp (target_source, "asset_hosts") == 0)
     return new_target (credentials, params,
                        GSAD_MESSAGE_INVALID_PARAM ("Create Target"),
                        response_data);
-  CHECK_PARAM (comment, "Create Target", new_target);
-  CHECK_PARAM (port_list_id, "Create Target", new_target);
-  CHECK_PARAM (target_ssh_credential, "Create Target", new_target);
+  CHECK_PARAM_REDIRECT (comment, "Create Target", "new_target");
+  CHECK_PARAM_REDIRECT (port_list_id, "Create Target", "new_target");
+  CHECK_PARAM_REDIRECT (target_ssh_credential, "Create Target", "new_target");
   if (strcmp (target_ssh_credential, "--"))
-    CHECK_PARAM (port, "Create Target", new_target);
-  CHECK_PARAM (target_smb_credential, "Create Target", new_target);
-  CHECK_PARAM (target_esxi_credential, "Create Target", new_target);
-  CHECK_PARAM (target_snmp_credential, "Create Target", new_target);
-  CHECK_PARAM (alive_tests, "Create Target", new_target);
+    CHECK_PARAM_REDIRECT (port, "Create Target", "new_target");
+  CHECK_PARAM_REDIRECT (target_smb_credential, "Create Target", "new_target");
+  CHECK_PARAM_REDIRECT (target_esxi_credential, "Create Target", "new_target");
+  CHECK_PARAM_REDIRECT (target_snmp_credential, "Create Target", "new_target");
+  CHECK_PARAM_REDIRECT (alive_tests, "Create Target", "new_target");
 
   if (comment != NULL)
     comment_element = g_strdup_printf ("<comment>%s</comment>", comment);
@@ -9411,17 +9404,13 @@ create_target_omp (credentials_t * credentials, params_t *params,
                             "/omp?cmd=get_targets", response_data);
     }
 
-  if (omp_success (entity))
-    {
-      html = next_page (credentials, params, response, response_data);
-      if (html == NULL)
-        html = get_targets (credentials, params, response, response_data);
-    }
-  else
-    {
-      set_http_status_from_entity (entity, response_data);
-      html = new_target (credentials, params, response, response_data);
-    }
+  if (entity_attribute (entity, "id"))
+    params_add (params, "target_id", entity_attribute (entity, "id"));
+  html = response_from_entity (credentials, params, entity,
+                               (no_redirect && strcmp (no_redirect, "0")),
+                               NULL, "get_targets",
+                               NULL, "new_target",
+                               "Create Target", response_data);
   free_entity (entity);
   g_free (response);
   return html;
@@ -9462,7 +9451,7 @@ clone_omp (credentials_t *credentials, params_t *params,
   int socket;
   gchar *html, *response;
   const char *id, *type, *alterable, *no_redirect, *next_id;
-  gchar *next_id_name, *cap_type, *prev_action, *next_url;
+  gchar *next_id_name, *cap_type, *prev_action;
   entity_t entity;
 
   id = params_value (params, "id");
@@ -9588,24 +9577,11 @@ clone_omp (credentials_t *credentials, params_t *params,
 
   cap_type = capitalize (type);
   prev_action = g_strdup_printf ("Clone %s", cap_type);
-  next_url = next_page_url (credentials, params, NULL, NULL,
-                            prev_action,
-                            entity_attribute (entity, "status"),
-                            entity_attribute (entity, "status_text"));
-
-  if (no_redirect && strcmp (no_redirect, "0"))
-    {
-      html = action_result_page (credentials, response_data, prev_action,
-                                 entity_attribute (entity, "status"),
-                                 entity_attribute (entity, "status_text"),
-                                 next_url);
-      g_free (next_url);
-    }
-  else
-    {
-      response_data->redirect = next_url;
-      html = NULL;
-    }
+  html = response_from_entity (credentials, params, entity,
+                               (no_redirect && strcmp (no_redirect, "0")),
+                               NULL, NULL,
+                               NULL, NULL,
+                               prev_action, response_data);
 
   free_entity (entity);
   g_free (cap_type);
@@ -9801,7 +9777,7 @@ restore_omp (credentials_t * credentials, params_t *params,
              cmd_response_data_t* response_data)
 {
   GString *xml;
-  gchar *ret, *next_url;
+  gchar *ret;
   gnutls_session_t session;
   int socket;
   entity_t entity;
@@ -9878,27 +9854,11 @@ restore_omp (credentials_t * credentials, params_t *params,
   /* Cleanup, and return trash page. */
 
   openvas_server_close (socket, session);
-  if (! omp_success (entity))
-    set_http_status_from_entity (entity, response_data);
-
-  next_url = next_page_url (credentials, params, "get_trash", NULL,
-                            "Restore",
-                            entity_attribute (entity, "status"),
-                            entity_attribute (entity, "status_text"));
-
-  if (no_redirect && strcmp (no_redirect, "0"))
-    {
-      ret = action_result_page (credentials, response_data, "Restore",
-                                entity_attribute (entity, "status"),
-                                entity_attribute (entity, "status_text"),
-                                next_url);
-      g_free (next_url);
-    }
-  else
-    {
-      ret = NULL;
-      response_data->redirect = next_url;
-    }
+  ret = response_from_entity (credentials, params, entity,
+                              (no_redirect && strcmp (no_redirect, "0")),
+                              NULL, "get_trash",
+                              NULL, "get_trash",
+                              "Restore", response_data);
   free_entity (entity);
   g_string_free (xml, FALSE);
   return ret;
@@ -9919,7 +9879,7 @@ empty_trashcan_omp (credentials_t * credentials, params_t *params,
 {
   GString *xml;
   const char* no_redirect;
-  gchar *next_url, *ret;
+  gchar *ret;
   gnutls_session_t session;
   int socket;
   entity_t entity;
@@ -9978,26 +9938,12 @@ empty_trashcan_omp (credentials_t * credentials, params_t *params,
   /* Cleanup, and return trash page. */
 
   openvas_server_close (socket, session);
-  if (! omp_success (entity))
-    set_http_status_from_entity (entity, response_data);
-  next_url = next_page_url (credentials, params, "get_trash", NULL,
-                            "Empty Trashcan",
-                            entity_attribute (entity, "status"),
-                            entity_attribute (entity, "status_text"));
 
-  if (no_redirect && strcmp (no_redirect, "0"))
-    {
-      ret = action_result_page (credentials, response_data, "Empty Trashcan",
-                                entity_attribute (entity, "status"),
-                                entity_attribute (entity, "status_text"),
-                                next_url);
-      g_free (next_url);
-    }
-  else
-    {
-      ret = NULL;
-      response_data->redirect = next_url;
-    }
+  ret = response_from_entity (credentials, params, entity,
+                              (no_redirect && strcmp (no_redirect, "0")),
+                              NULL, "get_trash",
+                              NULL, "get_trash",
+                              "Empty Trashcan", response_data);
   free_entity (entity);
   g_string_free (xml, FALSE);
   return ret;
@@ -10085,7 +10031,7 @@ create_tag_omp (credentials_t *credentials, params_t *params,
 {
   char *ret;
   const char* no_redirect;
-  gchar *response, *next_url;
+  gchar *response;
   const char *name, *comment, *value, *resource_type, *resource_id, *active;
   entity_t entity;
 
@@ -10155,26 +10101,13 @@ create_tag_omp (credentials_t *credentials, params_t *params,
                              "/omp?cmd=get_tags", response_data);
     }
 
-  if (! omp_success (entity))
-    set_http_status_from_entity (entity, response_data);
-  next_url = next_page_url (credentials, params, NULL, "new_tag",
-                            "Create Tag",
-                            entity_attribute (entity, "status"),
-                            entity_attribute (entity, "status_text"));
-
-  if (no_redirect && strcmp (no_redirect, "0"))
-    {
-      ret = action_result_page (credentials, response_data, "Create Tag",
-                                entity_attribute (entity, "status"),
-                                entity_attribute (entity, "status_text"),
-                                next_url);
-      g_free (next_url);
-    }
-  else
-    {
-      ret = NULL;
-      response_data->redirect = next_url;
-    }
+  if (entity_attribute (entity, "id"))
+    params_add (params, "tag_id", entity_attribute (entity, "id"));
+  ret = response_from_entity (credentials, params, entity,
+                              (no_redirect && strcmp (no_redirect, "0")),
+                              NULL, "get_tags",
+                              NULL, "new_tag",
+                              "Create Tag", response_data);
 
   free_entity (entity);
   g_free (response);
@@ -10342,7 +10275,7 @@ char *
 save_tag_omp (credentials_t * credentials, params_t *params,
               cmd_response_data_t* response_data)
 {
-  gchar *response, *next_url;
+  gchar *response;
   const char *name, *comment, *value, *resource_type, *resource_id, *active;
   const char *tag_id, *no_redirect;
   entity_t entity;
@@ -10421,26 +10354,11 @@ save_tag_omp (credentials_t * credentials, params_t *params,
                              "/omp?cmd=get_tags", response_data);
     }
 
-  if (! omp_success (entity))
-    set_http_status_from_entity (entity, response_data);
-  next_url = next_page_url (credentials, params, NULL, "edit_tag",
-                            "Create Tag",
-                            entity_attribute (entity, "status"),
-                            entity_attribute (entity, "status_text"));
-
-  if (no_redirect && strcmp (no_redirect, "0"))
-    {
-      ret = action_result_page (credentials, response_data, "Create Tag",
-                                entity_attribute (entity, "status"),
-                                entity_attribute (entity, "status_text"),
-                                next_url);
-      g_free (next_url);
-    }
-  else
-    {
-      ret = NULL;
-      response_data->redirect = next_url;
-    }
+  ret = response_from_entity (credentials, params, entity,
+                              (no_redirect && strcmp (no_redirect, "0")),
+                              NULL, "get_tags",
+                              NULL, "edit_tag",
+                              "Save Tag", response_data);
 
   free_entity (entity);
   g_free (response);
@@ -10666,19 +10584,11 @@ toggle_tag_omp (credentials_t * credentials, params_t *params,
                             entity_attribute (entity, "status"),
                             entity_attribute (entity, "status_text"));
 
-  if (no_redirect && strcmp (no_redirect, "0"))
-    {
-      html = action_result_page (credentials, response_data, "Toggle Tag",
-                                entity_attribute (entity, "status"),
-                                entity_attribute (entity, "status_text"),
-                                next_url);
-      g_free (next_url);
-    }
-  else
-    {
-      html = NULL;
-      response_data->redirect = next_url;
-    }
+  html = response_from_entity (credentials, params, entity,
+                               (no_redirect && strcmp (no_redirect, "0")),
+                               NULL, "get_tags",
+                               NULL, "get_tags",
+                               "Toggle Tag", response_data);
 
   free_entity (entity);
   g_free (response);
@@ -10971,24 +10881,25 @@ save_target_omp (credentials_t * credentials, params_t *params,
   gnutls_session_t session;
   int socket;
   gchar *html, *response;
-  const char *name, *hosts, *exclude_hosts, *comment;
+  const char *no_redirect, *name, *hosts, *exclude_hosts, *comment;
   const char *target_ssh_credential, *port, *target_smb_credential;
   const char *target_esxi_credential, *target_snmp_credential, *target_source;
   const char *target_id, *port_list_id, *reverse_lookup_only;
   const char *reverse_lookup_unify, *alive_tests, *in_use;
   GString *command;
 
+  no_redirect = params_value (params, "no_redirect");
   alive_tests = params_value (params, "alive_tests");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
   in_use = params_value (params, "in_use");
   target_id = params_value (params, "target_id");
 
-  CHECK_PARAM (name, "Save Target", edit_target);
-  CHECK_PARAM (target_id, "Save Target", edit_target);
-  CHECK_PARAM (comment, "Save Target", edit_target);
-  CHECK_PARAM (alive_tests, "Save Target", edit_target);
-  CHECK_PARAM (in_use, "Save Target", edit_target);
+  CHECK_PARAM_REDIRECT (name, "Save Target", "edit_target");
+  CHECK_PARAM_REDIRECT (target_id, "Save Target", "edit_target");
+  CHECK_PARAM_REDIRECT (comment, "Save Target", "edit_target");
+  CHECK_PARAM_REDIRECT (alive_tests, "Save Target", "edit_target");
+  CHECK_PARAM_REDIRECT (in_use, "Save Target", "edit_target");
 
   if (strcmp (in_use, "0"))
     {
@@ -11044,17 +10955,11 @@ save_target_omp (credentials_t * credentials, params_t *params,
                                  "/omp?cmd=get_targets", response_data);
         }
 
-      if (omp_success (entity))
-        {
-          html = next_page (credentials, params, response, response_data);
-          if (html == NULL)
-            html = get_targets_omp (credentials, params, response_data);
-        }
-      else
-        {
-          set_http_status_from_entity (entity, response_data);
-          html = edit_target (credentials, params, response, response_data);
-        }
+      html = response_from_entity (credentials, params, entity,
+                                   (no_redirect && strcmp (no_redirect, "0")),
+                                   NULL, "get_targets",
+                                   NULL, "edit_target",
+                                   "Save Target", response_data);
 
       free_entity (entity);
       g_free (response);
@@ -11073,16 +10978,16 @@ save_target_omp (credentials_t * credentials, params_t *params,
   target_esxi_credential = params_value (params, "esxi_credential_id");
   target_snmp_credential = params_value (params, "snmp_credential_id");
 
-  CHECK_PARAM (target_source, "Save Target", edit_target);
-  CHECK_PARAM (port_list_id, "Save Target", edit_target);
-  CHECK_PARAM (target_ssh_credential, "Save Target", edit_target);
-  CHECK_PARAM (target_smb_credential, "Save Target", edit_target);
-  CHECK_PARAM (target_esxi_credential, "Save Target", edit_target);
-  CHECK_PARAM (target_snmp_credential, "Save Target", edit_target);
+  CHECK_PARAM_REDIRECT (target_source, "Save Target", "edit_target");
+  CHECK_PARAM_REDIRECT (port_list_id, "Save Target", "edit_target");
+  CHECK_PARAM_REDIRECT (target_ssh_credential, "Save Target", "edit_target");
+  CHECK_PARAM_REDIRECT (target_smb_credential, "Save Target", "edit_target");
+  CHECK_PARAM_REDIRECT (target_esxi_credential, "Save Target", "edit_target");
+  CHECK_PARAM_REDIRECT (target_snmp_credential, "Save Target", "edit_target");
 
   if (strcmp (target_ssh_credential, "--")
       && strcmp (target_ssh_credential, "0"))
-    CHECK_PARAM (port, "Save Target", edit_target);
+    CHECK_PARAM_REDIRECT (port, "Save Target", "edit_target");
 
   switch (manager_connect (credentials, &socket, &session, &html,
                            response_data))
@@ -11128,7 +11033,6 @@ save_target_omp (credentials_t * credentials, params_t *params,
     gchar *ssh_credentials_element, *smb_credentials_element;
     gchar *esxi_credentials_element, *snmp_credentials_element;
     gchar* comment_element;
-    const char *status;
     entity_t entity;
 
     if (comment)
@@ -11235,38 +11139,15 @@ save_target_omp (credentials_t * credentials, params_t *params,
 
     openvas_server_close (socket, session);
 
-    status = entity_attribute (entity, "status");
-    if ((status == NULL)
-        || (strlen (status) == 0))
-      {
-        openvas_server_close (socket, session);
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while modifying a target. "
-                             "It is unclear whether the target has been modified or not. "
-                             "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_targets", response_data);
-      }
-
-    if (status[0] != '2')
-      {
-        set_http_status_from_entity (entity, response_data);
-        html = edit_target (credentials, params, response, response_data);
-        g_free (response);
-        free_entity (entity);
-        return html;
-      }
-
-    free_entity (entity);
+    html = response_from_entity (credentials, params, entity,
+                                 (no_redirect && strcmp (no_redirect, "0")),
+                                 NULL, "get_targets",
+                                 NULL, "edit_target",
+                                 "Save Target", response_data);
   }
 
   /* Pass response to handler of following page. */
 
-  html = next_page (credentials, params, response, response_data);
-  if (html == NULL)
-    html = get_targets (credentials, params, response, response_data);
-  g_free (response);
   return html;
 }
 
@@ -11450,20 +11331,21 @@ create_config_omp (credentials_t * credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
   gchar *html, *response;
-  const char *name, *comment, *base, *scanner = NULL;
+  const char *no_redirect, *name, *comment, *base, *scanner = NULL;
   entity_t entity;
 
+  no_redirect = params_value (params, "no_redirect");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
   base = params_value (params, "base");
 
-  CHECK_PARAM (name, "New Config", new_config);
-  CHECK_PARAM (comment, "New Config", new_config);
-  CHECK_PARAM (base, "New Config", new_config);
+  CHECK_PARAM_REDIRECT (name, "New Config", "new_config");
+  CHECK_PARAM_REDIRECT (comment, "New Config", "new_config");
+  CHECK_PARAM_REDIRECT (base, "New Config", "new_config");
   if (!strcmp (base, "0"))
     {
       scanner = params_value (params, "scanner_id");
-      CHECK_PARAM (scanner, "New Config", new_config);
+      CHECK_PARAM_REDIRECT (scanner, "New Config", "new_config");
     }
 
   /* Create the config. */
@@ -11509,17 +11391,14 @@ create_config_omp (credentials_t * credentials, params_t *params,
                             "/omp?cmd=get_configs", response_data);
     }
 
-  if (omp_success (entity))
-    {
-      html = next_page (credentials, params, response, response_data);
-      if (html == NULL)
-        html = get_configs (credentials, params, response, response_data);
-    }
-  else
-    {
-      set_http_status_from_entity (entity, response_data);
-      html = new_config (credentials, params, response, response_data);
-    }
+  if (entity_attribute (entity, "id"))
+    params_add (params, "config_id", entity_attribute (entity, "id"));
+  html = response_from_entity (credentials, params, entity,
+                               (no_redirect && strcmp (no_redirect, "0")),
+                               NULL, "get_configs",
+                               NULL, "new_config",
+                               "Create Config", response_data);
+
   free_entity (entity);
   g_free (response);
   return html;
@@ -11538,9 +11417,12 @@ char *
 import_config_omp (credentials_t * credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
+  const char *no_redirect;
   gchar *command, *html, *response;
   entity_t entity;
   int ret;
+
+  no_redirect = params_value (params, "no_redirect");
 
   /* Create the config. */
 
@@ -11585,17 +11467,11 @@ import_config_omp (credentials_t * credentials, params_t *params,
 
   /* Cleanup, and return transformed XML. */
 
-  if (omp_success (entity))
-    {
-      html = next_page (credentials, params, response, response_data);
-      if (html == NULL)
-        html = get_configs (credentials, params, response, response_data);
-    }
-  else
-    {
-      set_http_status_from_entity (entity, response_data);
-      html = new_config (credentials, params, response, response_data);
-    }
+  html = response_from_entity (credentials, params, entity,
+                               (no_redirect && strcmp (no_redirect, "0")),
+                               NULL, "get_configs",
+                               NULL, "new_config",
+                               "Import Config", response_data);
   free_entity (entity);
   g_free (response);
   return html;
@@ -12080,16 +11956,17 @@ save_config_omp (credentials_t * credentials, params_t *params,
   char *ret;
   gchar *html;
   params_t *preferences, *selects, *trends;
-  const char *config_id, *name, *comment, *scanner_id;
+  const char *no_redirect, *config_id, *name, *comment, *scanner_id;
 
+  no_redirect = params_value (params, "no_redirect");
   config_id = params_value (params, "config_id");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
   scanner_id = params_value (params, "scanner_id");
 
-  CHECK_PARAM (config_id, "Save Config", edit_config);
-  CHECK_PARAM (name, "Save Config", edit_config);
-  CHECK_PARAM (comment, "Save Config", edit_config);
+  CHECK_PARAM_REDIRECT (config_id, "Save Config", "edit_config");
+  CHECK_PARAM_REDIRECT (name, "Save Config", "edit_config");
+  CHECK_PARAM_REDIRECT (comment, "Save Config", "edit_config");
 
   switch (manager_connect (credentials, &socket, &session, &html,
                            response_data))
@@ -15841,14 +15718,15 @@ create_note_omp (credentials_t *credentials, params_t *params,
 {
   char *ret;
   gchar *response;
-  const char *oid, *severity, *port, *hosts;
+  const char *no_redirect, *oid, *severity, *port, *hosts;
   const char *text, *task_id, *note_result_id;
   /* For get_report. */
   const char *active, *days;
   entity_t entity;
 
+  no_redirect = params_value (params, "no_redirect");
   oid = params_value (params, "oid");
-  CHECK_PARAM (oid, "Create Note", new_note);
+  CHECK_PARAM_REDIRECT (oid, "Create Note", "new_note");
 
   if (params_valid (params, "severity"))
     severity = params_value (params, "severity");
@@ -15857,7 +15735,7 @@ create_note_omp (credentials_t *credentials, params_t *params,
     severity = NULL;
   else
     severity = "";
-  CHECK_PARAM (severity, "Create Note", new_note);
+  CHECK_PARAM_REDIRECT (severity, "Create Note", "new_note");
 
   port = params_value (params, "port");
   if (port == NULL)
@@ -15872,7 +15750,7 @@ create_note_omp (credentials_t *credentials, params_t *params,
       if (num < 0 || num > 65535)
         port = NULL;
     }
-  CHECK_PARAM (port, "Create Note", new_note);
+  CHECK_PARAM_REDIRECT (port, "Create Note", "new_note");
 
   if (params_valid (params, "hosts"))
     {
@@ -15893,7 +15771,7 @@ create_note_omp (credentials_t *credentials, params_t *params,
     hosts = NULL;
   else
     hosts = "";
-  CHECK_PARAM (hosts, "Create Note", new_note);
+  CHECK_PARAM_REDIRECT (hosts, "Create Note", "new_note");
 
   if (params_valid (params, "note_task_id"))
     {
@@ -15908,7 +15786,7 @@ create_note_omp (credentials_t *credentials, params_t *params,
     task_id = "";
 
   active = params_value (params, "active");
-  CHECK_PARAM (active, "Create Note", new_note);
+  CHECK_PARAM_REDIRECT (active, "Create Note", "new_note");
 
   text = params_value (params, "text");
   days = params_value (params, "days");
@@ -15973,17 +15851,13 @@ create_note_omp (credentials_t *credentials, params_t *params,
                              "/omp?cmd=get_notes", response_data);
     }
 
-  if (omp_success (entity))
-    {
-      ret = next_page (credentials, params, response, response_data);
-      if (ret == NULL)
-        ret = get_notes (credentials, params, response, response_data);
-    }
-  else
-    {
-      set_http_status_from_entity (entity, response_data);
-      ret = new_note (credentials, params, response, response_data);
-    }
+  if (entity_attribute (entity, "id"))
+    params_add (params, "note_id", entity_attribute (entity, "id"));
+  ret = response_from_entity (credentials, params, entity,
+                              (no_redirect && strcmp (no_redirect, "0")),
+                              NULL, "get_notes",
+                              NULL, "new_note",
+                              "Create Note", response_data);
   free_entity (entity);
   g_free (response);
   return ret;
@@ -16140,10 +16014,12 @@ save_note_omp (credentials_t * credentials, params_t *params,
 {
   gchar *response;
   entity_t entity;
+  const char *no_redirect;
   const char *note_id, *text, *hosts, *port, *severity, *note_task_id;
   const char *note_result_id, *active, *days;
   char *ret;
 
+  no_redirect = params_value (params, "no_redirect");
   note_id = params_value (params, "note_id");
 
   text = params_value (params, "text");
@@ -16177,32 +16053,15 @@ save_note_omp (credentials_t * credentials, params_t *params,
   active = params_value (params, "active");
   days = params_value (params, "days");
 
-  if (note_task_id == NULL || note_result_id == NULL || active == NULL)
-    {
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while saving a note. "
-                           "The note remains the same. "
-                           "Diagnostics: Required parameter was NULL.",
-                           "/omp?cmd=get_notes", response_data);
-    }
-
-  if (note_id == NULL
-      || text == NULL
-      || hosts == NULL
-      || port == NULL
-      || severity == NULL
-      || days == NULL)
-    {
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while saving a note. "
-                           "The note remains the same. "
-                           "Diagnostics: Syntax error in required parameter.",
-                           "/omp?cmd=get_notes", response_data);
-    }
+  CHECK_PARAM_REDIRECT (note_task_id, "Save Note", "edit_note");
+  CHECK_PARAM_REDIRECT (note_result_id, "Save Note", "edit_note");
+  CHECK_PARAM_REDIRECT (active, "Save Note", "edit_note");
+  CHECK_PARAM_REDIRECT (note_id, "Save Note", "edit_note");
+  CHECK_PARAM_REDIRECT (text, "Save Note", "edit_note");
+  CHECK_PARAM_REDIRECT (hosts, "Save Note", "edit_note");
+  CHECK_PARAM_REDIRECT (port, "Save Note", "edit_note");
+  CHECK_PARAM_REDIRECT (severity, "Save Note", "edit_note");
+  CHECK_PARAM_REDIRECT (days, "Save Note", "edit_note");
 
   response = NULL;
   entity = NULL;
@@ -16259,17 +16118,11 @@ save_note_omp (credentials_t * credentials, params_t *params,
                              "/omp?cmd=get_notes", response_data);
     }
 
-  if (omp_success (entity))
-    {
-      ret = next_page (credentials, params, response, response_data);
-      if (ret == NULL)
-        ret = get_notes (credentials, params, response, response_data);
-    }
-  else
-    {
-      set_http_status_from_entity (entity, response_data);
-      ret = edit_note (credentials, params, response, response_data);
-    }
+  ret = response_from_entity (credentials, params, entity,
+                              (no_redirect && strcmp (no_redirect, "0")),
+                              NULL, "get_notes",
+                              NULL, "edit_note",
+                              "Save Note", response_data);
 
   free_entity (entity);
   g_free (response);
@@ -16586,14 +16439,16 @@ create_override_omp (credentials_t *credentials, params_t *params,
 {
   char *ret;
   gchar *response;
+  const char *no_redirect;
   const char *oid, *severity, *custom_severity, *new_severity, *port, *hosts;
   const char *text, *task_id, *override_result_id;
   /* For get_report. */
   const char *active, *days;
   entity_t entity;
 
+  no_redirect = params_value (params, "no_redirect");
   oid = params_value (params, "oid");
-  CHECK_PARAM (oid, "Create Override", new_override);
+  CHECK_PARAM_REDIRECT (oid, "Create Override", "new_override");
 
   if (params_valid (params, "severity"))
     severity = params_value (params, "severity");
@@ -16602,10 +16457,10 @@ create_override_omp (credentials_t *credentials, params_t *params,
     severity = NULL;
   else
     severity = "";
-  CHECK_PARAM (severity, "Create Override", new_override);
+  CHECK_PARAM_REDIRECT (severity, "Create Override", "new_override");
 
   custom_severity = params_value (params, "custom_severity");
-  CHECK_PARAM (custom_severity, "Create Override", new_override);
+  CHECK_PARAM_REDIRECT (custom_severity, "Create Override", "new_override");
 
   if (custom_severity != NULL && strcmp (custom_severity, "0"))
     {
@@ -16616,7 +16471,7 @@ create_override_omp (credentials_t *credentials, params_t *params,
         new_severity = NULL;
       else
         new_severity = "";
-      CHECK_PARAM (new_severity, "Create Override", new_override);
+      CHECK_PARAM_REDIRECT (new_severity, "Create Override", "new_override");
     }
   else
     {
@@ -16629,7 +16484,7 @@ create_override_omp (credentials_t *credentials, params_t *params,
         new_severity = NULL;
       else
         new_severity = "";
-      CHECK_PARAM (new_severity, "Create Override", new_override);
+      CHECK_PARAM_REDIRECT (new_severity, "Create Override", "new_override");
     }
 
   port = params_value (params, "port");
@@ -16645,7 +16500,7 @@ create_override_omp (credentials_t *credentials, params_t *params,
       if (num < 0 || num > 65535)
         port = NULL;
     }
-  CHECK_PARAM (port, "Create Override", new_override);
+  CHECK_PARAM_REDIRECT (port, "Create Override", "new_override");
 
   if (params_valid (params, "hosts"))
     {
@@ -16666,7 +16521,7 @@ create_override_omp (credentials_t *credentials, params_t *params,
     hosts = NULL;
   else
     hosts = "";
-  CHECK_PARAM (hosts, "Create Override", new_override);
+  CHECK_PARAM_REDIRECT (hosts, "Create Override", "new_override");
 
   if (params_valid (params, "override_task_id"))
     {
@@ -16678,7 +16533,7 @@ create_override_omp (credentials_t *credentials, params_t *params,
     task_id = "";
 
   active = params_value (params, "active");
-  CHECK_PARAM (active, "Create Override", new_override);
+  CHECK_PARAM_REDIRECT (active, "Create Override", "new_override");
 
   text = params_value (params, "text");
   days = params_value (params, "days");
@@ -16745,17 +16600,13 @@ create_override_omp (credentials_t *credentials, params_t *params,
                              "/omp?cmd=get_overrides", response_data);
     }
 
-  if (omp_success (entity))
-    {
-      ret = next_page (credentials, params, response, response_data);
-      if (ret == NULL)
-        ret = get_overrides (credentials, params, response, response_data);
-    }
-  else
-    {
-      set_http_status_from_entity (entity, response_data);
-      ret = new_override (credentials, params, response, response_data);
-    }
+  if (entity_attribute (entity, "id"))
+    params_add (params, "override_id", entity_attribute (entity, "id"));
+  ret = response_from_entity (credentials, params, entity,
+                              (no_redirect && strcmp (no_redirect, "0")),
+                              NULL, "get_overrides",
+                              NULL, "new_override",
+                              "Create Override", response_data);
   free_entity (entity);
   g_free (response);
   return ret;
@@ -16913,11 +16764,12 @@ save_override_omp (credentials_t * credentials, params_t *params,
 {
   gchar *response;
   entity_t entity;
-  const char *override_id, *text, *hosts, *port;
+  const char *no_redirect, *override_id, *text, *hosts, *port;
   const char *severity, *custom_severity, *new_severity;
   const char *override_task_id, *override_result_id, *active, *days;
   char *ret;
 
+  no_redirect = params_value (params, "no_redirect");
   override_id = params_value (params, "override_id");
 
   text = params_value (params, "text");
@@ -16957,33 +16809,17 @@ save_override_omp (credentials_t * credentials, params_t *params,
   active = params_value (params, "active");
   days = params_value (params, "days");
 
-  if (override_task_id == NULL || override_result_id == NULL || active == NULL)
-    {
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while saving a override. "
-                           "The override remains the same. "
-                           "Diagnostics: Required parameter was NULL.",
-                           "/omp?cmd=get_overrides", response_data);
-    }
+  CHECK_PARAM_REDIRECT (override_task_id, "Save Override", "edit_override");
+  CHECK_PARAM_REDIRECT (override_result_id, "Save Override", "edit_override");
+  CHECK_PARAM_REDIRECT (active, "Save Override", "edit_override");
+  CHECK_PARAM_REDIRECT (override_id, "Save Override", "edit_override");
+  CHECK_PARAM_REDIRECT (text, "Save Override", "edit_override");
+  CHECK_PARAM_REDIRECT (hosts, "Save Override", "edit_override");
+  CHECK_PARAM_REDIRECT (port, "Save Override", "edit_override");
+  CHECK_PARAM_REDIRECT (severity, "Save Override", "edit_override");
+  CHECK_PARAM_REDIRECT (new_severity, "Save Override", "edit_override");
+  CHECK_PARAM_REDIRECT (days, "Save Override", "edit_override");
 
-  if (override_id == NULL
-      || text == NULL
-      || hosts == NULL
-      || port == NULL
-      || severity == NULL
-      || new_severity == NULL
-      || days == NULL)
-    {
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while saving a override. "
-                           "The override remains the same. "
-                           "Diagnostics: Syntax error in required parameter.",
-                           "/omp?cmd=get_overrides", response_data);
-    }
   response = NULL;
   entity = NULL;
   switch (ompf (credentials,
@@ -17041,17 +16877,11 @@ save_override_omp (credentials_t * credentials, params_t *params,
                              "/omp?cmd=get_overrides", response_data);
     }
 
-  if (omp_success (entity))
-    {
-      ret = next_page (credentials, params, response, response_data);
-      if (ret == NULL)
-        ret = get_overrides (credentials, params, response, response_data);
-    }
-  else
-    {
-      set_http_status_from_entity (entity, response_data);
-      ret = edit_override (credentials, params, response, response_data);
-    }
+  ret = response_from_entity (credentials, params, entity,
+                              (no_redirect && strcmp (no_redirect, "0")),
+                              NULL, "get_overrides",
+                              NULL, "edit_override",
+                              "Save Override", response_data);
 
   free_entity (entity);
   g_free (response);
@@ -17164,20 +16994,21 @@ create_slave_omp (credentials_t *credentials, params_t *params,
 {
   int ret;
   gchar *html, *command, *response;
-  const char *name, *comment, *host, *port, *credential_id;
+  const char *no_redirect, *name, *comment, *host, *port, *credential_id;
   entity_t entity;
 
+  no_redirect = params_value (params, "no_redirect");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
   host = params_value (params, "host");
   port = params_value (params, "port");
   credential_id = params_value (params, "credential_id");
 
-  CHECK_PARAM (name, "Create Slave", new_slave);
-  CHECK_PARAM (comment, "Create Slave", new_slave);
-  CHECK_PARAM (host, "Create Slave", new_slave);
-  CHECK_PARAM (port, "Create Slave", new_slave);
-  CHECK_PARAM (credential_id, "Create Slave", new_slave);
+  CHECK_PARAM_REDIRECT (name, "Create Slave", "new_slave");
+  CHECK_PARAM_REDIRECT (comment, "Create Slave", "new_slave");
+  CHECK_PARAM_REDIRECT (host, "Create Slave", "new_slave");
+  CHECK_PARAM_REDIRECT (port, "Create Slave", "new_slave");
+  CHECK_PARAM_REDIRECT (credential_id, "Create Slave", "new_slave");
 
   if (comment)
     command = g_strdup_printf ("<create_slave>"
@@ -17237,17 +17068,13 @@ create_slave_omp (credentials_t *credentials, params_t *params,
                              "/omp?cmd=get_slaves", response_data);
     }
 
-  if (omp_success (entity))
-    {
-      html = next_page (credentials, params, response, response_data);
-      if (html == NULL)
-        html = get_slaves (credentials, params, response, response_data);
-    }
-  else
-    {
-      set_http_status_from_entity (entity, response_data);
-      html = new_slave (credentials, params, response, response_data);
-    }
+  if (entity_attribute (entity, "id"))
+    params_add (params, "slave_id", entity_attribute (entity, "id"));
+  html = response_from_entity (credentials, params, entity,
+                               (no_redirect && strcmp (no_redirect, "0")),
+                               NULL, "get_slaves",
+                               NULL, "new_slave",
+                               "Create Slave", response_data);
   free_entity (entity);
   g_free (response);
   return html;
@@ -17475,9 +17302,11 @@ save_slave_omp (credentials_t * credentials, params_t *params,
 {
   int ret;
   gchar *html, *response;
+  const char *no_redirect;
   const char *slave_id, *name, *comment, *host, *port, *credential_id;
   entity_t entity;
 
+  no_redirect = params_value (params, "no_redirect");
   slave_id = params_value (params, "slave_id");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
@@ -17485,12 +17314,12 @@ save_slave_omp (credentials_t * credentials, params_t *params,
   port = params_value (params, "port");
   credential_id = params_value (params, "credential_id");
 
-  CHECK_PARAM (slave_id, "Save Slave", edit_slave);
-  CHECK_PARAM (name, "Save Slave", edit_slave);
-  CHECK_PARAM (comment, "Save Slave", edit_slave);
-  CHECK_PARAM (host, "Save Slave", edit_slave);
-  CHECK_PARAM (port, "Save Slave", edit_slave);
-  CHECK_PARAM (credential_id, "Save Slave", edit_slave);
+  CHECK_PARAM_REDIRECT (slave_id, "Save Slave", "edit_slave");
+  CHECK_PARAM_REDIRECT (name, "Save Slave", "edit_slave");
+  CHECK_PARAM_REDIRECT (comment, "Save Slave", "edit_slave");
+  CHECK_PARAM_REDIRECT (host, "Save Slave", "edit_slave");
+  CHECK_PARAM_REDIRECT (port, "Save Slave", "edit_slave");
+  CHECK_PARAM_REDIRECT (credential_id, "Save Slave", "edit_slave");
 
   /* Modify the slave. */
 
@@ -17545,17 +17374,11 @@ save_slave_omp (credentials_t * credentials, params_t *params,
                              "/omp?cmd=get_slaves", response_data);
     }
 
-  if (omp_success (entity))
-    {
-      html = next_page (credentials, params, response, response_data);
-      if (html == NULL)
-        html = get_slaves (credentials, params, response, response_data);
-    }
-  else
-    {
-      set_http_status_from_entity (entity, response_data);
-      html = edit_slave (credentials, params, response, response_data);
-    }
+  html = response_from_entity (credentials, params, entity,
+                               (no_redirect && strcmp (no_redirect, "0")),
+                               NULL, "get_slaves",
+                               NULL, "edit_slave",
+                               "Save Slave", response_data);
   free_entity (entity);
   g_free (response);
   return html;
@@ -17898,9 +17721,11 @@ create_scanner_omp (credentials_t * credentials, params_t *params,
 {
   char *ret;
   gchar *response = NULL;
+  const char *no_redirect;
   const char *name, *comment, *host, *port, *type, *ca_pub, *credential_id;
   entity_t entity = NULL;
 
+  no_redirect = params_value (params, "no_redirect");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
   host = params_value (params, "host");
@@ -17908,13 +17733,13 @@ create_scanner_omp (credentials_t * credentials, params_t *params,
   type = params_value (params, "scanner_type");
   ca_pub = params_value (params, "ca_pub");
   credential_id = params_value (params, "credential_id");
-  CHECK_PARAM (name, "Create Scanner", new_scanner);
-  CHECK_PARAM (comment, "Create Scanner", new_scanner);
-  CHECK_PARAM (host, "Create Scanner", new_scanner);
-  CHECK_PARAM (port, "Create Scanner", new_scanner);
-  CHECK_PARAM (type, "Create Scanner", new_scanner);
-  CHECK_PARAM (ca_pub, "Create Scanner", new_scanner);
-  CHECK_PARAM (credential_id, "Create Scanner", new_scanner);
+  CHECK_PARAM_REDIRECT (name, "Create Scanner", "new_scanner");
+  CHECK_PARAM_REDIRECT (comment, "Create Scanner", "new_scanner");
+  CHECK_PARAM_REDIRECT (host, "Create Scanner", "new_scanner");
+  CHECK_PARAM_REDIRECT (port, "Create Scanner", "new_scanner");
+  CHECK_PARAM_REDIRECT (type, "Create Scanner", "new_scanner");
+  CHECK_PARAM_REDIRECT (ca_pub, "Create Scanner", "new_scanner");
+  CHECK_PARAM_REDIRECT (credential_id, "Create Scanner", "new_scanner");
 
   switch (ompf (credentials, &response, &entity, response_data,
                 "<create_scanner><name>%s</name><comment>%s</comment>"
@@ -17952,17 +17777,13 @@ create_scanner_omp (credentials_t * credentials, params_t *params,
                  "/omp?cmd=get_scanners", response_data);
     }
 
-  if (omp_success (entity))
-    {
-      ret = next_page (credentials, params, response, response_data);
-      if (ret == NULL)
-        ret = get_scanners (credentials, params, response, response_data);
-    }
-  else
-    {
-      set_http_status_from_entity (entity, response_data);
-      ret = new_scanner (credentials, params, response, response_data);
-    }
+  if (entity_attribute (entity, "id"))
+    params_add (params, "scanner_id", entity_attribute (entity, "id"));
+  ret = response_from_entity (credentials, params, entity,
+                              (no_redirect && strcmp (no_redirect, "0")),
+                              NULL, "get_scanners",
+                              NULL, "new_scanner",
+                              "Create Scanner", response_data);
   free_entity (entity);
   g_free (response);
   return ret;
@@ -18139,11 +17960,13 @@ save_scanner_omp (credentials_t * credentials, params_t *params,
 {
   gchar *response = NULL;
   entity_t entity = NULL;
+  const char *no_redirect;
   const char *scanner_id, *name, *comment, *port, *host, *type, *ca_pub;
   const char *credential_id;
   char *html;
   int ret, in_use;
 
+  no_redirect = params_value (params, "no_redirect");
   scanner_id = params_value (params, "scanner_id");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
@@ -18152,19 +17975,19 @@ save_scanner_omp (credentials_t * credentials, params_t *params,
   type = params_value (params, "scanner_type");
   ca_pub = params_value (params, "ca_pub");
   credential_id = params_value (params, "credential_id");
-  CHECK_PARAM (scanner_id, "Edit Scanner", edit_scanner);
-  CHECK_PARAM (name, "Edit Scanner", edit_scanner);
+  CHECK_PARAM_REDIRECT (scanner_id, "Edit Scanner", "edit_scanner");
+  CHECK_PARAM_REDIRECT (name, "Edit Scanner", "edit_scanner");
   if (params_given (params, "host") == 0)
     in_use = 1;
   else
    {
      in_use = 0;
-     CHECK_PARAM (host, "Edit Scanner", edit_scanner);
-     CHECK_PARAM (port, "Edit Scanner", edit_scanner);
-     CHECK_PARAM (type, "Edit Scanner", edit_scanner);
+     CHECK_PARAM_REDIRECT (host, "Edit Scanner", "edit_scanner");
+     CHECK_PARAM_REDIRECT (port, "Edit Scanner", "edit_scanner");
+     CHECK_PARAM_REDIRECT (type, "Edit Scanner", "edit_scanner");
    }
-  CHECK_PARAM (ca_pub, "Edit Scanner", edit_scanner);
-  CHECK_PARAM (credential_id, "Edit Scanner", edit_scanner);
+  CHECK_PARAM_REDIRECT (ca_pub, "Edit Scanner", "edit_scanner");
+  CHECK_PARAM_REDIRECT (credential_id, "Edit Scanner", "edit_scanner");
 
   if (in_use)
     ret = ompf (credentials, &response, &entity, response_data,
@@ -18219,17 +18042,11 @@ save_scanner_omp (credentials_t * credentials, params_t *params,
                  "/omp?cmd=get_scanners", response_data);
     }
 
-  if (omp_success (entity))
-    {
-      html = next_page (credentials, params, response, response_data);
-      if (html == NULL)
-        html = get_scanners_omp (credentials, params, response_data);
-    }
-  else
-    {
-      set_http_status_from_entity (entity, response_data);
-      html = edit_scanner (credentials, params, response, response_data);
-    }
+  html = response_from_entity (credentials, params, entity,
+                               (no_redirect && strcmp (no_redirect, "0")),
+                               NULL, "get_scanners",
+                               NULL, "edit_scanner",
+                               "Save Scanner", response_data);
 
   free_entity (entity);
   g_free (response);
@@ -18380,10 +18197,12 @@ create_schedule_omp (credentials_t * credentials, params_t *params,
 {
   char *ret;
   gchar *response;
+  const char *no_redirect;
   const char *name, *comment, *hour, *minute, *day_of_month, *month, *year;
   const char *period, *period_unit, *duration, *duration_unit, *timezone;
   entity_t entity;
 
+  no_redirect = params_value (params, "no_redirect");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
   hour = params_value (params, "hour");
@@ -18397,18 +18216,18 @@ create_schedule_omp (credentials_t * credentials, params_t *params,
   year = params_value (params, "year");
   timezone = params_value (params, "timezone");
 
-  CHECK_PARAM (name, "Create Schedule", new_schedule);
-  CHECK_PARAM (comment, "Create Schedule", new_schedule);
-  CHECK_PARAM (hour, "Create Schedule", new_schedule);
-  CHECK_PARAM (minute, "Create Schedule", new_schedule);
-  CHECK_PARAM (day_of_month, "Create Schedule", new_schedule);
-  CHECK_PARAM (duration, "Create Schedule", new_schedule);
-  CHECK_PARAM (duration_unit, "Create Schedule", new_schedule);
-  CHECK_PARAM (month, "Create Schedule", new_schedule);
-  CHECK_PARAM (period, "Create Schedule", new_schedule);
-  CHECK_PARAM (period_unit, "period_unit", new_schedule);
-  CHECK_PARAM (year, "Create Schedule", new_schedule);
-  CHECK_PARAM (timezone, "Create Schedule", new_schedule);
+  CHECK_PARAM_REDIRECT (name, "Create Schedule", "new_schedule");
+  CHECK_PARAM_REDIRECT (comment, "Create Schedule", "new_schedule");
+  CHECK_PARAM_REDIRECT (hour, "Create Schedule", "new_schedule");
+  CHECK_PARAM_REDIRECT (minute, "Create Schedule", "new_schedule");
+  CHECK_PARAM_REDIRECT (day_of_month, "Create Schedule", "new_schedule");
+  CHECK_PARAM_REDIRECT (duration, "Create Schedule", "new_schedule");
+  CHECK_PARAM_REDIRECT (duration_unit, "Create Schedule", "new_schedule");
+  CHECK_PARAM_REDIRECT (month, "Create Schedule", "new_schedule");
+  CHECK_PARAM_REDIRECT (period, "Create Schedule", "new_schedule");
+  CHECK_PARAM_REDIRECT (period_unit, "period_unit", "new_schedule");
+  CHECK_PARAM_REDIRECT (year, "Create Schedule", "new_schedule");
+  CHECK_PARAM_REDIRECT (timezone, "Create Schedule", "new_schedule");
 
   response = NULL;
   entity = NULL;
@@ -18482,17 +18301,13 @@ create_schedule_omp (credentials_t * credentials, params_t *params,
                              "/omp?cmd=get_schedules", response_data);
     }
 
-  if (omp_success (entity))
-    {
-      ret = next_page (credentials, params, response, response_data);
-      if (ret == NULL)
-        ret = get_schedules (credentials, params, response, response_data);
-    }
-  else
-    {
-      set_http_status_from_entity (entity, response_data);
-      ret = new_schedule (credentials, params, response, response_data);
-    }
+  if (entity_attribute (entity, "id"))
+    params_add (params, "schedule_id", entity_attribute (entity, "id"));
+  ret = response_from_entity (credentials, params, entity,
+                              (no_redirect && strcmp (no_redirect, "0")),
+                              NULL, "get_schedules",
+                              NULL, "new_schedule",
+                              "Create Schedule", response_data);
   free_entity (entity);
   g_free (response);
   return ret;
@@ -18910,9 +18725,12 @@ char *
 import_report_format_omp (credentials_t * credentials, params_t *params,
                           cmd_response_data_t* response_data)
 {
+  const char* no_redirect;
   gchar *command, *html, *response;
   entity_t entity;
   int ret;
+
+  no_redirect = params_value (params, "no_redirect");
 
   /* Create the report format. */
 
@@ -18957,18 +18775,13 @@ import_report_format_omp (credentials_t * credentials, params_t *params,
 
   /* Cleanup, and return transformed XML. */
 
-  if (omp_success (entity))
-    {
-      html = next_page (credentials, params, response, response_data);
-      if (html == NULL)
-        html = get_report_formats (credentials, params, response,
-                                   response_data);
-    }
-  else
-    {
-      set_http_status_from_entity (entity, response_data);
-      html = new_report_format (credentials, params, response, response_data);
-    }
+  if (entity_attribute (entity, "id"))
+    params_add (params, "report_format_id", entity_attribute (entity, "id"));
+  html = response_from_entity (credentials, params, entity,
+                               (no_redirect && strcmp (no_redirect, "0")),
+                               NULL, "get_report_formats",
+                               NULL, "new_report_format",
+                               "Create Report Format", response_data);
 
   free_entity (entity);
   g_free (response);
@@ -18991,18 +18804,20 @@ save_report_format_omp (credentials_t * credentials, params_t *params,
   int ret;
   gchar *html, *response;
   params_t *preferences;
-  const char *report_format_id, *name, *summary, *enable;
+  const char *no_redirect, *report_format_id, *name, *summary, *enable;
   entity_t entity;
 
+  no_redirect = params_value (params, "no_redirect");
   report_format_id = params_value (params, "report_format_id");
   name = params_value (params, "name");
   summary = params_value (params, "summary");
   enable = params_value (params, "enable");
 
-  CHECK_PARAM (report_format_id, "Save Report Format", edit_report_format);
-  CHECK_PARAM (name, "Save Report Format", edit_report_format);
-  CHECK_PARAM (summary, "Save Report Format", edit_report_format);
-  CHECK_PARAM (enable, "Save Report Format", edit_report_format);
+  CHECK_PARAM_REDIRECT (report_format_id, "Save Report Format",
+                        "edit_report_format");
+  CHECK_PARAM_REDIRECT (name, "Save Report Format", "edit_report_format");
+  CHECK_PARAM_REDIRECT (summary, "Save Report Format", "edit_report_format");
+  CHECK_PARAM_REDIRECT (enable, "Save Report Format", "edit_report_format");
 
   /* Modify the Report Format. */
 
@@ -19140,18 +18955,11 @@ save_report_format_omp (credentials_t * credentials, params_t *params,
                              "/omp?cmd=get_report_formats", response_data);
     }
 
-  if (omp_success (entity))
-    {
-      html = next_page (credentials, params, response, response_data);
-      if (html == NULL)
-        html = get_report_formats (credentials, params, response,
-                                   response_data);
-    }
-  else
-    {
-      set_http_status_from_entity (entity, response_data);
-      html = edit_report_format (credentials, params, response, response_data);
-    }
+  html = response_from_entity (credentials, params, entity,
+                               (no_redirect && strcmp (no_redirect, "0")),
+                               NULL, "get_report_formats",
+                               NULL, "edit_report_format",
+                               "Save Report Format", response_data);
   free_entity (entity);
   g_free (response);
   return html;
@@ -19267,7 +19075,7 @@ char *
 run_wizard_omp (credentials_t *credentials, params_t *params,
                 cmd_response_data_t* response_data)
 {
-  const char *name;
+  const char *no_redirect, *name;
   int ret;
   GString *run;
   param_t *param;
@@ -19280,6 +19088,7 @@ run_wizard_omp (credentials_t *credentials, params_t *params,
    * parameters are called "param"s and so are the OMP wizard
    * parameters. */
 
+  no_redirect = params_value (params, "no_redirect");
   name = params_value (params, "name");
   if (name == NULL)
     {
@@ -19348,17 +19157,11 @@ run_wizard_omp (credentials_t *credentials, params_t *params,
                              "/omp?cmd=get_tasks", response_data);
     }
 
-  if (omp_success (entity))
-    {
-      html = next_page (credentials, params, response, response_data);
-      if (html == NULL)
-        html = wizard (credentials, params, response, response_data);
-    }
-  else
-    {
-      set_http_status_from_entity (entity, response_data);
-      html = wizard (credentials, params, response, response_data);
-    }
+  html = response_from_entity (credentials, params, entity,
+                               (no_redirect && strcmp (no_redirect, "0")),
+                               NULL, "wizard",
+                               NULL, "wizard",
+                               "Run Wizard", response_data);
   free_entity (entity);
   g_free (response);
   return html;
@@ -20999,19 +20802,20 @@ create_group_omp (credentials_t *credentials, params_t *params,
                   cmd_response_data_t* response_data)
 {
   gchar *html, *response, *command, *specials_element;
-  const char *name, *comment, *users, *grant_full;
+  const char *no_redirect, *name, *comment, *users, *grant_full;
   entity_t entity;
   GString *xml;
   int ret;
 
+  no_redirect = params_value (params, "no_redirect");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
   grant_full = params_value (params, "grant_full");
   users = params_value (params, "users");
 
-  CHECK_PARAM (name, "Create Group", new_group);
-  CHECK_PARAM (comment, "Create Group", new_group);
-  CHECK_PARAM (users, "Create Group", new_group);
+  CHECK_PARAM_REDIRECT (name, "Create Group", "new_group");
+  CHECK_PARAM_REDIRECT (comment, "Create Group", "new_group");
+  CHECK_PARAM_REDIRECT (users, "Create Group", "new_group");
 
   /* Create the group. */
 
@@ -21075,17 +20879,13 @@ create_group_omp (credentials_t *credentials, params_t *params,
                             "/omp?cmd=get_groups", response_data);
     }
 
-  if (omp_success (entity))
-    {
-      html = next_page (credentials, params, response, response_data);
-      if (html == NULL)
-        html = get_groups (credentials, params, response, response_data);
-    }
-  else
-    {
-      set_http_status_from_entity (entity, response_data);
-      html = new_group (credentials, params, response, response_data);
-    }
+  if (entity_attribute (entity, "id"))
+    params_add (params, "group_id", entity_attribute (entity, "id"));
+  html = response_from_entity (credentials, params, entity,
+                               (no_redirect && strcmp (no_redirect, "0")),
+                               NULL, "get_groups",
+                               NULL, "new_group",
+                               "Create Group", response_data);
   free_entity (entity);
   g_free (response);
   return html;
@@ -21182,18 +20982,19 @@ save_group_omp (credentials_t * credentials, params_t *params,
 {
   int ret;
   gchar *html, *response;
-  const char *group_id, *name, *comment, *users;
+  const char *no_redirect, *group_id, *name, *comment, *users;
   entity_t entity;
 
+  no_redirect = params_value (params, "no_redirect");
   group_id = params_value (params, "group_id");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
   users = params_value (params, "users");
 
-  CHECK_PARAM (group_id, "Save Group", edit_group);
-  CHECK_PARAM (name, "Save Group", edit_group);
-  CHECK_PARAM (comment, "Save Group", edit_group);
-  CHECK_PARAM (users, "Save Group", edit_group);
+  CHECK_PARAM_REDIRECT (group_id, "Save Group", "edit_group");
+  CHECK_PARAM_REDIRECT (name, "Save Group", "edit_group");
+  CHECK_PARAM_REDIRECT (comment, "Save Group", "edit_group");
+  CHECK_PARAM_REDIRECT (users, "Save Group", "edit_group");
 
   /* Modify the Group. */
 
@@ -21244,17 +21045,11 @@ save_group_omp (credentials_t * credentials, params_t *params,
                              "/omp?cmd=get_groups", response_data);
     }
 
-  if (omp_success (entity))
-    {
-      html = next_page (credentials, params, response, response_data);
-      if (html == NULL)
-        html = get_groups (credentials, params, response, response_data);
-    }
-  else
-    {
-      set_http_status_from_entity (entity, response_data);
-      html = edit_group (credentials, params, response, response_data);
-    }
+  html = response_from_entity (credentials, params, entity,
+                               (no_redirect && strcmp (no_redirect, "0")),
+                               NULL, "get_groups",
+                               NULL, "edit_group",
+                               "Save Group", response_data);
   free_entity (entity);
   g_free (response);
   return html;
@@ -21558,7 +21353,7 @@ create_permission_omp (credentials_t *credentials, params_t *params,
 {
   int ret;
   gchar *html, *response;
-  const char *name, *comment, *resource_id, *resource_type;
+  const char *no_redirect, *name, *comment, *resource_id, *resource_type;
   const char *subject_id, *subject_type, *subject_name;
   entity_t entity;
 
@@ -21566,6 +21361,7 @@ create_permission_omp (credentials_t *credentials, params_t *params,
   entity_t get_subject_entity = NULL;
   entity_t subject_entity;
 
+  no_redirect = params_value (params, "no_redirect");
   name = params_value (params, "permission");
   comment = params_value (params, "comment");
   resource_id = params_value (params, "id_or_empty");
@@ -21573,16 +21369,17 @@ create_permission_omp (credentials_t *credentials, params_t *params,
   subject_type = params_value (params, "subject_type");
   subject_name = params_value (params, "subject_name");
 
-  CHECK_PARAM (name, "Create Permission", new_permission);
-  CHECK_PARAM (comment, "Create Permission", new_permission);
-  CHECK_PARAM (resource_id, "Create Permission", new_permission);
-  CHECK_PARAM (subject_type, "Create Permission", new_permission);
+  CHECK_PARAM_REDIRECT (name, "Create Permission", "new_permission");
+  CHECK_PARAM_REDIRECT (comment, "Create Permission", "new_permission");
+  CHECK_PARAM_REDIRECT (resource_id, "Create Permission", "new_permission");
+  CHECK_PARAM_REDIRECT (subject_type, "Create Permission", "new_permission");
   if (params_given (params, "optional_resource_type"))
-    CHECK_PARAM (resource_type, "Create Permission", new_permission);
+    CHECK_PARAM_REDIRECT (resource_type, "Create Permission", "new_permission");
 
   if (params_given (params, "subject_name"))
     {
-      CHECK_PARAM (subject_name, "Create Permission", new_permission);
+      CHECK_PARAM_REDIRECT (subject_name,
+                            "Create Permission", "new_permission");
       subject_id = NULL;
       ret = ompf (credentials,
                   &subject_response,
@@ -21655,7 +21452,7 @@ create_permission_omp (credentials_t *credentials, params_t *params,
     subject_id = params_value (params, "permission_role_id");
   else
     subject_id = NULL;
-  CHECK_PARAM (subject_id, "Create Permission", new_permission);
+  CHECK_PARAM_REDIRECT (subject_id, "Create Permission", "new_permission");
 
   /* Create the permission(s). */
 
@@ -21754,18 +21551,13 @@ create_permission_omp (credentials_t *credentials, params_t *params,
                                 "/omp?cmd=get_permissions", response_data);
         }
 
-      if (omp_success (entity))
-        {
-          html = next_page (credentials, params, response, response_data);
-          if (html == NULL)
-            html = get_permissions (credentials, params, response,
-                                    response_data);
-        }
-      else
-        {
-          set_http_status_from_entity (entity, response_data);
-          html = new_permission (credentials, params, response, response_data);
-        }
+        if (entity_attribute (entity, "id"))
+          params_add (params, "permission_id", entity_attribute (entity, "id"));
+        html = response_from_entity (credentials, params, entity,
+                                     (no_redirect && strcmp (no_redirect, "0")),
+                                     NULL, "get_permissions",
+                                     NULL, "new_permission",
+                                     "Create Permission", response_data);
     }
   else
     {
@@ -21824,21 +21616,13 @@ create_permission_omp (credentials_t *credentials, params_t *params,
                                 "/omp?cmd=get_permissions", response_data);
         }
 
-      if (omp_success (entity))
-        {
-          html = next_page (credentials, params, response, response_data);
-          if (html == NULL)
-            html = get_permissions (credentials, params, response,
-                                    response_data);
-        }
-      else
-        {
-          set_http_status_from_entity (entity, response_data);
-          html = next_page_error (credentials, params, response, response_data);
-          if (html == NULL)
-            html = new_permission (credentials, params, response,
-                                   response_data);
-        }
+        if (entity_attribute (entity, "id"))
+          params_add (params, "permission_id", entity_attribute (entity, "id"));
+        html = response_from_entity (credentials, params, entity,
+                                     (no_redirect && strcmp (no_redirect, "0")),
+                                     NULL, "get_permissions",
+                                     NULL, "new_permission",
+                                     "Create Permission", response_data);
     }
   free_entity (entity);
   g_free (response);
@@ -21878,17 +21662,18 @@ create_permission_omp (credentials_t *credentials, params_t *params,
     }                                                                         \
   if (omp_success (entity))                                                   \
     {                                                                         \
-      g_string_append (responses, response);                                  \
+      successes ++;                                                           \
       free_entity (entity);                                                   \
       g_free (response);                                                      \
     }                                                                         \
   else                                                                        \
     {                                                                         \
-      set_http_status_from_entity (entity, response_data);                                   \
-      g_string_free (responses, TRUE);                                        \
-      html = next_page_error (credentials, params, response, response_data);  \
-      if (html == NULL)                                                       \
-        html = new_permission (credentials, params, response, response_data); \
+      html                                                                    \
+        = response_from_entity (credentials, params, entity,                  \
+                                (no_redirect && strcmp (no_redirect, "0")),   \
+                                NULL, "get_permissions",                      \
+                                NULL, "new_permissions",                      \
+                                "Create Permissions", response_data);         \
       free_entity (entity);                                                   \
       g_free (response);                                                      \
       return html;                                                            \
@@ -22204,9 +21989,9 @@ create_permissions_omp (credentials_t *credentials, params_t *params,
                         cmd_response_data_t* response_data)
 {
   int ret;
-  gchar *html, *response;
-  GString *responses;
-  const char *permission, *comment, *resource_id, *resource_type;
+  gchar *html, *response, *summary_response, *next_url;
+  int successes;
+  const char *no_redirect, *permission, *comment, *resource_id, *resource_type;
   const char *subject_id, *subject_type, *subject_name;
   int include_related;
 
@@ -22216,6 +22001,7 @@ create_permissions_omp (credentials_t *credentials, params_t *params,
   entity_t get_subject_entity = NULL;
   entity_t subject_entity;
 
+  no_redirect = params_value (params, "no_redirect");
   permission = params_value (params, "permission");
   comment = params_value (params, "comment");
   resource_id = params_value (params, "resource_id");
@@ -22310,7 +22096,7 @@ create_permissions_omp (credentials_t *credentials, params_t *params,
     subject_id = NULL;
   CHECK_PARAM (subject_id, "Create Permission", new_permission);
 
-  responses = g_string_new ("");
+  successes = 0;
 
   /* Create the permission(s). */
 
@@ -22675,11 +22461,29 @@ create_permissions_omp (credentials_t *credentials, params_t *params,
   if (get_subject_entity)
     free_entity (get_subject_entity);
 
-  html = next_page (credentials, params, responses->str, response_data);
-  if (html == NULL)
-    html = get_permissions (credentials, params, responses->str, response_data);
+  summary_response = g_strdup_printf("Successfully created %i permissions",
+                                     successes);
 
-  g_string_free (responses, FALSE);
+  next_url = next_page_url (credentials, params,
+                            NULL, "new_permissions",
+                            "Create Permissions",
+                            G_STRINGIFY (MHD_HTTP_CREATED),
+                            summary_response);
+
+  if (no_redirect)
+    {
+      html = action_result_page (credentials, response_data,
+                                 "Create Permissions",
+                                 G_STRINGIFY (MHD_HTTP_CREATED),
+                                 summary_response,
+                                 next_url);
+      g_free (next_url);
+    }
+  else
+    {
+      html = NULL;
+      response_data->redirect = next_url;
+    }
   return html;
 }
 
@@ -22922,11 +22726,13 @@ save_permission_omp (credentials_t * credentials, params_t *params,
                      cmd_response_data_t* response_data)
 {
   gchar *html, *response;
+  const char *no_redirect;
   const char *permission_id, *name, *comment, *resource_id, *resource_type;
   const char *subject_id, *subject_type;
   entity_t entity;
   int ret;
 
+  no_redirect = params_value (params, "no_redirect");
   permission_id = params_value (params, "permission_id");
   name = params_value (params, "permission");
   comment = params_value (params, "comment");
@@ -22934,13 +22740,13 @@ save_permission_omp (credentials_t * credentials, params_t *params,
   resource_id = params_value (params, "id_or_empty");
   resource_type = params_value (params, "optional_resource_type");
 
-  CHECK_PARAM (permission_id, "Save Permission", edit_permission);
-  CHECK_PARAM (name, "Save Permission", edit_permission);
-  CHECK_PARAM (comment, "Save Permission", edit_permission);
-  CHECK_PARAM (resource_id, "Save Permission", edit_permission);
-  CHECK_PARAM (subject_type, "Save Permission", edit_permission);
+  CHECK_PARAM_REDIRECT (permission_id, "Save Permission", "edit_permission");
+  CHECK_PARAM_REDIRECT (name, "Save Permission", "edit_permission");
+  CHECK_PARAM_REDIRECT (comment, "Save Permission", "edit_permission");
+  CHECK_PARAM_REDIRECT (resource_id, "Save Permission", "edit_permission");
+  CHECK_PARAM_REDIRECT (subject_type, "Save Permission", "edit_permission");
   if (params_given (params, "optional_resource_type"))
-    CHECK_PARAM (resource_type, "Save Permission", edit_permission);
+    CHECK_PARAM_REDIRECT (resource_type, "Save Permission", "edit_permission");
 
   if (strcmp (subject_type, "user") == 0)
     subject_id = params_value (params, "user_id");
@@ -22950,7 +22756,7 @@ save_permission_omp (credentials_t * credentials, params_t *params,
     subject_id = params_value (params, "role_id");
   else
     subject_id = NULL;
-  CHECK_PARAM (subject_id, "Save Permission", edit_permission);
+  CHECK_PARAM_REDIRECT (subject_id, "Save Permission", "edit_permission");
 
   /* Modify the permission. */
 
@@ -23008,17 +22814,11 @@ save_permission_omp (credentials_t * credentials, params_t *params,
                              "/omp?cmd=get_permissions", response_data);
     }
 
-  if (omp_success (entity))
-    {
-      html = next_page (credentials, params, response, response_data);
-      if (html == NULL)
-        html = get_permissions (credentials, params, response, response_data);
-    }
-  else
-    {
-      set_http_status_from_entity (entity, response_data);
-      html = edit_permission (credentials, params, response, response_data);
-    }
+  html = response_from_entity (credentials, params, entity,
+                               (no_redirect && strcmp (no_redirect, "0")),
+                               NULL, "get_permissions",
+                               NULL, "edit_permission",
+                               "Save Permission", response_data);
   free_entity (entity);
   g_free (response);
   return html;
@@ -23105,18 +22905,19 @@ create_port_list_omp (credentials_t * credentials, params_t *params,
                       cmd_response_data_t* response_data)
 {
   gchar *html, *response;
-  const char *name, *comment, *port_range, *from_file;
+  const char *no_redirect, *name, *comment, *port_range, *from_file;
   entity_t entity;
 
+  no_redirect = params_value (params, "no_redirect");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
   port_range = params_value (params, "port_range");
   from_file = params_value (params, "from_file");
 
-  CHECK_PARAM (name, "Create Port List", new_port_list);
-  CHECK_PARAM (comment, "Create Port List", new_port_list);
-  CHECK_PARAM (port_range, "Create Port List", new_port_list);
-  CHECK_PARAM (from_file, "Create Port List", new_port_list);
+  CHECK_PARAM_REDIRECT (name, "Create Port List", "new_port_list");
+  CHECK_PARAM_REDIRECT (comment, "Create Port List", "new_port_list");
+  CHECK_PARAM_REDIRECT (port_range, "Create Port List", "new_port_list");
+  CHECK_PARAM_REDIRECT (from_file, "Create Port List", "new_port_list");
 
   /* Create the port_list. */
 
@@ -23164,17 +22965,13 @@ create_port_list_omp (credentials_t * credentials, params_t *params,
                             "/omp?cmd=get_port_lists", response_data);
     }
 
-  if (omp_success (entity))
-    {
-      html = next_page (credentials, params, response, response_data);
-      if (html == NULL)
-        html = get_port_lists (credentials, params, response, response_data);
-    }
-  else
-    {
-      set_http_status_from_entity (entity, response_data);
-      html = new_port_list (credentials, params, response, response_data);
-    }
+  if (entity_attribute (entity, "id"))
+    params_add (params, "port_list_id", entity_attribute (entity, "id"));
+  html = response_from_entity (credentials, params, entity,
+                               (no_redirect && strcmp (no_redirect, "0")),
+                               NULL, "get_port_lists",
+                               NULL, "new_port_list",
+                               "Create Port List", response_data);
   free_entity (entity);
   g_free (response);
   return html;
@@ -23195,18 +22992,19 @@ create_port_range_omp (credentials_t * credentials, params_t *params,
 {
   int ret;
   gchar *html, *response;
-  const char *port_list_id, *start, *end, *type;
+  const char *no_redirect, *port_list_id, *start, *end, *type;
   entity_t entity;
 
+  no_redirect = params_value (params, "no_redirect");
   port_list_id = params_value (params, "port_list_id");
   start = params_value (params, "port_range_start");
   end = params_value (params, "port_range_end");
   type = params_value (params, "port_type");
 
-  CHECK_PARAM (port_list_id, "Create Port Range", edit_port_list);
-  CHECK_PARAM (start, "Create Port Range", edit_port_list);
-  CHECK_PARAM (end, "Create Port Range", edit_port_list);
-  CHECK_PARAM (type, "Create Port Range", edit_port_list);
+  CHECK_PARAM_REDIRECT (port_list_id, "Create Port Range", "edit_port_list");
+  CHECK_PARAM_REDIRECT (start, "Create Port Range", "edit_port_list");
+  CHECK_PARAM_REDIRECT (end, "Create Port Range", "edit_port_list");
+  CHECK_PARAM_REDIRECT (type, "Create Port Range", "edit_port_list");
 
   /* Create the port range. */
 
@@ -23258,17 +23056,11 @@ create_port_range_omp (credentials_t * credentials, params_t *params,
                              "/omp?cmd=get_port_lists", response_data);
     }
 
-  if (omp_success (entity))
-    {
-      html = next_page (credentials, params, response, response_data);
-      if (html == NULL)
-        html = get_port_lists (credentials, params, response, response_data);
-    }
-  else
-    {
-      set_http_status_from_entity (entity, response_data);
-      html = edit_port_list (credentials, params, response, response_data);
-    }
+  html = response_from_entity (credentials, params, entity,
+                               (no_redirect && strcmp (no_redirect, "0")),
+                               NULL, "edit_port_list",
+                               NULL, "edit_port_list",
+                               "Create Port Range", response_data);
   free_entity (entity);
   g_free (response);
   return html;
@@ -23407,16 +23199,17 @@ save_port_list_omp (credentials_t * credentials, params_t *params,
 {
   int ret;
   gchar *html, *response;
-  const char *port_list_id, *name, *comment;
+  const char *no_redirect, *port_list_id, *name, *comment;
   entity_t entity;
 
+  no_redirect = params_value (params, "no_redirect");
   port_list_id = params_value (params, "port_list_id");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
 
-  CHECK_PARAM (port_list_id, "Save Port List", edit_port_list);
-  CHECK_PARAM (name, "Save Port List", edit_port_list);
-  CHECK_PARAM (comment, "Save Port List", edit_port_list);
+  CHECK_PARAM_REDIRECT (port_list_id, "Save Port List", "edit_port_list");
+  CHECK_PARAM_REDIRECT (name, "Save Port List", "edit_port_list");
+  CHECK_PARAM_REDIRECT (comment, "Save Port List", "edit_port_list");
 
   /* Modify the Port List. */
 
@@ -23465,17 +23258,11 @@ save_port_list_omp (credentials_t * credentials, params_t *params,
                              "/omp?cmd=get_port_lists", response_data);
     }
 
-  if (omp_success (entity))
-    {
-      html = next_page (credentials, params, response, response_data);
-      if (html == NULL)
-        html = get_port_lists (credentials, params, response, response_data);
-    }
-  else
-    {
-      set_http_status_from_entity (entity, response_data);
-      html = edit_port_list (credentials, params, response, response_data);
-    }
+  html = response_from_entity (credentials, params, entity,
+                               (no_redirect && strcmp (no_redirect, "0")),
+                               NULL, "get_port_lists",
+                               NULL, "edit_port_list",
+                               "Save Port List", response_data);
   free_entity (entity);
   g_free (response);
   return html;
@@ -23545,9 +23332,12 @@ char *
 import_port_list_omp (credentials_t * credentials, params_t *params,
                       cmd_response_data_t* response_data)
 {
+  const char *no_redirect;
   gchar *command, *html, *response;
   entity_t entity;
   int ret;
+
+  no_redirect = params_value (params, "no_redirect");
 
   /* Create the port list. */
 
@@ -23595,17 +23385,11 @@ import_port_list_omp (credentials_t * credentials, params_t *params,
 
   /* Cleanup, and return transformed XML. */
 
-  if (omp_success (entity))
-    {
-      html = next_page (credentials, params, response, response_data);
-      if (html == NULL)
-        html = get_port_lists (credentials, params, response, response_data);
-    }
-  else
-    {
-      set_http_status_from_entity (entity, response_data);
-      html = new_port_list (credentials, params, response, response_data);
-    }
+  html = response_from_entity (credentials, params, entity,
+                               (no_redirect && strcmp (no_redirect, "0")),
+                               NULL, "get_port_lists",
+                               NULL, "new_port_list",
+                               "Import Port List", response_data);
   free_entity (entity);
   g_free (response);
   return html;
@@ -23702,16 +23486,17 @@ create_role_omp (credentials_t *credentials, params_t *params,
 {
   char *ret;
   gchar *response;
-  const char *name, *comment, *users;
+  const char *no_redirect, *name, *comment, *users;
   entity_t entity;
 
+  no_redirect = params_value (params, "no_redirect");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
   users = params_value (params, "users");
 
-  CHECK_PARAM (name, "Create Role", new_role);
-  CHECK_PARAM (comment, "Create Role", new_role);
-  CHECK_PARAM (users, "Create Role", new_role);
+  CHECK_PARAM_REDIRECT (name, "Create Role", "new_role");
+  CHECK_PARAM_REDIRECT (comment, "Create Role", "new_role");
+  CHECK_PARAM_REDIRECT (users, "Create Role", "new_role");
 
   response = NULL;
   entity = NULL;
@@ -23757,17 +23542,13 @@ create_role_omp (credentials_t *credentials, params_t *params,
                              "/omp?cmd=get_roles", response_data);
     }
 
-  if (omp_success (entity))
-    {
-      ret = next_page (credentials, params, response, response_data);
-      if (ret == NULL)
-        ret = get_roles (credentials, params, response, response_data);
-    }
-  else
-    {
-      set_http_status_from_entity (entity, response_data);
-      ret = new_role (credentials, params, response, response_data);
-    }
+  if (entity_attribute (entity, "id"))
+    params_add (params, "role_id", entity_attribute (entity, "id"));
+  ret = response_from_entity (credentials, params, entity,
+                              (no_redirect && strcmp (no_redirect, "0")),
+                              NULL, "get_roles",
+                              NULL, "new_role",
+                              "Create Role", response_data);
   free_entity (entity);
   g_free (response);
   return ret;
@@ -24027,18 +23808,19 @@ save_role_omp (credentials_t * credentials, params_t *params,
 {
   int ret;
   gchar *html, *response;
-  const char *role_id, *name, *comment, *users;
+  const char *no_redirect, *role_id, *name, *comment, *users;
   entity_t entity;
 
+  no_redirect = params_value (params, "no_redirect");
   role_id = params_value (params, "role_id");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
   users = params_value (params, "users");
 
-  CHECK_PARAM (role_id, "Save Role", edit_role);
-  CHECK_PARAM (name, "Save Role", edit_role);
-  CHECK_PARAM (comment, "Save Role", edit_role);
-  CHECK_PARAM (users, "Save Role", edit_role);
+  CHECK_PARAM_REDIRECT (role_id, "Save Role", "edit_role");
+  CHECK_PARAM_REDIRECT (name, "Save Role", "edit_role");
+  CHECK_PARAM_REDIRECT (comment, "Save Role", "edit_role");
+  CHECK_PARAM_REDIRECT (users, "Save Role", "edit_role");
 
   /* Modify the Role. */
 
@@ -24089,17 +23871,11 @@ save_role_omp (credentials_t * credentials, params_t *params,
                              "/omp?cmd=get_roles", response_data);
     }
 
-  if (omp_success (entity))
-    {
-      html = next_page (credentials, params, response, response_data);
-      if (html == NULL)
-        html = get_roles (credentials, params, response, response_data);
-    }
-  else
-    {
-      set_http_status_from_entity (entity, response_data);
-      html = edit_role (credentials, params, response, response_data);
-    }
+  html = response_from_entity (credentials, params, entity,
+                               (no_redirect && strcmp (no_redirect, "0")),
+                               NULL, "get_roles",
+                               NULL, "edit_role",
+                               "Save Role", response_data);
   free_entity (entity);
   g_free (response);
   return html;
@@ -24675,18 +24451,19 @@ create_filter_omp (credentials_t *credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
   gchar *html, *response;
-  const char *name, *comment, *term, *type;
+  const char *no_redirect, *name, *comment, *term, *type;
   entity_t entity;
 
+  no_redirect = params_value (params, "no_redirect");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
   term = params_value (params, "term");
   type = params_value (params, "optional_resource_type");
 
-  CHECK_PARAM (name, "Create Filter", new_filter);
-  CHECK_PARAM (comment, "Create Filter", new_filter);
-  CHECK_PARAM (term, "Create Filter", new_filter);
-  CHECK_PARAM (type, "Create Filter", new_filter);
+  CHECK_PARAM_REDIRECT (name, "Create Filter", "new_filter");
+  CHECK_PARAM_REDIRECT (comment, "Create Filter", "new_filter");
+  CHECK_PARAM_REDIRECT (term, "Create Filter", "new_filter");
+  CHECK_PARAM_REDIRECT (type, "Create Filter", "new_filter");
 
   switch (ompf (credentials,
                 &response,
@@ -24744,16 +24521,15 @@ create_filter_omp (credentials_t *credentials, params_t *params,
           param->valid = 1;
           param->valid_utf8 = g_utf8_validate (param->value, -1, NULL);
         }
+    }
 
-      html = next_page (credentials, params, response, response_data);
-      if (html == NULL)
-        html = get_filters (credentials, params, response, response_data);
-    }
-  else
-    {
-      set_http_status_from_entity (entity, response_data);
-      html = new_filter (credentials, params, response, response_data);
-    }
+  if (entity_attribute (entity, "id"))
+    params_add (params, "filter_id", entity_attribute (entity, "id"));
+  html = response_from_entity (credentials, params, entity,
+                               (no_redirect && strcmp (no_redirect, "0")),
+                               NULL, "get_filters",
+                               NULL, "new_filter",
+                               "Create Filter", response_data);
   free_entity (entity);
   g_free (response);
   return html;
@@ -24910,20 +24686,22 @@ save_filter_omp (credentials_t * credentials, params_t *params,
 {
   gnutls_session_t session;
   int socket;
+  entity_t entity;
   gchar *html, *response;
-  const char *filter_id, *name, *comment, *term, *type;
+  const char *no_redirect, *filter_id, *name, *comment, *term, *type;
 
+  no_redirect = params_value (params, "no_redirect");
   filter_id = params_value (params, "filter_id");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
   term = params_value (params, "term");
   type = params_value (params, "optional_resource_type");
 
-  CHECK_PARAM (filter_id, "Save Filter", edit_filter);
-  CHECK_PARAM (name, "Save Filter", edit_filter);
-  CHECK_PARAM (comment, "Save Filter", edit_filter);
-  CHECK_PARAM (term, "Save Filter", edit_filter);
-  CHECK_PARAM (type, "Save Filter", edit_filter);
+  CHECK_PARAM_REDIRECT (filter_id, "Save Filter", "edit_filter");
+  CHECK_PARAM_REDIRECT (name, "Save Filter", "edit_filter");
+  CHECK_PARAM_REDIRECT (comment, "Save Filter", "edit_filter");
+  CHECK_PARAM_REDIRECT (term, "Save Filter", "edit_filter");
+  CHECK_PARAM_REDIRECT (type, "Save Filter", "edit_filter");
 
   switch (manager_connect (credentials, &socket, &session, &html,
                            response_data))
@@ -24946,8 +24724,6 @@ save_filter_omp (credentials_t * credentials, params_t *params,
 
   {
     int ret;
-    const char *status;
-    entity_t entity;
 
     /* Modify the filter. */
 
@@ -24989,42 +24765,19 @@ save_filter_omp (credentials_t * credentials, params_t *params,
                              "/omp?cmd=get_filters", response_data);
       }
 
-    openvas_server_close (socket, session);
-
-    status = entity_attribute (entity, "status");
-    if ((status == NULL)
-        || (strlen (status) == 0))
-      {
-        openvas_server_close (socket, session);
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while modifying a filter. "
-                             "It is unclear whether the filter has been modified or not. "
-                             "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_filters", response_data);
-      }
-
-    if (status[0] != '2')
-      {
-        openvas_server_close (socket, session);
-        set_http_status_from_entity (entity, response_data);
-        html = edit_filter (credentials, params, response, response_data);
-        g_free (response);
-        free_entity (entity);
-        return html;
-      }
-
-    free_entity (entity);
   }
 
   openvas_server_close (socket, session);
 
   /* Pass response to handler of following page. */
 
-  html = next_page (credentials, params, response, response_data);
-  if (html == NULL)
-    html = get_filters (credentials, params, response, response_data);
+  html = response_from_entity (credentials, params, entity,
+                               (no_redirect && strcmp (no_redirect, "0")),
+                               NULL, "get_filters",
+                               NULL, "edit_filter",
+                               "Save Filter", response_data);
+
+  free_entity (entity);
   g_free (response);
   return html;
 }
@@ -25125,11 +24878,12 @@ save_schedule_omp (credentials_t * credentials, params_t *params,
 {
   gchar *response;
   entity_t entity;
-  const char *schedule_id, *name, *comment;
+  const char *no_redirect, *schedule_id, *name, *comment;
   const char *hour, *minute, *day_of_month, *month, *year, *timezone;
   const char *period, *period_unit, *duration, *duration_unit;
   char *ret;
 
+  no_redirect = params_value (params, "no_redirect");
   schedule_id = params_value (params, "schedule_id");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
@@ -25144,24 +24898,19 @@ save_schedule_omp (credentials_t * credentials, params_t *params,
   year = params_value (params, "year");
   timezone = params_value (params, "timezone");
 
-  if (name == NULL || comment == NULL || hour == NULL || minute == NULL
-      || day_of_month == NULL || duration == NULL || duration_unit == NULL
-      || month == NULL || period == NULL || period_unit == NULL || year == NULL
-      || timezone == NULL)
-    return edit_schedule (credentials, params,
-                          GSAD_MESSAGE_INVALID_PARAM ("Create Schedule"),
-                          response_data);
-
-  if (schedule_id == NULL)
-    {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while saving a schedule. "
-                           "The schedule remains the same. "
-                           "Diagnostics: Required parameter missing.",
-                           "/omp?cmd=get_schedules", response_data);
-    }
+  CHECK_PARAM_REDIRECT (schedule_id, "Save Schedule", "edit_schedule");
+  CHECK_PARAM_REDIRECT (name, "Save Schedule", "edit_schedule");
+  CHECK_PARAM_REDIRECT (comment, "Save Schedule", "edit_schedule");
+  CHECK_PARAM_REDIRECT (hour, "Save Schedule", "edit_schedule");
+  CHECK_PARAM_REDIRECT (minute, "Save Schedule", "edit_schedule");
+  CHECK_PARAM_REDIRECT (day_of_month, "Save Schedule", "edit_schedule");
+  CHECK_PARAM_REDIRECT (duration, "Save Schedule", "edit_schedule");
+  CHECK_PARAM_REDIRECT (duration_unit, "Save Schedule", "edit_schedule");
+  CHECK_PARAM_REDIRECT (month, "Save Schedule", "edit_schedule");
+  CHECK_PARAM_REDIRECT (period, "Save Schedule", "edit_schedule");
+  CHECK_PARAM_REDIRECT (period_unit, "Save Schedule", "edit_schedule");
+  CHECK_PARAM_REDIRECT (year, "Save Schedule", "edit_schedule");
+  CHECK_PARAM_REDIRECT (timezone, "Save Schedule", "edit_schedule");
 
   response = NULL;
   entity = NULL;
@@ -25236,17 +24985,11 @@ save_schedule_omp (credentials_t * credentials, params_t *params,
                              "/omp?cmd=get_schedules", response_data);
     }
 
-  if (omp_success (entity))
-    {
-      ret = next_page (credentials, params, response, response_data);
-      if (ret == NULL)
-        ret = get_schedules_omp (credentials, params, response_data);
-    }
-  else
-    {
-      set_http_status_from_entity (entity, response_data);
-      ret = edit_schedule (credentials, params, response, response_data);
-    }
+  ret = response_from_entity (credentials, params, entity,
+                              (no_redirect && strcmp (no_redirect, "0")),
+                              NULL, "get_schedules",
+                              NULL, "edit_schedule",
+                              "Save Schedule", response_data);
   free_entity (entity);
   g_free (response);
   return ret;
@@ -25709,6 +25452,7 @@ char *
 create_user_omp (credentials_t * credentials, params_t *params,
                  cmd_response_data_t* response_data)
 {
+  const char *no_redirect;
   const char *name, *password, *hosts, *hosts_allow, *ifaces, *ifaces_allow;
   const char *auth_method, *submit;
   int ret;
@@ -25717,6 +25461,7 @@ create_user_omp (credentials_t * credentials, params_t *params,
   gchar *buf, *response, *html;
   entity_t entity;
 
+  no_redirect = params_value (params, "no_redirect");
   name = params_value (params, "login");
   password = params_value (params, "password");
   hosts = params_value (params, "access_hosts");
@@ -25740,13 +25485,15 @@ create_user_omp (credentials_t * credentials, params_t *params,
       else
         params_add (params, "groups", "2");
 
-      if (name == NULL || password == NULL || hosts == NULL
-          || hosts_allow == NULL)
-        return new_user (credentials, params,
-                         GSAD_MESSAGE_INVALID_PARAM ("New User"),
-                         response_data);
+      CHECK_PARAM_REDIRECT (name, "Create User", "new_user");
+      CHECK_PARAM_REDIRECT (password, "Create User", "new_user");
+      CHECK_PARAM_REDIRECT (hosts, "Create User", "new_user");
+      CHECK_PARAM_REDIRECT (hosts_allow, "Create User", "new_user");
+      CHECK_PARAM_REDIRECT (ifaces, "Create User", "new_user");
+      CHECK_PARAM_REDIRECT (ifaces_allow, "Create User", "new_user");
 
-      return new_user_omp (credentials, params, response_data);
+      MESSAGE_REDIRECT ("Group selected", G_STRINGIFY (MHD_HTTP_SUBMITTED),
+                        "Select Group", "new_user")
     }
 
   submit = params_value (params, "submit_plus_role");
@@ -25764,21 +25511,25 @@ create_user_omp (credentials_t * credentials, params_t *params,
       else
         params_add (params, "roles", "2");
 
-      if (name == NULL || password == NULL || hosts == NULL
-          || hosts_allow == NULL)
-        return new_user (credentials, params,
-                         GSAD_MESSAGE_INVALID_PARAM ("New User"),
-                         response_data);
+      CHECK_PARAM_REDIRECT (name, "Create User", "new_user");
+      CHECK_PARAM_REDIRECT (password, "Create User", "new_user");
+      CHECK_PARAM_REDIRECT (hosts, "Create User", "new_user");
+      CHECK_PARAM_REDIRECT (hosts_allow, "Create User", "new_user");
+      CHECK_PARAM_REDIRECT (ifaces, "Create User", "new_user");
+      CHECK_PARAM_REDIRECT (ifaces_allow, "Create User", "new_user");
 
-      return new_user_omp (credentials, params, response_data);
+      MESSAGE_REDIRECT ("Role selected", G_STRINGIFY (MHD_HTTP_SUBMITTED),
+                        "Select Role", "new_user")
+
+      return html;
     }
 
-  CHECK_PARAM (name, "Create User", new_user);
-  CHECK_PARAM (password, "Create User", new_user);
-  CHECK_PARAM (hosts, "Create User", new_user);
-  CHECK_PARAM (hosts_allow, "Create User", new_user);
-  CHECK_PARAM (ifaces, "Create User", new_user);
-  CHECK_PARAM (ifaces_allow, "Create User", new_user);
+  CHECK_PARAM_REDIRECT (name, "Create User", "new_user");
+  CHECK_PARAM_REDIRECT (password, "Create User", "new_user");
+  CHECK_PARAM_REDIRECT (hosts, "Create User", "new_user");
+  CHECK_PARAM_REDIRECT (hosts_allow, "Create User", "new_user");
+  CHECK_PARAM_REDIRECT (ifaces, "Create User", "new_user");
+  CHECK_PARAM_REDIRECT (ifaces_allow, "Create User", "new_user");
 
   /* Create the user. */
 
@@ -25890,17 +25641,13 @@ create_user_omp (credentials_t * credentials, params_t *params,
                              "/omp?cmd=get_users", response_data);
     }
 
-  if (omp_success (entity))
-    {
-      html = next_page (credentials, params, response, response_data);
-      if (html == NULL)
-        html = get_users (credentials, params, response, response_data);
-    }
-  else
-    {
-      set_http_status_from_entity (entity, response_data);
-      html = new_user (credentials, params, response, response_data);
-    }
+  if (entity_attribute (entity, "id"))
+    params_add (params, "user_id", entity_attribute (entity, "id"));
+  html = response_from_entity (credentials, params, entity,
+                               (no_redirect && strcmp (no_redirect, "0")),
+                               NULL, "get_users",
+                               NULL, "new_user",
+                               "Create User", response_data);
   free_entity (entity);
   g_free (response);
   return html;
@@ -26135,6 +25882,7 @@ save_user_omp (credentials_t * credentials, params_t *params,
 {
   int ret;
   gchar *html, *response, *buf;
+  const char *no_redirect;
   const char *user_id, *login, *modify_password, *password, *submit;
   const char *hosts, *hosts_allow, *ifaces, *ifaces_allow;
   entity_t entity;
@@ -26143,6 +25891,7 @@ save_user_omp (credentials_t * credentials, params_t *params,
 
   *password_return = NULL;
 
+  no_redirect = params_value (params, "no_redirect");
   /* List of hosts user has/lacks access rights. */
   hosts = params_value (params, "access_hosts");
   /* Whether hosts grants ("1") or forbids ("0") access.  "2" for all
@@ -26155,13 +25904,13 @@ save_user_omp (credentials_t * credentials, params_t *params,
   password = params_value (params, "password");
   user_id = params_value (params, "user_id");
 
-  CHECK_PARAM (user_id, "Edit User", edit_user);
-  CHECK_PARAM (modify_password, "Edit User", edit_user);
-  CHECK_PARAM (password, "Edit User", edit_user);
-  CHECK_PARAM (hosts, "Edit User", edit_user);
-  CHECK_PARAM (hosts_allow, "Edit User", edit_user);
-  CHECK_PARAM (ifaces, "Save User", edit_user);
-  CHECK_PARAM (ifaces_allow, "Save User", edit_user);
+  CHECK_PARAM_REDIRECT (user_id, "Edit User", "edit_user");
+  CHECK_PARAM_REDIRECT (modify_password, "Edit User", "edit_user");
+  CHECK_PARAM_REDIRECT (password, "Edit User", "edit_user");
+  CHECK_PARAM_REDIRECT (hosts, "Edit User", "edit_user");
+  CHECK_PARAM_REDIRECT (hosts_allow, "Edit User", "edit_user");
+  CHECK_PARAM_REDIRECT (ifaces, "Save User", "edit_user");
+  CHECK_PARAM_REDIRECT (ifaces_allow, "Save User", "edit_user");
   submit = params_value (params, "submit_plus_group");
   if (submit && (strcmp (submit, "+") == 0))
     {
@@ -26176,7 +25925,9 @@ save_user_omp (credentials_t * credentials, params_t *params,
         }
       else
         params_add (params, "groups", "2");
-      return edit_user_omp (credentials, params, response_data);
+
+      MESSAGE_REDIRECT ("Group selected", G_STRINGIFY (MHD_HTTP_SUBMITTED),
+                        "Select Group", "new_user")
     }
 
   submit = params_value (params, "submit_plus_role");
@@ -26193,11 +25944,13 @@ save_user_omp (credentials_t * credentials, params_t *params,
         }
       else
         params_add (params, "roles", "2");
-      return edit_user_omp (credentials, params, response_data);
+
+      MESSAGE_REDIRECT ("Role selected", G_STRINGIFY (MHD_HTTP_SUBMITTED),
+                        "Select Role", "new_user")
     }
 
   if (params_given (params, "login"))
-    CHECK_PARAM (login, "Save User", edit_user);
+    CHECK_PARAM_REDIRECT (login, "Save User", "edit_user");
 
   /* Modify the user. */
 
@@ -26340,27 +26093,24 @@ save_user_omp (credentials_t * credentials, params_t *params,
                              "/omp?cmd=get_users", response_data);
     }
 
-  if (omp_success (entity))
+  if (omp_success (entity)
+      && (!strcmp (modify_password, "2")
+          || !strcmp (modify_password, "3"))
+      && params_given (params, "current_user"))
     {
-      if ((!strcmp (modify_password, "2")
-           || !strcmp (modify_password, "3"))
-          && params_given (params, "current_user"))
-        html = logout (credentials,
-                       "Authentication method changed."
-                       "  Please login with LDAP password.",
-                       response_data);
-      else
-        {
-          html = next_page (credentials, params, response, response_data);
-          if (html == NULL)
-            html = get_users (credentials, params, response, response_data);
-        }
+      free_entity (entity);
+      g_free (response);
+      html = logout (credentials,
+                     "Authentication method changed."
+                     "  Please login with LDAP password.",
+                     response_data);
     }
   else
-    {
-      set_http_status_from_entity (entity, response_data);
-      html = edit_user (credentials, params, response, response_data);
-    }
+    html = response_from_entity (credentials, params, entity,
+                                 (no_redirect && strcmp (no_redirect, "0")),
+                                 NULL, "get_users",
+                                 NULL, "edit_user",
+                                 "Save User", response_data);
   free_entity (entity);
   g_free (response);
   return html;
@@ -26595,7 +26345,7 @@ save_auth_omp (credentials_t* credentials, params_t *params,
   int ret;
   entity_t entity = NULL;
   char *html, *response = NULL, *truefalse;
-  const char *method;
+  const char *no_redirect, *method;
 
   if (params_value (params, "enable")
       && (strcmp (params_value (params, "enable"), "1") == 0))
@@ -26603,16 +26353,17 @@ save_auth_omp (credentials_t* credentials, params_t *params,
   else
     truefalse = "false";
 
+  no_redirect = params_value (params, "no_redirect");
   method = params_value (params, "group");
-  CHECK_PARAM (method, "Save Authentication", get_users);
+  CHECK_PARAM_REDIRECT (method, "Save Authentication", "get_users");
   if (!strcmp (method, "method:ldap_connect"))
     {
       const char *ldaphost, *authdn;
       ldaphost = params_value (params, "ldaphost");
       authdn = params_value (params, "authdn");
 
-      CHECK_PARAM (ldaphost, "Save Authentication", get_users);
-      CHECK_PARAM (authdn, "Save Authentication", get_users);
+      CHECK_PARAM_REDIRECT (ldaphost, "Save Authentication", "get_users");
+      CHECK_PARAM_REDIRECT (authdn, "Save Authentication", "get_users");
       /** @warning authdn shall contain a single %s, handle with care. */
       ret = ompf (credentials, &response, &entity, response_data,
                   "<modify_auth>"
@@ -26629,8 +26380,8 @@ save_auth_omp (credentials_t* credentials, params_t *params,
       radiushost = params_value (params, "radiushost");
       radiuskey = params_value (params, "radiuskey");
 
-      CHECK_PARAM (radiushost, "Save Authentication", get_users);
-      CHECK_PARAM (radiuskey, "Save Authentication", get_users);
+      CHECK_PARAM_REDIRECT (radiushost, "Save Authentication", "get_users");
+      CHECK_PARAM_REDIRECT (radiuskey, "Save Authentication", "get_users");
       /** @warning authdn shall contain a single %s, handle with care. */
       ret = ompf (credentials, &response, &entity, response_data,
                   "<modify_auth>"
@@ -26678,17 +26429,12 @@ save_auth_omp (credentials_t* credentials, params_t *params,
                              "/omp?cmd=get_users", response_data);
     }
 
-  if (omp_success (entity))
-    {
-      html = next_page (credentials, params, response, response_data);
-      if (html == NULL)
-        html = get_users (credentials, params, response, response_data);
-    }
-  else
-    {
-      set_http_status_from_entity (entity, response_data);
-      html = get_users (credentials, params, response, response_data);
-    }
+  html = response_from_entity (credentials, params, entity,
+                               (no_redirect && strcmp (no_redirect, "0")),
+                               NULL, "get_users",
+                               NULL, "get_users",
+                               "Save Authentication Configuration",
+                               response_data);
   free_entity (entity);
   g_free (response);
   return html;
@@ -27349,7 +27095,7 @@ bulk_delete_omp (credentials_t * credentials, params_t *params,
 {
   gnutls_session_t session;
   int socket;
-  const char *type;
+  const char *no_redirect, *type;
   GString *commands_xml;
   params_t *selected_ids;
   params_iterator_t iter;
@@ -27359,6 +27105,7 @@ bulk_delete_omp (credentials_t * credentials, params_t *params,
   entity_t entity;
   gchar *extra_attribs;
 
+  no_redirect = params_value (params, "no_redirect");
   type = params_value (params, "resource_type");
   if (type == NULL)
     {
@@ -27454,7 +27201,6 @@ bulk_delete_omp (credentials_t * credentials, params_t *params,
                            "Diagnostics: Failure to read response from manager daemon.",
                            "/omp?cmd=get_tasks", response_data);
     }
-  free_entity (entity);
 
   openvas_server_close (socket, session);
 
@@ -27467,18 +27213,14 @@ bulk_delete_omp (credentials_t * credentials, params_t *params,
       params_add (params, "next", next);
       g_free (next);
     }
-  html = next_page (credentials, params, response, response_data);
+  html = response_from_entity (credentials, params, entity,
+                               (no_redirect && strcmp (no_redirect, "0")),
+                               NULL, NULL,
+                               NULL, NULL,
+                               "Bulk Delete", response_data);
   g_free (response);
+  free_entity (entity);
 
-  if (html == NULL)
-    {
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while deleting resources. "
-                           "Diagnostics: Error in parameter next.",
-                           "/omp?cmd=get_tasks", response_data);
-    }
   return html;
 }
 
@@ -27539,15 +27281,17 @@ create_host_omp (credentials_t * credentials, params_t *params,
 {
   int ret;
   gchar *html, *response;
-  const char *name, *comment;
+  const char *no_redirect, *name, *comment;
   entity_t entity;
   GString *xml;
 
+  no_redirect = params_value (params, "no_redirect");
+
   name = params_value (params, "name");
-  CHECK_PARAM (name, "Create Host", new_host);
+  CHECK_PARAM_REDIRECT (name, "Create Host", "new_host");
 
   comment = params_value (params, "comment");
-  CHECK_PARAM (comment, "Create Host", new_host);
+  CHECK_PARAM_REDIRECT (comment, "Create Host", "new_host");
 
   /* Create the host. */
 
@@ -27601,17 +27345,13 @@ create_host_omp (credentials_t * credentials, params_t *params,
                             "/omp?cmd=get_assets", response_data);
     }
 
-  if (omp_success (entity))
-    {
-      html = next_page (credentials, params, response, response_data);
-      if (html == NULL)
-        html = get_assets (credentials, params, response, response_data);
-    }
-  else
-    {
-      set_http_status_from_entity (entity, response_data);
-      html = new_host (credentials, params, response, response_data);
-    }
+  if (entity_attribute (entity, "id"))
+    params_add (params, "asset_id", entity_attribute (entity, "id"));
+  html = response_from_entity (credentials, params, entity,
+                               (no_redirect && strcmp (no_redirect, "0")),
+                               NULL, "get_assets",
+                               NULL, "new_host",
+                               "Create Host", response_data);
   free_entity (entity);
   g_free (response);
   return html;
@@ -27798,12 +27538,13 @@ create_asset_omp (credentials_t *credentials, params_t *params,
 {
   char *ret;
   gchar *response;
-  const char *report_id;
+  const char *no_redirect, *report_id;
   entity_t entity;
 
+  no_redirect = params_value (params, "no_redirect");
   report_id = params_value (params, "report_id");
 
-  CHECK_PARAM (report_id, "Create Asset", get_report_section);
+  CHECK_PARAM_REDIRECT (report_id, "Create Asset", "get_report_section");
 
   response = NULL;
   entity = NULL;
@@ -27845,17 +27586,11 @@ create_asset_omp (credentials_t *credentials, params_t *params,
                              "/omp?cmd=get_tasks", response_data);
     }
 
-  if (omp_success (entity))
-    {
-      ret = next_page (credentials, params, response, response_data);
-      if (ret == NULL)
-        ret = get_report_section (credentials, params, response, response_data);
-    }
-  else
-    {
-      set_http_status_from_entity (entity, response_data);
-      ret = get_report_section (credentials, params, response, response_data);
-    }
+  ret = response_from_entity (credentials, params, entity,
+                              (no_redirect && strcmp (no_redirect, "0")),
+                              NULL, "get_report_section",
+                              NULL, "get_report_section",
+                              "Create Asset", response_data);
   free_entity (entity);
   g_free (response);
   return ret;
@@ -28149,14 +27884,15 @@ save_asset_omp (credentials_t * credentials, params_t *params,
 {
   int ret;
   gchar *html, *response;
-  const char *asset_id, *comment;
+  const char *no_redirect, *asset_id, *comment;
   entity_t entity;
 
+  no_redirect = params_value (params, "no_redirect");
   asset_id = params_value (params, "asset_id");
   comment = params_value (params, "comment");
 
-  CHECK_PARAM (asset_id, "Save Asset", edit_asset);
-  CHECK_PARAM (comment, "Save Asset", edit_asset);
+  CHECK_PARAM_REDIRECT (asset_id, "Save Asset", "edit_asset");
+  CHECK_PARAM_REDIRECT (comment, "Save Asset", "edit_asset");
 
   /* Modify the asset. */
 
@@ -28203,17 +27939,11 @@ save_asset_omp (credentials_t * credentials, params_t *params,
                              "/omp?cmd=get_assets", response_data);
     }
 
-  if (omp_success (entity))
-    {
-      html = next_page (credentials, params, response, response_data);
-      if (html == NULL)
-        html = get_assets (credentials, params, response, response_data);
-    }
-  else
-    {
-      set_http_status_from_entity (entity, response_data);
-      html = edit_asset (credentials, params, response, response_data);
-    }
+  html = response_from_entity (credentials, params, entity,
+                               (no_redirect && strcmp (no_redirect, "0")),
+                               NULL, "get_assets",
+                               NULL, "edit_asset",
+                               "Save Asset", response_data);
   free_entity (entity);
   g_free (response);
   return html;
