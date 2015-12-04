@@ -383,6 +383,13 @@
     var content = $('#' + self.id).closest('form').clone();
     content.find('#' + self.id).show();
     content.find('a, div.footnote, input[type=image], input[type=submit]').remove();
+
+    // Update the form parameter
+    var input = content.find('input[name=build_filter]');
+    if (input.length){
+      input.val(input.val() ^ 1);
+    }
+
     self.dialog = $("<div/>", {
         'class': "dialog-form",
         title:  self.title,
@@ -594,11 +601,6 @@
         toggleIcon(icon);
       }
       elem.on('click', function(){
-        // Update the form parameter
-        var input = target.closest('form').find('input[name=build_filter]');
-        if (input.length){
-          input.val(input.val() ^ 1);
-        }
         // Update the localStorage
         if (collapsed){
           if (window.localStorage.getItem(collapsed)){
