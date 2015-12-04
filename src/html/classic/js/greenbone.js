@@ -374,6 +374,46 @@
 
   window.OMPDialog = OMPDialog;
 
+  var FilterDialog = function(id, title){
+    self.id = id;
+    self.title = title;
+  };
+
+  FilterDialog.prototype.show = function(){
+    var content = $('#' + self.id).closest('form').clone();
+    content.find('#' + self.id).show();
+    content.find('a, div.footnote, input[type=image], input[type=submit]').remove();
+    self.dialog = $("<div/>", {
+        'class': "dialog-form",
+        title:  self.title,
+        html: content,
+      });
+    stopAutoRefresh();
+
+    // show the dialog !
+    self.dialog.dialog({
+      modal: true,
+      width: 800,
+      buttons:[
+        {
+          text: 'Update',
+          click: function(){
+            self.dialog.find('form').submit();
+          },
+        }
+      ],
+      close: function(event, ui){
+        self.dialog.remove();
+        self.dialog = undefined;
+        startAutoRefresh();
+      },
+    });
+
+
+  };
+
+  window.FilterDialog = FilterDialog;
+
   var onReady = function(doc){
     doc = $(doc);
 
@@ -476,6 +516,15 @@
       elem.on('click', function(event){
         event.preventDefault();
         new OMPDialog('wizard', true, params).show();
+      });
+    });
+
+    doc.find(".edit-filter-action-icon").each(function(){
+      var elem = $(this),
+          id = elem.data('id');
+      elem.on('click', function(event){
+        event.preventDefault();
+        new FilterDialog(id, 'Update Filter').show();
       });
     });
 

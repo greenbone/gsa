@@ -1,3 +1,9 @@
+2015-12-04  Benoît Allard  <benoit.allard@greenbone.net>
+
+	Move the Edit Filter to a js dialog.
+
+	* src/html/classic/js/greenbone.js, src/html/classic/omp.xsl: 
+
 2015-12-04  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/classic/wizard.xsl (name="quick-first-scan-wizard"):

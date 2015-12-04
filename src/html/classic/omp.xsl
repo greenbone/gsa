@@ -1044,10 +1044,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                  </xsl:choose>
                </xsl:for-each>
              </select>
-             <a href='#' class="toggle-action-icon" data-target="#filterbox" data-name="Filter">
-               <img src="/img/unfold.png" class="expand"
-                    style="vertical-align:middle;margin-left:3px;margin-right:3px;"/>
-             </a>
            </div>
          </form>
        </xsl:if>
@@ -1081,6 +1077,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
      <a href="/help/powerfilter.html?token={/envelope/token}" title="{gsa:i18n ('Help', 'Help')}: {gsa:i18n ('Powerfilter', 'Filter')}">
        <img style="vertical-align:middle;margin-left:3px;margin-right:3px;"
             src="/img/help.png" border="0"/>
+     </a>
+     <a href="#"
+        class="edit-filter-action-icon" data-id="filterbox">
+       <img style="vertical-align:middle;margin-left:3px;margin-right:3px;"
+            src="/img/edit.png"/>
      </a>
      <xsl:variable name="extras">
        <xsl:for-each select="exslt:node-set($extra_params)/param">
