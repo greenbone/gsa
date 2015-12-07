@@ -1,3 +1,7 @@
+2015-12-07  Benoît Allard  <benoit.allard@greenbone.net>
+
+	* src/html/classic/css/gsa-login.css: Lower a bit the labels.
+
 2015-12-04  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/classic/omp.xsl (match="group" mode="radiusauth"): Apply
