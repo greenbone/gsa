@@ -531,12 +531,14 @@
       elem.on('click', function(event){
         var dialog = new OMPDialog('wizard', true, params);
         event.preventDefault();
-        dialog.old_postForm = dialog.postForm;
-        dialog.postForm = function(){
-          this.old_postForm();
-          // set 30 sec.
-          window.localStorage.setItem('autorefresh-interval', 30);
-        };
+        if (name === 'quick_first_scan'){
+          dialog.old_postForm = dialog.postForm;
+          dialog.postForm = function(){
+            this.old_postForm();
+            // set 30 sec.
+            window.localStorage.setItem('autorefresh-interval', 30);
+          };
+        }
         dialog.show();
       });
     });

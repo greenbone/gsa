@@ -1,5 +1,10 @@
 2015-12-07  Benoît Allard  <benoit.allard@greenbone.net>
 
+	* src/html/classic/js/greenbone.js: Only set the refresh rate when the
+	  quick_first_scan is being run.
+
+2015-12-07  Benoît Allard  <benoit.allard@greenbone.net>
+
 	* src/html/classic/js/greenbone.js: Set the autorefresh to 30sec. when
 	  the wizard is called.
 
