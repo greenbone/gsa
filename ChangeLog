@@ -13,6 +13,12 @@
 
 2015-12-07  Benoît Allard  <benoit.allard@greenbone.net>
 
+	* src/html/classic/css/gsa-style.css, src/html/classic/js/greenbone.js,
+	  src/html/classic/omp.xsl: Make a two-column layout for the filter
+	  dialog.
+
+2015-12-07  Benoît Allard  <benoit.allard@greenbone.net>
+
 	* src/html/classic/css/gsa-login.css: Lower a bit the labels.
 
 2015-12-04  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>

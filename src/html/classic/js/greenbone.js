@@ -387,6 +387,7 @@
     var self = this,
         content = $('#' + this.id).closest('form').clone();
     content.find('#' + this.id).show();
+    content.find('#' + this.id).css("padding-top", "2em");
     content.find('a, div.footnote, input[type=image], input[type=submit]').remove();
 
     // Update the form parameter
