@@ -1123,6 +1123,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        <div class="ctrl-group">
          <xsl:variable name="apply_overrides"
                        select="filters/keywords/keyword[column='apply_overrides']/value"/>
+         <label class="left-column">
+           <xsl:value-of select="gsa:i18n ('Apply overrides', 'Override Controls')"/>:
+         </label>
          <label class="right-column">
            <xsl:choose>
              <xsl:when test="$apply_overrides = 0">
@@ -1133,7 +1136,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       checked="1"/>
              </xsl:otherwise>
            </xsl:choose>
-           <xsl:value-of select="gsa:i18n ('Apply overrides', 'Override Controls')"/>
          </label>
        </div>
      </xsl:if>
