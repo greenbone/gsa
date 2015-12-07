@@ -1,5 +1,10 @@
 2015-12-07  Benoît Allard  <benoit.allard@greenbone.net>
 
+	* src/html/classic/js/greenbone.js: Set the autorefresh to 30sec. when
+	  the wizard is called.
+
+2015-12-07  Benoît Allard  <benoit.allard@greenbone.net>
+
 	* src/html/classic/js/greenbone.js, src/html/classic/omp.xsl: Improve
 	  the Filter dialog further.
 

@@ -529,8 +529,15 @@
           name = elem.data('name'),
           params = {name: name};
       elem.on('click', function(event){
+        var dialog = new OMPDialog('wizard', true, params);
         event.preventDefault();
-        new OMPDialog('wizard', true, params).show();
+        dialog.old_postForm = dialog.postForm;
+        dialog.postForm = function(){
+          this.old_postForm();
+          // set 30 sec.
+          window.localStorage.setItem('autorefresh-interval', 30);
+        };
+        dialog.show();
       });
     });
 
