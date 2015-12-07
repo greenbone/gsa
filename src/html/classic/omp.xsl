@@ -998,7 +998,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <div style="float: right; padding: 2px;">
         <xsl:if test="gsa:may-op ('create_filter')">
           <form style="display: inline;" action="" method="post" enctype="multipart/form-data">
-            <div style="display: inline;">
+            <div style="display: inline; padding-right: 5px;">
               <input type="hidden" name="token" value="{/envelope/token}"/>
               <input type="hidden" name="cmd" value="create_filter"/>
               <input type="hidden" name="caller" value="{/envelope/current_page}"/>
@@ -1050,7 +1050,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
      </div>
    </xsl:otherwise>
  </xsl:choose>
- <form action="" method="get" enctype="multipart/form-data" name="filterform">
+ <form action="" method="get" enctype="multipart/form-data" name="filterform" style="float:right;padding-right:5px;">
    <xsl:variable name="criteria">
      <xsl:call-template name="filter-criteria"/>
    </xsl:variable>
@@ -1063,11 +1063,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
    <xsl:for-each select="exslt:node-set($extra_params)/param">
      <input type="hidden" name="{name}" value="{value}"/>
    </xsl:for-each>
-   <div class="ctrl-group">
-    <div class="left-column">
+   <div>
      <b><xsl:value-of select="gsa:i18n ('Filter')"/></b>:
-    </div>
-    <div class="right-column">
      <input type="text" name="filter" size="53"
             value="{$criteria}"
             maxlength="1000"/>
@@ -1091,7 +1088,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        </xsl:for-each>
      </xsl:variable>
      <input type="hidden" name="filter_extra" value="{$extra}" />
-    </div>
    </div>
    <div class="footnote">
      <xsl:value-of select="$extra"/>

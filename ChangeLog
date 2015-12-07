@@ -1,3 +1,8 @@
+2015-12-07  Benoît Allard  <benoit.allard@greenbone.net>
+
+	* src/html/classic/js/greenbone.js, src/html/classic/omp.xsl: Improve
+	  the Filter dialog further.
+
 2015-12-07  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/classic/omp.xsl (name="filter-window-part"): Moved
