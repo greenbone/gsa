@@ -1,3 +1,16 @@
+2015-12-07  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Only load charts when the Summary section is unfolded.
+
+	* src/html/classic/graphics.xsl (js-scan-management-top-visualization)
+	(js-secinfo-top-visualization): Do not load the chart data here.
+
+	* src/html/classic/js/greenbone.js (onload): Load charts the first time
+	the Summary section is unfolded after loading the page.
+
+	* src/html/classic/js/gsa_graphics_base.js (Display): Add variable
+	and function "requested".
+
 2015-12-07  Benoît Allard  <benoit.allard@greenbone.net>
 
 	* src/html/classic/css/gsa-login.css: Lower a bit the labels.

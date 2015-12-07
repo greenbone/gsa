@@ -478,6 +478,7 @@ function Display (p_container)
   var footer = container.select ("#" + container.attr ("id") + "-foot");
   var select_elem = null;
   var filter_elem = null;
+  var requested = false;
 
   var charts = [];
   var chart_i = 0;
@@ -516,6 +517,12 @@ function Display (p_container)
   my.footer = function ()
     {
       return footer;
+    }
+
+  /* Gets whether the chart has been requested at least once */
+  my.requested = function ()
+    {
+      return requested;
     }
 
   /* Adds a new chart to the list */
@@ -707,6 +714,7 @@ function Display (p_container)
   /* refreshes the current chart */
   my.refresh = function ()
     {
+      requested = true;
       charts [chart_i].request_data ();
     }
 

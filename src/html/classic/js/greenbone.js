@@ -602,9 +602,31 @@
         }
       }
 
+      function foldComplete() {
+        if (collapsed && window.localStorage.getItem(collapsed)) {
+          // Section collapsed
+        } else {
+          // Section unfolded
+          if (name == "Summary") {
+            for (var display in gsa.displays) {
+              if (! gsa.displays[display].requested ())
+                gsa.displays[display].refresh ();
+            }
+          }
+        }
+      }
+
       if (collapsed && window.localStorage.getItem(collapsed)){
         target.hide();
         toggleIcon(icon);
+      } else {
+        if (name == "Summary") {
+          for (var display in gsa.displays)
+            {
+              if (! gsa.displays[display].requested ())
+                    gsa.displays[display].refresh ();
+            }
+        }
       }
       elem.on('click', function(){
         // Update the localStorage
@@ -617,7 +639,7 @@
             window.localStorage.setItem(collapsed, true);
           }
         }
-        target.slideToggle();
+        target.slideToggle(undefined, foldComplete);
         toggleIcon(icon);
       });
     });
