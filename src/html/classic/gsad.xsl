@@ -904,20 +904,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </div>
     <div>
       <div class="logout_panel">
+        <xsl:value-of select="gsa:i18n('Logged in as', 'Logo')"/>&#160;
+        <xsl:value-of select="/envelope/role"/>&#160;
+        <b><a href="/omp?cmd=get_my_settings&amp;token={/envelope/token}">
         <xsl:choose>
           <xsl:when test="$username = ''">
           </xsl:when>
           <xsl:when test="string-length ($username) &gt; 45">
-            <xsl:value-of select="gsa:i18n('Logged in as', 'Logo')"/>
-            <div style="display: inline;margin-left:3px"><xsl:value-of select="/envelope/role"/></div>
-            <b><a href="/omp?cmd=get_my_settings&amp;token={/envelope/token}"><xsl:value-of select="substring ($username, 1, 45)"/>...</a></b> |
+            <xsl:value-of select="substring ($username, 1, 45)"/>...
           </xsl:when>
           <xsl:otherwise>
-            <xsl:value-of select="gsa:i18n('Logged in as', 'Logo')"/>
-            <div style="display: inline;margin-left:3px"><xsl:value-of select="/envelope/role"/></div>
-            <b><a href="/omp?cmd=get_my_settings&amp;token={/envelope/token}"><xsl:value-of select="$username"/></a></b> |
+            <xsl:value-of select="$username"/>
           </xsl:otherwise>
         </xsl:choose>
+        </a></b> |
         <a href="/logout?token={/envelope/token}" title="{gsa:i18n('Logout', 'Action Verb')}" style="margin-left:3px;">
           <xsl:value-of select="gsa:i18n('Logout', 'Action Verb')"/>
         </a>
