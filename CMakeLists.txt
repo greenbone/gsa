@@ -487,6 +487,8 @@ install (FILES src/html/classic/img/agent.png
                src/html/classic/img/os.svg
                src/html/classic/img/host.svg
                src/html/classic/img/feed.svg
+               src/html/classic/img/cpe.svg
+               src/html/classic/img/cve.svg
                src/html/classic/img/schedule.svg
                src/html/classic/img/target.svg
                src/html/classic/img/task.svg
