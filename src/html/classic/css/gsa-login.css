@@ -65,12 +65,15 @@ header .version {
 
 .logo_box {
   position: fixed;
-  top: 30%;
+  top: 20%;
   left: 50%;
+  width: 35%;
+  min-width: 200px;
+  max-width: 500px;
 }
 
 .logo_box img {
-  width: 500px;
+  width: 100%;
 }
 
 .login_box {

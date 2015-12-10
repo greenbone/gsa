@@ -13,6 +13,11 @@
 
 2015-12-10  Benoît Allard  <benoit.allard@greenbone.net>
 
+	* src/html/classic/css/gsa-login.css: Make the size of the head
+	  somewhat proportional.
+
+2015-12-10  Benoît Allard  <benoit.allard@greenbone.net>
+
 	* src/html/classic/gsad.xsl: Disable the input fields once the login
 	  operation is running.
 
