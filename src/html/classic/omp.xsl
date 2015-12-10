@@ -8874,11 +8874,14 @@ should not have received it.
                 </tr>
                 <tr>
                   <td colspan="2" valign="top">
-                    <label>
-                      <input type="radio" name="event" value="New NVTs arrived"
-                             onChange="editAlertUpdateForm()"/>
-                      <xsl:value-of select="gsa:i18n ('New NVTs arrived', 'Alert')"/>
-                    </label>
+                    <input type="radio" name="event" value="New NVTs arrived"
+                           onChange="editAlertUpdateForm()"/>
+                    <select name="event_data:feed_event">
+                      <option value="new" selected="1"><xsl:value-of select="gsa:i18n ('New', 'Status')"/></option>
+                      <option value="updated"><xsl:value-of select="gsa:i18n ('Updated', 'Status')"/></option>
+                    </select>
+                    <xsl:text> </xsl:text>
+                    <xsl:value-of select="gsa:i18n ('NVTs arrived', 'Alert')"/>
                   </td>
                 </tr>
               </table>
@@ -9374,7 +9377,7 @@ should not have received it.
           <!-- CSS for hiding rows, when event is 'New NVTs arrived'. -->
           <xsl:variable name="hide">
             <xsl:choose>
-              <xsl:when test="get_alerts_response/alert/event/text() = 'New NVTs arrived'">
+              <xsl:when test="get_alerts_response/alert/event/text() = 'New NVTs arrived' or get_alerts_response/alert/event/text() = 'Updated NVTs arrived'">
                 <xsl:text>display: none</xsl:text>
               </xsl:when>
               <xsl:otherwise>
@@ -9470,13 +9473,30 @@ should not have received it.
                         <xsl:when test="get_alerts_response/alert/event/text() = 'New NVTs arrived'">
                           <input type="radio" name="event" value="New NVTs arrived" checked="1"
                                  onChange="editAlertUpdateForm()"/>
+                          <select name="event_data:feed_event">
+                            <option value="new" selected="1"><xsl:value-of select="gsa:i18n ('New', 'Status')"/></option>
+                            <option value="updated"><xsl:value-of select="gsa:i18n ('Updated', 'Status')"/></option>
+                          </select>
+                        </xsl:when>
+                        <xsl:when test="get_alerts_response/alert/event/text() = 'Updated NVTs arrived'">
+                          <input type="radio" name="event" value="New NVTs arrived" checked="1"
+                                 onChange="editAlertUpdateForm()"/>
+                          <select name="event_data:feed_event">
+                            <option value="new"><xsl:value-of select="gsa:i18n ('New', 'Status')"/></option>
+                            <option value="updated" selected="1"><xsl:value-of select="gsa:i18n ('Updated', 'Status')"/></option>
+                          </select>
                         </xsl:when>
                         <xsl:otherwise>
                           <input type="radio" name="event" value="New NVTs arrived"
                                  onChange="editAlertUpdateForm()"/>
+                          <select name="event_data:feed_event">
+                            <option value="new" selected="1"><xsl:value-of select="gsa:i18n ('New', 'Status')"/></option>
+                            <option value="updated"><xsl:value-of select="gsa:i18n ('Updated', 'Status')"/></option>
+                          </select>
                         </xsl:otherwise>
                       </xsl:choose>
-                      <xsl:value-of select="gsa:i18n ('New NVTs arrived', 'Alert')"/>
+                      <xsl:text> </xsl:text>
+                      <xsl:value-of select="gsa:i18n ('NVTs arrived', 'Alert')"/>
                     </label>
                   </td>
                 </tr>

@@ -6916,7 +6916,7 @@ create_agent_omp (credentials_t * credentials, params_t *params,
 {
   entity_t entity;
   gchar *response, *html;
-  const char *no_redirect; 
+  const char *no_redirect;
   const char *name, *comment, *installer, *installer_filename, *installer_sig;
   const char *howto_install, *howto_use;
   int installer_size, installer_sig_size, howto_install_size, howto_use_size;
@@ -8120,6 +8120,23 @@ create_alert_omp (credentials_t * credentials, params_t *params,
 
   xml = g_string_new ("");
 
+  if ((strcmp (event, "New NVTs arrived") == 0) && event_data)
+    {
+      params_iterator_t iter;
+      char *name;
+      param_t *param;
+
+      params_iterator_init (&iter, event_data);
+      while (params_iterator_next (&iter, &name, &param))
+        if ((strcmp (name, "feed_event") == 0)
+            && param->value
+            && (strcmp (param->value, "updated") == 0))
+          {
+            event = "Updated NVTs arrived";
+            break;
+          }
+    }
+
   xml_string_append (xml,
                      "<create_alert>"
                      "<name>%s</name>"
@@ -8818,6 +8835,23 @@ save_alert_omp (credentials_t * credentials, params_t *params,
   event_data = params_values (params, "event_data:");
   condition_data = params_values (params, "condition_data:");
   method_data = params_values (params, "method_data:");
+
+  if ((strcmp (event, "New NVTs arrived") == 0) && event_data)
+    {
+      params_iterator_t iter;
+      char *name;
+      param_t *param;
+
+      params_iterator_init (&iter, event_data);
+      while (params_iterator_next (&iter, &name, &param))
+        if ((strcmp (name, "feed_event") == 0)
+            && param->value
+            && (strcmp (param->value, "updated") == 0))
+          {
+            event = "Updated NVTs arrived";
+            break;
+          }
+    }
 
   xml_string_append (xml,
                      "<modify_alert alert_id=\"%s\">"

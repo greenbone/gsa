@@ -1,3 +1,14 @@
+2015-12-10  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add alert event "Updated NVTs arrived".
+
+	* src/gsad_omp.c (create_alert_omp, save_alert_omp): Check if the event
+	should be "Updated NVTs arrived" when the event is "New NVTs arrived".
+
+	* src/html/classic/omp.xsl (html-create-alert-form)
+	(html-edit-alert-form): Add New/Updated dropdown to "NVTs arrived"
+	event.
+
 2015-12-10  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/classic/css/gsa-style.css (.chart-foot): Due to last commit,
@@ -169,7 +180,7 @@
 
 	Move the Edit Filter to a js dialog.
 
-	* src/html/classic/js/greenbone.js, src/html/classic/omp.xsl: 
+	* src/html/classic/js/greenbone.js, src/html/classic/omp.xsl:
 
 2015-12-04  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
@@ -190,7 +201,7 @@
 	* CMakeLists.txt: Install new label.
 
 	* src/html/classic/gsad.xsl (match="login_page"): Use new label
-	for login dialog. 
+	for login dialog.
 
 2015-12-03  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
