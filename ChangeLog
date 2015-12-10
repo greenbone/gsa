@@ -1,5 +1,10 @@
 2015-12-10  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/omp.xsl (credential [trash])
+	(html-credentials-trash-table): Add columns type and allow_insecure.
+
+2015-12-10  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Add "allow_insecure" property of credentials.
 
 	* src/gsad_omp.c (create_credential_omp, save_credential_omp): Add

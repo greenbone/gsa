@@ -7841,6 +7841,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <b><xsl:value-of select="name"/></b>
     </td>
     <td>
+      <xsl:value-of select="type"/>
+      <span class="footnote"> (<xsl:value-of select="full_type"/>)</span>
+    </td>
+    <td>
+      <xsl:choose>
+        <xsl:when test="allow_insecure != 0">
+          <xsl:value-of select="gsa:i18n ('Yes', 'Binary Choice')"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="gsa:i18n ('No', 'Binary Choice')"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td>
       <xsl:value-of select="login"/>
     </td>
     <td>
@@ -33104,6 +33118,8 @@ var toggleFilter = function(){
     <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
       <tr class="gbntablehead2">
         <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
+        <td><xsl:value-of select="gsa:i18n ('Type', 'Property')"/></td>
+        <td><xsl:value-of select="gsa:i18n ('Allow insecure use', 'Credential')"/></td>
         <td><xsl:value-of select="gsa:i18n ('Login', 'Auth Data')"/></td>
         <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/></td>
         <td width="{$trash-actions-width}"><xsl:value-of select="gsa:i18n ('Actions', 'Actions')"/></td>
