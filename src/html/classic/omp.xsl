@@ -7300,6 +7300,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </select>
             </td>
           </tr>
+          <tr>
+            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Allow insecure use', 'Credential')"/></td>
+            <td>
+              <label>
+                <input name="allow_insecure" value="1" type="radio"/>
+                <xsl:value-of select="gsa:i18n ('Yes', 'Binary Choice')"/>
+              </label>
+              <label>
+                <input name="allow_insecure" value="0" type="radio" checked="1"/>
+                <xsl:value-of select="gsa:i18n ('No', 'Binary Choice')"/>
+              </label>
+            </td>
+          </tr>
           <tr id="autogenerate_row">
             <!--
               Updates handled in greenbone.js:newCredentialUpdateForm()
@@ -7418,6 +7431,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <field>type</field>
       </column>
       <column>
+        <name><xsl:value-of select="gsa:i18n('Allow insecure use', 'Credential')"/></name>
+        <field>allow_insecure</field>
+      </column>
+      <column>
         <name><xsl:value-of select="gsa:i18n('Login', 'Auth Data')"/></name>
         <field>login</field>
       </column>
@@ -7523,6 +7540,33 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <xsl:with-param name="select-value" select="$credential_type"/>
                 </xsl:call-template>
               </select>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Allow insecure use', 'Credential')"/></td>
+            <td>
+              <label>
+                <xsl:choose>
+                  <xsl:when test="commands_response/get_credentials_response/credential/allow_insecure != 0">
+                    <input name="allow_insecure" value="1" type="radio" checked="1"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input name="allow_insecure" value="1" type="radio"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+                <xsl:value-of select="gsa:i18n ('Yes', 'Binary Choice')"/>
+              </label>
+              <label>
+                <xsl:choose>
+                  <xsl:when test="commands_response/get_credentials_response/credential/allow_insecure != 0">
+                    <input name="allow_insecure" value="0" type="radio"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input name="allow_insecure" value="0" type="radio" checked="1"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+                <xsl:value-of select="gsa:i18n ('No', 'Binary Choice')"/>
+              </label>
             </td>
           </tr>
           <xsl:if test="$credential_type = 'snmp'">
@@ -7755,6 +7799,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <span class="footnote"> (<xsl:value-of select="full_type"/>)</span>
     </td>
     <td>
+      <xsl:choose>
+        <xsl:when test="allow_insecure != 0">
+          <xsl:value-of select="gsa:i18n ('Yes', 'Binary Choice')"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="gsa:i18n ('No', 'Binary Choice')"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td>
       <xsl:value-of select="login"/>
     </td>
     <xsl:choose>
@@ -7845,6 +7899,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <td>
           <xsl:value-of select="type"/><br/>
           <span class="footnote">(<xsl:value-of select="full_type"/>)</span>
+        </td>
+      </tr>
+      <tr>
+        <td style="vertical-align:top;"><xsl:value-of select="gsa:i18n ('Allow insecure use', 'Credential')"/>:</td>
+        <td>
+          <xsl:choose>
+            <xsl:when test="allow_insecure != 0">
+              <xsl:value-of select="gsa:i18n ('Yes', 'Binary Choice')"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="gsa:i18n ('No', 'Binary Choice')"/>
+            </xsl:otherwise>
+          </xsl:choose>
         </td>
       </tr>
       <xsl:if test="type != 'cc'">

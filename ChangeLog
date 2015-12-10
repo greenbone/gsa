@@ -1,3 +1,16 @@
+2015-12-10  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Add "allow_insecure" property of credentials.
+
+	* src/gsad_omp.c (create_credential_omp, save_credential_omp): Add
+	parameter allow_insecure.
+
+	* src/gsad.c (init_validator): Add parameter allow_insecure.
+
+	* src/html/classic/omp.xsl (html-create-credential-form)
+	(html-credentials-table, html-edit-credential-form, credential)
+	(credential [details]): Add elements for new property "allow_insecure".
+
 2015-12-09  Benoît Allard  <benoit.allard@greenbone.net>
 
 	* src/html/classic/gsad.xsl: Fix the spaces in the logout_box.

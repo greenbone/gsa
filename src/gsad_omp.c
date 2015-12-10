@@ -6001,7 +6001,7 @@ create_credential_omp (credentials_t * credentials, params_t *params,
   const char *no_redirect;
   const char *name, *comment, *login, *type, *password, *passphrase;
   const char *private_key, *certificate, *community, *privacy_password;
-  const char *auth_algorithm, *privacy_algorithm;
+  const char *auth_algorithm, *privacy_algorithm, *allow_insecure;
   int autogenerate;
   entity_t entity;
 
@@ -6018,6 +6018,7 @@ create_credential_omp (credentials_t * credentials, params_t *params,
   privacy_password = params_value (params, "privacy_password");
   auth_algorithm = params_value (params, "auth_algorithm");
   privacy_algorithm = params_value (params, "privacy_algorithm");
+  allow_insecure = params_value (params, "allow_insecure");
 
   if (params_value (params, "autogenerate"))
     autogenerate = strcmp (params_value (params, "autogenerate"), "0");
@@ -6031,6 +6032,7 @@ create_credential_omp (credentials_t * credentials, params_t *params,
   CHECK_PARAM_REDIRECT (name, "Create Credential", "new_credential");
   CHECK_PARAM_REDIRECT (comment, "Create Credential", "new_credential");
   CHECK_PARAM_REDIRECT (type, "Create Credential", "new_credential");
+  CHECK_PARAM_REDIRECT (allow_insecure, "Create Credential", "new_credential");
 
   if (autogenerate)
     {
@@ -6045,10 +6047,12 @@ create_credential_omp (credentials_t * credentials, params_t *params,
                       "<name>%s</name>"
                       "<comment>%s</comment>"
                       "<type>%s</type>"
+                      "<allow_insecure>%s</allow_insecure>"
                       "</create_credential>",
                       name,
                       comment ? comment : "",
-                      type);
+                      type,
+                      allow_insecure);
         }
       else
         {
@@ -6064,11 +6068,13 @@ create_credential_omp (credentials_t * credentials, params_t *params,
                       "<comment>%s</comment>"
                       "<type>%s</type>"
                       "<login>%s</login>"
+                      "<allow_insecure>%s</allow_insecure>"
                       "</create_credential>",
                       name,
                       comment ? comment : "",
                       type,
-                      login);
+                      login,
+                      allow_insecure);
         }
     }
   else
@@ -6090,12 +6096,14 @@ create_credential_omp (credentials_t * credentials, params_t *params,
                       "<type>%s</type>"
                       "<login>%s</login>"
                       "<password>%s</password>"
+                      "<allow_insecure>%s</allow_insecure>"
                       "</create_credential>",
                       name,
                       comment ? comment : "",
                       type,
                       login ? login : "",
-                      password ? password : "");
+                      password ? password : "",
+                      allow_insecure);
         }
       else if (type && (strcmp (type, "usk") == 0))
         {
@@ -6119,13 +6127,15 @@ create_credential_omp (credentials_t * credentials, params_t *params,
                       "<private>%s</private>"
                       "<phrase>%s</phrase>"
                       "</key>"
+                      "<allow_insecure>%s</allow_insecure>"
                       "</create_credential>",
                       name,
                       comment ? comment : "",
                       type,
                       login ? login : "",
                       private_key ? private_key : "",
-                      passphrase ? passphrase : "");
+                      passphrase ? passphrase : "",
+                      allow_insecure);
         }
       else if (type && (strcmp (type, "cc") == 0))
         {
@@ -6146,12 +6156,14 @@ create_credential_omp (credentials_t * credentials, params_t *params,
                       "<key>"
                       "<private>%s</private>"
                       "</key>"
+                      "<allow_insecure>%s</allow_insecure>"
                       "</create_credential>",
                       name,
                       comment ? comment : "",
                       type,
                       certificate ? certificate : "",
-                      private_key ? private_key : "");
+                      private_key ? private_key : "",
+                      allow_insecure);
 
         }
       else if (type && (strcmp (type, "snmp") == 0))
@@ -6185,6 +6197,7 @@ create_credential_omp (credentials_t * credentials, params_t *params,
                       "<algorithm>%s</algorithm>"
                       "</privacy>"
                       "<auth_algorithm>%s</auth_algorithm>"
+                      "<allow_insecure>%s</allow_insecure>"
                       "</create_credential>",
                       name,
                       comment ? comment : "",
@@ -6194,7 +6207,8 @@ create_credential_omp (credentials_t * credentials, params_t *params,
                       password ? password : "",
                       privacy_password ? privacy_password : "",
                       privacy_algorithm ? privacy_algorithm : "",
-                      auth_algorithm ? auth_algorithm : "");
+                      auth_algorithm ? auth_algorithm : "",
+                      allow_insecure);
         }
       else
         {
@@ -6673,7 +6687,7 @@ save_credential_omp (credentials_t * credentials, params_t *params,
   const char *no_redirect, *credential_id;
   const char *name, *comment, *login, *password, *passphrase;
   const char *private_key, *certificate, *community, *privacy_password;
-  const char *auth_algorithm, *privacy_algorithm;
+  const char *auth_algorithm, *privacy_algorithm, *allow_insecure;
   GString *command;
   entity_t entity;
 
@@ -6691,10 +6705,12 @@ save_credential_omp (credentials_t * credentials, params_t *params,
   auth_algorithm  = params_value (params, "auth_algorithm");
   privacy_algorithm  = params_value (params, "privacy_algorithm");
   community  = params_value (params, "community");
+  allow_insecure = params_value (params, "allow_insecure");
 
   CHECK_PARAM_REDIRECT (credential_id, "Save Credential", "edit_credential");
   CHECK_PARAM_REDIRECT (name, "Save Credential", "edit_credential");
   CHECK_PARAM_REDIRECT (comment, "Save Credential", "edit_credential");
+  CHECK_PARAM_REDIRECT (allow_insecure, "Save Credential", "edit_credential");
   if (params_given (params, "certificate"))
     CHECK_PARAM_REDIRECT (certificate, "Save Credential", "edit_credential");
   if (params_given (params, "private_key"))
@@ -6728,10 +6744,12 @@ save_credential_omp (credentials_t * credentials, params_t *params,
   xml_string_append (command,
                      "<modify_credential credential_id=\"%s\">"
                      "<name>%s</name>"
-                     "<comment>%s</comment>",
+                     "<comment>%s</comment>"
+                     "<allow_insecure>%s</allow_insecure>",
                      credential_id,
                      name,
-                     comment);
+                     comment,
+                     allow_insecure);
 
   if (auth_algorithm)
     xml_string_append (command,
