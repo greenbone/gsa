@@ -482,6 +482,7 @@ install (FILES src/html/classic/img/agent.png
                src/html/classic/img/scanner.svg
                src/html/classic/img/config.svg
                src/html/classic/img/secinfo.svg
+               src/html/classic/img/nvt.svg
                src/html/classic/img/report.svg
                src/html/classic/img/agent.svg
                src/html/classic/img/os.svg
@@ -492,6 +493,7 @@ install (FILES src/html/classic/img/agent.png
                src/html/classic/img/ovaldef.svg
                src/html/classic/img/cert_bund_adv.svg
                src/html/classic/img/dfn_cert_adv.svg
+               src/html/classic/img/result.svg
                src/html/classic/img/schedule.svg
                src/html/classic/img/target.svg
                src/html/classic/img/task.svg

@@ -1,3 +1,12 @@
+2015-12-10  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/classic/img/nvt.svg,
+	  src/html/classic/img/result.svg: New.
+
+	* src/html/classic/img/cert_bund_adv.svg: Updated.
+
+	* CMakeLists.txt: Install new icons.
+
 2015-12-10  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add alert event "Updated NVTs arrived".
