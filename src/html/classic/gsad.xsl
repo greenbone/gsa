@@ -2375,7 +2375,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <label for="password"><xsl:value-of select="gsa:i18n('Password:')"/></label>
           <input type="password" 
                  autocomplete="off" id="password" name="password" 
-                 onkeydown="if (event.keyCode == 13) {{ this.form.submit(); return false; }}"/>
+                 onkeydown="if (event.keyCode == 13) {{ this.form.submit(); login.disabled = password.disabled = true; return false; }}"/>
         </div>
       </form>
       <xsl:if test="string-length (guest/username) &gt; 0">
