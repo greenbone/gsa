@@ -1315,9 +1315,10 @@ text-align:right;
 }
 
 .chart-foot {
-  background: #DDDDDD;
+  background: #EEEEEE;
   color: #EEEEEE;
   padding: 2px;
+ margin-bottom:4px;
 }
 
 .bar {

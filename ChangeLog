@@ -1,3 +1,8 @@
+2015-12-10  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/classic/css/gsa-style.css (.chart-foot): Use same light
+	gray for background as for the chart itself.
+
 2015-12-10  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/css/gsa-style.css (.dashboard_box): Remove border.
