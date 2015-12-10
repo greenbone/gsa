@@ -489,6 +489,9 @@ install (FILES src/html/classic/img/agent.png
                src/html/classic/img/feed.svg
                src/html/classic/img/cpe.svg
                src/html/classic/img/cve.svg
+               src/html/classic/img/ovaldef.svg
+               src/html/classic/img/cert_bund_adv.svg
+               src/html/classic/img/dfn_cert_adv.svg
                src/html/classic/img/schedule.svg
                src/html/classic/img/target.svg
                src/html/classic/img/task.svg
