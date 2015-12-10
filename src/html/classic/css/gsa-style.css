@@ -1301,7 +1301,6 @@ text-align:right;
 .dashboard_box {
   background: #EEEEEE;
   display: inline-block;
-  border: 1px solid grey;
   font-weight: bold;
   margin: 3px;
 }
@@ -1316,7 +1315,7 @@ text-align:right;
 }
 
 .chart-foot {
-  background: #3A3A3A;
+  background: #DDDDDD;
   color: #EEEEEE;
   padding: 2px;
 }
