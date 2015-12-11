@@ -7184,7 +7184,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:with-param name="generator_name" select="'tasks-generator'"/>
       <xsl:with-param name="display_name" select="'tasks-display'"/>
       <xsl:with-param name="chart_type" select="/envelope/params/chart_type"/>
-      <xsl:with-param name="init_params">
+      <xsl:with-param name="init_params" xmlns="">
         <xsl:if test="/envelope/params/_param[starts-with (name, 'chart_init:')]">
           <params>
             <xsl:for-each select="/envelope/params/_param[starts-with (name, 'chart_init:')]">
@@ -7193,7 +7193,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </params>
         </xsl:if>
       </xsl:with-param>
-      <xsl:with-param name="gen_params">
+      <xsl:with-param name="gen_params" xmlns="">
         <xsl:if test="/envelope/params/_param[starts-with (name, 'chart_gen:')]">
           <params>
             <xsl:for-each select="/envelope/params/_param[starts-with (name, 'chart_gen:')]">

@@ -326,8 +326,7 @@ function GanttChartGenerator ()
        svg.selectAll(".empty_text")
             .data (dummy_data)
               .enter().insert("text")
-                .attr ("x", width/2)
-                .attr ("y", height/2)
+                .attr ("class", "empty_text")
                 .style ("dominant-baseline", "middle")
                 .style ("text-anchor", "middle")
                 .text (empty_text);
@@ -335,6 +334,10 @@ function GanttChartGenerator ()
           .data (dummy_data)
             .exit ()
               .remove ()
+      svg.selectAll(".empty_text")
+            .data (dummy_data)
+              .attr ("x", width/2)
+              .attr ("y", height/2)
 
       // Update chart
       time_axis_elem.attr("transform",

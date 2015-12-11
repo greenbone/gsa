@@ -1,3 +1,14 @@
+2015-12-11  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Fix text shown when Gantt and horizontal bar charts have no data.
+
+	* src/html/classic/omp.xsl (get_tasks_chart): Add empty xmlns for
+	init_params and gen_params.
+
+	* src/html/classic/js/gsa_h_bar_chart.js (generate),
+	src/html/classic/js/gsa_gantt_chart.js (generate): Move existing
+	text for empty data instead of adding a new one on every redraw.
+
 2015-12-11  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/classic/omp.xsl (name="list-window"): Drop the fold toggle
