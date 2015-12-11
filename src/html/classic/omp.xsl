@@ -4516,12 +4516,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 
   <div id="list-window-header" class="clearfix">
-    <div style="float:right; margin-top:35px">
-      <a href="#"
-         class="toggle-action-icon" data-target="#chart-box" data-name="Summary" data-variable="chart-box--collapsed">
-          <img src="/img/fold.png"/>
-      </a>
-    </div>
     <div id="list-window-title">
       <xsl:choose>
         <xsl:when test="$subtype != ''">
