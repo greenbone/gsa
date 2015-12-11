@@ -1,5 +1,10 @@
 2015-12-11  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/graphics.xsl (js-scan-management-top-visualization)
+	(js-secinfo-top-visualization): Load charts automatically again.
+
+2015-12-11  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Fix text shown when Gantt and horizontal bar charts have no data.
 
 	* src/html/classic/omp.xsl (get_tasks_chart): Add empty xmlns for

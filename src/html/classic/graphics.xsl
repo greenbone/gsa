@@ -983,10 +983,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     gsa.displays ["top-visualization-right"].create_chart_selector ();
 
     <xsl:if test="$auto_load_left != ''">
-    gsa.displays ["top-visualization-left"].select_chart ("<xsl:value-of select="$auto_load_left"/>", false, false);
+    gsa.displays ["top-visualization-left"].select_chart ("<xsl:value-of select="$auto_load_left"/>", false, true);
     </xsl:if>
     <xsl:if test="$auto_load_right != ''">
-    gsa.displays ["top-visualization-right"].select_chart ("<xsl:value-of select="$auto_load_right"/>", false, false);
+    gsa.displays ["top-visualization-right"].select_chart ("<xsl:value-of select="$auto_load_right"/>", false, true);
     </xsl:if>
   </script>
 </xsl:template>
@@ -1311,10 +1311,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     gsa.displays ["top-visualization-right"].create_chart_selector ();
 
     <xsl:if test="$auto_load_left != ''">
-    gsa.displays ["top-visualization-left"].select_chart ("<xsl:value-of select="$auto_load_left"/>", false, false);
+    gsa.displays ["top-visualization-left"].select_chart ("<xsl:value-of select="$auto_load_left"/>", false, true);
     </xsl:if>
     <xsl:if test="$auto_load_right != ''">
-    gsa.displays ["top-visualization-right"].select_chart ("<xsl:value-of select="$auto_load_right"/>", false, false);
+    gsa.displays ["top-visualization-right"].select_chart ("<xsl:value-of select="$auto_load_right"/>", false, true);
     </xsl:if>
   </script>
 </xsl:template>
