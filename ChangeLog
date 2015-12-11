@@ -1,3 +1,10 @@
+2015-12-11  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/classic/omp.xsl (name="list-window"): Remove the "Summary"
+	section header and its line to have a more harmonic impression
+	by resolving the double line. Move the fold toggle button to the
+	upper section line.
+
 2015-12-10  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/classic/img/nvt.svg,
