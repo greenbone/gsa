@@ -28,8 +28,7 @@ install (FILES favicon.gif gsad.xsl gsa-style.css
                help.xsl omp.xsl
          DESTINATION ${GSA_DATA_DIR}/its)
 
-install (FILES login/login.html
-               gsa-style.css
+install (FILES gsa-style.css
                favicon.gif
          DESTINATION ${GSA_DATA_DIR}/its/login)
 

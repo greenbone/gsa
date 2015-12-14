@@ -353,8 +353,7 @@ else (CMAKE_BUILD_TYPE MATCHES "Release")
            DESTINATION ${GSA_DATA_DIR}/classic/js)
 endif (CMAKE_BUILD_TYPE MATCHES "Release")
 
-install (FILES src/html/classic/login/login.html
-               src/html/classic/css/gsa-login.css
+install (FILES src/html/classic/css/gsa-login.css
                src/html/classic/favicon.gif
          DESTINATION ${GSA_DATA_DIR}/classic/login)
 
