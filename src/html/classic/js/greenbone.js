@@ -745,6 +745,9 @@
             $("#severity_at_least_row, #severity_changed_row, #filter_count_at_least_row, #filter_count_changed_row").hide();
 	        /* Methods. */
             $("#http_get_row, #start_task_row, #sourcefire_row, #verinice_row").hide();
+	        /* Method fields. */
+            $("#send_to_host_report_row, #email_subject_row, #email_content_row").hide();
+            $("#details_url_row").show();
 	        /* Filter. */
             $("#report_result_filter_row").hide();
             break;
@@ -753,6 +756,9 @@
             $("#severity_at_least_row, #severity_changed_row, #filter_count_at_least_row, #filter_count_changed_row").show();
 	        /* Methods. */
             $("#http_get_row, #start_task_row, #sourcefire_row, #verinice_row").show();
+	        /* Method fields. */
+            $("#send_to_host_report_row, #email_subject_row, #email_content_row").show();
+            $("#details_url_row").hide();
 	        /* Filter. */
             $("#report_result_filter_row").show();
             break;

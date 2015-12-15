@@ -8917,7 +8917,7 @@ should not have received it.
                     <input type="text" name="method_data:from_address" size="30" maxlength="301"/>
                   </td>
                 </tr>
-                <tr>
+                <tr id="email_subject_row">
                   <td width="45"></td>
                   <td width="150"><xsl:value-of select="gsa:i18n ('Subject', 'Alert|Email')"/></td>
                   <td>
@@ -8926,7 +8926,7 @@ should not have received it.
                            value="[OpenVAS-Manager] Task '$n': $e"/>
                   </td>
                 </tr>
-                <tr>
+                <tr id="email_content_row">
                   <td width="45"></td>
                   <td width="150"><xsl:value-of select="gsa:i18n ('Content', 'Alert|Email')"/></td>
                   <td>
@@ -9217,7 +9217,7 @@ should not have received it.
                            size="6" maxlength="6"/>
                   </td>
                 </tr>
-                <tr>
+                <tr id="send_to_host_report_row">
                   <td width="45"></td>
                   <td width="150"><xsl:value-of select="gsa:i18n ('Report', 'Alert')"/></td>
                   <td>
@@ -9236,6 +9236,17 @@ should not have received it.
               </table>
             </td>
           </tr>
+
+          <!-- Fields that apply to all/multiple methods. -->
+
+          <tr style="display: none" id="details_url_row">
+            <td valign="top" width="145"><xsl:value-of select="gsa:i18n ('Details URL', 'Alert')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+            <td colspan="2">
+              <input type="text" name="method_data:details_url"
+                     size="30" maxlength="1000"
+                     value="https://secinfo.greenbone.net/omp?cmd=get_info&amp;info_type=nvt&amp;info_id=$o&amp;token=guest"/>
+            </td>
+          </tr>
           <xsl:if test="gsa:may-op ('get_filters')">
             <tr id="report_result_filter_row">
               <td valign="top" width="145"><xsl:value-of select="gsa:i18n ('Report Result Filter', 'Alert')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
@@ -9249,6 +9260,7 @@ should not have received it.
               </td>
             </tr>
           </xsl:if>
+
           <tr class="even">
             <td colspan="2" style="text-align:right;">
               <input type="submit" name="submit" value="{gsa:i18n ('Create Alert', 'Alert')}"/>
@@ -9367,7 +9379,7 @@ should not have received it.
           <input type="hidden" name="filter_id" value="0"/>
         </xsl:if>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
-          <!-- CSS for hiding rows, when event is 'New NVTs arrived'. -->
+          <!-- CSS for hiding/showing rows initially. -->
           <xsl:variable name="hide">
             <xsl:choose>
               <xsl:when test="get_alerts_response/alert/event/text() = 'New NVTs arrived' or get_alerts_response/alert/event/text() = 'Updated NVTs arrived'">
@@ -9375,6 +9387,16 @@ should not have received it.
               </xsl:when>
               <xsl:otherwise>
                 <xsl:text></xsl:text>
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:variable>
+          <xsl:variable name="show">
+            <xsl:choose>
+              <xsl:when test="get_alerts_response/alert/event/text() = 'New NVTs arrived' or get_alerts_response/alert/event/text() = 'Updated NVTs arrived'">
+                <xsl:text></xsl:text>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:text>display: none</xsl:text>
               </xsl:otherwise>
             </xsl:choose>
           </xsl:variable>
@@ -9550,7 +9572,7 @@ should not have received it.
                         value="{$method/data[name='from_address']/text()}"/>
                   </td>
                 </tr>
-                <tr>
+                <tr style="{$hide}">
                   <td width="45"></td>
                   <td width="150"><xsl:value-of select="gsa:i18n ('Subject', 'Alert|Email')"/></td>
                   <td>
@@ -9559,7 +9581,7 @@ should not have received it.
                            value="{$method/data[name='subject']/text()}"/>
                   </td>
                 </tr>
-                <tr>
+                <tr style="{$hide}">
                   <td width="45"></td>
                   <td width="150"><xsl:value-of select="gsa:i18n ('Content', 'Alert|Email')"/></td>
                   <td>
@@ -9909,7 +9931,7 @@ should not have received it.
                            value="{$method/data[name='send_port']/text()}"/>
                   </td>
                 </tr>
-                <tr>
+                <tr style="{$hide}">
                   <td width="45"></td>
                   <td width="150"><xsl:value-of select="gsa:i18n ('Report', 'Alert')"/></td>
                   <td>
@@ -9940,6 +9962,14 @@ should not have received it.
 
           <!-- Report Result Filter. -->
 
+          <tr style="{$show}" id="details_url_row">
+            <td valign="top" width="145"><xsl:value-of select="gsa:i18n ('Details URL', 'Alert')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+            <td colspan="2">
+              <input type="text" name="method_data:details_url"
+                     size="30" maxlength="1000"
+                     value="{$method/data[name='details_url']/text()}"/>
+            </td>
+          </tr>
           <xsl:if test="gsa:may-op ('get_filters')">
             <xsl:variable name="filtername"
                 select="get_alerts_response/alert/filter/name"/>
@@ -10424,87 +10454,93 @@ should not have received it.
                     </xsl:choose>
                   </td>
                 </tr>
-                <tr>
-                  <td width="45"></td>
-                  <td><xsl:value-of select="gsa:i18n ('Content', 'Alert|Email')"/>:</td>
-                  <td>
-                    <xsl:choose>
-                      <xsl:when test="method/data[name='notice']/text() = '0'">
-                        <xsl:value-of select="gsa:i18n ('Include report', 'Alert|Email')"/>
-                        <xsl:variable name="id"
-                                      select="method/data[name='notice_report_format']/text()"/>
-                        <xsl:text> </xsl:text>
+                <xsl:choose>
+                  <xsl:when test="event/text() = 'New NVTs arrived'"/>
+                  <xsl:when test="event/text() = 'Updated NVTs arrived'"/>
+                  <xsl:otherwise>
+                    <tr>
+                      <td width="45"></td>
+                      <td><xsl:value-of select="gsa:i18n ('Content', 'Alert|Email')"/>:</td>
+                      <td>
                         <xsl:choose>
-                          <xsl:when test="boolean (../../get_report_formats_response/report_format[@id=$id])">
-                            <xsl:value-of select="../../get_report_formats_response/report_format[@id=$id]/name"/>
+                          <xsl:when test="method/data[name='notice']/text() = '0'">
+                            <xsl:value-of select="gsa:i18n ('Include report', 'Alert|Email')"/>
+                            <xsl:variable name="id"
+                                          select="method/data[name='notice_report_format']/text()"/>
+                            <xsl:text> </xsl:text>
+                            <xsl:choose>
+                              <xsl:when test="boolean (../../get_report_formats_response/report_format[@id=$id])">
+                                <xsl:value-of select="../../get_report_formats_response/report_format[@id=$id]/name"/>
+                              </xsl:when>
+                              <xsl:otherwise>
+                                <xsl:text>(</xsl:text>
+                                <xsl:value-of select="gsa:i18n('Unavailable', 'Property')"/>
+                                <xsl:text>, </xsl:text>
+                                <xsl:value-of select="gsa:i18n('UUID', 'Property')"/>
+                                <xsl:text>: </xsl:text>
+                                <xsl:value-of select="$id"/>
+                                <xsl:text>)</xsl:text>
+                              </xsl:otherwise>
+                            </xsl:choose>
+                          </xsl:when>
+                          <xsl:when test="method/data[name='notice']/text() = '2'">
+                            <xsl:value-of select="gsa:i18n ('Attach report', 'Alert|Email')"/>
+                            <xsl:variable name="id"
+                                          select="method/data[name='notice_attach_format']/text()"/>
+                            <xsl:text> </xsl:text>
+                            <xsl:choose>
+                              <xsl:when test="boolean (../../get_report_formats_response/report_format[@id=$id])">
+                                <xsl:value-of select="../../get_report_formats_response/report_format[@id=$id]/name"/>
+                              </xsl:when>
+                              <xsl:otherwise>
+                                <xsl:text>(</xsl:text>
+                                <xsl:value-of select="gsa:i18n('Unavailable', 'Property')"/>
+                                <xsl:text>, </xsl:text>
+                                <xsl:value-of select="gsa:i18n('UUID', 'Property')"/>
+                                <xsl:text>: </xsl:text>
+                                <xsl:value-of select="$id"/>
+                                <xsl:text>)</xsl:text>
+                              </xsl:otherwise>
+                            </xsl:choose>
                           </xsl:when>
                           <xsl:otherwise>
-                            <xsl:text>(</xsl:text>
-                            <xsl:value-of select="gsa:i18n('Unavailable', 'Property')"/>
-                            <xsl:text>, </xsl:text>
-                            <xsl:value-of select="gsa:i18n('UUID', 'Property')"/>
-                            <xsl:text>: </xsl:text>
-                            <xsl:value-of select="$id"/>
-                            <xsl:text>)</xsl:text>
+                            <xsl:value-of select="gsa:i18n ('Simple notice', 'Alert|Email')"/>
                           </xsl:otherwise>
                         </xsl:choose>
-                      </xsl:when>
-                      <xsl:when test="method/data[name='notice']/text() = '2'">
-                        <xsl:value-of select="gsa:i18n ('Attach report', 'Alert|Email')"/>
-                        <xsl:variable name="id"
-                                      select="method/data[name='notice_attach_format']/text()"/>
-                        <xsl:text> </xsl:text>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td width="45"></td>
+                      <td><xsl:value-of select="gsa:i18n ('Subject', 'Alert|Email')"/>:</td>
+                      <td>
                         <xsl:choose>
-                          <xsl:when test="boolean (../../get_report_formats_response/report_format[@id=$id])">
-                            <xsl:value-of select="../../get_report_formats_response/report_format[@id=$id]/name"/>
+                          <xsl:when test="string-length(method/data[name='subject']/text()) &gt; 0">
+                            <xsl:value-of select="method/data[name='subject']/text()"/>
                           </xsl:when>
-                          <xsl:otherwise>
-                            <xsl:text>(</xsl:text>
-                            <xsl:value-of select="gsa:i18n('Unavailable', 'Property')"/>
-                            <xsl:text>, </xsl:text>
-                            <xsl:value-of select="gsa:i18n('UUID', 'Property')"/>
-                            <xsl:text>: </xsl:text>
-                            <xsl:value-of select="$id"/>
-                            <xsl:text>)</xsl:text>
-                          </xsl:otherwise>
                         </xsl:choose>
-                      </xsl:when>
-                      <xsl:otherwise>
-                        <xsl:value-of select="gsa:i18n ('Simple notice', 'Alert|Email')"/>
-                      </xsl:otherwise>
-                    </xsl:choose>
-                  </td>
-                </tr>
-                <tr>
-                  <td width="45"></td>
-                  <td><xsl:value-of select="gsa:i18n ('Subject', 'Alert|Email')"/>:</td>
-                  <td>
-                    <xsl:choose>
-                      <xsl:when test="string-length(method/data[name='subject']/text()) &gt; 0">
-                        <xsl:value-of select="method/data[name='subject']/text()"/>
-                      </xsl:when>
-                    </xsl:choose>
-                  </td>
-                </tr>
-                <tr>
-                  <td width="45"></td>
-                  <td><xsl:value-of select="gsa:i18n ('Message', 'Alert|Email')"/>:</td>
-                  <td>
-                    <xsl:choose>
-                      <xsl:when test="string-length(method/data[name='message']/text()) &gt; 0">
+                      </td>
+                    </tr>
+                    <tr>
+                      <td width="45"></td>
+                      <td><xsl:value-of select="gsa:i18n ('Message', 'Alert|Email')"/>:</td>
+                      <td>
                         <xsl:choose>
-                          <xsl:when test="contains (method/data[name='message']/text(), '&#10;')">
-                            <xsl:value-of select="substring-before (method/data[name='message']/text(), '&#10;')"/>
-                            <xsl:text>...</xsl:text>
+                          <xsl:when test="string-length(method/data[name='message']/text()) &gt; 0">
+                            <xsl:choose>
+                              <xsl:when test="contains (method/data[name='message']/text(), '&#10;')">
+                                <xsl:value-of select="substring-before (method/data[name='message']/text(), '&#10;')"/>
+                                <xsl:text>...</xsl:text>
+                              </xsl:when>
+                              <xsl:otherwise>
+                                <xsl:value-of select="method/data[name='message']/text()"/>
+                              </xsl:otherwise>
+                            </xsl:choose>
                           </xsl:when>
-                          <xsl:otherwise>
-                            <xsl:value-of select="method/data[name='message']/text()"/>
-                          </xsl:otherwise>
                         </xsl:choose>
-                      </xsl:when>
-                    </xsl:choose>
-                  </td>
-                </tr>
+                      </td>
+                    </tr>
+                  </xsl:otherwise>
+                </xsl:choose>
               </xsl:when>
               <xsl:when test="method/text()='HTTP Get'">
                 <tr>
@@ -10642,6 +10678,14 @@ should not have received it.
           </table>
         </td>
       </tr>
+      <xsl:if test="event/text() = 'New NVTs arrived' or event/text() = 'Updated NVTs arrived'">
+        <tr>
+          <td><xsl:value-of select="gsa:i18n ('Details URL', 'Alert')"/>:</td>
+          <td>
+            <xsl:value-of select="method/data[name='details_url']/text()"/>
+          </td>
+        </tr>
+      </xsl:if>
       <xsl:if test="gsa:may-op ('get_filters') or string-length (filter/name) &gt; 0">
         <tr>
           <td><xsl:value-of select="gsa:i18n ('Filter', 'Filter')"/>:</td>
