@@ -742,7 +742,7 @@
         {
           case "New NVTs arrived":
 	        /* Conditions. */
-            $("#severity_at_least_row, #severity_changed_row, #filter_count_at_least_row, #filter_count_changed_row").hide();
+            $("#severity_at_least_row, #severity_changed_row, #filter_count_changed_row").hide();
 	        /* Methods. */
             $("#http_get_row, #start_task_row, #sourcefire_row, #verinice_row").hide();
 	        /* Method fields. */
@@ -750,10 +750,18 @@
             $("#details_url_row").show();
 	        /* Filter. */
             $("#report_result_filter_row").hide();
+
+            $("#filter_count_at_least_span_nvts").show();
+            $("#filter_count_at_least_span_task").hide();
+            $("#filter_count_at_least_results_span").hide();
+            $("#filter_count_at_least_nvts_span").show();
+            $("#filter_count_at_least_select_task").attr("name", "dummy");
+            $("#filter_count_at_least_select_nvts").attr("name", "condition_data:filter_id");
+
             break;
           case "Task run status changed":
 	        /* Conditions. */
-            $("#severity_at_least_row, #severity_changed_row, #filter_count_at_least_row, #filter_count_changed_row").show();
+            $("#severity_at_least_row, #severity_changed_row, #filter_count_changed_row").show();
 	        /* Methods. */
             $("#http_get_row, #start_task_row, #sourcefire_row, #verinice_row").show();
 	        /* Method fields. */
@@ -761,6 +769,14 @@
             $("#details_url_row").hide();
 	        /* Filter. */
             $("#report_result_filter_row").show();
+
+            $("#filter_count_at_least_span_nvts").hide();
+            $("#filter_count_at_least_span_task").show();
+            $("#filter_count_at_least_results_span").show();
+            $("#filter_count_at_least_nvts_span").hide();
+            $("#filter_count_at_least_select_nvts").attr("name", "dummy");
+            $("#filter_count_at_least_select_task").attr("name", "condition_data:filter_id");
+
             break;
         }
     }

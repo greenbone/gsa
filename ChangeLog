@@ -1,3 +1,20 @@
+2015-12-17  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Enable alert condition "Filter count at least" for NVT alerts.
+
+	* src/gsad_omp.c (new_alert, edit_alert): Get all filters, so XSL can
+	choose the type.
+
+	* src/html/classic/js/greenbone.js (editAlertUpdateForm): Don't hide
+	"Filter count at least" field, instead adjust it according to the alert
+	condition type.
+
+	* src/html/classic/omp.xsl (condition-field): Add "show" arg, which
+	controls whether the condition is for an NVT event type.  Don't hide
+	"Filter count at least", instead add extra elements that can be shown
+	or hidden by the Javascript according to the event type.
+	(html-edit-alert-form): Pass show to condition-field.
+
 2015-12-15  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add "Details URL" param for NVT alerts.  Hide more fields that do not

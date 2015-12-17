@@ -8640,6 +8640,11 @@ should not have received it.
 
 <xsl:template name="condition-field">
   <xsl:param name="hide"/>
+  <xsl:param name="show">
+    <xsl:if test="string-length ($hide) = 0">
+      <xsl:text>display: none</xsl:text>
+    </xsl:if>
+  </xsl:param>
   <xsl:param name="condition" select="false ()"/>
   <xsl:param name="condition-text">
     <xsl:choose>
@@ -8721,7 +8726,7 @@ should not have received it.
         </select>
       </td>
     </tr>
-    <tr style="{$hide}" id="filter_count_at_least_row">
+    <tr id="filter_count_at_least_row">
       <td colspan="2" valign="top">
         <xsl:call-template name="radio-button">
           <xsl:with-param name="name" select="'condition'"/>
@@ -8729,20 +8734,38 @@ should not have received it.
           <xsl:with-param name="select-value" select="$condition-text"/>
           <xsl:with-param name="text">
             <xsl:value-of select="gsa:i18n ('Filter ', 'Alert')"/>
-            <select name="condition_data:at_least_filter_id">
-              <xsl:for-each select="$filters/filter">
-                <xsl:choose>
-                  <xsl:when test="$condition and $condition/text() = 'Filter count at least' and $condition/data[name='filter_id']/text() = @id">
-                    <option value="{@id}" selected="1">
-                      <xsl:value-of select="name"/>
-                    </option>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <option value="{@id}"><xsl:value-of select="name"/></option>
-                  </xsl:otherwise>
-                </xsl:choose>
-              </xsl:for-each>
-            </select>
+            <span style="{$hide}" id="filter_count_at_least_span_task">
+              <select id="filter_count_at_least_select_task" name="condition_data:at_least_filter_id">
+                <xsl:for-each select="$filters/filter[type='Result']">
+                  <xsl:choose>
+                    <xsl:when test="$condition and $condition/text() = 'Filter count at least' and $condition/data[name='filter_id']/text() = @id">
+                      <option value="{@id}" selected="1">
+                        <xsl:value-of select="name"/>
+                      </option>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <option value="{@id}"><xsl:value-of select="name"/></option>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </xsl:for-each>
+              </select>
+            </span>
+            <span style="{$show}" id="filter_count_at_least_span_nvts">
+              <select id="filter_count_at_least_select_nvts" name="condition_data:at_least_filter_id">
+                <xsl:for-each select="$filters/filter[type='SecInfo']">
+                  <xsl:choose>
+                    <xsl:when test="$condition and $condition/text() = 'Filter count at least' and $condition/data[name='filter_id']/text() = @id">
+                      <option value="{@id}" selected="1">
+                        <xsl:value-of select="name"/>
+                      </option>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <option value="{@id}"><xsl:value-of select="name"/></option>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </xsl:for-each>
+              </select>
+            </span>
             <xsl:value-of select="gsa:i18n (' matches at least ', 'Alert')"/>
             <xsl:choose>
               <xsl:when test="$condition and $condition/text() = 'Filter count at least'">
@@ -8754,7 +8777,12 @@ should not have received it.
                 <input name="condition_data:at_least_count" value="1" size="5"/>
               </xsl:otherwise>
             </xsl:choose>
-            <xsl:value-of select="gsa:i18n (' result(s)', 'Alert')"/>
+            <span style="{$hide}" id="filter_count_at_least_results_span">
+              <xsl:value-of select="gsa:i18n (' result(s)', 'Alert')"/>
+            </span>
+            <span style="{$show}" id="filter_count_at_least_nvts_span">
+              <xsl:value-of select="gsa:i18n (' NVT(s)', 'Alert')"/>
+            </span>
           </xsl:with-param>
         </xsl:call-template>
       </td>
@@ -8769,7 +8797,7 @@ should not have received it.
             <xsl:value-of select="gsa:i18n ('Filter ', 'Alert')"/>
             <input type="hidden" name="condition_data:filter_direction" value="increased"/>
             <select name="condition_data:filter_id">
-              <xsl:for-each select="$filters/filter">
+              <xsl:for-each select="$filters/filter[type='Result']">
                 <xsl:choose>
                   <xsl:when test="$condition and $condition/text() = 'Filter count changed' and $condition/data[name='filter_id']/text() = @id">
                     <option value="{@id}" selected="1">
@@ -9531,6 +9559,7 @@ should not have received it.
                                 select="get_alerts_response/alert/condition"/>
                 <xsl:with-param name="filters" select="$filters"/>
                 <xsl:with-param name="hide" select="$hide"/>
+                <xsl:with-param name="show" select="$show"/>
               </xsl:call-template>
             </td>
           </tr>
@@ -9572,7 +9601,7 @@ should not have received it.
                         value="{$method/data[name='from_address']/text()}"/>
                   </td>
                 </tr>
-                <tr style="{$hide}">
+                <tr style="{$hide}" id="email_subject_row">
                   <td width="45"></td>
                   <td width="150"><xsl:value-of select="gsa:i18n ('Subject', 'Alert|Email')"/></td>
                   <td>
@@ -9581,7 +9610,7 @@ should not have received it.
                            value="{$method/data[name='subject']/text()}"/>
                   </td>
                 </tr>
-                <tr style="{$hide}">
+                <tr style="{$hide}" id="email_content_row">
                   <td width="45"></td>
                   <td width="150"><xsl:value-of select="gsa:i18n ('Content', 'Alert|Email')"/></td>
                   <td>
@@ -10316,7 +10345,17 @@ should not have received it.
       </xsl:choose>
       <xsl:text> matches at least </xsl:text>
       <xsl:value-of select="condition/data[name='count']/text()"/>
-      <xsl:text> results</xsl:text>
+      <xsl:choose>
+        <xsl:when test="event/text()='New NVTs arrived' or event/text()='Updated NVTs arrived'">
+          <xsl:text> NVT</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:text> result</xsl:text>
+        </xsl:otherwise>
+      </xsl:choose>
+      <xsl:if test="condition/data[name='count']/text() &gt; 1">
+        <xsl:text>s</xsl:text>
+      </xsl:if>
     </xsl:when>
     <xsl:when test="condition/text()='Filter count changed'">
       <xsl:variable name="id" select="condition/data[name='filter_id']/text()"/>
