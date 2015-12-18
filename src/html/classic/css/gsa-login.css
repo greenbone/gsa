@@ -32,7 +32,7 @@ body {
 body {
  margin: 0px;
  font: small Verdana, sans-serif;
- font-size: 12px;
+ font-size: 12pt;
  color: #1A1A1A;
  background: #393637;
 }
@@ -43,24 +43,25 @@ body {
 }
 
 header {
-  line-height: 80px;
-  font-size: 38pt;
+  height: 40px;
   background-color: #99CE48;
   color: #393637;
 }
 
+header > span {
+  position: absolute;
+  top: 15px;
+  padding: 5px;
+}
+
 header .title {
-  margin-left: 20px;
+  left: 0;
+  margin-left: 12px;
   font-weight: bold;
 }
 
 header .version {
-  position: absolute;
-  font-size: 12pt;
-  line-height: initial;
   right: 0;
-  top: 55px;
-  padding: 5px;
 }
 
 .logo_box {
@@ -69,7 +70,7 @@ header .version {
   left: 50%;
   width: 35%;
   min-width: 200px;
-  max-width: 500px;
+  max-width: 400px;
 }
 
 .logo_box img {
@@ -77,6 +78,7 @@ header .version {
 }
 
 .login_box {
+  font-size: 9pt;
   width: 450px;
   height: 150px;
   background-color: #dddddd;

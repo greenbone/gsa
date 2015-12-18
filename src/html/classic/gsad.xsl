@@ -2342,7 +2342,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="login_page">
  <div class="page-wrap">
   <header>
-   <div class="title"><xsl:value-of select="gsa:i18n('Greenbone Security Assistant')"/></div>
+   <span class="title"><xsl:value-of select="gsa:i18n('Greenbone Security Assistant')"/></span>
    <span class="version"></span>
   </header>
   <div class="logo_box">
