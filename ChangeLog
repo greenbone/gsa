@@ -1,3 +1,22 @@
+2015-12-18  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Backport r23765.
+
+	Add alert conditions for triggering alerts according to result counts
+	matched by a filter.
+
+	* src/gsad_omp.c (append_alert_condition_data): Add special cases for
+	filter conditions, because the conditions use the same data names.
+	(get_alert, get_alerts): Correct message.  Get filters for the condition
+	link.
+
+	* src/html/classic/omp.xsl (condition-field): New template.
+	(html-create-alert-form): Use condition-field for the condition.
+	(radio-button): Align better.
+	(html-edit-alert-form): Use condition-field for the condition.
+	(alert, alert [details]): Use "condition" to display the condition.
+	(condition): New template.
+
 2015-12-04  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Revert r23215, backport of r23214.

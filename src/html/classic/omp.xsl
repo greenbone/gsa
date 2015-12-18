@@ -8164,6 +8164,168 @@ Please contact your local system administrator if you think you
 should not have received it.
 </xsl:variable>
 
+<xsl:template name="condition-field">
+  <xsl:param name="condition" select="false ()"/>
+  <xsl:param name="condition-text">
+    <xsl:choose>
+      <xsl:when test="$condition">
+        <xsl:value-of select="$condition/text()"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="''"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:param>
+  <xsl:param name="filters"/>
+  <table border="0" width="100%">
+    <tr>
+      <td colspan="2" valign="top">
+        <xsl:choose>
+          <xsl:when test="not ($condition)">
+            <xsl:call-template name="radio-button">
+              <xsl:with-param name="value" select="'Always'"/>
+              <xsl:with-param name="select-value" select="'Always'"/>
+              <xsl:with-param name="text" select="gsa:i18n ('Always', 'Alert')"/>
+              <xsl:with-param name="name" select="'condition'"/>
+            </xsl:call-template>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:call-template name="radio-button">
+              <xsl:with-param name="value" select="'Always'"/>
+              <xsl:with-param name="select-value" select="$condition-text"/>
+              <xsl:with-param name="text" select="gsa:i18n ('Always', 'Alert')"/>
+              <xsl:with-param name="name" select="'condition'"/>
+            </xsl:call-template>
+          </xsl:otherwise>
+        </xsl:choose>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2" valign="top">
+        <xsl:call-template name="radio-button">
+          <xsl:with-param name="value" select="'Severity at least'"/>
+          <xsl:with-param name="select-value" select="$condition-text"/>
+          <xsl:with-param name="text" select="gsa:i18n ('Severity at least', 'Alert')"/>
+          <xsl:with-param name="name" select="'condition'"/>
+        </xsl:call-template>
+        <xsl:text> </xsl:text>
+        <xsl:choose>
+          <xsl:when test="$condition and $condition/text() = 'Severity at least'">
+            <input name="condition_data:severity" value="{$condition/data/text()}" size="5"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <input name="condition_data:severity" value="0.1" size="5"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2" valign="top">
+        <xsl:call-template name="radio-button">
+          <xsl:with-param name="name" select="'condition'"/>
+          <xsl:with-param name="value" select="'Severity changed'"/>
+          <xsl:with-param name="select-value" select="$condition-text"/>
+          <xsl:with-param name="text" select="gsa:i18n ('Severity level ', 'Alert Condition')"/>
+        </xsl:call-template>
+        <select name="condition_data:direction">
+          <xsl:call-template name="opt">
+            <xsl:with-param name="value" select="'changed'"/>
+            <xsl:with-param name="select-value" select="$condition-text"/>
+            <xsl:with-param name="content" select="gsa:i18n ('changed', 'Alert Condition')"/>
+          </xsl:call-template>
+          <xsl:call-template name="opt">
+            <xsl:with-param name="value" select="'increased'"/>
+            <xsl:with-param name="select-value" select="$condition-text"/>
+            <xsl:with-param name="content" select="gsa:i18n ('increased', 'Alert Condition')"/>
+          </xsl:call-template>
+          <xsl:call-template name="opt">
+            <xsl:with-param name="value" select="'decreased'"/>
+            <xsl:with-param name="select-value" select="$condition-text"/>
+            <xsl:with-param name="content" select="gsa:i18n ('decreased', 'Alert Condition')"/>
+          </xsl:call-template>
+        </select>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2" valign="top">
+        <xsl:call-template name="radio-button">
+          <xsl:with-param name="name" select="'condition'"/>
+          <xsl:with-param name="value" select="'Filter count at least'"/>
+          <xsl:with-param name="select-value" select="$condition-text"/>
+          <xsl:with-param name="text">
+            <xsl:value-of select="gsa:i18n ('Filter ', 'Alert')"/>
+            <select name="condition_data:at_least_filter_id">
+              <xsl:for-each select="$filters/filter">
+                <xsl:choose>
+                  <xsl:when test="$condition and $condition/text() = 'Filter count at least' and $condition/data[name='filter_id']/text() = @id">
+                    <option value="{@id}" selected="1">
+                      <xsl:value-of select="name"/>
+                    </option>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <option value="{@id}"><xsl:value-of select="name"/></option>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </xsl:for-each>
+            </select>
+            <xsl:value-of select="gsa:i18n (' matches at least ', 'Alert')"/>
+            <xsl:choose>
+              <xsl:when test="$condition and $condition/text() = 'Filter count at least'">
+                <input name="condition_data:at_least_count"
+                       value="{$condition/data[name='count']/text()}"
+                       size="5"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <input name="condition_data:at_least_count" value="1" size="5"/>
+              </xsl:otherwise>
+            </xsl:choose>
+            <xsl:value-of select="gsa:i18n (' result(s)', 'Alert')"/>
+          </xsl:with-param>
+        </xsl:call-template>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2" valign="top">
+        <xsl:call-template name="radio-button">
+          <xsl:with-param name="name" select="'condition'"/>
+          <xsl:with-param name="value" select="'Filter count changed'"/>
+          <xsl:with-param name="select-value" select="$condition-text"/>
+          <xsl:with-param name="text">
+            <xsl:value-of select="gsa:i18n ('Filter ', 'Alert')"/>
+            <input type="hidden" name="condition_data:filter_direction" value="increased"/>
+            <select name="condition_data:filter_id">
+              <xsl:for-each select="$filters/filter">
+                <xsl:choose>
+                  <xsl:when test="$condition and $condition/text() = 'Filter count changed' and $condition/data[name='filter_id']/text() = @id">
+                    <option value="{@id}" selected="1">
+                      <xsl:value-of select="name"/>
+                    </option>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <option value="{@id}"><xsl:value-of select="name"/></option>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </xsl:for-each>
+            </select>
+            <xsl:value-of select="gsa:i18n (' matches at least ', 'Alert')"/>
+            <xsl:choose>
+              <xsl:when test="$condition and $condition/text() = 'Filter count changed'">
+                <input name="condition_data:count"
+                       value="{$condition/data[name='count']/text()}"
+                       size="5"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <input name="condition_data:count" value="1" size="5"/>
+              </xsl:otherwise>
+            </xsl:choose>
+            <xsl:value-of select="gsa:i18n (' result(s) more than previous scan', 'Alert')"/>
+          </xsl:with-param>
+        </xsl:call-template>
+      </td>
+    </tr>
+  </table>
+</xsl:template>
+
 <xsl:template name="html-create-alert-form">
   <xsl:param name="report-formats"></xsl:param>
   <xsl:param name="filters"/>
@@ -8232,38 +8394,9 @@ should not have received it.
           <tr class="even">
             <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Condition', 'Alert')"/></td>
             <td colspan="2">
-              <table border="0" width="100%">
-                <tr>
-                  <td colspan="2" valign="top">
-                    <label>
-                      <input type="radio" name="condition" value="Always" checked="1"/>
-                      <xsl:value-of select="gsa:i18n ('Always', 'Alert')"/>
-                    </label>
-                  </td>
-                </tr>
-                <tr>
-                  <td colspan="2" valign="top">
-                    <label>
-                      <input type="radio" name="condition" value="Severity at least"/>
-                      <xsl:value-of select="gsa:i18n ('Severity is at least ', 'Alert')"/>
-                    </label>
-                    <input name="condition_data:severity" value="0.1" size="5"/>
-                  </td>
-                </tr>
-                <tr>
-                  <td colspan="2" valign="top">
-                    <label>
-                      <input type="radio" name="condition" value="Severity changed"/>
-                      <xsl:value-of select="gsa:i18n ('Severity level ', 'Alert Condition')"/>
-                    </label>
-                    <select name="condition_data:direction">
-                      <option value="changed" selected="1"><xsl:value-of select="gsa:i18n ('changed', 'Alert Condition')"/></option>
-                      <option value="increased"><xsl:value-of select="gsa:i18n ('increased', 'Alert Condition')"/></option>
-                      <option value="decreased"><xsl:value-of select="gsa:i18n ('decreased', 'Alert Condition')"/></option>
-                    </select>
-                  </td>
-                </tr>
-              </table>
+              <xsl:call-template name="condition-field">
+                <xsl:with-param name="filters" select="$filters"/>
+              </xsl:call-template>
             </td>
           </tr>
           <tr class="odd">
@@ -8649,23 +8782,22 @@ should not have received it.
   <xsl:param name="text"></xsl:param>
   <xsl:param name="select-value"></xsl:param>
   <label>
-  <xsl:choose>
-    <xsl:when test="$value = $select-value">
+    <xsl:choose>
+      <xsl:when test="$value = $select-value">
         <input type="radio" name="{$name}" checked="1" value="{$value}"/>
-    </xsl:when>
-    <xsl:otherwise>
+      </xsl:when>
+      <xsl:otherwise>
         <input type="radio" name="{$name}" value="{$value}"/>
-    </xsl:otherwise>
-  </xsl:choose>
-  <xsl:choose>
-    <xsl:when test="$text">
-      <xsl:value-of select="$text"/>
-    </xsl:when>
-    <xsl:otherwise>
-      <xsl:value-of select="$value"/>
-    </xsl:otherwise>
-  </xsl:choose>
-
+      </xsl:otherwise>
+    </xsl:choose>
+    <xsl:choose>
+      <xsl:when test="$text">
+        <xsl:copy-of select="$text"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$value"/>
+      </xsl:otherwise>
+    </xsl:choose>
   </label>
 </xsl:template>
 
@@ -8775,64 +8907,11 @@ should not have received it.
                           select="get_alerts_response/alert/condition"/>
             <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Condition', 'Alert')"/></td>
             <td colspan="2">
-              <table border="0" width="100%">
-                <tr>
-                  <td colspan="2" valign="top">
-                    <xsl:call-template name="radio-button">
-                      <xsl:with-param name="value" select="'Always'"/>
-                      <xsl:with-param name="select-value" select="$condition/text()"/>
-                      <xsl:with-param name="text" select="gsa:i18n ('Always', 'Alert')"/>
-                      <xsl:with-param name="name" select="'condition'"/>
-                    </xsl:call-template>
-                  </td>
-                </tr>
-                <tr>
-                  <td colspan="2" valign="top">
-                    <xsl:call-template name="radio-button">
-                      <xsl:with-param name="value" select="'Severity at least'"/>
-                      <xsl:with-param name="select-value" select="$condition/text()"/>
-                      <xsl:with-param name="text" select="gsa:i18n ('Severity at least', 'Alert')"/>
-                      <xsl:with-param name="name" select="'condition'"/>
-                    </xsl:call-template>
-                    <xsl:text> </xsl:text>
-                    <xsl:choose>
-                      <xsl:when test="$condition/text() = 'Severity at least'">
-                        <input name="condition_data:severity" value="{$condition/data/text()}" size="5"/>
-                      </xsl:when>
-                      <xsl:otherwise>
-                        <input name="condition_data:severity" value="0.1" size="5"/>
-                      </xsl:otherwise>
-                    </xsl:choose>
-                  </td>
-                </tr>
-                <tr>
-                  <td colspan="2" valign="top">
-                    <xsl:call-template name="radio-button">
-                      <xsl:with-param name="name" select="'condition'"/>
-                      <xsl:with-param name="value" select="'Severity changed'"/>
-                      <xsl:with-param name="select-value" select="$condition/text()"/>
-                      <xsl:with-param name="text" select="gsa:i18n ('Severity level ', 'Alert Condition')"/>
-                    </xsl:call-template>
-                    <select name="condition_data:direction">
-                      <xsl:call-template name="opt">
-                        <xsl:with-param name="value" select="'changed'"/>
-                        <xsl:with-param name="select-value" select="$condition/data/text()"/>
-                        <xsl:with-param name="content" select="gsa:i18n ('changed', 'Alert Condition')"/>
-                      </xsl:call-template>
-                      <xsl:call-template name="opt">
-                        <xsl:with-param name="value" select="'increased'"/>
-                        <xsl:with-param name="select-value" select="$condition/data/text()"/>
-                        <xsl:with-param name="content" select="gsa:i18n ('increased', 'Alert Condition')"/>
-                      </xsl:call-template>
-                      <xsl:call-template name="opt">
-                        <xsl:with-param name="value" select="'decreased'"/>
-                        <xsl:with-param name="select-value" select="$condition/data/text()"/>
-                        <xsl:with-param name="content" select="gsa:i18n ('decreased', 'Alert Condition')"/>
-                      </xsl:call-template>
-                    </select>
-                  </td>
-                </tr>
-              </table>
+              <xsl:call-template name="condition-field">
+                <xsl:with-param name="condition"
+                                select="get_alerts_response/alert/condition"/>
+                <xsl:with-param name="filters" select="$filters"/>
+              </xsl:call-template>
             </td>
           </tr>
           <xsl:variable name="method"
@@ -9343,15 +9422,7 @@ should not have received it.
       </xsl:choose>
     </td>
     <td>
-      <xsl:value-of select="gsa:i18n (condition/text(), 'Alert')"/>
-      <xsl:choose>
-        <xsl:when test="condition/text()='Severity at least' and string-length(condition/data[name='severity']/text()) &gt; 0">
-          <br/>(<xsl:value-of select="gsa:i18n (condition/data[name='severity']/text(), 'Alert')"/>)
-        </xsl:when>
-        <xsl:when test="condition/text()='Severity changed' and string-length(condition/data[name='direction']/text()) &gt; 0">
-          <br/>(<xsl:value-of select="gsa:i18n (condition/data[name='direction']/text(), 'Alert')"/>)
-        </xsl:when>
-      </xsl:choose>
+      <xsl:call-template name="condition"/>
     </td>
     <td>
       <xsl:choose>
@@ -9516,6 +9587,73 @@ should not have received it.
   </tr>
 </xsl:template>
 
+<xsl:template name="condition">
+  <xsl:choose>
+    <xsl:when test="condition/text()='Filter count at least'">
+      <xsl:variable name="id" select="condition/data[name='filter_id']/text()"/>
+      <xsl:text>Filter </xsl:text>
+      <xsl:choose>
+        <xsl:when test="gsa:may-op ('get_filters')">
+          <a href="/omp?cmd=get_filter&amp;filter_id={$id}&amp;token={/envelope/token}"
+             title="{gsa:i18n ('Details', 'Generic Resource')}">
+            <xsl:value-of select="../../get_filters_response/filter[@id=$id]/name"/>
+          </a>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="../../get_filters_response/filter[@id=$id]/name"/>
+        </xsl:otherwise>
+      </xsl:choose>
+      <xsl:text> matches at least </xsl:text>
+      <xsl:value-of select="condition/data[name='count']/text()"/>
+      <xsl:text> results</xsl:text>
+    </xsl:when>
+    <xsl:when test="condition/text()='Filter count changed'">
+      <xsl:variable name="id" select="condition/data[name='filter_id']/text()"/>
+      <xsl:text>Filter </xsl:text>
+      <xsl:choose>
+        <xsl:when test="gsa:may-op ('get_filters')">
+          <a href="/omp?cmd=get_filter&amp;filter_id={$id}&amp;token={/envelope/token}"
+             title="{gsa:i18n ('Details', 'Generic Resource')}">
+            <xsl:value-of select="../../get_filters_response/filter[@id=$id]/name"/>
+          </a>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="../../get_filters_response/filter[@id=$id]/name"/>
+        </xsl:otherwise>
+      </xsl:choose>
+      <xsl:text> matches at least </xsl:text>
+      <xsl:value-of select="condition/data[name='count']/text()"/>
+      <xsl:choose>
+        <xsl:when test="condition/data[name='direction']/text() = 'decreased'">
+          <xsl:text> fewer</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:text> more</xsl:text>
+        </xsl:otherwise>
+      </xsl:choose>
+      <xsl:choose>
+        <xsl:when test="condition/data[name='count']/text() &gt; 1">
+          <xsl:text> results than previous scan</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:text> result than previous scan</xsl:text>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:when>
+    <xsl:when test="condition/text()='Severity at least' and string-length(condition/data[name='severity']/text()) &gt; 0">
+      <xsl:value-of select="gsa:i18n (condition/text(), 'Alert')"/>
+      (<xsl:value-of select="condition/data[name='severity']/text()"/>)
+    </xsl:when>
+    <xsl:when test="condition/text()='Severity changed' and string-length(condition/data[name='direction']/text()) &gt; 0">
+      <xsl:value-of select="gsa:i18n (condition/text(), 'Alert')"/>
+      (<xsl:value-of select="gsa:i18n (condition/data[name='direction']/text(), 'Alert')"/>)
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:value-of select="gsa:i18n (condition/text(), 'Alert')"/>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
 <xsl:template match="alert" mode="details">
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
@@ -9541,15 +9679,7 @@ should not have received it.
         <tr>
           <td><xsl:value-of select="gsa:i18n ('Condition', 'Alert')"/>:</td>
           <td>
-            <xsl:value-of select="gsa:i18n (condition/text(), 'Alert')"/>
-            <xsl:choose>
-              <xsl:when test="condition/text()='Severity at least' and string-length(condition/data[name='severity']/text()) &gt; 0">
-                (<xsl:value-of select="condition/data[name='severity']/text()"/>)
-              </xsl:when>
-              <xsl:when test="condition/text()='Severity changed' and string-length(condition/data[name='direction']/text()) &gt; 0">
-                (<xsl:value-of select="gsa:i18n (condition/data[name='direction']/text(), 'Alert')"/>)
-              </xsl:when>
-            </xsl:choose>
+            <xsl:call-template name="condition"/>
           </td>
         </tr>
         <tr>
