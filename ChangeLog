@@ -1,5 +1,13 @@
 2015-12-21  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	Backport r24018 and add some missing conditions for Note actions.
+
+	* src/html/classic/omp.xsl (note-detailed, override-detailed): Disable
+	trash, edit and clone buttons if current user lacks permission or
+	the action cannot be performed for other reasons.
+
+2015-12-21  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/gsad_omp.c (page_url): Build type specific id parameter from
 	next_type and next_id.
 
