@@ -1,3 +1,8 @@
+2015-12-21  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/classic/css/gsa-login.css (header .version): Add some margin
+	that is equals to the left-hand title string.
+
 2015-12-21  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/omp.xsl (note-detailed, override-detailed): Disable
