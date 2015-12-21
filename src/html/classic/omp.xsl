@@ -27400,6 +27400,11 @@ should not have received it.
     <xsl:if test="$note-buttons = 1">
       <div class="float_right" style="text-align:right;">
         <xsl:choose>
+          <xsl:when test="not (gsa:may ('delete_note'))">
+            <img src="/img/trashcan_inactive.png" border="0" alt="{gsa:i18n ('Move to Trashcan', 'Action Verb')}"
+                 title="{gsa:i18n ('Permission to move Note to trashcan denied', 'Note')}"
+                 style="margin-left:3px;"/>
+          </xsl:when>
           <xsl:when test="gsa:may ('delete_note') and writable != '0' and in_use = '0'">
             <div style="display: inline">
               <xsl:call-template name="trashcan-icon">
@@ -27484,6 +27489,11 @@ should not have received it.
           <img src="/img/details.png" border="0" alt="{gsa:i18n ('Details', 'Generic Resource')}"/>
         </a>
         <xsl:choose>
+          <xsl:when test="not (gsa:may ('modify_note'))">
+            <img src="/img/edit_inactive.png" border="0" alt="{gsa:i18n ('Edit', 'Action Verb')}"
+                 title="{gsa:i18n ('Permission to edit Note denied', 'Note')}"
+                 style="margin-left:3px;"/>
+          </xsl:when>
           <xsl:when test="not (gsa:may ('modify_note')) or writable = '0' or in_use != '0'">
             <img src="/img/edit_inactive.png" border="0" alt="{gsa:i18n ('Edit', 'Action Verb')}"
                  title="{gsa:i18n ('Note is not writable', 'Note')}"
@@ -27538,74 +27548,85 @@ should not have received it.
             </a>
           </xsl:otherwise>
         </xsl:choose>
-        <div style="display: inline">
-          <form style="display: inline; font-size: 0px; margin-left: 3px" action="/omp#notes-{../../@id}" method="post" enctype="multipart/form-data">
-            <input type="hidden" name="token" value="{/envelope/token}"/>
-            <input type="hidden" name="caller" value="{/envelope/current_page}"/>
-            <input type="hidden" name="cmd" value="clone"/>
-            <input type="hidden" name="resource_type" value="note"/>
-            <input type="hidden" name="id" value="{@id}"/>
-            <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
-            <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-            <input type="hidden" name="autofp" value="{/envelope/params/autofp}"/>
-            <input type="hidden" name="apply_overrides" value="{/envelope/params/apply_overrides}"/>
-            <input type="hidden" name="overrides" value="{/envelope/params/overrides}"/>
-            <input type="hidden" name="details" value="{/envelope/params/details}"/>
-            <input type="image" src="/img/clone.png" alt="Clone Note"
-                   name="Clone" value="Clone" title="{gsa:i18n ('Clone', 'Action Verb')}"/>
+        <xsl:choose>
+          <xsl:when test="gsa:may-clone ('note')">
+            <div style="display: inline">
+              <form style="display: inline; font-size: 0px; margin-left: 3px" action="/omp#notes-{../../@id}" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="token" value="{/envelope/token}"/>
+                <input type="hidden" name="caller" value="{/envelope/current_page}"/>
+                <input type="hidden" name="cmd" value="clone"/>
+                <input type="hidden" name="resource_type" value="note"/>
+                <input type="hidden" name="id" value="{@id}"/>
+                <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
+                <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
+                <input type="hidden" name="autofp" value="{/envelope/params/autofp}"/>
+                <input type="hidden" name="apply_overrides" value="{/envelope/params/apply_overrides}"/>
+                <input type="hidden" name="overrides" value="{/envelope/params/overrides}"/>
+                <input type="hidden" name="details" value="{/envelope/params/details}"/>
+                <input type="image" src="/img/clone.png" alt="Clone Note"
+                      name="Clone" value="Clone" title="{gsa:i18n ('Clone', 'Action Verb')}"/>
 
-            <xsl:choose>
-              <xsl:when test="$next='get_result'">
-                <input type="hidden" name="report_result_id" value="{/envelope/params/report_result_id}"/>
                 <xsl:choose>
-                  <xsl:when test="$delta = 1">
-                    <input type="hidden" name="next" value="get_report"/>
-                    <input type="hidden" name="report_id" value="{../../../../../@id}"/>
-                    <input type="hidden" name="result_id" value="{../../@id}"/>
-                    <input type="hidden" name="task_id" value="{../../../../task/@id}"/>
-                    <input type="hidden" name="name" value="{../../../../task/name}"/>
-                    <input type="hidden" name="delta_report_id" value="{../../../../delta/report/@id}"/>
-                    <input type="hidden" name="delta_states" value="{../../../../filters/delta/text()}"/>
-                  </xsl:when>
-                  <xsl:when test="$delta = 2">
-                    <input type="hidden" name="next" value="get_report"/>
-                    <input type="hidden" name="report_id" value="{../../../../../@id}"/>
-                    <input type="hidden" name="result_id" value="{../../../@id}"/>
-                    <input type="hidden" name="task_id" value="{../../../../../task/@id}"/>
-                    <input type="hidden" name="name" value="{../../../../../task/name}"/>
-                    <input type="hidden" name="delta_report_id" value="{../../../../../delta/report/@id}"/>
-                    <input type="hidden" name="delta_states" value="{../../../../../filters/delta/text()}"/>
+                  <xsl:when test="$next='get_result'">
+                    <input type="hidden" name="report_result_id" value="{/envelope/params/report_result_id}"/>
+                    <xsl:choose>
+                      <xsl:when test="$delta = 1">
+                        <input type="hidden" name="next" value="get_report"/>
+                        <input type="hidden" name="report_id" value="{../../../../../@id}"/>
+                        <input type="hidden" name="result_id" value="{../../@id}"/>
+                        <input type="hidden" name="task_id" value="{../../../../task/@id}"/>
+                        <input type="hidden" name="name" value="{../../../../task/name}"/>
+                        <input type="hidden" name="delta_report_id" value="{../../../../delta/report/@id}"/>
+                        <input type="hidden" name="delta_states" value="{../../../../filters/delta/text()}"/>
+                      </xsl:when>
+                      <xsl:when test="$delta = 2">
+                        <input type="hidden" name="next" value="get_report"/>
+                        <input type="hidden" name="report_id" value="{../../../../../@id}"/>
+                        <input type="hidden" name="result_id" value="{../../../@id}"/>
+                        <input type="hidden" name="task_id" value="{../../../../../task/@id}"/>
+                        <input type="hidden" name="name" value="{../../../../../task/name}"/>
+                        <input type="hidden" name="delta_report_id" value="{../../../../../delta/report/@id}"/>
+                        <input type="hidden" name="delta_states" value="{../../../../../filters/delta/text()}"/>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <input type="hidden" name="next" value="get_result"/>
+                        <input type="hidden" name="report_id" value="{../../../../../../report/@id}"/>
+                        <input type="hidden" name="result_id" value="{../../@id}"/>
+                        <input type="hidden" name="task_id" value="{../../../../../../task/@id}"/>
+                        <input type="hidden" name="name" value="{../../../../../../task/name}"/>
+                      </xsl:otherwise>
+                    </xsl:choose>
                   </xsl:when>
                   <xsl:otherwise>
-                    <input type="hidden" name="next" value="get_result"/>
-                    <input type="hidden" name="report_id" value="{../../../../../../report/@id}"/>
-                    <input type="hidden" name="result_id" value="{../../@id}"/>
-                    <input type="hidden" name="task_id" value="{../../../../../../task/@id}"/>
-                    <input type="hidden" name="name" value="{../../../../../../task/name}"/>
+                    <input type="hidden" name="next" value="get_report"/>
+                    <xsl:choose>
+                      <xsl:when test="$delta = 1">
+                        <input type="hidden" name="report_id" value="{../../../../@id}"/>
+                        <input type="hidden" name="delta_report_id" value="{../../../../delta/report/@id}"/>
+                        <input type="hidden" name="delta_states" value="{../../../../filters/delta/text()}"/>
+                      </xsl:when>
+                      <xsl:when test="$delta = 2">
+                        <input type="hidden" name="report_id" value="{../../../../../@id}"/>
+                        <input type="hidden" name="delta_report_id" value="{../../../../../delta/report/@id}"/>
+                        <input type="hidden" name="delta_states" value="{../../../../../filters/delta/text()}"/>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <input type="hidden" name="report_id" value="{../../../../@id}"/>
+                      </xsl:otherwise>
+                    </xsl:choose>
                   </xsl:otherwise>
                 </xsl:choose>
-              </xsl:when>
-              <xsl:otherwise>
-                <input type="hidden" name="next" value="get_report"/>
-                <xsl:choose>
-                  <xsl:when test="$delta = 1">
-                    <input type="hidden" name="report_id" value="{../../../../@id}"/>
-                    <input type="hidden" name="delta_report_id" value="{../../../../delta/report/@id}"/>
-                    <input type="hidden" name="delta_states" value="{../../../../filters/delta/text()}"/>
-                  </xsl:when>
-                  <xsl:when test="$delta = 2">
-                    <input type="hidden" name="report_id" value="{../../../../../@id}"/>
-                    <input type="hidden" name="delta_report_id" value="{../../../../../delta/report/@id}"/>
-                    <input type="hidden" name="delta_states" value="{../../../../../filters/delta/text()}"/>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <input type="hidden" name="report_id" value="{../../../../@id}"/>
-                  </xsl:otherwise>
-                </xsl:choose>
-              </xsl:otherwise>
-            </xsl:choose>
-          </form>
-        </div>
+              </form>
+            </div>
+          </xsl:when>
+          <xsl:otherwise>
+            <img src="/img/clone_inactive.png"
+                alt="{gsa:i18n ('Clone', 'Action Verb')}"
+                value="Clone"
+                title="{gsa:i18n ('Permission to clone denied', 'Action Message')}"
+                style="margin-left:3px;"/>
+          </xsl:otherwise>
+        </xsl:choose>
         <a href="/omp?cmd=export_note&amp;note_id={@id}&amp;token={/envelope/token}"
            title="{gsa:i18n ('Export Note', 'Note')}"
            style="margin-left:3px;">
@@ -27659,82 +27680,106 @@ should not have received it.
     </div>
     <xsl:if test="$override-buttons = 1">
       <div class="float_right" style="text-align:right;">
-        <div style="display: inline">
-          <xsl:call-template name="trashcan-icon">
-            <xsl:with-param name="type" select="'override'"/>
-            <xsl:with-param name="id" select="@id"/>
-            <xsl:with-param name="fragment" select="concat ('#overrides-', ../../@id)"/>
-            <xsl:with-param name="params">
-              <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
-              <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-              <input type="hidden" name="details" value="{/envelope/params/details}"/>
-              <xsl:choose>
-                <xsl:when test="$next='get_result'">
-                  <input type="hidden" name="report_result_id" value="{/envelope/params/report_result_id}"/>
+        <xsl:choose>
+          <xsl:when test="not (gsa:may ('delete_override'))">
+            <img src="/img/trashcan_inactive.png" border="0" alt="{gsa:i18n ('Move to Trashcan', 'Action Verb')}"
+                title="{gsa:i18n ('Permission to move Override to trashcan denied', 'Override')}"
+                style="margin-left:3px;"/>
+          </xsl:when>
+          <xsl:when test="gsa:may ('delete_override') and writable != '0' and in_use = '0'">
+            <div style="display: inline">
+              <xsl:call-template name="trashcan-icon">
+                <xsl:with-param name="type" select="'override'"/>
+                <xsl:with-param name="id" select="@id"/>
+                <xsl:with-param name="fragment" select="concat ('#overrides-', ../../@id)"/>
+                <xsl:with-param name="params">
+                  <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
+                  <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
+                  <input type="hidden" name="details" value="{/envelope/params/details}"/>
                   <xsl:choose>
-                    <xsl:when test="$delta = 1">
-                      <input type="hidden" name="report_id" value="{../../../../../@id}"/>
-                      <input type="hidden" name="result_id" value="{../../@id}"/>
-                      <input type="hidden" name="task_id" value="{../../../../task/@id}"/>
-                      <input type="hidden" name="name" value="{../../../../task/name}"/>
-                      <input type="hidden" name="apply_overrides" value="{/envelope/params/apply_overrides}"/>
-                      <input type="hidden" name="overrides" value="{/envelope/params/apply_overrides}"/>
-                      <input type="hidden" name="autofp" value="{/envelope/params/autofp}"/>
-                      <input type="hidden" name="delta_report_id" value="{../../../../delta/report/@id}"/>
-                      <input type="hidden" name="delta_states" value="{../../../../filters/delta/text()}"/>
-                      <input type="hidden" name="next" value="get_report"/>
-                    </xsl:when>
-                    <xsl:when test="$delta = 2">
-                      <input type="hidden" name="report_id" value="{../../../../../@id}"/>
-                      <input type="hidden" name="result_id" value="{../../../@id}"/>
-                      <input type="hidden" name="task_id" value="{../../../../../task/@id}"/>
-                      <input type="hidden" name="name" value="{../../../../../task/name}"/>
-                      <input type="hidden" name="apply_overrides" value="{/envelope/params/apply_overrides}"/>
-                      <input type="hidden" name="overrides" value="{/envelope/params/apply_overrides}"/>
-                      <input type="hidden" name="autofp" value="{/envelope/params/autofp}"/>
-                      <input type="hidden" name="delta_report_id" value="{../../../../../delta/report/@id}"/>
-                      <input type="hidden" name="delta_states" value="{../../../../../filters/delta/text()}"/>
-                      <input type="hidden" name="next" value="get_report"/>
+                    <xsl:when test="$next='get_result'">
+                      <input type="hidden" name="report_result_id" value="{/envelope/params/report_result_id}"/>
+                      <xsl:choose>
+                        <xsl:when test="$delta = 1">
+                          <input type="hidden" name="report_id" value="{../../../../../@id}"/>
+                          <input type="hidden" name="result_id" value="{../../@id}"/>
+                          <input type="hidden" name="task_id" value="{../../../../task/@id}"/>
+                          <input type="hidden" name="name" value="{../../../../task/name}"/>
+                          <input type="hidden" name="apply_overrides" value="{/envelope/params/apply_overrides}"/>
+                          <input type="hidden" name="overrides" value="{/envelope/params/apply_overrides}"/>
+                          <input type="hidden" name="autofp" value="{/envelope/params/autofp}"/>
+                          <input type="hidden" name="delta_report_id" value="{../../../../delta/report/@id}"/>
+                          <input type="hidden" name="delta_states" value="{../../../../filters/delta/text()}"/>
+                          <input type="hidden" name="next" value="get_report"/>
+                        </xsl:when>
+                        <xsl:when test="$delta = 2">
+                          <input type="hidden" name="report_id" value="{../../../../../@id}"/>
+                          <input type="hidden" name="result_id" value="{../../../@id}"/>
+                          <input type="hidden" name="task_id" value="{../../../../../task/@id}"/>
+                          <input type="hidden" name="name" value="{../../../../../task/name}"/>
+                          <input type="hidden" name="apply_overrides" value="{/envelope/params/apply_overrides}"/>
+                          <input type="hidden" name="overrides" value="{/envelope/params/apply_overrides}"/>
+                          <input type="hidden" name="autofp" value="{/envelope/params/autofp}"/>
+                          <input type="hidden" name="delta_report_id" value="{../../../../../delta/report/@id}"/>
+                          <input type="hidden" name="delta_states" value="{../../../../../filters/delta/text()}"/>
+                          <input type="hidden" name="next" value="get_report"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                          <input type="hidden" name="report_id" value="{../../../../../../report/@id}"/>
+                          <input type="hidden" name="result_id" value="{../../@id}"/>
+                          <input type="hidden" name="task_id" value="{../../../../../../task/@id}"/>
+                          <input type="hidden" name="name" value="{../../../../../../task/name}"/>
+                          <input type="hidden" name="apply_overrides" value="{/envelope/params/apply_overrides}"/>
+                          <input type="hidden" name="autofp" value="{/envelope/params/autofp}"/>
+                          <input type="hidden" name="next" value="get_result"/>
+                        </xsl:otherwise>
+                      </xsl:choose>
                     </xsl:when>
                     <xsl:otherwise>
-                      <input type="hidden" name="report_id" value="{../../../../../../report/@id}"/>
-                      <input type="hidden" name="result_id" value="{../../@id}"/>
-                      <input type="hidden" name="task_id" value="{../../../../../../task/@id}"/>
-                      <input type="hidden" name="name" value="{../../../../../../task/name}"/>
-                      <input type="hidden" name="apply_overrides" value="{/envelope/params/apply_overrides}"/>
-                      <input type="hidden" name="autofp" value="{/envelope/params/autofp}"/>
-                      <input type="hidden" name="next" value="get_result"/>
+                      <input type="hidden" name="overrides" value="{/envelope/params/overrides}"/>
+                      <input type="hidden" name="next" value="get_report"/>
+                      <xsl:choose>
+                        <xsl:when test="$delta = 1">
+                          <input type="hidden" name="report_id" value="{../../../../@id}"/>
+                          <input type="hidden" name="delta_report_id" value="{../../../../delta/report/@id}"/>
+                          <input type="hidden" name="delta_states" value="{../../../../filters/delta/text()}"/>
+                        </xsl:when>
+                        <xsl:when test="$delta = 2">
+                          <input type="hidden" name="report_id" value="{../../../../../@id}"/>
+                          <input type="hidden" name="delta_report_id" value="{../../../../../delta/report/@id}"/>
+                          <input type="hidden" name="delta_states" value="{../../../../../filters/delta/text()}"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                          <input type="hidden" name="report_id" value="{../../../../@id}"/>
+                        </xsl:otherwise>
+                      </xsl:choose>
                     </xsl:otherwise>
                   </xsl:choose>
-                </xsl:when>
-                <xsl:otherwise>
-                  <input type="hidden" name="overrides" value="{/envelope/params/overrides}"/>
-                  <input type="hidden" name="next" value="get_report"/>
-                  <xsl:choose>
-                    <xsl:when test="$delta = 1">
-                      <input type="hidden" name="report_id" value="{../../../../@id}"/>
-                      <input type="hidden" name="delta_report_id" value="{../../../../delta/report/@id}"/>
-                      <input type="hidden" name="delta_states" value="{../../../../filters/delta/text()}"/>
-                    </xsl:when>
-                    <xsl:when test="$delta = 2">
-                      <input type="hidden" name="report_id" value="{../../../../../@id}"/>
-                      <input type="hidden" name="delta_report_id" value="{../../../../../delta/report/@id}"/>
-                      <input type="hidden" name="delta_states" value="{../../../../../filters/delta/text()}"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <input type="hidden" name="report_id" value="{../../../../@id}"/>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                </xsl:otherwise>
-              </xsl:choose>
-            </xsl:with-param>
-          </xsl:call-template>
-        </div>
+                </xsl:with-param>
+              </xsl:call-template>
+            </div>
+          </xsl:when>
+          <xsl:otherwise>
+            <img src="/img/trashcan_inactive.png" border="0" alt="{gsa:i18n ('Move to Trashcan', 'Action Verb')}"
+                  title="{gsa:i18n ('Override cannot be moved to trashcan', 'Override')}"
+                  style="margin-left:3px;"/>
+          </xsl:otherwise>
+        </xsl:choose>
         <a href="/omp?cmd=get_override&amp;override_id={@id}&amp;token={/envelope/token}"
            title="{gsa:i18n ('Override Details', 'Override')}" style="margin-left:3px;">
           <img src="/img/details.png" border="0" alt="{gsa:i18n ('Details', 'Generic Resource')}"/>
         </a>
         <xsl:choose>
+          <xsl:when test="not (gsa:may ('modify_override'))">
+            <img src="/img/edit_inactive.png" border="0" alt="{gsa:i18n ('Edit', 'Action Verb')}"
+                 title="{gsa:i18n ('Permission to edit Override denied', 'Override')}"
+                 style="margin-left:3px;"/>
+          </xsl:when>
+          <xsl:when test="not (gsa:may ('modify_override')) or writable = '0' or in_use != '0'">
+            <img src="/img/edit_inactive.png" border="0" alt="{gsa:i18n ('Edit', 'Action Verb')}"
+                 title="{gsa:i18n ('Override is not writable', 'Override')}"
+                 style="margin-left:3px;"/>
+          </xsl:when>
           <xsl:when test="$next='get_result' and $delta = 1">
             <a href="/omp?cmd=edit_override&amp;override_id={@id}&amp;next=get_report&amp;result_id={../../@id}&amp;task_id={../../../../task/@id}&amp;name={../../../../task/name}&amp;report_id={../../../../../report/@id}&amp;overrides={../../../../filters/apply_overrides}&amp;delta_report_id={../../../../delta/report/@id}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
                title="{gsa:i18n ('Edit Override', 'Override')}"
@@ -27784,74 +27829,85 @@ should not have received it.
             </a>
           </xsl:otherwise>
         </xsl:choose>
-        <div style="display: inline">
-          <form style="display: inline; font-size: 0px; margin-left: 3px" action="/omp#overrides-{../../@id}" method="post" enctype="multipart/form-data">
-            <input type="hidden" name="token" value="{/envelope/token}"/>
-            <input type="hidden" name="caller" value="{/envelope/current_page}"/>
-            <input type="hidden" name="cmd" value="clone"/>
-            <input type="hidden" name="resource_type" value="override"/>
-            <input type="hidden" name="id" value="{@id}"/>
-            <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
-            <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-            <input type="hidden" name="autofp" value="{/envelope/params/autofp}"/>
-            <input type="hidden" name="apply_overrides" value="{/envelope/params/apply_overrides}"/>
-            <input type="hidden" name="overrides" value="{/envelope/params/overrides}"/>
-            <input type="hidden" name="details" value="{/envelope/params/details}"/>
-            <input type="image" src="/img/clone.png" alt="Clone Override"
-                   name="Clone" value="Clone" title="{gsa:i18n ('Clone', 'Action Verb')}"/>
+        <xsl:choose>
+          <xsl:when test="gsa:may-clone ('override')">
+            <div style="display: inline">
+              <form style="display: inline; font-size: 0px; margin-left: 3px" action="/omp#overrides-{../../@id}" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="token" value="{/envelope/token}"/>
+                <input type="hidden" name="caller" value="{/envelope/current_page}"/>
+                <input type="hidden" name="cmd" value="clone"/>
+                <input type="hidden" name="resource_type" value="override"/>
+                <input type="hidden" name="id" value="{@id}"/>
+                <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
+                <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
+                <input type="hidden" name="autofp" value="{/envelope/params/autofp}"/>
+                <input type="hidden" name="apply_overrides" value="{/envelope/params/apply_overrides}"/>
+                <input type="hidden" name="overrides" value="{/envelope/params/overrides}"/>
+                <input type="hidden" name="details" value="{/envelope/params/details}"/>
+                <input type="image" src="/img/clone.png" alt="Clone Override"
+                      name="Clone" value="Clone" title="{gsa:i18n ('Clone', 'Action Verb')}"/>
 
-            <xsl:choose>
-              <xsl:when test="$next='get_result'">
-                <input type="hidden" name="report_result_id" value="{/envelope/params/report_result_id}"/>
                 <xsl:choose>
-                  <xsl:when test="$delta = 1">
-                    <input type="hidden" name="next" value="get_report"/>
-                    <input type="hidden" name="report_id" value="{../../../../../@id}"/>
-                    <input type="hidden" name="result_id" value="{../../@id}"/>
-                    <input type="hidden" name="task_id" value="{../../../../task/@id}"/>
-                    <input type="hidden" name="name" value="{../../../../task/name}"/>
-                    <input type="hidden" name="delta_report_id" value="{../../../../delta/report/@id}"/>
-                    <input type="hidden" name="delta_states" value="{../../../../filters/delta/text()}"/>
-                  </xsl:when>
-                  <xsl:when test="$delta = 2">
-                    <input type="hidden" name="next" value="get_report"/>
-                    <input type="hidden" name="report_id" value="{../../../../../@id}"/>
-                    <input type="hidden" name="result_id" value="{../../../@id}"/>
-                    <input type="hidden" name="task_id" value="{../../../../../task/@id}"/>
-                    <input type="hidden" name="name" value="{../../../../../task/name}"/>
-                    <input type="hidden" name="delta_report_id" value="{../../../../../delta/report/@id}"/>
-                    <input type="hidden" name="delta_states" value="{../../../../../filters/delta/text()}"/>
+                  <xsl:when test="$next='get_result'">
+                    <input type="hidden" name="report_result_id" value="{/envelope/params/report_result_id}"/>
+                    <xsl:choose>
+                      <xsl:when test="$delta = 1">
+                        <input type="hidden" name="next" value="get_report"/>
+                        <input type="hidden" name="report_id" value="{../../../../../@id}"/>
+                        <input type="hidden" name="result_id" value="{../../@id}"/>
+                        <input type="hidden" name="task_id" value="{../../../../task/@id}"/>
+                        <input type="hidden" name="name" value="{../../../../task/name}"/>
+                        <input type="hidden" name="delta_report_id" value="{../../../../delta/report/@id}"/>
+                        <input type="hidden" name="delta_states" value="{../../../../filters/delta/text()}"/>
+                      </xsl:when>
+                      <xsl:when test="$delta = 2">
+                        <input type="hidden" name="next" value="get_report"/>
+                        <input type="hidden" name="report_id" value="{../../../../../@id}"/>
+                        <input type="hidden" name="result_id" value="{../../../@id}"/>
+                        <input type="hidden" name="task_id" value="{../../../../../task/@id}"/>
+                        <input type="hidden" name="name" value="{../../../../../task/name}"/>
+                        <input type="hidden" name="delta_report_id" value="{../../../../../delta/report/@id}"/>
+                        <input type="hidden" name="delta_states" value="{../../../../../filters/delta/text()}"/>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <input type="hidden" name="next" value="get_result"/>
+                        <input type="hidden" name="report_id" value="{../../../../../../report/@id}"/>
+                        <input type="hidden" name="result_id" value="{../../@id}"/>
+                        <input type="hidden" name="task_id" value="{../../../../../../task/@id}"/>
+                        <input type="hidden" name="name" value="{../../../../../../task/name}"/>
+                      </xsl:otherwise>
+                    </xsl:choose>
                   </xsl:when>
                   <xsl:otherwise>
-                    <input type="hidden" name="next" value="get_result"/>
-                    <input type="hidden" name="report_id" value="{../../../../../../report/@id}"/>
-                    <input type="hidden" name="result_id" value="{../../@id}"/>
-                    <input type="hidden" name="task_id" value="{../../../../../../task/@id}"/>
-                    <input type="hidden" name="name" value="{../../../../../../task/name}"/>
+                    <input type="hidden" name="next" value="get_report"/>
+                    <xsl:choose>
+                      <xsl:when test="$delta = 1">
+                        <input type="hidden" name="report_id" value="{../../../../@id}"/>
+                        <input type="hidden" name="delta_report_id" value="{../../../../delta/report/@id}"/>
+                        <input type="hidden" name="delta_states" value="{../../../../filters/delta/text()}"/>
+                      </xsl:when>
+                      <xsl:when test="$delta = 2">
+                        <input type="hidden" name="report_id" value="{../../../../../@id}"/>
+                        <input type="hidden" name="delta_report_id" value="{../../../../../delta/report/@id}"/>
+                        <input type="hidden" name="delta_states" value="{../../../../../filters/delta/text()}"/>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <input type="hidden" name="report_id" value="{../../../../@id}"/>
+                      </xsl:otherwise>
+                    </xsl:choose>
                   </xsl:otherwise>
                 </xsl:choose>
-              </xsl:when>
-              <xsl:otherwise>
-                <input type="hidden" name="next" value="get_report"/>
-                <xsl:choose>
-                  <xsl:when test="$delta = 1">
-                    <input type="hidden" name="report_id" value="{../../../../@id}"/>
-                    <input type="hidden" name="delta_report_id" value="{../../../../delta/report/@id}"/>
-                    <input type="hidden" name="delta_states" value="{../../../../filters/delta/text()}"/>
-                  </xsl:when>
-                  <xsl:when test="$delta = 2">
-                    <input type="hidden" name="report_id" value="{../../../../../@id}"/>
-                    <input type="hidden" name="delta_report_id" value="{../../../../../delta/report/@id}"/>
-                    <input type="hidden" name="delta_states" value="{../../../../../filters/delta/text()}"/>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <input type="hidden" name="report_id" value="{../../../../@id}"/>
-                  </xsl:otherwise>
-                </xsl:choose>
-              </xsl:otherwise>
-            </xsl:choose>
-          </form>
-        </div>
+              </form>
+            </div>
+          </xsl:when>
+          <xsl:otherwise>
+            <img src="/img/clone_inactive.png"
+                alt="{gsa:i18n ('Clone', 'Action Verb')}"
+                value="Clone"
+                title="{gsa:i18n ('Permission to clone denied', 'Action Message')}"
+                style="margin-left:3px;"/>
+          </xsl:otherwise>
+        </xsl:choose>
         <a href="/omp?cmd=export_override&amp;override_id={@id}&amp;token={/envelope/token}"
            title="{gsa:i18n ('Export Override', 'Override')}"
            style="margin-left:3px;">
@@ -28443,6 +28499,8 @@ should not have received it.
             <xsl:choose>
               <xsl:when test="delta">
               </xsl:when>
+              <xsl:when test="not (gsa:may-op ('create_note'))">
+              </xsl:when>
               <xsl:when test="$result-details and string-length (original_severity)">
                 <a href="/omp?cmd=new_note&amp;next=get_result&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={task/@id}&amp;name={task/name}&amp;severity={original_severity}&amp;port={port}&amp;hosts={host/text()}&amp;report_id={report/@id}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
                    title="{gsa:i18n ('Add Note', 'Note')}" style="margin-left:3px;"
@@ -28478,6 +28536,8 @@ should not have received it.
           <div class="float_left">
             <xsl:choose>
               <xsl:when test="delta">
+              </xsl:when>
+              <xsl:when test="not (gsa:may-op ('create_override'))">
               </xsl:when>
               <xsl:when test="$result-details and string-length (original_severity)">
                 <a href="/omp?cmd=new_override&amp;next=get_result&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={task/@id}&amp;name={task/name}&amp;severity={original_severity}&amp;port={port}&amp;hosts={host/text()}&amp;report_id={report/@id}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
