@@ -913,10 +913,13 @@ setting_get_value (gnutls_session_t *session, const char *setting_id,
 static char *
 page_url (credentials_t *credentials, const gchar *cmd)
 {
+  gchar *next_type, *next_id;
   GString *url;
 
   assert (cmd);
 
+  next_type = NULL;
+  next_id = NULL;
   url = g_string_new ("");
 
   if (credentials->caller && strlen (credentials->caller))
@@ -955,6 +958,20 @@ page_url (credentials_t *credentials, const gchar *cmd)
                   point++;
                   continue;
                 }
+              else if (strncmp (param, "next_id=", strlen ("next_id="))
+                       == 0)
+                {
+                  next_id = g_strdup (param + strlen ("next_id="));
+                  point++;
+                  continue;
+                }
+              else if (strncmp (param, "next_type=", strlen ("next_type="))
+                       == 0)
+                {
+                  next_type = g_strdup (param + strlen ("next_type="));
+                  point++;
+                  continue;
+                }
 
               g_string_append_printf (url, "&%s", param);
 
@@ -963,6 +980,12 @@ page_url (credentials_t *credentials, const gchar *cmd)
           g_strfreev (split_amp);
         }
       g_strfreev (split_question);
+      if (next_id && next_type)
+        {
+          g_string_append_printf (url, "&%s_id=%s", next_type, next_id);
+        }
+      g_free (next_id);
+      g_free (next_type);
     }
   else
     g_string_append_printf (url, "?cmd=%s", cmd);
