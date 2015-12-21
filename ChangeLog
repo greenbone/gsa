@@ -1,3 +1,11 @@
+2015-12-21  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	Preparing the gsa 6.0.7 release.
+
+	* CHANGES: Updated.
+
+	* INSTALL: Add note regarding RADIUS authentication.
+
 2015-12-18  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Backport r23765.

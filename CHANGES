@@ -1,3 +1,37 @@
+gsa 6.0.7 (2015-12-21)
+
+This is the seventh maintenance release of the Greenbone Security Assistant (GSA)
+6.0 module for the Open Vulnerability Assessment System release 8 (OpenVAS-8).
+
+This release adds support for using RADIUS authentication, for the new "Send"
+alert method and for new alert conditions. Note that RADIUS authentication
+requires OpenVAS Libraries 8.0.6 or later. The release also incorporates
+several improvements from the development branch of OpenVAS. Please see below
+for a comprehensive list of changes.
+
+Many thanks to everyone who contributed to this release:
+Hani Benhabiles, Matthew Mundell, Timo Pollmeier and Jan-Oliver Wagner.
+
+Main changes compared to 6.0.6:
+* Support for using RADIUS authentication has been added.
+* Support for the new "Send" alert method has been added.
+* Support for new alert conditions based on result counts matched by a filter
+  has been added.
+* An issue which caused a radio button to not be shown when editing overrides
+  has been fixed.
+* An issue which caused the HTTP-to-HTTPS redirect to fail for a certain
+  notation of IPv4-mapped IPv6 addresses has been fixed.
+* An issue which cause links to non-existing resources for permissions under
+  certain circumstances has been fixed.
+* Links to the notes and overrides pages are now included in the vulnerability
+  section of a report when appropriate.
+* The interface for bulk actions on users has been improved.
+* The message shown when the OMP service is not (yet) available has been
+  improved.
+* Handling of invalid characters in the login dialog has been improved.
+* Several performance improvements.
+
+
 gsa 6.0.6 (2015-09-28)
 
 This is the sixth maintenance release of the Greenbone Security Assistant (GSA)
