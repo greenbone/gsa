@@ -1,3 +1,7 @@
+2015-12-22  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/classic/img/login-label.png: Updated.
+
 2015-12-21  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/classic/css/gsa-login.css (header .version): Add some margin
