@@ -50,8 +50,6 @@
 /**
  * @brief The Glib fatal mask, redefined to leave out G_LOG_FLAG_RECURSION.
  */
-#undef G_LOG_FATAL_MASK
-#define G_LOG_FATAL_MASK G_LOG_LEVEL_ERROR
 
 #define _GNU_SOURCE /* for strcasecmp */
 
@@ -96,6 +94,9 @@
 #ifdef SVN_REV_AVAILABLE
 #include "svnrevision.h"
 #endif
+
+#undef G_LOG_FATAL_MASK
+#define G_LOG_FATAL_MASK G_LOG_LEVEL_ERROR
 
 /**
  * @brief Name of the cookie used to store the SID.

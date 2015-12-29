@@ -1,3 +1,8 @@
+2015-12-29  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/gsad.c: Move down G_LOG_FATAL_MASK definition, to fix compiler
+	redifinition warning.
+
 2015-12-22  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/classic/img/login-label.png: Updated.
