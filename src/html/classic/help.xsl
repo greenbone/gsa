@@ -84,7 +84,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:if test="boolean ($asset-type)">
         <a href="/omp?cmd=get_assets&amp;type={$asset-type}&amp;token={/envelope/token}"
            title="Resource overview page" style="margin-right:3px;">
-          <img id="small-icon" src="/img/{$info-type}.svg" border="0" alt="{$asset-type}"/>
+          <img id="small-icon" src="/img/{$asset-type}.svg" border="0" alt="{$asset-type}"/>
         </a>
       </xsl:if>
       <xsl:if test="boolean ($info-type)">
@@ -7486,7 +7486,7 @@ Public License instead of this License.
 <xsl:template mode="help" match="overrides.html">
   <xsl:call-template name="help-header">
     <xsl:with-param name="title" select="'Overrides'"/>
-    <xsl:with-param name="asset-type" select="'override'"/>
+    <xsl:with-param name="type" select="'override'"/>
   </xsl:call-template>
 
   <div class="section-box">
@@ -8920,7 +8920,7 @@ Public License instead of this License.
 <xsl:template mode="help" match="tasks.html">
   <xsl:call-template name="help-header">
     <xsl:with-param name="title" select="'Tasks'"/>
-    <xsl:with-param name="asset-type" select="'task'"/>
+    <xsl:with-param name="type" select="'task'"/>
   </xsl:call-template>
 
   <div class="section-box">

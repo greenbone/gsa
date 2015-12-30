@@ -1,3 +1,12 @@
+2015-12-30  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	Make resource icons appear properly in help pages.
+
+	* src/html/classic/help.xsl (name="help-header"): Fix variable reference.
+	(mode="help" match="overrides.html", mode="help" match="tasks.html"):
+	Overrides and Tasks were wrongly marked as assets, now fixed to be
+	regular resources.
+
 2015-12-29  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad.c: Move down G_LOG_FATAL_MASK definition, to fix compiler
