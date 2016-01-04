@@ -25852,15 +25852,7 @@ logout (credentials_t *credentials, const gchar *message,
   now = time (NULL);
   ctime_r_strip_newline (&now, ctime_now);
 
-  xml = g_strdup_printf ("<login_page>"
-                         "<message>"
-                         "%s"
-                         "</message>"
-                         "<token></token>"
-                         "<time>%s</time>"
-                         "</login_page>",
-                         message,
-                         ctime_now);
+  xml = login_xml (message, NULL, ctime_now, NULL, NULL, NULL);
   res = xsl_transform (xml, response_data);
   g_free (xml);
   return res;

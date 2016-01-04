@@ -37,6 +37,8 @@
 #include "gsad_base.h"
 #include "tracef.h"
 
+#include <openvas/omp/xml.h>
+
 #include <glib.h>
 #include <microhttpd.h> /* for HTTP status codes */
 #ifdef USE_LIBXSLT
@@ -380,6 +382,53 @@ gsad_message (credentials_t *credentials, const char *title,
     }
   g_free (xml);
   return resp;
+}
+
+/**
+ * @brief Generate XML for login page.
+ *
+ * @param[in]  message      Login screen message, or NULL.
+ * @param[out] token        Token, or NULL.
+ * @param[out] time         Time.
+ * @param[out] i18n         i18n language code, or NULL.
+ * @param[out] guest        Username for guest login, or NULL.
+ *
+ * @return Freshly allocated login XML.
+ */
+gchar *
+login_xml (const gchar *message, const gchar *token, const gchar *time,
+           const gchar *url, const gchar *i18n, const gchar *guest)
+{
+  GString *xml;
+
+  xml = g_string_new ("");
+  xml_string_append (xml,
+                     "<login_page>"
+                     "<version>%s</version>"
+                     "<token>%s</token>"
+                     "<time>%s</time>",
+                     GSAD_VERSION,
+                     token ? token : "",
+                     time);
+  if (message)
+    xml_string_append (xml,
+                       "<message>%s</message>",
+                       message);
+  if (url)
+    xml_string_append (xml,
+                       "<url>%s</url>",
+                       url);
+  if (i18n)
+    xml_string_append (xml,
+                       "<i18n>%s</i18n>",
+                       i18n);
+  if (guest)
+    xml_string_append (xml,
+                       "<guest><username>%s</username></guest>",
+                       guest);
+  g_string_append (xml, "</login_page>");
+
+  return g_string_free (xml, FALSE);
 }
 
 

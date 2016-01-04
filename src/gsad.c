@@ -2077,26 +2077,21 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
               now = time (NULL);
               ctime_r_strip_newline (&now, ctime_now);
 
-              // FIX do via function
-              xml = g_strdup_printf ("<login_page>"
-                                     "<message>"
-                                     "Login failed.%s"
-                                     "</message>"
-                                     "<token></token>"
-                                     "<time>%s</time>"
-                                     "<i18n>%s</i18n>"
-                                     "<guest><username>%s</username></guest>"
-                                     "</login_page>",
-                                     ret == 2
-                                      ? "  Waiting for OMP service to become available."
-                                      : (ret == -1
-                                          ? "  Error during authentication."
-                                          : ""),
-                                     ctime_now,
-                                     con_info->language
-                                      ? con_info->language
-                                      : DEFAULT_GSAD_LANGUAGE,
-                                     guest_username ? guest_username : "");
+              xml = login_xml
+                     (ret == 2
+                       ? "Login failed."
+                         "  Waiting for OMP service to become available."
+                       : (ret == -1
+                           ? "Login failed."
+                             "  Error during authentication."
+                           : "Login failed."),
+                      NULL,
+                      ctime_now,
+                      NULL,
+                      con_info->language
+                       ? con_info->language
+                       : DEFAULT_GSAD_LANGUAGE,
+                      guest_username ? guest_username : "");
               res = xsl_transform (xml, &response_data);
               g_free (xml);
               con_info->response = res;
@@ -2138,19 +2133,10 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
           now = time (NULL);
           ctime_r_strip_newline (&now, ctime_now);
 
-          xml = g_strdup_printf ("<login_page>"
-                                 "<message>"
-                                 "Login failed."
-                                 "</message>"
-                                 "<token></token>"
-                                 "<time>%s</time>"
-                                 "<i18n>%s</i18n>"
-                                 "<guest><username>%s</username></guest>"
-                                 "</login_page>",
-                                 ctime_now,
-                                 con_info->language ? con_info->language
-                                                    : DEFAULT_GSAD_LANGUAGE,
-                                 guest_username ? guest_username : "");
+          xml = login_xml ("Login failed.", NULL, ctime_now, NULL,
+                           con_info->language ? con_info->language
+                                              : DEFAULT_GSAD_LANGUAGE,
+                           guest_username ? guest_username : "");
           res = xsl_transform (xml, &response_data);
           g_free (xml);
           con_info->response = res;
@@ -2216,24 +2202,16 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
 
       /* @todo Validate caller. */
 
-      xml = g_markup_printf_escaped ("<login_page>"
-                                     "<message>"
-                                     "Session has expired.  Please login again."
-                                     "</message>"
-                                     "<token></token>"
-                                     "<time>%s</time>"
-                                     "<url>%s</url>"
-                                     "<i18n>%s</i18n>"
-                                     "<guest><username>%s</username></guest>"
-                                     "</login_page>",
-                                     ctime_now,
-                                     caller
-                                      ? caller
-                                      : "",
-                                     con_info->language
-                                      ? con_info->language
-                                      : DEFAULT_GSAD_LANGUAGE,
-                                     guest_username ? guest_username : "");
+      xml = login_xml ("Session has expired.  Please login again.",
+                       NULL,
+                       ctime_now,
+                       caller
+                        ? caller
+                        : "",
+                       con_info->language
+                        ? con_info->language
+                        : DEFAULT_GSAD_LANGUAGE,
+                       guest_username ? guest_username : "");
       response_data.http_status_code = MHD_HTTP_UNAUTHORIZED;
       con_info->response = xsl_transform (xml, &response_data);
       g_free (xml);
@@ -2251,20 +2229,14 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
       now = time (NULL);
       ctime_r_strip_newline (&now, ctime_now);
 
-      xml = g_strdup_printf ("<login_page>"
-                             "<message>"
-                             "Cookie missing or bad.  Please login again."
-                             "</message>"
-                             "<token></token>"
-                             "<time>%s</time>"
-                             "<i18n>%s</i18n>"
-                             "<guest><username>%s</username></guest>"
-                             "</login_page>",
-                             ctime_now,
-                             con_info->language
-                              ? con_info->language
-                              : DEFAULT_GSAD_LANGUAGE,
-                             guest_username ? guest_username : "");
+      xml = login_xml ("Cookie missing or bad.  Please login again.",
+                       NULL,
+                       ctime_now,
+                       NULL,
+                       con_info->language
+                        ? con_info->language
+                        : DEFAULT_GSAD_LANGUAGE,
+                       guest_username ? guest_username : "");
       response_data.http_status_code = MHD_HTTP_UNAUTHORIZED;
       con_info->response = xsl_transform (xml, &response_data);
       g_free (xml);
@@ -2283,25 +2255,18 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
       ctime_r_strip_newline (&now, ctime_now);
 
       response_data.http_status_code = MHD_HTTP_SERVICE_UNAVAILABLE;
-      xml = g_markup_printf_escaped ("<login_page>"
-                                     "<message>"
-                                     "Login failed.%s"
-                                     "</message>"
-                                     "<token></token>"
-                                     "<time>%s</time>"
-                                     "<i18n>%s</i18n>"
-                                     "<guest><username>%s</username></guest>"
-                                     "</login_page>",
-                                     ret == 6
-                                      ? "  OMP service is down."
-                                      : (ret == -1
-                                          ? "  Error during authentication."
-                                          : ""),
-                                     ctime_now,
-                                     con_info->language
-                                      ? con_info->language
-                                      : DEFAULT_GSAD_LANGUAGE,
-                                     guest_username ? guest_username : "");
+      xml = login_xml (ret == 6
+                        ? "Login failed.  OMP service is down."
+                        : (ret == -1
+                            ? "Login failed.  Error during authentication."
+                            : "Login failed."),
+                       NULL,
+                       ctime_now,
+                       NULL,
+                       con_info->language
+                        ? con_info->language
+                        : DEFAULT_GSAD_LANGUAGE,
+                       guest_username ? guest_username : "");
       con_info->response = xsl_transform (xml, &response_data);
       g_free (xml);
       con_info->answercode = response_data.http_status_code;
@@ -3746,17 +3711,14 @@ file_content_response (credentials_t *credentials,
                                                      MHD_HEADER_KIND,
                                                      "Accept-Language");
       language = (accept_language_to_env_fmt (accept_language));
-      xml = g_strdup_printf ("<login_page>"
-                             "<token></token>"
-                             "<time>%s</time>"
-                             "<i18n>%s</i18n>"
-                             "<guest><username>%s</username></guest>"
-                             "</login_page>",
-                             ctime_now,
-                             language
-                              ? language
-                              : DEFAULT_GSAD_LANGUAGE,
-                             guest_username ? guest_username : "");
+      xml = login_xml (NULL,
+                       NULL,
+                       ctime_now,
+                       NULL,
+                       language
+                        ? language
+                        : DEFAULT_GSAD_LANGUAGE,
+                       guest_username ? guest_username : "");
       g_free (language);
       res = xsl_transform (xml, &response_data);
       response = MHD_create_response_from_data (strlen (res), res,
@@ -4161,25 +4123,18 @@ request_handler (void *cls, struct MHD_Connection *connection,
                                                              MHD_HEADER_KIND,
                                                              "Accept-Language");
               language = accept_language_to_env_fmt (accept_language);
-              xml = g_strdup_printf ("<login_page>"
-                                     "<message>"
-                                     "Login failed.%s"
-                                     "</message>"
-                                     "<token></token>"
-                                     "<time>%s</time>"
-                                     "<i18n>%s</i18n>"
-                                     "<guest><username>%s</username></guest>"
-                                     "</login_page>",
-                                     ret == 6
-                                      ? "  OMP service is down."
-                                      : (ret == -1
-                                          ? "  Error during authentication."
-                                          : ""),
-                                     ctime_now,
-                                     language
-                                      ? language
-                                      : DEFAULT_GSAD_LANGUAGE,
-                                     guest_username ? guest_username : "");
+              xml = login_xml (ret == 6
+                                ? "Login failed.  OMP service is down."
+                                : (ret == -1
+                                    ? "Login failed.  Error during authentication."
+                                    : "Login failed."),
+                               NULL,
+                               ctime_now,
+                               NULL,
+                               language
+                                ? language
+                                : DEFAULT_GSAD_LANGUAGE,
+                               guest_username ? guest_username : "");
               response_data.http_status_code = MHD_HTTP_SERVICE_UNAVAILABLE;
               g_free (language);
               res = xsl_transform (xml, &response_data);
@@ -4241,24 +4196,15 @@ request_handler (void *cls, struct MHD_Connection *connection,
           else
             response_data.http_status_code = MHD_HTTP_UNAUTHORIZED;
 
-          xml = g_markup_printf_escaped
-                 ("<login_page>"
-                  "<message>"
-                  "%s"
-                  "</message>"
-                  "<token></token>"
-                  "<time>%s</time>"
-                  "<url>%s</url>"
-                  "<i18n>%s</i18n>"
-                  "<guest><username>%s</username></guest>"
-                  "</login_page>",
-                  ((ret == 2)
-                    ? (strncmp (url, "/logout", strlen ("/logout"))
-                        ? "Session has expired.  Please login again."
-                        : "Already logged out.")
-                    : ((ret == 3 || ret == 7)
-                       ? "Cookie missing or bad.  Please login again."
-                       : "Token missing or bad.  Please login again.")),
+          xml = login_xml
+                 ((ret == 2)
+                   ? (strncmp (url, "/logout", strlen ("/logout"))
+                       ? "Session has expired.  Please login again."
+                       : "Already logged out.")
+                   : ((ret == 3 || ret == 7)
+                      ? "Cookie missing or bad.  Please login again."
+                      : "Token missing or bad.  Please login again."),
+                  NULL,
                   ctime_now,
                   (((export == 0)
                     && strncmp (url, "/logout", strlen ("/logout")))
@@ -4309,18 +4255,12 @@ request_handler (void *cls, struct MHD_Connection *connection,
                                                          MHD_HEADER_KIND,
                                                          "Accept-Language");
           language = accept_language_to_env_fmt (accept_language);
-          xml = g_strdup_printf ("<login_page>"
-                                 "<message>"
-                                 "Successfully logged out."
-                                 "</message>"
-                                 "<token></token>"
-                                 "<time>%s</time>"
-                                 "<i18n>%s</i18n>"
-                                 "<guest><username>%s</username></guest>"
-                                 "</login_page>",
-                                 ctime_now,
-                                 language ? language : DEFAULT_GSAD_LANGUAGE,
-                                 guest_username ? guest_username : "");
+          xml = login_xml ("Successfully logged out.",
+                           NULL,
+                           ctime_now,
+                           NULL,
+                           language ? language : DEFAULT_GSAD_LANGUAGE,
+                           guest_username ? guest_username : "");
           g_free (language);
           res = xsl_transform (xml, &response_data);
           http_response_code = response_data.http_status_code;
