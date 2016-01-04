@@ -4424,6 +4424,8 @@ request_handler (void *cls, struct MHD_Connection *connection,
 
               pre = g_markup_printf_escaped
                      ("<envelope>"
+                      "<version>%s</version>"
+                      "<vendor_version>%s</vendor_version>"
                       "<token>%s</token>"
                       "<time>%s</time>"
                       "<login>%s</login>"
@@ -4432,6 +4434,8 @@ request_handler (void *cls, struct MHD_Connection *connection,
                       "<charts>%i</charts>"
                       "<client_address>%s</client_address>"
                       "<help><%s/></help>",
+                      GSAD_VERSION,
+                      vendor_version_get (),
                       credentials->token,
                       ctime_now,
                       credentials->username,
@@ -5083,6 +5087,7 @@ main (int argc, char **argv)
   static gchar *gsad_port_string = NULL;
   static gchar *gsad_redirect_port_string = NULL;
   static gchar *gsad_manager_port_string = NULL;
+  static gchar *gsad_vendor_version_string = NULL;
   static gchar *ssl_private_key_filename = OPENVAS_SERVER_KEY;
   static gchar *ssl_certificate_filename = OPENVAS_SERVER_CERTIFICATE;
   static gchar *dh_params_filename = NULL;
@@ -5134,6 +5139,9 @@ main (int argc, char **argv)
     {"version", 'V',
      0, G_OPTION_ARG_NONE, &print_version,
      "Print version and exit.", NULL},
+    {"vendor-version", '\0',
+     0, G_OPTION_ARG_STRING, &gsad_vendor_version_string,
+     "Use <string> as version in interface.", "<string>"},
     {"ssl-private-key", 'k',
      0, G_OPTION_ARG_FILENAME, &ssl_private_key_filename,
      "Use <file> as the private key for HTTPS", "<file>"},
@@ -5240,6 +5248,8 @@ main (int argc, char **argv)
         exit (EXIT_FAILURE);
     }
 
+  if (gsad_vendor_version_string)
+    vendor_version_set (gsad_vendor_version_string);
 
   if (no_redirect && gsad_redirect_port_string)
     {

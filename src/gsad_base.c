@@ -62,6 +62,11 @@
 #define G_LOG_DOMAIN "gsad base"
 
 /**
+ * @brief Version from vendor, or NULL.
+ */
+gchar *vendor_version = NULL;
+
+/**
  * @brief Base init.
  *
  * @return 0 success, 1 XML needs thread support.
@@ -91,6 +96,29 @@ gsad_base_cleanup ()
   xmlCleanupParser ();
 #endif
   return 0;
+}
+
+/**
+ * @brief Set the vendor version.
+ *
+ * @param[in]  version  Vendor version.
+ */
+void
+vendor_version_set (const gchar *version)
+{
+  g_free (vendor_version);
+  vendor_version = g_strdup (version);
+}
+
+/**
+ * @brief Get the vendor version.
+ *
+ * @return Vendor version.
+ */
+const gchar *
+vendor_version_get ()
+{
+  return vendor_version ? vendor_version : "";
 }
 
 /**
@@ -405,9 +433,11 @@ login_xml (const gchar *message, const gchar *token, const gchar *time,
   xml_string_append (xml,
                      "<login_page>"
                      "<version>%s</version>"
+                     "<vendor_version>%s</vendor_version>"
                      "<token>%s</token>"
                      "<time>%s</time>",
                      GSAD_VERSION,
+                     vendor_version_get (),
                      token ? token : "",
                      time);
   if (message)

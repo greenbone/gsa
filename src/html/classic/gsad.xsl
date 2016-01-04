@@ -2343,7 +2343,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  <div class="page-wrap">
   <header>
    <span class="title"><xsl:value-of select="gsa:i18n('Greenbone Security Assistant')"/></span>
-   <span class="version"></span>
+   <span class="version">
+     <xsl:choose>
+       <xsl:when test="string-length (vendor_version) &gt; 0">
+         <xsl:value-of select="vendor_version"/>
+       </xsl:when>
+       <xsl:otherwise>
+          <xsl:text>Version </xsl:text>
+         <xsl:value-of select="version"/>
+       </xsl:otherwise>
+     </xsl:choose>
+   </span>
   </header>
   <div class="logo_box">
      <img src="/img/greenbone.svg" />
@@ -2424,6 +2434,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="token">
+</xsl:template>
+
+<xsl:template match="version">
+</xsl:template>
+
+<xsl:template match="vendor_version">
 </xsl:template>
 
 <xsl:template match="login">

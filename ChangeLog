@@ -1,5 +1,28 @@
 2015-01-04  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Add version to login page header.  Add option --vendor-version, so that
+	the user can override the version (in the header and on the About page).
+
+	* src/gsad.c (request_handler): Add VERSION and VENDOR_VERSION to
+	ENVELOPE.
+	(main): Add --vendor-version.
+
+	* src/gsad_base.c (vendor_version): New variable.
+	(vendor_version_set, vendor_version_get): New function.
+	(login_xml): Add VENDOR_VERSION to LOGIN_PAGE.
+
+	* src/gsad_base.h: Add headers accordingly.
+
+	* src/gsad_omp.c (xsl_transform_omp): Add VERSION and VENDOR_VERSION to
+	ENVELOPE.
+
+	* src/html/classic/gsad.xsl (login_page): Set header version from XML.
+	(version, vendor_version): New dummy templates.
+
+	* src/html/classic/help.xsl (help [about]): Set version from XML.
+
+2015-01-04  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (create_report_omp, create_container_task_omp)
 	(create_task_omp, move_task_omp, save_credential_omp)
 	(create_agent_omp, get_aggregate_omp, create_target_omp): Return

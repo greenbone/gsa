@@ -376,6 +376,8 @@ xsl_transform_omp (credentials_t * credentials, gchar * xml,
 
   gettimeofday (&tv, NULL);
   res = g_markup_printf_escaped ("<envelope>"
+                                 "<version>%s</version>"
+                                 "<vendor_version>%s</vendor_version>"
                                  "<token>%s</token>"
                                  "<caller>%s</caller>"
                                  "<current_page>%s</current_page>"
@@ -388,6 +390,8 @@ xsl_transform_omp (credentials_t * credentials, gchar * xml,
                                  "<charts>%d</charts>"
                                  "<client_address>%s</client_address>"
                                  "<backend_operation>%.2f</backend_operation>",
+                                 GSAD_VERSION,
+                                 vendor_version_get (),
                                  credentials->token,
                                  credentials->caller ? credentials->caller : "",
                                  credentials->current_page

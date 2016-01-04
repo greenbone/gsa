@@ -95,6 +95,8 @@ typedef struct {
 
 int gsad_base_init ();
 int gsad_base_cleanup ();
+void vendor_version_set (const gchar *);
+const gchar *vendor_version_get ();
 void set_language_code (gchar **, const gchar *);
 char *ctime_r_strip_newline (time_t *, char *);
 char * xsl_transform_with_stylesheet (const char *, const char *,

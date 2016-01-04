@@ -419,8 +419,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <table><tr><td valign="top">
 
       <h1>Greenbone Security Assistant</h1>
-      <h3>Version 6.1+beta3</h3>
-
+      <h3>
+        <xsl:choose>
+          <xsl:when test="string-length (/envelope/vendor_version) &gt; 0">
+            <xsl:value-of select="/envelope/vendor_version"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:text>Version </xsl:text>
+            <xsl:value-of select="/envelope/version"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </h3>
       <p>
       The Greenbone Security Assistant (GSA) is the web-based graphical
       user interface of the Open Vulnerability Assessment System (OpenVAS).
