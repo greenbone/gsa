@@ -3911,8 +3911,10 @@ create_report_omp (credentials_t * credentials, params_t *params,
   switch (ret)
     {
       case 0:
-      case -1:
         break;
+      case -1:
+        /* 'omp' set response. */
+        return response;
       case 1:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -4010,8 +4012,10 @@ create_container_task_omp (credentials_t * credentials, params_t *params,
   switch (ret)
     {
       case 0:
-      case -1:
         break;
+      case -1:
+        /* 'omp' set response. */
+        return response;
       case 1:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -4264,8 +4268,10 @@ create_task_omp (credentials_t * credentials, params_t *params,
   switch (ret)
     {
       case 0:
-      case -1:
         break;
+      case -1:
+        /* 'omp' set response. */
+        return response;
       case 1:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -5049,8 +5055,10 @@ move_task_omp (credentials_t * credentials, params_t *params,
   switch (ret)
     {
       case 0:
-      case -1:
         break;
+      case -1:
+        /* 'omp' set response. */
+        return response;
       case 1:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -6824,8 +6832,10 @@ save_credential_omp (credentials_t * credentials, params_t *params,
   switch (ret)
     {
       case 0:
-      case -1:
         break;
+      case -1:
+        /* 'omp' set response. */
+        return response;
       case 1:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -6999,8 +7009,10 @@ create_agent_omp (credentials_t * credentials, params_t *params,
       switch (ret)
         {
           case 0:
-          case -1:
             break;
+          case -1:
+            /* 'omp' set response. */
+            return response;
           case 1:
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
@@ -7682,8 +7694,10 @@ get_aggregate_omp (credentials_t * credentials, params_t *params,
   switch (ret)
     {
       case 0:
-      case -1:
         break;
+      case -1:
+        /* 'omp' set response. */
+        return response;
       case 1:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
@@ -9427,8 +9441,10 @@ create_target_omp (credentials_t * credentials, params_t *params,
   switch (ret)
     {
       case 0:
-      case -1:
         break;
+      case -1:
+        /* 'omp' set response. */
+        return response;
       case 1:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,

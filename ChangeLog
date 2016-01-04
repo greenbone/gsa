@@ -1,5 +1,13 @@
 2015-01-04  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (create_report_omp, create_container_task_omp)
+	(create_task_omp, move_task_omp, save_credential_omp)
+	(create_agent_omp, get_aggregate_omp, create_target_omp): Return
+	response from "omp" when return value is -1, because in this case
+	there is no entity available, so a break leads to a segfault.
+
+2015-01-04  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Consolidate multiple login XML locations into single function.
 
 	* src/gsad_base.c (login_xml): New function.
