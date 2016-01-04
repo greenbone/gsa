@@ -11768,6 +11768,33 @@ get_config (credentials_t * credentials, params_t *params,
                    "Diagnostics: Failure to receive response from manager daemon.",
                    "/omp?cmd=get_configs", response_data);
         }
+
+    }
+
+  /* Get Credentials */
+  if (openvas_server_sendf (&session, "<get_credentials/>") == -1)
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      return gsad_message
+              (credentials, "Internal error", __FUNCTION__, __LINE__,
+               "An internal error occurred while getting the config. "
+               "The config is not available. "
+               "Diagnostics: Failure to send command to manager daemon.",
+               "/omp?cmd=get_configs", response_data);
+    }
+  if (read_string (&session, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      return gsad_message
+              (credentials, "Internal error", __FUNCTION__, __LINE__,
+               "An internal error occurred while getting the config. "
+               "The config is not available. "
+               "Diagnostics: Failure to receive response from manager daemon.",
+               "/omp?cmd=get_configs", response_data);
     }
 
   /* Get the permissions */

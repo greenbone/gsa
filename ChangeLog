@@ -1,3 +1,10 @@
+2015-01-04  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/gsad_omp.c (get_config): Get credentials information.
+
+	* src/html/classic/omp.xsl (preference-details, edit-config-preference):
+	Handle osp_credential_username and osp_credential_password.
+
 2015-01-04  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add version to login page header.  Add option --vendor-version, so that

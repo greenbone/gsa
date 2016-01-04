@@ -14517,6 +14517,15 @@ should not have received it.
           <xsl:when test="type='file' and string-length(value) &gt; 0">
             <i><xsl:value-of select="gsa:i18n ('File attached.', 'Scan Config')"/></i>
           </xsl:when>
+          <xsl:when test="type='osp_credential_username' or type='osp_credential_password'">
+            <xsl:variable name="value">
+              <xsl:value-of select="value"/>
+            </xsl:variable>
+            <a href="/omp?cmd=get_credential&amp;credential_id={$value}&amp;token={/envelope/token}"
+               title="{gsa:view_details_title ('Credential', $value)}">
+              <xsl:value-of select="../../../../get_credentials_response/credential[@id=$value]/name"/>
+            </a>
+          </xsl:when>
           <xsl:otherwise>
             <xsl:value-of select="value"/>
           </xsl:otherwise>
@@ -14602,6 +14611,17 @@ should not have received it.
               <xsl:with-param name="content" select="'False'"/>
               <xsl:with-param name="select-value" select="value"/>
             </xsl:call-template>
+          </select>
+        </xsl:when>
+        <xsl:when test="type='osp_credential_username' or type='osp_credential_password'">
+          <select name="osp_pref_{name}">
+            <xsl:for-each select="../../../../get_credentials_response/credential">
+              <xsl:call-template name="opt">
+                <xsl:with-param name="content" select="name"/>
+                <xsl:with-param name="value" select="@id"/>
+                <xsl:with-param name="select-value" select="value"/>
+              </xsl:call-template>
+            </xsl:for-each>
           </select>
         </xsl:when>
 
