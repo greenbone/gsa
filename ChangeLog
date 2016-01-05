@@ -1,3 +1,12 @@
+2015-01-05  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Allow the sysadmin to provide an alternate login image.
+
+	* src/gsad_base.c (login_xml): Add ALTERNATE_LABEL flag to LOGIN_PAGE.
+
+	* src/html/classic/gsad.xsl (login_box): If ALTERNATE_LABEL is not 0
+	then use label.png instead of login-label.png.
+
 2015-01-04  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad_omp.c (get_config): Get credentials information.

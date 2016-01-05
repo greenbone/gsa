@@ -435,11 +435,13 @@ login_xml (const gchar *message, const gchar *token, const gchar *time,
                      "<version>%s</version>"
                      "<vendor_version>%s</vendor_version>"
                      "<token>%s</token>"
-                     "<time>%s</time>",
+                     "<time>%s</time>"
+                     "<alternate_label>%i</alternate_label>",
                      GSAD_VERSION,
                      vendor_version_get (),
                      token ? token : "",
-                     time);
+                     time,
+                     g_file_test ("img/label.png", G_FILE_TEST_EXISTS));
   if (message)
     xml_string_append (xml,
                        "<message>%s</message>",

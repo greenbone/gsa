@@ -2360,7 +2360,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
   <div class="login_box">
     <div class="logo">
-      <img height="130" width="94" src="/img/login-label.png"/>
+      <xsl:choose>
+        <xsl:when test="alternate_label = 0">
+          <img height="130" width="94" src="/img/login-label.png"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <img height="130" width="94" src="/img/label.png"/>
+        </xsl:otherwise>
+      </xsl:choose>
     </div>
     <div class="login">
       <div class="error_message">
