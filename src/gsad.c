@@ -9,7 +9,7 @@
  * Michael Wiegand <michael.wiegand@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2009 Greenbone Networks GmbH
+ * Copyright (C) 2009-2016 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -5226,7 +5226,7 @@ main (int argc, char **argv)
           printf ("gnutls %s\n", gnutls_check_version (NULL));
           printf ("libmicrohttpd %s\n", MHD_get_version ());
         }
-      printf ("Copyright (C) 2010-2015 Greenbone Networks GmbH\n");
+      printf ("Copyright (C) 2010-2016 Greenbone Networks GmbH\n");
       printf ("License GPLv2+: GNU GPL version 2 or later\n");
       printf
         ("This is free software: you are free to change and redistribute it.\n"
