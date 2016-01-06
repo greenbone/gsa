@@ -23,7 +23,7 @@ Michael Wiegand <michael.wiegand@greenbone.net>
 Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 Copyright:
-Copyright (C) 2009, 2010, 2012-2015 Greenbone Networks GmbH
+Copyright (C) 2009, 2010, 2012-2016 Greenbone Networks GmbH
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -3684,7 +3684,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
       <h1>Contents</h1>
       <p>
-       This is the help system of Greenbone Security Assistant.
        Small <a href="/help/contents.html?token={/envelope/token}" title="Help"><img src="/img/help.png"/></a>
        icons all over the web interface will jump you into the respective contents.
        Alternatively you can browse the following structure.

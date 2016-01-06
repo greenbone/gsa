@@ -19,7 +19,7 @@ Authors:
 Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 Copyright:
-Copyright (C) 2014 Greenbone Networks GmbH
+Copyright (C) 2014, 2016 Greenbone Networks GmbH
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -588,7 +588,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
       <h1>Inhalt</h1>
       <p>
-       Dies ist das Hilfesystem von Greenbone Security Assistant.
        Kleine
        <a href="/help/contents.html?token={/envelope/token}" title="Hilfe">
        <img src="/img/help.png"/>

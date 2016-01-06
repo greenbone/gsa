@@ -19,7 +19,7 @@ Authors:
 Winland Q. Yang <winland0704@126.com>
 
 Copyright:
-Copyright (C) 2014 Greenbone Networks GmbH
+Copyright (C) 2014, 2016 Greenbone Networks GmbH
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -2980,7 +2980,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
       <h1>帮助目录</h1>
       <p>
-       这是绿骨安全助手（Greenbone Security Assistant）的帮助系统。小问号
+       小问号
        <a href="/help/contents.html?token={/envelope/token}" title="帮助">
        <img src="/img/help.png"/>
        </a>图标贯穿于所有网页界面，引导您跳转到相应的帮助内容去。作为可选的，您也可以根据如下结构来浏览帮助内容。

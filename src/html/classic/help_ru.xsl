@@ -21,7 +21,7 @@ Authors:
 Ilmar S. Habibulin <ilmarh@aha.ru>
 
 Copyright:
-Copyright (C) 2015 Greenbone Networks GmbH
+Copyright (C) 2015-2016 Greenbone Networks GmbH
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -3225,7 +3225,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
       <h1>Содержание</h1>
       <p>
-       Добро пожаловать в справочную систему Greenbone Security Assistant.
        Маленькие иконки <a href="/help/contents.html?token={/envelope/token}" title="Помощь"><img src="/img/help.png"/></a>,
        используемые повсеместно в веб интерфейсе, помогут вам перейти сразу к интересующему вас содержимому. 
        Или вы можете воспользоваться доступом через нижеприведённое оглавление.
