@@ -8357,7 +8357,7 @@ Public License instead of this License.
 <xsl:template mode="help" match="config_editor_nvt_families.html">
   <xsl:call-template name="help-header">
     <xsl:with-param name="title" select="'Scan Config Editor NVT Families'"/>
-    <xsl:with-param name="asset-type" select="'scan_config'"/>
+    <xsl:with-param name="asset-type" select="'config'"/>
   </xsl:call-template>
 
   <div class="section-box">
@@ -8439,7 +8439,7 @@ Public License instead of this License.
 <xsl:template mode="help" match="config_editor_nvt.html">
   <xsl:call-template name="help-header">
     <xsl:with-param name="title" select="'Scan Config Editor NVT'"/>
-    <xsl:with-param name="asset-type" select="'scan_config'"/>
+    <xsl:with-param name="asset-type" select="'config'"/>
   </xsl:call-template>
 
   <div class="section-box">
@@ -8512,7 +8512,7 @@ Public License instead of this License.
 <xsl:template mode="help" match="config_family_details.html">
   <xsl:call-template name="help-header">
     <xsl:with-param name="title" select="'Scan Config Family Details'"/>
-    <xsl:with-param name="asset-type" select="'scan_config'"/>
+    <xsl:with-param name="asset-type" select="'config'"/>
   </xsl:call-template>
 
   <div class="section-box">
@@ -8578,7 +8578,7 @@ Public License instead of this License.
 <xsl:template mode="help" match="config_nvt_details.html">
   <xsl:call-template name="help-header">
     <xsl:with-param name="title" select="'Scan Config NVT Details'"/>
-    <xsl:with-param name="asset-type" select="'scan_config'"/>
+    <xsl:with-param name="asset-type" select="'config'"/>
   </xsl:call-template>
 
   <div class="section-box">
