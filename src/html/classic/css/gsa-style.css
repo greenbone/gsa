@@ -1483,3 +1483,29 @@ text-align:right;
 .ctrl-group .right-column {
  margin-left: 120px;
 }
+
+.valign-middle {
+ vertical-align: middle;
+}
+
+/* table for forms */
+.table-form {
+    width: 100%;
+    border: 0;
+    border-spacing: 0px; /* == cellspacing="0" */
+    border-collapse: collapse;
+}
+
+.table-form td {
+    vertical-align: middle;
+    padding: 3px; /* == cellpadding="3" */
+}
+
+.table-form label {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.table-form td a {
+    margin: 0 5px;
+}

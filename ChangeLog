@@ -1,5 +1,15 @@
 2016-01-08  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/gsa-style.css: Introduce new css classes:
+	A valign-middle class to center elements vertically.
+	Several css classes for formatting of tables as formulars.
+
+	* src/html/classic/omp.xsl: Remove obsolete html elements and attributes
+	which can be styled by css from the new task dialog.
+	Also fix several layout issues in the new task dialog.
+
+2016-01-08  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/help_de.xsl: Update German "Not Found" help page to new
 	frameless style.
 

@@ -5401,16 +5401,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:if test="not (gsa:may-op ('get_slaves'))">
         <input type="hidden" name="slave_id_optional" value="--"/>
       </xsl:if>
-      <table border="0" cellspacing="0" cellpadding="3" width="100%">
+      <table class="table-form">
         <tr>
-         <td valign="top" width="150"><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
-         <td width="280">
+         <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
+         <td>
            <input type="text" name="name" value="{gsa:param-or ('name', 'unnamed')}" size="30"
                   maxlength="80"/>
          </td>
         </tr>
         <tr>
-          <td valign="top"><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+          <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
           <td>
             <input type="text" name="comment" value="{gsa:param-or ('comment', '')}" size="30" maxlength="400"/>
           </td>
@@ -5435,7 +5435,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </select>
             <a href="#" title="{ gsa:i18n('Create a new target') }"
                class="new-action-icon" data-type="target" data-done="select[name=target_id]">
-              <img src="/img/new.png"/>
+              <img class="valign-middle" src="/img/new.png"/>
             </a>
           </td>
         </tr>
@@ -5450,7 +5450,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <option value="{@id}"><xsl:value-of select="name"/></option>
                 </xsl:for-each>
               </select>
-              <br/>
             </td>
           </tr>
         </xsl:if>
@@ -5480,9 +5479,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   </xsl:choose>
                 </xsl:for-each>
               </select>
-              <input name="schedule_periods" type="checkbox" value="1"
-                     title="{gsa:i18n ('Once', 'Time')}"/>
-              <xsl:value-of select="gsa:i18n ('Once', 'Time')"/>
+              <label>
+                <input name="schedule_periods" type="checkbox" value="1"
+                        title="{gsa:i18n ('Once', 'Time')}"/>
+                <xsl:value-of select="gsa:i18n ('Once', 'Time')"/>
+            </label>
             </td>
           </tr>
         </xsl:if>
@@ -5780,7 +5781,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </td>
         </tr>
       </table>
-      <br/>
     </form>
    </div>
   </div>
