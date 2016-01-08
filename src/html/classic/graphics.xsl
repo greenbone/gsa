@@ -48,7 +48,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <script src="/js/gsa_donut_chart.js"></script>
   <script src="/js/gsa_line_chart.js"></script>
   <script type="text/javascript">
-    gsa.gsa_token = "<xsl:value-of select="/envelope/params/token"/>";
+    gsa.gsa_token = "<xsl:value-of select="gsa:escape-js (/envelope/params/token)"/>";
     gsa.data_sources = {};
     gsa.generators = {};
     gsa.displays = {};
@@ -73,13 +73,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="container_width" select="concat ($width + 2, 'px')"/>
   <xsl:param name="select_pref_id"/>
   <xsl:param name="filter_pref_id"/>
-  create_chart_box ("<xsl:value-of select="$parent_id"/>",
-                    "<xsl:value-of select="$container_id"/>",
-                    <xsl:value-of select="$width"/>,
-                    <xsl:value-of select="$height"/>,
-                    "<xsl:value-of select="$container_width"/>",
-                    "<xsl:value-of select="$select_pref_id"/>",
-                    "<xsl:value-of select="$filter_pref_id"/>")
+  create_chart_box ("<xsl:value-of select="gsa:escape-js ($parent_id)"/>",
+                    "<xsl:value-of select="gsa:escape-js ($container_id)"/>",
+                    <xsl:value-of select="number ($width)"/>,
+                    <xsl:value-of select="number ($height)"/>,
+                    "<xsl:value-of select="gsa:escape-js ($container_width)"/>",
+                    "<xsl:value-of select="gsa:escape-js ($select_pref_id)"/>",
+                    "<xsl:value-of select="gsa:escape-js ($filter_pref_id)"/>")
 </xsl:template>
 
 <xsl:template name="js-aggregate-data-source">
@@ -91,28 +91,28 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="filter"/>
   <xsl:param name="filt_id"/>
 
-  <xsl:param name="chart_template" select="/envelope/params/chart_template"/>
+  <xsl:param name="chart_template" select="gsa:escape-js (/envelope/params/chart_template)"/>
 
-  if (gsa.data_sources ["<xsl:value-of select="$data_source_name"/>"] == undefined)
+  if (gsa.data_sources ["<xsl:value-of select="gsa:escape-js ($data_source_name)"/>"] == undefined)
     {
-      gsa.data_sources ["<xsl:value-of select="$data_source_name"/>"]
+      gsa.data_sources ["<xsl:value-of select="gsa:escape-js ($data_source_name)"/>"]
         =
         <xsl:choose>
           <xsl:when test="$chart_template = 'info_by_cvss' or $chart_template = 'info_by_class'">
             DataSource ("get_aggregate",
                         {xml:1,
-                         aggregate_type:"<xsl:value-of select="$aggregate_type"/>",
+                         aggregate_type:"<xsl:value-of select="gsa:escape-js ($aggregate_type)"/>",
                          group_column:"severity",
-                         filter:"<xsl:value-of select="gsa:escape-js ($filter)"/>",
-                         filt_id:"<xsl:value-of select="gsa:escape-js ($filt_id)"/>"});
+                         filter: unescapeXML ("<xsl:value-of select="gsa:escape-js ($filter)"/>"),
+                         filt_id: "<xsl:value-of select="gsa:escape-js ($filt_id)"/>"});
           </xsl:when>
           <xsl:otherwise>
             DataSource ("get_aggregate",
                         {xml:1,
-                         aggregate_type:"<xsl:value-of select="$aggregate_type"/>",
-                         group_column:"<xsl:value-of select="$group_column"/>",
-                         data_column:"<xsl:value-of select="$data_column"/>",
-                         filter:"<xsl:value-of select="gsa:escape-js ($filter)"/>",
+                         aggregate_type:"<xsl:value-of select="gsa:escape-js ($aggregate_type)"/>",
+                         group_column:"<xsl:value-of select="gsa:escape-js ($group_column)"/>",
+                         data_column:"<xsl:value-of select="gsa:escape-js ($data_column)"/>",
+                         filter: unescapeXML ("<xsl:value-of select="gsa:escape-js ($filter)"/>"),
                          filt_id:"<xsl:value-of select="gsa:escape-js ($filt_id)"/>"});
           </xsl:otherwise>
         </xsl:choose>
@@ -136,9 +136,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="auto_load" select="0"/>
   <xsl:param name="create_data_source" select="0"/>
 
-  if (gsa.displays ["<xsl:value-of select="$display_name"/>"] == undefined)
+  if (gsa.displays ["<xsl:value-of select="gsa:escape-js ($display_name)"/>"] == undefined)
     {
-      console.error ("Display not found: <xsl:value-of select="$display_name"/>");
+      console.error ("Display not found: <xsl:value-of select="gsa:escape-js ($display_name)"/>");
     }
 
   <!-- Optionally create data source -->
@@ -155,9 +155,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:call-template>
     </xsl:when>
     <xsl:otherwise>
-      if (gsa.data_sources ["<xsl:value-of select="$data_source_name"/>"] == undefined)
+      if (gsa.data_sources ["<xsl:value-of select="gsa:escape-js ($data_source_name)"/>"] == undefined)
         {
-          console.error ("Data source not found: <xsl:value-of select="$data_source_name"/>");
+          console.error ("Data source not found: <xsl:value-of select="gsa:escape-js ($data_source_name)"/>");
         }
     </xsl:otherwise>
   </xsl:choose>
@@ -181,15 +181,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:variable name="title_generator">
     <xsl:choose>
       <xsl:when test="$chart_template = 'info_by_class' or $chart_template = 'info_by_cvss'">
-        title_total ("<xsl:value-of select="concat(gsa:type-name-plural ($aggregate_type), ' by severity')"/>",
+        title_total (unescapeXML ("<xsl:value-of select="gsa:escape-js (concat(gsa:type-name-plural ($aggregate_type), ' by severity'))"/>"),
                      "count")
       </xsl:when>
       <xsl:when test="$chart_type = 'bubbles'">
-        title_total ("<xsl:value-of select="concat(gsa:type-name-plural ($aggregate_type), ' by ', gsa:field-name ($group_column))"/>",
+        title_total (unescapeXML ("<xsl:value-of select="gsa:escape-js (concat(gsa:type-name-plural ($aggregate_type), ' by ', gsa:field-name ($group_column)))"/>"),
                      "size_value")
       </xsl:when>
       <xsl:otherwise>
-        title_total ("<xsl:value-of select="concat(gsa:type-name-plural ($aggregate_type), ' by ', gsa:field-name ($group_column))"/>",
+        title_total (unescapeXML ("<xsl:value-of select="gsa:escape-js (concat(gsa:type-name-plural ($aggregate_type), ' by ', gsa:field-name ($group_column)))"/>"),
                      "count")
       </xsl:otherwise>
     </xsl:choose>
@@ -198,55 +198,55 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <!-- Create chart generator -->
   <xsl:choose>
     <xsl:when test="$chart_type = 'donut'">
-      gsa.generators ["<xsl:value-of select="$generator_name"/>"]
-        = DonutChartGenerator (gsa.data_sources ["<xsl:value-of select="$data_source_name"/>"])
+      gsa.generators ["<xsl:value-of select="gsa:escape-js ($generator_name)"/>"]
+        = DonutChartGenerator (gsa.data_sources ["<xsl:value-of select="gsa:escape-js ($data_source_name)"/>"])
             .title (<xsl:value-of select="$title_generator"/>)
     </xsl:when>
     <xsl:when test="$chart_type = 'bubbles'">
-      gsa.generators ["<xsl:value-of select="$generator_name"/>"]
-        = BubbleChartGenerator (gsa.data_sources ["<xsl:value-of select="$data_source_name"/>"])
+      gsa.generators ["<xsl:value-of select="gsa:escape-js ($generator_name)"/>"]
+        = BubbleChartGenerator (gsa.data_sources ["<xsl:value-of select="gsa:escape-js ($data_source_name)"/>"])
             .title (<xsl:value-of select="$title_generator"/>)
     </xsl:when>
     <xsl:when test="$chart_type = 'line'">
-      gsa.generators ["<xsl:value-of select="$generator_name"/>"]
-        = LineChartGenerator (gsa.data_sources ["<xsl:value-of select="$data_source_name"/>"])
+      gsa.generators ["<xsl:value-of select="gsa:escape-js ($generator_name)"/>"]
+        = LineChartGenerator (gsa.data_sources ["<xsl:value-of select="gsa:escape-js ($data_source_name)"/>"])
             .title (<xsl:value-of select="$title_generator"/>)
     </xsl:when>
     <xsl:otherwise>
-      gsa.generators ["<xsl:value-of select="$generator_name"/>"]
-        = BarChartGenerator (gsa.data_sources ["<xsl:value-of select="$data_source_name"/>"])
+      gsa.generators ["<xsl:value-of select="gsa:escape-js ($generator_name)"/>"]
+        = BarChartGenerator (gsa.data_sources ["<xsl:value-of select="gsa:escape-js ($data_source_name)"/>"])
             .title (<xsl:value-of select="$title_generator"/>)
     </xsl:otherwise>
   </xsl:choose>
 
   <!-- Create basic chart -->
-  gsa.charts ["<xsl:value-of select="$chart_name"/>"] =
-    Chart (gsa.data_sources ["<xsl:value-of select="$data_source_name"/>"],
-            gsa.generators ["<xsl:value-of select="$generator_name"/>"],
-            gsa.displays ["<xsl:value-of select="$display_name"/>"],
-            "<xsl:value-of select="$chart_name"/>",
-            "<xsl:value-of select="$selector_label"/>",
+  gsa.charts ["<xsl:value-of select="gsa:escape-js ($chart_name)"/>"] =
+    Chart (gsa.data_sources ["<xsl:value-of select="gsa:escape-js ($data_source_name)"/>"],
+            gsa.generators ["<xsl:value-of select="gsa:escape-js ($generator_name)"/>"],
+            gsa.displays ["<xsl:value-of select="gsa:escape-js ($display_name)"/>"],
+            "<xsl:value-of select="gsa:escape-js ($chart_name)"/>",
+            unescapeXML ("<xsl:value-of select="gsa:escape-js ($selector_label)"/>"),
             "/img/charts/severity-bar-chart.png",
             1,
-            "<xsl:value-of select="$chart_type"/>",
-            "<xsl:value-of select="$chart_template"/>");
+            "<xsl:value-of select="gsa:escape-js ($chart_type)"/>",
+            "<xsl:value-of select="gsa:escape-js ($chart_template)"/>");
 
   <!-- Data modifiers and stylers -->
   <xsl:choose>
     <xsl:when test="$chart_template = 'resource_type_counts'">
-      gsa.generators ["<xsl:value-of select="$generator_name"/>"]
+      gsa.generators ["<xsl:value-of select="gsa:escape-js ($generator_name)"/>"]
         .data_transform (resource_type_counts)
     </xsl:when>
     <xsl:when test="$chart_template = 'qod_type_counts'">
-      gsa.generators ["<xsl:value-of select="$generator_name"/>"]
+      gsa.generators ["<xsl:value-of select="gsa:escape-js ($generator_name)"/>"]
         .data_transform (qod_type_counts)
     </xsl:when>
     <xsl:when test="$chart_template = 'percentage_counts'">
-      gsa.generators ["<xsl:value-of select="$generator_name"/>"]
+      gsa.generators ["<xsl:value-of select="gsa:escape-js ($generator_name)"/>"]
         .data_transform (percentage_counts)
     </xsl:when>
     <xsl:when test="$chart_template = 'info_by_class' or $chart_template = 'recent_info_by_class'">
-      gsa.generators ["<xsl:value-of select="$generator_name"/>"]
+      gsa.generators ["<xsl:value-of select="gsa:escape-js ($generator_name)"/>"]
         .data_transform (data_severity_level_counts)
       <xsl:choose>
         <xsl:when test="$chart_type = 'donut'">
@@ -258,7 +258,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </xsl:when>
     <xsl:when test="$chart_template = 'info_by_cvss' or $chart_template = 'recent_info_by_cvss'">
-      gsa.generators ["<xsl:value-of select="$generator_name"/>"]
+      gsa.generators ["<xsl:value-of select="gsa:escape-js ($generator_name)"/>"]
         .data_transform (data_severity_histogram)
       <xsl:choose>
         <xsl:when test="$chart_type = 'donut'">
@@ -276,7 +276,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:choose>
 
   <xsl:if test="$auto_load">
-    gsa.charts ["<xsl:value-of select="$chart_name"/>"].request_data ();
+    gsa.charts ["<xsl:value-of select="gsa:escape-js ($chart_name)"/>"].request_data ();
   </xsl:if>
 
 </xsl:template>
@@ -408,10 +408,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     gsa.displays ["top-visualization-right"].create_chart_selector ();
 
     <xsl:if test="$auto_load_left != ''">
-    gsa.displays ["top-visualization-left"].select_chart ("<xsl:value-of select="$auto_load_left"/>", false, true);
+    gsa.displays ["top-visualization-left"].select_chart ("<xsl:value-of select="gsa:escape-js ($auto_load_left)"/>", false, true);
     </xsl:if>
     <xsl:if test="$auto_load_right != ''">
-    gsa.displays ["top-visualization-right"].select_chart ("<xsl:value-of select="$auto_load_right"/>", false, true);
+    gsa.displays ["top-visualization-right"].select_chart ("<xsl:value-of select="gsa:escape-js ($auto_load_right)"/>", false, true);
     </xsl:if>
   </script>
 </xsl:template>
@@ -734,10 +734,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     gsa.displays ["top-visualization-right"].create_chart_selector ();
 
     <xsl:if test="$auto_load_left != ''">
-    gsa.displays ["top-visualization-left"].select_chart ("<xsl:value-of select="$auto_load_left"/>", false, true);
+    gsa.displays ["top-visualization-left"].select_chart ("<xsl:value-of select="gsa:escape-js ($auto_load_left)"/>", false, true);
     </xsl:if>
     <xsl:if test="$auto_load_right != ''">
-    gsa.displays ["top-visualization-right"].select_chart ("<xsl:value-of select="$auto_load_right"/>", false, true);
+    gsa.displays ["top-visualization-right"].select_chart ("<xsl:value-of select="gsa:escape-js ($auto_load_right)"/>", false, true);
     </xsl:if>
   </script>
 </xsl:template>
@@ -1134,17 +1134,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:with-param name="create_data_source" select="1"/>
             </xsl:call-template>
 
-            gsa.displays ["<xsl:value-of select="$display_name"/>"].create_chart_selector ();
+            gsa.displays ["<xsl:value-of select="gsa:escape-js ($display_name)"/>"].create_chart_selector ();
             <xsl:if test="$filters">
-              gsa.displays ["<xsl:value-of select="$display_name"/>"].create_filter_selector ();
+              gsa.displays ["<xsl:value-of select="gsa:escape-js ($display_name)"/>"].create_filter_selector ();
 
               <xsl:for-each select="$filters">
-                gsa.displays ["<xsl:value-of select="$display_name"/>"].add_filter ("<xsl:value-of select="@id"/>", "<xsl:value-of select="gsa:escape-js (name)"/>", "<xsl:value-of select="gsa:escape-js (term)"/>");
+                gsa.displays ["<xsl:value-of select="gsa:escape-js ($display_name)"/>"].add_filter ("<xsl:value-of select="gsa:escape-js (@id)"/>", "<xsl:value-of select="gsa:escape-js (name)"/>", "<xsl:value-of select="gsa:escape-js (term)"/>");
               </xsl:for-each>
-              gsa.displays ["<xsl:value-of select="$display_name"/>"].select_filter ("<xsl:value-of select="$auto_filter"/>", false);
+              gsa.displays ["<xsl:value-of select="gsa:escape-js ($display_name)"/>"].select_filter ("<xsl:value-of select="gsa:escape-js ($auto_filter)"/>", false);
             </xsl:if>
 
-            gsa.displays ["<xsl:value-of select="$display_name"/>"].select_chart ("<xsl:value-of select="$auto_load"/>", false, true);
+            gsa.displays ["<xsl:value-of select="gsa:escape-js ($display_name)"/>"].select_chart ("<xsl:value-of select="gsa:escape-js ($auto_load)"/>", false, true);
           </xsl:for-each>
         </script>
       </center>

@@ -1,5 +1,17 @@
 2016-01-08  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	Backport r24068.
+
+	* src/html/classic/graphics.xsl: Apply escaping to all generated
+	JS strings.
+
+	* src/html/classic/js/gsa_graphics_base.js (unescapeXML): New function.
+
+	* src/html/classic/omp.xsl (gsa:escape-js): Escape special characters
+	to XML entities.
+
+2016-01-08  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Backport r24055 without asset_type case.
 
 	* src/gsad.c (init_validator): Make regex match options for
