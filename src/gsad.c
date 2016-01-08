@@ -1138,11 +1138,11 @@ init_validator ()
   openvas_validator_add (validator, "agent_format", "^(installer)$");
   openvas_validator_add (validator, "agent_id",     "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "aggregate_mode", "^[a-z0-9_]+$");
-  openvas_validator_add (validator, "aggregate_type", "agent|alert|config|credential|filter|group|nvt|note|override|permission|port_list|report|report_format|result|role|scanner|schedule|slave|tag|target|task|user|allinfo|cve|cpe|ovaldef|cert_bund_adv|dfn_cert_adv");
+  openvas_validator_add (validator, "aggregate_type", "^(agent|alert|config|credential|filter|group|nvt|note|override|permission|port_list|report|report_format|result|role|scanner|schedule|slave|tag|target|task|user|allinfo|cve|cpe|ovaldef|cert_bund_adv|dfn_cert_adv)$");
   openvas_validator_add (validator, "alive_tests", "^(Scan Config Default|ICMP Ping|TCP-ACK Service Ping|TCP-SYN Service Ping|ARP Ping|ICMP & TCP-ACK Service Ping|ICMP & ARP Ping|TCP-ACK Service & ARP Ping|ICMP, TCP-ACK Service & ARP Ping|Consider Alive)$");
   openvas_validator_add (validator, "apply_filter", "^(no|no_pagination|full)$");
   openvas_validator_add (validator, "asset_name",   "(?s)^.*$");
-  openvas_validator_add (validator, "asset_type",   "host|os");
+  openvas_validator_add (validator, "asset_type",   "^(host|os)$");
   openvas_validator_add (validator, "asset_id",     "^([[:alnum:]-_.:\\/~()']|&amp;)+$");
   openvas_validator_add (validator, "auth_algorithm",   "^(md5)|(sha1)$");
   openvas_validator_add (validator, "auth_method",  "^(0|1|2)$");
@@ -1323,7 +1323,7 @@ init_validator ()
   openvas_validator_add (validator, "type",       "^(assets|prognostic)$");
   openvas_validator_add (validator, "search_phrase", "^[[:alnum:][:punct:] äöüÄÖÜß]{0,400}$");
   openvas_validator_add (validator, "sort_field", "^[_[:alnum:] ]{1,40}$");
-  openvas_validator_add (validator, "sort_order", "^(ascending)|(descending)$");
+  openvas_validator_add (validator, "sort_order", "^(ascending|descending)$");
   openvas_validator_add (validator, "sort_stat", "^[_[:alnum:] ]{1,40}$");
   openvas_validator_add (validator, "submit_plus",    "^\\+$");
   openvas_validator_add (validator, "target_source", "^(asset_hosts|file|import|manual)$");

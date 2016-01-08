@@ -1,3 +1,8 @@
+2016-01-08  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/gsad.c (init_validator): Make regex match options for
+	aggregate_type, asset_type and sort_order exactly.
+
 2016-01-06  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* gsad.xsl, help.xsl, help_ru.xsl: Extend the copyright year to 2016.
