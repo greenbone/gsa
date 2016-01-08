@@ -1,3 +1,10 @@
+2016-01-08  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Backport r24055 without asset_type case.
+
+	* src/gsad.c (init_validator): Make regex match options for
+	aggregate_type and sort_order exactly.
+
 2015-12-21  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Backport r24018 and add some missing conditions for Note actions.
