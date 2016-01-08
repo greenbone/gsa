@@ -14614,12 +14614,13 @@ should not have received it.
           </select>
         </xsl:when>
         <xsl:when test="type='osp_credential_username' or type='osp_credential_password'">
+          <xsl:variable name="value" select="value"/>
           <select name="osp_pref_{name}">
             <xsl:for-each select="../../../../get_credentials_response/credential">
               <xsl:call-template name="opt">
                 <xsl:with-param name="content" select="name"/>
                 <xsl:with-param name="value" select="@id"/>
-                <xsl:with-param name="select-value" select="value"/>
+                <xsl:with-param name="select-value" select="$value"/>
               </xsl:call-template>
             </xsl:for-each>
           </select>
