@@ -100,11 +100,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template mode="help" match="*">
-  <div class="gb_window_part_center">Hilfe: Seite Nicht gefunden</div>
-  <div class="gb_window_part_content">
-    <div style="text-align:left">
-      <h1>Seite nicht gefunden</h1>
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'Seite Nicht gefunden'"/>
+  </xsl:call-template>
 
+  <div class="section-box">
+    <div style="text-align:left">
       <p>
         Die von Ihnen angeforderte Hilfeseite konnte nicht gefunden werden.
         Falls Sie über einen Link zu dieser Seite gelangt sind, hat sich die
