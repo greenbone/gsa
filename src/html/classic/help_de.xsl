@@ -122,13 +122,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template mode="help" match="tasks.html">
-  <div class="gb_window_part_center">Hilfe: Aufgaben
-    <a href="/omp?cmd=get_tasks&amp;token={/envelope/token}"
-       title="Tasks" style="margin-left:3px;">
-      <img src="/img/list.png" border="0" alt="Tasks"/>
-    </a>
-  </div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'Aufgaben'"/>
+    <xsl:with-param name="type" select="'task'"/>
+  </xsl:call-template>
+
+  <div class="section-box">
     <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Hilfe-Inhaltsverzeichnis</a></div>
     <div style="text-align:left">
 
@@ -139,7 +138,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:call-template>
 
       <a name="tasks"></a>
-      <h1>Aufgaben</h1>
       <p>
        Diese Tabelle bietet einen Überblick über alle konfigurierten
        <a href="glossary.html?token={/envelope/token}#task">Aufgaben</a> und
@@ -582,15 +580,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 
 <xsl:template mode="help" match="contents.html">
-  <div class="gb_window_part_center">Hilfe: Inhalt</div>
-  <div class="gb_window_part_content">
+  <xsl:call-template name="help-header">
+    <xsl:with-param name="title" select="'Inhalt'"/>
+  </xsl:call-template>
+
+  <div class="section-box">
     <div style="text-align:left">
 
       <h1>Inhalt</h1>
       <p>
        Kleine
        <a href="/help/contents.html?token={/envelope/token}" title="Hilfe">
-       <img src="/img/help.png"/>
+        <img src="/img/help.png"/>
        </a>-Icons überall im Web-Interface lassen sie zu den entsprechenden
        Inhalten springen.
        Alternativ können sie auch in der folgenden Struktur blättern.
