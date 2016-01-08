@@ -10261,7 +10261,7 @@ Public License instead of this License.
     <xsl:with-param name="info-type" select="'allinfo'"/>
   </xsl:call-template>
 
-  <div class="gb_window_part_content">
+  <div class="section-box">
     <div style="float:left;">
       <a href="/help/contents.html?token={/envelope/token}">Help Contents</a>
     </div>
