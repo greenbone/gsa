@@ -8428,7 +8428,7 @@ Public License instead of this License.
 
       <h4>Select and Edit NVT Details</h4>
       <p>
-       A click on the edit icon <img src="/img/edit.png" alt="Edit" title="Edit"/>will add the NVT to the selection
+       A click on the edit icon <img src="/img/edit.png" alt="Edit" title="Edit"/> will add the NVT to the selection
        and lead to a page that lists <a href="config_editor_nvt.html?token={/envelope/token}">NVT details and allows to modify preferences</a> and
        the timeout.
       </p>
