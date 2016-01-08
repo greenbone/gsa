@@ -164,8 +164,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <func:function name="gsa:escape-js">
   <xsl:param name="string"/>
   <xsl:variable name='apos'>'</xsl:variable>
-  <func:result select="str:replace (str:replace (str:replace (str:replace (str:replace (
-                        $string, '\', '\x2F'), '&quot;', '\x22'), $apos, '\x27'), '&lt;', '\x3C'), '&lt;', '\x3E')"/>
+  <!-- Escape as XML entities where applicable -->
+  <func:result select="str:replace (str:replace (str:replace (str:replace (str:replace (str:replace (
+                       $string, '&amp;', '&amp;amp;'), '\', '\x2F'), '&quot;', '&amp;quot;'), $apos, '&amp;apos;'), '&lt;', '&amp;lt;'), '&gt;', '&amp;gt;')"/>
 </func:function>
 
 <func:function name="gsa:date-tz">
@@ -13355,7 +13356,7 @@ should not have received it.
                   $('#sort_by_credential_desc').attr ('href', credential_url_prefix + "sort-reverse=" + type + credential_url_suffix);
                   if (reload)
                     {
-                      window.location = ('href', credential_url_prefix + "<xsl:value-of select="$sort_keyword/column"/>=" + type + credential_url_suffix);
+                      window.location = ('href', credential_url_prefix + "<xsl:value-of select="gsa:escape-js ($sort_keyword/column)"/>=" + type + credential_url_suffix);
                     }
                 }
               select_credential_type (false);

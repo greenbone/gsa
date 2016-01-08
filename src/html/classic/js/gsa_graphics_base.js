@@ -782,6 +782,22 @@ function Display (p_container)
   return my;
 }
 
+/*
+ * Generic helper functions
+ */
+
+/*
+ * Unescapes XML entities
+ */
+function unescapeXML (string)
+{
+  if (gsa.parser === undefined)
+    gsa.parser = new DOMParser ();
+
+  var doc = gsa.parser.parseFromString("<doc>" + string + "</doc>",
+                                       "application/xml");
+  return doc.documentElement.textContent;
+}
 
 /*
  * Data Source Helper functions
