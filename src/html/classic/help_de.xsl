@@ -667,10 +667,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <li> <a href="new_target.html?token={/envelope/token}">New Target</a></li>
                 <li> <a href="target_details.html?token={/envelope/token}">Target Details</a></li>
               </ul>
-            <li> <a href="lsc_credentials.html?token={/envelope/token}">Credentials</a></li>
+            <li> <a href="credentials.html?token={/envelope/token}">Credentials</a></li>
               <ul>
-                <li> <a href="new_lsc_credential.html?token={/envelope/token}">New Credential</a></li>
-                <li> <a href="lsc_credential_details.html?token={/envelope/token}">Credential Details</a></li>
+                <li> <a href="new_credential.html?token={/envelope/token}">New Credential</a></li>
+                <li> <a href="credential_details.html?token={/envelope/token}">Credential Details</a></li>
               </ul>
             <li> <a href="agents.html?token={/envelope/token}">Agents</a></li>
               <ul>
