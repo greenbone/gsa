@@ -1,3 +1,14 @@
+2016-01-11  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	Make a better distinction between hardening flags for compiling and
+	for linking to avoid using flags in a context where they make no
+	sense.
+
+	* CMakeLists.txt: Separate linker hardening flags from compiler
+	hardening flags.
+
+	* src/CMakeLists.txt: Use linker hardening flags when linking.
+
 2016-01-11  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/gsa-style.css: Use common indentation of 2 spaces.
