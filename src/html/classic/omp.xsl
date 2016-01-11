@@ -3708,7 +3708,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:variable name="current_slave_id" select="$task/slave/@id"/>
   <xsl:choose>
     <xsl:when test="gsa:may-op ('get_slaves') and gsa:may-op ('modify_task') and count ($slaves)">
-      <span class="menu_icon wizard_list">
+      <span class="icon-menu">
         <xsl:variable name="slave_count" select="count ($slaves [@id != $current_slave_id])"/>
         <img src="/img/wizard.png" border="0" style="margin-left:3px;"/>
         <ul>
@@ -4471,7 +4471,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </a>
       </xsl:when>
       <xsl:when test="$new-icon and $type = 'task'">
-        <span class="menu_icon wizard_list">
+        <span class="icon-menu">
           <a href="/omp?cmd=new_task{$extra_params_string}&amp;next=get_task&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
              class="new-action-icon" data-type="task"
              title="{gsa:i18n ('New Task', 'Task')}">
@@ -4485,7 +4485,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:value-of select="gsa:i18n ('New Task', 'Task')"/>
               </a>
             </li>
-            <li class="last">
+            <li>
               <a href="/omp?cmd=new_container_task{$extra_params_string}&amp;next=get_task&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
                  class="last new-action-icon" data-type="container_task"
                  title="{gsa:i18n ('New Container Task', 'Task')}">
@@ -4922,7 +4922,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:choose>
     <xsl:when test="$nonew"/>
     <xsl:when test="gsa:may-op (concat ('create_', $type)) and $type = 'task'">
-      <span class="menu_icon wizard_list">
+      <span class="icon-menu">
         <a href="/omp?cmd=new_task&amp;next=get_task&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
            class="new-action-icon" data-type="task"
            title="{gsa:i18n ('New Task', 'Task')}">
@@ -4936,9 +4936,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:value-of select="gsa:i18n ('New Task', 'Task')"/>
             </a>
           </li>
-          <li class="last">
+          <li>
             <a href="/omp?cmd=new_container_task&amp;next=get_task&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-               class="last new-action-icon" data-type="container_task"
+               class="new-action-icon" data-type="container_task"
                title="{gsa:i18n ('New Container Task', 'Task')}">
               <xsl:value-of select="gsa:i18n ('New Container Task', 'Task')"/>
             </a>

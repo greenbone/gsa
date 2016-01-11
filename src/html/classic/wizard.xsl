@@ -44,7 +44,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template name="wizard-icon">
   <xsl:choose>
     <xsl:when test="name (..) = 'get_tasks'">
-      <span class="menu_icon wizard_list">
+      <span class="icon-menu">
         <a href="/omp?cmd=wizard&amp;name=quick_first_scan&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
             title="{gsa:i18n ('Wizard', 'Wizard')}"
             class="wizard-action-icon" data-name="quick_first_scan">
@@ -53,7 +53,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <ul>
           <li>
             <a href="/omp?cmd=wizard&amp;name=quick_first_scan&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-               class="first wizard-action-icon" data-name="quick_first_scan">
+               class="wizard-action-icon" data-name="quick_first_scan">
               <xsl:value-of select="gsa:i18n ('Task Wizard', 'Task Wizard')"/>
             </a>
           </li>
@@ -63,9 +63,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:value-of select="gsa:i18n ('Advanced Task Wizard', 'Advanced Task Wizard')"/>
             </a>
           </li>
-          <li class="last">
+          <li>
             <a href="/omp?cmd=wizard&amp;name=modify_task&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-               class="last wizard-action-icon" data-name="modify_task">
+               class="wizard-action-icon" data-name="modify_task">
               <xsl:value-of select="gsa:i18n ('Modify Task Wizard', 'Modify Task Wizard')"/>
             </a>
           </li>
@@ -1285,7 +1285,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <li>
             <a href="/omp?cmd=wizard&amp;name=quick_task&amp;refresh_interval={/envelope/autorefresh/@interval}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('Advanced Task Wizard', 'Advanced Task Wizard')"/></a>
           </li>
-          <li class="last">
+          <li>
             <a href="/omp?cmd=wizard&amp;name=modify_task&amp;refresh_interval={/envelope/autorefresh/@interval}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('Modify Task Wizard', 'Modify Task Wizard')"/></a>
           </li>
         </ul>
