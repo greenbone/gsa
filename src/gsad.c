@@ -3714,6 +3714,10 @@ request_handler (void *cls, struct MHD_Connection *connection,
   if (&url[0] == NULL)
     return MHD_NO;
 
+  /* Prevent guest link from leading to URL redirection. */
+  if (url && (url[0] == '/') && (url[1] == '/'))
+    return MHD_NO;
+
   /* Only accept GET and POST methods and send ERROR_PAGE in other cases. */
   if (strcmp (method, "GET") && strcmp (method, "POST"))
     {
