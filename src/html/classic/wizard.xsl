@@ -1271,29 +1271,4 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  </div>
 </xsl:template>
 
-<xsl:template name="wizard_list">
-  <xsl:param name="title" select="'(Missing Title)'"/>
-
-  <div class="wizard_list">
-    <ul>
-      <li>
-        <a id="section_list_first"><xsl:value-of select="gsa:i18n($title, $title)"/></a>
-        <ul>
-          <li>
-            <a href="/omp?cmd=wizard&amp;name=quick_first_scan&amp;refresh_interval={/envelope/autorefresh/@interval}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('Task Wizard', 'Task Wizard')"/></a>
-          </li>
-          <li>
-            <a href="/omp?cmd=wizard&amp;name=quick_task&amp;refresh_interval={/envelope/autorefresh/@interval}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('Advanced Task Wizard', 'Advanced Task Wizard')"/></a>
-          </li>
-          <li>
-            <a href="/omp?cmd=wizard&amp;name=modify_task&amp;refresh_interval={/envelope/autorefresh/@interval}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('Modify Task Wizard', 'Modify Task Wizard')"/></a>
-          </li>
-        </ul>
-      </li>
-    </ul>
-  </div>
-
-</xsl:template>
-
-
 </xsl:stylesheet>
