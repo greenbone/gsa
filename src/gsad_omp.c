@@ -1279,7 +1279,8 @@ next_page_url (credentials_t *credentials, params_t *params,
       if (strcmp (param_name, "filter") == 0
           || strcmp (param_name, "filt_id") == 0
           || (strstr (param_name, "_id")
-                == param_name + strlen (param_name) - strlen ("_id")))
+                == param_name + strlen (param_name) - strlen ("_id"))
+          || strcmp (param_name, "xml") == 0)
         {
           g_string_append_printf (url, "&%s=%s",
                                   param_name,
