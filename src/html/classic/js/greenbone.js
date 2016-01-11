@@ -157,6 +157,7 @@
     var self = this,
         data = new FormData(this.dialog.find('form')[0]);
     data.append('xml', 1);
+    data.append('no_redirect', 1);
     $.ajax({
       url: '/omp',
       data: data,
@@ -281,8 +282,6 @@
 
       if (submit.length)
         submit.remove ();
-
-      self.dialog.find ("form").append ('<input name="no_redirect" value="1" type="hidden"/>');
 
       // show the dialog !
       self.dialog.dialog({
