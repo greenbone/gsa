@@ -1068,7 +1068,7 @@ setting_get_value (gnutls_session_t *session, const char *setting_id,
                          status, message);                                     \
       ret = action_result_page (credentials, response_data, op_name,           \
                                 G_STRINGIFY (MHD_HTTP_BAD_REQUEST),            \
-                                "Given " G_STRINGIFY (name) " was invalid",    \
+                                message,                                       \
                                 next_url);                                     \
       g_free (next_url);                                                       \
       response_data->http_status_code = MHD_HTTP_BAD_REQUEST;                  \
