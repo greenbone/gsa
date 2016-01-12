@@ -1052,49 +1052,41 @@ setting_get_value (gnutls_session_t *session, const char *setting_id,
     }
 
 /**
- * @brief Check a param using the redirect or direct response method.
+ * @brief Check a param using the direct response method.
  *
  * @param[in]  message  Message.
  * @param[in]  status   Status code.
  * @param[in]  op_name  Operation name.
  * @param[in]  ret_func Function to return message.
  */
-#define MESSAGE_REDIRECT(message, status, op_name, next_cmd)                   \
+#define MESSAGE_INVALID(message, status, op_name, next_cmd)                   \
   do                                                                           \
     {                                                                          \
       gchar *ret;                                                              \
       gchar *next_url                                                          \
         = next_page_url (credentials, params, next_cmd, NULL, op_name,         \
                          status, message);                                     \
-      if (no_redirect && strcmp (no_redirect, "0"))                            \
-        {                                                                      \
-          ret = action_result_page (credentials, response_data, op_name,       \
-                                    G_STRINGIFY (MHD_HTTP_BAD_REQUEST),        \
-                                    "Given " G_STRINGIFY (name) " was invalid",\
-                                    next_url);                                 \
-          g_free (next_url);                                                   \
-        }                                                                      \
-      else                                                                     \
-        {                                                                      \
-          ret = NULL;                                                          \
-          response_data->redirect = next_url;                                  \
-        }                                                                      \
+      ret = action_result_page (credentials, response_data, op_name,           \
+                                G_STRINGIFY (MHD_HTTP_BAD_REQUEST),            \
+                                "Given " G_STRINGIFY (name) " was invalid",    \
+                                next_url);                                     \
+      g_free (next_url);                                                       \
       response_data->http_status_code = MHD_HTTP_BAD_REQUEST;                  \
       return ret;                                                              \
     }                                                                          \
   while (0);
 
 /**
- * @brief Check a param using the redirect or direct response method.
+ * @brief Check a param using the direct response method.
  *
  * @param[in]  name     Param name.
  * @param[in]  op_name  Operation name.
  * @param[in]  ret_func Function to return message.
  */
-#define CHECK_PARAM_REDIRECT(name, op_name, next_cmd)                          \
+#define CHECK_PARAM_INVALID(name, op_name, next_cmd)                          \
   if (name == NULL)                                                            \
     {                                                                          \
-      MESSAGE_REDIRECT ("Given " G_STRINGIFY (name) " was invalid",            \
+      MESSAGE_INVALID ("Given " G_STRINGIFY (name) " was invalid",            \
                         G_STRINGIFY (MHD_HTTP_BAD_REQUEST),                    \
                         op_name, next_cmd)                                     \
     }
@@ -3859,10 +3851,10 @@ create_report_omp (credentials_t * credentials, params_t *params,
 
   if (task_id == NULL)
     {
-      CHECK_PARAM_REDIRECT (name, "Create Report", "new_container_task");
-      CHECK_PARAM_REDIRECT (comment, "Create Report", "new_container_task");
+      CHECK_PARAM_INVALID (name, "Create Report", "new_container_task");
+      CHECK_PARAM_INVALID (comment, "Create Report", "new_container_task");
     }
-  CHECK_PARAM_REDIRECT (xml_file, "Create Report", "new_container_task");
+  CHECK_PARAM_INVALID (xml_file, "Create Report", "new_container_task");
 
   if (strlen (xml_file) == 0)
     {
@@ -3978,7 +3970,7 @@ import_report_omp (credentials_t * credentials, params_t *params,
 }
 
 #define CHECK(name)                                                        \
-CHECK_PARAM_REDIRECT (name, "Create Task", "new_task")
+CHECK_PARAM_INVALID (name, "Create Task", "new_task")
 
 /**
  * @brief Create a container task, serve next page.
@@ -4647,7 +4639,7 @@ save_task_omp (credentials_t * credentials, params_t *params,
   source_iface = params_value (params, "source_iface");
   max_hosts = params_value (params, "max_hosts");
   alterable = params_value (params, "alterable");
-  CHECK_PARAM_REDIRECT (scanner_type, "Save Task", "edit_task");
+  CHECK_PARAM_INVALID (scanner_type, "Save Task", "edit_task");
   if (!strcmp (scanner_type, "1"))
     {
       scanner_id = params_value (params, "osp_scanner_id");
@@ -4684,43 +4676,43 @@ save_task_omp (credentials_t * credentials, params_t *params,
       else
         params_add (params, "alerts", "2");
 
-      CHECK_PARAM_REDIRECT (name, "Edit Task", "edit_task");
-      CHECK_PARAM_REDIRECT (comment, "Edit Task", "edit_task");
-      CHECK_PARAM_REDIRECT (target_id, "Edit Task", "edit_task");
-      CHECK_PARAM_REDIRECT (config_id, "Edit Task", "edit_task");
-      CHECK_PARAM_REDIRECT (schedule_id, "Edit Task", "edit_task");
-      CHECK_PARAM_REDIRECT (slave_id, "Edit Task", "edit_task");
-      CHECK_PARAM_REDIRECT (scanner_id, "Edit Task", "edit_task");
-      CHECK_PARAM_REDIRECT (next, "Edit Task", "edit_task");
-      CHECK_PARAM_REDIRECT (task_id, "Edit Task", "edit_task");
-      CHECK_PARAM_REDIRECT (max_checks, "Edit Task", "edit_task");
-      CHECK_PARAM_REDIRECT (source_iface, "Edit Task", "edit_task");
-      CHECK_PARAM_REDIRECT (max_hosts, "Edit Task", "edit_task");
-      CHECK_PARAM_REDIRECT (in_assets, "Edit Task", "edit_task");
+      CHECK_PARAM_INVALID (name, "Edit Task", "edit_task");
+      CHECK_PARAM_INVALID (comment, "Edit Task", "edit_task");
+      CHECK_PARAM_INVALID (target_id, "Edit Task", "edit_task");
+      CHECK_PARAM_INVALID (config_id, "Edit Task", "edit_task");
+      CHECK_PARAM_INVALID (schedule_id, "Edit Task", "edit_task");
+      CHECK_PARAM_INVALID (slave_id, "Edit Task", "edit_task");
+      CHECK_PARAM_INVALID (scanner_id, "Edit Task", "edit_task");
+      CHECK_PARAM_INVALID (next, "Edit Task", "edit_task");
+      CHECK_PARAM_INVALID (task_id, "Edit Task", "edit_task");
+      CHECK_PARAM_INVALID (max_checks, "Edit Task", "edit_task");
+      CHECK_PARAM_INVALID (source_iface, "Edit Task", "edit_task");
+      CHECK_PARAM_INVALID (max_hosts, "Edit Task", "edit_task");
+      CHECK_PARAM_INVALID (in_assets, "Edit Task", "edit_task");
 
       return edit_task_omp (credentials, params, response_data);
     }
 
-  CHECK_PARAM_REDIRECT (name, "Save Task", "edit_task");
-  CHECK_PARAM_REDIRECT (comment, "Save Task", "edit_task");
-  CHECK_PARAM_REDIRECT (target_id, "Save Task", "edit_task");
-  CHECK_PARAM_REDIRECT (hosts_ordering, "Save Task", "edit_task");
-  CHECK_PARAM_REDIRECT (config_id, "Save Task", "edit_task");
-  CHECK_PARAM_REDIRECT (schedule_id, "Save Task", "edit_task");
+  CHECK_PARAM_INVALID (name, "Save Task", "edit_task");
+  CHECK_PARAM_INVALID (comment, "Save Task", "edit_task");
+  CHECK_PARAM_INVALID (target_id, "Save Task", "edit_task");
+  CHECK_PARAM_INVALID (hosts_ordering, "Save Task", "edit_task");
+  CHECK_PARAM_INVALID (config_id, "Save Task", "edit_task");
+  CHECK_PARAM_INVALID (schedule_id, "Save Task", "edit_task");
   if (params_given (params, "schedule_periods"))
     {
       CHECK (schedule_periods);
     }
   else
     schedule_periods = "0";
-  CHECK_PARAM_REDIRECT (slave_id, "Save Task", "edit_task");
-  CHECK_PARAM_REDIRECT (scanner_id, "Save Task", "edit_task");
-  CHECK_PARAM_REDIRECT (next, "Save Task", "edit_task");
-  CHECK_PARAM_REDIRECT (task_id, "Save Task", "edit_task");
-  CHECK_PARAM_REDIRECT (max_checks, "Save Task", "edit_task");
-  CHECK_PARAM_REDIRECT (source_iface, "Save Task", "edit_task");
-  CHECK_PARAM_REDIRECT (max_hosts, "Save Task", "edit_task");
-  CHECK_PARAM_REDIRECT (in_assets, "Save Task", "edit_task");
+  CHECK_PARAM_INVALID (slave_id, "Save Task", "edit_task");
+  CHECK_PARAM_INVALID (scanner_id, "Save Task", "edit_task");
+  CHECK_PARAM_INVALID (next, "Save Task", "edit_task");
+  CHECK_PARAM_INVALID (task_id, "Save Task", "edit_task");
+  CHECK_PARAM_INVALID (max_checks, "Save Task", "edit_task");
+  CHECK_PARAM_INVALID (source_iface, "Save Task", "edit_task");
+  CHECK_PARAM_INVALID (max_hosts, "Save Task", "edit_task");
+  CHECK_PARAM_INVALID (in_assets, "Save Task", "edit_task");
 
   alert_element = g_string_new ("");
   if (params_given (params, "alert_id_optional:"))
@@ -4875,10 +4867,10 @@ save_container_task_omp (credentials_t * credentials, params_t *params,
   in_assets = params_value (params, "in_assets");
   name = params_value (params, "name");
   task_id = params_value (params, "task_id");
-  CHECK_PARAM_REDIRECT (name, "Save Task", "edit_task")
-  CHECK_PARAM_REDIRECT (comment, "Save Task", "edit_task")
-  CHECK_PARAM_REDIRECT (task_id, "Save Task", "edit_task")
-  CHECK_PARAM_REDIRECT (in_assets, "Save Task", "edit_task")
+  CHECK_PARAM_INVALID (name, "Save Task", "edit_task")
+  CHECK_PARAM_INVALID (comment, "Save Task", "edit_task")
+  CHECK_PARAM_INVALID (task_id, "Save Task", "edit_task")
+  CHECK_PARAM_INVALID (in_assets, "Save Task", "edit_task")
 
   format = g_strdup_printf ("<modify_task task_id=\"%%s\">"
                             "<name>%%s</name>"
@@ -6039,15 +6031,15 @@ create_credential_omp (credentials_t * credentials, params_t *params,
     autogenerate = strcmp (params_value (params, "autogenerate"), "0");
   else
     {
-      MESSAGE_REDIRECT ("Given autogenerate was invalid",
+      MESSAGE_INVALID ("Given autogenerate was invalid",
                         G_STRINGIFY (MHD_HTTP_BAD_REQUEST),
                         "Create Credential", "new_credential");
     }
 
-  CHECK_PARAM_REDIRECT (name, "Create Credential", "new_credential");
-  CHECK_PARAM_REDIRECT (comment, "Create Credential", "new_credential");
-  CHECK_PARAM_REDIRECT (type, "Create Credential", "new_credential");
-  CHECK_PARAM_REDIRECT (allow_insecure, "Create Credential", "new_credential");
+  CHECK_PARAM_INVALID (name, "Create Credential", "new_credential");
+  CHECK_PARAM_INVALID (comment, "Create Credential", "new_credential");
+  CHECK_PARAM_INVALID (type, "Create Credential", "new_credential");
+  CHECK_PARAM_INVALID (allow_insecure, "Create Credential", "new_credential");
 
   if (autogenerate)
     {
@@ -6072,7 +6064,7 @@ create_credential_omp (credentials_t * credentials, params_t *params,
       else
         {
           // Auto-generate types with username
-          CHECK_PARAM_REDIRECT (login, "Create Credential", "new_credential");
+          CHECK_PARAM_INVALID (login, "Create Credential", "new_credential");
 
           ret = ompf (credentials,
                       &response,
@@ -6096,9 +6088,9 @@ create_credential_omp (credentials_t * credentials, params_t *params,
     {
       if (type && (strcmp (type, "up") == 0))
         {
-          CHECK_PARAM_REDIRECT (login,
+          CHECK_PARAM_INVALID (login,
                                 "Create Credential", "new_credential");
-          CHECK_PARAM_REDIRECT (password,
+          CHECK_PARAM_INVALID (password,
                                 "Create Credential", "new_credential");
 
           ret = ompf (credentials,
@@ -6122,11 +6114,11 @@ create_credential_omp (credentials_t * credentials, params_t *params,
         }
       else if (type && (strcmp (type, "usk") == 0))
         {
-          CHECK_PARAM_REDIRECT (login,
+          CHECK_PARAM_INVALID (login,
                                 "Create Credential", "new_credential");
-          CHECK_PARAM_REDIRECT (passphrase,
+          CHECK_PARAM_INVALID (passphrase,
                                 "Create Credential", "new_credential");
-          CHECK_PARAM_REDIRECT (private_key,
+          CHECK_PARAM_INVALID (private_key,
                                 "Create Credential", "new_credential");
 
           ret = ompf (credentials,
@@ -6154,9 +6146,9 @@ create_credential_omp (credentials_t * credentials, params_t *params,
         }
       else if (type && (strcmp (type, "cc") == 0))
         {
-          CHECK_PARAM_REDIRECT (certificate,
+          CHECK_PARAM_INVALID (certificate,
                                 "Create Credential", "new_credential");
-          CHECK_PARAM_REDIRECT (private_key,
+          CHECK_PARAM_INVALID (private_key,
                                 "Create Credential", "new_credential");
 
           ret = ompf (credentials,
@@ -6183,17 +6175,17 @@ create_credential_omp (credentials_t * credentials, params_t *params,
         }
       else if (type && (strcmp (type, "snmp") == 0))
         {
-          CHECK_PARAM_REDIRECT (community,
+          CHECK_PARAM_INVALID (community,
                                 "Create Credential", "new_credential");
-          CHECK_PARAM_REDIRECT (login,
+          CHECK_PARAM_INVALID (login,
                                 "Create Credential", "new_credential");
-          CHECK_PARAM_REDIRECT (password,
+          CHECK_PARAM_INVALID (password,
                                 "Create Credential", "new_credential");
-          CHECK_PARAM_REDIRECT (privacy_password,
+          CHECK_PARAM_INVALID (privacy_password,
                                 "Create Credential", "new_credential");
-          CHECK_PARAM_REDIRECT (auth_algorithm,
+          CHECK_PARAM_INVALID (auth_algorithm,
                                 "Create Credential", "new_credential");
-          CHECK_PARAM_REDIRECT (privacy_algorithm,
+          CHECK_PARAM_INVALID (privacy_algorithm,
                                 "Create Credential", "new_credential");
 
           ret = ompf (credentials,
@@ -6722,35 +6714,35 @@ save_credential_omp (credentials_t * credentials, params_t *params,
   community  = params_value (params, "community");
   allow_insecure = params_value (params, "allow_insecure");
 
-  CHECK_PARAM_REDIRECT (credential_id, "Save Credential", "edit_credential");
-  CHECK_PARAM_REDIRECT (name, "Save Credential", "edit_credential");
-  CHECK_PARAM_REDIRECT (comment, "Save Credential", "edit_credential");
-  CHECK_PARAM_REDIRECT (allow_insecure, "Save Credential", "edit_credential");
+  CHECK_PARAM_INVALID (credential_id, "Save Credential", "edit_credential");
+  CHECK_PARAM_INVALID (name, "Save Credential", "edit_credential");
+  CHECK_PARAM_INVALID (comment, "Save Credential", "edit_credential");
+  CHECK_PARAM_INVALID (allow_insecure, "Save Credential", "edit_credential");
   if (params_given (params, "certificate"))
-    CHECK_PARAM_REDIRECT (certificate, "Save Credential", "edit_credential");
+    CHECK_PARAM_INVALID (certificate, "Save Credential", "edit_credential");
   if (params_given (params, "private_key"))
-    CHECK_PARAM_REDIRECT (private_key, "Save Credential", "edit_credential");
+    CHECK_PARAM_INVALID (private_key, "Save Credential", "edit_credential");
   if (params_given (params, "login"))
-    CHECK_PARAM_REDIRECT (login, "Save Credential", "edit_credential");
+    CHECK_PARAM_INVALID (login, "Save Credential", "edit_credential");
   if (params_given (params, "auth_algorithm"))
-    CHECK_PARAM_REDIRECT (auth_algorithm, "Save Credential", "edit_credential");
+    CHECK_PARAM_INVALID (auth_algorithm, "Save Credential", "edit_credential");
   if (params_given (params, "privacy_algorithm"))
-    CHECK_PARAM_REDIRECT (privacy_algorithm,
+    CHECK_PARAM_INVALID (privacy_algorithm,
                           "Save Credential", "edit_credential");
 
   change_community = (params_value (params, "change_community") ? 1 : 0);
   if (change_community)
-    CHECK_PARAM_REDIRECT (community, "Save Credential", "edit_credential");
+    CHECK_PARAM_INVALID (community, "Save Credential", "edit_credential");
   change_passphrase = (params_value (params, "change_passphrase") ? 1 : 0);
   if (change_passphrase)
-    CHECK_PARAM_REDIRECT (passphrase, "Save Credential", "edit_credential");
+    CHECK_PARAM_INVALID (passphrase, "Save Credential", "edit_credential");
   change_password = (params_value (params, "change_password") ? 1 : 0);
   if (change_password)
-    CHECK_PARAM_REDIRECT (password, "Save Credential", "edit_credential");
+    CHECK_PARAM_INVALID (password, "Save Credential", "edit_credential");
   change_privacy_password
     = (params_value (params, "change_privacy_password") ? 1 : 0);
   if (change_privacy_password)
-    CHECK_PARAM_REDIRECT (privacy_password,
+    CHECK_PARAM_INVALID (privacy_password,
                           "Save Credential", "edit_credential");
 
   /* Prepare command */
@@ -6951,8 +6943,8 @@ create_agent_omp (credentials_t * credentials, params_t *params,
   howto_use = params_value (params, "howto_use");
   howto_use_size = params_value_size (params, "howto_use");
 
-  CHECK_PARAM_REDIRECT (name, "Create Agent", "new_agent");
-  CHECK_PARAM_REDIRECT (comment, "Create Agent", "new_agent");
+  CHECK_PARAM_INVALID (name, "Create Agent", "new_agent");
+  CHECK_PARAM_INVALID (comment, "Create Agent", "new_agent");
 
   if (name && comment)
     {
@@ -7331,9 +7323,9 @@ save_agent_omp (credentials_t * credentials, params_t *params,
   name = params_value (params, "name");
   comment = params_value (params, "comment");
 
-  CHECK_PARAM_REDIRECT (agent_id, "Save Agent", "edit_agent");
-  CHECK_PARAM_REDIRECT (name, "Save Agent", "edit_agent");
-  CHECK_PARAM_REDIRECT (comment, "Save Agent", "edit_agent");
+  CHECK_PARAM_INVALID (agent_id, "Save Agent", "edit_agent");
+  CHECK_PARAM_INVALID (name, "Save Agent", "edit_agent");
+  CHECK_PARAM_INVALID (comment, "Save Agent", "edit_agent");
 
   /* Modify the agent. */
 
@@ -8127,12 +8119,12 @@ create_alert_omp (credentials_t * credentials, params_t *params,
   method = params_value (params, "method");
   filter_id = params_value (params, "filter_id");
 
-  CHECK_PARAM_REDIRECT (name, "Create Alert", "new_alert");
-  CHECK_PARAM_REDIRECT (comment, "Create Alert", "new_alert");
-  CHECK_PARAM_REDIRECT (condition, "Create Alert", "new_alert");
-  CHECK_PARAM_REDIRECT (event, "Create Alert", "new_alert");
-  CHECK_PARAM_REDIRECT (method, "Create Alert", "new_alert");
-  CHECK_PARAM_REDIRECT (filter_id, "Create Alert", "new_alert");
+  CHECK_PARAM_INVALID (name, "Create Alert", "new_alert");
+  CHECK_PARAM_INVALID (comment, "Create Alert", "new_alert");
+  CHECK_PARAM_INVALID (condition, "Create Alert", "new_alert");
+  CHECK_PARAM_INVALID (event, "Create Alert", "new_alert");
+  CHECK_PARAM_INVALID (method, "Create Alert", "new_alert");
+  CHECK_PARAM_INVALID (filter_id, "Create Alert", "new_alert");
 
   /* Create the alert. */
 
@@ -8840,13 +8832,13 @@ save_alert_omp (credentials_t * credentials, params_t *params,
   alert_id = params_value (params, "alert_id");
   filter_id = params_value (params, "filter_id");
 
-  CHECK_PARAM_REDIRECT (name, "Save Alert", "edit_alert");
-  CHECK_PARAM_REDIRECT (comment, "Save Alert", "edit_alert");
-  CHECK_PARAM_REDIRECT (alert_id, "Save Alert", "edit_alert");
-  CHECK_PARAM_REDIRECT (condition, "Save Alert", "edit_alert");
-  CHECK_PARAM_REDIRECT (event, "Save Alert", "edit_alert");
-  CHECK_PARAM_REDIRECT (method, "Save Alert", "edit_alert");
-  CHECK_PARAM_REDIRECT (filter_id, "Save Alert", "edit_alert");
+  CHECK_PARAM_INVALID (name, "Save Alert", "edit_alert");
+  CHECK_PARAM_INVALID (comment, "Save Alert", "edit_alert");
+  CHECK_PARAM_INVALID (alert_id, "Save Alert", "edit_alert");
+  CHECK_PARAM_INVALID (condition, "Save Alert", "edit_alert");
+  CHECK_PARAM_INVALID (event, "Save Alert", "edit_alert");
+  CHECK_PARAM_INVALID (method, "Save Alert", "edit_alert");
+  CHECK_PARAM_INVALID (filter_id, "Save Alert", "edit_alert");
 
   xml = g_string_new ("");
 
@@ -9333,30 +9325,30 @@ create_target_omp (credentials_t * credentials, params_t *params,
   alive_tests = params_value (params, "alive_tests");
   hosts_filter = params_value (params, "hosts_filter");
 
-  CHECK_PARAM_REDIRECT (name, "Create Target", "new_target");
-  CHECK_PARAM_REDIRECT (target_source, "Create Target", "new_target")
+  CHECK_PARAM_INVALID (name, "Create Target", "new_target");
+  CHECK_PARAM_INVALID (target_source, "Create Target", "new_target")
   if (hosts == NULL && strcmp (target_source, "manual") == 0)
-    MESSAGE_REDIRECT ("Given target_source was invalid",
+    MESSAGE_INVALID ("Given target_source was invalid",
                       G_STRINGIFY (MHD_HTTP_BAD_REQUEST),
                       "Create Target", "new_target")
   if (strcmp (target_source, "import") == 0 && name == NULL)
-    MESSAGE_REDIRECT ("Given target_source was invalid",
+    MESSAGE_INVALID ("Given target_source was invalid",
                       G_STRINGIFY (MHD_HTTP_BAD_REQUEST),
                       "Create Target", "new_target")
-  CHECK_PARAM_REDIRECT (hosts_filter, "Create Target", "new_target");
+  CHECK_PARAM_INVALID (hosts_filter, "Create Target", "new_target");
   if (hosts_filter == NULL && strcmp (target_source, "asset_hosts") == 0)
     return new_target (credentials, params,
                        GSAD_MESSAGE_INVALID_PARAM ("Create Target"),
                        response_data);
-  CHECK_PARAM_REDIRECT (comment, "Create Target", "new_target");
-  CHECK_PARAM_REDIRECT (port_list_id, "Create Target", "new_target");
-  CHECK_PARAM_REDIRECT (target_ssh_credential, "Create Target", "new_target");
+  CHECK_PARAM_INVALID (comment, "Create Target", "new_target");
+  CHECK_PARAM_INVALID (port_list_id, "Create Target", "new_target");
+  CHECK_PARAM_INVALID (target_ssh_credential, "Create Target", "new_target");
   if (strcmp (target_ssh_credential, "--"))
-    CHECK_PARAM_REDIRECT (port, "Create Target", "new_target");
-  CHECK_PARAM_REDIRECT (target_smb_credential, "Create Target", "new_target");
-  CHECK_PARAM_REDIRECT (target_esxi_credential, "Create Target", "new_target");
-  CHECK_PARAM_REDIRECT (target_snmp_credential, "Create Target", "new_target");
-  CHECK_PARAM_REDIRECT (alive_tests, "Create Target", "new_target");
+    CHECK_PARAM_INVALID (port, "Create Target", "new_target");
+  CHECK_PARAM_INVALID (target_smb_credential, "Create Target", "new_target");
+  CHECK_PARAM_INVALID (target_esxi_credential, "Create Target", "new_target");
+  CHECK_PARAM_INVALID (target_snmp_credential, "Create Target", "new_target");
+  CHECK_PARAM_INVALID (alive_tests, "Create Target", "new_target");
 
   if (comment != NULL)
     comment_element = g_strdup_printf ("<comment>%s</comment>", comment);
@@ -10117,12 +10109,12 @@ create_tag_omp (credentials_t *credentials, params_t *params,
   resource_id = params_value (params, "resource_id");
   active = params_value (params, "active");
 
-  CHECK_PARAM_REDIRECT (name, "Create Tag", "new_tag")
-  CHECK_PARAM_REDIRECT (comment, "Create Tag", "new_tag")
-  CHECK_PARAM_REDIRECT (value, "Create Tag", "new_tag")
-  CHECK_PARAM_REDIRECT (resource_type, "Create Tag", "new_tag")
-  CHECK_PARAM_REDIRECT (resource_id, "Create Tag", "new_tag")
-  CHECK_PARAM_REDIRECT (active, "Create Tag", "new_tag")
+  CHECK_PARAM_INVALID (name, "Create Tag", "new_tag")
+  CHECK_PARAM_INVALID (comment, "Create Tag", "new_tag")
+  CHECK_PARAM_INVALID (value, "Create Tag", "new_tag")
+  CHECK_PARAM_INVALID (resource_type, "Create Tag", "new_tag")
+  CHECK_PARAM_INVALID (resource_id, "Create Tag", "new_tag")
+  CHECK_PARAM_INVALID (active, "Create Tag", "new_tag")
 
   response = NULL;
   entity = NULL;
@@ -10364,13 +10356,13 @@ save_tag_omp (credentials_t * credentials, params_t *params,
   resource_id = params_value (params, "resource_id");
   active = params_value (params, "active");
 
-  CHECK_PARAM_REDIRECT (tag_id, "Save Tag", "edit_tag")
-  CHECK_PARAM_REDIRECT (name, "Save Tag", "edit_tag")
-  CHECK_PARAM_REDIRECT (comment, "Save Tag", "edit_tag")
-  CHECK_PARAM_REDIRECT (value, "Save Tag", "edit_tag")
-  CHECK_PARAM_REDIRECT (resource_type, "Save Tag", "edit_tag")
-  CHECK_PARAM_REDIRECT (resource_id, "Save Tag", "edit_tag")
-  CHECK_PARAM_REDIRECT (active, "Save Tag", "edit_tag")
+  CHECK_PARAM_INVALID (tag_id, "Save Tag", "edit_tag")
+  CHECK_PARAM_INVALID (name, "Save Tag", "edit_tag")
+  CHECK_PARAM_INVALID (comment, "Save Tag", "edit_tag")
+  CHECK_PARAM_INVALID (value, "Save Tag", "edit_tag")
+  CHECK_PARAM_INVALID (resource_type, "Save Tag", "edit_tag")
+  CHECK_PARAM_INVALID (resource_id, "Save Tag", "edit_tag")
+  CHECK_PARAM_INVALID (active, "Save Tag", "edit_tag")
 
   response = NULL;
   entity = NULL;
@@ -10964,11 +10956,11 @@ save_target_omp (credentials_t * credentials, params_t *params,
   in_use = params_value (params, "in_use");
   target_id = params_value (params, "target_id");
 
-  CHECK_PARAM_REDIRECT (name, "Save Target", "edit_target");
-  CHECK_PARAM_REDIRECT (target_id, "Save Target", "edit_target");
-  CHECK_PARAM_REDIRECT (comment, "Save Target", "edit_target");
-  CHECK_PARAM_REDIRECT (alive_tests, "Save Target", "edit_target");
-  CHECK_PARAM_REDIRECT (in_use, "Save Target", "edit_target");
+  CHECK_PARAM_INVALID (name, "Save Target", "edit_target");
+  CHECK_PARAM_INVALID (target_id, "Save Target", "edit_target");
+  CHECK_PARAM_INVALID (comment, "Save Target", "edit_target");
+  CHECK_PARAM_INVALID (alive_tests, "Save Target", "edit_target");
+  CHECK_PARAM_INVALID (in_use, "Save Target", "edit_target");
 
   if (strcmp (in_use, "0"))
     {
@@ -11047,16 +11039,16 @@ save_target_omp (credentials_t * credentials, params_t *params,
   target_esxi_credential = params_value (params, "esxi_credential_id");
   target_snmp_credential = params_value (params, "snmp_credential_id");
 
-  CHECK_PARAM_REDIRECT (target_source, "Save Target", "edit_target");
-  CHECK_PARAM_REDIRECT (port_list_id, "Save Target", "edit_target");
-  CHECK_PARAM_REDIRECT (target_ssh_credential, "Save Target", "edit_target");
-  CHECK_PARAM_REDIRECT (target_smb_credential, "Save Target", "edit_target");
-  CHECK_PARAM_REDIRECT (target_esxi_credential, "Save Target", "edit_target");
-  CHECK_PARAM_REDIRECT (target_snmp_credential, "Save Target", "edit_target");
+  CHECK_PARAM_INVALID (target_source, "Save Target", "edit_target");
+  CHECK_PARAM_INVALID (port_list_id, "Save Target", "edit_target");
+  CHECK_PARAM_INVALID (target_ssh_credential, "Save Target", "edit_target");
+  CHECK_PARAM_INVALID (target_smb_credential, "Save Target", "edit_target");
+  CHECK_PARAM_INVALID (target_esxi_credential, "Save Target", "edit_target");
+  CHECK_PARAM_INVALID (target_snmp_credential, "Save Target", "edit_target");
 
   if (strcmp (target_ssh_credential, "--")
       && strcmp (target_ssh_credential, "0"))
-    CHECK_PARAM_REDIRECT (port, "Save Target", "edit_target");
+    CHECK_PARAM_INVALID (port, "Save Target", "edit_target");
 
   switch (manager_connect (credentials, &socket, &session, &html,
                            response_data))
@@ -11408,13 +11400,13 @@ create_config_omp (credentials_t * credentials, params_t *params,
   comment = params_value (params, "comment");
   base = params_value (params, "base");
 
-  CHECK_PARAM_REDIRECT (name, "New Config", "new_config");
-  CHECK_PARAM_REDIRECT (comment, "New Config", "new_config");
-  CHECK_PARAM_REDIRECT (base, "New Config", "new_config");
+  CHECK_PARAM_INVALID (name, "New Config", "new_config");
+  CHECK_PARAM_INVALID (comment, "New Config", "new_config");
+  CHECK_PARAM_INVALID (base, "New Config", "new_config");
   if (!strcmp (base, "0"))
     {
       scanner = params_value (params, "scanner_id");
-      CHECK_PARAM_REDIRECT (scanner, "New Config", "new_config");
+      CHECK_PARAM_INVALID (scanner, "New Config", "new_config");
     }
 
   /* Create the config. */
@@ -12052,17 +12044,16 @@ save_config_omp (credentials_t * credentials, params_t *params,
   char *ret;
   gchar *html;
   params_t *preferences, *selects, *trends;
-  const char *no_redirect, *config_id, *name, *comment, *scanner_id;
+  const char *config_id, *name, *comment, *scanner_id;
 
-  no_redirect = params_value (params, "no_redirect");
   config_id = params_value (params, "config_id");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
   scanner_id = params_value (params, "scanner_id");
 
-  CHECK_PARAM_REDIRECT (config_id, "Save Config", "edit_config");
-  CHECK_PARAM_REDIRECT (name, "Save Config", "edit_config");
-  CHECK_PARAM_REDIRECT (comment, "Save Config", "edit_config");
+  CHECK_PARAM_INVALID (config_id, "Save Config", "edit_config");
+  CHECK_PARAM_INVALID (name, "Save Config", "edit_config");
+  CHECK_PARAM_INVALID (comment, "Save Config", "edit_config");
 
   switch (manager_connect (credentials, &socket, &session, &html,
                            response_data))
@@ -15822,7 +15813,7 @@ create_note_omp (credentials_t *credentials, params_t *params,
 
   no_redirect = params_value (params, "no_redirect");
   oid = params_value (params, "oid");
-  CHECK_PARAM_REDIRECT (oid, "Create Note", "new_note");
+  CHECK_PARAM_INVALID (oid, "Create Note", "new_note");
 
   if (params_valid (params, "severity"))
     severity = params_value (params, "severity");
@@ -15831,7 +15822,7 @@ create_note_omp (credentials_t *credentials, params_t *params,
     severity = NULL;
   else
     severity = "";
-  CHECK_PARAM_REDIRECT (severity, "Create Note", "new_note");
+  CHECK_PARAM_INVALID (severity, "Create Note", "new_note");
 
   port = params_value (params, "port");
   if (port == NULL)
@@ -15846,7 +15837,7 @@ create_note_omp (credentials_t *credentials, params_t *params,
       if (num < 0 || num > 65535)
         port = NULL;
     }
-  CHECK_PARAM_REDIRECT (port, "Create Note", "new_note");
+  CHECK_PARAM_INVALID (port, "Create Note", "new_note");
 
   if (params_valid (params, "hosts"))
     {
@@ -15867,7 +15858,7 @@ create_note_omp (credentials_t *credentials, params_t *params,
     hosts = NULL;
   else
     hosts = "";
-  CHECK_PARAM_REDIRECT (hosts, "Create Note", "new_note");
+  CHECK_PARAM_INVALID (hosts, "Create Note", "new_note");
 
   if (params_valid (params, "note_task_id"))
     {
@@ -15882,7 +15873,7 @@ create_note_omp (credentials_t *credentials, params_t *params,
     task_id = "";
 
   active = params_value (params, "active");
-  CHECK_PARAM_REDIRECT (active, "Create Note", "new_note");
+  CHECK_PARAM_INVALID (active, "Create Note", "new_note");
 
   text = params_value (params, "text");
   days = params_value (params, "days");
@@ -16149,15 +16140,15 @@ save_note_omp (credentials_t * credentials, params_t *params,
   active = params_value (params, "active");
   days = params_value (params, "days");
 
-  CHECK_PARAM_REDIRECT (note_task_id, "Save Note", "edit_note");
-  CHECK_PARAM_REDIRECT (note_result_id, "Save Note", "edit_note");
-  CHECK_PARAM_REDIRECT (active, "Save Note", "edit_note");
-  CHECK_PARAM_REDIRECT (note_id, "Save Note", "edit_note");
-  CHECK_PARAM_REDIRECT (text, "Save Note", "edit_note");
-  CHECK_PARAM_REDIRECT (hosts, "Save Note", "edit_note");
-  CHECK_PARAM_REDIRECT (port, "Save Note", "edit_note");
-  CHECK_PARAM_REDIRECT (severity, "Save Note", "edit_note");
-  CHECK_PARAM_REDIRECT (days, "Save Note", "edit_note");
+  CHECK_PARAM_INVALID (note_task_id, "Save Note", "edit_note");
+  CHECK_PARAM_INVALID (note_result_id, "Save Note", "edit_note");
+  CHECK_PARAM_INVALID (active, "Save Note", "edit_note");
+  CHECK_PARAM_INVALID (note_id, "Save Note", "edit_note");
+  CHECK_PARAM_INVALID (text, "Save Note", "edit_note");
+  CHECK_PARAM_INVALID (hosts, "Save Note", "edit_note");
+  CHECK_PARAM_INVALID (port, "Save Note", "edit_note");
+  CHECK_PARAM_INVALID (severity, "Save Note", "edit_note");
+  CHECK_PARAM_INVALID (days, "Save Note", "edit_note");
 
   response = NULL;
   entity = NULL;
@@ -16544,7 +16535,7 @@ create_override_omp (credentials_t *credentials, params_t *params,
 
   no_redirect = params_value (params, "no_redirect");
   oid = params_value (params, "oid");
-  CHECK_PARAM_REDIRECT (oid, "Create Override", "new_override");
+  CHECK_PARAM_INVALID (oid, "Create Override", "new_override");
 
   if (params_valid (params, "severity"))
     severity = params_value (params, "severity");
@@ -16553,10 +16544,10 @@ create_override_omp (credentials_t *credentials, params_t *params,
     severity = NULL;
   else
     severity = "";
-  CHECK_PARAM_REDIRECT (severity, "Create Override", "new_override");
+  CHECK_PARAM_INVALID (severity, "Create Override", "new_override");
 
   custom_severity = params_value (params, "custom_severity");
-  CHECK_PARAM_REDIRECT (custom_severity, "Create Override", "new_override");
+  CHECK_PARAM_INVALID (custom_severity, "Create Override", "new_override");
 
   if (custom_severity != NULL && strcmp (custom_severity, "0"))
     {
@@ -16567,7 +16558,7 @@ create_override_omp (credentials_t *credentials, params_t *params,
         new_severity = NULL;
       else
         new_severity = "";
-      CHECK_PARAM_REDIRECT (new_severity, "Create Override", "new_override");
+      CHECK_PARAM_INVALID (new_severity, "Create Override", "new_override");
     }
   else
     {
@@ -16580,7 +16571,7 @@ create_override_omp (credentials_t *credentials, params_t *params,
         new_severity = NULL;
       else
         new_severity = "";
-      CHECK_PARAM_REDIRECT (new_severity, "Create Override", "new_override");
+      CHECK_PARAM_INVALID (new_severity, "Create Override", "new_override");
     }
 
   port = params_value (params, "port");
@@ -16596,7 +16587,7 @@ create_override_omp (credentials_t *credentials, params_t *params,
       if (num < 0 || num > 65535)
         port = NULL;
     }
-  CHECK_PARAM_REDIRECT (port, "Create Override", "new_override");
+  CHECK_PARAM_INVALID (port, "Create Override", "new_override");
 
   if (params_valid (params, "hosts"))
     {
@@ -16617,7 +16608,7 @@ create_override_omp (credentials_t *credentials, params_t *params,
     hosts = NULL;
   else
     hosts = "";
-  CHECK_PARAM_REDIRECT (hosts, "Create Override", "new_override");
+  CHECK_PARAM_INVALID (hosts, "Create Override", "new_override");
 
   if (params_valid (params, "override_task_id"))
     {
@@ -16629,7 +16620,7 @@ create_override_omp (credentials_t *credentials, params_t *params,
     task_id = "";
 
   active = params_value (params, "active");
-  CHECK_PARAM_REDIRECT (active, "Create Override", "new_override");
+  CHECK_PARAM_INVALID (active, "Create Override", "new_override");
 
   text = params_value (params, "text");
   days = params_value (params, "days");
@@ -16905,16 +16896,16 @@ save_override_omp (credentials_t * credentials, params_t *params,
   active = params_value (params, "active");
   days = params_value (params, "days");
 
-  CHECK_PARAM_REDIRECT (override_task_id, "Save Override", "edit_override");
-  CHECK_PARAM_REDIRECT (override_result_id, "Save Override", "edit_override");
-  CHECK_PARAM_REDIRECT (active, "Save Override", "edit_override");
-  CHECK_PARAM_REDIRECT (override_id, "Save Override", "edit_override");
-  CHECK_PARAM_REDIRECT (text, "Save Override", "edit_override");
-  CHECK_PARAM_REDIRECT (hosts, "Save Override", "edit_override");
-  CHECK_PARAM_REDIRECT (port, "Save Override", "edit_override");
-  CHECK_PARAM_REDIRECT (severity, "Save Override", "edit_override");
-  CHECK_PARAM_REDIRECT (new_severity, "Save Override", "edit_override");
-  CHECK_PARAM_REDIRECT (days, "Save Override", "edit_override");
+  CHECK_PARAM_INVALID (override_task_id, "Save Override", "edit_override");
+  CHECK_PARAM_INVALID (override_result_id, "Save Override", "edit_override");
+  CHECK_PARAM_INVALID (active, "Save Override", "edit_override");
+  CHECK_PARAM_INVALID (override_id, "Save Override", "edit_override");
+  CHECK_PARAM_INVALID (text, "Save Override", "edit_override");
+  CHECK_PARAM_INVALID (hosts, "Save Override", "edit_override");
+  CHECK_PARAM_INVALID (port, "Save Override", "edit_override");
+  CHECK_PARAM_INVALID (severity, "Save Override", "edit_override");
+  CHECK_PARAM_INVALID (new_severity, "Save Override", "edit_override");
+  CHECK_PARAM_INVALID (days, "Save Override", "edit_override");
 
   response = NULL;
   entity = NULL;
@@ -17100,11 +17091,11 @@ create_slave_omp (credentials_t *credentials, params_t *params,
   port = params_value (params, "port");
   credential_id = params_value (params, "credential_id");
 
-  CHECK_PARAM_REDIRECT (name, "Create Slave", "new_slave");
-  CHECK_PARAM_REDIRECT (comment, "Create Slave", "new_slave");
-  CHECK_PARAM_REDIRECT (host, "Create Slave", "new_slave");
-  CHECK_PARAM_REDIRECT (port, "Create Slave", "new_slave");
-  CHECK_PARAM_REDIRECT (credential_id, "Create Slave", "new_slave");
+  CHECK_PARAM_INVALID (name, "Create Slave", "new_slave");
+  CHECK_PARAM_INVALID (comment, "Create Slave", "new_slave");
+  CHECK_PARAM_INVALID (host, "Create Slave", "new_slave");
+  CHECK_PARAM_INVALID (port, "Create Slave", "new_slave");
+  CHECK_PARAM_INVALID (credential_id, "Create Slave", "new_slave");
 
   if (comment)
     command = g_strdup_printf ("<create_slave>"
@@ -17410,12 +17401,12 @@ save_slave_omp (credentials_t * credentials, params_t *params,
   port = params_value (params, "port");
   credential_id = params_value (params, "credential_id");
 
-  CHECK_PARAM_REDIRECT (slave_id, "Save Slave", "edit_slave");
-  CHECK_PARAM_REDIRECT (name, "Save Slave", "edit_slave");
-  CHECK_PARAM_REDIRECT (comment, "Save Slave", "edit_slave");
-  CHECK_PARAM_REDIRECT (host, "Save Slave", "edit_slave");
-  CHECK_PARAM_REDIRECT (port, "Save Slave", "edit_slave");
-  CHECK_PARAM_REDIRECT (credential_id, "Save Slave", "edit_slave");
+  CHECK_PARAM_INVALID (slave_id, "Save Slave", "edit_slave");
+  CHECK_PARAM_INVALID (name, "Save Slave", "edit_slave");
+  CHECK_PARAM_INVALID (comment, "Save Slave", "edit_slave");
+  CHECK_PARAM_INVALID (host, "Save Slave", "edit_slave");
+  CHECK_PARAM_INVALID (port, "Save Slave", "edit_slave");
+  CHECK_PARAM_INVALID (credential_id, "Save Slave", "edit_slave");
 
   /* Modify the slave. */
 
@@ -17829,13 +17820,13 @@ create_scanner_omp (credentials_t * credentials, params_t *params,
   type = params_value (params, "scanner_type");
   ca_pub = params_value (params, "ca_pub");
   credential_id = params_value (params, "credential_id");
-  CHECK_PARAM_REDIRECT (name, "Create Scanner", "new_scanner");
-  CHECK_PARAM_REDIRECT (comment, "Create Scanner", "new_scanner");
-  CHECK_PARAM_REDIRECT (host, "Create Scanner", "new_scanner");
-  CHECK_PARAM_REDIRECT (port, "Create Scanner", "new_scanner");
-  CHECK_PARAM_REDIRECT (type, "Create Scanner", "new_scanner");
-  CHECK_PARAM_REDIRECT (ca_pub, "Create Scanner", "new_scanner");
-  CHECK_PARAM_REDIRECT (credential_id, "Create Scanner", "new_scanner");
+  CHECK_PARAM_INVALID (name, "Create Scanner", "new_scanner");
+  CHECK_PARAM_INVALID (comment, "Create Scanner", "new_scanner");
+  CHECK_PARAM_INVALID (host, "Create Scanner", "new_scanner");
+  CHECK_PARAM_INVALID (port, "Create Scanner", "new_scanner");
+  CHECK_PARAM_INVALID (type, "Create Scanner", "new_scanner");
+  CHECK_PARAM_INVALID (ca_pub, "Create Scanner", "new_scanner");
+  CHECK_PARAM_INVALID (credential_id, "Create Scanner", "new_scanner");
 
   switch (ompf (credentials, &response, &entity, response_data,
                 "<create_scanner><name>%s</name><comment>%s</comment>"
@@ -18071,19 +18062,19 @@ save_scanner_omp (credentials_t * credentials, params_t *params,
   type = params_value (params, "scanner_type");
   ca_pub = params_value (params, "ca_pub");
   credential_id = params_value (params, "credential_id");
-  CHECK_PARAM_REDIRECT (scanner_id, "Edit Scanner", "edit_scanner");
-  CHECK_PARAM_REDIRECT (name, "Edit Scanner", "edit_scanner");
+  CHECK_PARAM_INVALID (scanner_id, "Edit Scanner", "edit_scanner");
+  CHECK_PARAM_INVALID (name, "Edit Scanner", "edit_scanner");
   if (params_given (params, "host") == 0)
     in_use = 1;
   else
    {
      in_use = 0;
-     CHECK_PARAM_REDIRECT (host, "Edit Scanner", "edit_scanner");
-     CHECK_PARAM_REDIRECT (port, "Edit Scanner", "edit_scanner");
-     CHECK_PARAM_REDIRECT (type, "Edit Scanner", "edit_scanner");
+     CHECK_PARAM_INVALID (host, "Edit Scanner", "edit_scanner");
+     CHECK_PARAM_INVALID (port, "Edit Scanner", "edit_scanner");
+     CHECK_PARAM_INVALID (type, "Edit Scanner", "edit_scanner");
    }
-  CHECK_PARAM_REDIRECT (ca_pub, "Edit Scanner", "edit_scanner");
-  CHECK_PARAM_REDIRECT (credential_id, "Edit Scanner", "edit_scanner");
+  CHECK_PARAM_INVALID (ca_pub, "Edit Scanner", "edit_scanner");
+  CHECK_PARAM_INVALID (credential_id, "Edit Scanner", "edit_scanner");
 
   if (in_use)
     ret = ompf (credentials, &response, &entity, response_data,
@@ -18312,18 +18303,18 @@ create_schedule_omp (credentials_t * credentials, params_t *params,
   year = params_value (params, "year");
   timezone = params_value (params, "timezone");
 
-  CHECK_PARAM_REDIRECT (name, "Create Schedule", "new_schedule");
-  CHECK_PARAM_REDIRECT (comment, "Create Schedule", "new_schedule");
-  CHECK_PARAM_REDIRECT (hour, "Create Schedule", "new_schedule");
-  CHECK_PARAM_REDIRECT (minute, "Create Schedule", "new_schedule");
-  CHECK_PARAM_REDIRECT (day_of_month, "Create Schedule", "new_schedule");
-  CHECK_PARAM_REDIRECT (duration, "Create Schedule", "new_schedule");
-  CHECK_PARAM_REDIRECT (duration_unit, "Create Schedule", "new_schedule");
-  CHECK_PARAM_REDIRECT (month, "Create Schedule", "new_schedule");
-  CHECK_PARAM_REDIRECT (period, "Create Schedule", "new_schedule");
-  CHECK_PARAM_REDIRECT (period_unit, "period_unit", "new_schedule");
-  CHECK_PARAM_REDIRECT (year, "Create Schedule", "new_schedule");
-  CHECK_PARAM_REDIRECT (timezone, "Create Schedule", "new_schedule");
+  CHECK_PARAM_INVALID (name, "Create Schedule", "new_schedule");
+  CHECK_PARAM_INVALID (comment, "Create Schedule", "new_schedule");
+  CHECK_PARAM_INVALID (hour, "Create Schedule", "new_schedule");
+  CHECK_PARAM_INVALID (minute, "Create Schedule", "new_schedule");
+  CHECK_PARAM_INVALID (day_of_month, "Create Schedule", "new_schedule");
+  CHECK_PARAM_INVALID (duration, "Create Schedule", "new_schedule");
+  CHECK_PARAM_INVALID (duration_unit, "Create Schedule", "new_schedule");
+  CHECK_PARAM_INVALID (month, "Create Schedule", "new_schedule");
+  CHECK_PARAM_INVALID (period, "Create Schedule", "new_schedule");
+  CHECK_PARAM_INVALID (period_unit, "period_unit", "new_schedule");
+  CHECK_PARAM_INVALID (year, "Create Schedule", "new_schedule");
+  CHECK_PARAM_INVALID (timezone, "Create Schedule", "new_schedule");
 
   response = NULL;
   entity = NULL;
@@ -18909,11 +18900,11 @@ save_report_format_omp (credentials_t * credentials, params_t *params,
   summary = params_value (params, "summary");
   enable = params_value (params, "enable");
 
-  CHECK_PARAM_REDIRECT (report_format_id, "Save Report Format",
+  CHECK_PARAM_INVALID (report_format_id, "Save Report Format",
                         "edit_report_format");
-  CHECK_PARAM_REDIRECT (name, "Save Report Format", "edit_report_format");
-  CHECK_PARAM_REDIRECT (summary, "Save Report Format", "edit_report_format");
-  CHECK_PARAM_REDIRECT (enable, "Save Report Format", "edit_report_format");
+  CHECK_PARAM_INVALID (name, "Save Report Format", "edit_report_format");
+  CHECK_PARAM_INVALID (summary, "Save Report Format", "edit_report_format");
+  CHECK_PARAM_INVALID (enable, "Save Report Format", "edit_report_format");
 
   /* Modify the Report Format. */
 
@@ -20863,9 +20854,9 @@ create_group_omp (credentials_t *credentials, params_t *params,
   grant_full = params_value (params, "grant_full");
   users = params_value (params, "users");
 
-  CHECK_PARAM_REDIRECT (name, "Create Group", "new_group");
-  CHECK_PARAM_REDIRECT (comment, "Create Group", "new_group");
-  CHECK_PARAM_REDIRECT (users, "Create Group", "new_group");
+  CHECK_PARAM_INVALID (name, "Create Group", "new_group");
+  CHECK_PARAM_INVALID (comment, "Create Group", "new_group");
+  CHECK_PARAM_INVALID (users, "Create Group", "new_group");
 
   /* Create the group. */
 
@@ -21041,10 +21032,10 @@ save_group_omp (credentials_t * credentials, params_t *params,
   comment = params_value (params, "comment");
   users = params_value (params, "users");
 
-  CHECK_PARAM_REDIRECT (group_id, "Save Group", "edit_group");
-  CHECK_PARAM_REDIRECT (name, "Save Group", "edit_group");
-  CHECK_PARAM_REDIRECT (comment, "Save Group", "edit_group");
-  CHECK_PARAM_REDIRECT (users, "Save Group", "edit_group");
+  CHECK_PARAM_INVALID (group_id, "Save Group", "edit_group");
+  CHECK_PARAM_INVALID (name, "Save Group", "edit_group");
+  CHECK_PARAM_INVALID (comment, "Save Group", "edit_group");
+  CHECK_PARAM_INVALID (users, "Save Group", "edit_group");
 
   /* Modify the Group. */
 
@@ -21419,16 +21410,16 @@ create_permission_omp (credentials_t *credentials, params_t *params,
   subject_type = params_value (params, "subject_type");
   subject_name = params_value (params, "subject_name");
 
-  CHECK_PARAM_REDIRECT (name, "Create Permission", "new_permission");
-  CHECK_PARAM_REDIRECT (comment, "Create Permission", "new_permission");
-  CHECK_PARAM_REDIRECT (resource_id, "Create Permission", "new_permission");
-  CHECK_PARAM_REDIRECT (subject_type, "Create Permission", "new_permission");
+  CHECK_PARAM_INVALID (name, "Create Permission", "new_permission");
+  CHECK_PARAM_INVALID (comment, "Create Permission", "new_permission");
+  CHECK_PARAM_INVALID (resource_id, "Create Permission", "new_permission");
+  CHECK_PARAM_INVALID (subject_type, "Create Permission", "new_permission");
   if (params_given (params, "optional_resource_type"))
-    CHECK_PARAM_REDIRECT (resource_type, "Create Permission", "new_permission");
+    CHECK_PARAM_INVALID (resource_type, "Create Permission", "new_permission");
 
   if (params_given (params, "subject_name"))
     {
-      CHECK_PARAM_REDIRECT (subject_name,
+      CHECK_PARAM_INVALID (subject_name,
                             "Create Permission", "new_permission");
       subject_id = NULL;
       ret = ompf (credentials,
@@ -21502,7 +21493,7 @@ create_permission_omp (credentials_t *credentials, params_t *params,
     subject_id = params_value (params, "permission_role_id");
   else
     subject_id = NULL;
-  CHECK_PARAM_REDIRECT (subject_id, "Create Permission", "new_permission");
+  CHECK_PARAM_INVALID (subject_id, "Create Permission", "new_permission");
 
   /* Create the permission(s). */
 
@@ -22790,13 +22781,13 @@ save_permission_omp (credentials_t * credentials, params_t *params,
   resource_id = params_value (params, "id_or_empty");
   resource_type = params_value (params, "optional_resource_type");
 
-  CHECK_PARAM_REDIRECT (permission_id, "Save Permission", "edit_permission");
-  CHECK_PARAM_REDIRECT (name, "Save Permission", "edit_permission");
-  CHECK_PARAM_REDIRECT (comment, "Save Permission", "edit_permission");
-  CHECK_PARAM_REDIRECT (resource_id, "Save Permission", "edit_permission");
-  CHECK_PARAM_REDIRECT (subject_type, "Save Permission", "edit_permission");
+  CHECK_PARAM_INVALID (permission_id, "Save Permission", "edit_permission");
+  CHECK_PARAM_INVALID (name, "Save Permission", "edit_permission");
+  CHECK_PARAM_INVALID (comment, "Save Permission", "edit_permission");
+  CHECK_PARAM_INVALID (resource_id, "Save Permission", "edit_permission");
+  CHECK_PARAM_INVALID (subject_type, "Save Permission", "edit_permission");
   if (params_given (params, "optional_resource_type"))
-    CHECK_PARAM_REDIRECT (resource_type, "Save Permission", "edit_permission");
+    CHECK_PARAM_INVALID (resource_type, "Save Permission", "edit_permission");
 
   if (strcmp (subject_type, "user") == 0)
     subject_id = params_value (params, "user_id");
@@ -22806,7 +22797,7 @@ save_permission_omp (credentials_t * credentials, params_t *params,
     subject_id = params_value (params, "role_id");
   else
     subject_id = NULL;
-  CHECK_PARAM_REDIRECT (subject_id, "Save Permission", "edit_permission");
+  CHECK_PARAM_INVALID (subject_id, "Save Permission", "edit_permission");
 
   /* Modify the permission. */
 
@@ -22964,10 +22955,10 @@ create_port_list_omp (credentials_t * credentials, params_t *params,
   port_range = params_value (params, "port_range");
   from_file = params_value (params, "from_file");
 
-  CHECK_PARAM_REDIRECT (name, "Create Port List", "new_port_list");
-  CHECK_PARAM_REDIRECT (comment, "Create Port List", "new_port_list");
-  CHECK_PARAM_REDIRECT (port_range, "Create Port List", "new_port_list");
-  CHECK_PARAM_REDIRECT (from_file, "Create Port List", "new_port_list");
+  CHECK_PARAM_INVALID (name, "Create Port List", "new_port_list");
+  CHECK_PARAM_INVALID (comment, "Create Port List", "new_port_list");
+  CHECK_PARAM_INVALID (port_range, "Create Port List", "new_port_list");
+  CHECK_PARAM_INVALID (from_file, "Create Port List", "new_port_list");
 
   /* Create the port_list. */
 
@@ -23051,10 +23042,10 @@ create_port_range_omp (credentials_t * credentials, params_t *params,
   end = params_value (params, "port_range_end");
   type = params_value (params, "port_type");
 
-  CHECK_PARAM_REDIRECT (port_list_id, "Create Port Range", "edit_port_list");
-  CHECK_PARAM_REDIRECT (start, "Create Port Range", "edit_port_list");
-  CHECK_PARAM_REDIRECT (end, "Create Port Range", "edit_port_list");
-  CHECK_PARAM_REDIRECT (type, "Create Port Range", "edit_port_list");
+  CHECK_PARAM_INVALID (port_list_id, "Create Port Range", "edit_port_list");
+  CHECK_PARAM_INVALID (start, "Create Port Range", "edit_port_list");
+  CHECK_PARAM_INVALID (end, "Create Port Range", "edit_port_list");
+  CHECK_PARAM_INVALID (type, "Create Port Range", "edit_port_list");
 
   /* Create the port range. */
 
@@ -23257,9 +23248,9 @@ save_port_list_omp (credentials_t * credentials, params_t *params,
   name = params_value (params, "name");
   comment = params_value (params, "comment");
 
-  CHECK_PARAM_REDIRECT (port_list_id, "Save Port List", "edit_port_list");
-  CHECK_PARAM_REDIRECT (name, "Save Port List", "edit_port_list");
-  CHECK_PARAM_REDIRECT (comment, "Save Port List", "edit_port_list");
+  CHECK_PARAM_INVALID (port_list_id, "Save Port List", "edit_port_list");
+  CHECK_PARAM_INVALID (name, "Save Port List", "edit_port_list");
+  CHECK_PARAM_INVALID (comment, "Save Port List", "edit_port_list");
 
   /* Modify the Port List. */
 
@@ -23544,9 +23535,9 @@ create_role_omp (credentials_t *credentials, params_t *params,
   comment = params_value (params, "comment");
   users = params_value (params, "users");
 
-  CHECK_PARAM_REDIRECT (name, "Create Role", "new_role");
-  CHECK_PARAM_REDIRECT (comment, "Create Role", "new_role");
-  CHECK_PARAM_REDIRECT (users, "Create Role", "new_role");
+  CHECK_PARAM_INVALID (name, "Create Role", "new_role");
+  CHECK_PARAM_INVALID (comment, "Create Role", "new_role");
+  CHECK_PARAM_INVALID (users, "Create Role", "new_role");
 
   response = NULL;
   entity = NULL;
@@ -23867,10 +23858,10 @@ save_role_omp (credentials_t * credentials, params_t *params,
   comment = params_value (params, "comment");
   users = params_value (params, "users");
 
-  CHECK_PARAM_REDIRECT (role_id, "Save Role", "edit_role");
-  CHECK_PARAM_REDIRECT (name, "Save Role", "edit_role");
-  CHECK_PARAM_REDIRECT (comment, "Save Role", "edit_role");
-  CHECK_PARAM_REDIRECT (users, "Save Role", "edit_role");
+  CHECK_PARAM_INVALID (role_id, "Save Role", "edit_role");
+  CHECK_PARAM_INVALID (name, "Save Role", "edit_role");
+  CHECK_PARAM_INVALID (comment, "Save Role", "edit_role");
+  CHECK_PARAM_INVALID (users, "Save Role", "edit_role");
 
   /* Modify the Role. */
 
@@ -24510,10 +24501,10 @@ create_filter_omp (credentials_t *credentials, params_t *params,
   term = params_value (params, "term");
   type = params_value (params, "optional_resource_type");
 
-  CHECK_PARAM_REDIRECT (name, "Create Filter", "new_filter");
-  CHECK_PARAM_REDIRECT (comment, "Create Filter", "new_filter");
-  CHECK_PARAM_REDIRECT (term, "Create Filter", "new_filter");
-  CHECK_PARAM_REDIRECT (type, "Create Filter", "new_filter");
+  CHECK_PARAM_INVALID (name, "Create Filter", "new_filter");
+  CHECK_PARAM_INVALID (comment, "Create Filter", "new_filter");
+  CHECK_PARAM_INVALID (term, "Create Filter", "new_filter");
+  CHECK_PARAM_INVALID (type, "Create Filter", "new_filter");
 
   switch (ompf (credentials,
                 &response,
@@ -24747,11 +24738,11 @@ save_filter_omp (credentials_t * credentials, params_t *params,
   term = params_value (params, "term");
   type = params_value (params, "optional_resource_type");
 
-  CHECK_PARAM_REDIRECT (filter_id, "Save Filter", "edit_filter");
-  CHECK_PARAM_REDIRECT (name, "Save Filter", "edit_filter");
-  CHECK_PARAM_REDIRECT (comment, "Save Filter", "edit_filter");
-  CHECK_PARAM_REDIRECT (term, "Save Filter", "edit_filter");
-  CHECK_PARAM_REDIRECT (type, "Save Filter", "edit_filter");
+  CHECK_PARAM_INVALID (filter_id, "Save Filter", "edit_filter");
+  CHECK_PARAM_INVALID (name, "Save Filter", "edit_filter");
+  CHECK_PARAM_INVALID (comment, "Save Filter", "edit_filter");
+  CHECK_PARAM_INVALID (term, "Save Filter", "edit_filter");
+  CHECK_PARAM_INVALID (type, "Save Filter", "edit_filter");
 
   switch (manager_connect (credentials, &socket, &session, &html,
                            response_data))
@@ -24948,19 +24939,19 @@ save_schedule_omp (credentials_t * credentials, params_t *params,
   year = params_value (params, "year");
   timezone = params_value (params, "timezone");
 
-  CHECK_PARAM_REDIRECT (schedule_id, "Save Schedule", "edit_schedule");
-  CHECK_PARAM_REDIRECT (name, "Save Schedule", "edit_schedule");
-  CHECK_PARAM_REDIRECT (comment, "Save Schedule", "edit_schedule");
-  CHECK_PARAM_REDIRECT (hour, "Save Schedule", "edit_schedule");
-  CHECK_PARAM_REDIRECT (minute, "Save Schedule", "edit_schedule");
-  CHECK_PARAM_REDIRECT (day_of_month, "Save Schedule", "edit_schedule");
-  CHECK_PARAM_REDIRECT (duration, "Save Schedule", "edit_schedule");
-  CHECK_PARAM_REDIRECT (duration_unit, "Save Schedule", "edit_schedule");
-  CHECK_PARAM_REDIRECT (month, "Save Schedule", "edit_schedule");
-  CHECK_PARAM_REDIRECT (period, "Save Schedule", "edit_schedule");
-  CHECK_PARAM_REDIRECT (period_unit, "Save Schedule", "edit_schedule");
-  CHECK_PARAM_REDIRECT (year, "Save Schedule", "edit_schedule");
-  CHECK_PARAM_REDIRECT (timezone, "Save Schedule", "edit_schedule");
+  CHECK_PARAM_INVALID (schedule_id, "Save Schedule", "edit_schedule");
+  CHECK_PARAM_INVALID (name, "Save Schedule", "edit_schedule");
+  CHECK_PARAM_INVALID (comment, "Save Schedule", "edit_schedule");
+  CHECK_PARAM_INVALID (hour, "Save Schedule", "edit_schedule");
+  CHECK_PARAM_INVALID (minute, "Save Schedule", "edit_schedule");
+  CHECK_PARAM_INVALID (day_of_month, "Save Schedule", "edit_schedule");
+  CHECK_PARAM_INVALID (duration, "Save Schedule", "edit_schedule");
+  CHECK_PARAM_INVALID (duration_unit, "Save Schedule", "edit_schedule");
+  CHECK_PARAM_INVALID (month, "Save Schedule", "edit_schedule");
+  CHECK_PARAM_INVALID (period, "Save Schedule", "edit_schedule");
+  CHECK_PARAM_INVALID (period_unit, "Save Schedule", "edit_schedule");
+  CHECK_PARAM_INVALID (year, "Save Schedule", "edit_schedule");
+  CHECK_PARAM_INVALID (timezone, "Save Schedule", "edit_schedule");
 
   response = NULL;
   entity = NULL;
@@ -25535,14 +25526,14 @@ create_user_omp (credentials_t * credentials, params_t *params,
       else
         params_add (params, "groups", "2");
 
-      CHECK_PARAM_REDIRECT (name, "Create User", "new_user");
-      CHECK_PARAM_REDIRECT (password, "Create User", "new_user");
-      CHECK_PARAM_REDIRECT (hosts, "Create User", "new_user");
-      CHECK_PARAM_REDIRECT (hosts_allow, "Create User", "new_user");
-      CHECK_PARAM_REDIRECT (ifaces, "Create User", "new_user");
-      CHECK_PARAM_REDIRECT (ifaces_allow, "Create User", "new_user");
+      CHECK_PARAM_INVALID (name, "Create User", "new_user");
+      CHECK_PARAM_INVALID (password, "Create User", "new_user");
+      CHECK_PARAM_INVALID (hosts, "Create User", "new_user");
+      CHECK_PARAM_INVALID (hosts_allow, "Create User", "new_user");
+      CHECK_PARAM_INVALID (ifaces, "Create User", "new_user");
+      CHECK_PARAM_INVALID (ifaces_allow, "Create User", "new_user");
 
-      MESSAGE_REDIRECT ("Group selected", G_STRINGIFY (MHD_HTTP_SUBMITTED),
+      MESSAGE_INVALID ("Group selected", G_STRINGIFY (MHD_HTTP_SUBMITTED),
                         "Select Group", "new_user")
     }
 
@@ -25561,25 +25552,25 @@ create_user_omp (credentials_t * credentials, params_t *params,
       else
         params_add (params, "roles", "2");
 
-      CHECK_PARAM_REDIRECT (name, "Create User", "new_user");
-      CHECK_PARAM_REDIRECT (password, "Create User", "new_user");
-      CHECK_PARAM_REDIRECT (hosts, "Create User", "new_user");
-      CHECK_PARAM_REDIRECT (hosts_allow, "Create User", "new_user");
-      CHECK_PARAM_REDIRECT (ifaces, "Create User", "new_user");
-      CHECK_PARAM_REDIRECT (ifaces_allow, "Create User", "new_user");
+      CHECK_PARAM_INVALID (name, "Create User", "new_user");
+      CHECK_PARAM_INVALID (password, "Create User", "new_user");
+      CHECK_PARAM_INVALID (hosts, "Create User", "new_user");
+      CHECK_PARAM_INVALID (hosts_allow, "Create User", "new_user");
+      CHECK_PARAM_INVALID (ifaces, "Create User", "new_user");
+      CHECK_PARAM_INVALID (ifaces_allow, "Create User", "new_user");
 
-      MESSAGE_REDIRECT ("Role selected", G_STRINGIFY (MHD_HTTP_SUBMITTED),
+      MESSAGE_INVALID ("Role selected", G_STRINGIFY (MHD_HTTP_SUBMITTED),
                         "Select Role", "new_user")
 
       return html;
     }
 
-  CHECK_PARAM_REDIRECT (name, "Create User", "new_user");
-  CHECK_PARAM_REDIRECT (password, "Create User", "new_user");
-  CHECK_PARAM_REDIRECT (hosts, "Create User", "new_user");
-  CHECK_PARAM_REDIRECT (hosts_allow, "Create User", "new_user");
-  CHECK_PARAM_REDIRECT (ifaces, "Create User", "new_user");
-  CHECK_PARAM_REDIRECT (ifaces_allow, "Create User", "new_user");
+  CHECK_PARAM_INVALID (name, "Create User", "new_user");
+  CHECK_PARAM_INVALID (password, "Create User", "new_user");
+  CHECK_PARAM_INVALID (hosts, "Create User", "new_user");
+  CHECK_PARAM_INVALID (hosts_allow, "Create User", "new_user");
+  CHECK_PARAM_INVALID (ifaces, "Create User", "new_user");
+  CHECK_PARAM_INVALID (ifaces_allow, "Create User", "new_user");
 
   /* Create the user. */
 
@@ -25946,13 +25937,13 @@ save_user_omp (credentials_t * credentials, params_t *params,
   password = params_value (params, "password");
   user_id = params_value (params, "user_id");
 
-  CHECK_PARAM_REDIRECT (user_id, "Edit User", "edit_user");
-  CHECK_PARAM_REDIRECT (modify_password, "Edit User", "edit_user");
-  CHECK_PARAM_REDIRECT (password, "Edit User", "edit_user");
-  CHECK_PARAM_REDIRECT (hosts, "Edit User", "edit_user");
-  CHECK_PARAM_REDIRECT (hosts_allow, "Edit User", "edit_user");
-  CHECK_PARAM_REDIRECT (ifaces, "Save User", "edit_user");
-  CHECK_PARAM_REDIRECT (ifaces_allow, "Save User", "edit_user");
+  CHECK_PARAM_INVALID (user_id, "Edit User", "edit_user");
+  CHECK_PARAM_INVALID (modify_password, "Edit User", "edit_user");
+  CHECK_PARAM_INVALID (password, "Edit User", "edit_user");
+  CHECK_PARAM_INVALID (hosts, "Edit User", "edit_user");
+  CHECK_PARAM_INVALID (hosts_allow, "Edit User", "edit_user");
+  CHECK_PARAM_INVALID (ifaces, "Save User", "edit_user");
+  CHECK_PARAM_INVALID (ifaces_allow, "Save User", "edit_user");
   submit = params_value (params, "submit_plus_group");
   if (submit && (strcmp (submit, "+") == 0))
     {
@@ -25968,7 +25959,7 @@ save_user_omp (credentials_t * credentials, params_t *params,
       else
         params_add (params, "groups", "2");
 
-      MESSAGE_REDIRECT ("Group selected", G_STRINGIFY (MHD_HTTP_SUBMITTED),
+      MESSAGE_INVALID ("Group selected", G_STRINGIFY (MHD_HTTP_SUBMITTED),
                         "Select Group", "new_user")
     }
 
@@ -25987,12 +25978,12 @@ save_user_omp (credentials_t * credentials, params_t *params,
       else
         params_add (params, "roles", "2");
 
-      MESSAGE_REDIRECT ("Role selected", G_STRINGIFY (MHD_HTTP_SUBMITTED),
+      MESSAGE_INVALID ("Role selected", G_STRINGIFY (MHD_HTTP_SUBMITTED),
                         "Select Role", "new_user")
     }
 
   if (params_given (params, "login"))
-    CHECK_PARAM_REDIRECT (login, "Save User", "edit_user");
+    CHECK_PARAM_INVALID (login, "Save User", "edit_user");
 
   /* Modify the user. */
 
@@ -26397,15 +26388,15 @@ save_auth_omp (credentials_t* credentials, params_t *params,
 
   no_redirect = params_value (params, "no_redirect");
   method = params_value (params, "group");
-  CHECK_PARAM_REDIRECT (method, "Save Authentication", "get_users");
+  CHECK_PARAM_INVALID (method, "Save Authentication", "get_users");
   if (!strcmp (method, "method:ldap_connect"))
     {
       const char *ldaphost, *authdn;
       ldaphost = params_value (params, "ldaphost");
       authdn = params_value (params, "authdn");
 
-      CHECK_PARAM_REDIRECT (ldaphost, "Save Authentication", "get_users");
-      CHECK_PARAM_REDIRECT (authdn, "Save Authentication", "get_users");
+      CHECK_PARAM_INVALID (ldaphost, "Save Authentication", "get_users");
+      CHECK_PARAM_INVALID (authdn, "Save Authentication", "get_users");
       /** @warning authdn shall contain a single %s, handle with care. */
       ret = ompf (credentials, &response, &entity, response_data,
                   "<modify_auth>"
@@ -26422,8 +26413,8 @@ save_auth_omp (credentials_t* credentials, params_t *params,
       radiushost = params_value (params, "radiushost");
       radiuskey = params_value (params, "radiuskey");
 
-      CHECK_PARAM_REDIRECT (radiushost, "Save Authentication", "get_users");
-      CHECK_PARAM_REDIRECT (radiuskey, "Save Authentication", "get_users");
+      CHECK_PARAM_INVALID (radiushost, "Save Authentication", "get_users");
+      CHECK_PARAM_INVALID (radiuskey, "Save Authentication", "get_users");
       /** @warning authdn shall contain a single %s, handle with care. */
       ret = ompf (credentials, &response, &entity, response_data,
                   "<modify_auth>"
@@ -27330,10 +27321,10 @@ create_host_omp (credentials_t * credentials, params_t *params,
   no_redirect = params_value (params, "no_redirect");
 
   name = params_value (params, "name");
-  CHECK_PARAM_REDIRECT (name, "Create Host", "new_host");
+  CHECK_PARAM_INVALID (name, "Create Host", "new_host");
 
   comment = params_value (params, "comment");
-  CHECK_PARAM_REDIRECT (comment, "Create Host", "new_host");
+  CHECK_PARAM_INVALID (comment, "Create Host", "new_host");
 
   /* Create the host. */
 
@@ -27586,7 +27577,7 @@ create_asset_omp (credentials_t *credentials, params_t *params,
   no_redirect = params_value (params, "no_redirect");
   report_id = params_value (params, "report_id");
 
-  CHECK_PARAM_REDIRECT (report_id, "Create Asset", "get_report_section");
+  CHECK_PARAM_INVALID (report_id, "Create Asset", "get_report_section");
 
   response = NULL;
   entity = NULL;
@@ -27933,8 +27924,8 @@ save_asset_omp (credentials_t * credentials, params_t *params,
   asset_id = params_value (params, "asset_id");
   comment = params_value (params, "comment");
 
-  CHECK_PARAM_REDIRECT (asset_id, "Save Asset", "edit_asset");
-  CHECK_PARAM_REDIRECT (comment, "Save Asset", "edit_asset");
+  CHECK_PARAM_INVALID (asset_id, "Save Asset", "edit_asset");
+  CHECK_PARAM_INVALID (comment, "Save Asset", "edit_asset");
 
   /* Modify the asset. */
 
