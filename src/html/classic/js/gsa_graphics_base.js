@@ -34,54 +34,1082 @@ gsa.date_format = d3.time.format.utc ("%Y-%m-%d")
 gsa.datetime_format = d3.time.format.utc ("%Y-%m-%d %H:%M")
 
 /*
- * Basic chart components
+ * Dashboard functions
  */
+function Dashboard (id, controllersString, filtersString, dashboardOpts)
+{
+  function my () {};
+  var elem = $("#" + id)[0];
+  var rows = {};
+  var components = {};
+  var controllerFactories = {};
+  var prevControllersString = controllersString;
+  var lastRowIndex = 0;
+  var lastBoxIndex = 0;
+  var currentResizeTimeout = null;
+  var width = -1;
+  var topTarget, bottomTarget;
+  var editMode = false;
+  var totalComponents = 0;
+  var controllersPrefRequest;
+
+  /*
+   * Extra options
+   */
+  // Controller selection preference
+  var controllersPrefID = "";
+  // Controller String for new components
+  var defaultControllerString = "by-cvss";
+  // Filter String for new components
+  var defaultFilterString = null;
+  // Maximum number of components
+  var maxComponents = 8;
+  // Maximum number of components per row
+  var maxPerRow = 4;
+
+  // Controls element
+  var dashboardControls = null;
+  var startEditButton = null;
+  var stopEditButton = null;
+  var newComponentButton = null;
+
+  if (dashboardOpts)
+    {
+      console.debug ("processing dashboardOpts");
+      console.debug (dashboardOpts)
+
+      if (dashboardOpts["controllersPrefID"])
+        controllersPrefID = dashboardOpts["controllersPrefID"];
+      if (dashboardOpts["defaultFilterString"])
+        defaultFilterString = dashboardOpts["defaultFilterString"];
+      if (dashboardOpts["defaultControllerString"] !== undefined)
+        defaultControllerString = dashboardOpts["defaultControllerString"];
+      if (dashboardOpts["defaultFilterString"])
+        defaultFilterString = dashboardOpts["defaultFilterString"];
+      if (dashboardOpts["maxComponents"])
+        maxComponents = dashboardOpts["maxComponents"];
+      if (dashboardOpts["maxPerRow"])
+        maxPerRow = dashboardOpts["maxPerRow"];
+      if (dashboardOpts["dashboardControls"])
+        {
+          console.debug ("creating control buttons");
+          dashboardControls = dashboardOpts["dashboardControls"];
+
+          startEditButton
+            = d3.select (dashboardControls)
+                  .append ("a")
+                    .attr ("href", "javascript:void(0)")
+                    .on ("click", function () {my.startEdit ()})
+                    .append ("img")
+                      .attr ("src", "img/edit.png")
+                      .attr ("alt", "Edit Dashboard")
+                      .attr ("title", "Edit Dashboard")
+                    startEditButton
+          startEditButton = startEditButton.node ();
+
+          newComponentButton
+            = d3.select (dashboardControls)
+                  .append ("a")
+                    .attr ("href", "javascript:void(0)")
+                    .on ("click", function () {my.newComponent ()})
+                    .append ("img")
+                      .attr ("src", "img/new.png")
+                      .attr ("alt", "Add new Component")
+                      .attr ("title", "Add new Component")
+          newComponentButton = newComponentButton.node ();
+          $(newComponentButton).hide ();
+
+          stopEditButton
+            = d3.select (dashboardControls)
+                  .append ("a")
+                    .attr ("href", "javascript:void(0)")
+                    .on ("click", function () {my.stopEdit ()})
+                    .append ("img")
+                      .attr ("src", "img/stop.png")
+                      .attr ("alt", "Stop Editing")
+                      .attr ("title", "Stop Editing")
+          stopEditButton = stopEditButton.node ();
+          $(stopEditButton).hide ();
+        }
+    }
+
+  my.id = function ()
+    {
+      return id;
+    }
+
+  my.elem = function ()
+    {
+      return elem;
+    }
+
+  my.editMode = function ()
+    {
+      return editMode;
+    }
+
+  my.maxComponents = function ()
+    {
+      return maxComponents;
+    }
+
+  my.maxPerRow = function ()
+    {
+      return maxPerRow;
+    }
+
+  my.addNewRow = function (rowControllersString, rowFiltersString,
+                           height, position)
+    {
+      if (height == undefined)
+        height = 280;
+      else if (! (height >= 150))
+        height = 150;
+      var row = DashboardRow (my, rowControllersString, rowFiltersString,
+                              height, dashboardOpts);
+      rows[row.id()] = row;
+
+      if (position != undefined && position == "top")
+        {
+          $(elem).prepend (row.elem ());
+          $(elem).prepend (topTarget.elem());
+        }
+      else
+        {
+          $(elem).append (row.elem ());
+          $(elem).append (bottomTarget.elem());
+        }
+      if (editMode)
+        row.startEdit();
+      return row;
+    }
+
+  my.addToNewRow = function (componentID, position)
+    {
+      var newRow = my.addNewRow (undefined, undefined, undefined, position);
+      $(newRow.elem ()).append (components [componentID].elem ());
+      my.resize ();
+      my.redraw ();
+      my.updateRows ();
+    }
+
+  my.registerBox = function (box, rowID)
+    {
+      components [box.id ()] = box;
+    }
+
+  my.unregisterBox = function (id)
+    {
+      delete components [id];
+    }
+
+  my.component = function (id)
+    {
+      return components [id];
+    }
+
+  my.nextRowID = function ()
+    {
+      lastRowIndex ++;
+      return id + "-row-" + lastRowIndex;
+    }
+
+  my.nextBoxID = function ()
+    {
+      lastBoxIndex ++;
+      return id + "-box-" + lastBoxIndex;
+    }
+
+  my.controllersString = function ()
+    {
+      return controllersString;
+    }
+
+  my.filtersString = function ()
+    {
+      return filtersString;
+    }
+
+  my.updateControllersString = function ()
+    {
+      delete controllersString;
+      controllersString = "";
+      var sortedRowElems = $(elem).find (".dashboard-row").toArray ();
+      for (var index in sortedRowElems)
+        {
+          var entry = $(sortedRowElems[index]).attr ("id");
+          var rowControllersString = rows[entry].updateControllersString ();
+          if (rowControllersString != "")
+            {
+              controllersString += rowControllersString
+              controllersString += "#";
+            }
+        }
+      controllersString = controllersString.slice (0, -1);
+      if (controllersString != prevControllersString)
+        {
+          console.debug ("controllersString updated to: " + controllersString);
+          prevControllersString = controllersString;
+
+          if (controllersPrefID != "")
+            {
+              if (controllersPrefRequest != null)
+                controllersPrefRequest.abort ();
+
+              controllersPrefRequest = d3.xhr ("/omp")
+
+              var form_data = new FormData ();
+              form_data.append ("chart_preference_id", controllersPrefID);
+              form_data.append ("chart_preference_value", controllersString);
+              form_data.append ("token", gsa.gsa_token);
+              form_data.append ("cmd", "save_chart_preference");
+
+              controllersPrefRequest.post (form_data);
+            }
+        }
+      else
+        {
+          console.debug ("controllersString same as before");
+        }
+      return controllersString;
+    }
+
+  my.updateFiltersString = function ()
+    {
+      return filtersString;
+    }
+
+  my.removeRow = function (id)
+    {
+      $(rows[id].elem()).hide ("blind", {}, 150,
+                               function ()
+                                  {
+                                    $(rows[id].elem()).remove();
+                                    my.resize ();
+                                    my.redraw ();
+                                    delete rows[id];
+                                  });
+    }
+
+  my.updateRows = function ()
+    {
+      totalComponents = 0;
+      for (var item in rows)
+        {
+          rows[item].updateComponents();
+          if (rows [item].componentsCount() == 0)
+            my.removeRow (item);
+
+          totalComponents += rows[item].componentsCount ();
+        }
+      if (controllersString != null)
+        my.updateControllersString ();
+      if (filtersString != null)
+        my.updateFiltersString ();
+    }
+
+  my.removeComponent = function (id)
+    {
+      components [id].row().removeComponent (id);
+      my.unregisterBox (id);
+    }
+
+  my.newComponent = function ()
+    {
+      if (totalComponents >= maxComponents)
+        {
+          console.error ("Maximum number of components reached");
+          return;
+        }
+
+      var lastFreeRowElem
+        = $(elem).find (".dashboard-row:not(\".full\")").last ();
+      var row;
+      if (lastFreeRowElem [0])
+        {
+          row = rows[lastFreeRowElem.attr("id")];
+          var box = DashboardBox (row,
+                                  defaultControllerString,
+                                  defaultFilterString,
+                                  dashboardOpts);
+          my.registerBox (box);
+          row.registerBox (box);
+          $(row.elem ()).append (box.elem ());
+          row.resize ();
+          row.redraw ();
+        }
+      else
+        {
+          // All rows full
+          row = my.addNewRow (defaultControllerString, defaultFilterString,
+                              undefined, "bottom");
+          box = row.lastAddedComponent();
+          my.resize ();
+          my.redraw ();
+        }
+      $(box.elem()).find ("select").select2();
+      box.selectController (box.controllerString(), false, true);
+      my.updateRows ();
+    }
+
+  my.loadContent = function ()
+    {
+      for (var item in rows)
+        {
+          rows[item].loadContent ();
+        }
+    }
+
+  my.resized = function ()
+    {
+      if (width == elem.clientWidth)
+        return;
+      width = elem.clientWidth;
+      my.resize ();
+      clearTimeout(currentResizeTimeout);
+      currentResizeTimeout = setTimeout(my.redraw, 50);
+    }
+
+  my.resize = function ()
+    {
+      for (var item in rows)
+        {
+          rows[item].resize ();
+        }
+    }
+
+  my.redraw = function ()
+    {
+      for (var item in rows)
+        {
+          rows[item].redraw ();
+        }
+    }
+
+  my.addControllerFactory = function (factoryName, factoryFunc)
+    {
+      controllerFactories [factoryName] = factoryFunc;
+    }
+
+  my.addControllersForComponent = function (component)
+    {
+      for (var factoryName in controllerFactories)
+        {
+          var newController
+            = controllerFactories [factoryName] (component);
+        }
+    }
+
+  my.initComponentsFromString = function ()
+    {
+      var rowControllersStringList = [];
+      if (controllersString)
+        rowControllersStringList = controllersString.split ("#");
+
+      var rowFilterStringList = null;
+      if (filtersString)
+        rowFiltersStringList = filtersString.split ("#");
+
+      for (var index in rowControllersStringList)
+        {
+          my.addNewRow (rowControllersStringList [index],
+                        filtersString ? rowFiltersStringList [index] : null);
+        }
+      my.resize ();
+      my.redraw ();
+
+      if (controllersString)
+        {
+          for (var item in components)
+            {
+              components[item].updateControllerSelect ();
+            }
+        }
+    }
+
+  my.startEdit = function ()
+    {
+      if (editMode)
+        return;
+      editMode = true;
+      $(topTarget.elem()).show ("blind", {}, 150);
+      $(bottomTarget.elem()).show ("blind", {}, 150);
+      $(elem).addClass ("edit");
+      for (var item in rows)
+        {
+          rows[item].startEdit ();
+        }
+
+      if (dashboardControls)
+        {
+          $(startEditButton).hide ();
+          $(stopEditButton).show ();
+          $(newComponentButton).show ();
+        }
+    }
+
+  my.stopEdit = function ()
+    {
+      if (!editMode)
+        return;
+      $(topTarget.elem()).hide ("blind", {}, 150);
+      $(bottomTarget.elem()).hide ("blind", {}, 150);
+      editMode = false;
+      $(elem).removeClass ("edit");
+      for (var item in rows)
+        {
+          rows[item].stopEdit ();
+        }
+
+      if (dashboardControls)
+        {
+          $(startEditButton).show ();
+          $(stopEditButton).hide ();
+          $(newComponentButton).hide ();
+        }
+    }
+
+  width = elem.clientWidth;
+
+  // Window resize
+  $(window).on ("resize", my.resized);
+  // Check in case other elements cause scrollbar to appear or disappear
+  $(window).bind ("DOMSubtreeModified", my.resized);
+
+  // Drop targets for new rows
+  topTarget = DashboardNewRowTarget (my, "top");
+  $(elem).prepend (topTarget.elem ());
+  bottomTarget = DashboardNewRowTarget (my, "bottom");
+  $(elem).append (bottomTarget.elem ());
+
+  return my;
+}
 
 /*
- * Creates and adds display elements to a selected part of the HTML page
+ * Dashboard Rows
  */
-function create_chart_box (parent_id, container_id, width, height,
-                           container_width, select_pref_id, filter_pref_id)
+function DashboardRow (dashboard, controllersString, filtersString, height,
+                       dashboardOpts)
 {
-  var parent = d3.select ("#" + parent_id);
-  var container = parent.append ("div")
-                        .attr ("class", "dashboard_box")
-                        .attr ("id", container_id)
-                        .style ("width", container_width);
+  var my = function () {};
+  var components = {};
+  var elem = document.createElement ("div");
+  $(elem).addClass ("dashboard-row");
+  var id = dashboard.nextRowID ();
+  $(elem).attr ("id", id);
+  var compCountOffset = 0;
+  var lastAddedComponent = null;
 
-  var menu = container.append ("div")
-               .attr ("id", "chart_list")
-                 .append ("ul")
-                    .append ("li");
+  my.elem = function ()
+    {
+      return elem;
+    }
 
+  my.dashboard = function ()
+    {
+      return dashboard;
+    }
+
+  my.id = function ()
+    {
+      return id;
+    }
+
+  my.component = function (id)
+    {
+      return components [id];
+    }
+
+  my.controllersString = function ()
+    {
+      return controllersString;
+    }
+
+  my.lastAddedComponent = function ()
+    {
+      return lastAddedComponent;
+    }
+
+  my.componentsCount = function ()
+    {
+      var placeholderCount = $(elem).find (".dashboard-placeholder").toArray().length;
+      return Object.keys(components).length + placeholderCount + compCountOffset;
+    }
+
+  my.registerBox = function (box)
+    {
+      components [box.id ()] = box;
+      lastAddedComponent = box;
+    }
+
+  my.unregisterBox = function (id)
+    {
+      delete components[id];
+    }
+
+  my.filtersString = function ()
+    {
+      return filtersString;
+    }
+
+  my.updateControllersString = function ()
+    {
+      delete controllersString;
+      controllersString = "";
+      for (var item in components)
+        {
+          controllersString += components[item].controllerString ();
+          controllersString += "|";
+        }
+      controllersString = controllersString.slice (0, -1);
+      return controllersString;
+    }
+
+  my.updateFiltersString = function ()
+    {
+      return filtersString;
+    }
+
+  my.updateComponents = function ()
+    {
+      var componentElems = $(elem).children ("div.dashboard-box").toArray ();
+      var newComponents = {};
+      for (var index in componentElems)
+        {
+          var id = componentElems[index].id;
+          newComponents [id] = dashboard.component (id);
+          newComponents [id].row (my);
+        }
+      delete components;
+      components = newComponents;
+      compCountOffset = 0;
+
+      if (my.componentsCount () >= dashboard.maxPerRow ())
+        $(elem).addClass ("full");
+      else
+        $(elem).removeClass ("full");
+    }
+
+  my.removeComponent = function (id)
+    {
+      components[id].elem ().remove ();
+
+      dashboard.unregisterBox (id);
+      my.unregisterBox (id);
+
+      if (my.componentsCount() == 0)
+        dashboard.removeRow (my.id ());
+
+      dashboard.updateRows ();
+    }
+
+  my.loadContent = function ()
+    {
+      for (var item in components)
+        {
+          components[item].loadContent ();
+        }
+    }
+
+  my.resize = function (newRowWidth, newRowHeight)
+    {
+      if (newRowHeight)
+        {
+          height = newRowHeight;
+        }
+
+      $(elem).css ("height", height);
+      $(elem).attr ("height", height);
+
+      for (var item in components)
+        {
+          components[item].resize (newRowWidth, newRowHeight);
+        }
+    }
+
+  my.redraw = function ()
+    {
+      for (var item in components)
+        {
+          components[item].redraw ();
+        }
+    }
+
+  my.startEdit = function ()
+    {
+      for (var componentID in components)
+        {
+          components[componentID].startEdit ();
+        }
+
+      $(elem)
+        .resizable({handles: "s",
+                    minHeight: 150,
+                    grid: [10, 10],
+                    resize: function (event, ui) {my.resize (undefined,
+                                                             ui.size.height);
+                                                  dashboard.resize (); },
+                    stop: function (event, ui) {dashboard.redraw ();} });
+      $(elem)
+        .sortable ({handle: ".chart-head",
+                    connectWith: ".dashboard-row:not(\".full\"), .dashboard-add-row",
+                    placeholder: "dashboard-placeholder",
+                    forcePlaceholderSize: true,
+                    opacity: 0.75,
+                    tolerance: "pointer",
+                    start: function (event, ui)
+                              {
+                                compCountOffset = -1;
+                                dashboard.resize ();
+                              },
+                    stop: function (event, ui)
+                              {
+                                dashboard.updateRows ();
+                                dashboard.resize ();
+                                dashboard.redraw ();
+                              },
+                    change: function (event, ui)
+                              {
+                                dashboard.resize();
+                              }
+                    });
+    }
+
+  my.stopEdit = function ()
+    {
+      for (var componentID in components)
+        {
+          components[componentID].stopEdit ();
+        }
+
+      $(elem).resizable("destroy");
+      $(elem).sortable("destroy");
+    }
+
+  var componentStringList = [];
+  if (controllersString)
+    componentStringList = controllersString.split ("|");
+
+  var filterStringList = null;
+  if (filtersString)
+    filterStringList = filtersStr.split ("|");
+
+  $(elem).css ("height", height);
+  $(elem).attr ("height", height);
+
+  for (var index in componentStringList)
+    {
+      var box = DashboardBox (my,
+                              componentStringList [index],
+                              filterStringList ? filterStringList [index]
+                                               : null,
+                              dashboardOpts);
+      dashboard.registerBox (box);
+      my.registerBox (box);
+      $(elem).append (box.elem ());
+    }
+
+  return my;
+}
+
+/*
+ * Dashboard "New Row" drop target
+ */
+function DashboardNewRowTarget (dashboard, position)
+{
+  var my = function () {};
+  var id = dashboard.id () + "-" + position + "-add";
+  var elem = document.createElement ("div");
+  $(elem).addClass ("dashboard-add-row");
+  $(elem).attr ("id", id);
+  $(elem).css ("display", dashboard.editMode() ? "block" : "none");
+
+  my.elem = function ()
+    {
+      return elem;
+    }
+
+  my.dashboard = function ()
+    {
+      return dashboard;
+    }
+
+  my.id = function ()
+    {
+      return id;
+    }
+
+  $(elem)
+    .sortable ({handle: ".chart-head",
+                forcePlaceholderSize: true,
+                opacity: 0.75,
+                tolerance: "pointer",
+                receive: function (event, ui)
+                        {
+                          var receivedID = ui.item.attr ("id");
+                          $(dashboard.component (receivedID).elem()).remove ();
+                          dashboard.addToNewRow (receivedID, position);
+                        },
+                });
+
+  return my;
+}
+
+/*
+ * Dashboard Component Boxes
+ */
+function DashboardBox (row, controllerString, filterString, dashboardOpts)
+{
+  var my = function () {};
+  var dashboard = row ? row.dashboard () : null;
+  var id = dashboard.nextBoxID ();
+  var controllers = [];
+  var controllerIndexes = {};
+  var currentCtrlIndex = -1;
+
+  var last_generator = null;
+  var last_gen_params = null;
+
+  var hideControllerSelect;
+
+  if (dashboardOpts)
+    {
+      if (dashboardOpts["hideControllerSelect"])
+        hideControllerSelect = dashboardOpts["hideControllerSelect"];
+    }
+
+  var elem = document.createElement ("div");
+  $(elem).addClass ("dashboard-box")
+         .attr ("id", id);
+  var innerElem_d3 = d3.select (elem)
+                          .append ("div")
+                            .attr ("class", "chart-box")
+  var innerElem = innerElem_d3.node();
+
+  var menu, header, topButtons, content, content_d3, footer, select_elem, svg;
+  menu
+    = innerElem_d3
+        .append ("div")
+          .attr ("id", "chart_list")
+            .append ("ul")
+              .append ("li");
   menu.append ("a")
         .attr ("id", "section_list_first");
-
   menu = menu.append ("ul")
-          .attr ("id", container_id + "-menu");
+          .attr ("id", id + "-menu");
+  menu = menu.node();
 
-  container.append ("div")
-        .attr ("class", "chart-head")
-        .attr ("id", container_id + "-head")
-        .text ("Initializing chart...");
+  topButtons
+    = innerElem_d3
+        .append ("div")
+          .attr ("class", "chart-top-buttons")
+  topButtons
+    .append ("a")
+      .attr ("class", "remove-button")
+      .attr ("href", "javascript:void(0);")
+      .on ("click", function () { my.remove (); })
+      .style ("display", dashboard.editMode () ? "inline" : "none")
+      .append ("img")
+        .attr ("src", "/img/delete.png")
+        .attr ("alt", "Remove")
+        .attr ("title", "Remove");
 
-  container.append ("svg")
-      .attr ("class", "chart-svg")
-      .attr ("id", container_id + "-svg")
-      .attr ("width", width)
-      .attr ("height", height);
+  header
+    = innerElem_d3
+        .append ("div")
+          .attr ("class", "chart-head")
+          .attr ("id", id + "-head")
+          .text ("Initializing component \"" + controllerString + "\"...");
+  header = header.node()
 
-  container.append ("div")
-      .attr ("class", "chart-foot")
-      .attr ("id", container_id + "-foot")
+  content_d3
+    = innerElem_d3
+        .append ("div")
+          .attr ("class", "dash-box-content")
+          .attr ("id", id + "-content");
 
-  gsa.displays [container_id] = new Display (container);
-  if (select_pref_id != '')
-    gsa.displays [container_id].select_pref_id (select_pref_id);
+  svg
+    = content_d3
+        .append ("svg")
+          .attr ("class", "chart-svg")
+          .attr ("id", id + "-svg")
+          .attr ("width", 450)
+          .attr ("height", 250);
+  svg = svg.node()
 
-  if (filter_pref_id != '')
-    gsa.displays [container_id].filter_pref_id (filter_pref_id);
+  footer
+    = innerElem_d3
+        .append ("div")
+          .attr ("class", "chart-foot")
+          .attr ("id", id + "-foot")
+  footer = footer.node()
 
+  my.elem = function ()
+    {
+      return elem;
+    }
+
+  my.header = function ()
+    {
+      return d3.select(header);
+    }
+
+  my.svg = function ()
+    {
+      return d3.select(svg);
+    }
+
+  my.row = function (newRow)
+    {
+      if (newRow === undefined)
+        return row;
+      row = newRow;
+      return my;
+    }
+
+  my.dashboard = function ()
+    {
+      return dashboard;
+    }
+
+  my.id = function ()
+    {
+      return id;
+    }
+
+  my.controllerString = function (newStr)
+    {
+      if (newStr === undefined)
+        return controllerString;
+      controllerString = newStr;
+      dashboard.updateControllersString ();
+    }
+
+  my.filterString = function (newStr)
+    {
+      if (newStr === undefined)
+        return filterString;
+      filterString = newStr;
+      dashboard.updateFiltersString ();
+    }
+
+  my.addController = function (controllerName, controller)
+    {
+      controllerIndexes[controllerName] = controllers.length;
+      controllers.push (controller);
+    }
+
+  my.remove = function ()
+    {
+      $(elem).hide ("fade", {}, 250,
+                    function ()
+                      {
+                        dashboard.removeComponent (id);
+                        row.resize ();
+                        row.redraw ();
+                      });
+    }
+
+  my.resize = function (newRowWidth, newRowHeight)
+    {
+      var rowWidth, rowHeight;
+      var componentsCount = row.componentsCount ();
+      // Set height first
+      if (newRowHeight === undefined)
+        rowHeight = $(row.elem()).attr ("height");
+      else
+        rowHeight = newRowHeight;
+      var newHeight = rowHeight - header.clientHeight - footer.clientHeight - 8;
+      my.svg().attr ("height", newHeight);
+
+      if (newRowWidth === undefined)
+        rowWidth = dashboard.elem().clientWidth;
+      else
+        rowWidth = newRowWidth;
+      var newWidth = (rowWidth - (row.componentsCount () * 8) - 2) / (componentsCount ? componentsCount : 1);
+      my.svg().attr ("width", newWidth);
+      $(elem).css ("width", newWidth);
+    }
+
+  my.redraw = function ()
+    {
+      if (currentCtrlIndex >= 0)
+        controllers [currentCtrlIndex].request_data ();
+    }
+
+  // Edit management
+  my.startEdit = function ()
+    {
+      topButtons.select(".remove-button")
+        .style ("display", "inline");
+    }
+
+  my.stopEdit = function ()
+    {
+      topButtons.select(".remove-button")
+        .style ("display", "none");
+    }
+
+  // Data management
+
+  /* Gets the last successful generator */
+  my.last_generator = function ()
+    {
+      return last_generator;
+    }
+
+  /* Gets the parameters for the last successful generator run */
+  my.last_gen_params = function ()
+    {
+      return last_gen_params;
+    }
+
+  /* Updates the data on the last successful generator.
+   * Should be called by the generator if it was successful */
+  my.update_gen_data = function (generator, gen_params)
+    {
+      last_generator = generator;
+      last_gen_params = gen_params;
+      return my;
+    }
+
+  /* Puts an error message into the header and clears the svg element */
+  my.show_error = function (message)
+    {
+      header.text (message);
+      svg.text ("");
+    }
+
+  /* Gets a menu item or creates it if it does not exist */
+  my.create_or_get_menu_item = function (menu_item_id, last)
+    {
+      var menu_d3 = d3.select(menu)
+      var item = menu_d3
+                  .select ("li #" + id + "_" + menu_item_id)
+                    .select ("a");
+
+      if (item.empty ())
+      {
+        var li = menu_d3.append ("li");
+        if (last)
+            li.attr ("class", "last");
+          item = li.attr ("id", id + "_" + menu_item_id).append ("a");
+      }
+
+      return item;
+    }
+
+  // Controller selection
+
+  my.updateControllerSelect = function ()
+    {
+      if (select_elem)
+        {
+          $(select_elem.node ()).select2 ();
+          $(select_elem.node ()).select2 ("val", controllerString);
+        }
+      else
+        {
+          my.selectController (controllerString, false, true)
+        }
+    }
+
+  my.selectController = function (name, savePreference, requestData)
+    {
+      var index = controllerIndexes [name];
+      if (index == undefined)
+        {
+          console.warn ("Chart not found: " + name);
+          my.selectControllerIndex (0, savePreference, requestData);
+        }
+      else
+        {
+          my.selectControllerIndex (index, savePreference, requestData);
+        }
+    }
+
+  my.selectControllerIndex = function (index, savePreference, requestData)
+    {
+      if (typeof (index) != "number" || index < 0 || index >= controllers.length)
+        return console.error ("Invalid chart index: " + index);
+      currentCtrlIndex = index;
+      my.controllerString (controllers [currentCtrlIndex].id ());
+
+      if (requestData)
+        controllers [currentCtrlIndex].request_data ();
+
+    }
+
+  my.prevController = function ()
+    {
+      if (currentCtrlIndex <= 0)
+        $(select_elem.node ())
+          .select2 ("val", controllers[controllers.length - 1].id ());
+      else
+        $(select_elem.node ())
+          .select2 ("val", controllers[currentCtrlIndex - 1].id ());
+    }
+
+  my.nextController = function ()
+    {
+      if (currentCtrlIndex >= controllers.length - 1)
+        $(select_elem.node ())
+          .select2 ("val", controllers[0].id ());
+      else
+        $(select_elem.node ())
+          .select2 ("val", controllers[currentCtrlIndex + 1].id ());
+    }
+
+  /* Adds a chart selector to the footer */
+  my.createChartSelector = function ()
+  {
+    d3.select(footer)
+        .append ("a")
+          .attr ("href", "javascript: void (0);")
+          .attr ("onclick",
+                 "gsa.dashboards [\"" + dashboard.id() + "\"]"
+                 + ".component(\"" + id + "\").prevController()")
+          .append ("img")
+            .attr ("src", "img/previous.png")
+            .style ("vertical-align", "middle")
+
+    select_elem = d3.select(footer)
+                      .append ("select")
+                        .style ("margin-left", "5px")
+                        .style ("margin-right", "5px")
+                        .style ("vertical-align", "middle")
+                        .attr ("onchange",
+                               "gsa.dashboards [\"" + dashboard.id() + "\"]"
+                               + ".component(\"" + id + "\")"
+                               + ".selectController (this.value, true, true)");
+
+    for (var controllerID in controllers)
+      {
+        var controller = controllers [controllerID];
+        select_elem.append ("option")
+                      .attr ("value", controller.chart_name ())
+                      .attr ("id", id + "_chart_opt_" + controllerID)
+                      .text (controller.label ())
+      }
+
+    d3.select(footer)
+        .append ("a")
+          .attr ("href", "javascript: void (0);")
+          .attr ("onclick",
+                 "gsa.dashboards [\"" + dashboard.id() + "\"]"
+                 + ".component(\"" + id + "\").nextController()")
+          .append ("img")
+            .attr ("src", "img/next.png")
+            .style ("vertical-align", "middle")
+  }
+
+  dashboard.addControllersForComponent (my);
+  if (! (hideControllerSelect))
+    {
+      my.createChartSelector ();
+    }
+
+  return my;
 }
 
 /*
@@ -112,7 +1140,12 @@ function Chart (p_data_src, p_generator, p_display,
   function my () {};
 
   if (add_to_display)
-    display.add_chart (my);
+    display.addController (chart_name, my);
+
+  my.id = function ()
+    {
+      return chart_name;
+    }
 
   /* Gets or sets the data source */
   my.data_src = function (value)
@@ -1741,11 +2774,11 @@ function open_detached (url)
 /*
  * Resize a detached chart window to fit the chart display, filter and footer
  */
-function fit_detached_window ()
+function fit_detached_window (dashboard)
 {
-  var display = d3.select ("#aggregate-display, #tasks-display");
-  var display_width = Number (display.property ("scrollWidth"));
-  var display_height = Number (display.property ("scrollHeight"));
+  console.debug (dashboard.elem ())
+  var display_width = Number (dashboard.elem().scrollWidth);
+  var display_height = Number (dashboard.elem().scrollHeight);
   var filter = d3.select ("#applied_filter");
   var footer = d3.select (".gsa_footer")
   var height_diff = this.outerHeight - this.innerHeight;
@@ -1762,20 +2795,20 @@ function fit_detached_window ()
 /*
  * Resizes a chart display to fill the whole window
  */
-function detached_chart_resize_listener (display)
+function detached_chart_resize_listener (dashboard)
 {
   return function ()
     {
       var window_width = window.innerWidth;
       var window_height = window.innerHeight;
-
-      display.width (window_width * 0.98 - 2);
-      display.height (window_height - (  Number (d3.select (".gsa_footer")
-                                                    .property ("clientHeight"))
-                                       + Number (d3.select ("#applied_filter")
-                                                    .property ("clientHeight"))
-                                       + 20));
-      display.refresh ();
+console.debug ("resized");
+      $(dashboard.elem())
+          .height (window_height - (Number (d3.select (".gsa_footer")
+                                            .property ("clientHeight"))
+                                    + Number (d3.select ("#applied_filter")
+                                                .property ("clientHeight"))
+                                    + 20));
+      dashboard.resized ();
     }
 }
 

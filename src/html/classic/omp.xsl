@@ -4560,15 +4560,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 
   <xsl:if test="$top-visualization != ''">
-    <div id="chart-box">
-      <div class="visualization">
-        <div class="visualization-spacer"/>
-        <div class="visualization-box" id="top-visualization-box-left"/>
-        <div class="visualization-spacer"/>
-        <div class="visualization-box" id="top-visualization-box-right"/>
-        <div class="visualization-spacer"/>
-        <xsl:copy-of select="$top-visualization"/>
+    <div id="top-dashboard-section" class="section-box">
+      <div style="text-align:right" id="top-dashboard-controls">
+<!--        <a href="javascript:gsa.dashboards ['top-dashboard'].startEdit ();"><img src="/img/edit.png"/></a>
+        <a href="javascript:gsa.dashboards ['top-dashboard'].stopEdit ();"><img src="/img/stop.png"/></a>
+        <a href="javascript:gsa.dashboards ['top-dashboard'].newComponent ();"><img src="/img/new.png"/></a>-->
       </div>
+      <div id="top-dashboard" class="dashboard">
+      </div>
+      <xsl:copy-of select="$top-visualization"/>
     </div>
   </xsl:if>
 
@@ -7153,7 +7153,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:variable name="filt_id" select="/envelope/params/filt_id"/>
 
   <xsl:call-template name="init-d3charts"/>
-  <div id="tasks-container"/>
+  <div id="single-box-dashboard"/>
   <xsl:choose>
     <xsl:when test="$filter_term != ''">
       <div id="applied_filter" class="footnote" style="padding: 5px 10px">
@@ -7168,20 +7168,26 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:choose>
   <xsl:call-template name="html-footer"/>
   <script>
-    <xsl:call-template name="js-create-chart-box">
-      <xsl:with-param name="parent_id" select="'tasks-container'"/>
-      <xsl:with-param name="container_id" select="'tasks-display'"/>
-      <xsl:with-param name="container_width" select="'98%'"/>
-    </xsl:call-template>
+    gsa.dashboards ["single-box-dashboard"]
+      = Dashboard ("single-box-dashboard",
+                   "tasks-chart",
+                   null,
+                   {
+                     "filter": "<xsl:value-of select="gsa:escape-js ($filter_term)"/>",
+                     "filt_id": "<xsl:value-of select="gsa:escape-js ($filt_id)"/>",
+                     "max_components": 1,
+                     "hideControllerSelect": true
+                   });
     <xsl:call-template name="js-tasks-data-source">
       <xsl:with-param name="data_source_name" select="'tasks-source'"/>
       <xsl:with-param name="filter" select="$filter_term"/>
       <xsl:with-param name="filt_id" select="$filt_id"/>
       <xsl:with-param name="chart_template" select="/envelope/params/chart_template"/>
     </xsl:call-template>
-    <xsl:call-template name="js-tasks-chart">
+    <xsl:call-template name="js-tasks-chart-factory">
       <xsl:with-param name="chart_name" select="'tasks-chart'"/>
       <xsl:with-param name="data_source_name" select="'tasks-source'"/>
+      <xsl:with-param name="dashboard_name" select="'single-box-dashboard'"/>
       <xsl:with-param name="generator_name" select="'tasks-generator'"/>
       <xsl:with-param name="display_name" select="'tasks-display'"/>
       <xsl:with-param name="chart_type" select="/envelope/params/chart_type"/>
@@ -7207,10 +7213,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:with-param name="auto_load" select="0"/>
     </xsl:call-template>
 
-    if (this.fit_window)
-      fit_detached_window ()
+    gsa.dashboards ["single-box-dashboard"].initComponentsFromString ();
 
-    window.onresize = detached_chart_resize_listener (gsa.displays ["tasks-display"])
+    if (this.fit_window)
+      fit_detached_window (gsa.dashboards ["single-box-dashboard"])
+
+    window.onresize
+      = detached_chart_resize_listener (gsa.dashboards ["single-box-dashboard"])
     window.onresize ();
   </script>
 </xsl:template>
@@ -8491,7 +8500,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:variable name="filt_id" select="/envelope/params/filt_id"/>
 
   <xsl:call-template name="init-d3charts"/>
-  <div id="aggregate-container"/>
+  <div id="single-box-dashboard"/>
   <xsl:choose>
     <xsl:when test="$filter_term != ''">
       <div id="applied_filter" class="footnote" style="padding: 5px 10px">
@@ -8506,11 +8515,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:choose>
   <xsl:call-template name="html-footer"/>
   <script>
-    <xsl:call-template name="js-create-chart-box">
-      <xsl:with-param name="parent_id" select="'aggregate-container'"/>
-      <xsl:with-param name="container_id" select="'aggregate-display'"/>
-      <xsl:with-param name="container_width" select="'98%'"/>
-    </xsl:call-template>
+    gsa.dashboards ["single-box-dashboard"]
+      = Dashboard ("single-box-dashboard",
+                   "aggregate-chart",
+                   null,
+                   {
+                     "filter": "<xsl:value-of select="gsa:escape-js ($filter_term)"/>",
+                     "filt_id": "<xsl:value-of select="gsa:escape-js ($filt_id)"/>",
+                     "max_components": 1,
+                     "hideControllerSelect": true
+                   });
     <xsl:call-template name="js-aggregate-data-source">
       <xsl:with-param name="data_source_name" select="'aggregate-source'"/>
       <xsl:with-param name="aggregate_type" select="/envelope/params/aggregate_type"/>
@@ -8540,8 +8554,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:with-param name="filt_id" select="$filt_id"/>
       <xsl:with-param name="chart_template" select="/envelope/params/chart_template"/>
     </xsl:call-template>
-    <xsl:call-template name="js-aggregate-chart">
+    <xsl:call-template name="js-aggregate-chart-factory">
       <xsl:with-param name="chart_name" select="'aggregate-chart'"/>
+      <xsl:with-param name="dashboard_name" select="'single-box-dashboard'"/>
       <xsl:with-param name="data_source_name" select="'aggregate-source'"/>
       <xsl:with-param name="generator_name" select="'aggregate-generator'"/>
       <xsl:with-param name="display_name" select="'aggregate-display'"/>
@@ -8590,11 +8605,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:with-param name="auto_load" select="0"/>
     </xsl:call-template>
 
-    if (this.fit_window)
-      fit_detached_window ()
+    gsa.dashboards ["single-box-dashboard"].initComponentsFromString ();
 
-    window.onresize = detached_chart_resize_listener (gsa.displays ["aggregate-display"])
-    window.onresize ();
+    if (this.fit_window)
+      fit_detached_window (gsa.dashboards ["single-box-dashboard"])
+
+    window.onresize
+      = detached_chart_resize_listener (gsa.dashboards ["single-box-dashboard"])
   </script>
 </xsl:template>
 

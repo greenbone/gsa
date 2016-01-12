@@ -28117,7 +28117,8 @@ authenticate_omp (const gchar * username, const gchar * password,
       /* Get the chart preferences */
 
       ret = openvas_server_sendf (&session,
-                                  "<get_settings filter='name~\"Chart\"'/>");
+                                  "<get_settings"
+                                  " filter='name~\"Dashboard\"'/>");
       if (ret)
         {
           openvas_server_close (socket, session);

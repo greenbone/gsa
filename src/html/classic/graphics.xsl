@@ -54,10 +54,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <script src="/js/gsa_line_chart.js"></script>
   <script type="text/javascript">
     gsa.gsa_token = "<xsl:value-of select="gsa:escape-js (/envelope/params/token)"/>";
+    gsa.dashboards = {};
     gsa.data_sources = {};
-    gsa.generators = {};
-    gsa.displays = {};
-    gsa.charts = {};
 
     gsa.severity_levels =
       {max_high : <xsl:value-of select="gsa:risk-factor-max-cvss ('high')"/>,
@@ -193,11 +191,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     }
 </xsl:template>
 
-<xsl:template name="js-aggregate-chart">
+<xsl:template name="js-aggregate-chart-factory">
   <xsl:param name="chart_name" select="'aggregate-chart'"/>
   <xsl:param name="data_source_name" select="concat($chart_name, '-source')"/>
-  <xsl:param name="generator_name" select="concat($chart_name, '-generator')"/>
-  <xsl:param name="display_name" select="'chart-box'"/>
+  <xsl:param name="dashboard_name" select="'dashboard'"/>
 
   <xsl:param name="aggregate_type"/>
   <xsl:param name="group_column"/>
@@ -256,32 +253,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     }
   </xsl:variable>
 
-  if (gsa.displays ["<xsl:value-of select="gsa:escape-js ($display_name)"/>"] == undefined)
-    {
-      console.error ("Display not found: <xsl:value-of select="gsa:escape-js ($display_name)"/>");
-    }
-
-  <!-- Optionally create data source -->
-  <xsl:choose>
-    <xsl:when test="$create_data_source">
-      <xsl:call-template name="js-aggregate-data-source">
-        <xsl:with-param name="data_source_name" select="$data_source_name"/>
-        <xsl:with-param name="aggregate_type" select="$aggregate_type"/>
-        <xsl:with-param name="group_column" select="$group_column"/>
-        <xsl:with-param name="data_column" select="$data_column"/>
-        <xsl:with-param name="filter" select="$filter"/>
-        <xsl:with-param name="filt_id" select="$filt_id"/>
-        <xsl:with-param name="chart_template" select="$chart_template"/>
-      </xsl:call-template>
-    </xsl:when>
-    <xsl:otherwise>
-      if (gsa.data_sources ["<xsl:value-of select="gsa:escape-js ($data_source_name)"/>"] == undefined)
-        {
-          console.error ("Data source not found: <xsl:value-of select="gsa:escape-js ($data_source_name)"/>");
-        }
-    </xsl:otherwise>
-  </xsl:choose>
-
   <!-- Select selector label -->
   <xsl:variable name="selector_label">
     <xsl:choose>
@@ -328,105 +299,128 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:variable>
 
   <!-- Create chart generator -->
-  <xsl:choose>
-    <xsl:when test="$chart_type = 'donut'">
-      gsa.generators ["<xsl:value-of select="gsa:escape-js ($generator_name)"/>"]
-        = DonutChartGenerator (gsa.data_sources ["<xsl:value-of select="gsa:escape-js ($data_source_name)"/>"])
-            .title (<xsl:value-of select="$title_generator"/>)
-    </xsl:when>
-    <xsl:when test="$chart_type = 'bubbles'">
-      gsa.generators ["<xsl:value-of select="gsa:escape-js ($generator_name)"/>"]
-        = BubbleChartGenerator (gsa.data_sources ["<xsl:value-of select="gsa:escape-js ($data_source_name)"/>"])
-            .title (<xsl:value-of select="$title_generator"/>)
-    </xsl:when>
-    <xsl:when test="$chart_type = 'cloud'">
-      gsa.generators ["<xsl:value-of select="gsa:escape-js ($generator_name)"/>"]
-        = CloudChartGenerator (gsa.data_sources ["<xsl:value-of select="gsa:escape-js ($data_source_name)"/>"])
-            .title (<xsl:value-of select="$title_generator"/>)
-    </xsl:when>
-    <xsl:when test="$chart_type = 'horizontal_bar'">
-      gsa.generators ["<xsl:value-of select="gsa:escape-js ($generator_name)"/>"]
-        = HorizontalBarChartGenerator (gsa.data_sources ["<xsl:value-of select="gsa:escape-js ($data_source_name)"/>"])
-            .title (<xsl:value-of select="$title_generator"/>)
-    </xsl:when>
-    <xsl:when test="$chart_type = 'line'">
-      gsa.generators ["<xsl:value-of select="gsa:escape-js ($generator_name)"/>"]
-        = LineChartGenerator (gsa.data_sources ["<xsl:value-of select="gsa:escape-js ($data_source_name)"/>"])
-            .title (<xsl:value-of select="$title_generator"/>)
-    </xsl:when>
-    <xsl:otherwise>
-      gsa.generators ["<xsl:value-of select="gsa:escape-js ($generator_name)"/>"]
-        = BarChartGenerator (gsa.data_sources ["<xsl:value-of select="gsa:escape-js ($data_source_name)"/>"])
-            .title (<xsl:value-of select="$title_generator"/>)
-    </xsl:otherwise>
-  </xsl:choose>
+  <xsl:variable name="chart_generator">
+    <xsl:choose>
+      <xsl:when test="$chart_type = 'donut'">
+        DonutChartGenerator (gsa.data_sources ["<xsl:value-of select="gsa:escape-js ($data_source_name)"/>"])
+              .title (<xsl:value-of select="$title_generator"/>)
+      </xsl:when>
+      <xsl:when test="$chart_type = 'bubbles'">
+        BubbleChartGenerator (gsa.data_sources ["<xsl:value-of select="gsa:escape-js ($data_source_name)"/>"])
+              .title (<xsl:value-of select="$title_generator"/>)
+      </xsl:when>
+      <xsl:when test="$chart_type = 'cloud'">
+        CloudChartGenerator (gsa.data_sources ["<xsl:value-of select="gsa:escape-js ($data_source_name)"/>"])
+              .title (<xsl:value-of select="$title_generator"/>)
+      </xsl:when>
+      <xsl:when test="$chart_type = 'horizontal_bar'">
+        HorizontalBarChartGenerator (gsa.data_sources ["<xsl:value-of select="gsa:escape-js ($data_source_name)"/>"])
+              .title (<xsl:value-of select="$title_generator"/>)
+      </xsl:when>
+      <xsl:when test="$chart_type = 'line'">
+        LineChartGenerator (gsa.data_sources ["<xsl:value-of select="gsa:escape-js ($data_source_name)"/>"])
+              .title (<xsl:value-of select="$title_generator"/>)
+      </xsl:when>
+      <xsl:otherwise>
+        BarChartGenerator (gsa.data_sources ["<xsl:value-of select="gsa:escape-js ($data_source_name)"/>"])
+              .title (<xsl:value-of select="$title_generator"/>)
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
 
   <!-- Create basic chart -->
-  gsa.charts ["<xsl:value-of select="gsa:escape-js ($chart_name)"/>"] =
-    Chart (gsa.data_sources ["<xsl:value-of select="gsa:escape-js ($data_source_name)"/>"],
-            gsa.generators ["<xsl:value-of select="gsa:escape-js ($generator_name)"/>"],
-            gsa.displays ["<xsl:value-of select="gsa:escape-js ($display_name)"/>"],
-            "<xsl:value-of select="gsa:escape-js ($chart_name)"/>",
-            unescapeXML ("<xsl:value-of select="gsa:escape-js ($selector_label)"/>"),
-            "/img/charts/severity-bar-chart.png",
-            1,
-            "<xsl:value-of select="gsa:escape-js ($chart_type)"/>",
-            "<xsl:value-of select="gsa:escape-js ($chart_template)"/>",
-            <xsl:value-of select="$gen_params_js"/>,
-            <xsl:value-of select="$init_params_js"/>);
+  gsa.dashboards ["<xsl:value-of select="gsa:escape-js ($dashboard_name)"/>"]
+        .addControllerFactory
+          ("<xsl:value-of select="gsa:escape-js ($chart_name)"/>",
+           function (forComponent)
+            {
+              var dashboard = forComponent.dashboard ();
+              // Check data source
+              <xsl:choose>
+                <xsl:when test="$create_data_source">
+                  <xsl:call-template name="js-aggregate-data-source">
+                    <xsl:with-param name="data_source_name" select="gsa:escape-js ($data_source_name)"/>
+                    <xsl:with-param name="aggregate_type" select="gsa:escape-js ($aggregate_type)"/>
+                    <xsl:with-param name="group_column" select="gsa:escape-js ($group_column)"/>
+                    <xsl:with-param name="data_column" select="gsa:escape-js ($data_column)"/>
+                    <xsl:with-param name="filter" select="gsa:escape-js ($filter)"/>
+                    <xsl:with-param name="filt_id" select="gsa:escape-js ($filt_id)"/>
+                    <xsl:with-param name="chart_template" select="gsa:escape-js ($chart_template)"/>
+                  </xsl:call-template>
+                </xsl:when>
+                <xsl:otherwise>
+                  if (gsa.data_sources ["<xsl:value-of select="gsa:escape-js ($data_source_name)"/>"] == undefined)
+                    {
+                      console.error ("Data source not found: <xsl:value-of select="gsa:escape-js ($data_source_name)"/>");
+                    }
+                </xsl:otherwise>
+              </xsl:choose>
+              var dataSource = gsa.data_sources ["<xsl:value-of select="gsa:escape-js ($data_source_name)"/>"];
 
-  <!-- Data modifiers and stylers -->
-  <xsl:choose>
-    <xsl:when test="$chart_template = 'resource_type_counts'">
-      gsa.generators ["<xsl:value-of select="gsa:escape-js ($generator_name)"/>"]
-        .data_transform (resource_type_counts)
-    </xsl:when>
-    <xsl:when test="$chart_template = 'qod_type_counts'">
-      gsa.generators ["<xsl:value-of select="gsa:escape-js ($generator_name)"/>"]
-        .data_transform (qod_type_counts)
-    </xsl:when>
-    <xsl:when test="$chart_template = 'percentage_counts'">
-      gsa.generators ["<xsl:value-of select="gsa:escape-js ($generator_name)"/>"]
-        .data_transform (percentage_counts)
-    </xsl:when>
-    <xsl:when test="$chart_template = 'info_by_class' or $chart_template = 'recent_info_by_class'">
-      gsa.generators ["<xsl:value-of select="gsa:escape-js ($generator_name)"/>"]
-        .data_transform (data_severity_level_counts)
-      <xsl:choose>
-        <xsl:when test="$chart_type = 'donut'">
-          .color_scale (severity_level_color_scale)
-        </xsl:when>
-        <xsl:otherwise>
+              // Check dashboard
+              if (forComponent == undefined)
+                console.error ("Component not defined");
 
-        </xsl:otherwise>
-      </xsl:choose>
-    </xsl:when>
-    <xsl:when test="$chart_template = 'info_by_cvss' or $chart_template = 'recent_info_by_cvss'">
-      gsa.generators ["<xsl:value-of select="gsa:escape-js ($generator_name)"/>"]
-        .data_transform (data_severity_histogram)
-      <xsl:choose>
-        <xsl:when test="$chart_type = 'donut'">
+              // Create generator
+              // Basic generator
+              var generator = <xsl:value-of select="$chart_generator"/>;
+              // Data modifiers and stylers
+              <xsl:choose>
+                <xsl:when test="$chart_template = 'resource_type_counts'">
+                  generator.data_transform (resource_type_counts)
+                </xsl:when>
+                <xsl:when test="$chart_template = 'qod_type_counts'">
+                  generator.data_transform (qod_type_counts)
+                </xsl:when>
+                <xsl:when test="$chart_template = 'percentage_counts'">
+                  generator.data_transform (percentage_counts)
+                </xsl:when>
+                <xsl:when test="$chart_template = 'info_by_class' or chart_template = 'recent_info_by_class'">
+                  generator.data_transform (data_severity_level_counts)
+                  <xsl:choose>
+                    <xsl:when test="$chart_type = 'donut'">
+                      .color_scale (severity_level_color_scale)
+                    </xsl:when>
+                    <xsl:otherwise>
 
-        </xsl:when>
-        <xsl:otherwise>
-          .bar_style (severity_bar_style ("value",
-                                          gsa.severity_levels.max_log,
-                                          gsa.severity_levels.max_low,
-                                          gsa.severity_levels.max_medium))
-        </xsl:otherwise>
-      </xsl:choose>
-    </xsl:when>
-    <xsl:otherwise/>
-  </xsl:choose>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </xsl:when>
+                <xsl:when test="$chart_template = 'info_by_cvss' or $chart_template = 'recent_info_by_cvss'">
+                  generator.data_transform (data_severity_histogram)
+                  <xsl:choose>
+                    <xsl:when test="$chart_type = 'donut'">
+                    </xsl:when>
+                    <xsl:otherwise>
+                      .bar_style (severity_bar_style ("value",
+                                                      gsa.severity_levels.max_log,
+                                                      gsa.severity_levels.max_low,
+                                                      gsa.severity_levels.max_medium))
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </xsl:when>
+                <xsl:otherwise/>
+              </xsl:choose>
 
-  <xsl:if test="$auto_load">
-    gsa.charts ["<xsl:value-of select="gsa:escape-js ($chart_name)"/>"].request_data ();
-  </xsl:if>
+              // Create chart
+              return Chart (dataSource,
+                            generator,
+                            forComponent,
+                            "<xsl:value-of select="gsa:escape-js ($chart_name)"/>",
+                            "<xsl:value-of select="gsa:escape-js ($selector_label)"/>",
+                            "/img/charts/severity-bar-chart.png",
+                            1,
+                            "<xsl:value-of select="gsa:escape-js ($chart_type)"/>",
+                            "<xsl:value-of select="gsa:escape-js ($chart_template)"/>",
+                            <xsl:value-of select="$gen_params_js"/>,
+                            <xsl:value-of select="$init_params_js"/>);
+            });
 
 </xsl:template>
 
-<xsl:template name="js-tasks-chart">
+<xsl:template name="js-tasks-chart-factory">
   <xsl:param name="chart_name" select="'aggregate-chart'"/>
+  <xsl:param name="dashboard_name" select="'dashboard'"/>
   <xsl:param name="data_source_name" select="concat($chart_name, '-source')"/>
   <xsl:param name="generator_name" select="concat($chart_name, '-generator')"/>
   <xsl:param name="display_name" select="'chart-box'"/>
@@ -458,16 +452,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     }
   </xsl:variable>
 
-  if (gsa.displays ["<xsl:value-of select="gsa:escape-js ($display_name)"/>"] == undefined)
-    {
-      console.error ("Display not found: <xsl:value-of select="gsa:escape-js ($display_name)"/>");
-    }
-
-  if (gsa.data_sources ["<xsl:value-of select="gsa:escape-js ($data_source_name)"/>"] == undefined)
-    {
-      console.error ("Data source not found: <xsl:value-of select="gsa:escape-js ($data_source_name)"/>");
-    }
-
   <!-- Select selector label -->
   <xsl:variable name="selector_label">
     <xsl:choose>
@@ -493,72 +477,85 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:variable>
 
   <!-- Create chart generator -->
-  <xsl:choose>
-    <xsl:when test="0">
-    </xsl:when>
-    <xsl:otherwise>
-      gsa.generators ["<xsl:value-of select="gsa:escape-js ($generator_name)"/>"]
-        = GanttChartGenerator (gsa.data_sources ["<xsl:value-of select="gsa:escape-js ($data_source_name)"/>"])
-            .title (<xsl:value-of select="$title_generator"/>)
-    </xsl:otherwise>
-  </xsl:choose>
+  <xsl:variable name="chart_generator">
+    <xsl:choose>
+      <xsl:when test="0">
+      </xsl:when>
+      <xsl:otherwise>
+        GanttChartGenerator (gsa.data_sources ["<xsl:value-of select="gsa:escape-js ($data_source_name)"/>"])
+              .title (<xsl:value-of select="$title_generator"/>)
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
 
   <!-- Create basic chart -->
-  gsa.charts ["<xsl:value-of select="gsa:escape-js ($chart_name)"/>"] =
-    Chart (gsa.data_sources ["<xsl:value-of select="gsa:escape-js ($data_source_name)"/>"],
-            gsa.generators ["<xsl:value-of select="gsa:escape-js ($generator_name)"/>"],
-            gsa.displays ["<xsl:value-of select="gsa:escape-js ($display_name)"/>"],
-            "<xsl:value-of select="gsa:escape-js ($chart_name)"/>",
-            unescapeXML ("<xsl:value-of select="gsa:escape-js ($selector_label)"/>"),
-            "/img/charts/severity-bar-chart.png",
-            1,
-            "<xsl:value-of select="gsa:escape-js ($chart_type)"/>",
-            "<xsl:value-of select="gsa:escape-js ($chart_template)"/>",
-            <xsl:value-of select="$gen_params_js"/>,
-            <xsl:value-of select="$init_params_js"/>);
+  gsa.dashboards ["<xsl:value-of select="gsa:escape-js ($dashboard_name)"/>"]
+        .addControllerFactory
+          ("<xsl:value-of select="gsa:escape-js ($chart_name)"/>",
+           function (forComponent)
+            {
+              // Get and check DataSource
+              var dataSource = gsa.data_sources ["<xsl:value-of select="gsa:escape-js ($data_source_name)"/>"]
+              if (dataSource == undefined)
+                {
+                  console.error ("Data source not found: <xsl:value-of select="gsa:escape-js ($data_source_name)"/>");
+                }
 
-  <xsl:if test="$auto_load">
-    gsa.charts ["<xsl:value-of select="gsa:escape-js ($chart_name)"/>"].request_data ();
-  </xsl:if>
+              // Create generator
+              // Basic generator
+              var generator = <xsl:value-of select="$chart_generator"/>;
 
+              // Create chart controller
+              return Chart (dataSource,
+                            generator,
+                            forComponent,
+                            "<xsl:value-of select="gsa:escape-js ($chart_name)"/>",
+                            "<xsl:value-of select="gsa:escape-js ($selector_label)"/>",
+                            "/img/charts/severity-bar-chart.png",
+                            1,
+                            "<xsl:value-of select="gsa:escape-js ($chart_type)"/>",
+                            "<xsl:value-of select="gsa:escape-js ($chart_template)"/>",
+                            <xsl:value-of select="$gen_params_js"/>,
+                            <xsl:value-of select="$init_params_js"/>);
+            });
 </xsl:template>
 
 <xsl:template name="js-scan-management-top-visualization">
   <xsl:param name="type" select="'task'"/>
-  <xsl:param name="auto_load_left_pref_id">
+  <xsl:param name="controllers_pref_id">
     <xsl:choose>
       <xsl:when test="$type='task'">3d5db3c7-5208-4b47-8c28-48efc621b1e0</xsl:when>
       <xsl:when test="$type='report'">e599bb6b-b95a-4bb2-a6bb-fe8ac69bc071</xsl:when>
       <xsl:when test="$type='result'">0b8ae70d-d8fc-4418-8a72-e65ac8d2828e</xsl:when>
     </xsl:choose>
   </xsl:param>
-  <xsl:param name="auto_load_right_pref_id">
+  <xsl:param name="heights_pref_id">
     <xsl:choose>
       <xsl:when test="$type='task'">ce8608af-7e66-45a8-aa8a-76def4f9f838</xsl:when>
       <xsl:when test="$type='report'">fc875cd4-16bf-42d1-98ed-c0c9bd6015cd</xsl:when>
       <xsl:when test="$type='result'">cb7db2fe-3fe4-4704-9fa1-efd4b9e522a8</xsl:when>
     </xsl:choose>
   </xsl:param>
-  <xsl:param name="auto_load_left_default" select="'left-by-cvss'"/>
-  <xsl:param name="auto_load_right_default" select="'right-by-class'"/>
+  <xsl:param name="default_components" select="'by-cvss|by-class'"/>
+  <xsl:param name="default_heights" select="'280'"/>
 
-  <xsl:variable name="auto_load_left">
+  <xsl:variable name="controllers">
     <xsl:choose>
-      <xsl:when test="/envelope/chart_preferences/chart_preference[@id = $auto_load_left_pref_id]">
-        <xsl:value-of select="/envelope/chart_preferences/chart_preference[@id = $auto_load_left_pref_id]/value"/>
+      <xsl:when test="/envelope/chart_preferences/chart_preference[@id = $controllers_pref_id]">
+        <xsl:value-of select="/envelope/chart_preferences/chart_preference[@id = $controllers_pref_id]/value"/>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:value-of select="$auto_load_left_default"/>
+        <xsl:value-of select="$default_components"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
-  <xsl:variable name="auto_load_right">
+  <xsl:variable name="heights">
     <xsl:choose>
-      <xsl:when test="/envelope/chart_preferences/chart_preference[@id = $auto_load_right_pref_id]">
-        <xsl:value-of select="/envelope/chart_preferences/chart_preference[@id = $auto_load_right_pref_id]/value"/>
+      <xsl:when test="/envelope/chart_preferences/chart_preference[@id = $heights_pref_id]">
+        <xsl:value-of select="/envelope/chart_preferences/chart_preference[@id = $heights_pref_id]/value"/>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:value-of select="$auto_load_right_default"/>
+        <xsl:value-of select="$default_heights"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
@@ -567,16 +564,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:variable name="filt_id" select="/envelope/get_tasks/get_tasks_response/filters/@id | /envelope/get_reports/get_reports_response/filters/@id |  /envelope/get_results/get_results_response/filters/@id"/>
 
   <script type="text/javascript">
-    <xsl:call-template name="js-create-chart-box">
-      <xsl:with-param name="parent_id" select="'top-visualization-box-left'"/>
-      <xsl:with-param name="container_id" select="'top-visualization-left'"/>
-      <xsl:with-param name="select_pref_id" select="$auto_load_left_pref_id"/>
-    </xsl:call-template>
-    <xsl:call-template name="js-create-chart-box">
-      <xsl:with-param name="parent_id" select="'top-visualization-box-right'"/>
-      <xsl:with-param name="container_id" select="'top-visualization-right'"/>
-      <xsl:with-param name="select_pref_id" select="$auto_load_right_pref_id"/>
-    </xsl:call-template>
+    gsa.dashboards ["top-dashboard"]
+      = Dashboard ("top-dashboard",
+                   "<xsl:value-of select="gsa:escape-js ($controllers)"/>",
+                   null,
+                   {
+                     "controllersPrefID": "<xsl:value-of select="gsa:escape-js ($controllers_pref_id)"/>",
+                     "filter": "<xsl:value-of select="gsa:escape-js ($filter)"/>",
+                     "filt_id": "<xsl:value-of select="gsa:escape-js ($filt_id)"/>",
+                     "max_components": 4,
+                     "dashboardControls": $("#top-dashboard-controls")[0]
+                   });
 
     <xsl:call-template name="js-aggregate-data-source">
       <xsl:with-param name="data_source_name" select="'severity-count-source'"/>
@@ -597,36 +595,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:with-param name="chart_template" select="''"/>
     </xsl:call-template>
 
-    <xsl:call-template name="js-aggregate-chart">
-      <xsl:with-param name="chart_name" select="'left-by-cvss'"/>
+    <xsl:call-template name="js-aggregate-chart-factory">
+      <xsl:with-param name="chart_name" select="'by-cvss'"/>
+      <xsl:with-param name="dashboard_name" select="'top-dashboard'"/>
       <xsl:with-param name="data_source_name" select="'severity-count-source'"/>
       <xsl:with-param name="aggregate_type" select="$type"/>
-      <xsl:with-param name="display_name" select="'top-visualization-left'"/>
       <xsl:with-param name="chart_type" select="'bar'"/>
       <xsl:with-param name="chart_template" select="'info_by_cvss'"/>
     </xsl:call-template>
-    <xsl:call-template name="js-aggregate-chart">
-      <xsl:with-param name="chart_name" select="'right-by-cvss'"/>
+    <xsl:call-template name="js-aggregate-chart-factory">
+      <xsl:with-param name="chart_name" select="'by-class'"/>
+      <xsl:with-param name="dashboard_name" select="'top-dashboard'"/>
       <xsl:with-param name="data_source_name" select="'severity-count-source'"/>
       <xsl:with-param name="aggregate_type" select="$type"/>
-      <xsl:with-param name="display_name" select="'top-visualization-right'"/>
-      <xsl:with-param name="chart_type" select="'bar'"/>
-      <xsl:with-param name="chart_template" select="'info_by_cvss'"/>
-    </xsl:call-template>
-
-    <xsl:call-template name="js-aggregate-chart">
-      <xsl:with-param name="chart_name" select="'left-by-class'"/>
-      <xsl:with-param name="data_source_name" select="'severity-count-source'"/>
-      <xsl:with-param name="aggregate_type" select="$type"/>
-      <xsl:with-param name="display_name" select="'top-visualization-left'"/>
-      <xsl:with-param name="chart_type" select="'donut'"/>
-      <xsl:with-param name="chart_template" select="'info_by_class'"/>
-    </xsl:call-template>
-    <xsl:call-template name="js-aggregate-chart">
-      <xsl:with-param name="chart_name" select="'right-by-class'"/>
-      <xsl:with-param name="data_source_name" select="'severity-count-source'"/>
-      <xsl:with-param name="aggregate_type" select="$type"/>
-      <xsl:with-param name="display_name" select="'top-visualization-right'"/>
       <xsl:with-param name="chart_type" select="'donut'"/>
       <xsl:with-param name="chart_template" select="'info_by_class'"/>
     </xsl:call-template>
@@ -644,13 +625,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:with-param>
         <xsl:with-param name="filter" select="$filter"/>
         <xsl:with-param name="filt_id" select="$filt_id"/>
-        <xsl:with-param name="display_name" select="'top-visualization-left'"/>
         <xsl:with-param name="chart_type" select="'line'"/>
         <xsl:with-param name="chart_template" select="''"/>
       </xsl:call-template>
 
-      <xsl:call-template name="js-aggregate-chart">
-        <xsl:with-param name="chart_name" select="'left-report-high-results-timeline'"/>
+      <xsl:call-template name="js-aggregate-chart-factory">
+        <xsl:with-param name="chart_name" select="'report-high-results-timeline'"/>
+        <xsl:with-param name="dashboard_name" select="'top-dashboard'"/>
         <xsl:with-param name="data_source_name" select="'report-high-results-timeline-source'"/>
         <xsl:with-param name="aggregate_type" select="$type"/>
         <xsl:with-param name="group_column" select="'date'"/>
@@ -680,42 +661,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <param name="show_stat_type">0</param>
           </params>
         </xsl:with-param>
-        <xsl:with-param name="display_name" select="'top-visualization-left'"/>
-        <xsl:with-param name="chart_type" select="'line'"/>
-        <xsl:with-param name="chart_template" select="''"/>
-      </xsl:call-template>
-      <xsl:call-template name="js-aggregate-chart">
-        <xsl:with-param name="chart_name" select="'right-report-high-results-timeline'"/>
-        <xsl:with-param name="data_source_name" select="'report-high-results-timeline-source'"/>
-        <xsl:with-param name="aggregate_type" select="$type"/>
-        <xsl:with-param name="group_column" select="'date'"/>
-        <xsl:with-param name="data_columns" xmlns="">
-          <data_columns>
-            <column>high</column>
-            <column>high_per_host</column>
-          </data_columns>
-        </xsl:with-param>
-        <xsl:with-param name="y_fields" xmlns="">
-          <fields>
-            <field>high_max</field>
-          </fields>
-        </xsl:with-param>
-        <xsl:with-param name="z_fields" xmlns="">
-          <fields>
-            <field>high_per_host_max</field>
-          </fields>
-        </xsl:with-param>
-        <xsl:with-param name="init_params" xmlns="">
-          <params>
-            <param name="title_text">Reports: 'High' results timeline</param>
-          </params>
-        </xsl:with-param>
-        <xsl:with-param name="gen_params" xmlns="">
-          <params>
-            <param name="show_stat_type">0</param>
-          </params>
-        </xsl:with-param>
-        <xsl:with-param name="display_name" select="'top-visualization-right'"/>
         <xsl:with-param name="chart_type" select="'line'"/>
         <xsl:with-param name="chart_template" select="''"/>
       </xsl:call-template>
@@ -751,57 +696,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="filt_id" select="$filt_id"/>
       </xsl:call-template>
 
-      <xsl:call-template name="js-aggregate-chart">
-        <xsl:with-param name="chart_name" select="'left-by-task-status'"/>
+      <xsl:call-template name="js-aggregate-chart-factory">
+        <xsl:with-param name="chart_name" select="'by-task-status'"/>
+        <xsl:with-param name="dashboard_name" select="'top-dashboard'"/>
         <xsl:with-param name="data_source_name" select="'task-status-count-source'"/>
         <xsl:with-param name="aggregate_type" select="$type"/>
         <xsl:with-param name="group_column" select="'status'"/>
-        <xsl:with-param name="display_name" select="'top-visualization-left'"/>
-        <xsl:with-param name="chart_type" select="'donut'"/>
-        <xsl:with-param name="chart_template" select="''"/>
-      </xsl:call-template>
-      <xsl:call-template name="js-aggregate-chart">
-        <xsl:with-param name="chart_name" select="'right-by-task-status'"/>
-        <xsl:with-param name="data_source_name" select="'task-status-count-source'"/>
-        <xsl:with-param name="aggregate_type" select="$type"/>
-        <xsl:with-param name="group_column" select="'status'"/>
-        <xsl:with-param name="display_name" select="'top-visualization-right'"/>
         <xsl:with-param name="chart_type" select="'donut'"/>
         <xsl:with-param name="chart_template" select="''"/>
       </xsl:call-template>
 
-      <xsl:call-template name="js-aggregate-chart">
-        <xsl:with-param name="chart_name" select="'left-by-high-results'"/>
-        <xsl:with-param name="data_source_name" select="'task-high-results-source'"/>
-        <xsl:with-param name="display_name" select="'top-visualization-left'"/>
-        <xsl:with-param name="aggregate_type" select="$type"/>
-        <xsl:with-param name="x_field" select="'name'"/>
-        <xsl:with-param name="y_fields" xmlns="">
-          <fields>
-            <field>high_per_host_max</field>
-          </fields>
-        </xsl:with-param>
-        <xsl:with-param name="z_fields" xmlns="">
-          <fields>
-            <field>severity_max</field>
-          </fields>
-        </xsl:with-param>
-        <xsl:with-param name="init_params" xmlns="">
-          <params>
-            <param name="title_text">Tasks: 'High' results per host</param>
-          </params>
-        </xsl:with-param>
-        <xsl:with-param name="gen_params" xmlns="">
-          <params>
-            <param name="empty_text">No Tasks with 'High' severity found</param>
-          </params>
-        </xsl:with-param>
-        <xsl:with-param name="chart_type" select="'bubbles'"/>
-        <xsl:with-param name="chart_template" select="''"/>
-      </xsl:call-template>
-      <xsl:call-template name="js-aggregate-chart">
-        <xsl:with-param name="chart_name" select="'right-by-high-results'"/>
-        <xsl:with-param name="display_name" select="'top-visualization-right'"/>
+      <xsl:call-template name="js-aggregate-chart-factory">
+        <xsl:with-param name="chart_name" select="'by-high-results'"/>
+        <xsl:with-param name="dashboard_name" select="'top-dashboard'"/>
         <xsl:with-param name="data_source_name" select="'task-high-results-source'"/>
         <xsl:with-param name="aggregate_type" select="$type"/>
         <xsl:with-param name="x_field" select="'name'"/>
@@ -829,38 +736,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="chart_template" select="''"/>
       </xsl:call-template>
 
-      <xsl:call-template name="js-aggregate-chart">
-        <xsl:with-param name="chart_name" select="'left-top-high-results'"/>
-        <xsl:with-param name="display_name" select="'top-visualization-left'"/>
-        <xsl:with-param name="data_source_name" select="'task-high-results-source'"/>
-        <xsl:with-param name="aggregate_type" select="$type"/>
-        <xsl:with-param name="x_field" select="'name'"/>
-        <xsl:with-param name="y_fields" xmlns="">
-          <fields>
-            <field>high_per_host_max</field>
-          </fields>
-        </xsl:with-param>
-        <xsl:with-param name="z_fields" xmlns="">
-          <fields>
-            <field>severity_max</field>
-          </fields>
-        </xsl:with-param>
-        <xsl:with-param name="init_params" xmlns="">
-          <params>
-            <param name="title_text">Tasks with most 'High' results per host</param>
-          </params>
-        </xsl:with-param>
-        <xsl:with-param name="gen_params" xmlns="">
-          <params>
-            <param name="empty_text">No Tasks with 'High' severity found</param>
-          </params>
-        </xsl:with-param>
-        <xsl:with-param name="chart_type" select="'horizontal_bar'"/>
-        <xsl:with-param name="chart_template" select="''"/>
-      </xsl:call-template>
-      <xsl:call-template name="js-aggregate-chart">
-        <xsl:with-param name="chart_name" select="'right-top-high-results'"/>
-        <xsl:with-param name="display_name" select="'top-visualization-right'"/>
+      <xsl:call-template name="js-aggregate-chart-factory">
+        <xsl:with-param name="chart_name" select="'top-high-results'"/>
+        <xsl:with-param name="dashboard_name" select="'top-dashboard'"/>
         <xsl:with-param name="data_source_name" select="'task-high-results-source'"/>
         <xsl:with-param name="aggregate_type" select="$type"/>
         <xsl:with-param name="x_field" select="'name'"/>
@@ -888,22 +766,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="chart_template" select="''"/>
       </xsl:call-template>
 
-      <xsl:call-template name="js-tasks-chart">
-        <xsl:with-param name="chart_name" select="'left-task-schedules'"/>
+      <xsl:call-template name="js-tasks-chart-factory">
+        <xsl:with-param name="chart_name" select="'task-schedules'"/>
+        <xsl:with-param name="dashboard_name" select="'top-dashboard'"/>
         <xsl:with-param name="data_source_name" select="'task-schedules-source'"/>
-        <xsl:with-param name="display_name" select="'top-visualization-left'"/>
-        <xsl:with-param name="chart_type" select="'gantt'"/>
-        <xsl:with-param name="gen_params" xmlns="">
-          <params>
-            <param name="empty_text">No scheduled Tasks found</param>
-          </params>
-        </xsl:with-param>
-        <xsl:with-param name="chart_template" select="''"/>
-      </xsl:call-template>
-      <xsl:call-template name="js-tasks-chart">
-        <xsl:with-param name="chart_name" select="'right-task-schedules'"/>
-        <xsl:with-param name="data_source_name" select="'task-schedules-source'"/>
-        <xsl:with-param name="display_name" select="'top-visualization-right'"/>
         <xsl:with-param name="chart_type" select="'gantt'"/>
         <xsl:with-param name="gen_params" xmlns="">
           <params>
@@ -940,45 +806,28 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="chart_template" select="''"/>
       </xsl:call-template>
 
-      <xsl:call-template name="js-aggregate-chart">
-        <xsl:with-param name="chart_name" select="'left-result-vuln-words'"/>
+      <xsl:call-template name="js-aggregate-chart-factory">
+        <xsl:with-param name="chart_name" select="'result-vuln-words'"/>
+        <xsl:with-param name="dashboard_name" select="'top-dashboard'"/>
         <xsl:with-param name="data_source_name" select="'result-vuln-words-source'"/>
         <xsl:with-param name="aggregate_type" select="$type"/>
         <xsl:with-param name="group_column" select="'vulnerability'"/>
-        <xsl:with-param name="display_name" select="'top-visualization-left'"/>
-        <xsl:with-param name="chart_type" select="'cloud'"/>
-        <xsl:with-param name="chart_template" select="''"/>
-      </xsl:call-template>
-      <xsl:call-template name="js-aggregate-chart">
-        <xsl:with-param name="chart_name" select="'right-result-vuln-words'"/>
-        <xsl:with-param name="group_column" select="'vulnerability'"/>
-        <xsl:with-param name="data_source_name" select="'result-vuln-words-source'"/>
-        <xsl:with-param name="aggregate_type" select="$type"/>
-        <xsl:with-param name="display_name" select="'top-visualization-right'"/>
         <xsl:with-param name="chart_type" select="'cloud'"/>
         <xsl:with-param name="chart_template" select="''"/>
       </xsl:call-template>
 
-      <xsl:call-template name="js-aggregate-chart">
-        <xsl:with-param name="chart_name" select="'left-result-desc-words'"/>
+      <xsl:call-template name="js-aggregate-chart-factory">
+        <xsl:with-param name="chart_name" select="'result-desc-words'"/>
+        <xsl:with-param name="dashboard_name" select="'top-dashboard'"/>
         <xsl:with-param name="data_source_name" select="'result-desc-words-source'"/>
         <xsl:with-param name="aggregate_type" select="$type"/>
         <xsl:with-param name="group_column" select="'description'"/>
-        <xsl:with-param name="display_name" select="'top-visualization-left'"/>
-        <xsl:with-param name="chart_type" select="'cloud'"/>
-        <xsl:with-param name="chart_template" select="''"/>
-      </xsl:call-template>
-      <xsl:call-template name="js-aggregate-chart">
-        <xsl:with-param name="chart_name" select="'right-result-desc-words'"/>
-        <xsl:with-param name="group_column" select="'description'"/>
-        <xsl:with-param name="data_source_name" select="'result-desc-words-source'"/>
-        <xsl:with-param name="aggregate_type" select="$type"/>
-        <xsl:with-param name="display_name" select="'top-visualization-right'"/>
         <xsl:with-param name="chart_type" select="'cloud'"/>
         <xsl:with-param name="chart_template" select="''"/>
       </xsl:call-template>
     </xsl:if>
 
+<!--
     gsa.displays ["top-visualization-left"].create_chart_selector ();
     gsa.displays ["top-visualization-right"].create_chart_selector ();
 
@@ -988,12 +837,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:if test="$auto_load_right != ''">
     gsa.displays ["top-visualization-right"].select_chart ("<xsl:value-of select="gsa:escape-js ($auto_load_right)"/>", false, true);
     </xsl:if>
+-->
+    gsa.dashboards["top-dashboard"].initComponentsFromString ();
   </script>
 </xsl:template>
 
 <xsl:template name="js-secinfo-top-visualization">
   <xsl:param name="type" select="'nvt'"/>
-  <xsl:param name="auto_load_left_pref_id">
+  <xsl:param name="controllers_pref_id">
     <xsl:choose>
       <xsl:when test="$type='nvt'">f68d9369-1945-477b-968f-121c6029971b</xsl:when>
       <xsl:when test="$type='cve'">815ddd2e-8654-46c7-a05b-d73224102240</xsl:when>
@@ -1004,7 +855,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:when test="$type='allinfo'">4c7b1ea7-b7e6-4d12-9791-eb9f72b6f864</xsl:when>
     </xsl:choose>
   </xsl:param>
-  <xsl:param name="auto_load_right_pref_id">
+  <xsl:param name="heights_pref_id">
     <xsl:choose>
       <xsl:when test="$type='nvt'">af89a84a-d3ec-43a8-97a8-aa688bf093bc</xsl:when>
       <xsl:when test="$type='cve'">418a5746-d68a-4a2d-864a-0da993b32220</xsl:when>
@@ -1015,26 +866,26 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:when test="$type='allinfo'">985f38eb-1a30-4a35-abb6-3eec05b5d54a</xsl:when>
     </xsl:choose>
   </xsl:param>
-  <xsl:param name="auto_load_left_default" select="'left-by-cvss'"/>
-  <xsl:param name="auto_load_right_default" select="'right-by-class'"/>
+  <xsl:param name="default_components" select="'by-cvss|by-class'"/>
+  <xsl:param name="default_heights" select="'280'"/>
 
-  <xsl:variable name="auto_load_left">
+  <xsl:variable name="controllers">
     <xsl:choose>
-      <xsl:when test="/envelope/chart_preferences/chart_preference[@id = $auto_load_left_pref_id]">
-        <xsl:value-of select="/envelope/chart_preferences/chart_preference[@id = $auto_load_left_pref_id]/value"/>
+      <xsl:when test="/envelope/chart_preferences/chart_preference[@id = $controllers_pref_id]">
+        <xsl:value-of select="/envelope/chart_preferences/chart_preference[@id = $controllers_pref_id]/value"/>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:value-of select="$auto_load_left_default"/>
+        <xsl:value-of select="$default_components"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
-  <xsl:variable name="auto_load_right">
+  <xsl:variable name="heights">
     <xsl:choose>
-      <xsl:when test="/envelope/chart_preferences/chart_preference[@id = $auto_load_right_pref_id]">
-        <xsl:value-of select="/envelope/chart_preferences/chart_preference[@id = $auto_load_right_pref_id]/value"/>
+      <xsl:when test="/envelope/chart_preferences/chart_preference[@id = $heights_pref_id]">
+        <xsl:value-of select="gsa:escape-js (/envelope/chart_preferences/chart_preference[@id = $heights_pref_id]/value)"/>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:value-of select="$auto_load_right_default"/>
+        <xsl:value-of select="$default_heights"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
@@ -1043,16 +894,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:variable name="filt_id" select="/envelope/get_info/get_info_response/filters/@id"/>
 
   <script type="text/javascript">
-    <xsl:call-template name="js-create-chart-box">
-      <xsl:with-param name="parent_id" select="'top-visualization-box-left'"/>
-      <xsl:with-param name="container_id" select="'top-visualization-left'"/>
-      <xsl:with-param name="select_pref_id" select="$auto_load_left_pref_id"/>
-    </xsl:call-template>
-    <xsl:call-template name="js-create-chart-box">
-      <xsl:with-param name="parent_id" select="'top-visualization-box-right'"/>
-      <xsl:with-param name="container_id" select="'top-visualization-right'"/>
-      <xsl:with-param name="select_pref_id" select="$auto_load_right_pref_id"/>
-    </xsl:call-template>
+    gsa.dashboards ["top-dashboard"]
+      = Dashboard ("top-dashboard",
+                   "<xsl:value-of select="gsa:escape-js ($controllers)"/>",
+                   null,
+                   {
+                     "controllersPrefID": "<xsl:value-of select="gsa:escape-js ($controllers_pref_id)"/>",
+                     "filter": "<xsl:value-of select="gsa:escape-js ($filter)"/>",
+                     "filt_id": "<xsl:value-of select="gsa:escape-js ($filt_id)"/>",
+                     "max_components": 4,
+                     "dashboardControls": $("#top-dashboard-controls")[0]
+                   });
 
     <xsl:call-template name="js-aggregate-data-source">
       <xsl:with-param name="data_source_name" select="'severity-count-source'"/>
@@ -1073,57 +925,31 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:with-param name="chart_template" select="''"/>
     </xsl:call-template>
 
-    <xsl:call-template name="js-aggregate-chart">
-      <xsl:with-param name="chart_name" select="'left-by-cvss'"/>
+    <xsl:call-template name="js-aggregate-chart-factory">
+      <xsl:with-param name="chart_name" select="'by-cvss'"/>
+      <xsl:with-param name="dashboard_name" select="'top-dashboard'"/>
       <xsl:with-param name="data_source_name" select="'severity-count-source'"/>
       <xsl:with-param name="aggregate_type" select="$type"/>
-      <xsl:with-param name="display_name" select="'top-visualization-left'"/>
-      <xsl:with-param name="chart_type" select="'bar'"/>
-      <xsl:with-param name="chart_template" select="'info_by_cvss'"/>
-    </xsl:call-template>
-    <xsl:call-template name="js-aggregate-chart">
-      <xsl:with-param name="chart_name" select="'right-by-cvss'"/>
-      <xsl:with-param name="data_source_name" select="'severity-count-source'"/>
-      <xsl:with-param name="aggregate_type" select="$type"/>
-      <xsl:with-param name="display_name" select="'top-visualization-right'"/>
       <xsl:with-param name="chart_type" select="'bar'"/>
       <xsl:with-param name="chart_template" select="'info_by_cvss'"/>
     </xsl:call-template>
 
-    <xsl:call-template name="js-aggregate-chart">
-      <xsl:with-param name="chart_name" select="'left-by-class'"/>
+    <xsl:call-template name="js-aggregate-chart-factory">
+      <xsl:with-param name="chart_name" select="'by-class'"/>
+      <xsl:with-param name="dashboard_name" select="'top-dashboard'"/>
       <xsl:with-param name="data_source_name" select="'severity-count-source'"/>
       <xsl:with-param name="aggregate_type" select="$type"/>
-      <xsl:with-param name="display_name" select="'top-visualization-left'"/>
-      <xsl:with-param name="chart_type" select="'donut'"/>
-      <xsl:with-param name="chart_template" select="'info_by_class'"/>
-    </xsl:call-template>
-    <xsl:call-template name="js-aggregate-chart">
-      <xsl:with-param name="chart_name" select="'right-by-class'"/>
-      <xsl:with-param name="data_source_name" select="'severity-count-source'"/>
-      <xsl:with-param name="aggregate_type" select="$type"/>
-      <xsl:with-param name="display_name" select="'top-visualization-right'"/>
       <xsl:with-param name="chart_type" select="'donut'"/>
       <xsl:with-param name="chart_template" select="'info_by_class'"/>
     </xsl:call-template>
 
-    <xsl:call-template name="js-aggregate-chart">
-      <xsl:with-param name="chart_name" select="'left-by-created'"/>
+    <xsl:call-template name="js-aggregate-chart-factory">
+      <xsl:with-param name="dashboard_name" select="'top-dashboard'"/>
+      <xsl:with-param name="chart_name" select="'by-created'"/>
       <xsl:with-param name="data_source_name" select="'created-count-source'"/>
       <xsl:with-param name="aggregate_type" select="$type"/>
       <xsl:with-param name="group_column" select="'created'"/>
       <xsl:with-param name="data_column" select="''"/>
-      <xsl:with-param name="display_name" select="'top-visualization-left'"/>
-      <xsl:with-param name="chart_type" select="'line'"/>
-      <xsl:with-param name="chart_template" select="''"/>
-    </xsl:call-template>
-    <xsl:call-template name="js-aggregate-chart">
-      <xsl:with-param name="chart_name" select="'right-by-created'"/>
-      <xsl:with-param name="data_source_name" select="'created-count-source'"/>
-      <xsl:with-param name="aggregate_type" select="$type"/>
-      <xsl:with-param name="group_column" select="'created'"/>
-      <xsl:with-param name="data_column" select="''"/>
-      <xsl:with-param name="display_name" select="'top-visualization-right'"/>
       <xsl:with-param name="chart_type" select="'line'"/>
       <xsl:with-param name="chart_template" select="''"/>
     </xsl:call-template>
@@ -1163,48 +989,28 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="chart_template" select="'percentage_counts'"/>
       </xsl:call-template>
 
-      <xsl:call-template name="js-aggregate-chart">
-        <xsl:with-param name="chart_name" select="'left-nvt-by-family'"/>
+      <xsl:call-template name="js-aggregate-chart-factory">
+        <xsl:with-param name="dashboard_name" select="'top-dashboard'"/>
+        <xsl:with-param name="chart_name" select="'nvt-by-family'"/>
         <xsl:with-param name="data_source_name" select="'nvt-by-family-source'"/>
         <xsl:with-param name="aggregate_type" select="$type"/>
         <xsl:with-param name="group_column" select="'family'"/>
         <xsl:with-param name="data_column" select="'severity'"/>
-        <xsl:with-param name="display_name" select="'top-visualization-left'"/>
         <xsl:with-param name="chart_type" select="'bubbles'"/>
         <xsl:with-param name="chart_template" select="''"/>
       </xsl:call-template>
-      <xsl:call-template name="js-aggregate-chart">
-        <xsl:with-param name="chart_name" select="'right-nvt-by-family'"/>
-        <xsl:with-param name="data_source_name" select="'nvt-by-family-source'"/>
-        <xsl:with-param name="aggregate_type" select="$type"/>
-        <xsl:with-param name="group_column" select="'family'"/>
-        <xsl:with-param name="data_column" select="'severity'"/>
-        <xsl:with-param name="display_name" select="'top-visualization-right'"/>
-        <xsl:with-param name="chart_type" select="'bubbles'"/>
-        <xsl:with-param name="chart_template" select="''"/>
-      </xsl:call-template>
-
-      <xsl:call-template name="js-aggregate-chart">
-        <xsl:with-param name="chart_name" select="'left-nvt-by-solution_type'"/>
+      <xsl:call-template name="js-aggregate-chart-factory">
+        <xsl:with-param name="dashboard_name" select="'top-dashboard'"/>
+        <xsl:with-param name="chart_name" select="'nvt-by-solution_type'"/>
         <xsl:with-param name="data_source_name" select="'nvt-by-solution_type-source'"/>
         <xsl:with-param name="aggregate_type" select="$type"/>
         <xsl:with-param name="group_column" select="'solution_type'"/>
-        <xsl:with-param name="display_name" select="'top-visualization-left'"/>
         <xsl:with-param name="chart_type" select="'donut'"/>
         <xsl:with-param name="chart_template" select="''"/>
       </xsl:call-template>
-      <xsl:call-template name="js-aggregate-chart">
-        <xsl:with-param name="chart_name" select="'right-nvt-by-solution_type'"/>
-        <xsl:with-param name="data_source_name" select="'nvt-by-solution_type-source'"/>
-        <xsl:with-param name="aggregate_type" select="$type"/>
-        <xsl:with-param name="group_column" select="'solution_type'"/>
-        <xsl:with-param name="display_name" select="'top-visualization-right'"/>
-        <xsl:with-param name="chart_type" select="'donut'"/>
-        <xsl:with-param name="chart_template" select="''"/>
-      </xsl:call-template>
-
-      <xsl:call-template name="js-aggregate-chart">
-        <xsl:with-param name="chart_name" select="'left-nvt-by-qod_type'"/>
+      <xsl:call-template name="js-aggregate-chart-factory">
+        <xsl:with-param name="dashboard_name" select="'top-dashboard'"/>
+        <xsl:with-param name="chart_name" select="'nvt-by-qod_type'"/>
         <xsl:with-param name="data_source_name" select="'nvt-by-qod_type-source'"/>
         <xsl:with-param name="aggregate_type" select="$type"/>
         <xsl:with-param name="group_column" select="'qod_type'"/>
@@ -1212,31 +1018,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="chart_type" select="'donut'"/>
         <xsl:with-param name="chart_template" select="'qod_type_counts'"/>
       </xsl:call-template>
-      <xsl:call-template name="js-aggregate-chart">
-        <xsl:with-param name="chart_name" select="'right-nvt-by-qod_type'"/>
-        <xsl:with-param name="data_source_name" select="'nvt-by-qod_type-source'"/>
-        <xsl:with-param name="aggregate_type" select="$type"/>
-        <xsl:with-param name="group_column" select="'qod_type'"/>
-        <xsl:with-param name="display_name" select="'top-visualization-right'"/>
-        <xsl:with-param name="chart_type" select="'donut'"/>
-        <xsl:with-param name="chart_template" select="'qod_type_counts'"/>
-      </xsl:call-template>
-
-      <xsl:call-template name="js-aggregate-chart">
-        <xsl:with-param name="chart_name" select="'left-nvt-by-qod'"/>
+      <xsl:call-template name="js-aggregate-chart-factory">
+        <xsl:with-param name="dashboard_name" select="'top-dashboard'"/>
+        <xsl:with-param name="chart_name" select="'nvt-by-qod'"/>
         <xsl:with-param name="data_source_name" select="'nvt-by-qod-source'"/>
         <xsl:with-param name="aggregate_type" select="$type"/>
         <xsl:with-param name="group_column" select="'qod'"/>
         <xsl:with-param name="display_name" select="'top-visualization-left'"/>
-        <xsl:with-param name="chart_type" select="'donut'"/>
-        <xsl:with-param name="chart_template" select="'percentage_counts'"/>
-      </xsl:call-template>
-      <xsl:call-template name="js-aggregate-chart">
-        <xsl:with-param name="chart_name" select="'right-nvt-by-qod'"/>
-        <xsl:with-param name="data_source_name" select="'nvt-by-qod-source'"/>
-        <xsl:with-param name="aggregate_type" select="$type"/>
-        <xsl:with-param name="group_column" select="'qod'"/>
-        <xsl:with-param name="display_name" select="'top-visualization-right'"/>
         <xsl:with-param name="chart_type" select="'donut'"/>
         <xsl:with-param name="chart_template" select="'percentage_counts'"/>
       </xsl:call-template>
@@ -1253,23 +1041,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="chart_template" select="''"/>
       </xsl:call-template>
 
-      <xsl:call-template name="js-aggregate-chart">
-        <xsl:with-param name="chart_name" select="'left-by-oval-class'"/>
+      <xsl:call-template name="js-aggregate-chart-factory">
+        <xsl:with-param name="dashboard_name" select="'top-dashboard'"/>
+        <xsl:with-param name="chart_name" select="'by-oval-class'"/>
         <xsl:with-param name="data_source_name" select="'ovaldef-by-class-source'"/>
         <xsl:with-param name="aggregate_type" select="$type"/>
         <xsl:with-param name="group_column" select="'class'"/>
         <xsl:with-param name="data_column" select="''"/>
         <xsl:with-param name="display_name" select="'top-visualization-left'"/>
-        <xsl:with-param name="chart_type" select="'donut'"/>
-        <xsl:with-param name="chart_template" select="''"/>
-      </xsl:call-template>
-      <xsl:call-template name="js-aggregate-chart">
-        <xsl:with-param name="chart_name" select="'right-by-oval-class'"/>
-        <xsl:with-param name="data_source_name" select="'ovaldef-by-class-source'"/>
-        <xsl:with-param name="aggregate_type" select="$type"/>
-        <xsl:with-param name="group_column" select="'class'"/>
-        <xsl:with-param name="data_column" select="''"/>
-        <xsl:with-param name="display_name" select="'top-visualization-right'"/>
         <xsl:with-param name="chart_type" select="'donut'"/>
         <xsl:with-param name="chart_template" select="''"/>
       </xsl:call-template>
@@ -1285,8 +1064,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="chart_template" select="''"/>
       </xsl:call-template>
 
-      <xsl:call-template name="js-aggregate-chart">
-        <xsl:with-param name="chart_name" select="'left-by-info-type'"/>
+      <xsl:call-template name="js-aggregate-chart-factory">
+        <xsl:with-param name="dashboard_name" select="'top-dashboard'"/>
+        <xsl:with-param name="chart_name" select="'by-info-type'"/>
         <xsl:with-param name="data_source_name" select="'allinfo-by-type-source'"/>
         <xsl:with-param name="aggregate_type" select="$type"/>
         <xsl:with-param name="group_column" select="'type'"/>
@@ -1295,18 +1075,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="chart_type" select="'donut'"/>
         <xsl:with-param name="chart_template" select="'resource_type_counts'"/>
       </xsl:call-template>
-      <xsl:call-template name="js-aggregate-chart">
-        <xsl:with-param name="chart_name" select="'right-by-info-type'"/>
-        <xsl:with-param name="data_source_name" select="'allinfo-by-type-source'"/>
-        <xsl:with-param name="aggregate_type" select="$type"/>
-        <xsl:with-param name="group_column" select="'type'"/>
-        <xsl:with-param name="data_column" select="''"/>
-        <xsl:with-param name="display_name" select="'top-visualization-right'"/>
-        <xsl:with-param name="chart_type" select="'donut'"/>
-        <xsl:with-param name="chart_template" select="'resource_type_counts'"/>
-      </xsl:call-template>
     </xsl:if>
 
+    <!--
     gsa.displays ["top-visualization-left"].create_chart_selector ();
     gsa.displays ["top-visualization-right"].create_chart_selector ();
 
@@ -1316,6 +1087,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:if test="$auto_load_right != ''">
     gsa.displays ["top-visualization-right"].select_chart ("<xsl:value-of select="gsa:escape-js ($auto_load_right)"/>", false, true);
     </xsl:if>
+    -->
+    gsa.dashboards["top-dashboard"].initComponentsFromString ();
   </script>
 </xsl:template>
 
@@ -1360,23 +1133,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </h1>
   </div>
 
-  <div class="visualization" id="dashboard">
-    <div class="visualization-row">
-      <div class="visualization-spacer"/>
-      <div class="visualization-box" id="dashboard-box-1"/>
-      <div class="visualization-spacer"/>
-      <div class="visualization-box" id="dashboard-box-2"/>
-      <div class="visualization-spacer"/>
-    </div>
-    <div class="visualization-row">
-      <div class="visualization-spacer"/>
-      <div class="visualization-box" id="dashboard-box-3"/>
-      <div class="visualization-spacer"/>
-      <div class="visualization-box" id="dashboard-box-4"/>
-      <div class="visualization-spacer"/>
-    </div>
+  <xsl:call-template name="init-d3charts"/>
+  <!-- TODO: Implement filter selection for new Dashboard JS and
+              update this section to enable Dashboard again-->
 
-    <xsl:call-template name="init-d3charts"/>
+<!--
 
     <xsl:variable name="envelope" select="/envelope"/>
     <xsl:variable name="chart_defaults" xmlns="">
@@ -1740,6 +1501,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:for-each>
     </script>
   </div>
+-->
 </xsl:template>
 
 </xsl:stylesheet>

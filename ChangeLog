@@ -1,3 +1,45 @@
+2016-01-12  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Use a new, more dynamic method for creating dashboards / chart boxes
+	which makes their size adapt to the screen width, and which also allows
+	editing of dashboards like rearranging, removing and adding of new
+	components and resizing the row heights.
+
+	* src/gsad_omp.c (authenticate_omp): Change filter for getting
+	dashboard settings.
+
+	* src/html/classic/graphics.xsl (init-d3charts): Add variable
+	"dashboards" and remove unused variables "generators", "displays" and
+	"charts".
+	(js-aggregate-chart, js-tasks-chart): Remove. Renamed to
+	js-aggregate-chart-factory and js-tasks-chart-factory.
+	(js-aggregate-chart-factory): New. Most functionality from
+	js-aggregate-chart and js-tasks-chart. Builds a JS function generating
+	chart controllers instead of creating the controller directly. Also
+	adjusted to new dashboard creation method.
+	(js-scan-management-top-visualization, js-secinfo-top-visualization):
+	Use new, more flexible dashboard creation method.
+	(dashboard [secinfo]): Comment out chart creation code.
+
+	* src/html/classic/omp.xsl (list-window): Use new Dashboard creation
+	method for top mini-dashboard.
+	(get_tasks_chart, get_aggregate): Use new Dashboard creation method.
+
+	* src/html/classic/css/gsa-style.css: Update CSS for dashboards.
+
+	* src/html/classic/js/gsa_graphics_base.js (Dashboard, DashboardRow)
+	(DashboardNewRowTarget): New constructor functions for objects managing
+	rearrangable and resizable dashboards.
+	(DashboardBox): New constructor function. Replacement for Display
+	using the new editable Dashboard.
+	(Chart): Use addController function of DashboardBox. Add function "id".
+	(fit_detached_window, detached_chart_resize_listener): Adapt to new
+	Dashboard.
+
+	* src/html/classic/js/jquery-ui.js
+	src/html/classic/js/min/jquery-ui.js: Update to a version including all
+	components.
+
 2016-01-12  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/gsad_omp.c (MESSAGE_INVALID): Fix returning the correct error message in
