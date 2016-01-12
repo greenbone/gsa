@@ -1,3 +1,34 @@
+gsa 6.0.8 (2016-01-12)
+
+This is the eighth maintenance release of the Greenbone Security Assistant (GSA)
+6.0 module for the Open Vulnerability Assessment System release 8 (OpenVAS-8).
+
+This release addresses two important security issues:
+- Due to incomplete parameter filtering of the aggregate_type and sort_order
+  fields, a cross-site scripting (XSS) was possible. This attack vector
+  required a valid session token. The guest token could be used as a valid
+  session token if guest logins were explicitly enabled.
+- Due to incomplete URL checking it was possible to influence the target of the
+  guest mode login link when requesting the login page when guest logins were
+  explicitly enabled.
+
+The release also incorporates several improvements from the development branch
+of OpenVAS. Please see below for a comprehensive list of changes.
+
+Many thanks to everyone who contributed to this release:
+Matthew Mundell and Timo Pollmeier.
+
+Main changes compared to 6.0.7:
+* GSA no longer accepts two consecutive slashes in URLs.
+* Proper escaping is now applied to all generated JavaScript strings.
+* Values for aggregate_type and sort_order fields are now checked more strictly.
+* An issue which resulted in an internal error when the page was automatically
+  refreshed after creating a new permission has been fixed.
+* An issue which caused icons for certain actions to be displayed for notes and
+  overrides even though the user did not have the correct permissions has been
+  addressed,
+
+
 gsa 6.0.7 (2015-12-21)
 
 This is the seventh maintenance release of the Greenbone Security Assistant (GSA)
