@@ -1,5 +1,15 @@
 2016-01-13  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Prevent a few segfaults when OMP server is down.
+
+	* src/gsad_omp.c (omp, ompf): Add success return to doc.
+	(save_report_format_omp): When saving a parameter give up instead of
+	continuing, so that the user at least knows that the parameter was not
+	changed.  Add note about checking response.  When saving report format
+	use ompf response when ompf returns -1, because there is no entity.
+
+2016-01-13  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Extend the NVT alerts to any SecInfo type.
 
 	* src/gsad_omp.c (append_alert_event_data): Add 'secinfo_type'.

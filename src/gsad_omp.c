@@ -758,7 +758,8 @@ set_http_status_from_entity (entity_t entity,
  * @param[out] response_data  Extra data return for the HTTP response.
  * @param[in]  command        Command.
  *
- * @return -1 failed to connect (response set), 1 send error, 2 read error.
+ * @return 0 success, -1 failed to connect (response set), 1 send error, 2 read
+ *         error.
  */
 static int
 omp (credentials_t *credentials, gchar **response, entity_t *entity_return,
@@ -938,7 +939,8 @@ simple_ompf (const gchar *message_operation, credentials_t *credentials,
  * @param[in]  format         Command.
  * @param[in]  ...            Arguments for format string.
  *
- * @return -1 failed to connect (response set), 1 send error, 2 read error.
+ * @return 0 success, -1 failed to connect (response set), 1 send error,
+ *         2 read error.
  */
 static int
 ompf (credentials_t *credentials, gchar **response, entity_t *entity_return,
@@ -18961,7 +18963,6 @@ save_report_format_omp (credentials_t * credentials, params_t *params,
               switch (ret)
                 {
                   case 0:
-                  case -1:
                     break;
                   case 1:
                     response_data->http_status_code
@@ -18983,6 +18984,7 @@ save_report_format_omp (credentials_t * credentials, params_t *params,
                                          "Diagnostics: Failure to receive response from manager daemon.",
                                          "/omp?cmd=get_report_formats",
                                          response_data);
+                  case -1:
                   default:
                     response_data->http_status_code
                       = MHD_HTTP_INTERNAL_SERVER_ERROR;
@@ -18994,6 +18996,8 @@ save_report_format_omp (credentials_t * credentials, params_t *params,
                                          "/omp?cmd=get_report_formats",
                                          response_data);
                 }
+
+              /* TODO Check if succeeded.  response_from_entity_if_failed? */
             }
          }
     }
@@ -19018,8 +19022,9 @@ save_report_format_omp (credentials_t * credentials, params_t *params,
   switch (ret)
     {
       case 0:
-      case -1:
         break;
+      case -1:
+        return response;
       case 1:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
