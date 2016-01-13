@@ -1,5 +1,16 @@
 2016-01-13  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/greenbone.js: Add entry selectors for new slaves and
+	schedules.
+
+	* src/html/classic/css/gsa-style.css: Set mininum width of select elements in
+	table based forms.
+
+	* src/html/classic/omp.xsl: Add "new action" icons for schedule and slaves to
+	new task dialog.
+
+2016-01-13  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/greenbone.js: Update OMPDialog to use Post-Redirect-Get
 	pattern. This fixes selecting newly created subelements (e.g. a new schedule)
 	in the "New Task" dialog.

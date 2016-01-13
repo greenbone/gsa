@@ -5485,6 +5485,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                         title="{gsa:i18n ('Once', 'Time')}"/>
                 <xsl:value-of select="gsa:i18n ('Once', 'Time')"/>
             </label>
+            <a href="#" title="{ gsa:i18n('Create a new schedule') }"
+              class="new-action-icon" data-type="schedule"
+              data-done="select[name=schedule_id_optional]">
+              <img class="valign-middle" src="/img/new.png"/>
+            </a>
             </td>
           </tr>
         </xsl:if>
@@ -5546,7 +5551,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </tr>
       </table>
 
-      <table>
+      <table class="table-form">
         <tr>
           <td>
             <h3><xsl:value-of select="gsa:i18n ('Scanner', 'Scanner')"/></h3>
@@ -5628,6 +5633,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     </xsl:choose>
                   </xsl:for-each>
                 </select>
+                <a href="#" title="{ gsa:i18n('Create a new slave') }"
+                  class="new-action-icon" data-type="slave"
+                  data-done="select[name=slave_id_optional]">
+                  <img class="valign-middle" src="/img/new.png"/>
+                </a>
               </td>
             </tr>
           </xsl:if>

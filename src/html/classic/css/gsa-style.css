@@ -1460,4 +1460,8 @@ select[multiple] {
 .table-form td a {
   margin: 0 5px;
 }
+
+.table-form .select2-container {
+  min-width: 200px;
+}
 /* vim: set ts=2 sw=2 tw=80:*/

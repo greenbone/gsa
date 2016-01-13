@@ -83,6 +83,14 @@
       return get_entity_from_element(
           doc.find('get_port_lists_response > port_list'));
     },
+    new_slave: function(doc) {
+      return get_entity_from_element(
+          doc.find('get_slaves_response > slave'));
+    },
+    new_schedule: function(doc) {
+      return get_entity_from_element(
+          doc.find('get_schedules_response > schedule'));
+    },
   }
 
   function get_entity_from_element(element) {
