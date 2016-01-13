@@ -7923,7 +7923,10 @@ append_alert_event_data (GString *xml, params_t *data, const char *event)
       params_iterator_init (&iter, data);
       while (params_iterator_next (&iter, &name, &param))
         if ((strcmp (event, "Task run status changed") == 0
-             && strcmp (name, "status") == 0))
+             && strcmp (name, "status") == 0)
+            || ((strcmp (event, "New SecInfo arrived") == 0
+                 || strcmp (event, "Updated SecInfo arrived") == 0)
+                && strcmp (name, "secinfo_type") == 0))
           xml_string_append (xml,
                              "<data><name>%s</name>%s</data>",
                              name,
@@ -8135,7 +8138,7 @@ create_alert_omp (credentials_t * credentials, params_t *params,
 
   xml = g_string_new ("");
 
-  if ((strcmp (event, "New NVTs arrived") == 0) && event_data)
+  if ((strcmp (event, "New SecInfo arrived") == 0) && event_data)
     {
       params_iterator_t iter;
       char *name;
@@ -8147,7 +8150,7 @@ create_alert_omp (credentials_t * credentials, params_t *params,
             && param->value
             && (strcmp (param->value, "updated") == 0))
           {
-            event = "Updated NVTs arrived";
+            event = "Updated SecInfo arrived";
             break;
           }
     }
@@ -8849,7 +8852,7 @@ save_alert_omp (credentials_t * credentials, params_t *params,
   condition_data = params_values (params, "condition_data:");
   method_data = params_values (params, "method_data:");
 
-  if ((strcmp (event, "New NVTs arrived") == 0) && event_data)
+  if ((strcmp (event, "New SecInfo arrived") == 0) && event_data)
     {
       params_iterator_t iter;
       char *name;
@@ -8861,7 +8864,7 @@ save_alert_omp (credentials_t * credentials, params_t *params,
             && param->value
             && (strcmp (param->value, "updated") == 0))
           {
-            event = "Updated NVTs arrived";
+            event = "Updated SecInfo arrived";
             break;
           }
     }

@@ -8923,14 +8923,23 @@ should not have received it.
                 </tr>
                 <tr>
                   <td colspan="2" valign="top">
-                    <input type="radio" name="event" value="New NVTs arrived"
+                    <input type="radio" name="event" value="New SecInfo arrived"
                            onChange="editAlertUpdateForm()"/>
                     <select name="event_data:feed_event">
                       <option value="new" selected="1"><xsl:value-of select="gsa:i18n ('New', 'Status')"/></option>
                       <option value="updated"><xsl:value-of select="gsa:i18n ('Updated', 'Status')"/></option>
                     </select>
                     <xsl:text> </xsl:text>
-                    <xsl:value-of select="gsa:i18n ('NVTs arrived', 'Alert')"/>
+                    <select name="event_data:secinfo_type">
+                      <option value="nvt" selected="1"><xsl:value-of select="gsa:i18n ('NVTs', 'NVT')"/></option>
+                      <option value="cve"><xsl:value-of select="gsa:i18n ('CVEs', 'CVE')"/></option>
+                      <option value="cpe"><xsl:value-of select="gsa:i18n ('CPEs', 'CPE')"/></option>
+                      <option value="cert_bund_adv"><xsl:value-of select="gsa:i18n ('CERT-Bund Advisories', 'CERT-Bund Advisory')"/></option>
+                      <option value="dfn_cert_adv"><xsl:value-of select="gsa:i18n ('DFN-CERT Advisories', 'DFN-CERT Advisory')"/></option>
+                      <option value="ovaldef"><xsl:value-of select="gsa:i18n ('OVAL Definition', 'OVAL Definition')"/></option>
+                    </select>
+                    <xsl:text> </xsl:text>
+                    <xsl:value-of select="gsa:i18n ('arrived', 'Alert')"/>
                   </td>
                 </tr>
               </table>
@@ -9300,7 +9309,7 @@ should not have received it.
             <td colspan="2">
               <input type="text" name="method_data:details_url"
                      size="30" maxlength="1000"
-                     value="https://secinfo.greenbone.net/omp?cmd=get_info&amp;info_type=nvt&amp;info_id=$o&amp;token=guest"/>
+                     value="https://secinfo.greenbone.net/omp?cmd=get_info&amp;info_type=$t&amp;info_id=$o&amp;details=1&amp;token=guest"/>
             </td>
           </tr>
           <xsl:if test="gsa:may-op ('get_filters')">
@@ -9438,7 +9447,7 @@ should not have received it.
           <!-- CSS for hiding/showing rows initially. -->
           <xsl:variable name="hide">
             <xsl:choose>
-              <xsl:when test="get_alerts_response/alert/event/text() = 'New NVTs arrived' or get_alerts_response/alert/event/text() = 'Updated NVTs arrived'">
+              <xsl:when test="get_alerts_response/alert/event/text() = 'New SecInfo arrived' or get_alerts_response/alert/event/text() = 'Updated SecInfo arrived'">
                 <xsl:text>display: none</xsl:text>
               </xsl:when>
               <xsl:otherwise>
@@ -9448,7 +9457,7 @@ should not have received it.
           </xsl:variable>
           <xsl:variable name="show">
             <xsl:choose>
-              <xsl:when test="get_alerts_response/alert/event/text() = 'New NVTs arrived' or get_alerts_response/alert/event/text() = 'Updated NVTs arrived'">
+              <xsl:when test="get_alerts_response/alert/event/text() = 'New SecInfo arrived' or get_alerts_response/alert/event/text() = 'Updated SecInfo arrived'">
                 <xsl:text></xsl:text>
               </xsl:when>
               <xsl:otherwise>
@@ -9494,7 +9503,7 @@ should not have received it.
                       <xsl:text> </xsl:text>
                     </label>
                     <xsl:variable name="eventdata"
-                                  select="get_alerts_response/alert/event/data/text()"/>
+                                  select="get_alerts_response/alert/event/data[name='status']/text()"/>
                     <select name="event_data:status">
                       <xsl:if test="$eventdata = 'Delete Requested'">
                         <!-- In case the user has an alert with this state. -->
@@ -9541,16 +9550,16 @@ should not have received it.
                   <td colspan="2" valign="top">
                     <label>
                       <xsl:choose>
-                        <xsl:when test="get_alerts_response/alert/event/text() = 'New NVTs arrived'">
-                          <input type="radio" name="event" value="New NVTs arrived" checked="1"
+                        <xsl:when test="get_alerts_response/alert/event/text() = 'New SecInfo arrived'">
+                          <input type="radio" name="event" value="New SecInfo arrived" checked="1"
                                  onChange="editAlertUpdateForm()"/>
                           <select name="event_data:feed_event">
                             <option value="new" selected="1"><xsl:value-of select="gsa:i18n ('New', 'Status')"/></option>
                             <option value="updated"><xsl:value-of select="gsa:i18n ('Updated', 'Status')"/></option>
                           </select>
                         </xsl:when>
-                        <xsl:when test="get_alerts_response/alert/event/text() = 'Updated NVTs arrived'">
-                          <input type="radio" name="event" value="New NVTs arrived" checked="1"
+                        <xsl:when test="get_alerts_response/alert/event/text() = 'Updated SecInfo arrived'">
+                          <input type="radio" name="event" value="New SecInfo arrived" checked="1"
                                  onChange="editAlertUpdateForm()"/>
                           <select name="event_data:feed_event">
                             <option value="new"><xsl:value-of select="gsa:i18n ('New', 'Status')"/></option>
@@ -9558,7 +9567,7 @@ should not have received it.
                           </select>
                         </xsl:when>
                         <xsl:otherwise>
-                          <input type="radio" name="event" value="New NVTs arrived"
+                          <input type="radio" name="event" value="New SecInfo arrived"
                                  onChange="editAlertUpdateForm()"/>
                           <select name="event_data:feed_event">
                             <option value="new" selected="1"><xsl:value-of select="gsa:i18n ('New', 'Status')"/></option>
@@ -9567,7 +9576,41 @@ should not have received it.
                         </xsl:otherwise>
                       </xsl:choose>
                       <xsl:text> </xsl:text>
-                      <xsl:value-of select="gsa:i18n ('NVTs arrived', 'Alert')"/>
+                      <xsl:variable name="eventdata"
+                                    select="get_alerts_response/alert/event/data[name='secinfo_type']/text()"/>
+                      <select name="event_data:secinfo_type">
+                        <xsl:call-template name="opt">
+                          <xsl:with-param name="value" select="'nvt'"/>
+                          <xsl:with-param name="content" select="gsa:i18n ('NVTs', 'NVT')"/>
+                          <xsl:with-param name="select-value" select="$eventdata"/>
+                        </xsl:call-template>
+                        <xsl:call-template name="opt">
+                          <xsl:with-param name="value" select="'cve'"/>
+                          <xsl:with-param name="content" select="gsa:i18n ('CVEs', 'CVE')"/>
+                          <xsl:with-param name="select-value" select="$eventdata"/>
+                        </xsl:call-template>
+                        <xsl:call-template name="opt">
+                          <xsl:with-param name="value" select="'cpe'"/>
+                          <xsl:with-param name="content" select="gsa:i18n ('CPEs', 'CPE')"/>
+                          <xsl:with-param name="select-value" select="$eventdata"/>
+                        </xsl:call-template>
+                        <xsl:call-template name="opt">
+                          <xsl:with-param name="value" select="'cert_bund_adv'"/>
+                          <xsl:with-param name="content" select="gsa:i18n ('CERT-Bund Advisories', 'CERT-Bund Advisory')"/>
+                          <xsl:with-param name="select-value" select="$eventdata"/>
+                        </xsl:call-template>
+                        <xsl:call-template name="opt">
+                          <xsl:with-param name="value" select="'dfn_cert_adv'"/>
+                          <xsl:with-param name="content" select="gsa:i18n ('DFN-CERT Advisories', 'DFN-CERT Advisory')"/>
+                          <xsl:with-param name="select-value" select="$eventdata"/>
+                        </xsl:call-template>
+                        <xsl:call-template name="opt">
+                          <xsl:with-param name="value" select="'ovaldef'"/>
+                          <xsl:with-param name="content" select="gsa:i18n ('OVAL Definitions', 'OVAL Definition')"/>
+                          <xsl:with-param name="select-value" select="$eventdata"/>
+                        </xsl:call-template>
+                      </select>
+                      <xsl:value-of select="gsa:i18n ('arrived', 'Alert')"/>
                     </label>
                   </td>
                 </tr>
@@ -10163,12 +10206,26 @@ should not have received it.
       </xsl:choose>
     </td>
     <td>
-      <xsl:value-of select="gsa:i18n(event/text(), 'Alert')"/>
+      <xsl:choose>
+        <xsl:when test="event/text() = 'New SecInfo arrived'">
+          <xsl:text>New </xsl:text>
+          <xsl:value-of select="gsa:type-name-plural (event/data[name='secinfo_type']/text())"/>
+          <xsl:text> arrived</xsl:text>
+        </xsl:when>
+        <xsl:when test="event/text() = 'Updated SecInfo arrived'">
+          <xsl:text>Updated </xsl:text>
+          <xsl:value-of select="gsa:i18n (event/data[name='secinfo_type']/text(), 'Alert')"/>
+          <xsl:text> arrived</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="gsa:i18n (event/text(), 'Alert')"/>
+        </xsl:otherwise>
+      </xsl:choose>
       <xsl:choose>
         <xsl:when test="event/text()='Task run status changed' and string-length(event/data[name='status']/text()) &gt; 0">
-          <br/>(<xsl:value-of select="gsa:i18n ('to', 'Alert')"/>
-          <xsl:text> </xsl:text>
-          <xsl:value-of select="gsa:i18n (event/data[name='status']/text(), 'Status')"/>)
+          (<xsl:value-of select="gsa:i18n ('to', 'Alert')"/>
+           <xsl:text> </xsl:text>
+           <xsl:value-of select="gsa:i18n (event/data[name='status']/text(), 'Status')"/>)
         </xsl:when>
       </xsl:choose>
     </td>
@@ -10374,7 +10431,7 @@ should not have received it.
       <xsl:text> matches at least </xsl:text>
       <xsl:value-of select="condition/data[name='count']/text()"/>
       <xsl:choose>
-        <xsl:when test="event/text()='New NVTs arrived' or event/text()='Updated NVTs arrived'">
+        <xsl:when test="event/text()='New SecInfo arrived' or event/text()='Updated SecInfo arrived'">
           <xsl:text> NVT</xsl:text>
         </xsl:when>
         <xsl:otherwise>
@@ -10468,7 +10525,21 @@ should not have received it.
       <tr>
         <td><xsl:value-of select="gsa:i18n ('Event', 'Alert')"/>:</td>
         <td>
-          <xsl:value-of select="gsa:i18n (event/text(), 'Alert')"/>
+          <xsl:choose>
+            <xsl:when test="event/text() = 'New SecInfo arrived'">
+              <xsl:text>New </xsl:text>
+              <xsl:value-of select="gsa:type-name-plural (event/data[name='secinfo_type']/text())"/>
+              <xsl:text> arrived</xsl:text>
+            </xsl:when>
+            <xsl:when test="event/text() = 'Updated SecInfo arrived'">
+              <xsl:text>Updated </xsl:text>
+              <xsl:value-of select="gsa:type-name-plural (event/data[name='secinfo_type']/text())"/>
+              <xsl:text> arrived</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="gsa:i18n (event/text(), 'Alert')"/>
+            </xsl:otherwise>
+          </xsl:choose>
           <xsl:choose>
             <xsl:when test="event/text()='Task run status changed' and string-length(event/data[name='status']/text()) &gt; 0">
               (<xsl:value-of select="gsa:i18n ('to', 'Alert')"/>
@@ -10522,8 +10593,8 @@ should not have received it.
                   </td>
                 </tr>
                 <xsl:choose>
-                  <xsl:when test="event/text() = 'New NVTs arrived'"/>
-                  <xsl:when test="event/text() = 'Updated NVTs arrived'"/>
+                  <xsl:when test="event/text() = 'New SecInfo arrived'"/>
+                  <xsl:when test="event/text() = 'Updated SecInfo arrived'"/>
                   <xsl:otherwise>
                     <tr>
                       <td width="45"></td>
@@ -10745,7 +10816,7 @@ should not have received it.
           </table>
         </td>
       </tr>
-      <xsl:if test="event/text() = 'New NVTs arrived' or event/text() = 'Updated NVTs arrived'">
+      <xsl:if test="event/text() = 'New SecInfo arrived' or event/text() = 'Updated SecInfo arrived'">
         <tr>
           <td><xsl:value-of select="gsa:i18n ('Details URL', 'Alert')"/>:</td>
           <td>

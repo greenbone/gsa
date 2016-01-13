@@ -778,7 +778,7 @@
 
       switch(type)
         {
-          case "New NVTs arrived":
+          case "New SecInfo arrived":
 	        /* Conditions. */
             $("#severity_at_least_row, #severity_changed_row, #filter_count_changed_row").hide();
 	        /* Methods. */

@@ -1,3 +1,21 @@
+2016-01-13  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Extend the NVT alerts to any SecInfo type.
+
+	* src/gsad_omp.c (append_alert_event_data): Add 'secinfo_type'.
+	(create_alert_omp, save_alert_omp): Update event names.
+
+	* src/html/classic/js/greenbone.js (window.editAlertUpdateForm): Update
+	event name.
+
+	* src/html/classic/omp.xsl (html-create-alert-form): Update event name.
+	Add type dropdown.  Add "details=1" to "details_url".
+	(html-edit-alert-form): Update event names.  Specify name for 'status'.
+	Add type dropdown.
+	(alert): Add type.  Put status on same line as event name.
+	(condition): Update event name.
+	(alert [details]): Add SecInfo to name.  Update event names.
+
 2016-01-13  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/js/greenbone.js: Add entry selectors for new slaves and
