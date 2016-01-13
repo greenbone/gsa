@@ -856,7 +856,7 @@ init_validator ()
 
   openvas_validator_add (validator,
                          "cmd",
-                         "^(bulk_delete)"
+                         "^((bulk_delete)"
                          "|(clone)"
                          "|(create_agent)"
                          "|(create_asset)"
@@ -1130,7 +1130,7 @@ init_validator ()
                          "|(verify_report_format)"
                          "|(verify_scanner)"
                          "|(wizard)"
-                         "|(wizard_get)$");
+                         "|(wizard_get))$");
 
   openvas_validator_add (validator, "action_message", "(?s)^.*$");
   openvas_validator_add (validator, "action_status", "(?s)^.*$");
@@ -1144,13 +1144,13 @@ init_validator ()
   openvas_validator_add (validator, "asset_name",   "(?s)^.*$");
   openvas_validator_add (validator, "asset_type",   "^(host|os)$");
   openvas_validator_add (validator, "asset_id",     "^([[:alnum:]-_.:\\/~()']|&amp;)+$");
-  openvas_validator_add (validator, "auth_algorithm",   "^(md5)|(sha1)$");
+  openvas_validator_add (validator, "auth_algorithm",   "^(md5|sha1)$");
   openvas_validator_add (validator, "auth_method",  "^(0|1|2)$");
   /* Defined in RFC 2253. */
   openvas_validator_add (validator, "authdn",       "^.{0,200}%s.{0,200}$");
   openvas_validator_add (validator, "autofp",       "^(0|1|2)$");
   openvas_validator_add (validator, "autofp_value", "^(1|2)$");
-  openvas_validator_add (validator, "boolean",    "^0|1$");
+  openvas_validator_add (validator, "boolean",    "^(0|1)$");
   openvas_validator_add (validator, "bulk_selected:name",  "^(.*){0,400}$");
   openvas_validator_add (validator, "bulk_selected:value", "(?s)^.*$");
   openvas_validator_add (validator, "caller",     "^.*$");
@@ -1177,9 +1177,9 @@ init_validator ()
   openvas_validator_add (validator, "cvss_i",       "^(N|P|C)$");
   openvas_validator_add (validator, "cvss_a",       "^(N|P|C)$");
   openvas_validator_add (validator, "cvss_vector",       "^AV:(L|A|N)/AC:(H|M|L)/A(u|U):(M|S|N)/C:(N|P|C)/I:(N|P|C)/A:(N|P|C)$");
-  openvas_validator_add (validator, "min_cvss_base", "^(|10.0|[0-9].[0-9])$");
+  openvas_validator_add (validator, "min_cvss_base", "^(|10\\.0|[0-9]\\.[0-9])$");
   openvas_validator_add (validator, "min_qod", "^(|100|[1-9]?[0-9]|)$");
-  openvas_validator_add (validator, "day_of_month", "^([0-9]|[012][0-9]|3[01])$");
+  openvas_validator_add (validator, "day_of_month", "^(0??[1-9]|[12][0-9]|30|31)$");
   openvas_validator_add (validator, "days",         "^(-1|[0-9]+)$");
   openvas_validator_add (validator, "data_column", "^[_[:alnum:]]{1,80}$");
   openvas_validator_add (validator, "data_columns:name",  "^[0123456789]{1,5}$");
@@ -1216,7 +1216,7 @@ init_validator ()
   openvas_validator_add (validator, "host",       "^[[:alnum:]:\\.]{1,80}$");
   openvas_validator_add (validator, "hostport",   "^[-[:alnum:]\\. :]{1,80}$");
   openvas_validator_add (validator, "hosts",      "^[-[:alnum:],: \\./]{1,2000}$");
-  openvas_validator_add (validator, "hosts_allow", "^0|1$");
+  openvas_validator_add (validator, "hosts_allow", "^(0|1)$");
   openvas_validator_add (validator, "hosts_opt",  "^[-[:alnum:], \\./]{0,2000}$");
   openvas_validator_add (validator, "hosts_ordering", "^(sequential|random|reverse)$");
   openvas_validator_add (validator, "hour",        "^((0|1)[0-9]{1,1})|(2(0|1|2|3))$");
@@ -1240,7 +1240,7 @@ init_validator ()
   openvas_validator_add (validator, "max_result", "^[0-9]+$");
   openvas_validator_add (validator, "max_groups", "^-?[0-9]+$");
   openvas_validator_add (validator, "minute",     "^[0-5]{1,1}[0-9]{1,1}$");
-  openvas_validator_add (validator, "month",      "^((0??[0-9])|1[012])$");
+  openvas_validator_add (validator, "month",      "^((0??[1-9])|1[012])$");
   openvas_validator_add (validator, "note_id",    "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "note_result_id", "^[a-z0-9\\-]*$");
   openvas_validator_add (validator, "override_id",    "^[a-z0-9\\-]+$");
@@ -1255,18 +1255,18 @@ init_validator ()
   openvas_validator_add (validator, "optional_number", "^[0-9]*$");
   openvas_validator_add (validator, "oid",        "^([0-9.]{1,80}|CVE-[-0-9]{1,14})$");
   openvas_validator_add (validator, "page",       "^[_[:alnum:] ]{1,40}$");
-  openvas_validator_add (validator, "package_format", "^(pem)|(key)|(rpm)|(deb)|(exe)$");
+  openvas_validator_add (validator, "package_format", "^(pem|key|rpm|deb|exe)$");
   openvas_validator_add (validator, "password",   "^.{0,40}$");
   openvas_validator_add (validator, "password:value", "(?s)^.*$");
   openvas_validator_add (validator, "port",       "^.{1,60}$");
   openvas_validator_add (validator, "port_range", "^((default)|([-0-9, TU:]{1,400}))$");
-  openvas_validator_add (validator, "port_type", "^tcp|udp$");
+  openvas_validator_add (validator, "port_type", "^(tcp|udp)$");
   /** @todo Better regex. */
   openvas_validator_add (validator, "preference_name", "^(.*){0,400}$");
   openvas_validator_add (validator, "preference:name",  "^([^[]*\\[[^]]*\\]:.*){0,400}$");
   openvas_validator_add (validator, "preference:value", "(?s)^.*$");
   openvas_validator_add (validator, "prev_action", "(?s)^.*$");
-  openvas_validator_add (validator, "privacy_algorithm",   "^(aes)|(des)$");
+  openvas_validator_add (validator, "privacy_algorithm",   "^(aes|des)$");
   openvas_validator_add (validator, "private_key",      "(?s)^.*$");
   openvas_validator_add (validator, "protocol_format",  "^(html|rnc|xml)$");
   openvas_validator_add (validator, "pw",         "^[[:alnum:]]{1,10}$");
@@ -1346,7 +1346,7 @@ init_validator ()
   openvas_validator_add (validator, "year",       "^[0-9]+$");
   openvas_validator_add (validator, "z_fields:name", "^[0-9]{1,5}$");
   openvas_validator_add (validator, "z_fields:value", "^[_[:alnum:]]{1,80}$");
-  openvas_validator_add (validator, "calendar_unit", "^second|minute|hour|day|week|month|year|decade$");
+  openvas_validator_add (validator, "calendar_unit", "^(second|minute|hour|day|week|month|year|decade)$");
 
   /* Beware, the rule must be defined before the alias. */
 

@@ -1,3 +1,10 @@
+2016-01-13  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/gsad.c (init_validator): Correct regular expressions for
+	"cmd", "auth_algorithm", "boolean", "min_cvss_base", "day_of_month",
+	"hosts_allow", "month", "package_format", "port_type",
+	"privacy_algorithm" and "calendar_unit".
+
 2016-01-13  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Prevent a few segfaults when OMP server is down.
