@@ -67,11 +67,40 @@
     process_bulk:        'commands_response'
   };
 
-  var NAME_SELECTORS = {
-    new_credential:    function(doc, uuid){ return doc.find('get_credentials_response > credential[id=' + uuid +'] > name').text();},
-    new_target:    function(doc, uuid){ return doc.find('get_targets_response > target[id=' + uuid +'] > name').text();},
-    new_port_list: function(doc, uuid){ return doc.find('get_port_lists_response > port_list[id=' + uuid +'] > name').text();},
-    new_container_task: function(doc, uuid){ return doc.find('get_tasks_response > task[id=' + uuid +'] > name').text();},
+  var ENTITY_SELECTORS = {
+    new_target: function(doc) {
+      return get_entity_from_element(doc.find('get_targets_response > target'));
+    },
+    new_container_task: function(doc) {
+      return get_entity_from_element(
+          doc.find('get_tasks_response > task'));
+    },
+    new_credential: function(doc) {
+      return get_entity_from_element(
+          doc.find('get_credentials_response > credential'));
+    },
+    new_port_list: function(doc){
+      return get_entity_from_element(
+          doc.find('get_port_lists_response > port_list'));
+    },
+  }
+
+  function get_entity_from_element(element) {
+    if (!element) {
+      return undefined;
+    }
+
+    return {
+      name: element.children('name').text(),
+      id: element.attr('id'),
+    };
+  }
+
+  function get_entity(cmd, xml) {
+    if (cmd in ENTITY_SELECTORS) {
+      return ENTITY_SELECTORS[cmd](xml);
+    }
+    return undefined;
   }
 
   var isStatusOk = function(status_code){
@@ -222,7 +251,6 @@
       })
       .done(function(xml){
         xml = $(xml);
-        var response = xml.find(RESPONSE_SELECTORS[self.command]);
         if (self.reload === true){
           window.location.reload();
           // a bit overkill, but better-safe-than-sorry.
@@ -233,15 +261,19 @@
           self.close();
           return;
         }
-        // get the uuid of the created resource
-        var uuid = response.attr("id");
-        // get its name
-        var name = NAME_SELECTORS[self.command](xml, uuid);
-        // fill in the new information in the $element and make it selected
-        self.element.append($("<option/>", {value: uuid, html: name, selected: true}));
-        // refresh the select widget.
-        self.element.select2("destroy");
-        self.element.select2();
+        var entity = get_entity(self.command, xml);
+        if (entity !== undefined) {
+          // fill in the new information in the $element and make it selected
+          self.element.append($("<option/>", {
+            value: entity.id,
+            html: entity.name,
+            selected: true,
+          }));
+
+          // refresh the select widget.
+          self.element.select2("destroy");
+          self.element.select2();
+        }
 
         // And finally, close our dialog.
         self.close();
@@ -281,8 +313,6 @@
 
       if (submit.length)
         submit.remove ();
-
-      self.dialog.find ("form").append ('<input name="no_redirect" value="1" type="hidden"/>');
 
       // show the dialog !
       self.dialog.dialog({
