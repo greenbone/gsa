@@ -1,3 +1,11 @@
+2016-01-13  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Backport r24112.
+
+	* src/gsad.c (init_validator): Correct regular expressions for
+	"cmd", "boolean", "min_cvss_base", "day_of_month", "hosts_allow",
+	"month", "package_format", "port_type" and "calendar_unit".
+
 2016-01-13  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/gsad.c, src/html/classic/gsad.xsl,
