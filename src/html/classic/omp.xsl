@@ -5347,7 +5347,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          </td>
         </tr>
         <tr>
-          <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+          <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/></td>
           <td>
             <input type="text" name="comment" size="30" maxlength="400"/>
           </td>
@@ -5411,7 +5411,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          </td>
         </tr>
         <tr>
-          <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+          <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/></td>
           <td>
             <input type="text" name="comment" value="{gsa:param-or ('comment', '')}" size="30" maxlength="400"/>
           </td>
@@ -6463,7 +6463,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template name="html-edit-task-comment">
   <tr>
-    <td valign="top"><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+    <td valign="top"><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/></td>
     <td>
       <input type="text" name="comment" size="30" maxlength="400"
              value="{gsa:param-or ('comment', commands_response/get_tasks_response/task/comment)}"/>
@@ -7277,7 +7277,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr>
-            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/></td>
             <td>
               <input type="text" name="comment" value="" size="30"
                      maxlength="400"/>
@@ -8138,7 +8138,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr>
-            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/></td>
             <td>
               <input type="text" name="comment" size="30" maxlength="400"/>
             </td>
@@ -8236,7 +8236,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr>
-            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/></td>
             <td>
               <input type="text" name="comment" size="30" maxlength="400"
                      value="{commands_response/get_agents_response/agent/comment}"/>
@@ -8897,7 +8897,7 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/></td>
             <td>
               <input type="text" name="comment" size="30" maxlength="400"/>
             </td>
@@ -9473,7 +9473,7 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="165"><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+            <td valign="top" width="165"><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/></td>
             <td>
               <input type="text" name="comment" size="30" maxlength="400"
                      value="{get_alerts_response/alert/comment}"/>
@@ -11254,7 +11254,7 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/></td>
             <td>
               <input type="text" name="comment" size="30" maxlength="400"/>
             </td>
@@ -11331,7 +11331,7 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/></td>
             <td>
               <input type="text" name="comment" size="30" maxlength="400"
                      value="{commands_response/get_filters_response/filter/comment}"/>
@@ -12085,7 +12085,7 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/></td>
             <td>
               <input type="text" name="comment" value="{comment}" size="30"
                      maxlength="400"/>
@@ -12242,7 +12242,7 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/></td>
             <td>
               <input type="text" name="comment" value="{get_tags_response/tag/comment}" size="30"
                      maxlength="400"/>
@@ -12413,7 +12413,7 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/></td>
             <td>
               <input type="text" name="comment" size="30" maxlength="400"/>
             </td>
@@ -12717,7 +12717,7 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/></td>
             <td>
               <input type="text" name="comment" size="30" maxlength="400"
                      value="{get_targets_response/target/comment}"/>
@@ -14239,7 +14239,7 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/></td>
             <td>
               <input type="text" name="comment" size="30" maxlength="400"/>
             </td>
@@ -15809,7 +15809,7 @@ should not have received it.
           </td>
         </tr>
         <tr>
-          <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+          <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/></td>
           <td>
             <input type="text" name="comment" size="30" maxlength="400"
                    value="{$config/comment}"/>
@@ -16240,7 +16240,7 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (optional)</td>
+            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/></td>
             <td>
               <input type="text" name="comment" size="30" maxlength="400"/>
             </td>
@@ -16605,7 +16605,7 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/></td>
             <td>
               <input type="text" name="comment" size="30" maxlength="400"
                      value="{commands_response/get_schedules_response/schedule/comment}"/>
@@ -17403,7 +17403,7 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/></td>
             <td>
               <input type="text" name="comment" size="30" maxlength="400"/>
             </td>
@@ -17575,7 +17575,7 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/></td>
             <td>
               <input type="text" name="comment" size="30" maxlength="400"
                      value="{commands_response/get_scanners_response/scanner/comment}"/>
@@ -18134,7 +18134,7 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/></td>
             <td>
               <input type="text" name="comment" size="30" maxlength="400"/>
             </td>
@@ -18303,7 +18303,7 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/></td>
             <td>
               <input type="text" name="comment" size="30" maxlength="400"
                      value="{commands_response/get_slaves_response/slave/comment}"/>
@@ -24153,7 +24153,7 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/></td>
             <td>
               <input type="text" name="comment" size="30" maxlength="400"/>
             </td>
@@ -24230,7 +24230,7 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/></td>
             <td>
               <input type="text" name="comment" size="30" maxlength="400"
                      value="{commands_response/get_groups_response/group/comment}"/>
@@ -24454,7 +24454,7 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/></td>
             <td>
               <input type="text" name="comment" size="30" maxlength="400"
                      value="{commands_response/get_permissions_response/permission/comment}"/>
@@ -25193,7 +25193,7 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/></td>
             <td>
               <input type="text" name="comment" size="30" maxlength="400"
                      value="{commands_response/get_permissions_response/permission/comment}"/>
@@ -25420,7 +25420,7 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/></td>
             <td>
               <input type="text" name="comment" size="30" maxlength="400"/>
             </td>
@@ -25810,7 +25810,7 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/></td>
             <td>
               <input type="text" name="comment" size="30" maxlength="400"
                      value="{commands_response/get_port_lists_response/port_list/comment}"/>
@@ -32560,7 +32560,7 @@ var toggleFilter = function(){
             </td>
           </tr>
           <tr>
-            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/></td>
             <td>
               <input type="text" name="comment" size="30" maxlength="400"/>
             </td>
@@ -32634,7 +32634,7 @@ var toggleFilter = function(){
             </td>
           </tr>
           <tr>
-            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/></td>
             <td>
               <input type="text" name="comment" size="30" maxlength="400"
                      value="{commands_response/get_roles_response/role/comment}"/>
@@ -36575,7 +36575,7 @@ var toggleFilter = function(){
             </td>
           </tr>
           <tr>
-            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/></td>
             <td>
               <input type="text" name="comment" size="30" maxlength="400"/>
             </td>
@@ -36794,7 +36794,7 @@ var toggleFilter = function(){
             </td>
           </tr>
           <tr>
-            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/></td>
             <td>
               <input type="text" name="comment" size="30" maxlength="400"
                      value="{get_assets_response/asset/comment}"/>
