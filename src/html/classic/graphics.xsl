@@ -217,7 +217,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:variable name="init_params_js">
     {
       <xsl:for-each select="exslt:node-set ($init_params)/params/param">
-        "<xsl:value-of select="gsa:escape-js (@name)"/>" : "<xsl:value-of select="gsa:escape-js (.)"/>"
+        "<xsl:value-of select="gsa:escape-js (@name)"/>" : unescapeXML ("<xsl:value-of select="gsa:escape-js (.)"/>")
         <xsl:if test="position() &lt; count(exslt:node-set ($init_params)/params/param)">, </xsl:if>
       </xsl:for-each>
     }
@@ -407,7 +407,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                             generator,
                             forComponent,
                             "<xsl:value-of select="gsa:escape-js ($chart_name)"/>",
-                            "<xsl:value-of select="gsa:escape-js ($selector_label)"/>",
+                            unescapeXML ("<xsl:value-of select="gsa:escape-js ($selector_label)"/>"),
                             "/img/charts/severity-bar-chart.png",
                             1,
                             "<xsl:value-of select="gsa:escape-js ($chart_type)"/>",
@@ -435,7 +435,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:variable name="init_params_js">
     {
       <xsl:for-each select="exslt:node-set ($init_params)/params/param">
-        "<xsl:value-of select="gsa:escape-js (@name)"/>" : "<xsl:value-of select="gsa:escape-js (.)"/>"
+        "<xsl:value-of select="gsa:escape-js (@name)"/>" : unescapeXML ("<xsl:value-of select="gsa:escape-js (.)"/>")
         <xsl:if test="position() &lt; count(exslt:node-set ($init_params)/params/param)">, </xsl:if>
       </xsl:for-each>
     }
@@ -510,7 +510,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                             generator,
                             forComponent,
                             "<xsl:value-of select="gsa:escape-js ($chart_name)"/>",
-                            "<xsl:value-of select="gsa:escape-js ($selector_label)"/>",
+                            unescapeXML ("<xsl:value-of select="gsa:escape-js ($selector_label)"/>"),
                             "/img/charts/severity-bar-chart.png",
                             1,
                             "<xsl:value-of select="gsa:escape-js ($chart_type)"/>",
@@ -536,7 +536,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:when test="$type='result'">cb7db2fe-3fe4-4704-9fa1-efd4b9e522a8</xsl:when>
     </xsl:choose>
   </xsl:param>
-  <xsl:param name="default_components" select="'by-cvss|by-class'"/>
+  <xsl:param name="default_controllers" select="'by-cvss|by-class'"/>
   <xsl:param name="default_heights" select="'280'"/>
 
   <xsl:variable name="controllers">
@@ -545,7 +545,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:value-of select="/envelope/chart_preferences/chart_preference[@id = $controllers_pref_id]/value"/>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:value-of select="$default_components"/>
+        <xsl:value-of select="$default_controllers"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
@@ -567,9 +567,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     gsa.dashboards ["top-dashboard"]
       = Dashboard ("top-dashboard",
                    "<xsl:value-of select="gsa:escape-js ($controllers)"/>",
+                   "<xsl:value-of select="gsa:escape-js ($heights)"/>",
                    null,
                    {
                      "controllersPrefID": "<xsl:value-of select="gsa:escape-js ($controllers_pref_id)"/>",
+                     "heightsPrefID": "<xsl:value-of select="gsa:escape-js ($heights_pref_id)"/>",
                      "filter": "<xsl:value-of select="gsa:escape-js ($filter)"/>",
                      "filt_id": "<xsl:value-of select="gsa:escape-js ($filt_id)"/>",
                      "max_components": 4,
@@ -866,7 +868,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:when test="$type='allinfo'">985f38eb-1a30-4a35-abb6-3eec05b5d54a</xsl:when>
     </xsl:choose>
   </xsl:param>
-  <xsl:param name="default_components" select="'by-cvss|by-class'"/>
+  <xsl:param name="default_controllers" select="'by-cvss|by-class'"/>
   <xsl:param name="default_heights" select="'280'"/>
 
   <xsl:variable name="controllers">
@@ -875,7 +877,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:value-of select="/envelope/chart_preferences/chart_preference[@id = $controllers_pref_id]/value"/>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:value-of select="$default_components"/>
+        <xsl:value-of select="$default_controllers"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
@@ -897,9 +899,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     gsa.dashboards ["top-dashboard"]
       = Dashboard ("top-dashboard",
                    "<xsl:value-of select="gsa:escape-js ($controllers)"/>",
+                   "<xsl:value-of select="gsa:escape-js ($heights)"/>",
                    null,
                    {
                      "controllersPrefID": "<xsl:value-of select="gsa:escape-js ($controllers_pref_id)"/>",
+                     "heightsPrefID": "<xsl:value-of select="gsa:escape-js ($heights_pref_id)"/>",
                      "filter": "<xsl:value-of select="gsa:escape-js ($filter)"/>",
                      "filt_id": "<xsl:value-of select="gsa:escape-js ($filt_id)"/>",
                      "max_components": 4,

@@ -1,3 +1,40 @@
+2016-01-14  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Save dashboard row heights, fix resizing of detached chart and add some
+	missing unescaping.
+
+	* src/html/classic/graphics.xsl (js-aggregate-chart-factory)
+	(js-tasks-chart-factory): Unescape init params and selector label.
+	(js-scan-management-top-visualization, js-secinfo-top-visualization):
+	Rename default_components to default_controllers, add row heights
+	setting ID parameter for Dashboard.
+
+	* src/html/classic/omp.xsl (get_tasks_chart, get_aggregate): Add
+	heights parameter for Dashboard. Run fit_detached_window after page is
+	loaded and run resize listener once automatically.
+
+	* src/html/classic/js/gsa_graphics_base.js (Dashboard): Add parameter
+	"heightsString" and dashboardOpt "heightsPrefID".
+	(Dashboard.updateControllersString): Do not delete controllersString.
+	Check component count instead of rowControllersString to test whether
+	to insert separator.
+	(Dashboard.updateHeightsString): New function.
+	(Dashboard.updateRows): Update heights string if applicable.
+	(Dashboard.newComponent): Do not apply Select2 here.
+	(Dashboard.resized): Add parameter to also check height.
+	(Dashboard.resize): Set row heights if the heightsString is null.
+	(Dashboard.initComponentsFromString): Process heightsString to set
+	row heights if available.
+	(DashboardRow.height): New function.
+	(DashboardRow.updateControllersString): Do not delete controllersString.
+	(DashboardRow.updateComponents): Do not delete components.
+	(DashboardRow.startEdit): Update heights string on resize stop.
+	(DashboardBox.redraw): Apply Select2 here.
+	(DashboardBox.updateControllerSelect): Do not apply Select2 here.
+	(DashboardBox.applySelect2): New function.
+	(detached_chart_resize_listener): Remove debug output and call
+	resized function on dashboard.
+
 2016-01-14  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	Use a common layout for create and edit dialogs based on css.

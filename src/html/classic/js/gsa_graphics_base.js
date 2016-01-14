@@ -36,7 +36,8 @@ gsa.datetime_format = d3.time.format.utc ("%Y-%m-%d %H:%M")
 /*
  * Dashboard functions
  */
-function Dashboard (id, controllersString, filtersString, dashboardOpts)
+function Dashboard (id, controllersString, heightsString, filtersString,
+                    dashboardOpts)
 {
   function my () {};
   var elem = $("#" + id)[0];
@@ -44,20 +45,25 @@ function Dashboard (id, controllersString, filtersString, dashboardOpts)
   var components = {};
   var controllerFactories = {};
   var prevControllersString = controllersString;
+  var prevHeightsString = heightsString;
   var lastRowIndex = 0;
   var lastBoxIndex = 0;
   var currentResizeTimeout = null;
   var width = -1;
+  var height = -1;
   var topTarget, bottomTarget;
   var editMode = false;
   var totalComponents = 0;
   var controllersPrefRequest;
+  var heightsPrefRequest;
 
   /*
    * Extra options
    */
   // Controller selection preference
   var controllersPrefID = "";
+  // Row heights preference
+  var heightsPrefID = "";
   // Controller String for new components
   var defaultControllerString = "by-cvss";
   // Filter String for new components
@@ -80,6 +86,8 @@ function Dashboard (id, controllersString, filtersString, dashboardOpts)
 
       if (dashboardOpts["controllersPrefID"])
         controllersPrefID = dashboardOpts["controllersPrefID"];
+      if (dashboardOpts["heightsPrefID"])
+        heightsPrefID = dashboardOpts["heightsPrefID"];
       if (dashboardOpts["defaultFilterString"])
         defaultFilterString = dashboardOpts["defaultFilterString"];
       if (dashboardOpts["defaultControllerString"] !== undefined)
@@ -232,14 +240,13 @@ function Dashboard (id, controllersString, filtersString, dashboardOpts)
 
   my.updateControllersString = function ()
     {
-      delete controllersString;
       controllersString = "";
       var sortedRowElems = $(elem).find (".dashboard-row").toArray ();
       for (var index in sortedRowElems)
         {
           var entry = $(sortedRowElems[index]).attr ("id");
           var rowControllersString = rows[entry].updateControllersString ();
-          if (rowControllersString != "")
+          if (rows[entry].componentsCount () != 0)
             {
               controllersString += rowControllersString
               controllersString += "#";
@@ -274,6 +281,50 @@ function Dashboard (id, controllersString, filtersString, dashboardOpts)
       return controllersString;
     }
 
+  my.updateHeightsString = function ()
+    {
+      heightsString = "";
+
+      var sortedRowElems = $(elem).find (".dashboard-row").toArray ();
+      for (var index in sortedRowElems)
+        {
+          var entry = $(sortedRowElems[index]).attr ("id");
+          var rowHeight = rows[entry].height ();
+          if (rows[entry].componentsCount () != 0)
+            {
+              heightsString += rowHeight
+              heightsString += "#";
+            }
+        }
+      heightsString = heightsString.slice (0, -1);
+
+      if (heightsString != prevHeightsString)
+        {
+          console.debug ("heightsString updated to: " + heightsString);
+
+          if (heightsPrefID != "")
+            {
+              if (heightsPrefRequest != null)
+                heightsPrefRequest.abort ();
+
+              heightsPrefRequest = d3.xhr ("/omp")
+
+              var form_data = new FormData ();
+              form_data.append ("chart_preference_id", heightsPrefID);
+              form_data.append ("chart_preference_value", heightsString);
+              form_data.append ("token", gsa.gsa_token);
+              form_data.append ("cmd", "save_chart_preference");
+
+              heightsPrefRequest.post (form_data);
+            }
+        }
+      else
+        {
+          console.debug ("heightsString same as before");
+        }
+      return heightsString;
+    }
+
   my.updateFiltersString = function ()
     {
       return filtersString;
@@ -304,6 +355,8 @@ function Dashboard (id, controllersString, filtersString, dashboardOpts)
         }
       if (controllersString != null)
         my.updateControllersString ();
+      if (heightsString != null)
+        my.updateHeightsString ()
       if (filtersString != null)
         my.updateFiltersString ();
     }
@@ -347,7 +400,6 @@ function Dashboard (id, controllersString, filtersString, dashboardOpts)
           my.resize ();
           my.redraw ();
         }
-      $(box.elem()).find ("select").select2();
       box.selectController (box.controllerString(), false, true);
       my.updateRows ();
     }
@@ -360,11 +412,13 @@ function Dashboard (id, controllersString, filtersString, dashboardOpts)
         }
     }
 
-  my.resized = function ()
+  my.resized = function (checkHeight)
     {
-      if (width == elem.clientWidth)
+      if (width == elem.clientWidth
+          && (checkHeight == false || height == elem.clientHeight))
         return;
       width = elem.clientWidth;
+      height = elem.clientHeight;
       my.resize ();
       clearTimeout(currentResizeTimeout);
       currentResizeTimeout = setTimeout(my.redraw, 50);
@@ -374,6 +428,10 @@ function Dashboard (id, controllersString, filtersString, dashboardOpts)
     {
       for (var item in rows)
         {
+          if (heightsString == null)
+            {
+              rows[item].height (elem.clientHeight);
+            }
           rows[item].resize ();
         }
     }
@@ -409,11 +467,21 @@ function Dashboard (id, controllersString, filtersString, dashboardOpts)
       var rowFilterStringList = null;
       if (filtersString)
         rowFiltersStringList = filtersString.split ("#");
+      if (heightsString)
+        rowHeightsList = heightsString.split ("#");
+      else
+        rowHeightsList = [];
 
       for (var index in rowControllersStringList)
         {
+          height = parseInt (rowHeightsList[index]);
+          if (isNaN (height))
+            height = undefined;
+
+          console.debug (height);
           my.addNewRow (rowControllersStringList [index],
-                        filtersString ? rowFiltersStringList [index] : null);
+                        filtersString ? rowFiltersStringList [index] : null,
+                        height);
         }
       my.resize ();
       my.redraw ();
@@ -499,6 +567,7 @@ function DashboardRow (dashboard, controllersString, filtersString, height,
   $(elem).attr ("id", id);
   var compCountOffset = 0;
   var lastAddedComponent = null;
+  var prevHeight = height;
 
   my.elem = function ()
     {
@@ -513,6 +582,19 @@ function DashboardRow (dashboard, controllersString, filtersString, height,
   my.id = function ()
     {
       return id;
+    }
+
+  my.height = function (newHeight)
+    {
+      if (newHeight === undefined)
+        return height;
+
+      if (height != newHeight)
+        {
+          height = newHeight;
+          prevHeight = height;
+          dashboard.resize ();
+        }
     }
 
   my.component = function (id)
@@ -554,7 +636,6 @@ function DashboardRow (dashboard, controllersString, filtersString, height,
 
   my.updateControllersString = function ()
     {
-      delete controllersString;
       controllersString = "";
       for (var item in components)
         {
@@ -580,7 +661,6 @@ function DashboardRow (dashboard, controllersString, filtersString, height,
           newComponents [id] = dashboard.component (id);
           newComponents [id].row (my);
         }
-      delete components;
       components = newComponents;
       compCountOffset = 0;
 
@@ -649,7 +729,8 @@ function DashboardRow (dashboard, controllersString, filtersString, height,
                     resize: function (event, ui) {my.resize (undefined,
                                                              ui.size.height);
                                                   dashboard.resize (); },
-                    stop: function (event, ui) {dashboard.redraw ();} });
+                    stop: function (event, ui) {dashboard.redraw ();
+                                                dashboard.updateHeightsString();} });
       $(elem)
         .sortable ({handle: ".chart-head",
                     connectWith: ".dashboard-row:not(\".full\"), .dashboard-add-row",
@@ -933,6 +1014,7 @@ function DashboardBox (row, controllerString, filterString, dashboardOpts)
 
   my.redraw = function ()
     {
+      my.applySelect2 ();
       if (currentCtrlIndex >= 0)
         controllers [currentCtrlIndex].request_data ();
     }
@@ -1005,7 +1087,6 @@ function DashboardBox (row, controllerString, filterString, dashboardOpts)
     {
       if (select_elem)
         {
-          $(select_elem.node ()).select2 ();
           $(select_elem.node ()).select2 ("val", controllerString);
         }
       else
@@ -1101,6 +1182,15 @@ function DashboardBox (row, controllerString, filterString, dashboardOpts)
           .append ("img")
             .attr ("src", "img/next.png")
             .style ("vertical-align", "middle")
+  }
+
+  my.applySelect2 = function ()
+  {
+    if (! hideControllerSelect)
+      {
+        $(elem).find (".select2-container").remove ();
+        $(select_elem.node ()).select2 ();
+      }
   }
 
   dashboard.addControllersForComponent (my);
@@ -2801,14 +2891,13 @@ function detached_chart_resize_listener (dashboard)
     {
       var window_width = window.innerWidth;
       var window_height = window.innerHeight;
-console.debug ("resized");
       $(dashboard.elem())
           .height (window_height - (Number (d3.select (".gsa_footer")
                                             .property ("clientHeight"))
                                     + Number (d3.select ("#applied_filter")
                                                 .property ("clientHeight"))
                                     + 20));
-      dashboard.resized ();
+      dashboard.resized (true);
     }
 }
 

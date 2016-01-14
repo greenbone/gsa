@@ -7182,6 +7182,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       = Dashboard ("single-box-dashboard",
                    "tasks-chart",
                    null,
+                   null,
                    {
                      "filter": "<xsl:value-of select="gsa:escape-js ($filter_term)"/>",
                      "filt_id": "<xsl:value-of select="gsa:escape-js ($filt_id)"/>",
@@ -7226,10 +7227,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     gsa.dashboards ["single-box-dashboard"].initComponentsFromString ();
 
     if (this.fit_window)
-      fit_detached_window (gsa.dashboards ["single-box-dashboard"])
+      window.onload = function () { fit_detached_window (gsa.dashboards ["single-box-dashboard"]) }
 
     window.onresize
-      = detached_chart_resize_listener (gsa.dashboards ["single-box-dashboard"])
+      = detached_chart_resize_listener (gsa.dashboards ["single-box-dashboard"]);
     window.onresize ();
   </script>
 </xsl:template>
@@ -8525,6 +8526,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       = Dashboard ("single-box-dashboard",
                    "aggregate-chart",
                    null,
+                   null,
                    {
                      "filter": "<xsl:value-of select="gsa:escape-js ($filter_term)"/>",
                      "filt_id": "<xsl:value-of select="gsa:escape-js ($filt_id)"/>",
@@ -8614,10 +8616,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     gsa.dashboards ["single-box-dashboard"].initComponentsFromString ();
 
     if (this.fit_window)
-      fit_detached_window (gsa.dashboards ["single-box-dashboard"])
+      window.onload = function () { fit_detached_window (gsa.dashboards ["single-box-dashboard"]) }
 
     window.onresize
-      = detached_chart_resize_listener (gsa.dashboards ["single-box-dashboard"])
+      = detached_chart_resize_listener (gsa.dashboards ["single-box-dashboard"]);
+    window.onresize ();
   </script>
 </xsl:template>
 
