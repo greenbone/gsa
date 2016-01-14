@@ -1,5 +1,10 @@
 2016-01-14  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/css/gsa-style.css (.dashboard.edit .chart-head): New
+	rule to show a "grab" cursor on dashboard box headers in edit mode.
+
+2016-01-14  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Save dashboard row heights, fix resizing of detached chart and add some
 	missing unescaping.
 

@@ -1258,6 +1258,10 @@ select[multiple] {
   text-overflow: ellipsis;
 }
 
+.dashboard.edit .chart-head {
+  cursor: grab;
+}
+
 .chart-top-buttons {
   background: #3A3A3A;
   padding: 2px;
