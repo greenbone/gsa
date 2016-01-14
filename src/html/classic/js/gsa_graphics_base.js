@@ -1337,7 +1337,8 @@ function Chart (p_data_src, p_generator, p_display,
       var extra_params_str = ""
       if (gen_params.x_field != null)
         {
-          extra_params_str = extra_params_str + "&x_field=" + gen_params.x_field;
+          extra_params_str = extra_params_str + "&x_field="
+                              + encodeURIComponent (gen_params.x_field);
         }
       if (gen_params.y_fields != null)
         {
@@ -1345,7 +1346,8 @@ function Chart (p_data_src, p_generator, p_display,
             {
               extra_params_str = extra_params_str + "&y_fields:"
                                   + (1 + Number(field))
-                                  + "=" + gen_params.y_fields[field]
+                                  + "="
+                                  + encodeURIComponent (gen_params.y_fields[field])
             }
         }
       if (gen_params.z_fields != null)
@@ -1354,31 +1356,36 @@ function Chart (p_data_src, p_generator, p_display,
             {
               extra_params_str = extra_params_str + "&z_fields:"
                                   + (1 + Number(field))
-                                  + "=" + gen_params.z_fields[field]
+                                  + "="
+                                  + encodeURIComponent (gen_params.z_fields[field])
             }
         }
       for (var param in init_params)
         {
-          extra_params_str = extra_params_str + "&chart_init:" + param
-                              + "=" + init_params[param] + ""
+          extra_params_str = extra_params_str + "&chart_init:"
+                              + encodeURIComponent (param)
+                              + "="
+                              + encodeURIComponent (init_params[param])
         }
       for (var param in gen_params.extra)
         {
-          extra_params_str = extra_params_str + "&chart_gen:" + param
-                              + "=" + gen_params.extra[param] + ""
+          extra_params_str = extra_params_str + "&chart_gen:"
+                              +  encodeURIComponent (param)
+                              + "="
+                              + encodeURIComponent (gen_params.extra[param])
         }
 
       var command = data_src.command ();
       if (command != "get_aggregate")
-        command = command + "_chart";
+        command = encodeURIComponent (command) + "_chart";
 
       return create_uri (command,
                          data_src.params (),
                          data_src.prefix (),
                          true)
-             + "&chart_type=" + chart_type
-             + "&chart_template=" + chart_template
-             + encodeURI (extra_params_str)
+             + "&chart_type=" + encodeURIComponent (chart_type)
+             + "&chart_template=" + encodeURIComponent (chart_template)
+             + extra_params_str
     }
 
   return my;
@@ -1932,7 +1939,7 @@ function unescapeXML (string)
  */
 function create_uri (command, params, prefix, no_xml)
 {
-  var params_str = prefix + "cmd=" + command;
+  var params_str = prefix + "cmd=" + encodeURIComponent (command);
   for (var prop_name in params)
     {
       if (!no_xml || prop_name != "xml")
@@ -1941,17 +1948,19 @@ function create_uri (command, params, prefix, no_xml)
             {
               for (var i = 0; i < params[prop_name].length; i++)
                 {
-                  params_str = (params_str + "&" + prop_name + ":" + i
-                                + "=" + params[prop_name][i]);
+                  params_str = (params_str + "&"
+                                + encodeURIComponent (prop_name) + ":" + i
+                                + "="
+                                + encodeURIComponent (params[prop_name][i]));
                 }
             }
           else
-            params_str = (params_str + "&" + prop_name
-                          + "=" + params[prop_name]);
+            params_str = (params_str + "&" + encodeURIComponent (prop_name)
+                          + "=" + encodeURIComponent (params[prop_name]));
         }
     }
-  params_str = params_str + "&token=" + gsa.gsa_token;
-  return encodeURI (params_str);
+  params_str = params_str + "&token=" + encodeURIComponent (gsa.gsa_token);
+  return params_str;
 }
 
 /*

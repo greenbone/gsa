@@ -1,5 +1,11 @@
 2016-01-14  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/js/gsa_graphics_base.js (Chart.detached_url)
+	(create_uri): Encode individual components instead of whole string so
+	ampersands and other special character are also encoded.
+
+2016-01-14  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/graphics.xsl (js-aggregate-chart-factory)
 	(js-tasks-chart-factory): Unescape extra gen_params.
 
