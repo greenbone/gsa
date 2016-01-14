@@ -1,3 +1,11 @@
+2016-01-14  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/graphics.xsl (js-aggregate-chart-factory)
+	(js-tasks-chart-factory): Unescape extra gen_params.
+
+	* src/html/classic/js/gsa_graphics_base.js (Dashboard.resized): Fix
+	height check.
+
 2016-01-14  Björn Ricks <bjoern.ricks@greenbone.net>
 	Introduce a new info dialog
 

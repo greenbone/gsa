@@ -414,8 +414,9 @@ function Dashboard (id, controllersString, heightsString, filtersString,
 
   my.resized = function (checkHeight)
     {
-      if (width == elem.clientWidth
-          && (checkHeight == false || height == elem.clientHeight))
+      if (width == elem.clientWidth)
+        return;
+      if (checkHeight && height == elem.clientHeight)
         return;
       width = elem.clientWidth;
       height = elem.clientHeight;

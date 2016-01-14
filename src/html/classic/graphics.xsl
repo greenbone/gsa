@@ -246,7 +246,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:if>
       "extra" : {
         <xsl:for-each select="exslt:node-set ($gen_params)/params/param">
-          "<xsl:value-of select="gsa:escape-js (@name)"/>" : "<xsl:value-of select="gsa:escape-js (.)"/>"
+          "<xsl:value-of select="gsa:escape-js (@name)"/>" : unescapeXML ("<xsl:value-of select="gsa:escape-js (.)"/>")
           <xsl:if test="position() &lt; count(exslt:node-set ($gen_params)/params/param)">, </xsl:if>
         </xsl:for-each>
         }
@@ -445,7 +445,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     {
       "extra" : {
         <xsl:for-each select="exslt:node-set ($gen_params)/params/param">
-          "<xsl:value-of select="gsa:escape-js (@name)"/>" : "<xsl:value-of select="gsa:escape-js (.)"/>"
+          "<xsl:value-of select="gsa:escape-js (@name)"/>" : unescapeXML ("<xsl:value-of select="gsa:escape-js (.)"/>")
           <xsl:if test="position() &lt; count(exslt:node-set ($gen_params)/params/param)">, </xsl:if>
         </xsl:for-each>
         }
