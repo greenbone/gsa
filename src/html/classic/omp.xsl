@@ -5338,22 +5338,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:if>
       <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
       <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-      <table border="0" cellspacing="0" cellpadding="3" width="100%">
+      <table class="table-form">
         <tr>
-         <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
+         <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
          <td>
            <input type="text" name="name" value="unnamed" size="30"
                   maxlength="80"/>
          </td>
         </tr>
         <tr>
-          <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+          <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
           <td>
             <input type="text" name="comment" size="30" maxlength="400"/>
           </td>
         </tr>
         <tr>
-          <td colspan="2" style="text-align:right;">
+          <td>
             <input type="submit" name="submit" value="{gsa:i18n ('Create Task', 'Task')}"/>
           </td>
         </tr>
@@ -5707,7 +5707,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr>
-            <td valign="top"></td>
+            <td></td>
             <td>
               <xsl:value-of select="gsa:i18n ('Scan Config', 'Scan Config')"/>
             </td>
@@ -5750,7 +5750,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:if test="gsa:may-op ('get_tags') and gsa:may-op ('create_task') and count(get_tags_response/tag) != 0">
         <table>
           <tr>
-            <td colspan="2">
+            <td>
               <h3><xsl:value-of select="gsa:i18n ('Tag', 'Tag')"/></h3>
             </td>
           </tr>
@@ -7267,16 +7267,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="next" value="get_credential"/>
         <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+        <table class="table-form">
           <tr>
-            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
             <td>
               <input type="text" name="name" value="unnamed" size="30"
                      maxlength="80"/>
             </td>
           </tr>
           <tr>
-            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
             <td>
               <input type="text" name="comment" value="" size="30"
                      maxlength="400"/>
@@ -7287,7 +7287,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               Updates handled in greenbone.js:newCredentialUpdateForm()
               to avoid eval() of inline scripts by jQuery.
             -->
-            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Type', 'Credential')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Type', 'Credential')"/></td>
             <td>
               <select name="base" onChange="newCredentialUpdateForm()">
                 <xsl:call-template name="opt">
@@ -7314,7 +7314,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Allow insecure use', 'Credential')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Allow insecure use', 'Credential')"/></td>
             <td>
               <label>
                 <input name="allow_insecure" value="1" type="radio"/>
@@ -7331,7 +7331,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               Updates handled in greenbone.js:newCredentialUpdateForm()
               to avoid eval() of inline scripts by jQuery.
             -->
-            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Auto-generate', 'Credential')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Auto-generate', 'Credential')"/></td>
             <td>
               <label>
                 <input name="autogenerate" value="1" type="radio" onChange="newCredentialUpdateForm()"/>
@@ -7344,52 +7344,52 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr>
-            <td valign="top" height="10"></td>
+            <td></td>
           </tr>
           <tr id="community_row" style="display:none;">
-            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('SNMP Community', 'Auth Data')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('SNMP Community', 'Auth Data')"/></td>
             <td>
               <input type="password" name="community" size="30"/>
             </td>
           </tr>
           <tr id="login_row">
-            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Username', 'Auth Data')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Username', 'Auth Data')"/></td>
             <td>
               <input type="text" name="credential_login" size="30"/>
             </td>
           </tr>
           <tr id="password_row">
-            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Password', 'Auth Data')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Password', 'Auth Data')"/></td>
             <td>
               <input type="password" name="lsc_password" size="30"/>
             </td>
           </tr>
           <tr id="priv_password_row" style="display:none;">
-            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Privacy Password', 'Auth Data')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Privacy Password', 'Auth Data')"/></td>
             <td>
               <input type="password" name="privacy_password" size="30"/>
             </td>
           </tr>
           <tr id="certificate_row" style="display:none;">
-            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Certificate', 'Auth Data')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Certificate', 'Auth Data')"/></td>
             <td>
               <input type="file" name="certificate" size="30"/>
             </td>
           </tr>
           <tr id="private_key_row" style="display:none;">
-            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Private Key', 'Auth Data')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Private Key', 'Auth Data')"/></td>
             <td>
               <input type="file" name="private_key" size="30"/>
             </td>
           </tr>
           <tr id="passphrase_row" style="display:none;">
-            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Passphrase', 'Auth Data')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Passphrase', 'Auth Data')"/></td>
             <td>
               <input type="password" name="passphrase" size="30"/>
             </td>
           </tr>
           <tr id="auth_algo_row" style="display:none;">
-            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Auth Algorithm', 'Credential')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Auth Algorithm', 'Credential')"/></td>
             <td>
               <label>
                 <input name="auth_algorithm" value="md5" type="radio"/>
@@ -7402,7 +7402,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr id="priv_algo_row" style="display:none;">
-            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Privacy Algorithm', 'Credential')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Privacy Algorithm', 'Credential')"/></td>
             <td>
               <label>
                 <input name="privacy_algorithm" value="aes" type="radio" checked="1"/>
@@ -7415,7 +7415,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr>
-            <td colspan="2" style="text-align:right;">
+            <td>
               <input type="submit" name="submit" value="{gsa:i18n ('Create Credential', 'Credential')}"/>
             </td>
           </tr>
@@ -7510,9 +7510,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                name="credential_id"
                value="{commands_response/get_credentials_response/credential/@id}"/>
         <input type="hidden" name="next" value="{/envelope/params/next}"/>
-        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+        <table class="table-form">
           <tr>
-            <td valign="top" width="165"><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
             <td>
               <input type="text"
                      name="name"
@@ -7522,14 +7522,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr>
-            <td valign="top"><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/></td>
             <td>
               <input type="text" name="comment" size="30" maxlength="400"
                      value="{commands_response/get_credentials_response/credential/comment}"/>
             </td>
           </tr>
           <tr>
-            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Type', 'Credential')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Type', 'Credential')"/></td>
             <td>
               <select name="base" onChange="newCredentialUpdateForm()" disabled="1">
                 <xsl:call-template name="opt">
@@ -7556,7 +7556,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Allow insecure use', 'Credential')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Allow insecure use', 'Credential')"/></td>
             <td>
               <label>
                 <xsl:choose>
@@ -7584,12 +7584,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </tr>
           <xsl:if test="$credential_type = 'snmp'">
             <tr>
-              <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('SNMP Community', 'Auth Data')"/></td>
+              <td><xsl:value-of select="gsa:i18n ('SNMP Community', 'Auth Data')"/></td>
               <td>
                 <label>
                   <input type="checkbox" name="change_community" value="1"/>
                   <xsl:value-of select="gsa:i18n ('Replace existing value with', 'Auth Data|Password')"/>:
-                  <br/>
                 </label>
                 <input type="password" autocomplete="off" name="community"
                        size="30" maxlength="400" value=""/>
@@ -7598,7 +7597,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:if>
           <xsl:if test="$credential_type != 'cc'">
             <tr>
-              <td valign="top"><xsl:value-of select="gsa:i18n ('Login', 'Auth Data')"/></td>
+              <td><xsl:value-of select="gsa:i18n ('Login', 'Auth Data')"/></td>
               <td>
                 <input type="text" name="credential_login" size="30" maxlength="400"
                        value="{commands_response/get_credentials_response/credential/login}"/>
@@ -7607,35 +7606,33 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:if>
           <xsl:if test="$credential_type = 'up' or $credential_type = 'snmp'">
             <tr>
-              <td valign="top"><xsl:value-of select="gsa:i18n ('Password', 'Auth Data')"/></td>
+              <td><xsl:value-of select="gsa:i18n ('Password', 'Auth Data')"/></td>
               <td>
                 <label>
                   <input type="checkbox" name="change_password" value="1"/>
                   <xsl:value-of select="gsa:i18n ('Replace existing value with', 'Auth Data|Password')"/>:
-                  <br/>
+                  <input type="password" autocomplete="off" name="password"
+                        size="30" maxlength="400" value=""/>
                 </label>
-                <input type="password" autocomplete="off" name="password"
-                       size="30" maxlength="400" value=""/>
               </td>
             </tr>
           </xsl:if>
           <xsl:if test="$credential_type = 'snmp'">
             <tr>
-              <td valign="top"><xsl:value-of select="gsa:i18n ('Privacy Password', 'Auth Data')"/></td>
+              <td><xsl:value-of select="gsa:i18n ('Privacy Password', 'Auth Data')"/></td>
               <td>
                 <label>
                   <input type="checkbox" name="change_privacy_password" value="1"/>
                   <xsl:value-of select="gsa:i18n ('Replace existing value with', 'Auth Data|Password')"/>:
-                  <br/>
+                  <input type="password" autocomplete="off" name="privacy_password"
+                        size="30" maxlength="400" value=""/>
                 </label>
-                <input type="password" autocomplete="off" name="privacy_password"
-                       size="30" maxlength="400" value=""/>
               </td>
             </tr>
           </xsl:if>
           <xsl:if test="$credential_type = 'cc'">
             <tr>
-              <td valign="top"><xsl:value-of select="gsa:i18n ('Certificate', 'Auth Data')"/></td>
+              <td><xsl:value-of select="gsa:i18n ('Certificate', 'Auth Data')"/></td>
               <td>
                 <input type="file" name="certificate" size="30"/>
               </td>
@@ -7643,7 +7640,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:if>
           <xsl:if test="$credential_type = 'cc' or $credential_type = 'usk'">
             <tr>
-              <td valign="top"><xsl:value-of select="gsa:i18n ('Private key', 'Auth Data')"/></td>
+              <td><xsl:value-of select="gsa:i18n ('Private key', 'Auth Data')"/></td>
               <td>
                 <input type="file" name="private_key" size="30"/>
               </td>
@@ -7651,21 +7648,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:if>
           <xsl:if test="$credential_type = 'usk'">
             <tr>
-              <td valign="top"><xsl:value-of select="gsa:i18n ('Passphrase', 'Auth Data')"/></td>
+              <td><xsl:value-of select="gsa:i18n ('Passphrase', 'Auth Data')"/></td>
               <td>
                 <label>
                   <input type="checkbox" name="change_passphrase" value="1"/>
                   <xsl:value-of select="gsa:i18n ('Replace existing value with', 'Auth Data|Password')"/>:
-                  <br/>
+                  <input type="password" autocomplete="off" name="passphrase"
+                        size="30" maxlength="400" value=""/>
                 </label>
-                <input type="password" autocomplete="off" name="passphrase"
-                       size="30" maxlength="400" value=""/>
               </td>
             </tr>
           </xsl:if>
           <xsl:if test="$credential_type = 'snmp'">
             <tr>
-              <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Auth Algorithm', 'Credential')"/></td>
+              <td><xsl:value-of select="gsa:i18n ('Auth Algorithm', 'Credential')"/></td>
               <td>
                 <label>
                   <xsl:choose>
@@ -7694,7 +7690,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:if>
           <xsl:if test="$credential_type = 'snmp'">
             <tr>
-              <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Privacy Algorithm', 'Credential')"/></td>
+              <td><xsl:value-of select="gsa:i18n ('Privacy Algorithm', 'Credential')"/></td>
               <td>
                 <label>
                   <xsl:choose>
@@ -7722,7 +7718,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </tr>
           </xsl:if>
           <tr>
-            <td colspan="2" style="text-align:right;">
+            <td>
               <input type="submit" name="submit" value="{gsa:i18n ('Save Credential', 'Credential')}"/>
             </td>
           </tr>
@@ -8132,26 +8128,26 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="next" value="get_agent"/>
         <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+        <table class="table-form">
           <tr>
-            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
             <td>
               <input type="text" name="name" value="unnamed" size="30"
                      maxlength="80"/>
             </td>
           </tr>
           <tr>
-            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
             <td>
               <input type="text" name="comment" size="30" maxlength="400"/>
             </td>
           </tr>
           <tr>
-            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Installer', 'Agent')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Installer', 'Agent')"/></td>
             <td><input type="file" name="installer" size="30"/></td>
           </tr>
           <tr>
-            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Installer signature', 'Agent')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+            <td><xsl:value-of select="gsa:i18n ('Installer signature', 'Agent')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
             <td><input type="file" name="installer_sig" size="30"/></td>
           </tr>
           <!--
@@ -8165,7 +8161,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </tr>
           -->
           <tr>
-            <td colspan="2" style="text-align:right;">
+            <td>
               <input type="submit" name="submit" value="{gsa:i18n ('Create Agent', 'Agent')}"/>
             </td>
           </tr>
@@ -8230,23 +8226,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="next" value="{/envelope/params/next}"/>
         <input type="hidden" name="agent" value="{/envelope/params/agent}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+        <table class="table-form">
           <tr>
-            <td valign="top" width="165"><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
             <td>
               <input type="text" name="name" size="30" maxlength="80"
                      value="{commands_response/get_agents_response/agent/name}"/>
             </td>
           </tr>
           <tr>
-            <td valign="top" width="165"><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
             <td>
               <input type="text" name="comment" size="30" maxlength="400"
                      value="{commands_response/get_agents_response/agent/comment}"/>
             </td>
           </tr>
           <tr>
-            <td colspan="2" style="text-align:right;">
+            <td>
               <input type="submit" name="submit" value="{gsa:i18n ('Save Agent', 'Agent')}"/>
             </td>
           </tr>
@@ -8685,9 +8681,9 @@ should not have received it.
     </xsl:choose>
   </xsl:param>
   <xsl:param name="filters"/>
-  <table border="0" width="100%">
+  <table class="table-form">
     <tr id="always_row">
-      <td colspan="2" valign="top">
+      <td>
         <xsl:choose>
           <xsl:when test="not ($condition)">
             <xsl:call-template name="radio-button">
@@ -8709,53 +8705,57 @@ should not have received it.
       </td>
     </tr>
     <tr style="{$hide}" id="severity_at_least_row">
-      <td colspan="2" valign="top">
+      <td>
         <xsl:call-template name="radio-button">
           <xsl:with-param name="value" select="'Severity at least'"/>
           <xsl:with-param name="select-value" select="$condition-text"/>
-          <xsl:with-param name="text" select="gsa:i18n ('Severity at least', 'Alert')"/>
           <xsl:with-param name="name" select="'condition'"/>
+          <xsl:with-param name="text">
+            <xsl:value-of select="gsa:i18n ('Severity at least', 'Alert')"/>
+            <xsl:text> </xsl:text>
+            <xsl:choose>
+              <xsl:when test="$condition and $condition/text() = 'Severity at least'">
+                <input name="condition_data:severity" value="{$condition/data/text()}" size="5"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <input name="condition_data:severity" value="0.1" size="5"/>
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:with-param>
         </xsl:call-template>
-        <xsl:text> </xsl:text>
-        <xsl:choose>
-          <xsl:when test="$condition and $condition/text() = 'Severity at least'">
-            <input name="condition_data:severity" value="{$condition/data/text()}" size="5"/>
-          </xsl:when>
-          <xsl:otherwise>
-            <input name="condition_data:severity" value="0.1" size="5"/>
-          </xsl:otherwise>
-        </xsl:choose>
       </td>
     </tr>
     <tr style="{$hide}" id="severity_changed_row">
-      <td colspan="2" valign="top">
+      <td>
         <xsl:call-template name="radio-button">
           <xsl:with-param name="name" select="'condition'"/>
           <xsl:with-param name="value" select="'Severity changed'"/>
           <xsl:with-param name="select-value" select="$condition-text"/>
-          <xsl:with-param name="text" select="gsa:i18n ('Severity level ', 'Alert Condition')"/>
+          <xsl:with-param name="text">
+            <xsl:value-of select="gsa:i18n ('Severity level', 'Alert')"/>
+            <select name="condition_data:direction">
+              <xsl:call-template name="opt">
+                <xsl:with-param name="value" select="'changed'"/>
+                <xsl:with-param name="select-value" select="$condition-text"/>
+                <xsl:with-param name="content" select="gsa:i18n ('changed', 'Alert Condition')"/>
+              </xsl:call-template>
+              <xsl:call-template name="opt">
+                <xsl:with-param name="value" select="'increased'"/>
+                <xsl:with-param name="select-value" select="$condition-text"/>
+                <xsl:with-param name="content" select="gsa:i18n ('increased', 'Alert Condition')"/>
+              </xsl:call-template>
+              <xsl:call-template name="opt">
+                <xsl:with-param name="value" select="'decreased'"/>
+                <xsl:with-param name="select-value" select="$condition-text"/>
+                <xsl:with-param name="content" select="gsa:i18n ('decreased', 'Alert Condition')"/>
+              </xsl:call-template>
+            </select>
+          </xsl:with-param>
         </xsl:call-template>
-        <select name="condition_data:direction">
-          <xsl:call-template name="opt">
-            <xsl:with-param name="value" select="'changed'"/>
-            <xsl:with-param name="select-value" select="$condition-text"/>
-            <xsl:with-param name="content" select="gsa:i18n ('changed', 'Alert Condition')"/>
-          </xsl:call-template>
-          <xsl:call-template name="opt">
-            <xsl:with-param name="value" select="'increased'"/>
-            <xsl:with-param name="select-value" select="$condition-text"/>
-            <xsl:with-param name="content" select="gsa:i18n ('increased', 'Alert Condition')"/>
-          </xsl:call-template>
-          <xsl:call-template name="opt">
-            <xsl:with-param name="value" select="'decreased'"/>
-            <xsl:with-param name="select-value" select="$condition-text"/>
-            <xsl:with-param name="content" select="gsa:i18n ('decreased', 'Alert Condition')"/>
-          </xsl:call-template>
-        </select>
       </td>
     </tr>
     <tr id="filter_count_at_least_row">
-      <td colspan="2" valign="top">
+      <td>
         <xsl:call-template name="radio-button">
           <xsl:with-param name="name" select="'condition'"/>
           <xsl:with-param name="value" select="'Filter count at least'"/>
@@ -8816,7 +8816,7 @@ should not have received it.
       </td>
     </tr>
     <tr style="{$hide}" id="filter_count_changed_row">
-      <td colspan="2" valign="top">
+      <td>
         <xsl:call-template name="radio-button">
           <xsl:with-param name="name" select="'condition'"/>
           <xsl:with-param name="value" select="'Filter count changed'"/>
@@ -8885,44 +8885,44 @@ should not have received it.
         <xsl:if test="not (gsa:may-op ('get_filters'))">
           <input type="hidden" name="filter_id" value="0"/>
         </xsl:if>
-        <table border="0" cellspacing="0" cellpadding="3" width="100%">
-          <tr class="odd">
-            <td valign="top" width="145"><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
+        <table class="table-form">
+          <tr>
+            <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
             <td>
               <input type="text" name="name" value="unnamed" size="30"
                      maxlength="80"/>
             </td>
           </tr>
-          <tr class="even">
-            <td valign="top" width="145"><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+          <tr>
+            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
             <td>
               <input type="text" name="comment" size="30" maxlength="400"/>
             </td>
           </tr>
-          <tr class="odd">
-            <td valign="top" width="145"><xsl:value-of select="gsa:i18n ('Event', 'Alert')"/></td>
-            <td colspan="2">
-              <table border="0" width="100%">
+          <tr>
+            <td><xsl:value-of select="gsa:i18n ('Event', 'Alert')"/></td>
+            <td>
+              <table class="table-form">
                 <tr>
-                  <td colspan="2" valign="top">
+                  <td>
                     <label>
                       <input type="radio" name="event" value="Task run status changed" checked="1"
                              onChange="editAlertUpdateForm()"/>
                       <xsl:value-of select="gsa:i18n ('Task run status changed to', 'Alert')"/>
                       <xsl:text> </xsl:text>
+                      <select name="event_data:status">
+                        <option value="Done" selected="1"><xsl:value-of select="gsa:i18n ('Done', 'Status')"/></option>
+                        <option value="New"><xsl:value-of select="gsa:i18n ('New', 'Status')"/></option>
+                        <option value="Requested"><xsl:value-of select="gsa:i18n ('Requested', 'Status')"/></option>
+                        <option value="Running"><xsl:value-of select="gsa:i18n ('Running', 'Status')"/></option>
+                        <option value="Stop Requested"><xsl:value-of select="gsa:i18n ('Stop Requested', 'Status')"/></option>
+                        <option value="Stopped"><xsl:value-of select="gsa:i18n ('Stopped', 'Status')"/></option>
+                      </select>
                     </label>
-                    <select name="event_data:status">
-                      <option value="Done" selected="1"><xsl:value-of select="gsa:i18n ('Done', 'Status')"/></option>
-                      <option value="New"><xsl:value-of select="gsa:i18n ('New', 'Status')"/></option>
-                      <option value="Requested"><xsl:value-of select="gsa:i18n ('Requested', 'Status')"/></option>
-                      <option value="Running"><xsl:value-of select="gsa:i18n ('Running', 'Status')"/></option>
-                      <option value="Stop Requested"><xsl:value-of select="gsa:i18n ('Stop Requested', 'Status')"/></option>
-                      <option value="Stopped"><xsl:value-of select="gsa:i18n ('Stopped', 'Status')"/></option>
-                    </select>
                   </td>
                 </tr>
                 <tr>
-                  <td colspan="2" valign="top">
+                  <td>
                     <input type="radio" name="event" value="New SecInfo arrived"
                            onChange="editAlertUpdateForm()"/>
                     <select name="event_data:feed_event">
@@ -8945,9 +8945,9 @@ should not have received it.
               </table>
             </td>
           </tr>
-          <tr class="even">
-            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Condition', 'Alert')"/></td>
-            <td colspan="2">
+          <tr>
+            <td><xsl:value-of select="gsa:i18n ('Condition', 'Alert')"/></td>
+            <td>
               <xsl:call-template name="condition-field">
                 <xsl:with-param name="filters" select="$filters"/>
               </xsl:call-template>
@@ -8956,12 +8956,12 @@ should not have received it.
 
           <!-- Method: Email. -->
 
-          <tr class="odd">
-            <td valign="top" width="145"><xsl:value-of select="gsa:i18n ('Method', 'Alert')"/></td>
-            <td colspan="2">
-              <table border="0" width="100%">
+          <tr>
+            <td><xsl:value-of select="gsa:i18n ('Method', 'Alert')"/></td>
+            <td>
+              <table class="table-form">
                 <tr>
-                  <td colspan="3" valign="top">
+                  <td>
                     <label>
                       <input type="radio" name="method" value="Email" checked="1"/>
                       <xsl:value-of select="gsa:i18n ('Email', 'Alert')"/>
@@ -8969,22 +8969,22 @@ should not have received it.
                   </td>
                 </tr>
                 <tr>
-                  <td width="45"></td>
-                  <td width="150"><xsl:value-of select="gsa:i18n ('To Address', 'Alert|Email')"/></td>
+                  <td></td>
+                  <td><xsl:value-of select="gsa:i18n ('To Address', 'Alert|Email')"/></td>
                   <td>
                     <input type="text" name="method_data:to_address" size="30" maxlength="301"/>
                   </td>
                 </tr>
                 <tr>
-                  <td width="45"></td>
-                  <td width="150"><xsl:value-of select="gsa:i18n ('From Address', 'Alert|Email')"/></td>
+                  <td></td>
+                  <td><xsl:value-of select="gsa:i18n ('From Address', 'Alert|Email')"/></td>
                   <td>
                     <input type="text" name="method_data:from_address" size="30" maxlength="301"/>
                   </td>
                 </tr>
                 <tr id="email_subject_row">
-                  <td width="45"></td>
-                  <td width="150"><xsl:value-of select="gsa:i18n ('Subject', 'Alert|Email')"/></td>
+                  <td></td>
+                  <td><xsl:value-of select="gsa:i18n ('Subject', 'Alert|Email')"/></td>
                   <td>
                     <input type="text" name="method_data:subject"
                            size="30" maxlength="80"
@@ -8992,12 +8992,12 @@ should not have received it.
                   </td>
                 </tr>
                 <tr id="email_content_row">
-                  <td width="45"></td>
-                  <td width="150"><xsl:value-of select="gsa:i18n ('Content', 'Alert|Email')"/></td>
+                  <td></td>
+                  <td><xsl:value-of select="gsa:i18n ('Content', 'Alert|Email')"/></td>
                   <td>
-                    <table>
+                    <table class="table-form">
                       <tr>
-                        <td colspan="3" valign="top">
+                        <td>
                           <label>
                             <input type="radio" name="method_data:notice" value="1" checked="1"/>
                             <xsl:value-of select="gsa:i18n ('Simple notice', 'Alert|Email')"/>
@@ -9006,17 +9006,47 @@ should not have received it.
                       </tr>
                       <xsl:if test="gsa:may-op ('get_report_formats')">
                         <tr>
-                          <td colspan="3" valign="top">
+                          <td>
                             <label>
                               <input type="radio" name="method_data:notice" value="0"/>
                               <xsl:value-of select="gsa:i18n ('Include report', 'Alert|Email')"/>
                               <xsl:text> </xsl:text>
+                              <select name="method_data:notice_report_format">
+                                <xsl:for-each select="$report-formats/report_format">
+                                  <xsl:if test="substring(content_type, 1, 5) = 'text/'">
+                                    <xsl:choose>
+                                      <xsl:when test="@id='19f6f1b3-7128-4433-888c-ccc764fe6ed5'">
+                                        <option value="{@id}" selected="1">
+                                          <xsl:value-of select="name"/>
+                                        </option>
+                                      </xsl:when>
+                                      <xsl:otherwise>
+                                        <option value="{@id}">
+                                          <xsl:value-of select="name"/>
+                                        </option>
+                                      </xsl:otherwise>
+                                    </xsl:choose>
+                                  </xsl:if>
+                                </xsl:for-each>
+                              </select>
                             </label>
-                            <select name="method_data:notice_report_format">
-                              <xsl:for-each select="$report-formats/report_format">
-                                <xsl:if test="substring(content_type, 1, 5) = 'text/'">
+                            with message:
+                            <br/>
+                            <textarea name="method_data:message" rows="3" cols="50">
+                              <xsl:value-of select="$include-message-default"/>
+                            </textarea>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <label>
+                              <input type="radio" name="method_data:notice" value="2"/>
+                              <xsl:value-of select="gsa:i18n ('Attach report', 'Alert|Email')"/>
+                              <xsl:text> </xsl:text>
+                              <select name="method_data:notice_attach_format">
+                                <xsl:for-each select="$report-formats/report_format">
                                   <xsl:choose>
-                                    <xsl:when test="@id='19f6f1b3-7128-4433-888c-ccc764fe6ed5'">
+                                    <xsl:when test="@id='1a60a67e-97d0-4cbf-bc77-f71b08e7043d'">
                                       <option value="{@id}" selected="1">
                                         <xsl:value-of select="name"/>
                                       </option>
@@ -9027,45 +9057,12 @@ should not have received it.
                                       </option>
                                     </xsl:otherwise>
                                   </xsl:choose>
-                                </xsl:if>
-                              </xsl:for-each>
-                            </select>
-                            with message:
-                            <br/>
-                            <textarea style="margin-left:15px;"
-                                      name="method_data:message"
-                                      rows="3" cols="50">
-                              <xsl:value-of select="$include-message-default"/>
-                            </textarea>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td colspan="3" valign="top">
-                            <label>
-                              <input type="radio" name="method_data:notice" value="2"/>
-                              <xsl:value-of select="gsa:i18n ('Attach report', 'Alert|Email')"/>
-                              <xsl:text> </xsl:text>
+                                </xsl:for-each>
+                              </select>
                             </label>
-                            <select name="method_data:notice_attach_format">
-                              <xsl:for-each select="$report-formats/report_format">
-                                <xsl:choose>
-                                  <xsl:when test="@id='1a60a67e-97d0-4cbf-bc77-f71b08e7043d'">
-                                    <option value="{@id}" selected="1">
-                                      <xsl:value-of select="name"/>
-                                    </option>
-                                  </xsl:when>
-                                  <xsl:otherwise>
-                                    <option value="{@id}">
-                                      <xsl:value-of select="name"/>
-                                    </option>
-                                  </xsl:otherwise>
-                                </xsl:choose>
-                              </xsl:for-each>
-                            </select>
                             with message:
                             <br/>
-                            <textarea style="margin-left:15px;"
-                                      name="method_data:message_attach"
+                            <textarea name="method_data:message_attach"
                                       rows="3" cols="50">
                               <xsl:value-of select="$attach-message-default"/>
                             </textarea>
@@ -9081,21 +9078,21 @@ should not have received it.
 
           <!-- Method: System Logger. -->
 
-          <tr class="odd">
-            <td valign="top" width="125"></td>
-            <td colspan="2">
-              <table border="0" width="100%">
+          <tr>
+            <td></td>
+            <td>
+              <table class="table-form">
                 <tr>
-                  <td colspan="2" valign="top">
-                    <label width="250">
+                  <td>
+                    <label>
                       <input type="radio" name="method" value="syslog"/>
                       <xsl:value-of select="gsa:i18n ('System Logger', 'Alert')"/>
                       <xsl:text> </xsl:text>
+                      <select name="method_data:submethod">
+                        <option value="syslog" selected="1">syslog</option>
+                        <option value="SNMP">SNMP</option>
+                      </select>
                     </label>
-                    <select margin="50" name="method_data:submethod">
-                      <option value="syslog" selected="1">syslog</option>
-                      <option value="SNMP">SNMP</option>
-                    </select>
                   </td>
                 </tr>
               </table>
@@ -9104,12 +9101,12 @@ should not have received it.
 
           <!-- Method: HTTP Get. -->
 
-          <tr id="http_get_row" class="odd">
-            <td valign="top" width="125"></td>
-            <td colspan="2">
-              <table border="0" width="100%">
+          <tr id="http_get_row">
+            <td></td>
+            <td>
+              <table class="table-form">
                 <tr>
-                  <td colspan="3" valign="top">
+                  <td>
                     <label>
                       <input type="radio" name="method" value="HTTP Get"/>
                       <xsl:value-of select="gsa:i18n ('HTTP Get', 'Alert')"/>
@@ -9117,8 +9114,8 @@ should not have received it.
                   </td>
                 </tr>
                 <tr>
-                  <td width="45"></td>
-                  <td width="150">URL</td>
+                  <td></td>
+                  <td>URL</td>
                   <td>
                     <input type="text" name="method_data:URL" size="30" maxlength="301"/>
                   </td>
@@ -9129,12 +9126,12 @@ should not have received it.
 
           <!-- Method: Sourcefire Connector. -->
 
-          <tr id="sourcefire_row" class="odd">
-            <td valign="top" width="125"></td>
-            <td colspan="2">
-              <table border="0" width="100%">
+          <tr id="sourcefire_row">
+            <td></td>
+            <td>
+              <table class="table-form">
                 <tr>
-                  <td colspan="3" valign="top">
+                  <td>
                     <label>
                       <input type="radio" name="method" value="Sourcefire Connector"/>
                       <xsl:value-of select="gsa:i18n ('Sourcefire Connector', 'Alert')"/>
@@ -9142,24 +9139,24 @@ should not have received it.
                   </td>
                 </tr>
                 <tr>
-                  <td width="45"></td>
-                  <td width="150"><xsl:value-of select="gsa:i18n ('Defense Center IP', 'Alert')"/></td>
+                  <td></td>
+                  <td><xsl:value-of select="gsa:i18n ('Defense Center IP', 'Alert')"/></td>
                   <td>
                     <input type="text" name="method_data:defense_center_ip"
                            size="30" maxlength="40"/>
                   </td>
                 </tr>
                 <tr>
-                  <td width="45"></td>
-                  <td width="150"><xsl:value-of select="gsa:i18n ('Defense Center Port', 'Alert')"/></td>
+                  <td></td>
+                  <td><xsl:value-of select="gsa:i18n ('Defense Center Port', 'Alert')"/></td>
                   <td>
                     <input type="text" name="method_data:defense_center_port"
                            size="30" maxlength="400" value="8307"/>
                   </td>
                 </tr>
                 <tr>
-                  <td width="45"></td>
-                  <td width="150"><xsl:value-of select="gsa:i18n ('PKCS12 file', 'Alert')"/></td>
+                  <td></td>
+                  <td><xsl:value-of select="gsa:i18n ('PKCS12 file', 'Alert')"/></td>
                   <td>
                     <input type="file" name="method_data:pkcs12" size="30"/>
                   </td>
@@ -9170,12 +9167,12 @@ should not have received it.
 
           <!-- Method: Verinice Connector. -->
 
-          <tr id="verinice_row" class="odd">
-            <td valign="top" width="125"></td>
-            <td colspan="2">
-              <table border="0" width="100%">
+          <tr id="verinice_row">
+            <td></td>
+            <td>
+              <table class="table-form">
                 <tr>
-                  <td colspan="3" valign="top">
+                  <td>
                     <label>
                       <input type="radio" name="method" value="verinice Connector"/>
                       <xsl:value-of select="gsa:i18n ('verinice.PRO Connector', 'Alert')"/>
@@ -9183,32 +9180,32 @@ should not have received it.
                   </td>
                 </tr>
                 <tr>
-                  <td width="45"></td>
-                  <td width="150"><xsl:value-of select="gsa:i18n ('verinice.PRO URL', 'Alert')"/></td>
+                  <td></td>
+                  <td><xsl:value-of select="gsa:i18n ('verinice.PRO URL', 'Alert')"/></td>
                   <td>
                     <input type="text" name="method_data:verinice_server_url"
                            size="30" maxlength="256"/>
                   </td>
                 </tr>
                 <tr>
-                  <td width="45"></td>
-                  <td width="150"><xsl:value-of select="gsa:i18n ('verinice.PRO Username', 'Alert')"/></td>
+                  <td></td>
+                  <td><xsl:value-of select="gsa:i18n ('verinice.PRO Username', 'Alert')"/></td>
                   <td>
                     <input type="text" name="method_data:verinice_server_username"
                            size="30" maxlength="40"/>
                   </td>
                 </tr>
                 <tr>
-                  <td width="45"></td>
-                  <td width="150"><xsl:value-of select="gsa:i18n ('verinice.PRO Password', 'Alert')"/></td>
+                  <td></td>
+                  <td><xsl:value-of select="gsa:i18n ('verinice.PRO Password', 'Alert')"/></td>
                   <td>
                     <input type="password" name="method_data:verinice_server_password"
                            size="30" maxlength="40"/>
                   </td>
                 </tr>
                 <tr>
-                  <td width="45"></td>
-                  <td width="150"><xsl:value-of select="gsa:i18n ('verinice.PRO Report', 'Alert')"/></td>
+                  <td></td>
+                  <td><xsl:value-of select="gsa:i18n ('verinice.PRO Report', 'Alert')"/></td>
                   <td>
                     <select name="method_data:verinice_server_report_format">
                       <xsl:for-each select="$report-formats/report_format">
@@ -9239,12 +9236,12 @@ should not have received it.
 
           <!-- Method: Start task. -->
 
-          <tr id="start_task_row" class="odd">
-            <td valign="top" width="125"></td>
-            <td colspan="2">
-              <table border="0" width="100%">
+          <tr id="start_task_row">
+            <td></td>
+            <td>
+              <table class="table-form">
                 <tr>
-                  <td colspan="3" valign="top">
+                  <td>
                     <label>
                       <input type="radio" name="method" value="Start Task"/>
                       <xsl:value-of select="gsa:i18n ('Start Task', 'Alert')"/>
@@ -9265,26 +9262,26 @@ should not have received it.
 
           <!-- Method: Send. -->
 
-          <tr id="send_row" class="odd">
-            <td valign="top" width="125"></td>
-            <td colspan="2">
-              <table border="0" width="100%">
+          <tr id="send_row">
+            <td></td>
+            <td>
+              <table class="table-form">
                 <tr>
-                  <td colspan="3" valign="top">
+                  <td colspan="3">
                     <label>
                       <input type="radio" name="method" value="Send"/>
                       <xsl:value-of select="gsa:i18n ('Send to host ', 'Alert')"/>
+                      <input type="text" name="method_data:send_host"
+                            size="30" maxlength="256"/>
+                      <xsl:value-of select="gsa:i18n (' on port ', 'Alert')"/>
+                      <input type="text" name="method_data:send_port"
+                            size="6" maxlength="6"/>
                     </label>
-                    <input type="text" name="method_data:send_host"
-                           size="30" maxlength="256"/>
-                    <xsl:value-of select="gsa:i18n (' on port ', 'Alert')"/>
-                    <input type="text" name="method_data:send_port"
-                           size="6" maxlength="6"/>
                   </td>
                 </tr>
                 <tr id="send_to_host_report_row">
-                  <td width="45"></td>
-                  <td width="150"><xsl:value-of select="gsa:i18n ('Report', 'Alert')"/></td>
+                  <td></td>
+                  <td><xsl:value-of select="gsa:i18n ('Report', 'Alert')"/></td>
                   <td>
                     <select name="method_data:send_report_format">
                       <xsl:for-each select="$report-formats/report_format">
@@ -9305,8 +9302,8 @@ should not have received it.
           <!-- Fields that apply to all/multiple methods. -->
 
           <tr style="display: none" id="details_url_row">
-            <td valign="top" width="145"><xsl:value-of select="gsa:i18n ('Details URL', 'Alert')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
-            <td colspan="2">
+            <td><xsl:value-of select="gsa:i18n ('Details URL', 'Alert')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+            <td>
               <input type="text" name="method_data:details_url"
                      size="30" maxlength="1000"
                      value="https://secinfo.greenbone.net/omp?cmd=get_info&amp;info_type=$t&amp;info_id=$o&amp;details=1&amp;token=guest"/>
@@ -9314,8 +9311,8 @@ should not have received it.
           </tr>
           <xsl:if test="gsa:may-op ('get_filters')">
             <tr id="report_result_filter_row">
-              <td valign="top" width="145"><xsl:value-of select="gsa:i18n ('Report Result Filter', 'Alert')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
-              <td colspan="2">
+              <td><xsl:value-of select="gsa:i18n ('Report Result Filter', 'Alert')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+              <td>
                 <select name="filter_id">
                   <option value="0">--</option>
                   <xsl:for-each select="$filters/filter">
@@ -9327,7 +9324,7 @@ should not have received it.
           </xsl:if>
 
           <tr class="even">
-            <td colspan="2" style="text-align:right;">
+            <td>
               <input type="submit" name="submit" value="{gsa:i18n ('Create Alert', 'Alert')}"/>
             </td>
           </tr>
@@ -9443,7 +9440,7 @@ should not have received it.
         <xsl:if test="not (gsa:may-op ('get_filters'))">
           <input type="hidden" name="filter_id" value="0"/>
         </xsl:if>
-        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+        <table class="table-form">
           <!-- CSS for hiding/showing rows initially. -->
           <xsl:variable name="hide">
             <xsl:choose>
@@ -9465,29 +9462,29 @@ should not have received it.
               </xsl:otherwise>
             </xsl:choose>
           </xsl:variable>
-          <tr class="odd">
-            <td valign="top" width="165"><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
+          <tr>
+            <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
             <td>
               <input type="text" name="name" size="30" maxlength="80"
                      value="{get_alerts_response/alert/name}"/>
             </td>
           </tr>
-          <tr class="even">
+          <tr>
             <td valign="top" width="165"><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
             <td>
               <input type="text" name="comment" size="30" maxlength="400"
                      value="{get_alerts_response/alert/comment}"/>
             </td>
           </tr>
-          <tr class="odd">
+          <tr>
 
             <!-- Event. -->
 
-            <td valign="top" width="145"><xsl:value-of select="gsa:i18n ('Event', 'Alert')"/></td>
-            <td colspan="2">
-              <table border="0" width="100%">
+            <td><xsl:value-of select="gsa:i18n ('Event', 'Alert')"/></td>
+            <td>
+              <table class="table-form">
                 <tr>
-                  <td colspan="2" valign="top">
+                  <td>
                     <label>
                       <xsl:choose>
                         <xsl:when test="get_alerts_response/alert/event/text() = 'Task run status changed'">
@@ -9501,53 +9498,53 @@ should not have received it.
                       </xsl:choose>
                       <xsl:value-of select="gsa:i18n ('Task run status changed to', 'Alert')"/>
                       <xsl:text> </xsl:text>
-                    </label>
-                    <xsl:variable name="eventdata"
-                                  select="get_alerts_response/alert/event/data[name='status']/text()"/>
-                    <select name="event_data:status">
-                      <xsl:if test="$eventdata = 'Delete Requested'">
-                        <!-- In case the user has an alert with this state. -->
+                      <xsl:variable name="eventdata"
+                                    select="get_alerts_response/alert/event/data[name='status']/text()"/>
+                      <select name="event_data:status">
+                        <xsl:if test="$eventdata = 'Delete Requested'">
+                          <!-- In case the user has an alert with this state. -->
+                          <xsl:call-template name="opt">
+                            <xsl:with-param name="value" select="'Delete Requested'"/>
+                            <xsl:with-param name="content" select="gsa:i18n ('Delete Requested', 'Status')"/>
+                            <xsl:with-param name="select-value" select="$eventdata"/>
+                          </xsl:call-template>
+                        </xsl:if>
                         <xsl:call-template name="opt">
-                          <xsl:with-param name="value" select="'Delete Requested'"/>
-                          <xsl:with-param name="content" select="gsa:i18n ('Delete Requested', 'Status')"/>
+                          <xsl:with-param name="value" select="'Done'"/>
+                          <xsl:with-param name="content" select="gsa:i18n ('Done', 'Status')"/>
                           <xsl:with-param name="select-value" select="$eventdata"/>
                         </xsl:call-template>
-                      </xsl:if>
-                      <xsl:call-template name="opt">
-                        <xsl:with-param name="value" select="'Done'"/>
-                        <xsl:with-param name="content" select="gsa:i18n ('Done', 'Status')"/>
-                        <xsl:with-param name="select-value" select="$eventdata"/>
-                      </xsl:call-template>
-                      <xsl:call-template name="opt">
-                        <xsl:with-param name="value" select="'New'"/>
-                        <xsl:with-param name="content" select="gsa:i18n ('New', 'Status')"/>
-                        <xsl:with-param name="select-value" select="$eventdata"/>
-                      </xsl:call-template>
-                      <xsl:call-template name="opt">
-                        <xsl:with-param name="value" select="'Requested'"/>
-                        <xsl:with-param name="content" select="gsa:i18n ('Requested', 'Status')"/>
-                        <xsl:with-param name="select-value" select="$eventdata"/>
-                      </xsl:call-template>
-                      <xsl:call-template name="opt">
-                        <xsl:with-param name="value" select="'Running'"/>
-                        <xsl:with-param name="content" select="gsa:i18n ('Running', 'Status')"/>
-                        <xsl:with-param name="select-value" select="$eventdata"/>
-                      </xsl:call-template>
-                      <xsl:call-template name="opt">
-                        <xsl:with-param name="value" select="'Stop Requested'"/>
-                        <xsl:with-param name="content" select="gsa:i18n ('Stop Requested', 'Status')"/>
-                        <xsl:with-param name="select-value" select="$eventdata"/>
-                      </xsl:call-template>
-                      <xsl:call-template name="opt">
-                        <xsl:with-param name="value" select="'Stopped'"/>
-                        <xsl:with-param name="content" select="gsa:i18n ('Stopped', 'Status')"/>
-                        <xsl:with-param name="select-value" select="$eventdata"/>
-                      </xsl:call-template>
-                    </select>
+                        <xsl:call-template name="opt">
+                          <xsl:with-param name="value" select="'New'"/>
+                          <xsl:with-param name="content" select="gsa:i18n ('New', 'Status')"/>
+                          <xsl:with-param name="select-value" select="$eventdata"/>
+                        </xsl:call-template>
+                        <xsl:call-template name="opt">
+                          <xsl:with-param name="value" select="'Requested'"/>
+                          <xsl:with-param name="content" select="gsa:i18n ('Requested', 'Status')"/>
+                          <xsl:with-param name="select-value" select="$eventdata"/>
+                        </xsl:call-template>
+                        <xsl:call-template name="opt">
+                          <xsl:with-param name="value" select="'Running'"/>
+                          <xsl:with-param name="content" select="gsa:i18n ('Running', 'Status')"/>
+                          <xsl:with-param name="select-value" select="$eventdata"/>
+                        </xsl:call-template>
+                        <xsl:call-template name="opt">
+                          <xsl:with-param name="value" select="'Stop Requested'"/>
+                          <xsl:with-param name="content" select="gsa:i18n ('Stop Requested', 'Status')"/>
+                          <xsl:with-param name="select-value" select="$eventdata"/>
+                        </xsl:call-template>
+                        <xsl:call-template name="opt">
+                          <xsl:with-param name="value" select="'Stopped'"/>
+                          <xsl:with-param name="content" select="gsa:i18n ('Stopped', 'Status')"/>
+                          <xsl:with-param name="select-value" select="$eventdata"/>
+                        </xsl:call-template>
+                      </select>
+                    </label>
                   </td>
                 </tr>
                 <tr>
-                  <td colspan="2" valign="top">
+                  <td>
                     <label>
                       <xsl:choose>
                         <xsl:when test="get_alerts_response/alert/event/text() = 'New SecInfo arrived'">
@@ -9617,14 +9614,14 @@ should not have received it.
               </table>
             </td>
           </tr>
-          <tr class="even">
+          <tr>
             <xsl:variable name="condition"
                           select="get_alerts_response/alert/condition"/>
 
             <!-- Condition. -->
 
-            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Condition', 'Alert')"/></td>
-            <td colspan="2">
+            <td><xsl:value-of select="gsa:i18n ('Condition', 'Alert')"/></td>
+            <td>
               <xsl:call-template name="condition-field">
                 <xsl:with-param name="condition"
                                 select="get_alerts_response/alert/condition"/>
@@ -9639,15 +9636,15 @@ should not have received it.
 
           <!-- Method. -->
 
-          <tr class="odd">
+          <tr>
 
             <!-- Method: Email. -->
 
-            <td valign="top" width="145"><xsl:value-of select="gsa:i18n ('Method', 'Alert')"/></td>
-            <td colspan="2">
-              <table border="0" width="100%">
+            <td><xsl:value-of select="gsa:i18n ('Method', 'Alert')"/></td>
+            <td>
+              <table class="table-form">
                 <tr>
-                  <td colspan="3" valign="top">
+                  <td>
                     <xsl:call-template name="radio-button">
                       <xsl:with-param name="name" select="'method'"/>
                       <xsl:with-param name="value" select="'Email'"/>
@@ -9657,24 +9654,24 @@ should not have received it.
                   </td>
                 </tr>
                 <tr>
-                  <td width="45"></td>
-                  <td width="150"><xsl:value-of select="gsa:i18n ('To Address', 'Alert|Email')"/></td>
+                  <td></td>
+                  <td><xsl:value-of select="gsa:i18n ('To Address', 'Alert|Email')"/></td>
                   <td>
                     <input type="text" name="method_data:to_address" size="30" maxlength="301"
                         value="{$method/data[name='to_address']/text()}"/>
                   </td>
                 </tr>
                 <tr>
-                  <td width="45"></td>
-                  <td width="150"><xsl:value-of select="gsa:i18n ('From Address', 'Alert|Email')"/></td>
+                  <td></td>
+                  <td><xsl:value-of select="gsa:i18n ('From Address', 'Alert|Email')"/></td>
                   <td>
                     <input type="text" name="method_data:from_address" size="30" maxlength="301"
                         value="{$method/data[name='from_address']/text()}"/>
                   </td>
                 </tr>
                 <tr style="{$hide}" id="email_subject_row">
-                  <td width="45"></td>
-                  <td width="150"><xsl:value-of select="gsa:i18n ('Subject', 'Alert|Email')"/></td>
+                  <td></td>
+                  <td><xsl:value-of select="gsa:i18n ('Subject', 'Alert|Email')"/></td>
                   <td>
                     <input type="text" name="method_data:subject"
                            size="30" maxlength="80"
@@ -9682,50 +9679,50 @@ should not have received it.
                   </td>
                 </tr>
                 <tr style="{$hide}" id="email_content_row">
-                  <td width="45"></td>
-                  <td width="150"><xsl:value-of select="gsa:i18n ('Content', 'Alert|Email')"/></td>
+                  <td></td>
+                  <td><xsl:value-of select="gsa:i18n ('Content', 'Alert|Email')"/></td>
                   <td>
-                    <table>
+                    <table class="table-form">
                       <tr>
-                        <td colspan="3" valign="top">
-                          <label>
-                            <xsl:call-template name="radio-button">
-                              <xsl:with-param name="name" select="'method_data:notice'"/>
-                              <xsl:with-param name="text" select="gsa:i18n ('Simple notice', 'Alert|Email')"/>
-                              <xsl:with-param name="value" select="'1'"/>
-                              <xsl:with-param name="select-value" select="$method/data[name='notice']/text()"/>
-                            </xsl:call-template>
-                          </label>
+                        <td>
+                          <xsl:call-template name="radio-button">
+                            <xsl:with-param name="name" select="'method_data:notice'"/>
+                            <xsl:with-param name="text" select="gsa:i18n ('Simple notice', 'Alert|Email')"/>
+                            <xsl:with-param name="value" select="'1'"/>
+                            <xsl:with-param name="select-value" select="$method/data[name='notice']/text()"/>
+                          </xsl:call-template>
                         </td>
                       </tr>
                       <xsl:if test="gsa:may-op ('get_filters')">
                         <tr>
-                          <td colspan="3" valign="top">
+                          <td>
                               <xsl:call-template name="radio-button">
                                 <xsl:with-param name="name" select="'method_data:notice'"/>
-                                <xsl:with-param name="text" select="gsa:i18n ('Include report', 'Alert|Email')"/>
                                 <xsl:with-param name="value" select="'0'"/>
                                 <xsl:with-param name="select-value" select="$method/data[name='notice']/text()"/>
+                                <xsl:with-param name="text">
+                                  <xsl:value-of select="gsa:i18n ('Include report', 'Alert|Email')"/>
+                                  <xsl:text> </xsl:text>
+                                  <select name="method_data:notice_report_format">
+                                    <xsl:for-each select="$report-formats/report_format">
+                                      <xsl:if test="substring(content_type, 1, 5) = 'text/'">
+                                        <xsl:choose>
+                                          <xsl:when test="@id=$method/data[name='notice_report_format']/text()">
+                                            <option value="{@id}" selected="1">
+                                              <xsl:value-of select="name"/>
+                                            </option>
+                                          </xsl:when>
+                                          <xsl:otherwise>
+                                            <option value="{@id}">
+                                              <xsl:value-of select="name"/>
+                                            </option>
+                                          </xsl:otherwise>
+                                        </xsl:choose>
+                                      </xsl:if>
+                                    </xsl:for-each>
+                                  </select>
+                                </xsl:with-param>
                               </xsl:call-template>
-                            <xsl:text> </xsl:text>
-                            <select name="method_data:notice_report_format">
-                              <xsl:for-each select="$report-formats/report_format">
-                                <xsl:if test="substring(content_type, 1, 5) = 'text/'">
-                                  <xsl:choose>
-                                    <xsl:when test="@id=$method/data[name='notice_report_format']/text()">
-                                      <option value="{@id}" selected="1">
-                                        <xsl:value-of select="name"/>
-                                      </option>
-                                    </xsl:when>
-                                    <xsl:otherwise>
-                                      <option value="{@id}">
-                                        <xsl:value-of select="name"/>
-                                      </option>
-                                    </xsl:otherwise>
-                                  </xsl:choose>
-                                </xsl:if>
-                              </xsl:for-each>
-                            </select>
                             with message:
                             <br/>
                             <textarea style="margin-left:15px;"
@@ -9743,30 +9740,32 @@ should not have received it.
                           </td>
                         </tr>
                         <tr>
-                          <td colspan="3" valign="top">
+                          <td>
                               <xsl:call-template name="radio-button">
                                 <xsl:with-param name="name" select="'method_data:notice'"/>
-                                <xsl:with-param name="text" select="gsa:i18n ('Attach report', 'Alert|Email')"/>
                                 <xsl:with-param name="value" select="'2'"/>
                                 <xsl:with-param name="select-value" select="$method/data[name='notice']/text()"/>
+                                <xsl:with-param name="text">
+                                  <xsl:value-of  select="gsa:i18n ('Attach report', 'Alert|Email')"/>
+                                  <xsl:text> </xsl:text>
+                                  <select name="method_data:notice_attach_format">
+                                    <xsl:for-each select="$report-formats/report_format">
+                                      <xsl:choose>
+                                        <xsl:when test="@id=$method/data[name='notice_attach_format']/text()">
+                                          <option value="{@id}" selected="1">
+                                            <xsl:value-of select="name"/>
+                                          </option>
+                                        </xsl:when>
+                                        <xsl:otherwise>
+                                          <option value="{@id}">
+                                            <xsl:value-of select="name"/>
+                                          </option>
+                                        </xsl:otherwise>
+                                      </xsl:choose>
+                                    </xsl:for-each>
+                                  </select>
+                                </xsl:with-param>
                               </xsl:call-template>
-                            <xsl:text> </xsl:text>
-                            <select name="method_data:notice_attach_format">
-                              <xsl:for-each select="$report-formats/report_format">
-                                <xsl:choose>
-                                  <xsl:when test="@id=$method/data[name='notice_attach_format']/text()">
-                                    <option value="{@id}" selected="1">
-                                      <xsl:value-of select="name"/>
-                                    </option>
-                                  </xsl:when>
-                                  <xsl:otherwise>
-                                    <option value="{@id}">
-                                      <xsl:value-of select="name"/>
-                                    </option>
-                                  </xsl:otherwise>
-                                </xsl:choose>
-                              </xsl:for-each>
-                            </select>
                             with message:
                             <br/>
                             <textarea style="margin-left:15px;"
@@ -9790,46 +9789,48 @@ should not have received it.
               </table>
             </td>
           </tr>
-          <tr class="even">
+          <tr>
 
             <!-- Method: System Logger. -->
 
-            <td valign="top" width="125"></td>
-            <td colspan="2">
-              <table border="0" width="100%">
+            <td></td>
+            <td>
+              <table class="table-form">
                 <tr>
-                  <td colspan="3" valign="top">
+                  <td>
                     <xsl:call-template name="radio-button">
                       <xsl:with-param name="name" select="'method'"/>
                       <xsl:with-param name="value" select="'syslog'"/>
                       <xsl:with-param name="select-value" select="gsa:lower-case($method/text())"/>
-                      <xsl:with-param name="text" select="gsa:i18n ('System Logger', 'Alert')"/>
+                      <xsl:with-param name="text">
+                        <xsl:value-of select="gsa:i18n ('System Logger', 'Alert')"/>
+                        <xsl:text> </xsl:text>
+                        <select name="method_data:submethod">
+                          <xsl:call-template name="opt">
+                            <xsl:with-param name="value" select="'syslog'"/>
+                            <xsl:with-param name="select-value" select="$method/data/text()"/>
+                          </xsl:call-template>
+                          <xsl:call-template name="opt">
+                            <xsl:with-param name="value" select="'SNMP'"/>
+                            <xsl:with-param name="select-value" select="$method/data/text()"/>
+                          </xsl:call-template>
+                        </select>
+                      </xsl:with-param>
                     </xsl:call-template>
-                    <xsl:text> </xsl:text>
-                    <select name="method_data:submethod">
-                      <xsl:call-template name="opt">
-                        <xsl:with-param name="value" select="'syslog'"/>
-                        <xsl:with-param name="select-value" select="$method/data/text()"/>
-                      </xsl:call-template>
-                      <xsl:call-template name="opt">
-                        <xsl:with-param name="value" select="'SNMP'"/>
-                        <xsl:with-param name="select-value" select="$method/data/text()"/>
-                      </xsl:call-template>
-                    </select>
                   </td>
                 </tr>
               </table>
             </td>
           </tr>
-          <tr style="{$hide}" id="http_get_row" class="odd">
+          <tr style="{$hide}" id="http_get_row">
 
             <!-- Method: HTTP Get. -->
 
-            <td valign="top" width="125"></td>
-            <td colspan="2">
-              <table border="0" width="100%">
+            <td></td>
+            <td>
+              <table class="table-form">
                 <tr>
-                  <td colspan="3" valign="top">
+                  <td>
                     <xsl:call-template name="radio-button">
                       <xsl:with-param name="name" select="'method'"/>
                       <xsl:with-param name="value" select="'HTTP Get'"/>
@@ -9839,8 +9840,8 @@ should not have received it.
                   </td>
                 </tr>
                 <tr>
-                  <td width="45"></td>
-                  <td width="150">URL</td>
+                  <td></td>
+                  <td>URL</td>
                   <td>
                     <input type="text" name="method_data:URL" size="30" maxlength="301"
                         value="{$method/data[name='URL']/text()}"/>
@@ -9849,15 +9850,15 @@ should not have received it.
               </table>
             </td>
           </tr>
-          <tr style="{$hide}" id="sourcefire_row" class="even">
+          <tr style="{$hide}" id="sourcefire_row">
 
             <!-- Method: Sourcefire Connector. -->
 
-            <td valign="top" width="125"></td>
-            <td colspan="2">
-              <table border="0" width="100%">
+            <td></td>
+            <td>
+              <table class="table-form">
                 <tr>
-                  <td colspan="3" valign="top">
+                  <td>
                     <xsl:call-template name="radio-button">
                       <xsl:with-param name="name" select="'method'"/>
                       <xsl:with-param name="value" select="'Sourcefire Connector'"/>
@@ -9867,16 +9868,16 @@ should not have received it.
                   </td>
                 </tr>
                 <tr>
-                  <td width="45"></td>
-                  <td width="150"><xsl:value-of select="gsa:i18n ('Defense Center IP', 'Alert')"/></td>
+                  <td></td>
+                  <td><xsl:value-of select="gsa:i18n ('Defense Center IP', 'Alert')"/></td>
                   <td>
                     <input type="text" name="method_data:defense_center_ip"
                            size="30" maxlength="40" value="{$method/data[name='defense_center_ip']/text()}"/>
                   </td>
                 </tr>
                 <tr>
-                  <td width="45"></td>
-                  <td width="150"><xsl:value-of select="gsa:i18n ('Defense Center Port', 'Alert')"/></td>
+                  <td></td>
+                  <td><xsl:value-of select="gsa:i18n ('Defense Center Port', 'Alert')"/></td>
                   <td>
                     <xsl:choose>
                       <xsl:when test="$method/data[name='defense_center_port']/text()">
@@ -9891,8 +9892,8 @@ should not have received it.
                   </td>
                 </tr>
                 <tr>
-                  <td width="45"></td>
-                  <td width="150"><xsl:value-of select="gsa:i18n ('PKCS12 file', 'Alert')"/></td>
+                  <td></td>
+                  <td><xsl:value-of select="gsa:i18n ('PKCS12 file', 'Alert')"/></td>
                   <td>
                     <input type="file" name="method_data:pkcs12" size="30"/>
                   </td>
@@ -9900,15 +9901,15 @@ should not have received it.
               </table>
             </td>
           </tr>
-          <tr style="{$hide}" id="verinice_row" class="odd">
+          <tr style="{$hide}" id="verinice_row">
 
             <!-- Method: verinice Connector. -->
 
-            <td valign="top" width="125"></td>
-            <td colspan="2">
-              <table border="0" width="100%">
+            <td></td>
+            <td>
+              <table class="table-form">
                 <tr>
-                  <td colspan="3" valign="top">
+                  <td>
                     <xsl:call-template name="radio-button">
                       <xsl:with-param name="name" select="'method'"/>
                       <xsl:with-param name="value" select="'verinice Connector'"/>
@@ -9918,32 +9919,32 @@ should not have received it.
                   </td>
                 </tr>
                 <tr>
-                  <td width="45"></td>
-                  <td width="150"><xsl:value-of select="gsa:i18n ('verinice.PRO URL', 'Alert')"/></td>
+                  <td></td>
+                  <td><xsl:value-of select="gsa:i18n ('verinice.PRO URL', 'Alert')"/></td>
                   <td>
                     <input type="text" name="method_data:verinice_server_url"
                            size="30" maxlength="256" value="{$method/data[name='verinice_server_url']/text()}"/>
                   </td>
                 </tr>
                 <tr>
-                  <td width="45"></td>
-                  <td width="150"><xsl:value-of select="gsa:i18n ('verinice.PRO Username', 'Alert')"/></td>
+                  <td></td>
+                  <td><xsl:value-of select="gsa:i18n ('verinice.PRO Username', 'Alert')"/></td>
                   <td>
                     <input type="text" name="method_data:verinice_server_username"
                            size="30" maxlength="40" value="{$method/data[name='verinice_server_username']/text()}"/>
                   </td>
                 </tr>
                 <tr>
-                  <td width="45"></td>
-                  <td width="150"><xsl:value-of select="gsa:i18n ('verinice.PRO Password', 'Alert')"/></td>
+                  <td></td>
+                  <td><xsl:value-of select="gsa:i18n ('verinice.PRO Password', 'Alert')"/></td>
                   <td>
                     <input type="password" name="method_data:verinice_server_password"
                            size="30" maxlength="40"/>
                   </td>
                 </tr>
                 <tr>
-                  <td width="45"></td>
-                  <td width="150"><xsl:value-of select="gsa:i18n ('verinice.PRO Report', 'Alert')"/></td>
+                  <td></td>
+                  <td><xsl:value-of select="gsa:i18n ('verinice.PRO Report', 'Alert')"/></td>
                   <td>
                     <select name="method_data:verinice_server_report_format">
                       <xsl:for-each select="$report-formats/report_format">
@@ -9971,69 +9972,72 @@ should not have received it.
               </table>
             </td>
           </tr>
-          <tr style="{$hide}" id="start_task_row" class="odd">
+          <tr style="{$hide}" id="start_task_row">
 
             <!-- Method: Start Task. -->
 
-            <td valign="top" width="125"></td>
-            <td colspan="2">
-              <table border="0" width="100%">
+            <td></td>
+            <td>
+              <table class="table-form">
                 <tr>
-                  <td colspan="3" valign="top">
+                  <td>
                     <xsl:call-template name="radio-button">
                       <xsl:with-param name="name" select="'method'"/>
                       <xsl:with-param name="value" select="'Start Task'"/>
                       <xsl:with-param name="select-value" select="$method/text()"/>
-                      <xsl:with-param name="text" select="gsa:i18n ('Start Task', 'Alert')"/>
+                      <xsl:with-param name="text">
+                        <xsl:value-of  select="gsa:i18n ('Start Task', 'Alert')"/>
+                        <select name="method_data:start_task_task">
+                          <xsl:for-each select="$tasks/task">
+                            <xsl:choose>
+                              <xsl:when test="@id=$method/data[name='start_task_task']/text()">
+                                <option value="{@id}" selected="1">
+                                  <xsl:value-of select="name"/>
+                                </option>
+                              </xsl:when>
+                              <xsl:otherwise>
+                                <option value="{@id}">
+                                  <xsl:value-of select="name"/>
+                                </option>
+                              </xsl:otherwise>
+                            </xsl:choose>
+                          </xsl:for-each>
+                        </select>
+                      </xsl:with-param>
                     </xsl:call-template>
-                    <select name="method_data:start_task_task">
-                      <xsl:for-each select="$tasks/task">
-                        <xsl:choose>
-                          <xsl:when test="@id=$method/data[name='start_task_task']/text()">
-                            <option value="{@id}" selected="1">
-                              <xsl:value-of select="name"/>
-                            </option>
-                          </xsl:when>
-                          <xsl:otherwise>
-                            <option value="{@id}">
-                              <xsl:value-of select="name"/>
-                            </option>
-                          </xsl:otherwise>
-                        </xsl:choose>
-                      </xsl:for-each>
-                    </select>
                   </td>
                 </tr>
               </table>
             </td>
           </tr>
-          <tr class="odd">
+          <tr>
 
             <!-- Method: Send. -->
 
-            <td valign="top" width="125"></td>
-            <td colspan="2">
-              <table border="0" width="100%">
+            <td></td>
+            <td>
+              <table class="table-form">
                 <tr>
-                  <td colspan="3" valign="top">
+                  <td colspan="2">
                     <xsl:call-template name="radio-button">
                       <xsl:with-param name="name" select="'method'"/>
                       <xsl:with-param name="value" select="'Send'"/>
                       <xsl:with-param name="select-value" select="$method/text()"/>
-                      <xsl:with-param name="text" select="gsa:i18n ('Send to host ', 'Alert')"/>
+                      <xsl:with-param name="text">
+                        <xsl:value-of select="gsa:i18n ('Send to host ', 'Alert')"/>
+                        <input type="text" name="method_data:send_host"
+                              size="30" maxlength="256"
+                              value="{$method/data[name='send_host']/text()}"/>
+                        <xsl:value-of select="gsa:i18n (' on port ', 'Alert')"/>
+                        <input type="text" name="method_data:send_port"
+                              size="6" maxlength="6"
+                              value="{$method/data[name='send_port']/text()}"/>
+                      </xsl:with-param>
                     </xsl:call-template>
-                    <input type="text" name="method_data:send_host"
-                           size="30" maxlength="256"
-                           value="{$method/data[name='send_host']/text()}"/>
-                    <xsl:value-of select="gsa:i18n (' on port ', 'Alert')"/>
-                    <input type="text" name="method_data:send_port"
-                           size="6" maxlength="6"
-                           value="{$method/data[name='send_port']/text()}"/>
                   </td>
                 </tr>
                 <tr style="{$hide}">
-                  <td width="45"></td>
-                  <td width="150"><xsl:value-of select="gsa:i18n ('Report', 'Alert')"/></td>
+                  <td><xsl:value-of select="gsa:i18n ('Report', 'Alert')"/></td>
                   <td>
                     <select name="method_data:send_report_format">
                       <xsl:for-each select="$report-formats/report_format">
@@ -10063,8 +10067,8 @@ should not have received it.
           <!-- Report Result Filter. -->
 
           <tr style="{$show}" id="details_url_row">
-            <td valign="top" width="145"><xsl:value-of select="gsa:i18n ('Details URL', 'Alert')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
-            <td colspan="2">
+            <td><xsl:value-of select="gsa:i18n ('Details URL', 'Alert')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+            <td>
               <input type="text" name="method_data:details_url"
                      size="30" maxlength="1000"
                      value="{$method/data[name='details_url']/text()}"/>
@@ -10075,7 +10079,7 @@ should not have received it.
                 select="get_alerts_response/alert/filter/name"/>
             <tr style="{$hide}" id="report_result_filter_row">
               <td valign="top" width="145"><xsl:value-of select="gsa:i18n ('Report Result Filter', 'Alert')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
-              <td colspan="2">
+              <td>
                 <select name="filter_id">
                   <option value="0">--</option>
                   <xsl:for-each select="$filters/filter">
@@ -10096,7 +10100,7 @@ should not have received it.
           <!-- Save button. -->
 
           <tr>
-            <td colspan="2" style="text-align:right;">
+            <td>
               <input type="submit" name="submit" value="{gsa:i18n ('Save Alert', 'Alert')}"/>
             </td>
           </tr>
@@ -11237,9 +11241,9 @@ should not have received it.
         <input type="hidden" name="next" value="get_filter"/>
         <input type="hidden" name="filter_id" value="{/envelope/params/filter_id}"/>
         <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
-        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+        <table class="table-form">
           <tr>
-            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Name', 'Property')"/>
+            <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/>
             </td>
             <td>
               <input type="text" name="name" value="unnamed" size="30"
@@ -11247,19 +11251,19 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
             <td>
               <input type="text" name="comment" size="30" maxlength="400"/>
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Term', 'Filter')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Term', 'Filter')"/></td>
             <td>
               <input type="text" name="term" size="30" maxlength="1000"/>
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Type', 'Property')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Type', 'Property')"/></td>
             <td>
               <select name="optional_resource_type">
                 <option value="">--</option>
@@ -11270,7 +11274,7 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td colspan="2" style="text-align:right;">
+            <td>
               <input type="submit" name="submit" value="{gsa:i18n ('Create Filter', 'Filter')}"/>
             </td>
           </tr>
@@ -11312,9 +11316,9 @@ should not have received it.
         <input type="hidden" name="next" value="{/envelope/params/next}"/>
         <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+        <table class="table-form">
           <tr>
-            <td valign="top" width="165"><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
             <td>
               <input type="text"
                      name="name"
@@ -11324,14 +11328,14 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
             <td>
               <input type="text" name="comment" size="30" maxlength="400"
                      value="{commands_response/get_filters_response/filter/comment}"/>
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Term', 'Filter')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Term', 'Filter')"/></td>
             <td>
               <input type="text" name="term"
                      value="{commands_response/get_filters_response/filter/term}"
@@ -11340,7 +11344,7 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Type', 'Property')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Type', 'Property')"/></td>
             <td>
               <select name="optional_resource_type">
                 <xsl:variable name="type">
@@ -11361,7 +11365,7 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td colspan="2" style="text-align:right;">
+            <td>
               <input type="submit" name="submit" value="{gsa:i18n ('Save Filter', 'Filter')}"/>
             </td>
           </tr>
@@ -12068,9 +12072,9 @@ should not have received it.
         <input type="hidden" name="filter" value="{filters/term}"/>
         <input type="hidden" name="first" value="{/envelope/params/start}"/>
         <input type="hidden" name="max" value="{/envelope/params/max}"/>
-        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+        <table class="table-form">
           <tr>
-            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Name', 'Property')"/>
+            <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/>
             </td>
             <td>
               <input type="text" name="tag_name" value="{tag_name}" size="30"
@@ -12078,14 +12082,14 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
             <td>
               <input type="text" name="comment" value="{comment}" size="30"
                      maxlength="400"/>
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Value', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)
+            <td><xsl:value-of select="gsa:i18n ('Value', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)
             </td>
             <td>
               <input type="text" name="tag_value" value="{tag_value}" size="30"
@@ -12093,7 +12097,7 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Resource Type', 'Property')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Resource Type', 'Property')"/></td>
             <td>
               <select name="resource_type">
                 <xsl:call-template name="tag_resource_types">
@@ -12105,7 +12109,7 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Resource ID', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+            <td><xsl:value-of select="gsa:i18n ('Resource ID', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
             <td>
               <input type="text" name="resource_id" value="{resource_id}" size="30"
                          maxlength="80"/>
@@ -12139,7 +12143,7 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td colspan="2" style="text-align:right;">
+            <td>
               <input type="submit" name="submit" value="{gsa:i18n ('Create Tag', 'Tag')}"/>
             </td>
           </tr>
@@ -12225,9 +12229,9 @@ should not have received it.
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
         <input type="hidden" name="first" value="{limits/@start}"/>
         <input type="hidden" name="max" value="{limits/@max}"/>
-        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+        <table class="table-form">
           <tr>
-            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Name', 'Property')"/>
+            <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/>
             </td>
             <td>
               <input type="text" name="tag_name" value="{get_tags_response/tag/name}" size="30"
@@ -12235,14 +12239,14 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
             <td>
               <input type="text" name="comment" value="{get_tags_response/tag/comment}" size="30"
                      maxlength="400"/>
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Value', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)
+            <td><xsl:value-of select="gsa:i18n ('Value', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)
             </td>
             <td>
               <input type="text" name="tag_value" value="{get_tags_response/tag/value}" size="30"
@@ -12250,7 +12254,7 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Resource Type', 'Property')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Resource Type', 'Property')"/></td>
             <td>
               <select name="resource_type">
                 <xsl:call-template name="tag_resource_types">
@@ -12262,7 +12266,7 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Resource ID', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+            <td><xsl:value-of select="gsa:i18n ('Resource ID', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
             <td>
               <input type="text" name="resource_id" value="{get_tags_response/tag/resource/@id}" size="30"
                          maxlength="80"/>
@@ -12296,7 +12300,7 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td colspan="2" style="text-align:right;">
+            <td>
               <input type="submit" name="submit" value="{gsa:i18n ('Save Tag', 'Tag')}"/>
             </td>
           </tr>
@@ -12396,9 +12400,9 @@ should not have received it.
                  name="port_list_id"
                  value="c7e03b6c-3bbe-11e1-a057-406186ea4fc5"/>
         </xsl:if>
-        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+        <table class="table-form">
           <tr>
-            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Name', 'Property')"/>
+            <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/>
             </td>
             <td>
               <input type="text" name="name" value="unnamed" size="30"
@@ -12406,15 +12410,15 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
             <td>
               <input type="text" name="comment" size="30" maxlength="400"/>
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Hosts', 'Host')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Hosts', 'Host')"/></td>
             <td>
-              <table>
+              <table class="table-form">
                 <tr>
                   <td>
                     <label>
@@ -12460,7 +12464,7 @@ should not have received it.
                 <xsl:choose>
                   <xsl:when test="$host_count &gt; 0">
                     <tr>
-                      <td colspan="2">
+                      <td>
                         <label>
                           <xsl:choose>
                             <xsl:when test="$host_count > 0">
@@ -12497,7 +12501,7 @@ should not have received it.
                   <xsl:otherwise>
                     <input type="hidden" name="hosts_filter" value=""/>
                     <tr>
-                      <td colspan="2">
+                      <td>
                         <label style="color:#ccc;">
                           <input type="radio" name="target_source" value="asset_hosts" disabled="1"/>
                           <xsl:value-of select="gsa:i18n ('From host assets', 'Target')"/>
@@ -12511,14 +12515,14 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Exclude Hosts', 'Target')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Exclude Hosts', 'Target')"/></td>
             <td>
               <input type="text" name="exclude_hosts" value="" size="30"
                       maxlength="2000"/>
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Reverse Lookup Only', 'Target')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Reverse Lookup Only', 'Target')"/></td>
             <td>
               <label>
                 <input type="radio" name="reverse_lookup_only" value="1"/><xsl:value-of select="gsa:i18n ('Yes', 'Binary Choice')"/>
@@ -12530,7 +12534,7 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Reverse Lookup Unify', 'Target')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Reverse Lookup Unify', 'Target')"/></td>
             <td>
               <label>
                 <input type="radio" name="reverse_lookup_unify" value="1"/><xsl:value-of select="gsa:i18n ('Yes', 'Binary Choice')"/>
@@ -12543,7 +12547,7 @@ should not have received it.
           </tr>
           <xsl:if test="gsa:may-op ('get_port_lists')">
             <tr>
-              <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Port List', 'Port List')"/></td>
+              <td><xsl:value-of select="gsa:i18n ('Port List', 'Port List')"/></td>
               <td>
                 <select name="port_list_id">
                   <xsl:apply-templates select="$port-lists" mode="select">
@@ -12552,7 +12556,7 @@ should not have received it.
                 </select>
                 <a href="#" title="{ gsa:i18n('Create a new port list') }"
                    class="new-action-icon" data-type="port_list" data-done="select[name=port_list_id]">
-                  <img src="/img/new.png"/>
+                  <img class="valign-middle" src="/img/new.png"/>
                 </a>
               </td>
             </tr>
@@ -12576,13 +12580,13 @@ should not have received it.
           </tr>
           <xsl:if test="gsa:may-op ('get_credentials')">
             <tr>
-              <td valign="top" width="175" colspan="2">
+              <td>
                 <xsl:value-of select="gsa:i18n ('Credentials for authenticated checks', 'Target')"/>
                 (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>):
               </td>
             </tr>
             <tr>
-              <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('SSH', 'Target|Credential')"/></td>
+              <td><xsl:value-of select="gsa:i18n ('SSH', 'Target|Credential')"/></td>
               <td>
                 <select name="ssh_credential_id">
                   <option value="--">--</option>
@@ -12598,7 +12602,7 @@ should not have received it.
               </td>
             </tr>
             <tr>
-              <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('SMB', 'Target|Credential')"/></td>
+              <td><xsl:value-of select="gsa:i18n ('SMB', 'Target|Credential')"/></td>
               <td>
                 <select name="smb_credential_id">
                   <option value="--">--</option>
@@ -12609,7 +12613,7 @@ should not have received it.
               </td>
             </tr>
             <tr>
-              <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('ESXi', 'Target|Credential')"/></td>
+              <td><xsl:value-of select="gsa:i18n ('ESXi', 'Target|Credential')"/></td>
               <td>
                 <select name="esxi_credential_id">
                   <option value="--">--</option>
@@ -12620,7 +12624,7 @@ should not have received it.
               </td>
             </tr>
             <tr>
-              <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('SNMP', 'Target|Credential')"/></td>
+              <td><xsl:value-of select="gsa:i18n ('SNMP', 'Target|Credential')"/></td>
               <td>
                 <select name="snmp_credential_id">
                   <option value="--">--</option>
@@ -12632,7 +12636,7 @@ should not have received it.
             </tr>
           </xsl:if>
           <tr>
-            <td colspan="2" style="text-align:right;">
+            <td>
               <input type="submit" name="submit" value="{gsa:i18n ('Create Target', 'Target')}"/>
             </td>
           </tr>
@@ -12682,9 +12686,9 @@ should not have received it.
                  name="port_list_id"
                  value="c7e03b6c-3bbe-11e1-a057-406186ea4fc5"/>
         </xsl:if>
-        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+        <table class="table-form">
           <tr>
-            <td valign="top" width="165"><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
             <td>
               <input type="text"
                      name="name"
@@ -12694,7 +12698,7 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
             <td>
               <input type="text" name="comment" size="30" maxlength="400"
                      value="{get_targets_response/target/comment}"/>
@@ -12703,7 +12707,7 @@ should not have received it.
           <xsl:choose>
             <xsl:when test="get_targets_response/target/in_use = '0'">
               <tr>
-                <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Hosts', 'Host')"/></td>
+                <td><xsl:value-of select="gsa:i18n ('Hosts', 'Host')"/></td>
                 <td>
                   <table>
                     <tr>
@@ -12736,7 +12740,7 @@ should not have received it.
                 </td>
               </tr>
               <tr>
-                <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Exclude Hosts', 'Target')"/></td>
+                <td><xsl:value-of select="gsa:i18n ('Exclude Hosts', 'Target')"/></td>
                 <td>
                   <input type="text" name="exclude_hosts"
                          value="{get_targets_response/target/exclude_hosts}"
@@ -12744,7 +12748,7 @@ should not have received it.
                 </td>
               </tr>
               <tr>
-                <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Reverse Lookup Only', 'Target')"/></td>
+                <td><xsl:value-of select="gsa:i18n ('Reverse Lookup Only', 'Target')"/></td>
                 <td>
                   <label>
                     <xsl:choose>
@@ -12769,7 +12773,7 @@ should not have received it.
                 </td>
               </tr>
               <tr>
-                <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Reverse Lookup Unify', 'Target')"/></td>
+                <td><xsl:value-of select="gsa:i18n ('Reverse Lookup Unify', 'Target')"/></td>
                 <td>
                   <label>
                     <xsl:choose>
@@ -12795,7 +12799,7 @@ should not have received it.
               </tr>
               <xsl:if test="gsa:may-op ('get_port_lists')">
                 <tr>
-                  <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Port List', 'Port List')"/></td>
+                  <td><xsl:value-of select="gsa:i18n ('Port List', 'Port List')"/></td>
                   <td>
                     <select name="port_list_id">
                       <xsl:variable name="port_list_id">
@@ -12866,13 +12870,13 @@ should not have received it.
               </tr>
               <xsl:if test="gsa:may-op ('get_credentials')">
                 <tr>
-                  <td valign="top" width="175" colspan="2">
+                  <td>
                     <xsl:value-of select="gsa:i18n ('Credentials for authenticated checks', 'Target')"/>
                     (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>):
                   </td>
                 </tr>
                 <tr>
-                  <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('SSH', 'Target|Credential')"/></td>
+                  <td><xsl:value-of select="gsa:i18n ('SSH', 'Target|Credential')"/></td>
                   <td>
                     <select name="ssh_credential_id">
                       <xsl:variable name="credential_id">
@@ -12917,7 +12921,7 @@ should not have received it.
                   </td>
                 </tr>
                 <tr>
-                  <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('SMB', 'Target|Credential')"/></td>
+                  <td><xsl:value-of select="gsa:i18n ('SMB', 'Target|Credential')"/></td>
                   <td>
                     <select name="smb_credential_id">
                       <xsl:variable name="credential_id">
@@ -12945,7 +12949,7 @@ should not have received it.
                   </td>
                 </tr>
                 <tr>
-                  <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('ESXi', 'Target|Credential')"/></td>
+                  <td><xsl:value-of select="gsa:i18n ('ESXi', 'Target|Credential')"/></td>
                   <td>
                     <select name="esxi_credential_id">
                       <xsl:variable name="credential_id">
@@ -12973,7 +12977,7 @@ should not have received it.
                   </td>
                 </tr>
                 <tr>
-                  <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('SNMP', 'Target|Credential')"/></td>
+                  <td><xsl:value-of select="gsa:i18n ('SNMP', 'Target|Credential')"/></td>
                   <td>
                     <select name="snmp_credential_id">
                       <xsl:variable name="credential_id">
@@ -13006,7 +13010,7 @@ should not have received it.
               <xsl:variable name="width" select="240"/>
               <!-- Target is in use. -->
               <tr>
-                <td valign="top" width="{$width}">
+                <td>
                   <xsl:value-of select="gsa:i18n ('Hosts', 'Host')"/> (<xsl:value-of select="gsa:i18n ('immutable', 'Meta Property')"/>)
                 </td>
                 <td>
@@ -14207,16 +14211,16 @@ should not have received it.
         <input type="hidden" name="next" value="get_config"/>
         <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+        <table class="table-form">
           <tr>
-            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
             <td>
               <input type="text" name="name" value="unnamed" size="30"
                      maxlength="80"/>
             </td>
           </tr>
           <tr>
-            <td valign="top"><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
             <td>
               <input type="text" name="comment" size="30" maxlength="400"/>
             </td>
@@ -14224,45 +14228,37 @@ should not have received it.
           <tr>
             <td><xsl:value-of select="gsa:i18n ('Base', 'Scan Config')"/></td>
             <td>
-              <table>
-                <tr>
-                  <td colspan="2">
-                    <label>
-                      <input type="radio" name="base"
-                             value="085569ce-73ed-11df-83c3-002264764cea"
-                             checked="1"/>
-                      <xsl:value-of select="gsa:i18n ('Empty, static and fast', 'Scan Config')"/>
-                    </label>
-                  </td>
-                </tr>
-                <tr>
-                  <td colspan="2">
-                    <label>
-                      <input type="radio" name="base"
-                             value="daba56c8-73ec-11df-a475-002264764cea"/>
-                      <xsl:value-of select="gsa:i18n ('Full and fast', 'Scan Config')"/>
-                    </label>
-                  </td>
-                </tr>
-                <xsl:if test="get_scanners_response/scanner[type != '2' and type != '3']">
-                  <tr>
-                    <td colspan="2">
-                      <label>
-                        <input type="radio" name="base" value="0"/>
-                        <select name="scanner_id">
-                          <xsl:for-each select="get_scanners_response/scanner[type != '2' and type != '3']">
-                            <option value="{@id}"><xsl:value-of select="name"/></option>
-                          </xsl:for-each>
-                        </select>
-                      </label>
-                    </td>
-                  </tr>
-                </xsl:if>
-              </table>
+              <div>
+                <label>
+                  <input type="radio" name="base"
+                          value="085569ce-73ed-11df-83c3-002264764cea"
+                          checked="1"/>
+                  <xsl:value-of select="gsa:i18n ('Empty, static and fast', 'Scan Config')"/>
+                </label>
+              </div>
+              <div>
+                <label>
+                  <input type="radio" name="base"
+                          value="daba56c8-73ec-11df-a475-002264764cea"/>
+                  <xsl:value-of select="gsa:i18n ('Full and fast', 'Scan Config')"/>
+                </label>
+              </div>
+              <xsl:if test="get_scanners_response/scanner[type != '2' and type != '3']">
+                <div>
+                  <label>
+                    <input type="radio" name="base" value="0"/>
+                    <select name="scanner_id">
+                      <xsl:for-each select="get_scanners_response/scanner[type != '2' and type != '3']">
+                        <option value="{@id}"><xsl:value-of select="name"/></option>
+                      </xsl:for-each>
+                    </select>
+                  </label>
+                </div>
+              </xsl:if>
             </td>
           </tr>
           <tr>
-            <td colspan="2" style="text-align:right;">
+            <td>
               <input type="submit" name="submit" value="{gsa:i18n ('Create Scan Config', 'Scan Config')}"/>
             </td>
           </tr>
@@ -15785,16 +15781,16 @@ should not have received it.
       <input type="hidden" name="config_id" value="{$config/@id}"/>
       <input type="hidden" name="name" value="{$config/name}"/>
 
-      <table border="0" cellspacing="0" cellpadding="3" width="100%">
+      <table class="table-form">
         <tr>
-          <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
+          <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
           <td>
             <input type="text" name="name" value="{$config/name}" size="30"
                    maxlength="80"/>
           </td>
         </tr>
         <tr>
-          <td valign="top"><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+          <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
           <td>
             <input type="text" name="comment" size="30" maxlength="400"
                    value="{$config/comment}"/>
@@ -15802,7 +15798,7 @@ should not have received it.
         </tr>
         <xsl:if test="not($config/in_use != 0) and $config/type = 1">
           <tr>
-            <td valign="top"><xsl:value-of select="gsa:i18n ('Scanner', 'Scanner')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Scanner', 'Scanner')"/></td>
             <td>
               <select name="scanner_id">
                 <xsl:for-each select="get_scanners_response/scanner">
@@ -16216,22 +16212,22 @@ should not have received it.
         <input type="hidden" name="next" value="get_schedule"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
         <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
-        <table border="0" cellspacing="0" cellpadding="3" width="100%" class="stripped">
+        <table class="table-form">
           <tr>
-            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
             <td>
               <input type="text" name="name" value="unnamed" size="30"
                      maxlength="80"/>
             </td>
           </tr>
           <tr>
-            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (optional)</td>
+            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (optional)</td>
             <td>
               <input type="text" name="comment" size="30" maxlength="400"/>
             </td>
           </tr>
           <tr>
-            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('First Time', 'Schedule')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('First Time', 'Schedule')"/></td>
             <td>
               <input id="datevalue" size="30"/>
               <input id="datepicker" type="hidden"/>,
@@ -16390,7 +16386,7 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Timezone', 'Time')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Timezone', 'Time')"/></td>
             <td>
               <xsl:call-template name="timezone-select">
                 <xsl:with-param name="timezone" select="/envelope/timezone"/>
@@ -16399,7 +16395,7 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Period', 'Schedule')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+            <td><xsl:value-of select="gsa:i18n ('Period', 'Schedule')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
             <td>
               <input type="text"
                      name="period"
@@ -16415,7 +16411,7 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Duration', 'Schedule')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+            <td><xsl:value-of select="gsa:i18n ('Duration', 'Schedule')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
             <td>
               <input type="text"
                      name="duration"
@@ -16430,7 +16426,7 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td colspan="2" style="text-align:right;">
+            <td>
               <input type="submit" name="submit" value="{gsa:i18n ('Create Schedule', 'Schedule')}"/>
             </td>
           </tr>
@@ -16578,9 +16574,9 @@ should not have received it.
         <input type="hidden" name="next" value="{/envelope/params/next}"/>
         <input type="hidden" name="schedule" value="{/envelope/params/schedule}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-        <table border="0" cellspacing="0" cellpadding="3" width="100%" class="stripped">
+        <table class="table-form">
           <tr>
-            <td valign="top" width="165"><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
             <td>
               <input type="text"
                      name="name"
@@ -16590,14 +16586,14 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
             <td>
               <input type="text" name="comment" size="30" maxlength="400"
                      value="{commands_response/get_schedules_response/schedule/comment}"/>
             </td>
           </tr>
           <tr>
-            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('First Time', 'Schedule')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('First Time', 'Schedule')"/></td>
             <td>
               <input id="datevalue" size="30"/>
               <input id="datepicker" type="hidden"/>,
@@ -16760,7 +16756,7 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Timezone', 'Time')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Timezone', 'Time')"/></td>
             <td>
               <xsl:call-template name="timezone-select">
                 <xsl:with-param name="timezone" select="commands_response/get_schedules_response/schedule/timezone"/>
@@ -16769,7 +16765,7 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Period', 'Schedule')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+            <td><xsl:value-of select="gsa:i18n ('Period', 'Schedule')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
             <td>
               <xsl:choose>
                 <xsl:when test="commands_response/get_schedules_response/schedule/simple_period/text() = 0 and commands_response/get_schedules_response/schedule/period/text() &gt; 0">
@@ -16835,7 +16831,7 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Duration', 'Schedule')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+            <td><xsl:value-of select="gsa:i18n ('Duration', 'Schedule')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
             <td>
               <xsl:choose>
                 <xsl:when test="commands_response/get_schedules_response/schedule/simple_duration/text() = 0 and commands_response/get_schedules_response/schedule/duration/text() &gt; 0">
@@ -16884,7 +16880,7 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td colspan="2" style="text-align:right;">
+            <td>
               <input type="submit" name="submit" value="{gsa:i18n ('Save Schedule', 'Schedule')}"/>
             </td>
           </tr>
@@ -17379,30 +17375,30 @@ should not have received it.
         <input type="hidden" name="next" value="get_scanner"/>
         <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+        <table class="table-form">
           <tr>
-            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
             <td>
               <input type="text" name="name" value="unnamed" size="30"
                      maxlength="80"/>
             </td>
           </tr>
           <tr>
-            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
             <td>
               <input type="text" name="comment" size="30" maxlength="400"/>
             </td>
           </tr>
           <tr>
-            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Host', 'Host')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Host', 'Host')"/></td>
             <td><input type="text" name="host" value="localhost" size="30"/></td>
           </tr>
           <tr>
-            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Port', 'Port')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Port', 'Port')"/></td>
             <td><input type="text" name="port" value="9391" size="30"/></td>
           </tr>
           <tr>
-            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Type', 'Property')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Type', 'Property')"/></td>
             <td>
               <select name="scanner_type">
                 <xsl:call-template name="scanner-type-list">
@@ -17412,11 +17408,11 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('CA Certificate', 'Auth Data')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('CA Certificate', 'Auth Data')"/></td>
             <td><input type="file" name="ca_pub"/></td>
           </tr>
           <tr>
-            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Credential', 'Credential')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Credential', 'Credential')"/></td>
             <td>
               <xsl:variable name="credential_id" select="/envelope/params/credential_id"/>
               <select name="credential_id">
@@ -17430,12 +17426,12 @@ should not have received it.
               </select>
               <a href="#" title="{ gsa:i18n('Create a new Credential', 'Credential') }"
                   class="new-action-icon" data-type="credential" data-done="select[name=credential_id]">
-                <img src="/img/new.png"/>
+                <img class="valign-middle" src="/img/new.png"/>
               </a>
             </td>
           </tr>
           <tr>
-            <td colspan="2" style="text-align:right;">
+            <td>
               <input type="submit" name="submit" value="{gsa:i18n ('Create Scanner', 'Scanner')}"/>
             </td>
           </tr>
@@ -17551,23 +17547,23 @@ should not have received it.
         <input type="hidden" name="next" value="{/envelope/params/next}"/>
         <input type="hidden" name="scanner" value="{/envelope/params/scanner}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+        <table class="table-form">
           <tr>
-            <td valign="top" width="165"><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
             <td>
               <input type="text" name="name" size="30" maxlength="80"
                      value="{commands_response/get_scanners_response/scanner/name}"/>
             </td>
           </tr>
           <tr>
-            <td valign="top" width="165"><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
             <td>
               <input type="text" name="comment" size="30" maxlength="400"
                      value="{commands_response/get_scanners_response/scanner/comment}"/>
             </td>
           </tr>
           <tr>
-            <td valign="top" width="165"><xsl:value-of select="gsa:i18n ('Host', 'Host')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Host', 'Host')"/></td>
             <td>
               <xsl:choose>
                 <xsl:when test="$in_use">
@@ -17583,7 +17579,7 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="165"><xsl:value-of select="gsa:i18n ('Port', 'Port')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Port', 'Port')"/></td>
             <td>
               <xsl:choose>
                 <xsl:when test="$in_use">
@@ -17599,7 +17595,7 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="165"><xsl:value-of select="gsa:i18n ('Type', 'Property')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Type', 'Property')"/></td>
             <td>
               <xsl:choose>
                 <xsl:when test="$in_use">
@@ -17620,11 +17616,11 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('CA Certificate', 'Auth Data')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('CA Certificate', 'Auth Data')"/></td>
             <td><input type="file" name="ca_pub"/></td>
           </tr>
           <tr>
-            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Credential', 'Credential')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Credential', 'Credential')"/></td>
             <td>
               <xsl:variable name="credential_id" select="commands_response/get_scanners_response/scanner/credential/@id"/>
               <select name="credential_id">
@@ -17639,12 +17635,11 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td colspan="2" style="text-align:right;">
+            <td>
               <input type="submit" name="submit" value="{gsa:i18n ('Save Scanner', 'Scanner')}"/>
             </td>
           </tr>
         </table>
-        <br/>
       </form>
     </div>
   </div>
@@ -18110,9 +18105,9 @@ should not have received it.
         <input type="hidden" name="next" value="get_slave"/>
         <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+        <table class="table-form">
           <tr>
-            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Name', 'Property')"/>
+            <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/>
             </td>
             <td>
               <input type="text" name="name" value="unnamed" size="30"
@@ -18120,27 +18115,27 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
             <td>
               <input type="text" name="comment" size="30" maxlength="400"/>
             </td>
           </tr>
           <tr>
-            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Host', 'Host')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Host', 'Host')"/></td>
             <td>
               <input type="text" name="host" value="localhost" size="30"
                       maxlength="80"/>
             </td>
           </tr>
           <tr>
-            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Port', 'Port')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Port', 'Port')"/></td>
             <td>
               <input type="text" name="port" value="9390" size="30"
                      maxlength="80"/>
             </td>
           </tr>
           <tr>
-            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Credential', 'Credential')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Credential', 'Credential')"/></td>
             <td>
               <xsl:variable name="credential_id" select="/envelope/params/credential_id"/>
               <select name="credential_id">
@@ -18154,12 +18149,12 @@ should not have received it.
               </select>
               <a href="#" title="{ gsa:i18n('Create a new Credential', 'Credential') }"
                   class="new-action-icon" data-type="credential" data-done="select[name=credential_id]">
-                <img src="/img/new.png"/>
+                <img class="valign-middle" src="/img/new.png"/>
               </a>
             </td>
           </tr>
           <tr>
-            <td colspan="2" style="text-align:right;">
+            <td>
               <input type="submit" name="submit" value="{gsa:i18n ('Create Slave', 'Slave')}"/>
             </td>
           </tr>
@@ -18280,23 +18275,23 @@ should not have received it.
         <input type="hidden" name="next" value="{/envelope/params/next}"/>
         <input type="hidden" name="slave" value="{/envelope/params/slave}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+        <table class="table-form">
           <tr>
-            <td valign="top" width="165"><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
             <td>
               <input type="text" name="name" size="30" maxlength="80"
                      value="{commands_response/get_slaves_response/slave/name}"/>
             </td>
           </tr>
           <tr>
-            <td valign="top" width="165"><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
             <td>
               <input type="text" name="comment" size="30" maxlength="400"
                      value="{commands_response/get_slaves_response/slave/comment}"/>
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Host', 'Host')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Host', 'Host')"/></td>
             <td>
               <input type="text" name="host"
                      value="{commands_response/get_slaves_response/slave/host}"
@@ -18305,14 +18300,14 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Port', 'Port')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Port', 'Port')"/></td>
             <td>
               <input type="text" name="port" size="30" maxlength="1000"
                      value="{commands_response/get_slaves_response/slave/port}"/>
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Credential', 'Credential')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Credential', 'Credential')"/></td>
             <td>
               <xsl:variable name="credential_id" select="commands_response/get_slaves_response/slave/credential/@id"/>
               <select name="credential_id">
@@ -18327,7 +18322,7 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td colspan="2" style="text-align:right;">
+            <td>
               <input type="submit" name="submit" value="{gsa:i18n ('Save Slave', 'Slave')}"/>
             </td>
           </tr>
@@ -21635,12 +21630,12 @@ should not have received it.
           </xsl:otherwise>
         </xsl:choose>
 
-        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+        <table class="table-form">
           <xsl:choose>
             <xsl:when test="result/@id">
               <input type="hidden" name="oid" value="{nvt/@id}"/>
               <tr>
-                <td valign="center" width="125"><b><xsl:value-of select="gsa:i18n ('NVT Name', 'Note or Override')"/></b></td>
+                <td><b><xsl:value-of select="gsa:i18n ('NVT Name', 'Note or Override')"/></b></td>
                 <td>
                   <xsl:variable name="nvt" select="get_results_response/result/nvt"/>
                   <xsl:variable name="max" select="70"/>
@@ -21664,7 +21659,7 @@ should not have received it.
             </xsl:when>
             <xsl:otherwise>
               <tr>
-                <td valign="center" width="125"><b><xsl:value-of select="gsa:i18n ('NVT OID', 'Note or Override')"/></b></td>
+                <td><b><xsl:value-of select="gsa:i18n ('NVT OID', 'Note or Override')"/></b></td>
                 <td>
                   <xsl:choose>
                     <xsl:when test="nvt/@id = '0'">
@@ -21679,7 +21674,7 @@ should not have received it.
             </xsl:otherwise>
           </xsl:choose>
           <tr>
-            <td valign="center" width="125">
+            <td>
               <xsl:value-of select="gsa:i18n ('Active', 'Note')"/>
             </td>
             <td>
@@ -21708,7 +21703,7 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="125">
+            <td>
               <xsl:value-of select="gsa:i18n ('Hosts', 'Host')"/>
             </td>
             <td>
@@ -21737,7 +21732,7 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="125">
+            <td>
               <xsl:value-of select="gsa:i18n ('Location', 'Note or Override')"/>
             </td>
             <td>
@@ -21766,7 +21761,7 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="125">
+            <td>
               <xsl:value-of select="gsa:i18n ('Severity', 'Severity')"/>
             </td>
             <td>
@@ -21807,7 +21802,7 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="125">
+            <td>
               <xsl:value-of select="gsa:i18n ('Task', 'Task')"/>
             </td>
             <td>
@@ -21841,7 +21836,7 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="125">
+            <td>
               <xsl:value-of select="gsa:i18n ('Result', 'Result')"/>
             </td>
             <td>
@@ -21860,20 +21855,20 @@ should not have received it.
                   <label>
                     <input type="radio" name="note_result_id" value="0"/>
                     UUID
+                    <input type="text" name="note_result_uuid" size="30" maxlength="80" value=""/>
                   </label>
-                  <input type="text" name="note_result_uuid" size="30" maxlength="80" value=""/>
                 </xsl:otherwise>
               </xsl:choose>
             </td>
           </tr>
           <tr>
-            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Text', 'Note or Override')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Text', 'Note or Override')"/></td>
             <td>
               <textarea name="text" rows="10" cols="60"/>
             </td>
           </tr>
           <tr>
-            <td colspan="2" style="text-align:right;">
+            <td>
               <input type="submit" name="submit" value="{gsa:i18n ('Create Note', 'Note')}"/>
             </td>
           </tr>
@@ -21953,7 +21948,7 @@ should not have received it.
         <input type="hidden" name="apply_overrides" value="{/envelope/params/apply_overrides}"/>
         <input type="hidden" name="autofp" value="{/envelope/params/autofp}"/>
 
-        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+        <table class="table-form">
           <tr>
             <td><b><xsl:value-of select="gsa:i18n ('NVT Name', 'Note or Override')"/></b></td>
             <td>
@@ -21977,7 +21972,7 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td valign="center"><xsl:value-of select="gsa:i18n ('Active', 'Note')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Active', 'Note')"/></td>
             <td>
               <xsl:choose>
                 <xsl:when test="get_notes_response/note/active='1' and string-length(get_notes_response/note/end_time) &gt; 0">
@@ -22063,7 +22058,7 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="125">
+            <td>
               <xsl:value-of select="gsa:i18n ('Hosts', 'Host')"/>
             </td>
             <td>
@@ -22150,7 +22145,7 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="125">
+            <td>
               <xsl:value-of select="gsa:i18n ('Task', 'Task')"/>
             </td>
             <td>
@@ -22177,7 +22172,7 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="125">
+            <td>
               <xsl:value-of select="gsa:i18n ('Result', 'Result')"/>
             </td>
             <td>
@@ -22204,13 +22199,13 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Text', 'Note or Override')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Text', 'Note or Override')"/></td>
             <td>
               <textarea name="text" rows="10" cols="60"><xsl:value-of select="get_notes_response/note/text"/></textarea>
             </td>
           </tr>
           <tr>
-            <td colspan="2" style="text-align:right;">
+            <td>
               <input type="submit" name="submit" value="{gsa:i18n ('Save Note', 'Note')}"/>
             </td>
           </tr>
@@ -22705,12 +22700,12 @@ should not have received it.
           </xsl:otherwise>
         </xsl:choose>
 
-        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+        <table class="table-form">
           <xsl:choose>
             <xsl:when test="result/@id">
               <input type="hidden" name="oid" value="{nvt/@id}"/>
               <tr>
-                <td valign="center" width="125"><b><xsl:value-of select="gsa:i18n ('NVT Name', 'Note or Override')"/></b></td>
+                <td><b><xsl:value-of select="gsa:i18n ('NVT Name', 'Note or Override')"/></b></td>
                 <td>
                   <xsl:variable name="nvt" select="get_results_response/result/nvt"/>
                   <xsl:variable name="max" select="70"/>
@@ -22734,7 +22729,7 @@ should not have received it.
             </xsl:when>
             <xsl:otherwise>
               <tr>
-                <td valign="center" width="125"><b><xsl:value-of select="gsa:i18n ('NVT OID', 'Note or Override')"/></b></td>
+                <td><b><xsl:value-of select="gsa:i18n ('NVT OID', 'Note or Override')"/></b></td>
                 <td>
                   <xsl:choose>
                     <xsl:when test="nvt/@id = '0'">
@@ -22749,7 +22744,7 @@ should not have received it.
             </xsl:otherwise>
           </xsl:choose>
           <tr>
-            <td valign="center" width="125">
+            <td>
               <xsl:value-of select="gsa:i18n ('Active', 'Override')"/>
             </td>
             <td>
@@ -22778,7 +22773,7 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="125">
+            <td>
               <xsl:value-of select="gsa:i18n ('Hosts', 'Host')"/>
             </td>
             <td>
@@ -22807,7 +22802,7 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="125">
+            <td>
               <xsl:value-of select="gsa:i18n ('Location', 'Note or Override')"/>
             </td>
             <td>
@@ -22836,7 +22831,7 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="125">
+            <td>
               <xsl:value-of select="gsa:i18n ('Severity', 'Severity')"/>
             </td>
             <td>
@@ -22877,27 +22872,29 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="125">
+            <td>
               <b><xsl:value-of select="gsa:i18n ('New Severity', 'Override')"/></b>
             </td>
             <td>
-              <input type="radio" name="custom_severity" value="0" checked="1"/>
-              <select name="new_severity_from_list">
-                <option value="10.0">10.0 (<xsl:value-of select="gsa:i18n ('High', 'Severity')"/>)</option>
-                <option value="5.0">5.0 (<xsl:value-of select="gsa:i18n ('Medium', 'Severity')"/>)</option>
-                <option value="2.0">2.0 (<xsl:value-of select="gsa:i18n ('Low', 'Severity')"/>)</option>
-                <option value="0.0"><xsl:value-of select="gsa:i18n ('Log', 'Severity')"/></option>
-                <option value="-1.0" selected="1"><xsl:value-of select="gsa:i18n ('False Positive', 'Severity')"/></option>
-              </select>
+              <label>
+                <input type="radio" name="custom_severity" value="0" checked="1"/>
+                <select name="new_severity_from_list">
+                  <option value="10.0">10.0 (<xsl:value-of select="gsa:i18n ('High', 'Severity')"/>)</option>
+                  <option value="5.0">5.0 (<xsl:value-of select="gsa:i18n ('Medium', 'Severity')"/>)</option>
+                  <option value="2.0">2.0 (<xsl:value-of select="gsa:i18n ('Low', 'Severity')"/>)</option>
+                  <option value="0.0"><xsl:value-of select="gsa:i18n ('Log', 'Severity')"/></option>
+                  <option value="-1.0" selected="1"><xsl:value-of select="gsa:i18n ('False Positive', 'Severity')"/></option>
+                </select>
+              </label>
               <label>
                 <input type="radio" name="custom_severity" value="1"/>
                 <xsl:value-of select="gsa:i18n ('Other', 'Override|Severity')"/>:
+                <input type="text" name="new_severity" value="" size="5" maxlength="4"/>
               </label>
-              <input type="text" name="new_severity" value="" size="5" maxlength="4"/>
             </td>
           </tr>
           <tr>
-            <td valign="top" width="125">
+            <td>
               <xsl:value-of select="gsa:i18n ('Task', 'Task')"/>
             </td>
             <td>
@@ -22931,7 +22928,7 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="125">
+            <td>
               <xsl:value-of select="gsa:i18n ('Result', 'Result')"/>
             </td>
             <td>
@@ -22950,20 +22947,20 @@ should not have received it.
                   <label>
                     <input type="radio" name="override_result_id" value="0"/>
                     UUID
+                    <input type="text" name="override_result_uuid" size="30" maxlength="80" value=""/>
                   </label>
-                  <input type="text" name="override_result_uuid" size="30" maxlength="80" value=""/>
                 </xsl:otherwise>
               </xsl:choose>
             </td>
           </tr>
           <tr>
-            <td valign="top" width="125">Text</td>
+            <td>Text</td>
             <td>
               <textarea name="text" rows="10" cols="60"/>
             </td>
           </tr>
           <tr>
-            <td colspan="2" style="text-align:right;">
+            <td>
               <input type="submit" name="submit" value="{gsa:i18n ('Create Override', 'Override')}"/>
             </td>
           </tr>
@@ -24127,9 +24124,9 @@ should not have received it.
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
         <input type="hidden" name="group_id" value="{/envelope/params/group_id}"/>
         <input type="hidden" name="group" value="{/envelope/params/group}"/>
-        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+        <table class="table-form">
           <tr>
-            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Name', 'Property')"/>
+            <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/>
             </td>
             <td>
               <input type="text" name="name" value="unnamed" size="30"
@@ -24137,24 +24134,22 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
             <td>
               <input type="text" name="comment" size="30" maxlength="400"/>
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Users', 'User')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Users', 'User')"/></td>
             <td>
               <input type="text" name="users" size="30" maxlength="1000"/>
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175" colspan="2">
+            <td>
               <xsl:value-of select="gsa:i18n ('Special Groups', 'Group')"/>:
             </td>
-          </tr>
-          <tr>
-            <td valign="top" width="175" colspan="2">
+            <td>
               <label>
                 <input type="checkbox" name="grant_full" value="1"/>
                 <xsl:value-of select="gsa:i18n ('Create permission to grant full read and write access among all group members and across any resources', 'Group')"/>
@@ -24162,7 +24157,7 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td colspan="2" style="text-align:right;">
+            <td>
               <input type="submit" name="submit" value="{gsa:i18n ('Create Group', 'Group')}"/>
             </td>
           </tr>
@@ -24204,9 +24199,9 @@ should not have received it.
         <input type="hidden" name="next" value="{/envelope/params/next}"/>
         <input type="hidden" name="group" value="{/envelope/params/group}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+        <table class="table-form">
           <tr>
-            <td valign="top" width="165"><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
             <td>
               <input type="text"
                      name="name"
@@ -24216,14 +24211,14 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
             <td>
               <input type="text" name="comment" size="30" maxlength="400"
                      value="{commands_response/get_groups_response/group/comment}"/>
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Users', 'User')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Users', 'User')"/></td>
             <td>
               <input type="text" name="users"
                      value="{commands_response/get_groups_response/group/users}"
@@ -24232,7 +24227,7 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td colspan="2" style="text-align:right;">
+            <td>
               <input type="submit" name="submit" value="{gsa:i18n ('Save Group', 'Group')}"/>
             </td>
           </tr>
@@ -24309,58 +24304,62 @@ should not have received it.
 
 <xsl:template name="permission-subject-selection">
   <xsl:if test="gsa:may-op ('get_users')">
-    <label>
-      <input type="radio" name="subject_type" value="user" checked="1"/>
-      <xsl:value-of select="gsa:i18n ('User', 'User')"/>
-      <xsl:text> </xsl:text>
-    </label>
-    <select name="permission_user_id">
-      <xsl:for-each select="get_users_response/user">
-        <option value="{@id}"><xsl:value-of select="name"/></option>
-      </xsl:for-each>
-    </select>
-    <br/>
+    <div>
+      <label>
+          <input type="radio" name="subject_type" value="user" checked="1"/>
+          <xsl:value-of select="gsa:i18n ('User', 'User')"/>
+          <xsl:text> </xsl:text>
+        <select name="permission_user_id">
+          <xsl:for-each select="get_users_response/user">
+            <option value="{@id}"><xsl:value-of select="name"/></option>
+          </xsl:for-each>
+        </select>
+      </label>
+    </div>
   </xsl:if>
 
   <xsl:if test="gsa:may-op ('get_roles')">
-    <label>
-      <xsl:choose>
-        <xsl:when test="gsa:may-op ('get_users')">
-          <input type="radio" name="subject_type" value="role"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <input type="radio" name="subject_type" value="role" checked="1"/>
-        </xsl:otherwise>
-      </xsl:choose>
-      <xsl:value-of select="gsa:i18n ('Role', 'Role')"/>
-      <xsl:text> </xsl:text>
-    </label>
-    <select name="permission_role_id">
-      <xsl:for-each select="get_roles_response/role">
-        <option value="{@id}"><xsl:value-of select="name"/></option>
-      </xsl:for-each>
-    </select>
-    <br/>
+    <div>
+      <label>
+        <xsl:choose>
+          <xsl:when test="gsa:may-op ('get_users')">
+            <input type="radio" name="subject_type" value="role"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <input type="radio" name="subject_type" value="role" checked="1"/>
+          </xsl:otherwise>
+        </xsl:choose>
+        <xsl:value-of select="gsa:i18n ('Role', 'Role')"/>
+        <xsl:text> </xsl:text>
+        <select name="permission_role_id">
+          <xsl:for-each select="get_roles_response/role">
+            <option value="{@id}"><xsl:value-of select="name"/></option>
+          </xsl:for-each>
+        </select>
+      </label>
+    </div>
   </xsl:if>
 
   <xsl:if test="gsa:may-op ('get_groups')">
-    <label>
-      <xsl:choose>
-        <xsl:when test="gsa:may-op ('get_users') or gsa:may-op ('get_roles')">
-          <input type="radio" name="subject_type" value="group"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <input type="radio" name="subject_type" value="group" checked="1"/>
-        </xsl:otherwise>
-      </xsl:choose>
-      <xsl:value-of select="gsa:i18n ('Group', 'Group')"/>
-      <xsl:text> </xsl:text>
-    </label>
-    <select name="permission_group_id">
-      <xsl:for-each select="get_groups_response/group">
-        <option value="{@id}"><xsl:value-of select="name"/></option>
-      </xsl:for-each>
-    </select>
+    <div>
+      <label>
+        <xsl:choose>
+          <xsl:when test="gsa:may-op ('get_users') or gsa:may-op ('get_roles')">
+            <input type="radio" name="subject_type" value="group"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <input type="radio" name="subject_type" value="group" checked="1"/>
+          </xsl:otherwise>
+        </xsl:choose>
+        <xsl:value-of select="gsa:i18n ('Group', 'Group')"/>
+        <xsl:text> </xsl:text>
+        <select name="permission_group_id">
+          <xsl:for-each select="get_groups_response/group">
+            <option value="{@id}"><xsl:value-of select="name"/></option>
+          </xsl:for-each>
+        </select>
+      </label>
+    </div>
   </xsl:if>
 </xsl:template>
 
@@ -24390,9 +24389,9 @@ should not have received it.
         </xsl:if>
         <!-- FIX filter?. -->
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+        <table class="table-form">
           <tr>
-            <td valign="top" width="165"><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
             <td>
               <select name="permission">
                 <xsl:variable name="restrict_type" select="/envelope/params/restrict_type"/>
@@ -24436,20 +24435,20 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
             <td>
               <input type="text" name="comment" size="30" maxlength="400"
                      value="{commands_response/get_permissions_response/permission/comment}"/>
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Subject', 'Permission')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Subject', 'Permission')"/></td>
             <td>
               <xsl:call-template name="permission-subject-selection"/>
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Resource ID', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+            <td><xsl:value-of select="gsa:i18n ('Resource ID', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
             <td>
               <input type="text" name="id_or_empty"
                      value="{/envelope/params/resource_id}"
@@ -24458,7 +24457,7 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Resource Type', 'Property')"/> (<xsl:value-of select="gsa:i18n ('for Super permissions', 'Permission')"/>)</td>
+            <td><xsl:value-of select="gsa:i18n ('Resource Type', 'Property')"/> (<xsl:value-of select="gsa:i18n ('for Super permissions', 'Permission')"/>)</td>
             <td>
               <select name="optional_resource_type">
                 <option value="">--</option>
@@ -24469,7 +24468,7 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td colspan="2" style="text-align:right;">
+            <td>
               <input type="submit" name="submit" value="{gsa:i18n ('Create Permission', 'Permission')}"/>
             </td>
           </tr>
@@ -25138,9 +25137,9 @@ should not have received it.
         <input type="hidden" name="permission" value="{/envelope/params/permission}"/>
         <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+        <table class="table-form">
           <tr>
-            <td valign="top" width="165"><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
             <td>
               <select name="permission">
                 <xsl:variable name="name">
@@ -25175,97 +25174,101 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
             <td>
               <input type="text" name="comment" size="30" maxlength="400"
                      value="{commands_response/get_permissions_response/permission/comment}"/>
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Subject', 'Permission')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Subject', 'Permission')"/></td>
             <td>
-              <label>
-                <xsl:choose>
-                  <xsl:when test="commands_response/get_permissions_response/permission/subject/type = 'user'">
-                    <input type="radio" name="subject_type" value="user" checked="1"/>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <input type="radio" name="subject_type" value="user"/>
-                  </xsl:otherwise>
-                </xsl:choose>
-                <xsl:value-of select="gsa:i18n ('User', 'User')"/>
-                <xsl:text> </xsl:text>
-              </label>
-              <xsl:variable name="user_id"
-                            select="commands_response/get_permissions_response/permission/subject/@id"/>
-              <select name="user_id">
-                <xsl:for-each select="get_users_response/user">
+              <div>
+                <label>
                   <xsl:choose>
-                    <xsl:when test="@id = $user_id">
-                      <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                    <xsl:when test="commands_response/get_permissions_response/permission/subject/type = 'user'">
+                      <input type="radio" name="subject_type" value="user" checked="1"/>
                     </xsl:when>
                     <xsl:otherwise>
-                      <option value="{@id}"><xsl:value-of select="name"/></option>
+                      <input type="radio" name="subject_type" value="user"/>
                     </xsl:otherwise>
                   </xsl:choose>
-                </xsl:for-each>
-              </select>
-              <br/>
-              <label>
-                <xsl:choose>
-                  <xsl:when test="commands_response/get_permissions_response/permission/subject/type = 'role'">
-                    <input type="radio" name="subject_type" value="role" checked="1"/>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <input type="radio" name="subject_type" value="role"/>
-                  </xsl:otherwise>
-                </xsl:choose>
-                <xsl:value-of select="gsa:i18n ('Role', 'Role')"/>
-                <xsl:text> </xsl:text>
-              </label>
-              <xsl:variable name="subject_id"
-                            select="commands_response/get_permissions_response/permission/subject/@id"/>
-              <select name="role_id">
-                <xsl:for-each select="get_roles_response/role">
+                  <xsl:value-of select="gsa:i18n ('User', 'User')"/>
+                  <xsl:text> </xsl:text>
+                  <xsl:variable name="user_id"
+                                select="commands_response/get_permissions_response/permission/subject/@id"/>
+                  <select name="user_id">
+                    <xsl:for-each select="get_users_response/user">
+                      <xsl:choose>
+                        <xsl:when test="@id = $user_id">
+                          <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                        </xsl:when>
+                        <xsl:otherwise>
+                          <option value="{@id}"><xsl:value-of select="name"/></option>
+                        </xsl:otherwise>
+                      </xsl:choose>
+                    </xsl:for-each>
+                  </select>
+                </label>
+              </div>
+              <div>
+                <label>
                   <xsl:choose>
-                    <xsl:when test="@id = $subject_id">
-                      <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                    <xsl:when test="commands_response/get_permissions_response/permission/subject/type = 'role'">
+                      <input type="radio" name="subject_type" value="role" checked="1"/>
                     </xsl:when>
                     <xsl:otherwise>
-                      <option value="{@id}"><xsl:value-of select="name"/></option>
+                      <input type="radio" name="subject_type" value="role"/>
                     </xsl:otherwise>
                   </xsl:choose>
-                </xsl:for-each>
-              </select>
-              <br/>
-              <label>
-                <xsl:choose>
-                  <xsl:when test="commands_response/get_permissions_response/permission/subject/type = 'group'">
-                    <input type="radio" name="subject_type" value="group" checked="1"/>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <input type="radio" name="subject_type" value="group"/>
-                  </xsl:otherwise>
-                </xsl:choose>
-                <xsl:value-of select="gsa:i18n ('Group', 'Group')"/>
-                <xsl:text> </xsl:text>
-              </label>
-              <select name="group_id">
-                <xsl:for-each select="get_groups_response/group">
+                  <xsl:value-of select="gsa:i18n ('Role', 'Role')"/>
+                  <xsl:text> </xsl:text>
+                  <xsl:variable name="subject_id"
+                                select="commands_response/get_permissions_response/permission/subject/@id"/>
+                  <select name="role_id">
+                    <xsl:for-each select="get_roles_response/role">
+                      <xsl:choose>
+                        <xsl:when test="@id = $subject_id">
+                          <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                        </xsl:when>
+                        <xsl:otherwise>
+                          <option value="{@id}"><xsl:value-of select="name"/></option>
+                        </xsl:otherwise>
+                      </xsl:choose>
+                    </xsl:for-each>
+                  </select>
+                </label>
+              </div>
+              <div>
+                <label>
                   <xsl:choose>
-                    <xsl:when test="@id = commands_response/get_permissions_response/permission/subject/@id">
-                      <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                    <xsl:when test="commands_response/get_permissions_response/permission/subject/type = 'group'">
+                      <input type="radio" name="subject_type" value="group" checked="1"/>
                     </xsl:when>
                     <xsl:otherwise>
-                      <option value="{@id}"><xsl:value-of select="name"/></option>
+                      <input type="radio" name="subject_type" value="group"/>
                     </xsl:otherwise>
                   </xsl:choose>
-                </xsl:for-each>
-              </select>
+                  <xsl:value-of select="gsa:i18n ('Group', 'Group')"/>
+                  <xsl:text> </xsl:text>
+                  <select name="group_id">
+                    <xsl:for-each select="get_groups_response/group">
+                      <xsl:choose>
+                        <xsl:when test="@id = commands_response/get_permissions_response/permission/subject/@id">
+                          <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                        </xsl:when>
+                        <xsl:otherwise>
+                          <option value="{@id}"><xsl:value-of select="name"/></option>
+                        </xsl:otherwise>
+                      </xsl:choose>
+                    </xsl:for-each>
+                  </select>
+                </label>
+              </div>
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Resource ID', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+            <td><xsl:value-of select="gsa:i18n ('Resource ID', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
             <td>
               <xsl:choose>
                 <xsl:when test="commands_response/get_permissions_response/permission/resource/@id = '0'">
@@ -25284,7 +25287,7 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Resource Type', 'Property')"/> (<xsl:value-of select="gsa:i18n ('for Super permissions', 'Permission')"/>)</td>
+            <td><xsl:value-of select="gsa:i18n ('Resource Type', 'Property')"/> (<xsl:value-of select="gsa:i18n ('for Super permissions', 'Permission')"/>)</td>
             <td>
               <select name="optional_resource_type">
                 <option value="">--</option>
@@ -25316,7 +25319,7 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td colspan="2" style="text-align:right;">
+            <td>
               <input type="submit" name="submit" value="{gsa:i18n ('Save Permission', 'Permission')}"/>
             </td>
           </tr>
@@ -25388,9 +25391,9 @@ should not have received it.
         <input type="hidden" name="next" value="get_port_list"/>
         <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+        <table class="table-form">
           <tr>
-            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Name', 'Property')"/>
+            <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/>
             </td>
             <td>
               <input type="text" name="name" value="unnamed" size="30"
@@ -25398,30 +25401,33 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
             <td>
               <input type="text" name="comment" size="30" maxlength="400"/>
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Port Ranges', 'Port Range')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Port Ranges', 'Port Range')"/></td>
             <td>
-              <label>
-                <input type="radio" name="from_file" value="0" checked="1"/>
-              </label>
-              <input type="text" name="port_range" value="T:1-5,7,9,U:1-3,5,7,9"
+              <div>
+                <label>
+                  <input type="radio" name="from_file" value="0" checked="1"/>
+                  <input type="text" name="port_range" value="T:1-5,7,9,U:1-3,5,7,9"
                      size="30" maxlength="400"/>
-              <br/>
-              <label>
-                <input type="radio" name="from_file" value="1"/>
-                <xsl:value-of select="gsa:i18n ('From file', 'Port List')"/>
-                <xsl:text> </xsl:text>
-                <input type="file" name="file" size="30"/>
-              </label>
+                </label>
+              </div>
+              <div>
+                <label>
+                  <input type="radio" name="from_file" value="1"/>
+                  <xsl:value-of select="gsa:i18n ('From file', 'Port List')"/>
+                  <xsl:text> </xsl:text>
+                  <input type="file" name="file" size="30"/>
+                </label>
+              </div>
             </td>
           </tr>
           <tr>
-            <td colspan="2" style="text-align:right;">
+            <td>
               <input type="submit" name="submit" value="{gsa:i18n ('Create Port List', 'Port List')}"/>
             </td>
           </tr>
@@ -25776,16 +25782,16 @@ should not have received it.
         </xsl:choose>
         <input type="hidden" name="port_list" value="{/envelope/params/port_list}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+        <table class="table-form">
           <tr>
-            <td valign="top" width="165"><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
             <td>
               <input type="text" name="name" size="30" maxlength="80"
                      value="{commands_response/get_port_lists_response/port_list/name}"/>
             </td>
           </tr>
           <tr>
-            <td valign="top" width="165"><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
             <td>
               <input type="text" name="comment" size="30" maxlength="400"
                      value="{commands_response/get_port_lists_response/port_list/comment}"/>
@@ -25812,9 +25818,9 @@ should not have received it.
         <input type="hidden" name="port_list_id" value="{$id}"/>
         <input type="hidden" name="next" value="edit_port_list"/>
         <input type="hidden" name="next_next" value="{/envelope/params/next}"/>
-        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+        <table class="table-form">
           <tr>
-            <td valign="top"><xsl:value-of select="gsa:i18n ('Start', 'Port Range')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Start', 'Port Range')"/></td>
             <td>
               <xsl:choose>
                 <xsl:when test="$in_use = 0">
@@ -25829,7 +25835,7 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td valign="top"><xsl:value-of select="gsa:i18n ('End', 'Port Range')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('End', 'Port Range')"/></td>
             <td>
               <xsl:choose>
                 <xsl:when test="$in_use = 0">
@@ -25844,7 +25850,7 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td valign="top"><xsl:value-of select="gsa:i18n ('Protocol', 'Port Range')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Protocol', 'Port Range')"/></td>
             <td>
               <label>
                 <xsl:choose>
@@ -26108,15 +26114,15 @@ should not have received it.
         <input type="hidden" name="next" value="{/envelope/params/next}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
         <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
-        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+        <table class="table-form">
           <tr>
-            <td valign="top" width="125">
+            <td>
               <xsl:value-of select="gsa:i18n ('Import XML report format', 'Report Format')"/>
             </td>
             <td><input type="file" name="xml_file" size="30"/></td>
           </tr>
           <tr>
-            <td colspan="2" style="text-align:right;">
+            <td>
               <input type="submit" name="submit" value="{gsa:i18n ('Import Report Format', 'Report Format')}"/>
             </td>
           </tr>
@@ -26193,9 +26199,9 @@ should not have received it.
         <input type="hidden" name="report_format" value="{/envelope/params/report_format}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
         <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
-        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+        <table class="table-form">
           <tr>
-           <td valign="top" width="165"><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
+           <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
            <td>
              <input type="text"
                     name="name"
@@ -26205,14 +26211,14 @@ should not have received it.
            </td>
           </tr>
           <tr>
-            <td valign="top"><xsl:value-of select="gsa:i18n ('Summary', 'Property')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Summary', 'Property')"/></td>
             <td>
               <input type="text" name="summary" size="30" maxlength="400"
                      value="{commands_response/get_report_formats_response/report_format/summary}"/>
             </td>
           </tr>
           <tr>
-            <td valign="top"><xsl:value-of select="gsa:i18n ('Active', 'Report Format')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Active', 'Report Format')"/></td>
             <td>
               <xsl:choose>
                 <xsl:when test="commands_response/get_report_formats_response/report_format/active='1'">
@@ -26240,7 +26246,7 @@ should not have received it.
           </tr>
           <xsl:for-each select="commands_response/get_report_formats_response/report_format">
             <tr>
-              <td valign="top" colspan="2">
+              <td>
                 <xsl:choose>
                   <xsl:when test="count(param) = 0">
                     <h1><xsl:value-of select="gsa:i18n ('Parameters', 'Report Format')"/>: <xsl:value-of select="gsa:i18n ('None', 'Report Format|Parameters')"/></h1>
@@ -26254,12 +26260,11 @@ should not have received it.
             </tr>
           </xsl:for-each>
           <tr>
-            <td colspan="2" style="text-align:right;">
+            <td>
               <input type="submit" name="submit" value="{gsa:i18n ('Save Report Format', 'Report Format')}"/>
             </td>
           </tr>
         </table>
-        <br/>
       </form>
     </div>
   </div>
@@ -32526,9 +32531,9 @@ var toggleFilter = function(){
         <input type="hidden" name="cmd" value="create_role"/>
         <input type="hidden" name="caller" value="{/envelope/current_page}"/>
         <input type="hidden" name="next" value="get_role"/>
-        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+        <table class="table-form">
           <tr>
-            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Name', 'Property')"/>
+            <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/>
             </td>
             <td>
               <input type="text" name="name" value="unnamed" size="30"
@@ -32536,19 +32541,19 @@ var toggleFilter = function(){
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
             <td>
               <input type="text" name="comment" size="30" maxlength="400"/>
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175"><xsl:value-of select="gsa:i18n('Users', 'User')"/></td>
+            <td><xsl:value-of select="gsa:i18n('Users', 'User')"/></td>
             <td>
               <input type="text" name="users" size="30" maxlength="1000"/>
             </td>
           </tr>
           <tr>
-            <td colspan="2" style="text-align:right;">
+            <td>
               <input type="submit" name="submit" value="{gsa:i18n ('Create Role', 'Role')}"/>
             </td>
           </tr>
@@ -32598,9 +32603,9 @@ var toggleFilter = function(){
         </xsl:choose>
         <input type="hidden" name="role" value="{/envelope/params/role}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+        <table class="table-form">
           <tr>
-            <td valign="top" width="165"><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
             <td>
               <input type="text"
                      name="name"
@@ -32610,14 +32615,14 @@ var toggleFilter = function(){
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
             <td>
               <input type="text" name="comment" size="30" maxlength="400"
                      value="{commands_response/get_roles_response/role/comment}"/>
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Users', 'User')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Users', 'User')"/></td>
             <td>
               <input type="text" name="users"
                      value="{commands_response/get_roles_response/role/users}"
@@ -32647,9 +32652,9 @@ var toggleFilter = function(){
         <input type="hidden" name="comment" value=""/>
         <input type="hidden" name="subject_type" value="role"/>
         <input type="hidden" name="id_or_empty" value=""/>
-        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+        <table class="table-form">
           <tr>
-            <td valign="top" width="165"><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
             <td>
               <xsl:variable name="permissions"
                             select="get_permissions_response/permission[string-length (resource/@id) = 0]"/>
@@ -32703,9 +32708,9 @@ var toggleFilter = function(){
         <input type="hidden" name="comment" value=""/>
         <input type="hidden" name="subject_type" value="role"/>
         <input type="hidden" name="permission" value="Super"/>
-        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+        <table class="table-form">
           <tr>
-            <td valign="top" width="165"><xsl:value-of select="gsa:i18n ('Group', 'Group')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Group', 'Group')"/></td>
             <td>
               <input type="hidden" name="optional_resource_type" value="group"/>
               <select name="id_or_empty">
@@ -33902,25 +33907,24 @@ var toggleFilter = function(){
         <input type="hidden" name="next" value="get_user"/>
         <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-        <table border="0" cellspacing="0" cellpadding="3" width="100%" class="stripped">
+        <table class="table-form">
           <tr>
-            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Login Name', 'Auth Data')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Login Name', 'Auth Data')"/></td>
             <td>
               <input type="text" name="login" value="{gsa:param-or ('login', 'unnamed')}"
                      size="30" maxlength="80"/>
             </td>
           </tr>
           <tr>
-            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Authentication', 'Auth Data')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Authentication', 'Auth Data')"/></td>
             <td>
               <label>
                 <input type="radio" name="auth_method" value="0" checked="1"/>
                 <xsl:value-of select="gsa:i18n ('Password', 'Auth Data')"/>
-              </label>
-              <input type="password" name="password" value="" size="30"
+                <input type="password" name="password" value="" size="30"
                      maxlength="40"/>
+              </label>
               <xsl:if test="//group[@name='method:ldap_connect']/auth_conf_setting[@key='enable']/@value = 'true'">
-                <br/>
                 <label>
                   <input type="radio" name="auth_method" value="1"/>
                   <xsl:value-of select="gsa:i18n ('Allow LDAP Authentication Only', 'User')"/>
@@ -33961,7 +33965,7 @@ var toggleFilter = function(){
             </tr>
           </xsl:if>
           <tr>
-            <td valign="top"><xsl:value-of select="gsa:i18n ('Host Access', 'User')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Host Access', 'User')"/></td>
             <td>
               <label>
                 <input type="radio" name="hosts_allow" value="0" checked="1"/>
@@ -33971,13 +33975,14 @@ var toggleFilter = function(){
                 <input type="radio" name="hosts_allow" value="1"/>
                 <xsl:value-of select="gsa:i18n ('Deny all and allow', 'User')"/>:
               </label>
-              <br/>
-              <input type="text" name="access_hosts" value="{gsa:param-or ('access_hosts', '')}"
-                     size="30" maxlength="2000"/>
+              <div>
+                <input type="text" name="access_hosts" value="{gsa:param-or ('access_hosts', '')}"
+                        size="30" maxlength="2000"/>
+              </div>
             </td>
           </tr>
           <tr>
-            <td valign="top"><xsl:value-of select="gsa:i18n ('Interface Access', 'User')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Interface Access', 'User')"/></td>
             <td>
               <label>
                 <input type="radio" name="ifaces_allow" value="0" checked="1"/>
@@ -33987,13 +33992,14 @@ var toggleFilter = function(){
                 <input type="radio" name="ifaces_allow" value="1"/>
                 <xsl:value-of select="gsa:i18n ('Deny all and allow', 'User')"/>:
               </label>
-              <br/>
-              <input type="text" name="access_ifaces" value="{gsa:param-or ('access_ifaces', '')}"
-                     size="30" maxlength="2000"/>
+              <div>
+                <input type="text" name="access_ifaces" value="{gsa:param-or ('access_ifaces', '')}"
+                      size="30" maxlength="2000"/>
+              </div>
             </td>
           </tr>
           <tr>
-            <td colspan="2" style="text-align:right;">
+            <td>
               <input type="submit" name="submit" value="{gsa:i18n ('Create User', 'User')}"/>
             </td>
           </tr>
@@ -35334,12 +35340,12 @@ var toggleFilter = function(){
   </div>
 
   <div class="section-box">
-    <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
+    <table class="gbntable table-form stripped">
       <tr class="gbntablehead2">
         <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
         <td><xsl:value-of select="gsa:i18n ('Value', 'Property')"/></td>
       </tr>
-      <tr class="odd">
+      <tr>
         <td><xsl:value-of select="gsa:i18n ('Timezone', 'Time')"/></td>
         <td>
           <xsl:variable name="abbrev"
@@ -35352,12 +35358,12 @@ var toggleFilter = function(){
           </xsl:if>
         </td>
       </tr>
-      <tr class="even">
+      <tr>
         <td><xsl:value-of select="gsa:i18n ('Password', 'Auth Data')"/></td>
         <td>********</td>
       </tr>
       <xsl:if test="gsa:may-op ('get_settings')">
-        <tr class="odd">
+        <tr>
           <td><xsl:value-of select="gsa:i18n ('User Interface Language', 'My Settings')"/></td>
           <td>
             <xsl:variable name="lang">
@@ -35384,23 +35390,23 @@ var toggleFilter = function(){
             </xsl:choose>
           </td>
         </tr>
-        <tr class="even">
+        <tr>
           <td><xsl:value-of select="gsa:i18n ('Rows Per Page', 'My Settings')"/></td>
           <td><xsl:value-of select="get_settings_response/setting[name='Rows Per Page']/value"/></td>
         </tr>
-        <tr class="odd">
+        <tr>
           <td><xsl:value-of select="gsa:i18n ('Details Export File Name', 'My Settings')"/></td>
           <td><xsl:value-of select="get_settings_response/setting[name='Details Export File Name']/value"/></td>
         </tr>
-        <tr class="even">
+        <tr>
           <td><xsl:value-of select="gsa:i18n ('List Export File Name', 'My Settings')"/></td>
           <td><xsl:value-of select="get_settings_response/setting[name='List Export File Name']/value"/></td>
         </tr>
-        <tr class="odd">
+        <tr>
           <td><xsl:value-of select="gsa:i18n ('Report Export File Name', 'My Settings')"/></td>
           <td><xsl:value-of select="get_settings_response/setting[name='Report Export File Name']/value"/></td>
         </tr>
-        <tr class="even">
+        <tr>
           <td><xsl:value-of select="gsa:i18n ('Severity Class', 'My Settings')"/></td>
           <td>
             <xsl:call-template name="severity-settings-name">
@@ -35409,7 +35415,7 @@ var toggleFilter = function(){
             </xsl:call-template>
           </td>
         </tr>
-        <tr class="odd">
+        <tr>
           <td><xsl:value-of select="gsa:i18n ('Dynamic Severity', 'My Settings')"/></td>
           <td>
             <xsl:variable name="dynamic_severity"                              select="get_settings_response/setting[name='Dynamic Severity']/value"/>
@@ -35422,13 +35428,13 @@ var toggleFilter = function(){
             </xsl:choose>
           </td>
         </tr>
-        <tr class="even">
+        <tr>
           <td><xsl:value-of select="gsa:i18n ('Default Severity', 'My Settings')"/></td>
           <td><xsl:value-of select="get_settings_response/setting[name='Default Severity']/value"/></td>
         </tr>
 
         <xsl:if test="gsa:may-op ('get_alerts')">
-          <tr class="odd">
+          <tr>
             <td><xsl:value-of select="gsa:i18n ('Default Alert', 'Alert')"/></td>
             <td>
               <xsl:call-template name="get-settings-resource">
@@ -35442,7 +35448,7 @@ var toggleFilter = function(){
         </xsl:if>
 
         <xsl:if test="gsa:may-op ('get_configs')">
-          <tr class="even">
+          <tr>
             <td><xsl:value-of select="gsa:i18n ('Default OpenVAS Scan Config', 'Scan Config')"/></td>
             <td>
               <xsl:call-template name="get-settings-resource">
@@ -35454,7 +35460,7 @@ var toggleFilter = function(){
             </td>
           </tr>
 
-          <tr class="odd">
+          <tr>
             <td><xsl:value-of select="gsa:i18n ('Default OSP Scan Config', 'Scan Config')"/></td>
             <td>
               <xsl:call-template name="get-settings-resource">
@@ -35468,7 +35474,7 @@ var toggleFilter = function(){
         </xsl:if>
 
         <xsl:if test="gsa:may-op ('get_credentials')">
-          <tr class="even">
+          <tr>
             <td><xsl:value-of select="gsa:i18n ('Default SSH Credential', 'Credential')"/></td>
             <td>
               <xsl:call-template name="get-settings-resource">
@@ -35480,7 +35486,7 @@ var toggleFilter = function(){
             </td>
           </tr>
 
-          <tr class="odd">
+          <tr>
             <td><xsl:value-of select="gsa:i18n ('Default SMB Credential', 'Credential')"/></td>
             <td>
               <xsl:call-template name="get-settings-resource">
@@ -35492,7 +35498,7 @@ var toggleFilter = function(){
             </td>
           </tr>
 
-          <tr class="even">
+          <tr>
             <td><xsl:value-of select="gsa:i18n ('Default ESXi Credential', 'Credential')"/></td>
             <td>
               <xsl:call-template name="get-settings-resource">
@@ -35504,7 +35510,7 @@ var toggleFilter = function(){
             </td>
           </tr>
 
-          <tr class="odd">
+          <tr>
             <td><xsl:value-of select="gsa:i18n ('Default SNMP Credential', 'Credential')"/></td>
             <td>
               <xsl:call-template name="get-settings-resource">
@@ -35518,7 +35524,7 @@ var toggleFilter = function(){
         </xsl:if>
 
         <xsl:if test="gsa:may-op ('get_port_lists')">
-          <tr class="even">
+          <tr>
             <td><xsl:value-of select="gsa:i18n ('Default Port List', 'Port List')"/></td>
             <td>
               <xsl:call-template name="get-settings-resource">
@@ -35532,7 +35538,7 @@ var toggleFilter = function(){
         </xsl:if>
 
         <xsl:if test="gsa:may-op ('get_scanners')">
-          <tr class="odd">
+          <tr>
             <td><xsl:value-of select="gsa:i18n ('Default OpenVAS Scanner', 'Scanner')"/></td>
             <td>
               <xsl:call-template name="get-settings-resource">
@@ -35544,7 +35550,7 @@ var toggleFilter = function(){
             </td>
           </tr>
 
-          <tr class="even">
+          <tr>
             <td><xsl:value-of select="gsa:i18n ('Default OSP Scanner', 'Scanner')"/></td>
             <td>
               <xsl:call-template name="get-settings-resource">
@@ -35558,7 +35564,7 @@ var toggleFilter = function(){
         </xsl:if>
 
         <xsl:if test="gsa:may-op ('get_schedules')">
-          <tr class="odd">
+          <tr>
             <td><xsl:value-of select="gsa:i18n ('Default Schedule', 'Schedule')"/></td>
             <td>
               <xsl:call-template name="get-settings-resource">
@@ -35572,7 +35578,7 @@ var toggleFilter = function(){
         </xsl:if>
 
         <xsl:if test="gsa:may-op ('get_slaves')">
-          <tr class="even">
+          <tr>
             <td><xsl:value-of select="gsa:i18n ('Default Slave', 'Slave')"/></td>
             <td>
               <xsl:call-template name="get-settings-resource">
@@ -35586,7 +35592,7 @@ var toggleFilter = function(){
         </xsl:if>
 
         <xsl:if test="gsa:may-op ('get_targets')">
-          <tr class="odd">
+          <tr>
             <td><xsl:value-of select="gsa:i18n ('Default Target', 'Target')"/></td>
             <td>
               <xsl:call-template name="get-settings-resource">
@@ -35600,7 +35606,7 @@ var toggleFilter = function(){
         </xsl:if>
 
         <xsl:if test="gsa:may-op ('get_filters')">
-          <tr class="even">
+          <tr>
             <td><xsl:value-of select="gsa:i18n ('Agents Filter', 'Agent')"/></td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -35609,7 +35615,7 @@ var toggleFilter = function(){
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="odd">
+          <tr>
             <td><xsl:value-of select="gsa:i18n ('Alerts Filter', 'Alert')"/></td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -35618,7 +35624,7 @@ var toggleFilter = function(){
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="even">
+          <tr>
             <td><xsl:value-of select="gsa:i18n ('Configs Filter', 'Scan Config')"/></td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -35627,7 +35633,7 @@ var toggleFilter = function(){
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="odd">
+          <tr>
             <td><xsl:value-of select="gsa:i18n ('Credentials Filter', 'Credential')"/></td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -35636,7 +35642,7 @@ var toggleFilter = function(){
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="even">
+          <tr>
             <td><xsl:value-of select="gsa:i18n ('Filters Filter', 'Filter')"/></td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -35645,7 +35651,7 @@ var toggleFilter = function(){
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="odd">
+          <tr>
             <td><xsl:value-of select="gsa:i18n ('Notes Filter', 'Note')"/></td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -35654,7 +35660,7 @@ var toggleFilter = function(){
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="even">
+          <tr>
             <td><xsl:value-of select="gsa:i18n ('Overrides Filter', 'Override')"/></td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -35663,7 +35669,7 @@ var toggleFilter = function(){
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="odd">
+          <tr>
             <td><xsl:value-of select="gsa:i18n ('Permissions Filter', 'Permission')"/></td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -35672,7 +35678,7 @@ var toggleFilter = function(){
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="even">
+          <tr>
             <td><xsl:value-of select="gsa:i18n ('Port Lists Filter', 'Port List')"/></td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -35681,7 +35687,7 @@ var toggleFilter = function(){
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="odd">
+          <tr>
             <td><xsl:value-of select="gsa:i18n ('Reports Filter', 'Report')"/></td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -35690,7 +35696,7 @@ var toggleFilter = function(){
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="even">
+          <tr>
             <td><xsl:value-of select="gsa:i18n ('Report Formats Filter', 'Report Format')"/></td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -35699,7 +35705,7 @@ var toggleFilter = function(){
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="odd">
+          <tr>
             <td><xsl:value-of select="gsa:i18n ('Results Filter', 'Result')"/></td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -35708,7 +35714,7 @@ var toggleFilter = function(){
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="even">
+          <tr>
             <td><xsl:value-of select="gsa:i18n ('Roles Filter', 'Role')"/></td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -35717,7 +35723,7 @@ var toggleFilter = function(){
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="odd">
+          <tr>
             <td><xsl:value-of select="gsa:i18n ('Schedules Filter', 'Schedule')"/></td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -35726,7 +35732,7 @@ var toggleFilter = function(){
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="even">
+          <tr>
             <td><xsl:value-of select="gsa:i18n ('Slaves Filter', 'Slave')"/></td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -35735,7 +35741,7 @@ var toggleFilter = function(){
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="odd">
+          <tr>
             <td><xsl:value-of select="gsa:i18n ('Tags Filter', 'Tag')"/></td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -35744,7 +35750,7 @@ var toggleFilter = function(){
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="even">
+          <tr>
             <td><xsl:value-of select="gsa:i18n ('Targets Filter', 'Target')"/></td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -35753,7 +35759,7 @@ var toggleFilter = function(){
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="odd">
+          <tr>
             <td><xsl:value-of select="gsa:i18n ('Tasks Filter', 'Task')"/></td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -35762,7 +35768,7 @@ var toggleFilter = function(){
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="even">
+          <tr>
             <td><xsl:value-of select="gsa:i18n ('CPE Filter', 'CPE')"/></td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -35771,7 +35777,7 @@ var toggleFilter = function(){
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="odd">
+          <tr>
             <td><xsl:value-of select="gsa:i18n ('CVE Filter', 'CVE')"/></td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -35780,7 +35786,7 @@ var toggleFilter = function(){
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="even">
+          <tr>
             <td><xsl:value-of select="gsa:i18n ('NVT Filter', 'NVT')"/></td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -35789,7 +35795,7 @@ var toggleFilter = function(){
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="odd">
+          <tr>
             <td><xsl:value-of select="gsa:i18n ('OVAL Filter', 'OVAL Definition')"/></td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -35798,7 +35804,7 @@ var toggleFilter = function(){
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="even">
+          <tr>
             <td><xsl:value-of select="gsa:i18n ('CERT-Bund Filter', 'CERT-Bund Advisory')"/></td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -35807,7 +35813,7 @@ var toggleFilter = function(){
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="odd">
+          <tr>
             <td><xsl:value-of select="gsa:i18n ('DFN-CERT Filter', 'DFN-CERT Advisory')"/></td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -35816,7 +35822,7 @@ var toggleFilter = function(){
               </xsl:call-template>
             </td>
           </tr>
-          <tr class="even">
+          <tr>
             <td><xsl:value-of select="gsa:i18n ('All SecInfo Filter', 'SecInfo')"/></td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -35887,7 +35893,7 @@ var toggleFilter = function(){
           <input type="hidden" name="token" value="{/envelope/token}"/>
           <input type="hidden" name="cmd" value="save_my_settings"/>
           <input type="hidden" name="caller" value="{/envelope/current_page}"/>
-          <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
+          <table class="gbntable table-form">
             <tr class="gbntablehead2">
               <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
               <td><xsl:value-of select="gsa:i18n ('Value', 'Property')"/></td>
@@ -35904,7 +35910,7 @@ var toggleFilter = function(){
             <tr>
               <td valign="top"><xsl:value-of select="gsa:i18n ('Password', 'Auth Data')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
               <td>
-                <table>
+                <table class="table-form">
                   <tr>
                     <td><xsl:value-of select="gsa:i18n ('Old', 'Auth Data|Password')"/></td>
                     <td>
@@ -36541,22 +36547,22 @@ var toggleFilter = function(){
         <input type="hidden" name="asset_type" value="host"/>
         <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+        <table class="table-form">
           <tr>
-            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
             <td>
               <input type="text" name="name" value="127.0.0.1" size="30"
                      maxlength="80"/>
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
             <td>
               <input type="text" name="comment" size="30" maxlength="400"/>
             </td>
           </tr>
           <tr>
-            <td colspan="2" style="text-align:right;">
+            <td>
               <input type="submit" name="submit" value="{gsa:i18n ('Create Host', 'Host')}"/>
             </td>
           </tr>
@@ -36756,9 +36762,9 @@ var toggleFilter = function(){
                  name="port_list_id"
                  value="c7e03b6c-3bbe-11e1-a057-406186ea4fc5"/>
         </xsl:if>
-        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+        <table class="table-form">
           <tr>
-            <td valign="top" width="165"><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
             <td>
               <input type="text"
                      disabled="disabled"
@@ -36769,14 +36775,14 @@ var toggleFilter = function(){
             </td>
           </tr>
           <tr>
-            <td valign="top" width="175"><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
             <td>
               <input type="text" name="comment" size="30" maxlength="400"
                      value="{get_assets_response/asset/comment}"/>
             </td>
           </tr>
           <tr>
-            <td colspan="2" style="text-align:right;">
+            <td>
               <input type="submit" name="submit" value="{gsa:i18n ('Save Asset', 'Asset')}"/>
             </td>
           </tr>

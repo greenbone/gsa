@@ -1452,9 +1452,26 @@ select[multiple] {
   padding: 3px; /* == cellpadding="3" */
 }
 
-.table-form label {
+.table-form td div {
+  padding: 3px 0;
+}
+
+.table-form label, .table-form button, .table-form input[type=button],
+.table-form input[type=text], .table-form textarea,
+.table-form input[type=password] {
   display: inline-block;
   vertical-align: middle;
+}
+
+.table-form input[type=radio], .table-form input[type=checkbox] {
+  margin: 0 5px;
+  vertical-align: sub;
+}
+
+.table-form label input,
+.table-form label .select2-container {
+  margin-left: 5px;
+  margin-right: 5px;
 }
 
 .table-form td a {
@@ -1464,4 +1481,5 @@ select[multiple] {
 .table-form .select2-container {
   min-width: 200px;
 }
+
 /* vim: set ts=2 sw=2 tw=80:*/

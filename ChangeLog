@@ -1,3 +1,15 @@
+2016-01-14  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	Use a common layout for create and edit dialogs based on css.
+
+	* src/html/classic/css/gsa-style.css: Add additional styles for table based
+	formulars to align its elements.
+
+	* src/html/classic/omp.xsl: Refactor create and edit dialogs to use a common
+	layout. The new layout removes the usage of deprecated html attributes (like
+	e.g. valign or cellspacing) and fixes the vertical alignment of radio-,
+	checkboxes and images.
+
 2016-01-13  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/gsad.c (init_validator): Correct regular expressions for
