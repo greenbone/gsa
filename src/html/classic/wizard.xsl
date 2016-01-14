@@ -80,8 +80,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:choose>
     <xsl:when test="(/envelope/role != 'Observer') and (name (..) = 'get_tasks') and (number (task_count/text ()) = 0) or ($force-wizard = 1)">
       <div class="info-dialog" data-timeout="10000" data-transfer-to=".wizard-action-icon[data-name=quick_first_scan]">
-          <p class="wizard_hint">There are no tasks (yet), you can create a pre-configured one using the wizard via the
-              <img class="icon-lg valign-middle" src="/img/wizard.svg" /> button on top of this page.</p>
+        <p class="wizard_hint">
+          <img class="icon-lg valign-middle" style="float:left; margin-right:10px" src="/img/wizard.svg" />
+          <xsl:value-of select="gsa:i18n('Welcome to the scan task management!', 'Task Wizard')"/><br/>
+          <xsl:value-of select="gsa:i18n('To start your first vulnerability scan, the scan wizard can help you to do so with just one click.', 'Task Wizard')"/><br/>
+          <xsl:value-of select="gsa:i18n('Simply select the wizard icon from the icon bar in the top-left of this page.', 'Task Wizard')"/>
+        </p>
       </div>
     </xsl:when>
   </xsl:choose>
