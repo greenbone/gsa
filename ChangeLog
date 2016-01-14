@@ -1,3 +1,23 @@
+2016-01-14  Björn Ricks <bjoern.ricks@greenbone.net>
+	Introduce a new info dialog
+
+	* src/html/classic/css/gsa-style.css: Add icon-lg css class for large icons
+	with size of 50x50 pixels. Also add styles for the new info dialog.
+
+	* src/html/classic/img/pause.png: Add new button for pause actions.
+
+	* src/html/classic/img/wizard.svg: Add a svg version of the wizard icon to
+	allow scaling of the icon.
+
+	* CMakeLists.txt: Install pause.png and wizard.svg.
+
+	* src/html/classic/js/greenbone.js: Add new InfoDialog class for displaying
+	a help text within a dialog. It is possible to use a timeout to close the
+	dialog automatically. The timeout can be pause and resumed afterwards.
+
+	* src/html/classic/wizard.xsl: Display an info dialog if the user has not
+	created any tasks yet.
+
 2016-01-14  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/js/gsa_line_chart.js (generate): Fix updating of

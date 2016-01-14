@@ -1344,6 +1344,28 @@ select[multiple] {
   background-position: 0 center;
 }
 
+/* jquery ui transfer effect css settings */
+.ui-effects-transfer {
+ border: 1px dotted black;
+}
+
+/* info dialog progress */
+.ui-dialog .progress {
+  font-size: 20px;
+  text-align: right;
+  margin-right: 10px;
+  margin-bottom: 5px;
+  vertical-align: middle;
+}
+
+.ui-dialog .progress img {
+  margin: 0 5px;
+}
+
+.ui-dialog .progress img, .ui-dialog .progress span {
+  vertical-align: middle;
+}
+
 /* The new reworked list view */
 
 #list-window-header {
@@ -1416,7 +1438,7 @@ select[multiple] {
   height: 16px;
 }
 
-#big-icon {
+#big-icon, .icon-lg {
   width: 50px;
   height: 50px;
 }

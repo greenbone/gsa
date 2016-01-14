@@ -467,6 +467,118 @@
 
   window.FilterDialog = FilterDialog;
 
+  var InfoDialog = function(options) {
+    this.timeout = options.timeout !== undefined ? options.timeout : 5000;
+    this.width = options.width !== undefined ? options.width : 600;
+    this.transfer_to = options.transfer_to ? $(options.transfer_to) : undefined;
+    this.interval_time = 1000; // 1 sec
+    this.progress_value = this.timeout;
+
+    this.dialog = $("<div/>", {
+      'class': "dialog-form",
+    });
+    options.element.detach();
+    this.dialog.append(options.element.children());
+    this.dialog_css = options.dialog_css;
+  };
+
+  InfoDialog.prototype.close = function() {
+    if (this.transfer_to !== undefined) {
+      this.dialog.parent('.ui-dialog').effect('transfer', {
+        to: this.transfer_to,
+      }, 1000);
+    }
+
+    this.stop_progress();
+
+    this.progress = undefined;
+    this.progress_value = this.timeout;
+
+    this.dialog.remove();
+    this.dialog = undefined;
+  };
+
+  InfoDialog.prototype.stop_progress = function() {
+    if (this.progress_timer !== undefined) {
+      window.clearInterval(this.progress_timer);
+      this.progress_timer = undefined;
+    }
+  }
+
+  InfoDialog.prototype.start_progress = function() {
+    var self = this;
+
+    var element = $('<div class="progress"/>');
+
+    this.progress = $('<span />');
+    this.progress.text(this.progress_value / 1000);
+
+    this.progress_button = $('<img src="/img/pause.png" alt="Pause/Resume" />');
+    this.progress_button.on('click', function() {
+      if (self.progress_timer === undefined ) {
+        self.resume_progress();
+      }
+      else {
+        self.pause_progress();
+      }
+    });
+
+    element.append(this.progress);
+    element.append(this.progress_button);
+
+    this.dialog.after(element);
+
+    this.resume_progress();
+  }
+
+  InfoDialog.prototype.pause_progress = function() {
+    if (this.progress_timer !== undefined) {
+      window.clearInterval(this.progress_timer);
+      this.progress_timer = undefined;
+    }
+    this.progress_button.attr('src', '/img/resume.png');
+  }
+
+  InfoDialog.prototype.resume_progress = function() {
+    var self = this;
+
+    self.progress_button.attr('src', '/img/pause.png');
+
+    self.progress_timer = window.setInterval(function() {
+      self.progress_value -= self.interval_time;
+
+      if (self.progress_value < 0) {
+        self.stop_progress();
+        self.close();
+        return;
+      }
+
+      self.progress.text(self.progress_value / 1000);
+    }, self.interval_time);
+  }
+
+  InfoDialog.prototype.show = function() {
+    var self = this;
+
+    self.dialog.css('cursor', 'wait');
+
+    self.dialog.dialog({
+      dialogClass: self.dialog_css,
+      modal: false,
+      width: self.width,
+      show: { effect: "fade", duration: 1000 },
+      beforeClose: function(event, ui){
+        self.close();
+      },
+    });
+
+    if (self.timeout) {
+      self.start_progress();
+    }
+  };
+
+  window.InfoDialog = InfoDialog;
+
   var onReady = function(doc){
     doc = $(doc);
 
@@ -588,6 +700,16 @@
         event.preventDefault();
         new FilterDialog(id, 'Update Filter').show();
       });
+    });
+
+    doc.find(".info-dialog").each(function(){
+      var elem = $(this);
+      new InfoDialog({
+        element: elem,
+        timeout: elem.data('timeout'),
+        width: elem.data('width'),
+        transfer_to: elem.data('transfer-to'),
+      }).show();
     });
 
     var datepicker = doc.find("#datepicker");

@@ -470,6 +470,7 @@ install (FILES src/html/classic/img/agent.png
                src/html/classic/img/p_bar_gray.png
                src/html/classic/img/login-label.png
                src/html/classic/img/loading.gif
+               src/html/classic/img/pause.png
                src/html/classic/img/cvss_calculator.svg
                src/html/classic/img/mysettings.svg
                src/html/classic/img/performance.svg
@@ -507,6 +508,7 @@ install (FILES src/html/classic/img/agent.png
                src/html/classic/img/slave.svg
                src/html/classic/img/help.svg
                src/html/classic/img/greenbone.svg
+               src/html/classic/img/wizard.svg
          DESTINATION ${GSA_DATA_DIR}/classic/img)
 
 install (FILES src/html/classic/img/style/gsa-logo.png
