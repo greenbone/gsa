@@ -1,3 +1,8 @@
+2016-01-14  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/omp.xsl (html-create-target-form): Add buttons to create
+	credentials directly from the new target dialog.
+
 2016-01-14  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/js/gsa_graphics_base.js (Chart.detached_url)

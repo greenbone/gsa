@@ -12602,6 +12602,10 @@ should not have received it.
                 <xsl:text> </xsl:text>
                 <input type="text" name="port" value="22" size="6"
                        maxlength="400"/>
+                <a href="#" title="{ gsa:i18n('Create a credential') }"
+                  class="new-action-icon" data-type="credential" data-done="select[name=ssh_credential_id]">
+                  <img class="valign-middle" src="/img/new.png"/>
+                </a>
               </td>
             </tr>
             <tr>
@@ -12613,6 +12617,10 @@ should not have received it.
                     <xsl:with-param name="select_id" select="smb_credential_id"/>
                   </xsl:apply-templates>
                 </select>
+                <a href="#" title="{ gsa:i18n('Create a credential') }"
+                  class="new-action-icon" data-type="credential" data-done="select[name=smb_credential_id]">
+                  <img class="valign-middle" src="/img/new.png"/>
+                </a>
               </td>
             </tr>
             <tr>
@@ -12624,6 +12632,10 @@ should not have received it.
                     <xsl:with-param name="select_id" select="esxi_credential_id"/>
                   </xsl:apply-templates>
                 </select>
+                <a href="#" title="{ gsa:i18n('Create a credential') }"
+                  class="new-action-icon" data-type="credential" data-done="select[name=esxi_credential_id]">
+                  <img class="valign-middle" src="/img/new.png"/>
+                </a>
               </td>
             </tr>
             <tr>
@@ -12635,6 +12647,10 @@ should not have received it.
                     <xsl:with-param name="select_id" select="snmp_credential_id"/>
                   </xsl:apply-templates>
                 </select>
+                <a href="#" title="{ gsa:i18n('Create a credential') }"
+                  class="new-action-icon" data-type="credential" data-done="select[name=snmp_credential_id]">
+                  <img class="valign-middle" src="/img/new.png"/>
+                </a>
               </td>
             </tr>
           </xsl:if>
