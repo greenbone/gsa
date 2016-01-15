@@ -91,6 +91,10 @@
       return get_entity_from_element(
           doc.find('get_schedules_response > schedule'));
     },
+    new_config: function(doc) {
+      return get_entity_from_element(
+          doc.find('get_configs_response > config'));
+    }
   }
 
   function get_entity_from_element(element) {
@@ -108,6 +112,7 @@
     if (cmd in ENTITY_SELECTORS) {
       return ENTITY_SELECTORS[cmd](xml);
     }
+    console.warn('No entity selector found for command ', cmd);
     return undefined;
   }
 
