@@ -1,5 +1,11 @@
 2016-01-15  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/wizard.xsl: Remove usage of <br/> elements for formatting.
+	<br/> should only be used in texts for an explicit line break after a word or
+	sentence but not to ensure an empty line for a paragraph.
+
+2016-01-15  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	Remove usage of obsolete border attribute
 
 	* src/html/classic/css/gsa-style.css: Disable border for all tables.
