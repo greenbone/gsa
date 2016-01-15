@@ -12850,6 +12850,10 @@ should not have received it.
                         </xsl:choose>
                       </xsl:for-each>
                     </select>
+                    <a href="#" title="{ gsa:i18n('Create a new port list') }"
+                      class="new-action-icon" data-type="port_list" data-done="select[name=port_list_id]">
+                      <img class="valign-middle" src="/img/new.png"/>
+                    </a>
                   </td>
                 </tr>
               </xsl:if>
@@ -12951,6 +12955,10 @@ should not have received it.
                         <input type="text" name="port" value="22" size="6" maxlength="400"/>
                       </xsl:otherwise>
                     </xsl:choose>
+                    <a href="#" title="{ gsa:i18n('Create a credential') }"
+                      class="new-action-icon" data-type="credential" data-done="select[name=ssh_credential_id]">
+                      <img class="valign-middle" src="/img/new.png"/>
+                    </a>
                   </td>
                 </tr>
                 <tr>
@@ -12979,6 +12987,10 @@ should not have received it.
                         </xsl:choose>
                       </xsl:for-each>
                     </select>
+                    <a href="#" title="{ gsa:i18n('Create a credential') }"
+                      class="new-action-icon" data-type="credential" data-done="select[name=smb_credential_id]">
+                      <img class="valign-middle" src="/img/new.png"/>
+                    </a>
                   </td>
                 </tr>
                 <tr>
@@ -13007,6 +13019,10 @@ should not have received it.
                         </xsl:choose>
                       </xsl:for-each>
                     </select>
+                    <a href="#" title="{ gsa:i18n('Create a credential') }"
+                      class="new-action-icon" data-type="credential" data-done="select[name=esxi_credential_id]">
+                      <img class="valign-middle" src="/img/new.png"/>
+                    </a>
                   </td>
                 </tr>
                 <tr>
@@ -13035,6 +13051,10 @@ should not have received it.
                         </xsl:choose>
                       </xsl:for-each>
                     </select>
+                    <a href="#" title="{ gsa:i18n('Create a credential') }"
+                      class="new-action-icon" data-type="credential" data-done="select[name=snmp_credential_id]">
+                      <img class="valign-middle" src="/img/new.png"/>
+                    </a>
                   </td>
                 </tr>
               </xsl:if>
