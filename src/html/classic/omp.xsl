@@ -5442,7 +5442,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </tr>
         <xsl:if test="gsa:may-op ('get_alerts')">
           <tr>
-            <td><xsl:value-of select="gsa:i18n ('Alerts', 'Alert')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+            <td><xsl:value-of select="gsa:i18n ('Alerts', 'Alert')"/></td>
             <td>
               <xsl:variable name="alerts"
                             select="get_alerts_response/alert"/>
@@ -5456,7 +5456,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:if>
         <xsl:if test="gsa:may-op ('get_schedules')">
           <tr>
-            <td><xsl:value-of select="gsa:i18n ('Schedule', 'Schedule')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+            <td><xsl:value-of select="gsa:i18n ('Schedule', 'Schedule')"/></td>
             <td>
               <select name="schedule_id_optional">
                 <xsl:variable name="schedule_id"
@@ -5608,7 +5608,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:if test="gsa:may-op ('get_slaves')">
             <tr>
               <td></td>
-              <td><xsl:value-of select="gsa:i18n ('Slave', 'Slave')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+              <td><xsl:value-of select="gsa:i18n ('Slave', 'Slave')"/></td>
               <td>
                 <select name="slave_id_optional">
                   <xsl:variable name="slave_id">
@@ -6124,7 +6124,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template name="html-edit-task-alert">
   <xsl:if test="gsa:may-op ('get_alerts')">
     <tr>
-      <td><xsl:value-of select="gsa:i18n ('Alerts', 'Alert')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+      <td><xsl:value-of select="gsa:i18n ('Alerts', 'Alert')"/></td>
       <td>
         <xsl:variable name="task_alerts" select="commands_response/get_tasks_response/task/alert"/>
         <select name="alert_ids:" multiple="multiple">
@@ -6205,7 +6205,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:if test="gsa:may-op ('get_slaves')">
     <tr>
       <td></td>
-      <td><xsl:value-of select="gsa:i18n ('Slave', 'Slave')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+      <td><xsl:value-of select="gsa:i18n ('Slave', 'Slave')"/></td>
       <td>
         <select name="slave_id">
           <xsl:variable name="slave_id">
@@ -6245,7 +6245,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template name="html-edit-task-schedule">
   <xsl:if test="gsa:may-op ('get_schedules')">
     <tr>
-      <td><xsl:value-of select="gsa:i18n ('Schedule', 'Schedule')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+      <td><xsl:value-of select="gsa:i18n ('Schedule', 'Schedule')"/></td>
       <td>
         <select name="schedule_id">
           <xsl:variable name="schedule_id">
@@ -8148,7 +8148,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td><input type="file" name="installer" size="30"/></td>
           </tr>
           <tr>
-            <td><xsl:value-of select="gsa:i18n ('Installer signature', 'Agent')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+            <td><xsl:value-of select="gsa:i18n ('Installer signature', 'Agent')"/></td>
             <td><input type="file" name="installer_sig" size="30"/></td>
           </tr>
           <!--
@@ -9305,7 +9305,7 @@ should not have received it.
           <!-- Fields that apply to all/multiple methods. -->
 
           <tr style="display: none" id="details_url_row">
-            <td><xsl:value-of select="gsa:i18n ('Details URL', 'Alert')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+            <td><xsl:value-of select="gsa:i18n ('Details URL', 'Alert')"/></td>
             <td>
               <input type="text" name="method_data:details_url"
                      size="30" maxlength="1000"
@@ -9314,7 +9314,7 @@ should not have received it.
           </tr>
           <xsl:if test="gsa:may-op ('get_filters')">
             <tr id="report_result_filter_row">
-              <td><xsl:value-of select="gsa:i18n ('Report Result Filter', 'Alert')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+              <td><xsl:value-of select="gsa:i18n ('Report Result Filter', 'Alert')"/></td>
               <td>
                 <select name="filter_id">
                   <option value="0">--</option>
@@ -10070,7 +10070,7 @@ should not have received it.
           <!-- Report Result Filter. -->
 
           <tr style="{$show}" id="details_url_row">
-            <td><xsl:value-of select="gsa:i18n ('Details URL', 'Alert')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+            <td><xsl:value-of select="gsa:i18n ('Details URL', 'Alert')"/></td>
             <td>
               <input type="text" name="method_data:details_url"
                      size="30" maxlength="1000"
@@ -10081,7 +10081,7 @@ should not have received it.
             <xsl:variable name="filtername"
                 select="get_alerts_response/alert/filter/name"/>
             <tr style="{$hide}" id="report_result_filter_row">
-              <td valign="top" width="145"><xsl:value-of select="gsa:i18n ('Report Result Filter', 'Alert')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+              <td><xsl:value-of select="gsa:i18n ('Report Result Filter', 'Alert')"/></td>
               <td>
                 <select name="filter_id">
                   <option value="0">--</option>
@@ -12092,8 +12092,7 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td><xsl:value-of select="gsa:i18n ('Value', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)
-            </td>
+            <td><xsl:value-of select="gsa:i18n ('Value', 'Property')"/></td>
             <td>
               <input type="text" name="tag_value" value="{tag_value}" size="30"
                      maxlength="200"/>
@@ -12112,7 +12111,7 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td><xsl:value-of select="gsa:i18n ('Resource ID', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+            <td><xsl:value-of select="gsa:i18n ('Resource ID', 'Property')"/></td>
             <td>
               <input type="text" name="resource_id" value="{resource_id}" size="30"
                          maxlength="80"/>
@@ -12249,8 +12248,7 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td><xsl:value-of select="gsa:i18n ('Value', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)
-            </td>
+            <td><xsl:value-of select="gsa:i18n ('Value', 'Property')"/></td>
             <td>
               <input type="text" name="tag_value" value="{get_tags_response/tag/value}" size="30"
                      maxlength="200"/>
@@ -12269,7 +12267,7 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td><xsl:value-of select="gsa:i18n ('Resource ID', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+            <td><xsl:value-of select="gsa:i18n ('Resource ID', 'Property')"/></td>
             <td>
               <input type="text" name="resource_id" value="{get_tags_response/tag/resource/@id}" size="30"
                          maxlength="80"/>
@@ -12585,7 +12583,6 @@ should not have received it.
             <tr>
               <td>
                 <xsl:value-of select="gsa:i18n ('Credentials for authenticated checks', 'Target')"/>
-                (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>):
               </td>
             </tr>
             <tr>
@@ -12891,7 +12888,6 @@ should not have received it.
                 <tr>
                   <td>
                     <xsl:value-of select="gsa:i18n ('Credentials for authenticated checks', 'Target')"/>
-                    (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>):
                   </td>
                 </tr>
                 <tr>
@@ -16414,7 +16410,7 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td><xsl:value-of select="gsa:i18n ('Period', 'Schedule')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+            <td><xsl:value-of select="gsa:i18n ('Period', 'Schedule')"/></td>
             <td>
               <input type="text"
                      name="period"
@@ -16430,7 +16426,7 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td><xsl:value-of select="gsa:i18n ('Duration', 'Schedule')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+            <td><xsl:value-of select="gsa:i18n ('Duration', 'Schedule')"/></td>
             <td>
               <input type="text"
                      name="duration"
@@ -16784,7 +16780,7 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td><xsl:value-of select="gsa:i18n ('Period', 'Schedule')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+            <td><xsl:value-of select="gsa:i18n ('Period', 'Schedule')"/></td>
             <td>
               <xsl:choose>
                 <xsl:when test="commands_response/get_schedules_response/schedule/simple_period/text() = 0 and commands_response/get_schedules_response/schedule/period/text() &gt; 0">
@@ -16850,7 +16846,7 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td><xsl:value-of select="gsa:i18n ('Duration', 'Schedule')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+            <td><xsl:value-of select="gsa:i18n ('Duration', 'Schedule')"/></td>
             <td>
               <xsl:choose>
                 <xsl:when test="commands_response/get_schedules_response/schedule/simple_duration/text() = 0 and commands_response/get_schedules_response/schedule/duration/text() &gt; 0">
@@ -24467,7 +24463,7 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td><xsl:value-of select="gsa:i18n ('Resource ID', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+            <td><xsl:value-of select="gsa:i18n ('Resource ID', 'Property')"/></td>
             <td>
               <input type="text" name="id_or_empty"
                      value="{/envelope/params/resource_id}"
@@ -25287,7 +25283,7 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td><xsl:value-of select="gsa:i18n ('Resource ID', 'Property')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+            <td><xsl:value-of select="gsa:i18n ('Resource ID', 'Property')"/></td>
             <td>
               <xsl:choose>
                 <xsl:when test="commands_response/get_permissions_response/permission/resource/@id = '0'">
@@ -33960,7 +33956,7 @@ var toggleFilter = function(){
           </tr>
           <xsl:if test="gsa:may-op ('get_roles')">
             <tr>
-              <td><xsl:value-of select="gsa:i18n ('Roles', 'Role')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+              <td><xsl:value-of select="gsa:i18n ('Roles', 'Role')"/></td>
               <td>
                 <select name="role_ids:" multiple="multiple">
                   <xsl:for-each select="get_roles_response/role[@id != '9c5a6ec6-6fe2-11e4-8cb6-406186ea4fc5']">
@@ -33973,7 +33969,7 @@ var toggleFilter = function(){
           </xsl:if>
           <xsl:if test="gsa:may-op ('get_groups')">
             <tr>
-              <td><xsl:value-of select="gsa:i18n ('Groups', 'Group')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+              <td><xsl:value-of select="gsa:i18n ('Groups', 'Group')"/></td>
               <td>
                 <select name="group_ids:" multiple="multiple">
                   <xsl:for-each select="get_groups_response/group">
@@ -34472,7 +34468,7 @@ var toggleFilter = function(){
             </td>
           </tr>
           <tr>
-            <td><xsl:value-of select="gsa:i18n ('Roles', 'Role')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+            <td><xsl:value-of select="gsa:i18n ('Roles', 'Role')"/></td>
             <td>
               <xsl:variable name="super" select="boolean (role[@id = '9c5a6ec6-6fe2-11e4-8cb6-406186ea4fc5'])"/>
               <xsl:if test="$super">
@@ -34497,7 +34493,7 @@ var toggleFilter = function(){
             </td>
           </tr>
           <tr>
-            <td><xsl:value-of select="gsa:i18n ('Groups', 'Group')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+            <td><xsl:value-of select="gsa:i18n ('Groups', 'Group')"/></td>
             <td>
               <select name="group_ids:" multiple="multiple">
                 <xsl:for-each select="../../../get_groups_response/group">
@@ -35927,7 +35923,7 @@ var toggleFilter = function(){
               </td>
             </tr>
             <tr>
-              <td valign="top"><xsl:value-of select="gsa:i18n ('Password', 'Auth Data')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
+              <td valign="top"><xsl:value-of select="gsa:i18n ('Password', 'Auth Data')"/></td>
               <td>
                 <table class="table-form">
                   <tr>

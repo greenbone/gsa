@@ -1,3 +1,9 @@
+2016-01-14  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/omp.xsl, src/html/classic/wizard.xsl: Remove "(optional)"
+	term from all field labels. With our new dialogs it is much more obvious which
+	fields are optional.
+
 2016-01-14  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/graphics.xsl (dashboard [secinfo]): Show dashboard

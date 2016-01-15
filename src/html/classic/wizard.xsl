@@ -643,9 +643,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <tr>
           <td>
             <xsl:value-of select="gsa:i18n ('SSH Credential', 'Target|Credentials')"/>
-            <xsl:text> (</xsl:text>
-            <xsl:value-of select="gsa:i18n('optional', 'Meta Property')"/>
-            <xsl:text>):</xsl:text>
           </td>
           <td>
             <xsl:variable name="ssh_credential_id" select="../run_wizard_response/response/commands_response/get_settings_response/setting[name = 'Default SSH Credential']/value"/>
@@ -669,9 +666,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <tr>
           <td>
             <xsl:value-of select="gsa:i18n ('SMB Credential', 'Target|Credentials')"/>
-            <xsl:text> (</xsl:text>
-            <xsl:value-of select="gsa:i18n('optional', 'Meta Property')"/>
-            <xsl:text>)</xsl:text>
           </td>
           <td>
             <xsl:variable name="smb_credential_id" select="../run_wizard_response/response/commands_response/get_settings_response/setting[name = 'Default SMB Credential']/value"/>
@@ -693,9 +687,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <tr>
           <td>
             <xsl:value-of select="gsa:i18n ('ESXi Credential', 'Target|Credentials')"/>
-            <xsl:text> (</xsl:text>
-            <xsl:value-of select="gsa:i18n('optional', 'Meta Property')"/>
-            <xsl:text>)</xsl:text>
           </td>
           <td>
             <xsl:variable name="esxi_credential_id" select="../run_wizard_response/response/commands_response/get_settings_response/setting[name = 'Default ESXi Credential']/value"/>
@@ -719,9 +710,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <tr>
           <td>
             <xsl:value-of select="gsa:i18n ('Email report to', 'Task Wizard')"/>
-            <xsl:text> (</xsl:text>
-            <xsl:value-of select="gsa:i18n('optional', 'Meta Property')"/>
-            <xsl:text>):</xsl:text>
           </td>
           <td>
             <input type="text" name="event_data:alert_email" value="" size="30" maxlength="80"/>
@@ -732,9 +720,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <tr>
           <td>
             <xsl:value-of select="gsa:i18n ('Slave', 'Slave')"/>
-            <xsl:text> (</xsl:text>
-            <xsl:value-of select="gsa:i18n('optional', 'Meta Property')"/>
-            <xsl:text>):</xsl:text>
           </td>
           <td>
             <xsl:variable name="slave_id" select="../run_wizard_response/response/commands_response/get_settings_response/setting[name = 'Default Slave']/value"/>
@@ -1234,9 +1219,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <tr>
           <td>
             <xsl:value-of select="gsa:i18n ('Email report to', 'Task Wizard')"/>
-            <xsl:text> (</xsl:text>
-            <xsl:value-of select="gsa:i18n('optional', 'Meta Property')"/>
-            <xsl:text>):</xsl:text>
           </td>
           <td>
             <input type="text" name="event_data:alert_email" value="" size="30" maxlength="80"/>
