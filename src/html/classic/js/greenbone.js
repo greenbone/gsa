@@ -560,7 +560,7 @@
   InfoDialog.prototype.show = function() {
     var self = this;
 
-    self.dialog.css('cursor', 'wait');
+    self.dialog.css('cursor', 'progress');
 
     self.dialog.dialog({
       dialogClass: self.dialog_css,

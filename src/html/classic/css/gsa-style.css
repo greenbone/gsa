@@ -1360,6 +1360,7 @@ select[multiple] {
 
 .ui-dialog .progress img {
   margin: 0 5px;
+  cursor: pointer;
 }
 
 .ui-dialog .progress img, .ui-dialog .progress span {
