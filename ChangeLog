@@ -1,5 +1,13 @@
 2016-01-15  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	Improve the edit task dialog.
+
+	* src/html/classic/omp.xsl: Use new table-from css class for the edit task
+	dialog. Add new action icons to allow creating of schedules, alerts, etc.
+	directly from within the edit task dialog.
+
+2016-01-15  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/greenbone.js: Add an entity selector for newly created
 	scan config. This allows selecting the new scan config after they have been
 	created in a sub dialog.

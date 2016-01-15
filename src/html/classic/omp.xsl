@@ -6004,6 +6004,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:otherwise>
         </xsl:choose>
       </select>
+      <a href="#" title="{ gsa:i18n('Create a new scan config') }"
+        class="new-action-icon" data-type="config" data-done="select[name={$param_name}]">
+        <img class="valign-middle" src="/img/new.png"/>
+      </a>
     </td>
   </tr>
 </xsl:template>
@@ -6097,6 +6101,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:otherwise>
             </xsl:choose>
           </select>
+          <a href="#" title="{ gsa:i18n('Create a new scan target') }"
+            class="new-action-icon" data-type="target" data-done="select[name=target_id]">
+            <img class="valign-middle" src="/img/new.png"/>
+          </a>
         </td>
       </tr>
     </xsl:when>
@@ -6127,7 +6135,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <td><xsl:value-of select="gsa:i18n ('Alerts', 'Alert')"/></td>
       <td>
         <xsl:variable name="task_alerts" select="commands_response/get_tasks_response/task/alert"/>
-        <select name="alert_ids:" multiple="multiple">
+        <select name="alert_ids" multiple="multiple">
           <xsl:for-each select="commands_response/get_alerts_response/alert">
             <xsl:variable name="alert_id" select="@id"/>
             <xsl:choose>
@@ -6140,7 +6148,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:choose>
           </xsl:for-each>
         </select>
-        <br/>
+        <a href="#" title="{ gsa:i18n('Create a new alert') }"
+          class="new-action-icon" data-type="alert" data-done="select[name=alert_ids]">
+          <img class="valign-middle" src="/img/new.png"/>
+        </a>
       </td>
     </tr>
   </xsl:if>
@@ -6237,6 +6248,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:choose>
           </xsl:for-each>
         </select>
+        <a href="#" title="{ gsa:i18n('Create a slave') }"
+          class="new-action-icon" data-type="slave" data-done="select[name=slave_id]">
+          <img class="valign-middle" src="/img/new.png"/>
+        </a>
       </td>
     </tr>
   </xsl:if>
@@ -6295,6 +6310,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:value-of select="gsa:i18n ('Once', 'Time')"/>
           </xsl:otherwise>
         </xsl:choose>
+        <a href="#" title="{ gsa:i18n('Create a schedule') }"
+          class="new-action-icon" data-type="schedule" data-done="select[name=schedule_id]">
+          <img class="valign-middle" src="/img/new.png"/>
+        </a>
       </td>
     </tr>
   </xsl:if>
@@ -6452,8 +6471,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template name="html-edit-task-name">
   <tr>
-   <td valign="top" width="150"><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
-   <td width="340">
+   <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
+   <td>
      <input type="text" name="name"
             value="{gsa:param-or ('name', commands_response/get_tasks_response/task/name)}"
             size="30" maxlength="80"/>
@@ -6463,7 +6482,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template name="html-edit-task-comment">
   <tr>
-    <td valign="top"><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/></td>
+    <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/></td>
     <td>
       <input type="text" name="comment" size="30" maxlength="400"
              value="{gsa:param-or ('comment', commands_response/get_tasks_response/task/comment)}"/>
@@ -6518,7 +6537,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:otherwise>0</xsl:otherwise>
           </xsl:choose>
         </xsl:variable>
-        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+        <table class="table-form">
 
           <!-- Name. -->
           <xsl:call-template name="html-edit-task-name"/>
@@ -6561,7 +6580,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
           <!-- Regular task.  Alterable. -->
 
-          <table>
+          <table class="table-form">
             <tr>
               <td>
                 <h3>
@@ -6617,9 +6636,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
         <!-- Submit button. -->
 
-        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+        <table class="table-form">
           <tr>
-            <td colspan="2" style="text-align:right;">
+            <td>
               <input type="submit" name="submit" value="{gsa:i18n ('Save Task', 'Task')}"/>
             </td>
           </tr>
@@ -6632,7 +6651,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <!-- Import Report window. -->
 
   <xsl:if test="commands_response/get_tasks_response/task/target/@id = '' and gsa:may-op ('create_report')">
-    <br/>
     <div class="gb_window">
       <div class="gb_window_part_left"></div>
       <div class="gb_window_part_right"></div>
