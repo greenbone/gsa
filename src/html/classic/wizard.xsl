@@ -48,7 +48,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <a href="/omp?cmd=wizard&amp;name=quick_first_scan&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
             title="{gsa:i18n ('Wizard', 'Wizard')}"
             class="wizard-action-icon" data-name="quick_first_scan">
-          <img src="/img/wizard.png" border="0" style="margin-left:3px;"/>
+          <img src="/img/wizard.png" style="margin-left:3px;"/>
         </a>
         <ul>
           <li>
@@ -143,7 +143,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:text> </xsl:text>
       <a href="/omp?cmd=new_task&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
          title="{gsa:i18n ('New Task', 'Task')}">
-        <img src="/img/new.png" border="0"/>
+        <img src="/img/new.png" />
       </a>
       <xsl:text> </xsl:text>
       <xsl:value-of select="gsa:i18n('you can create a new Task yourself.', 'Task Wizard')"/>
@@ -165,11 +165,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </a>
     <a href="/omp?cmd=new_task&amp;refresh_interval={/envelope/params/refresh_interval}&amp;overrides={/envelope/params/overrides}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
        title="{gsa:i18n ('New Task', 'Task')}">
-      <img src="/img/new.png" border="0" style="margin-left:3px;"/>
+      <img src="/img/new.png" style="margin-left:3px;"/>
     </a>
     <a href="/omp?cmd=get_tasks&amp;refresh_interval={/envelope/params/refresh_interval}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
        title="{gsa:i18n ('Tasks', 'Task')}" style="margin-left:3px;">
-      <img src="/img/list.png" border="0" alt="{gsa:i18n ('Tasks', 'Task')}"/>
+      <img src="/img/list.png" alt="{gsa:i18n ('Tasks', 'Task')}"/>
     </a>
   </div>
   <div class="gb_window_part_content">
@@ -762,11 +762,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </a>
     <a href="/omp?cmd=new_task&amp;refresh_interval={/envelope/params/refresh_interval}&amp;overrides={/envelope/params/overrides}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
        title="{gsa:i18n ('New Task', 'Task')}">
-      <img src="/img/new.png" border="0" style="margin-left:3px;"/>
+      <img src="/img/new.png" style="margin-left:3px;"/>
     </a>
     <a href="/omp?cmd=get_tasks&amp;refresh_interval={/envelope/params/refresh_interval}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
        title="{gsa:i18n ('Tasks', 'Task')}" style="margin-left:3px;">
-      <img src="/img/list.png" border="0" alt="{gsa:i18n ('Tasks', 'Task')}"/>
+      <img src="/img/list.png" alt="{gsa:i18n ('Tasks', 'Task')}"/>
     </a>
   </div>
   <div class="gb_window_part_content">
@@ -1247,11 +1247,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </a>
     <a href="/omp?cmd=new_task&amp;refresh_interval={/envelope/params/refresh_interval}&amp;overrides={/envelope/params/overrides}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
        title="{gsa:i18n ('New Task', 'Task')}">
-      <img src="/img/new.png" border="0" style="margin-left:3px;"/>
+      <img src="/img/new.png" style="margin-left:3px;"/>
     </a>
     <a href="/omp?cmd=get_tasks&amp;refresh_interval={/envelope/params/refresh_interval}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
        title="{gsa:i18n ('Tasks', 'Task')}" style="margin-left:3px;">
-      <img src="/img/list.png" border="0" alt="{gsa:i18n ('Tasks', 'Task')}"/>
+      <img src="/img/list.png" alt="{gsa:i18n ('Tasks', 'Task')}"/>
     </a>
   </div>
   <div class="gb_window_part_content">

@@ -1,3 +1,13 @@
+2016-01-15  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	Remove usage of obsolete border attribute
+
+	* src/html/classic/css/gsa-style.css: Disable border for all tables.
+
+	* src/html/classic/omp.xsl, src/html/classic/wizard.xsl: Remove all
+	occurences of the border attribute. This html attribute should not be used
+	anymore.
+
 2016-01-15  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	* src/html/classic/omp.xsl (get_info_response): Fix typo in message.
