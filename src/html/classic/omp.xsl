@@ -20154,7 +20154,7 @@ should not have received it.
                 Please ensure that your SCAP data is up to date and that you entered
                 a valid CVE. If the problem persists, the CVE is not available.
                 In some cases, CVE references are reserved but did not
-                enter the offical CVE database yet. Some were reserved and used as
+                enter the official CVE database yet. Some were reserved and used as
                 a reference by vendors, but never entered the CVE database.
               </p>
             </xsl:when>
