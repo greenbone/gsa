@@ -52,24 +52,6 @@ body {
   color: #1A1A1A;
 }
 
-.clearfix:before,
-.clearfix:after {
-  content: " ";
-  display: table;
-}
-
-.clearfix:after {
-  clear:both;
-}
-
-.pull-right {
-  float: right;
-}
-
-.pull-left {
-  float: left;
-}
-
 a:link {
   color: blue;
   text-decoration: none;
@@ -83,30 +65,6 @@ a:hover, a:focus {
 pre {
   white-space: pre-wrap;
   word-wrap: break-word;
-}
-
-.footnote {
-  font-size:10px;
-  color: #787878;
-  text-align:left;
-}
-
-.footnote a {
-  font-size:10px;
-  color: #787878;
-  text-decoration: none;
-}
-
-.footnote a:hover {
-  font-size:10px;
-  color: #787878;
-  text-decoration: underline;
-}
-
-.footnote a:focus {
-  font-size:10px;
-  color: #787878;
-  text-decoration: underline;
 }
 
 img {
@@ -142,6 +100,49 @@ table {
 p {
   margin-left:5px;
 }
+
+.clearfix:before,
+.clearfix:after {
+  content: " ";
+  display: table;
+}
+
+.clearfix:after {
+  clear:both;
+}
+
+.pull-right {
+  float: right;
+}
+
+.pull-left {
+  float: left;
+}
+
+.footnote {
+  font-size:10px;
+  color: #787878;
+  text-align:left;
+}
+
+.footnote a {
+  font-size:10px;
+  color: #787878;
+  text-decoration: none;
+}
+
+.footnote a:hover {
+  font-size:10px;
+  color: #787878;
+  text-decoration: underline;
+}
+
+.footnote a:focus {
+  font-size:10px;
+  color: #787878;
+  text-decoration: underline;
+}
+
 
 .task {
   background-color: #FFFFFF;

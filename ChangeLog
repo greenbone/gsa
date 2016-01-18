@@ -1,5 +1,11 @@
 2016-01-18  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/css/gsa-style.css: Reorder CSS declarations. First define
+	standard element styles for normalization. Afterwards introduce new css
+	classes.
+
+2016-01-18  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/css/gsa-style.css: Use common css classes pull-right and
 	pull-left for floating. Remove float_left and float_right classes.
 
