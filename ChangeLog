@@ -1,5 +1,12 @@
 2016-01-18  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/css/gsa-style.css: Remove #wizardess css styles.
+
+	* src/html/classic/wizard.xsl: Refactor advanced create task dialog to use new
+	grid layout and table form.
+
+2016-01-18  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/css/gsa-style.css: Set a common width for all select2 drop
 	down boxes. For a unified layout and easier reading all selects should have
 	the same width in table bases formulars.
