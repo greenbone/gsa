@@ -1,5 +1,10 @@
 2016-01-18  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/omp.xsl: Fix calculating the width of icon actions after
+	using box-sizing: border-box by default.
+
+2016-01-18  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/css/gsa-style.css: Remove #wizardess css styles.
 
 	* src/html/classic/wizard.xsl: Refactor advanced create task dialog to use new

@@ -132,7 +132,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <func:function name="gsa:actions-width">
   <xsl:param name="icon-count"/>
-  <func:result select="3 + ($icon-count * $icon-width)"/>
+  <func:result select="15 + ($icon-count * $icon-width)"/>
 </func:function>
 
 <func:function name="gsa:token">
@@ -2162,7 +2162,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
             <td><xsl:value-of select="gsa:i18n ('Value', 'Property')"/></td>
             <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/></td>
-            <td width="{gsa:actions-width (3)}"><xsl:value-of select="gsa:i18n ('Actions', 'Actions')"/></td>
+            <td style="width: {gsa:actions-width (3)}px"><xsl:value-of select="gsa:i18n ('Actions', 'Actions')"/></td>
           </tr>
           <xsl:apply-templates select="$user_tags/tag" mode="for_resource">
             <xsl:with-param name="resource_type" select="$resource_type"/>
@@ -2422,7 +2422,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td><xsl:value-of select="gsa:i18n ('Resource', 'Property')"/></td>
           <td><xsl:value-of select="gsa:i18n ('Subject Type', 'Permission')"/></td>
           <td><xsl:value-of select="gsa:i18n ('Subject', 'Permission')"/></td>
-          <td width="{gsa:actions-width (4)}"><xsl:value-of select="gsa:i18n ('Actions', 'Actions')"/></td>
+          <td style="width: {gsa:actions-width (4)}px"><xsl:value-of select="gsa:i18n ('Actions', 'Actions')"/></td>
         </tr>
         <xsl:apply-templates select="$permissions/permission">
           <xsl:with-param name="next" select="$next"/>
@@ -4650,7 +4650,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:for-each>
             <!-- Action column. -->
             <xsl:if test="$icon-count &gt; 0">
-              <td width="{gsa:actions-width ($icon-count)}" rowspan="2"><xsl:value-of select="gsa:i18n ('Actions', 'Actions')"/></td>
+              <td style="width: {gsa:actions-width ($icon-count)}px" rowspan="2"><xsl:value-of select="gsa:i18n ('Actions', 'Actions')"/></td>
             </xsl:if>
           </tr>
 
@@ -11195,7 +11195,7 @@ should not have received it.
         <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
         <td><xsl:value-of select="gsa:i18n ('Term', 'Filter')"/></td>
         <td><xsl:value-of select="gsa:i18n ('Type', 'Property')"/></td>
-        <td width="{$trash-actions-width}"><xsl:value-of select="gsa:i18n ('Actions', 'Actions')"/></td>
+        <td style="width: {$trash-actions-width}px"><xsl:value-of select="gsa:i18n ('Actions', 'Actions')"/></td>
       </tr>
       <xsl:apply-templates select="filter" mode="trash"/>
     </table>
@@ -14931,7 +14931,7 @@ should not have received it.
         <td><xsl:value-of select="gsa:i18n ('NVT', 'NVT')"/></td>
         <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
         <td><xsl:value-of select="gsa:i18n ('Value', 'Property')"/></td>
-        <td width="{gsa:actions-width (1)}"><xsl:value-of select="gsa:i18n ('Actions', 'Actions')"/></td>
+        <td style="width: {gsa:actions-width (1)}px"><xsl:value-of select="gsa:i18n ('Actions', 'Actions')"/></td>
       </tr>
       <xsl:for-each select="preference[string-length(./nvt)&gt;0]">
         <xsl:call-template name="preference">
@@ -22640,7 +22640,7 @@ should not have received it.
       <tr class="gbntablehead2">
         <td><xsl:value-of select="gsa:i18n ('NVT', 'NVT')"/></td>
         <td><xsl:value-of select="gsa:i18n ('Text', 'Note or Override')"/></td>
-        <td width="{$trash-actions-width}"><xsl:value-of select="gsa:i18n ('Actions', 'Actions')"/></td>
+        <td style="width: {$trash-actions-width}px"><xsl:value-of select="gsa:i18n ('Actions', 'Actions')"/></td>
       </tr>
       <xsl:apply-templates select="note" mode="trash"/>
     </table>
@@ -23895,7 +23895,7 @@ should not have received it.
       <tr class="gbntablehead2">
         <td><xsl:value-of select="gsa:i18n ('NVT', 'NVT')"/></td>
         <td><xsl:value-of select="gsa:i18n ('Text', 'Note or Override')"/></td>
-        <td width="{$trash-actions-width}"><xsl:value-of select="gsa:i18n ('Actions', 'Actions')"/></td>
+        <td style="width: {$trash-actions-width}px"><xsl:value-of select="gsa:i18n ('Actions', 'Actions')"/></td>
       </tr>
       <xsl:apply-templates select="override" mode="trash"/>
     </table>
@@ -24108,7 +24108,7 @@ should not have received it.
     <table class="gbntable" cellspacing="2" cellpadding="4">
       <tr class="gbntablehead2">
         <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
-        <td width="{$trash-actions-width}"><xsl:value-of select="gsa:i18n ('Actions', 'Actions')"/></td>
+        <td style="width: {$trash-actions-width}px"><xsl:value-of select="gsa:i18n ('Actions', 'Actions')"/></td>
       </tr>
       <xsl:apply-templates select="group" mode="trash"/>
     </table>
@@ -25083,7 +25083,7 @@ should not have received it.
         <td><xsl:value-of select="gsa:i18n ('Resource', 'Property')"/></td>
         <td><xsl:value-of select="gsa:i18n ('Subject Type', 'Permission')"/></td>
         <td><xsl:value-of select="gsa:i18n ('Subject', 'Permission')"/></td>
-        <td width="{$trash-actions-width}"><xsl:value-of select="gsa:i18n ('Actions', 'Actions')"/></td>
+        <td style="width: {$trash-actions-width}px"><xsl:value-of select="gsa:i18n ('Actions', 'Actions')"/></td>
       </tr>
       <xsl:apply-templates select="permission" mode="trash"/>
     </table>
@@ -28420,7 +28420,7 @@ should not have received it.
       </xsl:choose>
     </td>
     <xsl:if test="$prognostic != 1">
-      <td width="{gsa:actions-width (3)}"><xsl:value-of select="gsa:i18n ('Actions', 'Actions')"/></td>
+      <td style="width: {gsa:actions-width (3)}px"><xsl:value-of select="gsa:i18n ('Actions', 'Actions')"/></td>
     </xsl:if>
   </tr>
 </xsl:template>
@@ -29673,7 +29673,7 @@ should not have received it.
       <td><xsl:value-of select="gsa:i18n ('Distance', 'Host')"/></td>
       <td><xsl:value-of select="gsa:i18n ('Prognosis', 'Host')"/></td>
       <td><xsl:value-of select="gsa:i18n ('Reports', 'Report')"/></td>
-      <td width="{gsa:actions-width (1)}"><xsl:value-of select="gsa:i18n ('Actions', 'Actions')"/></td>
+      <td style="width: {gsa:actions-width (1)}px"><xsl:value-of select="gsa:i18n ('Actions', 'Actions')"/></td>
     </tr>
     <xsl:for-each select="host">
       <xsl:variable name="current_host" select="ip"/>
@@ -31849,7 +31849,7 @@ var toggleFilter = function(){
           <td><xsl:value-of select="gsa:i18n ('Not valid after', 'Auth Data')"/></td>
           <td><xsl:value-of select="gsa:i18n ('Host', 'Host')"/></td>
           <td><xsl:value-of select="gsa:i18n ('Port', 'Port')"/></td>
-          <td width="{gsa:actions-width (1)}"><xsl:value-of select="gsa:i18n ('Actions', 'Actions')"/></td>
+          <td style="width: {gsa:actions-width (1)}px"><xsl:value-of select="gsa:i18n ('Actions', 'Actions')"/></td>
         </tr>
         <xsl:for-each select="report/host/detail[contains(name, 'SSLInfo')]">
           <xsl:variable name="port" select="substring-before(value, '::')"/>
@@ -33078,7 +33078,7 @@ var toggleFilter = function(){
     <table class="gbntable" cellspacing="2" cellpadding="4">
       <tr class="gbntablehead2">
         <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
-        <td width="{$trash-actions-width}"><xsl:value-of select="gsa:i18n ('Actions', 'Actions')"/></td>
+        <td style="width: {$trash-actions-width}px"><xsl:value-of select="gsa:i18n ('Actions', 'Actions')"/></td>
       </tr>
       <xsl:apply-templates select="role" mode="trash"/>
     </table>
@@ -33377,7 +33377,7 @@ var toggleFilter = function(){
       <tr class="gbntablehead2">
         <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
         <td><xsl:value-of select="gsa:i18n ('Trust', 'Trust')"/></td>
-        <td width="{$trash-actions-width}"><xsl:value-of select="gsa:i18n ('Actions', 'Actions')"/></td>
+        <td style="width: {$trash-actions-width}px"><xsl:value-of select="gsa:i18n ('Actions', 'Actions')"/></td>
       </tr>
       <xsl:apply-templates select="agent" mode="trash"/>
     </table>
@@ -33391,7 +33391,7 @@ var toggleFilter = function(){
         <td rowspan="2"><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
         <td colspan="2"><xsl:value-of select="gsa:i18n ('Families', 'Scan Config')"/></td>
         <td colspan="2"><xsl:value-of select="gsa:i18n ('NVTs', 'NVT')"/></td>
-        <td width="{$trash-actions-width}" rowspan="2"><xsl:value-of select="gsa:i18n ('Actions', 'Actions')"/></td>
+        <td style="width: {$trash-actions-width}px" rowspan="2"><xsl:value-of select="gsa:i18n ('Actions', 'Actions')"/></td>
       </tr>
       <tr class="gbntablehead2">
         <td width="1" style="font-size:10px;"><xsl:value-of select="gsa:i18n ('Total', 'Families')"/></td>
@@ -33413,7 +33413,7 @@ var toggleFilter = function(){
         <td><xsl:value-of select="gsa:i18n ('Condition', 'Alert')"/></td>
         <td><xsl:value-of select="gsa:i18n ('Method', 'Alert')"/></td>
         <td><xsl:value-of select="gsa:i18n ('Filter', 'Filter')"/></td>
-        <td width="{$trash-actions-width}"><xsl:value-of select="gsa:i18n ('Actions', 'Actions')"/></td>
+        <td style="width: {$trash-actions-width}px"><xsl:value-of select="gsa:i18n ('Actions', 'Actions')"/></td>
       </tr>
       <xsl:apply-templates select="alert" mode="trash"/>
     </table>
@@ -33429,7 +33429,7 @@ var toggleFilter = function(){
         <td><xsl:value-of select="gsa:i18n ('Allow insecure use', 'Credential')"/></td>
         <td><xsl:value-of select="gsa:i18n ('Login', 'Auth Data')"/></td>
         <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/></td>
-        <td width="{$trash-actions-width}"><xsl:value-of select="gsa:i18n ('Actions', 'Actions')"/></td>
+        <td style="width: {$trash-actions-width}px"><xsl:value-of select="gsa:i18n ('Actions', 'Actions')"/></td>
       </tr>
       <xsl:apply-templates select="credential" mode="trash"/>
     </table>
@@ -33441,7 +33441,7 @@ var toggleFilter = function(){
     <table class="gbntable" cellspacing="2" cellpadding="4">
       <tr class="gbntablehead2">
         <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
-        <td width="{$trash-actions-width}"><xsl:value-of select="gsa:i18n ('Actions', 'Actions')"/></td>
+        <td style="width: {$trash-actions-width}px"><xsl:value-of select="gsa:i18n ('Actions', 'Actions')"/></td>
       </tr>
       <xsl:apply-templates select="port_list" mode="trash"/>
     </table>
@@ -33457,7 +33457,7 @@ var toggleFilter = function(){
         <td><xsl:value-of select="gsa:i18n ('Content Type', 'Report Format')"/></td>
         <td><xsl:value-of select="gsa:i18n ('Trust (Last Verified)', 'Report Format')"/></td>
         <td><xsl:value-of select="gsa:i18n ('Active', 'Report Format')"/></td>
-        <td width="{$trash-actions-width}"><xsl:value-of select="gsa:i18n ('Actions', 'Actions')"/></td>
+        <td style="width: {$trash-actions-width}px"><xsl:value-of select="gsa:i18n ('Actions', 'Actions')"/></td>
       </tr>
       <xsl:apply-templates select="report_format" mode="trash"/>
     </table>
@@ -33473,7 +33473,7 @@ var toggleFilter = function(){
         <td><xsl:value-of select="gsa:i18n ('Port', 'Port')"/></td>
         <td><xsl:value-of select="gsa:i18n ('Type', 'Property')"/></td>
         <td><xsl:value-of select="gsa:i18n ('Credential' ,'Credential')"/></td>
-        <td width="{$trash-actions-width}"><xsl:value-of select="gsa:i18n ('Actions', 'Actions')"/></td>
+        <td style="width: {$trash-actions-width}px"><xsl:value-of select="gsa:i18n ('Actions', 'Actions')"/></td>
       </tr>
       <xsl:apply-templates select="scanner" mode="trash"/>
     </table>
@@ -33489,7 +33489,7 @@ var toggleFilter = function(){
         <td><xsl:value-of select="gsa:i18n ('Next Run', 'Schedule')"/></td>
         <td><xsl:value-of select="gsa:i18n ('Period', 'Schedule')"/></td>
         <td><xsl:value-of select="gsa:i18n ('Duration', 'Schedule')"/></td>
-        <td width="{$trash-actions-width}"><xsl:value-of select="gsa:i18n ('Actions', 'Actions')"/></td>
+        <td style="width: {$trash-actions-width}px"><xsl:value-of select="gsa:i18n ('Actions', 'Actions')"/></td>
       </tr>
       <xsl:apply-templates select="schedule" mode="trash"/>
     </table>
@@ -33505,7 +33505,7 @@ var toggleFilter = function(){
         <td><xsl:value-of select="gsa:i18n ('Port', 'Port')"/></td>
         <td><xsl:value-of select="gsa:i18n ('Credential', 'Credential')"/></td>
         <td><xsl:value-of select="gsa:i18n ('Login', 'Auth Data')"/></td>
-        <td width="{$trash-actions-width}"><xsl:value-of select="gsa:i18n ('Actions', 'Actions')"/></td>
+        <td style="width: {$trash-actions-width}px"><xsl:value-of select="gsa:i18n ('Actions', 'Actions')"/></td>
       </tr>
       <xsl:apply-templates select="slave" mode="trash"/>
     </table>
@@ -33520,7 +33520,7 @@ var toggleFilter = function(){
         <td><xsl:value-of select="gsa:i18n ('Value', 'Property')"/></td>
         <td><xsl:value-of select="gsa:i18n ('Resource Type', 'Property')"/></td>
         <td><xsl:value-of select="gsa:i18n ('Resource Name', 'Property')"/></td>
-        <td width="{$trash-actions-width}"><xsl:value-of select="gsa:i18n ('Actions', 'Actions')"/></td>
+        <td style="width: {$trash-actions-width}px"><xsl:value-of select="gsa:i18n ('Actions', 'Actions')"/></td>
       </tr>
       <xsl:apply-templates select="tag" mode="trash"/>
     </table>
@@ -33536,7 +33536,7 @@ var toggleFilter = function(){
         <td><xsl:value-of select="gsa:i18n ('IPs', 'Host')"/></td>
         <td><xsl:value-of select="gsa:i18n ('Port List', 'Port List')"/></td>
         <td><xsl:value-of select="gsa:i18n ('Credentials', 'Credential')"/></td>
-        <td width="{$trash-actions-width}"><xsl:value-of select="gsa:i18n ('Actions', 'Actions')"/></td>
+        <td style="width: {$trash-actions-width}px"><xsl:value-of select="gsa:i18n ('Actions', 'Actions')"/></td>
       </tr>
       <xsl:apply-templates select="target" mode="trash"/>
     </table>
@@ -33552,7 +33552,7 @@ var toggleFilter = function(){
         <td colspan="3"><xsl:value-of select="gsa:i18n ('Reports', 'Report')"/></td>
         <td rowspan="2"><xsl:value-of select="gsa:i18n ('Severity', 'Severity')"/></td>
         <td rowspan="2"><xsl:value-of select="gsa:i18n ('Trend', 'Severity')"/></td>
-        <td width="{$trash-actions-width}" rowspan="2"><xsl:value-of select="gsa:i18n ('Actions', 'Actions')"/></td>
+        <td style="width: {$trash-actions-width}px" rowspan="2"><xsl:value-of select="gsa:i18n ('Actions', 'Actions')"/></td>
       </tr>
       <tr class="gbntablehead2">
         <td width="1" style="font-size:10px;"><xsl:value-of select="gsa:i18n ('Total', 'Task|Reports')"/></td>
