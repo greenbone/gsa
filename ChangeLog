@@ -1,3 +1,9 @@
+2016-01-18  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/css/gsa-style.css: Set default box width and height
+	calculation model to the more intuitive border-box mode. For details please
+	take a look at https://css-tricks.com/box-sizing/
+
 2016-01-15  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/wizard.xsl: Remove usage of <br/> elements for formatting.

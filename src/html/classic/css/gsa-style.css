@@ -26,6 +26,25 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+/* set default width and height calculation behaviour */
+
+/* border-box: actual width = border + padding + margin */
+/*             actual height = border + padding + margin */
+/* content-box: actual width = border + padding + margin + width */
+/*              actual height = border + padding + margin + height */
+
+html {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+*, *:before, *:after {
+  -webkit-box-sizing: inherit;
+  -moz-box-sizing: inherit;
+  box-sizing: inherit;
+}
+
 body {
   margin: 0px;
   font: small Verdana, sans-serif;
