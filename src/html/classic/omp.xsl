@@ -1163,7 +1163,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                </xsl:choose>
                <xsl:value-of select="gsa:i18n ('Full CVE match', 'Report Filter')"/>
              </label>
-             <br/>
              <label>
                <xsl:choose>
                  <xsl:when test="filters/keywords/keyword[column='autofp']/value = 2">
@@ -2504,7 +2503,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
         </table>
-        <br/>
       </form>
     </div>
   </div>
@@ -2535,17 +2533,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:variable name="apply-overrides"
                 select="report/filters/apply_overrides"/>
   <xsl:if test="report/@scap_loaded = 0">
-    <xsl:call-template name="error_window">
-      <xsl:with-param name="heading">Warning: SCAP Database Missing</xsl:with-param>
-      <xsl:with-param name="message">
-        SCAP database missing on OMP server.  Prognostic reporting disabled.
-        <a href="/help/hosts_classic.html?token={/envelope/token}#scap_missing"
-           title="Help: SCAP database missing">
-          <img style="margin-left:5px" src="/img/help.png"/>
-        </a>
-      </xsl:with-param>
-    </xsl:call-template>
-    <br/>
+    <div>
+      <xsl:call-template name="error_window">
+        <xsl:with-param name="heading">Warning: SCAP Database Missing</xsl:with-param>
+        <xsl:with-param name="message">
+          SCAP database missing on OMP server.  Prognostic reporting disabled.
+          <a href="/help/hosts_classic.html?token={/envelope/token}#scap_missing"
+            title="Help: SCAP database missing">
+            <img style="margin-left:5px" src="/img/help.png"/>
+          </a>
+        </xsl:with-param>
+      </xsl:call-template>
+    </div>
   </xsl:if>
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
@@ -2693,7 +2692,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </div>
     </div>
   </div>
-  <br/>
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
     <div class="gb_window_part_right"></div>
@@ -3138,7 +3136,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     </xsl:choose>
                     <xsl:value-of select="gsa:i18n ('Full CVE match', 'Report Filter')"/>
                   </label>
-                  <br/>
                   <label>
                     <xsl:choose>
                       <xsl:when test="report/filters/autofp = 2">
@@ -4140,7 +4137,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 
   <xsl:if test="target/@id='' and gsa:may-op ('create_report')">
-    <br/>
     <div class="gb_window">
       <div class="gb_window_part_left"></div>
       <div class="gb_window_part_right"></div>
@@ -5357,7 +5353,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </td>
         </tr>
       </table>
-      <br/>
     </form>
    </div>
   </div>
@@ -6640,7 +6635,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
         </table>
-        <br/>
       </form>
     </div>
   </div>
@@ -7735,7 +7729,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
         </table>
-        <br/>
       </form>
     </div>
   </div>
@@ -7810,7 +7803,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </b>
       <xsl:choose>
         <xsl:when test="comment != ''">
-          <br/>(<xsl:value-of select="comment"/>)
+          <div class="comment">(<xsl:value-of select="comment"/>)</div>
         </xsl:when>
         <xsl:otherwise></xsl:otherwise>
       </xsl:choose>
@@ -8259,7 +8252,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
         </table>
-        <br/>
       </form>
     </div>
   </div>
@@ -8339,7 +8331,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </b>
       <xsl:choose>
         <xsl:when test="comment != ''">
-          <br/>(<xsl:value-of select="comment"/>)
+          <div class="comment">(<xsl:value-of select="comment"/>)</div>
         </xsl:when>
         <xsl:otherwise></xsl:otherwise>
       </xsl:choose>
@@ -8392,7 +8384,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <b><xsl:value-of select="name"/></b>
       <xsl:choose>
         <xsl:when test="comment != ''">
-          <br/>(<xsl:value-of select="comment"/>)
+          <div class="comment">(<xsl:value-of select="comment"/>)</div>
         </xsl:when>
         <xsl:otherwise></xsl:otherwise>
       </xsl:choose>
@@ -8401,7 +8393,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:value-of select="gsa:i18n (installer/trust/text(), 'Trust')"/>
       <xsl:choose>
         <xsl:when test="installer/trust/time != ''">
-          <br/>(<xsl:value-of select="concat (date:month-abbreviation (installer/trust/time), ' ', date:day-in-month (installer/trust/time), ' ', date:year (installer/trust/time))"/>)
+          <div>(<xsl:value-of select="concat (date:month-abbreviation (installer/trust/time), ' ', date:day-in-month (installer/trust/time), ' ', date:year (installer/trust/time))"/>)</div>
         </xsl:when>
         <xsl:otherwise></xsl:otherwise>
       </xsl:choose>
@@ -10119,7 +10111,6 @@ should not have received it.
             </td>
           </tr>
         </table>
-        <br/>
       </form>
     </div>
   </div>
@@ -10218,7 +10209,7 @@ should not have received it.
       </b>
       <xsl:choose>
         <xsl:when test="comment != ''">
-          <br/>(<xsl:value-of select="comment"/>)
+          <div class="comment">(<xsl:value-of select="comment"/>)</div>
         </xsl:when>
         <xsl:otherwise></xsl:otherwise>
       </xsl:choose>
@@ -10265,9 +10256,9 @@ should not have received it.
           <xsl:value-of select="gsa:i18n (method/text(), 'Alert')"/>
           <xsl:choose>
             <xsl:when test="method/text()='Email' and string-length(method/data[name='to_address']/text()) &gt; 0">
-              <br/>(<xsl:value-of select="gsa:i18n ('To', 'Alert|Email')"/>
+              <div>(<xsl:value-of select="gsa:i18n ('To', 'Alert|Email')"/>
               <xsl:text> </xsl:text>
-              <xsl:value-of select="method/data[name='to_address']/text()"/>)
+              <xsl:value-of select="method/data[name='to_address']/text()"/>)</div>
             </xsl:when>
             <xsl:when test="method/text()='Start Task'">
               <xsl:variable name="id" select="method/data[name='start_task_task']/text()"/>
@@ -10342,7 +10333,7 @@ should not have received it.
       <b><xsl:value-of select="name"/></b>
       <xsl:choose>
         <xsl:when test="comment != ''">
-          <br/>(<xsl:value-of select="comment"/>)
+          <div class="comment">(<xsl:value-of select="comment"/>)</div>
         </xsl:when>
         <xsl:otherwise></xsl:otherwise>
       </xsl:choose>
@@ -10351,9 +10342,9 @@ should not have received it.
       <xsl:value-of select="gsa:i18n (event/text(), 'Alert')"/>
       <xsl:choose>
         <xsl:when test="event/text()='Task run status changed' and string-length(event/data[name='status']/text()) &gt; 0">
-          <br/>(<xsl:value-of select="gsa:i18n ('to', 'Alert')"/>
+          <div>(<xsl:value-of select="gsa:i18n ('to', 'Alert')"/>
           <xsl:text> </xsl:text>
-          <xsl:value-of select="gsa:i18n (event/data[name='status']/text(), 'Alert')"/>)
+          <xsl:value-of select="gsa:i18n (event/data[name='status']/text(), 'Alert')"/>)</div>
         </xsl:when>
       </xsl:choose>
     </td>
@@ -10361,10 +10352,10 @@ should not have received it.
       <xsl:value-of select="gsa:i18n (condition/text(), 'Alert')"/>
       <xsl:choose>
         <xsl:when test="condition/text()='Severity at least' and string-length(condition/data[name='severity']/text()) &gt; 0">
-          <br/>(<xsl:value-of select="condition/data[name='severity']/text()"/>)
+          <div>(<xsl:value-of select="condition/data[name='severity']/text()"/>)</div>
         </xsl:when>
         <xsl:when test="condition/text()='Severity changed' and string-length(condition/data[name='direction']/text()) &gt; 0">
-          <br/>(<xsl:value-of select="gsa:i18n (condition/data[name='direction']/text(), 'Alert')"/>)
+          <div>(<xsl:value-of select="gsa:i18n (condition/data[name='direction']/text(), 'Alert')"/>)</div>
         </xsl:when>
       </xsl:choose>
     </td>
@@ -10377,9 +10368,9 @@ should not have received it.
           <xsl:value-of select="gsa:i18n (method/text(), 'Alert')"/>
           <xsl:choose>
             <xsl:when test="method/text()='Email' and string-length(method/data[name='to_address']/text()) &gt; 0">
-              <br/>(<xsl:value-of select="gsa:i18n ('To', 'Alert|Email')"/>
+              <div>(<xsl:value-of select="gsa:i18n ('To', 'Alert|Email')"/>
                     <xsl:text> </xsl:text>
-                    <xsl:value-of select="method/data[name='to_address']/text()"/>)
+                    <xsl:value-of select="method/data[name='to_address']/text()"/>)</div>
             </xsl:when>
           </xsl:choose>
         </xsl:otherwise>
@@ -11019,7 +11010,7 @@ should not have received it.
       </b>
       <xsl:choose>
         <xsl:when test="comment != ''">
-          <br/>(<xsl:value-of select="comment"/>)
+          <div class="comment">(<xsl:value-of select="comment"/>)</div>
         </xsl:when>
         <xsl:otherwise></xsl:otherwise>
       </xsl:choose>
@@ -11058,7 +11049,7 @@ should not have received it.
       </b>
       <xsl:choose>
         <xsl:when test="comment != ''">
-          <br/>(<xsl:value-of select="comment"/>)
+          <div class="comment">(<xsl:value-of select="comment"/>)</div>
         </xsl:when>
         <xsl:otherwise></xsl:otherwise>
       </xsl:choose>
@@ -11382,7 +11373,6 @@ should not have received it.
             </td>
           </tr>
         </table>
-        <br/>
       </form>
     </div>
   </div>
@@ -11581,7 +11571,7 @@ should not have received it.
       </a>
       <xsl:choose>
         <xsl:when test="comment != ''">
-          <br/>(<xsl:value-of select="comment"/>)
+          <div class="comment">(<xsl:value-of select="comment"/>)</div>
         </xsl:when>
         <xsl:otherwise></xsl:otherwise>
       </xsl:choose>
@@ -11778,7 +11768,7 @@ should not have received it.
       <b><xsl:value-of select="name"/></b>
       <xsl:choose>
         <xsl:when test="comment != ''">
-          <br/>(<xsl:value-of select="comment"/>)
+          <div class="comment">(<xsl:value-of select="comment"/>)</div>
         </xsl:when>
         <xsl:otherwise></xsl:otherwise>
       </xsl:choose>
@@ -13366,7 +13356,6 @@ should not have received it.
             </td>
           </tr>
         </table>
-        <br/>
       </form>
     </div>
   </div>
@@ -13596,7 +13585,7 @@ should not have received it.
       </b>
       <xsl:choose>
         <xsl:when test="comment != ''">
-          <br/>(<xsl:value-of select="comment"/>)
+          <div class="comment">(<xsl:value-of select="comment"/>)</div>
         </xsl:when>
         <xsl:otherwise></xsl:otherwise>
       </xsl:choose>
@@ -13739,7 +13728,7 @@ should not have received it.
       <b><xsl:value-of select="name"/></b>
       <xsl:choose>
         <xsl:when test="comment != ''">
-          <br/>(<xsl:value-of select="comment"/>)
+          <div class="comment">(<xsl:value-of select="comment"/>)</div>
         </xsl:when>
         <xsl:otherwise></xsl:otherwise>
       </xsl:choose>
@@ -13750,7 +13739,7 @@ should not have received it.
       <xsl:choose>
         <xsl:when test="port_list/trash = '1'">
           <xsl:value-of select="port_list/name"/>
-          <br/>(<xsl:value-of select="gsa:i18n ('in trashcan', 'Trashcan')"/>)
+          <div>(<xsl:value-of select="gsa:i18n ('in trashcan', 'Trashcan')"/>)</div>
         </xsl:when>
         <xsl:otherwise>
           <a href="/omp?cmd=get_port_list&amp;port_list_id={port_list/@id}&amp;token={/envelope/token}">
@@ -13768,7 +13757,7 @@ should not have received it.
               <xsl:choose>
                 <xsl:when test="ssh_credential/trash = '1'">
                   <xsl:value-of select="ssh_credential/name"/>
-                  <br/>(<xsl:value-of select="gsa:i18n ('in trashcan', 'Trashcan')"/>)
+                  <div>(<xsl:value-of select="gsa:i18n ('in trashcan', 'Trashcan')"/>)</div>
                 </xsl:when>
                 <xsl:when test="boolean (ssh_credential/permissions) and count (ssh_credential/permissions/permission) = 0">
                   <xsl:value-of select="ssh_credential/name"/>
@@ -13792,7 +13781,7 @@ should not have received it.
               <xsl:choose>
                 <xsl:when test="smb_credential/trash = '1'">
                   <xsl:value-of select="smb_credential/name"/>
-                  <br/>(<xsl:value-of select="gsa:i18n ('in trashcan', 'Trashcan')"/>)
+                  <div>(<xsl:value-of select="gsa:i18n ('in trashcan', 'Trashcan')"/>)</div>
                 </xsl:when>
                 <xsl:when test="boolean (smb_credential/permissions) and count (smb_credential/permissions/permission) = 0">
                   <xsl:value-of select="smb_credential/name"/>
@@ -13816,7 +13805,7 @@ should not have received it.
               <xsl:choose>
                 <xsl:when test="esxi_credential/trash = '1'">
                   <xsl:value-of select="esxi_credential/name"/>
-                  <br/>(<xsl:value-of select="gsa:i18n ('in trashcan', 'Trashcan')"/>)
+                  <div>(<xsl:value-of select="gsa:i18n ('in trashcan', 'Trashcan')"/>)</div>
                 </xsl:when>
                 <xsl:when test="boolean (esxi_credential/permissions) and count (esxi_credential/permissions/permission) = 0">
                   <xsl:value-of select="esxi_credential/name"/>
@@ -13840,7 +13829,7 @@ should not have received it.
               <xsl:choose>
                 <xsl:when test="snmp_credential/trash = '1'">
                   <xsl:value-of select="snmp_credential/name"/>
-                  <br/>(<xsl:value-of select="gsa:i18n ('in trashcan', 'Trashcan')"/>)
+                  <div>(<xsl:value-of select="gsa:i18n ('in trashcan', 'Trashcan')"/>)</div>
                 </xsl:when>
                 <xsl:when test="boolean (snmp_credential/permissions) and count (snmp_credential/permissions/permission) = 0">
                   <xsl:value-of select="snmp_credential/name"/>
@@ -14305,7 +14294,6 @@ should not have received it.
             </td>
           </tr>
         </table>
-        <br/>
       </form>
     </div>
   </div>
@@ -14345,7 +14333,6 @@ should not have received it.
             </td>
           </tr>
         </table>
-        <br/>
       </form>
     </div>
   </div>
@@ -14798,7 +14785,6 @@ should not have received it.
                    value="yes"/>
             <xsl:value-of select="gsa:i18n ('Replace existing value with', 'Auth Data|Password')"/>:
           </label>
-          <br/>
           <input type="password" autocomplete="off"
                  name="preference:{nvt/name}[password]:{name}"
                  value="{value}" size="30" maxlength="40"/>
@@ -14816,7 +14802,6 @@ should not have received it.
               </xsl:otherwise>
             </xsl:choose>
           </label>
-          <br/>
           <input type="file" name="preference:{nvt/name}[file]:{name}" size="30"/>
         </xsl:when>
         <xsl:when test="type='entry'">
@@ -14830,13 +14815,14 @@ should not have received it.
             <xsl:value-of select="value"/>
           </label>
           <xsl:for-each select="alt">
-            <br/>
-            <label>
-              <input type="radio"
-                     name="preference:{../nvt/name}[radio]:{../name}"
-                     value="{text()}"/>
-              <xsl:value-of select="."/>
-            </label>
+            <div>
+              <label>
+                <input type="radio"
+                      name="preference:{../nvt/name}[radio]:{../name}"
+                      value="{text()}"/>
+                <xsl:value-of select="."/>
+              </label>
+            </div>
           </xsl:for-each>
         </xsl:when>
         <xsl:when test="type=''">
@@ -15016,26 +15002,26 @@ should not have received it.
             </xsl:choose>
             <xsl:value-of select="gsa:i18n ('Apply default timeout', 'Scan Config')"/>
           </label>
-          <br/>
-          <xsl:choose>
-            <xsl:when test="string-length(timeout) &gt; 0">
-              <input type="radio"
-                     name="timeout"
-                     value="1"
-                     checked="1"/>
-            </xsl:when>
-            <xsl:otherwise>
-              <input type="radio"
-                     name="timeout"
-                     value="1"/>
-            </xsl:otherwise>
-          </xsl:choose>
-          <input type="text"
-                 name="preference:scanner[scanner]:timeout.{../@oid}"
-                 value="{timeout}"
-                 size="30"
-                 maxlength="400"/>
-          <br/>
+          <div>
+            <xsl:choose>
+              <xsl:when test="string-length(timeout) &gt; 0">
+                <input type="radio"
+                      name="timeout"
+                      value="1"
+                      checked="1"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <input type="radio"
+                      name="timeout"
+                      value="1"/>
+              </xsl:otherwise>
+            </xsl:choose>
+            <input type="text"
+                  name="preference:scanner[scanner]:timeout.{../@oid}"
+                  value="{timeout}"
+                  size="30"
+                  maxlength="400"/>
+          </div>
         </td>
         <td></td>
         <td></td>
@@ -16005,7 +15991,7 @@ should not have received it.
       </b>
       <xsl:choose>
         <xsl:when test="comment != ''">
-          <br/>(<xsl:value-of select="comment"/>)
+          <div class="comment">(<xsl:value-of select="comment"/>)</div>
         </xsl:when>
         <xsl:otherwise>
         </xsl:otherwise>
@@ -16095,7 +16081,7 @@ should not have received it.
       <b><xsl:value-of select="name"/></b>
       <xsl:choose>
         <xsl:when test="comment != ''">
-          <br/>(<xsl:value-of select="comment"/>)
+          <div class="comment">(<xsl:value-of select="comment"/>)</div>
         </xsl:when>
         <xsl:otherwise>
         </xsl:otherwise>
@@ -16927,7 +16913,6 @@ should not have received it.
             </td>
           </tr>
         </table>
-        <br/>
       </form>
     </div>
   </div>
@@ -17019,7 +17004,7 @@ should not have received it.
       </b>
       <xsl:choose>
         <xsl:when test="comment != ''">
-          <br/>(<xsl:value-of select="comment"/>)
+          <div class="comment">(<xsl:value-of select="comment"/>)</div>
         </xsl:when>
         <xsl:otherwise></xsl:otherwise>
       </xsl:choose>
@@ -17107,7 +17092,7 @@ should not have received it.
       <b><xsl:value-of select="name"/></b>
       <xsl:choose>
         <xsl:when test="comment != ''">
-          <br/>(<xsl:value-of select="comment"/>)
+          <div class="comment">(<xsl:value-of select="comment"/>)</div>
         </xsl:when>
         <xsl:otherwise></xsl:otherwise>
       </xsl:choose>
@@ -17991,7 +17976,7 @@ should not have received it.
       </b>
       <xsl:choose>
         <xsl:when test="comment != ''">
-          <br/>(<xsl:value-of select="comment"/>)
+          <div class="comment">(<xsl:value-of select="comment"/>)</div>
         </xsl:when>
         <xsl:otherwise></xsl:otherwise>
       </xsl:choose>
@@ -18059,7 +18044,7 @@ should not have received it.
       <b><xsl:value-of select="name"/></b>
       <xsl:choose>
         <xsl:when test="comment != ''">
-          <br/>(<xsl:value-of select="comment"/>)
+          <div class="comment">(<xsl:value-of select="comment"/>)</div>
         </xsl:when>
         <xsl:otherwise></xsl:otherwise>
       </xsl:choose>
@@ -18079,7 +18064,7 @@ should not have received it.
       <xsl:choose>
         <xsl:when test="credential/trash != '0'">
           <xsl:value-of select="credential/name"/>
-          <br/>(<xsl:value-of select="gsa:i18n ('in trashcan', 'Trashcan')"/>)
+          <div>(<xsl:value-of select="gsa:i18n ('in trashcan', 'Trashcan')"/>)</div>
         </xsl:when>
         <xsl:otherwise>
           <a href="/omp?cmd=get_credential&amp;credential_id={credential/@id}&amp;token={/envelope/token}"
@@ -18368,7 +18353,6 @@ should not have received it.
             </td>
           </tr>
         </table>
-        <br/>
       </form>
     </div>
   </div>
@@ -18396,7 +18380,7 @@ should not have received it.
       </b>
       <xsl:choose>
         <xsl:when test="comment != ''">
-          <br/>(<xsl:value-of select="comment"/>)
+          <div class="comment">(<xsl:value-of select="comment"/>)</div>
         </xsl:when>
         <xsl:otherwise></xsl:otherwise>
       </xsl:choose>
@@ -18446,7 +18430,7 @@ should not have received it.
       <b><xsl:value-of select="name"/></b>
       <xsl:choose>
         <xsl:when test="comment != ''">
-          <br/>(<xsl:value-of select="comment"/>)
+          <div class="comment">(<xsl:value-of select="comment"/>)</div>
         </xsl:when>
         <xsl:otherwise></xsl:otherwise>
       </xsl:choose>
@@ -18457,7 +18441,7 @@ should not have received it.
       <xsl:choose>
         <xsl:when test="credential/trash != '0'">
           <xsl:value-of select="credential/name"/>
-          <br/>(<xsl:value-of select="gsa:i18n ('in trashcan', 'Trashcan')"/>)
+          <div>(<xsl:value-of select="gsa:i18n ('in trashcan', 'Trashcan')"/>)</div>
         </xsl:when>
         <xsl:otherwise>
           <a href="/omp?cmd=get_credential&amp;credential_id={credential/@id}&amp;token={/envelope/token}"
@@ -18790,7 +18774,7 @@ should not have received it.
       </b>
       <xsl:choose>
         <xsl:when test="../comment != ''">
-          <br/>(<xsl:value-of select="../comment"/>)
+          <div class="comment">(<xsl:value-of select="../comment"/>)</div>
         </xsl:when>
         <xsl:otherwise></xsl:otherwise>
       </xsl:choose>
@@ -18860,7 +18844,7 @@ should not have received it.
         </b>
         <xsl:choose>
           <xsl:when test="../comment != ''">
-            <br/>(<xsl:value-of select="../comment"/>)
+            <div class="comment">(<xsl:value-of select="../comment"/>)</div>
           </xsl:when>
           <xsl:otherwise></xsl:otherwise>
         </xsl:choose>
@@ -19082,13 +19066,14 @@ should not have received it.
   <tbody class="{gsa:table-row-class(position())}">
     <tr>
       <td rowspan="2">
-        <b>
-          <xsl:call-template name="get_info_ovaldef_lnk">
-            <xsl:with-param name="ovaldef" select="../name"/>
-            <xsl:with-param name="ovaldef_id" select="../@id"/>
-          </xsl:call-template>
-        </b>
-        <br/>
+        <div>
+          <b>
+            <xsl:call-template name="get_info_ovaldef_lnk">
+              <xsl:with-param name="ovaldef" select="../name"/>
+              <xsl:with-param name="ovaldef_id" select="../@id"/>
+            </xsl:call-template>
+          </b>
+        </div>
         <span style="font-size:80%; color:grey">
           <xsl:choose>
             <xsl:when test="string-length(file) > 45">
@@ -19101,7 +19086,7 @@ should not have received it.
         </span>
         <xsl:choose>
           <xsl:when test="../comment != ''">
-            <br/>(<xsl:value-of select="../comment"/>)
+            <div class="comment">(<xsl:value-of select="../comment"/>)</div>
           </xsl:when>
           <xsl:otherwise></xsl:otherwise>
         </xsl:choose>
@@ -19214,7 +19199,7 @@ should not have received it.
       </b>
       <xsl:choose>
         <xsl:when test="../comment != ''">
-          <br/>(<xsl:value-of select="../comment"/>)
+          <div class="comment">(<xsl:value-of select="../comment"/>)</div>
         </xsl:when>
         <xsl:otherwise></xsl:otherwise>
       </xsl:choose>
@@ -19268,7 +19253,7 @@ should not have received it.
       </b>
       <xsl:choose>
         <xsl:when test="../comment != ''">
-          <br/>(<xsl:value-of select="../comment"/>)
+          <div class="comment">(<xsl:value-of select="../comment"/>)</div>
         </xsl:when>
         <xsl:otherwise></xsl:otherwise>
       </xsl:choose>
@@ -19325,7 +19310,7 @@ should not have received it.
         </b>
         <xsl:choose>
           <xsl:when test="../comment != ''">
-            <br/>(<xsl:value-of select="../comment"/>)
+            <div class="comment">(<xsl:value-of select="../comment"/>)</div>
           </xsl:when>
           <xsl:otherwise></xsl:otherwise>
         </xsl:choose>
@@ -19569,17 +19554,18 @@ should not have received it.
 
 <xsl:template name="html-cpe-table">
   <xsl:if test="@status = 400">
-    <xsl:call-template name="error_window">
-      <xsl:with-param name="heading">Warning: SecInfo Database Missing</xsl:with-param>
-      <xsl:with-param name="message">
-        SCAP and/or CERT database missing on OMP server.
-        <a href="/help/cpes.html?token={/envelope/token}#secinfo_missing"
-           title="Help: SecInfo database missing">
-          <img style="margin-left:5px" src="/img/help.png"/>
-        </a>
-      </xsl:with-param>
-    </xsl:call-template>
-    <br/>
+    <div>
+      <xsl:call-template name="error_window">
+        <xsl:with-param name="heading">Warning: SecInfo Database Missing</xsl:with-param>
+        <xsl:with-param name="message">
+          SCAP and/or CERT database missing on OMP server.
+          <a href="/help/cpes.html?token={/envelope/token}#secinfo_missing"
+              title="Help: SecInfo database missing">
+            <img style="margin-left:5px" src="/img/help.png"/>
+          </a>
+        </xsl:with-param>
+      </xsl:call-template>
+    </div>
   </xsl:if>
   <xsl:call-template name="list-window">
     <xsl:with-param name="type" select="'info'"/>
@@ -19626,17 +19612,18 @@ should not have received it.
 
 <xsl:template name="html-cve-table">
   <xsl:if test="@status = 400">
-    <xsl:call-template name="error_window">
-      <xsl:with-param name="heading">Warning: SecInfo Database Missing</xsl:with-param>
-      <xsl:with-param name="message">
-        SCAP and/or CERT database missing on OMP server.
-        <a href="/help/cves.html?token={/envelope/token}#secinfo_missing"
-           title="Help: SecInfo database missing">
-          <img style="margin-left:5px" src="/img/help.png"/>
-        </a>
-      </xsl:with-param>
-    </xsl:call-template>
-    <br/>
+    <div>
+      <xsl:call-template name="error_window">
+        <xsl:with-param name="heading">Warning: SecInfo Database Missing</xsl:with-param>
+        <xsl:with-param name="message">
+          SCAP and/or CERT database missing on OMP server.
+          <a href="/help/cves.html?token={/envelope/token}#secinfo_missing"
+            title="Help: SecInfo database missing">
+            <img style="margin-left:5px" src="/img/help.png"/>
+          </a>
+        </xsl:with-param>
+      </xsl:call-template>
+    </div>
   </xsl:if>
   <xsl:call-template name="list-window">
     <xsl:with-param name="type" select="'info'"/>
@@ -19700,17 +19687,18 @@ should not have received it.
 
 <xsl:template name="html-nvt-table">
   <xsl:if test="@status = 400">
-    <xsl:call-template name="error_window">
-      <xsl:with-param name="heading">Warning: SecInfo Database Missing</xsl:with-param>
-      <xsl:with-param name="message">
-        SCAP and/or CERT database missing on OMP server.
-        <a href="/help/nvts.html?token={/envelope/token}#secinfo_missing"
-           title="Help: SecInfo database missing">
-          <img style="margin-left:5px" src="/img/help.png"/>
-        </a>
-      </xsl:with-param>
-    </xsl:call-template>
-    <br/>
+    <div>
+      <xsl:call-template name="error_window">
+        <xsl:with-param name="heading">Warning: SecInfo Database Missing</xsl:with-param>
+        <xsl:with-param name="message">
+          SCAP and/or CERT database missing on OMP server.
+          <a href="/help/nvts.html?token={/envelope/token}#secinfo_missing"
+            title="Help: SecInfo database missing">
+            <img style="margin-left:5px" src="/img/help.png"/>
+          </a>
+        </xsl:with-param>
+      </xsl:call-template>
+    </div>>
   </xsl:if>
   <xsl:call-template name="list-window">
     <xsl:with-param name="type" select="'info'"/>
@@ -19776,17 +19764,18 @@ should not have received it.
 
 <xsl:template name="html-ovaldef-table">
   <xsl:if test="@status = 400">
-    <xsl:call-template name="error_window">
-      <xsl:with-param name="heading">Warning: SecInfo Database Missing</xsl:with-param>
-      <xsl:with-param name="message">
-        SCAP and/or CERT database missing on OMP server.
-        <a href="/help/ovaldefs.html?token={/envelope/token}#secinfo_missing"
-           title="Help: SecInfo database missing">
-          <img style="margin-left:5px" src="/img/help.png"/>
-        </a>
-      </xsl:with-param>
-    </xsl:call-template>
-    <br/>
+    <div>
+      <xsl:call-template name="error_window">
+        <xsl:with-param name="heading">Warning: SecInfo Database Missing</xsl:with-param>
+        <xsl:with-param name="message">
+          SCAP and/or CERT database missing on OMP server.
+          <a href="/help/ovaldefs.html?token={/envelope/token}#secinfo_missing"
+            title="Help: SecInfo database missing">
+            <img style="margin-left:5px" src="/img/help.png"/>
+          </a>
+        </xsl:with-param>
+      </xsl:call-template>
+    </div>
   </xsl:if>
   <xsl:call-template name="list-window">
     <xsl:with-param name="type" select="'info'"/>
@@ -19846,17 +19835,18 @@ should not have received it.
 
 <xsl:template name="html-cert_bund_adv-table">
   <xsl:if test="@status = 400">
-    <xsl:call-template name="error_window">
-      <xsl:with-param name="heading">Warning: SecInfo Database Missing</xsl:with-param>
-      <xsl:with-param name="message">
-        SCAP and/or CERT database missing on OMP server.
-        <a href="/help/cert_bund_advs.html?token={/envelope/token}#secinfo_missing"
-           title="Help: SecInfo database missing">
-          <img style="margin-left:5px" src="/img/help.png"/>
-        </a>
-      </xsl:with-param>
-    </xsl:call-template>
-    <br/>
+    <div>
+      <xsl:call-template name="error_window">
+        <xsl:with-param name="heading">Warning: SecInfo Database Missing</xsl:with-param>
+        <xsl:with-param name="message">
+          SCAP and/or CERT database missing on OMP server.
+          <a href="/help/cert_bund_advs.html?token={/envelope/token}#secinfo_missing"
+            title="Help: SecInfo database missing">
+            <img style="margin-left:5px" src="/img/help.png"/>
+          </a>
+        </xsl:with-param>
+      </xsl:call-template>
+    </div>
   </xsl:if>
   <xsl:call-template name="list-window">
     <xsl:with-param name="type" select="'info'"/>
@@ -19906,17 +19896,18 @@ should not have received it.
 
 <xsl:template name="html-dfn_cert_adv-table">
   <xsl:if test="@status = 400">
-    <xsl:call-template name="error_window">
-      <xsl:with-param name="heading">Warning: SecInfo Database Missing</xsl:with-param>
-      <xsl:with-param name="message">
-        SCAP and/or CERT database missing on OMP server.
-        <a href="/help/dfn_cert_advs.html?token={/envelope/token}#secinfo_missing"
-           title="Help: SecInfo database missing">
-          <img style="margin-left:5px" src="/img/help.png"/>
-        </a>
-      </xsl:with-param>
-    </xsl:call-template>
-    <br/>
+    <div>
+      <xsl:call-template name="error_window">
+        <xsl:with-param name="heading">Warning: SecInfo Database Missing</xsl:with-param>
+        <xsl:with-param name="message">
+          SCAP and/or CERT database missing on OMP server.
+          <a href="/help/dfn_cert_advs.html?token={/envelope/token}#secinfo_missing"
+            title="Help: SecInfo database missing">
+            <img style="margin-left:5px" src="/img/help.png"/>
+          </a>
+        </xsl:with-param>
+      </xsl:call-template>
+    </div>
   </xsl:if>
   <xsl:call-template name="list-window">
     <xsl:with-param name="type" select="'info'"/>
@@ -19966,17 +19957,18 @@ should not have received it.
 
 <xsl:template name="html-allinfo-table">
   <xsl:if test="@status = 400">
-    <xsl:call-template name="error_window">
-      <xsl:with-param name="heading">Warning: SecInfo Database Missing</xsl:with-param>
-      <xsl:with-param name="message">
-        SCAP and/or CERT database missing on OMP server.
-        <a href="/help/allinfo.html?token={/envelope/token}#secinfo_missing"
-           title="Help: SecInfo database missing">
-          <img style="margin-left:5px" src="/img/help.png"/>
-        </a>
-      </xsl:with-param>
-    </xsl:call-template>
-    <br/>
+    <div>
+      <xsl:call-template name="error_window">
+        <xsl:with-param name="heading">Warning: SecInfo Database Missing</xsl:with-param>
+        <xsl:with-param name="message">
+          SCAP and/or CERT database missing on OMP server.
+          <a href="/help/allinfo.html?token={/envelope/token}#secinfo_missing"
+            title="Help: SecInfo database missing">
+            <img style="margin-left:5px" src="/img/help.png"/>
+          </a>
+        </xsl:with-param>
+      </xsl:call-template>
+    </div>
   </xsl:if>
   <xsl:call-template name="list-window">
     <xsl:with-param name="type" select="'info'"/>
@@ -20844,8 +20836,10 @@ should not have received it.
               <td><xsl:value-of select="./@date"/></td>
               <td>
                 <xsl:for-each select="./oval_definitions:contributor">
-                <xsl:value-of select="./text()"/>
-                <i> (<xsl:value-of select="./@organization"/>)</i><br />
+                  <div>
+                    <xsl:value-of select="./text()"/>
+                    <i> (<xsl:value-of select="./@organization"/>)</i>
+                  </div>
                 </xsl:for-each>
               </td>
             </tr>
@@ -22303,7 +22297,7 @@ should not have received it.
       </xsl:call-template>
       <a href="/omp?cmd=get_note&amp;note_id={@id}&amp;token={/envelope/token}"
          title="{gsa:view_details_title ('Note', @id)}">
-        <xsl:if test="orphan = 1"><b><xsl:value-of select="gsa:i18n ('Orphan', 'Note')"/></b><br/></xsl:if>
+        <xsl:if test="orphan = 1"><div><b><xsl:value-of select="gsa:i18n ('Orphan', 'Note')"/></b></div></xsl:if>
         <xsl:choose>
           <xsl:when test="text/@excerpt = 1">
               <xsl:value-of select="text/text()"/>...
@@ -22385,7 +22379,7 @@ should not have received it.
       </xsl:choose>
     </td>
     <td>
-      <xsl:if test="orphan = 1"><b><xsl:value-of select="gsa:i18n ('Orphan', 'Note')"/></b><br/></xsl:if>
+      <xsl:if test="orphan = 1"><div><b><xsl:value-of select="gsa:i18n ('Orphan', 'Note')"/></b></div></xsl:if>
       <xsl:choose>
         <xsl:when test="text/@excerpt = 1">
           <xsl:value-of select="text/text()"/>...
@@ -23489,7 +23483,7 @@ should not have received it.
     <td>
       <a href="/omp?cmd=get_override&amp;override_id={@id}&amp;token={/envelope/token}"
          title="{gsa:view_details_title ('Override', @id)}">
-        <xsl:if test="orphan = 1"><b><xsl:value-of select="gsa:i18n ('Orphan', 'Override')"/></b><br/></xsl:if>
+        <xsl:if test="orphan = 1"><div><b><xsl:value-of select="gsa:i18n ('Orphan', 'Override')"/></b></div></xsl:if>
         <xsl:choose>
           <xsl:when test="text/@excerpt = 1">
             <xsl:value-of select="text/text()"/>...
@@ -23605,7 +23599,7 @@ should not have received it.
       </xsl:choose>
     </td>
     <td>
-      <xsl:if test="orphan = 1"><b><xsl:value-of select="gsa:i18n ('Orphan', 'Override')"/></b><br/></xsl:if>
+      <xsl:if test="orphan = 1"><div><b><xsl:value-of select="gsa:i18n ('Orphan', 'Override')"/></b></div></xsl:if>
       <xsl:choose>
         <xsl:when test="text/@excerpt = 1">
           <xsl:value-of select="text/text()"/>...
@@ -23995,7 +23989,7 @@ should not have received it.
       </b>
       <xsl:choose>
         <xsl:when test="comment != ''">
-          <br/>(<xsl:value-of select="comment"/>)
+          <div class="comment">(<xsl:value-of select="comment"/>)</div>
         </xsl:when>
         <xsl:otherwise></xsl:otherwise>
       </xsl:choose>
@@ -24032,7 +24026,7 @@ should not have received it.
       </b>
       <xsl:choose>
         <xsl:when test="comment != ''">
-          <br/>(<xsl:value-of select="comment"/>)
+          <div class="comment">(<xsl:value-of select="comment"/>)</div>
         </xsl:when>
         <xsl:otherwise></xsl:otherwise>
       </xsl:choose>
@@ -24269,7 +24263,6 @@ should not have received it.
             </td>
           </tr>
         </table>
-        <br/>
       </form>
     </div>
   </div>
@@ -24510,7 +24503,6 @@ should not have received it.
             </td>
           </tr>
         </table>
-        <br/>
       </form>
     </div>
   </div>
@@ -24813,7 +24805,7 @@ should not have received it.
       </b>
       <xsl:choose>
         <xsl:when test="comment != ''">
-          <br/>(<xsl:value-of select="comment"/>)
+          <div class="comment">(<xsl:value-of select="comment"/>)</div>
         </xsl:when>
         <xsl:otherwise></xsl:otherwise>
       </xsl:choose>
@@ -25013,7 +25005,7 @@ should not have received it.
       </b>
       <xsl:choose>
         <xsl:when test="comment != ''">
-          <br/>(<xsl:value-of select="comment"/>)
+          <div class="comment">(<xsl:value-of select="comment"/>)</div>
         </xsl:when>
         <xsl:otherwise></xsl:otherwise>
       </xsl:choose>
@@ -25025,7 +25017,7 @@ should not have received it.
       <xsl:choose>
         <xsl:when test="resource/trash != '0'">
           <xsl:value-of select="resource/name"/>
-          <br/>(<xsl:value-of select="gsa:i18n ('in trashcan', 'Trashcan')"/>)
+          <div>(<xsl:value-of select="gsa:i18n ('in trashcan', 'Trashcan')"/>)</div>
         </xsl:when>
         <xsl:otherwise>
           <a href="/omp?cmd=get_{resource/type}&amp;{resource/type}_id={resource/@id}&amp;token={/envelope/token}"
@@ -25358,7 +25350,6 @@ should not have received it.
             </td>
           </tr>
         </table>
-        <br/>
       </form>
     </div>
   </div>
@@ -25572,7 +25563,7 @@ should not have received it.
       </b>
       <xsl:choose>
         <xsl:when test="comment != ''">
-          <br/>(<xsl:value-of select="comment"/>)
+          <div class="comment">(<xsl:value-of select="comment"/>)</div>
         </xsl:when>
         <xsl:otherwise></xsl:otherwise>
       </xsl:choose>
@@ -25616,7 +25607,7 @@ should not have received it.
       <b><xsl:value-of select="name"/></b>
       <xsl:choose>
         <xsl:when test="comment != ''">
-          <br/>(<xsl:value-of select="comment"/>)
+          <div class="comment">(<xsl:value-of select="comment"/>)</div>
         </xsl:when>
         <xsl:otherwise></xsl:otherwise>
       </xsl:choose>
@@ -25836,7 +25827,6 @@ should not have received it.
             </td>
           </tr>
         </table>
-        <br/>
       </form>
 
       <h2><xsl:value-of select="gsa:i18n ('New Port Range', 'Port List')"/></h2>
@@ -26037,7 +26027,6 @@ should not have received it.
             </td>
           </tr>
         </table>
-        <br/>
       </form>
     </div>
   </div>
@@ -26159,7 +26148,6 @@ should not have received it.
             </td>
           </tr>
         </table>
-        <br/>
       </form>
     </div>
   </div>
@@ -26336,7 +26324,7 @@ should not have received it.
       </b>
       <xsl:choose>
         <xsl:when test="summary != ''">
-          <br/>(<xsl:value-of select="summary"/>)
+          <div>(<xsl:value-of select="summary"/>)</div>
         </xsl:when>
         <xsl:otherwise></xsl:otherwise>
       </xsl:choose>
@@ -26347,7 +26335,7 @@ should not have received it.
       <xsl:value-of select="gsa:i18n (trust/text(), 'Trust')"/>
       <xsl:choose>
         <xsl:when test="trust/time != ''">
-          <br/>(<xsl:value-of select="concat (date:month-abbreviation (trust/time), ' ', date:day-in-month (trust/time), ' ', date:year (trust/time))"/>)
+          <div>(<xsl:value-of select="concat (date:month-abbreviation (trust/time), ' ', date:day-in-month (trust/time), ' ', date:year (trust/time))"/>)</div>
         </xsl:when>
         <xsl:otherwise></xsl:otherwise>
       </xsl:choose>
@@ -26407,7 +26395,7 @@ should not have received it.
       <b><xsl:value-of select="name"/></b>
       <xsl:choose>
         <xsl:when test="summary != ''">
-          <br/>(<xsl:value-of select="summary"/>)
+          <div>(<xsl:value-of select="summary"/>)</div>
         </xsl:when>
         <xsl:otherwise></xsl:otherwise>
       </xsl:choose>
@@ -26418,7 +26406,7 @@ should not have received it.
       <xsl:value-of select="gsa:i18n (trust/text(), 'Trust')"/>
       <xsl:choose>
         <xsl:when test="trust/time != ''">
-          <br/>(<xsl:value-of select="concat (date:month-abbreviation (trust/time), ' ', date:day-in-month (trust/time), ' ', date:year (trust/time))"/>)
+          <div>(<xsl:value-of select="concat (date:month-abbreviation (trust/time), ' ', date:day-in-month (trust/time), ' ', date:year (trust/time))"/>)</div>
         </xsl:when>
         <xsl:otherwise></xsl:otherwise>
       </xsl:choose>
@@ -26816,17 +26804,18 @@ should not have received it.
 <xsl:template match="host" mode="classic">
   <xsl:variable name="apply-overrides" select="../filters/apply_overrides"/>
   <xsl:if test="../@scap_loaded = 0">
-    <xsl:call-template name="error_window">
-      <xsl:with-param name="heading">Warning: SCAP Database Missing</xsl:with-param>
-      <xsl:with-param name="message">
-        SCAP database missing on OMP server.  Prognostic reporting disabled.
-        <a href="/help/hosts_classic.html?token={/envelope/token}#scap_missing"
-           title="Help: SCAP database missing">
-          <img style="margin-left:5px" src="/img/help.png"/>
-        </a>
-      </xsl:with-param>
-    </xsl:call-template>
-    <br/>
+    <div>
+      <xsl:call-template name="error_window">
+        <xsl:with-param name="heading">Warning: SCAP Database Missing</xsl:with-param>
+        <xsl:with-param name="message">
+          SCAP database missing on OMP server.  Prognostic reporting disabled.
+          <a href="/help/hosts_classic.html?token={/envelope/token}#scap_missing"
+            title="Help: SCAP database missing">
+            <img style="margin-left:5px" src="/img/help.png"/>
+          </a>
+        </xsl:with-param>
+      </xsl:call-template>
+    </div>
   </xsl:if>
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
@@ -27538,7 +27527,9 @@ should not have received it.
   <xsl:param name="delta"/>
   <xsl:param name="next">get_report</xsl:param>
   <div class="note_box_box">
-    <b><xsl:value-of select="gsa:i18n ('Note', 'Note')"/></b><xsl:if test="$delta and $delta &gt; 0"> (<xsl:value-of select="gsa:i18n ('Result', 'Result')"/> <xsl:value-of select="$delta"/>)</xsl:if><br/>
+    <div>
+      <b><xsl:value-of select="gsa:i18n ('Note', 'Note')"/></b><xsl:if test="$delta and $delta &gt; 0"> (<xsl:value-of select="gsa:i18n ('Result', 'Result')"/> <xsl:value-of select="$delta"/>)</xsl:if>
+    </div>
     <pre><xsl:value-of select="text"/></pre>
     <div>
       <xsl:choose>
@@ -27792,7 +27783,6 @@ should not have received it.
     <xsl:if test="count(user_tags/tag)">
       <xsl:value-of select="gsa:i18n ('Tags', 'Tag')"/>:
       <xsl:call-template name="user_tag_list"/>
-      <br/>
     </xsl:if>
     <xsl:value-of select="gsa:i18n ('Modified', 'Date')"/>: <xsl:value-of select="gsa:long-time (modification_time)"/>.
   </div>
@@ -28962,7 +28952,9 @@ should not have received it.
 
       <xsl:if test="$cve_ref != '' or $bid_ref != '' or $xref != '' or count($cert_ref/cert_ref) > 0">
         <div class="result_section">
-          <b><xsl:value-of select="gsa:i18n ('References', 'SecInfo')"/></b><br/>
+          <div>
+            <b><xsl:value-of select="gsa:i18n ('References', 'SecInfo')"/></b>
+          </div>
           <p>
             <table>
               <xsl:call-template name="ref_cve_list">
@@ -29016,7 +29008,9 @@ should not have received it.
             </xsl:variable>
             <xsl:if test="$cve_ref_2 != '' or $bid_ref_2 != '' or $xref_2 != '' or count($cert_ref_2/cert_ref)">
               <div class="result_section">
-                <b><xsl:value-of select="gsa:i18n ('References', 'SecInfo')"/></b><br/>
+                <div>
+                  <b><xsl:value-of select="gsa:i18n ('References', 'SecInfo')"/></b>
+                </div>
 
                 <table>
                   <xsl:call-template name="ref_cve_list">
@@ -32664,7 +32658,6 @@ var toggleFilter = function(){
             </td>
           </tr>
         </table>
-        <br/>
       </form>
       <h2><xsl:value-of select="gsa:i18n ('New Permission', 'Permission')"/></h2>
 
@@ -32876,7 +32869,7 @@ var toggleFilter = function(){
       </b>
       <xsl:choose>
         <xsl:when test="comment != ''">
-          <br/>(<xsl:value-of select="comment"/>)
+          <div class="comment">(<xsl:value-of select="comment"/>)</div>
         </xsl:when>
         <xsl:otherwise></xsl:otherwise>
       </xsl:choose>
@@ -32919,7 +32912,7 @@ var toggleFilter = function(){
       </b>
       <xsl:choose>
         <xsl:when test="comment != ''">
-          <br/>(<xsl:value-of select="comment"/>)
+          <div>(<xsl:value-of select="comment"/>)</div>
         </xsl:when>
         <xsl:otherwise></xsl:otherwise>
       </xsl:choose>
@@ -33957,7 +33950,6 @@ var toggleFilter = function(){
                 </label>
               </xsl:if>
               <xsl:if test="//group[@name='method:radius_connect']/auth_conf_setting[@key='enable']/@value = 'true'">
-                <br/>
                 <label>
                   <input type="radio" name="auth_method" value="2"/>
                   <xsl:value-of select="gsa:i18n ('Allow RADIUS Authentication Only', 'User')"/>
@@ -33974,7 +33966,6 @@ var toggleFilter = function(){
                     <option value="{@id}"><xsl:value-of select="name"/></option>
                   </xsl:for-each>
                 </select>
-                <br/>
               </td>
             </tr>
           </xsl:if>
@@ -34135,7 +34126,7 @@ var toggleFilter = function(){
       </b>
       <xsl:choose>
         <xsl:when test="comment != ''">
-          <br/>(<xsl:value-of select="comment"/>)
+          <div class="comment">(<xsl:value-of select="comment"/>)</div>
         </xsl:when>
         <xsl:otherwise></xsl:otherwise>
       </xsl:choose>
@@ -34454,7 +34445,6 @@ var toggleFilter = function(){
                     <input type="radio" name="modify_password" value="0"/>
                     <xsl:value-of select="concat (gsa:i18n ('Password', 'Auth Data'), ': ', gsa:i18n ('Use existing value', 'User'))"/>
                   </label>
-                  <br/>
                 </xsl:otherwise>
               </xsl:choose>
               <input type="radio" name="modify_password" value="1" checked="1"/>
@@ -34462,14 +34452,12 @@ var toggleFilter = function(){
               <input type="password" name="password" value="" size="30"
                      maxlength="40"/>
               <xsl:if test="//group[@name='method:ldap_connect']/auth_conf_setting[@key='enable']/@value = 'true'">
-                <br/>
                 <label>
                   <input type="radio" name="modify_password" value="2"/>
                   <xsl:value-of select="gsa:i18n ('Allow LDAP Authentication Only', 'User')"/>
                 </label>
               </xsl:if>
               <xsl:if test="//group[@name='method:radius_connect']/auth_conf_setting[@key='enable']/@value = 'true'">
-                <br/>
                 <label>
                   <input type="radio" name="modify_password" value="3"/>
                   <xsl:value-of select="gsa:i18n ('Allow RADIUS Authentication Only', 'User')"/>
@@ -34485,7 +34473,6 @@ var toggleFilter = function(){
                 <select disabled="disabled" name="dummy">
                   <option value="" selected="1"><xsl:value-of select="role[@id = '9c5a6ec6-6fe2-11e4-8cb6-406186ea4fc5']/name"/></option>
                 </select>
-                <br/>
               </xsl:if>
               <select name="role_ids:" multiple="multiple">
                 <xsl:for-each select="../../../get_roles_response/role[@id != '9c5a6ec6-6fe2-11e4-8cb6-406186ea4fc5']">
@@ -34545,7 +34532,6 @@ var toggleFilter = function(){
                 </xsl:choose>
                 <xsl:value-of select="gsa:i18n ('Allow all and deny', 'User')"/>:
               </label>
-              <br/>
               <input type="text" name="access_hosts" value="{hosts}" size="30"
                      maxlength="2000"/>
             </td>
@@ -34575,7 +34561,6 @@ var toggleFilter = function(){
                 </xsl:choose>
                 <xsl:value-of select="gsa:i18n ('Allow all and deny', 'User')"/>:
               </label>
-              <br/>
               <input type="text" name="access_ifaces" value="{ifaces}" size="30"
                      maxlength="2000"/>
             </td>
@@ -34918,7 +34903,7 @@ var toggleFilter = function(){
         <tr>
           <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
           <td>
-            <b><xsl:value-of select="feed/name"/></b><br/>
+            <b><xsl:value-of select="feed/name"/></b>
           </td>
         </tr>
         <tr>
@@ -35059,7 +35044,7 @@ var toggleFilter = function(){
         <tr>
           <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
           <td>
-            <b><xsl:value-of select="scap/name"/></b><br/>
+            <b><xsl:value-of select="scap/name"/></b>
           </td>
         </tr>
         <tr>
@@ -35215,7 +35200,7 @@ var toggleFilter = function(){
         <tr>
           <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
           <td>
-            <b><xsl:value-of select="cert/name"/></b><br/>
+            <b><xsl:value-of select="cert/name"/></b>
           </td>
         </tr>
         <tr>
@@ -36812,7 +36797,6 @@ var toggleFilter = function(){
             </td>
           </tr>
         </table>
-        <br/>
       </form>
     </div>
   </div>
@@ -37244,7 +37228,7 @@ var toggleFilter = function(){
       </b>
       <xsl:choose>
         <xsl:when test="../comment != ''">
-          <br/>(<xsl:value-of select="../comment"/>)
+          <div class="comment">(<xsl:value-of select="../comment"/>)</div>
         </xsl:when>
         <xsl:otherwise></xsl:otherwise>
       </xsl:choose>
@@ -37475,8 +37459,9 @@ var toggleFilter = function(){
 
             <xsl:choose>
               <xsl:when test="action='delete' and type='user'">
-                <br/>
-                <xsl:value-of select="gsa:i18n ('If no inheriting user is selected, all owned resources will be deleted as well.', 'User')"/>
+                <div>
+                  <xsl:value-of select="gsa:i18n ('If no inheriting user is selected, all owned resources will be deleted as well.', 'User')"/>
+                </div>
                 <p>
                   <xsl:value-of select="gsa:i18n ('Inheriting user', 'User')"/>:
                   <xsl:variable name="inheritor_id" select="''"/>
@@ -37566,9 +37551,6 @@ var toggleFilter = function(){
   <div class="section-box">
     <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
-
-      <br/>
-
       <h1>OMP</h1>
 
       <xsl:if test="version">
@@ -37706,7 +37688,7 @@ var toggleFilter = function(){
                         <xsl:with-param name="content" select="'None'"/>
                         <xsl:with-param name="select-value" select="cvss_au"/>
                       </xsl:call-template>
-                    </select><br/>
+                    </select>
                   </td>
                 </tr>
                 <tr>
@@ -37805,12 +37787,11 @@ var toggleFilter = function(){
     <xsl:choose>
       <xsl:when test="cvss_score">
         <xsl:if test="cvss_score != '-1.0'">
-          <br/>
           <table>
             <tr>
               <td><b><xsl:value-of select="gsa:i18n ('Base Vector', 'CVSS Calculator')"/>:</b></td>
               <td>
-                <xsl:value-of select="cvss_vector"/><br/>
+                <xsl:value-of select="cvss_vector"/>
               </td>
             </tr>
             <tr>
@@ -37824,7 +37805,9 @@ var toggleFilter = function(){
           </table>
         </xsl:if>
         <xsl:if test="cvss_score = '-1.0'">
-          <br/><xsl:value-of select="gsa:i18n ('Invalid CVSS Base Vector value provided.  Use back button of your browser to edit the vector.', 'CVSS Calculator')"/><br/><br/>
+          <div>
+            <xsl:value-of select="gsa:i18n ('Invalid CVSS Base Vector value provided.  Use back button of your browser to edit the vector.', 'CVSS Calculator')"/>
+          </div>
         </xsl:if>
       </xsl:when>
     </xsl:choose>
