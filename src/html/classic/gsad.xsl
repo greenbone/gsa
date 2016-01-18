@@ -1681,7 +1681,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template name="html-footer">
   <div class="gsa_footer">
-    <div style="float: left">
+    <div class="pull-left">
       <xsl:choose>
         <xsl:when test="not (boolean (/envelope/backend_operation))"/>
         <xsl:when test="/envelope/backend_operation = 0"/>
@@ -2167,7 +2167,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </div>
     <div class="gb_window_part_content_error">
 <!--
-      <div class="float_right">
+      <div class="pull-right">
         <a href="/help/error_messages.html?token={$token}" title="Help: Error Message">
           <img src="/img/help.png"/>
         </a>
@@ -2196,14 +2196,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <div class="gb_window_part_right_error"></div>
         <div class="gb_window_part_center_error">Error Message</div>
         <div class="gb_window_part_content_error" style="text-align:center;">
-          <div class="float_right">
+          <div class="pull-right">
             <a href="/help/error_messages.html?token={$token}" title="Help: Error Message">
               <img src="/img/help.png"/>
             </a>
           </div>
           <br/>
           <img src="/img/alert_sign.png" alt="" title="{$title}"
-               style="float:left;margin-left:10px;"/>
+               class="pull-left" style="margin-left:10px;"/>
           <span style="font-size:16px;">
             <div style="font-weight:bold;padding-top:12px;font-size:20px;">
               <xsl:value-of select="$title"/>

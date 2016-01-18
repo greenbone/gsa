@@ -129,7 +129,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 
   <div class="section-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Hilfe-Inhaltsverzeichnis</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Hilfe-Inhaltsverzeichnis</a></div>
     <div style="text-align:left">
 
       <br/>

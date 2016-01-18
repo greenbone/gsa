@@ -468,7 +468,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 
   <div class="selection-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -516,7 +516,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 
   <div class="selection-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -614,8 +614,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 
   <div class="selection-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
-    <div class="float_right"><a href="/omp?cmd=get_report&amp;type=assets&amp;overrides=1&amp;levels=hm&amp;token={/envelope/token}">Jump to dialog</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-right"><a href="/omp?cmd=get_report&amp;type=assets&amp;overrides=1&amp;levels=hm&amp;token={/envelope/token}">Jump to dialog</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -793,7 +793,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 
   <div class="selection-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -824,7 +824,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 
   <div class="selection-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -908,7 +908,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 
   <div class="selection-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -990,7 +990,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 
   <div class="selection-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -1111,7 +1111,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 
   <div class="selection-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -1217,7 +1217,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 
   <div class="selection-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -1252,7 +1252,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 
   <div class="selection-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -1413,7 +1413,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 
   <div class="selection-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -1497,7 +1497,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 
   <div class="selection-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -1532,7 +1532,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 
   <div class="selection-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -1677,7 +1677,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 
   <div class="selection-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -1803,7 +1803,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 
   <div class="selection-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -1845,7 +1845,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 
   <div class="selection-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -2008,7 +2008,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 
   <div class="selection-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -2064,7 +2064,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 
   <div class="selection-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -2106,7 +2106,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 
   <div class="selection-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -2196,7 +2196,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 
   <div class="selection-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -2281,7 +2281,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 
   <div class="selection-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -2317,7 +2317,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 
   <div class="selection-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -2399,7 +2399,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 
   <div class="section-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -2508,7 +2508,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 
   <div class="section-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -2578,7 +2578,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 
   <div class="section-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -2647,7 +2647,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 
   <div class="section-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -2683,7 +2683,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 
   <div class="section-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -2765,7 +2765,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 
   <div class="section-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -2845,7 +2845,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 
   <div class="section-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -3085,7 +3085,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 
   <div class="section-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -3116,7 +3116,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 
   <div class="section-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a>
     | <a href="standard_actions.html?token={/envelope/token}">Standard Actions</a>
     | <a href="filtering.html?token={/envelope/token}">Filtering</a>
     | <a href="permission_details.html?token={/envelope/token}">Permission Details</a>
@@ -3186,7 +3186,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 
   <div class="section-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a>
     | <a href="/help/permissions.html?token={/envelope/token}">Permissions</a>
     | <a href="permission_details.html?token={/envelope/token}">Permission Details</a>
     </div>
@@ -3391,7 +3391,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 
   <div class="section-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
       <br/>
       <p>
@@ -3461,7 +3461,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 
   <div class="section-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a>
     | <a href="standard_actions.html?token={/envelope/token}">Standard Actions</a>
     | <a href="permissions.html?token={/envelope/token}">Permissions</a>
     | <a href="new_permission.html?token={/envelope/token}">New/Edit Permission Dialog</a>
@@ -3492,7 +3492,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 
   <div class="section-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
       <br/>
       <p>
@@ -3529,7 +3529,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 
   <div class="section-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -3650,7 +3650,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 
   <div class="section-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -3877,7 +3877,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 
   <div class="section-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -3911,7 +3911,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 
   <div class="section-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -3937,7 +3937,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 
   <div class="section-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -3987,7 +3987,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 
   <div class="section-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -4031,7 +4031,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 
   <div class="section-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -4063,8 +4063,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 
   <div class="section-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
-    <div class="float_right"><a href="/omp?cmd=unknown_cmd&amp;token={/envelope/token}">Provoke a harmless internal error</a> (use <img src="/img/help.png"/> to get back here)</div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-right"><a href="/omp?cmd=unknown_cmd&amp;token={/envelope/token}">Provoke a harmless internal error</a> (use <img src="/img/help.png"/> to get back here)</div>
     <div style="text-align:left">
 
       <br/>
@@ -4130,8 +4130,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 
   <div class="section-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
-    <div class="float_right"><a href="/omp?cmd=get_feed&amp;token={/envelope/token}">Jump to dialog</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-right"><a href="/omp?cmd=get_feed&amp;token={/envelope/token}">Jump to dialog</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -4174,8 +4174,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 
   <div class="section-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
-    <div class="float_right"><a href="/omp?cmd=get_scap&amp;token={/envelope/token}">Jump to dialog</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-right"><a href="/omp?cmd=get_scap&amp;token={/envelope/token}">Jump to dialog</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -4218,8 +4218,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 
   <div class="section-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
-    <div class="float_right"><a href="/oap?cmd=get_cert&amp;token={/envelope/token}">Jump to dialog</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-right"><a href="/oap?cmd=get_cert&amp;token={/envelope/token}">Jump to dialog</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -4263,7 +4263,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 
   <div class="section-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -4297,7 +4297,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 
   <div class="section-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -4365,7 +4365,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 
   <div class="section-box">,
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -5116,7 +5116,7 @@ Public License instead of this License.
   </xsl:call-template>
 
   <div class="section-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -5146,7 +5146,7 @@ Public License instead of this License.
   </xsl:call-template>
 
   <div class="section-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -5201,7 +5201,7 @@ Public License instead of this License.
   </xsl:call-template>
 
   <div class="section-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -5529,7 +5529,7 @@ Public License instead of this License.
   </xsl:call-template>
 
   <div class="section-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -5602,7 +5602,7 @@ Public License instead of this License.
   </xsl:call-template>
 
   <div class="section-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -5668,7 +5668,7 @@ Public License instead of this License.
   </xsl:call-template>
 
   <div class="section-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -5719,7 +5719,7 @@ Public License instead of this License.
   </xsl:call-template>
 
   <div class="section-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -5805,7 +5805,7 @@ Public License instead of this License.
   </xsl:call-template>
 
   <div class="section-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -5912,7 +5912,7 @@ Public License instead of this License.
   </xsl:call-template>
 
   <div class="section-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -5978,7 +5978,7 @@ Public License instead of this License.
   </xsl:call-template>
 
   <div class="section-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -6092,7 +6092,7 @@ Public License instead of this License.
   </xsl:call-template>
 
   <div class="section-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -6177,7 +6177,7 @@ Public License instead of this License.
     <xsl:with-param name="type" select="'target'"/>
   </xsl:call-template>
 
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a>
     | <a href="/help/targets.html?token={/envelope/token}">Targets</a>
     | <a href="target_details.html?token={/envelope/token}">Target Details</a>
     </div>
@@ -6323,7 +6323,7 @@ Public License instead of this License.
   </xsl:call-template>
 
   <div class="section-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -6529,7 +6529,7 @@ Public License instead of this License.
   </xsl:call-template>
 
   <div class="section-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -6595,7 +6595,7 @@ Public License instead of this License.
   </xsl:call-template>
 
   <div class="section-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -6629,7 +6629,7 @@ Public License instead of this License.
   </xsl:call-template>
 
   <div class="section-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -6729,8 +6729,8 @@ Public License instead of this License.
   </xsl:call-template>
 
   <div class="section-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
-    <div class="float_right"><a href="/omp?cmd=get_system_reports&amp;duration=86400&amp;slave_id=0&amp;token={/envelope/token}">Jump to dialog</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-right"><a href="/omp?cmd=get_system_reports&amp;duration=86400&amp;slave_id=0&amp;token={/envelope/token}">Jump to dialog</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -6760,7 +6760,7 @@ Public License instead of this License.
   </xsl:call-template>
 
   <div class="section-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -7073,7 +7073,7 @@ Public License instead of this License.
   </xsl:call-template>
 
   <div class="section-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -7176,7 +7176,7 @@ Public License instead of this License.
   </xsl:call-template>
 
   <div class="section-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -7237,8 +7237,8 @@ Public License instead of this License.
   </xsl:call-template>
 
   <div class="selection-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
-    <div class="float_right"><a href="/omp?cmd=get_trash&amp;token={/envelope/token}">Jump to dialog</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-right"><a href="/omp?cmd=get_trash&amp;token={/envelope/token}">Jump to dialog</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -7282,7 +7282,7 @@ Public License instead of this License.
   </xsl:call-template>
 
   <div class="section-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -7334,7 +7334,7 @@ Public License instead of this License.
   </xsl:call-template>
 
   <div class="section-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -7373,7 +7373,7 @@ Public License instead of this License.
   </xsl:call-template>
 
   <div class="section-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -7464,7 +7464,7 @@ Public License instead of this License.
   </xsl:call-template>
 
   <div class="section-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -7498,7 +7498,7 @@ Public License instead of this License.
   </xsl:call-template>
 
   <div class="section-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -7607,7 +7607,7 @@ Public License instead of this License.
   </xsl:call-template>
 
   <div class="section-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -7624,7 +7624,7 @@ Public License instead of this License.
   </xsl:call-template>
 
   <div class="section-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -7985,8 +7985,8 @@ Public License instead of this License.
   </xsl:call-template>
 
   <div class="section-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
-    <div class="float_right"><a href="/omp?cmd=get_task&amp;task_id=343435d6-91b0-11de-9478-ffd71f4c6f29&amp;overrides=1&amp;token={/envelope/token}">Jump to dialog with sample content</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-right"><a href="/omp?cmd=get_task&amp;task_id=343435d6-91b0-11de-9478-ffd71f4c6f29&amp;overrides=1&amp;token={/envelope/token}">Jump to dialog with sample content</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -8044,7 +8044,7 @@ Public License instead of this License.
   </xsl:call-template>
 
   <div class="section-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -8191,7 +8191,7 @@ Public License instead of this License.
   </xsl:call-template>
 
   <div class="section-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -8361,7 +8361,7 @@ Public License instead of this License.
   </xsl:call-template>
 
   <div class="section-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -8443,7 +8443,7 @@ Public License instead of this License.
   </xsl:call-template>
 
   <div class="section-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -8516,7 +8516,7 @@ Public License instead of this License.
   </xsl:call-template>
 
   <div class="section-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -8582,7 +8582,7 @@ Public License instead of this License.
   </xsl:call-template>
 
   <div class="section-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -8643,7 +8643,7 @@ Public License instead of this License.
   </xsl:call-template>
 
   <div class="section-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -8674,7 +8674,7 @@ Public License instead of this License.
     <xsl:with-param name="type" select="'target'"/>
   </xsl:call-template>
 
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a>
     | <a href="standard_actions.html?token={/envelope/token}">Standard Actions</a>
     | <a href="targets.html?token={/envelope/token}">Targets</a>
     | <a href="new_target.html?token={/envelope/token}">New/Edit Target Dialog</a>
@@ -8711,7 +8711,7 @@ Public License instead of this License.
   </xsl:call-template>
 
   <div class="section-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -8788,7 +8788,7 @@ Public License instead of this License.
   </xsl:call-template>
 
   <div class="section-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -8858,7 +8858,7 @@ Public License instead of this License.
     <xsl:with-param name="type" select="'target'"/>
   </xsl:call-template>
 
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a>
     | <a href="standard_actions.html?token={/envelope/token}">Standard Actions</a>
     | <a href="filtering.html?token={/envelope/token}">Filtering</a>
     | <a href="target_details.html?token={/envelope/token}">Target Details</a>
@@ -8932,7 +8932,7 @@ Public License instead of this License.
   </xsl:call-template>
 
   <div class="section-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -9389,8 +9389,8 @@ Public License instead of this License.
   </xsl:call-template>
 
   <div class="section-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
-    <div class="float_right"><a href="/omp?cmd=get_trash&amp;token={/envelope/token}">Jump to dialog</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-right"><a href="/omp?cmd=get_trash&amp;token={/envelope/token}">Jump to dialog</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -9437,7 +9437,7 @@ Public License instead of this License.
   </xsl:call-template>
 
   <div class="section-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -9474,8 +9474,8 @@ Public License instead of this License.
   </xsl:call-template>
 
   <div class="section-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
-    <div class="float_right"><a href="/omp?cmd=get_report&amp;report_id=343435d6-91b0-11de-9478-ffd71f4c6f30&amp;token={/envelope/token}">Jump to dialog with sample content</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-right"><a href="/omp?cmd=get_report&amp;report_id=343435d6-91b0-11de-9478-ffd71f4c6f30&amp;token={/envelope/token}">Jump to dialog with sample content</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -9622,10 +9622,10 @@ Public License instead of this License.
   </xsl:call-template>
 
   <div class="section-box">
-    <div style="float:left;">
+    <div class="pull-left">
       <a href="/help/contents.html?token={/envelope/token}">Help Contents</a>
     </div>
-    <div class="float_right">
+    <div class="pull-right">
       <a href="/omp?cmd=get_info&amp;info_type=cpe&amp;token={/envelope/token}">Jump to dialog</a>
     </div>
     <div style="text-align:left">
@@ -9705,10 +9705,10 @@ Public License instead of this License.
   </xsl:call-template>
 
   <div class="section-box">
-    <div style="float:left;">
+    <div class="pull-left">
       <a href="/help/contents.html?token={/envelope/token}">Help Contents</a>
     </div>
-    <div class="float_right">
+    <div class="pull-right">
       <a href="/omp?cmd=get_info&amp;info_type=cve&amp;token={/envelope/token}">Jump to dialog</a>
     </div>
     <div style="text-align:left">
@@ -9824,7 +9824,7 @@ Public License instead of this License.
   </xsl:call-template>
 
   <div class="section-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -9855,10 +9855,10 @@ Public License instead of this License.
   </xsl:call-template>
 
   <div class="section-box">
-    <div style="float:left;">
+    <div class="pull-left">
       <a href="/help/contents.html?token={/envelope/token}">Help Contents</a>
     </div>
-    <div class="float_right">
+    <div class="pull-right">
       <a href="/omp?cmd=get_info&amp;info_type=nvt&amp;token={/envelope/token}">Jump to dialog</a>
     </div>
     <div style="text-align:left">
@@ -9946,10 +9946,10 @@ Public License instead of this License.
   </xsl:call-template>
 
   <div class="section-box">
-    <div style="float:left;">
+    <div class="pull-left">
       <a href="/help/contents.html?token={/envelope/token}">Help Contents</a>
     </div>
-    <div class="float_right">
+    <div class="pull-right">
       <a href="/omp?cmd=get_info&amp;info_type=ovaldef&amp;token={/envelope/token}">Jump to dialog</a>
     </div>
     <div style="text-align:left">
@@ -10045,10 +10045,10 @@ Public License instead of this License.
   </xsl:call-template>
 
   <div class="section-box">
-    <div style="float:left;">
+    <div class="pull-left">
       <a href="/help/contents.html?token={/envelope/token}">Help Contents</a>
     </div>
-    <div class="float_right">
+    <div class="pull-right">
       <a href="/omp?cmd=get_info&amp;info_type=cert_bund_adv&amp;token={/envelope/token}">Jump to dialog</a>
     </div>
     <div style="text-align:left">
@@ -10163,10 +10163,10 @@ Public License instead of this License.
 
   <div class="gb_window_part_center">Help: DFN-CERT Advisories</div>
   <div class="gb_window_part_content">
-    <div style="float:left;">
+    <div class="pull-left">
       <a href="/help/contents.html?token={/envelope/token}">Help Contents</a>
     </div>
-    <div class="float_right">
+    <div class="pull-right">
       <a href="/omp?cmd=get_info&amp;info_type=dfn_cert_adv&amp;token={/envelope/token}">Jump to dialog</a>
     </div>
     <div style="text-align:left">
@@ -10262,10 +10262,10 @@ Public License instead of this License.
   </xsl:call-template>
 
   <div class="section-box">
-    <div style="float:left;">
+    <div class="pull-left">
       <a href="/help/contents.html?token={/envelope/token}">Help Contents</a>
     </div>
-    <div class="float_right">
+    <div class="pull-right">
       <a href="/omp?cmd=get_info&amp;info_type=allinfo&amp;token={/envelope/token}">Jump to dialog</a>
     </div>
     <div style="text-align:left">
@@ -10338,7 +10338,7 @@ Public License instead of this License.
   </xsl:call-template>
 
   <div class="section-box">
-    <div style="float:left;">
+    <div class="pull-left">
       <a href="/help/contents.html?token={/envelope/token}">Help Contents</a>
     </div>
     <div style="text-align:left">

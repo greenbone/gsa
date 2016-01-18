@@ -305,8 +305,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template mode="help" match="hosts.html">
   <div class="gb_window_part_center">帮助：主机</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
-    <div class="float_right"><a href="/omp?cmd=get_report&amp;type=assets&amp;overrides=1&amp;levels=hm&amp;token={/envelope/token}">跳到对话框</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
+    <div class="pull-right"><a href="/omp?cmd=get_report&amp;type=assets&amp;overrides=1&amp;levels=hm&amp;token={/envelope/token}">跳到对话框</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -468,7 +468,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="gb_window_part_center">帮助：代理详情
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -523,7 +523,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </a>
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -606,7 +606,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </a>
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -686,7 +686,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </a>
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -801,7 +801,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </a>
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -900,7 +900,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="gb_window_part_center">帮助：证书详情
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -960,7 +960,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </a>
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -1083,7 +1083,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </a>
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -1163,7 +1163,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="gb_window_part_center">帮助：警报详情
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -1218,7 +1218,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -1363,7 +1363,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </a>
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -1482,7 +1482,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="gb_window_part_center">帮助：端口列表详情
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -1543,7 +1543,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </a>
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -1698,7 +1698,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </a>
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -1751,7 +1751,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="gb_window_part_center">帮助：报告格式详情
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -1812,7 +1812,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </a>
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -1902,7 +1902,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </a>
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -1984,7 +1984,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="gb_window_part_center">帮助：计划详情
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -2046,7 +2046,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </a>
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -2129,7 +2129,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </a>
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -2206,7 +2206,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="gb_window_part_center">帮助：从属详情
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -2268,7 +2268,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </a>
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -2347,7 +2347,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </a>
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -2435,7 +2435,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </a>
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -2635,7 +2635,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 -->
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -2691,7 +2691,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </a>
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">帮助内容</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">帮助内容</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -2767,7 +2767,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </a>
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -2837,7 +2837,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template mode="help" match="permission_details.html">
   <div class="gb_window_part_center">帮助：权限详情</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">帮助内容</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">帮助内容</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -2893,7 +2893,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </a>
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -2940,7 +2940,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="gb_window_part_center">帮助：角色详情
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -3153,7 +3153,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template mode="help" match="cpe_details.html">
   <div class="gb_window_part_center">帮助：CPE 详情</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -3184,7 +3184,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template mode="help" match="cve_details.html">
   <div class="gb_window_part_center">帮助：CVE 详情</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -3205,7 +3205,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template mode="help" match="ovaldef_details.html">
   <div class="gb_window_part_center">帮助：OVAL 定义详情</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -3246,7 +3246,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template mode="help" match="dfn_cert_adv_details.html">
   <div class="gb_window_part_center">帮助：DFN-CERT 公告详情</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -3274,8 +3274,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template mode="help" match="error_messages.html">
   <div class="gb_window_part_center">帮助：错误消息</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
-    <div class="float_right"><a href="/omp?cmd=unknown_cmd&amp;token={/envelope/token}">
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
+    <div class="pull-right"><a href="/omp?cmd=unknown_cmd&amp;token={/envelope/token}">
                    调出一个无害的内部错误 </a> (点击 <img src="/img/help.png"/> 回到这里)</div>
     <div style="text-align:left">
 
@@ -3330,8 +3330,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template mode="help" match="feed_management.html">
   <div class="gb_window_part_center">帮助：NVT 订阅管理</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
-    <div class="float_right"><a href="/omp?cmd=get_feed&amp;token={/envelope/token}">跳转到对话框</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
+    <div class="pull-right"><a href="/omp?cmd=get_feed&amp;token={/envelope/token}">跳转到对话框</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -3369,8 +3369,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template mode="help" match="scap_management.html">
   <div class="gb_window_part_center">帮助：SCAP 订阅管理</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
-    <div class="float_right"><a href="/omp?cmd=get_scap&amp;token={/envelope/token}">跳转到对话框</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
+    <div class="pull-right"><a href="/omp?cmd=get_scap&amp;token={/envelope/token}">跳转到对话框</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -3408,8 +3408,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template mode="help" match="cert_management.html">
   <div class="gb_window_part_center">帮助：CERT 订阅管理</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
-    <div class="float_right"><a href="/oap?cmd=get_cert&amp;token={/envelope/token}">跳转到对话框</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
+    <div class="pull-right"><a href="/oap?cmd=get_cert&amp;token={/envelope/token}">跳转到对话框</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -3453,7 +3453,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 -->
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -3516,7 +3516,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </a>
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -3583,7 +3583,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
   <div class="gb_window_part_center">帮助：术语</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -3885,7 +3885,7 @@ GPL v2 翻译忽略，因为只有英文原版的 GPL 才具有法律效力。
 -->
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -3941,7 +3941,7 @@ GPL v2 翻译忽略，因为只有英文原版的 GPL 才具有法律效力。
     </a>
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -4000,7 +4000,7 @@ GPL v2 翻译忽略，因为只有英文原版的 GPL 才具有法律效力。
     </a>
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -4240,7 +4240,7 @@ GPL v2 翻译忽略，因为只有英文原版的 GPL 才具有法律效力。
     </a>
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -4314,7 +4314,7 @@ GPL v2 翻译忽略，因为只有英文原版的 GPL 才具有法律效力。
     </a>
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -4380,7 +4380,7 @@ GPL v2 翻译忽略，因为只有英文原版的 GPL 才具有法律效力。
     </a>
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -4466,7 +4466,7 @@ GPL v2 翻译忽略，因为只有英文原版的 GPL 才具有法律效力。
     </a>
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -4559,7 +4559,7 @@ GPL v2 翻译忽略，因为只有英文原版的 GPL 才具有法律效力。
     </a>
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">帮助内容</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">帮助内容</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -4626,7 +4626,7 @@ GPL v2 翻译忽略，因为只有英文原版的 GPL 才具有法律效力。
     </a>
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -4713,7 +4713,7 @@ GPL v2 翻译忽略，因为只有英文原版的 GPL 才具有法律效力。
     </a>
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -4850,8 +4850,8 @@ GPL v2 翻译忽略，因为只有英文原版的 GPL 才具有法律效力。
 <xsl:template mode="help" match="new_task.html">
   <div class="gb_window_part_center">帮助：新建任务</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
-    <div class="float_right"><a href="/omp?cmd=new_task&amp;overrides=1&amp;token={/envelope/token}">跳转到对话框</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
+    <div class="pull-right"><a href="/omp?cmd=new_task&amp;overrides=1&amp;token={/envelope/token}">跳转到对话框</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -5044,7 +5044,7 @@ GPL v2 翻译忽略，因为只有英文原版的 GPL 才具有法律效力。
     </a>
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -5108,7 +5108,7 @@ GPL v2 翻译忽略，因为只有英文原版的 GPL 才具有法律效力。
   <div class="gb_window_part_center">帮助：批注详情
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -5167,7 +5167,7 @@ GPL v2 翻译忽略，因为只有英文原版的 GPL 才具有法律效力。
     </a>
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -5247,8 +5247,8 @@ GPL v2 翻译忽略，因为只有英文原版的 GPL 才具有法律效力。
 <xsl:template mode="help" match="performance.html">
   <div class="gb_window_part_center">帮助：性能</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
-    <div class="float_right"><a href="/omp?cmd=get_system_reports&amp;duration=86400&amp;slave_id=0&amp;token={/envelope/token}">跳转到对话框</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
+    <div class="pull-right"><a href="/omp?cmd=get_system_reports&amp;duration=86400&amp;slave_id=0&amp;token={/envelope/token}">跳转到对话框</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -5279,7 +5279,7 @@ GPL v2 翻译忽略，因为只有英文原版的 GPL 才具有法律效力。
     </a>
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -5587,8 +5587,8 @@ GPL v2 翻译忽略，因为只有英文原版的 GPL 才具有法律效力。
 <xsl:template mode="help" match="trashcan.html">
   <div class="gb_window_part_center">帮助：回收站</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
-    <div class="float_right"><a href="/omp?cmd=get_trash&amp;token={/envelope/token}">跳转到对话框</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
+    <div class="pull-right"><a href="/omp?cmd=get_trash&amp;token={/envelope/token}">跳转到对话框</a></div>
     <div style="text-align:left">
 
       <xsl:call-template name="trashcan-availability_zh"/>
@@ -5633,7 +5633,7 @@ GPL v2 翻译忽略，因为只有英文原版的 GPL 才具有法律效力。
       </a>
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -5682,7 +5682,7 @@ GPL v2 翻译忽略，因为只有英文原版的 GPL 才具有法律效力。
   <div class="gb_window_part_center">帮助：覆盖的详情
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -5741,7 +5741,7 @@ GPL v2 翻译忽略，因为只有英文原版的 GPL 才具有法律效力。
     </a>
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -5829,7 +5829,7 @@ GPL v2 翻译忽略，因为只有英文原版的 GPL 才具有法律效力。
   <div class="gb_window_part_center">帮助：超强过滤器
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -6151,8 +6151,8 @@ GPL v2 翻译忽略，因为只有英文原版的 GPL 才具有法律效力。
 <xsl:template mode="help" match="task_details.html">
   <div class="gb_window_part_center">帮助：任务详情</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
-    <div class="float_right"><a href="/omp?cmd=get_task&amp;task_id=343435d6-91b0-11de-9478-ffd71f4c6f29&amp;overrides=1&amp;token={/envelope/token}">跳转到示例内容对话框</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
+    <div class="pull-right"><a href="/omp?cmd=get_task&amp;task_id=343435d6-91b0-11de-9478-ffd71f4c6f29&amp;overrides=1&amp;token={/envelope/token}">跳转到示例内容对话框</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -6390,7 +6390,7 @@ GPL v2 翻译忽略，因为只有英文原版的 GPL 才具有法律效力。
 <xsl:template mode="help" match="config_details.html">
   <div class="gb_window_part_center">帮助：扫描配置详情</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -6536,7 +6536,7 @@ GPL v2 翻译忽略，因为只有英文原版的 GPL 才具有法律效力。
 <xsl:template mode="help" match="config_editor.html">
   <div class="gb_window_part_center">帮助：扫描配置编辑器</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -6706,7 +6706,7 @@ GPL v2 翻译忽略，因为只有英文原版的 GPL 才具有法律效力。
 <xsl:template mode="help" match="config_editor_nvt_families.html">
   <div class="gb_window_part_center">帮助：扫描配置编辑器-NVT 家族</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -6787,7 +6787,7 @@ GPL v2 翻译忽略，因为只有英文原版的 GPL 才具有法律效力。
 <xsl:template mode="help" match="config_editor_nvt.html">
   <div class="gb_window_part_center">帮助：扫描配置编辑器-NVT</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -6852,7 +6852,7 @@ GPL v2 翻译忽略，因为只有英文原版的 GPL 才具有法律效力。
 <xsl:template mode="help" match="config_family_details.html">
   <div class="gb_window_part_center">帮助：扫描配置家族详情</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -6915,7 +6915,7 @@ GPL v2 翻译忽略，因为只有英文原版的 GPL 才具有法律效力。
 <xsl:template mode="help" match="config_nvt_details.html">
   <div class="gb_window_part_center">帮助：扫描配置 NVT 详情</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -6974,7 +6974,7 @@ GPL v2 翻译忽略，因为只有英文原版的 GPL 才具有法律效力。
     <img src="/img/details.png" border="0" style="margin-left:3px;"/>
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -7029,7 +7029,7 @@ GPL v2 翻译忽略，因为只有英文原版的 GPL 才具有法律效力。
     </a>
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -7093,7 +7093,7 @@ GPL v2 翻译忽略，因为只有英文原版的 GPL 才具有法律效力。
     </a>
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -7168,7 +7168,7 @@ GPL v2 翻译忽略，因为只有英文原版的 GPL 才具有法律效力。
 <xsl:template mode="help" match="user-tags.html">
   <div class="gb_window_part_center">帮助：用户标签列表</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -7240,7 +7240,7 @@ GPL v2 翻译忽略，因为只有英文原版的 GPL 才具有法律效力。
     </a>
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -7331,7 +7331,7 @@ GPL v2 翻译忽略，因为只有英文原版的 GPL 才具有法律效力。
     </a>
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -7752,7 +7752,7 @@ GPL v2 翻译忽略，因为只有英文原版的 GPL 才具有法律效力。
     </a>
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -7785,8 +7785,8 @@ GPL v2 翻译忽略，因为只有英文原版的 GPL 才具有法律效力。
 <xsl:template mode="help" match="view_report.html">
   <div class="gb_window_part_center">帮助：查看报告</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
-    <div class="float_right"><a href="/omp?cmd=get_report&amp;report_id=343435d6-91b0-11de-9478-ffd71f4c6f30&amp;token={/envelope/token}">跳转到示例内容对话框</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
+    <div class="pull-right"><a href="/omp?cmd=get_report&amp;report_id=343435d6-91b0-11de-9478-ffd71f4c6f30&amp;token={/envelope/token}">跳转到示例内容对话框</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -7955,10 +7955,10 @@ GPL v2 翻译忽略，因为只有英文原版的 GPL 才具有法律效力。
 <xsl:template mode="help" match="cpes.html">
   <div class="gb_window_part_center">帮助：CPE</div>
   <div class="gb_window_part_content">
-    <div style="float:left;">
+    <div class="pull-left">
       <a href="/help/contents.html?token={/envelope/token}">帮助目录</a>
     </div>
-    <div class="float_right">
+    <div class="pull-right">
       <a href="/omp?cmd=get_info&amp;info_type=cpe&amp;token={/envelope/token}">跳转到对话框</a>
     </div>
     <div style="text-align:left">
@@ -8035,10 +8035,10 @@ GPL v2 翻译忽略，因为只有英文原版的 GPL 才具有法律效力。
 <xsl:template mode="help" match="cves.html">
   <div class="gb_window_part_center">帮助：CVE</div>
   <div class="gb_window_part_content">
-    <div style="float:left;">
+    <div class="pull-left">
       <a href="/help/contents.html?token={/envelope/token}">帮助目录</a>
     </div>
-    <div class="float_right">
+    <div class="pull-right">
       <a href="/omp?cmd=get_info&amp;info_type=cve&amp;token={/envelope/token}">跳转到对话框</a>
     </div>
     <div style="text-align:left">
@@ -8167,7 +8167,7 @@ GPL v2 翻译忽略，因为只有英文原版的 GPL 才具有法律效力。
 <xsl:template mode="help" match="nvt_details.html">
   <div class="gb_window_part_center">帮助：NVT 详情</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">帮助目录</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -8194,10 +8194,10 @@ GPL v2 翻译忽略，因为只有英文原版的 GPL 才具有法律效力。
 <xsl:template mode="help" match="nvts.html">
   <div class="gb_window_part_center">帮助：NVT</div>
   <div class="gb_window_part_content">
-    <div style="float:left;">
+    <div class="pull-left">
       <a href="/help/contents.html?token={/envelope/token}">帮助目录</a>
     </div>
-    <div class="float_right">
+    <div class="pull-right">
       <a href="/omp?cmd=get_info&amp;info_type=nvt&amp;token={/envelope/token}">跳转到对话框</a>
     </div>
     <div style="text-align:left">
@@ -8276,10 +8276,10 @@ GPL v2 翻译忽略，因为只有英文原版的 GPL 才具有法律效力。
 <xsl:template mode="help" match="ovaldefs.html">
   <div class="gb_window_part_center">帮助：OVAL 定义</div>
   <div class="gb_window_part_content">
-    <div style="float:left;">
+    <div class="pull-left">
       <a href="/help/contents.html?token={/envelope/token}">帮助目录</a>
     </div>
-    <div class="float_right">
+    <div class="pull-right">
       <a href="/omp?cmd=get_info&amp;info_type=ovaldef&amp;token={/envelope/token}">跳转到对话框</a>
     </div>
     <div style="text-align:left">
@@ -8376,10 +8376,10 @@ GPL v2 翻译忽略，因为只有英文原版的 GPL 才具有法律效力。
 <xsl:template mode="help" match="dfn_cert_advs.html">
   <div class="gb_window_part_center">帮助：DFN-CERT 公告</div>
   <div class="gb_window_part_content">
-    <div style="float:left;">
+    <div class="pull-left">
       <a href="/help/contents.html?token={/envelope/token}">帮助目录</a>
     </div>
-    <div class="float_right">
+    <div class="pull-right">
       <a href="/omp?cmd=get_info&amp;info_type=dfn_cert_adv&amp;token={/envelope/token}">跳转到对话框</a>
     </div>
     <div style="text-align:left">
@@ -8472,10 +8472,10 @@ GPL v2 翻译忽略，因为只有英文原版的 GPL 才具有法律效力。
 <xsl:template mode="help" match="allinfo.html">
   <div class="gb_window_part_center">帮助：所有的 SecInfo</div>
   <div class="gb_window_part_content">
-    <div style="float:left;">
+    <div class="pull-left">
       <a href="/help/contents.html?token={/envelope/token}">帮助目录</a>
     </div>
-    <div class="float_right">
+    <div class="pull-right">
       <a href="/omp?cmd=get_info&amp;info_type=allinfo&amp;token={/envelope/token}">跳转到对话框</a>
     </div>
     <div style="text-align:left">

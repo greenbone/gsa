@@ -66,6 +66,10 @@ body {
   float: right;
 }
 
+.pull-left {
+  float: left;
+}
+
 a:link {
   color: blue;
   text-decoration: none;
@@ -157,14 +161,6 @@ p {
   background-color: #FFFF99;
   border: 3px solid #CC0000;
   margin: 10px;
-}
-
-div.float_right {
-  float: right;
-}
-
-div.float_left {
-  float: left;
 }
 
 div.diff-line {

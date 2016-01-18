@@ -1,5 +1,16 @@
 2016-01-18  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/css/gsa-style.css: Use common css classes pull-right and
+	pull-left for floating. Remove float_left and float_right classes.
+
+	* src/html/classic/omp.xsl, src/html/classic/help.xsl,
+	src/html/classic/help_de.xsl, src/html/classic/help_ru.xsl,
+	src/html/classic/help_zh_CN.xsl: Always use pull-right and pull-left css
+	classes for floating. Remove usage of direct styles for floating from all
+	elements.
+
+2016-01-18  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/css/gsa-style.css: Set default box width and height
 	calculation model to the more intuitive border-box mode. For details please
 	take a look at https://css-tricks.com/box-sizing/

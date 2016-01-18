@@ -996,7 +996,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:choose>
     <xsl:when test="0"/>
     <xsl:otherwise>
-      <div style="float: right; padding: 2px;">
+      <div class="pull-right" style="padding: 2px;">
         <xsl:if test="gsa:may-op ('create_filter')">
           <form style="display: inline;" action="" method="post" enctype="multipart/form-data">
             <div style="display: inline; padding-right: 5px;">
@@ -1051,7 +1051,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
      </div>
    </xsl:otherwise>
  </xsl:choose>
- <form action="" method="get" enctype="multipart/form-data" name="filterform" style="float:right;padding-right:5px;">
+ <form action="" method="get" enctype="multipart/form-data" name="filterform" class="pull-right" style="padding-right:5px;">
    <xsl:variable name="criteria">
      <xsl:call-template name="filter-criteria"/>
    </xsl:variable>
@@ -1270,7 +1270,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </div>
        </div>
     </xsl:if>
-    <div style="float: right; margin-right: 5px; margin-top: -25px">
+    <div class="pull-right" style="margin-right: 5px; margin-top: -25px">
       <input type="submit" value="{gsa:i18n ('Apply', 'Action Verb')}" title="{gsa:i18n ('Apply', 'Action Verb')}"/>
     </div>
   </div>
@@ -2615,7 +2615,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                    value="{report/filters/phrase}"
                    maxlength="400"/>
           </div>
-          <div style="float: right">
+          <div class="pull-right">
             <input type="submit" value="{gsa:i18n ('Apply', 'Action Verb')}" title="{gsa:i18n ('Apply', 'Action Verb')}"/>
           </div>
           <div class="ctrl-group">
@@ -3038,7 +3038,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <xsl:if test="../../delta">
           <input type="hidden" name="delta_report_id" value="{report/delta/report/@id}"/>
-          <div style="float: right;">
+          <div class="pull-right">
             <div class="ctrl-group"><xsl:value-of select="gsa:i18n ('Show delta results', 'Report Filter')"/>:</div>
             <div style="margin-left: 8px;">
               <label>
@@ -3360,7 +3360,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:with-param name="input-name" select="'timezone'"/>
           </xsl:call-template>
         </div>
-        <div style="float: right">
+        <div class="pull-right">
           <input type="submit" value="{gsa:i18n ('Apply', 'Action Verb')}" title="{gsa:i18n ('Apply', 'Action Verb')}"/>
         </div>
         <div class="ctrl-group">
@@ -3506,7 +3506,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       <xsl:value-of select="concat ('&amp;delta_report_id=', report/delta/report/@id)"/>
                     </xsl:if>
                   </xsl:variable>
-                  <div class="float_right">
+                  <div class="pull-right">
                     <xsl:apply-templates select="." mode="results-pager"/>
                   </div>
                   (<xsl:value-of select="gsa:i18n('Applied filter:', 'Filter')"/>
@@ -4151,7 +4151,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </div>
       <div class="gb_window_part_content">
         <form action="/omp" method="post" enctype="multipart/form-data">
-          <div style="float: right">
+          <div class="pull-right">
             <input type="submit" name="submit" value="{gsa:i18n ('Add Report', 'Task')}"/>
           </div>
           <input type="hidden" name="token" value="{/envelope/token}"/>
@@ -4586,7 +4586,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <table style="width:100%">
           <tr>
             <td class="footnote" colspan="{count (exslt:node-set ($columns)/column/column) + count (exslt:node-set ($columns)/column[count (column) = 0]) + ($icon-count &gt; 0)}">
-              <div class="float_right">
+              <div class="pull-right">
                 <xsl:call-template name="filter-window-pager">
                   <xsl:with-param name="type" select="$type"/>
                   <xsl:with-param name="list" select="$resources-summary"/>
@@ -4852,7 +4852,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <table style="width:100%; margin-bottom:10px">
           <tr>
             <td class="footnote" colspan="{count (exslt:node-set ($columns)/column/column) + count (exslt:node-set ($columns)/column[count (column) = 0]) + ($icon-count &gt; 0)}">
-              <div class="float_right">
+              <div class="pull-right">
                 <xsl:call-template name="filter-window-pager">
                   <xsl:with-param name="type" select="$type"/>
                   <xsl:with-param name="list" select="$resources-summary"/>
@@ -4878,7 +4878,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="minor-details">
-  <div class="float_right" style="font-size: 10px;">
+  <div class="pull-right" style="font-size: 10px;">
     <table style="font-size: 10px; border-spacing:0px">
       <tr>
         <td><xsl:value-of select="gsa:i18n ('ID', 'Property')"/>:</td>
@@ -6658,7 +6658,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </div>
       <div class="gb_window_part_content">
         <form action="/omp" method="post" enctype="multipart/form-data">
-          <div style="float: right">
+          <div class="pull-right">
             <input type="submit" name="submit" value="{gsa:i18n ('Add Report', 'Task')}"/>
           </div>
           <input type="hidden" name="token" value="{/envelope/token}"/>
@@ -6711,7 +6711,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
       <tr class="{gsa:table-row-class(position())}">
         <td>
-          <div class="float_right">
+          <div class="pull-right">
             <xsl:choose>
               <xsl:when test="alterable = 0">
               </xsl:when>
@@ -7098,7 +7098,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <before>
             <xsl:choose xmlns="http://www.w3.org/1999/xhtml">
               <xsl:when test="/envelope/params/bulk_select = 1">
-                <div style="float: right; display: inline">
+                <div class="pull-right" style="display: inline">
                   <xsl:choose>
                     <xsl:when test="filters/keywords/keyword[column='apply_overrides']/value = 0">
                       <img src="/img/overrides_disabled.png"
@@ -7116,7 +7116,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 </div>
               </xsl:when>
               <xsl:otherwise>
-                <div style="float: right; display: inline">
+                <div class="pull-right" style="display: inline">
                   <form method="get" action="" enctype="multipart/form-data">
                     <input type="hidden" name="token" value="{/envelope/token}"/>
                     <input type="hidden" name="cmd" value="get_tasks"/>
@@ -15609,7 +15609,7 @@ should not have received it.
   </div>
 
   <div class="section-header">
-    <div class="float_right" style="font-size: 10px;">
+    <div class="pull-right" style="font-size: 10px;">
       <table style="font-size: 10px; border-spacing:0px">
         <tr>
           <td><xsl:value-of select="gsa:i18n ('ID', 'Property')"/>:</td>
@@ -20176,7 +20176,7 @@ should not have received it.
   </div>
 
   <div class="section-header">
-    <div class="float_right" style="font-size: 10px;">
+    <div class="pull-right" style="font-size: 10px;">
       <table style="font-size: 10px; border-spacing:0px">
         <tr>
           <td><xsl:value-of select="gsa:i18n ('ID', 'Property')"/>:</td>
@@ -20251,7 +20251,7 @@ should not have received it.
               <tr>
                 <td><xsl:value-of select="gsa:i18n ('Base score', 'CVE')"/></td>
                 <td>
-                  <div style="float: left;">
+                  <div class="pull-left">
                     <xsl:call-template name="severity-bar">
                       <xsl:with-param name="cvss" select="info/cve/raw_data/cve:entry/vuln:cvss/cvss:base_metrics/cvss:score"/>
                     </xsl:call-template>
@@ -20481,7 +20481,7 @@ should not have received it.
   </div>
 
   <div class="section-header">
-    <div class="float_right" style="font-size: 10px;">
+    <div class="pull-right" style="font-size: 10px;">
       <table style="font-size: 10px; border-spacing:0px">
         <xsl:if test="info/@id != ''">
           <tr>
@@ -20644,7 +20644,7 @@ should not have received it.
   </div>
 
   <div class="section-header">
-    <div class="float_right" style="font-size: 10px;">
+    <div class="pull-right" style="font-size: 10px;">
       <table style="font-size: 10px; border-spacing:0px">
         <tr>
           <td><xsl:value-of select="gsa:i18n ('ID', 'Property')"/>:</td>
@@ -20909,7 +20909,7 @@ should not have received it.
   </div>
 
   <div class="section-header">
-    <div class="float_right" style="font-size: 10px;">
+    <div class="pull-right" style="font-size: 10px;">
       <table style="font-size: 10px; border-spacing:0px">
         <tr>
           <td><xsl:value-of select="gsa:i18n ('ID', 'Property')"/>:</td>
@@ -21102,7 +21102,7 @@ should not have received it.
   </div>
 
   <div class="section-header">
-    <div class="float_right" style="font-size: 10px;">
+    <div class="pull-right" style="font-size: 10px;">
       <table style="font-size: 10px; border-spacing:0px">
         <tr>
           <td><xsl:value-of select="gsa:i18n ('ID', 'Property')"/>:</td>
@@ -21558,7 +21558,7 @@ should not have received it.
       </div>
 
       <div class="section-header">
-        <div class="float_right" style="font-size: 10px;">
+        <div class="pull-right" style="font-size: 10px;">
           <table style="font-size: 10px; border-spacing:0px">
             <tr>
               <td><xsl:value-of select="gsa:i18n ('ID', 'Property')"/>:</td>
@@ -23458,7 +23458,7 @@ should not have received it.
 
 <xsl:template name="observers-icon">
   <xsl:param name="type"/>
-  <div class="float_right">
+  <div class="pull-right">
     <xsl:choose>
       <xsl:when test="owner/name=/envelope/login/text()">
       </xsl:when>
@@ -24791,7 +24791,7 @@ should not have received it.
 
   <tr class="{gsa:table-row-class(position())}">
     <td>
-      <div class="float_right">
+      <div class="pull-right">
         <xsl:choose>
           <xsl:when test="string-length (observers) &gt; 0">
             <img src="/img/provide_view.png"
@@ -24994,7 +24994,7 @@ should not have received it.
 <xsl:template match="permission" mode="trash">
   <tr class="{gsa:table-row-class(position())}">
     <td>
-      <div class="float_right">
+      <div class="pull-right">
         <xsl:choose>
           <xsl:when test="string-length (observers) &gt; 0">
             <img src="/img/provide_view.png"
@@ -27161,7 +27161,7 @@ should not have received it.
             <tr class="gbntablehead2">
               <td rowspan="2"><xsl:value-of select="gsa:i18n ('CPE', 'CPE')"/></td>
               <td colspan="4">
-              <div style="float: left; margin-right: 4px;">
+              <div class="pull-left" style="margin-right: 4px;">
                 <xsl:value-of select="gsa:i18n ('Prognosis', 'Host')"/>
               </div>
                 <xsl:variable name="threat"
@@ -27169,7 +27169,7 @@ should not have received it.
                 <xsl:for-each select="detail[contains(name, '/CVSS')]">
                   <xsl:sort data-type="number" select="value" order="descending"/>
                   <xsl:if test="position() = 1">
-                    <div style="float: left;">
+                    <div class="pull-left">
                       <xsl:call-template name="severity-bar">
                         <xsl:with-param name="cvss" select="value"/>
                         <xsl:with-param name="extra_text" select="concat (' (', gsa:i18n (gsa:cvss-risk-factor(value), 'Severity'), ')')"/>
@@ -27334,7 +27334,7 @@ should not have received it.
           <before>
             <xsl:choose>
               <xsl:when test="/envelope/params/bulk_select = 1">
-                <div style="float: right; display: inline">
+                <div class="pull-right" style="display: inline">
                   <xsl:choose>
                     <xsl:when test="filters/keywords/keyword[column='apply_overrides']/value = 0">
                       <img src="/img/overrides_disabled.png"
@@ -27352,7 +27352,7 @@ should not have received it.
                 </div>
               </xsl:when>
               <xsl:otherwise>
-                <div style="float: right; display: inline">
+                <div class="pull-right" style="display: inline">
                   <form method="get" action="" enctype="multipart/form-data">
                     <input type="hidden" name="token" value="{/envelope/token}"/>
                     <input type="hidden" name="cmd" value="get_reports"/>
@@ -27553,7 +27553,7 @@ should not have received it.
       </xsl:choose>
     </div>
     <xsl:if test="$note-buttons = 1">
-      <div class="float_right" style="text-align:right;">
+      <div class="pull-right" style="text-align:right;">
         <xsl:choose>
           <xsl:when test="not (gsa:may ('delete_note'))">
             <img src="/img/trashcan_inactive.png" alt="{gsa:i18n ('Move to Trashcan', 'Action Verb')}"
@@ -27834,7 +27834,7 @@ should not have received it.
       </xsl:choose>
     </div>
     <xsl:if test="$override-buttons = 1">
-      <div class="float_right" style="text-align:right;">
+      <div class="pull-right" style="text-align:right;">
         <xsl:choose>
           <xsl:when test="not (gsa:may ('delete_override'))">
             <img src="/img/trashcan_inactive.png" alt="{gsa:i18n ('Move to Trashcan', 'Action Verb')}"
@@ -28316,7 +28316,7 @@ should not have received it.
         </xsl:otherwise>
       </xsl:choose>
       <xsl:if test="$collapse-details-button &gt; 0">
-        <div class="float_right">
+        <div class="pull-right">
           <xsl:apply-templates select="../../." mode="result-details-icon"/>
         </div>
       </xsl:if>
@@ -28342,13 +28342,13 @@ should not have received it.
             <xsl:with-param name="name" select="'severity'"/>
             <xsl:with-param name="label-text" select="gsa:i18n ('Severity', 'Severity')"/>
           </xsl:apply-templates>
-          <div class="float_right">
+          <div class="pull-right">
             <xsl:apply-templates select="../../." mode="result-overrides-icon"/>
           </div>
         </xsl:when>
         <xsl:otherwise>
           <xsl:value-of select="gsa:i18n ('Severity', 'Severity')"/>
-          <div style="float: right; display: inline">
+          <div class="pull-right" style="display: inline">
             <form method="get" action="" enctype="multipart/form-data">
               <input type="hidden" name="token" value="{/envelope/token}"/>
               <input type="hidden" name="cmd" value="get_result"/>
@@ -28449,9 +28449,9 @@ should not have received it.
 
   <tr class="{$header_style} {gsa:table-row-class($class)}">
     <td> <!-- Vulnerability -->
-      <div class="float_right">
+      <div class="pull-right">
         <xsl:if test="$note-buttons = 1">
-          <div class="float_left">
+          <div class="pull-left">
             <xsl:if test="count(notes/note) &gt; 0">
               <xsl:choose>
                 <xsl:when test="$result-details or /envelope/params/details &gt; 0">
@@ -28470,7 +28470,7 @@ should not have received it.
           </div>
         </xsl:if>
         <xsl:if test="$override-buttons = 1">
-          <div class="float_left">
+          <div class="pull-left">
             <xsl:if test="count(overrides/override[active != 0]) &gt; 0">
               <xsl:choose>
                 <xsl:when test="$result-details or /envelope/params/details &gt; 0">
@@ -28650,7 +28650,7 @@ should not have received it.
     <xsl:if test="$prognostic != 1">
       <td>
         <xsl:if test="$note-buttons = 1">
-          <div class="float_left">
+          <div class="pull-left">
             <xsl:choose>
               <xsl:when test="delta">
               </xsl:when>
@@ -28688,7 +28688,7 @@ should not have received it.
           </div>
         </xsl:if>
         <xsl:if test="$override-buttons = 1">
-          <div class="float_left">
+          <div class="pull-left">
             <xsl:choose>
               <xsl:when test="delta">
               </xsl:when>
@@ -29454,7 +29454,7 @@ should not have received it.
           <before>
             <xsl:choose>
               <xsl:when test="/envelope/params/bulk_select = 1">
-                <div style="float: right; display: inline">
+                <div class="pull-right" style="display: inline">
                   <xsl:choose>
                     <xsl:when test="filters/keywords/keyword[column='apply_overrides']/value = 0">
                       <img src="/img/overrides_disabled.png"
@@ -29472,7 +29472,7 @@ should not have received it.
                 </div>
               </xsl:when>
               <xsl:otherwise>
-                <div style="float: right; display: inline">
+                <div class="pull-right" style="display: inline">
                   <form method="get" action="" enctype="multipart/form-data">
                     <input type="hidden" name="token" value="{/envelope/token}"/>
                     <input type="hidden" name="cmd" value="get_results"/>
@@ -30141,7 +30141,7 @@ should not have received it.
   </xsl:variable>
   <div style="background-color: #EEEEEE;">
     <xsl:if test="/envelope/params/cmd!='get_report_section' or /envelope/params/report_section = 'results' or /envelope/params/report_section = 'summary'">
-      <div style="float: right">
+      <div class="pull-right">
         <form style="display: inline; margin: 0; vertical-align:middle;" action="" method="post" enctype="multipart/form-data">
           <div style="display: inline; padding: 2px; vertical-align:middle;">
             <input type="hidden" name="token" value="{/envelope/token}"/>
@@ -30935,10 +30935,10 @@ var toggleFilter = function(){
                 <xsl:with-param name="nvt" select="nvt/name"/>
                 <xsl:with-param name="oid" select="$oid"/>
               </xsl:call-template>
-              <div class="float_right">
+              <div class="pull-right">
                 <xsl:choose>
                   <xsl:when test="count (../result[nvt/@oid = $oid]/notes/note)">
-                    <div class="float_left">
+                    <div class="pull-left">
                       <a href="/omp?cmd=get_notes&amp;filter=nvt_id={$oid} sort=nvt&amp;token={/envelope/token}"
                          title="{gsa:i18n ('Notes', 'Note')}" style="margin-left:3px;">
                         <img src="/img/note.png" alt="{gsa:i18n ('Notes', 'Note')}"/>
@@ -30948,7 +30948,7 @@ var toggleFilter = function(){
                 </xsl:choose>
                 <xsl:choose>
                   <xsl:when test="count (../result[nvt/@oid = $oid]/overrides/override)">
-                    <div class="float_left">
+                    <div class="pull-left">
                       <a href="/omp?cmd=get_overrides&amp;filter=nvt_id={$oid} sort=nvt&amp;token={/envelope/token}"
                          title="{gsa:i18n ('Overrides', 'Override')}" style="margin-left:3px;">
                         <img src="/img/override.png" alt="{gsa:i18n ('Overrides', 'Override')}"/>
@@ -31501,7 +31501,7 @@ var toggleFilter = function(){
       </a>
       <xsl:choose>
         <xsl:when test="not(/envelope/params/delta_report_id != '')">
-          <div style="float:right; margin-top:2px">
+          <div class="pull-right" style="margin-top:2px">
             <xsl:apply-templates select="report" mode="section-link">
               <xsl:with-param name="section" select="'summary'"/>
               <xsl:with-param name="type">
@@ -32081,12 +32081,12 @@ var toggleFilter = function(){
     <div class="gb_window_part_content">
       <xsl:choose>
         <xsl:when test="@type='prognostic'">
-          <div class="float_right">
+          <div class="pull-right">
             <a href="?cmd=get_report&amp;type=assets&amp;levels={../../host_levels}&amp;search_phrase={../../host_search_phrase}&amp;first_result={../../results/@start}&amp;max_results={../../results/@max}&amp;overrides={$apply-overrides}&amp;token={/envelope/token}">Hosts</a>
           </div>
         </xsl:when>
         <xsl:otherwise>
-          <div class="float_right">
+          <div class="pull-right">
             <table style="font-size: 10px;">
               <tr>
                 <td><xsl:value-of select="gsa:i18n ('ID', 'Property')"/>:</td>
@@ -32355,7 +32355,7 @@ var toggleFilter = function(){
                 <xsl:value-of select="report/result_count/hole/full + report/result_count/warning/full + report/result_count/info/full + report/result_count/log/full + report/result_count/false_positive/full"/>
               </td>
               <td>
-                <div id="small_form" style="float:right;">
+                <div id="small_form" class="pull-right">
                   <form action="" method="post" enctype="multipart/form-data">
                     <input type="hidden" name="cmd" value="alert_report"/>
                     <input type="hidden" name="caller" value="{/envelope/current_page}"/>
@@ -32393,7 +32393,7 @@ var toggleFilter = function(){
                 </div>
               </td>
               <td>
-                <div id="small_form" style="float:right;">
+                <div id="small_form" class="pull-right;">
                   <xsl:call-template name="full-report-export-form"/>
                 </div>
               </td>
@@ -32427,7 +32427,7 @@ var toggleFilter = function(){
             </xsl:when>
             <xsl:otherwise>
               <td>
-                <div id="small_form" style="float:right;">
+                <div id="small_form" class="pull-right;">
                   <form action="" method="post" enctype="multipart/form-data">
                     <input type="hidden" name="cmd" value="alert_report"/>
                     <input type="hidden" name="caller" value="{/envelope/current_page}"/>
@@ -32487,7 +32487,7 @@ var toggleFilter = function(){
             </xsl:when>
             <xsl:otherwise>
               <td>
-                <div id="small_form" style="float:right;">
+                <div id="small_form" class="pull-right">
                   <xsl:call-template name="filtered-report-export-form">
                     <xsl:with-param name="apply-overrides" select="$apply-overrides"/>
                     <xsl:with-param name="levels" select="$levels"/>
@@ -33254,7 +33254,7 @@ var toggleFilter = function(){
             <xsl:value-of select="gsa:i18n ('Reports for slave', 'Performance')"/>:
           </td>
           <td>
-            <div id="small_form" style="float:left;">
+            <div id="small_form" class="pull-left">
               <form action="" method="get" name="switch_slave" enctype="multipart/form-data">
                 <input type="hidden" name="token" value="{/envelope/token}"/>
                 <input type="hidden" name="cmd" value="get_system_reports"/>
@@ -37564,7 +37564,7 @@ var toggleFilter = function(){
   </div>
 
   <div class="section-box">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div style="text-align:left">
 
       <br/>

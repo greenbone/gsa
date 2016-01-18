@@ -406,8 +406,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template mode="help" match="hosts.html">
   <div class="gb_window_part_center">Помощь: Узлы</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
-    <div class="float_right"><a href="/omp?cmd=get_report&amp;type=assets&amp;overrides=1&amp;levels=hm&amp;token={/envelope/token}">Отобразить страницу</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-right"><a href="/omp?cmd=get_report&amp;type=assets&amp;overrides=1&amp;levels=hm&amp;token={/envelope/token}">Отобразить страницу</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -606,7 +606,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="gb_window_part_center">Помощь: Подробности Агента
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -639,7 +639,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </a>
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -720,7 +720,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </a>
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -799,7 +799,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </a>
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -917,7 +917,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </a>
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -1015,7 +1015,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="gb_window_part_center">Помощь: Подробности Атрибутов доступа
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -1050,7 +1050,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </a>
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -1176,7 +1176,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </a>
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -1254,7 +1254,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="gb_window_part_center">Помощь: Подробности Уведомления
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -1291,7 +1291,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -1429,7 +1429,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </a>
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -1547,7 +1547,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="gb_window_part_center">Помощь: Подробности Списка Портов
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -1591,7 +1591,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </a>
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -1746,7 +1746,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </a>
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -1796,7 +1796,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="gb_window_part_center">Помощь: Подробности Формата Отчётов
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -1840,7 +1840,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </a>
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -1928,7 +1928,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </a>
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -2008,7 +2008,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="gb_window_part_center">Помощь: Подробности Расписания
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -2045,7 +2045,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </a>
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -2127,7 +2127,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </a>
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -2233,7 +2233,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </a>
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -2300,7 +2300,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="gb_window_part_center">Помощь: Подробности Сканера
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -2366,7 +2366,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="gb_window_part_center">Помощь: Подробности Подчинённого
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -2403,7 +2403,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </a>
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -2479,7 +2479,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </a>
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -2565,7 +2565,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </a>
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -2649,7 +2649,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 -->
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -2682,7 +2682,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </a>
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -2768,7 +2768,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </a>
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -3012,7 +3012,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template mode="help" match="permission_details.html">
   <div class="gb_window_part_center">Помощь: Подробности Разрешения</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -3040,7 +3040,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template mode="help" match="resource_permissions.html">
   <div class="gb_window_part_center">Помощь: Разрешения Ресурса</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
     <div style="text-align:left">
       <br/>
       <h1>Разрешения Ресурса</h1>
@@ -3073,7 +3073,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </a>
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -3193,7 +3193,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="gb_window_part_center">Помощь: Подробности Роли
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -3407,7 +3407,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template mode="help" match="cpe_details.html">
   <div class="gb_window_part_center">Помощь: Подробности CPE</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -3438,7 +3438,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template mode="help" match="cve_details.html">
   <div class="gb_window_part_center">Помощь: Подробности CVE</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -3460,7 +3460,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template mode="help" match="ovaldef_details.html">
   <div class="gb_window_part_center">Помощь: Подробности Определения OVAL</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -3507,7 +3507,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template mode="help" match="cert_bund_adv_details.html">
   <div class="gb_window_part_center">Помощь: Подробности Предупреждения CERT-Bund</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -3549,7 +3549,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template mode="help" match="dfn_cert_adv_details.html">
   <div class="gb_window_part_center">Помощь: Подробности Предупреждения DFN-CERT</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -3578,8 +3578,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template mode="help" match="error_messages.html">
   <div class="gb_window_part_center">Помощь: Сообщения об Ошибках</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
-    <div class="float_right"><a href="/omp?cmd=unknown_cmd&amp;token={/envelope/token}">Вызвать безобидную внутреннюю ошибку</a> (воспользуйтесь <img src="/img/help.png"/>, чтобы вернуться сюда)</div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-right"><a href="/omp?cmd=unknown_cmd&amp;token={/envelope/token}">Вызвать безобидную внутреннюю ошибку</a> (воспользуйтесь <img src="/img/help.png"/>, чтобы вернуться сюда)</div>
     <div style="text-align:left">
 
       <br/>
@@ -3637,8 +3637,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template mode="help" match="feed_management.html">
   <div class="gb_window_part_center">Помощь: Управление Подпиской NVT</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
-    <div class="float_right"><a href="/omp?cmd=get_feed&amp;token={/envelope/token}">Отобразить страницу</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-right"><a href="/omp?cmd=get_feed&amp;token={/envelope/token}">Отобразить страницу</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -3677,8 +3677,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template mode="help" match="scap_management.html">
   <div class="gb_window_part_center">Помощь: Управление Подпиской SCAP</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
-    <div class="float_right"><a href="/omp?cmd=get_scap&amp;token={/envelope/token}">Отобразить страницу</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-right"><a href="/omp?cmd=get_scap&amp;token={/envelope/token}">Отобразить страницу</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -3717,8 +3717,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template mode="help" match="cert_management.html">
   <div class="gb_window_part_center">Помощь: Управление Подпиской CERT</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
-    <div class="float_right"><a href="/oap?cmd=get_cert&amp;token={/envelope/token}">Отобразить страницу</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-right"><a href="/oap?cmd=get_cert&amp;token={/envelope/token}">Отобразить страницу</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -3763,7 +3763,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 -->
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -3799,7 +3799,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </a>
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -3865,7 +3865,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
   <div class="gb_window_part_center">Помощь: Глоссарий</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -4553,7 +4553,7 @@ Public License instead of this License.
 -->
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -4585,7 +4585,7 @@ Public License instead of this License.
     </a>
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -4641,7 +4641,7 @@ Public License instead of this License.
     </a>
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -4957,7 +4957,7 @@ Public License instead of this License.
     </a>
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -5028,7 +5028,7 @@ Public License instead of this License.
     </a>
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -5092,7 +5092,7 @@ Public License instead of this License.
     </a>
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -5191,7 +5191,7 @@ Public License instead of this License.
     </a>
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -5297,7 +5297,7 @@ Public License instead of this License.
     </a>
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -5361,7 +5361,7 @@ Public License instead of this License.
     </a>
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -5471,7 +5471,7 @@ Public License instead of this License.
     </a>
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -5557,7 +5557,7 @@ Public License instead of this License.
     </a>
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -5702,8 +5702,8 @@ Public License instead of this License.
 <xsl:template mode="help" match="new_task.html">
   <div class="gb_window_part_center">Помощь: Новая Задача</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
-    <div class="float_right"><a href="/omp?cmd=new_task&amp;overrides=1&amp;token={/envelope/token}">Отобразить страницу</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-right"><a href="/omp?cmd=new_task&amp;overrides=1&amp;token={/envelope/token}">Отобразить страницу</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -5897,7 +5897,7 @@ Public License instead of this License.
     </a>
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -6045,7 +6045,7 @@ Public License instead of this License.
   <div class="gb_window_part_center">Помощь: Подробности Заметки
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -6080,7 +6080,7 @@ Public License instead of this License.
     </a>
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -6173,8 +6173,8 @@ Public License instead of this License.
 <xsl:template mode="help" match="performance.html">
   <div class="gb_window_part_center">Помощь: Производительность</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
-    <div class="float_right"><a href="/omp?cmd=get_system_reports&amp;duration=86400&amp;slave_id=0&amp;token={/envelope/token}">Отобразить страницу</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-right"><a href="/omp?cmd=get_system_reports&amp;duration=86400&amp;slave_id=0&amp;token={/envelope/token}">Отобразить страницу</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -6205,7 +6205,7 @@ Public License instead of this License.
     </a>
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -6505,7 +6505,7 @@ Public License instead of this License.
     </a>
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -6601,8 +6601,8 @@ Public License instead of this License.
 <xsl:template mode="help" match="trashcan.html">
   <div class="gb_window_part_center">Помощь: Корзина</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
-    <div class="float_right"><a href="/omp?cmd=get_trash&amp;token={/envelope/token}">Отобразить страницу</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-right"><a href="/omp?cmd=get_trash&amp;token={/envelope/token}">Отобразить страницу</a></div>
     <div style="text-align:left">
 
 <!--
@@ -6651,7 +6651,7 @@ Public License instead of this License.
       </a>
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -6699,7 +6699,7 @@ Public License instead of this License.
   <div class="gb_window_part_center">Помощь: Подробности Переопределения
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -6735,7 +6735,7 @@ Public License instead of this License.
     </a>
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -6838,7 +6838,7 @@ Public License instead of this License.
   <div class="gb_window_part_center">Помощь: Фильтрация
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -7153,8 +7153,8 @@ Public License instead of this License.
 <xsl:template mode="help" match="task_details.html">
   <div class="gb_window_part_center">Помощь: Подробности Задачи</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
-    <div class="float_right"><a href="/omp?cmd=get_task&amp;task_id=343435d6-91b0-11de-9478-ffd71f4c6f29&amp;overrides=1&amp;token={/envelope/token}">Отобразить страницу с примером</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-right"><a href="/omp?cmd=get_task&amp;task_id=343435d6-91b0-11de-9478-ffd71f4c6f29&amp;overrides=1&amp;token={/envelope/token}">Отобразить страницу с примером</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -7206,7 +7206,7 @@ Public License instead of this License.
 <xsl:template mode="help" match="config_details.html">
   <div class="gb_window_part_center">Помощь: Подробности Конфигурации Сканирования</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -7327,7 +7327,7 @@ Public License instead of this License.
 <xsl:template mode="help" match="config_editor.html">
   <div class="gb_window_part_center">Помощь: Редактор Конфигурации Сканирования</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -7475,7 +7475,7 @@ Public License instead of this License.
 <xsl:template mode="help" match="config_editor_nvt_families.html">
   <div class="gb_window_part_center">Помощь: Редактор Групп NVT Конфигурации Сканирования</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -7550,7 +7550,7 @@ Public License instead of this License.
 <xsl:template mode="help" match="config_editor_nvt.html">
   <div class="gb_window_part_center">Помощь: Редактор NVT Конфигурации Сканирования</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -7616,7 +7616,7 @@ Public License instead of this License.
 <xsl:template mode="help" match="config_family_details.html">
   <div class="gb_window_part_center">Помощь: Подробности Группы Конфигурации Сканирования</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -7678,7 +7678,7 @@ Public License instead of this License.
 <xsl:template mode="help" match="config_nvt_details.html">
   <div class="gb_window_part_center">Помощь: Подробности NVT Конфигурации Сканирования</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -7734,7 +7734,7 @@ Public License instead of this License.
     <img src="/img/details.png" border="0" style="margin-left:3px;"/>
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -7765,7 +7765,7 @@ Public License instead of this License.
     </a>
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -7803,7 +7803,7 @@ Public License instead of this License.
     </a>
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -7874,7 +7874,7 @@ Public License instead of this License.
 <xsl:template mode="help" match="user-tags.html">
   <div class="gb_window_part_center">Помощь: Пользовательские Тэги</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -7941,7 +7941,7 @@ Public License instead of this License.
     </a>
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -8028,7 +8028,7 @@ Public License instead of this License.
     </a>
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -8424,8 +8424,8 @@ Public License instead of this License.
 <xsl:template mode="help" match="trashcan.html">
   <div class="gb_window_part_center">Помощь: Корзина</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
-    <div class="float_right"><a href="/omp?cmd=get_trash&amp;token={/envelope/token}">Отобразить страницу</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-right"><a href="/omp?cmd=get_trash&amp;token={/envelope/token}">Отобразить страницу</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -8470,7 +8470,7 @@ Public License instead of this License.
     </a>
   </div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -8502,8 +8502,8 @@ Public License instead of this License.
 <xsl:template mode="help" match="view_report.html">
   <div class="gb_window_part_center">Помощь: Просмотр Отчёта</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
-    <div class="float_right"><a href="/omp?cmd=get_report&amp;report_id=343435d6-91b0-11de-9478-ffd71f4c6f30&amp;token={/envelope/token}">Отобразить страницу с примером</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-right"><a href="/omp?cmd=get_report&amp;report_id=343435d6-91b0-11de-9478-ffd71f4c6f30&amp;token={/envelope/token}">Отобразить страницу с примером</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -8618,10 +8618,10 @@ Public License instead of this License.
 <xsl:template mode="help" match="cpes.html">
   <div class="gb_window_part_center">Помощь: CPE</div>
   <div class="gb_window_part_content">
-    <div style="float:left;">
+    <div class="pull-left">
       <a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a>
     </div>
-    <div class="float_right">
+    <div class="pull-right">
       <a href="/omp?cmd=get_info&amp;info_type=cpe&amp;token={/envelope/token}">Отобразить страницу</a>
     </div>
     <div style="text-align:left">
@@ -8692,10 +8692,10 @@ Public License instead of this License.
 <xsl:template mode="help" match="cves.html">
   <div class="gb_window_part_center">Помощь: CVE</div>
   <div class="gb_window_part_content">
-    <div style="float:left;">
+    <div class="pull-left">
       <a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a>
     </div>
-    <div class="float_right">
+    <div class="pull-right">
       <a href="/omp?cmd=get_info&amp;info_type=cve&amp;token={/envelope/token}">Отобразить страницу</a>
     </div>
     <div style="text-align:left">
@@ -8795,7 +8795,7 @@ Public License instead of this License.
 <xsl:template mode="help" match="nvt_details.html">
   <div class="gb_window_part_center">Помощь: Подробности NVT</div>
   <div class="gb_window_part_content">
-    <div style="float:left;"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
+    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a></div>
     <div style="text-align:left">
 
       <br/>
@@ -8820,10 +8820,10 @@ Public License instead of this License.
 <xsl:template mode="help" match="nvts.html">
   <div class="gb_window_part_center">Помощь: NVT</div>
   <div class="gb_window_part_content">
-    <div style="float:left;">
+    <div class="pull-left">
       <a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a>
     </div>
-    <div class="float_right">
+    <div class="pull-right">
       <a href="/omp?cmd=get_info&amp;info_type=nvt&amp;token={/envelope/token}">Отобразить страницу</a>
     </div>
     <div style="text-align:left">
@@ -8905,10 +8905,10 @@ Public License instead of this License.
 <xsl:template mode="help" match="ovaldefs.html">
   <div class="gb_window_part_center">Помощь: Определения OVAL</div>
   <div class="gb_window_part_content">
-    <div style="float:left;">
+    <div class="pull-left">
       <a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a>
     </div>
-    <div class="float_right">
+    <div class="pull-right">
       <a href="/omp?cmd=get_info&amp;info_type=ovaldef&amp;token={/envelope/token}">Отобразить страницу</a>
     </div>
     <div style="text-align:left">
@@ -8995,10 +8995,10 @@ Public License instead of this License.
 <xsl:template mode="help" match="cert_bund_advs.html">
   <div class="gb_window_part_center">Помощь: Предупреждения CERT-Bund</div>
   <div class="gb_window_part_content">
-    <div style="float:left;">
+    <div class="pull-left">
       <a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a>
     </div>
-    <div class="float_right">
+    <div class="pull-right">
       <a href="/omp?cmd=get_info&amp;info_type=cert_bund_adv&amp;token={/envelope/token}">Отобразить страницу</a>
     </div>
     <div style="text-align:left">
@@ -9104,10 +9104,10 @@ Public License instead of this License.
 <xsl:template mode="help" match="dfn_cert_advs.html">
   <div class="gb_window_part_center">Помощь: Предупреждения DFN-CERT</div>
   <div class="gb_window_part_content">
-    <div style="float:left;">
+    <div class="pull-left">
       <a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a>
     </div>
-    <div class="float_right">
+    <div class="pull-right">
       <a href="/omp?cmd=get_info&amp;info_type=dfn_cert_adv&amp;token={/envelope/token}">Отобразить страницу</a>
     </div>
     <div style="text-align:left">
@@ -9190,10 +9190,10 @@ Public License instead of this License.
 <xsl:template mode="help" match="allinfo.html">
   <div class="gb_window_part_center">Помощь: Вся База Знаний</div>
   <div class="gb_window_part_content">
-    <div style="float:left;">
+    <div class="pull-left">
       <a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a>
     </div>
-    <div class="float_right">
+    <div class="pull-right">
       <a href="/omp?cmd=get_info&amp;info_type=allinfo&amp;token={/envelope/token}">Отобразить страницу</a>
     </div>
     <div style="text-align:left">
@@ -9263,7 +9263,7 @@ Public License instead of this License.
 <xsl:template mode="help" match="qod.html">
   <div class="gb_window_part_center">Помощь: Точность обнаружения (QoD)</div>
   <div class="gb_window_part_content">
-    <div style="float:left;">
+    <div class="pull-left">
       <a href="/help/contents.html?token={/envelope/token}">К Оглавлению</a>
     </div>
     <div style="text-align:left">
