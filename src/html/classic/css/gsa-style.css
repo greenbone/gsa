@@ -1513,7 +1513,9 @@ select[multiple] {
 }
 
 .table-form .select2-container {
-  min-width: 200px;
+  min-width: 180px;
+  max-width: 180px;
+  width: 180px;
 }
 
 /* grid system */

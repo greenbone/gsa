@@ -1,5 +1,11 @@
 2016-01-18  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/css/gsa-style.css: Set a common width for all select2 drop
+	down boxes. For a unified layout and easier reading all selects should have
+	the same width in table bases formulars.
+
+2016-01-18  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/css/gsa-style.css: Introduce a draft for a grid layout
 	similar to bootstrap (http://getbootstrap.com/css/#grid) or
 	skeleton (http://getskeleton.com/#grid).
