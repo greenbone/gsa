@@ -6777,7 +6777,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </b>
           <xsl:choose>
             <xsl:when test="comment != ''">
-              <br/>(<xsl:value-of select="comment"/>)
+              <div class="comment">(<xsl:value-of select="comment"/>)</div>
             </xsl:when>
             <xsl:otherwise></xsl:otherwise>
           </xsl:choose>
@@ -6917,7 +6917,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <b><xsl:value-of select="name"/></b>
       <xsl:choose>
         <xsl:when test="comment != ''">
-          <br/>(<xsl:value-of select="comment"/>)
+          <div class="comment">(<xsl:value-of select="comment"/>)</div>
         </xsl:when>
         <xsl:otherwise></xsl:otherwise>
       </xsl:choose>

@@ -1,5 +1,10 @@
 2016-01-18  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/omp.xsl: Don't use <br/> for rendering comments in task
+	details.
+
+2016-01-18  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/omp.xsl: Fix calculating the width of icon actions after
 	using box-sizing: border-box by default.
 
