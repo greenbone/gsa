@@ -1,5 +1,11 @@
 2016-01-19  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/greenbone.js: Refactor initializing of OMPDialogs. Use a
+	common function for edit, create, upload and delete dialogs. This reduces the
+	code duplication for initializing the dialog.
+
+2016-01-19  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/css/gsa-style.css: Add style to set the maximum height of a
 	dialog. If the content is larger then the maximum height scrollbars should be
 	shown.

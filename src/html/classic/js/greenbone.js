@@ -584,73 +584,73 @@
 
   window.InfoDialog = InfoDialog;
 
+  function parse_params(data) {
+    var params = {};
+
+    if (data) {
+      $.each(data.split('&'), function(i, v){
+        var pair = v.split('=');
+        return params[pair[0]] = pair[1];
+      });
+    }
+    return params;
+  }
+
+  function init_omp_dialog(type, elem, button, postfix) {
+    var params;
+
+    var cmd = elem.data('cmd');
+    var type_id = elem.data('id');
+    var type_name = elem.data('type');
+    var extra = elem.data('extra');
+    var done = elem.data('done');
+    var task_id = elem.data('task_id');
+
+    if (cmd === undefined) {
+      cmd = type + '_' + type_name;
+
+      if (postfix !== undefined) {
+        cmd = cmd + '_' + postfix;
+      }
+    }
+
+    if (done === undefined){
+      done = true;
+    }
+
+    params = parse_params(extra);
+
+    if (type_id !== undefined) {
+      params[type_name + '_id'] = type_id;
+    }
+
+    if (task_id !== undefined) {
+      params['task_id'] = task_id;
+    }
+
+    elem.on('click', function(event){
+      event.preventDefault();
+      new OMPDialog(cmd, done, params).show(button);
+    });
+  }
+
   var onReady = function(doc){
     doc = $(doc);
 
     doc.find(".edit-action-icon").each(function(){
-      var elem = $(this),
-          type_id = elem.data('id'),
-          type_name = elem.data('type'),
-          params = {};
-      params[type_name + '_id'] = type_id;
-      elem.on('click', function(event){
-        event.preventDefault();
-        new OMPDialog('edit_' + type_name, true, params).show('Save');
-      });
+      init_omp_dialog('edit', $(this), 'Save');
     });
 
     doc.find(".new-action-icon").each(function(){
-      var elem = $(this),
-          type_name = elem.data('type'),
-          done = elem.data('done'),
-          extra = elem.data('extra'),
-          params = {};
-      if (done === undefined){
-        done = true;
-      }
-      if (extra !== undefined){
-        // process the extra string
-        $.each(extra.split('&'), function(i, v){
-          var pair = v.split('=');
-          return params[pair[0]] = pair[1];
-        });
-      }
-      elem.on('click', function(event){
-        event.preventDefault();
-        new OMPDialog('new_' + type_name, done, params).show();
-      });
+      init_omp_dialog('new', $(this), 'Create');
     });
 
     doc.find(".upload-action-icon").each(function(){
-      var elem = $(this),
-          type_name = elem.data('type'),
-          done = elem.data('done'),
-          task_id = elem.data('task_id'),
-          params = {};
-      params['task_id'] = task_id;
-      if (done === undefined){
-        done = true;
-      }
-      elem.on('click', function(event){
-        event.preventDefault();
-        new OMPDialog('upload_' + type_name, done, params).show();
-      });
+      init_omp_dialog('upload', $(this), 'Create');
     });
 
     doc.find(".delete-action-icon").each(function(){
-      var elem = $(this),
-          type_name = elem.data('type'),
-          done = elem.data('done'),
-          type_id = elem.data('id'),
-          params = {};
-      params[type_name + '_id'] = type_id;
-      if (done === undefined){
-        done = true;
-      }
-      elem.on('click', function(event){
-        event.preventDefault();
-        new OMPDialog('delete_' + type_name + '_confirm', done, params).show('Delete');
-      });
+      init_omp_dialog('delete', $(this), 'Delete', 'confirm');
     });
 
     doc.find(".bulk-dialog-icon").each(function(){
