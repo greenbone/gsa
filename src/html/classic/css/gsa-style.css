@@ -1371,6 +1371,14 @@ select[multiple] {
  border: 1px dotted black;
 }
 
+/* reduce max dialog size and show scrollbars if content is larger */
+.dialog-form.ui-dialog-content {
+  max-height: 800px !important;
+  overflow: auto;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
 /* info dialog progress */
 .ui-dialog .progress {
   font-size: 20px;
