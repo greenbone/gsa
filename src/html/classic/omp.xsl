@@ -29995,128 +29995,126 @@ should not have received it.
     </xsl:choose>
   </xsl:variable>
   <xsl:variable name="title" select="gsa:report-section-title($current, $type)"/>
-  <center>
-    <div id="report_section_list">
-      <ul>
-        <li>
-          <a id="section_list_first"><xsl:value-of select="$title"/></a>
-          <ul>
-            <li>
+  <div id="report_section_list">
+    <ul>
+      <li>
+        <a id="section_list_first"><xsl:value-of select="$title"/></a>
+        <ul>
+          <li>
+            <xsl:apply-templates select="." mode="section-link">
+              <xsl:with-param name="section" select="'summary'"/>
+              <xsl:with-param name="type" select="$type"/>
+            </xsl:apply-templates>
+          </li>
+          <li>
+            <xsl:apply-templates select="." mode="section-link">
+              <xsl:with-param name="count" select="result_count/full"/>
+              <xsl:with-param name="section" select="'results'"/>
+              <xsl:with-param name="type" select="$type"/>
+            </xsl:apply-templates>
+          </li>
+          <li>
+            <xsl:if test="$type != 'prognostic' and $type != 'delta'">
               <xsl:apply-templates select="." mode="section-link">
-                <xsl:with-param name="section" select="'summary'"/>
+                <xsl:with-param name="count" select="vulns/count"/>
+                <xsl:with-param name="section" select="'vulns'"/>
+              </xsl:apply-templates>
+            </xsl:if>
+          </li>
+          <li>
+            <xsl:if test="$type != 'delta'">
+              <xsl:apply-templates select="." mode="section-link">
+                <xsl:with-param name="count" select="hosts/count"/>
+                <xsl:with-param name="section" select="'hosts'"/>
                 <xsl:with-param name="type" select="$type"/>
               </xsl:apply-templates>
-            </li>
-            <li>
+            </xsl:if>
+          </li>
+          <li>
+            <xsl:if test="$type != 'prognostic' and $type != 'delta'">
               <xsl:apply-templates select="." mode="section-link">
-                <xsl:with-param name="count" select="result_count/full"/>
-                <xsl:with-param name="section" select="'results'"/>
-                <xsl:with-param name="type" select="$type"/>
+                <xsl:with-param name="count" select="ports/count"/>
+                <xsl:with-param name="section" select="'ports'"/>
               </xsl:apply-templates>
-            </li>
-            <li>
-              <xsl:if test="$type != 'prognostic' and $type != 'delta'">
-                <xsl:apply-templates select="." mode="section-link">
-                  <xsl:with-param name="count" select="vulns/count"/>
-                  <xsl:with-param name="section" select="'vulns'"/>
-                </xsl:apply-templates>
-              </xsl:if>
-            </li>
-            <li>
-              <xsl:if test="$type != 'delta'">
-                <xsl:apply-templates select="." mode="section-link">
-                  <xsl:with-param name="count" select="hosts/count"/>
-                  <xsl:with-param name="section" select="'hosts'"/>
-                  <xsl:with-param name="type" select="$type"/>
-                </xsl:apply-templates>
-              </xsl:if>
-            </li>
-            <li>
-              <xsl:if test="$type != 'prognostic' and $type != 'delta'">
-                <xsl:apply-templates select="." mode="section-link">
-                  <xsl:with-param name="count" select="ports/count"/>
-                  <xsl:with-param name="section" select="'ports'"/>
-                </xsl:apply-templates>
-              </xsl:if>
-            </li>
-            <li>
-              <xsl:if test="$type != 'delta'">
-                <xsl:apply-templates select="." mode="section-link">
-                  <xsl:with-param name="count" select="apps/count"/>
-                  <xsl:with-param name="section" select="'apps'"/>
-                  <xsl:with-param name="type" select="$type"/>
-                  <xsl:with-param name="class">
-                    <xsl:choose>
-                      <xsl:when test="$type = 'prognostic'">last</xsl:when>
-                      <xsl:otherwise>section_sublist</xsl:otherwise>
-                    </xsl:choose>
-                  </xsl:with-param>
-                </xsl:apply-templates>
-              </xsl:if>
-            </li>
-            <li>
-              <xsl:if test="$type != 'prognostic' and $type != 'delta'">
-                <xsl:apply-templates select="." mode="section-link">
-                  <xsl:with-param name="count" select="$os_count"/>
-                  <xsl:with-param name="section" select="'os'"/>
-                </xsl:apply-templates>
-              </xsl:if>
-            </li>
-            <li>
-              <xsl:if test="$type != 'prognostic' and $type != 'delta'">
-                <xsl:apply-templates select="." mode="section-link">
-                  <xsl:with-param name="count" select="cves/count"/>
-                  <xsl:with-param name="section" select="'cves'"/>
-                </xsl:apply-templates>
-              </xsl:if>
-            </li>
-            <li>
-              <xsl:if test="$type != 'prognostic' and $type != 'delta'">
-                <xsl:apply-templates select="." mode="section-link">
-                  <xsl:with-param name="count" select="closed_cves/count"/>
-                  <xsl:with-param name="section" select="'closed_cves'"/>
-                </xsl:apply-templates>
-              </xsl:if>
-            </li>
-            <li>
-              <xsl:if test="$type != 'prognostic' and $type != 'delta'">
-                <xsl:apply-templates select="." mode="section-link">
-                  <xsl:with-param name="count" select="ssl_certs/count"/>
-                  <xsl:with-param name="section" select="'ssl_certs'"/>
-                </xsl:apply-templates>
-              </xsl:if>
-            </li>
-            <li>
-              <xsl:if test="$type != 'prognostic' and $type != 'delta'">
-                <xsl:apply-templates select="." mode="section-link">
-                  <xsl:with-param name="count" select="errors/count"/>
-                  <xsl:with-param name="section" select="'errors'"/>
-                </xsl:apply-templates>
-              </xsl:if>
-            </li>
-            <li>
-              <xsl:if test="$type != 'prognostic'">
-                <li>
-                  <a href="?cmd=get_results&amp;filter={filters/term} and report_id={@id}&amp;token={/envelope/token}">
-                    <xsl:value-of select="gsa:i18n ('Results view', 'Report Section')"/>
-                  </a>
-                </li>
-              </xsl:if>
-            </li>
-            <li>
-              <xsl:if test="$type != 'prognostic'">
-                <li class="last">
-                  <a href="?cmd=get_task&amp;task_id={task/@id}&amp;overrides={filters/apply_overrides}&amp;min_qod={filters/min_qod}&amp;token={/envelope/token}">
-                    <xsl:value-of select="concat (gsa:i18n ('Task', 'Task'), ': ', task/name)"/>
-                  </a>
-                </li>
-              </xsl:if>
-            </li>
-          </ul>
-        </li>
-      </ul>
-    </div>
-  </center>
+            </xsl:if>
+          </li>
+          <li>
+            <xsl:if test="$type != 'delta'">
+              <xsl:apply-templates select="." mode="section-link">
+                <xsl:with-param name="count" select="apps/count"/>
+                <xsl:with-param name="section" select="'apps'"/>
+                <xsl:with-param name="type" select="$type"/>
+                <xsl:with-param name="class">
+                  <xsl:choose>
+                    <xsl:when test="$type = 'prognostic'">last</xsl:when>
+                    <xsl:otherwise>section_sublist</xsl:otherwise>
+                  </xsl:choose>
+                </xsl:with-param>
+              </xsl:apply-templates>
+            </xsl:if>
+          </li>
+          <li>
+            <xsl:if test="$type != 'prognostic' and $type != 'delta'">
+              <xsl:apply-templates select="." mode="section-link">
+                <xsl:with-param name="count" select="$os_count"/>
+                <xsl:with-param name="section" select="'os'"/>
+              </xsl:apply-templates>
+            </xsl:if>
+          </li>
+          <li>
+            <xsl:if test="$type != 'prognostic' and $type != 'delta'">
+              <xsl:apply-templates select="." mode="section-link">
+                <xsl:with-param name="count" select="cves/count"/>
+                <xsl:with-param name="section" select="'cves'"/>
+              </xsl:apply-templates>
+            </xsl:if>
+          </li>
+          <li>
+            <xsl:if test="$type != 'prognostic' and $type != 'delta'">
+              <xsl:apply-templates select="." mode="section-link">
+                <xsl:with-param name="count" select="closed_cves/count"/>
+                <xsl:with-param name="section" select="'closed_cves'"/>
+              </xsl:apply-templates>
+            </xsl:if>
+          </li>
+          <li>
+            <xsl:if test="$type != 'prognostic' and $type != 'delta'">
+              <xsl:apply-templates select="." mode="section-link">
+                <xsl:with-param name="count" select="ssl_certs/count"/>
+                <xsl:with-param name="section" select="'ssl_certs'"/>
+              </xsl:apply-templates>
+            </xsl:if>
+          </li>
+          <li>
+            <xsl:if test="$type != 'prognostic' and $type != 'delta'">
+              <xsl:apply-templates select="." mode="section-link">
+                <xsl:with-param name="count" select="errors/count"/>
+                <xsl:with-param name="section" select="'errors'"/>
+              </xsl:apply-templates>
+            </xsl:if>
+          </li>
+          <li>
+            <xsl:if test="$type != 'prognostic'">
+              <li>
+                <a href="?cmd=get_results&amp;filter={filters/term} and report_id={@id}&amp;token={/envelope/token}">
+                  <xsl:value-of select="gsa:i18n ('Results view', 'Report Section')"/>
+                </a>
+              </li>
+            </xsl:if>
+          </li>
+          <li>
+            <xsl:if test="$type != 'prognostic'">
+              <li class="last">
+                <a href="?cmd=get_task&amp;task_id={task/@id}&amp;overrides={filters/apply_overrides}&amp;min_qod={filters/min_qod}&amp;token={/envelope/token}">
+                  <xsl:value-of select="concat (gsa:i18n ('Task', 'Task'), ': ', task/name)"/>
+                </a>
+              </li>
+            </xsl:if>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
 </xsl:template>
 
 <xsl:template match="report" mode="section-filter">
@@ -34585,38 +34583,40 @@ var toggleFilter = function(){
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n ('Confirm action', 'Bulk Action')"/></div>
     <div class="gb_window_part_content">
-      <form style="display:inline;" method="post" enctype="multipart/form-data">
-        <center>
-          <div style="margin-bottom:10px">
-            <p>
-              <xsl:value-of select="gsa-i18n:strformat (gsa:i18n ('User &quot;%1&quot; will be deleted.', 'User'), get_users_response/user[@id = $user_id]/name)"/><br/>
-              <xsl:value-of select="gsa:i18n ('If no inheriting user is selected, all owned resources will be deleted as well.', 'User')"/>
-            </p>
-            <p>
-              <xsl:value-of select="gsa:i18n ('Inheriting user', 'User')"/>:
-              <xsl:variable name="inheritor_id" select="''"/>
-              <select name="inheritor_id" style="text-align:left;">
+      <form method="post" enctype="multipart/form-data">
+        <div>
+          <p>
+            <b>
+              <xsl:value-of select="gsa-i18n:strformat (gsa:i18n ('User &quot;%1&quot; will be deleted.', 'User'), get_users_response/user[@id = $user_id]/name)"/>
+            </b>
+          </p>
+          <p>
+            <xsl:value-of select="gsa:i18n ('If no inheriting user is selected, all owned resources will be deleted as well.', 'User')"/>
+          </p>
+          <p>
+            <xsl:value-of select="gsa:i18n ('Inheriting user', 'User')"/>:
+            <xsl:variable name="inheritor_id" select="''"/>
+            <select name="inheritor_id" style="text-align:left;">
+              <xsl:call-template name="opt">
+                <xsl:with-param name="value" select="''"/>
+                <xsl:with-param name="select-value" select="$inheritor_id"/>
+                <xsl:with-param name="content" select="'--'"/>
+              </xsl:call-template>
+              <xsl:call-template name="opt">
+                <xsl:with-param name="value" select="'self'"/>
+                <xsl:with-param name="select-value" select="$inheritor_id"/>
+                <xsl:with-param name="content" select="concat ('(', gsa:i18n ('Current User', 'User'), ')')"/>
+              </xsl:call-template>
+              <xsl:for-each select="get_users_response/user[@id != $user_id]">
                 <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="''"/>
+                  <xsl:with-param name="value" select="@id"/>
                   <xsl:with-param name="select-value" select="$inheritor_id"/>
-                  <xsl:with-param name="content" select="'--'"/>
+                  <xsl:with-param name="content" select="gsa:i18n (name)"/>
                 </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'self'"/>
-                  <xsl:with-param name="select-value" select="$inheritor_id"/>
-                  <xsl:with-param name="content" select="concat ('(', gsa:i18n ('Current User', 'User'), ')')"/>
-                </xsl:call-template>
-                <xsl:for-each select="get_users_response/user[@id != $user_id]">
-                  <xsl:call-template name="opt">
-                    <xsl:with-param name="value" select="@id"/>
-                    <xsl:with-param name="select-value" select="$inheritor_id"/>
-                    <xsl:with-param name="content" select="gsa:i18n (name)"/>
-                  </xsl:call-template>
-                </xsl:for-each>
-              </select>
-            </p>
-          </div>
-        </center>
+              </xsl:for-each>
+            </select>
+          </p>
+        </div>
         <input type="hidden" name="cmd" value="delete_user"/>
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="caller" value="{/envelope/params/caller}"/>
@@ -34624,9 +34624,7 @@ var toggleFilter = function(){
         <input type="hidden" name="user_id" value="{$user_id}"/>
         <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-        <center>
-          <input type="submit" value="OK"/>
-        </center>
+        <input type="submit" value="OK"/>
       </form>
     </div>
   </div>
@@ -37442,74 +37440,76 @@ var toggleFilter = function(){
     <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n ('Confirm action', 'Bulk Action')"/></div>
     <div class="gb_window_part_content">
       <form style="display:inline;" method="post" enctype="multipart/form-data">
-        <center>
-          <div style="margin-bottom:10px">
-            <xsl:choose>
-              <!-- i18n with concat : see dynamic_strings.xsl - type-bulk-delete-confirm -->
-              <xsl:when test="action = 'delete'">
+        <div>
+          <xsl:choose>
+            <!-- i18n with concat : see dynamic_strings.xsl - type-bulk-delete-confirm -->
+            <xsl:when test="action = 'delete'">
+              <p class="text-center">
                 <xsl:value-of select="gsa-i18n:strformat (gsa:n-i18n (concat ('%1 ', gsa:type-name (type), ' will be deleted'), concat ('%1 ', gsa:type-name-plural (type), ' will be deleted'), count($resources), 'Bulk Action'), count($resources))"/>
                 <input type="hidden" name="cmd" value="bulk_delete"/>
-              </xsl:when>
-              <!-- i18n with concat : see dynamic_strings.xsl - type-bulk-trash-confirm -->
-              <xsl:when test="action = 'trash'">
+              </p>
+            </xsl:when>
+            <!-- i18n with concat : see dynamic_strings.xsl - type-bulk-trash-confirm -->
+            <xsl:when test="action = 'trash'">
+              <p class="text-center">
                 <xsl:value-of select="gsa-i18n:strformat (gsa:n-i18n (concat ('%1 ', gsa:type-name (type), ' will be moved to the trashcan'), concat ('%1 ', gsa:type-name-plural (type), ' will be moved to the trashcan'), count($resources), 'Bulk Action'), count($resources))"/>
                 <input type="hidden" name="cmd" value="bulk_delete"/>
-              </xsl:when>
-            </xsl:choose>
+              </p>
+            </xsl:when>
+          </xsl:choose>
 
+          <xsl:choose>
+            <xsl:when test="action='delete' and type='user'">
+              <div>
+                <xsl:value-of select="gsa:i18n ('If no inheriting user is selected, all owned resources will be deleted as well.', 'User')"/>
+              </div>
+              <p>
+                <xsl:value-of select="gsa:i18n ('Inheriting user', 'User')"/>:
+                <xsl:variable name="inheritor_id" select="''"/>
+                <select name="inheritor_id" style="text-align:left;">
+                  <xsl:call-template name="opt">
+                    <xsl:with-param name="value" select="''"/>
+                    <xsl:with-param name="select-value" select="$inheritor_id"/>
+                    <xsl:with-param name="content" select="'--'"/>
+                  </xsl:call-template>
+                  <xsl:call-template name="opt">
+                    <xsl:with-param name="value" select="'self'"/>
+                    <xsl:with-param name="select-value" select="$inheritor_id"/>
+                    <xsl:with-param name="content" select="concat ('(', gsa:i18n ('Current User', 'User'), ')')"/>
+                  </xsl:call-template>
+                  <xsl:for-each select="get_users_response/user">
+                    <xsl:variable name="selection_id" select="@id"/>
+                    <xsl:if test="count($resources [. = $selection_id]) = 0">
+                      <xsl:call-template name="opt">
+                        <xsl:with-param name="value" select="@id"/>
+                        <xsl:with-param name="select-value" select="$inheritor_id"/>
+                        <xsl:with-param name="content" select="name"/>
+                      </xsl:call-template>
+                    </xsl:if>
+                  </xsl:for-each>
+                </select>
+              </p>
+            </xsl:when>
+          </xsl:choose>
+
+          <xsl:for-each select="/envelope/params/*">
             <xsl:choose>
-              <xsl:when test="action='delete' and type='user'">
-                <div>
-                  <xsl:value-of select="gsa:i18n ('If no inheriting user is selected, all owned resources will be deleted as well.', 'User')"/>
-                </div>
-                <p>
-                  <xsl:value-of select="gsa:i18n ('Inheriting user', 'User')"/>:
-                  <xsl:variable name="inheritor_id" select="''"/>
-                  <select name="inheritor_id" style="text-align:left;">
-                    <xsl:call-template name="opt">
-                      <xsl:with-param name="value" select="''"/>
-                      <xsl:with-param name="select-value" select="$inheritor_id"/>
-                      <xsl:with-param name="content" select="'--'"/>
-                    </xsl:call-template>
-                    <xsl:call-template name="opt">
-                      <xsl:with-param name="value" select="'self'"/>
-                      <xsl:with-param name="select-value" select="$inheritor_id"/>
-                      <xsl:with-param name="content" select="concat ('(', gsa:i18n ('Current User', 'User'), ')')"/>
-                    </xsl:call-template>
-                    <xsl:for-each select="get_users_response/user">
-                      <xsl:variable name="selection_id" select="@id"/>
-                      <xsl:if test="count($resources [. = $selection_id]) = 0">
-                        <xsl:call-template name="opt">
-                          <xsl:with-param name="value" select="@id"/>
-                          <xsl:with-param name="select-value" select="$inheritor_id"/>
-                          <xsl:with-param name="content" select="name"/>
-                        </xsl:call-template>
-                      </xsl:if>
-                    </xsl:for-each>
-                  </select>
-                </p>
+              <xsl:when test="starts-with (name (), 'bulk_') or name() = 'cmd' or (name() = '_param' and starts-with (name, 'bulk_'))">
               </xsl:when>
+              <xsl:when test="name() = '_param'">
+                <input type="hidden" name="{name}" value="{value}"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <input type="hidden" name="{name()}" value="{text()}"/>
+              </xsl:otherwise>
             </xsl:choose>
+          </xsl:for-each>
 
-            <xsl:for-each select="/envelope/params/*">
-              <xsl:choose>
-                <xsl:when test="starts-with (name (), 'bulk_') or name() = 'cmd' or (name() = '_param' and starts-with (name, 'bulk_'))">
-                </xsl:when>
-                <xsl:when test="name() = '_param'">
-                  <input type="hidden" name="{name}" value="{value}"/>
-                </xsl:when>
-                <xsl:otherwise>
-                  <input type="hidden" name="{name()}" value="{text()}"/>
-                </xsl:otherwise>
-              </xsl:choose>
-            </xsl:for-each>
-
-            <xsl:for-each select="$resources">
-              <input type="hidden" name="bulk_selected:{.}" value="1"/>
-            </xsl:for-each>
-          </div>
-          <input type="submit" value="OK"/>
-        </center>
+          <xsl:for-each select="$resources">
+            <input type="hidden" name="bulk_selected:{.}" value="1"/>
+          </xsl:for-each>
+        </div>
+        <input type="submit" value="OK"/>
       </form>
     </div>
   </div>

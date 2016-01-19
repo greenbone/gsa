@@ -1,5 +1,10 @@
 2016-01-19  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/omp.xsl(delete_user, report, process_bulk): Remove usage of
+	deprecated <center> element for styling.
+
+2016-01-19  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/css/gsa-style.css: Add css classes for text layout. Set a
 	better default for paragraph elements. A paragraph should only have a margin
 	on the bottom.
