@@ -98,7 +98,7 @@ table {
 }
 
 p {
-  margin-left:5px;
+  margin: 0 0 10px;
 }
 
 .pull-right {
@@ -107,6 +107,26 @@ p {
 
 .pull-left {
   float: left;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-justify {
+  text-align: justify;
+}
+
+.text-nowrap {
+  white-space: nowrap;
 }
 
 .footnote {
