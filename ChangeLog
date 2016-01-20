@@ -1,5 +1,9 @@
 2016-01-20  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/greenbone.js: Update coding style and make jshint happy.
+
+2016-01-20  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/omp.xsl (html-config-nvt-table): Refactor scan config nvt
 	details page to use the new layout.
 
