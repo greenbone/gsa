@@ -1062,11 +1062,6 @@ select[multiple] {
   font-weight: bold;
 }
 
-.icon-menu img {
-  padding: 2px;
-  margin: -2px;
-}
-
 .icon-menu:hover img {
   background: #99CE48;
 }
@@ -1450,13 +1445,12 @@ select[multiple] {
   margin: 0;
 }
 
-.section-header .toggle-action-icon {
-  float: right;
+.section-header .icon {
+  margin-right: 5px;
 }
 
-.section-header .icon {
+.section-header .icon-action {
   float: right;
-  margin-right: 5px;
 }
 
 .section-box {
@@ -1464,7 +1458,7 @@ select[multiple] {
   margin-bottom: 20px;
 }
 
-#small-icon {
+#small-icon, .icon-sm {
   width: 16px;
   height: 16px;
 }
@@ -1477,6 +1471,19 @@ select[multiple] {
 .toolbar {
   margin: 10px;
   margin-top:-8px;
+}
+
+.toolbar .icon {
+  margin-right: 3px;
+}
+
+.toolbar .divider {
+  width: 16px;
+  display: inline-block;
+}
+
+.toolbar div.icon, .toolbar div.icon form {
+  display: inline;
 }
 
 .ctrl-group {

@@ -1658,9 +1658,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="params"></xsl:param>
   <xsl:param name="cmd">resume_<xsl:value-of select="type"/></xsl:param>
 
-  <div style="display: inline">
-    <form style="display: inline; font-size: 0px; margin-left: 3px"
-          action="/omp" method="post" enctype="multipart/form-data">
+  <div class="icon">
+    <form action="/omp" method="post" enctype="multipart/form-data">
       <input type="hidden" name="token" value="{/envelope/token}"/>
       <input type="hidden" name="caller" value="{/envelope/current_page}"/>
       <input type="hidden" name="cmd" value="{$cmd}"/>
@@ -1680,9 +1679,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="alt"><xsl:value-of select="gsa:i18n('Start', 'Action Verb')"/></xsl:param>
   <xsl:param name="name">Start</xsl:param>
 
-  <div style="display: inline">
-    <form style="display: inline; font-size: 0px; margin-left: 3px"
-          action="/omp" method="post" enctype="multipart/form-data">
+  <div class="icon">
+    <form action="/omp" method="post" enctype="multipart/form-data">
       <input type="hidden" name="token" value="{/envelope/token}"/>
       <input type="hidden" name="caller" value="{/envelope/current_page}"/>
       <input type="hidden" name="cmd" value="{$cmd}"/>
@@ -1701,9 +1699,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="id"></xsl:param>
   <xsl:param name="params"></xsl:param>
 
-  <div style="display: inline">
-    <form style="display: inline; font-size: 0px; margin-left: 3px"
-          action="/omp" method="post" enctype="multipart/form-data">
+  <div class="icon">
+    <form action="/omp" method="post" enctype="multipart/form-data">
       <input type="hidden" name="token" value="{/envelope/token}"/>
       <input type="hidden" name="caller" value="{/envelope/current_page}"/>
       <input type="hidden" name="cmd" value="stop_{$type}"/>
@@ -1721,8 +1718,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="fragment"></xsl:param>
   <xsl:param name="params"></xsl:param>
 
-  <div style="display: inline">
-    <form style="display: inline; font-size: 0px; margin-left: 3px" action="/omp{$fragment}" method="post" enctype="multipart/form-data">
+  <div class="icon">
+    <form action="/omp{$fragment}" method="post" enctype="multipart/form-data">
       <input type="hidden" name="token" value="{/envelope/token}"/>
       <input type="hidden" name="caller" value="{/envelope/current_page}"/>
       <input type="hidden" name="cmd" value="delete_{$type}"/>
@@ -2025,37 +2022,34 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
   <div class="section-header">
     <a href="#"
-       class="toggle-action-icon" data-target="#usertags-box" data-name="User Tags" data-variable="usertags-box--collapsed">
+       class="icon icon-action" data-target="#usertags-box" data-name="User Tags" data-variable="usertags-box--collapsed">
       <img src="/img/fold.png"/>
     </a>
     <a href="/help/user-tags.html?token={/envelope/token}"
-       class="icon"
+       class="icon icon-action"
        title="{gsa:i18n ('Help', 'Help')}: {gsa:i18n ('User Tags list', 'Tag')}">
-      <img style="margin-left:5px" src="/img/help.png"/>
+      <img src="/img/help.png"/>
     </a>
       <xsl:choose>
         <xsl:when test="not (gsa:may-op ('create_tag'))"/>
         <xsl:when test="$report_section != ''">
           <a href="/omp?cmd=new_tag&amp;resource_id={$resource_id}&amp;resource_type={$resource_type}&amp;next={$next}&amp;next_type={$resource_type}&amp;next_id={$resource_id}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;report_section={$report_section}&amp;token={/envelope/token}"
              title="{gsa:i18n ('New tag', 'Tag')}"
-             style="margin-left:3px;"
-             class="new-action-icon icon" data-type="tag" data-extra="resource_id={$resource_id}&amp;resource_type={$resource_type}">
+             class="new-action-icon icon icon-action" data-type="tag" data-extra="resource_id={$resource_id}&amp;resource_type={$resource_type}">
             <img src="/img/new.png" alt="{gsa:i18n ('Add tag', 'Tag')}"/>
           </a>
         </xsl:when>
         <xsl:when test="$resource_subtype != ''">
           <a href="/omp?cmd=new_tag&amp;resource_id={$resource_id}&amp;resource_type={$resource_subtype}&amp;next={$next}&amp;next_type={$resource_type}&amp;next_subtype={$resource_subtype}&amp;next_id={$resource_id}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
              title="{gsa:i18n ('New Tag', 'Tag')}"
-             style="margin-left:3px;"
-             class="new-action-icon icon" data-type="tag" data-extra="resource_id={$resource_id}&amp;resource_type={$resource_subtype}">
+             class="new-action-icon icon icon-action" data-type="tag" data-extra="resource_id={$resource_id}&amp;resource_type={$resource_subtype}">
             <img src="/img/new.png" alt="{gsa:i18n ('Add tag', 'Tag')}"/>
           </a>
         </xsl:when>
         <xsl:otherwise>
           <a href="/omp?cmd=new_tag&amp;resource_id={$resource_id}&amp;resource_type={$resource_type}&amp;next={$next}&amp;next_type={$resource_type}&amp;next_id={$resource_id}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
              title="{gsa:i18n ('New Tag', 'Tag')}"
-             style="margin-left:3px;"
-             class="new-action-icon icon" data-type="tag" data-extra="resource_id={$resource_id}&amp;resource_type={$resource_type}">
+             class="new-action-icon icon icon-action" data-type="tag" data-extra="resource_id={$resource_id}&amp;resource_type={$resource_type}">
             <img src="/img/new.png" alt="{gsa:i18n ('Add tag', 'Tag')}"/>
           </a>
         </xsl:otherwise>
@@ -2376,21 +2370,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:variable>
 
     <div class="section-header">
-      <a href="#"
-         class="toggle-action-icon" data-target="#permission-box" data-name="Permissions" data-variable="permission-box--collapsed">
+      <a href="#" class="toggle-action-icon icon icon-action"
+        data-target="#permission-box" data-name="Permissions"
+        data-variable="permission-box--collapsed">
           <img src="/img/fold.png"/>
       </a>
       <a href="/help/resource_permissions.html?token={/envelope/token}"
-         class="icon"
+         class="icon icon-action"
          title="Help: Resource Permissions">
-        <img style="margin-left:5px" src="/img/help.png"/>
+        <img src="/img/help.png"/>
       </a>
       <xsl:choose>
         <xsl:when test="gsa:may-op ('create_permission')">
           <a href="/omp?cmd=new_permissions&amp;next={$next}&amp;next_id={$resource_id}&amp;next_type={$resource_type}&amp;resource_id={$resource_id}&amp;restrict_type={$resource_type}&amp;{$related_params}token={/envelope/token}"
-             class="last new-action-icon icon" data-type="permissions" data-extra="resource_id={$resource_id}&amp;restrict_type={$resource_type}&amp;{$related_params}"
+             class="new-action-icon icon icon-action" data-type="permissions" data-extra="resource_id={$resource_id}&amp;restrict_type={$resource_type}&amp;{$related_params}"
              title="{gsa:i18n ('Create Multiple Permissions', 'Permission')}">
-            <img src="/img/new.png" style="margin-left:3px;"/>
+            <img src="/img/new.png"/>
           </a>
         </xsl:when>
         <xsl:otherwise/>
@@ -3566,19 +3561,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:choose>
     <xsl:when test="target/@id = ''">
       <a href="/omp?cmd=upload_report&amp;next=get_report&amp;task_id={@id}&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-         class="upload-action-icon" data-type="report"
+         class="upload-action-icon icon" data-type="report"
          data-task_id="{@id}"
          title="{gsa:i18n ('Import Report', 'Task')}">
-        <img src="/img/upload.png" style="margin-left:3px;"/>
+        <img src="/img/upload.png"/>
       </a>
     </xsl:when>
     <xsl:when test="gsa:may ('start_task') = 0">
-      <img style="margin-left: 3px" src="/img/start_inactive.png" alt="{gsa:i18n ('Start', 'Action Verb')}" title="{gsa:i18n ('Permission to start task denied', 'Task')}"/>
+      <img class="icon" src="/img/start_inactive.png" alt="{gsa:i18n ('Start', 'Action Verb')}" title="{gsa:i18n ('Permission to start task denied', 'Task')}"/>
     </xsl:when>
     <xsl:when test="string-length(schedule/@id) &gt; 0">
       <xsl:choose>
         <xsl:when test="boolean (schedule/permissions) and count (schedule/permissions/permission) = 0">
-          <img style="margin-left: 3px" src="/img/scheduled_inactive.png"
+          <img class="icon" src="/img/scheduled_inactive.png"
                alt="{gsa:i18n ('Schedule Unavailable', 'Task|Schedule')}"
                title="{gsa:i18n ('Schedule Unavailable', 'Task|Schedule')} ({gsa:i18n ('Name', 'Property')}: {schedule/name}, ID: {schedule/@id})"/>
         </xsl:when>
@@ -3600,8 +3595,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:choose>
           </xsl:variable>
           <a href="/omp?cmd=get_schedule&amp;schedule_id={schedule/@id}&amp;token={/envelope/token}"
+             class="icon"
              title="{concat (gsa:view_details_title ('schedule', schedule/name), $next_due_string)}">
-            <img style="margin-left: 3px" src="/img/scheduled.png" alt="{gsa:i18n ('Schedule Details', 'Schedule')}"/>
+            <img src="/img/scheduled.png" alt="{gsa:i18n ('Schedule Details', 'Schedule')}"/>
           </a>
         </xsl:otherwise>
       </xsl:choose>
@@ -3619,7 +3615,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:call-template>
           </xsl:when>
           <xsl:otherwise>
-            <img style="margin-left: 3px" src="/img/start_inactive.png" alt="{gsa:i18n ('Start', 'Action Verb')}" title="{gsa:i18n ('Task is already active', 'Task')}"/>
+            <img class="icon" src="/img/start_inactive.png" alt="{gsa:i18n ('Start', 'Action Verb')}" title="{gsa:i18n ('Task is already active', 'Task')}"/>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:if>
@@ -3664,17 +3660,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:choose>
     <xsl:when test="target/@id = ''">
       <img src="/img/resume_inactive.png" alt="{gsa:i18n ('Resume', 'Action Verb')}" title="{gsa:i18n ('Task is a container', 'Task')}"
-         style="margin-left:3px;"/>
+         class="icon"/>
     </xsl:when>
     <xsl:when test="string-length(schedule/@id) &gt; 0">
       <img src="/img/resume_inactive.png" alt="{gsa:i18n ('Resume', 'Action Verb')}" title="{gsa:i18n ('Task is scheduled', 'Task')}"
-           style="margin-left:3px;"/>
+           class="icon"/>
     </xsl:when>
     <xsl:when test="status='Stopped'">
       <xsl:choose>
         <xsl:when test="gsa:may ('resume_task') = 0">
           <img src="/img/resume_inactive.png" alt="{gsa:i18n ('Resume', 'Action Verb')}" title="{gsa:i18n ('Permission to resume task denied', 'Task')}"
-             style="margin-left:3px;"/>
+             class="icon"/>
         </xsl:when>
         <xsl:otherwise>
           <xsl:call-template name="resume-icon">
@@ -3692,7 +3688,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:when>
     <xsl:otherwise>
       <img src="/img/resume_inactive.png" alt="{gsa:i18n ('Resume', 'Action Verb')}" title="{gsa:i18n ('Task is not stopped', 'Task')}"
-           style="margin-left:3px;"/>
+           class="icon"/>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
@@ -3706,7 +3702,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:when test="gsa:may-op ('get_slaves') and gsa:may-op ('modify_task') and count ($slaves)">
       <span class="icon-menu">
         <xsl:variable name="slave_count" select="count ($slaves [@id != $current_slave_id])"/>
-        <img src="/img/wizard.png" style="margin-left:3px;"/>
+        <img src="/img/wizard.png" class="icon"/>
         <ul>
           <xsl:if test="$current_slave_id != ''">
             <xsl:variable name="class">
@@ -3767,12 +3763,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
              title="{gsa:i18n ('This is an Alterable Task. Reports may not relate to current Scan Config or Target!', 'Task')}"/>
       </xsl:otherwise>
     </xsl:choose>
-    <div class="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
-      <xsl:call-template name="task-icons">
-        <xsl:with-param name="next" select="'get_task'"/>
-        <xsl:with-param name="show-start-when-scheduled" select="1"/>
-      </xsl:call-template>
-    </div>
+    <span class="divider"/>
+    <xsl:call-template name="task-icons">
+      <xsl:with-param name="next" select="'get_task'"/>
+      <xsl:with-param name="show-start-when-scheduled" select="1"/>
+    </xsl:call-template>
     <xsl:call-template name="move_task_icon"/>
   </div>
 
@@ -4568,8 +4563,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:if>
 
   <div class="section-header">
-    <a href="#"
-       class="toggle-action-icon" data-target="#table-box" data-name="Details" data-variable="table-box--collapsed">
+    <a href="#" class="toggle-action-icon icon icon-action"
+      data-target="#table-box" data-name="Details"
+      data-variable="table-box--collapsed">
         <img src="/img/fold.png"/>
     </a>
     <h3><xsl:value-of select="gsa:i18n ('Details')"/></h3>
@@ -4910,7 +4906,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="filt_id" select="/envelope/params/filt_id"/>
 
   <!-- i18n with concat : see dynamic_strings.xsl - type-details -->
-  <a href="/help/{$type}_details.html?token={/envelope/token}"
+  <a class="icon" href="/help/{$type}_details.html?token={/envelope/token}"
     title="{gsa:i18n ('Help', 'Help')}: {gsa:i18n(concat($cap-type, ' Details'), $cap-type)}">
     <img src="/img/help.png"/>
   </a>
@@ -4919,9 +4915,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:when test="gsa:may-op (concat ('create_', $type)) and $type = 'task'">
       <span class="icon-menu">
         <a href="/omp?cmd=new_task&amp;next=get_task&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-           class="new-action-icon" data-type="task"
+           class="new-action-icon icon" data-type="task"
            title="{gsa:i18n ('New Task', 'Task')}">
-          <img src="/img/new.png" style="margin-left:3px;"/>
+          <img src="/img/new.png"/>
         </a>
         <ul>
           <li>
@@ -4944,9 +4940,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:when test="gsa:may-op (concat ('create_', $type))">
       <!-- i18n with concat : see dynamic_strings.xsl - type-new -->
       <a href="/omp?cmd=new_{$type}&amp;next=get_{$type}&amp;filter={str:encode-uri ($filter, true ())}&amp;filt_id={$filt_id}&amp;{$type}_id={@id}&amp;token={/envelope/token}"
-         class="new-action-icon" data-type="{$type}"
+         class="new-action-icon icon" data-type="{$type}"
          title="{gsa:i18n (concat ('New ', $cap-type), $cap-type)}">
-        <img src="/img/new.png" style="margin-left:3px;"/>
+        <img src="/img/new.png"/>
       </a>
     </xsl:when>
   </xsl:choose>
@@ -4954,9 +4950,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:when test="$noupload"/>
     <xsl:when test="gsa:may-op (concat ('create_', $type))">
       <a href="/omp?cmd=upload_{$type}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-         class="upload-action-icon" data-type="port_list"
+         class="upload-action-icon icon" data-type="port_list"
          title="{gsa:i18n ('Import Port List', 'Port List')}">
-        <img src="/img/upload.png" style="margin-left:3px;"/>
+        <img src="/img/upload.png"/>
       </a>
     </xsl:when>
   </xsl:choose>
@@ -4968,7 +4964,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
            alt="{gsa:i18n ('Clone', 'Action Verb')}"
            value="Clone"
            title="{gsa:i18n (concat ($cap-type, ' may not be cloned'), $cap-type)}"
-           style="margin-left:3px;"/>
+           class="icon"/>
     </xsl:when>
     <xsl:when test="gsa:may-clone ($type, owner)">
       <xsl:choose>
@@ -4978,37 +4974,40 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                alt="{gsa:i18n ('Clone', 'Action Verb')}"
                value="Clone"
                title="{gsa:i18n (concat ($cap-type, ' must be owned or global'), $cap-type)}"
-               style="margin-left:3px;"/>
+               class="icon"/>
         </xsl:when>
         <xsl:otherwise>
-          <form style="display: inline; font-size: 0px; margin-left: 3px" action="/omp" method="post" enctype="multipart/form-data">
-            <input type="hidden" name="token" value="{/envelope/token}"/>
-            <input type="hidden" name="caller" value="{/envelope/current_page}"/>
-            <input type="hidden" name="cmd" value="clone"/>
-            <input type="hidden" name="resource_type" value="{$type}"/>
-            <input type="hidden" name="next" value="get_{$type}"/>
-            <input type="hidden" name="id" value="{@id}"/>
-            <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
-            <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-            <input type="image" src="/img/clone.png" alt="{gsa:i18n ('Clone', 'Action Verb')}"
-                  name="Clone" value="Clone" title="{gsa:i18n ('Clone', 'Action Verb')}"/>
-          </form>
+          <div class="icon">
+            <form action="/omp" method="post" enctype="multipart/form-data">
+              <input type="hidden" name="token" value="{/envelope/token}"/>
+              <input type="hidden" name="caller" value="{/envelope/current_page}"/>
+              <input type="hidden" name="cmd" value="clone"/>
+              <input type="hidden" name="resource_type" value="{$type}"/>
+              <input type="hidden" name="next" value="get_{$type}"/>
+              <input type="hidden" name="id" value="{@id}"/>
+              <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
+              <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
+              <input type="image" src="/img/clone.png" alt="{gsa:i18n ('Clone', 'Action Verb')}"
+                    name="Clone" value="Clone" title="{gsa:i18n ('Clone', 'Action Verb')}"/>
+            </form>
+          </div>
         </xsl:otherwise>
       </xsl:choose>
     </xsl:when>
   </xsl:choose>
   <a href="/omp?cmd=get_{$type}s&amp;filter={str:encode-uri ($filter, true ())}&amp;filt_id={$filt_id}&amp;token={/envelope/token}"
-     title="{gsa:i18n ($cap-type-plural, $cap-type)}" style="margin-left:3px;">
+     title="{gsa:i18n ($cap-type-plural, $cap-type)}" class="icon">
     <img src="/img/list.png" alt="{gsa:i18n ($cap-type-plural, $cap-type)}"/>
   </a>
-  <div class="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
+  <span class="divider"/>
+  <span>
     <xsl:choose>
       <xsl:when test="$type = 'user'">
         <xsl:choose>
           <xsl:when test="name=/envelope/login/text()">
             <img src="/img/delete_inactive.png" alt="{gsa:i18n ('Delete', 'Action Verb')}"
                  title="{gsa:i18n ('Currently logged in as this user', 'User')}"
-                 style="margin-left:3px;"/>
+                 class="icon"/>
           </xsl:when>
           <xsl:when test="gsa:may (concat ('delete_', $type)) and writable!='0' and in_use='0'">
             <xsl:call-template name="delete-icon">
@@ -5037,7 +5036,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:variable>
             <img src="/img/delete_inactive.png" alt="{gsa:i18n ('Delete', 'Action Verb')}"
                  title="{$inactive_text}"
-                 style="margin-left:3px;"/>
+                 class="icon"/>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:when>
@@ -5070,7 +5069,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:variable>
             <img src="/img/trashcan_inactive.png" alt="{gsa:i18n ('To Trashcan', 'Action Verb')}"
                  title="{$inactive_text}"
-                 style="margin-left:3px;"/>
+                 class="icon"/>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:otherwise>
@@ -5083,16 +5082,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:when test="gsa:may (concat ('modify_', $type)) and writable!='0'">
             <!-- i18n with concat : see dynamic_strings.xsl - type-edit -->
             <a href="/omp?cmd=edit_{$type}&amp;{$type}_id={@id}&amp;next=get_{$type}&amp;filter={str:encode-uri ($filter, true ())}&amp;filt_id={$filt_id}&amp;token={/envelope/token}"
-               class="edit-action-icon" data-type="{$type}" data-id="{@id}"
+               class="edit-action-icon icon" data-type="{$type}" data-id="{@id}"
                title="{gsa:i18n (concat ('Edit ', $cap-type), $cap-type)}">
-              <img src="/img/edit.png" style="margin-left:3px;"/>
+              <img src="/img/edit.png"/>
             </a>
           </xsl:when>
           <xsl:otherwise>
             <!-- i18n with concat : see dynamic_strings.xsl - type-action-denied -->
             <img src="/img/edit_inactive.png" alt="{gsa:i18n ('Edit', 'Action Verb')}"
                  title="{gsa:i18n (concat ($cap-type, ' is not writable'), $cap-type)}"
-                 style="margin-left:3px;"/>
+                 class="icon"/>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:otherwise>
@@ -5104,12 +5103,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <!-- i18n with concat : see dynamic_strings.xsl - type-export-xml -->
         <a href="/omp?cmd=export_{$type}&amp;{$type}_id={@id}&amp;filter={str:encode-uri ($filter, true ())}&amp;filt_id={$filt_id}&amp;token={/envelope/token}"
            title="{gsa:i18n (concat ('Export ', $cap-type, ' as XML'), $cap-type)}"
-           style="margin-left:3px;">
+           class="icon">
           <img src="/img/download.png" alt="{gsa:i18n ('Export XML', 'Action Verb')}"/>
         </a>
       </xsl:otherwise>
     </xsl:choose>
-  </div>
+  </span>
 </xsl:template>
 
 <xsl:template match="gsad_msg">
@@ -7962,8 +7961,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 
   <div class="section-header">
-    <a href="#"
-       class="toggle-action-icon" data-target="#using-box" data-name="Slaves using this Credential" data-variable="using-box--collapsed">
+    <a href="#" class="toggle-action-icon icon icon-action"
+      data-target="#using-box" data-name="Slaves using this Credential"
+      data-variable="using-box--collapsed">
         <img src="/img/fold.png"/>
     </a>
     <h3>
@@ -8010,8 +8010,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 
   <div class="section-header">
-    <a href="#"
-       class="toggle-action-icon" data-target="#using-box2" data-name="Targets using this Credential" data-variable="using-box2--collapsed">
+    <a href="#" class="toggle-action-icon icon icon-action"
+      data-target="#using-box2" data-name="Targets using this Credential"
+      data-variable="using-box2--collapsed">
         <img src="/img/fold.png"/>
     </a>
     <h3>
@@ -10864,8 +10865,9 @@ should not have received it.
   </div>
 
   <div class="section-header">
-    <a href="#"
-       class="toggle-action-icon" data-target="#using-box" data-name="Tasks using this Alert" data-variable="using-box--collapsed">
+    <a href="#" class="toggle-action-icon icon icon-action"
+      data-target="#using-box" data-name="Tasks using this Alert"
+      data-variable="using-box--collapsed">
         <img src="/img/fold.png"/>
     </a>
     <h3>
@@ -11121,14 +11123,15 @@ should not have received it.
   </div>
 
   <div class="section-header">
-    <a href="#"
-       class="toggle-action-icon" data-target="#using-box" data-name="Alerts using this Filter" data-variable="using-box--collapsed">
+    <a href="#" class="toggle-action-icon icon icon-action"
+      data-target="#using-box" data-name="Alerts using this Filter"
+      data-variable="using-box--collapsed">
         <img src="/img/fold.png"/>
     </a>
     <h3>
       <a href="/omp?cmd=get_alerts&amp;token={/envelope/token}"
          title="{gsa:i18n ('Alerts', 'Alert')}">
-        <img id="small-icon" src="/img/alert.svg" style="margin-right:5px" alt="Alerts"/>
+        <img class="icon-sm icon" src="/img/alert.svg" style="margin-right:5px" alt="Alerts"/>
       </a>
       <xsl:value-of select="gsa:i18n ('Alerts using this Filter', 'Filter')"/>
       <xsl:text> </xsl:text>
@@ -14102,8 +14105,9 @@ should not have received it.
   </div>
 
   <div class="section-header">
-    <a href="#"
-       class="toggle-action-icon" data-target="#using-box" data-name="Tasks using this Target" data-variable="using-box--collapsed">
+    <a href="#" class="toggle-action-icon icon icon-action"
+      data-target="#using-box" data-name="Tasks using this Target"
+      data-variable="using-box--collapsed">
         <img src="/img/fold.png"/>
     </a>
     <h3>
@@ -15262,7 +15266,9 @@ should not have received it.
         </td>
         <td>
           <a href="/omp?cmd=edit_config_family&amp;config_id={$config/@id}&amp;name={$config/name}&amp;family={$current_name}&amp;token={/envelope/token}"
-             title="{gsa:i18n ('Edit Scan Config Family', 'Scan Config')}" style="margin-left:3px;">
+            class="edit-action-icon" data-cmd="edit_config_family" data-type="config" data-id="{$config/@id}"
+            data-extra="name={$config/name}&amp;family={$current_name}"
+            title="{gsa:i18n ('Edit Scan Config Family', 'Scan Config')}">
             <img src="/img/edit.png" alt="{gsa:i18n ('Edit', 'Action Verb')}"/>
           </a>
         </td>
@@ -15498,24 +15504,24 @@ should not have received it.
   <xsl:variable name="config" select="get_configs_response/config"/>
 
   <div class="toolbar">
-    <a href="/help/config_details.html?token={/envelope/token}"
+    <a href="/help/config_details.html?token={/envelope/token}" class="icon"
        title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('Scan Config Details', 'Scan Config'))}">
       <img src="/img/help.png"/>
     </a>
     <a href="/omp?cmd=new_config&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;config_id={$config/@id}&amp;token={/envelope/token}"
        title="{gsa:i18n ('New Scan Config', 'Scan Config')}"
-       class="new-action-icon" data-type="config">
-      <img src="/img/new.png" style="margin-left:3px;"/>
+       class="new-action-icon icon" data-type="config">
+      <img src="/img/new.png"/>
     </a>
     <a href="/omp?cmd=upload_config&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-       class="upload-action-icon" data-type="config"
+       class="upload-action-icon icon" data-type="config"
        title="{gsa:i18n ('Import Scan Config', 'Config')}">
-      <img src="/img/upload.png" style="margin-left:3px;"/>
+      <img src="/img/upload.png"/>
     </a>
     <xsl:choose>
       <xsl:when test="gsa:may-clone ('config')">
-        <div style="display: inline">
-          <form style="display: inline; font-size: 0px; margin-left: 3px" action="/omp" method="post" enctype="multipart/form-data">
+        <div class="icon">
+          <form action="/omp" method="post" enctype="multipart/form-data">
             <input type="hidden" name="token" value="{/envelope/token}"/>
             <input type="hidden" name="caller" value="{/envelope/current_page}"/>
             <input type="hidden" name="cmd" value="clone"/>
@@ -15534,14 +15540,16 @@ should not have received it.
              alt="{gsa:i18n ('Clone', 'Action Verb')}"
              value="Clone"
              title="{gsa:i18n ('Permission to clone denied', 'Action Message')}"
-             style="margin-left:3px;"/>
+             class="icon"/>
       </xsl:otherwise>
     </xsl:choose>
     <a href="/omp?cmd=get_configs&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-       title="{gsa:i18n ('Scan Configs', 'Scan Config')}" style="margin-left:3px;">
+       class="icon"
+       title="{gsa:i18n ('Scan Configs', 'Scan Config')}">
       <img src="/img/list.png" alt="{gsa:i18n ('Scan Configs', 'Scan Config')}"/>
     </a>
-    <div class="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
+    <span class="divider" />
+    <span>
       <xsl:choose>
         <xsl:when test="$config/writable!='0' and $config/in_use='0'">
           <xsl:call-template name="trashcan-icon">
@@ -15563,35 +15571,35 @@ should not have received it.
           </xsl:variable>
           <img src="/img/trashcan_inactive.png" alt="{gsa:i18n ('To Trashcan', 'Action Verb')}"
                title="{$inactive_text}"
-               style="margin-left:3px;"/>
+               class="icon"/>
         </xsl:otherwise>
       </xsl:choose>
       <xsl:choose>
         <xsl:when test="$config/writable='0'">
           <img src="/img/edit_inactive.png" alt="{gsa:i18n ('Edit', 'Action Verb')}"
                title="{gsa:i18n ('Scan Config is not writable', 'Scan Config')}"
-               style="margin-left:3px;"/>
+               class="icon"/>
         </xsl:when>
         <xsl:otherwise>
           <a href="/omp?cmd=edit_config&amp;config_id={$config/@id}&amp;next=get_config&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-             class="edit-action-icon" data-type="config" data-id="{$config/@id}"
+             class="edit-action-icon icon" data-type="config" data-id="{$config/@id}"
              title="{gsa:i18n ('Edit Scan Config', 'Scan Config')}">
-            <img src="/img/edit.png" style="margin-left:3px;"/>
+            <img src="/img/edit.png"/>
           </a>
         </xsl:otherwise>
       </xsl:choose>
       <a href="/omp?cmd=export_config&amp;config_id={$config/@id}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
          title="{gsa:i18n ('Export Scan Config as XML', 'Scan Config')}"
-         style="margin-left:3px;">
+         class="icon">
         <img src="/img/download.png" alt="{gsa:i18n ('Export XML', 'Action Verb')}"/>
       </a>
       <xsl:if test="$config/type = 1">
         <a href="/omp?cmd=sync_config&amp;config_id={$config/@id}&amp;next=get_config&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-          title="{gsa:i18n ('Sync Config', 'Config')}" style="margin-left:3px;">
+          title="{gsa:i18n ('Sync Config', 'Config')}" class="icon">
           <img src="/img/refresh.png" alt="{gsa:i18n ('Sync Config', 'Config')}"/>
         </a>
       </xsl:if>
-    </div>
+    </span>
   </div>
 
   <div class="section-header">
@@ -15642,8 +15650,10 @@ should not have received it.
   </div>
 
   <div class="section-header">
-    <a href="#"
-       class="toggle-action-icon" data-target="#nvtfamilies-box" data-name="Network Vulnerability Test Families" data-variable="nvtfamilies-box--collapsed">
+    <a href="#" class="toggle-action-icon icon icon-action"
+      data-target="#nvtfamilies-box"
+      data-name="Network Vulnerability Test Families"
+      data-variable="nvtfamilies-box--collapsed">
         <img src="/img/fold.png"/>
     </a>
     <h3>
@@ -15665,8 +15675,9 @@ should not have received it.
   </div>
 
   <div class="section-header">
-    <a href="#"
-       class="toggle-action-icon" data-target="#scannerprefs-box" data-name="Scanner Preferences" data-variable="scannerprefs-box--collapsed">
+    <a href="#" class="toggle-action-icon icon icon-action"
+      data-target="#scannerprefs-box" data-name="Scanner Preferences"
+      data-variable="scannerprefs-box--collapsed">
         <img src="/img/fold.png"/>
     </a>
     <h3>
@@ -15691,8 +15702,9 @@ should not have received it.
   </div>
 
   <div class="section-header">
-    <a href="#"
-       class="toggle-action-icon" data-target="#nvtprefs-box" data-name="NVT Preferences" data-variable="nvtprefs-box--collapsed">
+    <a href="#" class="toggle-action-icon icon icon-action"
+      data-target="#nvtprefs-box" data-name="NVT Preferences"
+      data-variable="nvtprefs-box--collapsed">
         <img src="/img/fold.png"/>
     </a>
     <h3>
@@ -15722,8 +15734,9 @@ should not have received it.
   </div>
 
   <div class="section-header">
-    <a href="#"
-       class="toggle-action-icon" data-target="#using-box" data-name="Tasks using this Scan Config" data-variable="using-box--collapsed">
+    <a href="#" class="toggle-action-icon icon icon-action"
+      data-target="#using-box" data-name="Tasks using this Scan Config"
+      data-variable="using-box--collapsed">
         <img src="/img/fold.png"/>
     </a>
     <h3>
@@ -17275,8 +17288,9 @@ should not have received it.
   </div>
 
   <div class="section-header">
-    <a href="#"
-       class="toggle-action-icon" data-target="#using-box" data-name="Tasks using this Schedule" data-variable="using-box--collapsed">
+    <a href="#" class="toggle-action-icon icon icon-action"
+      data-target="#using-box" data-name="Tasks using this Schedule"
+      data-variable="using-box--collapsed">
         <img src="/img/fold.png"/>
     </a>
     <h3>
@@ -17850,8 +17864,9 @@ should not have received it.
   </div>
 
   <div class="section-header">
-    <a href="#"
-       class="toggle-action-icon" data-target="#using-box" data-name="Tasks using this Scanner" data-variable="using-box--collapsed">
+    <a href="#" class="toggle-action-icon icon icon-action"
+      data-target="#using-box" data-name="Tasks using this Scanner"
+      data-variable="using-box--collapsed">
         <img src="/img/fold.png"/>
     </a>
     <h3>
@@ -18542,8 +18557,9 @@ should not have received it.
   </div>
 
   <div class="section-header">
-    <a href="#"
-       class="toggle-action-icon" data-target="#using-box" data-name="Tasks using this Slave" data-variable="using-box--collapsed">
+    <a href="#" class="toggle-action-icon icon icon-action"
+      data-target="#using-box" data-name="Tasks using this Slave"
+      data-variable="using-box--collapsed">
         <img src="/img/fold.png"/>
     </a>
     <h3>
@@ -25677,8 +25693,9 @@ should not have received it.
   </div>
 
   <div class="section-header">
-    <a href="#"
-       class="toggle-action-icon" data-target="#portranges-box" data-name="Port Ranges" data-variable="portranges-box--collapsed">
+    <a href="#" class="toggle-action-icon icon icon-action"
+      data-target="#portranges-box" data-name="Port Ranges"
+      data-variable="portranges-box--collapsed">
         <img src="/img/fold.png"/>
     </a>
     <h3>
@@ -25716,8 +25733,9 @@ should not have received it.
   </div>
 
   <div class="section-header">
-    <a href="#"
-       class="toggle-action-icon" data-target="#using-box" data-name="Targets using this Port List" data-variable="using-box--collapsed">
+    <a href="#" class="toggle-action-icon icon icon-action"
+      data-target="#using-box" data-name="Targets using this Port List"
+      data-variable="using-box--collapsed">
         <img src="/img/fold.png"/>
     </a>
     <h3>
@@ -26633,8 +26651,9 @@ should not have received it.
   </div>
 
   <div class="section-header">
-    <a href="#"
-       class="toggle-action-icon" data-target="#rfp_parameters-box" data-name="Tasks using this Target" data-variable="rfp_parameters-box--collapsed">
+    <a href="#" class="toggle-action-icon icon icon-action"
+      data-target="#rfp_parameters-box" data-name="Tasks using this Target"
+      data-variable="rfp_parameters-box--collapsed">
         <img src="/img/fold.png"/>
     </a>
     <h3>
@@ -26657,7 +26676,9 @@ should not have received it.
 
   <div class="section-header">
     <a href="#"
-       class="toggle-action-icon" data-target="#using-box" data-name="Alerts using this Report Format" data-variable="using-box--collapsed">
+      class="toggle-action-icon icon icon-action"
+      data-target="#using-box" data-name="Alerts using this Report Format" 
+      data-variable="using-box--collapsed">
         <img src="/img/fold.png"/>
     </a>
     <h3>
@@ -32972,8 +32993,9 @@ var toggleFilter = function(){
   </div>
 
   <div class="section-header">
-    <a href="#"
-       class="toggle-action-icon" data-target="#perm-box" data-name="Permissions" data-variable="perm-box--collapsed">
+    <a href="#" class="toggle-action-icon icon icon-action"
+      data-target="#perm-box" data-name="Permissions"
+      data-variable="perm-box--collapsed">
         <img src="/img/fold.png"/>
     </a>
     <h3>
@@ -34691,8 +34713,9 @@ var toggleFilter = function(){
   <xsl:choose>
     <xsl:when test="@name='method:ldap_connect'">
       <div class="section-header">
-        <a href="#"
-           class="toggle-action-icon" data-target="#ldap-box" data-name="LDAP per-User Authentication" data-variable="ldap-box--collapsed">
+        <a href="#" class="toggle-action-icon icon icon-action"
+          data-target="#ldap-box" data-name="LDAP per-User Authentication"
+          data-variable="ldap-box--collapsed">
           <img src="/img/fold.png"/>
         </a>
         <a href="/help/users.html?token={/envelope/token}#peruserldapauthentication"
@@ -34763,8 +34786,9 @@ var toggleFilter = function(){
 
 <xsl:template match="group" mode="radiusauth">
   <div class="section-header">
-    <a href="#"
-       class="toggle-action-icon" data-target="#radius-box" data-name="RADIUS Authentication" data-variable="ldap-box--collapsed">
+    <a href="#" class="toggle-action-icon icon icon-action"
+      data-target="#radius-box" data-name="RADIUS Authentication"
+      data-variable="ldap-box--collapsed">
       <img src="/img/fold.png"/>
     </a>
     <a href="/help/users.html?token={/envelope/token}#radiusauthentication"

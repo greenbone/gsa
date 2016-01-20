@@ -1,3 +1,13 @@
+2016-01-20  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	Refactor using icons as action buttons
+
+	* src/html/classic/omp.xsl: Remove the direct formatting via style
+	attributes for several icons. Especially in the section headers.
+
+	* src/html/classic/css/gsa-style.css: Introduce icon and icon-action css
+	classes for formatting icon button at secion headers and in toolbars.
+
 2016-01-19  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/js/greenbone.js: Refactor initializing of OMPDialogs. Use a
