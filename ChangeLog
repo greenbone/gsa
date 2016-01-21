@@ -1,5 +1,13 @@
 2016-01-21  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/omp.xsl, src/html/classic/graphics.xsl: Remove direct style
+	for big icons in the section header.
+
+	* src/html/classic/css/gsa-style.css: Remove now obsole #big-icon css
+	definition.
+
+2016-01-21  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/omp.xsl: Remove direct style for small icons in the section
 	header.
 

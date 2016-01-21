@@ -3768,7 +3768,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <h1>
       <a href="/omp?cmd=get_tasks&amp;token={/envelope/token}"
          title="{gsa:i18n ('Tasks', 'Task')}">
-        <img id="big-icon" src="/img/task.svg" style="margin-right:5px" alt="Tasks"/>
+        <img class="icon icon-lg" src="/img/task.svg" alt="Tasks"/>
       </a>
       <xsl:value-of select="gsa:i18n ('Task', 'Task')"/>:
       <xsl:value-of select="name"/>
@@ -7898,7 +7898,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <h1>
       <a href="/omp?cmd=get_credentials&amp;token={/envelope/token}"
          title="{gsa:i18n ('Credentials', 'Credential')}">
-        <img id="big-icon" src="/img/credential.svg" style="margin-right:5px" alt="Credentials"/>
+        <img class="icon icon-lg" src="/img/credential.svg" alt="Credentials"/>
       </a>
       <xsl:value-of select="gsa:i18n ('Credential', 'Credential')"/>:
       <xsl:value-of select="name"/>
@@ -10502,7 +10502,7 @@ should not have received it.
     <h1>
       <a href="/omp?cmd=get_alerts&amp;token={/envelope/token}"
          title="{gsa:i18n ('Alerts', 'Alert')}">
-        <img id="big-icon" src="/img/alert.svg" style="margin-right:5px" alt="Alerts"/>
+        <img class="icon icon-lg" src="/img/alert.svg" alt="Alerts"/>
       </a>
       <xsl:value-of select="gsa:i18n ('Alert', 'Alert')"/>:
       <xsl:value-of select="name"/>
@@ -11084,7 +11084,7 @@ should not have received it.
     <h1>
       <a href="/omp?cmd=get_filters&amp;token={/envelope/token}"
          title="{gsa:i18n ('Filters', 'Filter')}">
-        <img id="big-icon" src="/img/filter.svg" style="margin-right:5px" alt="Filters"/>
+        <img class="icon icon-lg" src="/img/filter.svg" style="margin-right:5px" alt="Filters"/>
       </a>
       <xsl:value-of select="gsa:i18n ('Filter', 'Filter')"/>:
       <xsl:value-of select="name"/>
@@ -11667,7 +11667,7 @@ should not have received it.
     <h1>
       <a href="/omp?cmd=get_tags&amp;token={/envelope/token}"
          title="{gsa:i18n ('Tags', 'Tag')}">
-        <img id="big-icon" src="/img/tag.svg" style="margin-right:5px" alt="Tags"/>
+        <img class="icon icon-lg" src="/img/tag.svg" alt="Tags"/>
       </a>
       <xsl:value-of select="gsa:i18n ('Tag', 'Tag')"/>:
       <xsl:value-of select="name"/>
@@ -13894,7 +13894,7 @@ should not have received it.
     <h1>
       <a href="/omp?cmd=get_targets&amp;token={/envelope/token}"
          title="{gsa:i18n ('Targets', 'Targets')}">
-        <img id="big-icon" src="/img/target.svg" style="margin-right:5px" alt="Targets"/>
+        <img class="icon icon-lg" src="/img/target.svg" alt="Targets"/>
       </a>
       <xsl:value-of select="gsa:i18n ('Target', 'Target')"/>:
       <xsl:value-of select="name"/>
@@ -15657,7 +15657,7 @@ should not have received it.
     <h1>
       <a href="/omp?cmd=get_configs&amp;token={/envelope/token}"
          title="{gsa:i18n ('Scan Configs', 'Scan Config')}">
-        <img id="big-icon" src="/img/config.svg" style="margin-right:5px" alt="Scan Configs"/>
+        <img class="icon icon-lg" src="/img/config.svg" alt="Scan Configs"/>
       </a>
       <xsl:value-of select="gsa:i18n ('Scan Config', 'Scan Config')"/>:
       <xsl:value-of select="$config/name"/>
@@ -17226,7 +17226,7 @@ should not have received it.
     <h1>
       <a href="/omp?cmd=get_schedules&amp;token={/envelope/token}"
          title="{gsa:i18n ('Schedules', 'Schedule')}">
-        <img id="big-icon" src="/img/schedule.svg" style="margin-right:5px" alt="Schedules"/>
+        <img class="icon icon-lg" src="/img/schedule.svg" alt="Schedules"/>
       </a>
       <xsl:value-of select="gsa:i18n ('Schedule', 'Schedule')"/>:
       <xsl:value-of select="name"/>
@@ -17745,7 +17745,7 @@ should not have received it.
     <h1>
       <a href="/omp?cmd=get_scanners&amp;token={/envelope/token}"
          title="{gsa:i18n ('Scanners', 'Scanner')}">
-        <img id="big-icon" src="/img/scanner.svg" style="margin-right:5px" alt="Scanners"/>
+        <img class="icon icon-lg" src="/img/scanner.svg" alt="Scanners"/>
       </a>
       <xsl:value-of select="gsa:i18n ('Scanner', 'Scanner')"/>:
       <xsl:value-of select="name"/>
@@ -18546,7 +18546,7 @@ should not have received it.
     <h1>
       <a href="/omp?cmd=get_slaves&amp;token={/envelope/token}"
          title="{gsa:i18n ('Slaves', 'Slave')}">
-        <img id="big-icon" src="/img/slave.svg" style="margin-right:5px" alt="Targets"/>
+        <img class="icon icon-lg" src="/img/slave.svg" alt="Targets"/>
       </a>
       <xsl:value-of select="gsa:i18n ('Slave', 'Slave')"/>:
       <xsl:value-of select="name"/>
@@ -20250,7 +20250,7 @@ should not have received it.
     <h1>
       <a href="/omp?cmd=get_info&amp;info_type=cve&amp;token={/envelope/token}"
          title="{gsa:i18n ('CVEs', 'CVE')}">
-        <img id="big-icon" src="/img/cve.svg" style="margin-right:5px" alt="CVEs"/>
+        <img class="icon icon-lg" src="/img/cve.svg" alt="CVEs"/>
       </a>
       <xsl:value-of select="gsa:i18n ('CVE', 'CVE')"/>:
       <xsl:value-of select="name"/>
@@ -20552,7 +20552,7 @@ should not have received it.
     <h1>
       <a href="/omp?cmd=get_info&amp;info_type=cpe&amp;token={/envelope/token}"
          title="{gsa:i18n ('CPEs', 'CPE')}">
-        <img id="big-icon" src="/img/cpe.svg" style="margin-right:5px" alt="CPEs"/>
+        <img class="icon icon-lg" src="/img/cpe.svg" alt="CPEs"/>
       </a>
       <xsl:value-of select="gsa:i18n ('CPE', 'CPE')"/>:
       <xsl:value-of select="name"/>
@@ -20707,7 +20707,7 @@ should not have received it.
     <h1>
       <a href="/omp?cmd=get_info&amp;info_type=ovaldef&amp;token={/envelope/token}"
          title="{gsa:i18n ('OVAL Definitions', 'OVAL Definition')}">
-        <img id="big-icon" src="/img/ovaldef.svg" style="margin-right:5px" alt="OVAL Definitions"/>
+        <img class="icon icon-lg" src="/img/ovaldef.svg" alt="OVAL Definitions"/>
       </a>
       <xsl:value-of select="gsa:i18n ('OVAL Definition', 'OVAL Definition')"/>:
       <xsl:value-of select="name"/>
@@ -20974,7 +20974,7 @@ should not have received it.
     <h1>
       <a href="/omp?cmd=get_info&amp;info_type=cert_bund_adv&amp;token={/envelope/token}"
          title="{gsa:i18n ('CERT-Bund Advisories', 'CERT-Bund Advisory')}">
-        <img id="big-icon" src="/img/cert_bund_adv.svg" style="margin-right:5px" alt="CERT-Bund Advisories"/>
+        <img class="icon icon-lg" src="/img/cert_bund_adv.svg" alt="CERT-Bund Advisories"/>
       </a>
       <xsl:value-of select="gsa:i18n ('CERT-Bund Advisory', 'CERT-Bund Advisory')"/>:
       <xsl:value-of select="name"/>
@@ -21167,7 +21167,7 @@ should not have received it.
     <h1>
       <a href="/omp?cmd=get_info&amp;info_type=dfn_cert_adv&amp;token={/envelope/token}"
          title="{gsa:i18n ('DFN-CERT Advisories', 'DFN-CERT Advisory')}">
-        <img id="big-icon" src="/img/dfn_cert_adv.svg" style="margin-right:5px" alt="DFN-CERT Advisories"/>
+        <img class="icon icon-lg" src="/img/dfn_cert_adv.svg" alt="DFN-CERT Advisories"/>
       </a>
       <xsl:value-of select="gsa:i18n ('DFN-CERT Advisory', 'DFN-CERT Advisory')"/>:
       <xsl:value-of select="name"/>
@@ -21627,7 +21627,7 @@ should not have received it.
         <h1>
           <a href="/omp?cmd=get_info&amp;info_type=nvt&amp;token={/envelope/token}"
              title="{gsa:i18n ('NVTs', 'NVT')}">
-            <img id="big-icon" src="/img/nvt.svg" style="margin-right:5px" alt="NVTs"/>
+            <img class="icon icon-lg" src="/img/nvt.svg" alt="NVTs"/>
           </a>
           <xsl:value-of select="gsa:i18n ('NVT', 'NVT')"/>:
           <xsl:value-of select="name"/>
@@ -22464,7 +22464,7 @@ should not have received it.
     <h1>
       <a href="/omp?cmd=get_notes&amp;token={/envelope/token}"
          title="{gsa:i18n ('Notes', 'Note')}">
-        <img id="big-icon" src="/img/note.svg" style="margin-right:5px" alt="Notes"/>
+        <img class="icon icon-lg" src="/img/note.svg" alt="Notes"/>
       </a>
       <xsl:value-of select="gsa:i18n ('Note for NVT', 'Note')"/>:
       <xsl:text> </xsl:text>
@@ -23684,7 +23684,7 @@ should not have received it.
     <h1>
       <a href="/omp?cmd=get_overrides&amp;token={/envelope/token}"
          title="{gsa:i18n ('Overrides', 'Override')}">
-        <img id="big-icon" src="/img/override.svg" style="margin-right:5px" alt="Overrides"/>
+        <img class="icon icon-lg" src="/img/override.svg" alt="Overrides"/>
       </a>
       <xsl:value-of select="gsa:i18n ('Override for NVT', 'Override')"/>:
       <xsl:text> </xsl:text>
@@ -24116,7 +24116,7 @@ should not have received it.
     <h1>
       <a href="/omp?cmd=get_groups&amp;token={/envelope/token}"
          title="{gsa:i18n ('Groups', 'Group')}">
-        <img id="big-icon" src="/img/group.svg" style="margin-right:5px" alt="Groups"/>
+        <img class="icon icon-lg" src="/img/group.svg" alt="Groups"/>
       </a>
       <xsl:value-of select="gsa:i18n ('Group', 'Group')"/>:
       <xsl:value-of select="name"/>
@@ -24949,7 +24949,7 @@ should not have received it.
     <h1>
       <a href="/omp?cmd=get_permissons&amp;token={/envelope/token}"
          title="{gsa:i18n ('Permissions', 'Permission')}">
-        <img id="big-icon" src="/img/permission.svg" style="margin-right:5px" alt="Permissions"/>
+        <img class="icon icon-lg" src="/img/permission.svg" alt="Permissions"/>
       </a>
       <xsl:value-of select="gsa:i18n ('Permission', 'Permission')"/>:
       <xsl:value-of select="name"/>
@@ -25697,7 +25697,7 @@ should not have received it.
     <h1>
       <a href="/omp?cmd=get_port_lists&amp;token={/envelope/token}"
          title="{gsa:i18n ('Port Lists', 'Port List')}">
-        <img id="big-icon" src="/img/port_list.svg" style="margin-right:5px" alt="Port Lists"/>
+        <img class="icon icon-lg" src="/img/port_list.svg" alt="Port Lists"/>
       </a>
       <xsl:value-of select="gsa:i18n ('Port List', 'Port List')"/>:
       <xsl:value-of select="name"/>
@@ -26639,7 +26639,7 @@ should not have received it.
     <h1>
       <a href="/omp?cmd=get_report_formats&amp;token={/envelope/token}"
          title="{gsa:i18n ('Report Formats', 'Report Format')}">
-        <img id="big-icon" src="/img/report_format.svg" style="margin-right:5px" alt="Report Formats"/>
+        <img class="icon" src="/img/report_format.svg" alt="Report Formats"/>
       </a>
       <xsl:value-of select="gsa:i18n ('Report Format', 'Report Format')"/>:
       <xsl:value-of select="name"/>
@@ -28240,7 +28240,7 @@ should not have received it.
     <h1>
       <a href="/omp?cmd=get_results&amp;token={/envelope/token}"
          title="{gsa:i18n ('Results', 'Result')}">
-        <img id="big-icon" src="/img/result.svg" style="margin-right:5px" alt="Results"/>
+        <img class="icon icon-lg" src="/img/result.svg" alt="Results"/>
       </a>
       <xsl:value-of select="gsa:i18n ('Result', 'Result')"/>:
       <xsl:value-of select="name"/>
@@ -33005,7 +33005,7 @@ var toggleFilter = function(){
     <h1>
       <a href="/omp?cmd=get_roles&amp;token={/envelope/token}"
          title="{gsa:i18n ('Roles', 'Role')}">
-        <img id="big-icon" src="/img/role.svg" style="margin-right:5px" alt="Roles"/>
+        <img class="icon icon-lg" src="/img/role.svg" alt="Roles"/>
       </a>
       <xsl:value-of select="gsa:i18n ('Role', 'Role')"/>:
       <xsl:value-of select="name"/>
@@ -33236,7 +33236,7 @@ var toggleFilter = function(){
     <h1>
       <a href="/omp?cmd=get_system_report&amp;duration=86400&amp;slave_id=0&amp;token={/envelope/token}"
          title="{gsa:i18n ('Performance', 'Performance')}">
-        <img id="big-icon" src="/img/performance.svg" style="margin-right:5px" alt="Performance"/>
+        <img class="icon icon-lg" src="/img/performance.svg" alt="Performance"/>
       </a>
       <xsl:value-of select="gsa:i18n ('Performance', 'Performance')"/>
     </h1>
@@ -33645,7 +33645,7 @@ var toggleFilter = function(){
     <h1>
       <a href="/omp?cmd=get_trash&amp;token={/envelope/token}"
          title="{gsa:i18n ('Trashcan', 'Trashcan')}">
-        <img id="big-icon" src="/img/trashcan.svg" style="margin-right:5px" alt="Trashcan"/>
+        <img class="icon icon-lg" src="/img/trashcan.svg" alt="Trashcan"/>
       </a>
       <xsl:value-of select="gsa:i18n ('Trashcan', 'Trashcan')"/>
     </h1>
@@ -34310,7 +34310,7 @@ var toggleFilter = function(){
     <h1>
       <a href="/omp?cmd=get_users&amp;token={/envelope/token}"
          title="{gsa:i18n ('Users', 'User')}">
-        <img id="big-icon" src="/img/user.svg" style="margin-right:5px" alt="Users"/>
+        <img class="icon icon-lg" src="/img/user.svg" alt="Users"/>
       </a>
       <xsl:value-of select="gsa:i18n ('User', 'User')"/>:
       <xsl:value-of select="name"/>
@@ -34944,7 +34944,7 @@ var toggleFilter = function(){
     <h1>
       <a href="/omp?cmd=get_feed&amp;token={/envelope/token}"
          title="{gsa:i18n ('NVT Feed Management', 'Feed Sync')}">
-        <img id="big-icon" src="/img/feed.svg" style="margin-right:5px" alt="NVT Feed Management"/>
+        <img class="icon icon-lg" src="/img/feed.svg" alt="NVT Feed Management"/>
       </a>
       <xsl:value-of select="gsa:i18n ('NVT Feed Management', 'Feed Sync')"/>
     </h1>
@@ -35085,7 +35085,7 @@ var toggleFilter = function(){
     <h1>
       <a href="/omp?cmd=get_scap&amp;token={/envelope/token}"
          title="{gsa:i18n ('SCAP Feed Management', 'Feed Sync')}">
-        <img id="big-icon" src="/img/feed.svg" style="margin-right:5px" alt="SCAP Feed Management"/>
+        <img class="icon icon-lg" src="/img/feed.svg" alt="SCAP Feed Management"/>
       </a>
       <xsl:value-of select="gsa:i18n ('SCAP Feed Management', 'Feed Sync')"/>
     </h1>
@@ -35241,7 +35241,7 @@ var toggleFilter = function(){
     <h1>
       <a href="/omp?cmd=get_feed&amp;token={/envelope/token}"
          title="{gsa:i18n ('CERT Feed Management', 'Feed Sync')}">
-        <img id="big-icon" src="/img/feed.svg" style="margin-right:5px" alt="CERT Feed Management"/>
+        <img class="icon icon-lg" src="/img/feed.svg" alt="CERT Feed Management"/>
       </a>
       <xsl:value-of select="gsa:i18n ('CERT Feed Management', 'Feed Sync')"/>
     </h1>
@@ -35399,7 +35399,7 @@ var toggleFilter = function(){
     <h1>
       <a href="/omp?cmd=get_my_settings&amp;token={/envelope/token}"
          title="{gsa:i18n ('My Settings', 'My Settings')}">
-        <img id="big-icon" src="/img/my_setting.svg" style="margin-right:5px" alt="My Settings"/>
+        <img class="icon icon-lg" src="/img/my_setting.svg" alt="My Settings"/>
       </a>
       <xsl:value-of select="gsa:i18n ('My Settings', 'My Settings')"/>
     </h1>
@@ -36687,7 +36687,7 @@ var toggleFilter = function(){
     <h1>
       <a href="/omp?cmd=get_assets&amp;asset_type=os&amp;token={/envelope/token}"
          title="{gsa:i18n ('Operating Systems', 'Operating System')}">
-        <img id="big-icon" src="/img/os.svg" style="margin-right:5px" alt="Operating Systems"/>
+        <img class="icon icon-lg" src="/img/os.svg" alt="Operating Systems"/>
       </a>
       <xsl:value-of select="gsa:i18n ('Operating System', 'Operating System')"/>:
       <xsl:value-of select="name"/>
@@ -36959,7 +36959,7 @@ var toggleFilter = function(){
     <h1>
       <a href="/omp?cmd=get_assets&amp;asset_type=host&amp;token={/envelope/token}"
          title="{gsa:i18n ('Hosts', 'Host')}">
-        <img id="big-icon" src="/img/host.svg" style="margin-right:5px" alt="Hosts"/>
+        <img class="icon icon-lg" src="/img/host.svg" alt="Hosts"/>
       </a>
       <xsl:value-of select="gsa:i18n ('Host', 'Host')"/>:
       <xsl:value-of select="name"/>
@@ -37601,7 +37601,7 @@ var toggleFilter = function(){
     <h1>
       <a href="/omp?cmd=get_protocol_doc&amp;token={/envelope/token}"
          title="{gsa:i18n ('Help: OMP', 'Help')}">
-        <img id="big-icon" src="/img/help.svg" style="margin-right:5px" alt="Help: OMP"/>
+        <img class="icon icon-lg" src="/img/help.svg" alt="Help: OMP"/>
       </a>
       <xsl:value-of select="gsa:i18n ('Help: OMP', 'Help')"/>
     </h1>
@@ -37668,7 +37668,7 @@ var toggleFilter = function(){
     <h1>
       <a href="/omp?cmd=cvss_calculator&amp;token={/envelope/token}"
          title="{gsa:i18n ('CVSS Base Score Calculator', 'CVSS Calculator')}">
-        <img id="big-icon" src="/img/cvss_calculator.svg" style="margin-right:5px" alt="CVSS Base Score Calculator"/>
+        <img class="icon icon-lg" src="/img/cvss_calculator.svg" alt="CVSS Base Score Calculator"/>
       </a>
       <xsl:value-of select="gsa:i18n ('CVSS Base Score Calculator', 'CVSS Calculator')"/>
     </h1>
