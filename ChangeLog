@@ -37,7 +37,7 @@
 
 2016-01-21  Björn Ricks <bjoern.ricks@greenbone.net>
 
-	* src/html/classic/omp.xsl: Remove direct style for seaction header info boxes
+	* src/html/classic/omp.xsl: Remove direct style for section header info boxes
 	at the right of the detail pages. Use new css class section-header-info
 	instead.
 
@@ -61,7 +61,7 @@
 	* src/html/classic/img/mysettings.svg: Renamed to
 	my_setting.svg.
 
-        * src/html/classic/img/my_setting.svg: New, see above.
+	* src/html/classic/img/my_setting.svg: New, see above.
 
 	* CMakeLists.txt, src/html/classic/omp.xsl: Adjust filename accordingly.
 
