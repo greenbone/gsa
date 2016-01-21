@@ -35375,7 +35375,7 @@ var toggleFilter = function(){
     <h1>
       <a href="/omp?cmd=get_my_settings&amp;token={/envelope/token}"
          title="{gsa:i18n ('My Settings', 'My Settings')}">
-        <img id="big-icon" src="/img/mysettings.svg" style="margin-right:5px" alt="My Settings"/>
+        <img id="big-icon" src="/img/my_setting.svg" style="margin-right:5px" alt="My Settings"/>
       </a>
       <xsl:value-of select="gsa:i18n ('My Settings', 'My Settings')"/>
     </h1>
