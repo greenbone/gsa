@@ -1,5 +1,10 @@
 2016-01-21  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/omp.xsl (html-config-family-table): Refactor scan config
+	family details to use new layout.
+
+2016-01-21  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/omp.xsl (list-window): Fix marging for help and new taks
 	icon by using the icon css class.
 
