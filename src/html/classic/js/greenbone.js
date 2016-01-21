@@ -299,30 +299,36 @@
     stopAutoRefresh();
 
     done_func = function(html) {
+      var dialog_title, dialog_html;
+
       // get the content of the (first) window
       // needs to wrap it in a div to be able to select the top-level elements.
-      var gb_windows = $('<div/>', {html: html}).find('.gb_window'),
-          gb_window = gb_windows.first();
-          // create a new div
+      var gb_windows = $('<div/>', {html: html}).find('.gb_window');
+
+      if (gb_windows.length) {
+        var gb_window = gb_windows.first();
+
+        if (gb_windows.length > 1) {
+          self.error( (gb_windows.length - 1) + " forms not displayed !");
+        }
+
+        content = gb_window.find('div:nth-child(4)');
+
+        // remove the last 'submit' button
+        submit = content.find('input[type=submit]').last().closest('tr');
+        if (submit.length === 0) {
+          submit = content.find('input[type=submit]').last();
+        }
+
+        dialog_title = gb_window.find('.gb_window_part_center').justtext();
+        dialog_html = content.html();
+      }
+
       self.dialog = $("<div/>", {
         'class': "dialog-form",
-        title:  gb_window.find('.gb_window_part_center').justtext(),
-        html: gb_window.find('div:nth-child(4)').html(),
+        title: dialog_title,
+        html: dialog_html,
       });
-
-      if (gb_windows.length > 1) {
-        self.error( (gb_windows.length - 1) + " forms not displayed !");
-      }
-
-      // remove the last 'submit' button
-      submit = self.dialog.find('input[type=submit]').last().closest('tr');
-      if (submit.length === 0) {
-        submit = self.dialog.find('input[type=submit]').last();
-      }
-
-      if (submit.length) {
-        submit.remove();
-      }
 
       // show the dialog !
       self.dialog.dialog({
