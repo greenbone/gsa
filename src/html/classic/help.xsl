@@ -90,7 +90,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:if test="boolean ($info-type)">
         <a href="/omp?cmd=get_info&amp;type={$info-type}&amp;token={/envelope/token}"
            title="Resource overview page" style="margin-right:3px;">
-          <img icon="icon icon-sm" src="/img/{$info-type}.svg" alt="{$info-type}"/>
+          <img class="icon icon-sm" src="/img/{$info-type}.svg" alt="{$info-type}"/>
         </a>
       </xsl:if>
       <xsl:value-of select="$title"/>
