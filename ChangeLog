@@ -1,3 +1,12 @@
+2016-01-21  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/omp.xsl: Fix rendering the detail table action icons. Put
+	them into one row again.
+
+	* src/html/classic/css/gsa-style.css: Introduce new css class table-actions.
+	This css class is intended to be used within detail tables for styling icon
+	buttons.
+
 2016-01-20  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/js/greenbone.js: Update coding style and make jshint happy.

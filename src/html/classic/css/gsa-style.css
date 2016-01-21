@@ -1482,8 +1482,13 @@ select[multiple] {
   display: inline-block;
 }
 
-.toolbar div.icon, .toolbar div.icon form {
+.toolbar div.icon, .toolbar div.icon form,
+.table-actions div.icon, .table-actions div.icon form {
   display: inline;
+}
+
+.table-actions .icon {
+  margin-right: 3px;
 }
 
 .ctrl-group {
