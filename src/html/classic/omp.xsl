@@ -4427,12 +4427,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:choose>
       <xsl:when test="$subtype != ''">
         <a href="/help/{gsa:type-many($subtype)}.html?token={/envelope/token}"
+           class="icon"
            title="{gsa:i18n ('Help', 'Help')}: {gsa:i18n ($cap-type-plural, $cap-type)}">
           <img src="/img/help.png"/>
         </a>
       </xsl:when>
       <xsl:otherwise>
         <a href="/help/{gsa:type-many($type)}.html?token={/envelope/token}"
+           class="icon"
            title="{gsa:i18n ('Help', 'Help')}: {gsa:i18n ($cap-type-plural, $cap-type)}">
           <img src="/img/help.png"/>
         </a>
@@ -4455,7 +4457,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:when test="$new-icon and $type = 'task'">
         <span class="icon-menu">
           <a href="/omp?cmd=new_task{$extra_params_string}&amp;next=get_task&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-             class="new-action-icon" data-type="task"
+             class="new-action-icon icon" data-type="task"
              title="{gsa:i18n ('New Task', 'Task')}">
             <img src="/img/new.png" style="margin-left:3px;"/>
           </a>
