@@ -1141,7 +1141,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </div>
     <div id="secinfo-dashboard">
     </div>
-  </div> 
+  </div>
 
   <xsl:call-template name="init-d3charts"/>
   <xsl:variable name="default_controllers" select="'nvt_bar_chart|nvt_donut_chart#cve_bar_chart|cve_donut_chart'"/>
