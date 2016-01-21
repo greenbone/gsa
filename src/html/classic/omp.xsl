@@ -15776,7 +15776,7 @@ should not have received it.
     <h3>
       <a href="/omp?cmd=get_tasks&amp;token={/envelope/token}"
          title="{gsa:i18n ('Tasks', 'Task')}">
-        <img id="icon icon-sm" src="/img/task.svg" alt="Tasks"/>
+        <img class="icon icon-sm" src="/img/task.svg" alt="Tasks"/>
       </a>
       <xsl:value-of select="gsa:i18n ('Tasks using this Scan Config', 'Scan Config')"/>
       <xsl:text> </xsl:text>

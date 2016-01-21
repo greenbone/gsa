@@ -1,5 +1,10 @@
 2016-01-21  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/omp.xsl, src/html/classic/help.xsl: Fix usage of .icon-lg
+	and remove usage of #small-icon.
+
+2016-01-21  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/omp.xsl, src/html/classic/graphics.xsl: Remove direct style
 	for big icons in the section header.
 

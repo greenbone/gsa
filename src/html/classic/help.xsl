@@ -78,19 +78,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:if test="boolean ($type)">
         <a href="/omp?cmd=get_{$type}s&amp;token={/envelope/token}"
            title="Resource overview page" style="margin-right:3px;">
-          <img id="small-icon" src="/img/{$type}.svg" border="0" alt="{$type}"/>
+          <img class="icon icon-sm" src="/img/{$type}.svg" alt="{$type}"/>
         </a>
       </xsl:if>
       <xsl:if test="boolean ($asset-type)">
         <a href="/omp?cmd=get_assets&amp;type={$asset-type}&amp;token={/envelope/token}"
            title="Resource overview page" style="margin-right:3px;">
-          <img id="small-icon" src="/img/{$asset-type}.svg" border="0" alt="{$asset-type}"/>
+          <img class="icon icon-sm" src="/img/{$asset-type}.svg" alt="{$asset-type}"/>
         </a>
       </xsl:if>
       <xsl:if test="boolean ($info-type)">
         <a href="/omp?cmd=get_info&amp;type={$info-type}&amp;token={/envelope/token}"
            title="Resource overview page" style="margin-right:3px;">
-          <img id="small-icon" src="/img/{$info-type}.svg" border="0" alt="{$info-type}"/>
+          <img icon="icon icon-sm" src="/img/{$info-type}.svg" alt="{$info-type}"/>
         </a>
       </xsl:if>
       <xsl:value-of select="$title"/>
