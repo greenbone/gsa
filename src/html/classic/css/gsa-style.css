@@ -1453,6 +1453,16 @@ select[multiple] {
   float: right;
 }
 
+.section-header .section-header-info {
+  float: right;
+  font-size: 10px;
+}
+
+.section-header .section-header-info table {
+  font-size: inherit;
+  border-spacing: 0;
+}
+
 .section-box {
   margin: 10px;
   margin-bottom: 20px;

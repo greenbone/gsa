@@ -4861,8 +4861,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="minor-details">
-  <div class="pull-right" style="font-size: 10px;">
-    <table style="font-size: 10px; border-spacing:0px">
+  <div class="section-header-info">
+    <table>
       <tr>
         <td><xsl:value-of select="gsa:i18n ('ID', 'Property')"/>:</td>
         <td><xsl:value-of select="@id"/></td>
@@ -14377,8 +14377,8 @@ should not have received it.
     </xsl:choose>
   </div>
   <div class="section-header">
-    <div class="pull-right" style="font-size: 10px;">
-      <table style="font-size: 10px; border-spacing:0px">
+    <div class="section-header-info">
+      <table>
         <tr>
           <td><xsl:value-of select="gsa:i18n ('Config ID', 'Property')"/>:</td>
           <td><xsl:value-of select="config/@id"/></td>
@@ -15136,8 +15136,8 @@ should not have received it.
     </xsl:choose>
   </div>
   <div class="section-header">
-    <div class="pull-right" style="font-size: 10px;">
-      <table style="font-size: 10px; border-spacing:0px">
+    <div class="section-header-info">
+      <table>
         <tr>
           <td><xsl:value-of select="gsa:i18n ('Config ID', 'Property')"/>:</td>
           <td><xsl:value-of select="config/@id"/></td>
@@ -15637,8 +15637,8 @@ should not have received it.
   </div>
 
   <div class="section-header">
-    <div class="pull-right" style="font-size: 10px;">
-      <table style="font-size: 10px; border-spacing:0px">
+    <div class="section-header-info">
+      <table>
         <tr>
           <td><xsl:value-of select="gsa:i18n ('ID', 'Property')"/>:</td>
           <td><xsl:value-of select="$config/@id"/></td>
@@ -20218,8 +20218,8 @@ should not have received it.
   </div>
 
   <div class="section-header">
-    <div class="pull-right" style="font-size: 10px;">
-      <table style="font-size: 10px; border-spacing:0px">
+    <div class="section-header-info">
+      <table>
         <tr>
           <td><xsl:value-of select="gsa:i18n ('ID', 'Property')"/>:</td>
           <td>
@@ -20523,8 +20523,8 @@ should not have received it.
   </div>
 
   <div class="section-header">
-    <div class="pull-right" style="font-size: 10px;">
-      <table style="font-size: 10px; border-spacing:0px">
+    <div class="section-header-info">
+      <table>
         <xsl:if test="info/@id != ''">
           <tr>
             <td><xsl:value-of select="gsa:i18n ('ID', 'Property')"/>:</td>
@@ -20686,8 +20686,8 @@ should not have received it.
   </div>
 
   <div class="section-header">
-    <div class="pull-right" style="font-size: 10px;">
-      <table style="font-size: 10px; border-spacing:0px">
+    <div class="section-header-info">
+      <table>
         <tr>
           <td><xsl:value-of select="gsa:i18n ('ID', 'Property')"/>:</td>
           <td>
@@ -20953,8 +20953,8 @@ should not have received it.
   </div>
 
   <div class="section-header">
-    <div class="pull-right" style="font-size: 10px;">
-      <table style="font-size: 10px; border-spacing:0px">
+    <div class="section-header-info">
+      <table>
         <tr>
           <td><xsl:value-of select="gsa:i18n ('ID', 'Property')"/>:</td>
           <td>
@@ -21146,8 +21146,8 @@ should not have received it.
   </div>
 
   <div class="section-header">
-    <div class="pull-right" style="font-size: 10px;">
-      <table style="font-size: 10px; border-spacing:0px">
+    <div class="section-header-info">
+      <table>
         <tr>
           <td><xsl:value-of select="gsa:i18n ('ID', 'Property')"/>:</td>
           <td>
@@ -21602,8 +21602,8 @@ should not have received it.
       </div>
 
       <div class="section-header">
-        <div class="pull-right" style="font-size: 10px;">
-          <table style="font-size: 10px; border-spacing:0px">
+        <div class="section-header-info">
+          <table>
             <tr>
               <td><xsl:value-of select="gsa:i18n ('ID', 'Property')"/>:</td>
               <td>
