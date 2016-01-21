@@ -5875,29 +5875,29 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </td>
       </xsl:when>
       <xsl:otherwise>
-        <td>
+        <td class="table-actions">
           <xsl:choose>
             <xsl:when test="$delta = @id">
               <img src="/img/delta_inactive.png" alt="{gsa:i18n ('Compare', 'Report')}"
                   title="{gsa:i18n ('Report is already selected for delta', 'Report')}"
-                  style="margin-left:3px;"/>
+                  class="icon"/>
             </xsl:when>
             <xsl:when test="string-length (../../filters/keywords/keyword[column='task_id']) = 0">
               <img src="/img/delta_inactive.png" alt="{gsa:i18n ('Compare', 'Report')}"
                   title="{gsa:i18n ('Filter must be limited to a single Task to allow delta reports', 'Report')}"
-                  style="margin-left:3px;"/>
+                  class="icon"/>
             </xsl:when>
             <xsl:when test="string-length ($delta) &gt; 0">
               <a href="/omp?cmd=get_report&amp;report_id={$delta}&amp;delta_report_id={@id}&amp;notes=1&amp;overrides={$apply_overrides}&amp;result_hosts_only=1&amp;token={/envelope/token}"
                 title="{gsa:i18n ('Compare', 'Report')}"
-                style="margin-left:3px;">
+                class="icon">
                 <img src="/img/delta_second.png" alt="{gsa:i18n ('Compare', 'Report')}"/>
               </a>
             </xsl:when>
             <xsl:otherwise>
               <a href="/omp?cmd=get_reports&amp;replace_task_id=1&amp;task_id={$task_id}&amp;delta_report_id={@id}&amp;overrides={$apply_overrides}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;task_filter={str:encode-uri (/envelope/params/task_filter, true ())}&amp;task_filt_id={/envelope/params/task_filt_id}&amp;token={/envelope/token}"
                 title="{gsa:i18n ('Compare', 'Report')}"
-                style="margin-left:3px;">
+                class="icon">
                 <img src="/img/delta.png" alt="{gsa:i18n ('Compare', 'Report')}"/>
               </a>
             </xsl:otherwise>
@@ -5907,13 +5907,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <img src="/img/delete_inactive.png"
                   alt="{gsa:i18n ('Delete', 'Action Verb')}"
                   title="{gsa:i18n ('Report is observed', 'Report')}"
-                  style="margin-left:3px;"/>
+                  class="icon"/>
             </xsl:when>
             <xsl:when test="scan_run_status='Running' or scan_run_status='Requested' or scan_run_status='Stop Requested' or scan_run_status='Resume Requested'">
               <img src="/img/delete_inactive.png"
                   alt="{gsa:i18n ('Delete', 'Action Verb')}"
                   title="{gsa:i18n ('Scan is active', 'Report')}"
-                  style="margin-left:3px;"/>
+                  class="icon"/>
             </xsl:when>
             <xsl:otherwise>
               <xsl:call-template name="delete-icon">
