@@ -2049,7 +2049,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <h3>
       <a href="/omp?cmd=get_tags&amp;filter=resource_uuid={$resource_id}&amp;token={/envelope/token}"
          title="{gsa:i18n ('Tags', 'Tags')}">
-        <img id="small-icon" src="/img/tag.svg" style="margin-right:5px" alt="Tags"/>
+        <img class="icon icon-sm" src="/img/tag.svg" alt="Tags"/>
       </a>
       <xsl:value-of select="gsa:i18n ('User Tags', 'Tags')"/>
       <xsl:choose>
@@ -2385,7 +2385,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <h3>
         <a href="/omp?cmd=get_permissions&amp;filter=name:^.*({$resource_type})s?$ and resource_uuid={$resource_id}&amp;token={/envelope/token}"
            title="{gsa:i18n ('Permissions', 'Permission')}">
-          <img id="small-icon" src="/img/permission.svg" style="margin-right:5px" alt="Permissions"/>
+          <img class="icon icon-sm" src="/img/permission.svg" alt="Permissions"/>
         </a>
         <xsl:value-of select="gsa:i18n ('Permissions', 'Permissions')"/>
         <xsl:choose>
@@ -7960,7 +7960,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <h3>
       <a href="/omp?cmd=get_slaves&amp;token={/envelope/token}"
          title="{gsa:i18n ('Slaves', 'Slave')}">
-        <img id="small-icon" src="/img/slave.svg" style="margin-right:5px" alt="Slaves"/>
+        <img class="icon icon-sm" src="/img/slave.svg" alt="Slaves"/>
       </a>
       <xsl:value-of select="gsa:i18n ('Slaves using this Credential', 'Credential')"/>
       <xsl:text> </xsl:text>
@@ -8009,7 +8009,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <h3>
       <a href="/omp?cmd=get_targets&amp;token={/envelope/token}"
          title="{gsa:i18n ('Targets', 'Targets')}">
-        <img id="small-icon" src="/img/target.svg" style="margin-right:5px" alt="Targets"/>
+        <img class="icon icon-sm" src="/img/target.svg" alt="Targets"/>
       </a>
       <xsl:value-of select="gsa:i18n ('Targets using this Credential', 'Credential')"/>
       <xsl:text> </xsl:text>
@@ -10864,7 +10864,7 @@ should not have received it.
     <h3>
       <a href="/omp?cmd=get_tasks&amp;token={/envelope/token}"
          title="{gsa:i18n ('Tasks', 'Tasks')}">
-        <img id="small-icon" src="/img/task.svg" style="margin-right:5px" alt="Tasks"/>
+        <img class="icon icon-sm" src="/img/task.svg" alt="Tasks"/>
       </a>
       <xsl:value-of select="gsa:i18n ('Tasks using this Alert', 'Alert')"/>
       <xsl:text> </xsl:text>
@@ -14104,7 +14104,7 @@ should not have received it.
     <h3>
       <a href="/omp?cmd=get_tasks&amp;token={/envelope/token}"
          title="{gsa:i18n ('Tasks', 'Tasks')}">
-        <img id="small-icon" src="/img/task.svg" style="margin-right:5px" alt="Tasks"/>
+        <img class="icon icon-sm" src="/img/task.svg" alt="Tasks"/>
       </a>
       <xsl:value-of select="gsa:i18n ('Tasks using this Target', 'Target')"/>
       <xsl:text> </xsl:text>
@@ -15776,7 +15776,7 @@ should not have received it.
     <h3>
       <a href="/omp?cmd=get_tasks&amp;token={/envelope/token}"
          title="{gsa:i18n ('Tasks', 'Task')}">
-        <img id="small-icon" src="/img/task.svg" style="margin-right:5px" alt="Tasks"/>
+        <img id="icon icon-sm" src="/img/task.svg" alt="Tasks"/>
       </a>
       <xsl:value-of select="gsa:i18n ('Tasks using this Scan Config', 'Scan Config')"/>
       <xsl:text> </xsl:text>
@@ -17330,7 +17330,7 @@ should not have received it.
     <h3>
       <a href="/omp?cmd=get_tasks&amp;token={/envelope/token}"
          title="{gsa:i18n ('Tasks', 'Tasks')}">
-        <img id="small-icon" src="/img/task.svg" style="margin-right:5px" alt="Tasks"/>
+        <img class="icon icon-sm" src="/img/task.svg" alt="Tasks"/>
       </a>
       <xsl:value-of select="gsa:i18n ('Tasks using this Schedule', 'Schedule')"/>
       <xsl:text> </xsl:text>
@@ -17906,7 +17906,7 @@ should not have received it.
     <h3>
       <a href="/omp?cmd=get_tasks&amp;token={/envelope/token}"
          title="{gsa:i18n ('Tasks', 'Tasks')}">
-        <img id="small-icon" src="/img/task.svg" style="margin-right:5px" alt="Tasks"/>
+        <img class="icon icon-sm" src="/img/task.svg" alt="Tasks"/>
       </a>
       <xsl:value-of select="gsa:i18n ('Tasks using this Scanner', 'Scanner')"/>
       <xsl:text> </xsl:text>
@@ -18599,7 +18599,7 @@ should not have received it.
     <h3>
       <a href="/omp?cmd=get_tasks&amp;token={/envelope/token}"
          title="{gsa:i18n ('Slaves', 'Slave')}">
-        <img id="small-icon" src="/img/task.svg" style="margin-right:5px" alt="Slaves"/>
+        <img class="icon icon-sm" src="/img/task.svg" alt="Slaves"/>
       </a>
       <xsl:value-of select="gsa:i18n ('Tasks using this Slave', 'Slave')"/>
       <xsl:text> </xsl:text>
@@ -25775,7 +25775,7 @@ should not have received it.
     <h3>
       <a href="/omp?cmd=get_targets&amp;token={/envelope/token}"
          title="{gsa:i18n ('Targets', 'Targets')}">
-        <img id="small-icon" src="/img/target.svg" style="margin-right:5px" alt="Targets"/>
+        <img class="icon icon-sm" src="/img/target.svg" alt="Targets"/>
       </a>
       <xsl:value-of select="gsa:i18n ('Targets using this Port List', 'Port List')"/>
       <xsl:text> </xsl:text>
@@ -26718,7 +26718,7 @@ should not have received it.
     <h3>
       <a href="/omp?cmd=get_alerts&amp;token={/envelope/token}"
          title="{gsa:i18n ('Alerts', 'Alert')}">
-        <img id="small-icon" src="/img/alert.svg" style="margin-right:5px" alt="Alerts"/>
+        <img class="icon icon-sm" src="/img/alert.svg" alt="Alerts"/>
       </a>
       <xsl:value-of select="gsa:i18n ('Alerts using this Report Format', 'Report Format')"/>
       <xsl:text> </xsl:text>

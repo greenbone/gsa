@@ -1468,7 +1468,7 @@ select[multiple] {
   margin-bottom: 20px;
 }
 
-#small-icon, .icon-sm {
+.icon-sm {
   width: 16px;
   height: 16px;
 }
