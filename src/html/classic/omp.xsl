@@ -4459,7 +4459,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <a href="/omp?cmd=new_task{$extra_params_string}&amp;next=get_task&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
              class="new-action-icon icon" data-type="task"
              title="{gsa:i18n ('New Task', 'Task')}">
-            <img src="/img/new.png" style="margin-left:3px;"/>
+            <img src="/img/new.png"/>
           </a>
           <ul>
             <li>

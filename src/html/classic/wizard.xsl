@@ -47,8 +47,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <span class="icon-menu">
         <a href="/omp?cmd=wizard&amp;name=quick_first_scan&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
             title="{gsa:i18n ('Wizard', 'Wizard')}"
-            class="wizard-action-icon" data-name="quick_first_scan">
-          <img src="/img/wizard.png" style="margin-left:3px;"/>
+            class="wizard-action-icon icon" data-name="quick_first_scan">
+          <img src="/img/wizard.png"/>
         </a>
         <ul>
           <li>
