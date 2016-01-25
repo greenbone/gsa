@@ -14347,34 +14347,154 @@ should not have received it.
   <xsl:call-template name="html-import-config-form"/>
 </xsl:template>
 
+<xsl:template name="edit-config-family">
+  <div class="toolbar">
+    <a href="/help/config_editor_nvt_families.html?token={/envelope/token}"
+      class="icon"
+      title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('Scan Configs', 'Scan Config'),' (',gsa:i18n('Edit Scan Config Family', 'Scan Config'),')')}">
+      <img src="/img/help.png"/>
+    </a>
+    <a href="?cmd=edit_config&amp;config_id={config/@id}&amp;token={/envelope/token}"
+      title="{gsa:i18n ('Scan Config', 'Scan Config')}"
+      class="icon">
+      <img src="/img/list.png" alt="{gsa:i18n ('Scan Config', 'Scan Config')}"/>
+    </a>
+  </div>
+  <div class="section-header">
+    <h1>
+      <xsl:value-of select="gsa:i18n ('Edit Scan Config Family', 'Scan Config')"/>
+    </h1>
+  </div>
+  <div class="section-box">
+    <xsl:variable name="config_id" select="config/@id"/>
+    <xsl:variable name="config_name" select="config/name"/>
+    <xsl:variable name="family" select="config/family"/>
+
+    <table>
+      <tr><td><xsl:value-of select="gsa:i18n ('Config', 'Scan Config')"/>:</td><td><xsl:value-of select="$config_name"/></td></tr>
+      <tr><td><b><xsl:value-of select="gsa:i18n ('Family', 'Scan Config')"/>:</b></td><td><b><xsl:value-of select="$family"/></b></td></tr>
+    </table>
+
+    <h1><xsl:value-of select="gsa:i18n ('Edit Network Vulnerability Tests', 'Scan Config')"/></h1>
+    <table class="gbntable" cellspacing="2" cellpadding="4">
+      <tr class="gbntablehead2">
+        <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
+        <td><xsl:value-of select="gsa:i18n ('OID', 'NVT')"/></td>
+        <td><xsl:value-of select="gsa:i18n ('Severity', 'Severity')"/></td>
+        <td><xsl:value-of select="gsa:i18n ('Timeout', 'Scan Config')"/></td>
+        <td><xsl:value-of select="gsa:i18n ('Prefs', 'Scan Config')"/></td>
+        <td><xsl:value-of select="gsa:i18n ('Selected', 'Scan Config')"/></td>
+        <td><xsl:value-of select="gsa:i18n ('Actions', 'Actions')"/></td>
+      </tr>
+      <form action="" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="token" value="{/envelope/token}"/>
+        <input type="hidden" name="cmd" value="save_config_family"/>
+        <input type="hidden" name="caller" value="{/envelope/current_page}"/>
+        <input type="hidden" name="config_id" value="{$config_id}"/>
+        <input type="hidden" name="name" value="{$config_name}"/>
+        <input type="hidden" name="family" value="{$family}"/>
+        <xsl:for-each select="all/get_nvts_response/nvt" >
+          <xsl:variable name="current_name" select="name/text()"/>
+          <xsl:variable name="id" select="@oid"/>
+
+          <tr class="{gsa:table-row-class(position())}">
+            <td>
+              <a href="/omp?cmd=get_config_nvt&amp;oid={@oid}&amp;config_id={$config_id}&amp;name={$config_name}&amp;family={$family}&amp;token={/envelope/token}"
+                title="{gsa:i18n ('NVT Details', 'NVT')}" style="margin-left:3px;">
+                <xsl:value-of select="$current_name"/>
+              </a>
+            </td>
+            <td>
+              <xsl:value-of select="@oid"/>
+            </td>
+            <td>
+              <xsl:call-template name="severity-bar">
+                <xsl:with-param name="cvss" select="cvss_base"/>
+              </xsl:call-template>
+            </td>
+            <td>
+              <xsl:variable
+                name="timeout"
+                select="../../../get_nvts_response/nvt[@oid=$id]/timeout"/>
+              <xsl:choose>
+                <xsl:when test="string-length($timeout) &gt; 0">
+                  <xsl:value-of select="$timeout"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:value-of select="gsa:i18n ('default', 'Scan Config')"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </td>
+            <td style="text-align:center;">
+              <xsl:choose>
+                <xsl:when test="preference_count&gt;0">
+                  <xsl:value-of select="preference_count"/>
+                </xsl:when>
+                <xsl:otherwise>
+                </xsl:otherwise>
+              </xsl:choose>
+            </td>
+            <td style="text-align:center;">
+              <xsl:choose>
+                <xsl:when test="../../../get_nvts_response/nvt[@oid=$id]">
+                  <input type="checkbox" name="nvt:{@oid}" value="1"
+                    checked="1"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <input type="checkbox" name="nvt:{@oid}" value="1"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </td>
+            <td>
+              <a href="/omp?cmd=edit_config_nvt&amp;oid={@oid}&amp;config_id={$config_id}&amp;name={$config_name}&amp;family={$family}&amp;token={/envelope/token}"
+                title="{gsa:i18n ('Select and Edit NVT Details', 'Scan Config')}"
+                style="margin-left:3px;">
+                <img src="/img/edit.png" alt="{gsa:i18n ('Edit', 'Action Verb')}"/>
+              </a>
+            </td>
+          </tr>
+        </xsl:for-each>
+        <tr>
+          <td>
+            <xsl:value-of select="gsa:i18n ('Total', 'NVTs')"/>:
+            <xsl:value-of select="count(all/get_nvts_response/nvt)"/>
+          </td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td>
+            <xsl:value-of select="gsa:i18n ('Total', 'NVTs')"/>:
+            <xsl:value-of select="count(get_nvts_response/nvt)"/>
+          </td>
+          <td></td>
+        </tr>
+        <tr>
+          <td colspan="8" style="text-align:right;">
+            <input type="submit"
+              name="submit"
+              value="{gsa:i18n ('Save Config', 'Scan Config')}"
+              title="{gsa:i18n ('Save Config', 'Scan Config')}"/>
+          </td>
+        </tr>
+      </form>
+    </table>
+  </div>
+</xsl:template>
+
 <xsl:template name="html-config-family-table">
   <div class="toolbar">
-    <xsl:choose>
-      <xsl:when test="edit">
-        <a href="/help/config_editor_nvt_families.html?token={/envelope/token}"
-           class="icon"
-           title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('Scan Configs', 'Scan Config'),' (',gsa:i18n('Edit Scan Config Family', 'Scan Config'),')')}">
-          <img src="/img/help.png"/>
-        </a>
-        <a href="?cmd=edit_config&amp;config_id={config/@id}&amp;token={/envelope/token}"
-           title="{gsa:i18n ('Scan Config', 'Scan Config')}"
-           class="icon">
-          <img src="/img/list.png" alt="{gsa:i18n ('Scan Config', 'Scan Config')}"/>
-        </a>
-      </xsl:when>
-      <xsl:otherwise>
-        <a href="/help/config_family_details.html?token={/envelope/token}"
-           class="icon"
-           title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('Scan Configs', 'Scan Config'),' (',gsa:i18n('Scan Config Family Details', 'Scan Config'),')')}">
-          <img src="/img/help.png"/>
-        </a>
-        <a href="?cmd=get_config&amp;config_id={config/@id}&amp;token={/envelope/token}"
-           title="{gsa:i18n ('Scan Config', 'Scan Config')}"
-           class="icon">
-          <img src="/img/list.png" alt="{gsa:i18n ('Scan Config', 'Scan Config')}"/>
-        </a>
-      </xsl:otherwise>
-    </xsl:choose>
+    <a href="/help/config_family_details.html?token={/envelope/token}"
+      class="icon"
+      title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('Scan Configs', 'Scan Config'),' (',gsa:i18n('Scan Config Family Details', 'Scan Config'),')')}">
+      <img src="/img/help.png"/>
+    </a>
+    <a href="?cmd=get_config&amp;config_id={config/@id}&amp;token={/envelope/token}"
+      title="{gsa:i18n ('Scan Config', 'Scan Config')}"
+      class="icon">
+      <img src="/img/list.png" alt="{gsa:i18n ('Scan Config', 'Scan Config')}"/>
+    </a>
   </div>
   <div class="section-header">
     <div class="section-header-info">
@@ -14398,14 +14518,7 @@ should not have received it.
          title="{gsa:i18n ('Scan Configs', 'Scan Config')}">
         <img class="icon icon-lg" src="/img/config.svg" alt="Scan Configs"/>
       </a>
-      <xsl:choose>
-        <xsl:when test="edit">
-          <xsl:value-of select="gsa:i18n ('Edit Scan Config Family', 'Scan Config')"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="gsa:i18n ('Scan Config Family Details', 'Scan Config')"/>
-        </xsl:otherwise>
-      </xsl:choose>
+      <xsl:value-of select="gsa:i18n ('Scan Config Family Details', 'Scan Config')"/>
     </h1>
   </div>
   <div class="section-box">
@@ -14418,14 +14531,7 @@ should not have received it.
       <tr><td><b><xsl:value-of select="gsa:i18n ('Family', 'Scan Config')"/>:</b></td><td><b><xsl:value-of select="$family"/></b></td></tr>
     </table>
 
-    <xsl:choose>
-      <xsl:when test="edit">
-        <h1><xsl:value-of select="gsa:i18n ('Edit Network Vulnerability Tests', 'Scan Config')"/></h1>
-      </xsl:when>
-      <xsl:otherwise>
-        <h1><xsl:value-of select="gsa:i18n ('Network Vulnerability Tests', 'Scan Config')"/></h1>
-      </xsl:otherwise>
-    </xsl:choose>
+    <h1><xsl:value-of select="gsa:i18n ('Network Vulnerability Tests', 'Scan Config')"/></h1>
 
     <table class="gbntable" cellspacing="2" cellpadding="4">
       <tr class="gbntablehead2">
@@ -14434,163 +14540,56 @@ should not have received it.
         <td><xsl:value-of select="gsa:i18n ('Severity', 'Severity')"/></td>
         <td><xsl:value-of select="gsa:i18n ('Timeout', 'Scan Config')"/></td>
         <td><xsl:value-of select="gsa:i18n ('Prefs', 'Scan Config')"/></td>
-        <xsl:if test="edit">
-          <td><xsl:value-of select="gsa:i18n ('Selected', 'Scan Config')"/></td>
-        </xsl:if>
-        <xsl:choose>
-          <xsl:when test="edit">
-            <td><xsl:value-of select="gsa:i18n ('Actions', 'Actions')"/></td>
-          </xsl:when>
-        </xsl:choose>
       </tr>
-      <xsl:choose>
-        <xsl:when test="edit">
-          <form action="" method="post" enctype="multipart/form-data">
-            <input type="hidden" name="token" value="{/envelope/token}"/>
-            <input type="hidden" name="cmd" value="save_config_family"/>
-            <input type="hidden" name="caller" value="{/envelope/current_page}"/>
-            <input type="hidden" name="config_id" value="{$config_id}"/>
-            <input type="hidden" name="name" value="{$config_name}"/>
-            <input type="hidden" name="family" value="{$family}"/>
-            <xsl:for-each select="all/get_nvts_response/nvt" >
-              <xsl:variable name="current_name" select="name/text()"/>
-              <xsl:variable name="id" select="@oid"/>
+      <xsl:for-each select="get_nvts_response/nvt" >
+        <xsl:variable name="current_name" select="name/text()"/>
 
-              <tr class="{gsa:table-row-class(position())}">
-                <td>
-                  <a href="/omp?cmd=get_config_nvt&amp;oid={@oid}&amp;config_id={$config_id}&amp;name={$config_name}&amp;family={$family}&amp;token={/envelope/token}"
-                    title="{gsa:i18n ('NVT Details', 'NVT')}" style="margin-left:3px;">
-                    <xsl:value-of select="$current_name"/>
-                  </a>
-                </td>
-                <td>
-                  <xsl:value-of select="@oid"/>
-                </td>
-                <td>
-                  <xsl:call-template name="severity-bar">
-                    <xsl:with-param name="cvss" select="cvss_base"/>
-                  </xsl:call-template>
-                </td>
-                <td>
-                  <xsl:variable
-                    name="timeout"
-                    select="../../../get_nvts_response/nvt[@oid=$id]/timeout"/>
-                  <xsl:choose>
-                    <xsl:when test="string-length($timeout) &gt; 0">
-                      <xsl:value-of select="$timeout"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <xsl:value-of select="gsa:i18n ('default', 'Scan Config')"/>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                </td>
-                <td style="text-align:center;">
-                  <xsl:choose>
-                    <xsl:when test="preference_count&gt;0">
-                      <xsl:value-of select="preference_count"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                </td>
-                <td style="text-align:center;">
-                  <xsl:choose>
-                    <xsl:when test="../../../get_nvts_response/nvt[@oid=$id]">
-                      <input type="checkbox" name="nvt:{@oid}" value="1"
-                        checked="1"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <input type="checkbox" name="nvt:{@oid}" value="1"/>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                </td>
-                <td>
-                  <a href="/omp?cmd=edit_config_nvt&amp;oid={@oid}&amp;config_id={$config_id}&amp;name={$config_name}&amp;family={$family}&amp;token={/envelope/token}"
-                    title="{gsa:i18n ('Select and Edit NVT Details', 'Scan Config')}"
-                    style="margin-left:3px;">
-                    <img src="/img/edit.png" alt="{gsa:i18n ('Edit', 'Action Verb')}"/>
-                  </a>
-                </td>
-              </tr>
-            </xsl:for-each>
-            <tr>
-              <td>
-                <xsl:value-of select="gsa:i18n ('Total', 'NVTs')"/>:
-                <xsl:value-of select="count(all/get_nvts_response/nvt)"/>
-              </td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td>
-                <xsl:value-of select="gsa:i18n ('Total', 'NVTs')"/>:
-                <xsl:value-of select="count(get_nvts_response/nvt)"/>
-              </td>
-              <td></td>
-            </tr>
-            <tr>
-              <td colspan="8" style="text-align:right;">
-                <input type="submit"
-                  name="submit"
-                  value="{gsa:i18n ('Save Config', 'Scan Config')}"
-                  title="{gsa:i18n ('Save Config', 'Scan Config')}"/>
-              </td>
-            </tr>
-          </form>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:for-each select="get_nvts_response/nvt" >
-            <xsl:variable name="current_name" select="name/text()"/>
-
-            <tr class="{gsa:table-row-class(position())}">
-              <td>
-                <a href="/omp?cmd=get_config_nvt&amp;oid={@oid}&amp;config_id={$config_id}&amp;name={$config_name}&amp;family={$family}&amp;token={/envelope/token}"
-                  title="{gsa:i18n ('NVT Details', 'NVT')}" style="margin-left:3px;">
-                  <xsl:value-of select="$current_name"/>
-                </a>
-              </td>
-              <td>
-                <xsl:value-of select="@oid"/>
-              </td>
-              <td>
-                <xsl:call-template name="severity-bar">
-                  <xsl:with-param name="cvss" select="cvss_base"/>
-                </xsl:call-template>
-              </td>
-              <td>
-                <xsl:choose>
-                  <xsl:when test="string-length(timeout) &gt; 0">
-                    <xsl:value-of select="timeout"/>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <xsl:value-of select="gsa:i18n ('default', 'Scan Config')"/>
-                  </xsl:otherwise>
-                </xsl:choose>
-              </td>
-              <td style="text-align:center;">
-                <xsl:choose>
-                  <xsl:when test="preference_count&gt;0">
-                    <xsl:value-of select="preference_count"/>
-                  </xsl:when>
-                  <xsl:otherwise>
-                  </xsl:otherwise>
-                </xsl:choose>
-              </td>
-            </tr>
-          </xsl:for-each>
-          <tr>
-            <td>
-              <xsl:value-of select="gsa:i18n ('Total', 'NVTs')"/>:
-              <xsl:value-of select="count(get_nvts_response/nvt)"/>
-            </td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
-        </xsl:otherwise>
-      </xsl:choose>
+        <tr class="{gsa:table-row-class(position())}">
+          <td>
+            <a href="/omp?cmd=get_config_nvt&amp;oid={@oid}&amp;config_id={$config_id}&amp;name={$config_name}&amp;family={$family}&amp;token={/envelope/token}"
+              title="{gsa:i18n ('NVT Details', 'NVT')}" style="margin-left:3px;">
+              <xsl:value-of select="$current_name"/>
+            </a>
+          </td>
+          <td>
+            <xsl:value-of select="@oid"/>
+          </td>
+          <td>
+            <xsl:call-template name="severity-bar">
+              <xsl:with-param name="cvss" select="cvss_base"/>
+            </xsl:call-template>
+          </td>
+          <td>
+            <xsl:choose>
+              <xsl:when test="string-length(timeout) &gt; 0">
+                <xsl:value-of select="timeout"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="gsa:i18n ('default', 'Scan Config')"/>
+              </xsl:otherwise>
+            </xsl:choose>
+          </td>
+          <td style="text-align:center;">
+            <xsl:choose>
+              <xsl:when test="preference_count&gt;0">
+                <xsl:value-of select="preference_count"/>
+              </xsl:when>
+              <xsl:otherwise>
+              </xsl:otherwise>
+            </xsl:choose>
+          </td>
+        </tr>
+      </xsl:for-each>
+      <tr>
+        <td>
+          <xsl:value-of select="gsa:i18n ('Total', 'NVTs')"/>:
+          <xsl:value-of select="count(get_nvts_response/nvt)"/>
+        </td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
     </table>
   </div>
 </xsl:template>
@@ -16239,7 +16238,14 @@ should not have received it.
 <!-- GET_CONFIG_FAMILY_RESPONSE -->
 
 <xsl:template match="get_config_family_response">
-  <xsl:call-template name="html-config-family-table"/>
+  <xsl:choose>
+    <xsl:when test="edit">
+      <xsl:call-template name="edit-config-family"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:call-template name="html-config-family-table"/>
+    </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 <!-- GET_CONFIG_NVT_RESPONSE -->
