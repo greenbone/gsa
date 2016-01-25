@@ -314,11 +314,8 @@
         var gb_window = gb_windows.first();
         var content = gb_window.find('div:nth-child(4)');
 
-        // remove the last 'submit' button
-        var submit = content.find('input[type=submit]').last().closest('tr');
-        if (submit.length === 0) {
-          submit = content.find('input[type=submit]').last();
-        }
+        // remove all 'submit' buttons
+        content.find('input[type=submit]').remove();
 
         dialog_title = gb_window.find('.gb_window_part_center').justtext();
         dialog_html = content.html();
