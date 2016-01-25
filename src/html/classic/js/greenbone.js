@@ -291,7 +291,6 @@
     var self = this;
     var done_func, fail_func;
     var request;
-    var submit;
     if (button === undefined) { button = 'Create';}
     this.params.cmd = this.command;
     this.params.token = $('#gsa-token').text();
@@ -300,28 +299,33 @@
 
     done_func = function(html) {
       var dialog_title, dialog_html;
+      var response = $('<div/>', {html: html});
 
       // get the content of the (first) window
       // needs to wrap it in a div to be able to select the top-level elements.
-      var gb_windows = $('<div/>', {html: html}).find('.gb_window');
+      var gb_windows = response.find('.gb_window');
+      var edit_dialog = response.find('.edit-dialog');
 
       if (gb_windows.length) {
-        var gb_window = gb_windows.first();
-
         if (gb_windows.length > 1) {
           self.error( (gb_windows.length - 1) + " forms not displayed !");
         }
 
-        content = gb_window.find('div:nth-child(4)');
+        var gb_window = gb_windows.first();
+        var content = gb_window.find('div:nth-child(4)');
 
         // remove the last 'submit' button
-        submit = content.find('input[type=submit]').last().closest('tr');
+        var submit = content.find('input[type=submit]').last().closest('tr');
         if (submit.length === 0) {
           submit = content.find('input[type=submit]').last();
         }
 
         dialog_title = gb_window.find('.gb_window_part_center').justtext();
         dialog_html = content.html();
+      }
+      else if(edit_dialog.length) {
+        dialog_title = edit_dialog.find('.title').justtext();
+        dialog_html = edit_dialog.find('.content').html();
       }
 
       self.dialog = $("<div/>", {

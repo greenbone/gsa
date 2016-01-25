@@ -1,3 +1,10 @@
+2016-01-25  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/js/greenbone.js (OMPDialog.prototype.show): Introduce new
+	html content structure for edit dialogs. A new edit dialog should have the
+	structure <div class="edit-dialog"><div class="title">...</div><div
+	class="content">...</div></div>.
+
 2016-01-25  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Allow user to specify email subject and content for SecInfo alerts too.
