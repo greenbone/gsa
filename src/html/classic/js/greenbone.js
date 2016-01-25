@@ -909,8 +909,30 @@
         $("#severity_at_least_row, #severity_changed_row, #filter_count_changed_row").hide();
         /* Methods. */
         $("#http_get_row, #start_task_row, #sourcefire_row, #verinice_row").hide();
+
+        $("#email_subject_task").hide();
+        $("#email_subject_task_input").attr("name", "subject_dummy");
+        $("#email_subject_secinfo").show();
+        $("#email_subject_secinfo_input").attr("name", "method_data:subject");
+
+        $("#email_content_include_task").hide();
+        $("#email_content_include_secinfo").show();
+        $("#email_content_include_secinfo").attr("style", "display: inline");
+        $("#email_content_include_message_task").hide();
+        $("#message_include_task").attr("name", "message_include_dummy");
+        $("#email_content_include_message_secinfo").show();
+        $("#message_include_secinfo").attr("name", "method_data:message");
+
+        $("#email_content_attach_task").hide();
+        $("#email_content_attach_secinfo").show();
+        $("#email_content_attach_secinfo").attr("style", "display: inline");
+        $("#email_content_attach_message_task").hide();
+        $("#message_attach_task").attr("name", "message_attach_dummy");
+        $("#email_content_attach_message_secinfo").show();
+        $("#message_attach_secinfo").attr("name", "method_data:message_attach");
+
         /* Method fields. */
-        $("#send_to_host_report_row, #email_subject_row, #email_content_row").hide();
+        $("#send_to_host_report_row").hide();
         $("#details_url_row").show();
         /* Filter. */
         $("#report_result_filter_row").hide();
@@ -928,8 +950,29 @@
         $("#severity_at_least_row, #severity_changed_row, #filter_count_changed_row").show();
         /* Methods. */
         $("#http_get_row, #start_task_row, #sourcefire_row, #verinice_row").show();
+
+        $("#email_subject_task").show();
+        $("#email_subject_task_input").attr("name", "method_data:subject");
+        $("#email_subject_secinfo").hide();
+        $("#email_subject_secinfo_input").attr("name", "subject_dummy");
+        $("#email_content_include_task").show();
+        $("#email_content_include_task").attr("style", "display: inline");
+        $("#email_content_include_secinfo").hide();
+        $("#email_content_include_message_task").show();
+        $("#message_include_task").attr("name", "method_data:message");
+        $("#email_content_include_message_secinfo").hide();
+        $("#message_include_secinfo").attr("name", "message_include_dummy");
+
+        $("#email_content_attach_task").show();
+        $("#email_content_attach_task").attr("style", "display: inline");
+        $("#email_content_attach_secinfo").hide();
+        $("#email_content_attach_message_task").show();
+        $("#message_attach_task").attr("name", "method_data:message_attach");
+        $("#email_content_attach_message_secinfo").hide();
+        $("#message_attach_secinfo").attr("name", "message_attach_dummy");
+
         /* Method fields. */
-        $("#send_to_host_report_row, #email_subject_row, #email_content_row").show();
+        $("#send_to_host_report_row").show();
         $("#details_url_row").hide();
         /* Filter. */
         $("#report_result_filter_row").show();

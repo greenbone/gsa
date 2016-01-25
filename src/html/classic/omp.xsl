@@ -4514,7 +4514,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <div id="list-window-details">
         <h2>
           <xsl:value-of select="gsa:i18n ($cap-type-plural)"/>
-          (<xsl:value-of select="$filtered-count"/> 
+          (<xsl:value-of select="$filtered-count"/>
           <xsl:text> </xsl:text>
           <xsl:value-of select="gsa:i18n ('of')"/>
           <xsl:text> </xsl:text>
@@ -8643,6 +8643,21 @@ Please contact your local system administrator if you think you
 should not have received it.
 </xsl:variable>
 
+<xsl:variable name="include-message-default-secinfo">
+After the event $e,
+the following condition was met: $c
+
+Full details are available on the scan engine.
+
+$t
+$i
+
+Note:
+This email was sent to you as a configured security information escalation.
+Please contact your local system administrator if you think you
+should not have received it.
+</xsl:variable>
+
 <xsl:variable name="attach-message-default">
 Task '$n': $e
 
@@ -8656,6 +8671,21 @@ $t
 
 Note:
 This email was sent to you as a configured security scan escalation.
+Please contact your local system administrator if you think you
+should not have received it.
+</xsl:variable>
+
+<xsl:variable name="attach-message-default-secinfo">
+After the event $e,
+the following condition was met: $c
+
+This email escalation is configured to attach the resource list.
+Full details are available on the scan engine.
+
+$t
+
+Note:
+This email was sent to you as a configured security information escalation.
 Please contact your local system administrator if you think you
 should not have received it.
 </xsl:variable>
@@ -8884,6 +8914,7 @@ should not have received it.
           <input type="hidden" name="filter_id" value="0"/>
         </xsl:if>
         <table class="table-form">
+          <!-- CSS for hiding/showing rows initially. -->
           <tr>
             <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
             <td>
@@ -8983,10 +9014,15 @@ should not have received it.
                 <tr id="email_subject_row">
                   <td></td>
                   <td><xsl:value-of select="gsa:i18n ('Subject', 'Alert|Email')"/></td>
-                  <td>
-                    <input type="text" name="method_data:subject"
+                  <td id="email_subject_task">
+                    <input id="email_subject_task_input" type="text" name="method_data:subject"
                            size="30" maxlength="80"
                            value="[OpenVAS-Manager] Task '$n': $e"/>
+                  </td>
+                  <td style="display: none" id="email_subject_secinfo">
+                    <input id="email_subject_secinfo_input" type="text" name="dummy_subject"
+                           size="30" maxlength="80"
+                           value="[OpenVAS-Manager] $q $S arrived"/>
                   </td>
                 </tr>
                 <tr id="email_content_row">
@@ -9007,13 +9043,61 @@ should not have received it.
                           <td>
                             <label>
                               <input type="radio" name="method_data:notice" value="0"/>
-                              <xsl:value-of select="gsa:i18n ('Include report', 'Alert|Email')"/>
-                              <xsl:text> </xsl:text>
-                              <select name="method_data:notice_report_format">
-                                <xsl:for-each select="$report-formats/report_format">
-                                  <xsl:if test="substring(content_type, 1, 5) = 'text/'">
+                              <div id="email_content_include_task" style="display: inline">
+                                <xsl:value-of select="gsa:i18n ('Include report', 'Alert|Email')"/>
+                                <xsl:text> </xsl:text>
+                                <select name="method_data:notice_report_format">
+                                  <xsl:for-each select="$report-formats/report_format">
+                                    <xsl:if test="substring(content_type, 1, 5) = 'text/'">
+                                      <xsl:choose>
+                                        <xsl:when test="@id='19f6f1b3-7128-4433-888c-ccc764fe6ed5'">
+                                          <option value="{@id}" selected="1">
+                                            <xsl:value-of select="name"/>
+                                          </option>
+                                        </xsl:when>
+                                        <xsl:otherwise>
+                                          <option value="{@id}">
+                                            <xsl:value-of select="name"/>
+                                          </option>
+                                        </xsl:otherwise>
+                                      </xsl:choose>
+                                    </xsl:if>
+                                  </xsl:for-each>
+                                </select>
+                              </div>
+                              <div id="email_content_include_secinfo" style="display: none">
+                                <xsl:value-of select="gsa:i18n ('Include list of resources', 'Alert|Email')"/>
+                              </div>
+                              <xsl:text> with message:</xsl:text>
+                            </label>
+                            <br/>
+                            <div id="email_content_include_message_task" style="display: inline">
+                              <textarea id="message_include_task"
+                                        name="method_data:message"
+                                        rows="3" cols="50">
+                                <xsl:value-of select="$include-message-default"/>
+                              </textarea>
+                            </div>
+                            <div id="email_content_include_message_secinfo" style="display: none">
+                              <textarea id="message_include_secinfo"
+                                        name="dummy_message"
+                                        rows="3" cols="50">
+                                <xsl:value-of select="$include-message-default-secinfo"/>
+                              </textarea>
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <label>
+                              <input type="radio" name="method_data:notice" value="2"/>
+                              <div id="email_content_attach_task" style="display: inline">
+                                <xsl:value-of select="gsa:i18n ('Attach report', 'Alert|Email')"/>
+                                <xsl:text> </xsl:text>
+                                <select name="method_data:notice_attach_format">
+                                  <xsl:for-each select="$report-formats/report_format">
                                     <xsl:choose>
-                                      <xsl:when test="@id='19f6f1b3-7128-4433-888c-ccc764fe6ed5'">
+                                      <xsl:when test="@id='1a60a67e-97d0-4cbf-bc77-f71b08e7043d'">
                                         <option value="{@id}" selected="1">
                                           <xsl:value-of select="name"/>
                                         </option>
@@ -9024,46 +9108,29 @@ should not have received it.
                                         </option>
                                       </xsl:otherwise>
                                     </xsl:choose>
-                                  </xsl:if>
-                                </xsl:for-each>
-                              </select>
+                                  </xsl:for-each>
+                                </select>
+                              </div>
+                              <div id="email_content_attach_secinfo" style="display: none">
+                                <xsl:value-of select="gsa:i18n ('Attach list of resources', 'Alert|Email')"/>
+                              </div>
+                              <xsl:text> with message:</xsl:text>
                             </label>
-                            with message:
                             <br/>
-                            <textarea name="method_data:message" rows="3" cols="50">
-                              <xsl:value-of select="$include-message-default"/>
-                            </textarea>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            <label>
-                              <input type="radio" name="method_data:notice" value="2"/>
-                              <xsl:value-of select="gsa:i18n ('Attach report', 'Alert|Email')"/>
-                              <xsl:text> </xsl:text>
-                              <select name="method_data:notice_attach_format">
-                                <xsl:for-each select="$report-formats/report_format">
-                                  <xsl:choose>
-                                    <xsl:when test="@id='1a60a67e-97d0-4cbf-bc77-f71b08e7043d'">
-                                      <option value="{@id}" selected="1">
-                                        <xsl:value-of select="name"/>
-                                      </option>
-                                    </xsl:when>
-                                    <xsl:otherwise>
-                                      <option value="{@id}">
-                                        <xsl:value-of select="name"/>
-                                      </option>
-                                    </xsl:otherwise>
-                                  </xsl:choose>
-                                </xsl:for-each>
-                              </select>
-                            </label>
-                            with message:
-                            <br/>
-                            <textarea name="method_data:message_attach"
-                                      rows="3" cols="50">
-                              <xsl:value-of select="$attach-message-default"/>
-                            </textarea>
+                            <div id="email_content_attach_message_task">
+                              <textarea id="message_attach_task"
+                                        name="method_data:message_attach"
+                                        rows="3" cols="50">
+                                <xsl:value-of select="$attach-message-default"/>
+                              </textarea>
+                            </div>
+                            <div id="email_content_attach_message_secinfo" style="display: none">
+                              <textarea id="message_attach_secinfo"
+                                        name="dummy_message"
+                                        rows="3" cols="50">
+                                <xsl:value-of select="$attach-message-default-secinfo"/>
+                              </textarea>
+                            </div>
                           </td>
                         </tr>
                       </xsl:if>
@@ -9667,16 +9734,41 @@ should not have received it.
                         value="{$method/data[name='from_address']/text()}"/>
                   </td>
                 </tr>
-                <tr style="{$hide}" id="email_subject_row">
+                <tr id="email_subject_row">
+                  <xsl:variable name="dummy-task">
+                    <xsl:choose>
+                      <xsl:when test="get_alerts_response/alert/event/text() != 'New SecInfo arrived' and get_alerts_response/alert/event/text() != 'Updated SecInfo arrived'">
+                        <xsl:text>method_data:subject</xsl:text>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <xsl:text>dummy_subject</xsl:text>
+                      </xsl:otherwise>
+                    </xsl:choose>
+                  </xsl:variable>
+                  <xsl:variable name="dummy-secinfo">
+                    <xsl:choose>
+                      <xsl:when test="get_alerts_response/alert/event/text() = 'New SecInfo arrived' or get_alerts_response/alert/event/text() = 'Updated SecInfo arrived'">
+                        <xsl:text>method_data:subject</xsl:text>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <xsl:text>dummy_subject</xsl:text>
+                      </xsl:otherwise>
+                    </xsl:choose>
+                  </xsl:variable>
                   <td></td>
                   <td><xsl:value-of select="gsa:i18n ('Subject', 'Alert|Email')"/></td>
-                  <td>
-                    <input type="text" name="method_data:subject"
+                  <td id="email_subject_task" style="{$hide}">
+                    <input id="email_subject_task_input" type="text" name="{$dummy-task}"
+                           size="30" maxlength="80"
+                           value="{$method/data[name='subject']/text()}"/>
+                  </td>
+                  <td id="email_subject_secinfo" style="{$show}">
+                    <input id="email_subject_task_input" type="text" name="{$dummy-secinfo}"
                            size="30" maxlength="80"
                            value="{$method/data[name='subject']/text()}"/>
                   </td>
                 </tr>
-                <tr style="{$hide}" id="email_content_row">
+                <tr id="email_content_row">
                   <td></td>
                   <td><xsl:value-of select="gsa:i18n ('Content', 'Alert|Email')"/></td>
                   <td>
@@ -9694,62 +9786,29 @@ should not have received it.
                       <xsl:if test="gsa:may-op ('get_filters')">
                         <tr>
                           <td>
-                              <xsl:call-template name="radio-button">
-                                <xsl:with-param name="name" select="'method_data:notice'"/>
-                                <xsl:with-param name="value" select="'0'"/>
-                                <xsl:with-param name="select-value" select="$method/data[name='notice']/text()"/>
-                                <xsl:with-param name="text">
-                                  <xsl:value-of select="gsa:i18n ('Include report', 'Alert|Email')"/>
-                                  <xsl:text> </xsl:text>
-                                  <select name="method_data:notice_report_format">
-                                    <xsl:for-each select="$report-formats/report_format">
-                                      <xsl:if test="substring(content_type, 1, 5) = 'text/'">
-                                        <xsl:choose>
-                                          <xsl:when test="@id=$method/data[name='notice_report_format']/text()">
-                                            <option value="{@id}" selected="1">
-                                              <xsl:value-of select="name"/>
-                                            </option>
-                                          </xsl:when>
-                                          <xsl:otherwise>
-                                            <option value="{@id}">
-                                              <xsl:value-of select="name"/>
-                                            </option>
-                                          </xsl:otherwise>
-                                        </xsl:choose>
-                                      </xsl:if>
-                                    </xsl:for-each>
-                                  </select>
-                                </xsl:with-param>
-                              </xsl:call-template>
-                            with message:
-                            <br/>
-                            <textarea style="margin-left:15px;"
-                                      name="method_data:message"
-                                      rows="3" cols="50">
+                            <xsl:variable name="secinfo-style">
+                              <xsl:if test="$show = ''">display: inline</xsl:if>
+                            </xsl:variable>
+                            <xsl:variable name="task-style">
+                              <xsl:if test="$hide = ''">display: inline</xsl:if>
+                            </xsl:variable>
+                            <label>
                               <xsl:choose>
-                                <xsl:when test="$method/data[name='notice']/text() = 0">
-                                  <xsl:value-of select="$method/data[name='message']/text()"/>
+                                <xsl:when test="$method/data[name='notice']/text() = '0'">
+                                  <input type="radio" name="method_data:notice" checked="1" value="0"/>
                                 </xsl:when>
                                 <xsl:otherwise>
-                                  <xsl:value-of select="$include-message-default"/>
+                                  <input type="radio" name="method_data:notice" value="0"/>
                                 </xsl:otherwise>
                               </xsl:choose>
-                            </textarea>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                              <xsl:call-template name="radio-button">
-                                <xsl:with-param name="name" select="'method_data:notice'"/>
-                                <xsl:with-param name="value" select="'2'"/>
-                                <xsl:with-param name="select-value" select="$method/data[name='notice']/text()"/>
-                                <xsl:with-param name="text">
-                                  <xsl:value-of  select="gsa:i18n ('Attach report', 'Alert|Email')"/>
-                                  <xsl:text> </xsl:text>
-                                  <select name="method_data:notice_attach_format">
-                                    <xsl:for-each select="$report-formats/report_format">
+                              <div id="email_content_include_task" style="{concat ($hide, ' ', $task-style)}">
+                                <xsl:value-of select="gsa:i18n ('Include report', 'Alert|Email')"/>
+                                <xsl:text> </xsl:text>
+                                <select name="method_data:notice_report_format">
+                                  <xsl:for-each select="$report-formats/report_format">
+                                    <xsl:if test="substring(content_type, 1, 5) = 'text/'">
                                       <xsl:choose>
-                                        <xsl:when test="@id=$method/data[name='notice_attach_format']/text()">
+                                        <xsl:when test="@id=$method/data[name='notice_report_format']/text()">
                                           <option value="{@id}" selected="1">
                                             <xsl:value-of select="name"/>
                                           </option>
@@ -9760,24 +9819,159 @@ should not have received it.
                                           </option>
                                         </xsl:otherwise>
                                       </xsl:choose>
-                                    </xsl:for-each>
-                                  </select>
-                                </xsl:with-param>
-                              </xsl:call-template>
-                            with message:
+                                    </xsl:if>
+                                  </xsl:for-each>
+                                </select>
+                              </div>
+                              <div id="email_content_include_secinfo" style="{concat ($show, ' ', $secinfo-style)}">
+                                <xsl:value-of select="gsa:i18n ('Include list of resources', 'Alert|Email')"/>
+                              </div>
+                              <xsl:text> with message:</xsl:text>
+                            </label>
                             <br/>
-                            <textarea style="margin-left:15px;"
-                                      name="method_data:message_attach"
-                                      rows="3" cols="50">
+                            <xsl:variable name="task-dummy">
                               <xsl:choose>
-                                <xsl:when test="$method/data[name='notice']/text() = 2">
-                                  <xsl:value-of select="$method/data[name='message']/text()"/>
+                                <xsl:when test="(get_alerts_response/alert/event/text() != 'New SecInfo arrived' and get_alerts_response/alert/event/text() != 'Updated SecInfo arrived')">
+                                  <xsl:text>method_data:message_attach</xsl:text>
                                 </xsl:when>
                                 <xsl:otherwise>
-                                  <xsl:value-of select="$attach-message-default"/>
+                                  <xsl:text>dummy_message</xsl:text>
                                 </xsl:otherwise>
                               </xsl:choose>
-                            </textarea>
+                            </xsl:variable>
+                            <xsl:variable name="secinfo-dummy">
+                              <xsl:choose>
+                                <xsl:when test="(get_alerts_response/alert/event/text() = 'New SecInfo arrived' or get_alerts_response/alert/event/text() = 'Updated SecInfo arrived')">
+                                  <xsl:text>method_data:message_attach</xsl:text>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                  <xsl:text>dummy_message</xsl:text>
+                                </xsl:otherwise>
+                              </xsl:choose>
+                            </xsl:variable>
+                            <div id="email_content_include_message_task" style="{concat ($hide, ' ', $task-style)}">
+                              <textarea style="margin-left:15px;"
+                                        name="{$task-dummy}"
+                                        rows="3" cols="50">
+                                <xsl:choose>
+                                  <xsl:when test="$method/data[name='notice']/text() = 0">
+                                    <xsl:value-of select="$method/data[name='message']/text()"/>
+                                  </xsl:when>
+                                  <xsl:otherwise>
+                                    <xsl:value-of select="$include-message-default"/>
+                                  </xsl:otherwise>
+                                </xsl:choose>
+                              </textarea>
+                            </div>
+                            <div id="email_content_include_message_secinfo" style="{concat ($show, ' ', $secinfo-style)}">
+                              <textarea style="margin-left:15px;"
+                                        name="{$secinfo-dummy}"
+                                        rows="3" cols="50">
+                                <xsl:choose>
+                                  <xsl:when test="$method/data[name='notice']/text() = 0">
+                                    <xsl:value-of select="$method/data[name='message']/text()"/>
+                                  </xsl:when>
+                                  <xsl:otherwise>
+                                    <xsl:value-of select="$include-message-default-secinfo"/>
+                                  </xsl:otherwise>
+                                </xsl:choose>
+                              </textarea>
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <xsl:variable name="secinfo-style">
+                              <xsl:if test="$show = ''">display: inline</xsl:if>
+                            </xsl:variable>
+                            <xsl:variable name="task-style">
+                              <xsl:if test="$hide = ''">display: inline</xsl:if>
+                            </xsl:variable>
+                            <label>
+                              <xsl:choose>
+                                <xsl:when test="$method/data[name='notice']/text() = '2'">
+                                  <input type="radio" name="method_data:notice" checked="1" value="2"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                  <input type="radio" name="method_data:notice" value="2"/>
+                                </xsl:otherwise>
+                              </xsl:choose>
+                              <div id="email_content_attach_task" style="{concat ($hide, ' ', $task-style)}">
+                                <xsl:value-of  select="gsa:i18n ('Attach report', 'Alert|Email')"/>
+                                <xsl:text> </xsl:text>
+                                <select name="method_data:notice_attach_format">
+                                  <xsl:for-each select="$report-formats/report_format">
+                                    <xsl:choose>
+                                      <xsl:when test="@id=$method/data[name='notice_attach_format']/text()">
+                                        <option value="{@id}" selected="1">
+                                          <xsl:value-of select="name"/>
+                                        </option>
+                                      </xsl:when>
+                                      <xsl:otherwise>
+                                        <option value="{@id}">
+                                          <xsl:value-of select="name"/>
+                                        </option>
+                                      </xsl:otherwise>
+                                    </xsl:choose>
+                                  </xsl:for-each>
+                                </select>
+                              </div>
+                              <div id="email_content_attach_secinfo" style="{concat ($show, ' ', $secinfo-style)}">
+                                <xsl:value-of select="gsa:i18n ('Attach list of resources', 'Alert|Email')"/>
+                              </div>
+                              <xsl:text> with message:</xsl:text>
+                            </label>
+                            <br/>
+                            <xsl:variable name="task-dummy">
+                              <xsl:choose>
+                                <xsl:when test="(get_alerts_response/alert/event/text() != 'New SecInfo arrived' and get_alerts_response/alert/event/text() != 'Updated SecInfo arrived')">
+                                  <xsl:text>method_data:message_attach</xsl:text>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                  <xsl:text>dummy_message</xsl:text>
+                                </xsl:otherwise>
+                              </xsl:choose>
+                            </xsl:variable>
+                            <xsl:variable name="secinfo-dummy">
+                              <xsl:choose>
+                                <xsl:when test="(get_alerts_response/alert/event/text() = 'New SecInfo arrived' or get_alerts_response/alert/event/text() = 'Updated SecInfo arrived')">
+                                  <xsl:text>method_data:message_attach</xsl:text>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                  <xsl:text>dummy_message</xsl:text>
+                                </xsl:otherwise>
+                              </xsl:choose>
+                            </xsl:variable>
+                            <div id="email_content_attach_message_task" style="{concat ($hide, ' ', $task-style)}">
+                              <textarea style="margin-left:15px;"
+                                        id="message_attach_task"
+                                        name="{$task-dummy}"
+                                        rows="3" cols="50">
+                                <xsl:choose>
+                                  <xsl:when test="$method/data[name='notice']/text() = 2 and (get_alerts_response/alert/event/text() != 'New SecInfo arrived' and get_alerts_response/alert/event/text() != 'Updated SecInfo arrived')">
+                                    <xsl:value-of select="$method/data[name='message']/text()"/>
+                                  </xsl:when>
+                                  <xsl:otherwise>
+                                    <xsl:value-of select="$attach-message-default"/>
+                                  </xsl:otherwise>
+                                </xsl:choose>
+                              </textarea>
+                            </div>
+                            <div id="email_content_attach_message_secinfo" style="{concat ($show, ' ', $secinfo-style)}">
+                              <textarea style="margin-left:15px;"
+                                        id="message_attach_secinfo"
+                                        name="{$secinfo-dummy}"
+                                        rows="3" cols="50">
+                                <xsl:choose>
+                                  <xsl:when test="$method/data[name='notice']/text() = 2 and (get_alerts_response/alert/event/text() = 'New SecInfo arrived' or get_alerts_response/alert/event/text() = 'Updated SecInfo arrived')">
+                                    <xsl:value-of select="$method/data[name='message']/text()"/>
+                                  </xsl:when>
+                                  <xsl:otherwise>
+                                    <xsl:value-of select="$attach-message-default-secinfo"/>
+                                  </xsl:otherwise>
+                                </xsl:choose>
+                              </textarea>
+                            </div>
                           </td>
                         </tr>
                       </xsl:if>
@@ -21640,7 +21834,7 @@ should not have received it.
           <xsl:text> </xsl:text>
         </h1>
       </div>
-     
+
       <div class="section-box">
         <xsl:apply-templates
           select="$nvts_response/nvt" mode="details"/>
@@ -26717,7 +26911,7 @@ should not have received it.
   <div class="section-header">
     <a href="#"
       class="toggle-action-icon icon icon-action"
-      data-target="#using-box" data-name="Alerts using this Report Format" 
+      data-target="#using-box" data-name="Alerts using this Report Format"
       data-variable="using-box--collapsed">
         <img src="/img/fold.png"/>
     </a>
@@ -31441,7 +31635,7 @@ var toggleFilter = function(){
             value="Download"
             title="{gsa:i18n ('Download full Report', 'Report')}"
             src="/img/download.png"
-           
+
             style="margin-left:3px;"
             alt="{gsa:i18n ('Download', 'Report')}"/>
   </form>
@@ -31531,7 +31725,7 @@ var toggleFilter = function(){
             value="Download"
             title="{gsa:i18n ('Download filtered Report', 'Report')}"
             src="/img/download.png"
-           
+
             style="margin-left:3px;"
             alt="{gsa:i18n ('Download', 'Report')}"/>
   </form>
@@ -34767,7 +34961,7 @@ var toggleFilter = function(){
           <xsl:value-of select="gsa:i18n ('LDAP per-User Authentication', 'Group')"/>
         </h3>
       </div>
-     
+
       <div class="section-box" id="ldap-box">
         <form action="/omp" method="post" enctype="multipart/form-data">
           <input type="hidden" name="token" value="{/envelope/token}"/>
@@ -34840,7 +35034,7 @@ var toggleFilter = function(){
       <xsl:value-of select="gsa:i18n ('RADIUS Authentication', 'Group')"/>
     </h3>
   </div>
-     
+
   <div class="section-box" id="radius-box">
     <form action="/omp" method="post" enctype="multipart/form-data">
       <input type="hidden" name="token" value="{/envelope/token}"/>

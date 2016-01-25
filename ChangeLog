@@ -1,3 +1,16 @@
+2016-01-25  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Allow user to specify email subject and content for SecInfo alerts too.
+
+	* src/html/classic/omp.xsl (include-message-default-secinfo)
+	(attach-message-default-secinfo): New variables.
+	(html-create-alert-form, html-edit-alert-form): Add two subject fields,
+	one task case and one secinfo case.  These are hidden according to the
+	event type.  Same for message and message radio.
+
+	* src/html/classic/js/greenbone.js (editAlertUpdateForm): Adjust email
+	subject and content fields according to event type.
+
 2016-01-25  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/omp.xsl: Split html-config-family-table into two templates.
