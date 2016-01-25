@@ -640,6 +640,61 @@
     });
   }
 
+  function ToggleIcon(options) {
+    this.name = options.name;
+    this.target = options.target;
+    this.icon = options.icon;
+    this.variable = options.variable;
+    this.collapsed = options.collapsed == options.collapsed !== undefined ?
+      !!options.collapsed : false;
+    this.storage = window.localStorage;
+  }
+
+  ToggleIcon.prototype.init = function() {
+    if (this.variable) {
+      if (this.storage.getItem(this.variable) ||
+          (this.storage.getItem(this.variable) === null && this.collapsed)) {
+        this.storage.setItem(this.variable, true);
+        this.target.hide();
+        this.toggleIcon();
+      }
+    }
+  };
+
+  ToggleIcon.prototype.toggleIcon = function() {
+    // manage the button itself
+    this.icon.toggleClass('expand');
+    if (this.icon.hasClass('expand')) {
+      this.icon.attr({
+        src:   "/img/unfold.png",
+        title: "Unfold " + this.name,
+        alt:   "Unfold " + this.name
+      });
+    } else {
+      this.icon.attr({
+        src:   "/img/fold.png",
+        title: "Fold " + this.name,
+        alt:   "Fold " + this.name
+      });
+    }
+  };
+
+  ToggleIcon.prototype.toggle = function() {
+    // Update the localStorage
+    if (this.variable) {
+      if (this.storage.getItem(this.variable)) {
+        // visible
+        this.storage.removeItem(this.variable);
+      }
+      else {
+        // hidden
+        this.storage.setItem(this.variable, true);
+      }
+    }
+    this.target.slideToggle();
+    this.toggleIcon();
+  };
+
   var onReady = function(doc) {
     doc = $(doc);
 
@@ -761,69 +816,19 @@
     }
 
     doc.find('.toggle-action-icon').each(function() {
-      var elem = $(this),
-          target = doc.find(elem.data('target')),
-          icon = elem.find('img'),
-          name = elem.data('name'),
-          collapsed = elem.data('variable');
+      var elem = $(this);
+      var ticon = new ToggleIcon({
+          target: doc.find(elem.data('target')),
+          icon: elem.find('img'),
+          name: elem.data('name'),
+          collapsed: elem.data('collapsed'),
+          variable: elem.data('variable'),
+      });
 
-      function toggleIcon (icon) {
-        // manage the button itself
-        icon.toggleClass('expand');
-        if (icon.hasClass('expand')) {
-          icon.attr({
-            src:   "/img/unfold.png",
-            title: "Unfold " + name,
-            alt:   "Unfold " + name
-          });
-        } else {
-          icon.attr({
-            src:   "/img/fold.png",
-            title: "Fold " + name,
-            alt:   "Fold " + name
-          });
-        }
-      }
+      ticon.init();
 
-      function foldComplete() {
-        if (collapsed && window.localStorage.getItem(collapsed)) {
-          // Section collapsed
-        } else {
-          // Section unfolded
-          if (name == "Summary") {
-            for (var display in gsa.displays) {
-              if (! gsa.displays[display].requested())
-                gsa.displays[display].refresh();
-            }
-          }
-        }
-      }
-
-      if (collapsed && window.localStorage.getItem(collapsed)) {
-        target.hide();
-        toggleIcon(icon);
-      } else {
-        if (name == "Summary") {
-          for (var display in gsa.displays) {
-            if (! gsa.displays[display].requested ()) {
-              gsa.displays[display].refresh();
-            }
-          }
-        }
-      }
       elem.on('click', function() {
-        // Update the localStorage
-        if (collapsed){
-          if (window.localStorage.getItem(collapsed)) {
-            // visible
-            window.localStorage.removeItem(collapsed);
-          } else {
-            // hidden
-            window.localStorage.setItem(collapsed, true);
-          }
-        }
-        target.slideToggle(undefined, foldComplete);
-        toggleIcon(icon);
+        ticon.toggle();
       });
     });
 
