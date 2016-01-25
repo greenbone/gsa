@@ -1,5 +1,10 @@
 2016-01-25  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/greenbone.js (OMPDialog.prototype.show): Show login page
+	when session has expired and a 401 is returned to a dialog request.
+
+2016-01-25  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/greenbone.js (OMPDialog.prototype.show): Remove all
 	submit buttons from the OMPDialog not only the first one. In a dialog no
 	button should be shown beside the main dialog button.

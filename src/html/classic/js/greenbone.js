@@ -357,6 +357,12 @@
     };
 
     fail_func = function(response) {
+      if (response.status === 401) {
+        // not authorized (anymore)
+        // reload page to show login dialog
+        window.location.reload();
+        return;
+      }
 
       self.dialog = $("<div/>", {
         'class': "dialog-form",
