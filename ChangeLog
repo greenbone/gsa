@@ -1,5 +1,10 @@
 2016-01-26  Benoît Allard  <benoit.allard@greenbone.net>
 
+	* src/gsad.c: Re-introduce MHD_HTTP_METHOD_NOT_ACCEPTABLE for when the
+	  library doesn't define it (yet).
+
+2016-01-26  Benoît Allard  <benoit.allard@greenbone.net>
+
 	* src/gsad.c: Fix usage of deprecated symbol MHD_HTTP_METHOD_NOT_ACCEPTABLE
 
 2016-01-26  Benoît Allard  <benoit.allard@greenbone.net>

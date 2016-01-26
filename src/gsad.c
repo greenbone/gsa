@@ -99,6 +99,14 @@
 #define G_LOG_FATAL_MASK G_LOG_LEVEL_ERROR
 
 /**
+ * @brief The symbol is deprecated, but older versions (0.9.37 - Debian
+ * jessie) don't define it yet.
+ */
+#ifndef MHD_HTTP_NOT_ACCEPTABLE
+#define MHD_HTTP_NOT_ACCEPTABLE MHD_HTTP_METHOD_NOT_ACCEPTABLE
+#endif
+
+/**
  * @brief Name of the cookie used to store the SID.
  */
 #define SID_COOKIE_NAME "GSAD_SID"
