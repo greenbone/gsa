@@ -127,13 +127,10 @@
    * show_method specifies the method to send the initial request instead of GET.
   **/
   var OMPDialog = function(options) {
-    this.command = options.command;
-    this.reload = false;
-    if (options.element === true){
-      this.reload = true;
-    } else {
-      this.element = $(options.element);
-    }
+    this.command = options.cmd;
+    this.window_reload = options.window_reload !== undefined ?
+      !!options.window_reload : false;
+    this.element = options.element ? $(options.element) : undefined;
     if (options.params === undefined) {
       this.params = {};
     } else {
@@ -144,6 +141,11 @@
     } else {
       this.show_method = options.show_method;
     }
+    if (options.parent_dialog) {
+      this.parent_dialog = options.parent_dialog.$omp;
+    }
+    this.parent_reload = options.parent_reload !== undefined ?
+      !!options.parent_reload : true;
   };
 
   var waiting = function(){
@@ -191,8 +193,14 @@
   };
 
   OMPDialog.prototype.close = function() {
-    this.dialog.dialog("close");
-    // the rest happens in the ``close`` handler of the dialog.
+    if (this.dialog.$omp) {
+      // dereference self to avoid memory leak
+      this.dialog.$omp = undefined;
+    }
+    this.dialog.remove();
+    this.dialog = undefined;
+    this.parent_dialog = undefined;
+    startAutoRefresh();
   };
 
   OMPDialog.prototype.postForm = function() {
@@ -258,10 +266,13 @@
       })
       .done(function(xml) {
         xml = $(xml);
-        if (self.reload === true) {
+        if (self.window_reload === true) {
           window.location.reload();
           // a bit overkill, but better-safe-than-sorry.
           return;
+        }
+        if (self.parent_dialog && self.parent_reload) {
+          self.parent_dialog.reload();
         }
         if (self.element === undefined) {
           // No element to update, exit early.
@@ -287,6 +298,68 @@
       });
   };
 
+  OMPDialog.prototype.set_content = function(html) {
+    var self = this;
+    var dialog_title, dialog_html;
+    var response = $('<div/>', {html: html});
+
+    // get the content of the (first) window
+    // needs to wrap it in a div to be able to select the top-level elements.
+    var gb_windows = response.find('.gb_window');
+    var edit_dialog = response.find('.edit-dialog');
+
+    if (gb_windows.length) {
+      if (gb_windows.length > 1) {
+        self.error( (gb_windows.length - 1) + " forms not displayed !");
+      }
+
+      var gb_window = gb_windows.first();
+      var content = gb_window.find('div:nth-child(4)');
+
+      // remove all 'submit' buttons
+      content.find('input[type=submit]').remove();
+
+      dialog_title = gb_window.find('.gb_window_part_center').justtext();
+      dialog_html = content.html();
+    }
+    else if(edit_dialog.length) {
+      dialog_title = edit_dialog.find('.title').justtext();
+      dialog_html = edit_dialog.find('.content').html();
+    }
+
+    self.dialog.attr('title', dialog_title);
+    self.dialog.html(dialog_html);
+
+    // enable buttons, set up selects, ...
+    onReady(self.dialog);
+  };
+
+  OMPDialog.prototype.set_error_content = function(html) {
+    var self = this;
+    self.dialog.attr('title', 'Error');
+
+    var dialog_html = $(html),
+        internal_error_html
+          = html.find (".gb_error_dialog .gb_window_part_content_error"),
+        login_form_html
+          = html.find (".gb_login_dialog .gb_window_part_content"),
+        error_title = "Error:",
+        error = "Unknown error";
+
+    if (internal_error_html.length) {
+      error_title = internal_error_html.find("span div").text();
+      if (!(error_title)) {
+        error_title = "Internal Error";
+      }
+      error = internal_error_html.find("span").text();
+    }
+    else if (login_form_html.length) {
+      error = login_form_html.find(".error_message").text();
+    }
+
+    self.error(error, error_title);
+  };
+
   OMPDialog.prototype.show = function(button){
     var self = this;
     var done_func, fail_func;
@@ -297,39 +370,15 @@
     $('html').css('cursor', 'wait');
     stopAutoRefresh();
 
+    self.dialog = $("<div/>", {
+      'class': "dialog-form",
+    });
+
+    // connect this OMPDialog with the DOM
+    self.dialog[0].$omp = self;
+
     done_func = function(html) {
-      var dialog_title, dialog_html;
-      var response = $('<div/>', {html: html});
-
-      // get the content of the (first) window
-      // needs to wrap it in a div to be able to select the top-level elements.
-      var gb_windows = response.find('.gb_window');
-      var edit_dialog = response.find('.edit-dialog');
-
-      if (gb_windows.length) {
-        if (gb_windows.length > 1) {
-          self.error( (gb_windows.length - 1) + " forms not displayed !");
-        }
-
-        var gb_window = gb_windows.first();
-        var content = gb_window.find('div:nth-child(4)');
-
-        // remove all 'submit' buttons
-        content.find('input[type=submit]').remove();
-
-        dialog_title = gb_window.find('.gb_window_part_center').justtext();
-        dialog_html = content.html();
-      }
-      else if(edit_dialog.length) {
-        dialog_title = edit_dialog.find('.title').justtext();
-        dialog_html = edit_dialog.find('.content').html();
-      }
-
-      self.dialog = $("<div/>", {
-        'class': "dialog-form",
-        title: dialog_title,
-        html: dialog_html,
-      });
+      self.set_content(html);
 
       // show the dialog !
       self.dialog.dialog({
@@ -346,13 +395,10 @@
           }
         ],
         close: function(event, ui){
-          self.dialog.remove();
-          self.dialog = undefined;
-          startAutoRefresh();
+          self.close();
         },
       });
-      // fancy-up the selects
-      onReady(self.dialog);
+
       $('html').css('cursor', "");
     };
 
@@ -364,44 +410,22 @@
         return;
       }
 
-      self.dialog = $("<div/>", {
-        'class': "dialog-form",
-        title:  "Error"
-      });
-
-      var html = $(response.responseText),
-          internal_error_html
-            = html.find (".gb_error_dialog .gb_window_part_content_error"),
-          login_form_html
-            = html.find (".gb_login_dialog .gb_window_part_content"),
-          error_title = "Error:",
-          error = "Unknown error";
-
-      if (internal_error_html.length) {
-        error_title = internal_error_html.find("span div").text();
-        if (! (error_title)) {
-          error_title = "Internal Error";
-        }
-        error = internal_error_html.find("span").text();
-      }
-      else if (login_form_html.length) {
-        error = login_form_html.find(".error_message").text();
-      }
+      self.set_error_content(response.responseText);
 
       self.dialog.dialog({
         modal: true,
         width: 800
       });
 
-      self.error(error, error_title);
-
       $('html').css('cursor', "");
     };
 
     if (this.show_method == 'GET') {
-      request = $.get(
-        '/omp?' + $.param(this.params)
-      );
+      self.request_data = {
+        url: '/omp?' + $.param(this.params),
+        cache: false,
+        type: 'GET',
+      };
     }
     else if (this.show_method == 'POST') {
       var data = new FormData();
@@ -409,19 +433,31 @@
         data.append(param, this.params[param]);
       }
 
-      request = $.ajax({
+      self.request_data = {
         url: '/omp',
         data: data,
+        cache: false,
         processData: false,
         contentType: false,
         type: 'POST',
         dataType: 'html',
-      });
+      };
     }
     else
       throw new Error('Unknown show_method "' + this.show_method + '"');
 
-    request.done(done_func).fail(fail_func);
+    $.ajax(self.request_data).done(done_func).fail(fail_func);
+  };
+
+  OMPDialog.prototype.reload = function() {
+    var self = this;
+    self.waiting();
+    $.ajax(self.request_data).then(function(data) {
+        self.set_content(data);
+        self.done();
+      }, function(jqXHR, status) {
+      }
+    );
   };
 
   window.OMPDialog = OMPDialog;
@@ -611,6 +647,7 @@
     var extra = elem.data('extra');
     var done = elem.data('done');
     var task_id = elem.data('task_id');
+    var parent_dialog = elem.parents('.dialog-form')[0];
 
     if (cmd === undefined) {
       cmd = type + '_' + type_name;
@@ -620,9 +657,7 @@
       }
     }
 
-    if (done === undefined) {
-      done = true;
-    }
+    var window_reload = done === undefined ? true: false;
 
     params = parse_params(extra);
 
@@ -636,7 +671,9 @@
 
     elem.on('click', function(event) {
       event.preventDefault();
-      new OMPDialog({cmd: cmd, done: done, params: params}).show(button);
+      new OMPDialog({cmd: cmd, element: done, params: params,
+        window_reload: window_reload, parent_dialog: parent_dialog}
+      ).show(button);
     });
   }
 
@@ -718,9 +755,7 @@
       var elem = $(this),
           type_name = elem.data('type'),
           done = elem.data('done');
-      if (done === undefined) {
-        done = true;
-      }
+
       var params = {
          "resource_type" : type_name
       };
@@ -734,8 +769,10 @@
                   (this.getAttribute("type") != "checkbox" || this.checked))
             params[this.name] = this.value;
         });
-        new OMPDialog({cmd: 'process_bulk', done: done, params: params,
-          show_command: "POST"}).show("OK", "confirmation");
+        var window_reload = done === undefined ? true : false;
+        new OMPDialog({cmd: 'process_bulk', element: done, params: params,
+          show_command: "POST", window_reload: window_reload}
+        ).show("OK", "confirmation");
       });
     });
 
@@ -744,7 +781,8 @@
           name = elem.data('name'),
           params = {name: name};
       elem.on('click', function(event) {
-        var dialog = new OMPDialog({cmd: 'wizard', params: params});
+        var dialog = new OMPDialog({cmd: 'wizard', window_reload: true,
+          params: params});
         event.preventDefault();
         if (name === 'quick_first_scan'){
           dialog.old_postForm = dialog.postForm;

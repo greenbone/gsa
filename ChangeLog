@@ -1,5 +1,10 @@
 2016-01-26  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/greenbone.js: Refactor OMPDialog to allow reloading a
+	parent dialog after its child is closed.
+
+2016-01-26  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/greenbone.js: Change OMPDialog constructor function to
 	accept an object instead of parameters. This allows easier handling of
 	optional parameters.
