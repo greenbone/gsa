@@ -3440,8 +3440,8 @@ send_response (struct MHD_Connection *connection, const char *content,
   size_t size = (content_length ? content_length : strlen (content));
   int ret;
 
-  response = MHD_create_response_from_data (size, (void *) content,
-                                            MHD_NO, MHD_YES);
+  response = MHD_create_response_from_buffer (size, (void *) content,
+                                              MHD_RESPMEM_MUST_COPY);
   gsad_add_content_type_header (response, &content_type);
 
   if (content_disposition)
@@ -3497,8 +3497,8 @@ send_redirect_to_uri (struct MHD_Connection *connection, const char *uri,
   body = g_strdup_printf ("<html><body>Code 303 - Redirecting to"
                           " <a href=\"%s\">%s<a/></body></html>\n",
                           uri, uri);
-  response = MHD_create_response_from_data (strlen (body), body, MHD_NO,
-                                            MHD_YES);
+  response = MHD_create_response_from_buffer (strlen (body), body,
+                                              MHD_RESPMEM_MUST_COPY);
   g_free (body);
 
   if (!response)
@@ -3721,8 +3721,8 @@ file_content_response (credentials_t *credentials,
                        guest_username ? guest_username : "");
       g_free (language);
       res = xsl_transform (xml, &response_data);
-      response = MHD_create_response_from_data (strlen (res), res,
-                                                MHD_NO, MHD_YES);
+      response = MHD_create_response_from_buffer (strlen (res), res,
+                                                  MHD_RESPMEM_MUST_COPY);
       g_free (path);
       g_free (xml);
       g_free (res);
@@ -3739,10 +3739,9 @@ file_content_response (credentials_t *credentials,
 
       *http_response_code = MHD_HTTP_NOT_FOUND;
       cmd_response_data_reset (&response_data);
-      return MHD_create_response_from_data (strlen (FILE_NOT_FOUND),
-                                            (void *) FILE_NOT_FOUND,
-                                            MHD_NO,
-                                            MHD_YES);
+      return MHD_create_response_from_buffer (strlen (FILE_NOT_FOUND),
+                                              (void *) FILE_NOT_FOUND,
+                                              MHD_RESPMEM_MUST_COPY);
     }
 
   /* Guess content type. */
@@ -3784,8 +3783,8 @@ file_content_response (credentials_t *credentials,
       g_free (path);
       fclose (file);
       cmd_response_data_reset (&response_data);
-      ret = MHD_create_response_from_data (strlen (res), (void *) res,
-                                           MHD_NO, MHD_YES);
+      ret = MHD_create_response_from_buffer (strlen (res), (void *) res,
+                                             MHD_RESPMEM_MUST_COPY);
       g_free (res);
       return ret;
     }
@@ -4144,8 +4143,8 @@ request_handler (void *cls, struct MHD_Connection *connection,
               res = xsl_transform (xml, &response_data);
               g_free (xml);
             }
-          response = MHD_create_response_from_data (strlen (res), res,
-                                                    MHD_NO, MHD_YES);
+          response = MHD_create_response_from_buffer (strlen (res), res,
+                                                      MHD_RESPMEM_MUST_COPY);
           g_free (res);
           http_response_code = response_data.http_status_code;
           ADD_CONTENT_SECURITY_HEADERS (response);
@@ -4223,8 +4222,8 @@ request_handler (void *cls, struct MHD_Connection *connection,
           g_free (xml);
 
           http_response_code = response_data.http_status_code;
-          response = MHD_create_response_from_data (strlen (res), res,
-                                                    MHD_NO, MHD_YES);
+          response = MHD_create_response_from_buffer (strlen (res), res,
+                                                      MHD_RESPMEM_MUST_COPY);
           g_free (res);
           ADD_CONTENT_SECURITY_HEADERS (response);
           cmd_response_data_reset (&response_data);
@@ -4269,8 +4268,8 @@ request_handler (void *cls, struct MHD_Connection *connection,
           res = xsl_transform (xml, &response_data);
           http_response_code = response_data.http_status_code;
           g_free (xml);
-          response = MHD_create_response_from_data (strlen (res), res,
-                                                    MHD_NO, MHD_YES);
+          response = MHD_create_response_from_buffer (strlen (res), res,
+                                                      MHD_RESPMEM_MUST_COPY);
           cmd_response_data_reset (&response_data);
           g_free (res);
           ADD_CONTENT_SECURITY_HEADERS (response);
@@ -4334,9 +4333,8 @@ request_handler (void *cls, struct MHD_Connection *connection,
                 content_type = GSAD_CONTENT_TYPE_APP_XML;
             }
 
-          response = MHD_create_response_from_data (res_len,
-                                                    (void *) res,
-                                                    MHD_NO, MHD_YES);
+          response = MHD_create_response_from_buffer (res_len, (void *) res,
+                                                      MHD_RESPMEM_MUST_COPY);
           if (content_type_string)
             {
               MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
@@ -4387,8 +4385,8 @@ request_handler (void *cls, struct MHD_Connection *connection,
               credentials_free (credentials);
               return MHD_NO;
             }
-          response = MHD_create_response_from_data ((unsigned int) res_len,
-                                                    res, MHD_NO, MHD_YES);
+          response = MHD_create_response_from_buffer ((unsigned int) res_len,
+                                                      res, MHD_RESPMEM_MUST_COPY);
 
           http_response_code = response_data.http_status_code;
           cmd_response_data_reset (&response_data);
@@ -4504,8 +4502,8 @@ request_handler (void *cls, struct MHD_Connection *connection,
                                   "/help/contents.html", &response_data);
             }
           http_response_code = response_data.http_status_code;
-          response = MHD_create_response_from_data (strlen (res), res,
-                                                    MHD_NO, MHD_YES);
+          response = MHD_create_response_from_buffer (strlen (res), res,
+                                                      MHD_RESPMEM_MUST_COPY);
           cmd_response_data_reset (&response_data);
           g_free (res);
         }

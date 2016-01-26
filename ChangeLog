@@ -1,3 +1,7 @@
+2016-01-26  Benoît Allard  <benoit.allard@greenbone.net>
+
+	* src/gsad.c: Fix usage of deprecated function MHD_create_response_from_data
+
 2016-01-25  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/js/greenbone.js: Refactor toggling of sections via icon
