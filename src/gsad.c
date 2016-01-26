@@ -3610,7 +3610,7 @@ redirect_handler (void *cls, struct MHD_Connection *connection,
   /* Only accept GET and POST methods and send ERROR_PAGE in other cases. */
   if (strcmp (method, "GET") && strcmp (method, "POST"))
     {
-      send_response (connection, ERROR_PAGE, MHD_HTTP_METHOD_NOT_ACCEPTABLE,
+      send_response (connection, ERROR_PAGE, MHD_HTTP_NOT_ACCEPTABLE,
                      NULL, GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0);
       return MHD_YES;
     }
@@ -3979,7 +3979,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
   /* Only accept GET and POST methods and send ERROR_PAGE in other cases. */
   if (strcmp (method, "GET") && strcmp (method, "POST"))
     {
-      send_response (connection, ERROR_PAGE, MHD_HTTP_METHOD_NOT_ACCEPTABLE,
+      send_response (connection, ERROR_PAGE, MHD_HTTP_NOT_ACCEPTABLE,
                      NULL, GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0);
       return MHD_YES;
     }
