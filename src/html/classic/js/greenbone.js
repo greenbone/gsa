@@ -126,23 +126,23 @@
    * params are extra parameters to send to the initial GET request.
    * show_method specifies the method to send the initial request instead of GET.
   **/
-  var OMPDialog = function(command, element, params, show_method){
-    this.command = command;
+  var OMPDialog = function(options) {
+    this.command = options.command;
     this.reload = false;
-    if (element === true){
+    if (options.element === true){
       this.reload = true;
     } else {
-      this.element = $(element);
+      this.element = $(options.element);
     }
-    if (params === undefined) {
+    if (options.params === undefined) {
       this.params = {};
     } else {
-      this.params = params;
+      this.params = options.params;
     }
-    if (show_method === undefined) {
+    if (options.show_method === undefined) {
       this.show_method = "GET";
     } else {
-      this.show_method = show_method;
+      this.show_method = options.show_method;
     }
   };
 
@@ -636,7 +636,7 @@
 
     elem.on('click', function(event) {
       event.preventDefault();
-      new OMPDialog(cmd, done, params).show(button);
+      new OMPDialog({cmd: cmd, done: done, params: params}).show(button);
     });
   }
 
@@ -734,8 +734,8 @@
                   (this.getAttribute("type") != "checkbox" || this.checked))
             params[this.name] = this.value;
         });
-        new OMPDialog('process_bulk', done, params, "POST")
-                      .show("OK", "confirmation");
+        new OMPDialog({cmd: 'process_bulk', done: done, params: params,
+          show_command: "POST"}).show("OK", "confirmation");
       });
     });
 
@@ -744,7 +744,7 @@
           name = elem.data('name'),
           params = {name: name};
       elem.on('click', function(event) {
-        var dialog = new OMPDialog('wizard', true, params);
+        var dialog = new OMPDialog({cmd: 'wizard', params: params});
         event.preventDefault();
         if (name === 'quick_first_scan'){
           dialog.old_postForm = dialog.postForm;

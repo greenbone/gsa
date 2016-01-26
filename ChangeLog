@@ -1,3 +1,9 @@
+2016-01-26  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/js/greenbone.js: Change OMPDialog constructor function to
+	accept an object instead of parameters. This allows easier handling of
+	optional parameters.
+
 2016-01-26  Benoît Allard  <benoit.allard@greenbone.net>
 
 	* src/gsad.c: Optimize that one case where the buffer is actually
