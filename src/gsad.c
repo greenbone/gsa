@@ -3749,7 +3749,7 @@ file_content_response (credentials_t *credentials,
       cmd_response_data_reset (&response_data);
       return MHD_create_response_from_buffer (strlen (FILE_NOT_FOUND),
                                               (void *) FILE_NOT_FOUND,
-                                              MHD_RESPMEM_MUST_COPY);
+                                              MHD_RESPMEM_PERSISTENT);
     }
 
   /* Guess content type. */
