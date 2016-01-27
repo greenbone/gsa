@@ -15094,7 +15094,7 @@ should not have received it.
   <xsl:param name="config_id"></xsl:param>
   <xsl:param name="config_name"></xsl:param>
   <xsl:param name="edit"></xsl:param>
-  <div id="preferences">
+  <div id="nvt-test-preferences">
     <table class="gbntable" cellspacing="2" cellpadding="4">
       <tr class="gbntablehead2">
         <td><xsl:value-of select="gsa:i18n ('NVT', 'NVT')"/></td>
@@ -15245,7 +15245,7 @@ should not have received it.
 </xsl:template>
 
 <xsl:template match="preferences" mode="edit-scanner-details">
-  <div id="preferences">
+  <div id="scanner-preferences">
     <table class="gbntable" cellspacing="2" cellpadding="4">
       <tr class="gbntablehead2">
         <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
@@ -16056,7 +16056,15 @@ should not have received it.
       </table>
 
       <xsl:if test="not($config/in_use != 0) and $config/type = 0">
-        <h1><xsl:value-of select="gsa:i18n ('Edit Network Vulnerability Test Families', 'Scan Config')"/></h1>
+        <div class="section-header">
+          <a href="#" class="toggle-action-icon icon icon-action"
+            data-target="#families"
+            data-name="Network Vulnerability Test Families"
+            data-variable="families--collapsed">
+              <img src="/img/fold.png"/>
+          </a>
+          <h1><xsl:value-of select="gsa:i18n ('Edit Network Vulnerability Test Families', 'Scan Config')"/></h1>
+        </div>
 
         <xsl:call-template name="edit-families">
           <xsl:with-param name="config" select="$config"/>
@@ -16075,19 +16083,35 @@ should not have received it.
           </xsl:if>
         </xsl:when>
         <xsl:otherwise>
-          <h1><xsl:value-of select="gsa:i18n ('Edit Scanner Preferences', 'Scan Config')"/></h1>
+          <div class="section-header">
+            <a href="#" class="toggle-action-icon icon icon-action"
+              data-target="#scanner-preferences"
+              data-name="Scanner Preferences" data-collapsed="true"
+              data-variable="scanner-preferences--collapsed">
+              <img src="/img/fold.png"/>
+            </a>
+            <h1><xsl:value-of select="gsa:i18n ('Edit Scanner Preferences', 'Scan Config')"/></h1>
+          </div>
 
           <xsl:apply-templates select="$config/preferences" mode="edit-scanner-details"/>
 
           <xsl:if test="$config/type = 0">
-            <h1><xsl:value-of select="gsa:i18n ('Network Vulnerability Test Preferences', 'Scan Config')"/></h1>
-            <xsl:for-each select="$config/preferences">
-              <xsl:call-template name="preferences">
-                <xsl:with-param name="config_id" select="$config/@id"/>
-                <xsl:with-param name="config_name" select="$config/name"/>
-                <xsl:with-param name="edit">yes</xsl:with-param>
-              </xsl:call-template>
-            </xsl:for-each>
+            <div class="section-header">
+              <a href="#" class="toggle-action-icon icon icon-action"
+                data-target="#nvt-test-preferences"
+                data-name="Scanner Preferences" data-collapsed="true"
+                data-variable="nvt-test-preferences--collapsed">
+                <img src="/img/fold.png"/>
+              </a>
+              <h1><xsl:value-of select="gsa:i18n ('Network Vulnerability Test Preferences', 'Scan Config')"/></h1>
+            </div>
+              <xsl:for-each select="$config/preferences">
+                <xsl:call-template name="preferences">
+                  <xsl:with-param name="config_id" select="$config/@id"/>
+                  <xsl:with-param name="config_name" select="$config/name"/>
+                  <xsl:with-param name="edit">yes</xsl:with-param>
+                </xsl:call-template>
+              </xsl:for-each>
           </xsl:if>
         </xsl:otherwise>
       </xsl:choose>

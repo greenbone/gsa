@@ -1,5 +1,10 @@
 2016-01-27  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/omp.xsl: Allow to toggle sections in edit scan config
+	dialog.
+
+2016-01-27  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/css/gsa-style.css: Update paddings and margins after adding
 	the gsa-main container.
 
