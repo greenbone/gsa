@@ -638,22 +638,24 @@
     return params;
   }
 
-  function init_omp_dialog(type, elem, button, postfix) {
+  function init_omp_dialog(options) {
     var params;
 
-    var cmd = elem.data('cmd');
-    var type_id = elem.data('id');
-    var type_name = elem.data('type');
-    var extra = elem.data('extra');
-    var done = elem.data('done');
-    var task_id = elem.data('task_id');
-    var parent_dialog = elem.parents('.dialog-form')[0];
+    var cmd = options.element.data('cmd');
+    var type_id = options.element.data('id');
+    var type_name = options.element.data('type');
+    var extra = options.element.data('extra');
+    var done = options.element.data('done');
+    var task_id = options.element.data('task_id');
+    var parent_dialog = options.element.parents('.dialog-form')[0];
+    var parent_reload = options.parent_reload === undefined ?
+      undefined : !!options.parent_reload;
 
     if (cmd === undefined) {
-      cmd = type + '_' + type_name;
+      cmd = options.type + '_' + type_name;
 
-      if (postfix !== undefined) {
-        cmd = cmd + '_' + postfix;
+      if (options.postfix !== undefined) {
+        cmd = cmd + '_' + options.postfix;
       }
     }
 
@@ -669,11 +671,12 @@
       params.task_id = task_id;
     }
 
-    elem.on('click', function(event) {
+    options.element.on('click', function(event) {
       event.preventDefault();
       new OMPDialog({cmd: cmd, element: done, params: params,
-        window_reload: window_reload, parent_dialog: parent_dialog}
-      ).show(button);
+        window_reload: window_reload, parent_dialog: parent_dialog,
+        parent_reload: parent_reload}
+      ).show(options.button);
     });
   }
 
@@ -736,19 +739,21 @@
     doc = $(doc);
 
     doc.find(".edit-action-icon").each(function() {
-      init_omp_dialog('edit', $(this), 'Save');
+      init_omp_dialog({type: 'edit', element: $(this), button: 'Save'});
     });
 
     doc.find(".new-action-icon").each(function() {
-      init_omp_dialog('new', $(this), 'Create');
+      init_omp_dialog({type: 'new', element: $(this), button: 'Create',
+        parent_reload: false});
     });
 
     doc.find(".upload-action-icon").each(function() {
-      init_omp_dialog('upload', $(this), 'Create');
+      init_omp_dialog({type: 'upload', element: $(this), button: 'Create'});
     });
 
     doc.find(".delete-action-icon").each(function() {
-      init_omp_dialog('delete', $(this), 'Delete', 'confirm');
+      init_omp_dialog({type: 'delete', element: $(this), button: 'Delete',
+        prefix: 'confirm'});
     });
 
     doc.find(".bulk-dialog-icon").each(function() {

@@ -1,5 +1,11 @@
 2016-01-27  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/greenbone.js (init_omp_dialog): Pass parameters as
+	object to init_omp_dialog. Add new optional parameter parent_reload. This
+	allows disabling of reload for create new OMPDialogs.
+
+2016-01-27  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/greenbone.js: Fix getting the conntent of an error
 	response in an OMPDialog.
 
