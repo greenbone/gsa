@@ -906,6 +906,10 @@ select[multiple] {
   text-align: center;
 }
 
+.gsa-main {
+  margin: 5px 10px;
+}
+
 /* Footer */
 .gsa_footer {
   font-size:10px;
@@ -1395,7 +1399,7 @@ select[multiple] {
 /* The new reworked list view */
 
 #list-window-header {
-  margin: 10px;
+  margin: 10px 0;
   border-bottom: 2px solid black;
 }
 
@@ -1429,7 +1433,7 @@ select[multiple] {
 }
 
 .section-header {
-  margin: 10px;
+  margin: 10px 0px;
   border-bottom: 2px solid black;
 }
 
@@ -1464,7 +1468,7 @@ select[multiple] {
 }
 
 .section-box {
-  margin: 10px;
+  margin: 10px 0px;
   margin-bottom: 20px;
 }
 
@@ -1479,7 +1483,6 @@ select[multiple] {
 }
 
 .toolbar {
-  margin: 10px;
   margin-top:-8px;
 }
 
