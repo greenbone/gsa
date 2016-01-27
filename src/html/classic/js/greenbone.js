@@ -771,7 +771,7 @@
         });
         var window_reload = done === undefined ? true : false;
         new OMPDialog({cmd: 'process_bulk', element: done, params: params,
-          show_command: "POST", window_reload: window_reload}
+          show_method: "POST", window_reload: window_reload}
         ).show("OK", "confirmation");
       });
     });

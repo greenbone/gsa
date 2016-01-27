@@ -1,3 +1,8 @@
+2016-01-27  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/js/greenbone.js: Fix getting the conntent of an error
+	response in an OMPDialog.
+
 2016-01-26  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/js/greenbone.js: Refactor OMPDialog to allow reloading a
