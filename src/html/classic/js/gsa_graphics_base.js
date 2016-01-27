@@ -2880,7 +2880,7 @@ function fit_detached_window (dashboard)
   var display_width = Number (dashboard.elem().scrollWidth);
   var display_height = Number (dashboard.elem().scrollHeight);
   var filter = d3.select ("#applied_filter");
-  var footer = d3.select (".gsa_footer")
+  var footer = d3.select (".gsa-footer")
   var height_diff = this.outerHeight - this.innerHeight;
   var width_diff = this.outerWidth - this.innerWidth;
 
@@ -2902,7 +2902,7 @@ function detached_chart_resize_listener (dashboard)
       var window_width = window.innerWidth;
       var window_height = window.innerHeight;
       $(dashboard.elem())
-          .height (window_height - (Number (d3.select (".gsa_footer")
+          .height (window_height - (Number (d3.select (".gsa-footer")
                                             .property ("clientHeight"))
                                     + Number (d3.select ("#applied_filter")
                                                 .property ("clientHeight"))

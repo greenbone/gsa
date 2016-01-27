@@ -911,7 +911,7 @@ select[multiple] {
 }
 
 /* Footer */
-.gsa_footer {
+.gsa-footer {
   font-size:10px;
   text-align:right;
   color: #787878;
@@ -919,7 +919,7 @@ select[multiple] {
   margin-right:5px;
 }
 
-.gsa_footer a {
+.gsa-footer a {
   color: #787878;
 }
 

@@ -1680,7 +1680,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="html-footer">
-  <div class="gsa_footer">
+  <div class="gsa-footer">
     <div class="pull-left">
       <xsl:choose>
         <xsl:when test="not (boolean (/envelope/backend_operation))"/>
