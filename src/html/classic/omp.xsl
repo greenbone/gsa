@@ -14627,7 +14627,7 @@ should not have received it.
                 <a href="/omp?cmd=edit_config_nvt&amp;oid={@oid}&amp;config_id={$config_id}&amp;name={$config_name}&amp;family={$family}&amp;token={/envelope/token}"
                   title="{gsa:i18n ('Select and Edit NVT Details', 'Scan Config')}"
                   data-cmd="edit_config_nvt" data-type="config" data-id="{$config_id}"
-                  data-extra="name={$config_name}&amp;family={$family}" data-done=""
+                  data-extra="name={$config_name}&amp;family={$family}&amp;oid={@oid}" data-done=""
                   class="edit-action-icon icon">
                   <img src="/img/edit.png" alt="{gsa:i18n ('Edit', 'Action Verb')}"/>
                 </a>
