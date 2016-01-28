@@ -340,9 +340,9 @@
 
     var dialog_html = $(html),
         internal_error_html
-          = html.find (".gb_error_dialog .gb_window_part_content_error"),
+          = dialog_html.find(".gb_error_dialog .gb_window_part_content_error"),
         login_form_html
-          = html.find (".gb_login_dialog .gb_window_part_content"),
+          = dialog_html.find(".gb_login_dialog .gb_window_part_content"),
         error_title = "Error:",
         error = "Unknown error";
 
