@@ -1,5 +1,10 @@
 2016-01-28  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/greenbone.js: Fix bulk action dialogs which are using
+	POST as http method.
+
+2016-01-28  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/greenbone.js (OMPDialog.prototype.set_error_content):
 	Fix getting the content of an error response in an OMPDialog.
 
@@ -24,11 +29,6 @@
 	* src/html/classic/gsad.xsl (envelope): Put main content in an extra diff with
 	class gsa-main. This allows easier stlying (padding, margin, ...) of all
 	contents without having to touch the xsl.
-
-2016-01-27  Björn Ricks <bjoern.ricks@greenbone.net>
-
-	* src/html/classic/js/greenbone.js: Fix bulk action dialogs which are using
-	POST as http method.
 
 2016-01-27  Björn Ricks <bjoern.ricks@greenbone.net>
 
