@@ -15260,6 +15260,106 @@ should not have received it.
 </xsl:template>
 
 <!--     CONFIG NVTS -->
+<xsl:template match="nvt" mode="edit">
+  <xsl:param name="config"/>
+  <table>
+    <tr><td><b><xsl:value-of select="gsa:i18n ('Name', 'Property')"/>:</b></td>
+      <td>
+        <b>
+          <a href="/omp?cmd=get_config_nvt&amp;oid={@oid}&amp;config_id={$config/@id}&amp;name={$config/name}&amp;family={family}&amp;token={/envelope/token}"
+            title="{gsa:i18n ('Scan Config NVT Details', 'Scan Config')}" target="_blank">
+            <xsl:value-of select="name"/>
+          </a>
+        </b>
+      </td>
+    </tr>
+    <xsl:if test="summary != 'NOSUMMARY'">
+      <tr><td><xsl:value-of select="gsa:i18n ('Summary', 'Property')"/>:</td><td><xsl:value-of select="summary"/></td></tr>
+    </xsl:if>
+    <tr><td><xsl:value-of select="gsa:i18n ('Config', 'Scan Config')"/>:</td><td><xsl:value-of select="$config/name"/></td></tr>
+    <tr><td><xsl:value-of select="gsa:i18n ('Family', 'NVT')"/>:</td><td><xsl:value-of select="family"/></td></tr>
+    <tr><td><xsl:value-of select="gsa:i18n ('OID', 'NVT')"/>:</td><td><xsl:value-of select="@oid"/></td></tr>
+    <tr><td><xsl:value-of select="gsa:i18n ('Version', 'NVT')"/>:</td><td><xsl:value-of select="version"/></td></tr>
+    <tr>
+      <td><xsl:value-of select="gsa:i18n ('Notes', 'Note')"/>:</td>
+      <td>
+        <xsl:value-of select="count (../../../get_notes_response/note)"/>
+      </td>
+    </tr>
+    <tr>
+      <td><xsl:value-of select="gsa:i18n ('Overrides', 'Override')"/>:</td>
+      <td>
+        <xsl:value-of select="count (../../../get_overrides_response/override)"/>
+      </td>
+    </tr>
+  </table>
+
+  <xsl:choose>
+    <xsl:when test="contains(tags, 'summary=')">
+      <h2><xsl:value-of select="gsa:i18n ('Summary', 'Property')"/></h2>
+      <xsl:for-each select="str:split (tags, '|')">
+        <xsl:if test="'summary' = substring-before (., '=')">
+          <xsl:call-template name="structured-text">
+            <xsl:with-param name="string" select="substring-after (., '=')"/>
+          </xsl:call-template>
+        </xsl:if>
+      </xsl:for-each>
+    </xsl:when>
+    <xsl:otherwise>
+    </xsl:otherwise>
+  </xsl:choose>
+
+  <xsl:choose>
+    <xsl:when test="contains(tags, 'affected=')">
+      <h2><xsl:value-of select="gsa:i18n ('Affected Software/OS', 'NVT or Result')"/></h2>
+      <xsl:for-each select="str:split (tags, '|')">
+        <xsl:if test="'affected' = substring-before (., '=')">
+          <xsl:call-template name="structured-text">
+            <xsl:with-param name="string" select="substring-after (., '=')"/>
+          </xsl:call-template>
+        </xsl:if>
+      </xsl:for-each>
+    </xsl:when>
+    <xsl:otherwise>
+    </xsl:otherwise>
+  </xsl:choose>
+
+  <h2><xsl:value-of select="gsa:i18n ('Vulnerability Scoring', 'NVT or Result')"/></h2>
+  <table>
+    <tr>
+      <td><xsl:value-of select="gsa:i18n ('CVSS base', 'NVT or Result')"/>:</td>
+      <td>
+        <xsl:choose>
+          <xsl:when test="cvss_base &gt;= 0.0">
+            <xsl:call-template name="severity-bar">
+              <xsl:with-param name="cvss" select="cvss_base"/>
+            </xsl:call-template>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:call-template name="severity-bar">
+              <xsl:with-param name="extra_text" select="'N/A'"/>
+            </xsl:call-template>
+          </xsl:otherwise>
+        </xsl:choose>
+      </td>
+    </tr>
+    <xsl:variable name="token" select="/envelope/token"/>
+    <xsl:for-each select="str:split (tags, '|')">
+      <xsl:if test="'cvss_base_vector' = substring-before (., '=')">
+        <xsl:variable name="cvss_vector" select="substring-after (., '=')"/>
+        <tr>
+          <td><xsl:value-of select="gsa:i18n ('CVSS base vector', 'NVT or Result')"/>:</td>
+          <td>
+            <a target="_blank" href="/omp?cmd=cvss_calculator&amp;cvss_vector={$cvss_vector}&amp;token={$token}">
+              <xsl:value-of select="$cvss_vector"/>
+            </a>
+          </td>
+        </tr>
+      </xsl:if>
+    </xsl:for-each>
+  </table>
+</xsl:template>
+
 <xsl:template name="edit-config-nvt">
   <xsl:variable name="family">
     <xsl:value-of select="get_nvts_response/nvt/family"/>
@@ -15269,12 +15369,11 @@ should not have received it.
       <xsl:value-of select="gsa:i18n ('Edit Scan Config NVT', 'Scan Config')"/>
     </div>
     <div class="content">
-      <xsl:apply-templates select="get_nvts_response/nvt" mode="details">
-        <xsl:with-param name="config" select="config/name"/>
+      <xsl:apply-templates select="get_nvts_response/nvt" mode="edit">
+        <xsl:with-param name="config" select="config"/>
       </xsl:apply-templates>
 
       <h2><xsl:value-of select="gsa:i18n ('Preferences', 'Scan Config')"/></h2>
-      <xsl:variable name="config" select="config"/>
       <form action="" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="save_config_nvt"/>
@@ -15287,7 +15386,7 @@ should not have received it.
           value="{get_nvts_response/nvt/@oid}"/>
         <xsl:for-each select="get_nvts_response/nvt/preferences">
           <xsl:call-template name="preferences-edit-details">
-            <xsl:with-param name="config" select="$config"/>
+            <xsl:with-param name="config" select="config"/>
           </xsl:call-template>
         </xsl:for-each>
       </form>

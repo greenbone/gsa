@@ -1,3 +1,9 @@
+2016-01-28  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/omp.xsl: Add an own template for editing scan config nvts.
+	This allows displaying a different content when editing a scan config nvt in
+	a dialog.
+
 2016-01-28  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/omp.xsl (html-create-alert-form): Add count and date
