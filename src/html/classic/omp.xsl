@@ -15215,15 +15215,6 @@ should not have received it.
           <xsl:with-param name="config" select="$config"/>
         </xsl:call-template>
       </xsl:for-each>
-
-      <tr>
-        <td colspan="4" style="text-align:right;">
-          <input type="submit"
-                 name="submit"
-                 value="{gsa:i18n ('Save Config', 'Scan Config')}"
-                 title="{gsa:i18n ('Save Config', 'Scan Config')}"/>
-        </td>
-      </tr>
     </table>
   </div>
 </xsl:template>

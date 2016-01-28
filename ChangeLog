@@ -1,5 +1,11 @@
 2016-01-28  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/omp.xsl (preferences-edit-details): Remove the submit
+	button from the template. The template is used within an edit dialog.
+	Therefore no submit button is necessary anymore.
+
+2016-01-28  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/omp.xsl: Split editing a scan config nvt into an own
 	template. The new template is used to display an edit dialog.
 
