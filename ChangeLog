@@ -1,3 +1,8 @@
+2016-01-28  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/classic/help.xsl (help [new_alert.html]): Add new $
+	variables.
+
 2016-01-28  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/omp.xsl: Add an own template for editing scan config nvts.

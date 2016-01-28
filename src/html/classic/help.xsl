@@ -1361,8 +1361,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
       <ul>
         <li> $$: $ </li>
+        <li> $d: date that SecInfo check was last performed (blank for Task alerts)</li>
         <li> $e: event description </li>
-        <li> $n: task name </li>
+        <li> $n: task name (blank for SecInfo alerts)</li>
+        <li> $q: the type of SecInfo event: "New", "Updated" or blank for Task alerts</li>
+        <li> $s: the type of SecInfo: "NVT", "CERT-Bund Advisory", ... or blank for Task alerts</li>
+        <li> $S: $s, but plural: "NVTs", "CERT-Bund Advisories", ...</li>
+        <li> $T: Total number of resources in the list for SecInfo alerts; 0 for Task alerts.</li>
       </ul>
 
       <p>
@@ -1372,14 +1377,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <ul>
         <li> $$: $ </li>
         <li> $c: condition description </li>
+        <li> $d: date that SecInfo check was last performed (blank for Task alerts)</li>
         <li> $e: event description </li>
         <li> $F: name of filter </li>
         <li> $f: filter term </li>
         <li> $H: host summary </li>
-        <li> $i: the report text (only when including a report) </li>
-        <li> $n: task name </li>
+        <li> $i: the report text or list of SecInfo resources (only when including the report/list)</li>
+        <li> $n: task name (blank for SecInfo alerts)</li>
         <li> $r: report format name </li>
+        <li> $q: the type of SecInfo event: "New", "Updated" or blank for Task alerts</li>
+        <li> $s: the type of SecInfo: "NVT", "CERT-Bund Advisory", ... or blank for Task alerts</li>
+        <li> $S: $s, but plural: "NVTs", "CERT-Bund Advisories", ...</li>
         <li> $t: a note when the report was truncated </li>
+        <li> $T: Total number of resources in the list for SecInfo alerts; 0 for Task alerts.</li>
         <li> $z: timezone </li>
       </ul>
 
@@ -8865,13 +8875,13 @@ Public License instead of this License.
     | <a href="new_target.html?token={/envelope/token}">New/Edit Target Dialog</a>
     </div>
     <div style="text-align:left">
- 
+
       <br/>
- 
+
       <xsl:call-template name="availability">
         <xsl:with-param name="command" select="'GET_TARGETS'"/>
       </xsl:call-template>
- 
+
       <p>
        This table provides an overview of all configured
        <a href="glossary.html?token={/envelope/token}#target">Targets</a>.
@@ -8879,9 +8889,9 @@ Public License instead of this License.
        are shown (name, comment and hosts).
        If credentials are linked to the target, they are listed as well.
       </p>
- 
+
       <xsl:call-template name="sorting"/>
- 
+
       <table class="gbntable">
         <tr class="gbntablehead2">
           <td>Column</td>
@@ -8920,7 +8930,7 @@ Public License instead of this License.
           <td>Associated ESXi credential, that can be clicked on to view details.</td>
         </tr>
       </table>
- 
+
       <xsl:call-template name="hosts_note"/>
     </div>
 </xsl:template>
