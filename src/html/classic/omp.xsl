@@ -9832,7 +9832,7 @@ should not have received it.
                             <xsl:variable name="task-dummy">
                               <xsl:choose>
                                 <xsl:when test="(get_alerts_response/alert/event/text() != 'New SecInfo arrived' and get_alerts_response/alert/event/text() != 'Updated SecInfo arrived')">
-                                  <xsl:text>method_data:message_attach</xsl:text>
+                                  <xsl:text>method_data:message</xsl:text>
                                 </xsl:when>
                                 <xsl:otherwise>
                                   <xsl:text>dummy_message</xsl:text>
@@ -9842,7 +9842,7 @@ should not have received it.
                             <xsl:variable name="secinfo-dummy">
                               <xsl:choose>
                                 <xsl:when test="(get_alerts_response/alert/event/text() = 'New SecInfo arrived' or get_alerts_response/alert/event/text() = 'Updated SecInfo arrived')">
-                                  <xsl:text>method_data:message_attach</xsl:text>
+                                  <xsl:text>method_data:message</xsl:text>
                                 </xsl:when>
                                 <xsl:otherwise>
                                   <xsl:text>dummy_message</xsl:text>

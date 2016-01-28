@@ -1,5 +1,10 @@
 2016-01-28  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/classic/help.xsl (html-edit-alert-form): Correct name of
+	message fields under the "include" radio.
+
+2016-01-28  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/classic/help.xsl (help [new_alert.html]): Add new $
 	variables.
 
