@@ -1,3 +1,8 @@
+2016-01-28  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/classic/omp.xsl (html-create-alert-form): Add count and date
+	to SecInfo subject.
+
 2016-01-28  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/omp.xsl (preferences-edit-details): Remove the submit

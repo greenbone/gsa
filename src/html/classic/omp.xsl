@@ -9022,7 +9022,7 @@ should not have received it.
                   <td style="display: none" id="email_subject_secinfo">
                     <input id="email_subject_secinfo_input" type="text" name="dummy_subject"
                            size="30" maxlength="80"
-                           value="[OpenVAS-Manager] $q $S arrived"/>
+                           value="[OpenVAS-Manager] $T $q $S since $d"/>
                   </td>
                 </tr>
                 <tr id="email_content_row">
