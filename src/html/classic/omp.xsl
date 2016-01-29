@@ -26124,14 +26124,14 @@ should not have received it.
                         select="commands_response/get_port_lists_response/port_list/@id"/>
       </xsl:call-template>
     </div>
+    <xsl:variable name="id" select="commands_response/get_port_lists_response/port_list/@id"/>
     <div class="gb_window_part_content">
       <form action="" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="save_port_list"/>
         <input type="hidden" name="caller" value="{/envelope/current_page}"/>
         <input type="hidden"
-               name="port_list_id"
-               value="{commands_response/get_port_lists_response/port_list/@id}"/>
+               name="port_list_id" value="{$id}"/>
         <xsl:choose>
           <xsl:when test="string-length (/envelope/params/next_next) &gt; 0">
             <input type="hidden" name="next" value="{/envelope/params/next_next}"/>
@@ -26165,94 +26165,15 @@ should not have received it.
         </table>
       </form>
 
-      <h2><xsl:value-of select="gsa:i18n ('New Port Range', 'Port List')"/></h2>
-
-      <xsl:variable name="id" select="commands_response/get_port_lists_response/port_list/@id"/>
-      <xsl:variable name="in_use" select="commands_response/get_port_lists_response/port_list/in_use"/>
-
-      <form action="/omp" method="post" enctype="multipart/form-data">
-        <input type="hidden" name="token" value="{/envelope/token}"/>
-        <input type="hidden" name="cmd" value="create_port_range"/>
-        <input type="hidden" name="caller" value="{/envelope/current_page}"/>
-        <input type="hidden" name="port_list_id" value="{$id}"/>
-        <input type="hidden" name="next" value="edit_port_list"/>
-        <input type="hidden" name="next_next" value="{/envelope/params/next}"/>
-        <table class="table-form">
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('Start', 'Port Range')"/></td>
-            <td>
-              <xsl:choose>
-                <xsl:when test="$in_use = 0">
-                  <input type="text" name="port_range_start" value=""
-                         size="30" maxlength="400"/>
-                </xsl:when>
-                <xsl:otherwise>
-                  <input type="text" name="port_range_start" value=""
-                         size="30" maxlength="400" disabled="1"/>
-                </xsl:otherwise>
-              </xsl:choose>
-            </td>
-          </tr>
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('End', 'Port Range')"/></td>
-            <td>
-              <xsl:choose>
-                <xsl:when test="$in_use = 0">
-                  <input type="text" name="port_range_end" value=""
-                         size="30" maxlength="400"/>
-                </xsl:when>
-                <xsl:otherwise>
-                  <input type="text" name="port_range_end" value=""
-                         size="30" maxlength="400" disabled="1"/>
-                </xsl:otherwise>
-              </xsl:choose>
-            </td>
-          </tr>
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('Protocol', 'Port Range')"/></td>
-            <td>
-              <label>
-                <xsl:choose>
-                  <xsl:when test="$in_use = 0">
-                    <input type="radio" name="port_type" value="tcp" checked="1"/>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <input type="radio" name="port_type" value="tcp" checked="1"
-                           disabled="1"/>
-                  </xsl:otherwise>
-                </xsl:choose>
-                TCP
-              </label>
-              <label>
-                <xsl:choose>
-                  <xsl:when test="$in_use = 0">
-                    <input type="radio" name="port_type" value="udp"/>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <input type="radio" name="port_type" value="udp"
-                           disabled="1"/>
-                  </xsl:otherwise>
-                </xsl:choose>
-                UDP
-              </label>
-            </td>
-          </tr>
-          <tr>
-            <td colspan="4" style="text-align:right;">
-              <xsl:choose>
-                <xsl:when test="$in_use = 0">
-                  <input type="submit" name="submit" value="{gsa:i18n ('Create Port Range', 'Port List')}"/>
-                </xsl:when>
-                <xsl:otherwise>
-                  <input type="submit" name="submit" value="{gsa:i18n ('Create Port Range', 'Port List')}"
-                         disabled="1"/>
-                </xsl:otherwise>
-              </xsl:choose>
-            </td>
-          </tr>
-        </table>
-      </form>
-      <h1><xsl:value-of select="gsa:i18n ('Port Ranges', 'Port Range')"/></h1>
+      <div class="section-header">
+        <a href="#" title="{gsa:i18n ('Add Port Range', 'Override')}"
+          class="new-action-icon icon icon-action"
+          data-type="port_range" data-extra="port_list_id={$id}"
+          data-parent-reload="true">
+          <img src="/img/new.png" alt="{gsa:i18n ('Add Port Range', 'Port Range')}"/>
+        </a>
+        <h1><xsl:value-of select="gsa:i18n ('Port Ranges', 'Port Range')"/></h1>
+      </div>
       <table class="gbntable" cellspacing="2" cellpadding="4">
         <tr class="gbntablehead2">
           <td><xsl:value-of select="gsa:i18n ('Start', 'Port Range')"/></td>

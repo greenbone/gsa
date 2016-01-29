@@ -1,5 +1,10 @@
 2016-01-29  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/omp.xsl (html-edit-port-list-form): Refactor edit port list
+	to open up a child dialog for adding a new port range.
+
+2016-01-29  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/omp.xsl: Introduce a template for displaying a form to
 	add a new port range to a port list.
 
