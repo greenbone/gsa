@@ -1,3 +1,10 @@
+2016-01-29  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/js/greenbone.js (init_omp_dialog): Allow to overwrite
+	parent reload option via the data-parent-reload attribute on the button
+	element. With this change a button for a new dialog can decide weather a
+	parent dialog should be reloaded after the new dialog is closed.
+
 2016-01-28  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/help.xsl (html-edit-alert-form): Correct name of

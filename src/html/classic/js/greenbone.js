@@ -650,6 +650,12 @@
     var parent_dialog = options.element.parents('.dialog-form')[0];
     var parent_reload = options.parent_reload === undefined ?
       undefined : !!options.parent_reload;
+    var elem_parent_reload = options.element.data('parent-reload');
+
+    if (elem_parent_reload !== undefined) {
+      // overwrite default parent_reload from options
+      parent_reload = !!elem_parent_reload;
+    }
 
     if (cmd === undefined) {
       cmd = options.type + '_' + type_name;
