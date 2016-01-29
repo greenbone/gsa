@@ -665,7 +665,7 @@
       }
     }
 
-    var window_reload = done === undefined ? true: false;
+    var window_reload = done === undefined && !parent_reload ? true: false;
 
     params = parse_params(extra);
 
