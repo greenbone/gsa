@@ -298,6 +298,7 @@ char * create_port_list_omp (credentials_t *, params_t *, cmd_response_data_t*);
 char * create_port_range_omp (credentials_t *, params_t *,
                               cmd_response_data_t*);
 char * new_port_list_omp (credentials_t *, params_t *, cmd_response_data_t*);
+char * new_port_range_omp (credentials_t *, params_t *, cmd_response_data_t*);
 char * upload_port_list_omp (credentials_t *, params_t *, cmd_response_data_t*);
 char * get_port_list_omp (credentials_t *, params_t *, cmd_response_data_t*);
 char * edit_port_list_omp (credentials_t *, params_t *, cmd_response_data_t*);

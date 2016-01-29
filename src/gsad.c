@@ -1084,6 +1084,7 @@ init_validator ()
                          "|(new_permission)"
                          "|(new_permissions)"
                          "|(new_port_list)"
+                         "|(new_port_range)"
                          "|(new_report_format)"
                          "|(new_role)"
                          "|(new_scanner)"
@@ -3187,6 +3188,7 @@ exec_omp_get (struct MHD_Connection *connection,
   ELSE (new_permission)
   ELSE (new_permissions)
   ELSE (new_port_list)
+  ELSE (new_port_range)
   ELSE (new_report_format)
   ELSE (new_scanner)
   ELSE (new_schedule)

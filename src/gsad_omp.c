@@ -23028,6 +23028,45 @@ create_port_list_omp (credentials_t * credentials, params_t *params,
 }
 
 /**
+ * @brief Returns page to create a new Port Range.
+ *
+ * @param[in]  credentials  Credentials of user issuing the action.
+ * @param[in]  params       Request parameters.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
+ *
+ * @return Result of XSL transformation.
+ */
+static char *
+new_port_range (credentials_t *credentials, params_t *params,
+               const char *extra_xml, cmd_response_data_t* response_data)
+{
+  GString *xml;
+  xml = g_string_new ("<new_port_range>");
+  if (extra_xml)
+    g_string_append (xml, extra_xml);
+  g_string_append (xml, "</new_port_range>");
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+                            response_data);
+}
+
+/**
+ * @brief Return the new Port Range page.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+new_port_range_omp (credentials_t *credentials, params_t *params,
+                   cmd_response_data_t* response_data)
+{
+  return new_port_range (credentials, params, NULL, response_data);
+}
+
+/**
  * @brief Add a range to a port list, XSL transform the result.
  *
  * @param[in]  credentials  Username and password for authentication.

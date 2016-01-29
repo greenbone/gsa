@@ -1,5 +1,11 @@
 2016-01-29  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/gsad.c, src/gsad_omp.c, src/gsad_omp.h: Introduce a new_port_range omp
+	command. This command is intended to only return html for adding a new port
+	range.
+
+2016-01-29  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/greenbone.js (init_omp_dialog): Don't reload the
 	browsers window if a child dialog wants to reload only the parent dialog.
 
