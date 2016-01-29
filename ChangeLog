@@ -1,5 +1,10 @@
 2016-01-29  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/omp.xsl: Introduce a template for displaying a form to
+	add a new port range to a port list.
+
+2016-01-29  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/gsad.c, src/gsad_omp.c, src/gsad_omp.h: Introduce a new_port_range omp
 	command. This command is intended to only return html for adding a new port
 	range.

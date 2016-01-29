@@ -26316,6 +26316,61 @@ should not have received it.
   </xsl:call-template>
 </xsl:template>
 
+<xsl:template match="new_port_range">
+  <xsl:apply-templates select="gsad_msg"/>
+  <xsl:apply-templates select="create_port_range_response"/>
+  <xsl:apply-templates select="commands_response/delete_port_range_response"/>
+  <xsl:call-template name="html-create-port-range-form"/>
+</xsl:template>
+
+<xsl:template name="html-create-port-range-form">
+  <div class="edit-dialog">
+    <div class="title">
+      <xsl:value-of select="gsa:i18n ('New Port Range', 'Port List')"/>
+    </div>
+
+    <xsl:variable name="id" select="/envelope/params/port_list_id"/>
+
+      <div class="content">
+      <form action="/omp" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="token" value="{/envelope/token}"/>
+        <input type="hidden" name="cmd" value="create_port_range"/>
+        <input type="hidden" name="caller" value="{/envelope/current_page}"/>
+        <input type="hidden" name="port_list_id" value="{$id}"/>
+        <table class="table-form">
+          <tr>
+            <td><xsl:value-of select="gsa:i18n ('Start', 'Port Range')"/></td>
+            <td>
+              <input type="text" name="port_range_start" value=""
+                size="30" maxlength="400"/>
+            </td>
+          </tr>
+          <tr>
+            <td><xsl:value-of select="gsa:i18n ('End', 'Port Range')"/></td>
+            <td>
+              <input type="text" name="port_range_end" value=""
+                size="30" maxlength="400"/>
+            </td>
+          </tr>
+          <tr>
+            <td><xsl:value-of select="gsa:i18n ('Protocol', 'Port Range')"/></td>
+            <td>
+              <label>
+                <input type="radio" name="port_type" value="tcp" checked="1"/>
+                TCP
+              </label>
+              <label>
+                <input type="radio" name="port_type" value="udp"/>
+                UDP
+              </label>
+            </td>
+          </tr>
+        </table>
+      </form>
+    </div>
+  </div>
+</xsl:template>
+
 <xsl:template match="modify_port_list_response">
   <xsl:call-template name="command_result_dialog">
     <xsl:with-param name="operation">
