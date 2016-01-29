@@ -26169,7 +26169,7 @@ should not have received it.
         <a href="#" title="{gsa:i18n ('Add Port Range', 'Override')}"
           class="new-action-icon icon icon-action"
           data-type="port_range" data-extra="port_list_id={$id}"
-          data-parent-reload="true">
+          data-reload="parent">
           <img src="/img/new.png" alt="{gsa:i18n ('Add Port Range', 'Port Range')}"/>
         </a>
         <h1><xsl:value-of select="gsa:i18n ('Port Ranges', 'Port Range')"/></h1>
