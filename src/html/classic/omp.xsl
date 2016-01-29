@@ -4457,21 +4457,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:when test="$new-icon and $type = 'task'">
         <span class="icon-menu">
           <a href="/omp?cmd=new_task{$extra_params_string}&amp;next=get_task&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-             class="new-action-icon icon" data-type="task"
+             class="new-action-icon icon" data-type="task" data-reload="window"
              title="{gsa:i18n ('New Task', 'Task')}">
             <img src="/img/new.png"/>
           </a>
           <ul>
             <li>
               <a href="/omp?cmd=new_task{$extra_params_string}&amp;next=get_task&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-                 class="new-action-icon" data-type="task"
+                 class="new-action-icon" data-type="task" data-reload="window"
                  title="{gsa:i18n ('New Task', 'Task')}">
                 <xsl:value-of select="gsa:i18n ('New Task', 'Task')"/>
               </a>
             </li>
             <li>
               <a href="/omp?cmd=new_container_task{$extra_params_string}&amp;next=get_task&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-                 class="last new-action-icon" data-type="container_task"
+                 class="last new-action-icon" data-type="container_task" data-reload="window"
                  title="{gsa:i18n ('New Container Task', 'Task')}">
                 <xsl:value-of select="gsa:i18n ('New Container Task', 'Task')"/>
               </a>
@@ -4482,7 +4482,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:when test="$new-icon">
         <!-- i18n with concat : see dynamic_strings.xsl - type-new -->
         <a href="/omp?cmd=new_{$type}{$extra_params_string}&amp;next=get_{$type}&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-           class="new-action-icon icon" data-type="{$type}"
+           class="new-action-icon icon" data-type="{$type}" data-reload="window"
            title="{gsa:i18n (concat ('New ', $cap-type), $cap-type)}">
           <img src="/img/new.png"/>
         </a>

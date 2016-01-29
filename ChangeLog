@@ -1,5 +1,10 @@
 2016-01-29  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/omp.xsl: Reload window after closing the dialogs
+	from the main icon menu successfully.
+
+2016-01-29  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/greenbone.js: Refaktor OMPDialog to use a more
 	generalized option for reloading after success. Currently the option accepts
 	two values: 'window' and 'parent'.
