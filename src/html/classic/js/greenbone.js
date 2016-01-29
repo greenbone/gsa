@@ -128,8 +128,7 @@
   **/
   var OMPDialog = function(options) {
     this.command = options.cmd;
-    this.window_reload = options.window_reload !== undefined ?
-      !!options.window_reload : false;
+    this.success_reload = options.reload;
     this.element = options.element ? $(options.element) : undefined;
     if (options.params === undefined) {
       this.params = {};
@@ -144,8 +143,6 @@
     if (options.parent_dialog) {
       this.parent_dialog = options.parent_dialog.$omp;
     }
-    this.parent_reload = options.parent_reload !== undefined ?
-      !!options.parent_reload : true;
   };
 
   var waiting = function(){
@@ -266,12 +263,12 @@
       })
       .done(function(xml) {
         xml = $(xml);
-        if (self.window_reload === true) {
+        if (self.success_reload === 'window') {
           window.location.reload();
           // a bit overkill, but better-safe-than-sorry.
           return;
         }
-        if (self.parent_dialog && self.parent_reload) {
+        if (self.success_reload === 'parent' && self.parent_dialog) {
           self.parent_dialog.reload();
         }
         if (self.element === undefined) {
@@ -648,14 +645,7 @@
     var done = options.element.data('done');
     var task_id = options.element.data('task_id');
     var parent_dialog = options.element.parents('.dialog-form')[0];
-    var parent_reload = options.parent_reload === undefined ?
-      undefined : !!options.parent_reload;
-    var elem_parent_reload = options.element.data('parent-reload');
-
-    if (elem_parent_reload !== undefined) {
-      // overwrite default parent_reload from options
-      parent_reload = !!elem_parent_reload;
-    }
+    var reload = options.element.data('reload');
 
     if (cmd === undefined) {
       cmd = options.type + '_' + type_name;
@@ -664,8 +654,6 @@
         cmd = cmd + '_' + options.postfix;
       }
     }
-
-    var window_reload = done === undefined && !parent_reload ? true: false;
 
     params = parse_params(extra);
 
@@ -680,8 +668,7 @@
     options.element.on('click', function(event) {
       event.preventDefault();
       new OMPDialog({cmd: cmd, element: done, params: params,
-        window_reload: window_reload, parent_dialog: parent_dialog,
-        parent_reload: parent_reload}
+        reload: reload, parent_dialog: parent_dialog}
       ).show(options.button);
     });
   }
@@ -749,8 +736,7 @@
     });
 
     doc.find(".new-action-icon").each(function() {
-      init_omp_dialog({type: 'new', element: $(this), button: 'Create',
-        parent_reload: false});
+      init_omp_dialog({type: 'new', element: $(this), button: 'Create'});
     });
 
     doc.find(".upload-action-icon").each(function() {
@@ -767,6 +753,7 @@
           type_name = elem.data('type'),
           done = elem.data('done');
 
+      var reload;
       var params = {
          "resource_type" : type_name
       };
@@ -780,9 +767,11 @@
                   (this.getAttribute("type") != "checkbox" || this.checked))
             params[this.name] = this.value;
         });
-        var window_reload = done === undefined ? true : false;
+        if (done === undefined) {
+          reload = 'window';
+        }
         new OMPDialog({cmd: 'process_bulk', element: done, params: params,
-          show_method: "POST", window_reload: window_reload}
+          show_method: "POST", reload: reload}
         ).show("OK", "confirmation");
       });
     });
@@ -792,7 +781,7 @@
           name = elem.data('name'),
           params = {name: name};
       elem.on('click', function(event) {
-        var dialog = new OMPDialog({cmd: 'wizard', window_reload: true,
+        var dialog = new OMPDialog({cmd: 'wizard', reload: 'window',
           params: params});
         event.preventDefault();
         if (name === 'quick_first_scan'){
