@@ -1,3 +1,9 @@
+2016-01-29  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/classic/omp.xsl (name="include-message-default")
+	(name="attach-message-default"): Removed the sentence about
+	scan engine.
+
 2016-01-29  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/omp.xsl: Reload parent dialog after adding a port range

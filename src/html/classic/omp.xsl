@@ -8647,8 +8647,6 @@ should not have received it.
 After the event $e,
 the following condition was met: $c
 
-Full details are available on the scan engine.
-
 $t
 $i
 
@@ -8680,7 +8678,6 @@ After the event $e,
 the following condition was met: $c
 
 This email escalation is configured to attach the resource list.
-Full details are available on the scan engine.
 
 $t
 
