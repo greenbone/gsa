@@ -3718,6 +3718,10 @@ request_handler (void *cls, struct MHD_Connection *connection,
   if (url && (url[0] == '/') && (url[1] == '/'))
     return MHD_NO;
 
+  /* Many Glib functions require valid UTF-8. */
+  if (url && (g_utf8_validate (url, -1, NULL) == FALSE))
+    return MHD_NO;
+
   /* Only accept GET and POST methods and send ERROR_PAGE in other cases. */
   if (strcmp (method, "GET") && strcmp (method, "POST"))
     {
