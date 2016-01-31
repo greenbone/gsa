@@ -1,5 +1,11 @@
 2016-01-31  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad.c (request_handler): Close connection if "url" is not valid
+	UTF-8.  This prevents Glib from segfaulting when printing the URL to the
+	login page XML, which could be used to bring GSA down.
+
+2016-01-31  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad.c (request_handler): Check that params has been setup before
 	accessing param "cmd", because in some cases params is still NULL.
 	Prevents a Glib critical error due to accessing NULL as a hashtable.
