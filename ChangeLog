@@ -1,5 +1,14 @@
 2016-01-31  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Backport r24265.
+
+	* src/gsad.c (params_mhd_validate_values, params_mhd_validate): Before
+	calling openvas_validate, check that the param is valid UTF-8.  This
+	prevents the Glib functions from running on invalid UTF-8, which can
+	lead to segfaults, and so can be used to bring GSA down.
+
+2016-01-31  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Backport r24262.
 
 	* src/gsad.c (request_handler): Close connection if "url" is not valid

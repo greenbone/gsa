@@ -1716,10 +1716,22 @@ params_mhd_validate_values (const char *parent_name, void *params)
     {
       gchar *item_name;
 
-      item_name = g_strdup_printf ("%s%s:", parent_name, name);
-
       /* Item specific value validator like "method_data:to_adddress:". */
-      switch (openvas_validate (validator, item_name, param->value))
+      if ((g_utf8_validate (name, -1, NULL) == FALSE)
+          || (g_utf8_validate (param->value, -1, NULL) == FALSE))
+        {
+          param->original_value = param->value;
+          param->value = NULL;
+          param->value_size = 0;
+          param->valid = 0;
+          param->valid_utf8 = 0;
+          item_name = NULL;
+        }
+      else switch (openvas_validate (validator,
+                                     (item_name = g_strdup_printf ("%s%s:",
+                                                                   parent_name,
+                                                                   name)),
+                                     param->value))
         {
           case 0:
             break;
@@ -1747,7 +1759,7 @@ params_mhd_validate_values (const char *parent_name, void *params)
                 const gchar *alias_for;
 
                 param->valid = 1;
-                param->valid_utf8 = g_utf8_validate (param->value, -1, NULL);
+                param->valid_utf8 = 1;
 
                 alias_for = openvas_validator_alias_for (validator, name);
                 if ((param->value && (strcmp ((gchar*) name, "number") == 0))
@@ -1791,8 +1803,9 @@ params_mhd_validate (void *params)
       param_t *param;
       param = (param_t*) value;
 
-      if (!g_str_has_prefix (name, "osp_pref_")
-          && openvas_validate (validator, name, param->value))
+      if ((g_utf8_validate (param->value, -1, NULL) == FALSE)
+          || (!g_str_has_prefix (name, "osp_pref_")
+              && openvas_validate (validator, name, param->value)))
         {
           param->original_value = param->value;
           param->value = NULL;
@@ -1804,7 +1817,7 @@ params_mhd_validate (void *params)
           const gchar *alias_for;
 
           param->valid = 1;
-          param->valid_utf8 = g_utf8_validate (param->value, -1, NULL);
+          param->valid_utf8 = 1;
 
           alias_for = openvas_validator_alias_for (validator, name);
           if ((param->value && (strcmp ((gchar*) name, "number") == 0))
