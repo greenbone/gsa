@@ -4532,7 +4532,12 @@ request_handler (void *cls, struct MHD_Connection *connection,
       if (response)
         {
           const char* cmd;
-          cmd = params_value (credentials->params, "cmd");
+
+          if (credentials->params)
+            cmd = params_value (credentials->params, "cmd");
+          else
+            cmd = NULL;
+
           if (attach_sid (response, sid) == MHD_NO)
             {
               g_free (sid);
