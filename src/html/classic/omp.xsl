@@ -33094,15 +33094,20 @@ var toggleFilter = function(){
             <td width="100">
               <xsl:choose>
                 <xsl:when test="in_use = 0">
-                  <xsl:call-template name="trashcan-icon">
-                    <xsl:with-param name="type">permission</xsl:with-param>
-                    <xsl:with-param name="id" select="@id"/>
-                    <xsl:with-param name="params">
-                      <input type="hidden" name="role_id" value="{$role_id}"/>
-                      <input type="hidden" name="next" value="edit_role"/>
-                      <input type="hidden" name="next_next" value="{/envelope/params/next}"/>
-                    </xsl:with-param>
-                  </xsl:call-template>
+                  <form action="/omp" method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="token" value="{/envelope/token}"/>
+                    <input type="hidden" name="caller" value="{/envelope/current_page}"/>
+                    <input type="hidden" name="cmd" value="delete_permission"/>
+                    <input type="hidden" name="permission_id" value="{@id}"/>
+                    <input type="hidden" name="role_id" value="{$role_id}"/>
+                    <input type="hidden" name="next" value="edit_role"/>
+                    <input type="hidden" name="next_next" value="{/envelope/params/next}"/>
+
+                    <a href="#" class="icon dialog-delete-action">
+                      <img src="/img/trashcan.png" alt="{gsa:i18n ('To Trashcan', 'Action Verb')}"
+                        title="{gsa:i18n ('Move To Trashcan', 'Action Verb')}"/>
+                    </a>
+                  </form>
                 </xsl:when>
                 <xsl:otherwise>
                   <img src="/img/trashcan_inactive.png"
