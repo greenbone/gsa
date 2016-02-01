@@ -1,5 +1,12 @@
 2016-02-01  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/omp.xsl (html-edit-port-list-form): Use new OMPAction to
+	delete port ranges in the port edit dialog. Using the OMPAction allows to
+	send the delete request asynchronously and refresh the edit dialog on
+	success.
+
+2016-02-01  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/greenbone.js: Add new OMPAction class to allow sending
 	formulars via ajax.
 

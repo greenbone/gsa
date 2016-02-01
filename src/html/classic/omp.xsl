@@ -26191,15 +26191,20 @@ should not have received it.
             <td width="100">
               <xsl:choose>
                 <xsl:when test="../../in_use = 0">
-                  <xsl:call-template name="delete-icon">
-                    <xsl:with-param name="type">port_range</xsl:with-param>
-                    <xsl:with-param name="id" select="@id"/>
-                    <xsl:with-param name="params">
-                      <input type="hidden" name="port_list_id" value="{../../@id}"/>
-                      <input type="hidden" name="next" value="edit_port_list"/>
-                      <input type="hidden" name="next_next" value="{/envelope/params/next}"/>
-                    </xsl:with-param>
-                  </xsl:call-template>
+                  <form action="/omp" method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="token" value="{/envelope/token}"/>
+                    <input type="hidden" name="caller" value="{/envelope/current_page}"/>
+                    <input type="hidden" name="port_list_id" value="{../../@id}"/>
+                    <input type="hidden" name="cmd" value="delete_port_range"/>
+                    <input type="hidden" name="port_range_id" value="{@id}"/>
+                    <input type="hidden" name="next" value="edit_port_list"/>
+                    <input type="hidden" name="next_next" value="{/envelope/params/next}"/>
+                    <a href="#" class="icon dialog-delete-action">
+                      <img src="/img/delete.png"
+                          alt="{gsa:i18n ('Delete', 'Action Verb')}"
+                          title="{gsa:i18n ('Delete', 'Action Verb')}"/>
+                    </a>
+                  </form>
                 </xsl:when>
                 <xsl:otherwise>
                   <img src="/img/delete_inactive.png"
