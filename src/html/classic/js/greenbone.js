@@ -235,14 +235,14 @@
         if (! (error_title)) {
           error_title = "Internal Error";
         }
-        error = "<br/>" + internal_error_html.find("span")[0].lastChild.textContent;
+        error = internal_error_html.find("span").text();
     }
     else if (top_line_error_html.length) {
       error_title = "Operation \"" + top_line_error_html.find("#operation").text() + "\" failed";
       error = "<br/>" + top_line_error_html.find ("#message").text ();
     }
     else if (login_form_html.length) {
-      error = login_form_html.find("center div")[0].lastChild.textContent;
+      error = login_form_html.find(".error_message").text();
     }
     self.error(error, error_title);
   };
@@ -335,32 +335,6 @@
     onReady(self.dialog);
   };
 
-  OMPDialog.prototype.set_error_content = function(html) {
-    var self = this;
-    self.dialog.attr('title', 'Error');
-
-    var dialog_html = $(html),
-        internal_error_html
-          = dialog_html.find(".gb_error_dialog .gb_window_part_content_error"),
-        login_form_html
-          = dialog_html.find(".gb_login_dialog .gb_window_part_content"),
-        error_title = "Error:",
-        error = "Unknown error";
-
-    if (internal_error_html.length) {
-      error_title = internal_error_html.find("span div").text();
-      if (!(error_title)) {
-        error_title = "Internal Error";
-      }
-      error = internal_error_html.find("span").text();
-    }
-    else if (login_form_html.length) {
-      error = login_form_html.find(".error_message").text();
-    }
-
-    self.error(error, error_title);
-  };
-
   OMPDialog.prototype.show = function(button){
     var self = this;
     var done_func, fail_func;
@@ -411,7 +385,7 @@
         return;
       }
 
-      self.set_error_content(response.responseText);
+      self.setErrorFromResponse(response);
 
       self.dialog.dialog({
         modal: true,
