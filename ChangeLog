@@ -1,3 +1,8 @@
+2016-02-01  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/omp.xsl(html-edit-port-list-form): Only show add new port
+	range if port list is not in use.
+
 2016-01-31  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (params_mhd_validate_values, params_mhd_validate): Before

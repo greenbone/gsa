@@ -26163,12 +26163,16 @@ should not have received it.
       </form>
 
       <div class="section-header">
-        <a href="#" title="{gsa:i18n ('Add Port Range', 'Override')}"
-          class="new-action-icon icon icon-action"
-          data-type="port_range" data-extra="port_list_id={$id}"
-          data-reload="parent">
-          <img src="/img/new.png" alt="{gsa:i18n ('Add Port Range', 'Port Range')}"/>
-        </a>
+        <xsl:choose>
+          <xsl:when test="../../in_use = 0">
+            <a href="#" title="{gsa:i18n ('Add Port Range', 'Override')}"
+              class="new-action-icon icon icon-action"
+              data-type="port_range" data-extra="port_list_id={$id}"
+              data-reload="parent">
+              <img src="/img/new.png" alt="{gsa:i18n ('Add Port Range', 'Port Range')}"/>
+            </a>
+          </xsl:when>
+        </xsl:choose>
         <h1><xsl:value-of select="gsa:i18n ('Port Ranges', 'Port Range')"/></h1>
       </div>
       <table class="gbntable" cellspacing="2" cellpadding="4">
