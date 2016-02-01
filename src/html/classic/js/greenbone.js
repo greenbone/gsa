@@ -732,6 +732,40 @@
     this.toggleIcon();
   };
 
+  function OMPAction(options) {
+    this.params = options.params === undefined ? {} : options.params;
+    this.dialog = options.dialog.$omp;
+    this.form = options.form;
+  }
+
+  OMPAction.prototype.do = function() {
+    var self = this;
+    var data = new FormData(this.form);
+    for (var param in this.params) {
+      data.append(param, this.params[param]);
+    }
+    data.append('xml', 1);
+
+    self.request_data = {
+      url: '/omp',
+      data: data,
+      cache: false,
+      processData: false,
+      contentType: false,
+      type: 'POST',
+      dataType: 'html',
+    };
+
+    function done_func() {
+      self.dialog.reload();
+    }
+    function fail_func(jqXHR) {
+      self.dialog.setErrorFromResponse(jqXHR);
+    }
+
+    $.ajax(self.request_data).done(done_func).fail(fail_func);
+  };
+
   var onReady = function(doc) {
     doc = $(doc);
 
@@ -750,6 +784,17 @@
     doc.find(".delete-action-icon").each(function() {
       init_omp_dialog({type: 'delete', element: $(this), button: 'Delete',
         prefix: 'confirm'});
+    });
+
+    doc.find('.dialog-delete-action').each(function() {
+      var elem = $(this);
+      elem.on('click', function(event) {
+        event.preventDefault();
+        new OMPAction({dialog: elem.parents('.dialog-form')[0],
+          cmd: elem.data('cmd'), params: parse_params(elem.data('extra')),
+          form: elem.parents('form')[0],
+        }).do();
+      });
     });
 
     doc.find(".bulk-dialog-icon").each(function() {
