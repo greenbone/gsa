@@ -32923,9 +32923,7 @@ var toggleFilter = function(){
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="save_role"/>
         <input type="hidden" name="caller" value="{/envelope/current_page}"/>
-        <input type="hidden"
-               name="role_id"
-               value="{$role_id}"/>
+        <input type="hidden" name="role_id" value="{$role_id}"/>
         <xsl:choose>
           <xsl:when test="string-length (/envelope/params/next_next) &gt; 0">
             <input type="hidden" name="next" value="{/envelope/params/next_next}"/>
@@ -32961,11 +32959,6 @@ var toggleFilter = function(){
                      value="{commands_response/get_roles_response/role/users}"
                      size="30"
                      maxlength="1000"/>
-            </td>
-          </tr>
-          <tr>
-            <td colspan="2" style="text-align:right;">
-              <input type="submit" name="submit" value="{gsa:i18n ('Save Role', 'Role')}"/>
             </td>
           </tr>
         </table>
@@ -33015,11 +33008,14 @@ var toggleFilter = function(){
             <td colspan="4" style="text-align:right;">
               <xsl:choose>
                 <xsl:when test="$in_use = 0">
-                  <input type="submit" name="submit" value="{gsa:i18n ('Create Permission', 'Permission')}"/>
+                  <a href="#" class="button dialog-action">
+                    <xsl:value-of select="gsa:i18n ('Create Permission', 'Permission')"/>
+                  </a>
                 </xsl:when>
                 <xsl:otherwise>
-                  <input type="submit" name="submit" value="{gsa:i18n ('Create Permission', 'Permission')}"
-                         disabled="1"/>
+                  <a href="#" class="button disabled">
+                    <xsl:value-of select="gsa:i18n ('Create Permission', 'Permission')"/>
+                  </a>
                 </xsl:otherwise>
               </xsl:choose>
             </td>
@@ -33056,11 +33052,14 @@ var toggleFilter = function(){
             <td colspan="4" style="text-align:right;">
               <xsl:choose>
                 <xsl:when test="count (get_groups_response/group) &gt; 0">
-                  <input type="submit" name="submit" value="{gsa:i18n ('Create Permission', 'Permission')}"/>
+                  <a href="#" class="button dialog-action">
+                    <xsl:value-of select="gsa:i18n ('Create Permission', 'Permission')"/>
+                  </a>
                 </xsl:when>
                 <xsl:otherwise>
-                  <input type="submit" name="submit" value="{gsa:i18n ('Create Permission', 'Permission')}"
-                         disabled="1"/>
+                  <a href="#" class="button disabled">
+                    <xsl:value-of select="gsa:i18n ('Create Permission', 'Permission')"/>
+                  </a>
                 </xsl:otherwise>
               </xsl:choose>
             </td>

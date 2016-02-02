@@ -1,5 +1,11 @@
 2016-02-02  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/omp.xsl (html-edit-role-form): Refactor edit role
+	formular to use the dialog action for submitting the post requests
+	asynchronously.
+
+2016-02-02  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/omp.xsl (html-edit-role-form): Fix creating permissions
 	from the edit role formular. The parameter role_id got renamed to
 	permission_role_id.
