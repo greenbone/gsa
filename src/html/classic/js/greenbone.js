@@ -717,7 +717,8 @@
     for (var param in this.params) {
       data.append(param, this.params[param]);
     }
-    data.append('xml', 1);
+    data.set('xml', 1);
+    data.set('no_redirect', 1);
 
     self.request_data = {
       url: '/omp',

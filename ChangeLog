@@ -1,5 +1,11 @@
 2016-02-02  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/greenbone.js (OMPAction.prototype.do): Don't use redirect
+	for POST in OMPActions. The PRG pattern is not required for ajax requests
+	and only causes a higher latency.
+
+2016-02-02  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/css/gsa-style.css: Set text color for link button. This
 	avoid having a blue text color applied from a:link to a button.
 
