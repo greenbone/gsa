@@ -1,5 +1,9 @@
 2016-02-02  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/gsad.c (request_handler): Respect xml parameter also for POST responses.
+
+2016-02-02  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/greenbone.js, src/html/classic/omp.xsl: Rename css class
 	dialog-delete-action to dialog-action. This css class is used to apply a
 	OMPAction to the element.

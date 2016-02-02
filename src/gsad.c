@@ -3974,6 +3974,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
   char *content_disposition = NULL;
   gsize response_size = 0;
   int http_response_code = MHD_HTTP_OK;
+  const char *xml_flag = NULL;
 
   /* Never respond on first call of a GET. */
   if ((!strcmp (method, "GET")) && *con_cls == NULL)
@@ -4349,8 +4350,6 @@ request_handler (void *cls, struct MHD_Connection *connection,
             }
           else
             {
-              const char *xml_flag;
-
               res_len = strlen (res);
 
               xml_flag = credentials->params
@@ -4677,12 +4676,30 @@ request_handler (void *cls, struct MHD_Connection *connection,
           con_info->redirect = NULL;
         }
       else
-        ret = send_response (connection, con_info->response,
-                             con_info->answercode,
-                             new_sid ? new_sid : "0",
-                             con_info->content_type,
-                             con_info->content_disposition,
-                             con_info->content_length);
+        {
+          xml_flag = con_info->params
+            ? params_value (con_info->params, "xml")
+            : NULL;
+
+          if (xml_flag && strcmp (xml_flag, "0"))
+            {
+              content_type = GSAD_CONTENT_TYPE_APP_XML;
+            }
+          else
+          {
+            content_type = con_info->content_type;
+          }
+
+          content_type = GSAD_CONTENT_TYPE_APP_XML;
+          ret = send_response (connection, con_info->response,
+              con_info->answercode,
+              new_sid ? new_sid : "0",
+              content_type,
+              /* con_info->content_type, */
+              con_info->content_disposition,
+              con_info->content_length);
+        }
+
       g_free (new_sid);
       return ret;
     }
