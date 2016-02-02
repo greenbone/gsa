@@ -26164,7 +26164,7 @@ should not have received it.
 
       <div class="section-header">
         <xsl:choose>
-          <xsl:when test="../../in_use = 0">
+          <xsl:when test="commands_response/get_port_lists_response/port_list/in_use = 0">
             <a href="#" title="{gsa:i18n ('Add Port Range', 'Override')}"
               class="new-action-icon icon icon-action"
               data-type="port_range" data-extra="port_list_id={$id}"
