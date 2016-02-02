@@ -763,7 +763,7 @@
       elem.on('click', function(event) {
         event.preventDefault();
         new OMPAction({dialog: elem.parents('.dialog-form')[0],
-          cmd: elem.data('cmd'), params: parse_params(elem.data('extra')),
+          params: parse_params(elem.data('extra')),
           form: elem.parents('form')[0],
         }).do();
       });
