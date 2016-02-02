@@ -32914,18 +32914,10 @@ var toggleFilter = function(){
 <!--     EDIT_ROLE -->
 
 <xsl:template name="html-edit-role-form">
-  <div class="gb_window">
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n ('Edit Role', 'Role')"/>
-      <xsl:call-template name="edit-header-icons">
-        <xsl:with-param name="cap-type" select="'Role'"/>
-        <xsl:with-param name="type" select="'role'"/>
-        <xsl:with-param name="id"
-                        select="commands_response/get_roles_response/role/@id"/>
-      </xsl:call-template>
+  <div class="edit-dialog">
+    <div class="title"><xsl:value-of select="gsa:i18n ('Edit Role', 'Role')"/>
     </div>
-    <div class="gb_window_part_content">
+    <div class="content">
       <xsl:variable name="role_id" select="commands_response/get_roles_response/role/@id"/>
       <form action="" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
