@@ -415,7 +415,6 @@
         processData: false,
         contentType: false,
         type: 'POST',
-        dataType: 'html',
       };
     }
     else
@@ -727,7 +726,6 @@
       processData: false,
       contentType: false,
       type: 'POST',
-      dataType: 'html',
     };
 
     function done_func() {
