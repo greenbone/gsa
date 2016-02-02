@@ -32978,7 +32978,7 @@ var toggleFilter = function(){
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="create_permission"/>
         <input type="hidden" name="caller" value="{/envelope/current_page}"/>
-        <input type="hidden" name="role_id" value="{$role_id}"/>
+        <input type="hidden" name="permission_role_id" value="{$role_id}"/>
         <input type="hidden" name="next" value="edit_role"/>
         <input type="hidden" name="next_next" value="{/envelope/params/next}"/>
         <input type="hidden" name="comment" value=""/>
@@ -33033,7 +33033,7 @@ var toggleFilter = function(){
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="create_permission"/>
         <input type="hidden" name="caller" value="{/envelope/current_page}"/>
-        <input type="hidden" name="role_id" value="{$role_id}"/>
+        <input type="hidden" name="permission_role_id" value="{$role_id}"/>
         <input type="hidden" name="next" value="edit_role"/>
         <input type="hidden" name="next_error" value="edit_role"/>
         <input type="hidden" name="next_next" value="{/envelope/params/next}"/>
