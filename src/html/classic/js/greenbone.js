@@ -758,7 +758,7 @@
         prefix: 'confirm'});
     });
 
-    doc.find('.dialog-delete-action').each(function() {
+    doc.find('.dialog-action').each(function() {
       var elem = $(this);
       elem.on('click', function(event) {
         event.preventDefault();

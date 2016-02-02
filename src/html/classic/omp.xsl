@@ -26199,7 +26199,7 @@ should not have received it.
                     <input type="hidden" name="port_range_id" value="{@id}"/>
                     <input type="hidden" name="next" value="edit_port_list"/>
                     <input type="hidden" name="next_next" value="{/envelope/params/next}"/>
-                    <a href="#" class="icon dialog-delete-action">
+                    <a href="#" class="icon dialog-action">
                       <img src="/img/delete.png"
                           alt="{gsa:i18n ('Delete', 'Action Verb')}"
                           title="{gsa:i18n ('Delete', 'Action Verb')}"/>
@@ -33103,7 +33103,7 @@ var toggleFilter = function(){
                     <input type="hidden" name="next" value="edit_role"/>
                     <input type="hidden" name="next_next" value="{/envelope/params/next}"/>
 
-                    <a href="#" class="icon dialog-delete-action">
+                    <a href="#" class="icon dialog-action">
                       <img src="/img/trashcan.png" alt="{gsa:i18n ('To Trashcan', 'Action Verb')}"
                         title="{gsa:i18n ('Move To Trashcan', 'Action Verb')}"/>
                     </a>
