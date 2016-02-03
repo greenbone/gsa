@@ -26358,7 +26358,7 @@ dashboard (credentials_t * credentials, params_t *params,
                 &response,
                 &entity,
                 response_data,
-                "<get_filters filter=\"type=info first=1 rows=-1\"/>");
+                "<get_filters filter=\"type=info or type= first=1 rows=-1\"/>");
   else
     ret = ompf (credentials,
                 &response,

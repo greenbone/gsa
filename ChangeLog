@@ -1,3 +1,24 @@
+2016-02-03  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Add filter selection dropdowns on SecInfo dashboard. Remove test output
+	and prevent unnecessary update events. Remove unused "Display".
+
+	* src/gsad_omp.c (dashboard): Select filters with empty type as well.
+
+	* src/html/classic/graphics.xsl (js-add-dashboard-filter): New template.
+	(dashboard [secinfo]): Add filter selection for charts and define
+	the defaultControllerString.
+
+	* src/html/classic/js/gsa_graphics_base.js (Dashboard): Add filter
+	selection. Remove debug output used for testing. Have controller and
+	filter selection elements only active after initialization. Fix resized
+	event handler.
+	(DashboardRow): Add filter selection.
+	(DashboardBox): Add filter selection and activation of select dropdowns.
+	(Chart): Make id more unique and add filter selection.
+	(DataSource): Add filter selection and manage data for multiple filters.
+	(Display): Remove. Obsoleted by DashboardBox.
+
 2016-02-03  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/omp.xsl (preference): Use edit dialog to change the

@@ -85,6 +85,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     "<xsl:value-of select="gsa:escape-js ($filter_pref_id)"/>")
 </xsl:template>
 
+<xsl:template name="js-add-dashboard-filter">
+  <xsl:param name="dashboard_name" select="'dashboard'"/>
+  <xsl:param name="id" select="''"/>
+  <xsl:param name="name" select="''"/>
+  <xsl:param name="term" select="''"/>
+  <xsl:param name="type" select="''"/>
+  gsa.dashboards ["<xsl:value-of select="gsa:escape-js ($dashboard_name)"/>"]
+      .addFilter ("<xsl:value-of select="gsa:escape-js ($id)"/>",
+                  "<xsl:value-of select="gsa:escape-js ($name)"/>",
+                  unescapeXML ("<xsl:value-of select="gsa:escape-js ($term)"/>"),
+                  "<xsl:value-of select="gsa:escape-js ($type)"/>");
+</xsl:template>
+
 <xsl:template name="js-aggregate-data-source">
   <xsl:param name="data_source_name" select="'aggregate-source'"/>
 
@@ -1146,9 +1159,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:call-template name="init-d3charts"/>
   <xsl:variable name="default_controllers" select="'nvt_bar_chart|nvt_donut_chart#cve_bar_chart|cve_donut_chart'"/>
   <xsl:variable name="default_heights" select="'280#280'"/>
+  <xsl:variable name="default_filters" select="'|#|'"/>
 
   <xsl:variable name="envelope" select="/envelope"/>
-  <xsl:variable name="filters" select="get_filters_response/filter[type='SecInfo']"/>
+  <xsl:variable name="filters" select="get_filters_response/filter[type='SecInfo' or type='']"/>
 
   <xsl:variable name="controllers_pref_id" select="'84ab32da-fe69-44d8-8a8f-70034cf28d4e'"/>
   <xsl:variable name="heights_pref_id" select="'42d48049-3153-43bf-b30d-72ca5ab1eb49'"/>
@@ -1174,24 +1188,48 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
+  <xsl:variable name="filters_string">
+    <xsl:choose>
+      <xsl:when test="/envelope/chart_preferences/chart_preference[@id = $filters_pref_id]">
+        <xsl:value-of select="gsa:escape-js (/envelope/chart_preferences/chart_preference[@id = $filters_pref_id]/value)"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$default_filters"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
   <!-- TODO: Update data sources to support multiple filters and
              add filter selection to chart boxes again -->
 
   <script>
+    // Create Dashboard and Filter selection
     gsa.dashboards ["secinfo-dashboard"]
       = Dashboard ("secinfo-dashboard",
                    "<xsl:value-of select="gsa:escape-js ($controllers)"/>",
                    "<xsl:value-of select="gsa:escape-js ($heights)"/>",
-                   null,
+                   "<xsl:value-of select="gsa:escape-js ($filters_string)"/>",
                    {
                      "controllersPrefID": "<xsl:value-of select="gsa:escape-js ($controllers_pref_id)"/>",
+                     "filtersPrefID": "<xsl:value-of select="gsa:escape-js ($filters_pref_id)"/>",
                      "heightsPrefID": "<xsl:value-of select="gsa:escape-js ($heights_pref_id)"/>",
                      "filter": "",
                      "filt_id": "",
                      "max_components": 8,
+                     "defaultControllerString": "nvt_bar_chart",
                      "dashboardControls": $("#secinfo-dashboard-controls")[0]
                    });
 
+    <xsl:for-each select="$filters">
+      <xsl:call-template name="js-add-dashboard-filter">
+        <xsl:with-param name="dashboard_name" select="'secinfo-dashboard'"/>
+        <xsl:with-param name="id" select="@id"/>
+        <xsl:with-param name="name" select="name"/>
+        <xsl:with-param name="term" select="term"/>
+        <xsl:with-param name="type" select="type"/>
+      </xsl:call-template>
+    </xsl:for-each>
+
+    // Create Data Sources and Controllers
     // NVTs
     <xsl:call-template name="js-aggregate-chart-factory">
       <xsl:with-param name="chart_name" select="'nvt_bar_chart'"/>

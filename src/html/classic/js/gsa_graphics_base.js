@@ -44,8 +44,10 @@ function Dashboard (id, controllersString, heightsString, filtersString,
   var rows = {};
   var components = {};
   var controllerFactories = {};
+  var filters = [{ id:"", name:"--", term:"", type: "" }];
   var prevControllersString = controllersString;
   var prevHeightsString = heightsString;
+  var prevFiltersString = filtersString;
   var lastRowIndex = 0;
   var lastBoxIndex = 0;
   var currentResizeTimeout = null;
@@ -56,6 +58,7 @@ function Dashboard (id, controllersString, heightsString, filtersString,
   var totalComponents = 0;
   var controllersPrefRequest;
   var heightsPrefRequest;
+  var filtersPrefRequest;
 
   /*
    * Extra options
@@ -64,6 +67,8 @@ function Dashboard (id, controllersString, heightsString, filtersString,
   var controllersPrefID = "";
   // Row heights preference
   var heightsPrefID = "";
+  // Filter selection preference
+  var filtersPrefID = "";
   // Controller String for new components
   var defaultControllerString = "by-cvss";
   // Filter String for new components
@@ -81,13 +86,12 @@ function Dashboard (id, controllersString, heightsString, filtersString,
 
   if (dashboardOpts)
     {
-      console.debug ("processing dashboardOpts");
-      console.debug (dashboardOpts)
-
       if (dashboardOpts["controllersPrefID"])
         controllersPrefID = dashboardOpts["controllersPrefID"];
       if (dashboardOpts["heightsPrefID"])
         heightsPrefID = dashboardOpts["heightsPrefID"];
+      if (dashboardOpts["filtersPrefID"])
+        filtersPrefID = dashboardOpts["filtersPrefID"];
       if (dashboardOpts["defaultFilterString"])
         defaultFilterString = dashboardOpts["defaultFilterString"];
       if (dashboardOpts["defaultControllerString"] !== undefined)
@@ -100,7 +104,6 @@ function Dashboard (id, controllersString, heightsString, filtersString,
         maxPerRow = dashboardOpts["maxPerRow"];
       if (dashboardOpts["dashboardControls"])
         {
-          console.debug ("creating control buttons");
           dashboardControls = dashboardOpts["dashboardControls"];
 
           startEditButton
@@ -255,7 +258,6 @@ function Dashboard (id, controllersString, heightsString, filtersString,
       controllersString = controllersString.slice (0, -1);
       if (controllersString != prevControllersString)
         {
-          console.debug ("controllersString updated to: " + controllersString);
           prevControllersString = controllersString;
 
           if (controllersPrefID != "")
@@ -273,10 +275,6 @@ function Dashboard (id, controllersString, heightsString, filtersString,
 
               controllersPrefRequest.post (form_data);
             }
-        }
-      else
-        {
-          console.debug ("controllersString same as before");
         }
       return controllersString;
     }
@@ -300,8 +298,6 @@ function Dashboard (id, controllersString, heightsString, filtersString,
 
       if (heightsString != prevHeightsString)
         {
-          console.debug ("heightsString updated to: " + heightsString);
-
           if (heightsPrefID != "")
             {
               if (heightsPrefRequest != null)
@@ -318,15 +314,46 @@ function Dashboard (id, controllersString, heightsString, filtersString,
               heightsPrefRequest.post (form_data);
             }
         }
-      else
-        {
-          console.debug ("heightsString same as before");
-        }
       return heightsString;
     }
 
   my.updateFiltersString = function ()
     {
+      if (filtersString == null)
+        return;
+
+      filtersString = "";
+      var sortedRowElems = $(elem).find (".dashboard-row").toArray ();
+      for (var index in sortedRowElems)
+        {
+          var entry = $(sortedRowElems[index]).attr ("id");
+          var rowFiltersString = rows[entry].updateFiltersString ();
+          if (rows[entry].componentsCount () != 0)
+            {
+              filtersString += rowFiltersString
+              filtersString += "#";
+            }
+        }
+      filtersString = filtersString.slice (0, -1);
+      if (filtersString != prevFiltersString)
+        {
+          prevFiltersString = filtersString;
+          if (filtersPrefID != "")
+            {
+              if (filtersPrefRequest != null)
+                filtersPrefRequest.abort ();
+
+              filtersPrefRequest = d3.xhr ("/omp")
+
+              var form_data = new FormData ();
+              form_data.append ("chart_preference_id", filtersPrefID);
+              form_data.append ("chart_preference_value", filtersString);
+              form_data.append ("token", gsa.gsa_token);
+              form_data.append ("cmd", "save_chart_preference");
+
+              filtersPrefRequest.post (form_data);
+            }
+        }
       return filtersString;
     }
 
@@ -400,6 +427,7 @@ function Dashboard (id, controllersString, heightsString, filtersString,
           my.resize ();
           my.redraw ();
         }
+      box.activateSelectors ();
       box.selectController (box.controllerString(), false, true);
       my.updateRows ();
     }
@@ -414,10 +442,16 @@ function Dashboard (id, controllersString, heightsString, filtersString,
 
   my.resized = function (checkHeight)
     {
-      if (width == elem.clientWidth)
-        return;
-      if (checkHeight && height == elem.clientHeight)
-        return;
+      if (checkHeight)
+        {
+          if (width == elem.clientWidth || height == elem.clientHeight)
+            return;
+        }
+      else
+        {
+          if (width == elem.clientWidth)
+            return;
+        }
       width = elem.clientWidth;
       height = elem.clientHeight;
       my.resize ();
@@ -450,12 +484,27 @@ function Dashboard (id, controllersString, heightsString, filtersString,
       controllerFactories [factoryName] = factoryFunc;
     }
 
+  my.addFilter = function (filterID, filterName, filterTerm, filterType)
+    {
+      filters.push ({ id: filterID, name: filterName,
+                    term: filterTerm, type: filterType});
+    }
+
   my.addControllersForComponent = function (component)
     {
       for (var factoryName in controllerFactories)
         {
           var newController
             = controllerFactories [factoryName] (component);
+        }
+    }
+
+  my.addFiltersForComponent = function (component)
+    {
+      for (var filterIndex in filters)
+        {
+          var filter = filters [filterIndex];
+          component.addFilter (filter.id, filter);
         }
     }
 
@@ -468,6 +517,8 @@ function Dashboard (id, controllersString, heightsString, filtersString,
       var rowFilterStringList = null;
       if (filtersString)
         rowFiltersStringList = filtersString.split ("#");
+
+      var rowHeightsList;
       if (heightsString)
         rowHeightsList = heightsString.split ("#");
       else
@@ -479,7 +530,6 @@ function Dashboard (id, controllersString, heightsString, filtersString,
           if (isNaN (height))
             height = undefined;
 
-          console.debug (height);
           my.addNewRow (rowControllersStringList [index],
                         filtersString ? rowFiltersStringList [index] : null,
                         height);
@@ -492,8 +542,14 @@ function Dashboard (id, controllersString, heightsString, filtersString,
           for (var item in components)
             {
               components[item].updateControllerSelect ();
+              components[item].updateFilterSelect ();
             }
         }
+      for (var item in components)
+        {
+          components[item].activateSelectors ();
+        }
+      my.redraw ();
     }
 
   my.startEdit = function ()
@@ -541,9 +597,9 @@ function Dashboard (id, controllersString, heightsString, filtersString,
   width = elem.clientWidth;
 
   // Window resize
-  $(window).on ("resize", my.resized);
+  $(window).on ("resize", function () { my.resized (false) });
   // Check in case other elements cause scrollbar to appear or disappear
-  $(window).bind ("DOMSubtreeModified", my.resized);
+  $(window).bind ("DOMSubtreeModified", function () { my.resized (false) });
 
   // Drop targets for new rows
   topTarget = DashboardNewRowTarget (my, "top");
@@ -649,6 +705,13 @@ function DashboardRow (dashboard, controllersString, filtersString, height,
 
   my.updateFiltersString = function ()
     {
+      filtersString = "";
+      for (var item in components)
+        {
+          filtersString += components[item].filterString ();
+          filtersString += "|";
+        }
+      filtersString = filtersString.slice (0, -1);
       return filtersString;
     }
 
@@ -774,7 +837,7 @@ function DashboardRow (dashboard, controllersString, filtersString, height,
 
   var filterStringList = null;
   if (filtersString)
-    filterStringList = filtersStr.split ("|");
+    filterStringList = filtersString.split ("|");
 
   $(elem).css ("height", height);
   $(elem).attr ("height", height);
@@ -848,16 +911,25 @@ function DashboardBox (row, controllerString, filterString, dashboardOpts)
   var controllers = [];
   var controllerIndexes = {};
   var currentCtrlIndex = -1;
+  var filters = [];
+  var filterIndexes = {};
+  var currentFilterIndex = -1;
+  var selectorsActive = false;
 
+  var lastRequestedController = null;
+  var lastRequestedFilter = null;
   var last_generator = null;
   var last_gen_params = null;
 
   var hideControllerSelect;
+  var hideFilterSelect;
 
   if (dashboardOpts)
     {
       if (dashboardOpts["hideControllerSelect"])
         hideControllerSelect = dashboardOpts["hideControllerSelect"];
+      if (dashboardOpts["hideControllerSelect"])
+        hideFilterSelect = dashboardOpts["hideFilterSelect"];
     }
 
   var elem = document.createElement ("div");
@@ -868,7 +940,8 @@ function DashboardBox (row, controllerString, filterString, dashboardOpts)
                             .attr ("class", "chart-box")
   var innerElem = innerElem_d3.node();
 
-  var menu, header, topButtons, content, content_d3, footer, select_elem, svg;
+  var menu, header, topButtons, content, content_d3, svg;
+  var footer, controllerSelectElem, filterSelectElem;
   menu
     = innerElem_d3
         .append ("div")
@@ -975,10 +1048,24 @@ function DashboardBox (row, controllerString, filterString, dashboardOpts)
       dashboard.updateFiltersString ();
     }
 
+  my.currentFilter = function ()
+    {
+      if (currentFilterIndex >= 0)
+        return filters [currentFilterIndex]
+      else
+        return null;
+    }
+
   my.addController = function (controllerName, controller)
     {
       controllerIndexes[controllerName] = controllers.length;
       controllers.push (controller);
+    }
+
+  my.addFilter = function (filterID, filter)
+    {
+      filterIndexes[filterID] = filters.length;
+      filters.push (filter);
     }
 
   my.remove = function ()
@@ -1017,7 +1104,24 @@ function DashboardBox (row, controllerString, filterString, dashboardOpts)
     {
       my.applySelect2 ();
       if (currentCtrlIndex >= 0)
-        controllers [currentCtrlIndex].request_data ();
+        controllers [currentCtrlIndex]
+          .request_data (filters [currentFilterIndex]);
+    }
+
+  my.lastRequestedController = function (newController)
+    {
+      if (newController === undefined)
+        return lastRequestedController;
+      lastRequestedController = newController;
+      return my;
+    }
+
+  my.lastRequestedFilter = function (newFilter)
+    {
+      if (newFilter === undefined)
+        return lastRequestedFilter;
+      lastRequestedFilter = newFilter;
+      return my;
     }
 
   // Edit management
@@ -1059,7 +1163,7 @@ function DashboardBox (row, controllerString, filterString, dashboardOpts)
   /* Puts an error message into the header and clears the svg element */
   my.show_error = function (message)
     {
-      header.text (message);
+      d3.select(header).text (message);
       svg.text ("");
     }
 
@@ -1082,17 +1186,23 @@ function DashboardBox (row, controllerString, filterString, dashboardOpts)
       return item;
     }
 
+  // Activators selectors
+  my.activateSelectors = function ()
+    {
+      selectorsActive = true;
+    }
+
   // Controller selection
 
   my.updateControllerSelect = function ()
     {
-      if (select_elem)
+      if (controllerSelectElem)
         {
-          $(select_elem.node ()).select2 ("val", controllerString);
+          $(controllerSelectElem.node ()).select2 ("val", controllerString);
         }
       else
         {
-          my.selectController (controllerString, false, true)
+          my.selectController (controllerString, false, false)
         }
     }
 
@@ -1115,31 +1225,30 @@ function DashboardBox (row, controllerString, filterString, dashboardOpts)
       if (typeof (index) != "number" || index < 0 || index >= controllers.length)
         return console.error ("Invalid chart index: " + index);
       currentCtrlIndex = index;
-      my.controllerString (controllers [currentCtrlIndex].id ());
+      my.controllerString (controllers [currentCtrlIndex].chart_name ());
 
-      if (requestData)
-        controllers [currentCtrlIndex].request_data ();
-
+      if (requestData && selectorsActive)
+        my.redraw ();
     }
 
   my.prevController = function ()
     {
       if (currentCtrlIndex <= 0)
-        $(select_elem.node ())
-          .select2 ("val", controllers[controllers.length - 1].id ());
+        $(controllerSelectElem.node ())
+          .select2 ("val", controllers[controllers.length - 1].chart_name ());
       else
-        $(select_elem.node ())
-          .select2 ("val", controllers[currentCtrlIndex - 1].id ());
+        $(controllerSelectElem.node ())
+          .select2 ("val", controllers[currentCtrlIndex - 1].chart_name ());
     }
 
   my.nextController = function ()
     {
       if (currentCtrlIndex >= controllers.length - 1)
-        $(select_elem.node ())
-          .select2 ("val", controllers[0].id ());
+        $(controllerSelectElem.node ())
+          .select2 ("val", controllers[0].chart_name ());
       else
-        $(select_elem.node ())
-          .select2 ("val", controllers[currentCtrlIndex + 1].id ());
+        $(controllerSelectElem.node ())
+          .select2 ("val", controllers[currentCtrlIndex + 1].chart_name ());
     }
 
   /* Adds a chart selector to the footer */
@@ -1155,23 +1264,24 @@ function DashboardBox (row, controllerString, filterString, dashboardOpts)
             .attr ("src", "img/previous.png")
             .style ("vertical-align", "middle")
 
-    select_elem = d3.select(footer)
-                      .append ("select")
-                        .style ("margin-left", "5px")
-                        .style ("margin-right", "5px")
-                        .style ("vertical-align", "middle")
-                        .attr ("onchange",
-                               "gsa.dashboards [\"" + dashboard.id() + "\"]"
-                               + ".component(\"" + id + "\")"
-                               + ".selectController (this.value, true, true)");
+    controllerSelectElem = d3.select(footer)
+                              .append ("select")
+                                .style ("margin-left", "5px")
+                                .style ("margin-right", "5px")
+                                .style ("vertical-align", "middle")
+                                .attr ("onchange",
+                                       "gsa.dashboards [\"" + dashboard.id() + "\"]"
+                                       + ".component(\"" + id + "\")"
+                                       + ".selectController (this.value, true, true)");
 
-    for (var controllerID in controllers)
+    for (var controllerIndex in controllers)
       {
-        var controller = controllers [controllerID];
-        select_elem.append ("option")
-                      .attr ("value", controller.chart_name ())
-                      .attr ("id", id + "_chart_opt_" + controllerID)
-                      .text (controller.label ())
+        var controller = controllers [controllerIndex];
+        var controllerName = controller.chart_name ();
+        controllerSelectElem.append ("option")
+                              .attr ("value", controllerName)
+                              .attr ("id", id + "_chart_opt_" + controllerIndex)
+                              .text (controller.label ())
       }
 
     d3.select(footer)
@@ -1183,21 +1293,138 @@ function DashboardBox (row, controllerString, filterString, dashboardOpts)
           .append ("img")
             .attr ("src", "img/next.png")
             .style ("vertical-align", "middle")
+
+    d3.select(footer)
+        .append ("br");
+  }
+
+  my.updateFilterSelect = function ()
+    {
+      if (filterSelectElem)
+        {
+          $(filterSelectElem.node ()).select2 ("val", filterString);
+        }
+      else
+        {
+          if (filterString)
+            my.selectFilter (filterString, false, false)
+        }
+    }
+
+  my.selectFilter = function (id, savePreference, requestData)
+    {
+      var index = filterIndexes [id];
+      if (index == undefined)
+        {
+          console.warn ("Filter not found: \"" + id + "\"");
+          my.selectFilterIndex (0, savePreference, requestData);
+        }
+      else
+        {
+          my.selectFilterIndex (index, savePreference, requestData);
+        }
+    }
+
+  my.selectFilterIndex = function (index, savePreference, requestData)
+    {
+      if (typeof (index) != "number" || index < 0 || index >= filters.length)
+        return console.error ("Invalid filter index: " + index);
+      currentFilterIndex = index;
+      my.filterString (filters [currentFilterIndex].id);
+
+      if (requestData && selectorsActive)
+        my.redraw ();
+    }
+
+  my.prevFilter = function ()
+    {
+      if (currentFilterIndex <= 0)
+        $(filterSelectElem.node ())
+          .select2 ("val", filters[filters.length - 1].id);
+      else
+        $(filterSelectElem.node ())
+          .select2 ("val", filters[currentFilterIndex - 1].id);
+    }
+
+  my.nextFilter = function ()
+    {
+      if (currentFilterIndex >= filters.length - 1)
+        $(filterSelectElem.node ())
+          .select2 ("val", filters[0].id);
+      else
+        $(filterSelectElem.node ())
+          .select2 ("val", filters[currentFilterIndex + 1].id);
+    }
+
+  /* Adds a filter selector to the footer */
+  my.createFilterSelector = function ()
+  {
+    d3.select(footer)
+        .append ("a")
+          .attr ("href", "javascript: void (0);")
+          .attr ("onclick",
+                 "gsa.dashboards [\"" + dashboard.id() + "\"]"
+                 + ".component(\"" + id + "\").prevFilter()")
+          .append ("img")
+            .attr ("src", "img/previous.png")
+            .style ("vertical-align", "middle")
+
+    filterSelectElem = d3.select(footer)
+                          .append ("select")
+                            .style ("margin-left", "5px")
+                            .style ("margin-right", "5px")
+                            .style ("vertical-align", "middle")
+                            .attr ("onchange",
+                                  "gsa.dashboards [\"" + dashboard.id() + "\"]"
+                                  + ".component(\"" + id + "\")"
+                                  + ".selectFilter (this.value, true, true)");
+
+    for (var filterIndex in filters)
+      {
+        var filter = filters [filterIndex];
+        filterSelectElem.append ("option")
+                          .attr ("value", filter.id)
+                          .attr ("id", id + "_filter_opt_" + filter.id)
+                          .text (filter.name)
+      }
+
+    d3.select(footer)
+        .append ("a")
+          .attr ("href", "javascript: void (0);")
+          .attr ("onclick",
+                 "gsa.dashboards [\"" + dashboard.id() + "\"]"
+                 + ".component(\"" + id + "\").nextFilter()")
+          .append ("img")
+            .attr ("src", "img/next.png")
+            .style ("vertical-align", "middle")
+
+    d3.select(footer)
+        .append ("br");
   }
 
   my.applySelect2 = function ()
   {
-    if (! hideControllerSelect)
+    $(elem).find (".select2-container").remove ();
+    if (controllerSelectElem)
       {
-        $(elem).find (".select2-container").remove ();
-        $(select_elem.node ()).select2 ();
+        $(controllerSelectElem.node ()).select2 ();
+      }
+    if (filterSelectElem)
+      {
+        $(filterSelectElem.node ()).select2 ();
       }
   }
 
   dashboard.addControllersForComponent (my);
+  dashboard.addFiltersForComponent (my);
+
   if (! (hideControllerSelect))
     {
       my.createChartSelector ();
+    }
+  if (! (hideFilterSelect) && filters.length > 1)
+    {
+      my.createFilterSelector ();
     }
 
   return my;
@@ -1235,7 +1462,7 @@ function Chart (p_data_src, p_generator, p_display,
 
   my.id = function ()
     {
-      return chart_name;
+      return chart_name + "@" + display.id ();
     }
 
   /* Gets or sets the data source */
@@ -1311,12 +1538,12 @@ function Chart (p_data_src, p_generator, p_display,
     }
 
   /* Delegates a data request to the data source */
-  my.request_data = function (p_gen_params)
+  my.request_data = function (filter, p_gen_params)
     {
       if (p_gen_params)
         gen_params = p_gen_params;
 
-      data_src.request_data (this, gen_params);
+      data_src.request_data (this, filter, gen_params);
     }
 
   /* Shows the "Loading ..." text in the display */
@@ -1380,6 +1607,7 @@ function Chart (p_data_src, p_generator, p_display,
         command = encodeURIComponent (command) + "_chart";
 
       return create_uri (command,
+                         display.currentFilter (),
                          data_src.params (),
                          data_src.prefix (),
                          true)
@@ -1405,8 +1633,9 @@ function DataSource (command, params, prefix)
   var prefix = (undefined == prefix) ? "/omp?" : prefix;
   var command;
   var params = (params == undefined) ? {} : params;
-  var data_uri = null;
-  var last_uri = null;
+  var requestingControllers = {};
+  var activeRequests = {};
+  var xml_data = {};
   var column_info = {};
   var data = {};
 
@@ -1456,16 +1685,16 @@ function DataSource (command, params, prefix)
       return my;
     }
 
-  /* Gets the current data URI */
-  my.data_uri = function ()
+  /* Gets the current data URI for a given filter ID*/
+  my.data_uri = function (filterID)
     {
-      return data_uri;
+      return data_uris [filterID];
     }
 
-  /* Gets the URI of the last successful request */
-  my.last_uri = function ()
+  /* Gets the URI of the last successful request for a given filter ID */
+  my.last_uri = function (filterID)
     {
-      return last_uri;
+      return last_uris [filterID];
     }
 
   /* Gets the Column data of the last successful request */
@@ -1474,23 +1703,113 @@ function DataSource (command, params, prefix)
       return column_info;
     }
 
-  /* Sends an HTTP request to get XML data.
-   * Once the data is loaded, the chart will be notified via the
-   * data_loaded callback */
-  my.request_data = function (chart, gen_params, ignore_cache)
+  my.addRequest = function (controller, filter, gen_params)
     {
-      data_uri = create_uri (command, params, prefix);
+      var filterID = "";
+      if (filter)
+        filterID = filter.id;
 
-      if (ignore_cache || last_uri != data_uri)
+      if (requestingControllers [filterID] === undefined)
+        requestingControllers [filterID] = {};
+
+      requestingControllers [filterID][controller.id ()]
+        = { active : true,
+            controller : controller,
+            filter: filter,
+            gen_params: gen_params };
+      controller.display ().lastRequestedController (controller);
+      controller.display ().lastRequestedFilter (filter);
+    }
+
+  my.removeRequest = function (controller, filter)
+    {
+      var filterID = "";
+      if (filter)
+        filterID = filter.id;
+
+      if (requestingControllers [filterID] !== undefined
+          && requestingControllers [filterID][controller.id ()])
+        delete requestingControllers [filterID][controller.id ()];
+      controller.display ().lastRequestedController (null);
+      controller.display ().lastRequestedFilter (null);
+    }
+
+  my.checkRequests = function (filter)
+    {
+      var filterID = "";
+      if (filter)
+        filterID = filter.id;
+
+      var requestingCount
+            = Object.keys(requestingControllers [filterID]).length;
+
+      if (requestingCount == 0)
         {
-          chart.show_loading ();
+          if (activeRequests [filterID])
+            {
+              activeRequests [filterID].abort ();
+              delete activeRequests [filterID];
+            }
+        }
+      else
+        {
+          if (activeRequests [filterID])
+            return;
+          else
+            {
+              var data_uri = create_uri (my.command (),
+                                         filter,
+                                         my.params (),
+                                         my.prefix (),
+                                         false);
 
-          if (chart.current_request () != null)
-            chart.current_request ().abort ();
+              if (data [filterID] === undefined)
+                data [filterID] = {};
 
-          chart.current_request (d3.xml (data_uri, "application/xml"));
-          chart.current_request ()
-                 .get (function (error, xml)
+              if (xml_data [filterID])
+                {
+                  for (controllerID in requestingControllers [filterID])
+                    {
+                      if (!requestingControllers [filterID][controllerID].active)
+                        continue;
+
+                      var xml_select = xml_data [filterID];
+                      var gen_params = requestingControllers [filterID][controllerID].gen_params;
+
+                      if (data [filterID][controllerID] == undefined)
+                        {
+                          if (command == "get_aggregate")
+                            {
+                              data [filterID][controllerID]
+                                = { original_xml : xml_select,
+                                    records : extract_simple_records (xml_select, "aggregate group"),
+                                    column_info : extract_column_info (xml_select, gen_params),
+                                    filter_info : extract_filter_info (xml_select, gen_params) };
+                            }
+                          else if (command == "get_tasks")
+                            {
+                              data[filterID][controllerID]
+                                = { original_xml : xml_select,
+                                    records : extract_task_records (xml_select),
+                                    column_info : tasks_column_info (),
+                                    filter_info : extract_filter_info (xml_select) };
+                            }
+                        }
+
+                      if (data [filterID][controllerID] == undefined)
+                        output_error (requestingControllers [filterID][controllerID].controller,
+                                      "Internal error: Invalid request", "Invalid request command: \"" + command + "\"");
+
+                      requestingControllers [filterID][controllerID].active = false;
+                      requestingControllers [filterID][controllerID]
+                        .controller
+                          .data_loaded (data[filterID][controllerID], gen_params);
+                    }
+                  return;
+                }
+              activeRequests [filterID] = d3.xml (data_uri, "application/xml");
+              activeRequests [filterID]
+                .get (function (error, xml)
                         {
                           if (error)
                             {
@@ -1498,18 +1817,26 @@ function DataSource (command, params, prefix)
                                 {
                                   if (error.status === 0)
                                     {
-                                      output_error (chart, "Loading aborted");
+                                      for (controllerID in requestingControllers [filterID])
+                                        output_error (requestingControllers [filterID][controllerID].controller,
+                                                      "Loading aborted");
                                       return;
                                     }
                                   else
                                     {
-                                      output_error (chart, "HTTP error " + error.status, "Error: HTTP request returned status " + error.status + " for URL: " + data_uri);
+                                      for (controllerID in requestingControllers [filterID])
+                                        output_error (requestingControllers [filterID][controllerID].controller,
+                                                      "HTTP error " + error.status,
+                                                      "Error: HTTP request returned status " + error.status + " for URL: " + data_uri);
                                       return;
                                     }
                                 }
                               else
                                 {
-                                  output_error (chart, "Error reading XML", "Error reading XML from URL '" + data_uri + "': " + error);
+                                  for (controllerID in requestingControllers [filterID])
+                                    output_error (requestingControllers [filterID][controllerID].controller,
+                                                  "Error reading XML",
+                                                  "Error reading XML from URL '" + data_uri + "': " + error);
                                   return;
                                 }
                             }
@@ -1518,10 +1845,12 @@ function DataSource (command, params, prefix)
                               var xml_select = d3.select(xml.documentElement);
                               if (xml.documentElement.localName == "parsererror")
                                 {
-                                  output_error (chart, "Error parsing XML data", "Error parsing XML data, details follow in a debug message", xml.documentElement.textContent);
+                                  for (controllerID in requestingControllers [filterID])
+                                    output_error (requestingControllers [filterID][controllerID].controller,
+                                                  "Error parsing XML data",
+                                                  "Error parsing XML data, details follow in a debug message", xml.documentElement.textContent);
                                   return;
                                 }
-                              last_uri = data_uri;
 
                               if (command == "get_aggregate")
                                 {
@@ -1542,10 +1871,19 @@ function DataSource (command, params, prefix)
                                       return my;
                                     }
 
-                                  data = { original_xml : xml_select,
-                                           records : extract_simple_records (xml_select, "aggregate group"),
-                                           column_info : extract_column_info (xml_select, gen_params),
-                                           filter_info : extract_filter_info (xml_select, gen_params) };
+                                  xml_data [filterID] = xml_select;
+
+                                  for (controllerID in requestingControllers [filterID])
+                                    {
+                                      if (!requestingControllers [filterID][controllerID].active)
+                                        continue;
+                                      var gen_params = requestingControllers [filterID][controllerID].gen_params;
+                                      data [filterID][controllerID]
+                                        = { original_xml : xml_select,
+                                            records : extract_simple_records (xml_select, "aggregate group"),
+                                            column_info : extract_column_info (xml_select, gen_params),
+                                            filter_info : extract_filter_info (xml_select, gen_params) };
+                                    }
                                 }
                               else if (command == "get_tasks")
                                 {
@@ -1566,349 +1904,70 @@ function DataSource (command, params, prefix)
                                       return my;
                                     }
 
-                                  data = { original_xml : xml_select,
-                                           records : extract_task_records (xml_select),
-                                           column_info : tasks_column_info (),
-                                           filter_info : extract_filter_info (xml_select) };
+                                  xml_data [filterID] = xml_select;
+
+                                  for (controllerID in requestingControllers [filterID])
+                                    {
+                                      if (!requestingControllers [filterID][controllerID].active)
+                                        continue;
+                                      data[filterID][controllerID]
+                                        = { original_xml : xml_select,
+                                            records : extract_task_records (xml_select),
+                                            column_info : tasks_column_info (),
+                                            filter_info : extract_filter_info (xml_select) };
+                                    }
                                 }
                               else
                                 {
-                                  output_error (chart, "Internal error: Invalid request", "Invalid request command: \"" + command + "\"")
+                                  for (controllerID in requestingControllers [filterID])
+                                    output_error (requestingControllers [filterID][controllerID].controller,
+                                                  "Internal error: Invalid request", "Invalid request command: \"" + command + "\"")
                                   return my;
                                 }
-                              chart.data_loaded (data, gen_params);
-                              chart.current_request (null);
+
+                              for (controllerID in requestingControllers [filterID])
+                                {
+                                  if (!requestingControllers [filterID][controllerID].active)
+                                    continue;
+                                  var gen_params = requestingControllers [filterID][controllerID].gen_params;
+                                  requestingControllers [filterID][controllerID].active = false;
+                                  requestingControllers [filterID][controllerID]
+                                    .controller
+                                      .data_loaded (data[filterID][controllerID], gen_params);
+                                }
+                              delete activeRequests [filterID];
                             }
                         });
+            }
         }
-      else
-        {
-          chart.data_loaded (data, gen_params);
-        }
+    }
+
+  /* Sends an HTTP request to get XML data.
+   * Once the data is loaded, the chart will be notified via the
+   * data_loaded callback */
+  my.request_data = function (chart, filter, gen_params, ignore_cache)
+    {
+      var lastRequestedController
+        = chart.display ().lastRequestedController ();
+      var lastRequestedFilter
+        = chart.display ().lastRequestedFilter ();
+
+      if (lastRequestedController)
+        lastRequestedController
+          .data_src()
+            .removeRequest (lastRequestedController, lastRequestedFilter);
+      my.addRequest (chart, filter, gen_params);
+
+      if (lastRequestedController
+          && lastRequestedController.data_src () != chart.data_src ())
+        lastRequestedController.data_src().checkRequests (lastRequestedFilter);
+
+      my.checkRequests (filter);
+
       return my;
     }
 
   my.command (command);
-
-  return my;
-}
-
-/*
- * Display
- *
- * Parameters:
- *  p_container: the div containing the header, svg and footer elements
- */
-function Display (p_container)
-{
-  var container = p_container;
-  var name = container.attr ("id");
-  var menu = container.select ("#" + container.attr ("id") + "-menu");
-  var header = container.select ("#" + container.attr ("id") + "-head");
-  var svg = container.select ("#" + container.attr ("id") + "-svg");
-  var footer = container.select ("#" + container.attr ("id") + "-foot");
-  var select_elem = null;
-  var filter_elem = null;
-  var requested = false;
-
-  var charts = [];
-  var chart_i = 0;
-  var chart_name_indexes = {};
-
-  var filters = {"": { name:"--", term:"" }};
-
-  var last_generator = null;
-  var last_gen_params = null;
-
-  var select_pref_id = "";
-  var filter_pref_id = "";
-  var chart_pref_request = null;
-
-  function my() {};
-
-  /* Gets the Display name */
-  my.display_name = function ()
-    {
-      return name;
-    }
-
-  /* Gets the header element */
-  my.header = function ()
-    {
-      return header;
-    }
-
-  /* Gets the svg element */
-  my.svg = function ()
-    {
-      return svg;
-    }
-
-  /* Gets the footer element */
-  my.footer = function ()
-    {
-      return footer;
-    }
-
-  /* Gets whether the chart has been requested at least once */
-  my.requested = function ()
-    {
-      return requested;
-    }
-
-  /* Adds a new chart to the list */
-  my.add_chart = function (new_chart)
-    {
-      charts.push (new_chart);
-    }
-
-  /* Gets the last successful generator */
-  my.last_generator = function ()
-    {
-      return last_generator;
-    }
-
-  /* Gets the parameters for the last successful generator run */
-  my.last_gen_params = function ()
-    {
-      return last_gen_params;
-    }
-
-  /* Updates the data on the last successful generator.
-   * Should be called by the generator if it was successful */
-  my.update_gen_data = function (generator, gen_params)
-    {
-      last_generator = generator;
-      last_gen_params = gen_params;
-      return my;
-    }
-
-  /* Puts an error message into the header and clears the svg element */
-  my.show_error = function (message)
-    {
-      header.text (message);
-      svg.text ("");
-    }
-
-  /* Gets a menu item or creates it if it does not exist */
-  my.create_or_get_menu_item = function (id, last)
-    {
-      var item = menu.select ("li #" + name + "_" + id)
-                      .select ("a");
-
-      if (item.empty ())
-	    {
-	      var li = menu.append ("li");
-	      if (last)
-            li.attr ("class", "last");
-          item = li.attr ("id", name + "_" + id).append ("a");
-	    }
-
-      return item;
-    }
-
-  /* Adds a chart selector to the footer */
-  my.create_chart_selector = function ()
-  {
-    footer.append ("a")
-          .attr ("href", "javascript: void (0);")
-          .attr ("onclick", "gsa.displays [\"" + name + "\"].prev_chart ()")
-          .append ("img")
-            .attr ("src", "img/previous.png")
-            .style ("vertical-align", "middle")
-
-    select_elem = footer.append ("select")
-                          .style ("margin-left", "5px")
-                          .style ("margin-right", "5px")
-                          .style ("vertical-align", "middle")
-                          .attr ("onchange", "gsa.displays [\""+ name + "\"].select_chart (this.value, true, true)");
-
-    for (var i = 0; i < charts.length; i++)
-      {
-        chart_name_indexes [charts [i].chart_name ()] = i
-        select_elem.append ("option")
-                      .attr ("value", charts [i].chart_name ())
-                      .attr ("id", name + "_chart_opt_" + i)
-                      .text (charts [i].label ())
-      }
-
-    footer.append ("a")
-          .attr ("href", "javascript: void (0);")
-          .attr ("onclick", "gsa.displays [\"" + name + "\"].next_chart ()")
-          .append ("img")
-            .attr ("src", "img/next.png")
-            .style ("vertical-align", "middle")
-  }
-
-  /* Creates a filter selector */
-  my.create_filter_selector = function ()
-    {
-      filter_elem = footer.append ("div")
-                            .attr ("id", name + "_filter_selector")
-                            .text ("Filter: ")
-                              .append ("select")
-                              .attr ("onchange", "gsa.displays [\""+ name + "\"].select_filter (this.value, true, true)")
-      filter_elem.append ("option")
-                  .text ("--")
-                  .attr ("value", "")
-    }
-
-  /* Adds a filter to the selector */
-  my.add_filter = function (id, filter_name, term)
-    {
-      filters [id] = {name: filter_name, term: term}
-      d3.select ("#" + name + "_filter_selector select")
-          .append ("option")
-            .text (filter_name)
-            .attr ("value", id)
-            .attr ("id", name + "_filter_opt_" + id)
-    }
-
-  my.select_filter = function (filter_id, save_preference, request_data)
-    {
-      if (filters [filter_id] == undefined)
-        {
-          console.warn ("Filter not found: " + filter_id)
-          my.select_filter ("", save_preference, request_data);
-          return;
-        }
-
-      for (var chart in charts)
-        {
-          charts[chart].data_src ().delete_param ("filter");
-          charts[chart].data_src ().param ("filt_id", filter_id);
-        }
-
-      if (request_data)
-        charts [chart_i].request_data (my);
-
-      if (save_preference && select_pref_id != "")
-        {
-          if (chart_pref_request != null)
-            chart_pref_request.abort ();
-
-          chart_pref_request = d3.xhr ("/omp")
-
-          var form_data = new FormData ();
-          form_data.append ("chart_preference_id", filter_pref_id);
-          form_data.append ("chart_preference_value", filter_id);
-          form_data.append ("token", gsa.gsa_token);
-          form_data.append ("cmd", "save_chart_preference");
-
-          chart_pref_request.post (form_data);
-        }
-
-      filter_elem.select ("option#" + name + "_filter_opt_" + filter_id)
-                                    .property ("selected", "selected")
-    }
-
-  my.select_pref_id = function (value)
-    {
-      if (!arguments.length)
-        return select_pref_id;
-
-      select_pref_id = value;
-
-      return my;
-    }
-
-  my.filter_pref_id = function (value)
-    {
-      if (!arguments.length)
-        return filter_pref_id;
-
-      filter_pref_id = value;
-
-      return my;
-    }
-
-  my.width = function (new_width)
-    {
-      if (!arguments.length)
-        return container.property ("clientWidth");
-
-      svg.attr ("width",
-                Math.max (new_width, 200));
-      return my;
-    }
-
-  my.height = function (new_height)
-    {
-      if (!arguments.length)
-        return container.property ("clientHeight");
-
-      svg.attr ("height",
-                Math.max (new_height - (header.property ("clientHeight") + footer.property ("clientHeight")), 100));
-      return my;
-    }
-
-  /* refreshes the current chart */
-  my.refresh = function ()
-    {
-      requested = true;
-      charts [chart_i].request_data ();
-    }
-
-  /* Selects and shows a chart from the charts list by name */
-  my.select_chart = function (name, save_preference, request_data)
-    {
-      if (chart_name_indexes [name] == undefined)
-        {
-          console.warn ("Chart not found: " + name);
-          my.select_chart_index (0, save_preference, request_data)
-        }
-      else
-        my.select_chart_index (chart_name_indexes [name],
-                               save_preference, request_data)
-    }
-
-  /* Selects and shows a chart from the charts list by index */
-  my.select_chart_index = function (index, save_preference, request_data)
-    {
-      if (typeof (index) != "number" || index < 0 || index >= charts.length)
-        return console.error ("Invalid chart index: " + index);
-      chart_i = index;
-
-      if (request_data)
-        charts [index].request_data ();
-
-      if (save_preference && select_pref_id != "")
-        {
-          if (chart_pref_request != null)
-            chart_pref_request.abort ();
-
-          chart_pref_request = d3.xhr ("/omp")
-
-          var form_data = new FormData ();
-          form_data.append ("chart_preference_id", select_pref_id);
-          form_data.append ("chart_preference_value", charts [index].chart_name ());
-          form_data.append ("token", gsa.gsa_token);
-          form_data.append ("cmd", "save_chart_preference");
-
-          chart_pref_request.post (form_data);
-        }
-
-      select_elem.select ("option#" + name + "_chart_opt_" + (index))
-                  .property ("selected", "selected")
-    }
-
-  /* Selects and shows the previous chart from the charts list if possible */
-  my.prev_chart = function ()
-    {
-      if (chart_i > 0)
-        my.select_chart_index (chart_i - 1, true, true);
-      else
-        my.select_chart_index (charts.length - 1, true, true);
-    }
-
-  /* Selects and shows the next chart from the charts list if possible */
-  my.next_chart = function ()
-    {
-      if (chart_i < charts.length - 1)
-        my.select_chart_index (chart_i + 1, true, true);
-      else
-        my.select_chart_index (0, true, true);
-    }
 
   return my;
 }
@@ -1937,12 +1996,14 @@ function unescapeXML (string)
 /*
  * creates a GSA request URI from a command name, parameters array and prefix
  */
-function create_uri (command, params, prefix, no_xml)
+function create_uri (command, filter, params, prefix, no_xml)
 {
   var params_str = prefix + "cmd=" + encodeURIComponent (command);
   for (var prop_name in params)
     {
-      if (!no_xml || prop_name != "xml")
+      if ((!no_xml || prop_name != "xml")
+          && (filter == undefined
+              || (prop_name != "filter" && prop_name != "filt_id")))
         {
           if (params[prop_name] instanceof Array)
             {
@@ -1958,6 +2019,10 @@ function create_uri (command, params, prefix, no_xml)
             params_str = (params_str + "&" + encodeURIComponent (prop_name)
                           + "=" + encodeURIComponent (params[prop_name]));
         }
+    }
+  if (filter != undefined && filter.id)
+    {
+      params_str = params_str + "&filt_id=" + encodeURIComponent (filter.id);
     }
   params_str = params_str + "&token=" + encodeURIComponent (gsa.gsa_token);
   return params_str;
@@ -2876,7 +2941,6 @@ function open_detached (url)
  */
 function fit_detached_window (dashboard)
 {
-  console.debug (dashboard.elem ())
   var display_width = Number (dashboard.elem().scrollWidth);
   var display_height = Number (dashboard.elem().scrollHeight);
   var filter = d3.select ("#applied_filter");
