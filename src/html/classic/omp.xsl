@@ -14810,7 +14810,9 @@ should not have received it.
     <td>
       <xsl:if test="string-length($edit) &gt; 0">
         <a href="/omp?cmd=edit_config_nvt&amp;oid={nvt/@oid}&amp;config_id={$config_id}&amp;name={$config_name}&amp;family={nvt/family}&amp;token={/envelope/token}"
-           title="{gsa:i18n ('Edit Scan Config NVT Details', 'Scan Config')}" style="margin-left:3px;">
+            class="edit-action-icon icon" data-reload="parent" data-type="config_nvt"
+            data-extra="oid={nvt/@oid}&amp;config_id={$config_id}&amp;name={$config_name}&amp;family={nvt/family}"
+           title="{gsa:i18n ('Edit Scan Config NVT Details', 'Scan Config')}">
           <img src="/img/edit.png" alt="{gsa:i18n ('Edit', 'Action Verb')}"/>
         </a>
       </xsl:if>
