@@ -193,7 +193,7 @@
     this.dialog.remove();
     this.dialog = undefined;
     this.parent_dialog = undefined;
-    startAutoRefresh();
+    start_auto_refresh();
   };
 
   OMPDialog.prototype.setErrorFromResponse = function(jqXHR) {
@@ -295,7 +295,7 @@
       });
   };
 
-  OMPDialog.prototype.set_content = function(html) {
+  OMPDialog.prototype.setContent = function(html) {
     var self = this;
     var dialog_title, dialog_html;
     var response = $('<div/>', {html: html});
@@ -328,7 +328,7 @@
     self.dialog.html(dialog_html);
 
     // enable buttons, set up selects, ...
-    onReady(self.dialog);
+    on_ready(self.dialog);
   };
 
   OMPDialog.prototype.show = function(button){
@@ -339,7 +339,7 @@
     this.params.cmd = this.command;
     this.params.token = $('#gsa-token').text();
     $('html').css('cursor', 'wait');
-    stopAutoRefresh();
+    stop_auto_refresh();
 
     self.dialog = $("<div/>", {
       'class': "dialog-form",
@@ -349,7 +349,7 @@
     self.dialog[0].$omp = self;
 
     done_func = function(html) {
-      self.set_content(html);
+      self.setContent(html);
 
       // show the dialog !
       self.dialog.dialog({
@@ -423,7 +423,7 @@
     var self = this;
     self.waiting();
     $.ajax(self.request_data).then(function(data) {
-        self.set_content(data);
+        self.setContent(data);
         self.done();
       }, function(jqXHR, status) {
       }
@@ -459,7 +459,7 @@
       html: content,
     });
 
-    stopAutoRefresh();
+    stop_auto_refresh();
 
     // show the dialog !
     this.dialog.dialog({
@@ -477,7 +477,7 @@
       close: function(event, ui) {
         self.dialog.remove();
         self.dialog = undefined;
-        startAutoRefresh();
+        start_auto_refresh();
       },
     });
   };
@@ -506,7 +506,7 @@
       }, 1000);
     }
 
-    this.stop_progress();
+    this.stopProgress();
 
     this.progress = undefined;
     this.progress_value = this.timeout;
@@ -515,14 +515,14 @@
     this.dialog = undefined;
   };
 
-  InfoDialog.prototype.stop_progress = function() {
+  InfoDialog.prototype.stopProgress = function() {
     if (this.progress_timer !== undefined) {
       window.clearInterval(this.progress_timer);
       this.progress_timer = undefined;
     }
   };
 
-  InfoDialog.prototype.start_progress = function() {
+  InfoDialog.prototype.startProgress = function() {
     var self = this;
 
     var element = $('<div class="progress"/>');
@@ -533,10 +533,10 @@
     this.progress_button = $('<img src="/img/pause.png" alt="Pause/Resume" />');
     this.progress_button.on('click', function() {
       if (self.progress_timer === undefined ) {
-        self.resume_progress();
+        self.resumeProgress();
       }
       else {
-        self.pause_progress();
+        self.pauseProgress();
       }
     });
 
@@ -545,10 +545,10 @@
 
     this.dialog.after(element);
 
-    this.resume_progress();
+    this.resumeProgress();
   };
 
-  InfoDialog.prototype.pause_progress = function() {
+  InfoDialog.prototype.pauseProgress = function() {
     if (this.progress_timer !== undefined) {
       window.clearInterval(this.progress_timer);
       this.progress_timer = undefined;
@@ -556,7 +556,7 @@
     this.progress_button.attr('src', '/img/resume.png');
   };
 
-  InfoDialog.prototype.resume_progress = function() {
+  InfoDialog.prototype.resumeProgress = function() {
     var self = this;
 
     self.progress_button.attr('src', '/img/pause.png');
@@ -565,7 +565,7 @@
       self.progress_value -= self.interval_time;
 
       if (self.progress_value < 0) {
-        self.stop_progress();
+        self.stopProgress();
         self.close();
         return;
       }
@@ -590,7 +590,7 @@
     });
 
     if (self.timeout) {
-      self.start_progress();
+      self.startProgress();
     }
   };
 
@@ -741,7 +741,7 @@
     $.ajax(self.request_data).done(done_func).fail(fail_func);
   };
 
-  var onReady = function(doc) {
+  function on_ready(doc) {
     doc = $(doc);
 
     doc.find(".edit-action-icon").each(function() {
@@ -868,9 +868,9 @@
         autorefresh.val(window.localStorage.getItem('autorefresh-interval'));
       }
       autorefresh.change(function() {
-        stopAutoRefresh();
+        stop_auto_refresh();
         window.localStorage.setItem('autorefresh-interval', $(this).val());
-        startAutoRefresh();
+        start_auto_refresh();
       });
       if (!window.autorefresh_enabled){
         autorefresh.prop('disabled', 'disabled');
@@ -895,11 +895,11 @@
     });
 
     doc.find('select').select2();
-  };
+  }
 
   var timeout_id;
 
-  function startAutoRefresh() {
+  function start_auto_refresh() {
     if ($('.dialog-form').length > 0) {
       // Still open dialogs.
       return;
@@ -911,7 +911,7 @@
     }
   }
 
-  function stopAutoRefresh() {
+  function stop_auto_refresh() {
     if (timeout_id !== undefined) {
       clearTimeout(timeout_id);
       timeout_id = undefined;
@@ -921,10 +921,10 @@
   $(window.document).ready(function() {
 
     // generic widget pimping
-    onReady(window.document);
+    on_ready(window.document);
 
     // autorefresh
-    startAutoRefresh();
+    start_auto_refresh();
   });
 
   /*
