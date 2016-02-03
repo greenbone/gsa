@@ -624,6 +624,12 @@
     var parent_dialog = options.element.parents('.dialog-form')[0];
     var reload = options.element.data('reload');
 
+    if (done) {
+      // done is used to add newly created elements to the dialog
+      // therefore we must not reload anything
+      reload = undefined;
+    }
+
     if (cmd === undefined) {
       cmd = options.type + '_' + type_name;
 

@@ -1,3 +1,9 @@
+2016-02-03  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/greenbone.js (init_omp_dialog): Don't reload the page or
+	dialog of a done element is set. The done element is used to add an entry to
+	the parent dialog dynamically.
+
 2016-02-02  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/greenbone.js (OMPAction.prototype.do): Don't use redirect
