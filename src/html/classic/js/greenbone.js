@@ -116,10 +116,6 @@
     return undefined;
   }
 
-  var isStatusOk = function(status_code){
-    return (status_code == 200) || (status_code == 201) || (status_code == 202);
-  };
-
   /**
    * command is the name of the gsa command that has to be send initialy
    * element is the select that will get the value of the newly created resource or true if a global reload is to be triggered.
