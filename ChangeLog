@@ -1,3 +1,9 @@
+2016-02-03  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	Preparing the gsa 6.0.9 release.
+
+	* CHANGES: Updated.
+
 2016-01-31  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Backport r24265.
