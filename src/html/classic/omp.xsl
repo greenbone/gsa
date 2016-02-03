@@ -10406,7 +10406,7 @@ should not have received it.
         </xsl:when>
         <xsl:when test="event/text() = 'Updated SecInfo arrived'">
           <xsl:text>Updated </xsl:text>
-          <xsl:value-of select="gsa:i18n (event/data[name='secinfo_type']/text(), 'Alert')"/>
+          <xsl:value-of select="gsa:type-name-plural (event/data[name='secinfo_type']/text())"/>
           <xsl:text> arrived</xsl:text>
         </xsl:when>
         <xsl:otherwise>
