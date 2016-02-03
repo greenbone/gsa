@@ -1,5 +1,10 @@
 2016-02-03  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/classic/omp.xsl (alert [details]): In the "Send to host"
+	case, leave out the report format, because it's not used.
+
+2016-02-03  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/classic/omp.xsl (alert): Use type-name-plural for Updated
 	case of 'New SecInfo arrived' too.
 

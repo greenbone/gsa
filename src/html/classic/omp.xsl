@@ -10980,28 +10980,34 @@ should not have received it.
                   <td><xsl:value-of select="gsa:i18n ('Port', 'Alert')"/>:</td>
                   <td><xsl:value-of select="method/data[name='send_port']/text()"/></td>
                 </tr>
-                <tr>
-                  <td width="45"></td>
-                  <td><xsl:value-of select="gsa:i18n ('Report', 'Report')"/>:</td>
-                  <td>
-                    <xsl:variable name="id"
-                                  select="method/data[name='send_report_format']/text()"/>
-                    <xsl:choose>
-                      <xsl:when test="string-length($id) &gt; 0 and boolean (../../get_report_formats_response/report_format[@id=$id])">
-                        <a href="/omp?cmd=get_report_format&amp;report_format_id={$id}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-                           title="{gsa:view_details_title ('Report Format', name)}">
-                          <xsl:value-of select="../../get_report_formats_response/report_format[@id=$id]/name"/>
-                        </a>
-                      </xsl:when>
-                      <xsl:when test="string-length($id) &gt; 0">
-                        <xsl:value-of select="$id"/>
-                      </xsl:when>
-                      <xsl:otherwise>
-                        XML
-                      </xsl:otherwise>
-                    </xsl:choose>
-                  </td>
-                </tr>
+                <xsl:choose>
+                  <xsl:when test="event/text() = 'New SecInfo arrived'"/>
+                  <xsl:when test="event/text() = 'Updated SecInfo arrived'"/>
+                  <xsl:otherwise>
+                    <tr>
+                      <td width="45"></td>
+                      <td><xsl:value-of select="gsa:i18n ('Report', 'Report')"/>:</td>
+                      <td>
+                        <xsl:variable name="id"
+                                      select="method/data[name='send_report_format']/text()"/>
+                        <xsl:choose>
+                          <xsl:when test="string-length($id) &gt; 0 and boolean (../../get_report_formats_response/report_format[@id=$id])">
+                            <a href="/omp?cmd=get_report_format&amp;report_format_id={$id}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+                               title="{gsa:view_details_title ('Report Format', name)}">
+                              <xsl:value-of select="../../get_report_formats_response/report_format[@id=$id]/name"/>
+                            </a>
+                          </xsl:when>
+                          <xsl:when test="string-length($id) &gt; 0">
+                            <xsl:value-of select="$id"/>
+                          </xsl:when>
+                          <xsl:otherwise>
+                            XML
+                          </xsl:otherwise>
+                        </xsl:choose>
+                      </td>
+                    </tr>
+                  </xsl:otherwise>
+                </xsl:choose>
               </xsl:when>
             </xsl:choose>
           </table>
