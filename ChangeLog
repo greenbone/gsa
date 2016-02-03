@@ -1,5 +1,10 @@
 2016-02-03  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/wizard.xsl: Use new edit-dialog css classes for the wizard
+	dialogs.
+
+2016-02-03  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/wizard.xsl: Fix modify task wizard by using the new
 	css column layout.
 

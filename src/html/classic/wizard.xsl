@@ -156,25 +156,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template match="wizard/quick_first_scan">
   <xsl:apply-templates select="gsad_msg"/>
 
- <div class="gb_window">
-  <div class="gb_window_part_left"></div>
-  <div class="gb_window_part_right"></div>
-  <div class="gb_window_part_center">
+ <div class="edit-dialog">
+  <div class="title">
     <xsl:value-of select="gsa:i18n('Task Wizard')"/>
-
-    <a href="/help/tasks.html?token={/envelope/token}#wizard" title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('Task Wizard', 'Task Wizard'))}">
-      <img src="/img/help.png" style="margin-left:3px;"/>
-    </a>
-    <a href="/omp?cmd=new_task&amp;refresh_interval={/envelope/params/refresh_interval}&amp;overrides={/envelope/params/overrides}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-       title="{gsa:i18n ('New Task', 'Task')}">
-      <img src="/img/new.png" style="margin-left:3px;"/>
-    </a>
-    <a href="/omp?cmd=get_tasks&amp;refresh_interval={/envelope/params/refresh_interval}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-       title="{gsa:i18n ('Tasks', 'Task')}" style="margin-left:3px;">
-      <img src="/img/list.png" alt="{gsa:i18n ('Tasks', 'Task')}"/>
-    </a>
   </div>
-  <div class="gb_window_part_content">
+  <div class="content">
     <xsl:call-template name="quick-first-scan-wizard"/>
   </div>
  </div>
@@ -765,25 +751,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template match="wizard/quick_task">
   <xsl:apply-templates select="gsad_msg"/>
- <div class="gb_window">
-  <div class="gb_window_part_left"></div>
-  <div class="gb_window_part_right"></div>
-  <div class="gb_window_part_center">
+ <div class="edit-dialog">
+  <div class="title">
     <xsl:value-of select="gsa:i18n('Advanced Task Wizard')"/>
-
-    <a href="/help/tasks.html?token={/envelope/token}#wizard" title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('Task Wizard', 'Task Wizard'))}">
-      <img src="/img/help.png" style="margin-left:3px;"/>
-    </a>
-    <a href="/omp?cmd=new_task&amp;refresh_interval={/envelope/params/refresh_interval}&amp;overrides={/envelope/params/overrides}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-       title="{gsa:i18n ('New Task', 'Task')}">
-      <img src="/img/new.png" style="margin-left:3px;"/>
-    </a>
-    <a href="/omp?cmd=get_tasks&amp;refresh_interval={/envelope/params/refresh_interval}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-       title="{gsa:i18n ('Tasks', 'Task')}" style="margin-left:3px;">
-      <img src="/img/list.png" alt="{gsa:i18n ('Tasks', 'Task')}"/>
-    </a>
   </div>
-  <div class="gb_window_part_content">
+
+  <div class="content">
     <xsl:call-template name="quick-task-wizard"/>
   </div>
  </div>
@@ -1253,25 +1226,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template match="wizard/modify_task">
   <xsl:apply-templates select="gsad_msg"/>
- <div class="gb_window">
-  <div class="gb_window_part_left"></div>
-  <div class="gb_window_part_right"></div>
-  <div class="gb_window_part_center">
+ <div class="edit-dialog">
+  <div class="title">
     <xsl:value-of select="gsa:i18n('Modify Task Wizard')"/>
-
-    <a href="/help/tasks.html?token={/envelope/token}#wizard" title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('Task Wizard', 'Task Wizard'))}">
-      <img src="/img/help.png" style="margin-left:3px;"/>
-    </a>
-    <a href="/omp?cmd=new_task&amp;refresh_interval={/envelope/params/refresh_interval}&amp;overrides={/envelope/params/overrides}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-       title="{gsa:i18n ('New Task', 'Task')}">
-      <img src="/img/new.png" style="margin-left:3px;"/>
-    </a>
-    <a href="/omp?cmd=get_tasks&amp;refresh_interval={/envelope/params/refresh_interval}&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-       title="{gsa:i18n ('Tasks', 'Task')}" style="margin-left:3px;">
-      <img src="/img/list.png" alt="{gsa:i18n ('Tasks', 'Task')}"/>
-    </a>
   </div>
-  <div class="gb_window_part_content">
+  <div class="content">
     <xsl:call-template name="modify-task-wizard"/>
   </div>
  </div>
