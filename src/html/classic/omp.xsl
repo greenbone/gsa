@@ -14775,10 +14775,21 @@ should not have received it.
     <td>
       <xsl:choose>
         <xsl:when test="string-length($config_id) &gt; 0">
-          <a href="/omp?cmd=get_config_nvt&amp;oid={nvt/@oid}&amp;config_id={$config_id}&amp;name={$config_name}&amp;family={nvt/family}&amp;token={/envelope/token}"
-             title="{gsa:i18n ('Scan Config NVT Details', 'Scan Config')}" style="margin-left:3px;">
-            <xsl:value-of select="nvt/name"/>
-          </a>
+          <xsl:choose>
+            <xsl:when test="string-length($edit) &gt; 0">
+              <a href="/omp?cmd=get_config_nvt&amp;oid={nvt/@oid}&amp;config_id={$config_id}&amp;name={$config_name}&amp;family={nvt/family}&amp;token={/envelope/token}"
+                target="_blank"
+                title="{gsa:i18n ('Scan Config NVT Details', 'Scan Config')}">
+                <xsl:value-of select="nvt/name"/>
+              </a>
+            </xsl:when>
+            <xsl:otherwise>
+              <a href="/omp?cmd=get_config_nvt&amp;oid={nvt/@oid}&amp;config_id={$config_id}&amp;name={$config_name}&amp;family={nvt/family}&amp;token={/envelope/token}"
+                title="{gsa:i18n ('Scan Config NVT Details', 'Scan Config')}" style="margin-left:3px;">
+                <xsl:value-of select="nvt/name"/>
+              </a>
+            </xsl:otherwise>
+          </xsl:choose>
         </xsl:when>
         <xsl:otherwise>
           <xsl:value-of select="nvt/name"/>
