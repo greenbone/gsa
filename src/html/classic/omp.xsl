@@ -1494,7 +1494,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:when test="gsa:may (concat ('modify_', $type)) and $resource/writable!='0'">
           <!-- i18n with concat : see dynamic_strings.xsl - type-edit -->
           <a href="/omp?cmd=edit_{$type}&amp;{$type}_id={$resource/@id}&amp;next={$next}{$next_params_string}{$params}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-             title="{gsa:i18n (concat ('Edit ', $cap-type), $cap-type)}"
+             title="{gsa:i18n (concat ('Edit ', $cap-type), $cap-type)}" data-reload="window"
              class="edit-action-icon icon" data-type="{$type}" data-id="{$resource/@id}">
             <img src="/img/edit.png" alt="{gsa:i18n ('Edit', 'Action Verb')}"/>
           </a>
@@ -4449,7 +4449,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:when test="$new-icon and $subtype != ''">
         <!-- i18n with concat : see dynamic_strings.xsl - type-new -->
         <a href="/omp?cmd=new_{$subtype}{$extra_params_string}&amp;next=get_{$type}&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-           class="new-action-icon icon" data-type="{$subtype}"
+           class="new-action-icon icon" data-type="{$subtype}" data-reload="window"
            title="{gsa:i18n (concat ('New ', $cap-type), $cap-type)}">
           <img src="/img/new.png"/>
         </a>
@@ -4906,21 +4906,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:when test="gsa:may-op (concat ('create_', $type)) and $type = 'task'">
       <span class="icon-menu">
         <a href="/omp?cmd=new_task&amp;next=get_task&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-           class="new-action-icon icon" data-type="task"
+           class="new-action-icon icon" data-type="task" data-reload="window"
            title="{gsa:i18n ('New Task', 'Task')}">
           <img src="/img/new.png"/>
         </a>
         <ul>
           <li>
             <a href="/omp?cmd=new_task&amp;next=get_task&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-               class="new-action-icon" data-type="task"
+               class="new-action-icon" data-type="task" data-reload="window"
                title="{gsa:i18n ('New Task', 'Task')}">
               <xsl:value-of select="gsa:i18n ('New Task', 'Task')"/>
             </a>
           </li>
           <li>
             <a href="/omp?cmd=new_container_task&amp;next=get_task&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-               class="new-action-icon" data-type="container_task"
+               class="new-action-icon" data-type="container_task" data-reload="window"
                title="{gsa:i18n ('New Container Task', 'Task')}">
               <xsl:value-of select="gsa:i18n ('New Container Task', 'Task')"/>
             </a>
@@ -4931,7 +4931,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:when test="gsa:may-op (concat ('create_', $type))">
       <!-- i18n with concat : see dynamic_strings.xsl - type-new -->
       <a href="/omp?cmd=new_{$type}&amp;next=get_{$type}&amp;filter={str:encode-uri ($filter, true ())}&amp;filt_id={$filt_id}&amp;{$type}_id={@id}&amp;token={/envelope/token}"
-         class="new-action-icon icon" data-type="{$type}"
+         class="new-action-icon icon" data-type="{$type}" data-reload="window"
          title="{gsa:i18n (concat ('New ', $cap-type), $cap-type)}">
         <img src="/img/new.png"/>
       </a>
@@ -4941,7 +4941,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:when test="$noupload"/>
     <xsl:when test="gsa:may-op (concat ('create_', $type))">
       <a href="/omp?cmd=upload_{$type}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-         class="upload-action-icon icon" data-type="port_list"
+         class="upload-action-icon icon" data-type="port_list" data-reload="window"
          title="{gsa:i18n ('Import Port List', 'Port List')}">
         <img src="/img/upload.png"/>
       </a>
@@ -5072,7 +5072,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:choose>
           <xsl:when test="gsa:may (concat ('modify_', $type)) and writable!='0'">
             <!-- i18n with concat : see dynamic_strings.xsl - type-edit -->
-            <a href="/omp?cmd=edit_{$type}&amp;{$type}_id={@id}&amp;next=get_{$type}&amp;filter={str:encode-uri ($filter, true ())}&amp;filt_id={$filt_id}&amp;token={/envelope/token}"
+            <a href="/omp?cmd=edit_{$type}&amp;{$type}_id={@id}&amp;next=get_{$type}&amp;filter={str:encode-uri ($filter, true ())}&amp;filt_id={$filt_id}&amp;token={/envelope/token}" data-reload="window"
                class="edit-action-icon icon" data-type="{$type}" data-id="{@id}"
                title="{gsa:i18n (concat ('Edit ', $cap-type), $cap-type)}">
               <img src="/img/edit.png"/>
