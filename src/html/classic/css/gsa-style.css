@@ -1151,6 +1151,22 @@ select[multiple] {
   vertical-align: top;
 }
 
+.num-components-1 .dashboard-placeholder {
+  width: 100%;
+}
+
+.num-components-2 .dashboard-placeholder {
+  width: 50%;
+}
+
+.num-components-3 .dashboard-placeholder {
+  width: 33.33333333%;
+}
+
+.num-components-4 .dashboard-placeholder {
+  width: 25%;
+}
+
 .dashboard-placeholder {
   display: inline-block;
   text-align: center;
@@ -1158,8 +1174,8 @@ select[multiple] {
   vertical-align: top;
   border: 1px dashed gray;
   background: #EEEEEE;
-  width: 24%;
   height: 100%;
+  width: 100%;
 }
 
 /* Chart menu. */

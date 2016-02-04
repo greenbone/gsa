@@ -369,6 +369,14 @@ function Dashboard (id, controllersString, heightsString, filtersString,
                                   });
     }
 
+  my.updateComponentCountClasses = function ()
+    {
+      for (var item in rows)
+        {
+          rows [item].updateComponentCountClasses ()
+        }
+    }
+
   my.updateRows = function ()
     {
       totalComponents = 0;
@@ -715,6 +723,15 @@ function DashboardRow (dashboard, controllersString, filtersString, height,
       return filtersString;
     }
 
+  my.updateComponentCountClasses = function ()
+    {
+      for (var i = 0; i <= 4; i++)
+        {
+          $(elem).removeClass ("num-components-" +  i);
+        }
+      $(elem).addClass ("num-components-" + my.componentsCount ());
+    }
+
   my.updateComponents = function ()
     {
       var componentElems = $(elem).children ("div.dashboard-box").toArray ();
@@ -732,6 +749,8 @@ function DashboardRow (dashboard, controllersString, filtersString, height,
         $(elem).addClass ("full");
       else
         $(elem).removeClass ("full");
+
+      my.updateComponentCountClasses ();
     }
 
   my.removeComponent = function (id)
@@ -816,6 +835,7 @@ function DashboardRow (dashboard, controllersString, filtersString, height,
                     change: function (event, ui)
                               {
                                 dashboard.resize();
+                                dashboard.updateComponentCountClasses ()
                               }
                     });
     }

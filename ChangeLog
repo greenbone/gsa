@@ -1,3 +1,19 @@
+2016-02-04  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Adapt width of dashboard box placeholder to available space.
+
+	* src/html/classic/css/gsa-style.css: Add new rules for
+	dashboard-placeholders in rows with .num-components-N class, N being
+	a number from 1 to 4.
+	(.dashboard-placeholder): Set default width to 100%;
+
+	* src/html/classic/js/gsa_graphics_base.js
+	(Dashboard.updateComponentCountClasses): New function
+	(DashboardRow.updateComponentCountClasses): New function.
+	(DashboardRow.updateComponents): Call updateComponentCountClasses.
+	(DashboardRow.startEdit): Call updateComponentCountClasses of dashboard
+	on change.
+
 2016-02-04  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/omp.xsl (user-tags-window-checked): Allow to toggle user
