@@ -1,3 +1,8 @@
+2016-02-04  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/js/.jshintrc: Add a config file for jshint (javascript
+	linter).
+
 2016-02-03  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Add filter selection dropdowns on SecInfo dashboard. Remove test output

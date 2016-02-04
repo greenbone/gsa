@@ -1,0 +1,14 @@
+{
+    "undef": true,
+    "unused": true,
+    "curly": true,
+    "eqeqeq": true,
+    "nonbsp": true,
+    "shadow": "inner",
+    "strict": true,
+    "unused": true,
+    "browser": true,
+    "jquery": true,
+    "devel": true,
+    "esversion": 5
+}
