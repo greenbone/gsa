@@ -279,6 +279,10 @@ div.label_none {
 /* BEGIN Greenbone Progress Bar */
 
 .progressbar_box {
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+
   margin-left:0px;
   margin-top:0px;
 
