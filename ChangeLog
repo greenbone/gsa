@@ -1,5 +1,10 @@
 2016-02-04  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/greenbone.js: Fix toggling sections via ToggleIcon class.
+	Store the correct current collapsed state in the local storage of the browser.
+
+2016-02-04  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/greenbone.js: Update coding style to reduce jshint
 	warnings. Use ' instead of ", always use {} for if, for, while. Remove unsed
 	variables. Use === and !=== for comparisions (see

@@ -658,16 +658,15 @@
     this.target = options.target;
     this.icon = options.icon;
     this.variable = options.variable;
-    this.collapsed = options.collapsed == options.collapsed !== undefined ?
+    this.collapsed = options.collapsed !== undefined ?
       !!options.collapsed : false;
     this.storage = window.localStorage;
   }
 
   ToggleIcon.prototype.init = function() {
     if (this.variable) {
-      if (this.storage.getItem(this.variable) ||
+      if (this.storage.getItem(this.variable) === 'true' ||
           (this.storage.getItem(this.variable) === null && this.collapsed)) {
-        this.storage.setItem(this.variable, true);
         this.target.hide();
         this.toggleIcon();
       }
@@ -695,13 +694,13 @@
   ToggleIcon.prototype.toggle = function() {
     // Update the localStorage
     if (this.variable) {
-      if (this.storage.getItem(this.variable)) {
+      if (this.storage.getItem(this.variable) === 'true') {
         // visible
-        this.storage.removeItem(this.variable);
+        this.storage.setItem(this.variable, 'false');
       }
       else {
         // hidden
-        this.storage.setItem(this.variable, true);
+        this.storage.setItem(this.variable, 'true');
       }
     }
     this.target.slideToggle();
