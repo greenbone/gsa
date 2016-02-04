@@ -23424,7 +23424,7 @@ should not have received it.
         <input type="hidden" name="apply_overrides" value="{/envelope/params/apply_overrides}"/>
         <input type="hidden" name="autofp" value="{/envelope/params/autofp}"/>
 
-        <table cellspacing="0" cellpadding="3" width="100%">
+        <table class="table-form">
           <tr>
             <td><b><xsl:value-of select="gsa:i18n ('NVT Name', 'Note or Override')"/></b></td>
             <td>
@@ -23448,7 +23448,7 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td valign="center"><xsl:value-of select="gsa:i18n ('Active', 'Override')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Active', 'Override')"/></td>
             <td>
               <xsl:choose>
                 <xsl:when test="get_overrides_response/override/active='1' and string-length(get_overrides_response/override/end_time) &gt; 0">
@@ -23468,9 +23468,9 @@ should not have received it.
                     <label>
                       <input type="radio" name="active" value="1"/>
                       <xsl:value-of select="concat (gsa:i18n ('yes', 'Binary Choice'), ', ', gsa:i18n ('for the next', 'Time'), ' ')"/>
+                      <input type="text" name="days" size="3" maxlength="7" value="30"/>
+                      <xsl:value-of select="gsa:i18n ('days', 'Time')"/>
                     </label>
-                    <input type="text" name="days" size="3" maxlength="7" value="30"/>
-                    <xsl:value-of select="gsa:i18n ('days', 'Time')"/>
                   </div>
                   <div>
                     <label>
@@ -23490,9 +23490,9 @@ should not have received it.
                     <label>
                       <input type="radio" name="active" value="1"/>
                       <xsl:value-of select="concat (gsa:i18n ('yes', 'Binary Choice'), ', ', gsa:i18n ('for the next', 'Time'), ' ')"/>
+                      <input type="text" name="days" size="3" maxlength="7" value="30"/>
+                      <xsl:value-of select="gsa:i18n ('days', 'Time')"/>
                     </label>
-                    <input type="text" name="days" size="3" maxlength="7" value="30"/>
-                    <xsl:value-of select="gsa:i18n ('days', 'Time')"/>
                   </div>
                   <div>
                     <label>
@@ -23512,9 +23512,9 @@ should not have received it.
                     <label>
                       <input type="radio" name="active" value="1"/>
                       <xsl:value-of select="concat (gsa:i18n ('yes', 'Binary Choice'), ', ', gsa:i18n ('for the next', 'Time'), ' ')"/>
+                      <input type="text" name="days" size="3" maxlength="7" value="30"/>
+                      <xsl:value-of select="gsa:i18n ('days', 'Time')"/>
                     </label>
-                    <input type="text" name="days" size="3" maxlength="7" value="30"/>
-                    <xsl:value-of select="gsa:i18n ('days', 'Time')"/>
                   </div>
                   <div>
                     <label>
@@ -23527,7 +23527,7 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="125">
+            <td>
               <xsl:value-of select="gsa:i18n ('Hosts', 'Host')"/>
             </td>
             <td>
@@ -23554,7 +23554,7 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="125">
+            <td>
               <xsl:value-of select="gsa:i18n ('Port', 'Port')"/>
             </td>
             <td>
@@ -23580,7 +23580,7 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="125">
+            <td>
               <xsl:value-of select="gsa:i18n ('Severity', 'Severity')"/>
             </td>
             <td>
@@ -23614,7 +23614,7 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="125">
+            <td>
               <b><xsl:value-of select="gsa:i18n ('New Severity', 'Override')"/></b>
             </td>
             <td>
@@ -23682,19 +23682,19 @@ should not have received it.
                   </xsl:otherwise>
                 </xsl:choose>
                 <xsl:value-of select="gsa:i18n ('Other', 'Override|Severity')"/>:
+                <xsl:choose>
+                  <xsl:when test="$use_custom_severity">
+                    <input type="text" name="new_severity" value="{get_overrides_response/override/new_severity}" size="5" maxlength="4"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="text" name="new_severity" value="" size="5" maxlength="4"/>
+                  </xsl:otherwise>
+                </xsl:choose>
               </label>
-              <xsl:choose>
-                <xsl:when test="$use_custom_severity">
-                  <input type="text" name="new_severity" value="{get_overrides_response/override/new_severity}" size="5" maxlength="4"/>
-                </xsl:when>
-                <xsl:otherwise>
-                  <input type="text" name="new_severity" value="" size="5" maxlength="4"/>
-                </xsl:otherwise>
-              </xsl:choose>
             </td>
           </tr>
           <tr>
-            <td valign="top" width="125">
+            <td>
               <xsl:value-of select="gsa:i18n ('Task', 'Task')"/>
             </td>
             <td>
@@ -23721,7 +23721,7 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="125">
+            <td>
               <xsl:value-of select="gsa:i18n ('Result', 'Result')"/>
             </td>
             <td>
@@ -23748,14 +23748,9 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Text', 'Note or Override')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Text', 'Note or Override')"/></td>
             <td>
               <textarea name="text" rows="10" cols="60"><xsl:value-of select="get_overrides_response/override/text"/></textarea>
-            </td>
-          </tr>
-          <tr>
-            <td colspan="2" style="text-align:right;">
-              <input type="submit" name="submit" value="{gsa:i18n ('Save Override', 'Override')}"/>
             </td>
           </tr>
         </table>

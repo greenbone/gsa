@@ -1,3 +1,9 @@
+2016-02-04  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/omp.xsl (html-edit-override-form): Fix layout of the edit
+	override dialog by using the table-form css class. Also remove the deprecated
+	td attributes.
+
 2016-02-04  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/gsad.xsl (html-head): Add "Content-Type" meta tag
