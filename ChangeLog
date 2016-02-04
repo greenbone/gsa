@@ -1,5 +1,10 @@
 2016-02-04  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/omp.xsl (user-tags-window-checked): Allow to toggle user
+	tags section in detail views.
+
+2016-02-04  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/omp.xsl: Fix layout of tag section in new task dialog.
 
 2016-02-04  Björn Ricks <bjoern.ricks@greenbone.net>

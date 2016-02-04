@@ -2013,8 +2013,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="tag_names"/>
 
   <div class="section-header">
-    <a href="#"
-       class="icon icon-action" data-target="#usertags-box" data-name="User Tags" data-variable="usertags-box--collapsed">
+    <a href="#" class="icon icon-action toggle-action-icon"
+      data-target="#usertags-box" data-name="User Tags" data-variable="usertags-box--collapsed">
       <img src="/img/fold.png"/>
     </a>
     <a href="/help/user-tags.html?token={/envelope/token}"
