@@ -1630,8 +1630,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="id"></xsl:param>
 
   <xsl:if test="gsa:may-op ('restore')">
-    <div style="display: inline">
-      <form style="display: inline; font-size: 0px; margin-left: 3px" action="/omp"
+    <div class="icon">
+      <form action="/omp"
             method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="caller" value="{/envelope/current_page}"/>
@@ -6923,7 +6923,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:with-param>
       </xsl:call-template>
     </td>
-    <td style="text-align:right;font-size:10px;">
+    <td>
       <xsl:choose>
         <xsl:when test="report_count &gt; 0">
           <xsl:value-of select="report_count/finished"/>
@@ -6932,7 +6932,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:otherwise>
       </xsl:choose>
     </td>
-    <td style="font-size:10px;">
+    <td>
       <xsl:choose>
         <xsl:when test="last_report/report/@id = first_report/report/@id">
         </xsl:when>
@@ -6944,18 +6944,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <td style="font-size:10px;">
       <xsl:call-template name="short_timestamp_last"/>
     </td>
-    <td style="text-align:center;">
+    <td>
       <xsl:choose>
         <xsl:when test="last_report">
           <xsl:apply-templates select="last_report"/>
         </xsl:when>
       </xsl:choose>
     </td>
-    <td style="text-align:center;">
+    <td>
       <!-- Trend -->
       <xsl:call-template name="trend_meter"/>
     </td>
-    <td>
+    <td class="table-actions">
       <xsl:choose>
         <xsl:when test="not (gsa:may-op ('restore'))"/>
         <xsl:when test="(target/trash = '0') and (config/trash = '0') and (schedule/trash = '0') and (slave/trash = '0') and (gsa:alert-in-trash () = 0)">
@@ -6976,7 +6976,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:variable>
           <img src="/img/restore_inactive.png" alt="{gsa:i18n ('Restore', 'Action Verb')}"
                title="{$resources_string}{gsa:i18n (' must be restored first.', 'Action Message')}"
-               style="margin-left:3px;"/>
+               class="icon"/>
         </xsl:otherwise>
       </xsl:choose>
       <xsl:call-template name="trash-delete-icon">
@@ -7864,7 +7864,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <td>
       <xsl:value-of select="comment"/>
     </td>
-    <td>
+    <td class="table-actions">
       <xsl:call-template name="restore-icon">
         <xsl:with-param name="id" select="@id"/>
       </xsl:call-template>
@@ -7878,7 +7878,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:otherwise>
           <img src="/img/delete_inactive.png" alt="{gsa:i18n ('Delete', 'Action Verb')}"
                title="{gsa:i18n ('Credential is still in use', 'Credential')}"
-               style="margin-left:3px;"/>
+               class="icon"/>
         </xsl:otherwise>
       </xsl:choose>
     </td>
@@ -8390,7 +8390,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:otherwise></xsl:otherwise>
       </xsl:choose>
     </td>
-    <td>
+    <td class="table-actions">
       <xsl:call-template name="restore-icon">
         <xsl:with-param name="id" select="@id"/>
       </xsl:call-template>
@@ -10571,13 +10571,13 @@ should not have received it.
         </xsl:otherwise>
       </xsl:choose>
     </td>
-    <td>
+    <td class="table-actions">
       <xsl:choose>
         <xsl:when test="not (gsa:may-op ('restore'))"/>
         <xsl:when test="filter/trash = '1'">
           <img src="/img/restore_inactive.png" alt="{gsa:i18n ('Restore', 'Action Verb')}"
                title="{gsa:i18n ('Filter', 'Filter')}{gsa:i18n (' must be restored first', 'Trashcan')}"
-               style="margin-left:3px;"/>
+               class="icon"/>
         </xsl:when>
         <xsl:otherwise>
           <xsl:call-template name="restore-icon">
@@ -10596,7 +10596,7 @@ should not have received it.
           <img src="/img/delete_inactive.png"
                alt="{gsa:i18n ('Delete', 'Action Verb')}"
                title="{gsa:i18n ('Alert is still in use', 'Alert')}"
-               style="margin-left:3px;"/>
+               class="icon"/>
         </xsl:otherwise>
       </xsl:choose>
     </td>
@@ -11246,7 +11246,7 @@ should not have received it.
     </td>
     <td><xsl:value-of select="term"/></td>
     <td><xsl:value-of select="gsa:i18n (type, 'Type')"/></td>
-    <td>
+    <td class="table-actions">
       <xsl:call-template name="restore-icon">
         <xsl:with-param name="id" select="@id"/>
       </xsl:call-template>
@@ -11261,7 +11261,7 @@ should not have received it.
           <img src="/img/delete_inactive.png"
                alt="{gsa:i18n ('Delete', 'Action Verb')}"
                title="{gsa:i18n ('Filter is still in use', 'Filter')}"
-               style="margin-left:3px;"/>
+               class="icon"/>
         </xsl:otherwise>
       </xsl:choose>
     </td>
@@ -11989,7 +11989,7 @@ should not have received it.
         </xsl:otherwise>
       </xsl:choose>
     </td>
-    <td>
+    <td class="table-actions">
       <xsl:call-template name="restore-icon">
         <xsl:with-param name="id" select="@id"/>
       </xsl:call-template>
@@ -12004,7 +12004,7 @@ should not have received it.
           <img src="/img/delete_inactive.png"
                alt="{gsa:i18n ('Delete', 'Action Verb')}"
                title="{gsa:i18n ('Tag is still in use', 'Tag')}"
-               style="margin-left:3px;"/>
+               class="icon"/>
         </xsl:otherwise>
       </xsl:choose>
     </td>
@@ -14039,7 +14039,7 @@ should not have received it.
         </xsl:if>
       </table>
     </td>
-    <td>
+    <td class="table-actions">
       <xsl:choose>
         <xsl:when test="not (gsa:may-op ('restore'))"/>
         <xsl:when test="ssh_credential/trash = '1' or smb_credential/trash = '1' or esxi_credential/trash = '1' or snmp_credential/trash = '1' or port_list/trash = '1'">
@@ -14052,7 +14052,7 @@ should not have received it.
             <xsl:value-of select="gsa:i18n (' must be restored first.', 'Action Message')"/>
           </xsl:variable>
           <img src="/img/restore_inactive.png" alt="{gsa:i18n ('Restore', 'Action Verb')}" title="{$resources_string}"
-               style="margin-left:3px;"/>
+               class="icon"/>
         </xsl:when>
         <xsl:otherwise>
           <xsl:call-template name="restore-icon">
@@ -14071,7 +14071,7 @@ should not have received it.
           <img src="/img/delete_inactive.png"
                alt="{gsa:i18n ('Delete', 'Action Verb')}"
                title="{gsa:i18n ('Target is still in use', 'Target')}"
-               style="margin-left:3px;"/>
+               class="icon"/>
         </xsl:otherwise>
       </xsl:choose>
     </td>
@@ -16474,7 +16474,7 @@ should not have received it.
         </xsl:otherwise>
       </xsl:choose>
     </td>
-    <td>
+    <td class="table-actions">
       <xsl:call-template name="restore-icon">
         <xsl:with-param name="id" select="@id"/>
       </xsl:call-template>
@@ -16488,7 +16488,7 @@ should not have received it.
         <xsl:otherwise>
           <img src="/img/delete_inactive.png" alt="{gsa:i18n ('Delete', 'Action Verb')}"
                title="{gsa:i18n ('Scan Config is still in use', 'Scan Config')}"
-               style="margin-left:3px;"/>
+               class="icon"/>
         </xsl:otherwise>
       </xsl:choose>
     </td>
@@ -17491,7 +17491,7 @@ should not have received it.
         </xsl:otherwise>
       </xsl:choose>
     </td>
-    <td>
+    <td class="table-actions">
       <xsl:call-template name="restore-icon">
         <xsl:with-param name="id" select="@id"/>
       </xsl:call-template>
@@ -17506,7 +17506,7 @@ should not have received it.
           <img src="/img/delete_inactive.png"
                alt="{gsa:i18n ('Delete', 'Action Verb')}"
                title="{gsa:i18n ('Schedule is still in use', 'Schedule')}"
-               style="margin-left:3px;"/>
+               class="icon"/>
         </xsl:otherwise>
       </xsl:choose>
     </td>
@@ -18423,7 +18423,7 @@ should not have received it.
         </xsl:otherwise>
       </xsl:choose>
     </td>
-    <td>
+    <td class="table-actions">
       <xsl:choose>
         <xsl:when test="not (gsa:may-op ('restore'))"/>
         <xsl:when test="credential/trash = '0'">
@@ -18434,7 +18434,7 @@ should not have received it.
         <xsl:otherwise>
           <img src="/img/restore_inactive.png" alt="{gsa:i18n ('Restore', 'Action Verb')}"
                title="{gsa:i18n ('Credential', 'Credential')}{gsa:i18n (' must be restored first.', 'Action Message')}"
-               style="margin-left:3px;"/>
+               class="icon"/>
         </xsl:otherwise>
       </xsl:choose>
       <xsl:choose>
@@ -18448,7 +18448,7 @@ should not have received it.
           <img src="/img/delete_inactive.png"
                alt="{gsa:i18n ('Delete', 'Action Verb')}"
                title="{gsa:i18n ('Scanner is still in use', 'Scanner')}"
-               style="margin-left:3px;"/>
+               class="icon"/>
         </xsl:otherwise>
       </xsl:choose>
     </td>
@@ -18801,7 +18801,7 @@ should not have received it.
       </xsl:choose>
     </td>
     <td><xsl:value-of select="credential/login"/></td>
-    <td>
+    <td class="table-actions">
       <xsl:choose>
         <xsl:when test="not (gsa:may-op ('restore'))"/>
         <xsl:when test="credential/trash = '0'">
@@ -18812,7 +18812,7 @@ should not have received it.
         <xsl:otherwise>
           <img src="/img/restore_inactive.png" alt="{gsa:i18n ('Restore', 'Action Verb')}"
                title="{gsa:i18n ('Credential', 'Credential')}{gsa:i18n (' must be restored first.', 'Action Message')}"
-               style="margin-left:3px;"/>
+               class="icon"/>
         </xsl:otherwise>
       </xsl:choose>
       <xsl:choose>
@@ -18826,7 +18826,7 @@ should not have received it.
           <img src="/img/delete_inactive.png"
                alt="{gsa:i18n ('Delete', 'Action Verb')}"
                title="{gsa:i18n ('Slave is still in use', 'Slave')}"
-               style="margin-left:3px;"/>
+               class="icon"/>
         </xsl:otherwise>
       </xsl:choose>
     </td>
@@ -22739,7 +22739,7 @@ should not have received it.
         </xsl:otherwise>
       </xsl:choose>
     </td>
-    <td>
+    <td class="table-actions">
       <xsl:call-template name="restore-icon">
         <xsl:with-param name="id" select="@id"/>
       </xsl:call-template>
@@ -23954,7 +23954,7 @@ should not have received it.
         </xsl:otherwise>
       </xsl:choose>
     </td>
-    <td>
+    <td class="table-actions">
       <xsl:call-template name="restore-icon">
         <xsl:with-param name="id" select="@id"/>
       </xsl:call-template>
@@ -24376,7 +24376,7 @@ should not have received it.
         <xsl:otherwise></xsl:otherwise>
       </xsl:choose>
     </td>
-    <td>
+    <td class="table-actions">
       <xsl:call-template name="restore-icon">
         <xsl:with-param name="id" select="@id"/>
       </xsl:call-template>
@@ -24391,7 +24391,7 @@ should not have received it.
           <img src="/img/delete_inactive.png"
                alt="{gsa:i18n ('Delete', 'Action Verb')}"
                title="{gsa:i18n ('Group is still in use', 'Group')}"
-               style="margin-left:3px;"/>
+               class="icon"/>
         </xsl:otherwise>
       </xsl:choose>
     </td>
@@ -25378,7 +25378,7 @@ should not have received it.
     <td>
       <xsl:value-of select="subject/name"/>
     </td>
-    <td>
+    <td class="table-actions">
       <xsl:call-template name="restore-icon">
         <xsl:with-param name="id" select="@id"/>
       </xsl:call-template>
@@ -25393,7 +25393,7 @@ should not have received it.
           <img src="/img/delete_inactive.png"
                alt="{gsa:i18n ('Delete', 'Action Verb')}"
                title="{gsa:i18n ('Permission is still in use', 'Permission')}"
-               style="margin-left:3px;"/>
+               class="icon"/>
         </xsl:otherwise>
       </xsl:choose>
     </td>
@@ -25957,7 +25957,7 @@ should not have received it.
         <xsl:otherwise></xsl:otherwise>
       </xsl:choose>
     </td>
-    <td>
+    <td class="table-actions">
       <xsl:call-template name="restore-icon">
         <xsl:with-param name="id" select="@id"/>
       </xsl:call-template>
@@ -25972,7 +25972,7 @@ should not have received it.
           <img src="/img/delete_inactive.png"
                alt="{gsa:i18n ('Delete', 'Action Verb')}"
                title="{gsa:i18n ('Port List is still in use', 'Port List')}"
-               style="margin-left:3px;"/>
+               class="icon"/>
         </xsl:otherwise>
       </xsl:choose>
     </td>
@@ -26753,7 +26753,7 @@ should not have received it.
         </xsl:otherwise>
       </xsl:choose>
     </td>
-    <td>
+    <td class="table-actions">
       <xsl:call-template name="restore-icon">
         <xsl:with-param name="id" select="@id"/>
       </xsl:call-template>
@@ -26768,7 +26768,7 @@ should not have received it.
           <img src="/img/delete_inactive.png"
                alt="{gsa:i18n ('Delete', 'Action Verb')}"
                title="{gsa:i18n ('Report Format is still in use', 'Report Format')}"
-               style="margin-left:3px;"/>
+               class="icon"/>
         </xsl:otherwise>
       </xsl:choose>
     </td>
@@ -33225,13 +33225,7 @@ var toggleFilter = function(){
 </xsl:template>
 
 <xsl:template match="role" mode="trash">
-  <xsl:variable name="class">
-    <xsl:choose>
-      <xsl:when test="position() mod 2 = 0">even</xsl:when>
-      <xsl:otherwise>odd</xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-  <tr class="{$class}">
+  <tr>
     <td>
       <xsl:call-template name="observers-icon">
         <xsl:with-param name="type" select="'Role'"/>
@@ -33246,7 +33240,7 @@ var toggleFilter = function(){
         <xsl:otherwise></xsl:otherwise>
       </xsl:choose>
     </td>
-    <td>
+    <td class="table-actions">
       <xsl:call-template name="restore-icon">
         <xsl:with-param name="id" select="@id"/>
       </xsl:call-template>
@@ -33261,7 +33255,7 @@ var toggleFilter = function(){
           <img src="/img/delete_inactive.png"
                alt="{gsa:i18n ('Delete', 'Action Verb')}"
                title="{gsa:i18n ('Role is still in use', 'Role')}"
-               style="margin-left:3px;"/>
+               class="icon"/>
         </xsl:otherwise>
       </xsl:choose>
     </td>
