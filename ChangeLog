@@ -1,5 +1,10 @@
 2016-02-04  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/gsad.xsl (html-head): Add "Content-Type" meta tag
+	because the one added implicitly otherwise is not closed correctly.
+
+2016-02-04  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/js/gsa_graphics_base.js (Dashboard): Fix check for
 	height changes.
 	(DashboardBox): Calculate width according to new box-sizing.
