@@ -5732,7 +5732,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:if>
       </table>
       <xsl:if test="gsa:may-op ('get_tags') and gsa:may-op ('create_task') and count(get_tags_response/tag) != 0">
-        <table>
+        <table class="table-form">
           <tr>
             <td>
               <h3><xsl:value-of select="gsa:i18n ('Tag', 'Tag')"/></h3>
@@ -5769,13 +5769,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </tr>
         </table>
       </xsl:if>
-      <table cellspacing="0" cellpadding="3" width="100%">
-        <tr>
-          <td colspan="2" style="text-align:right;">
-            <input type="submit" name="submit" value="{gsa:i18n ('Create Task', 'Task')}"/>
-          </td>
-        </tr>
-      </table>
     </form>
    </div>
   </div>
