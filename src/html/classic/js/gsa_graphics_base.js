@@ -1096,7 +1096,7 @@ function DashboardBox (row, controllerString, filterString, dashboardOpts)
       else
         rowWidth = newRowWidth;
       var newWidth = (rowWidth - 2) / (componentsCount ? componentsCount : 1);
-      my.svg().attr ("width", newWidth);
+      my.svg().attr ("width", newWidth - 8);
       $(elem).css ("width", newWidth);
     }
 

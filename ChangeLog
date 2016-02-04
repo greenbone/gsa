@@ -1,3 +1,11 @@
+2016-02-04  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/css/gsa-style.css (chart-top-buttons): Remove now
+	superfluous margin.
+
+	* src/html/classic/js/gsa_graphics_base.js (DashboardBox): Adjust SVG
+	element size to new box-sizing.
+
 2016-02-04  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/omp.xsl (html-edit-override-form): Fix layout of the edit
