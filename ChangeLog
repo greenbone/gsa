@@ -1,3 +1,11 @@
+2016-02-04  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/js/gsa_bar_chart.js (BarChartGenerator):
+	Initialize x and width of bars in generate function.
+
+	* src/html/classic/js/gsa_h_bar_chart.js (HorizontalBarChartGenerator):
+	Initialize y and height of bars in generate function.
+
 2016-02-04  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/omp.xsl (alert [details]): In the Method field, use
