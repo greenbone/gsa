@@ -1,3 +1,14 @@
+2016-02-04  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/js/gsa_graphics_base.js (Dashboard): Fix check for
+	height changes.
+	(DashboardBox): Calculate width according to new box-sizing.
+
+	* src/html/classic/css/gsa-style.css (.chart-head, .chart-top-buttons):
+	Adjust height and padding to new box-sizing.
+	(.dashboard.edit .chart-head): Add "-webkit-grab" cursor in case "grab"
+	does not work, e.g. in Chrome.
+
 2016-02-04  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/omp.xsl (edit-families-family): It is not required to set

@@ -444,7 +444,7 @@ function Dashboard (id, controllersString, heightsString, filtersString,
     {
       if (checkHeight)
         {
-          if (width == elem.clientWidth || height == elem.clientHeight)
+          if (width == elem.clientWidth && height == elem.clientHeight)
             return;
         }
       else
@@ -1095,7 +1095,7 @@ function DashboardBox (row, controllerString, filterString, dashboardOpts)
         rowWidth = dashboard.elem().clientWidth;
       else
         rowWidth = newRowWidth;
-      var newWidth = (rowWidth - (row.componentsCount () * 8) - 2) / (componentsCount ? componentsCount : 1);
+      var newWidth = (rowWidth - 2) / (componentsCount ? componentsCount : 1);
       my.svg().attr ("width", newWidth);
       $(elem).css ("width", newWidth);
     }

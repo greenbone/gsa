@@ -1270,10 +1270,10 @@ select[multiple] {
 }
 
 .chart-head {
-  height: 16px;
+  height: 18px;
   background: #3A3A3A;
   color: #EEEEEE;
-  padding: 2px 22px 2px 22px;
+  padding: 1px 22px 2px 22px;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -1281,12 +1281,13 @@ select[multiple] {
 
 .dashboard.edit .chart-head {
   cursor: grab;
+  cursor: -webkit-grab;
 }
 
 .chart-top-buttons {
   background: #3A3A3A;
-  padding: 2px;
-  height: 16px;
+  padding: 1px;
+  height: 18px;
   float: right;
   margin-right: 1px;
 }
