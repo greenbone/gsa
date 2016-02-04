@@ -146,9 +146,9 @@
     var buttons = this.dialog.closest('.ui-dialog').find('button.ui-button');
     buttons.each(function() {
       var button = $(this);
-      if (button.button('option', 'label') != "Close") {
+      if (button.button('option', 'label') !== 'Close') {
         this.label = button.button('option', 'label');
-        if (this.label != "OK") {
+        if (this.label !== 'OK') {
           button.button('option', 'label', this.label.substring(0, this.label.length - 1) + 'ing ...');
         }
         button.button('option', 'icons', {primary: 'ui-icon-waiting'});
@@ -164,7 +164,7 @@
     var buttons = this.dialog.closest('.ui-dialog').find('button.ui-button');
     buttons.each (function() {
       var button = $(this);
-      if (button.button('option', 'label') != "Close") {
+      if (button.button('option', 'label') !== 'Close') {
         button.button('enable');
         button.button('option', 'label', this.label);
         button.button('option', 'icons', {primary: null});
@@ -174,14 +174,14 @@
 
   OMPDialog.prototype.error = function(message, title) {
     if (! title) {
-      title = "Error:";
+      title = 'Error:';
     }
     // Remove previous errors
     this.dialog.find('div.ui-state-error').remove();
     // Insert our error message
-    this.dialog.prepend($("<div/>", {
-      "class": "ui-state-error ui-corner-all",
-      html: $("<p><strong>" + title + "</strong> " + message + "</p>"),
+    this.dialog.prepend($('<div/>', {
+      'class': 'ui-state-error ui-corner-all',
+      html: $('<p><strong>' + title + '</strong> ' + message + '</p>'),
     }));
   };
 
@@ -205,16 +205,16 @@
         action_result = xml.find('action_result'),
         generic_omp_response = xml.find('omp_response'),
         internal_error_html
-          = html.find(".gb_error_dialog .gb_window_part_content_error"),
+          = html.find('.gb_error_dialog .gb_window_part_content_error'),
         top_line_error_html
-          = html.find(".gb_window .gb_window_part_content_error"),
+          = html.find('.gb_window .gb_window_part_content_error'),
         login_form_html
-          = html.find(".gb_login_dialog .gb_window_part_content"),
-        error_title = "Error:",
-        error = "Unknown error";
+          = html.find('.gb_login_dialog .gb_window_part_content'),
+        error_title = 'Error:',
+        error = 'Unknown error';
 
     if (gsad_msg.length) {
-      error = gsad_msg.attr("status_text");
+      error = gsad_msg.attr('status_text');
     }
     else if (response.length) {
       error = response.attr('status_text');
@@ -223,22 +223,22 @@
       error = generic_omp_response.attr('status_text');
     }
     else if (action_result.length) {
-      error_title = "Operation \"" + action_result.find("action").text () + "\" failed";
-      error = "<br/>" + action_result.find("message").text();
+      error_title = 'Operation \'' + action_result.find('action').text () + '\' failed';
+      error = '<br/>' + action_result.find('message').text();
     }
     else if (internal_error_html.length) {
-        error_title = internal_error_html.find("span div").text();
+        error_title = internal_error_html.find('span div').text();
         if (! (error_title)) {
-          error_title = "Internal Error";
+          error_title = 'Internal Error';
         }
-        error = internal_error_html.find("span").text();
+        error = internal_error_html.find('span').text();
     }
     else if (top_line_error_html.length) {
-      error_title = "Operation \"" + top_line_error_html.find("#operation").text() + "\" failed";
-      error = "<br/>" + top_line_error_html.find ("#message").text ();
+      error_title = 'Operation \'' + top_line_error_html.find('#operation').text() + '\' failed';
+      error = '<br/>' + top_line_error_html.find ('#message').text ();
     }
     else if (login_form_html.length) {
-      error = login_form_html.find(".error_message").text();
+      error = login_form_html.find('.error_message').text();
     }
     self.error(error, error_title);
   };
@@ -279,14 +279,14 @@
         var entity = get_entity(self.command, xml);
         if (entity !== undefined) {
           // fill in the new information in the $element and make it selected
-          self.element.append($("<option/>", {
+          self.element.append($('<option/>', {
             value: entity.id,
             html: entity.name,
             selected: true,
           }));
 
           // refresh the select widget.
-          self.element.select2("destroy");
+          self.element.select2('destroy');
           self.element.select2();
         }
 
@@ -307,7 +307,7 @@
 
     if (gb_windows.length) {
       if (gb_windows.length > 1) {
-        self.error( (gb_windows.length - 1) + " forms not displayed !");
+        self.error( (gb_windows.length - 1) + ' forms not displayed !');
       }
 
       var gb_window = gb_windows.first();
@@ -334,15 +334,15 @@
   OMPDialog.prototype.show = function(button){
     var self = this;
     var done_func, fail_func;
-    var request;
+
     if (button === undefined) { button = 'Create';}
     this.params.cmd = this.command;
     this.params.token = $('#gsa-token').text();
     $('html').css('cursor', 'wait');
     stop_auto_refresh();
 
-    self.dialog = $("<div/>", {
-      'class': "dialog-form",
+    self.dialog = $('<div/>', {
+      'class': 'dialog-form',
     });
 
     // connect this OMPDialog with the DOM
@@ -365,12 +365,12 @@
             },
           }
         ],
-        close: function(event, ui){
+        close: function(){
           self.close();
         },
       });
 
-      $('html').css('cursor', "");
+      $('html').css('cursor', '');
     };
 
     fail_func = function(response) {
@@ -388,17 +388,17 @@
         width: 800
       });
 
-      $('html').css('cursor', "");
+      $('html').css('cursor', '');
     };
 
-    if (this.show_method == 'GET') {
+    if (this.show_method === 'GET') {
       self.request_data = {
         url: '/omp?' + $.param(this.params),
         cache: false,
         type: 'GET',
       };
     }
-    else if (this.show_method == 'POST') {
+    else if (this.show_method === 'POST') {
       var data = new FormData();
       for (var param in this.params) {
         data.append(param, this.params[param]);
@@ -413,8 +413,9 @@
         type: 'POST',
       };
     }
-    else
+    else {
       throw new Error('Unknown show_method "' + this.show_method + '"');
+    }
 
     $.ajax(self.request_data).done(done_func).fail(fail_func);
   };
@@ -425,7 +426,7 @@
     $.ajax(self.request_data).then(function(data) {
         self.setContent(data);
         self.done();
-      }, function(jqXHR, status) {
+      }, function() {
       }
     );
   };
@@ -444,7 +445,7 @@
         content = $('#' + this.id).closest('form').clone();
     content.find('#' + this.id).show();
     content.css('float', '');
-    content.find('#' + this.id).css("padding-top", "2em");
+    content.find('#' + this.id).css('padding-top', '2em');
     content.find('a, div.footnote, input[type=image], input[type=submit]').remove();
 
     // Update the form parameter
@@ -453,8 +454,8 @@
       input.val(input.val() ^ 1);
     }
 
-    this.dialog = $("<div/>", {
-      'class': "dialog-form",
+    this.dialog = $('<div/>', {
+      'class': 'dialog-form',
       title:  this.title,
       html: content,
     });
@@ -474,7 +475,7 @@
           },
         }
       ],
-      close: function(event, ui) {
+      close: function() {
         self.dialog.remove();
         self.dialog = undefined;
         start_auto_refresh();
@@ -491,8 +492,8 @@
     this.interval_time = 1000; // 1 sec
     this.progress_value = this.timeout;
 
-    this.dialog = $("<div/>", {
-      'class': "dialog-form",
+    this.dialog = $('<div/>', {
+      'class': 'dialog-form',
     });
     options.element.detach();
     this.dialog.append(options.element.children());
@@ -583,8 +584,8 @@
       dialogClass: self.dialog_css,
       modal: false,
       width: self.width,
-      show: { effect: "fade", duration: 1000 },
-      beforeClose: function(event, ui) {
+      show: { effect: 'fade', duration: 1000 },
+      beforeClose: function() {
         self.close();
       },
     });
@@ -678,15 +679,15 @@
     this.icon.toggleClass('expand');
     if (this.icon.hasClass('expand')) {
       this.icon.attr({
-        src:   "/img/unfold.png",
-        title: "Unfold " + this.name,
-        alt:   "Unfold " + this.name
+        src:   '/img/unfold.png',
+        title: 'Unfold ' + this.name,
+        alt:   'Unfold ' + this.name
       });
     } else {
       this.icon.attr({
-        src:   "/img/fold.png",
-        title: "Fold " + this.name,
-        alt:   "Fold " + this.name
+        src:   '/img/fold.png',
+        title: 'Fold ' + this.name,
+        alt:   'Fold ' + this.name
       });
     }
   };
@@ -744,19 +745,19 @@
   function on_ready(doc) {
     doc = $(doc);
 
-    doc.find(".edit-action-icon").each(function() {
+    doc.find('.edit-action-icon').each(function() {
       init_omp_dialog({type: 'edit', element: $(this), button: 'Save'});
     });
 
-    doc.find(".new-action-icon").each(function() {
+    doc.find('.new-action-icon').each(function() {
       init_omp_dialog({type: 'new', element: $(this), button: 'Create'});
     });
 
-    doc.find(".upload-action-icon").each(function() {
+    doc.find('.upload-action-icon').each(function() {
       init_omp_dialog({type: 'upload', element: $(this), button: 'Create'});
     });
 
-    doc.find(".delete-action-icon").each(function() {
+    doc.find('.delete-action-icon').each(function() {
       init_omp_dialog({type: 'delete', element: $(this), button: 'Delete',
         prefix: 'confirm'});
     });
@@ -772,35 +773,36 @@
       });
     });
 
-    doc.find(".bulk-dialog-icon").each(function() {
+    doc.find('.bulk-dialog-icon').each(function() {
       var elem = $(this),
           type_name = elem.data('type'),
           done = elem.data('done');
 
       var reload;
       var params = {
-         "resource_type" : type_name
+         'resource_type' : type_name
       };
-      params [this.name + ".x"] = "0";
+      params [this.name + '.x'] = '0';
 
       elem.on('click', function(event) {
         event.preventDefault();
-        var form = elem.closest("form");
-        form.find(":input").each(function() {
-          if (this.getAttribute("type") != "image" &&
-                  (this.getAttribute("type") != "checkbox" || this.checked))
+        var form = elem.closest('form');
+        form.find(':input').each(function() {
+          if (this.getAttribute('type') !== 'image' &&
+                  (this.getAttribute('type') !== 'checkbox' || this.checked)) {
             params[this.name] = this.value;
+          }
         });
         if (done === undefined) {
           reload = 'window';
         }
         new OMPDialog({cmd: 'process_bulk', element: done, params: params,
-          show_method: "POST", reload: reload}
-        ).show("OK", "confirmation");
+          show_method: 'POST', reload: reload}
+        ).show('OK', 'confirmation');
       });
     });
 
-    doc.find(".wizard-action-icon").each(function(){
+    doc.find('.wizard-action-icon').each(function(){
       var elem = $(this),
           name = elem.data('name'),
           params = {name: name};
@@ -820,7 +822,7 @@
       });
     });
 
-    doc.find(".edit-filter-action-icon").each(function() {
+    doc.find('.edit-filter-action-icon').each(function() {
       var elem = $(this),
           id = elem.data('id');
       elem.on('click', function(event) {
@@ -829,7 +831,7 @@
       });
     });
 
-    doc.find(".info-dialog").each(function() {
+    doc.find('.info-dialog').each(function() {
       var elem = $(this);
       new InfoDialog({
         element: elem,
@@ -839,27 +841,27 @@
       }).show();
     });
 
-    var datepicker = doc.find("#datepicker");
+    var datepicker = doc.find('#datepicker');
     if (datepicker.length) {
       var curDate = doc.find('input[name=month]').val() +
         '/' + doc.find('input[name=day_of_month]').val() + '/' +
         doc.find('input[name=year]').val();
       datepicker.datepicker({
-        showOn: "button",
-        buttonImage: "img/calendar.png",
-        buttonText: "Select date",
-        altField: doc.find("#datevalue"),
-        altFormat: "DD, d MM, yy",
+        showOn: 'button',
+        buttonImage: 'img/calendar.png',
+        buttonText: 'Select date',
+        altField: doc.find('#datevalue'),
+        altFormat: 'DD, d MM, yy',
         minDate: curDate,
-        maxDate: "+3Y",
+        maxDate: '+3Y',
         onClose: function() {
-          var date = $(this).datepicker("getDate");
+          var date = $(this).datepicker('getDate');
           doc.find('input[name=day_of_month]').val(date.getDate());
           doc.find('input[name=month]').val(date.getMonth() + 1);
           doc.find('input[name=year]').val(date.getFullYear());
         },
       });
-      datepicker.datepicker("setDate", curDate);
+      datepicker.datepicker('setDate', curDate);
     }
 
     var autorefresh = doc.find('#autorefresh');
@@ -941,33 +943,33 @@
 
     switch(type)
     {
-      case "up":
-        $("#autogenerate_row, #login_row, #password_row").show();
-        $("#community_row, #certificate_row, #private_key_row, #passphrase_row, #priv_password_row, #auth_algo_row, #priv_algo_row").hide();
+      case 'up':
+        $('#autogenerate_row, #login_row, #password_row').show();
+        $('#community_row, #certificate_row, #private_key_row, #passphrase_row, #priv_password_row, #auth_algo_row, #priv_algo_row').hide();
         break;
-      case "usk":
-        $("#autogenerate_row, #login_row, #private_key_row, #passphrase_row").show();
-        $("#community_row, #password_row, #certificate_row, #priv_password_row, #auth_algo_row, #priv_algo_row").hide();
+      case 'usk':
+        $('#autogenerate_row, #login_row, #private_key_row, #passphrase_row').show();
+        $('#community_row, #password_row, #certificate_row, #priv_password_row, #auth_algo_row, #priv_algo_row').hide();
         break;
-      case "cc":
-        $("#certificate_row, #private_key_row").show();
-        $("#community_row, #autogenerate_row, #login_row, #password_row, #passphrase_row, #priv_password_row, #auth_algo_row, #priv_algo_row").hide();
+      case 'cc':
+        $('#certificate_row, #private_key_row').show();
+        $('#community_row, #autogenerate_row, #login_row, #password_row, #passphrase_row, #priv_password_row, #auth_algo_row, #priv_algo_row').hide();
         auto = false;
         break;
-      case "snmp":
-        $("#community_row, #login_row, #password_row, #priv_password_row, #auth_algo_row, #priv_algo_row").show();
-        $("#autogenerate_row, #certificate_row, #private_key_row, #passphrase_row").hide();
+      case 'snmp':
+        $('#community_row, #login_row, #password_row, #priv_password_row, #auth_algo_row, #priv_algo_row').show();
+        $('#autogenerate_row, #certificate_row, #private_key_row, #passphrase_row').hide();
         auto = false;
         break;
     }
 
     if (auto)
     {
-      $("#password_row input, #certificate_row input, #private_key_row input, #passphrase_row input").attr("disabled", "1");
+      $('#password_row input, #certificate_row input, #private_key_row input, #passphrase_row input').attr('disabled', '1');
     }
     else
     {
-      $("#password_row input, #certificate_row input, #private_key_row input, #passphrase_row input").attr("disabled", null);
+      $('#password_row input, #certificate_row input, #private_key_row input, #passphrase_row input').attr('disabled', null);
     }
   };
 
@@ -978,85 +980,85 @@
 
     switch(type)
     {
-      case "New SecInfo arrived":
+      case 'New SecInfo arrived':
         /* Conditions. */
-        $("#severity_at_least_row, #severity_changed_row, #filter_count_changed_row").hide();
+        $('#severity_at_least_row, #severity_changed_row, #filter_count_changed_row').hide();
         /* Methods. */
-        $("#http_get_row, #start_task_row, #sourcefire_row, #verinice_row").hide();
+        $('#http_get_row, #start_task_row, #sourcefire_row, #verinice_row').hide();
 
-        $("#email_subject_task").hide();
-        $("#email_subject_task_input").attr("name", "subject_dummy");
-        $("#email_subject_secinfo").show();
-        $("#email_subject_secinfo_input").attr("name", "method_data:subject");
+        $('#email_subject_task').hide();
+        $('#email_subject_task_input').attr('name', 'subject_dummy');
+        $('#email_subject_secinfo').show();
+        $('#email_subject_secinfo_input').attr('name', 'method_data:subject');
 
-        $("#email_content_include_task").hide();
-        $("#email_content_include_secinfo").show();
-        $("#email_content_include_secinfo").attr("style", "display: inline");
-        $("#email_content_include_message_task").hide();
-        $("#message_include_task").attr("name", "message_include_dummy");
-        $("#email_content_include_message_secinfo").show();
-        $("#message_include_secinfo").attr("name", "method_data:message");
+        $('#email_content_include_task').hide();
+        $('#email_content_include_secinfo').show();
+        $('#email_content_include_secinfo').attr('style', 'display: inline');
+        $('#email_content_include_message_task').hide();
+        $('#message_include_task').attr('name', 'message_include_dummy');
+        $('#email_content_include_message_secinfo').show();
+        $('#message_include_secinfo').attr('name', 'method_data:message');
 
-        $("#email_content_attach_task").hide();
-        $("#email_content_attach_secinfo").show();
-        $("#email_content_attach_secinfo").attr("style", "display: inline");
-        $("#email_content_attach_message_task").hide();
-        $("#message_attach_task").attr("name", "message_attach_dummy");
-        $("#email_content_attach_message_secinfo").show();
-        $("#message_attach_secinfo").attr("name", "method_data:message_attach");
+        $('#email_content_attach_task').hide();
+        $('#email_content_attach_secinfo').show();
+        $('#email_content_attach_secinfo').attr('style', 'display: inline');
+        $('#email_content_attach_message_task').hide();
+        $('#message_attach_task').attr('name', 'message_attach_dummy');
+        $('#email_content_attach_message_secinfo').show();
+        $('#message_attach_secinfo').attr('name', 'method_data:message_attach');
 
         /* Method fields. */
-        $("#send_to_host_report_row").hide();
-        $("#details_url_row").show();
+        $('#send_to_host_report_row').hide();
+        $('#details_url_row').show();
         /* Filter. */
-        $("#report_result_filter_row").hide();
+        $('#report_result_filter_row').hide();
 
-        $("#filter_count_at_least_span_nvts").show();
-        $("#filter_count_at_least_span_task").hide();
-        $("#filter_count_at_least_results_span").hide();
-        $("#filter_count_at_least_nvts_span").show();
-        $("#filter_count_at_least_select_task").attr("name", "dummy");
-        $("#filter_count_at_least_select_nvts").attr("name", "condition_data:filter_id");
+        $('#filter_count_at_least_span_nvts').show();
+        $('#filter_count_at_least_span_task').hide();
+        $('#filter_count_at_least_results_span').hide();
+        $('#filter_count_at_least_nvts_span').show();
+        $('#filter_count_at_least_select_task').attr('name', 'dummy');
+        $('#filter_count_at_least_select_nvts').attr('name', 'condition_data:filter_id');
 
         break;
-      case "Task run status changed":
+      case 'Task run status changed':
         /* Conditions. */
-        $("#severity_at_least_row, #severity_changed_row, #filter_count_changed_row").show();
+        $('#severity_at_least_row, #severity_changed_row, #filter_count_changed_row').show();
         /* Methods. */
-        $("#http_get_row, #start_task_row, #sourcefire_row, #verinice_row").show();
+        $('#http_get_row, #start_task_row, #sourcefire_row, #verinice_row').show();
 
-        $("#email_subject_task").show();
-        $("#email_subject_task_input").attr("name", "method_data:subject");
-        $("#email_subject_secinfo").hide();
-        $("#email_subject_secinfo_input").attr("name", "subject_dummy");
-        $("#email_content_include_task").show();
-        $("#email_content_include_task").attr("style", "display: inline");
-        $("#email_content_include_secinfo").hide();
-        $("#email_content_include_message_task").show();
-        $("#message_include_task").attr("name", "method_data:message");
-        $("#email_content_include_message_secinfo").hide();
-        $("#message_include_secinfo").attr("name", "message_include_dummy");
+        $('#email_subject_task').show();
+        $('#email_subject_task_input').attr('name', 'method_data:subject');
+        $('#email_subject_secinfo').hide();
+        $('#email_subject_secinfo_input').attr('name', 'subject_dummy');
+        $('#email_content_include_task').show();
+        $('#email_content_include_task').attr('style', 'display: inline');
+        $('#email_content_include_secinfo').hide();
+        $('#email_content_include_message_task').show();
+        $('#message_include_task').attr('name', 'method_data:message');
+        $('#email_content_include_message_secinfo').hide();
+        $('#message_include_secinfo').attr('name', 'message_include_dummy');
 
-        $("#email_content_attach_task").show();
-        $("#email_content_attach_task").attr("style", "display: inline");
-        $("#email_content_attach_secinfo").hide();
-        $("#email_content_attach_message_task").show();
-        $("#message_attach_task").attr("name", "method_data:message_attach");
-        $("#email_content_attach_message_secinfo").hide();
-        $("#message_attach_secinfo").attr("name", "message_attach_dummy");
+        $('#email_content_attach_task').show();
+        $('#email_content_attach_task').attr('style', 'display: inline');
+        $('#email_content_attach_secinfo').hide();
+        $('#email_content_attach_message_task').show();
+        $('#message_attach_task').attr('name', 'method_data:message_attach');
+        $('#email_content_attach_message_secinfo').hide();
+        $('#message_attach_secinfo').attr('name', 'message_attach_dummy');
 
         /* Method fields. */
-        $("#send_to_host_report_row").show();
-        $("#details_url_row").hide();
+        $('#send_to_host_report_row').show();
+        $('#details_url_row').hide();
         /* Filter. */
-        $("#report_result_filter_row").show();
+        $('#report_result_filter_row').show();
 
-        $("#filter_count_at_least_span_nvts").hide();
-        $("#filter_count_at_least_span_task").show();
-        $("#filter_count_at_least_results_span").show();
-        $("#filter_count_at_least_nvts_span").hide();
-        $("#filter_count_at_least_select_nvts").attr("name", "dummy");
-        $("#filter_count_at_least_select_task").attr("name", "condition_data:filter_id");
+        $('#filter_count_at_least_span_nvts').hide();
+        $('#filter_count_at_least_span_task').show();
+        $('#filter_count_at_least_results_span').show();
+        $('#filter_count_at_least_nvts_span').hide();
+        $('#filter_count_at_least_select_nvts').attr('name', 'dummy');
+        $('#filter_count_at_least_select_task').attr('name', 'condition_data:filter_id');
 
         break;
     }

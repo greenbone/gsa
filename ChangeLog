@@ -1,5 +1,12 @@
 2016-02-04  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/greenbone.js: Update coding style to reduce jshint
+	warnings. Use ' instead of ", always use {} for if, for, while. Remove unsed
+	variables. Use === and !=== for comparisions (see
+	https://javascriptweblog.wordpress.com/2011/02/07/truth-equality-and-javascript/).
+
+2016-02-04  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/.jshintrc: Add a config file for jshint (javascript
 	linter).
 
