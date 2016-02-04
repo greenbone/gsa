@@ -15563,7 +15563,7 @@ should not have received it.
         <td>
           <a href="/omp?cmd=edit_config_family&amp;config_id={$config/@id}&amp;name={$config/name}&amp;family={$current_name}&amp;token={/envelope/token}"
             class="edit-action-icon" data-cmd="edit_config_family" data-type="config" data-id="{$config/@id}"
-            data-extra="name={$config/name}&amp;family={$current_name}" data-done=""
+            data-extra="name={$config/name}&amp;family={$current_name}" data-reload="parent"
             title="{gsa:i18n ('Edit Scan Config Family', 'Scan Config')}">
             <img src="/img/edit.png" alt="{gsa:i18n ('Edit', 'Action Verb')}"/>
           </a>
