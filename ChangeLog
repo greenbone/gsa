@@ -1,3 +1,10 @@
+2016-02-04  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/classic/omp.xsl (alert [details]): In the Method field, use
+	"list of resources" for SecInfo in the Send case.  For SecInfo in the
+	Email case also include the Content, Subject and Message, because these
+	can be edited now.
+
 2016-02-04  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Adapt width of dashboard box placeholder to available space.

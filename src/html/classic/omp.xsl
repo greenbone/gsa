@@ -10740,6 +10740,9 @@ should not have received it.
             <tr>
               <td colspan="3">
                 <xsl:choose>
+                  <xsl:when test="(event/text() = 'New SecInfo arrived' or event/text() = 'Updated SecInfo arrived') and method/text()='Send'">
+                    <xsl:value-of select="gsa:i18n ('Send list of resources to host', 'Alert')"/>
+                  </xsl:when>
                   <xsl:when test="method/text()='Send'">
                     <xsl:value-of select="gsa:i18n ('Send report to host', 'Alert')"/>
                   </xsl:when>
@@ -10777,8 +10780,25 @@ should not have received it.
                   </td>
                 </tr>
                 <xsl:choose>
-                  <xsl:when test="event/text() = 'New SecInfo arrived'"/>
-                  <xsl:when test="event/text() = 'Updated SecInfo arrived'"/>
+                  <xsl:when test="event/text() = 'Updated SecInfo arrived' or event/text() = 'New SecInfo arrived'">
+                    <tr>
+                      <td width="45"></td>
+                      <td><xsl:value-of select="gsa:i18n ('Content', 'Alert|Email')"/>:</td>
+                      <td>
+                        <xsl:choose>
+                          <xsl:when test="method/data[name='notice']/text() = '0'">
+                            <xsl:value-of select="gsa:i18n ('Include list of resources', 'Alert|Email')"/>
+                          </xsl:when>
+                          <xsl:when test="method/data[name='notice']/text() = '2'">
+                            <xsl:value-of select="gsa:i18n ('Attach list of resources', 'Alert|Email')"/>
+                          </xsl:when>
+                          <xsl:otherwise>
+                            <xsl:value-of select="gsa:i18n ('Simple notice', 'Alert|Email')"/>
+                          </xsl:otherwise>
+                        </xsl:choose>
+                      </td>
+                    </tr>
+                  </xsl:when>
                   <xsl:otherwise>
                     <tr>
                       <td width="45"></td>
@@ -10831,38 +10851,38 @@ should not have received it.
                         </xsl:choose>
                       </td>
                     </tr>
-                    <tr>
-                      <td width="45"></td>
-                      <td><xsl:value-of select="gsa:i18n ('Subject', 'Alert|Email')"/>:</td>
-                      <td>
-                        <xsl:choose>
-                          <xsl:when test="string-length(method/data[name='subject']/text()) &gt; 0">
-                            <xsl:value-of select="method/data[name='subject']/text()"/>
-                          </xsl:when>
-                        </xsl:choose>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td width="45"></td>
-                      <td><xsl:value-of select="gsa:i18n ('Message', 'Alert|Email')"/>:</td>
-                      <td>
-                        <xsl:choose>
-                          <xsl:when test="string-length(method/data[name='message']/text()) &gt; 0">
-                            <xsl:choose>
-                              <xsl:when test="contains (method/data[name='message']/text(), '&#10;')">
-                                <xsl:value-of select="substring-before (method/data[name='message']/text(), '&#10;')"/>
-                                <xsl:text>...</xsl:text>
-                              </xsl:when>
-                              <xsl:otherwise>
-                                <xsl:value-of select="method/data[name='message']/text()"/>
-                              </xsl:otherwise>
-                            </xsl:choose>
-                          </xsl:when>
-                        </xsl:choose>
-                      </td>
-                    </tr>
                   </xsl:otherwise>
                 </xsl:choose>
+                <tr>
+                  <td width="45"></td>
+                  <td><xsl:value-of select="gsa:i18n ('Subject', 'Alert|Email')"/>:</td>
+                  <td>
+                    <xsl:choose>
+                      <xsl:when test="string-length(method/data[name='subject']/text()) &gt; 0">
+                        <xsl:value-of select="method/data[name='subject']/text()"/>
+                      </xsl:when>
+                    </xsl:choose>
+                  </td>
+                </tr>
+                <tr>
+                  <td width="45"></td>
+                  <td><xsl:value-of select="gsa:i18n ('Message', 'Alert|Email')"/>:</td>
+                  <td>
+                    <xsl:choose>
+                      <xsl:when test="string-length(method/data[name='message']/text()) &gt; 0">
+                        <xsl:choose>
+                          <xsl:when test="contains (method/data[name='message']/text(), '&#10;')">
+                            <xsl:value-of select="substring-before (method/data[name='message']/text(), '&#10;')"/>
+                            <xsl:text>...</xsl:text>
+                          </xsl:when>
+                          <xsl:otherwise>
+                            <xsl:value-of select="method/data[name='message']/text()"/>
+                          </xsl:otherwise>
+                        </xsl:choose>
+                      </xsl:when>
+                    </xsl:choose>
+                  </td>
+                </tr>
               </xsl:when>
               <xsl:when test="method/text()='HTTP Get'">
                 <tr>
