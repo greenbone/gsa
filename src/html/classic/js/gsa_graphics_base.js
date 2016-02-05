@@ -604,10 +604,16 @@ function Dashboard (id, controllersString, heightsString, filtersString,
 
   width = elem.clientWidth;
 
-  // Window resize
-  $(window).on ("resize", function () { my.resized (false) });
-  // Check in case other elements cause scrollbar to appear or disappear
-  $(window).bind ("DOMSubtreeModified", function () { my.resized (false) });
+  $(window).on ("load",
+                function ()
+                  {
+                    // Window resize
+                    $(window).on ("resize",
+                                  function () { my.resized (false) });
+                    // Check in case other elements change scrollbar visibility
+                    $(window).on ("DOMSubtreeModified",
+                                  function () { my.resized (false) });
+                  })
 
   // Drop targets for new rows
   topTarget = DashboardNewRowTarget (my, "top");
