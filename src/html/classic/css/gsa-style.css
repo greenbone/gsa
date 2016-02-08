@@ -912,8 +912,7 @@ select[multiple] {
   font-size:10px;
   text-align:right;
   color: #787878;
-  margin-bottom:10px;
-  margin-right:5px;
+  margin:10px 5px;
 }
 
 .gsa-footer a {

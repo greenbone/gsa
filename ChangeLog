@@ -1,5 +1,9 @@
 2016-02-08  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/css/gsa-style.css (.footer): Adjust margins for the footer.
+
+2016-02-08  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/css/gsa-style.css: Reorder css definitions for main menu
 	(gb_menu).
 
