@@ -1,3 +1,8 @@
+2016-02-08  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/css/gsa-style.css: Fix width of highlighted entries in the
+	main menu (gb_menu).
+
 2016-02-05  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/js/gsa_graphics_base.js (Dashboard): Wait until
