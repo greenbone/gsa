@@ -560,6 +560,11 @@ td p {
   width: 14.2857143%; /* 100. / 7 */
 }
 
+#gb_menu ul > li:hover > a {
+  background-color: #99ce48;
+  color: #393637;
+}
+
 #gb_menu ul li a {
   display: block;
   height: 35px;
