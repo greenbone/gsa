@@ -443,6 +443,7 @@ function DonutChartGenerator ()
         {
           URL.revokeObjectURL (html_table_url);
           html_table_data = null;
+          html_table_url = null;
         }
       var open_html_table = function ()
         {

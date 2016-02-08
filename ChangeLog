@@ -1,3 +1,14 @@
+2016-02-08  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/js/gsa_bar_chart.js (generate),
+	src/html/classic/js/gsa_bubble_chart.js (generate),
+	src/html/classic/js/gsa_cloud_chart.js (generate),
+	src/html/classic/js/gsa_donut_chart.js (generate),
+	src/html/classic/js/gsa_gantt_chart.js (generate),
+	src/html/classic/js/gsa_h_bar_chart.js (generate),
+	src/html/classic/js/gsa_line_chart.js (generate): Reset html_table_url
+	so the HTML table is updated when filter is changed.
+
 2016-02-08  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/css/gsa-style.css: Reenable highlighting of the hovered
