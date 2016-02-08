@@ -3718,40 +3718,6 @@ file_content_response (credentials_t *credentials,
       path = g_strconcat (relative_url, NULL);
     }
 
-  if (!strcmp (path, default_file))
-    {
-      time_t now;
-      gchar *xml;
-      char *res;
-      char ctime_now[200];
-      const char* accept_language;
-      gchar *language;
-
-      now = time (NULL);
-      ctime_r_strip_newline (&now, ctime_now);
-
-      accept_language = MHD_lookup_connection_value (connection,
-                                                     MHD_HEADER_KIND,
-                                                     "Accept-Language");
-      language = (accept_language_to_env_fmt (accept_language));
-      xml = login_xml (NULL,
-                       NULL,
-                       ctime_now,
-                       NULL,
-                       language
-                        ? language
-                        : DEFAULT_GSAD_LANGUAGE,
-                       guest_username ? guest_username : "");
-      g_free (language);
-      res = xsl_transform (xml, &response_data);
-      response = MHD_create_response_from_buffer (strlen (res), res,
-                                                  MHD_RESPMEM_MUST_COPY);
-      g_free (path);
-      g_free (xml);
-      g_free (res);
-      return response;
-    }
-
   file = fopen (path, "r"); /* flawfinder: ignore, this file is just
                                 read and sent */
 
@@ -4062,12 +4028,38 @@ request_handler (void *cls, struct MHD_Connection *connection,
 
       if (!strcmp (url, default_file))
         {
-          response = file_content_response (NULL,
-                                            connection, url,
-                                            &http_response_code,
-                                            &content_type,
-                                            &content_disposition);
+          time_t now;
+          gchar *xml;
+          char *res;
+          char ctime_now[200];
+          const char* accept_language;
+          gchar *language;
+          cmd_response_data_t response_data;
+          cmd_response_data_init (&response_data);
+
+          now = time (NULL);
+          ctime_r_strip_newline (&now, ctime_now);
+
+          accept_language = MHD_lookup_connection_value (connection,
+                                                         MHD_HEADER_KIND,
+                                                         "Accept-Language");
+          language = (accept_language_to_env_fmt (accept_language));
+          xml = login_xml (NULL,
+                           NULL,
+                           ctime_now,
+                           NULL,
+                           language
+                            ? language
+                            : DEFAULT_GSAD_LANGUAGE,
+                           guest_username ? guest_username : "");
+          g_free (language);
+          res = xsl_transform (xml, &response_data);
+          response = MHD_create_response_from_buffer (strlen (res), res,
+                                                  MHD_RESPMEM_MUST_COPY);
+          g_free (xml);
+          g_free (res);
           ADD_CONTENT_SECURITY_HEADERS (response);
+          cmd_response_data_reset (&response_data);
           return handler_send_response (connection,
                                         response,
                                         &content_type,
