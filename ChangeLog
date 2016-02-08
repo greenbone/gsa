@@ -1,5 +1,9 @@
 2016-02-08  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/css/gsa-style.css: Remove unnecessary style declartions.
+
+2016-02-08  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/css/gsa-style.css: Fix width of highlighted entries in the
 	main menu (gb_menu).
 

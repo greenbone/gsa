@@ -568,7 +568,6 @@ td p {
   color: #FFFFFF;
   text-decoration: none;
   font-weight: bold;
-  border: 
 }
 
 div.empty_top_button {
@@ -581,11 +580,6 @@ div.empty_top_button {
   color: #FFFFFF;
   text-decoration: none;
   font-weight: bold;
-}
-
-#gb_menu ul > li:hover > a {
-  background-color: #99ce48;
-  color: #393637;
 }
 
 #gb_menu ul.first_button_overlay,
