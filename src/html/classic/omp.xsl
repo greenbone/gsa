@@ -30479,7 +30479,7 @@ should not have received it.
       </xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
-  <div style="background-color: #EEEEEE;">
+  <div>
     <xsl:if test="/envelope/params/cmd!='get_report_section' or /envelope/params/report_section = 'results' or /envelope/params/report_section = 'summary'">
       <div class="pull-right">
         <form style="display: inline; margin: 0; vertical-align:middle;" action="" method="post" enctype="multipart/form-data">
@@ -31819,7 +31819,7 @@ var toggleFilter = function(){
             title="{gsa:i18n ('Download filtered Report', 'Report')}"
             src="/img/download.png"
 
-            style="margin-left:3px;"
+            style="margin-left:3px; vertical-align: middle;"
             alt="{gsa:i18n ('Download', 'Report')}"/>
   </form>
 </xsl:template>
@@ -31879,15 +31879,15 @@ var toggleFilter = function(){
       </xsl:choose>
     </xsl:otherwise>
   </xsl:choose>
-  <div class="small_inline_form" style="display:inline; margin-left: 7px" >
+  <div class="small_inline_form" style="display:inline; margin-left: 7px; vertical-align: text-bottom" >
     <xsl:call-template name="filtered-report-export-form"></xsl:call-template>
   </div>
-  <form style="display: inline; font-size: 0px; margin-left: 3px" action="/omp" method="post" enctype="multipart/form-data">
+  <form style="display: inline; font-size: 0px; margin-left: 3px; vertical-align: text-top" action="/omp" method="post" enctype="multipart/form-data">
     <input type="hidden" name="token" value="{/envelope/token}"/>
     <input type="hidden" name="caller" value="{/envelope/current_page}"/>
     <input type="hidden" name="cmd" value="create_asset"/>
     <input type="image" src="/img/add_to_assets.png" alt="{gsa:i18n ('Add to Assets', 'Assets')}"
-           name="Add to Assets" value="Add to Assets"
+           name="Add to Assets" value="Add to Assets" style="vertical-align: text-top"
            title="{gsa:i18n ('Add to Assets', 'Action Verb')}"/>
 
     <input type="hidden" name="report_id" value="{@id}"/>
@@ -31896,12 +31896,12 @@ var toggleFilter = function(){
     <input type="hidden" name="filter" value=""/>
     <input type="hidden" name="filt_id" value=""/>
   </form>
-  <form style="display: inline; font-size: 0px; margin-left: 3px" action="/omp" method="post" enctype="multipart/form-data">
+  <form style="display: inline; font-size: 0px; margin-left: 3px; vertical-align: text-top" action="/omp" method="post" enctype="multipart/form-data">
     <input type="hidden" name="token" value="{/envelope/token}"/>
     <input type="hidden" name="caller" value="{/envelope/current_page}"/>
     <input type="hidden" name="cmd" value="delete_asset"/>
     <input type="image" src="/img/remove_from_assets.png" alt="{gsa:i18n ('Remove from Assets', 'Assets')}"
-           name="Remove from Assets" value="Remove from Assets"
+           name="Remove from Assets" value="Remove from Assets" style="vertical-align: text-top"
            title="{gsa:i18n ('Remove from Assets', 'Action Verb')}"/>
 
     <input type="hidden" name="report_id" value="{@id}"/>

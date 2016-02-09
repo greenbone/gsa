@@ -1,3 +1,9 @@
+2016-02-09  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/css/gsa-style.css, src/html/classic/omp.xsl: Fix layout of
+	icons at the gb_window_part_center element. It would be better to rework this
+	layout completely but we'll get rid of the gb_window usage in future.
+
 2016-02-08  Benoît Allard  <benoit.allard@greenbone.net>
 
 	* src/gsad.c: Move the handling of the /login/login.html page out of
