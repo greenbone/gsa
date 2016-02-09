@@ -1,3 +1,11 @@
+2016-02-09  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (get_config_family): Request timeout and set
+	preferences_config_id, so that the config's timeout is returned.
+
+	* src/html/classic/omp.xsl (edit-config-family): Get the config's actual
+	timeout, now that it is available in the "all" list of NVTs.
+
 2016-02-09 Michael Meyer <michael.meyer@greenbone.net>
 
 	* src/html/classic/os.xml: Added Cisco CNU-OS.

@@ -12412,11 +12412,14 @@ get_config_family (credentials_t * credentials, params_t *params, int edit,
       if (openvas_server_sendf (&session,
                                 "<get_nvts"
                                 " details=\"1\""
+                                " timeout=\"1\""
                                 " family=\"%s\""
+                                " preferences_config_id=\"%s\""
                                 " preference_count=\"1\""
                                 " sort_field=\"%s\""
                                 " sort_order=\"%s\"/>",
                                 family,
+                                config_id,
                                 sort_field ? sort_field : "nvts.name",
                                 sort_order ? sort_order : "ascending")
           == -1)

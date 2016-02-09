@@ -14609,7 +14609,7 @@ should not have received it.
               <td>
                 <xsl:variable
                   name="timeout"
-                  select="../../../get_nvts_response/nvt[@oid=$id]/timeout"/>
+                  select="timeout"/>
                 <xsl:choose>
                   <xsl:when test="string-length($timeout) &gt; 0">
                     <xsl:value-of select="$timeout"/>
