@@ -68,23 +68,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </script>
 </xsl:template>
 
-<xsl:template name="js-create-chart-box">
-  <xsl:param name="parent_id" select="'top-visualization'"/>
-  <xsl:param name="container_id" select="'chart-box'"/>
-  <xsl:param name="width" select="433"/>
-  <xsl:param name="height" select="250"/>
-  <xsl:param name="container_width" select="concat ($width + 2, 'px')"/>
-  <xsl:param name="select_pref_id"/>
-  <xsl:param name="filter_pref_id"/>
-  create_chart_box ("<xsl:value-of select="gsa:escape-js ($parent_id)"/>",
-                    "<xsl:value-of select="gsa:escape-js ($container_id)"/>",
-                    <xsl:value-of select="number ($width)"/>,
-                    <xsl:value-of select="number ($height)"/>,
-                    "<xsl:value-of select="gsa:escape-js ($container_width)"/>",
-                    "<xsl:value-of select="gsa:escape-js ($select_pref_id)"/>",
-                    "<xsl:value-of select="gsa:escape-js ($filter_pref_id)"/>")
-</xsl:template>
-
 <xsl:template name="js-add-dashboard-filter">
   <xsl:param name="dashboard_name" select="'dashboard'"/>
   <xsl:param name="id" select="''"/>
