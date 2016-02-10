@@ -1,5 +1,10 @@
 2016-02-10  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/.jshintrc: Remove setting for ECMA script version 5. Its
+	the default for jshint.
+
+2016-02-10  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/.jscsrc: Add a config for jscs (http://jscs.info). jscss
 	a code style linter/formatter.
 

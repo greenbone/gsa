@@ -9,6 +9,5 @@
     "unused": true,
     "browser": true,
     "jquery": true,
-    "devel": true,
-    "esversion": 5
+    "devel": true
 }
