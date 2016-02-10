@@ -1,5 +1,12 @@
 2016-02-10  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classis/js/gsa_graphics_base.js: Use self invoking function to
+	create a javascript "module". Also use strict mode to ensure we are using es5
+	(for details see
+	http://ejohn.org/blog/ecmascript-5-strict-mode-json-and-more/).
+
+2016-02-10  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/graphics.xsl: Remove unused template js-create-chart-box.
 
 2016-02-10  Timo Pollmeier <timo.pollmeier@greenbone.net>
