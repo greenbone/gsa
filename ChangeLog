@@ -1,3 +1,16 @@
+2016-02-10  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/gsad_omp.c (create_credential_omp): Allow creating SNMP
+	credentials without privacy params.
+	(save_credential_omp): Add case for empty privacy_algorithm.
+
+	* src/gsad.c (init_validator): Allow empty credential_login and
+	privacy_algorithm.
+
+	* src/html/classic/omp.xsl (html-create-credential-form)
+	(html-edit-credential-form, credential [details]): Add "None" option
+	for privacy algorithm.
+
 2016-02-09  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (get_config_family): Request timeout and set

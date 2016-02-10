@@ -7401,6 +7401,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <input name="privacy_algorithm" value="des" type="radio"/>
                 DES
               </label>
+              <label>
+                <input name="privacy_algorithm" value="" type="radio"/>
+                <xsl:value-of select="gsa:i18n ('None', 'Privacy Algorithm')"/>
+              </label>
             </td>
           </tr>
           <tr>
@@ -7703,6 +7707,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   </xsl:choose>
                   DES
                 </label>
+                <label>
+                  <xsl:choose>
+                    <xsl:when test="commands_response/get_credentials_response/credential/privacy/algorithm = ''">
+                      <input name="privacy_algorithm" value="" type="radio" checked="1"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <input name="privacy_algorithm" value="" type="radio"/>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                  <xsl:value-of select="gsa:i18n ('None', 'Privacy Algorithm')"/>
+                </label>
               </td>
             </tr>
           </xsl:if>
@@ -7938,7 +7953,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </tr>
         <tr>
           <td><xsl:value-of select="gsa:i18n ('Privacy Algorithm', 'Auth Data')"/>:</td>
-          <td><xsl:value-of select="privacy/algorithm"/></td>
+          <td>
+            <xsl:choose>
+              <xsl:when test="privacy/algorithm != ''">
+                <xsl:value-of select="privacy/algorithm"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="gsa:i18n ('None', 'Privacy Algorithm')"/>
+              </xsl:otherwise>
+            </xsl:choose>
+          </td>
         </tr>
       </xsl:if>
     </table>

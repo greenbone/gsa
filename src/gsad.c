@@ -1176,7 +1176,7 @@ init_validator ()
   openvas_validator_add (validator, "condition",  "^[[:alnum:] ]{0,100}$");
   openvas_validator_add (validator, "credential_id", "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "create_credentials_type", "^(gen|pass|key)$");
-  openvas_validator_add (validator, "credential_login", "^[-_[:alnum:]\\.@\\\\]{1,40}$");
+  openvas_validator_add (validator, "credential_login", "^[-_[:alnum:]\\.@\\\\]{0,40}$");
   openvas_validator_add (validator, "condition_data:name", "^(.*){0,400}$");
   openvas_validator_add (validator, "condition_data:value", "(?s)^.*$");
   openvas_validator_add (validator, "cvss_av",       "^(L|A|N)$");
@@ -1275,7 +1275,7 @@ init_validator ()
   openvas_validator_add (validator, "preference:name",  "^([^[]*\\[[^]]*\\]:.*){0,400}$");
   openvas_validator_add (validator, "preference:value", "(?s)^.*$");
   openvas_validator_add (validator, "prev_action", "(?s)^.*$");
-  openvas_validator_add (validator, "privacy_algorithm",   "^(aes|des)$");
+  openvas_validator_add (validator, "privacy_algorithm",   "^(aes|des|)$");
   openvas_validator_add (validator, "private_key",      "(?s)^.*$");
   openvas_validator_add (validator, "protocol_format",  "^(html|rnc|xml)$");
   openvas_validator_add (validator, "pw",         "^[[:alnum:]]{1,10}$");

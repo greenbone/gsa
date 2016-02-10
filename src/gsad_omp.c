@@ -6191,34 +6191,58 @@ create_credential_omp (credentials_t * credentials, params_t *params,
           CHECK_PARAM_INVALID (privacy_algorithm,
                                 "Create Credential", "new_credential");
 
-          ret = ompf (credentials,
-                      &response,
-                      &entity,
-                      response_data,
-                      "<create_credential>"
-                      "<name>%s</name>"
-                      "<comment>%s</comment>"
-                      "<type>%s</type>"
-                      "<community>%s</community>"
-                      "<login>%s</login>"
-                      "<password>%s</password>"
-                      "<privacy>"
-                      "<password>%s</password>"
-                      "<algorithm>%s</algorithm>"
-                      "</privacy>"
-                      "<auth_algorithm>%s</auth_algorithm>"
-                      "<allow_insecure>%s</allow_insecure>"
-                      "</create_credential>",
-                      name,
-                      comment ? comment : "",
-                      type,
-                      community ? community : "",
-                      login ? login : "",
-                      password ? password : "",
-                      privacy_password ? privacy_password : "",
-                      privacy_algorithm ? privacy_algorithm : "",
-                      auth_algorithm ? auth_algorithm : "",
-                      allow_insecure);
+          if (privacy_password && strcmp (privacy_password, ""))
+            ret = ompf (credentials,
+                        &response,
+                        &entity,
+                        response_data,
+                        "<create_credential>"
+                        "<name>%s</name>"
+                        "<comment>%s</comment>"
+                        "<type>%s</type>"
+                        "<community>%s</community>"
+                        "<login>%s</login>"
+                        "<password>%s</password>"
+                        "<privacy>"
+                        "<password>%s</password>"
+                        "<algorithm>%s</algorithm>"
+                        "</privacy>"
+                        "<auth_algorithm>%s</auth_algorithm>"
+                        "<allow_insecure>%s</allow_insecure>"
+                        "</create_credential>",
+                        name,
+                        comment ? comment : "",
+                        type,
+                        community ? community : "",
+                        login ? login : "",
+                        password ? password : "",
+                        privacy_password ? privacy_password : "",
+                        privacy_algorithm ? privacy_algorithm : "",
+                        auth_algorithm ? auth_algorithm : "",
+                        allow_insecure);
+          else
+            ret = ompf (credentials,
+                        &response,
+                        &entity,
+                        response_data,
+                        "<create_credential>"
+                        "<name>%s</name>"
+                        "<comment>%s</comment>"
+                        "<type>%s</type>"
+                        "<community>%s</community>"
+                        "<login>%s</login>"
+                        "<password>%s</password>"
+                        "<auth_algorithm>%s</auth_algorithm>"
+                        "<allow_insecure>%s</allow_insecure>"
+                        "</create_credential>",
+                        name,
+                        comment ? comment : "",
+                        type,
+                        community ? community : "",
+                        login ? login : "",
+                        password ? password : "",
+                        auth_algorithm ? auth_algorithm : "",
+                        allow_insecure);
         }
       else
         {
@@ -6790,14 +6814,24 @@ save_credential_omp (credentials_t * credentials, params_t *params,
     {
       xml_string_append (command,
                          "<privacy>");
-      if (privacy_algorithm)
-        xml_string_append (command,
-                           "<algorithm>%s</algorithm>",
-                           privacy_algorithm);
-      if (change_privacy_password)
-        xml_string_append (command,
-                           "<password>%s</password>",
-                           privacy_password);
+      if (privacy_algorithm && strcmp (privacy_algorithm, ""))
+        {
+          xml_string_append (command,
+                             "<algorithm>%s</algorithm>",
+                             privacy_algorithm);
+          if (change_privacy_password)
+            xml_string_append (command,
+                               "<password>%s</password>",
+                               privacy_password);
+        }
+      else if (privacy_algorithm)
+        {
+          xml_string_append (command,
+                             "<algorithm></algorithm>");
+          xml_string_append (command,
+                             "<password></password>");
+        }
+        
       xml_string_append (command,
                          "</privacy>");
     }
