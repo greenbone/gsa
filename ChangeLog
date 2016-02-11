@@ -1,5 +1,9 @@
 2016-02-11  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/gsad.xsl (i18n_po_path): Remove. No longer used.
+
+2016-02-11  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/help.xsl (my_settings.html): Add help for settings
 	"Dynamic Severity" and "Default Severity".
 
