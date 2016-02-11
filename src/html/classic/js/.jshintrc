@@ -9,5 +9,6 @@
     "unused": true,
     "browser": true,
     "jquery": true,
-    "devel": true
+    "devel": true,
+    "scripturl": true
 }

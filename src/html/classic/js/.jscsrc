@@ -1,6 +1,8 @@
 {
     "requireCamelCaseOrUpperCaseIdentifiers": null,
-    "requireCapitalizedConstructorsNew": true,
+    "requireCapitalizedConstructorsNew": {
+        "allExcept": ["String", "Number"],
+    },
     "disallowKeywordsOnNewLine": null,
     "maximumLineLength": {
       "value": 80,
@@ -75,4 +77,8 @@
     "requireDotNotation": true,
     "requireSemicolons": true,
     "validateParameterSeparator": ", ",
+    "requireObjectKeysOnNewLine": {
+        "allExcept": ["sameLine"]
+    },
+    "disallowSpaceBeforeComma": true
 }
