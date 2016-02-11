@@ -1,5 +1,10 @@
 2016-02-11  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_graphics_base.js: Update Copyright and add me as an
+	author.
+
+2016-02-11  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_graphics_base.js: Update JavaScript code for new
 	coding style requirements. This fixes most errors and warnings of jshint and
 	jscs.
