@@ -1,5 +1,11 @@
 2016-02-12  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/css/gsa-style.css (html): Add "overflow-y: scroll"
+	to always show scrollbar, preventing sudden, often difficult to handle
+	changes in page width due to the scrollbar appearing or disappearing.
+
+2016-02-12  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/js/gsa_graphics_base.js (DataSource): Remove unused
 	functions data_uri and last_uri. Fix sending OMP errors to controllers.
 
