@@ -4891,7 +4891,7 @@ save_container_task_omp (credentials_t * credentials, params_t *params,
 {
   gchar *format, *response, *html;
   const char *no_redirect, *comment, *name, *task_id;
-  const char *in_assets;
+  const char *in_assets, *auto_delete, *auto_delete_data;
   int ret;
   entity_t entity;
 
@@ -4900,10 +4900,14 @@ save_container_task_omp (credentials_t * credentials, params_t *params,
   in_assets = params_value (params, "in_assets");
   name = params_value (params, "name");
   task_id = params_value (params, "task_id");
+  auto_delete = params_value (params, "auto_delete");
+  auto_delete_data = params_value (params, "auto_delete_data");
   CHECK_PARAM_INVALID (name, "Save Task", "edit_task")
   CHECK_PARAM_INVALID (comment, "Save Task", "edit_task")
   CHECK_PARAM_INVALID (task_id, "Save Task", "edit_task")
   CHECK_PARAM_INVALID (in_assets, "Save Task", "edit_task")
+  CHECK_PARAM_INVALID (auto_delete, "Save Task", "edit_task");
+  CHECK_PARAM_INVALID (auto_delete_data, "Save Task", "edit_task");
 
   format = g_strdup_printf ("<modify_task task_id=\"%%s\">"
                             "<name>%%s</name>"
@@ -4913,6 +4917,14 @@ save_container_task_omp (credentials_t * credentials, params_t *params,
                             "<scanner_name>in_assets</scanner_name>"
                             "<value>%%s</value>"
                             "</preference>"
+                            "<preference>"
+                            "<scanner_name>auto_delete</scanner_name>"
+                            "<value>%%s</value>"
+                            "</preference>"
+                            "<preference>"
+                            "<scanner_name>auto_delete_data</scanner_name>"
+                            "<value>%%s</value>"
+                            "</preference>"
                             "</preferences>"
                             "</modify_task>");
 
@@ -4920,7 +4932,9 @@ save_container_task_omp (credentials_t * credentials, params_t *params,
   entity = NULL;
   ret = ompf (credentials, &response, &entity, response_data,
               format, task_id, name, comment,
-              strcmp (in_assets, "0") ? "yes" : "no");
+              strcmp (in_assets, "0") ? "yes" : "no",
+              auto_delete,
+              auto_delete_data);
   g_free (format);
   switch (ret)
     {

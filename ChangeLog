@@ -1,5 +1,10 @@
 2016-02-12  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad.c (save_container_task_omp): Send Auto Delete params with
+	MODIFY_TASK.
+
+2016-02-12  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Add task preference for auto deleting reports.
 
 	* src/gsad.c (init_validator): Add auto_delete and auto_delete_data.
