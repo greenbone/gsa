@@ -4078,7 +4078,7 @@ create_task_omp (credentials_t * credentials, params_t *params,
   const char *slave_id, *scanner_id, *schedule_id, *schedule_periods;
   const char *max_checks, *max_hosts;
   const char *in_assets, *submit, *hosts_ordering, *alterable, *source_iface;
-  const char *add_tag, *tag_name, *tag_value;
+  const char *add_tag, *tag_name, *tag_value, *auto_delete, *auto_delete_data;
   params_t *alerts;
   GString *alert_element;
 
@@ -4096,6 +4096,8 @@ create_task_omp (credentials_t * credentials, params_t *params,
   in_assets = params_value (params, "in_assets");
   max_checks = params_value (params, "max_checks");
   source_iface = params_value (params, "source_iface");
+  auto_delete = params_value (params, "auto_delete");
+  auto_delete_data = params_value (params, "auto_delete_data");
   max_hosts = params_value (params, "max_hosts");
   alterable = params_value (params, "alterable");
   add_tag = params_value (params, "add_tag");
@@ -4172,6 +4174,8 @@ create_task_omp (credentials_t * credentials, params_t *params,
   CHECK (in_assets);
   CHECK (max_checks);
   CHECK (source_iface);
+  CHECK (auto_delete);
+  CHECK (auto_delete_data);
   CHECK (max_hosts);
   CHECK (alterable);
   if (add_tag)
@@ -4237,6 +4241,14 @@ create_task_omp (credentials_t * credentials, params_t *params,
                              "<scanner_name>source_iface</scanner_name>"
                              "<value>%s</value>"
                              "</preference>"
+                             "<preference>"
+                             "<scanner_name>auto_delete</scanner_name>"
+                             "<value>%s</value>"
+                             "</preference>"
+                             "<preference>"
+                             "<scanner_name>auto_delete_data</scanner_name>"
+                             "<value>%s</value>"
+                             "</preference>"
                              "</preferences>"
                              "<alterable>%i</alterable>"
                              "</create_task>",
@@ -4254,6 +4266,8 @@ create_task_omp (credentials_t * credentials, params_t *params,
                              max_hosts,
                              strcmp (in_assets, "0") ? "yes" : "no",
                              source_iface,
+                             auto_delete,
+                             auto_delete_data,
                              alterable ? strcmp (alterable, "0") : 0);
 
   ret = omp (credentials,
@@ -4618,7 +4632,7 @@ save_task_omp (credentials_t * credentials, params_t *params,
   const char *comment, *name, *next, *schedule_id, *in_assets, *submit;
   const char *slave_id, *scanner_id, *task_id, *max_checks, *max_hosts;
   const char *config_id, *target_id, *hosts_ordering, *alterable, *source_iface;
-  const char *scanner_type, *schedule_periods;
+  const char *scanner_type, *schedule_periods, *auto_delete, *auto_delete_data;
   int ret;
   params_t *alerts;
   GString *alert_element;
@@ -4640,6 +4654,8 @@ save_task_omp (credentials_t * credentials, params_t *params,
   scanner_id = params_value (params, "scanner_id");
   max_checks = params_value (params, "max_checks");
   source_iface = params_value (params, "source_iface");
+  auto_delete = params_value (params, "auto_delete");
+  auto_delete_data = params_value (params, "auto_delete_data");
   max_hosts = params_value (params, "max_hosts");
   alterable = params_value (params, "alterable");
   CHECK_PARAM_INVALID (scanner_type, "Save Task", "edit_task");
@@ -4690,6 +4706,8 @@ save_task_omp (credentials_t * credentials, params_t *params,
       CHECK_PARAM_INVALID (task_id, "Edit Task", "edit_task");
       CHECK_PARAM_INVALID (max_checks, "Edit Task", "edit_task");
       CHECK_PARAM_INVALID (source_iface, "Edit Task", "edit_task");
+      CHECK_PARAM_INVALID (auto_delete, "Edit Task", "edit_task");
+      CHECK_PARAM_INVALID (auto_delete_data, "Edit Task", "edit_task");
       CHECK_PARAM_INVALID (max_hosts, "Edit Task", "edit_task");
       CHECK_PARAM_INVALID (in_assets, "Edit Task", "edit_task");
 
@@ -4714,6 +4732,8 @@ save_task_omp (credentials_t * credentials, params_t *params,
   CHECK_PARAM_INVALID (task_id, "Save Task", "edit_task");
   CHECK_PARAM_INVALID (max_checks, "Save Task", "edit_task");
   CHECK_PARAM_INVALID (source_iface, "Save Task", "edit_task");
+  CHECK_PARAM_INVALID (auto_delete, "Save Task", "edit_task");
+  CHECK_PARAM_INVALID (auto_delete_data, "Save Task", "edit_task");
   CHECK_PARAM_INVALID (max_hosts, "Save Task", "edit_task");
   CHECK_PARAM_INVALID (in_assets, "Save Task", "edit_task");
 
@@ -4771,6 +4791,14 @@ save_task_omp (credentials_t * credentials, params_t *params,
                             "<scanner_name>source_iface</scanner_name>"
                             "<value>%%s</value>"
                             "</preference>"
+                            "<preference>"
+                            "<scanner_name>auto_delete</scanner_name>"
+                            "<value>%%s</value>"
+                            "</preference>"
+                            "<preference>"
+                            "<scanner_name>auto_delete_data</scanner_name>"
+                            "<value>%%s</value>"
+                            "</preference>"
                             "</preferences>"
                             "%s%i%s"
                             "</modify_task>",
@@ -4798,7 +4826,9 @@ save_task_omp (credentials_t * credentials, params_t *params,
               max_checks,
               max_hosts,
               strcmp (in_assets, "0") ? "yes" : "no",
-              source_iface);
+              source_iface,
+              auto_delete,
+              auto_delete_data);
   g_free (format);
 
   g_string_free (alert_element, TRUE);
@@ -6831,7 +6861,7 @@ save_credential_omp (credentials_t * credentials, params_t *params,
           xml_string_append (command,
                              "<password></password>");
         }
-        
+
       xml_string_append (command,
                          "</privacy>");
     }

@@ -3916,6 +3916,25 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:choose>
         </td>
       </tr>
+      <tr>
+        <xsl:variable name="auto_delete" select="preferences/preference[scanner_name='auto_delete']/value"/>
+        <xsl:variable name="auto_delete_data" select="preferences/preference[scanner_name='auto_delete_data']/value"/>
+        <td>
+          <xsl:value-of select="gsa:i18n ('Auto Delete Reports', 'Task')"/>:
+        </td>
+        <td>
+          <xsl:choose>
+            <xsl:when test="$auto_delete = 'keep'">
+              <xsl:value-of select="gsa:i18n ('Automatically delete oldest reports but always keep newest ', 'Task')"/>
+              <xsl:value-of select="$auto_delete_data"/>
+              <xsl:value-of select="gsa:i18n (' reports', 'Task')"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="gsa:i18n ('Do not automatically delete reports', 'Task')"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </td>
+      </tr>
       <xsl:if test="target/@id != ''">
         <tr>
           <td><xsl:value-of select="gsa:i18n ('Scanner', 'Scanner')"/>:</td>
@@ -5533,6 +5552,45 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </label>
           </td>
         </tr>
+        <tr>
+          <td><xsl:value-of select="gsa:i18n ('Auto Delete Reports', 'Task')"/></td>
+          <td colspan="2">
+            <xsl:variable name="auto_delete" select="/envelope/params/auto_delete"/>
+            <xsl:variable name="auto_delete_data" select="/envelope/params/auto_delete_data"/>
+            <div>
+              <label>
+                <xsl:choose>
+                  <xsl:when test="$auto_delete = 'keep'">
+                    <input type="radio" name="auto_delete" value="no"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="radio" name="auto_delete" value="no" checked="1"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+                <xsl:value-of select="gsa:i18n ('Do not automatically delete reports', 'Task')"/>
+              </label>
+            </div>
+            <div>
+              <label>
+                <xsl:choose>
+                  <xsl:when test="$auto_delete = 'keep'">
+                    <input type="radio" name="auto_delete" value="keep" checked="1"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="radio" name="auto_delete" value="keep"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+                <xsl:value-of select="gsa:i18n ('Automatically delete oldest reports but always keep newest ', 'Task')"/>
+                <div style="display: inline;">
+                  <input style="display: inline;"
+                         type="text" name="auto_delete_data" value="5"
+                         size="4" maxlength="5"/>
+                </div>
+                <xsl:value-of select="gsa:i18n (' reports', 'Task')"/>
+              </label>
+            </div>
+          </td>
+        </tr>
       </table>
 
       <table class="table-form">
@@ -6378,6 +6436,69 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </td>
     </tr>
   </xsl:if>
+  <tr>
+    <td><xsl:value-of select="gsa:i18n ('Auto Delete Reports', 'Task')"/></td>
+    <td colspan="2">
+      <xsl:variable name="auto_delete">
+        <xsl:choose>
+          <xsl:when test="string-length (/envelope/params/auto_delete) &gt; 0">
+            <xsl:value-of select="/envelope/params/auto_delete"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="commands_response/get_tasks_response/task/preferences/preference[scanner_name='auto_delete']/value"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:variable>
+      <xsl:variable name="auto_delete_data">
+        <xsl:choose>
+          <xsl:when test="string-length (/envelope/params/auto_delete_data) &gt; 0">
+            <xsl:value-of select="/envelope/params/auto_delete_data"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="commands_response/get_tasks_response/task/preferences/preference[scanner_name='auto_delete_data']/value"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:variable>
+      <div>
+        <label>
+          <xsl:choose>
+            <xsl:when test="$auto_delete = 'keep'">
+              <input type="radio" name="auto_delete" value="no"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <input type="radio" name="auto_delete" value="no" checked="1"/>
+            </xsl:otherwise>
+          </xsl:choose>
+          <xsl:value-of select="gsa:i18n ('Do not automatically delete reports', 'Task')"/>
+        </label>
+      </div>
+      <div>
+        <label>
+          <xsl:choose>
+            <xsl:when test="$auto_delete = 'keep'">
+              <input type="radio" name="auto_delete" value="keep" checked="1"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <input type="radio" name="auto_delete" value="keep"/>
+            </xsl:otherwise>
+          </xsl:choose>
+          <xsl:value-of select="gsa:i18n ('Automatically delete oldest reports but always keep newest ', 'Task')"/>
+          <div style="display: inline;">
+            <xsl:variable name="data">
+              <xsl:choose>
+                <xsl:when test="$auto_delete_data = 0">5</xsl:when>
+                <xsl:otherwise><xsl:value-of select="$auto_delete_data"/></xsl:otherwise>
+              </xsl:choose>
+            </xsl:variable>
+            <input style="display: inline;"
+                   type="text" name="auto_delete_data" value="{$data}"
+                   size="4" maxlength="5"/>
+          </div>
+          <xsl:value-of select="gsa:i18n (' reports', 'Task')"/>
+        </label>
+      </div>
+    </td>
+  </tr>
 </xsl:template>
 
 <xsl:template name="html-edit-task-openvas-options">

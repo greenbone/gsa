@@ -1,3 +1,15 @@
+2016-02-12  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add task preference for auto deleting reports.
+
+	* src/gsad.c (init_validator): Add auto_delete and auto_delete_data.
+
+	* src/gsad_omp.c (create_task_omp, save_task_omp): Pass auto delete
+	parameters to OMP.
+
+	* src/html/classic/omp.xsl (task [details], new_task)
+	(html-edit-task-scan-options): Add field Auto Delete Reports.
+
 2016-02-12  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/css/gsa-style.css (html): Add "overflow-y: scroll"
