@@ -1607,18 +1607,6 @@
       return my;
     };
 
-    /* Gets the current data URI for a given filter ID*/
-    my.data_uri = function(filterID) {
-      // FIXME data_uris is not defined
-      return data_uris[filterID];
-    };
-
-    /* Gets the URI of the last successful request for a given filter ID */
-    my.last_uri = function(filterID) {
-      // FIXME last_uris is not defined
-      return last_uris[filterID];
-    };
-
     /* Gets the Column data of the last successful request */
     my.column_info = function() {
       return column_info;
@@ -1788,12 +1776,16 @@
                       .attr('status_text');
 
                     if (omp_status !== '200') {
-                      // FIXME chart is not defined
-                      output_error(chart,
-                          'Error ' + omp_status +
-                          ': ' + omp_status_text,
-                          'OMP Error ' + omp_status +
-                          ': ' + omp_status_text);
+                      for (controllerID in ctrls) {
+                        if (!ctrls[controllerID].active) {
+                          continue;
+                        }
+                        output_error(ctrls[controllerID].controller,
+                            'Error ' + omp_status +
+                            ': ' + omp_status_text,
+                            'OMP Error ' + omp_status +
+                            ': ' + omp_status_text);
+                      }
                       return my;
                     }
 
@@ -1823,12 +1815,16 @@
                       .attr('status_text');
 
                     if (omp_status !== '200') {
-                      // FIXME chart is not defined
-                      output_error(chart,
-                          'Error ' + omp_status +
-                          ': ' + omp_status_text,
-                          'OMP Error ' + omp_status +
-                          ': ' + omp_status_text);
+                      for (controllerID in ctrls) {
+                        if (!ctrls[controllerID].active) {
+                          continue;
+                        }
+                        output_error(ctrls[controllerID].controller,
+                            'Error ' + omp_status +
+                            ': ' + omp_status_text,
+                            'OMP Error ' + omp_status +
+                            ': ' + omp_status_text);
+                      }
                       return my;
                     }
 

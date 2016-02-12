@@ -1,3 +1,8 @@
+2016-02-12  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/js/gsa_graphics_base.js (DataSource): Remove unused
+	functions data_uri and last_uri. Fix sending OMP errors to controllers.
+
 2016-02-12  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/js/gsa_graphics_base.js: Remove event listener for
