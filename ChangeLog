@@ -1,3 +1,8 @@
+2016-02-15 Michael Meyer <michael.meyer@greenbone.net>
+
+	* src/html/classic/os.xml:
+	Added Cisco UCOS.
+
 2016-02-12  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (save_container_task_omp): Send Auto Delete params with
