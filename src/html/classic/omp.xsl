@@ -6168,7 +6168,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <td><xsl:value-of select="gsa:i18n ('Alerts', 'Alert')"/></td>
       <td>
         <xsl:variable name="task_alerts" select="commands_response/get_tasks_response/task/alert"/>
-        <select name="alert_ids" multiple="multiple">
+        <select name="alert_ids:" multiple="multiple">
           <xsl:for-each select="commands_response/get_alerts_response/alert">
             <xsl:variable name="alert_id" select="@id"/>
             <xsl:choose>
