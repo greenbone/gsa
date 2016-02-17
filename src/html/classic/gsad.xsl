@@ -1843,7 +1843,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </a>
           <ul>
             <li class="pointy"></li>
-            <li id="secinfo_dashboard_button" style="display:none;"><a href="/omp?cmd=dashboard&amp;dashboard_name=secinfo&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('SecInfo Dashboard', 'Dashboard')"/></a></li>
+            <li id="secinfo_dashboard_button" style="display:none;"><a href="/omp?cmd=dashboard&amp;dashboard_name=secinfo&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('Dashboard', 'Dashboard')"/></a></li>
             <li id="secinfo_nvts_button"><a href="/omp?cmd=get_info&amp;info_type=nvt&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('NVTs', 'NVT')"/></a></li>
             <li><a href="/omp?cmd=get_info&amp;info_type=cve&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('CVEs', 'CVE')"/></a></li>
             <li><a href="/omp?cmd=get_info&amp;info_type=cpe&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('CPEs', 'CPE')"/></a></li>
@@ -1859,7 +1859,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
       <script type="text/javascript">
         document.getElementById ("secinfo_button").setAttribute ("href", "/omp?cmd=dashboard&amp;dashboard_name=secinfo&amp;token=<xsl:value-of select="/envelope/token"/>");
-        document.getElementById ("secinfo_button_overlay").innerHTML="<xsl:value-of select="gsa:i18n ('SecInfo Dashboard', 'Dashboard')"/>";
+        document.getElementById ("secinfo_button_overlay").innerHTML="<xsl:value-of select="gsa:i18n ('Dashboard', 'Dashboard')"/>";
         document.getElementById ("secinfo_dashboard_button").setAttribute ("style", "");
         document.getElementById ("secinfo_nvts_button").setAttribute ("class", "section_start");
       </script>
