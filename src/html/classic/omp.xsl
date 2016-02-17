@@ -4142,32 +4142,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </table>
   </div>
 
-  <xsl:if test="target/@id='' and gsa:may-op ('create_report')">
-    <div class="gb_window">
-      <div class="gb_window_part_left"></div>
-      <div class="gb_window_part_right"></div>
-      <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n ('Import Report', 'Task')"/>
-        <a href="/help/task_details.html?token={/envelope/token}#import_report" title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('Import Report', 'Task'))}">
-          <img src="/img/help.png"/>
-        </a>
-      </div>
-      <div class="gb_window_part_content">
-        <form action="/omp" method="post" enctype="multipart/form-data">
-          <div class="pull-right">
-            <input type="submit" name="submit" value="{gsa:i18n ('Add Report', 'Task')}"/>
-          </div>
-          <input type="hidden" name="token" value="{/envelope/token}"/>
-          <input type="hidden" name="cmd" value="create_report"/>
-          <input type="hidden" name="caller" value="{/envelope/current_page}"/>
-          <input type="hidden" name="next" value="get_task"/>
-          <input type="hidden" name="task_id" value="{@id}"/>
-          <input type="hidden" name="overrides" value="{apply_overrides}"/>
-          <input type="file" name="xml_file" size="30"/>
-        </form>
-      </div>
-    </div>
-  </xsl:if>
-
   <xsl:call-template name="user-tags-window">
     <xsl:with-param name="resource_type" select="'task'"/>
     <xsl:with-param name="tag_names" select="../../../get_tags_response"/>
