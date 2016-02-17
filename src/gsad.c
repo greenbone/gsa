@@ -4684,12 +4684,10 @@ request_handler (void *cls, struct MHD_Connection *connection,
             content_type = con_info->content_type;
           }
 
-          content_type = GSAD_CONTENT_TYPE_APP_XML;
           ret = send_response (connection, con_info->response,
               con_info->answercode,
               new_sid ? new_sid : "0",
               content_type,
-              /* con_info->content_type, */
               con_info->content_disposition,
               con_info->content_length);
         }
