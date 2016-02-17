@@ -1114,6 +1114,8 @@ init_validator ()
   /* Defined in RFC 2253. */
   openvas_validator_add (validator, "auth_method",  "^(0|1|2)$");
   openvas_validator_add (validator, "authdn",       "^.{0,200}%s.{0,200}$");
+  openvas_validator_add (validator, "auto_delete",       "^(no|keep)$");
+  openvas_validator_add (validator, "auto_delete_data",  "^(.*){0,10}$");
   openvas_validator_add (validator, "autofp",       "^(0|1|2)$");
   openvas_validator_add (validator, "autofp_value", "^(1|2)$");
   openvas_validator_add (validator, "boolean",    "^(0|1)$");
