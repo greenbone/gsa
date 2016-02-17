@@ -1,4 +1,11 @@
-2016-02-12  Matthew Mundell <matthew.mundell@greenbone.net>
+2016-02-17  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Backport r24368.
+
+	* src/gsad_omp.c (save_container_task_omp): Send Auto Delete params with
+	MODIFY_TASK.
+
+2016-02-17  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Backport r24366.
 
