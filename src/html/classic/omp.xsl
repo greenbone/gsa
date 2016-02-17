@@ -34879,19 +34879,11 @@ var toggleFilter = function(){
 </xsl:template>
 
 <xsl:template match="user" mode="edit">
-  <div class="gb_window">
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">
+  <div class="edit-dialog">
+    <div class="title">
        <xsl:value-of select="gsa:i18n ('Edit User', 'User')"/>
-       <xsl:call-template name="edit-header-icons">
-         <xsl:with-param name="cap-type" select="'User'"/>
-         <xsl:with-param name="type" select="'user'"/>
-         <xsl:with-param name="id"
-                         select="@id"/>
-       </xsl:call-template>
     </div>
-    <div class="gb_window_part_content">
+    <div class="content">
       <form action="/omp" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="save_user"/>
@@ -34899,9 +34891,9 @@ var toggleFilter = function(){
         <input type="hidden" name="next" value="{/envelope/params/next}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
         <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
-        <table cellspacing="0" cellpadding="3" width="100%" class="stripped">
+        <table class="table-form">
           <tr>
-            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Login Name', 'Auth Data')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Login Name', 'Auth Data')"/></td>
             <td>
               <input type="hidden" name="user_id" value="{@id}"/>
               <xsl:choose>
@@ -34917,7 +34909,7 @@ var toggleFilter = function(){
             </td>
           </tr>
           <tr>
-            <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Authentication', 'Auth Data')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Authentication', 'Auth Data')"/></td>
             <td>
               <xsl:choose>
                 <xsl:when test="sources/source/text() = 'ldap_connect'"></xsl:when>
@@ -34990,7 +34982,7 @@ var toggleFilter = function(){
             </td>
           </tr>
           <tr>
-            <td valign="top"><xsl:value-of select="gsa:i18n ('Host Access', 'User')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Host Access', 'User')"/></td>
             <td>
               <label>
                 <xsl:choose>
@@ -35013,13 +35005,13 @@ var toggleFilter = function(){
                   </xsl:otherwise>
                 </xsl:choose>
                 <xsl:value-of select="gsa:i18n ('Allow all and deny', 'User')"/>:
+                <input type="text" name="access_hosts" value="{hosts}" size="30"
+                      maxlength="2000"/>
               </label>
-              <input type="text" name="access_hosts" value="{hosts}" size="30"
-                     maxlength="2000"/>
             </td>
           </tr>
           <tr>
-            <td valign="top"><xsl:value-of select="gsa:i18n ('Interface Access', 'User')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Interface Access', 'User')"/></td>
             <td>
               <label>
                 <xsl:choose>
@@ -35042,14 +35034,9 @@ var toggleFilter = function(){
                   </xsl:otherwise>
                 </xsl:choose>
                 <xsl:value-of select="gsa:i18n ('Allow all and deny', 'User')"/>:
-              </label>
-              <input type="text" name="access_ifaces" value="{ifaces}" size="30"
-                     maxlength="2000"/>
-            </td>
-          </tr>
-          <tr>
-            <td colspan="2" style="text-align:right;">
-              <input type="submit" name="submit" value="{gsa:i18n ('Save User', 'User')}"/>
+                <input type="text" name="access_ifaces" value="{ifaces}" size="30"
+                      maxlength="2000"/>
+                </label>
             </td>
           </tr>
         </table>
