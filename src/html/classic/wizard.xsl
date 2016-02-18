@@ -225,10 +225,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
             <td>
               <xsl:variable name="config_id" select="../run_wizard_response/response/commands_response/get_settings_response/setting[name = 'Default OpenVAS Scan Config']/value"/>
+
               <select name="event_data:config_id">
                 <xsl:for-each select="../run_wizard_response/response/commands_response/get_configs_response/config">
                   <xsl:choose>
-                    <xsl:when test="@id = $config_id or (not($config_id) and @id = 'daba56c8-73ec-11df-a475-002264764cea')">
+                    <xsl:when test="@id = $config_id or (string-length ($config_id) = 0 and @id = 'daba56c8-73ec-11df-a475-002264764cea')">
                       <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
                     </xsl:when>
                     <xsl:otherwise>

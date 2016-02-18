@@ -3407,13 +3407,17 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
                           "<slave_id>%s</slave_id>"
                           "<target_id>%s</target_id>",
                           alert ? alert : "",
-                          openvas_config ? openvas_config : "",
+                          (openvas_config && strlen (openvas_config))
+                           ? openvas_config
+                           : "daba56c8-73ec-11df-a475-002264764cea",
                           osp_config ? osp_config : "",
                           openvas_scanner ? openvas_scanner : "",
                           osp_scanner ? osp_scanner : "",
                           schedule ? schedule : "",
                           slave ? slave : "",
-                          target ? target : "");
+                          (target && strlen (target))
+                           ? target
+                           : "b493b7a8-7489-11df-a3ec-002264764cea");
 
   g_free (schedule);
   g_free (slave);
@@ -9253,7 +9257,9 @@ new_target (credentials_t *credentials, params_t *params, const char *extra_xml,
                           "<smb_credential_id>%s</smb_credential_id>"
                           "<esxi_credential_id>%s</esxi_credential_id>"
                           "<snmp_credential_id>%s</snmp_credential_id>",
-                          port_list ? port_list : "",
+                          (port_list && strlen (port_list))
+                           ? port_list
+                           : "33d0cd82-57c6-11e1-8ed1-406186ea4fc5",
                           ssh_credential ? ssh_credential : "",
                           smb_credential ? smb_credential : "",
                           esxi_credential ? esxi_credential : "",
