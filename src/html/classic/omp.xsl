@@ -37709,6 +37709,8 @@ var toggleFilter = function(){
                 <xsl:with-param name="params">
                   <input type="hidden" name="next" value="get_assets"/>
                   <input type="hidden" name="asset_type" value="host"/>
+                  <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
+                  <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
                 </xsl:with-param>
               </xsl:call-template>
             </xsl:when>

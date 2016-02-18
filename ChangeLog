@@ -1,5 +1,9 @@
 2016-02-18  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/omp.xsl: Keep the current filter when deleting a host.
+
+2016-02-18  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/omp.xsl: Change import report dialog into an new style
 	dialog to fix layout issues.
 
