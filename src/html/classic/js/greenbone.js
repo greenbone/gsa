@@ -863,6 +863,30 @@
       datepicker.datepicker('setDate', curDate);
     }
 
+    doc.find('.datepicker').each(function() {
+      var elem = $(this);
+      var curDate = elem.find('.datepicker-month').val() +
+        '/' + elem.find('.datepicker-day').val() + '/' +
+        elem.find('.datepicker-year').val();
+      var button = elem.find('.datepicker-button').first();
+      button.datepicker({
+        showOn: 'button',
+        buttonImage: 'img/calendar.png',
+        buttonText: 'Select date',
+        altField: elem.find('.datepicker-value'),
+        altFormat: 'DD, d MM, yy',
+        minDate: curDate,
+        maxDate: '+3Y',
+        onClose: function() {
+          var date = button.datepicker('getDate');
+          elem.find('.datepicker-day').val(date.getDate());
+          elem.find('.datepicker-month').val(date.getMonth() + 1);
+          elem.find('.datepicker-year').val(date.getFullYear());
+        },
+      });
+      button.datepicker('setDate', curDate);
+    });
+
     var autorefresh = doc.find('#autorefresh');
     if (autorefresh.length){
       if (window.localStorage.getItem('autorefresh-interval')) {

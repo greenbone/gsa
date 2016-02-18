@@ -1362,9 +1362,10 @@ select[multiple] {
   left: 0;
 }
 
-#datevalue {
+#datevalue, .datepicker-value {
   border: none;
   background: none;
+  color: rgb(51, 51, 51);
 }
 
 .ui-datepicker-trigger {

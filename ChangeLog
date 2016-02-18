@@ -1,5 +1,13 @@
 2016-02-18  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/wizard.xsl,
+	src/html/classic/js/greenbone.js,
+	src/html/classic/css/gsa-style.css: Use datepicker for date selection in
+	advanced task wizard. The new datepicker activation is a bit more flexible as
+	before by using class attributes instead of hardcoded ids and input names.
+
+2016-02-18  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/wizard.xsl: Remove extra "Create Task" button from advanced
 	task wizard.
 
