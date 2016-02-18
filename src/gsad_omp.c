@@ -27774,8 +27774,9 @@ delete_asset_omp (credentials_t * credentials, params_t *params,
   gnutls_session_t session;
   int socket;
   gchar *html, *response, *resource_id;
-  const char *next_id;
+  const char *next_id, *no_redirect;
   entity_t entity;
+  gchar *next_url;
 
   if (params_value (params, "asset_id"))
     resource_id = g_strdup (params_value (params, "asset_id"));
@@ -27862,7 +27863,6 @@ delete_asset_omp (credentials_t * credentials, params_t *params,
                            "Diagnostics: Failure to read response from manager daemon.",
                            "/omp?cmd=get_tasks", response_data);
     }
-  free_entity (entity);
 
   openvas_server_close (socket, session);
 
@@ -27870,17 +27870,34 @@ delete_asset_omp (credentials_t * credentials, params_t *params,
 
   if (params_given (params, "next") == 0)
     params_add (params, "next", "get_asset");
-  html = next_page (credentials, params, response, response_data);
-  g_free (response);
-  if (html == NULL)
+
+  no_redirect = params_value (params, "no_redirect");
+  if (no_redirect && strcmp (no_redirect, "0"))
     {
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while deleting an asset. "
-                           "Diagnostics: Error in parameter next.",
-                           "/omp?cmd=get_tasks", response_data);
+      html = next_page (credentials, params, response, response_data);
+      if (html == NULL)
+        {
+          response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+          html = gsad_message (credentials,
+              "Internal error", __FUNCTION__, __LINE__,
+              "An internal error occurred while deleting an "
+              "asset. Diagnostics: Error in parameter next.",
+              "/omp?cmd=get_tasks", response_data);
+        }
     }
+  else
+    {
+      next_url = next_page_url (credentials, params,
+          NULL, "get_asset", "delete_asset",
+          entity_attribute (entity, "status"),
+          entity_attribute (entity, "status_text"));
+      response_data->redirect = next_url;
+
+      html = NULL;
+    }
+
+  g_free (response);
+  free_entity (entity);
   return html;
 }
 
