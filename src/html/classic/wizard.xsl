@@ -737,11 +737,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </td>
             </tr>
           </xsl:if>
-          <tr>
-            <td>
-              <input type="submit" name="submit" value="{gsa:i18n ('Create Task', 'Task')}"/>
-            </td>
-          </tr>
         </table>
       </div>
     </div>
