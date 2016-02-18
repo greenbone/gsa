@@ -1,5 +1,9 @@
 2016-02-18  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/gsad.c (init_validator): Add parentheses to ifaces_allow regexp.
+
+2016-02-18  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/gsad_omp.c (get_report): Build filter term instead of using old
 	separate command attributes.
 

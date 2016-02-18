@@ -1236,7 +1236,7 @@ init_validator ()
   openvas_validator_add (validator, "id",             "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "id_optional",    "^(--|[a-z0-9\\-]+)$");
   openvas_validator_add (validator, "id_or_empty",    "^(|[a-z0-9\\-]+)$");
-  openvas_validator_add (validator, "ifaces_allow", "^0|1$");
+  openvas_validator_add (validator, "ifaces_allow", "^(0|1)$");
   openvas_validator_add (validator, "installer",      "(?s)^.*$");
   openvas_validator_add (validator, "installer_sig",  "(?s)^.*$");
   openvas_validator_add (validator, "lang",
