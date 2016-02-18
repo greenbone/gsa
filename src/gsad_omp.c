@@ -13542,11 +13542,16 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
   const char *report_id, *sort_field, *sort_order, *result_id, *delta_report_id;
   const char *format_id, *first_result, *max_results, *host, *pos;
   const char *given_filt_id, *filt_id, *filter, *apply_filter, *report_section;
+  const char *build_filter, *filter_extra;
   const char *host_search_phrase, *host_levels;
   const char *host_first_result, *host_max_results;
   int ret;
   int ignore_filter, ignore_pagination;
+  gchar *built_filter;
   gchar *fname_format, *esc_response;
+
+  build_filter = params_value (params, "build_filter");
+  filter_extra = NULL; /* FIXME */
 
   if (params_given (params, "apply_filter")
       && params_valid (params, "apply_filter"))
@@ -14112,6 +14117,52 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
   if (filter == NULL)
     filter = "";
 
+  if ((build_filter && (strcmp (build_filter, "1") == 0))
+      || ((filter == NULL || strcmp (filter, "") == 0)
+          && (filter_extra == NULL || strcmp (filter_extra, "") == 0)))
+    {
+      built_filter
+        = g_strdup_printf ("autofp=%s"
+                           " apply_overrides=%i"
+                           " notes=%i"
+                           " overrides=%i"
+                           " result_hosts_only=%i"
+                           " first=%s"
+                           " rows=%s"
+                           " sort%s=%s"
+                           " levels=%s"
+                           " delta_states=%s"
+                           " min_cvss_base=%s"
+                           " min_qod=%s"
+                           " timezone=%s"
+                           " %s",
+                           strcmp (autofp, "0") ? autofp_value : "0",
+                           1 /* FIXME : add apply_overrides */,
+                           strcmp (notes, "0") ? 1 : 0,
+                           strcmp (overrides, "0") ? 1 : 0,
+                           strcmp (result_hosts_only, "0") ? 1 : 0,
+                           first_result,
+                           max_results,
+                           sort_order
+                            ? strcmp (sort_order, "ascending")
+                                ? "-reverse"
+                                : ""
+                            : ((sort_field == NULL
+                                || strcmp (sort_field, "type") == 0
+                                || strcmp (sort_field, "severity") == 0)
+                                ? "-reverse"
+                                : ""),
+                           sort_field ? sort_field : "severity",
+                           levels->str,
+                           delta_states->str,
+                           min_cvss_base,
+                           min_qod,
+                           zone,
+                           search_phrase);
+    }
+  else
+    built_filter = filter ? g_strdup (filter) : NULL;
+
   if (type && (strcmp (type, "prognostic") == 0))
     {
       host_search_phrase = params_value (params, "host_search_phrase");
@@ -14191,27 +14242,13 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
   if (ignore_filter)
     ret = openvas_server_sendf_xml (&session,
                                     " filt_id=\"0\""
-                                    " filter=\"\""
-                                    " pos=\"1\""
-                                    " autofp=\"0\""
-                                    " notes=\"1\""
-                                    " notes_details=\"1\""
-                                    " apply_overrides=\"1\""
-                                    " overrides=\"1\""
-                                    " overrides_details=\"1\""
-                                    " result_hosts_only=\"0\""
+                                    " filter=\"first=1 rows=-1"
+                                    "  result_hosts_only=0 apply_overrides=1"
+                                    "  notes=1 overrides=1"
+                                    "  sort-reverse=severity\""
                                     " report_id=\"%s\""
                                     " delta_report_id=\"%s\""
-                                    " format_id=\"%s\""
-                                    " first_result=\"1\""
-                                    " max_results=\"-1\""
-                                    " sort_field=\"severity\""
-                                    " sort_order=\"ascending\""
-                                    " levels=\"hmlgfd\""
-                                    " delta_states=\"\""
-                                    " search_phrase=\"\""
-                                    " min_cvss_base=\"\""
-                                    " min_qod=\"\"/>",
+                                    " format_id=\"%s\"/>",
                                     (type && ((strcmp (type, "assets") == 0)
                                               || (strcmp (type, "prognostic")
                                                   == 0)))
@@ -14227,35 +14264,15 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                                     " filt_id=\"%s\""
                                     " filter=\"%s\""
                                     " pos=\"%s\""
-                                    " autofp=\"%s\""
-                                    " notes=\"%i\""
                                     " notes_details=\"1\""
-                                    " apply_overrides=\"%i\""
-                                    " overrides=\"%i\""
                                     " overrides_details=\"1\""
-                                    " result_hosts_only=\"%i\""
                                     " report_id=\"%s\""
                                     " delta_report_id=\"%s\""
-                                    " format_id=\"%s\""
-                                    " first_result=\"%s\""
-                                    " max_results=\"%s\""
-                                    " sort_field=\"%s\""
-                                    " sort_order=\"%s\""
-                                    " levels=\"%s\""
-                                    " delta_states=\"%s\""
-                                    " search_phrase=\"%s\""
-                                    " min_cvss_base=\"%s\""
-                                    " min_qod=\"%s\""
-                                    " timezone=\"%s\"/>",
+                                    " format_id=\"%s\"/>",
                                     ignore_pagination,
                                     filt_id ? filt_id : "0",
-                                    filter ? filter : "",
+                                    built_filter ? built_filter : "",
                                     pos ? pos : "1",
-                                    strcmp (autofp, "0") ? autofp_value : "0",
-                                    strcmp (notes, "0") ? 1 : 0,
-                                    strcmp (overrides, "0") ? 1 : 0,
-                                    strcmp (overrides, "0") ? 1 : 0,
-                                    strcmp (result_hosts_only, "0") ? 1 : 0,
                                     (type && ((strcmp (type, "assets") == 0)
                                               || (strcmp (type, "prognostic")
                                                   == 0)))
