@@ -2432,21 +2432,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="html-import-report-form">
-  <div class="gb_window">
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">
+  <div class="edit-dialog">
+    <div class="title">
       <xsl:value-of select="gsa:i18n ('Import Report', 'Report')"/>
-      <a href="/help/new_report.html?token={/envelope/token}#importreport"
-         title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('Import Report', 'Report'))}">
-        <img src="/img/help.png"/>
-      </a>
-      <a href="/omp?cmd=get_reports&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-         title="{gsa:i18n ('Reports', 'Report')}" style="margin-left:3px;">
-        <img src="/img/list.png" alt="{gsa:i18n ('Reports', 'Report')}"/>
-      </a>
     </div>
-    <div class="gb_window_part_content">
+    <div class="content">
       <form action="/omp" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="import_report"/>
@@ -2457,13 +2447,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:if>
         <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-        <table cellspacing="0" cellpadding="3" width="100%">
+        <table class="table-form">
           <tr>
-            <td valign="top"><xsl:value-of select="gsa:i18n ('Report', 'Report')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Report', 'Report')"/></td>
             <td><input type="file" name="xml_file" size="30"/></td>
           </tr>
           <tr>
-            <td valign="top"><xsl:value-of select="gsa:i18n ('Container Task', 'Task')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('Container Task', 'Task')"/></td>
             <td>
               <xsl:variable name="task_id" select="/envelope/params/task_id"/>
               <select name="task_id">
@@ -2479,14 +2469,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 </xsl:for-each>
               </select>
               <a href="#" title="{ gsa:i18n('Create a new container task') }"
-                 class="new-action-icon" data-type="container_task" data-done="select[name=task_id]">
-                <img src="/img/new.png"/>
+                 class="icon new-action-icon" data-type="container_task" data-done="select[name=task_id]">
+                <img src="/img/new.png" class="valign-middle"/>
               </a>
-            </td>
-          </tr>
-          <tr>
-            <td colspan="2" style="text-align:right;">
-              <input type="submit" name="submit" value="{gsa:i18n ('Import Report', 'Report')}"/>
             </td>
           </tr>
         </table>
