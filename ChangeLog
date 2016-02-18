@@ -1,3 +1,9 @@
+2016-02-18  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Backport r24397.
+
+	* src/gsad.c (init_validator): Add parentheses to ifaces_allow regexp.
+
 2016-02-17  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Backport r24368.
