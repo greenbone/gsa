@@ -1,5 +1,13 @@
 2016-02-19  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_graphics_base.js:
+	(DashboardBox.my.createFilterSelector): Don't use a string to create a
+	javascript event handler. This is potentially insecure for script injection.
+	We must change the generation of event handlers via a string on several
+	additional code places later too.
+
+2016-02-19  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/graphics.xsl (js-add-dashboard-filter): Remove theunsed
 	and obsolete template js-add-dashboard-filter. The filters can be added
 	via html class dashboard-filter now.

@@ -1327,11 +1327,7 @@
         .append('select')
         .style('margin-left', '5px')
         .style('margin-right', '5px')
-        .style('vertical-align', 'middle')
-        .attr('onchange',
-            'gsa.dashboards ["' + dashboard.id() + '"]' +
-            '.component("' + id + '")' +
-            '.selectFilter (this.value, true, true)');
+        .style('vertical-align', 'middle');
 
       for (var filterIndex in filters) {
         var filter = filters [filterIndex];
@@ -1363,6 +1359,10 @@
       if (filterSelectElem) {
         $(filterSelectElem.node()).select2();
       }
+
+      $(filterSelectElem.node()).on('change', function() {
+        my.selectFilter(this.value, true, true);
+      });
     };
 
     dashboard.addControllersForComponent(my);
