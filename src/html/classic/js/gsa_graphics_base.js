@@ -64,7 +64,7 @@
     var prevFiltersString = filtersString;
     var lastRowIndex = 0;
     var lastBoxIndex = 0;
-    var currentResizeTimeout = null;
+    var currentResizeTimeout;
     var width = -1;
     var height = -1;
     var topTarget, bottomTarget;
@@ -93,10 +93,10 @@
     var maxPerRow = 4;
 
     // Controls element
-    var dashboardControls = null;
-    var startEditButton = null;
-    var stopEditButton = null;
-    var newComponentButton = null;
+    var dashboardControls;
+    var startEditButton;
+    var stopEditButton;
+    var newComponentButton;
 
     if (dashboardOpts) {
       if (dashboardOpts.controllersPrefID) {
@@ -221,11 +221,11 @@
     };
 
     my.unregisterBox = function(id) {
-      delete components [id];
+      delete components[id];
     };
 
     my.component = function(id) {
-      return components [id];
+      return components[id];
     };
 
     my.nextRowID = function() {
@@ -402,7 +402,7 @@
         = $(elem).find('.dashboard-row:not(".full")').last();
       var row;
       var box;
-      if (lastFreeRowElem [0]) {
+      if (lastFreeRowElem[0]) {
         row = rows[lastFreeRowElem.attr('id')];
         box = DashboardBox(row, defaultControllerString, defaultFilterString,
             dashboardOpts);
@@ -465,7 +465,7 @@
     };
 
     my.addControllerFactory = function(factoryName, factoryFunc) {
-      controllerFactories [factoryName] = factoryFunc;
+      controllerFactories[factoryName] = factoryFunc;
     };
 
     my.addFilter = function(filterID, filterName, filterTerm, filterType) {
@@ -485,7 +485,7 @@
 
     my.addFiltersForComponent = function(component) {
       for (var filterIndex in filters) {
-        var filter = filters [filterIndex];
+        var filter = filters[filterIndex];
         component.addFilter(filter.id, filter);
       }
     };
@@ -515,9 +515,8 @@
           height = undefined;
         }
 
-        my.addNewRow(rowControllersStringList [index],
-                      filtersString ? rowFiltersStringList [index] : null,
-                      height);
+        my.addNewRow(rowControllersStringList[index],
+            filtersString ? rowFiltersStringList[index] : null, height);
       }
       my.resize();
       my.redraw();
@@ -1621,10 +1620,7 @@
     };
 
     my.addRequest = function(controller, filter, gen_params) {
-      var filterID = '';
-      if (filter) {
-        filterID = filter.id;
-      }
+      var filterID = filter ? filter.id : '';
 
       if (requestingControllers[filterID] === undefined) {
         requestingControllers[filterID] = {};
@@ -1641,10 +1637,7 @@
     };
 
     my.removeRequest = function(controller, filter) {
-      var filterID = '';
-      if (filter) {
-        filterID = filter.id;
-      }
+      var filterID = filter ? filter.id : '';
 
       if (requestingControllers[filterID] &&
           requestingControllers[filterID][controller.id()]) {
@@ -1655,13 +1648,9 @@
     };
 
     my.checkRequests = function(filter) {
-      var filterID = '';
-      if (filter) {
-        filterID = filter.id;
-      }
-
+      var filterID = filter ? filter.id : '';
       var requestingCount
-            = Object.keys(requestingControllers [filterID]).length;
+            = Object.keys(requestingControllers[filterID]).length;
 
       if (requestingCount === 0) {
         if (activeRequests[filterID]) {
@@ -1681,7 +1670,7 @@
             data[filterID] = {};
           }
 
-          if (xml_data [filterID]) {
+          if (xml_data[filterID]) {
             for (var controllerID in requestingControllers[filterID]) {
               if (!requestingControllers[filterID][controllerID].active) {
                 continue;
@@ -1693,7 +1682,7 @@
 
               if (data[filterID][controllerID] === undefined) {
                 if (command === 'get_aggregate') {
-                  data [filterID][controllerID] = {
+                  data[filterID][controllerID] = {
                     original_xml: xml_select,
                     records: extract_simple_records(xml_select,
                         'aggregate group'),
@@ -2474,9 +2463,11 @@
       }
     }
 
-    var column_info = {group_columns: [severity_field],
-                        data_columns: [count_field],
-                        columns: {}};
+    var column_info = {
+      group_columns: [severity_field],
+      data_columns: [count_field],
+      columns: {}
+    };
 
     var bin_func = function(val) {
       if (val !== '' && Number(val) <= 0.0) {
@@ -2500,16 +2491,16 @@
       return record;
     });
 
-    column_info.columns [severity_field] =
+    column_info.columns[severity_field] =
       {
           name: severity_field,
-          type: old_data.column_info.columns [severity_field].type,
+          type: old_data.column_info.columns[severity_field].type,
           column: old_data.column_info.columns [severity_field].column,
-          stat: old_data.column_info.columns [severity_field].stat,
+          stat: old_data.column_info.columns[severity_field].stat,
           data_type: 'text'
         };
 
-    column_info.columns [count_field] =
+    column_info.columns[count_field] =
       {
           name: count_field,
           type: old_data.column_info.columns [count_field].type,
