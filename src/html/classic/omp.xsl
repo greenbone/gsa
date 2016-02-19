@@ -3535,6 +3535,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template name="task-icons">
   <xsl:param name="next" select="'get_tasks'"/>
   <xsl:param name="show-start-when-scheduled" select="false ()"/>
+  <xsl:param name="show-stop-when-scheduled" select="false ()"/>
   <xsl:choose>
     <xsl:when test="target/@id = ''">
       <a href="/omp?cmd=upload_report&amp;next=get_report&amp;task_id={@id}&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
@@ -3591,6 +3592,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:with-param>
             </xsl:call-template>
           </xsl:when>
+          <xsl:when test="status='Running'">
+          </xsl:when>
           <xsl:otherwise>
             <img class="icon" src="/img/start_inactive.png" alt="{gsa:i18n ('Start', 'Action Verb')}" title="{gsa:i18n ('Task is already active', 'Task')}"/>
           </xsl:otherwise>
@@ -3623,17 +3626,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:call-template>
     </xsl:otherwise>
   </xsl:choose>
-  <xsl:if test="string-length (/envelope/params/enable_stop) &gt; 0 and /envelope/params/enable_stop = 1">
-    <xsl:call-template name="stop-icon">
-      <xsl:with-param name="type">task</xsl:with-param>
-      <xsl:with-param name="id" select="@id"/>
-      <xsl:with-param name="params">
-        <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
-        <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-        <input type="hidden" name="next" value="{$next}"/>
-      </xsl:with-param>
-    </xsl:call-template>
-  </xsl:if>
+  <xsl:choose>
+    <xsl:when test="(string-length (/envelope/params/enable_stop) &gt; 0 and /envelope/params/enable_stop = 1) or (boolean ($show-stop-when-scheduled) and status='Running' and string-length(schedule/@id) &gt; 0)">
+      <xsl:call-template name="stop-icon">
+        <xsl:with-param name="type">task</xsl:with-param>
+        <xsl:with-param name="id" select="@id"/>
+        <xsl:with-param name="params">
+          <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
+          <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
+          <input type="hidden" name="next" value="{$next}"/>
+        </xsl:with-param>
+      </xsl:call-template>
+    </xsl:when>
+  </xsl:choose>
   <xsl:choose>
     <xsl:when test="target/@id = ''">
       <img src="/img/resume_inactive.png" alt="{gsa:i18n ('Resume', 'Action Verb')}" title="{gsa:i18n ('Task is a container', 'Task')}"
@@ -3744,6 +3749,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:call-template name="task-icons">
       <xsl:with-param name="next" select="'get_task'"/>
       <xsl:with-param name="show-start-when-scheduled" select="1"/>
+      <xsl:with-param name="show-stop-when-scheduled" select="1"/>
     </xsl:call-template>
     <xsl:call-template name="move_task_icon"/>
   </div>

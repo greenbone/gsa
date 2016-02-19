@@ -1,3 +1,11 @@
+2016-02-19  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Allow stopping scheduled Tasks on details page.
+
+	* src/html/classic/omp.xsl (task-icons): Add new parameter
+	show-stop-when-scheduled for showing stop button for scheduled tasks.
+	(task [details]): Add show-stop-when-scheduled param to task-icons.
+
 2016-02-19 Michael Meyer <michael.meyer@greenbone.net>
 
 	* src/html/classic/os.xml:
