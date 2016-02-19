@@ -247,6 +247,7 @@
     var self = this,
         data = new FormData(this.dialog.find('form')[0]);
     data.append('xml', 1);
+    data.append('no_redirect', 1);
     $.ajax({
       url: '/omp',
       data: data,

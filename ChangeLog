@@ -1,3 +1,11 @@
+2016-02-19  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/gsad_omp.c (response_from_entity): Do not set no_redirect on
+	errors.
+
+	* src/html/classic/js/greenbone.js (OMPDialog.prototype.postForm): Add
+	no_redirect parameter.
+
 2016-02-18  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (new_task): Provide sensible defaults for config and

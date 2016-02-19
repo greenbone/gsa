@@ -1366,8 +1366,6 @@ response_from_entity (credentials_t* credentials, params_t *params,
     }
   else
     {
-      /* don't redirect in error cases */
-      no_redirect = 1;
       set_http_status_from_entity (entity, response_data);
       next_url = next_page_url (credentials, params,
                                 override_fail_next, default_fail_next,
