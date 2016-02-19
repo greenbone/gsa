@@ -1864,14 +1864,14 @@
                   }
 
                   for (controllerID in ctrls) {
-                    if (!ctrls[controllerID].active) {
+                    var ctrl = ctrls[controllerID];
+                    if (!ctrl.active) {
                       continue;
                     }
-                    gen_params = ctrls[controllerID].gen_params;
-                    ctrls[controllerID].active = false;
-                    ctrls[controllerID]
-                      .controller
-                      .data_loaded(data[filterID][controllerID], gen_params);
+                    gen_params = ctrl.gen_params;
+                    ctrl.active = false;
+                    ctrl.controller.data_loaded(
+                        data[filterID][controllerID], gen_params);
                   }
                   delete activeRequests[filterID];
                 }

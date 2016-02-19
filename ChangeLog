@@ -1,5 +1,10 @@
 2016-02-19  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_graphics_base.js (DataSource.my.checkRequest):
+	Simplify code by storing the request controller object in a variable.
+
+2016-02-19  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_graphics_base.js (DataSource.my.sendRequest): Rename
 	function parameter chart to controller. We should use a consistend naming
 	scheme.
