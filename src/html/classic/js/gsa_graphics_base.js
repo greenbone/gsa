@@ -54,6 +54,11 @@
   function Dashboard(id, controllersString, heightsString, filtersString,
                       dashboardOpts) {
     function my() {}
+
+    if (heightsString !== undefined) {
+      // ensure a string
+      heightsString += '';
+    }
     var elem = $('#' + id)[0];
     var rows = {};
     var components = {};
