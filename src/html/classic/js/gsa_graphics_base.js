@@ -1742,6 +1742,12 @@
                       return;
                     }
                     else {
+                      if (error.status === 401) {
+                        // not authorized (anymore)
+                        // reload page to show login dialog
+                        window.location.reload();
+                        return;
+                      }
                       for (controllerID in ctrls) {
                         output_error(ctrls[controllerID].controller,
                             'HTTP error ' + error.status,
