@@ -1881,23 +1881,23 @@
     };
 
     /* Sends an HTTP request to get XML data.
-    * Once the data is loaded, the chart will be notified via the
+    * Once the data is loaded, the controller will be notified via the
     * data_loaded callback */
-    my.sendRequest = function(chart, filter, gen_params) {
+    my.sendRequest = function(ctrl, filter, gen_params) {
       var lastRequestedController
-        = chart.display().lastRequestedController();
+        = ctrl.display().lastRequestedController();
       var lastRequestedFilter
-        = chart.display().lastRequestedFilter();
+        = ctrl.display().lastRequestedFilter();
 
       if (lastRequestedController) {
         lastRequestedController
           .data_src()
             .removeRequest(lastRequestedController, lastRequestedFilter);
       }
-      my.addRequest(chart, filter, gen_params);
+      my.addRequest(ctrl, filter, gen_params);
 
       if (lastRequestedController &&
-          lastRequestedController.data_src() !== chart.data_src()) {
+          lastRequestedController.data_src() !== ctrl.data_src()) {
         lastRequestedController.data_src().checkRequests(lastRequestedFilter);
       }
 
