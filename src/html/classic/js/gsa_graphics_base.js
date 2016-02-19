@@ -335,6 +335,10 @@
         }
       }
       filtersString = filtersString.slice(0, -1);
+      my.saveFiltersString();
+    };
+
+    my.saveFiltersString = function() {
       if (filtersString !== prevFiltersString) {
         prevFiltersString = filtersString;
         if (filtersPrefID !== '') {
