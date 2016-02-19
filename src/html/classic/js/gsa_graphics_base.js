@@ -1489,7 +1489,7 @@
         gen_params = p_gen_params;
       }
 
-      data_src.request_data(this, filter, gen_params);
+      data_src.request_data(my, filter, gen_params);
     };
 
     /* Shows the "Loading ..." text in the display */
@@ -1499,7 +1499,7 @@
 
     /* Callback for when data has been loaded */
     my.data_loaded = function(data, gen_params) {
-      generator.generate(data, this, gen_params);
+      generator.generate(data, my, gen_params);
     };
 
     /* Construct URL for detached chart */
