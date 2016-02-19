@@ -1389,8 +1389,8 @@
   *  p_generator: The chart generator to use
   *  p_display:   The Display to use
   */
-  function Chart(p_data_src, p_generator, p_display,
-                  p_chart_name, p_label, p_icon, add_to_display,
+  function ChartController(p_data_src, p_generator, p_display,
+                  p_chart_name, p_label, p_icon,
                   p_chart_type, p_chart_template, p_gen_params, p_init_params) {
     var data_src = p_data_src;
     var generator = p_generator;
@@ -1558,7 +1558,7 @@
     return my;
   }
 
-  global.Chart = Chart;
+  global.ChartController = ChartController;
 
   /*
   * Data source (parameters for GSA request, XML response cache)

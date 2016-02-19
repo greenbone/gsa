@@ -1,5 +1,12 @@
 2016-02-19  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_graphics_base.js (Chart),
+	src/html/classic/graphics.xsl: Rename Chart function into ChartController.
+	Actually it is not the chart that displays the svg. It's the controller of
+	the diagram.
+
+2016-02-19  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_graphics_base.js (DataSource.my.checkRequest):
 	Simplify code by storing the request controller object in a variable.
 

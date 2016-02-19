@@ -405,7 +405,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:choose>
 
               // Create chart
-              return Chart (dataSource,
+              return ChartController(dataSource,
                             generator,
                             forComponent,
                             "<xsl:value-of select="gsa:escape-js ($chart_name)"/>",
@@ -508,7 +508,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               var generator = <xsl:value-of select="$chart_generator"/>;
 
               // Create chart controller
-              return Chart (dataSource,
+              return ChartController(dataSource,
                             generator,
                             forComponent,
                             "<xsl:value-of select="gsa:escape-js ($chart_name)"/>",
