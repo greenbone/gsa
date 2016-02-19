@@ -74,19 +74,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </script>
 </xsl:template>
 
-<xsl:template name="js-add-dashboard-filter">
-  <xsl:param name="dashboard_name" select="'dashboard'"/>
-  <xsl:param name="id" select="''"/>
-  <xsl:param name="name" select="''"/>
-  <xsl:param name="term" select="''"/>
-  <xsl:param name="type" select="''"/>
-  gsa.dashboards ["<xsl:value-of select="gsa:escape-js ($dashboard_name)"/>"]
-      .addFilter ("<xsl:value-of select="gsa:escape-js ($id)"/>",
-                  "<xsl:value-of select="gsa:escape-js ($name)"/>",
-                  unescapeXML ("<xsl:value-of select="gsa:escape-js ($term)"/>"),
-                  "<xsl:value-of select="gsa:escape-js ($type)"/>");
-</xsl:template>
-
 <xsl:template name="js-aggregate-data-source">
   <xsl:param name="data_source_name" select="'aggregate-source'"/>
 
