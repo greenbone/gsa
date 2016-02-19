@@ -8,7 +8,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2014 - 2006 Greenbone Networks GmbH
+ * Copyright (C) 2014 - 2016 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3274,15 +3274,244 @@
 
   global.blob_img_window = blob_img_window;
 
+  function get_selector_label(chart_type, chart_template, aggregate_type,
+      group_column) {
+    if (chart_template === 'info_by_class' ||
+        chart_template === 'recent_info_by_class') {
+      return resource_type_name_plural(aggregate_type) + ' by Severity Class';
+    }
+
+    if (chart_template === 'info_by_cvss' ||
+        chart_template === 'recent_info_by_cvss') {
+      return resource_type_name_plural(aggregate_type) + ' by CVSS';
+    }
+
+    if (chart_type === 'cloud') {
+      return resource_type_name_plural(aggregate_type) + ' ' +
+        field_name(group_column) + ' word cloud';
+    }
+
+    return resource_type_name_plural(aggregate_type) + ' by ' +
+      field_name(group_column);
+  }
+
+  function get_title_generator(chart_type, chart_template, aggregate_type,
+      group_column) {
+    if (chart_template === 'info_by_class' ||
+        chart_template === 'info_by_cvss') {
+      return title_total(resource_type_name_plural(aggregate_type) +
+            ' by severity', 'count');
+    }
+
+    if (chart_type === 'bubbles') {
+      return title_total(resource_type_name_plural(aggregate_type) +
+            ' by ' + field_name(group_column), 'size_value');
+    }
+
+    if (chart_type === 'cloud') {
+      return title_static(resource_type_name_plural(aggregate_type) +
+            ' ' + field_name(group_column) + ' word cloud');
+    }
+
+    return title_total(resource_type_name_plural(aggregate_type) +
+          ' by ' + field_name(group_column), 'count');
+  }
+
+  function get_chart_generator(chart_type, data_source, title_generator) {
+    var generators = {
+      'donut': global.DonutChartGenerator,
+      'bubbles': global.BubbleChartGenerator,
+      'cloud': global.CloudChartGenerator,
+      'horizontal_bar': global.HorizontalBarChartGenerator,
+      'line': global.LineChartGenerator,
+    };
+
+    var generator = generators[chart_type] || global.BarChartGenerator;
+    return generator(data_source).title(title_generator);
+  }
+
+  function create_data_source(data_source_name, aggregate_type, chart_template,
+      options) {
+    options = options !== undefined ? options : {};
+
+    var data_source_options = {
+      xml: 1,
+      aggregate_type: aggregate_type,
+    };
+
+    if (options.filter !== undefined) {
+      data_source_options.filter = options.filter;
+    }
+
+    if (options.filt_id !== undefined) {
+      data_source_options.filt_id = options.filt_id;
+    }
+
+    if (chart_template !== 'info_by_cvss' &&
+        chart_template !== 'info_by_class') {
+
+      data_source_options.data_column = options.data_column !== undefined ?
+        options.data_column : '';
+      data_source_options.group_column = options.group_column !== undefined ?
+        options.group_column : '';
+
+      if (!options.data_columns) {
+        data_source_options.data_columns = [];
+      }
+      else {
+        data_source_options.data_columns = options.data_columns.split(',');
+      }
+
+      if (!options.text_columns) {
+        data_source_options.text_columns = [];
+      }
+      else {
+        data_source_options.text_columns = options.text_columns.split(',');
+      }
+
+      if (options.sort_field) {
+        data_source_options.sort_field = options.sort_field;
+      }
+      if (options.sort_order) {
+        data_source_options.sort_order = options.sort_order;
+      }
+      if (options.first_group) {
+        data_source_options.first_group = options.first_group;
+      }
+      if (options.max_groups) {
+        data_source_options.max_groups = options.max_groups;
+      }
+      if (options.aggregate_mode) {
+        data_source_options.aggregate_mode = options.aggregate_mode;
+      }
+    }
+    else {
+      data_source_options.group_column = 'severity';
+    }
+
+    return DataSource('get_aggregate', data_source_options);
+  }
+
   function on_ready(doc) {
     doc = $(doc);
 
-    doc.find('.dashboard-filter').each(function() {
+    doc.find('.dashboard').each(function() {
       var elem = $(this);
-      var dashboard_name = elem.data('dashboard-name') || 'dashboard';
-      gsa.dashboards[dashboard_name].addFilter(elem.data('id'),
-          elem.data('name'),
-          unescapeXML(elem.data('term'), elem.data('type')));
+      var dashboard_name = elem.data('dashboard-name');
+
+      if (dashboard_name === undefined) {
+        // TODO remove when all dashboards are converted
+        return;
+      }
+
+      var dashboard = Dashboard(dashboard_name,
+          elem.data('controllers'), elem.data('heights'),
+          elem.data('filters-string'),
+          {
+            controllersPrefID: elem.data('controllers-pref-id'),
+            filtersPrefID: elem.data('filters-pref-id'),
+            heightsPrefID: elem.data('heights-pref-id'),
+            filter: '',
+            filt_id: '',
+            max_components: 8,
+            defaultControllerString: elem.data('default-controller-string'),
+            dashboardControls: $('#' + elem.data('dashboard-controls'))[0]
+          }
+      );
+
+      elem.find('.dashboard-filter').each(function() {
+        var elem = $(this);
+        dashboard.addFilter(elem.data('id'), elem.data('name'),
+            unescapeXML(elem.data('term')), elem.data('type'));
+      });
+
+      elem.find('.dashboard-controller').each(function() {
+        var elem = $(this);
+        var data_source_name = elem.data('source-name');
+        var chart_template = elem.data('chart-template');
+        var chart_type = elem.data('chart-type');
+        var chart_name = elem.data('chart-name');
+        var aggregate_type = elem.data('aggregate-type');
+        var group_column = elem.data('group-column');
+        var create_source = elem.data('create-source');
+
+        var gen_params = {extra: {}}; // TODO
+        var init_params = {}; // TODO
+
+        var selector_label = get_selector_label(chart_type,
+            chart_template, aggregate_type, group_column);
+
+        var title_generator = get_title_generator(chart_type, chart_template,
+            aggregate_type, group_column);
+
+        dashboard.addControllerFactory(chart_name, function(for_component) {
+          if (for_component === undefined) {
+            console.error('Component not defined');
+            return null;
+          }
+
+          var data_source = gsa.data_sources[data_source_name];
+
+          if (create_source === '1' || create_source === 1) {
+            data_source = create_data_source(data_source_name, aggregate_type,
+                chart_template, {
+                  group_column: group_column,
+                  data_column: elem.data('column'),
+                });
+
+            gsa.data_sources[data_source_name] = data_source;
+          }
+
+          if (data_source === undefined) {
+            console.error('Data source not found: ' + data_source_name);
+            return null;
+          }
+
+          var generator = get_chart_generator(chart_type, data_source,
+              title_generator);
+
+          if (chart_template === 'resource_type_counts') {
+            generator.data_transform(global.resource_type_counts);
+          }
+          else if (chart_template === 'qod_type_counts') {
+            generator.data_transform(global.qod_type_counts);
+          }
+          else if (chart_template === 'percentage_counts') {
+            generator.data_transform(global.percentage_counts);
+          }
+          else if (chart_template === 'info_by_class' ||
+              chart_template === 'recent_info_by_class') {
+            if (chart_type === 'donut') {
+              generator.data_transform(global.data_severity_level_counts)
+                .color_scale(global.severity_level_color_scale);
+            }
+            else {
+              generator.data_transform(global.data_severity_level_counts);
+            }
+          }
+          else if (chart_template === 'info_by_cvss' ||
+              chart_template === 'recent_info_by_cvss') {
+            if (chart_type === 'donut') {
+              generator.data_transform(data_severity_histogram);
+            }
+            else {
+              generator.data_transform(data_severity_histogram)
+                .bar_style(global.severity_bar_style('value',
+                      gsa.severity_levels.max_log, gsa.severity_levels.max_low,
+                      gsa.severity_levels.max_medium));
+            }
+          }
+
+          ChartController(data_source, generator, for_component,
+              chart_name, unescapeXML(selector_label),
+              '/img/charts/severity-bar-chart.png', chart_type,
+              chart_template, gen_params, init_params);
+        });
+      });
+
+      gsa.dashboards[dashboard_name] = dashboard;
+
+      dashboard.initComponentsFromString();
     });
   }
 

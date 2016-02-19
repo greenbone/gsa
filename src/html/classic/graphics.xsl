@@ -1130,26 +1130,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="dashboard" mode="secinfo">
-  <div class="section-header">
-    <h1>
-      <img class="icon icon-lg" src="/img/secinfo.svg" alt="SecInfo Dashboard"/>
-      <xsl:value-of select="gsa:i18n ('SecInfo Dashboard', 'Dashboard')"/>
-    </h1>
-  </div>
-  <div class="section-box">
-    <div id="secinfo-dashboard-controls" style="text-align:right;">
-    </div>
-    <div id="secinfo-dashboard">
-    </div>
-  </div>
-
-  <xsl:call-template name="init-d3charts"/>
+  <xsl:variable name="filters" select="get_filters_response/filter[type='SecInfo' or type='']"/>
   <xsl:variable name="default_controllers" select="'nvt_bar_chart|nvt_donut_chart#cve_bar_chart|cve_donut_chart'"/>
   <xsl:variable name="default_heights" select="'280#280'"/>
   <xsl:variable name="default_filters" select="'|#|'"/>
 
   <xsl:variable name="envelope" select="/envelope"/>
-  <xsl:variable name="filters" select="get_filters_response/filter[type='SecInfo' or type='']"/>
 
   <xsl:variable name="controllers_pref_id" select="'84ab32da-fe69-44d8-8a8f-70034cf28d4e'"/>
   <xsl:variable name="heights_pref_id" select="'42d48049-3153-43bf-b30d-72ca5ab1eb49'"/>
@@ -1185,332 +1171,181 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
+
+  <div class="section-header">
+    <h1>
+      <img class="icon icon-lg" src="/img/secinfo.svg" alt="SecInfo Dashboard"/>
+      <xsl:value-of select="gsa:i18n ('SecInfo Dashboard', 'Dashboard')"/>
+    </h1>
+  </div>
+  <div class="section-box">
+    <div id="secinfo-dashboard-controls" style="text-align:right;">
+    </div>
+    <div id="secinfo-dashboard" class="dashboard" data-dashboard-name="secinfo-dashboard"
+      data-controllers="{$controllers}" data-heights="{$heights}"
+      data-filters-string="{$filters_string}" data-controllers-pref-id="{$controllers_pref_id}"
+      data-filters-pref-id="{$filters_pref_id}" data-heights-pref-id="{$heights_pref_id}"
+      data-default-controller-string="nvt_bar_chart"
+      data-dashboard-controls="secinfo-dashboard-controls">
+      <xsl:for-each select="$filters">
+        <span class="dashboard-filter" data-id="{@id}"
+          data-name="{name}"
+          data-term="{term}" data-type="{type}" />
+      </xsl:for-each>
+      <!-- NVTs -->
+      <span class="dashboard-controller" data-chart-name="nvt_bar_chart"
+        data-source-name="nvt_severity_src" data-aggregate-type="nvt"
+        data-chart-type="bar" data-chart-template="info_by_cvss"
+        data-create-source="1"/>
+      <span class="dashboard-controller" data-chart-name="nvt_donut_chart"
+        data-source-name="nvt_severity_src" data-aggregate-type="nvt"
+        data-chart-type="donut" data-chart-template="info_by_class"/>
+      <span class="dashboard-controller"
+        data-chart-name="nvt_timeline_chart" data-source-name="nvt_timeline_src"
+        data-aggregate-type="nvt" data-chart-type="line"
+        data-group-column="created"
+        data-create-source="1"/>
+      <span class="dashboard-controller"
+        data-chart-name="nvt_bubble_chart" data-source-name="nvt_families_src"
+        data-aggregate-type="nvt" data-chart-type="bubbles"
+        data-group-column="family" data-column="severity"
+        data-create-source="1"/>
+      <span class="dashboard-controller"
+        data-chart-name="nvt_qod_type" data-source-name="nvt_qod_type_src"
+        data-aggregate-type="nvt" data-group-column="qod_type"
+        data-chart-type="donut" data-chart-template="qod_type_counts"
+        data-create-source="1"/>
+      <span class="dashboard-controller"
+        data-chart-name="nvt_qod" data-source-name="nvt_qod_src"
+        data-aggregate-type="nvt" data-group-column="qod"
+        data-chart-type="donut" data-chart-template="percentage_counts"
+        data-create-source="1"/>
+      <!-- CVEs -->
+      <span class="dashboard-controller"
+        data-chart-name="cve_bar_chart" data-source-name="cve_severity_src"
+        data-aggregate-type="cve" data-chart-type="bar"
+        data-chart-template="info_by_cvss"
+        data-create-source="1"/>
+      <span class="dashboard-controller"
+        data-chart-name="cve_donut_chart" data-source-name="cve_severity_src"
+        data-aggregate-type="cve" data-chart-type="donut"
+        data-chart-template="info_by_class"
+        data-create-source="0"/>
+      <span class="dashboard-controller"
+        data-chart-name="cve_timeline_chart" data-source-name="cve_timeline_src"
+        data-aggregate-type="cve" data-chart-type="line"
+        data-group-column="created"
+        data-create-source="1"/>
+      <!-- CPEs -->
+      <span class="dashboard-controller"
+        data-chart-name="cpe_bar_chart" data-source-name="cpe_severity_src"
+        data-aggregate-type="cpe" data-chart-type="bar"
+        data-chart-template="info_by_cvss"
+        data-create-source="1"/>
+      <span class="dashboard-controller"
+        data-chart-name="cpe_donut_chart" data-source-name="cpe_severity_src"
+        data-aggregate-type="cpe" data-chart-type="donut"
+        data-chart-template="info_by_class"
+        data-create-source="0"/>
+      <span class="dashboard-controller"
+        data-chart-name="cpe_timeline_chart" data-source-name="cpe_timeline_src"
+        data-aggregate-type="cpe" data-chart-type="line"
+        data-group-column="created"
+        data-create-source="1"/>
+      <!-- OVAL Definitions -->
+      <span class="dashboard-controller"
+        data-chart-name="ovaldef_bar_chart"
+        data-source-name="ovaldef_severity_src"
+        data-aggregate-type="ovaldef" data-chart-type="bar"
+        data-chart-template="info_by_cvss"
+        data-create-source="1"/>
+      <span class="dashboard-controller"
+        data-chart-name="ovaldef_donut_chart"
+        data-source-name="ovaldef_severity_src"
+        data-aggregate-type="ovaldef" data-chart-type="donut"
+        data-chart-template="info_by_class"
+        data-create-source="0"/>
+      <span class="dashboard-controller"
+        data-chart-name="ovaldef_timeline_chart"
+        data-source-name="ovaldef_timeline_src"
+        data-aggregate-type="ovaldef" data-chart-type="line"
+        data-group-column="created"
+        data-create-source="1"/>
+      <span class="dashboard-controller"
+        data-chart-name="ovaldef_class_donut_chart"
+        data-source-name="ovaldef_class_src"
+        data-aggregate-type="ovaldef" data-chart-type="donut"
+        data-group-column="class"
+        data-create-source="1"/>
+      <!-- CERT Bund -->
+      <span class="dashboard-controller"
+        data-chart-name="cert_bund_adv_bar_chart"
+        data-source-name="cert_bund_adv_severity_src"
+        data-aggregate-type="cert_bund_adv" data-chart-type="bar"
+        data-chart-template="info_by_cvss"
+        data-create-source="1"/>
+      <span class="dashboard-controller"
+        data-chart-name="cert_bund_adv_donut_chart"
+        data-source-name="cert_bund_adv_severity_src"
+        data-aggregate-type="cert_bund_adv" data-chart-type="donut"
+        data-chart-template="info_by_class"
+        data-create-source="0"/>
+      <span class="dashboard-controller"
+        data-chart-name="cert_bund_adv_timeline_chart"
+        data-source-name="cert_bund_adv_timeline_src"
+        data-aggregate-type="cert_bund_adv" data-chart-type="line"
+        data-group-column="created"
+        data-create-source="1"/>
+      <!-- DFN CERT -->
+      <span class="dashboard-controller"
+        data-chart-name="dfn_cert_adv_bar_chart"
+        data-source-name="dfn_cert_adv_severity_src"
+        data-aggregate-type="dfn_cert_adv" data-chart-type="bar"
+        data-chart-template="info_by_cvss"
+        data-create-source="1"/>
+      <span class="dashboard-controller"
+        data-chart-name="dfn_cert_adv_donut_chart"
+        data-source-name="dfn_cert_adv_severity_src"
+        data-aggregate-type="dfn_cert_adv" data-chart-type="donut"
+        data-chart-template="info_by_class"
+        data-create-source="0"/>
+      <span class="dashboard-controller"
+        data-chart-name="dfn_cert_adv_timeline_chart"
+        data-source-name="dfn_cert_adv_timeline_src"
+        data-aggregate-type="dfn_cert_adv" data-chart-type="line"
+        data-group-column="created"
+        data-create-source="1"/>
+      <!-- All SecInfo -->
+      <span class="dashboard-controller"
+        data-chart-name="allinfo_chart"
+        data-source-name="allinfo_severity_src"
+        data-aggregate-type="allinfo" data-chart-type="bar"
+        data-chart-template="info_by_cvss"
+        data-create-source="1"/>
+      <span class="dashboard-controller"
+        data-chart-name="allinfo_donut_chart"
+        data-source-name="allinfo_severity_src"
+        data-aggregate-type="allinfo" data-chart-type="donut"
+        data-chart-template="info_by_class"
+        data-create-source="0"/>
+      <span class="dashboard-controller"
+        data-chart-name="allinfo_timeline_chart"
+        data-source-name="allinfo_timeline_src"
+        data-aggregate-type="allinfo" data-chart-type="line"
+        data-group-column="created"
+        data-create-source="1"/>
+      <span class="dashboard-controller"
+        data-chart-name="allinfo_by_info_type"
+        data-source-name="allinfo_by_info_type_src"
+        data-aggregate-type="allinfo" data-chart-type="donut"
+        data-group-column="type" data-chart-template="resource_type_counts"
+        data-create-source="1"/>
+    </div>
+  </div>
+
+  <xsl:call-template name="init-d3charts"/>
   <!-- TODO: Update data sources to support multiple filters and
              add filter selection to chart boxes again -->
-
-  <script>
-    // Create Dashboard and Filter selection
-    gsa.dashboards ["secinfo-dashboard"]
-      = Dashboard ("secinfo-dashboard",
-                   "<xsl:value-of select="gsa:escape-js ($controllers)"/>",
-                   "<xsl:value-of select="gsa:escape-js ($heights)"/>",
-                   "<xsl:value-of select="gsa:escape-js ($filters_string)"/>",
-                   {
-                     "controllersPrefID": "<xsl:value-of select="gsa:escape-js ($controllers_pref_id)"/>",
-                     "filtersPrefID": "<xsl:value-of select="gsa:escape-js ($filters_pref_id)"/>",
-                     "heightsPrefID": "<xsl:value-of select="gsa:escape-js ($heights_pref_id)"/>",
-                     "filter": "",
-                     "filt_id": "",
-                     "max_components": 8,
-                     "defaultControllerString": "nvt_bar_chart",
-                     "dashboardControls": $("#secinfo-dashboard-controls")[0]
-                   });
-
-    <xsl:for-each select="$filters">
-      <xsl:call-template name="js-add-dashboard-filter">
-        <xsl:with-param name="dashboard_name" select="'secinfo-dashboard'"/>
-        <xsl:with-param name="id" select="@id"/>
-        <xsl:with-param name="name" select="name"/>
-        <xsl:with-param name="term" select="term"/>
-        <xsl:with-param name="type" select="type"/>
-      </xsl:call-template>
-    </xsl:for-each>
-
-    // Create Data Sources and Controllers
-    // NVTs
-    <xsl:call-template name="js-aggregate-chart-factory">
-      <xsl:with-param name="chart_name" select="'nvt_bar_chart'"/>
-      <xsl:with-param name="dashboard_name" select="'secinfo-dashboard'"/>
-      <xsl:with-param name="data_source_name" select="'nvt_severity_src'"/>
-      <xsl:with-param name="aggregate_type" select="'nvt'"/>
-      <xsl:with-param name="chart_type" select="'bar'"/>
-      <xsl:with-param name="chart_template" select="'info_by_cvss'"/>
-      <xsl:with-param name="create_data_source" select="1"/>
-    </xsl:call-template>
-    <xsl:call-template name="js-aggregate-chart-factory">
-      <xsl:with-param name="chart_name" select="'nvt_donut_chart'"/>
-      <xsl:with-param name="dashboard_name" select="'secinfo-dashboard'"/>
-      <xsl:with-param name="data_source_name" select="'nvt_severity_src'"/>
-      <xsl:with-param name="aggregate_type" select="'nvt'"/>
-      <xsl:with-param name="chart_type" select="'donut'"/>
-      <xsl:with-param name="chart_template" select="'info_by_class'"/>
-      <xsl:with-param name="create_data_source" select="0"/>
-    </xsl:call-template>
-
-    <xsl:call-template name="js-aggregate-chart-factory">
-      <xsl:with-param name="chart_name" select="'nvt_timeline_chart'"/>
-      <xsl:with-param name="dashboard_name" select="'secinfo-dashboard'"/>
-      <xsl:with-param name="data_source_name" select="'nvt_timeline_src'"/>
-      <xsl:with-param name="aggregate_type" select="'nvt'"/>
-      <xsl:with-param name="chart_type" select="'line'"/>
-      <xsl:with-param name="group_column" select="'created'"/>
-      <xsl:with-param name="data_column" select="''"/>
-      <xsl:with-param name="chart_template" select="''"/>
-      <xsl:with-param name="create_data_source" select="1"/>
-    </xsl:call-template>
-
-    <xsl:call-template name="js-aggregate-chart-factory">
-      <xsl:with-param name="chart_name" select="'nvt_bubble_chart'"/>
-      <xsl:with-param name="dashboard_name" select="'secinfo-dashboard'"/>
-      <xsl:with-param name="data_source_name" select="'nvt_families_src'"/>
-      <xsl:with-param name="aggregate_type" select="'nvt'"/>
-      <xsl:with-param name="chart_type" select="'bubbles'"/>
-      <xsl:with-param name="group_column" select="'family'"/>
-      <xsl:with-param name="data_column" select="'severity'"/>
-      <xsl:with-param name="chart_template" select="''"/>
-      <xsl:with-param name="create_data_source" select="1"/>
-    </xsl:call-template>
-    <xsl:call-template name="js-aggregate-chart-factory">
-      <xsl:with-param name="chart_name" select="'nvt_solution_type'"/>
-      <xsl:with-param name="dashboard_name" select="'secinfo-dashboard'"/>
-      <xsl:with-param name="data_source_name" select="'nvt_solution_type_src'"/>
-      <xsl:with-param name="aggregate_type" select="'nvt'"/>
-      <xsl:with-param name="group_column" select="'solution_type'"/>
-      <xsl:with-param name="chart_type" select="'donut'"/>
-      <xsl:with-param name="chart_template" select="''"/>
-      <xsl:with-param name="create_data_source" select="1"/>
-    </xsl:call-template>
-    <xsl:call-template name="js-aggregate-chart-factory">
-      <xsl:with-param name="chart_name" select="'nvt_qod_type'"/>
-      <xsl:with-param name="dashboard_name" select="'secinfo-dashboard'"/>
-      <xsl:with-param name="data_source_name" select="'nvt_qod_type_src'"/>
-      <xsl:with-param name="aggregate_type" select="'nvt'"/>
-      <xsl:with-param name="group_column" select="'qod_type'"/>
-      <xsl:with-param name="chart_type" select="'donut'"/>
-      <xsl:with-param name="chart_template" select="'qod_type_counts'"/>
-      <xsl:with-param name="create_data_source" select="1"/>
-    </xsl:call-template>
-    <xsl:call-template name="js-aggregate-chart-factory">
-      <xsl:with-param name="chart_name" select="'nvt_qod'"/>
-      <xsl:with-param name="dashboard_name" select="'secinfo-dashboard'"/>
-      <xsl:with-param name="data_source_name" select="'nvt_qod_src'"/>
-      <xsl:with-param name="aggregate_type" select="'nvt'"/>
-      <xsl:with-param name="group_column" select="'qod'"/>
-      <xsl:with-param name="chart_type" select="'donut'"/>
-      <xsl:with-param name="chart_template" select="'percentage_counts'"/>
-      <xsl:with-param name="create_data_source" select="1"/>
-    </xsl:call-template>
-
-    // CVEs
-    <xsl:call-template name="js-aggregate-chart-factory">
-      <xsl:with-param name="chart_name" select="'cve_bar_chart'"/>
-      <xsl:with-param name="dashboard_name" select="'secinfo-dashboard'"/>
-      <xsl:with-param name="data_source_name" select="'cve_severity_src'"/>
-      <xsl:with-param name="aggregate_type" select="'cve'"/>
-      <xsl:with-param name="chart_type" select="'bar'"/>
-      <xsl:with-param name="chart_template" select="'info_by_cvss'"/>
-      <xsl:with-param name="auto_load" select="''"/>
-      <xsl:with-param name="create_data_source" select="1"/>
-    </xsl:call-template>
-    <xsl:call-template name="js-aggregate-chart-factory">
-      <xsl:with-param name="chart_name" select="'cve_donut_chart'"/>
-      <xsl:with-param name="dashboard_name" select="'secinfo-dashboard'"/>
-      <xsl:with-param name="data_source_name" select="'cve_severity_src'"/>
-      <xsl:with-param name="aggregate_type" select="'cve'"/>
-      <xsl:with-param name="chart_type" select="'donut'"/>
-      <xsl:with-param name="chart_template" select="'info_by_class'"/>
-      <xsl:with-param name="auto_load" select="0"/>
-      <xsl:with-param name="create_data_source" select="0"/>
-    </xsl:call-template>
-    <xsl:call-template name="js-aggregate-chart-factory">
-      <xsl:with-param name="chart_name" select="'cve_timeline_chart'"/>
-      <xsl:with-param name="dashboard_name" select="'secinfo-dashboard'"/>
-      <xsl:with-param name="data_source_name" select="'cve_timeline_src'"/>
-      <xsl:with-param name="aggregate_type" select="'cve'"/>
-      <xsl:with-param name="chart_type" select="'line'"/>
-      <xsl:with-param name="group_column" select="'created'"/>
-      <xsl:with-param name="data_column" select="''"/>
-      <xsl:with-param name="chart_template" select="''"/>
-      <xsl:with-param name="auto_load" select="0"/>
-      <xsl:with-param name="create_data_source" select="1"/>
-    </xsl:call-template>
-
-    // CPEs
-    <xsl:call-template name="js-aggregate-chart-factory">
-      <xsl:with-param name="chart_name" select="'cpe_bar_chart'"/>
-      <xsl:with-param name="dashboard_name" select="'secinfo-dashboard'"/>
-      <xsl:with-param name="data_source_name" select="'cpe_severity_src'"/>
-      <xsl:with-param name="aggregate_type" select="'cpe'"/>
-      <xsl:with-param name="chart_type" select="'bar'"/>
-      <xsl:with-param name="chart_template" select="'info_by_cvss'"/>
-      <xsl:with-param name="auto_load" select="''"/>
-      <xsl:with-param name="create_data_source" select="1"/>
-    </xsl:call-template>
-    <xsl:call-template name="js-aggregate-chart-factory">
-      <xsl:with-param name="chart_name" select="'cpe_donut_chart'"/>
-      <xsl:with-param name="dashboard_name" select="'secinfo-dashboard'"/>
-      <xsl:with-param name="data_source_name" select="'cpe_severity_src'"/>
-      <xsl:with-param name="aggregate_type" select="'cpe'"/>
-      <xsl:with-param name="chart_type" select="'donut'"/>
-      <xsl:with-param name="chart_template" select="'info_by_class'"/>
-      <xsl:with-param name="auto_load" select="0"/>
-      <xsl:with-param name="create_data_source" select="0"/>
-    </xsl:call-template>
-    <xsl:call-template name="js-aggregate-chart-factory">
-      <xsl:with-param name="chart_name" select="'cpe_timeline_chart'"/>
-      <xsl:with-param name="dashboard_name" select="'secinfo-dashboard'"/>
-      <xsl:with-param name="data_source_name" select="'cpe_timeline_src'"/>
-      <xsl:with-param name="aggregate_type" select="'cpe'"/>
-      <xsl:with-param name="chart_type" select="'line'"/>
-      <xsl:with-param name="group_column" select="'created'"/>
-      <xsl:with-param name="data_column" select="''"/>
-      <xsl:with-param name="chart_template" select="''"/>
-      <xsl:with-param name="auto_load" select="0"/>
-      <xsl:with-param name="create_data_source" select="1"/>
-    </xsl:call-template>
-
-    // OVAL Definitions
-    <xsl:call-template name="js-aggregate-chart-factory">
-      <xsl:with-param name="chart_name" select="'ovaldef_bar_chart'"/>
-      <xsl:with-param name="dashboard_name" select="'secinfo-dashboard'"/>
-      <xsl:with-param name="data_source_name" select="'ovaldef_severity_src'"/>
-      <xsl:with-param name="aggregate_type" select="'ovaldef'"/>
-      <xsl:with-param name="chart_type" select="'bar'"/>
-      <xsl:with-param name="chart_template" select="'info_by_cvss'"/>
-      <xsl:with-param name="create_data_source" select="1"/>
-    </xsl:call-template>
-    <xsl:call-template name="js-aggregate-chart-factory">
-      <xsl:with-param name="chart_name" select="'ovaldef_donut_chart'"/>
-      <xsl:with-param name="dashboard_name" select="'secinfo-dashboard'"/>
-      <xsl:with-param name="data_source_name" select="'ovaldef_severity_src'"/>
-      <xsl:with-param name="aggregate_type" select="'ovaldef'"/>
-      <xsl:with-param name="chart_type" select="'donut'"/>
-      <xsl:with-param name="chart_template" select="'info_by_class'"/>
-      <xsl:with-param name="create_data_source" select="0"/>
-    </xsl:call-template>
-    <xsl:call-template name="js-aggregate-chart-factory">
-      <xsl:with-param name="chart_name" select="'ovaldef_timeline_chart'"/>
-      <xsl:with-param name="dashboard_name" select="'secinfo-dashboard'"/>
-      <xsl:with-param name="data_source_name" select="'ovaldef_timeline_src'"/>
-      <xsl:with-param name="aggregate_type" select="'ovaldef'"/>
-      <xsl:with-param name="chart_type" select="'line'"/>
-      <xsl:with-param name="group_column" select="'created'"/>
-      <xsl:with-param name="data_column" select="''"/>
-      <xsl:with-param name="chart_template" select="''"/>
-      <xsl:with-param name="auto_load" select="0"/>
-      <xsl:with-param name="create_data_source" select="1"/>
-    </xsl:call-template>
-    <xsl:call-template name="js-aggregate-chart-factory">
-      <xsl:with-param name="chart_name" select="'ovaldef_class_donut_chart'"/>
-      <xsl:with-param name="dashboard_name" select="'secinfo-dashboard'"/>
-      <xsl:with-param name="data_source_name" select="'ovaldef_class_src'"/>
-      <xsl:with-param name="aggregate_type" select="'ovaldef'"/>
-      <xsl:with-param name="group_column" select="'class'"/>
-      <xsl:with-param name="chart_type" select="'donut'"/>
-      <xsl:with-param name="create_data_source" select="1"/>
-    </xsl:call-template>
-
-    // CERT Bund
-    <xsl:call-template name="js-aggregate-chart-factory">
-      <xsl:with-param name="chart_name" select="'cert_bund_adv_bar_chart'"/>
-      <xsl:with-param name="dashboard_name" select="'secinfo-dashboard'"/>
-      <xsl:with-param name="data_source_name" select="'cert_bund_adv_severity_src'"/>
-      <xsl:with-param name="aggregate_type" select="'cert_bund_adv'"/>
-      <xsl:with-param name="chart_type" select="'bar'"/>
-      <xsl:with-param name="chart_template" select="'info_by_cvss'"/>
-      <xsl:with-param name="create_data_source" select="1"/>
-    </xsl:call-template>
-    <xsl:call-template name="js-aggregate-chart-factory">
-      <xsl:with-param name="chart_name" select="'cert_bund_adv_donut_chart'"/>
-      <xsl:with-param name="dashboard_name" select="'secinfo-dashboard'"/>
-      <xsl:with-param name="data_source_name" select="'cert_bund_adv_severity_src'"/>
-      <xsl:with-param name="aggregate_type" select="'cert_bund_adv'"/>
-      <xsl:with-param name="chart_type" select="'donut'"/>
-      <xsl:with-param name="chart_template" select="'info_by_class'"/>
-      <xsl:with-param name="create_data_source" select="0"/>
-    </xsl:call-template>
-    <xsl:call-template name="js-aggregate-chart-factory">
-      <xsl:with-param name="chart_name" select="'cert_bund_adv_timeline_chart'"/>
-      <xsl:with-param name="dashboard_name" select="'secinfo-dashboard'"/>
-      <xsl:with-param name="data_source_name" select="'cert_bund_adv_timeline_src'"/>
-      <xsl:with-param name="aggregate_type" select="'cert_bund_adv'"/>
-      <xsl:with-param name="chart_type" select="'line'"/>
-      <xsl:with-param name="group_column" select="'created'"/>
-      <xsl:with-param name="data_column" select="''"/>
-      <xsl:with-param name="chart_template" select="''"/>
-      <xsl:with-param name="auto_load" select="0"/>
-      <xsl:with-param name="create_data_source" select="1"/>
-    </xsl:call-template>
-
-    // DFN CERT
-    <xsl:call-template name="js-aggregate-chart-factory">
-      <xsl:with-param name="chart_name" select="'dfn_cert_adv_bar_chart'"/>
-      <xsl:with-param name="dashboard_name" select="'secinfo-dashboard'"/>
-      <xsl:with-param name="data_source_name" select="'dfn_cert_adv_severity_src'"/>
-      <xsl:with-param name="aggregate_type" select="'dfn_cert_adv'"/>
-      <xsl:with-param name="chart_type" select="'bar'"/>
-      <xsl:with-param name="chart_template" select="'info_by_cvss'"/>
-      <xsl:with-param name="create_data_source" select="1"/>
-    </xsl:call-template>
-    <xsl:call-template name="js-aggregate-chart-factory">
-      <xsl:with-param name="chart_name" select="'dfn_cert_adv_donut_chart'"/>
-      <xsl:with-param name="dashboard_name" select="'secinfo-dashboard'"/>
-      <xsl:with-param name="data_source_name" select="'dfn_cert_adv_severity_src'"/>
-      <xsl:with-param name="aggregate_type" select="'dfn_cert_adv'"/>
-      <xsl:with-param name="chart_type" select="'donut'"/>
-      <xsl:with-param name="chart_template" select="'info_by_class'"/>
-      <xsl:with-param name="create_data_source" select="0"/>
-    </xsl:call-template>
-    <xsl:call-template name="js-aggregate-chart-factory">
-      <xsl:with-param name="chart_name" select="'dfn_cert_adv_timeline_chart'"/>
-      <xsl:with-param name="dashboard_name" select="'secinfo-dashboard'"/>
-      <xsl:with-param name="data_source_name" select="'dfn_cert_adv_timeline_src'"/>
-      <xsl:with-param name="aggregate_type" select="'dfn_cert_adv'"/>
-      <xsl:with-param name="chart_type" select="'line'"/>
-      <xsl:with-param name="group_column" select="'created'"/>
-      <xsl:with-param name="data_column" select="''"/>
-      <xsl:with-param name="chart_template" select="''"/>
-      <xsl:with-param name="auto_load" select="0"/>
-      <xsl:with-param name="create_data_source" select="1"/>
-    </xsl:call-template>
-
-    // All SecInfo
-    <xsl:call-template name="js-aggregate-chart-factory">
-      <xsl:with-param name="chart_name" select="'allinfo_chart'"/>
-      <xsl:with-param name="dashboard_name" select="'secinfo-dashboard'"/>
-      <xsl:with-param name="data_source_name" select="'allinfo_severity_src'"/>
-      <xsl:with-param name="aggregate_type" select="'allinfo'"/>
-      <xsl:with-param name="chart_type" select="'bar'"/>
-      <xsl:with-param name="chart_template" select="'info_by_cvss'"/>
-      <xsl:with-param name="create_data_source" select="1"/>
-    </xsl:call-template>
-    <xsl:call-template name="js-aggregate-chart-factory">
-      <xsl:with-param name="chart_name" select="'allinfo_donut_chart'"/>
-      <xsl:with-param name="dashboard_name" select="'secinfo-dashboard'"/>
-      <xsl:with-param name="data_source_name" select="'allinfo_severity_src'"/>
-      <xsl:with-param name="aggregate_type" select="'allinfo'"/>
-      <xsl:with-param name="chart_type" select="'donut'"/>
-      <xsl:with-param name="chart_template" select="'info_by_class'"/>
-      <xsl:with-param name="create_data_source" select="0"/>
-    </xsl:call-template>
-    <xsl:call-template name="js-aggregate-chart-factory">
-      <xsl:with-param name="chart_name" select="'allinfo_timeline_chart'"/>
-      <xsl:with-param name="dashboard_name" select="'secinfo-dashboard'"/>
-      <xsl:with-param name="data_source_name" select="'allinfo_timeline_src'"/>
-      <xsl:with-param name="aggregate_type" select="'allinfo'"/>
-      <xsl:with-param name="chart_type" select="'line'"/>
-      <xsl:with-param name="group_column" select="'created'"/>
-      <xsl:with-param name="data_column" select="''"/>
-      <xsl:with-param name="chart_template" select="''"/>
-      <xsl:with-param name="auto_load" select="0"/>
-      <xsl:with-param name="create_data_source" select="1"/>
-    </xsl:call-template>
-
-    <xsl:call-template name="js-aggregate-chart-factory">
-      <xsl:with-param name="chart_name" select="'allinfo-by-info-type'"/>
-      <xsl:with-param name="dashboard_name" select="'secinfo-dashboard'"/>
-      <xsl:with-param name="data_source_name" select="'allinfo-by-info-type-source'"/>
-      <xsl:with-param name="aggregate_type" select="'allinfo'"/>
-      <xsl:with-param name="group_column" select="'type'"/>
-      <xsl:with-param name="data_column" select="''"/>
-      <xsl:with-param name="chart_type" select="'donut'"/>
-      <xsl:with-param name="chart_template" select="'resource_type_counts'"/>
-      <xsl:with-param name="create_data_source" select="1"/>
-    </xsl:call-template>
-
-    gsa.dashboards["secinfo-dashboard"].initComponentsFromString ();
-  </script>
-
 </xsl:template>
 
 </xsl:stylesheet>

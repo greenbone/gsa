@@ -1535,6 +1535,10 @@ select[multiple] {
   vertical-align: middle;
 }
 
+.hidden, .dashboard-controller, .dashboard-filter {
+  display: none !important;
+}
+
 /* table for forms */
 .table-form {
   width: 100%;

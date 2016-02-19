@@ -1,5 +1,13 @@
 2016-02-19  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_graphics_base.js, src/html/classic/graphics.xsl:
+	Allow to init the secinfo dashboard per html class and data attributes. This
+	removes the requirement of generating possible insecure javascript per xslt
+	for the dashboard. Also it is easier to read and debug the code now.
+	* src/html/classic/css/gsa-style.css: Hide new dashboard data elements.
+
+2016-02-19  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_graphics_base.js (ChartController),
 	src/html/classic/graphics.xsl: Remove the paramter add_to_display from
 	ChartController. It is always true.
