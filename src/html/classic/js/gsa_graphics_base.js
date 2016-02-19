@@ -384,10 +384,10 @@
       if (controllersString !== null) {
         my.updateControllersString();
       }
-      if (heightsString !== null) {
+      if (heightsString !== null && heightsString !== undefined) {
         my.updateHeightsString();
       }
-      if (filtersString !== null) {
+      if (filtersString !== null && filtersString !== undefined) {
         my.updateFiltersString();
       }
     };

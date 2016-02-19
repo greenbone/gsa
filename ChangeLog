@@ -1,5 +1,10 @@
 2016-02-19  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_graphics_base.js (Dashboard): Fix checking if
+	heigtsString and FiltersString must be updated.
+
+2016-02-19  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_graphics_base.js (Dashboard): Ensure that
 	heightsString variable is always a string.
 
