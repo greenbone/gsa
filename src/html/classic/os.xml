@@ -414,6 +414,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          <pattern>cpe:/o:cisco:ucos</pattern><title>Cisco UCOS</title><icon>os_cisco.png</icon>
     </operating_system>
     <operating_system>
+         <pattern>cpe:/o:cisco:application_deployment_engine</pattern><title>Cisco ADE-OS</title><icon>os_cisco.png</icon>
+    </operating_system>
+    <operating_system>
         <pattern>cpe:/o:cyclades</pattern><title>Cyclades</title><icon>os_cyclades.png</icon>
     </operating_system>
     <operating_system>
