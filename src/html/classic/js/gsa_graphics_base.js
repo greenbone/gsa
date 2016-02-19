@@ -1406,9 +1406,7 @@
 
     function my() {}
 
-    if (add_to_display) {
-      display.addController(chart_name, my);
-    }
+    display.addController(chart_name, my);
 
     my.id = function() {
       return chart_name + '@' + display.id();

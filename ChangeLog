@@ -1,5 +1,11 @@
 2016-02-19  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_graphics_base.js (ChartController),
+	src/html/classic/graphics.xsl: Remove the paramter add_to_display from
+	ChartController. It is always true.
+
+2016-02-19  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_graphics_base.js (Chart),
 	src/html/classic/graphics.xsl: Rename Chart function into ChartController.
 	Actually it is not the chart that displays the svg. It's the controller of
