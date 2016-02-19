@@ -1484,12 +1484,12 @@
     };
 
     /* Delegates a data request to the data source */
-    my.request_data = function(filter, p_gen_params) {
+    my.sendRequest = function(filter, p_gen_params) {
       if (p_gen_params) {
         gen_params = p_gen_params;
       }
 
-      data_src.request_data(my, filter, gen_params);
+      data_src.sendRequest(my, filter, gen_params);
     };
 
     /* Shows the "Loading ..." text in the display */
@@ -1883,7 +1883,7 @@
     /* Sends an HTTP request to get XML data.
     * Once the data is loaded, the chart will be notified via the
     * data_loaded callback */
-    my.request_data = function(chart, filter, gen_params) {
+    my.sendRequest = function(chart, filter, gen_params) {
       var lastRequestedController
         = chart.display().lastRequestedController();
       var lastRequestedFilter
