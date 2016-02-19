@@ -36,6 +36,14 @@
 
   var gsa = global.gsa;
 
+  if (gsa.dashboards === undefined) {
+    gsa.dashboards = {};
+  }
+
+  if (gsa.data_sources === undefined) {
+    gsa.data_sources = {};
+  }
+
   // Default date and time formats
   gsa.date_format = global.d3.time.format.utc('%Y-%m-%d');
   gsa.datetime_format = global.d3.time.format.utc('%Y-%m-%d %H:%M');

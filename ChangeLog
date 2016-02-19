@@ -1,3 +1,8 @@
+2016-02-19  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/graphics.xsl, src/html/classic/js/gsa_graphics_base.js:
+	Initialize global gsa objects carefully. We can't ensure the loading order.
+
 2016-02-19  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Allow stopping scheduled Tasks on details page.
