@@ -3351,8 +3351,8 @@
     return generator(data_source).title(title_generator);
   }
 
-  function create_data_source(data_source_name, aggregate_type, chart_template,
-      options) {
+  function create_aggregate_data_source(data_source_name, aggregate_type,
+      chart_template, options) {
     options = options !== undefined ? options : {};
 
     var data_source_options = {
@@ -3476,8 +3476,8 @@
           var data_source = gsa.data_sources[data_source_name];
 
           if (create_source === '1' || create_source === 1) {
-            data_source = create_data_source(data_source_name, aggregate_type,
-                chart_template, {
+            data_source = create_aggregate_data_source(data_source_name,
+                aggregate_type, chart_template, {
                   group_column: group_column,
                   data_column: elem.data('column'),
                 });
