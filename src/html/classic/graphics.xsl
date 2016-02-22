@@ -1173,7 +1173,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       data-filters-string="{$filters_string}" data-controllers-pref-id="{$controllers_pref_id}"
       data-filters-pref-id="{$filters_pref_id}" data-heights-pref-id="{$heights_pref_id}"
       data-default-controller-string="nvt_bar_chart"
-      data-dashboard-controls="secinfo-dashboard-controls">
+      data-dashboard-controls="secinfo-dashboard-controls"
+      data-max-components="8">
       <xsl:for-each select="$filters">
         <span class="dashboard-filter" data-id="{@id}"
           data-name="{name}"
