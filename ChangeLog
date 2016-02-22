@@ -6,6 +6,12 @@
 
 2016-02-22  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_graphics_base.js: Rename ChartController to
+	create_chart_controller and also rename the internal my function to
+	controller.
+
+2016-02-22  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_graphics_base.js: Rename DataSource to
 	create_data_source. Also rename the internal my function to data_source.
 

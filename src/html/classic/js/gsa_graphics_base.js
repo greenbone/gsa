@@ -1410,7 +1410,7 @@
   *  p_generator: The chart generator to use
   *  p_display:   The Display to use
   */
-  function ChartController(p_data_src, p_generator, p_display,
+  function create_chart_controller(p_data_src, p_generator, p_display,
                   p_chart_name, p_label, p_icon,
                   p_chart_type, p_chart_template, p_gen_params, p_init_params) {
     var data_src = p_data_src;
@@ -1425,104 +1425,104 @@
     var icon = p_icon ? p_icon : '/img/help.png';
     var current_request = null;
 
-    function my() {}
+    function controller() {}
 
-    display.addController(chart_name, my);
+    display.addController(chart_name, controller);
 
-    my.id = function() {
+    controller.id = function() {
       return chart_name + '@' + display.id();
     };
 
     /* Gets or sets the data source */
-    my.data_src = function(value) {
+    controller.data_src = function(value) {
       if (!arguments.length) {
         return data_src;
       }
       data_src = value;
-      return my;
+      return controller;
     };
 
     /* Gets or sets the generator */
-    my.generator = function(value) {
+    controller.generator = function(value) {
       if (!arguments.length) {
         return generator;
       }
       generator = value;
-      return my;
+      return controller;
     };
 
     /* Gets or sets the display */
-    my.display = function(value) {
+    controller.display = function(value) {
       if (!arguments.length) {
         return display;
       }
       display = value;
-      return my;
+      return controller;
     };
 
     /* Gets the chart name */
-    my.chart_name = function() {
+    controller.chart_name = function() {
       return chart_name;
     };
 
     /* Gets or sets the label */
-    my.label = function(value) {
+    controller.label = function(value) {
       if (!arguments.length) {
         return label;
       }
       label = value;
-      return my;
+      return controller;
     };
 
     /* Gets or sets the icon */
-    my.icon = function(value) {
+    controller.icon = function(value) {
       if (!arguments.length) {
         return icon;
       }
       icon = value;
-      return my;
+      return controller;
     };
 
     /* Gets the chart type */
-    my.chart_type = function() {
+    controller.chart_type = function() {
       return chart_type;
     };
 
     /* Gets the chart template */
-    my.chart_template = function() {
+    controller.chart_template = function() {
       return chart_template;
     };
 
     /* Gets or sets the current request */
-    my.current_request = function(value) {
+    controller.current_request = function(value) {
       if (!arguments.length) {
         return current_request;
       }
       current_request = value;
-      return my;
+      return controller;
     };
 
     /* Delegates a data request to the data source */
-    my.sendRequest = function(filter, p_gen_params) {
+    controller.sendRequest = function(filter, p_gen_params) {
       if (p_gen_params) {
         gen_params = p_gen_params;
       }
 
-      data_src.sendRequest(my, filter, gen_params);
+      data_src.sendRequest(controller, filter, gen_params);
     };
 
     /* Shows the "Loading ..." text in the display */
-    my.show_loading = function() {
+    controller.show_loading = function() {
       generator.show_loading(display);
     };
 
     /* Callback for when data has been loaded */
-    my.data_loaded = function(data, gen_params) {
-      generator.generate(data, my, gen_params);
+    controller.data_loaded = function(data, gen_params) {
+      generator.generate(data, controller, gen_params);
     };
 
     /* Construct URL for detached chart */
-    my.detached_url = function() {
+    controller.detached_url = function() {
       var extra_params_str = '';
       var field;
       if (gen_params.x_field !== null && gen_params.x_field !== undefined) {
@@ -1574,10 +1574,11 @@
             extra_params_str;
     };
 
-    return my;
+    return controller;
   }
 
-  global.ChartController = ChartController;
+  global.create_chart_controller = create_chart_controller;
+  global.ChartController = create_chart_controller;
 
   /*
   * Data source (parameters for GSA request, XML response cache)
@@ -3526,7 +3527,7 @@
             }
           }
 
-          ChartController(data_source, generator, for_component,
+          create_chart_controller(data_source, generator, for_component,
               chart_name, unescapeXML(selector_label),
               '/img/charts/severity-bar-chart.png', chart_type,
               chart_template, gen_params, init_params);
