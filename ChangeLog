@@ -1,5 +1,11 @@
 2016-02-22  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_graphics_base.js (create_dashboard): Use an object
+	to return for a new dashboard. This allows to view the complete interface of
+	the dashboard.
+
+2016-02-22  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_graphics_base.js: Use jquery each function to
 	iterate over dashboard rows to update height, filters and controllers string.
 

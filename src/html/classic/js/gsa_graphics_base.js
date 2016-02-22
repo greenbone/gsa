@@ -53,8 +53,6 @@
   */
   function create_dashboard(id, controllersString, heightsString, filtersString,
                       dashboardOpts) {
-    function dashboard() {}
-
     if (heightsString !== undefined) {
       // ensure a string
       heightsString += '';
@@ -91,7 +89,7 @@
     // Controller String for new components
     var defaultControllerString = 'by-cvss';
     // Filter String for new components
-    var defaultFilterString = null;
+    var defaultFilterString;
     // Maximum number of components
     var maxComponents = 8;
     // Maximum number of components per row
@@ -130,73 +128,67 @@
       }
       if (dashboardOpts.dashboardControls) {
         dashboardControls = dashboardOpts.dashboardControls;
-
-        startEditButton = $('<a/>', {
-          href: '#',
-          on: {
-            click: function() {dashboard.startEdit();},
-          },
-        })
-        .append($('<img/>', {
-          src: 'img/edit.png',
-          alt: 'Edit Dashboard',
-          title: 'Edit Dashboard',
-        }))
-        .appendTo($(dashboardControls));
-
-        newComponentButton = $('<a/>', {
-          href: '#',
-          on: {
-            click: function() {dashboard.newComponent();},
-          }
-        })
-        .append($('<img/>', {
-          src: 'img/new.png',
-          alt: 'Add new Component',
-          title: 'Add new Component',
-        }))
-        .appendTo($(dashboardControls));
-
-        newComponentButton.hide();
-
-        stopEditButton = $('<a/>', {
-          href: '#',
-          on: {
-            click: function() {dashboard.stopEdit();},
-          }
-        })
-        .append($('<img/>', {
-          src: 'img/stop.png',
-          alt: 'Stop Editing',
-          title: 'Stop Editing',
-        }))
-        .appendTo($(dashboardControls));
-
-        stopEditButton.hide();
       }
     }
 
-    dashboard.id = function() {
+    var dashboard = {
+      id: get_id,
+      elem: get_elem,
+      editMode: edit_mode,
+      maxComponents: max_components,
+      maxPerRow: max_per_row,
+      addNewRow: add_new_row,
+      addToNewRow: add_to_new_row,
+      registerBox: register_box,
+      unregisterBox: unregister_box,
+      component: get_component,
+      nextRowID: get_next_row_id,
+      nextBoxID: get_next_box_id,
+      controllersString: get_controllers_string,
+      filtersString: get_filters_string,
+      updateControllersString: update_controllers_string,
+      updateHeightsString: update_heights_string,
+      updateFiltersString: update_filters_string,
+      saveFiltersString: save_filters_string,
+      removeRow: remove_row,
+      updateComponentCountClasses: update_component_count_classes,
+      updateRows: update_rows,
+      removeComponent: remove_component,
+      newComponent: new_component,
+      loadContent: load_content,
+      resized: resized,
+      resize: resize,
+      redraw: redraw,
+      addControllerFactory: add_controller_factory,
+      addFilter: add_filter,
+      addControllersForComponent: add_controllers_for_component,
+      addFiltersForComponent: add_filters_for_component,
+      initComponentsFromString: init_components_from_string,
+      startEdit: start_edit,
+      stopEdit: stop_edit,
+    };
+
+    function get_id() {
       return id;
-    };
+    }
 
-    dashboard.elem = function() {
+    function get_elem() {
       return elem[0];
-    };
+    }
 
-    dashboard.editMode = function() {
+    function edit_mode() {
       return editMode;
-    };
+    }
 
-    dashboard.maxComponents = function() {
+    function max_components() {
       return maxComponents;
-    };
+    }
 
-    dashboard.maxPerRow = function() {
+    function max_per_row() {
       return maxPerRow;
-    };
+    }
 
-    dashboard.addNewRow = function(options) {
+    function add_new_row(options) {
       if (options ===  undefined) {
         options = {};
       }
@@ -222,47 +214,47 @@
         row.startEdit();
       }
       return row;
-    };
+    }
 
-    dashboard.addToNewRow = function(componentID, position) {
+    function add_to_new_row(componentID, position) {
       var newRow = dashboard.addNewRow({position: position});
       $(newRow.elem()).append(components[componentID].elem());
       dashboard.resize();
       dashboard.redraw();
       dashboard.updateRows();
-    };
+    }
 
-    dashboard.registerBox = function(box) {
+    function register_box(box) {
       components[box.id()] = box;
-    };
+    }
 
-    dashboard.unregisterBox = function(id) {
+    function unregister_box(id) {
       delete components[id];
-    };
+    }
 
-    dashboard.component = function(id) {
+    function get_component(id) {
       return components[id];
-    };
+    }
 
-    dashboard.nextRowID = function() {
+    function get_next_row_id() {
       lastRowIndex ++;
       return id + '-row-' + lastRowIndex;
-    };
+    }
 
-    dashboard.nextBoxID = function() {
+    function get_next_box_id() {
       lastBoxIndex ++;
       return id + '-box-' + lastBoxIndex;
-    };
+    }
 
-    dashboard.controllersString = function() {
+    function get_controllers_string() {
       return controllersString;
-    };
+    }
 
-    dashboard.filtersString = function() {
+    function get_filters_string() {
       return filtersString;
-    };
+    }
 
-    dashboard.updateControllersString = function() {
+    function update_controllers_string() {
       controllersString = '';
 
       elem.find('.dashboard-row').each(function() {
@@ -296,9 +288,9 @@
         }
       }
       return controllersString;
-    };
+    }
 
-    dashboard.updateHeightsString = function() {
+    function update_heights_string() {
       heightsString = '';
 
       elem.find('.dashboard-row').each(function() {
@@ -331,9 +323,9 @@
         }
       }
       return heightsString;
-    };
+    }
 
-    dashboard.updateFiltersString = function() {
+    function update_filters_string() {
       if (filtersString === null || filtersString === undefined) {
         return;
       }
@@ -351,9 +343,9 @@
 
       filtersString = filtersString.slice(0, -1);
       dashboard.saveFiltersString();
-    };
+    }
 
-    dashboard.saveFiltersString = function() {
+    function save_filters_string() {
       if (filtersString !== prevFiltersString) {
         prevFiltersString = filtersString;
         if (filtersPrefID !== '') {
@@ -373,24 +365,24 @@
         }
       }
       return filtersString;
-    };
+    }
 
-    dashboard.removeRow = function(id) {
+    function remove_row(id) {
       $(rows[id].elem()).hide('blind', {}, 150, function() {
         $(rows[id].elem()).remove();
         dashboard.resize();
         dashboard.redraw();
         delete rows[id];
       });
-    };
+    }
 
-    dashboard.updateComponentCountClasses = function() {
+    function update_component_count_classes() {
       for (var item in rows) {
-        rows [item].updateComponentCountClasses();
+        rows[item].updateComponentCountClasses();
       }
-    };
+    }
 
-    dashboard.updateRows = function() {
+    function update_rows() {
       totalComponents = 0;
       for (var item in rows) {
         rows[item].updateComponents();
@@ -409,14 +401,14 @@
       if (filtersString !== null && filtersString !== undefined) {
         dashboard.updateFiltersString();
       }
-    };
+    }
 
-    dashboard.removeComponent = function(id) {
+    function remove_component(id) {
       components[id].row().removeComponent(id);
       dashboard.unregisterBox(id);
-    };
+    }
 
-    dashboard.newComponent = function() {
+    function new_component() {
       if (totalComponents >= maxComponents) {
         console.error('Maximum number of components reached');
         return;
@@ -449,15 +441,15 @@
       box.activateSelectors();
       box.selectController(box.controllerString(), false, true);
       dashboard.updateRows();
-    };
+    }
 
-    dashboard.loadContent = function() {
+    function load_content() {
       for (var item in rows) {
         rows[item].loadContent();
       }
-    };
+    }
 
-    dashboard.resized = function(checkHeight) {
+    function resized(checkHeight) {
       var dom_elem = elem[0];
       if (checkHeight) {
         if (width === dom_elem.clientWidth &&
@@ -475,51 +467,50 @@
       dashboard.resize();
       clearTimeout(currentResizeTimeout);
       currentResizeTimeout = setTimeout(dashboard.redraw, 50);
-    };
+    }
 
-    dashboard.resize = function() {
+    function resize() {
       for (var item in rows) {
         if (heightsString === null) {
           rows[item].height(elem[0].clientHeight);
         }
         rows[item].resize();
       }
-    };
+    }
 
-    dashboard.redraw = function() {
+    function redraw() {
       for (var item in rows) {
         rows[item].redraw();
       }
-    };
+    }
 
-    dashboard.addControllerFactory = function(factoryName, factoryFunc) {
+    function add_controller_factory(factoryName, factoryFunc) {
       controllerFactories[factoryName] = factoryFunc;
-    };
+    }
 
-    dashboard.addFilter = function(filterID, filterName, filterTerm,
-        filterType) {
+    function add_filter(filterID, filterName, filterTerm, filterType) {
       filters.push({
         id: filterID,
         name: filterName,
         term: filterTerm,
         type: filterType
       });
-    };
+    }
 
-    dashboard.addControllersForComponent = function(component) {
+    function add_controllers_for_component(component) {
       for (var factoryName in controllerFactories) {
         controllerFactories[factoryName](component);
       }
-    };
+    }
 
-    dashboard.addFiltersForComponent = function(component) {
+    function add_filters_for_component(component) {
       for (var filterIndex in filters) {
         var filter = filters[filterIndex];
         component.addFilter(filter.id, filter);
       }
-    };
+    }
 
-    dashboard.initComponentsFromString = function() {
+    function init_components_from_string() {
       var rowControllersStringList = [];
       if (controllersString) {
         rowControllersStringList = controllersString.split('#');
@@ -564,9 +555,9 @@
         components[item].activateSelectors();
       }
       dashboard.redraw();
-    };
+    }
 
-    dashboard.startEdit = function() {
+    function start_edit() {
       if (editMode) {
         return;
       }
@@ -583,9 +574,9 @@
         stopEditButton.show();
         newComponentButton.show();
       }
-    };
+    }
 
-    dashboard.stopEdit = function() {
+    function stop_edit() {
       if (!editMode) {
         return;
       }
@@ -602,23 +593,71 @@
         stopEditButton.hide();
         newComponentButton.hide();
       }
-    };
+    }
 
-    width = elem[0].clientWidth;
+    function init() {
+      if (dashboardControls) {
+        startEditButton = $('<a/>', {
+          href: '#',
+          on: {
+            click: function() {dashboard.startEdit();},
+          },
+        })
+        .append($('<img/>', {
+          src: 'img/edit.png',
+          alt: 'Edit Dashboard',
+          title: 'Edit Dashboard',
+        }))
+        .appendTo($(dashboardControls));
 
-    $(window).on('load', function() {
-      // Window resize
-      $(window).on('resize', function() {
-        console.log('Rezise ' + new Date());
-        dashboard.resized(false);
+        newComponentButton = $('<a/>', {
+          href: '#',
+          on: {
+            click: function() {dashboard.newComponent();},
+          }
+        })
+        .append($('<img/>', {
+          src: 'img/new.png',
+          alt: 'Add new Component',
+          title: 'Add new Component',
+        }))
+        .appendTo($(dashboardControls));
+
+        newComponentButton.hide();
+
+        stopEditButton = $('<a/>', {
+          href: '#',
+          on: {
+            click: function() {dashboard.stopEdit();},
+          }
+        })
+        .append($('<img/>', {
+          src: 'img/stop.png',
+          alt: 'Stop Editing',
+          title: 'Stop Editing',
+        }))
+        .appendTo($(dashboardControls));
+
+        stopEditButton.hide();
+      }
+
+      width = elem[0].clientWidth;
+
+      $(window).on('load', function() {
+        // Window resize
+        $(window).on('resize', function() {
+          dashboard.resized(false);
+        });
       });
-    });
 
-    // Drop targets for new rows
-    topTarget = create_dashboard_new_row_target(dashboard, 'top');
-    elem.prepend(topTarget.elem());
-    bottomTarget = create_dashboard_new_row_target(dashboard, 'bottom');
-    elem.append(bottomTarget.elem());
+      // add drop targets for new rows
+      topTarget = create_dashboard_new_row_target(dashboard, 'top');
+      elem.prepend(topTarget.elem());
+      bottomTarget = create_dashboard_new_row_target(dashboard, 'bottom');
+      elem.append(bottomTarget.elem());
+    }
+
+    init();
 
     return dashboard;
   }
