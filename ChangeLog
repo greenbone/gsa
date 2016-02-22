@@ -6,6 +6,11 @@
 
 2016-02-22  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_graphics_base.js: Remove jshint warning about
+	"Expected a conditional expression and instead saw an assignment.".
+
+2016-02-22  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_graphics_base.js: Pass more globally used variables
 	to encapsulating function. This allows a better minification and code
 	separation.

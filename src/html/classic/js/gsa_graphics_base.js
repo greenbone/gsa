@@ -2963,7 +2963,7 @@
                         .attr('x', x)
                         .attr('y', y);
       var word;
-      while (word = words.pop()) {
+      while ((word = words.pop())) {
         line.push(word);
         tspan.text(line.join(''));
         if (tspan.node().getComputedTextLength() > width) {
