@@ -6,6 +6,13 @@
 
 2016-02-22  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/.jshintrc: Update jshint config to ignore unused
+	function parameters. Sometimes unused parameters are required for callbacks.
+	Also don't allow to use variables before they have been defined. It is only
+	allowed to access functions before they are defined.
+
+2016-02-22  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_graphics_base.js (DashboardBox.my.redraw): Fix
 	redraw function of DashBoard. The used request_data function got renamed to
 	sendRequest.
