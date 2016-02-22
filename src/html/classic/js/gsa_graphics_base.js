@@ -1073,7 +1073,7 @@
       my.applySelect2();
       if (currentCtrlIndex >= 0) {
         controllers[currentCtrlIndex]
-          .request_data(filters [currentFilterIndex]);
+          .sendRequest(filters[currentFilterIndex]);
       }
     };
 
