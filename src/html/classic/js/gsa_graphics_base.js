@@ -1587,7 +1587,7 @@
   *  params:  parameters for the command
   *  prefix:  prefix for OMP commands
   */
-  function DataSource(command, params, prefix) {
+  function create_data_source(command, params, prefix) {
     prefix = (prefix === undefined) ? '/omp?' : prefix;
     params = (params === undefined) ? {} : params;
     var requestingControllers = {};
@@ -1596,29 +1596,29 @@
     var column_info = {};
     var data = {};
 
-    function my() {}
+    function data_source() {}
 
     /* Gets or sets the prefix */
-    my.prefix = function(value) {
+    data_source.prefix = function(value) {
       if (!arguments.length) {
         return prefix;
       }
       prefix = value;
-      return my;
+      return data_source;
     };
 
     /* Gets or sets the command name */
-    my.command = function(value) {
+    data_source.command = function(value) {
       if (!arguments.length) {
         return command;
       }
 
       command = value;
-      return my;
+      return data_source;
     };
 
     /* Gets or sets a parameter */
-    my.param = function(param_name, value) {
+    data_source.param = function(param_name, value) {
       if (!arguments.length) {
         return undefined;
       }
@@ -1628,26 +1628,26 @@
       else {
         params [param_name] = value;
       }
-      return my;
+      return data_source;
     };
 
     /* Gets the parameters array */
-    my.params = function() {
+    data_source.params = function() {
       return params;
     };
 
     /* Removes a parameter */
-    my.delete_param = function(param_name) {
+    data_source.delete_param = function(param_name) {
       delete params [param_name];
-      return my;
+      return data_source;
     };
 
     /* Gets the Column data of the last successful request */
-    my.column_info = function() {
+    data_source.column_info = function() {
       return column_info;
     };
 
-    my.addRequest = function(controller, filter, gen_params) {
+    data_source.addRequest = function(controller, filter, gen_params) {
       var filterID = filter ? filter.id : '';
 
       if (requestingControllers[filterID] === undefined) {
@@ -1664,7 +1664,7 @@
       controller.display().lastRequestedFilter(filter);
     };
 
-    my.removeRequest = function(controller, filter) {
+    data_source.removeRequest = function(controller, filter) {
       var filterID = filter ? filter.id : '';
 
       if (requestingControllers[filterID] &&
@@ -1675,7 +1675,7 @@
       controller.display().lastRequestedFilter(null);
     };
 
-    my.checkRequests = function(filter) {
+    data_source.checkRequests = function(filter) {
       var filterID = filter ? filter.id : '';
       var requestingCount
             = Object.keys(requestingControllers[filterID]).length;
@@ -1691,8 +1691,8 @@
           return;
         }
         else {
-          var data_uri = create_uri(my.command(),
-              filter, my.params(), my.prefix(), false);
+          var data_uri = create_uri(data_source.command(),
+              filter, data_source.params(), data_source.prefix(), false);
 
           if (data[filterID] === undefined) {
             data[filterID] = {};
@@ -1817,7 +1817,7 @@
                             'OMP Error ' + omp_status +
                             ': ' + omp_status_text);
                       }
-                      return my;
+                      return data_source;
                     }
 
                     xml_data[filterID] = xml_select;
@@ -1856,7 +1856,7 @@
                             'OMP Error ' + omp_status +
                             ': ' + omp_status_text);
                       }
-                      return my;
+                      return data_source;
                     }
 
                     xml_data[filterID] = xml_select;
@@ -1879,7 +1879,7 @@
                           'Internal error: Invalid request',
                           'Invalid request command: "' + command + '"');
                     }
-                    return my;
+                    return data_source;
                   }
 
                   for (controllerID in ctrls) {
@@ -1902,7 +1902,7 @@
     /* Sends an HTTP request to get XML data.
     * Once the data is loaded, the controller will be notified via the
     * data_loaded callback */
-    my.sendRequest = function(ctrl, filter, gen_params) {
+    data_source.sendRequest = function(ctrl, filter, gen_params) {
       var lastRequestedController
         = ctrl.display().lastRequestedController();
       var lastRequestedFilter
@@ -1913,24 +1913,25 @@
           .data_src()
             .removeRequest(lastRequestedController, lastRequestedFilter);
       }
-      my.addRequest(ctrl, filter, gen_params);
+      data_source.addRequest(ctrl, filter, gen_params);
 
       if (lastRequestedController &&
           lastRequestedController.data_src() !== ctrl.data_src()) {
         lastRequestedController.data_src().checkRequests(lastRequestedFilter);
       }
 
-      my.checkRequests(filter);
+      data_source.checkRequests(filter);
 
-      return my;
+      return data_source;
     };
 
-    my.command(command);
+    data_source.command(command);
 
-    return my;
+    return data_source;
   }
 
-  global.DataSource = DataSource;
+  global.create_data_source = create_data_source;
+  global.DataSource = create_data_source;
 
   /*
   * Generic helper functions
@@ -3410,7 +3411,7 @@
       data_source_options.group_column = 'severity';
     }
 
-    return DataSource('get_aggregate', data_source_options);
+    return create_data_source('get_aggregate', data_source_options);
   }
 
   function on_ready(doc) {
