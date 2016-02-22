@@ -187,19 +187,21 @@
       return maxPerRow;
     };
 
-    dashboard.addNewRow = function(rowControllersString, rowFiltersString,
-                            height, position) {
-      if (height === undefined) {
-        height = 280;
+    dashboard.addNewRow = function(options) {
+      if (options ===  undefined) {
+        options = {};
       }
-      else if (height < 150) {
-        height = 150;
+      if (options.height === undefined) {
+        options.height = 280;
       }
-      var row = DashboardRow(dashboard, rowControllersString, rowFiltersString,
-                              height, dashboardOpts);
+      else if (options.height < 150) {
+        options.height = 150;
+      }
+      var row = DashboardRow(dashboard, options.rowControllersString,
+          options.rowFiltersString, options.height, dashboardOpts);
       rows[row.id()] = row;
 
-      if (position !== undefined && position === 'top') {
+      if (options.position !== undefined && options.position === 'top') {
         $(elem).prepend(row.elem());
         $(elem).prepend(topTarget.elem());
       }
@@ -214,7 +216,7 @@
     };
 
     dashboard.addToNewRow = function(componentID, position) {
-      var newRow = dashboard.addNewRow(undefined, undefined, undefined, position);
+      var newRow = dashboard.addNewRow({position: position});
       $(newRow.elem()).append(components [componentID].elem());
       dashboard.resize();
       dashboard.redraw();
@@ -423,8 +425,11 @@
       }
       else {
         // All rows full
-        row = dashboard.addNewRow(defaultControllerString, defaultFilterString,
-            undefined, 'bottom');
+        row = dashboard.addNewRow({
+          rowControllersString: defaultControllerString,
+          rowFiltersString: defaultFilterString,
+          position: 'bottom',
+        });
         box = row.lastAddedComponent();
         dashboard.resize();
         dashboard.redraw();
@@ -524,8 +529,11 @@
           height = undefined;
         }
 
-        dashboard.addNewRow(rowControllersStringList[index],
-            filtersString ? rowFiltersStringList[index] : null, height);
+        dashboard.addNewRow({
+          rowControllersString: rowControllersStringList[index],
+          rowFiltersString: filtersString ? rowFiltersStringList[index] : null,
+          height: height,
+        });
       }
       dashboard.resize();
       dashboard.redraw();
