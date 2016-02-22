@@ -1358,11 +1358,10 @@
       }
       if (filterSelectElem) {
         $(filterSelectElem.node()).select2();
+        $(filterSelectElem.node()).on('change', function() {
+          my.selectFilter(this.value, true, true);
+        });
       }
-
-      $(filterSelectElem.node()).on('change', function() {
-        my.selectFilter(this.value, true, true);
-      });
     };
 
     dashboard.addControllersForComponent(my);
