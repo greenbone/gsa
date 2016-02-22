@@ -30,7 +30,7 @@
   /*
   * GSA base object
   */
-  if (typeof global.gsa === 'undefined') {
+  if (global.gsa === undefined) {
     global.gsa = {};
   }
 
