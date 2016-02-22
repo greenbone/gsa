@@ -197,7 +197,7 @@
       else if (options.height < 150) {
         options.height = 150;
       }
-      var row = DashboardRow(dashboard, options.rowControllersString,
+      var row = create_dashboard_row(dashboard, options.rowControllersString,
           options.rowFiltersString, options.height, dashboardOpts);
       rows[row.id()] = row;
 
@@ -482,7 +482,8 @@
       controllerFactories[factoryName] = factoryFunc;
     };
 
-    dashboard.addFilter = function(filterID, filterName, filterTerm, filterType) {
+    dashboard.addFilter = function(filterID, filterName, filterTerm,
+        filterType) {
       filters.push({
         id: filterID,
         name: filterName,
@@ -615,9 +616,8 @@
   /*
   * Dashboard Rows
   */
-  function DashboardRow(dashboard, controllersString, filtersString, height,
-                        dashboardOpts) {
-    var my = function() {};
+  function create_dashboard_row(dashboard, controllersString, filtersString,
+      height, dashboardOpts) {
     var components = {};
     var elem = document.createElement('div');
     $(elem).addClass('dashboard-row');
@@ -626,20 +626,21 @@
     var compCountOffset = 0;
     var lastAddedComponent = null;
     var prevHeight = height;
+    var dashboard_row = function() {};
 
-    my.elem = function() {
+    dashboard_row.elem = function() {
       return elem;
     };
 
-    my.dashboard = function() {
+    dashboard_row.dashboard = function() {
       return dashboard;
     };
 
-    my.id = function() {
+    dashboard_row.id = function() {
       return id;
     };
 
-    my.height = function(newHeight) {
+    dashboard_row.height = function(newHeight) {
       if (newHeight === undefined) {
         return height;
       }
@@ -651,39 +652,39 @@
       }
     };
 
-    my.component = function(id) {
+    dashboard_row.component = function(id) {
       return components [id];
     };
 
-    my.controllersString = function() {
+    dashboard_row.controllersString = function() {
       return controllersString;
     };
 
-    my.lastAddedComponent = function() {
+    dashboard_row.lastAddedComponent = function() {
       return lastAddedComponent;
     };
 
-    my.componentsCount = function() {
+    dashboard_row.componentsCount = function() {
       var placeholderCount = $(elem).find(
           '.dashboard-placeholder').toArray().length;
       return Object.keys(components).length + placeholderCount +
         compCountOffset;
     };
 
-    my.registerBox = function(box) {
+    dashboard_row.registerBox = function(box) {
       components [box.id()] = box;
       lastAddedComponent = box;
     };
 
-    my.unregisterBox = function(id) {
+    dashboard_row.unregisterBox = function(id) {
       delete components[id];
     };
 
-    my.filtersString = function() {
+    dashboard_row.filtersString = function() {
       return filtersString;
     };
 
-    my.updateControllersString = function() {
+    dashboard_row.updateControllersString = function() {
       controllersString = '';
       for (var item in components) {
         controllersString += components[item].controllerString();
@@ -693,7 +694,7 @@
       return controllersString;
     };
 
-    my.updateFiltersString = function() {
+    dashboard_row.updateFiltersString = function() {
       filtersString = '';
       for (var item in components) {
         filtersString += components[item].filterString();
@@ -703,54 +704,54 @@
       return filtersString;
     };
 
-    my.updateComponentCountClasses = function() {
+    dashboard_row.updateComponentCountClasses = function() {
       for (var i = 0; i <= 4; i++) {
         $(elem).removeClass('num-components-' +  i);
       }
-      $(elem).addClass('num-components-' + my.componentsCount());
+      $(elem).addClass('num-components-' + dashboard_row.componentsCount());
     };
 
-    my.updateComponents = function() {
+    dashboard_row.updateComponents = function() {
       var componentElems = $(elem).children('div.dashboard-box').toArray();
       var newComponents = {};
       for (var index in componentElems) {
         var id = componentElems[index].id;
         newComponents[id] = dashboard.component(id);
-        newComponents[id].row(my);
+        newComponents[id].row(dashboard_row);
       }
       components = newComponents;
       compCountOffset = 0;
 
-      if (my.componentsCount() >= dashboard.maxPerRow()) {
+      if (dashboard_row.componentsCount() >= dashboard.maxPerRow()) {
         $(elem).addClass('full');
       }
       else {
         $(elem).removeClass('full');
       }
 
-      my.updateComponentCountClasses();
+      dashboard_row.updateComponentCountClasses();
     };
 
-    my.removeComponent = function(id) {
+    dashboard_row.removeComponent = function(id) {
       components[id].elem().remove();
 
       dashboard.unregisterBox(id);
-      my.unregisterBox(id);
+      dashboard_row.unregisterBox(id);
 
-      if (my.componentsCount() === 0) {
-        dashboard.removeRow(my.id());
+      if (dashboard_row.componentsCount() === 0) {
+        dashboard.removeRow(dashboard_row.id());
       }
 
       dashboard.updateRows();
     };
 
-    my.loadContent = function() {
+    dashboard_row.loadContent = function() {
       for (var item in components) {
         components[item].loadContent();
       }
     };
 
-    my.resize = function(newRowWidth, newRowHeight) {
+    dashboard_row.resize = function(newRowWidth, newRowHeight) {
       if (newRowHeight) {
         height = newRowHeight;
       }
@@ -763,13 +764,13 @@
       }
     };
 
-    my.redraw = function() {
+    dashboard_row.redraw = function() {
       for (var item in components) {
         components[item].redraw();
       }
     };
 
-    my.startEdit = function() {
+    dashboard_row.startEdit = function() {
       for (var componentID in components) {
         components[componentID].startEdit();
       }
@@ -779,7 +780,7 @@
         minHeight: 150,
         grid: [10, 10],
         resize: function(event, ui) {
-          my.resize(undefined, ui.size.height);
+          dashboard_row.resize(undefined, ui.size.height);
           dashboard.resize();
         },
         stop: function(event, ui) {
@@ -810,7 +811,7 @@
       });
     };
 
-    my.stopEdit = function() {
+    dashboard_row.stopEdit = function() {
       for (var componentID in components) {
         components[componentID].stopEdit();
       }
@@ -833,18 +834,20 @@
     $(elem).attr('height', height);
 
     for (var index in componentStringList) {
-      var box = DashboardBox(my, componentStringList[index],
+      var box = DashboardBox(dashboard_row, componentStringList[index],
           filterStringList ? filterStringList[index] : null,
           dashboardOpts);
       dashboard.registerBox(box);
-      my.registerBox(box);
+      dashboard_row.registerBox(box);
       $(elem).append(box.elem());
     }
 
-    return my;
+    return dashboard_row;
   }
 
-  global.DashboardRow = DashboardRow;
+  global.create_dashboard_row = create_dashboard_row;
+  // TODO remove when all xslt code has been migrated
+  global.DashboardRow = create_dashboard_row;
 
   /*
   * Dashboard "New Row" drop target
