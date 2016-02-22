@@ -59,7 +59,7 @@
       // ensure a string
       heightsString += '';
     }
-    var elem = $('#' + id)[0];
+    var elem = $('#' + id);
     var rows = {};
     var components = {};
     var controllerFactories = {};
@@ -181,7 +181,7 @@
     };
 
     dashboard.elem = function() {
-      return elem;
+      return elem[0];
     };
 
     dashboard.editMode = function() {
@@ -211,12 +211,12 @@
       rows[row.id()] = row;
 
       if (options.position !== undefined && options.position === 'top') {
-        $(elem).prepend(row.elem());
-        $(elem).prepend(topTarget.elem());
+        elem.prepend(row.elem());
+        elem.prepend(topTarget.elem());
       }
       else {
-        $(elem).append(row.elem());
-        $(elem).append(bottomTarget.elem());
+        elem.append(row.elem());
+        elem.append(bottomTarget.elem());
       }
       if (editMode) {
         row.startEdit();
@@ -226,7 +226,7 @@
 
     dashboard.addToNewRow = function(componentID, position) {
       var newRow = dashboard.addNewRow({position: position});
-      $(newRow.elem()).append(components [componentID].elem());
+      $(newRow.elem()).append(components[componentID].elem());
       dashboard.resize();
       dashboard.redraw();
       dashboard.updateRows();
@@ -264,7 +264,7 @@
 
     dashboard.updateControllersString = function() {
       controllersString = '';
-      var sortedRowElems = $(elem).find('.dashboard-row').toArray();
+      var sortedRowElems = elem.find('.dashboard-row').toArray();
       for (var index in sortedRowElems) {
         var entry = $(sortedRowElems[index]).attr('id');
         var rowControllersString = rows[entry].updateControllersString();
@@ -299,7 +299,7 @@
     dashboard.updateHeightsString = function() {
       heightsString = '';
 
-      var sortedRowElems = $(elem).find('.dashboard-row').toArray();
+      var sortedRowElems = elem.find('.dashboard-row').toArray();
       for (var index in sortedRowElems) {
         var entry = $(sortedRowElems[index]).attr('id');
         var rowHeight = rows[entry].height();
@@ -336,7 +336,7 @@
       }
 
       filtersString = '';
-      var sortedRowElems = $(elem).find('.dashboard-row').toArray();
+      var sortedRowElems = elem.find('.dashboard-row').toArray();
       for (var index in sortedRowElems) {
         var entry = $(sortedRowElems[index]).attr('id');
         var rowFiltersString = rows[entry].updateFiltersString();
@@ -418,8 +418,7 @@
         return;
       }
 
-      var lastFreeRowElem
-        = $(elem).find('.dashboard-row:not(".full")').last();
+      var lastFreeRowElem = elem.find('.dashboard-row:not(".full")').last();
       var row;
       var box;
       if (lastFreeRowElem[0]) {
@@ -455,18 +454,20 @@
     };
 
     dashboard.resized = function(checkHeight) {
+      var dom_elem = elem[0];
       if (checkHeight) {
-        if (width === elem.clientWidth && height === elem.clientHeight) {
+        if (width === dom_elem.clientWidth &&
+            height === dom_elem.clientHeight) {
           return;
         }
       }
       else {
-        if (width === elem.clientWidth) {
+        if (width === dom_elem.clientWidth) {
           return;
         }
       }
-      width = elem.clientWidth;
-      height = elem.clientHeight;
+      width = dom_elem.clientWidth;
+      height = dom_elem.clientHeight;
       dashboard.resize();
       clearTimeout(currentResizeTimeout);
       currentResizeTimeout = setTimeout(dashboard.redraw, 50);
@@ -475,7 +476,7 @@
     dashboard.resize = function() {
       for (var item in rows) {
         if (heightsString === null) {
-          rows[item].height(elem.clientHeight);
+          rows[item].height(elem[0].clientHeight);
         }
         rows[item].resize();
       }
@@ -568,7 +569,7 @@
       editMode = true;
       $(topTarget.elem()).show('blind', {}, 150);
       $(bottomTarget.elem()).show('blind', {}, 150);
-      $(elem).addClass('edit');
+      elem.addClass('edit');
       for (var item in rows) {
         rows[item].startEdit();
       }
@@ -587,7 +588,7 @@
       $(topTarget.elem()).hide('blind', {}, 150);
       $(bottomTarget.elem()).hide('blind', {}, 150);
       editMode = false;
-      $(elem).removeClass('edit');
+      elem.removeClass('edit');
       for (var item in rows) {
         rows[item].stopEdit();
       }
@@ -599,7 +600,7 @@
       }
     };
 
-    width = elem.clientWidth;
+    width = elem[0].clientWidth;
 
     $(window).on('load', function() {
       // Window resize
@@ -611,9 +612,9 @@
 
     // Drop targets for new rows
     topTarget = create_dashboard_new_row_target(dashboard, 'top');
-    $(elem).prepend(topTarget.elem());
+    elem.prepend(topTarget.elem());
     bottomTarget = create_dashboard_new_row_target(dashboard, 'bottom');
-    $(elem).append(bottomTarget.elem());
+    elem.append(bottomTarget.elem());
 
     return dashboard;
   }
