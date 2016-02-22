@@ -3397,6 +3397,8 @@
     doc.find('.dashboard').each(function() {
       var elem = $(this);
       var dashboard_name = elem.data('dashboard-name');
+      var max_components = elem.data('max-components') !== undefined ?
+        elem.data('max-components') : 8;
 
       if (dashboard_name === undefined) {
         // TODO remove when all dashboards are converted
@@ -3410,9 +3412,9 @@
             controllersPrefID: elem.data('controllers-pref-id'),
             filtersPrefID: elem.data('filters-pref-id'),
             heightsPrefID: elem.data('heights-pref-id'),
-            filter: '',
-            filt_id: '',
-            max_components: 8,
+            filter: elem.data('filter'),
+            filt_id: elem.data('filter-id'),
+            max_components: max_components,
             defaultControllerString: elem.data('default-controller-string'),
             dashboardControls: $('#' + elem.data('dashboard-controls'))[0]
           }
