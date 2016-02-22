@@ -415,8 +415,8 @@
       var box;
       if (lastFreeRowElem[0]) {
         row = rows[lastFreeRowElem.attr('id')];
-        box = DashboardBox(row, defaultControllerString, defaultFilterString,
-            dashboardOpts);
+        box = create_dashboard_box(row, defaultControllerString,
+            defaultFilterString, dashboardOpts);
         dashboard.registerBox(box);
         row.registerBox(box);
         $(row.elem()).append(box.elem());
@@ -834,7 +834,7 @@
     $(elem).attr('height', height);
 
     for (var index in componentStringList) {
-      var box = DashboardBox(dashboard_row, componentStringList[index],
+      var box = create_dashboard_box(dashboard_row, componentStringList[index],
           filterStringList ? filterStringList[index] : null,
           dashboardOpts);
       dashboard.registerBox(box);
@@ -895,8 +895,8 @@
   /*
   * Dashboard Component Boxes
   */
-  function DashboardBox(row, controllerString, filterString, dashboardOpts) {
-    var my = function() {};
+  function create_dashboard_box(row, controllerString, filterString,
+      dashboardOpts) {
     var dashboard = row ? row.dashboard() : null;
     var id = dashboard.nextBoxID();
     var controllers = [];
@@ -933,6 +933,7 @@
 
     var menu, header, topButtons, content_d3, svg;
     var footer, controllerSelectElem, filterSelectElem;
+    var dashboard_box = function() {};
     menu =
       innerElem_d3
           .append('div')
@@ -953,7 +954,7 @@
       .append('a')
         .attr('class', 'remove-button')
         .attr('href', 'javascript:void(0);')
-        .on('click', function() { my.remove(); })
+        .on('click', function() { dashboard_box.remove(); })
         .style('display', dashboard.editMode() ? 'inline' : 'none')
         .append('img')
           .attr('src', '/img/delete.png')
@@ -990,35 +991,35 @@
             .attr('id', id + '-foot');
     footer = footer.node();
 
-    my.elem = function() {
+    dashboard_box.elem = function() {
       return elem;
     };
 
-    my.header = function() {
+    dashboard_box.header = function() {
       return d3.select(header);
     };
 
-    my.svg = function() {
+    dashboard_box.svg = function() {
       return d3.select(svg);
     };
 
-    my.row = function(newRow) {
+    dashboard_box.row = function(newRow) {
       if (newRow === undefined) {
         return row;
       }
       row = newRow;
-      return my;
+      return dashboard_box;
     };
 
-    my.dashboard = function() {
+    dashboard_box.dashboard = function() {
       return dashboard;
     };
 
-    my.id = function() {
+    dashboard_box.id = function() {
       return id;
     };
 
-    my.controllerString = function(newStr) {
+    dashboard_box.controllerString = function(newStr) {
       if (newStr === undefined) {
         return controllerString;
       }
@@ -1026,7 +1027,7 @@
       dashboard.updateControllersString();
     };
 
-    my.filterString = function(newStr) {
+    dashboard_box.filterString = function(newStr) {
       if (newStr === undefined) {
         return filterString;
       }
@@ -1034,7 +1035,7 @@
       dashboard.updateFiltersString();
     };
 
-    my.currentFilter = function() {
+    dashboard_box.currentFilter = function() {
       if (currentFilterIndex >= 0) {
         return filters [currentFilterIndex];
       }
@@ -1043,17 +1044,17 @@
       }
     };
 
-    my.addController = function(controllerName, controller) {
+    dashboard_box.addController = function(controllerName, controller) {
       controllerIndexes[controllerName] = controllers.length;
       controllers.push(controller);
     };
 
-    my.addFilter = function(filterID, filter) {
+    dashboard_box.addFilter = function(filterID, filter) {
       filterIndexes[filterID] = filters.length;
       filters.push(filter);
     };
 
-    my.remove = function() {
+    dashboard_box.remove = function() {
       $(elem).hide('fade', {}, 250, function() {
         dashboard.removeComponent(id);
         row.resize();
@@ -1061,7 +1062,7 @@
       });
     };
 
-    my.resize = function(newRowWidth, newRowHeight) {
+    dashboard_box.resize = function(newRowWidth, newRowHeight) {
       var rowWidth, rowHeight;
       var componentsCount = row.componentsCount();
       // Set height first
@@ -1072,7 +1073,7 @@
         rowHeight = newRowHeight;
       }
       var newHeight = rowHeight - header.clientHeight - footer.clientHeight - 8;
-      my.svg().attr('height', newHeight);
+      dashboard_box.svg().attr('height', newHeight);
 
       if (newRowWidth === undefined) {
         rowWidth = dashboard.elem().clientWidth;
@@ -1081,41 +1082,41 @@
         rowWidth = newRowWidth;
       }
       var newWidth = (rowWidth - 2) / (componentsCount ? componentsCount : 1);
-      my.svg().attr('width', newWidth - 8);
+      dashboard_box.svg().attr('width', newWidth - 8);
       $(elem).css('width', newWidth);
     };
 
-    my.redraw = function() {
-      my.applySelect2();
+    dashboard_box.redraw = function() {
+      dashboard_box.applySelect2();
       if (currentCtrlIndex >= 0) {
         controllers[currentCtrlIndex]
           .sendRequest(filters[currentFilterIndex]);
       }
     };
 
-    my.lastRequestedController = function(newController) {
+    dashboard_box.lastRequestedController = function(newController) {
       if (newController === undefined) {
         return lastRequestedController;
       }
       lastRequestedController = newController;
-      return my;
+      return dashboard_box;
     };
 
-    my.lastRequestedFilter = function(newFilter) {
+    dashboard_box.lastRequestedFilter = function(newFilter) {
       if (newFilter === undefined) {
         return lastRequestedFilter;
       }
       lastRequestedFilter = newFilter;
-      return my;
+      return dashboard_box;
     };
 
     // Edit management
-    my.startEdit = function() {
+    dashboard_box.startEdit = function() {
       topButtons.select('.remove-button')
         .style('display', 'inline');
     };
 
-    my.stopEdit = function() {
+    dashboard_box.stopEdit = function() {
       topButtons.select('.remove-button')
         .style('display', 'none');
     };
@@ -1123,31 +1124,31 @@
     // Data management
 
     /* Gets the last successful generator */
-    my.last_generator = function() {
+    dashboard_box.last_generator = function() {
       return last_generator;
     };
 
     /* Gets the parameters for the last successful generator run */
-    my.last_gen_params = function() {
+    dashboard_box.last_gen_params = function() {
       return last_gen_params;
     };
 
     /* Updates the data on the last successful generator.
     * Should be called by the generator if it was successful */
-    my.update_gen_data = function(generator, gen_params) {
+    dashboard_box.update_gen_data = function(generator, gen_params) {
       last_generator = generator;
       last_gen_params = gen_params;
-      return my;
+      return dashboard_box;
     };
 
     /* Puts an error message into the header and clears the svg element */
-    my.show_error = function(message) {
+    dashboard_box.show_error = function(message) {
       d3.select(header).text(message);
       svg.text('');
     };
 
     /* Gets a menu item or creates it if it does not exist */
-    my.create_or_get_menu_item = function(menu_item_id, last) {
+    dashboard_box.create_or_get_menu_item = function(menu_item_id, last) {
       var menu_d3 = d3.select(menu);
       var item = menu_d3
                   .select('li #' + id + '_' + menu_item_id)
@@ -1165,46 +1166,49 @@
     };
 
     // Activators selectors
-    my.activateSelectors = function() {
+    dashboard_box.activateSelectors = function() {
       selectorsActive = true;
     };
 
     // Controller selection
 
-    my.updateControllerSelect = function() {
+    dashboard_box.updateControllerSelect = function() {
       if (controllerSelectElem) {
         $(controllerSelectElem.node()).select2('val', controllerString);
       }
       else {
-        my.selectController(controllerString, false, false);
+        dashboard_box.selectController(controllerString, false, false);
       }
     };
 
-    my.selectController = function(name, savePreference, requestData) {
+    dashboard_box.selectController = function(name, savePreference,
+        requestData) {
       var index = controllerIndexes[name];
       if (index === undefined) {
         console.warn('Chart not found: ' + name);
-        my.selectControllerIndex(0, savePreference, requestData);
+        dashboard_box.selectControllerIndex(0, savePreference, requestData);
       }
       else {
-        my.selectControllerIndex(index, savePreference, requestData);
+        dashboard_box.selectControllerIndex(index, savePreference, requestData);
       }
     };
 
-    my.selectControllerIndex = function(index, savePreference, requestData) {
+    dashboard_box.selectControllerIndex = function(index, savePreference,
+        requestData) {
       if (typeof(index) !== 'number' || index < 0 ||
           index >= controllers.length) {
         return console.error('Invalid chart index: ' + index);
       }
       currentCtrlIndex = index;
-      my.controllerString(controllers[currentCtrlIndex].chart_name());
+      dashboard_box.controllerString(
+          controllers[currentCtrlIndex].chart_name());
 
       if (requestData && selectorsActive) {
-        my.redraw();
+        dashboard_box.redraw();
       }
     };
 
-    my.prevController = function() {
+    dashboard_box.prevController = function() {
       if (currentCtrlIndex <= 0) {
         $(controllerSelectElem.node())
           .select2('val', controllers[controllers.length - 1].chart_name());
@@ -1215,7 +1219,7 @@
       }
     };
 
-    my.nextController = function() {
+    dashboard_box.nextController = function() {
       if (currentCtrlIndex >= controllers.length - 1) {
         $(controllerSelectElem.node())
           .select2('val', controllers[0].chart_name());
@@ -1227,7 +1231,7 @@
     };
 
     /* Adds a chart selector to the footer */
-    my.createChartSelector = function() {
+    dashboard_box.createChartSelector = function() {
       d3.select(footer)
           .append('a')
             .attr('href', 'javascript: void (0);')
@@ -1271,41 +1275,42 @@
           .append('br');
     };
 
-    my.updateFilterSelect = function() {
+    dashboard_box.updateFilterSelect = function() {
       if (filterSelectElem) {
         $(filterSelectElem.node()).select2('val', filterString);
       }
       else {
         if (filterString) {
-          my.selectFilter(filterString, false, false);
+          dashboard_box.selectFilter(filterString, false, false);
         }
       }
     };
 
-    my.selectFilter = function(id, savePreference, requestData) {
+    dashboard_box.selectFilter = function(id, savePreference, requestData) {
       var index = filterIndexes[id];
       if (index === undefined) {
         console.warn('Filter not found: "' + id + '"');
-        my.selectFilterIndex(0, savePreference, requestData);
+        dashboard_box.selectFilterIndex(0, savePreference, requestData);
       }
       else {
-        my.selectFilterIndex(index, savePreference, requestData);
+        dashboard_box.selectFilterIndex(index, savePreference, requestData);
       }
     };
 
-    my.selectFilterIndex = function(index, savePreference, requestData) {
+    dashboard_box.selectFilterIndex = function(index, savePreference,
+        requestData) {
       if (typeof(index) !== 'number' || index < 0 || index >= filters.length) {
         return console.error('Invalid filter index: ' + index);
       }
       currentFilterIndex = index;
-      my.filterString(filters [currentFilterIndex].id);
+      dashboard_box.filterString(filters[currentFilterIndex].id);
 
       if (requestData && selectorsActive) {
-        my.redraw();
+        dashboard_box.redraw();
       }
     };
 
-    my.prevFilter = function() {
+    dashboard_box.prevFilter = function() {
       if (currentFilterIndex <= 0) {
         $(filterSelectElem.node())
           .select2('val', filters[filters.length - 1].id);
@@ -1316,7 +1321,7 @@
       }
     };
 
-    my.nextFilter = function() {
+    dashboard_box.nextFilter = function() {
       if (currentFilterIndex >= filters.length - 1) {
         $(filterSelectElem.node())
           .select2('val', filters[0].id);
@@ -1328,7 +1333,7 @@
     };
 
     /* Adds a filter selector to the footer */
-    my.createFilterSelector = function() {
+    dashboard_box.createFilterSelector = function() {
       d3.select(footer)
           .append('a')
             .attr('href', 'javascript: void (0);')
@@ -1367,7 +1372,7 @@
           .append('br');
     };
 
-    my.applySelect2 = function() {
+    dashboard_box.applySelect2 = function() {
       $(elem).find('.select2-container').remove();
       if (controllerSelectElem) {
         $(controllerSelectElem.node()).select2();
@@ -1375,25 +1380,26 @@
       if (filterSelectElem) {
         $(filterSelectElem.node()).select2();
         $(filterSelectElem.node()).on('change', function() {
-          my.selectFilter(this.value, true, true);
+          dashboard_box.selectFilter(this.value, true, true);
         });
       }
     };
 
-    dashboard.addControllersForComponent(my);
-    dashboard.addFiltersForComponent(my);
+    dashboard.addControllersForComponent(dashboard_box);
+    dashboard.addFiltersForComponent(dashboard_box);
 
     if (!(hideControllerSelect)) {
-      my.createChartSelector();
+      dashboard_box.createChartSelector();
     }
     if (!(hideFilterSelect) && filters.length > 1) {
-      my.createFilterSelector();
+      dashboard_box.createFilterSelector();
     }
 
-    return my;
+    return dashboard_box;
   }
 
-  global.DashboardBox = DashboardBox;
+  global.create_dashboard_box = create_dashboard_box;
+  global.DashboardBox = create_dashboard_box;
 
   /*
   * Creates a new Chart controller which manages the data source, generator and
