@@ -131,39 +131,48 @@
       if (dashboardOpts.dashboardControls) {
         dashboardControls = dashboardOpts.dashboardControls;
 
-        startEditButton = d3.select(dashboardControls)
-          .append('a')
-          .attr('href', 'javascript:void(0)')
-          .on('click', function() {dashboard.startEdit();})
-          .append('img')
-          .attr('src', 'img/edit.png')
-          .attr('alt', 'Edit Dashboard')
-          .attr('title', 'Edit Dashboard');
+        startEditButton = $('<a/>', {
+          href: '#',
+          on: {
+            click: function() {dashboard.startEdit();},
+          },
+        })
+        .append($('<img/>', {
+          src: 'img/edit.png',
+          alt: 'Edit Dashboard',
+          title: 'Edit Dashboard',
+        }))
+        .appendTo($(dashboardControls));
 
-        startEditButton = startEditButton.node();
+        newComponentButton = $('<a/>', {
+          href: '#',
+          on: {
+            click: function() {dashboard.newComponent();},
+          }
+        })
+        .append($('<img/>', {
+          src: 'img/new.png',
+          alt: 'Add new Component',
+          title: 'Add new Component',
+        }))
+        .appendTo($(dashboardControls));
 
-        newComponentButton = d3.select(dashboardControls)
-          .append('a')
-          .attr('href', 'javascript:void(0)')
-          .on('click', function() {dashboard.newComponent();})
-          .append('img')
-          .attr('src', 'img/new.png')
-          .attr('alt', 'Add new Component')
-          .attr('title', 'Add new Component');
-        newComponentButton = newComponentButton.node();
-        $(newComponentButton).hide();
+        newComponentButton.hide();
 
-        stopEditButton =
-          d3.select(dashboardControls)
-          .append('a')
-          .attr('href', 'javascript:void(0)')
-          .on('click', function() {dashboard.stopEdit();})
-          .append('img')
-          .attr('src', 'img/stop.png')
-          .attr('alt', 'Stop Editing')
-          .attr('title', 'Stop Editing');
-        stopEditButton = stopEditButton.node();
-        $(stopEditButton).hide();
+        stopEditButton = $('<a/>', {
+          href: '#',
+          on: {
+            click: function() {dashboard.stopEdit();},
+          }
+        })
+        .append($('<img/>', {
+          src: 'img/stop.png',
+          alt: 'Stop Editing',
+          title: 'Stop Editing',
+        }))
+        .appendTo($(dashboardControls));
+
+        stopEditButton.hide();
       }
     }
 
@@ -565,9 +574,9 @@
       }
 
       if (dashboardControls) {
-        $(startEditButton).hide();
-        $(stopEditButton).show();
-        $(newComponentButton).show();
+        startEditButton.hide();
+        stopEditButton.show();
+        newComponentButton.show();
       }
     };
 
@@ -584,9 +593,9 @@
       }
 
       if (dashboardControls) {
-        $(startEditButton).show();
-        $(stopEditButton).hide();
-        $(newComponentButton).hide();
+        startEditButton.show();
+        stopEditButton.hide();
+        newComponentButton.hide();
       }
     };
 
