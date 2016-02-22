@@ -25,7 +25,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-(function(global) {
+(function(global, document, d3, $) {
   'use strict';
   /*
   * GSA base object
@@ -45,8 +45,8 @@
   }
 
   // Default date and time formats
-  gsa.date_format = global.d3.time.format.utc('%Y-%m-%d');
-  gsa.datetime_format = global.d3.time.format.utc('%Y-%m-%d %H:%M');
+  gsa.date_format = d3.time.format.utc('%Y-%m-%d');
+  gsa.datetime_format = d3.time.format.utc('%Y-%m-%d %H:%M');
 
   /*
   * Dashboard functions
@@ -131,7 +131,7 @@
       if (dashboardOpts.dashboardControls) {
         dashboardControls = dashboardOpts.dashboardControls;
 
-        startEditButton = global.d3.select(dashboardControls)
+        startEditButton = d3.select(dashboardControls)
           .append('a')
           .attr('href', 'javascript:void(0)')
           .on('click', function() {my.startEdit();})
@@ -142,7 +142,7 @@
 
         startEditButton = startEditButton.node();
 
-        newComponentButton = global.d3.select(dashboardControls)
+        newComponentButton = d3.select(dashboardControls)
           .append('a')
           .attr('href', 'javascript:void(0)')
           .on('click', function() {my.newComponent();})
@@ -154,7 +154,7 @@
         $(newComponentButton).hide();
 
         stopEditButton =
-          global.d3.select(dashboardControls)
+          d3.select(dashboardControls)
           .append('a')
           .attr('href', 'javascript:void(0)')
           .on('click', function() {my.stopEdit();})
@@ -271,7 +271,7 @@
             controllersPrefRequest.abort();
           }
 
-          controllersPrefRequest = global.d3.xhr('/omp');
+          controllersPrefRequest = d3.xhr('/omp');
 
           var form_data = new FormData();
           form_data.append('chart_preference_id', controllersPrefID);
@@ -305,7 +305,7 @@
             heightsPrefRequest.abort();
           }
 
-          heightsPrefRequest = global.d3.xhr('/omp');
+          heightsPrefRequest = d3.xhr('/omp');
 
           var form_data = new FormData();
           form_data.append('chart_preference_id', heightsPrefID);
@@ -346,7 +346,7 @@
             filtersPrefRequest.abort();
           }
 
-          filtersPrefRequest = global.d3.xhr('/omp');
+          filtersPrefRequest = d3.xhr('/omp');
 
           var form_data = new FormData();
           form_data.append('chart_preference_id', filtersPrefID);
@@ -911,7 +911,7 @@
     var elem = document.createElement('div');
     $(elem).addClass('dashboard-box')
           .attr('id', id);
-    var innerElem_d3 = global.d3.select(elem)
+    var innerElem_d3 = d3.select(elem)
                             .append('div')
                               .attr('class', 'chart-box');
 
@@ -979,11 +979,11 @@
     };
 
     my.header = function() {
-      return global.d3.select(header);
+      return d3.select(header);
     };
 
     my.svg = function() {
-      return global.d3.select(svg);
+      return d3.select(svg);
     };
 
     my.row = function(newRow) {
@@ -1126,13 +1126,13 @@
 
     /* Puts an error message into the header and clears the svg element */
     my.show_error = function(message) {
-      global.d3.select(header).text(message);
+      d3.select(header).text(message);
       svg.text('');
     };
 
     /* Gets a menu item or creates it if it does not exist */
     my.create_or_get_menu_item = function(menu_item_id, last) {
-      var menu_d3 = global.d3.select(menu);
+      var menu_d3 = d3.select(menu);
       var item = menu_d3
                   .select('li #' + id + '_' + menu_item_id)
                     .select('a');
@@ -1212,7 +1212,7 @@
 
     /* Adds a chart selector to the footer */
     my.createChartSelector = function() {
-      global.d3.select(footer)
+      d3.select(footer)
           .append('a')
             .attr('href', 'javascript: void (0);')
             .attr('onclick',
@@ -1222,7 +1222,7 @@
               .attr('src', 'img/previous.png')
               .style('vertical-align', 'middle');
 
-      controllerSelectElem = global.d3.select(footer)
+      controllerSelectElem = d3.select(footer)
         .append('select')
         .style('margin-left', '5px')
         .style('margin-right', '5px')
@@ -1241,7 +1241,7 @@
                               .text(controller.label());
       }
 
-      global.d3.select(footer)
+      d3.select(footer)
           .append('a')
             .attr('href', 'javascript: void (0);')
             .attr('onclick',
@@ -1251,7 +1251,7 @@
               .attr('src', 'img/next.png')
               .style('vertical-align', 'middle');
 
-      global.d3.select(footer)
+      d3.select(footer)
           .append('br');
     };
 
@@ -1313,7 +1313,7 @@
 
     /* Adds a filter selector to the footer */
     my.createFilterSelector = function() {
-      global.d3.select(footer)
+      d3.select(footer)
           .append('a')
             .attr('href', 'javascript: void (0);')
             .attr('onclick',
@@ -1323,7 +1323,7 @@
               .attr('src', 'img/previous.png')
               .style('vertical-align', 'middle');
 
-      filterSelectElem = global.d3.select(footer)
+      filterSelectElem = d3.select(footer)
         .append('select')
         .style('margin-left', '5px')
         .style('margin-right', '5px')
@@ -1337,7 +1337,7 @@
                           .text(filter.name);
       }
 
-      global.d3.select(footer)
+      d3.select(footer)
           .append('a')
             .attr('href', 'javascript: void (0);')
             .attr('onclick',
@@ -1347,7 +1347,7 @@
               .attr('src', 'img/next.png')
               .style('vertical-align', 'middle');
 
-      global.d3.select(footer)
+      d3.select(footer)
           .append('br');
     };
 
@@ -1720,7 +1720,7 @@
             }
             return;
           }
-          activeRequests[filterID] = global.d3.xml(data_uri, 'application/xml');
+          activeRequests[filterID] = d3.xml(data_uri, 'application/xml');
           activeRequests[filterID].get(
               function(error, xml) {
                 var ctrls = requestingControllers[filterID];
@@ -1765,7 +1765,7 @@
                   }
                 }
                 else {
-                  var xml_select = global.d3.select(xml.documentElement);
+                  var xml_select = d3.select(xml.documentElement);
                   if (xml.documentElement.localName === 'parsererror') {
                     for (controllerID in ctrls) {
                       output_error(ctrls[controllerID].controller,
@@ -1972,37 +1972,37 @@
     var records = [];
     xml_data.selectAll(selector).each(function(d, i) {
       var record = {};
-      global.d3.select(this)
+      d3.select(this)
         .selectAll('value, count, c_count, stats, text')
         .each(function(d, i) {
           if (this.localName === 'stats') {
-            var col_name = global.d3.select(this).attr('column');
-            global.d3.select(this).selectAll('*').each(function(d, i) {
+            var col_name = d3.select(this).attr('column');
+            d3.select(this).selectAll('*').each(function(d, i) {
               if (!isNaN(parseFloat(
-                      global.d3.select(this).text())) &&
-                  isFinite(global.d3.select(this).text())) {
+                      d3.select(this).text())) &&
+                  isFinite(d3.select(this).text())) {
                 record[col_name + '_' + this.localName] =
-                  parseFloat(global.d3.select(this).text());
+                  parseFloat(d3.select(this).text());
               }
               else {
                 record[col_name + '_' + this.localName] =
-                  global.d3.select(this).text();
+                  d3.select(this).text();
               }
             });
           }
           else if (this.localName === 'text') {
-            record[global.d3.select(this).attr('column')] =
-              global.d3.select(this).text();
+            record[d3.select(this).attr('column')] =
+              d3.select(this).text();
           }
           else {
-            if (!isNaN(parseFloat(global.d3.select(this).text())) &&
-                isFinite(global.d3.select(this).text())) {
+            if (!isNaN(parseFloat(d3.select(this).text())) &&
+                isFinite(d3.select(this).text())) {
               record[this.localName] =
-                parseFloat(global.d3.select(this).text());
+                parseFloat(d3.select(this).text());
             }
             else {
               record[this.localName] =
-                global.d3.select(this).text();
+                d3.select(this).text();
             }
           }
         });
@@ -2027,32 +2027,32 @@
     xml_data.selectAll(
         'aggregate column_info aggregate_column').each(function(d, i) {
       var column = {};
-      global.d3.select(this)
+      d3.select(this)
         .selectAll('*')
         .each(function(d, i) {
-          if (!isNaN(parseFloat(global.d3.select(this).text())) &&
-              isFinite(global.d3.select(this).text())) {
+          if (!isNaN(parseFloat(d3.select(this).text())) &&
+              isFinite(d3.select(this).text())) {
             column[this.localName] =
-              parseFloat(global.d3.select(this).text());
+              parseFloat(d3.select(this).text());
           }
           else {
             column[this.localName] =
-              global.d3.select(this).text();
+              d3.select(this).text();
           }
         });
       column_info.columns[column.name] = column;
     });
 
     xml_data.selectAll('aggregate group_column').each(function(d, i) {
-      column_info.group_columns.push(global.d3.select(this).text());
+      column_info.group_columns.push(d3.select(this).text());
     });
 
     xml_data.selectAll('aggregate data_column').each(function(d, i) {
-      column_info.data_columns.push(global.d3.select(this).text());
+      column_info.data_columns.push(d3.select(this).text());
     });
 
     xml_data.selectAll('aggregate text_column').each(function(d, i) {
-      column_info.text_columns.push(global.d3.select(this).text());
+      column_info.text_columns.push(d3.select(this).text());
     });
 
     return column_info;
@@ -2176,7 +2176,7 @@
   function extract_task_records(xml_data) {
     var records = [];
     xml_data.selectAll('task').each(function(d, i) {
-      var task = global.d3.select(this);
+      var task = d3.select(this);
       var schedule = task.select('schedule');
       var periods = task.select('schedule_periods');
 
@@ -2911,8 +2911,8 @@
   function fit_detached_window(dashboard) {
     var display_width = Number(dashboard.elem().scrollWidth);
     var display_height = Number(dashboard.elem().scrollHeight);
-    var filter = global.d3.select('#applied_filter');
-    var footer = global.d3.select('.gsa-footer');
+    var filter = d3.select('#applied_filter');
+    var footer = d3.select('.gsa-footer');
     var height_diff = window.outerHeight - window.innerHeight;
     var width_diff = window.outerWidth - window.innerWidth;
 
@@ -2933,9 +2933,9 @@
     return function() {
       var window_height = window.innerHeight;
       $(dashboard.elem())
-          .height(window_height - (Number(global.d3.select('.gsa-footer')
+          .height(window_height - (Number(d3.select('.gsa-footer')
                                             .property('clientHeight')) +
-                                    Number(global.d3.select('#applied_filter')
+                                    Number(d3.select('#applied_filter')
                                                 .property('clientHeight')) +
                                     20));
       dashboard.resized(true);
@@ -2949,7 +2949,7 @@
   */
   function wrap_text(text_selection, width) {
     text_selection.each(function() {
-      var text = global.d3.select(this);
+      var text = d3.select(this);
       var words = text.text()
                         .match(/[^\s-]+[\s-]*/g)
                           .reverse();
@@ -3044,7 +3044,7 @@
   * Color scale for SecInfo severity levels
   */
   global.severity_level_color_scale =
-    global.d3.scale.ordinal()
+    d3.scale.ordinal()
                 .range(['silver', '#DDDDDD', 'skyblue', 'orange', '#D80000'])
                 .domain(['N/A', 'Log', 'Low', 'Medium', 'High']);
 
@@ -3052,17 +3052,17 @@
   * Severity gradient
   */
   global.severity_colors_gradient = function() {
-    return global.d3.scale.linear()
+    return d3.scale.linear()
               .domain([-1.0,
                         gsa.severity_levels.max_log,
                         gsa.severity_levels.max_low,
                         gsa.severity_levels.max_medium,
                         10.0])
-              .range([global.d3.rgb('grey'),
-                      global.d3.rgb('silver'),
-                      global.d3.rgb('skyblue'),
-                      global.d3.rgb('orange'),
-                      global.d3.rgb('red')]);
+              .range([d3.rgb('grey'),
+                      d3.rgb('silver'),
+                      d3.rgb('skyblue'),
+                      d3.rgb('orange'),
+                      d3.rgb('red')]);
   };
 
   /*
@@ -3120,8 +3120,8 @@
       headers, title, filter) {
     var doc = document.implementation.createDocument(
         'http://www.w3.org/1999/xhtml', 'html', null);
-    var head_s = global.d3.select(doc.documentElement).append('head');
-    var body_s = global.d3.select(doc.documentElement).append('body');
+    var head_s = d3.select(doc.documentElement).append('head');
+    var body_s = d3.select(doc.documentElement).append('body');
     var table_s;
     var row_class = 'odd';
 
@@ -3231,7 +3231,7 @@
       title_xml = '';
     }
 
-    var svg_clone = global.d3.select(svg_elem.node().cloneNode(true));
+    var svg_clone = d3.select(svg_elem.node().cloneNode(true));
     svg_clone.selectAll('.remove_on_static').remove();
 
     var defs = svg_clone.selectAll('defs');
@@ -3264,7 +3264,7 @@
   function blob_img_window(blob_url) {
     var new_window = window.open('', '_blank');
 
-    global.d3.select(new_window.document)
+    d3.select(new_window.document)
         .select('body')
           .insert('img')
             .attr('src', blob_url);
@@ -3514,10 +3514,10 @@
     });
   }
 
-  $(global.document).ready(function() {
-    on_ready(global.document);
+  $(document).ready(function() {
+    on_ready(document);
   });
 
-})(window);
+})(window, window.document, window.d3, window.$);
 
 // vim: set ts=2 sw=2 tw=80:
