@@ -51,9 +51,9 @@
   /*
   * Dashboard functions
   */
-  function Dashboard(id, controllersString, heightsString, filtersString,
+  function create_dashboard(id, controllersString, heightsString, filtersString,
                       dashboardOpts) {
-    function my() {}
+    function dashboard() {}
 
     if (heightsString !== undefined) {
       // ensure a string
@@ -134,7 +134,7 @@
         startEditButton = d3.select(dashboardControls)
           .append('a')
           .attr('href', 'javascript:void(0)')
-          .on('click', function() {my.startEdit();})
+          .on('click', function() {dashboard.startEdit();})
           .append('img')
           .attr('src', 'img/edit.png')
           .attr('alt', 'Edit Dashboard')
@@ -145,7 +145,7 @@
         newComponentButton = d3.select(dashboardControls)
           .append('a')
           .attr('href', 'javascript:void(0)')
-          .on('click', function() {my.newComponent();})
+          .on('click', function() {dashboard.newComponent();})
           .append('img')
           .attr('src', 'img/new.png')
           .attr('alt', 'Add new Component')
@@ -157,7 +157,7 @@
           d3.select(dashboardControls)
           .append('a')
           .attr('href', 'javascript:void(0)')
-          .on('click', function() {my.stopEdit();})
+          .on('click', function() {dashboard.stopEdit();})
           .append('img')
           .attr('src', 'img/stop.png')
           .attr('alt', 'Stop Editing')
@@ -167,27 +167,27 @@
       }
     }
 
-    my.id = function() {
+    dashboard.id = function() {
       return id;
     };
 
-    my.elem = function() {
+    dashboard.elem = function() {
       return elem;
     };
 
-    my.editMode = function() {
+    dashboard.editMode = function() {
       return editMode;
     };
 
-    my.maxComponents = function() {
+    dashboard.maxComponents = function() {
       return maxComponents;
     };
 
-    my.maxPerRow = function() {
+    dashboard.maxPerRow = function() {
       return maxPerRow;
     };
 
-    my.addNewRow = function(rowControllersString, rowFiltersString,
+    dashboard.addNewRow = function(rowControllersString, rowFiltersString,
                             height, position) {
       if (height === undefined) {
         height = 280;
@@ -195,7 +195,7 @@
       else if (height < 150) {
         height = 150;
       }
-      var row = DashboardRow(my, rowControllersString, rowFiltersString,
+      var row = DashboardRow(dashboard, rowControllersString, rowFiltersString,
                               height, dashboardOpts);
       rows[row.id()] = row;
 
@@ -213,45 +213,45 @@
       return row;
     };
 
-    my.addToNewRow = function(componentID, position) {
-      var newRow = my.addNewRow(undefined, undefined, undefined, position);
+    dashboard.addToNewRow = function(componentID, position) {
+      var newRow = dashboard.addNewRow(undefined, undefined, undefined, position);
       $(newRow.elem()).append(components [componentID].elem());
-      my.resize();
-      my.redraw();
-      my.updateRows();
+      dashboard.resize();
+      dashboard.redraw();
+      dashboard.updateRows();
     };
 
-    my.registerBox = function(box) {
+    dashboard.registerBox = function(box) {
       components[box.id()] = box;
     };
 
-    my.unregisterBox = function(id) {
+    dashboard.unregisterBox = function(id) {
       delete components[id];
     };
 
-    my.component = function(id) {
+    dashboard.component = function(id) {
       return components[id];
     };
 
-    my.nextRowID = function() {
+    dashboard.nextRowID = function() {
       lastRowIndex ++;
       return id + '-row-' + lastRowIndex;
     };
 
-    my.nextBoxID = function() {
+    dashboard.nextBoxID = function() {
       lastBoxIndex ++;
       return id + '-box-' + lastBoxIndex;
     };
 
-    my.controllersString = function() {
+    dashboard.controllersString = function() {
       return controllersString;
     };
 
-    my.filtersString = function() {
+    dashboard.filtersString = function() {
       return filtersString;
     };
 
-    my.updateControllersString = function() {
+    dashboard.updateControllersString = function() {
       controllersString = '';
       var sortedRowElems = $(elem).find('.dashboard-row').toArray();
       for (var index in sortedRowElems) {
@@ -285,7 +285,7 @@
       return controllersString;
     };
 
-    my.updateHeightsString = function() {
+    dashboard.updateHeightsString = function() {
       heightsString = '';
 
       var sortedRowElems = $(elem).find('.dashboard-row').toArray();
@@ -319,7 +319,7 @@
       return heightsString;
     };
 
-    my.updateFiltersString = function() {
+    dashboard.updateFiltersString = function() {
       if (filtersString === null || filtersString === undefined) {
         return;
       }
@@ -335,10 +335,10 @@
         }
       }
       filtersString = filtersString.slice(0, -1);
-      my.saveFiltersString();
+      dashboard.saveFiltersString();
     };
 
-    my.saveFiltersString = function() {
+    dashboard.saveFiltersString = function() {
       if (filtersString !== prevFiltersString) {
         prevFiltersString = filtersString;
         if (filtersPrefID !== '') {
@@ -360,48 +360,48 @@
       return filtersString;
     };
 
-    my.removeRow = function(id) {
+    dashboard.removeRow = function(id) {
       $(rows[id].elem()).hide('blind', {}, 150, function() {
         $(rows[id].elem()).remove();
-        my.resize();
-        my.redraw();
+        dashboard.resize();
+        dashboard.redraw();
         delete rows[id];
       });
     };
 
-    my.updateComponentCountClasses = function() {
+    dashboard.updateComponentCountClasses = function() {
       for (var item in rows) {
         rows [item].updateComponentCountClasses();
       }
     };
 
-    my.updateRows = function() {
+    dashboard.updateRows = function() {
       totalComponents = 0;
       for (var item in rows) {
         rows[item].updateComponents();
         if (rows [item].componentsCount() === 0) {
-          my.removeRow(item);
+          dashboard.removeRow(item);
         }
 
         totalComponents += rows[item].componentsCount();
       }
       if (controllersString !== null) {
-        my.updateControllersString();
+        dashboard.updateControllersString();
       }
       if (heightsString !== null && heightsString !== undefined) {
-        my.updateHeightsString();
+        dashboard.updateHeightsString();
       }
       if (filtersString !== null && filtersString !== undefined) {
-        my.updateFiltersString();
+        dashboard.updateFiltersString();
       }
     };
 
-    my.removeComponent = function(id) {
+    dashboard.removeComponent = function(id) {
       components[id].row().removeComponent(id);
-      my.unregisterBox(id);
+      dashboard.unregisterBox(id);
     };
 
-    my.newComponent = function() {
+    dashboard.newComponent = function() {
       if (totalComponents >= maxComponents) {
         console.error('Maximum number of components reached');
         return;
@@ -415,7 +415,7 @@
         row = rows[lastFreeRowElem.attr('id')];
         box = DashboardBox(row, defaultControllerString, defaultFilterString,
             dashboardOpts);
-        my.registerBox(box);
+        dashboard.registerBox(box);
         row.registerBox(box);
         $(row.elem()).append(box.elem());
         row.resize();
@@ -423,24 +423,24 @@
       }
       else {
         // All rows full
-        row = my.addNewRow(defaultControllerString, defaultFilterString,
+        row = dashboard.addNewRow(defaultControllerString, defaultFilterString,
             undefined, 'bottom');
         box = row.lastAddedComponent();
-        my.resize();
-        my.redraw();
+        dashboard.resize();
+        dashboard.redraw();
       }
       box.activateSelectors();
       box.selectController(box.controllerString(), false, true);
-      my.updateRows();
+      dashboard.updateRows();
     };
 
-    my.loadContent = function() {
+    dashboard.loadContent = function() {
       for (var item in rows) {
         rows[item].loadContent();
       }
     };
 
-    my.resized = function(checkHeight) {
+    dashboard.resized = function(checkHeight) {
       if (checkHeight) {
         if (width === elem.clientWidth && height === elem.clientHeight) {
           return;
@@ -453,12 +453,12 @@
       }
       width = elem.clientWidth;
       height = elem.clientHeight;
-      my.resize();
+      dashboard.resize();
       clearTimeout(currentResizeTimeout);
-      currentResizeTimeout = setTimeout(my.redraw, 50);
+      currentResizeTimeout = setTimeout(dashboard.redraw, 50);
     };
 
-    my.resize = function() {
+    dashboard.resize = function() {
       for (var item in rows) {
         if (heightsString === null) {
           rows[item].height(elem.clientHeight);
@@ -467,17 +467,17 @@
       }
     };
 
-    my.redraw = function() {
+    dashboard.redraw = function() {
       for (var item in rows) {
         rows[item].redraw();
       }
     };
 
-    my.addControllerFactory = function(factoryName, factoryFunc) {
+    dashboard.addControllerFactory = function(factoryName, factoryFunc) {
       controllerFactories[factoryName] = factoryFunc;
     };
 
-    my.addFilter = function(filterID, filterName, filterTerm, filterType) {
+    dashboard.addFilter = function(filterID, filterName, filterTerm, filterType) {
       filters.push({
         id: filterID,
         name: filterName,
@@ -486,20 +486,20 @@
       });
     };
 
-    my.addControllersForComponent = function(component) {
+    dashboard.addControllersForComponent = function(component) {
       for (var factoryName in controllerFactories) {
         controllerFactories[factoryName](component);
       }
     };
 
-    my.addFiltersForComponent = function(component) {
+    dashboard.addFiltersForComponent = function(component) {
       for (var filterIndex in filters) {
         var filter = filters[filterIndex];
         component.addFilter(filter.id, filter);
       }
     };
 
-    my.initComponentsFromString = function() {
+    dashboard.initComponentsFromString = function() {
       var rowControllersStringList = [];
       if (controllersString) {
         rowControllersStringList = controllersString.split('#');
@@ -524,11 +524,11 @@
           height = undefined;
         }
 
-        my.addNewRow(rowControllersStringList[index],
+        dashboard.addNewRow(rowControllersStringList[index],
             filtersString ? rowFiltersStringList[index] : null, height);
       }
-      my.resize();
-      my.redraw();
+      dashboard.resize();
+      dashboard.redraw();
 
       var item;
       if (controllersString) {
@@ -540,10 +540,10 @@
       for (item in components) {
         components[item].activateSelectors();
       }
-      my.redraw();
+      dashboard.redraw();
     };
 
-    my.startEdit = function() {
+    dashboard.startEdit = function() {
       if (editMode) {
         return;
       }
@@ -562,7 +562,7 @@
       }
     };
 
-    my.stopEdit = function() {
+    dashboard.stopEdit = function() {
       if (!editMode) {
         return;
       }
@@ -587,20 +587,22 @@
       // Window resize
       $(window).on('resize', function() {
         console.log('Rezise ' + new Date());
-        my.resized(false);
+        dashboard.resized(false);
       });
     });
 
     // Drop targets for new rows
-    topTarget = DashboardNewRowTarget(my, 'top');
+    topTarget = DashboardNewRowTarget(dashboard, 'top');
     $(elem).prepend(topTarget.elem());
-    bottomTarget = DashboardNewRowTarget(my, 'bottom');
+    bottomTarget = DashboardNewRowTarget(dashboard, 'bottom');
     $(elem).append(bottomTarget.elem());
 
-    return my;
+    return dashboard;
   }
 
-  global.Dashboard = Dashboard;
+  global.create_dashboard = create_dashboard;
+  // TODO remove when all xslt code has been migrated
+  global.Dashboard = create_dashboard;
 
   /*
   * Dashboard Rows
@@ -3405,7 +3407,7 @@
         return;
       }
 
-      var dashboard = Dashboard(dashboard_name,
+      var dashboard = create_dashboard(dashboard_name,
           elem.data('controllers'), elem.data('heights'),
           elem.data('filters-string'),
           {
