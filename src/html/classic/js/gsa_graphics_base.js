@@ -601,9 +601,9 @@
     });
 
     // Drop targets for new rows
-    topTarget = DashboardNewRowTarget(dashboard, 'top');
+    topTarget = create_dashboard_new_row_target(dashboard, 'top');
     $(elem).prepend(topTarget.elem());
-    bottomTarget = DashboardNewRowTarget(dashboard, 'bottom');
+    bottomTarget = create_dashboard_new_row_target(dashboard, 'bottom');
     $(elem).append(bottomTarget.elem());
 
     return dashboard;
@@ -852,23 +852,24 @@
   /*
   * Dashboard "New Row" drop target
   */
-  function DashboardNewRowTarget(dashboard, position) {
-    var my = function() {};
+  function create_dashboard_new_row_target(dashboard, position) {
     var id = dashboard.id() + '-' + position + '-add';
     var elem = document.createElement('div');
     $(elem).addClass('dashboard-add-row');
     $(elem).attr('id', id);
     $(elem).css('display', dashboard.editMode() ? 'block' : 'none');
 
-    my.elem = function() {
+    var new_row_target = function() {};
+
+    new_row_target.elem = function() {
       return elem;
     };
 
-    my.dashboard = function() {
+    new_row_target.dashboard = function() {
       return dashboard;
     };
 
-    my.id = function() {
+    new_row_target.id = function() {
       return id;
     };
 
@@ -884,10 +885,12 @@
       },
     });
 
-    return my;
+    return new_row_target;
   }
 
-  global.DashboardNewRowTarget = DashboardNewRowTarget;
+  global.create_dashboard_new_row_target = create_dashboard_new_row_target;
+  // TODO remove when all xslt code has been migrated
+  global.DashboardNewRowTarget = create_dashboard_new_row_target;
 
   /*
   * Dashboard Component Boxes
