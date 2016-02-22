@@ -264,15 +264,17 @@
 
     dashboard.updateControllersString = function() {
       controllersString = '';
-      var sortedRowElems = elem.find('.dashboard-row').toArray();
-      for (var index in sortedRowElems) {
-        var entry = $(sortedRowElems[index]).attr('id');
-        var rowControllersString = rows[entry].updateControllersString();
-        if (rows[entry].componentsCount() !== 0) {
+
+      elem.find('.dashboard-row').each(function() {
+        var entry = $(this).attr('id');
+        var row = rows[entry];
+        var rowControllersString = row.updateControllersString();
+        if (row.componentsCount() !== 0) {
           controllersString += rowControllersString;
           controllersString += '#';
         }
-      }
+      });
+
       controllersString = controllersString.slice(0, -1);
       if (controllersString !== prevControllersString) {
         prevControllersString = controllersString;
@@ -299,15 +301,16 @@
     dashboard.updateHeightsString = function() {
       heightsString = '';
 
-      var sortedRowElems = elem.find('.dashboard-row').toArray();
-      for (var index in sortedRowElems) {
-        var entry = $(sortedRowElems[index]).attr('id');
-        var rowHeight = rows[entry].height();
-        if (rows[entry].componentsCount() !== 0) {
+      elem.find('.dashboard-row').each(function() {
+        var entry = $(this).attr('id');
+        var row = rows[entry];
+        var rowHeight = row.height();
+        if (row.componentsCount() !== 0) {
           heightsString += rowHeight;
           heightsString += '#';
         }
-      }
+      });
+
       heightsString = heightsString.slice(0, -1);
 
       if (heightsString !== prevHeightsString) {
@@ -336,15 +339,16 @@
       }
 
       filtersString = '';
-      var sortedRowElems = elem.find('.dashboard-row').toArray();
-      for (var index in sortedRowElems) {
-        var entry = $(sortedRowElems[index]).attr('id');
-        var rowFiltersString = rows[entry].updateFiltersString();
-        if (rows[entry].componentsCount() !== 0) {
+      elem.find('.dashboard-row').each(function() {
+        var entry = $(this).attr('id');
+        var row = rows[entry];
+        var rowFiltersString = row.updateFiltersString();
+        if (row.componentsCount() !== 0) {
           filtersString += rowFiltersString;
           filtersString += '#';
         }
-      }
+      });
+
       filtersString = filtersString.slice(0, -1);
       dashboard.saveFiltersString();
     };
