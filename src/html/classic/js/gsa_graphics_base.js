@@ -167,6 +167,72 @@
       stopEdit: stop_edit,
     };
 
+    init();
+
+    return dashboard;
+
+    function init() {
+      if (dashboardControls) {
+        startEditButton = $('<a/>', {
+          href: '#',
+          on: {
+            click: function() {dashboard.startEdit();},
+          },
+        })
+        .append($('<img/>', {
+          src: 'img/edit.png',
+          alt: 'Edit Dashboard',
+          title: 'Edit Dashboard',
+        }))
+        .appendTo($(dashboardControls));
+
+        newComponentButton = $('<a/>', {
+          href: '#',
+          on: {
+            click: function() {dashboard.newComponent();},
+          }
+        })
+        .append($('<img/>', {
+          src: 'img/new.png',
+          alt: 'Add new Component',
+          title: 'Add new Component',
+        }))
+        .appendTo($(dashboardControls));
+
+        newComponentButton.hide();
+
+        stopEditButton = $('<a/>', {
+          href: '#',
+          on: {
+            click: function() {dashboard.stopEdit();},
+          }
+        })
+        .append($('<img/>', {
+          src: 'img/stop.png',
+          alt: 'Stop Editing',
+          title: 'Stop Editing',
+        }))
+        .appendTo($(dashboardControls));
+
+        stopEditButton.hide();
+      }
+
+      width = elem[0].clientWidth;
+
+      $(window).on('load', function() {
+        // Window resize
+        $(window).on('resize', function() {
+          dashboard.resized(false);
+        });
+      });
+
+      // add drop targets for new rows
+      topTarget = create_dashboard_new_row_target(dashboard, 'top');
+      elem.prepend(topTarget.elem());
+      bottomTarget = create_dashboard_new_row_target(dashboard, 'bottom');
+      elem.append(bottomTarget.elem());
+    }
+
     function get_id() {
       return id;
     }
@@ -617,72 +683,6 @@
         newComponentButton.hide();
       }
     }
-
-    function init() {
-      if (dashboardControls) {
-        startEditButton = $('<a/>', {
-          href: '#',
-          on: {
-            click: function() {dashboard.startEdit();},
-          },
-        })
-        .append($('<img/>', {
-          src: 'img/edit.png',
-          alt: 'Edit Dashboard',
-          title: 'Edit Dashboard',
-        }))
-        .appendTo($(dashboardControls));
-
-        newComponentButton = $('<a/>', {
-          href: '#',
-          on: {
-            click: function() {dashboard.newComponent();},
-          }
-        })
-        .append($('<img/>', {
-          src: 'img/new.png',
-          alt: 'Add new Component',
-          title: 'Add new Component',
-        }))
-        .appendTo($(dashboardControls));
-
-        newComponentButton.hide();
-
-        stopEditButton = $('<a/>', {
-          href: '#',
-          on: {
-            click: function() {dashboard.stopEdit();},
-          }
-        })
-        .append($('<img/>', {
-          src: 'img/stop.png',
-          alt: 'Stop Editing',
-          title: 'Stop Editing',
-        }))
-        .appendTo($(dashboardControls));
-
-        stopEditButton.hide();
-      }
-
-      width = elem[0].clientWidth;
-
-      $(window).on('load', function() {
-        // Window resize
-        $(window).on('resize', function() {
-          dashboard.resized(false);
-        });
-      });
-
-      // add drop targets for new rows
-      topTarget = create_dashboard_new_row_target(dashboard, 'top');
-      elem.prepend(topTarget.elem());
-      bottomTarget = create_dashboard_new_row_target(dashboard, 'bottom');
-      elem.append(bottomTarget.elem());
-    }
-
-    init();
-
-    return dashboard;
   }
 
   global.create_dashboard = create_dashboard;

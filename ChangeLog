@@ -1,5 +1,12 @@
 2016-02-23  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_graphics_base.js (create_dashboard): Move init
+	function to the top. This allows to see what is happening first easily. The
+	most important information (interface and initialization) is on top of the
+	function now.
+
+2016-02-23  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_graphics_base.js: Hide and show add new component
 	button if a component is added or removed dependend of maximum allowed
 	components.
