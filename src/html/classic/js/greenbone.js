@@ -482,6 +482,12 @@
         start_auto_refresh();
       },
     });
+
+    // Rebuild select2 dropdown lists as the original copies do not work.
+    content.find('span.select2').remove();
+    content.find('select').removeClass('select2-hidden-accessible');
+    content.find('select').removeAttr('aria-hidden');
+    content.find('select').select2();
   };
 
   window.FilterDialog = FilterDialog;
