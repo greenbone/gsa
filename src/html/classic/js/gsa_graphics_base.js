@@ -695,28 +695,83 @@
   function create_dashboard_row(dashboard, controllersString, filtersString,
       height, dashboardOpts) {
     var components = {};
-    var elem = document.createElement('div');
-    $(elem).addClass('dashboard-row');
     var id = dashboard.nextRowID();
-    $(elem).attr('id', id);
     var compCountOffset = 0;
-    var lastAddedComponent = null;
+    var lastAddedComponent;
     var prevHeight = height;
-    var dashboard_row = function() {};
+    var elem;
+    var componentStringList = [];
+    var filterStringList;
 
-    dashboard_row.elem = function() {
-      return elem;
+    var dashboard_row = {
+      elem: get_elem,
+      id: get_id,
+      dashboard: get_dashboard,
+      height: get_set_height,
+      component: get_component,
+      controllersString: get_controllers_string,
+      filtersString: get_filters_string,
+      lastAddedComponent: get_last_added_component,
+      componentsCount: get_components_count,
+      registerBox: register_box,
+      unregisterBox: unregister_box,
+      updateControllersString: update_controllers_string,
+      updateFiltersString: update_filters_string,
+      updateComponentCountClasses: update_component_count_classes,
+      updateComponents: update_components,
+      removeComponent: remove_component,
+      loadContent: load_content,
+      startEdit: start_edit,
+      stopEdit: stop_edit,
+      redraw: redraw,
+      resize: resize,
     };
 
-    dashboard_row.dashboard = function() {
+    init();
+
+    return dashboard_row;
+
+    function init() {
+      elem = $('<div/>', {
+        'class': 'dashboard-row',
+        id: id,
+        height: height,
+      });
+
+      elem.css('height', height);
+
+      if (controllersString) {
+        componentStringList = controllersString.split('|');
+      }
+
+      if (filtersString) {
+        filterStringList = filtersString.split('|');
+      }
+
+      for (var index in componentStringList) {
+        var box = create_dashboard_box(dashboard_row,
+            componentStringList[index],
+            filterStringList ? filterStringList[index] : null,
+            dashboardOpts);
+        dashboard.registerBox(box);
+        dashboard_row.registerBox(box);
+        elem.append(box.elem());
+      }
+    }
+
+    function get_elem() {
+      return elem[0];
+    }
+
+    function get_dashboard() {
       return dashboard;
-    };
+    }
 
-    dashboard_row.id = function() {
+    function get_id() {
       return id;
-    };
+    }
 
-    dashboard_row.height = function(newHeight) {
+    function get_set_height(newHeight) {
       if (newHeight === undefined) {
         return height;
       }
@@ -726,41 +781,41 @@
         prevHeight = height;
         dashboard.resize();
       }
-    };
+    }
 
-    dashboard_row.component = function(id) {
-      return components [id];
-    };
+    function get_component(id) {
+      return components[id];
+    }
 
-    dashboard_row.controllersString = function() {
+    function get_controllers_string() {
       return controllersString;
-    };
+    }
 
-    dashboard_row.lastAddedComponent = function() {
+    function get_last_added_component() {
       return lastAddedComponent;
-    };
+    }
 
-    dashboard_row.componentsCount = function() {
+    function get_components_count() {
       var placeholderCount = $(elem).find(
           '.dashboard-placeholder').toArray().length;
       return Object.keys(components).length + placeholderCount +
         compCountOffset;
-    };
+    }
 
-    dashboard_row.registerBox = function(box) {
-      components [box.id()] = box;
+    function register_box(box) {
+      components[box.id()] = box;
       lastAddedComponent = box;
-    };
+    }
 
-    dashboard_row.unregisterBox = function(id) {
+    function unregister_box(id) {
       delete components[id];
-    };
+    }
 
-    dashboard_row.filtersString = function() {
+    function get_filters_string() {
       return filtersString;
-    };
+    }
 
-    dashboard_row.updateControllersString = function() {
+    function update_controllers_string() {
       controllersString = '';
       for (var item in components) {
         controllersString += components[item].controllerString();
@@ -768,9 +823,9 @@
       }
       controllersString = controllersString.slice(0, -1);
       return controllersString;
-    };
+    }
 
-    dashboard_row.updateFiltersString = function() {
+    function update_filters_string() {
       filtersString = '';
       for (var item in components) {
         filtersString += components[item].filterString();
@@ -778,16 +833,16 @@
       }
       filtersString = filtersString.slice(0, -1);
       return filtersString;
-    };
+    }
 
-    dashboard_row.updateComponentCountClasses = function() {
+    function update_component_count_classes() {
       for (var i = 0; i <= 4; i++) {
         $(elem).removeClass('num-components-' +  i);
       }
       $(elem).addClass('num-components-' + dashboard_row.componentsCount());
-    };
+    }
 
-    dashboard_row.updateComponents = function() {
+    function update_components() {
       var componentElems = $(elem).children('div.dashboard-box').toArray();
       var newComponents = {};
       for (var index in componentElems) {
@@ -806,9 +861,9 @@
       }
 
       dashboard_row.updateComponentCountClasses();
-    };
+    }
 
-    dashboard_row.removeComponent = function(id) {
+    function remove_component(id) {
       components[id].elem().remove();
 
       dashboard.unregisterBox(id);
@@ -819,15 +874,15 @@
       }
 
       dashboard.updateRows();
-    };
+    }
 
-    dashboard_row.loadContent = function() {
+    function load_content() {
       for (var item in components) {
         components[item].loadContent();
       }
-    };
+    }
 
-    dashboard_row.resize = function(newRowWidth, newRowHeight) {
+    function resize(newRowWidth, newRowHeight) {
       if (newRowHeight) {
         height = newRowHeight;
       }
@@ -838,15 +893,15 @@
       for (var item in components) {
         components[item].resize(newRowWidth, newRowHeight);
       }
-    };
+    }
 
-    dashboard_row.redraw = function() {
+    function redraw() {
       for (var item in components) {
         components[item].redraw();
       }
-    };
+    }
 
-    dashboard_row.startEdit = function() {
+    function start_edit() {
       for (var componentID in components) {
         components[componentID].startEdit();
       }
@@ -885,40 +940,16 @@
           dashboard.updateComponentCountClasses();
         }
       });
-    };
+    }
 
-    dashboard_row.stopEdit = function() {
+    function stop_edit() {
       for (var componentID in components) {
         components[componentID].stopEdit();
       }
 
       $(elem).resizable('destroy');
       $(elem).sortable('destroy');
-    };
-
-    var componentStringList = [];
-    if (controllersString) {
-      componentStringList = controllersString.split('|');
     }
-
-    var filterStringList = null;
-    if (filtersString) {
-      filterStringList = filtersString.split('|');
-    }
-
-    $(elem).css('height', height);
-    $(elem).attr('height', height);
-
-    for (var index in componentStringList) {
-      var box = create_dashboard_box(dashboard_row, componentStringList[index],
-          filterStringList ? filterStringList[index] : null,
-          dashboardOpts);
-      dashboard.registerBox(box);
-      dashboard_row.registerBox(box);
-      $(elem).append(box.elem());
-    }
-
-    return dashboard_row;
   }
 
   global.create_dashboard_row = create_dashboard_row;

@@ -1,5 +1,10 @@
 2016-02-23  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_graphics_base.js (create_dashboard_row): Refactor
+	dashboard row to use an internal object instead of internal function.
+
+2016-02-23  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_graphics_base.js (create_dashboard): Move init
 	function to the top. This allows to see what is happening first easily. The
 	most important information (interface and initialization) is on top of the
