@@ -418,6 +418,10 @@
     function remove_component(id) {
       components[id].row().removeComponent(id);
       dashboard.unregisterBox(id);
+
+      if (totalComponents < maxComponents) {
+        newComponentButton.show();
+      }
     }
 
     function new_component() {
@@ -453,6 +457,10 @@
       box.activateSelectors();
       box.selectController(box.controllerString(), false, true);
       dashboard.updateRows();
+
+      if (totalComponents >= maxComponents) {
+        newComponentButton.hide();
+      }
     }
 
     function load_content() {
@@ -584,7 +592,10 @@
       if (dashboardControls) {
         startEditButton.hide();
         stopEditButton.show();
-        newComponentButton.show();
+
+        if (totalComponents < maxComponents) {
+          newComponentButton.show();
+        }
       }
     }
 
