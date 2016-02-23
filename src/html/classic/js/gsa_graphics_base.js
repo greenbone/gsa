@@ -987,7 +987,6 @@
       tolerance: 'pointer',
       receive: function(event, ui) {
         var receivedID = ui.item.attr('id');
-        $(dashboard.component(receivedID).elem()).remove();
         dashboard.addToNewRow(receivedID, position);
       },
     });
