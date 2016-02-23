@@ -4074,18 +4074,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:value-of select="gsa:i18n ('Reports', 'Report')"/>:
         </td>
         <td>
-          <a href="/omp?cmd=get_reports&amp;replace_task_id=1&amp;filt_id=-2&amp;filter=task_id={@id} apply_overrides={$apply-overrides} min_qod={$min-qod} sort-reverse=name&amp;task_filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;task_filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+          <a href="/omp?cmd=get_reports&amp;replace_task_id=1&amp;filt_id=-2&amp;filter=task_id={@id} apply_overrides={$apply-overrides} min_qod={$min-qod} sort-reverse=date&amp;task_filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
              title="{gsa-i18n:strformat (gsa:i18n ('Reports on Task %1', 'Task'), name)}">
             <xsl:value-of select="report_count/text ()"/>
           </a>
           <xsl:if test="current_report/report/timestamp">
             <xsl:value-of select="concat(', ', gsa:i18n ('Current', 'Task|Report'), ': ')"/>
-            <a href="/omp?cmd=get_report&amp;report_id={current_report/report/@id}&amp;overrides={$apply-overrides}&amp;apply_min_qod={number (string-length ($min-qod) != 0)}&amp;min_qod={$min-qod}&amp;token={/envelope/token}">
+            <a href="/omp?cmd=get_report&amp;report_id={current_report/report/@id}&amp;overrides={$apply-overrides}&amp;apply_min_qod={number (string-length ($min-qod) != 0)}&amp;;min_qod={$min-qod}&amp;token={/envelope/token}">
               <xsl:call-template name="short_timestamp_current"/>
             </a>
           </xsl:if>
            <xsl:value-of select="concat(' (', gsa:i18n ('Finished', 'Task|Reports'), ': ')"/>
-           <a href="/omp?cmd=get_reports&amp;replace_task_id=1&amp;filt_id=-2&amp;filter=task_id={@id} and status=Done apply_overrides={$apply-overrides} min_qod={$min-qod} sort-reverse=name&amp;task_filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;task_filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+           <a href="/omp?cmd=get_reports&amp;replace_task_id=1&amp;filt_id=-2&amp;filter=task_id={@id} and status=Done apply_overrides={$apply-overrides} min_qod={$min-qod} sort-reverse=date&amp;task_filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
              title="{gsa-i18n:strformat (gsa:i18n ('Reports on Task %1', 'Task'), name)}">
             <xsl:value-of select="report_count/finished"/>
            </a>
@@ -6908,11 +6908,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <td>
           <xsl:choose>
             <xsl:when test="report_count &gt; 0">
-              <a href="/omp?cmd=get_reports&amp;replace_task_id=1&amp;filt_id=-2&amp;filter=task_id={@id} and status=Done apply_overrides={../apply_overrides} min_qod={../filters/keywords/keyword[column='min_qod']/value} sort-reverse=name&amp;task_filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;task_filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+              <a href="/omp?cmd=get_reports&amp;replace_task_id=1&amp;filt_id=-2&amp;filter=task_id={@id} and status=Done apply_overrides={../apply_overrides} min_qod={../filters/keywords/keyword[column='min_qod']/value}&amp;task_filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;task_filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
                 title="{gsa-i18n:strformat (gsa:i18n ('View list of all finished reports for Task %1', 'Task'), name)}">
                 <xsl:value-of select="report_count/finished"/>
               </a>
-              (<a href="/omp?cmd=get_reports&amp;replace_task_id=1&amp;filt_id=-2&amp;filter=task_id={@id} apply_overrides={../apply_overrides} min_qod={../filters/keywords/keyword[column='min_qod']/value} sort-reverse=name&amp;task_filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;task_filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+              (<a href="/omp?cmd=get_reports&amp;replace_task_id=1&amp;filt_id=-2&amp;filter=task_id={@id} apply_overrides={../apply_overrides} min_qod={../filters/keywords/keyword[column='min_qod']/value}&amp;task_filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;task_filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
                 title="{gsa-i18n:strformat (gsa:i18n ('View list of all reports for Task %1, including unfinished ones', 'Task'), name)}">
                 <xsl:value-of select="report_count/text()"/>
                </a>)
