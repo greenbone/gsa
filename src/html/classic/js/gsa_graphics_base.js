@@ -174,7 +174,7 @@
     function init() {
       if (dashboardControls) {
         startEditButton = $('<a/>', {
-          href: '#',
+          href: 'javascript:void(0);',
           on: {
             click: function() {dashboard.startEdit();},
           },
@@ -187,7 +187,7 @@
         .appendTo($(dashboardControls));
 
         newComponentButton = $('<a/>', {
-          href: '#',
+          href: 'javascript:void(0);',
           on: {
             click: function() {dashboard.newComponent();},
           }
@@ -202,7 +202,7 @@
         newComponentButton.hide();
 
         stopEditButton = $('<a/>', {
-          href: '#',
+          href: 'javascript:void(0);',
           on: {
             click: function() {dashboard.stopEdit();},
           }
@@ -1077,7 +1077,7 @@
 
       $('<a/>', {
         'class': 'remove-button',
-        href: '#;',
+        href: 'javascript:void(0);',
         on: {
           click: function() { dashboard_box.remove(); },
         },
@@ -1373,7 +1373,7 @@
     /* Adds a chart selector to the footer */
     dashboard_box.createChartSelector = function() {
       $('<a/>', {
-        href: '#',
+        href: 'javascript:void(0);',
         on: {
           click: function() {dashboard_box.prevController();},
         }
@@ -1412,7 +1412,7 @@
       }
 
       $('<a/>', {
-        href: '#',
+        href: 'javascript:void(0);',
         on: {
           click: function() {
             dashboard_box.nextController();
@@ -1490,7 +1490,7 @@
     /* Adds a filter selector to the footer */
     dashboard_box.createFilterSelector = function() {
       $('<a/>', {
-        href: '#',
+        href: 'javascript:void(0);',
         on: {
           click: function() {
             dashboard_box.prevFilter();
@@ -1525,7 +1525,7 @@
       }
 
       $('<a/>', {
-        href: '#',
+        href: 'javascript:void(0);',
         on: {
           click: function() {
             dashboard_box.nextFilter();
