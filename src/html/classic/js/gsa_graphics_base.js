@@ -1281,7 +1281,7 @@
     /* Puts an error message into the header and clears the svg element */
     dashboard_box.show_error = function(message) {
       $(header).text(message);
-      svg.text('');
+      dashboard_box.svg().text('');
     };
 
     /* Gets a menu item or creates it if it does not exist */
