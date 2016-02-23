@@ -1014,13 +1014,24 @@
     var currentFilterIndex = -1;
     var selectorsActive = false;
 
-    var lastRequestedController = null;
-    var lastRequestedFilter = null;
-    var last_generator = null;
-    var last_gen_params = null;
+    var lastRequestedController;
+    var lastRequestedFilter;
+    var last_generator;
+    var last_gen_params;
 
     var hideControllerSelect;
     var hideFilterSelect;
+    var controllerSelectElem;
+    var filterSelectElem;
+
+    var elem;
+    var menu;
+    var svg;
+    var header;
+    var footer;
+    var topButtons;
+
+    var dashboard_box = {};
 
     if (dashboardOpts) {
       if (dashboardOpts.hideControllerSelect) {
@@ -1031,72 +1042,94 @@
       }
     }
 
-    var elem = document.createElement('div');
-    $(elem).addClass('dashboard-box')
-          .attr('id', id);
-    var innerElem_d3 = d3.select(elem)
-                            .append('div')
-                              .attr('class', 'chart-box');
+    function init() {
 
-    var menu, header, topButtons, content_d3, svg;
-    var footer, controllerSelectElem, filterSelectElem;
-    var dashboard_box = function() {};
-    menu =
-      innerElem_d3
-          .append('div')
-            .attr('id', 'chart_list')
-              .append('ul')
-                .append('li');
-    menu.append('a')
-          .attr('id', 'section_list_first');
-    menu = menu.append('ul')
-            .attr('id', id + '-menu');
-    menu = menu.node();
+      elem = $('<div/>', {
+        'class': 'dashboard-box',
+        id: id,
+      });
 
-    topButtons =
-      innerElem_d3
-          .append('div')
-            .attr('class', 'chart-top-buttons');
-    topButtons
-      .append('a')
-        .attr('class', 'remove-button')
-        .attr('href', 'javascript:void(0);')
-        .on('click', function() { dashboard_box.remove(); })
-        .style('display', dashboard.editMode() ? 'inline' : 'none')
-        .append('img')
-          .attr('src', '/img/delete.png')
-          .attr('alt', 'Remove')
-          .attr('title', 'Remove');
+      var innerElem_d3 = $('<div/>', {
+        'class': 'chart-box',
+      }).appendTo(elem);
 
-    header =
-      innerElem_d3
-          .append('div')
-            .attr('class', 'chart-head')
-            .attr('id', id + '-head')
-            .text('Initializing component "' + controllerString + '"...');
-    header = header.node();
+      menu = $('<li/>')
+        .appendTo($('<ul/>')
+            .appendTo($('<div/>', {
+                id: 'chart_list',
+              })
+              .appendTo(innerElem_d3))
+          );
 
-    content_d3 =
-      innerElem_d3
-          .append('div')
-            .attr('class', 'dash-box-content')
-            .attr('id', id + '-content');
+      $('<a/>', {
+        'id': 'section_list_first',
+      }).appendTo(menu);
 
-    svg =
-      content_d3
-          .append('svg')
-            .attr('class', 'chart-svg')
-            .attr('id', id + '-svg')
-            .attr('width', 450)
-            .attr('height', 250);
-    svg = svg.node();
+      menu = $('<ul/>', {
+        id: id + '-menu',
+      }).appendTo(menu);
 
-    footer =
-      innerElem_d3
-          .append('div')
-            .attr('class', 'chart-foot')
-            .attr('id', id + '-foot');
-    footer = footer.node();
+      menu = menu[0];
+
+      topButtons = $('<div/>', {
+        'class': 'chart-top-buttons',
+      }).appendTo(innerElem_d3);
+
+      $('<a/>', {
+        'class': 'remove-button',
+        href: '#;',
+        on: {
+          click: function() { dashboard_box.remove(); },
+        },
+        css: {
+          'display': dashboard.editMode() ? 'inline' : 'none',
+        }
+      })
+      .append($('<img/>', {
+        src: '/img/delete.png',
+        alt: 'Remove',
+        title: 'Remove',
+      }))
+      .appendTo(topButtons);
+
+      header = $('<div/>', {
+        'class': 'chart-head',
+        id: id + '-head',
+        text: 'Initializing component "' + controllerString + '"...',
+      }).appendTo(innerElem_d3);
+
+      header = header[0];
+
+      var content_d3 = $('<div/>', {
+        'class': 'dash-box-content',
+        id: id + '-content',
+      }).appendTo(innerElem_d3);
+
+      svg = d3.select(content_d3[0])
+        .append('svg')
+        .attr('class', 'chart-svg')
+        .attr('id', id + '-svg')
+        .attr('width', 450)
+        .attr('height', 250);
+      svg = svg.node();
+
+      footer = $('<div/>', {
+        'class': 'chart-foot',
+        'id': id + '-foot',
+      }).appendTo(innerElem_d3);
+
+      footer = footer[0];
+
+      dashboard.addControllersForComponent(dashboard_box);
+      dashboard.addFiltersForComponent(dashboard_box);
+
+      if (!hideControllerSelect) {
+        dashboard_box.createChartSelector();
+      }
+      if (!hideFilterSelect && filters.length > 1) {
+        dashboard_box.createFilterSelector();
+      }
+    }
 
     dashboard_box.elem = function() {
       return elem;
@@ -1250,7 +1283,7 @@
 
     /* Puts an error message into the header and clears the svg element */
     dashboard_box.show_error = function(message) {
-      d3.select(header).text(message);
+      $(header).text(message);
       svg.text('');
     };
 
@@ -1281,7 +1314,7 @@
 
     dashboard_box.updateControllerSelect = function() {
       if (controllerSelectElem) {
-        $(controllerSelectElem.node()).select2('val', controllerString);
+        $(controllerSelectElem).select2('val', controllerString);
       }
       else {
         dashboard_box.selectController(controllerString, false, false);
@@ -1317,74 +1350,89 @@
 
     dashboard_box.prevController = function() {
       if (currentCtrlIndex <= 0) {
-        $(controllerSelectElem.node())
+        $(controllerSelectElem)
           .select2('val', controllers[controllers.length - 1].chart_name());
       }
       else {
-        $(controllerSelectElem.node())
+        $(controllerSelectElem)
           .select2('val', controllers[currentCtrlIndex - 1].chart_name());
       }
     };
 
     dashboard_box.nextController = function() {
       if (currentCtrlIndex >= controllers.length - 1) {
-        $(controllerSelectElem.node())
+        $(controllerSelectElem)
           .select2('val', controllers[0].chart_name());
       }
       else {
-        $(controllerSelectElem.node())
+        $(controllerSelectElem)
           .select2('val', controllers[currentCtrlIndex + 1].chart_name());
       }
     };
 
     /* Adds a chart selector to the footer */
     dashboard_box.createChartSelector = function() {
-      d3.select(footer)
-          .append('a')
-            .attr('href', 'javascript: void (0);')
-            .attr('onclick',
-                  'gsa.dashboards ["' + dashboard.id() + '"]' +
-                  '.component("' + id + '").prevController()')
-            .append('img')
-              .attr('src', 'img/previous.png')
-              .style('vertical-align', 'middle');
+      $('<a/>', {
+        href: '#',
+        on: {
+          click: function() {dashboard_box.prevController();},
+        }
+      })
+      .append($('<img/>', {
+        src: 'img/previous.png',
+        css: {
+          'vertical-align': 'middle'
+        },
+      }))
+      .appendTo(footer);
 
-      controllerSelectElem = d3.select(footer)
-        .append('select')
-        .style('margin-left', '5px')
-        .style('margin-right', '5px')
-        .style('vertical-align', 'middle')
-        .attr('onchange',
-            'gsa.dashboards ["' + dashboard.id() + '"]' +
-            '.component("' + id + '")' +
-            '.selectController (this.value, true, true)');
+      controllerSelectElem = $('<select/>', {
+        css: {
+          'margin-left': '5px',
+          'margin-right': '5px',
+          'vertical-align': 'middle',
+        },
+        on: {
+          change: function() {
+            dashboard_box.selectController(this.value, true, true);
+          },
+        },
+      })
+      .appendTo(footer);
 
       for (var controllerIndex in controllers) {
         var controller = controllers [controllerIndex];
         var controllerName = controller.chart_name();
-        controllerSelectElem.append('option')
-                              .attr('value', controllerName)
-                              .attr('id', id + '_chart_opt_' + controllerIndex)
-                              .text(controller.label());
+        $('<option/>', {
+          value: controllerName,
+          id: id + '_chart_opt_' + controllerIndex,
+          text: controller.label(),
+        })
+        .appendTo(controllerSelectElem);
       }
 
-      d3.select(footer)
-          .append('a')
-            .attr('href', 'javascript: void (0);')
-            .attr('onclick',
-                  'gsa.dashboards ["' + dashboard.id() + '"]' +
-                  '.component("' + id + '").nextController()')
-            .append('img')
-              .attr('src', 'img/next.png')
-              .style('vertical-align', 'middle');
+      $('<a/>', {
+        href: '#',
+        on: {
+          click: function() {
+            dashboard_box.nextController();
+          },
+        },
+      })
+      .append($('<img/>', {
+        src: 'img/next.png',
+        css: {
+          'vertical-align': 'middle',
+        },
+      }))
+      .appendTo(footer);
 
-      d3.select(footer)
-          .append('br');
+      $('<br>').appendTo(footer);
     };
 
     dashboard_box.updateFilterSelect = function() {
       if (filterSelectElem) {
-        $(filterSelectElem.node()).select2('val', filterString);
+        $(filterSelectElem).select2('val', filterString);
       }
       else {
         if (filterString) {
@@ -1419,88 +1467,96 @@
 
     dashboard_box.prevFilter = function() {
       if (currentFilterIndex <= 0) {
-        $(filterSelectElem.node())
+        $(filterSelectElem)
           .select2('val', filters[filters.length - 1].id);
       }
       else {
-        $(filterSelectElem.node())
+        $(filterSelectElem)
           .select2('val', filters[currentFilterIndex - 1].id);
       }
     };
 
     dashboard_box.nextFilter = function() {
       if (currentFilterIndex >= filters.length - 1) {
-        $(filterSelectElem.node())
+        $(filterSelectElem)
           .select2('val', filters[0].id);
       }
       else {
-        $(filterSelectElem.node())
+        $(filterSelectElem)
           .select2('val', filters[currentFilterIndex + 1].id);
       }
     };
 
     /* Adds a filter selector to the footer */
     dashboard_box.createFilterSelector = function() {
-      d3.select(footer)
-          .append('a')
-            .attr('href', 'javascript: void (0);')
-            .attr('onclick',
-                  'gsa.dashboards ["' + dashboard.id() + '"]' +
-                  '.component("' + id + '").prevFilter()')
-            .append('img')
-              .attr('src', 'img/previous.png')
-              .style('vertical-align', 'middle');
+      $('<a/>', {
+        href: '#',
+        on: {
+          click: function() {
+            dashboard_box.prevFilter();
+          },
+        },
+      })
+      .append($('<img/>', {
+        src: 'img/previous.png',
+        css: {
+          'vertical-align': 'middle',
+        },
+      }))
+      .appendTo(footer);
 
-      filterSelectElem = d3.select(footer)
-        .append('select')
-        .style('margin-left', '5px')
-        .style('margin-right', '5px')
-        .style('vertical-align', 'middle');
+      filterSelectElem = $('<select/>', {
+        css: {
+          'margin-left': '5px',
+          'margin-right': '5px',
+          'vertical-align': 'middle',
+        },
+      })
+      .appendTo(footer);
 
       for (var filterIndex in filters) {
-        var filter = filters [filterIndex];
-        filterSelectElem.append('option')
-                          .attr('value', filter.id)
-                          .attr('id', id + '_filter_opt_' + filter.id)
-                          .text(filter.name);
+        var filter = filters[filterIndex];
+        $('<option/>', {
+          value: filter.id,
+          id: id + '_filter_opt_' + filter.id,
+          text: filter.name,
+        })
+        .appendTo(filterSelectElem);
       }
 
-      d3.select(footer)
-          .append('a')
-            .attr('href', 'javascript: void (0);')
-            .attr('onclick',
-                  'gsa.dashboards ["' + dashboard.id() + '"]' +
-                  '.component("' + id + '").nextFilter()')
-            .append('img')
-              .attr('src', 'img/next.png')
-              .style('vertical-align', 'middle');
+      $('<a/>', {
+        href: '#',
+        on: {
+          click: function() {
+            dashboard_box.nextFilter();
+          },
+        },
+      })
+      .append($('<img/>', {
+        src: 'img/next.png',
+        css: {
+          'vertical-align': 'middle',
+        },
+      }))
+      .appendTo(footer);
 
-      d3.select(footer)
-          .append('br');
+      $('<br>').appendTo(footer);
     };
 
     dashboard_box.applySelect2 = function() {
       $(elem).find('.select2-container').remove();
       if (controllerSelectElem) {
-        $(controllerSelectElem.node()).select2();
+        $(controllerSelectElem).select2();
       }
       if (filterSelectElem) {
-        $(filterSelectElem.node()).select2();
-        $(filterSelectElem.node()).on('change', function() {
+        $(filterSelectElem).select2();
+        $(filterSelectElem).on('change', function() {
           dashboard_box.selectFilter(this.value, true, true);
         });
       }
     };
 
-    dashboard.addControllersForComponent(dashboard_box);
-    dashboard.addFiltersForComponent(dashboard_box);
-
-    if (!(hideControllerSelect)) {
-      dashboard_box.createChartSelector();
-    }
-    if (!(hideFilterSelect) && filters.length > 1) {
-      dashboard_box.createFilterSelector();
-    }
+    init();
 
     return dashboard_box;
   }
