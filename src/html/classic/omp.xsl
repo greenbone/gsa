@@ -14963,7 +14963,7 @@ should not have received it.
           <xsl:when test="type='file' and string-length(value) &gt; 0">
             <i><xsl:value-of select="gsa:i18n ('File attached.', 'Scan Config')"/></i>
           </xsl:when>
-          <xsl:when test="type='osp_credential_username' or type='osp_credential_password'">
+          <xsl:when test="type='osp_credential_up'">
             <xsl:variable name="value">
               <xsl:value-of select="value"/>
             </xsl:variable>
@@ -15059,7 +15059,7 @@ should not have received it.
             </xsl:call-template>
           </select>
         </xsl:when>
-        <xsl:when test="type='osp_credential_username' or type='osp_credential_password'">
+        <xsl:when test="type='osp_credential_up'">
           <xsl:variable name="value" select="value"/>
           <select name="osp_pref_{name}">
             <xsl:for-each select="../../../../get_credentials_response/credential[type='up']">
