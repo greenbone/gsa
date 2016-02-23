@@ -1252,13 +1252,11 @@
 
     // Edit management
     dashboard_box.startEdit = function() {
-      topButtons.select('.remove-button')
-        .style('display', 'inline');
+      topButtons.children('.remove-button').show();
     };
 
     dashboard_box.stopEdit = function() {
-      topButtons.select('.remove-button')
-        .style('display', 'none');
+      topButtons.children('.remove-button').hide();
     };
 
     // Data management
