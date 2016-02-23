@@ -1,5 +1,11 @@
 2016-02-23  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_graphics_base.js: Move storing of the filters,
+	controllers and heights strings into own functions. Remove saveFiltersString
+	from public dashboard api. It is only used within the dashboard.
+
+2016-02-23  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/omp.xsl: Use an order by date descending for links to
 	report lists at the task detail page.
 

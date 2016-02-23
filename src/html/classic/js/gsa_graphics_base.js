@@ -149,7 +149,6 @@
       updateControllersString: update_controllers_string,
       updateHeightsString: update_heights_string,
       updateFiltersString: update_filters_string,
-      saveFiltersString: save_filters_string,
       removeRow: remove_row,
       updateComponentCountClasses: update_component_count_classes,
       updateRows: update_rows,
@@ -268,6 +267,13 @@
       });
 
       controllersString = controllersString.slice(0, -1);
+
+      save_controllers_string();
+
+      return controllersString;
+    }
+
+    function save_controllers_string() {
       if (controllersString !== prevControllersString) {
         prevControllersString = controllersString;
 
@@ -287,7 +293,6 @@
           controllersPrefRequest.post(form_data);
         }
       }
-      return controllersString;
     }
 
     function update_heights_string() {
@@ -305,6 +310,12 @@
 
       heightsString = heightsString.slice(0, -1);
 
+      save_heights_string();
+
+      return heightsString;
+    }
+
+    function save_heights_string() {
       if (heightsString !== prevHeightsString) {
         if (heightsPrefID !== '') {
           if (heightsPrefRequest) {
@@ -322,7 +333,6 @@
           heightsPrefRequest.post(form_data);
         }
       }
-      return heightsString;
     }
 
     function update_filters_string() {
@@ -342,7 +352,10 @@
       });
 
       filtersString = filtersString.slice(0, -1);
-      dashboard.saveFiltersString();
+
+      save_filters_string();
+
+      return filtersString;
     }
 
     function save_filters_string() {
@@ -364,7 +377,6 @@
           filtersPrefRequest.post(form_data);
         }
       }
-      return filtersString;
     }
 
     function remove_row(id) {
