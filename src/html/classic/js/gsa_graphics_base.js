@@ -961,10 +961,13 @@
   */
   function create_dashboard_new_row_target(dashboard, position) {
     var id = dashboard.id() + '-' + position + '-add';
-    var elem = document.createElement('div');
-    $(elem).addClass('dashboard-add-row');
-    $(elem).attr('id', id);
-    $(elem).css('display', dashboard.editMode() ? 'block' : 'none');
+    var elem = $('<div/>', {
+      'class': 'dashboard-add-row',
+      id: id,
+      css: {
+        'display': dashboard.editMode() ? 'block' : 'none',
+      },
+    });
 
     var new_row_target = function() {};
 

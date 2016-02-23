@@ -5,6 +5,11 @@
 
 2016-02-23  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_graphics_base.js (create_dashboard_new_row_target):
+	Use jquery to create add row div placeholder element.
+
+2016-02-23  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_graphics_base.js (dashboard_box.show_error):
 	text function is only available if it is a jquery or d3 element. Therefore
 	for resetting the svg element it is converted to a d3 element.
