@@ -6782,7 +6782,7 @@ Public License instead of this License.
 <xsl:template mode="help" match="reports.html">
   <xsl:call-template name="help-header">
     <xsl:with-param name="title" select="'Reports'"/>
-    <xsl:with-param name="type" select="'reports'"/>
+    <xsl:with-param name="type" select="'report'"/>
   </xsl:call-template>
 
   <div class="section-box">
@@ -7095,7 +7095,7 @@ Public License instead of this License.
 <xsl:template mode="help" match="results.html">
   <xsl:call-template name="help-header">
     <xsl:with-param name="title" select="'Results'"/>
-    <xsl:with-param name="type" select="'results'"/>
+    <xsl:with-param name="type" select="'result'"/>
   </xsl:call-template>
 
   <div class="section-box">
@@ -9968,7 +9968,7 @@ Public License instead of this License.
 <xsl:template mode="help" match="ovaldefs.html">
   <xsl:call-template name="help-header">
     <xsl:with-param name="title" select="'OVAL Definitions'"/>
-    <xsl:with-param name="info-type" select="'ovaldefs'"/>
+    <xsl:with-param name="info-type" select="'ovaldef'"/>
   </xsl:call-template>
 
   <div class="section-box">
@@ -10067,7 +10067,7 @@ Public License instead of this License.
 <xsl:template mode="help" match="cert_bund_advs.html">
   <xsl:call-template name="help-header">
     <xsl:with-param name="title" select="'CERT-Bund Advisories'"/>
-    <xsl:with-param name="info-type" select="'certbund'"/>
+    <xsl:with-param name="info-type" select="'cert_bund_adv'"/>
   </xsl:call-template>
 
   <div class="section-box">
@@ -10184,7 +10184,7 @@ Public License instead of this License.
 <xsl:template mode="help" match="dfn_cert_advs.html">
   <xsl:call-template name="help-header">
     <xsl:with-param name="title" select="'DFN-CERT Advisories'"/>
-    <xsl:with-param name="info-type" select="'dfncert'"/>
+    <xsl:with-param name="info-type" select="'dfn_cert_adv'"/>
   </xsl:call-template>
 
   <div class="gb_window_part_center">Help: DFN-CERT Advisories</div>

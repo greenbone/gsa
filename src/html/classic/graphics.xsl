@@ -1161,7 +1161,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
   <div class="section-header">
     <h1>
-      <img class="icon icon-lg" src="/img/secinfo.svg" alt="SecInfo Dashboard"/>
+      <img class="icon icon-lg" src="/img/allinfo.svg" alt="SecInfo Dashboard"/>
       <xsl:value-of select="gsa:i18n ('SecInfo Dashboard', 'Dashboard')"/>
     </h1>
   </div>
