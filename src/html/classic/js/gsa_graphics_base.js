@@ -1640,6 +1640,10 @@
       return chart_name + '@' + display.id();
     };
 
+    controller.showError = function(message) {
+      return display.showError(message);
+    };
+
     /* Gets or sets the data source */
     controller.data_src = function(value) {
       if (!arguments.length) {
@@ -3111,7 +3115,7 @@
   /*
   * Prints an error to the console and shows it on the display of a chart.
   */
-  function output_error(chart, display_message, console_message,
+  function output_error(controller, display_message, console_message,
       console_extra) {
     if (console_message !== undefined) {
       console.error(console_message);
@@ -3120,7 +3124,7 @@
       console.debug(console_extra);
     }
 
-    chart.display().showError(display_message);
+    controller.showError(display_message);
   }
 
   global.output_error = output_error;
