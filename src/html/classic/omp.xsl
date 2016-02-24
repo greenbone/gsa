@@ -14967,10 +14967,19 @@ should not have received it.
             <xsl:variable name="value">
               <xsl:value-of select="value"/>
             </xsl:variable>
-            <a href="/omp?cmd=get_credential&amp;credential_id={$value}&amp;token={/envelope/token}"
-               title="{gsa:view_details_title ('Credential', $value)}">
-              <xsl:value-of select="../../../../get_credentials_response/credential[@id=$value]/name"/>
-            </a>
+            <xsl:choose>
+              <xsl:when test="$value=0">
+                <option value="0">
+                  <xsl:value-of select="gsa:i18n ('Use target credentials', 'Scan Config')"/>
+                </option>
+              </xsl:when>
+              <xsl:otherwise>
+                <a href="/omp?cmd=get_credential&amp;credential_id={$value}&amp;token={/envelope/token}"
+                   title="{gsa:view_details_title ('Credential', $value)}">
+                  <xsl:value-of select="../../../../get_credentials_response/credential[@id=$value]/name"/>
+                </a>
+              </xsl:otherwise>
+            </xsl:choose>
           </xsl:when>
           <xsl:otherwise>
             <xsl:value-of select="value"/>
@@ -15062,6 +15071,9 @@ should not have received it.
         <xsl:when test="type='osp_credential_up'">
           <xsl:variable name="value" select="value"/>
           <select name="osp_pref_{name}">
+            <option value="0">
+              <xsl:value-of select="gsa:i18n ('Use target credentials', 'Scan Config')"/>
+            </option>
             <xsl:for-each select="../../../../get_credentials_response/credential[type='up']">
               <xsl:call-template name="opt">
                 <xsl:with-param name="content" select="name"/>
