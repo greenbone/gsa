@@ -1630,110 +1630,130 @@
     var chart_name = p_chart_name;
     var label = p_label ? p_label : 'Unnamed chart';
     var icon = p_icon ? p_icon : '/img/help.png';
-    var current_request = null;
+    var current_request;
 
-    function controller() {}
+    var controller = {
+      id: get_id,
+      showError: show_error,
+      display: get_display,
+      generator: get_set_generator,
+      label: get_set_label,
+      icon: get_set_icon,
+      sendRequest: send_request,
 
-    display.addController(chart_name, controller);
+      // TODO use camel case
+      data_src: get_set_data_source,
+      chart_name: get_chart_name,
+      chart_type: get_chart_type,
+      chart_template: get_chart_template,
+      current_request: get_set_current_request,
+      show_loading: show_loading,
+      data_loaded: on_data_loaded,
+      detached_url: get_detached_url,
+    };
 
-    controller.id = function() {
+    init();
+
+    return controller;
+
+    function init() {
+      display.addController(chart_name, controller);
+    }
+
+    function get_id() {
       return chart_name + '@' + display.id();
-    };
+    }
 
-    controller.showError = function(message) {
+    function show_error(message) {
       return display.showError(message);
-    };
+    }
 
     /* Gets or sets the data source */
-    controller.data_src = function(value) {
+    function get_set_data_source(value) {
       if (!arguments.length) {
         return data_src;
       }
       data_src = value;
       return controller;
-    };
+    }
 
     /* Gets or sets the generator */
-    controller.generator = function(value) {
+    function get_set_generator(value) {
       if (!arguments.length) {
         return generator;
       }
       generator = value;
       return controller;
-    };
+    }
 
-    /* Gets or sets the display */
-    controller.display = function(value) {
-      if (!arguments.length) {
-        return display;
-      }
-      display = value;
-      return controller;
-    };
+    /* Gets the display */
+    function get_display(value) {
+      return display;
+    }
 
     /* Gets the chart name */
-    controller.chart_name = function() {
+    function get_chart_name() {
       return chart_name;
-    };
+    }
 
     /* Gets or sets the label */
-    controller.label = function(value) {
+    function get_set_label(value) {
       if (!arguments.length) {
         return label;
       }
       label = value;
       return controller;
-    };
+    }
 
     /* Gets or sets the icon */
-    controller.icon = function(value) {
+    function get_set_icon(value) {
       if (!arguments.length) {
         return icon;
       }
       icon = value;
       return controller;
-    };
+    }
 
     /* Gets the chart type */
-    controller.chart_type = function() {
+    function get_chart_type() {
       return chart_type;
-    };
+    }
 
     /* Gets the chart template */
-    controller.chart_template = function() {
+    function get_chart_template() {
       return chart_template;
-    };
+    }
 
     /* Gets or sets the current request */
-    controller.current_request = function(value) {
+    function get_set_current_request(value) {
       if (!arguments.length) {
         return current_request;
       }
       current_request = value;
       return controller;
-    };
+    }
 
     /* Delegates a data request to the data source */
-    controller.sendRequest = function(filter, p_gen_params) {
+    function send_request(filter, p_gen_params) {
       if (p_gen_params) {
         gen_params = p_gen_params;
       }
 
       data_src.sendRequest(controller, filter, gen_params);
-    };
+    }
 
     /* Shows the "Loading ..." text in the display */
-    controller.show_loading = function() {
+    function show_loading() {
       generator.show_loading(display);
-    };
+    }
 
     /* Callback for when data has been loaded */
-    controller.data_loaded = function(data, gen_params) {
+    function on_data_loaded(data, gen_params) {
       generator.generate(data, controller, gen_params);
-    };
+    }
 
     /* Construct URL for detached chart */
-    controller.detached_url = function() {
+    function get_detached_url() {
       var extra_params_str = '';
       var field;
       if (gen_params.x_field !== null && gen_params.x_field !== undefined) {
@@ -1783,9 +1803,7 @@
             '&chart_type=' + encodeURIComponent(chart_type) +
             '&chart_template=' + encodeURIComponent(chart_template) +
             extra_params_str;
-    };
-
-    return controller;
+    }
   }
 
   global.create_chart_controller = create_chart_controller;
