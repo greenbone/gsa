@@ -1,5 +1,11 @@
 2016-02-24  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_graphics_base.js (create_dashboard_box): Refactor
+	dashboard box to use an internal object instead of an internal function. Also
+	rename dashboard_box.show_error to showError.
+
+2016-02-24  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_graphics_base.js (create_dashboard_new_row_target):
 	Refactor dashboard row target to use an internal object instead of internal
 	function.

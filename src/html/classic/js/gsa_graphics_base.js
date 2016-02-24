@@ -1044,18 +1044,59 @@
     var footer;
     var topButtons;
 
-    var dashboard_box = {};
+    var dashboard_box = {
+      elem: get_elem,
+      header: get_header,
+      svg: get_svg,
+      row: get_set_row,
+      dashboard: get_dashboard,
+      id: get_id,
+      controllerString: get_set_controller_string,
+      filterString: get_set_filter_string,
+      currentFilter: get_current_filter,
+      addController: add_controller,
+      addFilter: add_filter,
+      remove: remove,
+      resize: resize,
+      redraw: redraw,
+      lastRequestedController: get_set_last_requested_controller,
+      lastRequestedFilter: get_set_last_requested_filter,
+      startEdit: start_edit,
+      stopEdit: stop_edit,
+      activateSelectors: activate_selectors,
+      updateControllerSelect: update_controller_select,
+      selectController: select_controller,
+      selectControllerIndex: select_controller_index,
+      showError: show_error,
+      prevController: select_prev_controller,
+      nextController: select_next_controller,
+      createChartSelector: create_chart_selector,
+      updateFilterSelect: update_filter_select,
+      selectFilter: select_filter,
+      selectFilterIndex: select_filter_index,
+      prevFilter: select_pref_filter,
+      nextFilter: select_next_filter,
+      createFilterSelector: create_filter_selector,
+      // TODO use camel case here
+      last_generator: get_last_generator,
+      last_gen_params: get_last_gen_params,
+      update_gen_data: update_gen_data,
+      create_or_get_menu_item: create_or_get_menu_item,
+    };
 
-    if (dashboardOpts) {
-      if (dashboardOpts.hideControllerSelect) {
-        hideControllerSelect = dashboardOpts.hideControllerSelect;
-      }
-      if (dashboardOpts.hideControllerSelect) {
-        hideFilterSelect = dashboardOpts.hideFilterSelect;
-      }
-    }
+    init();
+
+    return dashboard_box;
 
     function init() {
+      if (dashboardOpts) {
+        if (dashboardOpts.hideControllerSelect) {
+          hideControllerSelect = dashboardOpts.hideControllerSelect;
+        }
+        if (dashboardOpts.hideControllerSelect) {
+          hideFilterSelect = dashboardOpts.hideFilterSelect;
+        }
+      }
 
       elem = $('<div/>', {
         'class': 'dashboard-box',
@@ -1124,7 +1165,6 @@
         .attr('id', id + '-svg')
         .attr('width', 450)
         .attr('height', 250);
-      svg = svg.node();
 
       footer = $('<div/>', {
         'class': 'chart-foot',
@@ -1144,78 +1184,78 @@
       }
     }
 
-    dashboard_box.elem = function() {
+    function get_elem() {
       return elem;
-    };
+    }
 
-    dashboard_box.header = function() {
+    function get_header() {
       return d3.select(header);
-    };
+    }
 
-    dashboard_box.svg = function() {
-      return d3.select(svg);
-    };
+    function get_svg() {
+      return svg;
+    }
 
-    dashboard_box.row = function(newRow) {
+    function get_set_row(newRow) {
       if (newRow === undefined) {
         return row;
       }
       row = newRow;
       return dashboard_box;
-    };
+    }
 
-    dashboard_box.dashboard = function() {
+    function get_dashboard() {
       return dashboard;
-    };
+    }
 
-    dashboard_box.id = function() {
+    function get_id() {
       return id;
-    };
+    }
 
-    dashboard_box.controllerString = function(newStr) {
+    function get_set_controller_string(newStr) {
       if (newStr === undefined) {
         return controllerString;
       }
       controllerString = newStr;
       dashboard.updateControllersString();
-    };
+    }
 
-    dashboard_box.filterString = function(newStr) {
+    function get_set_filter_string(newStr) {
       if (newStr === undefined) {
         return filterString;
       }
       filterString = newStr;
       dashboard.updateFiltersString();
-    };
+    }
 
-    dashboard_box.currentFilter = function() {
+    function get_current_filter() {
       if (currentFilterIndex >= 0) {
         return filters [currentFilterIndex];
       }
       else {
         return null;
       }
-    };
+    }
 
-    dashboard_box.addController = function(controllerName, controller) {
+    function add_controller(controllerName, controller) {
       controllerIndexes[controllerName] = controllers.length;
       controllers.push(controller);
-    };
+    }
 
-    dashboard_box.addFilter = function(filterID, filter) {
+    function add_filter(filterID, filter) {
       filterIndexes[filterID] = filters.length;
       filters.push(filter);
-    };
+    }
 
-    dashboard_box.remove = function() {
+    function remove() {
       $(elem).hide('fade', {}, 250, function() {
         dashboard.removeComponent(id);
         row.resize();
         row.redraw();
       });
-    };
+    }
 
-    dashboard_box.resize = function(newRowWidth, newRowHeight) {
+    function resize(newRowWidth, newRowHeight) {
       var rowWidth, rowHeight;
       var componentsCount = row.componentsCount();
       // Set height first
@@ -1237,69 +1277,69 @@
       var newWidth = (rowWidth - 2) / (componentsCount ? componentsCount : 1);
       dashboard_box.svg().attr('width', newWidth - 8);
       $(elem).css('width', newWidth);
-    };
+    }
 
-    dashboard_box.redraw = function() {
-      dashboard_box.applySelect2();
+    function redraw() {
+      apply_select2();
       if (currentCtrlIndex >= 0) {
         controllers[currentCtrlIndex]
           .sendRequest(filters[currentFilterIndex]);
       }
-    };
+    }
 
-    dashboard_box.lastRequestedController = function(newController) {
+    function get_set_last_requested_controller(newController) {
       if (newController === undefined) {
         return lastRequestedController;
       }
       lastRequestedController = newController;
       return dashboard_box;
-    };
+    }
 
-    dashboard_box.lastRequestedFilter = function(newFilter) {
+    function get_set_last_requested_filter(newFilter) {
       if (newFilter === undefined) {
         return lastRequestedFilter;
       }
       lastRequestedFilter = newFilter;
       return dashboard_box;
-    };
+    }
 
     // Edit management
-    dashboard_box.startEdit = function() {
+    function start_edit() {
       topButtons.children('.remove-button').show();
-    };
+    }
 
-    dashboard_box.stopEdit = function() {
+    function stop_edit() {
       topButtons.children('.remove-button').hide();
-    };
+    }
 
     // Data management
 
     /* Gets the last successful generator */
-    dashboard_box.last_generator = function() {
+    function get_last_generator() {
       return last_generator;
-    };
+    }
 
     /* Gets the parameters for the last successful generator run */
-    dashboard_box.last_gen_params = function() {
+    function get_last_gen_params() {
       return last_gen_params;
-    };
+    }
 
     /* Updates the data on the last successful generator.
     * Should be called by the generator if it was successful */
-    dashboard_box.update_gen_data = function(generator, gen_params) {
+    function update_gen_data(generator, gen_params) {
       last_generator = generator;
       last_gen_params = gen_params;
       return dashboard_box;
-    };
+    }
 
     /* Puts an error message into the header and clears the svg element */
-    dashboard_box.show_error = function(message) {
+    function show_error(message) {
       $(header).text(message);
       dashboard_box.svg().text('');
-    };
+    }
 
     /* Gets a menu item or creates it if it does not exist */
-    dashboard_box.create_or_get_menu_item = function(menu_item_id, last) {
+    function create_or_get_menu_item(menu_item_id, last) {
       var menu_d3 = d3.select(menu);
       var item = menu_d3
                   .select('li #' + id + '_' + menu_item_id)
@@ -1314,26 +1354,25 @@
       }
 
       return item;
-    };
+    }
 
     // Activators selectors
-    dashboard_box.activateSelectors = function() {
+    function activate_selectors() {
       selectorsActive = true;
-    };
+    }
 
     // Controller selection
 
-    dashboard_box.updateControllerSelect = function() {
+    function update_controller_select() {
       if (controllerSelectElem) {
         $(controllerSelectElem).select2('val', controllerString);
       }
       else {
         dashboard_box.selectController(controllerString, false, false);
       }
-    };
+    }
 
-    dashboard_box.selectController = function(name, savePreference,
-        requestData) {
+    function select_controller(name, savePreference, requestData) {
       var index = controllerIndexes[name];
       if (index === undefined) {
         console.warn('Chart not found: ' + name);
@@ -1342,10 +1381,9 @@
       else {
         dashboard_box.selectControllerIndex(index, savePreference, requestData);
       }
-    };
+    }
 
-    dashboard_box.selectControllerIndex = function(index, savePreference,
-        requestData) {
+    function select_controller_index(index, savePreference, requestData) {
       if (typeof(index) !== 'number' || index < 0 ||
           index >= controllers.length) {
         return console.error('Invalid chart index: ' + index);
@@ -1357,9 +1395,9 @@
       if (requestData && selectorsActive) {
         dashboard_box.redraw();
       }
-    };
+    }
 
-    dashboard_box.prevController = function() {
+    function select_prev_controller() {
       if (currentCtrlIndex <= 0) {
         $(controllerSelectElem)
           .select2('val', controllers[controllers.length - 1].chart_name());
@@ -1368,9 +1406,9 @@
         $(controllerSelectElem)
           .select2('val', controllers[currentCtrlIndex - 1].chart_name());
       }
-    };
+    }
 
-    dashboard_box.nextController = function() {
+    function select_next_controller() {
       if (currentCtrlIndex >= controllers.length - 1) {
         $(controllerSelectElem)
           .select2('val', controllers[0].chart_name());
@@ -1379,10 +1417,10 @@
         $(controllerSelectElem)
           .select2('val', controllers[currentCtrlIndex + 1].chart_name());
       }
-    };
+    }
 
     /* Adds a chart selector to the footer */
-    dashboard_box.createChartSelector = function() {
+    function create_chart_selector() {
       $('<a/>', {
         href: 'javascript:void(0);',
         on: {
@@ -1412,7 +1450,7 @@
       .appendTo(footer);
 
       for (var controllerIndex in controllers) {
-        var controller = controllers [controllerIndex];
+        var controller = controllers[controllerIndex];
         var controllerName = controller.chart_name();
         $('<option/>', {
           value: controllerName,
@@ -1439,9 +1477,9 @@
       .appendTo(footer);
 
       $('<br>').appendTo(footer);
-    };
+    }
 
-    dashboard_box.updateFilterSelect = function() {
+    function update_filter_select() {
       if (filterSelectElem) {
         $(filterSelectElem).select2('val', filterString);
       }
@@ -1450,9 +1488,9 @@
           dashboard_box.selectFilter(filterString, false, false);
         }
       }
-    };
+    }
 
-    dashboard_box.selectFilter = function(id, savePreference, requestData) {
+    function select_filter(id, savePreference, requestData) {
       var index = filterIndexes[id];
       if (index === undefined) {
         console.warn('Filter not found: "' + id + '"');
@@ -1461,10 +1499,9 @@
       else {
         dashboard_box.selectFilterIndex(index, savePreference, requestData);
       }
-    };
+    }
 
-    dashboard_box.selectFilterIndex = function(index, savePreference,
-        requestData) {
+    function select_filter_index(index, savePreference, requestData) {
       if (typeof(index) !== 'number' || index < 0 || index >= filters.length) {
         return console.error('Invalid filter index: ' + index);
       }
@@ -1474,9 +1511,9 @@
       if (requestData && selectorsActive) {
         dashboard_box.redraw();
       }
-    };
+    }
 
-    dashboard_box.prevFilter = function() {
+    function select_pref_filter() {
       if (currentFilterIndex <= 0) {
         $(filterSelectElem)
           .select2('val', filters[filters.length - 1].id);
@@ -1485,9 +1522,9 @@
         $(filterSelectElem)
           .select2('val', filters[currentFilterIndex - 1].id);
       }
-    };
+    }
 
-    dashboard_box.nextFilter = function() {
+    function select_next_filter() {
       if (currentFilterIndex >= filters.length - 1) {
         $(filterSelectElem)
           .select2('val', filters[0].id);
@@ -1496,10 +1533,10 @@
         $(filterSelectElem)
           .select2('val', filters[currentFilterIndex + 1].id);
       }
-    };
+    }
 
     /* Adds a filter selector to the footer */
-    dashboard_box.createFilterSelector = function() {
+    function create_filter_selector() {
       $('<a/>', {
         href: 'javascript:void(0);',
         on: {
@@ -1552,9 +1589,9 @@
       .appendTo(footer);
 
       $('<br>').appendTo(footer);
-    };
+    }
 
-    dashboard_box.applySelect2 = function() {
+    function apply_select2() {
       $(elem).find('.select2-container').remove();
       if (controllerSelectElem) {
         $(controllerSelectElem).select2();
@@ -1565,11 +1602,7 @@
           dashboard_box.selectFilter(this.value, true, true);
         });
       }
-    };
-
-    init();
-
-    return dashboard_box;
+    }
   }
 
   global.create_dashboard_box = create_dashboard_box;
@@ -3087,7 +3120,7 @@
       console.debug(console_extra);
     }
 
-    chart.display().show_error(display_message);
+    chart.display().showError(display_message);
   }
 
   global.output_error = output_error;
