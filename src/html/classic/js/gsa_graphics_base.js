@@ -960,41 +960,52 @@
   * Dashboard "New Row" drop target
   */
   function create_dashboard_new_row_target(dashboard, position) {
-    var id = dashboard.id() + '-' + position + '-add';
-    var elem = $('<div/>', {
-      'class': 'dashboard-add-row',
-      id: id,
-      css: {
-        'display': dashboard.editMode() ? 'block' : 'none',
-      },
-    });
+    var id;
+    var elem;
 
-    var new_row_target = function() {};
-
-    new_row_target.elem = function() {
-      return elem;
+    var new_row_target = {
+      elem: get_elem,
+      dashboard: get_dashboard,
+      id: get_id,
     };
 
-    new_row_target.dashboard = function() {
-      return dashboard;
-    };
-
-    new_row_target.id = function() {
-      return id;
-    };
-
-    $(elem).sortable({
-      handle: '.chart-head',
-      forcePlaceholderSize: true,
-      opacity: 0.75,
-      tolerance: 'pointer',
-      receive: function(event, ui) {
-        var receivedID = ui.item.attr('id');
-        dashboard.addToNewRow(receivedID, position);
-      },
-    });
+    init();
 
     return new_row_target;
+
+    function init() {
+      id = dashboard.id() + '-' + position + '-add';
+      elem = $('<div/>', {
+        'class': 'dashboard-add-row',
+        id: id,
+        css: {
+          'display': dashboard.editMode() ? 'block' : 'none',
+        },
+      });
+
+      elem.sortable({
+        handle: '.chart-head',
+        forcePlaceholderSize: true,
+        opacity: 0.75,
+        tolerance: 'pointer',
+        receive: function(event, ui) {
+          var receivedID = ui.item.attr('id');
+          dashboard.addToNewRow(receivedID, position);
+        },
+      });
+    }
+
+    function get_elem() {
+      return elem;
+    }
+
+    function get_dashboard() {
+      return dashboard;
+    }
+
+    function get_id() {
+      return id;
+    }
   }
 
   global.create_dashboard_new_row_target = create_dashboard_new_row_target;

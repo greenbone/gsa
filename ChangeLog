@@ -1,5 +1,11 @@
 2016-02-24  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_graphics_base.js (create_dashboard_new_row_target):
+	Refactor dashboard row target to use an internal object instead of internal
+	function.
+
+2016-02-24  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	Fix help pages icons
 
 	* src/html/classic/img/secinfo.svg: Rename secinfo.svg to allinfo.svg. The
