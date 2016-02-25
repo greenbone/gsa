@@ -1,5 +1,10 @@
 2016-02-25  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/css/gsa-style.css: Always hide dashboard-data-source and
+	dashboard-chart elements.
+
+2016-02-25  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_graphics_base.js (on_ready): Remove handler for
 	dashboard-controller css class. The handler got replaced by
 	dashboard-data-source and dashboard-chart.

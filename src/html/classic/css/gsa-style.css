@@ -1535,7 +1535,7 @@ select[multiple] {
   vertical-align: middle;
 }
 
-.hidden, .dashboard-controller, .dashboard-filter {
+.hidden, .dashboard-data-source, .dashboard-chart, .dashboard-filter {
   display: none !important;
 }
 
