@@ -3707,14 +3707,39 @@
         var group_column = elem.data('group-column');
         var create_source = elem.data('create-source');
 
-        var gen_params = {extra: {}}; // TODO
-        var init_params = {}; // TODO
+        var gen_params = {extra: {}};
+        var init_params = {};
 
-        var selector_label = get_selector_label(chart_type,
-            chart_template, aggregate_type, group_column);
+        if (elem.data('x-field')) {
+          gen_params.x_field = elem.data('x-field');
+        }
+        if (elem.data('y-fields')) {
+          gen_params.y_fields = elem.data('y-fields').split(',');
+        }
+        if (elem.data('z-fields')) {
+          gen_params.z_fields = elem.data('z-fields').split(',');
+        }
+
+        var key;
+        var elem_gen_params = elem.data('gen-params');
+        if (elem_gen_params) {
+          for (key in elem_gen_params) {
+            gen_params.extra[key] = elem_gen_params[key];
+          }
+        }
+
+        var elem_init_params = elem.data('init-params');
+        if (elem_init_params) {
+          for (key in elem_init_params) {
+            init_params[key] = elem_init_params[key];
+          }
+        }
+
+        var selector_label = get_selector_label(chart_type, chart_template,
+            aggregate_type, group_column, init_params.title_text);
 
         var title_generator = get_title_generator(chart_type, chart_template,
-            aggregate_type, group_column);
+            aggregate_type, group_column, init_params.title_text);
 
         dashboard.addControllerFactory(chart_name, function(for_component) {
           if (for_component === undefined) {

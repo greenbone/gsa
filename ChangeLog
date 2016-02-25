@@ -1,5 +1,15 @@
 2016-02-25  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_graphics_base.js (on_ready): Create init params and
+	gen params for the chart controllers.
+
+2016-02-25  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/js/gsa_graphics_base.js (on_ready): Pass all optional
+	parameters to create_aggregate_data_source.
+
+2016-02-25  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_graphics_base.js (create_aggregate_data_source):
 	Allow to set sort_stat parameter for an aggregate data source.
 
