@@ -1,5 +1,11 @@
 2016-02-25  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_graphics_base.js (on_ready): Add handler for
+	dashboard-data-source and dashboard-chart css classes. This allows separation
+	of data sources and its representation by different chart types.
+
+2016-02-25  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_graphics_base.js (create_aggregate_data_source),
 	src/html/classic/graphics.xsl: Remove special handling of info_by_class and
 	info_by_cvss chart template types in create_aggregate_data_source. This will

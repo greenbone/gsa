@@ -3713,7 +3713,124 @@
             unescapeXML(elem.data('term')), elem.data('type'));
       });
 
+      elem.find('.dashboard-data-source').each(function() {
+        var ds_elem = $(this);
+        var type = ds_elem.data('type');
+        var data_source_name = ds_elem.data('source-name');
+        var aggregate_type = ds_elem.data('aggregate-type');
+        var group_column = ds_elem.data('group-column');
+
+        var data_source = create_aggregate_data_source(data_source_name,
+            {
+              type: type,
+              aggregate_type: aggregate_type,
+              group_column: group_column,
+              data_column: ds_elem.data('column'),
+              data_columns: ds_elem.data('columns'),
+              text_columns: ds_elem.data('text-columns'),
+              filter: ds_elem.data('filter'),
+              filt_id: ds_elem.data('filter-id'),
+              sort_filed: ds_elem.data('sort-field'),
+              sort_order: ds_elem.data('sort-order'),
+              sort_stat: ds_elem.data('sort-stat'),
+              aggregate_mode: ds_elem.data('aggregate-mode'),
+              max_groups: ds_elem.data('max-groups'),
+              first_group: ds_elem.data('first-group'),
+            });
+
+        ds_elem.find('.dashboard-chart').each(function() {
+          var c_elem = $(this);
+          var chart_template = c_elem.data('chart-template');
+          var chart_type = c_elem.data('chart-type');
+          var chart_name = c_elem.data('chart-name');
+          var gen_params = {extra: {}};
+          var init_params = {};
+
+          if (c_elem.data('x-field')) {
+            gen_params.x_field = c_elem.data('x-field');
+          }
+          if (c_elem.data('y-fields')) {
+            gen_params.y_fields = c_elem.data('y-fields').split(',');
+          }
+          if (c_elem.data('z-fields')) {
+            gen_params.z_fields = c_elem.data('z-fields').split(',');
+          }
+
+          var key;
+          var c_elem_gen_params = c_elem.data('gen-params');
+          if (c_elem_gen_params) {
+            for (key in c_elem_gen_params) {
+              gen_params.extra[key] = c_elem_gen_params[key];
+            }
+          }
+
+          var c_elem_init_params = c_elem.data('init-params');
+          if (c_elem_init_params) {
+            for (key in c_elem_init_params) {
+              init_params[key] = c_elem_init_params[key];
+            }
+          }
+
+          var selector_label = get_selector_label(type, chart_type,
+              chart_template, aggregate_type, group_column,
+              init_params.title_text);
+
+          var title_generator = get_title_generator(type, chart_type,
+              chart_template, aggregate_type, group_column,
+              init_params.title_text);
+
+          dashboard.addControllerFactory(chart_name, function(for_component) {
+            if (for_component === undefined) {
+              console.error('Component not defined');
+              return null;
+            }
+
+            var generator = get_chart_generator(chart_type, data_source,
+                title_generator);
+
+            if (chart_template === 'resource_type_counts') {
+              generator.data_transform(global.resource_type_counts);
+            }
+            else if (chart_template === 'qod_type_counts') {
+              generator.data_transform(global.qod_type_counts);
+            }
+            else if (chart_template === 'percentage_counts') {
+              generator.data_transform(global.percentage_counts);
+            }
+            else if (chart_template === 'info_by_class' ||
+                chart_template === 'recent_info_by_class') {
+              if (chart_type === 'donut') {
+                generator.data_transform(global.data_severity_level_counts)
+                  .color_scale(global.severity_level_color_scale);
+              }
+              else {
+                generator.data_transform(global.data_severity_level_counts);
+              }
+            }
+            else if (chart_template === 'info_by_cvss' ||
+                chart_template === 'recent_info_by_cvss') {
+              if (chart_type === 'donut') {
+                generator.data_transform(data_severity_histogram);
+              }
+              else {
+                generator.data_transform(data_severity_histogram)
+                  .bar_style(global.severity_bar_style('value',
+                        gsa.severity_levels.max_log,
+                        gsa.severity_levels.max_low,
+                        gsa.severity_levels.max_medium));
+              }
+            }
+
+            create_chart_controller(data_source, generator, for_component,
+                chart_name, unescapeXML(selector_label),
+                '/img/charts/severity-bar-chart.png', chart_type,
+                chart_template, gen_params, init_params);
+          });
+        });
+      });
+
       elem.find('.dashboard-controller').each(function() {
+        // TODO remove me
         var elem = $(this);
         var data_source_name = elem.data('source-name');
         var chart_template = elem.data('chart-template');
