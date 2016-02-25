@@ -3729,6 +3729,13 @@
                 aggregate_type, chart_template, {
                   group_column: group_column,
                   data_column: elem.data('column'),
+                  data_columns: elem.data('columns'),
+                  text_columns: elem.data('text-columns'),
+                  filter: elem.data('filter'),
+                  filt_id: elem.data('filter-id'),
+                  sort_filed: elem.data('sort-field'),
+                  sort_order: elem.data('sort-order'),
+                  sort_stat: elem.data('sort-stat'),
                 });
 
             gsa.data_sources[data_source_name] = data_source;
