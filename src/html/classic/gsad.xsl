@@ -1876,14 +1876,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <item>
             <page>get_port_lists</page>
             <name><xsl:value-of select="gsa:i18n ('Port Lists', 'Port List')"/></name>
-            <class>indent</class>
           </item>
         </xsl:if>
         <xsl:if test="gsa:may-op ('GET_CREDENTIALS')">
           <item>
             <page>get_credentials</page>
             <name><xsl:value-of select="gsa:i18n ('Credentials', 'Credential')"/></name>
-            <class>indent</class>
           </item>
         </xsl:if>
         <xsl:if test="gsa:may-op ('GET_CONFIGS')">

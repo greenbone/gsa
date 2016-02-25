@@ -1,3 +1,9 @@
+2016-02-25  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/classic/gsad.xsl (html-gsa-navigation): Removed indention
+	in menu "Configuration". Credentials are used in other places meanwhile
+	so the indention does not make sense anymore.
+
 2016-02-25  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/graphics.xsl: Fix reports high results timeline chart. Use
