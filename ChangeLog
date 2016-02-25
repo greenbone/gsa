@@ -12,6 +12,11 @@
 
 2016-02-24  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_graphics_base.js (create_data_source): Refactor
+	data source to use an internal object instead of an internal function.
+
+2016-02-24  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_graphics_base.js (create_chart_controller): Refactor
 	chat controller to use an internal object instead of an internal function.
 

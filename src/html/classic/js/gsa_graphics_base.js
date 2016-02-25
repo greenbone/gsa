@@ -1826,29 +1826,44 @@
     var column_info = {};
     var data = {};
 
-    function data_source() {}
+    var data_source = {
+      prefix: get_set_prefix,
+      command: get_set_command,
+      param: get_set_param,
+      params: get_params,
+      addRequest: add_request,
+      removeRequest: remove_request,
+      checkRequests: check_requests,
+      sendRequest: send_request,
+
+      // TODO use camelcase
+      delete_param: delete_param,
+      column_info: get_column_info,
+    };
+
+    return data_source;
 
     /* Gets or sets the prefix */
-    data_source.prefix = function(value) {
+    function get_set_prefix(value) {
       if (!arguments.length) {
         return prefix;
       }
       prefix = value;
       return data_source;
-    };
+    }
 
     /* Gets or sets the command name */
-    data_source.command = function(value) {
+    function get_set_command(value) {
       if (!arguments.length) {
         return command;
       }
 
       command = value;
       return data_source;
-    };
+    }
 
     /* Gets or sets a parameter */
-    data_source.param = function(param_name, value) {
+    function get_set_param(param_name, value) {
       if (!arguments.length) {
         return undefined;
       }
@@ -1859,25 +1874,25 @@
         params [param_name] = value;
       }
       return data_source;
-    };
+    }
 
     /* Gets the parameters array */
-    data_source.params = function() {
+    function get_params() {
       return params;
-    };
+    }
 
     /* Removes a parameter */
-    data_source.delete_param = function(param_name) {
+    function delete_param(param_name) {
       delete params [param_name];
       return data_source;
-    };
+    }
 
     /* Gets the Column data of the last successful request */
-    data_source.column_info = function() {
+    function get_column_info() {
       return column_info;
-    };
+    }
 
-    data_source.addRequest = function(controller, filter, gen_params) {
+    function add_request(controller, filter, gen_params) {
       var filterID = filter ? filter.id : '';
 
       if (requestingControllers[filterID] === undefined) {
@@ -1892,9 +1907,9 @@
       };
       controller.display().lastRequestedController(controller);
       controller.display().lastRequestedFilter(filter);
-    };
+    }
 
-    data_source.removeRequest = function(controller, filter) {
+    function remove_request(controller, filter) {
       var filterID = filter ? filter.id : '';
 
       if (requestingControllers[filterID] &&
@@ -1903,9 +1918,9 @@
       }
       controller.display().lastRequestedController(null);
       controller.display().lastRequestedFilter(null);
-    };
+    }
 
-    data_source.checkRequests = function(filter) {
+    function check_requests(filter) {
       var filterID = filter ? filter.id : '';
       var requestingCount
             = Object.keys(requestingControllers[filterID]).length;
@@ -2127,12 +2142,12 @@
               });
         }
       }
-    };
+    }
 
     /* Sends an HTTP request to get XML data.
     * Once the data is loaded, the controller will be notified via the
     * data_loaded callback */
-    data_source.sendRequest = function(ctrl, filter, gen_params) {
+    function send_request(ctrl, filter, gen_params) {
       var lastRequestedController
         = ctrl.display().lastRequestedController();
       var lastRequestedFilter
@@ -2153,11 +2168,7 @@
       data_source.checkRequests(filter);
 
       return data_source;
-    };
-
-    data_source.command(command);
-
-    return data_source;
+    }
   }
 
   global.create_data_source = create_data_source;
