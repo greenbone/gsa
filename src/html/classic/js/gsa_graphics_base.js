@@ -3531,11 +3531,15 @@
 
   global.blob_img_window = blob_img_window;
 
-  function get_selector_label(chart_type, chart_template, aggregate_type,
+  function get_selector_label(type, chart_type, chart_template, aggregate_type,
       group_column, title_text) {
 
     if (title_text) {
       return title_text;
+    }
+
+    if (type === 'task') {
+      return 'Next scheduled tasks';
     }
 
     if (chart_template === 'info_by_class' ||
@@ -3557,11 +3561,16 @@
       field_name(group_column);
   }
 
-  function get_title_generator(chart_type, chart_template, aggregate_type,
+  function get_title_generator(type, chart_type, chart_template, aggregate_type,
       group_column, title_text) {
 
     if (title_text) {
       return title_static(title_text + ' (Loading...)', title_text);
+    }
+
+    if (type === 'task') {
+      return title_static('Next scheduled tasks (Loading...)',
+          'Next scheduled Tasks');
     }
 
     if (chart_template === 'info_by_class' ||
@@ -3707,6 +3716,7 @@
         var aggregate_type = elem.data('aggregate-type');
         var group_column = elem.data('group-column');
         var create_source = elem.data('create-source');
+        var type = elem.data('type');
 
         var gen_params = {extra: {}};
         var init_params = {};
@@ -3736,11 +3746,13 @@
           }
         }
 
-        var selector_label = get_selector_label(chart_type, chart_template,
-            aggregate_type, group_column, init_params.title_text);
+        var selector_label = get_selector_label(type, chart_type,
+            chart_template, aggregate_type, group_column,
+            init_params.title_text);
 
-        var title_generator = get_title_generator(chart_type, chart_template,
-            aggregate_type, group_column, init_params.title_text);
+        var title_generator = get_title_generator(type, chart_type,
+            chart_template, aggregate_type, group_column,
+            init_params.title_text);
 
         dashboard.addControllerFactory(chart_name, function(for_component) {
           if (for_component === undefined) {
