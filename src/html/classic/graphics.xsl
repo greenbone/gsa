@@ -1181,167 +1181,209 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           data-term="{term}" data-type="{type}" />
       </xsl:for-each>
       <!-- NVTs -->
-      <span class="dashboard-controller" data-chart-name="nvt_bar_chart"
-        data-source-name="nvt_severity_src" data-aggregate-type="nvt"
-        data-group-column="severity"
-        data-chart-type="bar" data-chart-template="info_by_cvss"
-        data-create-source="1"/>
-      <span class="dashboard-controller" data-chart-name="nvt_donut_chart"
-        data-source-name="nvt_severity_src" data-aggregate-type="nvt"
-        data-group-column="severity"
-        data-chart-type="donut" data-chart-template="info_by_class"/>
-      <span class="dashboard-controller"
-        data-chart-name="nvt_timeline_chart" data-source-name="nvt_timeline_src"
-        data-aggregate-type="nvt" data-chart-type="line"
-        data-group-column="created"
-        data-create-source="1"/>
-      <span class="dashboard-controller"
-        data-chart-name="nvt_bubble_chart" data-source-name="nvt_families_src"
-        data-aggregate-type="nvt" data-chart-type="bubbles"
-        data-group-column="family" data-column="severity"
-        data-create-source="1"/>
-      <span class="dashboard-controller"
-        data-chart-name="nvt_qod_type" data-source-name="nvt_qod_type_src"
-        data-aggregate-type="nvt" data-group-column="qod_type"
-        data-chart-type="donut" data-chart-template="qod_type_counts"
-        data-create-source="1"/>
-      <span class="dashboard-controller"
-        data-chart-name="nvt_qod" data-source-name="nvt_qod_src"
-        data-aggregate-type="nvt" data-group-column="qod"
-        data-chart-type="donut" data-chart-template="percentage_counts"
-        data-create-source="1"/>
+      <div class="dashboard-data-source"
+        data-source-name="nvt_severity_src"
+        data-aggregate-type="nvt"
+        data-group-column="severity">
+        <span class="dashboard-chart"
+          data-chart-name="nvt_bar_chart"
+          data-chart-type="bar"
+          data-chart-template="info_by_cvss"/>
+        <span class="dashboard-chart"
+          data-chart-name="nvt_donut_chart"
+          data-chart-type="donut"
+          data-chart-template="info_by_class"/>
+      </div>
+      <div class="dashboard-data-source"
+        data-source-name="nvt_timeline_src"
+        data-aggregate-type="nvt"
+        data-group-column="created">
+        <span class="dashboard-chart"
+          data-chart-name="nvt_timeline_chart"
+          data-chart-type="line"/>
+      </div>
+      <div class="dashboard-data-source"
+        data-source-name="nvt_families_src"
+        data-aggregate-type="nvt"
+        data-group-column="family"
+        data-column="severity">
+        <span class="dashboard-chart"
+          data-chart-name="nvt_bubble_chart"
+          data-chart-type="bubbles"/>
+      </div>
+      <div class="dashboard-data-source"
+        data-source-name="nvt_qod_type_src"
+        data-aggregate-type="nvt"
+        data-group-column="qod_type">
+        <span class="dashboard-chart"
+          data-chart-name="nvt_qod_type"
+          data-chart-type="donut"
+          data-chart-template="qod_type_counts"/>
+      </div>
+      <div class="dashboard-data-source"
+        data-source-name="nvt_qod_src"
+        data-aggregate-type="nvt"
+        data-group-column="qod">
+        <span class="dashboard-chart"
+          data-chart-name="nvt_qod"
+          data-chart-type="donut"
+          data-chart-template="percentage_counts"/>
+      </div>
+
       <!-- CVEs -->
-      <span class="dashboard-controller"
-        data-chart-name="cve_bar_chart" data-source-name="cve_severity_src"
-        data-aggregate-type="cve" data-chart-type="bar"
-        data-group-column="severity"
-        data-chart-template="info_by_cvss"
-        data-create-source="1"/>
-      <span class="dashboard-controller"
-        data-chart-name="cve_donut_chart" data-source-name="cve_severity_src"
-        data-aggregate-type="cve" data-chart-type="donut"
-        data-group-column="severity"
-        data-chart-template="info_by_class"
-        data-create-source="0"/>
-      <span class="dashboard-controller"
-        data-chart-name="cve_timeline_chart" data-source-name="cve_timeline_src"
-        data-aggregate-type="cve" data-chart-type="line"
-        data-group-column="created"
-        data-create-source="1"/>
+      <div class="dashboard-data-source"
+        data-source-name="cve_severity_src"
+        data-aggregate-type="cve"
+        data-group-column="severity">
+        <span class="dashboard-chart"
+          data-chart-name="cve_bar_chart"
+          data-chart-type="bar"
+          data-chart-template="info_by_cvss"/>
+        <span class="dashboard-chart"
+          data-chart-name="cve_donut_chart"
+          data-chart-type="donut"
+          data-chart-template="info_by_class"/>
+      </div>
+      <div class="dashboard-data-source"
+        data-source-name="cve_timeline_src"
+        data-aggregate-type="cve"
+        data-group-column="created">
+        <span class="dashboard-chart"
+          data-chart-name="cve_timeline_chart"
+          data-chart-type="line"/>
+      </div>
+
       <!-- CPEs -->
-      <span class="dashboard-controller"
-        data-chart-name="cpe_bar_chart" data-source-name="cpe_severity_src"
-        data-aggregate-type="cpe" data-chart-type="bar"
-        data-group-column="severity"
-        data-chart-template="info_by_cvss"
-        data-create-source="1"/>
-      <span class="dashboard-controller"
-        data-chart-name="cpe_donut_chart" data-source-name="cpe_severity_src"
-        data-aggregate-type="cpe" data-chart-type="donut"
-        data-group-column="severity"
-        data-chart-template="info_by_class"
-        data-create-source="0"/>
-      <span class="dashboard-controller"
-        data-chart-name="cpe_timeline_chart" data-source-name="cpe_timeline_src"
-        data-aggregate-type="cpe" data-chart-type="line"
-        data-group-column="created"
-        data-create-source="1"/>
+      <div class="dashboard-data-source"
+        data-source-name="cpe_severity_src"
+        data-aggregate-type="cpe"
+        data-group-column="severity">
+        <span class="dashboard-chart"
+          data-chart-name="cpe_bar_chart"
+          data-chart-type="bar"
+          data-chart-template="info_by_cvss"/>
+        <span class="dashboard-chart"
+          data-chart-name="cpe_donut_chart"
+          data-chart-type="donut"
+          data-chart-template="info_by_class"/>
+      </div>
+      <div class="dashboard-data-source"
+        data-source-name="cpe_timeline_src"
+        data-aggregate-type="cpe"
+        data-group-column="created">
+        <span class="dashboard-chart"
+          data-chart-name="cpe_timeline_chart"
+          data-chart-type="line"/>
+      </div>
+
       <!-- OVAL Definitions -->
-      <span class="dashboard-controller"
-        data-chart-name="ovaldef_bar_chart"
+      <div class="dashboard-data-source"
         data-source-name="ovaldef_severity_src"
-        data-aggregate-type="ovaldef" data-chart-type="bar"
-        data-group-column="severity"
-        data-chart-template="info_by_cvss"
-        data-create-source="1"/>
-      <span class="dashboard-controller"
-        data-chart-name="ovaldef_donut_chart"
-        data-source-name="ovaldef_severity_src"
-        data-aggregate-type="ovaldef" data-chart-type="donut"
-        data-group-column="severity"
-        data-chart-template="info_by_class"
-        data-create-source="0"/>
-      <span class="dashboard-controller"
-        data-chart-name="ovaldef_timeline_chart"
+        data-aggregate-type="ovaldef"
+        data-group-column="severity">
+        <span class="dashboard-chart"
+          data-chart-name="ovaldef_bar_chart"
+          data-chart-type="bar"
+          data-chart-template="info_by_cvss"/>
+        <span class="dashboard-chart"
+          data-chart-name="ovaldef_donut_chart"
+          data-chart-type="donut"
+          data-chart-template="info_by_class"/>
+      </div>
+      <div class="dashboard-data-source"
         data-source-name="ovaldef_timeline_src"
-        data-aggregate-type="ovaldef" data-chart-type="line"
-        data-group-column="created"
-        data-create-source="1"/>
-      <span class="dashboard-controller"
-        data-chart-name="ovaldef_class_donut_chart"
+        data-aggregate-type="ovaldef"
+        data-group-column="created">
+        <span class="dashboard-chart"
+          data-chart-name="ovaldef_timeline_chart"
+          data-chart-type="line"/>
+      </div>
+      <div class="dashboard-data-source"
         data-source-name="ovaldef_class_src"
-        data-aggregate-type="ovaldef" data-chart-type="donut"
-        data-group-column="class"
-        data-create-source="1"/>
+        data-aggregate-type="ovaldef"
+        data-group-column="class">
+        <span class="dashboard-chart"
+          data-chart-name="ovaldef_class_donut_chart"
+          data-chart-type="donut"/>
+      </div>
+
       <!-- CERT Bund -->
-      <span class="dashboard-controller"
-        data-chart-name="cert_bund_adv_bar_chart"
+      <div class="dashboard-data-source"
         data-source-name="cert_bund_adv_severity_src"
-        data-aggregate-type="cert_bund_adv" data-chart-type="bar"
         data-group-column="severity"
-        data-chart-template="info_by_cvss"
-        data-create-source="1"/>
-      <span class="dashboard-controller"
-        data-chart-name="cert_bund_adv_donut_chart"
-        data-source-name="cert_bund_adv_severity_src"
-        data-aggregate-type="cert_bund_adv" data-chart-type="donut"
-        data-group-column="severity"
-        data-chart-template="info_by_class"
-        data-create-source="0"/>
-      <span class="dashboard-controller"
-        data-chart-name="cert_bund_adv_timeline_chart"
+        data-aggregate-type="cert_bund_adv">
+        <span class="dashboard-chart"
+          data-chart-name="cert_bund_adv_bar_chart"
+          data-chart-template="info_by_cvss"
+          data-chart-type="bar"/>
+        <span class="dashboard-chart"
+          data-chart-name="cert_bund_adv_donut_chart"
+          data-chart-template="info_by_class"
+          data-chart-type="donut"/>
+      </div>
+      <div class="dashboard-data-source"
         data-source-name="cert_bund_adv_timeline_src"
-        data-aggregate-type="cert_bund_adv" data-chart-type="line"
-        data-group-column="created"
-        data-create-source="1"/>
+        data-aggregate-type="cert_bund_adv"
+        data-group-column="created">
+        <span class="dashboard-chart"
+          data-chart-name="cert_bund_adv_timeline_chart"
+          data-chart-type="line"/>
+      </div>
+
       <!-- DFN CERT -->
-      <span class="dashboard-controller"
-        data-chart-name="dfn_cert_adv_bar_chart"
+      <div class="dashboard-data-source"
         data-source-name="dfn_cert_adv_severity_src"
-        data-aggregate-type="dfn_cert_adv" data-chart-type="bar"
-        data-group-column="severity"
-        data-chart-template="info_by_cvss"
-        data-create-source="1"/>
-      <span class="dashboard-controller"
-        data-chart-name="dfn_cert_adv_donut_chart"
-        data-source-name="dfn_cert_adv_severity_src"
-        data-aggregate-type="dfn_cert_adv" data-chart-type="donut"
-        data-group-column="severity"
-        data-chart-template="info_by_class"
-        data-create-source="0"/>
-      <span class="dashboard-controller"
-        data-chart-name="dfn_cert_adv_timeline_chart"
+        data-aggregate-type="dfn_cert_adv"
+        data-group-column="severity">
+        <span class="dashboard-chart"
+          data-chart-name="dfn_cert_adv_bar_chart"
+          data-chart-type="bar"
+          data-chart-template="info_by_cvss"/>
+        <span class="dashboard-chart"
+          data-chart-name="dfn_cert_adv_donut_chart"
+          data-chart-type="donut"
+          data-chart-template="info_by_class"/>
+      </div>
+      <div class="dashboard-data-source"
         data-source-name="dfn_cert_adv_timeline_src"
-        data-aggregate-type="dfn_cert_adv" data-chart-type="line"
-        data-group-column="created"
-        data-create-source="1"/>
+        data-aggregate-type="dfn_cert_adv"
+        data-group-column="created">
+        <span class="dashboard-chart"
+          data-chart-name="dfn_cert_adv_timeline_chart"
+          data-chart-type="line"/>
+      </div>
+
       <!-- All SecInfo -->
-      <span class="dashboard-controller"
-        data-chart-name="allinfo_chart"
+      <div class="dashboard-data-source"
         data-source-name="allinfo_severity_src"
-        data-aggregate-type="allinfo" data-chart-type="bar"
-        data-group-column="severity"
-        data-chart-template="info_by_cvss"
-        data-create-source="1"/>
-      <span class="dashboard-controller"
-        data-chart-name="allinfo_donut_chart"
-        data-source-name="allinfo_severity_src"
-        data-aggregate-type="allinfo" data-chart-type="donut"
-        data-group-column="severity"
-        data-chart-template="info_by_class"
-        data-create-source="0"/>
-      <span class="dashboard-controller"
-        data-chart-name="allinfo_timeline_chart"
+        data-aggregate-type="allinfo"
+        data-group-column="severity">
+        <span class="dashboard-chart"
+          data-chart-name="allinfo_chart"
+          data-chart-type="bar"
+          data-chart-template="info_by_cvss"/>
+        <span class="dashboard-chart"
+          data-chart-name="allinfo_donut_chart"
+          data-chart-type="donut"
+          data-chart-template="info_by_class"/>
+      </div>
+      <div class="dashboard-data-source"
         data-source-name="allinfo_timeline_src"
-        data-aggregate-type="allinfo" data-chart-type="line"
-        data-group-column="created"
-        data-create-source="1"/>
-      <span class="dashboard-controller"
-        data-chart-name="allinfo_by_info_type"
+        data-aggregate-type="allinfo"
+        data-group-column="created">
+        <span class="dashboard-chart"
+          data-chart-name="allinfo_timeline_chart"
+          data-chart-type="line"/>
+      </div>
+      <div class="dashboard-data-source"
         data-source-name="allinfo_by_info_type_src"
-        data-aggregate-type="allinfo" data-chart-type="donut"
-        data-group-column="type" data-chart-template="resource_type_counts"
-        data-create-source="1"/>
+        data-aggregate-type="allinfo"
+        data-group-column="type">
+        <span class="dashboard-chart"
+          data-chart-name="allinfo_by_info_type"
+          data-chart-type="donut"
+          data-chart-template="resource_type_counts"/>
+      </div>
     </div>
   </div>
 
