@@ -14970,7 +14970,7 @@ should not have received it.
             <xsl:choose>
               <xsl:when test="$value=0">
                 <option value="0">
-                  <xsl:value-of select="gsa:i18n ('Use target's SSH credentials', 'Scan Config')"/>
+                  <xsl:value-of select="gsa:i18n ('Use target SSH credentials', 'Scan Config')"/>
                 </option>
               </xsl:when>
               <xsl:otherwise>
@@ -15072,7 +15072,7 @@ should not have received it.
           <xsl:variable name="value" select="value"/>
           <select name="osp_pref_{name}">
             <option value="0">
-              <xsl:value-of select="gsa:i18n ('Use target's SSH credentials', 'Scan Config')"/>
+              <xsl:value-of select="gsa:i18n ('Use target SSH credentials', 'Scan Config')"/>
             </option>
             <xsl:for-each select="../../../../get_credentials_response/credential[type='up']">
               <xsl:call-template name="opt">
