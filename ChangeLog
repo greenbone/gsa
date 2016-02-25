@@ -1,6 +1,11 @@
 2016-02-25  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/js/gsa_graphics_base.js (create_aggregate_data_source):
+	Register data source in create_aggregate_data_source.
+
+2016-02-25  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/js/gsa_graphics_base.js (create_aggregate_data_source):
 	Refactor create_aggregate_data_source to support also tasks besides
 	aggregates.
 

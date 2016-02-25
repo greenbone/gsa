@@ -3680,7 +3680,9 @@
       }
     }
 
-    return create_data_source(command, data_source_options);
+    var data_source = create_data_source(command, data_source_options);
+    gsa.data_sources[data_source_name] = data_source;
+    return data_source;
   }
 
   function on_ready(doc) {
@@ -3792,8 +3794,6 @@
                   first_group: elem.data('first-group'),
                   type: type,
                 });
-
-            gsa.data_sources[data_source_name] = data_source;
           }
 
           if (data_source === undefined) {
