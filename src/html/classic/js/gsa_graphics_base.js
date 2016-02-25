@@ -3601,6 +3601,7 @@
       'cloud': global.CloudChartGenerator,
       'horizontal_bar': global.HorizontalBarChartGenerator,
       'line': global.LineChartGenerator,
+      'gantt': global.GanttChartGenerator,
     };
 
     var generator = generators[chart_type] || global.BarChartGenerator;

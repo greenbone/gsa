@@ -1,5 +1,10 @@
 2016-02-25  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_graphics_base.js (get_chart_generator): Support
+	gantt charts required for tasks dashboards.
+
+2016-02-25  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_graphics_base.js (get_selector_label,
 	get_title_generator): Add parameter type to get_selector_label and
 	get_title_generator. The type parameter is required to support task charts.
