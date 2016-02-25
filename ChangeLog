@@ -1,5 +1,10 @@
 2016-02-25  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/graphics.xsl: Fix reports high results timeline chart. Use
+	correct element attribute name for data columns.
+
+2016-02-25  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/omp.xsl: Use css class table-form for edit scanner
 	preferences formular.
 

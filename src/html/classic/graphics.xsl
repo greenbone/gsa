@@ -629,7 +629,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         data-source-name="task-high-results-source"
         data-aggregate-type="{$type}"
         data-group-column="date"
-        data-data-columns="high,high_per_host"
+        data-columns="high,high_per_host"
         data-filter="{$filter}"
         data-filter-id="{$filt_id}">
         <span class="dashboard-chart"
