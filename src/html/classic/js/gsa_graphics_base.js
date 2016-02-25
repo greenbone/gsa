@@ -3576,8 +3576,9 @@
     }
 
     if (chart_type === 'cloud') {
-      return title_static(resource_type_name_plural(aggregate_type) +
-            ' ' + field_name(group_column) + ' word cloud');
+      var cloud_text = resource_type_name_plural(aggregate_type) +
+        ' ' + field_name(group_column) + ' word cloud';
+      return title_static(cloud_text + ' (Loading...)', cloud_text);
     }
 
     return title_total(resource_type_name_plural(aggregate_type) +
