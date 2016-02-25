@@ -685,7 +685,6 @@
     }
   }
 
-  global.create_dashboard = create_dashboard;
   // TODO remove when all xslt code has been migrated
   global.Dashboard = create_dashboard;
 
@@ -952,7 +951,6 @@
     }
   }
 
-  global.create_dashboard_row = create_dashboard_row;
   // TODO remove when all xslt code has been migrated
   global.DashboardRow = create_dashboard_row;
 
@@ -1008,7 +1006,6 @@
     }
   }
 
-  global.create_dashboard_new_row_target = create_dashboard_new_row_target;
   // TODO remove when all xslt code has been migrated
   global.DashboardNewRowTarget = create_dashboard_new_row_target;
 
@@ -1605,7 +1602,6 @@
     }
   }
 
-  global.create_dashboard_box = create_dashboard_box;
   global.DashboardBox = create_dashboard_box;
 
   /*
@@ -1806,7 +1802,6 @@
     }
   }
 
-  global.create_chart_controller = create_chart_controller;
   global.ChartController = create_chart_controller;
 
   /*
@@ -2171,7 +2166,6 @@
     }
   }
 
-  global.create_data_source = create_data_source;
   global.DataSource = create_data_source;
 
   /*

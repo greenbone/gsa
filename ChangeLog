@@ -12,6 +12,11 @@
 
 2016-02-24  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_graphics_base.js: Remove create functions from
+	global object. We should not use this functions outside of gsa_graphics_base.
+
+2016-02-24  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_graphics_base.js (create_dashboard): Move evaluation
 	of optional parameters to init function.
 
