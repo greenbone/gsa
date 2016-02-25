@@ -15386,8 +15386,8 @@ should not have received it.
 
 <xsl:template match="preferences" mode="edit-scanner-details">
   <div id="scanner-preferences">
-    <table class="gbntable" cellspacing="2" cellpadding="4">
-      <tr class="gbntablehead2">
+    <table class="table-form">
+      <tr>
         <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
         <td><xsl:value-of select="gsa:i18n ('New Value', 'Scan Config')"/></td>
         <td><xsl:value-of select="gsa:i18n ('Default Value', 'Scan Config')"/></td>

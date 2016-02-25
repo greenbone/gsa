@@ -1,5 +1,10 @@
 2016-02-25  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/omp.xsl: Use css class table-form for edit scanner
+	preferences formular.
+
+2016-02-25  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/graphics.xsl, src/html/classic/omp.xsl: Use jquery to
 	create charts for scans tasks, results and reports instead of generating
 	javascript via xslt.
