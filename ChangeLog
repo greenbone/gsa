@@ -1,3 +1,10 @@
+2016-02-25  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/js/gsa_graphics_base.js (get_selector_label,
+	get_title_generator): Allow to pass a titel text to get_selector_label and
+	get_title_generator. If this parameter is set it will be used to set the
+	selector label and title directly.
+
 2016-02-25  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/classic/omp.xsl (edit-config-preferences)

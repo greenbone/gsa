@@ -3532,7 +3532,12 @@
   global.blob_img_window = blob_img_window;
 
   function get_selector_label(chart_type, chart_template, aggregate_type,
-      group_column) {
+      group_column, title_text) {
+
+    if (title_text) {
+      return title_text;
+    }
+
     if (chart_template === 'info_by_class' ||
         chart_template === 'recent_info_by_class') {
       return resource_type_name_plural(aggregate_type) + ' by Severity Class';
@@ -3553,7 +3558,12 @@
   }
 
   function get_title_generator(chart_type, chart_template, aggregate_type,
-      group_column) {
+      group_column, title_text) {
+
+    if (title_text) {
+      return title_static(title_text + ' (Loading...)', title_text);
+    }
+
     if (chart_template === 'info_by_class' ||
         chart_template === 'info_by_cvss') {
       return title_total(resource_type_name_plural(aggregate_type) +
