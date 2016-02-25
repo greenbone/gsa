@@ -1183,10 +1183,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <!-- NVTs -->
       <span class="dashboard-controller" data-chart-name="nvt_bar_chart"
         data-source-name="nvt_severity_src" data-aggregate-type="nvt"
+        data-group-column="severity"
         data-chart-type="bar" data-chart-template="info_by_cvss"
         data-create-source="1"/>
       <span class="dashboard-controller" data-chart-name="nvt_donut_chart"
         data-source-name="nvt_severity_src" data-aggregate-type="nvt"
+        data-group-column="severity"
         data-chart-type="donut" data-chart-template="info_by_class"/>
       <span class="dashboard-controller"
         data-chart-name="nvt_timeline_chart" data-source-name="nvt_timeline_src"
@@ -1212,11 +1214,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <span class="dashboard-controller"
         data-chart-name="cve_bar_chart" data-source-name="cve_severity_src"
         data-aggregate-type="cve" data-chart-type="bar"
+        data-group-column="severity"
         data-chart-template="info_by_cvss"
         data-create-source="1"/>
       <span class="dashboard-controller"
         data-chart-name="cve_donut_chart" data-source-name="cve_severity_src"
         data-aggregate-type="cve" data-chart-type="donut"
+        data-group-column="severity"
         data-chart-template="info_by_class"
         data-create-source="0"/>
       <span class="dashboard-controller"
@@ -1228,11 +1232,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <span class="dashboard-controller"
         data-chart-name="cpe_bar_chart" data-source-name="cpe_severity_src"
         data-aggregate-type="cpe" data-chart-type="bar"
+        data-group-column="severity"
         data-chart-template="info_by_cvss"
         data-create-source="1"/>
       <span class="dashboard-controller"
         data-chart-name="cpe_donut_chart" data-source-name="cpe_severity_src"
         data-aggregate-type="cpe" data-chart-type="donut"
+        data-group-column="severity"
         data-chart-template="info_by_class"
         data-create-source="0"/>
       <span class="dashboard-controller"
@@ -1245,12 +1251,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         data-chart-name="ovaldef_bar_chart"
         data-source-name="ovaldef_severity_src"
         data-aggregate-type="ovaldef" data-chart-type="bar"
+        data-group-column="severity"
         data-chart-template="info_by_cvss"
         data-create-source="1"/>
       <span class="dashboard-controller"
         data-chart-name="ovaldef_donut_chart"
         data-source-name="ovaldef_severity_src"
         data-aggregate-type="ovaldef" data-chart-type="donut"
+        data-group-column="severity"
         data-chart-template="info_by_class"
         data-create-source="0"/>
       <span class="dashboard-controller"
@@ -1270,12 +1278,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         data-chart-name="cert_bund_adv_bar_chart"
         data-source-name="cert_bund_adv_severity_src"
         data-aggregate-type="cert_bund_adv" data-chart-type="bar"
+        data-group-column="severity"
         data-chart-template="info_by_cvss"
         data-create-source="1"/>
       <span class="dashboard-controller"
         data-chart-name="cert_bund_adv_donut_chart"
         data-source-name="cert_bund_adv_severity_src"
         data-aggregate-type="cert_bund_adv" data-chart-type="donut"
+        data-group-column="severity"
         data-chart-template="info_by_class"
         data-create-source="0"/>
       <span class="dashboard-controller"
@@ -1289,12 +1299,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         data-chart-name="dfn_cert_adv_bar_chart"
         data-source-name="dfn_cert_adv_severity_src"
         data-aggregate-type="dfn_cert_adv" data-chart-type="bar"
+        data-group-column="severity"
         data-chart-template="info_by_cvss"
         data-create-source="1"/>
       <span class="dashboard-controller"
         data-chart-name="dfn_cert_adv_donut_chart"
         data-source-name="dfn_cert_adv_severity_src"
         data-aggregate-type="dfn_cert_adv" data-chart-type="donut"
+        data-group-column="severity"
         data-chart-template="info_by_class"
         data-create-source="0"/>
       <span class="dashboard-controller"
@@ -1308,12 +1320,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         data-chart-name="allinfo_chart"
         data-source-name="allinfo_severity_src"
         data-aggregate-type="allinfo" data-chart-type="bar"
+        data-group-column="severity"
         data-chart-template="info_by_cvss"
         data-create-source="1"/>
       <span class="dashboard-controller"
         data-chart-name="allinfo_donut_chart"
         data-source-name="allinfo_severity_src"
         data-aggregate-type="allinfo" data-chart-type="donut"
+        data-group-column="severity"
         data-chart-template="info_by_class"
         data-create-source="0"/>
       <span class="dashboard-controller"
