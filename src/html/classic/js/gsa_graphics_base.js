@@ -3775,6 +3775,10 @@
                   sort_filed: elem.data('sort-field'),
                   sort_order: elem.data('sort-order'),
                   sort_stat: elem.data('sort-stat'),
+                  aggregate_mode: elem.data('aggregate-mode'),
+                  max_groups: elem.data('max-groups'),
+                  first_group: elem.data('first-group'),
+                  type: type,
                 });
 
             gsa.data_sources[data_source_name] = data_source;
