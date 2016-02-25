@@ -101,36 +101,6 @@
     var stopEditButton;
     var newComponentButton;
 
-    if (dashboardOpts) {
-      if (dashboardOpts.controllersPrefID) {
-        controllersPrefID = dashboardOpts.controllersPrefID;
-      }
-      if (dashboardOpts.heightsPrefID) {
-        heightsPrefID = dashboardOpts.heightsPrefID;
-      }
-      if (dashboardOpts.filtersPrefID) {
-        filtersPrefID = dashboardOpts.filtersPrefID;
-      }
-      if (dashboardOpts.defaultFilterString) {
-        defaultFilterString = dashboardOpts.defaultFilterString;
-      }
-      if (dashboardOpts.defaultControllerString) {
-        defaultControllerString = dashboardOpts.defaultControllerString;
-      }
-      if (dashboardOpts.defaultFilterString) {
-        defaultFilterString = dashboardOpts.defaultFilterString;
-      }
-      if (dashboardOpts.maxComponents) {
-        maxComponents = dashboardOpts.maxComponents;
-      }
-      if (dashboardOpts.maxPerRow) {
-        maxPerRow = dashboardOpts.maxPerRow;
-      }
-      if (dashboardOpts.dashboardControls) {
-        dashboardControls = dashboardOpts.dashboardControls;
-      }
-    }
-
     var dashboard = {
       id: get_id,
       elem: get_elem,
@@ -172,6 +142,36 @@
     return dashboard;
 
     function init() {
+      if (dashboardOpts) {
+        if (dashboardOpts.controllersPrefID) {
+          controllersPrefID = dashboardOpts.controllersPrefID;
+        }
+        if (dashboardOpts.heightsPrefID) {
+          heightsPrefID = dashboardOpts.heightsPrefID;
+        }
+        if (dashboardOpts.filtersPrefID) {
+          filtersPrefID = dashboardOpts.filtersPrefID;
+        }
+        if (dashboardOpts.defaultFilterString) {
+          defaultFilterString = dashboardOpts.defaultFilterString;
+        }
+        if (dashboardOpts.defaultControllerString) {
+          defaultControllerString = dashboardOpts.defaultControllerString;
+        }
+        if (dashboardOpts.defaultFilterString) {
+          defaultFilterString = dashboardOpts.defaultFilterString;
+        }
+        if (dashboardOpts.maxComponents) {
+          maxComponents = dashboardOpts.maxComponents;
+        }
+        if (dashboardOpts.maxPerRow) {
+          maxPerRow = dashboardOpts.maxPerRow;
+        }
+        if (dashboardOpts.dashboardControls) {
+          dashboardControls = dashboardOpts.dashboardControls;
+        }
+      }
+
       if (dashboardControls) {
         startEditButton = $('<a/>', {
           href: 'javascript:void(0);',
