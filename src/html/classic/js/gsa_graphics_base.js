@@ -1863,10 +1863,10 @@
         return undefined;
       }
       else if (arguments.length === 1) {
-        return params [param_name];
+        return params[param_name];
       }
       else {
-        params [param_name] = value;
+        params[param_name] = value;
       }
       return data_source;
     }
