@@ -3608,13 +3608,13 @@
     return generator(data_source).title(title_generator);
   }
 
-  function create_aggregate_data_source(data_source_name, aggregate_type,
-      chart_template, options) {
+  function create_aggregate_data_source(data_source_name, options) {
+    // TODO merge into create_data_source
     options = options !== undefined ? options : {};
 
+    var command;
     var data_source_options = {
       xml: 1,
-      aggregate_type: aggregate_type,
     };
 
     if (options.filter !== undefined) {
@@ -3625,52 +3625,62 @@
       data_source_options.filt_id = options.filt_id;
     }
 
-    if (chart_template !== 'info_by_cvss' &&
-        chart_template !== 'info_by_class') {
-
-      data_source_options.data_column = options.data_column !== undefined ?
-        options.data_column : '';
-      data_source_options.group_column = options.group_column !== undefined ?
-        options.group_column : '';
-
-      if (!options.data_columns) {
-        data_source_options.data_columns = [];
-      }
-      else {
-        data_source_options.data_columns = options.data_columns.split(',');
-      }
-
-      if (!options.text_columns) {
-        data_source_options.text_columns = [];
-      }
-      else {
-        data_source_options.text_columns = options.text_columns.split(',');
-      }
-
-      if (options.sort_field) {
-        data_source_options.sort_field = options.sort_field;
-      }
-      if (options.sort_order) {
-        data_source_options.sort_order = options.sort_order;
-      }
-      if (options.sort_stat) {
-        data_source_options.sort_stat = options.sort_stat;
-      }
-      if (options.first_group) {
-        data_source_options.first_group = options.first_group;
-      }
-      if (options.max_groups) {
-        data_source_options.max_groups = options.max_groups;
-      }
-      if (options.aggregate_mode) {
-        data_source_options.aggregate_mode = options.aggregate_mode;
-      }
+    if (options.type === 'task') {
+      command = 'get_tasks';
+      data_source_options.ignore_pagination = 1;
+      data_source_options.schedules_only = 1;
     }
     else {
-      data_source_options.group_column = 'severity';
+      command = 'get_aggregate';
+      data_source_options.aggregate_type = options.aggregate_type;
+
+      if (options.chart_template !== 'info_by_cvss' &&
+          options.chart_template !== 'info_by_class') {
+
+        data_source_options.data_column = options.data_column !== undefined ?
+          options.data_column : '';
+        data_source_options.group_column = options.group_column !== undefined ?
+          options.group_column : '';
+
+        if (!options.data_columns) {
+          data_source_options.data_columns = [];
+        }
+        else {
+          data_source_options.data_columns = options.data_columns.split(',');
+        }
+
+        if (!options.text_columns) {
+          data_source_options.text_columns = [];
+        }
+        else {
+          data_source_options.text_columns = options.text_columns.split(',');
+        }
+
+        if (options.sort_field) {
+          data_source_options.sort_field = options.sort_field;
+        }
+        if (options.sort_order) {
+          data_source_options.sort_order = options.sort_order;
+        }
+        if (options.sort_stat) {
+          data_source_options.sort_stat = options.sort_stat;
+        }
+        if (options.first_group) {
+          data_source_options.first_group = options.first_group;
+        }
+        if (options.max_groups) {
+          data_source_options.max_groups = options.max_groups;
+        }
+        if (options.aggregate_mode) {
+          data_source_options.aggregate_mode = options.aggregate_mode;
+        }
+      }
+      else {
+        data_source_options.group_column = 'severity';
+      }
     }
 
-    return create_data_source('get_aggregate', data_source_options);
+    return create_data_source(command, data_source_options);
   }
 
   function on_ready(doc) {
@@ -3765,7 +3775,9 @@
 
           if (create_source === '1' || create_source === 1) {
             data_source = create_aggregate_data_source(data_source_name,
-                aggregate_type, chart_template, {
+                {
+                  aggregate_type: aggregate_type,
+                  chart_template: chart_template,
                   group_column: group_column,
                   data_column: elem.data('column'),
                   data_columns: elem.data('columns'),

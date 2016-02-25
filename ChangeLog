@@ -1,5 +1,11 @@
 2016-02-25  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_graphics_base.js (create_aggregate_data_source):
+	Refactor create_aggregate_data_source to support also tasks besides
+	aggregates.
+
+2016-02-25  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_graphics_base.js (on_ready): Pass additional
 	optional parameters to create_aggregate_data_source.
 
