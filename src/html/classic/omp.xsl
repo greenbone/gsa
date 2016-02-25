@@ -4534,8 +4534,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <a href="javascript:gsa.dashboards ['top-dashboard'].stopEdit ();"><img src="/img/stop.png"/></a>
         <a href="javascript:gsa.dashboards ['top-dashboard'].newComponent ();"><img src="/img/new.png"/></a>-->
       </div>
-      <div id="top-dashboard" class="dashboard">
-      </div>
       <xsl:copy-of select="$top-visualization"/>
     </div>
   </xsl:if>

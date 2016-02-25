@@ -550,285 +550,128 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:variable name="filter" select="/envelope/get_tasks/get_tasks_response/filters/term | /envelope/get_reports/get_reports_response/filters/term | /envelope/get_results/get_results_response/filters/term"/>
   <xsl:variable name="filt_id" select="/envelope/get_tasks/get_tasks_response/filters/@id | /envelope/get_reports/get_reports_response/filters/@id |  /envelope/get_results/get_results_response/filters/@id"/>
 
-  <script type="text/javascript">
-    gsa.dashboards ["top-dashboard"]
-      = Dashboard ("top-dashboard",
-                   "<xsl:value-of select="gsa:escape-js ($controllers)"/>",
-                   "<xsl:value-of select="gsa:escape-js ($heights)"/>",
-                   null,
-                   {
-                     "controllersPrefID": "<xsl:value-of select="gsa:escape-js ($controllers_pref_id)"/>",
-                     "heightsPrefID": "<xsl:value-of select="gsa:escape-js ($heights_pref_id)"/>",
-                     "filter": "<xsl:value-of select="gsa:escape-js ($filter)"/>",
-                     "filt_id": "<xsl:value-of select="gsa:escape-js ($filt_id)"/>",
-                     "max_components": 4,
-                     "dashboardControls": $("#top-dashboard-controls")[0]
-                   });
-
-    <xsl:call-template name="js-aggregate-data-source">
-      <xsl:with-param name="data_source_name" select="'severity-count-source'"/>
-      <xsl:with-param name="aggregate_type" select="$type"/>
-      <xsl:with-param name="group_column" select="'severity'"/>
-      <xsl:with-param name="data_column" select="''"/>
-      <xsl:with-param name="filter" select="$filter"/>
-      <xsl:with-param name="filt_id" select="$filt_id"/>
-      <xsl:with-param name="chart_template" select="'info_by_cvss'"/>
-    </xsl:call-template>
-    <xsl:call-template name="js-aggregate-data-source">
-      <xsl:with-param name="data_source_name" select="'task-status-count-source'"/>
-      <xsl:with-param name="aggregate_type" select="$type"/>
-      <xsl:with-param name="group_column" select="'status'"/>
-      <xsl:with-param name="data_column" select="''"/>
-      <xsl:with-param name="filter" select="$filter"/>
-      <xsl:with-param name="filt_id" select="$filt_id"/>
-      <xsl:with-param name="chart_template" select="''"/>
-    </xsl:call-template>
-
-    <xsl:call-template name="js-aggregate-chart-factory">
-      <xsl:with-param name="chart_name" select="'by-cvss'"/>
-      <xsl:with-param name="dashboard_name" select="'top-dashboard'"/>
-      <xsl:with-param name="data_source_name" select="'severity-count-source'"/>
-      <xsl:with-param name="aggregate_type" select="$type"/>
-      <xsl:with-param name="chart_type" select="'bar'"/>
-      <xsl:with-param name="chart_template" select="'info_by_cvss'"/>
-    </xsl:call-template>
-    <xsl:call-template name="js-aggregate-chart-factory">
-      <xsl:with-param name="chart_name" select="'by-class'"/>
-      <xsl:with-param name="dashboard_name" select="'top-dashboard'"/>
-      <xsl:with-param name="data_source_name" select="'severity-count-source'"/>
-      <xsl:with-param name="aggregate_type" select="$type"/>
-      <xsl:with-param name="chart_type" select="'donut'"/>
-      <xsl:with-param name="chart_template" select="'info_by_class'"/>
-    </xsl:call-template>
-
-    <xsl:if test="$type='report'">
-      <xsl:call-template name="js-aggregate-data-source">
-        <xsl:with-param name="data_source_name" select="'report-high-results-timeline-source'"/>
-        <xsl:with-param name="aggregate_type" select="$type"/>
-        <xsl:with-param name="group_column" select="'date'"/>
-        <xsl:with-param name="data_columns" xmlns="">
-          <data_columns>
-            <column>high</column>
-            <column>high_per_host</column>
-          </data_columns>
-        </xsl:with-param>
-        <xsl:with-param name="filter" select="$filter"/>
-        <xsl:with-param name="filt_id" select="$filt_id"/>
-        <xsl:with-param name="chart_type" select="'line'"/>
-        <xsl:with-param name="chart_template" select="''"/>
-      </xsl:call-template>
-
-      <xsl:call-template name="js-aggregate-chart-factory">
-        <xsl:with-param name="chart_name" select="'report-high-results-timeline'"/>
-        <xsl:with-param name="dashboard_name" select="'top-dashboard'"/>
-        <xsl:with-param name="data_source_name" select="'report-high-results-timeline-source'"/>
-        <xsl:with-param name="aggregate_type" select="$type"/>
-        <xsl:with-param name="group_column" select="'date'"/>
-        <xsl:with-param name="data_columns" xmlns="">
-          <data_columns>
-            <column>high</column>
-            <column>high_per_host</column>
-          </data_columns>
-        </xsl:with-param>
-        <xsl:with-param name="y_fields" xmlns="">
-          <fields>
-            <field>high_max</field>
-          </fields>
-        </xsl:with-param>
-        <xsl:with-param name="z_fields" xmlns="">
-          <fields>
-            <field>high_per_host_max</field>
-          </fields>
-        </xsl:with-param>
-        <xsl:with-param name="init_params" xmlns="">
-          <params>
-            <param name="title_text">Reports: 'High' results timeline</param>
-          </params>
-        </xsl:with-param>
-        <xsl:with-param name="gen_params" xmlns="">
-          <params>
-            <param name="show_stat_type">0</param>
-          </params>
-        </xsl:with-param>
-        <xsl:with-param name="chart_type" select="'line'"/>
-        <xsl:with-param name="chart_template" select="''"/>
-      </xsl:call-template>
-    </xsl:if>
+  <div class="dashboard" id="top-dashboard"
+    data-dashboard-name="top-dashboard"
+    data-controllers="{$controllers}" data-heights="{$heights}"
+    data-filter="{$filter}"
+    data-controllers-pref-id="{$controllers_pref_id}"
+    data-filters-id="{$filt_id}" data-heights-pref-id="{$heights_pref_id}"
+    data-dashboard-controls="top-dashboard-controls"
+    data-max-components="4">
+    <div class="dashboard-data-source"
+      data-source-name="severity-count-source"
+      data-group-column="severity"
+      data-aggregate-type="{$type}"
+      data-filter="{$filter}"
+      data-filter-id="{$filt_id}">
+      <span class="dashboard-chart"
+        data-chart-name="by-cvss"
+        data-chart-type="bar"
+        data-chart-template="info_by_cvss"/>
+      <span class="dashboard-chart"
+        data-chart-name="by-class"
+        data-chart-type="donut"
+        data-chart-template="info_by_class"/>
+    </div>
 
     <xsl:if test="$type='task'">
-      <xsl:call-template name="js-aggregate-data-source">
-        <xsl:with-param name="data_source_name" select="'task-high-results-source'"/>
-        <xsl:with-param name="aggregate_type" select="$type"/>
-        <xsl:with-param name="group_column" select="'uuid'"/>
-        <xsl:with-param name="data_columns" xmlns="">
-          <data_columns>
-            <column>severity</column>
-            <column>high_per_host</column>
-          </data_columns>
-        </xsl:with-param>
-        <xsl:with-param name="text_columns" xmlns="">
-          <text_columns>
-            <column>name</column>
-          </text_columns>
-        </xsl:with-param>
-        <xsl:with-param name="sort_field" select="'high_per_host'"/>
-        <xsl:with-param name="sort_order" select="'descending'"/>
-        <xsl:with-param name="sort_stat" select="'max'"/>
-        <xsl:with-param name="filter" select="$filter"/>
-        <xsl:with-param name="filt_id" select="$filt_id"/>
-        <xsl:with-param name="chart_template" select="''"/>
-      </xsl:call-template>
-
-      <xsl:call-template name="js-tasks-data-source">
-        <xsl:with-param name="data_source_name" select="'task-schedules-source'"/>
-        <xsl:with-param name="filter" select="$filter"/>
-        <xsl:with-param name="filt_id" select="$filt_id"/>
-      </xsl:call-template>
-
-      <xsl:call-template name="js-aggregate-chart-factory">
-        <xsl:with-param name="chart_name" select="'by-task-status'"/>
-        <xsl:with-param name="dashboard_name" select="'top-dashboard'"/>
-        <xsl:with-param name="data_source_name" select="'task-status-count-source'"/>
-        <xsl:with-param name="aggregate_type" select="$type"/>
-        <xsl:with-param name="group_column" select="'status'"/>
-        <xsl:with-param name="chart_type" select="'donut'"/>
-        <xsl:with-param name="chart_template" select="''"/>
-      </xsl:call-template>
-
-      <xsl:call-template name="js-aggregate-chart-factory">
-        <xsl:with-param name="chart_name" select="'by-high-results'"/>
-        <xsl:with-param name="dashboard_name" select="'top-dashboard'"/>
-        <xsl:with-param name="data_source_name" select="'task-high-results-source'"/>
-        <xsl:with-param name="aggregate_type" select="$type"/>
-        <xsl:with-param name="x_field" select="'name'"/>
-        <xsl:with-param name="y_fields" xmlns="">
-          <fields>
-            <field>high_per_host_max</field>
-          </fields>
-        </xsl:with-param>
-        <xsl:with-param name="z_fields" xmlns="">
-          <fields>
-            <field>severity_max</field>
-          </fields>
-        </xsl:with-param>
-        <xsl:with-param name="init_params" xmlns="">
-          <params>
-            <param name="title_text">Tasks: 'High' results per host</param>
-          </params>
-        </xsl:with-param>
-        <xsl:with-param name="gen_params" xmlns="">
-          <params>
-            <param name="empty_text">No Tasks with 'High' severity found</param>
-          </params>
-        </xsl:with-param>
-        <xsl:with-param name="chart_type" select="'bubbles'"/>
-        <xsl:with-param name="chart_template" select="''"/>
-      </xsl:call-template>
-
-      <xsl:call-template name="js-aggregate-chart-factory">
-        <xsl:with-param name="chart_name" select="'top-high-results'"/>
-        <xsl:with-param name="dashboard_name" select="'top-dashboard'"/>
-        <xsl:with-param name="data_source_name" select="'task-high-results-source'"/>
-        <xsl:with-param name="aggregate_type" select="$type"/>
-        <xsl:with-param name="x_field" select="'name'"/>
-        <xsl:with-param name="y_fields" xmlns="">
-          <fields>
-            <field>high_per_host_max</field>
-          </fields>
-        </xsl:with-param>
-        <xsl:with-param name="z_fields" xmlns="">
-          <fields>
-            <field>severity_max</field>
-          </fields>
-        </xsl:with-param>
-        <xsl:with-param name="init_params" xmlns="">
-          <params>
-            <param name="title_text">Tasks with most 'High' results per host</param>
-          </params>
-        </xsl:with-param>
-        <xsl:with-param name="gen_params" xmlns="">
-          <params>
-            <param name="empty_text">No Tasks with 'High' severity found</param>
-          </params>
-        </xsl:with-param>
-        <xsl:with-param name="chart_type" select="'horizontal_bar'"/>
-        <xsl:with-param name="chart_template" select="''"/>
-      </xsl:call-template>
-
-      <xsl:call-template name="js-tasks-chart-factory">
-        <xsl:with-param name="chart_name" select="'task-schedules'"/>
-        <xsl:with-param name="dashboard_name" select="'top-dashboard'"/>
-        <xsl:with-param name="data_source_name" select="'task-schedules-source'"/>
-        <xsl:with-param name="chart_type" select="'gantt'"/>
-        <xsl:with-param name="gen_params" xmlns="">
-          <params>
-            <param name="empty_text">No scheduled Tasks found</param>
-          </params>
-        </xsl:with-param>
-        <xsl:with-param name="chart_template" select="''"/>
-      </xsl:call-template>
+      <div class="dashboard-data-source"
+        data-source-name="task-status-count-source"
+        data-aggregate-type="{$type}"
+        data-group-column="status"
+        data-filter="{$filter}"
+        data-filter-id="{$filt_id}">
+        <span class="dashboard-chart"
+          data-chart-name="by-task-status"
+          data-chart-type="donut"/>
+      </div>
+      <div class="dashboard-data-source"
+        data-source-name="task-high-results-source"
+        data-aggregate-type="{$type}"
+        data-group-column="uuid"
+        data-columns="severity,high_per_host"
+        data-text-columns="name"
+        data-sort-field="high_per_host"
+        data-sort-order="descending"
+        data-sort-stat="max"
+        data-filter="{$filter}"
+        data-filter-id="{$filt_id}">
+        <span class="dashboard-chart"
+          data-chart-name="by-high-results"
+          data-chart-type="bubbles"
+          data-x-field="name"
+          data-y-fields="high_per_host_max"
+          data-z-fields="severity_max"
+          data-gen-params='{{"empty_text": "No Tasks with High severity found"}}'
+          data-init-params='{{"title_text": "Tasks: High results per host"}}'/>
+        <span class="dashboard-chart"
+          data-chart-name="top-high-results"
+          data-chart-type="horizontal_bar"
+          data-x-field="name"
+          data-y-fields="high_per_host_max"
+          data-z-fields="severity_max"
+          data-gen-params='{{"empty_text": "No Tasks with High severity found"}}'
+          data-init-params='{{"title_text": "Tasks with most High results per host"}}'/>
+      </div>
+      <div class="dashboard-data-source"
+        data-source-name="task-schedules-source"
+        data-filter="{$filter}"
+        data-filter-id="{$filt_id}"
+        data-type="task">
+        <span class="dashboard-chart"
+          data-chart-name="task-schedules"
+          data-chart-type="gantt"
+          data-gen-params='{{"empty_text": "No scheduled Taks found"}}'/>
+      </div>
     </xsl:if>
-
+    <xsl:if test="$type='report'">
+      <div class="dashboard-data-source"
+        data-source-name="task-high-results-source"
+        data-aggregate-type="{$type}"
+        data-group-column="date"
+        data-data-columns="high,high_per_host"
+        data-filter="{$filter}"
+        data-filter-id="{$filt_id}">
+        <span class="dashboard-chart"
+          data-chart-name="report-high-results-timeline"
+          data-chart-type="line"
+          data-y-fields="high_max"
+          data-z-fields="high_per_host_max"
+          data-init-params='{{"title_text": "Reports: High results timeline"}}'
+          data-gen-params='{{"show_stat_type": 0}}'/>
+      </div>
+    </xsl:if>
     <xsl:if test="$type='result'">
-      <xsl:call-template name="js-aggregate-data-source">
-        <xsl:with-param name="data_source_name" select="'result-vuln-words-source'"/>
-        <xsl:with-param name="aggregate_type" select="$type"/>
-        <xsl:with-param name="group_column" select="'vulnerability'"/>
-        <xsl:with-param name="aggregate_mode" select="'word_counts'"/>
-        <xsl:with-param name="sort_stat" select="'count'"/>
-        <xsl:with-param name="sort_order" select="'descending'"/>
-        <xsl:with-param name="max_groups" select="'250'"/>
-        <xsl:with-param name="filter" select="$filter"/>
-        <xsl:with-param name="filt_id" select="$filt_id"/>
-        <xsl:with-param name="chart_template" select="''"/>
-      </xsl:call-template>
-      <xsl:call-template name="js-aggregate-data-source">
-        <xsl:with-param name="data_source_name" select="'result-desc-words-source'"/>
-        <xsl:with-param name="aggregate_type" select="$type"/>
-        <xsl:with-param name="group_column" select="'description'"/>
-        <xsl:with-param name="aggregate_mode" select="'word_counts'"/>
-        <xsl:with-param name="sort_stat" select="'count'"/>
-        <xsl:with-param name="sort_order" select="'descending'"/>
-        <xsl:with-param name="max_groups" select="'250'"/>
-        <xsl:with-param name="filter" select="$filter"/>
-        <xsl:with-param name="filt_id" select="$filt_id"/>
-        <xsl:with-param name="chart_template" select="''"/>
-      </xsl:call-template>
-
-      <xsl:call-template name="js-aggregate-chart-factory">
-        <xsl:with-param name="chart_name" select="'result-vuln-words'"/>
-        <xsl:with-param name="dashboard_name" select="'top-dashboard'"/>
-        <xsl:with-param name="data_source_name" select="'result-vuln-words-source'"/>
-        <xsl:with-param name="aggregate_type" select="$type"/>
-        <xsl:with-param name="group_column" select="'vulnerability'"/>
-        <xsl:with-param name="chart_type" select="'cloud'"/>
-        <xsl:with-param name="chart_template" select="''"/>
-      </xsl:call-template>
-
-      <xsl:call-template name="js-aggregate-chart-factory">
-        <xsl:with-param name="chart_name" select="'result-desc-words'"/>
-        <xsl:with-param name="dashboard_name" select="'top-dashboard'"/>
-        <xsl:with-param name="data_source_name" select="'result-desc-words-source'"/>
-        <xsl:with-param name="aggregate_type" select="$type"/>
-        <xsl:with-param name="group_column" select="'description'"/>
-        <xsl:with-param name="chart_type" select="'cloud'"/>
-        <xsl:with-param name="chart_template" select="''"/>
-      </xsl:call-template>
+      <div class="dashboard-data-source"
+        data-source-name="result-vuln-words-source"
+        data-aggregate-type="{$type}"
+        data-group-column="vulnerability"
+        data-aggregate-mode="word_counts"
+        data-sort-stat="count"
+        data-sort-order="descending"
+        data-max-groups="250"
+        data-filter="{$filter}"
+        data-filter-id="{$filt_id}">
+        <span class="dashboard-chart"
+          data-chart-name="result-vuln-words"
+          data-chart-type="cloud"/>
+      </div>
+      <div class="dashboard-data-source"
+        data-source-name="result-desc-words-source"
+        data-aggregate-type="{$type}"
+        data-group-column="description"
+        data-aggregate-mode="word_counts"
+        data-sort-stat="count"
+        data-sort-order="descending"
+        data-max-groups="250"
+        data-filter="{$filter}"
+        data-filter-id="{$filt_id}">
+        <span class="dashboard-chart"
+          data-chart-name="result-desc-words"
+          data-chart-type="cloud"/>
+      </div>
     </xsl:if>
-
-<!--
-    gsa.displays ["top-visualization-left"].create_chart_selector ();
-    gsa.displays ["top-visualization-right"].create_chart_selector ();
-
-    <xsl:if test="$auto_load_left != ''">
-    gsa.displays ["top-visualization-left"].select_chart ("<xsl:value-of select="gsa:escape-js ($auto_load_left)"/>", false, true);
-    </xsl:if>
-    <xsl:if test="$auto_load_right != ''">
-    gsa.displays ["top-visualization-right"].select_chart ("<xsl:value-of select="gsa:escape-js ($auto_load_right)"/>", false, true);
-    </xsl:if>
--->
-    gsa.dashboards["top-dashboard"].initComponentsFromString ();
-  </script>
+  </div>
 </xsl:template>
 
 <xsl:template name="js-secinfo-top-visualization">
