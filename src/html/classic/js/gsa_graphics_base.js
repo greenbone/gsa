@@ -3642,6 +3642,9 @@
       if (options.sort_order) {
         data_source_options.sort_order = options.sort_order;
       }
+      if (options.sort_stat) {
+        data_source_options.sort_stat = options.sort_stat;
+      }
       if (options.first_group) {
         data_source_options.first_group = options.first_group;
       }
