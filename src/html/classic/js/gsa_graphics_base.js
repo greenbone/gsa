@@ -2559,7 +2559,7 @@
       case 'high_per_host':
         return 'High / host';
       default:
-        if (typeof field === 'string') {
+        if (is_string(field)) {
           return field.replace('_', ' ');
         }
         return field;
@@ -3534,6 +3534,10 @@
   }
 
   global.blob_img_window = blob_img_window;
+
+  function is_string(value) {
+    return value !== null && value !== undefined && typeof field === 'string';
+  }
 
   function get_selector_label(type, chart_type, chart_template, aggregate_type,
       group_column, title_text) {

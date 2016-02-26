@@ -1,5 +1,10 @@
 2016-02-26  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_graphics_base.js: Add function is_string for
+	checking if a value is a JavaScript string.
+
+2016-02-26  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_graphics_base.js: Check more carefully for ''. null
 	and undefined values. At several places the variable can be null or undefined.
 	This fixes the resizing of the chart heights.
