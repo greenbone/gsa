@@ -725,205 +725,110 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:variable name="filter" select="/envelope/get_info/get_info_response/filters/term"/>
   <xsl:variable name="filt_id" select="/envelope/get_info/get_info_response/filters/@id"/>
 
-  <script type="text/javascript">
-    gsa.dashboards ["top-dashboard"]
-      = Dashboard ("top-dashboard",
-                   "<xsl:value-of select="gsa:escape-js ($controllers)"/>",
-                   "<xsl:value-of select="gsa:escape-js ($heights)"/>",
-                   null,
-                   {
-                     "controllersPrefID": "<xsl:value-of select="gsa:escape-js ($controllers_pref_id)"/>",
-                     "heightsPrefID": "<xsl:value-of select="gsa:escape-js ($heights_pref_id)"/>",
-                     "filter": "<xsl:value-of select="gsa:escape-js ($filter)"/>",
-                     "filt_id": "<xsl:value-of select="gsa:escape-js ($filt_id)"/>",
-                     "max_components": 4,
-                     "dashboardControls": $("#top-dashboard-controls")[0]
-                   });
-
-    <xsl:call-template name="js-aggregate-data-source">
-      <xsl:with-param name="data_source_name" select="'severity-count-source'"/>
-      <xsl:with-param name="aggregate_type" select="$type"/>
-      <xsl:with-param name="group_column" select="'severity'"/>
-      <xsl:with-param name="data_column" select="''"/>
-      <xsl:with-param name="filter" select="$filter"/>
-      <xsl:with-param name="filt_id" select="$filt_id"/>
-      <xsl:with-param name="chart_template" select="'info_by_cvss'"/>
-    </xsl:call-template>
-    <xsl:call-template name="js-aggregate-data-source">
-      <xsl:with-param name="data_source_name" select="'created-count-source'"/>
-      <xsl:with-param name="aggregate_type" select="$type"/>
-      <xsl:with-param name="group_column" select="'created'"/>
-      <xsl:with-param name="data_column" select="''"/>
-      <xsl:with-param name="filter" select="$filter"/>
-      <xsl:with-param name="filt_id" select="$filt_id"/>
-      <xsl:with-param name="chart_template" select="''"/>
-    </xsl:call-template>
-
-    <xsl:call-template name="js-aggregate-chart-factory">
-      <xsl:with-param name="chart_name" select="'by-cvss'"/>
-      <xsl:with-param name="dashboard_name" select="'top-dashboard'"/>
-      <xsl:with-param name="data_source_name" select="'severity-count-source'"/>
-      <xsl:with-param name="aggregate_type" select="$type"/>
-      <xsl:with-param name="chart_type" select="'bar'"/>
-      <xsl:with-param name="chart_template" select="'info_by_cvss'"/>
-    </xsl:call-template>
-
-    <xsl:call-template name="js-aggregate-chart-factory">
-      <xsl:with-param name="chart_name" select="'by-class'"/>
-      <xsl:with-param name="dashboard_name" select="'top-dashboard'"/>
-      <xsl:with-param name="data_source_name" select="'severity-count-source'"/>
-      <xsl:with-param name="aggregate_type" select="$type"/>
-      <xsl:with-param name="chart_type" select="'donut'"/>
-      <xsl:with-param name="chart_template" select="'info_by_class'"/>
-    </xsl:call-template>
-
-    <xsl:call-template name="js-aggregate-chart-factory">
-      <xsl:with-param name="dashboard_name" select="'top-dashboard'"/>
-      <xsl:with-param name="chart_name" select="'by-created'"/>
-      <xsl:with-param name="data_source_name" select="'created-count-source'"/>
-      <xsl:with-param name="aggregate_type" select="$type"/>
-      <xsl:with-param name="group_column" select="'created'"/>
-      <xsl:with-param name="data_column" select="''"/>
-      <xsl:with-param name="chart_type" select="'line'"/>
-      <xsl:with-param name="chart_template" select="''"/>
-    </xsl:call-template>
-
+  <div class="dashboard" id="top-dashboard"
+    data-dashboard-name="top-dashboard"
+    data-controllers="{$controllers}" data-heights="{$heights}"
+    data-filter="{$filter}"
+    data-controllers-pref-id="{$controllers_pref_id}"
+    data-filters-id="{$filt_id}" data-heights-pref-id="{$heights_pref_id}"
+    data-dashboard-controls="top-dashboard-controls"
+    data-max-components="4">
+    <div class="dashboard-data-source"
+      data-source-name="severity-count-source"
+      data-aggregate-type="{$type}"
+      data-group-column="severity"
+      data-filter="{$filter}"
+      data-filter-id="{$filt_id}">
+      <span class="dashboard-chart"
+        data-chart-name="by-cvss"
+        data-chart-type="bar"
+        data-chart-template="info_by_cvss"/>
+      <span class="dashboard-chart"
+        data-chart-name="by-class"
+        data-chart-type="donut"
+        data-chart-template="info_by_class"/>
+    </div>
+    <div class="dashboard-data-source"
+      data-source-name="created-count-source"
+      data-aggregate-type="{$type}"
+      data-group-column="created"
+      data-filter="{$filter}"
+      data-filter-id="{$filt_id}">
+      <span class="dashboard-chart"
+        data-chart-name="by-created"
+        data-chart-type="line"/>
+    </div>
     <xsl:if test="$type = 'nvt'">
-      <xsl:call-template name="js-aggregate-data-source">
-        <xsl:with-param name="data_source_name" select="'nvt-by-family-source'"/>
-        <xsl:with-param name="aggregate_type" select="$type"/>
-        <xsl:with-param name="group_column" select="'family'"/>
-        <xsl:with-param name="data_column" select="'severity'"/>
-        <xsl:with-param name="filter" select="$filter"/>
-        <xsl:with-param name="filt_id" select="$filt_id"/>
-        <xsl:with-param name="chart_template" select="''"/>
-      </xsl:call-template>
-      <xsl:call-template name="js-aggregate-data-source">
-        <xsl:with-param name="data_source_name" select="'nvt-by-solution_type-source'"/>
-        <xsl:with-param name="aggregate_type" select="$type"/>
-        <xsl:with-param name="group_column" select="'solution_type'"/>
-        <xsl:with-param name="filter" select="$filter"/>
-        <xsl:with-param name="filt_id" select="$filt_id"/>
-        <xsl:with-param name="chart_template" select="''"/>
-      </xsl:call-template>
-      <xsl:call-template name="js-aggregate-data-source">
-        <xsl:with-param name="data_source_name" select="'nvt-by-qod_type-source'"/>
-        <xsl:with-param name="aggregate_type" select="$type"/>
-        <xsl:with-param name="group_column" select="'qod_type'"/>
-        <xsl:with-param name="filter" select="$filter"/>
-        <xsl:with-param name="filt_id" select="$filt_id"/>
-        <xsl:with-param name="chart_template" select="'qod_type_counts'"/>
-      </xsl:call-template>
-      <xsl:call-template name="js-aggregate-data-source">
-        <xsl:with-param name="data_source_name" select="'nvt-by-qod-source'"/>
-        <xsl:with-param name="aggregate_type" select="$type"/>
-        <xsl:with-param name="group_column" select="'qod'"/>
-        <xsl:with-param name="filter" select="$filter"/>
-        <xsl:with-param name="filt_id" select="$filt_id"/>
-        <xsl:with-param name="chart_template" select="'percentage_counts'"/>
-      </xsl:call-template>
-
-      <xsl:call-template name="js-aggregate-chart-factory">
-        <xsl:with-param name="dashboard_name" select="'top-dashboard'"/>
-        <xsl:with-param name="chart_name" select="'nvt-by-family'"/>
-        <xsl:with-param name="data_source_name" select="'nvt-by-family-source'"/>
-        <xsl:with-param name="aggregate_type" select="$type"/>
-        <xsl:with-param name="group_column" select="'family'"/>
-        <xsl:with-param name="data_column" select="'severity'"/>
-        <xsl:with-param name="chart_type" select="'bubbles'"/>
-        <xsl:with-param name="chart_template" select="''"/>
-      </xsl:call-template>
-      <xsl:call-template name="js-aggregate-chart-factory">
-        <xsl:with-param name="dashboard_name" select="'top-dashboard'"/>
-        <xsl:with-param name="chart_name" select="'nvt-by-solution_type'"/>
-        <xsl:with-param name="data_source_name" select="'nvt-by-solution_type-source'"/>
-        <xsl:with-param name="aggregate_type" select="$type"/>
-        <xsl:with-param name="group_column" select="'solution_type'"/>
-        <xsl:with-param name="chart_type" select="'donut'"/>
-        <xsl:with-param name="chart_template" select="''"/>
-      </xsl:call-template>
-      <xsl:call-template name="js-aggregate-chart-factory">
-        <xsl:with-param name="dashboard_name" select="'top-dashboard'"/>
-        <xsl:with-param name="chart_name" select="'nvt-by-qod_type'"/>
-        <xsl:with-param name="data_source_name" select="'nvt-by-qod_type-source'"/>
-        <xsl:with-param name="aggregate_type" select="$type"/>
-        <xsl:with-param name="group_column" select="'qod_type'"/>
-        <xsl:with-param name="display_name" select="'top-visualization-left'"/>
-        <xsl:with-param name="chart_type" select="'donut'"/>
-        <xsl:with-param name="chart_template" select="'qod_type_counts'"/>
-      </xsl:call-template>
-      <xsl:call-template name="js-aggregate-chart-factory">
-        <xsl:with-param name="dashboard_name" select="'top-dashboard'"/>
-        <xsl:with-param name="chart_name" select="'nvt-by-qod'"/>
-        <xsl:with-param name="data_source_name" select="'nvt-by-qod-source'"/>
-        <xsl:with-param name="aggregate_type" select="$type"/>
-        <xsl:with-param name="group_column" select="'qod'"/>
-        <xsl:with-param name="display_name" select="'top-visualization-left'"/>
-        <xsl:with-param name="chart_type" select="'donut'"/>
-        <xsl:with-param name="chart_template" select="'percentage_counts'"/>
-      </xsl:call-template>
+      <div class="dashboard-data-source"
+        data-source-name="nvt-by-family-source"
+        data-aggregate-type="{$type}"
+        data-group-column="family"
+        data-column="severity"
+        data-filter="{$filter}"
+        data-filter-id="{$filt_id}">
+        <span class="dashboard-chart"
+          data-chart-name="nvt-by-family"
+          data-chart-type="bubbles"/>
+      </div>
+      <div class="dashboard-data-source"
+        data-source-name="nvt-by-solution_type-source"
+        data-aggregate-type="{$type}"
+        data-group-column="solution_type"
+        data-filter="{$filter}"
+        data-filter-id="{$filt_id}">
+        <span class="dashboard-chart"
+          data-chart-name="nvt-by-solution_type"
+          data-chart-type="donut"/>
+      </div>
+      <div class="dashboard-data-source"
+        data-source-name="nvt-by-qod_type-source"
+        data-aggregate-type="{$type}"
+        data-group-column="qod_type"
+        data-filter="{$filter}"
+        data-filter-id="{$filt_id}">
+        <span class="dashboard-chart"
+          data-chart-name="nvt-by-qod_type"
+          data-chart-template="qod_type_counts"
+          data-chart-type="donut"/>
+      </div>
+      <div class="dashboard-data-source"
+        data-source-name="nvt-by-qod-source"
+        data-aggregate-type="{$type}"
+        data-group-column="qod"
+        data-filter="{$filter}"
+        data-filter-id="{$filt_id}">
+        <span class="dashboard-chart"
+          data-chart-name="nvt-by-qod"
+          data-chart-template="percentage_counts"
+          data-chart-type="donut"/>
+      </div>
     </xsl:if>
-
     <xsl:if test="$type = 'ovaldef'">
-      <xsl:call-template name="js-aggregate-data-source">
-        <xsl:with-param name="data_source_name" select="'ovaldef-by-class-source'"/>
-        <xsl:with-param name="aggregate_type" select="$type"/>
-        <xsl:with-param name="group_column" select="'class'"/>
-        <xsl:with-param name="data_column" select="''"/>
-        <xsl:with-param name="filter" select="$filter"/>
-        <xsl:with-param name="filt_id" select="$filt_id"/>
-        <xsl:with-param name="chart_template" select="''"/>
-      </xsl:call-template>
-
-      <xsl:call-template name="js-aggregate-chart-factory">
-        <xsl:with-param name="dashboard_name" select="'top-dashboard'"/>
-        <xsl:with-param name="chart_name" select="'by-oval-class'"/>
-        <xsl:with-param name="data_source_name" select="'ovaldef-by-class-source'"/>
-        <xsl:with-param name="aggregate_type" select="$type"/>
-        <xsl:with-param name="group_column" select="'class'"/>
-        <xsl:with-param name="data_column" select="''"/>
-        <xsl:with-param name="display_name" select="'top-visualization-left'"/>
-        <xsl:with-param name="chart_type" select="'donut'"/>
-        <xsl:with-param name="chart_template" select="''"/>
-      </xsl:call-template>
+      <div class="dashboard-data-source"
+        data-source-name="ovaldef-by-class-source"
+        data-aggregate-type="{$type}"
+        data-group-column="class"
+        data-filter="{$filter}"
+        data-filter-id="{$filt_id}">
+        <span class="dashboard-chart"
+          data-chart-name="by-oval-class"
+          data-chart-type="donut"/>
+      </div>
     </xsl:if>
-
     <xsl:if test="$type = 'allinfo'">
-      <xsl:call-template name="js-aggregate-data-source">
-        <xsl:with-param name="data_source_name" select="'allinfo-by-type-source'"/>
-        <xsl:with-param name="aggregate_type" select="$type"/>
-        <xsl:with-param name="group_column" select="'type'"/>
-        <xsl:with-param name="data_column" select="''"/>
-        <xsl:with-param name="filter" select="$filter"/>
-        <xsl:with-param name="chart_template" select="''"/>
-      </xsl:call-template>
-
-      <xsl:call-template name="js-aggregate-chart-factory">
-        <xsl:with-param name="dashboard_name" select="'top-dashboard'"/>
-        <xsl:with-param name="chart_name" select="'by-info-type'"/>
-        <xsl:with-param name="data_source_name" select="'allinfo-by-type-source'"/>
-        <xsl:with-param name="aggregate_type" select="$type"/>
-        <xsl:with-param name="group_column" select="'type'"/>
-        <xsl:with-param name="data_column" select="''"/>
-        <xsl:with-param name="display_name" select="'top-visualization-left'"/>
-        <xsl:with-param name="chart_type" select="'donut'"/>
-        <xsl:with-param name="chart_template" select="'resource_type_counts'"/>
-      </xsl:call-template>
+      <div class="dashboard-data-source"
+        data-source-name="allinfo-by-type-source"
+        data-aggregate-type="{$type}"
+        data-group-column="type"
+        data-filter="{$filter}"
+        data-filter-id="{$filt_id}">
+        <span class="dashboard-chart"
+          data-chart-name="by-info-type"
+          data-chart-template="resource_type_counts"
+          data-chart-type="donut"/>
+      </div>
     </xsl:if>
-
-    <!--
-    gsa.displays ["top-visualization-left"].create_chart_selector ();
-    gsa.displays ["top-visualization-right"].create_chart_selector ();
-
-    <xsl:if test="$auto_load_left != ''">
-    gsa.displays ["top-visualization-left"].select_chart ("<xsl:value-of select="gsa:escape-js ($auto_load_left)"/>", false, true);
-    </xsl:if>
-    <xsl:if test="$auto_load_right != ''">
-    gsa.displays ["top-visualization-right"].select_chart ("<xsl:value-of select="gsa:escape-js ($auto_load_right)"/>", false, true);
-    </xsl:if>
-    -->
-    gsa.dashboards["top-dashboard"].initComponentsFromString ();
-  </script>
+  </div>
 </xsl:template>
 
 <xsl:template match="dashboard">
