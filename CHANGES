@@ -1,3 +1,22 @@
+gsa 6.0.10 (2016-02-26)
+
+This is the tenth maintenance release of the Greenbone Security Assistant (GSA)
+6.0 module for the Open Vulnerability Assessment System release 8 (OpenVAS-8).
+
+This release add support for automatically deleting old reports and improves
+the validation of one more parameter value.
+
+The release also incorporates several improvements from the development branch
+of OpenVAS. Please see below for a comprehensive list of changes.
+
+Many thanks to everyone who contributed to this release:
+Matthew Mundell and Timo Pollmeier.
+
+Main changes compared to 6.0.9:
+* Support for automatically deleting old reports has been added.
+* The value of the ifaces_allow allow parameter is now checked more strictly.
+
+
 gsa 6.0.9 (2016-02-03)
 
 This is the ninth maintenance release of the Greenbone Security Assistant (GSA)
