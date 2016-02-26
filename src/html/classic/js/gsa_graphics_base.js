@@ -3715,6 +3715,7 @@
             filt_id: elem.data('filter-id'),
             max_components: max_components,
             defaultControllerString: elem.data('default-controller-string'),
+            hideControllerSelect: elem.data('hide-controller-select'),
             dashboardControls: $('#' + elem.data('dashboard-controls'))[0]
           }
       );
@@ -3844,6 +3845,10 @@
       gsa.dashboards[dashboard_name] = dashboard;
 
       dashboard.initComponentsFromString();
+
+      if (elem.data('detached')) {
+        $(window).on('resize', detached_chart_resize_listener(dashboard));
+      }
     });
   }
 
