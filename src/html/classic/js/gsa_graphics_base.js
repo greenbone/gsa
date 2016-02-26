@@ -3535,6 +3535,10 @@
 
   global.blob_img_window = blob_img_window;
 
+  function is_object(value) {
+    return value !== null && value !== undefined && typeof value === 'object';
+  }
+
   function is_string(value) {
     return value !== null && value !== undefined && typeof field === 'string';
   }
@@ -3766,14 +3770,14 @@
 
           var key;
           var c_elem_gen_params = c_elem.data('gen-params');
-          if (c_elem_gen_params) {
+          if (is_object(c_elem_gen_params)) {
             for (key in c_elem_gen_params) {
               gen_params.extra[key] = c_elem_gen_params[key];
             }
           }
 
           var c_elem_init_params = c_elem.data('init-params');
-          if (c_elem_init_params) {
+          if (is_object(c_elem_init_params)) {
             for (key in c_elem_init_params) {
               init_params[key] = c_elem_init_params[key];
             }
