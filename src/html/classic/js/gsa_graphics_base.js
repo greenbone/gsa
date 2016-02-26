@@ -2558,6 +2558,9 @@
       case 'high_per_host':
         return 'High / host';
       default:
+        if (typeof field === 'string') {
+          return field.replace('_', ' ');
+        }
         return field;
     }
   }
