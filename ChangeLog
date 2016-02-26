@@ -1,5 +1,10 @@
 2016-02-26  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/omp.xsl: Use jquery to create task based charts for a
+	detached window instead of generating javascript code directly.
+
+2016-02-26  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_graphics_base.js: Add dashboard element data
 	attributes to hide the controller selection and to resize a chart in a
 	detached window automatically. This is both required for displaying detached
