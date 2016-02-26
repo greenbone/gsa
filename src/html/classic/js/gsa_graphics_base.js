@@ -53,7 +53,7 @@
   */
   function create_dashboard(id, controllersString, heightsString, filtersString,
                       dashboardOpts) {
-    if (heightsString !== undefined) {
+    if (heightsString !== undefined && heightsString !== null) {
       // ensure a string
       heightsString += '';
     }
@@ -83,7 +83,7 @@
     // Controller selection preference
     var controllersPrefID = '';
     // Row heights preference
-    var heightsPrefID = '';
+    var heightsPrefID;
     // Filter selection preference
     var filtersPrefID = '';
     // Controller String for new components
@@ -383,7 +383,8 @@
 
     function save_heights_string() {
       if (heightsString !== prevHeightsString) {
-        if (heightsPrefID !== '') {
+        if (heightsPrefID !== '' && heightsPrefID !== undefined &&
+            heightsPrefID !== null) {
           if (heightsPrefRequest) {
             heightsPrefRequest.abort();
           }
@@ -557,7 +558,7 @@
 
     function resize() {
       for (var item in rows) {
-        if (heightsString === null) {
+        if (heightsString === null || heightsString === undefined) {
           rows[item].height(elem[0].clientHeight);
         }
         rows[item].resize();
@@ -1622,7 +1623,7 @@
     var init_params = p_init_params;
     var display = p_display;
     var chart_type = p_chart_type;
-    var chart_template = p_chart_template;
+    var chart_template = p_chart_template ? p_chart_template : '';
     var chart_name = p_chart_name;
     var label = p_label ? p_label : 'Unnamed chart';
     var icon = p_icon ? p_icon : '/img/help.png';
