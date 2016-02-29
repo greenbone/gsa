@@ -1,5 +1,10 @@
 2016-02-29  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_graphics_base.js (create_data_source): Merge
+	create_aggregate_data_source function into create_data_source.
+
+2016-02-29  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_graphics_base.js,
 	src/html/classic/js/gsa_bubble_chart.js: Start to export functions to gsa
 	object instead of to the global namespace.

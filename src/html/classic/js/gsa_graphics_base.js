@@ -1827,18 +1827,22 @@
   * Data source (parameters for GSA request, XML response cache)
   *
   * Parameters:
-  *  command: command name like "get_aggregate"
-  *  params:  parameters for the command
+  *  name: name of the data source
+  *  options:  parameters for the command
   *  prefix:  prefix for OMP commands
   */
-  function create_data_source(command, params, prefix) {
+  function create_data_source(name, options, prefix) {
     prefix = (prefix === undefined) ? '/omp?' : prefix;
-    params = (params === undefined) ? {} : params;
+    options = (options === undefined) ? {} : options;
     var requestingControllers = {};
     var activeRequests = {};
     var xml_data = {};
     var column_info = {};
     var data = {};
+    var params = {
+      xml: 1,
+    };
+    var command;
 
     var data_source = {
       prefix: get_set_prefix,
@@ -1855,7 +1859,73 @@
       column_info: get_column_info,
     };
 
+    init();
+
     return data_source;
+
+    function init() {
+      if (options.filter !== undefined) {
+        params.filter = options.filter;
+      }
+
+      if (options.filt_id !== undefined) {
+        params.filt_id = options.filt_id;
+      }
+
+      if (options.type === 'task' || options.type === 'tasks') {
+        command = 'get_tasks';
+        params.ignore_pagination = 1;
+        params.schedules_only = 1;
+      }
+      else {
+        command = 'get_aggregate';
+        params.aggregate_type = options.aggregate_type;
+
+        params.data_column = options.data_column !== undefined ?
+          options.data_column : '';
+        params.group_column = options.group_column !== undefined ?
+          options.group_column : '';
+
+        if (!options.data_columns) {
+          params.data_columns = [];
+        }
+        else {
+          params.data_columns = options.data_columns.split(',');
+        }
+
+        if (!options.text_columns) {
+          params.text_columns = [];
+        }
+        else {
+          params.text_columns = options.text_columns.split(',');
+        }
+
+        if (options.sort_field) {
+          params.sort_field = options.sort_field;
+        }
+        if (options.sort_order) {
+          params.sort_order = options.sort_order;
+        }
+        if (options.sort_stat) {
+          params.sort_stat = options.sort_stat;
+        }
+        if (options.first_group) {
+          params.first_group = options.first_group;
+        }
+        if (options.max_groups) {
+          params.max_groups = options.max_groups;
+        }
+        if (options.aggregate_mode) {
+          params.aggregate_mode = options.aggregate_mode;
+        }
+      }
+
+      register_data_source();
+    }
+
+    function register_data_source() {
+      gsa.data_sources[name] = data_source;
+    }
 
     /* Gets or sets the prefix */
     function get_set_prefix(value) {
@@ -3577,76 +3647,6 @@
     return generator(data_source).title(title_generator);
   }
 
-  function create_aggregate_data_source(data_source_name, options) {
-    // TODO merge into create_data_source
-    options = options !== undefined ? options : {};
-
-    var command;
-    var data_source_options = {
-      xml: 1,
-    };
-
-    if (options.filter !== undefined) {
-      data_source_options.filter = options.filter;
-    }
-
-    if (options.filt_id !== undefined) {
-      data_source_options.filt_id = options.filt_id;
-    }
-
-    if (options.type === 'task') {
-      command = 'get_tasks';
-      data_source_options.ignore_pagination = 1;
-      data_source_options.schedules_only = 1;
-    }
-    else {
-      command = 'get_aggregate';
-      data_source_options.aggregate_type = options.aggregate_type;
-
-      data_source_options.data_column = options.data_column !== undefined ?
-        options.data_column : '';
-      data_source_options.group_column = options.group_column !== undefined ?
-        options.group_column : '';
-
-      if (!options.data_columns) {
-        data_source_options.data_columns = [];
-      }
-      else {
-        data_source_options.data_columns = options.data_columns.split(',');
-      }
-
-      if (!options.text_columns) {
-        data_source_options.text_columns = [];
-      }
-      else {
-        data_source_options.text_columns = options.text_columns.split(',');
-      }
-
-      if (options.sort_field) {
-        data_source_options.sort_field = options.sort_field;
-      }
-      if (options.sort_order) {
-        data_source_options.sort_order = options.sort_order;
-      }
-      if (options.sort_stat) {
-        data_source_options.sort_stat = options.sort_stat;
-      }
-      if (options.first_group) {
-        data_source_options.first_group = options.first_group;
-      }
-      if (options.max_groups) {
-        data_source_options.max_groups = options.max_groups;
-      }
-      if (options.aggregate_mode) {
-        data_source_options.aggregate_mode = options.aggregate_mode;
-      }
-    }
-
-    var data_source = create_data_source(command, data_source_options);
-    gsa.data_sources[data_source_name] = data_source;
-    return data_source;
-  }
-
   function on_ready(doc) {
     doc = $(doc);
 
@@ -3685,7 +3685,7 @@
         var aggregate_type = ds_elem.data('aggregate-type');
         var group_column = ds_elem.data('group-column');
 
-        var data_source = create_aggregate_data_source(data_source_name,
+        var data_source = create_data_source(data_source_name,
             {
               type: type,
               aggregate_type: aggregate_type,
