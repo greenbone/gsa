@@ -1,5 +1,11 @@
 2016-02-29  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_graphics_base.js: Don't pollute the global namespace
+	by removing functions from the global namespace not used outside of
+	gsa_graphics_base.js.
+
+2016-02-29  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/omp.xsl (js-tasks-chart-factory,
 	js-tasks-data-source): Remove now unused and obsolete xslt templates for
 	generating task charts. This code got replaced by a javascript

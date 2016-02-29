@@ -686,9 +686,6 @@
     }
   }
 
-  // TODO remove when all xslt code has been migrated
-  global.Dashboard = create_dashboard;
-
   /*
   * Dashboard Rows
   */
@@ -952,9 +949,6 @@
     }
   }
 
-  // TODO remove when all xslt code has been migrated
-  global.DashboardRow = create_dashboard_row;
-
   /*
   * Dashboard "New Row" drop target
   */
@@ -1006,9 +1000,6 @@
       return id;
     }
   }
-
-  // TODO remove when all xslt code has been migrated
-  global.DashboardNewRowTarget = create_dashboard_new_row_target;
 
   /*
   * Dashboard Component Boxes
@@ -1603,8 +1594,6 @@
     }
   }
 
-  global.DashboardBox = create_dashboard_box;
-
   /*
   * Creates a new Chart controller which manages the data source, generator and
   *  display of a chart
@@ -1802,8 +1791,6 @@
             extra_params_str;
     }
   }
-
-  global.ChartController = create_chart_controller;
 
   /*
   * Data source (parameters for GSA request, XML response cache)
@@ -2167,8 +2154,6 @@
     }
   }
 
-  global.DataSource = create_data_source;
-
   /*
   * Generic helper functions
   */
@@ -2185,8 +2170,6 @@
                                         'application/xml');
     return doc.documentElement.textContent;
   }
-
-  global.unescapeXML = unescapeXML;
 
   /*
   * Data Source Helper functions
@@ -2221,8 +2204,6 @@
     params_str = params_str + '&token=' + encodeURIComponent(gsa.gsa_token);
     return params_str;
   }
-
-  global.create_uri = create_uri;
 
   /*
   * Extracts records from XML
@@ -2270,8 +2251,6 @@
     return records;
   }
 
-  global.extract_simple_records = extract_simple_records;
-
   /*
   * Extracts column info from XML
   */
@@ -2316,8 +2295,6 @@
 
     return column_info;
   }
-
-  global.extract_column_info = extract_column_info;
 
   /*
   * Gets column info for get_tasks
@@ -2406,8 +2383,6 @@
     };
   }
 
-  global.tasks_column_info = tasks_column_info;
-
   /*
   * Extracts filter info from XML
   */
@@ -2426,8 +2401,6 @@
 
     return filter_info;
   }
-
-  global.extract_filter_info = extract_filter_info;
 
   /*
   * Extracts records from XML
@@ -2459,8 +2432,6 @@
 
     return records;
   }
-
-  global.extract_task_records = extract_task_records;
 
   /*
   * Helpers for processing extracted data
@@ -2805,8 +2776,6 @@
     return data;
   }
 
-  global.data_severity_histogram = data_severity_histogram;
-
   /*
   * Gets the counts of severity levels from records containing the counts
   * the counts for each numeric CVSS score.
@@ -2918,8 +2887,6 @@
     return data;
   }
 
-  global.data_severity_level_counts = data_severity_level_counts;
-
   /**
   * Get counts by resource type, using the full type name for the x field.
   */
@@ -2951,8 +2918,6 @@
     }
     return new_data;
   }
-
-  global.resource_type_counts = resource_type_counts;
 
   /**
   * Get counts by qod type, using the full type name for the x field.
@@ -3027,8 +2992,6 @@
     return new_data;
   }
 
-  global.qod_type_counts = qod_type_counts;
-
   /**
   * Get counts by qod type, using the full type name for the x field.
   */
@@ -3066,8 +3029,6 @@
 
     return new_data;
   }
-
-  global.percentage_counts = percentage_counts;
 
   /**
   * Get counts by resource type, using the full type name for the x field.
@@ -3154,8 +3115,6 @@
     controller.showError(display_message);
   }
 
-  global.output_error = output_error;
-
   /*
   * Opens a popup window for a detached chart
   */
@@ -3203,8 +3162,6 @@
       dashboard.resized(true);
     };
   }
-
-  global.detached_chart_resize_listener = detached_chart_resize_listener;
 
   /*
   * Wrap SVG text at a given width
@@ -3802,22 +3759,22 @@
                 title_generator);
 
             if (chart_template === 'resource_type_counts') {
-              generator.data_transform(global.resource_type_counts);
+              generator.data_transform(resource_type_counts);
             }
             else if (chart_template === 'qod_type_counts') {
-              generator.data_transform(global.qod_type_counts);
+              generator.data_transform(qod_type_counts);
             }
             else if (chart_template === 'percentage_counts') {
-              generator.data_transform(global.percentage_counts);
+              generator.data_transform(percentage_counts);
             }
             else if (chart_template === 'info_by_class' ||
                 chart_template === 'recent_info_by_class') {
               if (chart_type === 'donut') {
-                generator.data_transform(global.data_severity_level_counts)
-                  .color_scale(global.severity_level_color_scale);
+                generator.data_transform(data_severity_level_counts)
+                  .color_scale(gsa.severity_level_color_scale);
               }
               else {
-                generator.data_transform(global.data_severity_level_counts);
+                generator.data_transform(data_severity_level_counts);
               }
             }
             else if (chart_template === 'info_by_cvss' ||
