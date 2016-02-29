@@ -24,76 +24,79 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-/* Main chart generator */
-function BubbleChartGenerator ()
-{
-  function my () {};
+(function(window, gsa, d3, console) {
+  'use strict';
 
-  var svg;
-  var height;
-  var width;
-  var margin = {top: 5, right: 5, bottom: 5, left: 5};
+  /* Main chart generator */
+  function BubbleChartGenerator ()
+  {
+    function my () {};
 
-  var data_transform = simple_bubble_data;
-  var color_scale = gsa.severity_colors_gradient ();
-  var title = title_static ("Loading bubble chart ...", "Bubble Chart");
+    var svg;
+    var height;
+    var width;
+    var margin = {top: 5, right: 5, bottom: 5, left: 5};
 
-  var records;
-  var column_info;
-  var data;
+    var data_transform = simple_bubble_data;
+    var color_scale = gsa.severity_colors_gradient ();
+    var title = title_static ("Loading bubble chart ...", "Bubble Chart");
 
-  var empty_text = "empty";
-  var records_empty = false;
+    var records;
+    var column_info;
+    var data;
 
-  var x_label = "";
-  var y_label = "";
-  var color_label = "";
+    var empty_text = "empty";
+    var records_empty = false;
 
-  var x_field = "value";
-  var y_field = "count";
-  var color_field = "mean";
+    var x_label = "";
+    var y_label = "";
+    var color_label = "";
 
-  var show_stat_type = true;
+    var x_field = "value";
+    var y_field = "count";
+    var color_field = "mean";
 
-  var csv_data;
-  var csv_blob;
-  var csv_url;
+    var show_stat_type = true;
 
-  var html_table_data;
-  var html_table_blob;
-  var html_table_url;
+    var csv_data;
+    var csv_blob;
+    var csv_url;
 
-  var svg_data;
-  var svg_blob;
-  var svg_url;
+    var html_table_data;
+    var html_table_blob;
+    var html_table_url;
 
-  var tooltip_func = function (d)
+    var svg_data;
+    var svg_blob;
+    var svg_url;
+
+    var tooltip_func = function (d)
     {
       if (records_empty)
         return empty_text;
 
       var label_value = format_data (d ["label_value"],
-                                     data.column_info.columns ["label_value"]);
+          data.column_info.columns ["label_value"]);
       var size_value  = format_data (d ["size_value"],
-                                     data.column_info.columns ["size_value"]);
+          data.column_info.columns ["size_value"]);
       var color_value = format_data (d ["color_value"],
-                                     data.column_info.columns ["color_value"]);
+          data.column_info.columns ["color_value"]);
 
       return label_value + ": " + size_value
-              + " (" + color_label + ": " + color_value + ")";
+        + " (" + color_label + ": " + color_value + ")";
     }
 
-  my.height = function ()
+    my.height = function ()
     {
       return height;
     }
 
-  my.width = function ()
+    my.width = function ()
     {
       return width;
     }
 
-  my.x_field = function (value)
+    my.x_field = function (value)
     {
       if (!arguments.length)
         return x_field;
@@ -101,7 +104,7 @@ function BubbleChartGenerator ()
       return my;
     }
 
-  my.y_field = function (value)
+    my.y_field = function (value)
     {
       if (!arguments.length)
         return y_field;
@@ -109,7 +112,7 @@ function BubbleChartGenerator ()
       return my;
     }
 
-  my.y_field = function (value)
+    my.y_field = function (value)
     {
       if (!arguments.length)
         return y_field;
@@ -117,7 +120,7 @@ function BubbleChartGenerator ()
       return my;
     }
 
-  my.x_label = function (value)
+    my.x_label = function (value)
     {
       if (!arguments.length)
         return x_label;
@@ -125,7 +128,7 @@ function BubbleChartGenerator ()
       return my;
     }
 
-  my.y_label = function (value)
+    my.y_label = function (value)
     {
       if (!arguments.length)
         return y_label;
@@ -133,7 +136,7 @@ function BubbleChartGenerator ()
       return my;
     }
 
-  my.color_scale = function (value)
+    my.color_scale = function (value)
     {
       if (!arguments.length)
         return color_scale;
@@ -141,7 +144,7 @@ function BubbleChartGenerator ()
       return my;
     }
 
-  my.data_transform = function (value)
+    my.data_transform = function (value)
     {
       if (!arguments.length)
         return data_transform;
@@ -149,7 +152,7 @@ function BubbleChartGenerator ()
       return my;
     }
 
-  my.title = function (value)
+    my.title = function (value)
     {
       if (!arguments.length)
         return title;
@@ -157,12 +160,12 @@ function BubbleChartGenerator ()
       return my;
     }
 
-  my.show_loading = function (display)
+    my.show_loading = function (display)
     {
       display.header ().text (title ());
     }
 
-  my.generate = function (original_data, chart, gen_params)
+    my.generate = function (original_data, chart, gen_params)
     {
       var display = chart.display ();
       var data_src = chart.data_src ();
@@ -181,273 +184,273 @@ function BubbleChartGenerator ()
       if (gen_params.extra.show_stat_type)
         show_stat_type = !!JSON.parse (gen_params.extra.show_stat_type)
 
-      // Extract records and column info
-      switch (data_src.command ())
-        {
-          case "get_aggregate":
-            data = data_transform (original_data, gen_params);
-            records = data.records;
-            column_info = data.column_info;
-            color_label = column_label (column_info.columns ["color_value"], false, false, show_stat_type);
-            break;
-          default:
-            console.error ("Unsupported command:" + data_src.command ());
-            return;
-        }
+          // Extract records and column info
+          switch (data_src.command ())
+          {
+            case "get_aggregate":
+              data = data_transform (original_data, gen_params);
+              records = data.records;
+              column_info = data.column_info;
+              color_label = column_label (column_info.columns ["color_value"], false, false, show_stat_type);
+              break;
+            default:
+              console.error ("Unsupported command:" + data_src.command ());
+              return;
+          }
       display.header ().text (title (data));
 
       if (gen_params.extra.empty_text)
         empty_text = gen_params.extra.empty_text;
       else
         empty_text = "No matching " + resource_type_name (column_info.columns
-                                                          ["label_value"].type);
+            ["label_value"].type);
 
       // Setup display parameters
       height = display.svg ().attr ("height") - margin.top - margin.bottom;
       width = display.svg ().attr ("width") - margin.left - margin.right;
 
       if (!update)
-        {
-          display.svg ().text ("");
-          svg = display.svg ().append ("g");
+      {
+        display.svg ().text ("");
+        svg = display.svg ().append ("g");
 
-          display.svg ().on ("mousemove", null)
+        display.svg ().on ("mousemove", null)
           display.svg ().on ("mouseleave", null)
 
           svg.attr ("transform",
-                    "translate(" + margin.left + "," + margin.top + ")");
+              "translate(" + margin.left + "," + margin.top + ")");
 
-        }
+      }
 
       // Create bubbles
       var bubbles = d3.layout.pack()
-          .sort (null)
-          .size ([width, height])
-          .value (function(d) { return d.size_value; })
-          .padding(1.5);
+        .sort (null)
+        .size ([width, height])
+        .value (function(d) { return d.size_value; })
+        .padding(1.5);
 
       var filtered_records = [];
       for (var i in records)
-        {
-          if (records[i].size_value != 0)
-            filtered_records.push (records[i])
-        }
+      {
+        if (records[i].size_value != 0)
+          filtered_records.push (records[i])
+      }
 
       if (filtered_records.length == 0)
-        {
-          records_empty = true;
-          var dummy
-                = {
-                    color_value : 0,
-                    size_value : 1,
-                    label_value : "* " + empty_text + " *"
-                  };
-          filtered_records.push (dummy);
-        }
+      {
+        records_empty = true;
+        var dummy
+          = {
+            color_value : 0,
+            size_value : 1,
+            label_value : "* " + empty_text + " *"
+          };
+        filtered_records.push (dummy);
+      }
       else
-        {
-          records_empty = false;
-        }
+      {
+        records_empty = false;
+      }
 
       var nodes = bubbles.nodes({children: filtered_records})
-                        .filter (function(d) { return d.depth != 0; });
+        .filter (function(d) { return d.depth != 0; });
 
       svg.selectAll(".node")
-            .data(nodes)
-              .enter()
-                .call (BubbleChartGenerator.create_bubble)
+        .data(nodes)
+        .enter()
+        .call (BubbleChartGenerator.create_bubble)
 
-      // Remove unused bubbles
-      svg.selectAll(".node")
-            .data (nodes)
-              .exit ()
-                .remove ()
+        // Remove unused bubbles
+        svg.selectAll(".node")
+        .data (nodes)
+        .exit ()
+        .remove ()
 
-      // Update bubbles
-      svg.selectAll(".node")
-          .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
-            .select ("circle")
-              .attr ("r", function(d) { return d.r })
-              .attr ("title", tooltip_func)
-              .style ("fill", function(d) { return color_scale (d.color_value) })
+        // Update bubbles
+        svg.selectAll(".node")
+        .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+        .select ("circle")
+        .attr ("r", function(d) { return d.r })
+        .attr ("title", tooltip_func)
+        .style ("fill", function(d) { return color_scale (d.color_value) })
 
         svg.selectAll(".node")
-          .select ("text")
-            .attr ("title", tooltip_func)
-            .text(function(d) { return d.label_value.substring(0, d.r / 3); });
+        .select ("text")
+        .attr ("title", tooltip_func)
+        .text(function(d) { return d.label_value.substring(0, d.r / 3); });
 
       // Create detach menu item
       display.create_or_get_menu_item ("detach")
-               .attr("href", "javascript:void(0);")
-               .attr("onclick", "javascript:open_detached (\"" + chart.detached_url () + "\")")
-               .text("Show detached chart window");
+        .attr("href", "javascript:void(0);")
+        .attr("onclick", "javascript:open_detached (\"" + chart.detached_url () + "\")")
+        .text("Show detached chart window");
 
       // Generate CSV
       csv_data = csv_from_records (records,
-                                   column_info,
-                                   ["label_value", "size_value", "color_value"],
-                                   [column_label (column_info.columns ["label_value"], true, false, show_stat_type),
-                                    column_label (column_info.columns ["size_value"], true, false, show_stat_type),
-                                    column_label (column_info.columns ["color_value"], true, false, show_stat_type)],
-                                   display.header(). text ());
+          column_info,
+          ["label_value", "size_value", "color_value"],
+          [column_label (column_info.columns ["label_value"], true, false, show_stat_type),
+          column_label (column_info.columns ["size_value"], true, false, show_stat_type),
+          column_label (column_info.columns ["color_value"], true, false, show_stat_type)],
+          display.header(). text ());
       if (csv_url != null)
         URL.revokeObjectURL (csv_url);
       csv_blob = new Blob([csv_data], { type: "text/csv" });
       csv_url = URL.createObjectURL(csv_blob);
 
       display.create_or_get_menu_item ("csv_dl")
-               .attr("href", csv_url)
-               .attr("download", "gsa_bubble_chart-" + new Date().getTime() + ".csv")
-               .text("Download CSV");
+        .attr("href", csv_url)
+        .attr("download", "gsa_bubble_chart-" + new Date().getTime() + ".csv")
+        .text("Download CSV");
 
       // Generate HTML table
       if (html_table_url != null)
-        {
-          URL.revokeObjectURL (html_table_url);
-          html_table_data = null;
-          html_table_url = null;
-        }
+      {
+        URL.revokeObjectURL (html_table_url);
+        html_table_data = null;
+        html_table_url = null;
+      }
       var open_html_table = function ()
+      {
+        if (html_table_url == null)
         {
-          if (html_table_url == null)
-            {
-              html_table_data
-                = html_table_from_records (records,
-                                           column_info,
-                                           ["label_value", "size_value", "color_value"],
-                                           [column_label (column_info.columns ["label_value"], true, false, show_stat_type),
-                                            column_label (column_info.columns ["size_value"], true, false, show_stat_type),
-                                            column_label (column_info.columns ["color_value"], true, false, show_stat_type)],
-                                           display.header(). text (),
-                                           data_src.param ("filter"));
-              html_table_blob = new Blob([html_table_data], { type: "text/html" });
-              html_table_url = URL.createObjectURL(html_table_blob);
-            }
-          window.open (html_table_url);
-          return true;
+          html_table_data
+            = html_table_from_records (records,
+                column_info,
+                ["label_value", "size_value", "color_value"],
+                [column_label (column_info.columns ["label_value"], true, false, show_stat_type),
+                column_label (column_info.columns ["size_value"], true, false, show_stat_type),
+                column_label (column_info.columns ["color_value"], true, false, show_stat_type)],
+                display.header(). text (),
+                data_src.param ("filter"));
+          html_table_blob = new Blob([html_table_data], { type: "text/html" });
+          html_table_url = URL.createObjectURL(html_table_blob);
         }
+        window.open (html_table_url);
+        return true;
+      }
       display.create_or_get_menu_item ("html_table")
-                  .attr("href", "#")
-                  .on("click", open_html_table)
-                  .text("Show HTML table");
+        .attr("href", "#")
+        .on("click", open_html_table)
+        .text("Show HTML table");
 
       // Generate SVG after transition
       setTimeout(function()
-                  {
-                    svg_data = svg_from_elem (display.svg (),
-                                              display.header ().text ());
-                    if (svg_url != null)
-                      URL.revokeObjectURL (svg_url);
-                    svg_blob = new Blob([svg_data], { type: "image/svg+xml" });
-                    svg_url = URL.createObjectURL(svg_blob);
+          {
+            svg_data = svg_from_elem (display.svg (),
+                display.header ().text ());
+            if (svg_url != null)
+              URL.revokeObjectURL (svg_url);
+            svg_blob = new Blob([svg_data], { type: "image/svg+xml" });
+            svg_url = URL.createObjectURL(svg_blob);
 
-                    display.create_or_get_menu_item ("svg_window")
-                               .attr("href", "javascript:void(0)")
-                               .attr("onclick", "blob_img_window (\"" + svg_url + "\")")
-                               .text("Show copyable SVG");
+            display.create_or_get_menu_item ("svg_window")
+              .attr("href", "javascript:void(0)")
+              .attr("onclick", "blob_img_window (\"" + svg_url + "\")")
+              .text("Show copyable SVG");
 
-                    display.create_or_get_menu_item ("svg_dl", true /* Last. */)
-                               .attr("href", svg_url)
-                               .attr("download", "gsa_bubble_chart-" + new Date().getTime() + ".svg")
-                               .text("Download SVG");
-                  }, 600);
+            display.create_or_get_menu_item ("svg_dl", true /* Last. */)
+              .attr("href", svg_url)
+              .attr("download", "gsa_bubble_chart-" + new Date().getTime() + ".svg")
+              .text("Download SVG");
+          }, 600);
 
       display.update_gen_data (my, gen_params);
     };
 
-  var relax_labels = function (labels)
+    var relax_labels = function (labels)
     {
       again = false;
       var labels = svg.selectAll (".slice_label")
 
-      labels.each (function (d, i)
-        {
-          elem_a = this;
-
-          width_a = elem_a.getComputedTextLength ()
-          if (width_a == 0)
-            return;
-
-          sel_a = d3.select (elem_a);
-          x_a = sel_a.attr ("x");
-          y_a = sel_a.attr ("y");
-
-
-          labels.each (function (d, j)
+        labels.each (function (d, i)
             {
-              elem_b = this;
-              if (elem_a == elem_b)
-                return;
+              elem_a = this;
 
-              width_b = elem_b.getComputedTextLength ()
-              if (width_b == 0)
-                return;
+              width_a = elem_a.getComputedTextLength ()
+                if (width_a == 0)
+                  return;
 
-              sel_b = d3.select(elem_b);
-              x_b = sel_b.attr("x");
-              y_b = sel_b.attr("y");
+              sel_a = d3.select (elem_a);
+              x_a = sel_a.attr ("x");
+              y_a = sel_a.attr ("y");
 
-              if (Math.abs (x_a - x_b) * 2 > (width_a + width_b))
-                return;
 
-              delta_y = y_a - y_b;
+              labels.each (function (d, j)
+                  {
+                    elem_b = this;
+                    if (elem_a == elem_b)
+                      return;
 
-              if (Math.abs(delta_y) > label_spacing)
-                return;
+                    width_b = elem_b.getComputedTextLength ()
+                      if (width_b == 0)
+                        return;
 
-              again = true;
-              var adjust = (delta_y > 0 ? 1 : -1) * 1;
-              sel_a.attr ("y", +y_a + adjust);
-              sel_b.attr ("y", +y_b - adjust);
+                    sel_b = d3.select(elem_b);
+                    x_b = sel_b.attr("x");
+                    y_b = sel_b.attr("y");
+
+                    if (Math.abs (x_a - x_b) * 2 > (width_a + width_b))
+                      return;
+
+                    delta_y = y_a - y_b;
+
+                    if (Math.abs(delta_y) > label_spacing)
+                      return;
+
+                    again = true;
+                    var adjust = (delta_y > 0 ? 1 : -1) * 1;
+                    sel_a.attr ("y", +y_a + adjust);
+                    sel_b.attr ("y", +y_b - adjust);
+                  });
             });
-        });
 
       if (again)
-        {
-          setTimeout (relax_labels, 1)
-        }
+      {
+        setTimeout (relax_labels, 1)
+      }
     }
 
-  return my;
+    return my;
 
-}
+  }
 
-BubbleChartGenerator.create_bubble = function ()
-{
-  var new_node;
+  BubbleChartGenerator.create_bubble = function ()
+  {
+    var new_node;
 
-  new_node = this.append("g")
-    .attr("class", "node")
-    .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+    new_node = this.append("g")
+      .attr("class", "node")
+      .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
 
-  new_node
-    .append ("circle")
+      new_node
+      .append ("circle")
       .attr ("r", function(d) { return d.r })
       .style ("fill", "green")
 
-  new_node
-    .append ("text")
-    .attr ("text-anchor", "middle")
-    .attr ("dominant-baseline", "middle")
-    .style ("font-weight", "normal")
-    .style ("font-size", "10px")
-    .text ("X")
-}
+      new_node
+      .append ("text")
+      .attr ("text-anchor", "middle")
+      .attr ("dominant-baseline", "middle")
+      .style ("font-weight", "normal")
+      .style ("font-size", "10px")
+      .text ("X")
+  }
 
-function simple_bubble_data (old_data, params)
-{
-  var label_field = (params && params.x_field) ? params.x_field : "value"
-  var size_field = (params && params.y_fields && params.y_fields[0]) ? params.y_fields[0] : "count"
-  var color_field = (params &&  params.z_fields && params.z_fields[0])
-                      ? params.z_fields[0]
-                      : old_data.column_info.data_columns[0] + "_mean"
+  function simple_bubble_data (old_data, params)
+  {
+    var label_field = (params && params.x_field) ? params.x_field : "value"
+      var size_field = (params && params.y_fields && params.y_fields[0]) ? params.y_fields[0] : "count"
+      var color_field = (params &&  params.z_fields && params.z_fields[0])
+      ? params.z_fields[0]
+      : old_data.column_info.data_columns[0] + "_mean"
 
-  var column_info = { group_columns: old_data.column_info.group_columns,
-                      data_columns: old_data.column_info.data_columns,
-                      columns : {} }
+      var column_info = { group_columns: old_data.column_info.group_columns,
+        data_columns: old_data.column_info.data_columns,
+        columns : {} }
 
-  column_info.columns ["label_value"]
-    = {
+    column_info.columns ["label_value"]
+      = {
         name : "label_value",
         type : old_data.column_info.columns [label_field].type,
         column : old_data.column_info.columns [label_field].column,
@@ -455,8 +458,8 @@ function simple_bubble_data (old_data, params)
         data_type : old_data.column_info.columns [label_field].data_type,
       }
 
-  column_info.columns ["size_value"]
-    = {
+    column_info.columns ["size_value"]
+      = {
         name : "size_value",
         type : old_data.column_info.columns [size_field].type,
         column : old_data.column_info.columns [size_field].column,
@@ -464,8 +467,8 @@ function simple_bubble_data (old_data, params)
         data_type : old_data.column_info.columns [size_field].data_type,
       }
 
-  column_info.columns ["color_value"]
-    = {
+    column_info.columns ["color_value"]
+      = {
         name : "color_value",
         type : old_data.column_info.columns [color_field].type,
         column : old_data.column_info.columns [color_field].column,
@@ -473,9 +476,9 @@ function simple_bubble_data (old_data, params)
         data_type : old_data.column_info.columns [color_field].data_type,
       }
 
-  var bubble_data = [];
+    var bubble_data = [];
 
-  for (var d in old_data.records)
+    for (var d in old_data.records)
     {
       var new_record = {};
 
@@ -489,11 +492,14 @@ function simple_bubble_data (old_data, params)
       bubble_data.push (new_record);
     }
 
-  var new_data = { original_xml : old_data.original_xml,
-                   column_info : column_info,
-                   records : bubble_data,
-                   filter_info : old_data.filter_info }
+    var new_data = { original_xml : old_data.original_xml,
+      column_info : column_info,
+      records : bubble_data,
+      filter_info : old_data.filter_info }
 
-  return new_data;
-}
+    return new_data;
+  }
 
+})(window, window.gsa, window.d3, window.console);
+
+// vim: set ts=2 sw=2 tw=80:

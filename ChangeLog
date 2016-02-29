@@ -1,5 +1,10 @@
 2016-02-29  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_bubble_chart.js: Convert gsa_bubble_chart.js into a
+	sperate module by using an outer anonymous self invoking function.
+
+2016-02-29  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_graphics_base.js (create_data_source): Merge
 	create_aggregate_data_source function into create_data_source.
 
