@@ -1110,6 +1110,7 @@
       prevFilter: select_pref_filter,
       nextFilter: select_next_filter,
       createFilterSelector: create_filter_selector,
+      setTitle: set_title,
       // TODO use camel case here
       last_generator: get_last_generator,
       last_gen_params: get_last_gen_params,
@@ -1227,6 +1228,11 @@
 
     function get_svg() {
       return svg;
+    }
+
+    function set_title(title) {
+      $(header).text(title);
+      return dashboard_box;
     }
 
     function get_set_row(newRow) {
