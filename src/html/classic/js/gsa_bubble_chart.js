@@ -31,8 +31,6 @@
 
   /* Main chart generator */
   function BubbleChartGenerator() {
-    function my() {}
-
     var svg;
     var height;
     var width;
@@ -71,7 +69,23 @@
     var svg_blob;
     var svg_url;
 
-    var tooltip_func = function(d) {
+    var bubble_chart = {
+      height: get_height,
+      width: get_width,
+      x_field: get_set_x_field,
+      y_field: get_set_y_field,
+      x_label: get_set_x_label,
+      y_label: get_set_y_label,
+      color_scale: get_set_color_scale,
+      data_transform: get_set_data_transform,
+      title: get_set_title,
+      show_loading: show_loading,
+      generate: generate,
+    };
+
+    return bubble_chart;
+
+    function tooltip_func(d) {
       if (records_empty) {
         return empty_text;
       }
@@ -85,88 +99,81 @@
 
       return label_value + ': ' + size_value   +
         ' (' + color_label + ': ' + color_value + ')';
-    };
+    }
 
-    my.height = function() {
+    function get_height() {
       return height;
-    };
+    }
 
-    my.width = function() {
+    function get_width() {
       return width;
-    };
+    }
 
-    my.x_field = function(value) {
+    function get_set_x_field(value) {
       if (!arguments.length) {
         return x_field;
       }
       x_field = value;
-      return my;
-    };
+      return bubble_chart;
+    }
 
-    my.y_field = function(value) {
+    function get_set_y_field(value) {
       if (!arguments.length) {
         return y_field;
       }
       y_field = value;
-      return my;
-    };
+      return bubble_chart;
+    }
 
-    my.y_field = function(value) {
-      if (!arguments.length) {
-        return y_field;
-      }
-      y_field = value;
-      return my;
-    };
-
-    my.x_label = function(value) {
+    function get_set_x_label(value) {
       if (!arguments.length) {
         return x_label;
       }
       x_label = value;
-      return my;
-    };
+      return bubble_chart;
+    }
 
-    my.y_label = function(value) {
+    function get_set_y_label(value) {
       if (!arguments.length) {
         return y_label;
       }
       y_label = value;
-      return my;
-    };
+      return bubble_chart;
+    }
 
-    my.color_scale = function(value) {
+    function get_set_color_scale(value) {
       if (!arguments.length) {
         return color_scale;
       }
       color_scale = value;
-      return my;
-    };
+      return bubble_chart;
+    }
 
-    my.data_transform = function(value) {
+    function get_set_data_transform(value) {
       if (!arguments.length) {
         return data_transform;
       }
       data_transform = value;
-      return my;
-    };
+      return bubble_chart;
+    }
 
-    my.title = function(value) {
+    function get_set_title(value) {
       if (!arguments.length) {
         return title;
       }
       title = value;
-      return my;
-    };
+      return bubble_chart;
+    }
 
-    my.show_loading = function(display) {
+    function show_loading(display) {
+      // TODO it would be better to call display.setTitle(title());
       display.header().text(title());
-    };
+    }
 
-    my.generate = function(original_data, chart, gen_params) {
+    function generate(original_data, chart, gen_params) {
       var display = chart.display();
       var data_src = chart.data_src();
-      var update = (display.last_generator() === my);
+      var update = (display.last_generator() === bubble_chart);
 
       // evaluate options set by gen_params
       if (gen_params.x_field) {
@@ -198,6 +205,7 @@
           console.error('Unsupported command:' + data_src.command());
           return;
       }
+      // TODO use display.setTitle(...)
       display.header().text(title(data));
 
       if (gen_params.extra.empty_text) {
@@ -362,8 +370,8 @@
 
       }, 600);
 
-      display.update_gen_data(my, gen_params);
-    };
+      display.update_gen_data(bubble_chart, gen_params);
+    }
 
     var relax_labels = function(labels) {
       //FIXME this function seems to be unused
@@ -419,8 +427,6 @@
         global.setTimeout(relax_labels, 1);
       }
     };
-
-    return my;
   }
 
   function create_bubble(selection) {
