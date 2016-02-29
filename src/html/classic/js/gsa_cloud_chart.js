@@ -382,28 +382,6 @@ function CloudChartGenerator ()
 
 }
 
-BubbleChartGenerator.create_bubble = function ()
-{
-  var new_node;
-
-  new_node = this.append("g")
-    .attr("class", "node")
-    .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
-
-  new_node
-    .append ("circle")
-      .attr ("r", function(d) { return d.r })
-      .style ("fill", "green")
-
-  new_node
-    .append ("text")
-    .attr ("text-anchor", "middle")
-    .attr ("dominant-baseline", "middle")
-    .style ("font-weight", "normal")
-    .style ("font-size", "10px")
-    .text ("X")
-}
-
 function simple_bubble_data (old_data, params)
 {
   var label_field = (params && params.x_field) ? params.x_field : "value"
