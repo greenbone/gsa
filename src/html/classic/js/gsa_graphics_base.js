@@ -3656,11 +3656,6 @@
       var max_components = elem.data('max-components') !== undefined ?
         elem.data('max-components') : 8;
 
-      if (dashboard_name === undefined) {
-        // TODO remove when all dashboards are converted
-        return;
-      }
-
       var dashboard = create_dashboard(dashboard_name,
           elem.data('controllers'), elem.data('heights'),
           elem.data('filters-string'),
