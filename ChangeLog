@@ -1,5 +1,11 @@
 2016-02-29  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_bubble_chart.js: Rename
+	BubbleChartGenerator.create_bubble function into create_bubble. It is not
+	necessary to attach the function to BubbleChartGenerator.
+
+2016-02-29  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_graphics_base.js,
 	* src/html/classic/js/gsa_bubble_chart.js: Register the BubbleChartGenerator
 	only once in the gsa_bubble_chart.js module.

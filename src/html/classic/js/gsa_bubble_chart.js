@@ -257,7 +257,7 @@
       svg.selectAll('.node')
         .data(nodes)
         .enter()
-        .call(BubbleChartGenerator.create_bubble);
+        .call(create_bubble);
 
       // Remove unused bubbles
       svg.selectAll('.node')
@@ -423,10 +423,10 @@
     return my;
   }
 
-  BubbleChartGenerator.create_bubble = function() {
+  function create_bubble(selection) {
     var new_node;
 
-    new_node = this.append('g')
+    new_node = selection.append('g')
       .attr('class', 'node')
       .attr('transform', function(d) {
         return 'translate(' + d.x + ',' + d.y + ')';
@@ -444,7 +444,7 @@
       .style('font-weight', 'normal')
       .style('font-size', '10px')
       .text('X');
-  };
+  }
 
   function simple_bubble_data(old_data, params) {
     var label_field = (params && params.x_field) ? params.x_field : 'value';
