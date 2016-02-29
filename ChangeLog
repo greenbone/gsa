@@ -1,5 +1,9 @@
 2016-02-29  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/graphics.xsl: Update copyright year and add me as author.
+
+2016-02-29  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_cloud_chart.js: Remove
 	BubbleChartGenerator.create_bubble from gsa_cloud_chart.js. This function is
 	already defined identically in gsa_bubble_chart.js.
