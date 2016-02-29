@@ -25,7 +25,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-(function(global, document, d3, $, console) {
+(function(global, window, document, d3, $, console) {
   'use strict';
   /*
   * GSA base object
@@ -552,8 +552,8 @@
       width = dom_elem.clientWidth;
       height = dom_elem.clientHeight;
       dashboard.resize();
-      clearTimeout(currentResizeTimeout);
-      currentResizeTimeout = setTimeout(dashboard.redraw, 50);
+      global.clearTimeout(currentResizeTimeout);
+      currentResizeTimeout = global.setTimeout(dashboard.redraw, 50);
     }
 
     function resize() {
@@ -3813,6 +3813,6 @@
     on_ready(document);
   });
 
-})(window, window.document, window.d3, window.$, window.console);
+})(window, window, window.document, window.d3, window.$, window.console);
 
 // vim: set ts=2 sw=2 tw=80:
