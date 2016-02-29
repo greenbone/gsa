@@ -8586,7 +8586,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:variable name="filt_id" select="/envelope/params/filt_id"/>
 
   <xsl:call-template name="init-d3charts"/>
-  <div id="single-box-dashboard"/>
   <xsl:choose>
     <xsl:when test="$filter_term != ''">
       <div id="applied_filter" class="footnote" style="padding: 5px 10px">
@@ -8599,108 +8598,92 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <div id="applied_filter"/>
     </xsl:otherwise>
   </xsl:choose>
+
+  <xsl:variable name="init_params_js">
+    <xsl:if test="/envelope/params/_param[starts-with (name, 'chart_init:')]">{
+      <xsl:for-each select="/envelope/params/_param[starts-with (name, 'chart_init:')]">
+        "<xsl:value-of select="substring-after (name, 'chart_init:')"/>": "<xsl:value-of select="value"/>"<xsl:if test="position() &lt; count(exslt:node-set (/envelope/params/_param[starts-with (name, 'chart_init:')]))">, </xsl:if>
+      </xsl:for-each>
+      }</xsl:if>
+  </xsl:variable>
+
+  <xsl:variable name="gen_params_js">
+    <xsl:if test="/envelope/params/_param[starts-with (name, 'chart_gen:')]">{
+      <xsl:for-each select="/envelope/params/_param[starts-with (name, 'chart_gen:')]">
+        "<xsl:value-of select="substring-after (name, 'chart_gen:')"/>": "<xsl:value-of select="value"/>"<xsl:if test="position() &lt; count(exslt:node-set (/envelope/params/_param[starts-with (name, 'chart_gen:')]))">, </xsl:if>
+      </xsl:for-each>
+      }</xsl:if>
+  </xsl:variable>
+
+  <xsl:variable name="data_columns">
+    <xsl:if test="/envelope/params/_param[starts-with (name, 'data_columns:')]">
+      <xsl:for-each select="/envelope/params/_param[starts-with (name, 'data_columns:')]">
+       <xsl:value-of select="value"/><xsl:if test="position() &lt; count(exslt:node-set (/envelope/params/_param[starts-with (name, 'data_columns:')]))">,</xsl:if>
+      </xsl:for-each>
+    </xsl:if>
+  </xsl:variable>
+
+  <xsl:variable name="text_columns">
+    <xsl:if test="/envelope/params/_param[starts-with (name, 'text_columns:')]">
+      <xsl:for-each select="/envelope/params/_param[starts-with (name, 'text_columns:')]">
+       <xsl:value-of select="value"/><xsl:if test="position() &lt; count(exslt:node-set (/envelope/params/_param[starts-with (name, 'text_columns:')]))">,</xsl:if>
+      </xsl:for-each>
+    </xsl:if>
+  </xsl:variable>
+
+  <xsl:variable name="y_fields">
+    <xsl:if test="/envelope/params/_param[starts-with (name, 'y_fields:')]">
+      <xsl:for-each select="/envelope/params/_param[starts-with (name, 'y_fields:')]">
+       <xsl:value-of select="value"/><xsl:if test="position() &lt; count(exslt:node-set (/envelope/params/_param[starts-with (name, 'y_fields:')]))">,</xsl:if>
+      </xsl:for-each>
+    </xsl:if>
+  </xsl:variable>
+
+  <xsl:variable name="z_fields">
+    <xsl:if test="/envelope/params/_param[starts-with (name, 'z_fields:')]">
+      <xsl:for-each select="/envelope/params/_param[starts-with (name, 'z_fields:')]">
+       <xsl:value-of select="value"/><xsl:if test="position() &lt; count(exslt:node-set (/envelope/params/_param[starts-with (name, 'z_fields:')]))">,</xsl:if>
+      </xsl:for-each>
+    </xsl:if>
+  </xsl:variable>
+
+  <div id="single-box-dashboard" class="dashboard"
+    data-dashboard-name="single-box-dashboard"
+    data-controllers="aggregate-chart"
+    data-filter="{$filter_term}"
+    data-filter-id="{$filt_id}"
+    data-max-components="1"
+    data-detached="1"
+    data-hide-controller-select="1">
+    <div class="dashboard-data-source"
+      data-soure-name="aggregate-source"
+      data-type="aggregate"
+      data-aggregate-type="{/envelope/params/aggregate_type}"
+      data-group-column="{/envelope/params/group_column}"
+      data-column="{/envelope/params/data_column}"
+      data-columns="{$data_columns}"
+      data-text-columns="{$text_columns}"
+      data-sort-field="{/envelope/params/sort_field}"
+      data-sort-stat="{/envelope/params/sort_stat}"
+      data-sort-order="{/envelope/params/sort_order}"
+      data-first-group="{/envelope/params/first_group}"
+      data-max-groups="{/envelope/params/max_groups}"
+      data-aggregate-mode="{/envelope/params/aggregate_mode}"
+      data-filter="{$filter_term}"
+      data-filter-id="{$filt_id}">
+      <span class="dashboard-chart"
+        data-chart-name="aggregate-chart"
+        data-chart-type="{/envelope/params/chart_type}"
+        data-chart-template="{/envelope/params/chart_template}"
+        data-x-field="{/envelope/params/x_field}"
+        data-y-fields="{$y_fields}"
+        data-z-fields="{$y_fields}"
+        data-init-params="{$init_params_js}"
+        data-gen-params="{$gen_params_js}"
+        />
+    </div>
+  </div>
   <xsl:call-template name="html-footer"/>
-  <script>
-    gsa.dashboards ["single-box-dashboard"]
-      = Dashboard ("single-box-dashboard",
-                   "aggregate-chart",
-                   null,
-                   null,
-                   {
-                     "filter": "<xsl:value-of select="gsa:escape-js ($filter_term)"/>",
-                     "filt_id": "<xsl:value-of select="gsa:escape-js ($filt_id)"/>",
-                     "max_components": 1,
-                     "hideControllerSelect": true
-                   });
-    <xsl:call-template name="js-aggregate-data-source">
-      <xsl:with-param name="data_source_name" select="'aggregate-source'"/>
-      <xsl:with-param name="aggregate_type" select="/envelope/params/aggregate_type"/>
-      <xsl:with-param name="group_column" select="/envelope/params/group_column"/>
-      <xsl:with-param name="data_column" select="/envelope/params/data_column"/>
-      <xsl:with-param name="data_columns" xmlns="">
-        <data_columns>
-          <xsl:for-each select="/envelope/params/_param[starts-with (name, 'data_columns:')]">
-            <column><xsl:value-of select="value"/></column>
-          </xsl:for-each>
-        </data_columns>
-      </xsl:with-param>
-      <xsl:with-param name="text_columns" xmlns="">
-        <text_columns>
-          <xsl:for-each select="/envelope/params/_param[starts-with (name, 'text_columns:')]">
-            <column><xsl:value-of select="value"/></column>
-          </xsl:for-each>
-        </text_columns>
-      </xsl:with-param>
-      <xsl:with-param name="sort_field" select="/envelope/params/sort_field"/>
-      <xsl:with-param name="sort_stat" select="/envelope/params/sort_stat"/>
-      <xsl:with-param name="sort_order" select="/envelope/params/sort_order"/>
-      <xsl:with-param name="first_group" select="/envelope/params/first_group"/>
-      <xsl:with-param name="max_groups" select="/envelope/params/max_groups"/>
-      <xsl:with-param name="aggregate_mode" select="/envelope/params/aggregate_mode"/>
-      <xsl:with-param name="filter" select="$filter_term"/>
-      <xsl:with-param name="filt_id" select="$filt_id"/>
-      <xsl:with-param name="chart_template" select="/envelope/params/chart_template"/>
-    </xsl:call-template>
-    <xsl:call-template name="js-aggregate-chart-factory">
-      <xsl:with-param name="chart_name" select="'aggregate-chart'"/>
-      <xsl:with-param name="dashboard_name" select="'single-box-dashboard'"/>
-      <xsl:with-param name="data_source_name" select="'aggregate-source'"/>
-      <xsl:with-param name="generator_name" select="'aggregate-generator'"/>
-      <xsl:with-param name="display_name" select="'aggregate-display'"/>
-      <xsl:with-param name="aggregate_type" select="/envelope/params/aggregate_type"/>
-      <xsl:with-param name="group_column" select="/envelope/params/group_column"/>
-      <xsl:with-param name="data_column" select="/envelope/params/data_column"/>
-      <xsl:with-param name="chart_type" select="/envelope/params/chart_type"/>
-      <xsl:with-param name="init_params" xmlns="">
-        <xsl:if test="/envelope/params/_param[starts-with (name, 'chart_init:')]">
-          <params>
-            <xsl:for-each select="/envelope/params/_param[starts-with (name, 'chart_init:')]">
-              <param name="{substring-after (name, 'chart_init:')}"><xsl:value-of select="value"/></param>
-            </xsl:for-each>
-          </params>
-        </xsl:if>
-      </xsl:with-param>
-      <xsl:with-param name="gen_params" xmlns="">
-        <xsl:if test="/envelope/params/_param[starts-with (name, 'chart_gen:')]">
-          <params>
-            <xsl:for-each select="/envelope/params/_param[starts-with (name, 'chart_gen:')]">
-              <param name="{substring-after (name, 'chart_gen:')}"><xsl:value-of select="value"/></param>
-            </xsl:for-each>
-          </params>
-        </xsl:if>
-      </xsl:with-param>
-      <xsl:with-param name="x_field" select="/envelope/params/x_field"/>
-      <xsl:with-param name="y_fields" xmlns="">
-        <xsl:if test="/envelope/params/_param[starts-with (name, 'y_fields:')]">
-          <fields>
-            <xsl:for-each select="/envelope/params/_param[starts-with (name, 'y_fields:')]">
-              <field><xsl:value-of select="value"/></field>
-            </xsl:for-each>
-          </fields>
-        </xsl:if>
-      </xsl:with-param>
-      <xsl:with-param name="z_fields" xmlns="">
-        <xsl:if test="/envelope/params/_param[starts-with (name, 'z_fields:')]">
-          <fields>
-            <xsl:for-each select="/envelope/params/_param[starts-with (name, 'z_fields:')]">
-              <field><xsl:value-of select="value"/></field>
-            </xsl:for-each>
-          </fields>
-        </xsl:if>
-      </xsl:with-param>
-      <xsl:with-param name="chart_template" select="/envelope/params/chart_template"/>
-      <xsl:with-param name="auto_load" select="0"/>
-    </xsl:call-template>
-
-    gsa.dashboards ["single-box-dashboard"].initComponentsFromString ();
-
-    if (this.fit_window)
-      window.onload = function () { fit_detached_window (gsa.dashboards ["single-box-dashboard"]) }
-
-    window.onresize
-      = detached_chart_resize_listener (gsa.dashboards ["single-box-dashboard"]);
-    window.onresize ();
-  </script>
 </xsl:template>
 
 

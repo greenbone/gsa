@@ -1,3 +1,9 @@
+2016-02-29  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/omp.xsl (get_aggregate): Use jquery to create aggreagte
+	based charts for a detached window instead of generating javascript code
+	directly.
+
 2016-02-26  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/omp.xsl: Use jquery to create task based charts for a
