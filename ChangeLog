@@ -1,5 +1,10 @@
 2016-02-29  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/.jshintrc: Update jshint config file. Don't allow global
+	console and jquery access.
+
+2016-02-29  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_graphics_base.js: Don't pollute the global namespace
 	by removing functions from the global namespace not used outside of
 	gsa_graphics_base.js.

@@ -1,15 +1,12 @@
 {
     "undef": true,
-    "unused": true,
+    "unused": "vars",
     "curly": true,
     "eqeqeq": true,
     "nonbsp": true,
     "shadow": "inner",
     "strict": true,
-    "unused": "vars",
     "latedef": "nofunc",
     "browser": true,
-    "jquery": true,
-    "devel": true,
     "scripturl": true
 }
