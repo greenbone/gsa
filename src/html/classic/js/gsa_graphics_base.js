@@ -3540,7 +3540,7 @@
   }
 
   function is_string(value) {
-    return value !== null && value !== undefined && typeof field === 'string';
+    return value !== null && value !== undefined && typeof value === 'string';
   }
 
   function get_selector_label(type, chart_type, chart_template, aggregate_type,
