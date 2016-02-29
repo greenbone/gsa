@@ -27,7 +27,7 @@
 (function(window, global, gsa, d3, console) {
   'use strict';
 
-  global.BubbleChartGenerator = BubbleChartGenerator;
+  gsa.register_chart_generator('bubbles', BubbleChartGenerator);
 
   /* Main chart generator */
   function BubbleChartGenerator() {
