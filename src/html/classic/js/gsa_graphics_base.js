@@ -49,6 +49,37 @@
   gsa.datetime_format = d3.time.format.utc('%Y-%m-%d %H:%M');
 
   /*
+  * Generic chart styling helpers
+  */
+
+  /* Color scales */
+
+  /*
+  * Color scale for SecInfo severity levels
+  */
+  gsa.severity_level_color_scale =
+    d3.scale.ordinal()
+                .range(['silver', '#DDDDDD', 'skyblue', 'orange', '#D80000'])
+                .domain(['N/A', 'Log', 'Low', 'Medium', 'High']);
+
+  /*
+  * Severity gradient
+  */
+  gsa.severity_colors_gradient = function() {
+    return d3.scale.linear()
+              .domain([-1.0,
+                        gsa.severity_levels.max_log,
+                        gsa.severity_levels.max_low,
+                        gsa.severity_levels.max_medium,
+                        10.0])
+              .range([d3.rgb('grey'),
+                      d3.rgb('silver'),
+                      d3.rgb('skyblue'),
+                      d3.rgb('orange'),
+                      d3.rgb('red')]);
+  };
+
+  /*
   * Dashboard functions
   */
   function create_dashboard(id, controllersString, heightsString, filtersString,
@@ -3252,37 +3283,6 @@
   }
 
   global.title_total = title_total;
-
-  /*
-  * Generic chart styling helpers
-  */
-
-  /* Color scales */
-
-  /*
-  * Color scale for SecInfo severity levels
-  */
-  global.severity_level_color_scale =
-    d3.scale.ordinal()
-                .range(['silver', '#DDDDDD', 'skyblue', 'orange', '#D80000'])
-                .domain(['N/A', 'Log', 'Low', 'Medium', 'High']);
-
-  /*
-  * Severity gradient
-  */
-  global.severity_colors_gradient = function() {
-    return d3.scale.linear()
-              .domain([-1.0,
-                        gsa.severity_levels.max_log,
-                        gsa.severity_levels.max_low,
-                        gsa.severity_levels.max_medium,
-                        10.0])
-              .range([d3.rgb('grey'),
-                      d3.rgb('silver'),
-                      d3.rgb('skyblue'),
-                      d3.rgb('orange'),
-                      d3.rgb('red')]);
-  };
 
   /*
   * Data export helpers

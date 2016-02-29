@@ -35,7 +35,7 @@ function BubbleChartGenerator ()
   var margin = {top: 5, right: 5, bottom: 5, left: 5};
 
   var data_transform = simple_bubble_data;
-  var color_scale = severity_colors_gradient ();
+  var color_scale = gsa.severity_colors_gradient ();
   var title = title_static ("Loading bubble chart ...", "Bubble Chart");
 
   var records;
