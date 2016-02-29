@@ -1,5 +1,11 @@
 2016-02-29  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_bubble_chart.js: Use gsa object to access shared
+	functions from gsa_graphics_base.js. Also register BubbleChartGenerator
+	temporarily in the global namespace.
+
+2016-02-29  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_graphics_base.js: Register more functions into the
 	gsa "namespace".
 

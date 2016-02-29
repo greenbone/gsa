@@ -27,6 +27,8 @@
 (function(window, global, gsa, d3, console) {
   'use strict';
 
+  global.BubbleChartGenerator = BubbleChartGenerator;
+
   /* Main chart generator */
   function BubbleChartGenerator() {
     function my() {}
@@ -38,7 +40,7 @@
 
     var data_transform = simple_bubble_data;
     var color_scale = gsa.severity_colors_gradient();
-    var title = title_static('Loading bubble chart ...', 'Bubble Chart');
+    var title = gsa.title_static('Loading bubble chart ...', 'Bubble Chart');
 
     var records;
     var column_info;
@@ -74,11 +76,11 @@
         return empty_text;
       }
 
-      var label_value = format_data(d.label_value,
+      var label_value = gsa.format_data(d.label_value,
           data.column_info.columns.label_value);
-      var size_value  = format_data(d.size_value,
+      var size_value  = gsa.format_data(d.size_value,
           data.column_info.columns.size_value);
-      var color_value = format_data(d.color_value,
+      var color_value = gsa.format_data(d.color_value,
           data.column_info.columns.color_value);
 
       return label_value + ': ' + size_value   +
@@ -189,7 +191,7 @@
           data = data_transform(original_data, gen_params);
           records = data.records;
           column_info = data.column_info;
-          color_label = column_label(column_info.columns.color_value, false,
+          color_label = gsa.column_label(column_info.columns.color_value, false,
               false, show_stat_type);
           break;
         default:
@@ -202,7 +204,7 @@
         empty_text = gen_params.extra.empty_text;
       }
       else {
-        empty_text = 'No matching ' + resource_type_name(
+        empty_text = 'No matching ' + gsa.resource_type_name(
             column_info.columns.label_value.type);
       }
 
@@ -282,18 +284,18 @@
       display.create_or_get_menu_item('detach')
         .attr('href', 'javascript:void(0);')
         .on('click', function() {
-          open_detached(chart.detached_url());
+          gsa.open_detached(chart.detached_url());
         })
         .text('Show detached chart window');
 
       // Generate CSV
       var cols = column_info.columns;
-      csv_data = csv_from_records(records,
+      csv_data = gsa.csv_from_records(records,
           column_info,
           ['label_value', 'size_value', 'color_value'],
-          [column_label(cols.label_value, true, false, show_stat_type),
-          column_label(cols.size_value, true, false, show_stat_type),
-          column_label(cols.color_value, true, false, show_stat_type)],
+          [gsa.column_label(cols.label_value, true, false, show_stat_type),
+          gsa.column_label(cols.size_value, true, false, show_stat_type),
+          gsa.column_label(cols.color_value, true, false, show_stat_type)],
           display.header().text());
 
       if (csv_url !== null) {
@@ -317,12 +319,12 @@
       var open_html_table = function() {
         var cols = column_info.columns;
         if (html_table_url === null) {
-          html_table_data  = html_table_from_records(records,
+          html_table_data  = gsa.html_table_from_records(records,
               column_info,
               ['label_value', 'size_value', 'color_value'],
-              [column_label(cols.label_value, true, false, show_stat_type),
-              column_label(cols.size_value, true, false, show_stat_type),
-              column_label(colns.color_value, true, false, show_stat_type)],
+              [gsa.column_label(cols.label_value, true, false, show_stat_type),
+              gsa.column_label(cols.size_value, true, false, show_stat_type),
+              gsa.column_label(cols.color_value, true, false, show_stat_type)],
               display.header().text(),
               data_src.param('filter'));
           html_table_blob = new Blob([html_table_data], {type: 'text/html'});
@@ -339,7 +341,7 @@
 
       // Generate SVG after transition
       global.setTimeout(function() {
-        svg_data = svg_from_elem(display.svg(), display.header().text());
+        svg_data = gsa.svg_from_elem(display.svg(), display.header().text());
         if (svg_url !== null) {
           URL.revokeObjectURL(svg_url);
         }
@@ -349,7 +351,7 @@
         display.create_or_get_menu_item('svg_window')
           .attr('href', 'javascript:void(0)')
           .on('click', function() {
-            blob_img_window(svg_ur);
+            gsa.blob_img_window(svg_url);
           })
           .text('Show copyable SVG');
 
