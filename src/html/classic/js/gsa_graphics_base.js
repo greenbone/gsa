@@ -48,6 +48,16 @@
   gsa.date_format = d3.time.format.utc('%Y-%m-%d');
   gsa.datetime_format = d3.time.format.utc('%Y-%m-%d %H:%M');
 
+  gsa.title_static = title_static;
+  gsa.format_data = format_data;
+  gsa.column_label = column_label;
+  gsa.resource_type_name = resource_type_name;
+  gsa.open_detached = open_detached;
+  gsa.csv_from_records = csv_from_records;
+  gsa.html_table_from_records = html_table_from_records;
+  gsa.svg_from_elem = svg_from_elem;
+  gsa.blob_img_window = blob_img_window;
+
   /*
   * Generic chart styling helpers
   */
@@ -3361,7 +3371,7 @@
   /*
   * Generate CSV data from simple records
   */
-  global.csv_from_records = function(records, column_info, columns, headers,
+  function csv_from_records(records, column_info, columns, headers,
       title) {
     var csv_data = '';
 
@@ -3400,12 +3410,14 @@
     }
 
     return csv_data;
-  };
+  }
+
+  global.csv_from_records = csv_from_records;
 
   /*
   * Generate HTML table from simple records
   */
-  global.html_table_from_records = function(records, column_info, columns,
+  function html_table_from_records(records, column_info, columns,
       headers, title, filter) {
     var doc = document.implementation.createDocument(
         'http://www.w3.org/1999/xhtml', 'html', null);
@@ -3476,12 +3488,14 @@
     }
 
     return doc.documentElement.outerHTML;
-  };
+  }
+
+  global.html_table_from_records = html_table_from_records;
 
   /*
   * Convert SVG element to export format
   */
-  global.svg_from_elem = function(svg_elem, title) {
+  function svg_from_elem(svg_elem, title) {
     var css_text = '';
     // find stylesheet
     /*
@@ -3545,7 +3559,9 @@
       title_xml +
       '</svg>';
     return svg_data;
-  };
+  }
+
+  global.svg_from_elem = svg_from_elem;
 
   /*
   * Shows a blob url inside an img element in a new window.
