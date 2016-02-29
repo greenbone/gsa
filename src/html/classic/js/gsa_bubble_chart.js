@@ -166,8 +166,7 @@
     }
 
     function show_loading(display) {
-      // TODO it would be better to call display.setTitle(title());
-      display.header().text(title());
+      display.setTitle(title());
     }
 
     function generate(original_data, chart, gen_params) {
@@ -205,8 +204,7 @@
           console.error('Unsupported command:' + data_src.command());
           return;
       }
-      // TODO use display.setTitle(...)
-      display.header().text(title(data));
+      display.setTitle(title(data));
 
       if (gen_params.extra.empty_text) {
         empty_text = gen_params.extra.empty_text;
