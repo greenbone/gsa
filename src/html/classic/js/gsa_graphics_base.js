@@ -57,6 +57,7 @@
   gsa.html_table_from_records = html_table_from_records;
   gsa.svg_from_elem = svg_from_elem;
   gsa.blob_img_window = blob_img_window;
+  gsa.register_chart_generator = register_chart_generator;
 
   /*
   * Generic chart styling helpers
@@ -88,6 +89,8 @@
                       d3.rgb('orange'),
                       d3.rgb('red')]);
   };
+
+  var chart_generators = {};
 
   /*
   * Dashboard functions
@@ -3649,18 +3652,23 @@
           ' by ' + field_name(group_column), 'count');
   }
 
-  function get_chart_generator(chart_type, data_source, title_generator) {
-    var generators = {
-      'donut': global.DonutChartGenerator,
-      'bubbles': global.BubbleChartGenerator,
-      'cloud': global.CloudChartGenerator,
-      'horizontal_bar': global.HorizontalBarChartGenerator,
-      'line': global.LineChartGenerator,
-      'gantt': global.GanttChartGenerator,
-    };
+  function get_chart_generator(chart_type, data_source) {
+    // TODO register generators in their own modules
+    register_chart_generator('bubbles', global.BubbleChartGenerator);
+    register_chart_generator('donut', global.DonutChartGenerator);
+    register_chart_generator('cloud', global.CloudChartGenerator);
+    register_chart_generator('horizontal_bar',
+        global.HorizontalBarChartGenerator);
+    register_chart_generator('line', global.LineChartGenerator);
+    register_chart_generator('gantt', global.GanttChartGenerator);
+    register_chart_generator('bar', global.BarChartGenerator);
 
-    var generator = generators[chart_type] || global.BarChartGenerator;
-    return generator(data_source).title(title_generator);
+    var generator = chart_generators[chart_type];
+    return generator ? generator(data_source) : null;
+  }
+
+  function register_chart_generator(chart_type, generator) {
+    chart_generators[chart_type] = generator;
   }
 
   function on_ready(doc) {
@@ -3768,6 +3776,13 @@
 
             var generator = get_chart_generator(chart_type, data_source,
                 title_generator);
+
+            if (!generator) {
+              console.error('No chart generator for ' + chart_type + ' found');
+              return;
+            }
+
+            generator.title(title_generator);
 
             if (chart_template === 'resource_type_counts') {
               generator.data_transform(resource_type_counts);

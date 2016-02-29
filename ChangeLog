@@ -1,5 +1,13 @@
 2016-02-29  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_graphics_base.js: Refactor registering and getting
+	of chart generators. Add a gsa function to allow registering of a specific
+	generator for a chart type. Also remove setting the title generator from the
+	get_chart_generator function. Now the get_chart_generator only returns a
+	generator for a chart type and nothing more.
+
+2016-02-29  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/graphics.xsl (init-d3charts): Remove check and declartion
 	of gsa.dashboards and gsa.data_sources javascript objects from init-d3charts
 	xslt template. Both variables will always be initialized by
