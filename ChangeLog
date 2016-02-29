@@ -1,5 +1,12 @@
 2016-02-29  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/graphics.xsl (init-d3charts): Remove check and declartion
+	of gsa.dashboards and gsa.data_sources javascript objects from init-d3charts
+	xslt template. Both variables will always be initialized by
+	gsa_graphics_base.js now.
+
+2016-02-29  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/graphics.xsl: Update copyright year and add me as author.
 
 2016-02-29  Björn Ricks <bjoern.ricks@greenbone.net>
