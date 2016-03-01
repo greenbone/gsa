@@ -1,5 +1,11 @@
 2016-03-01  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/omp.xsl: Add sort reverse by date to the links to the
+	reports at the tasks list page. Reports should be sorted by date descending by
+	default.
+
+2016-03-01  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/omp.xsl: Fix layout of task selection in filter dialog.
 	First don't let the dynamic select element hide the label and second don't
 	show the selection if the response doesn't contain any tasks.
