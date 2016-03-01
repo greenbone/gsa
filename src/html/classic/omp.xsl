@@ -1101,20 +1101,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        <xsl:for-each select="exslt:node-set($extra_params)/param">
          <input type="hidden" name="{name}" value="{value}"/>
        </xsl:for-each>
-       <xsl:if test="filters/keywords/keyword[column='task_id']">
+       <xsl:if test="filters/keywords/keyword[column='task_id'] and ../get_tasks_response/task">
          <div class="ctrl-group">
            <xsl:variable name="task_id"
              select="filters/keywords/keyword[column='task_id']/value"/>
-           <label for="task_id" class="left-column">"<xsl:value-of select="gsa:i18n ('Task', 'Task')"/>:</label>
-           <select class="right-column" style="margin-bottom: 0px;" name="task_id" size="1">
-             <xsl:for-each select="../get_tasks_response/task">
-               <xsl:call-template name="opt">
-                 <xsl:with-param name="value" select="@id"/>
-                 <xsl:with-param name="content" select="name/text()"/>
-                 <xsl:with-param name="select-value" select="$task_id"/>
-               </xsl:call-template>
-             </xsl:for-each>
-           </select>
+           <label for="task_id" class="left-column"><xsl:value-of select="gsa:i18n ('Task', 'Task')"/>:</label>
+           <div class="right-column">
+            <select class="right-column" name="task_id" size="1">
+              <xsl:for-each select="../get_tasks_response/task">
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="@id"/>
+                  <xsl:with-param name="content" select="name/text()"/>
+                  <xsl:with-param name="select-value" select="$task_id"/>
+                </xsl:call-template>
+              </xsl:for-each>
+            </select>
+          </div>
          </div>
        </xsl:if>
        <xsl:if test="filters/keywords/keyword[column='apply_overrides']">

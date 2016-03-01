@@ -1,5 +1,11 @@
 2016-03-01  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/omp.xsl: Fix layout of task selection in filter dialog.
+	First don't let the dynamic select element hide the label and second don't
+	show the selection if the response doesn't contain any tasks.
+
+2016-03-01  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/omp.xsl: Fix layout of filter dialog. Don't float the
 	filter udpate dialog content on the right side.
 
