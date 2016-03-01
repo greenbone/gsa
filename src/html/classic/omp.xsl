@@ -1051,229 +1051,231 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
      </div>
    </xsl:otherwise>
  </xsl:choose>
- <form action="" method="get" enctype="multipart/form-data" name="filterform" class="pull-right" style="padding-right:5px;">
-   <xsl:variable name="criteria">
-     <xsl:call-template name="filter-criteria"/>
-   </xsl:variable>
-   <xsl:variable name="extra">
-     <xsl:call-template name="filter-extra"/>
-   </xsl:variable>
-
-   <input type="hidden" name="token" value="{/envelope/token}"/>
-   <input type="hidden" name="cmd" value="get_{gsa:type-many($type)}"/>
-   <xsl:for-each select="exslt:node-set($extra_params)/param">
-     <input type="hidden" name="{name}" value="{value}"/>
-   </xsl:for-each>
-   <div>
-     <b><xsl:value-of select="gsa:i18n ('Filter')"/></b>:
-     <input type="text" name="filter" size="53"
-            value="{$criteria}"
-            maxlength="1000"/>
-     <input type="image"
-            name="Update Filter"
-            title="{gsa:i18n ('Update Filter', 'Filter')}"
-            src="/img/refresh.png"
-            alt="{gsa:i18n ('Update', 'Action Verb')}" style="vertical-align:middle;margin-left:3px;margin-right:3px;"/>
-     <a href="/help/powerfilter.html?token={/envelope/token}" title="{gsa:i18n ('Help', 'Help')}: {gsa:i18n ('Powerfilter', 'Filter')}">
-       <img style="vertical-align:middle;margin-left:3px;margin-right:3px;"
-            src="/img/help.png" />
-     </a>
-     <a href="#"
-        class="edit-filter-action-icon" data-id="filterbox">
-       <img style="vertical-align:middle;margin-left:3px;margin-right:3px;"
-            src="/img/edit.png"/>
-     </a>
-     <xsl:variable name="extras">
-       <xsl:for-each select="exslt:node-set($extra_params)/param">
-         <xsl:value-of select="concat ('&amp;', name, '=', value)"/>
-       </xsl:for-each>
+ <div class="pull-right">
+   <form action="" method="get" enctype="multipart/form-data" name="filterform">
+     <xsl:variable name="criteria">
+       <xsl:call-template name="filter-criteria"/>
      </xsl:variable>
-     <input type="hidden" name="filter_extra" value="{$extra}" />
-   </div>
-   <div class="footnote">
-     <xsl:value-of select="$extra"/>
-   </div>
-   <div id="filterbox" style="display: none;">
+     <xsl:variable name="extra">
+       <xsl:call-template name="filter-extra"/>
+     </xsl:variable>
+
      <input type="hidden" name="token" value="{/envelope/token}"/>
      <input type="hidden" name="cmd" value="get_{gsa:type-many($type)}"/>
-     <input type="hidden" name="build_filter" value="0"/>
      <xsl:for-each select="exslt:node-set($extra_params)/param">
        <input type="hidden" name="{name}" value="{value}"/>
      </xsl:for-each>
-     <xsl:if test="filters/keywords/keyword[column='task_id']">
-       <div class="ctrl-group">
-         <xsl:variable name="task_id"
-                       select="filters/keywords/keyword[column='task_id']/value"/>
-         <label for="task_id" class="left-column">"<xsl:value-of select="gsa:i18n ('Task', 'Task')"/>:</label>
-         <select class="right-column" style="margin-bottom: 0px;" name="task_id" size="1">
-           <xsl:for-each select="../get_tasks_response/task">
-             <xsl:call-template name="opt">
-               <xsl:with-param name="value" select="@id"/>
-               <xsl:with-param name="content" select="name/text()"/>
-               <xsl:with-param name="select-value" select="$task_id"/>
-             </xsl:call-template>
-           </xsl:for-each>
-         </select>
-       </div>
-     </xsl:if>
-     <xsl:if test="filters/keywords/keyword[column='apply_overrides']">
-       <div class="ctrl-group">
-         <xsl:variable name="apply_overrides"
-                       select="filters/keywords/keyword[column='apply_overrides']/value"/>
-         <label class="left-column">
-           <xsl:value-of select="gsa:i18n ('Apply overrides', 'Override Controls')"/>:
-         </label>
-         <label class="right-column">
-           <xsl:choose>
-             <xsl:when test="$apply_overrides = 0">
-               <input type="checkbox" name="overrides" value="1"/>
-             </xsl:when>
-             <xsl:otherwise>
-               <input type="checkbox" name="overrides" value="1"
-                      checked="1"/>
-             </xsl:otherwise>
-           </xsl:choose>
-         </label>
-       </div>
-     </xsl:if>
-     <xsl:if test="filters/keywords/keyword[column='autofp_value']">
-       <div class="ctrl-group">
-         <label class="left-column"><xsl:value-of select="gsa:i18n ('Auto-FP', 'Report Filter')"/>:</label>
-         <div style="margin-left: 30px" class="right-column">
-           <label>
+     <div>
+       <b><xsl:value-of select="gsa:i18n ('Filter')"/></b>:
+       <input type="text" name="filter" size="53"
+         value="{$criteria}"
+         maxlength="1000"/>
+       <input type="image"
+         name="Update Filter"
+         title="{gsa:i18n ('Update Filter', 'Filter')}"
+         src="/img/refresh.png"
+         alt="{gsa:i18n ('Update', 'Action Verb')}" style="vertical-align:middle;margin-left:3px;margin-right:3px;"/>
+       <a href="/help/powerfilter.html?token={/envelope/token}" title="{gsa:i18n ('Help', 'Help')}: {gsa:i18n ('Powerfilter', 'Filter')}">
+         <img style="vertical-align:middle;margin-left:3px;margin-right:3px;"
+           src="/img/help.png" />
+       </a>
+       <a href="#"
+         class="edit-filter-action-icon" data-id="filterbox">
+         <img style="vertical-align:middle;margin-left:3px;margin-right:3px;"
+           src="/img/edit.png"/>
+       </a>
+       <xsl:variable name="extras">
+         <xsl:for-each select="exslt:node-set($extra_params)/param">
+           <xsl:value-of select="concat ('&amp;', name, '=', value)"/>
+         </xsl:for-each>
+       </xsl:variable>
+       <input type="hidden" name="filter_extra" value="{$extra}" />
+     </div>
+     <div class="footnote">
+       <xsl:value-of select="$extra"/>
+     </div>
+     <div id="filterbox" style="display: none;">
+       <input type="hidden" name="token" value="{/envelope/token}"/>
+       <input type="hidden" name="cmd" value="get_{gsa:type-many($type)}"/>
+       <input type="hidden" name="build_filter" value="0"/>
+       <xsl:for-each select="exslt:node-set($extra_params)/param">
+         <input type="hidden" name="{name}" value="{value}"/>
+       </xsl:for-each>
+       <xsl:if test="filters/keywords/keyword[column='task_id']">
+         <div class="ctrl-group">
+           <xsl:variable name="task_id"
+             select="filters/keywords/keyword[column='task_id']/value"/>
+           <label for="task_id" class="left-column">"<xsl:value-of select="gsa:i18n ('Task', 'Task')"/>:</label>
+           <select class="right-column" style="margin-bottom: 0px;" name="task_id" size="1">
+             <xsl:for-each select="../get_tasks_response/task">
+               <xsl:call-template name="opt">
+                 <xsl:with-param name="value" select="@id"/>
+                 <xsl:with-param name="content" select="name/text()"/>
+                 <xsl:with-param name="select-value" select="$task_id"/>
+               </xsl:call-template>
+             </xsl:for-each>
+           </select>
+         </div>
+       </xsl:if>
+       <xsl:if test="filters/keywords/keyword[column='apply_overrides']">
+         <div class="ctrl-group">
+           <xsl:variable name="apply_overrides"
+             select="filters/keywords/keyword[column='apply_overrides']/value"/>
+           <label class="left-column">
+             <xsl:value-of select="gsa:i18n ('Apply overrides', 'Override Controls')"/>:
+           </label>
+           <label class="right-column">
              <xsl:choose>
-               <xsl:when test="filters/keywords/keyword[column='autofp']/value = 0">
-                 <input type="checkbox" name="autofp" value="1"/>
+               <xsl:when test="$apply_overrides = 0">
+                 <input type="checkbox" name="overrides" value="1"/>
                </xsl:when>
                <xsl:otherwise>
-                 <input type="checkbox" name="autofp" value="1" checked="1"/>
+                 <input type="checkbox" name="overrides" value="1"
+                   checked="1"/>
                </xsl:otherwise>
              </xsl:choose>
-             <xsl:value-of select="gsa:i18n ('Trust vendor security updates', 'Report Filter')"/>
            </label>
-           <div style="margin-left: 30px">
+         </div>
+       </xsl:if>
+       <xsl:if test="filters/keywords/keyword[column='autofp_value']">
+         <div class="ctrl-group">
+           <label class="left-column"><xsl:value-of select="gsa:i18n ('Auto-FP', 'Report Filter')"/>:</label>
+           <div style="margin-left: 30px" class="right-column">
              <label>
                <xsl:choose>
-                 <xsl:when test="filters/keywords/keyword[column='autofp']/value = 2">
-                   <input type="radio" name="autofp_value" value="1"/>
+                 <xsl:when test="filters/keywords/keyword[column='autofp']/value = 0">
+                   <input type="checkbox" name="autofp" value="1"/>
                  </xsl:when>
                  <xsl:otherwise>
-                   <input type="radio" name="autofp_value" value="1" checked="1"/>
+                   <input type="checkbox" name="autofp" value="1" checked="1"/>
                  </xsl:otherwise>
                </xsl:choose>
-               <xsl:value-of select="gsa:i18n ('Full CVE match', 'Report Filter')"/>
+               <xsl:value-of select="gsa:i18n ('Trust vendor security updates', 'Report Filter')"/>
+             </label>
+             <div style="margin-left: 30px">
+               <label>
+                 <xsl:choose>
+                   <xsl:when test="filters/keywords/keyword[column='autofp']/value = 2">
+                     <input type="radio" name="autofp_value" value="1"/>
+                   </xsl:when>
+                   <xsl:otherwise>
+                     <input type="radio" name="autofp_value" value="1" checked="1"/>
+                   </xsl:otherwise>
+                 </xsl:choose>
+                 <xsl:value-of select="gsa:i18n ('Full CVE match', 'Report Filter')"/>
+               </label>
+               <label>
+                 <xsl:choose>
+                   <xsl:when test="filters/keywords/keyword[column='autofp']/value = 2">
+                     <input type="radio" name="autofp_value" value="2" checked="1"/>
+                   </xsl:when>
+                   <xsl:otherwise>
+                     <input type="radio" name="autofp_value" value="2"/>
+                   </xsl:otherwise>
+                 </xsl:choose>
+                 <xsl:value-of select="gsa:i18n ('Partial CVE match', 'Report Filter')"/>
+               </label>
+             </div>
+           </div>
+         </div>
+       </xsl:if>
+       <xsl:if test="filters/keywords/keyword[column='first']">
+         <div class="ctrl-group">
+           <label for="first" class="left-column"><xsl:value-of select="gsa:i18n ('First result', 'Filter')"/>:</label>
+           <input type="text" name="first" size="5"
+             value="{filters/keywords/keyword[column='first']/value}"
+             maxlength="400" class="right-column"/>
+         </div>
+       </xsl:if>
+       <xsl:if test="filters/keywords/keyword[column='rows']">
+         <div class="ctrl-group">
+           <label for="max" class="left-column"><xsl:value-of select="gsa:i18n ('Results per page', 'Filter')"/>:</label>
+           <input type="text" name="max" size="5"
+             value="{filters/keywords/keyword[column='rows']/value}"
+             maxlength="400" class="right-column"/>
+         </div>
+       </xsl:if>
+       <xsl:if test="exslt:node-set ($columns)">
+         <div class="ctrl-group">
+           <label for="sort_field" class="left-column"><xsl:value-of select="gsa:i18n ('Sort by', 'Filter')"/>:</label>
+           <div class="right-column">
+             <xsl:variable name="sort" select="sort/field/text ()"/>
+             <select style="margin-bottom: 0px;" name="sort_field" size="1">
+               <xsl:for-each select="exslt:node-set ($columns)/column">
+                 <xsl:variable name="single" select="count (column) = 0"/>
+                 <xsl:choose>
+                   <xsl:when test="boolean (hide_in_filter)"/>
+                   <xsl:when test="($single) and ((boolean (field) and field = $sort) or (gsa:column-filter-name (name) = $sort))">
+                     <option value="{$sort}" selected="1">
+                       <xsl:value-of select="name"/>
+                     </option>
+                   </xsl:when>
+                   <xsl:when test="$single and boolean (field)">
+                     <option value="{field}">
+                       <xsl:value-of select="name"/>
+                     </option>
+                   </xsl:when>
+                   <xsl:when test="$single">
+                     <option value="{gsa:column-filter-name (name)}">
+                       <xsl:value-of select="name"/>
+                     </option>
+                   </xsl:when>
+                   <xsl:otherwise>
+                     <xsl:for-each select="column">
+                       <xsl:choose>
+                         <xsl:when test="(boolean (field) and (field = $sort)) or (gsa:column-filter-name (name) = $sort)">
+                           <option value="{$sort}" selected="1">
+                             <xsl:value-of select="concat(../name, ': ', name)"/>
+                           </option>
+                         </xsl:when>
+                         <xsl:when test="boolean (field)">
+                           <option value="{field}">
+                             <xsl:value-of select="concat(../name, ': ', name)"/>
+                           </option>
+                         </xsl:when>
+                         <xsl:otherwise>
+                           <option value="{gsa:column-filter-name (name)}">
+                             <xsl:value-of select="concat(../name, ': ', name)"/>
+                           </option>
+                         </xsl:otherwise>
+                       </xsl:choose>
+                     </xsl:for-each>
+                   </xsl:otherwise>
+                 </xsl:choose>
+               </xsl:for-each>
+             </select>
+             <xsl:variable name="order" select="sort/field/order"/>
+             <label>
+               <xsl:choose>
+                 <xsl:when test="$order = 'ascending'">
+                   <input type="radio" name="sort_order" value="ascending" checked="1"/>
+                 </xsl:when>
+                 <xsl:otherwise>
+                   <input type="radio" name="sort_order" value="ascending"/>
+                 </xsl:otherwise>
+               </xsl:choose>
+               <xsl:value-of select="gsa:i18n ('Ascending', 'Filter')"/>
              </label>
              <label>
                <xsl:choose>
-                 <xsl:when test="filters/keywords/keyword[column='autofp']/value = 2">
-                   <input type="radio" name="autofp_value" value="2" checked="1"/>
+                 <xsl:when test="$order = 'descending'">
+                   <input type="radio" name="sort_order" value="descending" checked="1"/>
                  </xsl:when>
                  <xsl:otherwise>
-                   <input type="radio" name="autofp_value" value="2"/>
+                   <input type="radio" name="sort_order" value="descending"/>
                  </xsl:otherwise>
                </xsl:choose>
-               <xsl:value-of select="gsa:i18n ('Partial CVE match', 'Report Filter')"/>
+               <xsl:value-of select="gsa:i18n ('Descending', 'Filter')"/>
              </label>
            </div>
          </div>
+       </xsl:if>
+       <div class="pull-right" style="margin-right: 5px; margin-top: -25px">
+         <input type="submit" value="{gsa:i18n ('Apply', 'Action Verb')}" title="{gsa:i18n ('Apply', 'Action Verb')}"/>
        </div>
-     </xsl:if>
-     <xsl:if test="filters/keywords/keyword[column='first']">
-       <div class="ctrl-group">
- 	 <label for="first" class="left-column"><xsl:value-of select="gsa:i18n ('First result', 'Filter')"/>:</label>
-         <input type="text" name="first" size="5"
-                value="{filters/keywords/keyword[column='first']/value}"
-                maxlength="400" class="right-column"/>
-       </div>
-     </xsl:if>
-     <xsl:if test="filters/keywords/keyword[column='rows']">
-       <div class="ctrl-group">
-         <label for="max" class="left-column"><xsl:value-of select="gsa:i18n ('Results per page', 'Filter')"/>:</label>
-         <input type="text" name="max" size="5"
-                value="{filters/keywords/keyword[column='rows']/value}"
-                maxlength="400" class="right-column"/>
-       </div>
-     </xsl:if>
-     <xsl:if test="exslt:node-set ($columns)">
-       <div class="ctrl-group">
-         <label for="sort_field" class="left-column"><xsl:value-of select="gsa:i18n ('Sort by', 'Filter')"/>:</label>
-        <div class="right-column">
-         <xsl:variable name="sort" select="sort/field/text ()"/>
-         <select style="margin-bottom: 0px;" name="sort_field" size="1">
-           <xsl:for-each select="exslt:node-set ($columns)/column">
-             <xsl:variable name="single" select="count (column) = 0"/>
-             <xsl:choose>
-               <xsl:when test="boolean (hide_in_filter)"/>
-               <xsl:when test="($single) and ((boolean (field) and field = $sort) or (gsa:column-filter-name (name) = $sort))">
-                 <option value="{$sort}" selected="1">
-                   <xsl:value-of select="name"/>
-                 </option>
-               </xsl:when>
-               <xsl:when test="$single and boolean (field)">
-                 <option value="{field}">
-                   <xsl:value-of select="name"/>
-                 </option>
-               </xsl:when>
-               <xsl:when test="$single">
-                 <option value="{gsa:column-filter-name (name)}">
-                   <xsl:value-of select="name"/>
-                 </option>
-               </xsl:when>
-               <xsl:otherwise>
-                 <xsl:for-each select="column">
-                   <xsl:choose>
-                     <xsl:when test="(boolean (field) and (field = $sort)) or (gsa:column-filter-name (name) = $sort)">
-                       <option value="{$sort}" selected="1">
-                         <xsl:value-of select="concat(../name, ': ', name)"/>
-                       </option>
-                     </xsl:when>
-                     <xsl:when test="boolean (field)">
-                       <option value="{field}">
-                         <xsl:value-of select="concat(../name, ': ', name)"/>
-                       </option>
-                     </xsl:when>
-                     <xsl:otherwise>
-                       <option value="{gsa:column-filter-name (name)}">
-                         <xsl:value-of select="concat(../name, ': ', name)"/>
-                       </option>
-                     </xsl:otherwise>
-                   </xsl:choose>
-                 </xsl:for-each>
-               </xsl:otherwise>
-             </xsl:choose>
-           </xsl:for-each>
-         </select>
-         <xsl:variable name="order" select="sort/field/order"/>
-         <label>
-           <xsl:choose>
-             <xsl:when test="$order = 'ascending'">
-               <input type="radio" name="sort_order" value="ascending" checked="1"/>
-             </xsl:when>
-             <xsl:otherwise>
-               <input type="radio" name="sort_order" value="ascending"/>
-             </xsl:otherwise>
-           </xsl:choose>
-           <xsl:value-of select="gsa:i18n ('Ascending', 'Filter')"/>
-         </label>
-         <label>
-           <xsl:choose>
-             <xsl:when test="$order = 'descending'">
-               <input type="radio" name="sort_order" value="descending" checked="1"/>
-             </xsl:when>
-             <xsl:otherwise>
-               <input type="radio" name="sort_order" value="descending"/>
-             </xsl:otherwise>
-           </xsl:choose>
-           <xsl:value-of select="gsa:i18n ('Descending', 'Filter')"/>
-         </label>
-        </div>
-       </div>
-    </xsl:if>
-    <div class="pull-right" style="margin-right: 5px; margin-top: -25px">
-      <input type="submit" value="{gsa:i18n ('Apply', 'Action Verb')}" title="{gsa:i18n ('Apply', 'Action Verb')}"/>
-    </div>
-  </div>
-</form>
+     </div>
+   </form>
+ </div>
 </xsl:template>
 
 <xsl:template name="edit-header-icons">
