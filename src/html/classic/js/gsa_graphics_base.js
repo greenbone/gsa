@@ -58,6 +58,7 @@
   gsa.svg_from_elem = svg_from_elem;
   gsa.blob_img_window = blob_img_window;
   gsa.register_chart_generator = register_chart_generator;
+  gsa.severity_bar_style = severity_bar_style;
 
   /*
   * Generic chart styling helpers
@@ -89,6 +90,46 @@
                       d3.rgb('orange'),
                       d3.rgb('red')]);
   };
+
+  /*
+   * Severity bar chart style
+   */
+  function severity_bar_style(field, max_log, max_low, max_medium) {
+    var medium_high_color = d3.interpolateHcl('#D80000', 'orange')(0.5);
+    var low_medium_color = d3.interpolateHcl('orange', 'skyblue')(0.5);
+    var log_low_color = d3.interpolateHcl('skyblue', 'silver')(0.5);
+
+    var func = function(d) {
+      if (Number(d[field]) > Math.ceil(max_medium)) {
+        return ('fill: #D80000');
+      }
+      else if (Number(d[field]) > max_medium) {
+        return ('fill: ' + medium_high_color);
+      }
+      else if (Number(d[field]) > Math.ceil(max_low)) {
+        return ('fill: orange');
+      }
+      else if (Number(d[field]) > max_low) {
+        return ('fill: ' + low_medium_color);
+      }
+      else if (Number(d[field]) > Math.ceil(max_log)) {
+        return ('fill: skyblue');
+      }
+      else if (Number(d[field]) > max_log) {
+        return ('fill: ' + log_low_color);
+      }
+      else {
+        return ('fill: silver');
+      }
+    };
+    func.max_low = max_low;
+    func.max_medium = max_medium;
+    func.field = field;
+    return func;
+  }
+
+  // TODO remove after all gsa modules are migrated
+  global.severity_bar_style = severity_bar_style;
 
   var chart_generators = {};
 
@@ -3815,7 +3856,7 @@
               }
               else {
                 generator.data_transform(data_severity_histogram)
-                  .bar_style(global.severity_bar_style('value',
+                  .bar_style(severity_bar_style('value',
                         gsa.severity_levels.max_log,
                         gsa.severity_levels.max_low,
                         gsa.severity_levels.max_medium));
