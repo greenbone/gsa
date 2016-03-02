@@ -57,12 +57,9 @@
 
     var show_stat_type = true;
 
-    var csv_data;
-    var csv_blob;
     var csv_url;
 
     var html_table_data;
-    var html_table_blob;
     var html_table_url;
 
     var svg_data;
@@ -286,17 +283,26 @@
         .attr('title', tooltip_func)
         .text(function(d) { return d.label_value.substring(0, d.r / 3); });
 
+      add_menu_entries(chart);
+
+      display.update_gen_data(bubble_chart, gen_params);
+    }
+
+    function add_menu_entries(controller) {
+      var display = controller.display();
+      var data_src = controller.data_src();
+
       // Create detach menu item
       display.create_or_get_menu_item('detach')
         .attr('href', 'javascript:void(0);')
         .on('click', function() {
-          gsa.open_detached(chart.detached_url());
+          gsa.open_detached(controller.detached_url());
         })
         .text('Show detached chart window');
 
       // Generate CSV
       var cols = column_info.columns;
-      csv_data = gsa.csv_from_records(records,
+      var csv_data = gsa.csv_from_records(records,
           column_info,
           ['label_value', 'size_value', 'color_value'],
           [gsa.column_label(cols.label_value, true, false, show_stat_type),
@@ -307,7 +313,7 @@
       if (csv_url !== null) {
         URL.revokeObjectURL(csv_url);
       }
-      csv_blob = new Blob([csv_data], {type: 'text/csv'});
+      var csv_blob = new Blob([csv_data], {type: 'text/csv'});
       csv_url = URL.createObjectURL(csv_blob);
 
       display.create_or_get_menu_item('csv_dl')
@@ -333,7 +339,8 @@
               gsa.column_label(cols.color_value, true, false, show_stat_type)],
               display.header().text(),
               data_src.param('filter'));
-          html_table_blob = new Blob([html_table_data], {type: 'text/html'});
+          var html_table_blob = new Blob([html_table_data],
+              {type: 'text/html'});
           html_table_url = URL.createObjectURL(html_table_blob);
         }
         window.open(html_table_url);

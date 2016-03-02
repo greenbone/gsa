@@ -1,5 +1,10 @@
 2016-03-02  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_bubble_chart.js: Extract adding menu items to an own
+	function.
+
+2016-03-02  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_bubble_chart.js: Remove unused function
 	relax_labels.
 
