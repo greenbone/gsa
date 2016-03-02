@@ -35,8 +35,6 @@
 
   /* Main chart generator */
   function BarChartGenerator() {
-    function my() {}
-
     var svg;
     var height;
     var width;
@@ -78,78 +76,94 @@
     var svg_blob;
     var svg_url;
 
-    my.height = function() {
+    var bar_chart = {
+      height: get_height,
+      width: get_width,
+      x_field: get_set_x_field,
+      y_field: get_set_y_field,
+      x_label: get_set_x_label,
+      y_label: get_set_y_label,
+      data_transform: get_set_data_transform,
+      bar_style: get_set_bar_style,
+      title: get_set_title,
+      show_loading: show_loading,
+      generate: generate,
+    };
+
+    return bar_chart;
+
+    function get_height() {
       return height;
-    };
+    }
 
-    my.width = function() {
+    function get_width() {
       return width;
-    };
+    }
 
-    my.x_field = function(value) {
+    function get_set_x_field(value) {
       if (!arguments.length) {
         return x_field;
       }
       x_field = value;
-      return my;
-    };
+      return bar_chart;
+    }
 
-    my.y_field = function(value) {
+    function get_set_y_field(value) {
       if (!arguments.length) {
         return y_field;
       }
       y_field = value;
-      return my;
-    };
+      return bar_chart;
+    }
 
-    my.x_label = function(value) {
+    function get_set_x_label(value) {
       if (!arguments.length) {
         return x_label;
       }
       x_label = value;
-      return my;
-    };
+      return bar_chart;
+    }
 
-    my.y_label = function(value) {
+    function get_set_y_label(value) {
       if (!arguments.length) {
         return y_label;
       }
       y_label = value;
-      return my;
-    };
+      return bar_chart;
+    }
 
-    my.bar_style = function(value) {
+    function get_set_bar_style(value) {
       if (!arguments.length) {
         return bar_style;
       }
       bar_style = value;
-      return my;
-    };
+      return bar_chart;
+    }
 
-    my.data_transform = function(value) {
+    function get_set_data_transform(value) {
       if (!arguments.length) {
         return data_transform;
       }
       data_transform = value;
-      return my;
-    };
+      return bar_chart;
+    }
 
-    my.title = function(value) {
+    function get_set_title(value) {
       if (!arguments.length) {
         return title;
       }
       title = value;
-      return my;
-    };
+      return bar_chart;
+    }
 
-    my.show_loading = function(display) {
+    function show_loading(display) {
       display.setTitle(title());
-    };
+    }
 
-    my.generate = function(original_data, controller, gen_params) {
+    function generate(original_data, controller, gen_params) {
       var display = controller.display();
       var data_src = controller.data_src();
-      var update = (display.last_generator() === my);
+      var update = (display.last_generator() === bar_chart);
 
       // evaluate options set by gen_params
       if (gen_params.x_field) {
@@ -213,7 +227,7 @@
           .attr('class', 'y axis')
           .call(y_axis);
 
-        my.tip = d3.tip()
+        bar_chart.tip = d3.tip()
           .attr('class', 'd3-tip')
           .style('font-weight', 'normal')
           .offset([-10, 0])
@@ -260,9 +274,11 @@
             .attr('x', function(d) { return x_scale(d[x_field]); })
             .attr('y', function(d) { return y_scale(0); })
             .attr('width', function(d) { return x_scale.rangeBand(); })
-            .attr('height', function(d) { return my.height() - y_scale(0); })
-            .on('mouseover', my.tip.show)
-            .on('mouseout', my.tip.hide);
+            .attr('height', function(d) {
+              return bar_chart.height() - y_scale(0);
+            })
+            .on('mouseover', bar_chart.tip.show)
+            .on('mouseout', bar_chart.tip.hide);
 
       // Update bar widths and x axis
       svg.selectAll('.bar')
@@ -281,7 +297,7 @@
           .transition().delay(250).duration(250).ease('sin-in-out')
             .attr('y', function(d) { return y_scale(d [y_field]); })
             .attr('height', function(d) {
-              return my.height() - y_scale(d[y_field]);
+              return bar_chart.height() - y_scale(d[y_field]);
             })
             .attr('style', bar_style);
 
@@ -296,7 +312,7 @@
               .style('opacity', 0)
               .remove();
 
-      svg.call(my.tip);
+      svg.call(bar_chart.tip);
 
       // Create detach menu item
       display.create_or_get_menu_item('detach')
@@ -377,11 +393,8 @@
           .text('Download SVG');
       }, 600);
 
-      display.update_gen_data(my, gen_params);
-    };
-
-    return my;
-
+      display.update_gen_data(bar_chart, gen_params);
+    }
   }
 })(window, window, window.d3, window.console, window.gsa);
 
