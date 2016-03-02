@@ -1,5 +1,10 @@
 2016-03-02  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/greenbone.js: Update coding style to satisfy jshint and
+	jscs.
+
+2016-03-02  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/greenbone.js: Pass global objects as parameters to the
 	module function.
 

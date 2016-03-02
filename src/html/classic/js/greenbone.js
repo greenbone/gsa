@@ -3,12 +3,13 @@
 
   // work-around select2 not working inside dialogs from here:
   // https://github.com/select2/select2/issues/1246#issuecomment-17428249
-  window.jQuery.ui.dialog.prototype._allowInteraction = function(e) {
-    return !!$(e.target).closest('.ui-dialog, .ui-datepicker, .select2-dropdown').length;
+  global.jQuery.ui.dialog.prototype._allowInteraction = function(e) {
+    return !!$(e.target).closest(
+        '.ui-dialog, .ui-datepicker, .select2-dropdown').length;
   };
 
   /* A utility function that returns only the text in the current selection */
-  window.jQuery.fn.justtext = function() {
+  global.jQuery.fn.justtext = function() {
     return $(this)
       .clone()
         .children()
@@ -79,7 +80,7 @@
       return get_entity_from_element(
           doc.find('get_credentials_response > credential'));
     },
-    new_port_list: function(doc){
+    new_port_list: function(doc) {
       return get_entity_from_element(
           doc.find('get_port_lists_response > port_list'));
     },
@@ -132,7 +133,7 @@
       this.params = options.params;
     }
     if (options.show_method === undefined) {
-      this.show_method = "GET";
+      this.show_method = 'GET';
     } else {
       this.show_method = options.show_method;
     }
@@ -141,7 +142,7 @@
     }
   };
 
-  var waiting = function(){
+  var waiting = function() {
     // I believe there have to be a better way to find this.
     var buttons = this.dialog.closest('.ui-dialog').find('button.ui-button');
     buttons.each(function() {
@@ -149,7 +150,8 @@
       if (button.button('option', 'label') !== 'Close') {
         this.label = button.button('option', 'label');
         if (this.label !== 'OK') {
-          button.button('option', 'label', this.label.substring(0, this.label.length - 1) + 'ing ...');
+          button.button('option', 'label', this.label.substring(
+                0, this.label.length - 1) + 'ing ...');
         }
         button.button('option', 'icons', {primary: 'ui-icon-waiting'});
         button.button('disable');
@@ -162,7 +164,7 @@
   OMPDialog.prototype.done = function() {
     // I believe there have to be a better way to find this.
     var buttons = this.dialog.closest('.ui-dialog').find('button.ui-button');
-    buttons.each (function() {
+    buttons.each(function() {
       var button = $(this);
       if (button.button('option', 'label') !== 'Close') {
         button.button('enable');
@@ -173,7 +175,7 @@
   };
 
   OMPDialog.prototype.error = function(message, title) {
-    if (! title) {
+    if (!title) {
       title = 'Error:';
     }
     // Remove previous errors
@@ -198,20 +200,20 @@
 
   OMPDialog.prototype.setErrorFromResponse = function(jqXHR) {
     var self = this;
-    var xml = $(jqXHR.responseXML),
-        html = $(jqXHR.responseText),
-        response = xml.find(RESPONSE_SELECTORS[self.command]),
-        gsad_msg = xml.find('gsad_msg'),
-        action_result = xml.find('action_result'),
-        generic_omp_response = xml.find('omp_response'),
-        internal_error_html
-          = html.find('.gb_error_dialog .gb_window_part_content_error'),
-        top_line_error_html
-          = html.find('.gb_window .gb_window_part_content_error'),
-        login_form_html
-          = html.find('.gb_login_dialog .gb_window_part_content'),
-        error_title = 'Error:',
-        error = 'Unknown error';
+    var xml = $(jqXHR.responseXML);
+    var html = $(jqXHR.responseText);
+    var response = xml.find(RESPONSE_SELECTORS[self.command]);
+    var gsad_msg = xml.find('gsad_msg');
+    var action_result = xml.find('action_result');
+    var generic_omp_response = xml.find('omp_response');
+    var internal_error_html
+          = html.find('.gb_error_dialog .gb_window_part_content_error');
+    var top_line_error_html
+          = html.find('.gb_window .gb_window_part_content_error');
+    var login_form_html
+          = html.find('.gb_login_dialog .gb_window_part_content');
+    var error_title = 'Error:';
+    var error = 'Unknown error';
 
     if (gsad_msg.length) {
       error = gsad_msg.attr('status_text');
@@ -223,19 +225,21 @@
       error = generic_omp_response.attr('status_text');
     }
     else if (action_result.length) {
-      error_title = 'Operation \'' + action_result.find('action').text () + '\' failed';
+      error_title = 'Operation \'' + action_result.find('action').text() +
+        '\' failed';
       error = '<br/>' + action_result.find('message').text();
     }
     else if (internal_error_html.length) {
-        error_title = internal_error_html.find('span div').text();
-        if (! (error_title)) {
-          error_title = 'Internal Error';
-        }
-        error = internal_error_html.find('span').text();
+      error_title = internal_error_html.find('span div').text();
+      if (!error_title) {
+        error_title = 'Internal Error';
+      }
+      error = internal_error_html.find('span').text();
     }
     else if (top_line_error_html.length) {
-      error_title = 'Operation \'' + top_line_error_html.find('#operation').text() + '\' failed';
-      error = '<br/>' + top_line_error_html.find ('#message').text ();
+      error_title = 'Operation \'' +
+        top_line_error_html.find('#operation').text() + '\' failed';
+      error = '<br/>' + top_line_error_html.find('#message').text();
     }
     else if (login_form_html.length) {
       error = login_form_html.find('.error_message').text();
@@ -244,8 +248,9 @@
   };
 
   OMPDialog.prototype.postForm = function() {
-    var self = this,
-        data = new FormData(this.dialog.find('form')[0]);
+    var self = this;
+    var data = new FormData(this.dialog.find('form')[0]);
+
     data.append('xml', 1);
     data.append('no_redirect', 1);
     $.ajax({
@@ -256,44 +261,44 @@
       type: 'POST',
       dataType: 'xml',
     })
-      .fail(function(jqXHR){
-        self.setErrorFromResponse(jqXHR);
+    .fail(function(jqXHR) {
+      self.setErrorFromResponse(jqXHR);
 
-        // restore the original button.
-        self.done();
-      })
-      .done(function(xml) {
-        xml = $(xml);
-        if (self.success_reload === 'window') {
-          window.location.reload();
-          // a bit overkill, but better-safe-than-sorry.
-          return;
-        }
-        if (self.success_reload === 'parent' && self.parent_dialog) {
-          self.parent_dialog.reload();
-        }
-        if (self.element === undefined) {
-          // No element to update, exit early.
-          self.close();
-          return;
-        }
-        var entity = get_entity(self.command, xml);
-        if (entity !== undefined) {
-          // fill in the new information in the $element and make it selected
-          self.element.append($('<option/>', {
-            value: entity.id,
-            html: entity.name,
-            selected: true,
-          }));
-
-          // refresh the select widget.
-          self.element.select2('destroy');
-          self.element.select2();
-        }
-
-        // And finally, close our dialog.
+      // restore the original button.
+      self.done();
+    })
+    .done(function(xml) {
+      xml = $(xml);
+      if (self.success_reload === 'window') {
+        location.reload();
+        // a bit overkill, but better-safe-than-sorry.
+        return;
+      }
+      if (self.success_reload === 'parent' && self.parent_dialog) {
+        self.parent_dialog.reload();
+      }
+      if (self.element === undefined) {
+        // No element to update, exit early.
         self.close();
-      });
+        return;
+      }
+      var entity = get_entity(self.command, xml);
+      if (entity !== undefined) {
+        // fill in the new information in the $element and make it selected
+        self.element.append($('<option/>', {
+          value: entity.id,
+          html: entity.name,
+          selected: true,
+        }));
+
+        // refresh the select widget.
+        self.element.select2('destroy');
+        self.element.select2();
+      }
+
+      // And finally, close our dialog.
+      self.close();
+    });
   };
 
   OMPDialog.prototype.setContent = function(html) {
@@ -308,7 +313,7 @@
 
     if (gb_windows.length) {
       if (gb_windows.length > 1) {
-        self.error( (gb_windows.length - 1) + ' forms not displayed !');
+        self.error((gb_windows.length - 1) + ' forms not displayed !');
       }
 
       var gb_window = gb_windows.first();
@@ -320,7 +325,7 @@
       dialog_title = gb_window.find('.gb_window_part_center').justtext();
       dialog_html = content.html();
     }
-    else if(edit_dialog.length) {
+    else if (edit_dialog.length) {
       dialog_title = edit_dialog.find('.title').justtext();
       dialog_html = edit_dialog.find('.content').html();
     }
@@ -332,7 +337,7 @@
     on_ready(self.dialog);
   };
 
-  OMPDialog.prototype.show = function(button){
+  OMPDialog.prototype.show = function(button) {
     var self = this;
     var done_func, fail_func;
 
@@ -356,17 +361,17 @@
       self.dialog.dialog({
         modal: true,
         width: 800,
-        buttons:[
+        buttons: [
           {
             text: button,
-            click: function(){
+            click: function() {
               self.waiting();
 
               self.postForm();
             },
           }
         ],
-        close: function(){
+        close: function() {
           self.close();
         },
       });
@@ -378,7 +383,7 @@
       if (response.status === 401) {
         // not authorized (anymore)
         // reload page to show login dialog
-        window.location.reload();
+        location.reload();
         return;
       }
 
@@ -432,7 +437,7 @@
     );
   };
 
-  window.OMPDialog = OMPDialog;
+  global.OMPDialog = OMPDialog;
 
   var FilterDialog = function(id, title) {
     this.id = id;
@@ -442,12 +447,13 @@
   FilterDialog.prototype.waiting = waiting;
 
   FilterDialog.prototype.show = function() {
-    var self = this,
-        content = $('#' + this.id).closest('form').clone();
+    var self = this;
+    var content = $('#' + this.id).closest('form').clone();
     content.find('#' + this.id).show();
     content.css('float', '');
     content.find('#' + this.id).css('padding-top', '2em');
-    content.find('a, div.footnote, input[type=image], input[type=submit]').remove();
+    content.find('a, div.footnote, input[type=image], input[type=submit]')
+      .remove();
 
     // Update the form parameter
     var input = content.find('input[name=build_filter]');
@@ -467,10 +473,10 @@
     this.dialog.dialog({
       modal: true,
       width: 800,
-      buttons:[
+      buttons: [
         {
           text: 'Update',
-          click: function(){
+          click: function() {
             self.waiting();
             self.dialog.find('form').submit();
           },
@@ -490,7 +496,7 @@
     content.find('select').select2();
   };
 
-  window.FilterDialog = FilterDialog;
+  global.FilterDialog = FilterDialog;
 
   var InfoDialog = function(options) {
     this.timeout = options.timeout !== undefined ? options.timeout : 5000;
@@ -525,7 +531,7 @@
 
   InfoDialog.prototype.stopProgress = function() {
     if (this.progress_timer !== undefined) {
-      window.clearInterval(this.progress_timer);
+      global.clearInterval(this.progress_timer);
       this.progress_timer = undefined;
     }
   };
@@ -540,7 +546,7 @@
 
     this.progress_button = $('<img src="/img/pause.png" alt="Pause/Resume" />');
     this.progress_button.on('click', function() {
-      if (self.progress_timer === undefined ) {
+      if (self.progress_timer === undefined) {
         self.resumeProgress();
       }
       else {
@@ -558,7 +564,7 @@
 
   InfoDialog.prototype.pauseProgress = function() {
     if (this.progress_timer !== undefined) {
-      window.clearInterval(this.progress_timer);
+      global.clearInterval(this.progress_timer);
       this.progress_timer = undefined;
     }
     this.progress_button.attr('src', '/img/resume.png');
@@ -569,7 +575,7 @@
 
     self.progress_button.attr('src', '/img/pause.png');
 
-    self.progress_timer = window.setInterval(function() {
+    self.progress_timer = global.setInterval(function() {
       self.progress_value -= self.interval_time;
 
       if (self.progress_value < 0) {
@@ -591,7 +597,7 @@
       dialogClass: self.dialog_css,
       modal: false,
       width: self.width,
-      show: { effect: 'fade', duration: 1000 },
+      show: {effect: 'fade', duration: 1000},
       beforeClose: function() {
         self.close();
       },
@@ -602,7 +608,7 @@
     }
   };
 
-  window.InfoDialog = InfoDialog;
+  global.InfoDialog = InfoDialog;
 
   function parse_params(data) {
     var params = {};
@@ -654,9 +660,13 @@
 
     options.element.on('click', function(event) {
       event.preventDefault();
-      new OMPDialog({cmd: cmd, element: done, params: params,
-        reload: reload, parent_dialog: parent_dialog}
-      ).show(options.button);
+      new OMPDialog({
+        cmd: cmd,
+        element: done,
+        params: params,
+        reload: reload,
+        parent_dialog: parent_dialog
+      }).show(options.button);
     });
   }
 
@@ -667,7 +677,7 @@
     this.variable = options.variable;
     this.collapsed = options.collapsed !== undefined ?
       !!options.collapsed : false;
-    this.storage = window.localStorage;
+    this.storage = localStorage;
   }
 
   ToggleIcon.prototype.init = function() {
@@ -764,8 +774,12 @@
     });
 
     doc.find('.delete-action-icon').each(function() {
-      init_omp_dialog({type: 'delete', element: $(this), button: 'Delete',
-        prefix: 'confirm'});
+      init_omp_dialog({
+        type: 'delete',
+        element: $(this),
+        button: 'Delete',
+        prefix: 'confirm',
+      });
     });
 
     doc.find('.dialog-action').each(function() {
@@ -780,13 +794,13 @@
     });
 
     doc.find('.bulk-dialog-icon').each(function() {
-      var elem = $(this),
-          type_name = elem.data('type'),
-          done = elem.data('done');
+      var elem = $(this);
+      var type_name = elem.data('type');
+      var done = elem.data('done');
 
       var reload;
       var params = {
-         'resource_type' : type_name
+        resource_type: type_name,
       };
       params [this.name + '.x'] = '0';
 
@@ -802,26 +816,34 @@
         if (done === undefined) {
           reload = 'window';
         }
-        new OMPDialog({cmd: 'process_bulk', element: done, params: params,
-          show_method: 'POST', reload: reload}
-        ).show('OK', 'confirmation');
+        new OMPDialog({
+          cmd: 'process_bulk',
+          element: done,
+          params: params,
+          show_method: 'POST',
+          reload: reload,
+        }).show('OK', 'confirmation');
       });
     });
 
-    doc.find('.wizard-action-icon').each(function(){
-      var elem = $(this),
-          name = elem.data('name'),
-          params = {name: name};
+    doc.find('.wizard-action-icon').each(function() {
+      var elem = $(this);
+      var name = elem.data('name');
+      var params = {name: name};
+
       elem.on('click', function(event) {
-        var dialog = new OMPDialog({cmd: 'wizard', reload: 'window',
-          params: params});
+        var dialog = new OMPDialog({
+          cmd: 'wizard',
+          reload: 'window',
+          params: params,
+        });
         event.preventDefault();
-        if (name === 'quick_first_scan'){
+        if (name === 'quick_first_scan') {
           dialog.old_postForm = dialog.postForm;
           dialog.postForm = function() {
             this.old_postForm();
             // set 30 sec.
-            window.localStorage.setItem('autorefresh-interval', 30);
+            localStorage.setItem('autorefresh-interval', 30);
           };
         }
         dialog.show();
@@ -829,8 +851,8 @@
     });
 
     doc.find('.edit-filter-action-icon').each(function() {
-      var elem = $(this),
-          id = elem.data('id');
+      var elem = $(this);
+      var id = elem.data('id');
       elem.on('click', function(event) {
         event.preventDefault();
         new FilterDialog(id, 'Update Filter').show();
@@ -895,16 +917,16 @@
     });
 
     var autorefresh = doc.find('#autorefresh');
-    if (autorefresh.length){
-      if (window.localStorage.getItem('autorefresh-interval')) {
-        autorefresh.val(window.localStorage.getItem('autorefresh-interval'));
+    if (autorefresh.length) {
+      if (localStorage.getItem('autorefresh-interval')) {
+        autorefresh.val(localStorage.getItem('autorefresh-interval'));
       }
       autorefresh.change(function() {
         stop_auto_refresh();
-        window.localStorage.setItem('autorefresh-interval', $(this).val());
+        localStorage.setItem('autorefresh-interval', $(this).val());
         start_auto_refresh();
       });
-      if (!window.autorefresh_enabled){
+      if (!global.autorefresh_enabled) {
         autorefresh.prop('disabled', 'disabled');
       }
     }
@@ -912,11 +934,11 @@
     doc.find('.toggle-action-icon').each(function() {
       var elem = $(this);
       var ticon = new ToggleIcon({
-          target: doc.find(elem.data('target')),
-          icon: elem.find('img'),
-          name: elem.data('name'),
-          collapsed: elem.data('collapsed'),
-          variable: elem.data('variable'),
+        target: doc.find(elem.data('target')),
+        icon: elem.find('img'),
+        name: elem.data('name'),
+        collapsed: elem.data('collapsed'),
+        variable: elem.data('variable'),
       });
 
       ticon.init();
@@ -936,10 +958,11 @@
       // Still open dialogs.
       return;
     }
-    if (!timeout_id && +window.localStorage.getItem('autorefresh-interval') && window.autorefresh_enabled) {
-      timeout_id = window.setTimeout(function() {
-        window.location.reload();
-      }, window.localStorage.getItem('autorefresh-interval') * 1000);
+    if (!timeout_id && +localStorage.getItem('autorefresh-interval') &&
+        global.autorefresh_enabled) {
+      timeout_id = global.setTimeout(function() {
+        location.reload();
+      }, localStorage.getItem('autorefresh-interval') * 1000);
     }
   }
 
@@ -950,10 +973,10 @@
     }
   }
 
-  $(window.document).ready(function() {
+  $(document).ready(function() {
 
     // generic widget pimping
-    on_ready(window.document);
+    on_ready(document);
 
     // autorefresh
     start_auto_refresh();
@@ -966,55 +989,63 @@
   /* Credentials */
 
   /* Credential type selection */
-  window.newCredentialUpdateForm = function() {
+  global.newCredentialUpdateForm = function() {
     var type, auto;
     type = $('select[name="base"]').val();
-    auto = Boolean(Number($('input[name="autogenerate"]:checked').val()));
+    auto = !!(Number($('input[name="autogenerate"]:checked').val()));
 
-    switch(type)
-    {
+    switch (type) {
       case 'up':
         $('#autogenerate_row, #login_row, #password_row').show();
-        $('#community_row, #certificate_row, #private_key_row, #passphrase_row, #priv_password_row, #auth_algo_row, #priv_algo_row').hide();
+        $('#community_row, #certificate_row, #private_key_row, ' +
+            '#passphrase_row, #priv_password_row, #auth_algo_row, ' +
+            '#priv_algo_row').hide();
         break;
       case 'usk':
-        $('#autogenerate_row, #login_row, #private_key_row, #passphrase_row').show();
-        $('#community_row, #password_row, #certificate_row, #priv_password_row, #auth_algo_row, #priv_algo_row').hide();
+        $('#autogenerate_row, #login_row, #private_key_row, ' +
+            '#passphrase_row').show();
+        $('#community_row, #password_row, #certificate_row, ' +
+            '#priv_password_row, #auth_algo_row, #priv_algo_row').hide();
         break;
       case 'cc':
         $('#certificate_row, #private_key_row').show();
-        $('#community_row, #autogenerate_row, #login_row, #password_row, #passphrase_row, #priv_password_row, #auth_algo_row, #priv_algo_row').hide();
+        $('#community_row, #autogenerate_row, #login_row, #password_row,' +
+            '#passphrase_row, #priv_password_row, #auth_algo_row, ' +
+            '#priv_algo_row').hide();
         auto = false;
         break;
       case 'snmp':
-        $('#community_row, #login_row, #password_row, #priv_password_row, #auth_algo_row, #priv_algo_row').show();
-        $('#autogenerate_row, #certificate_row, #private_key_row, #passphrase_row').hide();
+        $('#community_row, #login_row, #password_row, #priv_password_row, ' +
+            '#auth_algo_row, #priv_algo_row').show();
+        $('#autogenerate_row, #certificate_row, #private_key_row, ' +
+            '#passphrase_row').hide();
         auto = false;
         break;
     }
 
-    if (auto)
-    {
-      $('#password_row input, #certificate_row input, #private_key_row input, #passphrase_row input').attr('disabled', '1');
+    if (auto) {
+      $('#password_row input, #certificate_row input, #private_key_row ' +
+          'input, #passphrase_row input').attr('disabled', '1');
     }
-    else
-    {
-      $('#password_row input, #certificate_row input, #private_key_row input, #passphrase_row input').attr('disabled', null);
+    else {
+      $('#password_row input, #certificate_row input, #private_key_row ' +
+          'input, #passphrase_row input').attr('disabled', null);
     }
   };
 
   /* Alert event type selection */
-  window.editAlertUpdateForm = function () {
+  global.editAlertUpdateForm = function() {
     var type;
     type = $('input[name="event"]:checked').val();
 
-    switch(type)
-    {
+    switch (type) {
       case 'New SecInfo arrived':
         /* Conditions. */
-        $('#severity_at_least_row, #severity_changed_row, #filter_count_changed_row').hide();
+        $('#severity_at_least_row, #severity_changed_row, ' +
+            '#filter_count_changed_row').hide();
         /* Methods. */
-        $('#http_get_row, #start_task_row, #sourcefire_row, #verinice_row').hide();
+        $('#http_get_row, #start_task_row, #sourcefire_row, ' +
+            '#verinice_row').hide();
 
         $('#email_subject_task').hide();
         $('#email_subject_task_input').attr('name', 'subject_dummy');
@@ -1048,14 +1079,17 @@
         $('#filter_count_at_least_results_span').hide();
         $('#filter_count_at_least_nvts_span').show();
         $('#filter_count_at_least_select_task').attr('name', 'dummy');
-        $('#filter_count_at_least_select_nvts').attr('name', 'condition_data:filter_id');
+        $('#filter_count_at_least_select_nvts').attr('name',
+            'condition_data:filter_id');
 
         break;
       case 'Task run status changed':
         /* Conditions. */
-        $('#severity_at_least_row, #severity_changed_row, #filter_count_changed_row').show();
+        $('#severity_at_least_row, #severity_changed_row, ' +
+            '#filter_count_changed_row').show();
         /* Methods. */
-        $('#http_get_row, #start_task_row, #sourcefire_row, #verinice_row').show();
+        $('#http_get_row, #start_task_row, #sourcefire_row, ' +
+            '#verinice_row').show();
 
         $('#email_subject_task').show();
         $('#email_subject_task_input').attr('name', 'method_data:subject');
