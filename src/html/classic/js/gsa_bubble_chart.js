@@ -367,64 +367,7 @@
           .text('Download SVG');
 
       }, 600);
-
-      display.update_gen_data(bubble_chart, gen_params);
     }
-
-    var relax_labels = function(labels) {
-      //FIXME this function seems to be unused
-      var again = false;
-      var labels = svg.selectAll('.slice_label');
-
-      labels.each(function(d, i) {
-        var elem_a = this;
-
-        var width_a = elem_a.getComputedTextLength();
-        if (width_a === 0) {
-          return;
-        }
-
-        var sel_a = d3.select(elem_a);
-        var x_a = sel_a.attr('x');
-        var y_a = sel_a.attr('y');
-
-        labels.each(function(d, j) {
-          var elem_b = this;
-          if (elem_a === elem_b) {
-            return;
-          }
-
-          var width_b = elem_b.getComputedTextLength();
-          if (width_b === 0) {
-            return;
-          }
-
-          var sel_b = d3.select(elem_b);
-          var x_b = sel_b.attr('x');
-          var y_b = sel_b.attr('y');
-
-          if (Math.abs(x_a - x_b) * 2 > (width_a + width_b)) {
-            return;
-          }
-
-          var delta_y = y_a - y_b;
-
-          if (Math.abs(delta_y) > label_spacing) {
-            return;
-          }
-
-          again = true;
-
-          var adjust = (delta_y > 0 ? 1 : -1) * 1;
-          sel_a.attr('y', +y_a + adjust);
-          sel_b.attr('y', +y_b - adjust);
-        });
-      });
-
-      if (again) {
-        global.setTimeout(relax_labels, 1);
-      }
-    };
   }
 
   function create_bubble(selection) {

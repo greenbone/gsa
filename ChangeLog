@@ -1,5 +1,10 @@
 2016-03-02  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_bubble_chart.js: Remove unused function
+	relax_labels.
+
+2016-03-02  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_graphics_base.js: Don't register bar chart generator
 	anymore. This is done in gsa_bar_chart.js now.
 
