@@ -59,6 +59,8 @@
   gsa.blob_img_window = blob_img_window;
   gsa.register_chart_generator = register_chart_generator;
   gsa.severity_bar_style = severity_bar_style;
+  gsa.data_raw = data_raw;
+  gsa.severity_colors_gradient = severity_colors_gradient;
 
   /*
   * Generic chart styling helpers
@@ -77,7 +79,7 @@
   /*
   * Severity gradient
   */
-  gsa.severity_colors_gradient = function() {
+  function severity_colors_gradient() {
     return d3.scale.linear()
               .domain([-1.0,
                         gsa.severity_levels.max_log,
@@ -89,7 +91,7 @@
                       d3.rgb('skyblue'),
                       d3.rgb('orange'),
                       d3.rgb('red')]);
-  };
+  }
 
   /*
    * Severity bar chart style

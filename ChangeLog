@@ -1,5 +1,10 @@
 2016-03-02  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_graphics_base.js: Export data_raw function also to
+	gsa namespace.
+
+2016-03-02  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_bar_chart.js,
 	src/html/classic/js/gsa_graphics_base.js: Move severity_bar_style function
 	from gsa_bar_chart.js to gsa_graphics_base.js. It is used in several modules.
