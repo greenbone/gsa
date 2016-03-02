@@ -1823,7 +1823,7 @@
 
     /* Shows the "Loading ..." text in the display */
     function show_loading() {
-      generator.show_loading(display);
+      generator.showLoading(display);
     }
 
     /* Callback for when data has been loaded */
@@ -3821,46 +3821,39 @@
               return null;
             }
 
-            var generator = get_chart_generator(chart_type, data_source,
-                title_generator);
+            var generator = get_chart_generator(chart_type, data_source);
 
             if (!generator) {
               console.error('No chart generator for ' + chart_type + ' found');
               return;
             }
 
-            generator.title(title_generator);
+            generator.setTitleGenerator(title_generator);
 
             if (chart_template === 'resource_type_counts') {
-              generator.data_transform(resource_type_counts);
+              generator.setDataTransformFunc(resource_type_counts);
             }
             else if (chart_template === 'qod_type_counts') {
-              generator.data_transform(qod_type_counts);
+              generator.setDataTransformFunc(qod_type_counts);
             }
             else if (chart_template === 'percentage_counts') {
-              generator.data_transform(percentage_counts);
+              generator.setDataTransformFunc(percentage_counts);
             }
             else if (chart_template === 'info_by_class' ||
                 chart_template === 'recent_info_by_class') {
-              if (chart_type === 'donut') {
-                generator.data_transform(data_severity_level_counts)
-                  .color_scale(gsa.severity_level_color_scale);
-              }
-              else {
-                generator.data_transform(data_severity_level_counts);
+              generator.setDataTransformFunc(data_severity_level_counts);
+              if (chart_type !== 'donut') {
+                generator.setColorScale(gsa.severity_level_color_scale);
               }
             }
             else if (chart_template === 'info_by_cvss' ||
                 chart_template === 'recent_info_by_cvss') {
-              if (chart_type === 'donut') {
-                generator.data_transform(data_severity_histogram);
-              }
-              else {
-                generator.data_transform(data_severity_histogram)
-                  .bar_style(severity_bar_style('value',
-                        gsa.severity_levels.max_log,
-                        gsa.severity_levels.max_low,
-                        gsa.severity_levels.max_medium));
+              generator.setDataTransformFunc(data_severity_histogram);
+              if (chart_type !== 'donut') {
+                generator.setBarStyle(severity_bar_style('value',
+                      gsa.severity_levels.max_log,
+                      gsa.severity_levels.max_low,
+                      gsa.severity_levels.max_medium));
               }
             }
 

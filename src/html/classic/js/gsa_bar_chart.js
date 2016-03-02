@@ -83,10 +83,10 @@
       y_field: get_set_y_field,
       x_label: get_set_x_label,
       y_label: get_set_y_label,
-      data_transform: get_set_data_transform,
-      bar_style: get_set_bar_style,
-      title: get_set_title,
-      show_loading: show_loading,
+      setDataTransformFunc: get_set_data_transform,
+      setBarStyle: get_set_bar_style,
+      setTitleGenerator: get_set_title,
+      showLoading: show_loading,
       generate: generate,
     };
 

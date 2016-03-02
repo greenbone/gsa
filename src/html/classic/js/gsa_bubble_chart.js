@@ -73,10 +73,10 @@
       y_field: get_set_y_field,
       x_label: get_set_x_label,
       y_label: get_set_y_label,
-      color_scale: get_set_color_scale,
-      data_transform: get_set_data_transform,
-      title: get_set_title,
-      show_loading: show_loading,
+      setColorScale: get_set_color_scale,
+      setDataTransformFunc: set_data_transform,
+      setTitleGenerator: get_set_title,
+      showLoading: show_loading,
       generate: generate,
     };
 
@@ -146,10 +146,7 @@
       return bubble_chart;
     }
 
-    function get_set_data_transform(value) {
-      if (!arguments.length) {
-        return data_transform;
-      }
+    function set_data_transform(value) {
       data_transform = value;
       return bubble_chart;
     }

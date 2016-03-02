@@ -156,7 +156,7 @@ function GanttChartGenerator ()
       return my;
     }
 
-  my.bar_style = function (value)
+  my.setBarStyle = function (value)
     {
       if (!arguments.length)
         return bar_style;
@@ -164,7 +164,7 @@ function GanttChartGenerator ()
       return my;
     }
 
-  my.data_transform = function (value)
+  my.setDataTransformFunc = function (value)
     {
       if (!arguments.length)
         return data_transform;
@@ -172,7 +172,7 @@ function GanttChartGenerator ()
       return my;
     }
 
-  my.title = function (value)
+  my.setTitleGenerator = function (value)
     {
       if (!arguments.length)
         return title;
@@ -180,7 +180,7 @@ function GanttChartGenerator ()
       return my;
     }
 
-  my.show_loading = function (display)
+  my.showLoading = function (display)
     {
       display.header ().text (title ());
     }
