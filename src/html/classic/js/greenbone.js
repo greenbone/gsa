@@ -1,4 +1,4 @@
-(function() {
+(function(global, document, $, console, localStorage, location) {
   'use strict';
 
   // work-around select2 not working inside dialogs from here:
@@ -1088,11 +1088,13 @@
         $('#filter_count_at_least_results_span').show();
         $('#filter_count_at_least_nvts_span').hide();
         $('#filter_count_at_least_select_nvts').attr('name', 'dummy');
-        $('#filter_count_at_least_select_task').attr('name', 'condition_data:filter_id');
+        $('#filter_count_at_least_select_task').attr('name',
+            'condition_data:filter_id');
 
         break;
     }
   };
 
-})();
+})(window, window,document, window.$, window.console, window.localStorage,
+  window.location);
 // vim: set ts=2 sw=2 tw=80:
