@@ -1157,6 +1157,6 @@
     }
   };
 
-})(window, window,document, window.$, window.console, window.localStorage,
+})(window, window.document, window.$, window.console, window.localStorage,
   window.location);
 // vim: set ts=2 sw=2 tw=80:
