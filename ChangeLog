@@ -1,5 +1,10 @@
 2016-03-03  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_graphics_base.js: Update last generator and last
+	generator params in controller instead of letting the generator update them.
+
+2016-03-03  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_graphics_base.js: Add a BaseChartGenerator
 	javascript "class" that provides all common chart generator functions.
 	This will allow reusing common code paths for all chart generators in future.

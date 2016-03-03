@@ -1830,6 +1830,7 @@
     /* Callback for when data has been loaded */
     function on_data_loaded(data, gen_params) {
       generator.generate(data, controller, gen_params);
+      display.update_gen_data(generator, gen_params);
     }
 
     /* Construct URL for detached chart */
