@@ -957,7 +957,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:for-each select="filters/keywords/keyword[column != 'apply_overrides' and column != 'autofp' and column != 'rows' and column != 'first' and column != 'sort' and column != 'sort-reverse' and column != 'notes' and column != 'overrides' and column != 'timezone' and column != 'result_hosts_only' and column != 'levels' and column != 'min_cvss_base' and column != 'min_qod' and column != 'delta_states' and (column != 'task_id' or $operator_count != 0)]">
     <xsl:value-of select="column"/>
     <xsl:choose>
-      <xsl:when test="column = ''">
+      <xsl:when test="column = '' and relation != '='">
       </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="relation"/>
@@ -975,7 +975,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:for-each select="filters/keywords/keyword[not(column != 'apply_overrides' and column != 'autofp' and column != 'rows' and column != 'first' and column != 'sort' and column != 'sort-reverse' and column != 'notes' and column != 'overrides' and column != 'timezone' and column != 'result_hosts_only' and column != 'levels' and column != 'min_cvss_base' and column != 'min_qod' and column != 'delta_states' and (column != 'task_id' or $operator_count != 0))]">
     <xsl:value-of select="column"/>
     <xsl:choose>
-      <xsl:when test="column = ''">
+      <xsl:when test="column = '' and relation != '='">
       </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="relation"/>
