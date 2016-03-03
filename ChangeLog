@@ -1,3 +1,11 @@
+2016-03-03  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Backport r24578.
+
+	* src/html/classic/omp.xsl (result [result-headers]): Disable link in
+	solution type and QOD columns for delta reports, because Manager does
+	not support sorting delta reports by these columns.
+
 2016-02-26  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	Post release version bump.
