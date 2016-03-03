@@ -28620,7 +28620,7 @@ should not have received it.
     </td>
     <td>
       <xsl:choose>
-        <xsl:when test="$collapse-details-button &gt; 0">
+        <xsl:when test="$collapse-details-button &gt; 0 and string-length (delta/text()) = 0">
           <xsl:apply-templates select="../../." mode="result-header">
             <xsl:with-param name="name" select="'solution_type'"/>
             <xsl:with-param name="label-text" select="gsa:i18n ('Solution type', 'NVT or Result')"/>
@@ -28679,7 +28679,7 @@ should not have received it.
     </td>
     <td>
       <xsl:choose>
-        <xsl:when test="$collapse-details-button &gt; 0">
+        <xsl:when test="$collapse-details-button &gt; 0 and string-length (delta/text()) = 0">
           <xsl:apply-templates select="../../." mode="result-header">
             <xsl:with-param name="name" select="'qod'"/>
             <xsl:with-param name="label-text" select="gsa:i18n ('QoD', 'NVT or Result')"/>

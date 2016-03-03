@@ -1,3 +1,9 @@
+2016-03-03  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/classic/omp.xsl (result [result-headers]): Disable link in
+	solution type and QOD columns for delta reports, because Manager does
+	not support sorting delta reports by these columns.
+
 2016-03-02  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/js/gsa_graphics_base.js,
@@ -434,7 +440,7 @@
 
 	* src/html/classic/img/secinfo.svg: Rename secinfo.svg to allinfo.svg. The
 	info type for all sec info is allinfo. The info type is used at several places
-	
+
 	to create the links and icon locations for the help page.
 	* src/html/classic/graphics.xsl: Use allinfo.svg instead of secinfo.svg.
 
