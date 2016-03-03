@@ -1595,6 +1595,7 @@ struct gsad_connection_info
   gchar *redirect;                         ///< Redirect URL.
 };
 
+#ifdef SERVE_STATIC_ASSETS
 /**
  * @brief Reads from a file.
  *
@@ -1613,6 +1614,7 @@ file_reader (void *cls, uint64_t pos, char *buf, int max)
   fseek (file, pos, SEEK_SET);
   return fread (buf, 1, max, file);
 }
+#endif
 
 /**
  * @brief Free resources.
@@ -3673,6 +3675,7 @@ redirect_handler (void *cls, struct MHD_Connection *connection,
  */
 #define DATE_2822_LEN 100
 
+#ifdef SERVE_STATIC_ASSETS
 /**
  * @brief Create a response to serve a file.
  *
@@ -3806,6 +3809,7 @@ file_content_response (credentials_t *credentials,
   cmd_response_data_reset (&response_data);
   return response;
 }
+#endif
 
 /**
  * @brief Send response for request_handler.
@@ -4070,6 +4074,8 @@ request_handler (void *cls, struct MHD_Connection *connection,
                                         1);
         }
 
+#ifdef SERVE_STATIC_ASSETS
+
       if (!strcmp (url, "/favicon.ico")
           || !strcmp (url, "/favicon.gif"))
         {
@@ -4106,6 +4112,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
                                         http_response_code,
                                         0);
         }
+#endif
 
       /* Setup credentials from token. */
 
@@ -4532,11 +4539,17 @@ request_handler (void *cls, struct MHD_Connection *connection,
           /* URL requests neither an OMP command nor a special GSAD command,
            * so it is a simple file. */
           /* Serve a file. */
+#ifdef SERVE_STATIC_ASSETS
           response = file_content_response (credentials,
                                             connection, url,
                                             &http_response_code,
                                             &content_type,
                                             &content_disposition);
+#else
+          response = MHD_create_response_from_buffer (strlen (FILE_NOT_FOUND),
+                                              (void *) FILE_NOT_FOUND,
+                                              MHD_RESPMEM_PERSISTENT);
+#endif
         }
 
       if (response)

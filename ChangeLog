@@ -1,3 +1,12 @@
+2016-03-03  Benoît Allard  <benoit.allard@greenbone.net>
+
+	Add a CMAKE option to disable the serving of static assets (raw files)
+	by gsad. This option is disabled by default (no change in behavior),
+	and can be enabled by passing '-DSERVE_STATIC_ASSETS=0' to the cmake
+	call.
+
+	* CMakeLists.txt, src/CMakeLists.txt, src/gsad.c: Updated.
+
 2016-03-03  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/omp.xsl (result [result-headers]): Disable link in

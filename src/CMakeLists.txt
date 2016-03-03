@@ -84,6 +84,13 @@ if (NOT CMAKE_BUILD_TYPE MATCHES "Release")
   endif (SVN_REVISION)
 endif (NOT CMAKE_BUILD_TYPE MATCHES "Release")
 
+if (SERVE_STATIC_ASSETS)
+  message (STATUS "Static asset serving is builtin, use with care.")
+  add_definitions (-DSERVE_STATIC_ASSETS)
+else (SERVE_STATIC_ASSETS)
+  message (STATUS "Static asset serving not builtin, use an external server")
+endif (SERVE_STATIC_ASSETS)
+
 if (USE_LIBXSLT)
   message (STATUS "Internal XSL transformations, with libxslt.")
   add_definitions (-DUSE_LIBXSLT)
