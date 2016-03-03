@@ -1406,14 +1406,6 @@ init_validator ()
   openvas_validator_alias (validator, "dynamic_severity", "boolean");
   openvas_validator_alias (validator, "enable",       "boolean");
   openvas_validator_alias (validator, "enable_stop",             "boolean");
-  openvas_validator_alias (validator, "esc_apply_min_cvss_base", "boolean");
-  openvas_validator_alias (validator, "esc_apply_min_qod", "boolean");
-  openvas_validator_alias (validator, "esc_first_result", "first_result");
-  openvas_validator_alias (validator, "esc_levels",       "levels");
-  openvas_validator_alias (validator, "esc_max_results",  "max_results");
-  openvas_validator_alias (validator, "esc_min_cvss_base", "min_cvss_base");
-  openvas_validator_alias (validator, "esc_min_qod", "min_qod");
-  openvas_validator_alias (validator, "esc_search_phrase", "search_phrase");
   openvas_validator_alias (validator, "esxi_credential_id", "credential_id");
   openvas_validator_alias (validator, "filt_id",            "id");
   openvas_validator_alias (validator, "filter_extra",       "filter");
@@ -1525,11 +1517,7 @@ init_validator ()
   openvas_validator_alias (validator, "user_id",      "id");
   openvas_validator_alias (validator, "user_id_optional", "id_optional");
   openvas_validator_alias (validator, "xml",          "boolean");
-
-  openvas_validator_alias (validator, "esc_notes",        "notes");
-  openvas_validator_alias (validator, "esc_overrides",    "overrides");
-  openvas_validator_alias (validator, "esc_result_hosts_only",
-                           "result_hosts_only");
+  openvas_validator_alias (validator, "esc_filter",        "filter");
 }
 
 /**

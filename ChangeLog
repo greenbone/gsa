@@ -1,3 +1,31 @@
+2016-03-03  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Use the new filter syntax for report results in the filter box.
+
+	* src/gsad_omp.c (get_report): Make apply_overrides a separate option
+	from overrides. Use both filter and filter_extra to build filter. Add
+	some keywords only if they are given when building from individual
+	parameters.
+
+	* src/gsad.c (init_validator): Replace the various "esc_..." parameters
+	with "esc_filter".
+
+	* src/html/classic/omp.xsl (filter-criteria, filter-extra): Add
+	"notes", "overrides", "timezone", "result_hosts_only", "levels",
+	"min_cvss_base", "min_qod" and "delta_states" as special keywords.
+	(result-overrides-icon): Adapt to new filter response syntax in report.
+	(report [filterbox]): Remove form tag, adapt to new filter syntax
+	in report, add "Apply Overrides" input and remove "Search phrase".
+	(report [results]): Adapt to new filter response syntax in report and
+	add with-filterbox param to section-filter template call.
+	(report [report]): Output filtered severity and result counts.
+	(report [section-filter]): Add param "with-filterbox" to optionally
+	add the extended filter box here so it can use the "Filter:" input.
+	(full-report-export-form, filtered-report-export-form): Adapt to new
+	filter syntax.
+	(report [summary])): Adapt to new filter syntax and fix alignment
+	of alert and export forms.
+
 2016-03-03  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/js/gsa_line_chart.js: Fix missing renaming of public chart

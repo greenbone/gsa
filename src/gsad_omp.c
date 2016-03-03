@@ -13374,6 +13374,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
   GString *levels, *delta_states;
   const char *alert_id, *search_phrase, *min_cvss_base, *min_qod, *type, *zone;
   const char *autofp, *autofp_value, *notes, *overrides, *result_hosts_only;
+  const char *apply_overrides;
   const char *report_id, *sort_field, *sort_order, *result_id, *delta_report_id;
   const char *format_id, *first_result, *max_results, *host, *pos;
   const char *given_filt_id, *filt_id, *filter, *apply_filter, *report_section;
@@ -13386,7 +13387,6 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
   gchar *fname_format, *esc_response;
 
   build_filter = params_value (params, "build_filter");
-  filter_extra = NULL; /* FIXME */
 
   if (params_given (params, "apply_filter")
       && params_valid (params, "apply_filter"))
@@ -13406,10 +13406,21 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                    && strcmp (report_section, "results")
                    && strcmp (report_section, "summary"));
 
-  ignore_pagination = (strcmp (apply_filter, "full")
-                       && strcmp (report_section, "")
-                       && strcmp (report_section, "results")
-                       && strcmp (report_section, "summary"));
+  if (params_given (params, "ignore_pagination"))
+    {
+      const char *ignore_pagination_str = params_value (params,
+                                                        "ignore_pagination");
+      ignore_pagination = (ignore_pagination_str
+                           && strcmp (ignore_pagination_str, "")
+                           && strcmp (ignore_pagination_str, "0"));
+    }
+  else
+    {
+      ignore_pagination = (strcmp (apply_filter, "full")
+                          && strcmp (report_section, "")
+                          && strcmp (report_section, "results")
+                          && strcmp (report_section, "summary"));
+    }
 
   alert_id = params_value (params, "alert_id");
   if (alert_id == NULL)
@@ -13471,7 +13482,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
   if (notes == NULL)
     {
       if (params_given (params, "max_results"))
-        /* Use the max_results params to determine if the request is from
+        /* Use the max_results param to determine if the request is from
          * the Result Filtering form, because the notes param is only sent
          * when the checkbox is ticked. */
         notes = "0";
@@ -13481,7 +13492,23 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
 
   overrides = params_value (params, "overrides");
   if (overrides == NULL)
-    params_given (params, "overrides") || (overrides = "0");
+    {
+      if (params_given (params, "max_results"))
+        /* Use the max_results param to check for filtering form as above */
+        overrides = "0";
+      else
+        params_given (params, "overrides") || (overrides = "1");
+    }
+
+  apply_overrides = params_value (params, "apply_overrides");
+  if (apply_overrides == NULL)
+    {
+      if (params_given (params, "max_results"))
+        /* Use the max_results param to check for filtering form as above */
+        apply_overrides = "0";
+      else
+        params_given (params, "apply_overrides") || (apply_overrides = "1");
+    }
 
   result_hosts_only = params_value (params, "result_hosts_only");
   if (result_hosts_only == NULL)
@@ -13638,96 +13665,25 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
 
   if (strcmp (alert_id, "0"))
     {
-      const char *status, *esc_notes, *esc_overrides, *esc_result_hosts_only;
-      const char *esc_first_result, *esc_max_results;
-      const char *esc_search_phrase, *esc_min_cvss_base, *esc_min_qod;
-      const char *esc_zone;
+      const char *status, *esc_filter;
 
-      esc_notes = params_value (params, "esc_notes");
-      if (esc_notes == NULL)
-        params_given (params, "esc_notes") || (esc_notes = "0");
-
-      esc_overrides = params_value (params, "esc_overrides");
-      if (esc_overrides == NULL)
-        params_given (params, "esc_overrides") || (esc_overrides = "0");
-
-      esc_result_hosts_only = params_value (params, "esc_result_hosts_only");
-      if (esc_result_hosts_only == NULL)
-        params_given (params, "esc_result_hosts_only")
-          || (esc_result_hosts_only = "0");
-
-      esc_first_result = params_value (params, "esc_first_result");
-      if (esc_first_result == NULL
-          || sscanf (esc_first_result, "%u", &first) != 1)
-        esc_first_result = "1";
-
-      esc_max_results = params_value (params, "esc_max_results");
-      if (esc_max_results == NULL
-          || sscanf (esc_max_results, "%u", &max) != 1)
-        esc_max_results = G_STRINGIFY (RESULTS_PER_PAGE);
-
-      esc_search_phrase = params_value (params, "esc_search_phrase");
-      if (esc_search_phrase == NULL)
-        params_given (params, "esc_search_phrase") || (esc_search_phrase = "");
-
-      esc_zone = params_value (params, "esc_zone");
-      if (esc_zone == NULL)
-        params_given (params, "esc_zone") || (esc_zone = "");
-
-      if (params_given (params, "esc_min_cvss_base"))
-        {
-          if (params_valid (params, "esc_min_cvss_base"))
-            {
-              if (params_value (params, "esc_apply_min_cvss_base")
-                  && strcmp (params_value (params, "esc_apply_min_cvss_base"),
-                                           "0"))
-                esc_min_cvss_base = params_value (params, "esc_min_cvss_base");
-              else
-                esc_min_cvss_base = "";
-            }
-          else
-            esc_min_cvss_base = NULL;
-        }
-      else
-        esc_min_cvss_base = "";
-
-      if (params_given (params, "esc_min_qod"))
-        {
-          if (params_valid (params, "esc_min_qod"))
-            {
-              if (params_value (params, "esc_apply_min_qod")
-                  && strcmp (params_value (params, "esc_apply_min_qod"),
-                                           "0"))
-                esc_min_qod = params_value (params, "esc_min_min_qod");
-              else
-                esc_min_qod = "";
-            }
-          else
-            esc_min_qod = NULL;
-        }
-      else
-        esc_min_qod = "";
+      esc_filter = params_value (params, "esc_filter");
+      if (esc_filter == NULL)
+        params_given (params, "esc_filter")
+          || (esc_filter = "first=1 rows=-1"
+                           "  result_hosts_only=0"
+                           "  apply_overrides=1"
+                           "  notes=1 overrides=1"
+                           "  sort-reverse=severity");
 
       if (ignore_filter)
         ret = openvas_server_sendf_xml (&session,
                                         "<get_reports"
-                                        " autofp=\"0\""
-                                        " notes=\"1\""
-                                        " notes_details=\"1\""
-                                        " apply_overrides=\"0\""
-                                        " overrides=\"1\""
-                                        " overrides_details=\"1\""
-                                        " result_hosts_only=\"0\""
-                                        " report_id=\"%s\""
-                                        " first_result=\"1\""
-                                        " max_results=\"-1\""
-                                        " sort_field=\"severity\""
-                                        " sort_order=\"ascending\""
-                                        " levels=\"hmlgfd\""
-                                        " delta_states=\"\""
-                                        " search_phrase=\"\""
-                                        " min_cvss_base=\"\""
-                                        " min_qod=\"\""
+                                        " filter=\"first=1 rows=-1"
+                                        "  result_hosts_only=0"
+                                        "  apply_overrides=1"
+                                        "  notes=1 overrides=1"
+                                        "  sort-reverse=severity\""
                                         " alert_id=\"%s\"/>",
                                         report_id,
                                         alert_id);
@@ -13735,53 +13691,11 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
         ret = openvas_server_sendf_xml (&session,
                                         "<get_reports"
                                         " ignore_pagination=\"%d\""
-                                        " autofp=\"%s\""
-                                        " notes=\"%i\""
-                                        " notes_details=\"1\""
-                                        " apply_overrides=\"%i\""
-                                        " overrides=\"%i\""
-                                        " overrides_details=\"1\""
-                                        " result_hosts_only=\"%i\""
-                                        " report_id=\"%s\""
-                                        " first_result=\"%s\""
-                                        " max_results=\"%s\""
-                                        " sort_field=\"%s\""
-                                        " sort_order=\"%s\""
-                                        " levels=\"%s\""
-                                        " delta_states=\"%s\""
-                                        " search_phrase=\"%s\""
-                                        " min_cvss_base=\"%s\""
-                                        " min_qod=\"%s\""
-                                        " alert_id=\"%s\""
-                                        " timezone=\"%s\"/>",
+                                        " filter=\"%s\""
+                                        " alert_id=\"%s\"/>",
                                         ignore_pagination,
-                                        strcmp (autofp, "0") ? autofp_value
-                                                             : "0",
-                                        strcmp (esc_notes, "0") ? 1 : 0,
-                                        strcmp (esc_overrides, "0") ? 1 : 0,
-                                        strcmp (esc_overrides, "0") ? 1 : 0,
-                                        strcmp (esc_result_hosts_only, "0") ? 1
-                                                                            : 0,
-                                        report_id,
-                                        esc_first_result,
-                                        esc_max_results,
-                                        sort_field ? sort_field : "severity",
-                                        sort_order
-                                        ? sort_order
-                                        : ((sort_field == NULL
-                                            || (strcmp (sort_field, "severity")
-                                                == 0)
-                                            || (strcmp (sort_field, "type")
-                                                == 0))
-                                            ? "descending"
-                                            : "ascending"),
-                                        params_value (params, "esc_levels"),
-                                        delta_states->str,
-                                        esc_search_phrase,
-                                        esc_min_cvss_base,
-                                        esc_min_qod,
-                                        alert_id,
-                                        esc_zone);
+                                        esc_filter ? esc_filter : "",
+                                        alert_id);
       if (ret == -1)
         {
           openvas_server_close (socket, session);
@@ -13886,6 +13800,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
 
   given_filt_id = params_value (params, "filt_id");
   filter = params_value (params, "filter");
+  filter_extra = params_value (params, "filter_extra");
 
   if (params_given (params, "filt_id"))
     {
@@ -13905,47 +13820,75 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
       || ((filter == NULL || strcmp (filter, "") == 0)
           && (filter_extra == NULL || strcmp (filter_extra, "") == 0)))
     {
-      built_filter
-        = g_strdup_printf ("autofp=%s"
-                           " apply_overrides=%i"
-                           " notes=%i"
-                           " overrides=%i"
-                           " result_hosts_only=%i"
-                           " first=%s"
-                           " rows=%s"
-                           " sort%s=%s"
-                           " levels=%s"
-                           " delta_states=%s"
-                           " min_cvss_base=%s"
-                           " min_qod=%s"
-                           " timezone=%s"
-                           " %s",
-                           strcmp (autofp, "0") ? autofp_value : "0",
-                           1 /* FIXME : add apply_overrides */,
-                           strcmp (notes, "0") ? 1 : 0,
-                           strcmp (overrides, "0") ? 1 : 0,
-                           strcmp (result_hosts_only, "0") ? 1 : 0,
-                           first_result,
-                           max_results,
-                           sort_order
-                            ? strcmp (sort_order, "ascending")
-                                ? "-reverse"
-                                : ""
-                            : ((sort_field == NULL
-                                || strcmp (sort_field, "type") == 0
-                                || strcmp (sort_field, "severity") == 0)
-                                ? "-reverse"
-                                : ""),
-                           sort_field ? sort_field : "severity",
-                           levels->str,
-                           delta_states->str,
-                           min_cvss_base,
-                           min_qod,
-                           zone,
-                           search_phrase);
+      GString *filter_buffer;
+      filter_buffer = g_string_new ("");
+
+      g_string_append_printf (filter_buffer,
+                              "autofp=%s"
+                              " apply_overrides=%i"
+                              " notes=%i"
+                              " overrides=%i"
+                              " result_hosts_only=%i"
+                              " first=%s"
+                              " rows=%s"
+                              " sort%s=%s"
+                              " levels=%s",
+                              strcmp (autofp, "0") ? autofp_value : "0",
+                              apply_overrides
+                                ? (strcmp (apply_overrides, "0") ? 1 : 0)
+                                : 1,
+                              strcmp (notes, "0") ? 1 : 0,
+                              strcmp (overrides, "0") ? 1 : 0,
+                              strcmp (result_hosts_only, "0") ? 1 : 0,
+                              first_result,
+                              max_results,
+                              sort_order
+                                ? strcmp (sort_order, "ascending")
+                                    ? "-reverse"
+                                    : ""
+                                : ((sort_field == NULL
+                                    || strcmp (sort_field, "type") == 0
+                                    || strcmp (sort_field, "severity") == 0)
+                                    ? "-reverse"
+                                    : ""),
+                              sort_field ? sort_field : "severity",
+                              levels->str);
+
+      if (delta_states->str && strcmp (delta_states->str, "")
+          && delta_report_id && strcmp (delta_report_id, ""))
+        g_string_append_printf (filter_buffer,
+                                " delta_states=%s",
+                                delta_states->str);
+
+      if (min_cvss_base && strcmp (min_cvss_base, ""))
+        g_string_append_printf (filter_buffer,
+                                " min_cvss_base=%s",
+                                min_cvss_base);
+
+      if (min_qod && strcmp (min_qod, ""))
+        g_string_append_printf (filter_buffer,
+                                " min_qod=%s",
+                                min_qod);
+
+      if (zone && strcmp (zone, ""))
+        g_string_append_printf (filter_buffer,
+                                " timezone=%s",
+                                zone);
+
+      if (filter && strcmp (filter, ""))
+        g_string_append_printf (filter_buffer,
+                                " %s",
+                                filter);
+
+      built_filter = g_string_free (filter_buffer, FALSE);
     }
+  else if (filter || filter_extra)
+    built_filter = g_strdup_printf ("%s%s%s",
+                                    filter ? filter : "",
+                                    filter && filter_extra ? " " : "",
+                                    filter_extra ? filter_extra : "");
   else
-    built_filter = filter ? g_strdup (filter) : NULL;
+    built_filter = NULL;
 
   if (type && (strcmp (type, "prognostic") == 0))
     {
