@@ -473,7 +473,7 @@ function LineChartGenerator ()
       return my;
     }
 
-  my.color_scale = function (value)
+  my.setColorScale = function (value)
     {
       if (!arguments.length)
         return color_scale;
@@ -481,7 +481,7 @@ function LineChartGenerator ()
       return my;
     }
 
-  my.data_transform = function (value)
+  my.setDataTransformFunc = function (value)
     {
       if (!arguments.length)
         return data_transform;
@@ -489,7 +489,7 @@ function LineChartGenerator ()
       return my;
     }
 
-  my.title = function (value)
+  my.setTitleGenerator = function (value)
     {
       if (!arguments.length)
         return title;
@@ -497,7 +497,7 @@ function LineChartGenerator ()
       return my;
     }
 
-  my.show_loading = function (display)
+  my.showLoading = function (display)
     {
       display.header ().text (title ());
     }

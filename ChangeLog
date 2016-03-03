@@ -1,3 +1,10 @@
+2016-03-03  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/js/gsa_line_chart.js: Fix missing renaming of public chart
+	generator functions in line charts: show_loading -> showLoading,
+	title -> setTitleGenerator, data_transform -> setDataTransformFunc and
+	color_scale -> setColorScale.
+
 2016-03-03  Benoît Allard  <benoit.allard@greenbone.net>
 
 	Add a CMAKE option to disable the serving of static assets (raw files)
