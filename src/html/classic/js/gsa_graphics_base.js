@@ -3704,8 +3704,6 @@
   }
 
   function BaseChartGenerator(name) {
-    this.svg_transition_timeout = 600;
-
     this.csv_url = null;
 
     this.html_table_data = null;

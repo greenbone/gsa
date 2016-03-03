@@ -1,5 +1,10 @@
 2016-03-03  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_graphics_base.js: Remove obsolete BaseChartGenerator
+	variable svg_transition_timeout. This variable was left over from refactoring.
+
+2016-03-03  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_graphics_base.js: Update last generator and last
 	generator params in controller instead of letting the generator update them.
 
