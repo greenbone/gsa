@@ -61,6 +61,7 @@
   gsa.severity_bar_style = severity_bar_style;
   gsa.data_raw = data_raw;
   gsa.severity_colors_gradient = severity_colors_gradient;
+  gsa.BaseChartGenerator = BaseChartGenerator;
 
   /*
   * Generic chart styling helpers
@@ -3700,6 +3701,185 @@
     return title_total(resource_type_name_plural(aggregate_type) +
           ' by ' + field_name(group_column), 'count');
   }
+
+  function BaseChartGenerator(name) {
+    this.svg_transition_timeout = 600;
+
+    this.csv_url = null;
+
+    this.html_table_data = null;
+    this.html_table_url = null;
+
+    this.svg_url = null;
+    this.svg = null;
+
+    this.setDataTransformFunc(data_raw);
+    this.setName(name);
+
+    this.init();
+  }
+
+  BaseChartGenerator.prototype.init = function() {
+  };
+
+  BaseChartGenerator.prototype.getName = function() {
+    return this.name;
+  };
+
+  BaseChartGenerator.prototype.setName = function(value) {
+    this.name = value;
+    return this;
+  };
+
+  BaseChartGenerator.prototype.setTitleGenerator = function(value) {
+    this.title_generator = value;
+    return this;
+  };
+
+  BaseChartGenerator.prototype.mustUpdate = function(display) {
+    return display.last_generator() === this;
+  };
+
+  BaseChartGenerator.prototype.setDataTransformFunc = function(value) {
+    this.data_transform_func = value;
+    return this;
+  };
+
+  BaseChartGenerator.prototype.transformData = function(original_data,
+      gen_params) {
+    return this.data_transform_func(original_data, gen_params);
+  };
+
+  BaseChartGenerator.prototype.showLoading = function(display) {
+    display.setTitle(this.title_generator());
+  };
+
+  BaseChartGenerator.prototype.generate = function(original_data, controller,
+      gen_params) {
+  };
+
+  BaseChartGenerator.prototype.generateData = function(original_data,
+      controller, gen_params) {
+    return null;
+  };
+
+  BaseChartGenerator.prototype.generateCsvData = function(controller, data) {
+    return null;
+  };
+
+  BaseChartGenerator.prototype.generateHtmlTableData = function(controller,
+      data) {
+    return null;
+  };
+
+  BaseChartGenerator.prototype.addMenuItems = function(controller, data) {
+    this.addDetachedChartMenuItem(controller);
+
+    // Generate CSV
+    var csv_data = this.generateCsvData(controller, data);
+    this.addCsvDownloadMenuItem(controller, csv_data);
+    this.addHtmlTableMenuItem(controller);
+
+    // Generate HTML table
+    var html_table_data = this.generateHtmlTableData(controller, data);
+    this.addHtmlTableMenuItem(controller, html_table_data);
+
+    this.addSvgMenuItems(controller);
+    return this;
+  };
+
+  BaseChartGenerator.prototype.addDetachedChartMenuItem = function(controller) {
+    // Create detach menu item
+    controller.display().create_or_get_menu_item('detach')
+      .attr('href', 'javascript:void(0);')
+      .on('click', function() {
+        open_detached(controller.detached_url());
+      })
+      .text('Show detached chart window');
+    return this;
+  };
+
+  BaseChartGenerator.prototype.addCsvDownloadMenuItem = function(controller,
+      csv_data) {
+    if (this.csv_url !== null) {
+      URL.revokeObjectURL(this.csv_url);
+    }
+
+    var csv_blob = new Blob([csv_data], {type: 'text/csv'});
+    this.csv_url = URL.createObjectURL(csv_blob);
+
+    controller.display().create_or_get_menu_item('csv_dl')
+      .attr('href', this.csv_url)
+      .attr('download', 'gsa_' + this.getName() + '_chart-' +
+          new Date().getTime() + '.csv')
+      .text('Download CSV');
+    return this;
+  };
+
+  BaseChartGenerator.prototype.addHtmlTableMenuItem = function(controller,
+      html_table_data) {
+    var self = this;
+
+    if (this.html_table_url !== null) {
+      URL.revokeObjectURL(this.html_table_url);
+      this.html_table_url = null;
+    }
+
+    var html_table_blob = new Blob([html_table_data],
+        {type: 'text/html'});
+    this.html_table_url = URL.createObjectURL(html_table_blob);
+
+    controller.display().create_or_get_menu_item('html_table')
+      .attr('href', '#')
+      .on('click', function() {
+        window.open(self.html_table_url);
+        return true;
+      })
+      .text('Show HTML table');
+    return this;
+  };
+
+  BaseChartGenerator.prototype.addSvgMenuItems = function(controller) {
+    var self = this;
+    var display = controller.display();
+
+    function create_svg_url() {
+      var svg_data = svg_from_elem(display.svg(), display.header().text());
+
+      if (self.svg_url !== null) {
+        URL.revokeObjectURL(self.svg_url);
+      }
+      var svg_blob = new Blob([svg_data], {type: 'image/svg+xml'});
+      self.svg_url = URL.createObjectURL(svg_blob);
+      return self.svg_url;
+    }
+
+    display.create_or_get_menu_item('svg_window')
+      .attr('href', 'javascript:void(0)')
+      .on('click', function() {
+        blob_img_window(create_svg_url());
+      })
+      .text('Show copyable SVG');
+
+    display.create_or_get_menu_item('svg_dl', true /* Last. */)
+      .attr('download', 'gsa_' + self.getName() + '_chart-' +
+          new Date().getTime() + '.svg')
+      .on('click', function() {
+        $(this).attr('href', create_svg_url());
+      })
+      .text('Download SVG');
+    return this;
+  };
+
+  BaseChartGenerator.prototype.setBarStyle = function(value) {
+    this.bar_style = value;
+    return this;
+  };
+
+  BaseChartGenerator.prototype.setColorScale = function(value) {
+    this.color_scale = value;
+    return this;
+  };
 
   function get_chart_generator(chart_type, data_source) {
     // TODO register generators in their own modules

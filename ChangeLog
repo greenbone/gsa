@@ -1,3 +1,9 @@
+2016-03-03  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/js/gsa_graphics_base.js: Add a BaseChartGenerator
+	javascript "class" that provides all common chart generator functions.
+	This will allow reusing common code paths for all chart generators in future.
+
 2016-03-03  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Use the new filter syntax for report results in the filter box.
