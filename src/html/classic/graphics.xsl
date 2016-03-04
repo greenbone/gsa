@@ -69,6 +69,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template name="js-scan-management-top-visualization">
   <xsl:param name="type" select="'task'"/>
+  <!-- Setting UUIDs for chart selection preferences -->
   <xsl:param name="controllers_pref_id">
     <xsl:choose>
       <xsl:when test="$type='task'">3d5db3c7-5208-4b47-8c28-48efc621b1e0</xsl:when>
@@ -76,6 +77,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:when test="$type='result'">0b8ae70d-d8fc-4418-8a72-e65ac8d2828e</xsl:when>
     </xsl:choose>
   </xsl:param>
+  <!-- Setting UUIDs for dashboard row height preferences -->
   <xsl:param name="heights_pref_id">
     <xsl:choose>
       <xsl:when test="$type='task'">ce8608af-7e66-45a8-aa8a-76def4f9f838</xsl:when>
@@ -83,8 +85,25 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:when test="$type='result'">cb7db2fe-3fe4-4704-9fa1-efd4b9e522a8</xsl:when>
     </xsl:choose>
   </xsl:param>
-  <xsl:param name="default_controllers" select="'by-cvss|by-class'"/>
-  <xsl:param name="default_heights" select="'280'"/>
+  <!-- Default chart selections:
+        Controller names of boxes in a row separated with "|",
+        rows separated with "#" -->
+  <xsl:param name="default_controllers">
+    <xsl:choose>
+      <xsl:when test="$type='task'">by-cvss|by-class</xsl:when>
+      <!-- fallback for all other types -->
+      <xsl:otherwise>by-cvss|by-class</xsl:otherwise>
+    </xsl:choose>
+  </xsl:param>
+  <!-- Default row heights, rows separated with "#",
+        number of rows must match default_controllers -->
+  <xsl:param name="default_heights">
+    <xsl:choose>
+      <xsl:when test="$type='task'">280</xsl:when>
+      <!-- fallback for all other types -->
+      <xsl:otherwise>280</xsl:otherwise>
+    </xsl:choose>
+  </xsl:param>
 
   <xsl:variable name="controllers">
     <xsl:choose>
@@ -236,6 +255,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template name="js-secinfo-top-visualization">
   <xsl:param name="type" select="'nvt'"/>
+  <!-- Setting UUIDs for chart selection preferences -->
   <xsl:param name="controllers_pref_id">
     <xsl:choose>
       <xsl:when test="$type='nvt'">f68d9369-1945-477b-968f-121c6029971b</xsl:when>
@@ -247,6 +267,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:when test="$type='allinfo'">4c7b1ea7-b7e6-4d12-9791-eb9f72b6f864</xsl:when>
     </xsl:choose>
   </xsl:param>
+  <!-- Setting UUIDs for dashboard row height preferences -->
   <xsl:param name="heights_pref_id">
     <xsl:choose>
       <xsl:when test="$type='nvt'">af89a84a-d3ec-43a8-97a8-aa688bf093bc</xsl:when>
@@ -258,8 +279,25 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:when test="$type='allinfo'">985f38eb-1a30-4a35-abb6-3eec05b5d54a</xsl:when>
     </xsl:choose>
   </xsl:param>
-  <xsl:param name="default_controllers" select="'by-cvss|by-class'"/>
-  <xsl:param name="default_heights" select="'280'"/>
+  <!-- Default chart selections:
+        Controller names of boxes in a row separated with "|",
+        rows separated with "#" -->
+  <xsl:param name="default_controllers">
+    <xsl:choose>
+      <xsl:when test="$type='allinfo'"></xsl:when>
+      <!-- fallback for all other types -->
+      <xsl:otherwise>by-cvss|by-class</xsl:otherwise>
+    </xsl:choose>
+  </xsl:param>
+  <!-- Default row heights, rows separated with "#",
+        number of rows must match default_controllers -->
+  <xsl:param name="default_heights">
+    <xsl:choose>
+      <xsl:when test="$type='allinfo'"></xsl:when>
+      <!-- fallback for all other types -->
+      <xsl:otherwise>280</xsl:otherwise>
+    </xsl:choose>
+  </xsl:param>
 
   <xsl:variable name="controllers">
     <xsl:choose>
@@ -426,14 +464,26 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template match="dashboard" mode="secinfo">
   <xsl:variable name="filters" select="get_filters_response/filter[type='SecInfo' or type='']"/>
+  <!-- Default chart selections:
+        Controller names of boxes in a row separated with "|",
+        rows separated with "#" -->
   <xsl:variable name="default_controllers" select="'nvt_bar_chart|nvt_donut_chart#cve_bar_chart|cve_donut_chart'"/>
+  <!-- Default row heights, rows separated with "#",
+        number of rows must match default_controllers -->
   <xsl:variable name="default_heights" select="'280#280'"/>
+  <!-- Default filter selections:
+        Filter UUIDs or empty string for boxes in a row separated with "|",
+        rows separated with "#",
+        number of boxes and rows must match default_controllers -->
   <xsl:variable name="default_filters" select="'|#|'"/>
 
   <xsl:variable name="envelope" select="/envelope"/>
 
+  <!-- Setting UUID for chart selection preferences -->
   <xsl:variable name="controllers_pref_id" select="'84ab32da-fe69-44d8-8a8f-70034cf28d4e'"/>
+  <!-- Setting UUIDs for row height preferences -->
   <xsl:variable name="heights_pref_id" select="'42d48049-3153-43bf-b30d-72ca5ab1eb49'"/>
+  <!-- Setting UUID for chart selection preferences -->
   <xsl:variable name="filters_pref_id" select="'517d0efe-426e-49a9-baa7-eda2832c93e8'"/>
 
   <xsl:variable name="controllers">

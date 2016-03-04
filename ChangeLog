@@ -1,5 +1,12 @@
 2016-03-04  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/graphics.xsl (js-scan-management-top-visualization)
+	(js-secinfo-top-visualization, dashboard [secinfo]): Add comments
+	describing the chart setting parameters and change the defaults to be
+	type-dependent.
+
+2016-03-04  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/gsad_omp.c (get_report): Add search_phrase to filter when
 	building the filter and when it is given.
 
