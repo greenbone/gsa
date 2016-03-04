@@ -358,6 +358,10 @@
       .attr('opacity', (slices.length !== 0) ? 1 : 0.25);
 
     function relax_labels() {
+      // adjust labels to not having overlapping texts
+      // for details see
+      // https://www.safaribooksonline.com/blog/2014/03/11/solving-d3-label-placement-constraint-relaxing/
+
       var elem_a, elem_b;
       var sel_a, sel_b;
       var x_a, x_b;
