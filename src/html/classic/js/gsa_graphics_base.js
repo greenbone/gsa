@@ -62,6 +62,8 @@
   gsa.data_raw = data_raw;
   gsa.severity_colors_gradient = severity_colors_gradient;
   gsa.BaseChartGenerator = BaseChartGenerator;
+  gsa.fill_empty_fields = fill_empty_fields;
+  gsa.wrap_text = wrap_text;
 
   /*
   * Generic chart styling helpers
