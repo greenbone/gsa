@@ -806,7 +806,7 @@
         type: 'delete',
         element: $(this),
         button: 'Delete',
-        prefix: 'confirm',
+        postfix: 'confirm',
       });
     });
 

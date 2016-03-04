@@ -1,5 +1,10 @@
 2016-03-04  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/greenbone.js: Fix applying postfix to delete commands
+	via delete action icons.
+
+2016-03-04  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_donut_chart.js (relax_labels): Add some comment to
 	the relax_labels function.
 
