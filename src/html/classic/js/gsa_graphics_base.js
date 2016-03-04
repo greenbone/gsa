@@ -4026,7 +4026,7 @@
             else if (chart_template === 'info_by_class' ||
                 chart_template === 'recent_info_by_class') {
               generator.setDataTransformFunc(data_severity_level_counts);
-              if (chart_type !== 'donut') {
+              if (chart_type === 'donut') {
                 generator.setColorScale(gsa.severity_level_color_scale);
               }
             }
