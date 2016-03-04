@@ -1,5 +1,10 @@
 2016-03-04  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/omp.xsl: Fix layout of help icons in header of ldap and
+	radius sections at the users list page.
+
+2016-03-04  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/omp.xsl: Reload users list after a user has been deleted.
 
 2016-03-04  Björn Ricks <bjoern.ricks@greenbone.net>

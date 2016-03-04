@@ -34964,7 +34964,7 @@ var toggleFilter = function(){
           <img src="/img/fold.png"/>
         </a>
         <a href="/help/users.html?token={/envelope/token}#peruserldapauthentication"
-           class="icon"
+           class="icon icon-action"
            title="{concat(gsa:i18n('Help', 'Help'),': ')}({gsa:i18n ('LDAP per-User Authentication', 'Group')})">
           <img src="/img/help.png"/>
         </a>
@@ -35037,7 +35037,7 @@ var toggleFilter = function(){
       <img src="/img/fold.png"/>
     </a>
     <a href="/help/users.html?token={/envelope/token}#radiusauthentication"
-       class="icon"
+       class="icon icon-action"
        title="{concat(gsa:i18n('Help', 'Help'),': ')}({gsa:i18n ('RADIUS Authentication', 'Group')})">
       <img src="/img/help.png"/>
     </a>
