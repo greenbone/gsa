@@ -1,5 +1,10 @@
 2016-03-04  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_donut_chart.js: Refactor DonutChartGenerator to
+	derive from BaseChartGenerator prototype.
+
+2016-03-04  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_bar_chart.js: Fix setting the correct constructor
 	function. The constructor function is not important but may be used to
 	identify an object.
