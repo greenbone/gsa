@@ -107,6 +107,7 @@
     for (var i in y_data) {
       y_sum += y_data[i];
     }
+    var y_max = Math.max.apply (null, y_data);
 
     // Setup display parameters
     var height = display.svg().attr('height') - this.margin.top -
@@ -144,7 +145,6 @@
         .style('font-weight', 'normal')
         .offset([-10, 0])
         .html(function(d) {
-          // FIXME y_max and size_field are not defined
           var x;
           if (d[self.x_field + '~long']) {
             x = d[self.x_field + '~long'];
@@ -168,7 +168,7 @@
           else {
             if (self.y_label !== '') {
               return '<strong>' + self.y_label + ' (' + x +
-                '):</strong><br/> ' + d[size_field] + ' (' +
+                '):</strong><br/> ' + d[self.y_field] + ' (' +
                 (100 * d[self.y_field] / y_max).toFixed(1) + '%)';
             }
             else {
