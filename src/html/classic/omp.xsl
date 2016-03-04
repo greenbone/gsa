@@ -34493,7 +34493,7 @@ var toggleFilter = function(){
                   <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
                   <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
                   <input type="image" src="/img/delete.png" alt="{gsa:i18n ('Delete', 'Action Verb')}"
-                        class="delete-action-icon" data-type="user" data-id="{@id}"
+                        class="delete-action-icon" data-reload="window" data-type="user" data-id="{@id}"
                         name="Delete" value="Delete" title="{gsa:i18n ('Delete', 'Action Verb')}"/>
                 </form>
               </div>

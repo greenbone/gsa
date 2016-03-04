@@ -1,5 +1,9 @@
 2016-03-04  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/omp.xsl: Reload users list after a user has been deleted.
+
+2016-03-04  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/omp.xsl: Refactor delete user confirm dialog to a new style
 	dialog and update its layout to show the inherited user selection.
 
