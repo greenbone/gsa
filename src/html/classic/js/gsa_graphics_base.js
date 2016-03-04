@@ -3882,6 +3882,10 @@
     return this;
   };
 
+  BaseChartGenerator.prototype.scaleColor = function(value) {
+    return this.color_scale(value);
+  };
+
   function get_chart_generator(chart_type, data_source) {
     // TODO register generators in their own modules
     register_chart_generator('cloud', global.CloudChartGenerator);

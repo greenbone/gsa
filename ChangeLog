@@ -1,5 +1,10 @@
 2016-03-04  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_graphics_base.js (BaseChartGenerator): Add prototype
+	method to run scaling color function.
+
+2016-03-04  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_graphics_base.js: Export fill_empty_fields and
 	wrap_text to the gsa namespace.
 
