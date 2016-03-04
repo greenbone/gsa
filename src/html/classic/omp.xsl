@@ -34842,12 +34842,17 @@ var toggleFilter = function(){
 
 <xsl:template match="delete_user">
   <xsl:variable name="user_id" select="/envelope/params/user_id"/>
-  <div class="gb_window" style="width:500px">
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n ('Confirm action', 'Bulk Action')"/></div>
-    <div class="gb_window_part_content">
+  <div class="edit-dialog">
+    <div class="title"><xsl:value-of select="gsa:i18n ('Confirm action', 'Bulk Action')"/></div>
+    <div class="content">
       <form method="post" enctype="multipart/form-data">
+        <input type="hidden" name="cmd" value="delete_user"/>
+        <input type="hidden" name="token" value="{/envelope/token}"/>
+        <input type="hidden" name="caller" value="{/envelope/params/caller}"/>
+        <input type="hidden" name="cmd" value="delete_user"/>
+        <input type="hidden" name="user_id" value="{$user_id}"/>
+        <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
+        <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
         <div>
           <p>
             <b>
@@ -34857,38 +34862,36 @@ var toggleFilter = function(){
           <p>
             <xsl:value-of select="gsa:i18n ('If no inheriting user is selected, all owned resources will be deleted as well.', 'User')"/>
           </p>
-          <p>
-            <xsl:value-of select="gsa:i18n ('Inheriting user', 'User')"/>:
-            <xsl:variable name="inheritor_id" select="''"/>
-            <select name="inheritor_id" style="text-align:left;">
-              <xsl:call-template name="opt">
-                <xsl:with-param name="value" select="''"/>
-                <xsl:with-param name="select-value" select="$inheritor_id"/>
-                <xsl:with-param name="content" select="'--'"/>
-              </xsl:call-template>
-              <xsl:call-template name="opt">
-                <xsl:with-param name="value" select="'self'"/>
-                <xsl:with-param name="select-value" select="$inheritor_id"/>
-                <xsl:with-param name="content" select="concat ('(', gsa:i18n ('Current User', 'User'), ')')"/>
-              </xsl:call-template>
-              <xsl:for-each select="get_users_response/user[@id != $user_id]">
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="@id"/>
-                  <xsl:with-param name="select-value" select="$inheritor_id"/>
-                  <xsl:with-param name="content" select="gsa:i18n (name)"/>
-                </xsl:call-template>
-              </xsl:for-each>
-            </select>
-          </p>
+          <xsl:variable name="inheritor_id" select="''"/>
+          <table class="table-form">
+            <tr>
+              <td>
+                <xsl:value-of select="gsa:i18n ('Inheriting user', 'User')"/>:
+              </td>
+              <td>
+                <select name="inheritor_id" style="text-align:left;">
+                  <xsl:call-template name="opt">
+                    <xsl:with-param name="value" select="''"/>
+                    <xsl:with-param name="select-value" select="$inheritor_id"/>
+                    <xsl:with-param name="content" select="'--'"/>
+                  </xsl:call-template>
+                  <xsl:call-template name="opt">
+                    <xsl:with-param name="value" select="'self'"/>
+                    <xsl:with-param name="select-value" select="$inheritor_id"/>
+                    <xsl:with-param name="content" select="concat ('(', gsa:i18n ('Current User', 'User'), ')')"/>
+                  </xsl:call-template>
+                  <xsl:for-each select="get_users_response/user[@id != $user_id]">
+                    <xsl:call-template name="opt">
+                      <xsl:with-param name="value" select="@id"/>
+                      <xsl:with-param name="select-value" select="$inheritor_id"/>
+                      <xsl:with-param name="content" select="gsa:i18n (name)"/>
+                    </xsl:call-template>
+                  </xsl:for-each>
+                </select>
+              </td>
+            </tr>
+          </table>
         </div>
-        <input type="hidden" name="cmd" value="delete_user"/>
-        <input type="hidden" name="token" value="{/envelope/token}"/>
-        <input type="hidden" name="caller" value="{/envelope/params/caller}"/>
-        <input type="hidden" name="cmd" value="delete_user"/>
-        <input type="hidden" name="user_id" value="{$user_id}"/>
-        <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
-        <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-        <input type="submit" value="OK"/>
       </form>
     </div>
   </div>

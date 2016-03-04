@@ -1,5 +1,10 @@
 2016-03-04  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/omp.xsl: Refactor delete user confirm dialog to a new style
+	dialog and update its layout to show the inherited user selection.
+
+2016-03-04  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/greenbone.js: Fix applying postfix to delete commands
 	via delete action icons.
 
