@@ -1,5 +1,10 @@
 2016-03-04  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/omp.xsl (delete_trash_icon): Stay on tash page after
+	deleting an item from the trash.
+
+2016-03-04  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/omp.xsl: Fix layout of help icons in header of ldap and
 	radius sections at the users list page.
 

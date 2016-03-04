@@ -1588,6 +1588,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <input type="hidden" name="token" value="{/envelope/token}"/>
       <input type="hidden" name="caller" value="{/envelope/current_page}"/>
       <input type="hidden" name="cmd" value="delete_trash_{$type}"/>
+      <input type="hidden" name="next" value="get_trash"/>
       <input type="hidden" name="{$type}_id" value="{$id}"/>
       <input type="image" src="/img/delete.png" alt="{gsa:i18n ('Delete', 'Action Verb')}"
              name="Delete" value="Delete" title="{gsa:i18n ('Delete', 'Action Verb')}"/>
