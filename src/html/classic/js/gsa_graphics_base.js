@@ -3882,7 +3882,6 @@
 
   function get_chart_generator(chart_type, data_source) {
     // TODO register generators in their own modules
-    register_chart_generator('donut', global.DonutChartGenerator);
     register_chart_generator('cloud', global.CloudChartGenerator);
     register_chart_generator('horizontal_bar',
         global.HorizontalBarChartGenerator);

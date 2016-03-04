@@ -27,6 +27,8 @@
 (function(global, window, d3, console, gsa) {
   'use strict';
 
+  gsa.register_chart_generator('donut', DonutChartGenerator);
+
   /* Main chart generator */
   function DonutChartGenerator ()
   {
