@@ -2506,9 +2506,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template name="assets">
   <xsl:variable name="levels"
-                select="report/filters/text()"/>
+                select="report/filters/keywords/keyword[column='levels']/value"/>
   <xsl:variable name="apply-overrides"
-                select="report/filters/apply_overrides"/>
+                select="report/filters/keywords/keyword[column='apply_overrides']/value"/>
+  <xsl:variable name="phrase"
+                select="translate (report/filters/keywords/keyword[column = '']/value, '&quot;', '')"/>
   <xsl:if test="report/@scap_loaded = 0">
     <div>
       <xsl:call-template name="error_window">
@@ -2537,12 +2539,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <input type="hidden" name="cmd" value="get_report"/>
           <input type="hidden" name="type" value="assets"/>
           <input type="hidden" name="levels" value="{$levels}"/>
-          <input type="hidden" name="search_phrase" value="{report/filters/phrase}"/>
+          <input type="hidden" name="search_phrase" value="{$phrase}"/>
           <!-- Switch back to the first page if the override state changes, because
                this could lead to changes in the number of hosts in the table. -->
           <input type="hidden" name="first_result" value="1"/>
           <input type="hidden" name="max_results" value="{report/hosts/@max}"/>
-          <select style="margin-bottom: 0px;" name="overrides" size="1" onchange="switch_overrides.submit ()">
+          <select style="margin-bottom: 0px;" name="apply_overrides" size="1" onchange="switch_overrides.submit ()">
             <xsl:choose>
               <xsl:when test="$apply-overrides = 0">
                 <option value="0" selected="1">&#8730;<xsl:value-of select="gsa:i18n ('No overrides', 'Override Controls')"/></option>
@@ -2577,8 +2579,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <input type="hidden" name="sort_field" value="{$sort_field}"/>
           <input type="hidden" name="sort_order" value="{$sort_order}"/>
           <input type="hidden"
-                 name="overrides"
-                 value="{report/filters/apply_overrides}"/>
+                 name="apply_overrides"
+                 value="{$apply-overrides}"/>
           <div class="ctrl-group">
             <xsl:value-of select="gsa:i18n ('Results per page', 'Filter')"/>:
             <input type="text" name="max_results" size="5"
@@ -2588,7 +2590,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <div class="ctrl-group">
             <xsl:value-of select="gsa:i18n ('Text phrase', 'Report Filter')"/>:
             <input type="text" name="search_phrase" size="50"
-                   value="{report/filters/phrase}"
+                   value="{$phrase}"
                    maxlength="400"/>
           </div>
           <div class="pull-right">
@@ -27117,7 +27119,7 @@ should not have received it.
 </xsl:template>
 
 <xsl:template match="host" mode="classic">
-  <xsl:variable name="apply-overrides" select="../filters/apply_overrides"/>
+  <xsl:variable name="apply-overrides" select="../filters/keywords/keyword[column='apply_overrides']/value"/>
   <xsl:if test="../@scap_loaded = 0">
     <div>
       <xsl:call-template name="error_window">
@@ -27158,7 +27160,7 @@ should not have received it.
         </xsl:otherwise>
       </xsl:choose>
       <div class="small_inline_form" style="display: inline; margin-left: 40px; font-weight: normal;">
-        <form action="" method="get" enctype="multipart/form-data">
+        <form action="" method="get" enctype="multipart/form-data" name="switch_overrides">
           <input type="hidden" name="token" value="{/envelope/token}"/>
           <input type="hidden" name="cmd" value="get_report"/>
           <input type="hidden" name="type" value="assets"/>
@@ -27170,7 +27172,7 @@ should not have received it.
                this could lead to changes in the number of hosts in the table. -->
           <input type="hidden" name="first_result" value="1"/>
           <input type="hidden" name="max_results" value="{../../../../hosts/@max}"/>
-          <select style="margin-bottom: 0px;" name="overrides" size="1">
+          <select style="margin-bottom: 0px;" name="apply_overrides" size="1" onchange="switch_overrides.submit()">
             <xsl:choose>
               <xsl:when test="$apply-overrides = 0">
                 <option value="0" selected="1">&#8730;<xsl:value-of select="gsa:i18n ('No overrides', 'Override Controls')"/></option>
@@ -27209,14 +27211,14 @@ should not have received it.
             <xsl:variable name="pos" select="detail[name/text() = 'report/pos']/value"/>
             <xsl:choose>
               <xsl:when test="$pos &lt; $report_count">
-                <a href="/omp?cmd=get_report&amp;type=assets&amp;host={ip}&amp;pos={$pos + 1}&amp;levels={../../../../levels}&amp;search_phrase={../../../../search_phrase}&amp;first_result={../../../../hosts/@start}&amp;max_results={../../../../hosts/@max}&amp;overrides={$apply-overrides}&amp;token={/envelope/token}">
+                <a href="/omp?cmd=get_report&amp;type=assets&amp;host={ip}&amp;pos={$pos + 1}&amp;levels={../../../../levels}&amp;search_phrase={../../../../search_phrase}&amp;first_result={../../../../hosts/@start}&amp;max_results={../../../../hosts/@max}&amp;apply_overrides={$apply-overrides}&amp;token={/envelope/token}">
                   &lt;&lt;
                 </a>
               </xsl:when>
             </xsl:choose>
             <xsl:choose>
               <xsl:when test="start/text() != ''">
-                <a style="margin-left: 5px; margin-right: 5px;" href="/omp?cmd=get_report&amp;report_id={detail[name = 'report/@id' and source/name = 'openvasmd']/value}&amp;filter==&#34;{ip}&#34; notes=1 overrides=1 result_hosts_only=1 levels=hm&amp;token={/envelope/token}">
+                <a style="margin-left: 5px; margin-right: 5px;" href="/omp?cmd=get_report&amp;report_id={detail[name = 'report/@id' and source/name = 'openvasmd']/value}&amp;filter=host=&#34;{ip}&#34; notes=1 overrides=1 apply_overrides={$apply-overrides} result_hosts_only=1 levels={../../../../levels}&amp;token={/envelope/token}">
                   <xsl:value-of select="concat (date:month-abbreviation (start/text()), ' ', date:day-in-month (start/text()), ' ', date:year (start/text()))"/>
                 </a>
               </xsl:when>
@@ -27224,7 +27226,7 @@ should not have received it.
             </xsl:choose>
             <xsl:choose>
               <xsl:when test="$pos &gt; 1">
-                <a href="/omp?cmd=get_report&amp;type=assets&amp;host={ip}&amp;pos={$pos - 1}&amp;levels={../../../../levels}&amp;search_phrase={../../../../search_phrase}&amp;first_result={../../../../hosts/@start}&amp;max_results={../../../../hosts/@max}&amp;overrides={$apply-overrides}&amp;token={/envelope/token}">
+                <a href="/omp?cmd=get_report&amp;type=assets&amp;host={ip}&amp;pos={$pos - 1}&amp;levels={../../../../levels}&amp;search_phrase={../../../../search_phrase}&amp;first_result={../../../../hosts/@start}&amp;max_results={../../../../hosts/@max}&amp;apply_overrides={$apply-overrides}&amp;token={/envelope/token}">
                   &gt;&gt;
                 </a>
               </xsl:when>
@@ -29952,6 +29954,7 @@ should not have received it.
 <!--     REPORT -->
 
 <xsl:template match="report" mode="assets">
+  <xsl:variable name="apply-overrides" select="filters/keywords/keyword[column='apply_overrides']/value"/>
   <table class="gbntable" cellspacing="2" cellpadding="4">
     <tr class="gbntablehead2">
       <td><xsl:value-of select="gsa:i18n ('IP', 'Host')"/></td>
@@ -30000,7 +30003,7 @@ should not have received it.
               </xsl:otherwise>
             </xsl:choose>
           </xsl:variable>
-          <a href="/omp?cmd=get_report&amp;type=assets&amp;host={ip}&amp;pos=1&amp;search_phrase={../filters/phrase}&amp;levels={gsa:build-levels(../filters)}&amp;first_result={../hosts/@start}&amp;max_results={../hosts/@max}&amp;overrides={../filters/apply_overrides}&amp;token={/envelope/token}"
+          <a href="/omp?cmd=get_report&amp;type=assets&amp;host={ip}&amp;pos=1&amp;search_phrase={../filters/phrase}&amp;levels={gsa:build-levels(../filters)}&amp;first_result={../hosts/@start}&amp;max_results={../hosts/@max}&amp;apply_overrides={$apply-overrides}&amp;token={/envelope/token}"
              title="{$title}" style="margin-left:3px;">
             <xsl:value-of select="$current_host"/>
             <xsl:if test="$hostname">
@@ -30033,7 +30036,7 @@ should not have received it.
           <xsl:choose>
             <xsl:when test="start/text() != ''">
               <xsl:variable name="report_id" select="detail[name = 'report/@id' and source/name = 'openvasmd']/value"/>
-              <a href="/omp?cmd=get_report&amp;report_id={$report_id}&amp;filter==&#34;{ip}&#34; notes=1 overrides=1 result_hosts_only=1 levels=hm&amp;token={/envelope/token}"
+              <a href="/omp?cmd=get_report&amp;report_id={$report_id}&amp;filter=host=&#34;{ip}&#34; apply_overrides={$apply-overrides} notes=1 overrides=1 result_hosts_only=1 levels={gsa:build-levels(../filters)}&amp;token={/envelope/token}"
                  title="{gsa-i18n:strformat (gsa:i18n ('View Report %1', 'Report'), $report_id)}">
                 <xsl:value-of select="concat (date:month-abbreviation (start/text()), ' ', date:day-in-month (start/text()), ' ', date:year (start/text()))"/>
               </a>

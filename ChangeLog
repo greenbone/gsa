@@ -1,3 +1,17 @@
+2016-03-04  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/gsad_omp.c (get_report): Add search_phrase to filter when
+	building the filter and when it is given.
+
+	* src/html/classic/gsad.xsl (html-gsa-navigation): Change overrides
+	parameter of "Hosts (Classic)" link to apply_overrides.
+
+	* src/html/classic/omp.xsl (assets, host [classic], report [assets]):
+	Update paths of filter keywords and change overrides parameter to
+	apply_overrides. Automatically submit the overrides
+	switch. Update links to use apply_overrides and the "host" keyword for
+	selecting report results. Apply the levels filter in the links.
+
 2016-03-04  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/omp.xsl (delete_trash_icon): Stay on tash page after

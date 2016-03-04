@@ -1818,7 +1818,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <li class="pointy"></li>
             <li><a href="/omp?cmd=get_assets&amp;asset_type=host&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('Hosts', 'Host')"/></a></li>
             <li><a href="/omp?cmd=get_assets&amp;asset_type=os&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('Operating Systems', 'Host')"/></a></li>
-            <li class="last"><a href="/omp?cmd=get_report&amp;type=assets&amp;overrides=1&amp;levels=hm&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('Hosts (Classic)', 'Host')"/></a></li>
+            <li class="last"><a href="/omp?cmd=get_report&amp;type=assets&amp;apply_overrides=1&amp;levels=hm&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('Hosts (Classic)', 'Host')"/></a></li>
           </ul>
         </xsl:when>
         <xsl:otherwise>

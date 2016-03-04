@@ -13854,6 +13854,16 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                               sort_field ? sort_field : "severity",
                               levels->str);
 
+      if (search_phrase && strcmp (search_phrase, ""))
+        {
+          gchar *search_phrase_escaped;
+          search_phrase_escaped = g_markup_escape_text (search_phrase, -1);
+          g_string_append_printf (filter_buffer,
+                                  " \"%s\"",
+                                  search_phrase_escaped);
+          g_free (search_phrase_escaped);
+        }
+
       if (delta_states->str && strcmp (delta_states->str, "")
           && delta_report_id && strcmp (delta_report_id, ""))
         g_string_append_printf (filter_buffer,
