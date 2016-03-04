@@ -45,7 +45,7 @@
   }
 
   BarChartGenerator.prototype = Object.create(gsa.BaseChartGenerator.prototype);
-  BarChartGenerator.constructor = gsa.BaseChartGenerator;
+  BarChartGenerator.prototype.constructor = BarChartGenerator;
 
   BarChartGenerator.prototype.init = function() {
     this.margin = {top: 40, right: 20, bottom: 40, left: 60};
