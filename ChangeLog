@@ -1,5 +1,11 @@
 2016-03-07  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/graphics.xsl: Don't use data source name twice. With the
+	current implementation the data source name isn't that importent anymore but
+	it is still a identifier and should't be reused.
+
+2016-03-07  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_graphics_base.js: Fix typo to pass correct sort
 	field to the data source.
 

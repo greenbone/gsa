@@ -205,7 +205,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:if>
     <xsl:if test="$type='report'">
       <div class="dashboard-data-source"
-        data-source-name="task-high-results-source"
+        data-source-name="report-high-results-timeline-source"
         data-aggregate-type="{$type}"
         data-group-column="date"
         data-columns="high,high_per_host"
