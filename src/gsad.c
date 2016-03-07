@@ -3563,7 +3563,7 @@ int
 send_redirect_to_urn (struct MHD_Connection *connection, const char *urn,
                       user_t *user)
 {
-  const char *host;
+  const char *host, *protocol;
   char uri[MAX_HOST_LEN];
 
   host = MHD_lookup_connection_value (connection, MHD_HEADER_KIND,
@@ -3571,8 +3571,17 @@ send_redirect_to_urn (struct MHD_Connection *connection, const char *urn,
   if (host == NULL)
     return MHD_NO;
 
-  snprintf (uri, sizeof (uri), "http%s://%s%s", use_secure_cookie ? "s" : "",
-            host, urn);
+  protocol = MHD_lookup_connection_value (connection, MHD_HEADER_KIND,
+                                          "X-Forwarded-Protocol");
+  if ((protocol == NULL) || (strcmp(protocol, "http") && strcmp(protocol, "https")))
+    {
+      if (use_secure_cookie)
+        protocol = "https";
+      else
+        protocol = "http";
+    }
+
+  snprintf (uri, sizeof (uri), "%s://%s%s", protocol, host, urn);
   return send_redirect_to_uri (connection, uri, user);
 }
 
