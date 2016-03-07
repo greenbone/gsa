@@ -3941,7 +3941,7 @@
               text_columns: ds_elem.data('text-columns'),
               filter: ds_elem.data('filter'),
               filt_id: ds_elem.data('filter-id'),
-              sort_filed: ds_elem.data('sort-field'),
+              sort_field: ds_elem.data('sort-field'),
               sort_order: ds_elem.data('sort-order'),
               sort_stat: ds_elem.data('sort-stat'),
               aggregate_mode: ds_elem.data('aggregate-mode'),
