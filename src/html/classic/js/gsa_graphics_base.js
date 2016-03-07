@@ -25,17 +25,8 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-(function(global, window, document, d3, $, console) {
+(function(global, window, document, gsa, d3, $, console) {
   'use strict';
-  /*
-  * GSA base object
-  */
-  if (global.gsa === undefined) {
-    global.gsa = {};
-  }
-
-  var gsa = global.gsa;
-
   if (gsa.dashboards === undefined) {
     gsa.dashboards = {};
   }
@@ -4063,6 +4054,7 @@
     on_ready(document);
   });
 
-})(window, window, window.document, window.d3, window.$, window.console);
+})(window, window, window.document, window.gsa, window.d3, window.$,
+  window.console);
 
 // vim: set ts=2 sw=2 tw=80:

@@ -1,3 +1,9 @@
+2016-03-07  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/js/greenbone.js, src/html/classic/js/gsa_graphics_base.js:
+	Move declaration of gsa object into greenbone.js. The gsa object will be our
+	common module in future.
+
 2016-03-04  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/graphics.xsl (js-scan-management-top-visualization)

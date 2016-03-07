@@ -46,6 +46,15 @@
       .text();
   };
 
+  /*
+  * GSA base object
+  */
+  if (global.gsa === undefined) {
+    global.gsa = {};
+  }
+
+  var gsa = global.gsa;
+
   var RESPONSE_SELECTORS = {
     new_agent:           'create_agent_response',
     new_host:            'create_asset_response',
