@@ -15204,21 +15204,21 @@ get_result (credentials_t *credentials, const char *result_id,
                             "%s"
                             "<get_results"
                             " result_id=\"%s\""
-                            " autofp=\"%s\""
                             "%s%s%s"
-                            " apply_overrides=\"%s\""
-                            " overrides=\"%s\""
+                            " filter=\"autofp=%s"
+                            " apply_overrides=%s"
+                            " overrides=%s"
+                            " notes=1\""
                             " overrides_details=\"1\""
-                            " notes=\"1\""
                             " notes_details=\"1\""
                             " details=\"1\"/>"
                             "</commands>",
                             commands ? commands : "",
                             result_id,
-                            autofp,
                             task_id ? " task_id=\"" : "",
                             task_id ? task_id : "",
                             task_id ? "\"" : "",
+                            autofp,
                             apply_overrides,
                             apply_overrides)
       == -1)

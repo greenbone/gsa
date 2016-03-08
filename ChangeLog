@@ -1,3 +1,8 @@
+2016-03-08  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/gsad_omp.c (get_result): Pass autofp, apply_override, notes
+	and overrides to get_results as filter keywords, not as attributes.
+
 2016-03-07  Benoît Allard  <benoit.allard@greenbone.net>
 
 	* src/gsad.c (send_redirect_to_urn): Use the X-Forwarded-Protocol
