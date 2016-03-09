@@ -4496,6 +4496,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </a>
       </xsl:when>
     </xsl:choose>
+
+    <div id="list-window-filter" style="margin-bottom:5px">
+      <xsl:call-template name="filter-window-part">
+        <xsl:with-param name="type" select="$type"/>
+        <xsl:with-param name="subtype" select="$subtype"/>
+        <xsl:with-param name="list" select="$resources-summary"/>
+        <xsl:with-param name="columns" select="$columns" xmlns=""/>
+        <xsl:with-param name="extra_params" xmlns="">
+          <xsl:copy-of select="$extra_params"/>
+          <xsl:if test="$subtype != ''">
+            <param>
+              <name><xsl:value-of select="$type"/>_type</name>
+              <value><xsl:value-of select="$subtype"/></value>
+            </param>
+          </xsl:if>
+        </xsl:with-param>
+      </xsl:call-template>
+    </div>
   </div>
 
   <div id="list-window-header" class="clearfix">
@@ -4520,24 +4538,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </h2>
 
       </div>
-    </div>
-
-    <div id="list-window-filter" style="margin-top:-27px">
-      <xsl:call-template name="filter-window-part">
-        <xsl:with-param name="type" select="$type"/>
-        <xsl:with-param name="subtype" select="$subtype"/>
-        <xsl:with-param name="list" select="$resources-summary"/>
-        <xsl:with-param name="columns" select="$columns" xmlns=""/>
-        <xsl:with-param name="extra_params" xmlns="">
-          <xsl:copy-of select="$extra_params"/>
-          <xsl:if test="$subtype != ''">
-            <param>
-              <name><xsl:value-of select="$type"/>_type</name>
-              <value><xsl:value-of select="$subtype"/></value>
-            </param>
-          </xsl:if>
-        </xsl:with-param>
-      </xsl:call-template>
     </div>
   </div>
 

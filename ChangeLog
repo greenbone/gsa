@@ -1,3 +1,8 @@
+2016-03-09  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/omp.xsl (list-window): Move filter box into toolbar
+	so it does not overlap with title if window is not wide enough.
+
 2016-03-08  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/gsad_omp.c (get_result): Pass autofp, apply_override, notes
