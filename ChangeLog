@@ -1,3 +1,16 @@
+2016-03-09  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/classic/img/os_arubanetworks.png,
+	src/html/classic/img/os_checkpoint.png,
+	src/html/classic/img/os_huawai.png,
+	src/html/classic/img/os_ipfire.png,
+	src/html/classic/img/os_mcafee.png,
+	src/html/classic/img/os_ruggedcom.png,
+	src/html/classic/img/os_sourcefire.png,
+	src/html/classic/img/os_synology.png: New.
+
+	* CMakeLists.txt: Install new icons.
+
 2016-03-09  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/omp.xsl (list-window): Move filter box into toolbar
@@ -459,7 +472,7 @@
 	* src/html/classic/js/gsa_graphics_base.js (field_name): Replace undescores
 	with spaces for field names.
 
-	2016-02-25  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+2016-02-25  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/classic/gsad.xsl (html-gsa-navigation): Removed indention
 	in menu "Configuration". Credentials are used in other places meanwhile

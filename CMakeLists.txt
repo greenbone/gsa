@@ -530,7 +530,9 @@ install (FILES src/html/classic/img/style/gsa-logo.png
 
 install (FILES  src/html/classic/img/os_aix.png
                 src/html/classic/img/os_apple.png
+                src/html/classic/img/os_arubanetworks.png
                 src/html/classic/img/os_centos.png
+                src/html/classic/img/os_checkpoint.png
                 src/html/classic/img/os_cisco.png
                 src/html/classic/img/os_conflict.png
                 src/html/classic/img/os_cyclades.png
@@ -542,17 +544,23 @@ install (FILES  src/html/classic/img/os_aix.png
                 src/html/classic/img/os_gos.png
                 src/html/classic/img/os_junos.png
                 src/html/classic/img/os_hp.png
+                src/html/classic/img/os_huawai.png
+                src/html/classic/img/os_ipfire.png
                 src/html/classic/img/os_linux.png
                 src/html/classic/img/os_mandriva.png
+                src/html/classic/img/os_mcafee.png
                 src/html/classic/img/os_netbsd.png
                 src/html/classic/img/os_netgear.png
                 src/html/classic/img/os_novell.png
                 src/html/classic/img/os_openbsd.png
                 src/html/classic/img/os_paloalto.png
                 src/html/classic/img/os_redhat.png
+                src/html/classic/img/os_ruggedcom.png
                 src/html/classic/img/os_slackware.png
+                src/html/classic/img/os_sourcefire.png
                 src/html/classic/img/os_sun.png
                 src/html/classic/img/os_suse.png
+                src/html/classic/img/os_synology.png
                 src/html/classic/img/os_trustix.png
                 src/html/classic/img/os_ubuntu.png
                 src/html/classic/img/os_ucs.png
