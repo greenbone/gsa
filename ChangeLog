@@ -1,3 +1,48 @@
+2016-03-11  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Use the standard filter boxes for report section pages where applicable
+	and add options for report filtering to them.  Change the report
+	section pages to the new style overall.
+
+	* CMakeLists.txt: Install new dropdown icon in classic face.
+
+	* src/html/classic/img/style/dropdown_arrow_black.png: New icon.
+
+	* src/html/classic/css/gsa-style.css (progressbar_box): Set display
+	property to inline-block.
+	(#report_section_list ul li a): Change text color to black.
+	(#report_section_list ul li a#section_list_first)
+	(#report_section_list:hover ul li a#section_list_first): Move arrow
+	down 3 pixels and use black icon for inactive menu.
+	(.ctrl-group, .ctrl-group .left-column, .ctrl-group .right-column):
+	Use table and table-row display property instead of absolute
+	positioning and margins.
+
+	* src/html/classic/omp.xsl (filter-window-pager): Add special cases
+	for type "report_result" so template can be used on report section
+	pages.
+	(filter-window-part): Add param "filter_options" to force options to
+	be visible even if the keyword is missing.  Add param "filters" to
+	give the list of all filters.  Limit size of text box showing "extra"
+	filter keywords.  Add input fields for keywords "delta_states",
+	"notes", "overrides", "result_hosts_only", "min_cvss_base", "min_qod",
+	"timezone", "levels".
+	(report [section-filter-restricted]): New template for "restricted"
+	report section filter.
+	(report [section-filter-full]): New template. Uses list-window-filter
+	to create full report section filter box.
+	(report [section-pager]): New template. Uses filter-window-pager
+	to create pagination elements for report sections.
+	(report [section-toolbar]): New template for icon and filter toolbar.
+	(report-section-header): New template for main page header.
+	(report [results], report [hosts], report [hosts], report [ports])
+	(report [vulns], report [os], report [apps]): Change to new design
+	using new toolbar, header and pager templates.
+	(report-icons): Remove status bar, which was moved to the header line.
+	(report [closed_cves], report [cves], report [ssl_certs])
+	(report [errors], report [summary]): Change to new design using new
+	toolbar, header and pager templates.
+
 2016-03-09  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/classic/img/os_arubanetworks.png,

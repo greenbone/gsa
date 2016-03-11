@@ -900,6 +900,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="filtered_count"/>
   <xsl:param name="full_count"/>
   <xsl:param name="extra_params"/>
+
+  <xsl:variable name="get_cmd">
+    <xsl:choose>
+      <xsl:when test="$type='report_result'">
+        <xsl:value-of select="'get_report_section'"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="concat ('get_', gsa:type-many($type))"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
   <xsl:choose>
     <xsl:when test="$count &gt; 0">
       <xsl:variable name="last" select="$list/@start + $count - 1"/>
@@ -909,7 +920,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <!-- Left icons. -->
       <xsl:choose>
         <xsl:when test = "$list/@start &gt; 1">
-          <a href="?cmd=get_{gsa:type-many($type)}{$extra_params}&amp;filter=first=1 rows={$list/@max} {filters/term}&amp;token={/envelope/token}"><img style="margin-left:10px;margin-right:3px;" src="/img/first.png" title="{gsa:i18n ('First', 'Pagination')}"/></a>
+          <a href="?cmd={$get_cmd}{$extra_params}&amp;filter=first=1 rows={$list/@max} {filters/term}&amp;token={/envelope/token}"><img style="margin-left:10px;margin-right:3px;" src="/img/first.png" title="{gsa:i18n ('First', 'Pagination')}"/></a>
         </xsl:when>
         <xsl:otherwise>
           <img style="margin-left:10px;margin-right:3px;" src="/img/first_inactive.png" title="{gsa:i18n ('Already on first page', 'Pagination')}"/>
@@ -917,10 +928,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
       <xsl:choose>
         <xsl:when test="$list/@start > $list/@max and $list/@max &gt; 0">
-          <a href="?cmd=get_{gsa:type-many($type)}{$extra_params}&amp;filter=first={$list/@start - $list/@max} rows={$list/@max} {filters/term}&amp;token={/envelope/token}"><img style="margin-right:3px;" src="/img/previous.png" title="{gsa:i18n ('Previous', 'Pagination')}"/></a>
+          <a href="?cmd={$get_cmd}{$extra_params}&amp;filter=first={$list/@start - $list/@max} rows={$list/@max} {filters/term}&amp;token={/envelope/token}"><img style="margin-right:3px;" src="/img/previous.png" title="{gsa:i18n ('Previous', 'Pagination')}"/></a>
         </xsl:when>
         <xsl:when test="$list/@start &gt; 1 and $list/@max &gt; 0">
-          <a href="?cmd=get_{gsa:type-many($type)}{$extra_params}&amp;filter=first=1 rows={$list/@max} {filters/term}&amp;token={/envelope/token}"><img style="margin-right:3px;" src="/img/previous.png" title="{gsa:i18n ('Previous', 'Pagination')}"/></a>
+          <a href="?cmd={$get_cmd}{$extra_params}&amp;filter=first=1 rows={$list/@max} {filters/term}&amp;token={/envelope/token}"><img style="margin-right:3px;" src="/img/previous.png" title="{gsa:i18n ('Previous', 'Pagination')}"/></a>
         </xsl:when>
         <xsl:otherwise>
           <img style="margin-right:3px;" src="/img/previous_inactive.png" title="{gsa:i18n ('Already on first page', 'Pagination')}"/>
@@ -934,7 +945,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <!-- Right icons. -->
       <xsl:choose>
         <xsl:when test = "$last &lt; $filtered_count">
-          <a href="?cmd=get_{gsa:type-many($type)}{$extra_params}&amp;filter=first={$list/@start + $list/@max} rows={$list/@max} {filters/term}&amp;token={/envelope/token}"><img style="margin-left:3px;" src="/img/next.png" title="{gsa:i18n ('Next', 'Pagination')}"/></a>
+          <a href="?cmd={$get_cmd}{$extra_params}&amp;filter=first={$list/@start + $list/@max} rows={$list/@max} {filters/term}&amp;token={/envelope/token}"><img style="margin-left:3px;" src="/img/next.png" title="{gsa:i18n ('Next', 'Pagination')}"/></a>
         </xsl:when>
         <xsl:otherwise>
           <img style="margin-left:3px;" src="/img/next_inactive.png" title="{gsa:i18n ('Already on last page', 'Pagination')}"/>
@@ -942,7 +953,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
       <xsl:choose>
         <xsl:when test = "$last &lt; $filtered_count">
-          <a href="?cmd=get_{gsa:type-many($type)}{$extra_params}&amp;filter=first={floor(($filtered_count - 1) div $list/@max) * $list/@max + 1} rows={$list/@max} {filters/term}&amp;token={/envelope/token}"><img style="margin-left:3px;margin-right:10px;" src="/img/last.png" title="{gsa:i18n ('Last', 'Pagination')}"/></a>
+          <a href="?cmd={$get_cmd}{$extra_params}&amp;filter=first={floor(($filtered_count - 1) div $list/@max) * $list/@max + 1} rows={$list/@max} {filters/term}&amp;token={/envelope/token}"><img style="margin-left:3px;margin-right:10px;" src="/img/last.png" title="{gsa:i18n ('Last', 'Pagination')}"/></a>
         </xsl:when>
         <xsl:otherwise>
           <img style="margin-left:3px;margin-right:10px;" src="/img/last_inactive.png" title="{gsa:i18n ('Already on last page', 'Pagination')}"/>
@@ -993,6 +1004,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="list"/>
   <xsl:param name="extra_params"/>
   <xsl:param name="columns"/>
+  <xsl:param name="filter_options" select="''"/>
+  <xsl:param name="filters" select="../filters"/>
+
+  <xsl:variable name="filter_options_nodes" select="exslt:node-set($filter_options)"/>
   <xsl:choose>
     <xsl:when test="0"/>
     <xsl:otherwise>
@@ -1005,20 +1020,39 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <input type="hidden" name="caller" value="{/envelope/current_page}"/>
               <input type="hidden" name="comment" value=""/>
               <input type="hidden" name="term" value="{filters/term}"/>
-              <input type="hidden" name="optional_resource_type" value="{$type}"/>
-              <input type="hidden" name="next" value="get_{gsa:type-many($type)}"/>
+              <xsl:choose>
+                <xsl:when test="$type = 'report_result'">
+                  <input type="hidden" name="optional_resource_type" value="result"/>
+                  <input type="hidden" name="next" value="get_report_section"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <input type="hidden" name="optional_resource_type" value="{$type}"/>
+                  <input type="hidden" name="next" value="get_{gsa:type-many($type)}"/>
+                </xsl:otherwise>
+              </xsl:choose>
               <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
               <xsl:for-each select="exslt:node-set($extra_params)/param">
                 <input type="hidden" name="{name}" value="{value}"/>
              </xsl:for-each>
              <input type="text" name="name" value="" size="10"
                     maxlength="80" style="vertical-align:middle"/>
+
+             <xsl:variable name="type-name">
+              <xsl:choose>
+                <xsl:when test="$type = 'report_result'">
+                  <xsl:value-of select="Result"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:value-of select="gsa:type-name ($type)"/>
+                </xsl:otherwise>
+              </xsl:choose>
+             </xsl:variable>
              <!-- i18n with concat : see dynamic_strings.xsl - type-new-filter -->
              <input type="image"
                     name="New Filter"
                     src="/img/new.png"
                     alt="{gsa:i18n ('New Filter', 'Filter')}"
-                    title="{gsa:i18n (concat ('New ', gsa:type-name ($type), ' Filter from current term'), gsa:type-name ($type))}"
+                    title="{gsa:i18n (concat ('New ', $type-name, ' Filter from current term'), $type-name)}"
                     style="vertical-align:middle;margin-left:3px;margin-right:3px;"/>
            </div>
          </form>
@@ -1027,14 +1061,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
          <form style="display: inline;" action="" method="get" name="switch_filter" enctype="multipart/form-data">
            <div style="display: inline;">
              <input type="hidden" name="token" value="{/envelope/token}"/>
-             <input type="hidden" name="cmd" value="get_{gsa:type-many($type)}"/>
+             <xsl:choose>
+              <xsl:when test="$type = 'report_result'">
+                <input type="hidden" name="cmd" value="get_report_section"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <input type="hidden" name="cmd" value="get_{gsa:type-many($type)}"/>
+              </xsl:otherwise>
+             </xsl:choose>
              <xsl:for-each select="exslt:node-set($extra_params)/param">
                <input type="hidden" name="{name}" value="{value}"/>
              </xsl:for-each>
              <select style="margin-bottom: 0px; max-width: 100px;" name="filt_id" onchange="switch_filter.submit()">
                <option value="--">--</option>
                <xsl:variable name="id" select="filters/@id"/>
-               <xsl:for-each select="../filters/get_filters_response/filter">
+               <xsl:for-each select="$filters/get_filters_response/filter">
                  <xsl:choose>
                    <xsl:when test="@id = $id">
                      <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
@@ -1061,7 +1102,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
      </xsl:variable>
 
      <input type="hidden" name="token" value="{/envelope/token}"/>
-     <input type="hidden" name="cmd" value="get_{gsa:type-many($type)}"/>
+     <xsl:choose>
+      <xsl:when test="$type = 'report_result'">
+        <input type="hidden" name="cmd" value="get_report_section"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <input type="hidden" name="cmd" value="get_{gsa:type-many($type)}"/>
+      </xsl:otherwise>
+     </xsl:choose>
      <xsl:for-each select="exslt:node-set($extra_params)/param">
        <input type="hidden" name="{name}" value="{value}"/>
      </xsl:for-each>
@@ -1091,7 +1139,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        </xsl:variable>
        <input type="hidden" name="filter_extra" value="{$extra}" />
      </div>
-     <div class="footnote">
+     <div class="footnote" style="width:555px">
        <xsl:value-of select="$extra"/>
      </div>
      <div id="filterbox" style="display: none;">
@@ -1119,7 +1167,72 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </div>
          </div>
        </xsl:if>
-       <xsl:if test="filters/keywords/keyword[column='apply_overrides']">
+      <xsl:if test="delta or $filter_options_nodes/option[text()='delta_states']">
+        <div class="ctrl-group">
+          <label class="left-column">
+            <xsl:value-of select="gsa:i18n ('Show delta results', 'Report Filter')"/>:
+          </label>
+          <span class="right-column">
+            <span style="margin-left: 0px;">
+              <label>
+                <xsl:choose>
+                  <xsl:when test="filters/delta/same = 0">
+                    <input type="checkbox" name="delta_state_same" value="1"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="checkbox" name="delta_state_same"
+                            value="1" checked="1"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+                = <xsl:value-of select="gsa:i18n ('same', 'Delta Result')"/>
+              </label>
+            </span>
+            <span style="margin-left: 18px;">
+              <label>
+                <xsl:choose>
+                  <xsl:when test="filters/delta/new = 0">
+                    <input type="checkbox" name="delta_state_new" value="1"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="checkbox" name="delta_state_new"
+                            value="1" checked="1"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+                + <xsl:value-of select="gsa:i18n ('new', 'Delta Result')"/>
+              </label>
+            </span>
+            <span style="margin-left: 18px;">
+              <label>
+                <xsl:choose>
+                  <xsl:when test="filters/delta/gone = 0">
+                    <input type="checkbox" name="delta_state_gone" value="1"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="checkbox" name="delta_state_gone"
+                            value="1" checked="1"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+                &#8722; <xsl:value-of select="gsa:i18n ('gone', 'Delta Result')"/>
+              </label>
+            </span>
+            <span style="margin-left: 18px;">
+              <label>
+                <xsl:choose>
+                  <xsl:when test="filters/delta/changed = 0">
+                    <input type="checkbox" name="delta_state_changed" value="1"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="checkbox" name="delta_state_changed"
+                            value="1" checked="1"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+                ~ <xsl:value-of select="gsa:i18n ('changed', 'Delta Result')"/>
+              </label>
+            </span>
+          </span>
+        </div>
+      </xsl:if>
+       <xsl:if test="filters/keywords/keyword[column='apply_overrides'] or $filter_options_nodes/option[text()='apply_overrides']">
          <div class="ctrl-group">
            <xsl:variable name="apply_overrides"
              select="filters/keywords/keyword[column='apply_overrides']/value"/>
@@ -1139,10 +1252,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
            </label>
          </div>
        </xsl:if>
-       <xsl:if test="filters/keywords/keyword[column='autofp_value']">
+       <xsl:if test="filters/keywords/keyword[column='autofp'] or $filter_options_nodes/option[text()='autofp']">
          <div class="ctrl-group">
            <label class="left-column"><xsl:value-of select="gsa:i18n ('Auto-FP', 'Report Filter')"/>:</label>
-           <div style="margin-left: 30px" class="right-column">
+           <div class="right-column">
              <label>
                <xsl:choose>
                  <xsl:when test="filters/keywords/keyword[column='autofp']/value = 0">
@@ -1157,7 +1270,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
              <div style="margin-left: 30px">
                <label>
                  <xsl:choose>
-                   <xsl:when test="filters/keywords/keyword[column='autofp']/value = 2">
+                   <xsl:when test="filters/keywords/keyword[column='autofp']/value = 1">
                      <input type="radio" name="autofp_value" value="1"/>
                    </xsl:when>
                    <xsl:otherwise>
@@ -1181,7 +1294,327 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
            </div>
          </div>
        </xsl:if>
-       <xsl:if test="filters/keywords/keyword[column='first']">
+       <xsl:if test="filters/keywords/keyword[column='notes'] or $filter_options_nodes/option[text()='notes']">
+         <div class="ctrl-group">
+           <label class="left-column">
+             <xsl:value-of select="gsa:i18n ('Show Notes', 'Filter')"/>:
+           </label>
+           <label class="right-column">
+             <xsl:choose>
+               <xsl:when test="filters/keywords/keyword[column='notes']/value = '0'">
+                 <input type="checkbox" name="notes" value="1"/>
+               </xsl:when>
+               <xsl:otherwise>
+                 <input type="checkbox" name="notes" value="1"
+                   checked="1"/>
+               </xsl:otherwise>
+             </xsl:choose>
+           </label>
+         </div>
+       </xsl:if>
+       <xsl:if test="filters/keywords/keyword[column='overrides'] or $filter_options_nodes/option[text()='overrides']">
+         <div class="ctrl-group">
+           <label class="left-column">
+             <xsl:value-of select="gsa:i18n ('Show Overrides', 'Filter')"/>:
+           </label>
+           <label class="right-column">
+             <xsl:choose>
+               <xsl:when test="filters/keywords/keyword[column='overrides']/value = '0'">
+                 <input type="checkbox" name="overrides" value="1"/>
+               </xsl:when>
+               <xsl:otherwise>
+                 <input type="checkbox" name="overrides" value="1"
+                   checked="1"/>
+               </xsl:otherwise>
+             </xsl:choose>
+           </label>
+         </div>
+       </xsl:if>
+       <xsl:if test="filters/keywords/keyword[column='result_hosts_only'] or $filter_options_nodes/option[text()='result_hosts_only']">
+         <div class="ctrl-group">
+           <label class="left-column">
+             <xsl:value-of select="gsa:i18n ('Only show hosts that have results', 'Filter')"/>:
+           </label>
+           <label class="right-column">
+             <xsl:choose>
+               <xsl:when test="filters/keywords/keyword[column='result_hosts_only']/value = '0'">
+                 <input type="checkbox" name="result_hosts_only" value="1"/>
+               </xsl:when>
+               <xsl:otherwise>
+                 <input type="checkbox" name="result_hosts_only" value="1"
+                   checked="1"/>
+               </xsl:otherwise>
+             </xsl:choose>
+           </label>
+         </div>
+       </xsl:if>
+       <xsl:if test="filters/keywords/keyword[column='min_cvss_base'] or $filter_options_nodes/option[text()='min_cvss_base']">
+         <div class="ctrl-group">
+            <label class="left-column">
+             <xsl:value-of select="gsa:i18n ('CVSS of NVT', 'Filter')"/>:
+            </label>
+            <span class="right-column">
+              <label>
+                <xsl:choose>
+                  <xsl:when test="not (filters/keywords/keyword[column = 'min_cvss_base'])">
+                    <input type="checkbox" name="apply_min_cvss_base" value="1"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="checkbox" name="apply_min_cvss_base" value="1"
+                            checked="1"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+                <xsl:value-of select="gsa:i18n ('must be at least', 'Filter')"/>
+                <xsl:text> </xsl:text>
+              </label>
+              <select name="min_cvss_base">
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'10.0'"/>
+                  <xsl:with-param name="select-value" select="filters/keywords/keyword[column = 'min_cvss_base']/value"/>
+                </xsl:call-template>
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'9.0'"/>
+                  <xsl:with-param name="select-value" select="filters/keywords/keyword[column = 'min_cvss_base']/value"/>
+                </xsl:call-template>
+                <xsl:choose>
+                  <xsl:when test="not (filters/keywords/keyword[column = 'min_cvss_base']/value = '')">
+                    <xsl:call-template name="opt">
+                      <xsl:with-param name="value" select="'8.0'"/>
+                      <xsl:with-param name="select-value" select="'8.0'"/>
+                    </xsl:call-template>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <xsl:call-template name="opt">
+                      <xsl:with-param name="value" select="'8.0'"/>
+                      <xsl:with-param name="select-value" select="filters/keywords/keyword[column = 'min_cvss_base']/value"/>
+                    </xsl:call-template>
+                  </xsl:otherwise>
+                </xsl:choose>
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'7.0'"/>
+                  <xsl:with-param name="select-value" select="filters/keywords/keyword[column = 'min_cvss_base']/value"/>
+                </xsl:call-template>
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'6.0'"/>
+                  <xsl:with-param name="select-value" select="filters/keywords/keyword[column = 'min_cvss_base']/value"/>
+                </xsl:call-template>
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'5.0'"/>
+                  <xsl:with-param name="select-value" select="filters/keywords/keyword[column = 'min_cvss_base']/value"/>
+                </xsl:call-template>
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'4.0'"/>
+                  <xsl:with-param name="select-value" select="filters/keywords/keyword[column = 'min_cvss_base']/value"/>
+                </xsl:call-template>
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'3.0'"/>
+                  <xsl:with-param name="select-value" select="filters/keywords/keyword[column = 'min_cvss_base']/value"/>
+                </xsl:call-template>
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'2.0'"/>
+                  <xsl:with-param name="select-value" select="filters/keywords/keyword[column = 'min_cvss_base']/value"/>
+                </xsl:call-template>
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'1.0'"/>
+                  <xsl:with-param name="select-value" select="filters/keywords/keyword[column = 'min_cvss_base']/value"/>
+                </xsl:call-template>
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'0.0'"/>
+                  <xsl:with-param name="select-value" select="filters/keywords/keyword[column = 'min_cvss_base']/value"/>
+                </xsl:call-template>
+              </select>
+            </span>
+         </div>
+       </xsl:if>
+       <xsl:if test="filters/keywords/keyword[column='min_qod'] or $filter_options_nodes/option[text()='min_qod']">
+         <div class="ctrl-group">
+          <label class="left-column">
+             <xsl:value-of select="gsa:i18n ('QoD of Results', 'Filter')"/>:
+          </label>
+          <span class="right-column">
+            <label>
+              <xsl:choose>
+                <xsl:when test="not (filters/keywords/keyword[column = 'min_qod'])">
+                  <input type="checkbox" name="apply_min_qod" value="1"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <input type="checkbox" name="apply_min_qod" value="1"
+                          checked="1"/>
+                </xsl:otherwise>
+              </xsl:choose>
+              <xsl:value-of select="gsa:i18n ('must be at least', 'Filter')"/>
+              <xsl:text> </xsl:text>
+            </label>
+            <select name="min_qod">
+              <xsl:call-template name="opt">
+                <xsl:with-param name="value" select="'100'"/>
+                <xsl:with-param name="select-value" select="filters/keywords/keyword[column = 'min_qod']/value"/>
+              </xsl:call-template>
+              <xsl:call-template name="opt">
+                <xsl:with-param name="value" select="'90'"/>
+                <xsl:with-param name="select-value" select="filters/keywords/keyword[column = 'min_qod']/value"/>
+              </xsl:call-template>
+              <xsl:call-template name="opt">
+                <xsl:with-param name="value" select="'80'"/>
+                <xsl:with-param name="select-value" select="filters/keywords/keyword[column = 'min_qod']/value"/>
+              </xsl:call-template>
+              <xsl:choose>
+                <xsl:when test="not (filters/keywords/keyword[column = 'min_qod']/value != '')">
+                  <xsl:call-template name="opt">
+                    <xsl:with-param name="value" select="'70'"/>
+                    <xsl:with-param name="select-value" select="'70'"/>
+                  </xsl:call-template>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:call-template name="opt">
+                    <xsl:with-param name="value" select="'70'"/>
+                    <xsl:with-param name="select-value" select="report/filters/keywords/keyword[column = 'min_qod']/value"/>
+                  </xsl:call-template>
+                </xsl:otherwise>
+              </xsl:choose>
+              <xsl:call-template name="opt">
+                <xsl:with-param name="value" select="'60'"/>
+                <xsl:with-param name="select-value" select="filters/keywords/keyword[column = 'min_qod']/value"/>
+              </xsl:call-template>
+              <xsl:call-template name="opt">
+                <xsl:with-param name="value" select="'50'"/>
+                <xsl:with-param name="select-value" select="filters/keywords/keyword[column = 'min_qod']/value"/>
+              </xsl:call-template>
+              <xsl:call-template name="opt">
+                <xsl:with-param name="value" select="'40'"/>
+                <xsl:with-param name="select-value" select="filters/keywords/keyword[column = 'min_qod']/value"/>
+              </xsl:call-template>
+              <xsl:call-template name="opt">
+                <xsl:with-param name="value" select="'30'"/>
+                <xsl:with-param name="select-value" select="filters/keywords/keyword[column = 'min_qod']/value"/>
+              </xsl:call-template>
+              <xsl:call-template name="opt">
+                <xsl:with-param name="value" select="'20'"/>
+                <xsl:with-param name="select-value" select="filters/keywords/keyword[column = 'min_qod']/value"/>
+              </xsl:call-template>
+              <xsl:call-template name="opt">
+                <xsl:with-param name="value" select="'10'"/>
+                <xsl:with-param name="select-value" select="filters/keywords/keyword[column = 'min_qod']/value"/>
+              </xsl:call-template>
+              <xsl:call-template name="opt">
+                <xsl:with-param name="value" select="'0'"/>
+                <xsl:with-param name="select-value" select="filters/keywords/keyword[column = 'min_qod']/value"/>
+              </xsl:call-template>
+            </select>
+            <xsl:text>%</xsl:text>
+           </span>
+         </div>
+       </xsl:if>
+       <xsl:if test="filters/keywords/keyword[column='timezone'] or $filter_options_nodes/option[text()='timezone']">
+        <div class="ctrl-group">
+          <label class="left-column">
+             <xsl:value-of select="gsa:i18n ('Timezone', 'Time')"/>:
+          </label>
+          <span class="right-column" style="margin-top:0px">
+            <xsl:call-template name="timezone-select">
+              <xsl:with-param name="timezone" select="timezone"/>
+              <xsl:with-param name="input-name" select="'timezone'"/>
+            </xsl:call-template>
+           </span>
+        </div>
+       </xsl:if>
+
+       <xsl:if test="filters/keywords/keyword[column='levels'] or $filter_options_nodes/option[text()='levels']">
+        <div class="ctrl-group">
+          <label class="left-column">
+            <xsl:value-of select="gsa:i18n ('Severity', 'Severity')"/>:
+          </label>
+          <table class="right-column" style="display: inline">
+            <tr>
+              <td class="threat_info_table_h">
+                <label>
+                  <xsl:choose>
+                    <xsl:when test="filters/filter[text()='High']">
+                      <input type="checkbox" name="level_high" value="1"
+                              checked="1"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <input type="checkbox" name="level_high" value="1"/>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                  <xsl:call-template name="severity-label">
+                    <xsl:with-param name="level" select="'High'"/>
+                  </xsl:call-template>
+                </label>
+              </td>
+              <td class="threat_info_table_h">
+                <label>
+                  <xsl:choose>
+                    <xsl:when test="filters/filter[text()='Medium']">
+                      <input type="checkbox" name="level_medium" value="1"
+                              checked="1"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <input type="checkbox" name="level_medium" value="1"/>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                  <xsl:call-template name="severity-label">
+                    <xsl:with-param name="level" select="'Medium'"/>
+                  </xsl:call-template>
+                </label>
+              </td>
+              <td class="threat_info_table_h">
+                <label>
+                  <xsl:choose>
+                    <xsl:when test="filters/filter[text()='Low']">
+                      <input type="checkbox" name="level_low" value="1"
+                              checked="1"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <input type="checkbox" name="level_low" value="1"/>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                  <xsl:call-template name="severity-label">
+                    <xsl:with-param name="level" select="'Low'"/>
+                  </xsl:call-template>
+                </label>
+              </td>
+              <td class="threat_info_table_h">
+                <label>
+                  <xsl:choose>
+                    <xsl:when test="filters/filter[text()='Log']">
+                      <input type="checkbox" name="level_log" value="1"
+                              checked="1"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <input type="checkbox" name="level_log" value="1"/>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                  <xsl:call-template name="severity-label">
+                    <xsl:with-param name="level" select="'Log'"/>
+                  </xsl:call-template>
+                </label>
+              </td>
+              <td class="threat_info_table_h">
+                <label>
+                  <xsl:choose>
+                    <xsl:when test="filters/filter[text()='False Positive']">
+                      <input type="checkbox"
+                              name="level_false_positive"
+                              value="1"
+                              checked="1"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <input type="checkbox"
+                              name="level_false_positive"
+                              value="1"/>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                  <xsl:call-template name="severity-label">
+                    <xsl:with-param name="level" select="'False Positive'"/>
+                  </xsl:call-template>
+                </label>
+              </td>
+            </tr>
+          </table>
+        </div>
+       </xsl:if>
+       <xsl:if test="filters/keywords/keyword[column='first'] or $filter_options_nodes/option[text()='first']">
          <div class="ctrl-group">
            <label for="first" class="left-column"><xsl:value-of select="gsa:i18n ('First result', 'Filter')"/>:</label>
            <input type="text" name="first" size="5"
@@ -1189,7 +1622,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
              maxlength="400" class="right-column"/>
          </div>
        </xsl:if>
-       <xsl:if test="filters/keywords/keyword[column='rows']">
+       <xsl:if test="filters/keywords/keyword[column='rows'] or $filter_options_nodes/option[text()='rows']">
          <div class="ctrl-group">
            <label for="max" class="left-column"><xsl:value-of select="gsa:i18n ('Results per page', 'Filter')"/>:</label>
            <input type="text" name="max" size="5"
@@ -3442,6 +3875,308 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
+<xsl:template match="report" mode="section-filter-restricted">
+  <xsl:param name="report_section" select="'results'"/>
+  <xsl:param name="extra_params" select="''"/>
+
+  <xsl:variable name="filter_term" select="/envelope/params/filter"/>
+  <xsl:variable name="apply-overrides"
+                select="filters/apply_overrides"/>
+
+  <div id="list-window-filter" style="margin-bottom:5px">
+    <form name="filterform" method="get" action="" enctype="multipart/form-data" class="pull-right">
+      <input type="hidden" name="token" value="{/envelope/token}"/>
+      <input type="hidden" name="cmd" value="get_report_section"/>
+      <input type="hidden" name="report_id" value="{@id}"/>
+      <input type="hidden" name="report_section" value="{$report_section}"/>
+      <input type="hidden" name="overrides" value="{$apply-overrides}"/>
+      <input type="hidden" name="details" value="{/envelope/params/details}"/>
+      <xsl:if test="@type='prognostic'">
+        <input type="hidden" name="type" value="prognostic"/>
+        <input type="hidden" name="host" value="{filters/host}"/>
+        <input type="hidden" name="host_search_phrase" value="{/envelope/params/host_search_phrase}"/>
+        <input type="hidden" name="host_levels" value="{/envelope/params/host_levels}"/>
+        <input type="hidden" name="host_first_result" value="{/envelope/params/host_first_result}"/>
+        <input type="hidden" name="host_max_results" value="{/envelope/params/host_max_results}"/>
+        <input type="hidden" name="pos" value="{/envelope/params/pos}"/>
+      </xsl:if>
+      <xsl:if test="@type='delta'">
+        <input type="hidden" name="delta_report_id" value="{delta/report/@id}"/>
+      </xsl:if>
+      <select name="apply_filter" style="min-width:250px">
+        <xsl:choose>
+          <xsl:when test="/envelope/params/apply_filter = 'no_pagination' or not(/envelope/params/apply_filter != '')">
+            <option value="no_pagination" selected="1">&#8730;<xsl:value-of select="gsa:i18n ('Use filtered results (all pages)', 'Filter')"/></option>
+          </xsl:when>
+          <xsl:otherwise>
+            <option value="no_pagination"><xsl:value-of select="gsa:i18n ('Use filtered results (all pages)', 'Filter')"/></option>
+          </xsl:otherwise>
+        </xsl:choose>
+        <xsl:choose>
+          <xsl:when test="/envelope/params/apply_filter = 'no'">
+            <option value="no" selected="1">&#8730;<xsl:value-of select="gsa:i18n ('Use all unfiltered results', 'Filter')"/></option>
+          </xsl:when>
+          <xsl:otherwise>
+            <option value="no"><xsl:value-of select="gsa:i18n ('Use all unfiltered results', 'Filter')"/></option>
+          </xsl:otherwise>
+        </xsl:choose>
+        <xsl:choose>
+          <xsl:when test="/envelope/params/apply_filter = 'full' or /envelope/params/apply_filter = ''">
+            <option value="full" selected="1">&#8730;<xsl:value-of select="gsa:i18n ('Use filtered results (current page)', 'Filter')"/></option>
+          </xsl:when>
+          <xsl:otherwise>
+            <option value="full"><xsl:value-of select="gsa:i18n ('Use filtered results (current page)', 'Filter')"/></option>
+          </xsl:otherwise>
+        </xsl:choose>
+      </select>
+      <xsl:text> </xsl:text>
+      <xsl:choose>
+        <xsl:when test="/envelope/params/apply_filter = 'no'">
+          <input type="text" name="filter" size="53"
+                  value="{$filter_term}" style="color:silver"
+                  maxlength="1000"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <input type="text" name="filter" size="53"
+                  value="{$filter_term}"
+                  maxlength="1000"/>
+        </xsl:otherwise>
+      </xsl:choose>
+      <input type="image"
+              name="Update Filter"
+              title="{gsa:i18n ('Update Filter', 'Filter')}"
+              src="/img/refresh.png"
+              alt="{gsa:i18n ('Update', 'Action Verb')}" style="vertical-align:middle;margin-left:3px;margin-right:3px;"/>
+      <a href="/help/powerfilter.html?token={/envelope/token}" title="{gsa:i18n ('Help', 'Help')}: {gsa:i18n ('Powerfilter', 'Filter')}">
+        <img style="vertical-align:middle;margin-left:3px;margin-right:3px;"
+            src="/img/help.png"/>
+      </a>
+    </form>
+  </div>
+</xsl:template>
+
+<xsl:template match="report" mode="section-filter-full">
+  <xsl:param name="report_section" select="'results'"/>
+  <xsl:param name="extra_params" select="''"/>
+
+  <div id="list-window-filter" style="margin-bottom:5px">
+    <xsl:call-template name="filter-window-part">
+      <xsl:with-param name="type" select="'report_result'"/>
+      <xsl:with-param name="subtype" select="''"/>
+      <xsl:with-param name="list" select="report/results"/>
+      <xsl:with-param name="columns" xmlns="">
+        <column>
+          <name><xsl:value-of select="gsa:i18n('Name', 'Property')"/></name>
+          <field>name</field>
+        </column>
+      </xsl:with-param>
+      <xsl:with-param name="filter_options" xmlns="">
+        <xsl:if test="delta">
+          <option>delta_states</option>
+        </xsl:if>
+        <option>apply_overrides</option>
+        <option>autofp</option>
+        <option>notes</option>
+        <option>overrides</option>
+        <option>result_hosts_only</option>
+        <option>min_cvss_base</option>
+        <option>min_qod</option>
+        <option>timezone</option>
+        <option>levels</option>
+        <option>first</option>
+        <option>rows</option>
+      </xsl:with-param>
+      <xsl:with-param name="extra_params" xmlns="">
+        <xsl:copy-of select="$extra_params"/>
+        <param>
+          <name>report_id</name>
+          <value><xsl:value-of select="@id"/></value>
+        </param>
+        <param>
+          <name>report_section</name>
+          <value><xsl:value-of select="$report_section"/></value>
+        </param>
+        <xsl:if test="../@type != '' and ../@type != 'scan'">
+          <param>
+            <name>type</name>
+            <value><xsl:value-of select="../@type"/></value>
+          </param>
+        </xsl:if>
+        <xsl:if test="../@type='prognostic'">
+          <param>
+            <name>host</name>
+            <value><xsl:value-of select="filters/host"/></value>
+          </param>
+          <param>
+            <name>host_search_phrase</name>
+            <value><xsl:value-of select="/envelope/params/host_search_phrase"/></value>
+          </param>
+          <param>
+            <name>host_levels</name>
+            <value><xsl:value-of select="/envelope/params/host_levels"/></value>
+          </param>
+          <param>
+            <name>host_first_result</name>
+            <value><xsl:value-of select="/envelope/params/host_first_result"/></value>
+          </param>
+          <param>
+            <name>host_max_results</name>
+            <value><xsl:value-of select="/envelope/params/host_max_results"/></value>
+          </param>
+          <param>
+            <name>pos</name>
+            <value><xsl:value-of select="/envelope/params/pos"/></value>
+          </param>
+        </xsl:if>
+        <xsl:if test="delta/report/@id">
+          <param>
+            <name>delta_report_id</name>
+            <value><xsl:value-of select="delta/report/@id"/></value>
+          </param>
+        </xsl:if>
+      </xsl:with-param>
+      <xsl:with-param name="filters" select="../../../filters"/>
+      <xsl:with-param name="report_section" select="$report_section"/>
+    </xsl:call-template>
+  </div>
+</xsl:template>
+
+<xsl:template match="report" mode="section-pager-new">
+  <xsl:param name="section"/>
+  <xsl:param name="count"/>
+  <xsl:param name="filtered-count"/>
+  <xsl:param name="full-count"/>
+
+  <xsl:call-template name="filter-window-pager">
+    <xsl:with-param name="type" select="'report_result'"/>
+    <xsl:with-param name="list" select="report/results"/>
+    <xsl:with-param name="count" select="$count"/>
+    <xsl:with-param name="filtered_count" select="$filtered-count"/>
+    <xsl:with-param name="full_count" select="$full-count"/>
+    <xsl:with-param name="extra_params">
+      <xsl:text>&amp;report_id=</xsl:text><xsl:value-of select="@id"/>
+      <xsl:text>&amp;report_section=</xsl:text><xsl:value-of select="$section"/>
+      <xsl:text>&amp;apply_overrides=</xsl:text><xsl:value-of select="/envelope/params/apply_overrides"/>
+      <xsl:text>&amp;details=</xsl:text><xsl:value-of select="/envelope/params/details"/>
+      <xsl:if test="@type='prognostic'">
+        <xsl:text>&amp;type=</xsl:text><xsl:value-of select="'prognostic'"/>
+        <xsl:text>&amp;host=</xsl:text><xsl:value-of select="filters/host"/>
+        <xsl:text>&amp;host_search_phrase=</xsl:text><xsl:value-of select="/envelope/params/host_search_phrase"/>
+        <xsl:text>&amp;host_levels=</xsl:text><xsl:value-of select="/envelope/params/host_levels"/>
+        <xsl:text>&amp;host_first_result=</xsl:text><xsl:value-of select="/envelope/params/host_first_result"/>
+        <xsl:text>&amp;host_max_results=</xsl:text><xsl:value-of select="/envelope/params/host_max_results"/>
+        <xsl:text>&amp;pos=</xsl:text><xsl:value-of select="/envelope/params/pos"/>
+      </xsl:if>
+      <xsl:if test="@type='delta'">
+        <xsl:text>&amp;delta_report_id=</xsl:text><xsl:value-of select="delta/report/@id"/>
+      </xsl:if>
+    </xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="report" mode="report-section-toolbar">
+  <xsl:param name="section" select="'results'"/>
+  <xsl:param name="extra_params" select="''"/>
+
+  <div class="toolbar">
+    <xsl:call-template name="report-icons">
+      <xsl:with-param name="section" select="$section"/>
+    </xsl:call-template>
+
+    <xsl:choose>
+      <xsl:when test="($section='results' or $section='summary')">
+        <xsl:apply-templates select="report" mode="section-filter-full">
+          <xsl:with-param name="extra_params" select="$extra_params"/>
+          <xsl:with-param name="report_section" select="$section"/>
+        </xsl:apply-templates>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:apply-templates select="report" mode="section-filter-restricted">
+          <xsl:with-param name="extra_params" select="$extra_params"/>
+          <xsl:with-param name="report_section" select="$section"/>
+        </xsl:apply-templates>
+      </xsl:otherwise>
+    </xsl:choose>
+  </div>
+</xsl:template>
+
+<xsl:template name="report-section-header">
+  <xsl:param name="section" select="'results'"/>
+  <xsl:param name="filtered-count" select="''"/>
+  <xsl:param name="full-count" select="''"/>
+
+  <div id="list-window-header" class="clearfix" style="width:100%; margin-top:-55px">
+    <div id="list-window-title" style="width:100%">
+      <xsl:choose>
+        <xsl:when test="0">
+        </xsl:when>
+        <xsl:otherwise>
+          <img id="list-window-img" src="/img/report.svg"/>
+        </xsl:otherwise>
+      </xsl:choose>
+
+      <div id="list-window-details">
+        <h2>
+          <xsl:apply-templates select="report" mode="section-list">
+            <xsl:with-param name="current" select="$section"/>
+          </xsl:apply-templates>
+          <xsl:if test="$filtered-count != ''">
+            <xsl:text> (</xsl:text>
+            <xsl:value-of select="$filtered-count"/>
+            <xsl:if test="$full-count != ''">
+              <xsl:text> </xsl:text>
+              <xsl:value-of select="gsa:i18n ('of')"/>
+              <xsl:text> </xsl:text>
+              <xsl:value-of select="$full-count"/>
+            </xsl:if>
+            <xsl:text>)</xsl:text>
+          </xsl:if>
+        </h2>
+      </div>
+
+      <!-- Status bar -->
+      <xsl:choose>
+        <xsl:when test="not(/envelope/params/delta_report_id != '')">
+          <div class="pull-right" style="margin-top:35px">
+            <xsl:apply-templates select="report" mode="section-link">
+              <xsl:with-param name="section" select="'summary'"/>
+              <xsl:with-param name="type">
+                <xsl:choose>
+                  <xsl:when test="@type"><xsl:value-of select="@type"/></xsl:when>
+                  <xsl:otherwise>normal</xsl:otherwise>
+                </xsl:choose>
+              </xsl:with-param>
+              <xsl:with-param name="count" select="-1"/>
+              <xsl:with-param name="link_style" select="'element'"/>
+
+              <xsl:with-param name="element">
+                <xsl:call-template name="status_bar">
+                  <xsl:with-param name="status">
+                    <xsl:choose>
+                      <xsl:when test="report/task/target/@id='' and report/scan_run_status='Running'">
+                        <xsl:text>Uploading</xsl:text>
+                      </xsl:when>
+                      <xsl:when test="report/task/target/@id=''">
+                        <xsl:text>Container</xsl:text>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <xsl:value-of select="report/scan_run_status"/>
+                      </xsl:otherwise>
+                    </xsl:choose>
+                  </xsl:with-param>
+                  <xsl:with-param name="progress">
+                    <xsl:value-of select="../../get_tasks_response/task/progress/text()"/>
+                  </xsl:with-param>
+                </xsl:call-template>
+              </xsl:with-param>
+            </xsl:apply-templates>
+          </div>
+        </xsl:when>
+      </xsl:choose>
+    </div>
+  </div>
+</xsl:template>
+
 <xsl:template match="report" mode="results">
   <xsl:variable name="levels"
                 select="report/filters/keywords/keyword[column = 'levels']/value"/>
@@ -3453,28 +4188,35 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:otherwise>normal</xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
-  <div class="gb_window">
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">
-      <xsl:apply-templates select="report" mode="section-list">
-        <xsl:with-param name="current" select="'results'"/>
-      </xsl:apply-templates>
-      <xsl:apply-templates select="." mode="results-pager"/>
-      <xsl:call-template name="report-icons">
-        <xsl:with-param name="section" select="'results'"/>
-      </xsl:call-template>
-    </div>
-    <div class="gb_window_part_content">
-      <xsl:apply-templates select="report" mode="section-filter">
-        <xsl:with-param name="section" select="'results'"/>
-        <xsl:with-param name="with-filterbox" select="1"/>
-      </xsl:apply-templates>
-    </div>
-    <div class="gb_window_part_content_no_pad">
+  <xsl:apply-templates select="." mode="report-section-toolbar">
+    <xsl:with-param name="section" select="'results'"/>
+  </xsl:apply-templates>
+  <xsl:call-template name="report-section-header">
+    <xsl:with-param name="section" select="'results'"/>
+    <xsl:with-param name="filtered-count" select="report/result_count/filtered"/>
+    <xsl:with-param name="full-count" select="report/result_count/full"/>
+  </xsl:call-template>
+
+  <div class="section-header">
+    <a href="#" class="toggle-action-icon icon icon-action"
+      data-target="#table-box" data-name="Details"
+      data-variable="table-box--collapsed">
+        <img src="/img/fold.png"/>
+    </a>
+    <h3><xsl:value-of select="gsa:i18n ('Details')"/></h3>
+  </div> <!-- /section-header -->
+  <div id="table-box" class="section-box">
       <xsl:choose>
         <xsl:when test="count(report/results/result) &gt; 0">
           <div id="reports">
+            <div class="footnote" style="text-align:right;">
+              <xsl:apply-templates select="." mode="section-pager-new">
+                <xsl:with-param name="report_section" select="'results'"/>
+                <xsl:with-param name="count" select="count (report/results/result)"/>
+                <xsl:with-param name="filtered-count" select="report/result_count/filtered"/>
+                <xsl:with-param name="full-count" select="report/result_count/full"/>
+              </xsl:apply-templates>
+            </div>
             <table class="gbntable" cellspacing="2" cellpadding="4">
               <xsl:apply-templates select="report" mode="details"/>
               <tr>
@@ -3490,7 +4232,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     </xsl:if>
                   </xsl:variable>
                   <div class="pull-right">
-                    <xsl:apply-templates select="." mode="results-pager"/>
+                    <xsl:apply-templates select="." mode="section-pager-new">
+                      <xsl:with-param name="report_section" select="'results'"/>
+                      <xsl:with-param name="count" select="count (report/results/result)"/>
+                      <xsl:with-param name="filtered-count" select="report/result_count/filtered"/>
+                      <xsl:with-param name="full-count" select="report/result_count/full"/>
+                    </xsl:apply-templates>
                   </div>
                   (<xsl:value-of select="gsa:i18n('Applied filter:', 'Filter')"/>
                   <a class="footnote"
@@ -3539,7 +4286,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </div>
         </xsl:otherwise>
       </xsl:choose>
-    </div>
   </div>
 </xsl:template>
 
@@ -30784,27 +31530,25 @@ var toggleFilter = function(){
 
 <xsl:template match="report" mode="hosts">
   <xsl:apply-templates select="gsad_msg"/>
-  <div class="gb_window">
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">
-      <xsl:apply-templates select="report" mode="section-list">
-        <xsl:with-param name="current" select="'hosts'"/>
-      </xsl:apply-templates>
-      <xsl:call-template name="report-section-pager">
-        <xsl:with-param name="current" select="count(report/host)"/>
-        <xsl:with-param name="total" select="report/hosts/count"/>
-      </xsl:call-template>
-      <xsl:call-template name="report-icons">
-        <xsl:with-param name="section" select="'hosts'"/>
-      </xsl:call-template>
-    </div>
-    <div class="gb_window_part_content">
-      <xsl:apply-templates select="report" mode="section-filter">
-        <xsl:with-param name="section" select="'hosts'"/>
-      </xsl:apply-templates>
-    </div>
-    <div class="gb_window_part_content_no_pad">
+
+  <xsl:apply-templates select="." mode="report-section-toolbar">
+    <xsl:with-param name="section" select="'hosts'"/>
+  </xsl:apply-templates>
+  <xsl:call-template name="report-section-header">
+    <xsl:with-param name="section" select="'hosts'"/>
+    <xsl:with-param name="filtered-count" select="count(report/host)"/>
+    <xsl:with-param name="full-count" select="report/hosts/count"/>
+  </xsl:call-template>
+
+  <div class="section-header">
+    <a href="#" class="toggle-action-icon icon icon-action"
+      data-target="#table-box" data-name="Details"
+      data-variable="table-box--collapsed">
+        <img src="/img/fold.png"/>
+    </a>
+    <h3><xsl:value-of select="gsa:i18n ('Details')"/></h3>
+  </div> <!-- /section-header -->
+  <div id="table-box" class="section-box">
       <table class="gbntable" cellspacing="2" cellpadding="4">
         <tr class="gbntablehead2">
           <td><xsl:value-of select="gsa:i18n ('Host', 'Host')"/></td>
@@ -31036,7 +31780,6 @@ var toggleFilter = function(){
           </td>
         </tr>
       </table>
-    </div>
   </div>
 </xsl:template>
 
@@ -31121,28 +31864,26 @@ var toggleFilter = function(){
 
 <xsl:template match="report" mode="ports">
   <xsl:apply-templates select="gsad_msg"/>
+
+  <xsl:apply-templates select="." mode="report-section-toolbar">
+    <xsl:with-param name="section" select="'ports'"/>
+  </xsl:apply-templates>
+  <xsl:call-template name="report-section-header">
+    <xsl:with-param name="section" select="'ports'"/>
+    <xsl:with-param name="filtered-count" select="count(report/ports/port[contains(text(), 'general/') = 0]/text()[generate-id() = generate-id(key('key_report_ports', .))])"/>
+    <xsl:with-param name="full-count" select="report/ports/count"/>
+  </xsl:call-template>
+
   <xsl:variable name="report" select="report"/>
-  <div class="gb_window">
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">
-      <xsl:apply-templates select="report" mode="section-list">
-        <xsl:with-param name="current" select="'ports'"/>
-      </xsl:apply-templates>
-      <xsl:call-template name="report-section-pager">
-        <xsl:with-param name="current" select="count(report/ports/port[contains(text(), 'general/') = 0]/text()[generate-id() = generate-id(key('key_report_ports', .))])"/>
-        <xsl:with-param name="total" select="report/ports/count"/>
-      </xsl:call-template>
-      <xsl:call-template name="report-icons">
-        <xsl:with-param name="section" select="'ports'"/>
-      </xsl:call-template>
-    </div>
-    <div class="gb_window_part_content">
-      <xsl:apply-templates select="report" mode="section-filter">
-        <xsl:with-param name="section" select="'ports'"/>
-      </xsl:apply-templates>
-    </div>
-    <div class="gb_window_part_content_no_pad">
+  <div class="section-header">
+    <a href="#" class="toggle-action-icon icon icon-action"
+      data-target="#table-box" data-name="Details"
+      data-variable="table-box--collapsed">
+        <img src="/img/fold.png"/>
+    </a>
+    <h3><xsl:value-of select="gsa:i18n ('Details')"/></h3>
+  </div> <!-- /section-header -->
+  <div id="table-box" class="section-box">
       <table class="gbntable" cellspacing="2" cellpadding="4">
           <col/>
           <col/>
@@ -31204,7 +31945,6 @@ var toggleFilter = function(){
             </tr>
         </xsl:for-each>
       </table>
-    </div>
   </div>
 </xsl:template>
 
@@ -31219,27 +31959,25 @@ var toggleFilter = function(){
 <xsl:template match="report" mode="vulns">
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:variable name="report" select="report"/>
-  <div class="gb_window">
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">
-      <xsl:apply-templates select="report" mode="section-list">
-        <xsl:with-param name="current" select="'vulns'"/>
-      </xsl:apply-templates>
-      <xsl:call-template name="report-section-pager">
-        <xsl:with-param name="current" select="count(report/results/result[nvt/@oid != '0' and generate-id() = generate-id(key('key_report_vulns', nvt/@oid))])"/>
-        <xsl:with-param name="total" select="report/vulns/count"/>
-      </xsl:call-template>
-      <xsl:call-template name="report-icons">
-        <xsl:with-param name="section" select="'vulns'"/>
-      </xsl:call-template>
-    </div>
-    <div class="gb_window_part_content">
-      <xsl:apply-templates select="report" mode="section-filter">
-        <xsl:with-param name="section" select="'vulns'"/>
-      </xsl:apply-templates>
-    </div>
-    <div class="gb_window_part_content_no_pad">
+
+  <xsl:apply-templates select="." mode="report-section-toolbar">
+    <xsl:with-param name="section" select="'vulns'"/>
+  </xsl:apply-templates>
+  <xsl:call-template name="report-section-header">
+    <xsl:with-param name="section" select="'vulns'"/>
+    <xsl:with-param name="filtered-count" select="count(report/results/result[nvt/@oid != '0' and generate-id() = generate-id(key('key_report_vulns', nvt/@oid))])"/>
+    <xsl:with-param name="full-count" select="report/vulns/count"/>
+  </xsl:call-template>
+
+  <div class="section-header">
+    <a href="#" class="toggle-action-icon icon icon-action"
+      data-target="#table-box" data-name="Details"
+      data-variable="table-box--collapsed">
+        <img src="/img/fold.png"/>
+    </a>
+    <h3><xsl:value-of select="gsa:i18n ('Details')"/></h3>
+  </div> <!-- /section-header -->
+  <div id="table-box" class="section-box">
       <table class="gbntable" cellspacing="2" cellpadding="4">
           <col/>
           <col/>
@@ -31317,7 +32055,6 @@ var toggleFilter = function(){
           </tr>
         </xsl:for-each>
       </table>
-    </div>
   </div>
 </xsl:template>
 
@@ -31341,27 +32078,24 @@ var toggleFilter = function(){
     </xsl:choose>
   </xsl:variable>
 
-  <div class="gb_window">
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">
-      <xsl:apply-templates select="report" mode="section-list">
-        <xsl:with-param name="current" select="'os'"/>
-      </xsl:apply-templates>
-      <xsl:call-template name="report-section-pager">
-        <xsl:with-param name="current" select="$known_count + $unknown"/>
-        <xsl:with-param name="total" select="report/os/count + $unknown"/>
-      </xsl:call-template>
-      <xsl:call-template name="report-icons">
-        <xsl:with-param name="section" select="'os'"/>
-      </xsl:call-template>
-    </div>
-    <div class="gb_window_part_content">
-      <xsl:apply-templates select="report" mode="section-filter">
-        <xsl:with-param name="section" select="'os'"/>
-      </xsl:apply-templates>
-    </div>
-    <div class="gb_window_part_content_no_pad">
+  <xsl:apply-templates select="." mode="report-section-toolbar">
+    <xsl:with-param name="section" select="'os'"/>
+  </xsl:apply-templates>
+  <xsl:call-template name="report-section-header">
+    <xsl:with-param name="section" select="'os'"/>
+    <xsl:with-param name="filtered-count" select="$known_count + $unknown"/>
+    <xsl:with-param name="full-count" select="report/os/count + $unknown"/>
+  </xsl:call-template>
+
+  <div class="section-header">
+    <a href="#" class="toggle-action-icon icon icon-action"
+      data-target="#table-box" data-name="Details"
+      data-variable="table-box--collapsed">
+        <img src="/img/fold.png"/>
+    </a>
+    <h3><xsl:value-of select="gsa:i18n ('Details')"/></h3>
+  </div> <!-- /section-header -->
+  <div id="table-box" class="section-box">
       <table class="gbntable" cellspacing="2" cellpadding="4">
           <col/>
           <col/>
@@ -31422,7 +32156,6 @@ var toggleFilter = function(){
         </xsl:if>
 
       </table>
-    </div>
   </div>
 </xsl:template>
 
@@ -31494,28 +32227,26 @@ var toggleFilter = function(){
 
 <xsl:template match="report" mode="apps">
   <xsl:apply-templates select="gsad_msg"/>
+
+  <xsl:apply-templates select="." mode="report-section-toolbar">
+    <xsl:with-param name="section" select="'apps'"/>
+  </xsl:apply-templates>
+  <xsl:call-template name="report-section-header">
+    <xsl:with-param name="section" select="'apps'"/>
+    <xsl:with-param name="filtered-count" select="count(report/host/detail[name = 'App' and generate-id() = generate-id(key('k_report_apps', concat(name, value)))])"/>
+    <xsl:with-param name="full-count" select="report/apps/count"/>
+  </xsl:call-template>
+
   <xsl:variable name="report" select="report"/>
-  <div class="gb_window">
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">
-      <xsl:apply-templates select="report" mode="section-list">
-        <xsl:with-param name="current" select="'apps'"/>
-      </xsl:apply-templates>
-      <xsl:call-template name="report-section-pager">
-        <xsl:with-param name="current" select="count(report/host/detail[name = 'App' and generate-id() = generate-id(key('k_report_apps', concat(name, value)))])"/>
-        <xsl:with-param name="total" select="report/apps/count"/>
-      </xsl:call-template>
-      <xsl:call-template name="report-icons">
-        <xsl:with-param name="section" select="'apps'"/>
-      </xsl:call-template>
-    </div>
-    <div class="gb_window_part_content">
-      <xsl:apply-templates select="report" mode="section-filter">
-        <xsl:with-param name="section" select="'apps'"/>
-      </xsl:apply-templates>
-    </div>
-    <div class="gb_window_part_content_no_pad">
+  <div class="section-header">
+    <a href="#" class="toggle-action-icon icon icon-action"
+      data-target="#table-box" data-name="Details"
+      data-variable="table-box--collapsed">
+        <img src="/img/fold.png"/>
+    </a>
+    <h3><xsl:value-of select="gsa:i18n ('Details')"/></h3>
+  </div> <!-- /section-header -->
+  <div id="table-box" class="section-box">
       <table class="gbntable" cellspacing="2" cellpadding="4">
           <col/>
           <col/>
@@ -31559,7 +32290,6 @@ var toggleFilter = function(){
         </xsl:for-each>
 
       </table>
-    </div>
   </div>
 </xsl:template>
 
@@ -31795,44 +32525,6 @@ var toggleFilter = function(){
         title="{gsa:i18n ('Return to default filter view', 'Action Verb')}">
         <img style="vertical-align: text-top; margin-left: 3px" src="/img/list.png"/>
       </a>
-      <xsl:choose>
-        <xsl:when test="not(/envelope/params/delta_report_id != '')">
-          <div class="pull-right" style="margin-top:2px">
-            <xsl:apply-templates select="report" mode="section-link">
-              <xsl:with-param name="section" select="'summary'"/>
-              <xsl:with-param name="type">
-                <xsl:choose>
-                  <xsl:when test="@type"><xsl:value-of select="@type"/></xsl:when>
-                  <xsl:otherwise>normal</xsl:otherwise>
-                </xsl:choose>
-              </xsl:with-param>
-              <xsl:with-param name="count" select="-1"/>
-              <xsl:with-param name="link_style" select="'element'"/>
-
-              <xsl:with-param name="element">
-                <xsl:call-template name="status_bar">
-                  <xsl:with-param name="status">
-                    <xsl:choose>
-                      <xsl:when test="report/task/target/@id='' and report/scan_run_status='Running'">
-                        <xsl:text>Uploading</xsl:text>
-                      </xsl:when>
-                      <xsl:when test="report/task/target/@id=''">
-                        <xsl:text>Container</xsl:text>
-                      </xsl:when>
-                      <xsl:otherwise>
-                        <xsl:value-of select="report/scan_run_status"/>
-                      </xsl:otherwise>
-                    </xsl:choose>
-                  </xsl:with-param>
-                  <xsl:with-param name="progress">
-                    <xsl:value-of select="../../get_tasks_response/task/progress/text()"/>
-                  </xsl:with-param>
-                </xsl:call-template>
-              </xsl:with-param>
-            </xsl:apply-templates>
-          </div>
-        </xsl:when>
-      </xsl:choose>
     </xsl:otherwise>
   </xsl:choose>
   <div class="small_inline_form" style="display:inline; margin-left: 7px; vertical-align: text-bottom" >
@@ -31874,27 +32566,24 @@ var toggleFilter = function(){
 </xsl:template>
 
 <xsl:template match="report" mode="closed_cves">
-  <div class="gb_window">
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">
-      <xsl:apply-templates select="report" mode="section-list">
-        <xsl:with-param name="current" select="'closed_cves'"/>
-      </xsl:apply-templates>
-      <xsl:call-template name="report-section-pager">
-        <xsl:with-param name="current" select="count(report/host/detail[name = 'Closed CVE'])"/>
-        <xsl:with-param name="total" select="report/closed_cves/count"/>
-      </xsl:call-template>
-      <xsl:call-template name="report-icons">
-        <xsl:with-param name="section" select="'closed_cves'"/>
-      </xsl:call-template>
-    </div>
-    <div class="gb_window_part_content">
-      <xsl:apply-templates select="report" mode="section-filter">
-        <xsl:with-param name="section" select="'closed_cves'"/>
-      </xsl:apply-templates>
-    </div>
-    <div class="gb_window_part_content_no_pad">
+  <xsl:apply-templates select="." mode="report-section-toolbar">
+    <xsl:with-param name="section" select="'closed_cves'"/>
+  </xsl:apply-templates>
+  <xsl:call-template name="report-section-header">
+    <xsl:with-param name="section" select="'closed_cves'"/>
+    <xsl:with-param name="filtered-count" select="count(report/host/detail[name = 'Closed CVE'])"/>
+    <xsl:with-param name="full-count" select="report/closed_cves/count"/>
+  </xsl:call-template>
+
+  <div class="section-header">
+    <a href="#" class="toggle-action-icon icon icon-action"
+      data-target="#table-box" data-name="Details"
+      data-variable="table-box--collapsed">
+        <img src="/img/fold.png"/>
+    </a>
+    <h3><xsl:value-of select="gsa:i18n ('Details')"/></h3>
+  </div> <!-- /section-header -->
+  <div id="table-box" class="section-box">
       <table class="gbntable" cellspacing="2" cellpadding="4">
         <tr class="gbntablehead2">
           <td><xsl:value-of select="gsa:i18n ('CVE', 'CVE')"/></td>
@@ -31950,7 +32639,6 @@ var toggleFilter = function(){
           </xsl:for-each>
         </xsl:for-each>
       </table>
-    </div>
   </div>
 </xsl:template>
 
@@ -31963,26 +32651,24 @@ var toggleFilter = function(){
 <xsl:key name="key_report_cves_hosts" match="report/results/result" use="concat(host, '|', nvt/cve)"/>
 
 <xsl:template match="report" mode="cves">
-  <div class="gb_window">
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">
-      <xsl:apply-templates select="report" mode="section-list">
-        <xsl:with-param name="current" select="'cves'"/>
-      </xsl:apply-templates>
-      <xsl:call-template name="report-section-pager">
-        <xsl:with-param name="current" select="count(report/results/result/nvt[cve != 'NOCVE' and generate-id() = generate-id(key('key_report_cves', cve))])"/>
-      </xsl:call-template>
-      <xsl:call-template name="report-icons">
-        <xsl:with-param name="section" select="'cves'"/>
-      </xsl:call-template>
-    </div>
-    <div class="gb_window_part_content">
-      <xsl:apply-templates select="report" mode="section-filter">
-        <xsl:with-param name="section" select="'cves'"/>
-      </xsl:apply-templates>
-    </div>
-    <div class="gb_window_part_content_no_pad">
+  <xsl:apply-templates select="." mode="report-section-toolbar">
+    <xsl:with-param name="section" select="'cves'"/>
+  </xsl:apply-templates>
+  <xsl:call-template name="report-section-header">
+    <xsl:with-param name="section" select="'cves'"/>
+    <xsl:with-param name="filtered-count" select="count(report/results/result/nvt[cve != 'NOCVE' and generate-id() = generate-id(key('key_report_cves', cve))])"/>
+    <xsl:with-param name="full-count" select="''"/>
+  </xsl:call-template>
+
+  <div class="section-header">
+    <a href="#" class="toggle-action-icon icon icon-action"
+      data-target="#table-box" data-name="Details"
+      data-variable="table-box--collapsed">
+        <img src="/img/fold.png"/>
+    </a>
+    <h3><xsl:value-of select="gsa:i18n ('Details')"/></h3>
+  </div> <!-- /section-header -->
+  <div id="table-box" class="section-box">
       <table class="gbntable" cellspacing="2" cellpadding="4">
         <tr class="gbntablehead2">
           <td><xsl:value-of select="gsa:i18n ('CVE', 'CVE')"/></td>
@@ -32026,7 +32712,6 @@ var toggleFilter = function(){
           </tr>
         </xsl:for-each>
       </table>
-    </div>
   </div>
 </xsl:template>
 
@@ -32116,27 +32801,24 @@ var toggleFilter = function(){
 </xsl:template>
 
 <xsl:template match="report" mode="ssl_certs">
-  <div class="gb_window">
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">
-      <xsl:apply-templates select="report" mode="section-list">
-        <xsl:with-param name="current" select="'ssl_certs'"/>
-      </xsl:apply-templates>
-      <xsl:call-template name="report-section-pager">
-        <xsl:with-param name="current" select="count(report/host/detail[name='SSLInfo'])"/>
-        <xsl:with-param name="total" select="report/ssl_certs/count"/>
-      </xsl:call-template>
-      <xsl:call-template name="report-icons">
-        <xsl:with-param name="section" select="'ssl_certs'"/>
-      </xsl:call-template>
-    </div>
-    <div class="gb_window_part_content">
-      <xsl:apply-templates select="report" mode="section-filter">
-        <xsl:with-param name="section" select="'ssl_certs'"/>
-      </xsl:apply-templates>
-    </div>
-    <div class="gb_window_part_content_no_pad">
+  <xsl:apply-templates select="." mode="report-section-toolbar">
+    <xsl:with-param name="section" select="'ssl_certs'"/>
+  </xsl:apply-templates>
+  <xsl:call-template name="report-section-header">
+    <xsl:with-param name="section" select="'ssl_certs'"/>
+    <xsl:with-param name="filtered-count" select="count(report/host/detail[name='SSLInfo'])"/>
+    <xsl:with-param name="full-count" select="report/ssl_certs/count"/>
+  </xsl:call-template>
+
+  <div class="section-header">
+    <a href="#" class="toggle-action-icon icon icon-action"
+      data-target="#table-box" data-name="Details"
+      data-variable="table-box--collapsed">
+        <img src="/img/fold.png"/>
+    </a>
+    <h3><xsl:value-of select="gsa:i18n ('Details')"/></h3>
+  </div> <!-- /section-header -->
+  <div id="table-box" class="section-box">
       <table class="gbntable" cellspacing="2" cellpadding="4">
         <tr class="gbntablehead2">
           <td><xsl:value-of select="gsa:i18n ('DN', 'Auth Data')"/></td>
@@ -32206,7 +32888,6 @@ var toggleFilter = function(){
           </tr>
         </xsl:for-each>
       </table>
-    </div>
   </div>
 </xsl:template>
 
@@ -32278,27 +32959,24 @@ var toggleFilter = function(){
 </xsl:template>
 
 <xsl:template match="report" mode="errors">
-  <div class="gb_window">
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">
-      <xsl:apply-templates select="report" mode="section-list">
-        <xsl:with-param name="current" select="'errors'"/>
-      </xsl:apply-templates>
-      <xsl:call-template name="report-section-pager">
-        <xsl:with-param name="current" select="count(report/errors/error)"/>
-        <xsl:with-param name="total" select="report/errors/count"/>
-      </xsl:call-template>
-      <xsl:call-template name="report-icons">
-        <xsl:with-param name="section" select="'errors'"/>
-      </xsl:call-template>
-    </div>
-    <div class="gb_window_part_content">
-      <xsl:apply-templates select="report" mode="section-filter">
-        <xsl:with-param name="section" select="'errors'"/>
-      </xsl:apply-templates>
-    </div>
-    <div class="gb_window_part_content_no_pad">
+  <xsl:apply-templates select="." mode="report-section-toolbar">
+    <xsl:with-param name="section" select="'errors'"/>
+  </xsl:apply-templates>
+  <xsl:call-template name="report-section-header">
+    <xsl:with-param name="section" select="'errors'"/>
+    <xsl:with-param name="filtered-count" select="count(report/errors/error)"/>
+    <xsl:with-param name="full-count" select="report/errors/count"/>
+  </xsl:call-template>
+
+  <div class="section-header">
+    <a href="#" class="toggle-action-icon icon icon-action"
+      data-target="#table-box" data-name="Details"
+      data-variable="table-box--collapsed">
+        <img src="/img/fold.png"/>
+    </a>
+    <h3><xsl:value-of select="gsa:i18n ('Details')"/></h3>
+  </div> <!-- /section-header -->
+  <div id="table-box" class="section-box">
       <table class="gbntable" cellspacing="2" cellpadding="4">
         <tr class="gbntablehead2">
           <td><xsl:value-of select="gsa:i18n ('Error Message', 'Result')"/></td>
@@ -32333,7 +33011,6 @@ var toggleFilter = function(){
           </tr>
         </xsl:for-each>
       </table>
-    </div>
   </div>
 </xsl:template>
 
@@ -32363,18 +33040,26 @@ var toggleFilter = function(){
                 select="report/filters/keywords/keyword[column='levels']/value"/>
   <xsl:variable name="apply-overrides"
                 select="report/filters/keywords/keyword[column='apply_overrides']/value"/>
-  <div class="gb_window">
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">
-      <xsl:apply-templates select="report" mode="section-list">
-        <xsl:with-param name="current" select="'summary'"/>
-      </xsl:apply-templates>
-      <xsl:call-template name="report-icons">
-        <xsl:with-param name="section" select="'summary'"/>
-      </xsl:call-template>
-    </div>
-    <div class="gb_window_part_content">
+
+  <xsl:apply-templates select="." mode="report-section-toolbar">
+    <xsl:with-param name="section" select="'summary'"/>
+  </xsl:apply-templates>
+  <xsl:call-template name="report-section-header">
+    <xsl:with-param name="section" select="'summary'"/>
+    <xsl:with-param name="filtered-count" select="''"/>
+    <xsl:with-param name="full-count" select="''"/>
+  </xsl:call-template>
+
+  <div class="section-header">
+    <a href="#" class="toggle-action-icon icon icon-action"
+      data-target="#table-box" data-name="Details"
+      data-variable="table-box--collapsed">
+        <img src="/img/fold.png"/>
+    </a>
+    <h3><xsl:value-of select="gsa:i18n ('Details')"/></h3>
+  </div> <!-- /section-header -->
+  <div id="table-box" class="section-box">
+    <div>
       <xsl:choose>
         <xsl:when test="@type='prognostic'">
           <div class="pull-right">
@@ -32575,13 +33260,14 @@ var toggleFilter = function(){
         </xsl:choose>
       </table>
     </div>
-    <div class="gb_window_part_content">
-      <xsl:apply-templates select="report" mode="section-filter">
+<!--
+    <div>
+      <xsl:apply-templates select="report" mode="section-filter-full">
         <xsl:with-param name="section" select="'summary'"/>
-        <xsl:with-param name="with-filterbox" select="1"/>
       </xsl:apply-templates>
     </div>
-    <div class="gb_window_part_content_no_pad">
+-->
+    <div>
       <table class="gbntable" cellspacing="2" cellpadding="4">
         <tr class="gbntablehead2">
           <td></td>

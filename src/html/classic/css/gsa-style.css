@@ -283,6 +283,7 @@ div.label_none {
   -webkit-box-sizing: content-box;
   -moz-box-sizing: content-box;
   box-sizing: content-box;
+  display: inline-block;
 
   margin-left:0px;
   margin-top:0px;
@@ -985,19 +986,19 @@ select[multiple] {
 #report_section_list ul li a {
   display: block;
   height: 25px;
-  color: #FFFFFF;
+  color: #000000;
   text-decoration: none;
 }
 
 #report_section_list ul li a#section_list_first {
-  background: url('/img/style/dropdown_arrow.png') no-repeat;
+  background: url('/img/style/dropdown_arrow_black.png') no-repeat 0 3px;
   padding-right: 2px;
   padding-left: 14px;
   margin-top: 0px;
 }
 
 #report_section_list:hover ul li a#section_list_first {
-  background: url('/img/style/dropdown_arrow_green.png') no-repeat;
+  background: url('/img/style/dropdown_arrow_green.png') no-repeat 0 3px;
 }
 
 #report_section_list ul li ul {
@@ -1519,16 +1520,21 @@ select[multiple] {
 }
 
 .ctrl-group {
+  display: table-row;
   padding: 2px;
 }
 
 .ctrl-group .left-column {
-  position: absolute;
+  display: table-cell;
+  width: 120px;
+  margin-right: 3px;
   padding-top: 5px;
 }
 
 .ctrl-group .right-column {
-  margin-left: 120px;
+  display: table-cell;
+  vertical-align: middle;
+  padding-top: 0px;
 }
 
 .valign-middle {
