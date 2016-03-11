@@ -504,6 +504,7 @@ install (FILES src/html/classic/img/agent.png
                src/html/classic/img/tag.svg
                src/html/classic/img/trashcan.svg
                src/html/classic/img/user.svg
+               src/html/classic/img/vul_report.svg
                src/html/classic/img/group.svg
                src/html/classic/img/role.svg
                src/html/classic/img/filter.svg

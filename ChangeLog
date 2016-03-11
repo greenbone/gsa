@@ -1,3 +1,12 @@
+2016-03-11  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/classic/img/vul_report.svg: New.
+
+	* CMakeLists.txt: Install the new icon.
+
+	* src/html/classic/omp.xsl (report-section-header): Use the new icon
+	for this section.
+
 2016-03-11  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/omp.xsl (prognostic_hosts, prognostic_apps): Change

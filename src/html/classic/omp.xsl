@@ -4111,7 +4111,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:when test="0">
         </xsl:when>
         <xsl:otherwise>
-          <img id="list-window-img" src="/img/report.svg"/>
+          <img id="list-window-img" src="/img/vul_report.svg"/>
         </xsl:otherwise>
       </xsl:choose>
 
