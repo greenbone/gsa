@@ -31785,27 +31785,25 @@ var toggleFilter = function(){
 
 <xsl:template match="report" mode="prognostic_hosts">
   <xsl:apply-templates select="gsad_msg"/>
-  <div class="gb_window">
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">
-      <xsl:apply-templates select="report" mode="section-list">
-        <xsl:with-param name="current" select="'hosts'"/>
-      </xsl:apply-templates>
-      <xsl:call-template name="report-section-pager">
-        <xsl:with-param name="current" select="count(report/host)"/>
-        <xsl:with-param name="total" select="report/hosts/count"/>
-      </xsl:call-template>
-      <xsl:call-template name="report-icons">
-        <xsl:with-param name="section" select="'hosts'"/>
-      </xsl:call-template>
-    </div>
-    <div class="gb_window_part_content">
-      <xsl:apply-templates select="report" mode="section-filter">
-        <xsl:with-param name="section" select="'hosts'"/>
-      </xsl:apply-templates>
-    </div>
-    <div class="gb_window_part_content_no_pad">
+
+  <xsl:apply-templates select="." mode="report-section-toolbar">
+    <xsl:with-param name="section" select="'hosts'"/>
+  </xsl:apply-templates>
+  <xsl:call-template name="report-section-header">
+    <xsl:with-param name="section" select="'hosts'"/>
+    <xsl:with-param name="filtered-count" select="count(report/host)"/>
+    <xsl:with-param name="full-count" select="report/hosts/count"/>
+  </xsl:call-template>
+
+  <div class="section-header">
+    <a href="#" class="toggle-action-icon icon icon-action"
+      data-target="#table-box" data-name="Details"
+      data-variable="table-box--collapsed">
+        <img src="/img/fold.png"/>
+    </a>
+    <h3><xsl:value-of select="gsa:i18n ('Details')"/></h3>
+  </div> <!-- /section-header -->
+  <div id="table-box" class="section-box">
       <table class="gbntable" cellspacing="2" cellpadding="4">
         <col/>
         <col/>
@@ -31851,7 +31849,6 @@ var toggleFilter = function(){
           </tr>
         </xsl:for-each>
       </table>
-    </div>
   </div>
 </xsl:template>
 
@@ -32332,27 +32329,25 @@ var toggleFilter = function(){
 <xsl:template match="report" mode="prognostic_apps">
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:variable name="report" select="report"/>
-  <div class="gb_window">
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">
-      <xsl:apply-templates select="report" mode="section-list">
-        <xsl:with-param name="current" select="'apps'"/>
-      </xsl:apply-templates>
-      <xsl:call-template name="report-section-pager">
-        <xsl:with-param name="current" select="count(report/results/result[generate-id() = generate-id(key('key_prog_apps', cve/cpe/@id))])"/>
-        <xsl:with-param name="total" select="report/apps/count"/>
-      </xsl:call-template>
-      <xsl:call-template name="report-icons">
-        <xsl:with-param name="section" select="'apps'"/>
-      </xsl:call-template>
-    </div>
-    <div class="gb_window_part_content">
-      <xsl:apply-templates select="report" mode="section-filter">
-        <xsl:with-param name="section" select="'apps'"/>
-      </xsl:apply-templates>
-    </div>
-    <div class="gb_window_part_content_no_pad">
+
+  <xsl:apply-templates select="." mode="report-section-toolbar">
+    <xsl:with-param name="section" select="'apps'"/>
+  </xsl:apply-templates>
+  <xsl:call-template name="report-section-header">
+    <xsl:with-param name="section" select="'apps'"/>
+    <xsl:with-param name="filtered-count" select="count(report/results/result[generate-id() = generate-id(key('key_prog_apps', cve/cpe/@id))])"/>
+    <xsl:with-param name="full-count" select="report/apps/count"/>
+  </xsl:call-template>
+
+  <div class="section-header">
+    <a href="#" class="toggle-action-icon icon icon-action"
+      data-target="#table-box" data-name="Details"
+      data-variable="table-box--collapsed">
+        <img src="/img/fold.png"/>
+    </a>
+    <h3><xsl:value-of select="gsa:i18n ('Details')"/></h3>
+  </div> <!-- /section-header -->
+  <div id="table-box" class="section-box">
       <table class="gbntable" cellspacing="2" cellpadding="4">
           <col/>
           <col/>
@@ -32393,7 +32388,6 @@ var toggleFilter = function(){
           </tr>
         </xsl:for-each>
       </table>
-    </div>
   </div>
 </xsl:template>
 

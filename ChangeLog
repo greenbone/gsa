@@ -1,5 +1,10 @@
 2016-03-11  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/omp.xsl (prognostic_hosts, prognostic_apps): Change
+	to new design using new toolbar and header templates.
+
+2016-03-11  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Use the standard filter boxes for report section pages where applicable
 	and add options for report filtering to them.  Change the report
 	section pages to the new style overall.
