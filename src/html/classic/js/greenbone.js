@@ -62,11 +62,11 @@
       nsSeparator: false, // don't use a namespace seperator in keys
       keySeperator: false, // don't use a key spererator in keys
       fallbackLng: 'en',
-      ns: ['gsa'], // use gsa as namespace
-      defaultNS: 'gsa',
-      fallbackNS: 'gsa',
+      ns: ['gsad'], // use gsad as namespace
+      defaultNS: 'gsad',
+      fallbackNS: 'gsad',
       backend: {
-        loadPath: 'js/locales/{{ns}}-{{lng}}.json', // e.g. js/locales/gsa-en.json
+        loadPath: 'js/locales/{{ns}}-{{lng}}.json', // e.g. js/locales/gsad-en.json
       },
       detection: {
         /* only use url querystring and browser settings for language detection */
