@@ -1,5 +1,10 @@
 2016-03-14  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/po/CMakeLists.txt: Rebuild json translation files if po files have been
+	changed.
+
+2016-03-14  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/greenbone.js: Use gsad instead of gsa as namespace for
 	translations. This allows to use the same filename pattern for the javascript
 	and xslt translations.

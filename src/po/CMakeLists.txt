@@ -43,6 +43,7 @@ macro (MAKE_TRANSLATION _LANG)
 
   add_custom_command (OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/gsad_js-${_LANG}-merged.po
                       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_js.pot
+                      DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/gsad_js-${_LANG}.po
                       COMMAND ${GETTEXT_MSGMERGE_EXECUTABLE}
                       ARGS ${CMAKE_CURRENT_SOURCE_DIR}/gsad_js-${_LANG}.po
                       ${CMAKE_CURRENT_BINARY_DIR}/gsad_js.pot
