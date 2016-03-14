@@ -346,10 +346,6 @@ install (FILES src/html/classic/js/lib/d3.tip.js
                src/html/classic/js/lib/min/i18next-languagedetector-0.1.0.js
          DESTINATION ${GSA_DATA_DIR}/classic/js)
 
-install (DIRECTORY src/html/classic/js/locales/
-         DESTINATION ${GSA_DATA_DIR}/classic/js/locales
-         PATTERN "gsa-*.json")
-
 if (CMAKE_BUILD_TYPE MATCHES "Release")
   install (FILES src/html/classic/js/lib/min/d3.v3.js
                  src/html/classic/js/lib/min/jquery-2.1.4.js

@@ -1,5 +1,10 @@
 2016-03-14  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* CMakeLists.txt, src/po/CMakeLists.txt: Add generation and installation of
+	translation files for javascriot to cmake build files.
+
+2016-03-14  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/po/gsad_js-de.po, src/po/gsad_js-ru.po, src/po/gsad_js-zh_CN.po: Add
 	stubs for po file translations generated from javascript.
 
