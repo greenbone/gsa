@@ -1,5 +1,10 @@
 2016-03-14  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* tools/js2pot: Add script to extract translatable messages from our
+	javascript files.
+
+2016-03-14  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/greenbone.js, src/html/classic/js/gsa_graphics_base.js:
 	Mark strings for translation.
 
