@@ -46,7 +46,9 @@ def convert(in_name, out_name):
 
     out_d = {}
     for entry in po_f:
-        out_d[entry.msgid] = entry.msgstr
+        if entry.msgstr:
+            # only add translated messages
+            out_d[entry.msgid] = entry.msgstr
 
     with open(out_name, "w") as out_f:
         json.dump(out_d, out_f, indent=2, sort_keys=True)
