@@ -1,0 +1,314 @@
+# Greenbone Security Assistant
+# $Id$
+# Description: Russian user interface translations.
+#
+# Copyright:
+# Copyright (C) 2016 Greenbone Networks GmbH
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+#
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-03-14 13:22+0000\n"
+"PO-Revision-Date: 2016-03-14 13:45+0000\n"
+"Last-Translator:  <openvas-devel@wald.intevation.org>\n"
+"Language-Team: Russian <openvas-devel@wald.intevation.org>\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#: /home/bricks/source/gsad/src/html/classic/js/greenbone.js:766
+#: /home/bricks/source/gsad/src/html/classic/js/greenbone.js:767
+msgid "Unfold {{name}}"
+msgstr ""
+
+#: /home/bricks/source/gsad/src/html/classic/js/greenbone.js:772
+#: /home/bricks/source/gsad/src/html/classic/js/greenbone.js:773
+msgid "Fold {{name}}"
+msgstr ""
+
+#: /home/bricks/source/gsad/src/html/classic/js/greenbone.js:832
+msgid "Save"
+msgstr ""
+
+#: /home/bricks/source/gsad/src/html/classic/js/greenbone.js:836
+#: /home/bricks/source/gsad/src/html/classic/js/greenbone.js:843
+msgid "Create"
+msgstr ""
+
+#: /home/bricks/source/gsad/src/html/classic/js/greenbone.js:851
+msgid "Delete"
+msgstr ""
+
+#: /home/bricks/source/gsad/src/html/classic/js/greenbone.js:929
+msgid "Update Filter"
+msgstr ""
+
+#: /home/bricks/source/gsad/src/html/classic/js/greenbone.js:975
+msgid "Select date"
+msgstr ""
+
+#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:265
+#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:266
+msgid "Edit Dashboard"
+msgstr ""
+
+#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:278
+#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:279
+msgid "Add new Component"
+msgstr ""
+
+#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:293
+#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:294
+msgid "Stop Editing"
+msgstr ""
+
+#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:1215
+#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:1216
+msgid "Remove"
+msgstr ""
+
+#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:1223
+msgid "Initializing component \"{{component}}\"..."
+msgstr ""
+
+#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:1705
+msgid "Unnamed chart"
+msgstr ""
+
+#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2121
+#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2274
+msgid "Internal error: Invalid request"
+msgstr ""
+
+#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2122
+msgid "Invalid request command: \"{{command}}\""
+msgstr ""
+
+#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2147
+msgid "Loading aborted"
+msgstr ""
+
+#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2160
+msgid "HTTP error {{error}}"
+msgstr ""
+
+#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2162
+msgid "Error: HTTP request returned status {{status}} for URL: {{url}}"
+msgstr ""
+
+#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2172
+msgid "Error reading XML"
+msgstr ""
+
+#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2173
+msgid "Error reading XML from URL {{url}}: {{error}}"
+msgstr ""
+
+#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2184
+msgid "Error parsing XML data"
+msgstr ""
+
+#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2185
+msgid "Error parsing XML data. Details: {{details}}"
+msgstr ""
+
+#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2204
+#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2246
+msgid "Error {{omp_status}}: {{omp_status_text}}"
+msgstr ""
+
+#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2207
+#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2249
+msgid "OMP Error {{omp_status}}: {{omp_status_text}}"
+msgstr ""
+
+#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2275
+msgid "Invalid request command: \"{{command}}"
+msgstr ""
+
+#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2649
+msgid "OVAL definition"
+msgstr ""
+
+#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2651
+msgid "CERT-Bund Advisory"
+msgstr ""
+
+#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2653
+msgid "DFN-CERT Advisory"
+msgstr ""
+
+#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2655
+msgid "SecInfo Item"
+msgstr ""
+
+#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2669
+msgid "DFN-CERT Advisories"
+msgstr ""
+
+#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2671
+msgid "CERT-Bund Advisories"
+msgstr ""
+
+#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2685
+msgid "total {{resource_type_plural}}"
+msgstr ""
+
+#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2693
+msgid "creation time"
+msgstr ""
+
+#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2695
+msgid "modification time"
+msgstr ""
+
+#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2697
+msgid "QoD"
+msgstr ""
+
+#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2699
+msgid "QoD type"
+msgstr ""
+
+#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2701
+msgid "High"
+msgstr ""
+
+#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2703
+msgid "High / host"
+msgstr ""
+
+#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3118
+msgid "None"
+msgstr ""
+
+#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3121
+msgid "Exploit"
+msgstr ""
+
+#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3124
+msgid "Remote vulnerability"
+msgstr ""
+
+#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3127
+msgid "Package check"
+msgstr ""
+
+#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3130
+msgid "Registry check"
+msgstr ""
+
+#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3133
+msgid "Executable version"
+msgstr ""
+
+#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3136
+msgid "Remote analysis"
+msgstr ""
+
+#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3139
+msgid "Remote probe"
+msgstr ""
+
+#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3142
+msgid "Unreliable rem. banner"
+msgstr ""
+
+#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3145
+msgid "Unreliable exec. version"
+msgstr ""
+
+#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3415
+msgid "{{title}} (Loading...)"
+msgstr ""
+
+#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3422
+msgid "{{title}} {{filter_text}} (Total: {{count}})"
+msgstr ""
+
+#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3502
+msgid "Greenbone Security Assistant - Chart data table"
+msgstr ""
+
+#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3549
+msgid "Applied filter: {{filter}}"
+msgstr ""
+
+#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3659
+msgid "Next scheduled tasks"
+msgstr ""
+
+#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3664
+msgid "{{resource_type_plural}} by Severity Class"
+msgstr ""
+
+#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3673
+msgid "{{resource_type_plural}} by CVSS"
+msgstr ""
+
+#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3681
+#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3731
+msgid "{{resource_type_plural}} {{field_name}} word cloud"
+msgstr ""
+
+#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3689
+#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3712
+#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3721
+#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3744
+msgid "{{resource_type_plural}} by {{field_name}}"
+msgstr ""
+
+#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3701
+msgid "{{title_text}} (Loading...)"
+msgstr ""
+
+#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3706
+msgid "Next scheduled tasks (Loading...)"
+msgstr ""
+
+#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3707
+msgid "Next scheduled Tasks"
+msgstr ""
+
+#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3735
+msgid "{{resource_type_plural}} {{field_name}} word cloud (Loading...)"
+msgstr ""
+
+#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3843
+msgid "Show detached chart window"
+msgstr ""
+
+#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3860
+msgid "Download CSV"
+msgstr ""
+
+#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3883
+msgid "Show HTML table"
+msgstr ""
+
+#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3907
+msgid "Show copyable SVG"
+msgstr ""
+
+#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3915
+msgid "Download SVG"
+msgstr ""
