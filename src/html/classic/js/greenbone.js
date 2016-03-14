@@ -55,6 +55,36 @@
 
   var gsa = global.gsa;
 
+  global.i18next
+    .use(global.i18nextXHRBackend) // use ajax backend
+    .use(global.i18nextBrowserLanguageDetector) // use browser for language detection
+    .init({
+      nsSeparator: false, // don't use a namespace seperator in keys
+      keySeperator: false, // don't use a key spererator in keys
+      fallbackLng: 'en',
+      ns: ['gsa'], // use gsa as namespace
+      defaultNS: 'gsa',
+      fallbackNS: 'gsa',
+      backend: {
+        loadPath: 'js/locales/{{ns}}-{{lng}}.json', // e.g. js/locales/gsa-en.json
+      },
+      detection: {
+        /* only use url querystring and browser settings for language detection */
+        order: ['querystring', 'navigator'],
+        /* use url?lang=de as querystring */
+        lookupQuerystring: 'lang',
+      },
+    });
+
+  /* Use an own function for translations
+   *
+   * This may allow to switch the i18n backend easily without having to adjust
+   * all function calls.
+   * */
+  gsa._ = function(key, options) {
+    return global.i18next.t(key, options);
+  };
+
   var RESPONSE_SELECTORS = {
     new_agent:           'create_agent_response',
     new_host:            'create_asset_response',

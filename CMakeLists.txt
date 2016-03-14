@@ -341,7 +341,14 @@ install (FILES src/html/classic/js/lib/d3.tip.js
                src/html/classic/js/gsa_h_bar_chart.js
                src/html/classic/js/gsa_line_chart.js
                src/html/classic/js/greenbone.js
+               src/html/classic/js/lib/min/i18next-2.2.0.js
+               src/html/classic/js/lib/min/i18next-xhr-0.4.0.js
+               src/html/classic/js/lib/min/i18next-languagedetector-0.1.0.js
          DESTINATION ${GSA_DATA_DIR}/classic/js)
+
+install (DIRECTORY src/html/classic/js/locales/
+         DESTINATION ${GSA_DATA_DIR}/classic/js/locales
+         PATTERN "gsa-*.json")
 
 if (CMAKE_BUILD_TYPE MATCHES "Release")
   install (FILES src/html/classic/js/lib/min/d3.v3.js
@@ -354,6 +361,9 @@ else (CMAKE_BUILD_TYPE MATCHES "Release")
                  src/html/classic/js/lib/jquery-2.1.4.js
                  src/html/classic/js/lib/jquery-ui.js
                  src/html/classic/js/lib/select2.js
+                 src/html/classic/js/lib/min/i18next-2.2.0.js.map
+                 src/html/classic/js/lib/min/i18next-xhr-0.4.0.js.map
+                 src/html/classic/js/lib/min/i18next-languagedetector-0.1.0.js.map
            DESTINATION ${GSA_DATA_DIR}/classic/js)
 endif (CMAKE_BUILD_TYPE MATCHES "Release")
 

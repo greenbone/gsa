@@ -1,5 +1,25 @@
 2016-03-14  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	Add i18next library for translations in javascript code
+
+	* CMakeLists.txt,
+	src/html/classic/gsad.xsl,
+	src/html/classic/js/greenbone.js,
+	src/html/classic/js/lib/min/i18next-2.2.0.js,
+	src/html/classic/js/lib/min/i18next-2.2.0.js.map,
+	src/html/classic/js/lib/min/i18next-languagedetector-0.1.0.js,
+	src/html/classic/js/lib/min/i18next-languagedetector-0.1.0.js.map,
+	src/html/classic/js/lib/min/i18next-xhr-0.4.0.js,
+	src/html/classic/js/lib/min/i18next-xhr-0.4.0.js.map: Add i18next library for
+	translation support in our javascript files. The i18n translation function is
+	exported as gsa._ to allow extracting via xgettext and to allow switching the
+	i18n library easily if i18next doesn't fit to our requirements anymore. The
+	i18next project only releases minified source code. This versions of the
+	minified code are generated from corresponding git tags. The code itself is
+	released under a MIT licence.
+
+2016-03-14  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/: Move external javascript libraries to a new sub
 	directory called lib. This will allow to better differentiate between external
 	and our code.
