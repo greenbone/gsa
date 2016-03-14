@@ -1,0 +1,66 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+#
+# Greenbone Security Assistant
+# $Id$
+# Description: Utility to generate a JSON file from a po file
+#
+# Authors:
+#  Björn Ricks <bjoern.ricks@greenbone.net>
+#
+# Copyright:
+#  Copyright (C) 2016 Greenbone Networks GmbH
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License version 2,
+# or, at your option, any later version as published by the Free
+# Software Foundation
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+
+from __future__ import print_function
+
+import json
+import os
+import sys
+
+import polib
+
+
+def usage():
+    print("Usage: {} POFILE JSONFILE".format(os.path.basename(sys.argv[0])))
+
+
+def convert(in_name, out_name):
+    if not os.path.isfile(in_name):
+            raise IOError("PO file {} not found".format(in_name))
+
+    po_f = polib.pofile(in_name)
+
+    out_d = {}
+    for entry in po_f:
+        out_d[entry.msgid] = entry.msgstr
+
+    with open(out_name, "w") as out_f:
+        json.dump(out_d, out_f, indent=2, sort_keys=True)
+
+
+def main():
+    if len(sys.argv) < 3:
+        usage()
+        sys.exit(1)
+
+    convert(sys.argv[1], sys.argv[2])
+
+
+if __name__ == "__main__":
+    main()
+
+#  vim: set ts=8 sw=4 tw=80:

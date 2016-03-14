@@ -1,5 +1,10 @@
 2016-03-14  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* tools/po2json: Add python script to convert po files into json files that
+	can be loaded by i18next.
+
+2016-03-14  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* tools/js2pot: Add script to extract translatable messages from our
 	javascript files.
 
