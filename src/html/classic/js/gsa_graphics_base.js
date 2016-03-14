@@ -262,8 +262,8 @@
         })
         .append($('<img/>', {
           src: 'img/edit.png',
-          alt: 'Edit Dashboard',
-          title: 'Edit Dashboard',
+          alt: gsa._('Edit Dashboard'),
+          title: gsa._('Edit Dashboard'),
         }))
         .appendTo($(dashboardControls));
 
@@ -275,8 +275,8 @@
         })
         .append($('<img/>', {
           src: 'img/new.png',
-          alt: 'Add new Component',
-          title: 'Add new Component',
+          alt: gsa._('Add new Component'),
+          title: gsa._('Add new Component'),
         }))
         .appendTo($(dashboardControls));
 
@@ -290,8 +290,8 @@
         })
         .append($('<img/>', {
           src: 'img/stop.png',
-          alt: 'Stop Editing',
-          title: 'Stop Editing',
+          alt: gsa._('Stop Editing'),
+          title: gsa._('Stop Editing'),
         }))
         .appendTo($(dashboardControls));
 
@@ -1212,15 +1212,16 @@
       })
       .append($('<img/>', {
         src: '/img/delete.png',
-        alt: 'Remove',
-        title: 'Remove',
+        alt: gsa._('Remove'),
+        title: gsa._('Remove'),
       }))
       .appendTo(topButtons);
 
       header = $('<div/>', {
         'class': 'chart-head',
         id: id + '-head',
-        text: 'Initializing component "' + controllerString + '"...',
+        text: gsa._('Initializing component "{{component}}"...',
+            {component: controllerString}),
       }).appendTo(innerElem_d3);
 
       header = header[0];
@@ -1701,7 +1702,7 @@
     var chart_type = p_chart_type;
     var chart_template = p_chart_template ? p_chart_template : '';
     var chart_name = p_chart_name;
-    var label = p_label ? p_label : 'Unnamed chart';
+    var label = p_label ? p_label : gsa._('Unnamed chart');
     var icon = p_icon ? p_icon : '/img/help.png';
     var current_request;
 
@@ -2117,8 +2118,9 @@
               if (data[filterID][controllerID] === undefined) {
                 output_error(
                     requestingControllers[filterID][controllerID].controller,
-                    'Internal error: Invalid request',
-                    'Invalid request command: "' + command + '"');
+                    gsa._('Internal error: Invalid request'),
+                    gsa._('Invalid request command: "{{command}}"',
+                      {command: command}));
               }
 
               requestingControllers[filterID][controllerID].active = false;
@@ -2142,7 +2144,7 @@
                     if (error.status === 0) {
                       for (controllerID in ctrls) {
                         output_error(ctrls[controllerID].controller,
-                            'Loading aborted');
+                            gsa._('Loading aborted'));
                       }
                       return;
                     }
@@ -2155,9 +2157,11 @@
                       }
                       for (controllerID in ctrls) {
                         output_error(ctrls[controllerID].controller,
-                            'HTTP error ' + error.status,
-                            'Error: HTTP request returned status ' +
-                            error.status + ' for URL: ' + data_uri);
+                            gsa._('HTTP error {{error}}',
+                              {error: error.status}),
+                            gsa._('Error: HTTP request returned status ' +
+                              '{{status}} for URL: {{url}}',
+                              {status: error.status, url: data_uri}));
                       }
                       return;
                     }
@@ -2165,9 +2169,9 @@
                   else {
                     for (controllerID in ctrls) {
                       output_error(ctrls[controllerID].controller,
-                          'Error reading XML',
-                          'Error reading XML from URL \'' + data_uri + '\': ' +
-                          error);
+                          gsa._('Error reading XML'),
+                          gsa._('Error reading XML from URL {{url}}: {{error}}',
+                            {url: data_uri, error: error}));
                     }
                     return;
                   }
@@ -2177,10 +2181,9 @@
                   if (xml.documentElement.localName === 'parsererror') {
                     for (controllerID in ctrls) {
                       output_error(ctrls[controllerID].controller,
-                          'Error parsing XML data',
-                          'Error parsing XML data, ' +
-                          'details follow in a debug message',
-                          xml.documentElement.textContent);
+                          gsa._('Error parsing XML data'),
+                          gsa._('Error parsing XML data. Details: {{details}}' +
+                            {details: xml.documentElement.textContent}));
                     }
                     return;
                   }
@@ -2198,10 +2201,13 @@
                           continue;
                         }
                         output_error(ctrls[controllerID].controller,
-                            'Error ' + omp_status +
-                            ': ' + omp_status_text,
-                            'OMP Error ' + omp_status +
-                            ': ' + omp_status_text);
+                            gsa._('Error {{omp_status}}: {{omp_status_text}}',
+                              {omp_status: omp_status,
+                                omp_status_text: omp_status_text}),
+                            gsa._('OMP Error {{omp_status}}: ' +
+                              '{{omp_status_text}}',
+                              {omp_status: omp_status,
+                                omp_status_text: omp_status_text}));
                       }
                       return data_source;
                     }
@@ -2237,10 +2243,13 @@
                           continue;
                         }
                         output_error(ctrls[controllerID].controller,
-                            'Error ' + omp_status +
-                            ': ' + omp_status_text,
-                            'OMP Error ' + omp_status +
-                            ': ' + omp_status_text);
+                            gsa._('Error {{omp_status}}: {{omp_status_text}}',
+                              {omp_status: omp_status,
+                                omp_status_text: omp_status_text}),
+                            gsa._('OMP Error {{omp_status}}: ' +
+                              '{{omp_status_text}}',
+                              {omp_status: omp_status,
+                                omp_status_text: omp_status_text}));
                       }
                       return data_source;
                     }
@@ -2262,8 +2271,9 @@
                   else {
                     for (controllerID in ctrls) {
                       output_error(ctrls[controllerID].controller,
-                          'Internal error: Invalid request',
-                          'Invalid request command: "' + command + '"');
+                          gsa._('Internal error: Invalid request'),
+                          gsa._('Invalid request command: "{{command}}',
+                            {command: command}));
                     }
                     return data_source;
                   }
@@ -2636,13 +2646,13 @@
   function resource_type_name(type) {
     switch (type.toLowerCase()) {
       case 'ovaldef':
-        return 'OVAL definition';
+        return gsa._('OVAL definition');
       case 'cert_bund_adv':
-        return 'CERT-Bund Advisory';
+        return gsa._('CERT-Bund Advisory');
       case 'dfn_cert_adv':
-        return 'DFN-CERT Advisory';
+        return gsa._('DFN-CERT Advisory');
       case 'allinfo':
-        return 'SecInfo Item';
+        return gsa._('SecInfo Item');
       default:
         return capitalize(type);
     }
@@ -2656,9 +2666,9 @@
   function resource_type_name_plural(type) {
     switch (type.toLowerCase()) {
       case 'dfn_cert_adv':
-        return 'DFN-CERT Advisories';
+        return gsa._('DFN-CERT Advisories');
       case 'cert_bund_adv':
-        return 'CERT-Bund Advisories';
+        return gsa._('CERT-Bund Advisories');
       default:
         return resource_type_name(type) + 's';
     }
@@ -2672,21 +2682,25 @@
   function field_name(field, type) {
     switch (field.toLowerCase()) {
       case 'c_count':
-        return 'total ' + resource_type_name_plural(type);
+        return gsa._('total {{resource_type_plural}}',
+            {
+              resource_type_plural: resource_type_name_plural(type),
+              interpolation: {escape: false},
+            });
       case 'count':
         return resource_type_name_plural(type);
       case 'created':
-        return 'creation time';
+        return gsa._('creation time');
       case 'modified':
-        return 'modification time';
+        return gsa._('modification time');
       case 'qod':
-        return 'QoD';
+        return gsa._('QoD');
       case 'qod_type':
-        return 'QoD type';
+        return gsa._('QoD type');
       case 'high':
-        return 'High';
+        return gsa._('High');
       case 'high_per_host':
-        return 'High / host';
+        return gsa._('High / host');
       default:
         if (is_string(field)) {
           return field.replace('_', ' ');
@@ -3101,34 +3115,34 @@
         if (field === type_field) {
           switch (old_data.records[record][field]) {
             case (''):
-              new_record[field] = 'None';
+              new_record[field] = gsa._('None');
               break;
             case ('exploit'):
-              new_record[field] = 'Exploit';
+              new_record[field] = gsa._('Exploit');
               break;
             case ('remote_vul'):
-              new_record[field] = 'Remote vulnerability';
+              new_record[field] = gsa._('Remote vulnerability');
               break;
             case ('package'):
-              new_record[field] = 'Package check';
+              new_record[field] = gsa._('Package check');
               break;
             case ('registry'):
-              new_record[field] = 'Registry check';
+              new_record[field] = gsa._('Registry check');
               break;
             case ('executable_version'):
-              new_record[field] = 'Executable version';
+              new_record[field] = gsa._('Executable version');
               break;
             case ('remote_analysis'):
-              new_record[field] = 'Remote analysis';
+              new_record[field] = gsa._('Remote analysis');
               break;
             case ('remote_probe'):
-              new_record[field] = 'Remote probe';
+              new_record[field] = gsa._('Remote probe');
               break;
             case ('remote_banner_unreliable'):
-              new_record[field] = 'Unreliable rem. banner';
+              new_record[field] = gsa._('Unreliable rem. banner');
               break;
             case ('executable_version_unreliable'):
-              new_record[field] = 'Unreliable exec. version';
+              new_record[field] = gsa._('Unreliable exec. version');
               break;
             default:
               new_record[field] = resource_type_name(
@@ -3398,14 +3412,15 @@
       }
 
       if (data === undefined) {
-        return title + ' (Loading...)';
+        return gsa._('{{title}} (Loading...)', {title: title});
       }
 
       var total = 0;
       for (var i = 0; i < data.records.length; i++) {
         total = Number(total) + Number(data.records[i][count_field]);
       }
-      return (title + filter_text + ' (Total: ' + String(total) + ')');
+      return gsa._('{{title}} {{filter_text}} (Total: {{count}})',
+          {title: title, filter_text: filter_text, count: '' + total});
     };
   }
 
@@ -3484,7 +3499,7 @@
     }
 
     head_s.append('title')
-            .text('Greenbone Security Assistant - Chart data table');
+            .text(gsa._('Greenbone Security Assistant - Chart data table'));
 
     head_s.append('link')
             .attr('href', stylesheet.href)
@@ -3531,7 +3546,7 @@
     if (filter) {
       body_s.append('p')
               .attr('class', 'footnote')
-              .text('Applied filter: ' + filter);
+              .text(gsa._('Applied filter: {{filter}}', {filter: filter}));
     }
 
     return doc.documentElement.outerHTML;
@@ -3641,59 +3656,97 @@
     }
 
     if (type === 'task') {
-      return 'Next scheduled tasks';
+      return gsa._('Next scheduled tasks');
     }
 
     if (chart_template === 'info_by_class' ||
         chart_template === 'recent_info_by_class') {
-      return resource_type_name_plural(aggregate_type) + ' by Severity Class';
+      return gsa._('{{resource_type_plural}} by Severity Class',
+          {
+            resource_type_plural: resource_type_name_plural(aggregate_type),
+            interpolation: {escape: false}
+          });
     }
 
     if (chart_template === 'info_by_cvss' ||
         chart_template === 'recent_info_by_cvss') {
-      return resource_type_name_plural(aggregate_type) + ' by CVSS';
+      return gsa._('{{resource_type_plural}} by CVSS',
+          {
+            resource_type_plural: resource_type_name_plural(aggregate_type),
+            interpolation: {escape: false}
+          });
     }
 
     if (chart_type === 'cloud') {
-      return resource_type_name_plural(aggregate_type) + ' ' +
-        field_name(group_column) + ' word cloud';
+      return gsa._('{{resource_type_plural}} {{field_name}} word cloud',
+          {
+            resource_type_plural: resource_type_name_plural(aggregate_type),
+            field_name: field_name(group_column),
+            interpolation: {escape: false}
+          });
     }
 
-    return resource_type_name_plural(aggregate_type) + ' by ' +
-      field_name(group_column);
+    return gsa._('{{resource_type_plural}} by {{field_name}}',
+        {
+          resource_type_plural: resource_type_name_plural(aggregate_type),
+          field_name: field_name(group_column),
+          interpolation: {escape: false},
+        });
   }
 
   function get_title_generator(type, chart_type, chart_template, aggregate_type,
       group_column, title_text) {
 
     if (title_text) {
-      return title_static(title_text + ' (Loading...)', title_text);
+      return title_static(gsa._('{{title_text}} (Loading...)',
+            {title_text: title_text}), title_text);
     }
 
     if (type === 'task') {
-      return title_static('Next scheduled tasks (Loading...)',
-          'Next scheduled Tasks');
+      return title_static(gsa._('Next scheduled tasks (Loading...)'),
+          gsa._('Next scheduled Tasks'));
     }
 
     if (chart_template === 'info_by_class' ||
         chart_template === 'info_by_cvss') {
-      return title_total(resource_type_name_plural(aggregate_type) +
-            ' by severity', 'count');
+      return title_total(gsa._('{{resource_type_plural}} by {{field_name}}',
+            {
+              resource_type_plural: resource_type_name_plural(aggregate_type),
+              field_name: 'severity',
+              interpolation: {escape: false},
+            }), 'count');
     }
 
     if (chart_type === 'bubbles') {
-      return title_total(resource_type_name_plural(aggregate_type) +
-            ' by ' + field_name(group_column), 'size_value');
+      return title_total(gsa._('{{resource_type_plural}} by {{field_name}}',
+          {
+            resource_type_plural: resource_type_name_plural(aggregate_type),
+            field_name: field_name(group_column),
+            interpolation: {escape: false},
+          }), 'size_value');
     }
 
     if (chart_type === 'cloud') {
-      var cloud_text = resource_type_name_plural(aggregate_type) +
-        ' ' + field_name(group_column) + ' word cloud';
-      return title_static(cloud_text + ' (Loading...)', cloud_text);
+      var cloud_text = gsa._(
+          '{{resource_type_plural}} {{field_name}} word cloud',
+          {resource_type_plural: resource_type_name_plural(aggregate_type),
+           field_name: field_name(group_column)});
+      var cloud_text_loading = gsa._(
+          '{{resource_type_plural}} {{field_name}} word cloud (Loading...)',
+          {
+            resource_type_plural: resource_type_name_plural(aggregate_type),
+            field_name: field_name(group_column),
+            interpolation: {escape: false}
+          });
+      return title_static(cloud_text_loading, cloud_text);
     }
 
-    return title_total(resource_type_name_plural(aggregate_type) +
-          ' by ' + field_name(group_column), 'count');
+    return title_total(gsa._('{{resource_type_plural}} by {{field_name}}',
+          {
+            resource_type_plural: resource_type_name_plural(aggregate_type),
+            field_name: field_name(group_column),
+            interpolation: {escape: false},
+          }), 'count');
   }
 
   function BaseChartGenerator(name) {
@@ -3787,7 +3840,7 @@
       .on('click', function() {
         open_detached(controller.detached_url());
       })
-      .text('Show detached chart window');
+      .text(gsa._('Show detached chart window'));
     return this;
   };
 
@@ -3804,7 +3857,7 @@
       .attr('href', this.csv_url)
       .attr('download', 'gsa_' + this.getName() + '_chart-' +
           new Date().getTime() + '.csv')
-      .text('Download CSV');
+      .text(gsa._('Download CSV'));
     return this;
   };
 
@@ -3827,7 +3880,7 @@
         window.open(self.html_table_url);
         return true;
       })
-      .text('Show HTML table');
+      .text(gsa._('Show HTML table'));
     return this;
   };
 
@@ -3851,7 +3904,7 @@
       .on('click', function() {
         blob_img_window(create_svg_url());
       })
-      .text('Show copyable SVG');
+      .text(gsa._('Show copyable SVG'));
 
     display.create_or_get_menu_item('svg_dl', true /* Last. */)
       .attr('download', 'gsa_' + self.getName() + '_chart-' +
@@ -3859,7 +3912,7 @@
       .on('click', function() {
         $(this).attr('href', create_svg_url());
       })
-      .text('Download SVG');
+      .text(gsa._('Download SVG'));
     return this;
   };
 

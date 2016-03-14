@@ -763,14 +763,14 @@
     if (this.icon.hasClass('expand')) {
       this.icon.attr({
         src:   '/img/unfold.png',
-        title: 'Unfold ' + this.name,
-        alt:   'Unfold ' + this.name
+        title: gsa._('Unfold {{name}}', {name: this.name}),
+        alt:   gsa._('Unfold {{name}}', {name: this.name}),
       });
     } else {
       this.icon.attr({
         src:   '/img/fold.png',
-        title: 'Fold ' + this.name,
-        alt:   'Fold ' + this.name
+        title: gsa._('Fold {{name}}', {name: this.name}),
+        alt:   gsa._('Fold {{name}}', {name: this.name}),
       });
     }
   };
@@ -829,22 +829,26 @@
     doc = $(doc);
 
     doc.find('.edit-action-icon').each(function() {
-      init_omp_dialog({type: 'edit', element: $(this), button: 'Save'});
+      init_omp_dialog({type: 'edit', element: $(this), button: gsa._('Save')});
     });
 
     doc.find('.new-action-icon').each(function() {
-      init_omp_dialog({type: 'new', element: $(this), button: 'Create'});
+      init_omp_dialog({type: 'new', element: $(this), button: gsa._('Create')});
     });
 
     doc.find('.upload-action-icon').each(function() {
-      init_omp_dialog({type: 'upload', element: $(this), button: 'Create'});
+      init_omp_dialog({
+        type: 'upload',
+        element: $(this),
+        button: gsa._('Create'),
+      });
     });
 
     doc.find('.delete-action-icon').each(function() {
       init_omp_dialog({
         type: 'delete',
         element: $(this),
-        button: 'Delete',
+        button: gsa._('Delete'),
         postfix: 'confirm',
       });
     });
@@ -922,7 +926,7 @@
       var id = elem.data('id');
       elem.on('click', function(event) {
         event.preventDefault();
-        new FilterDialog(id, 'Update Filter').show();
+        new FilterDialog(id, gsa._('Update Filter')).show();
       });
     });
 
@@ -968,7 +972,7 @@
       button.datepicker({
         showOn: 'button',
         buttonImage: 'img/calendar.png',
-        buttonText: 'Select date',
+        buttonText: gsa._('Select date'),
         altField: elem.find('.datepicker-value'),
         altFormat: 'DD, d MM, yy',
         minDate: curDate,
