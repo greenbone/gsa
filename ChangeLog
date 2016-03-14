@@ -1,3 +1,9 @@
+2016-03-14  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/js/: Move external javascript libraries to a new sub
+	directory called lib. This will allow to better differentiate between external
+	and our code.
+
 2016-03-11  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/classic/img/vul_report.svg: New.

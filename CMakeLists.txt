@@ -330,8 +330,8 @@ install (FILES src/html/classic/css/images/ui-bg_diagonals-thick_18_aa0000_40x40
                src/html/classic/css/images/ui-icons_ffffff_256x240.png
          DESTINATION ${GSA_DATA_DIR}/classic/css/images)
 
-install (FILES src/html/classic/js/d3.tip.js
-               src/html/classic/js/d3.layout.cloud.js
+install (FILES src/html/classic/js/lib/d3.tip.js
+               src/html/classic/js/lib/d3.layout.cloud.js
                src/html/classic/js/gsa_bar_chart.js
                src/html/classic/js/gsa_bubble_chart.js
                src/html/classic/js/gsa_cloud_chart.js
@@ -344,16 +344,16 @@ install (FILES src/html/classic/js/d3.tip.js
          DESTINATION ${GSA_DATA_DIR}/classic/js)
 
 if (CMAKE_BUILD_TYPE MATCHES "Release")
-  install (FILES src/html/classic/js/min/d3.v3.js
-                 src/html/classic/js/min/jquery-2.1.4.js
-                 src/html/classic/js/min/jquery-ui.js
-                 src/html/classic/js/min/select2.js
+  install (FILES src/html/classic/js/lib/min/d3.v3.js
+                 src/html/classic/js/lib/min/jquery-2.1.4.js
+                 src/html/classic/js/lib/min/jquery-ui.js
+                 src/html/classic/js/lib/min/select2.js
            DESTINATION ${GSA_DATA_DIR}/classic/js)
 else (CMAKE_BUILD_TYPE MATCHES "Release")
-  install (FILES src/html/classic/js/d3.v3.js
-                 src/html/classic/js/jquery-2.1.4.js
-                 src/html/classic/js/jquery-ui.js
-                 src/html/classic/js/select2.js
+  install (FILES src/html/classic/js/lib/d3.v3.js
+                 src/html/classic/js/lib/jquery-2.1.4.js
+                 src/html/classic/js/lib/jquery-ui.js
+                 src/html/classic/js/lib/select2.js
            DESTINATION ${GSA_DATA_DIR}/classic/js)
 endif (CMAKE_BUILD_TYPE MATCHES "Release")
 
