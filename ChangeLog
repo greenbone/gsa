@@ -1,3 +1,9 @@
+2016-03-15  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/schema_formats/HTML/HTML.xsl (structure-line): Apply templates
+	to filter_keywords element in attrib.
+	(filter_keywords): New template.
+
 2016-03-15  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* tools/xsl2pot: Update coding style for pep8 requirements
