@@ -1,5 +1,9 @@
 2016-03-15  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* tools/xsl2pot: Update coding style for pep8 requirements
+
+2016-03-15  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_donut_chart.js: Mark strings for translations.
 
 2016-03-15  Björn Ricks <bjoern.ricks@greenbone.net>

@@ -33,53 +33,64 @@ import polib
 import re
 import xml.sax.saxutils
 
-gettext_re = re.compile('gsa:i18n\s*\(\s*\'(?P<id>.+?)\'\s*,\s*\'(?P<context>.*?)\'\s*(?:,\s*\'(?P<default>.*?)\'\s*)?\)')
-ngettext_re = re.compile('gsa:n-i18n\s*\(\s*\'(?P<id>.+?)\'\s*,\s*\'(?P<id_plural>.+?)\'\s*,.+?,\s*\'(?P<context>.*?)\'\s*(?:,\s*\'(?P<default>.*?)\'\s*(?:,\s*\'(?P<default_plural>.*?)\'\s*)?)?\)')
+gettext_re = re.compile(
+    'gsa:i18n\s*\(\s*\'(?P<id>.+?)\'\s*,\s*\'(?P<context>.*?)\'\s*(?:,\s*\''
+    '(?P<default>.*?)\'\s*)?\)')
+ngettext_re = re.compile(
+    'gsa:n-i18n\s*\(\s*\'(?P<id>.+?)\'\s*,\s*\'(?P<id_plural>.+?)\''
+    '\s*,.+?,\s*\'(?P<context>.*?)\'\s*(?:,\s*\'(?P<default>.*?)\''
+    '\s*(?:,\s*\'(?P<default_plural>.*?)\'\s*)?)?\)')
 
-def unescape (string):
-    return xml.sax.saxutils.unescape (string,
-                                      entities = {'&quot;' : '\"',
-                                                  '&amp;' : '\''})
+
+def unescape(string):
+    return xml.sax.saxutils.unescape(string,
+                                     entities={'&quot;': '\"',
+                                               '&amp;': '\''})
+
 
 def process(filepath, po):
     print "Processing %s" % filepath
 
     with open(filepath) as xsl_file:
         content = xsl_file.read()
-    
+
     for m in gettext_re.finditer(content):
-        msgid = unescape (m.group ('id'))
-        msgctxt = unescape (m.group ('context'))
+        msgid = unescape(m.group('id'))
+        msgctxt = unescape(m.group('context'))
         e = po.find(msgid, msgctxt=msgctxt)
         if e is None:
-            e = polib.POEntry(msgid=unescape (m.group('id')),
-                              msgctxt=unescape (m.group('context')),
-                              occurrences=[(filepath,
-                                            content.count("\n",0,m.start())+1)])
+            e = polib.POEntry(
+                msgid=unescape(m.group('id')),
+                msgctxt=unescape(m.group('context')),
+                occurrences=[(filepath,
+                              content.count("\n", 0, m.start()) + 1)])
             if m.group('default') is not None:
-                e.msgstr = unescape (m.group ('default'))
-                e.flags.append ('fuzzy');
+                e.msgstr = unescape(m.group('default'))
+                e.flags.append('fuzzy')
             po.append(e)
         else:
-            e.occurrences.append((filepath, content.count("\n",0,m.start())+1))
+            e.occurrences.append(
+                (filepath, content.count("\n", 0, m.start()) + 1))
 
     for m in ngettext_re.finditer(content):
-        msgid = unescape (m.group ('id'))
-        msgid_plural = unescape (m.group ('id_plural'))
-        msgctxt = unescape (m.group('context'))
+        msgid = unescape(m.group('id'))
+        # TODO remove msgid_plural isn't used
+        # msgid_plural = unescape(m.group('id_plural'))
+        msgctxt = unescape(m.group('context'))
         e = po.find(msgid, msgctxt=msgctxt)
         if e is None:
-            e = polib.POEntry(msgid=unescape (m.group('id')),
-                              msgid_plural=unescape (m.group('id_plural')),
-                              msgctxt=unescape (m.group('context')),
-                              occurrences=[(filepath,
-                                            content.count("\n",0,m.start())+1)])
+            e = polib.POEntry(
+                msgid=unescape(m.group('id')),
+                msgid_plural=unescape(m.group('id_plural')),
+                msgctxt=unescape(m.group('context')),
+                occurrences=[(filepath,
+                              content.count("\n", 0, m.start()) + 1)])
             if m.group('default') is not None:
-                e.msgstr = unescape (m.group ('default'))
-                e.flags.append ('fuzzy');
-                if unescape (m.group('default_plural')) is not None:
-                    e.msgstr_plural[0] = unescape (m.group('default'))
-                    e.msgstr_plural[1] = unescape (m.group('default_plural'))
+                e.msgstr = unescape(m.group('default'))
+                e.flags.append('fuzzy')
+                if unescape(m.group('default_plural')) is not None:
+                    e.msgstr_plural[0] = unescape(m.group('default'))
+                    e.msgstr_plural[1] = unescape(m.group('default_plural'))
                 elif (e.msgid_plural is not None):
                     e.msgstr_plural[0] = ""
                     e.msgstr_plural[1] = ""
@@ -88,7 +99,9 @@ def process(filepath, po):
                 e.msgstr_plural[1] = ""
             po.append(e)
         else:
-            e.occurrences.append((filepath, content.count("\n",0,m.start())+1))
+            e.occurrences.append(
+                (filepath, content.count("\n", 0, m.start()) + 1))
+
 
 def main(xsldirpath, potfilepath=None):
     po = polib.POFile()
