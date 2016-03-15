@@ -1,3 +1,8 @@
+2016-03-15  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/omp.xsl: Reload window after edit settings dialog has been
+	closed and saved successfully.
+
 2016-03-15  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/js/greenbone.js: Add "/" at start of i18next

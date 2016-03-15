@@ -36283,7 +36283,7 @@ var toggleFilter = function(){
     <xsl:if test="gsa:may-op ('modify_setting')">
       <a href="/omp?cmd=edit_my_settings&amp;token={/envelope/token}"
          title="{gsa:i18n ('Edit My Settings', 'My Settings')}"
-         class="edit-action-icon" data-type="my_settings"
+         class="edit-action-icon" data-reload="window" data-type="my_settings"
          style="margin-left:3px;">
         <img src="/img/edit.png"/>
       </a>
