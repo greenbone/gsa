@@ -55,7 +55,7 @@
     this.setDataTransformFunc(gsa.data_raw);
     this.setColorScale(d3.scale.category20());
     this.setTitleGenerator(
-      gsa.title_static('Loading donut chart ...', 'Donut Chart'));
+      gsa.title_static(gsa._('Loading donut chart ...'), gsa._('Donut Chart')));
   };
 
   DonutChartGenerator.prototype.generateData = function(original_data,
