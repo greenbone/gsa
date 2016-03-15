@@ -41,14 +41,6 @@ macro (MAKE_TRANSLATION _LANG)
                       ${CMAKE_CURRENT_BINARY_DIR}/gsad_xsl.pot
                       -o ${CMAKE_CURRENT_BINARY_DIR}/gsad_xsl-${_LANG}-merged.po)
 
-  add_custom_command (OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/gsad_js-${_LANG}-merged.po
-                      DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_js.pot
-                      DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/gsad_js-${_LANG}.po
-                      COMMAND ${GETTEXT_MSGMERGE_EXECUTABLE}
-                      ARGS ${CMAKE_CURRENT_SOURCE_DIR}/gsad_js-${_LANG}.po
-                      ${CMAKE_CURRENT_BINARY_DIR}/gsad_js.pot
-                      -o ${CMAKE_CURRENT_BINARY_DIR}/gsad_js-${_LANG}-merged.po)
-
   add_custom_command (OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/gsad-${_LANG}.json
                       DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/gsad_js-${_LANG}.po
                       COMMAND ${PYTHON_EXECUTABLE} "${CMAKE_SOURCE_DIR}/tools/po2json"
@@ -86,13 +78,6 @@ if (GETTEXT_FOUND)
                      DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad-ru.json
                      DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad-zh_CN.json
                      COMMENT "Created translation .json files")
-
-  add_custom_target (gettext-json-po-files
-                     DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_js.pot
-                     DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_js-de-merged.po
-                     DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_js-ru-merged.po
-                     DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_js-zh_CN-merged.po
-                     COMMENT "Created translation .po files from JavaScript")
 
   if (PYTHONINTERP_FOUND)
     add_custom_command (OUTPUT  ${CMAKE_CURRENT_BINARY_DIR}/gsad_xsl.pot
