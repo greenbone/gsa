@@ -1,5 +1,10 @@
 2016-03-15  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/js/greenbone.js: Add "/" at start of i18next
+	loadPath so it works correctly on help pages.
+
+2016-03-15  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/po/CMakeLists.txt: Use .po files from source directory to create
 	translation JSON files.
 
