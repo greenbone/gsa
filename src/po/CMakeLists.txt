@@ -50,9 +50,9 @@ macro (MAKE_TRANSLATION _LANG)
                       -o ${CMAKE_CURRENT_BINARY_DIR}/gsad_js-${_LANG}-merged.po)
 
   add_custom_command (OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/gsad-${_LANG}.json
-                      DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_js-${_LANG}-merged.po
+                      DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/gsad_js-${_LANG}.po
                       COMMAND ${PYTHON_EXECUTABLE} "${CMAKE_SOURCE_DIR}/tools/po2json"
-                      ARGS ${CMAKE_CURRENT_BINARY_DIR}/gsad_js-${_LANG}-merged.po
+                      ARGS ${CMAKE_CURRENT_SOURCE_DIR}/gsad_js-${_LANG}.po
                       ${CMAKE_CURRENT_BINARY_DIR}/gsad-${_LANG}.json)
 
   install (FILES ${CMAKE_CURRENT_BINARY_DIR}/gsad-${_LANG}.json

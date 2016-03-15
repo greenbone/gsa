@@ -1,3 +1,8 @@
+2016-03-15  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/po/CMakeLists.txt: Use .po files from source directory to create
+	translation JSON files.
+
 2016-03-14  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/po/gsad_js-de.po: Add a draft for German translation of javascript ui.
