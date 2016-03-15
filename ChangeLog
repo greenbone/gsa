@@ -1,3 +1,8 @@
+2016-03-15  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* ChangeLog: Fix filename in last entry for file
+	src/html/classic/omp-doc.xsl.
+
 2016-03-15  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/po/CMakeLists.txt: Remove generation of obsolete
@@ -5,7 +10,7 @@
 
 2016-03-15  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
-	* src/schema_formats/HTML/HTML.xsl (structure-line): Apply templates
+	* src/html/classic/omp-doc.xsl (structure-line): Apply templates
 	to filter_keywords element in attrib.
 	(filter_keywords): New template.
 
