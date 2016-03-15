@@ -27,60 +27,147 @@
 (function(window, global, gsa, d3, console) {
   'use strict';
 
-  gsa.register_chart_generator('bubbles', BubbleChartGenerator);
+  gsa.register_chart_generator('bubbles', create_new_bubble_chart_generator);
+
+  function create_new_bubble_chart_generator() {
+    return new BubbleChartGenerator();
+  }
 
   /* Main chart generator */
   function BubbleChartGenerator() {
-    var svg;
-    var height;
-    var width;
-    var margin = {top: 5, right: 5, bottom: 5, left: 5};
+    // call super constructor
+    gsa.BaseChartGenerator.call(this, 'bubble');
+  }
 
-    var data_transform = simple_bubble_data;
-    var color_scale = gsa.severity_colors_gradient();
-    var title = gsa.title_static('Loading bubble chart ...', 'Bubble Chart');
+  BubbleChartGenerator.prototype = Object.create(
+      gsa.BaseChartGenerator.prototype);
+  BubbleChartGenerator.prototype.constructor = BubbleChartGenerator;
 
-    var records;
-    var column_info;
-    var data;
+  BubbleChartGenerator.prototype.init = function() {
+    this.margin = {top: 5, right: 5, bottom: 5, left: 5};
 
-    var empty_text = 'empty';
-    var records_empty = false;
+    this.x_label = '';
+    this.y_label = '';
+    this.color_label = '';
 
-    var x_label = '';
-    var y_label = '';
-    var color_label = '';
+    this.x_field = 'value';
+    this.y_field = 'count';
+    this.color_field = 'mean';
 
-    var x_field = 'value';
-    var y_field = 'count';
-    var color_field = 'mean';
+    this.setDataTransformFunc(simple_bubble_data);
+    this.setColorScale(gsa.severity_colors_gradient());
+    this.setTitleGenerator(gsa.title_static(
+          gsa._('Loading bubble chart ...'), gsa._('Bubble Chart')));
+  };
 
-    var show_stat_type = true;
+  BubbleChartGenerator.prototype.generateData = function(original_data,
+      controller, gen_params) {
+    var cmd = controller.data_src().command();
+    if (cmd === 'get_aggregate') {
+      return this.transformData(original_data, gen_params);
+    }
+    else {
+      console.error('Unsupported command:' + cmd);
+      return null;
+    }
+  };
 
-    var csv_url;
+  BubbleChartGenerator.prototype.generate = function(original_data, controller,
+      gen_params) {
+    var display = controller.display();
+    var update = this.mustUpdate(display);
+    var empty_text;
+    var self = this;
 
-    var html_table_data;
-    var html_table_url;
+    // evaluate options set by gen_params
+    if (gen_params.x_field) {
+      this.x_field = gen_params.x_field;
+    }
 
-    var svg_data;
-    var svg_blob;
-    var svg_url;
+    if (gen_params.y_fields && gen_params.y_fields[0]) {
+      this.y_field = gen_params.y_fields[0];
+    }
 
-    var bubble_chart = {
-      height: get_height,
-      width: get_width,
-      x_field: get_set_x_field,
-      y_field: get_set_y_field,
-      x_label: get_set_x_label,
-      y_label: get_set_y_label,
-      setColorScale: get_set_color_scale,
-      setDataTransformFunc: set_data_transform,
-      setTitleGenerator: get_set_title,
-      showLoading: show_loading,
-      generate: generate,
-    };
+    if (gen_params.z_fields && gen_params.z_fields[0]) {
+      this.color_field = gen_params.z_fields[0];
+    }
 
-    return bubble_chart;
+    if (gen_params.extra.show_stat_type) {
+      this.show_stat_type = !!JSON.parse(gen_params.extra.show_stat_type);
+    }
+
+    var data = this.generateData(original_data, controller, gen_params);
+    if (data === null) {
+      return;
+    }
+
+    var records = data.records;
+    var column_info = data.column_info;
+
+    this.color_label = gsa.column_label(column_info.columns.color_value, false,
+        false, this.show_stat_type);
+
+    display.setTitle(this.title_generator(data));
+
+    if (gen_params.extra.empty_text) {
+      empty_text = gen_params.extra.empty_text;
+    }
+    else {
+      empty_text = gsa._('No matching {{resource_type}}',
+          {
+            resource_type: gsa.resource_type_name(
+              column_info.columns.label_value.type),
+            interpolation: {escape: false},
+          });
+    }
+
+    // Setup display parameters
+    var height = display.svg().attr('height') - this.margin.top -
+      this.margin.bottom;
+    var width = display.svg().attr('width') - this.margin.left -
+      this.margin.right;
+
+    if (!update) {
+      display.svg().text('');
+      this.svg = display.svg().append('g');
+
+      display.svg().on('mousemove', null);
+      display.svg().on('mouseleave', null);
+
+      this.svg.attr('transform',
+          'translate(' + this.margin.left + ',' + this.margin.top + ')');
+
+    }
+
+    // Create bubbles
+    var bubbles = d3.layout.pack()
+      .sort(null)
+      .size([width, height])
+      .value(function(d) { return d.size_value; })
+      .padding(1.5);
+
+    var filtered_records = [];
+    for (var i in records) {
+      if (records[i].size_value !== 0) {
+        filtered_records.push(records[i]);
+      }
+    }
+
+    var records_empty;
+    if (filtered_records.length === 0) {
+      records_empty = true;
+
+      var dummy = {
+        color_value: 0,
+        size_value: 1,
+        label_value: '* ' + empty_text + ' *'
+      };
+      filtered_records.push(dummy);
+
+    }
+    else {
+      records_empty = false;
+    }
 
     function tooltip_func(d) {
       if (records_empty) {
@@ -95,284 +182,64 @@
           data.column_info.columns.color_value);
 
       return label_value + ': ' + size_value   +
-        ' (' + color_label + ': ' + color_value + ')';
+        ' (' + self.color_label + ': ' + color_value + ')';
     }
 
-    function get_height() {
-      return height;
-    }
+    var nodes = bubbles.nodes({children: filtered_records})
+      .filter(function(d) { return d.depth !== 0; });
 
-    function get_width() {
-      return width;
-    }
+    this.svg.selectAll('.node')
+      .data(nodes)
+      .enter()
+      .call(create_bubble);
 
-    function get_set_x_field(value) {
-      if (!arguments.length) {
-        return x_field;
-      }
-      x_field = value;
-      return bubble_chart;
-    }
+    // Remove unused bubbles
+    this.svg.selectAll('.node')
+      .data(nodes)
+      .exit()
+      .remove();
 
-    function get_set_y_field(value) {
-      if (!arguments.length) {
-        return y_field;
-      }
-      y_field = value;
-      return bubble_chart;
-    }
+    // Update bubbles
+    this.svg.selectAll('.node')
+      .attr('transform', function(d) {
+        return 'translate(' + d.x + ',' + d.y + ')';
+      })
+      .select('circle')
+      .attr('r', function(d) { return d.r;})
+      .attr('title', tooltip_func)
+      .style('fill', function(d) { return self.scaleColor(d.color_value); });
 
-    function get_set_x_label(value) {
-      if (!arguments.length) {
-        return x_label;
-      }
-      x_label = value;
-      return bubble_chart;
-    }
+    this.svg.selectAll('.node')
+      .select('text')
+      .attr('title', tooltip_func)
+      .text(function(d) { return d.label_value.substring(0, d.r / 3); });
 
-    function get_set_y_label(value) {
-      if (!arguments.length) {
-        return y_label;
-      }
-      y_label = value;
-      return bubble_chart;
-    }
+    this.addMenuItems(controller, data);
+  };
 
-    function get_set_color_scale(value) {
-      if (!arguments.length) {
-        return color_scale;
-      }
-      color_scale = value;
-      return bubble_chart;
-    }
+  BubbleChartGenerator.prototype.generateCsvData = function(controller, data) {
+    var cols = data.column_info.columns;
+    return gsa.csv_from_records(data.records,
+        data.column_info,
+        ['label_value', 'size_value', 'color_value'],
+        [gsa.column_label(cols.label_value, true, false, this.show_stat_type),
+        gsa.column_label(cols.size_value, true, false, this.show_stat_type),
+        gsa.column_label(cols.color_value, true, false, this.show_stat_type)],
+        controller.display().header().text());
+  };
 
-    function set_data_transform(value) {
-      data_transform = value;
-      return bubble_chart;
-    }
-
-    function get_set_title(value) {
-      if (!arguments.length) {
-        return title;
-      }
-      title = value;
-      return bubble_chart;
-    }
-
-    function show_loading(display) {
-      display.setTitle(title());
-    }
-
-    function generate(original_data, chart, gen_params) {
-      var display = chart.display();
-      var data_src = chart.data_src();
-      var update = (display.last_generator() === bubble_chart);
-
-      // evaluate options set by gen_params
-      if (gen_params.x_field) {
-        x_field = gen_params.x_field;
-      }
-
-      if (gen_params.y_fields && gen_params.y_fields[0]) {
-        y_field = gen_params.y_fields[0];
-      }
-
-      if (gen_params.z_fields && gen_params.z_fields[0]) {
-        color_field = gen_params.z_fields[0];
-      }
-
-      if (gen_params.extra.show_stat_type) {
-        show_stat_type = !!JSON.parse(gen_params.extra.show_stat_type);
-      }
-
-      // Extract records and column info
-      switch (data_src.command()) {
-        case 'get_aggregate':
-          data = data_transform(original_data, gen_params);
-          records = data.records;
-          column_info = data.column_info;
-          color_label = gsa.column_label(column_info.columns.color_value, false,
-              false, show_stat_type);
-          break;
-        default:
-          console.error('Unsupported command:' + data_src.command());
-          return;
-      }
-      display.setTitle(title(data));
-
-      if (gen_params.extra.empty_text) {
-        empty_text = gen_params.extra.empty_text;
-      }
-      else {
-        empty_text = 'No matching ' + gsa.resource_type_name(
-            column_info.columns.label_value.type);
-      }
-
-      // Setup display parameters
-      height = display.svg().attr('height') - margin.top - margin.bottom;
-      width = display.svg().attr('width') - margin.left - margin.right;
-
-      if (!update) {
-        display.svg().text('');
-        svg = display.svg().append('g');
-
-        display.svg().on('mousemove', null);
-        display.svg().on('mouseleave', null);
-
-        svg.attr('transform',
-            'translate(' + margin.left + ',' + margin.top + ')');
-
-      }
-
-      // Create bubbles
-      var bubbles = d3.layout.pack()
-        .sort(null)
-        .size([width, height])
-        .value(function(d) { return d.size_value; })
-        .padding(1.5);
-
-      var filtered_records = [];
-      for (var i in records) {
-        if (records[i].size_value !== 0) {
-          filtered_records.push(records[i]);
-        }
-      }
-
-      if (filtered_records.length === 0) {
-        records_empty = true;
-        var dummy = {
-          color_value: 0,
-          size_value: 1,
-          label_value: '* ' + empty_text + ' *'
-        };
-        filtered_records.push(dummy);
-      }
-      else {
-        records_empty = false;
-      }
-
-      var nodes = bubbles.nodes({children: filtered_records})
-        .filter(function(d) { return d.depth !== 0; });
-
-      svg.selectAll('.node')
-        .data(nodes)
-        .enter()
-        .call(create_bubble);
-
-      // Remove unused bubbles
-      svg.selectAll('.node')
-        .data(nodes)
-        .exit()
-        .remove();
-
-      // Update bubbles
-      svg.selectAll('.node')
-        .attr('transform', function(d) {
-          return 'translate(' + d.x + ',' + d.y + ')';
-        })
-        .select('circle')
-        .attr('r', function(d) { return d.r;})
-        .attr('title', tooltip_func)
-        .style('fill', function(d) { return color_scale(d.color_value); });
-
-      svg.selectAll('.node')
-        .select('text')
-        .attr('title', tooltip_func)
-        .text(function(d) { return d.label_value.substring(0, d.r / 3); });
-
-      add_menu_entries(chart);
-
-      display.update_gen_data(bubble_chart, gen_params);
-    }
-
-    function add_menu_entries(controller) {
-      var display = controller.display();
-      var data_src = controller.data_src();
-
-      // Create detach menu item
-      display.create_or_get_menu_item('detach')
-        .attr('href', 'javascript:void(0);')
-        .on('click', function() {
-          gsa.open_detached(controller.detached_url());
-        })
-        .text('Show detached chart window');
-
-      // Generate CSV
-      var cols = column_info.columns;
-      var csv_data = gsa.csv_from_records(records,
-          column_info,
-          ['label_value', 'size_value', 'color_value'],
-          [gsa.column_label(cols.label_value, true, false, show_stat_type),
-          gsa.column_label(cols.size_value, true, false, show_stat_type),
-          gsa.column_label(cols.color_value, true, false, show_stat_type)],
-          display.header().text());
-
-      if (csv_url !== null) {
-        URL.revokeObjectURL(csv_url);
-      }
-      var csv_blob = new Blob([csv_data], {type: 'text/csv'});
-      csv_url = URL.createObjectURL(csv_blob);
-
-      display.create_or_get_menu_item('csv_dl')
-        .attr('href', csv_url)
-        .attr('download', 'gsa_bubble_chart-' + new Date().getTime() + '.csv')
-        .text('Download CSV');
-
-      // Generate HTML table
-      if (html_table_url !== null) {
-        URL.revokeObjectURL(html_table_url);
-        html_table_data = null;
-        html_table_url = null;
-      }
-
-      var open_html_table = function() {
-        var cols = column_info.columns;
-        if (html_table_url === null) {
-          html_table_data  = gsa.html_table_from_records(records,
-              column_info,
-              ['label_value', 'size_value', 'color_value'],
-              [gsa.column_label(cols.label_value, true, false, show_stat_type),
-              gsa.column_label(cols.size_value, true, false, show_stat_type),
-              gsa.column_label(cols.color_value, true, false, show_stat_type)],
-              display.header().text(),
-              data_src.param('filter'));
-          var html_table_blob = new Blob([html_table_data],
-              {type: 'text/html'});
-          html_table_url = URL.createObjectURL(html_table_blob);
-        }
-        window.open(html_table_url);
-        return true;
-      };
-
-      display.create_or_get_menu_item('html_table')
-        .attr('href', '#')
-        .on('click', open_html_table)
-        .text('Show HTML table');
-
-      // Generate SVG after transition
-      global.setTimeout(function() {
-        svg_data = gsa.svg_from_elem(display.svg(), display.header().text());
-        if (svg_url !== null) {
-          URL.revokeObjectURL(svg_url);
-        }
-        svg_blob = new Blob([svg_data], {type: 'image/svg+xml'});
-        svg_url = URL.createObjectURL(svg_blob);
-
-        display.create_or_get_menu_item('svg_window')
-          .attr('href', 'javascript:void(0)')
-          .on('click', function() {
-            gsa.blob_img_window(svg_url);
-          })
-          .text('Show copyable SVG');
-
-        display.create_or_get_menu_item('svg_dl', true /* Last. */)
-          .attr('href', svg_url)
-          .attr('download', 'gsa_bubble_chart-' + new Date().getTime() + '.svg')
-          .text('Download SVG');
-
-      }, 600);
-    }
-  }
+  BubbleChartGenerator.prototype.generateHtmlTableData = function(controller,
+      data) {
+    var cols = data.column_info.columns;
+    return gsa.html_table_from_records(data.records,
+        data.column_info,
+        ['label_value', 'size_value', 'color_value'],
+        [gsa.column_label(cols.label_value, true, false, this.show_stat_type),
+        gsa.column_label(cols.size_value, true, false, this.show_stat_type),
+        gsa.column_label(cols.color_value, true, false, this.show_stat_type)],
+        controller.display().header().text(),
+        controller.data_src().param('filter'));
+  };
 
   function create_bubble(selection) {
     var new_node;
