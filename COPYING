@@ -71,12 +71,12 @@ src/html/classic/js/lib/min/select2.js:
   Copyright: Kevin Brown, Igor Vaynberg, and Select2 contributors
   Origin: https://github.com/select2/select2/releases
 
-src/html/classic/js/lib/min/i18next-languagedetector-0.1.0.js.map
-src/html/classic/js/lib/min/i18next-2.2.0.js
-src/html/classic/js/lib/min/i18next-xhr-0.4.0.js.map
-src/html/classic/js/lib/min/i18next-2.2.0.js.map
-src/html/classic/js/lib/min/i18next-languagedetector-0.1.0.js
-src/html/classic/js/lib/min/i18next-xhr-0.4.0.js
+src/html/classic/js/lib/i18next-2.3.4.js
+src/html/classic/js/lib/min/i18next-2.3.4.js
+src/html/classic/js/lib/i18next-languagedetector-0.2.2.js
+src/html/classic/js/lib/min/i18next-languagedetector-0.2.2.js
+src/html/classic/js/lib/i18next-xhr-0.5.3.js
+src/html/classic/js/lib/min/i18next-xhr-0.5.3.js
   Licence: MIT
   Copyright: Copyright (c) 2015 i18next
   Origin: https://github.com/i18next/i18next

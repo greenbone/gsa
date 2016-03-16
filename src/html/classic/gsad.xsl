@@ -156,9 +156,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <script src="/js/jquery-2.1.4.js" type="text/javascript"></script>
         <script src="/js/jquery-ui.js" type="text/javascript"></script>
         <script src="/js/select2.js" type="text/javascript"></script>
-        <script src="/js/i18next-2.2.0.js" type="text/javascript"></script>
-        <script src="/js/i18next-xhr-0.4.0.js" type="text/javascript"></script>
-        <script src="/js/i18next-languagedetector-0.1.0.js" type="text/javascript"></script>
+        <script src="/js/i18next-2.3.4.js" type="text/javascript"></script>
+        <script src="/js/i18next-xhr-0.5.3.js" type="text/javascript"></script>
+        <script src="/js/i18next-languagedetector-0.2.2.js" type="text/javascript"></script>
         <script src="/js/greenbone.js" type="text/javascript"></script>
         <xsl:apply-templates select="envelope/autorefresh" mode="html-header-meta" />
       </xsl:otherwise>

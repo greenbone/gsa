@@ -1,3 +1,19 @@
+2016-03-16  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	Update i18next javascript libraries
+
+	* src/html/classic/js/: Remove map files because they aren't available in
+	newer releases. Update i18next from 2.2.0 to 2.3.4. Update i18next-xhr from
+	0.4.0 to 0.5.3. Update i18next-languagedetector from 0.1.0 to 0.2.2.
+
+	* COPYING:  Update paths for i18next
+
+	* src/html/classic/omp.xsl: Update versions of i18next js files in script
+	tags.
+
+	* CMakeLists.txt: Update installed version if i18next js libraries and only
+	install minified versions in release mode.
+
 2016-03-16  Sven Haardiek <sven.haardiek@greenbone.net>
 
 	* COPYING:  Update some paths and add i18next
