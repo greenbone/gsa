@@ -1,5 +1,11 @@
 2016-03-16  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/gsad.c: Remove unnecessary code after calling
+	accept_language_to_env_fmt. accept_language_to_env_fmt always returns a
+	language code in new allocated memory.
+
+2016-03-16  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/gsad.c: Update docstring of gsad_connection_info langauge parameter. The
 	parameter will contain the language code and not the accept language header
 	content.

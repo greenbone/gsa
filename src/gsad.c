@@ -4060,14 +4060,12 @@ request_handler (void *cls, struct MHD_Connection *connection,
           accept_language = MHD_lookup_connection_value (connection,
                                                          MHD_HEADER_KIND,
                                                          "Accept-Language");
-          language = (accept_language_to_env_fmt (accept_language));
+          language = accept_language_to_env_fmt (accept_language);
           xml = login_xml (NULL,
                            NULL,
                            ctime_now,
                            NULL,
-                           language
-                            ? language
-                            : DEFAULT_GSAD_LANGUAGE,
+                           language,
                            guest_username ? guest_username : "");
           g_free (language);
           res = xsl_transform (xml, &response_data);
@@ -4174,9 +4172,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
                                NULL,
                                ctime_now,
                                NULL,
-                               language
-                                ? language
-                                : DEFAULT_GSAD_LANGUAGE,
+                               language,
                                guest_username ? guest_username : "");
               response_data.http_status_code = MHD_HTTP_SERVICE_UNAVAILABLE;
               g_free (language);
@@ -4253,7 +4249,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
                     && strncmp (url, "/logout", strlen ("/logout")))
                     ? full_url
                     : ""),
-                  language ? language : DEFAULT_GSAD_LANGUAGE,
+                  language,
                   guest_username ? guest_username : "");
 
           g_free (language);
@@ -4302,7 +4298,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
                            NULL,
                            ctime_now,
                            NULL,
-                           language ? language : DEFAULT_GSAD_LANGUAGE,
+                           language,
                            guest_username ? guest_username : "");
           g_free (language);
           res = xsl_transform (xml, &response_data);
@@ -4614,7 +4610,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
     {
       user_t *user;
       const char *sid, *accept_language;
-      gchar *language, *new_sid;
+      gchar *new_sid;
       int ret;
 
       if (NULL == *con_cls)
@@ -4665,11 +4661,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
       accept_language = MHD_lookup_connection_value (connection,
                                                      MHD_HEADER_KIND,
                                                      "Accept-Language");
-      language = accept_language_to_env_fmt (accept_language);
-      con_info->language = g_strdup (language
-                                      ? language
-                                      : DEFAULT_GSAD_LANGUAGE);
-      g_free (language);
+      con_info->language = accept_language_to_env_fmt (accept_language);
 
       user = NULL;
       new_sid = NULL;
