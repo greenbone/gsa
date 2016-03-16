@@ -1,5 +1,12 @@
 2016-03-16  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/greenbone.js: Use own detector class for language
+	detection in i18next javascript library. Read html tag property lang and
+	fallback to http request headers if the lang property is not set. This will
+	set the same language for javascript translations as used in xsl files.
+
+2016-03-16  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	Update i18next javascript libraries
 
 	* src/html/classic/js/: Remove map files because they aren't available in

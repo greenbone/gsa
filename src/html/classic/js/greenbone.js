@@ -55,9 +55,29 @@
 
   var gsa = global.gsa;
 
+  function LanguageDetector() {
+    global.i18nextBrowserLanguageDetector.call(this);
+  }
+
+  LanguageDetector.prototype = Object.create(
+    global.i18nextBrowserLanguageDetector.prototype);
+  LanguageDetector.prototype.constructor = LanguageDetector;
+
+  LanguageDetector.prototype.detect = function() {
+    var lang = $('html').attr('lang');
+
+    if (lang) {
+      return lang;
+    }
+
+    return global.i18nextBrowserLanguageDetector.prototype.detect.call(this);
+  };
+
+  LanguageDetector.type = 'languageDetector';
+
   global.i18next
     .use(global.i18nextXHRBackend) // use ajax backend
-    .use(global.i18nextBrowserLanguageDetector) // use browser for language detection
+    .use(LanguageDetector) // use own detector for language detection
     .init({
       nsSeparator: false, // don't use a namespace seperator in keys
       keySeperator: false, // don't use a key spererator in keys
