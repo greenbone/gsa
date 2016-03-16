@@ -416,6 +416,16 @@ user_add (const gchar *username, const gchar *password, const gchar *timezone,
   return user;
 }
 
+#define USER_OK 0
+#define USER_BAD_TOKEN 1
+#define USER_EXPIRED_TOKEN 2
+#define USER_BAD_MISSING_COOKIE 3
+#define USER_BAD_MISSING_TOKEN 4
+#define USER_GUEST_LOGIN_FAILED 5
+#define USER_OMP_DOWN 6
+#define USER_IP_ADDRESS_MISSMATCH 7
+#define USER_GUEST_LOGIN_ERROR -1
+
 /**
  * @brief Find a user, given a token and cookie.
  *
@@ -439,7 +449,7 @@ user_find (const gchar *cookie, const gchar *token, const char *address,
   user_t *user = NULL;
   int index;
   if (token == NULL)
-    return 4;
+    return USER_BAD_MISSING_TOKEN;
 
   if (guest_username && token && (strcmp (token, "guest") == 0))
     {
@@ -468,7 +478,7 @@ user_find (const gchar *cookie, const gchar *token, const char *address,
             {
               *user_return = user;
               user->time = time (NULL);
-              return 0;
+              return USER_OK;
             }
           g_mutex_unlock (mutex);
         }
@@ -486,11 +496,11 @@ user_find (const gchar *cookie, const gchar *token, const char *address,
                               &chart_prefs,
                               &autorefresh);
       if (ret == 1)
-        return 5;
+        return USER_GUEST_LOGIN_FAILED;
       else if (ret == 2)
-        return 6;
+        return USER_OMP_DOWN;
       else if (ret == -1)
-        return -1;
+        return USER_GUEST_LOGIN_ERROR;
       else
         {
           user_t *user;
@@ -505,12 +515,12 @@ user_find (const gchar *cookie, const gchar *token, const char *address,
           g_free (role);
           g_free (pw_warning);
           g_free (autorefresh);
-          return 0;
+          return USER_OK;
         }
     }
 
   g_mutex_lock (mutex);
-  ret = 0;
+  ret = USER_OK;
   for (index = 0; index < users->len; index++)
     {
       user_t *item;
@@ -522,9 +532,9 @@ user_find (const gchar *cookie, const gchar *token, const char *address,
               /* Check if the session has expired. */
               if (time (NULL) - item->time > (session_timeout * 60))
                 /* Probably the browser removed the cookie. */
-                ret = 2;
+                ret = USER_EXPIRED_TOKEN;
               else
-                ret = 3;
+                ret = USER_BAD_MISSING_COOKIE;
               break;
             }
           user = item;
@@ -535,18 +545,21 @@ user_find (const gchar *cookie, const gchar *token, const char *address,
     {
       /* Verify that the user address matches the client's address. */
       if (strcmp (address, user->address))
-        ret = 7;
+        ret = USER_IP_ADDRESS_MISSMATCH;
       else if (time (NULL) - user->time > (session_timeout * 60))
-        ret = 2;
+        ret = USER_EXPIRED_TOKEN;
       else
         {
           *user_return = user;
           user->time = time (NULL);
-          return 0;
+          /* FIXME mutex is not unlocked */
+          return USER_OK;
         }
     }
   else if (ret == 0)
-    ret = 2;
+    /* should it be really USER_EXPIRED_TOKEN?
+     * No user has been found therefore the token couldn't even expire */
+    ret = USER_EXPIRED_TOKEN;
   g_mutex_unlock (mutex);
   return ret;
 }
