@@ -1,5 +1,10 @@
 2016-03-16  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/gsad.c (request_handler): Use new defines for checking user_find return
+	values in request_handler function.
+
+2016-03-16  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/gsad.c (user_add): Imporve docstring for user_add function. Remove
 	unnecessary setting of user->language. It has been overwriten by the later
 	call to set_language_code function.

@@ -4139,7 +4139,8 @@ request_handler (void *cls, struct MHD_Connection *connection,
         cookie = NULL;
 
       ret = user_find (cookie, token, client_address, &user);
-      if (ret == 1 || ret == 5 || ret == 6 || ret == -1)
+      if (ret == USER_BAD_TOKEN || ret == USER_GUEST_LOGIN_FAILED ||
+              ret == USER_OMP_DOWN || ret == USER_GUEST_LOGIN_ERROR)
         {
           cmd_response_data_t response_data;
           cmd_response_data_init (&response_data);
@@ -4194,7 +4195,8 @@ request_handler (void *cls, struct MHD_Connection *connection,
                                         1);
         }
 
-      if ((ret == 2) || (ret == 3) || (ret == 4))
+      if ((ret == USER_EXPIRED_TOKEN) || (ret == USER_BAD_MISSING_COOKIE) ||
+              (ret == USER_BAD_MISSING_TOKEN))
         {
           time_t now;
           gchar *xml;
@@ -4226,7 +4228,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
           language = accept_language_to_env_fmt (accept_language);
           full_url = reconstruct_url (connection, url);
 
-          if (ret == 2)
+          if (ret == USER_EXPIRED_TOKEN)
             {
               if (strncmp (url, "/logout", strlen ("/logout")))
                 response_data.http_status_code = MHD_HTTP_UNAUTHORIZED;
@@ -4237,11 +4239,11 @@ request_handler (void *cls, struct MHD_Connection *connection,
             response_data.http_status_code = MHD_HTTP_UNAUTHORIZED;
 
           xml = login_xml
-                 ((ret == 2)
+                 ((ret == USER_EXPIRED_TOKEN)
                    ? (strncmp (url, "/logout", strlen ("/logout"))
                        ? "Session has expired.  Please login again."
                        : "Already logged out.")
-                   : ((ret == 3 || ret == 7)
+                   : ((ret == USER_BAD_MISSING_COOKIE)
                       ? "Cookie missing or bad.  Please login again."
                       : "Token missing or bad.  Please login again."),
                   NULL,
