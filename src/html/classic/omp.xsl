@@ -32324,7 +32324,7 @@ var toggleFilter = function(){
   </xsl:choose>
 </xsl:template>
 
-<xsl:key name="key_prog_apps" match="report/results/result" use="cve/cpe/@id"/>
+<xsl:key name="key_prog_apps" match="report/results/result" use="nvt/cpe/@id"/>
 
 <xsl:template match="report" mode="prognostic_apps">
   <xsl:apply-templates select="gsad_msg"/>
@@ -32335,7 +32335,7 @@ var toggleFilter = function(){
   </xsl:apply-templates>
   <xsl:call-template name="report-section-header">
     <xsl:with-param name="section" select="'apps'"/>
-    <xsl:with-param name="filtered-count" select="count(report/results/result[generate-id() = generate-id(key('key_prog_apps', cve/cpe/@id))])"/>
+    <xsl:with-param name="filtered-count" select="count(report/results/result[generate-id() = generate-id(key('key_prog_apps', nvt/cpe/@id))])"/>
     <xsl:with-param name="full-count" select="report/apps/count"/>
   </xsl:call-template>
 
@@ -32360,8 +32360,8 @@ var toggleFilter = function(){
           <td><xsl:value-of select="gsa:i18n ('Severity', 'Severity')"/></td>
         </tr>
 
-        <xsl:for-each select="report/results/result[generate-id() = generate-id(key('key_prog_apps', cve/cpe/@id))]">
-          <xsl:variable name="cpe_id" select="cve/cpe/@id"/>
+        <xsl:for-each select="report/results/result[generate-id() = generate-id(key('key_prog_apps', nvt/cpe/@id))]">
+          <xsl:variable name="cpe_id" select="nvt/cpe/@id"/>
           <tr class="{gsa:table-row-class(position())}">
             <td>
               <xsl:call-template name="get_info_cpe_lnk">
@@ -32373,14 +32373,14 @@ var toggleFilter = function(){
               <xsl:value-of select="count(../../host[detail/name = 'App' and detail/value = $cpe_id])"/>
             </td>
             <td>
-              <xsl:value-of select="count(../result[cve/cpe/@id = $cpe_id])"/>
+              <xsl:value-of select="count(../result[nvt/cpe/@id = $cpe_id])"/>
             </td>
             <td>
-              <xsl:for-each select="../result[cve/cpe/@id = $cpe_id]">
-                <xsl:sort data-type="number" select="cve/cvss_base" order="descending"/>
+              <xsl:for-each select="../result[nvt/cpe/@id = $cpe_id]">
+                <xsl:sort data-type="number" select="nvt/cvss_base" order="descending"/>
                 <xsl:if test="position() = 1">
                   <xsl:call-template name="severity-bar">
-                    <xsl:with-param name="cvss" select="cve/cvss_base"/>
+                    <xsl:with-param name="cvss" select="nvt/cvss_base"/>
                   </xsl:call-template>
                 </xsl:if>
               </xsl:for-each>

@@ -1,3 +1,8 @@
+2016-03-16  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/omp.xsl (key_prog_apps, report [prognostic_apps]):
+	Look for CPE in "nvt" element instead of "cve".
+
 2016-03-16  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* INSTALL: Update text about the python polib requirement.
