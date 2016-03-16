@@ -1587,7 +1587,7 @@ struct gsad_connection_info
   char *response;                          ///< HTTP response text.
   params_t *params;                        ///< Request parameters.
   char *cookie;                            ///< Value of SID cookie param.
-  char *language;                          ///< Value of Accept-Language header.
+  char *language;                          ///< Language code e.g. en
   int connectiontype;                      ///< 1=POST, 2=GET.
   int answercode;                          ///< HTTP response code.
   enum content_type content_type;          ///< Content type of response.
@@ -2202,7 +2202,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
 
   ret = user_find (con_info->cookie, params_value (con_info->params, "token"),
                    client_address, &user);
-  if (ret == 1)
+  if (ret == USER_BAD_TOKEN)
     {
       response_data.http_status_code = MHD_HTTP_BAD_REQUEST;
       con_info->response
@@ -2216,7 +2216,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
       return 3;
     }
 
-  if (ret == 2)
+  if (ret == USER_EXPIRED_TOKEN)
     {
       time_t now;
       gchar *xml;
@@ -2247,7 +2247,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
       return 2;
     }
 
-  if (ret == 3 || ret == 7)
+  if (ret == USER_BAD_MISSING_COOKIE || ret == USER_IP_ADDRESS_MISSMATCH)
     {
       time_t now;
       gchar *xml;
@@ -2272,7 +2272,8 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
       return 2;
     }
 
-  if (ret == 5 || ret == 6 || ret == -1)
+  if (ret == USER_GUEST_LOGIN_FAILED || ret == USER_OMP_DOWN ||
+          ret == USER_GUEST_LOGIN_ERROR)
     {
       time_t now;
       gchar *xml;
@@ -2282,9 +2283,9 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
       ctime_r_strip_newline (&now, ctime_now);
 
       response_data.http_status_code = MHD_HTTP_SERVICE_UNAVAILABLE;
-      xml = login_xml (ret == 6
+      xml = login_xml (ret == USER_OMP_DOWN
                         ? "Login failed.  OMP service is down."
-                        : (ret == -1
+                        : (ret == USER_GUEST_LOGIN_ERROR
                             ? "Login failed.  Error during authentication."
                             : "Login failed."),
                        NULL,

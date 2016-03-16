@@ -1,5 +1,16 @@
 2016-03-16  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/gsad.c: Update docstring of gsad_connection_info langauge parameter. The
+	parameter will contain the language code and not the accept language header
+	content.
+
+2016-03-16  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/gsad.c: Use new defines for checking user_find return values in
+	exec_omp_post.
+
+2016-03-16  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/xslt_i18n.c: Update docstring for accept_language_to_env_fmt function.
 	Clarify the return value description.
 
