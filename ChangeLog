@@ -1,5 +1,10 @@
 2016-03-16  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/xslt_i18n.c: Update docstring for accept_language_to_env_fmt function.
+	Clarify the return value description.
+
+2016-03-16  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/gsad.c: Introduce defines for user_find return values. It is really hard
 	to remember int return values of functions. Therefore rememberable names
 	should be used always.

@@ -744,7 +744,9 @@ buffer_languages_xml (GString *buffer)
  *  in the LANGUAGE environment variable.
  *
  * @param[in]   accept_language  HTTP Accept-Language header text.
- * @return      Newly allocated strig of language codes as used by gettext.
+ * @return      Newly allocated string of language codes as used by gettext. If
+ *              accept_language is NULL or it doesn't contain a language
+ *              DEFAULT_GSAD_LANGUAGE is returned.
  */
 gchar *
 accept_language_to_env_fmt (const char* accept_language)
