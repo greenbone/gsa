@@ -126,7 +126,7 @@ vendor_version_get ()
  *
  * Caller must handle locking.
  *
- * @param[in]   lang      Language slot.
+ * @param[in]   lang      Language slot. May be a language name or code
  * @param[in]   language  User Interface Language.
  */
 void
