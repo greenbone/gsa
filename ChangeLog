@@ -1,3 +1,7 @@
+2016-03-16  Sven Haardiek <sven.haardiek@greenbone.net>
+
+	* COPYING:  Update some paths and add i18next
+
 2016-03-16  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/omp.xsl (key_prog_apps, report [prognostic_apps]):
