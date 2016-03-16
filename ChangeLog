@@ -1,5 +1,9 @@
 2016-03-16  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* INSTALL: Update text about the python polib requirement.
+
+2016-03-16  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/po/CMakeLists.txt: Only run po2json to generate the javascript
 	translations if a python interpreter has been found.
 

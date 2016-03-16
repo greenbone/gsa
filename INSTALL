@@ -35,7 +35,8 @@ Prerequisites for building documentation:
 * Doxygen
 * xmltoman (optional, for building man page)
 
-Prerequisites to work on the translations:
+Prerequisites to work on the translations from C and XSLT based sources and
+also to build the JavaScript translations:
 * python-polib
 
 Install prerequisites on Debian GNU/Linux:
