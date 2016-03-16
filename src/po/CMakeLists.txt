@@ -41,14 +41,16 @@ macro (MAKE_TRANSLATION _LANG)
                       ${CMAKE_CURRENT_BINARY_DIR}/gsad_xsl.pot
                       -o ${CMAKE_CURRENT_BINARY_DIR}/gsad_xsl-${_LANG}-merged.po)
 
-  add_custom_command (OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/gsad-${_LANG}.json
-                      DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/gsad_js-${_LANG}.po
-                      COMMAND ${PYTHON_EXECUTABLE} "${CMAKE_SOURCE_DIR}/tools/po2json"
-                      ARGS ${CMAKE_CURRENT_SOURCE_DIR}/gsad_js-${_LANG}.po
-                      ${CMAKE_CURRENT_BINARY_DIR}/gsad-${_LANG}.json)
+  if (PYTHONINTERP_FOUND)
+    add_custom_command (OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/gsad-${_LANG}.json
+                        DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/gsad_js-${_LANG}.po
+                        COMMAND ${PYTHON_EXECUTABLE} "${CMAKE_SOURCE_DIR}/tools/po2json"
+                        ARGS ${CMAKE_CURRENT_SOURCE_DIR}/gsad_js-${_LANG}.po
+                        ${CMAKE_CURRENT_BINARY_DIR}/gsad-${_LANG}.json)
 
-  install (FILES ${CMAKE_CURRENT_BINARY_DIR}/gsad-${_LANG}.json
-           DESTINATION ${GSA_DATA_DIR}/classic/js/locales)
+    install (FILES ${CMAKE_CURRENT_BINARY_DIR}/gsad-${_LANG}.json
+            DESTINATION ${GSA_DATA_DIR}/classic/js/locales)
+  endif (PYTHONINTERP_FOUND)
 
 endmacro ()
 
@@ -72,14 +74,14 @@ if (GETTEXT_FOUND)
                      DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_xsl-zh_CN-merged.po
                      COMMENT "Created translation .po files")
 
-  add_custom_target (gettext-json-files
-                     ALL
-                     DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad-de.json
-                     DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad-ru.json
-                     DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad-zh_CN.json
-                     COMMENT "Created translation .json files")
-
   if (PYTHONINTERP_FOUND)
+    add_custom_target (gettext-json-files
+                        ALL
+                        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad-de.json
+                        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad-ru.json
+                        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad-zh_CN.json
+                        COMMENT "Created translation .json files")
+
     add_custom_command (OUTPUT  ${CMAKE_CURRENT_BINARY_DIR}/gsad_xsl.pot
                         COMMAND ${PYTHON_EXECUTABLE} "${CMAKE_SOURCE_DIR}/tools/xsl2pot"
                         ARGS    "${CMAKE_SOURCE_DIR}/src/html/classic"
@@ -98,7 +100,7 @@ if (GETTEXT_FOUND)
     add_custom_target (gettext-json-pot-files
                        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_js.pot)
   else (PYTHONINTERP_FOUND)
-    message (WARNING "Python interpreter not found, cannot run .pot generator.")
+    message (WARNING "Python interpreter not found, cannot run .pot generator and generate JavaScript translations.")
   endif (PYTHONINTERP_FOUND)
 
 else (GETTEXT_FOUND)
