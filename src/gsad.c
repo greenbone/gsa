@@ -354,6 +354,8 @@ static GMutex *mutex = NULL;
 /**
  * @brief Add a user.
  *
+ * Creates and initializes a user object with given parameters
+ *
  * It's up to the caller to release the returned user.
  *
  * @param[in]  username      Name of user.
@@ -362,7 +364,7 @@ static GMutex *mutex = NULL;
  * @param[in]  severity      Severity class setting of user.
  * @param[in]  role          Role of user.
  * @param[in]  capabilities  Capabilities of manager.
- * @param[in]  language      User Interface Language setting.
+ * @param[in]  language      User Interface Language (language name or code)
  * @param[in]  pw_warning    Password policy warning.
  * @param[in]  chart_prefs   The chart preferences.
  * @param[in]  autorefresh   The autorefresh preference.
@@ -398,7 +400,6 @@ user_add (const gchar *username, const gchar *password, const gchar *timezone,
   user->timezone = g_strdup (timezone);
   user->severity = g_strdup (severity);
   user->capabilities = g_strdup (capabilities);
-  user->language = language ? g_strdup (language) : NULL;
   user->pw_warning = pw_warning ? g_strdup (pw_warning) : NULL;
   user->chart_prefs = chart_prefs;
   user->autorefresh = g_strdup (autorefresh);
