@@ -1,3 +1,8 @@
+2016-03-17  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/css/gsa-login.css: Move greenbone log behind the login box
+	when the screen size is reduced.
+
 2016-03-17  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (init_validator): Allow @ in comment and tag_value.

@@ -66,6 +66,7 @@ header .version {
 }
 
 .logo_box {
+  z-index: -10;
   position: fixed;
   top: 20%;
   left: 50%;
