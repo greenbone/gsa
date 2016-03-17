@@ -1186,7 +1186,7 @@ init_validator ()
   openvas_validator_add (validator, "chart_init:value", "(?s)^.*$");
   openvas_validator_add (validator, "chart_preference_id", "^(.*){0,400}$");
   openvas_validator_add (validator, "chart_preference_value", "^(.*){0,400}$");
-  openvas_validator_add (validator, "comment",    "^[-_;':()[:alnum:]äüöÄÜÖß, \\./]{0,400}$");
+  openvas_validator_add (validator, "comment",    "^[-_;':()@[:alnum:]äüöÄÜÖß, \\./]{0,400}$");
   openvas_validator_add (validator, "config_id",  "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "osp_config_id",  "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "condition",  "^[[:alnum:] ]{0,100}$");
@@ -1334,7 +1334,7 @@ init_validator ()
   openvas_validator_add (validator, "summary",    "^.{0,400}$");
   openvas_validator_add (validator, "tag_id",  "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "tag_name",       "^[\\:-_[:alnum:], \\./]{1,80}$");
-  openvas_validator_add (validator, "tag_value",       "^[\\-_[:alnum:], \\./]{0,200}$");
+  openvas_validator_add (validator, "tag_value",       "^[\\-_@[:alnum:], \\./]{0,200}$");
   openvas_validator_add (validator, "target_id",  "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "target_id_optional",  "^(--|[a-z0-9\\-]+)$");
   openvas_validator_add (validator, "task_id",    "^[a-z0-9\\-]+$");

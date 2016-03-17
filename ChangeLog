@@ -1,3 +1,7 @@
+2016-03-17  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad.c (init_validator): Allow @ in comment and tag_value.
+
 2016-03-16  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/js/greenbone.js: Use own detector class for language
