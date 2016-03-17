@@ -166,6 +166,8 @@ p {
   margin-left: auto;
 }
 
+.form-horizontal .form-group::after,
+.form-horizontal .form-group::before,
 .clearfix:before,
 .clearfix:after,
 .container:before,
@@ -176,6 +178,7 @@ p {
   display: table;
 }
 
+.form-horizontal .form-group::after,
 .clearfix:after,
 .container:after,
 .row:after {
@@ -282,6 +285,26 @@ input::-moz-focus-inner {
   filter: alpha(opacity=65);
   -webkit-box-shadow: none;
   box-shadow: none;
+}
+
+
+/* formulars */
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-horizontal .control-label {
+  padding-top: 7px;
+  margin-bottom: 0;
+  display: inline-block;
+  max-width: 100%;
+  font-weight: 700;
+}
+
+.form-control {
+  display: block;
+  width: 100%;
 }
 
 /* vim: set ts=2 sw=2 tw=80: */
