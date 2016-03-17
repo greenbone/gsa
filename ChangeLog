@@ -1,3 +1,9 @@
+2016-03-17  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Backport r24691.
+
+	* src/gsad.c (init_validator): Allow @ in comment and tag_value.
+
 2016-03-03  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Backport r24578.
