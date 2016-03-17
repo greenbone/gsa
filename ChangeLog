@@ -1,5 +1,10 @@
 2016-03-17  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/css/gsa-login.css: Set fixed width and height for all login
+	logo images because the size of an alternate image may be different.
+
+2016-03-17  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/css/gsa-login.css: Remove invalid and unnecessary style for
 	login logo image height and width from the login css file.
 

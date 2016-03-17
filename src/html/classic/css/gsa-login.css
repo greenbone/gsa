@@ -82,7 +82,9 @@ header .version {
 }
 
 .logo > img {
-  padding: 10px;
+  margin: 10px;
+  height: 130px;
+  width: 95px;
 }
 
 .login {
