@@ -1,5 +1,13 @@
 2016-03-17  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/gsad.xsl (login_page): Reformat login page to use column
+	based layout. Also add buttons to login and login as guest.
+
+	* src/html/classic/css/gsa-login.css: Remove obsolete styles from the login
+	css file.
+
+2016-03-17  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/css/gsa-base.css: Remove margin from button class because
 	with a margin they won't work within columns. Reduce also padding on both
 	sides of the button by 5 pixel.

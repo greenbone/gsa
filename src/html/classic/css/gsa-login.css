@@ -24,22 +24,13 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-html,
 body {
+  background: #393637;
   height: 100%;
 }
 
-body {
- margin: 0px;
- font: small Verdana, sans-serif;
- font-size: 12pt;
- color: #1A1A1A;
- background: #393637;
-}
-
 .page-wrap {
- min-height: 100%;
-/* background-color: rgba(255,255,255,0.4);*/
+  min-height: 100%;
 }
 
 header {
@@ -81,8 +72,8 @@ header .version {
 
 .login_box {
   font-size: 9pt;
-  width: 450px;
-  height: 150px;
+  width: 480px;
+  min-height: 150px;
   background-color: #dddddd;
   margin-top: 10%;
   margin-left: 20%;
@@ -91,7 +82,8 @@ header .version {
 }
 
 .logo {
-  float: left
+  height: 130;
+  width: 94;
 }
 
 .logo > img {
@@ -99,7 +91,6 @@ header .version {
 }
 
 .login {
-  margin-left: 115px;
   padding: 10px;
 }
 
@@ -107,18 +98,7 @@ header .version {
   color: red;
   font-weight: bold;
   text-align: center;
+  margin: 10px;
 }
 
-.login div {
-  margin-bottom: 20px;
-}
-
-.login label {
-  position: absolute;
-  padding-top: 5px;
-}
-
-.login input {
-  margin-left: 80px;
-}
-
+/* vim: set ts=2 sw=2 tw=80:*/

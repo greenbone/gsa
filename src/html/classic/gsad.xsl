@@ -2353,23 +2353,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="logo_box">
      <img src="/img/greenbone.svg" />
   </div>
-  <div class="login_box">
-    <div class="logo">
+  <div class="login_box container">
+    <div class="logo col-3">
       <xsl:choose>
         <xsl:when test="alternate_label = 0">
-          <img height="130" width="94" src="/img/login-label.png"/>
+          <img src="/img/login-label.png"/>
         </xsl:when>
         <xsl:otherwise>
-          <img height="130" width="94" src="/img/label.png"/>
+          <img src="/img/label.png"/>
         </xsl:otherwise>
       </xsl:choose>
     </div>
-    <div class="login">
+    <div class="login col-9">
       <div class="error_message">
         <xsl:value-of select="gsa:i18n (message, 'Login Message')"/>
         &#160; <!-- nbsp in order to keep the div even when no messages -->
       </div>
-      <form action="/omp" method="post">
+      <form action="/omp" method="post" class="form-horizontal">
         <input type="hidden" name="cmd" value="login" />
         <xsl:choose>
           <xsl:when test="string-length(url) = 0">
@@ -2379,29 +2379,37 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <input type="hidden" name="text" value="{url}" />
           </xsl:otherwise>
         </xsl:choose>
-        <div>
-          <label for="login"><xsl:value-of select="gsa:i18n('Username:')"/></label>
-          <input type="text" autocomplete="off" id="login" name="login" value="" autofocus="autofocus"/>
+        <div class="form-group">
+          <label for="login" class="col-4 control-label"><xsl:value-of select="gsa:i18n('Username:')"/></label>
+          <div class="col-8">
+            <input type="text" autocomplete="off" id="login" name="login"
+              value="" autofocus="autofocus" tabindex="1" class="form-control"/>
+          </div>
         </div>
-        <div>
-          <label for="password"><xsl:value-of select="gsa:i18n('Password:')"/></label>
-          <input type="password" 
-                 autocomplete="off" id="password" name="password" 
-                 onkeydown="if (event.keyCode == 13) {{ this.form.submit(); login.disabled = password.disabled = true; return false; }}"/>
+        <div class="form-group">
+          <label for="password" class="control-label col-4"><xsl:value-of select="gsa:i18n('Password:')"/></label>
+          <div class="col-8">
+            <input type="password" class="form-control"
+                  autocomplete="off" id="password" name="password" tabindex="2"
+                  onkeydown="if (event.keyCode == 13) {{ this.form.submit(); login.disabled = password.disabled = true; return false; }}"/>
+            </div>
+        </div>
+        <div class="form-group">
+          <div class="col-10 offset-2 container">
+            <xsl:if test="string-length (guest/username) &gt; 0">
+              <xsl:choose>
+                <xsl:when test="string-length(url) = 0">
+                  <a href="/omp?r=1&amp;token=guest" class="col-6 button" tabindex="4"><xsl:value-of select="gsa:i18n ('Login as a guest', 'Action Verb')"/></a>
+                </xsl:when>
+                <xsl:otherwise>
+                  <a href="{url}&amp;token=guest" class="col-6 button" tabindex="4"><xsl:value-of select="gsa:i18n ('Login as a guest', 'Action Verb')"/></a>
+                </xsl:otherwise>
+              </xsl:choose>
+            </xsl:if>
+            <input type="submit" class="col-6 button" tabindex="3" value="{gsa:i18n('Login')}" />
+          </div>
         </div>
       </form>
-      <xsl:if test="string-length (guest/username) &gt; 0">
-        <div style="text-align: right">
-          <xsl:choose>
-            <xsl:when test="string-length(url) = 0">
-              <a href="/omp?r=1&amp;token=guest"><xsl:value-of select="gsa:i18n ('Login as a guest', 'Action Verb')"/></a>
-            </xsl:when>
-            <xsl:otherwise>
-              <a href="{url}&amp;token=guest"><xsl:value-of select="gsa:i18n ('Login as a guest', 'Action Verb')"/></a>
-            </xsl:otherwise>
-          </xsl:choose>
-        </div>
-      </xsl:if>
     </div>
   </div>
  </div>
