@@ -81,11 +81,6 @@ header .version {
   box-shadow: 10px 10px 15px #1a1a1a;
 }
 
-.logo {
-  height: 130;
-  width: 94;
-}
-
 .logo > img {
   padding: 10px;
 }
