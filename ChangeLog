@@ -1,5 +1,10 @@
 2016-03-17  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/css/gsa-base.css: Add left and right padding to columns in
+	the grid layout. Add offset classes to indent elements within the grid.
+
+2016-03-17  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/css/gsa-base.css: Add styles for generic formulars inspired
 	by twitter bootstrap.
 
