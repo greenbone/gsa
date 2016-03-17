@@ -3932,7 +3932,6 @@
 
   function get_chart_generator(chart_type, data_source) {
     // TODO register generators in their own modules
-    register_chart_generator('cloud', global.CloudChartGenerator);
     register_chart_generator('horizontal_bar',
         global.HorizontalBarChartGenerator);
     register_chart_generator('line', global.LineChartGenerator);

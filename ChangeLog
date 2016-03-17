@@ -1,5 +1,14 @@
 2016-03-17  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_cloud_chart.js: Refactor CloudChartGenerator to
+	derive from BaseChartGenerator. Removed a lot of unused besides of duplicate
+	code.
+
+	* src/html/classic/js/gsa_graphics_base.js: Remove registration of
+	CloudChartGenerator from gsa_graphics_base.js.
+
+2016-03-17  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/css/gsa-login.css: Set fixed width and height for all login
 	logo images because the size of an alternate image may be different.
 
