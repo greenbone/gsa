@@ -1,0 +1,278 @@
+/*
+ * Greenbone Security Assistant
+ * $Id$
+ * Description: Base HTML stylesheet
+ *
+ * Authors:
+ * Björn Ricks <bjoern.ricks@greenbone.net>
+ *
+ * Copyright:
+ * Copyright (C) 2016 Greenbone Networks GmbH
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
+
+/* set default width and height calculation behaviour */
+
+/* border-box: actual width = border + padding + margin */
+/*             actual height = border + padding + margin */
+/* content-box: actual width = border + padding + margin + width */
+/*              actual height = border + padding + margin + height */
+
+html {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  overflow-y: scroll;
+}
+
+*, *:before, *:after {
+  -webkit-box-sizing: inherit;
+  -moz-box-sizing: inherit;
+  box-sizing: inherit;
+}
+
+
+/* set element default styles */
+
+body {
+  margin: 0px;
+  font: small Verdana, sans-serif;
+  font-size: 12px;
+  color: #1A1A1A;
+}
+
+a:link {
+  color: blue;
+  text-decoration: none;
+}
+
+a:hover, a:focus {
+  color: blue;
+  text-decoration: underline;
+}
+
+pre {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+img {
+  border: 0px;
+}
+
+h1 {
+  font-size: 20px;
+}
+
+h2 {
+  font-size: 18px;
+}
+
+h3 {
+  font-size: 16px;
+}
+
+h4 {
+  font-size:14px;
+  margin-bottom:0px;
+}
+
+form {
+  font-size: 12px;
+}
+
+table {
+  font-size: 12px;
+  border: 0;
+}
+
+p {
+  margin: 0 0 10px;
+}
+
+
+/* generic css classes */
+
+.pull-right {
+  float: right;
+}
+
+.pull-left {
+  float: left;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-justify {
+  text-align: justify;
+}
+
+.text-nowrap {
+  white-space: nowrap;
+}
+
+.footnote {
+  font-size:10px;
+  color: #787878;
+  text-align:left;
+}
+
+.footnote a {
+  font-size:10px;
+  color: #787878;
+  text-decoration: none;
+}
+
+.footnote a:hover {
+  font-size:10px;
+  color: #787878;
+  text-decoration: underline;
+}
+
+.footnote a:focus {
+  font-size:10px;
+  color: #787878;
+  text-decoration: underline;
+}
+
+
+/* grid system */
+
+.container {
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.clearfix:before,
+.clearfix:after,
+.container:before,
+.container:after,
+.row:before,
+.row:after {
+  content: " ";
+  display: table;
+}
+
+.clearfix:after,
+.container:after,
+.row:after {
+  clear: both;
+}
+
+.col-1, .col-2, .col-3, .col-4, .col-5, .col-6, .col-7, .col-8, .col-9, .col-10,
+.col-11, .col-12 {
+  float: left;
+}
+
+.col-12 {
+  width: 100%;
+}
+
+.col-11 {
+  width: 91.66666667%;
+}
+
+.col-10 {
+  width: 83.33333333%;
+}
+
+.col-9 {
+  width: 75%;
+}
+
+.col-8 {
+  width: 66.66666667%;
+}
+
+.col-7 {
+  width: 58.33333333%;
+}
+
+.col-6 {
+  width: 50%;
+}
+
+.col-5 {
+  width: 41.66666667%;
+}
+
+.col-4 {
+  width: 33.33333333%;
+}
+
+.col-3 {
+  width: 25%;
+}
+
+.col-2 {
+  width: 16.66666667%;
+}
+
+.col-1 {
+  width: 8.33333333%;
+}
+
+
+/* buttons */
+
+.button {
+  display: inline-block;
+  padding: 0 20px;
+  color: #555;
+  text-align: center;
+  vertical-align: middle;
+  font-size: 11px;
+  line-height: 30px;
+  text-decoration: none;
+  white-space: nowrap;
+  background-color: #fff;
+  border-radius: 4px;
+  border: 1px solid #bbb;
+  cursor: pointer;
+}
+
+.button:link {
+  text-decoration: none;
+  color: #555;
+}
+
+.button:hover,
+.button:focus {
+  color: #333;
+  border-color: #888;
+  outline: 0;
+  text-decoration: none;
+}
+
+.button.disabled, .button[disabled] {
+  cursor: not-allowed;
+  opacity: 0.65;
+  filter: alpha(opacity=65);
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
+/* vim: set ts=2 sw=2 tw=80: */

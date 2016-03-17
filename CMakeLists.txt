@@ -308,6 +308,7 @@ install (FILES src/html/classic/favicon.gif
 
 install (FILES src/html/classic/css/gsa-login.css
                src/html/classic/css/gsa-style.css
+               src/html/classic/css/gsa-base.css
                src/html/classic/css/jquery-ui.structure.min.css
                src/html/classic/css/jquery-ui.theme.min.css
                src/html/classic/css/select2.min.css
