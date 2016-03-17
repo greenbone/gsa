@@ -1,5 +1,9 @@
 2016-03-17  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_bar_chart.js: Coding style++.
+
+2016-03-17  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_cloud_chart.js: Refactor CloudChartGenerator to
 	derive from BaseChartGenerator. Removed a lot of unused besides of duplicate
 	code.
