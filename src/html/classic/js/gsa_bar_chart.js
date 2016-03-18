@@ -65,8 +65,8 @@
     this.show_stat_type = true;
 
     this.setBarStyle(default_bar_style);
-    this.setTitleGenerator(
-        gsa.title_static('Loading bar chart ...', 'Bar Chart'));
+    this.setTitleGenerator(gsa.title_static(
+      gsa._('Loading bar chart ...'), gsa._('Bar Chart')));
   };
 
   BarChartGenerator.prototype.generate = function(original_data, controller,
