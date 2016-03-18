@@ -1,5 +1,9 @@
 2016-03-18  Benoît Allard  <benoit.allard@greenbone.net>
 
+	* tools/po2json: Make executable
+
+2016-03-18  Benoît Allard  <benoit.allard@greenbone.net>
+
 	* src/gsad_omp.c (create_agent_omp): Prevent usage of sometimes
 	  uninitialised values.
 
