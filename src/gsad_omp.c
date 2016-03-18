@@ -6886,8 +6886,8 @@ char *
 create_agent_omp (credentials_t * credentials, params_t *params,
                   cmd_response_data_t* response_data)
 {
-  entity_t entity;
-  gchar *response, *html;
+  entity_t entity = NULL;
+  gchar *response = NULL, *html;
   const char *no_redirect;
   const char *name, *comment, *installer, *installer_filename, *installer_sig;
   const char *howto_install, *howto_use;
