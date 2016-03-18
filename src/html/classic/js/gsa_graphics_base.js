@@ -2826,41 +2826,6 @@
   global.data_raw = data_raw;
 
   /*
-  * Transform data into a top 10 list.
-  */
-  function data_top_list(old_data, params) {
-    var new_data = {
-      original_xml: old_data.original_xml,
-      records: [],
-      column_info: old_data.column_info,
-      filter_info: old_data.filter_info
-    };
-
-    var y_field = params.y_fields[0];
-    if (y_field === null || y_field === undefined) {
-      y_field = 'count';
-    }
-
-    // Take only top 10 records with non-zero y field
-    var top_count = 10;
-    for (var i in old_data.records) {
-      if (top_count) {
-        if (old_data.records [i][y_field] > 0) {
-          top_count--;
-          new_data.records.push(old_data.records[i]);
-        }
-      }
-      else {
-        break;
-      }
-    }
-
-    return new_data;
-  }
-
-  global.data_top_list = data_top_list;
-
-  /*
   * Transform data into a severity histogram
   */
   function data_severity_histogram(old_data, params) {
@@ -3932,8 +3897,6 @@
 
   function get_chart_generator(chart_type, data_source) {
     // TODO register generators in their own modules
-    register_chart_generator('horizontal_bar',
-        global.HorizontalBarChartGenerator);
     register_chart_generator('line', global.LineChartGenerator);
 
     var generator = chart_generators[chart_type];

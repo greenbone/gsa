@@ -1,5 +1,15 @@
 2016-03-18  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_h_bar_chart.js: Refactor HorizontalBarChartGenerator
+	to derive from BaseChartGenerator.
+
+	* src/html/classic/js/gsa_graphics_base.js: Remove registration of
+	HorizontalBarChartGenerator from gsa_graphics_base.js. Also move data_top_list
+	function to gsa_h_bar_chart.js because it is only used within
+	HorizontalBarChartGenerator.
+
+2016-03-18  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_gantt_chart.js: Refactor GanttChartGenerator to
 	derive from BaseChartGenerator.
 
