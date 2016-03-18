@@ -3935,7 +3935,6 @@
     register_chart_generator('horizontal_bar',
         global.HorizontalBarChartGenerator);
     register_chart_generator('line', global.LineChartGenerator);
-    register_chart_generator('gantt', global.GanttChartGenerator);
 
     var generator = chart_generators[chart_type];
     return generator ? generator(data_source) : null;
