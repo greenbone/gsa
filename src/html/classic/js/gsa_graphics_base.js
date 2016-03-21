@@ -125,9 +125,6 @@
     return func;
   }
 
-  // TODO remove after all gsa modules are migrated
-  global.severity_bar_style = severity_bar_style;
-
   var chart_generators = {};
 
   /*
@@ -2625,8 +2622,6 @@
     }
   }
 
-  global.capitalize = capitalize;
-
   /*
   * Gets the full name of a resource type.
   */
@@ -2645,8 +2640,6 @@
     }
   }
 
-  global.resource_type_name = resource_type_name;
-
   /*
   * Gets the plural form of the full name of a resource type.
   */
@@ -2660,8 +2653,6 @@
         return resource_type_name(type) + 's';
     }
   }
-
-  global.resource_type_name_plural = resource_type_name_plural;
 
   /*
   * Gets the full form of an aggregate field.
@@ -2696,8 +2687,6 @@
     }
   }
 
-  global.field_name = field_name;
-
   /*
   * Generates a label from a column info object.
   */
@@ -2711,8 +2700,6 @@
                                   include_type, include_stat);
     }
   }
-
-  global.column_label = column_label;
 
   /*
   * Generates a label in the default format from a column info object.
@@ -2751,8 +2738,6 @@
     }
   }
 
-  global.default_column_label = default_column_label;
-
   /**
   * Generates a string representation of a data value using the column info.
   */
@@ -2764,8 +2749,6 @@
       return format_data_default(value, col_info_item);
     }
   }
-
-  global.format_data = format_data;
 
   /**
   * Generates a default string representation of a data value using column info.
@@ -2797,8 +2780,6 @@
     }
   }
 
-  global.format_data_default = format_data_default;
-
   /*
   * Record set transformation functions
   */
@@ -2809,8 +2790,6 @@
   function data_raw(data) {
     return data;
   }
-
-  global.data_raw = data_raw;
 
   /*
   * Transform data into a severity histogram
@@ -3218,8 +3197,6 @@
     return new_data;
   }
 
-  global.fill_empty_fields = fill_empty_fields;
-
   /*
   * Generic display helper functions
   */
@@ -3248,9 +3225,9 @@
     return false;
   }
 
-  global.open_detached = open_detached;
-
   /*
+  * FIXME Do we still need this function?
+  *
   * Resize a detached chart window to fit the chart display, filter and footer
   */
   function fit_detached_window(dashboard) {
@@ -3268,8 +3245,6 @@
         Number(footer.property('scrollHeight'))
     );
   }
-
-  global.fit_detached_window = fit_detached_window;
 
   /*
   * Resizes a chart display to fill the whole window
@@ -3330,8 +3305,6 @@
     });
   }
 
-  global.wrap_text = wrap_text;
-
   /*
   * Generic chart title generators
   */
@@ -3349,8 +3322,6 @@
       }
     };
   }
-
-  global.title_static = title_static;
 
   /*
   * Returns a title containing the total count of the resources.
@@ -3375,8 +3346,6 @@
           {title: title, filter_text: filter_text, count: '' + total});
     };
   }
-
-  global.title_total = title_total;
 
   /*
   * Data export helpers
@@ -3425,8 +3394,6 @@
 
     return csv_data;
   }
-
-  global.csv_from_records = csv_from_records;
 
   /*
   * Generate HTML table from simple records
@@ -3504,8 +3471,6 @@
     return doc.documentElement.outerHTML;
   }
 
-  global.html_table_from_records = html_table_from_records;
-
   /*
   * Convert SVG element to export format
   */
@@ -3575,8 +3540,6 @@
     return svg_data;
   }
 
-  global.svg_from_elem = svg_from_elem;
-
   /*
   * Shows a blob url inside an img element in a new window.
   */
@@ -3589,8 +3552,6 @@
             .attr('src', blob_url);
     return;
   }
-
-  global.blob_img_window = blob_img_window;
 
   function is_object(value) {
     return value !== null && value !== undefined && typeof value === 'object';
