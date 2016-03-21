@@ -1,3 +1,8 @@
+2016-03-21  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/omp.xsl (html-create-permissions-form): Add caller
+	param to multiple permissions form.
+
 2016-03-21  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/js/gsa_graphics_base.js: Refactor adding, updating,
