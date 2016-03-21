@@ -1820,9 +1820,14 @@
     }
 
     /* Callback for when data has been loaded */
-    function on_data_loaded(data, gen_params) {
-      generator.generate(data, controller, gen_params);
+    function on_data_loaded(orig_data, gen_params) {
+      var data = generator.generateData(controller, orig_data, gen_params);
+      if (data === null) {
+        return;
+      }
+      generator.generate(controller, data, gen_params);
       display.update_gen_data(generator, gen_params);
+      generator.addMenuItems(controller, data);
     }
 
     /* Construct URL for detached chart */

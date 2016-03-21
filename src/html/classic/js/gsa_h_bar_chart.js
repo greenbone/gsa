@@ -104,13 +104,12 @@
       gsa._('Loading bar chart ...'), gsa._('Bar Chart')));
   };
 
-  HorizontalBarChartGenerator.prototype.generate = function(original_data,
-      controller, gen_params) {
+  HorizontalBarChartGenerator.prototype.generate = function(controller,
+      data, gen_params) {
     var display = controller.display();
     var update = this.mustUpdate(display);
 
     var self = this;
-    var data;
     var x_data;
     var y_data; // == size_data
 
@@ -127,11 +126,6 @@
 
     if (gen_params.extra.show_stat_type) {
       this.show_stat_type = !!JSON.parse(gen_params.extra.show_stat_type);
-    }
-
-    data = this.generateData(original_data, controller, gen_params);
-    if (data === null) {
-      return;
     }
 
     if (gen_params.extra.empty_text) {
@@ -321,8 +315,6 @@
       .remove();
 
     this.svg.call(this.tip);
-
-    this.addMenuItems(controller, data);
   };
 
   HorizontalBarChartGenerator.prototype.generateCsvData = function(controller,
@@ -346,8 +338,8 @@
         controller.data_src().param('filter'));
   };
 
-  HorizontalBarChartGenerator.prototype.generateData = function(original_data,
-      controller, gen_params) {
+  HorizontalBarChartGenerator.prototype.generateData = function(controller,
+      original_data, gen_params) {
     // Extract records and column info
     var cmd = controller.data_src().command();
     if (cmd === 'get_aggregate') {

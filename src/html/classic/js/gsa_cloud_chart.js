@@ -55,8 +55,8 @@
 
   };
 
-  CloudChartGenerator.prototype.generateData = function(original_data,
-      controller, gen_params) {
+  CloudChartGenerator.prototype.generateData = function(controller,
+      original_data, gen_params) {
 
     var cmd = controller.data_src().command();
     if (cmd === 'get_aggregate') {
@@ -68,14 +68,12 @@
     }
   };
 
-  CloudChartGenerator.prototype.generate = function(original_data, controller,
+  CloudChartGenerator.prototype.generate = function(controller, data,
       gen_params) {
     var self = this;
 
     var display = controller.display();
     var update = this.mustUpdate(display);
-
-    var data;
 
     // evaluate options set by gen_params
     if (gen_params.x_field) {
@@ -88,11 +86,6 @@
 
     if (gen_params.extra.show_stat_type) {
       this.show_stat_type = !!JSON.parse(gen_params.extra.show_stat_type);
-    }
-
-    data = this.generateData(original_data, controller, gen_params);
-    if (data === null) {
-      return;
     }
 
     var records = data.records;
@@ -171,8 +164,6 @@
           .text(function(d) { return d.text; });
       })
       .start();
-
-    this.addMenuItems(controller, data);
   };
 
   CloudChartGenerator.prototype.generateCsvData = function(controller, data) {

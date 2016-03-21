@@ -77,12 +77,10 @@
       gsa._('Loading line chart ...'), gsa._('Bubble Chart')));
   };
 
-  LineChartGenerator.prototype.generate = function(original_data, controller,
+  LineChartGenerator.prototype.generate = function(controller, data,
       gen_params) {
     var display = controller.display();
     var update = this.mustUpdate(display);
-
-    var data;
 
     var self = this;
     var x_data;
@@ -112,7 +110,7 @@
     var height;
     var width;
 
-    var column_info = original_data.column_info;
+    var column_info = data.column_info;
 
     function mouse_exited() {
       info_box.style('display', 'none');
@@ -251,11 +249,6 @@
 
     if (gen_params.extra.show_stat_type) {
       this.show_stat_type = !!JSON.parse(gen_params.extra.show_stat_type);
-    }
-
-    data = this.generateData(original_data, controller, gen_params);
-    if (data === null) {
-      return;
     }
 
     var records = data.records;
@@ -563,12 +556,10 @@
       self.svg.select('#circle_y').remove();
       self.svg.select('#circle_y2').remove();
     }
-
-    this.addMenuItems(controller, data);
   };
 
-  LineChartGenerator.prototype.generateData = function(original_data,
-      controller, gen_params) {
+  LineChartGenerator.prototype.generateData = function(controller,
+      original_data, gen_params) {
     // Extract records and column info
     var cmd = controller.data_src().command();
     if (cmd === 'get_aggregate') {

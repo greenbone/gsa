@@ -74,12 +74,10 @@
       gsa._('Loading Gantt chart ...'), gsa._('Gantt Chart')));
   };
 
-  GanttChartGenerator.prototype.generate = function(original_data, controller,
+  GanttChartGenerator.prototype.generate = function(controller, data,
       gen_params) {
     var display = controller.display();
     var update = this.mustUpdate(display);
-
-    var data;
 
     var self = this;
 
@@ -112,11 +110,6 @@
     var empty_text = '';
     var display_records;
     var limit = 10;
-
-    data = this.generateData(original_data, controller, gen_params);
-    if (data === null) {
-      return;
-    }
 
     var records = data.records;
 
@@ -430,12 +423,10 @@
         return (height - self.x_scale(d[self.x_field]) -
             (self.x_scale.rangeBand() / 2));
       });
-
-    this.addMenuItems(controller, data);
   };
 
-  GanttChartGenerator.prototype.generateData = function(original_data,
-      controller, gen_params) {
+  GanttChartGenerator.prototype.generateData = function(controller,
+      original_data, gen_params) {
     // Extract records and column info
     var cmd = controller.data_src().command();
     if (cmd === 'get_tasks') {

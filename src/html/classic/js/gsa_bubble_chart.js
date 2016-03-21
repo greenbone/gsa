@@ -56,8 +56,8 @@
           gsa._('Loading bubble chart ...'), gsa._('Bubble Chart')));
   };
 
-  BubbleChartGenerator.prototype.generateData = function(original_data,
-      controller, gen_params) {
+  BubbleChartGenerator.prototype.generateData = function(controller,
+      original_data, gen_params) {
     var cmd = controller.data_src().command();
     if (cmd === 'get_aggregate') {
       return this.transformData(original_data, gen_params);
@@ -68,7 +68,7 @@
     }
   };
 
-  BubbleChartGenerator.prototype.generate = function(original_data, controller,
+  BubbleChartGenerator.prototype.generate = function(controller, data,
       gen_params) {
     var display = controller.display();
     var update = this.mustUpdate(display);
@@ -90,11 +90,6 @@
 
     if (gen_params.extra.show_stat_type) {
       this.show_stat_type = !!JSON.parse(gen_params.extra.show_stat_type);
-    }
-
-    var data = this.generateData(original_data, controller, gen_params);
-    if (data === null) {
-      return;
     }
 
     var records = data.records;
@@ -209,8 +204,6 @@
       .select('text')
       .attr('title', tooltip_func)
       .text(function(d) { return d.label_value.substring(0, d.r / 3); });
-
-    this.addMenuItems(controller, data);
   };
 
   BubbleChartGenerator.prototype.generateCsvData = function(controller, data) {

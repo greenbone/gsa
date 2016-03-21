@@ -7,6 +7,21 @@
 	src/html/classic/js/gsa_donut_chart.js,
 	src/html/classic/js/gsa_gantt_chart.js,
 	src/html/classic/js/gsa_h_bar_chart.js,
+	src/html/classic/js/gsa_line_chart.js: Refactor calling the generate functions
+	of a generator instance. Use a common argument order for alle generate
+	functions. Call addMenuItems in the controller not in the generator. Pass the
+	transformed data to generator.generator instead of transforming the data
+	within this function.
+
+2016-03-21  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/js/gsa_graphics_base.js,
+	src/html/classic/js/gsa_bar_chart.js,
+	src/html/classic/js/gsa_bubble_chart.js,
+	src/html/classic/js/gsa_cloud_chart.js,
+	src/html/classic/js/gsa_donut_chart.js,
+	src/html/classic/js/gsa_gantt_chart.js,
+	src/html/classic/js/gsa_h_bar_chart.js,
 	src/html/classic/js/gsa_line_chart.js: Refactor register_chart_generator to
 	accept constructor functions. This allows to remove the explicit class
 	generator functions.

@@ -54,8 +54,8 @@
       gsa.title_static(gsa._('Loading donut chart ...'), gsa._('Donut Chart')));
   };
 
-  DonutChartGenerator.prototype.generateData = function(original_data,
-      controller, gen_params) {
+  DonutChartGenerator.prototype.generateData = function(controller,
+      original_data, gen_params) {
     var cmd = controller.data_src().command();
     var data;
     if (cmd === 'get_aggregate') {
@@ -68,12 +68,10 @@
     }
   };
 
-  DonutChartGenerator.prototype.generate = function(original_data, controller,
+  DonutChartGenerator.prototype.generate = function(controller, data,
       gen_params) {
     var display = controller.display();
     var update = this.mustUpdate(display);
-
-    var data;
 
     var self = this;
 
@@ -88,11 +86,6 @@
 
     if (gen_params.extra.show_stat_type) {
       this.show_stat_type = !!JSON.parse(gen_params.extra.show_stat_type);
-    }
-
-    data = this.generateData(original_data, controller, gen_params);
-    if (data === null) {
-      return;
     }
 
     var records = data.records;
@@ -418,8 +411,6 @@
     }
 
     relax_labels();
-
-    this.addMenuItems(controller, data);
   };
 
   DonutChartGenerator.prototype.generateCsvData = function(controller, data) {
