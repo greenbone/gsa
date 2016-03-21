@@ -542,13 +542,14 @@
 
     function update_rows() {
       totalComponents = 0;
-      for (var item in rows) {
-        rows[item].updateComponents();
-        if (rows [item].componentsCount() === 0) {
-          dashboard.removeRow(item);
+      for (var id in rows) {
+        var row = rows[id];
+        row.updateComponents();
+        if (row.componentsCount() === 0) {
+          dashboard.removeRow(id);
         }
 
-        totalComponents += rows[item].componentsCount();
+        totalComponents += row.componentsCount();
       }
       if (controllersString !== null) {
         dashboard.updateControllersString();
@@ -710,15 +711,15 @@
       dashboard.resize();
       dashboard.redraw();
 
-      var item;
+      var id;
       if (controllersString) {
-        for (item in components) {
-          components[item].updateControllerSelect();
-          components[item].updateFilterSelect();
+        for (id in components) {
+          components[id].updateControllerSelect();
+          components[id].updateFilterSelect();
         }
       }
-      for (item in components) {
-        components[item].activateSelectors();
+      for (id in components) {
+        components[id].activateSelectors();
       }
       dashboard.redraw();
     }
