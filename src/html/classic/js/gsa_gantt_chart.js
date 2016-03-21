@@ -87,11 +87,11 @@
 
     var self = this;
 
-    var x_scale = d3.scale.ordinal();
-    var time_scale = d3.time.scale.utc();
+    this.x_scale = d3.scale.ordinal();
+    this.y_scale = d3.time.scale.utc(); // == time_scale
 
-    var x_axis = d3.svg.axis()
-      .scale(x_scale)
+    this.x_axis = d3.svg.axis()
+      .scale(this.x_scale)
       .tickFormat('')
       .orient('left');
 
@@ -105,14 +105,12 @@
         ['%Y', function() { return true; }]
     ]);
 
-    var time_axis = d3.svg.axis()
-      .scale(time_scale)
+    this.y_axis = d3.svg.axis()
+      .scale(self.y_scale)
       .ticks(7)
       .tickFormat(time_format)
-      .orient('bottom');
+      .orient('bottom'); // == time_axis
 
-    var x_axis_elem;
-    var time_axis_elem;
     var column_info;
     var x_data;
     var empty_text = '';
@@ -165,10 +163,10 @@
     end_date = new Date(start_date);
     end_date.setUTCDate(end_date.getUTCDate() + scale_days);
 
-    time_scale.domain([start_date, end_date])
+    self.y_scale.domain([start_date, end_date])
       .range([0, width]);
 
-    x_scale.domain(x_data)
+    this.x_scale.domain(x_data)
       .rangeRoundBands([height, 0], 0.125);
 
     if (!update) {
@@ -227,13 +225,13 @@
       this.svg.attr('transform',
         'translate(' + this.margin.left + ',' + this.margin.top + ')');
 
-      x_axis_elem = this.svg.append('g')
+      this.x_axis_elem = this.svg.append('g')
         .attr('class', 'x axis')
-        .call(x_axis);
+        .call(self.x_axis);
 
-      time_axis_elem = this.svg.append('g')
+      this.y_axis_elem = this.svg.append('g')
         .attr('class', 'y axis')
-        .call(time_axis);
+        .call(this.y_axis);
     }
 
     // Add a text if records list is empty
@@ -262,11 +260,11 @@
       .attr('y', height / 2);
 
     // Update chart
-    time_axis_elem.attr('transform',
+    this.y_axis_elem.attr('transform',
       'translate (' + 0 + ',' + height + ')');
 
-    x_axis_elem.call(x_axis);
-    time_axis_elem.call(time_axis);
+    this.x_axis_elem.call(self.x_axis);
+    this.y_axis_elem.call(self.y_axis);
 
     this.svg.selectAll('.bar-group')
       .data(display_records)
@@ -298,8 +296,8 @@
     this.svg.selectAll('.bar-group')
       .data(display_records)
       .attr('transform', function(d) {
-        return 'translate(' + 0 + ',' + (height - x_scale(
-                d[self.x_field]) - x_scale.rangeBand()) + ')';
+        return 'translate(' + 0 + ',' + (height - self.x_scale(
+                d[self.x_field]) - self.x_scale.rangeBand()) + ')';
       })
       .each(function(d, i) {
         var sel = d3.select(this);
@@ -311,7 +309,7 @@
         var r_periods = Number(d.schedule_periods);
         var r_length = r_duration ? r_duration * 1000 :
           r_period ? Math.min(r_period * 1000, 3600000 * 24) : 3600000 * 24;
-        var offset = +(time_scale.domain()[0]);
+        var offset = +(self.y_scale.domain()[0]);
 
         var bar_starts = [];
         var future_runs = 0;
@@ -361,11 +359,11 @@
           .style('stroke', function(d) {
             return r_duration ? '#549330' : 'url(#green_stroke_gradient)';
           })
-          .attr('x', function(start) { return time_scale(start); })
+          .attr('x', function(start) { return self.y_scale(start); })
           .attr('width', function(start) {
-            return time_scale(offset + Math.min(r_length, end_date - start));
+            return self.y_scale(offset + Math.min(r_length, end_date - start));
           })
-          .attr('height', x_scale.rangeBand())
+          .attr('height', self.x_scale.rangeBand())
           .attr('title', function(start) {
             var text = d.name;
             text += '\nStart: ' + gsa.datetime_format(new Date(start));
@@ -407,17 +405,17 @@
           .style('fill', '#549330')
           .style('stroke', '#549330')
           .attr('points',
-              (width + 5) + ',' + (x_scale.rangeBand() / 8) +
-              ' ' + (width + 20) + ',' + (x_scale.rangeBand() / 2) +
-              ' ' + (width + 5) + ',' + (7 * x_scale.rangeBand() / 8))
+              (width + 5) + ',' + (self.x_scale.rangeBand() / 8) +
+              ' ' + (width + 20) + ',' + (self.x_scale.rangeBand() / 2) +
+              ' ' + (width + 5) + ',' + (7 * self.x_scale.rangeBand() / 8))
           .attr('title', future_runs_text);
 
         sel.selectAll('.future-marker')
           .data(future_runs ? [1] : [])
           .attr('points', function() {
-            return (width + 5) + ',' + (x_scale.rangeBand() / 8) +
-              ' ' + (width + 20) + ',' + (x_scale.rangeBand() / 2) +
-              ' ' + (width + 5) + ',' + (7 * x_scale.rangeBand() / 8);
+            return (width + 5) + ',' + (self.x_scale.rangeBand() / 8) +
+              ' ' + (width + 20) + ',' + (self.x_scale.rangeBand() / 2) +
+              ' ' + (width + 5) + ',' + (7 * self.x_scale.rangeBand() / 8);
           });
       });
 
@@ -425,16 +423,16 @@
       .data(display_records)
       .text(function(d) { return d.name; })
       .attr('y', function(d) {
-        return (height - x_scale(d[self.x_field]) -
-            (x_scale.rangeBand() / 2));
+        return (height - self.x_scale(d[self.x_field]) -
+            (self.x_scale.rangeBand() / 2));
       });
 
     this.svg.selectAll('.bar-label')
       .data(display_records)
       .text(function(d) { return d.name; })
       .attr('y', function(d) {
-        return (height - x_scale(d[self.x_field]) -
-            (x_scale.rangeBand() / 2));
+        return (height - self.x_scale(d[self.x_field]) -
+            (self.x_scale.rangeBand() / 2));
       });
 
     this.addMenuItems(controller, data);
