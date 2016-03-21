@@ -1,3 +1,10 @@
+2016-03-21  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Backport r24729.
+
+	* src/html/classic/omp.xsl (html-create-permission-form): Add caller
+	param to multiple permissions form.
+
 2016-03-17  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Backport r24691.

@@ -23323,6 +23323,7 @@ should not have received it.
         <input type="hidden" name="next" value="{/envelope/params/next}"/>
         <input type="hidden" name="next_type" value="{/envelope/params/next_type}"/>
         <input type="hidden" name="{/envelope/params/next_type}_id" value="{$resource_id}"/>
+        <input type="hidden" name="caller" value="{/envelope/current_page}"/>
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <table border="0" cellspacing="0" cellpadding="3" width="100%">
           <tr>
