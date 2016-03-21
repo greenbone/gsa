@@ -145,7 +145,7 @@
     var prevHeightsString = heightsString;
     var prevFiltersString = filtersString;
     var lastRowIndex = 0;
-    var lastBoxIndex = 0;
+    var lastComponentIndex = 0;
     var currentResizeTimeout;
     var width = -1;
     var height = -1;
@@ -188,11 +188,11 @@
       maxPerRow: max_per_row,
       addNewRow: add_new_row,
       addToNewRow: add_to_new_row,
-      registerBox: register_box,
-      unregisterBox: unregister_box,
+      registerComponent: register_component,
+      unregisterComponent: unregister_component,
       component: get_component,
       nextRowID: get_next_row_id,
-      nextBoxID: get_next_box_id,
+      getNextComponentId: get_next_component_id,
       controllersString: get_controllers_string,
       filtersString: get_filters_string,
       updateControllersString: update_controllers_string,
@@ -368,11 +368,11 @@
       dashboard.updateRows();
     }
 
-    function register_box(box) {
-      components[box.id()] = box;
+    function register_component(component) {
+      components[component.id()] = component;
     }
 
-    function unregister_box(id) {
+    function unregister_component(id) {
       delete components[id];
     }
 
@@ -381,13 +381,13 @@
     }
 
     function get_next_row_id() {
-      lastRowIndex ++;
+      lastRowIndex++;
       return id + '-row-' + lastRowIndex;
     }
 
-    function get_next_box_id() {
-      lastBoxIndex ++;
-      return id + '-box-' + lastBoxIndex;
+    function get_next_component_id() {
+      lastComponentIndex++;
+      return id + '-box-' + lastComponentIndex;
     }
 
     function get_controllers_string() {
@@ -564,7 +564,7 @@
 
     function remove_component(id) {
       components[id].row().removeComponent(id);
-      dashboard.unregisterBox(id);
+      dashboard.unregisterComponent(id);
 
       if (totalComponents < maxComponents) {
         newComponentButton.show();
@@ -579,14 +579,14 @@
 
       var lastFreeRowElem = elem.find('.dashboard-row:not(".full")').last();
       var row;
-      var box;
+      var component;
       if (lastFreeRowElem[0]) {
         row = rows[lastFreeRowElem.attr('id')];
-        box = create_dashboard_box(row, defaultControllerString,
+        component = create_dashboard_component(row, defaultControllerString,
             defaultFilterString, dashboardOpts);
-        dashboard.registerBox(box);
-        row.registerBox(box);
-        $(row.elem()).append(box.elem());
+        dashboard.registerComponent(component);
+        row.registerComponent(component);
+        $(row.elem()).append(component.elem());
         row.resize();
         row.redraw();
       }
@@ -597,12 +597,12 @@
           rowFiltersString: defaultFilterString,
           position: 'bottom',
         });
-        box = row.lastAddedComponent();
+        component = row.lastAddedComponent();
         dashboard.resize();
         dashboard.redraw();
       }
-      box.activateSelectors();
-      box.selectController(box.controllerString(), false, true);
+      component.activateSelectors();
+      component.selectController(component.controllerString(), false, true);
       dashboard.updateRows();
 
       if (totalComponents >= maxComponents) {
@@ -790,8 +790,8 @@
       filtersString: get_filters_string,
       lastAddedComponent: get_last_added_component,
       componentsCount: get_components_count,
-      registerBox: register_box,
-      unregisterBox: unregister_box,
+      registerComponent: register_component,
+      unregisterComponent: unregister_component,
       updateControllersString: update_controllers_string,
       updateFiltersString: update_filters_string,
       updateComponentCountClasses: update_component_count_classes,
@@ -826,13 +826,13 @@
       }
 
       for (var index in componentStringList) {
-        var box = create_dashboard_box(dashboard_row,
+        var component = create_dashboard_component(dashboard_row,
             componentStringList[index],
             filterStringList ? filterStringList[index] : null,
             dashboardOpts);
-        dashboard.registerBox(box);
-        dashboard_row.registerBox(box);
-        elem.append(box.elem());
+        dashboard.registerComponent(component);
+        dashboard_row.registerComponent(component);
+        elem.append(component.elem());
       }
     }
 
@@ -879,12 +879,12 @@
         compCountOffset;
     }
 
-    function register_box(box) {
-      components[box.id()] = box;
-      lastAddedComponent = box;
+    function register_component(component) {
+      components[component.id()] = component;
+      lastAddedComponent = component;
     }
 
-    function unregister_box(id) {
+    function unregister_component(id) {
       delete components[id];
     }
 
@@ -943,8 +943,8 @@
     function remove_component(id) {
       components[id].elem().remove();
 
-      dashboard.unregisterBox(id);
-      dashboard_row.unregisterBox(id);
+      dashboard.unregisterComponent(id);
+      dashboard_row.unregisterComponent(id);
 
       if (dashboard_row.componentsCount() === 0) {
         dashboard.removeRow(dashboard_row.id());
@@ -1084,10 +1084,10 @@
   /*
   * Dashboard Component Boxes
   */
-  function create_dashboard_box(row, controllerString, filterString,
+  function create_dashboard_component(row, controllerString, filterString,
       dashboardOpts) {
     var dashboard = row ? row.dashboard() : null;
-    var id = dashboard.nextBoxID();
+    var id = dashboard.getNextComponentId();
     var controllers = [];
     var controllerIndexes = {};
     var currentCtrlIndex = -1;
@@ -1113,7 +1113,7 @@
     var footer;
     var topButtons;
 
-    var dashboard_box = {
+    var dashboard_component = {
       elem: get_elem,
       header: get_header,
       svg: get_svg,
@@ -1156,7 +1156,7 @@
 
     init();
 
-    return dashboard_box;
+    return dashboard_component;
 
     function init() {
       if (dashboardOpts) {
@@ -1203,7 +1203,7 @@
         'class': 'remove-button',
         href: 'javascript:void(0);',
         on: {
-          click: function() { dashboard_box.remove(); },
+          click: function() { dashboard_component.remove(); },
         },
         css: {
           'display': dashboard.editMode() ? 'inline' : 'none',
@@ -1244,14 +1244,14 @@
 
       footer = footer[0];
 
-      dashboard.addControllersForComponent(dashboard_box);
-      dashboard.addFiltersForComponent(dashboard_box);
+      dashboard.addControllersForComponent(dashboard_component);
+      dashboard.addFiltersForComponent(dashboard_component);
 
       if (!hideControllerSelect) {
-        dashboard_box.createChartSelector();
+        dashboard_component.createChartSelector();
       }
       if (!hideFilterSelect && filters.length > 1) {
-        dashboard_box.createFilterSelector();
+        dashboard_component.createFilterSelector();
       }
     }
 
@@ -1269,7 +1269,7 @@
 
     function set_title(title) {
       $(header).text(title);
-      return dashboard_box;
+      return dashboard_component;
     }
 
     function get_set_row(newRow) {
@@ -1277,7 +1277,7 @@
         return row;
       }
       row = newRow;
-      return dashboard_box;
+      return dashboard_component;
     }
 
     function get_dashboard() {
@@ -1342,7 +1342,7 @@
         rowHeight = newRowHeight;
       }
       var newHeight = rowHeight - header.clientHeight - footer.clientHeight - 8;
-      dashboard_box.svg().attr('height', newHeight);
+      dashboard_component.svg().attr('height', newHeight);
 
       if (newRowWidth === undefined) {
         rowWidth = dashboard.elem().clientWidth;
@@ -1351,7 +1351,7 @@
         rowWidth = newRowWidth;
       }
       var newWidth = (rowWidth - 2) / (componentsCount ? componentsCount : 1);
-      dashboard_box.svg().attr('width', newWidth - 8);
+      dashboard_component.svg().attr('width', newWidth - 8);
       $(elem).css('width', newWidth);
     }
 
@@ -1368,7 +1368,7 @@
         return lastRequestedController;
       }
       lastRequestedController = newController;
-      return dashboard_box;
+      return dashboard_component;
     }
 
     function get_set_last_requested_filter(newFilter) {
@@ -1376,7 +1376,7 @@
         return lastRequestedFilter;
       }
       lastRequestedFilter = newFilter;
-      return dashboard_box;
+      return dashboard_component;
     }
 
     // Edit management
@@ -1405,13 +1405,13 @@
     function update_gen_data(generator, gen_params) {
       last_generator = generator;
       last_gen_params = gen_params;
-      return dashboard_box;
+      return dashboard_component;
     }
 
     /* Puts an error message into the header and clears the svg element */
     function show_error(message) {
       $(header).text(message);
-      dashboard_box.svg().text('');
+      dashboard_component.svg().text('');
     }
 
     /* Gets a menu item or creates it if it does not exist */
@@ -1444,7 +1444,7 @@
         $(controllerSelectElem).select2('val', controllerString);
       }
       else {
-        dashboard_box.selectController(controllerString, false, false);
+        dashboard_component.selectController(controllerString, false, false);
       }
     }
 
@@ -1452,10 +1452,12 @@
       var index = controllerIndexes[name];
       if (index === undefined) {
         console.warn('Chart not found: ' + name);
-        dashboard_box.selectControllerIndex(0, savePreference, requestData);
+        dashboard_component.selectControllerIndex(0, savePreference,
+            requestData);
       }
       else {
-        dashboard_box.selectControllerIndex(index, savePreference, requestData);
+        dashboard_component.selectControllerIndex(index, savePreference,
+            requestData);
       }
     }
 
@@ -1465,11 +1467,11 @@
         return console.error('Invalid chart index: ' + index);
       }
       currentCtrlIndex = index;
-      dashboard_box.controllerString(
+      dashboard_component.controllerString(
           controllers[currentCtrlIndex].chart_name());
 
       if (requestData && selectorsActive) {
-        dashboard_box.redraw();
+        dashboard_component.redraw();
       }
     }
 
@@ -1500,7 +1502,7 @@
       $('<a/>', {
         href: 'javascript:void(0);',
         on: {
-          click: function() {dashboard_box.prevController();},
+          click: function() {dashboard_component.prevController();},
         }
       })
       .append($('<img/>', {
@@ -1519,7 +1521,7 @@
         },
         on: {
           change: function() {
-            dashboard_box.selectController(this.value, true, true);
+            dashboard_component.selectController(this.value, true, true);
           },
         },
       })
@@ -1540,7 +1542,7 @@
         href: 'javascript:void(0);',
         on: {
           click: function() {
-            dashboard_box.nextController();
+            dashboard_component.nextController();
           },
         },
       })
@@ -1561,7 +1563,7 @@
       }
       else {
         if (filterString) {
-          dashboard_box.selectFilter(filterString, false, false);
+          dashboard_component.selectFilter(filterString, false, false);
         }
       }
     }
@@ -1570,10 +1572,11 @@
       var index = filterIndexes[id];
       if (index === undefined) {
         console.warn('Filter not found: "' + id + '"');
-        dashboard_box.selectFilterIndex(0, savePreference, requestData);
+        dashboard_component.selectFilterIndex(0, savePreference, requestData);
       }
       else {
-        dashboard_box.selectFilterIndex(index, savePreference, requestData);
+        dashboard_component.selectFilterIndex(index, savePreference,
+            requestData);
       }
     }
 
@@ -1582,10 +1585,10 @@
         return console.error('Invalid filter index: ' + index);
       }
       currentFilterIndex = index;
-      dashboard_box.filterString(filters[currentFilterIndex].id);
+      dashboard_component.filterString(filters[currentFilterIndex].id);
 
       if (requestData && selectorsActive) {
-        dashboard_box.redraw();
+        dashboard_component.redraw();
       }
     }
 
@@ -1617,7 +1620,7 @@
         href: 'javascript:void(0);',
         on: {
           click: function() {
-            dashboard_box.prevFilter();
+            dashboard_component.prevFilter();
           },
         },
       })
@@ -1652,7 +1655,7 @@
         href: 'javascript:void(0);',
         on: {
           click: function() {
-            dashboard_box.nextFilter();
+            dashboard_component.nextFilter();
           },
         },
       })
@@ -1675,7 +1678,7 @@
       if (filterSelectElem) {
         $(filterSelectElem).select2();
         $(filterSelectElem).on('change', function() {
-          dashboard_box.selectFilter(this.value, true, true);
+          dashboard_component.selectFilter(this.value, true, true);
         });
       }
     }

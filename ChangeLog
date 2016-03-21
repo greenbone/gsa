@@ -1,3 +1,8 @@
+2016-03-21  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/js/gsa_graphics_base.js: Use a consistent naming for our
+	chart components. Use component instead of a mix of component and box.
+
 2016-03-21  Benoît Allard  <benoit.allard@greenbone.net>
 
 	Only run the po conversion programs if the right python module is
