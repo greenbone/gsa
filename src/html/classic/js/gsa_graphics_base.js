@@ -2606,20 +2606,6 @@
   */
 
   /*
-  * Finds the index of a record by the value of a given field
-  */
-  function find_record_index(records, value, field) {
-    for (var index in records) {
-      if (records[index][field].getTime() === value.getTime()) {
-        return index;
-      }
-    }
-    return -1;
-  }
-
-  global.find_record_index = find_record_index;
-
-  /*
   * Gets capitalized resource and attribute names
   */
   function capitalize(str) {
@@ -3896,9 +3882,6 @@
   };
 
   function get_chart_generator(chart_type, data_source) {
-    // TODO register generators in their own modules
-    register_chart_generator('line', global.LineChartGenerator);
-
     var generator = chart_generators[chart_type];
     return generator ? generator(data_source) : null;
   }

@@ -1,3 +1,13 @@
+2016-03-21  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/js/gsa_line_chart.js: Refactor LineChartGenerator
+	to derive from BaseChartGenerator.
+
+	* src/html/classic/js/gsa_graphics_base.js: Remove registration of
+	LineChartGenerator from gsa_graphics_base.js. Also move  find_record_index
+	function to gsa_line_chart.js because it is only used within
+	LineChartGenerator.
+
 2016-03-18  Benoît Allard  <benoit.allard@greenbone.net>
 
 	* tools/po2json: Make executable
