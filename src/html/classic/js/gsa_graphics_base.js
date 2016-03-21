@@ -42,6 +42,7 @@
   gsa.title_static = title_static;
   gsa.format_data = format_data;
   gsa.column_label = column_label;
+  gsa.default_column_label = default_column_label;
   gsa.resource_type_name = resource_type_name;
   gsa.open_detached = open_detached;
   gsa.csv_from_records = csv_from_records;

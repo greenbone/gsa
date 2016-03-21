@@ -1,5 +1,10 @@
 2016-03-21  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_graphics_base.js: Export default_column_label
+	function to gsa namespace. This function is used within LineChartGenerator.
+
+2016-03-21  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_gantt_chart.js: Store elements in the object
 	instance instead of a variable in the generate function. This fixes the no
 	update case.
