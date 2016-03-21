@@ -3844,8 +3844,14 @@
   };
 
   function get_chart_generator(chart_type, data_source) {
-    var generator = chart_generators[chart_type];
-    return generator ? generator(data_source) : null;
+    var Generator = chart_generators[chart_type];
+    if (Generator === null || Generator === undefined) {
+      return null;
+    }
+    if (typeof Generator === 'function') {
+      return new Generator();
+    }
+    return Generator;
   }
 
   function register_chart_generator(chart_type, generator) {

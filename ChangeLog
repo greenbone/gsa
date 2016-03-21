@@ -1,5 +1,18 @@
 2016-03-21  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_graphics_base.js,
+	src/html/classic/js/gsa_bar_chart.js,
+	src/html/classic/js/gsa_bubble_chart.js,
+	src/html/classic/js/gsa_cloud_chart.js,
+	src/html/classic/js/gsa_donut_chart.js,
+	src/html/classic/js/gsa_gantt_chart.js,
+	src/html/classic/js/gsa_h_bar_chart.js,
+	src/html/classic/js/gsa_line_chart.js: Refactor register_chart_generator to
+	accept constructor functions. This allows to remove the explicit class
+	generator functions.
+
+2016-03-21  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_graphics_base.js: Remove exporting functions to the
 	global namespace. All our shared functions should be called via the gsa
 	namespace.

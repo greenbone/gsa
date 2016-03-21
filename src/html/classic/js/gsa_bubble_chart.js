@@ -27,11 +27,7 @@
 (function(window, global, gsa, d3, console) {
   'use strict';
 
-  gsa.register_chart_generator('bubbles', create_new_bubble_chart_generator);
-
-  function create_new_bubble_chart_generator() {
-    return new BubbleChartGenerator();
-  }
+  gsa.register_chart_generator('bubbles', BubbleChartGenerator);
 
   /* Main chart generator */
   function BubbleChartGenerator() {

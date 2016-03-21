@@ -27,11 +27,7 @@
 (function(global, window, d3, console, gsa) {
   'use strict';
 
-  gsa.register_chart_generator('cloud', create_new_cloud_chart_generator);
-
-  function create_new_cloud_chart_generator() {
-    return new CloudChartGenerator();
-  }
+  gsa.register_chart_generator('cloud', CloudChartGenerator);
 
   function CloudChartGenerator() {
     gsa.BaseChartGenerator.call(this, 'cloud');

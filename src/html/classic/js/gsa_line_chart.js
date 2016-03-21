@@ -27,7 +27,7 @@
 (function(global, window, d3, console, gsa) {
   'use strict';
 
-  gsa.register_chart_generator('line', create_new_line_chart_generator);
+  gsa.register_chart_generator('line', LineChartGenerator);
 
   /*
   * Finds the index of a record by the value of a given field
@@ -43,10 +43,6 @@
 
   function is_defined(d) {
     return d !== undefined;
-  }
-
-  function create_new_line_chart_generator() {
-    return new LineChartGenerator();
   }
 
   function LineChartGenerator() {

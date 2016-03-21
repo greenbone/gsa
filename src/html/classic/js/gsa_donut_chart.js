@@ -27,11 +27,7 @@
 (function(global, window, d3, console, gsa) {
   'use strict';
 
-  gsa.register_chart_generator('donut', create_new_donut_chart_generator);
-
-  function create_new_donut_chart_generator() {
-    return new DonutChartGenerator();
-  }
+  gsa.register_chart_generator('donut', DonutChartGenerator);
 
   /* Main chart generator */
   function DonutChartGenerator() {

@@ -28,14 +28,10 @@
 (function(global, window, d3, console, gsa) {
   'use strict';
 
-  gsa.register_chart_generator('bar', create_new_bar_chart_generator);
+  gsa.register_chart_generator('bar', BarChartGenerator);
 
   function default_bar_style(d) {
     return ('');
-  }
-
-  function create_new_bar_chart_generator() {
-    return new BarChartGenerator();
   }
 
   /* Main chart generator */

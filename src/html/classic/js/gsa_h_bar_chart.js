@@ -27,12 +27,7 @@
 (function(global, window, d3, console, gsa) {
   'use strict';
 
-  gsa.register_chart_generator('horizontal_bar',
-      create_new_h_bar_chart_generator);
-
-  function create_new_h_bar_chart_generator() {
-    return new HorizontalBarChartGenerator();
-  }
+  gsa.register_chart_generator('horizontal_bar', HorizontalBarChartGenerator);
 
   /*
   * Transform data into a top 10 list.

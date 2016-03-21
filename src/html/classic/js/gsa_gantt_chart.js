@@ -27,11 +27,7 @@
 (function(global, window, d3, console, gsa) {
   'use strict';
 
-  gsa.register_chart_generator('gantt', create_new_gantt_chart_generator);
-
-  function create_new_gantt_chart_generator() {
-    return new GanttChartGenerator();
-  }
+  gsa.register_chart_generator('gantt', GanttChartGenerator);
 
   /* Schedule data extractor */
   function data_task_schedules(old_data, gen_params) {
