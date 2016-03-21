@@ -24,6 +24,9 @@
 
 include (FindGettext)
 include (FindPythonInterp)
+include (${CMAKE_SOURCE_DIR}/FindPythonModule.cmake)
+
+find_python_module(polib)
 
 macro (MAKE_TRANSLATION _LANG)
   file (MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${_LANG})
@@ -41,7 +44,7 @@ macro (MAKE_TRANSLATION _LANG)
                       ${CMAKE_CURRENT_BINARY_DIR}/gsad_xsl.pot
                       -o ${CMAKE_CURRENT_BINARY_DIR}/gsad_xsl-${_LANG}-merged.po)
 
-  if (PYTHONINTERP_FOUND)
+  if (PY_POLIB_FOUND)
     add_custom_command (OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/gsad-${_LANG}.json
                         DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/gsad_js-${_LANG}.po
                         COMMAND ${PYTHON_EXECUTABLE} "${CMAKE_SOURCE_DIR}/tools/po2json"
@@ -50,7 +53,7 @@ macro (MAKE_TRANSLATION _LANG)
 
     install (FILES ${CMAKE_CURRENT_BINARY_DIR}/gsad-${_LANG}.json
             DESTINATION ${GSA_DATA_DIR}/classic/js/locales)
-  endif (PYTHONINTERP_FOUND)
+  endif (PY_POLIB_FOUND)
 
 endmacro ()
 
@@ -74,7 +77,7 @@ if (GETTEXT_FOUND)
                      DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_xsl-zh_CN-merged.po
                      COMMENT "Created translation .po files")
 
-  if (PYTHONINTERP_FOUND)
+  if (PY_POLIB_FOUND)
     add_custom_target (gettext-json-files
                         ALL
                         DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad-de.json
@@ -99,9 +102,9 @@ if (GETTEXT_FOUND)
                         COMMENT "Creating translation template (.pot) file from JS")
     add_custom_target (gettext-json-pot-files
                        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_js.pot)
-  else (PYTHONINTERP_FOUND)
-    message (WARNING "Python interpreter not found, cannot run .pot generator and generate JavaScript translations.")
-  endif (PYTHONINTERP_FOUND)
+  else (PY_POLIB_FOUND)
+    message (WARNING "Python interpreter not found, or polib python module not found: cannot run .pot generator and generate JavaScript translations.")
+  endif (PY_POLIB_FOUND)
 
 else (GETTEXT_FOUND)
   message (WARNING "Could not build translation files: gettext not found.")
