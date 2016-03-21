@@ -191,7 +191,7 @@
       registerComponent: register_component,
       unregisterComponent: unregister_component,
       component: get_component,
-      nextRowID: get_next_row_id,
+      getNextRowId: get_next_row_id,
       getNextComponentId: get_next_component_id,
       controllersString: get_controllers_string,
       filtersString: get_filters_string,
@@ -342,8 +342,9 @@
       else if (options.height < 150) {
         options.height = 150;
       }
-      var row = create_dashboard_row(dashboard, options.rowControllersString,
-          options.rowFiltersString, options.height, dashboardOpts);
+      var row = create_dashboard_row(dashboard, dashboard.getNextRowId(),
+          options.rowControllersString, options.rowFiltersString,
+          options.height, dashboardOpts);
       rows[row.id()] = row;
 
       if (options.position !== undefined && options.position === 'top') {
@@ -362,7 +363,8 @@
 
     function add_to_new_row(componentID, position) {
       var newRow = dashboard.addNewRow({position: position});
-      $(newRow.elem()).append(components[componentID].elem());
+      var component = components[componentID];
+      newRow.addComponent(component);
       dashboard.resize();
       dashboard.redraw();
       dashboard.updateRows();
@@ -372,8 +374,8 @@
       components[component.id()] = component;
     }
 
-    function unregister_component(id) {
-      delete components[id];
+    function unregister_component(component) {
+      delete components[component.id()];
     }
 
     function get_component(id) {
@@ -525,9 +527,15 @@
       }
     }
 
-    function remove_row(id) {
-      $(rows[id].elem()).hide('blind', {}, 150, function() {
-        $(rows[id].elem()).remove();
+    function remove_row(row) {
+      var id = row.id();
+
+      if (!(id in rows)) {
+        return;
+      }
+
+      $(row.elem()).hide('blind', {}, 250, function() {
+        $(row.elem()).remove();
         dashboard.resize();
         dashboard.redraw();
         delete rows[id];
@@ -546,7 +554,7 @@
         var row = rows[id];
         row.updateComponents();
         if (row.componentsCount() === 0) {
-          dashboard.removeRow(id);
+          dashboard.removeRow(row);
         }
 
         totalComponents += row.componentsCount();
@@ -562,9 +570,16 @@
       }
     }
 
-    function remove_component(id) {
-      components[id].row().removeComponent(id);
-      dashboard.unregisterComponent(id);
+    function remove_component(component) {
+      var row = component.row();
+      row.removeComponent(component);
+      dashboard.unregisterComponent(component);
+
+      if (row.componentsCount() === 0) {
+        dashboard.removeRow(row);
+      }
+
+      dashboard.updateRows();
 
       if (totalComponents < maxComponents) {
         newComponentButton.show();
@@ -582,11 +597,11 @@
       var component;
       if (lastFreeRowElem[0]) {
         row = rows[lastFreeRowElem.attr('id')];
-        component = create_dashboard_component(row, defaultControllerString,
+        component = create_dashboard_component(row,
+            dashboard.getNextComponentId(), defaultControllerString,
             defaultFilterString, dashboardOpts);
         dashboard.registerComponent(component);
-        row.registerComponent(component);
-        $(row.elem()).append(component.elem());
+        row.addComponent(component);
         row.resize();
         row.redraw();
       }
@@ -769,10 +784,9 @@
   /*
   * Dashboard Rows
   */
-  function create_dashboard_row(dashboard, controllersString, filtersString,
+  function create_dashboard_row(dashboard, id, controllersString, filtersString,
       height, dashboardOpts) {
     var components = {};
-    var id = dashboard.nextRowID();
     var compCountOffset = 0;
     var lastAddedComponent;
     var prevHeight = height;
@@ -802,6 +816,7 @@
       stopEdit: stop_edit,
       redraw: redraw,
       resize: resize,
+      addComponent: add_component,
     };
 
     init();
@@ -827,12 +842,11 @@
 
       for (var index in componentStringList) {
         var component = create_dashboard_component(dashboard_row,
-            componentStringList[index],
+            dashboard.getNextComponentId(), componentStringList[index],
             filterStringList ? filterStringList[index] : null,
             dashboardOpts);
         dashboard.registerComponent(component);
-        dashboard_row.registerComponent(component);
-        elem.append(component.elem());
+        dashboard_row.addComponent(component);
       }
     }
 
@@ -848,6 +862,12 @@
       return id;
     }
 
+    function add_component(component) {
+      dashboard_row.registerComponent(component);
+      elem.append(component.elem());
+      return dashboard_row;
+    }
+
     function get_set_height(newHeight) {
       if (newHeight === undefined) {
         return height;
@@ -856,7 +876,6 @@
       if (height !== newHeight) {
         height = newHeight;
         prevHeight = height;
-        dashboard.resize();
       }
     }
 
@@ -884,8 +903,8 @@
       lastAddedComponent = component;
     }
 
-    function unregister_component(id) {
-      delete components[id];
+    function unregister_component(component) {
+      delete components[component.id()];
     }
 
     function get_filters_string() {
@@ -940,17 +959,13 @@
       dashboard_row.updateComponentCountClasses();
     }
 
-    function remove_component(id) {
-      components[id].elem().remove();
-
-      dashboard.unregisterComponent(id);
-      dashboard_row.unregisterComponent(id);
-
-      if (dashboard_row.componentsCount() === 0) {
-        dashboard.removeRow(dashboard_row.id());
+    function remove_component(component) {
+      var id = component.id();
+      if (!(id in components)) {
+        return;
       }
-
-      dashboard.updateRows();
+      component.elem().remove();
+      dashboard_row.unregisterComponent(component);
     }
 
     function load_content() {
@@ -1084,10 +1099,9 @@
   /*
   * Dashboard Component Boxes
   */
-  function create_dashboard_component(row, controllerString, filterString,
+  function create_dashboard_component(row, id, controllerString, filterString,
       dashboardOpts) {
     var dashboard = row ? row.dashboard() : null;
-    var id = dashboard.getNextComponentId();
     var controllers = [];
     var controllerIndexes = {};
     var currentCtrlIndex = -1;
@@ -1325,7 +1339,7 @@
 
     function remove() {
       $(elem).hide('fade', {}, 250, function() {
-        dashboard.removeComponent(id);
+        dashboard.removeComponent(dashboard_component);
         row.resize();
         row.redraw();
       });
