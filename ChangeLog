@@ -1,5 +1,10 @@
 2016-03-22  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/classic/omp.xsl: Add calculator heading.
+	(user [edit]): Align tag.
+
+2016-03-22  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Add new alert method 'SCP'.
 
 	* src/html/classic/omp.xsl (html-create-alert-form)

@@ -35403,7 +35403,7 @@ should not have received it.
                 <xsl:value-of select="gsa:i18n ('Allow all and deny', 'User')"/>:
                 <input type="text" name="access_ifaces" value="{ifaces}" size="30"
                       maxlength="2000"/>
-                </label>
+              </label>
             </td>
           </tr>
         </table>
@@ -38442,6 +38442,8 @@ should not have received it.
     <xsl:call-template name="protocol"/>
   </xsl:for-each>
 </xsl:template>
+
+<!-- BEGIN CVSS CALCULATOR -->
 
 <xsl:template match="cvss_calculator">
   <div class="toolbar">
