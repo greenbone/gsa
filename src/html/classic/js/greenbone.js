@@ -393,6 +393,13 @@
       if (self.success_reload === 'parent' && self.parent_dialog) {
         self.parent_dialog.reload();
       }
+      if (self.success_reload === 'next' &&
+          xml.find('action_result next')) {
+        var url = parse_url(xml.find('action_result next').text());
+        // we need the html page
+        url.params.xml = 0;
+        location.href = encode_url_object(url);
+      }
       if (self.element === undefined) {
         // No element to update, exit early.
         self.close();
