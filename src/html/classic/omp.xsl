@@ -32710,44 +32710,6 @@ var toggleFilter = function(){
   </div>
 </xsl:template>
 
-<xsl:template match="get_report_topology_response">
-  <xsl:apply-templates select="get_report/get_reports_response/report"
-                       mode="topology"/>
-</xsl:template>
-
-<xsl:template match="report" mode="topology">
-  <xsl:apply-templates select="gsad_msg"/>
-  <xsl:variable name="report" select="report"/>
-  <div class="gb_window">
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">
-      <xsl:apply-templates select="report" mode="section-list">
-        <xsl:with-param name="current" select="'topology'"/>
-      </xsl:apply-templates>
-      <xsl:call-template name="report-icons">
-        <xsl:with-param name="section" select="'topology'"/>
-      </xsl:call-template>
-    </div>
-    <div class="gb_window_part_content">
-      <xsl:apply-templates select="report" mode="section-filter">
-        <xsl:with-param name="section" select="'topology'"/>
-      </xsl:apply-templates>
-    </div>
-    <div class="gb_window_part_content_no_pad">
-      <div style="overflow:auto; max-height:600px;">
-        <xsl:call-template name="report-image">
-          <xsl:with-param name="report" select="$report"/>
-          <xsl:with-param name="extra_filter" select="'first=1 rows=-1'"/>
-          <xsl:with-param name="report_format" select="'9e5e5deb-879e-4ecc-8be6-a71cd0875cdd'"/>
-          <xsl:with-param name="available_report_formats" select="../../get_report_formats_response"/>
-          <xsl:with-param name="title" select="'Network topology graph'"/>
-        </xsl:call-template>
-      </div>
-    </div>
-  </div>
-</xsl:template>
-
 <xsl:template name="report-image">
   <xsl:param name="report"/>
   <xsl:param name="extra_filter"/>
