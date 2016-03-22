@@ -1,3 +1,15 @@
+2016-03-22  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Backport r23022.
+
+	* src/gsad_omp.c (save_my_settings_omp): Add new "Default Severity"
+	setting.
+
+	* src/gsad.c (init_validator): Add default_severity.
+
+	* src/html/classic/omp.xsl (get_my_settings, edit_my_settings): Add new
+	"Default Severity" setting.
+
 2016-03-21  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Backport r24729.

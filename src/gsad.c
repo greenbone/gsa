@@ -1322,6 +1322,7 @@ init_validator ()
   openvas_validator_alias (validator, "current_user", "boolean");
   openvas_validator_alias (validator, "dashboard_name", "name");
   openvas_validator_alias (validator, "debug",           "boolean");
+  openvas_validator_alias (validator, "default_severity", "min_cvss_base");
   openvas_validator_alias (validator, "delta_report_id",     "report_id");
   openvas_validator_alias (validator, "delta_state_changed", "boolean");
   openvas_validator_alias (validator, "delta_state_gone", "boolean");
