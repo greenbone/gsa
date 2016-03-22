@@ -1,3 +1,13 @@
+2016-03-22  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add new alert method 'SCP'.
+
+	* src/html/classic/omp.xsl (html-create-alert-form)
+	(html-edit-alert-form): Add SCP input.
+	(alert, alert [details]): Add SCP data.
+
+	* src/gsad_omp.c (append_alert_method_data): Add SCP checks.
+
 2016-03-22  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* FindPythonModule.cmake: Fix exporting PY_module_FOUND variable in
