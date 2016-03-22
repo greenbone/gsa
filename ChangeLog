@@ -1,5 +1,11 @@
 2016-03-22  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* FindPythonModule.cmake: Fix exporting PY_module_FOUND variable in
+	find_python_module cmake function. This fixes building the json translation
+	files.
+
+2016-03-22  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* FindPythonModule.cmake: Change tabs into spaces and remove unnecessary
 	whitespace.
 
