@@ -777,6 +777,10 @@
     var parent_dialog = options.element.parents('.dialog-form')[0];
     var reload = options.element.data('reload');
 
+    if (!is_defined(reload)) {
+      reload = options.default_reload;
+    }
+
     if (done) {
       // done is used to add newly created elements to the dialog
       // therefore we must not reload anything

@@ -1,5 +1,11 @@
 2016-03-22  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/greenbone.js: Add options to set a default reload
+	parameter when calling init_omp_dialog. If the element data-reload attribute
+	is not set the default reload options will be used.
+
+2016-03-22  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/greenbone.js: Add new reload option next for OMPDialogs.
 	This options allows to redirect to the returned next url of the http response.
 
