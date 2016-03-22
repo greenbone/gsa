@@ -1,5 +1,10 @@
 2016-03-22  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/omp.xsl: Redirect to new tasks when a new task has been
+	created from an existing task detail view.
+
+2016-03-22  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/greenbone.js: Set default reload options for edit, new
 	and delete action icons.
 
