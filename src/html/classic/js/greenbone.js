@@ -55,6 +55,11 @@
 
   var gsa = global.gsa;
 
+  gsa.has_value = has_value;
+  gsa.is_object = is_object;
+  gsa.is_string = is_string;
+  gsa.is_defined = is_defined;
+
   function LanguageDetector() {
     global.i18nextBrowserLanguageDetector.call(this);
   }
@@ -104,6 +109,22 @@
   gsa._ = function(key, options) {
     return global.i18next.t(key, options);
   };
+
+  function is_object(value) {
+    return has_value(value) && typeof value === 'object';
+  }
+
+  function is_string(value) {
+    return has_value(value) && typeof value === 'string';
+  }
+
+  function has_value(value) {
+    return value !== null && is_defined(value);
+  }
+
+  function is_defined(value) {
+    return value !== undefined;
+  }
 
   var RESPONSE_SELECTORS = {
     new_agent:           'create_agent_response',

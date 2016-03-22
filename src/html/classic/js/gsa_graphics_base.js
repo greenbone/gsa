@@ -2703,7 +2703,7 @@
       case 'high_per_host':
         return gsa._('High / host');
       default:
-        if (is_string(field)) {
+        if (gsa.is_string(field)) {
           return field.replace('_', ' ');
         }
         return field;
@@ -3576,14 +3576,6 @@
     return;
   }
 
-  function is_object(value) {
-    return value !== null && value !== undefined && typeof value === 'object';
-  }
-
-  function is_string(value) {
-    return value !== null && value !== undefined && typeof value === 'string';
-  }
-
   function get_selector_label(type, chart_type, chart_template, aggregate_type,
       group_column, title_text) {
 
@@ -3957,14 +3949,14 @@
 
           var key;
           var c_elem_gen_params = c_elem.data('gen-params');
-          if (is_object(c_elem_gen_params)) {
+          if (gsa.is_object(c_elem_gen_params)) {
             for (key in c_elem_gen_params) {
               gen_params.extra[key] = c_elem_gen_params[key];
             }
           }
 
           var c_elem_init_params = c_elem.data('init-params');
-          if (is_object(c_elem_init_params)) {
+          if (gsa.is_object(c_elem_init_params)) {
             for (key in c_elem_init_params) {
               init_params[key] = c_elem_init_params[key];
             }
