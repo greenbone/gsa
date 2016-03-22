@@ -1,5 +1,13 @@
 2016-03-22  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/omp.xsl (report [results-pager]): Remove. Replaced
+	by new template: report [section-pager-new].
+	(section-pager): Remove. Replaced by section-filter-full and
+	section-filter-restricted.
+	(report-section-pager): Remove. Replaced by report [section-pager-new].
+
+2016-03-22  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/omp.xsl (get_report_topology_response)
 	(report [topology]): Remove. Templates are no longer used.
 
