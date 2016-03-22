@@ -3968,7 +3968,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
-<xsl:template match="report" mode="section-pager-new">
+<xsl:template match="report" mode="section-pager">
   <xsl:param name="section"/>
   <xsl:param name="count"/>
   <xsl:param name="filtered-count"/>
@@ -4137,7 +4137,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:when test="count(report/results/result) &gt; 0">
           <div id="reports">
             <div class="footnote" style="text-align:right;">
-              <xsl:apply-templates select="." mode="section-pager-new">
+              <xsl:apply-templates select="." mode="section-pager">
                 <xsl:with-param name="report_section" select="'results'"/>
                 <xsl:with-param name="count" select="count (report/results/result)"/>
                 <xsl:with-param name="filtered-count" select="report/result_count/filtered"/>
@@ -4159,7 +4159,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     </xsl:if>
                   </xsl:variable>
                   <div class="pull-right">
-                    <xsl:apply-templates select="." mode="section-pager-new">
+                    <xsl:apply-templates select="." mode="section-pager">
                       <xsl:with-param name="report_section" select="'results'"/>
                       <xsl:with-param name="count" select="count (report/results/result)"/>
                       <xsl:with-param name="filtered-count" select="report/result_count/filtered"/>

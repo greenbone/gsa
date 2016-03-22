@@ -1,3 +1,10 @@
+2016-03-22  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/omp.xsl (report [section-pager-new]): Renamed to
+	report [section-pager].
+	(report [section-pager]): New. Renamed report [section-pager-new].
+	(report [results]): Change section-pager-new to section-pager.
+
 2016-03-22  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/js/gsa_line_chart.js: Fix transforming data for line
