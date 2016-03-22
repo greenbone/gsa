@@ -77,8 +77,7 @@
       gsa._('Loading line chart ...'), gsa._('Bubble Chart')));
   };
 
-  LineChartGenerator.prototype.generate = function(controller, data,
-      gen_params) {
+  LineChartGenerator.prototype.generate = function(controller, data) {
     var display = controller.display();
     var update = this.mustUpdate(display);
 
@@ -97,25 +96,19 @@
       .y(function(d) { return self.y2_scale(d[self.y2_field]); })
       .defined(function(d) { return d[self.y2_field] !== undefined; });
 
-    var info_line;
-    var info_box;
-    var info_text_g;
-    var info_text_lines;
-
     var x_min, x_max;
     var y_min, y_max;
     var y2_min, y2_max;
 
-    var info_last_x;
     var height;
     var width;
 
     var column_info = data.column_info;
 
     function mouse_exited() {
-      info_box.style('display', 'none');
-      info_line.style('display', 'none');
-      info_text_g.style('display', 'none');
+      self.info_box.style('display', 'none');
+      self.info_line.style('display', 'none');
+      self.info_text_g.style('display', 'none');
     }
 
     function mouse_moved() {
@@ -123,9 +116,9 @@
         return;
       }
 
-      info_box.style('display', 'block');
-      info_line.style('display', 'block');
-      info_text_g.style('display', 'block');
+      self.info_box.style('display', 'block');
+      self.info_line.style('display', 'block');
+      self.info_text_g.style('display', 'block');
 
       var parent_rect = self.svg.node()
         .parentNode
@@ -136,6 +129,7 @@
       var mouse_y = d3.event.clientY - parent_rect.top - self.margin.top - 21;
 
       var rounded_x;
+      var info_last_x;
       var line_index;
       var line_x;
       var box_x;
@@ -166,89 +160,66 @@
         info_last_x = rounded_x;
 
         var line;
-        for (line in info_text_lines) {
+        for (line in self.info_text_lines) {
           var bbox;
           var line_width;
           var d = data.records[line_index];
           if (d !== null && d !== undefined) {
-            d = d[info_text_lines[line].field];
+            d = d[self.info_text_lines[line].field];
             d = gsa.format_data(d,
-              data.column_info.columns[info_text_lines[line].field]);
+              data.column_info.columns[self.info_text_lines[line].field]);
 
-            info_text_lines[line].elem.text(d);
+            self.info_text_lines[line].elem.text(d);
           }
           else {
             if (line === 0) {
-              info_text_lines[line].elem.text(
+              self.info_text_lines[line].elem.text(
                   gsa.format_data(rounded_x, {data_type: 'js_date'}));
             }
             else {
-              info_text_lines[line].elem.text('N/A');
+              self.info_text_lines[line].elem.text('N/A');
             }
           }
 
-          bbox = info_text_lines[line].elem.node()
+          bbox = self.info_text_lines[line].elem.node()
             .getBoundingClientRect();
           line_width = bbox.width;
 
-          if (info_text_lines[line].field !== self.x_field) {
+          if (self.info_text_lines[line].field !== self.x_field) {
             line_width += 25;
           }
 
           max_line_width = Math.max(max_line_width, line_width);
         }
 
-        for (line in info_text_lines) {
-          info_text_lines[line].elem.attr('x', max_line_width);
+        for (line in self.info_text_lines) {
+          self.info_text_lines[line].elem.attr('x', max_line_width);
         }
 
-        info_box
+        self.info_box
           .attr('width', max_line_width + 10)
           .attr('height', 53);
       }
 
-      box_x = Math.min(width - info_box.attr('width') + self.margin.right,
+      box_x = Math.min(width - self.info_box.attr('width') + self.margin.right,
           Math.max(-self.margin.left,
-            mouse_x - info_box.attr('width') / 2));
+            mouse_x - self.info_box.attr('width') / 2));
 
-      info_box
+      self.info_box
         .text('')
         .attr('x', box_x)
         .attr('y', mouse_y - 50);
 
-      info_text_g
+      self.info_text_g
         .attr('text-anchor', 'end')
         .attr('transform',
             'translate (' + (box_x + 5) + ',' + (mouse_y - 35) + ')');
 
-      info_line
+      self.info_line
         .attr('x1', line_x)
         .attr('x2', line_x)
         .attr('y1', 0)
         .attr('y2', height);
-    }
-
-    // evaluate options set by gen_params
-    if (gen_params.x_field) {
-      self.x_field = gen_params.x_field;
-    }
-
-    if (gen_params.y_fields && gen_params.y_fields[0]  &&
-      gen_params.z_fields && gen_params.z_fields[0]) {
-      self.y_field = gen_params.y_fields[0];
-      self.y2_field = gen_params.z_fields[0];
-    }
-    else if (gen_params.y_fields && gen_params.y_fields[0]) {
-      self.y_field = gen_params.y_fields[0];
-      self.y2_field = 'count';
-    }
-    else {
-      self.y_field = 'count';
-      self.y2_field = 'c_count';
-    }
-
-    if (gen_params.extra.show_stat_type) {
-      this.show_stat_type = !!JSON.parse(gen_params.extra.show_stat_type);
     }
 
     var records = data.records;
@@ -361,7 +332,7 @@
           .style('stroke', 'green')
           .attr('r', '4px')
           .attr('cx', width / 2)
-          .attr('cy', self.y_scale(records [0][self.y_field]));
+          .attr('cy', self.y_scale(records[0][self.y_field]));
 
         self.svg.append('circle')
           .attr('id', 'circle_y2')
@@ -375,54 +346,54 @@
       }
 
       // Create tooltip elements
-      info_line = self.svg.append('line')
+      self.info_line = self.svg.append('line')
         .style('stroke', 'grey')
         .style('display', 'none')
         .classed('remove_on_static', true);
 
-      info_box = self.svg.append('rect')
+      self.info_box = self.svg.append('rect')
         .style('fill', 'white')
         .style('opacity', '0.75')
         .style('display', 'none')
         .classed('remove_on_static', true);
 
-      info_text_g = self.svg.append('g')
+      self.info_text_g = self.svg.append('g')
         .style('display', 'none')
         .classed('remove_on_static', true);
 
-      info_text_lines = [];
-      info_text_lines .push({
-        elem: info_text_g.append('text')
+      self.info_text_lines = [];
+      self.info_text_lines .push({
+        elem: self.info_text_g.append('text')
           .attr('transform', 'translate(0,0)')
           .style('font-weight', 'bold')
           .text('X'),
         field: self.x_field,
       });
 
-      info_text_lines.push({
-        elem: info_text_g.append('text')
+      self.info_text_lines.push({
+        elem: self.info_text_g.append('text')
           .attr('transform', 'translate(0,15)')
           .style('font-weight', 'normal')
           .text('Y1'),
         field: self.y_field,
       });
 
-      info_text_lines.push({
-        elem: info_text_g.append('text')
+      self.info_text_lines.push({
+        elem: self.info_text_g.append('text')
           .attr('transform', 'translate(0,30)')
           .style('font-weight', 'normal')
           .text('Y2'),
         field: self.y2_field
       });
 
-      info_text_g.append('line')
+      self.info_text_g.append('line')
         .attr('x1', '0')
         .attr('x2', '15')
         .attr('y1', '10')
         .attr('y2', '10')
         .style('stroke', 'green');
 
-      info_text_g.append('line')
+      self.info_text_g.append('line')
         .attr('x1', '0')
         .attr('x2', '15')
         .attr('y1', '25')
@@ -559,11 +530,11 @@
   };
 
   LineChartGenerator.prototype.generateData = function(controller,
-      original_data, gen_params) {
+      original_data) {
     // Extract records and column info
     var cmd = controller.data_src().command();
     if (cmd === 'get_aggregate') {
-      return this.transformData(original_data, gen_params);
+      return this.transformData(original_data);
     }
     else {
       console.error('Unsupported command:' + cmd);
@@ -595,19 +566,51 @@
         controller.data_src().param('filter'));
   };
 
-  LineChartGenerator.prototype.time_line = function(old_data, params) {
-    var t_field = 'value';
-    var fillers = {};
-    var self = this;
-
-    if (params) {
-      if (params.t_field !== null && params.t_field !== undefined) {
-        t_field = params.t_field;
-      }
-      if (params.fillers !== null && params.fillers !== undefined) {
-        fillers = params.fillers;
-      }
+  LineChartGenerator.prototype.evaluateParams = function(gen_params) {
+    // evaluate options set by gen_params
+    if (!gen_params) {
+      return;
     }
+
+    if (gen_params.x_field) {
+      this.x_field = gen_params.x_field;
+    }
+
+    if (gen_params.y_fields && gen_params.y_fields[0]  &&
+      gen_params.z_fields && gen_params.z_fields[0]) {
+      this.y_field = gen_params.y_fields[0];
+      this.y2_field = gen_params.z_fields[0];
+    }
+    else if (gen_params.y_fields && gen_params.y_fields[0]) {
+      this.y_field = gen_params.y_fields[0];
+      this.y2_field = 'count';
+    }
+    else {
+      this.y_field = 'count';
+      this.y2_field = 'c_count';
+    }
+
+    if (gen_params.extra.show_stat_type) {
+      this.show_stat_type = !!JSON.parse(gen_params.extra.show_stat_type);
+    }
+
+    if (gsa.has_value(gen_params.t_field)) {
+      this.t_field = gen_params.t_field;
+    }
+    else {
+      this.t_field = 'value';
+    }
+
+    if (gsa.has_value(gen_params.fillers)) {
+      this.fillers = gen_params.fillers;
+    }
+    else {
+      this.fillers = {};
+    }
+  };
+
+  LineChartGenerator.prototype.time_line = function(old_data) {
+    var self = this;
 
     var new_data = {
       original_xml: old_data.original_xml,
@@ -645,7 +648,7 @@
     for (var column_name in old_data.column_info.columns) {
       var info;
       var column = old_data.column_info.columns[column_name];
-      if (column_name === t_field) {
+      if (column_name === self.t_field) {
         column_info.columns[column_name] = {};
         for (info in column) {
           if (info === 'data_type') {
@@ -676,20 +679,25 @@
 
     var t_index = 0;
 
-    while (isNaN(old_data.records[t_index][t_field])) {
+    while (isNaN(old_data.records[t_index][self.t_field])) {
       t_index++;
     }
-    var t_min = new Date(old_data.records[t_index][t_field] * 1000);
+    var t_min = new Date(old_data.records[t_index][self.t_field] * 1000);
 
     t_index = old_data.records.length - 1;
-    while (isNaN(old_data.records[t_index][t_field])) {
+    while (isNaN(old_data.records[t_index][self.t_field])) {
       t_index--;
     }
-    var t_max = new Date(old_data.records[t_index][t_field] * 1000);
+    var t_max = new Date(old_data.records[t_index][self.t_field] * 1000);
 
     var interval_days = (t_max.getTime() - t_min.getTime()) / 86400000;
     var times;
     t_index = 0;
+    var has_values;
+    var values;
+    var new_record;
+    var t;
+    var field;
     var data_index = 0;
     var prev_values = {};
 
@@ -715,25 +723,27 @@
     }
 
     for (t_index in times) {
-      var new_record = {};
-      var t = times[t_index];
-      var values = {};
-      new_record[t_field] = t;
-      var has_values = false;
-      var field;
+      new_record = {};
+      t = times[t_index];
+      values = {};
+      new_record[self.t_field] = t;
+      has_values = false;
 
       while (data_index < old_data.records.length &&
           (t_index >= times.length - 1 ||
-           isNaN(old_data.records[data_index][t_field]) ||
-           old_data.records[data_index][t_field] * 1000 <
+           isNaN(old_data.records[data_index][self.t_field]) ||
+           old_data.records[data_index][self.t_field] * 1000 <
            times[Number(t_index) + 1].getTime())) {
-        if (isNaN(old_data.records[data_index][t_field])) {
+
+        // collect values from orgin data which fit to the time value
+
+        if (isNaN(old_data.records[data_index][self.t_field])) {
           data_index++;
           continue;
         }
 
         for (field in old_data.records[data_index]) {
-          if (field !== t_field) {
+          if (field !== self.t_field) {
             if (values[field] === undefined) {
               values[field] = old_data.records[data_index][field];
             }
@@ -753,21 +763,21 @@
           }
         }
 
-        data_index ++;
+        data_index++;
       }
 
       for (field in old_data.column_info.columns) {
-        if (field !== t_field) {
-          if (values[field] !== null && values[field] !== undefined) {
+        if (field !== self.t_field) {
+          if (gsa.has_value(values[field])) {
             prev_values[field] = values[field];
             new_record[field] = values[field];
             has_values = true;
           }
-          else if (fillers[field] === '!previous') {
+          else if (self.fillers[field] === '!previous') {
             new_record[field] = prev_values[field] ? prev_values[field] : 0;
           }
-          else if (fillers [field] !== null) {
-            new_record[field] = fillers[field];
+          else if (gsa.has_value(self.fillers[field])) {
+            new_record[field] = self.fillers[field];
           }
           else if (old_data.column_info.columns[field].stat === 'c_count') {
             new_record[field] = prev_values[field] ? prev_values[field] : 0;
