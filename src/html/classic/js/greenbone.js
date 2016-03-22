@@ -738,6 +738,26 @@
     return params;
   }
 
+  function parse_url(value) {
+    var parser = document.createElement('a');
+    parser.href = value;
+
+    return {
+      protocol: parser.protocol,
+      hostname: parser.hostname,
+      port: parser.port,
+      host: parser.host,
+      pathname: parser.pathname,
+      hash: parser.hash,
+      params: parse_params(parser.search.substr(1)),
+    };
+  }
+
+  function encode_url_object(url) {
+    // currently only local urls are supported
+    return url.pathname + '?' + $.param(url.params);
+  }
+
   function init_omp_dialog(options) {
     var params;
 
