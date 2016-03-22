@@ -1,5 +1,12 @@
 2016-03-22  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/omp.xsl (wbr-at-punctuation): New template.
+	(report [hosts]): Set a minimum width for "Host" column, abbreviate
+	"Distance" as "Dist." and add word break tags at periods and colons
+	of hostnames and IP addresses.
+
+2016-03-22  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/omp.xsl (report [section-filter]): Rewrite text in
 	apply_filter drop-down to make it consistent with current trunk and
 	less ambiguous.

@@ -850,6 +850,29 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:for-each>
 </xsl:template>
 
+<xsl:template name="wbr-at-punctuation">
+  <xsl:param name="string"/>
+  <xsl:variable name="colon-split" select="str:tokenize ($string, ':')"/>
+  <xsl:for-each select="$colon-split">
+    <xsl:if test="position() != 1">
+      <xsl:text>:</xsl:text>
+    </xsl:if>
+    <xsl:variable name="period-split" select="str:tokenize (., '.')"/>
+    <xsl:for-each select="$period-split">
+      <xsl:if test="position() != 1">
+        <xsl:text>.</xsl:text>
+      </xsl:if>
+      <xsl:value-of select="."/>
+      <xsl:if test="position() != last()">
+        <wbr/>
+      </xsl:if>
+    </xsl:for-each>
+    <xsl:if test="position() != last()">
+      <wbr/>
+    </xsl:if>
+  </xsl:for-each>
+</xsl:template>
+
 <!-- Currently only a very simple formatting method to produce
      nice HTML from a structured text:
      - create paragraphs for each text block separated with a empty line
@@ -28948,11 +28971,11 @@ should not have received it.
     <div class="gb_window_part_content_no_pad">
       <table class="gbntable" cellspacing="2" cellpadding="4" border="0">
         <tr class="gbntablehead2">
-          <td><xsl:value-of select="gsa:i18n ('Host', 'Host')"/></td>
+          <td style="min-width: 150px"><xsl:value-of select="gsa:i18n ('Host', 'Host')"/></td>
           <td><xsl:value-of select="gsa:i18n ('OS', 'Host')"/></td>
           <td><xsl:value-of select="gsa:i18n ('Ports', 'Host')"/></td>
           <td><xsl:value-of select="gsa:i18n ('Apps', 'Host')"/></td>
-          <td><xsl:value-of select="gsa:i18n ('Distance', 'Host')"/></td>
+          <td><xsl:value-of select="gsa:i18n ('Dist.', 'Host')"/></td>
           <td><xsl:value-of select="gsa:i18n ('Auth', 'Host')"/></td>
           <td><xsl:value-of select="gsa:i18n ('Start', 'Host Time')"/></td>
           <td><xsl:value-of select="gsa:i18n ('End', 'Host Time')"/></td>
@@ -28990,10 +29013,15 @@ should not have received it.
             <td>
               <xsl:variable name="hostname" select="detail[name/text() = 'hostname']/value"/>
               <a href="?cmd=get_report&amp;type=assets&amp;host={$current_host}&amp;token={/envelope/token}">
-                <xsl:value-of select="$current_host"/>
+              <xsl:call-template name="wbr-at-punctuation">
+                <xsl:with-param name="string" select="$current_host"/>
+              </xsl:call-template>
               </a>
               <xsl:if test="$hostname">
-                <xsl:value-of select="concat(' (', $hostname, ')')"/>
+                <br/>
+                <xsl:call-template name="wbr-at-punctuation">
+                  <xsl:with-param name="string" select="concat(' (', $hostname, ')')"/>
+                </xsl:call-template>
               </xsl:if>
             </td>
             <td>
