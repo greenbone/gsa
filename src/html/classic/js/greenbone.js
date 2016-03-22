@@ -909,11 +909,21 @@
     doc = $(doc);
 
     doc.find('.edit-action-icon').each(function() {
-      init_omp_dialog({type: 'edit', element: $(this), button: gsa._('Save')});
+      init_omp_dialog({
+        type: 'edit',
+        element: $(this),
+        default_reload: 'window',
+        button: gsa._('Save')
+      });
     });
 
     doc.find('.new-action-icon').each(function() {
-      init_omp_dialog({type: 'new', element: $(this), button: gsa._('Create')});
+      init_omp_dialog({
+        type: 'new',
+        element: $(this),
+        default_reload: 'next',
+        button: gsa._('Create'),
+      });
     });
 
     doc.find('.upload-action-icon').each(function() {
@@ -929,6 +939,7 @@
         type: 'delete',
         element: $(this),
         button: gsa._('Delete'),
+        default_reload: 'window',
         postfix: 'confirm',
       });
     });
