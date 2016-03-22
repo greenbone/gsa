@@ -322,20 +322,25 @@
           = html.find('.gb_login_dialog .gb_window_part_content');
     var error_title = 'Error:';
     var error = 'Unknown error';
+    var error_code = '';
 
     if (gsad_msg.length) {
       error = gsad_msg.attr('status_text');
+      error_code = gsad_msg.attr('status_code');
     }
     else if (response.length) {
       error = response.attr('status_text');
+      error_code = response.attr('status');
     }
     else if (generic_omp_response.length) {
       error = generic_omp_response.attr('status_text');
+      error_code = generic_omp_response.attr('status');
     }
     else if (action_result.length) {
       error_title = 'Operation \'' + action_result.find('action').text() +
         '\' failed';
       error = '<br/>' + action_result.find('message').text();
+      error_code = action_result.find('status').text();
     }
     else if (internal_error_html.length) {
       error_title = internal_error_html.find('span div').text();
@@ -352,6 +357,9 @@
     else if (login_form_html.length) {
       error = login_form_html.find('.error_message').text();
     }
+
+    if (error_code !== undefined && error_code !== '')
+      error_title = error_title + ' <i>(Status code: ' + error_code + ')</i>';
     self.error(error, error_title);
   };
 

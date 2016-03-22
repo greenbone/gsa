@@ -1,3 +1,8 @@
+2016-03-22  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/js/greenbone.js (OMPDialog [setErrorFromResponse]):
+	Add status code to error title if one is given.
+
 2016-03-22  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/omp.xsl: Add calculator heading.
