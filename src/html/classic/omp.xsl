@@ -28760,29 +28760,29 @@ should not have received it.
             <xsl:apply-templates select="." mode="fold-filter-icon"/>
           </xsl:when>
           <xsl:otherwise>
-            <select name="apply_filter" style="width:165px">
+            <select name="apply_filter" style="min-width:260px">
               <xsl:choose>
                 <xsl:when test="/envelope/params/apply_filter = 'no_pagination' or not(/envelope/params/apply_filter != '')">
-                  <option value="no_pagination" selected="1">&#8730;<xsl:value-of select="gsa:i18n ('All filtered results:', 'Filter')"/></option>
+                  <option value="no_pagination" selected="1">&#8730;<xsl:value-of select="gsa:i18n ('Use filtered results (all pages)', 'Filter')"/></option>
                 </xsl:when>
                 <xsl:otherwise>
-                  <option value="no_pagination"><xsl:value-of select="gsa:i18n ('All filtered results:', 'Filter')"/></option>
+                  <option value="no_pagination"><xsl:value-of select="gsa:i18n ('Use filtered results (all pages)', 'Filter')"/></option>
                 </xsl:otherwise>
               </xsl:choose>
               <xsl:choose>
                 <xsl:when test="/envelope/params/apply_filter = 'no'">
-                  <option value="no" selected="1">&#8730;<xsl:value-of select="gsa:i18n ('All results', 'Filter')"/></option>
+                  <option value="no" selected="1">&#8730;<xsl:value-of select="gsa:i18n ('Use all unfiltered results', 'Filter')"/></option>
                 </xsl:when>
                 <xsl:otherwise>
-                  <option value="no"><xsl:value-of select="gsa:i18n ('All results', 'Filter')"/></option>
+                  <option value="no"><xsl:value-of select="gsa:i18n ('Use all unfiltered results', 'Filter')"/></option>
                 </xsl:otherwise>
               </xsl:choose>
               <xsl:choose>
                 <xsl:when test="/envelope/params/apply_filter = 'full' or /envelope/params/apply_filter = ''">
-                  <option value="full" selected="1">&#8730;<xsl:value-of select="gsa:i18n ('Apply full filter:', 'Filter')"/></option>
+                  <option value="full" selected="1">&#8730;<xsl:value-of select="gsa:i18n ('Use filtered results (current page)', 'Filter')"/></option>
                 </xsl:when>
                 <xsl:otherwise>
-                  <option value="full"><xsl:value-of select="gsa:i18n ('Apply full filter:', 'Filter')"/></option>
+                  <option value="full"><xsl:value-of select="gsa:i18n ('Use filtered results (current page)', 'Filter')"/></option>
                 </xsl:otherwise>
               </xsl:choose>
             </select>

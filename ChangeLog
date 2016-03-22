@@ -1,5 +1,11 @@
 2016-03-22  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/omp.xsl (report [section-filter]): Rewrite text in
+	apply_filter drop-down to make it consistent with current trunk and
+	less ambiguous.
+
+2016-03-22  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Backport r24355.
 
 	* src/html/classic/help.xsl (my_settings.html): Add help for settings
