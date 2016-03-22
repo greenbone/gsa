@@ -1839,10 +1839,14 @@
 
     /* Callback for when data has been loaded */
     function on_data_loaded(orig_data, gen_params) {
+      generator.evaluateParams(gen_params);
+      //TODO remove gen_params argument after all generators are using
+      // evaluateParams
       var data = generator.generateData(controller, orig_data, gen_params);
       if (data === null) {
         return;
       }
+      //TODO remove gen_params argument
       generator.generate(controller, data, gen_params);
       display.update_gen_data(generator, gen_params);
       generator.addMenuItems(controller, data);
@@ -3856,6 +3860,9 @@
 
   BaseChartGenerator.prototype.scaleColor = function(value) {
     return this.color_scale(value);
+  };
+
+  BaseChartGenerator.prototype.evaluateParams = function(gen_params) {
   };
 
   function get_chart_generator(chart_type, data_source) {

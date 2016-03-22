@@ -1,3 +1,9 @@
+2016-03-22  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/js/gsa_graphics_base.js: Add a evaluateParams prototype
+	function to BaseChartGenerator. This function will be called before
+	generateData and should be used to initialize generator specific parameters.
+
 2016-03-22  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/omp.xsl (report [results-pager]): Remove. Replaced
@@ -11,7 +17,7 @@
 	* src/html/classic/omp.xsl (get_report_topology_response)
 	(report [topology]): Remove. Templates are no longer used.
 
-2016-03-23  Björn Ricks <bjoern.ricks@greenbone.net>
+2016-03-22  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/js/gsa_graphics_base.js: Remove is_object and is_string
 	functions from gsa_graphics_base.js.
