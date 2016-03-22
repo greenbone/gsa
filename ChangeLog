@@ -1,5 +1,12 @@
 2016-03-22  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	Backport r24355.
+
+	* src/html/classic/help.xsl (my_settings.html): Add help for settings
+	"Dynamic Severity" and "Default Severity".
+
+2016-03-22  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Backport r23022.
 
 	* src/gsad_omp.c (save_my_settings_omp): Add new "Default Severity"

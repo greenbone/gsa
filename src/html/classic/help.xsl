@@ -5152,6 +5152,22 @@ Public License instead of this License.
           </li>
         </ul>
       </p>
+      <h3>Dynamic Severity</h3>
+      <p>
+        When set to <i>Yes</i>, the severity of scan results will be the
+        current CVSS base score of the NVT. If set to <i>No</i>, the severity
+        at the time of the scan will be shown.
+      </p>
+      <h3>Default Severity</h3>
+      <p>
+        The default severity to assign to results without a severity
+        value.
+      </p>
+      <p>
+        Currently this only applies to CVE results where the CVE cannot be
+        found in the SCAP database. For other result types the scanner must
+        provide a severity score.
+      </p>
 
       <h3>Default Resources</h3>
       <p>
