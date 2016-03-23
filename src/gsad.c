@@ -3918,11 +3918,22 @@ reconstruct_url (struct MHD_Connection *connection, const char *url)
 static void
 get_client_address (struct MHD_Connection *conn, char *client_address)
 {
-  const union MHD_ConnectionInfo* info;
+  // First try the X-Real-IP header, then the MHD connection
+  const char* x_real_ip = MHD_lookup_connection_value (conn,
+                                                       MHD_HEADER_KIND,
+                                                       "X-Real-IP");
+  if (x_real_ip != NULL)
+    {
+      strcpy(client_address, x_real_ip);
+    }
+  else
+    {
+      const union MHD_ConnectionInfo* info;
 
-  info = MHD_get_connection_info (conn, MHD_CONNECTION_INFO_CLIENT_ADDRESS);
-  sockaddr_as_str ((struct sockaddr_storage *) info->client_addr,
-                   client_address);
+      info = MHD_get_connection_info (conn, MHD_CONNECTION_INFO_CLIENT_ADDRESS);
+      sockaddr_as_str ((struct sockaddr_storage *) info->client_addr,
+                       client_address);
+    }
 }
 
 /**
