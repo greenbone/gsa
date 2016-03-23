@@ -1,3 +1,7 @@
+2016-03-23  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (create_report_omp): Return error if report is missing.
+
 2016-03-23  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/css/gsa-style.css: Fix width of chart menu entries during

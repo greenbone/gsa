@@ -3791,6 +3791,11 @@ create_report_omp (credentials_t * credentials, params_t *params,
 
   if (strlen (xml_file) == 0)
     {
+      if (task_id)
+        MESSAGE_INVALID ("Report required",
+                         G_STRINGIFY (MHD_HTTP_BAD_REQUEST),
+                         "Create Report", "new_container_task");
+
       /* Create only the container task. */
 
       command = g_strdup_printf ("<create_task>"
