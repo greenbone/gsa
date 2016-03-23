@@ -467,7 +467,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <!-- Default chart selections:
         Controller names of boxes in a row separated with "|",
         rows separated with "#" -->
-  <xsl:variable name="default_controllers" select="'nvt_bar_chart|nvt_donut_chart#cve_bar_chart|cve_donut_chart'"/>
+  <xsl:variable name="default_controllers" select="'nvt_donut_chart|cve_timeline_chart|cve_donut_chart#cert_bund_adv_timeline_chart|cert_bund_adv_bar_chart'"/>
   <!-- Default row heights, rows separated with "#",
         number of rows must match default_controllers -->
   <xsl:variable name="default_heights" select="'280#280'"/>
