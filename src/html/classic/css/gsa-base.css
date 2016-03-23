@@ -339,6 +339,23 @@ input::-moz-focus-inner {
   box-shadow: none;
 }
 
+.button-primary {
+  border: 1px solid #519032;
+  background-color: #87d050;
+  font-weight: bold;
+  color: #519032;
+}
+
+.button img {
+  height: 32px;
+  width: 32px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  margin-right: 10px;
+  margin-left: -10px;
+  vertical-align: middle;
+}
+
 
 /* formulars */
 

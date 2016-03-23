@@ -1,5 +1,11 @@
 2016-03-23  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/css/gsa-base.css: Use a new css class for primary buttons.
+	This button can be used to highlight the main button. Also add css to allow to
+	use images within button captions.
+
+2016-03-23  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/css/gsa-base.css: Use a bold font for button captions.
 	Also use a green background for focused or hovered buttons.
 
