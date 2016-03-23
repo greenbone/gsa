@@ -286,8 +286,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:choose>
       <xsl:when test="$type='allinfo'"></xsl:when>
       <xsl:when test="$type='nvt'">by-class|nvt-by-family|by-cvss#by-created|nvt-by-qod_type</xsl:when>
+      <xsl:when test="$type='ovaldef'">by-class|by-created|by-oval-class</xsl:when>
       <!-- fallback for all other types -->
-      <xsl:otherwise>by-cvss|by-class</xsl:otherwise>
+      <xsl:otherwise>by-class|by-created|by-cvss</xsl:otherwise>
     </xsl:choose>
   </xsl:param>
   <!-- Default row heights, rows separated with "#",
