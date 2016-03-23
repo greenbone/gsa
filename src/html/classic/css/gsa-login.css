@@ -70,15 +70,21 @@ header .version {
   width: 100%;
 }
 
-.login_box {
-  font-size: 9pt;
+.box {
+  margin-top: 30px;
+  margin-bottom: 30px;
+  padding: 5px;
   width: 480px;
-  min-height: 150px;
+  font-size: 9pt;
   background-color: #dddddd;
-  margin-top: 10%;
-  margin-left: 20%;
   border-radius: 15px;
   box-shadow: 10px 10px 15px #1a1a1a;
+}
+
+.login-box {
+  margin-top: 10%;
+  margin-left: 20%;
+  width: 480px;
 }
 
 .logo > img {
