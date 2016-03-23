@@ -295,8 +295,7 @@ configure_file (src/gsad_log_conf.cmake_in src/gsad_log.conf)
 
 ## Install
 
-install (FILES src/html/classic/favicon.gif
-               src/html/classic/gsad.xsl
+install (FILES src/html/classic/gsad.xsl
                src/html/classic/graphics.xsl
                src/html/classic/help.xsl
                src/html/classic/omp.xsl
@@ -365,7 +364,6 @@ else (CMAKE_BUILD_TYPE MATCHES "Release")
 endif (CMAKE_BUILD_TYPE MATCHES "Release")
 
 install (FILES src/html/classic/css/gsa-login.css
-               src/html/classic/favicon.gif
          DESTINATION ${GSA_DATA_DIR}/classic/login)
 
 install (FILES src/html/classic/img/gsa_splash.png
@@ -521,6 +519,7 @@ install (FILES src/html/classic/img/agent.png
                src/html/classic/img/help.svg
                src/html/classic/img/greenbone.svg
                src/html/classic/img/wizard.svg
+               src/html/classic/img/favicon.gif
          DESTINATION ${GSA_DATA_DIR}/classic/img)
 
 install (FILES src/html/classic/img/style/gsa-logo.png
