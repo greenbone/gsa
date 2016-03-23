@@ -1,3 +1,9 @@
+2016-03-23  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/js/greenbone.js (OMPDialog.prototype.postForm): Get
+	"next" page if the response of the POST is one containing an
+	action_result and get entity for select option from there.
+
 2016-03-23  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/omp.xsl (html-create-alert-form): Add ID to SCP

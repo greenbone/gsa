@@ -405,7 +405,28 @@
         self.close();
         return;
       }
-      var entity = get_entity(self.command, xml);
+
+      var entity;
+      var action_result_next = xml.find ('action_result > next');
+
+      if (action_result_next.length > 0) {
+        // got an "action_result" with "next" element,
+        //  so get "next" url and extract entity from response.
+        var next_url = action_result_next.text();
+        $.ajax({ url: next_url,
+                 async: false,
+                 success: function(doc) {
+                            entity = get_entity(self.command, $(doc);
+                          },
+                 error: function(doc) {
+                          self.setErrorFromResponse($(doc))
+                 }
+               });
+      } else {
+        // got a response directly, extract entity directly.
+        entity = get_entity(self.command, xml);
+      }
+
       if (entity !== undefined) {
         // fill in the new information in the $element and make it selected
         self.element.append($('<option/>', {
