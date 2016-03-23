@@ -1,5 +1,11 @@
 2016-03-23  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (create_agent_omp): Remove name and comment checks,
+	this is done by CHECK_PARAM_INVALID.  Hence remove redundant entity and
+	response initialisations, as Clang should understand now.
+
+2016-03-23  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad.c (init_validator): Remove "+" submit rules.  No longer used.
 
 	* src/gsad_omp.c (create_task_omp, save_task_omp, create_user_omp)

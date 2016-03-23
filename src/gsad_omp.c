@@ -6831,12 +6831,15 @@ char *
 create_agent_omp (credentials_t * credentials, params_t *params,
                   cmd_response_data_t* response_data)
 {
-  entity_t entity = NULL;
-  gchar *response = NULL, *html;
+  entity_t entity;
+  gchar *response, *html;
   const char *no_redirect;
   const char *name, *comment, *installer, *installer_filename, *installer_sig;
   const char *howto_install, *howto_use;
   int installer_size, installer_sig_size, howto_install_size, howto_use_size;
+  int ret;
+  gchar *installer_64, *installer_sig_64, *howto_install_64, *howto_use_64;
+  gchar *command;
 
   no_redirect = params_value (params, "no_redirect");
   name = params_value (params, "name");
@@ -6854,97 +6857,90 @@ create_agent_omp (credentials_t * credentials, params_t *params,
   CHECK_PARAM_INVALID (name, "Create Agent", "new_agent");
   CHECK_PARAM_INVALID (comment, "Create Agent", "new_agent");
 
-  if (name && comment)
+  /* Create the agent. */
+
+  installer_64 = (installer_size > 0)
+                 ? g_base64_encode ((guchar *) installer,
+                                    installer_size)
+                 : g_strdup ("");
+
+  installer_sig_64 = (installer_sig_size > 0)
+                     ? g_base64_encode ((guchar *) installer_sig,
+                                        installer_sig_size)
+                     : g_strdup ("");
+
+  howto_install_64 = (howto_install_size > 0)
+                     ? g_base64_encode ((guchar *) howto_install,
+                                        howto_install_size)
+                     : g_strdup ("");
+
+  howto_use_64 = (howto_use_size > 0)
+                 ? g_base64_encode ((guchar *) howto_use,
+                                    howto_use_size)
+                 : g_strdup ("");
+
+  command = g_strdup_printf ("<create_agent>"
+                             "<name>%s</name>"
+                             "%s%s%s"
+                             "<installer>"
+                             "%s"
+                             "<signature>%s</signature>"
+                             "<filename>%s</filename>"
+                             "</installer>"
+                             "<howto_install>%s</howto_install>"
+                             "<howto_use>%s</howto_use>"
+                             "</create_agent>",
+                             name, comment ? "<comment>" : "",
+                             comment ? comment : "",
+                             comment ? "</comment>" : "",
+                             installer_64,
+                             installer_sig_64,
+                             installer_filename ? installer_filename : "",
+                             howto_install_64,
+                             howto_use_64);
+
+  ret = omp (credentials,
+             &response,
+             &entity,
+             response_data,
+             command);
+  g_free (command);
+
+  g_free (installer_64);
+  g_free (howto_install_64);
+  g_free (howto_use_64);
+
+  switch (ret)
     {
-      int ret;
-      gchar *installer_64, *installer_sig_64, *howto_install_64, *howto_use_64;
-      gchar *command;
-
-      /* Create the agent. */
-
-      installer_64 = (installer_size > 0)
-                     ? g_base64_encode ((guchar *) installer,
-                                        installer_size)
-                     : g_strdup ("");
-
-      installer_sig_64 = (installer_sig_size > 0)
-                         ? g_base64_encode ((guchar *) installer_sig,
-                                            installer_sig_size)
-                         : g_strdup ("");
-
-      howto_install_64 = (howto_install_size > 0)
-                         ? g_base64_encode ((guchar *) howto_install,
-                                            howto_install_size)
-                         : g_strdup ("");
-
-      howto_use_64 = (howto_use_size > 0)
-                     ? g_base64_encode ((guchar *) howto_use,
-                                        howto_use_size)
-                     : g_strdup ("");
-
-      command = g_strdup_printf ("<create_agent>"
-                                 "<name>%s</name>"
-                                 "%s%s%s"
-                                 "<installer>"
-                                 "%s"
-                                 "<signature>%s</signature>"
-                                 "<filename>%s</filename>"
-                                 "</installer>"
-                                 "<howto_install>%s</howto_install>"
-                                 "<howto_use>%s</howto_use>"
-                                 "</create_agent>",
-                                 name, comment ? "<comment>" : "",
-                                 comment ? comment : "",
-                                 comment ? "</comment>" : "",
-                                 installer_64,
-                                 installer_sig_64,
-                                 installer_filename ? installer_filename : "",
-                                 howto_install_64,
-                                 howto_use_64);
-
-      ret = omp (credentials,
-                 &response,
-                 &entity,
-                 response_data,
-                 command);
-      g_free (command);
-
-      g_free (installer_64);
-      g_free (howto_install_64);
-      g_free (howto_use_64);
-
-      switch (ret)
-        {
-          case 0:
-            break;
-          case -1:
-            /* 'omp' set response. */
-            return response;
-          case 1:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-            return gsad_message (credentials,
-                                "Internal error", __FUNCTION__, __LINE__,
-                                "An internal error occurred while creating a new agent. "
-                                "No new agent was created. "
-                                "Diagnostics: Failure to send command to manager daemon.",
-                                "/omp?cmd=get_agents", response_data);
-          case 2:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-            return gsad_message (credentials,
-                                "Internal error", __FUNCTION__, __LINE__,
-                                "An internal error occurred while creating a new agent. "
-                                "It is unclear whether the agent has been created or not. "
-                                "Diagnostics: Failure to receive response from manager daemon.",
-                                "/omp?cmd=get_agents", response_data);
-          default:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-            return gsad_message (credentials,
-                                "Internal error", __FUNCTION__, __LINE__,
-                                "An internal error occurred while creating a new agent. "
-                                "It is unclear whether the agent has been created or not. "
-                                "Diagnostics: Internal Error.",
-                                "/omp?cmd=get_agents", response_data);
-        }
+      case 0:
+        break;
+      case -1:
+        /* 'omp' set response. */
+        return response;
+      case 1:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        return gsad_message (credentials,
+                            "Internal error", __FUNCTION__, __LINE__,
+                            "An internal error occurred while creating a new agent. "
+                            "No new agent was created. "
+                            "Diagnostics: Failure to send command to manager daemon.",
+                            "/omp?cmd=get_agents", response_data);
+      case 2:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        return gsad_message (credentials,
+                            "Internal error", __FUNCTION__, __LINE__,
+                            "An internal error occurred while creating a new agent. "
+                            "It is unclear whether the agent has been created or not. "
+                            "Diagnostics: Failure to receive response from manager daemon.",
+                            "/omp?cmd=get_agents", response_data);
+      default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        return gsad_message (credentials,
+                            "Internal error", __FUNCTION__, __LINE__,
+                            "An internal error occurred while creating a new agent. "
+                            "It is unclear whether the agent has been created or not. "
+                            "Diagnostics: Internal Error.",
+                            "/omp?cmd=get_agents", response_data);
     }
 
   if (entity_attribute (entity, "id"))
