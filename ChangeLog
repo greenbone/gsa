@@ -1,5 +1,10 @@
 2016-03-23  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/css/gsa-style.css: Fix width of chart menu entries during
+	hovering.
+
+2016-03-23  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/favicon.gif, src/html/classic/img/favicon.gif,
 	CMakeLists.txt, src/html/classic/gsad.xsl: Move favicon to img directory and
 	also install the icon under the img location. This allows to serve the static
