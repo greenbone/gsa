@@ -10170,7 +10170,7 @@ should not have received it.
                            size="30" maxlength="256" value="report.xml"/>
                   </td>
                 </tr>
-                <tr>
+                <tr id="scp_report_row">
                   <td></td>
                   <td><xsl:value-of select="gsa:i18n ('Report', 'Alert')"/></td>
                   <td>

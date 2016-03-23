@@ -1232,6 +1232,7 @@
 
         /* Method fields. */
         $('#send_to_host_report_row').hide();
+        $('#scp_report_row').hide();
         $('#details_url_row').show();
         /* Filter. */
         $('#report_result_filter_row').hide();
@@ -1275,6 +1276,7 @@
 
         /* Method fields. */
         $('#send_to_host_report_row').show();
+        $('#scp_report_row').show();
         $('#details_url_row').hide();
         /* Filter. */
         $('#report_result_filter_row').show();

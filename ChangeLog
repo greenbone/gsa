@@ -1,3 +1,11 @@
+2016-03-23  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/classic/omp.xsl (html-create-alert-form): Add ID to SCP
+	report row.
+
+	* src/html/classic/js/greenbone.js (editAlertUpdateForm): Show and hide
+	SCP report row according to alert event type.
+
 2016-03-22  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/omp.xsl: Redirect to new tasks when a new task has been
