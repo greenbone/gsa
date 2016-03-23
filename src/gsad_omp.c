@@ -1056,41 +1056,17 @@ setting_get_value (gnutls_session_t *session, const char *setting_id,
 /**
  * @brief Check a param using the direct response method.
  *
- * @param[in]  message  Message.
- * @param[in]  status   Status code.
- * @param[in]  op_name  Operation name.
- * @param[in]  ret_func Function to return message.
- */
-#define MESSAGE_INVALID(message, status, op_name, next_cmd)                   \
-  do                                                                           \
-    {                                                                          \
-      gchar *ret;                                                              \
-      gchar *next_url                                                          \
-        = next_page_url (credentials, params, next_cmd, NULL, op_name,         \
-                         status, message);                                     \
-      ret = action_result_page (credentials, response_data, op_name,           \
-                                G_STRINGIFY (MHD_HTTP_BAD_REQUEST),            \
-                                message,                                       \
-                                next_url);                                     \
-      g_free (next_url);                                                       \
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;                  \
-      return ret;                                                              \
-    }                                                                          \
-  while (0);
-
-/**
- * @brief Check a param using the direct response method.
- *
  * @param[in]  name     Param name.
  * @param[in]  op_name  Operation name.
  * @param[in]  ret_func Function to return message.
  */
-#define CHECK_PARAM_INVALID(name, op_name, next_cmd)                          \
+#define CHECK_PARAM_INVALID(name, op_name, next_cmd)                           \
   if (name == NULL)                                                            \
     {                                                                          \
-      MESSAGE_INVALID ("Given " G_STRINGIFY (name) " was invalid",            \
-                        G_STRINGIFY (MHD_HTTP_BAD_REQUEST),                    \
-                        op_name, next_cmd)                                     \
+      return message_invalid (credentials, params, response_data,              \
+                              "Given " G_STRINGIFY (name) " was invalid",      \
+                              G_STRINGIFY (MHD_HTTP_BAD_REQUEST),              \
+                              op_name, next_cmd);                              \
     }
 
 /**
@@ -1320,6 +1296,36 @@ action_result_page (credentials_t *credentials,
                                  message ? message : "",
                                  next_url ? next_url : "");
   return xsl_transform_omp (credentials, xml, response_data);
+}
+
+/**
+ * @brief Check a param using the direct response method.
+ *
+ * @param[in]  credentials    Username and password for authentication.
+ * @param[in]  params         Request parameters.
+ * @param[in]  message  Message.
+ * @param[in]  status   Status code.
+ * @param[in]  op_name  Operation name.
+ *
+ * @return Result of XSL transformation.
+ */
+gchar *
+message_invalid (credentials_t *credentials, params_t *params,
+                 cmd_response_data_t *response_data, const char *message,
+                 const char *status, const char *op_name, const char *next_cmd)
+{
+  gchar *ret;
+  gchar *next_url;
+
+  next_url = next_page_url (credentials, params, next_cmd, NULL, op_name,
+                            status, message);
+  ret = action_result_page (credentials, response_data, op_name,
+                            G_STRINGIFY (MHD_HTTP_BAD_REQUEST),
+                            message,
+                            next_url);
+  g_free (next_url);
+  response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+  return ret;
 }
 
 /**
@@ -3792,9 +3798,10 @@ create_report_omp (credentials_t * credentials, params_t *params,
   if (strlen (xml_file) == 0)
     {
       if (task_id)
-        MESSAGE_INVALID ("Report required",
-                         G_STRINGIFY (MHD_HTTP_BAD_REQUEST),
-                         "Create Report", "new_container_task");
+        return message_invalid (credentials, params, response_data,
+                                "Report required",
+                                G_STRINGIFY (MHD_HTTP_BAD_REQUEST),
+                                "Create Report", "new_container_task");
 
       /* Create only the container task. */
 
@@ -5964,11 +5971,10 @@ create_credential_omp (credentials_t * credentials, params_t *params,
   if (params_value (params, "autogenerate"))
     autogenerate = strcmp (params_value (params, "autogenerate"), "0");
   else
-    {
-      MESSAGE_INVALID ("Given autogenerate was invalid",
-                        G_STRINGIFY (MHD_HTTP_BAD_REQUEST),
-                        "Create Credential", "new_credential");
-    }
+    return message_invalid (credentials, params, response_data,
+                            "Given autogenerate was invalid",
+                            G_STRINGIFY (MHD_HTTP_BAD_REQUEST),
+                            "Create Credential", "new_credential");
 
   CHECK_PARAM_INVALID (name, "Create Credential", "new_credential");
   CHECK_PARAM_INVALID (comment, "Create Credential", "new_credential");
@@ -9308,13 +9314,15 @@ create_target_omp (credentials_t * credentials, params_t *params,
   CHECK_PARAM_INVALID (name, "Create Target", "new_target");
   CHECK_PARAM_INVALID (target_source, "Create Target", "new_target")
   if (hosts == NULL && strcmp (target_source, "manual") == 0)
-    MESSAGE_INVALID ("Given target_source was invalid",
-                      G_STRINGIFY (MHD_HTTP_BAD_REQUEST),
-                      "Create Target", "new_target")
+    return message_invalid (credentials, params, response_data,
+                            "Given target_source was invalid",
+                            G_STRINGIFY (MHD_HTTP_BAD_REQUEST),
+                            "Create Target", "new_target");
   if (strcmp (target_source, "import") == 0 && name == NULL)
-    MESSAGE_INVALID ("Given target_source was invalid",
-                      G_STRINGIFY (MHD_HTTP_BAD_REQUEST),
-                      "Create Target", "new_target")
+    return message_invalid (credentials, params, response_data,
+                            "Given target_source was invalid",
+                            G_STRINGIFY (MHD_HTTP_BAD_REQUEST),
+                            "Create Target", "new_target");
   CHECK_PARAM_INVALID (hosts_filter, "Create Target", "new_target");
   if (hosts_filter == NULL && strcmp (target_source, "asset_hosts") == 0)
     return new_target (credentials, params,
@@ -25428,8 +25436,10 @@ create_user_omp (credentials_t * credentials, params_t *params,
       CHECK_PARAM_INVALID (ifaces, "Create User", "new_user");
       CHECK_PARAM_INVALID (ifaces_allow, "Create User", "new_user");
 
-      MESSAGE_INVALID ("Group selected", G_STRINGIFY (MHD_HTTP_SUBMITTED),
-                        "Select Group", "new_user")
+      return message_invalid (credentials, params, response_data,
+                              "Group selected",
+                              G_STRINGIFY (MHD_HTTP_SUBMITTED),
+                              "Select Group", "new_user");
     }
 
   submit = params_value (params, "submit_plus_role");
@@ -25454,10 +25464,10 @@ create_user_omp (credentials_t * credentials, params_t *params,
       CHECK_PARAM_INVALID (ifaces, "Create User", "new_user");
       CHECK_PARAM_INVALID (ifaces_allow, "Create User", "new_user");
 
-      MESSAGE_INVALID ("Role selected", G_STRINGIFY (MHD_HTTP_SUBMITTED),
-                        "Select Role", "new_user")
-
-      return html;
+      return message_invalid (credentials, params, response_data,
+                              "Role selected",
+                              G_STRINGIFY (MHD_HTTP_SUBMITTED),
+                              "Select Role", "new_user");
     }
 
   CHECK_PARAM_INVALID (name, "Create User", "new_user");
@@ -25854,8 +25864,10 @@ save_user_omp (credentials_t * credentials, params_t *params,
       else
         params_add (params, "groups", "2");
 
-      MESSAGE_INVALID ("Group selected", G_STRINGIFY (MHD_HTTP_SUBMITTED),
-                        "Select Group", "new_user")
+      return message_invalid (credentials, params, response_data,
+                              "Group selected",
+                              G_STRINGIFY (MHD_HTTP_SUBMITTED),
+                              "Select Group", "new_user");
     }
 
   submit = params_value (params, "submit_plus_role");
@@ -25873,8 +25885,10 @@ save_user_omp (credentials_t * credentials, params_t *params,
       else
         params_add (params, "roles", "2");
 
-      MESSAGE_INVALID ("Role selected", G_STRINGIFY (MHD_HTTP_SUBMITTED),
-                        "Select Role", "new_user")
+      return message_invalid (credentials, params, response_data,
+                              "Role selected",
+                              G_STRINGIFY (MHD_HTTP_SUBMITTED),
+                              "Select Role", "new_user");
     }
 
   if (params_given (params, "login"))
