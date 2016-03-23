@@ -158,6 +158,10 @@ p {
   text-decoration: underline;
 }
 
+.hide {
+  visibility: hidden !important;
+}
+
 
 /* grid system */
 

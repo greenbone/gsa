@@ -1,3 +1,8 @@
+2016-03-23  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/css/gsa-base.css: Add css class to hide elements. This
+	allows to reseve the space used by the element if it would be visible.
+
 2016-03-23  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/js/greenbone.js (OMPDialog.prototype.postForm): Get
