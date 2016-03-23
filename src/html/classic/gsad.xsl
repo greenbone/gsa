@@ -2405,7 +2405,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <input type="password" class="form-control"
                     autocomplete="off" id="password" name="password" tabindex="2"
                     onkeydown="if (event.keyCode == 13) {{ this.form.submit(); login.disabled = password.disabled = true; return false; }}"/>
-              </div>
+            </div>
           </div>
           <div class="form-group">
             <div class="col-6 offset-6 container">
