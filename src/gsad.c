@@ -1350,7 +1350,6 @@ init_validator ()
   openvas_validator_add (validator, "sort_field", "^[_[:alnum:] ]{1,40}$");
   openvas_validator_add (validator, "sort_order", "^(ascending|descending)$");
   openvas_validator_add (validator, "sort_stat", "^[_[:alnum:] ]{1,40}$");
-  openvas_validator_add (validator, "submit_plus",    "^\\+$");
   openvas_validator_add (validator, "target_source", "^(asset_hosts|file|import|manual)$");
   openvas_validator_add (validator, "timezone",      "^.{0,1000}$");
   openvas_validator_add (validator, "token", "^[a-z0-9\\-]+$");
@@ -1521,8 +1520,6 @@ init_validator ()
   openvas_validator_alias (validator, "subject_id",   "id");
   openvas_validator_alias (validator, "subject_id_optional", "id_optional");
   openvas_validator_alias (validator, "subject_name",   "name");
-  openvas_validator_alias (validator, "submit_plus_group", "submit_plus");
-  openvas_validator_alias (validator, "submit_plus_role",  "submit_plus");
   openvas_validator_alias (validator, "subtype", "asset_type");
   openvas_validator_alias (validator, "task_filter",  "filter");
   openvas_validator_alias (validator, "task_filt_id", "filt_id");

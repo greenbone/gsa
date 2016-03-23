@@ -4020,7 +4020,7 @@ create_task_omp (credentials_t * credentials, params_t *params,
   const char *name, *comment, *config_id, *target_id, *scanner_type;
   const char *slave_id, *scanner_id, *schedule_id, *schedule_periods;
   const char *max_checks, *max_hosts;
-  const char *in_assets, *submit, *hosts_ordering, *alterable, *source_iface;
+  const char *in_assets, *hosts_ordering, *alterable, *source_iface;
   const char *add_tag, *tag_name, *tag_value, *auto_delete, *auto_delete_data;
   params_t *alerts;
   GString *alert_element;
@@ -4066,38 +4066,6 @@ create_task_omp (credentials_t * credentials, params_t *params,
       max_checks = "";
       source_iface = "";
       max_hosts = "";
-    }
-
-  submit = params_value (params, "submit_plus");
-  if (submit && (strcmp (submit, "+") == 0))
-    {
-      param_t *count;
-      count = params_get (params, "alerts");
-      if (count)
-        {
-          gchar *old;
-          old = count->value;
-          count->value = old ? g_strdup_printf ("%i", atoi (old) + 1)
-                             : g_strdup ("2");
-        }
-      else
-        params_add (params, "alerts", "2");
-
-      CHECK (name);
-      CHECK (comment);
-      CHECK (config_id);
-      CHECK (target_id);
-      CHECK (slave_id);
-      CHECK (scanner_id);
-      CHECK (schedule_id);
-      if (params_given (params, "schedule_periods"))
-        CHECK (schedule_periods);
-      CHECK (in_assets);
-      CHECK (max_checks);
-      CHECK (max_hosts);
-      CHECK (alterable);
-
-      return new_task_omp (credentials, params, response_data);
     }
 
   CHECK (name);
@@ -4572,7 +4540,7 @@ save_task_omp (credentials_t * credentials, params_t *params,
 {
   gchar *html, *response, *format;
   const char *no_redirect;
-  const char *comment, *name, *next, *schedule_id, *in_assets, *submit;
+  const char *comment, *name, *next, *schedule_id, *in_assets;
   const char *slave_id, *scanner_id, *task_id, *max_checks, *max_hosts;
   const char *config_id, *target_id, *hosts_ordering, *alterable, *source_iface;
   const char *scanner_type, *schedule_periods, *auto_delete, *auto_delete_data;
@@ -4621,40 +4589,6 @@ save_task_omp (credentials_t * credentials, params_t *params,
       max_checks = "";
       source_iface = "";
       max_hosts = "";
-    }
-
-  submit = params_value (params, "submit_plus");
-  if (submit && (strcmp (submit, "+") == 0))
-    {
-      param_t *count;
-      count = params_get (params, "alerts");
-      if (count)
-        {
-          gchar *old;
-          old = count->value;
-          count->value = old ? g_strdup_printf ("%i", atoi (old) + 1)
-                             : g_strdup ("2");
-        }
-      else
-        params_add (params, "alerts", "2");
-
-      CHECK_PARAM_INVALID (name, "Edit Task", "edit_task");
-      CHECK_PARAM_INVALID (comment, "Edit Task", "edit_task");
-      CHECK_PARAM_INVALID (target_id, "Edit Task", "edit_task");
-      CHECK_PARAM_INVALID (config_id, "Edit Task", "edit_task");
-      CHECK_PARAM_INVALID (schedule_id, "Edit Task", "edit_task");
-      CHECK_PARAM_INVALID (slave_id, "Edit Task", "edit_task");
-      CHECK_PARAM_INVALID (scanner_id, "Edit Task", "edit_task");
-      CHECK_PARAM_INVALID (next, "Edit Task", "edit_task");
-      CHECK_PARAM_INVALID (task_id, "Edit Task", "edit_task");
-      CHECK_PARAM_INVALID (max_checks, "Edit Task", "edit_task");
-      CHECK_PARAM_INVALID (source_iface, "Edit Task", "edit_task");
-      CHECK_PARAM_INVALID (auto_delete, "Edit Task", "edit_task");
-      CHECK_PARAM_INVALID (auto_delete_data, "Edit Task", "edit_task");
-      CHECK_PARAM_INVALID (max_hosts, "Edit Task", "edit_task");
-      CHECK_PARAM_INVALID (in_assets, "Edit Task", "edit_task");
-
-      return edit_task_omp (credentials, params, response_data);
     }
 
   CHECK_PARAM_INVALID (name, "Save Task", "edit_task");
@@ -25398,7 +25332,7 @@ create_user_omp (credentials_t * credentials, params_t *params,
 {
   const char *no_redirect;
   const char *name, *password, *hosts, *hosts_allow, *ifaces, *ifaces_allow;
-  const char *auth_method, *submit;
+  const char *auth_method;
   int ret;
   params_t *groups, *roles;
   GString *group_elements, *role_elements, *string;
@@ -25413,62 +25347,6 @@ create_user_omp (credentials_t * credentials, params_t *params,
   ifaces = params_value (params, "access_ifaces");
   ifaces_allow = params_value (params, "ifaces_allow");
   auth_method = params_value (params, "auth_method");
-
-  submit = params_value (params, "submit_plus_group");
-  if (submit && (strcmp (submit, "+") == 0))
-    {
-      param_t *count;
-      count = params_get (params, "groups");
-      if (count)
-        {
-          gchar *old;
-          old = count->value;
-          count->value = old ? g_strdup_printf ("%i", atoi (old) + 1)
-                             : g_strdup ("2");
-        }
-      else
-        params_add (params, "groups", "2");
-
-      CHECK_PARAM_INVALID (name, "Create User", "new_user");
-      CHECK_PARAM_INVALID (password, "Create User", "new_user");
-      CHECK_PARAM_INVALID (hosts, "Create User", "new_user");
-      CHECK_PARAM_INVALID (hosts_allow, "Create User", "new_user");
-      CHECK_PARAM_INVALID (ifaces, "Create User", "new_user");
-      CHECK_PARAM_INVALID (ifaces_allow, "Create User", "new_user");
-
-      return message_invalid (credentials, params, response_data,
-                              "Group selected",
-                              G_STRINGIFY (MHD_HTTP_SUBMITTED),
-                              "Select Group", "new_user");
-    }
-
-  submit = params_value (params, "submit_plus_role");
-  if (submit && (strcmp (submit, "+") == 0))
-    {
-      param_t *count;
-      count = params_get (params, "roles");
-      if (count)
-        {
-          gchar *old;
-          old = count->value;
-          count->value = old ? g_strdup_printf ("%i", atoi (old) + 1)
-                             : g_strdup ("2");
-        }
-      else
-        params_add (params, "roles", "2");
-
-      CHECK_PARAM_INVALID (name, "Create User", "new_user");
-      CHECK_PARAM_INVALID (password, "Create User", "new_user");
-      CHECK_PARAM_INVALID (hosts, "Create User", "new_user");
-      CHECK_PARAM_INVALID (hosts_allow, "Create User", "new_user");
-      CHECK_PARAM_INVALID (ifaces, "Create User", "new_user");
-      CHECK_PARAM_INVALID (ifaces_allow, "Create User", "new_user");
-
-      return message_invalid (credentials, params, response_data,
-                              "Role selected",
-                              G_STRINGIFY (MHD_HTTP_SUBMITTED),
-                              "Select Role", "new_user");
-    }
 
   CHECK_PARAM_INVALID (name, "Create User", "new_user");
   CHECK_PARAM_INVALID (password, "Create User", "new_user");
@@ -25821,7 +25699,7 @@ save_user_omp (credentials_t * credentials, params_t *params,
   int ret;
   gchar *html, *response, *buf;
   const char *no_redirect;
-  const char *user_id, *login, *modify_password, *password, *submit;
+  const char *user_id, *login, *modify_password, *password;
   const char *hosts, *hosts_allow, *ifaces, *ifaces_allow;
   entity_t entity;
   GString *command, *group_elements, *role_elements;
@@ -25849,47 +25727,6 @@ save_user_omp (credentials_t * credentials, params_t *params,
   CHECK_PARAM_INVALID (hosts_allow, "Edit User", "edit_user");
   CHECK_PARAM_INVALID (ifaces, "Save User", "edit_user");
   CHECK_PARAM_INVALID (ifaces_allow, "Save User", "edit_user");
-  submit = params_value (params, "submit_plus_group");
-  if (submit && (strcmp (submit, "+") == 0))
-    {
-      param_t *count;
-      count = params_get (params, "groups");
-      if (count)
-        {
-          gchar *old;
-          old = count->value;
-          count->value = old ? g_strdup_printf ("%i", atoi (old) + 1)
-                             : g_strdup ("2");
-        }
-      else
-        params_add (params, "groups", "2");
-
-      return message_invalid (credentials, params, response_data,
-                              "Group selected",
-                              G_STRINGIFY (MHD_HTTP_SUBMITTED),
-                              "Select Group", "new_user");
-    }
-
-  submit = params_value (params, "submit_plus_role");
-  if (submit && (strcmp (submit, "+") == 0))
-    {
-      param_t *count;
-      count = params_get (params, "roles");
-      if (count)
-        {
-          gchar *old;
-          old = count->value;
-          count->value = old ? g_strdup_printf ("%i", atoi (old) + 1)
-                             : g_strdup ("2");
-        }
-      else
-        params_add (params, "roles", "2");
-
-      return message_invalid (credentials, params, response_data,
-                              "Role selected",
-                              G_STRINGIFY (MHD_HTTP_SUBMITTED),
-                              "Select Role", "new_user");
-    }
 
   if (params_given (params, "login"))
     CHECK_PARAM_INVALID (login, "Save User", "edit_user");

@@ -1,5 +1,12 @@
 2016-03-23  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad.c (init_validator): Remove "+" submit rules.  No longer used.
+
+	* src/gsad_omp.c (create_task_omp, save_task_omp, create_user_omp)
+	(save_user_omp): Remove submit "+" handling.  No longer used.
+
+2016-03-23  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Switch MESSAGE_INVALID from a macro to a function because it no longer
 	needs to be a macro (it's used seldom, and callers always just return the
 	result).   This also gives it a return, which makes the flow of control
