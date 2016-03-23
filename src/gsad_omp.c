@@ -6606,10 +6606,9 @@ save_credential_omp (credentials_t * credentials, params_t *params,
   private_key = params_value (params, "private_key");
   certificate = params_value (params, "certificate");
   community = params_value (params, "community");
-  privacy_password  = params_value (params, "privacy_password");
-  auth_algorithm  = params_value (params, "auth_algorithm");
-  privacy_algorithm  = params_value (params, "privacy_algorithm");
-  community  = params_value (params, "community");
+  privacy_password = params_value (params, "privacy_password");
+  auth_algorithm = params_value (params, "auth_algorithm");
+  privacy_algorithm = params_value (params, "privacy_algorithm");
   allow_insecure = params_value (params, "allow_insecure");
 
   CHECK_PARAM_INVALID (credential_id, "Save Credential", "edit_credential");
@@ -27769,6 +27768,7 @@ authenticate_omp (const gchar * username, const gchar * password,
   gnutls_session_t session;
   int socket;
   int auth;
+  omp_authenticate_info_opts_t auth_opts;
 
   socket = openvas_server_open (&session,
                                 manager_address
@@ -27793,7 +27793,7 @@ authenticate_omp (const gchar * username, const gchar * password,
   sleep (20);
 #endif
 
-  omp_authenticate_info_opts_t auth_opts;
+  auth_opts = omp_authenticate_info_opts_defaults;
   auth_opts.username = username;
   auth_opts.password = password;
   auth_opts.role = role;

@@ -1,5 +1,12 @@
 2016-03-23  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (save_credential_omp): Remove duplicate initialisation,
+	and random spaces.
+	(authenticate_omp): Init auth_opts to defaults, so that all fields are
+	always initialised.
+
+2016-03-23  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (create_agent_omp): Remove name and comment checks,
 	this is done by CHECK_PARAM_INVALID.  Hence remove redundant entity and
 	response initialisations, as Clang should understand now.
