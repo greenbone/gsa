@@ -285,6 +285,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="default_controllers">
     <xsl:choose>
       <xsl:when test="$type='allinfo'"></xsl:when>
+      <xsl:when test="$type='nvt'">by-class|nvt-by-family|by-cvss#by-created|nvt-by-qod_type</xsl:when>
       <!-- fallback for all other types -->
       <xsl:otherwise>by-cvss|by-class</xsl:otherwise>
     </xsl:choose>
