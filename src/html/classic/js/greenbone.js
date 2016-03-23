@@ -358,8 +358,10 @@
       error = login_form_html.find('.error_message').text();
     }
 
-    if (error_code !== undefined && error_code !== '')
+    if (error_code !== undefined && error_code !== '') {
       error_title = error_title + ' <i>(Status code: ' + error_code + ')</i>';
+    }
+
     self.error(error, error_title);
   };
 
@@ -407,21 +409,22 @@
       }
 
       var entity;
-      var action_result_next = xml.find ('action_result > next');
+      var action_result_next = xml.find('action_result > next');
 
       if (action_result_next.length > 0) {
         // got an "action_result" with "next" element,
         //  so get "next" url and extract entity from response.
         var next_url = action_result_next.text();
-        $.ajax({ url: next_url,
-                 async: false,
-                 success: function(doc) {
-                            entity = get_entity(self.command, $(doc);
-                          },
-                 error: function(doc) {
-                          self.setErrorFromResponse($(doc))
-                 }
-               });
+        $.ajax({
+          url: next_url,
+          async: false,
+          success: function(doc) {
+            entity = get_entity(self.command, $(doc));
+          },
+          error: function(doc) {
+            self.setErrorFromResponse($(doc));
+          },
+        });
       } else {
         // got a response directly, extract entity directly.
         entity = get_entity(self.command, xml);
