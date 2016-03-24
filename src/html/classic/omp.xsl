@@ -12218,6 +12218,174 @@ should not have received it.
   </xsl:call-template>
 </xsl:template>
 
+<xsl:template name="filter_resource_types">
+  <xsl:param name="select_type"/>
+  <xsl:if test="$select_type = 'agent' or gsa:may-op ('get_agents')">
+    <xsl:call-template name="opt">
+      <xsl:with-param name="value" select="'Agent'"/>
+      <xsl:with-param name="content" select="gsa:i18n ('Agent', 'Agent')"/>
+      <xsl:with-param name="select-value" select="$select_type"/>
+    </xsl:call-template>
+  </xsl:if>
+  <xsl:if test="$select_type = 'alert' or gsa:may-op ('get_alerts')">
+    <xsl:call-template name="opt">
+      <xsl:with-param name="value" select="'Alert'"/>
+      <xsl:with-param name="content" select="gsa:i18n ('Alert', 'Alert')"/>
+      <xsl:with-param name="select-value" select="$select_type"/>
+    </xsl:call-template>
+  </xsl:if>
+<!--
+  TODO These are not supported on manager side.
+  <xsl:if test="$select_type = 'host' or gsa:may-op ('get_assets')">
+    <xsl:call-template name="opt">
+      <xsl:with-param name="value" select="'Host'"/>
+      <xsl:with-param name="content" select="gsa:i18n ('Host', 'Host')"/>
+      <xsl:with-param name="select-value" select="$select_type"/>
+    </xsl:call-template>
+  </xsl:if>
+  <xsl:if test="$select_type = 'os' or gsa:may-op ('get_assets')">
+    <xsl:call-template name="opt">
+      <xsl:with-param name="value" select="'OS'"/>
+      <xsl:with-param name="content" select="gsa:i18n ('Operating System', 'OS')"/>
+      <xsl:with-param name="select-value" select="$select_type"/>
+    </xsl:call-template>
+  </xsl:if>
+-->
+  <xsl:if test="$select_type = 'credential' or gsa:may-op ('get_credentials')">
+    <xsl:call-template name="opt">
+      <xsl:with-param name="value" select="'Credential'"/>
+      <xsl:with-param name="content" select="gsa:i18n ('Credential', 'Credential')"/>
+      <xsl:with-param name="select-value" select="$select_type"/>
+    </xsl:call-template>
+  </xsl:if>
+  <xsl:if test="$select_type = 'filter' or gsa:may-op ('get_filters')">
+    <xsl:call-template name="opt">
+      <xsl:with-param name="value" select="'Filter'"/>
+      <xsl:with-param name="content" select="gsa:i18n ('Filter', 'Filter')"/>
+      <xsl:with-param name="select-value" select="$select_type"/>
+    </xsl:call-template>
+  </xsl:if>
+  <xsl:if test="$select_type = 'group' or gsa:may-op ('get_groups')">
+    <xsl:call-template name="opt">
+      <xsl:with-param name="value" select="'Group'"/>
+      <xsl:with-param name="content" select="gsa:i18n ('Group', 'Group')"/>
+      <xsl:with-param name="select-value" select="$select_type"/>
+    </xsl:call-template>
+  </xsl:if>
+  <xsl:if test="$select_type = 'note' or gsa:may-op ('get_notes')">
+    <xsl:call-template name="opt">
+      <xsl:with-param name="value" select="'Note'"/>
+      <xsl:with-param name="content" select="gsa:i18n ('Note', 'Note')"/>
+      <xsl:with-param name="select-value" select="$select_type"/>
+    </xsl:call-template>
+  </xsl:if>
+  <xsl:if test="$select_type = 'override' or gsa:may-op ('get_overrides')">
+    <xsl:call-template name="opt">
+      <xsl:with-param name="value" select="'Override'"/>
+      <xsl:with-param name="content" select="gsa:i18n ('Override', 'Override')"/>
+      <xsl:with-param name="select-value" select="$select_type"/>
+    </xsl:call-template>
+  </xsl:if>
+  <xsl:if test="$select_type = 'permission' or gsa:may-op ('get_permissions')">
+    <xsl:call-template name="opt">
+      <xsl:with-param name="value" select="'Permission'"/>
+      <xsl:with-param name="content" select="gsa:i18n ('Permission', 'Permission')"/>
+      <xsl:with-param name="select-value" select="$select_type"/>
+    </xsl:call-template>
+  </xsl:if>
+  <xsl:if test="$select_type = 'port_list' or gsa:may-op ('get_port_lists')">
+    <xsl:call-template name="opt">
+      <xsl:with-param name="value" select="'Port List'"/>
+      <xsl:with-param name="content" select="gsa:i18n ('Port List', 'Port List')"/>
+      <xsl:with-param name="select-value" select="$select_type"/>
+    </xsl:call-template>
+  </xsl:if>
+  <xsl:if test="$select_type = 'report' or gsa:may-op ('get_reports')">
+    <xsl:call-template name="opt">
+      <xsl:with-param name="value" select="'Report'"/>
+      <xsl:with-param name="content" select="gsa:i18n ('Report', 'Report')"/>
+      <xsl:with-param name="select-value" select="$select_type"/>
+    </xsl:call-template>
+  </xsl:if>
+  <xsl:if test="$select_type = 'report_format' or gsa:may-op ('get_report_formats')">
+    <xsl:call-template name="opt">
+      <xsl:with-param name="value" select="'Report Format'"/>
+      <xsl:with-param name="content" select="gsa:i18n ('Report Format', 'Report Format')"/>
+      <xsl:with-param name="select-value" select="$select_type"/>
+    </xsl:call-template>
+  </xsl:if>
+  <xsl:if test="$select_type = 'result' or gsa:may-op ('get_results')">
+      <xsl:call-template name="opt">
+      <xsl:with-param name="value" select="'Result'"/>
+      <xsl:with-param name="content" select="gsa:i18n ('Result', 'Result')"/>
+      <xsl:with-param name="select-value" select="$select_type"/>
+    </xsl:call-template>
+  </xsl:if>
+  <xsl:if test="$select_type = 'role' or gsa:may-op ('get_roles')">
+    <xsl:call-template name="opt">
+      <xsl:with-param name="value" select="'Role'"/>
+      <xsl:with-param name="content" select="gsa:i18n ('Role', 'Role')"/>
+      <xsl:with-param name="select-value" select="$select_type"/>
+    </xsl:call-template>
+  </xsl:if>
+  <xsl:if test="$select_type = 'schedule' or gsa:may-op ('get_schedules')">
+    <xsl:call-template name="opt">
+      <xsl:with-param name="value" select="'Schedule'"/>
+      <xsl:with-param name="content" select="gsa:i18n ('Schedule', 'Schedule')"/>
+      <xsl:with-param name="select-value" select="$select_type"/>
+    </xsl:call-template>
+  </xsl:if>
+  <xsl:if test="$select_type = 'secinfo' or gsa:may-op ('get_info')">
+    <xsl:call-template name="opt">
+      <xsl:with-param name="value" select="'SecInfo'"/>
+      <xsl:with-param name="content" select="gsa:i18n ('SecInfo', 'SecInfo')"/>
+      <xsl:with-param name="select-value" select="$select_type"/>
+    </xsl:call-template>
+  </xsl:if>
+  <xsl:if test="$select_type = 'config' or gsa:may-op ('get_configs')">
+    <xsl:call-template name="opt">
+      <xsl:with-param name="value" select="'Config'"/>
+      <xsl:with-param name="content" select="gsa:i18n ('Scan Config', 'Scan Config')"/>
+      <xsl:with-param name="select-value" select="$select_type"/>
+    </xsl:call-template>
+  </xsl:if>
+  <xsl:if test="$select_type = 'slave' or gsa:may-op ('get_slaves')">
+    <xsl:call-template name="opt">
+      <xsl:with-param name="value" select="'Slave'"/>
+      <xsl:with-param name="content" select="gsa:i18n ('Slave', 'Slave')"/>
+      <xsl:with-param name="select-value" select="$select_type"/>
+    </xsl:call-template>
+  </xsl:if>
+  <xsl:if test="$select_type = 'tag' or gsa:may-op ('get_tags')">
+    <xsl:call-template name="opt">
+      <xsl:with-param name="value" select="'Tag'"/>
+      <xsl:with-param name="content" select="gsa:i18n ('Tag', 'Tag')"/>
+      <xsl:with-param name="select-value" select="$select_type"/>
+    </xsl:call-template>
+  </xsl:if>
+  <xsl:if test="$select_type = 'target' or gsa:may-op ('get_targets')">
+    <xsl:call-template name="opt">
+      <xsl:with-param name="value" select="'Target'"/>
+      <xsl:with-param name="content" select="gsa:i18n ('Target', 'Target')"/>
+      <xsl:with-param name="select-value" select="$select_type"/>
+    </xsl:call-template>
+  </xsl:if>
+  <xsl:if test="$select_type = 'task' or gsa:may-op ('get_tasks')">
+    <xsl:call-template name="opt">
+      <xsl:with-param name="value" select="'Task'"/>
+      <xsl:with-param name="content" select="gsa:i18n ('Task', 'Task')"/>
+      <xsl:with-param name="select-value" select="$select_type"/>
+    </xsl:call-template>
+  </xsl:if>
+  <xsl:if test="$select_type = 'user' or gsa:may-op ('get_users')">
+    <xsl:call-template name="opt">
+      <xsl:with-param name="value" select="'User'"/>
+      <xsl:with-param name="content" select="gsa:i18n ('User', 'User')"/>
+      <xsl:with-param name="select-value" select="$select_type"/>
+    </xsl:call-template>
+  </xsl:if>
+</xsl:template>
+
 <xsl:template match="filter">
   <tr class="{gsa:table-row-class(position())}">
     <td>
@@ -12492,10 +12660,7 @@ should not have received it.
             <td><xsl:value-of select="gsa:i18n ('Type', 'Property')"/></td>
             <td>
               <select name="optional_resource_type">
-                <option value="">--</option>
-                <xsl:for-each select="str:split ('Agent|Alert|Config|Credential|Filter|Note|Override|Permission|Port List|Report|Report Format|Result|Role|Schedule|Slave|Tag|Target|Task|SecInfo', '|')">
-                  <option value="{.}"><xsl:value-of select="gsa:i18n(., 'Type')"/></option>
-                </xsl:for-each>
+                <xsl:call-template name="filter_resource_types"/>
               </select>
             </td>
           </tr>
@@ -12577,16 +12742,9 @@ should not have received it.
                   <xsl:value-of select="commands_response/get_filters_response/filter/type"/>
                 </xsl:variable>
                 <option value="">--</option>
-                <xsl:for-each select="str:split ('Agent|Alert|Config|Credential|Filter|Note|Override|Permission|Port List|Report|Report Format|Result|Role|Schedule|Slave|Tag|Target|Task|SecInfo', '|')">
-                  <xsl:choose>
-                    <xsl:when test=". = $type">
-                      <option value="{.}" selected="1"><xsl:value-of select="gsa:i18n ($type, 'Type')"/></option>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <option value="{.}"><xsl:value-of select="gsa:i18n (., 'Type')"/></option>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                </xsl:for-each>
+                <xsl:call-template name="filter_resource_types">
+                  <xsl:with-param name="select_type" select="$type"/>
+                </xsl:call-template>
               </select>
             </td>
           </tr>
