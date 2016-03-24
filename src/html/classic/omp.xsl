@@ -12510,53 +12510,55 @@ should not have received it.
     </table>
   </div>
 
-  <div class="section-header">
-    <a href="#" class="toggle-action-icon icon icon-action"
-      data-target="#using-box" data-name="Alerts using this Filter"
-      data-variable="using-box--collapsed">
-        <img src="/img/fold.png"/>
-    </a>
-    <h3>
-      <a href="/omp?cmd=get_alerts&amp;token={/envelope/token}"
-         title="{gsa:i18n ('Alerts', 'Alert')}">
-        <img class="icon-sm icon" src="/img/alert.svg" style="margin-right:5px" alt="Alerts"/>
+  <xsl:if test="gsa:may-op ('get_alerts')">
+    <div class="section-header">
+      <a href="#" class="toggle-action-icon icon icon-action"
+        data-target="#using-box" data-name="Alerts using this Filter"
+        data-variable="using-box--collapsed">
+          <img src="/img/fold.png"/>
       </a>
-      <xsl:value-of select="gsa:i18n ('Alerts using this Filter', 'Filter')"/>
-      <xsl:text> </xsl:text>
-      <xsl:choose>
-        <xsl:when test="count(alerts/alert) != 0">
-          (<xsl:value-of select="count(alerts/alert)"/>)
-        </xsl:when>
-        <xsl:otherwise>
-          (<xsl:value-of select="gsa:i18n ('none')"/>)
-        </xsl:otherwise>
-      </xsl:choose>
-    </h3>
-  </div>
+      <h3>
+        <a href="/omp?cmd=get_alerts&amp;token={/envelope/token}"
+           title="{gsa:i18n ('Alerts', 'Alert')}">
+          <img class="icon-sm icon" src="/img/alert.svg" style="margin-right:5px" alt="Alerts"/>
+        </a>
+        <xsl:value-of select="gsa:i18n ('Alerts using this Filter', 'Filter')"/>
+        <xsl:text> </xsl:text>
+        <xsl:choose>
+          <xsl:when test="count(alerts/alert) != 0">
+            (<xsl:value-of select="count(alerts/alert)"/>)
+          </xsl:when>
+          <xsl:otherwise>
+            (<xsl:value-of select="gsa:i18n ('none')"/>)
+          </xsl:otherwise>
+        </xsl:choose>
+      </h3>
+    </div>
 
-  <div class="section-box" id="using-box">
-    <table class="gbntable" cellspacing="2" cellpadding="4">
-      <tr class="gbntablehead2">
-        <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
-      </tr>
-      <xsl:for-each select="alerts/alert">
-        <tr class="{gsa:table-row-class(position())}">
-          <xsl:choose>
-            <xsl:when test="boolean (permissions) and count (permissions/permission) = 0">
-              <td><xsl:value-of select="name"/> (<xsl:value-of select="gsa:i18n('Unavailable', 'Property')"/>, <xsl:value-of select="gsa:i18n('UUID', 'Property')"/>: <xsl:value-of select="@id"/>)</td>
-            </xsl:when>
-            <xsl:otherwise>
-              <td>
-                <a href="/omp?cmd=get_alert&amp;alert_id={@id}&amp;token={/envelope/token}" title="{gsa:i18n ('Details', 'Generic Resource')}">
-                  <xsl:value-of select="name"/>
-                </a>
-              </td>
-            </xsl:otherwise>
-          </xsl:choose>
+    <div class="section-box" id="using-box">
+      <table class="gbntable" cellspacing="2" cellpadding="4">
+        <tr class="gbntablehead2">
+          <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
         </tr>
-      </xsl:for-each>
-    </table>
-  </div>
+        <xsl:for-each select="alerts/alert">
+          <tr class="{gsa:table-row-class(position())}">
+            <xsl:choose>
+              <xsl:when test="boolean (permissions) and count (permissions/permission) = 0">
+                <td><xsl:value-of select="name"/> (<xsl:value-of select="gsa:i18n('Unavailable', 'Property')"/>, <xsl:value-of select="gsa:i18n('UUID', 'Property')"/>: <xsl:value-of select="@id"/>)</td>
+              </xsl:when>
+              <xsl:otherwise>
+                <td>
+                  <a href="/omp?cmd=get_alert&amp;alert_id={@id}&amp;token={/envelope/token}" title="{gsa:i18n ('Details', 'Generic Resource')}">
+                    <xsl:value-of select="name"/>
+                  </a>
+                </td>
+              </xsl:otherwise>
+            </xsl:choose>
+          </tr>
+        </xsl:for-each>
+      </table>
+    </div>
+  </xsl:if>
 
   <xsl:call-template name="user-tags-window">
     <xsl:with-param name="resource_type" select="'filter'"/>

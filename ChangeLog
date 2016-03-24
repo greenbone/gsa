@@ -1,5 +1,10 @@
 2016-03-24  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/classic/omp.xsl (filter [details]): Only include alerts
+	if the user may run GET_ALERTS.
+
+2016-03-24  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/classic/omp.xsl (filter_resource_types): New template.
 	(html-create-filter-form, html-edit-filter-form): Use
 	filter_resource_types, which includes all types, and does i18n.
