@@ -139,8 +139,8 @@
     display.setTitle(this.title_generator(data));
 
     var records = data.records;
-    x_data = records.map(function(d) { return d[this.x_field]; });
-    y_data = records.map(function(d) { return d[this.y_field]; });
+    x_data = records.map(function(d) { return d[self.x_field]; });
+    y_data = records.map(function(d) { return d[self.y_field]; });
 
     var i;
     var y_sum = 0;
