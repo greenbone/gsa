@@ -2421,13 +2421,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:choose>
             <xsl:when test="string-length(url) = 0">
               <a href="/omp?r=1&amp;token=guest" class="col-12 button" tabindex="4">
-                <img src="/img/user.svg"/>
                 <xsl:value-of select="gsa:i18n ('Login as a guest', 'Action Verb')"/>
               </a>
             </xsl:when>
             <xsl:otherwise>
               <a href="{url}&amp;token=guest" class="col-12 button" tabindex="4">
-                <img src="/img/user.svg"/>
                 <xsl:value-of select="gsa:i18n ('Login as a guest', 'Action Verb')"/>
               </a>
             </xsl:otherwise>

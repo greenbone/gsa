@@ -1,5 +1,9 @@
 2016-03-24  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/gsad.xsl: Remove user icon from guest login button.
+
+2016-03-24  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_h_bar_chart.js: Fix rendering horizontal bar charts.
 
 2016-03-24  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
