@@ -1,3 +1,9 @@
+2016-03-24  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/gsad.c (get_client_address): Consider the setting
+	to ignore the use of x_real_ip.
+	(main): Add the command line parameter "--ignore-x-real-ip".
+
 2016-03-23  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/gsad.c (get_client_address): Get the header X-Real-IP and

@@ -318,6 +318,11 @@ gchar *http_guest_chart_x_frame_options;
 gchar *http_guest_chart_content_security_policy;
 
 /**
+ * @brief Current preference for using X_Real_IP from HTTP header
+ */
+gboolean ignore_http_x_real_ip;
+
+/**
  * @brief User information structure, for sessions.
  */
 struct user
@@ -3918,11 +3923,11 @@ reconstruct_url (struct MHD_Connection *connection, const char *url)
 static void
 get_client_address (struct MHD_Connection *conn, char *client_address)
 {
-  // First try the X-Real-IP header, then the MHD connection
+  // First try X-Real-IP header (unless advised to ignore, then MHD connection
   const char* x_real_ip = MHD_lookup_connection_value (conn,
                                                        MHD_HEADER_KIND,
                                                        "X-Real-IP");
-  if (x_real_ip != NULL)
+  if (!ignore_http_x_real_ip && x_real_ip != NULL)
     {
       strcpy(client_address, x_real_ip);
     }
@@ -5172,6 +5177,7 @@ main (int argc, char **argv)
                   = DEFAULT_GSAD_GUEST_CHART_X_FRAME_OPTIONS;
   static gchar *http_guest_chart_csp
                   = DEFAULT_GSAD_GUEST_CHART_CONTENT_SECURITY_POLICY;
+  static gboolean ignore_x_real_ip = FALSE;
   GError *error = NULL;
   GOptionContext *option_context;
   static GOptionEntry option_entries[] = {
@@ -5261,6 +5267,9 @@ main (int argc, char **argv)
      0, G_OPTION_ARG_STRING, &http_guest_chart_csp,
      "Content-Security-Policy HTTP header.  Defaults to \""
      DEFAULT_GSAD_GUEST_CHART_CONTENT_SECURITY_POLICY"\".", "<csp>"},
+    {"ignore-x-real-ip", '\0',
+     0, G_OPTION_ARG_NONE, &ignore_x_real_ip,
+     "Do not use X-Real-IP to determine the client address.", NULL},
     {NULL}
   };
 
@@ -5278,6 +5287,7 @@ main (int argc, char **argv)
   http_content_security_policy = http_csp;
   http_guest_chart_x_frame_options = http_guest_chart_frame_opts;
   http_guest_chart_content_security_policy = http_guest_chart_csp;
+  ignore_http_x_real_ip = ignore_x_real_ip;
 
   if (register_signal_handlers ())
     {
