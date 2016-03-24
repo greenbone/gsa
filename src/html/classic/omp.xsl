@@ -8722,54 +8722,55 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </table>
   </div>
 
-  <div class="section-header">
-    <a href="#" class="toggle-action-icon icon icon-action"
-      data-target="#using-box" data-name="Slaves using this Credential"
-      data-variable="using-box--collapsed">
-        <img src="/img/fold.png"/>
-    </a>
-    <h3>
-      <a href="/omp?cmd=get_slaves&amp;token={/envelope/token}"
-         title="{gsa:i18n ('Slaves', 'Slave')}">
-        <img class="icon icon-sm" src="/img/slave.svg" alt="Slaves"/>
+  <xsl:if test="gsa:may-op ('get_slaves')">
+    <div class="section-header">
+      <a href="#" class="toggle-action-icon icon icon-action"
+        data-target="#using-box" data-name="Slaves using this Credential"
+        data-variable="using-box--collapsed">
+          <img src="/img/fold.png"/>
       </a>
-      <xsl:value-of select="gsa:i18n ('Slaves using this Credential', 'Credential')"/>
-      <xsl:text> </xsl:text>
-      <xsl:choose>
-        <xsl:when test="count(slaves/slave) != 0">
-          (<xsl:value-of select="count(slaves/slave)"/>)
-        </xsl:when>
-        <xsl:otherwise>
-          (<xsl:value-of select="gsa:i18n ('none')"/>)
-        </xsl:otherwise>
-      </xsl:choose>
-    </h3>
-  </div>
-
-  <div class="section-box" id="using-box">
-          <table class="gbntable" cellspacing="2" cellpadding="4">
-            <tr class="gbntablehead2">
-              <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
-            </tr>
-            <xsl:for-each select="slaves/slave">
-              <tr class="{gsa:table-row-class(position())}">
-                <xsl:choose>
-                  <xsl:when test="boolean (permissions) and count (permissions/permission) = 0">
-                    <td><xsl:value-of select="name"/> (<xsl:value-of select="gsa:i18n('Unavailable', 'Property')"/>, <xsl:value-of select="gsa:i18n('UUID', 'Property')"/>: <xsl:value-of select="@id"/>)</td>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <td>
-                      <a href="/omp?cmd=get_slave&amp;slave_id={@id}&amp;token={/envelope/token}"
-                         title="{gsa:i18n ('Slave Details', 'Slave')}">
-                        <xsl:value-of select="name"/>
-                      </a>
-                    </td>
-                  </xsl:otherwise>
-                </xsl:choose>
-              </tr>
-            </xsl:for-each>
-          </table>
-  </div>
+      <h3>
+        <a href="/omp?cmd=get_slaves&amp;token={/envelope/token}"
+           title="{gsa:i18n ('Slaves', 'Slave')}">
+          <img class="icon icon-sm" src="/img/slave.svg" alt="Slaves"/>
+        </a>
+        <xsl:value-of select="gsa:i18n ('Slaves using this Credential', 'Credential')"/>
+        <xsl:text> </xsl:text>
+        <xsl:choose>
+          <xsl:when test="count(slaves/slave) != 0">
+            (<xsl:value-of select="count(slaves/slave)"/>)
+          </xsl:when>
+          <xsl:otherwise>
+            (<xsl:value-of select="gsa:i18n ('none')"/>)
+          </xsl:otherwise>
+        </xsl:choose>
+      </h3>
+    </div>
+    <div class="section-box" id="using-box">
+      <table class="gbntable" cellspacing="2" cellpadding="4">
+        <tr class="gbntablehead2">
+          <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
+        </tr>
+        <xsl:for-each select="slaves/slave">
+          <tr class="{gsa:table-row-class(position())}">
+            <xsl:choose>
+              <xsl:when test="boolean (permissions) and count (permissions/permission) = 0">
+                <td><xsl:value-of select="name"/> (<xsl:value-of select="gsa:i18n('Unavailable', 'Property')"/>, <xsl:value-of select="gsa:i18n('UUID', 'Property')"/>: <xsl:value-of select="@id"/>)</td>
+              </xsl:when>
+              <xsl:otherwise>
+                <td>
+                  <a href="/omp?cmd=get_slave&amp;slave_id={@id}&amp;token={/envelope/token}"
+                     title="{gsa:i18n ('Slave Details', 'Slave')}">
+                    <xsl:value-of select="name"/>
+                  </a>
+                </td>
+              </xsl:otherwise>
+            </xsl:choose>
+          </tr>
+        </xsl:for-each>
+      </table>
+    </div>
+  </xsl:if>
 
   <div class="section-header">
     <a href="#" class="toggle-action-icon icon icon-action"

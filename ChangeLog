@@ -1,3 +1,8 @@
+2016-03-24  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/classic/omp.xsl (credential [details]): Only include slaves
+	if the user may run GET_SLAVES.
+
 2016-03-24  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/gsad.xsl: Remove user icon from guest login button.
