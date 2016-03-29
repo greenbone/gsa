@@ -1,5 +1,11 @@
 2016-03-29  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/js/greenbone.js (OMPDialog [setErrorFromResponse]):
+	Add text from gsad_msg in addition to the status_text if it is not
+	empty.
+
+2016-03-29  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/gsad_omp.c (next_page_url): Add "asset_type" to the parameters
 	that are copied to the next page URL.
 
