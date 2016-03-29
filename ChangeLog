@@ -1,5 +1,10 @@
 2016-03-29  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/gsad_omp.c (next_page_url): Add "asset_type" to the parameters
+	that are copied to the next page URL.
+
+2016-03-29  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/omp.xsl (delete-icon): Remove margin-left from
 	style for icons that are not for the type "user".
 	(asset/os): Add class "table-actions" to the action td. Remove
