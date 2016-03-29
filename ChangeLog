@@ -1,3 +1,9 @@
+2016-03-29  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/css/gsa-style.css, src/html/classic/omp.xsl: Simplify css
+	by removing the extra stuff for list-window. Use section-header css class
+	instead.
+
 2016-03-29  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/js/greenbone.js (OMPDialog [setErrorFromResponse]):

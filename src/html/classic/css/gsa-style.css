@@ -1286,33 +1286,9 @@ select[multiple] {
 
 /* The new reworked list view */
 
-#list-window-header {
-  margin: 10px 0;
-  border-bottom: 2px solid black;
-}
-
 #list-window-charts,
 #list-window-table {
   margin: 10px;
-}
-
-#list-window-title {
-  float: left;
-}
-
-#list-window-img {
-  width: 50px;
-  height: 50px;
-  margin-right: 10px;
-}
-
-#list-window-details {
-  display: inline-block;
-}
-
-#list-window-details h2,
-#list-window-details p {
-  margin: 0;
 }
 
 #list-window-filter {
@@ -1325,16 +1301,11 @@ select[multiple] {
   border-bottom: 2px solid black;
 }
 
-.section-header h1 {
-  margin: 0;
-}
-
-.section-header h2 {
-  margin: 0;
-}
-
+.section-header h1,
+.section-header h2,
 .section-header h3 {
   margin: 0;
+  display: inline-block;
 }
 
 .section-header .icon {

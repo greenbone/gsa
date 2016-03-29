@@ -4032,34 +4032,32 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="filtered-count" select="''"/>
   <xsl:param name="full-count" select="''"/>
 
-  <div id="list-window-header" class="clearfix" style="width:100%; margin-top:-55px">
-    <div id="list-window-title" style="width:100%">
+  <div id="list-window-header">
+    <div id="list-window-title">
       <xsl:choose>
         <xsl:when test="0">
         </xsl:when>
         <xsl:otherwise>
-          <img id="list-window-img" src="/img/vul_report.svg"/>
+          <img class="icon icon-lg" src="/img/vul_report.svg"/>
         </xsl:otherwise>
       </xsl:choose>
 
-      <div id="list-window-details">
-        <h2>
-          <xsl:apply-templates select="report" mode="section-list">
-            <xsl:with-param name="current" select="$section"/>
-          </xsl:apply-templates>
-          <xsl:if test="$filtered-count != ''">
-            <xsl:text> (</xsl:text>
-            <xsl:value-of select="$filtered-count"/>
-            <xsl:if test="$full-count != ''">
-              <xsl:text> </xsl:text>
-              <xsl:value-of select="gsa:i18n ('of')"/>
-              <xsl:text> </xsl:text>
-              <xsl:value-of select="$full-count"/>
-            </xsl:if>
-            <xsl:text>)</xsl:text>
+      <h2>
+        <xsl:apply-templates select="report" mode="section-list">
+          <xsl:with-param name="current" select="$section"/>
+        </xsl:apply-templates>
+        <xsl:if test="$filtered-count != ''">
+          <xsl:text> (</xsl:text>
+          <xsl:value-of select="$filtered-count"/>
+          <xsl:if test="$full-count != ''">
+            <xsl:text> </xsl:text>
+            <xsl:value-of select="gsa:i18n ('of')"/>
+            <xsl:text> </xsl:text>
+            <xsl:value-of select="$full-count"/>
           </xsl:if>
-        </h2>
-      </div>
+          <xsl:text>)</xsl:text>
+        </xsl:if>
+      </h2>
 
       <!-- Status bar -->
       <xsl:choose>
@@ -5189,28 +5187,26 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </div>
   </div>
 
-  <div id="list-window-header" class="clearfix">
-    <div id="list-window-title">
+  <div id="list-window-header">
+    <div class="section-header">
       <xsl:choose>
         <xsl:when test="$subtype != ''">
-          <img id="list-window-img" src="/img/{$subtype}.svg"/>
+          <img class="icon icon-lg" src="/img/{$subtype}.svg"/>
         </xsl:when>
         <xsl:otherwise>
-          <img id="list-window-img" src="/img/{$type}.svg"/>
+          <img class="icon icon-lg" src="/img/{$type}.svg"/>
         </xsl:otherwise>
       </xsl:choose>
 
-      <div id="list-window-details">
-        <h2>
-          <xsl:value-of select="gsa:i18n ($cap-type-plural)"/>
-          (<xsl:value-of select="$filtered-count"/>
-          <xsl:text> </xsl:text>
-          <xsl:value-of select="gsa:i18n ('of')"/>
-          <xsl:text> </xsl:text>
-          <xsl:value-of select="$full-count"/>)
-        </h2>
+      <h2>
+        <xsl:value-of select="gsa:i18n ($cap-type-plural)"/>
+        (<xsl:value-of select="$filtered-count"/>
+        <xsl:text> </xsl:text>
+        <xsl:value-of select="gsa:i18n ('of')"/>
+        <xsl:text> </xsl:text>
+        <xsl:value-of select="$full-count"/>)
+      </h2>
 
-      </div>
     </div>
   </div>
 
