@@ -1,3 +1,10 @@
+2016-03-29  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/omp.xsl (delete-icon): Remove margin-left from
+	style for icons that are not for the type "user".
+	(asset/os): Add class "table-actions" to the action td. Remove
+	margin-left from icons and use class "icon" instead.
+
 2016-03-29  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/css/gsa-style.css: Reduce max size of pop up dialogs to

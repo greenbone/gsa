@@ -2050,7 +2050,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </form>
       </xsl:when>
       <xsl:otherwise>
-        <form style="display: inline; font-size: 0px; margin-left: 3px" action="/omp" method="post" enctype="multipart/form-data">
+        <form style="display: inline; font-size: 0px;" action="/omp" method="post" enctype="multipart/form-data">
           <input type="hidden" name="token" value="{/envelope/token}"/>
           <input type="hidden" name="caller" value="{/envelope/current_page}"/>
           <input type="hidden" name="cmd" value="delete_{$type}"/>
@@ -38407,7 +38407,7 @@ should not have received it.
         </td>
       </xsl:when>
       <xsl:otherwise>
-        <td>
+        <td class="table-actions">
           <xsl:choose>
             <xsl:when test="../in_use='0'">
               <xsl:call-template name="delete-icon">
@@ -38423,12 +38423,11 @@ should not have received it.
               <img src="/img/delete_inactive.png"
                    alt="{gsa:i18n ('Delete', 'Action Verb')}"
                    title="{gsa:i18n ('OS is in use', 'OS')}"
-                   style="margin-left:3px;"/>
+                   class="icon"/>
             </xsl:otherwise>
           </xsl:choose>
           <a href="/omp?cmd=export_asset&amp;asset_id={../@id}&amp;subtype=os&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-             title="{gsa:i18n ('Export Operating System', 'Assets')}"
-             style="margin-left:3px;">
+             title="{gsa:i18n ('Export Operating System', 'Assets')}">
             <img src="/img/download.png" alt="{gsa:i18n ('Export', 'Action Verb')}"/>
           </a>
         </td>
