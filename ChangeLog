@@ -1,3 +1,8 @@
+2016-03-29  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/css/gsa-style.css: Reduce max size of pop up dialogs to
+	500px in height.
+
 2016-03-24  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/omp.xsl (filter [details]): Only include alerts
