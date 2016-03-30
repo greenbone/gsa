@@ -1378,6 +1378,10 @@ select[multiple] {
   margin-right: 2px;
 }
 
+.toolbar .footnote {
+  max-width: 500px;
+}
+
 .table-actions .icon {
   margin-right: 3px;
 }
