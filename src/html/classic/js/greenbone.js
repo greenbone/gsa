@@ -598,9 +598,13 @@
   FilterDialog.prototype.show = function() {
     var self = this;
     var content = $('#' + this.id).closest('form').clone();
-    content.find('#' + this.id).show();
+    var elem = content.find('#' + this.id);
     content.css('float', '');
-    content.find('#' + this.id).css('padding-top', '2em');
+    elem.show();
+    elem.removeClass('hidden');
+    elem.css('padding-top', '2em');
+    content.removeClass('form-inline'); // TODO we should find a way to use a seperate form for the dialog
+    content.addClass('form-horizontal');
     content.find('a, div.footnote, input[type=image], input[type=submit]')
       .remove();
 
