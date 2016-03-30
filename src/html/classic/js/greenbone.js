@@ -326,8 +326,9 @@
 
     if (gsad_msg.length) {
       error = gsad_msg.attr('status_text');
-      if (is_string(gsad_msg.justtext ()) && gsad_msg.justtext () !== '')
-        error = error + "<br/>" + gsad_msg.justtext ()
+      if (is_string(gsad_msg.justtext()) && gsad_msg.justtext() !== '') {
+        error = error + '<br/>' + gsad_msg.justtext();
+      }
       error_code = gsad_msg.attr('status_code');
     }
     else if (response.length) {
