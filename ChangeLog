@@ -1,5 +1,14 @@
 2016-03-30  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/omp.xsl: Move filter dialog form outside of the
+	filter form. This allows to have seperated layouts for the dialog and the
+	filter toolbar forms.
+
+	* src/html/classic/js/greenbone.js: Update FilterDialog for reworked filter
+	form layout.
+
+2016-03-30  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/greenbone.js: Update coding style.
 
 2016-03-30  Björn Ricks <bjoern.ricks@greenbone.net>

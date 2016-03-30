@@ -598,16 +598,8 @@
 
   FilterDialog.prototype.show = function() {
     var self = this;
-    var content = $('#' + this.id).closest('form').clone();
-    var elem = content.find('#' + this.id);
-    content.css('float', '');
-    elem.show();
-    elem.removeClass('hidden');
-    elem.css('padding-top', '2em');
-    content.removeClass('form-inline'); // TODO we should find a way to use a seperate form for the dialog
-    content.addClass('form-horizontal');
-    content.find('a, div.footnote, input[type=image], input[type=submit]')
-      .remove();
+    var content = $('#' + this.id).clone();
+    content.show();
 
     // Update the form parameter
     var input = content.find('input[name=build_filter]');
