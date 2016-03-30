@@ -3816,7 +3816,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:variable name="apply-overrides"
                 select="filters/apply_overrides"/>
 
-  <div id="list-window-filter">
+  <div id="list-window-filter" class="col-8">
     <form name="filterform" method="get" action="" enctype="multipart/form-data" class="pull-right">
       <input type="hidden" name="token" value="{/envelope/token}"/>
       <input type="hidden" name="cmd" value="get_report_section"/>
@@ -3892,7 +3892,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="report_section" select="'results'"/>
   <xsl:param name="extra_params" select="''"/>
 
-  <div id="list-window-filter">
+  <div id="list-window-filter" class="col-8">
     <xsl:call-template name="filter-window-part">
       <xsl:with-param name="type" select="'report_result'"/>
       <xsl:with-param name="subtype" select="''"/>
@@ -4012,9 +4012,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="extra_params" select="''"/>
 
   <div class="toolbar">
-    <xsl:call-template name="report-icons">
-      <xsl:with-param name="section" select="$section"/>
-    </xsl:call-template>
+
+    <div class="col-4">
+      <xsl:call-template name="report-icons">
+        <xsl:with-param name="section" select="$section"/>
+      </xsl:call-template>
+    </div>
 
     <xsl:choose>
       <xsl:when test="($section='results' or $section='summary')">
