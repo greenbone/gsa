@@ -3020,13 +3020,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <input type="hidden"
                  name="apply_overrides"
                  value="{$apply-overrides}"/>
-          <div class="ctrl-group">
+          <div class="form-group">
             <xsl:value-of select="gsa:i18n ('Results per page', 'Filter')"/>:
             <input type="text" name="max_results" size="5"
                    value="{report/hosts/@max}"
                    maxlength="400"/>
           </div>
-          <div class="ctrl-group">
+          <div class="form-group">
             <xsl:value-of select="gsa:i18n ('Text phrase', 'Report Filter')"/>:
             <input type="text" name="search_phrase" size="50"
                    value="{$phrase}"
@@ -3035,7 +3035,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <div class="pull-right">
             <input type="submit" value="{gsa:i18n ('Apply', 'Action Verb')}" title="{gsa:i18n ('Apply', 'Action Verb')}"/>
           </div>
-          <div class="ctrl-group">
+          <div class="form-group">
             <xsl:value-of select="gsa:i18n ('Severity', 'Severity')"/>:
             <table style="display: inline">
               <tr>
@@ -3382,7 +3382,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:if test="../../delta">
         <input type="hidden" name="delta_report_id" value="{report/delta/report/@id}"/>
         <div class="pull-right">
-          <div class="ctrl-group"><xsl:value-of select="gsa:i18n ('Show delta results', 'Report Filter')"/>:</div>
+          <div class="form-group"><xsl:value-of select="gsa:i18n ('Show delta results', 'Report Filter')"/>:</div>
           <div style="margin-left: 8px;">
             <label>
               <xsl:choose>
@@ -3443,7 +3443,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:if>
 
       <xsl:if test="not (/envelope/params/report_section) or /envelope/params/report_section = 'results'">
-        <div class="ctrl-group">
+        <div class="form-group">
           <xsl:value-of select="gsa:i18n ('Results per page', 'Filter')"/>:
           <input type="text" name="max_results" size="5"
                 value="{report/results/@max}"
@@ -3451,7 +3451,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </div>
       </xsl:if>
 
-      <div class="ctrl-group">
+      <div class="form-group">
         <label>
           <xsl:choose>
             <xsl:when test="report/filters/keywords/keyword[column = 'apply_overrides']/value = 0">
@@ -3469,7 +3469,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:when test="@type='prognostic'">
         </xsl:when>
         <xsl:otherwise>
-          <div class="ctrl-group">
+          <div class="form-group">
             <xsl:value-of select="gsa:i18n ('Auto-FP', 'Report Filter')"/>:
             <div style="margin-left: 30px">
               <label>
@@ -3516,7 +3516,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:when test="@type='prognostic'">
         </xsl:when>
         <xsl:otherwise>
-          <div class="ctrl-group">
+          <div class="form-group">
             <label>
               <xsl:choose>
                 <xsl:when test="report/filters/keywords/keyword[column = 'notes']/value = 0">
@@ -3532,7 +3532,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:otherwise>
       </xsl:choose>
 
-      <div class="ctrl-group">
+      <div class="form-group">
         <label>
           <xsl:choose>
             <xsl:when test="report/filters/keywords/keyword[column = 'overrides']/value = 0">
@@ -3546,7 +3546,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </label>
       </div>
 
-      <div class="ctrl-group">
+      <div class="form-group">
         <xsl:choose>
           <xsl:when test="report/filters/keywords/keyword[column = 'result_hosts_only']/value = 0">
             <label>
@@ -3562,7 +3562,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:otherwise>
         </xsl:choose>
       </div>
-      <div class="ctrl-group">
+      <div class="form-group">
         <label>
           <xsl:choose>
             <xsl:when test="not (report/filters/keywords/keyword[column = 'min_cvss_base']/value != '')">
@@ -3632,7 +3632,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:call-template>
         </select>
       </div>
-      <div class="ctrl-group">
+      <div class="form-group">
         <label>
           <xsl:choose>
             <xsl:when test="not (report/filters/min_qod != '')">
@@ -3703,7 +3703,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </select>
         %
       </div>
-      <div class="ctrl-group">
+      <div class="form-group">
         <xsl:value-of select="gsa:i18n ('Timezone', 'Time')"/>:
         <xsl:call-template name="timezone-select">
           <xsl:with-param name="timezone" select="report/timezone"/>
@@ -3713,7 +3713,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <div class="pull-right">
         <input type="submit" value="{gsa:i18n ('Apply', 'Action Verb')}" title="{gsa:i18n ('Apply', 'Action Verb')}"/>
       </div>
-      <div class="ctrl-group">
+      <div class="form-group">
         <xsl:value-of select="gsa:i18n ('Severity', 'Severity')"/>:
         <table style="display: inline">
           <tr>

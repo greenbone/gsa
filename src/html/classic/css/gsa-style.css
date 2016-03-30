@@ -1382,24 +1382,6 @@ select[multiple] {
   margin-right: 3px;
 }
 
-.ctrl-group {
-  display: table-row;
-  padding: 2px;
-}
-
-.ctrl-group .left-column {
-  display: table-cell;
-  width: 120px;
-  margin-right: 3px;
-  padding-top: 5px;
-}
-
-.ctrl-group .right-column {
-  display: table-cell;
-  vertical-align: middle;
-  padding-top: 0px;
-}
-
 .valign-middle {
   vertical-align: middle;
 }
