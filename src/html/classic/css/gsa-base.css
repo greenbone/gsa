@@ -158,8 +158,12 @@ p {
   text-decoration: underline;
 }
 
-.hide {
+.invisible {
   visibility: hidden !important;
+}
+
+.hidden {
+  display: none !important;
 }
 
 

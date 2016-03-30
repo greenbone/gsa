@@ -2363,7 +2363,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </div>
       </xsl:when>
       <xsl:otherwise>
-        <div class="box container hide">
+        <div class="box container invisible">
           <div>
             &#160; <!-- nbsp in order to keep the div even when no messages -->
           </div>

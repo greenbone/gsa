@@ -1,3 +1,11 @@
+2016-03-30  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/css/gsa-base.css: Rename css class hide to invisible and
+	introduce new class hidden. invisible will keep the redering space and hidden
+	will not allocate any space for rendering.
+
+	* src/html/classic/gsad.xsl: Use invisible css class instead of hide.
+
 2016-03-29  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/css/gsa-style.css, src/html/classic/omp.xsl: Simplify css
