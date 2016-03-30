@@ -1292,8 +1292,12 @@ select[multiple] {
 }
 
 #list-window-filter {
-  float: right;
-  width: 900px;
+  text-align: right;
+}
+
+#list-window-filter > div {
+  display: inline-block;
+  vertical-align: top;
 }
 
 .section-header {
@@ -1347,6 +1351,8 @@ select[multiple] {
 
 .toolbar .icon {
   margin-right: 3px;
+  display: inline-block;
+  vertical-align: middle;
 }
 
 .toolbar .divider {
@@ -1357,6 +1363,19 @@ select[multiple] {
 .toolbar div.icon, .toolbar div.icon form,
 .table-actions div.icon, .table-actions div.icon form {
   display: inline;
+}
+
+.toolbar .select2-container--default .select2-selection--single {
+  /* remove after we have a common height for all input elements */
+  height: 22px;
+}
+
+.toolbar .form-group {
+  white-space: nowrap;
+}
+
+.toolbar .form-control {
+  margin-right: 2px;
 }
 
 .table-actions .icon {
