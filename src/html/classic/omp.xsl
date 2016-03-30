@@ -16019,7 +16019,7 @@ should not have received it.
   <xsl:param name="config" select=".."/>
 
   <tr class="{gsa:table-row-class(position())}">
-    <td><xsl:value-of select="name"/></td>
+    <td><xsl:value-of select="hr_name"/></td>
     <xsl:if test="$config != ''">
       <td>
         <xsl:choose>
@@ -16090,7 +16090,7 @@ should not have received it.
     <xsl:if test="$for_config_details">
       <td><xsl:value-of select="nvt/name"/></td>
     </xsl:if>
-    <td><xsl:value-of select="name"/></td>
+    <td><xsl:value-of select="hr_name"/></td>
     <td>
       <xsl:choose>
 
