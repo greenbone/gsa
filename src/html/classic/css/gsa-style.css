@@ -1420,6 +1420,19 @@ select[multiple] {
   padding-right: 0px;
 }
 
+.toolbar:before,
+.toolbar:after,
+.section-header:before,
+.section-header:after {
+  content: " ";
+  display: table;
+}
+
+.toolbar:after,
+.section-header:after {
+  clear: both;
+}
+
 .table-actions .icon {
   margin-right: 3px;
 }
