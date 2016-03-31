@@ -970,6 +970,7 @@ select[multiple] {
 
 .icon-menu {
   font-weight: bold;
+  position: relative;
 }
 
 .icon-menu:hover img {
@@ -977,11 +978,11 @@ select[multiple] {
 }
 
 .icon-menu ul {
-  position:absolute;
+  position: absolute;
   display: none;
   padding: 0;
-  margin-left: -18px;
-  margin-top: 18px;
+  left: 0px;
+  top: 6px;
   z-index: 5;
   list-style: none;
   font-size: 10px;
