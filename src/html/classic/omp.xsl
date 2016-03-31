@@ -1262,17 +1262,26 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <div class="form-group">
           <xsl:variable name="apply_overrides"
             select="filters/keywords/keyword[column='apply_overrides']/value"/>
+          <!-- TODO: Rename "overrides" to "apply_overrides" where it
+                      controls whether overrides are applied -->
+          <xsl:variable name="apply_overrides_param_name">
+            <xsl:choose>
+              <xsl:when test="$type = 'report_result'">apply_overrides</xsl:when>
+              <xsl:otherwise>overrides</xsl:otherwise>
+            </xsl:choose>
+          </xsl:variable>
           <label class="col-2">
             <xsl:value-of select="gsa:i18n ('Apply overrides', 'Override Controls')"/>:
           </label>
           <label class="col-10">
             <xsl:choose>
               <xsl:when test="$apply_overrides = 0">
-                <input type="checkbox" name="overrides" value="1"/>
+                <input type="checkbox" name="{$apply_overrides_param_name}"
+                  value="1"/>
               </xsl:when>
               <xsl:otherwise>
-                <input type="checkbox" name="overrides" value="1"
-                  checked="1"/>
+                <input type="checkbox" name="{$apply_overrides_param_name}"
+                  value="1" checked="1"/>
               </xsl:otherwise>
             </xsl:choose>
           </label>
@@ -1641,10 +1650,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </div>
       </xsl:if>
       <xsl:if test="filters/keywords/keyword[column='first'] or $filter_options_nodes/option[text()='first']">
+        <xsl:variable name="first_param_name">
+          <xsl:choose>
+            <xsl:when test="$type = 'report_result'">first_result</xsl:when>
+            <xsl:otherwise>first</xsl:otherwise>
+          </xsl:choose>
+        </xsl:variable>
         <div class="form-group">
-          <label for="first" class="col-2"><xsl:value-of select="gsa:i18n ('First result', 'Filter')"/>:</label>
+          <label for="{$first_param_name}" class="col-2"><xsl:value-of select="gsa:i18n ('First result', 'Filter')"/>:</label>
           <div class="col-10">
-            <input type="number" name="first" size="5"
+            <input type="number" name="{$first_param_name}" size="5"
               class="form-control"
               value="{filters/keywords/keyword[column='first']/value}"
               maxlength="400"/>
@@ -1652,10 +1667,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </div>
       </xsl:if>
       <xsl:if test="filters/keywords/keyword[column='rows'] or $filter_options_nodes/option[text()='rows']">
+        <xsl:variable name="max_param_name">
+          <xsl:choose>
+            <xsl:when test="$type = 'report_result'">max_results</xsl:when>
+            <xsl:otherwise>max</xsl:otherwise>
+          </xsl:choose>
+        </xsl:variable>
         <div class="form-group">
-          <label for="max" class="col-2"><xsl:value-of select="gsa:i18n ('Results per page', 'Filter')"/>:</label>
+          <label for="{$max_param_name}" class="col-2"><xsl:value-of select="gsa:i18n ('Results per page', 'Filter')"/>:</label>
           <div class="col-10">
-            <input type="number" name="max" size="5"
+            <input type="number" name="{$max_param_name}" size="5"
               class="form-control"
               value="{filters/keywords/keyword[column='rows']/value}"
               maxlength="400"/>
@@ -4004,7 +4025,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
   <xsl:call-template name="filter-window-pager">
     <xsl:with-param name="type" select="'report_result'"/>
-    <xsl:with-param name="list" select="report/results"/>
+    <xsl:with-param name="list" select="results"/>
     <xsl:with-param name="count" select="$count"/>
     <xsl:with-param name="filtered_count" select="$filtered-count"/>
     <xsl:with-param name="full_count" select="$full-count"/>
@@ -4168,7 +4189,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:when test="count(report/results/result) &gt; 0">
           <div id="reports">
             <div class="footnote" style="text-align:right;">
-              <xsl:apply-templates select="." mode="section-pager">
+              <xsl:apply-templates select="report" mode="section-pager">
                 <xsl:with-param name="report_section" select="'results'"/>
                 <xsl:with-param name="count" select="count (report/results/result)"/>
                 <xsl:with-param name="filtered-count" select="report/result_count/filtered"/>
@@ -4190,7 +4211,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     </xsl:if>
                   </xsl:variable>
                   <div class="pull-right">
-                    <xsl:apply-templates select="." mode="section-pager">
+                    <xsl:apply-templates select="report" mode="section-pager">
                       <xsl:with-param name="report_section" select="'results'"/>
                       <xsl:with-param name="count" select="count (report/results/result)"/>
                       <xsl:with-param name="filtered-count" select="report/result_count/filtered"/>
