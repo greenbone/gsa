@@ -507,6 +507,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <pattern>cpe:/o:hp:hp-ux</pattern><title>HP-UX</title><icon>os_hp.png</icon>
     </operating_system>
     <operating_system>
+        <pattern>cpe:/o:hp:integrated_lights-out</pattern><title>HP Integrated Lights-Out</title><icon>os_hp.png</icon>
+    </operating_system>
+    <operating_system>
         <pattern>cpe:/o:sun:solaris</pattern><title>Sun Solaris</title><icon>os_sun.png</icon>
     </operating_system>
     <operating_system>
@@ -616,6 +619,30 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </operating_system>
     <operating_system>
         <pattern>cpe:/o:greenbone:greenbone_os</pattern><title>Greenbone OS</title><icon>os_gos.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:ruggedcom:ros</pattern><title>Ruggedcom ROS</title><icon>os_ruggedcom.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:synology:dsm</pattern><title>Synology DSM</title><icon>os_synology.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:arubanetworks:arubaos</pattern><title>Arubanetworks Arubaos</title><icon>os_arubanetworks.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:huawei</pattern><title>Huawei</title><icon>os_huawai.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:sourcefire:linux_os</pattern><title>Sourcefire Linux</title><icon>os_sourcefire.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:checkpoint:gaia_os</pattern><title>Checkpoint Gaia Os</title><icon>os_checkpoint.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:ipfire:linux</pattern><title>Ipfire Linux</title><icon>os_ipfire.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:mcafee:linux_operating_system</pattern><title>McAfee Linux</title><icon>os_mcafee.png</icon>
     </operating_system>
     <operating_system>
         <pattern>cpe:/o:slackware:slackware_linux:8.1</pattern>
