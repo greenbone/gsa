@@ -32512,7 +32512,7 @@ should not have received it.
 <xsl:template name="report-help-icon">
   <a href="/help/view_report.html?token={/envelope/token}#viewreport"
      title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('View Report', 'Report'))}">
-    <img style="vertical-align: text-top; margin-left: 3px" src="/img/help.png"/>
+    <img class="icon" src="/img/help.png"/>
   </a>
 </xsl:template>
 
@@ -32616,8 +32616,7 @@ should not have received it.
             value="Download"
             title="{gsa:i18n ('Download filtered Report', 'Report')}"
             src="/img/download.png"
-
-            style="margin-left:3px; vertical-align: middle;"
+            class="icon"
             alt="{gsa:i18n ('Download', 'Report')}"/>
   </form>
 </xsl:template>
@@ -32629,25 +32628,26 @@ should not have received it.
     <xsl:when test="@type='prognostic'">
       <a href="/omp?cmd=get_report_section&amp;report_section={$section}&amp;type=prognostic&amp;host={/envelope/params/host}&amp;filter=&amp;filt_id=&amp;token={/envelope/token}"
         title="{gsa:i18n ('Return to default filter view', 'Action Verb')}">
-        <img style="vertical-align: text-top; margin-left: 3px" src="/img/list.png"/>
+        <img class="icon" src="/img/list.png"/>
       </a>
     </xsl:when>
     <xsl:otherwise>
       <a href="/omp?cmd=get_report_section&amp;report_section={$section}&amp;report_id={@id}&amp;filter=&amp;filt_id=&amp;token={/envelope/token}"
         title="{gsa:i18n ('Return to default filter view', 'Action Verb')}">
-        <img style="vertical-align: text-top; margin-left: 3px" src="/img/list.png"/>
+        <img class="icon" src="/img/list.png"/>
       </a>
     </xsl:otherwise>
   </xsl:choose>
-  <div class="small_inline_form" style="display:inline; margin-left: 7px; vertical-align: text-bottom" >
+  <div class="form-inline">
     <xsl:call-template name="filtered-report-export-form"></xsl:call-template>
   </div>
-  <form style="display: inline; font-size: 0px; margin-left: 3px; vertical-align: text-top" action="/omp" method="post" enctype="multipart/form-data">
+  <form class="form-inline" action="/omp" method="post" enctype="multipart/form-data">
     <input type="hidden" name="token" value="{/envelope/token}"/>
     <input type="hidden" name="caller" value="{/envelope/current_page}"/>
     <input type="hidden" name="cmd" value="create_asset"/>
     <input type="image" src="/img/add_to_assets.png" alt="{gsa:i18n ('Add to Assets', 'Assets')}"
-           name="Add to Assets" value="Add to Assets" style="vertical-align: text-top"
+           name="Add to Assets" value="Add to Assets"
+           class="icon"
            title="{gsa:i18n ('Add to Assets', 'Action Verb')}"/>
 
     <input type="hidden" name="report_id" value="{@id}"/>
@@ -32656,12 +32656,13 @@ should not have received it.
     <input type="hidden" name="filter" value=""/>
     <input type="hidden" name="filt_id" value=""/>
   </form>
-  <form style="display: inline; font-size: 0px; margin-left: 3px; vertical-align: text-top" action="/omp" method="post" enctype="multipart/form-data">
+  <form class="form-inline" action="/omp" method="post" enctype="multipart/form-data">
     <input type="hidden" name="token" value="{/envelope/token}"/>
     <input type="hidden" name="caller" value="{/envelope/current_page}"/>
     <input type="hidden" name="cmd" value="delete_asset"/>
     <input type="image" src="/img/remove_from_assets.png" alt="{gsa:i18n ('Remove from Assets', 'Assets')}"
-           name="Remove from Assets" value="Remove from Assets" style="vertical-align: text-top"
+           name="Remove from Assets" value="Remove from Assets"
+           class="icon"
            title="{gsa:i18n ('Remove from Assets', 'Action Verb')}"/>
 
     <input type="hidden" name="report_id" value="{@id}"/>
