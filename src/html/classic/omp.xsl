@@ -4093,7 +4093,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <!-- Status bar -->
       <xsl:choose>
         <xsl:when test="not(/envelope/params/delta_report_id != '')">
-          <div class="pull-right" style="margin-top:35px">
+          <div class="pull-right">
             <xsl:apply-templates select="report" mode="section-link">
               <xsl:with-param name="section" select="'summary'"/>
               <xsl:with-param name="type">
