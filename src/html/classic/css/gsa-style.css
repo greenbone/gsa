@@ -1409,6 +1409,12 @@ select[multiple] {
   max-width: 500px;
 }
 
+.toolbar > div[class*="col-"] {
+  /* remove padding from col-* elements */
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
 .table-actions .icon {
   margin-right: 3px;
 }
