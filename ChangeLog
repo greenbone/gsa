@@ -1,5 +1,10 @@
 2016-03-31  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/css/gsa-style.css: Add margin after select2 containers (our
+	dynamic select boxes) if they are followed by an icon.
+
+2016-03-31  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/css/gsa-style.css: Remove padding from column elemnts
 	inside the toolbar. The toolbar has already an outer padding. This removes the
 	extra space before the icon buttons in the toolbar.

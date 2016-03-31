@@ -730,6 +730,11 @@ a.top_button:hover div.first_button_overlay {
   margin-right: -2px;
 }
 
+.select2 + .icon {
+  /* add left margin if a select2 is followed directly by an icon */
+  margin-left: 5px;
+}
+
 select[multiple] {
   min-width: 50%;
 }
