@@ -37625,14 +37625,16 @@ should not have received it.
 <xsl:template match="asset" mode="os-details">
   <div class="toolbar">
     <a href="/help/os_details.html?token={/envelope/token}"
-       title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('Operating System', 'OS'),' (',gsa:i18n('Operating System Details', 'OS'),')')}">
+      class="icon"
+      title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('Operating System', 'OS'),' (',gsa:i18n('Operating System Details', 'OS'),')')}">
       <img src="/img/help.png"/>
     </a>
     <a href="/omp?cmd=get_assets&amp;asset_type=os&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-      title="{gsa:i18n ('OSs', 'OS')}" style="margin-left:3px;">
+      title="{gsa:i18n ('OSs', 'OS')}"
+      class="icon">
       <img src="/img/list.png" alt="{gsa:i18n ('OSs', 'OS')}"/>
     </a>
-    <div class="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
+    <div class="form-inline">
       <xsl:choose>
         <xsl:when test="in_use='0'">
           <xsl:call-template name="delete-icon">
@@ -37647,13 +37649,13 @@ should not have received it.
         <xsl:otherwise>
           <img src="/img/delete_inactive.png"
                alt="{gsa:i18n ('Delete', 'Action Verb')}"
-               style="margin-left:3px;"
+               class="icon"
                title="{gsa:i18n ('OS is in use', 'Hosts')}"/>
         </xsl:otherwise>
       </xsl:choose>
       <a href="/omp?cmd=export_asset&amp;asset_id={@id}&amp;subtype=os&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
          title="{gsa:i18n ('Export Asset as XML')}"
-         style="margin-left:3px;">
+         class="icon">
         <img src="/img/download.png" alt="{gsa:i18n ('Export XML', 'Action Verb')}"/>
       </a>
     </div>
@@ -37863,19 +37865,20 @@ should not have received it.
 
   <div class="toolbar">
     <a href="/help/host_details.html?token={/envelope/token}"
+      class="icon"
       title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('Host', 'Host'),' (',gsa:i18n('Host Details', 'Host'),')')}">
       <img src="/img/help.png"/>
     </a>
     <a href="/omp?cmd=new_host&amp;next=get_asset&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;asset_id={@id}&amp;token={/envelope/token}"
        title="{gsa:i18n ('New Host')}"
-       class="new-action-icon" data-type="host">
-      <img src="/img/new.png" style="margin-left:3px;"/>
+       class="new-action-icon icon" data-type="host">
+      <img src="/img/new.png"/>
     </a>
     <a href="/omp?cmd=get_assets&amp;asset_type=host&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-      title="{gsa:i18n ('Hosts', 'Host')}" style="margin-left:3px;">
+      title="{gsa:i18n ('Hosts', 'Host')}" class="icon">
       <img src="/img/list.png" alt="{gsa:i18n ('Hosts', 'Host')}"/>
     </a>
-    <div class="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
+    <div class="form-inline">
       <xsl:choose>
         <xsl:when test="in_use='0'">
           <xsl:call-template name="delete-icon">
@@ -37889,8 +37892,9 @@ should not have received it.
         </xsl:when>
         <xsl:otherwise>
           <img src="/img/delete_inactive.png"
-               alt="{gsa:i18n ('Delete', 'Action Verb')}"
-               title="{gsa:i18n ('Host is in use', 'Assets')}"/>
+            class="icon"
+            alt="{gsa:i18n ('Delete', 'Action Verb')}"
+            title="{gsa:i18n ('Host is in use', 'Assets')}"/>
         </xsl:otherwise>
       </xsl:choose>
       <xsl:choose>
@@ -37898,8 +37902,7 @@ should not have received it.
           <!-- i18n with concat : see dynamic_strings.xsl - type-edit -->
           <a href="/omp?cmd=edit_asset&amp;asset_id={@id}&amp;next=get_asset&amp;type=host&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
              title="{gsa:i18n ('Edit Host')}"
-             class="edit-action-icon" data-type="asset" data-id="{@id}"
-             style="margin-left:3px;">
+             class="edit-action-icon icon" data-type="asset" data-id="{@id}">
             <img src="/img/edit.png" alt="{gsa:i18n ('Edit', 'Action Verb')}"/>
           </a>
         </xsl:when>
@@ -37920,12 +37923,12 @@ should not have received it.
           </xsl:variable>
           <img src="/img/edit_inactive.png" alt="{gsa:i18n ('Edit', 'Action Verb')}"
                title="{$inactive_text}"
-               style="margin-left:3px;"/>
+               class="icon" />
         </xsl:otherwise>
       </xsl:choose>
       <a href="/omp?cmd=export_asset&amp;asset_id={@id}&amp;subtype=host&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
          title="{gsa:i18n ('Export Asset as XML')}"
-         style="margin-left:3px;">
+         class="icon">
         <img src="/img/download.png" alt="{gsa:i18n ('Export XML', 'Action Verb')}"/>
       </a>
     </div>
