@@ -954,6 +954,12 @@ select[multiple] {
   display: block;
 }
 
+.report-section-severity {
+  float: right;
+  position: relative;
+  top: 35px;
+}
+
 .wizard_hint {
   color: #8cacc7; /* a light grey blend */
   text-align: center;

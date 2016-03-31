@@ -1,5 +1,12 @@
 2016-03-31  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/css/gsa-style.css, src/html/classic/omp.xsl: Fix the
+	report details header by adding a surrounding section-header div element. Also
+	add a new css class to position the severity bar in the report section header
+	correctly.
+
+2016-03-31  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/css/gsa-style.css: Add clearfixes for toolbar and
 	section-header. Both are rows with floating elements. Therefore we need to
 	clear the floats afterwards.
