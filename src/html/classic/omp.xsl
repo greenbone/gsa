@@ -29578,6 +29578,7 @@ should not have received it.
 
   <div class="toolbar">
     <a href="/help/result_details.html?token={/envelope/token}"
+      class="icon"
       title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('Result Details', 'Result'))}">
       <img src="/img/help.png"/>
     </a>
@@ -29585,21 +29586,19 @@ should not have received it.
       <xsl:when test="$delta=0">
         <a href="?cmd=get_report&amp;report_id={$report_id}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;overrides={/envelope/params/apply_overrides}&amp;token={/envelope/token}#result-{$report_result_id}"
            title="{gsa:i18n ('Report', 'Report')}"
-           style="margin-left:3px;">
+           class="icon">
           <img src="/img/list.png" alt="{gsa:i18n ('Report', 'Report')}"/>
         </a>
-        <div class="small_inline_form" style="display: inline; margin-left: 5px; font-weight: normal;">
-          <a href="/omp?cmd=export_result&amp;result_id={@id}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-             title="{gsa:i18n ('Export Result as XML', 'Result')}"
-             style="margin-left:3px;">
-            <img src="/img/download.png" alt="{gsa:i18n ('Export XML', 'Action Verb')}"/>
-          </a>
-        </div>
+        <a href="/omp?cmd=export_result&amp;result_id={@id}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+          title="{gsa:i18n ('Export Result as XML', 'Result')}"
+          class="icon">
+          <img src="/img/download.png" alt="{gsa:i18n ('Export XML', 'Action Verb')}"/>
+        </a>
       </xsl:when>
       <xsl:otherwise>
         <a href="?cmd=get_report&amp;report_id={../../@id}&amp;delta_report_id={../../delta/report/@id}&amp;delta_states={../../filters/delta/text()}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;overrides={../../../../filters/apply_overrides}&amp;token={/envelope/token}#result-{$report_result_id}"
            title="{gsa:i18n ('Report', 'Report')}"
-           style="margin-left:3px;">
+           class="icon">
           <img src="/img/list.png" alt="{gsa:i18n ('Report', 'Report')}"/>
         </a>
       </xsl:otherwise>
