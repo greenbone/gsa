@@ -1,5 +1,9 @@
 2016-03-31  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/css/gsa-style.css: Fix alignment of icons in the toolbar.
+
+2016-03-31  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/omp.xsl: Remove direct style formatting and use icon css
 	class to fix diplaying the toolbar icons at the result details page.
 

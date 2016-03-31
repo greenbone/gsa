@@ -1398,11 +1398,6 @@ select[multiple] {
   display: inline-block;
 }
 
-.toolbar div.icon, .toolbar div.icon form,
-.table-actions div.icon, .table-actions div.icon form {
-  display: inline;
-}
-
 .toolbar .select2-container--default .select2-selection--single {
   /* remove after we have a common height for all input elements */
   height: 22px;
@@ -1441,6 +1436,10 @@ select[multiple] {
 
 .table-actions .icon {
   margin-right: 3px;
+}
+
+.table-actions div.icon, .table-actions div.icon form {
+  display: inline-block;
 }
 
 .valign-middle {
