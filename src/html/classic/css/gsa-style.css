@@ -416,7 +416,6 @@ td p {
 
 /* Menu Bar */
 #gb_menu {
-  margin-bottom: 12px;
   background-color: #393637;
 }
 
@@ -779,8 +778,35 @@ select[multiple] {
   text-align: center;
 }
 
+.gsa-head {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  height: 75px;
+  width: 100%;
+  border: none;
+}
+
 .gsa-main {
-  margin: 5px 10px;
+  margin-top: 75px;
+  padding: 5px 10px;
+}
+
+#gb_menu .logo {
+  visibility: hidden;
+  height: 35px;
+}
+
+.sticky #gb_menu .logo {
+  visibility: visible;
+}
+
+.sticky #gb_menu {
+  position: fixed;
+  z-index: 4;
+  top: 0px;
+  right: 0px;
+  left: 0px;
 }
 
 /* Footer */
@@ -1346,7 +1372,8 @@ select[multiple] {
 }
 
 .toolbar {
-  margin-top:-8px;
+  padding-top 5px;
+  padding-bottom: 5px;
 }
 
 .toolbar .icon {

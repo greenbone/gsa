@@ -1716,6 +1716,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div id="gb_menu" class="clearfix">
    <ul>
     <li>
+      <img class="logo" src="/img/greenbone.svg" />
       <xsl:variable name="items" xmlns="">
         <xsl:if test="gsa:may-op ('GET_TASKS')">
           <item>
@@ -2507,16 +2508,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:apply-templates/>
     </xsl:when>
     <xsl:otherwise>
-      <xsl:call-template name="html-gsa-logo">
-        <xsl:with-param name="username">
-          <xsl:value-of select="login/text()"/>
-        </xsl:with-param>
-        <xsl:with-param name="time">
-          <xsl:value-of select="time"/>
-        </xsl:with-param>
-      </xsl:call-template>
-      <xsl:call-template name="html-gsa-navigation"/>
-      <xsl:apply-templates select="/envelope/params/action_status"/>
+      <div class="gsa-head">
+        <xsl:call-template name="html-gsa-logo">
+          <xsl:with-param name="username">
+            <xsl:value-of select="login/text()"/>
+          </xsl:with-param>
+          <xsl:with-param name="time">
+            <xsl:value-of select="time"/>
+          </xsl:with-param>
+        </xsl:call-template>
+        <xsl:call-template name="html-gsa-navigation"/>
+        <xsl:apply-templates select="/envelope/params/action_status"/>
+      </div>
       <div class="gsa-main">
         <xsl:apply-templates/>
       </div>

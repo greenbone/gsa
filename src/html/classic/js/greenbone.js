@@ -1163,6 +1163,14 @@
     // generic widget pimping
     on_ready(document);
 
+    $(window).on('scroll', function() {
+      var h_height = $('#gb_header').height();
+      var scroll = $(window).scrollTop();
+      $('.gsa-head').toggleClass('sticky', scroll > h_height);
+    });
+
+    $(window).trigger('scroll');
+
     // autorefresh
     start_auto_refresh();
   });
