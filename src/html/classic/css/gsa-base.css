@@ -362,6 +362,10 @@ input::-moz-focus-inner {
 
 
 /* formulars */
+.form-inline {
+  display: inline-block;
+}
+
 .form-inline .form-group {
   display: inline-block;
   margin-bottom: 0;
