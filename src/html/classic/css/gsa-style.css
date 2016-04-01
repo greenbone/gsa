@@ -832,6 +832,10 @@ select[multiple] {
   padding: 4px;
 }
 
+.note_box_box .icon {
+  margin-right: 3px;
+}
+
 .note_top_line {
   background: #ffff90;
   border:1px solid #CCCCCC;

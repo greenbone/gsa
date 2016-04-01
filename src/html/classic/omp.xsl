@@ -29005,15 +29005,15 @@ should not have received it.
       </xsl:choose>
     </div>
     <xsl:if test="$note-buttons = 1">
-      <div class="pull-right" style="text-align:right;">
+      <div class="pull-right">
         <xsl:choose>
           <xsl:when test="not (gsa:may ('delete_note'))">
             <img src="/img/trashcan_inactive.png" alt="{gsa:i18n ('Move to Trashcan', 'Action Verb')}"
                  title="{gsa:i18n ('Permission to move Note to trashcan denied', 'Note')}"
-                 style="margin-left:3px;"/>
+                 class="icon"/>
           </xsl:when>
           <xsl:when test="gsa:may ('delete_note') and writable != '0' and in_use = '0'">
-            <div style="display: inline">
+            <div class="form-inline">
               <xsl:call-template name="trashcan-icon">
                 <xsl:with-param name="type" select="'note'"/>
                 <xsl:with-param name="id" select="@id"/>
@@ -29088,77 +29088,71 @@ should not have received it.
           <xsl:otherwise>
             <img src="/img/trashcan_inactive.png" alt="{gsa:i18n ('Move to Trashcan', 'Action Verb')}"
                  title="{gsa:i18n ('Note cannot be moved to trashcan', 'Note')}"
-                 style="margin-left:3px;"/>
+                 class="icon"/>
           </xsl:otherwise>
         </xsl:choose>
         <a href="/omp?cmd=get_note&amp;note_id={@id}&amp;token={/envelope/token}"
-           title="{gsa:i18n ('Note Details', 'Note')}" style="margin-left:3px;">
+           title="{gsa:i18n ('Note Details', 'Note')}" class="icon">
           <img src="/img/details.png" alt="{gsa:i18n ('Details', 'Generic Resource')}"/>
         </a>
         <xsl:choose>
           <xsl:when test="not (gsa:may ('modify_note'))">
             <img src="/img/edit_inactive.png" alt="{gsa:i18n ('Edit', 'Action Verb')}"
                  title="{gsa:i18n ('Permission to edit Note denied', 'Note')}"
-                 style="margin-left:3px;"/>
+                 class="icon"/>
           </xsl:when>
           <xsl:when test="not (gsa:may ('modify_note')) or writable = '0' or in_use != '0'">
             <img src="/img/edit_inactive.png" alt="{gsa:i18n ('Edit', 'Action Verb')}"
                  title="{gsa:i18n ('Note is not writable', 'Note')}"
-                 style="margin-left:3px;"/>
+                 class="icon"/>
           </xsl:when>
           <xsl:when test="$next='get_result' and $delta = 1">
             <a href="/omp?cmd=edit_note&amp;note_id={@id}&amp;next=get_report&amp;result_id={../../@id}&amp;task_id={../../../../task/@id}&amp;name={../../../../task/name}&amp;report_id={../../../../../report/@id}&amp;overrides={../../../../filters/apply_overrides}&amp;delta_report_id={../../../../delta/report/@id}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
                title="{gsa:i18n ('Edit Note', 'Note')}"
-               class="edit-action-icon" data-type="note" data-id="{@id}"
-               style="margin-left:3px;">
+               class="edit-action-icon icon" data-type="note" data-id="{@id}">
               <img src="/img/edit.png" alt="{gsa:i18n ('Edit', 'Action Verb')}"/>
             </a>
           </xsl:when>
           <xsl:when test="$next='get_result' and $delta = 2">
             <a href="/omp?cmd=edit_note&amp;note_id={@id}&amp;next=get_report&amp;result_id={../../../@id}&amp;task_id={../../../../../task/@id}&amp;name={../../../../../task/name}&amp;report_id={../../../../../@id}&amp;overrides={../../../../../filters/apply_overrides}&amp;delta_report_id={../../../../../delta/report/@id}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
                title="{gsa:i18n ('Edit Note', 'Note')}"
-               class="edit-action-icon" data-type="note" data-id="{@id}"
-               style="margin-left:3px;">
+               class="edit-action-icon icon" data-type="note" data-id="{@id}">
               <img src="/img/edit.png" alt="{gsa:i18n ('Edit', 'Action Verb')}"/>
             </a>
           </xsl:when>
           <xsl:when test="$next='get_result'">
             <a href="/omp?cmd=edit_note&amp;note_id={@id}&amp;next=get_result&amp;result_id={../../@id}&amp;task_id={../../../../../../task/@id}&amp;name={../../../../../../task/name}&amp;report_id={../../../../../../report/@id}&amp;overrides={/envelope/params/overrides}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
                title="{gsa:i18n ('Edit Note', 'Note')}"
-               class="edit-action-icon" data-type="note" data-id="{@id}"
-               style="margin-left:3px;">
+               class="edit-action-icon icon" data-type="note" data-id="{@id}">
               <img src="/img/edit.png" alt="{gsa:i18n ('Edit', 'Action Verb')}"/>
             </a>
           </xsl:when>
           <xsl:when test="$delta = 1">
             <a href="/omp?cmd=edit_note&amp;a=a&amp;note_id={@id}&amp;next=get_report&amp;report_id={../../../../../@id}&amp;overrides={../../../../filters/apply_overrides}&amp;delta_report_id={../../../../delta/report/@id}&amp;autofp={/envelope/params/autofp}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;report_result_id={../../@id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
                title="{gsa:i18n ('Edit Note', 'Note')}"
-               class="edit-action-icon" data-type="note" data-id="{@id}"
-               style="margin-left:3px;">
+               class="edit-action-icon icon" data-type="note" data-id="{@id}">
               <img src="/img/edit.png" alt="{gsa:i18n ('Edit', 'Action Verb')}"/>
             </a>
           </xsl:when>
           <xsl:when test="$delta = 2">
             <a href="/omp?cmd=edit_note&amp;a=a&amp;note_id={@id}&amp;next=get_report&amp;report_id={../../../../../@id}&amp;overrides={../../../../../filters/apply_overrides}&amp;delta_report_id={../../../../../delta/report/@id}&amp;delta_states={../../../../../filters/delta/text()}&amp;autofp={../../../../../../filters/autofp}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;report_result_id={../../@id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
                title="{gsa:i18n ('Edit Note', 'Note')}"
-               class="edit-action-icon" data-type="note" data-id="{@id}"
-               style="margin-left:3px;">
+               class="edit-action-icon icon" data-type="note" data-id="{@id}">
               <img src="/img/edit.png" alt="{gsa:i18n ('Edit', 'Action Verb')}"/>
             </a>
           </xsl:when>
           <xsl:otherwise>
             <a href="/omp?cmd=edit_note&amp;note_id={@id}&amp;next=get_report&amp;report_id={../../../../@id}&amp;result_id={../../@id}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;overrides={../../../../filters/apply_overrides}&amp;report_result_id={../../@id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
                title="{gsa:i18n ('Edit Note', 'Note')}"
-               class="edit-action-icon" data-type="note" data-id="{@id}"
-               style="margin-left:3px;">
+               class="edit-action-icon icon" data-type="note" data-id="{@id}">
               <img src="/img/edit.png" alt="{gsa:i18n ('Edit', 'Action Verb')}"/>
             </a>
           </xsl:otherwise>
         </xsl:choose>
         <xsl:choose>
           <xsl:when test="gsa:may-clone ('note')">
-            <div style="display: inline">
-              <form style="display: inline; font-size: 0px; margin-left: 3px" action="/omp#notes-{../../@id}" method="post" enctype="multipart/form-data">
+            <div class="form-inline">
+              <form action="/omp#notes-{../../@id}" method="post" enctype="multipart/form-data">
                 <input type="hidden" name="token" value="{/envelope/token}"/>
                 <input type="hidden" name="caller" value="{/envelope/current_page}"/>
                 <input type="hidden" name="cmd" value="clone"/>
@@ -29171,7 +29165,8 @@ should not have received it.
                 <input type="hidden" name="overrides" value="{/envelope/params/overrides}"/>
                 <input type="hidden" name="details" value="{/envelope/params/details}"/>
                 <input type="image" src="/img/clone.png" alt="Clone Note"
-                      name="Clone" value="Clone" title="{gsa:i18n ('Clone', 'Action Verb')}"/>
+                  class="icon"
+                  name="Clone" value="Clone" title="{gsa:i18n ('Clone', 'Action Verb')}"/>
 
                 <xsl:choose>
                   <xsl:when test="$next='get_result'">
@@ -29231,12 +29226,12 @@ should not have received it.
                 alt="{gsa:i18n ('Clone', 'Action Verb')}"
                 value="Clone"
                 title="{gsa:i18n ('Permission to clone denied', 'Action Message')}"
-                style="margin-left:3px;"/>
+                class="icon"/>
           </xsl:otherwise>
         </xsl:choose>
         <a href="/omp?cmd=export_note&amp;note_id={@id}&amp;token={/envelope/token}"
            title="{gsa:i18n ('Export Note', 'Note')}"
-           style="margin-left:3px;">
+           class="icon">
           <img src="/img/download.png" alt="{gsa:i18n ('Export', 'Action Verb')}"/>
         </a>
       </div>
