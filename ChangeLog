@@ -1,5 +1,10 @@
 2016-04-01  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/css/gsa-style.css: Adjust the size of our dynamic select
+	elements. They should use the same height as text inputs (22 pixels).
+
+2016-04-01  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/css/gsa-base.css: Add default styles for form elements
 	inspired by bootstrap 3 css framework. With this change we have two different
 	kind of forms that can by sized with the col-* based layout: horizontal and

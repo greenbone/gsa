@@ -712,7 +712,7 @@ a.top_button:hover div.first_button_overlay {
 }
 
 .select2-container--default .select2-selection--single .select2-selection__rendered {
-  line-height: 18px;
+  line-height: 20px;
   font-weight: normal;
 }
 
@@ -721,7 +721,7 @@ a.top_button:hover div.first_button_overlay {
 }
 
 .select2-container--default .select2-selection--single {
-  height: 20px;
+  height: 22px;
 }
 
 .select2-selection__rendered
@@ -1397,11 +1397,6 @@ select[multiple] {
   display: inline-block;
 }
 
-.toolbar .select2-container--default .select2-selection--single {
-  /* remove after we have a common height for all input elements */
-  height: 22px;
-}
-
 .toolbar .form-group {
   white-space: nowrap;
 }
@@ -1492,6 +1487,11 @@ select[multiple] {
   min-width: 180px;
   max-width: 180px;
   width: 180px;
+}
+
+.form-horizontal .select2-container {
+  min-width: 180px;
+  padding: 1px 0; /* use same padding top and bottom as inputs */
 }
 
 /* vim: set ts=2 sw=2 tw=80:*/
