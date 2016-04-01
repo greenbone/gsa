@@ -1,5 +1,10 @@
 2016-04-01  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/omp.xsl (filter-window-part): Rework update filter dialog
+	to use new css form classes.
+
+2016-04-01  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/css/gsa-style.css: Adjust the size of our dynamic select
 	elements. They should use the same height as text inputs (22 pixels).
 
