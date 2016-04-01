@@ -1,3 +1,12 @@
+2016-04-01  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/js/gsa_bubble_chart.js (generate): Pass data object
+	to create_bubble.
+	(create_bubble): Add param "data" and add filtered list page links to
+	the bubbles.
+	(simple_bubble_data): Add new column "group_data" containing the
+	column originally used for grouping.
+
 2016-04-01  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/js/gsa_donut_chart.js,

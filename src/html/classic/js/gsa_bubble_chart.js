@@ -182,7 +182,7 @@
     this.svg.selectAll('.node')
       .data(nodes)
       .enter()
-      .call(create_bubble);
+      .call(function(selection) { return create_bubble(selection, data); });
 
     // Remove unused bubbles
     this.svg.selectAll('.node')
@@ -230,21 +230,37 @@
         controller.data_src().param('filter'));
   };
 
-  function create_bubble(selection) {
-    var new_node;
+  function create_bubble(selection, data) {
+    var new_node_a;
 
-    new_node = selection.append('g')
+    new_node_a = selection.append('g')
       .attr('class', 'node')
       .attr('transform', function(d) {
         return 'translate(' + d.x + ',' + d.y + ')';
-      });
+      })
+      .append('a');
 
-    new_node
+    new_node_a.attr('xlink:href', function(d) {
+      var group_col_info = data.column_info.columns['group_value'];
+      var url;
+
+      console.debug (data);
+
+      url = gsa.filtered_list_url (group_col_info.type,
+                                   group_col_info.column,
+                                   d['group_value'],
+                                   data.filter_info.keywords);
+
+      console.debug (url);
+      return url;
+    });
+
+    new_node_a
       .append('circle')
       .attr('r', function(d) { return d.r; })
       .style('fill', 'green');
 
-    new_node
+    new_node_a
       .append('text')
       .attr('text-anchor', 'middle')
       .attr('dominant-baseline', 'middle')
@@ -259,10 +275,12 @@
       params.y_fields[0] : 'count';
     var color_field = (params &&  params.z_fields && params.z_fields[0]) ?
       params.z_fields[0] : old_data.column_info.data_columns[0] + '_mean';
+    var group_field = 'value';
 
     var column_info = {
-      group_columns: old_data.column_info.group_columns,
-      data_columns: old_data.column_info.data_columns,
+      group_columns: ['group_value'],
+      data_columns: ['size_value', 'color_value'],
+      text_columns: ['label_value'],
       columns: {},
     };
 
@@ -290,6 +308,14 @@
       data_type: old_data.column_info.columns[color_field].data_type,
     };
 
+    column_info.columns.group_value = {
+      name: 'group_value',
+      type: old_data.column_info.columns[group_field].type,
+      column: old_data.column_info.columns[group_field].column,
+      stat: old_data.column_info.columns[group_field].stat,
+      data_type: old_data.column_info.columns[group_field].data_type,
+    };
+
     var bubble_data = [];
 
     for (var d in old_data.records) {
@@ -303,6 +329,7 @@
       else {
         new_record.color_value = null;
       }
+      new_record.group_value = old_data.records[d][group_field];
 
       bubble_data.push(new_record);
     }
