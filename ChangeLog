@@ -1,3 +1,44 @@
+2016-04-01  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/css/gsa-base.css: Add default styles for form elements
+	inspired by bootstrap 3 css framework. With this change we have two different
+	kind of forms that can by sized with the col-* based layout: horizontal and
+	inline form. Horizontal should be used for dialogs and longer forms. A "row"
+	within the horizontal form can be set by form-group css class. Within the
+	form-group a control-label can be used to highlight description of a form
+	entry. If an element e.g. an input text field should use the full width of its
+	container form-control can be set. Example for a horizontal form:
+
+	<form class="form-horizontal">
+		<div class="form-group">
+			<label class="col-2 control-label">My Label</label>
+			<div class="col-10">
+				<input type="text" class=form-control"/>
+			</div>
+		</div>
+		<div class="form-group">
+		...
+		</div>
+	</form>
+
+	An inline form can be used to put several form elements like text inputs in
+	one row e.g. for quick filters in a menu. In inline forms form groups will be
+	displayed as inline-blocks. Example:
+
+	<form class="form-inline">
+		<div class="form-group">
+			<label class="control-label">My Label</label>
+			<input type="text" class=form-control"/>
+		</div>
+		<div class="form-group">
+		...
+		</div>
+		<input type="submit" class="button"/>
+	</form>
+
+	For a more detailed explanation please take a look at
+	https://getbootstrap.com/css/#forms
+
 2016-04-01  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/js/gsa_donut_chart.js (generate): Make the slices

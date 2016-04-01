@@ -104,6 +104,87 @@ p {
 }
 
 
+/* input elements */
+
+label {
+  display: inline-block;
+  max-width: 100%;
+  margin-bottom: 5px;
+}
+
+input[type="radio"],
+input[type="checkbox"] {
+  padding: 0;
+  margin: 0px;
+  line-height: normal;
+}
+
+.radio,
+.checkbox {
+  position: relative;
+  display: block;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.radio label,
+.checkbox label {
+  padding-left: 20px;
+  min-height: 20px;
+  margin-bottom: 0;
+  font-weight: normal;
+  cursor: pointer;
+}
+
+.radio input[type="radio"],
+.radio-inline input[type="radio"],
+.checkbox input[type="checkbox"],
+.checkbox-inline input[type="checkbox"] {
+  position: absolute;
+  margin-left: -20px;
+}
+
+.radio + .radio,
+.checkbox + .checkbox {
+  margin-top: -5px;
+}
+
+.radio-inline,
+.checkbox-inline {
+  position: relative;
+  display: inline-block;
+  padding-left: 20px;
+  margin-bottom: 0;
+  vertical-align: middle;
+  font-weight: normal;
+  cursor: pointer;
+}
+
+.radio-inline + .radio-inline,
+.checkbox-inline + .checkbox-inline {
+  margin-top: 0;
+  margin-left: 10px;
+}
+
+.radio-inline.disabled,
+.checkbox-inline.disabled,
+input[type="radio"][disabled],
+input[type="checkbox"][disabled],
+input[type="radio"].disabled,
+input[type="checkbox"].disabled,
+fieldset[disabled] input[type="radio"],
+fieldset[disabled] input[type="checkbox"] {
+  cursor: not-allowed;
+}
+
+.radio.disabled label,
+.checkbox.disabled label,
+fieldset[disabled] .radio label,
+fieldset[disabled] .checkbox label {
+  cursor: not-allowed;
+}
+
+
 /* generic css classes */
 
 .pull-right {
@@ -372,7 +453,8 @@ input::-moz-focus-inner {
   vertical-align: middle;
 }
 
-.form-inline .form-control {
+.form-inline .form-control,
+.form-item .form-control {
   display: inline-block;
   width: auto;
   vertical-align: middle;
@@ -383,11 +465,12 @@ input::-moz-focus-inner {
 }
 
 .form-horizontal .control-label {
-  padding-top: 7px;
+  padding-top: 5px;
   margin-bottom: 0;
   display: inline-block;
   max-width: 100%;
-  font-weight: 700;
+  font-weight: bold;
+  text-align: right;
 }
 
 .form-control {
@@ -399,6 +482,32 @@ input::-moz-focus-inner {
   background-image: none;
   border: 1px solid #ccc;
   border-radius: 4px;
+  padding: 1px 8px;
+}
+
+.form-horizontal .radio,
+.form-horizontal .checkbox,
+.form-horizontal .radio-inline,
+.form-horizontal .checkbox-inline {
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-top: 5px;
+}
+
+.form-item {
+  display: inline-block;
+  width: auto;
+}
+
+.form-item + .form-item {
+  margin-left: 10px;
+}
+
+.form-item .radio,
+.form-item .checkbox,
+.form-item .radio-inline,
+.form-item .checkbox-inline {
+  padding-top: 0;
 }
 
 /* vim: set ts=2 sw=2 tw=80: */
