@@ -2597,15 +2597,14 @@
     filter_info.keywords = {};
 
     keyword_elems = xml_data.selectAll('filters keywords keyword');
-    keyword_elems.each (function () {
+    keyword_elems.each(function() {
       var elem = d3.select(this);
       var column = elem.select('column').text();
-      filter_info.keywords[column]
-        = {
-            'column' : column,
-            'relation' : elem.select('relation').text(),
-            'value' : elem.select('value').text()
-          };
+      filter_info.keywords[column] = {
+        column: column,
+        relation: elem.select('relation').text(),
+        value: elem.select('value').text(),
+      };
     });
 
     return filter_info;
@@ -3043,10 +3042,9 @@
       text_columns: old_data.column_info.text_columns,
       columns: {}
     };
-    for (var col in old_data.column_info.columns)
-      {
-        new_column_info.columns[col] = old_data.column_info.columns[col];
-      }
+    for (var col in old_data.column_info.columns) {
+      new_column_info.columns[col] = old_data.column_info.columns[col];
+    }
 
     var new_data = {
       original_xml: old_data.original_xml,
@@ -3062,8 +3060,8 @@
       }
     }
 
-    new_column_info.columns[type_field + '~original']
-      = old_data.column_info.columns[type_field];
+    new_column_info.columns[type_field + '~original'] =
+      old_data.column_info.columns[type_field];
 
     for (var record in old_data.records) {
       var new_record = {};
@@ -3092,10 +3090,9 @@
       text_columns: old_data.column_info.text_columns,
       columns: {}
     };
-    for (var col in old_data.column_info.columns)
-      {
-        new_column_info.columns[col] = old_data.column_info.columns[col];
-      }
+    for (var col in old_data.column_info.columns) {
+      new_column_info.columns[col] = old_data.column_info.columns[col];
+    }
 
     var new_data = {
       original_xml: old_data.original_xml,
@@ -3111,8 +3108,8 @@
       }
     }
 
-    new_column_info.columns[type_field + '~original']
-      = old_data.column_info.columns[type_field];
+    new_column_info.columns[type_field + '~original'] =
+      old_data.column_info.columns[type_field];
 
     for (var record in old_data.records) {
       var new_record = {};
@@ -3180,10 +3177,9 @@
       text_columns: old_data.column_info.text_columns,
       columns: {}
     };
-    for (var col in old_data.column_info.columns)
-      {
-        new_column_info.columns[col] = old_data.column_info.columns[col];
-      }
+    for (var col in old_data.column_info.columns) {
+      new_column_info.columns[col] = old_data.column_info.columns[col];
+    }
 
     var new_data = {original_xml: old_data.original_xml,
                     records: [],
@@ -3197,8 +3193,8 @@
       }
     }
 
-    new_column_info.columns[type_field + '~original']
-      = old_data.column_info.columns[type_field];
+    new_column_info.columns[type_field + '~original'] =
+      old_data.column_info.columns[type_field];
 
     var record;
     for (record in old_data.records) {
@@ -3215,10 +3211,10 @@
     new_data.records.sort(sort_func);
 
     for (record in new_data.records) {
-      new_data.records[record][type_field + '~original']
-        = new_data.records[record][type_field]
-      new_data.records[record][type_field]
-        = new_data.records[record][type_field] + '%';
+      new_data.records[record][type_field + '~original'] =
+        new_data.records[record][type_field];
+      new_data.records[record][type_field] =
+        new_data.records[record][type_field] + '%';
     }
 
     return new_data;
@@ -3306,74 +3302,77 @@
     var get_type_plural;
 
     // Get "real" type and plural
-    if (type === 'host'
-        || type === 'os')
-      get_type = 'asset'
-    else if (type === 'allinfo'
-        || type === 'nvt'
-        || type === 'cve'
-        || type === 'cpe'
-        || type === 'ovaldef'
-        || type === 'cert_bund_adv'
-        || type === 'dfn_cert_adv')
+    if (type === 'host' || type === 'os') {
+      get_type = 'asset';
+    }
+    else if (type === 'allinfo' || type === 'nvt' || type === 'cve' ||
+        type === 'cpe' || type === 'ovaldef' || type === 'cert_bund_adv' ||
+        type === 'dfn_cert_adv') {
       get_type = 'info';
-    else
+    }
+    else {
       get_type = type;
+    }
 
     // Get plural of type for command
-    if (get_type === 'info')
+    if (get_type === 'info') {
       get_type_plural = get_type;
-    else
+    }
+    else {
       get_type_plural = get_type + 's';
+    }
 
     // Add command and (if needed) subtype
     result += ('cmd=get_' + get_type_plural);
 
-    if (get_type !== type)
+    if (get_type !== type) {
       result += ('&' + get_type + '_type=' + type);
+    }
 
     // Add basic column filter
-    if (column === 'severity')
-      {
-        switch (value) {
-          case ('High'):
-            result += '&filter=severity>' + gsa.severity_levels.max_medium;
-            break;
-          case ('Medium'):
-            result += '&filter=severity>' + gsa.severity_levels.max_low
-                        + ' and severity<' + gsa.severity_levels.min_high;
-            break;
-          case ('Low'):
-            result += '&filter=severity>' + gsa.severity_levels.max_log
-                        + ' and severity<' + gsa.severity_levels.min_medium;
-            break;
-          case ('Log'):
-            if (gsa.severity_levels.max_log === 0.0)
-              result += '&filter=severity=0';
-            else
-              result += '&filter=severity>-1'
-                          + ' and severity<' + gsa.severity_levels.min_low;
-            break;
-          case (''):
-          case ('N/A'):
-            result += '&filter=severity=""'
-        }
+    if (column === 'severity') {
+      switch (value) {
+        case ('High'):
+          result += '&filter=severity>' + gsa.severity_levels.max_medium;
+          break;
+        case ('Medium'):
+          result += '&filter=severity>' + gsa.severity_levels.max_low +
+          ' and severity<' + gsa.severity_levels.min_high;
+          break;
+        case ('Low'):
+          result += '&filter=severity>' + gsa.severity_levels.max_log +
+          ' and severity<' + gsa.severity_levels.min_medium;
+          break;
+        case ('Log'):
+          if (gsa.severity_levels.max_log === 0.0) {
+            result += '&filter=severity=0';
+          }
+          else {
+            result += '&filter=severity>-1' +
+              ' and severity<' + gsa.severity_levels.min_low;
+          }
+          break;
+        case (''):
+        case ('N/A'):
+          result += '&filter=severity=""';
       }
-    else
-      {
-        result += '&filter=' + column + '="' + value + '"';
-      }
+    }
+    else {
+      result += '&filter=' + column + '="' + value + '"';
+    }
 
     // Copy special filter keywords
     if (keywords !== undefined) {
-      if (keywords['apply_overrides'] !== undefined)
-        result += ' apply_overrides=' + keywords['apply_overrides'].value;
+      if (keywords.apply_overrides !== undefined) {
+        result += ' apply_overrides=' + keywords.apply_overrides.value;
+      }
 
-      if (keywords['autofp'] !== undefined)
-        result += ' autofp=' + keywords['autofp'].value;
-
-      if (keywords['min_qod'] !== undefined)
-        result += ' min_qod=' + keywords['min_qod'].value;
+      if (keywords.autofp !== undefined) {
+        result += ' autofp=' + keywords.autofp.value;
+      }
+      if (keywords.min_qod !== undefined) {
+        result += ' min_qod=' + keywords.min_qod.value;
+      }
     }
 
     // Add token
@@ -3381,7 +3380,7 @@
 
     return result;
   }
-  
+
   /*
   * Generic display helper functions
   */

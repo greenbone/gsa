@@ -24,7 +24,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-(function(global, window, d3, console, gsa) {
+(function(global, window, d3, console, gsa, $) {
   'use strict';
 
   gsa.register_chart_generator('donut', DonutChartGenerator);
@@ -135,15 +135,16 @@
     var ri = 1.0 / 2.0;
 
     // Function to generate link URLs
-    var generateLink = function (d, i) {
+    function generateLink(d, i) {
       var type = data.column_info.columns[self.x_field].type;
       var column = data.column_info.columns[self.x_field].column;
       var value = d.data [self.x_field + '~original'];
-      if (value === undefined)
+      if (value === undefined) {
         value = d.data [self.x_field];
+      }
 
       return gsa.filtered_list_url(type, column, value,
-                                   data.filter_info.keywords);
+          data.filter_info.keywords);
     }
 
     // Remove legend
@@ -166,8 +167,8 @@
         x = d.data[this.x_field];
       }
 
-      var legend_item = legend.insert ('a')
-      legend_item.attr ('xlink:href', generateLink (d, i));
+      var legend_item = legend.insert('a');
+      legend_item.attr('xlink:href', generateLink(d, i));
 
       legend_item.insert('rect')
         .attr('height', '15')
@@ -217,21 +218,21 @@
       .insert('a')
         .attr('class', 'slice')
         .attr('xlink:href', generateLink)
-        .each(function (d, i) {
-          var slice = d3.select (this);
+        .each(function(d, i) {
+          var slice = d3.select(this);
 
           slice.insert('path')
             .attr('class', 'slice_inner')
-            .style('shape-rendering', 'geometricPrecision')
+            .style('shape-rendering', 'geometricPrecision');
 
           slice.insert('path')
             .attr('class', 'slice_top')
-            .style('shape-rendering', 'geometricPrecision')
+            .style('shape-rendering', 'geometricPrecision');
 
           slice.insert('path')
             .attr('class', 'slice_outer')
-            .style('shape-rendering', 'geometricPrecision')
-        })
+            .style('shape-rendering', 'geometricPrecision');
+        });
 
     donut.selectAll('.slice_inner')
       .data(slices)
@@ -309,14 +310,15 @@
 
     // Sort slices so they are rendered in correct order.
     var slice_elems = donut.selectAll('.slice')[0];
-    slice_elems.sort (function (a, b) {
-        var a_BBox = a.getBBox();
-        var b_BBox = b.getBBox();
-        return (a_BBox.y + a_BBox.height) - (b_BBox.y + + b_BBox.height);
-      });
-      for (var elem in slice_elems) {
-        $(donut.node()).append(slice_elems[elem]);
-      }
+    slice_elems.sort(function(a, b) {
+      var a_BBox = a.getBBox();
+      var b_BBox = b.getBBox();
+      return (a_BBox.y + a_BBox.height) - (b_BBox.y + b_BBox.height);
+    });
+
+    for (var elem in slice_elems) {
+      $(donut.node()).append(slice_elems[elem]);
+    }
 
     donut.selectAll('.slice_label')
       .data(slices)
@@ -596,6 +598,6 @@
 
     return result.join(' ');
   }
-})(window, window, window.d3, window.console, window.gsa);
+})(window, window, window.d3, window.console, window.gsa, window.$);
 
 // vim: set ts=2 sw=2 tw=80:
