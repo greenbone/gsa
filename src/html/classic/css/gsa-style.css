@@ -826,13 +826,13 @@ select[multiple] {
   color: #787878;
 }
 
-.note_box_box {
+.hint-box {
   background: #ffff90;
   border:1px solid #CCCCCC;
   padding: 4px;
 }
 
-.note_box_box .icon {
+.hint-box .icon {
   margin-right: 3px;
 }
 
@@ -846,12 +846,6 @@ select[multiple] {
   padding:3px;
   padding-top:0px;
   padding-bottom:0px;
-}
-
-.override_box_box {
-  background: #ffff90;
-  border:1px solid #CCCCCC;
-  padding: 4px;
 }
 
 .override_top_line {

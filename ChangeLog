@@ -1,5 +1,10 @@
 2016-04-01  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/css/gsa-style.css, src/html/classic/omp.xsl: Merge
+	override_box_box and note_box_box css class into hint-box.
+
+2016-04-01  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/omp.xsl: Return to report result details page after a note
 	or a override have been created or edited. Also use css classes instead of
 	inline styles for the icon buttons.

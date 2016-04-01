@@ -28987,7 +28987,7 @@ should not have received it.
   <xsl:param name="note-buttons">1</xsl:param>
   <xsl:param name="delta"/>
   <xsl:param name="next">get_report</xsl:param>
-  <div class="note_box_box">
+  <div class="hint-box">
     <div>
       <b><xsl:value-of select="gsa:i18n ('Note', 'Note')"/></b><xsl:if test="$delta and $delta &gt; 0"> (<xsl:value-of select="gsa:i18n ('Result', 'Result')"/> <xsl:value-of select="$delta"/>)</xsl:if>
     </div>
@@ -29250,7 +29250,7 @@ should not have received it.
   <xsl:param name="override-buttons">1</xsl:param>
   <xsl:param name="delta"/>
   <xsl:param name="next">get_report</xsl:param>
-  <div class="override_box_box">
+  <div class="hint-box">
     <b>
       <xsl:value-of select="gsa:i18n ('Override from ', 'Override')"/>
       <xsl:choose>
@@ -30194,7 +30194,7 @@ should not have received it.
     <td colspan="7" style="padding: 0">
       <!-- Tags -->
       <xsl:if test="count(user_tags/tag)">
-        <div class="note_box_box">
+        <div class="hint-box">
           <b><xsl:value-of select="gsa:i18n ('Result Tags', 'Result')"/>: </b>
           <xsl:call-template name="user_tag_list"/>
         </div>
