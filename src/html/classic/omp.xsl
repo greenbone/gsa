@@ -29793,7 +29793,7 @@ should not have received it.
         </xsl:when>
         <xsl:otherwise>
           <xsl:value-of select="gsa:i18n ('Severity', 'Severity')"/>
-          <div class="pull-right" style="display: inline">
+          <div class="pull-right form-inline">
             <form method="get" action="" enctype="multipart/form-data">
               <input type="hidden" name="token" value="{/envelope/token}"/>
               <input type="hidden" name="cmd" value="get_result"/>
@@ -30095,7 +30095,7 @@ should not have received it.
     <xsl:if test="$prognostic != 1">
       <td>
         <xsl:if test="$note-buttons = 1">
-          <div class="pull-left">
+          <div class="pull-left table-actions">
             <xsl:choose>
               <xsl:when test="delta">
               </xsl:when>
@@ -30104,28 +30104,32 @@ should not have received it.
               <xsl:when test="$result-details and string-length (original_severity)">
                 <a href="/omp?cmd=new_note&amp;next=get_result&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={task/@id}&amp;name={task/name}&amp;severity={original_severity}&amp;port={port}&amp;hosts={host/text()}&amp;report_id={report/@id}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
                    title="{gsa:i18n ('Add Note', 'Note')}" style="margin-left:3px;"
-                   class="new-action-icon" data-type="note" data-extra="result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={task/@id}&amp;severity={original_severity}&amp;port={port}&amp;hosts={host/text()}&amp;name={task/name}">
+                   data-reload="window"
+                   class="new-action-icon icon" data-type="note" data-extra="result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={task/@id}&amp;severity={original_severity}&amp;port={port}&amp;hosts={host/text()}&amp;name={task/name}">
                   <img src="/img/new_note.png" alt="{gsa:i18n ('Add Note', 'Note')}"/>
                 </a>
               </xsl:when>
               <xsl:when test="$result-details">
                 <a href="/omp?cmd=new_note&amp;next=get_result&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={task/@id}&amp;name={task/name}&amp;severity={severity}&amp;port={port}&amp;hosts={host/text()}&amp;report_id={report/@id}&amp;overrides={filters/apply_overrides}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
-                   title="{gsa:i18n ('Add Note', 'Note')}" style="margin-left:3px;"
-                   class="new-action-icon" data-type="note" data-extra="result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={task/@id}&amp;severity={severity}&amp;port={port}&amp;hosts={host/text()}&amp;name={task/name}">
+                   title="{gsa:i18n ('Add Note', 'Note')}"
+                   data-reload="window"
+                   class="new-action-icon icon" data-type="note" data-extra="result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={task/@id}&amp;severity={severity}&amp;port={port}&amp;hosts={host/text()}&amp;name={task/name}">
                   <img src="/img/new_note.png" alt="{gsa:i18n ('Add Note', 'Note')}"/>
                 </a>
               </xsl:when>
               <xsl:when test="string-length (original_severity)">
                 <a href="/omp?cmd=new_note&amp;next=get_report&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../@id}&amp;severity={original_severity}&amp;port={port}&amp;hosts={host/text()}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
-                   title="{gsa:i18n ('Add Note', 'Note')}" style="margin-left:3px;"
-                   class="new-action-icon" data-type="note" data-extra="result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;severity={original_severity}&amp;port={port}&amp;hosts={host/text()}&amp;name={../../task/name}">
+                   title="{gsa:i18n ('Add Note', 'Note')}"
+                   data-reload="window"
+                   class="new-action-icon icon" data-type="note" data-extra="result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;severity={original_severity}&amp;port={port}&amp;hosts={host/text()}&amp;name={../../task/name}">
                   <img src="/img/new_note.png" alt="{gsa:i18n ('Add Note', 'Note')}"/>
                 </a>
               </xsl:when>
               <xsl:otherwise>
                 <a href="/omp?cmd=new_note&amp;next=get_report&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../@id}&amp;severity={severity}&amp;port={port}&amp;hosts={host/text()}&amp;overrides={../../filters/apply_overrides}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
-                   title="{gsa:i18n ('Add Note', 'Note')}" style="margin-left:3px;"
-                   class="new-action-icon" data-type="note" data-extra="result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;severity={severity}&amp;port={port}&amp;hosts={host/text()}&amp;name={../../task/name}">
+                   title="{gsa:i18n ('Add Note', 'Note')}"
+                   data-reload="window"
+                   class="new-action-icon icon" data-type="note" data-extra="result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;severity={severity}&amp;port={port}&amp;hosts={host/text()}&amp;name={../../task/name}">
                   <img src="/img/new_note.png" alt="{gsa:i18n ('Add Note', 'Note')}"/>
                 </a>
               </xsl:otherwise>
@@ -30133,7 +30137,7 @@ should not have received it.
           </div>
         </xsl:if>
         <xsl:if test="$override-buttons = 1">
-          <div class="pull-left">
+          <div class="pull-left table-actions">
             <xsl:choose>
               <xsl:when test="delta">
               </xsl:when>
@@ -30141,29 +30145,33 @@ should not have received it.
               </xsl:when>
               <xsl:when test="$result-details and string-length (original_severity)">
                 <a href="/omp?cmd=new_override&amp;next=get_result&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={task/@id}&amp;name={task/name}&amp;severity={original_severity}&amp;port={port}&amp;hosts={host/text()}&amp;report_id={report/@id}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
-                   title="{gsa:i18n ('Add Override', 'Override')}" style="margin-left:3px;"
-                   class="new-action-icon" data-type="override" data-extra="result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={task/@id}&amp;name={task/name}&amp;severity={original_severity}&amp;port={port}&amp;hosts={host/text()}">
+                   data-reload="window"
+                   title="{gsa:i18n ('Add Override', 'Override')}"
+                   class="new-action-icon icon" data-type="override" data-extra="result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={task/@id}&amp;name={task/name}&amp;severity={original_severity}&amp;port={port}&amp;hosts={host/text()}">
                   <img src="/img/new_override.png" alt="{gsa:i18n ('Add Override', 'Override')}"/>
                 </a>
               </xsl:when>
               <xsl:when test="$result-details">
                 <a href="/omp?cmd=new_override&amp;next=get_result&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={task/@id}&amp;name={task/name}&amp;severity={severity}&amp;port={port}&amp;hosts={host/text()}&amp;report_id={report/@id}&amp;overrides={filters/apply_overrides}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
-                   title="{gsa:i18n ('Add Override', 'Override')}" style="margin-left:3px;"
-                   class="new-action-icon" data-type="override" data-extra="result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={task/@id}&amp;name={task/name}&amp;severity={severity}&amp;port={port}&amp;hosts={host/text()}">
+                   title="{gsa:i18n ('Add Override', 'Override')}"
+                   data-reload="window"
+                   class="new-action-icon icon" data-type="override" data-extra="result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={task/@id}&amp;name={task/name}&amp;severity={severity}&amp;port={port}&amp;hosts={host/text()}">
                   <img src="/img/new_override.png" alt="{gsa:i18n ('Add Override', 'Override')}"/>
                 </a>
               </xsl:when>
               <xsl:when test="string-length (original_severity)">
                 <a href="/omp?cmd=new_override&amp;next=get_report&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../@id}&amp;severity={original_severity}&amp;port={port}&amp;hosts={host/text()}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
-                   title="{gsa:i18n ('Add Override', 'Override')}" style="margin-left:3px;"
-                   class="new-action-icon" data-type="override" data-extra="result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;severity={original_severity}&amp;port={port}&amp;hosts={host/text()}">
+                   title="{gsa:i18n ('Add Override', 'Override')}"
+                   data-reload="window"
+                   class="new-action-icon icon" data-type="override" data-extra="result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;severity={original_severity}&amp;port={port}&amp;hosts={host/text()}">
                   <img src="/img/new_override.png" alt="{gsa:i18n ('Add Override', 'Override')}"/>
                 </a>
               </xsl:when>
               <xsl:otherwise>
                 <a href="/omp?cmd=new_override&amp;next=get_report&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;report_id={../../@id}&amp;severity={severity}&amp;port={port}&amp;hosts={host/text()}&amp;overrides={../../filters/apply_overrides}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
-                   title="{gsa:i18n ('Add Override', 'Override')}" style="margin-left:3px;"
-                   class="new-action-icon" data-type="override" data-extra="result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;severity={severity}&amp;port={port}&amp;hosts={host/text()}">
+                   title="{gsa:i18n ('Add Override', 'Override')}"
+                   data-reload="window"
+                   class="new-action-icon icon" data-type="override" data-extra="result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={../../task/name}&amp;severity={severity}&amp;port={port}&amp;hosts={host/text()}">
                   <img src="/img/new_override.png" alt="{gsa:i18n ('Add Override', 'Override')}"/>
                 </a>
               </xsl:otherwise>
