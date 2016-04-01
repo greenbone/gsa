@@ -1,3 +1,15 @@
+2016-04-01  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/js/gsa_donut_chart.js (generate): Make the slices
+	and legend items links to filtered list pages.
+
+	* src/html/classic/js/gsa_graphics_base.js (extract_filter_info): Also
+	extract the filter keywords.
+	(resource_type_counts, qod_type_counts, percentage_counts): Copy the
+	original values of modified columns to new columns suffixed "~original"
+	to make them available for filters.
+	(filtered_list_url): New function.
+
 2016-04-01  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/omp.xsl: Fix layout of icon buttons in report result

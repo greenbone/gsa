@@ -55,6 +55,7 @@
   gsa.severity_colors_gradient = severity_colors_gradient;
   gsa.BaseChartGenerator = BaseChartGenerator;
   gsa.fill_empty_fields = fill_empty_fields;
+  gsa.filtered_list_url = filtered_list_url;
   gsa.wrap_text = wrap_text;
 
   /*
@@ -2581,6 +2582,7 @@
   */
   function extract_filter_info(xml_data) {
     var filter_info = {};
+    var keyword_elems;
 
     filter_info.id =  xml_data.selectAll('filters').attr('id');
     filter_info.term =  xml_data.selectAll('filters term').text();
@@ -2591,6 +2593,20 @@
     else {
       filter_info.name = '';
     }
+
+    filter_info.keywords = {};
+
+    keyword_elems = xml_data.selectAll('filters keywords keyword');
+    keyword_elems.each (function () {
+      var elem = d3.select(this);
+      var column = elem.select('column').text();
+      filter_info.keywords[column]
+        = {
+            'column' : column,
+            'relation' : elem.select('relation').text(),
+            'value' : elem.select('value').text()
+          };
+    });
 
     return filter_info;
   }
@@ -3021,10 +3037,23 @@
   * Get counts by resource type, using the full type name for the x field.
   */
   function resource_type_counts(old_data, params) {
-    var new_data = {original_xml: old_data.original_xml,
-                    records: [],
-                    column_info: old_data.column_info,
-                    filter_info: old_data.filter_info};
+    var new_column_info = {
+      group_columns: old_data.column_info.group_columns,
+      data_columns: old_data.column_info.data_columns,
+      text_columns: old_data.column_info.text_columns,
+      columns: {}
+    };
+    for (var col in old_data.column_info.columns)
+      {
+        new_column_info.columns[col] = old_data.column_info.columns[col];
+      }
+
+    var new_data = {
+      original_xml: old_data.original_xml,
+      records: [],
+      column_info: new_column_info,
+      filter_info: old_data.filter_info
+    };
 
     var type_field = 'value';
     if (params) {
@@ -3033,10 +3062,14 @@
       }
     }
 
+    new_column_info.columns[type_field + '~original']
+      = old_data.column_info.columns[type_field];
+
     for (var record in old_data.records) {
       var new_record = {};
       for (var field in old_data.records[record]) {
         if (field === type_field) {
+          new_record[field + '~original'] = old_data.records[record][field];
           new_record[field] = resource_type_name_plural(
               old_data.records[record][field]);
         }
@@ -3053,10 +3086,21 @@
   * Get counts by qod type, using the full type name for the x field.
   */
   function qod_type_counts(old_data, params) {
+    var new_column_info = {
+      group_columns: old_data.column_info.group_columns,
+      data_columns: old_data.column_info.data_columns,
+      text_columns: old_data.column_info.text_columns,
+      columns: {}
+    };
+    for (var col in old_data.column_info.columns)
+      {
+        new_column_info.columns[col] = old_data.column_info.columns[col];
+      }
+
     var new_data = {
       original_xml: old_data.original_xml,
       records: [],
-      column_info: old_data.column_info,
+      column_info: new_column_info,
       filter_info: old_data.filter_info
     };
 
@@ -3067,10 +3111,14 @@
       }
     }
 
+    new_column_info.columns[type_field + '~original']
+      = old_data.column_info.columns[type_field];
+
     for (var record in old_data.records) {
       var new_record = {};
       for (var field in old_data.records[record]) {
         if (field === type_field) {
+          new_record[field + '~original'] = old_data.records[record][field];
           switch (old_data.records[record][field]) {
             case (''):
               new_record[field] = gsa._('None');
@@ -3126,9 +3174,20 @@
   * Get counts by qod type, using the full type name for the x field.
   */
   function percentage_counts(old_data, params) {
+    var new_column_info = {
+      group_columns: old_data.column_info.group_columns,
+      data_columns: old_data.column_info.data_columns,
+      text_columns: old_data.column_info.text_columns,
+      columns: {}
+    };
+    for (var col in old_data.column_info.columns)
+      {
+        new_column_info.columns[col] = old_data.column_info.columns[col];
+      }
+
     var new_data = {original_xml: old_data.original_xml,
                     records: [],
-                    column_info: old_data.column_info,
+                    column_info: new_column_info,
                     filter_info: old_data.filter_info};
 
     var type_field = 'value';
@@ -3137,6 +3196,9 @@
         type_field = params.type_field;
       }
     }
+
+    new_column_info.columns[type_field + '~original']
+      = old_data.column_info.columns[type_field];
 
     var record;
     for (record in old_data.records) {
@@ -3153,8 +3215,10 @@
     new_data.records.sort(sort_func);
 
     for (record in new_data.records) {
-      new_data.records[record][type_field] =
-        new_data.records[record][type_field] + '%';
+      new_data.records[record][type_field + '~original']
+        = new_data.records[record][type_field]
+      new_data.records[record][type_field]
+        = new_data.records[record][type_field] + '%';
     }
 
     return new_data;
@@ -3224,6 +3288,100 @@
     return new_data;
   }
 
+  /*
+   * In-chart link generator functions
+   */
+
+  /**
+   * @summary Generates a filtered list page URL
+   *
+   * @param {string} type      Resource type or subtype
+   * @param {string} column    Column name
+   * @param {string} value     Column value
+   * @param {Object} keywords  filter_keywords from generator filter_data
+   */
+  function filtered_list_url(type, column, value, keywords) {
+    var result = '/omp?';
+    var get_type;
+    var get_type_plural;
+
+    // Get "real" type and plural
+    if (type === 'host'
+        || type === 'os')
+      get_type = 'asset'
+    else if (type === 'allinfo'
+        || type === 'nvt'
+        || type === 'cve'
+        || type === 'cpe'
+        || type === 'ovaldef'
+        || type === 'cert_bund_adv'
+        || type === 'dfn_cert_adv')
+      get_type = 'info';
+    else
+      get_type = type;
+
+    // Get plural of type for command
+    if (get_type === 'info')
+      get_type_plural = get_type;
+    else
+      get_type_plural = get_type + 's';
+
+    // Add command and (if needed) subtype
+    result += ('cmd=get_' + get_type_plural);
+
+    if (get_type !== type)
+      result += ('&' + get_type + '_type=' + type);
+
+    // Add basic column filter
+    if (column === 'severity')
+      {
+        switch (value) {
+          case ('High'):
+            result += '&filter=severity>' + gsa.severity_levels.max_medium;
+            break;
+          case ('Medium'):
+            result += '&filter=severity>' + gsa.severity_levels.max_low
+                        + ' and severity<' + gsa.severity_levels.min_high;
+            break;
+          case ('Low'):
+            result += '&filter=severity>' + gsa.severity_levels.max_log
+                        + ' and severity<' + gsa.severity_levels.min_medium;
+            break;
+          case ('Log'):
+            if (gsa.severity_levels.max_log === 0.0)
+              result += '&filter=severity=0';
+            else
+              result += '&filter=severity>-1'
+                          + ' and severity<' + gsa.severity_levels.min_low;
+            break;
+          case (''):
+          case ('N/A'):
+            result += '&filter=severity=""'
+        }
+      }
+    else
+      {
+        result += '&filter=' + column + '="' + value + '"';
+      }
+
+    // Copy special filter keywords
+    if (keywords !== undefined) {
+      if (keywords['apply_overrides'] !== undefined)
+        result += ' apply_overrides=' + keywords['apply_overrides'].value;
+
+      if (keywords['autofp'] !== undefined)
+        result += ' autofp=' + keywords['autofp'].value;
+
+      if (keywords['min_qod'] !== undefined)
+        result += ' min_qod=' + keywords['min_qod'].value;
+    }
+
+    // Add token
+    result += '&token=' + gsa.gsa_token;
+
+    return result;
+  }
+  
   /*
   * Generic display helper functions
   */

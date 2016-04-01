@@ -134,6 +134,18 @@
     var ry = Math.min(height / 2, width / 2) - h / 2;
     var ri = 1.0 / 2.0;
 
+    // Function to generate link URLs
+    var generateLink = function (d, i) {
+      var type = data.column_info.columns[self.x_field].type;
+      var column = data.column_info.columns[self.x_field].column;
+      var value = d.data [self.x_field + '~original'];
+      if (value === undefined)
+        value = d.data [self.x_field];
+
+      return gsa.filtered_list_url(type, column, value,
+                                   data.filter_info.keywords);
+    }
+
     // Remove legend
     this.svg.selectAll('.legend')
       .remove();
@@ -154,7 +166,10 @@
         x = d.data[this.x_field];
       }
 
-      legend.insert('rect')
+      var legend_item = legend.insert ('a')
+      legend_item.attr ('xlink:href', generateLink (d, i));
+
+      legend_item.insert('rect')
         .attr('height', '15')
         .attr('width', '15')
         .attr('x', 0.5)
@@ -167,7 +182,7 @@
             x + ': ' + (100 * d.data[this.y_field] / y_sum).toFixed(1) +
             '% (' + d.data[this.y_field] + ')');
 
-      var new_text = legend.insert('text')
+      var new_text = legend_item.insert('text')
         .attr('x', 22)
         .attr('y', legend_y + 12)
         .style('font-size', '12px')
@@ -196,12 +211,30 @@
       .attr('transform',
           'translate(' + cx + ',' + cy + ')');
 
-    donut.selectAll('.slice_inner')
+    donut.selectAll('.slice')
       .data(slices)
       .enter()
-      .insert('path')
-      .attr('class', 'slice_inner')
-      .style('shape-rendering', 'geometricPrecision')
+      .insert('a')
+        .attr('class', 'slice')
+        .attr('xlink:href', generateLink)
+        .each(function (d, i) {
+          var slice = d3.select (this);
+
+          slice.insert('path')
+            .attr('class', 'slice_inner')
+            .style('shape-rendering', 'geometricPrecision')
+
+          slice.insert('path')
+            .attr('class', 'slice_top')
+            .style('shape-rendering', 'geometricPrecision')
+
+          slice.insert('path')
+            .attr('class', 'slice_outer')
+            .style('shape-rendering', 'geometricPrecision')
+        })
+
+    donut.selectAll('.slice_inner')
+      .data(slices)
       //                  .attr ('stroke', 'black')
       //                  .attr ('stroke-width', '0.25')
       .attr('d', function(d, i) {
@@ -224,10 +257,6 @@
 
     donut.selectAll('.slice_top')
       .data(slices)
-      .enter()
-      .insert('path')
-      .attr('class', 'slice_top')
-      .style('shape-rendering', 'geometricPrecision')
       //                  .attr ('stroke', 'black')
       //                  .attr ('stroke-width', '0.25')
       .attr('d', function(d, i) {
@@ -258,10 +287,6 @@
 
     donut.selectAll('.slice_outer')
       .data(slices)
-      .enter()
-      .insert('path')
-      .attr('class', 'slice_outer')
-      .style('shape-rendering', 'geometricPrecision')
       //                  .attr ('stroke', 'black')
       //                 .attr ('stroke-width', '0.25')
       .attr('d', function(d, i) {
@@ -282,41 +307,54 @@
           '% (' + d.data[self.y_field] + ')';
       });
 
+    // Sort slices so they are rendered in correct order.
+    var slice_elems = donut.selectAll('.slice')[0];
+    slice_elems.sort (function (a, b) {
+        var a_BBox = a.getBBox();
+        var b_BBox = b.getBBox();
+        return (a_BBox.y + a_BBox.height) - (b_BBox.y + + b_BBox.height);
+      });
+      for (var elem in slice_elems) {
+        $(donut.node()).append(slice_elems[elem]);
+      }
+
     donut.selectAll('.slice_label')
       .data(slices)
       .enter()
-      .insert('text')
-      .attr('class', 'slice_label')
-      .text(function(d, i) {
-        if (d.endAngle - d.startAngle >= 0.02) {
-          return d.data[self.y_field];
-        }
-        else {
-          return '';
-        }
-      })
-      .attr('x', function(d, i) {
-        return Math.sin((d.startAngle + d.endAngle) / 2) * rx *
-          ((1 + ri) / 2);
-      })
-      .attr('y', function(d, i) {
-        return -Math.cos((d.startAngle + d.endAngle) / 2) * ry *
-          ((1 + ri) / 2);
-      })
-      .attr('text-anchor', 'middle')
-      .style('font-weight', 'bold')
-      .style('font-size', '7pt')
-      .attr('title', function(d, i) {
-        var x;
-        if (d.data[self.x_field + '~long']) {
-          x = d.data[self.x_field + '~long'];
-        }
-        else {
-          x = d.data[self.x_field];
-        }
-        return x + ': ' + (100 * d.data[self.y_field] / y_sum).toFixed(1) +
-          '% (' + d.data[self.y_field] + ')';
-      });
+      .insert('a')
+        .attr('xlink:href', generateLink)
+        .insert('text')
+        .attr('class', 'slice_label')
+        .text(function(d, i) {
+          if (d.endAngle - d.startAngle >= 0.02) {
+            return d.data[self.y_field];
+          }
+          else {
+            return '';
+          }
+        })
+        .attr('x', function(d, i) {
+          return Math.sin((d.startAngle + d.endAngle) / 2) * rx *
+            ((1 + ri) / 2);
+        })
+        .attr('y', function(d, i) {
+          return -Math.cos((d.startAngle + d.endAngle) / 2) * ry *
+            ((1 + ri) / 2);
+        })
+        .attr('text-anchor', 'middle')
+        .style('font-weight', 'bold')
+        .style('font-size', '7pt')
+        .attr('title', function(d, i) {
+          var x;
+          if (d.data[self.x_field + '~long']) {
+            x = d.data[self.x_field + '~long'];
+          }
+          else {
+            x = d.data[self.x_field];
+          }
+          return x + ': ' + (100 * d.data[self.y_field] / y_sum).toFixed(1) +
+            '% (' + d.data[self.y_field] + ')';
+        });
 
     // In case of missing data, draw a transparent grey donut
     if (slices.length === 0) {
