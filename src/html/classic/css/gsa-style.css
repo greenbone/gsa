@@ -1494,4 +1494,9 @@ select[multiple] {
   padding: 1px 0; /* use same padding top and bottom as inputs */
 }
 
+.form-horizontal .select2-container .select2-selection--multiple {
+  min-width: 300px;
+  padding-bottom: 5px;
+}
+
 /* vim: set ts=2 sw=2 tw=80:*/
