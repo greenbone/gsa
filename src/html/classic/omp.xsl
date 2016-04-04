@@ -1667,6 +1667,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <div class="col-4">
             <input type="number" name="{$first_param_name}" size="5"
               class="form-control"
+              min="0"
               value="{filters/keywords/keyword[column='first']/value}"
               maxlength="400"/>
           </div>
@@ -1684,8 +1685,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:value-of select="gsa:i18n ('Results per page', 'Filter')"/>:
           </label>
           <div class="col-4">
-            <input type="number" name="{$max_param_name}" size="5"
+            <input name="{$max_param_name}" size="5"
               class="form-control"
+              min="1"
+              type="number"
               value="{filters/keywords/keyword[column='rows']/value}"
               maxlength="400"/>
           </div>
