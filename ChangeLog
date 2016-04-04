@@ -1,5 +1,10 @@
 2016-04-04  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/omp.xsl: Change label from Password to New Password when
+	changing a users password in the edit user dialog.
+
+2016-04-04  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/omp.xsl: Pre select current authentication mode when
 	editing a user.
 

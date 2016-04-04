@@ -35540,7 +35540,7 @@ should not have received it.
               <div class="form-item radio">
                 <label>
                   <input type="radio" name="modify_password" value="1"/>
-                  <xsl:value-of select="concat (gsa:i18n ('Password', 'Auth Data'), ': ')"/>
+                  <xsl:value-of select="concat (gsa:i18n ('New Password', 'Auth Data'), ': ')"/>
                 </label>
               </div>
               <div class="form-item">
