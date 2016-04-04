@@ -3424,12 +3424,29 @@
               criteria_addition += 'severity=0';
             }
             else {
-              add_criteria += 'severity>-1 and severity<' + gsa.severity_levels.min_low;
+              criteria_addition += ('severity>-1 and severity<'
+                                    + gsa.severity_levels.min_low);
             }
             break;
           case (''):
           case ('N/A'):
             criteria_addition += 'severity=""';
+            break;
+          case ('0'):
+            criteria_addition += 'severity=0';
+            break;
+          default:
+            var severity = parseFloat(value);
+            if (severity.isNaN) {
+              criteria_addition += ('severity=' + value);
+            } else if (severity >= 10.0) {
+              criteria_addition += 'severity>9.0';
+            } else {
+              criteria_addition += ('severity>'
+                                    + (severity - 1.0).toFixed(1)
+                                    + ' and severity<'
+                                    + (severity + 0.1).toFixed(1));
+            }
         }
       }
       else {

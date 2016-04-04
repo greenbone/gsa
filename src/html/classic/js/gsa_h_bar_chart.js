@@ -265,20 +265,35 @@
       .attr('x', width / 2)
       .attr('y', height / 2);
 
+    // Function to generate link URLs
+    function generateLink(d, i) {
+      var column = data.column_info.columns.value.column;
+      var type = data.column_info.columns.value.type;
+      var value = d.value;
+
+      if (column === 'uuid') {
+        return gsa.details_page_url(type, value, data.filter_info);
+      } else {
+        return gsa.filtered_list_url(type, column, value, data.filter_info);
+      }
+    }
+
     // Add new bars
     this.svg.selectAll('.bar')
-      .data(records)
-      .enter().insert('rect', '.x.axis')
-      .attr('class', 'bar')
-      .attr('x', this.y_scale(0))
-      .attr('y', function(d) { return self.x_scale(d[self.x_field]); })
-      .attr('width', 0)
-      .attr('height', function(d) { return self.x_scale.rangeBand(); })
-      .on('mouseover', this.tip.show)
-      .on('mouseout', this.tip.hide);
+      .data(records).enter().insert('a')
+        .attr('class', 'bar')
+        .attr('xlink:href', generateLink)
+        .insert('rect', '.x.axis')
+          .attr('class', 'bar')
+          .attr('x', this.y_scale(0))
+          .attr('y', function(d) { return self.x_scale(d[self.x_field]); })
+          .attr('width', 0)
+          .attr('height', function(d) { return self.x_scale.rangeBand(); })
+          .on('mouseover', this.tip.show)
+          .on('mouseout', this.tip.hide);
 
     // Update bar heights and x axis
-    this.svg.selectAll('.bar')
+    this.svg.selectAll('.bar rect')
       .data(records)
       .transition().delay(0).duration(250).ease('sin-in-out')
       .attr('y', function(d) { return self.x_scale(d[self.x_field]); })
@@ -292,7 +307,7 @@
       .call(this.x_axis);
 
     // Update widths and size axis
-    this.svg.selectAll('.bar')
+    this.svg.selectAll('.bar rect')
       .data(records)
       .transition().delay(500).duration(250).ease('sin-in-out')
       .attr('width', function(d) { return self.y_scale(d[self.y_field]); })
@@ -307,7 +322,7 @@
       .call(this.y_axis);
 
     // Fade out and remove unused bars
-    this.svg.selectAll('.bar')
+    this.svg.selectAll('.bar rect')
       .data(records)
       .exit()
       .transition().delay(0).duration(250).ease('sin-in-out')

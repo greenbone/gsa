@@ -34,6 +34,7 @@
     var new_data = {
       records: [],
       column_info: old_data.column_info,
+      filter_info: old_data.filter_info,
     };
 
     for (var i in old_data.records) {
@@ -248,6 +249,15 @@
       .attr('x', width / 2)
       .attr('y', height / 2);
 
+    // Function to generate link URLs
+    function generateLink(d, i) {
+      var type = data.column_info.columns.id.type;
+      var column = data.column_info.columns.id.column;
+      var value = d.id;
+
+      return gsa.details_page_url(type, value, data.filter_info);
+    }
+
     // Update chart
     this.y_axis_elem.attr('transform',
       'translate (' + 0 + ',' + height + ')');
@@ -259,7 +269,9 @@
       .data(display_records)
       .enter()
       .insert('g')
-      .attr('class', 'bar-group');
+      .attr('class', 'bar-group')
+      .insert('a')
+        .attr('xlink:href', generateLink);
 
     this.svg.selectAll('.bar-label-shadow')
       .data(display_records)
@@ -288,6 +300,9 @@
         return 'translate(' + 0 + ',' + (height - self.x_scale(
                 d[self.x_field]) - self.x_scale.rangeBand()) + ')';
       })
+
+    this.svg.selectAll('.bar-group a')
+      .data(display_records)
       .each(function(d, i) {
         var sel = d3.select(this);
         var r_start = Date.parse(d.schedule_next_time.substr(0, 19) +
