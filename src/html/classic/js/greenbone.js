@@ -1134,6 +1134,8 @@
       });
     });
 
+    doc.find('input[type=number]').spinner();
+
     doc.find('select').select2();
   }
 
