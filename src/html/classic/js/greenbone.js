@@ -598,7 +598,8 @@
 
   FilterDialog.prototype.show = function() {
     var self = this;
-    var content = $('#' + this.id).clone();
+    var content = $('#' + this.id);
+
     content.show();
 
     // Update the form parameter

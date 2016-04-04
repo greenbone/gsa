@@ -1,5 +1,11 @@
 2016-04-04  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/greenbone.js (FilterDialog.prototype.show): Don't clone
+	filter dialog content. Use the original to keep all already connected event
+	handlers. Using a clone doesn't clone the event listeners.
+
+2016-04-04  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/css/jquery-ui.structure.css,
 	src/html/classic/css/jquery-ui.structure.min.css: Update jquery-ui.structure
 	css files to include all components which are also included in the jquery-ui
