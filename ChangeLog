@@ -1,5 +1,10 @@
 2016-04-04  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/omp.xsl: Pre select current authentication mode when
+	editing a user.
+
+2016-04-04  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/omp.xsl: Refactor user edit dialog to use new
 	form-horizontal css style. Now the edit user dialog has the same layout as the
 	create user dialog.

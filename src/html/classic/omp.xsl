@@ -35551,16 +35551,30 @@ should not have received it.
             <xsl:if test="//group[@name='method:ldap_connect']/auth_conf_setting[@key='enable']/@value = 'true'">
               <div class="radio">
                 <label>
-                  <input type="radio" name="modify_password" value="2"/>
-                  <xsl:value-of select="gsa:i18n ('Allow LDAP Authentication Only', 'User')"/>
+                  <xsl:choose>
+                    <xsl:when test="sources/source/text() = 'ldap_connect'">
+                      <input type="radio" name="modify_password" value="2" checked="1"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <input type="radio" name="modify_password" value="2"/>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                  <xsl:value-of select="gsa:i18n ('LDAP Authentication Only', 'User')"/>
                 </label>
               </div>
             </xsl:if>
             <xsl:if test="//group[@name='method:radius_connect']/auth_conf_setting[@key='enable']/@value = 'true'">
               <div class="radio">
                 <label>
-                  <input type="radio" name="modify_password" value="3"/>
-                  <xsl:value-of select="gsa:i18n ('Allow RADIUS Authentication Only', 'User')"/>
+                  <xsl:choose>
+                    <xsl:when test="sources/source/text() = 'radius_connect'">
+                      <input type="radio" name="modify_password" value="3" checked="1"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <input type="radio" name="modify_password" value="3"/>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                  <xsl:value-of select="gsa:i18n ('RADIUS Authentication Only', 'User')"/>
                 </label>
               </div>
             </xsl:if>
