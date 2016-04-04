@@ -35495,18 +35495,18 @@ should not have received it.
        <xsl:value-of select="gsa:i18n ('Edit User', 'User')"/>
     </div>
     <div class="content">
-      <form action="/omp" method="post" enctype="multipart/form-data">
+      <form class="form-horizontal" action="/omp" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="save_user"/>
         <input type="hidden" name="caller" value="{/envelope/current_page}"/>
         <input type="hidden" name="next" value="{/envelope/params/next}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
         <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
-        <table class="table-form">
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('Login Name', 'Auth Data')"/></td>
-            <td>
-              <input type="hidden" name="user_id" value="{@id}"/>
+        <div class="form-group">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Login Name', 'Auth Data')"/></label>
+          <div class="col-10">
+            <input type="hidden" name="user_id" value="{@id}"/>
+            <div>
               <xsl:choose>
                 <xsl:when test="name=/envelope/login/text()">
                   <xsl:value-of select="name"/>
@@ -35514,87 +35514,104 @@ should not have received it.
                 </xsl:when>
                 <xsl:otherwise>
                   <input type="text" name="login" value="{gsa:param-or ('login', name)}"
-                         size="30" maxlength="80"/>
+                    size="30" maxlength="80"
+                    class="form-control"/>
                 </xsl:otherwise>
               </xsl:choose>
-            </td>
-          </tr>
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('Authentication', 'Auth Data')"/></td>
-            <td>
-              <xsl:choose>
-                <xsl:when test="sources/source/text() = 'ldap_connect'"></xsl:when>
-                <xsl:when test="sources/source/text() = 'radius_connect'"></xsl:when>
-                <xsl:otherwise>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Authentication', 'Auth Data')"/></label>
+          <div class="col-10">
+            <xsl:choose>
+              <xsl:when test="sources/source/text() = 'ldap_connect'"></xsl:when>
+              <xsl:when test="sources/source/text() = 'radius_connect'"></xsl:when>
+              <xsl:otherwise>
+                <div class="radio">
                   <label>
-                    <input type="radio" name="modify_password" value="0"/>
+                    <input type="radio" name="modify_password" value="0" checked="1"/>
                     <xsl:value-of select="concat (gsa:i18n ('Password', 'Auth Data'), ': ', gsa:i18n ('Use existing value', 'User'))"/>
                   </label>
-                </xsl:otherwise>
-              </xsl:choose>
-              <input type="radio" name="modify_password" value="1" checked="1"/>
-              <xsl:value-of select="concat (gsa:i18n ('Password', 'Auth Data'), ': ')"/>
-              <input type="password" name="password" value="" size="30"
-                     maxlength="40"/>
-              <xsl:if test="//group[@name='method:ldap_connect']/auth_conf_setting[@key='enable']/@value = 'true'">
+                </div>
+              </xsl:otherwise>
+            </xsl:choose>
+            <div>
+              <div class="form-item radio">
+                <label>
+                  <input type="radio" name="modify_password" value="1"/>
+                  <xsl:value-of select="concat (gsa:i18n ('Password', 'Auth Data'), ': ')"/>
+                </label>
+              </div>
+              <div class="form-item">
+                <input type="password" name="password" value="" size="30"
+                  maxlength="40" class="form-control"/>
+              </div>
+            </div>
+            <xsl:if test="//group[@name='method:ldap_connect']/auth_conf_setting[@key='enable']/@value = 'true'">
+              <div class="radio">
                 <label>
                   <input type="radio" name="modify_password" value="2"/>
                   <xsl:value-of select="gsa:i18n ('Allow LDAP Authentication Only', 'User')"/>
                 </label>
-              </xsl:if>
-              <xsl:if test="//group[@name='method:radius_connect']/auth_conf_setting[@key='enable']/@value = 'true'">
+              </div>
+            </xsl:if>
+            <xsl:if test="//group[@name='method:radius_connect']/auth_conf_setting[@key='enable']/@value = 'true'">
+              <div class="radio">
                 <label>
                   <input type="radio" name="modify_password" value="3"/>
                   <xsl:value-of select="gsa:i18n ('Allow RADIUS Authentication Only', 'User')"/>
                 </label>
-              </xsl:if>
-            </td>
-          </tr>
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('Roles', 'Role')"/></td>
-            <td>
-              <xsl:variable name="super" select="boolean (role[@id = '9c5a6ec6-6fe2-11e4-8cb6-406186ea4fc5'])"/>
-              <xsl:if test="$super">
-                <select disabled="disabled" name="dummy">
-                  <option value="" selected="1"><xsl:value-of select="role[@id = '9c5a6ec6-6fe2-11e4-8cb6-406186ea4fc5']/name"/></option>
-                </select>
-              </xsl:if>
-              <select name="role_ids:" multiple="multiple">
-                <xsl:for-each select="../../../get_roles_response/role[@id != '9c5a6ec6-6fe2-11e4-8cb6-406186ea4fc5']">
-                  <xsl:variable name="role_id" select="@id"/>
-                  <xsl:choose>
-                    <xsl:when test="../../commands_response/get_users_response/user/role[@id = $role_id]">
-                      <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <option value="{@id}"><xsl:value-of select="name"/></option>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                </xsl:for-each>
+              </div>
+            </xsl:if>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Roles', 'Role')"/></label>
+          <div class="col-10">
+            <xsl:variable name="super" select="boolean (role[@id = '9c5a6ec6-6fe2-11e4-8cb6-406186ea4fc5'])"/>
+            <xsl:if test="$super">
+              <select disabled="disabled" name="dummy">
+                <option value="" selected="1"><xsl:value-of select="role[@id = '9c5a6ec6-6fe2-11e4-8cb6-406186ea4fc5']/name"/></option>
               </select>
-            </td>
-          </tr>
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('Groups', 'Group')"/></td>
-            <td>
-              <select name="group_ids:" multiple="multiple">
-                <xsl:for-each select="../../../get_groups_response/group">
-                  <xsl:variable name="group_id" select="@id"/>
-                  <xsl:choose>
-                    <xsl:when test="../../commands_response/get_users_response/user/groups/group[@id = $group_id]">
-                      <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <option value="{@id}"><xsl:value-of select="name"/></option>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                </xsl:for-each>
-              </select>
-            </td>
-          </tr>
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('Host Access', 'User')"/></td>
-            <td>
+            </xsl:if>
+            <select name="role_ids:" multiple="multiple">
+              <xsl:for-each select="../../../get_roles_response/role[@id != '9c5a6ec6-6fe2-11e4-8cb6-406186ea4fc5']">
+                <xsl:variable name="role_id" select="@id"/>
+                <xsl:choose>
+                  <xsl:when test="../../commands_response/get_users_response/user/role[@id = $role_id]">
+                    <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <option value="{@id}"><xsl:value-of select="name"/></option>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </xsl:for-each>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Groups', 'Group')"/></label>
+          <div class="col-10">
+            <select name="group_ids:" multiple="multiple">
+              <xsl:for-each select="../../../get_groups_response/group">
+                <xsl:variable name="group_id" select="@id"/>
+                <xsl:choose>
+                  <xsl:when test="../../commands_response/get_users_response/user/groups/group[@id = $group_id]">
+                    <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <option value="{@id}"><xsl:value-of select="name"/></option>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </xsl:for-each>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Host Access', 'User')"/></label>
+          <div class="col-10">
+            <div class="form-item radio">
               <label>
                 <xsl:choose>
                   <xsl:when test="hosts/@allow = 1">
@@ -35606,6 +35623,8 @@ should not have received it.
                 </xsl:choose>
                 <xsl:value-of select="gsa:i18n ('Deny all and allow', 'User')"/>:
               </label>
+            </div>
+            <div class="form-item radio">
               <label>
                 <xsl:choose>
                   <xsl:when test="hosts/@allow = 0">
@@ -35616,14 +35635,19 @@ should not have received it.
                   </xsl:otherwise>
                 </xsl:choose>
                 <xsl:value-of select="gsa:i18n ('Allow all and deny', 'User')"/>:
-                <input type="text" name="access_hosts" value="{hosts}" size="30"
-                      maxlength="2000"/>
               </label>
-            </td>
-          </tr>
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('Interface Access', 'User')"/></td>
-            <td>
+            </div>
+            <div>
+              <input type="text" name="access_hosts" value="{hosts}" size="30"
+                maxlength="2000"
+                class="form-item form-control"/>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Interface Access', 'User')"/></label>
+          <div class="col-10">
+            <div class="form-item radio">
               <label>
                 <xsl:choose>
                   <xsl:when test="ifaces/@allow = 1">
@@ -35635,6 +35659,8 @@ should not have received it.
                 </xsl:choose>
                 <xsl:value-of select="gsa:i18n ('Deny all and allow', 'User')"/>:
               </label>
+            </div>
+            <div class="form-item radio">
               <label>
                 <xsl:choose>
                   <xsl:when test="ifaces/@allow = 0">
@@ -35645,12 +35671,14 @@ should not have received it.
                   </xsl:otherwise>
                 </xsl:choose>
                 <xsl:value-of select="gsa:i18n ('Allow all and deny', 'User')"/>:
-                <input type="text" name="access_ifaces" value="{ifaces}" size="30"
-                      maxlength="2000"/>
               </label>
-            </td>
-          </tr>
-        </table>
+            </div>
+            <div>
+              <input type="text" name="access_ifaces" value="{ifaces}" size="30"
+                    maxlength="2000" class="form-item form-control" />
+            </div>
+          </div>
+        </div>
       </form>
     </div>
   </div>

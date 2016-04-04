@@ -1,5 +1,11 @@
 2016-04-04  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/omp.xsl: Refactor user edit dialog to use new
+	form-horizontal css style. Now the edit user dialog has the same layout as the
+	create user dialog.
+
+2016-04-04  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/omp.xsl (html-create-user-form): Only show radio button for
 	password if other authentication methods are available and enabled.
 
