@@ -4294,7 +4294,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:when test="target/@id = ''">
       <a href="/omp?cmd=upload_report&amp;next=get_report&amp;task_id={@id}&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
          class="upload-action-icon icon" data-type="report"
-         data-task_id="{@id}"
+         data-task_id="{@id}" data-reload="window"
          title="{gsa:i18n ('Import Report', 'Task')}">
         <img src="/img/upload.png"/>
       </a>
