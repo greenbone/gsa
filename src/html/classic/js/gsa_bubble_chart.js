@@ -241,18 +241,10 @@
       .append('a');
 
     new_node_a.attr('xlink:href', function(d) {
-      var group_col_info = data.column_info.columns['group_value'];
-      var url;
+      var group_col_info = data.column_info.columns.group_value;
 
-      console.debug (data);
-
-      url = gsa.filtered_list_url (group_col_info.type,
-                                   group_col_info.column,
-                                   d['group_value'],
-                                   data.filter_info.keywords);
-
-      console.debug (url);
-      return url;
+      return gsa.filtered_list_url(group_col_info.type, group_col_info.column,
+          d.group_value, data.filter_info.keywords);
     });
 
     new_node_a
