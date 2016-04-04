@@ -242,9 +242,13 @@
 
     new_node_a.attr('xlink:href', function(d) {
       var group_col_info = data.column_info.columns.group_value;
-
-      return gsa.filtered_list_url(group_col_info.type, group_col_info.column,
-          d.group_value, data.filter_info.keywords);
+      if (group_col_info.column === 'uuid') {
+        return gsa.details_page_url(group_col_info.type, d.group_value,
+            data.filter_info);
+      } else {
+        return gsa.filtered_list_url(group_col_info.type, group_col_info.column,
+            d.group_value, data.filter_info);
+      }
     });
 
     new_node_a

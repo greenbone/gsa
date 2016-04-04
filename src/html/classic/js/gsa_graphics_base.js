@@ -55,6 +55,7 @@
   gsa.severity_colors_gradient = severity_colors_gradient;
   gsa.BaseChartGenerator = BaseChartGenerator;
   gsa.fill_empty_fields = fill_empty_fields;
+  gsa.details_page_url = details_page_url;
   gsa.filtered_list_url = filtered_list_url;
   gsa.wrap_text = wrap_text;
 
@@ -2594,17 +2595,68 @@
       filter_info.name = '';
     }
 
-    filter_info.keywords = {};
+    filter_info.keywords = [];
+    filter_info.criteria_str = '';
+    filter_info.extra_options_str = '';
+    filter_info.criteria = [];
+    filter_info.extra_options = [];
 
     keyword_elems = xml_data.selectAll('filters keywords keyword');
     keyword_elems.each(function() {
       var elem = d3.select(this);
       var column = elem.select('column').text();
-      filter_info.keywords[column] = {
+      var current_keyword = {
         column: column,
         relation: elem.select('relation').text(),
         value: elem.select('value').text(),
       };
+
+      // Create term split into criteria and extra options
+      if (current_keyword.column === '') {
+        // boolean operators and search phrase
+        if (filter_info.criteria.length) {
+          filter_info.criteria_str += ' ';
+        }
+        filter_info.criteria.push (current_keyword);
+        if (current_keyword.relation === '=') {
+          filter_info.criteria_str += '=' + current_keyword.value;
+        } else {
+          filter_info.criteria_str += current_keyword.value;
+        }
+      } else if (current_keyword.column === 'apply_overrides'
+                 || current_keyword.column === 'autofp'
+                 || current_keyword.column === 'rows'
+                 || current_keyword.column === 'first'
+                 || current_keyword.column === 'sort'
+                 || current_keyword.column === 'sort-reverse'
+                 || current_keyword.column === 'notes'
+                 || current_keyword.column === 'overrides'
+                 || current_keyword.column === 'timezone'
+                 || current_keyword.column === 'result_hosts_only'
+                 || current_keyword.column === 'levels'
+                 || current_keyword.column === 'min_cvss_base'
+                 || current_keyword.column === 'min_qod'
+                 || current_keyword.column === 'delta_states') {
+        // special options
+        if (filter_info.extra_options.length != '') {
+          filter_info.extra_options_str += ' ';
+        }
+        filter_info.extra_options.push (current_keyword);
+        filter_info.extra_options_str
+          += (current_keyword.column
+              + current_keyword.relation
+              + current_keyword.value);
+      } else {
+        // normal column criteria
+        if (filter_info.criteria.length) {
+          filter_info.criteria_str += ' ';
+        }
+        filter_info.criteria.push (current_keyword);
+        filter_info.criteria_str
+          += (current_keyword.column
+              + current_keyword.relation
+              + current_keyword.value);
+      }
     });
 
     return filter_info;
@@ -3289,19 +3341,15 @@
    */
 
   /**
-   * @summary Generates a filtered list page URL
+   * @summary Helper function to get the type as used in cmd=get_[...].
    *
-   * @param {string} type      Resource type or subtype
-   * @param {string} column    Column name
-   * @param {string} value     Column value
-   * @param {Object} keywords  filter_keywords from generator filter_data
+   * @param {string}  type         Resource type or subtype
+   *
+   * @return {string} The resource type as used in cmd=get_[...].
    */
-  function filtered_list_url(type, column, value, keywords) {
-    var result = '/omp?';
+  function cmd_type (type)
+  {
     var get_type;
-    var get_type_plural;
-
-    // Get "real" type and plural
     if (type === 'host' || type === 'os') {
       get_type = 'asset';
     }
@@ -3313,8 +3361,31 @@
     else {
       get_type = type;
     }
+    return get_type;
+  }
 
-    // Get plural of type for command
+  /**
+   * @summary Generates a filtered list page URL
+   *
+   * @param {string}  type         Resource type or subtype
+   * @param {string}  column       Column name
+   * @param {string}  value        Column value
+   * @param {Object}  filter_info  filter_info from generator
+   * @param {string}  relation     The relation to use
+   *
+   * @return {string} The page URL.
+   */
+  function filtered_list_url(type, column, value, filter_info, relation) {
+    var result = '/omp?';
+    var get_type;
+    var get_type_plural;
+
+    if (relation === undefined)
+      relation = '=';
+
+    // Get "real" type and plural
+    get_type = cmd_type (type);
+
     if (get_type === 'info') {
       get_type_plural = get_type;
     }
@@ -3329,54 +3400,119 @@
       result += ('&' + get_type + '_type=' + type);
     }
 
-    // Add basic column filter
-    if (column === 'severity') {
-      switch (value) {
-        case ('High'):
-          result += '&filter=severity>' + gsa.severity_levels.max_medium;
-          break;
-        case ('Medium'):
-          result += '&filter=severity>' + gsa.severity_levels.max_low +
-          ' and severity<' + gsa.severity_levels.min_high;
-          break;
-        case ('Low'):
-          result += '&filter=severity>' + gsa.severity_levels.max_log +
-          ' and severity<' + gsa.severity_levels.min_medium;
-          break;
-        case ('Log'):
-          if (gsa.severity_levels.max_log === 0.0) {
-            result += '&filter=severity=0';
-          }
-          else {
-            result += '&filter=severity>-1' +
-              ' and severity<' + gsa.severity_levels.min_low;
-          }
-          break;
-        case (''):
-        case ('N/A'):
-          result += '&filter=severity=""';
+    // Add existing extra options from filter
+    result += '&filter=' + filter_info.extra_options_str + ' ';
+
+    // Create new column filter keyword(s)
+    var criteria_addition = '';
+    if (relation === '=') {
+      if (column === 'severity') {
+        switch (value) {
+          case ('High'):
+            criteria_addition += 'severity>' + gsa.severity_levels.max_medium;
+            break;
+          case ('Medium'):
+            criteria_addition += 'severity>' + gsa.severity_levels.max_low +
+            ' and severity<' + gsa.severity_levels.min_high;
+            break;
+          case ('Low'):
+            criteria_addition += 'severity>' + gsa.severity_levels.max_log +
+            ' and severity<' + gsa.severity_levels.min_medium;
+            break;
+          case ('Log'):
+            if (gsa.severity_levels.max_log === 0.0) {
+              criteria_addition += 'severity=0';
+            }
+            else {
+              add_criteria += 'severity>-1 and severity<' + gsa.severity_levels.min_low;
+            }
+            break;
+          case (''):
+          case ('N/A'):
+            criteria_addition += 'severity=""';
+        }
       }
-    }
-    else {
-      result += '&filter=' + column + '="' + value + '"';
+      else {
+        criteria_addition += column + '="' + value + '"';
+      }
+    } else {
+      criteria_addition += column + relation + '"' + value + '"';
     }
 
-    // Copy special filter keywords
-    if (keywords !== undefined) {
-      if (keywords.apply_overrides !== undefined) {
-        result += ' apply_overrides=' + keywords.apply_overrides.value;
+    // Add other criteria
+    var new_criteria = '';
+    for (var i in filter_info.criteria) {
+      var current_keyword = filter_info.criteria[i];
+      if (i > 0) {
+        new_criteria += ' ';
       }
 
-      if (keywords.autofp !== undefined) {
-        result += ' autofp=' + keywords.autofp.value;
+      if (current_keyword.value !== 'and'
+          && current_keyword.value !== 'or'
+          && current_keyword.value !== 'not'
+          // last keyword was not an "and" operator
+          && (i <= 0
+              || filter_info.criteria[i-1].value !== 'and'
+              || filter_info.criteria[i-1].column !== '')) {
+        new_criteria += criteria_addition + ' and '
       }
-      if (keywords.min_qod !== undefined) {
-        result += ' min_qod=' + keywords.min_qod.value;
+
+      if (current_keyword.column === '') {
+        if (current_keyword.relation === '=') {
+          new_criteria += '=' + current_keyword.value;
+        } else {
+          new_criteria += current_keyword.value;
+        }
+      } else {
+        new_criteria
+          += (current_keyword.column
+              + current_keyword.relation
+              + current_keyword.value);
       }
     }
+    if (filter_info.criteria !== undefined
+        && filter_info.criteria.length == 0) {
+      new_criteria = criteria_addition;
+    }
+
+    result += new_criteria;
 
     // Add token
     result += '&token=' + gsa.gsa_token;
+
+    return result;
+  }
+
+  /**
+   * @summary Generates a details page URL
+   *
+   * @param {string}  type         Resource type or subtype
+   * @param {string}  id           id of the resource to get
+   * @param {Object}  filter_info  filter_info from generator
+   * @param {string}  relation     The relation to use
+   *
+   * @return {string} the page URL
+   */
+  function details_page_url(type, id, filter_info) {
+    var result = '/omp?';
+    var get_type = cmd_type (type);
+
+    // Add command and (if needed) subtype
+    result += ('cmd=get_' + get_type);
+
+    if (get_type !== type) {
+      result += ('&' + get_type + '_type=' + type);
+    }
+
+    // Add resource id
+    result += ('&' + get_type + '_id=' + id);
+
+    // Add filter
+    result += ('&filter=' + filter_info.term);
+    result += ('&filt_id=' + filter_info.id);
+
+    // Add token
+    result += ('&token=' + gsa.gsa_token);
 
     return result;
   }

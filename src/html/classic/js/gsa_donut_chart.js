@@ -143,8 +143,7 @@
         value = d.data [self.x_field];
       }
 
-      return gsa.filtered_list_url(type, column, value,
-          data.filter_info.keywords);
+      return gsa.filtered_list_url(type, column, value, data.filter_info);
     }
 
     // Remove legend

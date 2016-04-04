@@ -1,3 +1,24 @@
+2016-04-04  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/js/gsa_bubble_chart.js (generate): Have bubble
+	charts grouped by uuid link to details pages and pass full filter_info
+	to filtered_list_url for other group columns.
+
+	* src/html/classic/js/gsa_cloud_chart.js (generate): Have the words
+	link to filtered list pages.
+
+	* src/html/classic/js/gsa_donut_chart.js (generate): Pass full
+	filter_info to filtered_list_url.
+
+	* src/html/classic/js/gsa_graphics_base.js (extract_filter_info): Make
+	keywords field in filter_info an array to preserve multiple occurences
+	of keywords.  Add fields for criteria and extra options and their
+	string representations to filter_info.
+	(cmd_type): New function.
+	(filtered_list_url): Add new filter criteria instead of replacing them.
+	Use new cmd_type function to get the type for the get_... command.
+	(details_page_url): New function.
+
 2016-04-04  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/omp.xsl: Change label from Password to New Password when

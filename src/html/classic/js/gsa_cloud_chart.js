@@ -141,6 +141,14 @@
 
     this.color_scale.domain(words);
 
+    function generateLink (d, i) {
+      var type = data.column_info.columns[self.x_field].type;
+      var column = data.column_info.group_columns[0];
+      var value = d['text'];
+
+      return gsa.filtered_list_url(type, column, value, data.filter_info, '~');
+    }
+
     cloud
       .size([width, height])
       .fontSize(function(d) { return d.size; })
@@ -150,18 +158,20 @@
       .on('end', function(words) {
         self.svg.selectAll('text')
           .data(words)
-          .enter().append('text')
-          .style('font-size', function(d) { return d.size + 'px'; })
-          .style('font-family', function(d) { return d.font; })
-          .style('font-weight', function(d) { return d.weight; })
-          .style('fill', function(d, i) { return self.scaleColor(d.text); })
-          .attr('text-anchor', 'middle')
-          .attr('transform', function(d) {
-            return 'translate(' + [d.x + width / 2 + self.margin.left,
-                d.y + height / 2 + self.margin.top] +
-              ')rotate(' + d.rotate + ')';
-          })
-          .text(function(d) { return d.text; });
+          .enter().append('a')
+            .attr('xlink:href', generateLink)
+            .append('text')
+              .style('font-size', function(d) { return d.size + 'px'; })
+              .style('font-family', function(d) { return d.font; })
+              .style('font-weight', function(d) { return d.weight; })
+              .style('fill', function(d, i) { return self.scaleColor(d.text); })
+              .attr('text-anchor', 'middle')
+              .attr('transform', function(d) {
+                return 'translate(' + [d.x + width / 2 + self.margin.left,
+                    d.y + height / 2 + self.margin.top] +
+                    ')rotate(' + d.rotate + ')';
+              })
+              .text(function(d) { return d.text; });
       })
       .start();
   };
