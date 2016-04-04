@@ -34977,122 +34977,124 @@ should not have received it.
 <!-- BEGIN USERS MANAGEMENT -->
 
 <xsl:template name="html-create-user-form">
-  <div class="gb_window">
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n ('New User', 'User')"/>
-      <a href="/help/users.html?token={/envelope/token}#newuser"
-         title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('Users', 'User'),' (',gsa:i18n ('New User', 'User'),')')}">
-        <img src="/img/help.png"/>
-      </a>
-      <a href="/omp?cmd=get_users&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-         title="{gsa:i18n ('Users', 'User')}" style="margin-left:3px;">
-        <img src="/img/list.png" alt="{gsa:i18n ('Users', 'User')}"/>
-      </a>
+  <div class="edit-dialog">
+    <div class="title"><xsl:value-of select="gsa:i18n ('New User', 'User')"/>
     </div>
-    <div class="gb_window_part_content">
-      <form action="/omp" method="post" enctype="multipart/form-data">
+    <div class="content">
+      <form class="form-horizontal" action="/omp" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="create_user"/>
         <input type="hidden" name="caller" value="{/envelope/current_page}"/>
         <input type="hidden" name="next" value="get_user"/>
         <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-        <table class="table-form">
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('Login Name', 'Auth Data')"/></td>
-            <td>
-              <input type="text" name="login" value="{gsa:param-or ('login', 'unnamed')}"
-                     size="30" maxlength="80"/>
-            </td>
-          </tr>
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('Authentication', 'Auth Data')"/></td>
-            <td>
+        <div class="form-group">
+          <label for="login" class="col-2 control-label">
+            <xsl:value-of select="gsa:i18n ('Login Name', 'Auth Data')"/>
+          </label>
+          <div class="col-10">
+            <input type="text" name="login" value="{gsa:param-or ('login', 'unnamed')}"
+              class="form-control"
+              size="30" maxlength="80"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-2 control-label">
+            <xsl:value-of select="gsa:i18n ('Authentication', 'Auth Data')"/>
+          </label>
+          <div class="col-10">
+            <div class="form-item radio">
               <label>
                 <input type="radio" name="auth_method" value="0" checked="1"/>
-                <xsl:value-of select="gsa:i18n ('Password', 'Auth Data')"/>
-                <input type="password" name="password" value="" size="30"
-                     maxlength="40"/>
+                <xsl:value-of select="gsa:i18n ('Password:', 'Auth Data')"/>
               </label>
-              <xsl:if test="//group[@name='method:ldap_connect']/auth_conf_setting[@key='enable']/@value = 'true'">
-                <label>
-                  <input type="radio" name="auth_method" value="1"/>
-                  <xsl:value-of select="gsa:i18n ('Allow LDAP Authentication Only', 'User')"/>
-                </label>
-              </xsl:if>
-              <xsl:if test="//group[@name='method:radius_connect']/auth_conf_setting[@key='enable']/@value = 'true'">
-                <label>
-                  <input type="radio" name="auth_method" value="2"/>
-                  <xsl:value-of select="gsa:i18n ('Allow RADIUS Authentication Only', 'User')"/>
-                </label>
-              </xsl:if>
-            </td>
-          </tr>
-          <xsl:if test="gsa:may-op ('get_roles')">
-            <tr>
-              <td><xsl:value-of select="gsa:i18n ('Roles', 'Role')"/></td>
-              <td>
-                <select name="role_ids:" multiple="multiple">
-                  <xsl:for-each select="get_roles_response/role[@id != '9c5a6ec6-6fe2-11e4-8cb6-406186ea4fc5']">
-                    <option value="{@id}"><xsl:value-of select="name"/></option>
-                  </xsl:for-each>
-                </select>
-              </td>
-            </tr>
-          </xsl:if>
-          <xsl:if test="gsa:may-op ('get_groups')">
-            <tr>
-              <td><xsl:value-of select="gsa:i18n ('Groups', 'Group')"/></td>
-              <td>
-                <select name="group_ids:" multiple="multiple">
-                  <xsl:for-each select="get_groups_response/group">
-                    <option value="{@id}"><xsl:value-of select="name"/></option>
-                  </xsl:for-each>
-                </select>
-              </td>
-            </tr>
-          </xsl:if>
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('Host Access', 'User')"/></td>
-            <td>
+            </div>
+            <div class="form-item">
+              <input type="password" name="password" value="" size="30"
+                class="form-control"
+                maxlength="40"/>
+            </div>
+            <xsl:if test="//group[@name='method:ldap_connect']/auth_conf_setting[@key='enable']/@value = 'true'">
+              <label>
+                <input type="radio" name="auth_method" value="1"/>
+                <xsl:value-of select="gsa:i18n ('LDAP Authentication Only', 'User')"/>
+              </label>
+            </xsl:if>
+            <xsl:if test="//group[@name='method:radius_connect']/auth_conf_setting[@key='enable']/@value = 'true'">
+              <label>
+                <input type="radio" name="auth_method" value="2"/>
+                <xsl:value-of select="gsa:i18n ('RADIUS Authentication Only', 'User')"/>
+              </label>
+            </xsl:if>
+          </div>
+        </div>
+        <xsl:if test="gsa:may-op ('get_roles')">
+          <div class="form-group">
+            <label for="role_ids" class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Roles', 'Role')"/></label>
+            <div class="col-10">
+              <select id="role_ids" name="role_ids:" multiple="multiple">
+                <xsl:for-each select="get_roles_response/role[@id != '9c5a6ec6-6fe2-11e4-8cb6-406186ea4fc5']">
+                  <option value="{@id}"><xsl:value-of select="name"/></option>
+                </xsl:for-each>
+              </select>
+            </div>
+          </div>
+        </xsl:if>
+        <xsl:if test="gsa:may-op ('get_groups')">
+          <div class="form-group">
+            <label for="group_ids" class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Groups', 'Group')"/></label>
+            <div class="col-10">
+              <select name="group_ids:" multiple="multiple">
+                <xsl:for-each select="get_groups_response/group">
+                  <option value="{@id}"><xsl:value-of select="name"/></option>
+                </xsl:for-each>
+              </select>
+            </div>
+          </div>
+        </xsl:if>
+        <div class="form-group">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Host Access', 'User')"/></label>
+          <div class="col-10">
+            <div class="form-item radio">
               <label>
                 <input type="radio" name="hosts_allow" value="0" checked="1"/>
                 <xsl:value-of select="gsa:i18n ('Allow all and deny', 'User')"/>:
               </label>
+            </div>
+            <div class="form-item radio">
               <label>
                 <input type="radio" name="hosts_allow" value="1"/>
                 <xsl:value-of select="gsa:i18n ('Deny all and allow', 'User')"/>:
               </label>
-              <div>
-                <input type="text" name="access_hosts" value="{gsa:param-or ('access_hosts', '')}"
-                        size="30" maxlength="2000"/>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('Interface Access', 'User')"/></td>
-            <td>
+            </div>
+            <div>
+              <input type="text" name="access_hosts" value="{gsa:param-or ('access_hosts', '')}"
+                size="30" maxlength="2000" class="form-item form-control" />
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Interface Access', 'User')"/></label>
+          <div class="col-10">
+            <div class="form-item radio">
               <label>
                 <input type="radio" name="ifaces_allow" value="0" checked="1"/>
                 <xsl:value-of select="gsa:i18n ('Allow all and deny', 'User')"/>:
               </label>
+            </div>
+            <div class="form-item radio">
               <label>
                 <input type="radio" name="ifaces_allow" value="1"/>
                 <xsl:value-of select="gsa:i18n ('Deny all and allow', 'User')"/>:
               </label>
-              <div>
-                <input type="text" name="access_ifaces" value="{gsa:param-or ('access_ifaces', '')}"
-                      size="30" maxlength="2000"/>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <input type="submit" name="submit" value="{gsa:i18n ('Create User', 'User')}"/>
-            </td>
-          </tr>
-        </table>
+            </div>
+            <div>
+              <input type="text" name="access_ifaces" value="{gsa:param-or ('access_ifaces', '')}"
+                size="30" maxlength="2000"
+                class="form-item form-control" />
+            </div>
+          </div>
+        </div>
       </form>
     </div>
   </div>

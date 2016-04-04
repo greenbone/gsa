@@ -1,5 +1,10 @@
 2016-04-04  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/omp.xsl (html-create-user-form): Refactor html create user
+	dialog to use edit dialog pattern and the new horizontal form css layout.
+
+2016-04-04  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/css/gsa-style.css: Add style for formatting a multiline
 	selection widget within a horizontal form.
 
