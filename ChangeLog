@@ -1,5 +1,10 @@
 2016-04-04  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/omp.xsl (html-create-user-form): Only show radio button for
+	password if other authentication methods are available and enabled.
+
+2016-04-04  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_bubble_chart.js (create_bubble): Update coding style
 	and remove debug statements.
 

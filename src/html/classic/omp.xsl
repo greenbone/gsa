@@ -35003,28 +35003,47 @@ should not have received it.
             <xsl:value-of select="gsa:i18n ('Authentication', 'Auth Data')"/>
           </label>
           <div class="col-10">
-            <div class="form-item radio">
-              <label>
-                <input type="radio" name="auth_method" value="0" checked="1"/>
-                <xsl:value-of select="gsa:i18n ('Password:', 'Auth Data')"/>
-              </label>
-            </div>
-            <div class="form-item">
-              <input type="password" name="password" value="" size="30"
-                class="form-control"
-                maxlength="40"/>
+            <div>
+              <xsl:choose>
+                <xsl:when test="//group[@name='method:ldap_connect']/auth_conf_setting[@key='enable']/@value = 'true' or //group[@name='method:radius_connect']/auth_conf_setting[@key='enable']/@value = 'true'">
+                  <div class="form-item radio">
+                    <label>
+                      <input type="radio" name="auth_method" value="0" checked="1"/>
+
+                      <xsl:value-of select="gsa:i18n ('Password:', 'Auth Data')"/>
+                    </label>
+                  </div>
+                </xsl:when>
+                <xsl:otherwise>
+                  <div class="form-item">
+                    <label>
+                      <input type="hidden" name="auth_method" value="0" checked="1"/>
+                      <xsl:value-of select="gsa:i18n ('Password:', 'Auth Data')"/>
+                    </label>
+                  </div>
+                </xsl:otherwise>
+              </xsl:choose>
+              <div class="form-item">
+                <input type="password" name="password" value="" size="30"
+                  class="form-control"
+                  maxlength="40"/>
+              </div>
             </div>
             <xsl:if test="//group[@name='method:ldap_connect']/auth_conf_setting[@key='enable']/@value = 'true'">
-              <label>
-                <input type="radio" name="auth_method" value="1"/>
-                <xsl:value-of select="gsa:i18n ('LDAP Authentication Only', 'User')"/>
-              </label>
+              <div class="radio">
+                <label>
+                  <input type="radio" name="auth_method" value="1"/>
+                  <xsl:value-of select="gsa:i18n ('LDAP Authentication Only', 'User')"/>
+                </label>
+              </div>
             </xsl:if>
             <xsl:if test="//group[@name='method:radius_connect']/auth_conf_setting[@key='enable']/@value = 'true'">
-              <label>
-                <input type="radio" name="auth_method" value="2"/>
-                <xsl:value-of select="gsa:i18n ('RADIUS Authentication Only', 'User')"/>
-              </label>
+              <div class="radio">
+                <label>
+                  <input type="radio" name="auth_method" value="2"/>
+                  <xsl:value-of select="gsa:i18n ('RADIUS Authentication Only', 'User')"/>
+                </label>
+              </div>
             </xsl:if>
           </div>
         </div>
