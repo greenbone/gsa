@@ -1,5 +1,10 @@
 2016-04-04  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/omp.xsl: Fix displaying "Task is already active" icon
+	button in task details page.
+
+2016-04-04  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/greenbone.js (on_ready): Use jquery-ui spinner component
 	for all number input fields.
 

@@ -4366,7 +4366,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:call-template>
     </xsl:when>
     <xsl:when test="status='Stop Requested' or status='Delete Requested' or status='Ultimate Delete Requested' or status='Resume Requested' or status='Requested'">
-      <img style="margin-left: 3px" src="/img/start_inactive.png" alt="{gsa:i18n ('Start', 'Action Verb')}" title="{gsa:i18n ('Task is already active', 'Task')}"/>
+      <img class="icon" src="/img/start_inactive.png" alt="{gsa:i18n ('Start', 'Action Verb')}" title="{gsa:i18n ('Task is already active', 'Task')}"/>
     </xsl:when>
     <xsl:otherwise>
       <xsl:call-template name="start-icon">
