@@ -1,5 +1,11 @@
 2016-04-05  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/omp.xsl (edit_report_format): Use new horizontal form
+	styles to fix layout of edit report format dialog. Also convert the dialog to
+	an edit dialog.
+
+2016-04-05  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/omp.xsl (cvss_calculator): Use standard drop down selects
 	for cvss calculation. No need for select2 search completion here.
 

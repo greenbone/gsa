@@ -27686,19 +27686,12 @@ should not have received it.
 <!--     EDITING REPORT FORMATS -->
 
 <xsl:template name="html-edit-report-format-form">
-  <div class="gb_window">
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n ('Edit Report Format', 'Report Format')"/>
-      <xsl:call-template name="edit-header-icons">
-        <xsl:with-param name="cap-type" select="'Report Format'"/>
-        <xsl:with-param name="type" select="'report_format'"/>
-        <xsl:with-param name="id"
-                        select="commands_response/get_report_formats_response/report_format/@id"/>
-      </xsl:call-template>
+  <div class="edit-dialog">
+    <div class="title">
+      <xsl:value-of select="gsa:i18n ('Edit Report Format', 'Report Format')"/>
     </div>
-    <div class="gb_window_part_content">
-      <form action="" method="post" enctype="multipart/form-data">
+    <div class="content">
+      <form action="" method="post" enctype="multipart/form-data" class="form-horizontal">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="save_report_format"/>
         <input type="hidden" name="caller" value="{/envelope/current_page}"/>
@@ -27709,51 +27702,63 @@ should not have received it.
         <input type="hidden" name="report_format" value="{/envelope/params/report_format}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
         <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
-        <table class="table-form">
-          <tr>
-           <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
-           <td>
-             <input type="text"
-                    name="name"
-                    value="{commands_response/get_report_formats_response/report_format/name}"
-                    size="30"
-                    maxlength="80"/>
-           </td>
-          </tr>
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('Summary', 'Property')"/></td>
-            <td>
-              <input type="text" name="summary" size="30" maxlength="400"
-                     value="{commands_response/get_report_formats_response/report_format/summary}"/>
-            </td>
-          </tr>
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('Active', 'Report Format')"/></td>
-            <td>
-              <xsl:choose>
-                <xsl:when test="commands_response/get_report_formats_response/report_format/active='1'">
+
+        <div class="form-group">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></label>
+          <div class="col-10">
+            <input type="text"
+              name="name"
+              value="{commands_response/get_report_formats_response/report_format/name}"
+              size="30"
+              class="form-control"
+              maxlength="80"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Summary', 'Property')"/></label>
+          <div class="col-10">
+            <input type="text" name="summary" size="30" maxlength="400"
+              class="form-control"
+              value="{commands_response/get_report_formats_response/report_format/summary}"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Active', 'Report Format')"/></label>
+          <div class="col-10">
+            <xsl:choose>
+              <xsl:when test="commands_response/get_report_formats_response/report_format/active='1'">
+                <div class="radio-inline">
                   <label>
                     <input type="radio" name="enable" value="1" checked="1"/>
                     <xsl:value-of select="gsa:i18n ('yes', 'Binary Choice')"/>
                   </label>
+                </div>
+                <div class="radio-inline">
                   <label>
                     <input type="radio" name="enable" value="0"/>
                     <xsl:value-of select="gsa:i18n ('no', 'Binary Choice')"/>
                   </label>
-                </xsl:when>
-                <xsl:otherwise>
+                </div>
+              </xsl:when>
+              <xsl:otherwise>
+                <div class="radio-inline">
                   <label>
                     <input type="radio" name="enable" value="1"/>
                     <xsl:value-of select="gsa:i18n ('yes', 'Binary Choice')"/>
                   </label>
+                </div>
+                <div class="radio-inline">
                   <label>
                     <input type="radio" name="enable" value="0" checked="1"/>
                     <xsl:value-of select="gsa:i18n ('no', 'Binary Choice')"/>
                   </label>
-                </xsl:otherwise>
-              </xsl:choose>
-            </td>
-          </tr>
+                </div>
+              </xsl:otherwise>
+            </xsl:choose>
+          </div>
+        </div>
+
+        <table class="table-form">
           <xsl:for-each select="commands_response/get_report_formats_response/report_format">
             <tr>
               <td>
@@ -27769,11 +27774,6 @@ should not have received it.
               </td>
             </tr>
           </xsl:for-each>
-          <tr>
-            <td>
-              <input type="submit" name="submit" value="{gsa:i18n ('Save Report Format', 'Report Format')}"/>
-            </td>
-          </tr>
         </table>
       </form>
     </div>
