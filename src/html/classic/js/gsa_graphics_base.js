@@ -3112,14 +3112,24 @@
       }
     }
 
-    new_column_info.columns[type_field + '~original'] =
-      old_data.column_info.columns[type_field];
+    if (old_data.column_info.columns[type_field + '~original'] !== undefined) {
+      new_column_info.columns[type_field + '~original'] =
+        old_data.column_info.columns[type_field + '~original'];
+    } else {
+      new_column_info.columns[type_field + '~original'] =
+        old_data.column_info.columns[type_field];
+    }
 
     for (var record in old_data.records) {
       var new_record = {};
       for (var field in old_data.records[record]) {
         if (field === type_field) {
-          new_record[field + '~original'] = old_data.records[record][field];
+          if (new_record[field + '~original'] !== undefined) {
+            new_record[field + '~original']
+              = old_data.records[record][field + '~original'];
+          } else {
+            new_record[field + '~original'] = old_data.records[record][field];
+          }
           new_record[field] = resource_type_name_plural(
               old_data.records[record][field]);
         }
@@ -3160,14 +3170,24 @@
       }
     }
 
-    new_column_info.columns[type_field + '~original'] =
-      old_data.column_info.columns[type_field];
+    if (old_data.column_info.columns[type_field + '~original'] !== undefined) {
+      new_column_info.columns[type_field + '~original'] =
+        old_data.column_info.columns[type_field + '~original'];
+    } else {
+      new_column_info.columns[type_field + '~original'] =
+        old_data.column_info.columns[type_field];
+    }
 
     for (var record in old_data.records) {
       var new_record = {};
       for (var field in old_data.records[record]) {
         if (field === type_field) {
-          new_record[field + '~original'] = old_data.records[record][field];
+          if (new_record[field + '~original'] !== undefined) {
+            new_record[field + '~original'] =
+              old_data.records[record][field + '~original'];
+          } else {
+            new_record[field + '~original'] = old_data.records[record][field];
+          }
           switch (old_data.records[record][field]) {
             case (''):
               new_record[field] = gsa._('None');
@@ -3245,8 +3265,13 @@
       }
     }
 
-    new_column_info.columns[type_field + '~original'] =
-      old_data.column_info.columns[type_field];
+    if (old_data.column_info.columns[type_field + '~original'] !== undefined) {
+      new_column_info.columns[type_field + '~original'] =
+        old_data.column_info.columns[type_field + '~original'];
+    } else {
+      new_column_info.columns[type_field + '~original'] =
+        old_data.column_info.columns[type_field];
+    }
 
     var record;
     for (record in old_data.records) {
@@ -3263,8 +3288,14 @@
     new_data.records.sort(sort_func);
 
     for (record in new_data.records) {
-      new_data.records[record][type_field + '~original'] =
-        new_data.records[record][type_field];
+      if (old_data.column_info.columns[type_field + '~original']
+          !== undefined) {
+        new_data.records[record][type_field + '~original'] =
+          new_data.records[record][type_field + '~original'];
+      } else {
+        new_data.records[record][type_field + '~original'] =
+          new_data.records[record][type_field];
+      }
       new_data.records[record][type_field] =
         new_data.records[record][type_field] + '%';
     }
@@ -3314,6 +3345,8 @@
             default:
               new_record[field] = 'N/A';
           }
+
+          new_record[field + '~original'] = '';
 
           if (field === x_field) {
             empty_x = true;

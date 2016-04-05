@@ -1,5 +1,13 @@
 2016-04-04  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/js/gsa_graphics_base.js (resource_type_counts)
+	(qod_type_counts, percentage_counts): Do not overwrite "~original"
+	fields of records if they exist.
+	(fill_empty_fields): Add an empty string as "~original" to empty fields
+	in records.
+
+2016-04-04  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/js/gsa_bar_chart.js (generate): Make the bars link
 	to list or details pages.
 
