@@ -13629,6 +13629,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
       if (ignore_filter)
         ret = openvas_server_sendf_xml (&session,
                                         "<get_reports"
+                                        " report_id=\"%s\""
                                         " filter=\"first=1 rows=-1"
                                         "  result_hosts_only=0"
                                         "  apply_overrides=1"
@@ -13640,9 +13641,11 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
       else
         ret = openvas_server_sendf_xml (&session,
                                         "<get_reports"
+                                        " report_id=\"%s\""
                                         " ignore_pagination=\"%d\""
                                         " filter=\"%s\""
                                         " alert_id=\"%s\"/>",
+                                        report_id,
                                         ignore_pagination,
                                         esc_filter ? esc_filter : "",
                                         alert_id);
