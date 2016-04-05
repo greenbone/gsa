@@ -28162,7 +28162,7 @@ should not have received it.
       <xsl:text> </xsl:text>
       <xsl:choose>
         <xsl:when test="count(alerts/alert) != 0">
-          (<xsl:value-of select="count(alert/alert)"/>)
+          (<xsl:value-of select="count(alerts/alert)"/>)
         </xsl:when>
         <xsl:otherwise>
           (<xsl:value-of select="gsa:i18n ('none')"/>)
