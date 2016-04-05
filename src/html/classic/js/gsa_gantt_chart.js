@@ -250,9 +250,8 @@
       .attr('y', height / 2);
 
     // Function to generate link URLs
-    function generateLink(d, i) {
+    function generate_link(d, i) {
       var type = data.column_info.columns.id.type;
-      var column = data.column_info.columns.id.column;
       var value = d.id;
 
       return gsa.details_page_url(type, value, data.filter_info);
@@ -271,7 +270,7 @@
       .insert('g')
       .attr('class', 'bar-group')
       .insert('a')
-        .attr('xlink:href', generateLink);
+        .attr('xlink:href', generate_link);
 
     this.svg.selectAll('.bar-label-shadow')
       .data(display_records)
@@ -299,7 +298,7 @@
       .attr('transform', function(d) {
         return 'translate(' + 0 + ',' + (height - self.x_scale(
                 d[self.x_field]) - self.x_scale.rangeBand()) + ')';
-      })
+      });
 
     this.svg.selectAll('.bar-group a')
       .data(display_records)

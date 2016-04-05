@@ -135,12 +135,12 @@
     var ri = 1.0 / 2.0;
 
     // Function to generate link URLs
-    function generateLink(d, i) {
+    function generate_link(d, i) {
       var type = data.column_info.columns[self.x_field].type;
       var column = data.column_info.columns[self.x_field].column;
-      var value = d.data [self.x_field + '~original'];
+      var value = d.data[self.x_field + '~original'];
       if (value === undefined) {
-        value = d.data [self.x_field];
+        value = d.data[self.x_field];
       }
 
       return gsa.filtered_list_url(type, column, value, data.filter_info);
@@ -167,7 +167,7 @@
       }
 
       var legend_item = legend.insert('a');
-      legend_item.attr('xlink:href', generateLink(d, i));
+      legend_item.attr('xlink:href', generate_link(d, i));
 
       legend_item.insert('rect')
         .attr('height', '15')
@@ -216,7 +216,7 @@
       .enter()
       .insert('a')
         .attr('class', 'slice')
-        .attr('xlink:href', generateLink)
+        .attr('xlink:href', generate_link)
         .each(function(d, i) {
           var slice = d3.select(this);
 
@@ -323,7 +323,7 @@
       .data(slices)
       .enter()
       .insert('a')
-        .attr('xlink:href', generateLink)
+        .attr('xlink:href', generate_link)
         .insert('text')
         .attr('class', 'slice_label')
         .text(function(d, i) {

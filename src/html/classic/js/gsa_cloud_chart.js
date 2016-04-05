@@ -141,10 +141,10 @@
 
     this.color_scale.domain(words);
 
-    function generateLink (d, i) {
+    function generate_link(d, i) {
       var type = data.column_info.columns[self.x_field].type;
       var column = data.column_info.group_columns[0];
-      var value = d['text'];
+      var value = d.text;
 
       return gsa.filtered_list_url(type, column, value, data.filter_info, '~');
     }
@@ -159,7 +159,7 @@
         self.svg.selectAll('text')
           .data(words)
           .enter().append('a')
-            .attr('xlink:href', generateLink)
+            .attr('xlink:href', generate_link)
             .append('text')
               .style('font-size', function(d) { return d.size + 'px'; })
               .style('font-family', function(d) { return d.font; })

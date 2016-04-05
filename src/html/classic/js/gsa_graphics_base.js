@@ -2617,45 +2617,41 @@
         if (filter_info.criteria.length) {
           filter_info.criteria_str += ' ';
         }
-        filter_info.criteria.push (current_keyword);
+        filter_info.criteria.push(current_keyword);
         if (current_keyword.relation === '=') {
           filter_info.criteria_str += '=' + current_keyword.value;
         } else {
           filter_info.criteria_str += current_keyword.value;
         }
-      } else if (current_keyword.column === 'apply_overrides'
-                 || current_keyword.column === 'autofp'
-                 || current_keyword.column === 'rows'
-                 || current_keyword.column === 'first'
-                 || current_keyword.column === 'sort'
-                 || current_keyword.column === 'sort-reverse'
-                 || current_keyword.column === 'notes'
-                 || current_keyword.column === 'overrides'
-                 || current_keyword.column === 'timezone'
-                 || current_keyword.column === 'result_hosts_only'
-                 || current_keyword.column === 'levels'
-                 || current_keyword.column === 'min_cvss_base'
-                 || current_keyword.column === 'min_qod'
-                 || current_keyword.column === 'delta_states') {
+      } else if (current_keyword.column === 'apply_overrides' ||
+          current_keyword.column === 'autofp' ||
+          current_keyword.column === 'rows' ||
+          current_keyword.column === 'first' ||
+          current_keyword.column === 'sort' ||
+          current_keyword.column === 'sort-reverse' ||
+          current_keyword.column === 'notes' ||
+          current_keyword.column === 'overrides' ||
+          current_keyword.column === 'timezone' ||
+          current_keyword.column === 'result_hosts_only' ||
+          current_keyword.column === 'levels' ||
+          current_keyword.column === 'min_cvss_base' ||
+          current_keyword.column === 'min_qod' ||
+          current_keyword.column === 'delta_states') {
         // special options
-        if (filter_info.extra_options.length != '') {
+        if (filter_info.extra_options.length !== '') {
           filter_info.extra_options_str += ' ';
         }
-        filter_info.extra_options.push (current_keyword);
-        filter_info.extra_options_str
-          += (current_keyword.column
-              + current_keyword.relation
-              + current_keyword.value);
+        filter_info.extra_options.push(current_keyword);
+        filter_info.extra_options_str += current_keyword.column +
+          current_keyword.relation + current_keyword.value;
       } else {
         // normal column criteria
         if (filter_info.criteria.length) {
           filter_info.criteria_str += ' ';
         }
-        filter_info.criteria.push (current_keyword);
-        filter_info.criteria_str
-          += (current_keyword.column
-              + current_keyword.relation
-              + current_keyword.value);
+        filter_info.criteria.push(current_keyword);
+        filter_info.criteria_str += current_keyword.column +
+          current_keyword.relation + current_keyword.value;
       }
     });
 
@@ -3125,8 +3121,8 @@
       for (var field in old_data.records[record]) {
         if (field === type_field) {
           if (new_record[field + '~original'] !== undefined) {
-            new_record[field + '~original']
-              = old_data.records[record][field + '~original'];
+            new_record[field + '~original'] =
+              old_data.records[record][field + '~original'];
           } else {
             new_record[field + '~original'] = old_data.records[record][field];
           }
@@ -3288,8 +3284,8 @@
     new_data.records.sort(sort_func);
 
     for (record in new_data.records) {
-      if (old_data.column_info.columns[type_field + '~original']
-          !== undefined) {
+      if (old_data.column_info.columns[type_field + '~original'] !==
+          undefined) {
         new_data.records[record][type_field + '~original'] =
           new_data.records[record][type_field + '~original'];
       } else {
@@ -3380,8 +3376,7 @@
    *
    * @return {string} The resource type as used in cmd=get_[...].
    */
-  function cmd_type (type)
-  {
+  function cmd_type(type) {
     var get_type;
     if (type === 'host' || type === 'os') {
       get_type = 'asset';
@@ -3413,11 +3408,12 @@
     var get_type;
     var get_type_plural;
 
-    if (relation === undefined)
+    if (relation === undefined) {
       relation = '=';
+    }
 
     // Get "real" type and plural
-    get_type = cmd_type (type);
+    get_type = cmd_type(type);
 
     if (get_type === 'info') {
       get_type_plural = get_type;
@@ -3457,8 +3453,8 @@
               criteria_addition += 'severity=0';
             }
             else {
-              criteria_addition += ('severity>-1 and severity<'
-                                    + gsa.severity_levels.min_low);
+              criteria_addition += 'severity>-1 and severity<' +
+                gsa.severity_levels.min_low;
             }
             break;
           case (''):
@@ -3471,14 +3467,12 @@
           default:
             var severity = parseFloat(value);
             if (severity.isNaN) {
-              criteria_addition += ('severity=' + value);
+              criteria_addition += 'severity=' + value;
             } else if (severity >= 10.0) {
               criteria_addition += 'severity>9.0';
             } else {
-              criteria_addition += ('severity>'
-                                    + (severity - 1.0).toFixed(1)
-                                    + ' and severity<'
-                                    + (severity + 0.1).toFixed(1));
+              criteria_addition += 'severity>' + (severity - 1.0).toFixed(1) +
+                ' and severity<' + (severity + 0.1).toFixed(1);
             }
         }
       }
@@ -3497,14 +3491,12 @@
         new_criteria += ' ';
       }
 
-      if (current_keyword.value !== 'and'
-          && current_keyword.value !== 'or'
-          && current_keyword.value !== 'not'
+      if (current_keyword.value !== 'and' && current_keyword.value !== 'or' &&
+          current_keyword.value !== 'not' &&
           // last keyword was not an "and" operator
-          && (i <= 0
-              || filter_info.criteria[i-1].value !== 'and'
-              || filter_info.criteria[i-1].column !== '')) {
-        new_criteria += criteria_addition + ' and '
+          (i <= 0 || filter_info.criteria[i - 1].value !== 'and' ||
+           filter_info.criteria[i - 1].column !== '')) {
+        new_criteria += criteria_addition + ' and ';
       }
 
       if (current_keyword.column === '') {
@@ -3514,14 +3506,12 @@
           new_criteria += current_keyword.value;
         }
       } else {
-        new_criteria
-          += (current_keyword.column
-              + current_keyword.relation
-              + current_keyword.value);
+        new_criteria += current_keyword.column + current_keyword.relation +
+          current_keyword.value;
       }
     }
-    if (filter_info.criteria !== undefined
-        && filter_info.criteria.length == 0) {
+    if (filter_info.criteria !== undefined &&
+        filter_info.criteria.length === 0) {
       new_criteria = criteria_addition;
     }
 
@@ -3545,7 +3535,7 @@
    */
   function details_page_url(type, id, filter_info) {
     var result = '/omp?';
-    var get_type = cmd_type (type);
+    var get_type = cmd_type(type);
 
     // Add command and (if needed) subtype
     result += ('cmd=get_' + get_type);
