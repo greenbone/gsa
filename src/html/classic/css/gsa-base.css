@@ -448,6 +448,11 @@ input::-moz-focus-inner {
   vertical-align: middle;
 }
 
+.button-block {
+  display: block;
+  width: 100%;
+}
+
 
 /* formulars */
 .form-inline {
