@@ -106,6 +106,13 @@ p {
 
 /* input elements */
 
+button, input, select, textarea {
+  /* use font and line settings from parents not from browser default */
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+}
+
 label {
   display: inline-block;
   max-width: 100%;
