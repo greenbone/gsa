@@ -38778,7 +38778,7 @@ should not have received it.
       <div class="form-group">
         <label class="col-2 control-label"><xsl:value-of select="gsa:i18n('Access Vector', 'CVSS Vector')"/>:</label>
         <div class="col-2">
-          <select name="cvss_av" onchange="calc_from_metrics.submit()" class="form-control">
+          <select name="cvss_av" onchange="calc_from_metrics.submit()" class="form-control no-select2">
             <xsl:call-template name="opt">
               <xsl:with-param name="value" select="'L'"/>
               <xsl:with-param name="content" select="'Local'"/>
@@ -38800,7 +38800,7 @@ should not have received it.
       <div class="form-group">
         <label class="col-2 control-label"><xsl:value-of select="gsa:i18n('Access Complexity', 'CVSS Vector')"/>:</label>
         <div class="col-2">
-          <select name="cvss_ac" onchange="calc_from_metrics.submit()" class="form-control">
+          <select name="cvss_ac" onchange="calc_from_metrics.submit()" class="form-control no-select2">
             <xsl:call-template name="opt">
               <xsl:with-param name="value" select="'H'"/>
               <xsl:with-param name="content" select="'High'"/>
@@ -38822,7 +38822,7 @@ should not have received it.
       <div class="form-group">
         <label class="col-2 control-label"><xsl:value-of select="gsa:i18n('Authentication', 'CVSS Vector')"/>:</label>
         <div class="col-2">
-          <select name="cvss_au" onchange="calc_from_metrics.submit()" class="form-control">
+          <select name="cvss_au" onchange="calc_from_metrics.submit()" class="form-control no-select2">
             <xsl:call-template name="opt">
               <xsl:with-param name="value" select="'M'"/>
               <xsl:with-param name="content" select="'Multiple'"/>
@@ -38844,7 +38844,7 @@ should not have received it.
       <div class="form-group">
         <label class="col-2 control-label"><xsl:value-of select="gsa:i18n('Confidentiality', 'CVSS Vector')"/>:</label>
         <div class="col-2">
-          <select name="cvss_c" onchange="calc_from_metrics.submit()" class="form-control">
+          <select name="cvss_c" onchange="calc_from_metrics.submit()" class="form-control no-select2">
             <xsl:call-template name="opt">
               <xsl:with-param name="value" select="'N'"/>
               <xsl:with-param name="content" select="'None'"/>
@@ -38866,7 +38866,7 @@ should not have received it.
       <div class="form-group">
         <label class="col-2 control-label"><xsl:value-of select="gsa:i18n('Integrity', 'CVSS Vector')"/>:</label>
         <div class="col-2">
-          <select name="cvss_i" onchange="calc_from_metrics.submit()" class="form-control">
+          <select name="cvss_i" onchange="calc_from_metrics.submit()" class="form-control no-select2">
             <xsl:call-template name="opt">
               <xsl:with-param name="value" select="'N'"/>
               <xsl:with-param name="content" select="'None'"/>
@@ -38888,7 +38888,7 @@ should not have received it.
       <div class="form-group">
         <label class="col-2 control-label"><xsl:value-of select="gsa:i18n('Availability', 'CVSS Vector')"/>:</label>
         <div class="col-2">
-          <select name="cvss_a" onchange="calc_from_metrics.submit()" class="form-control">
+          <select name="cvss_a" onchange="calc_from_metrics.submit()" class="form-control no-select2">
             <xsl:call-template name="opt">
               <xsl:with-param name="value" select="'N'"/>
               <xsl:with-param name="content" select="'None'"/>
