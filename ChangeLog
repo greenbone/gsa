@@ -1,5 +1,11 @@
 2016-04-05  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/greenbone.js (on_read): Prevent illegal characters
+	beeing inserted into number input fields. Hint: currently our number input
+	fields only accept integers not floats.
+
+2016-04-05  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_cloud_chart.js,
 	src/html/classic/js/gsa_donut_chart.js,
 	src/html/classic/js/gsa_gantt_chart.js,
