@@ -1157,7 +1157,7 @@
       },
     });
 
-    doc.find('select').select2();
+    doc.find('select:not(.no-select2)').select2();
   }
 
   var timeout_id;

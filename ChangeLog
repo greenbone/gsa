@@ -1,5 +1,11 @@
 2016-04-05  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/greenbone.js (on_read): Don't use select2 for select
+	elements with css class no-select2. This allows to explicit render selects as
+	standard select drop downs in the browser style.
+
+2016-04-05  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/omp.xsl (cvss_calculator): Use new colum and
 	horizontal form layout for the cvss calculator.
 
