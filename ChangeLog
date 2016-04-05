@@ -1,5 +1,10 @@
 2016-04-05  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/omp.xsl (filter-window-part): Add button for resetting the
+	filter to the filter toolbar.
+
+2016-04-05  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/css/gsa-base.css: Set line height, font size and font
 	family from parent elements and not from the browser default for button,
 	input, select and textarea elements.

@@ -1015,18 +1015,30 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:variable name="extra">
     <xsl:call-template name="filter-extra"/>
   </xsl:variable>
+  <xsl:variable name="get_cmd">
+    <xsl:choose>
+      <xsl:when test="$type='report_result'">
+        <xsl:value-of select="'get_report_section'"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="concat ('get_', gsa:type-many($type))"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
+  <xsl:variable name="extra_params_string">
+    <xsl:for-each select="exslt:node-set($extra_params)/param">
+      <xsl:text>&amp;</xsl:text>
+      <xsl:value-of select="name"/>
+      <xsl:text>=</xsl:text>
+      <xsl:value-of select="value"/>
+    </xsl:for-each>
+  </xsl:variable>
 
   <div>
     <form class="form-inline" action="" method="get" enctype="multipart/form-data" name="filterform">
       <input type="hidden" name="token" value="{/envelope/token}"/>
-      <xsl:choose>
-        <xsl:when test="$type = 'report_result'">
-          <input type="hidden" name="cmd" value="get_report_section"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <input type="hidden" name="cmd" value="get_{gsa:type-many($type)}"/>
-        </xsl:otherwise>
-      </xsl:choose>
+      <input type="hidden" name="cmd" value="{$get_cmd}"/>
       <xsl:for-each select="exslt:node-set($extra_params)/param">
         <input type="hidden" name="{name}" value="{value}"/>
       </xsl:for-each>
@@ -1045,6 +1057,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           title="{gsa:i18n ('Update Filter', 'Filter')}"
           src="/img/refresh.png"
           alt="{gsa:i18n ('Update', 'Action Verb')}"/>
+        <a href="?token={/envelope/token}&amp;cmd={$get_cmd}&amp;filt_id=--{$extra_params_string}"
+          class="icon"
+          title="{gsa:i18n ('Reset Filter', 'Filter')}">
+          <img src="/img/delete.png" />
+        </a>
         <a href="/help/powerfilter.html?token={/envelope/token}"
           class="icon"
           title="{gsa:i18n ('Help', 'Help')}: {gsa:i18n ('Powerfilter', 'Filter')}">
