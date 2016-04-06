@@ -2518,9 +2518,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:with-param>
         </xsl:call-template>
         <xsl:call-template name="html-gsa-navigation"/>
-        <xsl:apply-templates select="/envelope/params/action_status"/>
       </div>
       <div class="gsa-main">
+        <xsl:apply-templates select="/envelope/params/action_status"/>
         <xsl:apply-templates/>
       </div>
       <xsl:call-template name="html-footer"/>

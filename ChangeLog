@@ -1,5 +1,12 @@
 2016-04-06  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/gsad.xsl (envolope): Don't put action status into the
+	header. It belongs to the main content. This fixes displaying errors from
+	gsad. It is still no perfect because the error should be displayed beyond the
+	toolbar but that may require much more work.
+
+2016-04-06  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/omp.xsl (report-icons): Remove "Return to default filter
 	view" icon buttons from reports.
 
