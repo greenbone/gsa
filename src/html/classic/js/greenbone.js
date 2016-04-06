@@ -1134,39 +1134,57 @@
       });
     });
 
-    var on_spinner_change = function() {
-      // spinner instance is stored as data object in the DOM
-      var spinner = $(this).data('ui-spinner');
-      var value = spinner.value();
-      var max = $(this).attr('max');
-      var min = $(this).attr('min');
-
-      /* reset to previous value if value is null, value is greater then max or
-       * value is smaller then min */
-      if (!has_value(spinner.value()) ||
-          (is_defined(max) && value > max) ||
-          (is_defined(min) && value < min)) {
-        // call _value instead of value to avoid triggering change event again
-        spinner._value(spinner.previous);
-      }
-    };
-
-    doc.find('input[type=number]').each(function() {
+    doc.find('input.spinner').each(function() {
       var elem = $(this);
+      var type = elem.data('type');
+      var allowed = [
+        109, // subtract
+        173, // -
+      ];
+      var disallowed = [
+        $.ui.keyCode.SPACE,
+      ];
+
+      if (type === 'int') {
+        if (!is_defined(elem.attr('step'))) {
+          elem.attr('step', '1');
+        }
+      }
+
+      if (type === 'float' && !is_defined(elem.attr('step'))) {
+        elem.attr('step', '0.1');
+        allowed.push($.ui.keyCode.PERIOD); // .
+      }
 
       elem.spinner({
-        start: function(event, ui) {
+        start: function(event) {
           var oevent = event.originalEvent;
           if (is_defined(oevent) && oevent.type === 'keydown') {
-            if (event.which > 57 || event.shiftKey ||
-                event.which === $.ui.keyCode.SPACE) {
+            if ((event.which > 57 || event.shiftKey ||
+                disallowed.indexOf(event.which) > 0) &&
+                allowed.indexOf(event.which) === -1) {
               // don't allow keys > 57, combinations with shift and space
               // ('9' == keycode 57)
               event.preventDefault();
             }
           }
         },
-        change: on_spinner_change,
+        change: function() {
+          // spinner instance is stored as data object in the DOM
+          var spinner = $(this).data('ui-spinner');
+          var value = spinner.value();
+          var max = $(this).attr('max');
+          var min = $(this).attr('min');
+
+          /* reset to previous value if value is null, value is greater then max or
+           * value is smaller then min */
+          if (!has_value(spinner.value()) ||
+              (is_defined(max) && value > max) ||
+              (is_defined(min) && value < min)) {
+            // call _value instead of value to avoid triggering change event again
+            spinner._value(spinner.previous);
+          }
+        },
       });
     });
 

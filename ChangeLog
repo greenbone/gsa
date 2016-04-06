@@ -1,5 +1,15 @@
 2016-04-06  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/greenbone.js (on_read): Refactor spinner to allow float
+	and int values. Also convert inputs to a spinner only if the spinner class is
+	set.
+
+	* src/html/classic/omp.xsl (filter-window-part): Add spinner class to first
+	result and max input fields in update filter dialog. Also set the data type to
+	int.
+
+2016-04-06  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/omp.xsl (filter-window-part): Set max value of first result
 	parameter to at least 1. It won't work for lower values then 1.
 

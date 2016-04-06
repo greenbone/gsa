@@ -1695,9 +1695,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </label>
           <div class="col-4">
             <input type="number" name="{$first_param_name}" size="5"
-              class="form-control"
+              class="form-control spinner"
               min="1"
               max="{$max}"
+              data-type="int"
               value="{filters/keywords/keyword[column='first']/value}"
               maxlength="400"/>
           </div>
@@ -1716,9 +1717,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </label>
           <div class="col-4">
             <input name="{$max_param_name}" size="5"
-              class="form-control"
+              class="form-control spinner"
               min="1"
               type="number"
+              data-type="int"
               value="{filters/keywords/keyword[column='rows']/value}"
               maxlength="400"/>
           </div>
