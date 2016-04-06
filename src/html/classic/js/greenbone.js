@@ -1134,27 +1134,40 @@
       });
     });
 
-    doc.find('input[type=number]').spinner({
-      start: function(event, ui) {
-        var oevent = event.originalEvent;
-        if (is_defined(oevent) && oevent.type === 'keydown') {
-          if (event.which > 57 || event.shiftKey ||
-              event.which === $.ui.keyCode.SPACE) {
-            // don't allow keys > 57, combinations with shift and space
-            // ('9' == keycode 57)
-            event.preventDefault();
+    var on_spinner_change = function() {
+      // spinner instance is stored as data object in the DOM
+      var spinner = $(this).data('ui-spinner');
+      var value = spinner.value();
+      var max = $(this).attr('max');
+      var min = $(this).attr('min');
+
+      /* reset to previous value if value is null, value is greater then max or
+       * value is smaller then min */
+      if (!has_value(spinner.value()) ||
+          (is_defined(max) && value > max) ||
+          (is_defined(min) && value < min)) {
+        // call _value instead of value to avoid triggering change event again
+        spinner._value(spinner.previous);
+      }
+    };
+
+    doc.find('input[type=number]').each(function() {
+      var elem = $(this);
+
+      elem.spinner({
+        start: function(event, ui) {
+          var oevent = event.originalEvent;
+          if (is_defined(oevent) && oevent.type === 'keydown') {
+            if (event.which > 57 || event.shiftKey ||
+                event.which === $.ui.keyCode.SPACE) {
+              // don't allow keys > 57, combinations with shift and space
+              // ('9' == keycode 57)
+              event.preventDefault();
+            }
           }
-        }
-      },
-      change: function(event, ui) {
-        // spinner instance is stored as data object in the DOM
-        var spinner = $(this).data('ui-spinner');
-        // reset to previous value if value is null
-        if (!has_value(spinner.value())) {
-          // call _value instead of value to avoid triggering change event again
-          spinner._value(spinner.previous);
-        }
-      },
+        },
+        change: on_spinner_change,
+      });
     });
 
     doc.find('select:not(.no-select2)').select2();
