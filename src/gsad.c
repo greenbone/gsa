@@ -3923,13 +3923,16 @@ reconstruct_url (struct MHD_Connection *connection, const char *url)
 static void
 get_client_address (struct MHD_Connection *conn, char *client_address)
 {
-  // First try X-Real-IP header (unless advised to ignore, then MHD connection
-  const char* x_real_ip = MHD_lookup_connection_value (conn,
-                                                       MHD_HEADER_KIND,
-                                                       "X-Real-IP");
+  const char* x_real_ip;
+
+  /* First try X-Real-IP header (unless told to ignore), then MHD connection. */
+
+  x_real_ip = MHD_lookup_connection_value (conn,
+                                           MHD_HEADER_KIND,
+                                           "X-Real-IP");
   if (!ignore_http_x_real_ip && x_real_ip != NULL)
     {
-      strcpy(client_address, x_real_ip);
+      strcpy (client_address, x_real_ip);
     }
   else
     {
@@ -4035,7 +4038,6 @@ request_handler (void *cls, struct MHD_Connection *connection,
 
   /* Set HTTP Header values. */
 
-  get_client_address (connection, client_address);
   if (!strcmp (method, "GET"))
     {
       const char *token, *cookie, *accept_language;
@@ -4151,6 +4153,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
       if (openvas_validate (validator, "token", cookie))
         cookie = NULL;
 
+      get_client_address (connection, client_address);
       ret = user_find (cookie, token, client_address, &user);
       if (ret == USER_BAD_TOKEN || ret == USER_GUEST_LOGIN_FAILED ||
               ret == USER_OMP_DOWN || ret == USER_GUEST_LOGIN_ERROR)
@@ -4678,6 +4681,8 @@ request_handler (void *cls, struct MHD_Connection *connection,
                                                      MHD_HEADER_KIND,
                                                      "Accept-Language");
       con_info->language = accept_language_to_env_fmt (accept_language);
+
+      get_client_address (connection, client_address);
 
       user = NULL;
       new_sid = NULL;

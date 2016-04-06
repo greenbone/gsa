@@ -1,5 +1,10 @@
 2016-04-06  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad.c (get_client_address): Neaten formatting.
+	(request_handler): Get client address as late as possible.
+
+2016-04-06  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/classic/help.xsl (new_alert.html): Add SCP section.
 
 2016-04-05  Matthew Mundell <matthew.mundell@greenbone.net>
