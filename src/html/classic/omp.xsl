@@ -1684,7 +1684,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <div class="col-4">
             <input type="number" name="{$first_param_name}" size="5"
               class="form-control"
-              min="0"
+              min="1"
               value="{filters/keywords/keyword[column='first']/value}"
               maxlength="400"/>
           </div>
