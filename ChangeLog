@@ -1,5 +1,11 @@
 2016-04-06  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/omp.xsl (filter-window-part): Set maximim value of first
+	result parameter in update filter dialog to number available entries returned
+	from gsad.
+
+2016-04-06  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/greenbone.js (on_read): Extract the spinner change event
 	handler to a reusable on_spinner_change function. Also reset spinner to
 	previous value if value is smaller then min or bigger then max.

@@ -1006,6 +1006,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="columns"/>
   <xsl:param name="filter_options" select="''"/>
   <xsl:param name="filters" select="../filters"/>
+  <xsl:param name="full-count" select="1"/>
 
   <xsl:variable name="filter_options_nodes" select="exslt:node-set($filter_options)"/>
 
@@ -1685,6 +1686,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <input type="number" name="{$first_param_name}" size="5"
               class="form-control"
               min="1"
+              max="{$full-count}"
               value="{filters/keywords/keyword[column='first']/value}"
               maxlength="400"/>
           </div>
@@ -3972,6 +3974,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:with-param name="type" select="'report_result'"/>
       <xsl:with-param name="subtype" select="''"/>
       <xsl:with-param name="list" select="report/results"/>
+      <xsl:with-param name="full-count" select="result_count/full/text ()"/>
       <xsl:with-param name="columns" xmlns="">
         <column>
           <name><xsl:value-of select="gsa:i18n('Name', 'Property')"/></name>
@@ -5261,6 +5264,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="type" select="$type"/>
         <xsl:with-param name="subtype" select="$subtype"/>
         <xsl:with-param name="list" select="$resources-summary"/>
+        <xsl:with-param name="full-count" select="$full-count"/>
         <xsl:with-param name="columns" select="$columns" xmlns=""/>
         <xsl:with-param name="extra_params" xmlns="">
           <xsl:copy-of select="$extra_params"/>
