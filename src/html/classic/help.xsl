@@ -1412,6 +1412,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <li> $e: event description </li>
         <li> $n: task name </li>
       </ul>
+
+      <h3>SCP</h3>
+
+      <p>
+        The report will be copied to the given destination using "scp".
+      </p>
+
+      <p>
+      The following replacements in the filename will be done:
+      </p>
+
+      <ul>
+        <li> $$: $ </li>
+        <li> $n: task name </li>
+      </ul>
     </div>
   </div>
 </xsl:template>

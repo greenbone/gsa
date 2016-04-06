@@ -1,3 +1,7 @@
+2016-04-06  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/classic/help.xsl (new_alert.html): Add SCP section.
+
 2016-04-05  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/omp.xsl (report_format [details]): Correct path for
