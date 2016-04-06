@@ -32693,20 +32693,6 @@ should not have received it.
 <xsl:template name="report-icons">
   <xsl:param name="section"/>
   <xsl:call-template name="report-help-icon"/>
-  <xsl:choose>
-    <xsl:when test="@type='prognostic'">
-      <a href="/omp?cmd=get_report_section&amp;report_section={$section}&amp;type=prognostic&amp;host={/envelope/params/host}&amp;filter=&amp;filt_id=&amp;token={/envelope/token}"
-        title="{gsa:i18n ('Return to default filter view', 'Action Verb')}">
-        <img class="icon" src="/img/list.png"/>
-      </a>
-    </xsl:when>
-    <xsl:otherwise>
-      <a href="/omp?cmd=get_report_section&amp;report_section={$section}&amp;report_id={@id}&amp;filter=&amp;filt_id=&amp;token={/envelope/token}"
-        title="{gsa:i18n ('Return to default filter view', 'Action Verb')}">
-        <img class="icon" src="/img/list.png"/>
-      </a>
-    </xsl:otherwise>
-  </xsl:choose>
   <div class="form-inline">
     <xsl:call-template name="filtered-report-export-form"></xsl:call-template>
   </div>
