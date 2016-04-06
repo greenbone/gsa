@@ -1036,6 +1036,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:for-each>
   </xsl:variable>
 
+  <xsl:variable name="max">
+    <xsl:choose>
+      <xsl:when test="$full-count&lt;1">
+        <xsl:value-of select="1"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$full-count"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
   <div>
     <form class="form-inline" action="" method="get" enctype="multipart/form-data" name="filterform">
       <input type="hidden" name="token" value="{/envelope/token}"/>
@@ -1686,7 +1697,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <input type="number" name="{$first_param_name}" size="5"
               class="form-control"
               min="1"
-              max="{$full-count}"
+              max="{$max}"
               value="{filters/keywords/keyword[column='first']/value}"
               maxlength="400"/>
           </div>
