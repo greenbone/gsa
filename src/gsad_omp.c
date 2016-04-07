@@ -6521,6 +6521,13 @@ append_alert_method_data (GString *xml, params_t *data, const char *method)
                     && (strcmp (name, "send_host") == 0
                         || strcmp (name, "send_port") == 0
                         || strcmp (name, "send_report_format") == 0))
+                || (strcmp (method, "SCP") == 0
+                    && (strcmp (name, "scp_host") == 0
+                        || strcmp (name, "scp_known_hosts") == 0
+                        || strcmp (name, "scp_password") == 0
+                        || strcmp (name, "scp_path") == 0
+                        || strcmp (name, "scp_report_format") == 0
+                        || strcmp (name, "scp_username") == 0))
                 || (strcmp (method, "verinice Connector") == 0
                     && (strcmp (name, "verinice_server_url") == 0
                         || strcmp (name, "verinice_server_username") == 0
