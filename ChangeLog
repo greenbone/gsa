@@ -5,6 +5,11 @@
 
 2016-04-07  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/greenbone-ui.js: Introduce a slider ui component which
+	is a combination of our spinner and the jquery ui slider.
+
+2016-04-07  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/greenbone-ui.js: Pass keydown event also to super widget
 	class. Fix checking for min values in spinner.
 

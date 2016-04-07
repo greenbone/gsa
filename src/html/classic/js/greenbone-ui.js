@@ -27,6 +27,81 @@
 (function(global, $, console) {
   'use strict';
 
+  $.widget('greenbone.slider', $.ui.slider, {
+    _create: function() {
+      var self = this;
+
+      this.root = this.element;
+
+      this.element = $('<div class="gb-slider"></div>');
+      this.spinner_element = $('<input type="text"/>');
+
+      if (this.options.type !== undefined) {
+        this.spinner_element.data('type', this.options.type);
+      }
+
+      $.each(['min', 'max', 'step', 'value'], function(i, option) {
+        var value = self.options[option];
+        if (value !== undefined) {
+          self.spinner_element.attr(option, value);
+        }
+      });
+
+      this.root.addClass('gb-slider-container');
+      this.root.append(this.spinner_element);
+      this.root.append(this.element);
+
+      this.spinner_element.spinner({
+        change: this._onSpinChange(),
+        spin: this._onSpin(),
+      });
+      this.spinner = this.spinner_element.spinner('instance');
+
+      this._super();
+    },
+    _getCreateOptions: function() {
+      var options = {};
+      var element = this.element;
+      var value;
+
+      $.each(['min', 'max', 'step', 'value'], function(i, option) {
+        value = element.attr(option);
+        if (value !== undefined && value.length) {
+          options[option] = +value;
+        }
+      });
+
+      value = element.attr('type');
+      if (value !== undefined && value.length) {
+        options.type = value;
+      }
+
+      return options;
+    },
+
+    _onSpinChange: function() {
+      var self = this;
+      return function() {
+        var value = self.spinner.value();
+        self._setValue(value);
+      };
+    },
+    _onSpin: function() {
+      var self = this;
+      return function(event, ui) {
+        var value = ui.value;
+        self._setValue(value);
+      };
+    },
+    _change: function() {
+      this.spinner._value(this.value());
+    },
+    _setValue: function(value) {
+      this.options.value = this._trimAlignValue(value);
+      this._refreshValue();
+    }
+  });
+
   $.widget('greenbonde.spinner', $.ui.spinner, {
     _create: function() {
       this.allowed = [
