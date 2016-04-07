@@ -5,6 +5,11 @@
 
 2016-04-07  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/greenbone-ui.js: Pass name parameter to slider input
+	element. This allows to use the new slider within forms.
+
+2016-04-07  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/greenbone-ui.js: Introduce a slider ui component which
 	is a combination of our spinner and the jquery ui slider.
 

@@ -40,6 +40,8 @@
         this.spinner_element.data('type', this.options.type);
       }
 
+      this.spinner_element.attr('name', this.options.name);
+
       $.each(['min', 'max', 'step', 'value'], function(i, option) {
         var value = self.options[option];
         if (value !== undefined) {
@@ -71,10 +73,12 @@
         }
       });
 
-      value = element.attr('type');
-      if (value !== undefined && value.length) {
-        options.type = value;
-      }
+      $.each(['type', 'name'], function(i, option) {
+        value = element.attr(option);
+        if (value !== undefined && value.length) {
+          options[option] = value;
+        }
+      });
 
       return options;
     },
