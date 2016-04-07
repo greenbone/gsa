@@ -17782,20 +17782,9 @@ should not have received it.
 </xsl:template>
 
 <xsl:template name="html-create-schedule-form">
-  <div class="gb_window">
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n ('New Schedule', 'Schedule')"/>
-      <a href="/help/new_schedule.html?token={/envelope/token}"
-         title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('New Schedule', 'Schedule'))}">
-        <img src="/img/help.png"/>
-      </a>
-      <a href="/omp?cmd=get_schedules&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-         title="{gsa:i18n ('Schedules', 'Schedule')}" style="margin-left:3px;">
-        <img src="/img/list.png" alt="{gsa:i18n ('Schedules', 'Schedule')}"/>
-      </a>
-    </div>
-    <div class="gb_window_part_content">
+  <div class="edit-dialog">
+    <div class="title"><xsl:value-of select="gsa:i18n ('New Schedule', 'Schedule')"/></div>
+    <div class="content">
       <form action="/omp" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="create_schedule"/>
@@ -18014,11 +18003,6 @@ should not have received it.
                 <option value="day"><xsl:value-of select="gsa:i18n ('day(s)', 'Time')"/></option>
                 <option value="week"><xsl:value-of select="gsa:i18n ('week(s)', 'Time')"/></option>
               </select>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <input type="submit" name="submit" value="{gsa:i18n ('Create Schedule', 'Schedule')}"/>
             </td>
           </tr>
         </table>
