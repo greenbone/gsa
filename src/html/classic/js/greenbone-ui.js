@@ -171,6 +171,10 @@
 
       return this._super(event);
     },
+    _draw: function() {
+      this._super();
+      this.uiSpinner.addClass('gb-spinner');
+    },
   });
 
 })(window, window.$, window.console);
