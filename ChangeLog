@@ -1,5 +1,10 @@
 2016-04-07  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/greenbone.js: Don't log errors of i18n to console. It's
+	ok to not find translation files because we have a sane fallback.
+
+2016-04-07  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/css/gsa-style.css: Add margin between "sections" of the
 	filter selection in the toolbar.
 

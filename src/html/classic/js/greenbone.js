@@ -99,6 +99,9 @@
         /* use url?lang=de as querystring */
         lookupQuerystring: 'lang',
       },
+    }, function(err, t) {
+      /* keep quiet if translations have not be found.
+       * errors can be debugged here */
     });
 
   /* Use an own function for translations
