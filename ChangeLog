@@ -1,3 +1,10 @@
+2016-04-07  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/help.xsl (hosts.html): Show help text for "Edit"
+	action, add description for "Create Target from Host" and fix heading
+	for "Delete Host".
+	(new_target.html): Add input field "Hosts: From host assets".
+
 2016-04-07  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/js/greenbone.js (FilterDialog): Fix displaying the content

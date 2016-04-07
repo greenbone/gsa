@@ -594,11 +594,25 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:call-template name="list-window-line-actions">
         <xsl:with-param name="type" select="'Host'"/>
         <xsl:with-param name="noclone" select="1"/>
-        <xsl:with-param name="noedit" select="1"/>
         <xsl:with-param name="notrashcan" select="1"/>
       </xsl:call-template>
 
-      <h4>Delete Report</h4>
+      <h4>Create Target from Host</h4>
+      <p>
+        To create a new Target based on a Host click the
+        Create Target from Host icon
+        <img src="/img/new.png" title="Create Target from Host"/>,
+        which will open the
+        <a href="/help/new_target.html?token={/envelope/token}">New Target</a>
+        dialog with an option to use the selected Host Asset selected.
+      </p>
+      <p>
+        The corresponding "Create Target from..." bulk action at the bottom of
+        the table will open the dialog with the option to use the chosen
+        selection of Hosts.
+      </p>
+
+      <h4>Delete Host</h4>
       <p>
         Pressing the delete icon <img src="/img/delete.png" alt="Delete" title="Delete"/> will
         remove the host immediately, including all host identifiers.  The list of assets will
@@ -6270,34 +6284,46 @@ Public License instead of this License.
           <td><tt>192.168.1.23,192.168.1.2/31, webserv1.mycompany.tld</tt></td>
         </tr>
         <tr class="even">
+          <td>Hosts: From host assets</td>
+          <td>--</td>
+          <td>--</td>
+          <td>
+            Use a selection of Hosts from the Asset Management.
+            (Only available if dialog was opened from the
+            <a href="/help/hosts.html?token={/envelope/token}">Hosts</a>
+            list page)
+          </td>
+          <td>--</td>
+        </tr>
+        <tr class="odd">
           <td>Exclude Hosts</td>
           <td>--</td>
           <td>200</td>
           <td>Same as Hosts.</td>
           <td><tt>192.168.1.23, 192.168.1.125, webbackup.mycompany.tld</tt></td>
         </tr>
-        <tr class="odd">
+        <tr class="even">
           <td>Reverse Lookup Only</td>
           <td>yes</td>
           <td>---</td>
           <td>Choice</td>
           <td>Yes (Scan only hosts that reverse-lookup.)</td>
         </tr>
-        <tr class="even">
+        <tr class="odd">
           <td>Reverse Lookup Unify</td>
           <td>yes</td>
           <td>---</td>
           <td>Choice</td>
           <td>Yes (Deduplicate hosts based on reverse-lookup value.)</td>
         </tr>
-        <tr class="odd">
+        <tr class="even">
           <td>Comment</td>
           <td>no</td>
           <td>400</td>
           <td>Alphanumeric</td>
           <td>Covers both of our web staging systems</td>
         </tr>
-        <tr class="even">
+        <tr class="odd">
           <td>
             Port List
             <xsl:if test="not (gsa:may-op ('get_port_lists'))">*</xsl:if>
@@ -6307,7 +6333,7 @@ Public License instead of this License.
           <td>Any of the <a href="port_lists.html?token={/envelope/token}">configured port lists</a>.</td>
           <td>All privileged TCP</td>
         </tr>
-        <tr class="odd">
+        <tr class="even">
           <td>
             SSH Credential
             <xsl:if test="not (gsa:may-op ('get_credentials'))">*</xsl:if>
@@ -6317,7 +6343,7 @@ Public License instead of this License.
           <td>Any of the <a href="credentials.html?token={/envelope/token}">configured credentials</a>.</td>
           <td>Security Scan Account for SSH</td>
         </tr>
-        <tr class="even">
+        <tr class="odd">
           <td>
             SSH Port
             <xsl:if test="not (gsa:may-op ('get_credentials'))">*</xsl:if>
@@ -6327,7 +6353,7 @@ Public License instead of this License.
           <td>A port number.</td>
           <td>22</td>
         </tr>
-        <tr class="odd">
+        <tr class="even">
           <td>
             SMB Credential
             <xsl:if test="not (gsa:may-op ('get_credentials'))">*</xsl:if>
@@ -6337,7 +6363,7 @@ Public License instead of this License.
           <td>Any of the <a href="credentials.html?token={/envelope/token}">configured credentials</a>.</td>
           <td>Security Scan Account for SMB</td>
         </tr>
-        <tr class="even">
+        <tr class="odd">
           <td>
             ESXi Credential
             <xsl:if test="not (gsa:may-op ('get_credentials'))">*</xsl:if>
