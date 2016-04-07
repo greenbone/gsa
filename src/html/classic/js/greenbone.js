@@ -602,6 +602,7 @@
   FilterDialog.prototype.show = function() {
     var self = this;
     var content = $('#' + this.id);
+    var parent = content.parent();
 
     content.show();
 
@@ -633,6 +634,8 @@
         }
       ],
       close: function() {
+        content.hide();
+        parent.append(content);
         self.dialog.remove();
         self.dialog = undefined;
         start_auto_refresh();

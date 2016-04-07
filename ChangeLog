@@ -1,3 +1,11 @@
+2016-04-07  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/js/greenbone.js (FilterDialog): Fix displaying the content
+	of the update filter dialog after it has been closed. The dialog got changed
+	to use the original content and not the cloned one because the cloned content
+	didn't had cloned event listeners. Now with the original content we must
+	ensure that it isn't removed from the DOM when closing the dialog.
+
 2016-04-07  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad.c (main): Add --unix-socket option.
