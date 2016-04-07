@@ -5,6 +5,11 @@
 
 2016-04-07  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/omp.xsl, src/html/classic/js/greenbone.js: Use new slider
+	component for min cvss and min qod values in update filter dialog.
+
+2016-04-07  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/css/gsa-style.css: Add css styles for formatting the slider
 	ui component.
 

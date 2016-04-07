@@ -1136,6 +1136,7 @@
 
     doc.find('input.spinner').spinner();
 
+    doc.find('.slider').slider();
 
     doc.find('select:not(.no-select2)').select2();
   }

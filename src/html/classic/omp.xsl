@@ -1047,6 +1047,28 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:choose>
   </xsl:variable>
 
+  <xsl:variable name="min_qod_value">
+    <xsl:choose>
+      <xsl:when test="not (filters/keywords/keyword[column = 'min_qod']/value != '')">
+        <xsl:value-of select="70"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="filters/keywords/keyword[column = 'min_qod']/value"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
+  <xsl:variable name="min_cvss_base_value">
+    <xsl:choose>
+      <xsl:when test="not (filters/keywords/keyword[column = 'min_cvss_base']/value != '')">
+        <xsl:value-of select="'8.0'"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="filters/keywords/keyword[column = 'min_cvss_base']/value"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
   <div>
     <form class="form-inline" action="" method="get" enctype="multipart/form-data" name="filterform">
       <input type="hidden" name="token" value="{/envelope/token}"/>
@@ -1442,62 +1464,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </label>
             </div>
             <div class="form-item">
-              <select name="min_cvss_base">
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'10.0'"/>
-                  <xsl:with-param name="select-value" select="filters/keywords/keyword[column = 'min_cvss_base']/value"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'9.0'"/>
-                  <xsl:with-param name="select-value" select="filters/keywords/keyword[column = 'min_cvss_base']/value"/>
-                </xsl:call-template>
-                <xsl:choose>
-                  <xsl:when test="not (filters/keywords/keyword[column = 'min_cvss_base']/value = '')">
-                    <xsl:call-template name="opt">
-                      <xsl:with-param name="value" select="'8.0'"/>
-                      <xsl:with-param name="select-value" select="'8.0'"/>
-                    </xsl:call-template>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <xsl:call-template name="opt">
-                      <xsl:with-param name="value" select="'8.0'"/>
-                      <xsl:with-param name="select-value" select="filters/keywords/keyword[column = 'min_cvss_base']/value"/>
-                    </xsl:call-template>
-                  </xsl:otherwise>
-                </xsl:choose>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'7.0'"/>
-                  <xsl:with-param name="select-value" select="filters/keywords/keyword[column = 'min_cvss_base']/value"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'6.0'"/>
-                  <xsl:with-param name="select-value" select="filters/keywords/keyword[column = 'min_cvss_base']/value"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'5.0'"/>
-                  <xsl:with-param name="select-value" select="filters/keywords/keyword[column = 'min_cvss_base']/value"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'4.0'"/>
-                  <xsl:with-param name="select-value" select="filters/keywords/keyword[column = 'min_cvss_base']/value"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'3.0'"/>
-                  <xsl:with-param name="select-value" select="filters/keywords/keyword[column = 'min_cvss_base']/value"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'2.0'"/>
-                  <xsl:with-param name="select-value" select="filters/keywords/keyword[column = 'min_cvss_base']/value"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'1.0'"/>
-                  <xsl:with-param name="select-value" select="filters/keywords/keyword[column = 'min_cvss_base']/value"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'0.0'"/>
-                  <xsl:with-param name="select-value" select="filters/keywords/keyword[column = 'min_cvss_base']/value"/>
-                </xsl:call-template>
-              </select>
+              <div min="0" max="10" step="0.1" name="min_cvss_base" class="slider" type="float" value="{$min_cvss_base_value}"></div>
             </div>
           </span>
         </div>
@@ -1524,63 +1491,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </label>
             </div>
             <div class="form-item">
-              <select name="min_qod">
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'100'"/>
-                  <xsl:with-param name="select-value" select="filters/keywords/keyword[column = 'min_qod']/value"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'90'"/>
-                  <xsl:with-param name="select-value" select="filters/keywords/keyword[column = 'min_qod']/value"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'80'"/>
-                  <xsl:with-param name="select-value" select="filters/keywords/keyword[column = 'min_qod']/value"/>
-                </xsl:call-template>
-                <xsl:choose>
-                  <xsl:when test="not (filters/keywords/keyword[column = 'min_qod']/value != '')">
-                    <xsl:call-template name="opt">
-                      <xsl:with-param name="value" select="'70'"/>
-                      <xsl:with-param name="select-value" select="'70'"/>
-                    </xsl:call-template>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <xsl:call-template name="opt">
-                      <xsl:with-param name="value" select="'70'"/>
-                      <xsl:with-param name="select-value" select="report/filters/keywords/keyword[column = 'min_qod']/value"/>
-                    </xsl:call-template>
-                  </xsl:otherwise>
-                </xsl:choose>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'60'"/>
-                  <xsl:with-param name="select-value" select="filters/keywords/keyword[column = 'min_qod']/value"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'50'"/>
-                  <xsl:with-param name="select-value" select="filters/keywords/keyword[column = 'min_qod']/value"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'40'"/>
-                  <xsl:with-param name="select-value" select="filters/keywords/keyword[column = 'min_qod']/value"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'30'"/>
-                  <xsl:with-param name="select-value" select="filters/keywords/keyword[column = 'min_qod']/value"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'20'"/>
-                  <xsl:with-param name="select-value" select="filters/keywords/keyword[column = 'min_qod']/value"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'10'"/>
-                  <xsl:with-param name="select-value" select="filters/keywords/keyword[column = 'min_qod']/value"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'0'"/>
-                  <xsl:with-param name="select-value" select="filters/keywords/keyword[column = 'min_qod']/value"/>
-                </xsl:call-template>
-              </select>
-              <xsl:text>%</xsl:text>
+              <div min="0" max="100" step="1" class="slider" name="min_qod" type="int" value="{$min_qod_value}"></div>
             </div>
           </span>
         </div>
