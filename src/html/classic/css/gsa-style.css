@@ -1499,4 +1499,33 @@ select[multiple] {
   padding-bottom: 5px;
 }
 
+/* greenbone slider */
+
+.gb-slider-container {
+  vertical-align: middle;
+  display: inline-block;
+}
+
+.gb-slider-container .gb-spinner {
+  width: 25%;
+  float: left;
+}
+
+.gb-slider-container .gb-slider {
+  width: 75%;
+  float: left;
+  left: 10px;
+  top: 5px;
+}
+
+.gb-slider-container::after,
+.gb-slider-container::before {
+  content: " ";
+  display: table;
+}
+
+.gb-slider-container:after {
+  clear: both;
+}
+
 /* vim: set ts=2 sw=2 tw=80:*/
