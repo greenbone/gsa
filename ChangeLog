@@ -1,3 +1,25 @@
+2016-04-07  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Backport applicable parts of r24893 with fixes from r24894.  Also test
+	UTF-8 validity in file_content_response.
+
+	* src/gsad_omp.c (generate_page): Test if current_page is valid UTF-8.
+
+	* src/gsad.c (UTF8_ERROR_PAGE): New #define.
+	(params_mhd_validate): Separate test if param is valid UTF-8 from other
+	validations.
+	(exec_omp_post): Test if caller is valid UTF-8.
+	(send_redirect_to_urn, redirect_handler): Test if "Host" header is
+	valid UTF-8.
+	(file_content_response): Test if "Accept-Language" header is not valid
+	UTF-8.
+	(request_handler): Return error message if URL or "Accept-Language"
+	header is not valid UTF-8.  Also check encoding of "cmd" and
+	"report_format_id" in expired/bad/missing token/cookie case.
+
+	* src/validator.c (openvas_validate): Test whether name and value are
+	valid UTF-8 if they are not NULL.
+
 2016-03-22  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/omp.xsl (wbr-at-punctuation): New template.

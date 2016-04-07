@@ -1032,6 +1032,12 @@ generate_page (credentials_t *credentials, params_t *params, gchar *response,
                const gchar *next)
 {
   credentials->current_page = page_url (credentials, next);
+  if (g_utf8_validate (credentials->current_page, -1, NULL))
+    {
+      g_free (credentials->current_page);
+      g_warning ("%s - current_page is not valid UTF-8", __FUNCTION__);
+      credentials->current_page = g_strdup ("");
+    }
 
   if (strcmp (next, "edit_role") == 0)
     return edit_role (credentials, params, response);

@@ -184,6 +184,17 @@ openvas_validate (validator_t validator, const char *name, const char *value)
 {
   gpointer key, value_rule;
 
+  if (name != NULL && g_utf8_validate (name, -1, NULL) == FALSE)
+    {
+      tracef ("%s: name is not valid UTF-8", __FUNCTION__);
+      return 1;
+    }
+  else if (value != NULL && g_utf8_validate (value, -1, NULL) == FALSE)
+    {
+      tracef ("%s: value is not valid UTF-8", __FUNCTION__);
+      return 2;
+    }
+
   tracef ("%s: name %s value %s", __FUNCTION__, name, value);
 
   if (g_hash_table_lookup_extended (validator, name, &key, &value_rule))

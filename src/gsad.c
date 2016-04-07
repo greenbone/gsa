@@ -223,6 +223,15 @@ const char *ERROR_PAGE = "<html><body>HTTP Method not supported</body></html>";
 char *SERVER_ERROR =
   "<html><body>An internal server error has occurred.</body></html>";
 
+/*
+ * UTF-8 Error page HTML.
+ */
+#define UTF8_ERROR_PAGE(location) \
+  "<html>"                                                            \
+  "<head><title>Invalid request</title></head>"                       \
+  "<body>The request contained invalid UTF-8 in " location ".</body>" \
+  "</html>"
+
 /**
  * @brief The handle on the embedded HTTP daemon.
  */
@@ -1806,21 +1815,22 @@ params_mhd_validate (void *params)
       param_t *param;
       param = (param_t*) value;
 
-      if ((g_utf8_validate (param->value, -1, NULL) == FALSE)
-          || (!g_str_has_prefix (name, "osp_pref_")
-              && openvas_validate (validator, name, param->value)))
+      param->valid_utf8 = (g_utf8_validate (name, -1, NULL)
+                           && (param->value == NULL
+                               || g_utf8_validate (param->value, -1, NULL)));
+
+      if ((!g_str_has_prefix (name, "osp_pref_")
+           && openvas_validate (validator, name, param->value)))
         {
           param->original_value = param->value;
           param->value = NULL;
           param->valid = 0;
-          param->valid_utf8 = 0;
         }
       else
         {
           const gchar *alias_for;
 
           param->valid = 1;
-          param->valid_utf8 = 1;
 
           alias_for = openvas_validator_alias_for (validator, name);
           if ((param->value && (strcmp ((gchar*) name, "number") == 0))
@@ -2088,6 +2098,12 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
 
       caller = params_value (con_info->params, "caller");
 
+      if (caller && g_utf8_validate (caller, -1, NULL) == FALSE)
+        {
+          caller = NULL;
+          g_warning ("%s - caller is not valid UTF-8", __FUNCTION__);
+        }
+
       /* @todo Validate caller. */
 
       xml = g_markup_printf_escaped ("<login_page>"
@@ -2191,6 +2207,11 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   /* The caller of a POST is usually the caller of the page that the POST form
    * was on. */
   caller = params_value (con_info->params, "caller");
+  if (caller && g_utf8_validate (caller, -1, NULL) == FALSE)
+    {
+      g_warning ("%s - caller is not valid UTF-8", __FUNCTION__);
+      caller = NULL;
+    }
   credentials->caller = g_strdup (caller ?: "");
 
   if (new_sid) *new_sid = g_strdup (user->cookie);
@@ -3312,7 +3333,15 @@ send_redirect_to_urn (struct MHD_Connection *connection, const char *urn,
 
   host = MHD_lookup_connection_value (connection, MHD_HEADER_KIND,
                                       MHD_HTTP_HEADER_HOST);
-  if (host == NULL)
+  if (host && g_utf8_validate (host, -1, NULL) == FALSE)
+    {
+      send_response (connection,
+                     UTF8_ERROR_PAGE ("'Host' header"),
+                     MHD_HTTP_BAD_REQUEST, NULL,
+                     GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0);
+      return MHD_YES;
+    }
+  else if (host == NULL)
     return MHD_NO;
 
   snprintf (uri, sizeof (uri), "http%s://%s%s", use_secure_cookie ? "s" : "",
@@ -3378,7 +3407,15 @@ redirect_handler (void *cls, struct MHD_Connection *connection,
   host = MHD_lookup_connection_value (connection,
                                       MHD_HEADER_KIND,
                                       "Host");
-  if (host == NULL)
+  if (host && g_utf8_validate (host, -1, NULL) == FALSE)
+    {
+      send_response (connection,
+                     UTF8_ERROR_PAGE ("'Host' header"),
+                     MHD_HTTP_BAD_REQUEST, NULL,
+                     GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0);
+      return MHD_YES;
+    }
+  else if (host == NULL)
     return MHD_NO;
   /* [IPv6 or IPv4-mapped IPv6]:port */
   if (sscanf (host, "[%" G_STRINGIFY(MAX_HOST_LEN) "[0-9a-f:.]]:%*i", name)
@@ -3466,20 +3503,31 @@ file_content_response (credentials_t *credentials,
       accept_language = MHD_lookup_connection_value (connection,
                                                      MHD_HEADER_KIND,
                                                      "Accept-Language");
-      language = (accept_language_to_env_fmt (accept_language));
-      xml = g_strdup_printf ("<login_page>"
-                             "<token></token>"
-                             "<time>%s</time>"
-                             "<i18n>%s</i18n>"
-                             "<guest><username>%s</username></guest>"
-                             "</login_page>",
-                             ctime_now,
-                             language
-                              ? language
-                              : DEFAULT_GSAD_LANGUAGE,
-                             guest_username ? guest_username : "");
-      g_free (language);
-      res = xsl_transform (xml);
+      if (accept_language
+          && g_utf8_validate (accept_language, -1, NULL) == FALSE)
+        {
+          res = g_strdup (UTF8_ERROR_PAGE ("'Accept-Language' header"));
+          if (http_response_code)
+            *http_response_code = MHD_HTTP_BAD_REQUEST;
+          xml = NULL;
+        }
+      else
+        {
+          language = (accept_language_to_env_fmt (accept_language));
+          xml = g_strdup_printf ("<login_page>"
+                                 "<token></token>"
+                                 "<time>%s</time>"
+                                 "<i18n>%s</i18n>"
+                                 "<guest><username>%s</username></guest>"
+                                 "</login_page>",
+                                 ctime_now,
+                                 language
+                                   ? language
+                                   : DEFAULT_GSAD_LANGUAGE,
+                                 guest_username ? guest_username : "");
+          g_free (language);
+          res = xsl_transform (xml);
+        }
       response = MHD_create_response_from_data (strlen (res), res,
                                                 MHD_NO, MHD_YES);
       g_free (path);
@@ -3736,7 +3784,13 @@ request_handler (void *cls, struct MHD_Connection *connection,
 
   /* Many Glib functions require valid UTF-8. */
   if (url && (g_utf8_validate (url, -1, NULL) == FALSE))
-    return MHD_NO;
+    {
+      send_response (connection,
+                     UTF8_ERROR_PAGE ("URL"),
+                     MHD_HTTP_BAD_REQUEST, NULL,
+                     GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0);
+      return MHD_YES;
+    }
 
   /* Only accept GET and POST methods and send ERROR_PAGE in other cases. */
   if (strcmp (method, "GET") && strcmp (method, "POST"))
@@ -3883,6 +3937,15 @@ request_handler (void *cls, struct MHD_Connection *connection,
               accept_language = MHD_lookup_connection_value (connection,
                                                              MHD_HEADER_KIND,
                                                              "Accept-Language");
+              if (accept_language
+                  && g_utf8_validate (accept_language, -1, NULL) == FALSE)
+                {
+                  send_response (connection,
+                                UTF8_ERROR_PAGE ("'Accept-Language' header"),
+                                MHD_HTTP_BAD_REQUEST, NULL,
+                                GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0);
+                  return MHD_YES;
+                }
               language = accept_language_to_env_fmt (accept_language);
               xml = g_strdup_printf ("<login_page>"
                                      "<message>"
@@ -3939,13 +4002,24 @@ request_handler (void *cls, struct MHD_Connection *connection,
                                                           MHD_GET_ARGUMENT_KIND,
                                                           "report_format_id");
           export = (cmd
+                    && g_utf8_validate (cmd, -1, NULL)
                     && ((strncmp (cmd, "export", strlen ("export")) == 0)
                         || ((strcmp (cmd, "get_report") == 0)
-                            && report_format_id)));
+                            && report_format_id
+                            && g_utf8_validate (report_format_id, -1, NULL))));
 
           accept_language = MHD_lookup_connection_value (connection,
                                                          MHD_HEADER_KIND,
                                                          "Accept-Language");
+          if (accept_language
+              && g_utf8_validate (accept_language, -1, NULL) == FALSE)
+            {
+              send_response (connection,
+                             UTF8_ERROR_PAGE ("'Accept-Language' header"),
+                             MHD_HTTP_BAD_REQUEST, NULL,
+                             GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0);
+              return MHD_YES;
+            }
           language = accept_language_to_env_fmt (accept_language);
           full_url = reconstruct_url (connection, url);
           xml = g_markup_printf_escaped
@@ -4009,6 +4083,15 @@ request_handler (void *cls, struct MHD_Connection *connection,
           accept_language = MHD_lookup_connection_value (connection,
                                                          MHD_HEADER_KIND,
                                                          "Accept-Language");
+          if (accept_language
+              && g_utf8_validate (accept_language, -1, NULL) == FALSE)
+            {
+              send_response (connection,
+                             UTF8_ERROR_PAGE ("'Accept-Language' header"),
+                             MHD_HTTP_BAD_REQUEST, NULL,
+                             GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0);
+              return MHD_YES;
+            }
           language = accept_language_to_env_fmt (accept_language);
           xml = g_strdup_printf ("<login_page>"
                                  "<message>"
@@ -4043,6 +4126,15 @@ request_handler (void *cls, struct MHD_Connection *connection,
         {
           accept_language = MHD_lookup_connection_value
                               (connection, MHD_HEADER_KIND, "Accept-Language");
+          if (accept_language
+              && g_utf8_validate (accept_language, -1, NULL) == FALSE)
+            {
+              send_response (connection,
+                             UTF8_ERROR_PAGE ("'Accept-Language' header"),
+                             MHD_HTTP_BAD_REQUEST, NULL,
+                             GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0);
+              return MHD_YES;
+            }
           language = accept_language_to_env_fmt (accept_language);
           credentials = credentials_new (user, language, client_address);
           g_free (language);
@@ -4051,6 +4143,12 @@ request_handler (void *cls, struct MHD_Connection *connection,
         credentials = credentials_new (user, language, client_address);
 
       credentials->caller = reconstruct_url (connection, url);
+      if (credentials->caller
+          && g_utf8_validate (credentials->caller, -1, NULL) == FALSE)
+        {
+          g_free (credentials->caller);
+          credentials->caller = NULL;
+        }
 
       sid = g_strdup (user->cookie);
 
@@ -4350,6 +4448,15 @@ request_handler (void *cls, struct MHD_Connection *connection,
       accept_language = MHD_lookup_connection_value (connection,
                                                      MHD_HEADER_KIND,
                                                      "Accept-Language");
+      if (accept_language
+          && g_utf8_validate (accept_language, -1, NULL) == FALSE)
+        {
+          send_response (connection,
+                         UTF8_ERROR_PAGE ("'Accept-Language' header"),
+                         MHD_HTTP_BAD_REQUEST, NULL,
+                         GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0);
+          return MHD_YES;
+        }
       language = accept_language_to_env_fmt (accept_language);
       con_info->language = g_strdup (language
                                       ? language
