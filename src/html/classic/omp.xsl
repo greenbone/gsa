@@ -17785,227 +17785,226 @@ should not have received it.
   <div class="edit-dialog">
     <div class="title"><xsl:value-of select="gsa:i18n ('New Schedule', 'Schedule')"/></div>
     <div class="content">
-      <form action="/omp" method="post" enctype="multipart/form-data">
+      <form action="/omp" method="post" enctype="multipart/form-data" class="form-horizontal">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="create_schedule"/>
         <input type="hidden" name="caller" value="{/envelope/current_page}"/>
         <input type="hidden" name="next" value="get_schedule"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
         <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
-        <table class="table-form">
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
-            <td>
-              <input type="text" name="name" value="unnamed" size="30"
-                     maxlength="80"/>
-            </td>
-          </tr>
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/></td>
-            <td>
-              <input type="text" name="comment" size="30" maxlength="400"/>
-            </td>
-          </tr>
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('First Time', 'Schedule')"/></td>
-            <td>
-              <input id="datevalue" size="30"/>
-              <input id="datepicker" type="hidden"/>,
-              <input name="day_of_month" type="hidden" value="{time/day_of_month}"/>
-              <input name="month" type="hidden" value="{time/month}"/>
-              <input name="year" type="hidden" value="{time/year}"/>
-              <select name="hour">
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'00'"/>
-                  <xsl:with-param name="select-value" select="time/hour"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'01'"/>
-                  <xsl:with-param name="select-value" select="time/hour"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'02'"/>
-                  <xsl:with-param name="select-value" select="time/hour"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'03'"/>
-                  <xsl:with-param name="select-value" select="time/hour"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'04'"/>
-                  <xsl:with-param name="select-value" select="time/hour"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'05'"/>
-                  <xsl:with-param name="select-value" select="time/hour"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'06'"/>
-                  <xsl:with-param name="select-value" select="time/hour"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'07'"/>
-                  <xsl:with-param name="select-value" select="time/hour"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'08'"/>
-                  <xsl:with-param name="select-value" select="time/hour"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'09'"/>
-                  <xsl:with-param name="select-value" select="time/hour"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'10'"/>
-                  <xsl:with-param name="select-value" select="time/hour"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'11'"/>
-                  <xsl:with-param name="select-value" select="time/hour"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'12'"/>
-                  <xsl:with-param name="select-value" select="time/hour"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'13'"/>
-                  <xsl:with-param name="select-value" select="time/hour"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'14'"/>
-                  <xsl:with-param name="select-value" select="time/hour"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'15'"/>
-                  <xsl:with-param name="select-value" select="time/hour"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'16'"/>
-                  <xsl:with-param name="select-value" select="time/hour"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'17'"/>
-                  <xsl:with-param name="select-value" select="time/hour"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'18'"/>
-                  <xsl:with-param name="select-value" select="time/hour"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'19'"/>
-                  <xsl:with-param name="select-value" select="time/hour"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'20'"/>
-                  <xsl:with-param name="select-value" select="time/hour"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'21'"/>
-                  <xsl:with-param name="select-value" select="time/hour"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'22'"/>
-                  <xsl:with-param name="select-value" select="time/hour"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'23'"/>
-                  <xsl:with-param name="select-value" select="time/hour"/>
-                </xsl:call-template>
-              </select>
-              h
-              <select name="minute">
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'00'"/>
-                  <xsl:with-param name="select-value" select="time/minute - (time/minute mod 5)"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'05'"/>
-                  <xsl:with-param name="select-value" select="time/minute - (time/minute mod 5)"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'10'"/>
-                  <xsl:with-param name="select-value" select="time/minute - (time/minute mod 5)"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'15'"/>
-                  <xsl:with-param name="select-value" select="time/minute - (time/minute mod 5)"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'20'"/>
-                  <xsl:with-param name="select-value" select="time/minute - (time/minute mod 5)"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'25'"/>
-                  <xsl:with-param name="select-value" select="time/minute - (time/minute mod 5)"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'30'"/>
-                  <xsl:with-param name="select-value" select="time/minute - (time/minute mod 5)"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'35'"/>
-                  <xsl:with-param name="select-value" select="time/minute - (time/minute mod 5)"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'40'"/>
-                  <xsl:with-param name="select-value" select="time/minute - (time/minute mod 5)"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'45'"/>
-                  <xsl:with-param name="select-value" select="time/minute - (time/minute mod 5)"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'50'"/>
-                  <xsl:with-param name="select-value" select="time/minute - (time/minute mod 5)"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'55'"/>
-                  <xsl:with-param name="select-value" select="time/minute - (time/minute mod 5)"/>
-                </xsl:call-template>
-              </select>
-            </td>
-          </tr>
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('Timezone', 'Time')"/></td>
-            <td>
-              <xsl:call-template name="timezone-select">
-                <xsl:with-param name="timezone" select="/envelope/timezone"/>
-                <xsl:with-param name="input-name" select="'timezone'"/>
+        <div class="form-group">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></label>
+          <div class="col-10">
+            <input type="text" name="name" value="unnamed" size="30"
+              class="form-control"
+              maxlength="80"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/></label>
+          <div class="col-10">
+            <input type="text" name="comment" size="30" maxlength="400" class="form-control"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('First Time', 'Schedule')"/></label>
+          <div class="col-10">
+            <input id="datevalue" size="30"/>
+            <input id="datepicker" type="hidden"/>,
+            <input name="day_of_month" type="hidden" value="{time/day_of_month}"/>
+            <input name="month" type="hidden" value="{time/month}"/>
+            <input name="year" type="hidden" value="{time/year}"/>
+            <select name="hour">
+              <xsl:call-template name="opt">
+                <xsl:with-param name="value" select="'00'"/>
+                <xsl:with-param name="select-value" select="time/hour"/>
               </xsl:call-template>
-            </td>
-          </tr>
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('Period', 'Schedule')"/></td>
-            <td>
-              <input type="text"
-                     name="period"
-                     value="0"
-                     size="3"
-                     maxlength="80"/>
-              <select name="period_unit">
-                <option value="hour" selected="1"><xsl:value-of select="gsa:i18n ('hour(s)', 'Time')"/></option>
-                <option value="day"><xsl:value-of select="gsa:i18n ('day(s)', 'Time')"/></option>
-                <option value="week"><xsl:value-of select="gsa:i18n ('week(s)', 'Time')"/></option>
-                <option value="month"><xsl:value-of select="gsa:i18n ('month(s)', 'Time')"/></option>
-              </select>
-            </td>
-          </tr>
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('Duration', 'Schedule')"/></td>
-            <td>
-              <input type="text"
-                     name="duration"
-                     value="0"
-                     size="3"
-                     maxlength="80"/>
-              <select name="duration_unit">
-                <option value="hour" selected="1"><xsl:value-of select="gsa:i18n ('hour(s)', 'Time')"/></option>
-                <option value="day"><xsl:value-of select="gsa:i18n ('day(s)', 'Time')"/></option>
-                <option value="week"><xsl:value-of select="gsa:i18n ('week(s)', 'Time')"/></option>
-              </select>
-            </td>
-          </tr>
-        </table>
+              <xsl:call-template name="opt">
+                <xsl:with-param name="value" select="'01'"/>
+                <xsl:with-param name="select-value" select="time/hour"/>
+              </xsl:call-template>
+              <xsl:call-template name="opt">
+                <xsl:with-param name="value" select="'02'"/>
+                <xsl:with-param name="select-value" select="time/hour"/>
+              </xsl:call-template>
+              <xsl:call-template name="opt">
+                <xsl:with-param name="value" select="'03'"/>
+                <xsl:with-param name="select-value" select="time/hour"/>
+              </xsl:call-template>
+              <xsl:call-template name="opt">
+                <xsl:with-param name="value" select="'04'"/>
+                <xsl:with-param name="select-value" select="time/hour"/>
+              </xsl:call-template>
+              <xsl:call-template name="opt">
+                <xsl:with-param name="value" select="'05'"/>
+                <xsl:with-param name="select-value" select="time/hour"/>
+              </xsl:call-template>
+              <xsl:call-template name="opt">
+                <xsl:with-param name="value" select="'06'"/>
+                <xsl:with-param name="select-value" select="time/hour"/>
+              </xsl:call-template>
+              <xsl:call-template name="opt">
+                <xsl:with-param name="value" select="'07'"/>
+                <xsl:with-param name="select-value" select="time/hour"/>
+              </xsl:call-template>
+              <xsl:call-template name="opt">
+                <xsl:with-param name="value" select="'08'"/>
+                <xsl:with-param name="select-value" select="time/hour"/>
+              </xsl:call-template>
+              <xsl:call-template name="opt">
+                <xsl:with-param name="value" select="'09'"/>
+                <xsl:with-param name="select-value" select="time/hour"/>
+              </xsl:call-template>
+              <xsl:call-template name="opt">
+                <xsl:with-param name="value" select="'10'"/>
+                <xsl:with-param name="select-value" select="time/hour"/>
+              </xsl:call-template>
+              <xsl:call-template name="opt">
+                <xsl:with-param name="value" select="'11'"/>
+                <xsl:with-param name="select-value" select="time/hour"/>
+              </xsl:call-template>
+              <xsl:call-template name="opt">
+                <xsl:with-param name="value" select="'12'"/>
+                <xsl:with-param name="select-value" select="time/hour"/>
+              </xsl:call-template>
+              <xsl:call-template name="opt">
+                <xsl:with-param name="value" select="'13'"/>
+                <xsl:with-param name="select-value" select="time/hour"/>
+              </xsl:call-template>
+              <xsl:call-template name="opt">
+                <xsl:with-param name="value" select="'14'"/>
+                <xsl:with-param name="select-value" select="time/hour"/>
+              </xsl:call-template>
+              <xsl:call-template name="opt">
+                <xsl:with-param name="value" select="'15'"/>
+                <xsl:with-param name="select-value" select="time/hour"/>
+              </xsl:call-template>
+              <xsl:call-template name="opt">
+                <xsl:with-param name="value" select="'16'"/>
+                <xsl:with-param name="select-value" select="time/hour"/>
+              </xsl:call-template>
+              <xsl:call-template name="opt">
+                <xsl:with-param name="value" select="'17'"/>
+                <xsl:with-param name="select-value" select="time/hour"/>
+              </xsl:call-template>
+              <xsl:call-template name="opt">
+                <xsl:with-param name="value" select="'18'"/>
+                <xsl:with-param name="select-value" select="time/hour"/>
+              </xsl:call-template>
+              <xsl:call-template name="opt">
+                <xsl:with-param name="value" select="'19'"/>
+                <xsl:with-param name="select-value" select="time/hour"/>
+              </xsl:call-template>
+              <xsl:call-template name="opt">
+                <xsl:with-param name="value" select="'20'"/>
+                <xsl:with-param name="select-value" select="time/hour"/>
+              </xsl:call-template>
+              <xsl:call-template name="opt">
+                <xsl:with-param name="value" select="'21'"/>
+                <xsl:with-param name="select-value" select="time/hour"/>
+              </xsl:call-template>
+              <xsl:call-template name="opt">
+                <xsl:with-param name="value" select="'22'"/>
+                <xsl:with-param name="select-value" select="time/hour"/>
+              </xsl:call-template>
+              <xsl:call-template name="opt">
+                <xsl:with-param name="value" select="'23'"/>
+                <xsl:with-param name="select-value" select="time/hour"/>
+              </xsl:call-template>
+            </select>
+            h
+            <select name="minute">
+              <xsl:call-template name="opt">
+                <xsl:with-param name="value" select="'00'"/>
+                <xsl:with-param name="select-value" select="time/minute - (time/minute mod 5)"/>
+              </xsl:call-template>
+              <xsl:call-template name="opt">
+                <xsl:with-param name="value" select="'05'"/>
+                <xsl:with-param name="select-value" select="time/minute - (time/minute mod 5)"/>
+              </xsl:call-template>
+              <xsl:call-template name="opt">
+                <xsl:with-param name="value" select="'10'"/>
+                <xsl:with-param name="select-value" select="time/minute - (time/minute mod 5)"/>
+              </xsl:call-template>
+              <xsl:call-template name="opt">
+                <xsl:with-param name="value" select="'15'"/>
+                <xsl:with-param name="select-value" select="time/minute - (time/minute mod 5)"/>
+              </xsl:call-template>
+              <xsl:call-template name="opt">
+                <xsl:with-param name="value" select="'20'"/>
+                <xsl:with-param name="select-value" select="time/minute - (time/minute mod 5)"/>
+              </xsl:call-template>
+              <xsl:call-template name="opt">
+                <xsl:with-param name="value" select="'25'"/>
+                <xsl:with-param name="select-value" select="time/minute - (time/minute mod 5)"/>
+              </xsl:call-template>
+              <xsl:call-template name="opt">
+                <xsl:with-param name="value" select="'30'"/>
+                <xsl:with-param name="select-value" select="time/minute - (time/minute mod 5)"/>
+              </xsl:call-template>
+              <xsl:call-template name="opt">
+                <xsl:with-param name="value" select="'35'"/>
+                <xsl:with-param name="select-value" select="time/minute - (time/minute mod 5)"/>
+              </xsl:call-template>
+              <xsl:call-template name="opt">
+                <xsl:with-param name="value" select="'40'"/>
+                <xsl:with-param name="select-value" select="time/minute - (time/minute mod 5)"/>
+              </xsl:call-template>
+              <xsl:call-template name="opt">
+                <xsl:with-param name="value" select="'45'"/>
+                <xsl:with-param name="select-value" select="time/minute - (time/minute mod 5)"/>
+              </xsl:call-template>
+              <xsl:call-template name="opt">
+                <xsl:with-param name="value" select="'50'"/>
+                <xsl:with-param name="select-value" select="time/minute - (time/minute mod 5)"/>
+              </xsl:call-template>
+              <xsl:call-template name="opt">
+                <xsl:with-param name="value" select="'55'"/>
+                <xsl:with-param name="select-value" select="time/minute - (time/minute mod 5)"/>
+              </xsl:call-template>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Timezone', 'Time')"/></label>
+          <div class="col-10">
+            <xsl:call-template name="timezone-select">
+              <xsl:with-param name="timezone" select="/envelope/timezone"/>
+              <xsl:with-param name="input-name" select="'timezone'"/>
+            </xsl:call-template>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Period', 'Schedule')"/></label>
+          <div class="col-10">
+            <input type="text"
+              name="period"
+              value="0"
+              size="3"
+              maxlength="80"/>
+            <select name="period_unit">
+              <option value="hour" selected="1"><xsl:value-of select="gsa:i18n ('hour(s)', 'Time')"/></option>
+              <option value="day"><xsl:value-of select="gsa:i18n ('day(s)', 'Time')"/></option>
+              <option value="week"><xsl:value-of select="gsa:i18n ('week(s)', 'Time')"/></option>
+              <option value="month"><xsl:value-of select="gsa:i18n ('month(s)', 'Time')"/></option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Duration', 'Schedule')"/></label>
+          <div class="col-10">
+            <input type="text"
+              name="duration"
+              value="0"
+              size="3"
+              maxlength="80"/>
+            <select name="duration_unit">
+              <option value="hour" selected="1"><xsl:value-of select="gsa:i18n ('hour(s)', 'Time')"/></option>
+              <option value="day"><xsl:value-of select="gsa:i18n ('day(s)', 'Time')"/></option>
+              <option value="week"><xsl:value-of select="gsa:i18n ('week(s)', 'Time')"/></option>
+            </select>
+          </div>
+        </div>
       </form>
     </div>
   </div>
