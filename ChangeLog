@@ -1,3 +1,8 @@
+2016-04-07  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/css/gsa-style.css: Add margin between "sections" of the
+	filter selection in the toolbar.
+
 2016-04-07  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/omp.xsl (list-window): Also count "os" assets

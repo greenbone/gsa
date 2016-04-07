@@ -1336,6 +1336,10 @@ select[multiple] {
   vertical-align: top;
 }
 
+#list-window-filter > div + div {
+  margin-left: 10px;
+}
+
 .section-header {
   margin: 10px 0px;
   border-bottom: 2px solid black;
