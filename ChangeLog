@@ -1,3 +1,15 @@
+2016-04-07  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Backport r24748.
+
+	Add new alert method 'SCP'.
+
+	* src/html/classic/omp.xsl (html-create-alert-form)
+	(html-edit-alert-form): Add SCP input.
+	(alert, alert [details]): Add SCP data.
+
+	* src/gsad_omp.c (append_alert_method_data): Add SCP checks.
+
 2016-04-07  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Backport applicable parts of r24893 with fixes from r24894.  Also test
