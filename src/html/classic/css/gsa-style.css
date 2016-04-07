@@ -1283,6 +1283,7 @@ select[multiple] {
   border: none;
   background: none;
   cursor: pointer;
+  vertical-align: middle;
 }
 
 .ui-icon.ui-icon-waiting {
