@@ -725,6 +725,12 @@
           height: height,
         });
       }
+
+      totalComponents = 0;
+      for (var component in components) {
+        totalComponents ++;
+      }
+
       dashboard.resize();
       dashboard.redraw();
 
