@@ -5,6 +5,11 @@
 
 2016-04-07  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/greenbone-ui.js: Pass keydown event also to super widget
+	class. Fix checking for min values in spinner.
+
+2016-04-07  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* CMakeLists.txt, src/html/classic/gsad.xsl,
 	src/html/classic/js/greenbone-ui.js, src/html/classic/js/greenbone.js:
 	Move our special handling for the spinner ui element to an own jquery ui

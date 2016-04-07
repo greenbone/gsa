@@ -72,7 +72,7 @@
         event.preventDefault();
         return true;
       }
-      return this._super();
+      return this._super(event);
     },
     _stop: function(event) {
       if (!this.spinning) {
@@ -84,7 +84,7 @@
        * value is smaller then min */
       if ((value === undefined || value === null) ||
           (this.options.max !== null && value > this.options.max) ||
-          (this.options.min && value < this.options.min)) {
+          (this.options.min !== null && value < this.options.min)) {
         // call _value instead of value to avoid triggering change event again
         this._value(this.previous);
         return;
