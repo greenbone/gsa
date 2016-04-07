@@ -5494,13 +5494,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <td colspan="{count (exslt:node-set ($columns)/column/column) + count (exslt:node-set ($columns)/column[count (column) = 0]) + ($icon-count &gt; 0)}"  style="text-align:right;" class="small_inline_form">
                   <form name="bulk-actions" method="post" action="/omp" enctype="multipart/form-data">
                     <xsl:choose>
-                      <xsl:when test="$type = 'asset' and $subtype = 'host'">
+                      <xsl:when test="$type = 'asset' and ($subtype = 'host' or $subtype = 'os')">
                         <xsl:choose>
                           <xsl:when test="/envelope/params/bulk_select = 2">
-                            <input type="hidden" name="host_count" value="{$filtered-count}"/>
+                            <input type="hidden" name="{$subtype}_count" value="{$filtered-count}"/>
                           </xsl:when>
                           <xsl:otherwise>
-                            <input type="hidden" name="host_count" value="{$count}"/>
+                            <input type="hidden" name="{$subtype}_count" value="{$count}"/>
                           </xsl:otherwise>
                         </xsl:choose>
                         <xsl:for-each select="$resources">
@@ -5529,8 +5529,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <tr style="background:#DDDDDD">
                 <td colspan="{count (exslt:node-set ($columns)/column/column) + count (exslt:node-set ($columns)/column[count (column) = 0]) + ($icon-count &gt; 0)}"  style="text-align:right;" class="small_inline_form">
                   <xsl:choose>
-                    <xsl:when test="$type = 'asset' and $subtype = 'host'">
-                      <input type="hidden" name="host_count" value="0"/>
+                    <xsl:when test="$type = 'asset' and ($subtype = 'host' and $subtype = 'os')">
+                      <input type="hidden" name="{$subtype}_count" value="0"/>
                     </xsl:when>
                   </xsl:choose>
                   <xsl:copy-of select="$bulk-elements"/>
