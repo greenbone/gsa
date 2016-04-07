@@ -2240,7 +2240,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
 
       caller = params_value (con_info->params, "caller");
 
-      if (g_utf8_validate (caller, -1, NULL) == FALSE)
+      if (caller && g_utf8_validate (caller, -1, NULL) == FALSE)
         {
           caller = NULL;
           g_warning ("%s - caller is not valid UTF-8", __FUNCTION__);
@@ -2335,7 +2335,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   /* The caller of a POST is usually the caller of the page that the POST form
    * was on. */
   caller = params_value (con_info->params, "caller");
-  if (g_utf8_validate (caller, -1, NULL) == FALSE)
+  if (caller && g_utf8_validate (caller, -1, NULL) == FALSE)
     {
       g_warning ("%s - caller is not valid UTF-8", __FUNCTION__);
       caller = NULL;
@@ -4466,7 +4466,8 @@ request_handler (void *cls, struct MHD_Connection *connection,
         credentials = credentials_new (user, language, client_address);
 
       credentials->caller = reconstruct_url (connection, url);
-      if (g_utf8_validate (credentials->caller, -1, NULL) == FALSE)
+      if (credentials->caller
+          && g_utf8_validate (credentials->caller, -1, NULL) == FALSE)
         {
           g_free (credentials->caller);
           credentials->caller = NULL;
