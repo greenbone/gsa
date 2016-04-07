@@ -1,3 +1,12 @@
+2016-04-07  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/gsad.c (main): Add --unix-socket option.
+	(send_redirect_to_urn): Adjust for unix socket daemon case.
+	(gsad_cleanup): Cleanup unix socket child too.
+	(start_unix_http_daemon): New function.
+
+	* doc/gsad.8: Update documentation.
+
 2016-04-07  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/js/greenbone.js: Don't log errors of i18n to console. It's

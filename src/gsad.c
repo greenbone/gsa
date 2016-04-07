@@ -79,6 +79,7 @@
 #include <sys/prctl.h>
 #endif
 #include <sys/socket.h>
+#include <sys/un.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
@@ -265,6 +266,16 @@ gchar *redirect_location = NULL;
  * @brief PID of redirect child in parent, 0 in child.
  */
 pid_t redirect_pid = 0;
+
+/**
+ * @brief PID of unix socket child in parent, 0 in child.
+ */
+pid_t unix_pid = 0;
+
+/**
+ * @brief Unix socket to listen on.
+ */
+int unix_socket = 0;
 
 /** @todo Ensure the accesses to these are thread safe. */
 
@@ -3636,7 +3647,10 @@ send_redirect_to_urn (struct MHD_Connection *connection, const char *urn,
         protocol = "http";
     }
 
-  snprintf (uri, sizeof (uri), "%s://%s%s", protocol, host, urn);
+  if (unix_socket)
+    snprintf (uri, sizeof (uri), "%s:/%s", protocol, urn);
+  else
+    snprintf (uri, sizeof (uri), "%s://%s%s", protocol, host, urn);
   return send_redirect_to_uri (connection, uri, user);
 }
 
@@ -5099,6 +5113,7 @@ void
 gsad_cleanup ()
 {
   if (redirect_pid) kill (redirect_pid, SIGTERM);
+  if (unix_pid) kill (unix_pid, SIGTERM);
 
   MHD_stop_daemon (gsad_daemon);
 
@@ -5151,6 +5166,44 @@ mhd_logger (void *arg, const char *fmt, va_list ap)
   vsnprintf (buf, sizeof (buf), fmt, ap);
   va_end (ap);
   g_warning ("MHD: %s", buf);
+}
+
+static struct MHD_Daemon *
+start_unix_http_daemon (const char *unix_socket_path,
+                        int handler (void *, struct MHD_Connection *,
+                                     const char *, const char *, const char *,
+                                     const char *, size_t *, void **))
+{
+  struct sockaddr_un addr;
+
+  unix_socket = socket (AF_UNIX, SOCK_STREAM, 0);
+  if (unix_socket == -1)
+    {
+      g_warning ("%s: Couldn't create UNIX socket", __FUNCTION__);
+      return NULL;
+    }
+  addr.sun_family = AF_UNIX;
+  strncpy (addr.sun_path, unix_socket_path, sizeof (addr.sun_path));
+  unlink (addr.sun_path);
+  if (bind (unix_socket, (struct sockaddr *) &addr, sizeof (struct sockaddr_un))
+      == -1)
+    {
+      g_warning ("%s: Error on bind(%s): %s", __FUNCTION__,
+                 unix_socket_path, strerror (errno));
+      return NULL;
+    }
+  if (listen (unix_socket, 128) == -1)
+    {
+      g_warning ("%s: Error on listen(): %s", __FUNCTION__, strerror (errno));
+      return NULL;
+    }
+
+  return MHD_start_daemon
+          (MHD_USE_THREAD_PER_CONNECTION | MHD_USE_DEBUG, 0,
+           NULL, NULL, handler, NULL, MHD_OPTION_NOTIFY_COMPLETED,
+           free_resources, NULL, MHD_OPTION_LISTEN_SOCKET, unix_socket,
+           MHD_OPTION_PER_IP_CONNECTION_LIMIT, 15,
+           MHD_OPTION_EXTERNAL_LOGGER, mhd_logger, NULL, MHD_OPTION_END);
 }
 
 static struct MHD_Daemon *
@@ -5311,6 +5364,7 @@ main (int argc, char **argv)
   static gchar *ssl_private_key_filename = OPENVAS_SERVER_KEY;
   static gchar *ssl_certificate_filename = OPENVAS_SERVER_CERTIFICATE;
   static gchar *dh_params_filename = NULL;
+  static gchar *unix_socket_path = NULL;
   static gchar *gnutls_priorities = "NORMAL";
   static int debug_tls = 0;
   static gchar *face_name = NULL;
@@ -5415,6 +5469,9 @@ main (int argc, char **argv)
     {"ignore-x-real-ip", '\0',
      0, G_OPTION_ARG_NONE, &ignore_x_real_ip,
      "Do not use X-Real-IP to determine the client address.", NULL},
+    {"unix-socket", '\0',
+     0, G_OPTION_ARG_FILENAME, &unix_socket_path,
+     "Path to unix socket to listen on", "<file>"},
     {NULL}
   };
 
@@ -5628,6 +5685,37 @@ main (int argc, char **argv)
   if (http_only)
     no_redirect = TRUE;
 
+  if (unix_socket_path)
+    {
+      /* Fork for the unix socket server. */
+      tracef ("Forking for unix socket...\n");
+      pid_t pid = fork ();
+      switch (pid)
+        {
+        case 0:
+          /* Child. */
+#if __linux
+          if (prctl (PR_SET_PDEATHSIG, SIGKILL))
+            g_warning ("%s: Failed to change parent death signal;"
+                       " unix socket process will remain if parent is killed:"
+                       " %s\n",
+                       __FUNCTION__,
+                       strerror (errno));
+#endif
+          break;
+        case -1:
+          /* Parent when error. */
+          g_warning ("%s: Failed to fork for unix socket!\n", __FUNCTION__);
+          exit (EXIT_FAILURE);
+          break;
+        default:
+          /* Parent. */
+          unix_pid = pid;
+          no_redirect = TRUE;
+          break;
+        }
+    }
+
   if (!no_redirect)
     {
       /* Fork for the redirect server. */
@@ -5695,6 +5783,23 @@ main (int argc, char **argv)
         {
           tracef ("GSAD started successfully and is redirecting on port %d.\n",
                   gsad_redirect_port);
+        }
+    }
+  else if (unix_socket_path && !unix_pid)
+    {
+      /* Start the unix socket server. */
+
+      gsad_daemon = start_unix_http_daemon (unix_socket_path, request_handler);
+
+      if (gsad_daemon == NULL)
+        {
+          g_warning ("%s: start_unix_http_daemon failed !", __FUNCTION__);
+          return EXIT_FAILURE;
+        }
+      else
+        {
+          tracef ("GSAD started successfully and is listening on unix socket %s.\n",
+                  unix_socket_path);
         }
     }
   else
