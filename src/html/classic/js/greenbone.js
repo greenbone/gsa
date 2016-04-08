@@ -1146,6 +1146,26 @@
     doc.find('.slider').slider();
 
     doc.find('select:not(.no-select2)').select2();
+
+    doc.find('.form-selection-control').each(function() {
+      var elem = $(this);
+      var form = elem.parents('form');
+      elem.on('change', function() {
+        var value = elem.val();
+        form.find('.form-selection-item').hide();
+        form.find('.form-selection-item--' + value).show();
+      });
+    });
+
+    doc.find('.form-enable-control').each(function() {
+      var elem = $(this);
+      var form = elem.parents('form');
+      elem.on('change', function() {
+        var value = elem.val();
+        var name = elem.attr('id');
+        form.find('.form-enable-item--' + name).attr('disabled', value === '1');
+      });
+    });
   }
 
   var timeout_id;
