@@ -1,5 +1,10 @@
 2016-04-08  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/greenbone.js (new_credential_update_form): Remove the
+	now obsolete function new_credential_update_form.
+
+2016-04-08  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/omp.xsl (html-create-credential-form): Use new javascript
 	code for dynamically enabling/disabling and hiding of form elements at the
 	create credentials dialog.
