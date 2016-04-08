@@ -4094,8 +4094,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
 
   if (!strcmp (&url[0], url_base))
     {
-      send_redirect_to_urn (connection, default_file, NULL);
-      return MHD_YES;
+      return send_redirect_to_urn (connection, default_file, NULL);
     }
 
   if ((!strcmp (method, "GET"))
@@ -4103,8 +4102,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
                                                                     it is a const str */
         && ! url[strlen ("/login/")])
     {
-      send_redirect_to_urn (connection, default_file, NULL);
-      return MHD_YES;
+      return send_redirect_to_urn (connection, default_file, NULL);
     }
 
   /* Set HTTP Header values. */
@@ -4847,9 +4845,9 @@ request_handler (void *cls, struct MHD_Connection *connection,
                                  params_value (con_info->params, "text"),
                                  user->token);
           user_release (user);
-          send_redirect_to_urn (connection, url, user);
+          ret = send_redirect_to_urn (connection, url, user);
           g_free (url);
-          return MHD_YES;
+          return ret;
         }
 
       if (con_info->redirect)
