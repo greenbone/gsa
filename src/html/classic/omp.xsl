@@ -8242,19 +8242,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <!--     EDITING CREDENTIALS -->
 
 <xsl:template name="html-edit-credential-form">
-  <div class="gb_window">
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n ('Edit Credential', 'Credential')"/>
-      <xsl:call-template name="edit-header-icons">
-        <xsl:with-param name="cap-type" select="'Credential'"/>
-        <xsl:with-param name="type" select="'credential'"/>
-        <xsl:with-param name="id"
-                        select="commands_response/get_credentials_response/credential/@id"/>
-      </xsl:call-template>
-    </div>
+  <div class="edit-dialog">
+    <div class="title"><xsl:value-of select="gsa:i18n ('Edit Credential', 'Credential')"/></div>
     <xsl:variable name="credential_type" select="commands_response/get_credentials_response/credential/type"/>
-    <div class="gb_window_part_content">
+    <div class="content">
       <form action="" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="save_credential"/>
@@ -8481,11 +8472,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </td>
             </tr>
           </xsl:if>
-          <tr>
-            <td>
-              <input type="submit" name="submit" value="{gsa:i18n ('Save Credential', 'Credential')}"/>
-            </td>
-          </tr>
         </table>
       </form>
     </div>
