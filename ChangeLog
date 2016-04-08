@@ -1,5 +1,11 @@
 2016-04-08  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/omp.xsl (html-create-credential-form),
+	src/html/classic/js/greenbone.js: Rename newCredentialUpdateForm to
+	new_credential_update_form and put the function into the gsa namespace.
+
+2016-04-08  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/omp.xsl (html-create-credential-form): Use horizontal form
 	style for edit credential dialog.
 

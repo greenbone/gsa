@@ -59,6 +59,7 @@
   gsa.is_object = is_object;
   gsa.is_string = is_string;
   gsa.is_defined = is_defined;
+  gsa.new_credential_update_form = new_credential_update_form;
 
   function LanguageDetector() {
     global.i18nextBrowserLanguageDetector.call(this);
@@ -1193,7 +1194,7 @@
   /* Credentials */
 
   /* Credential type selection */
-  global.newCredentialUpdateForm = function() {
+  function new_credential_update_form() {
     var type, auto;
     type = $('select[name="base"]').val();
     auto = !!(Number($('input[name="autogenerate"]:checked').val()));
@@ -1235,7 +1236,7 @@
       $('#password_row input, #certificate_row input, #private_key_row ' +
           'input, #passphrase_row input').attr('disabled', null);
     }
-  };
+  }
 
   /* Alert event type selection */
   global.editAlertUpdateForm = function() {

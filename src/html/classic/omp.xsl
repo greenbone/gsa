@@ -8030,12 +8030,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </div>
         <div class="form-group">
           <!--
-              Updates handled in greenbone.js:newCredentialUpdateForm()
+              Updates handled in greenbone.js:gsa.new_credential_update_form()
               to avoid eval() of inline scripts by jQuery.
             -->
           <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Type', 'Credential')"/></label>
           <div class="col-10">
-            <select class="col-2 control-label" name="base" onChange="newCredentialUpdateForm()">
+            <select class="col-2 control-label" name="base" onChange="gsa.new_credential_update_form()">
               <xsl:call-template name="opt">
                 <xsl:with-param name="value" select="'up'"/>
                 <xsl:with-param name="content" select="gsa:i18n ('Username + Password', 'Credential')"/>
