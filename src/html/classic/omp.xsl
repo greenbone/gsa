@@ -17977,32 +17977,46 @@ should not have received it.
         <div class="form-group">
           <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Period', 'Schedule')"/></label>
           <div class="col-10">
-            <input type="text"
-              name="period"
-              value="0"
-              size="3"
-              maxlength="80"/>
-            <select name="period_unit">
-              <option value="hour" selected="1"><xsl:value-of select="gsa:i18n ('hour(s)', 'Time')"/></option>
-              <option value="day"><xsl:value-of select="gsa:i18n ('day(s)', 'Time')"/></option>
-              <option value="week"><xsl:value-of select="gsa:i18n ('week(s)', 'Time')"/></option>
-              <option value="month"><xsl:value-of select="gsa:i18n ('month(s)', 'Time')"/></option>
-            </select>
+            <div class="form-item">
+              <input type="text"
+                name="period"
+                value="0"
+                size="3"
+                class="spinner"
+                data-type="int"
+                min="0"
+                maxlength="80"/>
+            </div>
+            <div class="form-item">
+              <select name="period_unit">
+                <option value="hour" selected="1"><xsl:value-of select="gsa:i18n ('hour(s)', 'Time')"/></option>
+                <option value="day"><xsl:value-of select="gsa:i18n ('day(s)', 'Time')"/></option>
+                <option value="week"><xsl:value-of select="gsa:i18n ('week(s)', 'Time')"/></option>
+                <option value="month"><xsl:value-of select="gsa:i18n ('month(s)', 'Time')"/></option>
+              </select>
+            </div>
           </div>
         </div>
         <div class="form-group">
           <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Duration', 'Schedule')"/></label>
           <div class="col-10">
-            <input type="text"
-              name="duration"
-              value="0"
-              size="3"
-              maxlength="80"/>
-            <select name="duration_unit">
-              <option value="hour" selected="1"><xsl:value-of select="gsa:i18n ('hour(s)', 'Time')"/></option>
-              <option value="day"><xsl:value-of select="gsa:i18n ('day(s)', 'Time')"/></option>
-              <option value="week"><xsl:value-of select="gsa:i18n ('week(s)', 'Time')"/></option>
-            </select>
+            <div class="form-item">
+              <input type="text"
+                name="duration"
+                class="spinner"
+                min="0"
+                data-type="int"
+                value="0"
+                size="3"
+                maxlength="80"/>
+            </div>
+            <div class="form-item">
+              <select name="duration_unit">
+                <option value="hour" selected="1"><xsl:value-of select="gsa:i18n ('hour(s)', 'Time')"/></option>
+                <option value="day"><xsl:value-of select="gsa:i18n ('day(s)', 'Time')"/></option>
+                <option value="week"><xsl:value-of select="gsa:i18n ('week(s)', 'Time')"/></option>
+              </select>
+            </div>
           </div>
         </div>
       </form>
