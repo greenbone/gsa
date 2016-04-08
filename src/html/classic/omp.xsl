@@ -8000,21 +8000,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="html-create-credential-form">
-  <div class="gb_window">
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">
+  <div class="edit-dialog">
+    <div class="title">
       <xsl:value-of select="gsa:i18n ('New Credential', 'Credential')"/>
-      <a href="/help/new_credential.html?token={/envelope/token}"
-         title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('New Credential', 'Credential'))}">
-        <img src="/img/help.png"/>
-      </a>
-      <a href="/omp?cmd=get_credentials&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-         title="{gsa:i18n ('Credentials', 'Credential')}" style="margin-left:3px;">
-        <img src="/img/list.png" alt="{gsa:i18n ('Credentials', 'Credential')}"/>
-      </a>
     </div>
-    <div class="gb_window_part_content">
+    <div class="content">
       <form action="/omp" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="create_credential"/>
@@ -8171,11 +8161,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <input name="privacy_algorithm" value="" type="radio"/>
                 <xsl:value-of select="gsa:i18n ('None', 'Privacy Algorithm')"/>
               </label>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <input type="submit" name="submit" value="{gsa:i18n ('Create Credential', 'Credential')}"/>
             </td>
           </tr>
         </table>
