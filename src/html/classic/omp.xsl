@@ -8074,17 +8074,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </div>
         <div class="form-group" id="autogenerate_row">
           <!--
-              Updates handled in greenbone.js:newCredentialUpdateForm()
+              Updates handled in greenbone.js:gsa.new_credential_update_form()
               to avoid eval() of inline scripts by jQuery.
             -->
           <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Auto-generate', 'Credential')"/></label>
           <div class="col-10">
             <label class="radio-inline">
-              <input name="autogenerate" value="1" type="radio" onChange="newCredentialUpdateForm()"/>
+              <input name="autogenerate" value="1" type="radio" onChange="gsa.new_credential_update_form()"/>
               <xsl:value-of select="gsa:i18n ('Yes', 'Binary Choice')"/>
             </label>
             <label class="radio-inline">
-              <input name="autogenerate" value="0" type="radio" onChange="newCredentialUpdateForm()" checked="1"/>
+              <input name="autogenerate" value="0" type="radio" onChange="gsa.new_credential_update_form()" checked="1"/>
               <xsl:value-of select="gsa:i18n ('No', 'Binary Choice')"/>
             </label>
           </div>
@@ -8275,7 +8275,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <div class="form-group">
           <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Type', 'Credential')"/></label>
           <div class="col-10">
-            <select name="base" onChange="newCredentialUpdateForm()" disabled="1">
+            <select name="base" onChange="gsa.new_credential_update_form()" disabled="1">
               <xsl:call-template name="opt">
                 <xsl:with-param name="value" select="'up'"/>
                 <xsl:with-param name="content" select="gsa:i18n ('Username + Password', 'Credential')"/>
