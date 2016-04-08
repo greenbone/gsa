@@ -1,3 +1,12 @@
+2016-04-08  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Backport r24936.
+
+	* src/gsad.c (request_handler): Account for the return from
+	send_redirect_to_urn, so that the connection closes when there is an
+	error in the request.  This prevents DOS-like behaviour when clients
+	like "openssl sclient" send erroneous HTTP requests.
+
 2016-04-07  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Backport r24882.
