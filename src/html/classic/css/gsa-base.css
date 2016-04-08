@@ -497,6 +497,16 @@ input::-moz-focus-inner {
   padding: 1px 8px;
 }
 
+.form-control[disabled] {
+  cursor: not-allowed;
+}
+
+.form-control[disabled],
+.form-control[readonly] {
+  background-color: #eee;
+  opacity: 1;
+}
+
 .form-horizontal .radio,
 .form-horizontal .checkbox,
 .form-horizontal .radio-inline,

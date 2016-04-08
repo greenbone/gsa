@@ -1,5 +1,9 @@
 2016-04-08  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/css/gsa-base.css: Add styles for disabled form controls.
+
+2016-04-08  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/omp.xsl (html-create-credential-form): Change missing
 	newCredentialUpdateForm function calls to gsa.new_credential_update_form.
 
