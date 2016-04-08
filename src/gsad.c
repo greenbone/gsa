@@ -3647,10 +3647,7 @@ send_redirect_to_urn (struct MHD_Connection *connection, const char *urn,
         protocol = "http";
     }
 
-  if (unix_socket)
-    snprintf (uri, sizeof (uri), "%s:/%s", protocol, urn);
-  else
-    snprintf (uri, sizeof (uri), "%s://%s%s", protocol, host, urn);
+  snprintf (uri, sizeof (uri), "%s://%s%s", protocol, host, urn);
   return send_redirect_to_uri (connection, uri, user);
 }
 
@@ -3997,9 +3994,9 @@ get_client_address (struct MHD_Connection *conn, char *client_address)
       && x_real_ip && g_utf8_validate (x_real_ip, -1, NULL) == FALSE)
     return 1;
   else if (!ignore_http_x_real_ip && x_real_ip != NULL)
-    {
-      strcpy (client_address, x_real_ip);
-    }
+    strcpy (client_address, x_real_ip);
+  else if (unix_socket)
+    strcpy (client_address, "unix_socket");
   else
     {
       const union MHD_ConnectionInfo* info;
@@ -4312,8 +4309,9 @@ request_handler (void *cls, struct MHD_Connection *connection,
                                         1);
         }
 
-      if ((ret == USER_EXPIRED_TOKEN) || (ret == USER_BAD_MISSING_COOKIE) ||
-              (ret == USER_BAD_MISSING_TOKEN))
+      if ((ret == USER_EXPIRED_TOKEN) || (ret == USER_BAD_MISSING_COOKIE)
+          || (ret == USER_BAD_MISSING_TOKEN)
+          || (ret == USER_IP_ADDRESS_MISSMATCH))
         {
           time_t now;
           gchar *xml;

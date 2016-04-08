@@ -1,3 +1,10 @@
+2016-04-08  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/gsad.c (send_redirect_to_urn): Use same syntax for unix sockets.
+	(request_handler): Handle USER_IP_ADDRESS_MISSMATCH case instead of
+	aborting on it.
+	(get_client_address): Fix for unix socket case.
+
 2016-04-07  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/js/gsa_graphics_base.js (create_dashboard): Count
