@@ -1,3 +1,7 @@
+2016-04-08  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad.c (request_handler): Check UTF8 of reconstructed URL.
+
 2016-04-08  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/js/greenbone.js (new_credential_update_form): Remove the

@@ -4350,7 +4350,13 @@ request_handler (void *cls, struct MHD_Connection *connection,
               return MHD_YES;
             }
           language = accept_language_to_env_fmt (accept_language);
+
           full_url = reconstruct_url (connection, url);
+          if (full_url && g_utf8_validate (full_url, -1, NULL) == FALSE)
+            {
+              g_free (full_url);
+              full_url = NULL;
+            }
 
           if (ret == USER_EXPIRED_TOKEN)
             {
