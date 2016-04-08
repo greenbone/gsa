@@ -1,5 +1,11 @@
 2016-04-08  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/omp.xsl (html-create-credential-form): Use new javascript
+	code for dynamically enabling/disabling and hiding of form elements at the
+	create credentials dialog.
+
+2016-04-08  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/greenbone.js (on_ready): Add code for a flexible hidding
 	of elements on input selection changes and also code for enabling/disabling of
 	elements depending on other input elements.

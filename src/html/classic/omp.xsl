@@ -8029,13 +8029,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </div>
         </div>
         <div class="form-group">
-          <!--
-              Updates handled in greenbone.js:gsa.new_credential_update_form()
-              to avoid eval() of inline scripts by jQuery.
-            -->
           <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Type', 'Credential')"/></label>
           <div class="col-10">
-            <select class="col-2 control-label" name="base" onChange="gsa.new_credential_update_form()">
+            <select class="col-2 control-label form-selection-control" name="base">
               <xsl:call-template name="opt">
                 <xsl:with-param name="value" select="'up'"/>
                 <xsl:with-param name="content" select="gsa:i18n ('Username + Password', 'Credential')"/>
@@ -8072,26 +8068,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </label>
           </div>
         </div>
-        <div class="form-group" id="autogenerate_row">
-          <!--
-              Updates handled in greenbone.js:gsa.new_credential_update_form()
-              to avoid eval() of inline scripts by jQuery.
-            -->
+        <div class="form-group form-selection-item form-selection-item--up form-selection-item--usk" id="autogenerate_row">
           <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Auto-generate', 'Credential')"/></label>
           <div class="col-10">
             <label class="radio-inline">
-              <input name="autogenerate" value="1" type="radio" onChange="gsa.new_credential_update_form()"/>
+              <input name="autogenerate" id="autogenerate" value="1" type="radio"
+                class="form-enable-control"/>
               <xsl:value-of select="gsa:i18n ('Yes', 'Binary Choice')"/>
             </label>
             <label class="radio-inline">
-              <input name="autogenerate" value="0" type="radio" onChange="gsa.new_credential_update_form()" checked="1"/>
+              <input name="autogenerate" id="autogenerate" value="0" type="radio" checked="1"
+                class="form-enable-control"/>
               <xsl:value-of select="gsa:i18n ('No', 'Binary Choice')"/>
             </label>
           </div>
         </div>
         <div class="form-group">
         </div>
-        <div class="form-group" id="community_row" style="display:none;">
+        <div class="form-group form-selection-item form-selection-item--snmp" id="community_row" style="display:none;">
           <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('SNMP Community', 'Auth Data')"/></label>
           <div class="col-10">
             <div class="form-item">
@@ -8099,7 +8093,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </div>
           </div>
         </div>
-        <div class="form-group" id="login_row">
+        <div class="form-group form-selection-item form-selection-item--up form-selection-item--usk form-selection-item--snmp" id="login_row">
           <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Username', 'Auth Data')"/></label>
           <div class="col-10">
             <div class="form-item">
@@ -8107,43 +8101,43 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </div>
           </div>
         </div>
-        <div class="form-group" id="password_row">
+        <div class="form-group form-selection-item form-selection-item--up form-selection-item--snmp" id="password_row">
           <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Password', 'Auth Data')"/></label>
           <div class="col-10">
             <div class="form-item">
-              <input type="password" name="lsc_password" size="30" class="form-control"/>
+              <input type="password" name="lsc_password" size="30" class="form-control form-enable-item--autogenerate"/>
             </div>
           </div>
         </div>
-        <div class="form-group" id="priv_password_row" style="display:none;">
+        <div class="form-group form-selection-item form-selection-item--snmp" id="priv_password_row" style="display:none;">
           <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Privacy Password', 'Auth Data')"/></label>
           <div class="col-10">
             <div class="form-item">
-              <input type="password" name="privacy_password" size="30" class="form-control"/>
+              <input type="password" name="privacy_password" size="30" class="form-control form-enable-item--autogenerate"/>
             </div>
           </div>
         </div>
-        <div class="form-group" id="certificate_row" style="display:none;">
+        <div class="form-group form-selection-item form-selection-item--cc" id="certificate_row" style="display:none;">
           <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Certificate', 'Auth Data')"/></label>
           <div class="col-10">
             <input type="file" name="certificate" size="30"/>
           </div>
         </div>
-        <div class="form-group" id="private_key_row" style="display:none;">
+        <div class="form-group form-selection-item form-selection-item--usk form-selection-item--cc" id="private_key_row" style="display:none;">
           <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Private Key', 'Auth Data')"/></label>
           <div class="col-10">
             <input type="file" name="private_key" size="30"/>
           </div>
         </div>
-        <div class="form-group" id="passphrase_row" style="display:none;">
+        <div class="form-group form-selection-item form-selection-item--usk" id="passphrase_row" style="display:none;">
           <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Passphrase', 'Auth Data')"/></label>
           <div class="col-10">
             <div class="form-item">
-              <input type="password" name="passphrase" size="30" class="form-control"/>
+              <input type="password" name="passphrase" size="30" class="form-control form-enable-item--autogenerate"/>
             </div>
           </div>
         </div>
-        <div class="form-group" id="auth_algo_row" style="display:none;">
+        <div class="form-group form-selection-item form-selection-item--snmp" id="auth_algo_row" style="display:none;">
           <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Auth Algorithm', 'Credential')"/></label>
           <div class="col-10">
             <label class="radio-inline">
@@ -8156,7 +8150,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </label>
           </div>
         </div>
-        <div class="form-group" id="priv_algo_row" style="display:none;">
+        <div class="form-group form-selection-item form-selection-item--usk" id="priv_algo_row" style="display:none;">
           <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Privacy Algorithm', 'Credential')"/></label>
           <div class="col-10">
             <label class="radio-inline">
@@ -8275,7 +8269,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <div class="form-group">
           <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Type', 'Credential')"/></label>
           <div class="col-10">
-            <select name="base" onChange="gsa.new_credential_update_form()" disabled="1">
+            <select name="base" class="form-selection-control" disabled="1">
               <xsl:call-template name="opt">
                 <xsl:with-param name="value" select="'up'"/>
                 <xsl:with-param name="content" select="gsa:i18n ('Username + Password', 'Credential')"/>
