@@ -1,5 +1,11 @@
 2016-04-08  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Backport r24946.
+
+	* src/gsad.c (request_handler): Check UTF8 of reconstructed URL.
+
+2016-04-08  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Backport r24936.
 
 	* src/gsad.c (request_handler): Account for the return from
