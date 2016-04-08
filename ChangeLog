@@ -1,5 +1,10 @@
 2016-04-08  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/greenbone.js (on_ready): Mark text of calender widget
+	icon button as translateable.
+
+2016-04-08  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/gsad.c: Make the 0 prefix in minute params optional.
 
 2016-04-08  Björn Ricks <bjoern.ricks@greenbone.net>

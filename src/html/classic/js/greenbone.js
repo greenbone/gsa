@@ -1069,7 +1069,7 @@
       datepicker.datepicker({
         showOn: 'button',
         buttonImage: 'img/calendar.png',
-        buttonText: 'Select date',
+        buttonText: gsa._('Select date'),
         altField: doc.find('#datevalue'),
         altFormat: 'DD, d MM, yy',
         minDate: curDate,
