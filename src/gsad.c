@@ -1289,7 +1289,7 @@ init_validator ()
   openvas_validator_add (validator, "lsc_password", "^.{0,40}$");
   openvas_validator_add (validator, "max_result", "^[0-9]+$");
   openvas_validator_add (validator, "max_groups", "^-?[0-9]+$");
-  openvas_validator_add (validator, "minute",     "^[0-5]{1,1}[0-9]{1,1}$");
+  openvas_validator_add (validator, "minute",     "^[0-5]{0,1}[0-9]{1,1}$");
   openvas_validator_add (validator, "month",      "^((0??[1-9])|1[012])$");
   openvas_validator_add (validator, "note_id",    "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "note_result_id", "^[a-z0-9\\-]*$");
