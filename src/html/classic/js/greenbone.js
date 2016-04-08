@@ -1061,8 +1061,8 @@
       }).show();
     });
 
-    var datepicker = doc.find('#datepicker');
-    if (datepicker.length) {
+    doc.find('#datepicker').each(function() {
+      var datepicker = $(this);
       var curDate = doc.find('input[name=month]').val() +
         '/' + doc.find('input[name=day_of_month]').val() + '/' +
         doc.find('input[name=year]').val();
@@ -1082,7 +1082,7 @@
         },
       });
       datepicker.datepicker('setDate', curDate);
-    }
+    });
 
     doc.find('.datepicker').each(function() {
       var elem = $(this);

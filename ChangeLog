@@ -1,5 +1,11 @@
 2016-04-08  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/greenbone.js (on_ready): Use each function to active
+	datepickers. This will allow to use a css class instead of an id for
+	datepickers in future more easily.
+
+2016-04-08  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/greenbone.js (on_ready): Mark text of calender widget
 	icon button as translateable.
 
