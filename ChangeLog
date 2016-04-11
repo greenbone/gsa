@@ -1,3 +1,8 @@
+2016-04-08  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/gsad.c (start_unix_http_daemon): Don't recreate the socket if it
+	already exists, in order to keep previous setup permissions.
+
 2016-04-08  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (request_handler): Check UTF8 of reconstructed URL.

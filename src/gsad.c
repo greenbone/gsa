@@ -5186,7 +5186,6 @@ start_unix_http_daemon (const char *unix_socket_path,
     }
   addr.sun_family = AF_UNIX;
   strncpy (addr.sun_path, unix_socket_path, sizeof (addr.sun_path));
-  unlink (addr.sun_path);
   if (bind (unix_socket, (struct sockaddr *) &addr, sizeof (struct sockaddr_un))
       == -1)
     {
