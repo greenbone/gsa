@@ -5177,6 +5177,8 @@ start_unix_http_daemon (const char *unix_socket_path,
                                      const char *, size_t *, void **))
 {
   struct sockaddr_un addr;
+  struct stat ustat;
+  mode_t oldmask = 0;
 
   unix_socket = socket (AF_UNIX, SOCK_STREAM, 0);
   if (unix_socket == -1)
@@ -5186,6 +5188,13 @@ start_unix_http_daemon (const char *unix_socket_path,
     }
   addr.sun_family = AF_UNIX;
   strncpy (addr.sun_path, unix_socket_path, sizeof (addr.sun_path));
+  if (!stat (addr.sun_path, &ustat))
+    {
+      /* Remove socket so we can bind(). Keep same permissions when recreating
+       * it. */
+      unlink (addr.sun_path);
+      oldmask = umask (~ustat.st_mode);
+    }
   if (bind (unix_socket, (struct sockaddr *) &addr, sizeof (struct sockaddr_un))
       == -1)
     {
@@ -5193,6 +5202,8 @@ start_unix_http_daemon (const char *unix_socket_path,
                  unix_socket_path, strerror (errno));
       return NULL;
     }
+  if (oldmask)
+    umask (oldmask);
   if (listen (unix_socket, 128) == -1)
     {
       g_warning ("%s: Error on listen(): %s", __FUNCTION__, strerror (errno));
