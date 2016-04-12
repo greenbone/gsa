@@ -4325,7 +4325,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
           char *res;
           gchar *full_url;
           char ctime_now[200];
-          const char *cmd, *report_format_id;
+          const char *cmd;
           int export;
           cmd_response_data_t response_data;
           cmd_response_data_init (&response_data);
@@ -4336,15 +4336,25 @@ request_handler (void *cls, struct MHD_Connection *connection,
           cmd = MHD_lookup_connection_value (connection,
                                              MHD_GET_ARGUMENT_KIND,
                                              "cmd");
-          report_format_id = MHD_lookup_connection_value (connection,
-                                                          MHD_GET_ARGUMENT_KIND,
-                                                          "report_format_id");
-          export = (cmd
-                    && g_utf8_validate (cmd, -1, NULL)
-                    && ((strncmp (cmd, "export", strlen ("export")) == 0)
-                        || ((strcmp (cmd, "get_report") == 0)
-                            && report_format_id
-                            && g_utf8_validate (report_format_id, -1, NULL))));
+
+          export = 0;
+          if (cmd && g_utf8_validate (cmd, -1, NULL))
+            {
+              if (strncmp (cmd, "export", strlen ("export")) == 0)
+                export = 1;
+              else if (strcmp (cmd, "get_report") == 0)
+                {
+                  const char *report_format_id;
+
+                  report_format_id = MHD_lookup_connection_value
+                                      (connection,
+                                       MHD_GET_ARGUMENT_KIND,
+                                       "report_format_id");
+                  if (report_format_id
+                      && g_utf8_validate (report_format_id, -1, NULL))
+                    export = 1;
+                }
+            }
 
           accept_language = MHD_lookup_connection_value (connection,
                                                          MHD_HEADER_KIND,

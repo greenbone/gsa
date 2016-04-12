@@ -1,5 +1,10 @@
 2016-04-12  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad.c (request_handler): Move report_format_id into an explicit
+	"if" statement, so that it is only retrieved when needed.
+
+2016-04-12  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad.c (append_param): Check key and value before using them.  In
 	particular, value can legitimately be NULL for requests like
 	http://foo/bar?key.
