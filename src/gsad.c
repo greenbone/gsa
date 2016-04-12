@@ -233,6 +233,12 @@ const char *FILE_NOT_FOUND =
 const char *ERROR_PAGE = "<html><body>HTTP Method not supported</body></html>";
 
 /**
+ * @brief Bad request error HTML.
+ */
+char *BAD_REQUEST_PAGE =
+  "<html><body>Bad request.</body></html>";
+
+/**
  * @brief Server error HTML.
  */
 char *SERVER_ERROR =
@@ -4068,11 +4074,19 @@ request_handler (void *cls, struct MHD_Connection *connection,
 
   /* If called with undefined URL, abort request handler. */
   if (&url[0] == NULL)
-    return MHD_NO;
+    {
+      send_response (connection, BAD_REQUEST_PAGE, MHD_HTTP_NOT_ACCEPTABLE,
+                     NULL, GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0);
+      return MHD_YES;
+    }
 
   /* Prevent guest link from leading to URL redirection. */
   if (url && (url[0] == '/') && (url[1] == '/'))
-    return MHD_NO;
+    {
+      send_response (connection, BAD_REQUEST_PAGE, MHD_HTTP_NOT_ACCEPTABLE,
+                     NULL, GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0);
+      return MHD_YES;
+    }
 
   /* Many Glib functions require valid UTF-8. */
   if (url && (g_utf8_validate (url, -1, NULL) == FALSE))

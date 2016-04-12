@@ -1,5 +1,12 @@
 2016-04-12  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad.c (BAD_REQUEST_PAGE): New define.
+	(request_handler): Send bad request page instead of dropping the
+	connection when URL is bad, to keep MHD "Internal application error"
+	warnings out of the logs.
+
+2016-04-12  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad.c (request_handler): Do the export check earlier, to save
 	calling reconstruct_url in one or two cases.
 
