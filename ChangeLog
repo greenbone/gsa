@@ -1,3 +1,9 @@
+2016-04-12  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad.c (append_param): Check key and value before using them.  In
+	particular, value can legitimately be NULL for requests like
+	http://foo/bar?key.
+
 2016-04-11  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad.c (start_unix_http_daemon): Remove unix socket so that bind

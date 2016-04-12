@@ -3934,6 +3934,15 @@ static int
 append_param (void *string, enum MHD_ValueKind kind, const char *key,
               const char *value)
 {
+  if (value == NULL)
+    /* http://foo/bar?key */
+    return MHD_YES;
+  if (key == NULL)
+    {
+      assert (0);
+      return MHD_YES;
+    }
+  /* http://foo/bar?key=value */
   if (strcmp (key, "token") && strcmp (key, "r"))
     {
       g_string_append ((GString*) string, key);
