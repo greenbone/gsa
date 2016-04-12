@@ -4370,12 +4370,17 @@ request_handler (void *cls, struct MHD_Connection *connection,
             }
           language = accept_language_to_env_fmt (accept_language);
 
-          full_url = reconstruct_url (connection, url);
-          if (full_url && g_utf8_validate (full_url, -1, NULL) == FALSE)
+          if ((export == 0) && strncmp (url, "/logout", strlen ("/logout")))
             {
-              g_free (full_url);
-              full_url = NULL;
+              full_url = reconstruct_url (connection, url);
+              if (full_url && g_utf8_validate (full_url, -1, NULL) == FALSE)
+                {
+                  g_free (full_url);
+                  full_url = NULL;
+                }
             }
+          else
+            full_url = NULL;
 
           if (ret == USER_EXPIRED_TOKEN)
             {
@@ -4397,10 +4402,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
                       : "Token missing or bad.  Please login again."),
                   NULL,
                   ctime_now,
-                  (((export == 0)
-                    && strncmp (url, "/logout", strlen ("/logout")))
-                    ? full_url
-                    : ""),
+                  full_url ? full_url : "",
                   language,
                   guest_username ? guest_username : "");
 

@@ -1,5 +1,10 @@
 2016-04-12  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad.c (request_handler): Do the export check earlier, to save
+	calling reconstruct_url in one or two cases.
+
+2016-04-12  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad.c (request_handler): Move report_format_id into an explicit
 	"if" statement, so that it is only retrieved when needed.
 
