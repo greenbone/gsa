@@ -3990,8 +3990,8 @@ reconstruct_url (struct MHD_Connection *connection, const char *url)
  * @brief Get the client's address.
  *
  * @param[in]   conn             Connection.
- * @param[out]  client_address   Buffer to store client address. Has at least
- *                               INET6_ADDRSTRLEN bytes.
+ * @param[out]  client_address   Buffer to store client address. Must have at
+ *                               least INET6_ADDRSTRLEN bytes.
  *
  * @return  0 success, 1 invalid UTF-8 in X-Real-IP header
  */
