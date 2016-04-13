@@ -1,3 +1,25 @@
+2016-04-13  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Change handling of report result filters so it remembers whether
+	the search phrase must match exactly and simplify the filtering
+	for the alert tests on report summary pages.
+
+	* src/gsad_omp.c (get_report): Handle new search_phrase_exact
+	parameter, build filter from parameters instead of passing them to
+	the get_reports OMP command as individual attributes and replace
+	the "esc_..." parameters in the alert test with "esc_filter".
+
+	* src/gsad.c (init_validator): Replace the various "esc_..." parameters
+	for the alert test with "esc_filter" and add "search_phrase_exact".
+	
+	* src/html/classic/omp.xsl (report [results-pager]): Add parameter
+	search_phrase_exact to the common part of the links.
+	(report [filterbox]): Add radio button to choose whether the search
+	phrase must match exactly.
+	(filtered-report-export-form): Add paramete search_phrase_exact.
+	(report [summary]): Replace the various "esc_..." parameters
+	for the alert test with "esc_filter" and add "search_phrase_exact".
+
 2016-04-08  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Backport r24946.

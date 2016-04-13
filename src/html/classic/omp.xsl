@@ -2886,6 +2886,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                                 '&amp;apply_min_qod=', number (string-length (report/filters/min_qod) &gt; 0),
                                 '&amp;min_qod=', report/filters/min_qod,
                                 '&amp;search_phrase=', report/filters/phrase,
+                                '&amp;search_phrase_exact=', number (contains (report/filters/term, concat ('=', report/filters/phrase)) or contains (report/filters/term, concat ('=&quot;', report/filters/phrase, '&quot;'))),
                                 '&amp;autofp=', report/filters/autofp,
                                 '&amp;delta_states=', report/filters/delta/text())"/>
 
@@ -3501,10 +3502,40 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           %
         </div>
         <div style="padding: 2px;">
+          <xsl:variable name="search_phrase_exact" select="number (contains (report/filters/term, concat ('=', report/filters/phrase)) or contains (report/filters/term, concat ('=&quot;', report/filters/phrase, '&quot;')))"/>
           <xsl:value-of select="gsa:i18n ('Text phrase', 'Report Filter')"/>:
           <input type="text" name="search_phrase" size="50"
                  value="{report/filters/phrase}"
                  maxlength="400"/>
+          <div style="margin-left: 30px">
+            <label>
+              <xsl:choose>
+                <xsl:when test="$search_phrase_exact">
+                  <input type="radio" name="search_phrase_exact" value="0"
+                      maxlength="400"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <input type="radio" name="search_phrase_exact" value="0"
+                      maxlength="400" checked="1"/>
+                </xsl:otherwise>
+              </xsl:choose>
+              <xsl:value-of select="gsa:i18n ('Can match partially', 'Report Filter')"/>
+            </label>
+            <br/>
+            <label>
+              <xsl:choose>
+                <xsl:when test="$search_phrase_exact">
+                  <input type="radio" name="search_phrase_exact" value="1"
+                      maxlength="400" checked="1"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <input type="radio" name="search_phrase_exact" value="1"
+                      maxlength="400"/>
+                </xsl:otherwise>
+              </xsl:choose>
+              <xsl:value-of select="gsa:i18n ('Must match exactly', 'Report Filter')"/>
+            </label>
+          </div>
         </div>
         <div style="padding: 2px;">
           <xsl:value-of select="gsa:i18n ('Timezone', 'Time')"/>:
@@ -30170,6 +30201,9 @@ should not have received it.
             name="search_phrase"
             value="{report/filters/phrase}"/>
     <input type="hidden"
+            name="search_phrase_exact"
+            value="{number (contains (report/filters/term, concat ('=', report/filters/phrase)) or contains (report/filters/term, concat ('=&quot;', report/filters/phrase, '&quot;')))}"/>
+    <input type="hidden"
             name="apply_min_cvss_base"
             value="{number (string-length (report/filters/min_cvss_base) &gt; 0)}"/>
     <input type="hidden"
@@ -31078,12 +31112,22 @@ should not have received it.
                     <input type="hidden" name="autofp" value="{report/filters/autofp}"/>
 
                     <!-- Alert filters. -->
-                    <input type="hidden" name="esc_first_result" value="1"/>
-                    <input type="hidden" name="esc_max_results" value="{report/result_count/hole/full + report/result_count/warning/full + report/result_count/info/full + report/result_count/log/full + report/result_count/false_positive/full}"/>
-                    <input type="hidden" name="esc_notes" value="1"/>
-                    <input type="hidden" name="esc_overrides" value="1"/>
-                    <input type="hidden" name="esc_result_hosts_only" value="1"/>
-                    <input type="hidden" name="esc_levels" value="hmlgf"/>
+                    <xsl:variable name="esc_filter_term">
+                      <xsl:if test="string-length (report/filters/autofp) &gt; 0">
+                        <xsl:value-of select="concat ('autofp=', report/filters/autofp, ' ')"/>
+                      </xsl:if>
+                      <xsl:if test="string-length (report/filters/apply_overrides) &gt; 0">
+                        <xsl:value-of select="concat ('apply_overrides=', report/filters/apply_overrides, ' ')"/>
+                      </xsl:if>
+                      <xsl:if test="string-length (report/filters/min_qod) &gt; 0">
+                        <xsl:value-of select="concat ('min_qod=', report/filters/min_qod, ' ')"/>
+                      </xsl:if>
+                      <xsl:if test="string-length (report/filters/timezone) &gt; 0">
+                        <xsl:value-of select="concat ('timezone=', report/filters/timezone, ' ')"/>
+                      </xsl:if>
+                      <xsl:text>result_hosts_only=0 levels=hmlgfd notes=1 overrides=1 start=1 rows=-1</xsl:text>
+                    </xsl:variable>
+                    <input type="hidden" name="esc_filter" value="{$esc_filter_term}"/>
 
                     <select name="alert_id" title="{gsa:i18n ('Alert', 'Alert')}">
                       <xsl:for-each select="../../get_alerts_response/alert">
@@ -31151,28 +31195,7 @@ should not have received it.
                     <input type="hidden" name="autofp" value="{report/filters/autofp}"/>
 
                     <!-- Alert filters. -->
-                    <input type="hidden" name="esc_first_result" value="{report/results/@start}"/>
-                    <input type="hidden" name="esc_max_results" value="{report/result_count/hole/filtered + report/result_count/warning/filtered + report/result_count/info/filtered + report/result_count/log/filtered + report/result_count/false_positive/filtered}"/>
-                    <input type="hidden" name="esc_levels" value="{$levels}"/>
-                    <input type="hidden"
-                           name="esc_search_phrase"
-                           value="{report/filters/phrase}"/>
-                    <input type="hidden"
-                           name="esc_apply_min_cvss_base"
-                           value="{number (string-length (report/filters/min_cvss_base) &gt; 0)}"/>
-                    <input type="hidden"
-                           name="esc_min_cvss_base"
-                           value="{report/filters/min_cvss_base}"/>
-                    <input type="hidden"
-                           name="esc_min_qod"
-                           value="{report/filters/min_qod}"/>
-                    <input type="hidden" name="esc_notes" value="{report/filters/notes}"/>
-                    <input type="hidden"
-                           name="esc_overrides"
-                           value="{$apply-overrides}"/>
-                    <input type="hidden"
-                           name="esc_result_hosts_only"
-                           value="{report/filters/result_hosts_only}"/>
+                    <input type="hidden" name="esc_filter" value="{report/filters/term}"/>
 
                     <select name="alert_id" title="{gsa:i18n ('Alert', 'Alert')}">
                       <xsl:for-each select="../../get_alerts_response/alert">
