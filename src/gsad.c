@@ -3990,7 +3990,8 @@ reconstruct_url (struct MHD_Connection *connection, const char *url)
  * @brief Get the client's address.
  *
  * @param[in]   conn             Connection.
- * @param[out]  client_address   Buffer to store client address.
+ * @param[out]  client_address   Buffer to store client address. Has at least
+ *                               INET6_ADDRSTRLEN bytes.
  *
  * @return  0 success, 1 invalid UTF-8 in X-Real-IP header
  */
@@ -4009,9 +4010,9 @@ get_client_address (struct MHD_Connection *conn, char *client_address)
       && x_real_ip && g_utf8_validate (x_real_ip, -1, NULL) == FALSE)
     return 1;
   else if (!ignore_http_x_real_ip && x_real_ip != NULL)
-    strcpy (client_address, x_real_ip);
+    strncpy (client_address, x_real_ip, INET6_ADDRSTRLEN);
   else if (unix_socket)
-    strcpy (client_address, "unix_socket");
+    strncpy (client_address, "unix_socket", INET6_ADDRSTRLEN);
   else
     {
       const union MHD_ConnectionInfo* info;

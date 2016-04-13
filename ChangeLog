@@ -1,3 +1,9 @@
+2016-04-13  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/gsad.c (get_client_address): Fix stack bufferoverflow introduced
+	in r24780. Can be triggered with: curl -k -H "X-Real-IP: `python -c
+	'print "A"*300'`" https://localhost/omp?token=foo
+
 2016-04-12  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (BAD_REQUEST_PAGE): New define.
