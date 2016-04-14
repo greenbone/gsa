@@ -1,3 +1,53 @@
+gsa 6.1+beta3 (2016-04-14)
+
+This is the third beta release of the upcoming version 6.1 of the
+Greenbone Security Assistant (GSA). It will be part of the upcoming
+OpenVAS-9 release. This module is the web client that makes the
+full feature set of OpenVAS Manager available in a web browser.
+
+This release comprehensively updates the user interface style and
+workflows, using JS technologies for dialogs, widgets and various other
+elements.
+
+Many thanks to everyone who has contributed to this release:
+Benoît Allard, Hani Benhabiles, Matthew Mundell, Timo Pollmeier,
+Jan-Oliver Wagner and Michael Wiegand.
+
+Main changes since 6.1+beta2:
+* Replace login and password in slaves with credential and show slaves
+  using a credential on the credential details page.
+* Replace the Certificate and Private Key in Scanners with a Credential.
+* Add new alert method 'SCP'.
+* Split the autogenerate option into "Autogenerate password" and
+* Add new SNMP credential type.  Simplify use of "New Credential" dialog
+* Add SNMP credentials to targets.
+* Add new client certificate credential type "Autogenerate SSH key pair".
+* Add alert conditions for triggering alerts according to result counts
+  matched by a filter.
+* Add alert event for any SecInfo type.
+* Add alert method "Send", for sending the report to a TCP listener.
+* Introduce a icon toolbar for overview and details pages.
+* Turn Filter section into a toolbar-like compact element.
+* New, more dynamic method for creating dashboards / chart boxes
+  which makes their size adapt to the screen width, and which also allows
+  editing of dashboards like rearranging, removing and adding of new
+  components and resizing the row heights.
+* Add task preference for auto deleting reports.
+* Added links inside charts to respective filters or resources.
+* Use the new filter syntax for report results in the filter box.
+* Introduce a new info dialog.
+* Turned several edit/new pages into dialogs.
+* Add syncing of OSP scan configs.
+* Apply PRG pattern across entire GUI.
+* Reworked login page.
+* Add --unix-socket option.
+* Add Radius support for authentication.
+* Introduce new style for help pages, compatible with the new style
+  of the overview pages.
+* Get tags working for Assets.
+* Various code improvements.
+
+
 gsa 6.1+beta2 (2015-10-21)
 
 This is the second beta release of the upcoming version 6.1 of the
