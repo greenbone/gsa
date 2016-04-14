@@ -1,3 +1,11 @@
+2016-04-14  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/js/gsa_graphics_base.js (fill_empty_fields): Set
+	"~original" columns to empty string instead of 'N/A' and do not
+	change columns with value 0.
+	(filtered_list_url): Append new keyword instead of prepending so it
+	works with criteria containing the "not" keyword.
+
 2016-04-13  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/js/gsa_donut_chart.js (init): Remove color scale

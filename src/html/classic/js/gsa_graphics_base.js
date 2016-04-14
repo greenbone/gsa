@@ -3425,10 +3425,11 @@
       var new_record = {};
       var empty_x = false;
       for (var field in old_data.records [record]) {
-        if (old_data.records[record][field]) {
+        if (old_data.records[record][field]
+            || old_data.records[record][field] === 0) {
           new_record[field] = old_data.records [record][field];
         }
-        else {
+        else if (field.lastIndexOf('~original') !== (field.length - 9)) {
           switch (old_data.column_info.columns[field].data_type) {
             case 'integer':
             case 'decimal':
@@ -3448,6 +3449,9 @@
           if (field === x_field) {
             empty_x = true;
           }
+        }
+        else {
+          new_record[field] = '';
         }
       }
 
@@ -3592,14 +3596,6 @@
         new_criteria += ' ';
       }
 
-      if (current_keyword.value !== 'and' && current_keyword.value !== 'or' &&
-          current_keyword.value !== 'not' &&
-          // last keyword was not an "and" operator
-          (i <= 0 || filter_info.criteria[i - 1].value !== 'and' ||
-           filter_info.criteria[i - 1].column !== '')) {
-        new_criteria += criteria_addition + ' and ';
-      }
-
       if (current_keyword.column === '') {
         if (current_keyword.relation === '=') {
           new_criteria += '=' + current_keyword.value;
@@ -3609,6 +3605,14 @@
       } else {
         new_criteria += current_keyword.column + current_keyword.relation +
           current_keyword.value;
+      }
+
+      if (current_keyword.value !== 'and' && current_keyword.value !== 'or' &&
+          current_keyword.value !== 'not' &&
+          // last keyword was not an "and" operator
+          (i <= 0 || filter_info.criteria[i - 1].value !== 'and' ||
+           filter_info.criteria[i - 1].column !== '')) {
+        new_criteria += ' and ' + criteria_addition;
       }
     }
     if (filter_info.criteria !== undefined &&
