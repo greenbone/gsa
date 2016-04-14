@@ -52,6 +52,7 @@
   gsa.register_chart_generator = register_chart_generator;
   gsa.severity_bar_style = severity_bar_style;
   gsa.data_raw = data_raw;
+  gsa.field_color_scale = field_color_scale;
   gsa.severity_colors_gradient = severity_colors_gradient;
   gsa.BaseChartGenerator = BaseChartGenerator;
   gsa.fill_empty_fields = fill_empty_fields;
@@ -72,6 +73,100 @@
     d3.scale.ordinal()
                 .range(['silver', '#DDDDDD', 'skyblue', 'orange', '#D80000'])
                 .domain(['N/A', 'Log', 'Low', 'Medium', 'High']);
+
+  function field_color_scale(type, column) {
+    var scale = d3.scale.ordinal();
+
+    var red = d3.interpolateHcl('#d62728', '#ff9896');
+    var dark_red = d3.interpolateHcl('#ff9896', '#800000');
+    var green = d3.interpolateHcl('#2ca02c', '#98df8a');
+    var blue = d3.interpolateHcl('#aec7e8', '#1f77b4');
+    var orange = d3.interpolateHcl('#ff7f0e', '#ffbb78');
+    var purple = d3.interpolateHcl('#9467bd', '#c5b0d5');
+    var yellow = d3.interpolateHcl('#ad9e39', '#ffff99');
+    var red_yellow = d3.interpolateHcl('#d62728', '#ffff8e');
+
+    switch (column) {
+      case 'class':
+        scale.domain(['compliance',
+                      'inventory',
+                      'miscellaneous',
+                      'patch',
+                      'vulnerability',
+                      'N/A']);
+        scale.range([blue(0),
+                     blue(1),
+                     green(0),
+                     green(1),
+                     orange(0),
+                     'silver']);
+        break;
+      case 'qod':
+        scale = d3.scale.linear();
+        scale.domain ([0, 30, 60, 70, 80, 95, 100]);
+        scale.range ([d3.hsl('#881100'),
+                      d3.hsl('#ff7f0e'),
+                      d3.hsl('#ffff0e'),
+                      d3.hsl('#f8f8f8'),
+                      d3.hsl('#22cc22'),
+                      d3.hsl('#22ddff'),
+                      d3.hsl('#000044')]);
+        break;
+      case 'qod_type':
+        scale.domain(['Exploit', 'Remote vulnerability',
+                      'Remote Active', 'Remote analysis', 'Remote App', 'Remote Banner', 'Remote probe',
+                      'Package check', 'Registry check', 'Executable version',
+                      'Unreliable rem. banner', 'Unreliable exec. version',
+                      'General Note', 'None']);
+        scale.range([red(0), orange(0),
+                     green(0), green(0.5), green(0.25), green(0.75), green(1.0),
+                     blue(1.0), blue(0.5), blue(0.0),
+                     yellow(0.5), yellow(1.0),
+                     'grey', 'silver']);
+        break;
+      case 'solution_type':
+        scale.domain(['Mitigation',
+                      'NoneAvailable',
+                      'VendorFix',
+                      'WillNotFix',
+                      'Workaround',
+                      'N/A']);
+        scale.range([green(0.5),
+                     red_yellow(0.5),
+                     blue(1),
+                     red_yellow(0),
+                     red_yellow(0.75),
+                     'silver']);
+        break;
+      case 'status':
+        scale.domain(['Delete Requested', 'Ultimate Delete Requested',
+                      'Internal Error',
+                      'New', 'Requested', 'Running',
+                      'Stop Requested', 'Stopped',
+                      'Done',
+                      'N/A']);
+        scale.range([red(1.0), red(0.5),
+                     red(0.0),
+                     green(1.0), green(0.5), green(0.0),
+                     orange(1.0), orange(0.0),
+                     blue(0.5),
+                     'silver']);
+        break;
+      case 'type':
+        scale.domain(['NVTs',
+                      'CVEs', 'CPEs', 'OVAL definitions',
+                      'CERT-Bund Advisories', 'DFN-CERT Advisories',
+                      'N/A']);
+        scale.range([orange(0.0),
+                     blue(0.0), blue(0.5), blue(1.0),
+                     green(0.0), green(1.0),
+                     'silver']);
+        break;
+      default:
+        return d3.scale.category20();
+    }
+    return scale;
+  }
 
   /*
   * Severity gradient
@@ -4198,7 +4293,12 @@
   };
 
   BaseChartGenerator.prototype.scaleColor = function(value) {
-    return this.color_scale(value);
+    var color = this.color_scale(value);
+    if (color === '#NaNNaNNaN') {
+      return undefined;
+    } else {
+      return color;
+    }
   };
 
   BaseChartGenerator.prototype.evaluateParams = function(gen_params) {

@@ -49,7 +49,6 @@
     this.y_field = 'count';
 
     this.setDataTransformFunc(gsa.data_raw);
-    this.setColorScale(d3.scale.category20());
     this.setTitleGenerator(
       gsa.title_static(gsa._('Loading donut chart ...'), gsa._('Donut Chart')));
   };
@@ -82,6 +81,13 @@
 
     if (gen_params.y_fields && gen_params.y_fields[0]) {
       this.y_field = gen_params.y_fields[0];
+    }
+
+    if (this.color_scale === undefined) {
+      this.setColorScale(gsa.field_color_scale(data.column_info
+                                                .columns[this.x_field].type,
+                                              data.column_info
+                                                .columns[this.x_field].column));
     }
 
     if (gen_params.extra.show_stat_type) {
@@ -166,6 +172,11 @@
         x = d.data[this.x_field];
       }
 
+      var color = self.scaleColor(d.data[self.x_field]);
+      if (color === undefined) {
+        color = self.scaleColor(d.data[self.x_field + '~original']);
+      }
+
       var legend_item = legend.insert('a');
       legend_item.attr('xlink:href', generate_link(d, i));
 
@@ -174,7 +185,7 @@
         .attr('width', '15')
         .attr('x', 0.5)
         .attr('y', legend_y + 0.5)
-        .attr('fill', this.scaleColor(x_data[i]))
+        .attr('fill', color)
         .attr('stroke', 'black')
         .attr('stroke-width', '0.25')
         .style('shape-rendering', 'geometricPrecision')
@@ -241,7 +252,11 @@
         return donut_inner_path_d(d.startAngle, d.endAngle, rx, ry, ri, h);
       })
       .attr('fill', function(d, i) {
-        return d3.lab(self.scaleColor(d.data[self.x_field])).darker();
+        var color = self.scaleColor(d.data[self.x_field]);
+        if (color === undefined) {
+          color = self.scaleColor(d.data[self.x_field + '~original']);
+        }
+        return d3.lab(color).darker();
       })
       .attr('title', function(d, i) {
         var x;
@@ -271,7 +286,11 @@
         }
       })
       .attr('fill', function(d, i) {
-        return self.scaleColor(d.data[self.x_field]);
+        var color = self.scaleColor(d.data[self.x_field]);
+        if (color === undefined) {
+          color = self.scaleColor(d.data[self.x_field + '~original']);
+        }
+        return color;
       })
       .attr('title', function(d, i) {
         var x;
@@ -293,7 +312,11 @@
         return donut_outer_path_d(d.startAngle, d.endAngle, rx, ry, ri, h);
       })
       .attr('fill', function(d, i) {
-        return d3.lab(self.scaleColor(d.data[self.x_field])).darker();
+        var color = self.scaleColor(d.data[self.x_field]);
+        if (color === undefined) {
+          color = self.scaleColor(d.data[self.x_field + '~original']);
+        }
+        return d3.lab(color).darker();
       })
       .attr('title', function(d, i) {
         var x;

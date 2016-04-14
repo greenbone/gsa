@@ -1,3 +1,16 @@
+2016-04-13  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/js/gsa_donut_chart.js (init): Remove color scale
+	initialization.
+	(generate): Initialize color scale using the type and value column name
+	if it is still undefined.  Try getting scale color for original value
+	if the current one does not work.
+
+	* src/html/classic/js/gsa_graphics_base.js (gsa.field_color_scale): New
+	function to get column-specific color scales.
+	(BaseChartGenerator.prototype.scaleColor): Return undefined if color
+	is not valid.
+
 2016-04-13  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad.c (get_client_address): Fix stack bufferoverflow introduced
