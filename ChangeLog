@@ -1,3 +1,8 @@
+2016-04-15  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/gsad_omp.c (generate_page): Correct condition of current_page
+	UTF-8 check and set current_page to NULL if it fails.
+
 2016-04-15  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (send_redirect_to_uri, file_content_response)
