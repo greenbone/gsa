@@ -539,13 +539,11 @@ xsl_transform_omp (credentials_t * credentials, gchar * xml,
                           "</envelope>",
                           credentials->capabilities,
                           xml);
+  g_free (xml);
 
   xml_flag = params_value (credentials->params, "xml");
   if (xml_flag && strcmp (xml_flag, "0"))
-    {
-      g_free (xml);
-      return g_string_free (string, FALSE);
-    }
+    return g_string_free (string, FALSE);
 
   html = xsl_transform (string->str, response_data);
   g_string_free (string, TRUE);
@@ -570,7 +568,6 @@ xsl_transform_omp (credentials_t * credentials, gchar * xml,
                          "</html>");
       g_free (res);
     }
-  g_free (xml);
   return html;
 }
 
