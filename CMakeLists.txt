@@ -210,6 +210,7 @@ set (CPACK_SOURCE_IGNORE_FILES
 "VERSION$"
 "cpe-icons.xml$"
 "zones.xml$"
+${CMAKE_BINARY_DIR}
 )
 
 include (CPack)

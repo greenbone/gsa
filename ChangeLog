@@ -1,3 +1,8 @@
+2016-04-15  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	* CMakeLists.txt: Add CMAKE_BINARY_DIR to CPACK_SOURCE_IGNORE_FILES to
+	generally ignore files created in out-of-source builds.
+
 2016-04-15  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (xsl_transform_omp): Free xml earlier, to reduce max
