@@ -1,5 +1,11 @@
 2016-04-15  Michael Wiegand <michael.wiegand@greenbone.net>
 
+	Preparing the gsa 6.1+beta4 release.
+
+	* CHANGES: Updated.
+
+2016-04-15  Michael Wiegand <michael.wiegand@greenbone.net>
+
 	* CMakeLists.txt: Add CMAKE_BINARY_DIR to CPACK_SOURCE_IGNORE_FILES to
 	generally ignore files created in out-of-source builds.
 

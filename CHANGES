@@ -1,3 +1,23 @@
+gsa 6.1+beta4 (2016-04-15)
+
+This is the fourth beta release of the upcoming version 6.1 of the
+Greenbone Security Assistant (GSA). It will be part of the upcoming
+OpenVAS-9 release. This module is the web client that makes the
+full feature set of OpenVAS Manager available in a web browser.
+
+This release addresses an issue which caused the tar ball of gsa 6.1+beta3 to
+be missing a file, making it impossible to build from the release tar ball. It
+also improves memory handling during XSL transformations.
+
+Many thanks to everyone who has contributed to this release:
+Matthew Mundell, Jan-Oliver Wagner and Michael Wiegand.
+
+Main changes since 6.1+beta3:
+* Update list of files to be ignored for tar balls to avoid accidentally
+  excluding necessary files.
+* Reduce memory usage during XSL transformations.
+
+
 gsa 6.1+beta3 (2016-04-14)
 
 This is the third beta release of the upcoming version 6.1 of the
