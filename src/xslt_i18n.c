@@ -464,6 +464,9 @@ xslt_ext_strformat (xmlXPathParserContextPtr ctxt,
     }
 
   result_obj = xmlXPathNewString ((xmlChar*) result_str->str);
+  g_array_free (format_args, TRUE);
+  g_free (format_string);
+  g_string_free (number_str, TRUE);
   g_string_free (result_str, TRUE);
   valuePush (ctxt, result_obj);
 }
@@ -626,6 +629,7 @@ init_language_lists ()
                 g_hash_table_insert (native_language_names,
                                      g_strdup (code),
                                      g_strdup (native_name));
+              g_strfreev (columns);
             }
           g_free (line);
           line = NULL;
@@ -694,7 +698,7 @@ init_language_lists ()
 
 /**
  * @brief Write the list of installed languages to a buffer as XML.
- * 
+ *
  * @param[in] buffer  A GString buffer to write to.
  */
 void

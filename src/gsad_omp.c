@@ -1904,10 +1904,14 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
                         g_strdup (given_filt_id));
       filt_id = given_filt_id;
     }
-  else if (filter == NULL || strcmp (filter, "") == 0)
-    filt_id = g_tree_lookup (credentials->last_filt_ids, filter_type);
   else
-    filt_id = NULL;
+    {
+      if (filter == NULL || strcmp (filter, "") == 0)
+          filt_id = g_tree_lookup (credentials->last_filt_ids, filter_type);
+      else
+        filt_id = NULL;
+      g_free (filter_type);
+    }
 
   switch (manager_connect (credentials, &socket, &session, &html,
                            response_data))

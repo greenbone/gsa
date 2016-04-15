@@ -1,3 +1,13 @@
+2016-04-15  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Close some leaks found with valgrind.
+
+	* src/gsad_omp.c (get_many): Free filter_type if it is not added to
+	last_filt_ids.
+
+	* src/xslt_i18n.c (xslt_ext_strformat): Free data.
+	(init_language_lists): Free columns.
+
 2016-04-15  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/gsad_omp.c (generate_page): Correct condition of current_page
