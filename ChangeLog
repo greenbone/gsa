@@ -1,3 +1,8 @@
+2016-04-15  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	* CMakeLists.txt: Remove 'cmake$' from CPACK_SOURCE_IGNORE_FILES to
+	avoid accidentally excluding custom CMake scripts from the tar ball.
+
 2016-04-14  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	Post release version bump.

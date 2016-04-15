@@ -193,7 +193,6 @@ set (CPACK_SOURCE_IGNORE_FILES
 "/.svn/"
 "/_CPack_Packages/"
 "/CMakeFiles/"
-"cmake$"
 "swp$"
 "Cache.txt$"
 ".tar.gz"
