@@ -1,3 +1,9 @@
+2016-04-15  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_base.c (xsl_transform_with_stylesheet): Free doc earlier, to
+	reduce the amount of memory allocated at once.  Call malloc_trim after
+	freeing everything, to force Glib to check if it can reduce the heap size.
+
 2016-04-15  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	* CMakeLists.txt: Remove 'cmake$' from CPACK_SOURCE_IGNORE_FILES to

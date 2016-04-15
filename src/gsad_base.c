@@ -49,6 +49,7 @@
 #include <libxslt/xsltInternals.h> /* for xsltStylesheetPtr */
 #include <libxslt/transform.h> /* for xsltApplyStylesheet() */
 #include <libxslt/xsltutils.h> /* for xsltSaveResultToString() */
+#include <malloc.h>
 #else
 #include <string.h>
 #include <sys/wait.h>
@@ -235,17 +236,18 @@ xsl_transform_with_stylesheet (const char *xml_text,
     {
       g_warning ("Failed to apply stylesheet %s", xsl_stylesheet);
       xsltFreeStylesheet (cur);
+      xmlFreeDoc (doc);
       if (response_data)
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return g_strdup (FAIL_HTML);
     }
+  xmlFreeDoc (doc);
 
   if (xsltSaveResultToString (&doc_txt_ptr, &doc_txt_len, res, cur) < 0)
     {
       g_warning ("Failed to store transformation result.");
       xsltFreeStylesheet (cur);
       xmlFreeDoc (res);
-      xmlFreeDoc (doc);
       if (response_data)
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return g_strdup (FAIL_HTML);
@@ -253,7 +255,7 @@ xsl_transform_with_stylesheet (const char *xml_text,
 
   xsltFreeStylesheet (cur);
   xmlFreeDoc (res);
-  xmlFreeDoc (doc);
+  malloc_trim (0);
 
   return (char *) doc_txt_ptr;
 #else
