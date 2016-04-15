@@ -464,7 +464,13 @@ xslt_ext_strformat (xmlXPathParserContextPtr ctxt,
     }
 
   result_obj = xmlXPathNewString ((xmlChar*) result_str->str);
-  g_array_free (format_args, TRUE);
+
+  {
+    guint index = format_args->len;
+    while (index--)
+      g_free (g_array_index (format_args, gchar*, index));
+    g_array_free (format_args, TRUE);
+  }
   g_free (format_string);
   g_string_free (number_str, TRUE);
   g_string_free (result_str, TRUE);

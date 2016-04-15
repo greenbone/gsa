@@ -1,5 +1,9 @@
 2016-04-15  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/xslt_i18n.c (xslt_ext_strformat): Free members of format_args too.
+
+2016-04-15  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Close some leaks found with valgrind.
 
 	* src/gsad_omp.c (get_many): Free filter_type if it is not added to
