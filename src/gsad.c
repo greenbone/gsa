@@ -3568,8 +3568,7 @@ send_redirect_to_uri (struct MHD_Connection *connection, const char *uri,
                           " <a href=\"%s\">%s<a/></body></html>\n",
                           uri, uri);
   response = MHD_create_response_from_buffer (strlen (body), body,
-                                              MHD_RESPMEM_MUST_COPY);
-  g_free (body);
+                                              MHD_RESPMEM_MUST_FREE);
 
   if (!response)
     return MHD_NO;
@@ -3855,8 +3854,7 @@ file_content_response (credentials_t *credentials,
       fclose (file);
       cmd_response_data_reset (&response_data);
       ret = MHD_create_response_from_buffer (strlen (res), (void *) res,
-                                             MHD_RESPMEM_MUST_COPY);
-      g_free (res);
+                                             MHD_RESPMEM_MUST_FREE);
       return ret;
     }
 
@@ -4186,10 +4184,9 @@ request_handler (void *cls, struct MHD_Connection *connection,
                            guest_username ? guest_username : "");
           g_free (language);
           res = xsl_transform (xml, &response_data);
-          response = MHD_create_response_from_buffer (strlen (res), res,
-                                                  MHD_RESPMEM_MUST_COPY);
           g_free (xml);
-          g_free (res);
+          response = MHD_create_response_from_buffer (strlen (res), res,
+                                                  MHD_RESPMEM_MUST_FREE);
           ADD_CONTENT_SECURITY_HEADERS (response);
           cmd_response_data_reset (&response_data);
           return handler_send_response (connection,
@@ -4318,8 +4315,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
               g_free (xml);
             }
           response = MHD_create_response_from_buffer (strlen (res), res,
-                                                      MHD_RESPMEM_MUST_COPY);
-          g_free (res);
+                                                      MHD_RESPMEM_MUST_FREE);
           http_response_code = response_data.http_status_code;
           ADD_CONTENT_SECURITY_HEADERS (response);
           cmd_response_data_reset (&response_data);
@@ -4428,8 +4424,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
 
           http_response_code = response_data.http_status_code;
           response = MHD_create_response_from_buffer (strlen (res), res,
-                                                      MHD_RESPMEM_MUST_COPY);
-          g_free (res);
+                                                      MHD_RESPMEM_MUST_FREE);
           ADD_CONTENT_SECURITY_HEADERS (response);
           cmd_response_data_reset (&response_data);
           return handler_send_response (connection,
@@ -4483,9 +4478,8 @@ request_handler (void *cls, struct MHD_Connection *connection,
           http_response_code = response_data.http_status_code;
           g_free (xml);
           response = MHD_create_response_from_buffer (strlen (res), res,
-                                                      MHD_RESPMEM_MUST_COPY);
+                                                      MHD_RESPMEM_MUST_FREE);
           cmd_response_data_reset (&response_data);
-          g_free (res);
           ADD_CONTENT_SECURITY_HEADERS (response);
           return handler_send_response (connection,
                                         response,
@@ -4561,7 +4555,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
             }
 
           response = MHD_create_response_from_buffer (res_len, (void *) res,
-                                                      MHD_RESPMEM_MUST_COPY);
+                                                      MHD_RESPMEM_MUST_FREE);
           if (content_type_string)
             {
               MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
@@ -4570,7 +4564,6 @@ request_handler (void *cls, struct MHD_Connection *connection,
             }
           http_response_code = response_data.http_status_code;
           cmd_response_data_reset (&response_data);
-          g_free (res);
         }
       /* URL does not request OMP command but perhaps a special GSAD command? */
       else if (!strncmp (&url[0], "/system_report/",
@@ -4613,11 +4606,10 @@ request_handler (void *cls, struct MHD_Connection *connection,
               return MHD_NO;
             }
           response = MHD_create_response_from_buffer ((unsigned int) res_len,
-                                                      res, MHD_RESPMEM_MUST_COPY);
+                                                      res, MHD_RESPMEM_MUST_FREE);
 
           http_response_code = response_data.http_status_code;
           cmd_response_data_reset (&response_data);
-          g_free (res);
         }
       else if (!strncmp (&url[0], "/help/",
                          strlen ("/help/"))) /* flawfinder: ignore,
@@ -4730,9 +4722,8 @@ request_handler (void *cls, struct MHD_Connection *connection,
             }
           http_response_code = response_data.http_status_code;
           response = MHD_create_response_from_buffer (strlen (res), res,
-                                                      MHD_RESPMEM_MUST_COPY);
+                                                      MHD_RESPMEM_MUST_FREE);
           cmd_response_data_reset (&response_data);
-          g_free (res);
         }
       else
         {
