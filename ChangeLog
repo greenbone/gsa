@@ -1,5 +1,11 @@
 2016-04-17  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad.c (send_redirect_to_urn, request_handler): Send a response
+	instead of dropping the connection, to prevent libmhd from adding
+	"Internal application error" to the log.
+
+2016-04-17  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad.c (request_handler): When the token is NULL skip
 	validation, cookie retrieval and user search, because the result is
 	always USER_BAD_MISSING_TOKEN.

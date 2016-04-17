@@ -3639,7 +3639,11 @@ send_redirect_to_urn (struct MHD_Connection *connection, const char *urn,
       return MHD_YES;
     }
   if (host == NULL)
-    return MHD_NO;
+    {
+      send_response (connection, BAD_REQUEST_PAGE, MHD_HTTP_NOT_ACCEPTABLE,
+                     NULL, GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0);
+      return MHD_YES;
+    }
 
   protocol = MHD_lookup_connection_value (connection, MHD_HEADER_KIND,
                                           "X-Forwarded-Protocol");
@@ -4837,7 +4841,16 @@ request_handler (void *cls, struct MHD_Connection *connection,
             MHD_create_post_processor (connection, POST_BUFFER_SIZE,
                                        serve_post, (void *) con_info);
           if (NULL == con_info->postprocessor)
-            return MHD_NO;
+            {
+              g_free (con_info);
+              /* Both bad request or running out of memory will lead here, but
+               * we return the Bad Request page always, to prevent bad requests
+               * from leading to "Internal application error" in the log. */
+              send_response (connection, BAD_REQUEST_PAGE,
+                             MHD_HTTP_NOT_ACCEPTABLE, NULL,
+                             GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0);
+              return MHD_YES;
+            }
           con_info->params = params_new ();
           con_info->connectiontype = 1;
           con_info->answercode = MHD_HTTP_OK;
