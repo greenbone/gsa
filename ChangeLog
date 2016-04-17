@@ -1,5 +1,10 @@
 2016-04-17  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad.c (handler_send_response): Return the MHD_queue_response
+	return, instead of blindly returning MHD_YES.
+
+2016-04-17  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad.c (send_redirect_to_urn, request_handler): Send a response
 	instead of dropping the connection, to prevent libmhd from adding
 	"Internal application error" to the log.

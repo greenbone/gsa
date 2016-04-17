@@ -3918,6 +3918,8 @@ handler_send_response (struct MHD_Connection *connection,
                        int http_response_code,
                        int remove_cookie)
 {
+  int ret;
+
   if (remove_cookie)
     if (remove_sid (response) == MHD_NO)
       {
@@ -3933,9 +3935,9 @@ handler_send_response (struct MHD_Connection *connection,
                                content_disposition);
       g_free (content_disposition);
     }
-  MHD_queue_response (connection, http_response_code, response);
+  ret = MHD_queue_response (connection, http_response_code, response);
   MHD_destroy_response (response);
-  return MHD_YES;
+  return ret;
 }
 
 /**
