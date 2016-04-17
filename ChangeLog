@@ -1,5 +1,11 @@
 2016-04-17  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad.c (request_handler): When the token is NULL skip
+	validation, cookie retrieval and user search, because the result is
+	always USER_BAD_MISSING_TOKEN.
+
+2016-04-17  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad.c (send_redirect_to_uri, handler_send_response)
 	(request_handler): Log a warning when returning MHD_NO, to clarify the
 	"Internal application error" message that libmhd adds to the log.

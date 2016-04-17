@@ -4252,29 +4252,38 @@ request_handler (void *cls, struct MHD_Connection *connection,
       token = MHD_lookup_connection_value (connection,
                                            MHD_GET_ARGUMENT_KIND,
                                            "token");
-      if (openvas_validate (validator, "token", token))
-        token = NULL;
-
-      cookie = MHD_lookup_connection_value (connection,
-                                            MHD_COOKIE_KIND,
-                                            SID_COOKIE_NAME);
-      if (openvas_validate (validator, "token", cookie))
-        cookie = NULL;
-
-      get_client_address (connection, client_address);
-      ret = get_client_address (connection, client_address);
-      if (ret == 1)
+      if (token == NULL)
         {
-          send_response (connection,
-                        UTF8_ERROR_PAGE ("'X-Real-IP' header"),
-                        MHD_HTTP_BAD_REQUEST, NULL,
-                        GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0);
-          return MHD_YES;
+          cookie = NULL;
+          ret = USER_BAD_MISSING_TOKEN;
+        }
+      else
+        {
+          if (openvas_validate (validator, "token", token))
+            token = NULL;
+
+          cookie = MHD_lookup_connection_value (connection,
+                                                MHD_COOKIE_KIND,
+                                                SID_COOKIE_NAME);
+          if (openvas_validate (validator, "token", cookie))
+            cookie = NULL;
+
+          get_client_address (connection, client_address);
+          ret = get_client_address (connection, client_address);
+          if (ret == 1)
+            {
+              send_response (connection,
+                             UTF8_ERROR_PAGE ("'X-Real-IP' header"),
+                             MHD_HTTP_BAD_REQUEST, NULL,
+                             GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0);
+              return MHD_YES;
+            }
+
+          ret = user_find (cookie, token, client_address, &user);
         }
 
-      ret = user_find (cookie, token, client_address, &user);
-      if (ret == USER_BAD_TOKEN || ret == USER_GUEST_LOGIN_FAILED ||
-              ret == USER_OMP_DOWN || ret == USER_GUEST_LOGIN_ERROR)
+      if (ret == USER_BAD_TOKEN || ret == USER_GUEST_LOGIN_FAILED
+          || ret == USER_OMP_DOWN || ret == USER_GUEST_LOGIN_ERROR)
         {
           cmd_response_data_t response_data;
           cmd_response_data_init (&response_data);
