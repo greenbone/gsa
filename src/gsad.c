@@ -3571,11 +3571,17 @@ send_redirect_to_uri (struct MHD_Connection *connection, const char *uri,
                                               MHD_RESPMEM_MUST_FREE);
 
   if (!response)
-    return MHD_NO;
+    {
+      g_warning ("%s: failed to create response, dropping request",
+                 __FUNCTION__);
+      return MHD_NO;
+    }
   ret = MHD_add_response_header (response, MHD_HTTP_HEADER_LOCATION, uri);
   if (!ret)
     {
       MHD_destroy_response (response);
+      g_warning ("%s: failed to add location header, dropping request",
+                 __FUNCTION__);
       return MHD_NO;
     }
 
@@ -3584,6 +3590,8 @@ send_redirect_to_uri (struct MHD_Connection *connection, const char *uri,
       if (attach_sid (response, user->cookie) == MHD_NO)
         {
           MHD_destroy_response (response);
+          g_warning ("%s: failed to attach SID, dropping request",
+                     __FUNCTION__);
           return MHD_NO;
         }
     }
@@ -3910,6 +3918,8 @@ handler_send_response (struct MHD_Connection *connection,
     if (remove_sid (response) == MHD_NO)
       {
         MHD_destroy_response (response);
+        g_warning ("%s: failed to remove SID, dropping request",
+                   __FUNCTION__);
         return MHD_NO;
       }
   gsad_add_content_type_header (response, content_type);
@@ -4586,6 +4596,8 @@ request_handler (void *cls, struct MHD_Connection *connection,
             {
               g_free (sid);
               credentials_free (credentials);
+              g_warning ("%s: failed to validate slave_id, dropping request",
+                         __FUNCTION__);
               return MHD_NO;
             }
 
@@ -4603,6 +4615,8 @@ request_handler (void *cls, struct MHD_Connection *connection,
             {
               g_free (sid);
               credentials_free (credentials);
+              g_warning ("%s: failed to get system reports, dropping request",
+                         __FUNCTION__);
               return MHD_NO;
             }
           response = MHD_create_response_from_buffer ((unsigned int) res_len,
@@ -4756,6 +4770,8 @@ request_handler (void *cls, struct MHD_Connection *connection,
             {
               g_free (sid);
               MHD_destroy_response (response);
+              g_warning ("%s: failed to attach SID, dropping request",
+                         __FUNCTION__);
               return MHD_NO;
             }
           g_free (sid);
@@ -4786,6 +4802,8 @@ request_handler (void *cls, struct MHD_Connection *connection,
           /* Severe memory or file access problem. */
           g_free (sid);
           credentials_free (credentials);
+          g_warning ("%s: memory or file access problem, dropping request",
+                     __FUNCTION__);
           return MHD_NO;
         }
     }
@@ -4915,6 +4933,10 @@ request_handler (void *cls, struct MHD_Connection *connection,
       g_free (new_sid);
       return ret;
     }
+
+  assert (0);
+  g_warning ("%s: something went wrong, dropping request",
+             __FUNCTION__);
   return MHD_NO;
 }
 

@@ -1,5 +1,11 @@
 2016-04-17  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad.c (send_redirect_to_uri, handler_send_response)
+	(request_handler): Log a warning when returning MHD_NO, to clarify the
+	"Internal application error" message that libmhd adds to the log.
+
+2016-04-17  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad.c (request_handler): Format ! like everywhere else.
 
 2016-04-15  Matthew Mundell <matthew.mundell@greenbone.net>
