@@ -4120,9 +4120,9 @@ request_handler (void *cls, struct MHD_Connection *connection,
     }
 
   if ((!strcmp (method, "GET"))
-        && (! strncmp (&url[0], "/login/", strlen ("/login/"))) /* flawfinder: ignore,
-                                                                    it is a const str */
-        && ! url[strlen ("/login/")])
+        && (!strncmp (&url[0], "/login/", strlen ("/login/"))) /* flawfinder: ignore,
+                                                                   it is a const str */
+        && !url[strlen ("/login/")])
     {
       return send_redirect_to_urn (connection, default_file, NULL);
     }
@@ -4618,7 +4618,7 @@ request_handler (void *cls, struct MHD_Connection *connection,
           cmd_response_data_t response_data;
           cmd_response_data_init (&response_data);
 
-          if (! g_ascii_isalpha (url[6]))
+          if (!g_ascii_isalpha (url[6]))
             {
               response_data.http_status_code = MHD_HTTP_BAD_REQUEST;
               res = gsad_message (credentials,
