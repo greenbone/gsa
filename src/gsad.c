@@ -3936,6 +3936,14 @@ handler_send_response (struct MHD_Connection *connection,
       g_free (content_disposition);
     }
   ret = MHD_queue_response (connection, http_response_code, response);
+  if (ret == MHD_NO)
+    {
+      /* Assume this was due to a bad request, to keep the MHD "Internal
+       * application error" out of the log. */
+      send_response (connection, BAD_REQUEST_PAGE, MHD_HTTP_NOT_ACCEPTABLE,
+                     NULL, GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0);
+      return MHD_YES;
+    }
   MHD_destroy_response (response);
   return ret;
 }

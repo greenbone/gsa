@@ -1,3 +1,9 @@
+2016-04-18  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad.c (handler_send_response): If MHD_queue_response returns
+	MHD_NO, assume the cause was a bad request.  This keeps MHD
+	"Internal application error" out of the log.
+
 2016-04-18  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	Allow to use several form selections in a form
