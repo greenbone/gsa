@@ -1,3 +1,8 @@
+2016-04-18  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/js/gsa_graphics_base.js: Update coding style to fix
+	warnings and errors of jshint and jscs.
+
 2016-04-17  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (handler_send_response): Return the MHD_queue_response
