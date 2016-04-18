@@ -38,6 +38,7 @@
   // Default date and time formats
   gsa.date_format = d3.time.format.utc('%Y-%m-%d');
   gsa.datetime_format = d3.time.format.utc('%Y-%m-%d %H:%M');
+  gsa.iso_time_format = d3.time.format.utc('%Y-%m-%dT%H:%M');
 
   gsa.title_static = title_static;
   gsa.format_data = format_data;
@@ -3631,6 +3632,10 @@
       else {
         criteria_addition += column + '="' + value + '"';
       }
+    } else if (relation === 'range') {
+      criteria_addition = (column + '>' + value[0]
+                           + ' and '
+                           + column + '<' + value[1]);
     } else {
       criteria_addition += column + relation + '"' + value + '"';
     }
