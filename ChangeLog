@@ -1,3 +1,11 @@
+2016-04-18  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Rename request_handler to a verb, because it's a function.
+
+	* src/gsad.c (request_handler): Remove.  Renamed.
+	(handle_request): New function.  Was request_handler.
+	(start_https_daemon, main): Update for name.
+
 2016-04-18  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/js/gsa_graphics_base.js: Update coding style to fix

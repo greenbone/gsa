@@ -3899,7 +3899,7 @@ file_content_response (credentials_t *credentials,
 #endif
 
 /**
- * @brief Send response for request_handler.
+ * @brief Send response for handle_request.
  *
  * @param[in]  connection     Connection handle, e.g. used to send response.
  * @param[in]  response       Response.
@@ -4057,7 +4057,7 @@ get_client_address (struct MHD_Connection *conn, char *client_address)
  * @return MHD_NO in case of problems. MHD_YES if all is OK.
  */
 int
-request_handler (void *cls, struct MHD_Connection *connection,
+handle_request (void *cls, struct MHD_Connection *connection,
                  const char *url, const char *method,
                  const char *version, const char *upload_data,
                  size_t * upload_data_size, void **con_cls)
@@ -5333,7 +5333,7 @@ start_https_daemon (int port, const char *key, const char *cert,
     ipv6_flag = MHD_NO_FLAG;
   return MHD_start_daemon
           (MHD_USE_THREAD_PER_CONNECTION | MHD_USE_DEBUG | MHD_USE_SSL
-           | ipv6_flag, port, NULL, NULL, &request_handler, NULL,
+           | ipv6_flag, port, NULL, NULL, &handle_request, NULL,
            MHD_OPTION_HTTPS_MEM_KEY, key,
            MHD_OPTION_HTTPS_MEM_CERT, cert,
            MHD_OPTION_NOTIFY_COMPLETED, free_resources, NULL,
@@ -5874,7 +5874,7 @@ main (int argc, char **argv)
     {
       /* Start the unix socket server. */
 
-      gsad_daemon = start_unix_http_daemon (unix_socket_path, request_handler);
+      gsad_daemon = start_unix_http_daemon (unix_socket_path, handle_request);
 
       if (gsad_daemon == NULL)
         {
@@ -5894,14 +5894,14 @@ main (int argc, char **argv)
       /* Start the real server. */
       if (http_only)
         {
-          gsad_daemon = start_http_daemon (gsad_port, request_handler);
+          gsad_daemon = start_http_daemon (gsad_port, handle_request);
           if (gsad_daemon == NULL && gsad_port_string == NULL)
             {
               g_warning ("Binding to port %d failed, trying default port %d next.",
                          gsad_port, DEFAULT_GSAD_PORT);
               gsad_port = DEFAULT_GSAD_PORT;
               gsad_address_set_port (gsad_port);
-              gsad_daemon = start_http_daemon (gsad_port, request_handler);
+              gsad_daemon = start_http_daemon (gsad_port, handle_request);
             }
         }
       else
