@@ -1,3 +1,8 @@
+2016-04-18  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/classic/omp.xsl (get_my_settings): Display "Max Rows Per
+	Page".
+
 2016-04-18  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/js/gsa_graphics_base.js (gsa.iso_time_format): New
