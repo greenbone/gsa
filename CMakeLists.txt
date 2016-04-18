@@ -190,27 +190,9 @@ set (CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-${CPACK_PACKAGE_VERSION}")
 set (CPACK_SOURCE_PACKAGE_FILE_NAME "${PROJECT_NAME}-${CPACK_PACKAGE_VERSION}")
 set (CPACK_PACKAGE_VENDOR "The OpenVAS Project")
 set (CPACK_SOURCE_IGNORE_FILES
+"${CMAKE_BINARY_DIR}"
 "/.svn/"
-"/_CPack_Packages/"
-"/CMakeFiles/"
 "swp$"
-"Cache.txt$"
-".tar.gz"
-"src/libgsad_omp.a$"
-"src/libgsad_oap.a$"
-"src/libgsad_base.a$"
-"src/gsad$"
-"install_manifest.txt"
-"Makefile"
-"src/html/build/"
-"/doc/generated/"
-"log.conf$"
-"Doxyfile$"
-"Doxyfile_full$"
-"VERSION$"
-"cpe-icons.xml$"
-"zones.xml$"
-${CMAKE_BINARY_DIR}
 )
 
 include (CPack)
