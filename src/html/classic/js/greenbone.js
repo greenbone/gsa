@@ -1149,19 +1149,20 @@
     doc.find('.form-selection-control').each(function() {
       var elem = $(this);
       var form = elem.parents('form');
+      var name = elem.attr('id');
       elem.on('change', function() {
         var value = elem.val();
-        form.find('.form-selection-item').hide();
-        form.find('.form-selection-item--' + value).show();
+        form.find('.form-selection-item-' + name).hide();
+        form.find('.form-selection-item-' + name + '--' + value).show();
       });
     });
 
     doc.find('.form-enable-control').each(function() {
       var elem = $(this);
       var form = elem.parents('form');
+      var name = elem.attr('id');
       elem.on('change', function() {
         var value = elem.val();
-        var name = elem.attr('id');
         form.find('.form-enable-item--' + name).attr('disabled', value === '1');
       });
     });

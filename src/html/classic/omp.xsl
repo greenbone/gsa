@@ -8031,7 +8031,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <div class="form-group">
           <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Type', 'Credential')"/></label>
           <div class="col-10">
-            <select class="col-2 control-label form-selection-control" name="base">
+            <select class="col-2 control-label form-selection-control" id="credentials" name="base">
               <xsl:call-template name="opt">
                 <xsl:with-param name="value" select="'up'"/>
                 <xsl:with-param name="content" select="gsa:i18n ('Username + Password', 'Credential')"/>
@@ -8068,7 +8068,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </label>
           </div>
         </div>
-        <div class="form-group form-selection-item form-selection-item--up form-selection-item--usk" id="autogenerate_row">
+        <div class="form-group form-selection-item-credentials form-selection-item-credentials--up form-selection-item-credentials--usk"
+            id="autogenerate_row">
           <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Auto-generate', 'Credential')"/></label>
           <div class="col-10">
             <label class="radio-inline">
@@ -8085,7 +8086,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </div>
         <div class="form-group">
         </div>
-        <div class="form-group form-selection-item form-selection-item--snmp" id="community_row" style="display:none;">
+        <div class="form-group form-selection-item-credentials form-selection-item-credentials--snmp"
+            id="community_row" style="display:none;">
           <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('SNMP Community', 'Auth Data')"/></label>
           <div class="col-10">
             <div class="form-item">
@@ -8093,7 +8095,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </div>
           </div>
         </div>
-        <div class="form-group form-selection-item form-selection-item--up form-selection-item--usk form-selection-item--snmp" id="login_row">
+        <div class="form-group form-selection-item-credentials form-selection-item-credentials--up form-selection-item-credentials--usk form-selection-item-credentials--snmp"
+            id="login_row">
           <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Username', 'Auth Data')"/></label>
           <div class="col-10">
             <div class="form-item">
@@ -8101,7 +8104,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </div>
           </div>
         </div>
-        <div class="form-group form-selection-item form-selection-item--up form-selection-item--snmp" id="password_row">
+        <div class="form-group form-selection-item-credentials form-selection-item-credentials--up form-selection-item-credentials--snmp"
+            id="password_row">
           <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Password', 'Auth Data')"/></label>
           <div class="col-10">
             <div class="form-item">
@@ -8109,7 +8113,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </div>
           </div>
         </div>
-        <div class="form-group form-selection-item form-selection-item--snmp" id="priv_password_row" style="display:none;">
+        <div class="form-group form-selection-item-credentials form-selection-item-credentials--snmp"
+            id="priv_password_row" style="display:none;">
           <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Privacy Password', 'Auth Data')"/></label>
           <div class="col-10">
             <div class="form-item">
@@ -8117,19 +8122,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </div>
           </div>
         </div>
-        <div class="form-group form-selection-item form-selection-item--cc" id="certificate_row" style="display:none;">
+        <div class="form-group form-selection-item-credentials form-selection-item-credentials--cc"
+            id="certificate_row" style="display:none;">
           <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Certificate', 'Auth Data')"/></label>
           <div class="col-10">
             <input type="file" name="certificate" size="30"/>
           </div>
         </div>
-        <div class="form-group form-selection-item form-selection-item--usk form-selection-item--cc" id="private_key_row" style="display:none;">
+        <div class="form-group form-selection-item-credentials form-selection-item-credentials--usk form-selection-item-credentials--cc"
+            id="private_key_row" style="display:none;">
           <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Private Key', 'Auth Data')"/></label>
           <div class="col-10">
             <input type="file" name="private_key" size="30"/>
           </div>
         </div>
-        <div class="form-group form-selection-item form-selection-item--usk" id="passphrase_row" style="display:none;">
+        <div class="form-group form-selection-item-credentials form-selection-item-credentials--sk"
+            id="passphrase_row" style="display:none;">
           <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Passphrase', 'Auth Data')"/></label>
           <div class="col-10">
             <div class="form-item">
@@ -8137,7 +8145,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </div>
           </div>
         </div>
-        <div class="form-group form-selection-item form-selection-item--snmp" id="auth_algo_row" style="display:none;">
+        <div class="form-group form-selection-item-credentials form-selection-item-credentials--snmp"
+            id="auth_algo_row" style="display:none;">
           <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Auth Algorithm', 'Credential')"/></label>
           <div class="col-10">
             <label class="radio-inline">
@@ -8150,7 +8159,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </label>
           </div>
         </div>
-        <div class="form-group form-selection-item form-selection-item--usk" id="priv_algo_row" style="display:none;">
+        <div class="form-group form-selection-item-credentials form-selection-item-credentials--usk"
+            id="priv_algo_row" style="display:none;">
           <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Privacy Algorithm', 'Credential')"/></label>
           <div class="col-10">
             <label class="radio-inline">
