@@ -1150,11 +1150,45 @@
       var elem = $(this);
       var form = elem.parents('form');
       var name = elem.attr('id');
-      elem.on('change', function() {
-        var value = elem.val();
+
+      function on_change() {
+        var value;
+        var option;
+
+        if (elem.attr('type') === 'radio' || elem.attr('type') === 'checkbox') {
+          option = elem;
+        }
+        else {
+          option = elem.find(':selected');
+        }
+
+        if (is_defined(option)) {
+          value = option.data('select');
+        }
+
+        if (!has_value(value)) {
+          /* fallback to elem.val() if data-select is not set or option not
+           * found */
+          value = elem.val();
+        }
+
+        /* hide all elements of the selection */
         form.find('.form-selection-item-' + name).hide();
-        form.find('.form-selection-item-' + name + '--' + value).show();
-      });
+
+        if (is_defined(value)) {
+          /* show elements wich have the selected value css class set */
+          form.find('.form-selection-item-' + name + '--' + value).show();
+        }
+      }
+
+      elem.on('change', on_change);
+
+      if ((elem.attr('type') !== 'radio' && elem.attr('type') !== 'checkbox') ||
+          elem.prop('checked')) {
+        /* initialize input fields if its not a radio and checkbox element or
+         * if radio/checkbox is selected */
+        on_change();
+      }
     });
 
     doc.find('.form-enable-control').each(function() {
