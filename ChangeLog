@@ -1,3 +1,11 @@
+2016-04-19  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad.c (ADD_CONTENT_SECURITY_HEADERS)
+	(ADD_GUEST_CHART_CONTENT_SECURITY_HEADERS): Remove.  Now a function.  No
+	need for a macro.
+	(add_content_security_headers)
+	(add_guest_chart_content_security_headers): New functions.  From macros.
+
 2016-04-18  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/omp.xsl (get_my_settings): Display "Max Rows Per

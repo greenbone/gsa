@@ -184,32 +184,6 @@
  " frame-ancestors *"
 
 /**
- * @brief Add content security headers to a MHD response.
- */
-#define ADD_CONTENT_SECURITY_HEADERS(response)                                \
-{                                                                             \
-  if (strcmp (http_x_frame_options, ""))                                      \
-    MHD_add_response_header (response, "X-Frame-Options",                     \
-                             http_x_frame_options);                           \
-  if (strcmp (http_content_security_policy, ""))                              \
-    MHD_add_response_header (response, "Content-Security-Policy",             \
-                             http_content_security_policy);                   \
-}
-
-/**
- * @brief Add guest chart content security headers to a MHD response.
- */
-#define ADD_GUEST_CHART_CONTENT_SECURITY_HEADERS(response)                    \
-{                                                                             \
-  if (strcmp (http_x_frame_options, ""))                                      \
-    MHD_add_response_header (response, "X-Frame-Options",                     \
-                             http_guest_chart_x_frame_options);               \
-  if (strcmp (http_content_security_policy, ""))                              \
-    MHD_add_response_header (response, "Content-Security-Policy",             \
-                             http_guest_chart_content_security_policy);       \
-}
-
-/**
  * @brief Flag for signal handler.
  */
 volatile int termination_signal = 0;
@@ -347,6 +321,34 @@ gchar *http_guest_chart_content_security_policy;
  * @brief Current preference for using X_Real_IP from HTTP header
  */
 gboolean ignore_http_x_real_ip;
+
+/**
+ * @brief Add content security headers to a MHD response.
+ */
+void
+add_content_security_headers (struct MHD_Response *response)
+{
+  if (strcmp (http_x_frame_options, ""))
+    MHD_add_response_header (response, "X-Frame-Options",
+                             http_x_frame_options);
+  if (strcmp (http_content_security_policy, ""))
+    MHD_add_response_header (response, "Content-Security-Policy",
+                             http_content_security_policy);
+}
+
+/**
+ * @brief Add guest chart content security headers to a MHD response.
+ */
+void
+add_guest_chart_content_security_headers (struct MHD_Response *response)
+{
+  if (strcmp (http_x_frame_options, ""))
+    MHD_add_response_header (response, "X-Frame-Options",
+                             http_guest_chart_x_frame_options);
+  if (strcmp (http_content_security_policy, ""))
+    MHD_add_response_header (response, "Content-Security-Policy",
+                             http_guest_chart_content_security_policy);
+}
 
 /**
  * @brief User information structure, for sessions.
@@ -3537,7 +3539,7 @@ send_response (struct MHD_Connection *connection, const char *content,
             }
         }
     }
-  ADD_CONTENT_SECURITY_HEADERS (response);
+  add_content_security_headers (response);
   ret = MHD_queue_response (connection, status_code, response);
   MHD_destroy_response (response);
   return ret;
@@ -3599,7 +3601,7 @@ send_redirect_to_uri (struct MHD_Connection *connection, const char *uri,
   MHD_add_response_header (response, MHD_HTTP_HEADER_EXPIRES, "-1");
   MHD_add_response_header (response, MHD_HTTP_HEADER_CACHE_CONTROL, "no-cache");
 
-  ADD_CONTENT_SECURITY_HEADERS (response);
+  add_content_security_headers (response);
   ret = MHD_queue_response (connection, MHD_HTTP_SEE_OTHER, response);
   MHD_destroy_response (response);
   return ret;
@@ -4211,7 +4213,7 @@ handle_request (void *cls, struct MHD_Connection *connection,
           g_free (xml);
           response = MHD_create_response_from_buffer (strlen (res), res,
                                                   MHD_RESPMEM_MUST_FREE);
-          ADD_CONTENT_SECURITY_HEADERS (response);
+          add_content_security_headers (response);
           cmd_response_data_reset (&response_data);
           return handler_send_response (connection,
                                         response,
@@ -4231,7 +4233,7 @@ handle_request (void *cls, struct MHD_Connection *connection,
                                             &http_response_code,
                                             &content_type,
                                             &content_disposition);
-          ADD_CONTENT_SECURITY_HEADERS (response);
+          add_content_security_headers (response);
           return handler_send_response (connection,
                                         response,
                                         &content_type,
@@ -4251,7 +4253,7 @@ handle_request (void *cls, struct MHD_Connection *connection,
                                             &http_response_code,
                                             &content_type,
                                             &content_disposition);
-          ADD_CONTENT_SECURITY_HEADERS (response);
+          add_content_security_headers (response);
           return handler_send_response (connection,
                                         response,
                                         &content_type,
@@ -4350,7 +4352,7 @@ handle_request (void *cls, struct MHD_Connection *connection,
           response = MHD_create_response_from_buffer (strlen (res), res,
                                                       MHD_RESPMEM_MUST_FREE);
           http_response_code = response_data.http_status_code;
-          ADD_CONTENT_SECURITY_HEADERS (response);
+          add_content_security_headers (response);
           cmd_response_data_reset (&response_data);
           return handler_send_response (connection,
                                         response,
@@ -4458,7 +4460,7 @@ handle_request (void *cls, struct MHD_Connection *connection,
           http_response_code = response_data.http_status_code;
           response = MHD_create_response_from_buffer (strlen (res), res,
                                                       MHD_RESPMEM_MUST_FREE);
-          ADD_CONTENT_SECURITY_HEADERS (response);
+          add_content_security_headers (response);
           cmd_response_data_reset (&response_data);
           return handler_send_response (connection,
                                         response,
@@ -4513,7 +4515,7 @@ handle_request (void *cls, struct MHD_Connection *connection,
           response = MHD_create_response_from_buffer (strlen (res), res,
                                                       MHD_RESPMEM_MUST_FREE);
           cmd_response_data_reset (&response_data);
-          ADD_CONTENT_SECURITY_HEADERS (response);
+          add_content_security_headers (response);
           return handler_send_response (connection,
                                         response,
                                         &content_type,
@@ -4805,11 +4807,11 @@ handle_request (void *cls, struct MHD_Connection *connection,
               && (strcmp (cmd, "get_aggregate") == 0
                   || strcmp (cmd, "get_tasks_chart") == 0))
             {
-              ADD_GUEST_CHART_CONTENT_SECURITY_HEADERS (response);
+              add_guest_chart_content_security_headers (response);
             }
           else
             {
-              ADD_CONTENT_SECURITY_HEADERS (response);
+              add_content_security_headers (response);
             }
 
           credentials_free (credentials);
