@@ -130,18 +130,18 @@
         .getBoundingClientRect();
       var mouse_x = d3.event.clientX - parent_rect.left - self.margin.left - 1;
 
-      self.marker_mouse_down = true;
-      self.marker_mouse_start_x = mouse_x;
+      self.range_marker_mouse_down = true;
+      self.range_marker_mouse_start_x = mouse_x;
 
-      if (self.marker_start === null) {
-        self.marker_start = get_rounded_x(mouse_x);
-        self.marker_resize = true;
+      if (self.range_marker_start === null) {
+        self.range_marker_start = get_rounded_x(mouse_x);
+        self.range_marker_resize = true;
         mouse_moved();
       }
     }
 
     function mouse_up() {
-      if (self.marker_start === null || self.marker_end === null)
+      if (self.range_marker_start === null || self.range_marker_end === null)
         return;
 
       var start, end;
@@ -149,12 +149,13 @@
       var column = data.column_info.columns[self.x_field].column;
       var value;
 
-      if (self.marker_start.getTime() >= self.marker_end.getTime()) {
-        start = new Date(self.marker_end);
-        end = new Date(self.marker_start);
+      if (self.range_marker_start.getTime() >=
+          self.range_marker_end.getTime()) {
+        start = new Date(self.range_marker_end);
+        end = new Date(self.range_marker_start);
       } else {
-        start = new Date(self.marker_start);
-        end = new Date(self.marker_end);
+        start = new Date(self.range_marker_start);
+        end = new Date(self.range_marker_end);
       }
 
       start.setTime(start.getTime() - 60000);
@@ -162,10 +163,10 @@
 
       value = [gsa.iso_time_format(start), gsa.iso_time_format(end)];
 
-      self.marker_resize = false;
-      self.marker_mouse_down = false;
+      self.range_marker_resize = false;
+      self.range_marker_mouse_down = false;
 
-      self.marker_elem
+      self.range_marker_elem
         .attr('xlink:href',
               gsa.filtered_list_url(type, column, value,
                                     data.filter_info, 'range'));
@@ -207,60 +208,62 @@
         line_x = width / 2;
       }
 
-      if (self.marker_mouse_down &&
+      if (self.range_marker_mouse_down &&
           data.records.length > 1 &&
-          (self.marker_last_x === null ||
-           self.marker_last_x.getTime() !== rounded_x.getTime()) &&
-          (Math.abs (self.marker_mouse_start_x - mouse_x) >= 10 ||
-           self.marker_resize)) {
+          (self.range_marker_last_x === null ||
+           self.range_marker_last_x.getTime() !== rounded_x.getTime()) &&
+          (Math.abs(self.range_marker_mouse_start_x - mouse_x) >= 10 ||
+           self.range_marker_resize)) {
 
-        var rounded_start_x = get_rounded_x (self.marker_mouse_start_x);
+        var rounded_start_x = get_rounded_x(self.range_marker_mouse_start_x);
         var y_range = self.y_scale.range();
         var left_line_width = 2;
         var right_line_width = 12;
         var points;
 
         if (rounded_start_x < rounded_x) {
-          self.marker_start = rounded_start_x;
-          self.marker_end = rounded_x;
+          self.range_marker_start = rounded_start_x;
+          self.range_marker_end = rounded_x;
         } else {
-          self.marker_start = rounded_x;
-          self.marker_end = rounded_start_x;
+          self.range_marker_start = rounded_x;
+          self.range_marker_end = rounded_start_x;
         }
-        self.marker_resize = true;
-        self.marker_last_x = rounded_x;
+        self.range_marker_resize = true;
+        self.range_marker_last_x = rounded_x;
 
-        self.marker_elem.select('.marker_c')
-          .attr ('x', self.x_scale(self.marker_start))
+        self.range_marker_elem.select('.range_marker_c')
+          .attr ('x', self.x_scale(self.range_marker_start))
           .attr ('y', 0)
           .attr ('width',
-                 self.x_scale(self.marker_end) - self.x_scale(self.marker_start))
+                 self.x_scale(self.range_marker_end) -
+                 self.x_scale(self.range_marker_start))
           .attr ('height', y_range[0] - y_range[1])
 
-        self.marker_elem.select('.marker_l')
-          .attr ('x', self.x_scale(self.marker_start) - left_line_width)
+        self.range_marker_elem.select('.range_marker_l')
+          .attr ('x', self.x_scale(self.range_marker_start) -
+                 left_line_width)
           .attr ('y', 0)
           .attr ('width', left_line_width)
           .attr ('height', y_range[0] - y_range[1])
 
-        points = [self.x_scale(self.marker_end),
+        points = [self.x_scale(self.range_marker_end),
                   ',',
                   y_range[1],
                   ' ',
-                  self.x_scale(self.marker_end),
+                  self.x_scale(self.range_marker_end),
                   ',',
                   y_range[0],
                   ' ',
-                  self.x_scale(self.marker_end) + right_line_width,
+                  self.x_scale(self.range_marker_end) + right_line_width,
                   ',',
                   y_range[0] - right_line_width,
                   ' ',
-                  self.x_scale(self.marker_end) + right_line_width,
+                  self.x_scale(self.range_marker_end) + right_line_width,
                   ',',
                   y_range[1] + right_line_width];
         points = points.join('');
 
-        self.marker_elem.select('.marker_r')
+        self.range_marker_elem.select('.range_marker_r')
           .attr ('points', points);
       }
 
@@ -391,13 +394,13 @@
       display.svg().text('');
       self.svg = display.svg().append('g');
 
-      self.marker_elem = null;
-      self.marker_resize = false;
-      self.marker_mouse_start_x = null;
-      self.marker_start = null;
-      self.marker_end = null;
-      self.marker_mouse_down = false;
-      self.marker_last_x = null;
+      self.range_marker_elem = null;
+      self.range_marker_resize = false;
+      self.range_marker_mouse_start_x = null;
+      self.range_marker_start = null;
+      self.range_marker_end = null;
+      self.range_marker_mouse_down = false;
+      self.range_marker_last_x = null;
 
       // Setup mouse event listeners
       display.svg().on('mousedown', mouse_down);
@@ -474,25 +477,25 @@
         .style('display', 'none')
         .classed('remove_on_static', true);
 
-      // Create marker element
-      self.marker_elem = self.svg.append('a')
-        .attr('class', 'marker_a');
+      // Create selection marker element
+      self.range_marker_elem = self.svg.append('a')
+        .attr('class', 'range_marker_a');
 
-      self.marker_elem
+      self.range_marker_elem
         .append('rect')
-          .attr('class', 'marker_c')
+          .attr('class', 'range_marker_c')
           .style('fill', '#008800')
           .style('opacity', '0.125');
 
-      self.marker_elem
+      self.range_marker_elem
         .append('rect')
-          .attr('class', 'marker_l')
+          .attr('class', 'range_marker_l')
           .style('fill', '#008800')
           .style('opacity', '0.25');
 
-      self.marker_elem
+      self.range_marker_elem
         .append('polygon')
-          .attr('class', 'marker_r')
+          .attr('class', 'range_marker_r')
           .style('fill', '#008800')
           .style('opacity', '0.25');
 
