@@ -1,4 +1,9 @@
-2016-04-18  Björn Ricks <bjoern.ricks@greenbone.net>
+2016-04-19  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/omp.xsl (html-edit-alert-form): Change edit alert dialog
+	into an edit based dialog. This removes the old gsa_ styling.
+
+2016-04-19  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/css/gsa-base.css: Allow to set height of a textarea via
 	rows attribute when form-control css class is set.
@@ -8,7 +13,7 @@
 	* src/html/classic/js/gsa_line_chart.js: Rename "marker" elements
 	and variables of range marker to avoid confusion with point markers.
 
-2016-04-18  Björn Ricks <bjoern.ricks@greenbone.net>
+2016-04-19  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/js/greenbone.js (on_ready): Allow to set a specific value
 	for element activation/deactivation on selection changes. Also initialize the

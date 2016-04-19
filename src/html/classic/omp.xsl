@@ -10308,18 +10308,11 @@ should not have received it.
   <xsl:param name="report-formats"></xsl:param>
   <xsl:param name="filters"/>
   <xsl:param name="tasks"/>
-  <div class="gb_window">
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n ('Edit Alert', 'Alert')"/>
-      <xsl:call-template name="edit-header-icons">
-        <xsl:with-param name="cap-type" select="'Alert'"/>
-        <xsl:with-param name="type" select="'alert'"/>
-        <xsl:with-param name="id"
-                        select="get_alerts_response/alert/@id"/>
-      </xsl:call-template>
+  <div class="edit-dialog">
+    <div class="title">
+      <xsl:value-of select="gsa:i18n ('Edit Alert', 'Alert')"/>
     </div>
-    <div class="gb_window_part_content">
+    <div class="content">
       <form action="" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="save_alert"/>
@@ -11205,13 +11198,6 @@ should not have received it.
             </tr>
           </xsl:if>
 
-          <!-- Save button. -->
-
-          <tr>
-            <td>
-              <input type="submit" name="submit" value="{gsa:i18n ('Save Alert', 'Alert')}"/>
-            </td>
-          </tr>
         </table>
       </form>
     </div>
