@@ -507,6 +507,10 @@ input::-moz-focus-inner {
   opacity: 1;
 }
 
+textarea.form-control {
+  height: auto;
+}
+
 .form-horizontal .radio,
 .form-horizontal .checkbox,
 .form-horizontal .radio-inline,
