@@ -117,6 +117,48 @@
       return rounded_x;
     }
 
+    function resize_range_marker_elems() {
+      var range_left_line_width = 2;
+      var range_right_line_width = 12;
+      var y_range = self.y_scale.range();
+      var points;
+
+      self.range_marker_elem.select('.range_marker_c')
+        .attr ('x', self.x_scale(self.range_marker_start))
+        .attr ('y', 0)
+        .attr ('width',
+                self.x_scale(self.range_marker_end) -
+                self.x_scale(self.range_marker_start))
+        .attr ('height', y_range[0] - y_range[1])
+
+      self.range_marker_elem.select('.range_marker_l')
+        .attr ('x', self.x_scale(self.range_marker_start) -
+                range_left_line_width)
+        .attr ('y', 0)
+        .attr ('width', range_left_line_width)
+        .attr ('height', y_range[0] - y_range[1])
+
+      points = [self.x_scale(self.range_marker_end),
+                ',',
+                y_range[1],
+                ' ',
+                self.x_scale(self.range_marker_end),
+                ',',
+                y_range[0],
+                ' ',
+                self.x_scale(self.range_marker_end) + range_right_line_width,
+                ',',
+                y_range[0] - range_right_line_width,
+                ' ',
+                self.x_scale(self.range_marker_end) + range_right_line_width,
+                ',',
+                y_range[1] + range_right_line_width];
+      points = points.join('');
+
+      self.range_marker_elem.select('.range_marker_r')
+        .attr ('points', points);
+    }
+
     function mouse_exited() {
       self.info_box.style('display', 'none');
       self.info_line.style('display', 'none');
@@ -189,6 +231,8 @@
       var mouse_x = d3.event.clientX - parent_rect.left - self.margin.left - 1;
       var mouse_y = d3.event.clientY - parent_rect.top - self.margin.top - 21;
 
+      var y_range = self.y_scale.range();
+
       var rounded_x;
       var info_last_x;
       var line_index;
@@ -216,10 +260,6 @@
            self.range_marker_resize)) {
 
         var rounded_start_x = get_rounded_x(self.range_marker_mouse_start_x);
-        var y_range = self.y_scale.range();
-        var left_line_width = 2;
-        var right_line_width = 12;
-        var points;
 
         if (rounded_start_x < rounded_x) {
           self.range_marker_start = rounded_start_x;
@@ -231,40 +271,7 @@
         self.range_marker_resize = true;
         self.range_marker_last_x = rounded_x;
 
-        self.range_marker_elem.select('.range_marker_c')
-          .attr ('x', self.x_scale(self.range_marker_start))
-          .attr ('y', 0)
-          .attr ('width',
-                 self.x_scale(self.range_marker_end) -
-                 self.x_scale(self.range_marker_start))
-          .attr ('height', y_range[0] - y_range[1])
-
-        self.range_marker_elem.select('.range_marker_l')
-          .attr ('x', self.x_scale(self.range_marker_start) -
-                 left_line_width)
-          .attr ('y', 0)
-          .attr ('width', left_line_width)
-          .attr ('height', y_range[0] - y_range[1])
-
-        points = [self.x_scale(self.range_marker_end),
-                  ',',
-                  y_range[1],
-                  ' ',
-                  self.x_scale(self.range_marker_end),
-                  ',',
-                  y_range[0],
-                  ' ',
-                  self.x_scale(self.range_marker_end) + right_line_width,
-                  ',',
-                  y_range[0] - right_line_width,
-                  ' ',
-                  self.x_scale(self.range_marker_end) + right_line_width,
-                  ',',
-                  y_range[1] + right_line_width];
-        points = points.join('');
-
-        self.range_marker_elem.select('.range_marker_r')
-          .attr ('points', points);
+        resize_range_marker_elems();
       }
 
       if (info_last_x === undefined ||
@@ -286,7 +293,7 @@
             self.info_text_lines[line].elem.text(d);
           }
           else {
-            if (line === 0) {
+            if (line === '0') {
               self.info_text_lines[line].elem.text(
                   gsa.format_data(rounded_x, {data_type: 'js_date'}));
             }
@@ -333,7 +340,7 @@
         .attr('x1', line_x)
         .attr('x2', line_x)
         .attr('y1', 0)
-        .attr('y2', height);
+        .attr('y2', y_range[0] - y_range[1]);
     }
 
     var records = data.records;
@@ -676,6 +683,9 @@
       self.svg.select('#circle_y').remove();
       self.svg.select('#circle_y2').remove();
     }
+
+    if (self.range_marker_start !== undefined)
+      resize_range_marker_elems();
   };
 
   LineChartGenerator.prototype.generateData = function(controller,
