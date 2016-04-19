@@ -36312,7 +36312,7 @@ should not have received it.
           <td><xsl:value-of select="get_settings_response/setting[name='Rows Per Page']/value"/></td>
         </tr>
         <tr>
-          <td><xsl:value-of select="gsa:i18n ('Max Rows Per Page', 'My Settings')"/></td>
+          <td><xsl:value-of select="gsa:i18n ('Max Rows Per Page (immutable)', 'My Settings')"/></td>
           <td><xsl:value-of select="get_settings_response/setting[name='Max Rows Per Page']/value"/></td>
         </tr>
         <tr>
