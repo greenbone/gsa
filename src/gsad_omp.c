@@ -19814,6 +19814,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
     }
 
   /* Send Rows Per Page */
+
   max_64 = g_base64_encode ((guchar*) max, strlen (max));
 
   if (openvas_server_sendf (&session,
@@ -19857,6 +19858,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
     }
 
   /* Send resource details export file name format. */
+
   fname_64 = g_base64_encode ((guchar*) details_fname, strlen (details_fname));
 
   if (openvas_server_sendf (&session,
@@ -19900,6 +19902,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
     }
 
   /* Send resource list export file name format. */
+
   fname_64 = g_base64_encode ((guchar*) list_fname, strlen (list_fname));
 
   if (openvas_server_sendf (&session,
@@ -19943,6 +19946,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
     }
 
   /* Send report export file name format. */
+
   fname_64 = g_base64_encode ((guchar*) report_fname, strlen (report_fname));
 
   if (openvas_server_sendf (&session,
@@ -19986,6 +19990,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
     }
 
   /* Send User Interface Language. */
+
   lang_64 = g_base64_encode ((guchar*) lang, strlen (lang));
 
   if (openvas_server_sendf (&session,
@@ -20046,6 +20051,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
     }
 
   /* Send default resources */
+
   defaults = params_values (params, "settings_default:");
   if (send_settings_filters (&session, defaults, xml, &modify_failed,
                              response_data))
@@ -20061,6 +20067,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
     }
 
   /* Send resources filters */
+
   filters = params_values (params, "settings_filter:");
   if (send_settings_filters (&session, filters, xml, &modify_failed,
                              response_data))
@@ -20076,6 +20083,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
     }
 
   /* Send Severity Class. */
+
   text = params_value (params, "severity_class");
   text_64 = (text
                  ? g_base64_encode ((guchar*) text, strlen (text))
@@ -20133,6 +20141,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
     }
 
   /* Send Dynamic Severity setting. */
+
   text = params_value (params, "dynamic_severity");
   text_64 = (text
                  ? g_base64_encode ((guchar*) text, strlen (text))
@@ -20179,6 +20188,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
     }
 
   /* Send Default Severity setting. */
+
   text = params_value (params, "default_severity");
   text_64 = (text
                  ? g_base64_encode ((guchar*) text, strlen (text))
@@ -20188,6 +20198,54 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
                             "<modify_setting"
                             " setting_id"
                             "=\"7eda49c5-096c-4bef-b1ab-d080d87300df\">"
+                            "<value>%s</value>"
+                            "</modify_setting>",
+                            text_64 ? text_64 : "")
+      == -1)
+    {
+      g_free (text_64);
+      openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while saving settings. "
+                           "It is unclear whether all the settings were saved. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_my_settings", response_data);
+    }
+  g_free (text_64);
+
+
+  entity = NULL;
+  if (read_entity_and_string (&session, &entity, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while saving settings. "
+                           "It is unclear whether all the settings were saved. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_my_settings", response_data);
+    }
+  if (! omp_success (entity))
+    {
+      set_http_status_from_entity (entity, response_data);
+      modify_failed = 1;
+    }
+
+  /* Send Asset Apply Overrides setting. */
+
+  text = params_value (params, "apply_overrides");
+  text_64 = (text
+                 ? g_base64_encode ((guchar*) text, strlen (text))
+                 : g_strdup (""));
+
+  if (openvas_server_sendf (&session,
+                            "<modify_setting"
+                            " setting_id"
+                            "=\"02e294fa-061b-11e6-ae64-28d24461215b\">"
                             "<value>%s</value>"
                             "</modify_setting>",
                             text_64 ? text_64 : "")
@@ -20218,13 +20276,60 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
                            "Diagnostics: Failure to receive response from manager daemon.",
                            "/omp?cmd=get_my_settings", response_data);
     }
-  if (! omp_success (entity))
+  if (!omp_success (entity))
+    {
+      set_http_status_from_entity (entity, response_data);
+      modify_failed = 1;
+    }
+
+  /* Send Assets Min QOD setting. */
+
+  text = params_value (params, "min_qod");
+  text_64 = (text ? g_base64_encode ((guchar*) text, strlen (text))
+                  : g_strdup (""));
+
+  if (openvas_server_sendf (&session,
+                            "<modify_setting"
+                            " setting_id"
+                            "=\"5a9046cc-0628-11e6-ba53-28d24461215b\">"
+                            "<value>%s</value>"
+                            "</modify_setting>",
+                            text_64 ? text_64 : "")
+      == -1)
+    {
+      g_free (text_64);
+      openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while saving settings. "
+                           "It is unclear whether all the settings were saved. "
+                           "Diagnostics: Failure to send command to manager daemon.",
+                           "/omp?cmd=get_my_settings", response_data);
+    }
+  g_free (text_64);
+
+  entity = NULL;
+  if (read_entity_and_string (&session, &entity, &xml))
+    {
+      g_string_free (xml, TRUE);
+      openvas_server_close (socket, session);
+      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      return gsad_message (credentials,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred while saving settings. "
+                           "It is unclear whether all the settings were saved. "
+                           "Diagnostics: Failure to receive response from manager daemon.",
+                           "/omp?cmd=get_my_settings", response_data);
+    }
+  if (!omp_success (entity))
     {
       set_http_status_from_entity (entity, response_data);
       modify_failed = 1;
     }
 
   /* Get the Filters and other resources. */
+
   commands = g_string_new ("<commands>");
   if (command_enabled (credentials, "GET_ALERTS"))
     g_string_append (commands, "<get_alerts/>");
@@ -27323,13 +27428,15 @@ create_asset_omp (credentials_t *credentials, params_t *params,
 {
   char *ret;
   gchar *response;
-  const char *no_redirect, *report_id;
+  const char *no_redirect, *report_id, *filter;
   entity_t entity;
 
   no_redirect = params_value (params, "no_redirect");
   report_id = params_value (params, "report_id");
+  filter = params_value (params, "filter");
 
   CHECK_PARAM_INVALID (report_id, "Create Asset", "get_report_section");
+  CHECK_PARAM_INVALID (filter, "Create Asset", "get_report_section");
 
   response = NULL;
   entity = NULL;
@@ -27338,9 +27445,12 @@ create_asset_omp (credentials_t *credentials, params_t *params,
                 &entity,
                 response_data,
                 "<create_asset>"
-                "<report id=\"%s\"/>"
+                "<report id=\"%s\">"
+                "<filter><term>%s</term></filter>"
+                "</report>"
                 "</create_asset>",
-                report_id))
+                report_id,
+                filter))
     {
       case 0:
       case -1:

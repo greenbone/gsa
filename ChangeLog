@@ -1,3 +1,14 @@
+2016-04-19  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Send filter when creating assets from a report, so that the overrides
+	and min QOD settings are used.
+
+	* src/gsad_omp.c (save_my_settings_omp): Send new Asset settings.
+	(create_asset_omp): Send FILTER/TERM in CREATE_ASSET.
+
+	* src/html/classic/omp.xsl (report-icons): Fill in filter params.
+	(get_my_settings, edit_my_settings): Add new Asset settings.
+
 2016-04-19  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/js/gsa_line_chart.js (generate): Resize the tooltip

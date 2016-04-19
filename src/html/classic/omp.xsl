@@ -32465,8 +32465,8 @@ should not have received it.
     <input type="hidden" name="report_id" value="{@id}"/>
     <input type="hidden" name="next" value="get_report_section"/>
     <input type="hidden" name="report_section" value="{$section}"/>
-    <input type="hidden" name="filter" value=""/>
-    <input type="hidden" name="filt_id" value=""/>
+    <input type="hidden" name="filter" value="{report/filters/term}"/>
+    <input type="hidden" name="filt_id" value="{report/filters/@id}"/>
   </form>
   <form class="form-inline" action="/omp" method="post" enctype="multipart/form-data">
     <input type="hidden" name="token" value="{/envelope/token}"/>
@@ -36353,6 +36353,24 @@ should not have received it.
           <td><xsl:value-of select="gsa:i18n ('Default Severity', 'My Settings')"/></td>
           <td><xsl:value-of select="get_settings_response/setting[name='Default Severity']/value"/></td>
         </tr>
+        <tr>
+          <td><xsl:value-of select="gsa:i18n ('Assets Apply Overrides', 'My Settings')"/></td>
+          <td>
+            <xsl:variable name="overrides"
+                          select="get_settings_response/setting[name='Assets Apply Overrides']/value"/>
+            <xsl:choose>
+              <xsl:when test="$overrides = 0"><xsl:value-of select="gsa:i18n ('No', 'Binary Choice')"/></xsl:when>
+              <xsl:when test="$overrides = 1"><xsl:value-of select="gsa:i18n ('Yes', 'Binary Choice')"/></xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="$overrides"/>
+              </xsl:otherwise>
+            </xsl:choose>
+          </td>
+        </tr>
+        <tr>
+          <td><xsl:value-of select="gsa:i18n ('Assets Min QOD', 'My Settings')"/></td>
+          <td><xsl:value-of select="get_settings_response/setting[name='Assets Min QOD']/value"/></td>
+        </tr>
 
         <xsl:if test="gsa:may-op ('get_alerts')">
           <tr>
@@ -36961,6 +36979,32 @@ should not have received it.
               <td>
                 <input type="text" name="default_severity" size="40" maxlength="800"
                        value="{gsa:param-or ('10.0', get_settings_response/setting[name='Default Severity']/value)}"/>
+              </td>
+            </tr>
+            <tr>
+              <td><xsl:value-of select="gsa:i18n ('Assets Apply Overrides', 'My Settings')"/></td>
+              <td>
+                <xsl:variable name="current_apply_overrides"
+                              select="gsa:param-or ('apply_overrides', get_settings_response/setting[name='Assets Apply Overrides']/value)"/>
+                <select name="apply_overrides" style="width:100px;">
+                  <xsl:call-template name="opt">
+                    <xsl:with-param name="value" select="'0'"/>
+                    <xsl:with-param name="content" select="gsa:i18n ('No', 'Binary Choice')"/>
+                    <xsl:with-param name="select-value" select="$current_apply_overrides"/>
+                  </xsl:call-template>
+                  <xsl:call-template name="opt">
+                    <xsl:with-param name="value" select="'1'"/>
+                    <xsl:with-param name="content" select="gsa:i18n ('Yes', 'Binary Choice')"/>
+                    <xsl:with-param name="select-value" select="$current_apply_overrides"/>
+                  </xsl:call-template>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <td><xsl:value-of select="gsa:i18n ('Assets Min QOD', 'My Settings')"/></td>
+              <td>
+                <input type="text" name="min_qod" size="40" maxlength="800"
+                       value="{gsa:param-or ('70', get_settings_response/setting[name='Assets Min QOD']/value)}"/>
               </td>
             </tr>
 
