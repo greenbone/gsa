@@ -163,9 +163,14 @@
       self.info_box.style('display', 'none');
       self.info_line.style('display', 'none');
       self.info_text_g.style('display', 'none');
+      self.range_info_box.style('display', 'none');
+      self.range_info_text_g.style('display', 'none');
     }
 
     function mouse_down() {
+      if (d3.event.button >= 2)
+        return;
+
       var parent_rect = self.svg.node()
         .parentNode
         .parentNode
@@ -190,6 +195,7 @@
       var type = data.column_info.columns[self.x_field].type;
       var column = data.column_info.columns[self.x_field].column;
       var value;
+      var url;
 
       if (self.range_marker_start.getTime() >=
           self.range_marker_end.getTime()) {
@@ -205,13 +211,22 @@
 
       value = [gsa.iso_time_format(start), gsa.iso_time_format(end)];
 
+
+      if (self.range_marker_resize) {
+        url = gsa.filtered_list_url(type, column, value,
+                                    data.filter_info, 'range')
+
+        self.range_marker_elem.attr('xlink:href', url);
+
+        if (d3.event.button == 1 || d3.event.ctrlKey || d3.event.shiftKey) {
+          window.open(url, '_blank');
+        } else {
+          window.location = url;
+        }
+      }
+
       self.range_marker_resize = false;
       self.range_marker_mouse_down = false;
-
-      self.range_marker_elem
-        .attr('xlink:href',
-              gsa.filtered_list_url(type, column, value,
-                                    data.filter_info, 'range'));
     }
 
     function mouse_moved() {
@@ -219,9 +234,18 @@
         return;
       }
 
-      self.info_box.style('display', 'block');
       self.info_line.style('display', 'block');
-      self.info_text_g.style('display', 'block');
+      if (self.range_marker_resize) {
+        self.info_box.style('display', 'none');
+        self.info_text_g.style('display', 'none');
+        self.range_info_box.style('display', 'block');
+        self.range_info_text_g.style('display', 'block');
+      } else {
+        self.info_box.style('display', 'block');
+        self.info_text_g.style('display', 'block');
+        self.range_info_box.style('display', 'none');
+        self.range_info_text_g.style('display', 'none');
+      }
 
       var parent_rect = self.svg.node()
         .parentNode
@@ -276,11 +300,54 @@
 
       if (info_last_x === undefined ||
           info_last_x.getTime() !== rounded_x.getTime()) {
-        var max_line_width = 0;
+        var max_line_width;
 
         info_last_x = rounded_x;
 
         var line;
+        // Range Selection info box
+        max_line_width = 0;
+
+        if (self.range_marker_resize) {
+          var end_date = self.x_step.offset(self.range_marker_end, 1);
+          end_date.setTime(end_date.getTime() - 1000);
+          var start_time = self.range_marker_start.getTime();
+          var end_time = end_date.getTime();
+          var range_count = 0;
+          for (var index in records) {
+            var record_time = records[index][self.x_field].getTime();
+            if (record_time >= start_time && record_time < end_time) {
+              range_count += records[index].count;
+            } else if (record_time >= end_time) {
+              break;
+            }
+          }
+          var type = data.column_info.columns.count.type;
+          self.range_info_text_lines[0]
+              .text(gsa.date_format(self.range_marker_start));
+          self.range_info_text_lines[1]
+              .text('to ' + gsa.date_format(end_date));
+          self.range_info_text_lines[2]
+              .text(gsa.resource_type_name_plural(type) + ': ' +
+                  range_count);
+        }
+
+        for (line in self.range_info_text_lines) {
+          var bbox;
+          var line_width;
+
+          bbox = self.range_info_text_lines[line].node()
+            .getBoundingClientRect();
+          line_width = bbox.width;
+          max_line_width = Math.max(max_line_width, line_width);
+        }
+
+        self.range_info_box
+          .attr('width', max_line_width + 10)
+          .attr('height', 53);
+
+        // Normal point info
+        max_line_width = 0;
         for (line in self.info_text_lines) {
           var bbox;
           var line_width;
@@ -322,6 +389,23 @@
           .attr('height', 53);
       }
 
+      // Selection info box
+      box_x = Math.min(width - self.range_info_box.attr('width') +
+          self.margin.right,
+          Math.max(-self.margin.left,
+            mouse_x - self.range_info_box.attr('width') / 2));
+
+      self.range_info_box
+        .text('')
+        .attr('x', box_x)
+        .attr('y', mouse_y - 50);
+
+      self.range_info_text_g
+        .attr('text-anchor', 'start')
+        .attr('transform',
+            'translate (' + (box_x + 5) + ',' + (mouse_y - 35) + ')');
+
+      // Normal point info
       box_x = Math.min(width - self.info_box.attr('width') + self.margin.right,
           Math.max(-self.margin.left,
             mouse_x - self.info_box.attr('width') / 2));
@@ -336,6 +420,7 @@
         .attr('transform',
             'translate (' + (box_x + 5) + ',' + (mouse_y - 35) + ')');
 
+      // Tooltip marker line
       self.info_line
         .attr('x1', line_x)
         .attr('x2', line_x)
@@ -506,7 +591,33 @@
           .style('fill', '#008800')
           .style('opacity', '0.25');
 
-      // Create tooltip elements
+      // Create tange selection tooltip
+      self.range_info_box = self.svg.append('rect')
+        .style('fill', 'white')
+        .style('opacity', '0.75')
+        .style('display', 'none')
+        .classed('remove_on_static', true);
+
+      self.range_info_text_g = self.svg.append('g')
+        .style('display', 'none')
+        .classed('remove_on_static', true);
+
+      self.range_info_text_lines = [
+          self.range_info_text_g.append('text')
+            .attr('transform', 'translate(0,0)')
+            .style('font-weight', 'bold')
+            .text('START'),
+          self.range_info_text_g.append('text')
+            .attr('transform', 'translate(0,15)')
+            .style('font-weight', 'bold')
+            .text('to END'),
+          self.range_info_text_g.append('text')
+            .attr('transform', 'translate(0,30)')
+            .style('font-weight', 'normal')
+            .text('1234567 items'),
+        ];
+
+      // Create normal tooltip elements
       self.info_box = self.svg.append('rect')
         .style('fill', 'white')
         .style('opacity', '0.75')

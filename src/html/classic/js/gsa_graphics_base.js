@@ -45,6 +45,7 @@
   gsa.column_label = column_label;
   gsa.default_column_label = default_column_label;
   gsa.resource_type_name = resource_type_name;
+  gsa.resource_type_name_plural = resource_type_name_plural;
   gsa.open_detached = open_detached;
   gsa.csv_from_records = csv_from_records;
   gsa.html_table_from_records = html_table_from_records;
