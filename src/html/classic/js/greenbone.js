@@ -1197,7 +1197,7 @@
       var name = elem.attr('id');
       elem.on('change', function() {
         var value = elem.val();
-        form.find('.form-enable-item--' + name).attr('disabled', value === '1');
+        form.find('.form-enable-item--' + name).prop('disabled', value === '1');
       });
     });
   }
