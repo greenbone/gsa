@@ -4580,8 +4580,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </td>
         </tr>
       </xsl:if>
+      <xsl:variable name="in_assets" select="preferences/preference[scanner_name='in_assets']"/>
       <tr>
-        <xsl:variable name="in_assets" select="preferences/preference[scanner_name='in_assets']"/>
         <td>
           <xsl:value-of select="gsa:i18n ('Add to Assets', 'Task')"/>:
         </td>
@@ -4589,6 +4589,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:value-of select="gsa:i18n (normalize-space($in_assets/value), 'Task')"/>
         </td>
       </tr>
+      <xsl:if test="normalize-space($in_assets/value) = 'yes'">
+        <tr>
+          <td></td>
+          <td>
+            <xsl:value-of select="gsa:i18n ('Apply Overrides', 'Overrides')"/>:
+            <xsl:value-of select="preferences/preference[scanner_name='assets_apply_overrides']/value"/>
+          </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>
+            <xsl:value-of select="gsa:i18n ('Min QOD', 'Results')"/>:
+            <xsl:value-of select="preferences/preference[scanner_name='assets_min_qod']/value"/>
+          </td>
+        </tr>
+      </xsl:if>
       <tr>
         <td>
           <xsl:value-of select="gsa:i18n ('Alterable Task', 'Task')"/>:
@@ -7066,6 +7082,70 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </label>
         </xsl:otherwise>
       </xsl:choose>
+    </td>
+  </tr>
+  <tr>
+    <xsl:variable name="apply_overrides"
+                  select="commands_response/get_tasks_response/task/preferences/preference[scanner_name='assets_apply_overrides']"/>
+    <td></td>
+    <td><xsl:value-of select="gsa:i18n ('Apply Overrides', 'Overrides')"/></td>
+    <td>
+      <xsl:variable name="param_yes" select="/envelope/params/apply_overrides"/>
+      <xsl:choose>
+        <xsl:when test="string-length ($param_yes) &gt; 0">
+          <xsl:choose>
+            <xsl:when test="$param_yes = '1'">
+              <label>
+                <input type="radio" name="apply_overrides" value="1" checked="1"/>
+                <xsl:value-of select="gsa:i18n ('yes', 'Binary Choice')"/>
+              </label>
+              <label>
+                <input type="radio" name="apply_overrides" value="0"/>
+                <xsl:value-of select="gsa:i18n ('no', 'Binary Choice')"/>
+              </label>
+            </xsl:when>
+            <xsl:otherwise>
+              <label>
+                <input type="radio" name="apply_overrides" value="1"/>
+                <xsl:value-of select="gsa:i18n ('yes', 'Binary Choice')"/>
+              </label>
+              <label>
+                <input type="radio" name="apply_overrides" value="0" checked="1"/>
+                <xsl:value-of select="gsa:i18n ('no', 'Binary Choice')"/>
+              </label>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:when>
+        <xsl:when test="$apply_overrides/value='yes'">
+          <label>
+            <input type="radio" name="apply_overrides" value="1" checked="1"/>
+            <xsl:value-of select="gsa:i18n ('yes', 'Binary Choice')"/>
+          </label>
+          <label>
+            <input type="radio" name="apply_overrides" value="0"/>
+            <xsl:value-of select="gsa:i18n ('no', 'Binary Choice')"/>
+          </label>
+        </xsl:when>
+        <xsl:otherwise>
+          <label>
+            <input type="radio" name="apply_overrides" value="1"/>
+            <xsl:value-of select="gsa:i18n ('yes', 'Binary Choice')"/>
+          </label>
+          <label>
+            <input type="radio" name="apply_overrides" value="0" checked="1"/>
+            <xsl:value-of select="gsa:i18n ('no', 'Binary Choice')"/>
+          </label>
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
+  </tr>
+  <tr>
+    <xsl:variable name="min_qod"
+                  select="commands_response/get_tasks_response/task/preferences/preference[scanner_name='assets_min_qod']"/>
+    <td></td>
+    <td><xsl:value-of select="gsa:i18n ('Min QOD', 'Results')"/></td>
+    <td>
+      <input type="text" name="min_qod" value="{$min_qod/value}"/>
     </td>
   </tr>
   <xsl:if test="commands_response/get_tasks_response/task/status = 'New'">
@@ -36426,24 +36506,6 @@ should not have received it.
           <td><xsl:value-of select="gsa:i18n ('Default Severity', 'My Settings')"/></td>
           <td><xsl:value-of select="get_settings_response/setting[name='Default Severity']/value"/></td>
         </tr>
-        <tr>
-          <td><xsl:value-of select="gsa:i18n ('Assets Apply Overrides', 'My Settings')"/></td>
-          <td>
-            <xsl:variable name="overrides"
-                          select="get_settings_response/setting[name='Assets Apply Overrides']/value"/>
-            <xsl:choose>
-              <xsl:when test="$overrides = 0"><xsl:value-of select="gsa:i18n ('No', 'Binary Choice')"/></xsl:when>
-              <xsl:when test="$overrides = 1"><xsl:value-of select="gsa:i18n ('Yes', 'Binary Choice')"/></xsl:when>
-              <xsl:otherwise>
-                <xsl:value-of select="$overrides"/>
-              </xsl:otherwise>
-            </xsl:choose>
-          </td>
-        </tr>
-        <tr>
-          <td><xsl:value-of select="gsa:i18n ('Assets Min QOD', 'My Settings')"/></td>
-          <td><xsl:value-of select="get_settings_response/setting[name='Assets Min QOD']/value"/></td>
-        </tr>
 
         <xsl:if test="gsa:may-op ('get_alerts')">
           <tr>
@@ -37052,32 +37114,6 @@ should not have received it.
               <td>
                 <input type="text" name="default_severity" size="40" maxlength="800"
                        value="{gsa:param-or ('10.0', get_settings_response/setting[name='Default Severity']/value)}"/>
-              </td>
-            </tr>
-            <tr>
-              <td><xsl:value-of select="gsa:i18n ('Assets Apply Overrides', 'My Settings')"/></td>
-              <td>
-                <xsl:variable name="current_apply_overrides"
-                              select="gsa:param-or ('apply_overrides', get_settings_response/setting[name='Assets Apply Overrides']/value)"/>
-                <select name="apply_overrides" style="width:100px;">
-                  <xsl:call-template name="opt">
-                    <xsl:with-param name="value" select="'0'"/>
-                    <xsl:with-param name="content" select="gsa:i18n ('No', 'Binary Choice')"/>
-                    <xsl:with-param name="select-value" select="$current_apply_overrides"/>
-                  </xsl:call-template>
-                  <xsl:call-template name="opt">
-                    <xsl:with-param name="value" select="'1'"/>
-                    <xsl:with-param name="content" select="gsa:i18n ('Yes', 'Binary Choice')"/>
-                    <xsl:with-param name="select-value" select="$current_apply_overrides"/>
-                  </xsl:call-template>
-                </select>
-              </td>
-            </tr>
-            <tr>
-              <td><xsl:value-of select="gsa:i18n ('Assets Min QOD', 'My Settings')"/></td>
-              <td>
-                <input type="text" name="min_qod" size="40" maxlength="800"
-                       value="{gsa:param-or ('70', get_settings_response/setting[name='Assets Min QOD']/value)}"/>
               </td>
             </tr>
 

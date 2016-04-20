@@ -4554,6 +4554,7 @@ save_task_omp (credentials_t * credentials, params_t *params,
   const char *slave_id, *scanner_id, *task_id, *max_checks, *max_hosts;
   const char *config_id, *target_id, *hosts_ordering, *alterable, *source_iface;
   const char *scanner_type, *schedule_periods, *auto_delete, *auto_delete_data;
+  const char *apply_overrides, *min_qod;
   int ret;
   params_t *alerts;
   GString *alert_element;
@@ -4565,6 +4566,8 @@ save_task_omp (credentials_t * credentials, params_t *params,
   task_id = params_value (params, "task_id");
   next = params_value (params, "next");
   in_assets = params_value (params, "in_assets");
+  apply_overrides = params_value (params, "apply_overrides");
+  min_qod = params_value (params, "min_qod");
   target_id = params_value (params, "target_id");
   scanner_type = params_value (params, "scanner_type");
   hosts_ordering = params_value (params, "hosts_ordering");
@@ -4623,6 +4626,8 @@ save_task_omp (credentials_t * credentials, params_t *params,
   CHECK_PARAM_INVALID (auto_delete_data, "Save Task", "edit_task");
   CHECK_PARAM_INVALID (max_hosts, "Save Task", "edit_task");
   CHECK_PARAM_INVALID (in_assets, "Save Task", "edit_task");
+  CHECK_PARAM_INVALID (apply_overrides, "Save Task", "edit_task");
+  CHECK_PARAM_INVALID (min_qod, "Save Task", "edit_task");
 
   alert_element = g_string_new ("");
   if (params_given (params, "alert_id_optional:"))
@@ -4675,6 +4680,14 @@ save_task_omp (credentials_t * credentials, params_t *params,
                             "<value>%%s</value>"
                             "</preference>"
                             "<preference>"
+                            "<scanner_name>assets_apply_overrides</scanner_name>"
+                            "<value>%%s</value>"
+                            "</preference>"
+                            "<preference>"
+                            "<scanner_name>assets_min_qod</scanner_name>"
+                            "<value>%%s</value>"
+                            "</preference>"
+                            "<preference>"
                             "<scanner_name>source_iface</scanner_name>"
                             "<value>%%s</value>"
                             "</preference>"
@@ -4713,6 +4726,8 @@ save_task_omp (credentials_t * credentials, params_t *params,
               max_checks,
               max_hosts,
               strcmp (in_assets, "0") ? "yes" : "no",
+              strcmp (apply_overrides, "0") ? "yes" : "no",
+              min_qod,
               source_iface,
               auto_delete,
               auto_delete_data);
@@ -20232,99 +20247,6 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_my_settings", response_data);
     }
   if (! omp_success (entity))
-    {
-      set_http_status_from_entity (entity, response_data);
-      modify_failed = 1;
-    }
-
-  /* Send Asset Apply Overrides setting. */
-
-  text = params_value (params, "apply_overrides");
-  text_64 = (text
-                 ? g_base64_encode ((guchar*) text, strlen (text))
-                 : g_strdup (""));
-
-  if (openvas_server_sendf (&session,
-                            "<modify_setting"
-                            " setting_id"
-                            "=\"02e294fa-061b-11e6-ae64-28d24461215b\">"
-                            "<value>%s</value>"
-                            "</modify_setting>",
-                            text_64 ? text_64 : "")
-      == -1)
-    {
-      g_free (text_64);
-      openvas_server_close (socket, session);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while saving settings. "
-                           "It is unclear whether all the settings were saved. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_my_settings", response_data);
-    }
-  g_free (text_64);
-
-  entity = NULL;
-  if (read_entity_and_string (&session, &entity, &xml))
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while saving settings. "
-                           "It is unclear whether all the settings were saved. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_my_settings", response_data);
-    }
-  if (!omp_success (entity))
-    {
-      set_http_status_from_entity (entity, response_data);
-      modify_failed = 1;
-    }
-
-  /* Send Assets Min QOD setting. */
-
-  text = params_value (params, "min_qod");
-  text_64 = (text ? g_base64_encode ((guchar*) text, strlen (text))
-                  : g_strdup (""));
-
-  if (openvas_server_sendf (&session,
-                            "<modify_setting"
-                            " setting_id"
-                            "=\"5a9046cc-0628-11e6-ba53-28d24461215b\">"
-                            "<value>%s</value>"
-                            "</modify_setting>",
-                            text_64 ? text_64 : "")
-      == -1)
-    {
-      g_free (text_64);
-      openvas_server_close (socket, session);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while saving settings. "
-                           "It is unclear whether all the settings were saved. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_my_settings", response_data);
-    }
-  g_free (text_64);
-
-  entity = NULL;
-  if (read_entity_and_string (&session, &entity, &xml))
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while saving settings. "
-                           "It is unclear whether all the settings were saved. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_my_settings", response_data);
-    }
-  if (!omp_success (entity))
     {
       set_http_status_from_entity (entity, response_data);
       modify_failed = 1;
