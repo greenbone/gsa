@@ -1173,10 +1173,14 @@
         }
 
         /* hide all elements of the selection */
+        form.find('.form-selection-input-' + name).prop('disabled', true);
         form.find('.form-selection-item-' + name).hide();
 
         if (is_defined(value)) {
           /* show elements wich have the selected value css class set */
+
+          form.find('.form-selection-input-' + name + '--' + value).prop(
+              'disabled', false);
           form.find('.form-selection-item-' + name + '--' + value).show();
         }
       }
