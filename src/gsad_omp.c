@@ -1227,6 +1227,8 @@ next_page_url (credentials_t *credentials, params_t *params,
           || strcmp (param_name, "filt_id") == 0
           || (strstr (param_name, "_id")
                 == param_name + strlen (param_name) - strlen ("_id"))
+          || (strcmp (param_name, "name") == 0
+              && strcasecmp (prev_action, "Run Wizard") == 0)
           || strcmp (param_name, "xml") == 0)
         {
           g_string_append_printf (url, "&%s=%s",

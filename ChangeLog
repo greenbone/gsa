@@ -1,5 +1,9 @@
 2016-04-20  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/gsad_omp.c (next_page_url): Include "name" param of wizards.
+
+2016-04-20  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/gsad_omp.c (wizard): Test if "name" param is valid.
 
 2016-04-19  Matthew Mundell <matthew.mundell@greenbone.net>
