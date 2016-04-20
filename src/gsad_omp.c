@@ -26447,6 +26447,7 @@ wizard (credentials_t *credentials, params_t *params, const char *extra_xml,
   gnutls_session_t session;
   int socket;
   gchar *html;
+  const char* name = params_value (params, "name");
 
   switch (manager_connect (credentials, &socket, &session, &html,
                            response_data))
@@ -26466,11 +26467,21 @@ wizard (credentials_t *credentials, params_t *params, const char *extra_xml,
                              "/omp?cmd=get_tasks", response_data);
     }
 
+  if (name == NULL)
+    {
+        response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting the wizard. "
+                             "Given name was invalid",
+                             "/omp?cmd=get_tasks", response_data);
+    }
+
   xml = g_string_new ("");
   g_string_append_printf (xml,
                           "<wizard>%s<%s/>",
                           extra_xml ? extra_xml : "",
-                          params_value (params, "name"));
+                          name);
 
   /* Try to run init mode of the wizard */
   if (openvas_server_sendf_xml (&session,
@@ -26478,7 +26489,7 @@ wizard (credentials_t *credentials, params_t *params, const char *extra_xml,
                                 "<name>%s</name>"
                                 "<mode>init</mode>"
                                 "</run_wizard>",
-                                params_value (params, "name"))
+                                name)
       == -1)
     {
       g_string_free (xml, TRUE);
