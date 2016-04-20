@@ -18147,7 +18147,7 @@ should not have received it.
       <xsl:value-of select="gsa:i18n ('Edit Schedule', 'Schedule')"/>
     </div>
     <div class="content">
-      <form action="" method="post" enctype="multipart/form-data">
+      <form action="" method="post" enctype="multipart/form-data" class="form-horizontal">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="save_schedule"/>
         <input type="hidden" name="caller" value="{/envelope/current_page}"/>
@@ -18157,224 +18157,119 @@ should not have received it.
         <input type="hidden" name="next" value="{/envelope/params/next}"/>
         <input type="hidden" name="schedule" value="{/envelope/params/schedule}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-        <table class="table-form">
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
-            <td>
+        <div class="form-group">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></label>
+          <div class="col-10">
+            <input type="text"
+              name="name"
+              class="form-control"
+              value="{commands_response/get_schedules_response/schedule/name}"
+              size="30"
+              maxlength="80"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/></label>
+          <div class="col-10">
+            <input type="text" name="comment" size="30" maxlength="400"
+              class="form-control"
+              value="{commands_response/get_schedules_response/schedule/comment}"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('First Time', 'Schedule')"/></label>
+          <div class="col-10">
+            <input id="datepicker" type="hidden"/>
+            <input name="day_of_month" type="hidden" value="{format-number (date:day-in-month (commands_response/get_schedules_response/schedule/first_time), '00')}"/>
+            <input name="month" type="hidden" value="{format-number (date:month-in-year (commands_response/get_schedules_response/schedule/first_time), '00')}"/>
+            <input name="year" type="hidden" value="{date:year (commands_response/get_schedules_response/schedule/first_time)}"/>
+            <input id="datevalue" class="datepicker-value"/>
+            <div class="form-item">
+              at
+            </div>
+            <xsl:variable name="hour"
+              select="format-number (date:hour-in-day (commands_response/get_schedules_response/schedule/first_time), '00')"/>
+            <div class="form-item">
               <input type="text"
-                     name="name"
-                     value="{commands_response/get_schedules_response/schedule/name}"
-                     size="30"
-                     maxlength="80"/>
-            </td>
-          </tr>
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/></td>
-            <td>
-              <input type="text" name="comment" size="30" maxlength="400"
-                     value="{commands_response/get_schedules_response/schedule/comment}"/>
-            </td>
-          </tr>
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('First Time', 'Schedule')"/></td>
-            <td>
-              <input id="datevalue" size="30"/>
-              <input id="datepicker" type="hidden"/>,
-              <input name="day_of_month" type="hidden" value="{format-number (date:day-in-month (commands_response/get_schedules_response/schedule/first_time), '00')}"/>
-              <input name="month" type="hidden" value="{format-number (date:month-in-year (commands_response/get_schedules_response/schedule/first_time), '00')}"/>
-              <input name="year" type="hidden" value="{date:year (commands_response/get_schedules_response/schedule/first_time)}"/>
-              <xsl:variable name="hour"
-                            select="format-number (date:hour-in-day (commands_response/get_schedules_response/schedule/first_time), '00')"/>
-              <select name="hour">
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'00'"/>
-                  <xsl:with-param name="select-value" select="$hour"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'01'"/>
-                  <xsl:with-param name="select-value" select="$hour"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'02'"/>
-                  <xsl:with-param name="select-value" select="$hour"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'03'"/>
-                  <xsl:with-param name="select-value" select="$hour"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'04'"/>
-                  <xsl:with-param name="select-value" select="$hour"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'05'"/>
-                  <xsl:with-param name="select-value" select="$hour"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'06'"/>
-                  <xsl:with-param name="select-value" select="$hour"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'07'"/>
-                  <xsl:with-param name="select-value" select="$hour"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'08'"/>
-                  <xsl:with-param name="select-value" select="$hour"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'09'"/>
-                  <xsl:with-param name="select-value" select="$hour"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'10'"/>
-                  <xsl:with-param name="select-value" select="$hour"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'11'"/>
-                  <xsl:with-param name="select-value" select="$hour"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'12'"/>
-                  <xsl:with-param name="select-value" select="$hour"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'13'"/>
-                  <xsl:with-param name="select-value" select="$hour"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'14'"/>
-                  <xsl:with-param name="select-value" select="$hour"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'15'"/>
-                  <xsl:with-param name="select-value" select="$hour"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'16'"/>
-                  <xsl:with-param name="select-value" select="$hour"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'17'"/>
-                  <xsl:with-param name="select-value" select="$hour"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'18'"/>
-                  <xsl:with-param name="select-value" select="$hour"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'19'"/>
-                  <xsl:with-param name="select-value" select="$hour"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'20'"/>
-                  <xsl:with-param name="select-value" select="$hour"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'21'"/>
-                  <xsl:with-param name="select-value" select="$hour"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'22'"/>
-                  <xsl:with-param name="select-value" select="$hour"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'23'"/>
-                  <xsl:with-param name="select-value" select="$hour"/>
-                </xsl:call-template>
-              </select>
+                name="hour"
+                value="{$hour}"
+                size="2"
+                class="spinner"
+                data-type="int"
+                min="0"
+                max="23"
+                maxlength="2"/>
               h
-              <select name="minute">
-                <xsl:variable name="minute"
-                              select="format-number (date:minute-in-hour (commands_response/get_schedules_response/schedule/first_time), '00')"/>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'00'"/>
-                  <xsl:with-param name="select-value" select="$minute - ($minute mod 5)"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'05'"/>
-                  <xsl:with-param name="select-value" select="$minute - ($minute mod 5)"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'10'"/>
-                  <xsl:with-param name="select-value" select="$minute - ($minute mod 5)"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'15'"/>
-                  <xsl:with-param name="select-value" select="$minute - ($minute mod 5)"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'20'"/>
-                  <xsl:with-param name="select-value" select="$minute - ($minute mod 5)"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'25'"/>
-                  <xsl:with-param name="select-value" select="$minute - ($minute mod 5)"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'30'"/>
-                  <xsl:with-param name="select-value" select="$minute - ($minute mod 5)"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'35'"/>
-                  <xsl:with-param name="select-value" select="$minute - ($minute mod 5)"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'40'"/>
-                  <xsl:with-param name="select-value" select="$minute - ($minute mod 5)"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'45'"/>
-                  <xsl:with-param name="select-value" select="$minute - ($minute mod 5)"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'50'"/>
-                  <xsl:with-param name="select-value" select="$minute - ($minute mod 5)"/>
-                </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'55'"/>
-                  <xsl:with-param name="select-value" select="$minute - ($minute mod 5)"/>
-                </xsl:call-template>
-              </select>
-            </td>
-          </tr>
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('Timezone', 'Time')"/></td>
-            <td>
-              <xsl:call-template name="timezone-select">
-                <xsl:with-param name="timezone" select="commands_response/get_schedules_response/schedule/timezone"/>
-                <xsl:with-param name="input-name" select="'timezone'"/>
-              </xsl:call-template>
-            </td>
-          </tr>
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('Period', 'Schedule')"/></td>
-            <td>
-              <xsl:choose>
-                <xsl:when test="commands_response/get_schedules_response/schedule/simple_period/text() = 0 and commands_response/get_schedules_response/schedule/period/text() &gt; 0">
+            </div>
+            <xsl:variable name="minute"
+              select="format-number (date:minute-in-hour (commands_response/get_schedules_response/schedule/first_time), '00')"/>
+            <div class="form-item">
+              <input type="text"
+                name="minute"
+                value="{$minute - ($minute mod 5)}"
+                size="2"
+                class="spinner"
+                data-type="int"
+                min="0"
+                max="59"
+                maxlength="2"/>
+              m
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Timezone', 'Time')"/></label>
+          <div class="col-10">
+            <xsl:call-template name="timezone-select">
+              <xsl:with-param name="timezone" select="commands_response/get_schedules_response/schedule/timezone"/>
+              <xsl:with-param name="input-name" select="'timezone'"/>
+            </xsl:call-template>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Period', 'Schedule')"/></label>
+          <div class="col-10">
+            <xsl:choose>
+              <xsl:when test="commands_response/get_schedules_response/schedule/simple_period/text() = 0 and commands_response/get_schedules_response/schedule/period/text() &gt; 0">
+                <div class="form-item">
                   <input type="text"
-                         name="period"
-                         value="{commands_response/get_schedules_response/schedule/period}"
-                         size="10"
-                         maxlength="80"/>
+                    name="period"
+                    class="spinner"
+                    data-type="int"
+                    min="0"
+                    value="{commands_response/get_schedules_response/schedule/period}"
+                    size="10"
+                    maxlength="80"/>
                   <input type="hidden" name="period_unit" value="second"/>
-                  <xsl:value-of select="gsa:i18n ('seconds', 'Time')"/>
-                </xsl:when>
-                <xsl:when test="commands_response/get_schedules_response/schedule/simple_period/text() = 0 and commands_response/get_schedules_response/schedule/period_months/text() &gt; 0">
+                </div>
+                <xsl:value-of select="gsa:i18n ('seconds', 'Time')"/>
+              </xsl:when>
+              <xsl:when test="commands_response/get_schedules_response/schedule/simple_period/text() = 0 and commands_response/get_schedules_response/schedule/period_months/text() &gt; 0">
+                <div class="form-item">
                   <input type="text"
-                         name="period"
-                         value="{commands_response/get_schedules_response/schedule/period_months}"
-                         size="10"
-                         maxlength="80"/>
-                  <input type="hidden" name="period_unit" value="month"/>
-                  <xsl:value-of select="gsa:i18n ('months', 'Time')"/>
-                </xsl:when>
-                <xsl:otherwise>
+                    name="period"
+                    value="{commands_response/get_schedules_response/schedule/period_months}"
+                    class="spinner"
+                    data-type="int"
+                    min="0"
+                    size="10"
+                    maxlength="80"/>
+                </div>
+                <input type="hidden" name="period_unit" value="month"/>
+                <xsl:value-of select="gsa:i18n ('months', 'Time')"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <div class="form-item">
                   <input type="text"
-                         name="period"
-                         value="{commands_response/get_schedules_response/schedule/simple_period/text()}"
-                         size="4"
-                         maxlength="80"/>
+                    name="period"
+                    value="{commands_response/get_schedules_response/schedule/simple_period/text()}"
+                    class="spinner"
+                    data-type="int"
+                    min="0"
+                    size="4"
+                    maxlength="80"/>
+                </div>
+                <div class="form-item">
                   <select name="period_unit">
                     <xsl:choose>
                       <xsl:when test="commands_response/get_schedules_response/schedule/simple_period/unit = 'hour'">
@@ -18409,29 +18304,41 @@ should not have received it.
                       </xsl:otherwise>
                     </xsl:choose>
                   </select>
-                </xsl:otherwise>
-              </xsl:choose>
-            </td>
-          </tr>
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('Duration', 'Schedule')"/></td>
-            <td>
-              <xsl:choose>
-                <xsl:when test="commands_response/get_schedules_response/schedule/simple_duration/text() = 0 and commands_response/get_schedules_response/schedule/duration/text() &gt; 0">
+                </div>
+              </xsl:otherwise>
+            </xsl:choose>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Duration', 'Schedule')"/></label>
+          <div class="col-10">
+            <xsl:choose>
+              <xsl:when test="commands_response/get_schedules_response/schedule/simple_duration/text() = 0 and commands_response/get_schedules_response/schedule/duration/text() &gt; 0">
+                <div class="form-item">
                   <input type="text"
-                         name="duration"
-                         value="{commands_response/get_schedules_response/schedule/duration}"
-                         size="10"
-                         maxlength="80"/>
-                  <input type="hidden" name="duration_unit" value="second"/>
-                  <xsl:value-of select="gsa:i18n ('seconds', 'Time')"/>
-                </xsl:when>
-                <xsl:otherwise>
+                    name="duration"
+                    value="{commands_response/get_schedules_response/schedule/duration}"
+                    size="10"
+                    class="spinner"
+                    min="0"
+                    data-type="int"
+                    maxlength="80"/>
+                </div>
+                <input type="hidden" name="duration_unit" value="second"/>
+                <xsl:value-of select="gsa:i18n ('seconds', 'Time')"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <div class="form-item">
                   <input type="text"
-                         name="duration"
-                         value="{commands_response/get_schedules_response/schedule/simple_duration/text()}"
-                         size="4"
-                         maxlength="80"/>
+                    name="duration"
+                    value="{commands_response/get_schedules_response/schedule/simple_duration/text()}"
+                    size="4"
+                    class="spinner"
+                    min="0"
+                    data-type="int"
+                    maxlength="80"/>
+                </div>
+                <div class="form-item">
                   <select name="duration_unit">
                     <xsl:choose>
                       <xsl:when test="commands_response/get_schedules_response/schedule/simple_duration/unit = 'hour'">
@@ -18458,11 +18365,11 @@ should not have received it.
                       </xsl:otherwise>
                     </xsl:choose>
                   </select>
-                </xsl:otherwise>
-              </xsl:choose>
-            </td>
-          </tr>
-        </table>
+                </div>
+              </xsl:otherwise>
+            </xsl:choose>
+          </div>
+        </div>
       </form>
     </div>
   </div>
