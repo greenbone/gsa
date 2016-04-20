@@ -9781,7 +9781,7 @@ should not have received it.
             <div class="col-10">
               <select name="filter_id">
                 <option value="0">--</option>
-                <xsl:for-each select="$filters/filter">
+                <xsl:for-each select="$filters/filter[type='Result']">
                   <option value="{@id}"><xsl:value-of select="name"/></option>
                 </xsl:for-each>
               </select>
@@ -10567,7 +10567,7 @@ should not have received it.
             <div class="col-10">
               <select name="filter_id">
                 <option value="0">--</option>
-                <xsl:for-each select="$filters/filter">
+                <xsl:for-each select="$filters/filter[type='Result']">
                   <xsl:choose>
                     <xsl:when test="name = $filtername">
                       <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>

@@ -1,6 +1,11 @@
 2016-04-20  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/omp.xsl (html-create-alert-form, html-edit-alert-form):
+	Only show result filter in report result filter selection.
+
+2016-04-20  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/omp.xsl (html-create-alert-form, html-edit-alert-form):
 	Rework alert forms to use new horizontal form and more important to hide/show
 	elements based on the method and event selections.
 
