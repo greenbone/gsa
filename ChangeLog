@@ -1,3 +1,11 @@
+2016-04-20  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/css/gsa-style.css: Add css class to format the displayed
+	date of a datepicker.
+
+	* src/html/classic/omp.xsl (html-create-schedule-form): Update datepicker in
+	create schedule form.
+
 2016-04-20  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/gsad_omp.c (next_page_url): Include "name" param of wizards.

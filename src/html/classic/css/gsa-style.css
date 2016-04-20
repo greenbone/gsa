@@ -1505,6 +1505,11 @@ select[multiple] {
   padding-bottom: 5px;
 }
 
+.form-horizontal .datepicker-value {
+  vertical-align: middle;
+  margin-left: 5px;
+}
+
 /* greenbone slider */
 
 .gb-slider-container {

@@ -17854,10 +17854,13 @@ should not have received it.
           <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('First Time', 'Schedule')"/></label>
           <div class="col-10">
             <input id="datepicker" type="hidden"/>
-            <input id="datevalue"/>
             <input name="day_of_month" type="hidden" value="{time/day_of_month}"/>
             <input name="month" type="hidden" value="{time/month}"/>
             <input name="year" type="hidden" value="{time/year}"/>
+            <input id="datevalue" class="datepicker-value"/>
+            <div class="form-item">
+              at
+            </div>
             <div class="form-item">
               <input type="text"
                 name="hour"
@@ -17880,6 +17883,7 @@ should not have received it.
                 min="0"
                 max="59"
                 maxlength="2"/>
+              m
             </div>
           </div>
         </div>
