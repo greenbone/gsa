@@ -18142,18 +18142,11 @@ should not have received it.
 </xsl:template>
 
 <xsl:template name="html-edit-schedule-form">
-  <div class="gb_window">
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n ('Edit Schedule', 'Schedule')"/>
-      <xsl:call-template name="edit-header-icons">
-        <xsl:with-param name="cap-type" select="'Schedule'"/>
-        <xsl:with-param name="type" select="'schedule'"/>
-        <xsl:with-param name="id"
-                        select="commands_response/get_schedules_response/schedule/@id"/>
-      </xsl:call-template>
+  <div class="edit-dialog">
+    <div class="title">
+      <xsl:value-of select="gsa:i18n ('Edit Schedule', 'Schedule')"/>
     </div>
-    <div class="gb_window_part_content">
+    <div class="content">
       <form action="" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="save_schedule"/>
@@ -18467,11 +18460,6 @@ should not have received it.
                   </select>
                 </xsl:otherwise>
               </xsl:choose>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <input type="submit" name="submit" value="{gsa:i18n ('Save Schedule', 'Schedule')}"/>
             </td>
           </tr>
         </table>
