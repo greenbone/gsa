@@ -9479,9 +9479,8 @@ should not have received it.
     </xsl:choose>
   </xsl:param>
   <xsl:param name="filters"/>
-  <table class="table-form">
-    <tr id="always_row">
-      <td>
+    <div id="always_row">
+      <div class="radio">
         <xsl:choose>
           <xsl:when test="not ($condition)">
             <xsl:call-template name="radio-button">
@@ -9500,159 +9499,188 @@ should not have received it.
             </xsl:call-template>
           </xsl:otherwise>
         </xsl:choose>
-      </td>
-    </tr>
-    <tr style="{$hide}" id="severity_at_least_row">
-      <td>
+      </div>
+    </div>
+    <div style="{$hide}" id="severity_at_least_row" class="form-selection-item-event form-selection-item-event--task">
+      <div class="form-item radio">
         <xsl:call-template name="radio-button">
           <xsl:with-param name="value" select="'Severity at least'"/>
           <xsl:with-param name="select-value" select="$condition-text"/>
           <xsl:with-param name="name" select="'condition'"/>
           <xsl:with-param name="text">
             <xsl:value-of select="gsa:i18n ('Severity at least', 'Alert')"/>
-            <xsl:text> </xsl:text>
-            <xsl:choose>
-              <xsl:when test="$condition and $condition/text() = 'Severity at least'">
-                <input name="condition_data:severity" value="{$condition/data/text()}" size="5"/>
-              </xsl:when>
-              <xsl:otherwise>
-                <input name="condition_data:severity" value="0.1" size="5"/>
-              </xsl:otherwise>
-            </xsl:choose>
           </xsl:with-param>
         </xsl:call-template>
-      </td>
-    </tr>
-    <tr style="{$hide}" id="severity_changed_row">
-      <td>
+      </div>
+      <div class="form-item">
+        <xsl:choose>
+          <xsl:when test="$condition and $condition/text() = 'Severity at least'">
+            <input name="condition_data:severity" value="{$condition/data/text()}" size="5"
+              class="spinner"
+              data-type="float" min="0" />
+          </xsl:when>
+          <xsl:otherwise>
+            <input name="condition_data:severity" value="0.1" size="5"
+              class="spinner"
+              data-type="float" min="0" />
+          </xsl:otherwise>
+        </xsl:choose>
+      </div>
+    </div>
+    <div style="{$hide}" id="severity_changed_row" class="form-selection-item-event form-selection-item-event--task">
+      <div class="form-item radio">
         <xsl:call-template name="radio-button">
           <xsl:with-param name="name" select="'condition'"/>
           <xsl:with-param name="value" select="'Severity changed'"/>
           <xsl:with-param name="select-value" select="$condition-text"/>
           <xsl:with-param name="text">
             <xsl:value-of select="gsa:i18n ('Severity level', 'Alert')"/>
-            <select name="condition_data:direction">
-              <xsl:call-template name="opt">
-                <xsl:with-param name="value" select="'changed'"/>
-                <xsl:with-param name="select-value" select="$condition-text"/>
-                <xsl:with-param name="content" select="gsa:i18n ('changed', 'Alert Condition')"/>
-              </xsl:call-template>
-              <xsl:call-template name="opt">
-                <xsl:with-param name="value" select="'increased'"/>
-                <xsl:with-param name="select-value" select="$condition-text"/>
-                <xsl:with-param name="content" select="gsa:i18n ('increased', 'Alert Condition')"/>
-              </xsl:call-template>
-              <xsl:call-template name="opt">
-                <xsl:with-param name="value" select="'decreased'"/>
-                <xsl:with-param name="select-value" select="$condition-text"/>
-                <xsl:with-param name="content" select="gsa:i18n ('decreased', 'Alert Condition')"/>
-              </xsl:call-template>
-            </select>
           </xsl:with-param>
         </xsl:call-template>
-      </td>
-    </tr>
-    <tr id="filter_count_at_least_row">
-      <td>
+      </div>
+      <div class="form-item">
+        <select name="condition_data:direction">
+          <xsl:call-template name="opt">
+            <xsl:with-param name="value" select="'changed'"/>
+            <xsl:with-param name="select-value" select="$condition-text"/>
+            <xsl:with-param name="content" select="gsa:i18n ('changed', 'Alert Condition')"/>
+          </xsl:call-template>
+          <xsl:call-template name="opt">
+            <xsl:with-param name="value" select="'increased'"/>
+            <xsl:with-param name="select-value" select="$condition-text"/>
+            <xsl:with-param name="content" select="gsa:i18n ('increased', 'Alert Condition')"/>
+          </xsl:call-template>
+          <xsl:call-template name="opt">
+            <xsl:with-param name="value" select="'decreased'"/>
+            <xsl:with-param name="select-value" select="$condition-text"/>
+            <xsl:with-param name="content" select="gsa:i18n ('decreased', 'Alert Condition')"/>
+          </xsl:call-template>
+        </select>
+      </div>
+    </div>
+    <div id="filter_count_at_least_row">
+      <div class="form-item radio">
         <xsl:call-template name="radio-button">
           <xsl:with-param name="name" select="'condition'"/>
           <xsl:with-param name="value" select="'Filter count at least'"/>
           <xsl:with-param name="select-value" select="$condition-text"/>
           <xsl:with-param name="text">
             <xsl:value-of select="gsa:i18n ('Filter ', 'Alert')"/>
-            <span style="{$hide}" id="filter_count_at_least_span_task">
-              <select id="filter_count_at_least_select_task" name="condition_data:at_least_filter_id">
-                <xsl:for-each select="$filters/filter[type='Result']">
-                  <xsl:choose>
-                    <xsl:when test="$condition and $condition/text() = 'Filter count at least' and $condition/data[name='filter_id']/text() = @id">
-                      <option value="{@id}" selected="1">
-                        <xsl:value-of select="name"/>
-                      </option>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <option value="{@id}"><xsl:value-of select="name"/></option>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                </xsl:for-each>
-              </select>
-            </span>
-            <span style="{$show}" id="filter_count_at_least_span_nvts">
-              <select id="filter_count_at_least_select_nvts" name="condition_data:at_least_filter_id">
-                <xsl:for-each select="$filters/filter[type='SecInfo']">
-                  <xsl:choose>
-                    <xsl:when test="$condition and $condition/text() = 'Filter count at least' and $condition/data[name='filter_id']/text() = @id">
-                      <option value="{@id}" selected="1">
-                        <xsl:value-of select="name"/>
-                      </option>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <option value="{@id}"><xsl:value-of select="name"/></option>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                </xsl:for-each>
-              </select>
-            </span>
-            <xsl:value-of select="gsa:i18n (' matches at least ', 'Alert')"/>
-            <xsl:choose>
-              <xsl:when test="$condition and $condition/text() = 'Filter count at least'">
-                <input name="condition_data:at_least_count"
-                       value="{$condition/data[name='count']/text()}"
-                       size="5"/>
-              </xsl:when>
-              <xsl:otherwise>
-                <input name="condition_data:at_least_count" value="1" size="5"/>
-              </xsl:otherwise>
-            </xsl:choose>
-            <span style="{$hide}" id="filter_count_at_least_results_span">
-              <xsl:value-of select="gsa:i18n (' result(s)', 'Alert')"/>
-            </span>
-            <span style="{$show}" id="filter_count_at_least_nvts_span">
-              <xsl:value-of select="gsa:i18n (' NVT(s)', 'Alert')"/>
-            </span>
           </xsl:with-param>
         </xsl:call-template>
-      </td>
-    </tr>
-    <tr style="{$hide}" id="filter_count_changed_row">
-      <td>
+      </div>
+      <div class="form-item">
+        <span id="filter_count_at_least_span_task"
+            class="form-selection-item-event form-selection-item-event--task">
+          <select id="filter_count_at_least_select_task" name="condition_data:at_least_filter_id"
+            class="form-selection-input-event form-selection-input-event--task">
+            <xsl:for-each select="$filters/filter[type='Result']">
+              <xsl:choose>
+                <xsl:when test="$condition and $condition/text() = 'Filter count at least' and $condition/data[name='filter_id']/text() = @id">
+                  <option value="{@id}" selected="1">
+                    <xsl:value-of select="name"/>
+                  </option>
+                </xsl:when>
+                <xsl:otherwise>
+                  <option value="{@id}"><xsl:value-of select="name"/></option>
+                </xsl:otherwise>
+              </xsl:choose>
+            </xsl:for-each>
+          </select>
+        </span>
+        <span id="filter_count_at_least_span_nvts"
+          class="form-selection-item-event form-selection-item-event--secinfo">
+          <select id="filter_count_at_least_select_nvts" name="condition_data:at_least_filter_id"
+            class="form-selection-input-event form-selection-input-event--secinfo">
+            <xsl:for-each select="$filters/filter[type='SecInfo']">
+              <xsl:choose>
+                <xsl:when test="$condition and $condition/text() = 'Filter count at least' and $condition/data[name='filter_id']/text() = @id">
+                  <option value="{@id}" selected="1">
+                    <xsl:value-of select="name"/>
+                  </option>
+                </xsl:when>
+                <xsl:otherwise>
+                  <option value="{@id}"><xsl:value-of select="name"/></option>
+                </xsl:otherwise>
+              </xsl:choose>
+            </xsl:for-each>
+          </select>
+        </span>
+        <xsl:value-of select="gsa:i18n (' matches at least ', 'Alert')"/>
+      </div>
+      <div class="form-item">
+        <xsl:choose>
+          <xsl:when test="$condition and $condition/text() = 'Filter count at least'">
+            <input name="condition_data:at_least_count"
+              value="{$condition/data[name='count']/text()}"
+              class="spinner"
+              data-type="int" min="0"
+              size="5"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <input name="condition_data:at_least_count" value="1"
+              class="spinner"
+              data-type="int" min="0"
+              size="5"/>
+          </xsl:otherwise>
+        </xsl:choose>
+        <span id="filter_count_at_least_results_span"
+          class="form-selection-input-event form-selection-input-event--secinfo">
+          <xsl:value-of select="gsa:i18n (' result(s)', 'Alert')"/>
+        </span>
+        <span id="filter_count_at_least_nvts_span"
+          class="form-selection-input-event form-selection-input-event--secinfo">
+          <xsl:value-of select="gsa:i18n (' NVT(s)', 'Alert')"/>
+        </span>
+      </div>
+    </div>
+    <div style="{$hide}" id="filter_count_changed_row" class="form-selection-item-event form-selection-item-event--task">
+      <div class="form-item radio">
         <xsl:call-template name="radio-button">
           <xsl:with-param name="name" select="'condition'"/>
           <xsl:with-param name="value" select="'Filter count changed'"/>
           <xsl:with-param name="select-value" select="$condition-text"/>
           <xsl:with-param name="text">
             <xsl:value-of select="gsa:i18n ('Filter ', 'Alert')"/>
-            <input type="hidden" name="condition_data:filter_direction" value="increased"/>
-            <select name="condition_data:filter_id">
-              <xsl:for-each select="$filters/filter[type='Result']">
-                <xsl:choose>
-                  <xsl:when test="$condition and $condition/text() = 'Filter count changed' and $condition/data[name='filter_id']/text() = @id">
-                    <option value="{@id}" selected="1">
-                      <xsl:value-of select="name"/>
-                    </option>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <option value="{@id}"><xsl:value-of select="name"/></option>
-                  </xsl:otherwise>
-                </xsl:choose>
-              </xsl:for-each>
-            </select>
-            <xsl:value-of select="gsa:i18n (' matches at least ', 'Alert')"/>
-            <xsl:choose>
-              <xsl:when test="$condition and $condition/text() = 'Filter count changed'">
-                <input name="condition_data:count"
-                       value="{$condition/data[name='count']/text()}"
-                       size="5"/>
-              </xsl:when>
-              <xsl:otherwise>
-                <input name="condition_data:count" value="1" size="5"/>
-              </xsl:otherwise>
-            </xsl:choose>
-            <xsl:value-of select="gsa:i18n (' result(s) more than previous scan', 'Alert')"/>
           </xsl:with-param>
         </xsl:call-template>
-      </td>
-    </tr>
-  </table>
+      </div>
+      <div class="form-item">
+        <input type="hidden" name="condition_data:filter_direction" value="increased"/>
+        <select name="condition_data:filter_id">
+          <xsl:for-each select="$filters/filter[type='Result']">
+            <xsl:choose>
+              <xsl:when test="$condition and $condition/text() = 'Filter count changed' and $condition/data[name='filter_id']/text() = @id">
+                <option value="{@id}" selected="1">
+                  <xsl:value-of select="name"/>
+                </option>
+              </xsl:when>
+              <xsl:otherwise>
+                <option value="{@id}"><xsl:value-of select="name"/></option>
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:for-each>
+        </select>
+        <xsl:value-of select="gsa:i18n (' matches at least ', 'Alert')"/>
+      </div>
+      <div class="form-item">
+        <xsl:choose>
+          <xsl:when test="$condition and $condition/text() = 'Filter count changed'">
+            <input name="condition_data:count"
+              class="spinner"
+              data-type="int" min="0"
+              value="{$condition/data[name='count']/text()}"
+              size="5"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <input name="condition_data:count" value="1" size="5"
+              class="spinner"
+              data-type="int" min="0" />
+          </xsl:otherwise>
+        </xsl:choose>
+        <xsl:value-of select="gsa:i18n (' result(s) more than previous scan', 'Alert')"/>
+      </div>
+    </div>
 </xsl:template>
 
 <xsl:template name="html-create-alert-form">
@@ -9662,7 +9690,7 @@ should not have received it.
   <div class="edit-dialog">
     <div class="title"><xsl:value-of select="gsa:i18n ('New Alert', 'Alert')"/></div>
     <div class="content">
-      <form action="/omp" method="post" enctype="multipart/form-data">
+      <form action="/omp" method="post" enctype="multipart/form-data" class="form-horizontal">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="create_alert"/>
         <input type="hidden" name="caller" value="{/envelope/current_page}"/>
@@ -9672,556 +9700,571 @@ should not have received it.
         <xsl:if test="not (gsa:may-op ('get_filters'))">
           <input type="hidden" name="filter_id" value="0"/>
         </xsl:if>
-        <table class="table-form">
-          <!-- CSS for hiding/showing rows initially. -->
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
-            <td>
-              <input type="text" name="name" value="unnamed" size="30"
-                     maxlength="80"/>
-            </td>
-          </tr>
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/></td>
-            <td>
-              <input type="text" name="comment" size="30" maxlength="400"/>
-            </td>
-          </tr>
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('Event', 'Alert')"/></td>
-            <td>
-              <table class="table-form">
-                <tr>
-                  <td>
-                    <label>
-                      <input type="radio" name="event" value="Task run status changed" checked="1"
-                             onChange="editAlertUpdateForm()"/>
-                      <xsl:value-of select="gsa:i18n ('Task run status changed to', 'Alert')"/>
-                      <xsl:text> </xsl:text>
-                      <select name="event_data:status">
-                        <option value="Done" selected="1"><xsl:value-of select="gsa:i18n ('Done', 'Status')"/></option>
-                        <option value="New"><xsl:value-of select="gsa:i18n ('New', 'Status')"/></option>
-                        <option value="Requested"><xsl:value-of select="gsa:i18n ('Requested', 'Status')"/></option>
-                        <option value="Running"><xsl:value-of select="gsa:i18n ('Running', 'Status')"/></option>
-                        <option value="Stop Requested"><xsl:value-of select="gsa:i18n ('Stop Requested', 'Status')"/></option>
-                        <option value="Stopped"><xsl:value-of select="gsa:i18n ('Stopped', 'Status')"/></option>
-                      </select>
-                    </label>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <input type="radio" name="event" value="New SecInfo arrived"
-                           onChange="editAlertUpdateForm()"/>
-                    <select name="event_data:feed_event">
-                      <option value="new" selected="1"><xsl:value-of select="gsa:i18n ('New', 'Status')"/></option>
-                      <option value="updated"><xsl:value-of select="gsa:i18n ('Updated', 'Status')"/></option>
-                    </select>
-                    <xsl:text> </xsl:text>
-                    <select name="event_data:secinfo_type">
-                      <option value="nvt" selected="1"><xsl:value-of select="gsa:i18n ('NVTs', 'NVT')"/></option>
-                      <option value="cve"><xsl:value-of select="gsa:i18n ('CVEs', 'CVE')"/></option>
-                      <option value="cpe"><xsl:value-of select="gsa:i18n ('CPEs', 'CPE')"/></option>
-                      <option value="cert_bund_adv"><xsl:value-of select="gsa:i18n ('CERT-Bund Advisories', 'CERT-Bund Advisory')"/></option>
-                      <option value="dfn_cert_adv"><xsl:value-of select="gsa:i18n ('DFN-CERT Advisories', 'DFN-CERT Advisory')"/></option>
-                      <option value="ovaldef"><xsl:value-of select="gsa:i18n ('OVAL Definition', 'OVAL Definition')"/></option>
-                    </select>
-                    <xsl:text> </xsl:text>
-                    <xsl:value-of select="gsa:i18n ('arrived', 'Alert')"/>
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('Condition', 'Alert')"/></td>
-            <td>
-              <xsl:call-template name="condition-field">
-                <xsl:with-param name="filters" select="$filters"/>
-              </xsl:call-template>
-            </td>
-          </tr>
+        <!-- CSS for hiding/showing rows initially. -->
+        <div class="form-group">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></label>
+          <div class="col-10">
+            <input type="text" name="name" value="unnamed" size="30" class="form-control"
+              maxlength="80"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/></label>
+          <div class="col-10">
+            <input type="text" name="comment" size="30" maxlength="400" class="form-control"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Event', 'Alert')"/></label>
+          <div class="col-10">
+            <div class="radio">
+              <div class="form-item">
+                <label>
+                  <input type="radio" name="event" data-select="task" value="Task run status changed" checked="1"
+                    class="form-selection-control" id="event" />
+                  <xsl:value-of select="gsa:i18n ('Task run status changed to', 'Alert')"/>
+                </label>
+              </div>
+              <div class="form-item">
+                <select name="event_data:status">
+                  <option value="Done" selected="1"><xsl:value-of select="gsa:i18n ('Done', 'Status')"/></option>
+                  <option value="New"><xsl:value-of select="gsa:i18n ('New', 'Status')"/></option>
+                  <option value="Requested"><xsl:value-of select="gsa:i18n ('Requested', 'Status')"/></option>
+                  <option value="Running"><xsl:value-of select="gsa:i18n ('Running', 'Status')"/></option>
+                  <option value="Stop Requested"><xsl:value-of select="gsa:i18n ('Stop Requested', 'Status')"/></option>
+                  <option value="Stopped"><xsl:value-of select="gsa:i18n ('Stopped', 'Status')"/></option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="col-10 offset-2">
+            <div class="form-item radio">
+              <label>
+                <input type="radio" name="event" data-select="secinfo" value="New SecInfo arrived"
+                  class="form-selection-control" id="event" />
+                &#160; <!-- we need none breakin space here to align the radio input element correctly -->
+              </label>
+              <select name="event_data:feed_event">
+                <option value="new" selected="1"><xsl:value-of select="gsa:i18n ('New', 'Status')"/></option>
+                <option value="updated"><xsl:value-of select="gsa:i18n ('Updated', 'Status')"/></option>
+              </select>
+            </div>
+            <div class="form-item">
+              <select name="event_data:secinfo_type">
+                <option value="nvt" selected="1"><xsl:value-of select="gsa:i18n ('NVTs', 'NVT')"/></option>
+                <option value="cve"><xsl:value-of select="gsa:i18n ('CVEs', 'CVE')"/></option>
+                <option value="cpe"><xsl:value-of select="gsa:i18n ('CPEs', 'CPE')"/></option>
+                <option value="cert_bund_adv"><xsl:value-of select="gsa:i18n ('CERT-Bund Advisories', 'CERT-Bund Advisory')"/></option>
+                <option value="dfn_cert_adv"><xsl:value-of select="gsa:i18n ('DFN-CERT Advisories', 'DFN-CERT Advisory')"/></option>
+                <option value="ovaldef"><xsl:value-of select="gsa:i18n ('OVAL Definition', 'OVAL Definition')"/></option>
+              </select>
+              <xsl:text> </xsl:text>
+              <xsl:value-of select="gsa:i18n ('arrived', 'Alert')"/>
+            </div>
+          </div>
+        </div>
 
-          <!-- Method: Email. -->
+        <div class="form-group">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Condition', 'Alert')"/></label>
+          <div class="col-10">
+            <xsl:call-template name="condition-field">
+              <xsl:with-param name="filters" select="$filters"/>
+            </xsl:call-template>
+          </div>
+        </div>
 
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('Method', 'Alert')"/></td>
-            <td>
-              <table class="table-form">
-                <tr>
-                  <td>
-                    <label>
-                      <input type="radio" name="method" value="Email" checked="1"/>
-                      <xsl:value-of select="gsa:i18n ('Email', 'Alert')"/>
-                    </label>
-                  </td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td><xsl:value-of select="gsa:i18n ('To Address', 'Alert|Email')"/></td>
-                  <td>
-                    <input type="text" name="method_data:to_address" size="30" maxlength="301"/>
-                  </td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td><xsl:value-of select="gsa:i18n ('From Address', 'Alert|Email')"/></td>
-                  <td>
-                    <input type="text" name="method_data:from_address" size="30" maxlength="301"/>
-                  </td>
-                </tr>
-                <tr id="email_subject_row">
-                  <td></td>
-                  <td><xsl:value-of select="gsa:i18n ('Subject', 'Alert|Email')"/></td>
-                  <td id="email_subject_task">
-                    <input id="email_subject_task_input" type="text" name="method_data:subject"
-                           size="30" maxlength="80"
-                           value="[OpenVAS-Manager] Task '$n': $e"/>
-                  </td>
-                  <td style="display: none" id="email_subject_secinfo">
-                    <input id="email_subject_secinfo_input" type="text" name="dummy_subject"
-                           size="30" maxlength="80"
-                           value="[OpenVAS-Manager] $T $q $S since $d"/>
-                  </td>
-                </tr>
-                <tr id="email_content_row">
-                  <td></td>
-                  <td><xsl:value-of select="gsa:i18n ('Content', 'Alert|Email')"/></td>
-                  <td>
-                    <table class="table-form">
-                      <tr>
-                        <td>
-                          <label>
-                            <input type="radio" name="method_data:notice" value="1" checked="1"/>
-                            <xsl:value-of select="gsa:i18n ('Simple notice', 'Alert|Email')"/>
-                          </label>
-                        </td>
-                      </tr>
-                      <xsl:if test="gsa:may-op ('get_report_formats')">
-                        <tr>
-                          <td>
-                            <label>
-                              <input type="radio" name="method_data:notice" value="0"/>
-                              <div id="email_content_include_task" style="display: inline">
-                                <xsl:value-of select="gsa:i18n ('Include report', 'Alert|Email')"/>
-                                <xsl:text> </xsl:text>
-                                <select name="method_data:notice_report_format">
-                                  <xsl:for-each select="$report-formats/report_format">
-                                    <xsl:if test="substring(content_type, 1, 5) = 'text/'">
-                                      <xsl:choose>
-                                        <xsl:when test="@id='19f6f1b3-7128-4433-888c-ccc764fe6ed5'">
-                                          <option value="{@id}" selected="1">
-                                            <xsl:value-of select="name"/>
-                                          </option>
-                                        </xsl:when>
-                                        <xsl:otherwise>
-                                          <option value="{@id}">
-                                            <xsl:value-of select="name"/>
-                                          </option>
-                                        </xsl:otherwise>
-                                      </xsl:choose>
-                                    </xsl:if>
-                                  </xsl:for-each>
-                                </select>
-                              </div>
-                              <div id="email_content_include_secinfo" style="display: none">
-                                <xsl:value-of select="gsa:i18n ('Include list of resources', 'Alert|Email')"/>
-                              </div>
-                              <xsl:text> with message:</xsl:text>
-                            </label>
-                            <br/>
-                            <div id="email_content_include_message_task" style="display: inline">
-                              <textarea id="message_include_task"
-                                        name="method_data:message"
-                                        rows="3" cols="50">
-                                <xsl:value-of select="$include-message-default"/>
-                              </textarea>
-                            </div>
-                            <div id="email_content_include_message_secinfo" style="display: none">
-                              <textarea id="message_include_secinfo"
-                                        name="dummy_message"
-                                        rows="3" cols="50">
-                                <xsl:value-of select="$include-message-default-secinfo"/>
-                              </textarea>
-                            </div>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            <label>
-                              <input type="radio" name="method_data:notice" value="2"/>
-                              <div id="email_content_attach_task" style="display: inline">
-                                <xsl:value-of select="gsa:i18n ('Attach report', 'Alert|Email')"/>
-                                <xsl:text> </xsl:text>
-                                <select name="method_data:notice_attach_format">
-                                  <xsl:for-each select="$report-formats/report_format">
-                                    <xsl:choose>
-                                      <xsl:when test="@id='1a60a67e-97d0-4cbf-bc77-f71b08e7043d'">
-                                        <option value="{@id}" selected="1">
-                                          <xsl:value-of select="name"/>
-                                        </option>
-                                      </xsl:when>
-                                      <xsl:otherwise>
-                                        <option value="{@id}">
-                                          <xsl:value-of select="name"/>
-                                        </option>
-                                      </xsl:otherwise>
-                                    </xsl:choose>
-                                  </xsl:for-each>
-                                </select>
-                              </div>
-                              <div id="email_content_attach_secinfo" style="display: none">
-                                <xsl:value-of select="gsa:i18n ('Attach list of resources', 'Alert|Email')"/>
-                              </div>
-                              <xsl:text> with message:</xsl:text>
-                            </label>
-                            <br/>
-                            <div id="email_content_attach_message_task">
-                              <textarea id="message_attach_task"
-                                        name="method_data:message_attach"
-                                        rows="3" cols="50">
-                                <xsl:value-of select="$attach-message-default"/>
-                              </textarea>
-                            </div>
-                            <div id="email_content_attach_message_secinfo" style="display: none">
-                              <textarea id="message_attach_secinfo"
-                                        name="dummy_message"
-                                        rows="3" cols="50">
-                                <xsl:value-of select="$attach-message-default-secinfo"/>
-                              </textarea>
-                            </div>
-                          </td>
-                        </tr>
+        <!-- Fields that apply to all/multiple methods. -->
+
+        <xsl:if test="gsa:may-op ('get_filters')">
+          <div class="form-group form-selection-item-event form-selection-item-event--task" id="report_result_filter_row">
+            <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Report Result Filter', 'Alert')"/></label>
+            <div class="col-10">
+              <select name="filter_id">
+                <option value="0">--</option>
+                <xsl:for-each select="$filters/filter">
+                  <option value="{@id}"><xsl:value-of select="name"/></option>
+                </xsl:for-each>
+              </select>
+            </div>
+          </div>
+        </xsl:if>
+
+        <div class="form-group form-selection-item-event form-selection-item-event--secinfo"
+          style="display: none" id="details_url_row">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Details URL', 'Alert')"/></label>
+          <div class="col-10">
+            <input type="text" name="method_data:details_url"
+              class="form-control"
+              size="30" maxlength="1000"
+              value="https://secinfo.greenbone.net/omp?cmd=get_info&amp;info_type=$t&amp;info_id=$o&amp;details=1&amp;token=guest"/>
+          </div>
+        </div>
+
+        <!-- Method -->
+
+        <div class="form-group">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Method', 'Alert')"/></label>
+          <div class="col-10">
+            <select name="method" id="method" class="form-selection-control">
+              <option data-select="email" value="Email" checked="1">
+                <xsl:value-of select="gsa:i18n ('Email', 'Alert')"/>
+              </option>
+              <option data-select="syslog" value="Syslog">
+                <xsl:value-of select="gsa:i18n ('System Logger', 'Alert')"/>
+              </option>
+              <option data-select="http-get" value="HTTP Get"
+                class="form-selection-input-event form-selection-input-event--task">
+                <xsl:value-of select="gsa:i18n ('HTTP Get', 'Alert')"/>
+              </option>
+              <option data-select="sourcefire" value="Sourcefire Connector"
+                class="form-selection-input-event form-selection-input-event--task">
+                <xsl:value-of select="gsa:i18n ('Sourcefire Connector', 'Alert')"/>
+              </option>
+              <option data-select="verinice" value="verinice Connector"
+                class="form-selection-input-event form-selection-input-event--task">
+                <xsl:value-of select="gsa:i18n ('verinice.PRO Connector', 'Alert')"/>
+              </option>
+              <option data-select="start_task" value="Start Task"
+                class="form-selection-input-event form-selection-input-event--task">
+                <xsl:value-of select="gsa:i18n ('Start Task', 'Alert')"/>
+              </option>
+              <option data-select="send" value="Send">
+                <xsl:value-of select="gsa:i18n ('Send to host ', 'Alert')"/>
+              </option>
+              <option data-select="scp" value="SCP">
+                <xsl:value-of select="gsa:i18n ('SCP', 'Alert')"/>
+              </option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Method: Email. -->
+
+        <div class="form-group form-selection-item-method form-selection-item-method--email">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('To Address', 'Alert|Email')"/></label>
+          <div class="col-10">
+            <div class="form-item">
+              <input type="text" name="method_data:to_address" size="30" maxlength="301"
+                class="form-control"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group form-selection-item-method form-selection-item-method--email">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('From Address', 'Alert|Email')"/></label>
+          <div class="col-10">
+            <div class="form-item">
+              <input type="text" name="method_data:from_address" size="30" maxlength="301"
+                class="form-control"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group form-selection-item-method form-selection-item-method--email">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Subject', 'Alert|Email')"/></label>
+          <div id="email_subject_task"
+            class="col-10 form-selection-item-event form-selection-item-event--task">
+            <div class="form-item">
+              <input id="email_subject_task_input" type="text" name="method_data:subject"
+                size="30" maxlength="80"
+                class="form-control form-selection-input-event form-selection-input-event--task"
+                value="[OpenVAS-Manager] Task '$n': $e"/>
+            </div>
+          </div>
+          <div  id="email_subject_secinfo"
+            class="col-10 form-selection-item-event form-selection-item-event--secinfo">
+            <div class="form-item">
+              <input id="email_subject_secinfo_input" type="text" name="method_data:subject"
+                size="30" maxlength="80"
+                class="form-control form-selection-input-event form-selection-input-event--secinfo"
+                value="[OpenVAS-Manager] $T $q $S since $d"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group form-selection-item-method form-selection-item-method--email" id="email_content_row">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Content', 'Alert|Email')"/></label>
+          <div class="col-10">
+            <div class="radio">
+              <label>
+                <input type="radio" name="method_data:notice" value="1" checked="1"/>
+                <xsl:value-of select="gsa:i18n ('Simple notice', 'Alert|Email')"/>
+              </label>
+            </div>
+
+            <xsl:if test="gsa:may-op ('get_report_formats')">
+              <div>
+                <div class="form-item radio">
+                  <label>
+                    <input type="radio" name="method_data:notice" value="0"/>
+                    <span class="form-selection-item-event form-selection-item-event--task">
+                      <xsl:value-of select="gsa:i18n ('Include report', 'Alert|Email')"/>
+                    </span>
+                    <span id="email_content_include_secinfo"
+                      class="form-selection-item-event form-selection-item-event--secinfo"
+                      style="display: none">
+                      <xsl:value-of select="gsa:i18n ('Include list of resources', 'Alert|Email')"/>
+                      <xsl:text> with message:</xsl:text>
+                    </span>
+                  </label>
+                </div>
+                <div class="form-item form-selection-item-event form-selection-item-event--task"
+                  style="display: inline">
+                  <select name="method_data:notice_report_format">
+                    <xsl:for-each select="$report-formats/report_format">
+                      <xsl:if test="substring(content_type, 1, 5) = 'text/'">
+                        <xsl:choose>
+                          <xsl:when test="@id='19f6f1b3-7128-4433-888c-ccc764fe6ed5'">
+                            <option value="{@id}" selected="1">
+                              <xsl:value-of select="name"/>
+                            </option>
+                          </xsl:when>
+                          <xsl:otherwise>
+                            <option value="{@id}">
+                              <xsl:value-of select="name"/>
+                            </option>
+                          </xsl:otherwise>
+                        </xsl:choose>
                       </xsl:if>
-                    </table>
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
+                    </xsl:for-each>
+                  </select>
+                  <xsl:text> with message:</xsl:text>
+                </div>
+                <div id="email_content_include_message_task"
+                  class="form-selection-item-event form-selection-item-event--task">
+                  <textarea id="message_include_task"
+                    name="method_data:message"
+                    class="form-control form-selection-input-event form-selection-input-event--task"
+                    rows="8" cols="50">
+                    <xsl:value-of select="$include-message-default"/>
+                  </textarea>
+                </div>
+                <div id="email_content_include_message_secinfo" style="display: none"
+                  class="form-selection-item-event form-selection-item-event--secinfo">
+                  <textarea id="message_include_secinfo"
+                    name="method_data:message"
+                    class="form-control form-selection-input-event form-selection-input-event--secinfo"
+                    rows="8" cols="50">
+                    <xsl:value-of select="$include-message-default-secinfo"/>
+                  </textarea>
+                </div>
+              </div>
 
-          <!-- Method: System Logger. -->
-
-          <tr>
-            <td></td>
-            <td>
-              <table class="table-form">
-                <tr>
-                  <td>
-                    <label>
-                      <input type="radio" name="method" value="syslog"/>
-                      <xsl:value-of select="gsa:i18n ('System Logger', 'Alert')"/>
-                      <xsl:text> </xsl:text>
-                      <select name="method_data:submethod">
-                        <option value="syslog" selected="1">syslog</option>
-                        <option value="SNMP">SNMP</option>
-                      </select>
-                    </label>
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
-
-          <!-- Method: HTTP Get. -->
-
-          <tr id="http_get_row">
-            <td></td>
-            <td>
-              <table class="table-form">
-                <tr>
-                  <td>
-                    <label>
-                      <input type="radio" name="method" value="HTTP Get"/>
-                      <xsl:value-of select="gsa:i18n ('HTTP Get', 'Alert')"/>
-                    </label>
-                  </td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td>URL</td>
-                  <td>
-                    <input type="text" name="method_data:URL" size="30" maxlength="301"/>
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
-
-          <!-- Method: Sourcefire Connector. -->
-
-          <tr id="sourcefire_row">
-            <td></td>
-            <td>
-              <table class="table-form">
-                <tr>
-                  <td>
-                    <label>
-                      <input type="radio" name="method" value="Sourcefire Connector"/>
-                      <xsl:value-of select="gsa:i18n ('Sourcefire Connector', 'Alert')"/>
-                    </label>
-                  </td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td><xsl:value-of select="gsa:i18n ('Defense Center IP', 'Alert')"/></td>
-                  <td>
-                    <input type="text" name="method_data:defense_center_ip"
-                           size="30" maxlength="40"/>
-                  </td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td><xsl:value-of select="gsa:i18n ('Defense Center Port', 'Alert')"/></td>
-                  <td>
-                    <input type="text" name="method_data:defense_center_port"
-                           size="30" maxlength="400" value="8307"/>
-                  </td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td><xsl:value-of select="gsa:i18n ('PKCS12 file', 'Alert')"/></td>
-                  <td>
-                    <input type="file" name="method_data:pkcs12" size="30"/>
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
-
-          <!-- Method: Verinice Connector. -->
-
-          <tr id="verinice_row">
-            <td></td>
-            <td>
-              <table class="table-form">
-                <tr>
-                  <td>
-                    <label>
-                      <input type="radio" name="method" value="verinice Connector"/>
-                      <xsl:value-of select="gsa:i18n ('verinice.PRO Connector', 'Alert')"/>
-                    </label>
-                  </td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td><xsl:value-of select="gsa:i18n ('verinice.PRO URL', 'Alert')"/></td>
-                  <td>
-                    <input type="text" name="method_data:verinice_server_url"
-                           size="30" maxlength="256"/>
-                  </td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td><xsl:value-of select="gsa:i18n ('verinice.PRO Username', 'Alert')"/></td>
-                  <td>
-                    <input type="text" name="method_data:verinice_server_username"
-                           size="30" maxlength="40"/>
-                  </td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td><xsl:value-of select="gsa:i18n ('verinice.PRO Password', 'Alert')"/></td>
-                  <td>
-                    <input type="password" name="method_data:verinice_server_password"
-                           size="30" maxlength="40"/>
-                  </td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td><xsl:value-of select="gsa:i18n ('verinice.PRO Report', 'Alert')"/></td>
-                  <td>
-                    <select name="method_data:verinice_server_report_format">
-                      <xsl:for-each select="$report-formats/report_format">
-                        <xsl:if test="extension = 'vna'">
-                          <xsl:choose>
-                            <xsl:when test="name='Verinice ISM'">
-                              <option value="{@id}" selected="1">
-                                <xsl:value-of select="name"/>
-                              </option>
-                            </xsl:when>
-                            <xsl:otherwise>
-                              <option value="{@id}">
-                                <xsl:value-of select="name"/>
-                              </option>
-                            </xsl:otherwise>
-                          </xsl:choose>
-                        </xsl:if>
-                      </xsl:for-each>
-                      <xsl:if test="count ($report-formats/report_format) = 0">
-                        <option value="''">--</option>
-                      </xsl:if>
-                    </select>
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
-
-          <!-- Method: Start task. -->
-
-          <tr id="start_task_row">
-            <td></td>
-            <td>
-              <table class="table-form">
-                <tr>
-                  <td>
-                    <label>
-                      <input type="radio" name="method" value="Start Task"/>
-                      <xsl:value-of select="gsa:i18n ('Start Task', 'Alert')"/>
-                      <xsl:text> </xsl:text>
-                      <select name="method_data:start_task_task">
-                        <xsl:for-each select="$tasks/task">
+              <div>
+                <div class="form-item radio">
+                  <label>
+                    <input type="radio" name="method_data:notice" value="2"/>
+                    <span class="form-selection-item-event form-selection-item-event--task">
+                      <xsl:value-of select="gsa:i18n ('Attach report', 'Alert|Email')"/>
+                    </span>
+                    <span class="form-selection-item-event form-selection-item-event--secinfo"
+                      style="display: none">
+                      <xsl:value-of select="gsa:i18n ('Attach list of resources', 'Alert|Email')"/>
+                      <xsl:text> with message:</xsl:text>
+                    </span>
+                  </label>
+                </div>
+                <div id="email_content_attach_task"
+                  style="display: inline"
+                  class="form-item form-selection-item-event form-selection-item-event--task">
+                  <select name="method_data:notice_attach_format">
+                    <xsl:for-each select="$report-formats/report_format">
+                      <xsl:choose>
+                        <xsl:when test="@id='1a60a67e-97d0-4cbf-bc77-f71b08e7043d'">
+                          <option value="{@id}" selected="1">
+                            <xsl:value-of select="name"/>
+                          </option>
+                        </xsl:when>
+                        <xsl:otherwise>
                           <option value="{@id}">
                             <xsl:value-of select="name"/>
                           </option>
-                        </xsl:for-each>
-                      </select>
-                    </label>
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
+                        </xsl:otherwise>
+                      </xsl:choose>
+                    </xsl:for-each>
+                  </select>
+                  <xsl:text> with message:</xsl:text>
+                </div>
+                <div id="email_content_attach_message_task"
+                  class="form-selection-item-event form-selection-item-event--task">
+                  <textarea id="message_attach_task"
+                    name="method_data:message_attach"
+                    class="form-control form-selection-input-event form-selection-input-event--task"
+                    rows="9" cols="50">
+                    <xsl:value-of select="$attach-message-default"/>
+                  </textarea>
+                </div>
+                <div id="email_content_attach_message_secinfo" style="display: none"
+                  class="form-selection-item-event form-selection-item-event--secinfo">
+                  <textarea id="message_attach_secinfo"
+                    class="form-control form-selection-input-event form-selection-input-event--secinfo"
+                    name="method_data:message_attach"
+                    rows="8" cols="50">
+                    <xsl:value-of select="$attach-message-default-secinfo"/>
+                  </textarea>
+                </div>
+              </div>
+            </xsl:if>
+          </div>
+        </div>
 
-          <!-- Method: Send. -->
+        <!-- Method: System Logger. -->
 
-          <tr id="send_row">
-            <td></td>
-            <td>
-              <table class="table-form">
-                <tr>
-                  <td colspan="3">
-                    <label>
-                      <input type="radio" name="method" value="Send"/>
-                      <xsl:value-of select="gsa:i18n ('Send to host ', 'Alert')"/>
-                      <input type="text" name="method_data:send_host"
-                            size="30" maxlength="256"/>
-                      <xsl:value-of select="gsa:i18n (' on port ', 'Alert')"/>
-                      <input type="text" name="method_data:send_port"
-                            size="6" maxlength="6"/>
-                    </label>
-                  </td>
-                </tr>
-                <tr id="send_to_host_report_row">
-                  <td></td>
-                  <td><xsl:value-of select="gsa:i18n ('Report', 'Alert')"/></td>
-                  <td>
-                    <select name="method_data:send_report_format">
-                      <xsl:for-each select="$report-formats/report_format">
-                        <option value="{@id}">
-                          <xsl:value-of select="name"/>
-                        </option>
-                      </xsl:for-each>
-                      <xsl:if test="count ($report-formats/report_format) = 0">
-                        <option value="''">--</option>
-                      </xsl:if>
-                    </select>
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
+        <div class="form-group form-selection-item-method form-selection-item-method--syslog"
+          style="display: none">
+          <label class="col-2 control-label">
+            <xsl:value-of select="gsa:i18n ('System Logger', 'Alert')"/>
+          </label>
+          <div class="col-10">
+            <label>
+              <select name="method_data:submethod">
+                <option value="syslog" selected="1">syslog</option>
+                <option value="SNMP">SNMP</option>
+              </select>
+            </label>
+          </div>
+        </div>
 
-          <!-- Method: SCP. -->
+        <!-- Method: HTTP Get. -->
 
-          <tr id="scp_row">
-            <td></td>
-            <td>
-              <table class="table-form">
-                <tr>
-                  <td>
-                    <label>
-                      <input type="radio" name="method" value="SCP"/>
-                      <xsl:value-of select="gsa:i18n ('SCP', 'Alert')"/>
-                    </label>
-                  </td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td><xsl:value-of select="gsa:i18n ('Username', 'Alert')"/></td>
-                  <td>
-                    <input type="text" name="method_data:scp_username"
-                           size="30" maxlength="256"/>
-                  </td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td><xsl:value-of select="gsa:i18n ('Password', 'Alert')"/></td>
-                  <td>
-                    <input type="password" name="method_data:scp_password"
-                           size="30" maxlength="256"/>
-                  </td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td><xsl:value-of select="gsa:i18n ('Host', 'Alert')"/></td>
-                  <td>
-                    <input type="text" name="method_data:scp_host"
-                           size="30" maxlength="256"/>
-                  </td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td><xsl:value-of select="gsa:i18n ('Known Hosts', 'Alert')"/></td>
-                  <td>
-                    <textarea name="method_data:scp_known_hosts"
-                              rows="3" cols="50">
-                    </textarea>
-                  </td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td><xsl:value-of select="gsa:i18n ('Path', 'Alert')"/></td>
-                  <td>
-                    <input type="text" name="method_data:scp_path"
-                           size="30" maxlength="256" value="report.xml"/>
-                  </td>
-                </tr>
-                <tr id="scp_report_row">
-                  <td></td>
-                  <td><xsl:value-of select="gsa:i18n ('Report', 'Alert')"/></td>
-                  <td>
-                    <select name="method_data:scp_report_format">
-                      <xsl:for-each select="$report-formats/report_format">
-                        <option value="{@id}">
-                          <xsl:value-of select="name"/>
-                        </option>
-                      </xsl:for-each>
-                      <xsl:if test="count ($report-formats/report_format) = 0">
-                        <option value="''">--</option>
-                      </xsl:if>
-                    </select>
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
+        <div class="form-group form-selection-item-method form-selection-item-method--http-get"
+          style="display: none" id="http_get_row">
+          <label class="col-2 control-label">
+            <xsl:value-of select="gsa:i18n ('HTTP Get URL', 'Alert')"/>
+          </label>
+          <div class="col-10">
+            <input type="text" name="method_data:URL" size="30" maxlength="301"
+              class="form-control"/>
+          </div>
+        </div>
 
-          <!-- Fields that apply to all/multiple methods. -->
+        <!-- Method: Sourcefire Connector. -->
 
-          <tr style="display: none" id="details_url_row">
-            <td><xsl:value-of select="gsa:i18n ('Details URL', 'Alert')"/></td>
-            <td>
-              <input type="text" name="method_data:details_url"
-                     size="30" maxlength="1000"
-                     value="https://secinfo.greenbone.net/omp?cmd=get_info&amp;info_type=$t&amp;info_id=$o&amp;details=1&amp;token=guest"/>
-            </td>
-          </tr>
-          <xsl:if test="gsa:may-op ('get_filters')">
-            <tr id="report_result_filter_row">
-              <td><xsl:value-of select="gsa:i18n ('Report Result Filter', 'Alert')"/></td>
-              <td>
-                <select name="filter_id">
-                  <option value="0">--</option>
-                  <xsl:for-each select="$filters/filter">
-                    <option value="{@id}"><xsl:value-of select="name"/></option>
-                  </xsl:for-each>
-                </select>
-              </td>
-            </tr>
-          </xsl:if>
-        </table>
+        <div class="form-group form-selection-item-method form-selection-item-method--sourcefire" id="sourcefire_row">
+          <label class="col-2 control-label">
+            <xsl:value-of select="gsa:i18n ('Defense Center IP', 'Alert')"/>
+          </label>
+          <div class="col-10">
+            <div class="form-item">
+                <input type="text" name="method_data:defense_center_ip"
+                  class="form-control"
+                  size="30" maxlength="40"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group form-selection-item-method form-selection-item-method--sourcefire">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Defense Center Port', 'Alert')"/></label>
+          <div class="col-10">
+            <div class="form-item">
+              <input type="text" name="method_data:defense_center_port"
+                data-type="int" class="form-control spinner" min="0" max="65535"
+                size="30" maxlength="400" value="8307"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group form-selection-item-method form-selection-item-method--sourcefire">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('PKCS12 file', 'Alert')"/></label>
+          <div class="col-10">
+            <div class="form-item">
+              <input type="file" name="method_data:pkcs12" size="30"/>
+            </div>
+          </div>
+        </div>
+
+        <!-- Method: Verinice Connector. -->
+
+        <div class="form-group form-selection-item-method form-selection-item-method--verinice">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('verinice.PRO URL', 'Alert')"/></label>
+          <div class="col-10">
+            <div class="form-item">
+              <input type="text" name="method_data:verinice_server_url"
+                class="form-control"
+                size="30" maxlength="256"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group form-selection-item-method form-selection-item-method--verinice">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('verinice.PRO Username', 'Alert')"/></label>
+          <div class="col-10">
+            <div class="form-item">
+              <input type="text" name="method_data:verinice_server_username"
+                class="form-control"
+                size="30" maxlength="40"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group form-selection-item-method form-selection-item-method--verinice">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('verinice.PRO Password', 'Alert')"/></label>
+          <div class="col-10">
+            <div class="form-item">
+              <input type="password" name="method_data:verinice_server_password"
+                class="form-control"
+                size="30" maxlength="40"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group form-selection-item-method form-selection-item-method--verinice">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('verinice.PRO Report', 'Alert')"/></label>
+          <div class="col-10">
+            <select name="method_data:verinice_server_report_format">
+              <xsl:for-each select="$report-formats/report_format">
+                <xsl:if test="extension = 'vna'">
+                  <xsl:choose>
+                    <xsl:when test="name='Verinice ISM'">
+                      <option value="{@id}" selected="1">
+                        <xsl:value-of select="name"/>
+                      </option>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <option value="{@id}">
+                        <xsl:value-of select="name"/>
+                      </option>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </xsl:if>
+              </xsl:for-each>
+              <xsl:if test="count ($report-formats/report_format) = 0">
+                <option value="''">--</option>
+              </xsl:if>
+            </select>
+          </div>
+        </div>
+
+        <!-- Method: Start task. -->
+
+        <div class="form-group form-selection-item-method form-selection-item-method--start_task" id="start_task_row">
+          <label class="col-2 control-label">
+            <xsl:value-of select="gsa:i18n ('Start Task', 'Alert')"/>
+          </label>
+          <div class="col-10">
+            <select name="method_data:start_task_task">
+              <xsl:for-each select="$tasks/task">
+                <option value="{@id}">
+                  <xsl:value-of select="name"/>
+                </option>
+              </xsl:for-each>
+            </select>
+          </div>
+        </div>
+
+        <!-- Method: Send. -->
+
+        <div class="form-group form-selection-item-method form-selection-item-method--send" id="send_row">
+          <label class="col-2 control-label">
+            <xsl:value-of select="gsa:i18n ('Send to host ', 'Alert')"/>
+          </label>
+          <div class="col-10">
+            <div class="form-item">
+              <input type="text" name="method_data:send_host"
+                class="form-control"
+                size="30" maxlength="256"/>
+            </div>
+            <div class="form-item">
+              <xsl:value-of select="gsa:i18n (' on port ', 'Alert')"/>
+            </div>
+            <div class="form-item">
+              <input type="text" name="method_data:send_port"
+                class="form-control"
+                size="6" maxlength="6"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group form-selection-item-method form-selection-item-method--send" id="send_to_host_report_row">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Report', 'Alert')"/></label>
+          <div class="col-10">
+            <select name="method_data:send_report_format">
+              <xsl:for-each select="$report-formats/report_format">
+                <option value="{@id}">
+                  <xsl:value-of select="name"/>
+                </option>
+              </xsl:for-each>
+              <xsl:if test="count ($report-formats/report_format) = 0">
+                <option value="''">--</option>
+              </xsl:if>
+            </select>
+          </div>
+        </div>
+
+        <!-- Method: SCP. -->
+
+        <div class="form-group form-selection-item-method form-selection-item-method--scp">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Username', 'Alert')"/></label>
+          <div class="col-10">
+            <div class="form-item">
+              <input type="text" name="method_data:scp_username"
+                class="form-control"
+                size="30" maxlength="256"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group form-selection-item-method form-selection-item-method--scp">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Password', 'Alert')"/></label>
+          <div class="col-10">
+            <div class="form-item">
+              <input type="password" name="method_data:scp_password"
+                class="form-control"
+                size="30" maxlength="256"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group form-selection-item-method form-selection-item-method--scp">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Host', 'Alert')"/></label>
+          <div class="col-10">
+            <div class="form-item">
+              <input type="text" name="method_data:scp_host"
+                class="form-control"
+                size="30" maxlength="256"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group form-selection-item-method form-selection-item-method--scp">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Known Hosts', 'Alert')"/></label>
+          <div class="col-10">
+            <div class="form-item">
+              <textarea name="method_data:scp_known_hosts"
+                class="form-control"
+                rows="3" cols="50">
+              </textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group form-selection-item-method form-selection-item-method--scp">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Path', 'Alert')"/></label>
+          <div class="col-10">
+            <div class="form-item">
+              <input type="text" name="method_data:scp_path"
+                class="form-control"
+                size="30" maxlength="256" value="report.xml"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group form-selection-item-method form-selection-item-method--scp">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Report', 'Alert')"/></label>
+          <div class="col-10">
+            <select name="method_data:scp_report_format">
+              <xsl:for-each select="$report-formats/report_format">
+                <option value="{@id}">
+                  <xsl:value-of select="name"/>
+                </option>
+              </xsl:for-each>
+              <xsl:if test="count ($report-formats/report_format) = 0">
+                <option value="''">--</option>
+              </xsl:if>
+            </select>
+          </div>
+        </div>
+
       </form>
     </div>
   </div>
@@ -10313,7 +10356,7 @@ should not have received it.
       <xsl:value-of select="gsa:i18n ('Edit Alert', 'Alert')"/>
     </div>
     <div class="content">
-      <form action="" method="post" enctype="multipart/form-data">
+      <form action="" method="post" enctype="multipart/form-data" class="form-horizontal">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="save_alert"/>
         <input type="hidden" name="caller" value="{/envelope/current_page}"/>
@@ -10323,739 +10366,471 @@ should not have received it.
         <input type="hidden" name="next" value="{/envelope/params/next}"/>
         <input type="hidden" name="alert" value="{/envelope/params/alert}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
+
         <xsl:if test="not (gsa:may-op ('get_filters'))">
           <input type="hidden" name="filter_id" value="0"/>
         </xsl:if>
-        <table class="table-form">
-          <!-- CSS for hiding/showing rows initially. -->
-          <xsl:variable name="hide">
-            <xsl:choose>
-              <xsl:when test="get_alerts_response/alert/event/text() = 'New SecInfo arrived' or get_alerts_response/alert/event/text() = 'Updated SecInfo arrived'">
-                <xsl:text>display: none</xsl:text>
-              </xsl:when>
-              <xsl:otherwise>
-                <xsl:text></xsl:text>
-              </xsl:otherwise>
-            </xsl:choose>
-          </xsl:variable>
-          <xsl:variable name="show">
-            <xsl:choose>
-              <xsl:when test="get_alerts_response/alert/event/text() = 'New SecInfo arrived' or get_alerts_response/alert/event/text() = 'Updated SecInfo arrived'">
-                <xsl:text></xsl:text>
-              </xsl:when>
-              <xsl:otherwise>
-                <xsl:text>display: none</xsl:text>
-              </xsl:otherwise>
-            </xsl:choose>
-          </xsl:variable>
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
-            <td>
-              <input type="text" name="name" size="30" maxlength="80"
-                     value="{get_alerts_response/alert/name}"/>
-            </td>
-          </tr>
-          <tr>
-            <td valign="top" width="165"><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/></td>
-            <td>
-              <input type="text" name="comment" size="30" maxlength="400"
-                     value="{get_alerts_response/alert/comment}"/>
-            </td>
-          </tr>
-          <tr>
 
-            <!-- Event. -->
+        <!-- CSS for hiding/showing rows initially. -->
+        <div class="form-group">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></label>
+          <div class="col-10">
+            <input type="text" name="name" size="30" maxlength="80"
+              class="form-control"
+              value="{get_alerts_response/alert/name}"/>
+          </div>
+        </div>
 
-            <td><xsl:value-of select="gsa:i18n ('Event', 'Alert')"/></td>
-            <td>
-              <table class="table-form">
-                <tr>
-                  <td>
-                    <label>
-                      <xsl:choose>
-                        <xsl:when test="get_alerts_response/alert/event/text() = 'Task run status changed'">
-                          <input type="radio" name="event" value="Task run status changed" checked="1"
-                                 onChange="editAlertUpdateForm()"/>
-                        </xsl:when>
-                        <xsl:otherwise>
-                          <input type="radio" name="event" value="Task run status changed"
-                                 onChange="editAlertUpdateForm()"/>
-                        </xsl:otherwise>
-                      </xsl:choose>
-                      <xsl:value-of select="gsa:i18n ('Task run status changed to', 'Alert')"/>
-                      <xsl:text> </xsl:text>
-                      <xsl:variable name="eventdata"
-                                    select="get_alerts_response/alert/event/data[name='status']/text()"/>
-                      <select name="event_data:status">
-                        <xsl:if test="$eventdata = 'Delete Requested'">
-                          <!-- In case the user has an alert with this state. -->
-                          <xsl:call-template name="opt">
-                            <xsl:with-param name="value" select="'Delete Requested'"/>
-                            <xsl:with-param name="content" select="gsa:i18n ('Delete Requested', 'Status')"/>
-                            <xsl:with-param name="select-value" select="$eventdata"/>
-                          </xsl:call-template>
-                        </xsl:if>
-                        <xsl:call-template name="opt">
-                          <xsl:with-param name="value" select="'Done'"/>
-                          <xsl:with-param name="content" select="gsa:i18n ('Done', 'Status')"/>
-                          <xsl:with-param name="select-value" select="$eventdata"/>
-                        </xsl:call-template>
-                        <xsl:call-template name="opt">
-                          <xsl:with-param name="value" select="'New'"/>
-                          <xsl:with-param name="content" select="gsa:i18n ('New', 'Status')"/>
-                          <xsl:with-param name="select-value" select="$eventdata"/>
-                        </xsl:call-template>
-                        <xsl:call-template name="opt">
-                          <xsl:with-param name="value" select="'Requested'"/>
-                          <xsl:with-param name="content" select="gsa:i18n ('Requested', 'Status')"/>
-                          <xsl:with-param name="select-value" select="$eventdata"/>
-                        </xsl:call-template>
-                        <xsl:call-template name="opt">
-                          <xsl:with-param name="value" select="'Running'"/>
-                          <xsl:with-param name="content" select="gsa:i18n ('Running', 'Status')"/>
-                          <xsl:with-param name="select-value" select="$eventdata"/>
-                        </xsl:call-template>
-                        <xsl:call-template name="opt">
-                          <xsl:with-param name="value" select="'Stop Requested'"/>
-                          <xsl:with-param name="content" select="gsa:i18n ('Stop Requested', 'Status')"/>
-                          <xsl:with-param name="select-value" select="$eventdata"/>
-                        </xsl:call-template>
-                        <xsl:call-template name="opt">
-                          <xsl:with-param name="value" select="'Stopped'"/>
-                          <xsl:with-param name="content" select="gsa:i18n ('Stopped', 'Status')"/>
-                          <xsl:with-param name="select-value" select="$eventdata"/>
-                        </xsl:call-template>
-                      </select>
-                    </label>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <label>
-                      <xsl:choose>
-                        <xsl:when test="get_alerts_response/alert/event/text() = 'New SecInfo arrived'">
-                          <input type="radio" name="event" value="New SecInfo arrived" checked="1"
-                                 onChange="editAlertUpdateForm()"/>
-                          <select name="event_data:feed_event">
-                            <option value="new" selected="1"><xsl:value-of select="gsa:i18n ('New', 'Status')"/></option>
-                            <option value="updated"><xsl:value-of select="gsa:i18n ('Updated', 'Status')"/></option>
-                          </select>
-                        </xsl:when>
-                        <xsl:when test="get_alerts_response/alert/event/text() = 'Updated SecInfo arrived'">
-                          <input type="radio" name="event" value="New SecInfo arrived" checked="1"
-                                 onChange="editAlertUpdateForm()"/>
-                          <select name="event_data:feed_event">
-                            <option value="new"><xsl:value-of select="gsa:i18n ('New', 'Status')"/></option>
-                            <option value="updated" selected="1"><xsl:value-of select="gsa:i18n ('Updated', 'Status')"/></option>
-                          </select>
-                        </xsl:when>
-                        <xsl:otherwise>
-                          <input type="radio" name="event" value="New SecInfo arrived"
-                                 onChange="editAlertUpdateForm()"/>
-                          <select name="event_data:feed_event">
-                            <option value="new" selected="1"><xsl:value-of select="gsa:i18n ('New', 'Status')"/></option>
-                            <option value="updated"><xsl:value-of select="gsa:i18n ('Updated', 'Status')"/></option>
-                          </select>
-                        </xsl:otherwise>
-                      </xsl:choose>
-                      <xsl:text> </xsl:text>
-                      <xsl:variable name="eventdata"
-                                    select="get_alerts_response/alert/event/data[name='secinfo_type']/text()"/>
-                      <select name="event_data:secinfo_type">
-                        <xsl:call-template name="opt">
-                          <xsl:with-param name="value" select="'nvt'"/>
-                          <xsl:with-param name="content" select="gsa:i18n ('NVTs', 'NVT')"/>
-                          <xsl:with-param name="select-value" select="$eventdata"/>
-                        </xsl:call-template>
-                        <xsl:call-template name="opt">
-                          <xsl:with-param name="value" select="'cve'"/>
-                          <xsl:with-param name="content" select="gsa:i18n ('CVEs', 'CVE')"/>
-                          <xsl:with-param name="select-value" select="$eventdata"/>
-                        </xsl:call-template>
-                        <xsl:call-template name="opt">
-                          <xsl:with-param name="value" select="'cpe'"/>
-                          <xsl:with-param name="content" select="gsa:i18n ('CPEs', 'CPE')"/>
-                          <xsl:with-param name="select-value" select="$eventdata"/>
-                        </xsl:call-template>
-                        <xsl:call-template name="opt">
-                          <xsl:with-param name="value" select="'cert_bund_adv'"/>
-                          <xsl:with-param name="content" select="gsa:i18n ('CERT-Bund Advisories', 'CERT-Bund Advisory')"/>
-                          <xsl:with-param name="select-value" select="$eventdata"/>
-                        </xsl:call-template>
-                        <xsl:call-template name="opt">
-                          <xsl:with-param name="value" select="'dfn_cert_adv'"/>
-                          <xsl:with-param name="content" select="gsa:i18n ('DFN-CERT Advisories', 'DFN-CERT Advisory')"/>
-                          <xsl:with-param name="select-value" select="$eventdata"/>
-                        </xsl:call-template>
-                        <xsl:call-template name="opt">
-                          <xsl:with-param name="value" select="'ovaldef'"/>
-                          <xsl:with-param name="content" select="gsa:i18n ('OVAL Definitions', 'OVAL Definition')"/>
-                          <xsl:with-param name="select-value" select="$eventdata"/>
-                        </xsl:call-template>
-                      </select>
-                      <xsl:value-of select="gsa:i18n ('arrived', 'Alert')"/>
-                    </label>
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
-          <tr>
+        <div class="form-group">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/></label>
+          <div class="col-10">
+            <input type="text" name="comment" size="30" maxlength="400"
+              class="form-control"
+              value="{get_alerts_response/alert/comment}"/>
+          </div>
+        </div>
+
+        <!-- Event. -->
+        <div class="form-group">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Event', 'Alert')"/></label>
+          <div class="col-10">
+            <div class="form-item radio">
+              <label>
+                <xsl:choose>
+                  <xsl:when test="get_alerts_response/alert/event/text() = 'Task run status changed'">
+                    <input type="radio" name="event" value="Task run status changed" checked="1"
+                      class="form-selection-control" data-select="task" id="event"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="radio" name="event" value="Task run status changed"
+                      class="form-selection-control" data-select="task" id="event"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+                <xsl:value-of select="gsa:i18n ('Task run status changed to', 'Alert')"/>
+                <xsl:text> </xsl:text>
+              </label>
+            </div>
+
+            <xsl:variable name="eventdata"
+              select="get_alerts_response/alert/event/data[name='status']/text()"/>
+
+            <div class="form-item">
+              <select name="event_data:status">
+                <xsl:if test="$eventdata = 'Delete Requested'">
+                  <!-- In case the user has an alert with this state. -->
+                  <xsl:call-template name="opt">
+                    <xsl:with-param name="value" select="'Delete Requested'"/>
+                    <xsl:with-param name="content" select="gsa:i18n ('Delete Requested', 'Status')"/>
+                    <xsl:with-param name="select-value" select="$eventdata"/>
+                  </xsl:call-template>
+                </xsl:if>
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'Done'"/>
+                  <xsl:with-param name="content" select="gsa:i18n ('Done', 'Status')"/>
+                  <xsl:with-param name="select-value" select="$eventdata"/>
+                </xsl:call-template>
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'New'"/>
+                  <xsl:with-param name="content" select="gsa:i18n ('New', 'Status')"/>
+                  <xsl:with-param name="select-value" select="$eventdata"/>
+                </xsl:call-template>
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'Requested'"/>
+                  <xsl:with-param name="content" select="gsa:i18n ('Requested', 'Status')"/>
+                  <xsl:with-param name="select-value" select="$eventdata"/>
+                </xsl:call-template>
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'Running'"/>
+                  <xsl:with-param name="content" select="gsa:i18n ('Running', 'Status')"/>
+                  <xsl:with-param name="select-value" select="$eventdata"/>
+                </xsl:call-template>
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'Stop Requested'"/>
+                  <xsl:with-param name="content" select="gsa:i18n ('Stop Requested', 'Status')"/>
+                  <xsl:with-param name="select-value" select="$eventdata"/>
+                </xsl:call-template>
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'Stopped'"/>
+                  <xsl:with-param name="content" select="gsa:i18n ('Stopped', 'Status')"/>
+                  <xsl:with-param name="select-value" select="$eventdata"/>
+                </xsl:call-template>
+              </select>
+            </div>
+          </div>
+
+          <div class="col-10 offset-2">
+            <div class="form-item radio">
+              <xsl:choose>
+                <xsl:when test="get_alerts_response/alert/event/text() = 'New SecInfo arrived'">
+                  <label>
+                    <input type="radio" name="event" value="New SecInfo arrived" checked="1"
+                      class="form-selection-control" data-select="secinfo" id="event"/>
+                    &#160; <!-- we need none breakin space here to align the radio input element correctly -->
+                  </label>
+                  <select name="event_data:feed_event">
+                    <option value="new" selected="1"><xsl:value-of select="gsa:i18n ('New', 'Status')"/></option>
+                    <option value="updated"><xsl:value-of select="gsa:i18n ('Updated', 'Status')"/></option>
+                  </select>
+                </xsl:when>
+                <xsl:when test="get_alerts_response/alert/event/text() = 'Updated SecInfo arrived'">
+                  <label>
+                    <input type="radio" name="event" value="New SecInfo arrived" checked="1"
+                      class="form-selection-control" data-select="secinfo" id="event"/>
+                    &#160; <!-- we need none breakin space here to align the radio input element correctly -->
+                  </label>
+                  <select name="event_data:feed_event">
+                    <option value="new"><xsl:value-of select="gsa:i18n ('New', 'Status')"/></option>
+                    <option value="updated" selected="1"><xsl:value-of select="gsa:i18n ('Updated', 'Status')"/></option>
+                  </select>
+                </xsl:when>
+                <xsl:otherwise>
+                  <label>
+                    <input type="radio" name="event" value="New SecInfo arrived"
+                      class="form-selection-control" data-select="secinfo" id="event"/>
+                    &#160; <!-- we need none breakin space here to align the radio input element correctly -->
+                  </label>
+                  <select name="event_data:feed_event">
+                    <option value="new" selected="1"><xsl:value-of select="gsa:i18n ('New', 'Status')"/></option>
+                    <option value="updated"><xsl:value-of select="gsa:i18n ('Updated', 'Status')"/></option>
+                  </select>
+                </xsl:otherwise>
+              </xsl:choose>
+            </div>
+
+            <xsl:variable name="eventdata"
+              select="get_alerts_response/alert/event/data[name='secinfo_type']/text()"/>
+
+            <div class="form-item">
+              <select name="event_data:secinfo_type">
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'nvt'"/>
+                  <xsl:with-param name="content" select="gsa:i18n ('NVTs', 'NVT')"/>
+                  <xsl:with-param name="select-value" select="$eventdata"/>
+                </xsl:call-template>
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'cve'"/>
+                  <xsl:with-param name="content" select="gsa:i18n ('CVEs', 'CVE')"/>
+                  <xsl:with-param name="select-value" select="$eventdata"/>
+                </xsl:call-template>
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'cpe'"/>
+                  <xsl:with-param name="content" select="gsa:i18n ('CPEs', 'CPE')"/>
+                  <xsl:with-param name="select-value" select="$eventdata"/>
+                </xsl:call-template>
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'cert_bund_adv'"/>
+                  <xsl:with-param name="content" select="gsa:i18n ('CERT-Bund Advisories', 'CERT-Bund Advisory')"/>
+                  <xsl:with-param name="select-value" select="$eventdata"/>
+                </xsl:call-template>
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'dfn_cert_adv'"/>
+                  <xsl:with-param name="content" select="gsa:i18n ('DFN-CERT Advisories', 'DFN-CERT Advisory')"/>
+                  <xsl:with-param name="select-value" select="$eventdata"/>
+                </xsl:call-template>
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'ovaldef'"/>
+                  <xsl:with-param name="content" select="gsa:i18n ('OVAL Definitions', 'OVAL Definition')"/>
+                  <xsl:with-param name="select-value" select="$eventdata"/>
+                </xsl:call-template>
+              </select>
+              <xsl:text> </xsl:text>
+              <xsl:value-of select="gsa:i18n ('arrived', 'Alert')"/>
+            </div>
+          </div>
+        </div>
+
+        <!-- Condition. -->
+        <div class="form-group">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Condition', 'Alert')"/></label>
+          <div class="col-10">
             <xsl:variable name="condition"
-                          select="get_alerts_response/alert/condition"/>
+              select="get_alerts_response/alert/condition"/>
 
-            <!-- Condition. -->
+            <xsl:call-template name="condition-field">
+              <xsl:with-param name="condition"
+                select="get_alerts_response/alert/condition"/>
+              <xsl:with-param name="filters" select="$filters"/>
+            </xsl:call-template>
+          </div>
+        </div>
 
-            <td><xsl:value-of select="gsa:i18n ('Condition', 'Alert')"/></td>
-            <td>
-              <xsl:call-template name="condition-field">
-                <xsl:with-param name="condition"
-                                select="get_alerts_response/alert/condition"/>
-                <xsl:with-param name="filters" select="$filters"/>
-                <xsl:with-param name="hide" select="$hide"/>
-                <xsl:with-param name="show" select="$show"/>
+        <!-- Report Result Filter. -->
+
+        <xsl:variable name="method"
+          select="get_alerts_response/alert/method"/>
+
+        <xsl:if test="gsa:may-op ('get_filters')">
+          <xsl:variable name="filtername"
+            select="get_alerts_response/alert/filter/name"/>
+          <div class="form-group form-selection-item-event form-selection-item-event--task" id="report_result_filter_row">
+            <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Report Result Filter', 'Alert')"/></label>
+            <div class="col-10">
+              <select name="filter_id">
+                <option value="0">--</option>
+                <xsl:for-each select="$filters/filter">
+                  <xsl:choose>
+                    <xsl:when test="name = $filtername">
+                      <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <option value="{@id}"><xsl:value-of select="name"/></option>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </xsl:for-each>
+              </select>
+            </div>
+          </div>
+        </xsl:if>
+
+        <div class="form-group form-selection-item-event form-selection-item-event--secinfo"
+          style="display: none" id="details_url_row">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Details URL', 'Alert')"/></label>
+          <div class="col-10">
+            <xsl:choose>
+              <xsl:when test="$method/data[name='details_url']/text()">
+                <input type="text" name="method_data:details_url"
+                  size="30" maxlength="1000"
+                  class="form-control"
+                  value="{$method/data[name='details_url']/text()}"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <input type="text" name="method_data:details_url"
+                  class="form-control"
+                  size="30" maxlength="1000"
+                  value="https://secinfo.greenbone.net/omp?cmd=get_info&amp;info_type=$t&amp;info_id=$o&amp;details=1&amp;token=guest"/>
+              </xsl:otherwise>
+            </xsl:choose>
+          </div>
+        </div>
+
+        <!-- Method. -->
+
+        <div class="form-group">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Method', 'Alert')"/></label>
+          <div class="col-10">
+            <select name="method" id="method" class="form-selection-control">
+              <xsl:choose>
+                <xsl:when test="$method/text() = 'Email'">
+                  <option data-select="email" value="Email" selected="1">
+                    <xsl:value-of select="gsa:i18n ('Email', 'Alert')"/>
+                  </option>
+                </xsl:when>
+                <xsl:otherwise>
+                  <option data-select="email" value="Email">
+                    <xsl:value-of select="gsa:i18n ('Email', 'Alert')"/>
+                  </option>
+                </xsl:otherwise>
+              </xsl:choose>
+
+              <xsl:choose>
+                <xsl:when test="$method/text() = 'Syslog'">
+                  <option data-select="syslog" value="Syslog" selected="1">
+                    <xsl:value-of select="gsa:i18n ('System Logger', 'Alert')"/>
+                  </option>
+                </xsl:when>
+                <xsl:otherwise>
+                  <option data-select="syslog" value="Syslog">
+                    <xsl:value-of select="gsa:i18n ('System Logger', 'Alert')"/>
+                  </option>
+                </xsl:otherwise>
+              </xsl:choose>
+
+              <xsl:choose>
+                <xsl:when test="$method/text() = 'HTTP Get'">
+                  <option data-select="http-get" value="HTTP Get" selected="1"
+                    class="form-selection-input-event form-selection-input-event--task">
+                    <xsl:value-of select="gsa:i18n ('HTTP Get', 'Alert')"/>
+                  </option>
+                </xsl:when>
+                <xsl:otherwise>
+                  <option data-select="http-get" value="HTTP Get"
+                    class="form-selection-input-event form-selection-input-event--task">
+                    <xsl:value-of select="gsa:i18n ('HTTP Get', 'Alert')"/>
+                  </option>
+                </xsl:otherwise>
+              </xsl:choose>
+
+              <xsl:choose>
+                <xsl:when test="$method/text() = 'Sourcefire Connector'">
+                  <option data-select="sourcefire" value="Sourcefire Connector" selected="1"
+                    class="form-selection-input-event form-selection-input-event--task">
+                    <xsl:value-of select="gsa:i18n ('Sourcefire Connector', 'Alert')"/>
+                  </option>
+                </xsl:when>
+                <xsl:otherwise>
+                  <option data-select="sourcefire" value="Sourcefire Connector"
+                    class="form-selection-input-event form-selection-input-event--task">
+                    <xsl:value-of select="gsa:i18n ('Sourcefire Connector', 'Alert')"/>
+                  </option>
+                </xsl:otherwise>
+              </xsl:choose>
+
+              <xsl:choose>
+                <xsl:when test="$method/text() = 'verinice Connector'">
+                  <option data-select="verinice" value="verinice Connector" selected="1"
+                    class="form-selection-input-event form-selection-input-event--task">
+                    <xsl:value-of select="gsa:i18n ('verinice.PRO Connector', 'Alert')"/>
+                  </option>
+                </xsl:when>
+                <xsl:otherwise>
+                  <option data-select="verinice" value="verinice Connector"
+                    class="form-selection-input-event form-selection-input-event--task">
+                    <xsl:value-of select="gsa:i18n ('verinice.PRO Connector', 'Alert')"/>
+                  </option>
+                </xsl:otherwise>
+              </xsl:choose>
+
+              <xsl:choose>
+                <xsl:when test="$method/text() = 'Start Task'">
+                  <option data-select="start_task" value="Start Task" selected="1"
+                    class="form-selection-input-event form-selection-input-event--task">
+                    <xsl:value-of select="gsa:i18n ('Start Task', 'Alert')"/>
+                  </option>
+                </xsl:when>
+                <xsl:otherwise>
+                  <option data-select="start_task" value="Start Task"
+                    class="form-selection-input-event form-selection-input-event--task">
+                    <xsl:value-of select="gsa:i18n ('Start Task', 'Alert')"/>
+                  </option>
+                </xsl:otherwise>
+              </xsl:choose>
+
+              <xsl:choose>
+                <xsl:when test="$method/text() = 'Send'">
+                  <option data-select="send" value="Send" selected="1">
+                    <xsl:value-of select="gsa:i18n ('Send to host ', 'Alert')"/>
+                  </option>
+                </xsl:when>
+                <xsl:otherwise>
+                  <option data-select="send" value="Send">
+                    <xsl:value-of select="gsa:i18n ('Send to host ', 'Alert')"/>
+                  </option>
+                </xsl:otherwise>
+              </xsl:choose>
+
+              <xsl:choose>
+                <xsl:when test="$method/text() = 'SCP'">
+                  <option data-select="scp" value="SCP" selected="1">
+                    <xsl:value-of select="gsa:i18n ('SCP', 'Alert')"/>
+                  </option>
+                </xsl:when>
+                <xsl:otherwise>
+                  <option data-select="scp" value="SCP">
+                    <xsl:value-of select="gsa:i18n ('SCP', 'Alert')"/>
+                  </option>
+                </xsl:otherwise>
+              </xsl:choose>
+            </select>
+          </div>
+        </div>
+
+        <!-- Method: Email. -->
+        <div class="form-group form-selection-item-method form-selection-item-method--email">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('To Address', 'Alert|Email')"/></label>
+          <div class="col-10">
+            <div class="form-item">
+              <input type="text" name="method_data:to_address" size="30" maxlength="301"
+                value="{$method/data[name='to_address']/text()}"
+                class="form-control"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group form-selection-item-method form-selection-item-method--email">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('From Address', 'Alert|Email')"/></label>
+          <div class="col-10">
+            <div class="form-item">
+              <input type="text" name="method_data:from_address" size="30" maxlength="301"
+                value="{$method/data[name='from_address']/text()}"
+                class="form-control"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group form-selection-item-method form-selection-item-method--email">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Subject', 'Alert|Email')"/></label>
+          <div id="email_subject_task"
+            class="col-10 form-selection-item-event form-selection-item-event--task">
+            <div class="form-item">
+              <xsl:choose>
+                <xsl:when test="$method/data[name='subject']/text()">
+                  <input id="email_subject_task_input" type="text" name="method_data:subject"
+                    size="30" maxlength="80"
+                    class="form-control form-selection-input-event form-selection-input-event--task"
+                    value="{$method/data[name='subject']/text()}"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <input id="email_subject_task_input" type="text" name="method_data:subject"
+                    size="30" maxlength="80"
+                    class="form-control form-selection-input-event form-selection-input-event--task"
+                    value="[OpenVAS-Manager] Task '$n': $e"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </div>
+          </div>
+          <div style="display: none" id="email_subject_secinfo"
+            class="col-10 form-selection-item-event form-selection-item-event--secinfo">
+            <div class="form-item">
+              <xsl:choose>
+                <xsl:when test="$method/data[name='subject']/text()">
+                  <input id="email_subject_secinfo_input" type="text" name="method_data:subject"
+                    size="30" maxlength="80"
+                    class="form-control form-selection-input-event form-selection-input-event--secinfo"
+                    value="{$method/data[name='subject']/text()}"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <input id="email_subject_secinfo_input" type="text" name="method_data:subject"
+                    size="30" maxlength="80"
+                    class="form-control form-selection-input-event form-selection-input-event--secinfo"
+                    value="[OpenVAS-Manager] $T $q $S since $d"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group form-selection-item-method form-selection-item-method--email" id="email_content_row">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Content', 'Alert|Email')"/></label>
+          <div class="col-10">
+            <div class="radio">
+              <xsl:call-template name="radio-button">
+                <xsl:with-param name="name" select="'method_data:notice'"/>
+                <xsl:with-param name="text" select="gsa:i18n ('Simple notice', 'Alert|Email')"/>
+                <xsl:with-param name="value" select="'1'"/>
+                <xsl:with-param name="select-value" select="$method/data[name='notice']/text()"/>
               </xsl:call-template>
-            </td>
-          </tr>
-          <xsl:variable name="method"
-                        select="get_alerts_response/alert/method"/>
+            </div>
 
-          <!-- Method. -->
-
-          <tr>
-
-            <!-- Method: Email. -->
-
-            <td><xsl:value-of select="gsa:i18n ('Method', 'Alert')"/></td>
-            <td>
-              <table class="table-form">
-                <tr>
-                  <td>
-                    <xsl:call-template name="radio-button">
-                      <xsl:with-param name="name" select="'method'"/>
-                      <xsl:with-param name="value" select="'Email'"/>
-                      <xsl:with-param name="select-value" select="$method/text()"/>
-                      <xsl:with-param name="text" select="gsa:i18n ('Email', 'Alert')"/>
-                    </xsl:call-template>
-                  </td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td><xsl:value-of select="gsa:i18n ('To Address', 'Alert|Email')"/></td>
-                  <td>
-                    <input type="text" name="method_data:to_address" size="30" maxlength="301"
-                        value="{$method/data[name='to_address']/text()}"/>
-                  </td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td><xsl:value-of select="gsa:i18n ('From Address', 'Alert|Email')"/></td>
-                  <td>
-                    <input type="text" name="method_data:from_address" size="30" maxlength="301"
-                        value="{$method/data[name='from_address']/text()}"/>
-                  </td>
-                </tr>
-                <tr id="email_subject_row">
-                  <xsl:variable name="dummy-task">
+            <xsl:if test="gsa:may-op ('get_report_formats')">
+              <div>
+                <div class="form-item radio">
+                  <label>
                     <xsl:choose>
-                      <xsl:when test="get_alerts_response/alert/event/text() != 'New SecInfo arrived' and get_alerts_response/alert/event/text() != 'Updated SecInfo arrived'">
-                        <xsl:text>method_data:subject</xsl:text>
+                      <xsl:when test="$method/data[name='notice']/text() = '0'">
+                        <input type="radio" name="method_data:notice" checked="1" value="0"/>
                       </xsl:when>
                       <xsl:otherwise>
-                        <xsl:text>dummy_subject</xsl:text>
+                        <input type="radio" name="method_data:notice" value="0"/>
                       </xsl:otherwise>
                     </xsl:choose>
-                  </xsl:variable>
-                  <xsl:variable name="dummy-secinfo">
-                    <xsl:choose>
-                      <xsl:when test="get_alerts_response/alert/event/text() = 'New SecInfo arrived' or get_alerts_response/alert/event/text() = 'Updated SecInfo arrived'">
-                        <xsl:text>method_data:subject</xsl:text>
-                      </xsl:when>
-                      <xsl:otherwise>
-                        <xsl:text>dummy_subject</xsl:text>
-                      </xsl:otherwise>
-                    </xsl:choose>
-                  </xsl:variable>
-                  <td></td>
-                  <td><xsl:value-of select="gsa:i18n ('Subject', 'Alert|Email')"/></td>
-                  <td id="email_subject_task" style="{$hide}">
-                    <input id="email_subject_task_input" type="text" name="{$dummy-task}"
-                           size="30" maxlength="80"
-                           value="{$method/data[name='subject']/text()}"/>
-                  </td>
-                  <td id="email_subject_secinfo" style="{$show}">
-                    <input id="email_subject_task_input" type="text" name="{$dummy-secinfo}"
-                           size="30" maxlength="80"
-                           value="{$method/data[name='subject']/text()}"/>
-                  </td>
-                </tr>
-                <tr id="email_content_row">
-                  <td></td>
-                  <td><xsl:value-of select="gsa:i18n ('Content', 'Alert|Email')"/></td>
-                  <td>
-                    <table class="table-form">
-                      <tr>
-                        <td>
-                          <xsl:call-template name="radio-button">
-                            <xsl:with-param name="name" select="'method_data:notice'"/>
-                            <xsl:with-param name="text" select="gsa:i18n ('Simple notice', 'Alert|Email')"/>
-                            <xsl:with-param name="value" select="'1'"/>
-                            <xsl:with-param name="select-value" select="$method/data[name='notice']/text()"/>
-                          </xsl:call-template>
-                        </td>
-                      </tr>
-                      <xsl:if test="gsa:may-op ('get_filters')">
-                        <tr>
-                          <td>
-                            <xsl:variable name="secinfo-style">
-                              <xsl:if test="$show = ''">display: inline</xsl:if>
-                            </xsl:variable>
-                            <xsl:variable name="task-style">
-                              <xsl:if test="$hide = ''">display: inline</xsl:if>
-                            </xsl:variable>
-                            <label>
-                              <xsl:choose>
-                                <xsl:when test="$method/data[name='notice']/text() = '0'">
-                                  <input type="radio" name="method_data:notice" checked="1" value="0"/>
-                                </xsl:when>
-                                <xsl:otherwise>
-                                  <input type="radio" name="method_data:notice" value="0"/>
-                                </xsl:otherwise>
-                              </xsl:choose>
-                              <div id="email_content_include_task" style="{concat ($hide, ' ', $task-style)}">
-                                <xsl:value-of select="gsa:i18n ('Include report', 'Alert|Email')"/>
-                                <xsl:text> </xsl:text>
-                                <select name="method_data:notice_report_format">
-                                  <xsl:for-each select="$report-formats/report_format">
-                                    <xsl:if test="substring(content_type, 1, 5) = 'text/'">
-                                      <xsl:choose>
-                                        <xsl:when test="@id=$method/data[name='notice_report_format']/text()">
-                                          <option value="{@id}" selected="1">
-                                            <xsl:value-of select="name"/>
-                                          </option>
-                                        </xsl:when>
-                                        <xsl:otherwise>
-                                          <option value="{@id}">
-                                            <xsl:value-of select="name"/>
-                                          </option>
-                                        </xsl:otherwise>
-                                      </xsl:choose>
-                                    </xsl:if>
-                                  </xsl:for-each>
-                                </select>
-                              </div>
-                              <div id="email_content_include_secinfo" style="{concat ($show, ' ', $secinfo-style)}">
-                                <xsl:value-of select="gsa:i18n ('Include list of resources', 'Alert|Email')"/>
-                              </div>
-                              <xsl:text> with message:</xsl:text>
-                            </label>
-                            <br/>
-                            <xsl:variable name="task-dummy">
-                              <xsl:choose>
-                                <xsl:when test="(get_alerts_response/alert/event/text() != 'New SecInfo arrived' and get_alerts_response/alert/event/text() != 'Updated SecInfo arrived')">
-                                  <xsl:text>method_data:message</xsl:text>
-                                </xsl:when>
-                                <xsl:otherwise>
-                                  <xsl:text>dummy_message</xsl:text>
-                                </xsl:otherwise>
-                              </xsl:choose>
-                            </xsl:variable>
-                            <xsl:variable name="secinfo-dummy">
-                              <xsl:choose>
-                                <xsl:when test="(get_alerts_response/alert/event/text() = 'New SecInfo arrived' or get_alerts_response/alert/event/text() = 'Updated SecInfo arrived')">
-                                  <xsl:text>method_data:message</xsl:text>
-                                </xsl:when>
-                                <xsl:otherwise>
-                                  <xsl:text>dummy_message</xsl:text>
-                                </xsl:otherwise>
-                              </xsl:choose>
-                            </xsl:variable>
-                            <div id="email_content_include_message_task" style="{concat ($hide, ' ', $task-style)}">
-                              <textarea style="margin-left:15px;"
-                                        name="{$task-dummy}"
-                                        rows="3" cols="50">
-                                <xsl:choose>
-                                  <xsl:when test="$method/data[name='notice']/text() = 0">
-                                    <xsl:value-of select="$method/data[name='message']/text()"/>
-                                  </xsl:when>
-                                  <xsl:otherwise>
-                                    <xsl:value-of select="$include-message-default"/>
-                                  </xsl:otherwise>
-                                </xsl:choose>
-                              </textarea>
-                            </div>
-                            <div id="email_content_include_message_secinfo" style="{concat ($show, ' ', $secinfo-style)}">
-                              <textarea style="margin-left:15px;"
-                                        name="{$secinfo-dummy}"
-                                        rows="3" cols="50">
-                                <xsl:choose>
-                                  <xsl:when test="$method/data[name='notice']/text() = 0">
-                                    <xsl:value-of select="$method/data[name='message']/text()"/>
-                                  </xsl:when>
-                                  <xsl:otherwise>
-                                    <xsl:value-of select="$include-message-default-secinfo"/>
-                                  </xsl:otherwise>
-                                </xsl:choose>
-                              </textarea>
-                            </div>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            <xsl:variable name="secinfo-style">
-                              <xsl:if test="$show = ''">display: inline</xsl:if>
-                            </xsl:variable>
-                            <xsl:variable name="task-style">
-                              <xsl:if test="$hide = ''">display: inline</xsl:if>
-                            </xsl:variable>
-                            <label>
-                              <xsl:choose>
-                                <xsl:when test="$method/data[name='notice']/text() = '2'">
-                                  <input type="radio" name="method_data:notice" checked="1" value="2"/>
-                                </xsl:when>
-                                <xsl:otherwise>
-                                  <input type="radio" name="method_data:notice" value="2"/>
-                                </xsl:otherwise>
-                              </xsl:choose>
-                              <div id="email_content_attach_task" style="{concat ($hide, ' ', $task-style)}">
-                                <xsl:value-of  select="gsa:i18n ('Attach report', 'Alert|Email')"/>
-                                <xsl:text> </xsl:text>
-                                <select name="method_data:notice_attach_format">
-                                  <xsl:for-each select="$report-formats/report_format">
-                                    <xsl:choose>
-                                      <xsl:when test="@id=$method/data[name='notice_attach_format']/text()">
-                                        <option value="{@id}" selected="1">
-                                          <xsl:value-of select="name"/>
-                                        </option>
-                                      </xsl:when>
-                                      <xsl:otherwise>
-                                        <option value="{@id}">
-                                          <xsl:value-of select="name"/>
-                                        </option>
-                                      </xsl:otherwise>
-                                    </xsl:choose>
-                                  </xsl:for-each>
-                                </select>
-                              </div>
-                              <div id="email_content_attach_secinfo" style="{concat ($show, ' ', $secinfo-style)}">
-                                <xsl:value-of select="gsa:i18n ('Attach list of resources', 'Alert|Email')"/>
-                              </div>
-                              <xsl:text> with message:</xsl:text>
-                            </label>
-                            <br/>
-                            <xsl:variable name="task-dummy">
-                              <xsl:choose>
-                                <xsl:when test="(get_alerts_response/alert/event/text() != 'New SecInfo arrived' and get_alerts_response/alert/event/text() != 'Updated SecInfo arrived')">
-                                  <xsl:text>method_data:message_attach</xsl:text>
-                                </xsl:when>
-                                <xsl:otherwise>
-                                  <xsl:text>dummy_message</xsl:text>
-                                </xsl:otherwise>
-                              </xsl:choose>
-                            </xsl:variable>
-                            <xsl:variable name="secinfo-dummy">
-                              <xsl:choose>
-                                <xsl:when test="(get_alerts_response/alert/event/text() = 'New SecInfo arrived' or get_alerts_response/alert/event/text() = 'Updated SecInfo arrived')">
-                                  <xsl:text>method_data:message_attach</xsl:text>
-                                </xsl:when>
-                                <xsl:otherwise>
-                                  <xsl:text>dummy_message</xsl:text>
-                                </xsl:otherwise>
-                              </xsl:choose>
-                            </xsl:variable>
-                            <div id="email_content_attach_message_task" style="{concat ($hide, ' ', $task-style)}">
-                              <textarea style="margin-left:15px;"
-                                        id="message_attach_task"
-                                        name="{$task-dummy}"
-                                        rows="3" cols="50">
-                                <xsl:choose>
-                                  <xsl:when test="$method/data[name='notice']/text() = 2 and (get_alerts_response/alert/event/text() != 'New SecInfo arrived' and get_alerts_response/alert/event/text() != 'Updated SecInfo arrived')">
-                                    <xsl:value-of select="$method/data[name='message']/text()"/>
-                                  </xsl:when>
-                                  <xsl:otherwise>
-                                    <xsl:value-of select="$attach-message-default"/>
-                                  </xsl:otherwise>
-                                </xsl:choose>
-                              </textarea>
-                            </div>
-                            <div id="email_content_attach_message_secinfo" style="{concat ($show, ' ', $secinfo-style)}">
-                              <textarea style="margin-left:15px;"
-                                        id="message_attach_secinfo"
-                                        name="{$secinfo-dummy}"
-                                        rows="3" cols="50">
-                                <xsl:choose>
-                                  <xsl:when test="$method/data[name='notice']/text() = 2 and (get_alerts_response/alert/event/text() = 'New SecInfo arrived' or get_alerts_response/alert/event/text() = 'Updated SecInfo arrived')">
-                                    <xsl:value-of select="$method/data[name='message']/text()"/>
-                                  </xsl:when>
-                                  <xsl:otherwise>
-                                    <xsl:value-of select="$attach-message-default-secinfo"/>
-                                  </xsl:otherwise>
-                                </xsl:choose>
-                              </textarea>
-                            </div>
-                          </td>
-                        </tr>
-                      </xsl:if>
-                    </table>
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
-          <tr>
-
-            <!-- Method: System Logger. -->
-
-            <td></td>
-            <td>
-              <table class="table-form">
-                <tr>
-                  <td>
-                    <xsl:call-template name="radio-button">
-                      <xsl:with-param name="name" select="'method'"/>
-                      <xsl:with-param name="value" select="'syslog'"/>
-                      <xsl:with-param name="select-value" select="gsa:lower-case($method/text())"/>
-                      <xsl:with-param name="text">
-                        <xsl:value-of select="gsa:i18n ('System Logger', 'Alert')"/>
-                        <xsl:text> </xsl:text>
-                        <select name="method_data:submethod">
-                          <xsl:call-template name="opt">
-                            <xsl:with-param name="value" select="'syslog'"/>
-                            <xsl:with-param name="select-value" select="$method/data/text()"/>
-                          </xsl:call-template>
-                          <xsl:call-template name="opt">
-                            <xsl:with-param name="value" select="'SNMP'"/>
-                            <xsl:with-param name="select-value" select="$method/data/text()"/>
-                          </xsl:call-template>
-                        </select>
-                      </xsl:with-param>
-                    </xsl:call-template>
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
-          <tr style="{$hide}" id="http_get_row">
-
-            <!-- Method: HTTP Get. -->
-
-            <td></td>
-            <td>
-              <table class="table-form">
-                <tr>
-                  <td>
-                    <xsl:call-template name="radio-button">
-                      <xsl:with-param name="name" select="'method'"/>
-                      <xsl:with-param name="value" select="'HTTP Get'"/>
-                      <xsl:with-param name="select-value" select="$method/text()"/>
-                      <xsl:with-param name="text" select="gsa:i18n ('HTTP Get', 'Alert')"/>
-                    </xsl:call-template>
-                  </td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td>URL</td>
-                  <td>
-                    <input type="text" name="method_data:URL" size="30" maxlength="301"
-                        value="{$method/data[name='URL']/text()}"/>
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
-          <tr style="{$hide}" id="sourcefire_row">
-
-            <!-- Method: Sourcefire Connector. -->
-
-            <td></td>
-            <td>
-              <table class="table-form">
-                <tr>
-                  <td>
-                    <xsl:call-template name="radio-button">
-                      <xsl:with-param name="name" select="'method'"/>
-                      <xsl:with-param name="value" select="'Sourcefire Connector'"/>
-                      <xsl:with-param name="select-value" select="$method/text()"/>
-                      <xsl:with-param name="text" select="gsa:i18n ('Sourcefire Connector', 'Alert')"/>
-                    </xsl:call-template>
-                  </td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td><xsl:value-of select="gsa:i18n ('Defense Center IP', 'Alert')"/></td>
-                  <td>
-                    <input type="text" name="method_data:defense_center_ip"
-                           size="30" maxlength="40" value="{$method/data[name='defense_center_ip']/text()}"/>
-                  </td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td><xsl:value-of select="gsa:i18n ('Defense Center Port', 'Alert')"/></td>
-                  <td>
-                    <xsl:choose>
-                      <xsl:when test="$method/data[name='defense_center_port']/text()">
-                        <input type="text" name="method_data:defense_center_port"
-                               size="30" maxlength="400"  value="{$method/data[name='defense_center_port']/text()}"/>
-                      </xsl:when>
-                      <xsl:otherwise>
-                        <input type="text" name="method_data:defense_center_port"
-                               size="30" maxlength="400" value="8307"/>
-                      </xsl:otherwise>
-                    </xsl:choose>
-                  </td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td><xsl:value-of select="gsa:i18n ('PKCS12 file', 'Alert')"/></td>
-                  <td>
-                    <input type="file" name="method_data:pkcs12" size="30"/>
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
-          <tr style="{$hide}" id="verinice_row">
-
-            <!-- Method: verinice Connector. -->
-
-            <td></td>
-            <td>
-              <table class="table-form">
-                <tr>
-                  <td>
-                    <xsl:call-template name="radio-button">
-                      <xsl:with-param name="name" select="'method'"/>
-                      <xsl:with-param name="value" select="'verinice Connector'"/>
-                      <xsl:with-param name="select-value" select="$method/text()"/>
-                      <xsl:with-param name="text" select="gsa:i18n ('verinice.PRO Connector', 'Alert')"/>
-                    </xsl:call-template>
-                  </td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td><xsl:value-of select="gsa:i18n ('verinice.PRO URL', 'Alert')"/></td>
-                  <td>
-                    <input type="text" name="method_data:verinice_server_url"
-                           size="30" maxlength="256" value="{$method/data[name='verinice_server_url']/text()}"/>
-                  </td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td><xsl:value-of select="gsa:i18n ('verinice.PRO Username', 'Alert')"/></td>
-                  <td>
-                    <input type="text" name="method_data:verinice_server_username"
-                           size="30" maxlength="40" value="{$method/data[name='verinice_server_username']/text()}"/>
-                  </td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td><xsl:value-of select="gsa:i18n ('verinice.PRO Password', 'Alert')"/></td>
-                  <td>
-                    <input type="password" name="method_data:verinice_server_password"
-                           size="30" maxlength="40"/>
-                  </td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td><xsl:value-of select="gsa:i18n ('verinice.PRO Report', 'Alert')"/></td>
-                  <td>
-                    <select name="method_data:verinice_server_report_format">
-                      <xsl:for-each select="$report-formats/report_format">
-                        <xsl:if test="extension = 'vna'">
-                          <xsl:choose>
-                            <xsl:when test="@id=$method/data[name='verinice_server_report_format']/text()">
-                              <option value="{@id}" selected="1">
-                                <xsl:value-of select="name"/>
-                              </option>
-                            </xsl:when>
-                            <xsl:otherwise>
-                              <option value="{@id}">
-                                <xsl:value-of select="name"/>
-                              </option>
-                            </xsl:otherwise>
-                          </xsl:choose>
-                        </xsl:if>
-                      </xsl:for-each>
-                      <xsl:if test="count ($report-formats/report_format) = 0">
-                        <option value="''">--</option>
-                      </xsl:if>
-                    </select>
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
-          <tr style="{$hide}" id="start_task_row">
-
-            <!-- Method: Start Task. -->
-
-            <td></td>
-            <td>
-              <table class="table-form">
-                <tr>
-                  <td>
-                    <xsl:call-template name="radio-button">
-                      <xsl:with-param name="name" select="'method'"/>
-                      <xsl:with-param name="value" select="'Start Task'"/>
-                      <xsl:with-param name="select-value" select="$method/text()"/>
-                      <xsl:with-param name="text">
-                        <xsl:value-of  select="gsa:i18n ('Start Task', 'Alert')"/>
-                        <select name="method_data:start_task_task">
-                          <xsl:for-each select="$tasks/task">
-                            <xsl:choose>
-                              <xsl:when test="@id=$method/data[name='start_task_task']/text()">
-                                <option value="{@id}" selected="1">
-                                  <xsl:value-of select="name"/>
-                                </option>
-                              </xsl:when>
-                              <xsl:otherwise>
-                                <option value="{@id}">
-                                  <xsl:value-of select="name"/>
-                                </option>
-                              </xsl:otherwise>
-                            </xsl:choose>
-                          </xsl:for-each>
-                        </select>
-                      </xsl:with-param>
-                    </xsl:call-template>
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
-          <tr>
-
-            <!-- Method: Send. -->
-
-            <td></td>
-            <td>
-              <table class="table-form">
-                <tr>
-                  <td colspan="2">
-                    <xsl:call-template name="radio-button">
-                      <xsl:with-param name="name" select="'method'"/>
-                      <xsl:with-param name="value" select="'Send'"/>
-                      <xsl:with-param name="select-value" select="$method/text()"/>
-                      <xsl:with-param name="text">
-                        <xsl:value-of select="gsa:i18n ('Send to host ', 'Alert')"/>
-                        <input type="text" name="method_data:send_host"
-                              size="30" maxlength="256"
-                              value="{$method/data[name='send_host']/text()}"/>
-                        <xsl:value-of select="gsa:i18n (' on port ', 'Alert')"/>
-                        <input type="text" name="method_data:send_port"
-                              size="6" maxlength="6"
-                              value="{$method/data[name='send_port']/text()}"/>
-                      </xsl:with-param>
-                    </xsl:call-template>
-                  </td>
-                </tr>
-                <tr style="{$hide}">
-                  <td><xsl:value-of select="gsa:i18n ('Report', 'Alert')"/></td>
-                  <td>
-                    <select name="method_data:send_report_format">
-                      <xsl:for-each select="$report-formats/report_format">
+                    <span class="form-selection-item-event form-selection-item-event--task">
+                      <xsl:value-of select="gsa:i18n ('Include report', 'Alert|Email')"/>
+                    </span>
+                    <span id="email_content_include_secinfo"
+                      class="form-selection-item-event form-selection-item-event--secinfo"
+                      style="display: none">
+                      <xsl:value-of select="gsa:i18n ('Include list of resources', 'Alert|Email')"/>
+                      <xsl:text> with message:</xsl:text>
+                    </span>
+                  </label>
+                </div>
+                <div class="form-item form-selection-item-event form-selection-item-event--task"
+                  style="display: inline">
+                  <select name="method_data:notice_report_format">
+                    <xsl:for-each select="$report-formats/report_format">
+                      <xsl:if test="substring(content_type, 1, 5) = 'text/'">
                         <xsl:choose>
-                          <xsl:when test="@id=$method/data[name='send_report_format']/text()">
+                          <xsl:when test="@id=$method/data[name='notice_report_format']/text()">
                             <option value="{@id}" selected="1">
                               <xsl:value-of select="name"/>
                             </option>
@@ -11066,139 +10841,433 @@ should not have received it.
                             </option>
                           </xsl:otherwise>
                         </xsl:choose>
-                      </xsl:for-each>
-                      <xsl:if test="count ($report-formats/report_format) = 0">
-                        <option value="''">--</option>
                       </xsl:if>
-                    </select>
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
-          <tr id="scp_row">
-
-            <!-- Method: SCP. -->
-
-            <td></td>
-            <td>
-              <table class="table-form">
-                <tr>
-                  <td>
-                    <label>
-                      <xsl:call-template name="radio-button">
-                        <xsl:with-param name="name" select="'method'"/>
-                        <xsl:with-param name="value" select="'SCP'"/>
-                        <xsl:with-param name="select-value" select="$method/text()"/>
-                        <xsl:with-param name="text">
-                          <xsl:value-of select="gsa:i18n ('SCP', 'Alert')"/>
-                        </xsl:with-param>
-                      </xsl:call-template>
-                    </label>
-                  </td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td><xsl:value-of select="gsa:i18n ('Username', 'Alert')"/></td>
-                  <td>
-                    <input type="text" name="method_data:scp_username"
-                           size="30" maxlength="256"
-                           value="{$method/data[name='scp_username']/text()}"/>
-                  </td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td><xsl:value-of select="gsa:i18n ('Password', 'Alert')"/></td>
-                  <td>
-                    <input type="password" name="method_data:scp_password"
-                           size="30" maxlength="256"
-                           value="{$method/data[name='scp_password']/text()}"/>
-                  </td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td><xsl:value-of select="gsa:i18n ('Host', 'Alert')"/></td>
-                  <td>
-                    <input type="text" name="method_data:scp_host"
-                           size="30" maxlength="256"
-                           value="{$method/data[name='scp_host']/text()}"/>
-                  </td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td><xsl:value-of select="gsa:i18n ('Known Hosts', 'Alert')"/></td>
-                  <td>
-                    <textarea name="method_data:scp_known_hosts"
-                              rows="3" cols="50">
-                      <xsl:value-of select="$method/data[name='scp_known_hosts']/text()"/>
-                    </textarea>
-                  </td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td><xsl:value-of select="gsa:i18n ('Path', 'Alert')"/></td>
-                  <td>
-                    <input type="text" name="method_data:scp_path"
-                           size="30" maxlength="256"
-                           value="{$method/data[name='scp_path']/text()}"/>
-                  </td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td><xsl:value-of select="gsa:i18n ('Report', 'Alert')"/></td>
-                  <td>
-                    <select name="method_data:scp_report_format">
-                      <xsl:for-each select="$report-formats/report_format">
-                        <xsl:call-template name="opt">
-                          <xsl:with-param name="value" select="@id"/>
-                          <xsl:with-param name="content" select="name"/>
-                          <xsl:with-param name="select-value" select="$method/data[name='scp_report_format']/text()"/>
-                        </xsl:call-template>
-                      </xsl:for-each>
-                      <xsl:if test="count ($report-formats/report_format) = 0">
-                        <option value="''">--</option>
-                      </xsl:if>
-                    </select>
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
-
-          <!-- Report Result Filter. -->
-
-          <tr style="{$show}" id="details_url_row">
-            <td><xsl:value-of select="gsa:i18n ('Details URL', 'Alert')"/></td>
-            <td>
-              <input type="text" name="method_data:details_url"
-                     size="30" maxlength="1000"
-                     value="{$method/data[name='details_url']/text()}"/>
-            </td>
-          </tr>
-          <xsl:if test="gsa:may-op ('get_filters')">
-            <xsl:variable name="filtername"
-                select="get_alerts_response/alert/filter/name"/>
-            <tr style="{$hide}" id="report_result_filter_row">
-              <td><xsl:value-of select="gsa:i18n ('Report Result Filter', 'Alert')"/></td>
-              <td>
-                <select name="filter_id">
-                  <option value="0">--</option>
-                  <xsl:for-each select="$filters/filter">
+                    </xsl:for-each>
+                  </select>
+                  <xsl:text> with message:</xsl:text>
+                </div>
+                <div id="email_content_include_message_task"
+                  class="form-selection-item-event form-selection-item-event--task">
+                  <textarea id="message_include_task"
+                    name="method_data:message"
+                    class="form-control form-selection-input-event form-selection-input-event--task"
+                    rows="8" cols="50">
                     <xsl:choose>
-                      <xsl:when test="name = $filtername">
-                        <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                      <xsl:when test="$method/data[name='notice']/text() = 0">
+                        <xsl:value-of select="$method/data[name='message']/text()"/>
                       </xsl:when>
                       <xsl:otherwise>
-                        <option value="{@id}"><xsl:value-of select="name"/></option>
+                        <xsl:value-of select="$include-message-default"/>
                       </xsl:otherwise>
                     </xsl:choose>
-                  </xsl:for-each>
-                </select>
-              </td>
-            </tr>
-          </xsl:if>
+                  </textarea>
+                </div>
+                <div id="email_content_include_message_secinfo" style="display: none"
+                  class="form-selection-item-event form-selection-item-event--secinfo">
+                  <textarea id="message_include_secinfo"
+                    name="method_data:message"
+                    class="form-control form-selection-input-event form-selection-input-event--secinfo"
+                    rows="8" cols="50">
+                    <xsl:choose>
+                      <xsl:when test="$method/data[name='notice']/text() = 0">
+                        <xsl:value-of select="$method/data[name='message']/text()"/>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <xsl:value-of select="$include-message-default-secinfo"/>
+                      </xsl:otherwise>
+                    </xsl:choose>
+                  </textarea>
+                </div>
+              </div>
+              <div>
+                <div class="form-item radio">
+                  <label>
+                    <xsl:choose>
+                      <xsl:when test="$method/data[name='notice']/text() = '2'">
+                        <input type="radio" name="method_data:notice" checked="1" value="2"/>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <input type="radio" name="method_data:notice" value="2"/>
+                      </xsl:otherwise>
+                    </xsl:choose>
+                    <span class="form-selection-item-event form-selection-item-event--task">
+                      <xsl:value-of select="gsa:i18n ('Attach report', 'Alert|Email')"/>
+                    </span>
+                    <span class="form-selection-item-event form-selection-item-event--secinfo"
+                      style="display: none">
+                      <xsl:value-of select="gsa:i18n ('Attach list of resources', 'Alert|Email')"/>
+                      <xsl:text> with message:</xsl:text>
+                    </span>
+                  </label>
+                </div>
+                <div id="email_content_attach_task"
+                  style="display: inline"
+                  class="form-item form-selection-item-event form-selection-item-event--task">
+                  <select name="method_data:notice_attach_format">
+                    <xsl:for-each select="$report-formats/report_format">
+                      <xsl:choose>
+                        <xsl:when test="@id=$method/data[name='notice_attach_format']/text()">
+                          <option value="{@id}" selected="1">
+                            <xsl:value-of select="name"/>
+                          </option>
+                        </xsl:when>
+                        <xsl:otherwise>
+                          <option value="{@id}">
+                            <xsl:value-of select="name"/>
+                          </option>
+                        </xsl:otherwise>
+                      </xsl:choose>
+                    </xsl:for-each>
+                  </select>
+                  <xsl:text> with message:</xsl:text>
+                </div>
+                <div id="email_content_attach_message_task"
+                  class="form-selection-item-event form-selection-item-event--task">
+                  <textarea id="message_attach_task"
+                    name="method_data:message_attach"
+                    class="form-control form-selection-input-event form-selection-input-event--task"
+                    rows="9" cols="50">
+                    <xsl:choose>
+                      <xsl:when test="$method/data[name='notice']/text() = 2 and (get_alerts_response/alert/event/text() != 'New SecInfo arrived' and get_alerts_response/alert/event/text() != 'Updated SecInfo arrived')">
+                        <xsl:value-of select="$method/data[name='message']/text()"/>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <xsl:value-of select="$attach-message-default"/>
+                      </xsl:otherwise>
+                    </xsl:choose>
+                  </textarea>
+                </div>
+                <div id="email_content_attach_message_secinfo" style="display: none"
+                  class="form-selection-item-event form-selection-item-event--secinfo">
+                  <textarea id="message_attach_secinfo"
+                    class="form-control form-selection-input-event form-selection-input-event--secinfo"
+                    name="method_data:message_attach"
+                    rows="8" cols="50">
+                    <xsl:choose>
+                      <xsl:when test="$method/data[name='notice']/text() = 2 and (get_alerts_response/alert/event/text() = 'New SecInfo arrived' or get_alerts_response/alert/event/text() = 'Updated SecInfo arrived')">
+                        <xsl:value-of select="$method/data[name='message']/text()"/>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <xsl:value-of select="$attach-message-default-secinfo"/>
+                      </xsl:otherwise>
+                    </xsl:choose>
+                  </textarea>
+                </div>
+              </div>
+            </xsl:if>
+          </div>
+        </div>
 
-        </table>
+        <!-- Method: System Logger. -->
+
+        <div class="form-group form-selection-item-method form-selection-item-method--syslog"
+          style="display: none">
+          <label class="col-2 control-label">
+            <xsl:value-of select="gsa:i18n ('System Logger', 'Alert')"/>
+          </label>
+          <div class="col-10">
+            <label>
+              <select name="method_data:submethod">
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'syslog'"/>
+                  <xsl:with-param name="select-value" select="$method/data/text()"/>
+                </xsl:call-template>
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'SNMP'"/>
+                  <xsl:with-param name="select-value" select="$method/data/text()"/>
+                </xsl:call-template>
+              </select>
+            </label>
+          </div>
+        </div>
+
+
+        <!-- Method: HTTP Get. -->
+
+        <div class="form-group form-selection-item-method form-selection-item-method--http-get"
+          style="display: none" id="http_get_row">
+          <label class="col-2 control-label">
+            <xsl:value-of select="gsa:i18n ('HTTP Get URL', 'Alert')"/>
+          </label>
+          <div class="col-10">
+            <input type="text" name="method_data:URL" size="30" maxlength="301"
+              value="{$method/data[name='URL']/text()}"
+              class="form-control"/>
+          </div>
+        </div>
+
+        <!-- Method: Sourcefire Connector. -->
+        <div class="form-group form-selection-item-method form-selection-item-method--sourcefire" id="sourcefire_row">
+          <label class="col-2 control-label">
+            <xsl:value-of select="gsa:i18n ('Defense Center IP', 'Alert')"/>
+          </label>
+          <div class="col-10">
+            <div class="form-item">
+                <input type="text" name="method_data:defense_center_ip"
+                  class="form-control"
+                  size="30" maxlength="40"
+                  value="{$method/data[name='defense_center_ip']/text()}"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group form-selection-item-method form-selection-item-method--sourcefire">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Defense Center Port', 'Alert')"/></label>
+          <div class="col-10">
+            <div class="form-item">
+              <xsl:choose>
+                <xsl:when test="$method/data[name='defense_center_port']/text()">
+                  <input type="text" name="method_data:defense_center_port"
+                    data-type="int" class="form-control spinner" min="0" max="65535"
+                    size="30" maxlength="400"  value="{$method/data[name='defense_center_port']/text()}"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <input type="text" name="method_data:defense_center_port"
+                    data-type="int" class="form-control spinner" min="0" max="65535"
+                    size="30" maxlength="400" value="8307"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group form-selection-item-method form-selection-item-method--sourcefire" id="sourcefire_row">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('PKCS12 file', 'Alert')"/></label>
+          <div class="col-10">
+            <div class="form-item">
+              <input type="file" name="method_data:pkcs12" size="30"/>
+            </div>
+          </div>
+        </div>
+
+        <!-- Method: verinice Connector. -->
+        <div class="form-group form-selection-item-method form-selection-item-method--verinice">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('verinice.PRO URL', 'Alert')"/></label>
+          <div class="col-10">
+            <div class="form-item">
+              <input type="text" name="method_data:verinice_server_url"
+                class="form-control"
+                size="30" maxlength="256" value="{$method/data[name='verinice_server_url']/text()}"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group form-selection-item-method form-selection-item-method--verinice">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('verinice.PRO Username', 'Alert')"/></label>
+          <div class="col-10">
+            <div class="form-item">
+              <input type="text" name="method_data:verinice_server_username"
+                class="form-control" value="{$method/data[name='verinice_server_username']/text()}"
+                size="30" maxlength="40"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group form-selection-item-method form-selection-item-method--verinice">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('verinice.PRO Password', 'Alert')"/></label>
+          <div class="col-10">
+            <div class="form-item">
+              <input type="password" name="method_data:verinice_server_password"
+                class="form-control"
+                size="30" maxlength="40"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group form-selection-item-method form-selection-item-method--verinice">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('verinice.PRO Report', 'Alert')"/></label>
+          <div class="col-10">
+            <select name="method_data:verinice_server_report_format">
+              <xsl:for-each select="$report-formats/report_format">
+                <xsl:if test="extension = 'vna'">
+                  <xsl:choose>
+                    <xsl:when test="@id=$method/data[name='verinice_server_report_format']/text()">
+                      <option value="{@id}" selected="1">
+                        <xsl:value-of select="name"/>
+                      </option>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <option value="{@id}">
+                        <xsl:value-of select="name"/>
+                      </option>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </xsl:if>
+              </xsl:for-each>
+              <xsl:if test="count ($report-formats/report_format) = 0">
+                <option value="''">--</option>
+              </xsl:if>
+            </select>
+          </div>
+        </div>
+
+        <!-- Method: Start Task. -->
+
+        <div class="form-group form-selection-item-method form-selection-item-method--start_task" id="start_task_row">
+          <label class="col-2 control-label">
+            <xsl:value-of select="gsa:i18n ('Start Task', 'Alert')"/>
+          </label>
+          <div class="col-10">
+            <select name="method_data:start_task_task">
+              <xsl:for-each select="$tasks/task">
+                <xsl:choose>
+                  <xsl:when test="@id=$method/data[name='start_task_task']/text()">
+                    <option value="{@id}" selected="1">
+                      <xsl:value-of select="name"/>
+                    </option>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <option value="{@id}">
+                      <xsl:value-of select="name"/>
+                    </option>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </xsl:for-each>
+            </select>
+          </div>
+        </div>
+
+        <!-- Method: Send. -->
+
+        <div class="form-group form-selection-item-method form-selection-item-method--send" id="send_row">
+          <label class="col-2 control-label">
+            <xsl:value-of select="gsa:i18n ('Send to host ', 'Alert')"/>
+          </label>
+          <div class="col-10">
+            <div class="form-item">
+              <input type="text" name="method_data:send_host"
+                class="form-control"
+                value="{$method/data[name='send_host']/text()}"
+                size="30" maxlength="256"/>
+            </div>
+            <div class="form-item">
+              <xsl:value-of select="gsa:i18n (' on port ', 'Alert')"/>
+            </div>
+            <div class="form-item">
+              <input type="text" name="method_data:send_port"
+                class="form-control"
+                value="{$method/data[name='send_port']/text()}"
+                size="6" maxlength="6"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group form-selection-item-method form-selection-item-method--send" id="send_to_host_report_row">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Report', 'Alert')"/></label>
+          <div class="col-10">
+            <select name="method_data:send_report_format">
+              <xsl:for-each select="$report-formats/report_format">
+                <xsl:choose>
+                  <xsl:when test="@id=$method/data[name='send_report_format']/text()">
+                    <option value="{@id}" selected="1">
+                      <xsl:value-of select="name"/>
+                    </option>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <option value="{@id}">
+                      <xsl:value-of select="name"/>
+                    </option>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </xsl:for-each>
+              <xsl:if test="count ($report-formats/report_format) = 0">
+                <option value="''">--</option>
+              </xsl:if>
+            </select>
+          </div>
+        </div>
+
+        <!-- Method: SCP. -->
+
+        <div class="form-group form-selection-item-method form-selection-item-method--scp">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Username', 'Alert')"/></label>
+          <div class="col-10">
+            <div class="form-item">
+              <input type="text" name="method_data:scp_username"
+                class="form-control"
+                value="{$method/data[name='scp_username']/text()}"
+                size="30" maxlength="256"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group form-selection-item-method form-selection-item-method--scp">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Password', 'Alert')"/></label>
+          <div class="col-10">
+            <div class="form-item">
+              <input type="password" name="method_data:scp_password"
+                class="form-control"
+                value="{$method/data[name='scp_password']/text()}"
+                size="30" maxlength="256"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group form-selection-item-method form-selection-item-method--scp">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Host', 'Alert')"/></label>
+          <div class="col-10">
+            <div class="form-item">
+              <input type="text" name="method_data:scp_host"
+                class="form-control"
+                value="{$method/data[name='scp_host']/text()}"
+                size="30" maxlength="256"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group form-selection-item-method form-selection-item-method--scp">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Known Hosts', 'Alert')"/></label>
+          <div class="col-10">
+            <div class="form-item">
+              <textarea name="method_data:scp_known_hosts"
+                class="form-control"
+                rows="3" cols="50">
+                <xsl:value-of select="$method/data[name='scp_known_hosts']/text()"/>
+              </textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group form-selection-item-method form-selection-item-method--scp">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Path', 'Alert')"/></label>
+          <div class="col-10">
+            <div class="form-item">
+              <xsl:choose>
+                <xsl:when test="$method/data[name='scp_path']/text()">
+                  <input type="text" name="method_data:scp_path"
+                    class="form-control"
+                    value="{$method/data[name='scp_path']/text()}"
+                    size="30" maxlength="256"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <input type="text" name="method_data:scp_path"
+                    class="form-control"
+                    value="report.xml"
+                    size="30" maxlength="256"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group form-selection-item-method form-selection-item-method--scp">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Report', 'Alert')"/></label>
+          <div class="col-10">
+            <select name="method_data:scp_report_format">
+              <xsl:for-each select="$report-formats/report_format">
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="@id"/>
+                  <xsl:with-param name="content" select="name"/>
+                  <xsl:with-param name="select-value" select="$method/data[name='scp_report_format']/text()"/>
+                </xsl:call-template>
+              </xsl:for-each>
+              <xsl:if test="count ($report-formats/report_format) = 0">
+                <option value="''">--</option>
+              </xsl:if>
+            </select>
+          </div>
+        </div>
+
       </form>
     </div>
   </div>

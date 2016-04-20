@@ -1,5 +1,11 @@
 2016-04-20  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/omp.xsl (html-create-alert-form, html-edit-alert-form):
+	Rework alert forms to use new horizontal form and more important to hide/show
+	elements based on the method and event selections.
+
+2016-04-20  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/greenbone.js (on_ready): Introduce form-selection-input
 	css classes. This classes can be used to deactive and activate input elements
 	of forms which must not be included in the http request after form submission.
