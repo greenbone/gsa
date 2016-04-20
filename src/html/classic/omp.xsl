@@ -32549,8 +32549,8 @@ should not have received it.
     <input type="hidden" name="report_id" value="{@id}"/>
     <input type="hidden" name="next" value="get_report_section"/>
     <input type="hidden" name="report_section" value="{$section}"/>
-    <input type="hidden" name="filter" value=""/>
-    <input type="hidden" name="filt_id" value=""/>
+    <input type="hidden" name="filter" value="{report/filters/term}"/>
+    <input type="hidden" name="filt_id" value="{report/filters/@id}"/>
   </form>
 </xsl:template>
 

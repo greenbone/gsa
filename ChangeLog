@@ -1,3 +1,8 @@
+2016-04-19  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/classic/omp.xsl (report-icons): Fill in filter params for
+	"Remove from Assets" icon.
+
 2016-04-20  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/js/gsa_graphics_base.js: Add the function
