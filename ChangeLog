@@ -1,5 +1,11 @@
 2016-04-20  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/greenbone.js (editAlertUpdateForm): Remove now obsolete
+	editAlertUpdateForm function. De-/activation of conditional elements is done
+	by form-selection css classes now.
+
+2016-04-20  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/omp.xsl (html-create-alert-form, html-edit-alert-form):
 	Only show result filter in report result filter selection.
 
