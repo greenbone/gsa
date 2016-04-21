@@ -17933,11 +17933,13 @@ should not have received it.
         <div class="form-group">
           <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('First Time', 'Schedule')"/></label>
           <div class="col-10">
-            <input id="datepicker" type="hidden"/>
-            <input name="day_of_month" type="hidden" value="{time/day_of_month}"/>
-            <input name="month" type="hidden" value="{time/month}"/>
-            <input name="year" type="hidden" value="{time/year}"/>
-            <input id="datevalue" class="datepicker-value"/>
+            <div class="datepicker form-item">
+              <input class="datepicker-button" type="hidden"/>
+              <input class="datepicker-value" size="26" disabled="1"/>
+              <input class="datepicker-day" name="day_of_month" type="hidden" value="{time/day_of_month}"/>
+              <input class="datepicker-month" name="month" type="hidden" value="{time/month}"/>
+              <input class="datepicker-year" name="year" type="hidden" value="{time/year}"/>
+            </div>
             <div class="form-item">
               at
             </div>
@@ -18179,11 +18181,17 @@ should not have received it.
         <div class="form-group">
           <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('First Time', 'Schedule')"/></label>
           <div class="col-10">
-            <input id="datepicker" type="hidden"/>
-            <input name="day_of_month" type="hidden" value="{format-number (date:day-in-month (commands_response/get_schedules_response/schedule/first_time), '00')}"/>
-            <input name="month" type="hidden" value="{format-number (date:month-in-year (commands_response/get_schedules_response/schedule/first_time), '00')}"/>
-            <input name="year" type="hidden" value="{date:year (commands_response/get_schedules_response/schedule/first_time)}"/>
-            <input id="datevalue" class="datepicker-value"/>
+            <div class="datepicker form-item">
+              <input class="datepicker-button" type="hidden"/>
+              <input class="datepicker-value" size="26" disabled="1"/>
+              <input class="datepicker-day" name="day_of_month" type="hidden"
+                value="{format-number (date:day-in-month (commands_response/get_schedules_response/schedule/first_time), '00')}"/>
+              <input class="datepicker-month" name="month" type="hidden"
+                value="{format-number (date:month-in-year (commands_response/get_schedules_response/schedule/first_time), '00')}"/>
+              <input class="datepicker-year" name="year" type="hidden"
+                value="{date:year (commands_response/get_schedules_response/schedule/first_time)}"/>
+            </div>
+
             <div class="form-item">
               at
             </div>
