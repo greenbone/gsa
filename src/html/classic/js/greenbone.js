@@ -238,6 +238,7 @@
     this.command = options.cmd;
     this.success_reload = options.reload;
     this.done = options.done ? $(options.done) : undefined;
+    this.height = is_defined(options.height) ? options.height : 500;
 
     if (options.params === undefined) {
       this.params = {};
@@ -515,6 +516,7 @@
       self.dialog.dialog({
         modal: true,
         width: 800,
+        maxHeight: self.height,
         buttons: [
           {
             text: button,
@@ -545,7 +547,8 @@
 
       self.dialog.dialog({
         modal: true,
-        width: 800
+        width: 800,
+        maxHeight: self.height
       });
 
       $('html').css('cursor', '');
@@ -807,6 +810,7 @@
     var task_id = options.element.data('task_id');
     var parent_dialog = options.element.parents('.dialog-form')[0];
     var reload = options.element.data('reload');
+    var height = options.element.data('height');
 
     if (!is_defined(reload)) {
       reload = options.default_reload;
@@ -843,7 +847,8 @@
         done: done,
         params: params,
         reload: reload,
-        parent_dialog: parent_dialog
+        parent_dialog: parent_dialog,
+        height: height,
       }).show(options.button);
     });
   }
@@ -1015,6 +1020,7 @@
           params: params,
           show_method: 'POST',
           reload: reload,
+          height: elem.data('height'),
         }).show('OK', 'confirmation');
       });
     });
@@ -1029,6 +1035,7 @@
           cmd: 'wizard',
           reload: 'window',
           params: params,
+          height: elem.data('height'),
         });
         event.preventDefault();
         if (name === 'quick_first_scan') {
