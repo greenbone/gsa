@@ -1076,12 +1076,13 @@
         elem.find('.datepicker-year').val();
       var button = elem.find('.datepicker-button').first();
       var value_field = elem.find('.datepicker-value');
+      var tooltip = gsa._('Select date') + '';
 
       button.datepicker({
         showOn: 'button',
         buttonImage: 'img/calendar.png',
         buttonImageOnly: true,
-        buttonText: gsa._('Select date') + '',
+        buttonText: tooltip,
         altField: value_field,
         altFormat: 'DD, d MM, yy',
         minDate: curDate,
@@ -1097,6 +1098,7 @@
 
       /* don't allow to change value_field by user */
       value_field.prop('readonly', true);
+      value_field.attr('title', tooltip);
 
       value_field.on('click', function() {
         /* show datepicker when clicking on value_field */
