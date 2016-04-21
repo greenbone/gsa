@@ -1,3 +1,39 @@
+2016-04-21  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Update OS list and icons.
+
+	* CMakeLists.txt: Install new icon files.
+
+	* src/html/classic/os.xml: Add new entries for Red Hat Linux (without
+	version), Fedora 16 to 23, Red Hat Enterprise Linux 6 and 7, Mandriva
+	Linux 2010.0 to 2011.0, CentOS-6 and 7, Debian GNU/Linux 7.0 to 8.4,
+	SuSE Linux Enterprise Server 12, Novell openSUSE 11.3 to 13.2,
+	Novell openSUSE Leap 42.1, Novell openSUSE (without version),
+	HP Integrated Lights-Out, Cisco AsyncOS, Cisco CNU-OS, Cisco UCOS,
+	Cisco ADE-OS, Cisco Wireless LAN Controller Software, Cisco Fire Linux
+	OS, Cisco, Fortinet, Univention Corporate Server (UCS), Greenbone OS
+	3.0, Ruggedcom ROS, Synology DSM, Arubanetworks Arubaos,
+	Huawei, Sourcefire Linux, Checkpoint Gaia Os, Ipfire Linux, and McAfee
+	Linux.
+
+	* src/html/classic/img/os_arubanetworks.png: New file.
+
+	* src/html/classic/img/os_checkpoint.png: New file.
+
+	* src/html/classic/img/os_fortinet.png: New file.
+
+	* src/html/classic/img/os_huawai.png: New file.
+
+	* src/html/classic/img/os_ipfire.png: New file.	
+
+	* src/html/classic/img/os_mcafee.png: New file.
+
+	* src/html/classic/img/os_ruggedcom.png: New file.
+
+	* src/html/classic/img/os_sourcefire.png: New file.
+
+	* src/html/classic/img/os_synology.png: New file.
+
 2016-04-15  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Backport r24986.

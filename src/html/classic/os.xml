@@ -96,6 +96,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <pattern>cpe:/o:redhat:linux:9</pattern><title>Red Hat Linux 9.0</title><icon>os_redhat.png</icon>
     </operating_system>
     <operating_system>
+        <pattern>cpe:/o:redhat:linux</pattern><title>Red Hat Linux</title><icon>os_redhat.png</icon>
+    </operating_system>
+    <operating_system>
         <pattern>cpe:/o:fedoraproject:fedora_core:1</pattern><title>Fedora Core 1</title><icon>os_fedora.png</icon>
     </operating_system>
     <operating_system>
@@ -141,6 +144,30 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <pattern>cpe:/o:fedoraproject:fedora:15</pattern><title>Fedora 15</title><icon>os_fedora.png</icon>
     </operating_system>
     <operating_system>
+        <pattern>cpe:/o:fedoraproject:fedora:16</pattern><title>Fedora 16</title><icon>os_fedora.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:fedoraproject:fedora:17</pattern><title>Fedora 17</title><icon>os_fedora.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:fedoraproject:fedora:18</pattern><title>Fedora 18</title><icon>os_fedora.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:fedoraproject:fedora:19</pattern><title>Fedora 19</title><icon>os_fedora.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:fedoraproject:fedora:20</pattern><title>Fedora 20</title><icon>os_fedora.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:fedoraproject:fedora:21</pattern><title>Fedora 21</title><icon>os_fedora.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:fedoraproject:fedora:22</pattern><title>Fedora 22</title><icon>os_fedora.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:fedoraproject:fedora:23</pattern><title>Fedora 23</title><icon>os_fedora.png</icon>
+    </operating_system>
+    <operating_system>
         <pattern>cpe:/o:fedoraproject:fedora</pattern><title>Fedora</title><icon>os_fedora.png</icon>
     </operating_system>
     <operating_system>
@@ -156,7 +183,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <pattern>cpe:/o:redhat:enterprise_linux:5</pattern><title>Red Hat Enterprise Linux 5</title><icon>os_redhat.png</icon>
     </operating_system>
     <operating_system>
+        <pattern>cpe:/o:redhat:enterprise_linux:6</pattern><title>Red Hat Enterprise Linux 6</title><icon>os_redhat.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:redhat:enterprise_linux:7</pattern><title>Red Hat Enterprise Linux 7</title><icon>os_redhat.png</icon>
+    </operating_system>
+    <operating_system>
         <pattern>cpe:/o:redhat</pattern><title>Red Hat</title><icon>os_redhat.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:mandriva:linux:2010.0</pattern><title>Mandriva Linux 2010.0</title><icon>os_mandriva.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:mandriva:linux:2010.1</pattern><title>Mandriva Linux 2010.1</title><icon>os_mandriva.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:mandriva:linux:2011.0</pattern><title>Mandriva Linux 2011.0</title><icon>os_mandriva.png</icon>
     </operating_system>
     <operating_system>
         <pattern>cpe:/o:mandriva:linux:2009.0</pattern><title>Mandriva Linux 2009.0</title><icon>os_mandriva.png</icon>
@@ -210,6 +252,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <pattern>cpe:/o:mandrakesoft:mandrake_linux</pattern><title>MandrakeSoft Mandrake Linux</title><icon>os_mandriva.png</icon>
     </operating_system>
     <operating_system>
+        <pattern>cpe:/o:centos:centos:7</pattern><title>CentOS-7</title><icon>os_centos.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:centos:centos:6</pattern><title>CentOS-6</title><icon>os_centos.png</icon>
+    </operating_system>
+    <operating_system>
         <pattern>cpe:/o:centos:centos:5</pattern><title>CentOS-5</title><icon>os_centos.png</icon>
     </operating_system>
     <operating_system>
@@ -243,7 +291,55 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <pattern>cpe:/o:debian:debian_linux:6.0</pattern><title>Debian GNU/Linux 6.0</title><icon>os_debian.png</icon>
     </operating_system>
     <operating_system>
+        <pattern>cpe:/o:debian:debian_linux:7.0</pattern><title>Debian GNU/Linux 7.0</title><icon>os_debian.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:debian:debian_linux:7.1</pattern><title>Debian GNU/Linux 7.1</title><icon>os_debian.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:debian:debian_linux:7.2</pattern><title>Debian GNU/Linux 7.2</title><icon>os_debian.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:debian:debian_linux:7.3</pattern><title>Debian GNU/Linux 7.3</title><icon>os_debian.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:debian:debian_linux:7.4</pattern><title>Debian GNU/Linux 7.4</title><icon>os_debian.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:debian:debian_linux:7.5</pattern><title>Debian GNU/Linux 7.5</title><icon>os_debian.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:debian:debian_linux:7.6</pattern><title>Debian GNU/Linux 7.6</title><icon>os_debian.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:debian:debian_linux:7.7</pattern><title>Debian GNU/Linux 7.7</title><icon>os_debian.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:debian:debian_linux:7.8</pattern><title>Debian GNU/Linux 7.8</title><icon>os_debian.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:debian:debian_linux:7.9</pattern><title>Debian GNU/Linux 7.9</title><icon>os_debian.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:debian:debian_linux:8.0</pattern><title>Debian GNU/Linux 8.0</title><icon>os_debian.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:debian:debian_linux:8.1</pattern><title>Debian GNU/Linux 8.1</title><icon>os_debian.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:debian:debian_linux:8.2</pattern><title>Debian GNU/Linux 8.2</title><icon>os_debian.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:debian:debian_linux:8.3</pattern><title>Debian GNU/Linux 8.3</title><icon>os_debian.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:debian:debian_linux:8.4</pattern><title>Debian GNU/Linux 8.4</title><icon>os_debian.png</icon>
+    </operating_system>
+    <operating_system>
         <pattern>cpe:/o:debian:debian_linux</pattern><title>Debian GNU/Linux</title><icon>os_debian.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:suse:linux_enterprise_server:12</pattern><title>SuSE Linux Enterprise Server 12</title><icon>os_suse.png</icon>
     </operating_system>
     <operating_system>
         <pattern>cpe:/o:suse:linux_enterprise_server:11</pattern><title>SuSE Linux Enterprise Server 11</title><icon>os_suse.png</icon>
@@ -256,6 +352,30 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </operating_system>
     <operating_system>
         <pattern>cpe:/o:suse:linux_enterprise_server</pattern><title>SuSE Linux Enterprise Server</title><icon>os_suse.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:novell:opensuse:11.3</pattern><title>Novell openSUSE 11.3</title><icon>os_novell.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:novell:opensuse:11.4</pattern><title>Novell openSUSE 11.4</title><icon>os_novell.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:novell:opensuse:12.1</pattern><title>Novell openSUSE 12.1</title><icon>os_novell.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:novell:opensuse:12.2</pattern><title>Novell openSUSE 12.2</title><icon>os_novell.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:novell:opensuse:12.3</pattern><title>Novell openSUSE 12.3</title><icon>os_novell.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:novell:opensuse:13.1</pattern><title>Novell openSUSE 13.1</title><icon>os_novell.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:novell:opensuse:13.2</pattern><title>Novell openSUSE 13.2</title><icon>os_novell.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:novell:opensuse:42.1</pattern><title>Novell openSUSE Leap 42.1</title><icon>os_novell.png</icon>
     </operating_system>
     <operating_system>
         <pattern>cpe:/o:novell:opensuse:11.2</pattern><title>Novell openSUSE 11.2</title><icon>os_novell.png</icon>
@@ -271,6 +391,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </operating_system>
     <operating_system>
         <pattern>cpe:/o:novell:opensuse:10.2</pattern><title>Novell openSUSE 10.2</title><icon>os_novell.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:novell:opensuse</pattern><title>Novell openSUSE</title><icon>os_novell.png</icon>
     </operating_system>
     <operating_system>
         <pattern>cpe:/o:novell:suse_linux:11.0</pattern><title>Novell SUSE Linux 11.0</title><icon>os_novell.png</icon>
@@ -384,6 +507,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <pattern>cpe:/o:hp:hp-ux</pattern><title>HP-UX</title><icon>os_hp.png</icon>
     </operating_system>
     <operating_system>
+        <pattern>cpe:/o:hp:integrated_lights-out</pattern><title>HP Integrated Lights-Out</title><icon>os_hp.png</icon>
+    </operating_system>
+    <operating_system>
         <pattern>cpe:/o:sun:solaris</pattern><title>Sun Solaris</title><icon>os_sun.png</icon>
     </operating_system>
     <operating_system>
@@ -405,10 +531,34 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <pattern>cpe:/o:cisco:ios</pattern><title>Cisco IOS</title><icon>os_cisco.png</icon>
     </operating_system>
     <operating_system>
+        <pattern>cpe:/o:cisco:asyncos</pattern><title>Cisco AsyncOS</title><icon>os_cisco.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:cisco:cnu-os</pattern><title>Cisco CNU-OS</title><icon>os_cisco.png</icon>
+    </operating_system>
+    <operating_system>
+         <pattern>cpe:/o:cisco:ucos</pattern><title>Cisco UCOS</title><icon>os_cisco.png</icon>
+    </operating_system>
+    <operating_system>
+         <pattern>cpe:/o:cisco:application_deployment_engine</pattern><title>Cisco ADE-OS</title><icon>os_cisco.png</icon>
+    </operating_system>
+    <operating_system>
+         <pattern>cpe:/o:cisco:wireless_lan_controller_software</pattern><title>Cisco Wireless LAN Controller Software</title><icon>os_cisco.png</icon>
+    </operating_system>
+    <operating_system>
+          <pattern>cpe:/o:cisco:fire_linux_os</pattern><title>Cisco Fire Linux OS</title><icon>os_cisco.png</icon>
+    </operating_system>
+    <operating_system>
+         <pattern>cpe:/o:cisco</pattern><title>Cisco</title><icon>os_cisco.png</icon>
+    </operating_system>
+    <operating_system>
         <pattern>cpe:/o:cyclades</pattern><title>Cyclades</title><icon>os_cyclades.png</icon>
     </operating_system>
     <operating_system>
         <pattern>cpe:/o:juniper</pattern><title>Juniper</title><icon>os_junos.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:fortinet:fortios</pattern><title>Fortinet</title><icon>os_fortinet.png</icon>
     </operating_system>
     <operating_system>
         <pattern>cpe:/o:freebsd:freebsd</pattern><title>FreeBSD</title><icon>os_freebsd.png</icon>
@@ -444,6 +594,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <pattern>cpe:/o:univention:univention_corporate_server</pattern><title>Univention Corporate Server (UCS)</title><icon>os_ucs.png</icon>
     </operating_system>
     <operating_system>
+        <pattern>cpe:/o:univention:ucs</pattern><title>Univention Corporate Server (UCS)</title><icon>os_ucs.png</icon>
+    </operating_system>
+    <operating_system>
         <pattern>cpe:/o:canonical:ubuntu_linux</pattern><title>Canonical Ubuntu Linux</title><icon>os_ubuntu.png</icon>
     </operating_system>
     <operating_system>
@@ -462,7 +615,34 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <pattern>cpe:/o:greenbone:greenbone_os:2.2.0</pattern><title>Greenbone OS 2.2</title><icon>os_gos.png</icon>
     </operating_system>
     <operating_system>
+        <pattern>cpe:/o:greenbone:greenbone_os:3.0</pattern><title>Greenbone OS 3.0</title><icon>os_gos.png</icon>
+    </operating_system>
+    <operating_system>
         <pattern>cpe:/o:greenbone:greenbone_os</pattern><title>Greenbone OS</title><icon>os_gos.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:ruggedcom:ros</pattern><title>Ruggedcom ROS</title><icon>os_ruggedcom.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:synology:dsm</pattern><title>Synology DSM</title><icon>os_synology.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:arubanetworks:arubaos</pattern><title>Arubanetworks Arubaos</title><icon>os_arubanetworks.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:huawei</pattern><title>Huawei</title><icon>os_huawai.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:sourcefire:linux_os</pattern><title>Sourcefire Linux</title><icon>os_sourcefire.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:checkpoint:gaia_os</pattern><title>Checkpoint Gaia Os</title><icon>os_checkpoint.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:ipfire:linux</pattern><title>Ipfire Linux</title><icon>os_ipfire.png</icon>
+    </operating_system>
+    <operating_system>
+        <pattern>cpe:/o:mcafee:linux_operating_system</pattern><title>McAfee Linux</title><icon>os_mcafee.png</icon>
     </operating_system>
     <operating_system>
         <pattern>cpe:/o:slackware:slackware_linux:8.1</pattern>
