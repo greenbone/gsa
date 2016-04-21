@@ -59,7 +59,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </li>
           <li>
             <a href="/omp?cmd=wizard&amp;name=quick_task&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-               class="wizard-action-icon" data-name="quick_task">
+               class="wizard-action-icon" data-name="quick_task" data-height="650">
               <xsl:value-of select="gsa:i18n ('Advanced Task Wizard', 'Advanced Task Wizard')"/>
             </a>
           </li>
@@ -168,7 +168,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template name="quick-task-wizard">
   <a name="wizard"></a>
-  <form action="" method="post" enctype="multipart/form-data">
+  <form action="" method="post" enctype="multipart/form-data" class="form-horizontal quick-task-wizard">
     <input type="hidden" name="token" value="{/envelope/token}"/>
     <input type="hidden" name="cmd" value="run_wizard"/>
     <input type="hidden" name="caller" value="{/envelope/caller}"/>
@@ -182,9 +182,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <input type="hidden" name="event_data:port_list_id" value="{../run_wizard_response/response/commands_response/get_settings_response/setting[name = 'Default Port List']/value}"/>
     <input type="hidden" name="event_data:scanner_id" value="{../run_wizard_response/response/commands_response/get_settings_response/setting[name = 'Default OpenVAS Scanner']/value}"/>
     <div class="container">
-      <div class="col-6">
+      <div class="col-5">
         <div class="container">
-          <div class="col-6">
+          <div class="col-12">
+            <div class="pull-right" id="wizardess"><img src="img/enchantress.png"/></div>
             <p><xsl:value-of select="gsa:i18n ('I can help you by creating a new scan task and automatically starting it.', 'Advanced Task Wizard')"/></p>
             <p><xsl:value-of select="gsa:i18n ('All you need to do is enter a name for the new task and the IP address or host name of the target, and select a scan configuration.', 'Advanced Task Wizard')"/></p>
             <p><xsl:value-of select="gsa:i18n ('You can choose if you want me to run the scan immediately, schedule the task for a later date and time, or just create the task so you can run it manually later.', 'Advanced Task Wizard')"/></p>
@@ -201,35 +202,148 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:value-of select="gsa:i18n('For any other setting I will apply the defaults from &quot;My Settings&quot;.', 'Advanced Task Wizard')"/>
             </p>
           </div>
-          <div class="col-6" id="wizardess"><img src="img/enchantress.png"/></div>
         </div>
       </div>
-      <div class="col-6">
-        <h4><b><xsl:value-of select="gsa:i18n ('Quick start: Create a new task', 'Advanced Task Wizard')"/></b></h4>
-        <table class="table-form">
-          <tr>
-            <td>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <xsl:value-of select="gsa:i18n ('Task Name', 'Advanced Task Wizard')"/>:
-            </td>
-            <td>
-              <input type="text" name="event_data:task_name" value="New Quick Task" size="30" maxlength="80"/>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <xsl:value-of select="gsa:i18n ('Scan Config', 'Scan Config')"/>:
-            </td>
-            <td>
-              <xsl:variable name="config_id" select="../run_wizard_response/response/commands_response/get_settings_response/setting[name = 'Default OpenVAS Scan Config']/value"/>
+      <div class="col-7">
+        <div class="form-group">
+          <h3><xsl:value-of select="gsa:i18n ('Quick start: Create a new task', 'Advanced Task Wizard')"/></h3>
+        </div>
+        <div class="form-group">
+          <label class="col-3 control-label">
+            <xsl:value-of select="gsa:i18n ('Task Name', 'Advanced Task Wizard')"/>:
+          </label>
+          <div class="col-9">
+            <input type="text" name="event_data:task_name" value="New Quick Task" size="30"
+              class="form-control" maxlength="80"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-3 control-label">
+            <xsl:value-of select="gsa:i18n ('Scan Config', 'Scan Config')"/>:
+          </label>
+          <div class="col-9">
+            <xsl:variable name="config_id" select="../run_wizard_response/response/commands_response/get_settings_response/setting[name = 'Default OpenVAS Scan Config']/value"/>
 
-              <select name="event_data:config_id">
-                <xsl:for-each select="../run_wizard_response/response/commands_response/get_configs_response/config">
+            <select name="event_data:config_id">
+              <xsl:for-each select="../run_wizard_response/response/commands_response/get_configs_response/config">
+                <xsl:choose>
+                  <xsl:when test="@id = $config_id or (string-length ($config_id) = 0 and @id = 'daba56c8-73ec-11df-a475-002264764cea')">
+                    <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <option value="{@id}"><xsl:value-of select="name"/></option>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </xsl:for-each>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-3 control-label">
+            <xsl:value-of select="gsa:i18n ('Target Host(s)', 'Task Wizard')"/>:
+          </label>
+          <div class="col-9">
+            <input type="text" name="event_data:target_hosts" value="{/envelope/client_address}" size="30"
+              class="form-control" maxlength="80"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-3 control-label">
+            <xsl:value-of select="gsa:i18n ('Start time', 'Task Wizard')"/>:
+          </label>
+          <div class="col-9">
+            <div class="radio">
+              <label>
+                <input type="radio" name="event_data:auto_start" value="2" checked="1"/>
+                <xsl:value-of select="gsa:i18n ('Start immediately', 'Task Wizard')"/>
+              </label>
+            </div>
+            <div class="radio">
+              <label>
+                <input type="radio" name="event_data:auto_start" value="1"/>
+                <xsl:value-of select="gsa:i18n ('Create Schedule', 'Schedule')"/>
+              </label>
+            </div>
+            <div class="offset-1">
+              <div class="datepicker form-group">
+                <xsl:variable name="day"
+                  select="format-number (date:day-in-month (date:date ()), '00')"/>
+                <xsl:variable name="month"
+                  select="format-number (date:month-in-year (date:date ()), '00')"/>
+                <xsl:variable name="year" select="date:year()"/>
+
+                <input class="datepicker-button" type="hidden"/>
+                <input class="datepicker-value" size="30" type="text" disabled="1" />
+                <input class="datepicker-day" name="event_data:start_day" value="{$day}" type="hidden"/>
+                <input class="datepicker-month" name="event_data:start_month" value="{$month}" type="hidden"/>
+                <input class="datepicker-year" name="event_data:start_year" value="{$year}" type="hidden"/>
+              </div>
+
+              <div class="form-group">
+                <xsl:variable name="hour"
+                  select="format-number (date:hour-in-day (date:time ()), '00')"/>
+                <xsl:variable name="minute"
+                  select="format-number (date:minute-in-hour (date:time ()), '00')"/>
+
+                <div class="form-item">
+                  at
+                </div>
+
+                <div class="form-item">
+                  <input type="text"
+                    name="event_data:start_hour"
+                    value="{$hour}"
+                    size="2"
+                    class="spinner"
+                    data-type="int"
+                    min="0"
+                    max="23"
+                    maxlength="2"/>
+                  h
+                </div>
+
+                <div class="form-item">
+                  <input type="text"
+                    name="event_data:start_minute"
+                    value="{$minute - ($minute mod 5)}"
+                    size="2"
+                    class="spinner"
+                    data-type="int"
+                    min="0"
+                    max="59"
+                    maxlength="2"/>
+                  m
+                </div>
+              </div>
+
+              <div class="form-group">
+                <xsl:call-template name="timezone-select">
+                  <xsl:with-param name="timezone" select="/envelope/timezone"/>
+                  <xsl:with-param name="input-name" select="'event_data:start_timezone'"/>
+                </xsl:call-template>
+              </div>
+            </div>
+
+            <div class="radio">
+              <label>
+                <input type="radio" name="event_data:auto_start" value="0"/>
+                <xsl:value-of select="gsa:i18n ('Do not start automatically', 'Advanced Task Wizard')"/>
+              </label>
+            </div>
+          </div>
+        </div>
+        <xsl:if test="../run_wizard_response/response/commands_response/get_credentials_response">
+          <div class="form-group">
+            <label class="col-3 control-label">
+              <xsl:value-of select="gsa:i18n ('SSH Credential', 'Target|Credentials')"/>
+            </label>
+            <div class="col-9">
+              <xsl:variable name="ssh_credential_id" select="../run_wizard_response/response/commands_response/get_settings_response/setting[name = 'Default SSH Credential']/value"/>
+              <select name="event_data:ssh_credential">
+                <option value="" selected="1">--</option>
+                <xsl:for-each select="../run_wizard_response/response/commands_response/get_credentials_response/credential">
                   <xsl:choose>
-                    <xsl:when test="@id = $config_id or (string-length ($config_id) = 0 and @id = 'daba56c8-73ec-11df-a475-002264764cea')">
+                    <xsl:when test="@id = $ssh_credential_id">
                       <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
                     </xsl:when>
                     <xsl:otherwise>
@@ -238,316 +352,87 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   </xsl:choose>
                 </xsl:for-each>
               </select>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <xsl:value-of select="gsa:i18n ('Target Host(s)', 'Task Wizard')"/>:
-            </td>
-            <td>
-              <input type="text" name="event_data:target_hosts" value="{/envelope/client_address}" size="30" maxlength="80"/>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <xsl:value-of select="gsa:i18n ('Start time', 'Task Wizard')"/>:
-            </td>
-            <td>
-              <div>
-                <label>
-                  <input type="radio" name="event_data:auto_start" value="2" checked="1"/>
-                  <xsl:value-of select="gsa:i18n ('Start immediately', 'Task Wizard')"/>
-                </label>
-              </div>
-              <div>
-                <label>
-                  <input type="radio" name="event_data:auto_start" value="1"/>
-                  <xsl:value-of select="gsa:i18n ('Create Schedule', 'Schedule')"/>
-                </label>
-              </div>
-              <div>
-                <div class="datepicker">
-                  <xsl:variable name="day"
-                    select="format-number (date:day-in-month (date:date ()), '00')"/>
-                  <xsl:variable name="month"
-                    select="format-number (date:month-in-year (date:date ()), '00')"/>
-                  <xsl:variable name="year" select="date:year()"/>
-
-                  <input class="datepicker-value" size="30" type="text" disabled="1" />
-                  <input class="datepicker-button" type="hidden"/>
-                  <input class="datepicker-day" name="event_data:start_day" value="{$day}" type="hidden"/>
-                  <input class="datepicker-month" name="event_data:start_month" value="{$month}" type="hidden"/>
-                  <input class="datepicker-year" name="event_data:start_year" value="{$year}" type="hidden"/>
-                  <select name="event_data:start_hour">
-                    <xsl:variable name="hour"
-                      select="format-number (date:hour-in-day (date:time ()), '00')"/>
-                    <xsl:call-template name="opt">
-                      <xsl:with-param name="value" select="'00'"/>
-                      <xsl:with-param name="select-value" select="$hour"/>
-                    </xsl:call-template>
-                    <xsl:call-template name="opt">
-                      <xsl:with-param name="value" select="'01'"/>
-                      <xsl:with-param name="select-value" select="$hour"/>
-                    </xsl:call-template>
-                    <xsl:call-template name="opt">
-                      <xsl:with-param name="value" select="'02'"/>
-                      <xsl:with-param name="select-value" select="$hour"/>
-                    </xsl:call-template>
-                    <xsl:call-template name="opt">
-                      <xsl:with-param name="value" select="'03'"/>
-                      <xsl:with-param name="select-value" select="$hour"/>
-                    </xsl:call-template>
-                    <xsl:call-template name="opt">
-                      <xsl:with-param name="value" select="'04'"/>
-                      <xsl:with-param name="select-value" select="$hour"/>
-                    </xsl:call-template>
-                    <xsl:call-template name="opt">
-                      <xsl:with-param name="value" select="'05'"/>
-                      <xsl:with-param name="select-value" select="$hour"/>
-                    </xsl:call-template>
-                    <xsl:call-template name="opt">
-                      <xsl:with-param name="value" select="'06'"/>
-                      <xsl:with-param name="select-value" select="$hour"/>
-                    </xsl:call-template>
-                    <xsl:call-template name="opt">
-                      <xsl:with-param name="value" select="'07'"/>
-                      <xsl:with-param name="select-value" select="$hour"/>
-                    </xsl:call-template>
-                    <xsl:call-template name="opt">
-                      <xsl:with-param name="value" select="'08'"/>
-                      <xsl:with-param name="select-value" select="$hour"/>
-                    </xsl:call-template>
-                    <xsl:call-template name="opt">
-                      <xsl:with-param name="value" select="'09'"/>
-                      <xsl:with-param name="select-value" select="$hour"/>
-                    </xsl:call-template>
-                    <xsl:call-template name="opt">
-                      <xsl:with-param name="value" select="'10'"/>
-                      <xsl:with-param name="select-value" select="$hour"/>
-                    </xsl:call-template>
-                    <xsl:call-template name="opt">
-                      <xsl:with-param name="value" select="'11'"/>
-                      <xsl:with-param name="select-value" select="$hour"/>
-                    </xsl:call-template>
-                    <xsl:call-template name="opt">
-                      <xsl:with-param name="value" select="'12'"/>
-                      <xsl:with-param name="select-value" select="$hour"/>
-                    </xsl:call-template>
-                    <xsl:call-template name="opt">
-                      <xsl:with-param name="value" select="'13'"/>
-                      <xsl:with-param name="select-value" select="$hour"/>
-                    </xsl:call-template>
-                    <xsl:call-template name="opt">
-                      <xsl:with-param name="value" select="'14'"/>
-                      <xsl:with-param name="select-value" select="$hour"/>
-                    </xsl:call-template>
-                    <xsl:call-template name="opt">
-                      <xsl:with-param name="value" select="'15'"/>
-                      <xsl:with-param name="select-value" select="$hour"/>
-                    </xsl:call-template>
-                    <xsl:call-template name="opt">
-                      <xsl:with-param name="value" select="'16'"/>
-                      <xsl:with-param name="select-value" select="$hour"/>
-                    </xsl:call-template>
-                    <xsl:call-template name="opt">
-                      <xsl:with-param name="value" select="'17'"/>
-                      <xsl:with-param name="select-value" select="$hour"/>
-                    </xsl:call-template>
-                    <xsl:call-template name="opt">
-                      <xsl:with-param name="value" select="'18'"/>
-                      <xsl:with-param name="select-value" select="$hour"/>
-                    </xsl:call-template>
-                    <xsl:call-template name="opt">
-                      <xsl:with-param name="value" select="'19'"/>
-                      <xsl:with-param name="select-value" select="$hour"/>
-                    </xsl:call-template>
-                    <xsl:call-template name="opt">
-                      <xsl:with-param name="value" select="'20'"/>
-                      <xsl:with-param name="select-value" select="$hour"/>
-                    </xsl:call-template>
-                    <xsl:call-template name="opt">
-                      <xsl:with-param name="value" select="'21'"/>
-                      <xsl:with-param name="select-value" select="$hour"/>
-                    </xsl:call-template>
-                    <xsl:call-template name="opt">
-                      <xsl:with-param name="value" select="'22'"/>
-                      <xsl:with-param name="select-value" select="$hour"/>
-                    </xsl:call-template>
-                    <xsl:call-template name="opt">
-                      <xsl:with-param name="value" select="'23'"/>
-                      <xsl:with-param name="select-value" select="$hour"/>
-                    </xsl:call-template>
-                  </select>
-                  h
-                  <select name="event_data:start_minute">
-                    <xsl:variable name="minute"
-                                  select="format-number (date:minute-in-hour (date:time ()), '00')"/>
-                    <xsl:call-template name="opt">
-                      <xsl:with-param name="value" select="'00'"/>
-                      <xsl:with-param name="select-value" select="$minute - ($minute mod 5)"/>
-                    </xsl:call-template>
-                    <xsl:call-template name="opt">
-                      <xsl:with-param name="value" select="'05'"/>
-                      <xsl:with-param name="select-value" select="$minute - ($minute mod 5)"/>
-                    </xsl:call-template>
-                    <xsl:call-template name="opt">
-                      <xsl:with-param name="value" select="'10'"/>
-                      <xsl:with-param name="select-value" select="$minute - ($minute mod 5)"/>
-                    </xsl:call-template>
-                    <xsl:call-template name="opt">
-                      <xsl:with-param name="value" select="'15'"/>
-                      <xsl:with-param name="select-value" select="$minute - ($minute mod 5)"/>
-                    </xsl:call-template>
-                    <xsl:call-template name="opt">
-                      <xsl:with-param name="value" select="'20'"/>
-                      <xsl:with-param name="select-value" select="$minute - ($minute mod 5)"/>
-                    </xsl:call-template>
-                    <xsl:call-template name="opt">
-                      <xsl:with-param name="value" select="'25'"/>
-                      <xsl:with-param name="select-value" select="$minute - ($minute mod 5)"/>
-                    </xsl:call-template>
-                    <xsl:call-template name="opt">
-                      <xsl:with-param name="value" select="'30'"/>
-                      <xsl:with-param name="select-value" select="$minute - ($minute mod 5)"/>
-                    </xsl:call-template>
-                    <xsl:call-template name="opt">
-                      <xsl:with-param name="value" select="'35'"/>
-                      <xsl:with-param name="select-value" select="$minute - ($minute mod 5)"/>
-                    </xsl:call-template>
-                    <xsl:call-template name="opt">
-                      <xsl:with-param name="value" select="'40'"/>
-                      <xsl:with-param name="select-value" select="$minute - ($minute mod 5)"/>
-                    </xsl:call-template>
-                    <xsl:call-template name="opt">
-                      <xsl:with-param name="value" select="'45'"/>
-                      <xsl:with-param name="select-value" select="$minute - ($minute mod 5)"/>
-                    </xsl:call-template>
-                    <xsl:call-template name="opt">
-                      <xsl:with-param name="value" select="'50'"/>
-                      <xsl:with-param name="select-value" select="$minute - ($minute mod 5)"/>
-                    </xsl:call-template>
-                    <xsl:call-template name="opt">
-                      <xsl:with-param name="value" select="'55'"/>
-                      <xsl:with-param name="select-value" select="$minute - ($minute mod 5)"/>
-                    </xsl:call-template>
-                  </select>
-                </div>
-
-                <div>
-                  <xsl:call-template name="timezone-select">
-                    <xsl:with-param name="timezone" select="/envelope/timezone"/>
-                    <xsl:with-param name="input-name" select="'event_data:start_timezone'"/>
-                  </xsl:call-template>
-                </div>
-              </div>
-
-              <label>
-                <input type="radio" name="event_data:auto_start" value="0"/>
-                <xsl:value-of select="gsa:i18n ('Do not start automatically', 'Advanced Task Wizard')"/>
-              </label>
-            </td>
-          </tr>
-          <xsl:if test="../run_wizard_response/response/commands_response/get_credentials_response">
-            <tr>
-              <td>
-                <xsl:value-of select="gsa:i18n ('SSH Credential', 'Target|Credentials')"/>
-              </td>
-              <td>
-                <xsl:variable name="ssh_credential_id" select="../run_wizard_response/response/commands_response/get_settings_response/setting[name = 'Default SSH Credential']/value"/>
-                <select name="event_data:ssh_credential">
-                  <option value="" selected="1">--</option>
-                  <xsl:for-each select="../run_wizard_response/response/commands_response/get_credentials_response/credential">
-                    <xsl:choose>
-                      <xsl:when test="@id = $ssh_credential_id">
-                        <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
-                      </xsl:when>
-                      <xsl:otherwise>
-                        <option value="{@id}"><xsl:value-of select="name"/></option>
-                      </xsl:otherwise>
-                    </xsl:choose>
-                  </xsl:for-each>
-                </select>
-                <xsl:value-of select="' on port '"/>
-                <input type="text" name="event_data:ssh_port" value="22" size="5"/>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <xsl:value-of select="gsa:i18n ('SMB Credential', 'Target|Credentials')"/>
-              </td>
-              <td>
-                <xsl:variable name="smb_credential_id" select="../run_wizard_response/response/commands_response/get_settings_response/setting[name = 'Default SMB Credential']/value"/>
-                <select name="event_data:smb_credential">
-                  <option value="" selected="1">--</option>
-                  <xsl:for-each select="../run_wizard_response/response/commands_response/get_credentials_response/credential">
-                    <xsl:choose>
-                      <xsl:when test="@id = $smb_credential_id">
-                        <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
-                      </xsl:when>
-                      <xsl:otherwise>
-                        <option value="{@id}"><xsl:value-of select="name"/></option>
-                      </xsl:otherwise>
-                    </xsl:choose>
-                  </xsl:for-each>
-                </select>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <xsl:value-of select="gsa:i18n ('ESXi Credential', 'Target|Credentials')"/>
-              </td>
-              <td>
-                <xsl:variable name="esxi_credential_id" select="../run_wizard_response/response/commands_response/get_settings_response/setting[name = 'Default ESXi Credential']/value"/>
-                <select name="event_data:esxi_credential">
-                  <option value="" selected="1">--</option>
-                  <xsl:for-each select="../run_wizard_response/response/commands_response/get_credentials_response/credential">
-                    <xsl:choose>
-                      <xsl:when test="@id = $esxi_credential_id">
-                        <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
-                      </xsl:when>
-                      <xsl:otherwise>
-                        <option value="{@id}"><xsl:value-of select="name"/></option>
-                      </xsl:otherwise>
-                    </xsl:choose>
-                  </xsl:for-each>
-                </select>
-              </td>
-            </tr>
-          </xsl:if>
-          <xsl:if test="gsa:may-op ('create_alert') and gsa:may-op ('get_alerts')">
-            <tr>
-              <td>
-                <xsl:value-of select="gsa:i18n ('Email report to', 'Task Wizard')"/>
-              </td>
-              <td>
-                <input type="text" name="event_data:alert_email" value="" size="30" maxlength="80"/>
-              </td>
-            </tr>
-          </xsl:if>
-          <xsl:if test="gsa:may-op ('get_slaves')">
-            <tr>
-              <td>
-                <xsl:value-of select="gsa:i18n ('Slave', 'Slave')"/>
-              </td>
-              <td>
-                <xsl:variable name="slave_id" select="../run_wizard_response/response/commands_response/get_settings_response/setting[name = 'Default Slave']/value"/>
-                <select name="event_data:slave_id">
-                  <option value="" selected="1">--</option>
-                  <xsl:for-each select="../run_wizard_response/response/commands_response/get_slaves_response/slave">
-                    <xsl:choose>
-                      <xsl:when test="@id = $slave_id">
-                        <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
-                      </xsl:when>
-                      <xsl:otherwise>
-                        <option value="{@id}"><xsl:value-of select="name"/></option>
-                      </xsl:otherwise>
-                    </xsl:choose>
-                  </xsl:for-each>
-                </select>
-              </td>
-            </tr>
-          </xsl:if>
-        </table>
+              <xsl:value-of select="' on port '"/>
+              <input type="text" name="event_data:ssh_port" class="spinner" min="0" max="65535" value="22" size="5"/>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-3 control-label">
+              <xsl:value-of select="gsa:i18n ('SMB Credential', 'Target|Credentials')"/>
+            </label>
+            <div class="col-9">
+              <xsl:variable name="smb_credential_id" select="../run_wizard_response/response/commands_response/get_settings_response/setting[name = 'Default SMB Credential']/value"/>
+              <select name="event_data:smb_credential">
+                <option value="" selected="1">--</option>
+                <xsl:for-each select="../run_wizard_response/response/commands_response/get_credentials_response/credential">
+                  <xsl:choose>
+                    <xsl:when test="@id = $smb_credential_id">
+                      <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <option value="{@id}"><xsl:value-of select="name"/></option>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </xsl:for-each>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-3 control-label">
+              <xsl:value-of select="gsa:i18n ('ESXi Credential', 'Target|Credentials')"/>
+            </label>
+            <div class="col-9">
+              <xsl:variable name="esxi_credential_id" select="../run_wizard_response/response/commands_response/get_settings_response/setting[name = 'Default ESXi Credential']/value"/>
+              <select name="event_data:esxi_credential">
+                <option value="" selected="1">--</option>
+                <xsl:for-each select="../run_wizard_response/response/commands_response/get_credentials_response/credential">
+                  <xsl:choose>
+                    <xsl:when test="@id = $esxi_credential_id">
+                      <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <option value="{@id}"><xsl:value-of select="name"/></option>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </xsl:for-each>
+              </select>
+            </div>
+          </div>
+        </xsl:if>
+        <xsl:if test="gsa:may-op ('create_alert') and gsa:may-op ('get_alerts')">
+          <div class="form-group">
+            <label class="col-3 control-label">
+              <xsl:value-of select="gsa:i18n ('Email report to', 'Task Wizard')"/>
+            </label>
+            <div class="col-9">
+              <input type="text" name="event_data:alert_email" value="" size="30" maxlength="80"
+                class="form-control" />
+            </div>
+          </div>
+        </xsl:if>
+        <xsl:if test="gsa:may-op ('get_slaves')">
+          <div class="form-group">
+            <label class="col-3 control-label">
+              <xsl:value-of select="gsa:i18n ('Slave', 'Slave')"/>
+            </label>
+            <div class="col-9">
+              <xsl:variable name="slave_id" select="../run_wizard_response/response/commands_response/get_settings_response/setting[name = 'Default Slave']/value"/>
+              <select name="event_data:slave_id">
+                <option value="" selected="1">--</option>
+                <xsl:for-each select="../run_wizard_response/response/commands_response/get_slaves_response/slave">
+                  <xsl:choose>
+                    <xsl:when test="@id = $slave_id">
+                      <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <option value="{@id}"><xsl:value-of select="name"/></option>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </xsl:for-each>
+              </select>
+            </div>
+          </div>
+        </xsl:if>
       </div>
     </div>
   </form>

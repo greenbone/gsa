@@ -964,6 +964,11 @@ select[multiple] {
   font-size: large;
 }
 
+.quick-task-wizard h3 {
+  margin-top: 0;
+  margin-bottom: 5px;
+}
+
 /* Styles for icon menus */
 
 .icon-menu {
