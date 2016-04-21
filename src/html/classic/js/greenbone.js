@@ -230,14 +230,15 @@
 
   /**
    * command is the name of the gsa command that has to be send initialy
-   * element is the select that will get the value of the newly created resource or true if a global reload is to be triggered.
+   * done is the select that will get the value of the newly created resource or true if a global reload is to be triggered.
    * params are extra parameters to send to the initial GET request.
    * show_method specifies the method to send the initial request instead of GET.
   **/
   var OMPDialog = function(options) {
     this.command = options.cmd;
     this.success_reload = options.reload;
-    this.element = options.element ? $(options.element) : undefined;
+    this.done = options.done ? $(options.done) : undefined;
+
     if (options.params === undefined) {
       this.params = {};
     } else {
@@ -408,7 +409,7 @@
         url.params.xml = 0;
         location.href = encode_url_object(url);
       }
-      if (self.element === undefined) {
+      if (self.done === undefined) {
         // No element to update, exit early.
         self.close();
         return;
@@ -437,16 +438,16 @@
       }
 
       if (entity !== undefined) {
-        // fill in the new information in the $element and make it selected
-        self.element.append($('<option/>', {
+        // fill in the new information in the $done element and make it selected
+        self.done.append($('<option/>', {
           value: entity.id,
           html: entity.name,
           selected: true,
         }));
 
         // refresh the select widget.
-        self.element.select2('destroy');
-        self.element.select2();
+        self.done.select2('destroy');
+        self.done.select2();
       }
 
       // And finally, close our dialog.
@@ -839,7 +840,7 @@
       event.preventDefault();
       new OMPDialog({
         cmd: cmd,
-        element: done,
+        done: done,
         params: params,
         reload: reload,
         parent_dialog: parent_dialog
@@ -1010,7 +1011,7 @@
         }
         new OMPDialog({
           cmd: 'process_bulk',
-          element: done,
+          done: done,
           params: params,
           show_method: 'POST',
           reload: reload,
