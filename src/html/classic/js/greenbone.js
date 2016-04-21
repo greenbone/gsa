@@ -1069,30 +1069,6 @@
       }).show();
     });
 
-    doc.find('#datepicker').each(function() {
-      var datepicker = $(this);
-      var curDate = doc.find('input[name=month]').val() +
-        '/' + doc.find('input[name=day_of_month]').val() + '/' +
-        doc.find('input[name=year]').val();
-      datepicker.datepicker({
-        showOn: 'button',
-        buttonImage: 'img/calendar.png',
-        buttonImageOnly: true,
-        buttonText: gsa._('Select date') + '',
-        altField: doc.find('#datevalue'),
-        altFormat: 'DD, d MM, yy',
-        minDate: curDate,
-        maxDate: '+3Y',
-        onClose: function() {
-          var date = $(this).datepicker('getDate');
-          doc.find('input[name=day_of_month]').val(date.getDate());
-          doc.find('input[name=month]').val(date.getMonth() + 1);
-          doc.find('input[name=year]').val(date.getFullYear());
-        },
-      });
-      datepicker.datepicker('setDate', curDate);
-    });
-
     doc.find('.datepicker').each(function() {
       var elem = $(this);
       var curDate = elem.find('.datepicker-month').val() +
