@@ -1046,7 +1046,7 @@
             localStorage.setItem('autorefresh-interval', 30);
           };
         }
-        dialog.show();
+        dialog.show(elem.data('button'));
       });
     });
 
