@@ -1,5 +1,11 @@
 2016-04-21  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/css/gsa-style.css: Fix 1px bug for icon menues. Sometimes
+	the icon drop down menu was shown 1px to low which resulted in a flickering
+	and inaccessible menu.
+
+2016-04-21  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/greenbone.js (OMPDialog): Allow to set the height of a
 	OMPDialog via data-height attribute.
 
