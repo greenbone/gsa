@@ -1075,12 +1075,14 @@
         '/' + elem.find('.datepicker-day').val() + '/' +
         elem.find('.datepicker-year').val();
       var button = elem.find('.datepicker-button').first();
+      var value_field = elem.find('.datepicker-value');
+
       button.datepicker({
         showOn: 'button',
         buttonImage: 'img/calendar.png',
         buttonImageOnly: true,
         buttonText: gsa._('Select date') + '',
-        altField: elem.find('.datepicker-value'),
+        altField: value_field,
         altFormat: 'DD, d MM, yy',
         minDate: curDate,
         maxDate: '+3Y',
@@ -1092,6 +1094,14 @@
         },
       });
       button.datepicker('setDate', curDate);
+
+      /* don't allow to change value_field by user */
+      value_field.prop('readonly', true);
+
+      value_field.on('click', function() {
+        /* show datepicker when clicking on value_field */
+        button.datepicker('show');
+      });
     });
 
     var autorefresh = doc.find('#autorefresh');

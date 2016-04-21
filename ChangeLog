@@ -1,5 +1,10 @@
 2016-04-21  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/greenbone.js (on_ready): Open datepicker when clicking
+	into datepicker value input field.
+
+2016-04-21  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/omp.xsl, src/html/classic/wizard.xsl: Don't disable
 	datepicker value input elements to be able to react on javascript events at
 	those elements.
