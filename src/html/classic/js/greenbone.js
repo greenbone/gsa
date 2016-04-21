@@ -1077,7 +1077,8 @@
       datepicker.datepicker({
         showOn: 'button',
         buttonImage: 'img/calendar.png',
-        buttonText: gsa._('Select date'),
+        buttonImageOnly: true,
+        buttonText: gsa._('Select date') + '',
         altField: doc.find('#datevalue'),
         altFormat: 'DD, d MM, yy',
         minDate: curDate,
@@ -1101,7 +1102,8 @@
       button.datepicker({
         showOn: 'button',
         buttonImage: 'img/calendar.png',
-        buttonText: gsa._('Select date'),
+        buttonImageOnly: true,
+        buttonText: gsa._('Select date') + '',
         altField: elem.find('.datepicker-value'),
         altFormat: 'DD, d MM, yy',
         minDate: curDate,
