@@ -1298,7 +1298,6 @@ select[multiple] {
 
 /* reduce max dialog size and show scrollbars if content is larger */
 .dialog-form.ui-dialog-content {
-  max-height: 500px !important;
   overflow: auto;
   margin-top: 5px;
   margin-bottom: 5px;
