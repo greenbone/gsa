@@ -29533,7 +29533,7 @@ should not have received it.
 
   <xsl:call-template name="user-tags-window">
     <xsl:with-param name="resource_type" select="'result'"/>
-    <xsl:with-param name="tag_names" select="../../../../get_tags_response"/>
+    <xsl:with-param name="tag_names" select="../../../get_tags_response"/>
     <xsl:with-param name="title" select="concat(gsa:i18n ('User Tags for this Result', 'Result'),': ')"/>
   </xsl:call-template>
 </xsl:template>

@@ -1,5 +1,10 @@
 2016-04-22  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/omp.xsl (result-details): Fix xpath to the tag response.
+	This fixes displaying the add user tag form within the result details.
+
+2016-04-22  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/omp.xsl (user-tags-window-checked): Refactor adding a user
 	tag into a inline form. This allows removing the inline style definitions from
 	the elements.
