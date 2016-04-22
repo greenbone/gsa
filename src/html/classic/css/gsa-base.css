@@ -465,6 +465,14 @@ input::-moz-focus-inner {
   vertical-align: middle;
 }
 
+.form-inline .form-group + .form-group {
+  margin-left: 5px;
+}
+
+.form-inline .form-group .control-label {
+  margin-right: 5px;
+}
+
 .form-inline .form-control,
 .form-item .form-control {
   display: inline-block;
