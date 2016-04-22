@@ -1,3 +1,8 @@
+2016-04-22  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/css/gsa-style.css: Remove style for #datevalue. #datevalue
+	isn't used anymore. Set vertical align to middle for datepicker input field.
+
 2016-04-21  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/js/greenbone.js (on_ready): Set tooltip on date value input

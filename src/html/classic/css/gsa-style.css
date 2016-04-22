@@ -1277,10 +1277,11 @@ select[multiple] {
   left: 0;
 }
 
-#datevalue, .datepicker-value {
+.datepicker-button {
   border: none;
   background: none;
   color: rgb(51, 51, 51);
+  vertical-align: middle;
 }
 
 .ui-datepicker-trigger {
