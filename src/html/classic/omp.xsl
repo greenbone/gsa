@@ -2472,6 +2472,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:when test="$report_section != ''">
           <a href="/omp?cmd=new_tag&amp;resource_id={$resource_id}&amp;resource_type={$resource_type}&amp;next={$next}&amp;next_type={$resource_type}&amp;next_id={$resource_id}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;report_section={$report_section}&amp;token={/envelope/token}"
              title="{gsa:i18n ('New tag', 'Tag')}"
+             data-reload="window"
              class="new-action-icon icon icon-action" data-type="tag" data-extra="resource_id={$resource_id}&amp;resource_type={$resource_type}">
             <img src="/img/new.png" alt="{gsa:i18n ('Add tag', 'Tag')}"/>
           </a>
@@ -2479,6 +2480,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:when test="$resource_subtype != ''">
           <a href="/omp?cmd=new_tag&amp;resource_id={$resource_id}&amp;resource_type={$resource_subtype}&amp;next={$next}&amp;next_type={$resource_type}&amp;next_subtype={$resource_subtype}&amp;next_id={$resource_id}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
              title="{gsa:i18n ('New Tag', 'Tag')}"
+             data-reload="window"
              class="new-action-icon icon icon-action" data-type="tag" data-extra="resource_id={$resource_id}&amp;resource_type={$resource_subtype}">
             <img src="/img/new.png" alt="{gsa:i18n ('Add tag', 'Tag')}"/>
           </a>
@@ -2486,6 +2488,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:otherwise>
           <a href="/omp?cmd=new_tag&amp;resource_id={$resource_id}&amp;resource_type={$resource_type}&amp;next={$next}&amp;next_type={$resource_type}&amp;next_id={$resource_id}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
              title="{gsa:i18n ('New Tag', 'Tag')}"
+             data-reload="window"
              class="new-action-icon icon icon-action" data-type="tag" data-extra="resource_id={$resource_id}&amp;resource_type={$resource_type}">
             <img src="/img/new.png" alt="{gsa:i18n ('Add tag', 'Tag')}"/>
           </a>

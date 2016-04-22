@@ -1,5 +1,10 @@
 2016-04-22  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/omp.xsl (user-tags-window-checked): Always reload current
+	window if a tag has been created instead of going to the tag list.
+
+2016-04-22  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/greenbone.js (on_ready): Use button field for displaying
 	the date value. The datepicker jquery ui elements requires to show this input
 	field to be able to react on events like keyboard input. Therefore we MUST NOT
