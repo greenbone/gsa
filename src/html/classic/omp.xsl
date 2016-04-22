@@ -2518,11 +2518,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:choose>
       <xsl:when test="count($tag_names/tag) > 0">
         <div style="margin-bottom: 10px">
-          <form style="display: inline; margin-left: 3px" action="/omp#user_tags" method="post" enctype="multipart/form-data">
-            <label>
-              <span style="margin-right: 5px">
+          <form class="form-inline" action="/omp#user_tags" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="comment"/>
+            <input type="hidden" name="active" value="1"/>
+            <input type="hidden" name="caller" value="{/envelope/current_page}"/>
+            <input type="hidden" name="token" value="{/envelope/token}"/>
+            <input type="hidden" name="cmd" value="create_tag"/>
+            <input type="hidden" name="resource_id" value="{$resource_id}"/>
+
+            <div class="form-group">
+              <label class="control-label">
                 <b><xsl:value-of select="gsa:i18n ('Add Tag', 'Tag')"/>:</b>
-              </span>
+              </label>
               <select style="margin-bottom: 0px;" name="tag_name" size="1">
                 <xsl:for-each select="$tag_names/tag">
                   <xsl:call-template name="opt">
@@ -2530,22 +2537,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   </xsl:call-template>
                 </xsl:for-each>
               </select>
-            </label>
-            <label>
-              <span style="margin-left: 5px;">
+            </div>
+
+            <div class="form-group">
+              <label class="control-label">
                 <xsl:value-of select="gsa:i18n ('with Value', 'Tag')"/>:
-              </span>
-              <input type="text" name="tag_value"/>
-            </label>
-            <input type="image" src="/img/tag.png" alt="{gsa:i18n ('Add Tag', 'Tag')}"
-                  name="Add Tag" value="Add Tag" title="{gsa:i18n ('Add Tag', 'Tag')}"
-                  style="margin-left: 5px" />
-            <input type="hidden" name="comment"/>
-            <input type="hidden" name="active" value="1"/>
-            <input type="hidden" name="caller" value="{/envelope/current_page}"/>
-            <input type="hidden" name="token" value="{/envelope/token}"/>
-            <input type="hidden" name="cmd" value="create_tag"/>
-            <input type="hidden" name="resource_id" value="{$resource_id}"/>
+              </label>
+              <input type="text" class="form-control" name="tag_value"/>
+            </div>
+            <div class="form-group">
+              <input type="image" src="/img/tag.png" alt="{gsa:i18n ('Add Tag', 'Tag')}"
+                name="Add Tag" value="Add Tag" title="{gsa:i18n ('Add Tag', 'Tag')}"
+                class="icon"/>
+            </div>
             <xsl:choose>
               <xsl:when test="$resource_subtype!=''">
                 <input type="hidden" name="resource_type" value="{$resource_subtype}"/>
