@@ -271,8 +271,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   select="format-number (date:month-in-year (date:date ()), '00')"/>
                 <xsl:variable name="year" select="date:year()"/>
 
-                <input class="datepicker-button" type="hidden"/>
-                <input class="datepicker-value" size="30" type="text"/>
+                <input class="datepicker-button" size="26"/>
                 <input class="datepicker-day" name="event_data:start_day" value="{$day}" type="hidden"/>
                 <input class="datepicker-month" name="event_data:start_month" value="{$month}" type="hidden"/>
                 <input class="datepicker-year" name="event_data:start_year" value="{$year}" type="hidden"/>
@@ -541,8 +540,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 select="format-number (date:minute-in-hour (date:time ()), '00')"/>
 
               <div class="datepicker form-group">
-                <input class="datepicker-button" type="hidden"/>
-                <input class="datepicker-value" size="26" type="text"/>
+                <input class="datepicker-button" size="26"/>
                 <input class="datepicker-day" name="event_data:start_day" value="{$day}" type="hidden"/>
                 <input class="datepicker-month" name="event_data:start_month" value="{$month}" type="hidden"/>
                 <input class="datepicker-year" name="event_data:start_year" value="{$year}" type="hidden"/>

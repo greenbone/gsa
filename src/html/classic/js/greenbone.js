@@ -1071,37 +1071,55 @@
 
     doc.find('.datepicker').each(function() {
       var elem = $(this);
-      var curDate = elem.find('.datepicker-month').val() +
-        '/' + elem.find('.datepicker-day').val() + '/' +
-        elem.find('.datepicker-year').val();
       var button = elem.find('.datepicker-button').first();
-      var value_field = elem.find('.datepicker-value');
       var tooltip = gsa._('Select date') + '';
+      var elem_year = elem.find('.datepicker-year');
+      var elem_month = elem.find('.datepicker-month');
+      var elem_day = elem.find('.datepicker-day');
+      var cur_date = new Date();
+
+      if (elem_year.length && is_defined(elem_year.val())) {
+        var year = parseInt(elem_year.val(), 10);
+        cur_date.setFullYear(year);
+      }
+      if (elem_month.length && is_defined(elem_month.val())) {
+        var month = parseInt(elem_month.val(), 10);
+        if (month > 0) {
+          cur_date.setMonth(month - 1); // js Date uses 0-11 for month value
+        }
+      }
+      if (elem_day.length && is_defined(elem_day.val())) {
+        var day = parseInt(elem_day.val(), 10);
+        if (day > 0) {
+          cur_date.setDate(day);
+        }
+      }
 
       button.datepicker({
         showOn: 'button',
         buttonImage: 'img/calendar.png',
         buttonImageOnly: true,
         buttonText: tooltip,
-        altField: value_field,
-        altFormat: 'DD, d MM, yy',
-        minDate: curDate,
+        dateFormat: 'DD, d MM, yy',
+        minDate: cur_date,
         maxDate: '+3Y',
         onClose: function() {
           var date = button.datepicker('getDate');
-          elem.find('.datepicker-day').val(date.getDate());
-          elem.find('.datepicker-month').val(date.getMonth() + 1);
-          elem.find('.datepicker-year').val(date.getFullYear());
+          if (has_value(date)) {
+            elem_day.val(date.getDate());
+            elem_month.val(date.getMonth() + 1);
+            elem_year.val(date.getFullYear());
+          }
         },
       });
-      button.datepicker('setDate', curDate);
+      button.datepicker('setDate', cur_date);
 
       /* don't allow to change value_field by user */
-      value_field.prop('readonly', true);
-      value_field.attr('title', tooltip);
+      button.prop('readonly', true);
+      button.attr('title', tooltip);
 
-      value_field.on('click', function() {
-        /* show datepicker when clicking on value_field */
+      button.on('click', function() {
+        /* show datepicker when clicking on deactivated button */
         button.datepicker('show');
       });
     });

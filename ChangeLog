@@ -1,5 +1,18 @@
 2016-04-22  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/greenbone.js (on_ready): Use button field for displaying
+	the date value. The datepicker jquery ui elements requires to show this input
+	field to be able to react on events like keyboard input. Therefore we MUST NOT
+	hide it. To be able to use a unified date format without having to rely on the
+	set date format of the datepicker the javascript Date class is used now.
+
+	* src/html/classic/wizard.xsl, src/html/classic/os.xml: Remove obsolete field
+	for datepicker value. The datepicker value is now shown in the datepicker
+	button field directly. As a result the button for the datepicker is always
+	shown on the right.
+
+2016-04-22  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/css/gsa-style.css: Remove style for #datevalue. #datevalue
 	isn't used anymore. Set vertical align to middle for datepicker input field.
 
