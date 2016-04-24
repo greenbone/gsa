@@ -32515,13 +32515,34 @@ should not have received it.
     <xsl:call-template name="filtered-report-export-form"></xsl:call-template>
   </div>
   <form class="form-inline" action="/omp" method="post" enctype="multipart/form-data">
+    <xsl:variable name="min_qod">
+      <xsl:choose>
+        <xsl:when test="string-length (report/filters/keywords/keyword[column='min_qod' and relation='=']/value) &gt; 0">
+          <xsl:value-of select="report/filters/keywords/keyword[column='min_qod' and relation='=']/value"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:text>70</xsl:text>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="overrides">
+      <xsl:choose>
+        <xsl:when test="report/filters/keywords/keyword[column='apply_overrides' and relation='=']/value = '1'">
+          <xsl:text>enabled</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:text>disabled</xsl:text>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+
     <input type="hidden" name="token" value="{/envelope/token}"/>
     <input type="hidden" name="caller" value="{/envelope/current_page}"/>
     <input type="hidden" name="cmd" value="create_asset"/>
     <input type="image" src="/img/add_to_assets.png" alt="{gsa:i18n ('Add to Assets', 'Assets')}"
            name="Add to Assets" value="Add to Assets"
            class="icon"
-           title="{gsa:i18n ('Add to Assets', 'Action Verb')}"/>
+           title="{gsa:i18n (concat ('Add to Assets with QOD>=', $min_qod, '% and Overrides ', $overrides), 'Action Verb')}"/>
 
     <input type="hidden" name="report_id" value="{@id}"/>
     <input type="hidden" name="next" value="get_report_section"/>

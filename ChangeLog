@@ -1,3 +1,8 @@
+2016-04-24  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/classic/omp.xsl (report-icons): Mention QOD and overrides in
+	tooltip of "Add to Assets" icon.
+
 2016-04-22  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/omp.xsl (result-details): Fix xpath to the tag response.
