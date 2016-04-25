@@ -7063,33 +7063,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:variable name="in_assets" select="commands_response/get_tasks_response/task/preferences/preference[scanner_name='in_assets']"/>
     <td><xsl:value-of select="gsa:i18n ($in_assets/name, 'Task')"/></td>
     <td>
-      <xsl:variable name="param_yes" select="/envelope/params/in_assets"/>
       <xsl:choose>
-        <xsl:when test="string-length ($param_yes) &gt; 0">
-          <xsl:choose>
-            <xsl:when test="$param_yes = '1'">
-              <label>
-                <input type="radio" name="in_assets" value="1" checked="1"/>
-                <xsl:value-of select="gsa:i18n ('yes', 'Binary Choice')"/>
-              </label>
-              <label>
-                <input type="radio" name="in_assets" value="0"/>
-                <xsl:value-of select="gsa:i18n ('no', 'Binary Choice')"/>
-              </label>
-            </xsl:when>
-            <xsl:otherwise>
-              <label>
-                <input type="radio" name="in_assets" value="1"/>
-                <xsl:value-of select="gsa:i18n ('yes', 'Binary Choice')"/>
-              </label>
-              <label>
-                <input type="radio" name="in_assets" value="0" checked="1"/>
-                <xsl:value-of select="gsa:i18n ('no', 'Binary Choice')"/>
-              </label>
-            </xsl:otherwise>
-          </xsl:choose>
-        </xsl:when>
-        <xsl:when test="((string-length ($param_yes) &gt; 0) and ($param_yes = '1')) or $in_assets/value='yes'">
+        <xsl:when test="$in_assets/value='yes'">
           <label>
             <input type="radio" name="in_assets" value="1" checked="1"/>
             <xsl:value-of select="gsa:i18n ('yes', 'Binary Choice')"/>
@@ -7118,32 +7093,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <td></td>
     <td><xsl:value-of select="gsa:i18n ('Apply Overrides', 'Overrides')"/></td>
     <td>
-      <xsl:variable name="param_yes" select="/envelope/params/apply_overrides"/>
       <xsl:choose>
-        <xsl:when test="string-length ($param_yes) &gt; 0">
-          <xsl:choose>
-            <xsl:when test="$param_yes = '1'">
-              <label>
-                <input type="radio" name="apply_overrides" value="1" checked="1"/>
-                <xsl:value-of select="gsa:i18n ('yes', 'Binary Choice')"/>
-              </label>
-              <label>
-                <input type="radio" name="apply_overrides" value="0"/>
-                <xsl:value-of select="gsa:i18n ('no', 'Binary Choice')"/>
-              </label>
-            </xsl:when>
-            <xsl:otherwise>
-              <label>
-                <input type="radio" name="apply_overrides" value="1"/>
-                <xsl:value-of select="gsa:i18n ('yes', 'Binary Choice')"/>
-              </label>
-              <label>
-                <input type="radio" name="apply_overrides" value="0" checked="1"/>
-                <xsl:value-of select="gsa:i18n ('no', 'Binary Choice')"/>
-              </label>
-            </xsl:otherwise>
-          </xsl:choose>
-        </xsl:when>
         <xsl:when test="$apply_overrides/value='yes'">
           <label>
             <input type="radio" name="apply_overrides" value="1" checked="1"/>
