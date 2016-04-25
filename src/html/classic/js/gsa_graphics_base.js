@@ -2585,6 +2585,10 @@
               record[this.localName] =
                 parseFloat(d3.select(this).text());
             }
+            else if (d3.select(this).text()
+                .match(/^\d{4}-(0\d|1[0-2])-([0-2]\d|3[01])T([0-1]\d|2[0-3]):[0-5]\d(:[0-5]\d)?([+-](0\d|1[0-4]):[0-5]\d|Z|)$/)) {
+              record[this.localName] = new Date(d3.select(this).text().substr(0,19)+'Z');
+            }
             else {
               record[this.localName] =
                 d3.select(this).text();

@@ -1,3 +1,11 @@
+2016-04-25  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/js/gsa_graphics_base.js (extract_simple_records):
+	Convert ISO datetime strings to JS Date objects.
+
+	* src/html/classic/js/gsa_line_chart.js (time_line): Change conditions
+	to expect JS Date objects and ensure the range covers the maximum date.
+
 2016-04-25  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (create_task_omp): Send Add to Assets preferences.

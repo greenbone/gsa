@@ -949,18 +949,21 @@
 
     var t_index = 0;
 
-    while (isNaN(old_data.records[t_index][self.t_field])) {
+    while (! (old_data.records[t_index][self.t_field] instanceof Date)) {
       t_index++;
     }
-    var t_min = new Date(old_data.records[t_index][self.t_field] * 1000);
+    var t_min = new Date(old_data.records[t_index][self.t_field].getTime());
 
     t_index = old_data.records.length - 1;
-    while (isNaN(old_data.records[t_index][self.t_field])) {
+    while (! (old_data.records[t_index][self.t_field] instanceof Date)) {
       t_index--;
     }
-    var t_max = new Date(old_data.records[t_index][self.t_field] * 1000);
+    /* Add 1 millisecond to ensure the range function give the correct results
+     * This addition should be negligible since timestamps in OpenVAS have
+     *  a resolution of 1 second */
+    var t_max = new Date(old_data.records[t_index][self.t_field].getTime() + 1);
 
-    var interval_days = (t_max.getTime() - t_min.getTime()) / 86400000;
+    var interval_days = (t_max.getTime() - t_min.getTime() - 1) / 86400000;
     var times;
     t_index = 0;
     var has_values;
@@ -1001,13 +1004,13 @@
 
       while (data_index < old_data.records.length &&
           (t_index >= times.length - 1 ||
-           isNaN(old_data.records[data_index][self.t_field]) ||
-           old_data.records[data_index][self.t_field] * 1000 <
+           ! (old_data.records[data_index][self.t_field] instanceof Date) ||
+           old_data.records[data_index][self.t_field].getTime() <
            times[Number(t_index) + 1].getTime())) {
 
         // collect values from orgin data which fit to the time value
 
-        if (isNaN(old_data.records[data_index][self.t_field])) {
+        if (! (old_data.records[data_index][self.t_field] instanceof Date)) {
           data_index++;
           continue;
         }
