@@ -1,3 +1,11 @@
+2016-04-25  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (create_task_omp): Send Add to Assets preferences.
+
+	* src/html/classic/omp.xsl (task [details]): Add % after QOD.
+	(new_task): Add Add to Assets preferences.
+	(html-edit-task-scan-options): Make QOD input smaller.
+
 2016-04-25  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/js/greenbone.js (OMPDialog): Fix reseting the submit button

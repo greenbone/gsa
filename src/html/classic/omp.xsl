@@ -4609,6 +4609,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <td>
             <xsl:value-of select="gsa:i18n ('Min QOD', 'Results')"/>:
             <xsl:value-of select="preferences/preference[scanner_name='assets_min_qod']/value"/>
+            <xsl:text>%</xsl:text>
           </td>
         </tr>
       </xsl:if>
@@ -6091,20 +6092,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <table class="table-form">
         <tr>
          <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
-         <td>
+         <td colspan="2">
            <input type="text" name="name" value="{gsa:param-or ('name', 'unnamed')}" size="30"
                   maxlength="80"/>
          </td>
         </tr>
         <tr>
           <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/></td>
-          <td>
+          <td colspan="2">
             <input type="text" name="comment" value="{gsa:param-or ('comment', '')}" size="30" maxlength="400"/>
           </td>
         </tr>
         <tr>
           <td><xsl:value-of select="gsa:i18n ('Scan Targets', 'Task')"/></td>
-          <td>
+          <td colspan="2">
             <select name="target_id">
               <xsl:variable name="target_id">
                 <xsl:value-of select="target_id"/>
@@ -6129,7 +6130,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:if test="gsa:may-op ('get_alerts')">
           <tr>
             <td><xsl:value-of select="gsa:i18n ('Alerts', 'Alert')"/></td>
-            <td>
+            <td colspan="2">
               <xsl:variable name="alerts"
                             select="get_alerts_response/alert"/>
               <select name="alert_ids:" multiple="multiple">
@@ -6143,7 +6144,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:if test="gsa:may-op ('get_schedules')">
           <tr>
             <td><xsl:value-of select="gsa:i18n ('Schedule', 'Schedule')"/></td>
-            <td>
+            <td colspan="2">
               <select name="schedule_id_optional">
                 <xsl:variable name="schedule_id"
                               select="schedule_id"/>
@@ -6181,7 +6182,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:if>
         <tr>
           <td><xsl:value-of select="gsa:i18n ('Add results to Assets', 'Task')"/></td>
-          <td>
+          <td colspan="2">
             <xsl:variable name="yes" select="/envelope/params/in_assets"/>
             <label>
               <xsl:choose>
@@ -6208,8 +6209,30 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </td>
         </tr>
         <tr>
-          <td><xsl:value-of select="gsa:i18n ('Alterable Task', 'Task')"/></td>
+          <td></td>
+          <td><xsl:value-of select="gsa:i18n ('Apply Overrides', 'Overrides')"/></td>
           <td>
+            <label>
+              <input type="radio" name="apply_overrides" value="1" checked="1"/>
+              <xsl:value-of select="gsa:i18n ('yes', 'Binary Choice')"/>
+            </label>
+            <label>
+              <input type="radio" name="apply_overrides" value="0"/>
+              <xsl:value-of select="gsa:i18n ('no', 'Binary Choice')"/>
+            </label>
+          </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td><xsl:value-of select="gsa:i18n ('Min QOD', 'Results')"/></td>
+          <td>
+            <input type="text" name="min_qod" value="70" size="4"/>
+            <xsl:text>%</xsl:text>
+          </td>
+        </tr>
+        <tr>
+          <td><xsl:value-of select="gsa:i18n ('Alterable Task', 'Task')"/></td>
+          <td colspan="2">
             <xsl:variable name="yes" select="/envelope/params/alterable"/>
             <label>
               <xsl:choose>
@@ -7150,7 +7173,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <td></td>
     <td><xsl:value-of select="gsa:i18n ('Min QOD', 'Results')"/></td>
     <td>
-      <input type="text" name="min_qod" value="{$min_qod/value}"/>
+      <input type="text" name="min_qod" value="{$min_qod/value}" size="4"/>
+      <xsl:text>%</xsl:text>
     </td>
   </tr>
   <xsl:if test="commands_response/get_tasks_response/task/status = 'New'">

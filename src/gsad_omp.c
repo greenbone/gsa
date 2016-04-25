@@ -4032,6 +4032,7 @@ create_task_omp (credentials_t * credentials, params_t *params,
   const char *max_checks, *max_hosts;
   const char *in_assets, *hosts_ordering, *alterable, *source_iface;
   const char *add_tag, *tag_name, *tag_value, *auto_delete, *auto_delete_data;
+  const char *apply_overrides, *min_qod;
   params_t *alerts;
   GString *alert_element;
 
@@ -4047,6 +4048,8 @@ create_task_omp (credentials_t * credentials, params_t *params,
   scanner_id = params_value (params, "scanner_id");
   config_id = params_value (params, "config_id");
   in_assets = params_value (params, "in_assets");
+  apply_overrides = params_value (params, "apply_overrides");
+  min_qod = params_value (params, "min_qod");
   max_checks = params_value (params, "max_checks");
   source_iface = params_value (params, "source_iface");
   auto_delete = params_value (params, "auto_delete");
@@ -4093,6 +4096,8 @@ create_task_omp (credentials_t * credentials, params_t *params,
   else
     schedule_periods = "0";
   CHECK (in_assets);
+  CHECK (apply_overrides);
+  CHECK (min_qod);
   CHECK (max_checks);
   CHECK (source_iface);
   CHECK (auto_delete);
@@ -4159,6 +4164,16 @@ create_task_omp (credentials_t * credentials, params_t *params,
                              "<value>%s</value>"
                              "</preference>"
                              "<preference>"
+                             "<scanner_name>"
+                             "assets_apply_overrides"
+                             "</scanner_name>"
+                             "<value>%s</value>"
+                             "</preference>"
+                             "<preference>"
+                             "<scanner_name>assets_min_qod</scanner_name>"
+                             "<value>%s</value>"
+                             "</preference>"
+                             "<preference>"
                              "<scanner_name>source_iface</scanner_name>"
                              "<value>%s</value>"
                              "</preference>"
@@ -4186,6 +4201,8 @@ create_task_omp (credentials_t * credentials, params_t *params,
                              max_checks,
                              max_hosts,
                              strcmp (in_assets, "0") ? "yes" : "no",
+                             strcmp (apply_overrides, "0") ? "yes" : "no",
+                             min_qod,
                              source_iface,
                              auto_delete,
                              auto_delete_data,
