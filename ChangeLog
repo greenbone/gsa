@@ -1,5 +1,11 @@
 2016-04-25  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/greenbone.js (OMPDialog): Fix reseting the submit button
+	of a dialog. done was used as variable and prototype function name. Rename
+	done function to finished.
+
+2016-04-25  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/omp.xsl (list-window): Remove obsolete update button from
 	list table bodies. The update is done automatically via js on selection change
 	event.

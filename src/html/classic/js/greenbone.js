@@ -274,7 +274,7 @@
 
   OMPDialog.prototype.waiting = waiting;
 
-  OMPDialog.prototype.done = function() {
+  OMPDialog.prototype.finished = function() {
     // I believe there have to be a better way to find this.
     var buttons = this.dialog.closest('.ui-dialog').find('button.ui-button');
     buttons.each(function() {
@@ -391,7 +391,7 @@
       self.setErrorFromResponse(jqXHR);
 
       // restore the original button.
-      self.done();
+      self.finished();
     })
     .done(function(xml) {
       xml = $(xml);
@@ -588,7 +588,7 @@
     self.waiting();
     $.ajax(self.request_data).then(function(data) {
         self.setContent(data);
-        self.done();
+        self.finished();
       }, function() {
       }
     );
