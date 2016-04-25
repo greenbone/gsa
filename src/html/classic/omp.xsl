@@ -5529,8 +5529,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:otherwise>
             </xsl:choose>
           </select>
-          <xsl:text> </xsl:text>
-          <input type="image" src="/img/refresh.png" alt="{gsa:i18n ('Update', 'Action Verb')}" title="{gsa:i18n ('Update', 'Action Verb')}"/>
         </form>
       </xsl:if>
 
