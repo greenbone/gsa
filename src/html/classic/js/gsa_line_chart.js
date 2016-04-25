@@ -168,7 +168,7 @@
     }
 
     function mouse_down() {
-      if (d3.event.button >= 2)
+      if (d3.event.button >= 2 || data.records.length <= 1)
         return;
 
       var parent_rect = self.svg.node()
