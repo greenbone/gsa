@@ -1,3 +1,8 @@
+2016-04-26  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/classic/omp.xsl (task [details]): Hide Add to Assets for
+	container tasks.
+
 2016-04-26  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/js/greenbone.js (gsa.is_date): New function.

@@ -4588,30 +4588,32 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </tr>
       </xsl:if>
       <xsl:variable name="in_assets" select="preferences/preference[scanner_name='in_assets']"/>
-      <tr>
-        <td>
-          <xsl:value-of select="gsa:i18n ('Add to Assets', 'Task')"/>:
-        </td>
-        <td>
-          <xsl:value-of select="gsa:i18n (normalize-space($in_assets/value), 'Task')"/>
-        </td>
-      </tr>
-      <xsl:if test="normalize-space($in_assets/value) = 'yes'">
+      <xsl:if test="target/@id != ''">
         <tr>
-          <td></td>
           <td>
-            <xsl:value-of select="gsa:i18n ('Apply Overrides', 'Overrides')"/>:
-            <xsl:value-of select="preferences/preference[scanner_name='assets_apply_overrides']/value"/>
+            <xsl:value-of select="gsa:i18n ('Add to Assets', 'Task')"/>:
+          </td>
+          <td>
+            <xsl:value-of select="gsa:i18n (normalize-space($in_assets/value), 'Task')"/>
           </td>
         </tr>
-        <tr>
-          <td></td>
-          <td>
-            <xsl:value-of select="gsa:i18n ('Min QOD', 'Results')"/>:
-            <xsl:value-of select="preferences/preference[scanner_name='assets_min_qod']/value"/>
-            <xsl:text>%</xsl:text>
-          </td>
-        </tr>
+        <xsl:if test="normalize-space($in_assets/value) = 'yes'">
+          <tr>
+            <td></td>
+            <td>
+              <xsl:value-of select="gsa:i18n ('Apply Overrides', 'Overrides')"/>:
+              <xsl:value-of select="preferences/preference[scanner_name='assets_apply_overrides']/value"/>
+            </td>
+          </tr>
+          <tr>
+            <td></td>
+            <td>
+              <xsl:value-of select="gsa:i18n ('Min QOD', 'Results')"/>:
+              <xsl:value-of select="preferences/preference[scanner_name='assets_min_qod']/value"/>
+              <xsl:text>%</xsl:text>
+            </td>
+          </tr>
+        </xsl:if>
       </xsl:if>
       <tr>
         <td>
