@@ -137,7 +137,6 @@ input[type="checkbox"] {
 .radio label,
 .checkbox label {
   padding-left: 20px;
-  min-height: 20px;
   margin-bottom: 0;
   font-weight: normal;
   cursor: pointer;

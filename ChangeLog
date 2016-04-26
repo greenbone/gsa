@@ -1,5 +1,10 @@
 2016-04-26  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/css/gsa-base.css: Don't set min-height for radio or
+	checkbox labels. This prevents to align them vertically in the middle.
+
+2016-04-26  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/css/gsa-style.css: Render select input elements the same as
 	text inputs. The padding top and button must be inside of the border.
 
