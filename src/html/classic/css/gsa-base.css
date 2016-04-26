@@ -122,7 +122,7 @@ label {
 input[type="radio"],
 input[type="checkbox"] {
   padding: 0;
-  margin: 0px;
+  margin: 0;
   line-height: normal;
 }
 
@@ -529,6 +529,7 @@ textarea.form-control {
 
 .form-item {
   display: inline-block;
+  vertical-align: middle;
   width: auto;
 }
 
@@ -541,6 +542,19 @@ textarea.form-control {
 .form-item .radio-inline,
 .form-item .checkbox-inline {
   padding-top: 0;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.form-item label {
+  margin-bottom: 0;
+  vertical-align: middle;
+}
+
+.form-item .checkbox input[type="checkbox"],
+.form-item .radio input[type="radio"] {
+  vertical-align: middle;
+  top: 1px;
 }
 
 /* vim: set ts=2 sw=2 tw=80: */
