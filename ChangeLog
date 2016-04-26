@@ -1,5 +1,12 @@
 2016-04-26  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/greenbone.js (OMPAction.prototype.do): Fix adding values
+	to FormData object. The FormData.prototype.set function is only available in
+	Chrome >= 50, Firefox >= 39. FormData.prototype.append only requires Chrome >=
+	7, Firefox >= 4.0 and IE >= 10.
+
+2016-04-26  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* doc/form-examples.html: Add a basic html exmaple file to show how to use the
 	css classes for horizontal forms.
 

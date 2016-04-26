@@ -922,10 +922,14 @@
     var self = this;
     var data = new FormData(this.form);
     for (var param in this.params) {
+      if (param === 'xml' || param === 'no_redirect') {
+        // skip values
+        continue;
+      }
       data.append(param, this.params[param]);
     }
-    data.set('xml', 1);
-    data.set('no_redirect', 1);
+    data.append('xml', 1);
+    data.append('no_redirect', 1);
 
     self.request_data = {
       url: '/omp',
