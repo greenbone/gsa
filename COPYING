@@ -33,7 +33,7 @@ src/html/classic/js/lib/d3.tip.js:
 
 src/html/classic/js/lib/jquery-2.1.4.js,
 src/html/classic/js/lib/min/jquery-2.1.4.js,
-src/html/classic/js/lib/jquery-2.1.4.js.map:
+src/html/classic/js/lib/min/jquery-2.1.4.js.map:
   License: MIT
   Copyright: jQuery Foundation, Inc. and other contributors
   Origin: http://jquery.com/download/
@@ -57,8 +57,8 @@ src/html/classic/css/images/ui-icons_87d050_256x240.png,
 src/html/classic/css/images/ui-icons_aa0000_256x240.png,
 src/html/classic/css/images/ui-icons_fdc300_256x240.png,
 src/html/classic/css/images/ui-icons_ffffff_256x240.png,
-src/html/classic/js/jquery-ui.js,
-src/html/classic/js/min/jquery-ui.js:
+src/html/classic/js/lib/jquery-ui.js,
+src/html/classic/js/lib/min/jquery-ui.js:
   License: MIT
   Copyright: jQuery Foundation, Inc. and other contributors
   Origin: http://jqueryui.com/download/
