@@ -253,6 +253,131 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
+<xsl:template name="js-assets-top-visualization">
+  <xsl:param name="type" select="'host'"/>
+  <!-- Setting UUIDs for chart selection preferences -->
+  <xsl:param name="controllers_pref_id">
+    <xsl:choose>
+      <xsl:when test="$type='host'">d3f5f2de-a85b-43f2-a817-b127457cc8ba</xsl:when>
+      <xsl:when test="$type='os'">e93b51ed-5881-40e0-bc4f-7d3268a36177</xsl:when>
+    </xsl:choose>
+  </xsl:param>
+  <!-- Setting UUIDs for dashboard row height preferences -->
+  <xsl:param name="heights_pref_id">
+    <xsl:choose>
+      <xsl:when test="$type='host'">1cef4fae-57a6-4c1d-856c-0368ead863d4</xsl:when>
+      <xsl:when test="$type='os'">3006052f-3f28-419b-bffa-65b41605d5c3</xsl:when>
+    </xsl:choose>
+  </xsl:param>
+  <!-- Default chart selections:
+        Controller names of boxes in a row separated with "|",
+        rows separated with "#" -->
+  <xsl:param name="default_controllers">
+    <xsl:choose>
+      <xsl:when test="$type='host'">most-vulnerable-hosts|by-class</xsl:when>
+      <!-- fallback for all other types -->
+      <xsl:otherwise>by-cvss|by-class</xsl:otherwise>
+    </xsl:choose>
+  </xsl:param>
+  <!-- Default row heights, rows separated with "#",
+        number of rows must match default_controllers -->
+  <xsl:param name="default_heights">
+    <xsl:choose>
+      <xsl:when test="$type='host'">280</xsl:when>
+      <!-- fallback for all other types -->
+      <xsl:otherwise>280</xsl:otherwise>
+    </xsl:choose>
+  </xsl:param>
+
+  <xsl:variable name="controllers">
+    <xsl:choose>
+      <xsl:when test="/envelope/chart_preferences/chart_preference[@id = $controllers_pref_id]">
+        <xsl:value-of select="/envelope/chart_preferences/chart_preference[@id = $controllers_pref_id]/value"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$default_controllers"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <xsl:variable name="heights">
+    <xsl:choose>
+      <xsl:when test="/envelope/chart_preferences/chart_preference[@id = $heights_pref_id]">
+        <xsl:value-of select="/envelope/chart_preferences/chart_preference[@id = $heights_pref_id]/value"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$default_heights"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
+  <xsl:variable name="filter" select="/envelope/get_assets/get_assets_response/filters/term"/>
+  <xsl:variable name="filt_id" select="/envelope/get_assets/get_assets_response/filters/@id"/>
+
+  <div class="dashboard" id="top-dashboard"
+    data-dashboard-name="top-dashboard"
+    data-controllers="{$controllers}" data-heights="{$heights}"
+    data-filter="{$filter}"
+    data-controllers-pref-id="{$controllers_pref_id}"
+    data-filters-id="{$filt_id}" data-heights-pref-id="{$heights_pref_id}"
+    data-dashboard-controls="top-dashboard-controls"
+    data-max-components="4">
+    <xsl:if test="$type = 'host'">
+      <div class="dashboard-data-source"
+        data-source-name="severity-count-source"
+        data-group-column="severity"
+        data-aggregate-type="{$type}"
+        data-filter="{$filter}"
+        data-filter-id="{$filt_id}">
+        <span class="dashboard-chart"
+          data-chart-name="by-cvss"
+          data-chart-type="bar"
+          data-chart-template="info_by_cvss"/>
+        <span class="dashboard-chart"
+          data-chart-name="by-class"
+          data-chart-type="donut"
+          data-chart-template="info_by_class"/>
+      </div>
+      <div class="dashboard-data-source"
+        data-source-name="most-vulnerable-hosts-source"
+        data-aggregate-type="{$type}"
+        data-group-column="uuid"
+        data-columns="severity"
+        data-text-columns="name"
+        data-sort-field="severity"
+        data-sort-order="descending"
+        data-sort-stat="max"
+        data-filter="{$filter}"
+        data-filter-id="{$filt_id}">
+        <span class="dashboard-chart"
+          data-chart-name="most-vulnerable-hosts"
+          data-chart-type="horizontal_bar"
+          data-x-field="name"
+          data-y-fields="severity_max"
+          data-z-fields="severity_max"
+          data-gen-params='{{"empty_text": "No vulnerable Hosts found"}}'
+          data-init-params='{{"title_text": "Most vulnerable hosts"}}'/>
+      </div>
+    </xsl:if>
+    <xsl:if test="$type = 'os'">
+      <div class="dashboard-data-source"
+        data-source-name="average-severity-count-source"
+        data-group-column="average_severity"
+        data-aggregate-type="{$type}"
+        data-filter="{$filter}"
+        data-filter-id="{$filt_id}">
+        <span class="dashboard-chart"
+          data-chart-name="by-cvss"
+          data-chart-type="bar"
+          data-chart-template="info_by_cvss"/>
+        <span class="dashboard-chart"
+          data-chart-name="by-class"
+          data-chart-type="donut"
+          data-chart-template="info_by_class"/>
+      </div>
+    </xsl:if>
+  </div>
+</xsl:template>
+
 <xsl:template name="js-secinfo-top-visualization">
   <xsl:param name="type" select="'nvt'"/>
   <!-- Setting UUIDs for chart selection preferences -->

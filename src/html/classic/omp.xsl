@@ -38110,6 +38110,12 @@ should not have received it.
       </column>
     </xsl:with-param>
     <xsl:with-param name="icon-count" select="4"/>
+    <xsl:with-param name="top-visualization">
+      <xsl:call-template name="init-d3charts"/>
+      <xsl:call-template name="js-assets-top-visualization">
+        <xsl:with-param name="type" select="'host'"/>
+      </xsl:call-template>
+    </xsl:with-param>
   </xsl:call-template>
 </xsl:template>
 
@@ -38164,6 +38170,12 @@ should not have received it.
     </xsl:with-param>
     <xsl:with-param name="icon-count" select="1"/>
     <xsl:with-param name="new-icon" select="false ()"/>
+    <xsl:with-param name="top-visualization">
+      <xsl:call-template name="init-d3charts"/>
+      <xsl:call-template name="js-assets-top-visualization">
+        <xsl:with-param name="type" select="'os'"/>
+      </xsl:call-template>
+    </xsl:with-param>
   </xsl:call-template>
 </xsl:template>
 

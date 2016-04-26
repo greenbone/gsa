@@ -1,3 +1,21 @@
+2016-04-26  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/gsad.c (init_validator): Add "host" and "os" to aggregate_type.
+
+	* src/html/classic/graphics.xsl (js-assets-top-visualization): New
+	template.
+
+	* src/html/classic/omp.xsl (html-hosts-table, html-oss-table): Add top
+	dashboard.
+
+	* src/html/classic/js/gsa_graphics_base.js (gsa.severity_level): New
+	function.
+	(gsa.resource_type_name): Add new case for "OS".
+
+	* src/html/classic/js/gsa_h_bar_chart.js (generate): Show severity
+	level name instead of percentage in tooltips if the y field is a
+	severity.
+
 2016-04-26  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/omp.xsl (task [details]): Hide Add to Assets for

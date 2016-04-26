@@ -226,6 +226,18 @@
                 ' (' + (100 * d[self.y_field] / y_sum).toFixed(1) + '%)';
             }
           }
+          else if (self.y_field.indexOf ('severity') !== -1) {
+            if (self.y_label !== '') {
+              return '<strong>' + self.y_label + ' (' + x +
+                  '):</strong><br/> ' + d[self.y_field].toFixed(1) +
+                  ' (' + gsa.severity_level(d[self.y_field]) + ')';
+            }
+            else {
+              return '<strong>' + x + ':</strong><br/> ' +
+                d[self.y_field].toFixed(1) +
+                ' (' + gsa.severity_level(d[self.y_field]) + ')';
+            }
+          }
           else {
             if (self.y_label !== '') {
               return '<strong>' + self.y_label + ' (' + x +

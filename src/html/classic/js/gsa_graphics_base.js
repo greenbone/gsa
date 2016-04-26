@@ -44,6 +44,7 @@
   gsa.format_data = format_data;
   gsa.column_label = column_label;
   gsa.default_column_label = default_column_label;
+  gsa.severity_level = severity_level;
   gsa.resource_type_name = resource_type_name;
   gsa.resource_type_name_plural = resource_type_name_plural;
   gsa.open_detached = open_detached;
@@ -2867,10 +2868,38 @@
   }
 
   /*
+   * Gets the severity level name for a numeric cvss value.
+   *
+   * @param {number}  value The numeric value to convert.
+   *
+   * @return {string} The severity level name.
+   */
+  function severity_level(value) {
+    if (value >= gsa.severity_levels.min_high)
+      return gsa._('High');
+    else if (value >= gsa.severity_levels.min_medium)
+      return gsa._('Medium');
+    else if (value >= gsa.severity_levels.min_low)
+      return gsa._('Low');
+    else if (value >= 0.0)
+      return gsa._('Log');
+    else if (value === -1.0)
+      return gsa._('False Positive');
+    else if (value === -2.0)
+      return gsa._('Debug');
+    else if (value === -3.0)
+      return gsa._('Error');
+    else
+      return ('N/A');
+  }
+
+  /*
   * Gets the full name of a resource type.
   */
   function resource_type_name(type) {
     switch (type.toLowerCase()) {
+      case 'os':
+        return gsa._('Operating System');
       case 'ovaldef':
         return gsa._('OVAL definition');
       case 'cert_bund_adv':
