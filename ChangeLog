@@ -1,3 +1,10 @@
+2016-04-26  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/js/greenbone.js (gsa.is_date): New function.
+
+	* src/html/classic/js/gsa_line_chart.js (time_line): Use new function
+	gsa.is_date to test if a value is a date.
+
 2016-04-25  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/js/gsa_line_chart.js (generate): Ignore mouse down

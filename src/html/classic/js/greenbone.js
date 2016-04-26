@@ -56,6 +56,7 @@
   var gsa = global.gsa;
 
   gsa.has_value = has_value;
+  gsa.is_date = is_date;
   gsa.is_object = is_object;
   gsa.is_string = is_string;
   gsa.is_defined = is_defined;
@@ -112,6 +113,10 @@
   gsa._ = function(key, options) {
     return global.i18next.t(key, options);
   };
+
+  function is_date(value) {
+    return is_object(value) && value instanceof Date;
+  }
 
   function is_object(value) {
     return has_value(value) && typeof value === 'object';

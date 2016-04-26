@@ -949,13 +949,13 @@
 
     var t_index = 0;
 
-    while (! (old_data.records[t_index][self.t_field] instanceof Date)) {
+    while (! gsa.is_date (old_data.records[t_index][self.t_field])) {
       t_index++;
     }
     var t_min = new Date(old_data.records[t_index][self.t_field].getTime());
 
     t_index = old_data.records.length - 1;
-    while (! (old_data.records[t_index][self.t_field] instanceof Date)) {
+    while (! gsa.is_date (old_data.records[t_index][self.t_field])) {
       t_index--;
     }
     /* Add 1 millisecond to ensure the range function give the correct results
@@ -1004,13 +1004,13 @@
 
       while (data_index < old_data.records.length &&
           (t_index >= times.length - 1 ||
-           ! (old_data.records[data_index][self.t_field] instanceof Date) ||
+           ! gsa.is_date (old_data.records[data_index][self.t_field]) ||
            old_data.records[data_index][self.t_field].getTime() <
            times[Number(t_index) + 1].getTime())) {
 
         // collect values from orgin data which fit to the time value
 
-        if (! (old_data.records[data_index][self.t_field] instanceof Date)) {
+        if (! gsa.is_date (old_data.records[data_index][self.t_field])) {
           data_index++;
           continue;
         }
