@@ -1502,6 +1502,9 @@ select[multiple] {
 
 .form-horizontal .select2-container {
   min-width: 180px;
+}
+
+.form-horizontal .select2-selection {
   padding: 1px 0; /* use same padding top and bottom as inputs */
 }
 
