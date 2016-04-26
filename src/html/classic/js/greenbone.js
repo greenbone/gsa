@@ -493,6 +493,12 @@
     self.dialog.attr('title', dialog_title);
     self.dialog.html(dialog_html);
 
+    self.dialog.find('form').on('submit', function(event) {
+      // prevent default form submission. we need to use our function
+      self.submit();
+      event.preventDefault();
+    });
+
     // enable buttons, set up selects, ...
     on_ready(self.dialog);
   };
@@ -526,9 +532,7 @@
           {
             text: button,
             click: function() {
-              self.waiting();
-
-              self.postForm();
+              self.submit();
             },
           }
         ],
@@ -597,6 +601,11 @@
       }, function() {
       }
     );
+  };
+
+  OMPDialog.prototype.submit = function() {
+    this.waiting();
+    this.postForm();
   };
 
   global.OMPDialog = OMPDialog;

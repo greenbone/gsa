@@ -1,5 +1,12 @@
 2016-04-26  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/greenbone.js (OMPDialog): Always use our dialog
+	submission function when the user clicks on a submit button or presses enter
+	within an input field. This fixes displaying an error message in the dialog
+	instead of in a seperate page.
+
+2016-04-26  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/greenbone.js (OMPAction.prototype.do): Fix adding values
 	to FormData object. The FormData.prototype.set function is only available in
 	Chrome >= 50, Firefox >= 39. FormData.prototype.append only requires Chrome >=
