@@ -375,6 +375,31 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           data-chart-type="donut"
           data-chart-template="info_by_class"/>
       </div>
+      <div class="dashboard-data-source"
+        data-source-name="most-vulnerable-oss-source"
+        data-aggregate-type="{$type}"
+        data-group-column="uuid"
+        data-columns="average_severity,average_severity_score,hosts"
+        data-text-columns="name,modified"
+        data-sort-field="average_severity_score"
+        data-sort-order="descending"
+        data-sort-stat="max"
+        data-filter="{$filter}"
+        data-filter-id="{$filt_id}">
+        <span class="dashboard-chart"
+          data-chart-name="most-vulnerable-oss"
+          data-chart-type="horizontal_bar"
+          data-x-field="name"
+          data-y-fields="average_severity_score_max"
+          data-z-fields="average_severity_max"
+          data-gen-params='{{"empty_text": "No vulnerable Operating Systems found",
+                             "score_breakdown" :
+                                {{"severity" : "average_severity_max",
+                                  "assets" : "hosts_max",
+                                  "asset_type" : "hosts" }},
+                             "extra_tooltip_fields": {{"modified" : "Updated"}}}}'
+          data-init-params='{{"title_text": "Most vulnerable Operating Systems"}}'/>
+      </div>
     </xsl:if>
   </div>
 </xsl:template>

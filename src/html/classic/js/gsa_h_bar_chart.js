@@ -29,6 +29,10 @@
 
   gsa.register_chart_generator('horizontal_bar', HorizontalBarChartGenerator);
 
+  function default_bar_style(d) {
+    return ('');
+  }
+
   /*
   * Transform data into a top 10 list.
   */
@@ -96,10 +100,7 @@
       .orient('bottom');
 
     this.setDataTransformFunc(data_top_list);
-    this.setBarStyle(gsa.severity_bar_style('severity_max',
-      gsa.severity_levels.max_log,
-      gsa.severity_levels.max_low,
-      gsa.severity_levels.max_medium));
+    this.setBarStyle(default_bar_style);
     this.setTitleGenerator(gsa.title_static(
       gsa._('Loading bar chart ...'), gsa._('Bar Chart')));
   };
@@ -122,6 +123,30 @@
 
     if (gen_params.y_fields && gen_params.y_fields[0]) {
       this.y_field = gen_params.y_fields[0];
+    }
+
+    if (controller.chart_template () === '') {
+      if (gen_params.z_fields && gen_params.z_fields[0]) {
+        if (gen_params.z_fields[0].indexOf('severity') !== -1) {
+          this.setBarStyle(gsa.severity_bar_style(gen_params.z_fields[0],
+            gsa.severity_levels.max_log,
+            gsa.severity_levels.max_low,
+            gsa.severity_levels.max_medium));
+        } else {
+          this.setBarStyle(default_bar_style);
+        }
+      }
+      else {
+        if (this.y_field.indexOf('severity') !== -1) {
+          this.setBarStyle(gsa.severity_bar_style(this.y_field,
+            gsa.severity_levels.max_log,
+            gsa.severity_levels.max_low,
+            gsa.severity_levels.max_medium));
+        }
+        else {
+          this.setBarStyle(default_bar_style);
+        }
+      }
     }
 
     if (gen_params.extra.show_stat_type) {
@@ -170,17 +195,22 @@
     this.x_scale.rangeRoundBands([0, height], 0.125);
     this.y_scale.range([0, width]);
 
-    var x_data_abbreviated = [];
-    for (var d_index in x_data) {
-      if (x_data[d_index].length > 25) {
-        x_data_abbreviated[d_index] = x_data[d_index].slice(0, 25) + '…';
-      }
-      else {
-        x_data_abbreviated[d_index] = x_data[d_index];
-      }
-    }
+    this.x_axis.tickFormat(function (d) {
+          var text = d.toString();
+          if (text.length > 25) {
+            if (text.slice (0, 4) === 'cpe:') {
+              return '…' + text.slice(Math.max (4, text.length - 25), text.length);
+            }
+            else {
+              return text.slice(0, 25) + '…';
+            }
+          }
+          else {
+            return text;
+          }
+        });
 
-    this.x_scale.domain(x_data_abbreviated);
+    this.x_scale.domain(x_data);
     this.y_scale.domain([0, y_max]).nice(10);
 
     if (!update) {
@@ -242,6 +272,44 @@
               return '<strong>' + x + ':</strong><br/> ' + d[self.y_field] +
                   ' (' + (100 * d[self.y_field] / y_sum).toFixed(1) + '%)' +
                   extra;
+            }
+          }
+          else if (self.y_field.indexOf ('severity_score') !== -1) {
+            var score_breakdown = gen_params.extra.score_breakdown;
+            if (score_breakdown !== undefined) {
+              var breakdown_extra;
+              if (score_breakdown.asset_type === 'hosts')
+                breakdown_extra =
+                  gsa._('<br/>({{assets}} Host(s) with average severity {{severity}})',
+                        {
+                          assets : d[score_breakdown.assets],
+                          severity : d[score_breakdown.severity]
+                        });
+              else
+                breakdown_extra = '';
+
+              if (self.y_label !== '') {
+                return '<strong>' + self.y_label + ' (' + x +
+                    '):</strong><br/> ' + d[self.y_field].toFixed(2) +
+                    breakdown_extra + extra;
+              }
+              else {
+                return '<strong>' + x + ':</strong><br/> ' +
+                    d[self.y_field].toFixed(2) +
+                    breakdown_extra + extra;
+              }
+            }
+            else {
+              if (self.y_label !== '') {
+                return '<strong>' + self.y_label + ' (' + x +
+                    '):</strong><br/> ' + d[self.y_field].toFixed(2) +
+                    extra;
+              }
+              else {
+                return '<strong>' + x + ':</strong><br/> ' +
+                    d[self.y_field].toFixed(2) +
+                    extra;
+              }
             }
           }
           else if (self.y_field.indexOf ('severity') !== -1) {
