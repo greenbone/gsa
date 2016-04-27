@@ -1,5 +1,9 @@
 2016-04-26  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/gsad.c (init_validator): Allow # in name parameters e.g. task names.
+
+2016-04-26  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/greenbone.js (OMPDialog): Always use our dialog
 	submission function when the user clicks on a submit button or presses enter
 	within an input field. This fixes displaying an error message in the dialog

@@ -1303,7 +1303,7 @@ init_validator ()
   openvas_validator_add (validator, "note_result_id", "^[a-z0-9\\-]*$");
   openvas_validator_add (validator, "override_id",    "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "override_result_id", "^[a-z0-9\\-]*$");
-  openvas_validator_add (validator, "name",       "^[-_[:alnum:], \\./]{1,80}$");
+  openvas_validator_add (validator, "name",       "^[#-_[:alnum:], \\./]{1,80}$");
   openvas_validator_add (validator, "info_name",  "(?s)^.*$");
   openvas_validator_add (validator, "info_type",  "(?s)^.*$");
   openvas_validator_add (validator, "info_id",  "^([[:alnum:]-_.:\\/~()']|&amp;)+$");
