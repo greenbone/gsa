@@ -6062,7 +6062,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
    <div class="title"><xsl:value-of select="gsa:i18n ('New Task', 'Task')"/>
    </div>
    <div class="content">
-    <form action="/omp" method="post" enctype="multipart/form-data">
+    <form action="/omp" method="post" enctype="multipart/form-data" class="form-horizontal">
       <input type="hidden" name="token" value="{/envelope/token}"/>
       <input type="hidden" name="cmd" value="create_task"/>
       <input type="hidden" name="caller" value="{/envelope/current_page}"/>
@@ -6078,23 +6078,25 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:if test="not (gsa:may-op ('get_slaves'))">
         <input type="hidden" name="slave_id_optional" value="--"/>
       </xsl:if>
-      <table class="table-form">
-        <tr>
-         <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
-         <td colspan="2">
-           <input type="text" name="name" value="{gsa:param-or ('name', 'unnamed')}" size="30"
-                  maxlength="80"/>
-         </td>
-        </tr>
-        <tr>
-          <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/></td>
-          <td colspan="2">
-            <input type="text" name="comment" value="{gsa:param-or ('comment', '')}" size="30" maxlength="400"/>
-          </td>
-        </tr>
-        <tr>
-          <td><xsl:value-of select="gsa:i18n ('Scan Targets', 'Task')"/></td>
-          <td colspan="2">
+      <div class="form-group">
+        <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></label>
+        <div class="col-10">
+          <input type="text" name="name" value="{gsa:param-or ('name', 'unnamed')}" size="30"
+            class="form-control"
+            maxlength="80"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/></label>
+        <div class="col-10" colspan="2">
+          <input type="text" name="comment" value="{gsa:param-or ('comment', '')}" size="30" maxlength="400"
+            class="form-control" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Scan Targets', 'Task')"/></label>
+        <div class="col-10">
+          <div class="form-item">
             <select name="target_id">
               <xsl:variable name="target_id">
                 <xsl:value-of select="target_id"/>
@@ -6110,33 +6112,37 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 </xsl:choose>
               </xsl:for-each>
             </select>
+          </div>
+          <div class="form-item">
             <a href="#" title="{ gsa:i18n('Create a new target') }"
-               class="new-action-icon" data-type="target" data-done="select[name=target_id]">
-              <img class="valign-middle" src="/img/new.png"/>
+              class="new-action-icon" data-type="target" data-done="select[name=target_id]">
+              <img src="/img/new.png"/>
             </a>
-          </td>
-        </tr>
-        <xsl:if test="gsa:may-op ('get_alerts')">
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('Alerts', 'Alert')"/></td>
-            <td colspan="2">
-              <xsl:variable name="alerts"
-                            select="get_alerts_response/alert"/>
-              <select name="alert_ids:" multiple="multiple">
-                <xsl:for-each select="$alerts">
-                  <option value="{@id}"><xsl:value-of select="name"/></option>
-                </xsl:for-each>
-              </select>
-            </td>
-          </tr>
-        </xsl:if>
-        <xsl:if test="gsa:may-op ('get_schedules')">
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('Schedule', 'Schedule')"/></td>
-            <td colspan="2">
+          </div>
+        </div>
+      </div>
+      <xsl:if test="gsa:may-op ('get_alerts')">
+        <div class="form-group">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Alerts', 'Alert')"/></label>
+          <div class="col-10">
+            <xsl:variable name="alerts"
+              select="get_alerts_response/alert"/>
+            <select name="alert_ids:" multiple="multiple" class="form-control">
+              <xsl:for-each select="$alerts">
+                <option value="{@id}"><xsl:value-of select="name"/></option>
+              </xsl:for-each>
+            </select>
+          </div>
+        </div>
+      </xsl:if>
+      <xsl:if test="gsa:may-op ('get_schedules')">
+        <div class="form-group">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Schedule', 'Schedule')"/></label>
+          <div class="col-10">
+            <div class="form-item">
               <select name="schedule_id_optional">
                 <xsl:variable name="schedule_id"
-                              select="schedule_id"/>
+                  select="schedule_id"/>
                 <xsl:choose>
                   <xsl:when test="string-length ($schedule_id) &gt; 0">
                     <option value="--">--</option>
@@ -6156,137 +6162,170 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   </xsl:choose>
                 </xsl:for-each>
               </select>
+            </div>
+            <div class="form-item">
+              <div class="checkbox">
+                <label>
+                  <input name="schedule_periods" type="checkbox" value="1"
+                    title="{gsa:i18n ('Once', 'Time')}"/>
+                  <xsl:value-of select="gsa:i18n ('Once', 'Time')"/>
+                </label>
+              </div>
+            </div>
+            <div class="form-item">
+              <a href="#" title="{ gsa:i18n('Create a new schedule') }"
+                class="new-action-icon" data-type="schedule"
+                data-done="select[name=schedule_id_optional]">
+                <img src="/img/new.png"/>
+              </a>
+            </div>
+          </div>
+        </div>
+      </xsl:if>
+      <div class="form-group">
+        <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Add results to Assets', 'Task')"/></label>
+        <div class="col-10">
+          <xsl:variable name="yes" select="/envelope/params/in_assets"/>
+          <div class="form-item">
+            <div class="radio">
               <label>
-                <input name="schedule_periods" type="checkbox" value="1"
-                        title="{gsa:i18n ('Once', 'Time')}"/>
-                <xsl:value-of select="gsa:i18n ('Once', 'Time')"/>
-            </label>
-            <a href="#" title="{ gsa:i18n('Create a new schedule') }"
-              class="new-action-icon" data-type="schedule"
-              data-done="select[name=schedule_id_optional]">
-              <img class="valign-middle" src="/img/new.png"/>
-            </a>
-            </td>
-          </tr>
-        </xsl:if>
-        <tr>
-          <td><xsl:value-of select="gsa:i18n ('Add results to Assets', 'Task')"/></td>
-          <td colspan="2">
-            <xsl:variable name="yes" select="/envelope/params/in_assets"/>
-            <label>
-              <xsl:choose>
-                <xsl:when test="string-length ($yes) = 0 or $yes = 1">
-                  <input type="radio" name="in_assets" value="1" checked="1"/>
-                </xsl:when>
-                <xsl:otherwise>
-                 <input type="radio" name="in_assets" value="1"/>
-                </xsl:otherwise>
-              </xsl:choose>
-              <xsl:value-of select="gsa:i18n ('yes', 'Binary Choice')"/>
-            </label>
-            <label>
-              <xsl:choose>
-                <xsl:when test="string-length ($yes) = 0 or $yes = 1">
-                  <input type="radio" name="in_assets" value="0"/>
-                </xsl:when>
-                <xsl:otherwise>
-                 <input type="radio" name="in_assets" value="0" checked="1"/>
-                </xsl:otherwise>
-              </xsl:choose>
-              <xsl:value-of select="gsa:i18n ('no', 'Binary Choice')"/>
-            </label>
-          </td>
-        </tr>
-        <tr>
-          <td></td>
-          <td><xsl:value-of select="gsa:i18n ('Apply Overrides', 'Overrides')"/></td>
-          <td>
-            <label>
-              <input type="radio" name="apply_overrides" value="1" checked="1"/>
-              <xsl:value-of select="gsa:i18n ('yes', 'Binary Choice')"/>
-            </label>
-            <label>
-              <input type="radio" name="apply_overrides" value="0"/>
-              <xsl:value-of select="gsa:i18n ('no', 'Binary Choice')"/>
-            </label>
-          </td>
-        </tr>
-        <tr>
-          <td></td>
-          <td><xsl:value-of select="gsa:i18n ('Min QOD', 'Results')"/></td>
-          <td>
-            <input type="text" name="min_qod" value="70" size="4"/>
+                <xsl:choose>
+                  <xsl:when test="string-length ($yes) = 0 or $yes = 1">
+                    <input type="radio" name="in_assets" value="1" checked="1"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="radio" name="in_assets" value="1"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+                <xsl:value-of select="gsa:i18n ('yes', 'Binary Choice')"/>
+              </label>
+            </div>
+          </div>
+          <div class="form-item">
+            <div class="radio">
+              <label>
+                <xsl:choose>
+                  <xsl:when test="string-length ($yes) = 0 or $yes = 1">
+                    <input type="radio" name="in_assets" value="0"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="radio" name="in_assets" value="0" checked="1"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+                <xsl:value-of select="gsa:i18n ('no', 'Binary Choice')"/>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Apply Overrides', 'Overrides')"/></label>
+        <div class="col-10">
+          <div class="form-item">
+            <div class="radio">
+              <label>
+                <input type="radio" name="apply_overrides" value="1" checked="1"/>
+                <xsl:value-of select="gsa:i18n ('yes', 'Binary Choice')"/>
+              </label>
+            </div>
+          </div>
+          <div class="form-item">
+            <div class="radio">
+              <label>
+                <input type="radio" name="apply_overrides" value="0"/>
+                <xsl:value-of select="gsa:i18n ('no', 'Binary Choice')"/>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Min QOD', 'Results')"/></label>
+        <div class="col-10">
+          <div class="form-item">
+            <input type="text" name="min_qod" value="70" size="4" class="spinner"
+              data-type="float" min="0" max="100"/>
+          </div>
+          <div class="form-item">
             <xsl:text>%</xsl:text>
-          </td>
-        </tr>
-        <tr>
-          <td><xsl:value-of select="gsa:i18n ('Alterable Task', 'Task')"/></td>
-          <td colspan="2">
-            <xsl:variable name="yes" select="/envelope/params/alterable"/>
-            <label>
-              <xsl:choose>
-                <xsl:when test="string-length ($yes) = 0 or $yes = 0">
-                  <input type="radio" name="alterable" value="1"/>
-                </xsl:when>
-                <xsl:otherwise>
-                  <input type="radio" name="alterable" value="1" checked="1"/>
-                </xsl:otherwise>
-              </xsl:choose>
-              <xsl:value-of select="gsa:i18n ('yes', 'Binary Choice')"/>
-            </label>
-            <label>
-              <xsl:choose>
-                <xsl:when test="string-length ($yes) = 0 or $yes = 0">
-                  <input type="radio" name="alterable" value="0" checked="1"/>
-                </xsl:when>
-                <xsl:otherwise>
-                  <input type="radio" name="alterable" value="0"/>
-                </xsl:otherwise>
-              </xsl:choose>
-              <xsl:value-of select="gsa:i18n ('no', 'Binary Choice')"/>
-            </label>
-          </td>
-        </tr>
-        <tr>
-          <td><xsl:value-of select="gsa:i18n ('Auto Delete Reports', 'Task')"/></td>
-          <td colspan="2">
-            <xsl:variable name="auto_delete" select="/envelope/params/auto_delete"/>
-            <xsl:variable name="auto_delete_data" select="/envelope/params/auto_delete_data"/>
-            <div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Alterable Task', 'Task')"/></label>
+        <div class="col-10">
+          <xsl:variable name="yes" select="/envelope/params/alterable"/>
+          <div class="form-item">
+            <div class="radio">
               <label>
                 <xsl:choose>
-                  <xsl:when test="$auto_delete = 'keep'">
-                    <input type="radio" name="auto_delete" value="no"/>
+                  <xsl:when test="string-length ($yes) = 0 or $yes = 0">
+                    <input type="radio" name="alterable" value="1"/>
                   </xsl:when>
                   <xsl:otherwise>
-                    <input type="radio" name="auto_delete" value="no" checked="1"/>
+                    <input type="radio" name="alterable" value="1" checked="1"/>
                   </xsl:otherwise>
                 </xsl:choose>
-                <xsl:value-of select="gsa:i18n ('Do not automatically delete reports', 'Task')"/>
+                <xsl:value-of select="gsa:i18n ('yes', 'Binary Choice')"/>
               </label>
             </div>
-            <div>
+          </div>
+          <div class="form-item">
+            <div class="radio">
               <label>
                 <xsl:choose>
-                  <xsl:when test="$auto_delete = 'keep'">
-                    <input type="radio" name="auto_delete" value="keep" checked="1"/>
+                  <xsl:when test="string-length ($yes) = 0 or $yes = 0">
+                    <input type="radio" name="alterable" value="0" checked="1"/>
                   </xsl:when>
                   <xsl:otherwise>
-                    <input type="radio" name="auto_delete" value="keep"/>
+                    <input type="radio" name="alterable" value="0"/>
                   </xsl:otherwise>
                 </xsl:choose>
-                <xsl:value-of select="gsa:i18n ('Automatically delete oldest reports but always keep newest ', 'Task')"/>
-                <div style="display: inline;">
-                  <input style="display: inline;"
-                         type="text" name="auto_delete_data" value="5"
-                         size="4" maxlength="5"/>
-                </div>
-                <xsl:value-of select="gsa:i18n (' reports', 'Task')"/>
+                <xsl:value-of select="gsa:i18n ('no', 'Binary Choice')"/>
               </label>
             </div>
-          </td>
-        </tr>
-      </table>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Auto Delete Reports', 'Task')"/></label>
+        <div class="col-10">
+          <xsl:variable name="auto_delete" select="/envelope/params/auto_delete"/>
+          <xsl:variable name="auto_delete_data" select="/envelope/params/auto_delete_data"/>
+          <div class="radio">
+            <label>
+              <xsl:choose>
+                <xsl:when test="$auto_delete = 'keep'">
+                  <input type="radio" name="auto_delete" value="no"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <input type="radio" name="auto_delete" value="no" checked="1"/>
+                </xsl:otherwise>
+              </xsl:choose>
+              <xsl:value-of select="gsa:i18n ('Do not automatically delete reports', 'Task')"/>
+            </label>
+          </div>
+          <div class="radio">
+            <label>
+              <xsl:choose>
+                <xsl:when test="$auto_delete = 'keep'">
+                  <input type="radio" name="auto_delete" value="keep" checked="1"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <input type="radio" name="auto_delete" value="keep"/>
+                </xsl:otherwise>
+              </xsl:choose>
+              <xsl:value-of select="gsa:i18n ('Automatically delete oldest reports but always keep newest ', 'Task')"/>
+              <div class="form-item">
+                <input class="spinner" data-type="int" min="0"
+                  type="text" name="auto_delete_data" value="5"
+                  size="4" maxlength="5"/>
+              </div>
+              <xsl:value-of select="gsa:i18n (' reports', 'Task')"/>
+            </label>
+          </div>
+        </div>
+      </div>
 
       <table class="table-form">
         <tr>
