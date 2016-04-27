@@ -484,12 +484,13 @@ input::-moz-focus-inner {
 }
 
 .form-horizontal .control-label {
-  padding-top: 5px;
   margin-bottom: 0;
   display: inline-block;
   max-width: 100%;
   font-weight: bold;
   text-align: right;
+  vertical-align: middle;
+  line-height: 22px;
 }
 
 .form-control {
@@ -549,12 +550,12 @@ textarea.form-control {
 .form-item label {
   margin-bottom: 0;
   vertical-align: middle;
+  line-height: 22px;
 }
 
 .form-item .checkbox input[type="checkbox"],
 .form-item .radio input[type="radio"] {
-  vertical-align: middle;
-  top: 1px;
+  top: 5px;
 }
 
 /* vim: set ts=2 sw=2 tw=80: */
