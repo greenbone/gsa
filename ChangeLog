@@ -1,3 +1,19 @@
+2016-04-27  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/graphics.xsl (js-assets-top-visualization): Get
+	"modified" timestamp for "Most vulnerable Hosts" chart and use it
+	as an extra tooltip field.
+
+	* src/html/classic/js/gsa_bar_chart.js (generate): Make tooltip the
+	same as horizontal bar chart and add option to add extra fields.
+
+	* src/html/classic/js/gsa_graphics_base.js (extract_simple_records):
+	Convert all ISO timestamp columns to Date objects.
+	(get_selector_label): Add cases for average severity.
+
+	* src/html/classic/js/gsa_h_bar_chart.js (generate): Add option to add
+	extra fields.
+
 2016-04-26  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/gsad.c (init_validator): Allow # in name parameters e.g. task names.

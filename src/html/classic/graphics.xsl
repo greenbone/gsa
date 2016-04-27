@@ -342,7 +342,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         data-aggregate-type="{$type}"
         data-group-column="uuid"
         data-columns="severity"
-        data-text-columns="name"
+        data-text-columns="name,modified"
         data-sort-field="severity"
         data-sort-order="descending"
         data-sort-stat="max"
@@ -354,7 +354,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           data-x-field="name"
           data-y-fields="severity_max"
           data-z-fields="severity_max"
-          data-gen-params='{{"empty_text": "No vulnerable Hosts found"}}'
+          data-gen-params='{{"empty_text": "No vulnerable Hosts found",
+                             "extra_tooltip_fields": {{"modified" : "Updated"}}}}'
           data-init-params='{{"title_text": "Most vulnerable hosts"}}'/>
       </div>
     </xsl:if>

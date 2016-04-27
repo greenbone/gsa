@@ -135,7 +135,7 @@
         .style('font-weight', 'normal')
         .offset([-10, 0])
         .html(function(d) {
-          var x;
+          var x, extra;
           if (d[self.x_field + '~long']) {
             x = d[self.x_field + '~long'];
           }
@@ -143,27 +143,60 @@
             x = d[self.x_field];
           }
 
+          extra = '';
+          if (gen_params.extra && gen_params.extra.extra_tooltip_fields) {
+            var extra_fields;
+            extra_fields = gen_params.extra.extra_tooltip_fields;
+
+            for (var field in extra_fields) {
+              extra += '<br/><strong>' + extra_fields[field] + ':</strong> ';
+              if (gsa.is_date (d[field])) {
+                extra += gsa.datetime_format (d[field]);
+              }
+              else {
+                extra += d[field]
+              }
+            }
+          }
+
           if (self.y_field === 'count') {
             if (self.y_label !== '') {
               return '<strong>' + self.y_label + ' (' + x +
-                '):</strong><br/> ' +
-                d[self.y_field] + ' (' +
-                (100 * d[self.y_field] / y_sum).toFixed(1) + '%)';
+                  '):</strong><br/> ' + d[self.y_field] + ' (' +
+                  (100 * d[self.y_field] / y_sum).toFixed(1) + '%)' +
+                  extra;
             }
             else {
               return '<strong>' + x + ':</strong><br/> ' + d[self.y_field] +
-                ' (' + (100 * d[self.y_field] / y_sum).toFixed(1) + '%)';
+                  ' (' + (100 * d[self.y_field] / y_sum).toFixed(1) + '%)' +
+                  extra;
+            }
+          }
+          else if (self.y_field.indexOf ('severity') !== -1) {
+            if (self.y_label !== '') {
+              return '<strong>' + self.y_label + ' (' + x +
+                  '):</strong><br/> ' + d[self.y_field].toFixed(1) +
+                  ' (' + gsa.severity_level(d[self.y_field]) + ')' +
+                  extra;
+            }
+            else {
+              return '<strong>' + x + ':</strong><br/> ' +
+                  d[self.y_field].toFixed(1) +
+                  ' (' + gsa.severity_level(d[self.y_field]) + ')' +
+                  extra;
             }
           }
           else {
             if (self.y_label !== '') {
               return '<strong>' + self.y_label + ' (' + x +
-                '):</strong><br/> ' + d[self.y_field] + ' (' +
-                (100 * d[self.y_field] / y_max).toFixed(1) + '%)';
+                  '):</strong><br/> ' + d[self.y_field] + ' (' +
+                  (100 * d[self.y_field] / y_max).toFixed(1) + '%)' +
+                  extra;
             }
             else {
               return '<strong>' + x + ':</strong><br/> ' + d[self.y_field] +
-                ' (' + (100 * d [self.y_field] / y_max).toFixed(1) + '%)';
+                  ' (' + (100 * d[self.y_field] / y_max).toFixed(1) + '%)' +
+                  extra;
             }
           }
         });

@@ -2555,6 +2555,7 @@
   * Extracts records from XML
   */
   function extract_simple_records(xml_data, selector) {
+    var date_regex = /^\d{4}-(0\d|1[0-2])-([0-2]\d|3[01])T([0-1]\d|2[0-3]):[0-5]\d(:[0-5]\d)?([+-](0\d|1[0-4]):[0-5]\d|Z|)$/;
     var records = [];
     xml_data.selectAll(selector).each(function(d, i) {
       var record = {};
@@ -2570,6 +2571,9 @@
                 record[col_name + '_' + this.localName] =
                   parseFloat(d3.select(this).text());
               }
+              else if (d3.select(this).text().match(date_regex)) {
+                record[col_name + '_' + this.localName] = new Date(d3.select(this).text().substr(0,19)+'Z');
+              }
               else {
                 record[col_name + '_' + this.localName] =
                   d3.select(this).text();
@@ -2577,8 +2581,14 @@
             });
           }
           else if (this.localName === 'text') {
-            record[d3.select(this).attr('column')] =
-              d3.select(this).text();
+            if (d3.select(this).text().match(date_regex)) {
+              record[d3.select(this).attr('column')] =
+                new Date(d3.select(this).text().substr(0,19)+'Z');
+            }
+            else {
+              record[d3.select(this).attr('column')] =
+                d3.select(this).text();
+            }
           }
           else {
             if (!isNaN(parseFloat(d3.select(this).text())) &&
@@ -2586,8 +2596,7 @@
               record[this.localName] =
                 parseFloat(d3.select(this).text());
             }
-            else if (d3.select(this).text()
-                .match(/^\d{4}-(0\d|1[0-2])-([0-2]\d|3[01])T([0-1]\d|2[0-3]):[0-5]\d(:[0-5]\d)?([+-](0\d|1[0-4]):[0-5]\d|Z|)$/)) {
+            else if (d3.select(this).text().match(date_regex)) {
               record[this.localName] = new Date(d3.select(this).text().substr(0,19)+'Z');
             }
             else {
@@ -4117,20 +4126,38 @@
 
     if (chart_template === 'info_by_class' ||
         chart_template === 'recent_info_by_class') {
-      return gsa._('{{resource_type_plural}} by Severity Class',
-          {
-            resource_type_plural: resource_type_name_plural(aggregate_type),
-            interpolation: {escape: false}
-          });
+      if (group_column === 'average_severity') {
+        return gsa._('{{resource_type_plural}} by average Severity Class',
+            {
+              resource_type_plural: resource_type_name_plural(aggregate_type),
+              interpolation: {escape: false}
+            });
+      }
+      else {
+        return gsa._('{{resource_type_plural}} by Severity Class',
+            {
+              resource_type_plural: resource_type_name_plural(aggregate_type),
+              interpolation: {escape: false}
+            });
+      }
     }
 
     if (chart_template === 'info_by_cvss' ||
         chart_template === 'recent_info_by_cvss') {
-      return gsa._('{{resource_type_plural}} by CVSS',
-          {
-            resource_type_plural: resource_type_name_plural(aggregate_type),
-            interpolation: {escape: false}
-          });
+      if (group_column === 'average_severity') {
+        return gsa._('{{resource_type_plural}} by average CVSS',
+            {
+              resource_type_plural: resource_type_name_plural(aggregate_type),
+              interpolation: {escape: false}
+            });
+      }
+      else {
+        return gsa._('{{resource_type_plural}} by CVSS',
+            {
+              resource_type_plural: resource_type_name_plural(aggregate_type),
+              interpolation: {escape: false}
+            });
+      }
     }
 
     if (chart_type === 'cloud') {
