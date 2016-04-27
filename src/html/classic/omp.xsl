@@ -6058,23 +6058,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:apply-templates select="create_task_response"/>
   <xsl:apply-templates select="create_report_response"/>
 
-  <div class="gb_window">
-   <div class="gb_window_part_left"></div>
-   <div class="gb_window_part_right"></div>
-   <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n ('New Task', 'Task')"/>
-    <a href="/help/new_task.html?token={/envelope/token}#newtask" title="{gsa:i18n ('Help', 'Help')}: {gsa:i18n ('New Task', 'Task')}">
-      <img src="/img/help.png"/>
-    </a>
-    <a href="/omp?cmd=wizard&amp;name=quick_first_scan&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-       title="{gsa:i18n ('Wizard', 'Wizard')}">
-      <img src="/img/wizard.png" style="margin-left:3px;"/>
-    </a>
-    <a href="/omp?cmd=get_tasks&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-       title="{gsa:i18n ('Tasks', 'Task')}" style="margin-left:3px;">
-      <img src="/img/list.png" alt="{gsa:i18n ('Tasks', 'Task')}"/>
-    </a>
+  <div class="edit-dialog">
+   <div class="title"><xsl:value-of select="gsa:i18n ('New Task', 'Task')"/>
    </div>
-   <div class="gb_window_part_content">
+   <div class="content">
     <form action="/omp" method="post" enctype="multipart/form-data">
       <input type="hidden" name="token" value="{/envelope/token}"/>
       <input type="hidden" name="cmd" value="create_task"/>
