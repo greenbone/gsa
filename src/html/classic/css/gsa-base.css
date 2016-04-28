@@ -176,8 +176,10 @@ input[type="checkbox"] {
 .checkbox-inline.disabled,
 input[type="radio"][disabled],
 input[type="checkbox"][disabled],
+input[type="text"][disabled],
 input[type="radio"].disabled,
 input[type="checkbox"].disabled,
+input[type="text"].disabled,
 fieldset[disabled] input[type="radio"],
 fieldset[disabled] input[type="checkbox"] {
   cursor: not-allowed;

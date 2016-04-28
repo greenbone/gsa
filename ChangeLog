@@ -1,3 +1,8 @@
+2016-04-28  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/css/gsa-base.css: Also show not allowed pointer on disabled
+	text input fields.
+
 2016-04-27  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* doc/form-examples.html: Add an examples to show radio selected form parts.
