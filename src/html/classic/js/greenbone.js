@@ -1233,9 +1233,12 @@
       var elem = $(this);
       var form = elem.parents('form');
       var name = elem.attr('id');
+      var disable = is_defined(elem.attr('disable-on')) ?
+        elem.attr('disable-on') : '1';
       elem.on('change', function() {
         var value = elem.val();
-        form.find('.form-enable-item--' + name).prop('disabled', value === '1');
+        form.find('.form-enable-item--' + name).prop('disabled',
+            value === disabled);
       });
     });
   }

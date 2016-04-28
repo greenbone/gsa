@@ -1,5 +1,10 @@
 2016-04-28  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/greenbone.js (on_ready): Allow to set a value on
+	which elements will be disabled for .form-enable css class usage.
+
+2016-04-28  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/css/gsa-base.css: Also show not allowed pointer on disabled
 	text input fields.
 
