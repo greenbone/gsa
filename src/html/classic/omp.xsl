@@ -7369,29 +7369,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="html-edit-task-form">
-  <div class="gb_window">
-
-    <!-- Header. -->
-
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n ('Edit Task', 'Task')"/>
-      <xsl:call-template name="edit-header-icons">
-        <xsl:with-param name="cap-type" select="'Task'"/>
-        <xsl:with-param name="type" select="'task'"/>
-        <xsl:with-param name="id"
-                        select="commands_response/get_tasks_response/task/@id"/>
-      </xsl:call-template>
-      <xsl:call-template name="move_task_icon">
-        <xsl:with-param name="slaves" select="commands_response/get_slaves_response/slave"/>
-        <xsl:with-param name="task" select="commands_response/get_tasks_response/task"/>
-        <xsl:with-param name="next" select="'edit_task'"/>
-      </xsl:call-template>
+  <div class="edit-dialog">
+    <div class="title">
+      <xsl:value-of select="gsa:i18n ('Edit Task', 'Task')"/>
     </div>
 
-    <!-- Form. -->
-
-    <div class="gb_window_part_content">
+    <div class="content">
       <form action="" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="caller" value="{/envelope/current_page}"/>
@@ -7512,15 +7495,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </table>
         </xsl:if>
 
-        <!-- Submit button. -->
-
-        <table class="table-form">
-          <tr>
-            <td>
-              <input type="submit" name="submit" value="{gsa:i18n ('Save Task', 'Task')}"/>
-            </td>
-          </tr>
-        </table>
       </form>
     </div>
   </div>
