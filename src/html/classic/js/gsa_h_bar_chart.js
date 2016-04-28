@@ -246,18 +246,29 @@
           }
 
           extra = '';
-          if (gen_params.extra && gen_params.extra.extra_tooltip_fields) {
-            var extra_fields;
-            extra_fields = gen_params.extra.extra_tooltip_fields;
+          if (gen_params.extra && gen_params.extra.extra_tooltip_field_1) {
+            var index = 1;
 
-            for (var field in extra_fields) {
-              extra += '<br/><strong>' + extra_fields[field] + ':</strong> ';
+            while (gen_params.extra ['extra_tooltip_field_' + index] !==
+                   undefined) {
+              var field = gen_params.extra ['extra_tooltip_field_' + index];
+              var label = gen_params.extra ['extra_tooltip_label_' + index]
+
+              if (label) {
+                extra += '<br/><strong>' + label + ':</strong> ';
+              }
+              else {
+                extra += '<br/>'
+              }
+
               if (gsa.is_date (d[field])) {
                 extra += gsa.datetime_format (d[field]);
               }
               else {
                 extra += d[field]
               }
+
+              index ++;
             }
           }
 
@@ -275,15 +286,20 @@
             }
           }
           else if (self.y_field.indexOf ('severity_score') !== -1) {
-            var score_breakdown = gen_params.extra.score_breakdown;
-            if (score_breakdown !== undefined) {
+            var score_severity = gen_params.extra.score_severity;
+            var score_assets = gen_params.extra.score_assets;
+            var score_asset_type = gen_params.extra.score_asset_type;
+
+            if (score_severity !== undefined &&
+                score_assets !== undefined && score_asset_type != undefined)
+            {
               var breakdown_extra;
-              if (score_breakdown.asset_type === 'hosts')
+              if (score_asset_type === 'hosts')
                 breakdown_extra =
                   gsa._('<br/>({{assets}} Host(s) with average severity {{severity}})',
                         {
-                          assets : d[score_breakdown.assets],
-                          severity : d[score_breakdown.severity]
+                          assets : d[score_assets],
+                          severity : d[score_severity]
                         });
               else
                 breakdown_extra = '';

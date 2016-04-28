@@ -144,18 +144,29 @@
           }
 
           extra = '';
-          if (gen_params.extra && gen_params.extra.extra_tooltip_fields) {
-            var extra_fields;
-            extra_fields = gen_params.extra.extra_tooltip_fields;
+          if (gen_params.extra && gen_params.extra.extra_tooltip_field_1) {
+            var index = 1;
 
-            for (var field in extra_fields) {
-              extra += '<br/><strong>' + extra_fields[field] + ':</strong> ';
+            while (gen_params.extra ['extra_tooltip_field_' + index] !==
+                   undefined) {
+              var field = gen_params.extra ['extra_tooltip_field_' + index];
+              var label = gen_params.extra ['extra_tooltip_label_' + index]
+
+              if (label) {
+                extra += '<br/><strong>' + label + ':</strong> ';
+              }
+              else {
+                extra += '<br/>'
+              }
+
               if (gsa.is_date (d[field])) {
                 extra += gsa.datetime_format (d[field]);
               }
               else {
                 extra += d[field]
               }
+
+              index ++;
             }
           }
 
