@@ -6191,10 +6191,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <label>
                 <xsl:choose>
                   <xsl:when test="string-length ($yes) = 0 or $yes = 1">
-                    <input type="radio" name="in_assets" value="1" checked="1"/>
+                    <input type="radio" name="in_assets" value="1" checked="1"
+                      disable-on="0"
+                      class="form-enable-control" id="in-assets"/>
                   </xsl:when>
                   <xsl:otherwise>
-                    <input type="radio" name="in_assets" value="1"/>
+                    <input type="radio" name="in_assets" value="1"
+                      disable-on="0"
+                      class="form-enable-control" id="in-assets"/>
                   </xsl:otherwise>
                 </xsl:choose>
                 <xsl:value-of select="gsa:i18n ('yes', 'Binary Choice')"/>
@@ -6206,10 +6210,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <label>
                 <xsl:choose>
                   <xsl:when test="string-length ($yes) = 0 or $yes = 1">
-                    <input type="radio" name="in_assets" value="0"/>
+                    <input type="radio" name="in_assets" value="0"
+                      disable-on="0"
+                      class="form-enable-control" id="in-assets"/>
                   </xsl:when>
                   <xsl:otherwise>
-                    <input type="radio" name="in_assets" value="0" checked="1"/>
+                    <input type="radio" name="in_assets" value="0" checked="1"
+                      disable-on="0"
+                      class="form-enable-control" id="in-assets"/>
                   </xsl:otherwise>
                 </xsl:choose>
                 <xsl:value-of select="gsa:i18n ('no', 'Binary Choice')"/>
@@ -6224,7 +6232,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <div class="form-item">
             <div class="radio">
               <label>
-                <input type="radio" name="apply_overrides" value="1" checked="1"/>
+                <input type="radio" name="apply_overrides" value="1" checked="1"
+                  class="form-enable-item--in-assets" />
                 <xsl:value-of select="gsa:i18n ('yes', 'Binary Choice')"/>
               </label>
             </div>
@@ -6232,7 +6241,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <div class="form-item">
             <div class="radio">
               <label>
-                <input type="radio" name="apply_overrides" value="0"/>
+                <input type="radio" name="apply_overrides" value="0"
+                  class="form-enable-item--in-assets" />
                 <xsl:value-of select="gsa:i18n ('no', 'Binary Choice')"/>
               </label>
             </div>
@@ -6243,7 +6253,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Min QOD', 'Results')"/></label>
         <div class="col-10">
           <div class="form-item">
-            <input type="text" name="min_qod" value="70" size="4" class="spinner"
+            <input type="text" name="min_qod" value="70" size="4"
+              class="spinner form-enable-item--in-assets"
               data-type="float" min="0" max="100"/>
           </div>
           <div class="form-item">

@@ -1,5 +1,10 @@
 2016-04-28  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/omp.xsl (new_task): Disable "qod" and "overrides" in new
+	task dialog if is "add to assets" is set to no.
+
+2016-04-28  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/greenbone.js (on_ready): Allow to disable also spinner
 	elements with .form-enable css classes.
 
