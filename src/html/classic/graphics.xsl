@@ -200,7 +200,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <span class="dashboard-chart"
           data-chart-name="task-schedules"
           data-chart-type="gantt"
-          data-gen-params='{{"empty_text": "No scheduled Taks found"}}'/>
+          data-gen-params='{{"empty_text": "No scheduled Tasks found"}}'/>
       </div>
     </xsl:if>
     <xsl:if test="$type='report'">
