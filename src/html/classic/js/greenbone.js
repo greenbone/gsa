@@ -1237,8 +1237,15 @@
         elem.attr('disable-on') : '1';
       elem.on('change', function() {
         var value = elem.val();
-        form.find('.form-enable-item--' + name).prop('disabled',
-            value === disabled);
+        form.find('.form-enable-item--' + name).each(function() {
+          var cur = $(this);
+          if (cur.hasClass('spinner')) {
+            cur.spinner('option', 'disabled', value === disable);
+          }
+          else {
+            cur.prop('disabled', value === disable);
+          }
+        });
       });
     });
   }
