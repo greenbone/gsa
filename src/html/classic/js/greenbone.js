@@ -392,8 +392,15 @@
       type: 'POST',
       dataType: 'xml',
     })
-    .fail(function(jqXHR) {
-      self.setErrorFromResponse(jqXHR);
+    .fail(function(response) {
+      if (response.status === 401) {
+        // not authorized (anymore)
+        // reload page to show login dialog
+        location.reload();
+        return;
+      }
+
+      self.setErrorFromResponse(response);
 
       // restore the original button.
       self.finished();
