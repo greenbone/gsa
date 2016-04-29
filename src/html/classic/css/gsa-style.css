@@ -1327,6 +1327,12 @@ select[multiple] {
   vertical-align: middle;
 }
 
+.ui-state-error {
+  margin-bottom: 5px;
+  padding: 5px;
+}
+
+
 /* The new reworked list view */
 
 #list-window-charts,
