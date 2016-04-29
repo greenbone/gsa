@@ -499,6 +499,14 @@
       event.preventDefault();
     });
 
+    self.dialog.on('keydown', function(event) {
+      if (event.which === $.ui.keyCode.ENTER) {
+        // submit form on enter
+        self.submit();
+        event.preventDefault();
+      }
+    });
+
     // enable buttons, set up selects, ...
     on_ready(self.dialog);
   };
