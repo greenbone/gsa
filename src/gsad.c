@@ -1277,7 +1277,7 @@ init_validator ()
   openvas_validator_add (validator, "hosts_allow", "^(0|1)$");
   openvas_validator_add (validator, "hosts_opt",  "^[-[:alnum:], \\./]{0,2000}$");
   openvas_validator_add (validator, "hosts_ordering", "^(sequential|random|reverse)$");
-  openvas_validator_add (validator, "hour",        "^((0|1)[0-9]{1,1})|(2(0|1|2|3))$");
+  openvas_validator_add (validator, "hour",        "^([01]?[0-9]|2[0-3])$");
   openvas_validator_add (validator, "howto_use",   "(?s)^.*$");
   openvas_validator_add (validator, "howto_install",  "(?s)^.*$");
   openvas_validator_add (validator, "id",             "^[a-z0-9\\-]+$");
