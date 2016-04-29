@@ -1,5 +1,11 @@
 2016-04-29  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/greenbone-ui.js (greenbone.spinner): Allow empty values
+	in spinner. This allows to use backspace or delete keys to remove all content
+	from spinner inputs.
+
+2016-04-29  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/css/gsa-style.css: Improve styling of error messages within
 	dialogs.
 

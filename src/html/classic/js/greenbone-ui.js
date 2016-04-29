@@ -159,10 +159,8 @@
       }
 
       var value = this.value();
-      /* reset to previous value if value is null, value is greater then max or
-       * value is smaller then min */
-      if ((value === undefined || value === null) ||
-          (this.options.max !== null && value > this.options.max) ||
+      /* value is greater then max or value is smaller then min */
+      if ((this.options.max !== null && value > this.options.max) ||
           (this.options.min !== null && value < this.options.min)) {
         // call _value instead of value to avoid triggering change event again
         this._value(this.previous);
