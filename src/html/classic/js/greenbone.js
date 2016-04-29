@@ -862,8 +862,7 @@
       params.task_id = task_id;
     }
 
-    options.element.on('click', function(event) {
-      event.preventDefault();
+    function show_dialog() {
       new OMPDialog({
         cmd: cmd,
         done: done,
@@ -872,6 +871,19 @@
         parent_dialog: parent_dialog,
         height: height,
       }).show(options.button);
+    }
+
+    options.element.on('click', function(event) {
+      event.preventDefault();
+      show_dialog();
+    });
+
+    options.element.on('keydown', function(event) {
+      console.log('keydown');
+      if (event.which === $.ui.keyCode.ENTER) {
+        event.stopPropagation();
+        show_dialog();
+      }
     });
   }
 

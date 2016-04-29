@@ -1,5 +1,10 @@
 2016-04-29  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/greenbone.js (init_omp_dialog): Open OMPDialog on mouse
+	click and on enter key press.
+
+2016-04-29  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/greenbone.js (OMPDialog.prototype.setContent): Submit
 	dialog form on enter key press.
 
