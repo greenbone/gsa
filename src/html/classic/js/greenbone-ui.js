@@ -106,7 +106,7 @@
     }
   });
 
-  $.widget('greenbonde.spinner', $.ui.spinner, {
+  $.widget('greenbone.spinner', $.ui.spinner, {
     _create: function() {
       this.allowed = [
         109, // subtract
@@ -143,11 +143,11 @@
       return options;
     },
     _keydown: function(event) {
-      if ((event.which > 57 || event.shiftKey ||
+      if ((event.which > 57 ||
             this.disallowed.indexOf(event.which) > 0) &&
-          this.allowed.indexOf(event.which) === -1) {
-        // don't allow keys > 57, combinations with shift and space
-        // ('9' == keycode 57)
+          this.allowed.indexOf(event.which) === -1 &&
+          !event.ctrlKey) {
+        // ('9' == keycode 57) only allow ints
         event.preventDefault();
         return true;
       }
