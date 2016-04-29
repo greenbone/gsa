@@ -1160,6 +1160,14 @@
         /* show datepicker when clicking on deactivated button */
         button.datepicker('show');
       });
+
+      button.on('keydown', function(event) {
+        if (event.which === $.ui.keyCode.ENTER) {
+          /* show datepicker on enter */
+          event.stopPropagation();
+          button.datepicker('show');
+        }
+      });
     });
 
     var autorefresh = doc.find('#autorefresh');
