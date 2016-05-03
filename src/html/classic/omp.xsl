@@ -887,7 +887,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="to_address" select="'FILL IN EMAIL ADDRESS'"/>
   <xsl:param name="subject" select="'Feedback'"/>
   <xsl:param name="body" select="'Dear%20{str:encode-uri ($to_name, true ())},&#xA;&#xA;'"/>
-  <a href="mailto:{str:encode-uri ($to_name, true ())}%20%3C{str:encode-uri ($to_address, true ())}%3E?subject={str:encode-uri ($subject, true ())}&amp;body=Dear%20{str:encode-uri ($to_name, true ())},&#xA;&#xA;{str:encode-uri ($body, true ())}">
+  <a class="icon" href="mailto:{str:encode-uri ($to_name, true ())}%20%3C{str:encode-uri ($to_address, true ())}%3E?subject={str:encode-uri ($subject, true ())}&amp;body=Dear%20{str:encode-uri ($to_name, true ())},&#xA;&#xA;{str:encode-uri ($body, true ())}">
     <img src="img/feedback.png" title="{gsa:i18n ('Send feedback to', 'Feedback Icon')} {$to_name}" alt="{gsa:i18n('Feedback', 'Feedback Icon')}"/>
   </a>
 -->
