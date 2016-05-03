@@ -3795,27 +3795,6 @@
   }
 
   /*
-  * FIXME Do we still need this function?
-  *
-  * Resize a detached chart window to fit the chart display, filter and footer
-  */
-  function fit_detached_window(dashboard) {
-    var display_width = Number(dashboard.elem().scrollWidth);
-    var display_height = Number(dashboard.elem().scrollHeight);
-    var filter = d3.select('#applied_filter');
-    var footer = d3.select('.gsa-footer');
-    var height_diff = window.outerHeight - window.innerHeight;
-    var width_diff = window.outerWidth - window.innerWidth;
-
-    window.resizeTo(display_width + width_diff + 24, window.innerHeight);
-    window.resizeTo(display_width + width_diff + 24,
-        20 + height_diff + display_height +
-        Number(filter.property('scrollHeight')) +
-        Number(footer.property('scrollHeight'))
-    );
-  }
-
-  /*
   * Resizes a chart display to fill the whole window
   */
   function detached_chart_resize_listener(dashboard) {
