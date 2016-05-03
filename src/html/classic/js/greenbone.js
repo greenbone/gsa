@@ -1209,6 +1209,15 @@
       });
     });
 
+    function init_input(elem, func) {
+      if ((elem.attr('type') !== 'radio' && elem.attr('type') !== 'checkbox') ||
+          elem.prop('checked')) {
+        /* initialize input fields if its not a radio and checkbox element or
+         * if radio/checkbox is selected */
+        func();
+      }
+    }
+
     doc.find('input.spinner').spinner();
 
     doc.find('.slider').slider();
@@ -1256,12 +1265,7 @@
 
       elem.on('change', on_change);
 
-      if ((elem.attr('type') !== 'radio' && elem.attr('type') !== 'checkbox') ||
-          elem.prop('checked')) {
-        /* initialize input fields if its not a radio and checkbox element or
-         * if radio/checkbox is selected */
-        on_change();
-      }
+      init_input(elem, on_change);
     });
 
     doc.find('.form-enable-control').each(function() {
@@ -1286,12 +1290,7 @@
 
       elem.on('change', on_change);
 
-      if ((elem.attr('type') !== 'radio' && elem.attr('type') !== 'checkbox') ||
-          elem.prop('checked')) {
-        /* initialize input fields if its not a radio and checkbox element or
-         * if radio/checkbox is selected */
-        on_change();
-      }
+      init_input(elem, on_change);
     });
   }
 
