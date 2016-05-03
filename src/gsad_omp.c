@@ -3953,7 +3953,7 @@ create_container_task_omp (credentials_t * credentials, params_t *params,
   command = g_strdup_printf ("<create_task>"
                              "<target id=\"0\"/>"
                              "<name>%s</name>"
-                              "<comment>%s</comment>"
+                             "<comment>%s</comment>"
                              "</create_task>",
                              name,
                              comment);
