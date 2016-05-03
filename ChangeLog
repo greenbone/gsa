@@ -1,5 +1,11 @@
 2016-05-03  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/classic/omp.xsl (resource-permissions-window): Set
+	data-reload attribute on New Permission link, so the dialog returns to
+	the current page on exit.
+
+2016-05-03  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (create_container_task_omp): Align string.
 
 2016-05-03  Matthew Mundell <matthew.mundell@greenbone.net>

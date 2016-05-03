@@ -2827,7 +2827,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:choose>
         <xsl:when test="gsa:may-op ('create_permission')">
           <a href="/omp?cmd=new_permissions&amp;next={$next}&amp;next_id={$resource_id}&amp;next_type={$resource_type}&amp;resource_id={$resource_id}&amp;restrict_type={$resource_type}&amp;{$related_params}token={/envelope/token}"
-             class="new-action-icon icon icon-action" data-type="permissions" data-extra="resource_id={$resource_id}&amp;restrict_type={$resource_type}&amp;{$related_params}"
+             class="new-action-icon icon icon-action"
+             data-reload="window"
+             data-type="permissions"
+             data-extra="resource_id={$resource_id}&amp;restrict_type={$resource_type}&amp;{$related_params}"
              title="{gsa:i18n ('Create Multiple Permissions', 'Permission')}">
             <img src="/img/new.png"/>
           </a>
