@@ -2572,7 +2572,8 @@
                   parseFloat(d3.select(this).text());
               }
               else if (d3.select(this).text().match(date_regex)) {
-                record[col_name + '_' + this.localName] = new Date(d3.select(this).text().substr(0,19)+'Z');
+                record[col_name + '_' + this.localName] = new Date(
+                    d3.select(this).text().substr(0, 19) + 'Z');
               }
               else {
                 record[col_name + '_' + this.localName] =
@@ -2583,7 +2584,7 @@
           else if (this.localName === 'text') {
             if (d3.select(this).text().match(date_regex)) {
               record[d3.select(this).attr('column')] =
-                new Date(d3.select(this).text().substr(0,19)+'Z');
+                new Date(d3.select(this).text().substr(0, 19) + 'Z');
             }
             else {
               record[d3.select(this).attr('column')] =
@@ -2597,7 +2598,8 @@
                 parseFloat(d3.select(this).text());
             }
             else if (d3.select(this).text().match(date_regex)) {
-              record[this.localName] = new Date(d3.select(this).text().substr(0,19)+'Z');
+              record[this.localName] = new Date(
+                  d3.select(this).text().substr(0, 19) + 'Z');
             }
             else {
               record[this.localName] =
@@ -2884,22 +2886,30 @@
    * @return {string} The severity level name.
    */
   function severity_level(value) {
-    if (value >= gsa.severity_levels.min_high)
+    if (value >= gsa.severity_levels.min_high) {
       return gsa._('High');
-    else if (value >= gsa.severity_levels.min_medium)
+    }
+    else if (value >= gsa.severity_levels.min_medium) {
       return gsa._('Medium');
-    else if (value >= gsa.severity_levels.min_low)
+    }
+    else if (value >= gsa.severity_levels.min_low) {
       return gsa._('Low');
-    else if (value >= 0.0)
+    }
+    else if (value >= 0.0) {
       return gsa._('Log');
-    else if (value === -1.0)
+    }
+    else if (value === -1.0) {
       return gsa._('False Positive');
-    else if (value === -2.0)
+    }
+    else if (value === -2.0) {
       return gsa._('Debug');
-    else if (value === -3.0)
+    }
+    else if (value === -3.0) {
       return gsa._('Error');
-    else
-      return ('N/A');
+    }
+    else {
+      return gsa._('N/A');
+    }
   }
 
   /*
@@ -3676,9 +3686,8 @@
         criteria_addition += column + '="' + value + '"';
       }
     } else if (relation === 'range') {
-      criteria_addition = (column + '>' + value[0]
-                           + ' and '
-                           + column + '<' + value[1]);
+      criteria_addition = (column + '>' + value[0] +
+          ' and ' + column + '<' + value[1]);
     } else {
       criteria_addition += column + relation + '"' + value + '"';
     }
