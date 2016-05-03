@@ -1675,20 +1675,29 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </item>
         </xsl:if>
       </xsl:variable>
+      <xsl:variable name="count" select="count (exslt:node-set ($items)/item)"/>
       <xsl:choose>
-        <xsl:when test="count (exslt:node-set ($items)/item) = 0">
+        <xsl:when test="$count = 0">
           <div class="empty_top_button"/>
         </xsl:when>
         <xsl:otherwise>
           <a class="top_button"
-             href="/omp?cmd=get_tasks&amp;token={/envelope/token}">
+             href="/omp?cmd={exslt:node-set ($items)/item/page}&amp;token={/envelope/token}">
             <xsl:value-of select="gsa:i18n ('Scan Management', 'Main Menu')"/>
             <div class="first_button_overlay">
               <ul class="first_button_overlay">
-                <li class="pointy"></li>
-                <li class="first_button_overlay">
-                  <xsl:value-of select="exslt:node-set ($items)/item/name"/>
-                </li>
+                <xsl:choose>
+                  <xsl:when test="$count = 1">
+                    <li class="first_button_overlay overlay_last">
+                      <xsl:value-of select="exslt:node-set ($items)/item/name"/>
+                    </li>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <li class="first_button_overlay">
+                      <xsl:value-of select="exslt:node-set ($items)/item/name"/>
+                    </li>
+                  </xsl:otherwise>
+                </xsl:choose>
               </ul>
             </div>
           </a>
@@ -1702,10 +1711,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   </xsl:if>
                 </xsl:variable>
                 <xsl:choose>
-                  <xsl:when test="position() = last() and boolean (filter)">
+                  <xsl:when test="(position() = last() or $count = 1) and boolean (filter)">
                     <li class="last {$divider} {class}"><a href="/omp?cmd={page}&amp;filter={filter}&amp;token={$token}"><xsl:value-of select="name"/></a></li>
                   </xsl:when>
-                  <xsl:when test="position() = last()">
+                  <xsl:when test="position() = last() or $count = 1">
                     <li class="last {$divider} {class}"><a href="/omp?cmd={page}&amp;token={$token}"><xsl:value-of select="name"/></a></li>
                   </xsl:when>
                   <xsl:when test="string-length (class) &gt; 0 and boolean (filter)">
@@ -1875,8 +1884,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </item>
         </xsl:if>
       </xsl:variable>
+      <xsl:variable name="count" select="count (exslt:node-set ($items)/item)"/>
       <xsl:choose>
-        <xsl:when test="count (exslt:node-set ($items)/item) = 0">
+        <xsl:when test="$count = 0">
           <div class="empty_top_button"/>
         </xsl:when>
         <xsl:otherwise>
@@ -1911,7 +1921,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   </xsl:if>
                 </xsl:variable>
                 <xsl:choose>
-                  <xsl:when test="position() = last()">
+                  <xsl:when test="position() = last() or $count = 1">
                     <li class="last {$divider} {class}"><a href="/omp?cmd={page}&amp;token={$token}"><xsl:value-of select="name"/></a></li>
                   </xsl:when>
                   <xsl:when test="(string-length ($divider) &gt; 0) or (string-length (class) &gt; 0)">
@@ -2009,13 +2019,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </item>
         </xsl:if>
       </xsl:variable>
+      <xsl:variable name="count" select="count (exslt:node-set ($items)/item)"/>
       <xsl:choose>
-        <xsl:when test="count (exslt:node-set ($items)/item) = 0">
+        <xsl:when test="$count = 0">
           <div class="empty_top_button"/>
         </xsl:when>
         <xsl:otherwise>
           <a class="top_button"
-             href="/omp?cmd=get_users&amp;token={/envelope/token}">
+             href="/omp?cmd={exslt:node-set ($items)/item/page}&amp;token={/envelope/token}">
             <xsl:value-of select="gsa:i18n ('Administration', 'Main Menu')"/>
             <xsl:if test="count (exslt:node-set ($items)/item) &gt; 0">
               <div class="first_button_overlay">
@@ -2037,7 +2048,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 </xsl:if>
               </xsl:variable>
               <xsl:choose>
-                <xsl:when test="position() = last()">
+                <xsl:when test="position() = last() or $count = 1">
                   <li class="{$divider} last"><a href="/omp?cmd={page}&amp;token={$token}"><xsl:value-of select="name"/></a></li>
                 </xsl:when>
                 <xsl:otherwise>

@@ -1,3 +1,12 @@
+2016-05-03  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Backport r25152.
+
+	* src/html/classic/gsad.xsl (html-gsa-navigation): Where the menu is
+	generated from a list, get the default command from the list.  Also
+	check the item count in the "last" check, because last() does not seem
+	to work when there's only one item.
+
 2016-04-21  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Update OS list and icons.
@@ -24,7 +33,7 @@
 
 	* src/html/classic/img/os_huawai.png: New file.
 
-	* src/html/classic/img/os_ipfire.png: New file.	
+	* src/html/classic/img/os_ipfire.png: New file.
 
 	* src/html/classic/img/os_mcafee.png: New file.
 
@@ -54,7 +63,7 @@
 
 	* src/gsad.c (init_validator): Replace the various "esc_..." parameters
 	for the alert test with "esc_filter" and add "search_phrase_exact".
-	
+
 	* src/html/classic/omp.xsl (report [results-pager]): Add parameter
 	search_phrase_exact to the common part of the links.
 	(report [filterbox]): Add radio button to choose whether the search
