@@ -359,6 +359,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                              "extra_tooltip_label_1": "Updated" }}'
           data-init-params='{{"title_text": "Most vulnerable hosts"}}'/>
       </div>
+      <div class="dashboard-data-source"
+        data-source-name="host-counts-timeline-source"
+        data-aggregate-type="{$type}"
+        data-group-column="modified"
+        data-subgroup-column="severity_level"
+        data-filter="{$filter}"
+        data-filter-id="{$filt_id}">
+        <span class="dashboard-chart"
+          data-chart-name="host-counts-timeline"
+          data-y-fields="count[High]"
+          data-z-fields="c_count[High]"
+          data-chart-type="line"/>
+      </div>
     </xsl:if>
     <xsl:if test="$type = 'os'">
       <div class="dashboard-data-source"

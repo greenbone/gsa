@@ -745,7 +745,8 @@
       .data(records)
       .enter();
 
-    if (self.y_field !== 'count' && self.y_field !== 'c_count') {
+    if (self.y_field.substr(0, 5) !== 'count' &&
+        self.y_field !== 'c_count'.substr(0, 7)) {
       enter.insert('circle')
         .attr('class', 'marker y')
         .attr('r', 1.5)
@@ -753,7 +754,8 @@
         .style('stroke', d3.rgb('green'));
     }
 
-    if (self.y2_field !== 'count' && self.y2_field !== 'c_count') {
+    if (self.y2_field.substr(0, 5) !== 'count' &&
+        self.y2_field.substr(0, 7) !== 'c_count') {
       enter.insert('circle')
         .attr('class', 'marker y2')
         .attr('r', 1.5)
@@ -769,7 +771,7 @@
     self.svg.selectAll('.marker.y2')
       .data(records)
       .attr('cx', function(d) { return self.x_scale(d[self.x_field]); })
-      .attr('cy', function(d) { return self.y_scale(d[self.y2_field]); });
+      .attr('cy', function(d) { return self.y2_scale(d[self.y2_field]); });
 
     self.svg.selectAll('.marker.y')
       .data(records)
@@ -1064,9 +1066,11 @@
         }
       }
       // FIXME: make filling an explicit option
-      if (has_values || self.y_field === 'count' ||
-          self.y_field === 'c_count' || self.y2_field === 'count' ||
-          self.y2_field === 'c_count') {
+      if (has_values ||
+          self.y_field.substr(0, 5) === 'count' ||
+          self.y_field.substr(0, 7) === 'c_count' ||
+          self.y2_field.substr(0, 5) === 'count' ||
+          self.y2_field.substr(0, 7) === 'c_count') {
         new_data.records.push(new_record);
       }
     }

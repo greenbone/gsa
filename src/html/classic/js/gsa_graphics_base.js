@@ -2121,6 +2121,8 @@
           options.data_column : '';
         params.group_column = options.group_column !== undefined ?
           options.group_column : '';
+        params.subgroup_column = options.subgroup_column !== undefined ?
+          options.subgroup_column : '';
 
         if (!options.data_columns) {
           params.data_columns = [];
@@ -2562,21 +2564,30 @@
       d3.select(this)
         .selectAll('value, count, c_count, stats, text')
         .each(function(d, i) {
+          var in_subgroup = (this.parentNode.localName === 'subgroup');
+          var subgroup_value;
+          if (in_subgroup) {
+            subgroup_value = d3.select(this.parentNode).select('value').text();
+          }
           if (this.localName === 'stats') {
             var col_name = d3.select(this).attr('column');
             d3.select(this).selectAll('*').each(function(d, i) {
+              var field_name = col_name + '_' + this.localName;
+              if (in_subgroup) {
+                field_name = field_name + '[' + subgroup_value + ']';
+              }
               if (!isNaN(parseFloat(
                       d3.select(this).text())) &&
                   isFinite(d3.select(this).text())) {
-                record[col_name + '_' + this.localName] =
+                record[field_name] =
                   parseFloat(d3.select(this).text());
               }
               else if (d3.select(this).text().match(date_regex)) {
-                record[col_name + '_' + this.localName] = new Date(
-                    d3.select(this).text().substr(0, 19) + 'Z');
+                record[field_name] = new Date(
+                    d3.select(this).text().substr(0,19)+'Z');
               }
               else {
-                record[col_name + '_' + this.localName] =
+                record[field_name] =
                   d3.select(this).text();
               }
             });
@@ -2592,17 +2603,22 @@
             }
           }
           else {
+            var field_name = this.localName;
+            if (in_subgroup) {
+              field_name = field_name + '[' + subgroup_value + ']';
+            }
+
             if (!isNaN(parseFloat(d3.select(this).text())) &&
                 isFinite(d3.select(this).text())) {
-              record[this.localName] =
+              record[field_name] =
                 parseFloat(d3.select(this).text());
             }
             else if (d3.select(this).text().match(date_regex)) {
-              record[this.localName] = new Date(
-                  d3.select(this).text().substr(0, 19) + 'Z');
-            }
+              record[field_name] = new Date(
+                  d3.select(this).text().substr(0,19)+'Z');
+}
             else {
-              record[this.localName] =
+              record[field_name] =
                 d3.select(this).text();
             }
           }
@@ -2615,13 +2631,19 @@
   /*
   * Extracts column info from XML
   */
-  function extract_column_info(xml_data) {
+  function extract_column_info(xml_data, gen_params) {
     var column_info = {
       group_columns: [],
+      subgroup_columns: [],
       data_columns: [],
       text_columns: [],
-      columns: {}
+      columns: {},
+      subgroups: [],
     };
+
+    xml_data.selectAll('aggregate subgroups value').each(function(d, i) {
+      column_info.subgroups.push(d3.select(this).text());
+    });
 
     xml_data.selectAll(
         'aggregate column_info aggregate_column').each(function(d, i) {
@@ -2640,9 +2662,26 @@
           }
         });
       column_info.columns[column.name] = column;
+      for (var i = 0; i < column_info.subgroups.length; i++) {
+        // Create copies of columns for subgroups
+        if (column.name !== 'value' && column.name !== 'subgroup_value') {
+          var column_copy = {}
+          var copy_name = column.name + '[' + column_info.subgroups[i] + ']';
+          for (var prop in column) {
+            column_copy[prop] = column[prop];
+          }
+          column_copy.name = copy_name;
+          column_copy.subgroup_value = column_info.subgroups[i];
+          column_info.columns[copy_name] = column_copy;
+        }
+      }
     });
 
     xml_data.selectAll('aggregate group_column').each(function(d, i) {
+      column_info.group_columns.push(d3.select(this).text());
+    });
+
+    xml_data.selectAll('aggregate subgroup_column').each(function(d, i) {
       column_info.group_columns.push(d3.select(this).text());
     });
 
@@ -2654,6 +2693,53 @@
       column_info.text_columns.push(d3.select(this).text());
     });
 
+    if (gen_params) {
+      var add_missing_column = function (field) {
+        if (column_info.columns[field] !== undefined) {
+          return;
+        }
+
+        if (field.indexOf('[') !== -1 && field.lastIndexOf(']') !== -1) {
+          var base = field.substr(0, field.indexOf('['));
+          var subgroup = field.substr(field.indexOf('[') + 1,
+              field.lastIndexOf(']') - field.indexOf('[') - 1);
+          var base_column = column_info.columns[base];
+          if (base_column !== undefined) {
+            var column_copy = {};
+            var copy_name = base + '[' + subgroup + ']'
+            for (var prop in base_column) {
+              column_copy[prop] = base_column[prop];
+            }
+            column_copy.name = copy_name;
+            column_copy.subgroup_value = subgroup;
+            column_info.columns[copy_name] = column_copy;
+          }
+          else {
+            console.warn ('Could not find base column info "' + base +
+                '" for "' + field + '"');
+          }
+        }
+      }
+
+      if (gen_params.y_fields) {
+        for (var index = 0; index < gen_params.y_fields.length; index++) {
+          var field = gen_params.y_fields[index];
+          if (column_info.columns[field] === undefined) {
+            add_missing_column (field);
+          }
+        }
+      }
+
+      if (gen_params.z_fields) {
+        for (var index = 0; index < gen_params.z_fields.length; index++) {
+          var field = gen_params.z_fields[index];
+          if (column_info.columns[field] === undefined) {
+            add_missing_column (field);
+          }
+        }
+      }
+
+    }
     return column_info;
   }
 
@@ -3023,11 +3109,14 @@
       label = label + ' (' + resource_type_name(info.type) + ')';
     }
     if (capitalize_label) {
-      return capitalize(label);
+      label = capitalize(label);
     }
-    else {
-      return label;
+
+    if (info.subgroup_value !== undefined && info.subgroup_value !== '') {
+      label += ' (' + info.subgroup_value + ')';
     }
+
+    return label;
   }
 
   /**
@@ -4461,12 +4550,14 @@
         var data_source_name = ds_elem.data('source-name');
         var aggregate_type = ds_elem.data('aggregate-type');
         var group_column = ds_elem.data('group-column');
+        var subgroup_column = ds_elem.data('subgroup-column');
 
         var data_source = create_data_source(data_source_name,
             {
               type: type,
               aggregate_type: aggregate_type,
               group_column: group_column,
+              subgroup_column: subgroup_column,
               data_column: ds_elem.data('column'),
               data_columns: ds_elem.data('columns'),
               text_columns: ds_elem.data('text-columns'),

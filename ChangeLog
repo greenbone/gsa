@@ -1,3 +1,25 @@
+2016-05-03  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/gsad_omp.c (get_aggregate_omp): Handle new request param
+	subgroup_column.
+
+	* src/gsad.c (init_validator): Accept square brackets in x_field,
+	y_fields, and z_fields params and add new param subgroup_column.
+
+	* src/html/classic/graphics.xsl (js-assets-top-visualization): Add new
+	chart hosts timeline chart.
+
+	* src/html/classic/omp.xsl (get_aggregate): Add param subgroup_column.
+
+	* src/html/classic/js/gsa_graphics_base.js (create_data_source):
+	Get subgroup_column in init function.
+	(extract_simple_records, extract_column_info, default_column_label):
+	Handle subgroups.
+	(BaseChartGenerator): Handle subgroup_column in data source definitions.
+
+	* src/html/classic/js/gsa_line_chart.js (LineChartGenerator.generate):
+	Handle subgroups and fix point markers using the y2 axis.
+
 2016-05-03  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/js/gsa_graphics_base.js: Remove unused function

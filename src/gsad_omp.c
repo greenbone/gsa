@@ -7569,7 +7569,8 @@ get_aggregate_omp (credentials_t * credentials, params_t *params,
   char *param_name;
   param_t *param;
 
-  const char *data_column, *group_column, *type, *filter, *filt_id, *xml_param;
+  const char *data_column, *group_column, *subgroup_column, *type;
+  const char *filter, *filt_id, *xml_param;
   const char *sort_field, *sort_stat, *sort_order, *first_group, *max_groups;
   const char *mode;
   gchar *filter_escaped, *command_escaped, *response;
@@ -7581,6 +7582,7 @@ get_aggregate_omp (credentials_t * credentials, params_t *params,
   data_column = params_value (params, "data_column");
   text_columns = params_values (params, "text_columns:");
   group_column = params_value (params, "group_column");
+  subgroup_column = params_value (params, "subgroup_column");
   type = params_value (params, "aggregate_type");
   filter = params_value (params, "filter");
   filt_id = params_value (params, "filt_id");
@@ -7606,6 +7608,9 @@ get_aggregate_omp (credentials_t * credentials, params_t *params,
     g_string_append_printf (command, " data_column=\"%s\"", data_column);
   if (group_column)
     g_string_append_printf (command, " group_column=\"%s\"", group_column);
+  if (subgroup_column)
+    g_string_append_printf (command,
+                            " subgroup_column=\"%s\"", subgroup_column);
   if (filter_escaped && strcmp (filter_escaped, ""))
     g_string_append_printf (command, " filter=\"%s\"", filter_escaped);
   if (filt_id && strcmp (filt_id, ""))

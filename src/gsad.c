@@ -1397,12 +1397,12 @@ init_validator ()
   openvas_validator_add (validator, "source_iface", "^(.*){1,16}$");
   openvas_validator_add (validator, "uuid",       "^[0-9abcdefABCDEF\\-]{1,40}$");
   openvas_validator_add (validator, "users",       "^[-_ [:alnum:],]*$");
-  openvas_validator_add (validator, "x_field", "^[_[:alnum:]]{1,80}$");
+  openvas_validator_add (validator, "x_field", "^[\\[\\]_[:alnum:]]{1,80}$");
   openvas_validator_add (validator, "y_fields:name", "^[0-9]{1,5}$");
-  openvas_validator_add (validator, "y_fields:value", "^[_[:alnum:]]{1,80}$");
+  openvas_validator_add (validator, "y_fields:value", "^[\\[\\]_[:alnum:]]{1,80}$");
   openvas_validator_add (validator, "year",       "^[0-9]+$");
   openvas_validator_add (validator, "z_fields:name", "^[0-9]{1,5}$");
-  openvas_validator_add (validator, "z_fields:value", "^[_[:alnum:]]{1,80}$");
+  openvas_validator_add (validator, "z_fields:value", "^[\\[\\]_[:alnum:]]{1,80}$");
   openvas_validator_add (validator, "calendar_unit", "^(second|minute|hour|day|week|month|year|decade)$");
 
   /* Beware, the rule must be defined before the alias. */
@@ -1550,6 +1550,7 @@ init_validator ()
   openvas_validator_alias (validator, "smb_credential_id", "credential_id");
   openvas_validator_alias (validator, "snmp_credential_id", "credential_id");
   openvas_validator_alias (validator, "ssh_credential_id", "credential_id");
+  openvas_validator_alias (validator, "subgroup_column", "group_column");
   openvas_validator_alias (validator, "subject_id",   "id");
   openvas_validator_alias (validator, "subject_id_optional", "id_optional");
   openvas_validator_alias (validator, "subject_name",   "name");
