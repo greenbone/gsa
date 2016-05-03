@@ -1270,7 +1270,8 @@
       var name = elem.attr('id');
       var disable = is_defined(elem.attr('disable-on')) ?
         elem.attr('disable-on') : '1';
-      elem.on('change', function() {
+
+      function on_change() {
         var value = elem.val();
         form.find('.form-enable-item--' + name).each(function() {
           var cur = $(this);
@@ -1281,7 +1282,16 @@
             cur.prop('disabled', value === disable);
           }
         });
-      });
+      }
+
+      elem.on('change', on_change);
+
+      if ((elem.attr('type') !== 'radio' && elem.attr('type') !== 'checkbox') ||
+          elem.prop('checked')) {
+        /* initialize input fields if its not a radio and checkbox element or
+         * if radio/checkbox is selected */
+        on_change();
+      }
     });
   }
 

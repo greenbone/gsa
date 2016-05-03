@@ -1,5 +1,10 @@
 2016-05-03  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/greenbone.js (on_ready): Initialize form enable
+	controls. This will deactivate elements when a dialog is opened.
+
+2016-05-03  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/omp.xsl (html-edit-task-form): Deactivate radio options
 	min_qod and apply_overrides if in_asset is set to no (0).
 
