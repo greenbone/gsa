@@ -4096,8 +4096,21 @@ create_task_omp (credentials_t * credentials, params_t *params,
   else
     schedule_periods = "0";
   CHECK (in_assets);
-  CHECK (apply_overrides);
-  CHECK (min_qod);
+  if (!strcmp (in_assets, "1"))
+    {
+      CHECK (apply_overrides);
+      CHECK (min_qod);
+    }
+  else
+    {
+      if (!params_given (params, "apply_overrides")
+          || !params_valid (params, "apply_overrides"))
+        apply_overrides = "";
+
+      if (!params_given (params, "min_qod")
+          || !params_valid (params, "min_qod"))
+        min_qod = "";
+    }
   CHECK (max_checks);
   CHECK (source_iface);
   CHECK (auto_delete);
@@ -4643,8 +4656,22 @@ save_task_omp (credentials_t * credentials, params_t *params,
   CHECK_PARAM_INVALID (auto_delete_data, "Save Task", "edit_task");
   CHECK_PARAM_INVALID (max_hosts, "Save Task", "edit_task");
   CHECK_PARAM_INVALID (in_assets, "Save Task", "edit_task");
-  CHECK_PARAM_INVALID (apply_overrides, "Save Task", "edit_task");
-  CHECK_PARAM_INVALID (min_qod, "Save Task", "edit_task");
+
+  if (!strcmp (in_assets, "1"))
+    {
+      CHECK_PARAM_INVALID (apply_overrides, "Save Task", "edit_task");
+      CHECK_PARAM_INVALID (min_qod, "Save Task", "edit_task");
+    }
+  else
+    {
+      if (!params_given (params, "apply_overrides")
+          || !params_valid (params, "apply_overrides"))
+        apply_overrides = "";
+
+      if (!params_given (params, "min_qod")
+          || !params_valid (params, "min_qod"))
+        min_qod = "";
+    }
 
   alert_element = g_string_new ("");
   if (params_given (params, "alert_id_optional:"))
