@@ -1,3 +1,10 @@
+2016-05-03  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/classic/gsad.xsl (html-gsa-navigation): Where the menu is
+	generated from a list, get the default command from the list.  Also
+	check the item count in the "last" check, because last() does not seem
+	to work when there's only one item.
+
 2016-05-03  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/gsad_omp.c (get_aggregate_omp): Handle new request param
