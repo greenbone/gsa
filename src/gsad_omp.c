@@ -7592,7 +7592,17 @@ get_aggregate_omp (credentials_t * credentials, params_t *params,
   first_group = params_value (params, "first_group");
   max_groups = params_value (params, "max_groups");
   mode = params_value (params, "aggregate_mode");
-  filter_escaped = filter ? g_markup_escape_text (filter, -1) : NULL;
+  if (filter)
+    filter_escaped = g_markup_escape_text (filter, -1);
+  else
+    {
+      if (filt_id == NULL
+          || strcmp (filt_id, "") == 0
+          || strcmp (filt_id, "0") == 0)
+        filter_escaped = g_strdup ("rows=-2");
+      else
+        filter_escaped = NULL;
+    }
   xml_param = params_value (params, "xml");
 
   if (xml_param == NULL || atoi (xml_param) == 0)

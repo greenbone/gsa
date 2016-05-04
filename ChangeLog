@@ -1,5 +1,11 @@
 2016-05-04  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/gsad_omp.c (get_aggregate_omp): Replace empty filters with
+	"rows=-2" when no filt_id is given, so the default number of rows
+	is used for links inside charts.
+
+2016-05-04  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/gsad.c (init_validator): Add param no_chart_links.
 
 	* src/html/classic/graphics.xsl (js-scan-management-top-visualization)
