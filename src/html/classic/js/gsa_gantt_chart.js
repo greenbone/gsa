@@ -82,6 +82,8 @@
 
     var self = this;
 
+    this.noChartLinks = controller.display().dashboard().noChartLinks();
+
     this.x_scale = d3.scale.ordinal();
     this.y_scale = d3.time.scale.utc(); // == time_scale
 
@@ -251,6 +253,9 @@
 
     // Function to generate link URLs
     function generate_link(d, i) {
+      if (self.noChartLinks) {
+        return null;
+      }
       var type = data.column_info.columns.id.type;
       var value = d.id;
 

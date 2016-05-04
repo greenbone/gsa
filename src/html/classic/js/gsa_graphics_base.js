@@ -323,6 +323,8 @@
     var maxComponents = 8;
     // Maximum number of components per row
     var maxPerRow = 4;
+    // Whether links in charts are disabled
+    var noChartLinks = false;
 
     // Controls element
     var dashboardControls;
@@ -364,6 +366,7 @@
       initComponentsFromString: init_components_from_string,
       startEdit: start_edit,
       stopEdit: stop_edit,
+      noChartLinks: get_no_chart_links,
     };
 
     init();
@@ -398,6 +401,9 @@
         }
         if (dashboardOpts.dashboardControls) {
           dashboardControls = dashboardOpts.dashboardControls;
+        }
+        if (dashboardOpts.noChartLinks) {
+          noChartLinks = dashboardOpts.noChartLinks;
         }
       }
 
@@ -931,6 +937,10 @@
         stopEditButton.hide();
         newComponentButton.hide();
       }
+    }
+
+    function get_no_chart_links() {
+      return noChartLinks;
     }
   }
 
@@ -4532,6 +4542,8 @@
             filter: elem.data('filter'),
             filt_id: elem.data('filter-id'),
             max_components: max_components,
+            linksDisabled: elem.data('no-chart-links') !== undefined ?
+              Boolean (elem.data('no-chart-links')) : false,
             defaultControllerString: elem.data('default-controller-string'),
             hideControllerSelect: elem.data('hide-controller-select'),
             dashboardControls: $('#' + elem.data('dashboard-controls'))[0]

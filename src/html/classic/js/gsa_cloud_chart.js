@@ -75,6 +75,8 @@
     var display = controller.display();
     var update = this.mustUpdate(display);
 
+    this.noChartLinks = controller.display().dashboard().noChartLinks();
+
     // evaluate options set by gen_params
     if (gen_params.x_field) {
       this.x_field = gen_params.x_field;
@@ -142,6 +144,9 @@
     this.color_scale.domain(words);
 
     function generate_link(d, i) {
+      if (self.noChartLinks) {
+        return null;
+      }
       var type = data.column_info.columns[self.x_field].type;
       var column = data.column_info.group_columns[0];
       var value = d.text;

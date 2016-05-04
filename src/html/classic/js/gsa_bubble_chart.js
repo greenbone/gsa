@@ -75,6 +75,8 @@
     var empty_text;
     var self = this;
 
+    this.noChartLinks = controller.display().dashboard().noChartLinks();
+
     // evaluate options set by gen_params
     if (gen_params.x_field) {
       this.x_field = gen_params.x_field;
@@ -241,6 +243,9 @@
       .append('a');
 
     new_node_a.attr('xlink:href', function(d) {
+      if (self.noChartLinks) {
+        return null;
+      }
       var group_col_info = data.column_info.columns.group_value;
       if (group_col_info.column === 'uuid') {
         return gsa.details_page_url(group_col_info.type, d.group_value,

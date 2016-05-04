@@ -74,6 +74,8 @@
 
     var self = this;
 
+    this.noChartLinks = controller.display().dashboard().noChartLinks();
+
     // evaluate options set by gen_params
     if (gen_params.x_field) {
       this.x_field = gen_params.x_field;
@@ -142,6 +144,9 @@
 
     // Function to generate link URLs
     function generate_link(d, i) {
+      if (self.noChartLinks) {
+        return null;
+      }
       var type = data.column_info.columns[self.x_field].type;
       var column = data.column_info.columns[self.x_field].column;
       var value = d.data[self.x_field + '~original'];

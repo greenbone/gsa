@@ -105,6 +105,8 @@
 
     var column_info = data.column_info;
 
+    this.noChartLinks = controller.display().dashboard().noChartLinks();
+
     function get_rounded_x(mouse_x) {
       var rounded_x = self.x_step.round(self.x_scale.invert(mouse_x));
 
@@ -168,7 +170,8 @@
     }
 
     function mouse_down() {
-      if (d3.event.button >= 2 || data.records.length <= 1)
+      if (self.noChartLinks ||
+          d3.event.button >= 2 || data.records.length <= 1)
         return;
 
       var parent_rect = self.svg.node()

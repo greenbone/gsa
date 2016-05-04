@@ -9594,6 +9594,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     data-controllers="aggregate-chart"
     data-filter="{$filter_term}"
     data-filter-id="{$filt_id}"
+    data-no-chart-links="{/envelope/params/no_chart_links}"
     data-max-components="1"
     data-detached="1"
     data-hide-controller-select="1">

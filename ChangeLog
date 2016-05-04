@@ -1,3 +1,42 @@
+2016-05-04  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/gsad.c (init_validator): Add param no_chart_links.
+
+	* src/html/classic/graphics.xsl (js-scan-management-top-visualization)
+	(js-assets-top-visualization, js-secinfo-top-visualization)
+	(dashboard [secinfo]): Add option to disable links in charts with the
+	no_chart_links param.
+
+	* src/html/classic/omp.xsl (get_aggregate): Add option to disable links
+	in charts with the no_chart_links param.
+
+	* src/html/classic/js/gsa_bar_chart.js (generate): Disable links
+	inside chart if noChartLinks is set in the dashboard.
+
+	* src/html/classic/js/gsa_bubble_chart.js (generate): Disable links
+	inside chart if noChartLinks is set in the dashboard.
+
+	* src/html/classic/js/gsa_cloud_chart.js (generate): Disable links
+	inside chart if noChartLinks is set in the dashboard.
+
+	* src/html/classic/js/gsa_donut_chart.js (generate): Disable links
+	inside chart if noChartLinks is set in the dashboard.
+
+	* src/html/classic/js/gsa_gantt_chart.js (generate): Disable links
+	inside chart if noChartLinks is set in the dashboard.
+
+	* src/html/classic/js/gsa_h_bar_chart.js (generate): Disable links
+	inside chart if noChartLinks is set in the dashboard.
+
+	* src/html/classic/js/gsa_line_chart.js (generate): Disable links
+	inside chart if noChartLinks is set in the dashboard.
+
+	* src/html/classic/js/gsa_graphics_base.js (create_dashboard):
+	Inititialize the noChartLinks variable and add noChartLinks getter
+	function to the returned object.
+	(on_ready): Get noChartLinks value from no-chart-links data attribute
+	of the dashboard.
+
 2016-05-03  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/omp.xsl (resource-permissions-window): Set

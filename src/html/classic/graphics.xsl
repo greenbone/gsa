@@ -136,6 +136,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     data-controllers-pref-id="{$controllers_pref_id}"
     data-filters-id="{$filt_id}" data-heights-pref-id="{$heights_pref_id}"
     data-dashboard-controls="top-dashboard-controls"
+    data-no-chart-links="{/envelope/params/no_chart_links}"
     data-max-components="4">
     <div class="dashboard-data-source"
       data-source-name="severity-count-source"
@@ -320,6 +321,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     data-controllers-pref-id="{$controllers_pref_id}"
     data-filters-id="{$filt_id}" data-heights-pref-id="{$heights_pref_id}"
     data-dashboard-controls="top-dashboard-controls"
+    data-no-chart-links="{/envelope/params/no_chart_links}"
     data-max-components="4">
     <xsl:if test="$type = 'host'">
       <div class="dashboard-data-source"
@@ -497,6 +499,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     data-controllers-pref-id="{$controllers_pref_id}"
     data-filters-id="{$filt_id}" data-heights-pref-id="{$heights_pref_id}"
     data-dashboard-controls="top-dashboard-controls"
+    data-no-chart-links="{/envelope/params/no_chart_links}"
     data-max-components="4">
     <div class="dashboard-data-source"
       data-source-name="severity-count-source"
@@ -699,6 +702,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       data-filters-pref-id="{$filters_pref_id}" data-heights-pref-id="{$heights_pref_id}"
       data-default-controller-string="nvt_bar_chart"
       data-dashboard-controls="secinfo-dashboard-controls"
+      data-no-chart-links="{/envelope/params/no_chart_links}"
       data-max-components="8">
       <xsl:for-each select="$filters">
         <span class="dashboard-filter" data-id="{@id}"
