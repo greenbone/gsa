@@ -33295,31 +33295,49 @@ should not have received it.
             <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Authentication', 'Auth Data')"/></td>
             <td>
               <xsl:choose>
-                <xsl:when test="sources/source/text() = 'ldap_connect'"></xsl:when>
-                <xsl:when test="sources/source/text() = 'radius_connect'"></xsl:when>
+                <xsl:when test="sources/source/text() = 'ldap_connect' or sources/source/text() = 'radius_connect'">
+                  <input type="radio" name="modify_password" value="1"/>
+                  <xsl:value-of select="concat (gsa:i18n ('Password', 'Auth Data'), ': ')"/>
+                  <input type="password" name="password" value="" size="30"
+                         maxlength="40"/>
+                </xsl:when>
                 <xsl:otherwise>
                   <label>
-                    <input type="radio" name="modify_password" value="0"/>
+                    <input type="radio" name="modify_password" value="0" checked="1"/>
                     <xsl:value-of select="concat (gsa:i18n ('Password', 'Auth Data'), ': ', gsa:i18n ('Use existing value', 'User'))"/>
                   </label>
                   <br/>
+                  <input type="radio" name="modify_password" value="1"/>
+                  <xsl:value-of select="concat (gsa:i18n ('Password', 'Auth Data'), ': ')"/>
+                  <input type="password" name="password" value="" size="30"
+                         maxlength="40"/>
                 </xsl:otherwise>
               </xsl:choose>
-              <input type="radio" name="modify_password" value="1" checked="1"/>
-              <xsl:value-of select="concat (gsa:i18n ('Password', 'Auth Data'), ': ')"/>
-              <input type="password" name="password" value="" size="30"
-                     maxlength="40"/>
               <xsl:if test="//group[@name='method:ldap_connect']/auth_conf_setting[@key='enable']/@value = 'true'">
                 <br/>
                 <label>
-                  <input type="radio" name="modify_password" value="2"/>
+                  <xsl:choose>
+                    <xsl:when test="sources/source/text() = 'ldap_connect'">
+                      <input type="radio" name="modify_password" value="2" checked="1"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <input type="radio" name="modify_password" value="2"/>
+                    </xsl:otherwise>
+                  </xsl:choose>
                   <xsl:value-of select="gsa:i18n ('Allow LDAP Authentication Only', 'User')"/>
                 </label>
               </xsl:if>
               <xsl:if test="//group[@name='method:radius_connect']/auth_conf_setting[@key='enable']/@value = 'true'">
                 <br/>
                 <label>
-                  <input type="radio" name="modify_password" value="3"/>
+                  <xsl:choose>
+                    <xsl:when test="sources/source/text() = 'radius_connect'">
+                      <input type="radio" name="modify_password" value="3" checked="1"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <input type="radio" name="modify_password" value="3"/>
+                    </xsl:otherwise>
+                  </xsl:choose>
                   <xsl:value-of select="gsa:i18n ('Allow RADIUS Authentication Only', 'User')"/>
                 </label>
               </xsl:if>
