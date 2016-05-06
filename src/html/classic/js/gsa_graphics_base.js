@@ -2582,7 +2582,7 @@
       var record = {};
       d3.select(this)
         .selectAll('value, count, c_count, stats, text')
-        .each(function(d, i) {
+        .each(function() {
           var elem = d3.select(this);
           var in_subgroup = (this.parentNode.localName === 'subgroup');
           var subgroup_value;
@@ -2593,19 +2593,20 @@
           if (this.localName === 'stats') {
             var col_name = elem.attr('column');
 
-            elem.selectAll('*').each(function(d, i) {
+            elem.selectAll('*').each(function() {
+              var child = d3.select(this);
               var field_name = col_name + '_' + this.localName;
               if (in_subgroup) {
                 field_name = field_name + '[' + subgroup_value + ']';
               }
-              if (!isNaN(get_float(elem)) && isFinite(elem.text())) {
-                record[field_name] = get_float(this);
+              if (!isNaN(get_float(child)) && isFinite(child.text())) {
+                record[field_name] = get_float(child);
               }
-              else if (elem.text().match(date_regex)) {
-                record[field_name] = get_date(elem);
+              else if (child.text().match(date_regex)) {
+                record[field_name] = get_date(child);
               }
               else {
-                record[field_name] = elem.text();
+                record[field_name] = child.text();
               }
             });
           }
