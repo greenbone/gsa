@@ -2578,6 +2578,24 @@
       return parseFloat(elem.text());
     }
 
+    function set_record_value(record, field_name, elem) {
+      if (!isNaN(get_float(elem)) && isFinite(elem.text())) {
+        record[field_name] = get_float(elem);
+      }
+      else {
+        set_text_record_value(record, field_name, elem);
+      }
+    }
+
+    function set_text_record_value(record, field_name, elem) {
+      if (elem.text().match(date_regex)) {
+        record[field_name] = get_date(elem);
+      }
+      else {
+        record[field_name] = elem.text();
+      }
+    }
+
     xml_data.selectAll(selector).each(function() {
       var record = {};
       d3.select(this)
@@ -2596,27 +2614,16 @@
             elem.selectAll('*').each(function() {
               var child = d3.select(this);
               var field_name = col_name + '_' + this.localName;
+
               if (in_subgroup) {
                 field_name = field_name + '[' + subgroup_value + ']';
               }
-              if (!isNaN(get_float(child)) && isFinite(child.text())) {
-                record[field_name] = get_float(child);
-              }
-              else if (child.text().match(date_regex)) {
-                record[field_name] = get_date(child);
-              }
-              else {
-                record[field_name] = child.text();
-              }
+
+              set_record_value(record, field_name, child);
             });
           }
           else if (this.localName === 'text') {
-            if (elem.text().match(date_regex)) {
-              record[elem.attr('column')] = get_date(elem);
-            }
-            else {
-              record[elem.attr('column')] = elem.text();
-            }
+            set_text_record_value(record, elem.attr('column'), elem);
           }
           else {
             var field_name = this.localName;
@@ -2624,15 +2631,7 @@
               field_name = field_name + '[' + subgroup_value + ']';
             }
 
-            if (!isNaN(get_float(elem)) && isFinite(elem.text())) {
-              record[field_name] = get_float(elem);
-            }
-            else if (elem.text().match(date_regex)) {
-              record[field_name] = get_date(elem);
-            }
-            else {
-              record[field_name] = elem.text();
-            }
+            set_record_value(record, field_name, elem);
           }
         });
       records.push(record);
