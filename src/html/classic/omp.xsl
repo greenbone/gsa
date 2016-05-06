@@ -24249,6 +24249,10 @@ should not have received it.
       </column>
     </xsl:with-param>
     <xsl:with-param name="icon-count" select="4"/>
+    <xsl:with-param name="top-visualization">
+      <xsl:call-template name="init-d3charts"/>
+      <xsl:call-template name="js-notes-top-visualization"/>
+    </xsl:with-param>
   </xsl:call-template>
 </xsl:template>
 
