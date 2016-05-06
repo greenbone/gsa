@@ -1,5 +1,10 @@
 2016-05-06  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_graphics_base.js (extract_column_info): Keep jshint
+	and jscs happy by updating coding style and use is_defined function.
+
+2016-05-06  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/omp.xsl (html-notes-table): Add dashboard to notes pages.
 
 2016-05-06  Björn Ricks <bjoern.ricks@greenbone.net>

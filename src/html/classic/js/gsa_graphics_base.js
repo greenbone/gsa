@@ -2705,8 +2705,8 @@
     });
 
     if (gen_params) {
-      var add_missing_column = function (field) {
-        if (column_info.columns[field] !== undefined) {
+      var add_missing_column = function(field) {
+        if (gsa.is_defined(column_info.columns[field])) {
           return;
         }
 
@@ -2715,9 +2715,10 @@
           var subgroup = field.substr(field.indexOf('[') + 1,
               field.lastIndexOf(']') - field.indexOf('[') - 1);
           var base_column = column_info.columns[base];
-          if (base_column !== undefined) {
+
+          if (gsa.is_defined(base_column)) {
             var column_copy = {};
-            var copy_name = base + '[' + subgroup + ']'
+            var copy_name = base + '[' + subgroup + ']';
             for (var prop in base_column) {
               column_copy[prop] = base_column[prop];
             }
@@ -2726,26 +2727,29 @@
             column_info.columns[copy_name] = column_copy;
           }
           else {
-            console.warn ('Could not find base column info "' + base +
+            console.warn('Could not find base column info "' + base +
                 '" for "' + field + '"');
           }
         }
-      }
+      };
+
+      var index;
+      var field;
 
       if (gen_params.y_fields) {
-        for (var index = 0; index < gen_params.y_fields.length; index++) {
-          var field = gen_params.y_fields[index];
-          if (column_info.columns[field] === undefined) {
-            add_missing_column (field);
+        for (index = 0; index < gen_params.y_fields.length; index++) {
+          field = gen_params.y_fields[index];
+          if (!gsa.is_defined(column_info.columns[field])) {
+            add_missing_column(field);
           }
         }
       }
 
       if (gen_params.z_fields) {
-        for (var index = 0; index < gen_params.z_fields.length; index++) {
-          var field = gen_params.z_fields[index];
-          if (column_info.columns[field] === undefined) {
-            add_missing_column (field);
+        for (index = 0; index < gen_params.z_fields.length; index++) {
+          field = gen_params.z_fields[index];
+          if (!gsa.is_defined(column_info.columns[field])) {
+            add_missing_column(field);
           }
         }
       }
