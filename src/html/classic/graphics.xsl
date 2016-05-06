@@ -599,6 +599,100 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
+<xsl:template name="js-notes-top-visualization">
+  <!-- Setting UUID for chart selection preferences -->
+  <xsl:variable name="controllers_pref_id" select="'ce7b121-c609-47b0-ab57-fd020a0336f4'"/>
+  <!-- Setting UUIDs for row height preferences -->
+  <xsl:variable name="heights_pref_id" select="'05eb63e9-ccd7-481d-841d-9406d3281040'"/>
+  <!-- Setting UUID for chart selection preferences -->
+  <xsl:variable name="filters_pref_id" select="'32b3d606-461b-4770-b3e1-b9ea3cf0f84c'"/>
+
+  <xsl:variable name="default_controllers" select="''"/>
+  <!-- Default row heights, rows separated with "#",
+        number of rows must match default_controllers -->
+  <xsl:variable name="default_heights" select="'280#280'"/>
+  <!-- Default filter selections:
+        Filter UUIDs or empty string for boxes in a row separated with "|",
+        rows separated with "#",
+        number of boxes and rows must match default_controllers -->
+  <xsl:variable name="default_filters" select="'|#|'"/>
+
+  <xsl:variable name="envelope" select="/envelope"/>
+
+  <xsl:variable name="controllers">
+    <xsl:choose>
+      <xsl:when test="/envelope/chart_preferences/chart_preference[@id = $controllers_pref_id]">
+        <xsl:value-of select="/envelope/chart_preferences/chart_preference[@id = $controllers_pref_id]/value"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$default_controllers"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <xsl:variable name="heights">
+    <xsl:choose>
+      <xsl:when test="/envelope/chart_preferences/chart_preference[@id = $heights_pref_id]">
+        <xsl:value-of select="gsa:escape-js (/envelope/chart_preferences/chart_preference[@id = $heights_pref_id]/value)"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$default_heights"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
+  <xsl:variable name="filters_string">
+    <xsl:choose>
+      <xsl:when test="/envelope/chart_preferences/chart_preference[@id = $filters_pref_id]">
+        <xsl:value-of select="gsa:escape-js (/envelope/chart_preferences/chart_preference[@id = $filters_pref_id]/value)"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$default_filters"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
+  <xsl:variable name="filter" select="/envelope/get_info/get_info_response/filters/term"/>
+  <xsl:variable name="filt_id" select="/envelope/get_info/get_info_response/filters/@id"/>
+
+  <div class="section-box">
+    <div id="top-notes-dashboard">
+    </div>
+    <div class="dashboard" id="top-dashboard"
+      data-dashboard-name="top-notes-dashboard"
+      data-controllers="{$controllers}" data-heights="{$heights}"
+      data-filter="{$filter}"
+      data-filters-id="{$filt_id}"
+      data-filters-string="{$filters_string}"
+      data-controllers-pref-id="{$controllers_pref_id}"
+      data-heights-pref-id="{$heights_pref_id}"
+      data-dashboard-controls="top-dashboard-controls"
+      data-max-components="4">
+      <div class="dashboard-data-source"
+        data-source-name="notes-created-count-src"
+        data-aggregate-type="note"
+        data-aggregate-mode="count"
+        data-group-column="created"
+        data-filter="{$filter}"
+        data-filter-id="{$filt_id}">
+        <span class="dashboard-chart"
+          data-chart-name="by-created"
+          data-chart-type="line"/>
+      </div>
+      <div class="dashboard-data-source"
+        data-source-name="notes-text-words-src"
+        data-aggregate-type="note"
+        data-group-column="text"
+        data-aggregate-mode="word_counts"
+        data-filter="{$filter}"
+        data-filter-id="{$filt_id}">
+        <span class="dashboard-chart"
+          data-chart-name="notes-text-words"
+          data-chart-type="cloud"/>
+      </div>
+    </div>
+  </div>
+</xsl:template>
+
 <xsl:template match="dashboard">
   <noscript>
     <div class="gb_window">
