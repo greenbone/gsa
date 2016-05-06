@@ -1,3 +1,9 @@
+2016-05-06  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/js/gsa_graphics_base.js (extract_simple_records): Simplify
+	code be moving duplicate code into functions and variables to improve
+	readability.
+
 2016-05-04  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/gsad_omp.c (get_aggregate_omp): Replace empty filters with

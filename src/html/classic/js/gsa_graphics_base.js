@@ -2569,47 +2569,52 @@
   function extract_simple_records(xml_data, selector) {
     var date_regex = /^\d{4}-(0\d|1[0-2])-([0-2]\d|3[01])T([0-1]\d|2[0-3]):[0-5]\d(:[0-5]\d)?([+-](0\d|1[0-4]):[0-5]\d|Z|)$/;
     var records = [];
+
+    function get_date(elem) {
+      return new Date(elem.text().substr(0, 19) + 'Z');
+    }
+
+    function get_float(elem) {
+      return parseFloat(elem.text());
+    }
+
     xml_data.selectAll(selector).each(function(d, i) {
       var record = {};
       d3.select(this)
         .selectAll('value, count, c_count, stats, text')
         .each(function(d, i) {
+          var elem = d3.select(this);
           var in_subgroup = (this.parentNode.localName === 'subgroup');
           var subgroup_value;
+
           if (in_subgroup) {
             subgroup_value = d3.select(this.parentNode).select('value').text();
           }
           if (this.localName === 'stats') {
-            var col_name = d3.select(this).attr('column');
-            d3.select(this).selectAll('*').each(function(d, i) {
+            var col_name = elem.attr('column');
+
+            elem.selectAll('*').each(function(d, i) {
               var field_name = col_name + '_' + this.localName;
               if (in_subgroup) {
                 field_name = field_name + '[' + subgroup_value + ']';
               }
-              if (!isNaN(parseFloat(
-                      d3.select(this).text())) &&
-                  isFinite(d3.select(this).text())) {
-                record[field_name] =
-                  parseFloat(d3.select(this).text());
+              if (!isNaN(get_float(elem)) && isFinite(elem.text())) {
+                record[field_name] = get_float(this);
               }
-              else if (d3.select(this).text().match(date_regex)) {
-                record[field_name] = new Date(
-                    d3.select(this).text().substr(0,19)+'Z');
+              else if (elem.text().match(date_regex)) {
+                record[field_name] = get_date(elem);
               }
               else {
-                record[field_name] =
-                  d3.select(this).text();
+                record[field_name] = elem.text();
               }
             });
           }
           else if (this.localName === 'text') {
-            if (d3.select(this).text().match(date_regex)) {
-              record[d3.select(this).attr('column')] =
-                new Date(d3.select(this).text().substr(0, 19) + 'Z');
+            if (elem.text().match(date_regex)) {
+              record[elem.attr('column')] = get_date(elem);
             }
             else {
-              record[d3.select(this).attr('column')] =
-                d3.select(this).text();
+              record[elem.attr('column')] = elem.text();
             }
           }
           else {
@@ -2618,18 +2623,14 @@
               field_name = field_name + '[' + subgroup_value + ']';
             }
 
-            if (!isNaN(parseFloat(d3.select(this).text())) &&
-                isFinite(d3.select(this).text())) {
-              record[field_name] =
-                parseFloat(d3.select(this).text());
+            if (!isNaN(get_float(elem)) && isFinite(elem.text())) {
+              record[field_name] = get_float(elem);
             }
-            else if (d3.select(this).text().match(date_regex)) {
-              record[field_name] = new Date(
-                  d3.select(this).text().substr(0,19)+'Z');
-}
+            else if (elem.text().match(date_regex)) {
+              record[field_name] = get_date(elem);
+            }
             else {
-              record[field_name] =
-                d3.select(this).text();
+              record[field_name] = elem.text();
             }
           }
         });
@@ -2675,7 +2676,7 @@
       for (var i = 0; i < column_info.subgroups.length; i++) {
         // Create copies of columns for subgroups
         if (column.name !== 'value' && column.name !== 'subgroup_value') {
-          var column_copy = {}
+          var column_copy = {};
           var copy_name = column.name + '[' + column_info.subgroups[i] + ']';
           for (var prop in column) {
             column_copy[prop] = column[prop];
