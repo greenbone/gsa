@@ -68,16 +68,7 @@
     }
   };
 
-  CloudChartGenerator.prototype.generate = function(controller, data,
-      gen_params) {
-    var self = this;
-
-    var display = controller.display();
-    var update = this.mustUpdate(display);
-
-    this.noChartLinks = controller.display().dashboard().noChartLinks();
-
-    // evaluate options set by gen_params
+  CloudChartGenerator.prototype.evaluateParams = function(gen_params) {
     if (gen_params.x_field) {
       this.x_field = gen_params.x_field;
     }
@@ -89,7 +80,17 @@
     if (gen_params.extra.show_stat_type) {
       this.show_stat_type = !!JSON.parse(gen_params.extra.show_stat_type);
     }
+  };
 
+  CloudChartGenerator.prototype.generate = function(controller, data) {
+    var self = this;
+
+    var display = controller.display();
+    var update = this.mustUpdate(display);
+
+    this.noChartLinks = controller.display().dashboard().noChartLinks();
+
+    // evaluate options set by gen_params
     var records = data.records;
     display.setTitle(this.title_generator(data));
 

@@ -1,5 +1,10 @@
 2016-05-06  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_cloud_chart.js: Use evaluateParams function in
+	CloudChartGenerator to seperate gen_params from the generate function.
+
+2016-05-06  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_graphics_base.js (extract_simple_records): Fix usage
 	of this element in subfunction.
 
