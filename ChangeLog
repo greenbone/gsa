@@ -1,3 +1,9 @@
+2016-05-06  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/js/gsa_graphics_base.js (extract_simple_records)
+	(extract_column_info, extract_task_records): Remove unused parameters
+	from d3 selection.each callbacks.
+
 2016-05-06  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/js/gsa_cloud_chart.js: Use evaluateParams function in

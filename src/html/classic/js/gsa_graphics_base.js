@@ -2578,7 +2578,7 @@
       return parseFloat(elem.text());
     }
 
-    xml_data.selectAll(selector).each(function(d, i) {
+    xml_data.selectAll(selector).each(function() {
       var record = {};
       d3.select(this)
         .selectAll('value, count, c_count, stats, text')
@@ -2653,16 +2653,16 @@
       subgroups: [],
     };
 
-    xml_data.selectAll('aggregate subgroups value').each(function(d, i) {
+    xml_data.selectAll('aggregate subgroups value').each(function() {
       column_info.subgroups.push(d3.select(this).text());
     });
 
     xml_data.selectAll(
-        'aggregate column_info aggregate_column').each(function(d, i) {
+        'aggregate column_info aggregate_column').each(function() {
       var column = {};
       d3.select(this)
         .selectAll('*')
-        .each(function(d, i) {
+        .each(function() {
           if (!isNaN(parseFloat(d3.select(this).text())) &&
               isFinite(d3.select(this).text())) {
             column[this.localName] =
@@ -2689,19 +2689,19 @@
       }
     });
 
-    xml_data.selectAll('aggregate group_column').each(function(d, i) {
+    xml_data.selectAll('aggregate group_column').each(function() {
       column_info.group_columns.push(d3.select(this).text());
     });
 
-    xml_data.selectAll('aggregate subgroup_column').each(function(d, i) {
+    xml_data.selectAll('aggregate subgroup_column').each(function() {
       column_info.group_columns.push(d3.select(this).text());
     });
 
-    xml_data.selectAll('aggregate data_column').each(function(d, i) {
+    xml_data.selectAll('aggregate data_column').each(function() {
       column_info.data_columns.push(d3.select(this).text());
     });
 
-    xml_data.selectAll('aggregate text_column').each(function(d, i) {
+    xml_data.selectAll('aggregate text_column').each(function() {
       column_info.text_columns.push(d3.select(this).text());
     });
 
@@ -2927,7 +2927,7 @@
   */
   function extract_task_records(xml_data) {
     var records = [];
-    xml_data.selectAll('task').each(function(d, i) {
+    xml_data.selectAll('task').each(function() {
       var task = d3.select(this);
       var schedule = task.select('schedule');
       var periods = task.select('schedule_periods');
@@ -2938,7 +2938,7 @@
       };
       record.schedule_id = schedule.attr('id');
       schedule.selectAll('*')
-        .each(function(d, i) {
+        .each(function() {
           record['schedule_' + this.localName] =
             this.textContent;
         });
