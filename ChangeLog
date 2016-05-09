@@ -1,5 +1,12 @@
 2016-05-09  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/js/gsa_graphics_base.js (create_chart_controller):
+	Add no_chart_links param in get_detached_url.
+	(on_ready): Rename linksDisable to noChartLinks as expected by other
+	function.  Copy noChartLinks param from dashboard to gen_params.
+
+2016-05-09  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Allow more than one field for each y axis in the line chart.
 
 	* src/html/classic/graphics.xsl (js-assets-top-visualization): Add

@@ -2088,6 +2088,12 @@
     function get_detached_url() {
       var extra_params_str = '';
       var field;
+      if (gen_params.noChartLinks !== null &&
+          gen_params.noChartLinks !== undefined) {
+        extra_params_str = extra_params_str + '&no_chart_links=' +
+                            (gen_params.noChartLinks ? '1' : '0');
+      }
+
       if (gen_params.x_field !== null && gen_params.x_field !== undefined) {
         extra_params_str = extra_params_str + '&x_field=' +
                             encodeURIComponent(gen_params.x_field);
@@ -4616,7 +4622,7 @@
             filter: elem.data('filter'),
             filt_id: elem.data('filter-id'),
             max_components: max_components,
-            linksDisabled: elem.data('no-chart-links') !== undefined ?
+            noChartLinks: elem.data('no-chart-links') !== undefined ?
               Boolean (elem.data('no-chart-links')) : false,
             defaultControllerString: elem.data('default-controller-string'),
             hideControllerSelect: elem.data('hide-controller-select'),
@@ -4665,6 +4671,9 @@
           var gen_params = {extra: {}};
           var init_params = {};
 
+          if (dashboard.noChartLinks !== undefined) {
+            gen_params.noChartLinks = dashboard.noChartLinks();
+          }
           if (c_elem.data('x-field')) {
             gen_params.x_field = c_elem.data('x-field');
           }
