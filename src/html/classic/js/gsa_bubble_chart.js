@@ -184,7 +184,8 @@
     this.svg.selectAll('.node')
       .data(nodes)
       .enter()
-      .call(function(selection) { return create_bubble(selection, data); });
+      .call(function(selection) { return create_bubble(selection, data, self);
+          });
 
     // Remove unused bubbles
     this.svg.selectAll('.node')
@@ -232,7 +233,7 @@
         controller.data_src().param('filter'));
   };
 
-  function create_bubble(selection, data) {
+  function create_bubble(selection, data, controller) {
     var new_node_a;
 
     new_node_a = selection.append('g')
@@ -243,7 +244,7 @@
       .append('a');
 
     new_node_a.attr('xlink:href', function(d) {
-      if (self.noChartLinks) {
+      if (controller !== undefined && controller.noChartLinks) {
         return null;
       }
       var group_col_info = data.column_info.columns.group_value;

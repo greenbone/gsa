@@ -1,5 +1,12 @@
 2016-05-09  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/js/gsa_bubble_chart.js (generate): Pass self to
+	create_bubble as controller.
+	(create_bubble): Add controller parameter so the function can access
+	the controller options like noChartLinks correctly.
+	
+2016-05-09  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/js/gsa_graphics_base.js (create_chart_controller):
 	Add no_chart_links param in get_detached_url.
 	(on_ready): Rename linksDisable to noChartLinks as expected by other
