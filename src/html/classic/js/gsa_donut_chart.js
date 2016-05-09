@@ -54,11 +54,11 @@
   };
 
   DonutChartGenerator.prototype.generateData = function(controller,
-      original_data, gen_params) {
+      original_data) {
     var cmd = controller.data_src().command();
     var data;
     if (cmd === 'get_aggregate') {
-      data = this.transformData(original_data, gen_params);
+      data = this.transformData(original_data);
       return gsa.fill_empty_fields(data);
     }
     else {

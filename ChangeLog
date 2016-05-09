@@ -1,5 +1,10 @@
 2016-05-09  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_donut_chart.js (generateData): Remove unnecessary
+	gen_params Parameter from DonutChartGenerator.prototype.generateData.
+
+2016-05-09  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_donut_chart.js: Add
 	DonutChartGenerator.prototype.evaluteParams function and remove gen_params
 	parameter from DonutChartGenerator.prototype.generate method.
