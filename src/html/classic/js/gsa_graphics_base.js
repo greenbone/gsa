@@ -262,7 +262,7 @@
     if (column_info.group_columns && column_info.group_columns[1]) {
       var type = column_info.columns.subgroup_value.type;
       var column = column_info.group_columns[1];
-      subgroup_scale = gsa.field_color_scale (type, column);
+      subgroup_scale = gsa.field_color_scale(type, column);
     }
 
     for (var index in y_fields) {
@@ -274,13 +274,13 @@
       }
 
       if (alt_color_limit === undefined || index < alt_color_limit) {
-        range.push (color);
+        range.push(color);
       }
       else if (d3.lab(color).l >= 70) {
-        range.push (d3.rgb(color).darker().toString());
+        range.push(d3.rgb(color).darker().toString());
       }
       else {
-        range.push (d3.rgb(color).brighter().toString());
+        range.push(d3.rgb(color).brighter().toString());
       }
     }
 

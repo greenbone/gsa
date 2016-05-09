@@ -149,23 +149,23 @@
           if (gen_params.extra && gen_params.extra.extra_tooltip_field_1) {
             var index = 1;
 
-            while (gen_params.extra ['extra_tooltip_field_' + index] !==
-                   undefined) {
-              var field = gen_params.extra ['extra_tooltip_field_' + index];
-              var label = gen_params.extra ['extra_tooltip_label_' + index]
+            while (gsa.is_defined(
+                  gen_params.extra['extra_tooltip_field_' + index])) {
+              var field = gen_params.extra['extra_tooltip_field_' + index];
+              var label = gen_params.extra['extra_tooltip_label_' + index];
 
               if (label) {
                 extra += '<br/><strong>' + label + ':</strong> ';
               }
               else {
-                extra += '<br/>'
+                extra += '<br/>';
               }
 
-              if (gsa.is_date (d[field])) {
-                extra += gsa.datetime_format (d[field]);
+              if (gsa.is_date(d[field])) {
+                extra += gsa.datetime_format(d[field]);
               }
               else {
-                extra += d[field]
+                extra += d[field];
               }
 
               index ++;
@@ -185,7 +185,7 @@
                   extra;
             }
           }
-          else if (self.y_field.indexOf ('severity') !== -1) {
+          else if (self.y_field.indexOf('severity') !== -1) {
             if (self.y_label !== '') {
               return '<strong>' + self.y_label + ' (' + x +
                   '):</strong><br/> ' + d[self.y_field].toFixed(1) +
