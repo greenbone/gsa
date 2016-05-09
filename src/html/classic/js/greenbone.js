@@ -60,6 +60,7 @@
   gsa.is_object = is_object;
   gsa.is_string = is_string;
   gsa.is_defined = is_defined;
+  gsa.is_function = is_function;
 
   function LanguageDetector() {
     global.i18nextBrowserLanguageDetector.call(this);
@@ -124,6 +125,10 @@
 
   function is_string(value) {
     return has_value(value) && typeof value === 'string';
+  }
+
+  function is_function(value) {
+    return has_value(value) && typeof value === 'function';
   }
 
   function has_value(value) {
