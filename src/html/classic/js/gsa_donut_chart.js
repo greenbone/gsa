@@ -67,15 +67,7 @@
     }
   };
 
-  DonutChartGenerator.prototype.generate = function(controller, data,
-      gen_params) {
-    var display = controller.display();
-    var update = this.mustUpdate(display);
-
-    var self = this;
-
-    this.noChartLinks = controller.display().dashboard().noChartLinks();
-
+  DonutChartGenerator.prototype.evaluateParams = function(gen_params) {
     // evaluate options set by gen_params
     if (gen_params.x_field) {
       this.x_field = gen_params.x_field;
@@ -85,15 +77,23 @@
       this.y_field = gen_params.y_fields[0];
     }
 
-    if (this.color_scale === undefined) {
-      this.setColorScale(gsa.field_color_scale(data.column_info
-                                                .columns[this.x_field].type,
-                                              data.column_info
-                                                .columns[this.x_field].column));
-    }
-
     if (gen_params.extra.show_stat_type) {
       this.show_stat_type = !!JSON.parse(gen_params.extra.show_stat_type);
+    }
+  };
+
+  DonutChartGenerator.prototype.generate = function(controller, data) {
+    var display = controller.display();
+    var update = this.mustUpdate(display);
+
+    var self = this;
+
+    this.noChartLinks = controller.display().dashboard().noChartLinks();
+
+    if (!gsa.is_defined(this.color_scale)) {
+      this.setColorScale(gsa.field_color_scale(
+            data.column_info.columns[this.x_field].type,
+            data.column_info.columns[this.x_field].column));
     }
 
     var records = data.records;
