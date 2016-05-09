@@ -27,11 +27,11 @@
 
 (function(global, window, document, gsa, d3, $, console) {
   'use strict';
-  if (gsa.dashboards === undefined) {
+  if (!gsa.is_defined(gsa.dashboards)) {
     gsa.dashboards = {};
   }
 
-  if (gsa.data_sources === undefined) {
+  if (!gsa.is_defined(gsa.data_sources)) {
     gsa.data_sources = {};
   }
 
@@ -269,11 +269,11 @@
       var field_info = column_info.columns[y_fields[index]];
       var color = 'green';
 
-      if (field_info.subgroup_value !== undefined) {
+      if (gsa.is_defined(field_info.subgroup_value)) {
         color = subgroup_scale(field_info.subgroup_value);
       }
 
-      if (alt_color_limit === undefined || index < alt_color_limit) {
+      if (!gsa.is_defined(alt_color_limit) || index < alt_color_limit) {
         range.push(color);
       }
       else if (d3.lab(color).l >= 70) {
@@ -351,7 +351,7 @@
   */
   function create_dashboard(id, controllersString, heightsString, filtersString,
                       dashboardOpts) {
-    if (heightsString !== undefined && heightsString !== null) {
+    if (gsa.has_value(heightsString)) {
       // ensure a string
       heightsString += '';
     }
@@ -558,10 +558,10 @@
     }
 
     function add_new_row(options) {
-      if (options ===  undefined) {
+      if (!gsa.is_defined(options)) {
         options = {};
       }
-      if (options.height === undefined) {
+      if (!gsa.is_defined(options.height)) {
         options.height = 280;
       }
       else if (options.height < 150) {
@@ -572,7 +572,7 @@
           options.height, dashboardOpts);
       rows[row.id()] = row;
 
-      if (options.position !== undefined && options.position === 'top') {
+      if (gsa.is_defined(options.position) && options.position === 'top') {
         elem.prepend(row.elem());
         elem.prepend(topTarget.elem());
       }
@@ -689,8 +689,7 @@
 
     function save_heights_string() {
       if (heightsString !== prevHeightsString) {
-        if (heightsPrefID !== '' && heightsPrefID !== undefined &&
-            heightsPrefID !== null) {
+        if (heightsPrefID !== '' && gsa.has_value(heightsPrefID)) {
           if (heightsPrefRequest) {
             heightsPrefRequest.abort();
           }
@@ -709,7 +708,7 @@
     }
 
     function update_filters_string() {
-      if (filtersString === null || filtersString === undefined) {
+      if (!gsa.has_value(filtersString)) {
         return;
       }
 
@@ -784,13 +783,13 @@
 
         totalComponents += row.componentsCount();
       }
-      if (controllersString !== null) {
+      if (gsa.has_value(controllersString)) {
         dashboard.updateControllersString();
       }
-      if (heightsString !== null && heightsString !== undefined) {
+      if (gsa.has_value(heightsString)) {
         dashboard.updateHeightsString();
       }
-      if (filtersString !== null && filtersString !== undefined) {
+      if (gsa.has_value(filtersString)) {
         dashboard.updateFiltersString();
       }
     }
@@ -878,7 +877,7 @@
 
     function resize() {
       for (var item in rows) {
-        if (heightsString === null || heightsString === undefined) {
+        if (!gsa.has_value(heightsString)) {
           rows[item].height(elem[0].clientHeight);
         }
         rows[item].resize();
@@ -1101,7 +1100,7 @@
     }
 
     function get_set_height(newHeight) {
-      if (newHeight === undefined) {
+      if (!gsa.is_defined(newHeight)) {
         return height;
       }
 
@@ -1519,7 +1518,7 @@
     }
 
     function get_set_row(newRow) {
-      if (newRow === undefined) {
+      if (!gsa.is_defined(newRow)) {
         return row;
       }
       row = newRow;
@@ -1535,7 +1534,7 @@
     }
 
     function get_set_controller_string(newStr) {
-      if (newStr === undefined) {
+      if (!gsa.is_defined(newStr)) {
         return controllerString;
       }
       controllerString = newStr;
@@ -1543,7 +1542,7 @@
     }
 
     function get_set_filter_string(newStr) {
-      if (newStr === undefined) {
+      if (!gsa.is_defined(newStr)) {
         return filterString;
       }
       filterString = newStr;
@@ -1581,7 +1580,7 @@
       var rowWidth, rowHeight;
       var componentsCount = row.componentsCount();
       // Set height first
-      if (newRowHeight === undefined) {
+      if (!gsa.is_defined(newRowHeight)) {
         rowHeight = $(row.elem()).attr('height');
       }
       else {
@@ -1590,7 +1589,7 @@
       var newHeight = rowHeight - header.clientHeight - footer.clientHeight - 8;
       dashboard_component.svg().attr('height', newHeight);
 
-      if (newRowWidth === undefined) {
+      if (!gsa.is_defined(newRowWidth)) {
         rowWidth = dashboard.elem().clientWidth;
       }
       else {
@@ -1610,7 +1609,7 @@
     }
 
     function get_set_last_requested_controller(newController) {
-      if (newController === undefined) {
+      if (!gsa.is_defined(newController)) {
         return lastRequestedController;
       }
       lastRequestedController = newController;
@@ -1618,7 +1617,7 @@
     }
 
     function get_set_last_requested_filter(newFilter) {
-      if (newFilter === undefined) {
+      if (!gsa.is_defined(newFilter)) {
         return lastRequestedFilter;
       }
       lastRequestedFilter = newFilter;
@@ -1696,7 +1695,7 @@
 
     function select_controller(name, savePreference, requestData) {
       var index = controllerIndexes[name];
-      if (index === undefined) {
+      if (!gsa.is_defined(index)) {
         console.warn('Chart not found: ' + name);
         dashboard_component.selectControllerIndex(0, savePreference,
             requestData);
@@ -1816,7 +1815,7 @@
 
     function select_filter(id, savePreference, requestData) {
       var index = filterIndexes[id];
-      if (index === undefined) {
+      if (!gsa.is_defined(index)) {
         console.warn('Filter not found: "' + id + '"');
         dashboard_component.selectFilterIndex(0, savePreference, requestData);
       }
@@ -2088,17 +2087,16 @@
     function get_detached_url() {
       var extra_params_str = '';
       var field;
-      if (gen_params.noChartLinks !== null &&
-          gen_params.noChartLinks !== undefined) {
+      if (gsa.has_value(gen_params.noChartLinks)) {
         extra_params_str = extra_params_str + '&no_chart_links=' +
                             (gen_params.noChartLinks ? '1' : '0');
       }
 
-      if (gen_params.x_field !== null && gen_params.x_field !== undefined) {
+      if (gsa.has_value(gen_params.x_field)) {
         extra_params_str = extra_params_str + '&x_field=' +
                             encodeURIComponent(gen_params.x_field);
       }
-      if (gen_params.y_fields !== null && gen_params.y_fields !== undefined) {
+      if (gsa.has_value(gen_params.y_fields)) {
         for (field in gen_params.y_fields) {
           extra_params_str = extra_params_str + '&y_fields:' +
                               (1 + Number(field)) +
@@ -2106,7 +2104,7 @@
                               encodeURIComponent(gen_params.y_fields[field]);
         }
       }
-      if (gen_params.z_fields !== null && gen_params.z_fields !== undefined) {
+      if (gsa.has_value(gen_params.z_fields)) {
         for (field in gen_params.z_fields) {
           extra_params_str = extra_params_str + '&z_fields:' +
                               (1 + Number(field)) +
@@ -2153,8 +2151,8 @@
   *  prefix:  prefix for OMP commands
   */
   function create_data_source(name, options, prefix) {
-    prefix = (prefix === undefined) ? '/omp?' : prefix;
-    options = (options === undefined) ? {} : options;
+    prefix = gsa.is_defined(prefix) ? prefix : '/omp?';
+    options = gsa.is_defined(options) ? options : {};
     var requestingControllers = {};
     var activeRequests = {};
     var xml_data = {};
@@ -2185,11 +2183,11 @@
     return data_source;
 
     function init() {
-      if (options.filter !== undefined) {
+      if (gsa.is_defined(options.filter)) {
         params.filter = options.filter;
       }
 
-      if (options.filt_id !== undefined) {
+      if (gsa.is_defined(options.filt_id)) {
         params.filt_id = options.filt_id;
       }
 
@@ -2202,11 +2200,11 @@
         command = 'get_aggregate';
         params.aggregate_type = options.aggregate_type;
 
-        params.data_column = options.data_column !== undefined ?
+        params.data_column = gsa.is_defined(options.data_column) ?
           options.data_column : '';
-        params.group_column = options.group_column !== undefined ?
+        params.group_column = gsa.is_defined(options.group_column) ?
           options.group_column : '';
-        params.subgroup_column = options.subgroup_column !== undefined ?
+        params.subgroup_column = gsa.is_defined(options.subgroup_column) ?
           options.subgroup_column : '';
 
         if (!options.data_columns) {
@@ -2302,7 +2300,7 @@
     function add_request(controller, filter, gen_params) {
       var filterID = filter ? filter.id : '';
 
-      if (requestingControllers[filterID] === undefined) {
+      if (!gsa.is_defined(requestingControllers[filterID])) {
         requestingControllers[filterID] = {};
       }
 
@@ -2346,7 +2344,7 @@
           var data_uri = create_uri(data_source.command(),
               filter, data_source.params(), data_source.prefix(), false);
 
-          if (data[filterID] === undefined) {
+          if (!gsa.is_defined(data[filterID])) {
             data[filterID] = {};
           }
 
@@ -2360,7 +2358,7 @@
               var gen_params = requestingControllers[filterID][
                 controllerID].gen_params;
 
-              if (data[filterID][controllerID] === undefined) {
+              if (!gsa.is_defined(data[filterID][controllerID])) {
                 if (command === 'get_aggregate') {
                   data[filterID][controllerID] = {
                     original_xml: xml_select,
@@ -2380,7 +2378,7 @@
                 }
               }
 
-              if (data[filterID][controllerID] === undefined) {
+              if (!gsa.is_defined(data[filterID][controllerID])) {
                 output_error(
                     requestingControllers[filterID][controllerID].controller,
                     gsa._('Internal error: Invalid request'),
@@ -2595,7 +2593,7 @@
   * Unescapes XML entities
   */
   function unescape_xml(string) {
-    if (gsa.parser === undefined) {
+    if (!gsa.is_defined(gsa.parser)) {
       gsa.parser = new DOMParser();
     }
 
@@ -2615,7 +2613,7 @@
     var params_str = prefix + 'cmd=' + encodeURIComponent(command);
     for (var prop_name in params) {
       if ((!no_xml || prop_name !== 'xml') &&
-          (filter === undefined ||
+          (!gsa.is_defined(filter) ||
               (prop_name !== 'filter' && prop_name !== 'filt_id'))) {
         if (params[prop_name] instanceof Array) {
           for (var i = 0; i < params[prop_name].length; i++) {
@@ -3202,7 +3200,7 @@
       label = capitalize(label);
     }
 
-    if (info.subgroup_value !== undefined && info.subgroup_value !== '') {
+    if (gsa.is_defined(info.subgroup_value) && info.subgroup_value !== '') {
       label += ' (' + info.subgroup_value + ')';
     }
 
@@ -3225,7 +3223,7 @@
   * Generates a default string representation of a data value using column info.
   */
   function format_data_default(value, col_info_item) {
-    if (value === null || value === undefined) {
+    if (!gsa.has_value(value)) {
       return value;
     }
 
@@ -3379,7 +3377,7 @@
       if (params.count_field) {
         count_field = params.count_field;
       }
-      if (params.ascending !== undefined) {
+      if (gsa.is_defined(params.ascending)) {
         ascending = params.ascending;
       }
     }
@@ -3489,7 +3487,8 @@
       }
     }
 
-    if (old_data.column_info.columns[type_field + '~original'] !== undefined) {
+    if (gsa.is_defined(
+          old_data.column_info.columns[type_field + '~original'])) {
       new_column_info.columns[type_field + '~original'] =
         old_data.column_info.columns[type_field + '~original'];
     } else {
@@ -3501,7 +3500,7 @@
       var new_record = {};
       for (var field in old_data.records[record]) {
         if (field === type_field) {
-          if (new_record[field + '~original'] !== undefined) {
+          if (gsa.is_defined(new_record[field + '~original'])) {
             new_record[field + '~original'] =
               old_data.records[record][field + '~original'];
           } else {
@@ -3547,7 +3546,8 @@
       }
     }
 
-    if (old_data.column_info.columns[type_field + '~original'] !== undefined) {
+    if (gsa.is_defined(
+          old_data.column_info.columns[type_field + '~original'])) {
       new_column_info.columns[type_field + '~original'] =
         old_data.column_info.columns[type_field + '~original'];
     } else {
@@ -3559,7 +3559,7 @@
       var new_record = {};
       for (var field in old_data.records[record]) {
         if (field === type_field) {
-          if (new_record[field + '~original'] !== undefined) {
+          if (gsa.is_defined(new_record[field + '~original'])) {
             new_record[field + '~original'] =
               old_data.records[record][field + '~original'];
           } else {
@@ -3642,7 +3642,8 @@
       }
     }
 
-    if (old_data.column_info.columns[type_field + '~original'] !== undefined) {
+    if (gsa.is_defined(
+          old_data.column_info.columns[type_field + '~original'])) {
       new_column_info.columns[type_field + '~original'] =
         old_data.column_info.columns[type_field + '~original'];
     } else {
@@ -3665,8 +3666,8 @@
     new_data.records.sort(sort_func);
 
     for (record in new_data.records) {
-      if (old_data.column_info.columns[type_field + '~original'] !==
-          undefined) {
+      if (gsa.is_defined(
+            old_data.column_info.columns[type_field + '~original'])) {
         new_data.records[record][type_field + '~original'] =
           new_data.records[record][type_field + '~original'];
       } else {
@@ -3793,7 +3794,7 @@
     var get_type;
     var get_type_plural;
 
-    if (relation === undefined) {
+    if (!gsa.is_defined(relation)) {
       relation = '=';
     }
 
@@ -3898,7 +3899,7 @@
         new_criteria += ' and ' + criteria_addition;
       }
     }
-    if (filter_info.criteria !== undefined &&
+    if (gsa.is_defined(filter_info.criteria) &&
         filter_info.criteria.length === 0) {
       new_criteria = criteria_addition;
     }
@@ -3954,10 +3955,10 @@
   */
   function output_error(controller, display_message, console_message,
       console_extra) {
-    if (console_message !== undefined) {
+    if (gsa.is_defined(console_message)) {
       console.error(console_message);
     }
-    if (console_extra !== undefined) {
+    if (gsa.is_defined(console_extra)) {
       console.debug(console_extra);
     }
 
@@ -4041,7 +4042,7 @@
   */
   function title_static(loading_text, loaded_text) {
     return function(data) {
-      if (data === undefined) {
+      if (!gsa.is_defined(data)) {
         return loading_text;
       }
       else {
@@ -4061,7 +4062,7 @@
         filter_text = ': ' + data.filter_info.name;
       }
 
-      if (data === undefined) {
+      if (!gsa.is_defined(data)) {
         return gsa._('{{title}} (Loading...)', {title: title});
       }
 
@@ -4085,12 +4086,12 @@
       title) {
     var csv_data = '';
 
-    if (title !== undefined) {
+    if (gsa.is_defined(title)) {
       csv_data += (title + '\r\n');
     }
 
     var col_i;
-    if (headers !== undefined) {
+    if (gsa.is_defined(headers)) {
       for (col_i in headers) {
         csv_data += '"' + String(headers[col_i]).replace('"', '""') + '"';
         if (col_i < columns.length - 1) {
@@ -4104,8 +4105,8 @@
       for (col_i in columns) {
         var col = columns [col_i];
         var record = records[row][col];
-        if (record !== null && record !== undefined) {
-          csv_data += '"' + format_data(record, column_info.columns [col])
+        if (gsa.has_value(record)) {
+          csv_data += '"' + format_data(record, column_info.columns[col])
             .replace('"', '""') + '"';
         }
         else {
@@ -4135,7 +4136,7 @@
     var row_class = 'odd';
 
     var stylesheet;
-    for (var sheet_i = 0; stylesheet === undefined &&
+    for (var sheet_i = 0; !gsa.is_defined(stylesheet) &&
         sheet_i < document.styleSheets.length; sheet_i++) {
       if (document.styleSheets[sheet_i].href.indexOf(
             '/gsa-style.css', document.styleSheets[sheet_i].href.length -
@@ -4168,7 +4169,7 @@
 
     var col_i;
     var tr_s;
-    if (headers !== undefined) {
+    if (gsa.is_defined(headers)) {
       tr_s = table_s.append('tr')
                           .attr('class', 'gbntablehead2');
       for (col_i in headers) {
@@ -4215,7 +4216,7 @@
     var width = Number(svg_elem.attr('width'));
     var height = Number(svg_elem.attr('height'));
 
-    for (var sheet_i = 0; stylesheet === undefined &&
+    for (var sheet_i = 0; !gsa.is_defined(stylesheet)  &&
         sheet_i < document.styleSheets.length; sheet_i++) {
       if (document.styleSheets[sheet_i].href.indexOf('/gsa-style.css',
             document.styleSheets[sheet_i]
@@ -4590,10 +4591,10 @@
 
   function get_chart_generator(chart_type, data_source) {
     var Generator = chart_generators[chart_type];
-    if (Generator === null || Generator === undefined) {
+    if (!gsa.has_value(Generator)) {
       return null;
     }
-    if (typeof Generator === 'function') {
+    if (gsa.is_function(Generator)) {
       return new Generator();
     }
     return Generator;
@@ -4609,7 +4610,7 @@
     doc.find('.dashboard').each(function() {
       var elem = $(this);
       var dashboard_name = elem.data('dashboard-name');
-      var max_components = elem.data('max-components') !== undefined ?
+      var max_components = gsa.is_defined(elem.data('max-components')) ?
         elem.data('max-components') : 8;
 
       var dashboard = create_dashboard(dashboard_name,
@@ -4622,8 +4623,8 @@
             filter: elem.data('filter'),
             filt_id: elem.data('filter-id'),
             max_components: max_components,
-            noChartLinks: elem.data('no-chart-links') !== undefined ?
-              Boolean (elem.data('no-chart-links')) : false,
+            noChartLinks: gsa.is_defined(elem.data('no-chart-links')) ?
+              !!(elem.data('no-chart-links')) : false,
             defaultControllerString: elem.data('default-controller-string'),
             hideControllerSelect: elem.data('hide-controller-select'),
             dashboardControls: $('#' + elem.data('dashboard-controls'))[0]
@@ -4708,7 +4709,7 @@
               init_params.title_text);
 
           dashboard.addControllerFactory(chart_name, function(for_component) {
-            if (for_component === undefined) {
+            if (!gsa.is_defined(for_component)) {
               console.error('Component not defined');
               return null;
             }

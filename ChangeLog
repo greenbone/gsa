@@ -1,5 +1,10 @@
 2016-05-09  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_graphics_base.js: Use is_defined, has_value and
+	is_function where possible.
+
+2016-05-09  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/greenbone.js, src/html/classic/js/gsa_graphics_base.js:
 	Update coding style to satisfy jshint and jscs.
 
