@@ -66,8 +66,8 @@
     this.y2_label = '';
 
     this.x_field = 'value';
-    this.y_field = 'c_count';
-    this.y2_field = 'count';
+    this.y_fields = ['c_count'];
+    this.y2_fields = ['count'];
 
     this.show_stat_type = true;
 
@@ -82,19 +82,23 @@
     var update = this.mustUpdate(display);
 
     var self = this;
-    var x_data;
-    var y_data;
-    var y2_data;
 
-    var line_1 = d3.svg.line()
-      .x(function(d) { return self.x_scale(d[self.x_field]); })
-      .y(function(d) { return self.y_scale(d[self.y_field]); })
-      .defined(function(d) { return d[self.y_field] !== undefined; });
+    function y_line(field, y_scale) {
+      return d3.svg.line()
+        .x(function(d) { return self.x_scale(d[self.x_field]); })
+        .y(function(d) { return y_scale(d[field]); })
+        .defined(function(d) { return d[field] !== undefined; });
+    }
 
-    var line_2 = d3.svg.line()
-      .x(function(d) { return self.x_scale(d[self.x_field]); })
-      .y(function(d) { return self.y2_scale(d[self.y2_field]); })
-      .defined(function(d) { return d[self.y2_field] !== undefined; });
+    self.all_y_fields = self.y_fields.concat(self.y2_fields);
+
+    var lines = [];
+    for (var line_index = 0; line_index < self.y_fields.length; line_index++) {
+      lines.push (y_line(self.y_fields[line_index], self.y_scale));
+    }
+    for (var line_index = 0; line_index < self.y2_fields.length; line_index++) {
+      lines.push (y_line(self.y2_fields[line_index], self.y2_scale));
+    }
 
     var x_min, x_max;
     var y_min, y_max;
@@ -347,7 +351,7 @@
 
         self.range_info_box
           .attr('width', max_line_width + 10)
-          .attr('height', 53);
+          .attr('height', self.range_info_text_lines.length * 15 + 6);
 
         // Normal point info
         max_line_width = 0;
@@ -389,7 +393,7 @@
 
         self.info_box
           .attr('width', max_line_width + 10)
-          .attr('height', 53);
+          .attr('height', self.info_text_lines.length * 15 + 6);
       }
 
       // Selection info box
@@ -434,15 +438,25 @@
     var records = data.records;
     display.setTitle(this.title_generator(data));
 
-    x_data = records.map(function(d) { return d[self.x_field]; });
-    y_data = records.map(function(d) { return d[self.y_field]; });
-    y2_data = records.map(function(d) { return d[self.y2_field]; });
-    x_min = d3.min(x_data.filter(is_defined));
-    x_max = d3.max(x_data.filter(is_defined));
-    y_min = d3.min(y_data.filter(is_defined));
-    y_max = d3.max(y_data.filter(is_defined));
-    y2_min = d3.min(y2_data.filter(is_defined));
-    y2_max = d3.max(y2_data.filter(is_defined));
+    self.setColorScale(gsa.field_name_colors(self.all_y_fields,
+        data.column_info, self.y_fields.length));
+
+    for (var record_index = 0; record_index < records.length; record_index++) {
+      var record = records[record_index];
+
+      x_min = d3.min([x_min, record[self.x_field]]);
+      x_max = d3.max([x_max, record[self.x_field]]);
+
+      for (var y_index = 0; y_index < self.y_fields.length; y_index++) {
+        y_min = d3.min ([y_min, record[self.y_fields[y_index]]]);
+        y_max = d3.max ([y_max, record[self.y_fields[y_index]]]);
+      }
+
+      for (var y2_index = 0; y2_index < self.y2_fields.length; y2_index++) {
+        y2_min = d3.min ([y2_min, record[self.y2_fields[y2_index]]]);
+        y2_max = d3.max ([y2_max, record[self.y2_fields[y2_index]]]);
+      }
+    }
 
     // Setup display parameters
     height = display.svg().attr('height') - self.margin.top -
@@ -528,42 +542,46 @@
         .attr('transform', 'translate(' + width + ', 0)')
         .call(self.y2_axis);
 
-      self.svg.append('path')
-        .attr('id', 'line_y')
-        .datum(records)
-        .style('fill', 'transparent')
-        .style('stroke', '1px')
-        .style('stroke', 'green')
-        .attr('d', line_1);
+      for (var index = 0; index < self.all_y_fields.length; index++) {
+        var new_path = self.svg.append('path');
+        new_path
+          .attr('id', 'line_' + index)
+          .datum(records)
+          .style('fill', 'transparent')
+          .style('stroke', '1px')
+          .style('stroke', self.scaleColor(self.all_y_fields[index]))
+          .attr('d', lines[index]);
 
-      self.svg.append('path')
-        .attr('id', 'line_y2')
-        .datum(records)
-        .style('fill', 'transparent')
-        .style('stroke', '1px')
-        .style('stroke-dasharray', '3,2')
-        .style('stroke', d3.rgb('green').brighter())
-        .attr('d', line_2);
+        if (index >= self.y_fields.length) {
+          // Special style for y2 axis lines
+          new_path
+            .style('stroke-dasharray', '3,2')
+        }
+      }
 
       if (records.length === 1) {
-        self.svg.append('circle')
-          .attr('id', 'circle_y')
-          .style('fill', 'transparent')
-          .style('stroke', '1px')
-          .style('stroke', 'green')
-          .attr('r', '4px')
-          .attr('cx', width / 2)
-          .attr('cy', self.y_scale(records[0][self.y_field]));
+        for (var index = 0; index < self.all_y_fields.length; index++) {
+          var new_circle = self.svg.append('circle');
+          new_circle
+            .attr('id', 'circle_' + index)
+            .attr('class', 'single_value_circle')
+            .style('fill', 'transparent')
+            .style('stroke', '1px')
+            .style('stroke', self.scaleColor(self.all_y_fields[index]))
+            .attr('r', '4px')
+            .attr('cx', width / 2)
 
-        self.svg.append('circle')
-          .attr('id', 'circle_y2')
-          .style('fill', 'transparent')
-          .style('stroke', '1px')
-          .style('stroke-dasharray', '3,2')
-          .style('stroke', d3.rgb('green').brighter())
-          .attr('r', '4px')
-          .attr('cx', width / 2)
-          .attr('cy', self.y2_scale(records[0][self.y2_field]));
+          if (index >= self.y_fields.length) {
+            // Special style for y2 axis circles
+            new_circle
+              .style('stroke-dasharray', '3,2')
+              .attr('cy', self.y2_scale(records[0][self.all_y_fields[index]]));
+          }
+          else {
+            new_circle
+              .attr('cy', self.y_scale(records[0][self.all_y_fields[index]]));
+          }
+        }
       }
 
       // Create tooltip line
@@ -640,91 +658,100 @@
         field: self.x_field,
       });
 
-      self.info_text_lines.push({
-        elem: self.info_text_g.append('text')
-          .attr('transform', 'translate(0,15)')
-          .style('font-weight', 'normal')
-          .text('Y1'),
-        field: self.y_field,
-      });
+      var line_y_offset = 15;
 
-      self.info_text_lines.push({
-        elem: self.info_text_g.append('text')
-          .attr('transform', 'translate(0,30)')
-          .style('font-weight', 'normal')
-          .text('Y2'),
-        field: self.y2_field
-      });
+      for (var index = 0; index < self.all_y_fields.length; index++) {
+        var new_line;
+        self.info_text_lines.push({
+          elem: self.info_text_g.append('text')
+            .attr('transform', 'translate(0,' + line_y_offset + ')')
+            .style('font-weight', 'normal')
+            .text('Y' + index),
+          field: self.all_y_fields[index],
+        });
 
-      self.info_text_g.append('line')
-        .attr('x1', '0')
-        .attr('x2', '15')
-        .attr('y1', '10')
-        .attr('y2', '10')
-        .style('stroke', 'green');
+        new_line = self.info_text_g.append('line');
 
-      self.info_text_g.append('line')
-        .attr('x1', '0')
-        .attr('x2', '15')
-        .attr('y1', '25')
-        .attr('y2', '25')
-        .style('stroke-dasharray', '3,2')
-        .style('stroke', d3.rgb('green').brighter());
+        new_line
+          .attr('x1', '0')
+          .attr('x2', '15')
+          .attr('y1', line_y_offset - 5)
+          .attr('y2', line_y_offset - 5)
+          .style('stroke', self.scaleColor([self.all_y_fields[index]]));
+
+        if (index >= self.y_fields.length) {
+          // Special style for y2 axis lines
+          new_line
+            .style('stroke-dasharray', '3,2')
+        }
+
+        line_y_offset += 15;
+      }
     }
 
     /* Create legend items */
-    /* TODO: automatic layout of legend elements*/
     self.legend_elem.text('');
-    var legend_part = self.legend_elem.append('g');
+    var legend_part;
     var legend_part_x = 0;
     var legend_part_y = 0;
     var last_part_rect;
     var current_part_rect;
 
-    legend_part.append('path')
-      .attr('d', 'M 0 10 L 20 10')
-      .style('fill', 'transparent')
-      .style('stroke', '1px')
-      .style('stroke', 'green');
+    for (var index = 0; index < self.all_y_fields.length; index++) {
+      var new_line, new_text;
+      legend_part = self.legend_elem.append('g')
 
-    legend_part.append('text')
-      .style('font-size', '8pt')
-      .style('font-weight', 'bold')
-      .attr('x', 25)
-      .attr('y', 15)
-      .text(gsa.column_label(
-        column_info.columns[self.y_field], true, false, self.show_stat_type));
+      new_line = legend_part.append('path');
+      new_line
+        .attr('d', 'M 0 10 L 20 10')
+        .style('fill', 'transparent')
+        .style('stroke', '1px')
+        .style('stroke', self.scaleColor(self.all_y_fields[index]));
 
-    last_part_rect = legend_part.node().getBoundingClientRect();
-    legend_part = self.legend_elem.append('g');
+      if (index >= self.y_fields.length) {
+        // Special style for y2 lines
+        new_line
+          .style('stroke-dasharray', '3,2')
+      }
 
-    legend_part.append('path')
-      .attr('d', 'M 0 10 L 20 10')
-      .style('fill', 'transparent')
-      .style('stroke', '1px')
-      .style('stroke-dasharray', '3,2')
-      .style('stroke', d3.rgb('green').brighter());
+      new_text = legend_part.append('text');
+      new_text
+        .style('font-size', '8pt')
+        .style('font-weight', 'bold')
+        .attr('x', 25)
+        .attr('y', 15)
+        .text(gsa.column_label(
+          column_info.columns[self.all_y_fields[index]], true, false,
+              self.show_stat_type));
+      if (index >= self.y_fields.length) {
+        // Special style for y2 labels
+        new_text
+          .style('font-weight', 'bold')
+          .style('font-style', 'oblique')
+      }
 
-    legend_part.append('text')
-      .style('font-size', '8pt')
-      .style('font-weight', 'bold')
-      .style('font-style', 'oblique')
-      .attr('x', 25)
-      .attr('y', 15)
-      .text(gsa.column_label(
-        column_info.columns[self.y2_field], true, false, self.show_stat_type));
+      current_part_rect = legend_part.node().getBoundingClientRect();
 
-    current_part_rect = legend_part.node().getBoundingClientRect();
-    if (legend_part_x + last_part_rect.width + current_part_rect.width + 10 <=
-        width - 40 + self.margin.left + self.margin.right) {
-      legend_part_x = legend_part_x + last_part_rect.width + 10;
-    }
-    else {
-      legend_part_x = 0;
-      legend_part_y = legend_part_y + last_part_rect.height + 2;
-    }
-    legend_part.attr('transform', 'translate(' + legend_part_x +
+      if (last_part_rect === undefined) {
+        legend_part_x = 0;
+      }
+      else if ((self.all_y_fields.length <= 2 ||
+                index !== self.y_fields.length) &&
+               legend_part_x +
+               last_part_rect.width + current_part_rect.width + 10 <=
+               width - 40 + self.margin.left + self.margin.right) {
+        legend_part_x = legend_part_x + last_part_rect.width + 10;
+      }
+      else {
+        legend_part_x = 0;
+        legend_part_y = legend_part_y + last_part_rect.height + 2;
+      }
+
+      legend_part.attr('transform', 'translate(' + legend_part_x +
           ', ' + legend_part_y + ')');
+
+      last_part_rect = current_part_rect;
+    }
 
     self.x_axis_elem
       .call(self.x_axis)
@@ -736,68 +763,91 @@
       .call(self.y2_axis)
       .attr('transform', 'translate(' + width + ', 0)');
 
-    self.svg.select('#line_y')
-      .datum(records)
-      .attr('d', line_1);
-
-    self.svg.select('#line_y2')
-      .datum(records)
-      .attr('d', line_2);
+    for (var index = 0; index < lines.length; index++) {
+      self.svg.select('#line_' + index)
+        .datum(records)
+        .attr('d', lines[index]);
+    }
 
     var enter = self.svg.selectAll('.marker')
       .data(records)
       .enter();
 
-    if (self.y_field.substr(0, 5) !== 'count' &&
-        self.y_field !== 'c_count'.substr(0, 7)) {
-      enter.insert('circle')
-        .attr('class', 'marker y')
+    for (var index = 0; index < self.all_y_fields.length; index++) {
+      var new_markers;
+      var selected_markers;
+
+      if (self.all_y_fields[index].substr(0, 5) === 'count' ||
+          self.all_y_fields[index].substr(0, 7) === 'c_count') {
+        self.svg.selectAll('.marker_' + index)
+          .remove();
+        break;
+      }
+
+
+      new_markers = enter.insert('circle');
+
+      new_markers
+        .attr('class', 'marker_' + index)
         .attr('r', 1.5)
-        .style('fill', d3.rgb('green'))
-        .style('stroke', d3.rgb('green'));
+        .style('stroke', d3.rgb(self.scaleColor(self.all_y_fields[index])));
+
+      if (index >= self.y_fields.length) {
+        // Special style for y2 lines
+        new_markers
+          .style('fill', 'none');
+      }
+      else {
+        new_markers
+          .style('fill', d3.rgb(self.scaleColor(self.all_y_fields[index])));
+      }
+
+      selected_markers = self.svg.selectAll('.marker_' + index);
+
+      selected_markers
+        .data(records)
+        .attr('cx', function(d) { return self.x_scale(d[self.x_field]); })
+
+      if (index >= self.y_fields.length) {
+        selected_markers
+          .attr('cy', function(d) { return self.y2_scale(
+                                        d[self.all_y_fields[index]]);
+              });
+      }
+      else {
+        selected_markers
+          .attr('cy', function(d) { return self.y_scale(
+                                        d[self.all_y_fields[index]]);
+              });
+      }
+
+      self.svg.selectAll('.marker_' + index)
+        .data(records)
+        .exit()
+        .remove();
     }
 
-    if (self.y2_field.substr(0, 5) !== 'count' &&
-        self.y2_field.substr(0, 7) !== 'c_count') {
-      enter.insert('circle')
-        .attr('class', 'marker y2')
-        .attr('r', 1.5)
-        .style('fill', 'none')
-        .style('stroke', d3.rgb('green').brighter());
-    }
-
-    self.svg.selectAll('.marker.y')
-      .data(records)
-      .attr('cx', function(d) { return self.x_scale(d[self.x_field]); })
-      .attr('cy', function(d) { return self.y_scale(d[self.y_field]); });
-
-    self.svg.selectAll('.marker.y2')
-      .data(records)
-      .attr('cx', function(d) { return self.x_scale(d[self.x_field]); })
-      .attr('cy', function(d) { return self.y2_scale(d[self.y2_field]); });
-
-    self.svg.selectAll('.marker.y')
-      .data(records)
-      .exit()
-      .remove();
-
-    self.svg.selectAll('.marker.y2')
-      .data(records)
-      .exit()
-      .remove();
-
+    // Single value markers
     if (records.length === 1) {
-      self.svg.select('#circle_y')
-        .attr('cx', width / 2)
-        .attr('cy', self.y_scale(records[0][self.y_field]));
+      for (var index = 0; index < self.all_y_fields.length; index++) {
+        var selected_circle;
+        selected_circle = self.svg.selectAll('#circle_' + index);
 
-      self.svg.select('#circle_y2')
-        .attr('cx', width / 2)
-        .attr('cy', self.y2_scale(records[0][self.y2_field]));
+        selected_circle
+          .attr('cx', width / 2)
+
+        if (index >= self.y_fields.length) {
+          selected_circle
+            .attr('cy', self.y2_scale(records[0][self.all_y_fields[index]]));
+        }
+        else {
+          selected_circle
+            .attr('cy', self.y_scale(records[0][self.all_y_fields[index]]));
+        }
+      }
     }
     else {
-      self.svg.select('#circle_y').remove();
-      self.svg.select('#circle_y2').remove();
+      self.svg.select('.single_value_circle').remove();
     }
 
     if (self.range_marker_start !== undefined)
@@ -819,25 +869,37 @@
 
   LineChartGenerator.prototype.generateCsvData = function(controller, data) {
     var cols = data.column_info.columns;
+    var column_selection = [this.x_field];
+    var column_labels = [
+        gsa.column_label(cols[this.x_field], true, false, this.show_stat_type)
+      ];
+
+    for (var index = 0; index < this.all_y_fields.length; index++) {
+      column_selection.push(this.all_y_fields[index]);
+      column_labels.push (gsa.column_label(cols[this.all_y_fields[index]],
+          true, false, this.show_stat_type));
+    }
+
     return gsa.csv_from_records(data.records, data.column_info,
-        [this.x_field, this.y_field, this.y2_field],
-        [gsa.column_label(cols[this.x_field], true, false, this.show_stat_type),
-        gsa.column_label(cols[this.y_field], true, false, this.show_stat_type),
-        gsa.column_label(cols[this.y2_field], true, false,
-          this.show_stat_type)],
-        controller.display().header().text());
+        column_selection, column_labels, controller.display().header().text());
   };
 
   LineChartGenerator.prototype.generateHtmlTableData = function(controller,
       data) {
     var cols = data.column_info.columns;
+    var column_selection = [this.x_field];
+    var column_labels = [
+        gsa.column_label(cols[this.x_field], true, false, this.show_stat_type)
+      ];
+
+    for (var index = 0; index < this.all_y_fields.length; index++) {
+      column_selection.push(this.all_y_fields[index]);
+      column_labels.push (gsa.column_label(cols[this.all_y_fields[index]],
+          true, false, this.show_stat_type));
+    }
+
     return gsa.html_table_from_records(data.records, data.column_info,
-        [this.x_field, this.y_field, this.y2_field],
-        [gsa.column_label(cols[this.x_field], true, false, this.show_stat_type),
-        gsa.column_label(cols[this.y_field], true, false, this.show_stat_type),
-        gsa.column_label(cols[this.y2_field], true, false,
-          this.show_stat_type)],
-        controller.display().header().text(),
+        column_selection, column_labels, controller.display().header().text(),
         controller.data_src().param('filter'));
   };
 
@@ -853,16 +915,16 @@
 
     if (gen_params.y_fields && gen_params.y_fields[0]  &&
       gen_params.z_fields && gen_params.z_fields[0]) {
-      this.y_field = gen_params.y_fields[0];
-      this.y2_field = gen_params.z_fields[0];
+      this.y_fields = gen_params.y_fields;
+      this.y2_fields = gen_params.z_fields;
     }
     else if (gen_params.y_fields && gen_params.y_fields[0]) {
-      this.y_field = gen_params.y_fields[0];
-      this.y2_field = 'count';
+      this.y_fields = gen_params.y_fields;
+      this.y2_fields = ['count'];
     }
     else {
-      this.y_field = 'count';
-      this.y2_field = 'c_count';
+      this.y_fields = ['count'];
+      this.y2_fields = ['c_count'];
     }
 
     if (gen_params.extra.show_stat_type) {
@@ -886,6 +948,14 @@
 
   LineChartGenerator.prototype.time_line = function(old_data) {
     var self = this;
+    var fill_empty_records = false;
+
+    // FIXME: make filling an explicit option
+    if (self.y_fields[0].substr(0, 5) === 'count' ||
+          self.y_fields[0].substr(0, 7) === 'c_count' ||
+          self.y2_fields[0].substr(0, 5) === 'count' ||
+          self.y2_fields[0].substr(0, 7) === 'c_count')
+      fill_empty_records = true;
 
     var new_data = {
       original_xml: old_data.original_xml,
@@ -1068,12 +1138,7 @@
           }
         }
       }
-      // FIXME: make filling an explicit option
-      if (has_values ||
-          self.y_field.substr(0, 5) === 'count' ||
-          self.y_field.substr(0, 7) === 'c_count' ||
-          self.y2_field.substr(0, 5) === 'count' ||
-          self.y2_field.substr(0, 7) === 'c_count') {
+      if (has_values || fill_empty_records){
         new_data.records.push(new_record);
       }
     }

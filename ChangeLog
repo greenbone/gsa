@@ -1,3 +1,22 @@
+2016-05-09  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Allow more than one field for each y axis in the line chart.
+
+	* src/html/classic/graphics.xsl (js-assets-top-visualization): Add
+	host counts of "High" subgroup as additional y and z fields.
+
+	* src/html/classic/js/gsa_graphics_base.js: Use gsa.field_color_scale
+	to get gsa.severity_level_color_scale.
+	(gsa.field_color_scale): Add case for "severity_level"/"threat", which
+	now also includes the values "Error", "Debug" and "False Positive".
+	(field_name_colors): New function. Generates a d3 color scale for
+	field names.
+
+	* src/html/classic/js/gsa_line_chart.js (init): Replace string
+	properties y_field and y2_field with arrays y_fields and y2_fields.
+	(generate, generateCsvData, generateHtmlTableData): Allow more than one
+	field for each y axis.
+
 2016-05-06  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/js/gsa_graphics_base.js (extract_column_info): Keep jshint

@@ -56,6 +56,7 @@
   gsa.severity_bar_style = severity_bar_style;
   gsa.data_raw = data_raw;
   gsa.field_color_scale = field_color_scale;
+  gsa.field_name_colors = field_name_colors;
   gsa.severity_colors_gradient = severity_colors_gradient;
   gsa.BaseChartGenerator = BaseChartGenerator;
   gsa.fill_empty_fields = fill_empty_fields;
@@ -73,9 +74,7 @@
   * Color scale for SecInfo severity levels
   */
   gsa.severity_level_color_scale =
-    d3.scale.ordinal()
-                .range(['silver', '#DDDDDD', 'skyblue', 'orange', '#D80000'])
-                .domain(['N/A', 'Log', 'Low', 'Medium', 'High']);
+    field_color_scale(undefined, 'severity_level');
 
   function field_color_scale(type, column) {
     var scale = d3.scale.ordinal();
@@ -153,6 +152,29 @@
             'silver',
         ]);
         break;
+      case 'severity_level':
+      case 'threat':
+        scale.domain([
+            'Error',
+            'Debug',
+            'False Positive',
+            'Log',
+            'Low',
+            'Medium',
+            'High',
+            'N/A',
+        ]);
+        scale.range([
+          '#800000',
+          '#008080',
+          '#808080',
+          '#DDDDDD',
+          'skyblue',
+          'orange',
+          '#D80000',
+          'silver',
+        ]);
+        break;
       case 'solution_type':
         scale.domain([
             'Mitigation',
@@ -218,6 +240,53 @@
       default:
         return d3.scale.category20();
     }
+    return scale;
+  }
+
+  /**
+   * Create a color scales for a color for each field name. If alt_color_limit
+   *  is defined, the fields starting at that index will use alternate (lighter
+   *  or darker) colors.
+   *
+   * @param {array}  y_fields         An array containing the field names.
+   * @param {object} column_info      The column info object of the dataset
+   * @param {number} alt_color_limit  Index at which alternate colors are used
+   *
+   * A d3 color scale for the field names given
+   */
+  function field_name_colors(y_fields, column_info, alt_color_limit) {
+    var range = [];
+    var scale = d3.scale.ordinal();
+    var subgroup_scale;
+
+    if (column_info.group_columns && column_info.group_columns[1]) {
+      var type = column_info.columns.subgroup_value.type;
+      var column = column_info.group_columns[1];
+      subgroup_scale = gsa.field_color_scale (type, column);
+    }
+
+    for (var index in y_fields) {
+      var field_info = column_info.columns[y_fields[index]];
+      var color = 'green';
+
+      if (field_info.subgroup_value !== undefined) {
+        color = subgroup_scale(field_info.subgroup_value);
+      }
+
+      if (alt_color_limit === undefined || index < alt_color_limit) {
+        range.push (color);
+      }
+      else if (d3.lab(color).l >= 70) {
+        range.push (d3.rgb(color).darker().toString());
+      }
+      else {
+        range.push (d3.rgb(color).brighter().toString());
+      }
+    }
+
+    scale.domain(y_fields);
+    scale.range(range);
+
     return scale;
   }
 

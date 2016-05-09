@@ -370,8 +370,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         data-filter-id="{$filt_id}">
         <span class="dashboard-chart"
           data-chart-name="host-counts-timeline"
-          data-y-fields="count[High]"
-          data-z-fields="c_count[High]"
+          data-y-fields="c_count,c_count[High]"
+          data-z-fields="count,count[High]"
           data-chart-type="line"/>
       </div>
     </xsl:if>
