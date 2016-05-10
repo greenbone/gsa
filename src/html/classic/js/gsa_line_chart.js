@@ -901,10 +901,7 @@
   };
 
   LineChartGenerator.prototype.evaluateParams = function(gen_params) {
-    // evaluate options set by gen_params
-    if (!gen_params) {
-      return;
-    }
+    gsa.BaseChartGenerator.prototype.evaluateParams.call(this, gen_params);
 
     if (gen_params.x_field) {
       this.x_field = gen_params.x_field;

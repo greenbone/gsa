@@ -1,5 +1,10 @@
 2016-05-10  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_line_chart.js: Call super method in
+	LineChartGenerator.prototype.evaluateParams.
+
+2016-05-10  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_line_chart.js: Use gsa.is_defined and gsa.has_value
 	function and also update some coding style issues.
 
