@@ -3386,17 +3386,17 @@
       columns: {}
     };
 
-    column_info.columns [severity_field] = {
+    column_info.columns[severity_field] = {
       name: severity_field,
-      type: old_data.column_info.columns [severity_field].type,
-      column: old_data.column_info.columns [severity_field].column,
-      stat: old_data.column_info.columns [severity_field].stat,
+      type: old_data.column_info.columns[severity_field].type,
+      column: old_data.column_info.columns[severity_field].column,
+      stat: old_data.column_info.columns[severity_field].stat,
       data_type: 'text'
     };
 
-    column_info.columns [count_field] = {
+    column_info.columns[count_field] = {
       name: count_field,
-      type: old_data.column_info.columns [count_field].type,
+      type: old_data.column_info.columns[count_field].type,
       column: '',
       stat: 'count',
       data_type: 'integer'
