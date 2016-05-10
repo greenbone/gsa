@@ -1,5 +1,11 @@
 2016-05-10  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/classic/omp.xsl (html-create-alert-form)
+	(html-edit-alert-form): Remove comment that referred to removed
+	variable.
+
+2016-05-10  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (append_alert_method_data): Add return removed in
 	r18026.  This was causing "Sourcefire Connector" parameters to be sent
 	for every type of alert.

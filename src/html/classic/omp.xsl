@@ -9938,7 +9938,6 @@ should not have received it.
         <xsl:if test="not (gsa:may-op ('get_filters'))">
           <input type="hidden" name="filter_id" value="0"/>
         </xsl:if>
-        <!-- CSS for hiding/showing rows initially. -->
         <div class="form-group">
           <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></label>
           <div class="col-10">
@@ -10647,7 +10646,6 @@ should not have received it.
           <input type="hidden" name="filter_id" value="0"/>
         </xsl:if>
 
-        <!-- CSS for hiding/showing rows initially. -->
         <div class="form-group">
           <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></label>
           <div class="col-10">
