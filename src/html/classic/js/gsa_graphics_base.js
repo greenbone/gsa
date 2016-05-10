@@ -4581,6 +4581,24 @@
     if (gsa.is_defined(gen_params.no_chart_links)) {
       this.no_chart_links = gen_params.no_chart_links;
     }
+
+    if (gen_params.chart_template === 'resource_type_counts') {
+      this.setDataTransformFunc(resource_type_counts);
+    }
+    else if (gen_params.chart_template === 'qod_type_counts') {
+      this.setDataTransformFunc(qod_type_counts);
+    }
+    else if (gen_params.chart_template === 'percentage_counts') {
+      this.setDataTransformFunc(percentage_counts);
+    }
+    else if (gen_params.chart_template === 'info_by_class' ||
+        gen_params.chart_template === 'recent_info_by_class') {
+      this.setDataTransformFunc(data_severity_level_counts);
+    }
+    else if (gen_params.chart_template === 'info_by_cvss' ||
+        gen_params.chart_template === 'recent_info_by_cvss') {
+      this.setDataTransformFunc(data_severity_histogram);
+    }
   };
 
   BaseChartGenerator.prototype.createGenerateLinkFunc = function(column, type,
@@ -4698,6 +4716,9 @@
           if (c_elem.data('z-fields')) {
             gen_params.z_fields = c_elem.data('z-fields').split(',');
           }
+          if (gsa.is_defined(chart_template)) {
+            gen_params.chart_template = chart_template;
+          }
 
           var key;
           var c_elem_gen_params = c_elem.data('gen-params');
@@ -4737,33 +4758,14 @@
 
             generator.setTitleGenerator(title_generator);
 
-            if (chart_template === 'resource_type_counts') {
-              generator.setDataTransformFunc(resource_type_counts);
+            if (chart_template === 'info_by_cvss' ||
+                chart_template === 'recent_info_by_cvss' &&
+                chart_type !== 'donut') {
+              generator.setBarStyle(severity_bar_style('value',
+                    gsa.severity_levels.max_log,
+                    gsa.severity_levels.max_low,
+                    gsa.severity_levels.max_medium));
             }
-            else if (chart_template === 'qod_type_counts') {
-              generator.setDataTransformFunc(qod_type_counts);
-            }
-            else if (chart_template === 'percentage_counts') {
-              generator.setDataTransformFunc(percentage_counts);
-            }
-            else if (chart_template === 'info_by_class' ||
-                chart_template === 'recent_info_by_class') {
-              generator.setDataTransformFunc(data_severity_level_counts);
-              if (chart_type === 'donut') {
-                generator.setColorScale(gsa.severity_level_color_scale);
-              }
-            }
-            else if (chart_template === 'info_by_cvss' ||
-                chart_template === 'recent_info_by_cvss') {
-              generator.setDataTransformFunc(data_severity_histogram);
-              if (chart_type !== 'donut') {
-                generator.setBarStyle(severity_bar_style('value',
-                      gsa.severity_levels.max_log,
-                      gsa.severity_levels.max_low,
-                      gsa.severity_levels.max_medium));
-              }
-            }
-
             create_chart_controller(data_source, generator, for_component,
                 chart_name, unescape_xml(selector_label),
                 '/img/charts/severity-bar-chart.png', chart_type,
