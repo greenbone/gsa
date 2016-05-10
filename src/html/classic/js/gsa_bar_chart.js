@@ -68,8 +68,6 @@
   BarChartGenerator.prototype.evaluateParams = function(gen_params) {
     gsa.BaseChartGenerator.prototype.evaluateParams.call(this, gen_params);
 
-    this.noChartLinks = controller.display().dashboard().noChartLinks();
-
     if (gen_params.x_field) {
       this.x_field = gen_params.x_field;
     }
@@ -230,21 +228,9 @@
         });
     }
 
-    // Function to generate link URLs
-    function generateLink(d, i) {
-      if (self.noChartLinks) {
-        return null;
-      }
-      var column = data.column_info.columns.value.column;
-      var type = data.column_info.columns.value.type;
-      var value = d.value;
-
-      if (column === 'uuid') {
-        return gsa.details_page_url(type, value, data.filter_info);
-      } else {
-        return gsa.filtered_list_url(type, column, value, data.filter_info);
-      }
-    }
+    var generateLink = self.createGenerateLinkFunc(
+        data.column_info.columns.value.column,
+        data.column_info.columns.value.type, data.filter_info);
 
     // Add new bars
     this.svg.selectAll('.bar')
@@ -328,6 +314,17 @@
         gsa.column_label(cols[this.y_field], true, false, this.show_stat_type)],
         controller.display().header().text(),
         controller.data_src().param('filter'));
+  };
+
+  BarChartGenerator.prototype.generateLink = function(d, i, column, type,
+      filter_info) {
+    var value = d.value;
+
+    if (column === 'uuid') {
+      return gsa.details_page_url(type, value, filter_info);
+    } else {
+      return gsa.filtered_list_url(type, column, value, filter_info);
+    }
   };
 
 })(window, window, window.d3, window.console, window.gsa);
