@@ -75,14 +75,19 @@
       gsa._('Loading Gantt chart ...'), gsa._('Gantt Chart')));
   };
 
-  GanttChartGenerator.prototype.generate = function(controller, data,
-      gen_params) {
+  GanttChartGenerator.prototype.evaluateParams = function(gen_params) {
+    gsa.BaseChartGenerator.prototype.evaluateParams.call(this, gen_params);
+
+    if (gen_params.extra.empty_text) {
+      this.empty_text = gen_params.extra.empty_text;
+    }
+  };
+
+  GanttChartGenerator.prototype.generate = function(controller, data) {
     var display = controller.display();
     var update = this.mustUpdate(display);
 
     var self = this;
-
-    this.noChartLinks = controller.display().dashboard().noChartLinks();
 
     this.x_scale = d3.scale.ordinal();
     this.y_scale = d3.time.scale.utc(); // == time_scale
@@ -110,7 +115,6 @@
 
     var column_info;
     var x_data;
-    var empty_text = '';
     var display_records;
     var limit = 10;
 
@@ -118,11 +122,8 @@
 
     display.setTitle(this.title_generator(data));
 
-    if (gen_params.extra.empty_text) {
-      empty_text = gen_params.extra.empty_text;
-    }
-    else {
-      empty_text = gsa._('No matching {{resource_type}}',
+    if (!gsa.is_defined(this.empty_text)) {
+      this.empty_text = gsa._('No matching {{resource_type}}',
           gsa.resource_type_name(column_info.columns[this.x_field].type));
     }
 
@@ -239,7 +240,7 @@
       .attr('class', 'empty_text')
       .style('dominant-baseline', 'middle')
       .style('text-anchor', 'middle')
-      .text(empty_text);
+      .text(this.empty_text);
 
     this.svg.selectAll('.empty_text')
       .data(dummy_data)

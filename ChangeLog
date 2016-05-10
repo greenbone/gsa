@@ -1,5 +1,10 @@
 2016-05-10  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_gantt_chart.js: Move evaluating the generator params
+	to an own evaluateParams method in GanttChartGenerator.
+
+2016-05-10  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_donut_chart.js,
 	src/html/classic/js/gsa_cloud_chart.js: Extract generating the links to a
 	generateLink method and call super method while evaluating the generator
