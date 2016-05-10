@@ -103,6 +103,8 @@
 
     var height;
     var width;
+    var index;
+    var new_line;
 
     var column_info = data.column_info;
 
@@ -305,7 +307,7 @@
         resize_range_marker_elems();
       }
 
-      if (info_last_x === undefined ||
+      if (!gsa.is_defined(info_last_x) ||
           info_last_x.getTime() !== rounded_x.getTime()) {
         var max_line_width;
 
@@ -357,7 +359,7 @@
         max_line_width = 0;
         for (line in self.info_text_lines) {
           var d = data.records[line_index];
-          if (d !== null && d !== undefined) {
+          if (gsa.has_value(d)) {
             d = d[self.info_text_lines[line].field];
             d = gsa.format_data(d,
               data.column_info.columns[self.info_text_lines[line].field]);
@@ -433,7 +435,6 @@
         .attr('y2', y_range[0] - y_range[1]);
     }
 
-    var records = data.records;
     display.setTitle(this.title_generator(data));
 
     self.setColorScale(gsa.field_name_colors(self.all_y_fields,
@@ -540,7 +541,7 @@
         .attr('transform', 'translate(' + width + ', 0)')
         .call(self.y2_axis);
 
-      for (var index = 0; index < self.all_y_fields.length; index++) {
+      for (index = 0; index < self.all_y_fields.length; index++) {
         var new_path = self.svg.append('path');
         new_path
           .attr('id', 'line_' + index)
@@ -558,7 +559,7 @@
       }
 
       if (records.length === 1) {
-        for (var index = 0; index < self.all_y_fields.length; index++) {
+        for (index = 0; index < self.all_y_fields.length; index++) {
           var new_circle = self.svg.append('circle');
           new_circle
             .attr('id', 'circle_' + index)
@@ -658,8 +659,7 @@
 
       var line_y_offset = 15;
 
-      for (var index = 0; index < self.all_y_fields.length; index++) {
-        var new_line;
+      for (index = 0; index < self.all_y_fields.length; index++) {
         self.info_text_lines.push({
           elem: self.info_text_g.append('text')
             .attr('transform', 'translate(0,' + line_y_offset + ')')
@@ -688,14 +688,15 @@
 
     /* Create legend items */
     self.legend_elem.text('');
+
     var legend_part;
     var legend_part_x = 0;
     var legend_part_y = 0;
     var last_part_rect;
     var current_part_rect;
 
-    for (var index = 0; index < self.all_y_fields.length; index++) {
-      var new_line, new_text;
+    for (index = 0; index < self.all_y_fields.length; index++) {
+      var new_text;
       legend_part = self.legend_elem.append('g');
 
       new_line = legend_part.append('path');
@@ -728,7 +729,7 @@
 
       current_part_rect = legend_part.node().getBoundingClientRect();
 
-      if (last_part_rect === undefined) {
+      if (!gsa.is_defined(last_part_rect)) {
         legend_part_x = 0;
       }
       else if ((self.all_y_fields.length <= 2 ||
@@ -759,7 +760,7 @@
       .call(self.y2_axis)
       .attr('transform', 'translate(' + width + ', 0)');
 
-    for (var index = 0; index < lines.length; index++) {
+    for (index = 0; index < lines.length; index++) {
       self.svg.select('#line_' + index)
         .datum(records)
         .attr('d', lines[index]);
@@ -769,7 +770,7 @@
       .data(records)
       .enter();
 
-    for (var index = 0; index < self.all_y_fields.length; index++) {
+    for (index = 0; index < self.all_y_fields.length; index++) {
       var new_markers;
       var selected_markers;
 
@@ -824,7 +825,7 @@
 
     // Single value markers
     if (records.length === 1) {
-      for (var index = 0; index < self.all_y_fields.length; index++) {
+      for (index = 0; index < self.all_y_fields.length; index++) {
         var selected_circle;
         selected_circle = self.svg.selectAll('#circle_' + index);
 
@@ -845,7 +846,7 @@
       self.svg.select('.single_value_circle').remove();
     }
 
-    if (self.range_marker_start !== undefined) {
+    if (gsa.is_defined(self.range_marker_start)) {
       resize_range_marker_elems();
     }
   };
@@ -890,7 +891,7 @@
 
     for (var index = 0; index < this.all_y_fields.length; index++) {
       column_selection.push(this.all_y_fields[index]);
-      column_labels.push (gsa.column_label(cols[this.all_y_fields[index]],
+      column_labels.push(gsa.column_label(cols[this.all_y_fields[index]],
           true, false, this.show_stat_type));
     }
 
@@ -1087,7 +1088,7 @@
 
         for (field in old_data.records[data_index]) {
           if (field !== self.t_field) {
-            if (values[field] === undefined) {
+            if (!gsa.is_defined(values[field])) {
               values[field] = old_data.records[data_index][field];
             }
             else if (column_info.columns[field].stat === 'sum' ||
@@ -1133,7 +1134,7 @@
           }
         }
       }
-      if (has_values || fill_empty_records){
+      if (has_values || fill_empty_records) {
         new_data.records.push(new_record);
       }
     }
