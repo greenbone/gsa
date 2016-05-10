@@ -184,8 +184,9 @@
     this.svg.selectAll('.node')
       .data(nodes)
       .enter()
-      .call(function(selection) { return create_bubble(selection, data, self);
-          });
+      .call(function(selection) { return create_bubble(selection, data,
+          self.noChartLinks);
+      });
 
     // Remove unused bubbles
     this.svg.selectAll('.node')
@@ -233,7 +234,7 @@
         controller.data_src().param('filter'));
   };
 
-  function create_bubble(selection, data, controller) {
+  function create_bubble(selection, data, no_chart_links) {
     var new_node_a;
 
     new_node_a = selection.append('g')
@@ -244,9 +245,10 @@
       .append('a');
 
     new_node_a.attr('xlink:href', function(d) {
-      if (controller !== undefined && controller.noChartLinks) {
+      if (no_chart_links === true) {
         return null;
       }
+
       var group_col_info = data.column_info.columns.group_value;
       if (group_col_info.column === 'uuid') {
         return gsa.details_page_url(group_col_info.type, d.group_value,

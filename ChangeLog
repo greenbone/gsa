@@ -1,5 +1,11 @@
 2016-05-09  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_bubble_chart.js (create_bubble): Don't pass the
+	complete controller to create_bubble. We only need to pass a parameter wether
+	to create links or not.
+
+2016-05-09  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_donut_chart.js (generateData): Remove unnecessary
 	gen_params Parameter from DonutChartGenerator.prototype.generateData.
 
