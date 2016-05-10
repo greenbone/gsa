@@ -1,5 +1,12 @@
 2016-05-10  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_graphics_base.js: Differentiate between getting a
+	chart generator and instantiating a new generator. Export get_chart_generator
+	function to gsa namespace. This allows to retrieve a chart generator
+	constructor in other components via the gsa object.
+
+2016-05-10  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_line_chart.js: Update coding style to fix errors
 	from jshint and jscs.
 

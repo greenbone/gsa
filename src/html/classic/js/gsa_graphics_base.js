@@ -52,12 +52,13 @@
   gsa.html_table_from_records = html_table_from_records;
   gsa.svg_from_elem = svg_from_elem;
   gsa.blob_img_window = blob_img_window;
-  gsa.register_chart_generator = register_chart_generator;
   gsa.severity_bar_style = severity_bar_style;
   gsa.data_raw = data_raw;
   gsa.field_color_scale = field_color_scale;
   gsa.field_name_colors = field_name_colors;
   gsa.severity_colors_gradient = severity_colors_gradient;
+  gsa.register_chart_generator = register_chart_generator;
+  gsa.get_chart_generator = get_chart_generator;
   gsa.BaseChartGenerator = BaseChartGenerator;
   gsa.fill_empty_fields = fill_empty_fields;
   gsa.details_page_url = details_page_url;
@@ -4589,19 +4590,25 @@
   BaseChartGenerator.prototype.evaluateParams = function(gen_params) {
   };
 
-  function get_chart_generator(chart_type, data_source) {
-    var Generator = chart_generators[chart_type];
-    if (!gsa.has_value(Generator)) {
-      return null;
-    }
+  function new_chart_generator(chart_type) {
+    var Generator = get_chart_generator(chart_type);
     if (gsa.is_function(Generator)) {
       return new Generator();
     }
     return Generator;
   }
 
+  function get_chart_generator(chart_type) {
+    var Generator = chart_generators[chart_type];
+    if (!gsa.has_value(Generator)) {
+      return null;
+    }
+    return Generator;
+  }
+
   function register_chart_generator(chart_type, generator) {
     chart_generators[chart_type] = generator;
+    chart_generators[generator.name] = generator;
   }
 
   function on_ready(doc) {
@@ -4714,7 +4721,7 @@
               return null;
             }
 
-            var generator = get_chart_generator(chart_type, data_source);
+            var generator = new_chart_generator(chart_type);
 
             if (!generator) {
               console.error('No chart generator for ' + chart_type + ' found');
