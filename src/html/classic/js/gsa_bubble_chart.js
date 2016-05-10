@@ -68,16 +68,9 @@
     }
   };
 
-  BubbleChartGenerator.prototype.generate = function(controller, data,
-      gen_params) {
-    var display = controller.display();
-    var update = this.mustUpdate(display);
-    var empty_text;
-    var self = this;
+  BubbleChartGenerator.prototype.evaluateParams = function(gen_params) {
+    gsa.BaseChartGenerator.prototype.evaluateParams.call(this, gen_params);
 
-    this.noChartLinks = controller.display().dashboard().noChartLinks();
-
-    // evaluate options set by gen_params
     if (gen_params.x_field) {
       this.x_field = gen_params.x_field;
     }
@@ -90,9 +83,22 @@
       this.color_field = gen_params.z_fields[0];
     }
 
-    if (gen_params.extra.show_stat_type) {
-      this.show_stat_type = !!JSON.parse(gen_params.extra.show_stat_type);
+    if (gsa.is_defined(gen_params.extra)) {
+
+      if (gen_params.extra.show_stat_type) {
+        this.show_stat_type = !!JSON.parse(gen_params.extra.show_stat_type);
+      }
+
+      if (gen_params.extra.empty_text) {
+        this.empty_text = gen_params.extra.empty_text;
+      }
     }
+  };
+
+  BubbleChartGenerator.prototype.generate = function(controller, data) {
+    var display = controller.display();
+    var update = this.mustUpdate(display);
+    var self = this;
 
     var records = data.records;
     var column_info = data.column_info;
@@ -102,14 +108,11 @@
 
     display.setTitle(this.title_generator(data));
 
-    if (gen_params.extra.empty_text) {
-      empty_text = gen_params.extra.empty_text;
-    }
-    else {
-      empty_text = gsa._('No matching {{resource_type}}',
+    if (!gsa.is_defined(this.empty_text)) {
+      this.empty_text = gsa._('No matching {{resource_type}}',
           {
             resource_type: gsa.resource_type_name(
-              column_info.columns.label_value.type),
+                               column_info.columns.label_value.type),
             interpolation: {escape: false},
           });
     }
@@ -153,7 +156,7 @@
       var dummy = {
         color_value: 0,
         size_value: 1,
-        label_value: '* ' + empty_text + ' *'
+        label_value: '* ' + this.empty_text + ' *'
       };
       filtered_records.push(dummy);
 
@@ -164,7 +167,7 @@
 
     function tooltip_func(d) {
       if (records_empty) {
-        return empty_text;
+        return self.empty_text;
       }
 
       var label_value = gsa.format_data(d.label_value,
