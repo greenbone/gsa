@@ -1,3 +1,9 @@
+2016-05-10  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Backport r25212.
+
+	* src/gsad.c (init_validator): Match "users" to "login".
+
 2016-05-05  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/omp.xsl (user [edit]): Default the Authentication
