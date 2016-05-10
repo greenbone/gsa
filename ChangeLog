@@ -1,5 +1,9 @@
 2016-05-10  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_line_chart.js: Remove unused method is_defined.
+
+2016-05-10  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_gantt_chart.js: Move evaluating the generator params
 	to an own evaluateParams method in GanttChartGenerator.
 

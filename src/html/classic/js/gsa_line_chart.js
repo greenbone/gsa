@@ -41,10 +41,6 @@
     return -1;
   }
 
-  function is_defined(d) {
-    return d !== undefined;
-  }
-
   function LineChartGenerator() {
     // call super constructor
     gsa.BaseChartGenerator.call(this, 'bar');
