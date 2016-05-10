@@ -1,5 +1,10 @@
 2016-05-10  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_line_chart.js: Add missing record variable
+	declaration.
+
+2016-05-10  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_bubble_chart.js,
 	src/html/classic/js/gsa_graphics_base.js,
 	src/html/classic/js/gsa_line_chart.js: Rename noChartLinks to no_chart_links

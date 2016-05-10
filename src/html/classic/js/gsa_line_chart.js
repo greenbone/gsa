@@ -76,6 +76,7 @@
   LineChartGenerator.prototype.generate = function(controller, data) {
     var display = controller.display();
     var update = this.mustUpdate(display);
+    var records = data.records;
 
     var self = this;
 
