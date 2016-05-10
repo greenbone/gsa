@@ -93,11 +93,12 @@
     self.all_y_fields = self.y_fields.concat(self.y2_fields);
 
     var lines = [];
-    for (var line_index = 0; line_index < self.y_fields.length; line_index++) {
-      lines.push (y_line(self.y_fields[line_index], self.y_scale));
+    var line_index;
+    for (line_index = 0; line_index < self.y_fields.length; line_index++) {
+      lines.push(y_line(self.y_fields[line_index], self.y_scale));
     }
-    for (var line_index = 0; line_index < self.y2_fields.length; line_index++) {
-      lines.push (y_line(self.y2_fields[line_index], self.y2_scale));
+    for (line_index = 0; line_index < self.y2_fields.length; line_index++) {
+      lines.push(y_line(self.y2_fields[line_index], self.y2_scale));
     }
 
     var x_min, x_max;
@@ -130,39 +131,41 @@
       var points;
 
       self.range_marker_elem.select('.range_marker_c')
-        .attr ('x', self.x_scale(self.range_marker_start))
-        .attr ('y', 0)
-        .attr ('width',
-                self.x_scale(self.range_marker_end) -
-                self.x_scale(self.range_marker_start))
-        .attr ('height', y_range[0] - y_range[1])
+        .attr('x', self.x_scale(self.range_marker_start))
+        .attr('y', 0)
+        .attr('width',
+            self.x_scale(self.range_marker_end) -
+            self.x_scale(self.range_marker_start))
+        .attr('height', y_range[0] - y_range[1]);
 
       self.range_marker_elem.select('.range_marker_l')
-        .attr ('x', self.x_scale(self.range_marker_start) -
-                range_left_line_width)
-        .attr ('y', 0)
-        .attr ('width', range_left_line_width)
-        .attr ('height', y_range[0] - y_range[1])
+        .attr('x', self.x_scale(self.range_marker_start) -
+            range_left_line_width)
+        .attr('y', 0)
+        .attr('width', range_left_line_width)
+        .attr('height', y_range[0] - y_range[1]);
 
-      points = [self.x_scale(self.range_marker_end),
-                ',',
-                y_range[1],
-                ' ',
-                self.x_scale(self.range_marker_end),
-                ',',
-                y_range[0],
-                ' ',
-                self.x_scale(self.range_marker_end) + range_right_line_width,
-                ',',
-                y_range[0] - range_right_line_width,
-                ' ',
-                self.x_scale(self.range_marker_end) + range_right_line_width,
-                ',',
-                y_range[1] + range_right_line_width];
+      points = [
+        self.x_scale(self.range_marker_end),
+        ',',
+        y_range[1],
+        ' ',
+        self.x_scale(self.range_marker_end),
+        ',',
+        y_range[0],
+        ' ',
+        self.x_scale(self.range_marker_end) + range_right_line_width,
+        ',',
+        y_range[0] - range_right_line_width,
+        ' ',
+        self.x_scale(self.range_marker_end) + range_right_line_width,
+        ',',
+        y_range[1] + range_right_line_width,
+      ];
       points = points.join('');
 
       self.range_marker_elem.select('.range_marker_r')
-        .attr ('points', points);
+        .attr('points', points);
     }
 
     function mouse_exited() {
@@ -175,8 +178,9 @@
 
     function mouse_down() {
       if (self.noChartLinks ||
-          d3.event.button >= 2 || data.records.length <= 1)
+          d3.event.button >= 2 || data.records.length <= 1) {
         return;
+      }
 
       var parent_rect = self.svg.node()
         .parentNode
@@ -195,8 +199,9 @@
     }
 
     function mouse_up() {
-      if (self.range_marker_start === null || self.range_marker_end === null)
+      if (self.range_marker_start === null || self.range_marker_end === null) {
         return;
+      }
 
       var start, end;
       var type = data.column_info.columns[self.x_field].type;
@@ -214,18 +219,17 @@
       }
 
       start.setTime(start.getTime() - 60000);
-      end = self.x_step.offset (end, 1);
+      end = self.x_step.offset(end, 1);
 
       value = [gsa.iso_time_format(start), gsa.iso_time_format(end)];
 
-
       if (self.range_marker_resize) {
-        url = gsa.filtered_list_url(type, column, value,
-                                    data.filter_info, 'range')
+        url = gsa.filtered_list_url(
+            type, column, value, data.filter_info, 'range');
 
         self.range_marker_elem.attr('xlink:href', url);
 
-        if (d3.event.button == 1 || d3.event.ctrlKey || d3.event.shiftKey) {
+        if (d3.event.button === 1 || d3.event.ctrlKey || d3.event.shiftKey) {
           window.open(url, '_blank');
         } else {
           window.location = url;
@@ -339,10 +343,10 @@
                   range_count);
         }
 
-        for (line in self.range_info_text_lines) {
-          var bbox;
-          var line_width;
+        var bbox;
+        var line_width;
 
+        for (line in self.range_info_text_lines) {
           bbox = self.range_info_text_lines[line].node()
             .getBoundingClientRect();
           line_width = bbox.width;
@@ -356,8 +360,6 @@
         // Normal point info
         max_line_width = 0;
         for (line in self.info_text_lines) {
-          var bbox;
-          var line_width;
           var d = data.records[line_index];
           if (d !== null && d !== undefined) {
             d = d[self.info_text_lines[line].field];
@@ -448,13 +450,13 @@
       x_max = d3.max([x_max, record[self.x_field]]);
 
       for (var y_index = 0; y_index < self.y_fields.length; y_index++) {
-        y_min = d3.min ([y_min, record[self.y_fields[y_index]]]);
-        y_max = d3.max ([y_max, record[self.y_fields[y_index]]]);
+        y_min = d3.min([y_min, record[self.y_fields[y_index]]]);
+        y_max = d3.max([y_max, record[self.y_fields[y_index]]]);
       }
 
       for (var y2_index = 0; y2_index < self.y2_fields.length; y2_index++) {
-        y2_min = d3.min ([y2_min, record[self.y2_fields[y2_index]]]);
-        y2_max = d3.max ([y2_max, record[self.y2_fields[y2_index]]]);
+        y2_min = d3.min([y2_min, record[self.y2_fields[y2_index]]]);
+        y2_max = d3.max([y2_max, record[self.y2_fields[y2_index]]]);
       }
     }
 
@@ -515,7 +517,7 @@
       display.svg().on('mousedown', mouse_down);
       display.svg().on('mouseup', mouse_up);
       display.svg().on('dragstart',
-                       function () { d3.event.preventDefault(); });
+                       function() { d3.event.preventDefault(); });
       display.svg().on('mousemove', mouse_moved);
       display.svg().on('mouseleave', mouse_exited);
 
@@ -555,7 +557,7 @@
         if (index >= self.y_fields.length) {
           // Special style for y2 axis lines
           new_path
-            .style('stroke-dasharray', '3,2')
+            .style('stroke-dasharray', '3,2');
         }
       }
 
@@ -569,7 +571,7 @@
             .style('stroke', '1px')
             .style('stroke', self.scaleColor(self.all_y_fields[index]))
             .attr('r', '4px')
-            .attr('cx', width / 2)
+            .attr('cx', width / 2);
 
           if (index >= self.y_fields.length) {
             // Special style for y2 axis circles
@@ -681,8 +683,7 @@
 
         if (index >= self.y_fields.length) {
           // Special style for y2 axis lines
-          new_line
-            .style('stroke-dasharray', '3,2')
+          new_line.style('stroke-dasharray', '3,2');
         }
 
         line_y_offset += 15;
@@ -699,7 +700,7 @@
 
     for (var index = 0; index < self.all_y_fields.length; index++) {
       var new_line, new_text;
-      legend_part = self.legend_elem.append('g')
+      legend_part = self.legend_elem.append('g');
 
       new_line = legend_part.append('path');
       new_line
@@ -710,8 +711,7 @@
 
       if (index >= self.y_fields.length) {
         // Special style for y2 lines
-        new_line
-          .style('stroke-dasharray', '3,2')
+        new_line.style('stroke-dasharray', '3,2');
       }
 
       new_text = legend_part.append('text');
@@ -727,7 +727,7 @@
         // Special style for y2 labels
         new_text
           .style('font-weight', 'bold')
-          .style('font-style', 'oblique')
+          .style('font-style', 'oblique');
       }
 
       current_part_rect = legend_part.node().getBoundingClientRect();
@@ -784,7 +784,6 @@
         break;
       }
 
-
       new_markers = enter.insert('circle');
 
       new_markers
@@ -806,19 +805,19 @@
 
       selected_markers
         .data(records)
-        .attr('cx', function(d) { return self.x_scale(d[self.x_field]); })
+        .attr('cx', function(d) { return self.x_scale(d[self.x_field]); });
 
       if (index >= self.y_fields.length) {
         selected_markers
-          .attr('cy', function(d) { return self.y2_scale(
-                                        d[self.all_y_fields[index]]);
-              });
+          .attr('cy', function(d) {
+            return self.y2_scale(d[self.all_y_fields[index]]);
+          });
       }
       else {
         selected_markers
-          .attr('cy', function(d) { return self.y_scale(
-                                        d[self.all_y_fields[index]]);
-              });
+          .attr('cy', function(d) {
+            return self.y_scale(d[self.all_y_fields[index]]);
+          });
       }
 
       self.svg.selectAll('.marker_' + index)
@@ -834,7 +833,7 @@
         selected_circle = self.svg.selectAll('#circle_' + index);
 
         selected_circle
-          .attr('cx', width / 2)
+          .attr('cx', width / 2);
 
         if (index >= self.y_fields.length) {
           selected_circle
@@ -850,8 +849,9 @@
       self.svg.select('.single_value_circle').remove();
     }
 
-    if (self.range_marker_start !== undefined)
+    if (self.range_marker_start !== undefined) {
       resize_range_marker_elems();
+    }
   };
 
   LineChartGenerator.prototype.generateData = function(controller,
@@ -876,7 +876,7 @@
 
     for (var index = 0; index < this.all_y_fields.length; index++) {
       column_selection.push(this.all_y_fields[index]);
-      column_labels.push (gsa.column_label(cols[this.all_y_fields[index]],
+      column_labels.push(gsa.column_label(cols[this.all_y_fields[index]],
           true, false, this.show_stat_type));
     }
 
@@ -954,8 +954,9 @@
     if (self.y_fields[0].substr(0, 5) === 'count' ||
           self.y_fields[0].substr(0, 7) === 'c_count' ||
           self.y2_fields[0].substr(0, 5) === 'count' ||
-          self.y2_fields[0].substr(0, 7) === 'c_count')
+          self.y2_fields[0].substr(0, 7) === 'c_count') {
       fill_empty_records = true;
+    }
 
     var new_data = {
       original_xml: old_data.original_xml,
@@ -1024,13 +1025,13 @@
 
     var t_index = 0;
 
-    while (! gsa.is_date (old_data.records[t_index][self.t_field])) {
+    while (!gsa.is_date(old_data.records[t_index][self.t_field])) {
       t_index++;
     }
     var t_min = new Date(old_data.records[t_index][self.t_field].getTime());
 
     t_index = old_data.records.length - 1;
-    while (! gsa.is_date (old_data.records[t_index][self.t_field])) {
+    while (!gsa.is_date(old_data.records[t_index][self.t_field])) {
       t_index--;
     }
     /* Add 1 millisecond to ensure the range function give the correct results
@@ -1061,13 +1062,11 @@
     }
     else if (interval_days <= 3650) {
       self.x_step = d3.time.month.utc;
-      times = d3.time.month.range.utc(d3.time.month.utc.floor(t_min),
-          t_max);
+      times = d3.time.month.range.utc(d3.time.month.utc.floor(t_min), t_max);
     }
     else {
       self.x_step = d3.time.year.utc;
-      times = d3.time.year.range.utc(d3.time.year.utc.floor(t_min),
-          t_max);
+      times = d3.time.year.range.utc(d3.time.year.utc.floor(t_min), t_max);
     }
 
     for (t_index in times) {
@@ -1079,13 +1078,13 @@
 
       while (data_index < old_data.records.length &&
           (t_index >= times.length - 1 ||
-           ! gsa.is_date (old_data.records[data_index][self.t_field]) ||
+           !gsa.is_date(old_data.records[data_index][self.t_field]) ||
            old_data.records[data_index][self.t_field].getTime() <
            times[Number(t_index) + 1].getTime())) {
 
         // collect values from orgin data which fit to the time value
 
-        if (! gsa.is_date (old_data.records[data_index][self.t_field])) {
+        if (!gsa.is_date(old_data.records[data_index][self.t_field])) {
           data_index++;
           continue;
         }
