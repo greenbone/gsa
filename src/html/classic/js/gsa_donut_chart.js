@@ -654,6 +654,7 @@
         new_record[value_field] = gsa._('Active for next {{days}} days',
             {days: value});
       }
+      new_record[value_field + '~original'] = value;
       records.push(new_record);
     });
 
