@@ -1396,7 +1396,8 @@ init_validator ()
   openvas_validator_add (validator, "severity_optional", "^(-1(\\.0)?|[0-9](\\.[0-9])?|10(\\.0)?)?$");
   openvas_validator_add (validator, "source_iface", "^(.*){1,16}$");
   openvas_validator_add (validator, "uuid",       "^[0-9abcdefABCDEF\\-]{1,40}$");
-  openvas_validator_add (validator, "users",       "^[-_ [:alnum:],]*$");
+  /* This must be "login" with space and comma. */
+  openvas_validator_add (validator, "users",      "^[[:alnum:]-_@., ]*$");
   openvas_validator_add (validator, "x_field", "^[\\[\\]_[:alnum:]]{1,80}$");
   openvas_validator_add (validator, "y_fields:name", "^[0-9]{1,5}$");
   openvas_validator_add (validator, "y_fields:value", "^[\\[\\]_[:alnum:]]{1,80}$");

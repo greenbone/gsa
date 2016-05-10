@@ -1,5 +1,9 @@
 2016-05-10  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad.c (init_validator): Match "users" to "login".
+
+2016-05-10  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Add alert method SNMP.
 
 	* src/gsad_omp.c (append_alert_method_data): Add SNMP param checks.
