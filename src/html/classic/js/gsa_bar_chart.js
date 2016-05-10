@@ -65,16 +65,11 @@
       gsa._('Loading bar chart ...'), gsa._('Bar Chart')));
   };
 
-  BarChartGenerator.prototype.generate = function(controller, data,
-      gen_params) {
-    var display = controller.display();
-    var update = this.mustUpdate(display);
-
-    var self = this;
+  BarChartGenerator.prototype.evaluateParams = function(gen_params) {
+    gsa.BaseChartGenerator.prototype.evaluateParams.call(this, gen_params);
 
     this.noChartLinks = controller.display().dashboard().noChartLinks();
 
-    // evaluate options set by gen_params
     if (gen_params.x_field) {
       this.x_field = gen_params.x_field;
     }
@@ -83,9 +78,35 @@
       this.y_field = gen_params.y_fields[0];
     }
 
-    if (gen_params.extra.show_stat_type) {
-      this.show_stat_type = !!JSON.parse(gen_params.extra.show_stat_type);
+    if (gsa.is_defined(gen_params.extra)) {
+
+      if (gsa.is_defined(gen_params.extra.show_stat_type)) {
+        this.show_stat_type = !!JSON.parse(gen_params.extra.show_stat_type);
+      }
+
+      if (gsa.is_defined(gen_params.extra) && gsa.is_defined(
+            gen_params.extra.extra_tooltip_field_1)) {
+        var index = 1;
+        this.tooltips = [];
+
+        while (gsa.is_defined(
+              gen_params.extra['extra_tooltip_field_' + index])) {
+          var field = gen_params.extra['extra_tooltip_field_' + index];
+          var label = gen_params.extra['extra_tooltip_label_' + index];
+
+          this.tooltips.push({field: field, label: label});
+
+          index ++;
+        }
+      }
     }
+  };
+
+  BarChartGenerator.prototype.generate = function(controller, data) {
+    var display = controller.display();
+    var update = this.mustUpdate(display);
+
+    var self = this;
 
     var records = data.records;
     display.setTitle(this.title_generator(data));
@@ -146,29 +167,23 @@
           }
 
           extra = '';
-          if (gen_params.extra && gen_params.extra.extra_tooltip_field_1) {
-            var index = 1;
+          /* FIXME this is unused for bar chart. Remove? */
+          if (gsa.is_defined(this.tooltips)) {
+            for (var tooltip in this.tooltips) {
 
-            while (gsa.is_defined(
-                  gen_params.extra['extra_tooltip_field_' + index])) {
-              var field = gen_params.extra['extra_tooltip_field_' + index];
-              var label = gen_params.extra['extra_tooltip_label_' + index];
-
-              if (label) {
-                extra += '<br/><strong>' + label + ':</strong> ';
+              if (tooltip.label) {
+                extra += '<br/><strong>' + tooltip.label + ':</strong> ';
               }
               else {
                 extra += '<br/>';
               }
 
-              if (gsa.is_date(d[field])) {
-                extra += gsa.datetime_format(d[field]);
+              if (gsa.is_date(d[tooltip.field])) {
+                extra += gsa.datetime_format(d[tooltip.field]);
               }
               else {
-                extra += d[field];
+                extra += d[tooltip.field];
               }
-
-              index ++;
             }
           }
 
