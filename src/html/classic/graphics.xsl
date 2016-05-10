@@ -651,8 +651,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:choose>
   </xsl:variable>
 
-  <xsl:variable name="filter" select="/envelope/get_info/get_info_response/filters/term"/>
-  <xsl:variable name="filt_id" select="/envelope/get_info/get_info_response/filters/@id"/>
+  <xsl:variable name="filter" select="/envelope/get_notes/get_notes_response/filters/term"/>
+  <xsl:variable name="filt_id" select="/envelope/get_notes/get_notes_response/filters/@id"/>
 
   <div class="section-box">
     <div id="top-notes-dashboard">
@@ -695,7 +695,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         data-group-column="active_days"
         data-sort-stat="count"
         data-sort-order="descending"
-        data-max-groups="250">
+        data-max-groups="250"
+        data-filter="{$filter}"
+        data-filter-id="{$filt_id}">
         <span class="dashboard-chart"
           data-chart-name="notes_donut_chart"
           data-chart-template="active_status"
