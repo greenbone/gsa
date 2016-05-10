@@ -1292,7 +1292,7 @@ init_validator ()
                          "(:([a-z]{2,3})(_[A-Z]{2})?(@[[:alnum:]_-]+)?)*)$");
   openvas_validator_add (validator, "levels",       "^(h|m|l|g|f){0,5}$");
   openvas_validator_add (validator, "list_fname", "^([[:alnum:]_-]|%[%CcDFMmNTtUu])+$");
-  /* Used for Administrator users, credentials, and slave login name. */
+  /* Used for users, credentials, and slave login name. */
   openvas_validator_add (validator, "login",      "^[[:alnum:]-_@.]+$");
   openvas_validator_add (validator, "lsc_password", "^.{0,40}$");
   openvas_validator_add (validator, "max_result", "^[0-9]+$");

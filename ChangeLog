@@ -1,5 +1,10 @@
 2016-05-10  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad.c (init_validator): Remove reference to old Administrator
+	module.
+
+2016-05-10  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad.c (init_validator): Match "users" to "login".
 
 2016-05-10  Matthew Mundell <matthew.mundell@greenbone.net>
