@@ -81,6 +81,11 @@
     if (gen_params.extra.show_stat_type) {
       this.show_stat_type = !!JSON.parse(gen_params.extra.show_stat_type);
     }
+
+    if (gen_params.chart_template === 'info_by_class' ||
+        gen_params.chart_template === 'recent_info_by_class') {
+      this.setColorScale(gsa.severity_level_color_scale);
+    }
   };
 
   DonutChartGenerator.prototype.generate = function(controller, data) {

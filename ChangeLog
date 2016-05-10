@@ -1,5 +1,11 @@
 2016-05-10  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_donut_chart.js,
+	src/html/classic/js/gsa_h_bar_chart.js: Move color scale and bar style
+	selection into evaluteParams methods.
+
+2016-05-10  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_graphics_base.js: Update coding style.
 
 2016-05-10  Björn Ricks <bjoern.ricks@greenbone.net>

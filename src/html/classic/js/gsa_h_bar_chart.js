@@ -117,18 +117,8 @@
     }
 
     this.z_fields = gen_params.z_fields;
-  };
 
-  HorizontalBarChartGenerator.prototype.generate = function(controller,
-      data) {
-    var display = controller.display();
-    var update = this.mustUpdate(display);
-
-    var self = this;
-    var x_data;
-    var y_data; // == size_data
-
-    if (controller.chart_template() === '') {
+    if (gen_params.chart_template === '') {
       if (this.z_fields && this.z_fields[0]) {
         if (this.z_fields[0].indexOf('severity') !== -1) {
           this.setBarStyle(gsa.severity_bar_style(this.z_fields[0],
@@ -151,6 +141,16 @@
         }
       }
     }
+  };
+
+  HorizontalBarChartGenerator.prototype.generate = function(controller,
+      data) {
+    var display = controller.display();
+    var update = this.mustUpdate(display);
+
+    var self = this;
+    var x_data;
+    var y_data; // == size_data
 
     if (!gsa.is_defined(this.empty_text)) {
       this.empty_text = gsa._('No matching {{resource_type}}',
