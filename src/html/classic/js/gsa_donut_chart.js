@@ -68,7 +68,8 @@
   };
 
   DonutChartGenerator.prototype.evaluateParams = function(gen_params) {
-    // evaluate options set by gen_params
+    gsa.BaseChartGenerator.prototype.evaluateParams.call(this, gen_params);
+
     if (gen_params.x_field) {
       this.x_field = gen_params.x_field;
     }
@@ -87,8 +88,6 @@
     var update = this.mustUpdate(display);
 
     var self = this;
-
-    this.noChartLinks = controller.display().dashboard().noChartLinks();
 
     if (!gsa.is_defined(this.color_scale)) {
       this.setColorScale(gsa.field_color_scale(
@@ -142,20 +141,10 @@
     var ry = Math.min(height / 2, width / 2) - h / 2;
     var ri = 1.0 / 2.0;
 
-    // Function to generate link URLs
-    function generate_link(d, i) {
-      if (self.noChartLinks) {
-        return null;
-      }
-      var type = data.column_info.columns[self.x_field].type;
-      var column = data.column_info.columns[self.x_field].column;
-      var value = d.data[self.x_field + '~original'];
-      if (value === undefined) {
-        value = d.data[self.x_field];
-      }
-
-      return gsa.filtered_list_url(type, column, value, data.filter_info);
-    }
+    var generate_link = this.createGenerateLinkFunc(
+      data.column_info.columns[self.x_field].column,
+      data.column_info.columns[self.x_field].type,
+      data.filter_info);
 
     // Remove legend
     this.svg.selectAll('.legend')
@@ -500,6 +489,17 @@
         gsa.column_label(cols[this.y_field], true, false, this.show_stat_type)],
         controller.display().header().text(),
         controller.data_src().param('filter'));
+  };
+
+  DonutChartGenerator.prototype.generateLink = function(d, i, column, type,
+      filter_info) {
+    var self = this;
+    var value = d.data[self.x_field + '~original'];
+    if (value === undefined) {
+      value = d.data[self.x_field];
+    }
+
+    return gsa.filtered_list_url(type, column, value, filter_info);
   };
 
   /*

@@ -1,5 +1,12 @@
 2016-05-10  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_donut_chart.js,
+	src/html/classic/js/gsa_cloud_chart.js: Extract generating the links to a
+	generateLink method and call super method while evaluating the generator
+	params.
+
+2016-05-10  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_bubble_chart.js: Add evaluateParams method to
 	BubbleChartGenerator.
 
