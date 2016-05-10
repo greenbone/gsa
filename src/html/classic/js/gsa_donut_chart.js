@@ -638,8 +638,6 @@
     var count_field = 'count';
     var value_field = 'value';
 
-    console.log(old_data.records);
-
     var records = [];
 
     old_data.records.map(function(d) {

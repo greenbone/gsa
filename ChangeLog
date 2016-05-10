@@ -1,5 +1,10 @@
 2016-05-10  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_donut_chart.js (active_status_transform): Remove
+	debug statement from active_status_transform function.
+
+2016-05-10  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/graphics.xsl (js-notes-top-visualization): Fix passing
 	filter term and filter id to the notes charts.
 
