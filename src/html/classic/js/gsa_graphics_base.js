@@ -393,8 +393,6 @@
     var maxComponents = 8;
     // Maximum number of components per row
     var maxPerRow = 4;
-    // Whether links in charts are disabled
-    var noChartLinks = false;
 
     // Controls element
     var dashboardControls;
@@ -436,7 +434,6 @@
       initComponentsFromString: init_components_from_string,
       startEdit: start_edit,
       stopEdit: stop_edit,
-      noChartLinks: get_no_chart_links,
     };
 
     init();
@@ -471,9 +468,6 @@
         }
         if (dashboardOpts.dashboardControls) {
           dashboardControls = dashboardOpts.dashboardControls;
-        }
-        if (dashboardOpts.noChartLinks) {
-          noChartLinks = dashboardOpts.noChartLinks;
         }
       }
 
@@ -1006,10 +1000,6 @@
         stopEditButton.hide();
         newComponentButton.hide();
       }
-    }
-
-    function get_no_chart_links() {
-      return noChartLinks;
     }
   }
 
@@ -2088,9 +2078,9 @@
     function get_detached_url() {
       var extra_params_str = '';
       var field;
-      if (gsa.has_value(gen_params.noChartLinks)) {
+      if (gsa.has_value(gen_params.no_chart_links)) {
         extra_params_str = extra_params_str + '&no_chart_links=' +
-                            (gen_params.noChartLinks ? '1' : '0');
+                            (gen_params.no_chart_links ? '1' : '0');
       }
 
       if (gsa.has_value(gen_params.x_field)) {
@@ -4636,6 +4626,8 @@
       var dashboard_name = elem.data('dashboard-name');
       var max_components = gsa.is_defined(elem.data('max-components')) ?
         elem.data('max-components') : 8;
+      var no_chart_links = gsa.is_defined(elem.data('no-chart-links')) ?
+        !!(elem.data('no-chart-links')) : false;
 
       var dashboard = create_dashboard(dashboard_name,
           elem.data('controllers'), elem.data('heights'),
@@ -4647,8 +4639,6 @@
             filter: elem.data('filter'),
             filt_id: elem.data('filter-id'),
             max_components: max_components,
-            noChartLinks: gsa.is_defined(elem.data('no-chart-links')) ?
-              !!(elem.data('no-chart-links')) : false,
             defaultControllerString: elem.data('default-controller-string'),
             hideControllerSelect: elem.data('hide-controller-select'),
             dashboardControls: $('#' + elem.data('dashboard-controls'))[0]
@@ -4696,8 +4686,8 @@
           var gen_params = {extra: {}};
           var init_params = {};
 
-          if (dashboard.noChartLinks !== undefined) {
-            gen_params.noChartLinks = dashboard.noChartLinks();
+          if (gsa.is_defined(no_chart_links)) {
+            gen_params.no_chart_links = no_chart_links;
           }
           if (c_elem.data('x-field')) {
             gen_params.x_field = c_elem.data('x-field');

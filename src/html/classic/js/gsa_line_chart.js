@@ -108,8 +108,6 @@
 
     var column_info = data.column_info;
 
-    this.noChartLinks = controller.display().dashboard().noChartLinks();
-
     function get_rounded_x(mouse_x) {
       var rounded_x = self.x_step.round(self.x_scale.invert(mouse_x));
 
@@ -175,7 +173,7 @@
     }
 
     function mouse_down() {
-      if (self.noChartLinks ||
+      if (self.no_chart_links ||
           d3.event.button >= 2 || data.records.length <= 1) {
         return;
       }

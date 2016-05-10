@@ -188,7 +188,7 @@
       .data(nodes)
       .enter()
       .call(function(selection) { return create_bubble(selection, data,
-          self.noChartLinks);
+          self.no_chart_links);
       });
 
     // Remove unused bubbles
