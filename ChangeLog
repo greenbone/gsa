@@ -1,5 +1,10 @@
 2016-05-10  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_line_chart.js: Rename time_line method to timeLine
+	in LineChartGenerator.
+
+2016-05-10  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_line_chart.js: Remove unused method is_defined.
 
 2016-05-10  Björn Ricks <bjoern.ricks@greenbone.net>

@@ -67,7 +67,7 @@
 
     this.show_stat_type = true;
 
-    this.setDataTransformFunc(this.time_line);
+    this.setDataTransformFunc(this.timeLine);
     this.setColorScale(d3.scale.category20());
     this.setTitleGenerator(gsa.title_static(
       gsa._('Loading line chart ...'), gsa._('Bubble Chart')));
@@ -942,7 +942,7 @@
     }
   };
 
-  LineChartGenerator.prototype.time_line = function(old_data) {
+  LineChartGenerator.prototype.timeLine = function(old_data) {
     var self = this;
     var fill_empty_records = false;
 
