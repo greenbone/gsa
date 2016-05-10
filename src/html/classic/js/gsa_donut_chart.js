@@ -82,7 +82,10 @@
       this.show_stat_type = !!JSON.parse(gen_params.extra.show_stat_type);
     }
 
-    if (gen_params.chart_template === 'info_by_class' ||
+    if (gen_params.chart_template === 'active_status') {
+      this.setDataTransformFunc(active_status_transform);
+    }
+    else if (gen_params.chart_template === 'info_by_class' ||
         gen_params.chart_template === 'recent_info_by_class') {
       this.setColorScale(gsa.severity_level_color_scale);
     }
@@ -629,6 +632,41 @@
                 'z');
 
     return result.join(' ');
+  }
+
+  function active_status_transform(old_data, params) {
+    var count_field = 'count';
+    var value_field = 'value';
+
+    console.log(old_data.records);
+
+    var records = [];
+
+    old_data.records.map(function(d) {
+      var value = d[value_field];
+      var new_record = {};
+      new_record[count_field] = d[count_field];
+      if (value === -1) {
+        new_record[value_field] = gsa._('Inactive');
+      }
+      else if (value === -2) {
+        new_record[value_field] = gsa._('Active (unlimited)');
+      }
+      else {
+        new_record[value_field] = gsa._('Active for next {{days}} days',
+            {days: value});
+      }
+      records.push(new_record);
+    });
+
+    var data = {
+      original_xml: old_data.original_xml,
+      records: records,
+      column_info: old_data.column_info,
+      filter_info: old_data.filter_info
+    };
+
+    return data;
   }
 })(window, window, window.d3, window.console, window.gsa, window.$);
 
