@@ -4588,6 +4588,23 @@
   };
 
   BaseChartGenerator.prototype.evaluateParams = function(gen_params) {
+    if (gsa.is_defined(gen_params.no_chart_links)) {
+      this.no_chart_links = gen_params.no_chart_links;
+    }
+  };
+
+  BaseChartGenerator.prototype.createGenerateLinkFunc = function(column, type,
+      filter_info) {
+    var self = this;
+    return function(d, i) {
+      if (self.no_chart_links !== true) {
+        return self.generateLink(d, i, column, type, filter_info);
+      }
+    };
+  };
+
+  BaseChartGenerator.prototype.generateLink = function(d, i, column, type,
+      filter_info) {
   };
 
   function new_chart_generator(chart_type) {
