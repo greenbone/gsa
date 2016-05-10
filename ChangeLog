@@ -1,5 +1,10 @@
 2016-05-10  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_donut_chart.js: Use gsa.is_defined to check for
+	undefined.
+
+2016-05-10  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_donut_chart.js: Add transfrom function for note
 	active status to DonutChartGenerator. The transform function is used if the
 	chart template is set to active_status.
