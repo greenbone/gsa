@@ -71,7 +71,7 @@
   }
 
   HorizontalBarChartGenerator.prototype = Object.create(
-      gsa.BaseChartGenerator.prototype);
+      gsa.get_chart_generator('BarChartGenerator').prototype);
   HorizontalBarChartGenerator.prototype.constructor =
     HorizontalBarChartGenerator;
 
@@ -102,11 +102,25 @@
     this.setDataTransformFunc(data_top_list);
     this.setBarStyle(default_bar_style);
     this.setTitleGenerator(gsa.title_static(
-      gsa._('Loading bar chart ...'), gsa._('Bar Chart')));
+      gsa._('Loading horizontal bar chart ...'),
+      gsa._('Horizontal Bar Chart')));
+  };
+
+  HorizontalBarChartGenerator.prototype.evaluateParams = function(gen_params) {
+    gsa.get_chart_generator('BarChartGenerator').prototype.evaluateParams.call(
+        this, gen_params);
+
+    if (gsa.is_defined(gen_params.extra)) {
+      this.score_severity = gen_params.extra.score_severity;
+      this.score_assets = gen_params.extra.score_assets;
+      this.score_asset_type = gen_params.extra.score_asset_type;
+    }
+
+    this.z_fields = gen_params.z_fields;
   };
 
   HorizontalBarChartGenerator.prototype.generate = function(controller,
-      data, gen_params) {
+      data) {
     var display = controller.display();
     var update = this.mustUpdate(display);
 
@@ -114,23 +128,10 @@
     var x_data;
     var y_data; // == size_data
 
-    var empty_text;
-
-    this.noChartLinks = controller.display().dashboard().noChartLinks();
-
-    // evaluate options set by gen_params
-    if (gen_params.x_field) {
-      this.x_field = gen_params.x_field;
-    }
-
-    if (gen_params.y_fields && gen_params.y_fields[0]) {
-      this.y_field = gen_params.y_fields[0];
-    }
-
-    if (controller.chart_template () === '') {
-      if (gen_params.z_fields && gen_params.z_fields[0]) {
-        if (gen_params.z_fields[0].indexOf('severity') !== -1) {
-          this.setBarStyle(gsa.severity_bar_style(gen_params.z_fields[0],
+    if (controller.chart_template() === '') {
+      if (this.z_fields && this.z_fields[0]) {
+        if (this.z_fields[0].indexOf('severity') !== -1) {
+          this.setBarStyle(gsa.severity_bar_style(this.z_fields[0],
             gsa.severity_levels.max_log,
             gsa.severity_levels.max_low,
             gsa.severity_levels.max_medium));
@@ -151,15 +152,8 @@
       }
     }
 
-    if (gen_params.extra.show_stat_type) {
-      this.show_stat_type = !!JSON.parse(gen_params.extra.show_stat_type);
-    }
-
-    if (gen_params.extra.empty_text) {
-      empty_text = gen_params.extra.empty_text;
-    }
-    else {
-      empty_text = gsa._('No matching {{resource_type}}',
+    if (!gsa.is_defined(this.empty_text)) {
+      this.empty_text = gsa._('No matching {{resource_type}}',
           gsa.resource_type_name(data.column_info.columns[this.x_field].type));
     }
 
@@ -197,11 +191,12 @@
     this.x_scale.rangeRoundBands([0, height], 0.125);
     this.y_scale.range([0, width]);
 
-    this.x_axis.tickFormat(function (d) {
+    this.x_axis.tickFormat(function(d) {
           var text = d.toString();
           if (text.length > 25) {
-            if (text.slice (0, 4) === 'cpe:') {
-              return '…' + text.slice(Math.max (4, text.length - 25), text.length);
+            if (text.slice(0, 4) === 'cpe:') {
+              return '…' + text.slice(Math.max(4, text.length - 25),
+                  text.length);
             }
             else {
               return text.slice(0, 25) + '…';
@@ -248,29 +243,22 @@
           }
 
           extra = '';
-          if (gen_params.extra && gen_params.extra.extra_tooltip_field_1) {
-            var index = 1;
+          if (gsa.is_defined(this.tooltips)) {
+            for (var tooltip in this.tooltips) {
 
-            while (gen_params.extra ['extra_tooltip_field_' + index] !==
-                   undefined) {
-              var field = gen_params.extra ['extra_tooltip_field_' + index];
-              var label = gen_params.extra ['extra_tooltip_label_' + index]
-
-              if (label) {
-                extra += '<br/><strong>' + label + ':</strong> ';
+              if (tooltip.label) {
+                extra += '<br/><strong>' + tooltip.label + ':</strong> ';
               }
               else {
-                extra += '<br/>'
+                extra += '<br/>';
               }
 
-              if (gsa.is_date (d[field])) {
-                extra += gsa.datetime_format (d[field]);
+              if (gsa.is_date(d[tooltip.field])) {
+                extra += gsa.datetime_format(d[tooltip.field]);
               }
               else {
-                extra += d[field]
+                extra += d[tooltip.field];
               }
-
-              index ++;
             }
           }
 
@@ -287,24 +275,22 @@
                   extra;
             }
           }
-          else if (self.y_field.indexOf ('severity_score') !== -1) {
-            var score_severity = gen_params.extra.score_severity;
-            var score_assets = gen_params.extra.score_assets;
-            var score_asset_type = gen_params.extra.score_asset_type;
-
-            if (score_severity !== undefined &&
-                score_assets !== undefined && score_asset_type != undefined)
-            {
+          else if (self.y_field.indexOf('severity_score') !== -1) {
+            if (gsa.is_defined(this.score_severity) &&
+                gsa.is_defined(this.score_assets) &&
+                gsa.is_defined(this.score_asset_type)) {
               var breakdown_extra;
-              if (score_asset_type === 'hosts')
-                breakdown_extra =
-                  gsa._('<br/>({{assets}} Host(s) with average severity {{severity}})',
-                        {
-                          assets : d[score_assets],
-                          severity : d[score_severity]
-                        });
-              else
+              if (this.score_asset_type === 'hosts') {
+                breakdown_extra = gsa._('<br/>({{assets}} Host(s) with ' +
+                      'average severity {{severity}})',
+                    {
+                      assets: d[this.score_assets],
+                      severity: d[this.score_severity],
+                    });
+              }
+              else {
                 breakdown_extra = '';
+              }
 
               if (self.y_label !== '') {
                 return '<strong>' + self.y_label + ' (' + x +
@@ -330,7 +316,7 @@
               }
             }
           }
-          else if (self.y_field.indexOf ('severity') !== -1) {
+          else if (self.y_field.indexOf('severity') !== -1) {
             if (self.y_label !== '') {
               return '<strong>' + self.y_label + ' (' + x +
                   '):</strong><br/> ' + d[self.y_field].toFixed(1) +
@@ -373,7 +359,7 @@
       .attr('class', 'empty_text')
       .style('dominant-baseline', 'middle')
       .style('text-anchor', 'middle')
-      .text(empty_text);
+      .text(this.empty_text);
 
     this.svg.selectAll('.empty_text')
       .data(dummy_data)
@@ -385,21 +371,9 @@
       .attr('x', width / 2)
       .attr('y', height / 2);
 
-    // Function to generate link URLs
-    function generateLink(d, i) {
-      if (self.noChartLinks) {
-        return null;
-      }
-      var column = data.column_info.columns.value.column;
-      var type = data.column_info.columns.value.type;
-      var value = d.value;
-
-      if (column === 'uuid') {
-        return gsa.details_page_url(type, value, data.filter_info);
-      } else {
-        return gsa.filtered_list_url(type, column, value, data.filter_info);
-      }
-    }
+    var generateLink = self.createGenerateLinkFunc(
+        data.column_info.columns.value.column,
+        data.column_info.columns.value.type, data.filter_info);
 
     // Add new bars
     this.svg.selectAll('.bar')
@@ -453,40 +427,6 @@
       .remove();
 
     this.svg.call(this.tip);
-  };
-
-  HorizontalBarChartGenerator.prototype.generateCsvData = function(controller,
-      data) {
-    var cols = data.column_info.columns;
-    return gsa.csv_from_records(data.records, data.column_info,
-        [this.x_field, this.y_field],
-        [gsa.column_label(cols[this.x_field], true, false, this.show_stat_type),
-        gsa.column_label(cols[this.y_field], true, false, this.show_stat_type)],
-        controller.display().header().text());
-  };
-
-  HorizontalBarChartGenerator.prototype.generateHtmlTableData = function(
-      controller, data) {
-    var cols = data.column_info.columns;
-    return gsa.html_table_from_records(data.records, data.column_info,
-        [this.x_field, this.y_field],
-        [gsa.column_label(cols[this.x_field], true, false, this.show_stat_type),
-        gsa.column_label(cols[this.y_field], true, false, this.show_stat_type)],
-        controller.display().header().text(),
-        controller.data_src().param('filter'));
-  };
-
-  HorizontalBarChartGenerator.prototype.generateData = function(controller,
-      original_data, gen_params) {
-    // Extract records and column info
-    var cmd = controller.data_src().command();
-    if (cmd === 'get_aggregate') {
-      return this.transformData(original_data, gen_params);
-    }
-    else {
-      console.error('Unsupported command:' + cmd);
-      return null;
-    }
   };
 
 })(window, window, window.d3, window.console, window.gsa);

@@ -1,5 +1,11 @@
 2016-05-10  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_h_bar_chart.js: Refactor HorizontalBarChartGenerator
+	to be a child of BarChartGenerator. This allows removing duplicate code.
+	Also fix some coding style issues found by jshint and jscs.
+
+2016-05-10  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_bar_chart.js: Extract generating bar chart links to
 	an own method of BarChartGenerator.
 
