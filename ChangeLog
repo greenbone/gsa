@@ -1,5 +1,11 @@
 2016-05-10  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/classic/omp.xsl (html-create-alert-form)
+	(html-edit-alert-form): Match method ordering, by making them
+	alphabetical.
+
+2016-05-10  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad.c (init_validator): Remove reference to old Administrator
 	module.
 

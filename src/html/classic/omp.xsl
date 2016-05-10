@@ -10047,33 +10047,33 @@ should not have received it.
               <option data-select="email" value="Email" checked="1">
                 <xsl:value-of select="gsa:i18n ('Email', 'Alert')"/>
               </option>
-              <option data-select="syslog" value="Syslog">
-                <xsl:value-of select="gsa:i18n ('System Logger', 'Alert')"/>
-              </option>
-              <option data-select="snmp" value="SNMP">
-                <xsl:value-of select="gsa:i18n ('SNMP', 'Alert')"/>
-              </option>
               <option data-select="http-get" value="HTTP Get"
                 class="form-selection-input-event form-selection-input-event--task">
                 <xsl:value-of select="gsa:i18n ('HTTP Get', 'Alert')"/>
+              </option>
+              <option data-select="scp" value="SCP">
+                <xsl:value-of select="gsa:i18n ('SCP', 'Alert')"/>
+              </option>
+              <option data-select="send" value="Send">
+                <xsl:value-of select="gsa:i18n ('Send to host ', 'Alert')"/>
+              </option>
+              <option data-select="snmp" value="SNMP">
+                <xsl:value-of select="gsa:i18n ('SNMP', 'Alert')"/>
               </option>
               <option data-select="sourcefire" value="Sourcefire Connector"
                 class="form-selection-input-event form-selection-input-event--task">
                 <xsl:value-of select="gsa:i18n ('Sourcefire Connector', 'Alert')"/>
               </option>
-              <option data-select="verinice" value="verinice Connector"
-                class="form-selection-input-event form-selection-input-event--task">
-                <xsl:value-of select="gsa:i18n ('verinice.PRO Connector', 'Alert')"/>
-              </option>
               <option data-select="start_task" value="Start Task"
                 class="form-selection-input-event form-selection-input-event--task">
                 <xsl:value-of select="gsa:i18n ('Start Task', 'Alert')"/>
               </option>
-              <option data-select="send" value="Send">
-                <xsl:value-of select="gsa:i18n ('Send to host ', 'Alert')"/>
+              <option data-select="syslog" value="Syslog">
+                <xsl:value-of select="gsa:i18n ('System Logger', 'Alert')"/>
               </option>
-              <option data-select="scp" value="SCP">
-                <xsl:value-of select="gsa:i18n ('SCP', 'Alert')"/>
+              <option data-select="verinice" value="verinice Connector"
+                class="form-selection-input-event form-selection-input-event--task">
+                <xsl:value-of select="gsa:i18n ('verinice.PRO Connector', 'Alert')"/>
               </option>
             </select>
           </div>
@@ -10899,19 +10899,6 @@ should not have received it.
               </xsl:choose>
 
               <xsl:choose>
-                <xsl:when test="$method/text() = 'Syslog'">
-                  <option data-select="syslog" value="Syslog" selected="1">
-                    <xsl:value-of select="gsa:i18n ('System Logger', 'Alert')"/>
-                  </option>
-                </xsl:when>
-                <xsl:otherwise>
-                  <option data-select="syslog" value="Syslog">
-                    <xsl:value-of select="gsa:i18n ('System Logger', 'Alert')"/>
-                  </option>
-                </xsl:otherwise>
-              </xsl:choose>
-
-              <xsl:choose>
                 <xsl:when test="$method/text() = 'HTTP Get'">
                   <option data-select="http-get" value="HTTP Get" selected="1"
                     class="form-selection-input-event form-selection-input-event--task">
@@ -10922,6 +10909,45 @@ should not have received it.
                   <option data-select="http-get" value="HTTP Get"
                     class="form-selection-input-event form-selection-input-event--task">
                     <xsl:value-of select="gsa:i18n ('HTTP Get', 'Alert')"/>
+                  </option>
+                </xsl:otherwise>
+              </xsl:choose>
+
+              <xsl:choose>
+                <xsl:when test="$method/text() = 'SCP'">
+                  <option data-select="scp" value="SCP" selected="1">
+                    <xsl:value-of select="gsa:i18n ('SCP', 'Alert')"/>
+                  </option>
+                </xsl:when>
+                <xsl:otherwise>
+                  <option data-select="scp" value="SCP">
+                    <xsl:value-of select="gsa:i18n ('SCP', 'Alert')"/>
+                  </option>
+                </xsl:otherwise>
+              </xsl:choose>
+
+              <xsl:choose>
+                <xsl:when test="$method/text() = 'Send'">
+                  <option data-select="send" value="Send" selected="1">
+                    <xsl:value-of select="gsa:i18n ('Send to host ', 'Alert')"/>
+                  </option>
+                </xsl:when>
+                <xsl:otherwise>
+                  <option data-select="send" value="Send">
+                    <xsl:value-of select="gsa:i18n ('Send to host ', 'Alert')"/>
+                  </option>
+                </xsl:otherwise>
+              </xsl:choose>
+
+              <xsl:choose>
+                <xsl:when test="$method/text() = 'SNMP'">
+                  <option data-select="snmp" value="SNMP" selected="1">
+                    <xsl:value-of select="gsa:i18n ('SNMP', 'Alert')"/>
+                  </option>
+                </xsl:when>
+                <xsl:otherwise>
+                  <option data-select="snmp" value="SNMP">
+                    <xsl:value-of select="gsa:i18n ('SNMP', 'Alert')"/>
                   </option>
                 </xsl:otherwise>
               </xsl:choose>
@@ -10942,21 +10968,6 @@ should not have received it.
               </xsl:choose>
 
               <xsl:choose>
-                <xsl:when test="$method/text() = 'verinice Connector'">
-                  <option data-select="verinice" value="verinice Connector" selected="1"
-                    class="form-selection-input-event form-selection-input-event--task">
-                    <xsl:value-of select="gsa:i18n ('verinice.PRO Connector', 'Alert')"/>
-                  </option>
-                </xsl:when>
-                <xsl:otherwise>
-                  <option data-select="verinice" value="verinice Connector"
-                    class="form-selection-input-event form-selection-input-event--task">
-                    <xsl:value-of select="gsa:i18n ('verinice.PRO Connector', 'Alert')"/>
-                  </option>
-                </xsl:otherwise>
-              </xsl:choose>
-
-              <xsl:choose>
                 <xsl:when test="$method/text() = 'Start Task'">
                   <option data-select="start_task" value="Start Task" selected="1"
                     class="form-selection-input-event form-selection-input-event--task">
@@ -10972,40 +10983,29 @@ should not have received it.
               </xsl:choose>
 
               <xsl:choose>
-                <xsl:when test="$method/text() = 'Send'">
-                  <option data-select="send" value="Send" selected="1">
-                    <xsl:value-of select="gsa:i18n ('Send to host ', 'Alert')"/>
+                <xsl:when test="$method/text() = 'Syslog'">
+                  <option data-select="syslog" value="Syslog" selected="1">
+                    <xsl:value-of select="gsa:i18n ('System Logger', 'Alert')"/>
                   </option>
                 </xsl:when>
                 <xsl:otherwise>
-                  <option data-select="send" value="Send">
-                    <xsl:value-of select="gsa:i18n ('Send to host ', 'Alert')"/>
+                  <option data-select="syslog" value="Syslog">
+                    <xsl:value-of select="gsa:i18n ('System Logger', 'Alert')"/>
                   </option>
                 </xsl:otherwise>
               </xsl:choose>
 
               <xsl:choose>
-                <xsl:when test="$method/text() = 'SCP'">
-                  <option data-select="scp" value="SCP" selected="1">
-                    <xsl:value-of select="gsa:i18n ('SCP', 'Alert')"/>
+                <xsl:when test="$method/text() = 'verinice Connector'">
+                  <option data-select="verinice" value="verinice Connector" selected="1"
+                    class="form-selection-input-event form-selection-input-event--task">
+                    <xsl:value-of select="gsa:i18n ('verinice.PRO Connector', 'Alert')"/>
                   </option>
                 </xsl:when>
                 <xsl:otherwise>
-                  <option data-select="scp" value="SCP">
-                    <xsl:value-of select="gsa:i18n ('SCP', 'Alert')"/>
-                  </option>
-                </xsl:otherwise>
-              </xsl:choose>
-
-              <xsl:choose>
-                <xsl:when test="$method/text() = 'SNMP'">
-                  <option data-select="snmp" value="SNMP" selected="1">
-                    <xsl:value-of select="gsa:i18n ('SNMP', 'Alert')"/>
-                  </option>
-                </xsl:when>
-                <xsl:otherwise>
-                  <option data-select="snmp" value="SNMP">
-                    <xsl:value-of select="gsa:i18n ('SNMP', 'Alert')"/>
+                  <option data-select="verinice" value="verinice Connector"
+                    class="form-selection-input-event form-selection-input-event--task">
+                    <xsl:value-of select="gsa:i18n ('verinice.PRO Connector', 'Alert')"/>
                   </option>
                 </xsl:otherwise>
               </xsl:choose>
