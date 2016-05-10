@@ -689,6 +689,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           data-chart-name="notes-text-words"
           data-chart-type="cloud"/>
       </div>
+      <div class="dashboard-data-source"
+        data-source-name="notes-status-src"
+        data-aggregate-type="note"
+        data-group-column="active_days"
+        data-sort-stat="count"
+        data-sort-order="descending"
+        data-max-groups="250">
+        <span class="dashboard-chart"
+          data-chart-name="notes_donut_chart"
+          data-chart-template="active_status"
+          data-chart-type="donut"/>
+      </div>
     </div>
   </div>
 </xsl:template>
