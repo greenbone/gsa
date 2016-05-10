@@ -1957,7 +1957,6 @@
       data_src: get_set_data_source,
       chart_name: get_chart_name,
       chart_type: get_chart_type,
-      chart_template: get_chart_template,
       current_request: get_set_current_request,
       show_loading: show_loading,
       data_loaded: on_data_loaded,
@@ -2029,11 +2028,6 @@
     /* Gets the chart type */
     function get_chart_type() {
       return chart_type;
-    }
-
-    /* Gets the chart template */
-    function get_chart_template() {
-      return chart_template;
     }
 
     /* Gets or sets the current request */
