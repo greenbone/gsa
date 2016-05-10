@@ -10050,6 +10050,9 @@ should not have received it.
               <option data-select="syslog" value="Syslog">
                 <xsl:value-of select="gsa:i18n ('System Logger', 'Alert')"/>
               </option>
+              <option data-select="snmp" value="SNMP">
+                <xsl:value-of select="gsa:i18n ('SNMP', 'Alert')"/>
+              </option>
               <option data-select="http-get" value="HTTP Get"
                 class="form-selection-input-event form-selection-input-event--task">
                 <xsl:value-of select="gsa:i18n ('HTTP Get', 'Alert')"/>
@@ -10273,6 +10276,41 @@ should not have received it.
           <div class="col-10">
             <input type="text" name="method_data:URL" size="30" maxlength="301"
               class="form-control"/>
+          </div>
+        </div>
+
+        <div class="form-group form-selection-item-method form-selection-item-method--http-get"
+          style="display: none" id="http_get_row">
+          <label class="col-2 control-label">
+            <xsl:value-of select="gsa:i18n ('HTTP Get URL 2', 'Alert')"/>
+          </label>
+          <div class="col-10">
+            <input type="text" name="method_data:URL" size="30" maxlength="301"
+              class="form-control"/>
+          </div>
+        </div>
+
+        <!-- Method: SNMP. -->
+
+        <div class="form-group form-selection-item-method form-selection-item-method--snmp"
+          style="display: none" id="snmp_row">
+          <label class="col-2 control-label">
+            <xsl:value-of select="gsa:i18n ('Community', 'Alert')"/>
+          </label>
+          <div class="col-10">
+            <input type="text" name="method_data:snmp_community" size="30" maxlength="301"
+              class="form-control" value="public"/>
+          </div>
+        </div>
+
+        <div class="form-group form-selection-item-method form-selection-item-method--snmp"
+          style="display: none" id="snmp_row">
+          <label class="col-2 control-label">
+            <xsl:value-of select="gsa:i18n ('Agent', 'Alert')"/>
+          </label>
+          <div class="col-10">
+            <input type="text" name="method_data:snmp_agent" size="30" maxlength="301"
+              class="form-control" value="localhost"/>
           </div>
         </div>
 
@@ -10958,11 +10996,25 @@ should not have received it.
                   </option>
                 </xsl:otherwise>
               </xsl:choose>
+
+              <xsl:choose>
+                <xsl:when test="$method/text() = 'SNMP'">
+                  <option data-select="snmp" value="SNMP" selected="1">
+                    <xsl:value-of select="gsa:i18n ('SNMP', 'Alert')"/>
+                  </option>
+                </xsl:when>
+                <xsl:otherwise>
+                  <option data-select="snmp" value="SNMP">
+                    <xsl:value-of select="gsa:i18n ('SNMP', 'Alert')"/>
+                  </option>
+                </xsl:otherwise>
+              </xsl:choose>
             </select>
           </div>
         </div>
 
         <!-- Method: Email. -->
+
         <div class="form-group form-selection-item-method form-selection-item-method--email">
           <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('To Address', 'Alert|Email')"/></label>
           <div class="col-10">
@@ -11208,17 +11260,17 @@ should not have received it.
               <select name="method_data:submethod">
                 <xsl:call-template name="opt">
                   <xsl:with-param name="value" select="'syslog'"/>
-                  <xsl:with-param name="select-value" select="$method/data/text()"/>
+                  <xsl:with-param name="select-value" select="$method/data[name='submethod']/text()"/>
                 </xsl:call-template>
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'SNMP'"/>
-                  <xsl:with-param name="select-value" select="$method/data/text()"/>
-                </xsl:call-template>
+                <xsl:if test="$method/data[name='submethod']/text() != 'syslog'">
+                  <option value="{$method/data/text()}" selected="1">
+                    <xsl:value-of select="$method/data/text()"/>
+                  </option>
+                </xsl:if>
               </select>
             </label>
           </div>
         </div>
-
 
         <!-- Method: HTTP Get. -->
 
@@ -11235,6 +11287,7 @@ should not have received it.
         </div>
 
         <!-- Method: Sourcefire Connector. -->
+
         <div class="form-group form-selection-item-method form-selection-item-method--sourcefire" id="sourcefire_row">
           <label class="col-2 control-label">
             <xsl:value-of select="gsa:i18n ('Defense Center IP', 'Alert')"/>
@@ -11279,6 +11332,7 @@ should not have received it.
         </div>
 
         <!-- Method: verinice Connector. -->
+
         <div class="form-group form-selection-item-method form-selection-item-method--verinice">
           <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('verinice.PRO URL', 'Alert')"/></label>
           <div class="col-10">
@@ -11503,6 +11557,32 @@ should not have received it.
                 <option value="''">--</option>
               </xsl:if>
             </select>
+          </div>
+        </div>
+
+        <!-- Method: SNMP. -->
+
+        <div class="form-group form-selection-item-method form-selection-item-method--snmp"
+          style="display: none" id="snmp_row">
+          <label class="col-2 control-label">
+            <xsl:value-of select="gsa:i18n ('Community', 'Alert')"/>
+          </label>
+          <div class="col-10">
+            <input type="text" name="method_data:snmp_community" size="30" maxlength="301"
+              value="{$method/data[name='snmp_community']/text()}"
+              class="form-control"/>
+          </div>
+        </div>
+
+        <div class="form-group form-selection-item-method form-selection-item-method--snmp"
+          style="display: none" id="snmp_row">
+          <label class="col-2 control-label">
+            <xsl:value-of select="gsa:i18n ('Agent', 'Alert')"/>
+          </label>
+          <div class="col-10">
+            <input type="text" name="method_data:snmp_agent" size="30" maxlength="301"
+              value="{$method/data[name='snmp_agent']/text()}"
+              class="form-control"/>
           </div>
         </div>
 

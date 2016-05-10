@@ -8020,6 +8020,9 @@ append_alert_method_data (GString *xml, params_t *data, const char *method)
                         || strcmp (name, "scp_path") == 0
                         || strcmp (name, "scp_report_format") == 0
                         || strcmp (name, "scp_username") == 0))
+                || (strcmp (method, "SNMP") == 0
+                    && (strcmp (name, "snmp_community") == 0
+                        || strcmp (name, "snmp_agent") == 0))
                 || (strcmp (method, "verinice Connector") == 0
                     && (strcmp (name, "verinice_server_url") == 0
                         || strcmp (name, "verinice_server_username") == 0
