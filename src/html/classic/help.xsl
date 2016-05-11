@@ -1434,12 +1434,33 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </p>
 
       <p>
-      The following replacements in the filename will be done:
+        The following replacements in the filename will be done:
       </p>
 
       <ul>
         <li> $$: $ </li>
         <li> $n: task name </li>
+      </ul>
+
+      <h3>SNMP</h3>
+
+      <p>
+        An SNMP trap will be sent to the given agent.
+      </p>
+
+      <p>
+        The following replacements will be done in the Message:
+      </p>
+
+      <ul>
+        <li> $$: $ </li>
+        <li> $d: date that SecInfo check was last performed (blank for Task alerts)</li>
+        <li> $e: event description </li>
+        <li> $n: task name (blank for SecInfo alerts)</li>
+        <li> $q: the type of SecInfo event: "New", "Updated" or blank for Task alerts</li>
+        <li> $s: the type of SecInfo: "NVT", "CERT-Bund Advisory", ... or blank for Task alerts</li>
+        <li> $S: $s, but plural: "NVTs", "CERT-Bund Advisories", ...</li>
+        <li> $T: Total number of resources in the list for SecInfo alerts; 0 for Task alerts.</li>
       </ul>
     </div>
   </div>

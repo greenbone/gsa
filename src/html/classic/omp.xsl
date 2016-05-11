@@ -10314,6 +10314,17 @@ should not have received it.
           </div>
         </div>
 
+        <div class="form-group form-selection-item-method form-selection-item-method--snmp"
+          style="display: none" id="snmp_row">
+          <label class="col-2 control-label">
+            <xsl:value-of select="gsa:i18n ('Message', 'Alert')"/>
+          </label>
+          <div class="col-10">
+            <input type="text" name="method_data:snmp_message" size="30" maxlength="301"
+              class="form-control" value="$e"/>
+          </div>
+        </div>
+
         <!-- Method: Sourcefire Connector. -->
 
         <div class="form-group form-selection-item-method form-selection-item-method--sourcefire" id="sourcefire_row">
@@ -11573,6 +11584,18 @@ should not have received it.
           <div class="col-10">
             <input type="text" name="method_data:snmp_agent" size="30" maxlength="301"
               value="{$method/data[name='snmp_agent']/text()}"
+              class="form-control"/>
+          </div>
+        </div>
+
+        <div class="form-group form-selection-item-method form-selection-item-method--snmp"
+          style="display: none" id="snmp_row">
+          <label class="col-2 control-label">
+            <xsl:value-of select="gsa:i18n ('Message', 'Alert')"/>
+          </label>
+          <div class="col-10">
+            <input type="text" name="method_data:snmp_message" size="30" maxlength="301"
+              value="{$method/data[name='snmp_message']/text()}"
               class="form-control"/>
           </div>
         </div>
