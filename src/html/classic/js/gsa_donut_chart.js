@@ -503,7 +503,7 @@
       filter_info) {
     var self = this;
     var value = d.data[self.x_field + '~original'];
-    if (value === undefined) {
+    if (!gsa.is_defined(value)) {
       value = d.data[self.x_field];
     }
 
