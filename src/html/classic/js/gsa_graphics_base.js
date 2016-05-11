@@ -4761,7 +4761,7 @@
                     gsa.severity_levels.max_medium));
             }
             create_chart_controller(data_source, generator, for_component,
-                chart_name, unescape_xml(selector_label),
+                chart_name, selector_label,
                 '/img/charts/severity-bar-chart.png', chart_type,
                 chart_template, gen_params, init_params);
           });
