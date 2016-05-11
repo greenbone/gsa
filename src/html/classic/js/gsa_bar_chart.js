@@ -242,7 +242,7 @@
           .attr('y', function(d) { return self.y_scale(0); })
           .attr('width', function(d) { return self.x_scale.rangeBand(); })
           .attr('height', function(d) {
-            return height - self.y_scale(0);
+            return height - self.y_scale(0) - 1;
           })
           .on('mouseover', this.tip.show)
           .on('mouseout', this.tip.hide);
@@ -264,7 +264,7 @@
         .transition().delay(250).duration(250).ease('sin-in-out')
           .attr('y', function(d) { return self.y_scale(d[self.y_field]); })
           .attr('height', function(d) {
-            return height - self.y_scale(d[self.y_field]);
+            return height - self.y_scale(d[self.y_field]) - 1;
           })
           .attr('style', this.bar_style);
 
