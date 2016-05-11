@@ -85,7 +85,6 @@
 
   GanttChartGenerator.prototype.generate = function(controller, data) {
     var display = controller.display();
-    var update = this.mustUpdate(display);
 
     var self = this;
 
@@ -162,7 +161,7 @@
     this.x_scale.domain(x_data)
       .rangeRoundBands([height, 0], 0.125);
 
-    if (!update) {
+    if (this.mustUpdate(display)) {
       display.svg().text('');
 
       var defs = display.svg().append('defs');

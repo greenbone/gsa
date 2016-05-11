@@ -102,11 +102,11 @@
 
   BarChartGenerator.prototype.generate = function(controller, data) {
     var display = controller.display();
-    var update = this.mustUpdate(display);
 
     var self = this;
 
     var records = data.records;
+
     display.setTitle(this.title_generator(data));
 
     var x_data = records.map(function(d) { return d[self.x_field]; });
@@ -132,7 +132,7 @@
     this.x_scale.domain(x_data);
     this.y_scale.domain([0, Math.max.apply(null, y_data)]).nice(10);
 
-    if (!update) {
+    if (this.mustUpdate(display)) {
       display.svg().text('');
       this.svg = display.svg().append('g');
 

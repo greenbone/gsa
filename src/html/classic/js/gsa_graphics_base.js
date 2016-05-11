@@ -4418,7 +4418,7 @@
   };
 
   BaseChartGenerator.prototype.mustUpdate = function(display) {
-    return display.last_generator() === this;
+    return display.last_generator() !== this;
   };
 
   BaseChartGenerator.prototype.setDataTransformFunc = function(value) {

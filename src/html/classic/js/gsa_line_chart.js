@@ -462,7 +462,7 @@
     width = display.svg().attr('width') - self.margin.left -
       self.margin.right;
 
-    if (!update) {
+    if (update) {
       display.svg().text('');
       self.svg = display.svg().append('g');
 
@@ -497,7 +497,7 @@
     self.y_scale.domain([0, y_max]).nice(10);
     self.y2_scale.domain([0, y2_max]).nice(10);
 
-    if (!update) {
+    if (update) {
       display.svg().text('');
       self.svg = display.svg().append('g');
 

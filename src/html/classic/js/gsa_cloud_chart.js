@@ -88,7 +88,6 @@
     var self = this;
 
     var display = controller.display();
-    var update = this.mustUpdate(display);
 
     // evaluate options set by gen_params
     var records = data.records;
@@ -102,7 +101,7 @@
     var width = display.svg().attr('width') - this.margin.left -
       this.margin.right;
 
-    if (!update) {
+    if (this.mustUpdate(display)) {
       display.svg().text('');
       this.svg = display.svg().append('g');
 

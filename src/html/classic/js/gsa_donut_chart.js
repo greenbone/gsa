@@ -93,7 +93,6 @@
 
   DonutChartGenerator.prototype.generate = function(controller, data) {
     var display = controller.display();
-    var update = this.mustUpdate(display);
 
     var self = this;
 
@@ -131,7 +130,7 @@
     var width = display.svg().attr('width') - this.margin.left -
       this.margin.right - legend_width;
 
-    if (!update) {
+    if (this.mustUpdate(display)) {
       display.svg().text('');
       this.svg = display.svg().append('g');
 

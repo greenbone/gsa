@@ -13,6 +13,19 @@
 
 2016-05-11  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_bar_chart.js,
+	src/html/classic/js/gsa_bubble_chart.js,
+	src/html/classic/js/gsa_cloud_chart.js,
+	src/html/classic/js/gsa_donut_chart.js,
+	src/html/classic/js/gsa_gantt_chart.js,
+	src/html/classic/js/gsa_graphics_base.js,
+	src/html/classic/js/gsa_h_bar_chart.js,
+	src/html/classic/js/gsa_line_chart.js: Reverse mustUpdate logic and adjust
+	generator generate methods accordingly. We must do an update if the last
+	generator is not the current generator.
+
+2016-05-11  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_bar_chart.js (BarChartGenerator.prototype.generate):
 	Display bars above the x axis and not on it.
 

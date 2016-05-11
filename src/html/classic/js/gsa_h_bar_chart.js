@@ -149,7 +149,6 @@
   HorizontalBarChartGenerator.prototype.generate = function(controller,
       data) {
     var display = controller.display();
-    var update = this.mustUpdate(display);
 
     var self = this;
     var x_data;
@@ -213,7 +212,7 @@
     this.x_scale.domain(x_data);
     this.y_scale.domain([0, y_max]).nice(10);
 
-    if (!update) {
+    if (this.mustUpdate(display)) {
       display.svg().text('');
       this.svg = display.svg().append('g');
 
