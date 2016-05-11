@@ -4435,12 +4435,12 @@
     display.setTitle(this.title_generator());
   };
 
-  BaseChartGenerator.prototype.generate = function(original_data, controller,
+  BaseChartGenerator.prototype.generate = function(controller, data,
       gen_params) {
   };
 
-  BaseChartGenerator.prototype.generateData = function(original_data,
-      controller, gen_params) {
+  BaseChartGenerator.prototype.generateData = function(controller,
+      original_data, gen_params) {
     return null;
   };
 

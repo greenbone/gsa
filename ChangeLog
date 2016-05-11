@@ -13,6 +13,13 @@
 
 2016-05-11  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_graphics_base.js
+	(BaseChartGenerator.prototype.generate,
+	BaseChartGenerator.prototype.generateCsvData): Update parameter sequence to
+	start with controller also for the BaseChartGenerator.
+
+2016-05-11  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_bar_chart.js (BarChartGenerator.prototype.generate):
 	Don't calculate max y value twice.
 
