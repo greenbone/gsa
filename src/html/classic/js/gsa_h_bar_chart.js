@@ -121,9 +121,9 @@
 
     this.z_fields = gen_params.z_fields;
 
-    if (gen_params.chart_template === undefined ||
+    if (!gsa.has_value(gen_params.chart_template) ||
         gen_params.chart_template === '') {
-      if (this.z_fields && this.z_fields[0]) {
+      if (gsa.is_array(this.z_fields) && gsa.is_string(this.z_fields[0])) {
         if (this.z_fields[0].indexOf('severity') !== -1) {
           this.setBarStyle(gsa.severity_bar_style(this.z_fields[0],
             gsa.severity_levels.max_log,
@@ -134,7 +134,8 @@
         }
       }
       else {
-        if (this.y_field.indexOf('severity') !== -1) {
+        if (gsa.is_string(this.y_field) &&
+            this.y_field.indexOf('severity') !== -1) {
           this.setBarStyle(gsa.severity_bar_style(this.y_field,
             gsa.severity_levels.max_log,
             gsa.severity_levels.max_low,
