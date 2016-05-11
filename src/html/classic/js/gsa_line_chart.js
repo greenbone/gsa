@@ -433,8 +433,6 @@
         .attr('y2', y_range[0] - y_range[1]);
     }
 
-    display.setTitle(this.title_generator(data));
-
     self.setColorScale(gsa.field_name_colors(self.all_y_fields,
         data.column_info, self.y_fields.length));
 

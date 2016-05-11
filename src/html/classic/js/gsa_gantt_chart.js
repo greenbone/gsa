@@ -117,8 +117,6 @@
 
     var records = data.records;
 
-    display.setTitle(this.title_generator(data));
-
     if (!gsa.is_defined(this.empty_text)) {
       this.empty_text = gsa._('No matching {{resource_type}}',
           gsa.resource_type_name(column_info.columns[this.x_field].type));

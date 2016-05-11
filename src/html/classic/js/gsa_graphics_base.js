@@ -2062,6 +2062,8 @@
       if (data === null) {
         return;
       }
+
+      display.setTitle(generator.getTitle(data));
       generator.generate(controller.display(), data);
       display.update_gen_data(generator, gen_params);
       generator.addMenuItems(controller, data);
@@ -4409,6 +4411,10 @@
   BaseChartGenerator.prototype.setName = function(value) {
     this.name = value;
     return this;
+  };
+
+  BaseChartGenerator.prototype.getTitle = function(data) {
+    return this.title_generator(data);
   };
 
   BaseChartGenerator.prototype.setTitleGenerator = function(value) {

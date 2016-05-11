@@ -157,8 +157,6 @@
           gsa.resource_type_name(data.column_info.columns[this.x_field].type));
     }
 
-    display.setTitle(this.title_generator(data));
-
     var records = data.records;
     x_data = records.map(function(d) { return d[self.x_field]; });
     y_data = records.map(function(d) { return d[self.y_field]; });

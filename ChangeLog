@@ -1,3 +1,19 @@
+2016-05-11  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/js/gsa_bar_chart.js,
+	src/html/classic/js/gsa_bubble_chart.js,
+	src/html/classic/js/gsa_cloud_chart.js,
+	src/html/classic/js/gsa_donut_chart.js,
+	src/html/classic/js/gsa_gantt_chart.js,
+	src/html/classic/js/gsa_h_bar_chart.js,
+	src/html/classic/js/gsa_line_chart.js: Remove setting the title at the display
+	form the generate methods.
+
+	* src/html/classic/js/gsa_graphics_base.js
+	(BaseChartGenerator.prototype.getTitle, on_data_loaded): Add getTitle method
+	to BaseChartGenerator. It is always the same for all generators. Set display
+	title after data has been generated.
+
 2016-05-11  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/js/gsa_h_bar_chart.js (evaluateParams): Apply

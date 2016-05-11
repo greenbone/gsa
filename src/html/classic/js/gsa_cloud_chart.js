@@ -88,8 +88,6 @@
     var self = this;
     var records = data.records;
 
-    display.setTitle(this.title_generator(data));
-
     var cloud = d3.layout.cloud();
 
     // Setup display parameters

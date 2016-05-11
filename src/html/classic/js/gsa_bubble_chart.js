@@ -104,8 +104,6 @@
     this.color_label = gsa.column_label(column_info.columns.color_value, false,
         false, this.show_stat_type);
 
-    display.setTitle(this.title_generator(data));
-
     if (!gsa.is_defined(this.empty_text)) {
       this.empty_text = gsa._('No matching {{resource_type}}',
           {

@@ -105,8 +105,6 @@
 
     var records = data.records;
 
-    display.setTitle(this.title_generator(data));
-
     var x_data = records.map(function(d) { return d[self.x_field]; });
     var y_data = records.map(function(d) { return d[self.y_field]; });
 
