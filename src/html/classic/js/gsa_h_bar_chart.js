@@ -146,10 +146,7 @@
     }
   };
 
-  HorizontalBarChartGenerator.prototype.generate = function(controller,
-      data) {
-    var display = controller.display();
-
+  HorizontalBarChartGenerator.prototype.generate = function(display, data) {
     var self = this;
     var x_data;
     var y_data; // == size_data

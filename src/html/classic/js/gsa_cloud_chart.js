@@ -84,13 +84,10 @@
     }
   };
 
-  CloudChartGenerator.prototype.generate = function(controller, data) {
+  CloudChartGenerator.prototype.generate = function(display, data) {
     var self = this;
-
-    var display = controller.display();
-
-    // evaluate options set by gen_params
     var records = data.records;
+
     display.setTitle(this.title_generator(data));
 
     var cloud = d3.layout.cloud();

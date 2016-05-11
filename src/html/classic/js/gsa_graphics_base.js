@@ -2062,8 +2062,7 @@
       if (data === null) {
         return;
       }
-      //TODO remove gen_params argument
-      generator.generate(controller, data, gen_params);
+      generator.generate(controller.display(), data);
       display.update_gen_data(generator, gen_params);
       generator.addMenuItems(controller, data);
     }
@@ -4435,8 +4434,7 @@
     display.setTitle(this.title_generator());
   };
 
-  BaseChartGenerator.prototype.generate = function(controller, data,
-      gen_params) {
+  BaseChartGenerator.prototype.generate = function(display, data) {
   };
 
   BaseChartGenerator.prototype.generateData = function(controller,

@@ -83,9 +83,7 @@
     }
   };
 
-  GanttChartGenerator.prototype.generate = function(controller, data) {
-    var display = controller.display();
-
+  GanttChartGenerator.prototype.generate = function(display, data) {
     var self = this;
 
     this.x_scale = d3.scale.ordinal();

@@ -95,8 +95,7 @@
     }
   };
 
-  BubbleChartGenerator.prototype.generate = function(controller, data) {
-    var display = controller.display();
+  BubbleChartGenerator.prototype.generate = function(display, data) {
     var self = this;
 
     var records = data.records;

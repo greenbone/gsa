@@ -91,9 +91,7 @@
     }
   };
 
-  DonutChartGenerator.prototype.generate = function(controller, data) {
-    var display = controller.display();
-
+  DonutChartGenerator.prototype.generate = function(display, data) {
     var self = this;
 
     if (!gsa.is_defined(this.color_scale)) {

@@ -73,8 +73,7 @@
       gsa._('Loading line chart ...'), gsa._('Bubble Chart')));
   };
 
-  LineChartGenerator.prototype.generate = function(controller, data) {
-    var display = controller.display();
+  LineChartGenerator.prototype.generate = function(display, data) {
     var update = this.mustUpdate(display);
     var records = data.records;
 
