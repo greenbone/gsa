@@ -1,3 +1,11 @@
+2016-05-11  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/omp.xsl (html-overrides-table): Add dashboard to overrides
+	list.
+
+	* src/html/classic/graphics.xsl (js-overrides-top-visualization): Add new
+	template to generate a overrides dashboard.
+
 2016-05-10  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/js/gsa_donut_chart.js (active_status_transform): Add

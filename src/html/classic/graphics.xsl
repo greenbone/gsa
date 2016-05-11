@@ -707,6 +707,114 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
+<xsl:template name="js-overrides-top-visualization">
+  <!-- Setting UUID for chart selection preferences -->
+  <xsl:variable name="controllers_pref_id" select="'054862fe-0781-4527-b1aa-2113bcd16ce7'"/>
+  <!-- Setting UUIDs for row height preferences -->
+  <xsl:variable name="heights_pref_id" select="'a8c246f9-0506-4d8d-be35-a3befb22fbca'"/>
+  <!-- Setting UUID for chart selection preferences -->
+  <xsl:variable name="filters_pref_id" select="'956d13bd-3baa-4404-a138-5e7eb8f9630e'"/>
+
+  <xsl:variable name="default_controllers" select="''"/>
+  <!-- Default row heights, rows separated with "#",
+        number of rows must match default_controllers -->
+  <xsl:variable name="default_heights" select="'280#280'"/>
+  <!-- Default filter selections:
+        Filter UUIDs or empty string for boxes in a row separated with "|",
+        rows separated with "#",
+        number of boxes and rows must match default_controllers -->
+  <xsl:variable name="default_filters" select="'|#|'"/>
+
+  <xsl:variable name="envelope" select="/envelope"/>
+
+  <xsl:variable name="controllers">
+    <xsl:choose>
+      <xsl:when test="/envelope/chart_preferences/chart_preference[@id = $controllers_pref_id]">
+        <xsl:value-of select="/envelope/chart_preferences/chart_preference[@id = $controllers_pref_id]/value"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$default_controllers"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <xsl:variable name="heights">
+    <xsl:choose>
+      <xsl:when test="/envelope/chart_preferences/chart_preference[@id = $heights_pref_id]">
+        <xsl:value-of select="gsa:escape-js (/envelope/chart_preferences/chart_preference[@id = $heights_pref_id]/value)"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$default_heights"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
+  <xsl:variable name="filters_string">
+    <xsl:choose>
+      <xsl:when test="/envelope/chart_preferences/chart_preference[@id = $filters_pref_id]">
+        <xsl:value-of select="gsa:escape-js (/envelope/chart_preferences/chart_preference[@id = $filters_pref_id]/value)"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$default_filters"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
+  <xsl:variable name="filter" select="/envelope/get_overrides/get_overrides_response/filters/term"/>
+  <xsl:variable name="filt_id" select="/envelope/get_overrides/get_overrides_response/filters/@id"/>
+
+  <div class="section-box">
+    <div id="top-overrides-dashboard">
+    </div>
+    <div class="dashboard" id="top-dashboard"
+      data-dashboard-name="top-overrides-dashboard"
+      data-controllers="{$controllers}" data-heights="{$heights}"
+      data-filter="{$filter}"
+      data-filters-id="{$filt_id}"
+      data-filters-string="{$filters_string}"
+      data-controllers-pref-id="{$controllers_pref_id}"
+      data-heights-pref-id="{$heights_pref_id}"
+      data-dashboard-controls="top-dashboard-controls"
+      data-max-components="4">
+      <div class="dashboard-data-source"
+        data-source-name="overrides-created-count-src"
+        data-aggregate-type="override"
+        data-aggregate-mode="count"
+        data-group-column="created"
+        data-filter="{$filter}"
+        data-filter-id="{$filt_id}">
+        <span class="dashboard-chart"
+          data-chart-name="by-created"
+          data-chart-type="line"/>
+      </div>
+      <div class="dashboard-data-source"
+        data-source-name="overrides-text-words-src"
+        data-aggregate-type="override"
+        data-group-column="text"
+        data-aggregate-mode="word_counts"
+        data-filter="{$filter}"
+        data-filter-id="{$filt_id}">
+        <span class="dashboard-chart"
+          data-chart-name="overrides-text-words"
+          data-chart-type="cloud"/>
+      </div>
+      <div class="dashboard-data-source"
+        data-source-name="overrides-status-src"
+        data-aggregate-type="override"
+        data-group-column="active_days"
+        data-sort-stat="count"
+        data-sort-order="descending"
+        data-max-groups="250"
+        data-filter="{$filter}"
+        data-filter-id="{$filt_id}">
+        <span class="dashboard-chart"
+          data-chart-name="overrides_donut_chart"
+          data-chart-template="active_status"
+          data-chart-type="donut"/>
+      </div>
+    </div>
+  </div>
+</xsl:template>
+
 <xsl:template match="dashboard">
   <noscript>
     <div class="gb_window">
