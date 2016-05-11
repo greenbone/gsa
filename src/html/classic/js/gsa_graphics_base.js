@@ -2050,7 +2050,7 @@
 
     /* Shows the "Loading ..." text in the display */
     function show_loading() {
-      generator.showLoading(display);
+      display.setTitle(generator.getTitle());
     }
 
     /* Callback for when data has been loaded */
@@ -4434,10 +4434,6 @@
   BaseChartGenerator.prototype.transformData = function(original_data,
       gen_params) {
     return this.data_transform_func(original_data, gen_params);
-  };
-
-  BaseChartGenerator.prototype.showLoading = function(display) {
-    display.setTitle(this.title_generator());
   };
 
   BaseChartGenerator.prototype.generate = function(display, data) {
