@@ -9922,6 +9922,7 @@ should not have received it.
 </xsl:template>
 
 <xsl:template name="html-create-alert-form">
+  <xsl:param name="credentials"/>
   <xsl:param name="report-formats"/>
   <xsl:param name="filters"/>
   <xsl:param name="tasks"/>
@@ -10362,24 +10363,17 @@ should not have received it.
         </div>
 
         <div class="form-group form-selection-item-method form-selection-item-method--verinice">
-          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('verinice.PRO Username', 'Alert')"/></label>
+          <label class="col-2 control-label">
+            <xsl:value-of select="gsa:i18n ('Credential', 'Credential')"/>
+          </label>
           <div class="col-10">
-            <div class="form-item">
-              <input type="text" name="method_data:verinice_server_username"
-                class="form-control"
-                size="30" maxlength="40"/>
-            </div>
-          </div>
-        </div>
-
-        <div class="form-group form-selection-item-method form-selection-item-method--verinice">
-          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('verinice.PRO Password', 'Alert')"/></label>
-          <div class="col-10">
-            <div class="form-item">
-              <input type="password" name="method_data:verinice_server_password"
-                class="form-control"
-                size="30" maxlength="40"/>
-            </div>
+            <select name="method_data:verinice_server_credential">
+              <xsl:for-each select="$credentials/credential">
+                <option value="{@id}">
+                  <xsl:value-of select="name"/>
+                </option>
+              </xsl:for-each>
+            </select>
           </div>
         </div>
 
@@ -10469,24 +10463,17 @@ should not have received it.
         <!-- Method: SCP. -->
 
         <div class="form-group form-selection-item-method form-selection-item-method--scp">
-          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Username', 'Alert')"/></label>
+          <label class="col-2 control-label">
+            <xsl:value-of select="gsa:i18n ('Credential', 'Credential')"/>
+          </label>
           <div class="col-10">
-            <div class="form-item">
-              <input type="text" name="method_data:scp_username"
-                class="form-control"
-                size="30" maxlength="256"/>
-            </div>
-          </div>
-        </div>
-
-        <div class="form-group form-selection-item-method form-selection-item-method--scp">
-          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Password', 'Alert')"/></label>
-          <div class="col-10">
-            <div class="form-item">
-              <input type="password" name="method_data:scp_password"
-                class="form-control"
-                size="30" maxlength="256"/>
-            </div>
+            <select name="method_data:scp_credential">
+              <xsl:for-each select="$credentials/credential[not (contains (login, '@') or contains (login, ':'))]">
+                <option value="{@id}">
+                  <xsl:value-of select="name"/>
+                </option>
+              </xsl:for-each>
+            </select>
           </div>
         </div>
 
@@ -10550,6 +10537,9 @@ should not have received it.
   <xsl:apply-templates select="create_alert_response"/>
   <xsl:apply-templates select="commands_response/delete_alert_response"/>
   <xsl:call-template name="html-create-alert-form">
+    <xsl:with-param
+      name="credentials"
+      select="get_credentials_response | commands_response/get_credentials_response"/>
     <xsl:with-param
       name="report-formats"
       select="get_report_formats_response | commands_response/get_report_formats_response"/>
@@ -10623,6 +10613,7 @@ should not have received it.
 </xsl:template>
 
 <xsl:template name="html-edit-alert-form">
+  <xsl:param name="credentials"/>
   <xsl:param name="report-formats"></xsl:param>
   <xsl:param name="filters"/>
   <xsl:param name="tasks"/>
@@ -11343,24 +11334,26 @@ should not have received it.
         </div>
 
         <div class="form-group form-selection-item-method form-selection-item-method--verinice">
-          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('verinice.PRO Username', 'Alert')"/></label>
+          <label class="col-2 control-label">
+            <xsl:value-of select="gsa:i18n ('Credential', 'Credential')"/>
+          </label>
           <div class="col-10">
-            <div class="form-item">
-              <input type="text" name="method_data:verinice_server_username"
-                class="form-control" value="{$method/data[name='verinice_server_username']/text()}"
-                size="30" maxlength="40"/>
-            </div>
-          </div>
-        </div>
-
-        <div class="form-group form-selection-item-method form-selection-item-method--verinice">
-          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('verinice.PRO Password', 'Alert')"/></label>
-          <div class="col-10">
-            <div class="form-item">
-              <input type="password" name="method_data:verinice_server_password"
-                class="form-control"
-                size="30" maxlength="40"/>
-            </div>
+            <select name="method_data:verinice_server_credential">
+              <xsl:for-each select="$credentials/credential">
+                <xsl:choose>
+                  <xsl:when test="@id=$method/data[name='verinice_server_credential']/text()">
+                    <option value="{@id}" selected="1">
+                      <xsl:value-of select="name"/>
+                    </option>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <option value="{@id}">
+                      <xsl:value-of select="name"/>
+                    </option>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </xsl:for-each>
+            </select>
           </div>
         </div>
 
@@ -11470,26 +11463,26 @@ should not have received it.
         <!-- Method: SCP. -->
 
         <div class="form-group form-selection-item-method form-selection-item-method--scp">
-          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Username', 'Alert')"/></label>
+          <label class="col-2 control-label">
+            <xsl:value-of select="gsa:i18n ('Credential', 'Credential')"/>
+          </label>
           <div class="col-10">
-            <div class="form-item">
-              <input type="text" name="method_data:scp_username"
-                class="form-control"
-                value="{$method/data[name='scp_username']/text()}"
-                size="30" maxlength="256"/>
-            </div>
-          </div>
-        </div>
-
-        <div class="form-group form-selection-item-method form-selection-item-method--scp">
-          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Password', 'Alert')"/></label>
-          <div class="col-10">
-            <div class="form-item">
-              <input type="password" name="method_data:scp_password"
-                class="form-control"
-                value="{$method/data[name='scp_password']/text()}"
-                size="30" maxlength="256"/>
-            </div>
+            <select name="method_data:scp_credential">
+              <xsl:for-each select="$credentials/credential[not (contains (login, '@') or contains (login, ':'))]">
+                <xsl:choose>
+                  <xsl:when test="@id=$method/data[name='scp_credential']/text()">
+                    <option value="{@id}" selected="1">
+                      <xsl:value-of select="name"/>
+                    </option>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <option value="{@id}">
+                      <xsl:value-of select="name"/>
+                    </option>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </xsl:for-each>
+            </select>
           </div>
         </div>
 
@@ -11593,6 +11586,9 @@ should not have received it.
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:apply-templates select="modify_alert_response"/>
   <xsl:call-template name="html-edit-alert-form">
+    <xsl:with-param
+      name="credentials"
+      select="get_credentials_response | commands_response/get_credentials_response"/>
     <xsl:with-param
       name="report-formats"
       select="get_report_formats_response | commands_response/get_report_formats_response"/>
@@ -11718,7 +11714,14 @@ should not have received it.
       <xsl:choose>
         <xsl:when test="method/text()='SCP'">
           <xsl:value-of select="gsa:i18n ('SCP to ', 'Alert')"/>
-          <xsl:value-of select="method/data[name='scp_username']/text()"/>
+          <xsl:choose>
+            <xsl:when test="method/data[name='scp_credential']/credential/login">
+              <xsl:value-of select="method/data[name='scp_credential']/credential/login"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <i>(<xsl:value-of select="gsa:i18n ('Credential unavailable', 'Alert')"/>)</i>
+            </xsl:otherwise>
+          </xsl:choose>
           <xsl:text>@</xsl:text>
           <xsl:value-of select="method/data[name='scp_host']/text()"/>
           <xsl:text>:</xsl:text>
@@ -12240,12 +12243,26 @@ should not have received it.
                 </tr>
                 <tr>
                   <td width="45"></td>
-                  <td><xsl:value-of select="gsa:i18n ('Username', 'Auth Data')"/>:</td>
+                  <td><xsl:value-of select="gsa:i18n ('Credential', 'Credential')"/>:</td>
                   <td>
+                    <xsl:variable name="credential" select="method/data[name='verinice_server_credential']/credential"/>
                     <xsl:choose>
-                      <xsl:when test="string-length(method/data[name='verinice_server_username']/text()) &gt; 0">
-                        <xsl:value-of select="method/data[name='verinice_server_username']/text()"/>
+                      <xsl:when test="string-length($credential) &gt; 0">
+                        <a href="/omp?cmd=get_credential&amp;credential_id={$credential/@id}&amp;details=1&amp;token={/envelope/token}">
+                          <xsl:value-of select="$credential/name"/>
+                        </a>
+                        <xsl:text> (</xsl:text>
+                        <xsl:value-of select="gsa:i18n ('Username', 'Auth Data')"/>
+                        <xsl:text>: </xsl:text>
+                        <xsl:value-of select="$credential/login"/>
+                        <xsl:text>)</xsl:text>
                       </xsl:when>
+                      <xsl:otherwise>
+                        <xsl:value-of select="gsa:i18n ('Credential unavailable', 'Alert')"/>
+                        <xsl:text> (ID: </xsl:text>
+                        <xsl:value-of select="method/data[name='verinice_server_credential']/text()"/>
+                        <xsl:text>)</xsl:text>
+                      </xsl:otherwise>
                     </xsl:choose>
                   </td>
                 </tr>
@@ -12330,12 +12347,26 @@ should not have received it.
               <xsl:when test="method/text()='SCP'">
                 <tr>
                   <td width="45"></td>
-                  <td><xsl:value-of select="gsa:i18n ('Username', 'Alert|SCP')"/>:</td>
+                  <td><xsl:value-of select="gsa:i18n ('Credential', 'Credential')"/>:</td>
                   <td>
+                    <xsl:variable name="credential" select="method/data[name='scp_credential']/credential"/>
                     <xsl:choose>
-                      <xsl:when test="string-length(method/data[name='scp_username']/text()) &gt; 0">
-                        <xsl:value-of select="method/data[name='scp_username']/text()"/>
+                      <xsl:when test="string-length($credential) &gt; 0">
+                        <a href="/omp?cmd=get_credential&amp;credential_id={$credential/@id}&amp;details=1&amp;token={/envelope/token}">
+                          <xsl:value-of select="$credential/name"/>
+                        </a>
+                        <xsl:text> (</xsl:text>
+                        <xsl:value-of select="gsa:i18n ('Username', 'Auth Data')"/>
+                        <xsl:text>: </xsl:text>
+                        <xsl:value-of select="$credential/login"/>
+                        <xsl:text>)</xsl:text>
                       </xsl:when>
+                      <xsl:otherwise>
+                        <xsl:value-of select="gsa:i18n ('Credential unavailable', 'Alert')"/>
+                        <xsl:text> (ID: </xsl:text>
+                        <xsl:value-of select="method/data[name='scp_credential']/text()"/>
+                        <xsl:text>)</xsl:text>
+                      </xsl:otherwise>
                     </xsl:choose>
                   </td>
                 </tr>

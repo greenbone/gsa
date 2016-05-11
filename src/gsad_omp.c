@@ -7864,6 +7864,51 @@ new_alert (credentials_t *credentials, params_t *params, const char *extra_xml,
   g_free (response);
   free_entity (entity);
 
+  /* Get Credentials. */
+
+  ret = omp (credentials, &response, &entity, response_data,
+             "<get_credentials"
+             " filter=\"type=up owner=any permission=any rows=-1\"/>");
+
+  switch (ret)
+    {
+      case 0:
+      case -1:
+        break;
+      case 1:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting"
+                             " Credentials for new alert. "
+                             "The task was not saved. "
+                             "Diagnostics: Failure to send command to manager daemon.",
+                             "/omp?cmd=get_alerts",
+                             response_data);
+      case 2:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting"
+                             " Credentials for new alert. "
+                             "Diagnostics: Failure to receive response from manager daemon.",
+                             "/omp?cmd=get_alerts",
+                             response_data);
+      default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while getting"
+                             " Credentials for new alert. "
+                             "Diagnostics: Internal Error.",
+                             "/omp?cmd=get_alerts",
+                             response_data);
+    }
+
+  g_string_append (xml, response);
+  g_free (response);
+  free_entity (entity);
+
   g_string_append (xml, "</new_alert>");
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
                             response_data);
@@ -8014,19 +8059,17 @@ append_alert_method_data (GString *xml, params_t *data, const char *method)
                         || strcmp (name, "send_port") == 0
                         || strcmp (name, "send_report_format") == 0))
                 || (strcmp (method, "SCP") == 0
-                    && (strcmp (name, "scp_host") == 0
+                    && (strcmp (name, "scp_credential") == 0
+                        || strcmp (name, "scp_host") == 0
                         || strcmp (name, "scp_known_hosts") == 0
-                        || strcmp (name, "scp_password") == 0
                         || strcmp (name, "scp_path") == 0
-                        || strcmp (name, "scp_report_format") == 0
-                        || strcmp (name, "scp_username") == 0))
+                        || strcmp (name, "scp_report_format") == 0))
                 || (strcmp (method, "SNMP") == 0
                     && (strcmp (name, "snmp_community") == 0
                         || strcmp (name, "snmp_agent") == 0))
                 || (strcmp (method, "verinice Connector") == 0
-                    && (strcmp (name, "verinice_server_url") == 0
-                        || strcmp (name, "verinice_server_username") == 0
-                        || strcmp (name, "verinice_server_password") == 0
+                    && (strcmp (name, "verinice_server_credential") == 0
+                        || strcmp (name, "verinice_server_url") == 0
                         || strcmp (name, "verinice_server_report_format") == 0))
                 || (strcmp (method, "Email") == 0
                     && (strcmp (name, "to_address") == 0
@@ -8773,6 +8816,43 @@ edit_alert (credentials_t * credentials, params_t *params,
                                "Internal error", __FUNCTION__, __LINE__,
                                "An internal error occurred while getting the list "
                                "of tasks. "
+                               "The current list of tasks is not available. "
+                               "Diagnostics: Failure to receive response from manager daemon.",
+                               "/omp?cmd=get_tasks", response_data);
+        }
+    }
+
+  /* Get Credentials. */
+
+  if (command_enabled (credentials, "GET_CREDENTIALS"))
+    {
+      if (openvas_server_sendf (&session,
+                                "<get_credentials"
+                                " filter=\"type=up owner=any permission=any"
+                                "          rows=-1\"/>")
+          == -1)
+        {
+          g_string_free (xml, TRUE);
+          openvas_server_close (socket, session);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while getting the list "
+                               "of credentials. "
+                               "The current list of tasks is not available. "
+                               "Diagnostics: Failure to send command to manager daemon.",
+                               "/omp?cmd=get_alerts", response_data);
+        }
+
+      if (read_string (&session, &xml))
+        {
+          g_string_free (xml, TRUE);
+          openvas_server_close (socket, session);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while getting the list "
+                               "of credentials. "
                                "The current list of tasks is not available. "
                                "Diagnostics: Failure to receive response from manager daemon.",
                                "/omp?cmd=get_tasks", response_data);
