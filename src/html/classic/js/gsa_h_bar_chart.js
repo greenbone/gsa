@@ -121,7 +121,8 @@
 
     this.z_fields = gen_params.z_fields;
 
-    if (gen_params.chart_template === '') {
+    if (gen_params.chart_template === undefined ||
+        gen_params.chart_template === '') {
       if (this.z_fields && this.z_fields[0]) {
         if (this.z_fields[0].indexOf('severity') !== -1) {
           this.setBarStyle(gsa.severity_bar_style(this.z_fields[0],

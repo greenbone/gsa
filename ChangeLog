@@ -1,5 +1,10 @@
 2016-05-11  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/js/gsa_h_bar_chart.js (evaluateParams): Apply
+	field-based bar style if gen_params.chart_template is undefined.
+
+2016-05-11  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/omp.xsl (html-create-alert-form, new_alert)
 	(html-edit-alert-form, edit_alert, alert, alert [details]): Replace
 	username and password fields of SCP and verinice alert methods with
