@@ -10,6 +10,12 @@
 
 2016-05-11  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_h_bar_chart.js
+	(HorizontalBarChartGenerator.prototype.evaluateParams): Remove superflous else
+	branches when setting the bar style.
+
+2016-05-11  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_line_chart.js
 	(LineChartGenerator.prototype.generate): Use is_defined function instead of
 	checking for undefined.

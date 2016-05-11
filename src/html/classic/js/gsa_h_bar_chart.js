@@ -129,21 +129,14 @@
             gsa.severity_levels.max_log,
             gsa.severity_levels.max_low,
             gsa.severity_levels.max_medium));
-        } else {
-          this.setBarStyle(default_bar_style);
         }
       }
-      else {
-        if (gsa.is_string(this.y_field) &&
-            this.y_field.indexOf('severity') !== -1) {
-          this.setBarStyle(gsa.severity_bar_style(this.y_field,
-            gsa.severity_levels.max_log,
-            gsa.severity_levels.max_low,
-            gsa.severity_levels.max_medium));
-        }
-        else {
-          this.setBarStyle(default_bar_style);
-        }
+      else if (gsa.is_string(this.y_field) &&
+          this.y_field.indexOf('severity') !== -1) {
+        this.setBarStyle(gsa.severity_bar_style(this.y_field,
+              gsa.severity_levels.max_log,
+              gsa.severity_levels.max_low,
+              gsa.severity_levels.max_medium));
       }
     }
   };
