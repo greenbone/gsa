@@ -83,7 +83,7 @@
       return d3.svg.line()
         .x(function(d) { return self.x_scale(d[self.x_field]); })
         .y(function(d) { return y_scale(d[field]); })
-        .defined(function(d) { return d[field] !== undefined; });
+        .defined(function(d) { return gsa.is_defined(d[field]); });
     }
 
     self.all_y_fields = self.y_fields.concat(self.y2_fields);
