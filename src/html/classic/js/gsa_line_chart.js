@@ -57,6 +57,10 @@
     this.y_scale = d3.scale.linear();
     this.y2_scale = d3.scale.linear();
 
+    this.x_axis = d3.svg.axis().scale(this.x_scale).orient('bottom').ticks(6);
+    this.y_axis = d3.svg.axis().scale(this.y_scale).orient('left');
+    this.y2_axis = d3.svg.axis().scale(this.y2_scale).orient('right');
+
     this.x_label = '';
     this.y_label = '';
     this.y2_label = '';
@@ -459,27 +463,6 @@
     width = display.svg().attr('width') - self.margin.left -
       self.margin.right;
 
-    if (update) {
-      display.svg().text('');
-      self.svg = display.svg().append('g');
-
-      self.svg.attr('transform',
-        'translate(' + self.margin.left + ',' + self.margin.top + ')');
-
-      self.x_axis = d3.svg.axis()
-        .scale(self.x_scale)
-        .orient('bottom')
-        .ticks(6);
-
-      self.y_axis = d3.svg.axis()
-        .scale(self.y_scale)
-        .orient('left');
-
-      self.y2_axis = d3.svg.axis()
-        .scale(self.y2_scale)
-        .orient('right');
-    }
-
     self.x_scale.range([0, width]);
     self.y_scale.range([height, 0]);
     self.y2_scale.range([height, 0]);
@@ -497,6 +480,9 @@
     if (update) {
       display.svg().text('');
       self.svg = display.svg().append('g');
+
+      self.svg.attr('transform',
+        'translate(' + self.margin.left + ',' + self.margin.top + ')');
 
       self.range_marker_elem = null;
       self.range_marker_resize = false;
