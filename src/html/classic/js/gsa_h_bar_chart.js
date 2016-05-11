@@ -44,8 +44,11 @@
       filter_info: old_data.filter_info
     };
 
-    var y_field = params.y_fields[0];
-    if (y_field === null || y_field === undefined) {
+    var y_field;
+    if (gsa.is_defined(params.y_fields) && gsa.has_value(params.y_fields[0])) {
+      y_field = params.y_fields[0];
+    }
+    else {
       y_field = 'count';
     }
 
