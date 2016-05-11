@@ -130,7 +130,7 @@
     this.y_scale.range([height, 0]);
 
     this.x_scale.domain(x_data);
-    this.y_scale.domain([0, Math.max.apply(null, y_data)]).nice(10);
+    this.y_scale.domain([0, y_max]).nice(10);
 
     if (this.mustUpdate(display)) {
       display.svg().text('');
