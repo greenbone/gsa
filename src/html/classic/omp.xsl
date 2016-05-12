@@ -8710,7 +8710,6 @@ should not have received it.
                     </label>
                     <select margin="50" name="method_data:submethod">
                       <option value="syslog" selected="1">syslog</option>
-                      <option value="SNMP">SNMP</option>
                     </select>
                   </td>
                 </tr>

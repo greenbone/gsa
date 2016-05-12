@@ -1,5 +1,12 @@
 2016-05-12  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Backport r25270.
+
+	* src/html/classic/omp.xsl (html-create-alert-form): Remove SNMP syslog
+	option, like in edit form.
+
+2016-05-12  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/classic/omp.xsl (alert [details]): Move SCP details into
 	method.  Looks like the SCP backport had it in event by mistake.
 
