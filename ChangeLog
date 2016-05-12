@@ -1,5 +1,13 @@
 2016-05-12  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Backport r25229.
+
+	* src/gsad_omp.c (append_alert_method_data): Add return removed in
+	r18026.  This was causing "Sourcefire Connector" parameters to be sent
+	for every type of alert.
+
+2016-05-12  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Backport r25211.
 
 	Add alert method SNMP.

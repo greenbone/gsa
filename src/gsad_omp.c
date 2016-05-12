@@ -6563,6 +6563,8 @@ append_alert_method_data (GString *xml, params_t *data, const char *method)
               xml_string_append (xml,
                                  "<data><name>message</name>%s</data>",
                                  param->value ? param->value : "");
+
+          return;
         }
 
       params_iterator_init (&iter, data);
