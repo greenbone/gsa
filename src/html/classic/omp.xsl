@@ -8955,6 +8955,41 @@ should not have received it.
             </td>
           </tr>
 
+          <!-- Method: SNMP. -->
+
+          <tr class="odd">
+            <td valign="top" width="125"></td>
+            <td colspan="2">
+              <table border="0" width="100%">
+                <tr>
+                  <td colspan="3" valign="top">
+                    <label width="250">
+                      <input type="radio" name="method" value="SNMP"/>
+                      <xsl:value-of select="gsa:i18n ('SNMP', 'Alert')"/>
+                      <xsl:text> </xsl:text>
+                    </label>
+                  </td>
+                </tr>
+                <tr>
+                  <td width="45"></td>
+                  <td width="150"><xsl:value-of select="gsa:i18n ('Community', 'Alert')"/></td>
+                  <td>
+                    <input type="text" name="method_data:snmp_community" size="30"
+                           maxlength="301" value="public"/>
+                  </td>
+                </tr>
+                <tr>
+                  <td width="45"></td>
+                  <td width="150"><xsl:value-of select="gsa:i18n ('Agent', 'Alert')"/></td>
+                  <td>
+                    <input type="text" name="method_data:snmp_agent" size="30" maxlength="301"
+                           value="localhost"/>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
           <xsl:if test="gsa:may-op ('get_filters')">
             <tr>
               <td valign="top" width="145"><xsl:value-of select="gsa:i18n ('Report Result Filter', 'Alert')"/> (<xsl:value-of select="gsa:i18n ('optional', 'Meta Property')"/>)</td>
@@ -9332,12 +9367,14 @@ should not have received it.
                     <select name="method_data:submethod">
                       <xsl:call-template name="opt">
                         <xsl:with-param name="value" select="'syslog'"/>
-                        <xsl:with-param name="select-value" select="$method/data/text()"/>
+                        <xsl:with-param name="select-value" select="$method/data[name='submethod']/text()"/>
                       </xsl:call-template>
-                      <xsl:call-template name="opt">
-                        <xsl:with-param name="value" select="'SNMP'"/>
-                        <xsl:with-param name="select-value" select="$method/data/text()"/>
-                      </xsl:call-template>
+                      <xsl:if test="$method/data[name='submethod']/text() != 'syslog'">
+                        <xsl:call-template name="opt">
+                          <xsl:with-param name="value" select="'SNMP'"/>
+                          <xsl:with-param name="select-value" select="$method/data[name='submethod']/text()"/>
+                        </xsl:call-template>
+                      </xsl:if>
                     </select>
                   </td>
                 </tr>
@@ -9617,6 +9654,42 @@ should not have received it.
                         <option value="''">--</option>
                       </xsl:if>
                     </select>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr class="even">
+
+            <!-- Method: SNMP. -->
+
+            <td valign="top" width="125"></td>
+            <td colspan="2">
+              <table border="0" width="100%">
+                <tr>
+                  <td colspan="3" valign="top">
+                    <xsl:call-template name="radio-button">
+                      <xsl:with-param name="name" select="'method'"/>
+                      <xsl:with-param name="value" select="'SNMP'"/>
+                      <xsl:with-param name="select-value" select="$method/text()"/>
+                      <xsl:with-param name="text" select="gsa:i18n ('SNMP', 'Alert')"/>
+                    </xsl:call-template>
+                  </td>
+                </tr>
+                <tr>
+                  <td width="45"></td>
+                  <td width="150"><xsl:value-of select="gsa:i18n ('Community', 'Alert')"/></td>
+                  <td>
+                    <input type="text" name="method_data:snmp_community"
+                           size="30" maxlength="256" value="{$method/data[name='snmp_community']/text()}"/>
+                  </td>
+                </tr>
+                <tr>
+                  <td width="45"></td>
+                  <td width="150"><xsl:value-of select="gsa:i18n ('Agent', 'Alert')"/></td>
+                  <td>
+                    <input type="text" name="method_data:snmp_agent"
+                           size="30" maxlength="40" value="{$method/data[name='snmp_agent']/text()}"/>
                   </td>
                 </tr>
               </table>
