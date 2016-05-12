@@ -8708,9 +8708,8 @@ should not have received it.
                       <xsl:value-of select="gsa:i18n ('System Logger', 'Alert')"/>
                       <xsl:text> </xsl:text>
                     </label>
-                    <select margin="50" name="method_data:submethod">
-                      <option value="syslog" selected="1">syslog</option>
-                    </select>
+                    <input type="hidden" name="method_data:submethod"
+                           value="syslog"/>
                   </td>
                 </tr>
               </table>
@@ -9371,18 +9370,23 @@ should not have received it.
                       <xsl:with-param name="text" select="gsa:i18n ('System Logger', 'Alert')"/>
                     </xsl:call-template>
                     <xsl:text> </xsl:text>
-                    <select name="method_data:submethod">
-                      <xsl:call-template name="opt">
-                        <xsl:with-param name="value" select="'syslog'"/>
-                        <xsl:with-param name="select-value" select="$method/data[name='submethod']/text()"/>
-                      </xsl:call-template>
-                      <xsl:if test="$method/data[name='submethod']/text() != 'syslog'">
-                        <xsl:call-template name="opt">
-                          <xsl:with-param name="value" select="'SNMP'"/>
-                          <xsl:with-param name="select-value" select="$method/data[name='submethod']/text()"/>
-                        </xsl:call-template>
-                      </xsl:if>
-                    </select>
+                    <xsl:choose>
+                      <xsl:when test="$method/data[name='submethod']/text() = 'syslog'">
+                        <input type="hidden" name="method_data:submethod" value="syslog"/>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <select name="method_data:submethod">
+                          <xsl:call-template name="opt">
+                            <xsl:with-param name="value" select="'syslog'"/>
+                            <xsl:with-param name="select-value" select="$method/data[name='submethod']/text()"/>
+                          </xsl:call-template>
+                          <xsl:call-template name="opt">
+                            <xsl:with-param name="value" select="$method/data[name='submethod']/text()"/>
+                            <xsl:with-param name="select-value" select="$method/data[name='submethod']/text()"/>
+                          </xsl:call-template>
+                        </select>
+                      </xsl:otherwise>
+                    </xsl:choose>
                   </td>
                 </tr>
               </table>

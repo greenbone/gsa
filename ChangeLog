@@ -1,5 +1,14 @@
 2016-05-12  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Backport r25272.
+
+	* src/html/classic/omp.xsl (html-create-alert-form): Use hidden field
+	for submethod, as it's always "syslog".
+	(html-edit-alert-form): When the submethod is "syslog" use a hidden
+	field, otherwise show the dropdown.
+
+2016-05-12  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Backport r25270.
 
 	* src/html/classic/omp.xsl (html-create-alert-form): Remove SNMP syslog
