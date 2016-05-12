@@ -1,3 +1,8 @@
+2016-05-12  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/classic/omp.xsl (html-create-alert-form): Also use the hidden
+	field when submethod is not present.
+
 2016-05-12  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/js/gsa_graphics_base.js (data_severity_level_counts):
