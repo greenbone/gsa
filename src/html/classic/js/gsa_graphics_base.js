@@ -3435,6 +3435,12 @@
       delete records[2];
     }
 
+    for (i in records) {
+      if (records[i][count_field] === 0) {
+        delete records[i];
+      }
+    }
+
     var data = {
       original_xml: old_data.original_xml,
       records: ascending ? records : records.reverse(),
