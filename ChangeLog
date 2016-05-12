@@ -1,5 +1,10 @@
 2016-05-12  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (append_alert_method_data): Return explicitly if data
+	is NULL, to reduce indentation.
+
+2016-05-12  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/classic/omp.xsl (html-create-alert-form): Use hidden field
 	for submethod, as it's always "syslog".
 	(html-edit-alert-form): When the submethod is "syslog" use a hidden
