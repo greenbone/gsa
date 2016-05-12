@@ -10260,7 +10260,6 @@ should not have received it.
             <label>
               <select name="method_data:submethod">
                 <option value="syslog" selected="1">syslog</option>
-                <option value="SNMP">SNMP</option>
               </select>
             </label>
           </div>
@@ -10272,17 +10271,6 @@ should not have received it.
           style="display: none" id="http_get_row">
           <label class="col-2 control-label">
             <xsl:value-of select="gsa:i18n ('HTTP Get URL', 'Alert')"/>
-          </label>
-          <div class="col-10">
-            <input type="text" name="method_data:URL" size="30" maxlength="301"
-              class="form-control"/>
-          </div>
-        </div>
-
-        <div class="form-group form-selection-item-method form-selection-item-method--http-get"
-          style="display: none" id="http_get_row">
-          <label class="col-2 control-label">
-            <xsl:value-of select="gsa:i18n ('HTTP Get URL 2', 'Alert')"/>
           </label>
           <div class="col-10">
             <input type="text" name="method_data:URL" size="30" maxlength="301"

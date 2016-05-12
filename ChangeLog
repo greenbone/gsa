@@ -1,5 +1,11 @@
 2016-05-11  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/classic/omp.xsl (html-create-alert-form): Remove SNMP syslog
+	option, like in edit form.
+	(html-create-alert-form): Remove test field.
+
+2016-05-11  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/classic/omp.xsl (alert, alert [details]): Add details for
 	SNMP.
 
