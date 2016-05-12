@@ -21807,6 +21807,8 @@ should not have received it.
         </xsl:with-param>
       </xsl:call-template>
     </xsl:when>
+  </xsl:choose>
+  <xsl:choose>
     <xsl:when test="/envelope/params/info_type = 'CPE' or /envelope/params/info_type = 'cpe'">
       <xsl:choose>
         <xsl:when test="(/envelope/params/info_name and info_count/filtered &lt;= 1)

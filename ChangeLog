@@ -12,6 +12,11 @@
 
 2016-05-12  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/omp.xsl (get_info_response): Always show get info content
+	independent of an error.
+
+2016-05-12  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/gsad.xsl (error_window, command_result_dialog: Use new
 	error panel to display error boxes instead of gb_window classes. At the end we
 	must get rid of all gb_window stuff.
