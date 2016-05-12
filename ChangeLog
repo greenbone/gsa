@@ -1,5 +1,17 @@
 2016-05-12  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Backport r25264.
+
+	* src/gsad_omp.c (append_alert_method_data): Add "snmp_message".
+
+	* src/html/classic/omp.xsl (html-create-alert-form)
+	(html-edit-alert-form): Add field for SNMP message.
+
+	* src/html/classic/help.xsl (new_alert.html): Describe SNMP message
+	replacements.
+
+2016-05-12  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Backport r25229.
 
 	* src/gsad_omp.c (append_alert_method_data): Add return removed in

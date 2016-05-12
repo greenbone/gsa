@@ -8986,6 +8986,14 @@ should not have received it.
                            value="localhost"/>
                   </td>
                 </tr>
+                <tr>
+                  <td width="45"></td>
+                  <td width="150"><xsl:value-of select="gsa:i18n ('Message', 'Alert')"/></td>
+                  <td>
+                    <input type="text" name="method_data:snmp_message" size="30" maxlength="301"
+                           value="$e"/>
+                  </td>
+                </tr>
               </table>
             </td>
           </tr>
@@ -9690,6 +9698,14 @@ should not have received it.
                   <td>
                     <input type="text" name="method_data:snmp_agent"
                            size="30" maxlength="40" value="{$method/data[name='snmp_agent']/text()}"/>
+                  </td>
+                </tr>
+                <tr>
+                  <td width="45"></td>
+                  <td width="150"><xsl:value-of select="gsa:i18n ('Message', 'Alert')"/></td>
+                  <td>
+                    <input type="text" name="method_data:snmp_message"
+                           size="30" maxlength="40" value="{$method/data[name='snmp_message']/text()}"/>
                   </td>
                 </tr>
               </table>

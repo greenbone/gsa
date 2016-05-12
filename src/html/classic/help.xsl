@@ -1267,11 +1267,27 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </p>
 
       <p>
-      The following replacements in the filename will be done:
+        The following replacements in the filename will be done:
       </p>
 
       <ul>
         <li> $$: $ </li>
+        <li> $n: task name </li>
+      </ul>
+
+      <h3>SNMP</h3>
+
+      <p>
+        An SNMP trap will be sent to the given agent.
+      </p>
+
+      <p>
+        The following replacements will be done in the Message:
+      </p>
+
+      <ul>
+        <li> $$: $ </li>
+        <li> $e: event description </li>
         <li> $n: task name </li>
       </ul>
     </div>
