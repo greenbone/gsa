@@ -61,6 +61,7 @@
   gsa.is_string = is_string;
   gsa.is_defined = is_defined;
   gsa.is_function = is_function;
+  gsa.is_array = Array.isArray;
 
   function LanguageDetector() {
     global.i18nextBrowserLanguageDetector.call(this);
