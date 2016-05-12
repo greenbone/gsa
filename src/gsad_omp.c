@@ -345,6 +345,41 @@ print_chart_pref (gchar *id, gchar *value, GString* buffer)
 }
 
 /**
+ *  @brief Structure to search a key by value
+ */
+typedef struct
+{
+  gchar *value;
+  gchar *key;
+} find_by_value_t;
+
+void init_find_by_value(find_by_value_t *find, gchar *value) {
+  find->key = NULL;
+  find->value = value;
+}
+
+/**
+ * @brief Traverse a g_tree until the first value is found
+ *
+ * @param[in]  key current key in the iteraton
+ * @param[in]  value current value in the iteration
+ * @param[out] data data->value contains the value to seach for. data->key will
+ *                  contain the first found key for the passed value
+ *
+ * @return TRUE if key is found FALSE otherwise
+ */
+static gboolean
+find_by_value (gchar *key, gchar *value,  find_by_value_t *data)
+{
+  if (strcmp (value, data->value) == 0)
+    {
+      data->key = key;
+      return TRUE;
+    }
+  return FALSE;
+}
+
+/**
  * @brief Wrap some XML in an envelope and XSL transform the envelope.
  *
  * @param[in]  credentials  Username and password for authentication.
@@ -24625,6 +24660,7 @@ delete_filter_omp (credentials_t * credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
   param_t *filt_id, *id;
+  find_by_value_t find;
 
   filt_id = params_get (params, "filt_id");
   id = params_get (params, "filter_id");
@@ -24632,6 +24668,16 @@ delete_filter_omp (credentials_t * credentials, params_t *params,
       && (strcmp (id->value, filt_id->value) == 0))
     // TODO: Add params_remove.
     filt_id->value = NULL;
+
+  /* remove to be deleted key from the user credentials */
+  init_find_by_value(&find, id->value);
+
+  g_tree_foreach (credentials->last_filt_ids, (GTraverseFunc)find_by_value,
+                   &find);
+  if (find.key)
+    {
+      g_tree_remove(credentials->last_filt_ids, find.key);
+    }
 
   return delete_resource ("filter", credentials, params, 0, "get_filters",
                           response_data);

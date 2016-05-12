@@ -1,3 +1,9 @@
+2016-05-12  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/gsad_omp.c (find_by_value, delete_filter_omp): Add function to find a
+	the first key in a g_tree by a value. Use this function to also delete a
+	filter id from the last filter id tree when a filter gets deleted.
+
 2016-05-12  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (append_alert_method_data): Return explicitly if data
