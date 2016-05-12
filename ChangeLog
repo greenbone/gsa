@@ -1,5 +1,10 @@
 2016-05-12  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/classic/omp.xsl (alert [details]): Move SCP details into
+	method.  Looks like the SCP backport had it in event by mistake.
+
+2016-05-12  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Backport r25269.
 
 	* src/html/classic/omp.xsl (alert, alert [details]): Add details for

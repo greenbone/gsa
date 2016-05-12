@@ -10134,92 +10134,6 @@ should not have received it.
                  <xsl:text> </xsl:text>
                  <xsl:value-of select="gsa:i18n (event/data[name='status']/text(), 'Status')"/>)
               </xsl:when>
-              <xsl:when test="method/text()='SCP'">
-                <tr>
-                  <td width="45"></td>
-                  <td><xsl:value-of select="gsa:i18n ('Username', 'Alert|SCP')"/>:</td>
-                  <td>
-                    <xsl:choose>
-                      <xsl:when test="string-length(method/data[name='scp_username']/text()) &gt; 0">
-                        <xsl:value-of select="method/data[name='scp_username']/text()"/>
-                      </xsl:when>
-                    </xsl:choose>
-                  </td>
-                </tr>
-                <tr>
-                  <td width="45"></td>
-                  <td><xsl:value-of select="gsa:i18n ('Host', 'Alert|Email')"/>:</td>
-                  <td>
-                    <xsl:choose>
-                      <xsl:when test="string-length(method/data[name='scp_host']/text()) &gt; 0">
-                        <xsl:value-of select="method/data[name='scp_host']/text()"/>
-                      </xsl:when>
-                    </xsl:choose>
-                  </td>
-                </tr>
-                <tr>
-                  <td width="45"></td>
-                  <td><xsl:value-of select="gsa:i18n ('Known Hosts', 'Alert|Email')"/>:</td>
-                  <td>
-                    <xsl:if test="string-length (method/data[name='scp_known_hosts']/text ()) &gt; 0">
-                      <xsl:choose>
-                        <xsl:when test="string-length (method/data[name='scp_known_hosts']/text ()) &gt; 40">
-                          <xsl:choose>
-                            <xsl:when test="contains (substring (method/data[name='scp_known_hosts']/text (), 0, 40), '&#10;')">
-                              <xsl:value-of select="substring-before (substring (method/data[name='scp_known_hosts']/text (), 0, 40), '&#10;')"/>
-                              <xsl:text>...</xsl:text>
-                            </xsl:when>
-                            <xsl:otherwise>
-                              <xsl:value-of select="substring (method/data[name='scp_known_hosts']/text (), 0, 40)"/>
-                              <xsl:text>...</xsl:text>
-                            </xsl:otherwise>
-                          </xsl:choose>
-                        </xsl:when>
-                        <xsl:when test="contains (method/data[name='scp_known_hosts']/text (), '&#10;')">
-                          <xsl:value-of select="substring-before (method/data[name='scp_known_hosts']/text (), '&#10;')"/>
-                          <xsl:text>...</xsl:text>
-                        </xsl:when>
-                        <xsl:otherwise>
-                          <xsl:value-of select="method/data[name='scp_known_hosts']/text()"/>
-                        </xsl:otherwise>
-                      </xsl:choose>
-                    </xsl:if>
-                  </td>
-                </tr>
-                <tr>
-                  <td width="45"></td>
-                  <td><xsl:value-of select="gsa:i18n ('Path', 'Alert|Email')"/>:</td>
-                  <td>
-                    <xsl:choose>
-                      <xsl:when test="string-length(method/data[name='scp_path']/text()) &gt; 0">
-                        <xsl:value-of select="method/data[name='scp_path']/text()"/>
-                      </xsl:when>
-                    </xsl:choose>
-                  </td>
-                </tr>
-                <tr>
-                  <td width="45"></td>
-                  <td><xsl:value-of select="gsa:i18n ('Report', 'Report')"/>:</td>
-                  <td>
-                    <xsl:variable name="id"
-                                  select="method/data[name='scp_report_format']/text()"/>
-                    <xsl:choose>
-                      <xsl:when test="string-length($id) &gt; 0 and boolean (../../get_report_formats_response/report_format[@id=$id])">
-                        <a href="/omp?cmd=get_report_format&amp;report_format_id={$id}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-                           title="{gsa:view_details_title ('Report Format', name)}">
-                          <xsl:value-of select="../../get_report_formats_response/report_format[@id=$id]/name"/>
-                        </a>
-                      </xsl:when>
-                      <xsl:when test="string-length($id) &gt; 0">
-                        <xsl:value-of select="$id"/>
-                      </xsl:when>
-                      <xsl:otherwise>
-                        XML
-                      </xsl:otherwise>
-                    </xsl:choose>
-                  </td>
-                </tr>
-              </xsl:when>
             </xsl:choose>
           </td>
         </tr>
@@ -10442,6 +10356,92 @@ should not have received it.
                     <td>
                       <xsl:variable name="id"
                                     select="method/data[name='send_report_format']/text()"/>
+                      <xsl:choose>
+                        <xsl:when test="string-length($id) &gt; 0 and boolean (../../get_report_formats_response/report_format[@id=$id])">
+                          <a href="/omp?cmd=get_report_format&amp;report_format_id={$id}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+                             title="{gsa:view_details_title ('Report Format', name)}">
+                            <xsl:value-of select="../../get_report_formats_response/report_format[@id=$id]/name"/>
+                          </a>
+                        </xsl:when>
+                        <xsl:when test="string-length($id) &gt; 0">
+                          <xsl:value-of select="$id"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                          XML
+                        </xsl:otherwise>
+                      </xsl:choose>
+                    </td>
+                  </tr>
+                </xsl:when>
+                <xsl:when test="method/text()='SCP'">
+                  <tr>
+                    <td width="45"></td>
+                    <td><xsl:value-of select="gsa:i18n ('Username', 'Alert|SCP')"/>:</td>
+                    <td>
+                      <xsl:choose>
+                        <xsl:when test="string-length(method/data[name='scp_username']/text()) &gt; 0">
+                          <xsl:value-of select="method/data[name='scp_username']/text()"/>
+                        </xsl:when>
+                      </xsl:choose>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td width="45"></td>
+                    <td><xsl:value-of select="gsa:i18n ('Host', 'Alert|Email')"/>:</td>
+                    <td>
+                      <xsl:choose>
+                        <xsl:when test="string-length(method/data[name='scp_host']/text()) &gt; 0">
+                          <xsl:value-of select="method/data[name='scp_host']/text()"/>
+                        </xsl:when>
+                      </xsl:choose>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td width="45"></td>
+                    <td><xsl:value-of select="gsa:i18n ('Known Hosts', 'Alert|Email')"/>:</td>
+                    <td>
+                      <xsl:if test="string-length (method/data[name='scp_known_hosts']/text ()) &gt; 0">
+                        <xsl:choose>
+                          <xsl:when test="string-length (method/data[name='scp_known_hosts']/text ()) &gt; 40">
+                            <xsl:choose>
+                              <xsl:when test="contains (substring (method/data[name='scp_known_hosts']/text (), 0, 40), '&#10;')">
+                                <xsl:value-of select="substring-before (substring (method/data[name='scp_known_hosts']/text (), 0, 40), '&#10;')"/>
+                                <xsl:text>...</xsl:text>
+                              </xsl:when>
+                              <xsl:otherwise>
+                                <xsl:value-of select="substring (method/data[name='scp_known_hosts']/text (), 0, 40)"/>
+                                <xsl:text>...</xsl:text>
+                              </xsl:otherwise>
+                            </xsl:choose>
+                          </xsl:when>
+                          <xsl:when test="contains (method/data[name='scp_known_hosts']/text (), '&#10;')">
+                            <xsl:value-of select="substring-before (method/data[name='scp_known_hosts']/text (), '&#10;')"/>
+                            <xsl:text>...</xsl:text>
+                          </xsl:when>
+                          <xsl:otherwise>
+                            <xsl:value-of select="method/data[name='scp_known_hosts']/text()"/>
+                          </xsl:otherwise>
+                        </xsl:choose>
+                      </xsl:if>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td width="45"></td>
+                    <td><xsl:value-of select="gsa:i18n ('Path', 'Alert|Email')"/>:</td>
+                    <td>
+                      <xsl:choose>
+                        <xsl:when test="string-length(method/data[name='scp_path']/text()) &gt; 0">
+                          <xsl:value-of select="method/data[name='scp_path']/text()"/>
+                        </xsl:when>
+                      </xsl:choose>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td width="45"></td>
+                    <td><xsl:value-of select="gsa:i18n ('Report', 'Report')"/>:</td>
+                    <td>
+                      <xsl:variable name="id"
+                                    select="method/data[name='scp_report_format']/text()"/>
                       <xsl:choose>
                         <xsl:when test="string-length($id) &gt; 0 and boolean (../../get_report_formats_response/report_format[@id=$id])">
                           <a href="/omp?cmd=get_report_format&amp;report_format_id={$id}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
