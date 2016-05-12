@@ -2167,13 +2167,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="heading">Error Message</xsl:param>
   <xsl:param name="message">(Missing message)</xsl:param>
   <xsl:param name="token"></xsl:param>
-  <div class="gb_window">
-    <div class="gb_window_part_left_error"></div>
-    <div class="gb_window_part_right_error"></div>
-    <div class="gb_window_part_center_error">
+  <div class="panel panel-error">
+    <div class="panel-heading">
       <xsl:value-of select="$heading"/>
     </div>
-    <div class="gb_window_part_content_error">
+    <div class="panel-body">
 <!--
       <div class="pull-right">
         <a href="/help/error_messages.html?token={$token}" title="Help: Error Message">
@@ -2279,53 +2277,51 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:when test="not ($always-visible) and ($status = '200' or $status = '201' or $status = '202')">
     </xsl:when>
     <xsl:otherwise>
-      <div class="gb_window">
-        <div class="gb_window_part_left_error"></div>
-        <div class="gb_window_part_right_error"></div>
-        <div class="gb_window_part_center_error">
-          Results of last operation
+      <div class="panel panel-error">
+        <div class="panel-heading">
+          <h3 class="panel-title">
+            Results of last operation
+          </h3>
         </div>
 
-        <div class="gb_window_part_content_no_pad">
-          <div style="text-align:left;">
-            <table>
-              <xsl:choose>
-                <xsl:when test="$operation = ''">
-                </xsl:when>
-                <xsl:otherwise>
-                  <tr>
-                    <td>Operation:</td>
-                    <td><xsl:value-of select="$operation"/></td>
-                  </tr>
-                </xsl:otherwise>
-              </xsl:choose>
-
-              <xsl:choose>
-                <xsl:when test="$status = ''">
-                </xsl:when>
-                <xsl:otherwise>
-                  <tr>
-                    <td>Status code:</td>
-                    <td><xsl:value-of select="$status"/></td>
-                  </tr>
-                </xsl:otherwise>
-              </xsl:choose>
-
-              <tr>
-                <td>Status message:</td>
-                <td><xsl:value-of select="$msg"/></td>
-              </tr>
-            </table>
-
+        <div class="panel-body">
+          <table>
             <xsl:choose>
-              <xsl:when test="$details = ''">
+              <xsl:when test="$operation = ''">
               </xsl:when>
               <xsl:otherwise>
-                <table><tr><td><xsl:value-of select="$details"/></td></tr></table>
+                <tr>
+                  <td>Operation:</td>
+                  <td><xsl:value-of select="$operation"/></td>
+                </tr>
               </xsl:otherwise>
             </xsl:choose>
 
-          </div>
+            <xsl:choose>
+              <xsl:when test="$status = ''">
+              </xsl:when>
+              <xsl:otherwise>
+                <tr>
+                  <td>Status code:</td>
+                  <td><xsl:value-of select="$status"/></td>
+                </tr>
+              </xsl:otherwise>
+            </xsl:choose>
+
+            <tr>
+              <td>Status message:</td>
+              <td><xsl:value-of select="$msg"/></td>
+            </tr>
+          </table>
+
+          <xsl:choose>
+            <xsl:when test="$details = ''">
+            </xsl:when>
+            <xsl:otherwise>
+              <table><tr><td><xsl:value-of select="$details"/></td></tr></table>
+            </xsl:otherwise>
+          </xsl:choose>
+
         </div>
       </div>
     </xsl:otherwise>

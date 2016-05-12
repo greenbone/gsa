@@ -12,6 +12,12 @@
 
 2016-05-12  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/gsad.xsl (error_window, command_result_dialog: Use new
+	error panel to display error boxes instead of gb_window classes. At the end we
+	must get rid of all gb_window stuff.
+
+2016-05-12  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/css/gsa-base.css: Introduce panel css classes for a panel
 	component. A panel is some kind of dialog box with an optional header and
 	footer and some body for a message. Currently four panel types are provided:
