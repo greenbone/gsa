@@ -9873,6 +9873,10 @@ should not have received it.
         <xsl:when test="method/text()='Syslog' and method/data[name='submethod']/text() = 'SNMP'">
           SNMP
         </xsl:when>
+        <xsl:when test="method/text()='SNMP'">
+          <xsl:value-of select="gsa:i18n ('SNMP to ', 'Alert')"/>
+          <xsl:value-of select="method/data[name='snmp_agent']/text()"/>
+        </xsl:when>
         <xsl:otherwise>
           <xsl:value-of select="gsa:i18n (method/text(), 'Alert')"/>
           <xsl:choose>
@@ -10451,6 +10455,41 @@ should not have received it.
                         <xsl:otherwise>
                           XML
                         </xsl:otherwise>
+                      </xsl:choose>
+                    </td>
+                  </tr>
+                </xsl:when>
+                <xsl:when test="method/text()='SNMP'">
+                  <tr>
+                    <td width="45"></td>
+                    <td>Community:</td>
+                    <td>
+                      <xsl:choose>
+                        <xsl:when test="string-length(method/data[name='snmp_community']/text()) &gt; 0">
+                          <xsl:value-of select="method/data[name='snmp_community']/text()"/>
+                        </xsl:when>
+                      </xsl:choose>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td width="45"></td>
+                    <td>Agent:</td>
+                    <td>
+                      <xsl:choose>
+                        <xsl:when test="string-length(method/data[name='snmp_agent']/text()) &gt; 0">
+                          <xsl:value-of select="method/data[name='snmp_agent']/text()"/>
+                        </xsl:when>
+                      </xsl:choose>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td width="45"></td>
+                    <td>Message:</td>
+                    <td>
+                      <xsl:choose>
+                        <xsl:when test="string-length(method/data[name='snmp_message']/text()) &gt; 0">
+                          <xsl:value-of select="method/data[name='snmp_message']/text()"/>
+                        </xsl:when>
                       </xsl:choose>
                     </td>
                   </tr>

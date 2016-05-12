@@ -1,5 +1,12 @@
 2016-05-12  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Backport r25269.
+
+	* src/html/classic/omp.xsl (alert, alert [details]): Add details for
+	SNMP.
+
+2016-05-12  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Backport r25264.
 
 	* src/gsad_omp.c (append_alert_method_data): Add "snmp_message".
