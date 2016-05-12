@@ -24785,7 +24785,7 @@ save_filter_omp (credentials_t * credentials, params_t *params,
 
     /* Modify the filter. */
 
-    ret = openvas_server_sendf (&session,
+    ret = openvas_server_sendf_xml (&session,
                                 "<modify_filter filter_id=\"%s\">"
                                 "<name>%s</name>"
                                 "<comment>%s</comment>"
