@@ -9370,19 +9370,21 @@ should not have received it.
                       <xsl:with-param name="text" select="gsa:i18n ('System Logger', 'Alert')"/>
                     </xsl:call-template>
                     <xsl:text> </xsl:text>
+                    <xsl:variable name="submethod"
+                                  select="$method/data[name='submethod']/text()"/>
                     <xsl:choose>
-                      <xsl:when test="$method/data[name='submethod']/text() = 'syslog'">
+                      <xsl:when test="string-length ($submethod) = 0 or $submethod = 'syslog'">
                         <input type="hidden" name="method_data:submethod" value="syslog"/>
                       </xsl:when>
                       <xsl:otherwise>
                         <select name="method_data:submethod">
                           <xsl:call-template name="opt">
                             <xsl:with-param name="value" select="'syslog'"/>
-                            <xsl:with-param name="select-value" select="$method/data[name='submethod']/text()"/>
+                            <xsl:with-param name="select-value" select="$submethod"/>
                           </xsl:call-template>
                           <xsl:call-template name="opt">
-                            <xsl:with-param name="value" select="$method/data[name='submethod']/text()"/>
-                            <xsl:with-param name="select-value" select="$method/data[name='submethod']/text()"/>
+                            <xsl:with-param name="value" select="$submethod"/>
+                            <xsl:with-param name="select-value" select="$submethod"/>
                           </xsl:call-template>
                         </select>
                       </xsl:otherwise>

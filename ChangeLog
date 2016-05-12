@@ -1,5 +1,12 @@
 2016-05-12  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Backport r25290.
+
+	* src/html/classic/omp.xsl (html-create-alert-form): Also use the hidden
+	field when submethod is not present.
+
+2016-05-12  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Backport r25272.
 
 	* src/html/classic/omp.xsl (html-create-alert-form): Use hidden field
