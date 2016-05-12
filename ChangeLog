@@ -12,6 +12,14 @@
 
 2016-05-12  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/css/gsa-base.css: Introduce panel css classes for a panel
+	component. A panel is some kind of dialog box with an optional header and
+	footer and some body for a message. Currently four panel types are provided:
+	default (gray), success (light green), warning (light orange) and error
+	(light red).
+
+2016-05-12  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/gsad_omp.c (save_filter_omp): Send save request to server via
 	openvas_server_sendf_xml instead of openvas_server_sendf. We are sending xml
 	and the content must be escaped because filter term may contain xml characters
