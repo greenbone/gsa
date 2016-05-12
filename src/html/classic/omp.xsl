@@ -10251,19 +10251,7 @@ should not have received it.
 
         <!-- Method: System Logger. -->
 
-        <div class="form-group form-selection-item-method form-selection-item-method--syslog"
-          style="display: none">
-          <label class="col-2 control-label">
-            <xsl:value-of select="gsa:i18n ('System Logger', 'Alert')"/>
-          </label>
-          <div class="col-10">
-            <label>
-              <select name="method_data:submethod">
-                <option value="syslog" selected="1">syslog</option>
-              </select>
-            </label>
-          </div>
-        </div>
+        <input type="hidden" name="method_data:submethod" value="syslog"/>
 
         <!-- Method: HTTP Get. -->
 
@@ -11238,27 +11226,32 @@ should not have received it.
 
         <!-- Method: System Logger. -->
 
-        <div class="form-group form-selection-item-method form-selection-item-method--syslog"
-          style="display: none">
-          <label class="col-2 control-label">
-            <xsl:value-of select="gsa:i18n ('System Logger', 'Alert')"/>
-          </label>
-          <div class="col-10">
-            <label>
-              <select name="method_data:submethod">
-                <xsl:call-template name="opt">
-                  <xsl:with-param name="value" select="'syslog'"/>
-                  <xsl:with-param name="select-value" select="$method/data[name='submethod']/text()"/>
-                </xsl:call-template>
-                <xsl:if test="$method/data[name='submethod']/text() != 'syslog'">
-                  <option value="{$method/data/text()}" selected="1">
-                    <xsl:value-of select="$method/data/text()"/>
-                  </option>
-                </xsl:if>
-              </select>
-            </label>
-          </div>
-        </div>
+        <xsl:choose>
+          <xsl:when test="$method/data[name='submethod']/text() = 'syslog'">
+            <input type="hidden" name="method_data:submethod" value="syslog"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <div class="form-group form-selection-item-method form-selection-item-method--syslog"
+              style="display: none">
+              <label class="col-2 control-label">
+                <xsl:value-of select="gsa:i18n ('Log Level', 'Alert')"/>
+              </label>
+              <div class="col-10">
+                <label>
+                  <select name="method_data:submethod">
+                    <xsl:call-template name="opt">
+                      <xsl:with-param name="value" select="'syslog'"/>
+                      <xsl:with-param name="select-value" select="$method/data[name='submethod']/text()"/>
+                    </xsl:call-template>
+                    <option value="{$method/data/text()}" selected="1">
+                      <xsl:value-of select="$method/data/text()"/>
+                    </option>
+                  </select>
+                </label>
+              </div>
+            </div>
+          </xsl:otherwise>
+        </xsl:choose>
 
         <!-- Method: HTTP Get. -->
 
