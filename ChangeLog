@@ -1,4 +1,9 @@
-2016-05-12  Björn Ricks <bjoern.ricks@greenbone.net>
+2016-05-13  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/css/gsa-base.css: Also show footer in header color for
+	error panels.
+
+2016-05-13  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/omp.xsl (html-create-alert-form, html-edit-alert-form: Add
 	margin before create credential icon. To get a margin after a select a select2

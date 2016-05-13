@@ -638,7 +638,8 @@ textarea.form-control {
   border-color: #ebccd1;
 }
 
-.panel-error > .panel-heading {
+.panel-error > .panel-heading,
+.panel-error > .panel-footer {
   color: #a94442;
   background-color: #f2dede;
   border-color: #ebccd1;
