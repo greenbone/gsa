@@ -1,5 +1,11 @@
 2016-05-13  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/gsad_omp.c (filter_exists, get_many): Check if a filter still exists
+	when calling get many with a filter id in the params. Reset filter id if the
+	filter doesn't exist anymore.
+
+2016-05-13  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/gsad_omp.c (find_by_value, delete_filter_omp): Change find_by_value to
 	store a list of keys. The last filter id tree may contain several keys for a
 	filter id. Therefore we should remove all entries for the to be deleted filter

@@ -272,6 +272,7 @@ static char *wizard_get (credentials_t *, params_t *, const char *,
 
 int token_user_remove (const char *);
 
+static int omp_success (entity_t entity);
 
 /* Helpers. */
 
@@ -382,6 +383,37 @@ find_by_value (gchar *key, gchar *value,  find_by_value_t *data)
       data->keys = g_list_append (data->keys, key);
     }
   return FALSE;
+}
+
+
+/**
+ * @brief Check whether an filter exists
+ *
+ * @param[in] entity  Response entity.
+ *
+ * @return 1 success, 0 fail, -1 error, -2 could not send command to server,
+ *         -3 could not read entity from server.
+ */
+static int
+filter_exists (gnutls_session_t *session, const char *filt_id)
+{
+  entity_t entity;
+
+  if (filt_id == NULL)
+    return 1;
+
+  /* check if filter still exists */
+  if (openvas_server_sendf (session, "<get_filters filter_id='%s'/>", filt_id))
+    {
+      return -2;
+    }
+
+  if (read_entity (session, &entity))
+    {
+      return -3;
+    }
+
+  return omp_success(entity);
 }
 
 /**
@@ -1972,6 +2004,32 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
                              "The current list of resources is not available. "
                              "Diagnostics: Failure to connect to manager daemon.",
                              "/omp?cmd=get_tasks", response_data);
+    }
+
+  /* check if filter still exists */
+  switch (filter_exists (&session, filt_id))
+    {
+      case 1:
+        break;
+      case 0:
+        tracef ("%s filter doesn't exist anymore %s!\n", __FUNCTION__, filt_id);
+        filt_id = NULL;
+        break;
+      case -1:
+        tracef ("%s filter response didn't contain a status!\n", __FUNCTION__);
+        filt_id = NULL;
+        break;
+      case -2:
+        tracef ("%s could not send filter request!\n", __FUNCTION__);
+        filt_id = NULL;
+        break;
+      case -3:
+        tracef ("%s could not read entity from filter response!\n",
+                __FUNCTION__);
+        filt_id = NULL;
+        break;
+      default:
+        filt_id = NULL;
     }
 
   xml = g_string_new ("");
