@@ -235,21 +235,21 @@
           }
 
           extra = '';
-          if (gsa.is_defined(this.tooltips)) {
-            for (var tooltip in this.tooltips) {
+          if (gsa.is_defined(self.tooltips)) {
+            for (var tooltip in self.tooltips) {
 
-              if (tooltip.label) {
-                extra += '<br/><strong>' + tooltip.label + ':</strong> ';
+              if (self.tooltips[tooltip].label) {
+                extra += '<br/><strong>' + self.tooltips[tooltip].label + ':</strong> ';
               }
               else {
                 extra += '<br/>';
               }
 
-              if (gsa.is_date(d[tooltip.field])) {
-                extra += gsa.datetime_format(d[tooltip.field]);
+              if (gsa.is_date(d[self.tooltips[tooltip].field])) {
+                extra += gsa.datetime_format(d[self.tooltips[tooltip].field]);
               }
               else {
-                extra += d[tooltip.field];
+                extra += d[self.tooltips[tooltip].field];
               }
             }
           }
@@ -268,16 +268,16 @@
             }
           }
           else if (self.y_field.indexOf('severity_score') !== -1) {
-            if (gsa.is_defined(this.score_severity) &&
-                gsa.is_defined(this.score_assets) &&
-                gsa.is_defined(this.score_asset_type)) {
+            if (gsa.is_defined(self.score_severity) &&
+                gsa.is_defined(self.score_assets) &&
+                gsa.is_defined(self.score_asset_type)) {
               var breakdown_extra;
-              if (this.score_asset_type === 'hosts') {
+              if (self.score_asset_type === 'hosts') {
                 breakdown_extra = gsa._('<br/>({{assets}} Host(s) with ' +
                       'average severity {{severity}})',
                     {
-                      assets: d[this.score_assets],
-                      severity: d[this.score_severity],
+                      assets: d[self.score_assets],
+                      severity: d[self.score_severity],
                     });
               }
               else {

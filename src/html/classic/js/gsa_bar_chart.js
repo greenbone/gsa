@@ -162,21 +162,21 @@
 
           extra = '';
           /* FIXME this is unused for bar chart. Remove? */
-          if (gsa.is_defined(this.tooltips)) {
-            for (var tooltip in this.tooltips) {
+          if (gsa.is_defined(self.tooltips)) {
+            for (var tooltip in self.tooltips) {
 
-              if (tooltip.label) {
-                extra += '<br/><strong>' + tooltip.label + ':</strong> ';
+              if (self.tooltips[tooltip].label) {
+                extra += '<br/><strong>' + self.tooltips[tooltip].label + ':</strong> ';
               }
               else {
                 extra += '<br/>';
               }
 
-              if (gsa.is_date(d[tooltip.field])) {
-                extra += gsa.datetime_format(d[tooltip.field]);
+              if (gsa.is_date(d[self.tooltips[tooltip].field])) {
+                extra += gsa.datetime_format(d[self.tooltips[tooltip].field]);
               }
               else {
-                extra += d[tooltip.field];
+                extra += d[self.tooltips[tooltip].field];
               }
             }
           }
