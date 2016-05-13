@@ -1,5 +1,20 @@
 2016-05-13  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	Add new Assets Dashboard.
+
+	* CMakeLists.txt: Install src/html/classic/img/asset.svg.
+
+	* src/html/classic/graphics.xsl (dashboard): Add case for "assets".
+	(dashboard [assets]): New template.
+
+	* src/html/classic/gsad.xsl (html-gsa-navigation): Add dashboard as new
+	top item in Assets menu.  Also show menu when user has "get_assets"
+	permission.
+
+	* src/html/classic/img/asset.svg: New image.
+
+2016-05-13  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/gsad_omp.c (get_aggregate_omp): Replace request parameters
 	sort_field, sort_stat, sort_order with their new hashtable variants
 	sort_fields, sort_stats, sort_orders, allowing sorting by multiple

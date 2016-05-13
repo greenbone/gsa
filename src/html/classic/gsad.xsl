@@ -1816,21 +1816,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </li>
     <li>
       <xsl:choose>
-        <xsl:when test="gsa:may-op ('GET_REPORTS')">
+        <xsl:when test="gsa:may-op ('GET_ASSETS') or gsa:may-op ('GET_REPORTS')">
           <a class="top_button"
-             href="/omp?cmd=get_assets&amp;asset_type=host&amp;token={/envelope/token}">
+             href="/omp?cmd=dashboard&amp;dashboard_name=assets&amp;token={/envelope/token}">
             <xsl:value-of select="gsa:i18n ('Assets', 'Main Menu')"/>
             <div class="first_button_overlay">
               <ul class="first_button_overlay">
                 <li class="pointy"></li>
                 <li class="first_button_overlay">
-                  <xsl:value-of select="gsa:i18n('Hosts', 'Host')"/>
+                  <xsl:value-of select="gsa:i18n('Dashboard', 'Dashboard')"/>
                 </li>
               </ul>
             </div>
           </a>
           <ul>
             <li class="pointy"></li>
+            <li><a href="/omp?cmd=dashboard&amp;dashboard_name=assets&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('Dashboard', 'Dashboard')"/></a></li>
             <li><a href="/omp?cmd=get_assets&amp;asset_type=host&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('Hosts', 'Host')"/></a></li>
             <li><a href="/omp?cmd=get_assets&amp;asset_type=os&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('Operating Systems', 'Host')"/></a></li>
             <li class="last"><a href="/omp?cmd=get_report&amp;type=assets&amp;apply_overrides=1&amp;levels=hm&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('Hosts (Classic)', 'Host')"/></a></li>

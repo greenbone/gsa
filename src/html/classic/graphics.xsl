@@ -830,6 +830,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </noscript>
 
   <xsl:choose>
+    <xsl:when test="name='assets'">
+      <xsl:apply-templates select="." mode="assets"/>
+    </xsl:when>
     <xsl:when test="name='' or name='secinfo'">
       <xsl:apply-templates select="." mode="secinfo"/>
     </xsl:when>
@@ -846,6 +849,175 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </div>
     </xsl:otherwise>
   </xsl:choose>
+</xsl:template>
+
+<xsl:template match="dashboard" mode="assets">
+  <xsl:variable name="filters" select="get_filters_response/filter[type='Asset' or type='']"/>
+  <!-- Default chart selections:
+        Controller names of boxes in a row separated with "|",
+        rows separated with "#" -->
+  <xsl:variable name="default_controllers" select="'most-vulnerable-hosts|most-vulnerable-oss#hosts-by-class|oss-by-class'"/>
+  <!-- Default row heights, rows separated with "#",
+        number of rows must match default_controllers -->
+  <xsl:variable name="default_heights" select="'280#280'"/>
+  <!-- Default filter selections:
+        Filter UUIDs or empty string for boxes in a row separated with "|",
+        rows separated with "#",
+        number of boxes and rows must match default_controllers -->
+  <xsl:variable name="default_filters" select="'|#|'"/>
+
+  <xsl:variable name="envelope" select="/envelope"/>
+
+  <!-- Setting UUID for chart selection preferences -->
+  <xsl:variable name="controllers_pref_id" select="'0320e0db-bf30-4d4f-9379-b0a022d07cf7'"/>
+  <!-- Setting UUID for chart selection preferences -->
+  <xsl:variable name="filters_pref_id" select="'48c344eb-062e-4ff5-81db-28f7ab110ca1'"/>
+  <!-- Setting UUIDs for row height preferences -->
+  <xsl:variable name="heights_pref_id" select="'d52373d8-90d9-4921-b03f-1ffd11e03f49'"/>
+
+  <xsl:variable name="controllers">
+    <xsl:choose>
+      <xsl:when test="/envelope/chart_preferences/chart_preference[@id = $controllers_pref_id]">
+        <xsl:value-of select="/envelope/chart_preferences/chart_preference[@id = $controllers_pref_id]/value"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$default_controllers"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <xsl:variable name="heights">
+    <xsl:choose>
+      <xsl:when test="/envelope/chart_preferences/chart_preference[@id = $heights_pref_id]">
+        <xsl:value-of select="gsa:escape-js (/envelope/chart_preferences/chart_preference[@id = $heights_pref_id]/value)"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$default_heights"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <xsl:variable name="filters_string">
+    <xsl:choose>
+      <xsl:when test="/envelope/chart_preferences/chart_preference[@id = $filters_pref_id]">
+        <xsl:value-of select="gsa:escape-js (/envelope/chart_preferences/chart_preference[@id = $filters_pref_id]/value)"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$default_filters"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
+  <div class="section-header">
+    <h1>
+      <img class="icon icon-lg" src="/img/asset.svg" alt="Assets Dashboard"/>
+      <xsl:value-of select="gsa:i18n ('Assets Dashboard', 'Dashboard')"/>
+    </h1>
+  </div>
+  <div class="section-box">
+    <div id="assets-dashboard-controls" style="text-align:right;">
+    </div>
+    <div id="assets-dashboard" class="dashboard" data-dashboard-name="assets-dashboard"
+      data-controllers="{$controllers}" data-heights="{$heights}"
+      data-filters-string="{$filters_string}" data-controllers-pref-id="{$controllers_pref_id}"
+      data-filters-pref-id="{$filters_pref_id}" data-heights-pref-id="{$heights_pref_id}"
+      data-default-controller-string="nvt_bar_chart"
+      data-dashboard-controls="assets-dashboard-controls"
+      data-no-chart-links="{/envelope/params/no_chart_links}"
+      data-max-components="8">
+      <xsl:for-each select="$filters">
+        <span class="dashboard-filter" data-id="{@id}"
+          data-name="{name}"
+          data-term="{term}" data-type="{type}" />
+      </xsl:for-each>
+
+      <!-- Hosts -->
+      <div class="dashboard-data-source"
+        data-source-name="hosts-severity-count-source"
+        data-group-column="severity"
+        data-aggregate-type="host">
+        <span class="dashboard-chart"
+          data-chart-name="hosts-by-cvss"
+          data-chart-type="bar"
+          data-chart-template="info_by_cvss"/>
+        <span class="dashboard-chart"
+          data-chart-name="hosts-by-class"
+          data-chart-type="donut"
+          data-chart-template="info_by_class"/>
+      </div>
+      <div class="dashboard-data-source"
+        data-source-name="most-vulnerable-hosts-source"
+        data-aggregate-type="host"
+        data-group-column="uuid"
+        data-columns="severity"
+        data-text-columns="name,modified"
+        data-sort-fields="severity,modified"
+        data-sort-orders="descending,descending"
+        data-sort-stats="max,value">
+        <span class="dashboard-chart"
+          data-chart-name="most-vulnerable-hosts"
+          data-chart-type="horizontal_bar"
+          data-x-field="name"
+          data-y-fields="severity_max"
+          data-z-fields="severity_max"
+          data-gen-params='{{"empty_text": "No vulnerable Hosts found",
+                             "extra_tooltip_field_1": "modified",
+                             "extra_tooltip_label_1": "Updated" }}'
+          data-init-params='{{"title_text": "Most vulnerable hosts"}}'/>
+      </div>
+      <div class="dashboard-data-source"
+        data-source-name="host-counts-timeline-source"
+        data-aggregate-type="host"
+        data-group-column="modified"
+        data-subgroup-column="severity_level">
+        <span class="dashboard-chart"
+          data-chart-name="host-counts-timeline"
+          data-y-fields="c_count,c_count[High]"
+          data-z-fields="count,count[High]"
+          data-chart-type="line"/>
+      </div>
+
+      <!-- Operating Systems -->
+      <div class="dashboard-data-source"
+        data-source-name="os-average-severity-count-source"
+        data-group-column="average_severity"
+        data-aggregate-type="os">
+        <span class="dashboard-chart"
+          data-chart-name="oss-by-cvss"
+          data-chart-type="bar"
+          data-chart-template="info_by_cvss"/>
+        <span class="dashboard-chart"
+          data-chart-name="oss-by-class"
+          data-chart-type="donut"
+          data-chart-template="info_by_class"/>
+      </div>
+      <div class="dashboard-data-source"
+        data-source-name="most-vulnerable-oss-source"
+        data-aggregate-type="os"
+        data-group-column="uuid"
+        data-columns="average_severity,average_severity_score,hosts"
+        data-text-columns="name,modified"
+        data-sort-fields="average_severity_score,modified"
+        data-sort-orders="descending,descending"
+        data-sort-stats="max,value">
+        <span class="dashboard-chart"
+          data-chart-name="most-vulnerable-oss"
+          data-chart-type="horizontal_bar"
+          data-x-field="name"
+          data-y-fields="average_severity_score_max"
+          data-z-fields="average_severity_max"
+          data-gen-params='{{"empty_text": "No vulnerable Operating Systems found",
+                             "score_severity" : "average_severity_max",
+                             "score_assets" : "hosts_max",
+                             "score_asset_type" : "hosts",
+                             "extra_tooltip_field_1": "modified",
+                             "extra_tooltip_label_1": "Updated"}}'
+          data-init-params='{{"title_text": "Most vulnerable Operating Systems"}}'/>
+      </div>
+    </div>
+  </div>
+
+  <xsl:call-template name="init-d3charts"/>
+  <!-- TODO: Update data sources to support multiple filters and
+             add filter selection to chart boxes again -->
 </xsl:template>
 
 <xsl:template match="dashboard" mode="secinfo">
