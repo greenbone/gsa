@@ -10372,7 +10372,7 @@ should not have received it.
                 </option>
               </xsl:for-each>
             </select>
-            <div class="form-item">
+            <div class="form-item icon">
               <a href="#" title="{ gsa:i18n('Create a new Credential', 'Credential') }"
                 class="new-action-icon" data-type="credential" data-done="select[name='method_data:verinice_server_credential']" data-extra="restrict_credential_type=up">
                 <img src="/img/new.png"/>
@@ -10478,7 +10478,7 @@ should not have received it.
                 </option>
               </xsl:for-each>
             </select>
-            <div class="form-item">
+            <div class="form-item icon">
               <a href="#" title="{ gsa:i18n('Create a new Credential', 'Credential') }"
                 class="new-action-icon" data-type="credential" data-done="select[name='method_data:scp_credential']" data-extra="restrict_credential_type=up">
                 <img src="/img/new.png"/>
@@ -11371,7 +11371,7 @@ should not have received it.
                 </xsl:choose>
               </xsl:for-each>
             </select>
-            <div class="form-item">
+            <div class="form-item icon">
               <a href="#" title="{ gsa:i18n('Create a new Credential', 'Credential') }"
                 class="new-action-icon" data-type="credential" data-done="select[name='method_data:verinice_server_credential']" data-extra="restrict_credential_type=up">
                 <img src="/img/new.png"/>
@@ -11506,7 +11506,7 @@ should not have received it.
                 </xsl:choose>
               </xsl:for-each>
             </select>
-            <div class="form-item">
+            <div class="form-item icon">
               <a href="#" title="{ gsa:i18n('Create a new Credential', 'Credential') }"
                 class="new-action-icon" data-type="credential" data-done="select[name='method_data:scp_credential']" data-extra="restrict_credential_type=up">
                 <img src="/img/new.png"/>
