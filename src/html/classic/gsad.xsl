@@ -2195,48 +2195,59 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="message">(Missing message)</xsl:param>
   <xsl:param name="backurl">/omp?cmd=get_tasks</xsl:param>
   <xsl:param name="token"></xsl:param>
-  <div class="gb_error_dialog_container">
+  <div class="gsa-head">
+    <xsl:call-template name="html-gsa-logo">
+      <xsl:with-param name="username">
+        <xsl:value-of select="login/text()"/>
+      </xsl:with-param>
+      <xsl:with-param name="time">
+        <xsl:value-of select="time"/>
+      </xsl:with-param>
+    </xsl:call-template>
+    <xsl:call-template name="html-gsa-navigation"/>
+  </div>
+  <div class="gsa-main">
     <div>
-      <div class="gb_window gb_error_dialog">
-        <div class="gb_window_part_left_error"></div>
-        <div class="gb_window_part_right_error"></div>
-        <div class="gb_window_part_center_error">Error Message</div>
-        <div class="gb_window_part_content_error" style="text-align:center;">
-          <div class="pull-right">
-            <a href="/help/error_messages.html?token={$token}" title="Help: Error Message">
-              <img src="/img/help.png"/>
-            </a>
-          </div>
-          <br/>
-          <img src="/img/alert_sign.png" alt="" title="{$title}"
-               class="pull-left" style="margin-left:10px;"/>
-          <span style="font-size:16px;">
-            <div style="font-weight:bold;padding-top:12px;font-size:20px;">
-              <xsl:value-of select="$title"/>
+      <div class="panel panel-error">
+        <div class="panel-heading">
+          <h3 class="panel-title">Error Message</h3>
+        </div>
+        <div class="panel-body">
+          <div class="row">
+            <div class="pull-right">
+              <a href="/help/error_messages.html?token={$token}" title="Help: Error Message">
+                <img src="/img/help.png"/>
+              </a>
             </div>
-            <br clear="all"/>
-            <xsl:value-of select="$message"/>
-          </span>
-          <div style="margin-top:10px;">
-            Your options (not all may work):<br/>
-            'Back' button of browser
-            <xsl:choose>
-              <xsl:when test="string-length ($token) &gt; 0">
-                <xsl:choose>
-                  <xsl:when test="contains ($backurl, '?')">
-                    | <a href="{$backurl}&amp;token={$token}">Assumed sane state</a>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    | <a href="{$backurl}?token={$token}">Assumed sane state</a>
-                  </xsl:otherwise>
-                </xsl:choose>
-                | <a href="/logout?token={$token}">Logout</a>
-              </xsl:when>
-              <xsl:otherwise>
-                | <a href="/logout">Logout</a>
-              </xsl:otherwise>
-            </xsl:choose>
+            <img src="/img/alert_sign.png" alt="" title="{$title}"
+              class="pull-left" style="margin-left:10px;"/>
+            <h4>
+              <xsl:value-of select="$title"/>
+            </h4>
           </div>
+          <p style="margin-top: 10px; font-size: 16px;">
+            <xsl:value-of select="$message"/>
+          </p>
+        </div>
+        <div class="panel-footer">
+          Your options (not all may work):
+          'Back' button of browser
+          <xsl:choose>
+            <xsl:when test="string-length ($token) &gt; 0">
+              <xsl:choose>
+                <xsl:when test="contains ($backurl, '?')">
+                  | <a href="{$backurl}&amp;token={$token}">Assumed sane state</a>
+                </xsl:when>
+                <xsl:otherwise>
+                  | <a href="{$backurl}?token={$token}">Assumed sane state</a>
+                </xsl:otherwise>
+              </xsl:choose>
+              | <a href="/logout?token={$token}">Logout</a>
+            </xsl:when>
+            <xsl:otherwise>
+              | <a href="/logout">Logout</a>
+            </xsl:otherwise>
+          </xsl:choose>
         </div>
       </div>
       <xsl:call-template name="html-footer"/>
