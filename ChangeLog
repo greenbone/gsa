@@ -1,3 +1,11 @@
+2016-05-13  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	Partial backport of r25300.
+
+	* src/gsad.c (start_http_daemon, start_https_daemon): Increase limit
+	of maximum connections per IP as the previous limit did not properly
+	address more complex use cases.
+
 2016-05-12  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Backport r25290.
