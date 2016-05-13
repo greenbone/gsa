@@ -350,12 +350,16 @@ print_chart_pref (gchar *id, gchar *value, GString* buffer)
 typedef struct
 {
   gchar *value;
-  gchar *key;
+  GList *keys;
 } find_by_value_t;
 
 void init_find_by_value(find_by_value_t *find, gchar *value) {
-  find->key = NULL;
+  find->keys = NULL;
   find->value = value;
+}
+
+void free_find_by_value(find_by_value_t *find) {
+  g_list_free (find->keys);
 }
 
 /**
@@ -363,18 +367,19 @@ void init_find_by_value(find_by_value_t *find, gchar *value) {
  *
  * @param[in]  key current key in the iteraton
  * @param[in]  value current value in the iteration
- * @param[out] data data->value contains the value to seach for. data->key will
- *                  contain the first found key for the passed value
+ * @param[out] data data->value contains the value to seach for. data->keys will
+ *                  contain all found keys for the passed value
  *
- * @return TRUE if key is found FALSE otherwise
+ * @return FALSE to iterrate over all items in the tree
  */
 static gboolean
 find_by_value (gchar *key, gchar *value,  find_by_value_t *data)
 {
   if (strcmp (value, data->value) == 0)
     {
-      data->key = key;
-      return TRUE;
+      tracef ("%s found key %s for value %s\n",
+                  __FUNCTION__, key, value);
+      data->keys = g_list_append (data->keys, key);
     }
   return FALSE;
 }
@@ -24660,6 +24665,7 @@ delete_filter_omp (credentials_t * credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
   param_t *filt_id, *id;
+  GList *list;
   find_by_value_t find;
 
   filt_id = params_get (params, "filt_id");
@@ -24670,14 +24676,24 @@ delete_filter_omp (credentials_t * credentials, params_t *params,
     filt_id->value = NULL;
 
   /* remove to be deleted key from the user credentials */
-  init_find_by_value(&find, id->value);
+  init_find_by_value (&find, id->value);
 
   g_tree_foreach (credentials->last_filt_ids, (GTraverseFunc)find_by_value,
-                   &find);
-  if (find.key)
+                  &find);
+  if (find.keys != NULL)
     {
-      g_tree_remove(credentials->last_filt_ids, find.key);
+      list = g_list_first (find.keys);
+
+      while (list != NULL)
+        {
+          tracef ("%s removing filter from last filter ids for %s\n",
+                  __FUNCTION__, (char *)list->data);
+          g_tree_remove (credentials->last_filt_ids, list->data);
+          list = g_list_next (find.keys);
+        }
     }
+
+  free_find_by_value(&find);
 
   return delete_resource ("filter", credentials, params, 0, "get_filters",
                           response_data);

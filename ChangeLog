@@ -1,5 +1,12 @@
 2016-05-13  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/gsad_omp.c (find_by_value, delete_filter_omp): Change find_by_value to
+	store a list of keys. The last filter id tree may contain several keys for a
+	filter id. Therefore we should remove all entries for the to be deleted filter
+	id.
+
+2016-05-13  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/gsad.xsl (error_window): Refactor error window template to
 	use error panel instead of gb window. Also improve the layout of the page to
 	use standard layout and css classes.
