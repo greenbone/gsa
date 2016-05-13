@@ -1,3 +1,8 @@
+2016-05-13  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/classic/img/asset.svg: Replaced temporary icon
+	with actual asset icon.
+
 2016-05-13  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Add new Assets Dashboard.
