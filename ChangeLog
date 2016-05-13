@@ -1,3 +1,9 @@
+2016-05-13  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	* src/gsad.c (start_unix_http_daemon, start_http_daemon)
+	(start_https_daemon): Increase limit of maximum connections per IP as
+	the previous limit did not properly address more complex use cases.
+
 2016-05-13  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/gsad_omp.c (filter_exists, get_many): Check if a filter still exists

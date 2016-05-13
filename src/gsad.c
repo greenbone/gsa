@@ -5301,7 +5301,7 @@ start_unix_http_daemon (const char *unix_socket_path,
           (MHD_USE_THREAD_PER_CONNECTION | MHD_USE_DEBUG, 0,
            NULL, NULL, handler, NULL, MHD_OPTION_NOTIFY_COMPLETED,
            free_resources, NULL, MHD_OPTION_LISTEN_SOCKET, unix_socket,
-           MHD_OPTION_PER_IP_CONNECTION_LIMIT, 15,
+           MHD_OPTION_PER_IP_CONNECTION_LIMIT, 30,
            MHD_OPTION_EXTERNAL_LOGGER, mhd_logger, NULL, MHD_OPTION_END);
 }
 
@@ -5326,7 +5326,7 @@ start_http_daemon (int port,
           (MHD_USE_THREAD_PER_CONNECTION | MHD_USE_DEBUG | ipv6_flag, port,
            NULL, NULL, handler, NULL, MHD_OPTION_NOTIFY_COMPLETED,
            free_resources, NULL, MHD_OPTION_SOCK_ADDR, &address,
-           MHD_OPTION_PER_IP_CONNECTION_LIMIT, 15,
+           MHD_OPTION_PER_IP_CONNECTION_LIMIT, 30,
            MHD_OPTION_EXTERNAL_LOGGER, mhd_logger, NULL, MHD_OPTION_END);
 }
 
@@ -5352,7 +5352,7 @@ start_https_daemon (int port, const char *key, const char *cert,
            MHD_OPTION_HTTPS_MEM_CERT, cert,
            MHD_OPTION_NOTIFY_COMPLETED, free_resources, NULL,
            MHD_OPTION_SOCK_ADDR, &address,
-           MHD_OPTION_PER_IP_CONNECTION_LIMIT, 15,
+           MHD_OPTION_PER_IP_CONNECTION_LIMIT, 30,
            MHD_OPTION_HTTPS_PRIORITIES, priorities,
            MHD_OPTION_EXTERNAL_LOGGER, mhd_logger, NULL,
 /* LibmicroHTTPD 0.9.35 and higher. */
