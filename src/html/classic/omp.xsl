@@ -8248,6 +8248,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="next" value="get_credential"/>
         <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
+        <input type="hidden" name="restrict_credential_type" value="{/envelope/params/restrict_credential_type}"/>
         <div class="form-group">
           <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></label>
           <div class="col-10">
@@ -8265,29 +8266,39 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </div>
         </div>
         <div class="form-group">
+          <xsl:variable name="allowed_types" select="str:tokenize (/envelope/params/restrict_credential_type, '|')"/>
+
           <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Type', 'Credential')"/></label>
           <div class="col-10">
             <select class="col-2 control-label form-selection-control" id="credentials" name="base">
-              <xsl:call-template name="opt">
-                <xsl:with-param name="value" select="'up'"/>
-                <xsl:with-param name="content" select="gsa:i18n ('Username + Password', 'Credential')"/>
-                <xsl:with-param name="select-value" select="/envelope/params/base"/>
-              </xsl:call-template>
-              <xsl:call-template name="opt">
-                <xsl:with-param name="value" select="'usk'"/>
-                <xsl:with-param name="content" select="gsa:i18n ('Username + SSH Key', 'Credential')"/>
-                <xsl:with-param name="select-value" select="/envelope/params/base"/>
-              </xsl:call-template>
-              <xsl:call-template name="opt">
-                <xsl:with-param name="value" select="'cc'"/>
-                <xsl:with-param name="content" select="gsa:i18n ('Client Certificate', 'Credential')"/>
-                <xsl:with-param name="select-value" select="/envelope/params/base"/>
-              </xsl:call-template>
-              <xsl:call-template name="opt">
-                <xsl:with-param name="value" select="'snmp'"/>
-                <xsl:with-param name="content" select="gsa:i18n ('SNMP', 'Credential')"/>
-                <xsl:with-param name="select-value" select="/envelope/params/base"/>
-              </xsl:call-template>
+              <xsl:if test="(count($allowed_types) = 0) or (count($allowed_types[text()='up']))">
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'up'"/>
+                  <xsl:with-param name="content" select="gsa:i18n ('Username + Password', 'Credential')"/>
+                  <xsl:with-param name="select-value" select="/envelope/params/base"/>
+                </xsl:call-template>
+              </xsl:if>
+              <xsl:if test="(count($allowed_types) = 0) or (count($allowed_types[text()='usk']))">
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'usk'"/>
+                  <xsl:with-param name="content" select="gsa:i18n ('Username + SSH Key', 'Credential')"/>
+                  <xsl:with-param name="select-value" select="/envelope/params/base"/>
+                </xsl:call-template>
+              </xsl:if>
+              <xsl:if test="(count($allowed_types) = 0) or (count($allowed_types[text()='cc']))">
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'cc'"/>
+                  <xsl:with-param name="content" select="gsa:i18n ('Client Certificate', 'Credential')"/>
+                  <xsl:with-param name="select-value" select="/envelope/params/base"/>
+                </xsl:call-template>
+              </xsl:if>
+              <xsl:if test="(count($allowed_types) = 0) or (count($allowed_types[text()='snmp']))">
+                <xsl:call-template name="opt">
+                  <xsl:with-param name="value" select="'snmp'"/>
+                  <xsl:with-param name="content" select="gsa:i18n ('SNMP', 'Credential')"/>
+                  <xsl:with-param name="select-value" select="/envelope/params/base"/>
+                </xsl:call-template>
+              </xsl:if>
             </select>
           </div>
         </div>
@@ -10361,6 +10372,12 @@ should not have received it.
                 </option>
               </xsl:for-each>
             </select>
+            <div class="form-item">
+              <a href="#" title="{ gsa:i18n('Create a new Credential', 'Credential') }"
+                class="new-action-icon" data-type="credential" data-done="select[name='method_data:verinice_server_credential']" data-extra="restrict_credential_type=up">
+                <img src="/img/new.png"/>
+              </a>
+            </div>
           </div>
         </div>
 
@@ -10461,6 +10478,12 @@ should not have received it.
                 </option>
               </xsl:for-each>
             </select>
+            <div class="form-item">
+              <a href="#" title="{ gsa:i18n('Create a new Credential', 'Credential') }"
+                class="new-action-icon" data-type="credential" data-done="select[name='method_data:scp_credential']" data-extra="restrict_credential_type=up">
+                <img src="/img/new.png"/>
+              </a>
+            </div>
           </div>
         </div>
 
@@ -11348,6 +11371,12 @@ should not have received it.
                 </xsl:choose>
               </xsl:for-each>
             </select>
+            <div class="form-item">
+              <a href="#" title="{ gsa:i18n('Create a new Credential', 'Credential') }"
+                class="new-action-icon" data-type="credential" data-done="select[name='method_data:verinice_server_credential']" data-extra="restrict_credential_type=up">
+                <img src="/img/new.png"/>
+              </a>
+            </div>
           </div>
         </div>
 
@@ -11477,6 +11506,12 @@ should not have received it.
                 </xsl:choose>
               </xsl:for-each>
             </select>
+            <div class="form-item">
+              <a href="#" title="{ gsa:i18n('Create a new Credential', 'Credential') }"
+                class="new-action-icon" data-type="credential" data-done="select[name='method_data:scp_credential']" data-extra="restrict_credential_type=up">
+                <img src="/img/new.png"/>
+              </a>
+            </div>
           </div>
         </div>
 
@@ -14429,7 +14464,7 @@ should not have received it.
                 <input type="text" name="port" value="22" size="6"
                        maxlength="400"/>
                 <a href="#" title="{ gsa:i18n('Create a credential') }"
-                  class="new-action-icon" data-type="credential" data-done="select[name=ssh_credential_id]">
+                  class="new-action-icon" data-type="credential" data-done="select[name=ssh_credential_id]" data-extra="restrict_credential_type=up|usk">
                   <img class="valign-middle" src="/img/new.png"/>
                 </a>
               </td>
@@ -14444,7 +14479,7 @@ should not have received it.
                   </xsl:apply-templates>
                 </select>
                 <a href="#" title="{ gsa:i18n('Create a credential') }"
-                  class="new-action-icon" data-type="credential" data-done="select[name=smb_credential_id]">
+                  class="new-action-icon" data-type="credential" data-done="select[name=smb_credential_id]" data-extra="restrict_credential_type=up">
                   <img class="valign-middle" src="/img/new.png"/>
                 </a>
               </td>
@@ -14459,7 +14494,7 @@ should not have received it.
                   </xsl:apply-templates>
                 </select>
                 <a href="#" title="{ gsa:i18n('Create a credential') }"
-                  class="new-action-icon" data-type="credential" data-done="select[name=esxi_credential_id]">
+                  class="new-action-icon" data-type="credential" data-done="select[name=esxi_credential_id]" data-extra="restrict_credential_type=up">
                   <img class="valign-middle" src="/img/new.png"/>
                 </a>
               </td>
@@ -14474,7 +14509,7 @@ should not have received it.
                   </xsl:apply-templates>
                 </select>
                 <a href="#" title="{ gsa:i18n('Create a credential') }"
-                  class="new-action-icon" data-type="credential" data-done="select[name=snmp_credential_id]">
+                  class="new-action-icon" data-type="credential" data-done="select[name=snmp_credential_id]" data-extra="restrict_credential_type=snmp">
                   <img class="valign-middle" src="/img/new.png"/>
                 </a>
               </td>
@@ -14767,7 +14802,7 @@ should not have received it.
                       </xsl:otherwise>
                     </xsl:choose>
                     <a href="#" title="{ gsa:i18n('Create a credential') }"
-                      class="new-action-icon" data-type="credential" data-done="select[name=ssh_credential_id]">
+                      class="new-action-icon" data-type="credential" data-done="select[name=ssh_credential_id]" data-extra="restrict_credential_type=up|usk">
                       <img class="valign-middle" src="/img/new.png"/>
                     </a>
                   </td>
@@ -14799,7 +14834,7 @@ should not have received it.
                       </xsl:for-each>
                     </select>
                     <a href="#" title="{ gsa:i18n('Create a credential') }"
-                      class="new-action-icon" data-type="credential" data-done="select[name=smb_credential_id]">
+                      class="new-action-icon" data-type="credential" data-done="select[name=smb_credential_id]" data-extra="restrict_credential_type=up">
                       <img class="valign-middle" src="/img/new.png"/>
                     </a>
                   </td>
@@ -14831,7 +14866,7 @@ should not have received it.
                       </xsl:for-each>
                     </select>
                     <a href="#" title="{ gsa:i18n('Create a credential') }"
-                      class="new-action-icon" data-type="credential" data-done="select[name=esxi_credential_id]">
+                      class="new-action-icon" data-type="credential" data-done="select[name=esxi_credential_id]" data-extra="restrict_credential_type=up">
                       <img class="valign-middle" src="/img/new.png"/>
                     </a>
                   </td>
@@ -14863,7 +14898,7 @@ should not have received it.
                       </xsl:for-each>
                     </select>
                     <a href="#" title="{ gsa:i18n('Create a credential') }"
-                      class="new-action-icon" data-type="credential" data-done="select[name=snmp_credential_id]">
+                      class="new-action-icon" data-type="credential" data-done="select[name=snmp_credential_id]" data-extra="restrict_credential_type=snmp">
                       <img class="valign-middle" src="/img/new.png"/>
                     </a>
                   </td>
@@ -19227,7 +19262,7 @@ should not have received it.
                 </xsl:for-each>
               </select>
               <a href="#" title="{ gsa:i18n('Create a new Credential', 'Credential') }"
-                  class="new-action-icon" data-type="credential" data-done="select[name=credential_id]">
+                  class="new-action-icon" data-type="credential" data-done="select[name=credential_id]" data-extra="restrict_credential_type=cc">
                 <img class="valign-middle" src="/img/new.png"/>
               </a>
             </td>
@@ -19434,6 +19469,10 @@ should not have received it.
                   </xsl:call-template>
                 </xsl:for-each>
               </select>
+              <a href="#" title="{ gsa:i18n('Create a new Credential', 'Credential') }"
+                  class="new-action-icon" data-type="credential" data-done="select[name=credential_id]" data-extra="restrict_credential_type=cc">
+                <img class="valign-middle" src="/img/new.png"/>
+              </a>
             </td>
           </tr>
           <tr>
@@ -19951,7 +19990,7 @@ should not have received it.
                 </xsl:for-each>
               </select>
               <a href="#" title="{ gsa:i18n('Create a new Credential', 'Credential') }"
-                  class="new-action-icon" data-type="credential" data-done="select[name=credential_id]">
+                  class="new-action-icon" data-type="credential" data-done="select[name=credential_id]" data-extra="restrict_credential_type=up">
                 <img class="valign-middle" src="/img/new.png"/>
               </a>
             </td>
@@ -20122,6 +20161,10 @@ should not have received it.
                   </xsl:call-template>
                 </xsl:for-each>
               </select>
+              <a href="#" title="{ gsa:i18n('Create a new Credential', 'Credential') }"
+                  class="new-action-icon" data-type="credential" data-done="select[name=credential_id]" data-extra="restrict_credential_type=up">
+                <img class="valign-middle" src="/img/new.png"/>
+              </a>
             </td>
           </tr>
           <tr>

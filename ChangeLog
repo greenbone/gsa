@@ -1,3 +1,15 @@
+2016-05-13  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/gsad.c (init_validator): Add param restrict_credential_type.
+
+	* src/html/classic/omp.xsl (html-create-credential-form): Show only
+	credential types listed in restrict_credential_type when it is given.
+	(html-create-alert-form, html-edit-alert-form, html-create-target-form)
+	(html-edit-target-form, html-create-scanner-form)
+	(html-edit-scanner-form, html-create-slave-form, html-edit-slave-form):
+	Add buttons to create a new Credential and add restrict_credential_type
+	param to existing buttons.
+
 2016-05-12  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/omp.xsl (html-create-alert-form): Also use the hidden
