@@ -1,5 +1,23 @@
 2016-05-13  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/gsad_omp.c (get_aggregate_omp): Replace request parameters
+	sort_field, sort_stat, sort_order with their new hashtable variants
+	sort_fields, sort_stats, sort_orders, allowing sorting by multiple
+	fields using the new sort element in the OMP command.
+
+	* src/gsad.c (init_validator, params_append_mhd, params_mhd_add):
+	Add new hashtable params sort_fields, sort_orders and sort_stats.
+
+	* src/html/classic/graphics.xsl (js-scan-management-top-visualization):
+	Add modification time as secondary sorting column for "Top 10"
+	bar charts and change sort data attribute names to their plural forms.
+
+	* src/html/classic/js/gsa_graphics_base.js (create_data_source)
+	(on_ready): Replace parameters sort_field, sort_stat, sort_order with
+	sort_fields, sort_stats, sort_orders.
+
+2016-05-13  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/js/gsa_bar_chart.js (generate): Fix extra tooltip
 	lines.
 

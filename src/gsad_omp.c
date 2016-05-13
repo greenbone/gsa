@@ -7663,13 +7663,16 @@ get_aggregate_omp (credentials_t * credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
   params_t *data_columns, *text_columns;
+  params_t *sort_fields, *sort_stats, *sort_orders;
   params_iterator_t data_columns_iterator, text_columns_iterator;
+  params_iterator_t sort_fields_iterator, sort_stats_iterator;
+  params_iterator_t sort_orders_iterator;
   char *param_name;
   param_t *param;
 
   const char *data_column, *group_column, *subgroup_column, *type;
   const char *filter, *filt_id, *xml_param;
-  const char *sort_field, *sort_stat, *sort_order, *first_group, *max_groups;
+  const char *first_group, *max_groups;
   const char *mode;
   gchar *filter_escaped, *command_escaped, *response;
   entity_t entity;
@@ -7684,9 +7687,9 @@ get_aggregate_omp (credentials_t * credentials, params_t *params,
   type = params_value (params, "aggregate_type");
   filter = params_value (params, "filter");
   filt_id = params_value (params, "filt_id");
-  sort_field = params_value (params, "sort_field");
-  sort_stat = params_value (params, "sort_stat");
-  sort_order = params_value (params, "sort_order");
+  sort_fields = params_values (params, "sort_fields:");
+  sort_stats = params_values (params, "sort_stats:");
+  sort_orders = params_values (params, "sort_orders:");
   first_group = params_value (params, "first_group");
   max_groups = params_value (params, "max_groups");
   mode = params_value (params, "aggregate_mode");
@@ -7723,12 +7726,6 @@ get_aggregate_omp (credentials_t * credentials, params_t *params,
     g_string_append_printf (command, " filter=\"%s\"", filter_escaped);
   if (filt_id && strcmp (filt_id, ""))
     g_string_append_printf (command, " filt_id=\"%s\"", filt_id);
-  if (sort_field && strcmp (sort_field, ""))
-    g_string_append_printf (command, " sort_field=\"%s\"", sort_field);
-  if (sort_stat && strcmp (sort_stat, ""))
-    g_string_append_printf (command, " sort_stat=\"%s\"", sort_stat);
-  if (sort_order && strcmp (sort_order, ""))
-    g_string_append_printf (command, " sort_order=\"%s\"", sort_order);
   if (first_group && strcmp (first_group, ""))
     g_string_append_printf (command, " first_group=\"%s\"", first_group);
   if (max_groups && strcmp (max_groups, ""))
@@ -7736,6 +7733,35 @@ get_aggregate_omp (credentials_t * credentials, params_t *params,
   if (mode && strcmp (mode, ""))
     g_string_append_printf (command, " mode=\"%s\"", mode);
   g_string_append (command, ">");
+
+  if (sort_fields && sort_stats && sort_orders)
+    {
+      param_t *field_param, *stat_param, *order_param;
+      gchar *field_i, *stat_i, *order_i;
+
+      params_iterator_init (&sort_fields_iterator, sort_fields);
+      params_iterator_init (&sort_stats_iterator, sort_stats);
+      params_iterator_init (&sort_orders_iterator, sort_orders);
+
+      while (params_iterator_next (&sort_fields_iterator,
+                                   &field_i, &field_param)
+             && params_iterator_next (&sort_stats_iterator,
+                                      &stat_i, &stat_param)
+             && params_iterator_next (&sort_orders_iterator,
+                                      &order_i, &order_param))
+        {
+          if (field_param->valid && stat_param->valid && order_param->valid)
+            {
+              xml_string_append (command,
+                                 "<sort field=\"%s\""
+                                 "      stat=\"%s\""
+                                 "      order=\"%s\"/>",
+                                 field_param->value ? field_param->value : "",
+                                 stat_param->value ? stat_param->value : "",
+                                 order_param->value ? order_param->value : "");
+            }
+        }
+    }
 
   if (data_columns)
     {

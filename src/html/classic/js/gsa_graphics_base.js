@@ -2207,15 +2207,27 @@
           params.text_columns = options.text_columns.split(',');
         }
 
-        if (options.sort_field) {
-          params.sort_field = options.sort_field;
+        if (!options.sort_fields) {
+          params.sort_fields = [];
         }
-        if (options.sort_order) {
-          params.sort_order = options.sort_order;
+        else {
+          params.sort_fields = options.sort_fields.split(',');
         }
-        if (options.sort_stat) {
-          params.sort_stat = options.sort_stat;
+
+        if (!options.sort_orders) {
+          params.sort_orders = [];
         }
+        else {
+          params.sort_orders = options.sort_orders.split(',');
+        }
+
+        if (!options.sort_stats) {
+          params.sort_stats = [];
+        }
+        else {
+          params.sort_stats = options.sort_stats.split(',');
+        }
+
         if (options.first_group) {
           params.first_group = options.first_group;
         }
@@ -4688,9 +4700,9 @@
               text_columns: ds_elem.data('text-columns'),
               filter: ds_elem.data('filter'),
               filt_id: ds_elem.data('filter-id'),
-              sort_field: ds_elem.data('sort-field'),
-              sort_order: ds_elem.data('sort-order'),
-              sort_stat: ds_elem.data('sort-stat'),
+              sort_fields: ds_elem.data('sort-fields'),
+              sort_orders: ds_elem.data('sort-orders'),
+              sort_stats: ds_elem.data('sort-stats'),
               aggregate_mode: ds_elem.data('aggregate-mode'),
               max_groups: ds_elem.data('max-groups'),
               first_group: ds_elem.data('first-group'),

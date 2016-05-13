@@ -1384,6 +1384,12 @@ init_validator ()
   openvas_validator_add (validator, "sort_field", "^[_[:alnum:] ]{1,40}$");
   openvas_validator_add (validator, "sort_order", "^(ascending|descending)$");
   openvas_validator_add (validator, "sort_stat", "^[_[:alnum:] ]{1,40}$");
+  openvas_validator_add (validator, "sort_fields:name", "^[0123456789]{1,5}$");
+  openvas_validator_add (validator, "sort_fields:value", "^[_[:alnum:] ]{1,40}$");
+  openvas_validator_add (validator, "sort_orders:name", "^[0123456789]{1,5}$");
+  openvas_validator_add (validator, "sort_orders:value", "^(ascending|descending)$");
+  openvas_validator_add (validator, "sort_stats:name", "^[0123456789]{1,5}$");
+  openvas_validator_add (validator, "sort_stats:value", "^[_[:alnum:] ]{1,40}$");
   openvas_validator_add (validator, "target_source", "^(asset_hosts|file|import|manual)$");
   openvas_validator_add (validator, "timezone",      "^.{0,1000}$");
   openvas_validator_add (validator, "token", "^[a-z0-9\\-]+$");
@@ -1738,6 +1744,9 @@ params_append_mhd (params_t *params,
       || (strncmp (name, "role_id_optional:", strlen ("role_id_optional:"))
           == 0)
       || (strncmp (name, "related:", strlen ("related:")) == 0)
+      || (strncmp (name, "sort_fields:", strlen ("sort_fields:")) == 0)
+      || (strncmp (name, "sort_orders:", strlen ("sort_orders:")) == 0)
+      || (strncmp (name, "sort_stats:", strlen ("sort_stats:")) == 0)
       || (strncmp (name, "y_fields:", strlen ("y_fields:")) == 0)
       || (strncmp (name, "z_fields:", strlen ("z_fields:")) == 0))
     {
@@ -2622,6 +2631,9 @@ params_mhd_add (void *params, enum MHD_ValueKind kind, const char *name,
       || (strncmp (name, "role_id_optional:", strlen ("role_id_optional:"))
           == 0)
       || (strncmp (name, "related:", strlen ("related:")) == 0)
+      || (strncmp (name, "sort_fields:", strlen ("sort_fields:")) == 0)
+      || (strncmp (name, "sort_orders:", strlen ("sort_orders:")) == 0)
+      || (strncmp (name, "sort_stats:", strlen ("sort_stats:")) == 0)
       || (strncmp (name, "y_fields:", strlen ("y_fields:")) == 0)
       || (strncmp (name, "z_fields:", strlen ("z_fields:")) == 0))
     {
