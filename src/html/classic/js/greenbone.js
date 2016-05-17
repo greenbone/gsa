@@ -142,6 +142,10 @@
   }
 
   function array_sum(array) {
+    if (!gsa.is_array(array) || array.length === 0) {
+      return 0;
+    }
+
     var sum = 0;
     if (Array.prototype.reduce) {
       sum = array.reduce(function(a, b) {
