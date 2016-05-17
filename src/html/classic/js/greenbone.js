@@ -62,6 +62,7 @@
   gsa.is_defined = is_defined;
   gsa.is_function = is_function;
   gsa.is_array = Array.isArray;
+  gsa.array_sum = array_sum;
 
   function LanguageDetector() {
     global.i18nextBrowserLanguageDetector.call(this);
@@ -138,6 +139,21 @@
 
   function is_defined(value) {
     return value !== undefined;
+  }
+
+  function array_sum(array) {
+    var sum = 0;
+    if (Array.prototype.reduce) {
+      sum = array.reduce(function(a, b) {
+        return a + b;
+      });
+    }
+    else {
+      for (var i in array) {
+        sum += array[i];
+      }
+    }
+    return sum;
   }
 
   var RESPONSE_SELECTORS = {

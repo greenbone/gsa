@@ -108,12 +108,7 @@
     var x_data = records.map(function(d) { return d[self.x_field]; });
     var y_data = records.map(function(d) { return d[self.y_field]; });
 
-    var y_sum = 0;
-
-    for (var i in y_data) {
-      y_sum += y_data[i];
-    }
-
+    var y_sum = gsa.array_sum(y_data);
     var y_max = Math.max.apply(null, y_data);
 
     // Setup display parameters

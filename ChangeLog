@@ -1,3 +1,11 @@
+2016-05-17  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/js/greenbone.js,
+	src/html/classic/js/gsa_bar_chart.js,
+	src/html/classic/js/gsa_donut_chart.js,
+	src/html/classic/js/gsa_h_bar_chart.js: Add array_sum function to gsa module.
+	Use the new function to calculate the sum of intger values in an array.
+
 2016-05-17  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/CMakeLists.txt: Replace Flawfinder check with a cppcheck one.
