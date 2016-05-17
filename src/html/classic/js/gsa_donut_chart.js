@@ -141,6 +141,7 @@
     var rx = width / 2;
     var ry = Math.min(height / 2, width / 2) - h / 2;
     var ri = 1.0 / 2.0;
+    var i;
 
     var generate_link = this.createGenerateLinkFunc(
       data.column_info.columns[self.x_field].column,
