@@ -1,3 +1,10 @@
+2016-05-17  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/CMakeLists.txt: Replace Flawfinder check with a cppcheck one.
+
+	* src/gsad.c (file_content_response, handle_request, main): Remove
+	Flawfinder annotations.
+
 2016-05-13  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/classic/img/asset.svg: Replaced temporary icon

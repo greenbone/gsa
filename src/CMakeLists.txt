@@ -150,11 +150,11 @@ install (TARGETS gsad
 
 ## Static analysis
 
-add_custom_target (flawfinder COMMENT "Running flawfinder..."
-                   COMMAND sh -c \"flawfinder ${CMAKE_CURRENT_SOURCE_DIR}/*.[ch]\")
+add_custom_target (cppcheck COMMENT "Running cppcheck..."
+                   COMMAND sh -c \"cppcheck ${CMAKE_CURRENT_SOURCE_DIR}\")
 
 add_custom_target (check COMMENT "Checking code...")
-add_dependencies (check flawfinder)
+add_dependencies (check cppcheck)
 
 ## Very superficial check if stylesheets are fine
 

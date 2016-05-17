@@ -3829,8 +3829,7 @@ file_content_response (credentials_t *credentials,
       path = g_strconcat (relative_url, NULL);
     }
 
-  file = fopen (path, "r"); /* flawfinder: ignore, this file is just
-                                read and sent */
+  file = fopen (path, "r"); /* this file is just read and sent */
 
   if (file == NULL)
     {
@@ -4162,8 +4161,7 @@ handle_request (void *cls, struct MHD_Connection *connection,
     }
 
   if ((!strcmp (method, "GET"))
-        && (!strncmp (&url[0], "/login/", strlen ("/login/"))) /* flawfinder: ignore,
-                                                                   it is a const str */
+        && (!strncmp (&url[0], "/login/", strlen ("/login/")))
         && !url[strlen ("/login/")])
     {
       return send_redirect_to_urn (connection, default_file, NULL);
@@ -4491,7 +4489,6 @@ handle_request (void *cls, struct MHD_Connection *connection,
 
       /* From here on, the user is authenticated. */
 
-      /* flawfinder: ignore, it is a const str */
       if (!strncmp (url, "/logout", strlen ("/logout")))
         {
           time_t now;
@@ -4618,8 +4615,7 @@ handle_request (void *cls, struct MHD_Connection *connection,
         }
       /* URL does not request OMP command but perhaps a special GSAD command? */
       else if (!strncmp (&url[0], "/system_report/",
-                         strlen ("/system_report/"))) /* flawfinder: ignore,
-                                                         it is a const str */
+                         strlen ("/system_report/")))
         {
           gsize res_len;
           const char *duration, *slave_id;
@@ -4667,8 +4663,7 @@ handle_request (void *cls, struct MHD_Connection *connection,
           cmd_response_data_reset (&response_data);
         }
       else if (!strncmp (&url[0], "/help/",
-                         strlen ("/help/"))) /* flawfinder: ignore,
-                                                it is a const str */
+                         strlen ("/help/")))
         {
           cmd_response_data_t response_data;
           cmd_response_data_init (&response_data);
@@ -5692,7 +5687,6 @@ main (int argc, char **argv)
 
   if (gsad_port_string)
     {
-      /* flawfinder: ignore, for atoi boundaries are checked properly */
       gsad_port = atoi (gsad_port_string);
       if (gsad_port <= 0 || gsad_port >= 65536)
         {
@@ -5704,7 +5698,6 @@ main (int argc, char **argv)
 
   if (gsad_manager_port_string)
     {
-      /* flawfinder: ignore, for atoi boundaries are checked properly */
       gsad_manager_port = atoi (gsad_manager_port_string);
       if (gsad_manager_port <= 0 || gsad_manager_port >= 65536)
         {
@@ -5761,7 +5754,6 @@ main (int argc, char **argv)
 
   if (gsad_redirect_port_string)
     {
-      /* flawfinder: ignore, for atoi boundaries are checked properly */
       gsad_redirect_port = atoi (gsad_redirect_port_string);
       if (gsad_redirect_port <= 0 || gsad_redirect_port >= 65536)
         {
