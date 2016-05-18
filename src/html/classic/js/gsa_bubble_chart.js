@@ -177,6 +177,14 @@
         ' (' + self.color_label + ': ' + color_value + ')';
     }
 
+    this.tip = d3.tip()
+    .attr('class', 'd3-tip')
+    .style('font-weight', 'bold')
+    .offset([-10, 0])
+    .html(function(d) {
+      return tooltip_func(d);
+    });
+
     var nodes = bubbles.nodes({children: filtered_records})
       .filter(function(d) { return d.depth !== 0; });
 
@@ -198,6 +206,8 @@
       .attr('transform', function(d) {
         return 'translate(' + d.x + ',' + d.y + ')';
       })
+      .on('mouseover',this.tip.show)
+      .on('mouseout', this.tip.hide)
       .select('circle')
       .attr('r', function(d) { return d.r;})
       .attr('title', tooltip_func)
@@ -207,6 +217,8 @@
       .select('text')
       .attr('title', tooltip_func)
       .text(function(d) { return d.label_value.substring(0, d.r / 3); });
+
+    this.svg.call(this.tip);
   };
 
   BubbleChartGenerator.prototype.generateCsvData = function(controller, data) {

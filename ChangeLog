@@ -1,5 +1,10 @@
 2016-05-17  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_bubble_chart.js (generate): Use d3.tip to show
+	tooltips in bubble charts.
+
+2016-05-17  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_donut_chart.js (generate): Use d3.tip to set
 	tooltips in donut charts. The title attributes are not shown in chrome and
 	firefox >= 49. We should always use our tooltips instead of title attributes
