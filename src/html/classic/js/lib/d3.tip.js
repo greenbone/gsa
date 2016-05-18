@@ -1,7 +1,11 @@
 // d3.tip
 // Copyright (c) 2013 Justin Palmer
+//               2016 Björn Ricks <bjoern.ricks@greenbone.net>
 //
 // Tooltips for d3.js SVG visualizations
+//
+// This is a slightly modified version of d3.tip originally developed by Justin
+// Palmer under the MIT licence (https://github.com/Caged/d3-tip)
 
 (function (root, factory) {
   if (typeof define === 'function' && define.amd) {
@@ -33,7 +37,7 @@
 
     function tip(vis) {
       svg = getSVGNode(vis)
-      point = svg.createSVGPoint()
+      point = new_point();
       document.body.appendChild(node)
     }
 
@@ -268,6 +272,15 @@
       return d3.select(node);
     }
 
+    function new_point(point) {
+      var new_point = svg.createSVGPoint();
+      if (point !== undefined) {
+        new_point.x = point.x;
+        new_point.y = point.y;
+      }
+      return new_point;
+    }
+
     // Private - gets the screen coordinates of a shape
     //
     // Given a shape on the screen, will return an SVGPoint for the directions
@@ -284,41 +297,73 @@
     function getScreenBBox() {
       var targetel   = target || d3.event.target;
 
-      while ('undefined' === typeof targetel.getScreenCTM && 'undefined' === targetel.parentNode) {
-          targetel = targetel.parentNode;
+      while ('undefined' === typeof targetel.getScreenCTM &&
+          'undefined' === targetel.parentNode) {
+        targetel = targetel.parentNode;
       }
 
-      var bbox       = {},
-          matrix     = targetel.getScreenCTM(),
-          tbbox      = targetel.getBBox(),
-          width      = tbbox.width,
-          height     = tbbox.height,
-          x          = tbbox.x,
-          y          = tbbox.y
+      var bbox = {};
+      var tbbox;
 
-      point.x = x
-      point.y = y
-      bbox.nw = point.matrixTransform(matrix)
-      point.x += width
-      bbox.ne = point.matrixTransform(matrix)
-      point.y += height
-      bbox.se = point.matrixTransform(matrix)
-      point.x -= width
-      bbox.sw = point.matrixTransform(matrix)
-      point.y -= height / 2
-      bbox.w  = point.matrixTransform(matrix)
-      point.x += width
-      bbox.e = point.matrixTransform(matrix)
-      point.x -= width / 2
-      point.y -= height / 2
-      bbox.n = point.matrixTransform(matrix)
-      point.y += height
-      bbox.s = point.matrixTransform(matrix)
+      matrix = targetel.getScreenCTM();
 
-      return bbox
+      try {
+        tbbox = targetel.getBBox();
+
+        var width      = tbbox.width;
+        var height     = tbbox.height;
+        var x          = tbbox.x;
+        var y          = tbbox.y;
+
+        point.x = x;
+        point.y = y;
+        bbox.nw = point.matrixTransform(matrix);
+        point.x += width;
+        bbox.ne = point.matrixTransform(matrix);
+        point.y += height;
+        bbox.se = point.matrixTransform(matrix);
+        point.x -= width;
+        bbox.sw = point.matrixTransform(matrix);
+        point.y -= height / 2;
+        bbox.w  = point.matrixTransform(matrix);
+        point.x += width;
+        bbox.e = point.matrixTransform(matrix);
+        point.x -= width / 2;
+        point.y -= height / 2;
+        bbox.n = point.matrixTransform(matrix);
+        point.y += height;
+        bbox.s = point.matrixTransform(matrix);
+
+      } catch (err) {
+        /* fix getBBox not implemented issue for tspans on firefox */
+        var rect = targetel.getBoundingClientRect();
+        var width = rect.width;
+        var height = rect.height;
+
+        point.x = rect.left;
+        point.y = rect.top;
+        bbox.nw = new_point(point);
+        point.x += width;
+        bbox.ne = new_point(point);
+        point.y += height;
+        bbox.se = new_point(point);
+        point.x -= width;
+        bbox.sw = new_point(point);
+        point.y -= height / 2;
+        bbox.w  = new_point(point);
+        point.x += width;
+        bbox.e = new_point(point);
+        point.x -= width / 2;
+        point.y -= height / 2;
+        bbox.n = new_point(point);
+        point.y += height;
+        bbox.s = new_point(point);
+      }
+
+      return bbox;
     }
 
-    return tip
+    return tip;
   };
 
 }));

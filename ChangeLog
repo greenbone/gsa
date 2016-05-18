@@ -1,5 +1,11 @@
 2016-05-17  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/lib/d3.tip.js: Extend d3.tip library to fix an issue
+	with the bordered box calculation on tspan svg elements in firefox. The
+	calculation was used to get the position for the displayed tooltips.
+
+2016-05-17  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_donut_chart.js
 	(DonutChartGenerator.prototype.generate): Add missing i variable.
 
