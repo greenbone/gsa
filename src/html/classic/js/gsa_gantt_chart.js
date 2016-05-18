@@ -301,9 +301,46 @@
                 d[self.x_field]) - self.x_scale.rangeBand()) + ')';
       });
 
+    this.tip = d3.tip()
+    .attr('class', 'd3-tip')
+    .style('font-weight', 'bold')
+    .offset([-10, 0])
+    .html(function(d) {
+      return d;
+    });
+
+    this.svg.call(this.tip);
+
+    function get_start_title(d, duration, start) {
+      var text = d.name;
+      text += '\nStart: ' + gsa.datetime_format(new Date(start));
+      if (duration) {
+        text += '\nEnd: ' + gsa.datetime_format(new Date(
+              +start + duration * 1000));
+      }
+      else {
+        text += '\nNo scheduled end';
+      }
+      return text;
+    }
+
+    function get_start_title_tooltip_func(d, duration) {
+      return function(start) {
+        var title = get_start_title(d, duration, start);
+        self.tip.show(title);
+      };
+    }
+
+    function get_start_title_func(d, duration) {
+      return function(start) {
+        return get_start_title(d, duration, start);
+      };
+    }
+
     this.svg.selectAll('.bar-group a')
       .data(display_records)
       .each(function(d, i) {
+
         var sel = d3.select(this);
         var r_start = Date.parse(d.schedule_next_time.substr(0, 19) +
             '+00:00');
@@ -368,18 +405,9 @@
             return self.y_scale(offset + Math.min(r_length, end_date - start));
           })
           .attr('height', self.x_scale.rangeBand())
-          .attr('title', function(start) {
-            var text = d.name;
-            text += '\nStart: ' + gsa.datetime_format(new Date(start));
-            if (r_duration) {
-              text += '\nEnd: ' + gsa.datetime_format(new Date(
-                    +start + r_duration * 1000));
-            }
-            else {
-              text += '\nNo scheduled end';
-            }
-            return text;
-          });
+          .on('mouseout', self.tip.hide)
+          .on('mouseover', get_start_title_tooltip_func(d, r_duration))
+          .attr('title', get_start_title_func(d, r_duration));
 
         sel.selectAll('rect')
           .data(bar_starts)
@@ -412,6 +440,10 @@
               (width + 5) + ',' + (self.x_scale.rangeBand() / 8) +
               ' ' + (width + 20) + ',' + (self.x_scale.rangeBand() / 2) +
               ' ' + (width + 5) + ',' + (7 * self.x_scale.rangeBand() / 8))
+          .on('mouseout', self.tip.hide)
+          .on('mouseover', function() {
+            self.tip.show(future_runs_text);
+          })
           .attr('title', future_runs_text);
 
         sel.selectAll('.future-marker')
