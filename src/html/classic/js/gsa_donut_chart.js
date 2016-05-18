@@ -148,6 +148,14 @@
       data.column_info.columns[self.x_field].type,
       data.filter_info);
 
+    this.tip = d3.tip()
+    .attr('class', 'd3-tip')
+    .style('font-weight', 'bold')
+    .offset([-10, 0])
+    .html(function(d) {
+      return d;
+    });
+
     // Remove legend
     this.svg.selectAll('.legend')
       .remove();
@@ -169,6 +177,18 @@
       return ret;
     }
 
+    function get_tooltip_title_func(d) {
+      var data = get_title_data(d);
+      return function() {
+        self.tip.show(get_title_string(data.x, data.y));
+      };
+    }
+
+    function set_tooltip_title(d) {
+      var data = get_title_data(d);
+      self.tip.show(get_title_string(data.x, data.y));
+    }
+
     function get_title_string(x, data) {
       return x + ': ' + (100 * data / y_sum).toFixed(1) + '% (' + data + ')';
     }
@@ -186,8 +206,13 @@
         color = self.scaleColor(d.data[self.x_field + '~original']);
       }
 
-      var legend_item = legend.insert('a');
-      legend_item.attr('xlink:href', generate_link(d, i));
+      var legend_group = legend.insert('g')
+        .attr('class', 'legend-group')
+        .on('mouseover', get_tooltip_title_func(d))
+        .on('mouseout', this.tip.hide);
+
+      var legend_item = legend_group.insert('a')
+        .attr('xlink:href', generate_link(d, i));
 
       legend_item.insert('rect')
         .attr('height', '15')
@@ -213,6 +238,8 @@
       legend_y += Math.max(20, new_text.node().getBBox().height + 5);
     }
 
+    this.svg.call(this.tip);
+
     legend.attr('opacity', 0)
       .transition(500)
       .attr('opacity', 1);
@@ -233,6 +260,8 @@
       .insert('a')
         .attr('class', 'slice')
         .attr('xlink:href', generate_link)
+        .on('mouseover', set_tooltip_title)
+        .on('mouseout', this.tip.hide)
         .each(function(d, i) {
           var slice = d3.select(this);
 
@@ -324,6 +353,8 @@
         .attr('xlink:href', generate_link)
         .insert('text')
         .attr('class', 'slice_label')
+        .on('mouseover', set_tooltip_title)
+        .on('mouseout', this.tip.hide)
         .text(function(d, i) {
           if (d.endAngle - d.startAngle >= 0.02) {
             return d.data[self.y_field];
