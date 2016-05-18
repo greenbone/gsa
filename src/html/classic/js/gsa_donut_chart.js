@@ -157,17 +157,30 @@
       .attr('class', 'legend')
       .attr('transform', 'translate(' + (width + 10.5) + ', 0)');
 
+    function get_title_data(d) {
+      var ret = {};
+      if (d.data[self.x_field + '~long']) {
+        ret.x = d.data[self.x_field + '~long'];
+      }
+      else {
+        ret.x = d.data[self.x_field];
+      }
+      ret.y = d.data[self.y_field];
+      return ret;
+    }
+
+    function get_title_string(x, data) {
+      return x + ': ' + (100 * data / y_sum).toFixed(1) + '% (' + data + ')';
+    }
+
+    function get_title(d) {
+      var data = get_title_data(d);
+      return get_title_string(data.x, data.y);
+    }
+
     var legend_y = 0;
     for (i = 0; i < slices.length; i++) {
       var d = slices[i];
-      var x;
-      if (d.data[this.x_field + '~long']) {
-        x = d.data[this.x_field + '~long'];
-      }
-      else {
-        x = d.data[this.x_field];
-      }
-
       var color = self.scaleColor(d.data[self.x_field]);
       if (!gsa.is_defined(color)) {
         color = self.scaleColor(d.data[self.x_field + '~original']);
@@ -185,9 +198,7 @@
         .attr('stroke', 'black')
         .attr('stroke-width', '0.25')
         .style('shape-rendering', 'geometricPrecision')
-        .attr('title',
-            x + ': ' + (100 * d.data[this.y_field] / y_sum).toFixed(1) +
-            '% (' + d.data[this.y_field] + ')');
+        .attr('title', get_title(d));
 
       var new_text = legend_item.insert('text')
         .attr('x', 22)
@@ -195,9 +206,7 @@
         .style('font-size', '12px')
         .style('font-weight', 'bold')
         .text(x_data[i])
-        .attr('title',
-            x + ': ' + (100 * d.data[this.y_field] / y_sum).toFixed(1) +
-            '% (' + d.data[this.y_field] + ')');
+        .attr('title', get_title(d));
 
       gsa.wrap_text(new_text, legend_width - 25);
 
@@ -254,17 +263,7 @@
         }
         return d3.lab(color).darker();
       })
-      .attr('title', function(d, i) {
-        var x;
-        if (d.data[self.x_field + '~long']) {
-          x = d.data[self.x_field + '~long'];
-        }
-        else {
-          x = d.data[self.x_field];
-        }
-        return x + ': ' + (100 * d.data[self.y_field] / y_sum).toFixed(1) +
-          '% (' + d.data[self.y_field] + ')';
-      });
+      .attr('title', get_title);
 
     donut.selectAll('.slice_top')
       .data(slices)
@@ -288,17 +287,7 @@
         }
         return color;
       })
-      .attr('title', function(d, i) {
-        var x;
-        if (d.data[self.x_field + '~long']) {
-          x = d.data[self.x_field + '~long'];
-        }
-        else {
-          x = d.data[self.x_field];
-        }
-        return x + ': ' + (100 * d.data[self.y_field] / y_sum).toFixed(1) +
-          '% (' + d.data[self.y_field] + ')';
-      });
+      .attr('title', get_title);
 
     donut.selectAll('.slice_outer')
       .data(slices)
@@ -314,17 +303,7 @@
         }
         return d3.lab(color).darker();
       })
-      .attr('title', function(d, i) {
-        var x;
-        if (d.data[self.x_field + '~long']) {
-          x = d.data[self.x_field + '~long'];
-        }
-        else {
-          x = d.data[self.x_field];
-        }
-        return x + ': ' + (100 * d.data[self.y_field] / y_sum).toFixed(1) +
-          '% (' + d.data[self.y_field] + ')';
-      });
+      .attr('title', get_title);
 
     // Sort slices so they are rendered in correct order.
     var slice_elems = donut.selectAll('.slice')[0];
@@ -364,17 +343,7 @@
         .attr('text-anchor', 'middle')
         .style('font-weight', 'bold')
         .style('font-size', '7pt')
-        .attr('title', function(d, i) {
-          var x;
-          if (d.data[self.x_field + '~long']) {
-            x = d.data[self.x_field + '~long'];
-          }
-          else {
-            x = d.data[self.x_field];
-          }
-          return x + ': ' + (100 * d.data[self.y_field] / y_sum).toFixed(1) +
-            '% (' + d.data[self.y_field] + ')';
-        });
+        .attr('title', get_title);
 
     // In case of missing data, draw a transparent grey donut
     if (slices.length === 0) {
