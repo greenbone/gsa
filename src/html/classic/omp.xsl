@@ -6342,7 +6342,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </div>
 
       <h3><xsl:value-of select="gsa:i18n ('Scanner', 'Scanner')"/></h3>
-      <xsl:if test="count(get_scanners_response/scanner[type = 2]) &gt;= 0">
+      <xsl:if test="count(get_scanners_response/scanner[type = 2])">
         <div class="form-group">
           <div class="col-1 offset-1">
             <div class="radio">
@@ -6991,7 +6991,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="param_name"/>
   <xsl:param name="type"/>
   <xsl:param name="params"/>
-  <xsl:if test="count(get_scanners_response/scanner[type = 0]) &gt;= 0">
+  <xsl:if test="count(commands_response/get_scanners_response/scanner[type = $type])">
     <div class="form-group">
       <div class="col-1 offset-1">
         <div class="radio">
@@ -7610,21 +7610,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:call-template>
 
           <!-- Radio: OSP Scanner. -->
-          <xsl:call-template name="html-edit-task-scanner">
-            <xsl:with-param name="title">
-              <xsl:call-template name="scanner-type-name">
-                <xsl:with-param name="type" select="1"/>
-              </xsl:call-template>
-            </xsl:with-param>
-            <xsl:with-param name="type">1</xsl:with-param>
-            <xsl:with-param name="param_name">osp_scanner_id</xsl:with-param>
-            <xsl:with-param name="params">
-              <xsl:call-template name="html-edit-task-config">
-                <xsl:with-param name="param_name">osp_config_id</xsl:with-param>
+          <xsl:if test="count(get_configs_response/config[type = 1])">
+            <xsl:call-template name="html-edit-task-scanner">
+                <xsl:with-param name="title">
+                <xsl:call-template name="scanner-type-name">
+                    <xsl:with-param name="type" select="1"/>
+                </xsl:call-template>
+                </xsl:with-param>
                 <xsl:with-param name="type">1</xsl:with-param>
-              </xsl:call-template>
-            </xsl:with-param>
-          </xsl:call-template>
+                <xsl:with-param name="param_name">osp_scanner_id</xsl:with-param>
+                <xsl:with-param name="params">
+                <xsl:call-template name="html-edit-task-config">
+                    <xsl:with-param name="param_name">osp_config_id</xsl:with-param>
+                    <xsl:with-param name="type">1</xsl:with-param>
+                </xsl:call-template>
+                </xsl:with-param>
+            </xsl:call-template>
+          </xsl:if>
 
             <!-- Radio: CVE Scanner. -->
             <xsl:call-template name="html-edit-task-scanner">

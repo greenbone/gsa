@@ -1,3 +1,14 @@
+2016-05-19  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/omp.xsl (html-edit-task-scanner): Fix check for existing
+	scanner.
+
+	* src/html/classic/omp.xsl (new_task): Fix checking for existing OpenVAS
+	Scanner.
+
+	* src/html/classic/omp.xsl (html-edit-task-form): Only show OSP Scanner radio
+	if a osp scan config is available.
+
 2016-05-17  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/js/gsa_gantt_chart.js (generate): Use d3.tip to display
