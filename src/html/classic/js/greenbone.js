@@ -237,7 +237,11 @@
     new_config: function(doc) {
       return get_entity_from_element(
           doc.find('get_configs_response > config'));
-    }
+    },
+    new_alert: function(doc) {
+      return get_entity_from_element(
+          doc.find('get_alerts_response > alert'));
+    },
   };
 
   function get_entity_from_element(element) {
