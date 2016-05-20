@@ -1,3 +1,8 @@
+2016-05-20  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/classic/gsad.xsl (html-gsa-logo): Rename link title of
+	main logo to "Dashboard"
+
 2016-05-20  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/js/gsa_graphics_base.js (extract_column_info): Add
