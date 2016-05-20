@@ -114,6 +114,7 @@
         this, gen_params);
 
     if (gsa.is_defined(gen_params.extra)) {
+      this.empty_text = gen_params.extra.empty_text;
       this.score_severity = gen_params.extra.score_severity;
       this.score_assets = gen_params.extra.score_assets;
       this.score_asset_type = gen_params.extra.score_asset_type;
@@ -148,7 +149,10 @@
 
     if (!gsa.is_defined(this.empty_text)) {
       this.empty_text = gsa._('No matching {{resource_type}}',
-          gsa.resource_type_name(data.column_info.columns[this.x_field].type));
+          {
+            resource_type: gsa.resource_type_name(
+                                data.column_info.columns[this.x_field].type)
+          });
     }
 
     var records = data.records;
