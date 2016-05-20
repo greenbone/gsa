@@ -414,7 +414,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                              "score_asset_type" : "hosts",
                              "extra_tooltip_field_1": "modified",
                              "extra_tooltip_label_1": "Updated"}}'
-          data-init-params='{{"title_text": "Most vulnerable Operating Systems"}}'/>
+          data-init-params='{{"title_text": "Operating Systems by Vulnerability Score"}}'/>
       </div>
     </xsl:if>
   </div>
@@ -1301,7 +1301,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                           "score_asset_type" : "hosts",
                           "extra_tooltip_field_1": "modified",
                           "extra_tooltip_label_1": "Updated"}}'
-      data-init-params='{{"title_text": "Most vulnerable Operating Systems"}}'/>
+      data-init-params='{{"title_text": "Operating Systems by Vulnerability Score"}}'/>
   </div>
 </xsl:template>
 
