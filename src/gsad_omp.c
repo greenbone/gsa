@@ -26371,7 +26371,7 @@ dashboard (credentials_t * credentials, params_t *params,
 
   name = params_value (params, "dashboard_name");
   if (name == NULL)
-    name = "secinfo";
+    name = "main";
 
   xml = g_string_new ("<dashboard>");
   g_string_append_printf (xml, "<name>%s</name>", name);

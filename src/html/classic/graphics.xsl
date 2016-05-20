@@ -830,10 +830,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </noscript>
 
   <xsl:choose>
+    <xsl:when test="name='' or name='main'">
+      <xsl:apply-templates select="." mode="main"/>
+    </xsl:when>
+    <xsl:when test="name='scans'">
+      <xsl:apply-templates select="." mode="scans"/>
+    </xsl:when>
     <xsl:when test="name='assets'">
       <xsl:apply-templates select="." mode="assets"/>
     </xsl:when>
-    <xsl:when test="name='' or name='secinfo'">
+    <xsl:when test="name='secinfo'">
       <xsl:apply-templates select="." mode="secinfo"/>
     </xsl:when>
     <xsl:otherwise>
@@ -849,6 +855,454 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </div>
     </xsl:otherwise>
   </xsl:choose>
+</xsl:template>
+
+<xsl:template match="dashboard" mode="main">
+  <xsl:variable name="filters" select="get_filters_response/filter"/>
+  <!-- Default chart selections:
+        Controller names of boxes in a row separated with "|",
+        rows separated with "#" -->
+  <xsl:variable name="default_controllers" select="'tasks-top-high-results|most-vulnerable-hosts#report-high-results-timeline|nvt_donut_chart'"/>
+  <!-- Default row heights, rows separated with "#",
+        number of rows must match default_controllers -->
+  <xsl:variable name="default_heights" select="'280#280'"/>
+  <!-- Default filter selections:
+        Filter UUIDs or empty string for boxes in a row separated with "|",
+        rows separated with "#",
+        number of boxes and rows must match default_controllers -->
+  <xsl:variable name="default_filters" select="'|#|'"/>
+
+  <xsl:variable name="envelope" select="/envelope"/>
+
+  <!-- Setting UUID for chart selection preferences -->
+  <xsl:variable name="controllers_pref_id" select="'d97eca9f-0386-4e5d-88f2-0ed7f60c0646'"/>
+  <!-- Setting UUID for chart selection preferences -->
+  <xsl:variable name="filters_pref_id" select="'8190fe85-3bc3-47fb-a9d4-bf1c8fcaa79c'"/>
+  <!-- Setting UUIDs for row height preferences -->
+  <xsl:variable name="heights_pref_id" select="'fdde8a8a-0d10-491c-8eb0-46eb0792b417'"/>
+
+  <xsl:variable name="controllers">
+    <xsl:choose>
+      <xsl:when test="/envelope/chart_preferences/chart_preference[@id = $controllers_pref_id]">
+        <xsl:value-of select="/envelope/chart_preferences/chart_preference[@id = $controllers_pref_id]/value"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$default_controllers"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <xsl:variable name="heights">
+    <xsl:choose>
+      <xsl:when test="/envelope/chart_preferences/chart_preference[@id = $heights_pref_id]">
+        <xsl:value-of select="gsa:escape-js (/envelope/chart_preferences/chart_preference[@id = $heights_pref_id]/value)"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$default_heights"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <xsl:variable name="filters_string">
+    <xsl:choose>
+      <xsl:when test="/envelope/chart_preferences/chart_preference[@id = $filters_pref_id]">
+        <xsl:value-of select="gsa:escape-js (/envelope/chart_preferences/chart_preference[@id = $filters_pref_id]/value)"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$default_filters"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
+  <div class="section-header">
+    <h1>
+      <img class="icon icon-lg" src="/img/dashboard.svg" alt="Dashboard"/>
+      <xsl:value-of select="gsa:i18n ('Dashboard', 'Dashboard')"/>
+    </h1>
+  </div>
+  <div class="section-box">
+    <div id="main-dashboard-controls" style="text-align:right;">
+    </div>
+    <div id="main-dashboard" class="dashboard" data-dashboard-name="main-dashboard"
+      data-controllers="{$controllers}" data-heights="{$heights}"
+      data-filters-string="{$filters_string}" data-controllers-pref-id="{$controllers_pref_id}"
+      data-filters-pref-id="{$filters_pref_id}" data-heights-pref-id="{$heights_pref_id}"
+      data-default-controller-string="nvt_bar_chart"
+      data-dashboard-controls="main-dashboard-controls"
+      data-no-chart-links="{/envelope/params/no_chart_links}"
+      data-max-components="8">
+      <xsl:for-each select="$filters">
+        <span class="dashboard-filter" data-id="{@id}"
+          data-name="{name}"
+          data-term="{term}" data-type="{type}" />
+      </xsl:for-each>
+
+      <xsl:call-template name="scans-dashboard-data"/>
+      <xsl:call-template name="assets-dashboard-data"/>
+      <xsl:call-template name="secinfo-dashboard-data"/>
+    </div>
+  </div>
+
+  <xsl:call-template name="init-d3charts"/>
+</xsl:template>
+
+<xsl:template name="scans-dashboard-data">
+  <!-- Tasks -->
+  <div class="dashboard-data-source"
+    data-source-name="tasks-severity-count-source"
+    data-group-column="severity"
+    data-aggregate-type="task">
+    <span class="dashboard-chart"
+      data-chart-name="tasks-by-cvss"
+      data-chart-type="bar"
+      data-chart-template="info_by_cvss"/>
+    <span class="dashboard-chart"
+      data-chart-name="tasks-by-class"
+      data-chart-type="donut"
+      data-chart-template="info_by_class"/>
+  </div>
+  <div class="dashboard-data-source"
+    data-source-name="task-status-count-source"
+    data-aggregate-type="task"
+    data-group-column="status">
+    <span class="dashboard-chart"
+      data-chart-name="by-task-status"
+      data-chart-type="donut"/>
+  </div>
+  <div class="dashboard-data-source"
+    data-source-name="task-high-results-source"
+    data-aggregate-type="task"
+    data-group-column="uuid"
+    data-columns="severity,high_per_host"
+    data-text-columns="name,modified"
+    data-sort-fields="high_per_host,modified"
+    data-sort-orders="descending,descending"
+    data-sort-stats="max,value">
+    <span class="dashboard-chart"
+      data-chart-name="tasks-by-high-results"
+      data-chart-type="bubbles"
+      data-x-field="name"
+      data-y-fields="high_per_host_max"
+      data-z-fields="severity_max"
+      data-gen-params='{{"empty_text": "No Tasks with High severity found"}}'
+      data-init-params='{{"title_text": "Tasks: High results per host"}}'/>
+    <span class="dashboard-chart"
+      data-chart-name="tasks-top-high-results"
+      data-chart-type="horizontal_bar"
+      data-x-field="name"
+      data-y-fields="high_per_host_max"
+      data-z-fields="severity_max"
+      data-gen-params='{{"empty_text": "No Tasks with High severity found"}}'
+      data-init-params='{{"title_text": "Tasks with most High results per host"}}'/>
+  </div>
+  <div class="dashboard-data-source"
+    data-source-name="task-schedules-source"
+    data-type="task">
+    <span class="dashboard-chart"
+      data-chart-name="task-schedules"
+      data-chart-type="gantt"
+      data-gen-params='{{"empty_text": "No scheduled Tasks found"}}'/>
+  </div>
+
+  <!-- Reports -->
+  <div class="dashboard-data-source"
+    data-source-name="reports-severity-count-source"
+    data-group-column="severity"
+    data-aggregate-type="report">
+    <span class="dashboard-chart"
+      data-chart-name="reports-by-cvss"
+      data-chart-type="bar"
+      data-chart-template="info_by_cvss"/>
+    <span class="dashboard-chart"
+      data-chart-name="reports-by-class"
+      data-chart-type="donut"
+      data-chart-template="info_by_class"/>
+  </div>
+  <div class="dashboard-data-source"
+    data-source-name="report-high-results-timeline-source"
+    data-aggregate-type="report"
+    data-group-column="date"
+    data-columns="high,high_per_host">
+    <span class="dashboard-chart"
+      data-chart-name="report-high-results-timeline"
+      data-chart-type="line"
+      data-y-fields="high_max"
+      data-z-fields="high_per_host_max"
+      data-init-params='{{"title_text": "Reports: High results timeline"}}'
+      data-gen-params='{{"show_stat_type": 0}}'/>
+  </div>
+
+  <!-- Results -->
+  <div class="dashboard-data-source"
+    data-source-name="results-severity-count-source"
+    data-group-column="severity"
+    data-aggregate-type="result">
+    <span class="dashboard-chart"
+      data-chart-name="results-by-cvss"
+      data-chart-type="bar"
+      data-chart-template="info_by_cvss"/>
+    <span class="dashboard-chart"
+      data-chart-name="results-by-class"
+      data-chart-type="donut"
+      data-chart-template="info_by_class"/>
+  </div>
+  <div class="dashboard-data-source"
+    data-source-name="result-vuln-words-source"
+    data-aggregate-type="result"
+    data-group-column="vulnerability"
+    data-aggregate-mode="word_counts"
+    data-sort-stat="count"
+    data-sort-order="descending"
+    data-max-groups="250">
+    <span class="dashboard-chart"
+      data-chart-name="result-vuln-words"
+      data-chart-type="cloud"/>
+  </div>
+  <div class="dashboard-data-source"
+    data-source-name="result-desc-words-source"
+    data-aggregate-type="result"
+    data-group-column="description"
+    data-aggregate-mode="word_counts"
+    data-sort-stat="count"
+    data-sort-order="descending"
+    data-max-groups="250">
+    <span class="dashboard-chart"
+      data-chart-name="result-desc-words"
+      data-chart-type="cloud"/>
+  </div>
+
+  <!-- Notes -->
+  <div class="dashboard-data-source"
+    data-source-name="notes-created-count-src"
+    data-aggregate-type="note"
+    data-aggregate-mode="count"
+    data-group-column="created">
+    <span class="dashboard-chart"
+      data-chart-name="notes-by-created"
+      data-chart-type="line"/>
+  </div>
+  <div class="dashboard-data-source"
+    data-source-name="notes-text-words-src"
+    data-aggregate-type="note"
+    data-group-column="text"
+    data-aggregate-mode="word_counts">
+    <span class="dashboard-chart"
+      data-chart-name="notes-text-words"
+      data-chart-type="cloud"/>
+  </div>
+  <div class="dashboard-data-source"
+    data-source-name="notes-status-src"
+    data-aggregate-type="note"
+    data-group-column="active_days"
+    data-sort-stat="count"
+    data-sort-order="descending"
+    data-max-groups="250">
+    <span class="dashboard-chart"
+      data-chart-name="notes_donut_chart"
+      data-chart-template="active_status"
+      data-chart-type="donut"/>
+  </div>
+
+  <!-- Overrides -->
+  <div class="dashboard-data-source"
+    data-source-name="overrides-created-count-src"
+    data-aggregate-type="override"
+    data-aggregate-mode="count"
+    data-group-column="created">
+    <span class="dashboard-chart"
+      data-chart-name="overrides-by-created"
+      data-chart-type="line"/>
+  </div>
+  <div class="dashboard-data-source"
+    data-source-name="overrides-text-words-src"
+    data-aggregate-type="override"
+    data-group-column="text"
+    data-aggregate-mode="word_counts">
+    <span class="dashboard-chart"
+      data-chart-name="overrides-text-words"
+      data-chart-type="cloud"/>
+  </div>
+  <div class="dashboard-data-source"
+    data-source-name="overrides-status-src"
+    data-aggregate-type="override"
+    data-group-column="active_days"
+    data-sort-stat="count"
+    data-sort-order="descending"
+    data-max-groups="250">
+    <span class="dashboard-chart"
+      data-chart-name="overrides_donut_chart"
+      data-chart-template="active_status"
+      data-chart-type="donut"/>
+  </div>
+</xsl:template>
+
+<xsl:template match="dashboard" mode="scans">
+  <xsl:variable name="filters" select="get_filters_response/filter"/>
+  <!-- Default chart selections:
+        Controller names of boxes in a row separated with "|",
+        rows separated with "#" -->
+  <xsl:variable name="default_controllers" select="'tasks-top-high-results|task-schedules#by-task-status|report-high-results-timeline'"/>
+  <!-- Default row heights, rows separated with "#",
+        number of rows must match default_controllers -->
+  <xsl:variable name="default_heights" select="'280#280'"/>
+  <!-- Default filter selections:
+        Filter UUIDs or empty string for boxes in a row separated with "|",
+        rows separated with "#",
+        number of boxes and rows must match default_controllers -->
+  <xsl:variable name="default_filters" select="'|#|'"/>
+
+  <xsl:variable name="envelope" select="/envelope"/>
+
+  <!-- Setting UUID for chart selection preferences -->
+  <xsl:variable name="controllers_pref_id" select="'c7584d7c-649f-4f8b-9ded-9e1dc20f24c8'"/>
+  <!-- Setting UUID for chart selection preferences -->
+  <xsl:variable name="filters_pref_id" select="'39311e88-0d10-4a46-bc0c-5becd034667b'"/>
+  <!-- Setting UUIDs for row height preferences -->
+  <xsl:variable name="heights_pref_id" select="'fd846514-cfb1-48b1-8deb-0cf3b5eaedcd'"/>
+
+  <xsl:variable name="controllers">
+    <xsl:choose>
+      <xsl:when test="/envelope/chart_preferences/chart_preference[@id = $controllers_pref_id]">
+        <xsl:value-of select="/envelope/chart_preferences/chart_preference[@id = $controllers_pref_id]/value"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$default_controllers"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <xsl:variable name="heights">
+    <xsl:choose>
+      <xsl:when test="/envelope/chart_preferences/chart_preference[@id = $heights_pref_id]">
+        <xsl:value-of select="gsa:escape-js (/envelope/chart_preferences/chart_preference[@id = $heights_pref_id]/value)"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$default_heights"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+  <xsl:variable name="filters_string">
+    <xsl:choose>
+      <xsl:when test="/envelope/chart_preferences/chart_preference[@id = $filters_pref_id]">
+        <xsl:value-of select="gsa:escape-js (/envelope/chart_preferences/chart_preference[@id = $filters_pref_id]/value)"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$default_filters"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
+  <div class="section-header">
+    <h1>
+      <img class="icon icon-lg" src="/img/scan.svg" alt="Scans Dashboard"/>
+      <xsl:value-of select="gsa:i18n ('Scans Dashboard', 'Dashboard')"/>
+    </h1>
+  </div>
+  <div class="section-box">
+    <div id="scans-dashboard-controls" style="text-align:right;">
+    </div>
+    <div id="scans-dashboard" class="dashboard" data-dashboard-name="scans-dashboard"
+      data-controllers="{$controllers}" data-heights="{$heights}"
+      data-filters-string="{$filters_string}" data-controllers-pref-id="{$controllers_pref_id}"
+      data-filters-pref-id="{$filters_pref_id}" data-heights-pref-id="{$heights_pref_id}"
+      data-default-controller-string="nvt_bar_chart"
+      data-dashboard-controls="scans-dashboard-controls"
+      data-no-chart-links="{/envelope/params/no_chart_links}"
+      data-max-components="8">
+      <xsl:for-each select="$filters">
+        <span class="dashboard-filter" data-id="{@id}"
+          data-name="{name}"
+          data-term="{term}" data-type="{type}" />
+      </xsl:for-each>
+
+      <xsl:call-template name="scans-dashboard-data"/>
+    </div>
+  </div>
+
+  <xsl:call-template name="init-d3charts"/>
+</xsl:template>
+
+<xsl:template name="assets-dashboard-data">
+  <!-- Hosts -->
+  <div class="dashboard-data-source"
+    data-source-name="hosts-severity-count-source"
+    data-group-column="severity"
+    data-aggregate-type="host">
+    <span class="dashboard-chart"
+      data-chart-name="hosts-by-cvss"
+      data-chart-type="bar"
+      data-chart-template="info_by_cvss"/>
+    <span class="dashboard-chart"
+      data-chart-name="hosts-by-class"
+      data-chart-type="donut"
+      data-chart-template="info_by_class"/>
+  </div>
+  <div class="dashboard-data-source"
+    data-source-name="most-vulnerable-hosts-source"
+    data-aggregate-type="host"
+    data-group-column="uuid"
+    data-columns="severity"
+    data-text-columns="name,modified"
+    data-sort-fields="severity,modified"
+    data-sort-orders="descending,descending"
+    data-sort-stats="max,value">
+    <span class="dashboard-chart"
+      data-chart-name="most-vulnerable-hosts"
+      data-chart-type="horizontal_bar"
+      data-x-field="name"
+      data-y-fields="severity_max"
+      data-z-fields="severity_max"
+      data-gen-params='{{"empty_text": "No vulnerable Hosts found",
+                          "extra_tooltip_field_1": "modified",
+                          "extra_tooltip_label_1": "Updated" }}'
+      data-init-params='{{"title_text": "Most vulnerable hosts"}}'/>
+  </div>
+  <div class="dashboard-data-source"
+    data-source-name="host-counts-timeline-source"
+    data-aggregate-type="host"
+    data-group-column="modified"
+    data-subgroup-column="severity_level">
+    <span class="dashboard-chart"
+      data-chart-name="host-counts-timeline"
+      data-y-fields="c_count,c_count[High]"
+      data-z-fields="count,count[High]"
+      data-chart-type="line"/>
+  </div>
+
+  <!-- Operating Systems -->
+  <div class="dashboard-data-source"
+    data-source-name="os-average-severity-count-source"
+    data-group-column="average_severity"
+    data-aggregate-type="os">
+    <span class="dashboard-chart"
+      data-chart-name="oss-by-cvss"
+      data-chart-type="bar"
+      data-chart-template="info_by_cvss"/>
+    <span class="dashboard-chart"
+      data-chart-name="oss-by-class"
+      data-chart-type="donut"
+      data-chart-template="info_by_class"/>
+  </div>
+  <div class="dashboard-data-source"
+    data-source-name="most-vulnerable-oss-source"
+    data-aggregate-type="os"
+    data-group-column="uuid"
+    data-columns="average_severity,average_severity_score,hosts"
+    data-text-columns="name,modified"
+    data-sort-fields="average_severity_score,modified"
+    data-sort-orders="descending,descending"
+    data-sort-stats="max,value">
+    <span class="dashboard-chart"
+      data-chart-name="most-vulnerable-oss"
+      data-chart-type="horizontal_bar"
+      data-x-field="name"
+      data-y-fields="average_severity_score_max"
+      data-z-fields="average_severity_max"
+      data-gen-params='{{"empty_text": "No vulnerable Operating Systems found",
+                          "score_severity" : "average_severity_max",
+                          "score_assets" : "hosts_max",
+                          "score_asset_type" : "hosts",
+                          "extra_tooltip_field_1": "modified",
+                          "extra_tooltip_label_1": "Updated"}}'
+      data-init-params='{{"title_text": "Most vulnerable Operating Systems"}}'/>
+  </div>
 </xsl:template>
 
 <xsl:template match="dashboard" mode="assets">
@@ -929,95 +1383,218 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           data-term="{term}" data-type="{type}" />
       </xsl:for-each>
 
-      <!-- Hosts -->
-      <div class="dashboard-data-source"
-        data-source-name="hosts-severity-count-source"
-        data-group-column="severity"
-        data-aggregate-type="host">
-        <span class="dashboard-chart"
-          data-chart-name="hosts-by-cvss"
-          data-chart-type="bar"
-          data-chart-template="info_by_cvss"/>
-        <span class="dashboard-chart"
-          data-chart-name="hosts-by-class"
-          data-chart-type="donut"
-          data-chart-template="info_by_class"/>
-      </div>
-      <div class="dashboard-data-source"
-        data-source-name="most-vulnerable-hosts-source"
-        data-aggregate-type="host"
-        data-group-column="uuid"
-        data-columns="severity"
-        data-text-columns="name,modified"
-        data-sort-fields="severity,modified"
-        data-sort-orders="descending,descending"
-        data-sort-stats="max,value">
-        <span class="dashboard-chart"
-          data-chart-name="most-vulnerable-hosts"
-          data-chart-type="horizontal_bar"
-          data-x-field="name"
-          data-y-fields="severity_max"
-          data-z-fields="severity_max"
-          data-gen-params='{{"empty_text": "No vulnerable Hosts found",
-                             "extra_tooltip_field_1": "modified",
-                             "extra_tooltip_label_1": "Updated" }}'
-          data-init-params='{{"title_text": "Most vulnerable hosts"}}'/>
-      </div>
-      <div class="dashboard-data-source"
-        data-source-name="host-counts-timeline-source"
-        data-aggregate-type="host"
-        data-group-column="modified"
-        data-subgroup-column="severity_level">
-        <span class="dashboard-chart"
-          data-chart-name="host-counts-timeline"
-          data-y-fields="c_count,c_count[High]"
-          data-z-fields="count,count[High]"
-          data-chart-type="line"/>
-      </div>
-
-      <!-- Operating Systems -->
-      <div class="dashboard-data-source"
-        data-source-name="os-average-severity-count-source"
-        data-group-column="average_severity"
-        data-aggregate-type="os">
-        <span class="dashboard-chart"
-          data-chart-name="oss-by-cvss"
-          data-chart-type="bar"
-          data-chart-template="info_by_cvss"/>
-        <span class="dashboard-chart"
-          data-chart-name="oss-by-class"
-          data-chart-type="donut"
-          data-chart-template="info_by_class"/>
-      </div>
-      <div class="dashboard-data-source"
-        data-source-name="most-vulnerable-oss-source"
-        data-aggregate-type="os"
-        data-group-column="uuid"
-        data-columns="average_severity,average_severity_score,hosts"
-        data-text-columns="name,modified"
-        data-sort-fields="average_severity_score,modified"
-        data-sort-orders="descending,descending"
-        data-sort-stats="max,value">
-        <span class="dashboard-chart"
-          data-chart-name="most-vulnerable-oss"
-          data-chart-type="horizontal_bar"
-          data-x-field="name"
-          data-y-fields="average_severity_score_max"
-          data-z-fields="average_severity_max"
-          data-gen-params='{{"empty_text": "No vulnerable Operating Systems found",
-                             "score_severity" : "average_severity_max",
-                             "score_assets" : "hosts_max",
-                             "score_asset_type" : "hosts",
-                             "extra_tooltip_field_1": "modified",
-                             "extra_tooltip_label_1": "Updated"}}'
-          data-init-params='{{"title_text": "Most vulnerable Operating Systems"}}'/>
-      </div>
+      <xsl:call-template name="assets-dashboard-data"/>
     </div>
   </div>
 
   <xsl:call-template name="init-d3charts"/>
-  <!-- TODO: Update data sources to support multiple filters and
-             add filter selection to chart boxes again -->
+</xsl:template>
+
+<xsl:template name="secinfo-dashboard-data">
+  <!-- NVTs -->
+  <div class="dashboard-data-source"
+    data-source-name="nvt_severity_src"
+    data-aggregate-type="nvt"
+    data-group-column="severity">
+    <span class="dashboard-chart"
+      data-chart-name="nvt_bar_chart"
+      data-chart-type="bar"
+      data-chart-template="info_by_cvss"/>
+    <span class="dashboard-chart"
+      data-chart-name="nvt_donut_chart"
+      data-chart-type="donut"
+      data-chart-template="info_by_class"/>
+  </div>
+  <div class="dashboard-data-source"
+    data-source-name="nvt_timeline_src"
+    data-aggregate-type="nvt"
+    data-group-column="created">
+    <span class="dashboard-chart"
+      data-chart-name="nvt_timeline_chart"
+      data-chart-type="line"/>
+  </div>
+  <div class="dashboard-data-source"
+    data-source-name="nvt_families_src"
+    data-aggregate-type="nvt"
+    data-group-column="family"
+    data-column="severity">
+    <span class="dashboard-chart"
+      data-chart-name="nvt_bubble_chart"
+      data-chart-type="bubbles"/>
+  </div>
+  <div class="dashboard-data-source"
+    data-source-name="nvt_qod_type_src"
+    data-aggregate-type="nvt"
+    data-group-column="qod_type">
+    <span class="dashboard-chart"
+      data-chart-name="nvt_qod_type"
+      data-chart-type="donut"
+      data-chart-template="qod_type_counts"/>
+  </div>
+  <div class="dashboard-data-source"
+    data-source-name="nvt_qod_src"
+    data-aggregate-type="nvt"
+    data-group-column="qod">
+    <span class="dashboard-chart"
+      data-chart-name="nvt_qod"
+      data-chart-type="donut"
+      data-chart-template="percentage_counts"/>
+  </div>
+
+  <!-- CVEs -->
+  <div class="dashboard-data-source"
+    data-source-name="cve_severity_src"
+    data-aggregate-type="cve"
+    data-group-column="severity">
+    <span class="dashboard-chart"
+      data-chart-name="cve_bar_chart"
+      data-chart-type="bar"
+      data-chart-template="info_by_cvss"/>
+    <span class="dashboard-chart"
+      data-chart-name="cve_donut_chart"
+      data-chart-type="donut"
+      data-chart-template="info_by_class"/>
+  </div>
+  <div class="dashboard-data-source"
+    data-source-name="cve_timeline_src"
+    data-aggregate-type="cve"
+    data-group-column="created">
+    <span class="dashboard-chart"
+      data-chart-name="cve_timeline_chart"
+      data-chart-type="line"/>
+  </div>
+
+  <!-- CPEs -->
+  <div class="dashboard-data-source"
+    data-source-name="cpe_severity_src"
+    data-aggregate-type="cpe"
+    data-group-column="severity">
+    <span class="dashboard-chart"
+      data-chart-name="cpe_bar_chart"
+      data-chart-type="bar"
+      data-chart-template="info_by_cvss"/>
+    <span class="dashboard-chart"
+      data-chart-name="cpe_donut_chart"
+      data-chart-type="donut"
+      data-chart-template="info_by_class"/>
+  </div>
+  <div class="dashboard-data-source"
+    data-source-name="cpe_timeline_src"
+    data-aggregate-type="cpe"
+    data-group-column="created">
+    <span class="dashboard-chart"
+      data-chart-name="cpe_timeline_chart"
+      data-chart-type="line"/>
+  </div>
+
+  <!-- OVAL Definitions -->
+  <div class="dashboard-data-source"
+    data-source-name="ovaldef_severity_src"
+    data-aggregate-type="ovaldef"
+    data-group-column="severity">
+    <span class="dashboard-chart"
+      data-chart-name="ovaldef_bar_chart"
+      data-chart-type="bar"
+      data-chart-template="info_by_cvss"/>
+    <span class="dashboard-chart"
+      data-chart-name="ovaldef_donut_chart"
+      data-chart-type="donut"
+      data-chart-template="info_by_class"/>
+  </div>
+  <div class="dashboard-data-source"
+    data-source-name="ovaldef_timeline_src"
+    data-aggregate-type="ovaldef"
+    data-group-column="created">
+    <span class="dashboard-chart"
+      data-chart-name="ovaldef_timeline_chart"
+      data-chart-type="line"/>
+  </div>
+  <div class="dashboard-data-source"
+    data-source-name="ovaldef_class_src"
+    data-aggregate-type="ovaldef"
+    data-group-column="class">
+    <span class="dashboard-chart"
+      data-chart-name="ovaldef_class_donut_chart"
+      data-chart-type="donut"/>
+  </div>
+
+  <!-- CERT Bund -->
+  <div class="dashboard-data-source"
+    data-source-name="cert_bund_adv_severity_src"
+    data-group-column="severity"
+    data-aggregate-type="cert_bund_adv">
+    <span class="dashboard-chart"
+      data-chart-name="cert_bund_adv_bar_chart"
+      data-chart-template="info_by_cvss"
+      data-chart-type="bar"/>
+    <span class="dashboard-chart"
+      data-chart-name="cert_bund_adv_donut_chart"
+      data-chart-template="info_by_class"
+      data-chart-type="donut"/>
+  </div>
+  <div class="dashboard-data-source"
+    data-source-name="cert_bund_adv_timeline_src"
+    data-aggregate-type="cert_bund_adv"
+    data-group-column="created">
+    <span class="dashboard-chart"
+      data-chart-name="cert_bund_adv_timeline_chart"
+      data-chart-type="line"/>
+  </div>
+
+  <!-- DFN CERT -->
+  <div class="dashboard-data-source"
+    data-source-name="dfn_cert_adv_severity_src"
+    data-aggregate-type="dfn_cert_adv"
+    data-group-column="severity">
+    <span class="dashboard-chart"
+      data-chart-name="dfn_cert_adv_bar_chart"
+      data-chart-type="bar"
+      data-chart-template="info_by_cvss"/>
+    <span class="dashboard-chart"
+      data-chart-name="dfn_cert_adv_donut_chart"
+      data-chart-type="donut"
+      data-chart-template="info_by_class"/>
+  </div>
+  <div class="dashboard-data-source"
+    data-source-name="dfn_cert_adv_timeline_src"
+    data-aggregate-type="dfn_cert_adv"
+    data-group-column="created">
+    <span class="dashboard-chart"
+      data-chart-name="dfn_cert_adv_timeline_chart"
+      data-chart-type="line"/>
+  </div>
+
+  <!-- All SecInfo -->
+  <div class="dashboard-data-source"
+    data-source-name="allinfo_severity_src"
+    data-aggregate-type="allinfo"
+    data-group-column="severity">
+    <span class="dashboard-chart"
+      data-chart-name="allinfo_chart"
+      data-chart-type="bar"
+      data-chart-template="info_by_cvss"/>
+    <span class="dashboard-chart"
+      data-chart-name="allinfo_donut_chart"
+      data-chart-type="donut"
+      data-chart-template="info_by_class"/>
+  </div>
+  <div class="dashboard-data-source"
+    data-source-name="allinfo_timeline_src"
+    data-aggregate-type="allinfo"
+    data-group-column="created">
+    <span class="dashboard-chart"
+      data-chart-name="allinfo_timeline_chart"
+      data-chart-type="line"/>
+  </div>
+  <div class="dashboard-data-source"
+    data-source-name="allinfo_by_info_type_src"
+    data-aggregate-type="allinfo"
+    data-group-column="type">
+    <span class="dashboard-chart"
+      data-chart-name="allinfo_by_info_type"
+      data-chart-type="donut"
+      data-chart-template="resource_type_counts"/>
+  </div>
 </xsl:template>
 
 <xsl:template match="dashboard" mode="secinfo">
@@ -1097,216 +1674,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           data-name="{name}"
           data-term="{term}" data-type="{type}" />
       </xsl:for-each>
-      <!-- NVTs -->
-      <div class="dashboard-data-source"
-        data-source-name="nvt_severity_src"
-        data-aggregate-type="nvt"
-        data-group-column="severity">
-        <span class="dashboard-chart"
-          data-chart-name="nvt_bar_chart"
-          data-chart-type="bar"
-          data-chart-template="info_by_cvss"/>
-        <span class="dashboard-chart"
-          data-chart-name="nvt_donut_chart"
-          data-chart-type="donut"
-          data-chart-template="info_by_class"/>
-      </div>
-      <div class="dashboard-data-source"
-        data-source-name="nvt_timeline_src"
-        data-aggregate-type="nvt"
-        data-group-column="created">
-        <span class="dashboard-chart"
-          data-chart-name="nvt_timeline_chart"
-          data-chart-type="line"/>
-      </div>
-      <div class="dashboard-data-source"
-        data-source-name="nvt_families_src"
-        data-aggregate-type="nvt"
-        data-group-column="family"
-        data-column="severity">
-        <span class="dashboard-chart"
-          data-chart-name="nvt_bubble_chart"
-          data-chart-type="bubbles"/>
-      </div>
-      <div class="dashboard-data-source"
-        data-source-name="nvt_qod_type_src"
-        data-aggregate-type="nvt"
-        data-group-column="qod_type">
-        <span class="dashboard-chart"
-          data-chart-name="nvt_qod_type"
-          data-chart-type="donut"
-          data-chart-template="qod_type_counts"/>
-      </div>
-      <div class="dashboard-data-source"
-        data-source-name="nvt_qod_src"
-        data-aggregate-type="nvt"
-        data-group-column="qod">
-        <span class="dashboard-chart"
-          data-chart-name="nvt_qod"
-          data-chart-type="donut"
-          data-chart-template="percentage_counts"/>
-      </div>
 
-      <!-- CVEs -->
-      <div class="dashboard-data-source"
-        data-source-name="cve_severity_src"
-        data-aggregate-type="cve"
-        data-group-column="severity">
-        <span class="dashboard-chart"
-          data-chart-name="cve_bar_chart"
-          data-chart-type="bar"
-          data-chart-template="info_by_cvss"/>
-        <span class="dashboard-chart"
-          data-chart-name="cve_donut_chart"
-          data-chart-type="donut"
-          data-chart-template="info_by_class"/>
-      </div>
-      <div class="dashboard-data-source"
-        data-source-name="cve_timeline_src"
-        data-aggregate-type="cve"
-        data-group-column="created">
-        <span class="dashboard-chart"
-          data-chart-name="cve_timeline_chart"
-          data-chart-type="line"/>
-      </div>
-
-      <!-- CPEs -->
-      <div class="dashboard-data-source"
-        data-source-name="cpe_severity_src"
-        data-aggregate-type="cpe"
-        data-group-column="severity">
-        <span class="dashboard-chart"
-          data-chart-name="cpe_bar_chart"
-          data-chart-type="bar"
-          data-chart-template="info_by_cvss"/>
-        <span class="dashboard-chart"
-          data-chart-name="cpe_donut_chart"
-          data-chart-type="donut"
-          data-chart-template="info_by_class"/>
-      </div>
-      <div class="dashboard-data-source"
-        data-source-name="cpe_timeline_src"
-        data-aggregate-type="cpe"
-        data-group-column="created">
-        <span class="dashboard-chart"
-          data-chart-name="cpe_timeline_chart"
-          data-chart-type="line"/>
-      </div>
-
-      <!-- OVAL Definitions -->
-      <div class="dashboard-data-source"
-        data-source-name="ovaldef_severity_src"
-        data-aggregate-type="ovaldef"
-        data-group-column="severity">
-        <span class="dashboard-chart"
-          data-chart-name="ovaldef_bar_chart"
-          data-chart-type="bar"
-          data-chart-template="info_by_cvss"/>
-        <span class="dashboard-chart"
-          data-chart-name="ovaldef_donut_chart"
-          data-chart-type="donut"
-          data-chart-template="info_by_class"/>
-      </div>
-      <div class="dashboard-data-source"
-        data-source-name="ovaldef_timeline_src"
-        data-aggregate-type="ovaldef"
-        data-group-column="created">
-        <span class="dashboard-chart"
-          data-chart-name="ovaldef_timeline_chart"
-          data-chart-type="line"/>
-      </div>
-      <div class="dashboard-data-source"
-        data-source-name="ovaldef_class_src"
-        data-aggregate-type="ovaldef"
-        data-group-column="class">
-        <span class="dashboard-chart"
-          data-chart-name="ovaldef_class_donut_chart"
-          data-chart-type="donut"/>
-      </div>
-
-      <!-- CERT Bund -->
-      <div class="dashboard-data-source"
-        data-source-name="cert_bund_adv_severity_src"
-        data-group-column="severity"
-        data-aggregate-type="cert_bund_adv">
-        <span class="dashboard-chart"
-          data-chart-name="cert_bund_adv_bar_chart"
-          data-chart-template="info_by_cvss"
-          data-chart-type="bar"/>
-        <span class="dashboard-chart"
-          data-chart-name="cert_bund_adv_donut_chart"
-          data-chart-template="info_by_class"
-          data-chart-type="donut"/>
-      </div>
-      <div class="dashboard-data-source"
-        data-source-name="cert_bund_adv_timeline_src"
-        data-aggregate-type="cert_bund_adv"
-        data-group-column="created">
-        <span class="dashboard-chart"
-          data-chart-name="cert_bund_adv_timeline_chart"
-          data-chart-type="line"/>
-      </div>
-
-      <!-- DFN CERT -->
-      <div class="dashboard-data-source"
-        data-source-name="dfn_cert_adv_severity_src"
-        data-aggregate-type="dfn_cert_adv"
-        data-group-column="severity">
-        <span class="dashboard-chart"
-          data-chart-name="dfn_cert_adv_bar_chart"
-          data-chart-type="bar"
-          data-chart-template="info_by_cvss"/>
-        <span class="dashboard-chart"
-          data-chart-name="dfn_cert_adv_donut_chart"
-          data-chart-type="donut"
-          data-chart-template="info_by_class"/>
-      </div>
-      <div class="dashboard-data-source"
-        data-source-name="dfn_cert_adv_timeline_src"
-        data-aggregate-type="dfn_cert_adv"
-        data-group-column="created">
-        <span class="dashboard-chart"
-          data-chart-name="dfn_cert_adv_timeline_chart"
-          data-chart-type="line"/>
-      </div>
-
-      <!-- All SecInfo -->
-      <div class="dashboard-data-source"
-        data-source-name="allinfo_severity_src"
-        data-aggregate-type="allinfo"
-        data-group-column="severity">
-        <span class="dashboard-chart"
-          data-chart-name="allinfo_chart"
-          data-chart-type="bar"
-          data-chart-template="info_by_cvss"/>
-        <span class="dashboard-chart"
-          data-chart-name="allinfo_donut_chart"
-          data-chart-type="donut"
-          data-chart-template="info_by_class"/>
-      </div>
-      <div class="dashboard-data-source"
-        data-source-name="allinfo_timeline_src"
-        data-aggregate-type="allinfo"
-        data-group-column="created">
-        <span class="dashboard-chart"
-          data-chart-name="allinfo_timeline_chart"
-          data-chart-type="line"/>
-      </div>
-      <div class="dashboard-data-source"
-        data-source-name="allinfo_by_info_type_src"
-        data-aggregate-type="allinfo"
-        data-group-column="type">
-        <span class="dashboard-chart"
-          data-chart-name="allinfo_by_info_type"
-          data-chart-type="donut"
-          data-chart-template="resource_type_counts"/>
-      </div>
+      <xsl:call-template name="secinfo-dashboard-data"/>
     </div>
   </div>
 
   <xsl:call-template name="init-d3charts"/>
-  <!-- TODO: Update data sources to support multiple filters and
-             add filter selection to chart boxes again -->
 </xsl:template>
 
 </xsl:stylesheet>

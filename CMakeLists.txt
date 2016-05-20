@@ -464,6 +464,7 @@ install (FILES src/html/classic/img/agent.png
                src/html/classic/img/loading.gif
                src/html/classic/img/pause.png
                src/html/classic/img/cvss_calculator.svg
+               src/html/classic/img/dashboard.svg
                src/html/classic/img/my_setting.svg
                src/html/classic/img/performance.svg
                src/html/classic/img/port_list.svg
@@ -487,6 +488,7 @@ install (FILES src/html/classic/img/agent.png
                src/html/classic/img/cert_bund_adv.svg
                src/html/classic/img/dfn_cert_adv.svg
                src/html/classic/img/result.svg
+               src/html/classic/img/scan.svg
                src/html/classic/img/schedule.svg
                src/html/classic/img/target.svg
                src/html/classic/img/task.svg

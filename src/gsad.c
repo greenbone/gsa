@@ -2751,23 +2751,7 @@ exec_omp_get (struct MHD_Connection *connection,
                                           "cmd");
   if (cmd == NULL)
     {
-      if (credentials->capabilities
-          && strcasestr (credentials->capabilities, "get_tasks"))
-        cmd = "get_tasks";
-      else if (credentials->capabilities
-               && strcasestr (credentials->capabilities, "get_reports"))
-        cmd = "get_reports";
-      else if (credentials->capabilities
-               && strcasestr (credentials->capabilities, "get_info"))
-        cmd = "dashboard";
-      else if (credentials->capabilities
-               && strcasestr (credentials->capabilities, "get_targets"))
-        cmd = "get_targets";
-      else if (credentials->capabilities
-               && strcasestr (credentials->capabilities, "get_system_reports"))
-        cmd = "get_system_reports";
-      else
-        cmd = "get_my_settings";
+      cmd = "dashboard";  // TODO: Allow settings for face + users(?)
     }
 
   if (openvas_validate (validator, "cmd", cmd))

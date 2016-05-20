@@ -1717,8 +1717,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div id="gb_menu" class="clearfix">
    <ul>
     <li>
-      <img class="logo" src="/img/greenbone.svg" />
+      <a class="top_button"
+          href="/omp?cmd=dashboard&amp;token={/envelope/token}">
+        <img class="logo" src="/img/greenbone.svg"/>
+        <xsl:value-of select="gsa:i18n ('Dashboard', 'Dashboard')"/>
+      </a>
+    </li>
+    <li>
       <xsl:variable name="items" xmlns="">
+        <xsl:if test="gsa:may-op ('GET_TASKS') or gsa:may-op ('GET_REPORTS') or gsa:may-op ('GET_RESULTS') or gsa:may-op ('GET_NOTES') or gsa:may-op ('GET_OVERRIDES')">
+          <item>
+            <page>dashboard&amp;dashboard_name=scans</page>
+            <name><xsl:value-of select="gsa:i18n ('Dashboard', 'Dashboard')"/></name>
+          </item>
+        </xsl:if>
         <xsl:if test="gsa:may-op ('GET_TASKS')">
           <item>
             <page>get_tasks</page>

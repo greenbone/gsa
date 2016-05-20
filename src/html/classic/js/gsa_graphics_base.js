@@ -1327,6 +1327,8 @@
     var controllers = [];
     var controllerIndexes = {};
     var currentCtrlIndex = -1;
+    var filterType;
+    var allFilters = [];
     var filters = [];
     var filterIndexes = {};
     var currentFilterIndex = -1;
@@ -1357,6 +1359,7 @@
       dashboard: get_dashboard,
       id: get_id,
       controllerString: get_set_controller_string,
+      filterType: get_set_filter_type,
       filterString: get_set_filter_string,
       currentFilter: get_current_filter,
       addController: add_controller,
@@ -1486,7 +1489,7 @@
       if (!hideControllerSelect) {
         dashboard_component.createChartSelector();
       }
-      if (!hideFilterSelect && filters.length > 1) {
+      if (!hideFilterSelect && allFilters.length > 1) {
         dashboard_component.createFilterSelector();
       }
     }
@@ -1532,6 +1535,53 @@
       dashboard.updateControllersString();
     }
 
+    function get_set_filter_type(newType) {
+      if (!gsa.is_defined(newType)) {
+        return filterType;
+      }
+      else if (newType !== filterType) {
+        var prevFilter = filters[currentFilterIndex];
+        var select2data;
+        select2data = [];
+        filterType = newType;
+        filterIndexes = {};
+        filters = [];
+        for (var i = 0; i < allFilters.length; i++) {
+          if (allFilters[i].type === '' || allFilters[i].type == filterType) {
+            var filterID = allFilters[i].id;
+            filterIndexes[filterID] = filters.length;
+            if (filterSelectElem) {
+              select2data.push({text: allFilters[i].name, id: filterID});
+            }
+            filters.push(allFilters[i]);
+          }
+        }
+        if (filterSelectElem) {
+          filterSelectElem.html('');
+          filterSelectElem.select2({data: select2data});
+        }
+        if (gsa.is_defined(prevFilter)) {
+          var newIndex;
+          for (var i = 0; i < filters.length; i++) {
+            if (filters[i].id === prevFilter.id) {
+              newIndex = i;
+              break;
+            }
+          }
+          if (gsa.is_defined (newIndex))
+            {
+              currentFilterIndex = newIndex;
+              filterSelectElem.select2()
+                .val(prevFilter.id ? prevFilter.id : '--');
+            }
+          else
+            {
+              filterSelectElem.select2().val('--').trigger('change');
+            }
+        }
+      }
+    }
+
     function get_set_filter_string(newStr) {
       if (!gsa.is_defined(newStr)) {
         return filterString;
@@ -1555,8 +1605,7 @@
     }
 
     function add_filter(filterID, filter) {
-      filterIndexes[filterID] = filters.length;
-      filters.push(filter);
+      allFilters.push(filter);
     }
 
     function remove() {
@@ -1702,9 +1751,19 @@
           index >= controllers.length) {
         return console.error('Invalid chart index: ' + index);
       }
+      var prev_filter_type;
+      var new_filter_type;
+      if (controllers[currentCtrlIndex])
+        prev_filter_type = controllers[currentCtrlIndex].filterType();
+      new_filter_type = controllers[index].filterType();
+
       currentCtrlIndex = index;
       dashboard_component.controllerString(
           controllers[currentCtrlIndex].chart_name());
+
+      if (prev_filter_type !== new_filter_type) {
+        dashboard_component.filterType(new_filter_type);
+      }
 
       if (requestData && selectorsActive) {
         dashboard_component.redraw();
@@ -1914,7 +1973,8 @@
       if (filterSelectElem) {
         $(filterSelectElem).select2();
         $(filterSelectElem).on('change', function() {
-          dashboard_component.selectFilter(this.value, true, true);
+          var value = this.value != '--' ? this.value : '';
+          dashboard_component.selectFilter(value, true, true);
         });
       }
     }
@@ -1952,6 +2012,7 @@
       label: get_set_label,
       icon: get_set_icon,
       sendRequest: send_request,
+      filterType: get_filter_type,
 
       // TODO use camel case
       data_src: get_set_data_source,
@@ -2028,6 +2089,11 @@
     /* Gets the chart type */
     function get_chart_type() {
       return chart_type;
+    }
+
+    /* Gets the filter type */
+    function get_filter_type() {
+      return data_src.filterType();
     }
 
     /* Gets or sets the current request */
@@ -2135,6 +2201,7 @@
   *  name: name of the data source
   *  options:  parameters for the command
   *  prefix:  prefix for OMP commands
+  *  filter_type: Accepted filter type or empty for any.
   */
   function create_data_source(name, options, prefix) {
     prefix = gsa.is_defined(prefix) ? prefix : '/omp?';
@@ -2148,10 +2215,12 @@
       xml: 1,
     };
     var command;
+    var filter_type;
 
     var data_source = {
       prefix: get_set_prefix,
       command: get_set_command,
+      filterType: get_filter_type,
       param: get_set_param,
       params: get_params,
       addRequest: add_request,
@@ -2179,11 +2248,15 @@
 
       if (options.type === 'task' || options.type === 'tasks') {
         command = 'get_tasks';
+        filter_type = 'Task';
+
         params.ignore_pagination = 1;
         params.schedules_only = 1;
       }
       else {
         command = 'get_aggregate';
+        filter_type = filter_type_name(options.aggregate_type);
+
         params.aggregate_type = options.aggregate_type;
 
         params.data_column = gsa.is_defined(options.data_column) ?
@@ -2263,6 +2336,11 @@
 
       command = value;
       return data_source;
+    }
+
+    /* Gets the filter type */
+    function get_filter_type() {
+      return filter_type;
     }
 
     /* Gets or sets a parameter */
@@ -3115,6 +3193,29 @@
         return gsa._('CERT-Bund Advisories');
       default:
         return resource_type_name(type) + 's';
+    }
+  }
+
+  /*
+  * Gets the Filter type name of a resource type.
+  */
+  function filter_type_name(type) {
+    switch (type.toLowerCase()) {
+      case 'asset':
+      case 'os':
+      case 'host':
+        return 'Asset';
+      case 'info':
+      case 'nvt':
+      case 'cve':
+      case 'cpe':
+      case 'ovaldef':
+      case 'cert_bund_adv':
+      case 'dfn_cert_adv':
+      case 'allinfo':
+        return 'SecInfo';
+      default:
+        return capitalize(type);
     }
   }
 

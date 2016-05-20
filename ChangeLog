@@ -1,3 +1,48 @@
+2016-05-20  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Add dashboards "Scans" and "Main" and use the Main dashboard as the
+	start page.
+
+	* CMakeLists.txt: Install src/html/classic/img/dashboard.svg and
+	src/html/classic/img/scan.svg.
+
+	* src/gsad_omp.c (dashboard): Show "main" dashboard when no dashboard
+	name is given instead of "secinfo".
+
+	* src/gsad.c (exec_omp_get): Show the dashboard if "cmd" param is NULL.
+
+	* src/html/classic/img/dashboard.svg: New image.
+
+	* src/html/classic/img/scan.svg: New image.
+
+	* src/html/classic/graphics.xsl (dashboard): Add dashboards "main" and
+	"scans".
+	(dashboard [main], scans-dashboard-data, dashboard [scans])
+	(assets-dashboard-data): New templates.
+	(dashboard [assets]): Add data sources and chart controllers
+	using new template assets-dashboard-data also used for main dashboard.
+	(secinfo-dashboard-data): New template.
+	(dashboard [secinfo]): Add data sources and chart controllers
+	using new template secinfo-dashboard-data also used for main dashboard.
+
+	* src/html/classic/gsad.xsl (html-gsa-navigation): Add "Dashboard"
+	item to main menu and a "Dashboard" item to the "Scans" menu.
+
+	* src/html/classic/css/gsa-style.css (#gb_menu > ul > li): Change width
+	to 12.5% so the added dashboard button fits.
+
+	* src/html/classic/js/gsa_graphics_base.js (create_dashboard_component):
+	Allow limiting the component to a certain filter type which can be set
+	with the filterType function.
+	(select_controller_index): Get the filter type from the new controller
+	and update the filters list accordingly.
+	(apply_select2): Handle case where value is "--".
+	(create_chart_controller): Add filterType function which gets the
+	filter type from the data source.
+	(create_data_source): Define a filter_type to limit the selection of
+	filters in the chart component and add filterType function to get it.
+	(filter_type_name): New. Gets the filter type name for a a given type.
+
 2016-05-20  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/omp.xsl (report): Add icons to create a new alert to the

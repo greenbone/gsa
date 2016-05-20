@@ -427,7 +427,7 @@ td p {
 
 #gb_menu > ul > li {
   float:left;
-  width: 14.2857143%; /* 100. / 7 */
+  width: 12.5%; /* 100. / 8 */
 }
 
 #gb_menu ul > li:hover > a {
