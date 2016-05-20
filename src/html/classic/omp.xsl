@@ -33701,12 +33701,17 @@ should not have received it.
                       </xsl:for-each>
                     </select>
                     <input type="image"
-                           name="submit"
-                           value="Run Alert"
-                           title="{gsa:i18n ('Run Alert', 'Report')}"
-                           src="/img/start.png"
-                           style="margin-left:3px;"
-                           alt="{gsa:i18n ('Run Alert', 'Report')}"/>
+                          name="submit"
+                          value="Run Alert"
+                          title="{gsa:i18n ('Run Alert', 'Report')}"
+                          src="/img/start.png"
+                          class="icon"
+                          alt="{gsa:i18n ('Run Alert', 'Report')}"/>
+
+                    <a href="#" title="{ gsa:i18n('Create a new alert') }"
+                      class="new-action-icon icon" data-type="alert" data-done="select[name=alert_id]">
+                      <img src="/img/new.png"/>
+                    </a>
                   </form>
                 </div>
               </td>
@@ -33772,8 +33777,13 @@ should not have received it.
                            value="Run Alert"
                            title="{gsa:i18n ('Run Alert', 'Report')}"
                            src="/img/start.png"
-                           style="margin-left:3px;"
+                           class="icon"
                            alt="{gsa:i18n ('Run Alert', 'Report')}"/>
+
+                    <a href="#" title="{ gsa:i18n('Create a new alert') }"
+                      class="new-action-icon icon" data-type="alert" data-done="select[name=alert_id]">
+                      <img src="/img/new.png"/>
+                    </a>
                   </form>
                 </div>
               </td>

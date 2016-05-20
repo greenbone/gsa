@@ -1,5 +1,10 @@
 2016-05-20  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/omp.xsl (report): Add icons to create a new alert to the
+	report result summary table.
+
+2016-05-20  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/css/gsa-style.css: Update styling for small_form ids.
 	Currently we need this id in report result summary to style the alert buttons
 	correctly.
