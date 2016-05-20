@@ -750,6 +750,14 @@ select[multiple] {
   vertical-align: middle;
 }
 
+#small_form .icon {
+  margin-left: 5px;
+}
+
+#small_form .new-action-icon img {
+  vertical-align: middle;
+}
+
 .small_inline_form select, .small_inline_form input {
   font-size: 10px;
   vertical-align: top;
