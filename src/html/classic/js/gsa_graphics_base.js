@@ -2837,6 +2837,18 @@
       }
     });
 
+    for (var i = 0; i < column_info.subgroups.length; i++) {
+      // Create copies of subgroup_value column for individual subgroups
+      var column_copy = {};
+      var copy_name = 'value[' + column_info.subgroups[i] + ']';
+      for (var prop in column_info.columns.subgroup_value) {
+        column_copy[prop] = column_info.columns.subgroup_value[prop];
+      }
+      column_copy.name = copy_name;
+      column_copy.subgroup_value = column_info.subgroups[i];
+      column_info.columns[copy_name] = column_copy;
+    }
+
     xml_data.selectAll('aggregate group_column').each(function() {
       column_info.group_columns.push(d3.select(this).text());
     });
