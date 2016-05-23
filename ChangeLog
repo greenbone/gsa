@@ -1,3 +1,10 @@
+2016-05-23  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/js/gsa_donut_chart.js
+	(DonutChartGenerator.prototype.generate): Move generating the slice label
+	within generating the slice anchor. This allows to remove duplicate code and a
+	better svg element structure.
+
 2016-05-23  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/omp.xsl (edit-settings-filters): Allow selecting

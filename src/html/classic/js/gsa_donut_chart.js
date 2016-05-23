@@ -276,7 +276,29 @@
           slice.insert('path')
             .attr('class', 'slice_outer')
             .style('shape-rendering', 'geometricPrecision');
-        });
+        })
+        .insert('text')
+        .attr('class', 'slice_label')
+        .text(function(d, i) {
+          if (d.endAngle - d.startAngle >= 0.02) {
+            return d.data[self.y_field];
+          }
+          else {
+            return '';
+          }
+        })
+        .attr('x', function(d, i) {
+          return Math.sin((d.startAngle + d.endAngle) / 2) * rx *
+            ((1 + ri) / 2);
+        })
+        .attr('y', function(d, i) {
+          return -Math.cos((d.startAngle + d.endAngle) / 2) * ry *
+            ((1 + ri) / 2);
+        })
+        .attr('text-anchor', 'middle')
+        .style('font-weight', 'bold')
+        .style('font-size', '7pt')
+        .attr('title', get_title);
 
     donut.selectAll('.slice_inner')
       .data(slices)
@@ -345,36 +367,6 @@
     for (var elem in slice_elems) {
       $(donut.node()).append(slice_elems[elem]);
     }
-
-    donut.selectAll('.slice_label')
-      .data(slices)
-      .enter()
-      .insert('a')
-        .attr('xlink:href', generate_link)
-        .insert('text')
-        .attr('class', 'slice_label')
-        .on('mouseover', set_tooltip_title)
-        .on('mouseout', this.tip.hide)
-        .text(function(d, i) {
-          if (d.endAngle - d.startAngle >= 0.02) {
-            return d.data[self.y_field];
-          }
-          else {
-            return '';
-          }
-        })
-        .attr('x', function(d, i) {
-          return Math.sin((d.startAngle + d.endAngle) / 2) * rx *
-            ((1 + ri) / 2);
-        })
-        .attr('y', function(d, i) {
-          return -Math.cos((d.startAngle + d.endAngle) / 2) * ry *
-            ((1 + ri) / 2);
-        })
-        .attr('text-anchor', 'middle')
-        .style('font-weight', 'bold')
-        .style('font-size', '7pt')
-        .attr('title', get_title);
 
     // In case of missing data, draw a transparent grey donut
     if (slices.length === 0) {
