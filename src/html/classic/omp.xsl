@@ -1814,7 +1814,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <select style="margin-bottom: 0px;" name="settings_filter:{$uuid}">
     <option value="">--</option>
     <xsl:variable name="id" select="filters/@id"/>
-    <xsl:for-each select="commands_response/get_filters_response/filter[type=$filter-type]">
+    <xsl:for-each select="commands_response/get_filters_response/filter[type=$filter-type or type='']">
       <xsl:choose>
         <xsl:when test="@id = $filter">
           <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
@@ -37006,6 +37006,15 @@ should not have received it.
             </td>
           </tr>
           <tr>
+            <td><xsl:value-of select="gsa:i18n ('Assets Filter', 'Asset')"/></td>
+            <td>
+              <xsl:call-template name="get-settings-filter">
+                <xsl:with-param name="filter"
+                                select="get_settings_response/setting[name='Assets Filter']/value"/>
+              </xsl:call-template>
+            </td>
+          </tr>
+          <tr>
             <td><xsl:value-of select="gsa:i18n ('Configs Filter', 'Scan Config')"/></td>
             <td>
               <xsl:call-template name="get-settings-filter">
@@ -37629,6 +37638,17 @@ should not have received it.
                     <xsl:with-param name="filter-type" select="'Alert'"/>
                     <xsl:with-param name="filter"
                                     select="gsa:param-or (concat ('settings_filter:', 'b833a6f2-dcdc-4535-bfb0-a5154b5b5092'), get_settings_response/setting[name='Alerts Filter']/value)"/>
+                  </xsl:call-template>
+                </td>
+              </tr>
+              <tr>
+                <td><xsl:value-of select="gsa:i18n ('Assets Filter', 'Asset')"/></td>
+                <td>
+                  <xsl:call-template name="edit-settings-filters">
+                    <xsl:with-param name="uuid" select="'0f040d06-abf9-43a2-8f94-9de178b0e978'"/>
+                    <xsl:with-param name="filter-type" select="'Asset'"/>
+                    <xsl:with-param name="filter"
+                                    select="gsa:param-or (concat ('settings_filter:', '0f040d06-abf9-43a2-8f94-9de178b0e978'), get_settings_response/setting[name='Assets Filter']/value)"/>
                   </xsl:call-template>
                 </td>
               </tr>
