@@ -209,9 +209,6 @@
       display.svg().on('mousemove', null);
       display.svg().on('mouseleave', null);
 
-      this.svg.attr('transform',
-        'translate(' + this.margin.left + ',' + this.margin.top + ')');
-
       this.x_axis_elem = this.svg.append('g')
         .attr('class', 'x axis')
         .call(this.x_axis);
@@ -338,6 +335,9 @@
         });
     }
 
+    this.svg.attr('transform',
+      'translate(' + this.margin.left + ',' + this.margin.top + ')');
+
     // Add a text if records list is empty
     var dummy_data = [];
     if (records.length === 0) {
@@ -367,13 +367,21 @@
         data.column_info.columns.value.column,
         data.column_info.columns.value.type, data.filter_info);
 
+    // Fade out and remove unused bars
+    this.svg.selectAll('.bar')
+      .data(records)
+      .exit()
+      .transition().delay(0).duration(250).ease('sin-in-out')
+      .style('opacity', 0)
+      .remove();
+
     // Add new bars
     this.svg.selectAll('.bar')
       .data(records).enter().insert('a')
         .attr('class', 'bar')
         .attr('xlink:href', generateLink)
         .insert('rect', '.x.axis')
-          .attr('class', 'bar')
+          .attr('class', 'bar-rect')
           .attr('x', this.y_scale(0))
           .attr('y', function(d) { return self.x_scale(d[self.x_field]); })
           .attr('width', 0)
@@ -409,14 +417,6 @@
       .duration(125)
       .ease('sin-in-out')
       .call(this.y_axis);
-
-    // Fade out and remove unused bars
-    this.svg.selectAll('.bar rect')
-      .data(records)
-      .exit()
-      .transition().delay(0).duration(250).ease('sin-in-out')
-      .style('opacity', 0)
-      .remove();
 
     this.svg.call(this.tip);
   };

@@ -1,3 +1,8 @@
+2016-05-23  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/js/gsa_h_bar_chart.js (generate): Fix removal of
+	unused bars and move axis origin on updates to adapt to label changes.
+
 2016-05-23  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/js/gsa_donut_chart.js
