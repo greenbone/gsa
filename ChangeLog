@@ -1,3 +1,12 @@
+2016-05-23  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/css/gsa-style.css: Fix width of multiple select boxes.
+	select2 adds a width to the style which is not the preferred width we need
+	here. E.g. if the select box is empty the width is set to something like 10px.
+	Because the width of the inner elements is bigger when using a multiple select
+	the following element would be displayed under the text box. Setting the width
+	to auto fixes this behaviour.
+
 2016-05-20  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/classic/gsad.xsl (html-gsa-logo): Rename link title of

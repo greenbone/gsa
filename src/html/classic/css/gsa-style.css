@@ -1516,6 +1516,7 @@ select[multiple] {
 
 .form-horizontal .select2-container {
   min-width: 180px;
+  width: auto !important;
 }
 
 .form-horizontal .select2-selection {
