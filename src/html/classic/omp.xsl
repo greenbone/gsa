@@ -12727,23 +12727,13 @@ should not have received it.
       <xsl:with-param name="select-value" select="$select_type"/>
     </xsl:call-template>
   </xsl:if>
-<!--
-  TODO These are not supported on manager side.
-  <xsl:if test="$select_type = 'host' or gsa:may-op ('get_assets')">
+  <xsl:if test="$select_type = 'asset' or gsa:may-op ('get_assets')">
     <xsl:call-template name="opt">
-      <xsl:with-param name="value" select="'Host'"/>
-      <xsl:with-param name="content" select="gsa:i18n ('Host', 'Host')"/>
+      <xsl:with-param name="value" select="'Asset'"/>
+      <xsl:with-param name="content" select="gsa:i18n ('Asset', 'Asset')"/>
       <xsl:with-param name="select-value" select="$select_type"/>
     </xsl:call-template>
   </xsl:if>
-  <xsl:if test="$select_type = 'os' or gsa:may-op ('get_assets')">
-    <xsl:call-template name="opt">
-      <xsl:with-param name="value" select="'OS'"/>
-      <xsl:with-param name="content" select="gsa:i18n ('Operating System', 'OS')"/>
-      <xsl:with-param name="select-value" select="$select_type"/>
-    </xsl:call-template>
-  </xsl:if>
--->
   <xsl:if test="$select_type = 'credential' or gsa:may-op ('get_credentials')">
     <xsl:call-template name="opt">
       <xsl:with-param name="value" select="'Credential'"/>

@@ -1,5 +1,9 @@
 2016-05-23  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/omp.xsl (filter_resource_types): Add type "Asset".
+
+2016-05-23  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/gsad.xsl (html-gsa-navigation): Add divider line
 	after "Dashboard" menu entries.
 
