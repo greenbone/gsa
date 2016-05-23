@@ -496,8 +496,7 @@
         }));
 
         // refresh the select widget.
-        self.done.select2('destroy');
-        self.done.select2();
+        self.done.trigger('change');
       }
 
       // And finally, close our dialog.
