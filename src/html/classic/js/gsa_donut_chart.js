@@ -186,7 +186,14 @@
 
     function set_tooltip_title(d) {
       var data = get_title_data(d);
-      self.tip.show(get_title_string(data.x, data.y));
+      var target;
+
+      if (gsa.has_value(d3.event.target)) {
+        target = d3.select(d3.event.target.parentNode)
+          .select('.slice_label')
+          .node();
+      }
+      self.tip.show(get_title_string(data.x, data.y), target);
     }
 
     function get_title_string(x, data) {

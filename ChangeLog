@@ -1,5 +1,11 @@
 2016-05-23  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_donut_chart.js
+	(DonutChartGenerator.prototype.generate): Show tooltip always above of the
+	anchor text when hovering over a donut chart slice.
+
+2016-05-23  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/lib/d3.tip.js (show): Add comment about the
 	Array.prototype.slice usage and reset target if not passed as argument.
 
