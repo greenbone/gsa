@@ -1731,6 +1731,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <name><xsl:value-of select="gsa:i18n ('Dashboard', 'Dashboard')"/></name>
           </item>
         </xsl:if>
+        <divider/>
         <xsl:if test="gsa:may-op ('GET_TASKS')">
           <item>
             <page>get_tasks</page>
@@ -1844,7 +1845,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <ul>
             <li class="pointy"></li>
             <li><a href="/omp?cmd=dashboard&amp;dashboard_name=assets&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('Dashboard', 'Dashboard')"/></a></li>
-            <li><a href="/omp?cmd=get_assets&amp;asset_type=host&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('Hosts', 'Host')"/></a></li>
+            <li class="section_start"><a href="/omp?cmd=get_assets&amp;asset_type=host&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('Hosts', 'Host')"/></a></li>
             <li><a href="/omp?cmd=get_assets&amp;asset_type=os&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('Operating Systems', 'Host')"/></a></li>
             <li class="last"><a href="/omp?cmd=get_report&amp;type=assets&amp;apply_overrides=1&amp;levels=hm&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('Hosts (Classic)', 'Host')"/></a></li>
           </ul>
