@@ -1,5 +1,10 @@
 2016-05-23  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/omp.xsl (new_task): Add create alert button after alert
+	select box in new task dialog.
+
+2016-05-23  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/greenbone.js (OMPDialog.prototype.postForm): No need to
 	destroy and re-create a select2. It should be enough to trigger a change event
 	to reload the displayed items in the select2 box.

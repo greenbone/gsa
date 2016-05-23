@@ -6130,11 +6130,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <div class="col-10">
             <xsl:variable name="alerts"
               select="get_alerts_response/alert"/>
-            <select name="alert_ids:" multiple="multiple" class="form-control">
-              <xsl:for-each select="$alerts">
-                <option value="{@id}"><xsl:value-of select="name"/></option>
-              </xsl:for-each>
-            </select>
+            <div class="form-item">
+              <select name="alert_ids:" multiple="multiple" class="form-control" id="alert_ids">
+                <xsl:for-each select="$alerts">
+                  <option value="{@id}"><xsl:value-of select="name"/></option>
+                </xsl:for-each>
+              </select>
+            </div>
+            <div class="form-item">
+              <a href="#" title="{ gsa:i18n('Create a new alert') }"
+                  class="new-action-icon icon" data-type="alert" data-done="#alert_ids">
+                  <img src="/img/new.png"/>
+              </a>
+            </div>
           </div>
         </div>
       </xsl:if>
