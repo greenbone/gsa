@@ -1,3 +1,8 @@
+2016-05-23  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/js/lib/d3.tip.js (show): Add comment about the
+	Array.prototype.slice usage and reset target if not passed as argument.
+
 2016-05-23  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/js/gsa_h_bar_chart.js (generate): Fix removal of

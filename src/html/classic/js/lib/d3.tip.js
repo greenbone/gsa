@@ -60,9 +60,14 @@
     //
     // Returns a tip
     tip.show = function() {
+      // convert array-like object arguments into a real Array
       var args = Array.prototype.slice.call(arguments);
       if (args[args.length - 1] instanceof SVGElement) {
         target = args.pop();
+      }
+      else {
+        // don't use last target from previous event
+        target = null;
       }
 
       var content = html.apply(this, args);
