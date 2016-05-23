@@ -1,5 +1,11 @@
 2016-05-23  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_bubble_chart.js
+	(BubbleChartGenerator.prototype.generate): Show tooltip always above the
+	anchor text of a bubble.
+
+2016-05-23  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_donut_chart.js
 	(DonutChartGenerator.prototype.generate): Show tooltip always above of the
 	anchor text when hovering over a donut chart slice.

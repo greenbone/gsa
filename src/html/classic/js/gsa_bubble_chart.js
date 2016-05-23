@@ -206,7 +206,10 @@
       .attr('transform', function(d) {
         return 'translate(' + d.x + ',' + d.y + ')';
       })
-      .on('mouseover',this.tip.show)
+      .on('mouseover', function(d) {
+        var target = d3.select(this).select('.node-label').node();
+        self.tip.show(d, target);
+      })
       .on('mouseout', this.tip.hide)
       .select('circle')
       .attr('r', function(d) { return d.r;})
@@ -277,6 +280,7 @@
 
     new_node_a
       .append('text')
+      .attr('class', 'node-label')
       .attr('text-anchor', 'middle')
       .attr('dominant-baseline', 'middle')
       .style('font-weight', 'normal')
