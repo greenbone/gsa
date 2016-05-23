@@ -6969,7 +6969,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <div class="col-10">
         <xsl:variable name="task_alerts" select="commands_response/get_tasks_response/task/alert"/>
         <div class="form-item">
-          <select name="alert_ids:" multiple="multiple">
+          <select name="alert_ids:" multiple="multiple" id="alert_ids">
             <xsl:for-each select="commands_response/get_alerts_response/alert">
               <xsl:variable name="alert_id" select="@id"/>
               <xsl:choose>
@@ -6985,7 +6985,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </div>
         <div class="form-item">
           <a href="#" title="{ gsa:i18n('Create a new alert') }"
-            class="new-action-icon" data-type="alert" data-done="select[name=alert_ids]">
+            class="new-action-icon" data-type="alert" data-done="#alert_ids">
             <img src="/img/new.png"/>
           </a>
         </div>

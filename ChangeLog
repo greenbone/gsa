@@ -1,5 +1,10 @@
 2016-05-23  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/omp.xsl (html-edit-task-alert): Fix creating an alert in
+	edit task wizard.
+
+2016-05-23  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/omp.xsl (new_task): Add create alert button after alert
 	select box in new task dialog.
 
