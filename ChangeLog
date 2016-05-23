@@ -1,5 +1,12 @@
 2016-05-23  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/greenbone.js (OMPDialog.prototype.postForm): Be more
+	save about the done element in a dialog. We must ensure that the done element
+	really contains a valid element from the dom and is not just an empty jquery
+	element wrapper.
+
+2016-05-23  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/css/gsa-style.css: Fix width of multiple select boxes.
 	select2 adds a width to the style which is not the preferred width we need
 	here. E.g. if the select box is empty the width is set to something like 10px.

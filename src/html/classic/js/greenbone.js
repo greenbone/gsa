@@ -452,8 +452,15 @@
         url.params.xml = 0;
         location.href = encode_url_object(url);
       }
-      if (self.done === undefined) {
+      if (!gsa.has_value(self.done)) {
         // No element to update, exit early.
+        self.close();
+        return;
+      }
+
+      if (!self.done.length) {
+        // element not found. raise warning
+        console.warn('Done element not found!');
         self.close();
         return;
       }
