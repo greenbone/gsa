@@ -90,7 +90,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         rows separated with "#" -->
   <xsl:param name="default_controllers">
     <xsl:choose>
-      <xsl:when test="$type='task'">by-cvss|by-class</xsl:when>
+      <xsl:when test="$type='task'">by-class|top-high-results|by-task-status</xsl:when>
+      <xsl:when test="$type='report'">by-class|report-high-results-timeline|by-cvss</xsl:when>
+      <xsl:when test="$type='result'">by-class|result-vuln-words|by-cvss</xsl:when>
       <!-- fallback for all other types -->
       <xsl:otherwise>by-cvss|by-class</xsl:otherwise>
     </xsl:choose>
@@ -275,7 +277,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         rows separated with "#" -->
   <xsl:param name="default_controllers">
     <xsl:choose>
-      <xsl:when test="$type='host'">most-vulnerable-hosts|by-class</xsl:when>
+      <xsl:when test="$type='host'">by-cvss|by-class|host-counts-timeline</xsl:when>
+      <xsl:when test="$type='os'">by-class|most-vulnerable-oss|by-cvss</xsl:when>
       <!-- fallback for all other types -->
       <xsl:otherwise>by-cvss|by-class</xsl:otherwise>
     </xsl:choose>
@@ -604,18 +607,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:variable name="controllers_pref_id" select="'ce7b121-c609-47b0-ab57-fd020a0336f4'"/>
   <!-- Setting UUIDs for row height preferences -->
   <xsl:variable name="heights_pref_id" select="'05eb63e9-ccd7-481d-841d-9406d3281040'"/>
-  <!-- Setting UUID for chart selection preferences -->
-  <xsl:variable name="filters_pref_id" select="'32b3d606-461b-4770-b3e1-b9ea3cf0f84c'"/>
 
-  <xsl:variable name="default_controllers" select="''"/>
+  <xsl:variable name="default_controllers" select="'notes_donut_chart|by-created|notes-text-words'"/>
   <!-- Default row heights, rows separated with "#",
         number of rows must match default_controllers -->
-  <xsl:variable name="default_heights" select="'280#280'"/>
-  <!-- Default filter selections:
-        Filter UUIDs or empty string for boxes in a row separated with "|",
-        rows separated with "#",
-        number of boxes and rows must match default_controllers -->
-  <xsl:variable name="default_filters" select="'|#|'"/>
+  <xsl:variable name="default_heights" select="'280'"/>
 
   <xsl:variable name="envelope" select="/envelope"/>
 
@@ -640,17 +636,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:choose>
   </xsl:variable>
 
-  <xsl:variable name="filters_string">
-    <xsl:choose>
-      <xsl:when test="/envelope/chart_preferences/chart_preference[@id = $filters_pref_id]">
-        <xsl:value-of select="gsa:escape-js (/envelope/chart_preferences/chart_preference[@id = $filters_pref_id]/value)"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="$default_filters"/>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-
   <xsl:variable name="filter" select="/envelope/get_notes/get_notes_response/filters/term"/>
   <xsl:variable name="filt_id" select="/envelope/get_notes/get_notes_response/filters/@id"/>
 
@@ -662,7 +647,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       data-controllers="{$controllers}" data-heights="{$heights}"
       data-filter="{$filter}"
       data-filters-id="{$filt_id}"
-      data-filters-string="{$filters_string}"
       data-controllers-pref-id="{$controllers_pref_id}"
       data-heights-pref-id="{$heights_pref_id}"
       data-dashboard-controls="top-dashboard-controls"
@@ -712,18 +696,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:variable name="controllers_pref_id" select="'054862fe-0781-4527-b1aa-2113bcd16ce7'"/>
   <!-- Setting UUIDs for row height preferences -->
   <xsl:variable name="heights_pref_id" select="'a8c246f9-0506-4d8d-be35-a3befb22fbca'"/>
-  <!-- Setting UUID for chart selection preferences -->
-  <xsl:variable name="filters_pref_id" select="'956d13bd-3baa-4404-a138-5e7eb8f9630e'"/>
 
-  <xsl:variable name="default_controllers" select="''"/>
+  <xsl:variable name="default_controllers" select="'overrides_donut_chart|by-created|overrides-text-words'"/>
   <!-- Default row heights, rows separated with "#",
         number of rows must match default_controllers -->
-  <xsl:variable name="default_heights" select="'280#280'"/>
-  <!-- Default filter selections:
-        Filter UUIDs or empty string for boxes in a row separated with "|",
-        rows separated with "#",
-        number of boxes and rows must match default_controllers -->
-  <xsl:variable name="default_filters" select="'|#|'"/>
+  <xsl:variable name="default_heights" select="'280'"/>
 
   <xsl:variable name="envelope" select="/envelope"/>
 
@@ -748,17 +725,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:choose>
   </xsl:variable>
 
-  <xsl:variable name="filters_string">
-    <xsl:choose>
-      <xsl:when test="/envelope/chart_preferences/chart_preference[@id = $filters_pref_id]">
-        <xsl:value-of select="gsa:escape-js (/envelope/chart_preferences/chart_preference[@id = $filters_pref_id]/value)"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="$default_filters"/>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-
   <xsl:variable name="filter" select="/envelope/get_overrides/get_overrides_response/filters/term"/>
   <xsl:variable name="filt_id" select="/envelope/get_overrides/get_overrides_response/filters/@id"/>
 
@@ -770,7 +736,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       data-controllers="{$controllers}" data-heights="{$heights}"
       data-filter="{$filter}"
       data-filters-id="{$filt_id}"
-      data-filters-string="{$filters_string}"
       data-controllers-pref-id="{$controllers_pref_id}"
       data-heights-pref-id="{$heights_pref_id}"
       data-dashboard-controls="top-dashboard-controls"
@@ -862,7 +827,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <!-- Default chart selections:
         Controller names of boxes in a row separated with "|",
         rows separated with "#" -->
-  <xsl:variable name="default_controllers" select="'tasks-top-high-results|most-vulnerable-hosts#report-high-results-timeline|nvt_donut_chart'"/>
+  <xsl:variable name="default_controllers" select="'tasks-by-class|by-task-status#cve_timeline_chart|nvt_donut_chart'"/>
   <!-- Default row heights, rows separated with "#",
         number of rows must match default_controllers -->
   <xsl:variable name="default_heights" select="'280#280'"/>
@@ -1139,7 +1104,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <!-- Default chart selections:
         Controller names of boxes in a row separated with "|",
         rows separated with "#" -->
-  <xsl:variable name="default_controllers" select="'tasks-top-high-results|task-schedules#by-task-status|report-high-results-timeline'"/>
+  <xsl:variable name="default_controllers" select="'results-by-class|reports-by-class#by-task-status|report-high-results-timeline|tasks-by-class'"/>
   <!-- Default row heights, rows separated with "#",
         number of rows must match default_controllers -->
   <xsl:variable name="default_heights" select="'280#280'"/>
@@ -1147,7 +1112,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         Filter UUIDs or empty string for boxes in a row separated with "|",
         rows separated with "#",
         number of boxes and rows must match default_controllers -->
-  <xsl:variable name="default_filters" select="'|#|'"/>
+  <xsl:variable name="default_filters" select="'|#||'"/>
 
   <xsl:variable name="envelope" select="/envelope"/>
 
@@ -1310,7 +1275,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <!-- Default chart selections:
         Controller names of boxes in a row separated with "|",
         rows separated with "#" -->
-  <xsl:variable name="default_controllers" select="'most-vulnerable-hosts|most-vulnerable-oss#hosts-by-class|oss-by-class'"/>
+  <xsl:variable name="default_controllers" select="'most-vulnerable-hosts|most-vulnerable-oss#oss-by-class|host-counts-timeline'"/>
   <!-- Default row heights, rows separated with "#",
         number of rows must match default_controllers -->
   <xsl:variable name="default_heights" select="'280#280'"/>

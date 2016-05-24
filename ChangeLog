@@ -1,3 +1,12 @@
+2016-05-24  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/graphics.xsl (js-scan-management-top-visualization)
+	(js-assets-top-visualization): Set new default controllers.
+	(js-notes-top-visualization, js-overrides-top-visualization): Set new
+	default controllers and column heights.  Remove unused filter settings.
+	(dashboard [main], dashboard [scans], dashboard [assets]): Set new
+	default controllers and filters.
+
 2016-05-23  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/omp.xsl (filter_resource_types): Add type "Asset".
