@@ -1,6 +1,13 @@
 2016-05-25  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/js/gsa_donut_chart.js
+	(DonutChartGenerator.prototype.generate): Put tooltip on top of the label. If
+	the label has the class empty use the position of the current hovered element
+	for the tooltip. Also resolve the label via the id now.
+
+2016-05-25  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/js/gsa_donut_chart.js
 	(DonutChartGenerator.prototype.generate): Move generating tooltip label text
 	elements back to the end of elements. SVG has a different rendering model as
 	HTML. It is not possible to set a z index for element in SVG. Instead the z
