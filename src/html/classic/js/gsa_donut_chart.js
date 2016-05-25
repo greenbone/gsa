@@ -283,29 +283,7 @@
           slice.insert('path')
             .attr('class', 'slice_outer')
             .style('shape-rendering', 'geometricPrecision');
-        })
-        .insert('text')
-        .attr('class', 'slice_label')
-        .text(function(d, i) {
-          if (d.endAngle - d.startAngle >= 0.02) {
-            return d.data[self.y_field];
-          }
-          else {
-            return '';
-          }
-        })
-        .attr('x', function(d, i) {
-          return Math.sin((d.startAngle + d.endAngle) / 2) * rx *
-            ((1 + ri) / 2);
-        })
-        .attr('y', function(d, i) {
-          return -Math.cos((d.startAngle + d.endAngle) / 2) * ry *
-            ((1 + ri) / 2);
-        })
-        .attr('text-anchor', 'middle')
-        .style('font-weight', 'bold')
-        .style('font-size', '7pt')
-        .attr('title', get_title);
+        });
 
     donut.selectAll('.slice_inner')
       .data(slices)
@@ -374,6 +352,47 @@
     for (var elem in slice_elems) {
       $(donut.node()).append(slice_elems[elem]);
     }
+
+    function display_label(d) {
+      return d.endAngle - d.startAngle >= 0.02;
+    }
+
+    donut.selectAll('.slice_label')
+      .data(slices)
+      .enter()
+      .insert('a')
+        .attr('xlink:href', generate_link)
+        .insert('text')
+          .classed('slice_label', true)
+          .classed('empty', function(d) {
+            // mark label as empty
+            return !display_label(d);
+          })
+          .attr('id', function(d, i) {
+            return 'label-' + to_id(d.data[self.x_field]);
+          })
+          .text(function(d, i) {
+            if (display_label(d)) {
+              return d.data[self.y_field];
+            }
+            else {
+              return '';
+            }
+          })
+          .attr('x', function(d, i) {
+            return Math.sin((d.startAngle + d.endAngle) / 2) * rx *
+              ((1 + ri) / 2);
+          })
+          .attr('y', function(d, i) {
+            return -Math.cos((d.startAngle + d.endAngle) / 2) * ry *
+              ((1 + ri) / 2);
+          })
+          .attr('text-anchor', 'middle')
+          .style('font-weight', 'bold')
+          .style('font-size', '7pt')
+          .on('mouseover', set_tooltip_title)
+          .on('mouseout', this.tip.hide)
+          .attr('title', get_title);
 
     // In case of missing data, draw a transparent grey donut
     if (slices.length === 0) {
@@ -659,6 +678,19 @@
     };
 
     return data;
+  }
+
+  /**
+   * Convert a value to a string that can be used as an id attribute
+   */
+  function to_id(value) {
+    if (!gsa.has_value(value)) {
+      return '';
+    }
+    if (!gsa.is_string(value)) {
+      value = '' + value;
+    }
+    return value.replace(/\W/g, '_');
   }
 })(window, window, window.d3, window.console, window.gsa, window.$);
 

@@ -1,3 +1,14 @@
+2016-05-25  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/js/gsa_donut_chart.js
+	(DonutChartGenerator.prototype.generate): Move generating tooltip label text
+	elements back to the end of elements. SVG has a different rendering model as
+	HTML. It is not possible to set a z index for element in SVG. Instead the z
+	order depends on the sequence of elements in the DOM. Later elements in the
+	DOM have a higher order an therefore cover previous elements. As a result the
+	label texts have been cutted on some donut charts. Also add an id attr to the
+	text elements and the css class empty if the label has no text.
+
 2016-05-24  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/graphics.xsl (js-scan-management-top-visualization)
