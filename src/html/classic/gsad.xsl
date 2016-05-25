@@ -2092,22 +2092,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </item>
         </xsl:if>
         <divider/>
-        <xsl:if test="gsa:may-op ('DESCRIBE_FEED')">
+        <xsl:if test="gsa:may-op ('DESCRIBE_FEED') or gsa:may-op ('DESCRIBE_SCAP') or gsa:may-op ('DESCRIBE_CERT')">
           <item>
-            <page>get_feed</page>
-            <name><xsl:value-of select="gsa:i18n ('NVT Feed', 'Feed Sync')"/></name>
-          </item>
-        </xsl:if>
-        <xsl:if test="gsa:may-op ('DESCRIBE_SCAP')">
-          <item>
-            <page>get_scap</page>
-            <name><xsl:value-of select="gsa:i18n ('SCAP Feed', 'Feed Sync')"/></name>
-          </item>
-        </xsl:if>
-        <xsl:if test="gsa:may-op ('DESCRIBE_CERT')">
-          <item>
-            <page>get_cert</page>
-            <name><xsl:value-of select="gsa:i18n ('CERT Feed', 'Feed Sync')"/></name>
+            <page>get_feeds</page>
+            <name><xsl:value-of select="gsa:i18n ('Feed Management', 'Feed Sync')"/></name>
           </item>
         </xsl:if>
       </xsl:variable>

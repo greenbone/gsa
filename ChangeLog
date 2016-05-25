@@ -1,3 +1,43 @@
+2016-05-25  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Combine individual feed management pages into a single one and
+	introduce more generic functions and templates for feed management
+	to reduce redundancy.
+
+	* src/gsad_omp.c (get_feeds_omp): New command handler function.
+	(get_feed_omp, get_scap_omp, get_cert_omp): Remove. Combined into new
+	function get_feeds_omp.
+	(sync_feed): New function. Generic function for feed sync commands.
+	(sync_feed_omp, sync_scap_omp, sync_cert_omp): Remove duplicate code
+	by using new generic sync_feed function.
+
+	* src/gsad_omp.h (get_feeds_omp): New function prototype.
+	(get_feed_omp, get_scap_omp, get_cert_omp): Remove. Replaced by
+	get_feeds_omp.
+
+	* src/gsad.c (init_validator, exec_omp_get): Replace get_feed, get_scap
+	and get_cert commands with get_feeds.
+
+	* src/html/classic/help.xsl (contents.html): Combine the three Feed
+	Management pages into one.
+	(feed_management.html): Remove note about Administrator role and update
+	so it applies to mulitple feeds now shown on the Feed Management page.
+	(scap_management.html, cert_management): Remove.
+
+	* src/html/classic/omp.xsl (get_feeds): New template for showing all
+	feeds on a single page.
+	(html-feed-form): Make the template a generic one for all feed types,
+	also moving the toolbar, page title and link to side effects help to
+	the the new get_feeds template.
+	(describe_feed_response): Add params for new generic html-feed-form.
+	(describe_scap_response): Use html-feed-form template.
+	(html-scap-form): Remove. Replaced by generic html-feed-form.
+	(describe_cert_response): Use html-feed-form template.
+	(html-cert-form): Remove. Replaced by generic html-feed-form.
+
+	* src/html/classic/gsad.xsl (html-gsa-navigation): Replace the
+	menu items "NVT Feed", "SCAP Feed", "CERT Feed" with "Feed Management".
+
 2016-05-25  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/js/gsa_donut_chart.js

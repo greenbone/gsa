@@ -3901,9 +3901,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <li> <a href="new_role.html?token={/envelope/token}">New Role</a></li>
                 <li> <a href="role_details.html?token={/envelope/token}">Role Details</a></li>
               </ul>
-            <li> <a href="feed_management.html?token={/envelope/token}">NVT Feed Management</a></li>
-            <li> <a href="scap_management.html?token={/envelope/token}">SCAP Feed Management</a></li>
-            <li> <a href="cert_management.html?token={/envelope/token}">CERT Feed Management</a></li>
+            <li> <a href="feed_management.html?token={/envelope/token}">Feed Management</a></li>
           </ul>
           <li> Miscellaneous</li>
           <ul>
@@ -4186,7 +4184,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template mode="help" match="feed_management.html">
   <xsl:call-template name="help-header">
-    <xsl:with-param name="title" select="'NVT Feed Management'"/>
+    <xsl:with-param name="title" select="'Feed Management'"/>
   </xsl:call-template>
 
   <div class="section-box">
@@ -4195,120 +4193,28 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div style="text-align:left">
 
       <br/>
-      <p>
-       The management of NVT feeds is only accessible for users that own
-       the "Administrator" role.
-      </p>
-
       <a name="feed_synchronization"></a>
-      <h2>Synchronization with an NVT Feed</h2>
+      <h2>Synchronization with an NVT, SCAP or CERT Feed</h2>
       <p>
-       This dialog allows you synchronize your NVT collection with an NVT feed. It
-       shows the name of the NVT Feed Service your installation is configured to use
-       and a short description of the tool which will be used to synchronize your NVT
-       collection with the Feed Service. Hit the "Synchronize with Feed now" button to
-       start the synchronization.
+       This dialog allows you synchronize your NVT collection and SecInfo with
+       a feed. For each feed type (NVT, SCAP and CERT) it shows the name of the
+       Feed Service your installation is configured to use and a short
+       description of the tool which will be use to synchronize your NVT
+       collection or SecInfo with the Feed Service.
+       Hit the "Synchronize with Feed now" button to start the synchronization.
       </p>
 
       <a name="side_effects"></a>
-      <h2>Side effects of an NVT Synchronization</h2>
+      <h2>Side effects of a Synchronization</h2>
       <p>
-       The synchronization with an NVT Feed Service will usually take a short amount of
+       The synchronization with an Feed Service will usually take a short amount of
        time.  However, in some cases this process can take much longer.
        This depends on the time of your last synchronization and the number of changes in
        the Feed Service. While synchronizing, the interface might be slow to react.
       </p>
       <p>
-       At the end of the synchronization, some components of your installation will
+       At the end of the NVT synchronization, some components of your installation will
        need to be reloaded to make full use of your updated NVT collection.  This also
-       usually takes a short time, but in some cases may take much longer.  During this
-       time the interface may be unresponsive.
-      </p>
-    </div>
-  </div>
-</xsl:template>
-
-<xsl:template mode="help" match="scap_management.html">
-  <xsl:call-template name="help-header">
-    <xsl:with-param name="title" select="'SCAP Feed Management'"/>
-  </xsl:call-template>
-
-  <div class="section-box">
-    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
-    <div class="pull-right"><a href="/omp?cmd=get_scap&amp;token={/envelope/token}">Jump to dialog</a></div>
-    <div style="text-align:left">
-
-      <br/>
-      <p>
-       The management of SCAP feeds is only accessible for users that own
-       the "Administrator" role.
-      </p>
-
-      <a name="scap_synchronization"></a>
-      <h2>Synchronization with a SCAP Feed</h2>
-      <p>
-       This dialog allows you synchronize your SCAP collection with a SCAP feed. It
-       shows the name of the SCAP Feed Service your installation is configured to use
-       and a short description of the tool which will be used to synchronize your SCAP
-       collection with the Feed Service. Hit the "Synchronize with Feed now" button to
-       start the synchronization.
-      </p>
-
-      <a name="side_effects"></a>
-      <h2>Side effects of an SCAP Synchronization</h2>
-      <p>
-       The synchronization with a SCAP Feed Service will usually take a short amount of
-       time.  However, in some cases this process can take much longer.
-       This depends on the time of your last synchronization and the number of changes in
-       the Feed Service. While synchronizing, the interface might be slow to react.
-      </p>
-      <p>
-       At the end of the synchronization, some components of your installation will
-       need to be reloaded to make full use of your updated SCAP collection.  This also
-       usually takes a short time, but in some cases may take much longer.  During this
-       time the interface may be unresponsive.
-      </p>
-    </div>
-  </div>
-</xsl:template>
-
-<xsl:template mode="help" match="cert_management.html">
-  <xsl:call-template name="help-header">
-    <xsl:with-param name="title" select="'CERT Feed Management'"/>
-  </xsl:call-template>
-
-  <div class="section-box">
-    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
-    <div class="pull-right"><a href="/oap?cmd=get_cert&amp;token={/envelope/token}">Jump to dialog</a></div>
-    <div style="text-align:left">
-
-      <br/>
-      <p>
-       The management of CERT feeds is only accessible for users that own
-       the "Administrator" role.
-      </p>
-
-      <a name="scap_synchronization"></a>
-      <h2>Synchronization with a CERT Feed</h2>
-      <p>
-       This dialog allows you synchronize your CERT advisory collection with a CERT feed. It
-       shows the name of the CERT Feed Service your installation is configured to use
-       and a short description of the tool which will be used to synchronize your CERT
-       collection with the Feed Service. Hit the "Synchronize with CERT Feed now" button to
-       start the synchronization.
-      </p>
-
-      <a name="side_effects"></a>
-      <h2>Side effects of a CERT Feed Synchronization</h2>
-      <p>
-       The synchronization with a CERT Feed Service will usually take a short amount of
-       time.  However, in some cases this process can take much longer.
-       This depends on the time of your last synchronization and the number of changes in
-       the Feed Service. While synchronizing, the interface might be slow to react.
-      </p>
-      <p>
-       At the end of the synchronization, some components of your installation will
-       need to be reloaded to make full use of your updated SCAP collection.  This also
        usually takes a short time, but in some cases may take much longer.  During this
        time the interface may be unresponsive.
       </p>

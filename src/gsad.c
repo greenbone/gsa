@@ -1063,9 +1063,7 @@ init_validator ()
                          "|(get_config_family)"
                          "|(get_config_nvt)"
                          "|(get_configs)"
-                         "|(get_feed)"
-                         "|(get_scap)"
-                         "|(get_cert)"
+                         "|(get_feeds)"
                          "|(get_credential)"
                          "|(get_credentials)"
                          "|(get_filter)"
@@ -3232,9 +3230,7 @@ exec_omp_get (struct MHD_Connection *connection,
   ELSE (get_trash)
   ELSE (get_user)
   ELSE (get_users)
-  ELSE (get_feed)
-  ELSE (get_scap)
-  ELSE (get_cert)
+  ELSE (get_feeds)
   ELSE (get_config)
   ELSE (get_configs)
   ELSE (get_config_family)

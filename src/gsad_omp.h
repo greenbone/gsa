@@ -382,9 +382,7 @@ char * save_report_format_omp (credentials_t *, params_t *,
 char * verify_report_format_omp (credentials_t *, params_t *,
                                  cmd_response_data_t*);
 
-char * get_feed_omp (credentials_t *, params_t *, cmd_response_data_t*);
-char * get_scap_omp (credentials_t *, params_t *, cmd_response_data_t*);
-char * get_cert_omp (credentials_t *, params_t *, cmd_response_data_t*);
+char * get_feeds_omp (credentials_t *, params_t *, cmd_response_data_t*);
 char * sync_feed_omp (credentials_t *, params_t *, cmd_response_data_t*);
 char * sync_scap_omp (credentials_t *, params_t *, cmd_response_data_t*);
 char * sync_cert_omp (credentials_t *, params_t *, cmd_response_data_t*);
