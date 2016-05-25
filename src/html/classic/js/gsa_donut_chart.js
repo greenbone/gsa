@@ -323,7 +323,7 @@
       })
       .attr('fill', function(d, i) {
         var color = self.scaleColor(d.data[self.x_field]);
-        if (color === undefined) {
+        if (!gsa.is_defined(color)) {
           color = self.scaleColor(d.data[self.x_field + '~original']);
         }
         return color;
@@ -339,7 +339,7 @@
       })
       .attr('fill', function(d, i) {
         var color = self.scaleColor(d.data[self.x_field]);
-        if (color === undefined) {
+        if (!gsa.is_defined(color)) {
           color = self.scaleColor(d.data[self.x_field + '~original']);
         }
         return d3.lab(color).darker();

@@ -1,6 +1,12 @@
 2016-05-25  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/js/gsa_donut_chart.js
+	(DonutChartGenerator.prototype.generate): Use gsa.is_defined to check for
+	undefined.
+
+2016-05-25  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/js/gsa_donut_chart.js
 	(DonutChartGenerator.prototype.generate): Put tooltip on top of the label. If
 	the label has the class empty use the position of the current hovered element
 	for the tooltip. Also resolve the label via the id now.
