@@ -8416,7 +8416,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </label>
           </div>
         </div>
-        <div class="form-group form-selection-item-credentials form-selection-item-credentials--usk"
+        <div class="form-group form-selection-item-credentials form-selection-item-credentials--snmp"
             id="priv_algo_row" style="display:none;">
           <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Privacy Algorithm', 'Credential')"/></label>
           <div class="col-10">

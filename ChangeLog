@@ -1,5 +1,10 @@
 2016-05-25  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/omp.xsl (html-create-credential-form): Show
+	"Privacy Algorithm" selection for SNMP credentials.
+
+2016-05-25  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Combine individual feed management pages into a single one and
 	introduce more generic functions and templates for feed management
 	to reduce redundancy.
