@@ -273,6 +273,21 @@
       if (gsa.is_defined(field_info.subgroup_value)) {
         color = subgroup_scale(field_info.subgroup_value);
       }
+      else if ((y_fields.length <= 1 && !gsa.is_defined(alt_color_limit)) ||
+               y_fields.length - alt_color_limit <= 1) {
+        color = 'green';
+      }
+      else if (gsa.is_defined (field_info.stat)) {
+        if (field_info.stat === 'max')
+          color = '#ff7f0e';
+        else if (field_info.stat === 'min')
+          color = '#9467bd';
+        else if (field_info.stat === 'sum')
+          color = '#7f7f7f';
+      }
+      else {
+        color = default_scale_1(index);
+      }
 
       if (!gsa.is_defined(alt_color_limit) || index < alt_color_limit) {
         range.push(color);

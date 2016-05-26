@@ -1,6 +1,14 @@
 2016-05-26  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/graphics.xsl (js-scan-management-top-visualization):
+	Show both average and maximum durations in duration timeline.
+
+	* src/html/classic/js/gsa_graphics_base.js (field_name_colors): Choose
+	colors based on statistic if there is more than one y or y2 field.
+
+2016-05-26  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/graphics.xsl (js-scan-management-top-visualization):
 	Add new chart "Reports: Duration timeline".
 
 2016-05-26  Timo Pollmeier <timo.pollmeier@greenbone.net>

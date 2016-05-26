@@ -232,8 +232,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <span class="dashboard-chart"
           data-chart-name="report-duration-timeline"
           data-chart-type="line"
-          data-y-fields="duration_mean"
-          data-z-fields="duration_per_host_mean"
+          data-y-fields="duration_mean,duration_max"
+          data-z-fields="duration_per_host_mean,duration_per_host_max"
           data-init-params='{{"title_text": "Reports: Duration timeline"}}'
           data-gen-params='{{"show_stat_type": 0, "duration_y": true}}'/>
       </div>
