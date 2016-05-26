@@ -362,6 +362,10 @@
       return d.endAngle - d.startAngle >= 0.02;
     }
 
+    /*
+     * Labels must be rendered after all slices have been added to the doom.
+     * Otherwise the label text would be cutted by overlapping slice elements.
+     */
     donut.selectAll('.slice_label')
       .data(slices)
       .enter()
