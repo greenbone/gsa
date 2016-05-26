@@ -62,8 +62,15 @@
     tip.show = function() {
       // convert array-like object arguments into a real Array
       var args = Array.prototype.slice.call(arguments);
-      if (args[args.length - 1] instanceof SVGElement) {
+      var lastarg = args[args.length - 1];
+      var coords;
+
+      if (lastarg instanceof SVGElement) {
         target = args.pop();
+      }
+      else if (typeof lastarg === 'object') {
+        coords = {};
+        args.pop();
       }
       else {
         // don't use last target from previous event
@@ -75,7 +82,6 @@
       var dir     = direction.apply(this, args);
       var nodel   = getNodeEl();
       var i       = directions.length;
-      var coords;
       var scrollTop  = document.documentElement.scrollTop ||
         document.body.scrollTop;
       var scrollLeft = document.documentElement.scrollLeft ||
@@ -84,10 +90,19 @@
       nodel.html(content)
         .style({opacity: 1, 'pointer-events': 'all'});
 
+      if (typeof coords === 'object') {
+        // use north (n) coordinates currently
+        coords.top = lastarg.y - node.offsetHeight;
+        coords.left = lastarg.x - node.offsetWidth / 2;
+      }
+      else {
+        coords  = direction_callbacks.get(dir).apply(this);
+      }
+
       while (i--) {
         nodel.classed(directions[i], false);
       }
-      coords = direction_callbacks.get(dir).apply(this);
+
       nodel.classed(dir, true).style({
         top: (coords.top +  poffset[0]) + scrollTop + 'px',
         left: (coords.left + poffset[1]) + scrollLeft + 'px'
