@@ -188,17 +188,16 @@
       var data = get_title_data(d);
       var label = '#label-' + to_id(d.data[self.x_field]);
       var target = self.svg.select(label);
-      var target_node = target.node();
 
       if (target.empty() || target.classed('empty')) {
-        target_node = d3.event.target;
-        if (gsa.has_value(target_node) &&
-            gsa.has_value(target_node.parentNode)) {
-          target_node = target_node.parentNode;
-        }
+        self.tip.show(get_title_string(data.x, data.y), {
+          x: d3.event.pageX,
+          y: d3.event.pageY,
+        });
       }
-
-      self.tip.show(get_title_string(data.x, data.y), target_node);
+      else {
+        self.tip.show(get_title_string(data.x, data.y), target.node());
+      }
     }
 
     function get_title_string(x, data) {

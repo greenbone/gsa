@@ -1,5 +1,11 @@
 2016-05-26  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_donut_chart.js
+	(DonutChartGenerator.prototype.generate): Show tooltip on mouse position when
+	no label text is available.
+
+2016-05-26  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/lib/d3.tip.js (show): Allow to pass absolute coordinates
 	for tooltip position to d3.tip.show function.
 
