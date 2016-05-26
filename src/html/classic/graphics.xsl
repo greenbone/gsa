@@ -222,6 +222,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           data-init-params='{{"title_text": "Reports: High results timeline"}}'
           data-gen-params='{{"show_stat_type": 0}}'/>
       </div>
+      <div class="dashboard-data-source"
+        data-source-name="report-duration-timeline-source"
+        data-aggregate-type="{$type}"
+        data-group-column="date"
+        data-columns="duration,duration_per_host"
+        data-filter="{$filter}"
+        data-filter-id="{$filt_id}">
+        <span class="dashboard-chart"
+          data-chart-name="report-duration-timeline"
+          data-chart-type="line"
+          data-y-fields="duration_mean"
+          data-z-fields="duration_per_host_mean"
+          data-init-params='{{"title_text": "Reports: Duration timeline"}}'
+          data-gen-params='{{"show_stat_type": 0, "duration_y": true}}'/>
+      </div>
     </xsl:if>
     <xsl:if test="$type='result'">
       <div class="dashboard-data-source"
