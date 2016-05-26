@@ -36231,153 +36231,137 @@ should not have received it.
     </h1>
   </div>
 
-  <xsl:if test="gsa:may-op ('describe_feed')">
-    <div class="section-header">
-      <h3>
-        <xsl:value-of select="gsa:i18n ('NVT Feed', 'Feed Sync')"/>
-      </h3>
-    </div>
-    <div class="section-box">
+  <table cellspacing="2" cellpadding="4" style="margin-bottom:0px;" class="gbntable">
+    <tr class="gbntablehead2">
+      <td><xsl:value-of select="gsa:i18n ('Type', 'Property')"/></td>
+      <td><xsl:value-of select="gsa:i18n ('Content', 'Feed Sync')"/></td>
+      <td><xsl:value-of select="gsa:i18n ('Origin', 'Feed Sync')"/></td>
+      <td><xsl:value-of select="gsa:i18n ('Version', 'Feed Sync')"/></td>
+      <td><xsl:value-of select="gsa:i18n ('Status', 'Feed Sync')"/></td>
+      <td style="width: {gsa:actions-width (1)}px"><xsl:value-of select="gsa:i18n ('Actions', 'Actions')"/></td>
+    </tr>
+    <xsl:if test="gsa:may-op ('describe_feed')">
       <xsl:apply-templates select="commands_response/describe_feed_response"/>
-    </div>
-  </xsl:if>
-
-  <xsl:if test="gsa:may-op ('describe_scap')">
-    <div class="section-header">
-      <h3>
-        <xsl:value-of select="gsa:i18n ('SCAP Feed', 'Feed Sync')"/>
-      </h3>
-    </div>
-    <div class="section-box">
+    </xsl:if>
+    <xsl:if test="gsa:may-op ('describe_scap')">
       <xsl:apply-templates select="commands_response/describe_scap_response"/>
-    </div>
-  </xsl:if>
-
-  <xsl:if test="gsa:may-op ('describe_cert')">
-    <div class="section-header">
-      <h3>
-        <xsl:value-of select="gsa:i18n ('CERT Feed', 'Feed Sync')"/>
-      </h3>
-    </div>
-    <div class="section-box">
+    </xsl:if>
+    <xsl:if test="gsa:may-op ('describe_cert')">
       <xsl:apply-templates select="commands_response/describe_cert_response"/>
-    </div>
-  </xsl:if>
-
-  <p>
-    <a style="background-color: #ff6;" href="/help/feed_management.html?token={/envelope/token}#side_effects" title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('Feed Management', 'Feed Sync'))}"><xsl:value-of select="gsa:i18n ('Learn about the side effects of Feed synchronization!', 'Feed Sync')"/></a>
-  </p>
+    </xsl:if>
+  </table>
 </xsl:template>
 
-<xsl:template name="html-feed-form">
+<xsl:template name="html-feed-row">
+  <xsl:param name="position" select="1"/>
+  <xsl:param name="id_prefix" select="'feed'"/>
+  <xsl:param name="type_text" select="gsa:i18n ('NVT', 'Feed Sync')"/>
+  <xsl:param name="content_text" select="gsa:i18n ('NVTs', 'Feed Sync')"/>
   <xsl:param name="feed" select="feed"/>
   <xsl:param name="sync_cmd" select="'sync_feed'"/>
 
-  <div class="section-box">
-    <form action="/omp" method="post" enctype="multipart/form-data">
-      <input type="hidden" name="token" value="{/envelope/token}"/>
-      <input type="hidden" name="cmd" value="{$sync_cmd}"/>
-      <input type="hidden" name="caller" value="{/envelope/current_page}"/>
-      <table cellspacing="0" cellpadding="3" width="100%">
-        <tr>
-          <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
-          <td>
-            <b><xsl:value-of select="$feed/name"/></b>
-          </td>
-        </tr>
-        <tr>
-          <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Feed Version', 'Feed Sync')"/></td>
-          <td>
-            <xsl:value-of select="$feed/version"/>
-          </td>
-        </tr>
-        <xsl:choose>
-          <xsl:when test="$feed/currently_syncing">
-            <tr>
-              <td valign="top" width="125"></td>
-              <td>
-                <xsl:value-of select="gsa:i18n ('Synchronization', 'Feed Sync')"/>
-                <b><xsl:value-of select="gsa:i18n (' in progress', 'Feed Sync')"/></b>
-                <xsl:text>. </xsl:text>
-                <xsl:value-of select="gsa:i18n ('Started ', 'Feed Sync')"/>
-                <b>
-                  <xsl:value-of select="$feed/currently_syncing/timestamp"/>
-                </b>
-                <xsl:value-of select="gsa:i18n (' by ', 'Feed Sync')"/>
-                <b><xsl:value-of select="$feed/currently_syncing/user"/></b>
-                <xsl:text>.</xsl:text>
-              </td>
-            </tr>
-          </xsl:when>
-        </xsl:choose>
-        <tr>
-          <td valign="top" width="125"><xsl:value-of select="gsa:i18n ('Description', 'Property')"/></td>
-          <td>
-            <xsl:value-of select="$feed/description"/>
-          </td>
-        </tr>
-        <xsl:choose>
-          <xsl:when test="$feed/sync_not_available">
-            <tr>
-              <td valign="top" width="125"></td>
-              <td>
-                <b><xsl:value-of select="gsa:i18n ('Warning:', 'Feed Sync')"/></b>
-                <xsl:text> </xsl:text>
-                <xsl:value-of select="gsa:i18n ('Synchronization with this feed is currently not possible.', 'Feed Sync')"/><br/>
-                <xsl:choose>
-                  <xsl:when test="$feed/sync_not_available/error/text()">
-                    <xsl:value-of select="gsa:i18n ('The synchronization script returned the following error message:', 'Feed Sync')"/>
-                    <xsl:text> </xsl:text>
-                    <i><xsl:value-of select="$feed/sync_not_available/error/text()"/></i>
-                  </xsl:when>
-                </xsl:choose>
-              </td>
-            </tr>
-          </xsl:when>
-        </xsl:choose>
-        <tr>
-          <td colspan="2" style="text-align:right;">
-            <xsl:choose>
-              <xsl:when test="$feed/currently_syncing">
-                <input type="submit" name="submit" value="{gsa:i18n ('Synchronize with Feed now', 'Feed Sync')}" disabled="disabled"/>
-              </xsl:when>
-              <xsl:when test="$feed/sync_not_available">
-                <input type="submit" name="submit" value="{gsa:i18n ('Synchronize with Feed now', 'Feed Sync')}" disabled="disabled"/>
-              </xsl:when>
-              <xsl:when test="gsa:may-op ($sync_cmd)">
-                <input type="submit" name="submit" value="{gsa:i18n ('Synchronize with Feed now', 'Feed Sync')}"/>
-              </xsl:when>
-              <xsl:otherwise>
-              </xsl:otherwise>
-            </xsl:choose>
-          </td>
-        </tr>
-      </table>
-    </form>
-  </div>
+  <xsl:variable name="class">
+    <xsl:choose>
+      <xsl:when test="$position mod 2 = 0">even</xsl:when>
+      <xsl:otherwise>odd</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
+  <tr class="{$class}">
+    <td>
+      <xsl:value-of select="$type_text"/>
+    </td>
+    <td>
+      <xsl:value-of select="$content_text"/>
+    </td>
+    <td>
+      <xsl:value-of select="$feed/name"/>
+      <!-- TODO: Show $feed/description in a tooltip or dialog box? -->
+    </td>
+    <td>
+      <xsl:value-of select="$feed/version"/>
+    </td>
+    <td>
+      <!-- Status -->
+      <xsl:choose>
+        <xsl:when test="@status='200'">
+          <xsl:choose>
+            <xsl:when test="$feed/sync_not_available">
+              <tr>
+                <td valign="top" width="125"></td>
+                <td>
+                  <b><xsl:value-of select="gsa:i18n ('Warning:', 'Feed Sync')"/></b>
+                  <xsl:text> </xsl:text>
+                  <xsl:value-of select="gsa:i18n ('Synchronization with this feed is currently not possible.', 'Feed Sync')"/><br/>
+                  <xsl:choose>
+                    <xsl:when test="$feed/sync_not_available/error/text()">
+                      <xsl:value-of select="gsa:i18n ('The synchronization script returned the following error message:', 'Feed Sync')"/>
+                      <xsl:text> </xsl:text>
+                      <i><xsl:value-of select="$feed/sync_not_available/error/text()"/></i>
+                    </xsl:when>
+                  </xsl:choose>
+                </td>
+              </tr>
+            </xsl:when>
+            <xsl:when test="$feed/currently_syncing">
+              <xsl:value-of select="gsa:i18n ('Synchronization', 'Feed Sync')"/>
+              <b><xsl:value-of select="gsa:i18n (' in progress', 'Feed Sync')"/></b>
+              <xsl:text>. </xsl:text>
+              <xsl:value-of select="gsa:i18n ('Started ', 'Feed Sync')"/>
+              <b>
+                <xsl:value-of select="$feed/currently_syncing/timestamp"/>
+              </b>
+              <xsl:value-of select="gsa:i18n (' by ', 'Feed Sync')"/>
+              <b><xsl:value-of select="$feed/currently_syncing/user"/></b>
+              <xsl:text>.</xsl:text>
+            </xsl:when>
+          </xsl:choose>
+        </xsl:when>
+        <xsl:otherwise>
+          <b>
+            <xsl:value-of select="gsa:i18n ('OMP Error', 'Error')"/>
+            <xsl:text> </xsl:text>
+            <xsl:value-of select="@status"/>:
+          </b>
+          <xsl:value-of select="@status_text"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td>
+      <div class="icon">
+        <form action="/omp" method="post" enctype="multipart/form-data">
+          <input type="hidden" name="token" value="{/envelope/token}"/>
+          <input type="hidden" name="cmd" value="{$sync_cmd}"/>
+          <input type="hidden" name="caller" value="{/envelope/current_page}"/>
+
+          <xsl:choose>
+            <xsl:when test="$feed/currently_syncing">
+            </xsl:when>
+            <xsl:when test="$feed/sync_not_available">
+            </xsl:when>
+            <xsl:when test="gsa:may-op ($sync_cmd)">
+              <input type="image" src="/img/refresh.png" alt="{gsa:i18n ('Synchronize with Feed now', 'Feed Sync')}"
+                    name="Synchronize" value="Synchronize" title="{gsa:i18n ('Synchronize with Feed now', 'Feed Sync')}"/>
+            </xsl:when>
+            <xsl:otherwise>
+            </xsl:otherwise>
+          </xsl:choose>
+        </form>
+      </div>
+    </td>
+  </tr>
 </xsl:template>
 
 <!-- NVT FEED -->
 <xsl:template match="describe_feed_response">
-  <xsl:choose>
-    <xsl:when test="substring(@status, 1, 1) = '4' or substring(@status, 1, 1) = '5'">
-      <xsl:call-template name="command_result_dialog">
-        <xsl:with-param name="operation">Describe Feed</xsl:with-param>
-        <xsl:with-param name="status">
-          <xsl:value-of select="@status"/>
-        </xsl:with-param>
-        <xsl:with-param name="msg">
-          <xsl:value-of select="@status_text"/>
-        </xsl:with-param>
-      </xsl:call-template>
-    </xsl:when>
-    <xsl:otherwise>
-      <xsl:call-template name="html-feed-form">
-        <xsl:with-param name="feed" select="feed"/>
-        <xsl:with-param name="sync_cmd" select="'sync_feed'"/>
-      </xsl:call-template>
-    </xsl:otherwise>
-  </xsl:choose>
+  <xsl:call-template name="html-feed-row">
+    <xsl:with-param name="position" select="1"/>
+    <xsl:with-param name="id_prefix" select="'nvt-feed'"/>
+    <xsl:with-param name="type_text" select="gsa:i18n ('NVT', 'Feed Sync')"/>
+    <xsl:with-param name="content_text" select="gsa:i18n ('NVTs', 'Feed Sync')"/>
+    <xsl:with-param name="feed" select="feed"/>
+    <xsl:with-param name="sync_cmd" select="'sync_feed'"/>
+  </xsl:call-template>
 </xsl:template>
 
 <xsl:template match="sync_feed_response">
@@ -36394,25 +36378,14 @@ should not have received it.
 
 <!-- SCAP FEED -->
 <xsl:template match="describe_scap_response">
-  <xsl:choose>
-    <xsl:when test="substring(@status, 1, 1) = '4' or substring(@status, 1, 1) = '5'">
-      <xsl:call-template name="command_result_dialog">
-        <xsl:with-param name="operation">Describe SCAP Feed</xsl:with-param>
-        <xsl:with-param name="status">
-          <xsl:value-of select="@status"/>
-        </xsl:with-param>
-        <xsl:with-param name="msg">
-          <xsl:value-of select="@status_text"/>
-        </xsl:with-param>
-      </xsl:call-template>
-    </xsl:when>
-    <xsl:otherwise>
-      <xsl:call-template name="html-feed-form">
-        <xsl:with-param name="feed" select="scap"/>
-        <xsl:with-param name="sync_cmd" select="'sync_scap'"/>
-      </xsl:call-template>
-    </xsl:otherwise>
-  </xsl:choose>
+  <xsl:call-template name="html-feed-row">
+    <xsl:with-param name="position" select="1 + gsa:may-op ('describe_feed')"/>
+    <xsl:with-param name="id_prefix" select="'scap-feed'"/>
+    <xsl:with-param name="type_text" select="gsa:i18n ('SCAP', 'Feed Sync')"/>
+    <xsl:with-param name="content_text" select="gsa:i18n ('CVEs, CPEs and OVAL Definitions', 'Feed Sync')"/>
+    <xsl:with-param name="feed" select="scap"/>
+    <xsl:with-param name="sync_cmd" select="'sync_scap'"/>
+  </xsl:call-template>
 </xsl:template>
 
 <xsl:template match="sync_scap_response">
@@ -36429,25 +36402,14 @@ should not have received it.
 
 <!-- CERT FEED -->
 <xsl:template match="describe_cert_response">
-  <xsl:choose>
-    <xsl:when test="substring(@status, 1, 1) = '4' or substring(@status, 1, 1) = '5'">
-      <xsl:call-template name="command_result_dialog">
-        <xsl:with-param name="operation">Describe CERT Feed</xsl:with-param>
-        <xsl:with-param name="status">
-          <xsl:value-of select="@status"/>
-        </xsl:with-param>
-        <xsl:with-param name="msg">
-          <xsl:value-of select="@status_text"/>
-        </xsl:with-param>
-      </xsl:call-template>
-    </xsl:when>
-    <xsl:otherwise>
-      <xsl:call-template name="html-feed-form">
-        <xsl:with-param name="feed" select="cert"/>
-        <xsl:with-param name="sync_cmd" select="'sync_cert'"/>
-      </xsl:call-template>
-    </xsl:otherwise>
-  </xsl:choose>
+  <xsl:call-template name="html-feed-row">
+    <xsl:with-param name="position" select="1 + gsa:may-op ('describe_feed') + gsa:may-op ('describe_scap')"/>
+    <xsl:with-param name="id_prefix" select="'cert-feed'"/>
+    <xsl:with-param name="type_text" select="gsa:i18n ('CERT', 'Feed Sync')"/>
+    <xsl:with-param name="content_text" select="gsa:i18n ('CERT-Bund and DFN-CERT Advisories', 'Feed Sync')"/>
+    <xsl:with-param name="feed" select="cert"/>
+    <xsl:with-param name="sync_cmd" select="'sync_cert'"/>
+  </xsl:call-template>
 </xsl:template>
 
 <xsl:template match="sync_cert_response">
