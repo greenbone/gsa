@@ -2095,7 +2095,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:if test="gsa:may-op ('DESCRIBE_FEED') or gsa:may-op ('DESCRIBE_SCAP') or gsa:may-op ('DESCRIBE_CERT')">
           <item>
             <page>get_feeds</page>
-            <name><xsl:value-of select="gsa:i18n ('Feed Management', 'Feed Sync')"/></name>
+            <name><xsl:value-of select="gsa:i18n ('Feed', 'Feed Sync')"/></name>
           </item>
         </xsl:if>
       </xsl:variable>

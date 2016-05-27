@@ -1,5 +1,28 @@
 2016-05-27  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/gsad_omp.c: Add #include <time.h> and #include <sys/time.h>.
+	(get_feeds_omp): Add the current UTC time to the response.
+
+	* src/html/classic/gsad.xsl (html-gsa-navigation): Rename entry
+	"Feed Management" to "Feed".
+
+	* src/html/classic/help.xsl (contents.html, feed_management.html):
+	Change title of "Feed Management" page to "Feed".
+	
+	* src/html/classic/omp.xsl (get_feeds): Change page title to "Feed".
+	(html-feed-row): Replace param content_text with content_html which
+	can contain markup.  Add feed description as tooltip of "Origin" text.
+	Show the age of the feed in the status column if there is no other
+	status message.
+	(feed-get_info-link): New template.
+	(describe_feed_response, describe_scap_response)
+	(describe_cert_response): Change the feed content text so it includes
+	icons and links to the corresponding get_info pages.
+
+	* src/html/classic/css/gsa-style.css (.icon-m): New class style.
+
+2016-05-27  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/graphics.xsl (js-scan-management-top-visualization):
 	Replace duration_y parameter with y_format and y2_format.
 

@@ -3901,7 +3901,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <li> <a href="new_role.html?token={/envelope/token}">New Role</a></li>
                 <li> <a href="role_details.html?token={/envelope/token}">Role Details</a></li>
               </ul>
-            <li> <a href="feed_management.html?token={/envelope/token}">Feed Management</a></li>
+            <li> <a href="feed_management.html?token={/envelope/token}">Feed</a></li>
           </ul>
           <li> Miscellaneous</li>
           <ul>
@@ -4184,7 +4184,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template mode="help" match="feed_management.html">
   <xsl:call-template name="help-header">
-    <xsl:with-param name="title" select="'Feed Management'"/>
+    <xsl:with-param name="title" select="'Feed'"/>
   </xsl:call-template>
 
   <div class="section-box">

@@ -46,6 +46,8 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <assert.h>
+#include <time.h>
+#include <sys/time.h>
 
 #include <microhttpd.h>
 
@@ -24085,6 +24087,9 @@ get_feeds_omp (credentials_t * credentials, params_t *params,
   gnutls_session_t session;
   int socket;
   gchar *html, *response;
+  time_t now;
+  struct tm *tm;
+  gchar current_timestamp[30];
 
   switch (manager_connect (credentials, &socket, &session, &html,
                            response_data))
@@ -24141,7 +24146,25 @@ get_feeds_omp (credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_tasks", response_data);
     }
 
-  response = g_strdup_printf ("<get_feeds>%s</get_feeds>", text);
+  time (&now);
+  tm = gmtime (&now);
+  if (tm == NULL
+      || (strftime (current_timestamp,
+                    29,
+                    "%Y-%m-%dT%H:%M:%S",
+                    tm)
+          == 0))
+    {
+      current_timestamp[0] = '\0';
+    }
+
+  response = g_strdup_printf ("<get_feeds>"
+                              "%s"
+                              "<current_time_utc>%s</current_time_utc>"
+                              "</get_feeds>",
+                              text,
+                              current_timestamp);
+
   g_free (text);
 
   openvas_server_close (socket, session);

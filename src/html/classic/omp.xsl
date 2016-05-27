@@ -36216,7 +36216,7 @@ should not have received it.
 <xsl:template match="get_feeds">
   <div class="toolbar">
     <a href="/help/feed_management.html?token={/envelope/token}"
-       title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('Feed Management', 'Feed Sync'))}">
+       title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('Feed', 'Feed Sync'))}">
       <img src="/img/help.png"/>
     </a>
   </div>
@@ -36224,10 +36224,10 @@ should not have received it.
   <div class="section-header">
     <h1>
       <a href="/omp?cmd=get_feed&amp;token={/envelope/token}"
-         title="{gsa:i18n ('Feed Management', 'Feed Sync')}">
-        <img class="icon icon-lg" src="/img/feed.svg" alt="Feed Management"/>
+         title="{gsa:i18n ('Feed', 'Feed Sync')}">
+        <img class="icon icon-lg" src="/img/feed.svg" alt="Feed"/>
       </a>
-      <xsl:value-of select="gsa:i18n ('Feed Management', 'Feed Sync')"/>
+      <xsl:value-of select="gsa:i18n ('Feed', 'Feed Sync')"/>
     </h1>
   </div>
 
@@ -36256,8 +36256,9 @@ should not have received it.
   <xsl:param name="position" select="1"/>
   <xsl:param name="id_prefix" select="'feed'"/>
   <xsl:param name="type_text" select="gsa:i18n ('NVT', 'Feed Sync')"/>
-  <xsl:param name="content_text" select="gsa:i18n ('NVTs', 'Feed Sync')"/>
+  <xsl:param name="content_html" select="'unknown content'"/>
   <xsl:param name="feed" select="feed"/>
+  <xsl:param name="current_timestamp" select="../../current_time_utc"/>
   <xsl:param name="sync_cmd" select="'sync_feed'"/>
 
   <xsl:variable name="class">
@@ -36272,17 +36273,19 @@ should not have received it.
       <xsl:value-of select="$type_text"/>
     </td>
     <td>
-      <xsl:value-of select="$content_text"/>
+      <xsl:copy-of select="$content_html"/>
     </td>
     <td>
-      <xsl:value-of select="$feed/name"/>
-      <!-- TODO: Show $feed/description in a tooltip or dialog box? -->
+      <abbr title="{$feed/description}">
+        <xsl:value-of select="$feed/name"/>
+      </abbr>
     </td>
     <td>
       <xsl:value-of select="$feed/version"/>
     </td>
     <td>
       <!-- Status -->
+      <xsl:variable name="version" select="normalize-space ($feed/version)"/>
       <xsl:choose>
         <xsl:when test="@status='200'">
           <xsl:choose>
@@ -36315,6 +36318,28 @@ should not have received it.
               <b><xsl:value-of select="$feed/currently_syncing/user"/></b>
               <xsl:text>.</xsl:text>
             </xsl:when>
+            <xsl:when test="$version and string-length($version) = 12 and number($version) = $version">
+              <xsl:variable name="timestamp_as_iso" select="concat (substring ($version, 1, 4), '-', substring ($version, 5, 2), '-', substring ($version, 7, 2), 'T', substring ($version, 9, 2), ':', substring ($version, 11, 2), ':00')"/>
+              <xsl:variable name="diff" select="date:difference($timestamp_as_iso, $current_timestamp)"/>
+              <xsl:variable name="days_diff" select="substring-after(substring-before ($diff, 'DT'), 'P')"/>
+
+              <xsl:choose>
+                <xsl:when test="number($days_diff) &gt;= 10">
+                  <b><xsl:value-of select="gsa-i18n:strformat(gsa:n-i18n ('Too old (%1 day)', 'Too old (%1 days)', number($days_diff), 'Feed Sync'), number($days_diff))"/></b>
+                  <xsl:text> - </xsl:text>
+                  <xsl:value-of select="gsa:i18n ('Please check the automatic synchronization of your system', 'Feed Sync')"/>
+                </xsl:when>
+                <xsl:when test="number($days_diff) &gt; 0">
+                  <xsl:value-of select="gsa-i18n:strformat(gsa:n-i18n ('%1 day old', '%1 days old', number($days_diff), 'Feed Sync'), number($days_diff))"/>
+                </xsl:when>
+                <xsl:when test="$days_diff = ''">
+                  <xsl:value-of select="gsa:i18n ('Less than 1 day old', 'Feed Sync')"/>
+                </xsl:when>
+              </xsl:choose>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="gsa:i18n ('No status info available', 'Feed Sync')"/>
+            </xsl:otherwise>
           </xsl:choose>
         </xsl:when>
         <xsl:otherwise>
@@ -36352,13 +36377,36 @@ should not have received it.
   </tr>
 </xsl:template>
 
+<xsl:template name="feed-get_info-link">
+  <xsl:param name="type" select="'nvt'"/>
+  <xsl:variable name="label_type" select="gsa:type-name-plural($type)"/>
+  <xsl:choose>
+    <xsl:when test="gsa:may-op ('get_info')">
+      <a href="/omp?cmd=get_info&amp;info_type={$type}&amp;token={/envelope/token}">
+        <img class="icon-m" src="/img/{$type}.svg"/>
+        <xsl:text> </xsl:text>
+        <xsl:value-of select="gsa:i18n ($label_type, $label_type)"/>
+      </a>
+    </xsl:when>
+    <xsl:otherwise>
+      <img class="icon-m" src="/img/{$type}.svg"/>
+      <xsl:text> </xsl:text>
+      <xsl:value-of select="gsa:i18n ($label_type, $label_type)"/>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
 <!-- NVT FEED -->
 <xsl:template match="describe_feed_response">
   <xsl:call-template name="html-feed-row">
     <xsl:with-param name="position" select="1"/>
     <xsl:with-param name="id_prefix" select="'nvt-feed'"/>
     <xsl:with-param name="type_text" select="gsa:i18n ('NVT', 'Feed Sync')"/>
-    <xsl:with-param name="content_text" select="gsa:i18n ('NVTs', 'Feed Sync')"/>
+    <xsl:with-param name="content_html">
+      <xsl:call-template name="feed-get_info-link">
+        <xsl:with-param name="type" select="'nvt'"/>
+      </xsl:call-template>
+    </xsl:with-param>
     <xsl:with-param name="feed" select="feed"/>
     <xsl:with-param name="sync_cmd" select="'sync_feed'"/>
   </xsl:call-template>
@@ -36382,7 +36430,19 @@ should not have received it.
     <xsl:with-param name="position" select="1 + gsa:may-op ('describe_feed')"/>
     <xsl:with-param name="id_prefix" select="'scap-feed'"/>
     <xsl:with-param name="type_text" select="gsa:i18n ('SCAP', 'Feed Sync')"/>
-    <xsl:with-param name="content_text" select="gsa:i18n ('CVEs, CPEs and OVAL Definitions', 'Feed Sync')"/>
+    <xsl:with-param name="content_html">
+      <xsl:call-template name="feed-get_info-link">
+        <xsl:with-param name="type" select="'cve'"/>
+      </xsl:call-template>
+      <xsl:text>, </xsl:text>
+      <xsl:call-template name="feed-get_info-link">
+        <xsl:with-param name="type" select="'cpe'"/>
+      </xsl:call-template>
+      <xsl:text>, </xsl:text>
+      <xsl:call-template name="feed-get_info-link">
+        <xsl:with-param name="type" select="'ovaldef'"/>
+      </xsl:call-template>
+    </xsl:with-param>
     <xsl:with-param name="feed" select="scap"/>
     <xsl:with-param name="sync_cmd" select="'sync_scap'"/>
   </xsl:call-template>
@@ -36406,7 +36466,15 @@ should not have received it.
     <xsl:with-param name="position" select="1 + gsa:may-op ('describe_feed') + gsa:may-op ('describe_scap')"/>
     <xsl:with-param name="id_prefix" select="'cert-feed'"/>
     <xsl:with-param name="type_text" select="gsa:i18n ('CERT', 'Feed Sync')"/>
-    <xsl:with-param name="content_text" select="gsa:i18n ('CERT-Bund and DFN-CERT Advisories', 'Feed Sync')"/>
+    <xsl:with-param name="content_html">
+      <xsl:call-template name="feed-get_info-link">
+        <xsl:with-param name="type" select="'cert_bund_adv'"/>
+      </xsl:call-template>
+      <xsl:text>, </xsl:text>
+      <xsl:call-template name="feed-get_info-link">
+        <xsl:with-param name="type" select="'dfn_cert_adv'"/>
+      </xsl:call-template>
+    </xsl:with-param>
     <xsl:with-param name="feed" select="cert"/>
     <xsl:with-param name="sync_cmd" select="'sync_cert'"/>
   </xsl:call-template>

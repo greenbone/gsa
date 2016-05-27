@@ -1401,6 +1401,11 @@ select[multiple] {
   height: 16px;
 }
 
+.icon-m {
+  width: 24px;
+  height: 24px;
+}
+
 .icon-lg {
   width: 50px;
   height: 50px;
