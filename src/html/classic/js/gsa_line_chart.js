@@ -51,7 +51,7 @@
   LineChartGenerator.prototype.constructor = LineChartGenerator;
 
   LineChartGenerator.prototype.init = function() {
-    this.margin = {top: 55, right: 55, bottom: 25, left: 55};
+    this.margin = {top: 55, right: 60, bottom: 25, left: 60};
 
     this.x_scale = d3.time.scale.utc();
     this.y_scale = d3.scale.linear();
@@ -363,8 +363,33 @@
           var d = data.records[line_index];
           if (gsa.has_value(d)) {
             d = d[self.info_text_lines[line].field];
-            d = gsa.format_data(d,
-              data.column_info.columns[self.info_text_lines[line].field]);
+
+            if (line > self.y_fields.length) {
+              // y2 field
+              switch (self.y2_format) {
+                case 'duration':
+                  d = self.duration_tick_format(d);
+                  break;
+                default:
+                  d = gsa.format_data(d,
+                    data.column_info.columns[self.info_text_lines[line].field]);
+              }
+            }
+            else if (line >= 1) {
+              // y field
+              switch (self.y2_format) {
+                case 'duration':
+                  d = self.duration_tick_format(d);
+                  break;
+                default:
+                  d = gsa.format_data(d,
+                    data.column_info.columns[self.info_text_lines[line].field]);
+              }
+            }
+            else {
+              d = gsa.format_data(d,
+                data.column_info.columns[self.info_text_lines[line].field]);
+            }
 
             self.info_text_lines[line].elem.text(d);
           }
@@ -474,8 +499,32 @@
       self.x_scale.domain([x_min - 1, x_min + 1]);
     }
 
-    self.y_scale.domain([0, y_max]).nice(10);
-    self.y2_scale.domain([0, y2_max]).nice(10);
+    var y_ticks, y2_ticks;
+    switch (self.y_format) {
+      case 'duration':
+        y_ticks = self.duration_ticks (0, y_max, 10);
+        self.y_scale.domain([0, y_ticks[y_ticks.length - 1]]);
+        self.y_axis.tickValues(y_ticks);
+        self.y_axis.tickFormat(self.duration_tick_format);
+        break;
+      default:
+        self.y_scale.domain([0, y_max]).nice(10);
+        self.y_axis.tickValues(null);
+        self.y_axis.tickFormat(null);
+    }
+
+    switch (self.y2_format) {
+      case 'duration':
+        y2_ticks = self.duration_ticks (0, y2_max, 10);
+        self.y2_scale.domain([0, y2_ticks[y2_ticks.length - 1]]);
+        self.y2_axis.tickValues(y2_ticks);
+        self.y2_axis.tickFormat(self.duration_tick_format);
+        break;
+      default:
+        self.y2_scale.domain([0, y2_max]).nice(10);
+        self.y2_axis.tickValues(null);
+        self.y2_axis.tickFormat(null);
+    }
 
     if (update) {
       display.svg().text('');
@@ -903,6 +952,9 @@
       this.y2_fields = ['c_count'];
     }
 
+    this.y_format = gen_params.extra.y_format;
+    this.y2_format = gen_params.extra.y2_format;
+
     if (gen_params.extra.show_stat_type) {
       this.show_stat_type = !!JSON.parse(gen_params.extra.show_stat_type);
     }
@@ -1120,6 +1172,67 @@
 
     return new_data;
   };
+
+  var zero_pad = d3.format('02d');
+  LineChartGenerator.prototype.duration_tick_format = function(val) {
+    val = Math.round(val);
+    if (val >= 86400) {
+      var days = Math.floor (val / 86400);
+      var hours = Math.floor ((val - hours * 86400) / 3600);
+      if (hours === 0) {
+        return days + 'd';
+      }
+      else {
+        return days + 'd' + zero_pad(hours) + 'h';
+      }
+    }
+    else if (val >= 3600) {
+      var hours = Math.floor (val / 3600);
+      var minutes = Math.floor ((val - hours * 3600) / 60);
+      if (minutes === 0) {
+        return hours + 'h';
+      }
+      else {
+        return hours + 'h' + zero_pad(minutes) + 'm';
+      }
+    }
+    else if (val >= 60) {
+      var minutes = Math.floor (val / 60);
+      var seconds = Math.floor (val % 60);
+      if (seconds === 0) {
+        return minutes + 'm';
+      }
+      else {
+        return minutes + 'm' + zero_pad(seconds) + 's'
+      }
+    }
+    else {
+      return val.toFixed(0) + 's';
+    }
+  }
+
+  LineChartGenerator.prototype.duration_ticks = function(min, max, number) {
+    var approx_step = (max - min) / number;
+    var step;
+    var ticks = [];
+
+    var steps = [1, 2, 5, 10, 15, 30,
+                  1*60, 2*60, 5*60, 10*60, 15*60, 30*60,
+                  1*3600, 2*3600, 3*3600, 6*3600, 12*3600, 24*3600];
+
+    for (i = 0; i < steps.length && step === undefined; i++) {
+      if (approx_step <= steps[i]) {
+        step = steps[i];
+      }
+    }
+
+    var rounded_max = Math.ceil(max / step)*step;
+
+    for (var i = 0; (min + i * step) <= rounded_max; i++) {
+      ticks.push (min + i * step);
+    }
+    return ticks;
+  }
 
 })(window, window, window.d3, window.console, window.gsa);
 

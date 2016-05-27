@@ -1,3 +1,15 @@
+2016-05-27  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/graphics.xsl (js-scan-management-top-visualization):
+	Replace duration_y parameter with y_format and y2_format.
+
+	* src/html/classic/js/gsa_line_chart.js (init): Make left and right
+	margins 5px wider.
+	(generate): Allow setting a special "duration" format for the data on
+	the y axes that shows durations in a more human-readable form.
+	(evaluateParams): Add params y_format, y2_format.
+	(duration_tick_format, duration_ticks): New functions.
+
 2016-05-26  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/graphics.xsl (js-scan-management-top-visualization):

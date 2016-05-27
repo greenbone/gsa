@@ -235,7 +235,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           data-y-fields="duration_mean,duration_max"
           data-z-fields="duration_per_host_mean,duration_per_host_max"
           data-init-params='{{"title_text": "Reports: Duration timeline"}}'
-          data-gen-params='{{"show_stat_type": 0, "duration_y": true}}'/>
+          data-gen-params='{{"show_stat_type": 0, "y_format": "duration", "y2_format": "duration"}}'/>
       </div>
     </xsl:if>
     <xsl:if test="$type='result'">
