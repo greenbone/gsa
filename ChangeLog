@@ -1,3 +1,7 @@
+2016-05-28  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad.c (main): Use convenience log function for consistency.
+
 2016-05-27  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/gsad_omp.c: Add #include <time.h> and #include <sys/time.h>.
@@ -8,7 +12,7 @@
 
 	* src/html/classic/help.xsl (contents.html, feed_management.html):
 	Change title of "Feed Management" page to "Feed".
-	
+
 	* src/html/classic/omp.xsl (get_feeds): Change page title to "Feed".
 	(html-feed-row): Replace param content_text with content_html which
 	can contain markup.  Add feed description as tooltip of "Origin" text.
@@ -492,7 +496,7 @@
 
 2016-05-12  Matthew Mundell <matthew.mundell@greenbone.net>
 
-	* src/html/classic/omp.xsl (html-create-alert-form): Also use the hidden
+	* src/html/classic/omp.xsl (html-edit-alert-form): Also use the hidden
 	field when submethod is not present.
 
 2016-05-12  Timo Pollmeier <timo.pollmeier@greenbone.net>

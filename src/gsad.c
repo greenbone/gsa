@@ -6006,8 +6006,7 @@ main (int argc, char **argv)
     {
       if (termination_signal)
         {
-          g_log (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG, "Received %s signal.\n",
-                 sys_siglist[termination_signal]);
+          g_debug ("Received %s signal.\n", sys_siglist[termination_signal]);
           gsad_cleanup ();
           /* Raise signal again, to exit with the correct return value. */
           signal (termination_signal, SIG_DFL);
