@@ -26,7 +26,6 @@
 
 #include <assert.h>
 
-#include "tracef.h"
 #include "validator.h"
 
 #undef G_LOG_DOMAIN
@@ -186,16 +185,16 @@ openvas_validate (validator_t validator, const char *name, const char *value)
 
   if (name != NULL && g_utf8_validate (name, -1, NULL) == FALSE)
     {
-      tracef ("%s: name is not valid UTF-8", __FUNCTION__);
+      g_debug ("%s: name is not valid UTF-8", __FUNCTION__);
       return 1;
     }
   else if (value != NULL && g_utf8_validate (value, -1, NULL) == FALSE)
     {
-      tracef ("%s: value is not valid UTF-8", __FUNCTION__);
+      g_debug ("%s: value is not valid UTF-8", __FUNCTION__);
       return 2;
     }
 
-  tracef ("%s: name %s value %s", __FUNCTION__, name, value);
+  g_debug ("%s: name %s value %s", __FUNCTION__, name, value);
 
   if (g_hash_table_lookup_extended (validator, name, &key, &value_rule))
     {
@@ -209,33 +208,33 @@ openvas_validate (validator_t validator, const char *name, const char *value)
         {
           if (value == NULL)
             {
-              tracef ("%s: matched, regex NULL", __FUNCTION__);
+              g_debug ("%s: matched, regex NULL", __FUNCTION__);
               return 0;
             }
-          tracef ("%s: failed to match, regex NULL", __FUNCTION__);
+          g_debug ("%s: failed to match, regex NULL", __FUNCTION__);
           return 2;
         }
 
       if (value == NULL)
         {
-          tracef ("%s: failed to match, value NULL", __FUNCTION__);
+          g_debug ("%s: failed to match, value NULL", __FUNCTION__);
           return 2;
         }
 
-      tracef ("matching <%s> against <%s>: ", (char *) rule->regex, value);
+      g_debug ("matching <%s> against <%s>: ", (char *) rule->regex, value);
       if (g_regex_match_simple (rule->regex,
                                 (const gchar *) value,
                                 0,
                                 0))
         {
-          tracef ("%s: matched", __FUNCTION__);
+          g_debug ("%s: matched", __FUNCTION__);
           return 0;
         }
-      tracef ("%s: failed to match\n", __FUNCTION__);
+      g_debug ("%s: failed to match\n", __FUNCTION__);
       return 2;
     }
 
-  tracef ("%s: failed to find name: %s", __FUNCTION__, name);
+  g_debug ("%s: failed to find name: %s", __FUNCTION__, name);
   return 1;
 }
 

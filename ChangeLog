@@ -1,3 +1,16 @@
+2016-05-24  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Replace tracef with g_debug.  No real gain having these messages
+	controlled by --verbose, when the log config does the same thing.
+
+	This is also simpler, and removes the mix of tracef and g_debug that had
+	crept in.
+
+	* src/gsad_base.c, src/gsad_omp.c, src/validator.c: Replace tracef.
+
+	* src/gsad.c: Replace tracef.
+	(G_LOG_DOMAIN): Define for logging.
+
 2016-05-28  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (main): Use convenience log function for consistency.

@@ -35,7 +35,6 @@
 #define XSL_PATH "gsad.xsl"
 
 #include "gsad_base.h"
-#include "tracef.h"
 
 #include <openvas/omp/xml.h>
 
@@ -204,8 +203,8 @@ xsl_transform_with_stylesheet (const char *xml_text,
   xmlChar *doc_txt_ptr = NULL;
   int doc_txt_len;
 
-  tracef ("xsl stylesheet: [%s]\n", xml_text);
-  tracef ("text to transform: [%s]\n", xml_text);
+  g_debug ("xsl stylesheet: [%s]\n", xml_text);
+  g_debug ("text to transform: [%s]\n", xml_text);
 
   exsltRegisterAll ();
   register_i18n_ext_module ();
@@ -279,7 +278,7 @@ xsl_transform_with_stylesheet (const char *xml_text,
 
   /* Copy text to temporary file. */
 
-  tracef ("text to transform: [%s]\n", xml_text);
+  g_debug ("text to transform: [%s]\n", xml_text);
 
   error = NULL;
   g_file_set_contents (content_file, xml_text, strlen (xml_text), &error);

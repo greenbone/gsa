@@ -88,13 +88,18 @@
 
 #include "gsad_base.h"
 #include "gsad_omp.h"
-#include "tracef.h"
 #include "validator.h"
 #include "xslt_i18n.h"
 
 #ifdef SVN_REV_AVAILABLE
 #include "svnrevision.h"
 #endif
+
+#undef G_LOG_DOMAIN
+/**
+ * @brief GLib log domain.
+ */
+#define G_LOG_DOMAIN "gsad main"
 
 #undef G_LOG_FATAL_MASK
 #define G_LOG_FATAL_MASK G_LOG_LEVEL_ERROR
@@ -1675,11 +1680,11 @@ free_resources (void *cls, struct MHD_Connection *connection,
 
   if (NULL == con_info)
     {
-      tracef ("con_info was NULL!\n");
+      g_debug ("con_info was NULL!\n");
       return;
     }
 
-  tracef ("connectiontype=%d\n", con_info->connectiontype);
+  g_debug ("connectiontype=%d\n", con_info->connectiontype);
 
   if (con_info->connectiontype == 1)
     {
@@ -2757,7 +2762,7 @@ exec_omp_get (struct MHD_Connection *connection,
 
   if ((cmd != NULL) && (strlen (cmd) <= CMD_MAX_SIZE))
     {
-      tracef ("cmd: [%s]\n", cmd);
+      g_debug ("cmd: [%s]\n", cmd);
 
       params = params_new ();
 
@@ -3813,7 +3818,7 @@ file_content_response (credentials_t *credentials,
 
   if (file == NULL)
     {
-      tracef ("File %s failed, ", path);
+      g_debug ("File %s failed, ", path);
       g_free (path);
 
       *http_response_code = MHD_HTTP_NOT_FOUND;
@@ -3837,7 +3842,7 @@ file_content_response (credentials_t *credentials,
   /** @todo Set content disposition? */
 
   struct stat buf;
-  tracef ("Default file successful.\n");
+  g_debug ("Default file successful.\n");
   if (stat (path, &buf))
     {
       /* File information could not be retrieved. */
@@ -4133,7 +4138,7 @@ handle_request (void *cls, struct MHD_Connection *connection,
    * way to logout, however, is with a token.  I guess this is where a cookie
    * would be useful. */
 
-  tracef ("============= url: %s\n", url);
+  g_debug ("============= url: %s\n", url);
 
   if (!strcmp (&url[0], url_base))
     {
@@ -5107,7 +5112,7 @@ my_gnutls_log_func (int level, const char *text)
 int
 gsad_init ()
 {
-  tracef ("Initializing the Greenbone Security Assistant...\n");
+  g_debug ("Initializing the Greenbone Security Assistant...\n");
 
   /* Init Glib. */
 #if GLIB_CHECK_VERSION (2, 31, 0)
@@ -5175,7 +5180,7 @@ gsad_init ()
   /* Init the validator. */
   init_validator ();
 
-  tracef ("Initialization of GSA successful.\n");
+  g_debug ("Initialization of GSA successful.\n");
   return MHD_YES;
 }
 
@@ -5746,7 +5751,7 @@ main (int argc, char **argv)
   if (foreground == FALSE)
     {
       /* Fork into the background. */
-      tracef ("Forking...\n");
+      g_debug ("Forking...\n");
       pid_t pid = fork ();
       switch (pid)
         {
@@ -5771,7 +5776,7 @@ main (int argc, char **argv)
   if (unix_socket_path)
     {
       /* Fork for the unix socket server. */
-      tracef ("Forking for unix socket...\n");
+      g_debug ("Forking for unix socket...\n");
       pid_t pid = fork ();
       switch (pid)
         {
@@ -5802,7 +5807,7 @@ main (int argc, char **argv)
   if (!no_redirect)
     {
       /* Fork for the redirect server. */
-      tracef ("Forking for redirect...\n");
+      g_debug ("Forking for redirect...\n");
       pid_t pid = fork ();
       switch (pid)
         {
@@ -5864,8 +5869,8 @@ main (int argc, char **argv)
         }
       else
         {
-          tracef ("GSAD started successfully and is redirecting on port %d.\n",
-                  gsad_redirect_port);
+          g_debug ("GSAD started successfully and is redirecting on port %d.\n",
+                   gsad_redirect_port);
         }
     }
   else if (unix_socket_path && !unix_pid)
@@ -5881,8 +5886,9 @@ main (int argc, char **argv)
         }
       else
         {
-          tracef ("GSAD started successfully and is listening on unix socket %s.\n",
-                  unix_socket_path);
+          g_debug ("GSAD started successfully and is listening on unix"
+                   " socket %s.\n",
+                   unix_socket_path);
         }
     }
   else
@@ -5965,8 +5971,8 @@ main (int argc, char **argv)
         }
       else
         {
-          tracef ("GSAD started successfully and is listening on port %d.\n",
-                  gsad_port);
+          g_debug ("GSAD started successfully and is listening on port %d.\n",
+                   gsad_port);
         }
     }
 

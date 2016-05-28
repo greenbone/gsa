@@ -53,7 +53,6 @@
 
 #include "gsad_base.h"
 #include "gsad_omp.h"
-#include "tracef.h"
 #include "xslt_i18n.h"
 
 #include <openvas/misc/openvas_server.h>
@@ -380,8 +379,8 @@ find_by_value (gchar *key, gchar *value,  find_by_value_t *data)
 {
   if (strcmp (value, data->value) == 0)
     {
-      tracef ("%s found key %s for value %s\n",
-                  __FUNCTION__, key, value);
+      g_debug ("%s found key %s for value %s\n",
+               __FUNCTION__, key, value);
       data->keys = g_list_append (data->keys, key);
     }
   return FALSE;
@@ -2014,20 +2013,21 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
       case 1:
         break;
       case 0:
-        tracef ("%s filter doesn't exist anymore %s!\n", __FUNCTION__, filt_id);
+        g_debug ("%s filter doesn't exist anymore %s!\n", __FUNCTION__,
+                 filt_id);
         filt_id = NULL;
         break;
       case -1:
-        tracef ("%s filter response didn't contain a status!\n", __FUNCTION__);
+        g_debug ("%s filter response didn't contain a status!\n", __FUNCTION__);
         filt_id = NULL;
         break;
       case -2:
-        tracef ("%s could not send filter request!\n", __FUNCTION__);
+        g_debug ("%s could not send filter request!\n", __FUNCTION__);
         filt_id = NULL;
         break;
       case -3:
-        tracef ("%s could not read entity from filter response!\n",
-                __FUNCTION__);
+        g_debug ("%s could not read entity from filter response!\n",
+                 __FUNCTION__);
         filt_id = NULL;
         break;
       default:
@@ -24573,8 +24573,8 @@ delete_filter_omp (credentials_t * credentials, params_t *params,
 
       while (list != NULL)
         {
-          tracef ("%s removing filter from last filter ids for %s\n",
-                  __FUNCTION__, (char *)list->data);
+          g_debug ("%s removing filter from last filter ids for %s\n",
+                   __FUNCTION__, (char *)list->data);
           g_tree_remove (credentials->last_filt_ids, list->data);
           list = g_list_next (find.keys);
         }
@@ -27928,7 +27928,7 @@ authenticate_omp (const gchar * username, const gchar * password,
                                 manager_port);
   if (socket == -1)
     {
-      tracef ("%s failed to acquire socket!\n", __FUNCTION__);
+      g_debug ("%s failed to acquire socket!\n", __FUNCTION__);
       return 2;
     }
 
@@ -27940,7 +27940,7 @@ authenticate_omp (const gchar * username, const gchar * password,
    * It's probably easier to run gsad in the foreground under gdb and
    * set a break point here.
    */
-  tracef ("Sleeping!");
+  g_debug ("Sleeping!");
   sleep (20);
 #endif
 
@@ -28152,14 +28152,14 @@ manager_connect (credentials_t *credentials, int *socket,
     }
 
 #if 0
-  tracef ("in manager_connect: Trying to authenticate with %s/%s\n",
-          credentials->username,
-          credentials->password);
+  g_debug ("in manager_connect: Trying to authenticate with %s/%s\n",
+           credentials->username,
+           credentials->password);
 #endif
 
   if (omp_authenticate (session, credentials->username, credentials->password))
     {
-      tracef ("authenticate failed!\n");
+      g_debug ("authenticate failed!\n");
       openvas_server_close (*socket, *session);
       return -2;
     }
@@ -28171,7 +28171,7 @@ manager_connect (credentials_t *credentials, int *socket,
    *
    * An easier method is to run gsad under gdb and set a breakpoint here.
    */
-  tracef ("Sleeping!");
+  g_debug ("Sleeping!");
   sleep (10);
 #endif
   return 0;
