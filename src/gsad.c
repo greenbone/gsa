@@ -269,12 +269,6 @@ int unix_socket = 0;
  */
 GSList *log_config = NULL;
 
-// @todo This is the definition for the entire program.
-/**
- * @brief Verbose output flag.
- */
-int verbose = 0;
-
 /**
  * @brief Whether to use a secure cookie.
  *
@@ -5468,6 +5462,7 @@ main (int argc, char **argv)
   static gchar *http_guest_chart_csp
                   = DEFAULT_GSAD_GUEST_CHART_CONTENT_SECURITY_POLICY;
   static gboolean ignore_x_real_ip = FALSE;
+  static int verbose = 0;
   GError *error = NULL;
   GOptionContext *option_context;
   static GOptionEntry option_entries[] = {
@@ -5501,7 +5496,7 @@ main (int argc, char **argv)
      "Don't redirect HTTP to HTTPS.", NULL },
     {"verbose", 'v',
      0, G_OPTION_ARG_NONE, &verbose,
-     "Print progress messages.", NULL },
+     "Has no effect.  See INSTALL for logging config.", NULL },
     {"version", 'V',
      0, G_OPTION_ARG_NONE, &print_version,
      "Print version and exit.", NULL},

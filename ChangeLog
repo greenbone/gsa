@@ -1,5 +1,12 @@
 2016-05-28  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad.c (verbose): Remove.  Now in main.
+	(main): Note that --verbose has no effect.
+
+	* INSTALL: Add section Logging Configuration.
+
+2016-05-28  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/tracef.h: Remove.  No longer used.
 
 2016-05-28  Matthew Mundell <matthew.mundell@greenbone.net>
