@@ -16087,80 +16087,69 @@ should not have received it.
 <!-- BEGIN CONFIGS MANAGEMENT -->
 
 <xsl:template name="html-create-config-form">
-  <div class="gb_window">
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">
+  <div class="edit-dialog">
+    <div class="title">
       <xsl:value-of select="gsa:i18n ('New Scan Config', 'Scan Config')"/>
-      <a href="/help/new_config.html?token={/envelope/token}"
-         title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('New Scan Config', 'Scan Config'))}">
-        <img src="/img/help.png"/>
-      </a>
-      <a href="/omp?cmd=get_configs&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-         title="{gsa:i18n ('Scan Configs', 'Scan Config')}" style="margin-left:3px;">
-        <img src="/img/list.png" alt="{gsa:i18n ('Scan Configs', 'Scan Config')}"/>
-      </a>
     </div>
-    <div class="gb_window_part_content">
-      <form action="/omp" method="post" enctype="multipart/form-data">
+    <div class="content">
+      <form action="/omp" method="post" enctype="multipart/form-data"
+        class="form-horizontal">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="create_config"/>
         <input type="hidden" name="caller" value="{/envelope/current_page}"/>
         <input type="hidden" name="next" value="get_config"/>
         <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-        <table class="table-form">
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
-            <td>
-              <input type="text" name="name" value="unnamed" size="30"
-                     maxlength="80"/>
-            </td>
-          </tr>
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/></td>
-            <td>
-              <input type="text" name="comment" size="30" maxlength="400"/>
-            </td>
-          </tr>
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('Base', 'Scan Config')"/></td>
-            <td>
-              <div>
+        <div class="form-group">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></label>
+          <div class="col-10">
+            <input type="text" name="name" value="unnamed" size="30"
+              class="form-control" maxlength="80"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-2 control-label">
+            <xsl:value-of select="gsa:i18n ('Comment', 'Property')"/>
+          </label>
+          <div class="col-10">
+            <input type="text" name="comment" size="30" maxlength="400"
+              class="form-control"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-2 control-label">
+            <xsl:value-of select="gsa:i18n ('Base', 'Scan Config')"/>
+          </label>
+          <div class="col-10">
+            <div class="radio">
+              <label>
+                <input type="radio" name="base"
+                        value="085569ce-73ed-11df-83c3-002264764cea"
+                        checked="1"/>
+                <xsl:value-of select="gsa:i18n ('Empty, static and fast', 'Scan Config')"/>
+              </label>
+            </div>
+            <div class="radio">
+              <label>
+                <input type="radio" name="base"
+                        value="daba56c8-73ec-11df-a475-002264764cea"/>
+                <xsl:value-of select="gsa:i18n ('Full and fast', 'Scan Config')"/>
+              </label>
+            </div>
+            <xsl:if test="get_scanners_response/scanner[type != '2' and type != '3']">
+              <div class="radio">
                 <label>
-                  <input type="radio" name="base"
-                          value="085569ce-73ed-11df-83c3-002264764cea"
-                          checked="1"/>
-                  <xsl:value-of select="gsa:i18n ('Empty, static and fast', 'Scan Config')"/>
+                  <input type="radio" name="base" value="0"/>
+                  <select name="scanner_id">
+                    <xsl:for-each select="get_scanners_response/scanner[type != '2' and type != '3']">
+                      <option value="{@id}"><xsl:value-of select="name"/></option>
+                    </xsl:for-each>
+                  </select>
                 </label>
               </div>
-              <div>
-                <label>
-                  <input type="radio" name="base"
-                          value="daba56c8-73ec-11df-a475-002264764cea"/>
-                  <xsl:value-of select="gsa:i18n ('Full and fast', 'Scan Config')"/>
-                </label>
-              </div>
-              <xsl:if test="get_scanners_response/scanner[type != '2' and type != '3']">
-                <div>
-                  <label>
-                    <input type="radio" name="base" value="0"/>
-                    <select name="scanner_id">
-                      <xsl:for-each select="get_scanners_response/scanner[type != '2' and type != '3']">
-                        <option value="{@id}"><xsl:value-of select="name"/></option>
-                      </xsl:for-each>
-                    </select>
-                  </label>
-                </div>
-              </xsl:if>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <input type="submit" name="submit" value="{gsa:i18n ('Create Scan Config', 'Scan Config')}"/>
-            </td>
-          </tr>
-        </table>
+            </xsl:if>
+          </div>
+        </div>
       </form>
     </div>
   </div>
