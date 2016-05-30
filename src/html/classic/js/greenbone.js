@@ -271,8 +271,8 @@
   **/
   var OMPDialog = function(options) {
     this.command = options.cmd;
-    this.success_reload = options.reload;
-    this.done = options.done ? $(options.done) : undefined;
+    this.success_reload = options.success_reload || {};
+    this.close_reload = options.close_reload || {};
     this.height = is_defined(options.height) ? options.height : 500;
 
     if (options.params === undefined) {
@@ -344,6 +344,10 @@
     this.dialog = undefined;
     this.parent_dialog = undefined;
     start_auto_refresh();
+
+    if (this.close_reload.type === 'window') {
+      location.reload();
+    }
   };
 
   OMPDialog.prototype.setErrorFromResponse = function(jqXHR) {
@@ -436,67 +440,74 @@
       self.finished();
     })
     .done(function(xml) {
+      var entity;
+
       xml = $(xml);
-      if (self.success_reload === 'window') {
+      if (self.success_reload.type === 'window') {
         location.reload();
         // a bit overkill, but better-safe-than-sorry.
         return;
       }
-      if (self.success_reload === 'parent' && self.parent_dialog) {
+      else if (self.success_reload.type === 'parent' && self.parent_dialog) {
         self.parent_dialog.reload();
       }
-      if (self.success_reload === 'next' &&
+      else if (self.success_reload.type === 'next' &&
           xml.find('action_result next')) {
         var url = parse_url(xml.find('action_result next').text());
         // we need the html page
         url.params.xml = 0;
         location.href = encode_url_object(url);
       }
-      if (!gsa.has_value(self.done)) {
-        // No element to update, exit early.
-        self.close();
-        return;
-      }
+      else if (self.success_reload.type === 'dialog') {
+        var elem = $(self.success_reload.data);
 
-      if (!self.done.length) {
-        // element not found. raise warning
-        console.warn('Done element not found!');
-        self.close();
-        return;
-      }
+        entity = self.getActionResultEntity(xml);
 
-      var entity;
-      var action_result_next = xml.find('action_result > next');
+        if (!gsa.has_value(entity)) {
+          // element not found. raise warning
+          console.warn('Entity element not found!');
+          self.close();
+          return;
+        }
 
-      if (action_result_next.length > 0) {
-        // got an "action_result" with "next" element,
-        //  so get "next" url and extract entity from response.
-        var next_url = action_result_next.text();
-        $.ajax({
-          url: next_url,
-          async: false,
-          success: function(doc) {
-            entity = get_entity(self.command, $(doc));
-          },
-          error: function(doc) {
-            self.setErrorFromResponse($(doc));
-          },
+        elem.data('id', entity.id);
+
+        var show_dialog = init_omp_dialog({
+          element: elem,
+          button: gsa._('Save'),
+          listeners: false,
         });
-      } else {
-        // got a response directly, extract entity directly.
-        entity = get_entity(self.command, xml);
+
+        show_dialog();
       }
+      else if (self.success_reload.type === 'done') {
+        var done = $(self.success_reload.data);
 
-      if (entity !== undefined) {
-        // fill in the new information in the $done element and make it selected
-        self.done.append($('<option/>', {
-          value: entity.id,
-          html: entity.name,
-          selected: true,
-        }));
+        if (!gsa.has_value(done)) {
+          // No element to update, exit early.
+          self.close();
+          return;
+        }
 
-        // refresh the select widget.
-        self.done.trigger('change');
+        if (!done.length) {
+          // element not found. raise warning
+          console.warn('Done element not found!');
+          self.close();
+          return;
+        }
+
+        entity = self.getActionResultEntity(xml);
+        if (gsa.has_value(entity)) {
+          // fill in the new information in the $done element and make it selected
+          done.append($('<option/>', {
+            value: entity.id,
+            html: entity.name,
+            selected: true,
+          }));
+
+          // refresh the select widget.
+          done.trigger('change');
+        }
       }
 
       // And finally, close our dialog.
@@ -652,6 +663,32 @@
       }, function() {
       }
     );
+  };
+
+  OMPDialog.prototype.getActionResultEntity = function(xml) {
+    var entity;
+    var self = this;
+    var action_result_next = xml.find('action_result > next');
+
+    if (action_result_next.length > 0) {
+      // got an "action_result" with "next" element,
+      //  so get "next" url and extract entity from response.
+      var next_url = action_result_next.text();
+      $.ajax({
+        url: next_url,
+        async: false,
+        success: function(doc) {
+          entity = get_entity(self.command, $(doc));
+        },
+        error: function(doc) {
+          self.setErrorFromResponse($(doc));
+        },
+      });
+    } else {
+      // got a response directly, extract entity directly.
+      entity = get_entity(self.command, xml);
+    }
+    return entity;
   };
 
   OMPDialog.prototype.submit = function() {
@@ -866,6 +903,7 @@
 
   function init_omp_dialog(options) {
     var params;
+    var reload_data;
 
     var cmd = options.element.data('cmd');
     var type_id = options.element.data('id');
@@ -874,20 +912,26 @@
     var done = options.element.data('done');
     var task_id = options.element.data('task_id');
     var parent_dialog = options.element.parents('.dialog-form')[0];
-    var reload = options.element.data('reload');
+    var reload_type = options.element.data('reload');
     var height = options.element.data('height');
+    var close_reload_type = options.element.data('close-reload');
 
-    if (!is_defined(reload)) {
-      reload = options.default_reload;
+    if (!is_defined(reload_type)) {
+      reload_type = options.default_reload;
+    }
+
+    if (reload_type === 'dialog') {
+      reload_data = options.element.find('.success-dialog');
     }
 
     if (done) {
       // done is used to add newly created elements to the dialog
       // therefore we must not reload anything
-      reload = undefined;
+      reload_type = 'done';
+      reload_data = done;
     }
 
-    if (cmd === undefined) {
+    if (!is_defined(cmd)) {
       cmd = options.type + '_' + type_name;
 
       if (options.postfix !== undefined) {
@@ -897,11 +941,11 @@
 
     params = parse_params(extra);
 
-    if (type_id !== undefined) {
+    if (is_defined(type_id)) {
       params[type_name + '_id'] = type_id;
     }
 
-    if (task_id !== undefined) {
+    if (is_defined(task_id)) {
       params.task_id = task_id;
     }
 
@@ -910,24 +954,29 @@
         cmd: cmd,
         done: done,
         params: params,
-        reload: reload,
+        success_reload: {type: reload_type, data: reload_data},
+        close_reload: {type: close_reload_type},
         parent_dialog: parent_dialog,
         height: height,
       }).show(options.button);
     }
 
-    options.element.on('click', function(event) {
-      event.preventDefault();
-      show_dialog();
-    });
-
-    options.element.on('keydown', function(event) {
-      console.log('keydown');
-      if (event.which === $.ui.keyCode.ENTER) {
-        event.stopPropagation();
+    if (options.listeners !== true) {
+      options.element.on('click', function(event) {
+        event.preventDefault();
         show_dialog();
-      }
-    });
+      });
+
+      options.element.on('keydown', function(event) {
+        console.log('keydown');
+        if (event.which === $.ui.keyCode.ENTER) {
+          event.stopPropagation();
+          show_dialog();
+        }
+      });
+    }
+
+    return show_dialog;
   }
 
   function ToggleIcon(options) {
@@ -1100,7 +1149,7 @@
           done: done,
           params: params,
           show_method: 'POST',
-          reload: reload,
+          success_reload: {type: reload},
           height: elem.data('height'),
         }).show('OK', 'confirmation');
       });
@@ -1114,7 +1163,7 @@
       elem.on('click', function(event) {
         var dialog = new OMPDialog({
           cmd: 'wizard',
-          reload: 'window',
+          success_reload: {type: 'window'},
           params: params,
           height: elem.data('height'),
         });
