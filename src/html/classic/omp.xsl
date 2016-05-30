@@ -5191,6 +5191,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </ul>
         </span>
       </xsl:when>
+      <xsl:when test="$new-icon and $type = 'config'">
+        <a href="/omp?cmd=new_{$type}{$extra_params_string}&amp;next=get_{$type}&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+           class="new-action-icon icon" data-type="{$type}" data-reload="dialog"
+           title="{gsa:i18n (concat ('New ', $cap-type), $cap-type)}">
+           <span class="success-dialog" data-type="{$type}" data-cmd="edit_{$type}"
+             data-reload="window" data-close-reload="window"/>
+          <img src="/img/new.png"/>
+        </a>
+      </xsl:when>
       <xsl:when test="$new-icon">
         <!-- i18n with concat : see dynamic_strings.xsl - type-new -->
         <a href="/omp?cmd=new_{$type}{$extra_params_string}&amp;next=get_{$type}&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"

@@ -5,6 +5,12 @@
 
 2016-05-30  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/omp.xsl (list-window): Add special handling of new scan
+	config button to open the edit button after the scan config has been
+	created (cloned).
+
+2016-05-30  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/greenbone.js (OMPDialog, init_omp_dialog): Allow to open
 	a new dialog after the first dialog has been closed successfully. Allow to
 	reload the current window when a dialog is beeing closed.
