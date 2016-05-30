@@ -797,13 +797,13 @@
         .attr('d', lines[index]);
     }
 
-    var enter = self.svg.selectAll('.marker')
-      .data(records)
-      .enter();
-
     for (index = 0; index < self.all_y_fields.length; index++) {
       var new_markers;
       var selected_markers;
+
+      var enter = self.svg.selectAll('.marker_' + index)
+        .data(records)
+        .enter();
 
       if (self.all_y_fields[index].substr(0, 5) === 'count' ||
           self.all_y_fields[index].substr(0, 7) === 'c_count') {
