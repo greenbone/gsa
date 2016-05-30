@@ -5645,6 +5645,15 @@ main (int argc, char **argv)
    * concurrently. */
   g_log_set_always_fatal (G_LOG_FATAL_MASK);
 
+#ifdef GSAD_SVN_REVISION
+  g_message ("Starting GSAD version %s (SVN revision %i)\n",
+             GSAD_VERSION,
+             GSAD_SVN_REVISION);
+#else
+  g_message ("Starting GSAD version %s\n",
+             GSAD_VERSION);
+#endif
+
   /* Finish processing the command line options. */
 
   use_secure_cookie = secure_cookie;

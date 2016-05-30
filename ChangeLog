@@ -1,5 +1,9 @@
 2016-05-30  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/gsad.c (main): Log gsad version when starting.
+
+2016-05-30  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/omp.xsl (html-create-config-form): Change create scan
 	config into an edit dialog and use new horizontal form.
 
