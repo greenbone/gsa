@@ -1352,6 +1352,10 @@ select[multiple] {
   text-align: right;
 }
 
+#list-window-filter * {
+  text-align: left;
+}
+
 #list-window-filter > div {
   display: inline-block;
   vertical-align: top;
