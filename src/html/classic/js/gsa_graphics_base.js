@@ -277,13 +277,16 @@
                y_fields.length - alt_color_limit <= 1) {
         color = 'green';
       }
-      else if (gsa.is_defined (field_info.stat)) {
-        if (field_info.stat === 'max')
+      else if (gsa.is_defined(field_info.stat)) {
+        if (field_info.stat === 'max') {
           color = '#ff7f0e';
-        else if (field_info.stat === 'min')
+        }
+        else if (field_info.stat === 'min') {
           color = '#9467bd';
-        else if (field_info.stat === 'sum')
+        }
+        else if (field_info.stat === 'sum') {
           color = '#7f7f7f';
+        }
       }
       else {
         color = default_scale_1(index);
@@ -1557,12 +1560,13 @@
       else if (newType !== filterType) {
         var prevFilter = filters[currentFilterIndex];
         var select2data;
+        var i;
         select2data = [];
         filterType = newType;
         filterIndexes = {};
         filters = [];
-        for (var i = 0; i < allFilters.length; i++) {
-          if (allFilters[i].type === '' || allFilters[i].type == filterType) {
+        for (i = 0; i < allFilters.length; i++) {
+          if (allFilters[i].type === '' || allFilters[i].type === filterType) {
             var filterID = allFilters[i].id;
             filterIndexes[filterID] = filters.length;
             if (filterSelectElem) {
@@ -1577,22 +1581,20 @@
         }
         if (gsa.is_defined(prevFilter)) {
           var newIndex;
-          for (var i = 0; i < filters.length; i++) {
+          for (i = 0; i < filters.length; i++) {
             if (filters[i].id === prevFilter.id) {
               newIndex = i;
               break;
             }
           }
-          if (gsa.is_defined (newIndex))
-            {
-              currentFilterIndex = newIndex;
-              filterSelectElem.select2()
-                .val(prevFilter.id ? prevFilter.id : '--');
-            }
-          else
-            {
-              filterSelectElem.select2().val('--').trigger('change');
-            }
+          if (gsa.is_defined(newIndex)) {
+            currentFilterIndex = newIndex;
+            filterSelectElem.select2()
+              .val(prevFilter.id ? prevFilter.id : '--');
+          }
+          else {
+            filterSelectElem.select2().val('--').trigger('change');
+          }
         }
       }
     }
@@ -1768,8 +1770,9 @@
       }
       var prev_filter_type;
       var new_filter_type;
-      if (controllers[currentCtrlIndex])
+      if (controllers[currentCtrlIndex]) {
         prev_filter_type = controllers[currentCtrlIndex].filterType();
+      }
       new_filter_type = controllers[index].filterType();
 
       currentCtrlIndex = index;
@@ -1988,7 +1991,7 @@
       if (filterSelectElem) {
         $(filterSelectElem).select2();
         $(filterSelectElem).on('change', function() {
-          var value = this.value != '--' ? this.value : '';
+          var value = this.value !== '--' ? this.value : '';
           dashboard_component.selectFilter(value, true, true);
         });
       }
@@ -4511,9 +4514,10 @@
 
     if (chart_type === 'cloud') {
       var cloud_text = gsa._(
-          '{{resource_type_plural}} {{field_name}} word cloud',
-          {resource_type_plural: resource_type_name_plural(aggregate_type),
-           field_name: field_name(group_column)});
+        '{{resource_type_plural}} {{field_name}} word cloud', {
+        resource_type_plural: resource_type_name_plural(aggregate_type),
+        field_name: field_name(group_column),
+      });
       var cloud_text_loading = gsa._(
           '{{resource_type_plural}} {{field_name}} word cloud (Loading...)',
           {
