@@ -1712,6 +1712,78 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:choose>
 </xsl:template>
 
+<xsl:template name="gsa-navigation-menu">
+  <xsl:param name="items" xmlns=""/>
+  <xsl:param name="menu_title"/>
+
+  <xsl:variable name="token" select="/envelope/token"/>
+  <xsl:variable name="count" select="count (exslt:node-set ($items)/item)"/>
+
+  <xsl:choose>
+    <xsl:when test="$count = 0">
+      <div class="empty_top_button"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <a class="top_button"
+          href="/omp?cmd={exslt:node-set ($items)/item/page}&amp;token={/envelope/token}">
+        <xsl:value-of select="$menu_title"/>
+        <div class="first_button_overlay">
+          <ul class="first_button_overlay">
+            <xsl:choose>
+              <xsl:when test="$count = 1">
+                <li class="first_button_overlay overlay_last">
+                  <xsl:value-of select="exslt:node-set ($items)/item/name"/>
+                </li>
+              </xsl:when>
+              <xsl:otherwise>
+                <li class="first_button_overlay">
+                  <xsl:value-of select="exslt:node-set ($items)/item/name"/>
+                </li>
+              </xsl:otherwise>
+            </xsl:choose>
+          </ul>
+        </div>
+      </a>
+      <ul>
+        <li class="pointy"></li>
+        <xsl:for-each select="exslt:node-set ($items)/*">
+          <xsl:if test="name (.) = 'item'">
+            <xsl:variable name="divider">
+              <xsl:if test="name (preceding-sibling::node ()[1]) = 'divider'">
+                <xsl:text>section_start</xsl:text>
+              </xsl:if>
+            </xsl:variable>
+            <xsl:variable name="url">
+              <xsl:choose>
+                <xsl:when test="url">
+                  <xsl:value-of select="url"/>
+                </xsl:when>
+                <xsl:when test="boolean (filter)">
+                  <xsl:value-of select="concat ('/omp?cmd=', page, '&amp;filter=', filter, '&amp;token=', $token)"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:value-of select="concat ('/omp?cmd=', page, '&amp;token=', $token)"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </xsl:variable>
+            <xsl:choose>
+              <xsl:when test="position() = last() or $count = 1">
+                <li class="last {$divider} {class}"><a href="{$url}"><xsl:value-of select="name"/></a></li>
+              </xsl:when>
+              <xsl:when test="string-length (class) &gt; 0">
+                <li class="{$divider} {class}"><a href="{$url}"><xsl:value-of select="name"/></a></li>
+              </xsl:when>
+              <xsl:otherwise>
+                <li class="{$divider}"><a href="{$url}"><xsl:value-of select="name"/></a></li>
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:if>
+        </xsl:for-each>
+      </ul>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
 <xsl:template name="html-gsa-navigation">
   <xsl:variable name="token" select="/envelope/token"/>
   <div id="gb_menu" class="clearfix">
@@ -1766,132 +1838,83 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </item>
         </xsl:if>
       </xsl:variable>
-      <xsl:variable name="count" select="count (exslt:node-set ($items)/item)"/>
-      <xsl:choose>
-        <xsl:when test="$count = 0">
-          <div class="empty_top_button"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <a class="top_button"
-             href="/omp?cmd={exslt:node-set ($items)/item/page}&amp;token={/envelope/token}">
-            <xsl:value-of select="gsa:i18n ('Scans', 'Main Menu')"/>
-            <div class="first_button_overlay">
-              <ul class="first_button_overlay">
-                <xsl:choose>
-                  <xsl:when test="$count = 1">
-                    <li class="first_button_overlay overlay_last">
-                      <xsl:value-of select="exslt:node-set ($items)/item/name"/>
-                    </li>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <li class="first_button_overlay">
-                      <xsl:value-of select="exslt:node-set ($items)/item/name"/>
-                    </li>
-                  </xsl:otherwise>
-                </xsl:choose>
-              </ul>
-            </div>
-          </a>
-          <ul>
-            <li class="pointy"></li>
-            <xsl:for-each select="exslt:node-set ($items)/*">
-              <xsl:if test="name (.) = 'item'">
-                <xsl:variable name="divider">
-                  <xsl:if test="name (preceding-sibling::node ()[1]) = 'divider'">
-                    <xsl:text>section_start</xsl:text>
-                  </xsl:if>
-                </xsl:variable>
-                <xsl:choose>
-                  <xsl:when test="(position() = last() or $count = 1) and boolean (filter)">
-                    <li class="last {$divider} {class}"><a href="/omp?cmd={page}&amp;filter={filter}&amp;token={$token}"><xsl:value-of select="name"/></a></li>
-                  </xsl:when>
-                  <xsl:when test="position() = last() or $count = 1">
-                    <li class="last {$divider} {class}"><a href="/omp?cmd={page}&amp;token={$token}"><xsl:value-of select="name"/></a></li>
-                  </xsl:when>
-                  <xsl:when test="string-length (class) &gt; 0 and boolean (filter)">
-                    <li class="{$divider} {class}"><a href="/omp?cmd={page}&amp;filter={filter}&amp;token={$token}"><xsl:value-of select="name"/></a></li>
-                  </xsl:when>
-                  <xsl:when test="string-length (class) &gt; 0">
-                    <li class="{$divider} {class}"><a href="/omp?cmd={page}&amp;token={$token}"><xsl:value-of select="name"/></a></li>
-                  </xsl:when>
-                  <xsl:when test="boolean (filter)">
-                    <li class="{$divider}"><a href="/omp?cmd={page}&amp;filter={filter}&amp;token={$token}"><xsl:value-of select="name"/></a></li>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <li class="{$divider}"><a href="/omp?cmd={page}&amp;token={$token}"><xsl:value-of select="name"/></a></li>
-                  </xsl:otherwise>
-                </xsl:choose>
-              </xsl:if>
-            </xsl:for-each>
-          </ul>
-        </xsl:otherwise>
-      </xsl:choose>
+      <xsl:call-template name="gsa-navigation-menu">
+        <xsl:with-param name="items" xmlns="" select="$items"/>
+        <xsl:with-param name="menu_title" select="gsa:i18n ('Scans', 'Main Menu')"/>
+      </xsl:call-template>
     </li>
     <li>
-      <xsl:choose>
-        <xsl:when test="gsa:may-op ('GET_ASSETS') or gsa:may-op ('GET_REPORTS')">
-          <a class="top_button"
-             href="/omp?cmd=dashboard&amp;dashboard_name=assets&amp;token={/envelope/token}">
-            <xsl:value-of select="gsa:i18n ('Assets', 'Main Menu')"/>
-            <div class="first_button_overlay">
-              <ul class="first_button_overlay">
-                <li class="pointy"></li>
-                <li class="first_button_overlay">
-                  <xsl:value-of select="gsa:i18n('Dashboard', 'Dashboard')"/>
-                </li>
-              </ul>
-            </div>
-          </a>
-          <ul>
-            <li class="pointy"></li>
-            <li><a href="/omp?cmd=dashboard&amp;dashboard_name=assets&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('Dashboard', 'Dashboard')"/></a></li>
-            <li class="section_start"><a href="/omp?cmd=get_assets&amp;asset_type=host&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('Hosts', 'Host')"/></a></li>
-            <li><a href="/omp?cmd=get_assets&amp;asset_type=os&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('Operating Systems', 'Host')"/></a></li>
-            <li class="last"><a href="/omp?cmd=get_report&amp;type=assets&amp;apply_overrides=1&amp;levels=hm&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('Hosts (Classic)', 'Host')"/></a></li>
-          </ul>
-        </xsl:when>
-        <xsl:otherwise>
-          <div class="empty_top_button"/>
-        </xsl:otherwise>
-      </xsl:choose>
+      <xsl:variable name="items" xmlns="">
+        <xsl:if test="gsa:may-op ('GET_ASSETS')">
+          <item>
+            <page>dashboard&amp;dashboard_name=assets</page>
+            <name><xsl:value-of select="gsa:i18n ('Dashboard', 'Dashboard')"/></name>
+          </item>
+          <divider/>
+          <item>
+            <page>get_assets&amp;asset_type=host</page>
+            <name><xsl:value-of select="gsa:i18n ('Hosts', 'Host')"/></name>
+          </item>
+          <item>
+            <page>get_assets&amp;asset_type=os</page>
+            <name><xsl:value-of select="gsa:i18n ('Operating Systems', 'Operating System')"/></name>
+          </item>
+        </xsl:if>
+        <xsl:if test="gsa:may-op ('GET_REPORTS')">
+          <item>
+            <page>get_report&amp;type=assets&amp;apply_overrides=1&amp;levels=hm</page>
+            <name><xsl:value-of select="gsa:i18n ('Hosts (Classic)', 'Host')"/></name>
+          </item>
+        </xsl:if>
+      </xsl:variable>
+      <xsl:call-template name="gsa-navigation-menu">
+        <xsl:with-param name="items" xmlns="" select="$items"/>
+        <xsl:with-param name="menu_title" select="gsa:i18n ('Assets', 'Main Menu')"/>
+      </xsl:call-template>
     </li>
     <li>
-      <xsl:choose>
-        <xsl:when test="gsa:may-op ('GET_INFO')">
-          <a class="top_button" id="secinfo_button"
-             href="/omp?cmd=get_info&amp;info_type=nvt&amp;token={/envelope/token}">
-            <xsl:value-of select="gsa:i18n ('SecInfo', 'Main Menu')"/>
-            <div class="first_button_overlay">
-              <ul class="first_button_overlay">
-                <li class="pointy"></li>
-                <li class="first_button_overlay" id="secinfo_button_overlay">
-                  <xsl:value-of select="gsa:i18n('NVTs', 'NVT')"/>
-                </li>
-              </ul>
-            </div>
-          </a>
-          <ul>
-            <li class="pointy"></li>
-            <li id="secinfo_dashboard_button" style="display:none;"><a href="/omp?cmd=dashboard&amp;dashboard_name=secinfo&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('Dashboard', 'Dashboard')"/></a></li>
-            <li id="secinfo_nvts_button"><a href="/omp?cmd=get_info&amp;info_type=nvt&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('NVTs', 'NVT')"/></a></li>
-            <li><a href="/omp?cmd=get_info&amp;info_type=cve&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('CVEs', 'CVE')"/></a></li>
-            <li><a href="/omp?cmd=get_info&amp;info_type=cpe&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('CPEs', 'CPE')"/></a></li>
-            <li><a href="/omp?cmd=get_info&amp;info_type=ovaldef&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('OVAL Definitions', 'OVAL Definition')"/></a></li>
-            <li><a href="/omp?cmd=get_info&amp;info_type=cert_bund_adv&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('CERT-Bund Advisories', 'CERT-Bund Advisory')"/></a></li>
-            <li><a href="/omp?cmd=get_info&amp;info_type=dfn_cert_adv&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('DFN-CERT Advisories', 'DFN-CERT Advisory')"/></a></li>
-            <li class="section_start last"><a href="/omp?cmd=get_info&amp;info_type=allinfo&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('All SecInfo', 'All SecInfo Information')"/></a></li>
-          </ul>
-        </xsl:when>
-        <xsl:otherwise>
-          <div class="empty_top_button"/>
-        </xsl:otherwise>
-      </xsl:choose>
-      <script type="text/javascript">
-        document.getElementById ("secinfo_button").setAttribute ("href", "/omp?cmd=dashboard&amp;dashboard_name=secinfo&amp;token=<xsl:value-of select="/envelope/token"/>");
-        document.getElementById ("secinfo_button_overlay").innerHTML="<xsl:value-of select="gsa:i18n ('Dashboard', 'Dashboard')"/>";
-        document.getElementById ("secinfo_dashboard_button").setAttribute ("style", "");
-        document.getElementById ("secinfo_nvts_button").setAttribute ("class", "section_start");
-      </script>
+      <xsl:variable name="items" xmlns="">
+        <xsl:if test="gsa:may-op ('GET_INFO')">
+          <item>
+            <page>dashboard&amp;dashboard_name=secinfo</page>
+            <name><xsl:value-of select="gsa:i18n ('Dashboard', 'Dashboard')"/></name>
+          </item>
+          <divider/>
+          <item>
+            <page>get_info&amp;info_type=nvt</page>
+            <name><xsl:value-of select="gsa:i18n ('NVTs', 'NVT')"/></name>
+          </item>
+          <item>
+            <page>get_info&amp;info_type=cve</page>
+            <name><xsl:value-of select="gsa:i18n ('CVEs', 'CVE')"/></name>
+          </item>
+          <item>
+            <page>get_info&amp;info_type=cpe</page>
+            <name><xsl:value-of select="gsa:i18n ('CPEs', 'CPE')"/></name>
+          </item>
+          <item>
+            <page>get_info&amp;info_type=ovaldef</page>
+            <name><xsl:value-of select="gsa:i18n ('OVAL Definitions', 'OVAL Definition')"/></name>
+          </item>
+          <item>
+            <page>get_info&amp;info_type=cert_bund_adv</page>
+            <name><xsl:value-of select="gsa:i18n ('CERT-Bund Advisories', 'CERT-Bund Advisory')"/></name>
+          </item>
+          <item>
+            <page>get_info&amp;info_type=dfn_cert_adv</page>
+            <name><xsl:value-of select="gsa:i18n ('DFN-CERT Advisories', 'DFN-CERT Advisory')"/></name>
+          </item>
+          <divider/>
+          <item>
+            <page>get_info&amp;info_type=allinfo</page>
+            <name><xsl:value-of select="gsa:i18n ('All SecInfo', 'All SecInfo Information')"/></name>
+          </item>
+        </xsl:if>
+      </xsl:variable>
+      <xsl:call-template name="gsa-navigation-menu">
+        <xsl:with-param name="items" xmlns="" select="$items"/>
+        <xsl:with-param name="menu_title" select="gsa:i18n ('SecInfo', 'Main Menu')"/>
+      </xsl:call-template>
     </li>
     <li>
       <xsl:variable name="items" xmlns="">
@@ -1976,100 +1999,40 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </item>
         </xsl:if>
       </xsl:variable>
-      <xsl:variable name="count" select="count (exslt:node-set ($items)/item)"/>
-      <xsl:choose>
-        <xsl:when test="$count = 0">
-          <div class="empty_top_button"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <a class="top_button"
-             href="/omp?cmd={exslt:node-set ($items)/item/page}&amp;token={/envelope/token}">
-            <xsl:value-of select="gsa:i18n ('Configuration', 'Main Menu')"/>
-            <div class="first_button_overlay">
-              <ul class="first_button_overlay">
-                <li class="pointy"></li>
-                <xsl:choose>
-                  <xsl:when test="count (exslt:node-set ($items)/item) = 1">
-                    <li class="first_button_overlay overlay_last">
-                      <xsl:value-of select="exslt:node-set ($items)/item/name"/>
-                    </li>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <li class="first_button_overlay">
-                      <xsl:value-of select="exslt:node-set ($items)/item/name"/>
-                    </li>
-                  </xsl:otherwise>
-                </xsl:choose>
-              </ul>
-            </div>
-          </a>
-          <ul>
-            <li class="pointy"></li>
-            <xsl:for-each select="exslt:node-set ($items)/*">
-              <xsl:if test="name (.) = 'item'">
-                <xsl:variable name="divider">
-                  <xsl:if test="name (preceding-sibling::node ()[1]) = 'divider'">
-                    <xsl:text>section_start</xsl:text>
-                  </xsl:if>
-                </xsl:variable>
-                <xsl:choose>
-                  <xsl:when test="position() = last() or $count = 1">
-                    <li class="last {$divider} {class}"><a href="/omp?cmd={page}&amp;token={$token}"><xsl:value-of select="name"/></a></li>
-                  </xsl:when>
-                  <xsl:when test="(string-length ($divider) &gt; 0) or (string-length (class) &gt; 0)">
-                    <li class="{$divider} {class}"><a href="/omp?cmd={page}&amp;token={$token}"><xsl:value-of select="name"/></a></li>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <li><a href="/omp?cmd={page}&amp;token={$token}"><xsl:value-of select="name"/></a></li>
-                  </xsl:otherwise>
-                </xsl:choose>
-              </xsl:if>
-            </xsl:for-each>
-          </ul>
-        </xsl:otherwise>
-      </xsl:choose>
+      <xsl:call-template name="gsa-navigation-menu">
+        <xsl:with-param name="items" xmlns="" select="$items"/>
+        <xsl:with-param name="menu_title" select="gsa:i18n ('Configuration', 'Main Menu')"/>
+      </xsl:call-template>
     </li>
     <li>
-     <xsl:variable name="page">
-       <xsl:choose>
-         <xsl:when test="gsa:may-get-trash ()">
-           <xsl:value-of select="'get_trash'"/>
-         </xsl:when>
-         <xsl:otherwise>
-           <xsl:value-of select="'get_my_settings'"/>
-         </xsl:otherwise>
-       </xsl:choose>
-     </xsl:variable>
-     <a class="top_button"
-        href="/omp?cmd={$page}&amp;token={/envelope/token}">
-       <xsl:value-of select="gsa:i18n ('Extras', 'Main Menu')"/>
-       <div class="first_button_overlay">
-         <ul class="first_button_overlay">
-           <li class="pointy"></li>
-           <li class="first_button_overlay">
-             <xsl:choose>
-               <xsl:when test="gsa:may-get-trash ()">
-                 <xsl:value-of select="gsa:i18n('Trashcan', 'Trashcan')"/>
-               </xsl:when>
-               <xsl:otherwise>
-                 <xsl:value-of select="gsa:i18n('My Settings', 'My Settings')"/>
-               </xsl:otherwise>
-             </xsl:choose>
-           </li>
-         </ul>
-       </div>
-     </a>
-     <ul>
-      <li class="pointy"></li>
-      <xsl:if test="gsa:may-get-trash ()">
-        <li><a href="/omp?cmd=get_trash&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n('Trashcan', 'Trashcan')"/></a></li>
-      </xsl:if>
-      <li><a href="/omp?cmd=get_my_settings&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('My Settings', 'My Settings')"/></a></li>
-      <xsl:if test="gsa:may-op ('GET_SYSTEM_REPORTS')">
-        <li><a href="/omp?cmd=get_system_reports&amp;duration=86400&amp;slave_id=0&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('Performance', 'Performance')"/></a></li>
-      </xsl:if>
-      <li class="last"><a href="/omp?cmd=cvss_calculator&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('CVSS Calculator', 'CVSS Calculator')"/></a></li>
-     </ul>
+      <xsl:variable name="items" xmlns="">
+        <xsl:if test="gsa:may-get-trash ()">
+          <item>
+            <page>get_trash</page>
+            <name><xsl:value-of select="gsa:i18n ('Trashcan', 'Trashcan')"/></name>
+          </item>
+        </xsl:if>
+        <xsl:if test="gsa:may-op ('GET_SETTINGS')">
+          <item>
+            <page>get_my_settings</page>
+            <name><xsl:value-of select="gsa:i18n ('My Settings', 'My Settings')"/></name>
+          </item>
+        </xsl:if>
+        <xsl:if test="gsa:may-op ('GET_SYSTEM_REPORTS')">
+          <item>
+            <page>get_system_reports&amp;duration=86400&amp;slave_id=0</page>
+            <name><xsl:value-of select="gsa:i18n ('Performance', 'Performance')"/></name>
+          </item>
+        </xsl:if>
+        <item>
+          <page>cvss_calculator</page>
+          <name><xsl:value-of select="gsa:i18n ('CVSS Calculator', 'CVSS Calculator')"/></name>
+        </item>
+      </xsl:variable>
+      <xsl:call-template name="gsa-navigation-menu">
+        <xsl:with-param name="items" xmlns="" select="$items"/>
+        <xsl:with-param name="menu_title" select="gsa:i18n ('Extras', 'Main Menu')"/>
+      </xsl:call-template>
     </li>
     <li>
       <xsl:variable name="items" xmlns="">
@@ -2099,65 +2062,26 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </item>
         </xsl:if>
       </xsl:variable>
-      <xsl:variable name="count" select="count (exslt:node-set ($items)/item)"/>
-      <xsl:choose>
-        <xsl:when test="$count = 0">
-          <div class="empty_top_button"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <a class="top_button"
-             href="/omp?cmd={exslt:node-set ($items)/item/page}&amp;token={/envelope/token}">
-            <xsl:value-of select="gsa:i18n ('Administration', 'Main Menu')"/>
-            <xsl:if test="count (exslt:node-set ($items)/item) &gt; 0">
-              <div class="first_button_overlay">
-                <ul class="first_button_overlay">
-                  <li class="pointy"></li>
-                  <li class="first_button_overlay">
-                    <xsl:value-of select="exslt:node-set ($items)/item/name"/>
-                  </li>
-                </ul>
-              </div>
-            </xsl:if>
-          </a>
-          <ul>
-            <li class="pointy"></li>
-            <xsl:for-each select="exslt:node-set ($items)/item">
-              <xsl:variable name="divider">
-                <xsl:if test="name (preceding-sibling::node ()[1]) = 'divider'">
-                  <xsl:text>section_start</xsl:text>
-                </xsl:if>
-              </xsl:variable>
-              <xsl:choose>
-                <xsl:when test="position() = last() or $count = 1">
-                  <li class="{$divider} last"><a href="/omp?cmd={page}&amp;token={$token}"><xsl:value-of select="name"/></a></li>
-                </xsl:when>
-                <xsl:otherwise>
-                  <li class="{$divider}"><a href="/omp?cmd={page}&amp;token={$token}"><xsl:value-of select="name"/></a></li>
-                </xsl:otherwise>
-              </xsl:choose>
-            </xsl:for-each>
-          </ul>
-        </xsl:otherwise>
-      </xsl:choose>
+      <xsl:call-template name="gsa-navigation-menu">
+        <xsl:with-param name="items" xmlns="" select="$items"/>
+        <xsl:with-param name="menu_title" select="gsa:i18n ('Administration', 'Main Menu')"/>
+      </xsl:call-template>
     </li>
     <li>
-     <a class="top_button"
-        href="/help/contents.html?token={/envelope/token}">
-       <xsl:value-of select="gsa:i18n ('Help', 'Help')"/>
-       <div class="first_button_overlay">
-         <ul class="first_button_overlay">
-           <li class="pointy"></li>
-           <li class="first_button_overlay">
-             <xsl:value-of select="gsa:i18n('Contents', 'Help')"/>
-           </li>
-         </ul>
-       </div>
-     </a>
-     <ul>
-      <li class="pointy"></li>
-      <li><a href="/help/contents.html?token={/envelope/token}"><xsl:value-of select="gsa:i18n ('Contents', 'Help')"/></a></li>
-      <li class="last"><a href="/help/about.html?token={/envelope/token}"><xsl:value-of select="gsa:i18n ('About', 'Help')"/></a></li>
-     </ul>
+      <xsl:variable name="items" xmlns="">
+        <item>
+          <url><xsl:value-of select="concat ('/help/contents.html?token=',$token)"/></url>
+          <name><xsl:value-of select="gsa:i18n ('Contents', 'Help')"/></name>
+        </item>
+        <item>
+          <url><xsl:value-of select="concat ('/help/about.html?token=',$token)"/></url>
+          <name><xsl:value-of select="gsa:i18n ('About', 'Help')"/></name>
+        </item>
+      </xsl:variable>
+      <xsl:call-template name="gsa-navigation-menu">
+        <xsl:with-param name="items" xmlns="" select="$items"/>
+        <xsl:with-param name="menu_title" select="gsa:i18n ('Help', 'Help')"/>
+      </xsl:call-template>
     </li>
    </ul>
   </div>
