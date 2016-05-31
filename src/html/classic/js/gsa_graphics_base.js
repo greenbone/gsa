@@ -2269,6 +2269,7 @@
         filter_type = 'Task';
 
         params.ignore_pagination = 1;
+        params.no_filter_history = 1;
         params.schedules_only = 1;
       }
       else {
@@ -2723,9 +2724,11 @@
         }
       }
     }
-    if (filter && filter.id) {
+    if (filter && filter.id && filter.id !== '') {
       params_str = params_str + '&filt_id=' + encodeURIComponent(filter.id);
     }
+    else if (filter.term === '')
+      params_str = params_str + '&filter= '
     params_str = params_str + '&token=' + encodeURIComponent(gsa.gsa_token);
     return params_str;
   }

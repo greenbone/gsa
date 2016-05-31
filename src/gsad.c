@@ -1513,6 +1513,7 @@ init_validator ()
   openvas_validator_alias (validator, "note_task_uuid", "note_task_id");
   openvas_validator_alias (validator, "note_result_uuid", "note_result_id");
   openvas_validator_alias (validator, "no_chart_links",        "boolean");
+  openvas_validator_alias (validator, "no_filter_history", "boolean");
   openvas_validator_alias (validator, "no_redirect", "boolean");
   openvas_validator_alias (validator, "nvt:value",         "uuid");
   openvas_validator_alias (validator, "old_password", "password");

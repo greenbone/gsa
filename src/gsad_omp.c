@@ -1947,11 +1947,15 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
   gnutls_session_t session;
   int socket;
   gchar *filter_type, *html, *request, *built_filter;
+  int no_filter_history;
   const char *build_filter, *given_filt_id, *filt_id, *filter, *filter_extra;
   const char *first, *max, *sort_field, *sort_order, *owner, *permission;
   const char *replace_task_id;
   const char *overrides, *autofp, *autofp_value;
 
+  no_filter_history = params_value(params, "no_filter_history")
+                        ? atoi (params_value(params, "no_filter_history"))
+                        : 0;
   build_filter = params_value(params, "build_filter");
   given_filt_id = params_value (params, "filt_id");
   filter = params_value (params, "filter");
@@ -1974,15 +1978,16 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
 
   if (given_filt_id)
     {
-      if (strcmp (given_filt_id, "0"))
+      if (no_filter_history == 0 && strcmp (given_filt_id, "0"))
         g_tree_replace (credentials->last_filt_ids, filter_type,
                         g_strdup (given_filt_id));
       filt_id = given_filt_id;
     }
   else
     {
-      if (filter == NULL || strcmp (filter, "") == 0)
-          filt_id = g_tree_lookup (credentials->last_filt_ids, filter_type);
+      if (no_filter_history == 0
+          && (filter == NULL || strcmp (filter, "") == 0))
+        filt_id = g_tree_lookup (credentials->last_filt_ids, filter_type);
       else
         filt_id = NULL;
       g_free (filter_type);
