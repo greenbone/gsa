@@ -267,11 +267,21 @@
 
     this.svg.selectAll('.bar-group')
       .data(display_records)
+      .exit()
+      .remove();
+
+    this.svg.selectAll('.bar-group')
+      .data(display_records)
       .enter()
       .insert('g')
       .attr('class', 'bar-group')
       .insert('a')
         .attr('xlink:href', generate_link);
+
+    this.svg.selectAll('.bar-label-shadow')
+      .data(display_records)
+      .exit()
+      .remove();
 
     this.svg.selectAll('.bar-label-shadow')
       .data(display_records)
@@ -284,6 +294,11 @@
       .style('stroke', '#EEEEEE')
       .style('stroke-opacity', '0.75')
       .style('stroke-width', '3px');
+
+    this.svg.selectAll('.bar-label')
+      .data(display_records)
+      .exit()
+      .remove();
 
     this.svg.selectAll('.bar-label')
       .data(display_records)

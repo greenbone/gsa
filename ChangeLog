@@ -1,5 +1,10 @@
 2016-05-31  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/js/gsa_gantt_chart.js (generate): Remove bars of
+	tasks no longer in the current filter.
+
+2016-05-31  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/js/gsa_graphics_base.js (create_uri): Test if filter
 	is defined with gsa.is_defined before checking its id and term.
 
