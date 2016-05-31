@@ -1,5 +1,10 @@
 2016-05-31  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/js/gsa_graphics_base.js (create_uri): Test if filter
+	is defined with gsa.is_defined before checking its id and term.
+
+2016-05-31  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/gsad_omp.c (get_many): Do not use or overwrite last_filt_ids
 	filter history if request parameter no_filter_history is true.
 
