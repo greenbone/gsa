@@ -478,7 +478,13 @@
           listeners: false,
         });
 
-        show_dialog();
+        var overlay = $('<div>')
+          .addClass('ui-widget-overlay ui-front')
+          .appendTo($('body'));
+
+        show_dialog(function() {
+          overlay.remove();
+        });
       }
       else if (self.success_reload.type === 'done') {
         var done = $(self.success_reload.data);
