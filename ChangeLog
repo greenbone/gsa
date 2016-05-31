@@ -1,5 +1,10 @@
 2016-05-31  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/gsad_omp.c (filter_exists): Handle special filt_id cases
+	"0" and "-2" as existing.
+
+2016-05-31  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/js/gsa_gantt_chart.js (generate): Remove bars of
 	tasks no longer in the current filter.
 

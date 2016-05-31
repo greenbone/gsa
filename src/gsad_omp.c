@@ -400,7 +400,9 @@ filter_exists (gnutls_session_t *session, const char *filt_id)
 {
   entity_t entity;
 
-  if (filt_id == NULL)
+  if (filt_id == NULL
+      || strcmp (filt_id, "0")
+      || strcmp (filt_id, "-2"))
     return 1;
 
   /* check if filter still exists */
