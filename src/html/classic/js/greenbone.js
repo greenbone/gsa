@@ -565,7 +565,7 @@
     on_ready(self.dialog);
   };
 
-  OMPDialog.prototype.show = function(button) {
+  OMPDialog.prototype.show = function(button, callback) {
     var self = this;
     var done_func, fail_func;
 
@@ -598,6 +598,11 @@
             },
           }
         ],
+        open: function() {
+          if (gsa.is_function(callback)) {
+            callback();
+          }
+        },
         close: function() {
           self.close();
         },
@@ -949,7 +954,7 @@
       params.task_id = task_id;
     }
 
-    function show_dialog() {
+    function show_dialog(callback) {
       new OMPDialog({
         cmd: cmd,
         done: done,
@@ -958,7 +963,7 @@
         close_reload: {type: close_reload_type},
         parent_dialog: parent_dialog,
         height: height,
-      }).show(options.button);
+      }).show(options.button, callback);
     }
 
     if (options.listeners !== true) {
