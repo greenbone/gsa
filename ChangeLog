@@ -1,3 +1,19 @@
+2016-06-01  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/gsad_omp.c (get_many): Handle min_qod request parameter for
+	tasks, reports and results.
+	(get_report): Remove apply_min_qod requirement for min_qod filter
+	keyword to be added.
+
+	* src/gsad.c (init_validator): Remove apply_min_qod.
+
+	* src/html/classic/omp.xsl (filter-window-part): Check autofp option
+	"Full CVE match" if autofp in filter is not 2.  Remove checkbox to
+	apply min_qod.
+	(report [filterbox]): Remove checkbox to apply min_qod.
+	(task [details], report, task, asset [host-detail]): Remove
+	apply_min_qod parameter and unused min_qod parameter from report links.
+
 2016-06-01  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/js/gsa_graphics_base.js (field_name_colors): Remove call of

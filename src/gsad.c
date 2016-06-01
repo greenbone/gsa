@@ -1422,7 +1422,6 @@ init_validator ()
   openvas_validator_alias (validator, "allow_insecure", "boolean");
   openvas_validator_alias (validator, "alterable", "boolean");
   openvas_validator_alias (validator, "apply_min_cvss_base", "boolean");
-  openvas_validator_alias (validator, "apply_min_qod", "boolean");
   openvas_validator_alias (validator, "apply_overrides", "boolean");
   openvas_validator_alias (validator, "autogenerate", "boolean");
   openvas_validator_alias (validator, "base",            "name");

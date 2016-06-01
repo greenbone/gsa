@@ -1358,7 +1358,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <div>
               <label class="radio-inline">
                 <xsl:choose>
-                  <xsl:when test="filters/keywords/keyword[column='autofp']/value = 1">
+                  <xsl:when test="filters/keywords/keyword[column='autofp']/value = 2">
                     <input type="radio" name="autofp_value" value="1"/>
                   </xsl:when>
                   <xsl:otherwise>
@@ -1475,22 +1475,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:value-of select="gsa:i18n ('QoD of Results', 'Filter')"/>:
           </label>
           <span class="col-10">
-            <div class="checkbox form-item">
-              <label>
-                <xsl:choose>
-                  <xsl:when test="not (filters/keywords/keyword[column = 'min_qod'])">
-                    <input type="checkbox" name="apply_min_qod" value="1"/>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <input type="checkbox" name="apply_min_qod" value="1"
-                      checked="1"/>
-                  </xsl:otherwise>
-                </xsl:choose>
-                <xsl:value-of select="gsa:i18n ('must be at least', 'Filter')"/>
-                <xsl:text> </xsl:text>
-              </label>
-            </div>
             <div class="form-item">
+              <label>
+                <xsl:value-of select="gsa:i18n ('must be at least', 'Filter')"/>
+              </label>
+              <xsl:text> </xsl:text>
               <div min="0" max="100" step="1" class="slider" name="min_qod" type="int" value="{$min_qod_value}"></div>
             </div>
           </span>
@@ -3645,15 +3634,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </div>
       <div class="form-group">
         <label>
-          <xsl:choose>
-            <xsl:when test="not (report/filters/min_qod != '')">
-              <input type="checkbox" name="apply_min_qod" value="1"/>
-            </xsl:when>
-            <xsl:otherwise>
-              <input type="checkbox" name="apply_min_qod" value="1"
-                      checked="1"/>
-            </xsl:otherwise>
-          </xsl:choose>
           QoD &gt;=
         </label>
         <select name="min_qod">
@@ -4807,7 +4787,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </a>
           <xsl:if test="current_report/report/timestamp">
             <xsl:value-of select="concat(', ', gsa:i18n ('Current', 'Task|Report'), ': ')"/>
-            <a href="/omp?cmd=get_report&amp;report_id={current_report/report/@id}&amp;overrides={$apply-overrides}&amp;apply_min_qod={number (string-length ($min-qod) != 0)}&amp;;min_qod={$min-qod}&amp;token={/envelope/token}">
+            <a href="/omp?cmd=get_report&amp;report_id={current_report/report/@id}&amp;overrides={$apply-overrides}&amp;;min_qod={$min-qod}&amp;token={/envelope/token}">
               <xsl:call-template name="short_timestamp_current"/>
             </a>
           </xsl:if>
@@ -4818,7 +4798,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
            </a>
            <xsl:if test="last_report/report/timestamp">
              <xsl:value-of select="concat(', ', gsa:i18n ('Last', 'Task|Report'), ': ')"/>
-             <a href="/omp?cmd=get_report&amp;report_id={last_report/report/@id}&amp;overrides={$apply-overrides}&amp;apply_min_qod={number (string-length ($min-qod) != 0)}&amp;min_qod={$min-qod}&amp;token={/envelope/token}">
+             <a href="/omp?cmd=get_report&amp;report_id={last_report/report/@id}&amp;overrides={$apply-overrides}&amp;min_qod={$min-qod}&amp;token={/envelope/token}">
                <xsl:call-template name="short_timestamp_last"/>
              </a>
            </xsl:if>)
@@ -6638,7 +6618,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <tr class="{gsa:table-row-class(position())}">
     <td>
       <b>
-        <a href="/omp?cmd=get_report&amp;report_id={@id}&amp;notes=1&amp;overrides={$apply_overrides}&amp;apply_min_qod={number (string-length ($min_qod) != 0)}&amp;min_qod={$min_qod}&amp;result_hosts_only=1&amp;token={/envelope/token}"
+        <a href="/omp?cmd=get_report&amp;report_id={@id}&amp;notes=1&amp;overrides={$apply_overrides}&amp;min_qod={$min_qod}&amp;result_hosts_only=1&amp;token={/envelope/token}"
            title="{gsa:view_details_title ('Report', @id)}">
           <xsl:value-of select="concat (date:day-abbreviation (timestamp), ' ', date:month-abbreviation (timestamp), ' ', date:day-in-month (timestamp), ' ', format-number(date:hour-in-day(timestamp), '00'), ':', format-number(date:minute-in-hour(timestamp), '00'), ':', format-number(date:second-in-minute(timestamp), '00'), ' ', date:year(timestamp))"/>
         </a>
@@ -7811,7 +7791,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:variable>
           <xsl:choose>
             <xsl:when test="$current_or_last_report_id != ''">
-              <a href="/omp?cmd=get_report&amp;report_id={$current_or_last_report_id}&amp;notes=1&amp;overrides={../apply_overrides}&amp;apply_min_qod={number (string-length (../filters/keywords/keyword[column='min_qod']/value) != 0)}&amp;min_qod={../filters/keywords/keyword[column='min_qod']/value}&amp;result_hosts_only=1&amp;token={/envelope/token}" title="{gsa-i18n:strformat (gsa:i18n ('View last report for Task %1', 'Task'), name)}">
+              <a href="/omp?cmd=get_report&amp;report_id={$current_or_last_report_id}&amp;notes=1&amp;overrides={../apply_overrides}&amp;min_qod={../filters/keywords/keyword[column='min_qod']/value}&amp;result_hosts_only=1&amp;token={/envelope/token}" title="{gsa-i18n:strformat (gsa:i18n ('View last report for Task %1', 'Task'), name)}">
                 <xsl:call-template name="status_bar">
                   <xsl:with-param name="status">
                     <xsl:choose>
@@ -7874,7 +7854,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:choose>
         </td>
         <td>
-          <a href="/omp?cmd=get_report&amp;report_id={last_report/report/@id}&amp;notes=1&amp;overrides={../apply_overrides}&amp;apply_min_qod={number (string-length (../filters/keywords/keyword[column='min_qod']/value) != 0)}&amp;min_qod={../filters/keywords/keyword[column='min_qod']/value}&amp;result_hosts_only=1&amp;token={/envelope/token}" title="{gsa-i18n:strformat (gsa:i18n ('View last report for Task %1', 'Task'), name)}">
+          <a href="/omp?cmd=get_report&amp;report_id={last_report/report/@id}&amp;notes=1&amp;overrides={../apply_overrides}&amp;min_qod={../filters/keywords/keyword[column='min_qod']/value}&amp;result_hosts_only=1&amp;token={/envelope/token}" title="{gsa-i18n:strformat (gsa:i18n ('View last report for Task %1', 'Task'), name)}">
             <xsl:call-template name="short_timestamp_last"/>
           </a>
         </td>
@@ -38202,7 +38182,7 @@ should not have received it.
                 <xsl:text>Report </xsl:text>
                 <xsl:choose>
                   <xsl:when test="source/deleted = '0'">
-                    <a href="/omp?cmd=get_report&amp;report_id={source/@id}&amp;overrides=1&amp;apply_min_qod=0&amp;min_qod=&amp;token={/envelope/token}">
+                    <a href="/omp?cmd=get_report&amp;report_id={source/@id}&amp;overrides=1&amp;token={/envelope/token}">
                       <xsl:value-of select="source/@id"/>
                     </a>
                   </xsl:when>
@@ -38220,7 +38200,7 @@ should not have received it.
                 <xsl:text>Report </xsl:text>
                 <xsl:choose>
                   <xsl:when test="source/deleted = '0'">
-                    <a href="/omp?cmd=get_report&amp;report_id={source/@id}&amp;overrides=1&amp;apply_min_qod=0&amp;min_qod=&amp;token={/envelope/token}">
+                    <a href="/omp?cmd=get_report&amp;report_id={source/@id}&amp;overrides=1&amp;token={/envelope/token}">
                       <xsl:value-of select="source/@id"/>
                     </a>
                   </xsl:when>

@@ -1953,7 +1953,7 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
   const char *build_filter, *given_filt_id, *filt_id, *filter, *filter_extra;
   const char *first, *max, *sort_field, *sort_order, *owner, *permission;
   const char *replace_task_id;
-  const char *overrides, *autofp, *autofp_value;
+  const char *overrides, *autofp, *autofp_value, *min_qod;
 
   no_filter_history = params_value(params, "no_filter_history")
                         ? atoi (params_value(params, "no_filter_history"))
@@ -1972,6 +1972,7 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
   overrides = params_value (params, "overrides");
   autofp = params_value (params, "autofp");
   autofp_value = params_value (params, "autofp_value");
+  min_qod = params_value (params, "min_qod");
 
   if (strcasecmp (type, "info") == 0)
     filter_type = g_strdup (params_value (params, "info_type"));
@@ -2067,17 +2068,21 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
               gchar *task;
               const char *search_phrase, *task_id;
 
-              if (strcmp (type, "task") == 0)
+              if (strcmp (type, "report") == 0
+                  || strcmp (type, "task") == 0)
                 {
-                  task = g_strdup_printf ("apply_overrides=%i ",
+                  task = g_strdup_printf ("apply_overrides=%i min_qod=%s ",
                                           overrides
-                                          && strcmp (overrides, "0"));
+                                          && strcmp (overrides, "0"),
+                                          min_qod ? min_qod : "");
                 }
               else if (strcmp (type, "result") == 0)
                 {
-                  task = g_strdup_printf ("apply_overrides=%i autofp=%s ",
+                  task = g_strdup_printf ("apply_overrides=%i min_qod=%s"
+                                          " autofp=%s ",
                                           (overrides
                                            && strcmp (overrides, "0")),
+                                          min_qod ? min_qod : "",
                                           (autofp && autofp_value)
                                             ? autofp_value : "0");
                 }
@@ -13703,21 +13708,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
   else
     min_cvss_base = "";
 
-  if (params_given (params, "min_qod"))
-    {
-      if (params_valid (params, "min_qod"))
-        {
-          if (params_value (params, "apply_min_qod")
-              && strcmp (params_value (params, "apply_min_qod"), "0"))
-            min_qod = params_value (params, "min_qod");
-          else
-            min_qod = "";
-        }
-      else
-        min_qod = NULL;
-    }
-  else
-    min_qod = "70";
+  min_qod = params_value (params, "min_qod");
 
   type = params_value (params, "type");
   host = params_value (params, "host");
