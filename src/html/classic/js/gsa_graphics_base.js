@@ -1365,6 +1365,8 @@
     var elem;
     var menu;
     var svg;
+    var content;
+    var loading;
     var header;
     var footer;
     var topButtons;
@@ -1394,6 +1396,8 @@
       selectController: select_controller,
       selectControllerIndex: select_controller_index,
       showError: show_error,
+      showLoading: show_loading,
+      hideLoading: hide_loading,
       prevController: select_prev_controller,
       nextController: select_next_controller,
       createChartSelector: create_chart_selector,
@@ -1482,12 +1486,22 @@
 
       header = header[0];
 
-      var content_d3 = $('<div/>', {
-        'class': 'dash-box-content',
+      content = $('<div/>', {
+        'class': 'dashboard-box-content',
         id: id + '-content',
       }).appendTo(innerElem_d3);
 
-      svg = d3.select(content_d3[0])
+      loading = $('<div/>', {
+        'class': 'dashboard-loading',
+      }).appendTo(content);
+
+      loading.append($('<span/>', {
+        'class': 'ui-icon ui-icon-waiting',
+      }));
+
+      $('<span/>').text(gsa._('Loading data ...')).appendTo(loading);
+
+      svg = d3.select(content[0])
         .append('svg')
         .attr('class', 'chart-svg')
         .attr('id', id + '-svg')
@@ -1995,6 +2009,14 @@
           dashboard_component.selectFilter(value, true, true);
         });
       }
+    }
+
+    function show_loading() {
+      loading.show();
+    }
+
+    function hide_loading() {
+      loading.hide();
     }
   }
 
