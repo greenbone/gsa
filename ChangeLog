@@ -1,5 +1,10 @@
 2016-06-01  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_graphics_base.js (create_dashboard_component):
+	Remove all svg elements before a chart is redrawn.
+
+2016-06-01  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_graphics_base.js (create_dashboard_component): Add
 	showLoading and hideLoading functions to dashboard component/display. This
 	will show or hide a loading text in the dashboard.

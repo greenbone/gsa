@@ -1672,6 +1672,7 @@
     }
 
     function redraw() {
+      svg.selectAll('*').remove();
       apply_select2();
       if (currentCtrlIndex >= 0) {
         controllers[currentCtrlIndex]
