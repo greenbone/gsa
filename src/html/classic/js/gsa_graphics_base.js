@@ -2750,11 +2750,12 @@
         }
       }
     }
-    if (gsa.is_defined(filter) && filter.id && filter.id !== '') {
+    if (gsa.has_value(filter) && filter.id && filter.id !== '') {
       params_str = params_str + '&filt_id=' + encodeURIComponent(filter.id);
     }
-    else if (gsa.is_defined(filter) && filter.term === '')
-      params_str = params_str + '&filter= '
+    else if (gsa.has_value(filter) && filter.term === '') {
+      params_str = params_str + '&filter= ';
+    }
     params_str = params_str + '&token=' + encodeURIComponent(gsa.gsa_token);
     return params_str;
   }
