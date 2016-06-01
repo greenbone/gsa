@@ -1069,6 +1069,23 @@ select[multiple] {
   vertical-align: top;
 }
 
+.dashboard-box-content {
+  position: relative;
+}
+
+.dashboard-loading {
+  position: absolute;
+  top: 50%;
+  padding: 5px;
+  width: 100%;
+}
+
+.dashboard-loading span {
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0 5px;
+}
+
 .num-components-1 .dashboard-placeholder {
   width: 100%;
 }
