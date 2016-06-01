@@ -1,3 +1,10 @@
+2016-06-01  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Backport r25447.
+
+	* src/html/classic/omp.xsl (task-icons): Add info if a schedule is only
+	run once or a limited number of times to the schedule icon tooltip.
+
 2016-05-13  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	Partial backport of r25300.
