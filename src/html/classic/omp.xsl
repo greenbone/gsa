@@ -4256,6 +4256,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:text>
     (</xsl:text>
                 <xsl:value-of select="gsa:i18n ('Next due', 'Task|Schedule')"/>: <xsl:value-of select="gsa:long-time (schedule/next_time)"/>
+                <xsl:choose>
+                  <xsl:when test="schedule_periods = 1">
+                    <xsl:value-of select="concat (', ', gsa:i18n ('Once', 'Time'))"/>
+                  </xsl:when>
+                  <xsl:when test="schedule_periods &gt; 1">
+                    <xsl:value-of select="concat (', ', schedule_periods, ' ', gsa:i18n ('more times', 'Time'))"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                  </xsl:otherwise>
+                </xsl:choose>
                 <xsl:text>)</xsl:text>
               </xsl:otherwise>
             </xsl:choose>

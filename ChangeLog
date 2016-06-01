@@ -1,5 +1,10 @@
 2016-06-01  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/omp.xsl (task-icons): Add info if a schedule is only
+	run once or a limited number of times to the schedule icon tooltip.
+
+2016-06-01  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/gsad_omp.c (get_many): Handle min_qod request parameter for
 	tasks, reports and results.
 	(get_report): Remove apply_min_qod requirement for min_qod filter
