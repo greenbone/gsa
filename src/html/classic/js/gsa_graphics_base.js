@@ -288,9 +288,6 @@
           color = '#7f7f7f';
         }
       }
-      else {
-        color = default_scale_1(index);
-      }
 
       if (!gsa.is_defined(alt_color_limit) || index < alt_color_limit) {
         range.push(color);
