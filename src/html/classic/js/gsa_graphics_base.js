@@ -2152,16 +2152,19 @@
         gen_params = p_gen_params;
       }
 
+      show_loading();
       data_src.sendRequest(controller, filter, gen_params);
     }
 
     /* Shows the "Loading ..." text in the display */
     function show_loading() {
       display.setTitle(generator.getTitle());
+      display.showLoading();
     }
 
     /* Callback for when data has been loaded */
     function on_data_loaded(orig_data, gen_params) {
+      display.hideLoading();
       generator.evaluateParams(gen_params);
       //TODO remove gen_params argument after all generators are using
       // evaluateParams
