@@ -1451,7 +1451,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:if test="filters/keywords/keyword[column='min_cvss_base'] or $filter_options_nodes/option[text()='min_cvss_base']">
         <div class="form-group">
           <label class="col-2 control-label">
-            <xsl:value-of select="gsa:i18n ('CVSS of NVT', 'Filter')"/>:
+            <xsl:value-of select="gsa:i18n ('Severity (CVSS)', 'Filter')"/>:
           </label>
           <span class="col-10">
             <div class="checkbox form-item">
@@ -1478,7 +1478,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:if test="filters/keywords/keyword[column='min_qod'] or $filter_options_nodes/option[text()='min_qod']">
         <div class="form-group">
           <label class="col-2 control-label">
-            <xsl:value-of select="gsa:i18n ('QoD of Results', 'Filter')"/>:
+            <xsl:value-of select="gsa:i18n ('QoD', 'Filter')"/>:
           </label>
           <span class="col-10">
             <div class="form-item">
@@ -1508,7 +1508,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:if test="filters/keywords/keyword[column='levels'] or $filter_options_nodes/option[text()='levels']">
         <div class="form-group">
           <label class="col-2 control-label">
-            <xsl:value-of select="gsa:i18n ('Severity', 'Severity')"/>:
+            <xsl:value-of select="gsa:i18n ('Severity (Class)', 'Severity')"/>:
           </label>
           <div class="col-10">
             <label class="checkbox-inline">

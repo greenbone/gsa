@@ -1,5 +1,10 @@
 2016-06-06  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/omp.xsl (filter-window-part): Rename some labels in update
+	filter dialog.
+
+2016-06-06  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/omp.xsl (filter-window-part): Disable 'Full CVE match' and
 	'Partial CVE match' radios if 'Trust vendorsecurity updates' is not set.
 
