@@ -1347,10 +1347,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <label>
               <xsl:choose>
                 <xsl:when test="filters/keywords/keyword[column='autofp']/value = 0">
-                  <input type="checkbox" name="autofp" value="1"/>
+                  <input class="form-enable-control" id="autofp" type="checkbox"
+                    name="autofp" value="1" disable-on="not(:checked)"/>
                 </xsl:when>
                 <xsl:otherwise>
-                  <input type="checkbox" name="autofp" value="1" checked="1"/>
+                  <input class="form-enable-control" id="autofp" type="checkbox"
+                    name="autofp" value="1" checked="1" disable-on="not(:checked)"/>
                 </xsl:otherwise>
               </xsl:choose>
               <xsl:value-of select="gsa:i18n ('Trust vendor security updates', 'Report Filter')"/>
@@ -1359,10 +1361,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <label class="radio-inline">
                 <xsl:choose>
                   <xsl:when test="filters/keywords/keyword[column='autofp']/value = 2">
-                    <input type="radio" name="autofp_value" value="1"/>
+                    <input type="radio" name="autofp_value" value="1"
+                      class="form-enable-item--autofp"/>
                   </xsl:when>
                   <xsl:otherwise>
-                    <input type="radio" name="autofp_value" value="1" checked="1"/>
+                    <input type="radio" name="autofp_value" value="1" checked="1"
+                      class="form-enable-item--autofp"/>
                   </xsl:otherwise>
                 </xsl:choose>
                 <xsl:value-of select="gsa:i18n ('Full CVE match', 'Report Filter')"/>
@@ -1370,10 +1374,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <label class="radio-inline">
                 <xsl:choose>
                   <xsl:when test="filters/keywords/keyword[column='autofp']/value = 2">
-                    <input type="radio" name="autofp_value" value="2" checked="1"/>
+                    <input type="radio" name="autofp_value" value="2" checked="1"
+                      class="form-enable-item--autofp"/>
                   </xsl:when>
                   <xsl:otherwise>
-                    <input type="radio" name="autofp_value" value="2"/>
+                    <input type="radio" name="autofp_value" value="2"
+                      class="form-enable-item--autofp"/>
                   </xsl:otherwise>
                 </xsl:choose>
                 <xsl:value-of select="gsa:i18n ('Partial CVE match', 'Report Filter')"/>
