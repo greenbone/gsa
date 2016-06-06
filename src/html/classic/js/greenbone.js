@@ -1370,9 +1370,24 @@
       var name = elem.attr('id');
       var disable = is_defined(elem.attr('disable-on')) ?
         elem.attr('disable-on') : '1';
+      var use_checked = false;
+
+      if (disable === ':checked') {
+        disable = true;
+        use_checked = true;
+      }
+      else if (disable === 'not(:checked)') {
+        disable = false;
+        use_checked = true;
+      }
 
       function on_change() {
         var value = elem.val();
+
+        if (use_checked && elem.attr('type') === 'checkbox') {
+          value = elem.prop('checked');
+        }
+
         form.find('.form-enable-item--' + name).each(function() {
           var cur = $(this);
           if (cur.hasClass('spinner')) {
@@ -1386,7 +1401,7 @@
 
       elem.on('change', on_change);
 
-      init_input(elem, on_change);
+      on_change();
     });
   }
 
