@@ -1317,7 +1317,7 @@
       var form = elem.parents('form');
       var name = elem.attr('name');
       var group = form.find('[name=' + name + ']');
-      console.log('init input', group);
+
       if ((elem.attr('type') !== 'radio' && elem.attr('type') !== 'checkbox') ||
           elem.prop('checked') || group.length === 1) {
         func();

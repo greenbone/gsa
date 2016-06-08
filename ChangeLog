@@ -1,5 +1,9 @@
 2016-06-08  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/greenbone.js (init_input): Remove debug statement.
+
+2016-06-08  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/greenbone.js (on_ready): Fix initialization of checkbox
 	and radio elements form form-selection-control and form-enable-control. For
 	each element group (element group means elements with the same name attribute)
