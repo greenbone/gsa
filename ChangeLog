@@ -1,3 +1,9 @@
+2016-06-08  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/gsad.c (handle_request): Improve debugging messages. Add full url with
+	params in debug output. This helps a lot to find the actual current request.
+	Add debug output if a token couldn't be found in the http params.
+
 2016-06-07  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/omp.xsl: Always uri encode task name because the task name

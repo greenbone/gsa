@@ -4132,7 +4132,7 @@ handle_request (void *cls, struct MHD_Connection *connection,
    * way to logout, however, is with a token.  I guess this is where a cookie
    * would be useful. */
 
-  g_debug ("============= url: %s\n", url);
+  g_debug ("============= url: %s\n", reconstruct_url (connection, url));
 
   if (!strcmp (&url[0], url_base))
     {
@@ -4263,6 +4263,7 @@ handle_request (void *cls, struct MHD_Connection *connection,
                                            "token");
       if (token == NULL)
         {
+          g_debug ("%s: Missing token in arguments", __FUNCTION__);
           cookie = NULL;
           ret = USER_BAD_MISSING_TOKEN;
         }
