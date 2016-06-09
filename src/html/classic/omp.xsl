@@ -24592,6 +24592,7 @@ should not have received it.
     <div class="content">
       <form action="/omp#overrides-{result/@id}"
             method="post"
+            class="form-horizontal"
             enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="create_override"/>
@@ -24628,184 +24629,250 @@ should not have received it.
           </xsl:otherwise>
         </xsl:choose>
 
-        <table class="table-form">
-          <xsl:choose>
-            <xsl:when test="result/@id">
-              <input type="hidden" name="oid" value="{nvt/@id}"/>
-              <tr>
-                <td><b><xsl:value-of select="gsa:i18n ('NVT Name', 'Note or Override')"/></b></td>
-                <td>
-                  <xsl:variable name="nvt" select="get_results_response/result/nvt"/>
-                  <xsl:variable name="max" select="70"/>
-                  <xsl:choose>
-                    <xsl:when test="$nvt/@oid = 0">
-                      <xsl:value-of select="gsa:i18n ('None.  Result was an open port.', 'Note or Override')"/>
-                    </xsl:when>
-                    <xsl:when test="string-length($nvt/name) &gt; $max">
-                      <a href="?cmd=get_info&amp;info_type={$nvt/type}&amp;details=1&amp;info_id={$nvt/@oid}&amp;token={/envelope/token}">
-                        <abbr title="{$nvt/name} ({$nvt/@oid})"><xsl:value-of select="substring($nvt/name, 0, $max)"/>...</abbr>
-                      </a>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <a href="?cmd=get_info&amp;info_type={$nvt/type}&amp;details=1&amp;info_id={$nvt/@oid}&amp;token={/envelope/token}">
-                        <xsl:value-of select="$nvt/name"/>
-                      </a>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                </td>
-              </tr>
-            </xsl:when>
-            <xsl:otherwise>
-              <tr>
-                <td><b><xsl:value-of select="gsa:i18n ('NVT OID', 'Note or Override')"/></b></td>
-                <td>
-                  <xsl:choose>
-                    <xsl:when test="nvt/@id = '0'">
-                      <input type="text" name="oid" size="30" maxlength="80" value="1.3.6.1.4.1.25623.1.0."/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <input type="text" name="oid" size="30" maxlength="80" value="{nvt/@id}"/>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                </td>
-              </tr>
-            </xsl:otherwise>
-          </xsl:choose>
-          <tr>
-            <td>
-              <xsl:value-of select="gsa:i18n ('Active', 'Override')"/>
-            </td>
-            <td>
-              <div>
-                <label>
-                  <input type="radio" name="active" value="-1" checked="1"/>
-                  <xsl:value-of select="concat (gsa:i18n ('yes', 'Binary Choice'), ', ', gsa:i18n ('always', 'Time'))"/>
-                </label>
+        <xsl:choose>
+          <xsl:when test="result/@id">
+            <input type="hidden" name="oid" value="{nvt/@id}"/>
+            <div class="form-group">
+              <label class="col-2 control-label">
+                <xsl:value-of select="gsa:i18n ('NVT Name', 'Note or Override')"/>
+              </label>
+              <div class="col-10">
+                <xsl:variable name="nvt" select="get_results_response/result/nvt"/>
+                <xsl:variable name="max" select="70"/>
+                <xsl:choose>
+                  <xsl:when test="$nvt/@oid = 0">
+                    <xsl:value-of select="gsa:i18n ('None.  Result was an open port.', 'Note or Override')"/>
+                  </xsl:when>
+                  <xsl:when test="string-length($nvt/name) &gt; $max">
+                    <a href="?cmd=get_info&amp;info_type={$nvt/type}&amp;details=1&amp;info_id={$nvt/@oid}&amp;token={/envelope/token}">
+                      <abbr title="{$nvt/name} ({$nvt/@oid})"><xsl:value-of select="substring($nvt/name, 0, $max)"/>...</abbr>
+                    </a>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <a href="?cmd=get_info&amp;info_type={$nvt/type}&amp;details=1&amp;info_id={$nvt/@oid}&amp;token={/envelope/token}">
+                      <xsl:value-of select="$nvt/name"/>
+                    </a>
+                  </xsl:otherwise>
+                </xsl:choose>
               </div>
-              <div>
+            </div>
+          </xsl:when>
+          <xsl:otherwise>
+            <div class="form-group">
+              <label class="col-2 control-label">
+                <xsl:value-of select="gsa:i18n ('NVT OID', 'Note or Override')"/>
+              </label>
+              <div class="col-10">
+                <xsl:choose>
+                  <xsl:when test="nvt/@id = '0'">
+                    <input type="text" name="oid" size="30" maxlength="80" value="1.3.6.1.4.1.25623.1.0."/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="text" name="oid" size="30" maxlength="80" value="{nvt/@id}"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </div>
+            </div>
+          </xsl:otherwise>
+        </xsl:choose>
+        <div class="form-group">
+          <label class="col-2 control-label">
+            <xsl:value-of select="gsa:i18n ('Active', 'Override')"/>
+          </label>
+          <div class="col-10">
+            <div class="radio">
+              <label>
+                <input type="radio" name="active" value="-1" checked="1"/>
+                <xsl:value-of select="concat (gsa:i18n ('yes', 'Binary Choice'), ', ', gsa:i18n ('always', 'Time'))"/>
+              </label>
+            </div>
+            <div class="radio">
+              <div class="form-item">
                 <label>
                   <input type="radio" name="active" value="1"/>
                   <xsl:value-of select="concat (gsa:i18n ('yes', 'Binary Choice'), ', ', gsa:i18n ('for the next', 'Time'), ' ')"/>
                 </label>
-                <label>
-                  <input type="text" name="days" size="3" maxlength="7" value="30"/>
-                  <xsl:value-of select="gsa:i18n ('days', 'Time')"/>
-                </label>
               </div>
-              <div>
-                <label>
-                  <input type="radio" name="active" value="0"/>
-                  <xsl:value-of select="gsa:i18n ('no', 'Binary Choice')"/>
-                </label>
+              <div class="form-item">
+                <input type="text" name="days" size="3" maxlength="7" value="30"/>
               </div>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <xsl:value-of select="gsa:i18n ('Hosts', 'Host')"/>
-            </td>
-            <td>
-              <xsl:choose>
-                <xsl:when test="result/@id">
-                  <label>
-                    <input type="radio" name="hosts" value=""/>
-                    <xsl:value-of select="gsa:i18n ('Any', 'Hosts')"/>
-                  </label>
-                  <label>
-                    <input type="radio" name="hosts" value="{hosts}" checked="1"/>
-                    <xsl:value-of select="hosts"/>
-                  </label>
-                </xsl:when>
-                <xsl:otherwise>
-                  <label>
-                    <input type="radio" name="hosts" value="" checked="1"/>
-                    <xsl:value-of select="gsa:i18n ('Any', 'Hosts')"/>
-                  </label>
-                  <label>
-                    <input type="radio" name="hosts" value="--"/>
-                  </label>
-                  <input type="text" name="hosts_manual" size="30" maxlength="80" value=""/>
-                </xsl:otherwise>
-              </xsl:choose>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <xsl:value-of select="gsa:i18n ('Location', 'Note or Override')"/>
-            </td>
-            <td>
-              <xsl:choose>
-                <xsl:when test="result/@id">
-                  <label>
-                    <input type="radio" name="port" value=""/>
-                    <xsl:value-of select="gsa:i18n ('Any', 'Note or Override|Location')"/>
-                  </label>
-                  <label>
-                    <input type="radio" name="port" value="{port}" checked="1"/>
-                    <xsl:value-of select="port"/>
-                  </label>
-                </xsl:when>
-                <xsl:otherwise>
-                  <label>
-                    <input type="radio" name="port" value="" checked="1"/>
-                    <xsl:value-of select="gsa:i18n ('Any', 'Note or Override|Location')"/>
-                  </label>
-                  <label>
-                    <input type="radio" name="port" value="--"/>
-                  </label>
-                  <input type="text" name="port_manual" size="30" maxlength="80" value=""/>
-                </xsl:otherwise>
-              </xsl:choose>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <xsl:value-of select="gsa:i18n ('Severity', 'Severity')"/>
-            </td>
-            <td>
-              <xsl:choose>
-                <xsl:when test="result/@id">
-                  <label>
-                    <input type="radio" name="severity" value=""/>
-                    <xsl:value-of select="gsa:i18n ('Any', 'Severity')"/>
-                  </label>
-                  <label>
-                    <xsl:choose>
-                      <xsl:when test="severity &gt; 0.0">
-                        <input type="radio" name="severity" value="0.1" checked="1"/>
-                        &gt; 0.0
-                      </xsl:when>
-                      <xsl:otherwise>
-                        <input type="radio" name="severity" value="{severity}" checked="1"/>
-                        <xsl:value-of select="gsa:i18n (gsa:result-cvss-risk-factor (severity), 'Severity')"/>
-                      </xsl:otherwise>
-                    </xsl:choose>
-                  </label>
-                </xsl:when>
-                <xsl:otherwise>
-                  <label>
-                    <input type="radio" name="severity" value="" checked="1"/>
-                    <xsl:value-of select="gsa:i18n ('Any', 'Severity')"/>
-                  </label>
-                  <label>
-                    <input type="radio" name="severity" value="0.1"/>
-                    &gt; 0.0
-                  </label>
-                  <label>
-                    <input type="radio" name="severity" value="0.0"/>
-                    <xsl:value-of select="gsa:i18n ('Log', 'Severity')"/>
-                  </label>
-                </xsl:otherwise>
-              </xsl:choose>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <b><xsl:value-of select="gsa:i18n ('New Severity', 'Override')"/></b>
-            </td>
-            <td>
+              <div class="form-item">
+                <xsl:value-of select="gsa:i18n ('days', 'Time')"/>
+              </div>
+            </div>
+            <div class="radio">
               <label>
-                <input type="radio" name="custom_severity" value="0" checked="1"/>
+                <input type="radio" name="active" value="0"/>
+                <xsl:value-of select="gsa:i18n ('no', 'Binary Choice')"/>
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-2 control-label">
+            <xsl:value-of select="gsa:i18n ('Hosts', 'Host')"/>
+          </label>
+          <div class="col-10">
+            <xsl:choose>
+              <xsl:when test="result/@id">
+                <div class="form-item">
+                  <div class="radio">
+                    <label>
+                      <input type="radio" name="hosts" value=""/>
+                      <xsl:value-of select="gsa:i18n ('Any', 'Hosts')"/>
+                    </label>
+                  </div>
+                </div>
+                <div class="form-item">
+                  <div class="radio">
+                    <label>
+                      <input type="radio" name="hosts" value="{hosts}" checked="1"/>
+                      <xsl:value-of select="hosts"/>
+                    </label>
+                  </div>
+                </div>
+              </xsl:when>
+              <xsl:otherwise>
+                <div class="form-item">
+                  <div class="radio">
+                    <label>
+                      <input type="radio" name="hosts" value="" checked="1"/>
+                      <xsl:value-of select="gsa:i18n ('Any', 'Hosts')"/>
+                    </label>
+                  </div>
+                </div>
+                <div class="form-item">
+                  <div class="radio">
+                    <label>
+                      <input type="radio" name="hosts" value="--"/>
+                    </label>
+                  </div>
+                </div>
+                <div class="form-item">
+                  <input type="text" name="hosts_manual" size="30" maxlength="80" value=""/>
+                </div>
+              </xsl:otherwise>
+            </xsl:choose>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-2 control-label">
+            <xsl:value-of select="gsa:i18n ('Location', 'Note or Override')"/>
+          </label>
+          <div class="col-10">
+            <xsl:choose>
+              <xsl:when test="result/@id">
+                <div class="form-item">
+                  <div class="radio">
+                    <label>
+                      <input type="radio" name="port" value=""/>
+                      <xsl:value-of select="gsa:i18n ('Any', 'Note or Override|Location')"/>
+                    </label>
+                  </div>
+                </div>
+                <div class="form-item">
+                  <div class="radio">
+                    <label>
+                      <input type="radio" name="port" value="{port}" checked="1"/>
+                      <xsl:value-of select="port"/>
+                    </label>
+                  </div>
+                </div>
+              </xsl:when>
+              <xsl:otherwise>
+                <div class="form-item">
+                  <div class="radio">
+                    <label>
+                      <input type="radio" name="port" value="" checked="1"/>
+                      <xsl:value-of select="gsa:i18n ('Any', 'Note or Override|Location')"/>
+                    </label>
+                  </div>
+                </div>
+                <div class="form-item">
+                  <div class="radio">
+                    <label>
+                      <input type="radio" name="port" value="--"/>
+                    </label>
+                  </div>
+                </div>
+                <div class="form-item">
+                  <input type="text" name="port_manual" size="30" maxlength="80" value=""/>
+                </div>
+              </xsl:otherwise>
+            </xsl:choose>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-2 control-label">
+            <xsl:value-of select="gsa:i18n ('Severity', 'Severity')"/>
+          </label>
+          <div class="col-10">
+            <xsl:choose>
+              <xsl:when test="result/@id">
+                <div class="form-item">
+                  <div class="radio">
+                    <label>
+                      <input type="radio" name="severity" value=""/>
+                      <xsl:value-of select="gsa:i18n ('Any', 'Severity')"/>
+                    </label>
+                  </div>
+                </div>
+                <div class="form-item">
+                  <div class="radio">
+                    <label>
+                      <xsl:choose>
+                        <xsl:when test="severity &gt; 0.0">
+                          <input type="radio" name="severity" value="0.1" checked="1"/>
+                          &gt; 0.0
+                        </xsl:when>
+                        <xsl:otherwise>
+                          <input type="radio" name="severity" value="{severity}" checked="1"/>
+                          <xsl:value-of select="gsa:i18n (gsa:result-cvss-risk-factor (severity), 'Severity')"/>
+                        </xsl:otherwise>
+                      </xsl:choose>
+                    </label>
+                  </div>
+                </div>
+              </xsl:when>
+              <xsl:otherwise>
+                <div class="form-item">
+                  <div class="radio">
+                    <label>
+                      <input type="radio" name="severity" value="" checked="1"/>
+                      <xsl:value-of select="gsa:i18n ('Any', 'Severity')"/>
+                    </label>
+                  </div>
+                </div>
+                <div class="form-item">
+                  <div class="radio">
+                    <label>
+                      <input type="radio" name="severity" value="0.1"/>
+                      &gt; 0.0
+                    </label>
+                  </div>
+                </div>
+                <div class="form-item">
+                  <div class="radio">
+                    <label>
+                      <input type="radio" name="severity" value="0.0"/>
+                      <xsl:value-of select="gsa:i18n ('Log', 'Severity')"/>
+                    </label>
+                  </div>
+                </div>
+              </xsl:otherwise>
+            </xsl:choose>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-2 control-label">
+            <xsl:value-of select="gsa:i18n ('New Severity', 'Override')"/>
+          </label>
+          <div class="col-10">
+            <div class="form-item">
+              <div class="radio">
+                <label>
+                  <input type="radio" name="custom_severity" value="0" checked="1"/>
+                </label>
                 <select name="new_severity_from_list">
                   <option value="10.0">10.0 (<xsl:value-of select="gsa:i18n ('High', 'Severity')"/>)</option>
                   <option value="5.0">5.0 (<xsl:value-of select="gsa:i18n ('Medium', 'Severity')"/>)</option>
@@ -24813,81 +24880,111 @@ should not have received it.
                   <option value="0.0"><xsl:value-of select="gsa:i18n ('Log', 'Severity')"/></option>
                   <option value="-1.0" selected="1"><xsl:value-of select="gsa:i18n ('False Positive', 'Severity')"/></option>
                 </select>
-              </label>
-              <label>
-                <input type="radio" name="custom_severity" value="1"/>
-                <xsl:value-of select="gsa:i18n ('Other', 'Override|Severity')"/>:
-                <input type="text" name="new_severity" value="" size="5" maxlength="4"/>
-              </label>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <xsl:value-of select="gsa:i18n ('Task', 'Task')"/>
-            </td>
-            <td>
-              <xsl:choose>
-                <xsl:when test="task/@id">
-                  <label>
-                    <input type="radio" name="override_task_id" value=""/>
-                    <xsl:value-of select="gsa:i18n ('Any', 'Task')"/>
-                  </label>
-                  <label>
-                    <input type="radio" name="override_task_id" value="{task/@id}"
-                           checked="1"/>
-                    <xsl:value-of select="task/name"/>
-                  </label>
-                </xsl:when>
-                <xsl:otherwise>
-                  <label>
-                    <input type="radio" name="override_task_id" value="" checked="1"/>
-                    <xsl:value-of select="gsa:i18n ('Any', 'Task')"/>
-                  </label>
-                  <label>
-                    <input type="radio" name="override_task_id" value="0"/>
-                  </label>
-                  <select style="margin-bottom: 0px;" name="override_task_uuid">
-                    <xsl:for-each select="get_tasks_response/task">
-                      <option value="{@id}"><xsl:value-of select="name"/></option>
-                    </xsl:for-each>
-                  </select>
-                </xsl:otherwise>
-              </xsl:choose>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <xsl:value-of select="gsa:i18n ('Result', 'Result')"/>
-            </td>
-            <td>
-              <label>
-                <input type="radio" name="override_result_id" value="" checked="1"/>
-                <xsl:value-of select="gsa:i18n ('Any', 'Result')"/>
-              </label>
-              <xsl:choose>
-                <xsl:when test="result/@id">
-                  <label>
-                    <input type="radio" name="override_result_id" value="{result/@id}"/>
-                    <xsl:value-of select="gsa:i18n ('Only the selected one', 'Note or Override|Result')"/> (<xsl:value-of select="result/@id"/>)
-                  </label>
-                </xsl:when>
-                <xsl:otherwise>
-                  <label>
-                    <input type="radio" name="override_result_id" value="0"/>
-                    UUID
-                    <input type="text" name="override_result_uuid" size="30" maxlength="80" value=""/>
-                  </label>
-                </xsl:otherwise>
-              </xsl:choose>
-            </td>
-          </tr>
-          <tr>
-            <td>Text</td>
-            <td>
-              <textarea name="text" rows="10" cols="60"/>
-            </td>
-          </tr>
-        </table>
+              </div>
+            </div>
+            <div class="form-item">
+              <div class="radio">
+                <label>
+                  <input type="radio" name="custom_severity" value="1"/>
+                  <xsl:value-of select="gsa:i18n ('Other', 'Override|Severity')"/>:
+                </label>
+              </div>
+            </div>
+            <div class="form-item">
+              <input type="text" name="new_severity" value="" size="5" maxlength="4"/>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-2 control-label">
+            <xsl:value-of select="gsa:i18n ('Task', 'Task')"/>
+          </label>
+          <div class="col-10">
+            <xsl:choose>
+              <xsl:when test="task/@id">
+                <div class="form-item">
+                  <div class="radio">
+                    <label>
+                      <input type="radio" name="override_task_id" value=""/>
+                      <xsl:value-of select="gsa:i18n ('Any', 'Task')"/>
+                    </label>
+                  </div>
+                </div>
+                <div class="form-item">
+                  <div class="radio">
+                    <label>
+                      <input type="radio" name="override_task_id" value="{task/@id}"
+                              checked="1"/>
+                      <xsl:value-of select="task/name"/>
+                    </label>
+                  </div>
+                </div>
+              </xsl:when>
+              <xsl:otherwise>
+                <div class="form-item">
+                  <div class="radio">
+                    <label>
+                      <input type="radio" name="override_task_id" value="" checked="1"/>
+                      <xsl:value-of select="gsa:i18n ('Any', 'Task')"/>
+                    </label>
+                  </div>
+                </div>
+                <div class="form-item">
+                  <div class="radio">
+                    <label>
+                      <input type="radio" name="override_task_id" value="0"/>
+                    </label>
+                    <select style="margin-bottom: 0px;" name="override_task_uuid">
+                      <xsl:for-each select="get_tasks_response/task">
+                        <option value="{@id}"><xsl:value-of select="name"/></option>
+                      </xsl:for-each>
+                    </select>
+                  </div>
+                </div>
+              </xsl:otherwise>
+            </xsl:choose>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-2 control-label">
+            <xsl:value-of select="gsa:i18n ('Result', 'Result')"/>
+          </label>
+          <div class="col-10">
+            <div class="form-item">
+              <div class="radio">
+                <label>
+                  <input type="radio" name="override_result_id" value="" checked="1"/>
+                  <xsl:value-of select="gsa:i18n ('Any', 'Result')"/>
+                </label>
+              </div>
+            </div>
+            <div class="form-item">
+              <div class="radio">
+                <label>
+                  <xsl:choose>
+                    <xsl:when test="result/@id">
+                      <input type="radio" name="override_result_id" value="{result/@id}"/>
+                      <xsl:value-of select="gsa:i18n ('Only the selected one', 'Note or Override|Result')"/> (<xsl:value-of select="result/@id"/>)
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <input type="radio" name="override_result_id" value="0"/>
+                      UUID
+                      <input type="text" name="override_result_uuid" size="30" maxlength="80" value=""/>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-2 control-label">
+            Text
+          </label>
+          <div class="col-10">
+            <textarea name="text" rows="10" cols="60" class="form-control"/>
+          </div>
+        </div>
       </form>
       <xsl:choose>
         <xsl:when test="result/@id">
