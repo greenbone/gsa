@@ -1,3 +1,8 @@
+2016-06-09  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/omp.xsl (html-create-override-form): Change create override
+	dialog into an edit dialog.
+
 2016-06-08  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/js/greenbone.js (init_input): Remove debug statement.

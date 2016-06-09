@@ -24585,20 +24585,11 @@ should not have received it.
 <!-- BEGIN OVERRIDES MANAGEMENT -->
 
 <xsl:template name="html-create-override-form">
-  <div class="gb_window">
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n ('New Override', 'Override')"/>
-      <a href="/help/new_override.html?token={/envelope/token}"
-         title="{gsa:i18n ('Help', 'Help')}: {gsa:i18n ('New Override', 'Override')}">
-        <img src="/img/help.png"/>
-      </a>
-      <a href="/omp?cmd=get_overrides&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-         title="{gsa:i18n ('Overrides', 'Override')}" style="margin-left:3px;">
-        <img src="/img/list.png" alt="{gsa:i18n ('Overrides', 'Override')}"/>
-      </a>
+  <div class="edit-dialog">
+    <div class="title">
+      <xsl:value-of select="gsa:i18n ('New Override', 'Override')"/>
     </div>
-    <div class="gb_window_part_content">
+    <div class="content">
       <form action="/omp#overrides-{result/@id}"
             method="post"
             enctype="multipart/form-data">
@@ -24894,11 +24885,6 @@ should not have received it.
             <td>Text</td>
             <td>
               <textarea name="text" rows="10" cols="60"/>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <input type="submit" name="submit" value="{gsa:i18n ('Create Override', 'Override')}"/>
             </td>
           </tr>
         </table>
