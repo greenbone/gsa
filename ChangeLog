@@ -1,3 +1,10 @@
+2016-06-10  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/js/greenbone.js (on_ready): Add a handler for external
+	links. Anchors (<a>) can now be marked as external links by setting the
+	external class. In this case clicking at the link will open a dialog that
+	shows a warning to the user.
+
 2016-06-09  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/omp.xsl (html-create-override-form): Use horizontal form

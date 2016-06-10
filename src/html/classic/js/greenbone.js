@@ -1413,6 +1413,45 @@
 
       init_input(elem, on_change);
     });
+
+    doc.find('a.external').on('click', function(event) {
+      event.preventDefault(); // prevent opening url
+
+      var url = $(this).attr('href');
+
+      var p = $('<p/>').append($('<span/>', {
+        'class': 'ui-icon ui-icon-alert',
+        style: 'float: left; margin: 0 15px 15px 0;',
+      }));
+      var dialog = $('<div/>', {
+        'class': 'dialog-form',
+        title: gsa._('Follow link?'),
+      }).append(p);
+
+      p.append(gsa._('This dialog will open a new window for <a>{{url}}</a> ' +
+            'if you click on follow link. Following this link is on your own ' +
+            'responsibility. Greenbone doesn\'t endorse the content you will ' +
+            'see there.', {url: url}));
+
+      var close = '' + gsa._('Abort');
+      var follow = '' + gsa._('Follow link');
+      var buttons = {};
+
+      buttons[close] = function() {
+        $(this).dialog('close');
+      };
+      buttons[follow] = function() {
+        window.open(url);
+        $(this).dialog('close');
+      };
+
+      dialog.dialog({
+        modal: true,
+        width: 600,
+        maxHeight: 400,
+        buttons: buttons,
+      });
+    });
   }
 
   var timeout_id;
