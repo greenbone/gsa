@@ -1784,10 +1784,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template name="edit-settings-resource">
   <xsl:param name="setting"/>
+  <xsl:param name="param_name" select="concat('settings_default:', $setting)"/>
   <xsl:param name="resources"/>
   <xsl:param name="selected_id" select="@id"/>
 
-  <select style="margin-bottom: 0px;" name="{$setting}">
+  <select style="margin-bottom: 0px;" name="{$param_name}" class="setting-control" data-setting="{$setting}">
     <option value="">--</option>
     <xsl:for-each select="$resources">
       <xsl:choose>
@@ -1806,7 +1807,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="uuid"/>
   <xsl:param name="filter-type"/>
   <xsl:param name="filter"/>
-  <select style="margin-bottom: 0px;" name="settings_filter:{$uuid}">
+  <select style="margin-bottom: 0px;" name="settings_filter:{$uuid}" class="setting-control" data-setting="{$uuid}">
     <option value="">--</option>
     <xsl:variable name="id" select="filters/@id"/>
     <xsl:for-each select="commands_response/get_filters_response/filter[type=$filter-type or type='']">
@@ -1824,7 +1825,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template name="severity-settings-list">
   <xsl:param name="default"/>
-  <select style="margin-bottom: 0px;" name="severity_class">
+  <select style="margin-bottom: 0px;" name="severity_class" class="setting-control" data-setting="severity_class">
     <xsl:call-template name="opt">
       <xsl:with-param name="value" select="'nist'"/>
       <xsl:with-param name="content" select="'NVD Vulnerability Severity Ratings'"/>
@@ -37207,31 +37208,55 @@ should not have received it.
   </div>
 </xsl:template>
 
+<xsl:template name="timezone-opts">
+  <xsl:param name="timezone" select="'utc'"/>
+
+  <xsl:choose>
+    <xsl:when test="gsa:upper-case ($timezone) = 'UTC' or gsa:upper-case ($timezone) = 'COORDINATED UNIVERSAL TIME'">
+      <option value="UTC" selected="1">Coordinated Universal Time</option>
+    </xsl:when>
+    <xsl:otherwise>
+      <option value="UTC">Coordinated Universal Time</option>
+    </xsl:otherwise>
+  </xsl:choose>
+  <xsl:for-each select="document ('zones.xml')/zones/zone/name">
+    <xsl:choose>
+      <xsl:when test=". = $timezone">
+        <option value="{.}" selected="1"><xsl:value-of select="translate (., '_',' ')"/></option>
+      </xsl:when>
+      <xsl:otherwise>
+        <option value="{.}"><xsl:value-of select="translate (., '_',' ')"/></option>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:for-each>
+</xsl:template>
+
 <xsl:template name="timezone-select">
   <xsl:param name="timezone" select="'utc'"/>
   <xsl:param name="input-name" select="'text'"/>
+  <xsl:param name="for-settings" select="0"/>
+
+  <xsl:variable name="show_select" select="gsa:upper-case ($timezone) = 'UTC' or gsa:upper-case ($timezone) = 'COORDINATED UNIVERSAL TIME' or boolean (document ('zones.xml')/zones/zone[name=$timezone])"/>
+
   <xsl:choose>
-    <xsl:when test="gsa:upper-case ($timezone) = 'UTC' or gsa:upper-case ($timezone) = 'COORDINATED UNIVERSAL TIME' or boolean (document ('zones.xml')/zones/zone[name=$timezone])">
-      <select name="{$input-name}">
-        <xsl:choose>
-          <xsl:when test="gsa:upper-case ($timezone) = 'UTC' or gsa:upper-case ($timezone) = 'COORDINATED UNIVERSAL TIME'">
-            <option value="UTC" selected="1">Coordinated Universal Time</option>
-          </xsl:when>
-          <xsl:otherwise>
-            <option value="UTC">Coordinated Universal Time</option>
-          </xsl:otherwise>
-        </xsl:choose>
-        <xsl:for-each select="document ('zones.xml')/zones/zone/name">
-          <xsl:choose>
-            <xsl:when test=". = $timezone">
-              <option value="{.}" selected="1"><xsl:value-of select="translate (., '_',' ')"/></option>
-            </xsl:when>
-            <xsl:otherwise>
-              <option value="{.}"><xsl:value-of select="translate (., '_',' ')"/></option>
-            </xsl:otherwise>
-          </xsl:choose>
-        </xsl:for-each>
+    <xsl:when test="$show_select and $for-settings">
+      <select name="{$input-name}" class="setting-control" data-setting="timezone">
+        <xsl:call-template name="timezone-opts">
+          <xsl:with-param name="timezone" select="$timezone"/>
+        </xsl:call-template>
       </select>
+    </xsl:when>
+    <xsl:when test="$show_select">
+      <select name="{$input-name}">
+        <xsl:call-template name="timezone-opts">
+          <xsl:with-param name="timezone" select="$timezone"/>
+        </xsl:call-template>
+      </select>
+    </xsl:when>
+    <xsl:when test="$for-settings">
+      <input type="text" name="{$input-name}" size="40" maxlength="800"
+             class="setting-control" data-setting="timezone"
+             value="{gsa:param-or ('text', $timezone)}"/>
     </xsl:when>
     <xsl:otherwise>
       <input type="text" name="{$input-name}" size="40" maxlength="800"
@@ -37274,6 +37299,7 @@ should not have received it.
                 <xsl:call-template name="timezone-select">
                   <xsl:with-param name="timezone"
                                   select="gsa:param-or ('text', /envelope/timezone)"/>
+                  <xsl:with-param name="for-settings" select="1"/>
                 </xsl:call-template>
               </td>
             </tr>
@@ -37285,6 +37311,7 @@ should not have received it.
                     <td><xsl:value-of select="gsa:i18n ('Old', 'Auth Data|Password')"/></td>
                     <td>
                       <input type="password" autocomplete="off" name="old_password"
+                             class="setting-control" data-setting="password"
                              size="30" maxlength="400" value=""/>
                     </td>
                   </tr>
@@ -37292,6 +37319,7 @@ should not have received it.
                     <td><xsl:value-of select="gsa:i18n ('New', 'Auth Data|Password')"/></td>
                     <td>
                       <input type="password" autocomplete="off" name="password"
+                             class="setting-control" data-setting="password"
                              size="30" maxlength="400" value=""/>
                     </td>
                   </tr>
@@ -37313,7 +37341,7 @@ should not have received it.
                     </xsl:otherwise>
                   </xsl:choose>
                 </xsl:variable>
-                <select name="lang">
+                <select name="lang" class="setting-control" data-setting="lang">
                   <xsl:for-each select="gsa_languages/language">
                     <xsl:variable name="label">
                       <xsl:choose>
@@ -37353,6 +37381,7 @@ should not have received it.
               <td><xsl:value-of select="gsa:i18n ('Rows Per Page', 'My Settings')"/></td>
               <td>
                 <input type="text" name="max" size="40" maxlength="800"
+                       class="setting-control" data-setting="max"
                        value="{gsa:param-or ('max', get_settings_response/setting[name='Rows Per Page']/value)}"/>
               </td>
             </tr>
@@ -37360,6 +37389,7 @@ should not have received it.
               <td><xsl:value-of select="gsa:i18n ('Details Export File Name', 'My Settings')"/></td>
               <td>
                 <input type="text" name="details_fname" size="40" maxlength="800"
+                       class="setting-control" data-setting="details_fname"
                        value="{gsa:param-or ('details_fname', get_settings_response/setting[name='Details Export File Name']/value)}"/>
               </td>
             </tr>
@@ -37367,6 +37397,7 @@ should not have received it.
               <td><xsl:value-of select="gsa:i18n ('List Export File Name', 'My Settings')"/></td>
               <td>
                 <input type="text" name="list_fname" size="40" maxlength="800"
+                       class="setting-control" data-setting="list_fname"
                        value="{gsa:param-or ('list_fname', get_settings_response/setting[name='List Export File Name']/value)}"/>
               </td>
             </tr>
@@ -37374,6 +37405,7 @@ should not have received it.
               <td><xsl:value-of select="gsa:i18n ('Report Export File Name', 'My Settings')"/></td>
               <td>
                 <input type="text" name="report_fname" size="40" maxlength="800"
+                       class="setting-control" data-setting="report_fname"
                        value="{gsa:param-or ('report_fname', get_settings_response/setting[name='Report Export File Name']/value)}"/>
               </td>
             </tr>
@@ -37391,7 +37423,7 @@ should not have received it.
               <td>
                 <xsl:variable name="current_dynamic_severity"
                               select="gsa:param-or ('dynamic_severity', get_settings_response/setting[name='Dynamic Severity']/value)"/>
-                <select name="dynamic_severity" style="width:100px;">
+                <select name="dynamic_severity" style="width:100px;" class="setting-control" data-setting="dynamic_severity">
                   <xsl:call-template name="opt">
                     <xsl:with-param name="value" select="'0'"/>
                     <xsl:with-param name="content" select="gsa:i18n ('No', 'Binary Choice')"/>
@@ -37409,6 +37441,7 @@ should not have received it.
               <td><xsl:value-of select="gsa:i18n ('Default Severity', 'My Settings')"/></td>
               <td>
                 <input type="text" name="default_severity" size="40" maxlength="800"
+                       class="setting-control" data-setting="default_severity"
                        value="{gsa:param-or ('10.0', get_settings_response/setting[name='Default Severity']/value)}"/>
               </td>
             </tr>
@@ -37418,7 +37451,7 @@ should not have received it.
                 <td><xsl:value-of select="gsa:i18n ('Default Alert', 'Alert')"/></td>
                 <td>
                   <xsl:call-template name="edit-settings-resource">
-                    <xsl:with-param name="setting" select="'settings_default:f9f5a546-8018-48d0-bef5-5ad4926ea899'"/>
+                    <xsl:with-param name="setting" select="'f9f5a546-8018-48d0-bef5-5ad4926ea899'"/>
                     <xsl:with-param name="selected_id"
                                     select="get_settings_response/setting[name='Default Alert']/value"/>
                     <xsl:with-param name="type" select="'alert'"/>
@@ -37433,7 +37466,7 @@ should not have received it.
                 <td><xsl:value-of select="gsa:i18n ('Default OpenVAS Scan Config', 'Scan Config')"/></td>
                 <td>
                   <xsl:call-template name="edit-settings-resource">
-                    <xsl:with-param name="setting" select="'settings_default:fe7ea321-e3e3-4cc6-9952-da836aae83ce'"/>
+                    <xsl:with-param name="setting" select="'fe7ea321-e3e3-4cc6-9952-da836aae83ce'"/>
                     <xsl:with-param name="selected_id"
                                     select="get_settings_response/setting[name='Default OpenVAS Scan Config']/value"/>
                     <xsl:with-param name="type" select="'config'"/>
@@ -37446,7 +37479,7 @@ should not have received it.
                 <td><xsl:value-of select="gsa:i18n ('Default OSP Scan Config', 'Scan Config')"/></td>
                 <td>
                   <xsl:call-template name="edit-settings-resource">
-                    <xsl:with-param name="setting" select="'settings_default:fb19ac4b-614c-424c-b046-0bc32bf1be73'"/>
+                    <xsl:with-param name="setting" select="'fb19ac4b-614c-424c-b046-0bc32bf1be73'"/>
                     <xsl:with-param name="selected_id"
                                     select="get_settings_response/setting[name='Default OSP Scan Config']/value"/>
                     <xsl:with-param name="type" select="'config'"/>
@@ -37461,7 +37494,7 @@ should not have received it.
                 <td><xsl:value-of select="gsa:i18n ('Default SSH Credential', 'Credential')"/></td>
                 <td>
                   <xsl:call-template name="edit-settings-resource">
-                    <xsl:with-param name="setting" select="'settings_default:6fc56b72-c1cf-451c-a4c4-3a9dc784c3bd'"/>
+                    <xsl:with-param name="setting" select="'6fc56b72-c1cf-451c-a4c4-3a9dc784c3bd'"/>
                     <xsl:with-param name="selected_id"
                                     select="get_settings_response/setting[name='Default SSH Credential']/value"/>
                     <xsl:with-param name="type" select="'credential'"/>
@@ -37474,7 +37507,7 @@ should not have received it.
                 <td><xsl:value-of select="gsa:i18n ('Default SMB Credential', 'Credential')"/></td>
                 <td>
                   <xsl:call-template name="edit-settings-resource">
-                    <xsl:with-param name="setting" select="'settings_default:a25c0cfe-f977-417b-b1da-47da370c03e8'"/>
+                    <xsl:with-param name="setting" select="'a25c0cfe-f977-417b-b1da-47da370c03e8'"/>
                     <xsl:with-param name="selected_id"
                                     select="get_settings_response/setting[name='Default SMB Credential']/value"/>
                     <xsl:with-param name="type" select="'credential'"/>
@@ -37487,7 +37520,7 @@ should not have received it.
                 <td><xsl:value-of select="gsa:i18n ('Default ESXi Credential', 'Credential')"/></td>
                 <td>
                   <xsl:call-template name="edit-settings-resource">
-                    <xsl:with-param name="setting" select="'settings_default:83545bcf-0c49-4b4c-abbf-63baf82cc2a7'"/>
+                    <xsl:with-param name="setting" select="'83545bcf-0c49-4b4c-abbf-63baf82cc2a7'"/>
                     <xsl:with-param name="selected_id"
                                     select="get_settings_response/setting[name='Default ESXi Credential']/value"/>
                     <xsl:with-param name="type" select="'credential'"/>
@@ -37500,7 +37533,7 @@ should not have received it.
                 <td><xsl:value-of select="gsa:i18n ('Default SNMP Credential', 'Credential')"/></td>
                 <td>
                   <xsl:call-template name="edit-settings-resource">
-                    <xsl:with-param name="setting" select="'settings_default:024550b8-868e-4b3c-98bf-99bb732f6a0d'"/>
+                    <xsl:with-param name="setting" select="'024550b8-868e-4b3c-98bf-99bb732f6a0d'"/>
                     <xsl:with-param name="selected_id"
                                     select="get_settings_response/setting[name='Default SNMP Credential']/value"/>
                     <xsl:with-param name="type" select="'credential'"/>
@@ -37515,7 +37548,7 @@ should not have received it.
                 <td><xsl:value-of select="gsa:i18n ('Default Port List', 'Port List')"/></td>
                 <td>
                   <xsl:call-template name="edit-settings-resource">
-                    <xsl:with-param name="setting" select="'settings_default:d74a9ee8-7d35-4879-9485-ab23f1bd45bc'"/>
+                    <xsl:with-param name="setting" select="'d74a9ee8-7d35-4879-9485-ab23f1bd45bc'"/>
                     <xsl:with-param name="selected_id"
                                     select="get_settings_response/setting[name='Default Port List']/value"/>
                     <xsl:with-param name="type" select="'port_list'"/>
@@ -37530,7 +37563,7 @@ should not have received it.
                 <td><xsl:value-of select="gsa:i18n ('Default OpenVAS Scanner', 'Scanner')"/></td>
                 <td>
                   <xsl:call-template name="edit-settings-resource">
-                    <xsl:with-param name="setting" select="'settings_default:f7d0f6ed-6f9e-45dc-8bd9-05cced84e80d'"/>
+                    <xsl:with-param name="setting" select="'f7d0f6ed-6f9e-45dc-8bd9-05cced84e80d'"/>
                     <xsl:with-param name="selected_id"
                                     select="get_settings_response/setting[name='Default OpenVAS Scanner']/value"/>
                     <xsl:with-param name="type" select="'scanner'"/>
@@ -37543,7 +37576,7 @@ should not have received it.
                 <td><xsl:value-of select="gsa:i18n ('Default OSP Scanner', 'Scanner')"/></td>
                 <td>
                   <xsl:call-template name="edit-settings-resource">
-                    <xsl:with-param name="setting" select="'settings_default:b20697c9-be0a-4cd4-8b4d-5fe7841ebb03'"/>
+                    <xsl:with-param name="setting" select="'b20697c9-be0a-4cd4-8b4d-5fe7841ebb03'"/>
                     <xsl:with-param name="selected_id"
                                     select="get_settings_response/setting[name='Default OSP Scanner']/value"/>
                     <xsl:with-param name="type" select="'scanner'"/>
@@ -37558,7 +37591,7 @@ should not have received it.
                 <td><xsl:value-of select="gsa:i18n ('Default Schedule', 'Schedule')"/></td>
                 <td>
                   <xsl:call-template name="edit-settings-resource">
-                    <xsl:with-param name="setting" select="'settings_default:778eedad-5550-4de0-abb6-1320d13b5e18'"/>
+                    <xsl:with-param name="setting" select="'778eedad-5550-4de0-abb6-1320d13b5e18'"/>
                     <xsl:with-param name="selected_id"
                                     select="get_settings_response/setting[name='Default Schedule']/value"/>
                     <xsl:with-param name="type" select="'schedule'"/>
@@ -37573,7 +37606,7 @@ should not have received it.
                 <td><xsl:value-of select="gsa:i18n ('Default Slave', 'Slave')"/></td>
                 <td>
                   <xsl:call-template name="edit-settings-resource">
-                    <xsl:with-param name="setting" select="'settings_default:aec201fa-8a82-4b61-bebe-a44ea93b2909'"/>
+                    <xsl:with-param name="setting" select="'aec201fa-8a82-4b61-bebe-a44ea93b2909'"/>
                     <xsl:with-param name="selected_id"
                                     select="get_settings_response/setting[name='Default Slave']/value"/>
                     <xsl:with-param name="type" select="'slave'"/>
@@ -37588,7 +37621,7 @@ should not have received it.
                 <td><xsl:value-of select="gsa:i18n ('Default Target', 'Target')"/></td>
                 <td>
                   <xsl:call-template name="edit-settings-resource">
-                    <xsl:with-param name="setting" select="'settings_default:23409203-940a-4b4a-b70c-447475f18323'"/>
+                    <xsl:with-param name="setting" select="'23409203-940a-4b4a-b70c-447475f18323'"/>
                     <xsl:with-param name="selected_id"
                                     select="get_settings_response/setting[name='Default Target']/value"/>
                     <xsl:with-param name="type" select="'target'"/>

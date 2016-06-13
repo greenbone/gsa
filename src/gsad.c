@@ -1253,6 +1253,8 @@ init_validator ()
   openvas_validator_add (validator, "file",         "(?s)^.*$");
   openvas_validator_add (validator, "file:name",    "^.*[[0-9abcdefABCDEF\\-]{1,40}]:.*$");
   openvas_validator_add (validator, "file:value",   "^yes$");
+  openvas_validator_add (validator, "settings_changed:name",  "^(.*){0,400}$");
+  openvas_validator_add (validator, "settings_changed:value", "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "settings_default:name",  "^(.*){0,400}$");
   openvas_validator_add (validator, "settings_default:value", "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "settings_filter:name",  "^(.*){0,400}$");
@@ -1722,6 +1724,8 @@ params_append_mhd (params_t *params,
       || (strncmp (name, "condition_data:", strlen ("condition_data:")) == 0)
       || (strncmp (name, "data_columns:", strlen ("data_columns:")) == 0)
       || (strncmp (name, "event_data:", strlen ("event_data:")) == 0)
+      || (strncmp (name, "settings_changed:", strlen ("settings_changed:"))
+          == 0)
       || (strncmp (name, "settings_default:", strlen ("settings_default:"))
           == 0)
       || (strncmp (name, "settings_filter:", strlen ("settings_filter:")) == 0)
@@ -2609,6 +2613,8 @@ params_mhd_add (void *params, enum MHD_ValueKind kind, const char *name,
       || (strncmp (name, "condition_data:", strlen ("condition_data:")) == 0)
       || (strncmp (name, "data_columns:", strlen ("data_columns:")) == 0)
       || (strncmp (name, "event_data:", strlen ("event_data:")) == 0)
+      || (strncmp (name, "settings_changed:", strlen ("settings_changed:"))
+          == 0)
       || (strncmp (name, "settings_default:", strlen ("settings_default:"))
           == 0)
       || (strncmp (name, "settings_filter:", strlen ("settings_filter:")) == 0)

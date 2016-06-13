@@ -1,3 +1,32 @@
+2016-06-13  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Make the "Edit My Settings" dialog send OMP requests only for settings
+	that changed and remove the various get_... OMP requests in the
+	save_my_settings which should be done by edit_my_settings.
+
+	* src/gsad_omp.c (send_settings_filters): Add param "changed" for
+	checking which settings were changed.
+	(save_my_settings_omp): Check "settings_changed:" request params to
+	see which settings must be saved.  Do not get resources as
+	edit_my_settings will do so.
+
+	* src/gsad.c (init_validator, params_append_mhd, params_mhd_add): Add
+	hashtable param "settings_changed".
+
+	* src/html/classic/js/greenbone.js (on_ready): Add listeners and hidden
+	"settings_changed:" inputs for elements with "setting-control" CSS
+	class to check for changes in settings.
+
+	* src/html/classic/omp.xsl (edit-settings-resource)
+	(edit-settings-filters, severity-settings-list): Add CSS class
+	"setting-control" and "data-setting" attribute to select elements.
+	(timezone-opts): New template.  Add option elems for timezone-select.
+	(timezone-select): Add param "for-settings" to add CSS class
+	"setting-control" and "data-setting" attribute to select element.  Use
+	the timezone-opts template to get the options.
+	(edit_my_settings): Add CSS class "setting-control" and "data-setting"
+	attribute to select elements.
+
 2016-06-10  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/omp.xsl (ref_xref_list): Mark urls from nvts as external.

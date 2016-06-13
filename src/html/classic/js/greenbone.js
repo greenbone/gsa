@@ -1273,6 +1273,40 @@
       });
     });
 
+    doc.find('.setting-control').each(function() {
+      var elem = $(this);
+      var form = elem.parents('form');
+      var setting = elem.data('setting');
+      var input_name = 'settings_changed:' + setting;
+      var changed_input = form.children('input[name="' + input_name + '"]');
+      var event;
+
+      switch (elem.attr('type')) {
+        case 'text':
+        case 'password':
+          event = 'keyup';
+          break;
+        case 'radio':
+          event = 'click';
+          break;
+        default:
+          event = 'change';
+      }
+
+      if (changed_input.length == 0) {
+        changed_input = $('<input/>',
+                          {
+                            'name': input_name,
+                            'type': 'hidden',
+                            'value': 0,
+                          }).appendTo (form);
+      }
+      // Add input elements to indicate that a setting was changed
+      elem.on(event, function() {
+          changed_input.attr('value', 1);
+        });
+    });
+
     var autorefresh = doc.find('#autorefresh');
     if (autorefresh.length) {
       if (localStorage.getItem('autorefresh-interval')) {

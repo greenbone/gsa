@@ -19814,6 +19814,7 @@ edit_my_settings_omp (credentials_t * credentials, params_t *params,
  *
  * @param[in]   session             GNUTLS session.
  * @param[in]   data                Data.
+ * @param[in]   changed             Params indicating which settings changed.
  * @param[out]  xml                 GString to write responses to.
  * @param[out]  modify_failed_flag  Pointer to an int to set to 1 on failure
  *                                  to modify one of the settings.
@@ -19821,7 +19822,7 @@ edit_my_settings_omp (credentials_t * credentials, params_t *params,
  */
 static int
 send_settings_filters (gnutls_session_t *session, params_t *data,
-                       GString *xml, int *modify_failed_flag,
+                       params_t *changed, GString *xml, int *modify_failed_flag,
                        cmd_response_data_t* response_data)
 {
   if (data)
@@ -19834,38 +19835,43 @@ send_settings_filters (gnutls_session_t *session, params_t *data,
       params_iterator_init (&iter, data);
       while (params_iterator_next (&iter, &uuid, &param))
         {
-          gchar *base64;
-          if (param->value)
-            base64 = g_base64_encode ((guchar*) param->value,
-                                      strlen (param->value));
-          else
-            base64 = g_strdup("");
-          if (openvas_server_sendf_xml (session,
-                                        "<modify_setting setting_id=\"%s\">"
-                                        "<value>%s</value>"
-                                        "</modify_setting>",
-                                        uuid,
-                                        base64))
+          const char* changed_value = params_value (changed, uuid);
+          if (changed_value == NULL
+              || (strcmp (changed_value, "") && strcmp (changed_value, "0")))
             {
+              gchar *base64;
+              if (param->value)
+                base64 = g_base64_encode ((guchar*) param->value,
+                                          strlen (param->value));
+              else
+                base64 = g_strdup("");
+              if (openvas_server_sendf_xml (session,
+                                            "<modify_setting setting_id=\"%s\">"
+                                            "<value>%s</value>"
+                                            "</modify_setting>",
+                                            uuid,
+                                            base64))
+                {
+                  g_free (base64);
+                  return -1;
+                }
+
               g_free (base64);
-              return -1;
-            }
 
-          g_free (base64);
-
-          entity = NULL;
-          if (read_entity_and_string (session, &entity, &xml))
-            {
-              free_entity (entity);
-              return -1;
+              entity = NULL;
+              if (read_entity_and_string (session, &entity, &xml))
+                {
+                  free_entity (entity);
+                  return -1;
+                }
+              if (! omp_success (entity))
+                {
+                  set_http_status_from_entity (entity, response_data);
+                  if (modify_failed_flag)
+                    *modify_failed_flag = 1;
+                }
+              free_entity(entity);
             }
-          if (! omp_success (entity))
-            {
-              set_http_status_from_entity (entity, response_data);
-              if (modify_failed_flag)
-                *modify_failed_flag = 1;
-            }
-          free_entity(entity);
         }
     }
   return 0;
@@ -19897,11 +19903,13 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
   const char *lang, *text, *old_passwd, *passwd, *status, *max;
   const char *details_fname, *list_fname, *report_fname;
   gchar *lang_64, *text_64, *max_64, *fname_64;
-  GString *xml, *commands;
+  GString *xml;
   entity_t entity;
-  params_t *defaults, *filters;
+  params_t *changed, *defaults, *filters;
   int modify_failed = 0;
+  const char *changed_value;
 
+  changed = params_values (params, "settings_changed:");
   *timezone = NULL;
   *password = NULL;
   *severity = NULL;
@@ -19949,10 +19957,12 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
 
   xml = g_string_new ("");
 
-  if (strlen (passwd) || strlen (old_passwd))
+  changed_value = params_value (changed, "password");
+  if ((strlen (passwd) || strlen (old_passwd))
+      && (changed_value == NULL
+          || (strcmp (changed_value, "") && strcmp (changed_value, "0"))))
     {
       gchar *passwd_64;
-
       /* Send Password setting */
 
       switch (omp_authenticate (&session, credentials->username, old_passwd))
@@ -20042,305 +20052,331 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
     }
 
   /* Send Timezone */
-  text_64 = g_base64_encode ((guchar*) text, strlen (text));
-
-  if (openvas_server_sendf (&session,
-                            "<modify_setting>"
-                            "<name>Timezone</name>"
-                            "<value>%s</value>"
-                            "</modify_setting>",
-                            text_64 ? text_64 : "")
-      == -1)
+  changed_value = params_value (changed, "timezone");
+  if (changed_value == NULL
+      || (strcmp (changed_value, "") && strcmp (changed_value, "0")))
     {
-      g_free (text_64);
-      openvas_server_close (socket, session);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while saving settings. "
-                           "It is unclear whether all the settings were saved. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_my_settings", response_data);
-    }
-  g_free (text_64);
+      text_64 = g_base64_encode ((guchar*) text, strlen (text));
 
-  entity = NULL;
-  if (read_entity_and_string (&session, &entity, &xml))
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while saving settings. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_my_settings", response_data);
-    }
-
-  status = entity_attribute (entity, "status");
-  if (status && (strlen (status) > 0) && (status[0] == '2'))
-    {
-      g_free (credentials->timezone);
-      credentials->timezone = g_strdup (strlen (text) ? text : "UTC");
-      *timezone = g_strdup (strlen (text) ? text : "UTC");
-
-      /* Set the timezone, so that the ENVELOPE/TIME uses the right timezone. */
-
-      if (setenv ("TZ", credentials->timezone, 1) == -1)
+      if (openvas_server_sendf (&session,
+                                "<modify_setting>"
+                                "<name>Timezone</name>"
+                                "<value>%s</value>"
+                                "</modify_setting>",
+                                text_64 ? text_64 : "")
+          == -1)
         {
+          g_free (text_64);
           openvas_server_close (socket, session);
-          g_critical ("%s: failed to set TZ\n", __FUNCTION__);
-          exit (EXIT_FAILURE);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while saving settings. "
+                               "It is unclear whether all the settings were saved. "
+                               "Diagnostics: Failure to send command to manager daemon.",
+                               "/omp?cmd=get_my_settings", response_data);
         }
-      tzset ();
-    }
-  else
-    {
-      set_http_status_from_entity (entity, response_data);
-      modify_failed = 1;
-    }
+      g_free (text_64);
 
-  /* Send Rows Per Page */
-
-  max_64 = g_base64_encode ((guchar*) max, strlen (max));
-
-  if (openvas_server_sendf (&session,
-                            "<modify_setting"
-                            " setting_id"
-                            "=\"5f5a8712-8017-11e1-8556-406186ea4fc5\">"
-                            "<value>%s</value>"
-                            "</modify_setting>",
-                            max_64 ? max_64 : "")
-      == -1)
-    {
-      g_free (max_64);
-      openvas_server_close (socket, session);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while saving settings. "
-                           "It is unclear whether all the settings were saved. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_my_settings", response_data);
-    }
-  g_free (max_64);
-
-  entity = NULL;
-  if (read_entity_and_string (&session, &entity, &xml))
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while saving settings. "
-                           "It is unclear whether all the settings were saved. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_my_settings", response_data);
-    }
-  if (! omp_success (entity))
-    {
-      set_http_status_from_entity (entity, response_data);
-      modify_failed = 1;
-    }
-
-  /* Send resource details export file name format. */
-
-  fname_64 = g_base64_encode ((guchar*) details_fname, strlen (details_fname));
-
-  if (openvas_server_sendf (&session,
-                            "<modify_setting"
-                            " setting_id"
-                            "=\"a6ac88c5-729c-41ba-ac0a-deea4a3441f2\">"
-                            "<value>%s</value>"
-                            "</modify_setting>",
-                            fname_64 ? fname_64 : "")
-      == -1)
-    {
-      g_free (fname_64);
-      openvas_server_close (socket, session);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while saving settings. "
-                           "It is unclear whether all the settings were saved. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_my_settings", response_data);
-    }
-  g_free (fname_64);
-
-  entity = NULL;
-  if (read_entity_and_string (&session, &entity, &xml))
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while saving settings. "
-                           "It is unclear whether all the settings were saved. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_my_settings", response_data);
-    }
-  if (omp_success (entity) != 1)
-    {
-      set_http_status_from_entity (entity, response_data);
-      modify_failed = 1;
-    }
-
-  /* Send resource list export file name format. */
-
-  fname_64 = g_base64_encode ((guchar*) list_fname, strlen (list_fname));
-
-  if (openvas_server_sendf (&session,
-                            "<modify_setting"
-                            " setting_id"
-                            "=\"0872a6ed-4f85-48c5-ac3f-a5ef5e006745\">"
-                            "<value>%s</value>"
-                            "</modify_setting>",
-                            fname_64 ? fname_64 : "")
-      == -1)
-    {
-      g_free (fname_64);
-      openvas_server_close (socket, session);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while saving settings. "
-                           "It is unclear whether all the settings were saved. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_my_settings", response_data);
-    }
-  g_free (fname_64);
-
-  entity = NULL;
-  if (read_entity_and_string (&session, &entity, &xml))
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while saving settings. "
-                           "It is unclear whether all the settings were saved. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_my_settings", response_data);
-    }
-  if (omp_success (entity) != 1)
-    {
-      set_http_status_from_entity (entity, response_data);
-      modify_failed = 1;
-    }
-
-  /* Send report export file name format. */
-
-  fname_64 = g_base64_encode ((guchar*) report_fname, strlen (report_fname));
-
-  if (openvas_server_sendf (&session,
-                            "<modify_setting"
-                            " setting_id"
-                            "=\"e1a2ae0b-736e-4484-b029-330c9e15b900\">"
-                            "<value>%s</value>"
-                            "</modify_setting>",
-                            fname_64 ? fname_64 : "")
-      == -1)
-    {
-      g_free (fname_64);
-      openvas_server_close (socket, session);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while saving settings. "
-                           "It is unclear whether all the settings were saved. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_my_settings", response_data);
-    }
-  g_free (fname_64);
-
-  entity = NULL;
-  if (read_entity_and_string (&session, &entity, &xml))
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while saving settings. "
-                           "It is unclear whether all the settings were saved. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_my_settings", response_data);
-    }
-  if (omp_success (entity) != 1)
-    {
-      set_http_status_from_entity (entity, response_data);
-      modify_failed = 1;
-    }
-
-  /* Send User Interface Language. */
-
-  lang_64 = g_base64_encode ((guchar*) lang, strlen (lang));
-
-  if (openvas_server_sendf (&session,
-                            "<modify_setting"
-                            " setting_id"
-                            "=\"6765549a-934e-11e3-b358-406186ea4fc5\">"
-                            "<value>%s</value>"
-                            "</modify_setting>",
-                            lang_64 ? lang_64 : "")
-      == -1)
-    {
-      g_free (lang_64);
-      openvas_server_close (socket, session);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while saving settings. "
-                           "It is unclear whether all the settings were saved. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_my_settings", response_data);
-    }
-  g_free (lang_64);
-
-  entity = NULL;
-  if (read_entity_and_string (&session, &entity, &xml))
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while saving settings. "
-                           "It is unclear whether all the settings were saved. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_my_settings", response_data);
-    }
-  if (omp_success (entity))
-    {
-      gchar *language_code;
-      set_language_code (&language_code, lang);
-      if (language_code)
+      entity = NULL;
+      if (read_entity_and_string (&session, &entity, &xml))
         {
-          g_free (credentials->language);
-          credentials->language = language_code;
-          *language = g_strdup (lang);
+          g_string_free (xml, TRUE);
+          openvas_server_close (socket, session);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while saving settings. "
+                               "Diagnostics: Failure to receive response from manager daemon.",
+                               "/omp?cmd=get_my_settings", response_data);
+        }
+
+      status = entity_attribute (entity, "status");
+      if (status && (strlen (status) > 0) && (status[0] == '2'))
+        {
+          g_free (credentials->timezone);
+          credentials->timezone = g_strdup (strlen (text) ? text : "UTC");
+          *timezone = g_strdup (strlen (text) ? text : "UTC");
+
+          /* Set the timezone, so that the ENVELOPE/TIME
+           * uses the right timezone. */
+
+          if (setenv ("TZ", credentials->timezone, 1) == -1)
+            {
+              openvas_server_close (socket, session);
+              g_critical ("%s: failed to set TZ\n", __FUNCTION__);
+              exit (EXIT_FAILURE);
+            }
+          tzset ();
         }
       else
         {
-          g_free (credentials->language);
-          credentials->language = accept_language_to_env_fmt (accept_language);
-          *language = NULL;
+          set_http_status_from_entity (entity, response_data);
+          modify_failed = 1;
         }
     }
-  else
+
+  /* Send Rows Per Page */
+  changed_value = params_value (changed, "max");
+  if (changed_value == NULL
+      || (strcmp (changed_value, "") && strcmp (changed_value, "0")))
     {
-      set_http_status_from_entity (entity, response_data);
-      modify_failed = 1;
+      max_64 = g_base64_encode ((guchar*) max, strlen (max));
+
+      if (openvas_server_sendf (&session,
+                                "<modify_setting"
+                                " setting_id"
+                                "=\"5f5a8712-8017-11e1-8556-406186ea4fc5\">"
+                                "<value>%s</value>"
+                                "</modify_setting>",
+                                max_64 ? max_64 : "")
+          == -1)
+        {
+          g_free (max_64);
+          openvas_server_close (socket, session);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while saving settings. "
+                               "It is unclear whether all the settings were saved. "
+                               "Diagnostics: Failure to send command to manager daemon.",
+                               "/omp?cmd=get_my_settings", response_data);
+        }
+      g_free (max_64);
+
+      entity = NULL;
+      if (read_entity_and_string (&session, &entity, &xml))
+        {
+          g_string_free (xml, TRUE);
+          openvas_server_close (socket, session);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while saving settings. "
+                               "It is unclear whether all the settings were saved. "
+                               "Diagnostics: Failure to receive response from manager daemon.",
+                               "/omp?cmd=get_my_settings", response_data);
+        }
+      if (! omp_success (entity))
+        {
+          set_http_status_from_entity (entity, response_data);
+          modify_failed = 1;
+        }
+    }
+
+  /* Send resource details export file name format. */
+  changed_value = params_value (changed, "details_fname");
+  if (changed_value == NULL
+      || (strcmp (changed_value, "") && strcmp (changed_value, "0")))
+    {
+      fname_64 = g_base64_encode ((guchar*) details_fname, strlen (details_fname));
+
+      if (openvas_server_sendf (&session,
+                                "<modify_setting"
+                                " setting_id"
+                                "=\"a6ac88c5-729c-41ba-ac0a-deea4a3441f2\">"
+                                "<value>%s</value>"
+                                "</modify_setting>",
+                                fname_64 ? fname_64 : "")
+          == -1)
+        {
+          g_free (fname_64);
+          openvas_server_close (socket, session);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while saving settings. "
+                               "It is unclear whether all the settings were saved. "
+                               "Diagnostics: Failure to send command to manager daemon.",
+                               "/omp?cmd=get_my_settings", response_data);
+        }
+      g_free (fname_64);
+
+      entity = NULL;
+      if (read_entity_and_string (&session, &entity, &xml))
+        {
+          g_string_free (xml, TRUE);
+          openvas_server_close (socket, session);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while saving settings. "
+                               "It is unclear whether all the settings were saved. "
+                               "Diagnostics: Failure to receive response from manager daemon.",
+                               "/omp?cmd=get_my_settings", response_data);
+        }
+      if (omp_success (entity) != 1)
+        {
+          set_http_status_from_entity (entity, response_data);
+          modify_failed = 1;
+        }
+    }
+
+  /* Send resource list export file name format. */
+  changed_value = params_value (changed, "list_fname");
+  if (changed_value == NULL
+      || (strcmp (changed_value, "") && strcmp (changed_value, "0")))
+    {
+      fname_64 = g_base64_encode ((guchar*) list_fname, strlen (list_fname));
+
+      if (openvas_server_sendf (&session,
+                                "<modify_setting"
+                                " setting_id"
+                                "=\"0872a6ed-4f85-48c5-ac3f-a5ef5e006745\">"
+                                "<value>%s</value>"
+                                "</modify_setting>",
+                                fname_64 ? fname_64 : "")
+          == -1)
+        {
+          g_free (fname_64);
+          openvas_server_close (socket, session);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while saving settings. "
+                               "It is unclear whether all the settings were saved. "
+                               "Diagnostics: Failure to send command to manager daemon.",
+                               "/omp?cmd=get_my_settings", response_data);
+        }
+      g_free (fname_64);
+
+      entity = NULL;
+      if (read_entity_and_string (&session, &entity, &xml))
+        {
+          g_string_free (xml, TRUE);
+          openvas_server_close (socket, session);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while saving settings. "
+                               "It is unclear whether all the settings were saved. "
+                               "Diagnostics: Failure to receive response from manager daemon.",
+                               "/omp?cmd=get_my_settings", response_data);
+        }
+      if (omp_success (entity) != 1)
+        {
+          set_http_status_from_entity (entity, response_data);
+          modify_failed = 1;
+        }
+    }
+
+  /* Send report export file name format. */
+  changed_value = params_value (changed, "report_fname");
+  if (changed_value == NULL
+      || (strcmp (changed_value, "") && strcmp (changed_value, "0")))
+    {
+      fname_64 = g_base64_encode ((guchar*) report_fname, strlen (report_fname));
+
+      if (openvas_server_sendf (&session,
+                                "<modify_setting"
+                                " setting_id"
+                                "=\"e1a2ae0b-736e-4484-b029-330c9e15b900\">"
+                                "<value>%s</value>"
+                                "</modify_setting>",
+                                fname_64 ? fname_64 : "")
+          == -1)
+        {
+          g_free (fname_64);
+          openvas_server_close (socket, session);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while saving settings. "
+                               "It is unclear whether all the settings were saved. "
+                               "Diagnostics: Failure to send command to manager daemon.",
+                               "/omp?cmd=get_my_settings", response_data);
+        }
+      g_free (fname_64);
+
+      entity = NULL;
+      if (read_entity_and_string (&session, &entity, &xml))
+        {
+          g_string_free (xml, TRUE);
+          openvas_server_close (socket, session);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while saving settings. "
+                               "It is unclear whether all the settings were saved. "
+                               "Diagnostics: Failure to receive response from manager daemon.",
+                               "/omp?cmd=get_my_settings", response_data);
+        }
+      if (omp_success (entity) != 1)
+        {
+          set_http_status_from_entity (entity, response_data);
+          modify_failed = 1;
+        }
+    }
+
+  /* Send User Interface Language. */
+  changed_value = params_value (changed, "lang");
+  if (changed_value == NULL
+      || (strcmp (changed_value, "") && strcmp (changed_value, "0")))
+    {
+      lang_64 = g_base64_encode ((guchar*) lang, strlen (lang));
+
+      if (openvas_server_sendf (&session,
+                                "<modify_setting"
+                                " setting_id"
+                                "=\"6765549a-934e-11e3-b358-406186ea4fc5\">"
+                                "<value>%s</value>"
+                                "</modify_setting>",
+                                lang_64 ? lang_64 : "")
+          == -1)
+        {
+          g_free (lang_64);
+          openvas_server_close (socket, session);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while saving settings. "
+                               "It is unclear whether all the settings were saved. "
+                               "Diagnostics: Failure to send command to manager daemon.",
+                               "/omp?cmd=get_my_settings", response_data);
+        }
+      g_free (lang_64);
+
+      entity = NULL;
+      if (read_entity_and_string (&session, &entity, &xml))
+        {
+          g_string_free (xml, TRUE);
+          openvas_server_close (socket, session);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while saving settings. "
+                               "It is unclear whether all the settings were saved. "
+                               "Diagnostics: Failure to receive response from manager daemon.",
+                               "/omp?cmd=get_my_settings", response_data);
+        }
+      if (omp_success (entity))
+        {
+          gchar *language_code;
+          set_language_code (&language_code, lang);
+          if (language_code)
+            {
+              g_free (credentials->language);
+              credentials->language = language_code;
+              *language = g_strdup (lang);
+            }
+          else
+            {
+              g_free (credentials->language);
+              credentials->language = accept_language_to_env_fmt (accept_language);
+              *language = NULL;
+            }
+        }
+      else
+        {
+          set_http_status_from_entity (entity, response_data);
+          modify_failed = 1;
+        }
     }
 
   /* Send default resources */
 
   defaults = params_values (params, "settings_default:");
-  if (send_settings_filters (&session, defaults, xml, &modify_failed,
+  if (send_settings_filters (&session, defaults, changed, xml, &modify_failed,
                              response_data))
     {
       openvas_server_close (socket, session);
@@ -20356,7 +20392,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
   /* Send resources filters */
 
   filters = params_values (params, "settings_filter:");
-  if (send_settings_filters (&session, filters, xml, &modify_failed,
+  if (send_settings_filters (&session, filters, changed, xml, &modify_failed,
                              response_data))
     {
       openvas_server_close (socket, session);
@@ -20371,211 +20407,151 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
 
   /* Send Severity Class. */
 
-  text = params_value (params, "severity_class");
-  text_64 = (text
-                 ? g_base64_encode ((guchar*) text, strlen (text))
-                 : g_strdup (""));
-
-  if (openvas_server_sendf (&session,
-                            "<modify_setting"
-                            " setting_id"
-                            "=\"f16bb236-a32d-4cd5-a880-e0fcf2599f59\">"
-                            "<value>%s</value>"
-                            "</modify_setting>",
-                            text_64 ? text_64 : "")
-      == -1)
+  changed_value = params_value (changed, "severity_class");
+  if (changed_value == NULL
+      || (strcmp (changed_value, "") && strcmp (changed_value, "0")))
     {
-      g_free (text_64);
-      openvas_server_close (socket, session);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while saving settings. "
-                           "It is unclear whether all the settings were saved. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_my_settings", response_data);
-    }
-  g_free (text_64);
+      text = params_value (params, "severity_class");
+      text_64 = (text
+                    ? g_base64_encode ((guchar*) text, strlen (text))
+                    : g_strdup (""));
 
-  entity = NULL;
-  if (read_entity_and_string (&session, &entity, &xml))
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while saving settings. "
-                           "It is unclear whether all the settings were saved. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_my_settings", response_data);
-    }
-
-  status = entity_attribute (entity, "status");
-  if (status && (strlen (status) > 0) && (status[0] == '2'))
-    {
-      g_free (credentials->severity);
-      if ((text != NULL) && (strlen (text) > 0))
+      if (openvas_server_sendf (&session,
+                                "<modify_setting"
+                                " setting_id"
+                                "=\"f16bb236-a32d-4cd5-a880-e0fcf2599f59\">"
+                                "<value>%s</value>"
+                                "</modify_setting>",
+                                text_64 ? text_64 : "")
+          == -1)
         {
-          credentials->severity = g_strdup (text);
-          *severity = g_strdup (text);
+          g_free (text_64);
+          openvas_server_close (socket, session);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while saving settings. "
+                               "It is unclear whether all the settings were saved. "
+                               "Diagnostics: Failure to send command to manager daemon.",
+                               "/omp?cmd=get_my_settings", response_data);
         }
-    }
-  else
-    {
-      set_http_status_from_entity (entity, response_data);
-      modify_failed = 1;
+      g_free (text_64);
+
+      entity = NULL;
+      if (read_entity_and_string (&session, &entity, &xml))
+        {
+          g_string_free (xml, TRUE);
+          openvas_server_close (socket, session);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while saving settings. "
+                               "It is unclear whether all the settings were saved. "
+                               "Diagnostics: Failure to receive response from manager daemon.",
+                               "/omp?cmd=get_my_settings", response_data);
+        }
+
+      status = entity_attribute (entity, "status");
+      if (status && (strlen (status) > 0) && (status[0] == '2'))
+        {
+          g_free (credentials->severity);
+          if ((text != NULL) && (strlen (text) > 0))
+            {
+              credentials->severity = g_strdup (text);
+              *severity = g_strdup (text);
+            }
+        }
+      else
+        {
+          set_http_status_from_entity (entity, response_data);
+          modify_failed = 1;
+        }
     }
 
   /* Send Dynamic Severity setting. */
 
-  text = params_value (params, "dynamic_severity");
-  text_64 = (text
-                 ? g_base64_encode ((guchar*) text, strlen (text))
-                 : g_strdup (""));
-
-  if (openvas_server_sendf (&session,
-                            "<modify_setting"
-                            " setting_id"
-                            "=\"77ec2444-e7f2-4a80-a59b-f4237782d93f\">"
-                            "<value>%s</value>"
-                            "</modify_setting>",
-                            text_64 ? text_64 : "")
-      == -1)
+  changed_value = params_value (changed, "dynamic_severity");
+  if (changed_value == NULL
+      || (strcmp (changed_value, "") && strcmp (changed_value, "0")))
     {
+      text = params_value (params, "dynamic_severity");
+      text_64 = (text
+                    ? g_base64_encode ((guchar*) text, strlen (text))
+                    : g_strdup (""));
+
+      if (openvas_server_sendf (&session,
+                                "<modify_setting"
+                                " setting_id"
+                                "=\"77ec2444-e7f2-4a80-a59b-f4237782d93f\">"
+                                "<value>%s</value>"
+                                "</modify_setting>",
+                                text_64 ? text_64 : "")
+          == -1)
+        {
+          g_free (text_64);
+          openvas_server_close (socket, session);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while saving settings. "
+                               "It is unclear whether all the settings were saved. "
+                               "Diagnostics: Failure to send command to manager daemon.",
+                               "/omp?cmd=get_my_settings", response_data);
+        }
       g_free (text_64);
-      openvas_server_close (socket, session);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while saving settings. "
-                           "It is unclear whether all the settings were saved. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_my_settings", response_data);
-    }
-  g_free (text_64);
 
-  entity = NULL;
-  if (read_entity_and_string (&session, &entity, &xml))
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while saving settings. "
-                           "It is unclear whether all the settings were saved. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_my_settings", response_data);
-    }
-  if (! omp_success (entity))
-    {
-      set_http_status_from_entity (entity, response_data);
-      modify_failed = 1;
+      entity = NULL;
+      if (read_entity_and_string (&session, &entity, &xml))
+        {
+          g_string_free (xml, TRUE);
+          openvas_server_close (socket, session);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while saving settings. "
+                               "It is unclear whether all the settings were saved. "
+                               "Diagnostics: Failure to receive response from manager daemon.",
+                               "/omp?cmd=get_my_settings", response_data);
+        }
+      if (! omp_success (entity))
+        {
+          set_http_status_from_entity (entity, response_data);
+          modify_failed = 1;
+        }
     }
 
   /* Send Default Severity setting. */
-
-  text = params_value (params, "default_severity");
-  text_64 = (text
-                 ? g_base64_encode ((guchar*) text, strlen (text))
-                 : g_strdup (""));
-
-  if (openvas_server_sendf (&session,
-                            "<modify_setting"
-                            " setting_id"
-                            "=\"7eda49c5-096c-4bef-b1ab-d080d87300df\">"
-                            "<value>%s</value>"
-                            "</modify_setting>",
-                            text_64 ? text_64 : "")
-      == -1)
+  changed_value = params_value (changed, "default_severity");
+  if (changed_value == NULL
+      || (strcmp (changed_value, "") && strcmp (changed_value, "0")))
     {
+      text = params_value (params, "default_severity");
+      text_64 = (text
+                    ? g_base64_encode ((guchar*) text, strlen (text))
+                    : g_strdup (""));
+
+      if (openvas_server_sendf (&session,
+                                "<modify_setting"
+                                " setting_id"
+                                "=\"7eda49c5-096c-4bef-b1ab-d080d87300df\">"
+                                "<value>%s</value>"
+                                "</modify_setting>",
+                                text_64 ? text_64 : "")
+          == -1)
+        {
+          g_free (text_64);
+          openvas_server_close (socket, session);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          return gsad_message (credentials,
+                              "Internal error", __FUNCTION__, __LINE__,
+                              "An internal error occurred while saving settings. "
+                              "It is unclear whether all the settings were saved. "
+                              "Diagnostics: Failure to send command to manager daemon.",
+                              "/omp?cmd=get_my_settings", response_data);
+        }
       g_free (text_64);
-      openvas_server_close (socket, session);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while saving settings. "
-                           "It is unclear whether all the settings were saved. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_my_settings", response_data);
-    }
-  g_free (text_64);
-
-
-  entity = NULL;
-  if (read_entity_and_string (&session, &entity, &xml))
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while saving settings. "
-                           "It is unclear whether all the settings were saved. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_my_settings", response_data);
-    }
-  if (! omp_success (entity))
-    {
-      set_http_status_from_entity (entity, response_data);
-      modify_failed = 1;
     }
 
-  /* Get the Filters and other resources. */
-
-  commands = g_string_new ("<commands>");
-  if (command_enabled (credentials, "GET_ALERTS"))
-    g_string_append (commands, "<get_alerts/>");
-  if (command_enabled (credentials, "GET_CONFIGS"))
-    g_string_append (commands, "<get_configs/>");
-  if (command_enabled (credentials, "GET_CREDENTIALS"))
-    g_string_append (commands, "<get_credentials/>");
-  if (command_enabled (credentials, "GET_FILTERS"))
-    g_string_append (commands, "<get_filters/>");
-  if (command_enabled (credentials, "GET_PORT_LISTS"))
-    g_string_append (commands, "<get_port_lists/>");
-  if (command_enabled (credentials, "GET_SCANNERS"))
-    g_string_append (commands, "<get_scanners/>");
-  if (command_enabled (credentials, "GET_SCHEDULES"))
-    g_string_append (commands, "<get_schedules/>");
-  if (command_enabled (credentials, "GET_SLAVES"))
-    g_string_append (commands, "<get_slaves/>");
-  if (command_enabled (credentials, "GET_TARGETS"))
-    g_string_append (commands, "<get_targets/>");
-  g_string_append (commands, "</commands>");
-
-  if (openvas_server_sendf (&session,
-                            commands->str)
-      == -1)
-    {
-      g_string_free (commands, TRUE);
-      openvas_server_close (socket, session);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while saving settings. "
-                           "It is unclear whether all the settings were saved. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_my_settings", response_data);
-    }
-
-  g_string_free (commands, TRUE);
-  entity = NULL;
-  if (read_entity_and_string (&session, &entity, &xml))
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while saving settings. "
-                           "It is unclear whether all the settings were saved. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_my_settings", response_data);
-    }
-
-  free_entity (entity);
   openvas_server_close (socket, session);
   if (modify_failed)
     return edit_my_settings (credentials, params, g_string_free (xml, FALSE),
