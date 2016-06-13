@@ -1378,10 +1378,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <li> $d: date that SecInfo check was last performed (blank for Task alerts)</li>
         <li> $e: event description </li>
         <li> $n: task name (blank for SecInfo alerts)</li>
+        <li> $N: alert name</li>
         <li> $q: the type of SecInfo event: "New", "Updated" or blank for Task alerts</li>
         <li> $s: the type of SecInfo: "NVT", "CERT-Bund Advisory", ... or blank for Task alerts</li>
         <li> $S: $s, but plural: "NVTs", "CERT-Bund Advisories", ...</li>
         <li> $T: Total number of resources in the list for SecInfo alerts; 0 for Task alerts.</li>
+        <li> $u: owner of the alert or current user if the alert was triggered manually</li>
+        <li> $U: UUID of the alert</li>
       </ul>
 
       <p>
@@ -1398,12 +1401,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <li> $H: host summary </li>
         <li> $i: the report text or list of SecInfo resources (only when including the report/list)</li>
         <li> $n: task name (blank for SecInfo alerts)</li>
+        <li> $N: alert name</li>
         <li> $r: report format name </li>
         <li> $q: the type of SecInfo event: "New", "Updated" or blank for Task alerts</li>
         <li> $s: the type of SecInfo: "NVT", "CERT-Bund Advisory", ... or blank for Task alerts</li>
         <li> $S: $s, but plural: "NVTs", "CERT-Bund Advisories", ...</li>
         <li> $t: a note when the report was truncated </li>
         <li> $T: Total number of resources in the list for SecInfo alerts; 0 for Task alerts.</li>
+        <li> $u: Owner of the alert or current user if the alert was triggered manually</li>
+        <li> $U: UUID of the alert</li>
         <li> $z: timezone </li>
       </ul>
 

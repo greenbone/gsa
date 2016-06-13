@@ -1,5 +1,10 @@
 2016-06-13  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/help.xsl (new_alert.html): Add new placeholders
+	$N, $u, $U for email subject and message.
+
+2016-06-13  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Make the "Edit My Settings" dialog send OMP requests only for settings
 	that changed and remove the various get_... OMP requests in the
 	save_my_settings which should be done by edit_my_settings.
