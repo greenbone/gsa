@@ -561,9 +561,13 @@
 
     self.dialog.on('keydown', function(event) {
       if (event.which === $.ui.keyCode.ENTER) {
-        // submit form on enter
-        self.submit();
-        event.preventDefault();
+        var focused = $(':focus');
+        var tag = focused[0].tagName;
+        // submit form on enter, unless focus is on a multi-line text area.
+        if (tag !== 'TEXTAREA') {
+          self.submit();
+          event.preventDefault();
+        }
       }
     });
 

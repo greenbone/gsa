@@ -1,5 +1,10 @@
 2016-06-14  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/js/greenbone.js (OMPDialog.prototype.setContent):
+	Do not submit on "enter" key press if a multi-line textarea is focused.
+
+2016-06-14  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/gsad_omp.c (get_report, new_note, new_override): Remove handling
 	of min_cvss_base request param.
 
