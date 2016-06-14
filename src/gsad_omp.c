@@ -1954,6 +1954,8 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
   const char *first, *max, *sort_field, *sort_order, *owner, *permission;
   const char *replace_task_id;
   const char *overrides, *autofp, *autofp_value, *min_qod;
+  const char *level_high, *level_medium, *level_low, *level_log;
+  const char *level_false_positive;
 
   no_filter_history = params_value(params, "no_filter_history")
                         ? atoi (params_value(params, "no_filter_history"))
@@ -1973,6 +1975,11 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
   autofp = params_value (params, "autofp");
   autofp_value = params_value (params, "autofp_value");
   min_qod = params_value (params, "min_qod");
+  level_high = params_value (params, "level_high");
+  level_medium = params_value (params, "level_medium");
+  level_low = params_value (params, "level_low");
+  level_log = params_value (params, "level_log");
+  level_false_positive = params_value (params, "level_false_positive");
 
   if (strcasecmp (type, "info") == 0)
     filter_type = g_strdup (params_value (params, "info_type"));
@@ -2078,13 +2085,22 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
                 }
               else if (strcmp (type, "result") == 0)
                 {
+                  gchar *levels
+                    = g_strdup_printf ("%s%s%s%s%s",
+                                       level_high ? "h" : "",
+                                       level_medium ? "m" : "",
+                                       level_low ? "l" : "",
+                                       level_log ? "g" : "",
+                                       level_false_positive ? "f" : "");
                   task = g_strdup_printf ("apply_overrides=%i min_qod=%s"
-                                          " autofp=%s ",
+                                          " autofp=%s levels=%s ",
                                           (overrides
                                            && strcmp (overrides, "0")),
                                           min_qod ? min_qod : "",
                                           (autofp && autofp_value)
-                                            ? autofp_value : "0");
+                                            ? autofp_value : "0",
+                                          levels);
+                  g_free (levels);
                 }
               else
                 task = NULL;

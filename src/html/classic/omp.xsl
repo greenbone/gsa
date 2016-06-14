@@ -1469,13 +1469,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
       <xsl:if test="filters/keywords/keyword[column='levels'] or $filter_options_nodes/option[text()='levels']">
         <div class="form-group">
+          <xsl:variable name="high_filter"
+                        select="filters/filter[text()='High'] or contains (filters/keywords/keyword[column='levels']/value, 'h')"/>
+          <xsl:variable name="medium_filter"
+                        select="filters/filter[text()='Medium'] or contains (filters/keywords/keyword[column='levels']/value, 'm')"/>
+          <xsl:variable name="low_filter"
+                        select="filters/filter[text()='Low'] or contains (filters/keywords/keyword[column='levels']/value, 'l')"/>
+          <xsl:variable name="log_filter"
+                        select="filters/filter[text()='Log'] or contains (filters/keywords/keyword[column='levels']/value, 'g')"/>
+          <xsl:variable name="false_positive_filter"
+                        select="filters/filter[text()='False Postive'] or contains (filters/keywords/keyword[column='levels']/value, 'f')"/>
           <label class="col-2 control-label">
             <xsl:value-of select="gsa:i18n ('Severity (Class)', 'Severity')"/>:
           </label>
           <div class="col-10">
             <label class="checkbox-inline">
               <xsl:choose>
-                <xsl:when test="filters/filter[text()='High']">
+                <xsl:when test="$high_filter">
                   <input type="checkbox" name="level_high" value="1"
                     checked="1"/>
                 </xsl:when>
@@ -1489,7 +1499,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </label>
             <label class="checkbox-inline">
               <xsl:choose>
-                <xsl:when test="filters/filter[text()='Medium']">
+                <xsl:when test="$medium_filter">
                   <input type="checkbox" name="level_medium" value="1"
                     checked="1"/>
                 </xsl:when>
@@ -1503,7 +1513,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </label>
             <label class="checkbox-inline">
               <xsl:choose>
-                <xsl:when test="filters/filter[text()='Low']">
+                <xsl:when test="$low_filter">
                   <input type="checkbox" name="level_low" value="1"
                     checked="1"/>
                 </xsl:when>
@@ -1517,7 +1527,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </label>
             <label class="checkbox-inline">
               <xsl:choose>
-                <xsl:when test="filters/filter[text()='Log']">
+                <xsl:when test="$log_filter">
                   <input type="checkbox" name="level_log" value="1"
                     checked="1"/>
                 </xsl:when>
@@ -1531,7 +1541,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </label>
             <label class="checkbox-inline">
               <xsl:choose>
-                <xsl:when test="filters/filter[text()='False Positive']">
+                <xsl:when test="$false_positive_filter">
                   <input type="checkbox"
                     name="level_false_positive"
                     value="1"
@@ -5116,6 +5126,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="list" select="$resources-summary"/>
         <xsl:with-param name="full-count" select="$full-count"/>
         <xsl:with-param name="columns" select="$columns" xmlns=""/>
+        <xsl:with-param name="filter_options" xmlns="">
+          <xsl:if test="$type='result' or $type='report' or $type='task'">
+            <option>apply_overrides</option>
+            <option>min_qod</option>
+          </xsl:if>
+          <xsl:if test="$type='result'">
+            <option>autofp</option>
+            <option>levels</option>
+          </xsl:if>
+          <option>first</option>
+          <option>rows</option>
+        </xsl:with-param>
         <xsl:with-param name="extra_params" xmlns="">
           <xsl:copy-of select="$extra_params"/>
           <xsl:if test="$subtype != ''">

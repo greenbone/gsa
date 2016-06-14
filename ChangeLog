@@ -1,5 +1,16 @@
 2016-06-14  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/gsad_omp.c (get_many): Build the levels filter keyword for
+	results using the level_high, level_medium, etc. request parameters.
+
+	* src/html/classic/omp.xsl (filter-window-part): Get the severity
+	levels also from the "levels" keyword.
+	(list-window): Add filter_options param for filter-window-part to
+	always show apply_overrides and min_qod for results, reports and tasks;
+	autofp and levels for results as well as first and rows for all types.
+
+2016-06-14  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/js/greenbone.js (OMPDialog.prototype.setContent):
 	Do not submit on "enter" key press if a multi-line textarea is focused.
 
