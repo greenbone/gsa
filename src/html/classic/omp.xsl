@@ -965,7 +965,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template name="filter-criteria">
   <xsl:variable name="operator_count" select="count (filters/keywords/keyword[column='' and (value='and' or value='not' or value='or')])"/>
-  <xsl:for-each select="filters/keywords/keyword[column != 'apply_overrides' and column != 'autofp' and column != 'rows' and column != 'first' and column != 'sort' and column != 'sort-reverse' and column != 'notes' and column != 'overrides' and column != 'timezone' and column != 'result_hosts_only' and column != 'levels' and column != 'min_cvss_base' and column != 'min_qod' and column != 'delta_states' and (column != 'task_id' or $operator_count != 0)]">
+  <xsl:for-each select="filters/keywords/keyword[column != 'apply_overrides' and column != 'autofp' and column != 'rows' and column != 'first' and column != 'sort' and column != 'sort-reverse' and column != 'notes' and column != 'overrides' and column != 'timezone' and column != 'result_hosts_only' and column != 'levels' and column != 'min_qod' and column != 'delta_states' and (column != 'task_id' or $operator_count != 0)]">
     <xsl:value-of select="column"/>
     <xsl:choose>
       <xsl:when test="column = '' and relation != '='">
@@ -983,7 +983,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template name="filter-extra">
   <xsl:variable name="operator_count" select="count (filters/keywords/keyword[column='' and (value='and' or value='not' or value='or')])"/>
-  <xsl:for-each select="filters/keywords/keyword[not(column != 'apply_overrides' and column != 'autofp' and column != 'rows' and column != 'first' and column != 'sort' and column != 'sort-reverse' and column != 'notes' and column != 'overrides' and column != 'timezone' and column != 'result_hosts_only' and column != 'levels' and column != 'min_cvss_base' and column != 'min_qod' and column != 'delta_states' and (column != 'task_id' or $operator_count != 0))]">
+  <xsl:for-each select="filters/keywords/keyword[not(column != 'apply_overrides' and column != 'autofp' and column != 'rows' and column != 'first' and column != 'sort' and column != 'sort-reverse' and column != 'notes' and column != 'overrides' and column != 'timezone' and column != 'result_hosts_only' and column != 'levels' and column != 'min_qod' and column != 'delta_states' and (column != 'task_id' or $operator_count != 0))]">
     <xsl:value-of select="column"/>
     <xsl:choose>
       <xsl:when test="column = '' and relation != '='">
@@ -1054,17 +1054,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="filters/keywords/keyword[column = 'min_qod']/value"/>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-
-  <xsl:variable name="min_cvss_base_value">
-    <xsl:choose>
-      <xsl:when test="not (filters/keywords/keyword[column = 'min_cvss_base']/value != '')">
-        <xsl:value-of select="'8.0'"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="filters/keywords/keyword[column = 'min_cvss_base']/value"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
@@ -1446,33 +1435,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:choose>
             </label>
           </div>
-        </div>
-      </xsl:if>
-      <xsl:if test="filters/keywords/keyword[column='min_cvss_base'] or $filter_options_nodes/option[text()='min_cvss_base']">
-        <div class="form-group">
-          <label class="col-2 control-label">
-            <xsl:value-of select="gsa:i18n ('Severity (CVSS)', 'Filter')"/>:
-          </label>
-          <span class="col-10">
-            <div class="checkbox form-item">
-              <label>
-                <xsl:choose>
-                  <xsl:when test="not (filters/keywords/keyword[column = 'min_cvss_base'])">
-                    <input type="checkbox" name="apply_min_cvss_base" value="1"/>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <input type="checkbox" name="apply_min_cvss_base" value="1"
-                      checked="1"/>
-                  </xsl:otherwise>
-                </xsl:choose>
-                <xsl:value-of select="gsa:i18n ('must be at least', 'Filter')"/>
-                <xsl:text> </xsl:text>
-              </label>
-            </div>
-            <div class="form-item">
-              <div min="0" max="10" step="0.1" name="min_cvss_base" class="slider" type="float" value="{$min_cvss_base_value}"></div>
-            </div>
-          </span>
         </div>
       </xsl:if>
       <xsl:if test="filters/keywords/keyword[column='min_qod'] or $filter_options_nodes/option[text()='min_qod']">
@@ -3571,76 +3533,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </div>
       <div class="form-group">
         <label>
-          <xsl:choose>
-            <xsl:when test="not (report/filters/keywords/keyword[column = 'min_cvss_base']/value != '')">
-              <input type="checkbox" name="apply_min_cvss_base" value="1"/>
-            </xsl:when>
-            <xsl:otherwise>
-              <input type="checkbox" name="apply_min_cvss_base" value="1"
-                      checked="1"/>
-            </xsl:otherwise>
-          </xsl:choose>
-          CVSS &gt;=
-        </label>
-        <select name="min_cvss_base">
-          <xsl:call-template name="opt">
-            <xsl:with-param name="value" select="'10.0'"/>
-            <xsl:with-param name="select-value" select="report/filters/keywords/keyword[column = 'min_cvss_base']/value"/>
-          </xsl:call-template>
-          <xsl:call-template name="opt">
-            <xsl:with-param name="value" select="'9.0'"/>
-            <xsl:with-param name="select-value" select="report/filters/keywords/keyword[column = 'min_cvss_base']/value"/>
-          </xsl:call-template>
-          <xsl:choose>
-            <xsl:when test="not (report/filters/keywords/keyword[column = 'min_cvss_base']/value = '')">
-              <xsl:call-template name="opt">
-                <xsl:with-param name="value" select="'8.0'"/>
-                <xsl:with-param name="select-value" select="'8.0'"/>
-              </xsl:call-template>
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:call-template name="opt">
-                <xsl:with-param name="value" select="'8.0'"/>
-                <xsl:with-param name="select-value" select="report/filters/keywords/keyword[column = 'min_cvss_base']/value"/>
-              </xsl:call-template>
-            </xsl:otherwise>
-          </xsl:choose>
-          <xsl:call-template name="opt">
-            <xsl:with-param name="value" select="'7.0'"/>
-            <xsl:with-param name="select-value" select="report/filters/keywords/keyword[column = 'min_cvss_base']/value"/>
-          </xsl:call-template>
-          <xsl:call-template name="opt">
-            <xsl:with-param name="value" select="'6.0'"/>
-            <xsl:with-param name="select-value" select="report/filters/keywords/keyword[column = 'min_cvss_base']/value"/>
-          </xsl:call-template>
-          <xsl:call-template name="opt">
-            <xsl:with-param name="value" select="'5.0'"/>
-            <xsl:with-param name="select-value" select="report/filters/keywords/keyword[column = 'min_cvss_base']/value"/>
-          </xsl:call-template>
-          <xsl:call-template name="opt">
-            <xsl:with-param name="value" select="'4.0'"/>
-            <xsl:with-param name="select-value" select="report/filters/keywords/keyword[column = 'min_cvss_base']/value"/>
-          </xsl:call-template>
-          <xsl:call-template name="opt">
-            <xsl:with-param name="value" select="'3.0'"/>
-            <xsl:with-param name="select-value" select="report/filters/keywords/keyword[column = 'min_cvss_base']/value"/>
-          </xsl:call-template>
-          <xsl:call-template name="opt">
-            <xsl:with-param name="value" select="'2.0'"/>
-            <xsl:with-param name="select-value" select="report/filters/keywords/keyword[column = 'min_cvss_base']/value"/>
-          </xsl:call-template>
-          <xsl:call-template name="opt">
-            <xsl:with-param name="value" select="'1.0'"/>
-            <xsl:with-param name="select-value" select="report/filters/keywords/keyword[column = 'min_cvss_base']/value"/>
-          </xsl:call-template>
-          <xsl:call-template name="opt">
-            <xsl:with-param name="value" select="'0.0'"/>
-            <xsl:with-param name="select-value" select="report/filters/keywords/keyword[column = 'min_cvss_base']/value"/>
-          </xsl:call-template>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>
           QoD &gt;=
         </label>
         <select name="min_qod">
@@ -3911,7 +3803,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <option>notes</option>
         <option>overrides</option>
         <option>result_hosts_only</option>
-        <option>min_cvss_base</option>
         <option>min_qod</option>
         <option>timezone</option>
         <option>levels</option>
@@ -32794,7 +32685,7 @@ should not have received it.
               <xsl:value-of select="count(../../host[detail[name = $name and value = $value]])"/>
             </td>
             <td>
-              <a href="/omp?cmd=get_report_section&amp;report_id={$report/@id}&amp;report_section=results&amp;filter=&#34;{$value}&#34; result_hosts_only=1 min_cvss_base= levels=hmlg autofp=0 notes=1 overrides=1 first=1 rows=100&amp;token={/envelope/token}" title="{gsa:i18n ('Report: Results', 'Report Section')} ({gsa:i18n ('for App', 'Result')}: {$value})">
+              <a href="/omp?cmd=get_report_section&amp;report_id={$report/@id}&amp;report_section=results&amp;filter=&#34;{$value}&#34; result_hosts_only=1 levels=hmlg autofp=0 notes=1 overrides=1 first=1 rows=100&amp;token={/envelope/token}" title="{gsa:i18n ('Report: Results', 'Report Section')} ({gsa:i18n ('for App', 'Result')}: {$value})">
                 <xsl:value-of select="count(../../host/detail[name = $value]) + $no_cpe_detail_hosts"/>
               </a>
               <xsl:if test="$no_cpe_detail_hosts">

@@ -1,3 +1,18 @@
+2016-06-14  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/gsad_omp.c (get_report, new_note, new_override): Remove handling
+	of min_cvss_base request param.
+
+	* src/gsad.c (init_validator): Remove params min_cvss_base and
+	apply_min_cvss_base.  Make default_severity a normal param.
+
+	* src/html/classic/omp.xsl (filter-criteria, filter-extra)
+	(filter-window-part, report [filterbox], report [section-filter-full])
+	(report [apps]): Remove min_cvss_base filter keyword.
+
+	* src/html/classic/js/gsa_graphics_base.js (extract_filter_info):
+	Remove min_cvss_base filter keyword.
+
 2016-06-13  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/help.xsl (new_alert.html): Add new placeholders

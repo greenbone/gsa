@@ -3107,7 +3107,6 @@
           current_keyword.column === 'timezone' ||
           current_keyword.column === 'result_hosts_only' ||
           current_keyword.column === 'levels' ||
-          current_keyword.column === 'min_cvss_base' ||
           current_keyword.column === 'min_qod' ||
           current_keyword.column === 'delta_states') {
         // special options

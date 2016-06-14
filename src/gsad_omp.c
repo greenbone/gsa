@@ -13630,7 +13630,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
   gchar *html;
   unsigned int first, max;
   GString *levels, *delta_states;
-  const char *alert_id, *search_phrase, *min_cvss_base, *min_qod, *type, *zone;
+  const char *alert_id, *search_phrase, *min_qod, *type, *zone;
   const char *autofp, *autofp_value, *notes, *overrides, *result_hosts_only;
   const char *apply_overrides;
   const char *report_id, *sort_field, *sort_order, *result_id, *delta_report_id;
@@ -13691,22 +13691,6 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
   zone = params_value (params, "timezone");
   if (zone == NULL)
     params_given (params, "zone") || (zone = "");
-
-  if (params_given (params, "min_cvss_base"))
-    {
-      if (params_valid (params, "min_cvss_base"))
-        {
-          if (params_value (params, "apply_min_cvss_base")
-              && strcmp (params_value (params, "apply_min_cvss_base"), "0"))
-            min_cvss_base = params_value (params, "min_cvss_base");
-          else
-            min_cvss_base = "";
-        }
-      else
-        min_cvss_base = NULL;
-    }
-  else
-    min_cvss_base = "";
 
   min_qod = params_value (params, "min_qod");
 
@@ -14117,11 +14101,6 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                                 " delta_states=%s",
                                 delta_states->str);
 
-      if (min_cvss_base && strcmp (min_cvss_base, ""))
-        g_string_append_printf (filter_buffer,
-                                " min_cvss_base=%s",
-                                min_cvss_base);
-
       if (min_qod && strcmp (min_qod, ""))
         g_string_append_printf (filter_buffer,
                                 " min_qod=%s",
@@ -14279,7 +14258,6 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                                     levels->str,
                                     delta_states->str,
                                     search_phrase,
-                                    min_cvss_base,
                                     min_qod,
                                     zone);
   if (ret == -1)
@@ -15676,7 +15654,7 @@ new_note (credentials_t *credentials, params_t *params, const char *extra_xml,
   /* Passthroughs. */
   const char *report_id, *first_result, *max_results, *sort_field;
   const char *sort_order, *levels, *autofp, *notes;
-  const char *overrides, *result_hosts_only, *search_phrase, *min_cvss_base;
+  const char *overrides, *result_hosts_only, *search_phrase;
 
   result_id = params_value (params, "result_id");
   task_id = params_value (params, "task_id");
@@ -15694,7 +15672,6 @@ new_note (credentials_t *credentials, params_t *params, const char *extra_xml,
   task_name = params_value (params, "name");
   severity = params_value (params, "severity");
   result_hosts_only = params_value (params, "result_hosts_only");
-  min_cvss_base = params_value (params, "min_cvss_base");
 
   hosts = params_value (params, "hosts");
   oid = params_value (params, "oid");
@@ -15814,8 +15791,7 @@ new_note (credentials_t *credentials, params_t *params, const char *extra_xml,
                      "<notes>%s</notes>"
                      "<overrides>%s</overrides>"
                      "<result_hosts_only>%s</result_hosts_only>"
-                     "<search_phrase>%s</search_phrase>"
-                     "<min_cvss_base>%s</min_cvss_base>",
+                     "<search_phrase>%s</search_phrase>",
                      oid,
                      hosts,
                      /* port is NULL for CVE scan results. */
@@ -15835,8 +15811,7 @@ new_note (credentials_t *credentials, params_t *params, const char *extra_xml,
                      notes,
                      overrides,
                      result_hosts_only,
-                     search_phrase,
-                     min_cvss_base);
+                     search_phrase);
 
   if (extra_xml)
     g_string_append (xml, extra_xml);
@@ -16395,7 +16370,7 @@ new_override (credentials_t *credentials, params_t *params,
   /* Passthroughs. */
   const char *report_id, *first_result, *max_results, *sort_field;
   const char *sort_order, *levels, *autofp, *notes;
-  const char *overrides, *result_hosts_only, *search_phrase, *min_cvss_base;
+  const char *overrides, *result_hosts_only, *search_phrase;
 
   result_id = params_value (params, "result_id");
   task_id = params_value (params, "task_id");
@@ -16413,7 +16388,6 @@ new_override (credentials_t *credentials, params_t *params,
   task_name = params_value (params, "name");
   severity = params_value (params, "severity");
   result_hosts_only = params_value (params, "result_hosts_only");
-  min_cvss_base = params_value (params, "min_cvss_base");
 
   hosts = params_value (params, "hosts");
   oid = params_value (params, "oid");
@@ -16535,8 +16509,7 @@ new_override (credentials_t *credentials, params_t *params,
                      "<notes>%s</notes>"
                      "<overrides>%s</overrides>"
                      "<result_hosts_only>%s</result_hosts_only>"
-                     "<search_phrase>%s</search_phrase>"
-                     "<min_cvss_base>%s</min_cvss_base>",
+                     "<search_phrase>%s</search_phrase>",
                      oid,
                      hosts,
                      /* port is NULL for CVE scan results. */
@@ -16556,8 +16529,7 @@ new_override (credentials_t *credentials, params_t *params,
                      notes,
                      overrides,
                      result_hosts_only,
-                     search_phrase,
-                     min_cvss_base);
+                     search_phrase);
 
   if (extra_xml)
     g_string_append (xml, extra_xml);

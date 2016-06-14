@@ -1232,13 +1232,13 @@ init_validator ()
   openvas_validator_add (validator, "cvss_i",       "^(N|P|C)$");
   openvas_validator_add (validator, "cvss_a",       "^(N|P|C)$");
   openvas_validator_add (validator, "cvss_vector",       "^AV:(L|A|N)/AC:(H|M|L)/A(u|U):(M|S|N)/C:(N|P|C)/I:(N|P|C)/A:(N|P|C)$");
-  openvas_validator_add (validator, "min_cvss_base", "^(|10\\.0|[0-9]\\.[0-9])$");
   openvas_validator_add (validator, "min_qod", "^(|100|[1-9]?[0-9]|)$");
   openvas_validator_add (validator, "day_of_month", "^(0??[1-9]|[12][0-9]|30|31)$");
   openvas_validator_add (validator, "days",         "^(-1|[0-9]+)$");
   openvas_validator_add (validator, "data_column", "^[_[:alnum:]]{1,80}$");
   openvas_validator_add (validator, "data_columns:name",  "^[0123456789]{1,5}$");
   openvas_validator_add (validator, "data_columns:value", "^[_[:alnum:]]{1,80}$");
+  openvas_validator_add (validator, "default_severity", "^(|10\\.0|[0-9]\\.[0-9])$");
   openvas_validator_add (validator, "delta_states", "^(c|g|n|s){0,4}$");
   openvas_validator_add (validator, "details_fname", "^([[:alnum:]_-]|%[%CcDFMmNTtUu])+$");
   openvas_validator_add (validator, "domain",     "^[-[:alnum:]\\.]{1,80}$");
@@ -1423,7 +1423,6 @@ init_validator ()
   openvas_validator_alias (validator, "alert_ids:value", "alert_id_optional");
   openvas_validator_alias (validator, "allow_insecure", "boolean");
   openvas_validator_alias (validator, "alterable", "boolean");
-  openvas_validator_alias (validator, "apply_min_cvss_base", "boolean");
   openvas_validator_alias (validator, "apply_overrides", "boolean");
   openvas_validator_alias (validator, "autogenerate", "boolean");
   openvas_validator_alias (validator, "base",            "name");
@@ -1447,7 +1446,6 @@ init_validator ()
   openvas_validator_alias (validator, "current_user", "boolean");
   openvas_validator_alias (validator, "dashboard_name", "name");
   openvas_validator_alias (validator, "debug",           "boolean");
-  openvas_validator_alias (validator, "default_severity", "min_cvss_base");
   openvas_validator_alias (validator, "delta_report_id",     "report_id");
   openvas_validator_alias (validator, "delta_state_changed", "boolean");
   openvas_validator_alias (validator, "delta_state_gone", "boolean");
