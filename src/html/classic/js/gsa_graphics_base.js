@@ -3982,43 +3982,43 @@
     // Create new column filter keyword(s)
     var criteria_addition = '';
     if (relation === '=') {
-      if (column === 'severity') {
+      if (column.indexOf('severity') !== -1) {
         switch (value) {
           case ('High'):
-            criteria_addition += 'severity>' + gsa.severity_levels.max_medium;
+            criteria_addition += column + '>' + gsa.severity_levels.max_medium;
             break;
           case ('Medium'):
-            criteria_addition += 'severity>' + gsa.severity_levels.max_low +
-            ' and severity<' + gsa.severity_levels.min_high;
+            criteria_addition += column + '>' + gsa.severity_levels.max_low +
+            ' and ' + column + '<' + gsa.severity_levels.min_high;
             break;
           case ('Low'):
-            criteria_addition += 'severity>' + gsa.severity_levels.max_log +
-            ' and severity<' + gsa.severity_levels.min_medium;
+            criteria_addition += column + '>' + gsa.severity_levels.max_log +
+            ' and ' + column + '<' + gsa.severity_levels.min_medium;
             break;
           case ('Log'):
             if (gsa.severity_levels.max_log === 0.0) {
-              criteria_addition += 'severity=0';
+              criteria_addition += column + '=0';
             }
             else {
-              criteria_addition += 'severity>-1 and severity<' +
+              criteria_addition += column + '>-1 and ' + column + '<' +
                 gsa.severity_levels.min_low;
             }
             break;
           case (''):
           case ('N/A'):
-            criteria_addition += 'severity=""';
+            criteria_addition += column + '=""';
             break;
           case ('0'):
-            criteria_addition += 'severity=0';
+            criteria_addition += column + '=0';
             break;
           default:
             var severity = parseFloat(value);
             if (severity.isNaN) {
-              criteria_addition += 'severity=' + value;
+              criteria_addition += column + '=' + value;
             } else if (severity >= 10.0) {
-              criteria_addition += 'severity>9.0';
+              criteria_addition += column + 'severity>9.0';
             } else {
-              criteria_addition += 'severity>' + (severity - 1.0).toFixed(1) +
+              criteria_addition += column + '>' + (severity - 1.0).toFixed(1) +
                 ' and severity<' + (severity + 0.1).toFixed(1);
             }
         }
