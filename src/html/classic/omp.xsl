@@ -5746,6 +5746,56 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:call-template>
 </xsl:template>
 
+<xsl:template name="certificate-info-table">
+  <xsl:param name="certificate_info"/>
+  <table>
+    <tr>
+      <td><xsl:value-of select="gsa:i18n ('Activation', 'Certificate')"/>:</td>
+      <td>
+        <xsl:value-of select="$certificate_info/activation_time"/>
+        <xsl:if test="$certificate_info/time_status = 'inactive'">
+          <xsl:text> </xsl:text>
+          <b>(<xsl:value-of select="gsa:i18n ('not active yet', 'Certificate')"/>)</b>
+        </xsl:if>
+      </td>
+    </tr>
+    <tr>
+      <td><xsl:value-of select="gsa:i18n ('Expiration', 'Certificate')"/>:</td>
+      <td>
+        <xsl:value-of select="$certificate_info/expiration_time"/>
+        <xsl:if test="$certificate_info/time_status = 'expired'">
+          <xsl:text> </xsl:text>
+          <b>(<xsl:value-of select="gsa:i18n ('expired', 'Certificate')"/>)</b>
+        </xsl:if>
+      </td>
+    </tr>
+    <tr>
+      <td><xsl:value-of select="gsa:i18n ('MD5 Fingerprint', 'Certificate')"/>:</td>
+      <td><xsl:value-of select="$certificate_info/md5_fingerprint"/></td>
+    </tr>
+    <tr>
+      <td><xsl:value-of select="gsa:i18n ('Issued by', 'Certificate')"/>:</td>
+      <td><xsl:value-of select="$certificate_info/issuer"/></td>
+    </tr>
+  </table>
+</xsl:template>
+
+<xsl:template name="certificate-status">
+  <xsl:param name="certificate_info"/>
+
+  <xsl:choose>
+    <xsl:when test="$certificate_info/time_status = 'expired'">
+      <xsl:value-of select="gsa-i18n:strformat (gsa:i18n ('Certificate currently in use expired %1', 'Certificate'), $certificate_info/expiration_time)"/>
+    </xsl:when>
+    <xsl:when test="$certificate_info/time_status = 'inactive'">
+      <xsl:value-of select="gsa-i18n:strformat (gsa:i18n ('Certificate currently in use is not valid until %1', 'Certificate'), $certificate_info/activation_time)"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:value-of select="gsa-i18n:strformat (gsa:i18n ('Certificate currently in use will expire %1', 'Certificate'), $certificate_info/expiration_time)"/>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
 <xsl:template match="commands_response">
   <xsl:apply-templates/>
 </xsl:template>
@@ -8847,6 +8897,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:with-param name="cap-type" select="'Credential'"/>
       <xsl:with-param name="type" select="'credential'"/>
     </xsl:call-template>
+    <xsl:call-template name="credential-download-icons">
+      <xsl:with-param name="type" select="type"/>
+    </xsl:call-template>
   </div>
 
   <div class="section-header">
@@ -8914,6 +8967,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </tr>
       </xsl:if>
     </table>
+
+    <xsl:if test="certificate_info">
+      <h3><xsl:value-of select="gsa:i18n ('Certificate', 'Auth Data')"/></h3>
+      <xsl:call-template name="certificate-info-table">
+        <xsl:with-param name="certificate_info" select="certificate_info"/>
+      </xsl:call-template>
+    </xsl:if>
   </div>
 
   <xsl:if test="gsa:may-op ('get_slaves')">
@@ -19362,12 +19422,30 @@ should not have received it.
           </tr>
           <tr>
             <td><xsl:value-of select="gsa:i18n ('CA Certificate', 'Auth Data')"/></td>
-            <td><input type="file" name="ca_pub"/></td>
+            <td>
+              <xsl:variable name="ca_pub" select="commands_response/get_scanners_response/scanner/ca_pub"/>
+              <xsl:variable name="ca_pub_info" select="commands_response/get_scanners_response/scanner/ca_pub_info"/>
+              <input type="file" name="ca_pub"/>
+              <xsl:if test="string-length ($ca_pub) &gt; 0">
+                <p class="footnote" style="margin-top:3px;">
+                  <a href="/omp?cmd=download_ca_pub&amp;scanner_id={commands_response/get_scanners_response/scanner/@id}&amp;ca_pub={str:encode-uri($ca_pub, true ())}&amp;token={/envelope/token}"
+                    title="{gsa:i18n ('Download CA Certificate currently in use', 'Action Verb')}"
+                    class="icon">
+                    <img src="/img/key.png"
+                        alt="{gsa:i18n ('Download CA Certificate currently in use', 'Action Verb')}"/>
+                  </a>
+                  <xsl:call-template name="certificate-status">
+                    <xsl:with-param name="certificate_info" select="$ca_pub_info"/>
+                  </xsl:call-template>
+                </p>
+              </xsl:if>
+            </td>
           </tr>
           <tr>
             <td><xsl:value-of select="gsa:i18n ('Credential', 'Credential')"/></td>
             <td>
               <xsl:variable name="credential_id" select="commands_response/get_scanners_response/scanner/credential/@id"/>
+              <xsl:variable name="certificate_info" select="commands_response/get_scanners_response/scanner/credential/certificate_info"/>
               <select name="credential_id">
                 <xsl:for-each select="commands_response/get_credentials_response/credential">
                   <xsl:call-template name="opt">
@@ -19381,6 +19459,17 @@ should not have received it.
                   class="new-action-icon" data-type="credential" data-done="select[name=credential_id]" data-extra="restrict_credential_type=cc">
                 <img class="valign-middle" src="/img/new.png"/>
               </a>
+              <xsl:if test="string-length ($credential_id) &gt; 0">
+                <p class="footnote" style="margin-top:3px;">
+                  <a href="/omp?cmd=download_credential&amp;credential_id={$credential_id}&amp;package_format=pem&amp;token={/envelope/token}"
+                    title="{gsa:i18n ('Download Certificate currently in use', 'Action Verb')}" class="icon">
+                    <img src="/img/key.png" alt="{gsa:i18n ('Download Certificate currently in use', 'Action Verb')}"/>
+                  </a>
+                  <xsl:call-template name="certificate-status">
+                    <xsl:with-param name="certificate_info" select="$certificate_info"/>
+                  </xsl:call-template>
+                </p>
+              </xsl:if>
             </td>
           </tr>
           <tr>
@@ -19410,7 +19499,7 @@ should not have received it.
     <xsl:call-template name="scanner-icons">
       <xsl:with-param name="scanner_id" select="@id"/>
       <xsl:with-param name="ca_pub" select="ca_pub"/>
-      <xsl:with-param name="key_pub" select="key_pub"/>
+      <xsl:with-param name="credential" select="credential"/>
       <xsl:with-param name="next" select="'get_scanner'"/>
     </xsl:call-template>
   </div>
@@ -19570,6 +19659,24 @@ should not have received it.
         <h1><xsl:value-of select="gsa:i18n ('OSP Scanner is offline', 'Scanner')"/></h1>
       </xsl:otherwise>
     </xsl:choose>
+
+    <xsl:if test="credential/certificate_info">
+      <h3>
+        <xsl:value-of select="gsa:i18n ('Client Certificate', 'Auth Data')"/>
+        <xsl:text> </xsl:text>
+        (<xsl:value-of select="gsa:i18n ('from Credential', 'Auth Data')"/>)
+      </h3>
+      <xsl:call-template name="certificate-info-table">
+        <xsl:with-param name="certificate_info" select="credential/certificate_info"/>
+      </xsl:call-template>
+    </xsl:if>
+
+    <xsl:if test="ca_pub_info">
+      <h3><xsl:value-of select="gsa:i18n ('CA Certificate', 'Auth Data')"/></h3>
+      <xsl:call-template name="certificate-info-table">
+        <xsl:with-param name="certificate_info" select="ca_pub_info"/>
+      </xsl:call-template>
+    </xsl:if>
   </div>
 
   <div class="section-header">
@@ -19750,7 +19857,7 @@ should not have received it.
           <xsl:call-template name="scanner-icons">
             <xsl:with-param name="scanner_id" select="@id"/>
             <xsl:with-param name="ca_pub" select="ca_pub"/>
-            <xsl:with-param name="key_pub" select="key_pub"/>
+            <xsl:with-param name="credential" select="credential"/>
             <xsl:with-param name="next" select="'get_scanners'"/>
           </xsl:call-template>
         </td>
@@ -33310,7 +33417,7 @@ should not have received it.
 <xsl:template name="scanner-icons">
   <xsl:param name="scanner_id"/>
   <xsl:param name="ca_pub"/>
-  <xsl:param name="key_pub"/>
+  <xsl:param name="credential"/>
   <xsl:param name="next">get_scanners</xsl:param>
 
   <a href="/omp?cmd=verify_scanner&amp;scanner_id={$scanner_id}&amp;next={$next}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
@@ -33318,12 +33425,10 @@ should not have received it.
     class="icon">
     <img src="/img/verify.png" alt="{gsa:i18n ('Verify Scanner', 'Scanner')}"/>
   </a>
-  <xsl:if test="string-length ($key_pub) &gt; 0">
-    <a href="/omp?cmd=download_key_pub&amp;scanner_id={$scanner_id}&amp;key_pub={str:encode-uri($key_pub, true ())}&amp;token={/envelope/token}"
-       title="{gsa:i18n ('Download Certificate', 'Action Verb')}"
-       class="icon">
-      <img src="/img/key.png"
-           alt="{gsa:i18n ('Download Certificate', 'Action Verb')}"/>
+  <xsl:if test="string-length ($credential/@id) &gt; 0">
+    <a href="/omp?cmd=download_credential&amp;credential_id={$credential/@id}&amp;package_format=pem&amp;token={/envelope/token}"
+      title="{gsa:i18n ('Download Certificate', 'Auth Data')} ({gsa:i18n ('from Credential', 'Auth Data')})" class="icon">
+      <img src="/img/key.png" alt="{gsa:i18n ('Download Certificate', 'Auth Data')}"/>
     </a>
   </xsl:if>
   <xsl:if test="string-length ($ca_pub) &gt; 0">

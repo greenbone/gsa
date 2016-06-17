@@ -1,3 +1,19 @@
+2016-06-17  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Add info about certificates to Credential and Scanner details pages,
+	add certificate status and download to the Edit Scanner dialog and
+	add missing certificate download buttons.
+
+	* src/html/classic/omp.xsl (certificate-info-table, certificate-status):
+	New templates.
+	(credential [details]): Add download icons and certificate info.
+	(html-edit-scanner-form): Add certificate download icons and status.
+	(scanner [details]): Add client certificate download icon, client and
+	CA certificate info.
+	(scanner): Add client certificate download icon.
+	(scanner-icons): Change unused "key_pub" parameter to "credential" and
+	use it to show a download icon for the client certificate.
+
 2016-06-16  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/js/gsa_graphics_base.js (filtered_list_url): Apply
