@@ -487,12 +487,12 @@ input::-moz-focus-inner {
 
 .form-horizontal .control-label {
   margin-bottom: 0;
+  margin-top: 5px;
   display: inline-block;
   max-width: 100%;
   font-weight: bold;
   text-align: right;
   vertical-align: middle;
-  line-height: 22px;
 }
 
 .form-control {

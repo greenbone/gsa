@@ -1,3 +1,8 @@
+2016-06-20  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/css/gsa-base.css (.form-horizontal .control-label):
+	Replace the larger line-height with a top margin.
+
 2016-06-17  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Add info about certificates to Credential and Scanner details pages,
