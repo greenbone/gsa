@@ -36290,6 +36290,12 @@ should not have received it.
                        value="{auth_conf_setting[@key='authdn']/@value}"/>
               </td>
             </tr>
+            <tr class="even">
+              <td><xsl:value-of select="gsa:i18n ('CA Certificate', 'Auth Data')"/></td>
+              <td>
+                <input type="file" name="certificate" size="30"/>
+              </td>
+            </tr>
             <tr>
               <td colspan="2" style="text-align:right;">
                 <input type="submit" name="submit" value="{gsa:i18n ('Save', 'Group')}"/>

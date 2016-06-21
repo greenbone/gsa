@@ -1,5 +1,11 @@
 2016-06-21  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (save_auth_omp): Pass CA cert to manager if given.
+
+	* src/html/classic/omp.xsl (group [ldapauth]): Add CA Certificate field.
+
+2016-06-21  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/classic/omp.xsl (group [ldapauth]): Clean up alignment.
 
 2016-06-21  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>

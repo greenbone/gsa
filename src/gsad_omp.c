@@ -26229,21 +26229,38 @@ save_auth_omp (credentials_t* credentials, params_t *params,
   CHECK_PARAM_INVALID (method, "Save Authentication", "get_users");
   if (!strcmp (method, "method:ldap_connect"))
     {
-      const char *ldaphost, *authdn;
+      const char *ldaphost, *authdn, *certificate;
       ldaphost = params_value (params, "ldaphost");
       authdn = params_value (params, "authdn");
+      certificate = params_value (params, "certificate");
 
       CHECK_PARAM_INVALID (ldaphost, "Save Authentication", "get_users");
       CHECK_PARAM_INVALID (authdn, "Save Authentication", "get_users");
-      /** @warning authdn shall contain a single %s, handle with care. */
-      ret = ompf (credentials, &response, &entity, response_data,
-                  "<modify_auth>"
-                  "<group name=\"%s\">"
-                  "<auth_conf_setting key=\"enable\" value=\"%s\"/>"
-                  "<auth_conf_setting key=\"ldaphost\" value=\"%s\"/>"
-                  "<auth_conf_setting key=\"authdn\" value=\"%s\"/>"
-                  "</group>"
-                  "</modify_auth>", method, truefalse, ldaphost, authdn);
+      if (params_given (params, "certificate") && strcmp (certificate, ""))
+        {
+          CHECK_PARAM_INVALID (certificate, "Save Authentication", "get_users");
+          /** @warning authdn shall contain a single %s, handle with care. */
+          ret = ompf (credentials, &response, &entity, response_data,
+                      "<modify_auth>"
+                      "<group name=\"%s\">"
+                      "<auth_conf_setting key=\"enable\" value=\"%s\"/>"
+                      "<auth_conf_setting key=\"ldaphost\" value=\"%s\"/>"
+                      "<auth_conf_setting key=\"authdn\" value=\"%s\"/>"
+                      "<auth_conf_setting key=\"cacert\" value=\"%s\"/>"
+                      "</group>"
+                      "</modify_auth>", method, truefalse, ldaphost, authdn,
+                      certificate);
+        }
+      else
+        /** @warning authdn shall contain a single %s, handle with care. */
+        ret = ompf (credentials, &response, &entity, response_data,
+                    "<modify_auth>"
+                    "<group name=\"%s\">"
+                    "<auth_conf_setting key=\"enable\" value=\"%s\"/>"
+                    "<auth_conf_setting key=\"ldaphost\" value=\"%s\"/>"
+                    "<auth_conf_setting key=\"authdn\" value=\"%s\"/>"
+                    "</group>"
+                    "</modify_auth>", method, truefalse, ldaphost, authdn);
     }
   else if (!strcmp (method, "method:radius_connect"))
     {
