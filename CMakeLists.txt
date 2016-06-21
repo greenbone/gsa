@@ -81,7 +81,7 @@ pkg_check_modules (LIBOPENVAS_OMP REQUIRED libopenvas_omp>=9.0.0)
 pkg_check_modules (LIBOPENVAS_BASE REQUIRED libopenvas_base>=9.0.0)
 pkg_check_modules (LIBOPENVAS_MISC REQUIRED libopenvas_misc>=9.0.0)
 pkg_check_modules (LIBXSLT REQUIRED libxslt)
-pkg_check_modules (GNUTLS REQUIRED gnutls>=2.8)
+pkg_check_modules (GNUTLS REQUIRED gnutls>=3.2.15)
 
 # Linking against libgthread is only required for GLib versions using the old,
 # deprecated thread API, i.e. version 2.30 and earlier.
