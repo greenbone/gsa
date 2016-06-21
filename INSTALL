@@ -13,14 +13,14 @@ See at the end of this section how to easily install these prerequisites on
 some supported platforms.
 
 Prerequisites:
-* openvas-libraries (>= 8.0.0)
-* gnutls (>= 2.8)
+* libopenvas_omp, libopenvas_base, libopenvas_misc >= 9.0.0
+* gnutls >= 2.8
 * libgcrypt
 * cmake
-* glib-2.0 (>= 2.16)
+* glib-2.0 >= 2.16
 * libxml
 * libxslt
-* libmicrohttpd (>= 0.9.0)
+* libmicrohttpd >= 0.9.0
 * libexslt
 * pkg-config
 * xsltproc

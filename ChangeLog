@@ -1,3 +1,8 @@
+2016-06-21  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* CMakeLists.txt, INSTALL: Increase dependency for openvas-libraries
+	from version from 8.0.0 to 9.0.0.
+
 2016-06-20  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/css/gsa-base.css (.form-horizontal .control-label):
