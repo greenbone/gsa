@@ -36256,35 +36256,40 @@ should not have received it.
               <td><xsl:value-of select="gsa:i18n ('Setting', 'Group')"/></td>
               <td><xsl:value-of select="gsa:i18n ('Value', 'Property')"/></td>
             </tr>
-              <tr class="odd">
-                <td><xsl:value-of select="gsa:i18n ('Enable', 'Group')"/></td>
-                <td>
-                  <xsl:choose>
-                    <xsl:when test="auth_conf_setting[@key='enable']/@value = 'true'">
-                      <input type="checkbox" name="enable" value="1" checked="1"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <input type="checkbox" name="enable" value="1"/>
-                    </xsl:otherwise>
-                 </xsl:choose>
-                 </td>
-              </tr>
-              <tr class="even">
-                <td>
+            <tr class="odd">
+              <td><xsl:value-of select="gsa:i18n ('Enable', 'Group')"/></td>
+              <td>
+                <xsl:choose>
+                  <xsl:when test="auth_conf_setting[@key='enable']/@value = 'true'">
+                    <input type="checkbox" name="enable" value="1" checked="1"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="checkbox" name="enable" value="1"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </td>
+            </tr>
+            <tr class="even">
+              <td>
                 <xsl:choose>
                   <xsl:when test="@name='method:ldap_connect'">
                     LDAP
                   </xsl:when>
                 </xsl:choose>
-                <xsl:value-of select="gsa:i18n ('Host', 'Host')"/></td>
-                <td><input type="text" name="ldaphost" size="30"
-                     value="{auth_conf_setting[@key='ldaphost']/@value}"/></td>
-              </tr>
-              <tr class="odd">
-                <td><xsl:value-of select="gsa:i18n ('Auth. DN', 'Group')"/></td>
-                <td><input type="text" name="authdn" size="30"
-                     value="{auth_conf_setting[@key='authdn']/@value}"/></td>
-              </tr>
+                <xsl:value-of select="gsa:i18n ('Host', 'Host')"/>
+              </td>
+              <td>
+                <input type="text" name="ldaphost" size="30"
+                       value="{auth_conf_setting[@key='ldaphost']/@value}"/>
+              </td>
+            </tr>
+            <tr class="odd">
+              <td><xsl:value-of select="gsa:i18n ('Auth. DN', 'Group')"/></td>
+              <td>
+                <input type="text" name="authdn" size="30"
+                       value="{auth_conf_setting[@key='authdn']/@value}"/>
+              </td>
+            </tr>
             <tr>
               <td colspan="2" style="text-align:right;">
                 <input type="submit" name="submit" value="{gsa:i18n ('Save', 'Group')}"/>

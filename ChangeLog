@@ -1,3 +1,7 @@
+2016-06-21  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/classic/omp.xsl (group [ldapauth]): Clean up alignment.
+
 2016-06-21  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* CMakeLists.txt, INSTALL: Increase dependency for openvas-libraries
@@ -234,7 +238,7 @@
 	filter history if request parameter no_filter_history is true.
 
 	* src/gsad.c (init_validator): Add request parameter no_filter_history.
-	
+
 	* src/html/classic/js/gsa_graphics_base.js (create_data_source):
 	Add no_filter_history parameter for Task data sources.
 	(create_uri): Add blank dummy filter if filter id and term are empty to
