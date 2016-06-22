@@ -1,5 +1,13 @@
 2016-06-22  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (AUTH_CONF_SETTING): New macro.
+	(save_auth_omp): Move KEY and VALUE attributes to elements.
+
+	* src/html/classic/omp.xsl (html-create-user-form, user [edit])
+	(group [ldapauth], group [radiusauth]): Get KEY and VALUE from elements.
+
+2016-06-22  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/classic/omp.xsl (group [ldapauth]): Add LDAP cert info.
 
 2016-06-21  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>

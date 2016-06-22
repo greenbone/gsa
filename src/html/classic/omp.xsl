@@ -35413,7 +35413,7 @@ should not have received it.
           <div class="col-10">
             <div>
               <xsl:choose>
-                <xsl:when test="//group[@name='method:ldap_connect']/auth_conf_setting[@key='enable']/@value = 'true' or //group[@name='method:radius_connect']/auth_conf_setting[@key='enable']/@value = 'true'">
+                <xsl:when test="//group[@name='method:ldap_connect']/auth_conf_setting[key='enable']/value = 'true' or //group[@name='method:radius_connect']/auth_conf_setting[key='enable']/value = 'true'">
                   <div class="form-item radio">
                     <label>
                       <input type="radio" name="auth_method" value="0" checked="1"/>
@@ -35437,7 +35437,7 @@ should not have received it.
                   maxlength="40"/>
               </div>
             </div>
-            <xsl:if test="//group[@name='method:ldap_connect']/auth_conf_setting[@key='enable']/@value = 'true'">
+            <xsl:if test="//group[@name='method:ldap_connect']/auth_conf_setting[key='enable']/value = 'true'">
               <div class="radio">
                 <label>
                   <input type="radio" name="auth_method" value="1"/>
@@ -35445,7 +35445,7 @@ should not have received it.
                 </label>
               </div>
             </xsl:if>
-            <xsl:if test="//group[@name='method:radius_connect']/auth_conf_setting[@key='enable']/@value = 'true'">
+            <xsl:if test="//group[@name='method:radius_connect']/auth_conf_setting[key='enable']/value = 'true'">
               <div class="radio">
                 <label>
                   <input type="radio" name="auth_method" value="2"/>
@@ -35956,7 +35956,7 @@ should not have received it.
                   maxlength="40" class="form-control"/>
               </div>
             </div>
-            <xsl:if test="//group[@name='method:ldap_connect']/auth_conf_setting[@key='enable']/@value = 'true'">
+            <xsl:if test="//group[@name='method:ldap_connect']/auth_conf_setting[key='enable']/value = 'true'">
               <div class="radio">
                 <label>
                   <xsl:choose>
@@ -35971,7 +35971,7 @@ should not have received it.
                 </label>
               </div>
             </xsl:if>
-            <xsl:if test="//group[@name='method:radius_connect']/auth_conf_setting[@key='enable']/@value = 'true'">
+            <xsl:if test="//group[@name='method:radius_connect']/auth_conf_setting[key='enable']/value = 'true'">
               <div class="radio">
                 <label>
                   <xsl:choose>
@@ -36260,7 +36260,7 @@ should not have received it.
               <td><xsl:value-of select="gsa:i18n ('Enable', 'Group')"/></td>
               <td>
                 <xsl:choose>
-                  <xsl:when test="auth_conf_setting[@key='enable']/@value = 'true'">
+                  <xsl:when test="auth_conf_setting[key='enable']/value = 'true'">
                     <input type="checkbox" name="enable" value="1" checked="1"/>
                   </xsl:when>
                   <xsl:otherwise>
@@ -36280,21 +36280,21 @@ should not have received it.
               </td>
               <td>
                 <input type="text" name="ldaphost" size="30"
-                       value="{auth_conf_setting[@key='ldaphost']/@value}"/>
+                       value="{auth_conf_setting[key='ldaphost']/value}"/>
               </td>
             </tr>
             <tr class="odd">
               <td><xsl:value-of select="gsa:i18n ('Auth. DN', 'Group')"/></td>
               <td>
                 <input type="text" name="authdn" size="30"
-                       value="{auth_conf_setting[@key='authdn']/@value}"/>
+                       value="{auth_conf_setting[key='authdn']/value}"/>
               </td>
             </tr>
             <tr class="even">
               <td><xsl:value-of select="gsa:i18n ('CA Certificate', 'Auth Data')"/></td>
               <td>
                 <xsl:variable name="certificate_info"
-                              select="auth_conf_setting[@key='cacert']/certificate_info"/>
+                              select="auth_conf_setting[key='cacert']/certificate_info"/>
                 <xsl:if test="$certificate_info">
                   <xsl:call-template name="certificate-info-table">
                     <xsl:with-param name="certificate_info" select="$certificate_info"/>
@@ -36351,7 +36351,7 @@ should not have received it.
             <td><xsl:value-of select="gsa:i18n ('Enable', 'Group')"/></td>
             <td>
               <xsl:choose>
-                <xsl:when test="auth_conf_setting[@key='enable']/@value = 'true'">
+                <xsl:when test="auth_conf_setting[key='enable']/value = 'true'">
                   <input type="checkbox" name="enable" value="1" checked="1"/>
                 </xsl:when>
                 <xsl:otherwise>
@@ -36367,12 +36367,12 @@ should not have received it.
             </xsl:choose>
             <xsl:value-of select="gsa:i18n ('Host', 'Host')"/></td>
             <td><input type="text" name="radiushost" size="30"
-                 value="{auth_conf_setting[@key='radiushost']/@value}"/></td>
+                 value="{auth_conf_setting[key='radiushost']/value}"/></td>
           </tr>
           <tr class="odd">
             <td><xsl:value-of select="gsa:i18n ('Secret Key', 'Group')"/></td>
             <td><input type="password" name="radiuskey" size="30"
-                 value="{auth_conf_setting[@key='radiuskey']/@value}"/></td>
+                 value="{auth_conf_setting[key='radiuskey']/value}"/></td>
           </tr>
         <tr>
           <td colspan="2" style="text-align:right;">

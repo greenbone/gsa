@@ -26201,6 +26201,15 @@ dashboard (credentials_t * credentials, params_t *params,
 }
 
 /**
+ * @brief Generate AUTH_CONF_SETTING element for save_auth_omp.
+ */
+#define AUTH_CONF_SETTING(key, value) \
+  "<auth_conf_setting>"               \
+  "<key>" key "</key>"                \
+  "<value>" value "</value>"          \
+  "</auth_conf_setting>"
+
+/**
  * @brief Save authentication settings.
  *
  * @param[in]  credentials  Username and password for authentication.
@@ -26243,10 +26252,10 @@ save_auth_omp (credentials_t* credentials, params_t *params,
           ret = ompf (credentials, &response, &entity, response_data,
                       "<modify_auth>"
                       "<group name=\"%s\">"
-                      "<auth_conf_setting key=\"enable\" value=\"%s\"/>"
-                      "<auth_conf_setting key=\"ldaphost\" value=\"%s\"/>"
-                      "<auth_conf_setting key=\"authdn\" value=\"%s\"/>"
-                      "<auth_conf_setting key=\"cacert\" value=\"%s\"/>"
+                      AUTH_CONF_SETTING ("enable", "%s")
+                      AUTH_CONF_SETTING ("ldaphost", "%s")
+                      AUTH_CONF_SETTING ("authdn", "%s")
+                      AUTH_CONF_SETTING ("cacert", "%s")
                       "</group>"
                       "</modify_auth>", method, truefalse, ldaphost, authdn,
                       certificate);
@@ -26256,9 +26265,9 @@ save_auth_omp (credentials_t* credentials, params_t *params,
         ret = ompf (credentials, &response, &entity, response_data,
                     "<modify_auth>"
                     "<group name=\"%s\">"
-                    "<auth_conf_setting key=\"enable\" value=\"%s\"/>"
-                    "<auth_conf_setting key=\"ldaphost\" value=\"%s\"/>"
-                    "<auth_conf_setting key=\"authdn\" value=\"%s\"/>"
+                    AUTH_CONF_SETTING ("enable", "%s")
+                    AUTH_CONF_SETTING ("ldaphost", "%s")
+                    AUTH_CONF_SETTING ("authdn", "%s")
                     "</group>"
                     "</modify_auth>", method, truefalse, ldaphost, authdn);
     }
@@ -26274,9 +26283,9 @@ save_auth_omp (credentials_t* credentials, params_t *params,
       ret = ompf (credentials, &response, &entity, response_data,
                   "<modify_auth>"
                   "<group name=\"%s\">"
-                  "<auth_conf_setting key=\"enable\" value=\"%s\"/>"
-                  "<auth_conf_setting key=\"radiushost\" value=\"%s\"/>"
-                  "<auth_conf_setting key=\"radiuskey\" value=\"%s\"/>"
+                  AUTH_CONF_SETTING ("enable", "%s")
+                  AUTH_CONF_SETTING ("radiushost", "%s")
+                  AUTH_CONF_SETTING ("radiuskey", "%s")
                   "</group>"
                   "</modify_auth>", method, truefalse, radiushost, radiuskey);
     }
