@@ -36293,6 +36293,13 @@ should not have received it.
             <tr class="even">
               <td><xsl:value-of select="gsa:i18n ('CA Certificate', 'Auth Data')"/></td>
               <td>
+                <xsl:variable name="certificate_info"
+                              select="auth_conf_setting[@key='cacert']/certificate_info"/>
+                <xsl:if test="$certificate_info">
+                  <xsl:call-template name="certificate-info-table">
+                    <xsl:with-param name="certificate_info" select="$certificate_info"/>
+                  </xsl:call-template>
+                </xsl:if>
                 <input type="file" name="certificate" size="30"/>
               </td>
             </tr>
