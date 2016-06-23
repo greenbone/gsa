@@ -1,5 +1,13 @@
 2016-06-23  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
+	* CMakeLists.txt: Increase required cmake version from 2.6
+	to 2.8 because 2.8 is the minimum version we are sure it
+	works with.
+
+	* INSTALL: Update accordingly.
+
+2016-06-23  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
 	* CMakeLists.txt: Drop the handling regarding gthread library
 	for glib versions prior 2.32 now that we have 2.32 as minimum.
 

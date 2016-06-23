@@ -27,7 +27,7 @@ message ("-- Configuring greenbone-security-assistant...")
 
 project (greenbone-security-assistant C)
 
-cmake_minimum_required (VERSION 2.6)
+cmake_minimum_required (VERSION 2.8)
 
 if (POLICY CMP0005)
   cmake_policy (SET CMP0005 OLD)
