@@ -21534,7 +21534,7 @@ should not have received it.
           </a>
         </xsl:with-param>
       </xsl:call-template>
-    </div>>
+    </div>
   </xsl:if>
   <xsl:call-template name="list-window">
     <xsl:with-param name="type" select="'info'"/>
