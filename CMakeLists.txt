@@ -75,7 +75,7 @@ endif (MANDATORY_TOOL_MISSING)
 ## Check for existance of required libraries
 pkg_check_modules (LIBMICROHTTPD REQUIRED libmicrohttpd>=0.9.0)
 pkg_check_modules (LIBXML REQUIRED libxml-2.0)
-pkg_check_modules (GLIB REQUIRED glib-2.0>=2.16)
+pkg_check_modules (GLIB REQUIRED glib-2.0>=2.32)
 pkg_check_modules (LIBEXSLT REQUIRED libexslt)
 pkg_check_modules (LIBOPENVAS_OMP REQUIRED libopenvas_omp>=9.0.0)
 pkg_check_modules (LIBOPENVAS_BASE REQUIRED libopenvas_base>=9.0.0)
