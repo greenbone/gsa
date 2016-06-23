@@ -5114,14 +5114,8 @@ gsad_init ()
   g_debug ("Initializing the Greenbone Security Assistant...\n");
 
   /* Init Glib. */
-#if GLIB_CHECK_VERSION (2, 31, 0)
   mutex = g_malloc (sizeof (GMutex));
   g_mutex_init (mutex);
-#else
-  if (!g_thread_supported ()) g_thread_init (NULL);
-  if (mutex == NULL)
-    mutex = g_mutex_new ();
-#endif
   users = g_ptr_array_new ();
 
   /* Check for required files. */

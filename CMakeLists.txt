@@ -83,16 +83,6 @@ pkg_check_modules (LIBOPENVAS_MISC REQUIRED libopenvas_misc>=9.0.0)
 pkg_check_modules (LIBXSLT REQUIRED libxslt)
 pkg_check_modules (GNUTLS REQUIRED gnutls>=3.2.15)
 
-# Linking against libgthread is only required for GLib versions using the old,
-# deprecated thread API, i.e. version 2.30 and earlier.
-if (${GLIB_VERSION} VERSION_LESS "2.31.0")
-  set (GTHREAD_REQUIRED TRUE)
-endif (${GLIB_VERSION} VERSION_LESS "2.31.0")
-
-if (GTHREAD_REQUIRED)
-  pkg_check_modules (GTHREAD REQUIRED gthread-2.0)
-endif (GTHREAD_REQUIRED)
-
 message (STATUS "Looking for libgcrypt...")
 find_library (LIBGCRYPT gcrypt)
 if (NOT LIBGCRYPT)
