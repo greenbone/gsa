@@ -178,7 +178,7 @@
 /**
  * @brief Default value for HTTP header "X-Frame-Options" for guest charts
  */
-#define DEFAULT_GSAD_GUEST_CHART_X_FRAME_OPTIONS ""
+#define DEFAULT_GSAD_GUEST_CHART_X_FRAME_OPTIONS "SAMEORIGIN"
 
 /**
  * @brief Default guest charts value for HTTP header "Content-Security-Policy"
