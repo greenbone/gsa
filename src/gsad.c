@@ -1330,6 +1330,7 @@ init_validator ()
   openvas_validator_add (validator, "xml_file",   "(?s)^.*$");
   openvas_validator_add (validator, "definitions_file",   "(?s)^.*$");
   openvas_validator_add (validator, "ca_pub",   "(?s)^.*$");
+  openvas_validator_add (validator, "which_cert",   "^(default|existing|new)$");
   openvas_validator_add (validator, "key_pub",   "(?s)^.*$");
   openvas_validator_add (validator, "key_priv",   "(?s)^.*$");
   openvas_validator_add (validator, "radiuskey",   "^.{0,40}$");

@@ -19425,7 +19425,29 @@ should not have received it.
             <td>
               <xsl:variable name="ca_pub" select="commands_response/get_scanners_response/scanner/ca_pub"/>
               <xsl:variable name="ca_pub_info" select="commands_response/get_scanners_response/scanner/ca_pub_info"/>
-              <input type="file" name="ca_pub"/>
+              <xsl:choose>
+                <xsl:when test="string-length ($ca_pub) &gt; 0">
+                  <label>
+                    <input type="radio" name="which_cert" value="existing" checked="1"/>
+                    <xsl:value-of select="gsa:i18n ('Existing', 'Auth Data')"/>
+                  </label>
+                  <label>
+                    <input type="radio" name="which_cert" value="default"/>
+                    <xsl:value-of select="gsa:i18n ('Default', 'Auth Data')"/>
+                  </label>
+                </xsl:when>
+                <xsl:otherwise>
+                  <label>
+                    <input type="radio" name="which_cert" value="default" checked="1"/>
+                    <xsl:value-of select="gsa:i18n ('Default', 'Auth Data')"/>
+                  </label>
+                </xsl:otherwise>
+              </xsl:choose>
+              <label>
+                <input type="radio" name="which_cert" value="new"/>
+                <xsl:value-of select="gsa:i18n ('New:', 'Auth Data')"/>
+                <input type="file" name="ca_pub"/>
+              </label>
               <xsl:if test="string-length ($ca_pub) &gt; 0">
                 <p class="footnote" style="margin-top:3px;">
                   <a href="/omp?cmd=download_ca_pub&amp;scanner_id={commands_response/get_scanners_response/scanner/@id}&amp;ca_pub={str:encode-uri($ca_pub, true ())}&amp;token={/envelope/token}"
@@ -37239,6 +37261,19 @@ should not have received it.
             </td>
           </tr>
         </xsl:if>
+
+        <tr>
+          <td><xsl:value-of select="gsa:i18n ('Default CA Cert (immutable)', 'My Settings')"/></td>
+          <td>
+            <xsl:variable name="certificate_info"
+                          select="get_settings_response/setting[@id='9ac801ea-39f8-11e6-bbaa-28d24461215b']/certificate_info"/>
+            <xsl:if test="$certificate_info">
+              <xsl:call-template name="certificate-info-table">
+                <xsl:with-param name="certificate_info" select="$certificate_info"/>
+              </xsl:call-template>
+            </xsl:if>
+          </td>
+        </tr>
       </xsl:if>
     </table>
   </div>

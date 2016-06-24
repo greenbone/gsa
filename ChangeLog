@@ -1,3 +1,16 @@
+2016-06-22  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add Default CA Cert setting.
+
+	* src/gsad.c (init_validator): Add which_cert.
+
+	* src/gsad_omp.c (save_scanner_omp): Add cases for new "use default"
+	CA cert option.
+
+	* src/html/classic/omp.xsl (html-edit-scanner-form): Add options for CA
+	cert.
+	(get_my_settings): Add "Default CA Cert".
+
 2016-06-23  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/gsad.c (DEFAULT_GSAD_GUEST_CHART_X_FRAME_OPTIONS): Changed

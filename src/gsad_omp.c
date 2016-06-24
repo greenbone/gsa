@@ -18125,7 +18125,7 @@ save_scanner_omp (credentials_t * credentials, params_t *params,
   entity_t entity = NULL;
   const char *no_redirect;
   const char *scanner_id, *name, *comment, *port, *host, *type, *ca_pub;
-  const char *credential_id;
+  const char *credential_id, *which_cert;
   char *html;
   int ret, in_use;
 
@@ -18136,6 +18136,7 @@ save_scanner_omp (credentials_t * credentials, params_t *params,
   host = params_value (params, "host");
   port = params_value (params, "port");
   type = params_value (params, "scanner_type");
+  which_cert = params_value (params, "which_cert");
   ca_pub = params_value (params, "ca_pub");
   credential_id = params_value (params, "credential_id");
   CHECK_PARAM_INVALID (scanner_id, "Edit Scanner", "edit_scanner");
@@ -18151,29 +18152,63 @@ save_scanner_omp (credentials_t * credentials, params_t *params,
    }
   CHECK_PARAM_INVALID (ca_pub, "Edit Scanner", "edit_scanner");
   CHECK_PARAM_INVALID (credential_id, "Edit Scanner", "edit_scanner");
+  CHECK_PARAM_INVALID (which_cert, "Edit Scanner", "edit_scanner");
 
-  if (in_use)
-    ret = ompf (credentials, &response, &entity, response_data,
-                "<modify_scanner scanner_id=\"%s\">"
-                "<name>%s</name>"
-                "<comment>%s</comment>"
-                "<ca_pub>%s</ca_pub>"
-                "<credential id=\"%s\"/>"
-                "</modify_scanner>",
-                scanner_id, name, comment ?: "", ca_pub, credential_id);
+  if (strcmp (which_cert, "new") == 0 || strcmp (which_cert, "default") == 0)
+    {
+      if (ca_pub == NULL)
+        ca_pub = "";
+      if (in_use)
+        ret = ompf (credentials, &response, &entity, response_data,
+                    "<modify_scanner scanner_id=\"%s\">"
+                    "<name>%s</name>"
+                    "<comment>%s</comment>"
+                    "<ca_pub>%s</ca_pub>"
+                    "<credential id=\"%s\"/>"
+                    "</modify_scanner>",
+                    scanner_id, name, comment ?: "",
+                    strcmp (which_cert, "new") == 0 ? ca_pub : "",
+                    credential_id);
+      else
+        ret = ompf (credentials, &response, &entity, response_data,
+                    "<modify_scanner scanner_id=\"%s\">"
+                    "<name>%s</name>"
+                    "<comment>%s</comment>"
+                    "<host>%s</host>"
+                    "<port>%s</port>"
+                    "<type>%s</type>"
+                    "<ca_pub>%s</ca_pub>"
+                    "<credential id=\"%s\"/>"
+                    "</modify_scanner>",
+                    scanner_id, name, comment ?: "", host, port, type,
+                    strcmp (which_cert, "new") == 0 ? ca_pub : "",
+                    credential_id);
+    }
   else
-    ret = ompf (credentials, &response, &entity, response_data,
-                "<modify_scanner scanner_id=\"%s\">"
-                "<name>%s</name>"
-                "<comment>%s</comment>"
-                "<host>%s</host>"
-                "<port>%s</port>"
-                "<type>%s</type>"
-                "<ca_pub>%s</ca_pub>"
-                "<credential id=\"%s\"/>"
-                "</modify_scanner>",
-                scanner_id, name, comment ?: "", host, port, type, ca_pub,
-                credential_id);
+    {
+      /* Using existing CA cert. */
+      if (in_use)
+        ret = ompf (credentials, &response, &entity, response_data,
+                    "<modify_scanner scanner_id=\"%s\">"
+                    "<name>%s</name>"
+                    "<comment>%s</comment>"
+                    "<credential id=\"%s\"/>"
+                    "</modify_scanner>",
+                    scanner_id, name, comment ?: "", credential_id);
+      else
+        ret = ompf (credentials, &response, &entity, response_data,
+                    "<modify_scanner scanner_id=\"%s\">"
+                    "<name>%s</name>"
+                    "<comment>%s</comment>"
+                    "<host>%s</host>"
+                    "<port>%s</port>"
+                    "<type>%s</type>"
+                    "<credential id=\"%s\"/>"
+                    "</modify_scanner>",
+                    scanner_id, name, comment ?: "", host, port, type,
+                    credential_id);
+    }
+
   switch (ret)
     {
       case 0:
