@@ -26,15 +26,16 @@
 
 (function(global, window, d3, console, gsa) {
   'use strict';
+  var gch = gsa.charts;
 
-  gsa.register_chart_generator('cloud', CloudChartGenerator);
+  gch.register_chart_generator('cloud', CloudChartGenerator);
 
   function CloudChartGenerator() {
-    gsa.BaseChartGenerator.call(this, 'cloud');
+    gch.BaseChartGenerator.call(this, 'cloud');
   }
 
   CloudChartGenerator.prototype = Object.create(
-    gsa.BaseChartGenerator.prototype);
+    gch.BaseChartGenerator.prototype);
   CloudChartGenerator.prototype.constructor = CloudChartGenerator;
 
   CloudChartGenerator.prototype.init = function() {
@@ -48,9 +49,9 @@
 
     this.show_stat_type = true;
 
-    this.setDataTransformFunc(gsa.data_raw);
+    this.setDataTransformFunc(gch.data_raw);
     this.setColorScale(d3.scale.category10());
-    this.setTitleGenerator(gsa.title_static(gsa._('Loading word cloud ...'),
+    this.setTitleGenerator(gch.title_static(gsa._('Loading word cloud ...'),
           gsa._('Word Cloud')));
 
   };
@@ -58,7 +59,7 @@
   CloudChartGenerator.prototype.generateData = function(controller,
       original_data, gen_params) {
 
-    var cmd = controller.data_src().command();
+    var cmd = controller.data_src.command;
     if (cmd === 'get_aggregate') {
       return this.transformData(original_data, gen_params);
     }
@@ -69,7 +70,7 @@
   };
 
   CloudChartGenerator.prototype.evaluateParams = function(gen_params) {
-    gsa.BaseChartGenerator.prototype.evaluateParams.call(this, gen_params);
+    gch.BaseChartGenerator.prototype.evaluateParams.call(this, gen_params);
 
     if (gen_params.x_field) {
       this.x_field = gen_params.x_field;
@@ -84,24 +85,24 @@
     }
   };
 
-  CloudChartGenerator.prototype.generate = function(display, data) {
+  CloudChartGenerator.prototype.generate = function(svg, data, update) {
     var self = this;
     var records = data.records;
 
     var cloud = d3.layout.cloud();
 
     // Setup display parameters
-    var height = display.svg().attr('height') - this.margin.top -
+    var height = svg.attr('height') - this.margin.top -
       this.margin.bottom;
-    var width = display.svg().attr('width') - this.margin.left -
+    var width = svg.attr('width') - this.margin.left -
       this.margin.right;
 
-    if (this.mustUpdate(display)) {
-      display.svg().text('');
-      this.svg = display.svg().append('g');
+    if (update) {
+      svg.text('');
+      this.svg = svg.append('g');
 
-      display.svg().on('mousemove', null);
-      display.svg().on('mouseleave', null);
+      svg.on('mousemove', null);
+      svg.on('mouseleave', null);
 
       this.svg.attr('transform',
         'translate(' + this.margin.left + ',' + this.margin.top + ')');
@@ -172,28 +173,28 @@
 
   CloudChartGenerator.prototype.generateCsvData = function(controller, data) {
     var cols = data.column_info.columns;
-    return gsa.csv_from_records(data.records, data.column_info,
+    return gch.csv_from_records(data.records, data.column_info,
         [this.x_field, this.y_field],
-        [gsa.column_label(cols[this.x_field], true, false, this.show_stat_type),
-        gsa.column_label(cols[this.y_field], true, false, this.show_stat_type)],
-        controller.display().header().text());
+        [gch.column_label(cols[this.x_field], true, false, this.show_stat_type),
+        gch.column_label(cols[this.y_field], true, false, this.show_stat_type)],
+        controller.display.getTitle());
   };
 
   CloudChartGenerator.prototype.generateHtmlTableData = function(controller,
       data) {
     var cols = data.column_info.columns;
-    return gsa.html_table_from_records(data.records, data.column_info,
+    return gch.html_table_from_records(data.records, data.column_info,
         [this.x_field, this.y_field],
-        [gsa.column_label(cols[this.x_field], true, false, this.show_stat_type),
-        gsa.column_label(cols[this.y_field], true, false, this.show_stat_type)],
-        controller.display().header().text(),
-        controller.data_src().param('filter'));
+        [gch.column_label(cols[this.x_field], true, false, this.show_stat_type),
+        gch.column_label(cols[this.y_field], true, false, this.show_stat_type)],
+        controller.display.getTitle(),
+        controller.data_src.getParam('filter'));
   };
 
   CloudChartGenerator.prototype.generateLink = function(d, i, column, type,
       filter_info) {
     var value = d.text;
-    return gsa.filtered_list_url(type, column, value, filter_info, '~');
+    return gch.filtered_list_url(type, column, value, filter_info, '~');
   };
 
 })(window, window, window.d3, window.console, window.gsa);

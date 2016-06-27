@@ -1,5 +1,40 @@
 2016-06-27  Björn Ricks <bjoern.ricks@gmx.net>
 
+	Refactoring of the dashboard chart code.
+	- Use prototype based classes
+	- Use consistent names (e.g. Display instead of component)
+	- Remove a lot of inter depenendencies
+	- Use events for communication between objects
+	- Remove a lot of unused and obsolete code paths
+	- ...
+
+	* CMakeLists.txt: Install new JS files gsa_chart_helpers.js and
+	gsa_dashboard.js.
+
+	* src/html/classic/graphics.xsl: Include new js files in html code for
+	charts.
+
+	* src/html/classic/css/gsa-style.css: Update CSS classes for component to
+	display renaming.
+
+	* src/html/classic/js/gsa_bar_chart.js,
+	src/html/classic/js/gsa_bubble_chart.js,
+	src/html/classic/js/gsa_cloud_chart.js,
+	src/html/classic/js/gsa_donut_chart.js,
+	src/html/classic/js/gsa_gantt_chart.js,
+	src/html/classic/js/gsa_h_bar_chart.js,
+	src/html/classic/js/gsa_line_chart.js: Update chart generator classes for api
+	changes.
+
+	* src/html/classic/js/gsa_dashboard.js,
+	src/html/classic/js/gsa_graphics_base.js,
+	src/html/classic/js/gsa_chart_helpers.js: Split original gsa_graphics_base.js
+	into three files. gsa_graphics_base.js only contains the BaseChartGenerator
+	now. gsa_dashboard.js contains all dashboard related classes and helper
+	functions and gsa_chart_helpers.js contains all general helper functions.
+
+2016-06-27  Björn Ricks <bjoern.ricks@gmx.net>
+
 	Fix possible error in d3.tip
 
 	* src/html/classic/js/lib/d3.tip.js: Be save when generating d3 tips be

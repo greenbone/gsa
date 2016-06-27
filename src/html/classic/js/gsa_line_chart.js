@@ -27,7 +27,9 @@
 (function(global, window, d3, console, gsa) {
   'use strict';
 
-  gsa.register_chart_generator('line', LineChartGenerator);
+  var gch = gsa.charts;
+
+  gch.register_chart_generator('line', LineChartGenerator);
 
   /*
   * Finds the index of a record by the value of a given field
@@ -43,11 +45,11 @@
 
   function LineChartGenerator() {
     // call super constructor
-    gsa.BaseChartGenerator.call(this, 'bar');
+    gch.BaseChartGenerator.call(this, 'bar');
   }
 
   LineChartGenerator.prototype = Object.create(
-      gsa.BaseChartGenerator.prototype);
+      gch.BaseChartGenerator.prototype);
   LineChartGenerator.prototype.constructor = LineChartGenerator;
 
   LineChartGenerator.prototype.init = function() {
@@ -73,12 +75,11 @@
 
     this.setDataTransformFunc(this.timeLine);
     this.setColorScale(d3.scale.category20());
-    this.setTitleGenerator(gsa.title_static(
+    this.setTitleGenerator(gch.title_static(
       gsa._('Loading line chart ...'), gsa._('Bubble Chart')));
   };
 
-  LineChartGenerator.prototype.generate = function(display, data) {
-    var update = this.mustUpdate(display);
+  LineChartGenerator.prototype.generate = function(svg, data, update) {
     var records = data.records;
 
     var self = this;
@@ -221,10 +222,10 @@
       start.setTime(start.getTime() - 60000);
       end = self.x_step.offset(end, 1);
 
-      value = [gsa.iso_time_format(start), gsa.iso_time_format(end)];
+      value = [gch.iso_time_format(start), gch.iso_time_format(end)];
 
       if (self.range_marker_resize) {
-        url = gsa.filtered_list_url(
+        url = gch.filtered_list_url(
             type, column, value, data.filter_info, 'range');
 
         self.range_marker_elem.attr('xlink:href', url);
@@ -335,11 +336,11 @@
           }
           var type = data.column_info.columns.count.type;
           self.range_info_text_lines[0]
-              .text(gsa.date_format(self.range_marker_start));
+              .text(gch.date_format(self.range_marker_start));
           self.range_info_text_lines[1]
-              .text('to ' + gsa.date_format(end_date));
+              .text('to ' + gch.date_format(end_date));
           self.range_info_text_lines[2]
-              .text(gsa.resource_type_name_plural(type) + ': ' +
+              .text(gch.resource_type_name_plural(type) + ': ' +
                   range_count);
         }
 
@@ -371,7 +372,7 @@
                   d = self.duration_tick_format(d);
                   break;
                 default:
-                  d = gsa.format_data(d,
+                  d = gch.format_data(d,
                     data.column_info.columns[self.info_text_lines[line].field]);
               }
             }
@@ -382,12 +383,12 @@
                   d = self.duration_tick_format(d);
                   break;
                 default:
-                  d = gsa.format_data(d,
+                  d = gch.format_data(d,
                     data.column_info.columns[self.info_text_lines[line].field]);
               }
             }
             else {
-              d = gsa.format_data(d,
+              d = gch.format_data(d,
                 data.column_info.columns[self.info_text_lines[line].field]);
             }
 
@@ -396,7 +397,7 @@
           else {
             if (line === '0') {
               self.info_text_lines[line].elem.text(
-                  gsa.format_data(rounded_x, {data_type: 'js_date'}));
+                  gch.format_data(rounded_x, {data_type: 'js_date'}));
             }
             else {
               self.info_text_lines[line].elem.text('N/A');
@@ -462,7 +463,7 @@
         .attr('y2', y_range[0] - y_range[1]);
     }
 
-    self.setColorScale(gsa.field_name_colors(self.all_y_fields,
+    self.setColorScale(gch.field_name_colors(self.all_y_fields,
         data.column_info, self.y_fields.length));
 
     for (var record_index = 0; record_index < records.length; record_index++) {
@@ -483,9 +484,9 @@
     }
 
     // Setup display parameters
-    height = display.svg().attr('height') - self.margin.top -
+    height = svg.attr('height') - self.margin.top -
       self.margin.bottom;
-    width = display.svg().attr('width') - self.margin.left -
+    width = svg.attr('width') - self.margin.left -
       self.margin.right;
 
     self.x_scale.range([0, width]);
@@ -502,7 +503,7 @@
     var y_ticks, y2_ticks;
     switch (self.y_format) {
       case 'duration':
-        y_ticks = self.duration_ticks (0, y_max, 10);
+        y_ticks = self.duration_ticks(0, y_max, 10);
         self.y_scale.domain([0, y_ticks[y_ticks.length - 1]]);
         self.y_axis.tickValues(y_ticks);
         self.y_axis.tickFormat(self.duration_tick_format);
@@ -515,7 +516,7 @@
 
     switch (self.y2_format) {
       case 'duration':
-        y2_ticks = self.duration_ticks (0, y2_max, 10);
+        y2_ticks = self.duration_ticks(0, y2_max, 10);
         self.y2_scale.domain([0, y2_ticks[y2_ticks.length - 1]]);
         self.y2_axis.tickValues(y2_ticks);
         self.y2_axis.tickFormat(self.duration_tick_format);
@@ -527,8 +528,8 @@
     }
 
     if (update) {
-      display.svg().text('');
-      self.svg = display.svg().append('g');
+      svg.text('');
+      self.svg = svg.append('g');
 
       self.svg.attr('transform',
         'translate(' + self.margin.left + ',' + self.margin.top + ')');
@@ -542,12 +543,12 @@
       self.range_marker_last_x = null;
 
       // Setup mouse event listeners
-      display.svg().on('mousedown', mouse_down);
-      display.svg().on('mouseup', mouse_up);
-      display.svg().on('dragstart',
+      svg.on('mousedown', mouse_down);
+      svg.on('mouseup', mouse_up);
+      svg.on('dragstart',
                        function() { d3.event.preventDefault(); });
-      display.svg().on('mousemove', mouse_moved);
-      display.svg().on('mouseleave', mouse_exited);
+      svg.on('mousemove', mouse_moved);
+      svg.on('mouseleave', mouse_exited);
 
       // Setup chart
       self.svg.attr('transform',
@@ -748,7 +749,7 @@
         .style('font-weight', 'bold')
         .attr('x', 25)
         .attr('y', 15)
-        .text(gsa.column_label(
+        .text(gch.column_label(
           column_info.columns[self.all_y_fields[index]], true, false,
               self.show_stat_type));
       if (index >= self.y_fields.length) {
@@ -885,7 +886,7 @@
   LineChartGenerator.prototype.generateData = function(controller,
       original_data) {
     // Extract records and column info
-    var cmd = controller.data_src().command();
+    var cmd = controller.data_src.command;
     if (cmd === 'get_aggregate') {
       return this.transformData(original_data);
     }
@@ -899,17 +900,17 @@
     var cols = data.column_info.columns;
     var column_selection = [this.x_field];
     var column_labels = [
-        gsa.column_label(cols[this.x_field], true, false, this.show_stat_type)
+        gch.column_label(cols[this.x_field], true, false, this.show_stat_type)
       ];
 
     for (var index = 0; index < this.all_y_fields.length; index++) {
       column_selection.push(this.all_y_fields[index]);
-      column_labels.push(gsa.column_label(cols[this.all_y_fields[index]],
+      column_labels.push(gch.column_label(cols[this.all_y_fields[index]],
           true, false, this.show_stat_type));
     }
 
-    return gsa.csv_from_records(data.records, data.column_info,
-        column_selection, column_labels, controller.display().header().text());
+    return gch.csv_from_records(data.records, data.column_info,
+        column_selection, column_labels, controller.display.getTitle());
   };
 
   LineChartGenerator.prototype.generateHtmlTableData = function(controller,
@@ -917,22 +918,22 @@
     var cols = data.column_info.columns;
     var column_selection = [this.x_field];
     var column_labels = [
-        gsa.column_label(cols[this.x_field], true, false, this.show_stat_type)
+        gch.column_label(cols[this.x_field], true, false, this.show_stat_type)
       ];
 
     for (var index = 0; index < this.all_y_fields.length; index++) {
       column_selection.push(this.all_y_fields[index]);
-      column_labels.push(gsa.column_label(cols[this.all_y_fields[index]],
+      column_labels.push(gch.column_label(cols[this.all_y_fields[index]],
           true, false, this.show_stat_type));
     }
 
-    return gsa.html_table_from_records(data.records, data.column_info,
-        column_selection, column_labels, controller.display().header().text(),
-        controller.data_src().param('filter'));
+    return gch.html_table_from_records(data.records, data.column_info,
+        column_selection, column_labels, controller.display.getTitle(),
+        controller.data_src.getParam('filter'));
   };
 
   LineChartGenerator.prototype.evaluateParams = function(gen_params) {
-    gsa.BaseChartGenerator.prototype.evaluateParams.call(this, gen_params);
+    gch.BaseChartGenerator.prototype.evaluateParams.call(this, gen_params);
 
     if (gen_params.x_field) {
       this.x_field = gen_params.x_field;
@@ -1015,7 +1016,7 @@
         suffix = ' / year';
       }
 
-      return gsa.default_column_label(column, capitalize_label,
+      return gch.default_column_label(column, capitalize_label,
             include_type, include_stat) + suffix;
     }
 
@@ -1176,9 +1177,11 @@
   var zero_pad = d3.format('02d');
   LineChartGenerator.prototype.duration_tick_format = function(val) {
     val = Math.round(val);
+    var hours;
+    var minutes;
     if (val >= 86400) {
-      var days = Math.floor (val / 86400);
-      var hours = Math.floor ((val - hours * 86400) / 3600);
+      var days = Math.floor(val / 86400);
+      hours = Math.floor((val - hours * 86400) / 3600);
       if (hours === 0) {
         return days + 'd';
       }
@@ -1187,8 +1190,8 @@
       }
     }
     else if (val >= 3600) {
-      var hours = Math.floor (val / 3600);
-      var minutes = Math.floor ((val - hours * 3600) / 60);
+      hours = Math.floor(val / 3600);
+      minutes = Math.floor((val - hours * 3600) / 60);
       if (minutes === 0) {
         return hours + 'h';
       }
@@ -1197,28 +1200,29 @@
       }
     }
     else if (val >= 60) {
-      var minutes = Math.floor (val / 60);
-      var seconds = Math.floor (val % 60);
+      minutes = Math.floor(val / 60);
+      var seconds = Math.floor(val % 60);
       if (seconds === 0) {
         return minutes + 'm';
       }
       else {
-        return minutes + 'm' + zero_pad(seconds) + 's'
+        return minutes + 'm' + zero_pad(seconds) + 's';
       }
     }
     else {
       return val.toFixed(0) + 's';
     }
-  }
+  };
 
   LineChartGenerator.prototype.duration_ticks = function(min, max, number) {
     var approx_step = (max - min) / number;
     var step;
+    var i;
     var ticks = [];
 
     var steps = [1, 2, 5, 10, 15, 30,
-                  1*60, 2*60, 5*60, 10*60, 15*60, 30*60,
-                  1*3600, 2*3600, 3*3600, 6*3600, 12*3600, 24*3600];
+                  1 * 60, 2 * 60, 5 * 60, 10 * 60, 15 * 60, 30 * 60,
+                  1 * 3600, 2 * 3600, 3 * 3600, 6 * 3600, 12 * 3600, 24 * 3600];
 
     for (i = 0; i < steps.length && step === undefined; i++) {
       if (approx_step <= steps[i]) {
@@ -1226,13 +1230,13 @@
       }
     }
 
-    var rounded_max = Math.ceil(max / step)*step;
+    var rounded_max = Math.ceil(max / step) * step;
 
-    for (var i = 0; (min + i * step) <= rounded_max; i++) {
-      ticks.push (min + i * step);
+    for (i = 0; (min + i * step) <= rounded_max; i++) {
+      ticks.push(min + i * step);
     }
     return ticks;
-  }
+  };
 
 })(window, window, window.d3, window.console, window.gsa);
 

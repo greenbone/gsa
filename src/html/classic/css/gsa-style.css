@@ -1062,14 +1062,14 @@ select[multiple] {
   overflow: hidden;
 }
 
-.dashboard-box {
+.dashboard-display {
   display: inline-block;
   text-align: center;
   padding: 4px;
   vertical-align: top;
 }
 
-.dashboard-box-content {
+.dashboard-display-content {
   position: relative;
 }
 
@@ -1086,19 +1086,19 @@ select[multiple] {
   margin: 0 5px;
 }
 
-.num-components-1 .dashboard-placeholder {
+.num-displays-1 .dashboard-placeholder {
   width: 100%;
 }
 
-.num-components-2 .dashboard-placeholder {
+.num-displays-2 .dashboard-placeholder {
   width: 50%;
 }
 
-.num-components-3 .dashboard-placeholder {
+.num-displays-3 .dashboard-placeholder {
   width: 33.33333333%;
 }
 
-.num-components-4 .dashboard-placeholder {
+.num-displays-4 .dashboard-placeholder {
   width: 25%;
 }
 

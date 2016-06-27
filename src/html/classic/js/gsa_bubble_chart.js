@@ -26,17 +26,18 @@
 
 (function(window, global, gsa, d3, console) {
   'use strict';
+  var gch = gsa.charts;
 
-  gsa.register_chart_generator('bubbles', BubbleChartGenerator);
+  gch.register_chart_generator('bubbles', BubbleChartGenerator);
 
   /* Main chart generator */
   function BubbleChartGenerator() {
     // call super constructor
-    gsa.BaseChartGenerator.call(this, 'bubble');
+    gch.BaseChartGenerator.call(this, 'bubble');
   }
 
   BubbleChartGenerator.prototype = Object.create(
-      gsa.BaseChartGenerator.prototype);
+      gch.BaseChartGenerator.prototype);
   BubbleChartGenerator.prototype.constructor = BubbleChartGenerator;
 
   BubbleChartGenerator.prototype.init = function() {
@@ -51,14 +52,14 @@
     this.color_field = 'mean';
 
     this.setDataTransformFunc(simple_bubble_data);
-    this.setColorScale(gsa.severity_colors_gradient());
-    this.setTitleGenerator(gsa.title_static(
+    this.setColorScale(gch.severity_colors_gradient());
+    this.setTitleGenerator(gch.title_static(
           gsa._('Loading bubble chart ...'), gsa._('Bubble Chart')));
   };
 
   BubbleChartGenerator.prototype.generateData = function(controller,
       original_data, gen_params) {
-    var cmd = controller.data_src().command();
+    var cmd = controller.data_src.command;
     if (cmd === 'get_aggregate') {
       return this.transformData(original_data, gen_params);
     }
@@ -69,7 +70,7 @@
   };
 
   BubbleChartGenerator.prototype.evaluateParams = function(gen_params) {
-    gsa.BaseChartGenerator.prototype.evaluateParams.call(this, gen_params);
+    gch.BaseChartGenerator.prototype.evaluateParams.call(this, gen_params);
 
     if (gen_params.x_field) {
       this.x_field = gen_params.x_field;
@@ -95,36 +96,36 @@
     }
   };
 
-  BubbleChartGenerator.prototype.generate = function(display, data) {
+  BubbleChartGenerator.prototype.generate = function(svg, data, update) {
     var self = this;
 
     var records = data.records;
     var column_info = data.column_info;
 
-    this.color_label = gsa.column_label(column_info.columns.color_value, false,
+    this.color_label = gch.column_label(column_info.columns.color_value, false,
         false, this.show_stat_type);
 
     if (!gsa.is_defined(this.empty_text)) {
       this.empty_text = gsa._('No matching {{resource_type}}',
           {
-            resource_type: gsa.resource_type_name(
+            resource_type: gch.resource_type_name(
                                column_info.columns.label_value.type),
             interpolation: {escape: false},
           });
     }
 
     // Setup display parameters
-    var height = display.svg().attr('height') - this.margin.top -
+    var height = svg.attr('height') - this.margin.top -
       this.margin.bottom;
-    var width = display.svg().attr('width') - this.margin.left -
+    var width = svg.attr('width') - this.margin.left -
       this.margin.right;
 
-    if (this.mustUpdate(display)) {
-      display.svg().text('');
-      this.svg = display.svg().append('g');
+    if (update) {
+      svg.text('');
+      this.svg = svg.append('g');
 
-      display.svg().on('mousemove', null);
-      display.svg().on('mouseleave', null);
+      svg.on('mousemove', null);
+      svg.on('mouseleave', null);
 
       this.svg.attr('transform',
           'translate(' + this.margin.left + ',' + this.margin.top + ')');
@@ -166,11 +167,11 @@
         return self.empty_text;
       }
 
-      var label_value = gsa.format_data(d.label_value,
+      var label_value = gch.format_data(d.label_value,
           data.column_info.columns.label_value);
-      var size_value  = gsa.format_data(d.size_value,
+      var size_value  = gch.format_data(d.size_value,
           data.column_info.columns.size_value);
-      var color_value = gsa.format_data(d.color_value,
+      var color_value = gch.format_data(d.color_value,
           data.column_info.columns.color_value);
 
       return label_value + ': ' + size_value   +
@@ -226,26 +227,26 @@
 
   BubbleChartGenerator.prototype.generateCsvData = function(controller, data) {
     var cols = data.column_info.columns;
-    return gsa.csv_from_records(data.records,
+    return gch.csv_from_records(data.records,
         data.column_info,
         ['label_value', 'size_value', 'color_value'],
-        [gsa.column_label(cols.label_value, true, false, this.show_stat_type),
-        gsa.column_label(cols.size_value, true, false, this.show_stat_type),
-        gsa.column_label(cols.color_value, true, false, this.show_stat_type)],
-        controller.display().header().text());
+        [gch.column_label(cols.label_value, true, false, this.show_stat_type),
+        gch.column_label(cols.size_value, true, false, this.show_stat_type),
+        gch.column_label(cols.color_value, true, false, this.show_stat_type)],
+        controller.display.getTitle());
   };
 
   BubbleChartGenerator.prototype.generateHtmlTableData = function(controller,
       data) {
     var cols = data.column_info.columns;
-    return gsa.html_table_from_records(data.records,
+    return gch.html_table_from_records(data.records,
         data.column_info,
         ['label_value', 'size_value', 'color_value'],
-        [gsa.column_label(cols.label_value, true, false, this.show_stat_type),
-        gsa.column_label(cols.size_value, true, false, this.show_stat_type),
-        gsa.column_label(cols.color_value, true, false, this.show_stat_type)],
-        controller.display().header().text(),
-        controller.data_src().param('filter'));
+        [gch.column_label(cols.label_value, true, false, this.show_stat_type),
+        gch.column_label(cols.size_value, true, false, this.show_stat_type),
+        gch.column_label(cols.color_value, true, false, this.show_stat_type)],
+        controller.display.getTitle(),
+        controller.data_src.getParam('filter'));
   };
 
   function create_bubble(selection, data, no_chart_links) {
@@ -265,10 +266,10 @@
 
       var group_col_info = data.column_info.columns.group_value;
       if (group_col_info.column === 'uuid') {
-        return gsa.details_page_url(group_col_info.type, d.group_value,
+        return gch.details_page_url(group_col_info.type, d.group_value,
             data.filter_info);
       } else {
-        return gsa.filtered_list_url(group_col_info.type, group_col_info.column,
+        return gch.filtered_list_url(group_col_info.type, group_col_info.column,
             d.group_value, data.filter_info);
       }
     });

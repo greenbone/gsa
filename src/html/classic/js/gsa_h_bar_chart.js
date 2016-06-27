@@ -27,7 +27,9 @@
 (function(global, window, d3, console, gsa) {
   'use strict';
 
-  gsa.register_chart_generator('horizontal_bar', HorizontalBarChartGenerator);
+  var gch = gsa.charts;
+
+  gch.register_chart_generator('horizontal_bar', HorizontalBarChartGenerator);
 
   function default_bar_style(d) {
     return ('');
@@ -70,11 +72,11 @@
   }
 
   function HorizontalBarChartGenerator() {
-    gsa.BaseChartGenerator.call(this, 'h_bar');
+    gch.BaseChartGenerator.call(this, 'h_bar');
   }
 
   HorizontalBarChartGenerator.prototype = Object.create(
-      gsa.get_chart_generator('BarChartGenerator').prototype);
+      gch.get_chart_generator('BarChartGenerator').prototype);
   HorizontalBarChartGenerator.prototype.constructor =
     HorizontalBarChartGenerator;
 
@@ -104,13 +106,13 @@
 
     this.setDataTransformFunc(data_top_list);
     this.setBarStyle(default_bar_style);
-    this.setTitleGenerator(gsa.title_static(
+    this.setTitleGenerator(gch.title_static(
       gsa._('Loading horizontal bar chart ...'),
       gsa._('Horizontal Bar Chart')));
   };
 
   HorizontalBarChartGenerator.prototype.evaluateParams = function(gen_params) {
-    gsa.get_chart_generator('BarChartGenerator').prototype.evaluateParams.call(
+    gch.get_chart_generator('BarChartGenerator').prototype.evaluateParams.call(
         this, gen_params);
 
     if (gsa.is_defined(gen_params.extra)) {
@@ -126,7 +128,7 @@
         gen_params.chart_template === '') {
       if (gsa.is_array(this.z_fields) && gsa.is_string(this.z_fields[0])) {
         if (this.z_fields[0].indexOf('severity') !== -1) {
-          this.setBarStyle(gsa.severity_bar_style(this.z_fields[0],
+          this.setBarStyle(gch.severity_bar_style(this.z_fields[0],
             gsa.severity_levels.max_log,
             gsa.severity_levels.max_low,
             gsa.severity_levels.max_medium));
@@ -134,7 +136,7 @@
       }
       else if (gsa.is_string(this.y_field) &&
           this.y_field.indexOf('severity') !== -1) {
-        this.setBarStyle(gsa.severity_bar_style(this.y_field,
+        this.setBarStyle(gch.severity_bar_style(this.y_field,
               gsa.severity_levels.max_log,
               gsa.severity_levels.max_low,
               gsa.severity_levels.max_medium));
@@ -142,7 +144,7 @@
     }
   };
 
-  HorizontalBarChartGenerator.prototype.generate = function(display, data) {
+  HorizontalBarChartGenerator.prototype.generate = function(svg, data, update) {
     var self = this;
     var x_data;
     var y_data; // == size_data
@@ -175,9 +177,9 @@
     this.margin.left = this.margin.right + Math.min(25, max_len) * 6.5;
 
     // Setup display parameters
-    var height = display.svg().attr('height') - this.margin.top -
+    var height = svg.attr('height') - this.margin.top -
       this.margin.bottom;
-    var width = display.svg().attr('width') - this.margin.left -
+    var width = svg.attr('width') - this.margin.left -
       this.margin.right;
 
     this.x_scale.rangeRoundBands([0, height], 0.125);
@@ -202,12 +204,12 @@
     this.x_scale.domain(x_data);
     this.y_scale.domain([0, y_max]).nice(10);
 
-    if (this.mustUpdate(display)) {
-      display.svg().text('');
-      this.svg = display.svg().append('g');
+    if (update) {
+      svg.text('');
+      this.svg = svg.append('g');
 
-      display.svg().on('mousemove', null);
-      display.svg().on('mouseleave', null);
+      svg.on('mousemove', null);
+      svg.on('mouseleave', null);
 
       this.x_axis_elem = this.svg.append('g')
         .attr('class', 'x axis')
@@ -236,14 +238,15 @@
             for (var tooltip in self.tooltips) {
 
               if (self.tooltips[tooltip].label) {
-                extra += '<br/><strong>' + self.tooltips[tooltip].label + ':</strong> ';
+                extra += '<br/><strong>' + self.tooltips[tooltip].label +
+                  ':</strong> ';
               }
               else {
                 extra += '<br/>';
               }
 
               if (gsa.is_date(d[self.tooltips[tooltip].field])) {
-                extra += gsa.datetime_format(d[self.tooltips[tooltip].field]);
+                extra += gch.datetime_format(d[self.tooltips[tooltip].field]);
               }
               else {
                 extra += d[self.tooltips[tooltip].field];

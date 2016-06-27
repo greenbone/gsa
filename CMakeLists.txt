@@ -306,10 +306,12 @@ install (FILES src/html/classic/js/lib/d3.tip.js
                src/html/classic/js/lib/d3.layout.cloud.js
                src/html/classic/js/gsa_bar_chart.js
                src/html/classic/js/gsa_bubble_chart.js
+               src/html/classic/js/gsa_chart_helpers.js
+               src/html/classic/js/gsa_graphics_base.js
                src/html/classic/js/gsa_cloud_chart.js
+               src/html/classic/js/gsa_dashboard.js
                src/html/classic/js/gsa_donut_chart.js
                src/html/classic/js/gsa_gantt_chart.js
-               src/html/classic/js/gsa_graphics_base.js
                src/html/classic/js/gsa_h_bar_chart.js
                src/html/classic/js/gsa_line_chart.js
                src/html/classic/js/greenbone.js

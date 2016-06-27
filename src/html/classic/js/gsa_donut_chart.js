@@ -27,16 +27,18 @@
 (function(global, window, d3, console, gsa, $) {
   'use strict';
 
-  gsa.register_chart_generator('donut', DonutChartGenerator);
+  var gch = gsa.charts;
+
+  gch.register_chart_generator('donut', DonutChartGenerator);
 
   /* Main chart generator */
   function DonutChartGenerator() {
     // call super constructor
-    gsa.BaseChartGenerator.call(this, 'donut');
+    gch.BaseChartGenerator.call(this, 'donut');
   }
 
   DonutChartGenerator.prototype = Object.create(
-      gsa.BaseChartGenerator.prototype);
+      gch.BaseChartGenerator.prototype);
   DonutChartGenerator.prototype.constructor = DonutChartGenerator;
 
   DonutChartGenerator.prototype.init = function() {
@@ -48,18 +50,18 @@
     this.x_field = 'value';
     this.y_field = 'count';
 
-    this.setDataTransformFunc(gsa.data_raw);
+    this.setDataTransformFunc(gch.data_raw);
     this.setTitleGenerator(
-      gsa.title_static(gsa._('Loading donut chart ...'), gsa._('Donut Chart')));
+      gch.title_static(gsa._('Loading donut chart ...'), gsa._('Donut Chart')));
   };
 
   DonutChartGenerator.prototype.generateData = function(controller,
       original_data) {
-    var cmd = controller.data_src().command();
+    var cmd = controller.data_src.command;
     var data;
     if (cmd === 'get_aggregate') {
       data = this.transformData(original_data);
-      return gsa.fill_empty_fields(data);
+      return gch.fill_empty_fields(data);
     }
     else {
       console.error('Unsupported command:' + cmd);
@@ -68,7 +70,7 @@
   };
 
   DonutChartGenerator.prototype.evaluateParams = function(gen_params) {
-    gsa.BaseChartGenerator.prototype.evaluateParams.call(this, gen_params);
+    gch.BaseChartGenerator.prototype.evaluateParams.call(this, gen_params);
 
     if (gen_params.x_field) {
       this.x_field = gen_params.x_field;
@@ -87,15 +89,15 @@
     }
     else if (gen_params.chart_template === 'info_by_class' ||
         gen_params.chart_template === 'recent_info_by_class') {
-      this.setColorScale(gsa.severity_level_color_scale);
+      this.setColorScale(gch.severity_level_color_scale);
     }
   };
 
-  DonutChartGenerator.prototype.generate = function(display, data) {
+  DonutChartGenerator.prototype.generate = function(svg, data, update) {
     var self = this;
 
     if (!gsa.is_defined(this.color_scale)) {
-      this.setColorScale(gsa.field_color_scale(
+      this.setColorScale(gch.field_color_scale(
             data.column_info.columns[this.x_field].type,
             data.column_info.columns[this.x_field].column));
     }
@@ -116,20 +118,20 @@
     });
 
     var legend_width = Math.min(240, Math.max(120,
-          display.svg().attr('width') / 5));
+          svg.attr('width') / 5));
 
     // Setup display parameters
-    var height = display.svg().attr('height') - this.margin.top -
+    var height = svg.attr('height') - this.margin.top -
       this.margin.bottom;
-    var width = display.svg().attr('width') - this.margin.left -
+    var width = svg.attr('width') - this.margin.left -
       this.margin.right - legend_width;
 
-    if (this.mustUpdate(display)) {
-      display.svg().text('');
-      this.svg = display.svg().append('g');
+    if (update) {
+      svg.text('');
+      this.svg = svg.append('g');
 
-      display.svg().on('mousemove', null);
-      display.svg().on('mouseleave', null);
+      svg.on('mousemove', null);
+      svg.on('mouseleave', null);
 
       this.svg.attr('transform',
           'translate(' + this.margin.left + ',' + this.margin.top + ')');
@@ -244,7 +246,7 @@
         .text(x_data[i])
         .attr('title', get_title(d));
 
-      gsa.wrap_text(new_text, legend_width - 25);
+      gch.wrap_text(new_text, legend_width - 25);
 
       legend_y += Math.max(20, new_text.node().getBBox().height + 5);
     }
@@ -499,24 +501,24 @@
 
   DonutChartGenerator.prototype.generateCsvData = function(controller, data) {
     var cols = data.column_info.columns;
-    return gsa.csv_from_records(data.records,
+    return gch.csv_from_records(data.records,
         data.column_info,
         [this.x_field, this.y_field],
-        [gsa.column_label(cols[this.x_field], true, false, this.show_stat_type),
-        gsa.column_label(cols[this.y_field], true, false, this.show_stat_type)],
-        controller.display().header().text());
+        [gch.column_label(cols[this.x_field], true, false, this.show_stat_type),
+        gch.column_label(cols[this.y_field], true, false, this.show_stat_type)],
+        controller.display.getTitle());
   };
 
   DonutChartGenerator.prototype.generateHtmlTableData = function(controller,
       data) {
     var cols = data.column_info.columns;
-    return gsa.html_table_from_records(data.records,
+    return gch.html_table_from_records(data.records,
         data.column_info,
         [this.x_field, this.y_field],
-        [gsa.column_label(cols[this.x_field], true, false, this.show_stat_type),
-        gsa.column_label(cols[this.y_field], true, false, this.show_stat_type)],
-        controller.display().header().text(),
-        controller.data_src().param('filter'));
+        [gch.column_label(cols[this.x_field], true, false, this.show_stat_type),
+        gch.column_label(cols[this.y_field], true, false, this.show_stat_type)],
+        controller.display.getTitle(),
+        controller.data_src.getParam('filter'));
   };
 
   DonutChartGenerator.prototype.generateLink = function(d, i, column, type,
@@ -527,7 +529,7 @@
       value = d.data[self.x_field];
     }
 
-    return gsa.filtered_list_url(type, column, value, filter_info);
+    return gch.filtered_list_url(type, column, value, filter_info);
   };
 
   /*

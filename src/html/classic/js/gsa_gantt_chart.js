@@ -27,7 +27,9 @@
 (function(global, window, d3, console, gsa) {
   'use strict';
 
-  gsa.register_chart_generator('gantt', GanttChartGenerator);
+  var gch = gsa.charts;
+
+  gch.register_chart_generator('gantt', GanttChartGenerator);
 
   /* Schedule data extractor */
   function data_task_schedules(old_data, gen_params) {
@@ -53,11 +55,11 @@
   }
 
   function GanttChartGenerator() {
-    gsa.BaseChartGenerator.call(this, 'gantt');
+    gch.BaseChartGenerator.call(this, 'gantt');
   }
 
   GanttChartGenerator.prototype = Object.create(
-      gsa.BaseChartGenerator.prototype);
+      gch.BaseChartGenerator.prototype);
   GanttChartGenerator.prototype.constructor = GanttChartGenerator;
 
   GanttChartGenerator.prototype.init = function() {
@@ -71,19 +73,19 @@
     this.show_stat_type = true;
 
     this.setDataTransformFunc(data_task_schedules);
-    this.setTitleGenerator(gsa.title_static(
+    this.setTitleGenerator(gch.title_static(
       gsa._('Loading Gantt chart ...'), gsa._('Gantt Chart')));
   };
 
   GanttChartGenerator.prototype.evaluateParams = function(gen_params) {
-    gsa.BaseChartGenerator.prototype.evaluateParams.call(this, gen_params);
+    gch.BaseChartGenerator.prototype.evaluateParams.call(this, gen_params);
 
     if (gen_params.extra.empty_text) {
       this.empty_text = gen_params.extra.empty_text;
     }
   };
 
-  GanttChartGenerator.prototype.generate = function(display, data) {
+  GanttChartGenerator.prototype.generate = function(svg, data, update) {
     var self = this;
 
     this.x_scale = d3.scale.ordinal();
@@ -119,7 +121,7 @@
 
     if (!gsa.is_defined(this.empty_text)) {
       this.empty_text = gsa._('No matching {{resource_type}}',
-          gsa.resource_type_name(column_info.columns[this.x_field].type));
+          gch.resource_type_name(column_info.columns[this.x_field].type));
     }
 
     if (limit) {
@@ -132,9 +134,9 @@
     x_data = display_records.map(function(d) { return d[self.x_field]; });
 
     // Setup display parameters
-    var height = display.svg().attr('height') - this.margin.top -
+    var height = svg.attr('height') - this.margin.top -
       this.margin.bottom;
-    var width = display.svg().attr('width') - this.margin.left -
+    var width = svg.attr('width') - this.margin.left -
       this.margin.right;
 
     // Setup scales
@@ -157,10 +159,10 @@
     this.x_scale.domain(x_data)
       .rangeRoundBands([height, 0], 0.125);
 
-    if (this.mustUpdate(display)) {
-      display.svg().text('');
+    if (update) {
+      svg.text('');
 
-      var defs = display.svg().append('defs');
+      var defs = svg.append('defs');
       var gradient1 = defs.append('linearGradient')
         .attr('id', 'green_fill_gradient')
         .attr('x1', '0%')
@@ -205,10 +207,10 @@
         .style('stop-color', '#549330')
         .style('stop-opacity', '0.1');
 
-      this.svg = display.svg().append('g');
+      this.svg = svg.append('g');
 
-      display.svg().on('mousemove', null);
-      display.svg().on('mouseleave', null);
+      svg.on('mousemove', null);
+      svg.on('mouseleave', null);
 
       this.svg.attr('transform',
         'translate(' + this.margin.left + ',' + this.margin.top + ')');
@@ -255,7 +257,7 @@
       var type = data.column_info.columns.id.type;
       var value = d.id;
 
-      return gsa.details_page_url(type, value, data.filter_info);
+      return gch.details_page_url(type, value, data.filter_info);
     }
 
     // Update chart
@@ -328,9 +330,9 @@
 
     function get_start_title(d, duration, start) {
       var text = d.name;
-      text += '\nStart: ' + gsa.datetime_format(new Date(start));
+      text += '\nStart: ' + gch.datetime_format(new Date(start));
       if (duration) {
-        text += '\nEnd: ' + gsa.datetime_format(new Date(
+        text += '\nEnd: ' + gch.datetime_format(new Date(
               +start + duration * 1000));
       }
       else {
@@ -441,7 +443,7 @@
         }
 
         future_runs_text += '\nNext scheduled run: ' +
-          gsa.datetime_format(new_date);
+          gch.datetime_format(new_date);
 
         sel.selectAll('.future-marker')
           .data(future_runs ? [1] : [])
@@ -490,7 +492,7 @@
   GanttChartGenerator.prototype.generateData = function(controller,
       original_data, gen_params) {
     // Extract records and column info
-    var cmd = controller.data_src().command();
+    var cmd = controller.data_src.command;
     if (cmd === 'get_tasks') {
       return this.transformData(original_data, gen_params);
     }
@@ -502,22 +504,22 @@
 
   GanttChartGenerator.prototype.generateCsvData = function(controller, data) {
     var cols = data.column_info.columns;
-    return gsa.csv_from_records(data.records, data.column_info,
+    return gch.csv_from_records(data.records, data.column_info,
         [this.x_field, this.y_field],
-        [gsa.column_label(cols[this.x_field], true, false, this.show_stat_type),
-        gsa.column_label(cols[this.y_field], true, false, this.show_stat_type)],
-        controller.display().header().text());
+        [gch.column_label(cols[this.x_field], true, false, this.show_stat_type),
+        gch.column_label(cols[this.y_field], true, false, this.show_stat_type)],
+        controller.display.header.text);
   };
 
   GanttChartGenerator.prototype.generateHtmlTableData = function(controller,
       data) {
     var cols = data.column_info.columns;
-    return gsa.html_table_from_records(data.records, data.column_info,
+    return gch.html_table_from_records(data.records, data.column_info,
         [this.x_field, this.y_field],
-        [gsa.column_label(cols[this.x_field], true, false, this.show_stat_type),
-        gsa.column_label(cols[this.y_field], true, false, this.show_stat_type)],
-        controller.display().header().text(),
-        controller.data_src().param('filter'));
+        [gch.column_label(cols[this.x_field], true, false, this.show_stat_type),
+        gch.column_label(cols[this.y_field], true, false, this.show_stat_type)],
+        controller.display.getTitle(),
+        controller.data_src.getParam('filter'));
   };
 
 })(window, window, window.d3, window.console, window.gsa);
