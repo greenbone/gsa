@@ -52,8 +52,10 @@
 
     function tip(vis) {
       svg = getSVGNode(vis);
-      point = new_point();
-      document.body.appendChild(node);
+      if (svg !== null) {
+        point = new_point();
+        document.body.appendChild(node);
+      }
     }
 
     // Public - show the tooltip on the screen

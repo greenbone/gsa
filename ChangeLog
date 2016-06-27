@@ -1,3 +1,10 @@
+2016-06-27  Björn Ricks <bjoern.ricks@gmx.net>
+
+	Fix possible error in d3.tip
+
+	* src/html/classic/js/lib/d3.tip.js: Be save when generating d3 tips be
+	checking if the svg element is valid.
+
 2016-06-22  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Add Default CA Cert setting.
