@@ -1345,7 +1345,7 @@
     }
 
     this.edit_mode = edit_mode;
-    this.all_filters = filters || [];
+    this.all_filters = filters || [EMPTY_FILTER];
     this.filters = [];
     this.controllers = [];
 

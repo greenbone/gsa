@@ -1,5 +1,10 @@
 2016-06-28  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_dashboard.js (DashboardDisplay): Put empty filter in
+	the list of all filters if no filter is passed to the DashboardDisplay.
+
+2016-06-28  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_dashboard.js (create_uri): Fix handling of filters
 	when creating an uri. If a filter is passed to create_uri it is only applied
 	if it has a valid id. This fixes the drill down of the charts.
