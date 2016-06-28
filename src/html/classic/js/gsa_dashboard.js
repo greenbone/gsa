@@ -1731,6 +1731,16 @@
   };
 
   /**
+   * Returns the current set filter
+   *
+   * @return The currently applied filter
+   *
+   */
+  DashboardDisplay.prototype.getCurrentFilter = function() {
+    return this.current_filter;
+  };
+
+  /**
    *
    * @return This display
    */

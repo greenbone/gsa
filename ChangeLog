@@ -1,5 +1,10 @@
 2016-06-27  Björn Ricks <bjoern.ricks@gmx.net>
 
+	* src/html/classic/js/gsa_dashboard.js (DashboardDisplay): Add a
+	getCurrentFilter method to DashboardDisplay.
+
+2016-06-27  Björn Ricks <bjoern.ricks@gmx.net>
+
 	* src/html/classic/js/gsa_dashboard.js (DashboardDisplay): Distinguish between
 	all available filters and filters corresponding the the current chart
 	controller. With this change the filters array property of DashboardDisplay
