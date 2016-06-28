@@ -1599,28 +1599,6 @@
   };
 
   /**
-   * Rebuilds the options in the filter selector
-   *
-   * @return This display
-   */
-  DashboardDisplay.prototype.rebuildFilterSelection = function() {
-    if (gsa.is_defined(this.filter_select_elem)) {
-      var filter_type = this.current_controller.data_src.filter_type;
-      var select2_data = [];
-
-      for (var filter_id in this.filters) {
-        var filter = this.filters[filter_id];
-        if (filter.type === filter_type || filter.type === '') {
-          select2_data.push({id: filter_id, text: filter.name});
-        }
-      }
-      this.filter_select_elem.html('');
-      this.filter_select_elem.select2({'data': select2_data});
-    }
-    return this;
-  };
-
-  /**
    *
    *
    * @return This display
@@ -1852,6 +1830,24 @@
   };
 
   /**
+   * Rebuilds the options in the filter selector
+   *
+   * @return This display
+   */
+  DashboardDisplay.prototype._rebuildFilterSelection = function() {
+    if (gsa.is_defined(this.filter_select_elem)) {
+      var select2_data = [];
+
+      this.filters.forEach(function(filter, index) {
+        select2_data.push({id: index, text: filter.name});
+      });
+      this.filter_select_elem.html('');
+      this.filter_select_elem.select2({'data': select2_data});
+    }
+    return this;
+  };
+
+  /**
    * Selects the current controller for the display and starts a redraw
    * if the controller has changed. Also triggers a controller_changed event in
    * that case.
@@ -1877,7 +1873,7 @@
       this.current_controller = new_controller;
 
       if (new_controller.data_src.filter_type !== old_filter_type) {
-        this.rebuildFilterSelection();
+        this._rebuildFilterSelection();
       }
 
       this.redraw();

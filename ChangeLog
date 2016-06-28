@@ -1,5 +1,15 @@
 2016-06-27  Björn Ricks <bjoern.ricks@gmx.net>
 
+	* src/html/classic/js/gsa_dashboard.js
+	(DashboardDisplay.prototype._rebuildFilterSelection): Rename
+	rebuildFilterSelection to _rebuildFilterSelection to mark the function as an
+	"internal" method of DashboardDisplay. Use also Array.prototype.forEach
+	instead of for loop and put all filters from the filters array into the
+	selection. The filters array property of DashboardDisplay should only contain
+	usable filters for the current controller in future.
+
+2016-06-27  Björn Ricks <bjoern.ricks@gmx.net>
+
 	Refactoring of the dashboard chart code.
 	- Use prototype based classes
 	- Use consistent names (e.g. Display instead of component)
