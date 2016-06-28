@@ -2048,6 +2048,7 @@
         value: index,
         id: self.id + '_filter_opt_' + filter.id,
         text: filter.name,
+        selected: filter === self.current_filter,
       })
       .appendTo(self.filter_select_elem);
     });
