@@ -59,6 +59,8 @@
     };
   }
 
+  var EMPTY_FILTER = {id: '', name: '--', term: '', type: null};
+
   function EventNode(event_node) {
     this.event_node = event_node ? event_node : $('<span/>');
   }
@@ -196,7 +198,7 @@
     this.prev_filters_string = filters_string;
 
     this.controller_factories = {};
-    this.filters = [{id: '', name: '--', term: '', type: ''}];
+    this.filters = [EMPTY_FILTER];
 
     this.reordering = false; // indicator if the dashboard rows are currently reorderd
 
@@ -1899,7 +1901,7 @@
 
   /**
    * Selects a controller for the display. If index is undefined the empty
-   * filter (filter.term === '') is selected.
+   * filter (filter.type === null) is selected.
    *
    * If the filter has changed a redraw is
    * started. In that case also filter_changed is triggered.
@@ -1914,7 +1916,7 @@
     if (!gsa.is_defined(index)) {
       new_filter = this.filters.find(function(filter) {
         // find empty filter
-        return filter.term === '';
+        return filter.type === null;
       });
     }
     else {
@@ -2096,7 +2098,7 @@
       return;
     }
     this.filters = this.all_filters.filter(function(filter) {
-      return filter.term === '' ||
+      return filter.type === null ||
         filter.type === self.current_controller.data_src.filter_type;
     });
     return this;
