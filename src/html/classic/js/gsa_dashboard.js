@@ -2225,10 +2225,9 @@
   /**
    * Callback for when data is loaded.
    *
-   * @param orig_data   The data that was loaded.
-   * @param gen_params  Generator parameters.
+   * @param xml_select  The xml data that was loaded.
    */
-  ChartController.prototype.dataLoaded = function(orig_data, gen_params) {
+  ChartController.prototype.dataLoaded = function(xml_select) {
     var self = this;
 
     self.display.hideLoading();
@@ -2239,8 +2238,9 @@
       return;
     }
 
-    self.generator.evaluateParams(gen_params);
+    self.generator.evaluateParams(self.gen_params);
 
+    var orig_data = self.generator.extractData(xml_select, self.gen_params);
     var data = self.generator.generateData(orig_data, self.gen_params);
 
     self.display.setTitle(self.generator.getTitle(data));
@@ -2491,11 +2491,8 @@
         var data_uri = create_uri(this.command, filter, this.params,
             this.prefix, false);
 
-        if (!gsa.is_defined(this.data[filter_id])) {
-          this.data[filter_id] = {};
-        }
-
-        if (this.xml_data[filter_id]) {
+        var xml_select = this.xml_data[filter_id];
+        if (xml_select) {
           // data has already been received once
           for (var controller_id in controllers) {
             if (!controllers[controller_id].active) {
@@ -2503,25 +2500,8 @@
               continue;
             }
 
-            var xml_select = self.xml_data[filter_id];
-            var gen_params = controllers[controller_id].gen_params;
-            var data = self.data[filter_id][controller_id];
-
-            if (!gsa.is_defined(data)) {
-              data = this._extractData(xml_select, gen_params);
-            }
-
-            if (!gsa.is_defined(data)) {
-              self.outputError(
-                  controllers[controller_id].controller,
-                  gsa._('Internal error: Invalid request'),
-                  gsa._('Invalid request command: "{{command}}"',
-                    {command: this.command}));
-            }
-            self.data[filter_id][controller_id] = data;
             controllers[controller_id].active = false;
-            controllers[controller_id].controller.dataLoaded(
-                data, gen_params);
+            controllers[controller_id].controller.dataLoaded(xml_select);
           }
           return;
         }
@@ -2533,7 +2513,6 @@
               var controller_id;
               var omp_status;
               var omp_status_text;
-              var gen_params;
 
               if (error) {
                 if (error instanceof XMLHttpRequest) {
@@ -2643,11 +2622,8 @@
                     continue;
                   }
 
-                  gen_params = ctrl.gen_params;
                   ctrl.active = false;
-                  var data =  self._extractData(xml_select, gen_params);
-                  self.data[filter_id][controller_id] = data;
-                  ctrl.controller.dataLoaded(data, gen_params);
+                  ctrl.controller.dataLoaded(xml_select);
                 }
                 delete self.active_requests[filter_id];
               }
@@ -2732,9 +2708,9 @@
     else if (this.command === 'get_assets') {
       data = {
         original_xml: xml_select,
-        topology: gch.extract_host_topology_data (xml_select),
+        topology: gch.extract_host_topology_data(xml_select),
         filter_info: gch.extract_filter_info(xml_select)
-      }
+      };
     }
     return data;
   };
