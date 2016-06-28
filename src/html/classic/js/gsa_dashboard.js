@@ -1464,7 +1464,7 @@
     if (!this.hide_controller_select) {
       this._createControllerSelector();
     }
-    if (!this.hide_filter_select &&  this.filters.length > 1) {
+    if (this._showFilterSelect()) {
       this._createFilterSelector();
     }
 
@@ -2100,6 +2100,15 @@
         filter.type === self.current_controller.data_src.filter_type;
     });
     return this;
+  };
+
+  /**
+   * Returns wether the filter selection element should be shown
+   *
+   * @return true if the filter selection should be shown
+   */
+  DashboardDisplay.prototype._showFilterSelect = function() {
+    return !this.hide_filter_select &&  this.filters.length > 1;
   };
 
   /* Chart controller class */
