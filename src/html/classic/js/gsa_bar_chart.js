@@ -164,7 +164,8 @@
             for (var tooltip in self.tooltips) {
 
               if (self.tooltips[tooltip].label) {
-                extra += '<br/><strong>' + self.tooltips[tooltip].label + ':</strong> ';
+                extra += '<br/><strong>' + self.tooltips[tooltip].label +
+                  ':</strong> ';
               }
               else {
                 extra += '<br/>';
