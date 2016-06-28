@@ -299,6 +299,11 @@
     };
   };
 
+  BaseChartGenerator.prototype.generateData = function(original_data,
+      gen_params) {
+    return this.transformData(original_data, gen_params);
+  };
+
   BaseChartGenerator.prototype.generateLink = function(d, i, column, type,
       filter_info) {
   };
