@@ -365,7 +365,7 @@
       BaseChartGenerator.prototype);
   AssetChartGenerator.prototype.constructor = AssetChartGenerator;
 
-  TaskChartGenerator.prototype.extractData = function(xml_select,
+  AssetChartGenerator.prototype.extractData = function(xml_select,
       gen_params) {
     return {
       original_xml: xml_select,

@@ -1,5 +1,10 @@
 2016-06-28  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_graphics_base.js: Fix copy and paste mistake and
+	assign function to the correct prototype.
+
+2016-06-28  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_dashboard.js (DataSource.prototype._extractData):
 	Remove now obsolete method _extractData from DataSource. Extracting the data
 	info is now done in the generators.
