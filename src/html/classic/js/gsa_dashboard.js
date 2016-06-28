@@ -1343,7 +1343,8 @@
     }
 
     this.edit_mode = edit_mode;
-    this.filters = filters || [];
+    this.all_filters = filters || [];
+    this.filters = [];
     this.controllers = [];
 
     for (var controller_name in controller_factories) {
@@ -1354,10 +1355,12 @@
       this.controllers.push(new_controller);
     }
 
-    this.current_filter = this.filters.find(function(filter, index) {
+    this.current_filter = this.all_filters.find(function(filter, index) {
       return filter.id === '' && !gsa.has_value(self.filter_string) ||
         filter.id === self.filter_string;
     });
+
+    this._updateFilters();
 
     this.init();
   }
@@ -1873,7 +1876,9 @@
       this.current_controller = new_controller;
 
       if (new_controller.data_src.filter_type !== old_filter_type) {
+        this._updateFilters();
         this._rebuildFilterSelection();
+        this._selectFilter(); // select empty filter
       }
 
       this.redraw();
@@ -2065,6 +2070,25 @@
     }
     this.current_controller
         .sendRequest(this.current_filter);
+    return this;
+  };
+
+  /**
+   * Updates the filter list for the current controller
+   *
+   * @return This display
+   */
+  DashboardDisplay.prototype._updateFilters = function() {
+    var self = this;
+
+    if (!gsa.is_defined(this.current_controller)) {
+      this.filters = [];
+      return;
+    }
+    this.filters = this.all_filters.filter(function(filter) {
+      return filter.term === '' ||
+        filter.type === self.current_controller.data_src.filter_type;
+    });
     return this;
   };
 
