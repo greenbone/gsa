@@ -314,6 +314,7 @@ install (FILES src/html/classic/js/lib/d3.tip.js
                src/html/classic/js/gsa_gantt_chart.js
                src/html/classic/js/gsa_h_bar_chart.js
                src/html/classic/js/gsa_line_chart.js
+               src/html/classic/js/gsa_topology_chart.js
                src/html/classic/js/greenbone.js
                src/html/classic/js/greenbone-ui.js
          DESTINATION ${GSA_DATA_DIR}/classic/js)

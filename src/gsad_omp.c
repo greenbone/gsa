@@ -27435,8 +27435,11 @@ get_assets (credentials_t *credentials, params_t *params, const char *extra_xml,
   extra_response = g_string_new (extra_xml ? extra_xml : "");
 
   extra_attribs = g_string_new("");
-  g_string_append_printf (extra_attribs, "type=\"%s\"",
-                          params_value (params, "asset_type"));
+  g_string_append_printf (extra_attribs, "type=\"%s\" ignore_pagination=\"%s\"",
+                          params_value (params, "asset_type"),
+                          params_value (params, "ignore_pagination")
+                            ? params_value (params, "ignore_pagination")
+                            : "0");
   if (params_value (params, "details"))
     g_string_append_printf (extra_attribs,
                             " details=\"%s\"",

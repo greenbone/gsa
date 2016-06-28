@@ -680,6 +680,126 @@
   };
 
   /**
+   * Extracts host topology data from XML.
+   *
+   * @param xml_data  The root node of the XML to extract the data from.
+   *
+   * @return  An array of records as used by chart generators.
+   */
+  gch.extract_host_topology_data = function(xml_data) {
+    var nodes = [];
+    var nodes_by_link_id = {};
+    var links = [];
+    var data = {
+                nodes : nodes,
+                nodes_by_link_id: nodes_by_link_id,
+                links : links
+               };
+    var assets = xml_data.selectAll('get_assets_response asset');
+
+    // Create nodes for each host
+    assets.each(function () {
+      var asset_elem = d3.select(this);
+      var new_host = {};
+      new_host.type = 'host';
+      new_host.hostname = null;
+      new_host.os = null;
+      new_host.os_cpe = null;
+      new_host.traceroute = null;
+      new_host.link_id = asset_elem.select('asset>name').text()
+      new_host.name = asset_elem.select('asset>name').text();
+      new_host.id = asset_elem.attr('id');
+      new_host.severity = Number(asset_elem.select('severity>value').text());
+
+      var identifiers = asset_elem.selectAll('identifiers>identifier');
+      identifiers.each(function () {
+        var identfier = d3.select(this);
+        switch (identfier.select('name').text()) {
+          case 'hostname':
+            if (new_host.hostname === null)
+              new_host.hostname = identfier.select('value').text()
+            break;
+        }
+      });
+
+      var host_details = asset_elem.selectAll('host detail');
+      host_details.each(function () {
+        var detail = d3.select(this);
+        switch (detail.select('name').text()) {
+          case 'traceroute':
+            if (new_host.traceroute === null)
+              new_host.traceroute = detail.select('value').text()
+            break;
+          case 'best_os_txt':
+            if (new_host.os === null)
+              new_host.os = detail.select('value').text()
+            break;
+          case 'best_os_cpe':
+            if (new_host.os_cpe === null)
+              new_host.os_cpe = detail.select('value').text()
+            break;
+        }
+      });
+      nodes.push(new_host);
+      nodes_by_link_id[new_host.link_id] = new_host;
+    });
+
+    // Create links between host;
+    for (var node_index = 0; node_index < nodes.length; node_index++) {
+      var host = nodes[node_index];
+
+      if (host.traceroute !== null) {
+        var route_split = host.traceroute.split(',');
+        for (var hop_index = 0; hop_index < route_split.length - 1; hop_index++) {
+          var new_link = {};
+          var source_ip = route_split[hop_index];
+          var target_ip = route_split[hop_index + 1];
+
+          // Create source node if its IP address is not in the list.
+          if (! gsa.is_defined(nodes_by_link_id [source_ip])) {
+            var new_host = {};
+            new_host.type = 'host';
+            new_host.hostname = null;
+            new_host.os = null;
+            new_host.os_cpe = null;
+            new_host.traceroute = null;
+            new_host.link_id = source_ip;
+            new_host.name = source_ip;
+            new_host.id = null;
+            new_host.severity = null;
+            nodes.push(new_host);
+            nodes_by_link_id[new_host.link_id] = new_host;
+          }
+
+          // Create target node if its IP address is not in the list.
+          if (! gsa.is_defined(nodes_by_link_id [source_ip])) {
+            var new_host = {};
+            new_host.type = 'host';
+            new_host.hostname = null;
+            new_host.os = null;
+            new_host.os_cpe = null;
+            new_host.traceroute = null;
+            new_host.link_id = target_ip;
+            new_host.name = target_ip;
+            new_host.id = null;
+            new_host.severity = null;
+            nodes.push(new_host);
+            nodes_by_link_id[new_host.link_id] = new_host;
+          }
+
+          new_link.source = nodes_by_link_id[source_ip];
+          new_link.target = nodes_by_link_id[target_ip];
+
+          links.push (new_link);
+        }
+
+      }
+    }
+
+    return data;
+  }
+
+  /**
    * Extracts filter info from XML.
    *
    * @param xml_data  The root element of the XML to extract from.

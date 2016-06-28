@@ -1,3 +1,25 @@
+2016-06-28  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* CMakeLists.txt: Install src/html/classic/js/gsa_topology_chart.js.
+
+	* src/gsad_omp.c (get_assets): Add ignore_pagination parameter.
+
+	* src/html/classic/graphics.xsl (init-d3charts): Also load the file
+	gsa_topology_chart.js.
+	(js-assets-top-visualization, assets-dashboard-data): Add new chart
+	"Hosts Topology".
+
+	* src/html/classic/js/gsa_chart_helpers.js (extract_host_topology_data):
+	New function.
+
+	* src/html/classic/js/gsa_dashboard.js (DataSource.prototype.init)
+	(DataSource.prototype.checkRequests, DataSource.prototype._extractData)
+	(get_selector_label, get_title_generator): Handle new type "host" and
+	command "get_assets".
+
+	* src/html/classic/js/gsa_topology_chart.js: New JavaScript for
+	topology charts.
+
 2016-06-28  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/js/gsa_dashboard.js: Fix setting log.error and log.warn

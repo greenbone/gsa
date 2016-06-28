@@ -55,6 +55,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <script src="/js/gsa_gantt_chart.js"></script>
   <script src="/js/gsa_h_bar_chart.js"></script>
   <script src="/js/gsa_line_chart.js"></script>
+  <script src="/js/gsa_topology_chart.js"></script>
   <script type="text/javascript">
     gsa.gsa_token = "<xsl:value-of select="gsa:escape-js (/envelope/params/token)"/>";
 
@@ -393,6 +394,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           data-y-fields="c_count,c_count[High]"
           data-z-fields="count,count[High]"
           data-chart-type="line"/>
+      </div>
+      <div class="dashboard-data-source"
+        data-source-name="hosts-topology-source"
+        data-aggregate-type="{$type}"
+        data-type="host"
+        data-filter="{$filter}"
+        data-filter-id="{$filt_id}">
+        <span class="dashboard-chart"
+          data-chart-name="hosts-topology"
+          data-chart-type="topology"/>
       </div>
     </xsl:if>
     <xsl:if test="$type = 'os'">
@@ -1246,6 +1257,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       data-y-fields="c_count,c_count[High]"
       data-z-fields="count,count[High]"
       data-chart-type="line"/>
+  </div>
+  <div class="dashboard-data-source"
+    data-source-name="hosts-topology-source"
+    data-aggregate-type="{$type}"
+    data-type="host"
+    data-filter="{$filter}"
+    data-filter-id="{$filt_id}">
+    <span class="dashboard-chart"
+      data-chart-name="hosts-topology"
+      data-chart-type="topology"/>
   </div>
 
   <!-- Operating Systems -->

@@ -2350,6 +2350,14 @@
       this.params.no_filter_history = 1;
       this.params.schedules_only = 1;
     }
+    else if (this.options.type === 'host') {
+      this.command = 'get_assets';
+      this.filter_type = 'Asset';
+
+      this.params.asset_type = 'host';
+      this.params.no_filter_history = 1;
+      this.params.ignore_pagination = 1;
+    }
     else {
       this.command = 'get_aggregate';
       this.filter_type = gch.filter_type_name(this.options.aggregate_type);
@@ -2587,6 +2595,14 @@
                       'get_tasks get_tasks_response')
                     .attr('status_text');
                 }
+                else if (self.command === 'get_assets') {
+                  omp_status = xml_select.select(
+                      'get_assets get_assets_response')
+                    .attr('status');
+                  omp_status_text = xml_select.select(
+                      'get_assets get_assets_response')
+                    .attr('status_text');
+                }
                 else {
                   for (controller_id in ctrls) {
                     self.outputError(ctrls[controller_id].controller,
@@ -2708,6 +2724,13 @@
         column_info: gch.tasks_column_info(),
         filter_info: gch.extract_filter_info(xml_select)
       };
+    }
+    else if (this.command === 'get_assets') {
+      data = {
+        original_xml: xml_select,
+        topology: gch.extract_host_topology_data (xml_select),
+        filter_info: gch.extract_filter_info(xml_select)
+      }
     }
     return data;
   };
@@ -2911,6 +2934,10 @@
       return gsa._('Next scheduled tasks');
     }
 
+    if (type === 'host') {
+      return gsa._('Hosts topology');
+    }
+
     if (chart_template === 'info_by_class' ||
         chart_template === 'recent_info_by_class') {
       if (group_column === 'average_severity') {
@@ -2984,6 +3011,11 @@
     if (type === 'task') {
       return gch.title_static(gsa._('Next scheduled tasks (Loading...)'),
           gsa._('Next scheduled Tasks'));
+    }
+
+    if (type === 'host') {
+      return gch.title_static(gsa._('Hosts topology'),
+                              gsa._('Hosts topology (Loading...)'));
     }
 
     if (chart_template === 'info_by_class' ||
