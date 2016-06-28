@@ -28,6 +28,12 @@
 2016-06-28  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/js/gsa_graphics_base.js
+	(BaseChartGenerator.prototype.supportsCommand): Add method that checks if a
+	command is supported by a chart generator.
+
+2016-06-28  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/js/gsa_graphics_base.js
 	(BaseChartGenerator.prototype.generateData): Add a default implementation for
 	generateData method. This method is mostly the same for all chart generators.
 

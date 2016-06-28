@@ -308,6 +308,10 @@
       filter_info) {
   };
 
+  BaseChartGenerator.prototype.supportsCommand = function(command) {
+    return this.command === command;
+  };
+
   function AggregateChartGenerator(name) {
     BaseChartGenerator.call(this, name);
     this.command = 'get_aggregate';
