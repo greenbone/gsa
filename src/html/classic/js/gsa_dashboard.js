@@ -2249,7 +2249,7 @@
    *
    * @return The generated URL.
    */
-  ChartController.prototype.detachedURL = function() {
+  ChartController.prototype.getDetachedUrl = function() {
     var extra_params_str = '';
     var field;
     if (gsa.has_value(this.gen_params.no_chart_links)) {

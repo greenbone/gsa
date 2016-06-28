@@ -166,7 +166,7 @@
     controller.display.createOrGetMenuItem('detach')
       .attr('href', 'javascript:void(0);')
       .on('click', function() {
-        gch.open_detached(controller.detached_url());
+        gch.open_detached(controller.getDetachedUrl());
       })
       .text(gsa._('Show detached chart window'));
     return this;
