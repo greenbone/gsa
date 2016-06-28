@@ -1883,7 +1883,10 @@
   };
 
   /**
-   * Selects a controller for the display. If the filter has changed a redraw is
+   * Selects a controller for the display. If index is undefined the empty
+   * filter (filter.term === '') is selected.
+   *
+   * If the filter has changed a redraw is
    * started. In that case also filter_changed is triggered.
    *
    * @param index Index of the new filter.
@@ -1891,7 +1894,17 @@
    * @return This display
    */
   DashboardDisplay.prototype._selectFilter = function(index) {
-    var new_filter = this.filters[index];
+    var new_filter;
+
+    if (!gsa.is_defined(index)) {
+      new_filter = this.filters.find(function(filter) {
+        // find empty filter
+        return filter.term === '';
+      });
+    }
+    else {
+      new_filter = this.filters[index];
+    }
 
     if (!gsa.is_defined(new_filter)) {
       log.warn('No filter found for index "' + index + '"');

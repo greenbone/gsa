@@ -1,6 +1,12 @@
 2016-06-27  Björn Ricks <bjoern.ricks@gmx.net>
 
 	* src/html/classic/js/gsa_dashboard.js
+	(DashboardDisplay.prototype._selectFilter): Allow to select the empty filter
+	(filter.term === '') by not passing an index argument to _selectFilter.
+
+2016-06-27  Björn Ricks <bjoern.ricks@gmx.net>
+
+	* src/html/classic/js/gsa_dashboard.js
 	(DashboardDisplay.prototype._rebuildFilterSelection): Rename
 	rebuildFilterSelection to _rebuildFilterSelection to mark the function as an
 	"internal" method of DashboardDisplay. Use also Array.prototype.forEach
