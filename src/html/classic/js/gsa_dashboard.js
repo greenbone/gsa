@@ -1358,7 +1358,7 @@
     }
 
     this.current_filter = this.all_filters.find(function(filter, index) {
-      return filter.id === '' && !gsa.has_value(self.filter_string) ||
+      return filter.type === null && !gsa.has_value(self.filter_string) ||
         filter.id === self.filter_string;
     });
 
