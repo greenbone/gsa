@@ -2874,7 +2874,7 @@
     var params_str = prefix + 'cmd=' + encodeURIComponent(command);
     for (var prop_name in params) {
       if ((!no_xml || prop_name !== 'xml') &&
-          (!gsa.is_defined(filter) ||
+          (!gsa.is_defined(filter) || filter.type === null ||
               (prop_name !== 'filter' && prop_name !== 'filt_id'))) {
         if (params[prop_name] instanceof Array) {
           for (var i = 0; i < params[prop_name].length; i++) {
@@ -2892,9 +2892,6 @@
     }
     if (gsa.has_value(filter) && filter.id && filter.id !== '') {
       params_str = params_str + '&filt_id=' + encodeURIComponent(filter.id);
-    }
-    else if (gsa.has_value(filter) && filter.term === '') {
-      params_str = params_str + '&filter= ';
     }
     params_str = params_str + '&token=' + encodeURIComponent(gsa.gsa_token);
     return params_str;
