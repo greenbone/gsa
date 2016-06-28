@@ -35,6 +35,7 @@
   gch.BaseChartGenerator = BaseChartGenerator;
   gch.AggregateChartGenerator = AggregateChartGenerator;
   gch.TaskChartGenerator = TaskChartGenerator;
+  gch.AssetChartGenerator = AssetChartGenerator;
 
   /* Base class for chart generators */
 
@@ -329,6 +330,15 @@
   TaskChartGenerator.prototype = Object.create(
       BaseChartGenerator.prototype);
   TaskChartGenerator.prototype.constructor = TaskChartGenerator;
+
+  function AssetChartGenerator(name) {
+    BaseChartGenerator.call(this, name);
+    this.command = 'get_assets';
+  }
+
+  AssetChartGenerator.prototype = Object.create(
+      BaseChartGenerator.prototype);
+  AssetChartGenerator.prototype.constructor = AssetChartGenerator;
 
 })(window, window, window.document, window.gsa, window.d3, window.$,
   window.console);
