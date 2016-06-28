@@ -1,5 +1,10 @@
 2016-06-28  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/js/gsa_dashboard.js (get_title_generator): Correct
+	order of title_static parameters in case for type "host".
+
+2016-06-28  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* CMakeLists.txt: Install src/html/classic/js/gsa_topology_chart.js.
 
 	* src/gsad_omp.c (get_assets): Add ignore_pagination parameter.

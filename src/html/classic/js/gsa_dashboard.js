@@ -3014,8 +3014,8 @@
     }
 
     if (type === 'host') {
-      return gch.title_static(gsa._('Hosts topology'),
-                              gsa._('Hosts topology (Loading...)'));
+      return gch.title_static(gsa._('Hosts topology  (Loading...)'),
+                              gsa._('Hosts topology'));
     }
 
     if (chart_template === 'info_by_class' ||
