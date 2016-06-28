@@ -1,5 +1,11 @@
 2016-06-27  Björn Ricks <bjoern.ricks@gmx.net>
 
+	* src/html/classic/js/gsa_dashboard.js (DashboardDisplay.prototype.resize):
+	Fix calculating the height of the DashboardDisplay when no filter selection
+	element is shown.
+
+2016-06-27  Björn Ricks <bjoern.ricks@gmx.net>
+
 	* src/html/classic/js/gsa_dashboard.js (DashboardDisplay): Add a "internal"
 	_showFilterSelect method to DashboardDisplay.
 

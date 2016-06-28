@@ -1621,7 +1621,7 @@
       new_height -= 24;
     }
 
-    if (!this.hide_filter_select) {
+    if (this._showFilterSelect()) {
       new_height -= 24;
     }
 
