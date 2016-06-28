@@ -2685,36 +2685,6 @@
     controller.showError(display_message);
   };
 
-  DataSource.prototype._extractData = function(xml_select, gen_params) {
-    var data;
-
-    if (this.command === 'get_aggregate') {
-      data = {
-        original_xml: xml_select,
-        records: gch.extract_simple_records(xml_select,
-            'aggregate group'),
-        column_info: gch.extract_column_info(xml_select, gen_params),
-        filter_info: gch.extract_filter_info(xml_select, gen_params)
-      };
-    }
-    else if (this.command === 'get_tasks') {
-      data = {
-        original_xml: xml_select,
-        records: gch.extract_task_records(xml_select),
-        column_info: gch.tasks_column_info(),
-        filter_info: gch.extract_filter_info(xml_select)
-      };
-    }
-    else if (this.command === 'get_assets') {
-      data = {
-        original_xml: xml_select,
-        topology: gch.extract_host_topology_data(xml_select),
-        filter_info: gch.extract_filter_info(xml_select)
-      };
-    }
-    return data;
-  };
-
   /* Initialization on page load */
 
   /**
