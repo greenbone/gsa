@@ -1260,10 +1260,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
   <div class="dashboard-data-source"
     data-source-name="hosts-topology-source"
-    data-aggregate-type="{$type}"
-    data-type="host"
-    data-filter="{$filter}"
-    data-filter-id="{$filt_id}">
+    data-aggregate-type="host"
+    data-type="host">
     <span class="dashboard-chart"
       data-chart-name="hosts-topology"
       data-chart-type="topology"/>

@@ -1,3 +1,9 @@
+2016-06-28  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/graphics.xsl (assets-dashboard-data): Fix attribute
+	data-aggregate-type and remove unused filter attributes for the
+	Hosts Topology chart.
+
 2016-06-28  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/js/gsa_topology_chart.js: Derive TopologyChartGenerator
