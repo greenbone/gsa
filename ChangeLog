@@ -6,6 +6,12 @@
 
 2016-06-28  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_graphics_base.js: Add extractData methods to base
+	chart generators. These methods will convert the xml data into data that will
+	be understand by generateData methods.
+
+2016-06-28  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_topology_chart.js: Derive TopologyChartGenerator
 	from AssetChartGenerator and remove obsolete function generateData.
 

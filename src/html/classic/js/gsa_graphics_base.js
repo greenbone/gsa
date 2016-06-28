@@ -313,6 +313,10 @@
     return this.command === command;
   };
 
+  BaseChartGenerator.prototype.extractData = function(xml_select, gen_params) {
+    throw new Error('Not implemented');
+  };
+
   function AggregateChartGenerator(name) {
     BaseChartGenerator.call(this, name);
     this.command = 'get_aggregate';
@@ -321,6 +325,17 @@
   AggregateChartGenerator.prototype = Object.create(
       BaseChartGenerator.prototype);
   AggregateChartGenerator.prototype.constructor = AggregateChartGenerator;
+
+  AggregateChartGenerator.prototype.extractData = function(xml_select,
+      gen_params) {
+    return {
+      original_xml: xml_select,
+      records: gch.extract_simple_records(xml_select,
+          'aggregate group'),
+      column_info: gch.extract_column_info(xml_select, gen_params),
+      filter_info: gch.extract_filter_info(xml_select, gen_params)
+    };
+  };
 
   function TaskChartGenerator(name) {
     BaseChartGenerator.call(this, name);
@@ -331,6 +346,16 @@
       BaseChartGenerator.prototype);
   TaskChartGenerator.prototype.constructor = TaskChartGenerator;
 
+  TaskChartGenerator.prototype.extractData = function(xml_select,
+      gen_params) {
+    return {
+      original_xml: xml_select,
+      records: gch.extract_task_records(xml_select),
+      column_info: gch.tasks_column_info(),
+      filter_info: gch.extract_filter_info(xml_select)
+    };
+  };
+
   function AssetChartGenerator(name) {
     BaseChartGenerator.call(this, name);
     this.command = 'get_assets';
@@ -339,6 +364,15 @@
   AssetChartGenerator.prototype = Object.create(
       BaseChartGenerator.prototype);
   AssetChartGenerator.prototype.constructor = AssetChartGenerator;
+
+  TaskChartGenerator.prototype.extractData = function(xml_select,
+      gen_params) {
+    return {
+      original_xml: xml_select,
+      topology: gch.extract_host_topology_data(xml_select),
+      filter_info: gch.extract_filter_info(xml_select)
+    };
+  };
 
 })(window, window, window.document, window.gsa, window.d3, window.$,
   window.console);
