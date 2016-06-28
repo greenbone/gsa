@@ -2296,7 +2296,7 @@
       command = encodeURIComponent(command) + '_chart';
     }
 
-    return create_uri(command, this.display.currentFilter(),
+    return create_uri(command, this.display.getCurrentFilter(),
         this.data_src.params, this.data_src.prefix, true) +
       '&chart_type=' + encodeURIComponent(this.chart_type) +
       '&chart_template=' + encodeURIComponent(this.chart_template) +
