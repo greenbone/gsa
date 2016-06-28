@@ -2300,13 +2300,13 @@
       }
     }
     var param;
-    for (param in this.init_params) { // TODO convert into init_params.forEach
+    for (param in this.init_params) {
       extra_params_str = extra_params_str + '&chart_init:' +
                           encodeURIComponent(param) +
                           '=' +
                           encodeURIComponent(this.init_params[param]);
     }
-    for (param in this.gen_params.extra) { // TODO convert into gen_params.extra.forEach
+    for (param in this.gen_params.extra) {
       extra_params_str = extra_params_str + '&chart_gen:' +
                           encodeURIComponent(param) +
                           '=' +
