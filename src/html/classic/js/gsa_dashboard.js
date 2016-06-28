@@ -2080,8 +2080,19 @@
       log.warn('No controller selected');
       return;
     }
+
+    if (gsa.is_defined(this.last_request)) {
+      this.last_request.controller.removeRequest(this.last_request.filter);
+      this.last_request = undefined;
+    }
+
     this.current_controller
-        .sendRequest(this.current_filter);
+        .addRequest(this.current_filter);
+
+    this.last_request = {
+      controller: this.current_controller,
+      filter: this.current_filter,
+    };
     return this;
   };
 
@@ -2175,7 +2186,7 @@
   }
 
   /* Delegates a data request to the data source */
-  ChartController.prototype.sendRequest = function(filter, gen_params) {
+  ChartController.prototype.addRequest = function(filter, gen_params) {
     this.filter = filter;
 
     if (gen_params) {
@@ -2189,7 +2200,12 @@
     if (this.hasChanged()) {
       this.showLoading();
     }
-    this.data_src.sendRequest(this, this.filter, this.gen_params);
+    this.data_src.addRequest(this, this.filter, this.gen_params);
+  };
+
+  ChartController.prototype.removeRequest = function(filter) {
+    this.data_src.removeRequest(this, filter);
+    return this;
   };
 
   /**
@@ -2446,8 +2462,8 @@
       filter: filter,
       gen_params: gen_params
     };
-    controller.display.last_requested_controller = controller;
-    controller.display.last_requested_filter = filter;
+
+    this.checkRequests(filter);
   };
 
   /**
@@ -2458,13 +2474,22 @@
    */
   DataSource.prototype.removeRequest = function(controller, filter) {
     var filter_id = filter ? filter.id : '';
+    var controllers = this.requesting_controllers[filter_id];
 
-    if (this.requesting_controllers[filter_id] &&
-        this.requesting_controllers[filter_id][controller.id]) {
-      delete this.requesting_controllers[filter_id][controller.id];
+    if (controllers && controllers[controller.id]) {
+      delete controllers[controller.id];
+
+      var requesting_count = Object.keys(controllers).length;
+
+      if (requesting_count === 0) {
+        if (this.active_requests[filter_id]) {
+          this.active_requests[filter_id].abort();
+          delete this.active_requests[filter_id];
+          log.debug('Aborted request for ' + controller.id + ' and filter "' +
+              filter_id + '"');
+        }
+      }
     }
-    controller.display.last_requested_controller = null;
-    controller.display.last_requested_filter = null;
   };
 
   /**
@@ -2475,190 +2500,155 @@
     var self = this;
     var filter_id = filter ? filter.id : '';
     var controllers = this.requesting_controllers[filter_id];
-    var requesting_count = Object.keys(controllers).length;
 
-    if (requesting_count === 0) {
-      if (this.active_requests[filter_id]) {
-        this.active_requests[filter_id].abort();
-        delete this.active_requests[filter_id];
-      }
+    if (this.active_requests[filter_id]) {
+      // we already have an request
+      return;
     }
     else {
-      if (this.active_requests[filter_id]) {
+      var data_uri = create_uri(this.command, filter, this.params,
+          this.prefix, false);
+
+      var xml_select = this.xml_data[filter_id];
+      if (xml_select) {
+        // data has already been received once
+        for (var controller_id in controllers) {
+          if (!controllers[controller_id].active) {
+            // controller already has received the requested data
+            continue;
+          }
+
+          controllers[controller_id].active = false;
+          controllers[controller_id].controller.dataLoaded(xml_select);
+        }
+        delete this.requesting_controllers[filter_id];
         return;
       }
-      else {
-        var data_uri = create_uri(this.command, filter, this.params,
-            this.prefix, false);
 
-        var xml_select = this.xml_data[filter_id];
-        if (xml_select) {
-          // data has already been received once
-          for (var controller_id in controllers) {
-            if (!controllers[controller_id].active) {
-              // controller already has received the requested data
-              continue;
-            }
+      self.active_requests[filter_id] = d3.xml(data_uri, 'application/xml');
+      self.active_requests[filter_id].get(
+          function(error, xml) {
+            var ctrls = controllers;
+            var controller_id;
+            var omp_status;
+            var omp_status_text;
 
-            controllers[controller_id].active = false;
-            controllers[controller_id].controller.dataLoaded(xml_select);
-          }
-          return;
-        }
-
-        self.active_requests[filter_id] = d3.xml(data_uri, 'application/xml');
-        self.active_requests[filter_id].get(
-            function(error, xml) {
-              var ctrls = controllers;
-              var controller_id;
-              var omp_status;
-              var omp_status_text;
-
-              if (error) {
-                if (error instanceof XMLHttpRequest) {
-                  if (error.status === 0) {
-                    for (controller_id in ctrls) {
-                      self.outputError(ctrls[controller_id].controller,
-                          gsa._('Loading aborted'));
-                    }
-                    return;
-                  }
-                  else {
-                    if (error.status === 401) {
-                      // not authorized (anymore)
-                      // reload page to show login dialog
-                      window.location.reload();
-                      return;
-                    }
-                    for (controller_id in ctrls) {
-                      self.outputError(ctrls[controller_id].controller,
-                          gsa._('HTTP error {{error}}',
-                            {error: error.status}),
-                          gsa._('Error: HTTP request returned status ' +
-                            '{{status}} for URL: {{url}}',
-                            {status: error.status, url: self.data_uri}));
-                    }
-                    return;
-                  }
-                }
-                else {
+            if (error) {
+              if (error instanceof XMLHttpRequest) {
+                if (error.status === 0) {
                   for (controller_id in ctrls) {
                     self.outputError(ctrls[controller_id].controller,
-                        gsa._('Error reading XML'),
-                        gsa._('Error reading XML from URL {{url}}: {{error}}',
-                          {url: self.data_uri, error: error}));
+                        gsa._('Loading aborted'));
+                  }
+                  return;
+                }
+                else {
+                  if (error.status === 401) {
+                    // not authorized (anymore)
+                    // reload page to show login dialog
+                    window.location.reload();
+                    return;
+                  }
+                  for (controller_id in ctrls) {
+                    self.outputError(ctrls[controller_id].controller,
+                        gsa._('HTTP error {{error}}',
+                          {error: error.status}),
+                        gsa._('Error: HTTP request returned status ' +
+                          '{{status}} for URL: {{url}}',
+                          {status: error.status, url: self.data_uri}));
                   }
                   return;
                 }
               }
               else {
-                var xml_select = d3.select(xml.documentElement);
-                if (xml.documentElement.localName === 'parsererror') {
-                  for (controller_id in ctrls) {
-                    self.outputError(ctrls[controller_id].controller,
-                        gsa._('Error parsing XML data'),
-                        gsa._('Error parsing XML data. Details: {{details}}' +
-                          {details: xml.documentElement.textContent}));
-                  }
-                  return;
-                }
-
-                if (self.command === 'get_aggregate') {
-                  omp_status = xml_select.select(
-                      'get_aggregate get_aggregates_response').attr('status');
-                  omp_status_text = xml_select.select(
-                      'get_aggregate get_aggregates_response')
-                    .attr('status_text');
-                }
-                else if (self.command === 'get_tasks') {
-                  omp_status = xml_select.select(
-                      'get_tasks get_tasks_response')
-                    .attr('status');
-                  omp_status_text = xml_select.select(
-                      'get_tasks get_tasks_response')
-                    .attr('status_text');
-                }
-                else if (self.command === 'get_assets') {
-                  omp_status = xml_select.select(
-                      'get_assets get_assets_response')
-                    .attr('status');
-                  omp_status_text = xml_select.select(
-                      'get_assets get_assets_response')
-                    .attr('status_text');
-                }
-                else {
-                  for (controller_id in ctrls) {
-                    self.outputError(ctrls[controller_id].controller,
-                        gsa._('Internal error: Invalid request'),
-                        gsa._('Invalid request command: "{{command}}',
-                          {command: self.command}));
-                  }
-                  return self;
-                }
-
-                if (omp_status !== '200') {
-                  for (controller_id in ctrls) {
-                    if (!ctrls[controller_id].active) {
-                      continue;
-                    }
-                    self.outputError(ctrls[controller_id].controller,
-                        gsa._('Error {{omp_status}}: {{omp_status_text}}',
-                          {omp_status: omp_status,
-                            omp_status_text: omp_status_text}),
-                        gsa._('OMP Error {{omp_status}}: ' +
-                          '{{omp_status_text}}',
-                          {omp_status: omp_status,
-                            omp_status_text: omp_status_text}));
-                  }
-                  return self;
-                }
-
-                self.xml_data[filter_id] = xml_select;
-
                 for (controller_id in ctrls) {
-                  var ctrl = ctrls[controller_id];
+                  self.outputError(ctrls[controller_id].controller,
+                      gsa._('Error reading XML'),
+                      gsa._('Error reading XML from URL {{url}}: {{error}}',
+                        {url: self.data_uri, error: error}));
+                }
+                return;
+              }
+            }
+            else {
+              var xml_select = d3.select(xml.documentElement);
+              if (xml.documentElement.localName === 'parsererror') {
+                for (controller_id in ctrls) {
+                  self.outputError(ctrls[controller_id].controller,
+                      gsa._('Error parsing XML data'),
+                      gsa._('Error parsing XML data. Details: {{details}}' +
+                        {details: xml.documentElement.textContent}));
+                }
+                return;
+              }
 
-                  if (!ctrl.active) {
+              if (self.command === 'get_aggregate') {
+                omp_status = xml_select.select(
+                    'get_aggregate get_aggregates_response').attr('status');
+                omp_status_text = xml_select.select(
+                    'get_aggregate get_aggregates_response')
+                  .attr('status_text');
+              }
+              else if (self.command === 'get_tasks') {
+                omp_status = xml_select.select(
+                    'get_tasks get_tasks_response')
+                  .attr('status');
+                omp_status_text = xml_select.select(
+                    'get_tasks get_tasks_response')
+                  .attr('status_text');
+              }
+              else if (self.command === 'get_assets') {
+                omp_status = xml_select.select(
+                    'get_assets get_assets_response')
+                  .attr('status');
+                omp_status_text = xml_select.select(
+                    'get_assets get_assets_response')
+                  .attr('status_text');
+              }
+              else {
+                for (controller_id in ctrls) {
+                  self.outputError(ctrls[controller_id].controller,
+                      gsa._('Internal error: Invalid request'),
+                      gsa._('Invalid request command: "{{command}}',
+                        {command: self.command}));
+                }
+                return self;
+              }
+
+              if (omp_status !== '200') {
+                for (controller_id in ctrls) {
+                  if (!ctrls[controller_id].active) {
                     continue;
                   }
-
-                  ctrl.active = false;
-                  ctrl.controller.dataLoaded(xml_select);
+                  self.outputError(ctrls[controller_id].controller,
+                      gsa._('Error {{omp_status}}: {{omp_status_text}}',
+                        {omp_status: omp_status,
+                          omp_status_text: omp_status_text}),
+                      gsa._('OMP Error {{omp_status}}: ' +
+                        '{{omp_status_text}}',
+                        {omp_status: omp_status,
+                          omp_status_text: omp_status_text}));
                 }
-                delete self.active_requests[filter_id];
+                return self;
               }
-            });
-      }
+
+              self.xml_data[filter_id] = xml_select;
+
+              for (controller_id in ctrls) {
+                var ctrl = ctrls[controller_id];
+
+                if (!ctrl.active) {
+                  continue;
+                }
+
+                ctrl.active = false;
+                ctrl.controller.dataLoaded(xml_select);
+              }
+              delete self.requesting_controllers[filter_id];
+              delete self.active_requests[filter_id];
+            }
+          });
     }
-  };
-
-  /* Sends an HTTP request to get XML data.
-   * Once the data is loaded, the controller will be notified via the
-   * data_loaded callback */
-  DataSource.prototype.sendRequest = function(ctrl, filter, gen_params) {
-    //FIXME we should not pass the controller here and even more not access its
-    // display
-    var last_requested_controller
-      = ctrl.display.last_requested_controller;
-    var last_requested_filter
-      = ctrl.display.last_requested_filter;
-
-    if (last_requested_controller) {
-      // remove last request of display
-      last_requested_controller
-        .data_src
-          .removeRequest(last_requested_controller, last_requested_filter);
-    }
-    this.addRequest(ctrl, filter, gen_params);
-
-    if (last_requested_controller &&
-        last_requested_controller.data_src !== this) {
-      last_requested_controller.data_src.checkRequests(last_requested_filter);
-    }
-
-    this.checkRequests(filter);
-
-    return this;
   };
 
   DataSource.prototype.getParam = function(param_name) {
