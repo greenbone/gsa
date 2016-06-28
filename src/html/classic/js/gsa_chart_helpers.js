@@ -1825,26 +1825,6 @@
    */
 
   /**
-   * Prints an error to the console and shows it on the display of a chart.
-   *
-   * @param controller        Controller of the chart where the error occurred.
-   * @param display_message   Short message to show on the display.
-   * @param console_message   Longer message shown on the console.
-   * @param console_extra     Extra debug info shown on the console.
-   */
-  gch.output_error = function(controller, display_message, console_message,
-      console_extra) {
-    if (gsa.is_defined(console_message)) {
-      console.error(console_message);
-    }
-    if (gsa.is_defined(console_extra)) {
-      console.debug(console_extra);
-    }
-
-    controller.showError(display_message);
-  };
-
-  /**
    * Opens a popup window for a detached chart.
    *
    * @param url  URL of the detached chart.

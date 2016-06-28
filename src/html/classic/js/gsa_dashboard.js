@@ -2667,6 +2667,26 @@
     return this.params[param_name];
   };
 
+  /**
+   * Prints an error to the console and shows it on the display of a chart.
+   *
+   * @param controller        Controller of the chart where the error occurred.
+   * @param display_message   Short message to show on the display.
+   * @param console_message   Longer message shown on the console.
+   * @param console_extra     Extra debug info shown on the console.
+   */
+  DataSource.prototye.outputError = function(controller, display_message,
+      console_message, console_extra) {
+    if (gsa.is_defined(console_message)) {
+      log.error(console_message);
+    }
+    if (gsa.is_defined(console_extra)) {
+      log.debug(console_extra);
+    }
+
+    controller.showError(display_message);
+  };
+
   DataSource.prototype._extractData = function(xml_select, gen_params) {
     var data;
 
