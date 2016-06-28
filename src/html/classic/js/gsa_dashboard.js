@@ -1545,7 +1545,7 @@
    *
    * @return The text of the title bar
    */
-  DashboardDisplay.prototype.getTitle = function(new_title) {
+  DashboardDisplay.prototype.getTitle = function() {
     return $(this.header).text();
   };
 
