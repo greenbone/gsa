@@ -55,11 +55,11 @@
   }
 
   function GanttChartGenerator() {
-    gch.BaseChartGenerator.call(this, 'gantt');
+    gch.TaskChartGenerator.call(this, 'gantt');
   }
 
   GanttChartGenerator.prototype = Object.create(
-      gch.BaseChartGenerator.prototype);
+      gch.TaskChartGenerator.prototype);
   GanttChartGenerator.prototype.constructor = GanttChartGenerator;
 
   GanttChartGenerator.prototype.init = function() {
@@ -78,7 +78,7 @@
   };
 
   GanttChartGenerator.prototype.evaluateParams = function(gen_params) {
-    gch.BaseChartGenerator.prototype.evaluateParams.call(this, gen_params);
+    gch.TaskChartGenerator.prototype.evaluateParams.call(this, gen_params);
 
     if (gen_params.extra.empty_text) {
       this.empty_text = gen_params.extra.empty_text;
@@ -487,19 +487,6 @@
         return (height - self.x_scale(d[self.x_field]) -
             (self.x_scale.rangeBand() / 2));
       });
-  };
-
-  GanttChartGenerator.prototype.generateData = function(controller,
-      original_data, gen_params) {
-    // Extract records and column info
-    var cmd = controller.data_src.command;
-    if (cmd === 'get_tasks') {
-      return this.transformData(original_data, gen_params);
-    }
-    else {
-      console.error('Unsupported command:' + cmd);
-      return null;
-    }
   };
 
   GanttChartGenerator.prototype.generateCsvData = function(controller, data) {

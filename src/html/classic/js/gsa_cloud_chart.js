@@ -31,11 +31,11 @@
   gch.register_chart_generator('cloud', CloudChartGenerator);
 
   function CloudChartGenerator() {
-    gch.BaseChartGenerator.call(this, 'cloud');
+    gch.AggregateChartGenerator.call(this, 'cloud');
   }
 
   CloudChartGenerator.prototype = Object.create(
-    gch.BaseChartGenerator.prototype);
+    gch.AggregateChartGenerator.prototype);
   CloudChartGenerator.prototype.constructor = CloudChartGenerator;
 
   CloudChartGenerator.prototype.init = function() {
@@ -56,21 +56,8 @@
 
   };
 
-  CloudChartGenerator.prototype.generateData = function(controller,
-      original_data, gen_params) {
-
-    var cmd = controller.data_src.command;
-    if (cmd === 'get_aggregate') {
-      return this.transformData(original_data, gen_params);
-    }
-    else {
-      console.error('Unsupported command:' + cmd);
-      return null;
-    }
-  };
-
   CloudChartGenerator.prototype.evaluateParams = function(gen_params) {
-    gch.BaseChartGenerator.prototype.evaluateParams.call(this, gen_params);
+    gch.AggregateChartGenerator.prototype.evaluateParams.call(this, gen_params);
 
     if (gen_params.x_field) {
       this.x_field = gen_params.x_field;

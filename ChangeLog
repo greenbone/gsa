@@ -27,6 +27,21 @@
 
 2016-06-28  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_dashboard.js (ChartController.prototype.dataLoaded):
+	Check if the generator supports the command of the datasource.
+
+	* src/html/classic/js/gsa_bar_chart.js,
+	src/html/classic/js/gsa_bubble_chart.js,
+	src/html/classic/js/gsa_cloud_chart.js,
+	src/html/classic/js/gsa_donut_chart.js,
+	src/html/classic/js/gsa_gantt_chart.js,
+	src/html/classic/js/gsa_h_bar_chart.js,
+	src/html/classic/js/gsa_line_chart.js: Update to new generator api. Remove
+	generateData method where it doesn't differ from BaseChartGenerator. Derive
+	chart generators from AggregateChartGenerator or TaskChartGenerator.
+
+2016-06-28  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_graphics_base.js
 	(BaseChartGenerator.prototype.supportsCommand): Add method that checks if a
 	command is supported by a chart generator.

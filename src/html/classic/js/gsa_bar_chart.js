@@ -39,10 +39,11 @@
   /* Main chart generator */
   function BarChartGenerator() {
     // call super constructor
-    gch.BaseChartGenerator.call(this, 'bar');
+    gch.AggregateChartGenerator.call(this, 'bar');
   }
 
-  BarChartGenerator.prototype = Object.create(gch.BaseChartGenerator.prototype);
+  BarChartGenerator.prototype = Object.create(
+      gch.AggregateChartGenerator.prototype);
   BarChartGenerator.prototype.constructor = BarChartGenerator;
 
   BarChartGenerator.prototype.init = function() {
@@ -68,7 +69,7 @@
   };
 
   BarChartGenerator.prototype.evaluateParams = function(gen_params) {
-    gch.BaseChartGenerator.prototype.evaluateParams.call(this, gen_params);
+    gch.AggregateChartGenerator.prototype.evaluateParams.call(this, gen_params);
 
     if (gen_params.x_field) {
       this.x_field = gen_params.x_field;
@@ -273,19 +274,6 @@
             .remove();
 
     this.svg.call(this.tip);
-  };
-
-  BarChartGenerator.prototype.generateData = function(controller, original_data,
-      gen_params) {
-    // Extract records and column info
-    var cmd = controller.data_src.command;
-    if (cmd === 'get_aggregate') {
-      return this.transformData(original_data, gen_params);
-    }
-    else {
-      console.error('Unsupported command:' + cmd);
-      return null;
-    }
   };
 
   BarChartGenerator.prototype.generateCsvData = function(controller, data) {

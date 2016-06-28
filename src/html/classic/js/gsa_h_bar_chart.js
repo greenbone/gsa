@@ -72,7 +72,7 @@
   }
 
   function HorizontalBarChartGenerator() {
-    gch.BaseChartGenerator.call(this, 'h_bar');
+    gch.AggregateChartGenerator.call(this, 'h_bar');
   }
 
   HorizontalBarChartGenerator.prototype = Object.create(

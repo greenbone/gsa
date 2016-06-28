@@ -34,11 +34,11 @@
   /* Main chart generator */
   function DonutChartGenerator() {
     // call super constructor
-    gch.BaseChartGenerator.call(this, 'donut');
+    gch.AggregateChartGenerator.call(this, 'donut');
   }
 
   DonutChartGenerator.prototype = Object.create(
-      gch.BaseChartGenerator.prototype);
+      gch.AggregateChartGenerator.prototype);
   DonutChartGenerator.prototype.constructor = DonutChartGenerator;
 
   DonutChartGenerator.prototype.init = function() {
@@ -55,22 +55,14 @@
       gch.title_static(gsa._('Loading donut chart ...'), gsa._('Donut Chart')));
   };
 
-  DonutChartGenerator.prototype.generateData = function(controller,
-      original_data) {
-    var cmd = controller.data_src.command;
+  DonutChartGenerator.prototype.generateData = function(original_data) {
     var data;
-    if (cmd === 'get_aggregate') {
-      data = this.transformData(original_data);
-      return gch.fill_empty_fields(data);
-    }
-    else {
-      console.error('Unsupported command:' + cmd);
-      return null;
-    }
+    data = this.transformData(original_data);
+    return gch.fill_empty_fields(data);
   };
 
   DonutChartGenerator.prototype.evaluateParams = function(gen_params) {
-    gch.BaseChartGenerator.prototype.evaluateParams.call(this, gen_params);
+    gch.AggregateChartGenerator.prototype.evaluateParams.call(this, gen_params);
 
     if (gen_params.x_field) {
       this.x_field = gen_params.x_field;

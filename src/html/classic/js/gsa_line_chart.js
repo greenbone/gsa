@@ -45,11 +45,11 @@
 
   function LineChartGenerator() {
     // call super constructor
-    gch.BaseChartGenerator.call(this, 'bar');
+    gch.AggregateChartGenerator.call(this, 'bar');
   }
 
   LineChartGenerator.prototype = Object.create(
-      gch.BaseChartGenerator.prototype);
+      gch.AggregateChartGenerator.prototype);
   LineChartGenerator.prototype.constructor = LineChartGenerator;
 
   LineChartGenerator.prototype.init = function() {
@@ -883,19 +883,6 @@
     }
   };
 
-  LineChartGenerator.prototype.generateData = function(controller,
-      original_data) {
-    // Extract records and column info
-    var cmd = controller.data_src.command;
-    if (cmd === 'get_aggregate') {
-      return this.transformData(original_data);
-    }
-    else {
-      console.error('Unsupported command:' + cmd);
-      return null;
-    }
-  };
-
   LineChartGenerator.prototype.generateCsvData = function(controller, data) {
     var cols = data.column_info.columns;
     var column_selection = [this.x_field];
@@ -933,7 +920,7 @@
   };
 
   LineChartGenerator.prototype.evaluateParams = function(gen_params) {
-    gch.BaseChartGenerator.prototype.evaluateParams.call(this, gen_params);
+    gch.AggregateChartGenerator.prototype.evaluateParams.call(this, gen_params);
 
     if (gen_params.x_field) {
       this.x_field = gen_params.x_field;

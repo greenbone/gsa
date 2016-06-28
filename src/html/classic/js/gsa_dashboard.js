@@ -2232,12 +2232,16 @@
     var self = this;
 
     self.display.hideLoading();
-    self.generator.evaluateParams(gen_params);
 
-    var data = self.generator.generateData(self, orig_data, self.gen_params);
-    if (data === null) {
+    if (!self.generator.supportsCommand(self.data_src.command)) {
+      log.error('Generator does not support command "' + self.data_src.command +
+          '"', self.generator);
       return;
     }
+
+    self.generator.evaluateParams(gen_params);
+
+    var data = self.generator.generateData(orig_data, self.gen_params);
 
     self.display.setTitle(self.generator.getTitle(data));
     self.generator.generate(self.display.svg, data, self.hasChanged());

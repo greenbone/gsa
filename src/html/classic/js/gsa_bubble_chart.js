@@ -33,11 +33,11 @@
   /* Main chart generator */
   function BubbleChartGenerator() {
     // call super constructor
-    gch.BaseChartGenerator.call(this, 'bubble');
+    gch.AggregateChartGenerator.call(this, 'bubble');
   }
 
   BubbleChartGenerator.prototype = Object.create(
-      gch.BaseChartGenerator.prototype);
+      gch.AggregateChartGenerator.prototype);
   BubbleChartGenerator.prototype.constructor = BubbleChartGenerator;
 
   BubbleChartGenerator.prototype.init = function() {
@@ -57,20 +57,13 @@
           gsa._('Loading bubble chart ...'), gsa._('Bubble Chart')));
   };
 
-  BubbleChartGenerator.prototype.generateData = function(controller,
-      original_data, gen_params) {
-    var cmd = controller.data_src.command;
-    if (cmd === 'get_aggregate') {
-      return this.transformData(original_data, gen_params);
-    }
-    else {
-      console.error('Unsupported command:' + cmd);
-      return null;
-    }
+  BubbleChartGenerator.prototype.generateData = function(original_data,
+      gen_params) {
+    return this.transformData(original_data, gen_params);
   };
 
   BubbleChartGenerator.prototype.evaluateParams = function(gen_params) {
-    gch.BaseChartGenerator.prototype.evaluateParams.call(this, gen_params);
+    gch.AggregateChartGenerator.prototype.evaluateParams.call(this, gen_params);
 
     if (gen_params.x_field) {
       this.x_field = gen_params.x_field;
