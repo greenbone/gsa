@@ -33,6 +33,8 @@
   var gch = gsa.charts;
 
   gch.BaseChartGenerator = BaseChartGenerator;
+  gch.AggregateChartGenerator = AggregateChartGenerator;
+  gch.TaskChartGenerator = TaskChartGenerator;
 
   /* Base class for chart generators */
 
@@ -300,6 +302,24 @@
   BaseChartGenerator.prototype.generateLink = function(d, i, column, type,
       filter_info) {
   };
+
+  function AggregateChartGenerator(name) {
+    BaseChartGenerator.call(this, name);
+    this.command = 'get_aggregate';
+  }
+
+  AggregateChartGenerator.prototype = Object.create(
+      BaseChartGenerator.prototype);
+  AggregateChartGenerator.prototype.constructor = AggregateChartGenerator;
+
+  function TaskChartGenerator(name) {
+    BaseChartGenerator.call(this, name);
+    this.command = 'get_tasks';
+  }
+
+  TaskChartGenerator.prototype = Object.create(
+      BaseChartGenerator.prototype);
+  TaskChartGenerator.prototype.constructor = TaskChartGenerator;
 
 })(window, window, window.document, window.gsa, window.d3, window.$,
   window.console);
