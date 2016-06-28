@@ -2675,7 +2675,7 @@
    * @param console_message   Longer message shown on the console.
    * @param console_extra     Extra debug info shown on the console.
    */
-  DataSource.prototye.outputError = function(controller, display_message,
+  DataSource.prototype.outputError = function(controller, display_message,
       console_message, console_extra) {
     if (gsa.is_defined(console_message)) {
       log.error(console_message);
