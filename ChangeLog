@@ -1,5 +1,11 @@
 2016-06-28  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_graphics_base.js
+	(BaseChartGenerator.prototype.addSvgMenuItems): Fix getting the title of a
+	display.
+
+2016-06-28  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_dashboard.js (DashboardDisplay.prototype.getTitle):
 	Remove unnecessary parameter new_title from getTitle method of
 	DashboardDisplay.

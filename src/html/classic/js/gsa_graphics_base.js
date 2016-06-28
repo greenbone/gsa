@@ -217,7 +217,7 @@
     var display = controller.display;
 
     function create_svg_url() {
-      var svg_data = gch.svg_from_elem(display.svg, display.header.text());
+      var svg_data = gch.svg_from_elem(display.svg, display.getTitle());
 
       if (self.svg_url !== null) {
         URL.revokeObjectURL(self.svg_url);
