@@ -37,11 +37,11 @@
   /* Main chart generator */
   function TopologyChartGenerator() {
     // call super constructor
-    gch.BaseChartGenerator.call(this, 'topology');
+    gch.AssetChartGenerator.call(this, 'topology');
   }
 
   TopologyChartGenerator.prototype =
-    Object.create(gch.BaseChartGenerator.prototype);
+    Object.create(gch.AssetChartGenerator.prototype);
   TopologyChartGenerator.prototype.constructor = TopologyChartGenerator;
 
   TopologyChartGenerator.prototype.init = function() {
@@ -52,7 +52,7 @@
   };
 
   TopologyChartGenerator.prototype.evaluateParams = function(gen_params) {
-    gch.BaseChartGenerator.prototype.evaluateParams.call(this, gen_params);
+    gch.AssetChartGenerator.prototype.evaluateParams.call(this, gen_params);
 
     if (gen_params.x_field) {
       this.x_field = gen_params.x_field;
@@ -198,20 +198,6 @@
     for (var i = 0; i < 1000; ++i) {
       self.layout.start();
       self.layout.tick();
-    }
-  };
-
-  TopologyChartGenerator.prototype.generateData = function(controller,
-      original_data, gen_params) {
-    // Extract records and column info
-    var cmd = controller.data_src.command;
-
-    if (cmd === 'get_assets') {
-      return this.transformData(original_data, gen_params);
-    }
-    else {
-      console.error('Unsupported command: ' + cmd);
-      return null;
     }
   };
 
