@@ -778,7 +778,7 @@
           }
 
           // Create target node if its IP address is not in the list.
-          if (!gsa.is_defined(nodes_by_link_id[source_ip])) {
+          if (!gsa.is_defined(nodes_by_link_id[target_ip])) {
             new_host = {};
             new_host.type = 'host';
             new_host.hostname = null;
