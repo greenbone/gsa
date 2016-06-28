@@ -42,10 +42,10 @@
 
   var log = {};
 
-  log.error = console.error = function() {
+  log.error =  function() {
     console.error.apply(console, arguments);
   };
-  log.warn = console.warn = function() {
+  log.warn = function() {
     console.warn.apply(console, arguments);
   };
 
