@@ -280,7 +280,7 @@
       this.stop_edit_button = $('<a/>', {
         href: 'javascript:void(0);',
         on: {
-          click: function() {self.stopEdit();},
+          click: function() {self.saveEdit();},
         }
       })
       .append($('<img/>', {
