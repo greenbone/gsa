@@ -354,6 +354,7 @@
     if (this.dashboard_controls) {
       this.start_edit_button.hide();
       this.stop_edit_button.show();
+      this.cancel_edit_button.show();
 
       if (this.canAddDisplay()) {
         this.new_display_button.show();
