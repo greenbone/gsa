@@ -1,5 +1,10 @@
 2016-06-29  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_dashboard.js (DashboardDisplay): Always create
+	filter and controller selection elements.
+
+2016-06-29  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_dashboard.js (Dashboard): Add methods to check
 	wether filters, controllers or heights in a dashboard have changed. Only save
 	parts that have actually changed.

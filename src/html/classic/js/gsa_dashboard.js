@@ -1541,12 +1541,8 @@
 
     this.footer = this.footer[0];
 
-    if (!this.hide_controller_select) {
-      this._createControllerSelector();
-    }
-    if (this._showFilterSelect()) {
-      this._createFilterSelector();
-    }
+    this._createControllerSelector();
+    this._createFilterSelector();
 
     this._applySelect2();
 
