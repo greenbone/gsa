@@ -337,6 +337,8 @@
    * @return This dashboard
    */
   Dashboard.prototype.startEdit = function() {
+    var self = this;
+
     if (this.edit_mode) {
       return;
     }
@@ -360,6 +362,13 @@
         this.new_display_button.show();
       }
     }
+
+    $(window).on('keypress', function(event) {
+      if (event.which === 0) { // escape has been pressed
+        self.cancelEdit();
+        event.preventDefault();
+      }
+    });
 
     return this;
   };

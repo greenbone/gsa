@@ -1,5 +1,10 @@
 2016-06-29  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_dashboard.js (Dashboard.prototype.startEdit): Add
+	keypress event listener to cancel editing when escape is pressed.
+
+2016-06-29  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_dashboard.js (Dashboard.prototype.init): Save
 	changes when clicking on the stop editing button in the dashboard.
 
