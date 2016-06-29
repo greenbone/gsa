@@ -1,5 +1,10 @@
 2016-06-29  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_dashboard.js (DashboardDisplay): Only allow to
+	change filter and controller of display when in edit mode.
+
+2016-06-29  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_dashboard.js (DashboardDisplay): Always create
 	filter and controller selection elements.
 

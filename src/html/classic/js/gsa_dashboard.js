@@ -1821,6 +1821,10 @@
    * @return This display
    */
   DashboardDisplay.prototype.prevController = function() {
+    if (!this.edit_mode) {
+      return;
+    }
+
     var index = this.getCurrentControllerIndex();
     if (index <= 0) {
       // use last controller
@@ -1843,6 +1847,10 @@
    * @return This display
    */
   DashboardDisplay.prototype.nextController = function() {
+    if (!this.edit_mode) {
+      return;
+    }
+
     var index = this.getCurrentControllerIndex();
     if (index === this.controllers.length - 1) {
       // use first controller
@@ -1866,6 +1874,10 @@
    * @return This display
    */
   DashboardDisplay.prototype.prevFilter = function() {
+    if (!this.edit_mode) {
+      return;
+    }
+
     var index = this.getCurrentFilterIndex();
     if (index <= 0) {
       // use last filter
@@ -1886,6 +1898,10 @@
    * @return This display
    */
   DashboardDisplay.prototype.nextFilter = function() {
+    if (!this.edit_mode) {
+      return;
+    }
+
     var index = this.getCurrentFilterIndex();
     if (index === this.filters.length - 1) {
       // use first filter
