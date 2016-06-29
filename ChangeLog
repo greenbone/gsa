@@ -1,5 +1,11 @@
 2016-06-29  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_dashboard.js (Dashboard.prototype.saveEdit): Add a
+	method to Dashboard to save the changes (filters, controllers and heights
+	strings) and stop the editing.
+
+2016-06-29  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_dashboard.js (Dashboard.prototype.startEdit): Show
 	cancel edit button if editing is started.
 

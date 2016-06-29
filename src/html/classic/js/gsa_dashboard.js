@@ -387,10 +387,27 @@
     if (this.dashboard_controls) {
       this.start_edit_button.show();
       this.stop_edit_button.hide();
+      this.cancel_edit_button.hide();
       this.new_display_button.hide();
     }
 
+    $(window).off('keypress'); // remove event listener
+
     return this;
+  };
+
+  /**
+   * Stops the edit mode of the dashboard and saves the changes
+   *
+   * @return This dashboard
+   */
+  Dashboard.prototype.saveEdit = function() {
+    if (!this.edit_mode) {
+      return;
+    }
+
+    this.stopEdit();
+    this.save();
   };
 
   /**
