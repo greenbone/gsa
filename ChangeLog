@@ -1,5 +1,11 @@
 2016-06-29  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_dashboard.js
+	(Dashboard.prototype.cancelEdit): Add a method to Dashboard to cancel the
+	editing mode.
+
+2016-06-29  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_dashboard.js (DashboardDisplay.prototype.stopEdit):
 	Hide filter and controller elements when editing is stopped.
 

@@ -377,6 +377,25 @@
   };
 
   /**
+   * Stops the edit mode of the dashboard and discards the changes
+   *
+   * @return This dashboard
+   */
+  Dashboard.prototype.cancelEdit = function() {
+    if (!this.edit_mode) {
+      return;
+    }
+
+    this.stopEdit();
+
+    if (this.hasChanged()) {
+      // FIXME we should only redraw with original controllers, heights and
+      // filters
+      window.location.reload();
+    }
+  };
+
+  /**
    * Tests if a display can be added to the dashboard.
    *
    * @return true if there is room for a new display, false otherwise.
