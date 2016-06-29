@@ -1693,7 +1693,7 @@
 
     var new_height = this.height - 8 - 18; // 18 == header height
 
-    if (!this.hide_controller_select) {
+    if (this._showControllerSelect()) {
       new_height -= 24;
     }
 
