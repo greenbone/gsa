@@ -1,6 +1,13 @@
 2016-06-29  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/js/gsa_topology_chart.js
+	(TopologyChartGenerator.prototype.generate): Move the layout size
+	outside the update_layout function. Start the layout and run it for
+	several ticks only on update and resume it otherwise.
+
+2016-06-29  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/js/gsa_topology_chart.js
 	(TopologyChartGenerator.prototype.generate): Create new layout on
 	update.
 

@@ -100,9 +100,9 @@
       this.translate = [0,0];
     }
 
+    self.layout.size([width, height]);
 
     this.update_layout = function () {
-      self.layout.size([width, height])
       self.layout.tick();
 
       var circle_scale = (5 * self.scale >= 2) ? 1 : 2 / 5 / self.scale;
@@ -195,9 +195,14 @@
     svg.call(zoom);
 
     self.resize_graph();
-    for (var i = 0; i < 1000; ++i) {
-      self.layout.start();
-      self.layout.tick();
+    if (update) {
+      for (var i = 0; i < 1000; ++i) {
+        self.layout.start();
+        self.layout.tick();
+      }
+    }
+    else {
+      self.layout.resume();
     }
   };
 
