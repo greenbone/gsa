@@ -1682,6 +1682,11 @@
   DashboardDisplay.prototype.stopEdit = function() {
     this.edit_mode = false;
     this.top_buttons.children('.remove-button').hide();
+
+    this.filter_select_container.hide();
+    this.controller_select_container.hide();
+
+    this.resize();
     return this;
   };
 
