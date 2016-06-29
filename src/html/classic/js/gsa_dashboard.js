@@ -1691,27 +1691,30 @@
       this.height = height;
     }
 
-    var new_height = this.height - 8 - 18; // 18 == header height
+    this.inner_height = this.height - 8 - 18; // 18 == header height
 
     if (this._showControllerSelect()) {
-      new_height -= 24;
+      this.inner_height -= 24;
     }
 
     if (this._showFilterSelect()) {
-      new_height -= 24;
+      this.inner_height -= 24;
     }
 
-    log.debug('resize display ' + this.id, this.height, this.width);
+    log.debug('resize display ' + this.id, this.height, this.width,
+        this.inner_height);
 
-    this.svg.attr('height', new_height);
+    this.svg.attr('height', this.inner_height);
 
     this.svg.attr('width', this.width - 8);
 
     this.elem.css('width', this.width);
 
-    if (this.last_width !== this.width || this.last_height !== this.height) {
+    if (this.last_width !== this.width || this.last_height !== this.height ||
+        this.last_inner_height !== this.inner_height) {
       this.last_width = this.width;
       this.last_height = this.height;
+      this.last_inner_height = this.inner_height;
       this.redraw();
     }
     return this;
