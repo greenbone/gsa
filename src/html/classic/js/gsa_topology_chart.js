@@ -80,7 +80,7 @@
       this.graph = svg.append('g');
     }
 
-    if (!this.layout) {
+    if (update || !this.layout) {
       this.layout = d3.layout.force();
       this.layout
             .charge(function (n) { return -(10) })

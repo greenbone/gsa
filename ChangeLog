@@ -1,5 +1,11 @@
 2016-06-29  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/js/gsa_topology_chart.js
+	(TopologyChartGenerator.prototype.generate): Create new layout on
+	update.
+
+2016-06-29  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/js/gsa_chart_helpers.js (clone_svg): New function.
 	(svg_from_elem): Use clone_svg function and add doc for return value.
 
