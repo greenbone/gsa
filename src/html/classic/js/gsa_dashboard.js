@@ -202,6 +202,10 @@
 
     this.reordering = false; // indicator if the dashboard rows are currently reorderd
 
+    this.heights_changed = false;
+    this.filters_changed = false;
+    this.controllers_changed = false;
+
     this.init();
   }
 
@@ -522,39 +526,33 @@
       log.debug('on display removed', self.reordering);
       self.total_displays -= 1;
       self._removeEmptyRows(); // triggers row removed if empty
-
-      if (!self.reordering) { // changes during reordering are saved in reordered
-        self.save();
-      }
+      self._allChanged();
     });
     row.on('display_added', function(event, display) {
       log.debug('on display added');
       self.total_displays += 1;
-      if (!self.reordering) { // changes during reordering are saved in reordered
-        self.save();
-      }
+      self._allChanged();
     });
     row.on('display_filter_changed', function(event, display) {
       log.debug('on display filter changed');
-      self.updateFiltersString().saveFiltersString();
+      self.filters_changed = true;
     });
     row.on('display_controller_changed', function(event, display) {
       log.debug('on display controller changed');
-      self.updateControllersString().saveControllersString();
+      self.controllers_changed = true;
     });
     row.on('resized', function(event, row) {
       log.debug('on resized');
-      self.saveHeights();
+      self.heights_changed = true;
     });
     row.on('reorder', function(event, row) {
       log.debug('on reorder');
-      self.reordering = true;
     });
     row.on('reorderd', function(event, row) {
       log.debug('on reordered');
       self._removeEmptyRows();
       self.reordering = false;
-      self.save();
+      self._allChanged();
     });
     row.on('removed', function(event, row) {
       log.debug('on removed');
@@ -573,6 +571,7 @@
    */
   Dashboard.prototype.unregisterRow = function(row) {
     delete this.rows[row.id];
+    this._allChanged();
     return this;
   };
 
@@ -778,9 +777,15 @@
    * @return  This dashboard
    */
   Dashboard.prototype.save = function() {
-    this.saveFilters();
-    this.saveControllers();
-    this.saveHeights();
+    if (this.hasFilterChanged()) {
+      this.saveFilters();
+    }
+    if (this.hasControllerChanged()) {
+      this.saveControllers();
+    }
+    if (this.hasHeightsChanged()) {
+      this.saveHeights();
+    }
     return this;
   };
 
@@ -792,6 +797,7 @@
   Dashboard.prototype.saveHeights = function() {
     this.updateHeightsString();
     this.saveHeightsString();
+    this.heights_changed = false;
     return this;
   };
 
@@ -803,6 +809,7 @@
   Dashboard.prototype.saveControllers = function() {
     this.updateControllersString();
     this.saveControllersString();
+    this.controllers_changed = false;
     return this;
   };
 
@@ -814,6 +821,7 @@
   Dashboard.prototype.saveFilters = function() {
     this.updateFiltersString();
     this.saveFiltersString();
+    this.filters_changed = false;
     return this;
   };
 
@@ -877,6 +885,43 @@
   };
 
   /**
+   * Returns true if any height of the rows has changed
+   *
+   * @return true if a height of a row has changed
+   */
+  Dashboard.prototype.hasHeightsChanged = function() {
+    return this.heights_changed;
+  };
+
+  /**
+   * Returns true if any controller of the rows has changed
+   *
+   * @return true if a controller of a row has changed
+   */
+  Dashboard.prototype.hasControllerChanged = function() {
+    return this.controllers_changed;
+  };
+
+  /**
+   * Returns true if any filter of the rows has changed
+   *
+   * @return true if a filter of a row has changed
+   */
+  Dashboard.prototype.hasFilterChanged = function() {
+    return this.filters_changed;
+  };
+
+  /**
+   * Returns true if a filter, controller or height has changed
+   *
+   * @return true if a filter, controller of height of a row has changed
+   */
+  Dashboard.prototype.hasChanged = function() {
+    return this.hasHeightsChanged() || this.hasFilterChanged() ||
+      this.hasControllerChanged();
+  };
+
+  /**
    * Resizes the dashboard and its rows
    *
    * @param height the new height if defined (optional)
@@ -925,6 +970,18 @@
     }
 
     this.resize(dom_elem.clientHeight, dom_elem.clientWidth);
+  };
+
+  /**
+   * Marks filters, controllers and heights as changed
+   *
+   * @return This Dashboard
+   */
+  Dashboard.prototype._allChanged = function() {
+    this.filters_changed = true;
+    this.controllers_changed = true;
+    this.heights_changed = true;
+    return this;
   };
 
   /* Dashboard row class */
