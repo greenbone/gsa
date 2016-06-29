@@ -1663,6 +1663,14 @@
   DashboardDisplay.prototype.startEdit = function() {
     this.edit_mode = true;
     this.top_buttons.children('.remove-button').show();
+
+    if (this._showFilterSelect()) {
+      this.filter_select_container.show();
+    }
+    if (this._showControllerSelect()) {
+      this.controller_select_container.show();
+    }
+    this.resize();
     return this;
   };
 
