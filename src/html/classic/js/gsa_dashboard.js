@@ -772,27 +772,48 @@
   };
 
   /**
-   * Updates the filter and controllers string and saves both to the user's
-   * settings
+   * Updates the filter, controllers and heights string and saves ithem to the
+   * user's settings if they have changed
    *
    * @return  This dashboard
    */
   Dashboard.prototype.save = function() {
-    this.updateFiltersString();
-    this.updateControllersString();
-    this.saveFiltersString();
-    this.saveControllersString();
+    this.saveFilters();
+    this.saveControllers();
+    this.saveHeights();
     return this;
   };
 
   /**
-   * Update the heights string and saved it to the user's settings.
+   * Update the heights string and save it to the user's settings.
    *
    * @return  This dashboard
    */
   Dashboard.prototype.saveHeights = function() {
     this.updateHeightsString();
     this.saveHeightsString();
+    return this;
+  };
+
+  /**
+   * Update the controllers string and save it to the user's settings.
+   *
+   * @return  This dashboard
+   */
+  Dashboard.prototype.saveControllers = function() {
+    this.updateControllersString();
+    this.saveControllersString();
+    return this;
+  };
+
+  /**
+   * Update the filters string and save it to the user's settings.
+   *
+   * @return  This dashboard
+   */
+  Dashboard.prototype.saveFilters = function() {
+    this.updateFiltersString();
+    this.saveFiltersString();
     return this;
   };
 
