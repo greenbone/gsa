@@ -291,6 +291,22 @@
       .appendTo(control_elem);
 
       this.stop_edit_button.hide();
+
+      this.cancel_edit_button = $('<a/>', {
+        href: 'javascript:void(0);',
+        on: {
+          click: function() {self.cancelEdit();},
+        },
+      })
+      .append($('<img/>', {
+        src: 'img/delete.png',
+        alt: gsa._('Cancel Editing'),
+        title: gsa._('Cancel Editing'),
+      }))
+      .appendTo(control_elem);
+
+      this.cancel_edit_button.hide();
+
     }
 
     this.width = this.elem[0].clientWidth;
