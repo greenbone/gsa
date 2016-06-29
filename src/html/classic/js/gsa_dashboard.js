@@ -2036,7 +2036,7 @@
   DashboardDisplay.prototype._createControllerSelector = function() {
     var self = this;
 
-    var container = $('<div/>').appendTo(this.footer);
+    this.controller_select_container = $('<div/>').appendTo(this.footer);
 
     $('<a/>', {
       href: 'javascript:void(0);',
@@ -2050,7 +2050,7 @@
         'vertical-align': 'middle'
       },
     }))
-    .appendTo(container);
+    .appendTo(this.controller_select_container);
 
     this.controller_select_elem = $('<select/>', {
       css: {
@@ -2065,7 +2065,7 @@
         },
       },
     })
-    .appendTo(container);
+    .appendTo(this.controller_select_container);
 
     this.controllers.forEach(function(controller, index) {
       $('<option/>', {
@@ -2091,7 +2091,12 @@
         'vertical-align': 'middle',
       },
     }))
-    .appendTo(container);
+    .appendTo(this.controller_select_container);
+
+    if (!this._showControllerSelect()) {
+      this.controller_select_container.hide();
+    }
+
     return this;
   };
 
@@ -2101,6 +2106,8 @@
    */
   DashboardDisplay.prototype._createFilterSelector = function() {
     var self = this;
+
+    this.filter_select_container = $('<div/>').appendTo(this.footer);
 
     $('<a/>', {
       href: 'javascript:void(0);',
@@ -2116,7 +2123,7 @@
         'vertical-align': 'middle',
       },
     }))
-    .appendTo(this.footer);
+    .appendTo(this.filter_select_container);
 
     this.filter_select_elem = $('<select/>', {
       css: {
@@ -2131,7 +2138,7 @@
         },
       },
     })
-    .appendTo(this.footer);
+    .appendTo(this.filter_select_container);
 
     this.filters.forEach(function(filter, index) {
       $('<option/>', {
@@ -2157,7 +2164,12 @@
         'vertical-align': 'middle',
       },
     }))
-    .appendTo(this.footer);
+    .appendTo(this.filter_select_container);
+
+    if (!this._showFilterSelect()) {
+      this.filter_select_container.hide();
+    }
+
     return this;
   };
 
