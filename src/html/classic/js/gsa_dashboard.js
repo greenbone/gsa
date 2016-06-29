@@ -2215,6 +2215,15 @@
     return !this.hide_filter_select &&  this.filters.length > 1;
   };
 
+  /**
+   * Returns wether the controller selection element should be shown
+   *
+   * @return true if the controller selection should be shown
+   */
+  DashboardDisplay.prototype._showControllerSelect = function() {
+    return !this.hide_controller_select && this.edit_mode;
+  };
+
   /* Chart controller class */
 
   /**
