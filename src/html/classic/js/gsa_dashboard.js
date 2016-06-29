@@ -2212,7 +2212,7 @@
    * @return true if the filter selection should be shown
    */
   DashboardDisplay.prototype._showFilterSelect = function() {
-    return !this.hide_filter_select &&  this.filters.length > 1;
+    return !this.hide_filter_select && this.edit_mode;
   };
 
   /**
