@@ -1608,8 +1608,7 @@
 
     this._applySelect2();
 
-    this.resize();
-    this.redraw();
+    this.resize(); // will also request the data
   };
 
   /**

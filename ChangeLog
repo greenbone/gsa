@@ -1,5 +1,11 @@
 2016-06-29  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_dashboard.js (DashboardDisplay.prototype.init): Fix
+	loading the data initially be not calling redraw. redraw will already be
+	called in resize now here because the inner_height is not set yet.
+
+2016-06-29  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_dashboard.js (Dashboard.prototype.startEdit): Add
 	keypress event listener to cancel editing when escape is pressed.
 
