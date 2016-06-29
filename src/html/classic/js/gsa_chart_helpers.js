@@ -2218,10 +2218,63 @@
   };
 
   /**
+   * Clone an SVG element with some modifications for export like replacing
+   *  "a" elements and removing elements with the class "remove_on_static".
+   *
+   * @param elem  The element to clone.
+   *
+   * @return A clone of the svg element.
+   */
+  gch.clone_svg = function(elem) {
+    var clone;
+    if ($(elem).hasClass ('remove_on_static')) {
+      return null;
+    }
+    else {
+      var child_elems;
+      // replace "a" elems with "g"
+      if (elem.tagName === 'a') {
+        clone = $('<g/>');
+      }
+      else {
+        clone = $('<' + elem.tagName + '/>');
+      }
+
+      for (var attr_index = 0;
+           attr_index < elem.attributes.length;
+           attr_index++) {
+        var attribute = elem.attributes[attr_index];
+        // remove href attributes
+        if (attribute.name !== 'href')
+          clone.attr(attribute.prefix 
+                      ? attribute.prefix + ':' + attribute.name
+                      : attribute.name,
+                     attribute.value);
+      }
+
+      for (var child_index = 0;
+           child_index < elem.childNodes.length;
+           child_index++) {
+        var child = elem.childNodes[child_index];
+        switch (child.nodeType) {
+          case Node.ELEMENT_NODE:
+            clone.append (gch.clone_svg (child));
+            break;
+          default:
+            clone.append (child.cloneNode());
+        }
+      }
+      return clone[0];
+    }
+  }
+
+  /**
    * Convert SVG element to export format.
    *
    * @param svg_elem  The svg element.
    * @param title     The title of the chart added at the top.
+   *
+   * @return The svg element as text.
    */
   gch.svg_from_elem = function(svg_elem, title) {
     var css_text = '';
@@ -2262,8 +2315,7 @@
       title_xml = '';
     }
 
-    var svg_clone = d3.select(svg_elem.node().cloneNode(true));
-    svg_clone.selectAll('.remove_on_static').remove();
+    var svg_clone = d3.select(gch.clone_svg(svg_elem.node()));
 
     var defs = svg_clone.selectAll('defs');
     if (defs.empty()) {
