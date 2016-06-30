@@ -692,6 +692,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       data-default-heights="{$default_heights}"
       data-controllers-pref-id="{$controllers_pref_id}"
       data-heights-pref-id="{$heights_pref_id}"
+      data-default-controller-string="notes_donut_chart"
       data-dashboard-controls="top-dashboard-controls"
       data-max-components="4">
       <div class="dashboard-data-source"
@@ -784,6 +785,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       data-default-heights="{$default_heights}"
       data-controllers-pref-id="{$controllers_pref_id}"
       data-heights-pref-id="{$heights_pref_id}"
+      data-default-controller-string="overrides_donut_chart"
       data-dashboard-controls="top-dashboard-controls"
       data-max-components="4">
       <div class="dashboard-data-source"
@@ -942,7 +944,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       data-controllers-pref-id="{$controllers_pref_id}"
       data-filters-pref-id="{$filters_pref_id}"
       data-heights-pref-id="{$heights_pref_id}"
-      data-default-controller-string="nvt_bar_chart"
+      data-default-controller-string="tasks-by-class"
       data-dashboard-controls="main-dashboard-controls"
       data-no-chart-links="{/envelope/params/no_chart_links}"
       data-max-components="8">
@@ -1225,7 +1227,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       data-controllers-pref-id="{$controllers_pref_id}"
       data-filters-pref-id="{$filters_pref_id}"
       data-heights-pref-id="{$heights_pref_id}"
-      data-default-controller-string="nvt_bar_chart"
+      data-default-controller-string="tasks-by-class"
       data-dashboard-controls="scans-dashboard-controls"
       data-no-chart-links="{/envelope/params/no_chart_links}"
       data-max-components="8">
@@ -1410,7 +1412,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       data-controllers-pref-id="{$controllers_pref_id}"
       data-filters-pref-id="{$filters_pref_id}"
       data-heights-pref-id="{$heights_pref_id}"
-      data-default-controller-string="nvt_bar_chart"
+      data-default-controller-string="hosts-by-class"
       data-dashboard-controls="assets-dashboard-controls"
       data-no-chart-links="{/envelope/params/no_chart_links}"
       data-max-components="8">

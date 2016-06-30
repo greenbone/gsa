@@ -1,3 +1,10 @@
+2016-06-30  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/graphics.xsl (js-notes-top-visualization)
+	(js-overrides-top-visualization, dashboard [main], dashboard [scans])
+	(dashboard [assets]): Use more sensible charts when adding new ones
+	to a dashboard.
+
 2016-06-30  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/js/gsa_dashboard.js (DashboardRow.prototype.init): Don't
