@@ -3088,7 +3088,7 @@
             max_components: max_components,
             default_controller_string: elem.data('default-controller-string'),
             hide_controller_select: elem.data('hide-controller-select'),
-            dashboard_controls: $('#' + elem.data('dashboard-controls'))[0]
+            dashboard_controls: '#' + elem.data('dashboard-controls'),
           }
       );
 
