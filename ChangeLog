@@ -1,5 +1,10 @@
 2016-06-30  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	*  src/html/classic/js/gsa_dashboard.js (Dashboard): Use new forEachRowOrdered
+	to reduce duplicate code.
+
+2016-06-30  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	*  src/html/classic/js/gsa_dashboard.js
 	(DashboardRow.prototype.forEachDisplayOrdered): Add new method to iterate over
 	all displays in a dashboard row in the order of their occurence in the

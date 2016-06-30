@@ -656,16 +656,7 @@
     var self = this;
     self.controllers_string = '';
 
-    self.elem.find('.dashboard-row').each(function() {
-      var id = $(this).attr('id');
-      var row = self.getRow(id);
-
-      if (!gsa.is_defined(row)) {
-        log.error('Row ' + id + ' not found when updating dashboard ' +
-          'controllers string');
-        return;
-      }
-
+    self.forEachRowOrdered(function(row) {
       var row_controllers_string = row.getControllersString();
       if (row.getNumDisplays() !== 0) {
         self.controllers_string += row_controllers_string;
@@ -719,16 +710,7 @@
     var self = this;
     self.filters_string = '';
 
-    self.elem.find('.dashboard-row').each(function() {
-      var id = $(this).attr('id');
-      var row = self.getRow(id);
-
-      if (!gsa.is_defined(row)) {
-        log.error('Row ' + id + ' not found when updating dashboard ' +
-          'filters string');
-        return;
-      }
-
+    self.forEachRowOrdered(function(row) {
       var row_filters_string = row.getFiltersString();
       if (row.getNumDisplays() !== 0) {
         self.filters_string += row_filters_string;
@@ -782,16 +764,7 @@
     var self = this;
     this.heightsString = '';
 
-    this.elem.find('.dashboard-row').each(function() {
-      var id = $(this).attr('id');
-      var row = self.getRow(id);
-
-      if (!gsa.is_defined(row)) {
-        log.error('Row ' + id + ' not found when updating dashboard ' +
-          'heights string');
-        return;
-      }
-
+    this.forEachRowOrdered(function(row) {
       if (row.getNumDisplays() !== 0) {
         var row_height = row.getHeight();
         self.heights_string += row_height;
