@@ -1405,6 +1405,53 @@
   };
 
   /**
+   * Rebuild displays from controllers and filter string
+   *
+   * @param controllers_string   String listing the controllers to use.
+   * @param filters_string       String listing the filters to use.
+   * @param height               Height to set for this row.
+   *
+   * @return This row
+   */
+  DashboardRow.prototype.update = function(controllers_string, filters_string,
+      height) {
+    var self = this;
+
+    this._updateControllersStringList(controllers_string);
+    this._updateFiltersStringList(filters_string);
+
+    var displays = [];
+    self.forEachDisplayOrdered(function(display) {
+      displays.push(display);
+    });
+
+    log.debug('Updating row ' + this.id, controllers_string, filters_string,
+        height);
+
+    this.controller_string_list.forEach(function(controller_string, index) {
+      if (index <= displays.length - 1) {
+        displays[index].update(controller_string,
+            self.filter_string_list[index]);
+      }
+      else {
+        self.createNewDisplay(controller_string,
+            self.filter_string_list[index], self.controller_string_list.length);
+      }
+    });
+
+    if (displays.length > this.controller_string_list.length) {
+      displays.slice(this.controller_string_list.length).forEach(function(d) {
+        d.remove();
+      });
+    }
+
+    this._updateCssClasses();
+
+    this.resize(height);
+    return this;
+  };
+
+  /**
    * Returns the width for one in the row
    *
    * @param count Expect count displays in this row to calculate the width for

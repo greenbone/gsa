@@ -1,5 +1,10 @@
 2016-06-30  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	*  src/html/classic/js/gsa_dashboard.js (DashboardRow.prototype.update): Add a
+	new method to update a row from new controllers, filters and heights strings.
+
+2016-06-30  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	*  src/html/classic/js/gsa_dashboard.js (DashboardDisplay.prototype.update):
 	Add method to update a display from a new controller and filter string.
 
