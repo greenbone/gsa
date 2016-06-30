@@ -1094,6 +1094,8 @@
    * Initializes the dashboard row.
    */
   DashboardRow.prototype.init = function() {
+    var self = this;
+
     this.elem = $('<div/>', {
       'class': 'dashboard-row',
       id: this.id,
@@ -1104,11 +1106,10 @@
 
     this.elem.css('height', this.height);
 
-    for (var index in this.controller_string_list) {
-      this.createNewDisplay(this.controller_string_list[index],
-          this.filter_string_list ? this.filter_string_list[index] : null,
-          this.controller_string_list.length);
-    }
+    this.controller_string_list.forEach(function(controller_string, index) {
+      self.createNewDisplay(controller_string, self.filter_string_list[index],
+          self.controller_string_list.length);
+    });
 
     this._updateCssClasses();
   };
