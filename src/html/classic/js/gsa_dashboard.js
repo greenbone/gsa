@@ -432,9 +432,8 @@
     this.stopEdit();
 
     if (this.hasChanged()) {
-      // FIXME we should only redraw with original controllers, heights and
-      // filters
-      window.location.reload();
+      // reset displays
+      this.updateDisplaysFromString();
     }
   };
 
