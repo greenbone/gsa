@@ -587,6 +587,10 @@
       self.total_displays -= 1;
       self._removeEmptyRows(); // triggers row removed if empty
       self._allChanged();
+
+      if (self.dashboard_controls && self.edit_mode && self.canAddDisplay()) {
+        self.new_display_button.show();
+      }
     });
     row.on('display_added', function(event, display) {
       log.debug('on display added');
