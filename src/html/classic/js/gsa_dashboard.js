@@ -940,6 +940,50 @@
   };
 
   /**
+   * Rebuilds the displays (and rows) from controllers and filters string
+   *
+   * @return This dashboard
+   */
+  Dashboard.prototype.updateDisplaysFromString = function() {
+    var self = this;
+    var controllers_string_list = split_rows(this.controllers_string);
+    var filters_string_list = split_rows(this.filters_string);
+    var heights_list = split_rows(this.heighs_string);
+
+    log.debug('Update displays from string', controllers_string_list,
+        filters_string_list, heights_list);
+
+    var rows = [];
+    self.forEachRowOrdered(function(row) {
+      rows.push(row);
+    });
+
+    controllers_string_list.forEach(function(controllers_string, index) {
+      var height = parseInt(heights_list[index]);
+      if (isNaN(height)) {
+        height = undefined;
+      }
+      if (index <= rows.length - 1) {
+        rows[index].update(controllers_string, filters_string_list[index],
+            height);
+      }
+      else {
+        self.addNewRow({
+          row_controllers_string: controllers_string,
+          row_filters_string: filters_string_list[index],
+          height: height,
+        });
+      }
+    });
+    if (rows.length > controllers_string_list.length) {
+      rows.slice(controllers_string_list.length).forEach(function(row) {
+        row.remove();
+      });
+    }
+    return this;
+  };
+
+  /**
    * Returns true if any height of the rows has changed
    *
    * @return true if a height of a row has changed
