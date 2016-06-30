@@ -920,6 +920,27 @@
   };
 
   /**
+   * Iterate over all rows in the order of their occurence
+   *
+   * @param callback A callback function as following function(row)
+   */
+  Dashboard.prototype.forEachRowOrdered = function(callback) {
+    var self = this;
+    this.elem.find('.dashboard-row').each(function() {
+      var id = $(this).attr('id');
+      var row = self.getRow(id);
+
+      if (!gsa.is_defined(row)) {
+        log.error('Row ' + id + ' not found when iteratring of each ' +
+            'displayed rows');
+        return;
+      }
+
+      callback(row);
+    });
+  };
+
+  /**
    * Initializes the Displays with the values in the displays string.
    *
    * @return  This dashboard
