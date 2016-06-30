@@ -932,8 +932,7 @@
 
       this.addNewRow({
         row_controllers_string: row_controllers_string_list[index],
-        row_filters_string: this.filters_string ?
-          row_filters_string_list[index] : null,
+        row_filters_string: row_filters_string_list[index],
         height: height,
       });
     }
