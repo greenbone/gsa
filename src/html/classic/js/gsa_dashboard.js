@@ -432,6 +432,7 @@
     if (this.hasChanged()) {
       // reset displays
       this.updateDisplaysFromString();
+      this._allUnchanged();
     }
   };
 
