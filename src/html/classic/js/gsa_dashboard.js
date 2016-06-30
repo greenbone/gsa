@@ -947,7 +947,7 @@
     var self = this;
     var controllers_string_list = split_rows(this.controllers_string);
     var filters_string_list = split_rows(this.filters_string);
-    var heights_list = split_rows(this.heighs_string);
+    var heights_list = split_rows(this.heights_string);
 
     log.debug('Update displays from string', controllers_string_list,
         filters_string_list, heights_list);
