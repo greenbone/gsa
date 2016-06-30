@@ -1481,7 +1481,6 @@
    */
   function DashboardDisplay(id, controller_string, filter_string,
       controller_factories, filters, edit_mode, height, width, dashboard_opts) {
-    var self = this;
     this.id = id;
     this.controller_string = controller_string;
     this.filter_string = filter_string;
@@ -1512,11 +1511,7 @@
       this.controllers.push(new_controller);
     }
 
-    this.current_filter = this.all_filters.find(function(filter, index) {
-      return filter.type === null && !gsa.has_value(self.filter_string) ||
-        filter.id === self.filter_string;
-    });
-
+    this._updateCurrentFilter();
     this._updateFilters();
 
     this.init();
