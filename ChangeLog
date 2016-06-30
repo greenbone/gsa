@@ -1,5 +1,10 @@
 2016-06-30  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	*  src/html/classic/js/gsa_dashboard.js (DashboardRow): Use new method
+	forEachDisplayOrdered in dashboard row.
+
+2016-06-30  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	*  src/html/classic/js/gsa_dashboard.js (DashboardRow.prototype.init): Use
 	Array.prototype.forEach to iterate over the controller string list instead of
 	for loop.

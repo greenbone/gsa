@@ -1241,8 +1241,7 @@
    */
   DashboardRow.prototype.getControllersString = function() {
     var controllers_string = '';
-    this.elem.find('.dashboard-display').each(function() {
-      var display = $(this).data('display');
+    this.forEachDisplayOrdered(function(display) {
       controllers_string += display.getControllerString();
       controllers_string += '|';
     });
@@ -1256,8 +1255,7 @@
    */
   DashboardRow.prototype.getFiltersString = function() {
     var filters_string = '';
-    this.elem.find('.dashboard-display').each(function() {
-      var display = $(this).data('display');
+    this.forEachDisplayOrdered(function(display) {
       filters_string += display.getFilterString();
       filters_string += '|';
     });
