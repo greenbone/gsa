@@ -1000,6 +1000,22 @@
   };
 
   /**
+   * Rebuilds the displays (and rows) from default controllers, filters and
+   * heights strings
+   *
+   * @return This dashboard
+   */
+  Dashboard.prototype.updateDisplaysFromDefaultStrings = function() {
+    this.controllers_string = this.default_controllers_string;
+    this.filters_string = this.default_filters_string;
+    this.heights_string = this.default_heights_string;
+
+    this.updateDisplaysFromString();
+
+    return this;
+  };
+
+  /**
    * Returns true if any height of the rows has changed
    *
    * @return true if a height of a row has changed
