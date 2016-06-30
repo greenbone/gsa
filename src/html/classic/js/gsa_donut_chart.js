@@ -31,6 +31,15 @@
 
   gch.register_chart_generator('donut', DonutChartGenerator);
 
+  function get_box(node) {
+    try {
+      return node.getBBox();
+    } catch (error) {
+      // firefox seems to have issues with getBBox sometimes
+      return node.getBoundingClientRect();
+    }
+  }
+
   /* Main chart generator */
   function DonutChartGenerator() {
     // call super constructor
@@ -240,7 +249,8 @@
 
       gch.wrap_text(new_text, legend_width - 25);
 
-      legend_y += Math.max(20, new_text.node().getBBox().height + 5);
+      var box = get_box(new_text.node());
+      legend_y += Math.max(20, box.height + 5);
     }
 
     this.svg.call(this.tip);
@@ -342,8 +352,8 @@
     // Sort slices so they are rendered in correct order.
     var slice_elems = donut.selectAll('.slice')[0];
     slice_elems.sort(function(a, b) {
-      var a_BBox = a.getBBox();
-      var b_BBox = b.getBBox();
+      var a_BBox = get_box(a);
+      var b_BBox = get_box(b);
       return (a_BBox.y + a_BBox.height) - (b_BBox.y + b_BBox.height);
     });
 

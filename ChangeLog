@@ -1,5 +1,11 @@
 2016-06-30  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_donut_chart.js: Fix getting the bounding box of an
+	svg element for firefox. Under some mysterious circumstances firefox raises an
+	internal NS_NOT_IMPLEMENTED error when accessing getBBox on svg elements.
+
+2016-06-30  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_dashboard.js (Dashboard.prototype.startEdit,
 	Dashboard.prototype.stopEdit): Fix acting on escape key for chrome. Chrome
 	only triggers the keypress event for "normal" keys. Therefore use keydown
