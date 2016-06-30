@@ -1689,8 +1689,6 @@
           {display: this.controller_string}),
     }).appendTo(inner_elem_d3);
 
-    this.header = this.header[0];
-
     this.content = $('<div/>', {
       'class': 'dashboard-display-content',
       id: this.id + '-content',
@@ -1790,7 +1788,7 @@
    * @return This display
    */
   DashboardDisplay.prototype.setTitle = function(new_title) {
-    $(this.header).text(new_title);
+    this.header.text(new_title);
     return this;
   };
 
@@ -1800,7 +1798,7 @@
    * @return The text of the title bar
    */
   DashboardDisplay.prototype.getTitle = function() {
-    return $(this.header).text();
+    return this.header.text();
   };
 
   /**
