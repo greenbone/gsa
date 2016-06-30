@@ -202,9 +202,7 @@
 
     this.reordering = false; // indicator if the dashboard rows are currently reorderd
 
-    this.heights_changed = false;
-    this.filters_changed = false;
-    this.controllers_changed = false;
+    this._allUnchanged();
 
     this.init();
   }
