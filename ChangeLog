@@ -1,6 +1,11 @@
 2016-06-30  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/js/gsa_dashboard.js (DashboardDisplay.prototype.showError):
+	Hide loading element if error occured during loading a chart.
+
+2016-06-30  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/js/gsa_dashboard.js (DashboardDisplay.prototype.showError):
 	Add missing showError method to DashboardDisplay.
 
 2016-06-30  Timo Pollmeier <timo.pollmeier@greenbone.net>

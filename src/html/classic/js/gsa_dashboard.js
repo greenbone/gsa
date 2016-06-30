@@ -2159,7 +2159,8 @@
    * @return This display
    */
   DashboardDisplay.prototype.showError = function(message) {
-    this.header.text(message);
+    this.setTitle(message);
+    this.hideLoading();
     this.clearSvg();
     return this;
   };
