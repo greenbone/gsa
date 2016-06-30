@@ -2012,6 +2012,21 @@
   };
 
   /**
+   * (Re-)sets the current filter from the filter string
+   *
+   * @return This display
+   */
+  DashboardDisplay.prototype._updateCurrentFilter = function() {
+    var self = this;
+
+    this.current_filter = this.all_filters.find(function(filter, index) {
+      return filter.type === null && !gsa.has_value(self.filter_string) ||
+        filter.id === self.filter_string;
+    });
+    return this;
+  };
+
+  /**
    * Applies Select2 to the filter and controller select elements.
    *
    * @return This display
