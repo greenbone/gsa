@@ -1251,6 +1251,17 @@
   };
 
   /**
+   * Iterate over each display in order of occurence
+   *
+   * @param callback A callback function as following function(display)
+   */
+  DashboardRow.prototype.forEachDisplayOrdered = function(callback) {
+    this.elem.find('.dashboard-display').each(function() {
+      callback($(this).data('display'));
+    });
+  };
+
+  /**
    * Returns the controllers string from the ones of the displays.
    *
    * @return  The controllers string.

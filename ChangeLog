@@ -1,6 +1,13 @@
 2016-06-30  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	*  src/html/classic/js/gsa_dashboard.js
+	(DashboardRow.prototype.forEachDisplayOrdered): Add new method to iterate over
+	all displays in a dashboard row in the order of their occurence in the
+	displayed html.
+
+2016-06-30  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	*  src/html/classic/js/gsa_dashboard.js
 	(Dashboard.prototype.forEachRowOrdered): Add new method to iterate over all
 	rows in a dashboard in the order of their occurence in the displayed html.
 
