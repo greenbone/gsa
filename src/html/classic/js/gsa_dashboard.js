@@ -1973,10 +1973,9 @@
 
     index -= 1;
     this._selectFilter(index);
+    this._updateFilterSelection(index);
 
-    // don't trigger select change event
-    this.filter_select_elem.val(index);
-    this.filter_select_elem.trigger('change.select2');
+    return this;
   };
 
   /**
@@ -1999,10 +1998,8 @@
     }
 
     this._selectFilter(index);
+    this._updateFilterSelection(index);
 
-    // don't trigger select change event
-    this.filter_select_elem.val(index);
-    this.filter_select_elem.trigger('change.select2');
     return this;
   };
 

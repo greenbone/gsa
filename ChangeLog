@@ -1,6 +1,11 @@
 2016-06-30  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	*  src/html/classic/js/gsa_dashboard.js (DashboardDisplay): Use new
+	_updateFilterSelection method in DashboardDisplay to reduce duplicate code.
+
+2016-06-30  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	*  src/html/classic/js/gsa_dashboard.js (DashboardDisplay): Use new
 	_updateCurrentFilter method in DashboardDisplay constructor function.
 
 2016-06-30  Björn Ricks <bjoern.ricks@greenbone.net>
