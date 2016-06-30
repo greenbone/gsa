@@ -1154,7 +1154,6 @@
     this.elem = $('<div/>', {
       'class': 'dashboard-row',
       id: this.id,
-      height: this.height,
     });
 
     EventNode.call(this);

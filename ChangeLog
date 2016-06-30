@@ -1,5 +1,11 @@
 2016-06-30  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_dashboard.js (DashboardRow.prototype.init): Don't
+	add height attribute to dashboard row element when creating it. The height is
+	set per css call afterwards already.
+
+2016-06-30  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_dashboard.js (DashboardDisplay.prototype.resize):
 	Add some comments about height and width calculation in DashboardDisplay
 	resize method.
