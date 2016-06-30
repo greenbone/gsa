@@ -2004,6 +2004,20 @@
   };
 
   /**
+   * (Re-)sets the current controller from the controller string
+   *
+   * @return This display
+   */
+  DashboardDisplay.prototype._updateCurrentController = function() {
+    var self = this;
+
+    this.current_controller = this.controllers.find(function(controller) {
+      return controller.chart_name === self.controller_string;
+    });
+    return this;
+  };
+
+  /**
    * (Re-)sets the current filter from the filter string
    *
    * @return This display
