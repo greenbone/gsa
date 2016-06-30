@@ -299,7 +299,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         rows separated with "#" -->
   <xsl:param name="default_controllers">
     <xsl:choose>
-      <xsl:when test="$type='host'">by-cvss|by-class|host-counts-timeline</xsl:when>
+      <xsl:when test="$type='host'">by-class|hosts-topology|host-counts-timeline</xsl:when>
       <xsl:when test="$type='os'">by-class|most-vulnerable-oss|by-cvss</xsl:when>
       <!-- fallback for all other types -->
       <xsl:otherwise>by-cvss|by-class</xsl:otherwise>
@@ -1341,7 +1341,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <!-- Default chart selections:
         Controller names of boxes in a row separated with "|",
         rows separated with "#" -->
-  <xsl:variable name="default_controllers" select="'most-vulnerable-hosts|most-vulnerable-oss#oss-by-class|host-counts-timeline'"/>
+  <xsl:variable name="default_controllers" select="'most-vulnerable-hosts|hosts-topology|most-vulnerable-oss#oss-by-class|host-counts-timeline'"/>
   <!-- Default row heights, rows separated with "#",
         number of rows must match default_controllers -->
   <xsl:variable name="default_heights" select="'280#280'"/>
