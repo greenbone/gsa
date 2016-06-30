@@ -1,5 +1,11 @@
 2016-06-30  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	*  src/html/classic/js/gsa_dashboard.js (DashboardRow): Use new
+	_updateControllersStringList and _updateFiltersStringList methods in
+	DashboardRow constructor function.
+
+2016-06-30  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	*  src/html/classic/js/gsa_dashboard.js (DashboardRow): Add new "private"
 	method to update the filters and controllers string list in a DashboardRow.
 

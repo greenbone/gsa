@@ -1060,10 +1060,8 @@
       controller_factories, filters, height, width, edit_mode, dashboard_opts) {
     this.id = id;
 
-    this.controller_string_list = split_elements(controllers_string);
     this.controller_factories = controller_factories;
 
-    this.filter_string_list = split_elements(filters_string);
     this.filters = filters;
 
     this.height = height;
@@ -1082,6 +1080,9 @@
       dashboard_opts.max_per_row : MAX_PER_ROW;
 
     this.last_display_index = 0;
+
+    this._updateControllersStringList(controllers_string);
+    this._updateFiltersStringList(filters_string);
 
     this.init();
   }
