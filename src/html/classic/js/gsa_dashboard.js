@@ -154,7 +154,7 @@
    *
    * @param id     The id of the dashboard and its container element
    * @param controllers_string Names of the controllers for the displays
-   * @param heighs_string '|' seperated values for the height of the rows
+   * @param heights_string '|' seperated values for the height of the rows
    * @param filters_string uuids of the filters for the displays
    * @param dashboard_opts Optional parameters for the dashboard and its
    *                       components.

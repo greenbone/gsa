@@ -1,5 +1,10 @@
 2016-06-30  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	*  src/html/classic/js/gsa_dashboard.js (Dashboard): Fix typo in docstring of
+	Dashboard constructor parameter heights_string.
+
+2016-06-30  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	*  src/html/classic/js/gsa_dashboard.js (on_ready): Pass dashboard controls as
 	id string to Dashboard constructor. It is passed to jquery anyway. Therefore
 	there is no need to get the element already in on_ready.
