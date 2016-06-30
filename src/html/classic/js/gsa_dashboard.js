@@ -2094,6 +2094,15 @@
     return this;
   };
 
+  /**
+   * Update this display to use new controller and/or filter. Data will be
+   * reloaded if the controller and/or filter is changed.
+   *
+   * @param controller_string Name of the new controller to use.
+   * @param filter_string     ID of the new filter to use.
+   *
+   * @return This display
+   */
   DashboardDisplay.prototype.update = function(controller_string,
       filter_string) {
     var changed = false;
