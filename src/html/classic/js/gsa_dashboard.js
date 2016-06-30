@@ -1450,6 +1450,17 @@
     return this.id + '-box-' + (++this.last_display_index);
   };
 
+  DashboardRow.prototype._updateControllersStringList = function(
+      controllers_string) {
+    this.controller_string_list = split_elements(controllers_string);
+    return this;
+  };
+
+  DashboardRow.prototype._updateFiltersStringList = function(filters_string) {
+    this.filter_string_list = split_elements(filters_string);
+    return this;
+  };
+
   /* Chart display */
 
   /**
