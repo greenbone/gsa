@@ -2135,6 +2135,7 @@
           new_filter !== this.current_filter)) {
       // filter has changed
       this.current_filter = new_filter;
+      this.filter_string = new_filter.id;
       this.redraw();
       this._trigger('filter_changed', this);
     }

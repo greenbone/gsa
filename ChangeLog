@@ -1,6 +1,12 @@
 2016-06-30  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	*  src/html/classic/js/gsa_dashboard.js
+	(DashboardDisplay.prototype._selectFilter): Set filter_string when calling
+	selectFilter.
+
+2016-06-30  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	*  src/html/classic/js/gsa_dashboard.js
 	(DashboardDisplay.prototype._updateCurrentController): Add new "private"
 	method to update the current controller from the controller string in
 	DashboardDisplay.
