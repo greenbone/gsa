@@ -1429,6 +1429,9 @@
       this.height = height;
     }
 
+    this.elem.css('width', width);
+    this.elem.css('height', height);
+
     for (var item in this.displays) {
       this.displays[item].resize(this.height, this._getDisplayWidth());
     }
