@@ -1,5 +1,10 @@
 2016-06-30  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_dashboard.js (Dashboard.prototype.save): Allow to
+	force saving of a dashboard.
+
+2016-06-30  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_dashboard.js (Dashboard.prototype.init, on_ready):
 	Pass default filters, controllers and heights to the dashboard.
 

@@ -821,18 +821,20 @@
 
   /**
    * Updates the filter, controllers and heights string and saves ithem to the
-   * user's settings if they have changed
+   * user's settings if they have changed or force is set to true
+   *
+   * @param force Set to true to force saving
    *
    * @return  This dashboard
    */
-  Dashboard.prototype.save = function() {
-    if (this.hasFilterChanged()) {
+  Dashboard.prototype.save = function(force) {
+    if (force || this.hasFilterChanged()) {
       this.saveFilters();
     }
-    if (this.hasControllerChanged()) {
+    if (force || this.hasControllerChanged()) {
       this.saveControllers();
     }
-    if (this.hasHeightsChanged()) {
+    if (force || this.hasHeightsChanged()) {
       this.saveHeights();
     }
     return this;
