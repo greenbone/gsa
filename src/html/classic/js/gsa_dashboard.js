@@ -2328,6 +2328,33 @@
     return !this.hide_controller_select && this.edit_mode;
   };
 
+  /**
+   * Update the selected filter in the filter select element without triggering
+   * a filter changed event
+   *
+   * @param index Index to set in the filter selection element. If index is
+   *              undefined the current filter will be selected.
+   *
+   * @return This display
+   */
+  DashboardDisplay.prototype._updateFilterSelection = function(index) {
+    var self = this;
+
+    if (!gsa.is_defined(index)) {
+      index = this.filters.findIndex(function(filter) {
+        return filter.type === null && !gsa.has_value(self.filter_string) ||
+          filter.id === self.current_filter.id;
+      });
+    }
+
+    log.debug('Update filter selection to index', index);
+
+    // don't trigger select change event only update the selected value
+    this.filter_select_elem.val(index);
+    this.filter_select_elem.trigger('change.select2');
+    return this;
+  };
+
   /* Chart controller class */
 
   /**
