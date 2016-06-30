@@ -449,6 +449,21 @@
   };
 
   /**
+   * Stops the edit mode of the dashboard and resets to the default values
+   *
+   * @return This dashboard
+   */
+  Dashboard.prototype.resetEdit = function() {
+    if (!this.edit_mode) {
+      return;
+    }
+
+    this.stopEdit();
+    this.updateDisplaysFromDefaultStrings();
+    this.save(true);
+  };
+
+  /**
    * Tests if a display can be added to the dashboard.
    *
    * @return true if there is room for a new display, false otherwise.

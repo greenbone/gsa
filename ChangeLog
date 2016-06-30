@@ -1,5 +1,10 @@
 2016-06-30  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_dashboard.js (Dashboard.prototype.resetEdit): Add
+	method to reset the dashboard to the defaults and stop editing.
+
+2016-06-30  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_dashboard.js
 	(Dashboard.prototype.updateDisplaysFromDefaultStrings): Add method to update
 	the rows and displays of a dashboard form the default controllers, filters and
