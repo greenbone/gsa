@@ -242,6 +242,18 @@
       if (this.dashboard_opts.dashboard_controls) {
         this.dashboard_controls = this.dashboard_opts.dashboard_controls;
       }
+      if (this.dashboard_opts.default_controllers_string) {
+        this.default_controllers_string =
+          this.dashboard_opts.default_controllers_string;
+      }
+      if (this.dashboard_opts.default_filters_string) {
+        this.default_filters_string =
+          this.dashboard_opts.default_filters_string;
+      }
+      if (this.dashboard_opts.default_heights_string) {
+        this.default_heights_string =
+          this.dashboard_opts.default_heights_string;
+      }
     }
 
     // Initialize DOM elements
@@ -3118,6 +3130,9 @@
             filt_id: elem.data('filter-id'),
             max_components: max_components,
             default_controller_string: elem.data('default-controller-string'),
+            default_controllers_string: elem.data('default-controllers'),
+            default_filters_string: elem.data('default-filters'),
+            default_heights_string: elem.data('default-heights'),
             hide_controller_select: elem.data('hide-controller-select'),
             dashboard_controls: '#' + elem.data('dashboard-controls'),
           }
