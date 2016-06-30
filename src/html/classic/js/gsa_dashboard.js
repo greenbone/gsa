@@ -1444,7 +1444,7 @@
    * @return The current height of the row
    */
   DashboardRow.prototype.getHeight = function() {
-    return this.elem[0].clientWidth;
+    return this.elem[0].clientHeight;
   };
 
   /**
