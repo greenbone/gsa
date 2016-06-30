@@ -921,7 +921,7 @@
 
     var row_controllers_string_list = split_rows(this.controllers_string);
     var row_filters_string_list = split_rows(this.filters_string);
-    var row_heights_list = split_rows(this.heighs_string);
+    var row_heights_list = split_rows(this.heights_string);
 
     for (var index in row_controllers_string_list) {
       var height = parseInt(row_heights_list[index]);
