@@ -317,6 +317,21 @@
 
       this.cancel_edit_button.hide();
 
+      this.reset_defaults_button = $('<a/>', {
+        href: 'javascript:void(0);',
+        on: {
+          click: function() {self.resetEdit();},
+        },
+      })
+      .append($('<img/>', {
+        src: 'img/delete.png',
+        alt: gsa._('Reset to defaults'),
+        title: gsa._('Reset to defaults'),
+      }))
+      .appendTo(control_elem);
+
+      this.reset_defaults_button.hide();
+
     }
 
     this.width = this.elem[0].clientWidth;
@@ -367,6 +382,7 @@
       this.start_edit_button.hide();
       this.stop_edit_button.show();
       this.cancel_edit_button.show();
+      this.reset_defaults_button.show();
 
       if (this.canAddDisplay()) {
         this.new_display_button.show();
@@ -408,6 +424,7 @@
       this.stop_edit_button.hide();
       this.cancel_edit_button.hide();
       this.new_display_button.hide();
+      this.reset_defaults_button.hide();
     }
 
     $(window).off('keydown'); // remove event listener
