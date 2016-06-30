@@ -1,5 +1,10 @@
 2016-06-30  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_dashboard.js (DashboardDisplay.prototype.resize):
+	Fix setting the height of a Display in resize method.
+
+2016-06-30  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_dashboard.js (DashboardRow.prototype.resize): Fix
 	resizing of a DashboardRow by setting its element css width and height in
 	resize method.

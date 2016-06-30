@@ -1894,6 +1894,8 @@
 
     this.svg.attr('height', this.inner_height);
 
+    this.elem.css('height', this.height);
+
     this.svg.attr('width', this.width - 8);
 
     this.elem.css('width', this.width);
