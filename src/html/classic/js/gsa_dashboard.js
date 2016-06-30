@@ -1082,6 +1082,18 @@
     return this;
   };
 
+  /**
+   * Marks filters, controllers and heights as unchanged
+   *
+   * @return This Dashboard
+   */
+  Dashboard.prototype._allUnchanged = function() {
+    this.filters_changed = false;
+    this.controllers_changed = false;
+    this.heights_changed = false;
+    return this;
+  };
+
   /* Dashboard row class */
 
   /**
