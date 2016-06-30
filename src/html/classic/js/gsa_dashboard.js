@@ -2003,6 +2003,36 @@
     return this;
   };
 
+  DashboardDisplay.prototype.update = function(controller_string,
+      filter_string) {
+    var changed = false;
+
+    log.debug('Updating display ' + this.id, 'new controller:',
+        controller_string, 'old controller:', this.controller_string,
+        'new filter:', filter_string, 'old filter:', this.filter_string);
+
+    if (controller_string !== this.current_controller.chart_name) {
+      log.debug('Controller has changed');
+      this.controller_string = controller_string;
+      this._updateCurrentController();
+      this._updateFilters(); // maybe unnecessary because it will be updated by new request
+      changed = true;
+    }
+
+    if (filter_string !== this.current_filter.id) {
+      log.debug('Filter has changed');
+      this.filter_string = filter_string;
+      this._updateCurrentFilter();
+      this._updateFilterSelection();
+      changed = true;
+    }
+
+    if (changed) {
+      this._requestNewChart();
+    }
+    return this;
+  };
+
   /**
    * (Re-)sets the current controller from the controller string
    *
