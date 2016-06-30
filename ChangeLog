@@ -5,6 +5,11 @@
 
 2016-06-30  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	*  src/html/classic/js/gsa_dashboard.js
+	(Dashboard.prototype.updateHeightsString): Fix resetting the heights_string.
+
+2016-06-30  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	*  src/html/classic/js/gsa_dashboard.js (Dashboard.prototype.cancelEdit): Use
 	updateDisplaysFromString to discard changed when editing of the dashbaord has
 	been canceled.

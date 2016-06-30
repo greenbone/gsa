@@ -761,7 +761,7 @@
    */
   Dashboard.prototype.updateHeightsString =  function() {
     var self = this;
-    this.heightsString = '';
+    this.heights_string = '';
 
     this.forEachRowOrdered(function(row) {
       if (row.getNumDisplays() !== 0) {
