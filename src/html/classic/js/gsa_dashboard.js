@@ -460,7 +460,7 @@
 
     if (this.hasChanged()) {
       // reset displays
-      this.updateDisplaysFromString();
+      this.updateDisplaysFromStrings();
       this._allUnchanged();
     }
   };
@@ -992,13 +992,13 @@
    *
    * @return This dashboard
    */
-  Dashboard.prototype.updateDisplaysFromString = function() {
+  Dashboard.prototype.updateDisplaysFromStrings = function() {
     var self = this;
     var controllers_string_list = split_rows(this.controllers_string);
     var filters_string_list = split_rows(this.filters_string);
     var heights_list = split_rows(this.heights_string);
 
-    log.debug('Update displays from string', controllers_string_list,
+    log.debug('Update displays from strings', controllers_string_list,
         filters_string_list, heights_list);
 
     var rows = [];
@@ -1042,7 +1042,7 @@
     this.filters_string = this.default_filters_string;
     this.heights_string = this.default_heights_string;
 
-    this.updateDisplaysFromString();
+    this.updateDisplaysFromStrings();
 
     return this;
   };

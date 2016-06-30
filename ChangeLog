@@ -1,5 +1,10 @@
 2016-06-30  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_dashboard.js (Dashboard): Rename
+	updateDisplaysFromString to updateDisplaysFromStrings.
+
+2016-06-30  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_dashboard.js (Dashboard): Add button to dashboard in
 	edit mode to reset the dashboard to the defaults.
 
