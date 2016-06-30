@@ -2152,6 +2152,19 @@
   };
 
   /**
+   * Shows an error message text in the header of this display
+   *
+   * @param message Message text to be displayed
+   *
+   * @return This display
+   */
+  DashboardDisplay.prototype.showError = function(message) {
+    this.header.text(message);
+    this.clearSvg();
+    return this;
+  };
+
+  /**
    * (Re-)sets the current controller from the controller string
    *
    * @return This display
