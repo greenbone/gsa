@@ -1,3 +1,10 @@
+2016-06-30  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/js/gsa_dashboard.js (Dashboard.prototype.startEdit,
+	Dashboard.prototype.stopEdit): Fix acting on escape key for chrome. Chrome
+	only triggers the keypress event for "normal" keys. Therefore use keydown
+	event to abort editing the dashboard on escape being pressed.
+
 2016-06-30  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/graphics.xsl (js-scan-management-top-visualization)

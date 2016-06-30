@@ -363,8 +363,8 @@
       }
     }
 
-    $(window).on('keypress', function(event) {
-      if (event.which === 0) { // escape has been pressed
+    $(window).on('keydown', function(event) {
+      if (event.which === 27) { // escape has been pressed
         self.cancelEdit();
         event.preventDefault();
       }
@@ -400,7 +400,7 @@
       this.new_display_button.hide();
     }
 
-    $(window).off('keypress'); // remove event listener
+    $(window).off('keydown'); // remove event listener
 
     return this;
   };
