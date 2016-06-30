@@ -2215,6 +2215,7 @@
   };
 
   /**
+   * Adds filter selector elements to a dashboard display.
    *
    * @return This display
    */
