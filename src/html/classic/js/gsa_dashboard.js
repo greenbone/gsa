@@ -1879,7 +1879,7 @@
       this.height = height;
     }
 
-    this.inner_height = this.height - 8 - 18; // 18 == header height
+    this.inner_height = this.height - 8 - 18; // 18 == header height, 8 == border height
 
     if (this._showControllerSelect()) {
       this.inner_height -= 24;
@@ -1896,7 +1896,7 @@
 
     this.elem.css('height', this.height);
 
-    this.svg.attr('width', this.width - 8);
+    this.svg.attr('width', this.width - 8); // 8 == border width
 
     this.elem.css('width', this.width);
 
