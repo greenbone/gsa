@@ -258,9 +258,13 @@
 
     // Initialize DOM elements
     if (this.dashboard_controls) {
-      var control_elem = $(this.dashboard_controls);
+      var container = $('<div/>', {
+        class: 'dashboard-actions',
+      }).appendTo($(this.dashboard_controls));
+
       this.start_edit_button = $('<a/>', {
         href: 'javascript:void(0);',
+        class: 'icon',
         on: {
           click: function() {self.startEdit();},
         },
@@ -270,10 +274,11 @@
         alt: gsa._('Edit Dashboard'),
         title: gsa._('Edit Dashboard'),
       }))
-      .appendTo(control_elem);
+      .appendTo(container);
 
       this.new_display_button = $('<a/>', {
         href: 'javascript:void(0);',
+        class: 'icon',
         on: {
           click: function() {self.newDisplay();},
         }
@@ -283,27 +288,29 @@
         alt: gsa._('Add new Chart'),
         title: gsa._('Add new Chart'),
       }))
-      .appendTo(control_elem);
+      .appendTo(container);
 
       this.new_display_button.hide();
 
-      this.stop_edit_button = $('<a/>', {
+      this.reset_defaults_button = $('<a/>', {
         href: 'javascript:void(0);',
+        class: 'icon',
         on: {
-          click: function() {self.saveEdit();},
-        }
+          click: function() {self.resetEdit();},
+        },
       })
       .append($('<img/>', {
-        src: 'img/stop.png',
-        alt: gsa._('Stop Editing'),
-        title: gsa._('Stop Editing'),
+        src: 'img/first.png',
+        alt: gsa._('Reset to defaults'),
+        title: gsa._('Reset to defaults'),
       }))
-      .appendTo(control_elem);
+      .appendTo(container);
 
-      this.stop_edit_button.hide();
+      this.reset_defaults_button.hide();
 
       this.cancel_edit_button = $('<a/>', {
         href: 'javascript:void(0);',
+        class: 'icon',
         on: {
           click: function() {self.cancelEdit();},
         },
@@ -313,25 +320,25 @@
         alt: gsa._('Cancel Editing'),
         title: gsa._('Cancel Editing'),
       }))
-      .appendTo(control_elem);
+      .appendTo(container);
 
       this.cancel_edit_button.hide();
 
-      this.reset_defaults_button = $('<a/>', {
+      this.stop_edit_button = $('<a/>', {
         href: 'javascript:void(0);',
+        class: 'icon',
         on: {
-          click: function() {self.resetEdit();},
-        },
+          click: function() {self.saveEdit();},
+        }
       })
       .append($('<img/>', {
-        src: 'img/delete.png',
-        alt: gsa._('Reset to defaults'),
-        title: gsa._('Reset to defaults'),
+        src: 'img/indicator_operation_ok.png',
+        alt: gsa._('Save Changes'),
+        title: gsa._('Save Changes'),
       }))
-      .appendTo(control_elem);
+      .appendTo(container);
 
-      this.reset_defaults_button.hide();
-
+      this.stop_edit_button.hide();
     }
 
     this.width = this.elem[0].clientWidth;

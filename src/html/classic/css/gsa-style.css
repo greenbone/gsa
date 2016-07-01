@@ -1495,6 +1495,10 @@ select[multiple] {
   display: none !important;
 }
 
+.dashboard-actions .icon + .icon {
+  margin-right: 3px;
+}
+
 /* table for forms */
 .table-form {
   width: 100%;

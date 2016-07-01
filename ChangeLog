@@ -1,3 +1,12 @@
+2016-07-01  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/js/gsa_dashboard.js (Dashboard.prototype.init): Put
+	dashboard action icons into an own container element. Reorder action buttons
+	and change some icons.
+
+	* src/html/classic/css/gsa-style.css: Add right margin for dashboard action
+	icon buttons.
+
 2016-07-01  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/gsad.c (handle_request): Check if the name of a requested help
