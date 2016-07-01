@@ -1005,12 +1005,8 @@
    * @return This dashboard
    */
   Dashboard.prototype.updateDisplaysFromDefaultStrings = function() {
-    this.controllers_string = this.default_controllers_string;
-    this.filters_string = this.default_filters_string;
-    this.heights_string = this.default_heights_string;
-
-    this.updateDisplaysFromStrings();
-
+    this._updateDisplaysFromStrings(this.default_controllers_string,
+        this.default_filters_string, this.default_heights_string);
     return this;
   };
 
