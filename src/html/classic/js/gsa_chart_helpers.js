@@ -2131,8 +2131,13 @@
         var col = columns [col_i];
         var record = records[row][col];
         if (gsa.has_value(record)) {
-          csv_data += '"' + gch.format_data(record, column_info.columns[col])
-            .replace('"', '""') + '"';
+          if (gsa.is_defined (column_info)) {
+            csv_data += '"' + gch.format_data(record, column_info.columns[col])
+              .replace('"', '""') + '"';
+          }
+          else {
+            csv_data += '"' + record.replace('"', '""') + '"';
+          }
         }
         else {
           csv_data += '""';
@@ -2149,7 +2154,7 @@
   };
 
   /**
-   * Generates CSV data from simple records.
+   * Generates HTML data from simple records.
    *
    * @param records       The records from the data set.
    * @param column_info   The column_info from the data set.
@@ -2217,9 +2222,14 @@
         .attr('class', row_class);
       for (col_i in columns) {
         var col = columns[col_i];
-        tr_s.append('td')
-              .text(gch.format_data(records[row][col],
-                                    column_info.columns[col]));
+        if (gsa.is_defined (column_info)) {
+          tr_s.append('td')
+                .text(gch.format_data(records[row][col],
+                                      column_info.columns[col]));
+        }
+        else {
+          tr_s.append('td').text(records[row][col]);
+        }
       }
       row_class = (row_class === 'odd') ? 'even' : 'odd';
     }

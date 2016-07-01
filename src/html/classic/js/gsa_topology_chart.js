@@ -208,12 +208,21 @@
 
   TopologyChartGenerator.prototype.generateCsvData = function(controller,
       data) {
-    return "CSV TODO";
+    return  gch.csv_from_records (data.topology.nodes, 
+                                  undefined /* column_info */,
+                                  ['link_id', 'hostname', 'traceroute'],
+                                  ['IP', 'Hostname', 'Route'],
+                                  controller.display.getTitle());
   };
 
   TopologyChartGenerator.prototype.generateHtmlTableData = function(controller,
       data) {
-    "HTML TODO";
+    return gch.html_table_from_records (data.topology.nodes,
+                                        undefined /* column_info */,
+                                        ['link_id', 'hostname', 'traceroute'],
+                                        ['IP', 'Hostname', 'Route'],
+                                        controller.display.getTitle(),
+                                        controller.data_src.getParam('filter'));
   };
 
   TopologyChartGenerator.prototype.generateLink = function(d, i, column, type,

@@ -1,3 +1,15 @@
+2016-07-01  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/js/gsa_chart_helpers.js (csv_from_records): Skip
+	data formatting if no column_info is defined.
+	(html_table_from_records): Fix documentation and skip data formatting
+	if no column_info is defined.
+
+	* src/html/classic/js/gsa_topology_chart.js
+	(TopologyChartGenerator.prototype.generateCsvData)
+	(TopologyChartGenerator.prototype.generateHtmlTableData): Add actual
+	generation of CSV and HTML tables.
+
 2016-07-01  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/omp.xsl (list-window): Move dashboard controls into the
