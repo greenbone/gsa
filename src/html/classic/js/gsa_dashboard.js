@@ -475,9 +475,8 @@
       return;
     }
 
-    this.stopEdit();
     this.updateDisplaysFromDefaultStrings();
-    this.save(true);
+    this._allChanged();
   };
 
   /**

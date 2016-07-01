@@ -1,5 +1,11 @@
 2016-07-01  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_dashboard.js (Dashboard.prototype.resetEdit): Don't
+	stop editing and also don't save changes when reset button has been clicked.
+	This will allow to cancel the resetting.
+
+2016-07-01  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_dashboard.js
 	(Dashboard.prototype.updateDisplaysFromDefaultStrings): Don't set
 	filters_string, controllers_string and heights_string properties when updating
