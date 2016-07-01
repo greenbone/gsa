@@ -252,7 +252,7 @@
       }
       if (this.dashboard_opts.default_heights_string) {
         this.default_heights_string =
-          this.dashboard_opts.default_heights_string;
+          this.dashboard_opts.default_heights_string + '';
       }
     }
 

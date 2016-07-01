@@ -1,5 +1,10 @@
 2016-07-01  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_dashboard.js (Dashboard.prototype.init): Ensure
+	default_heights_string is always a string.
+
+2016-07-01  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_dashboard.js (Dashboard.prototype.resetEdit): Don't
 	stop editing and also don't save changes when reset button has been clicked.
 	This will allow to cancel the resetting.
