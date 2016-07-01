@@ -1,5 +1,11 @@
 2016-07-01  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/gsad.c (handle_request): Check if the name of a requested help
+	page is a valid XML element name so invalid ones do not cause XSLT
+	errors.
+
+2016-07-01  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/gsad.xsl (gsa-navigation-menu): Use custom URLs and
 	filters also in the top button.
 

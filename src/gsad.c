@@ -4666,6 +4666,14 @@ handle_request (void *cls, struct MHD_Connection *connection,
               gchar **preferred_languages;
               gchar *xsl_filename = NULL;
               gchar *page = g_strndup ((gchar *) &url[6], MAX_FILE_NAME_SIZE);
+
+              // Disallow names that would be invalid for XML elements
+              if (g_regex_match_simple ("^(?!xml)[[:alpha:]_][[:alnum:]-_.]*$",
+                                        page, G_REGEX_CASELESS, 0) == 0)
+                {
+                  g_free (page);
+                  page = g_strdup ("_invalid_");
+                }
               // XXX: url subsearch could be nicer and xsl transform could
               // be generalized with the other transforms.
               time_t now;
