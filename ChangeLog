@@ -1,5 +1,10 @@
 2016-07-01  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/css/gsa-style.css: Use left margin for dashboard action
+	icon buttons.
+
+2016-07-01  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_dashboard.js (Dashboard.prototype.init): Put
 	dashboard action icons into an own container element. Reorder action buttons
 	and change some icons.

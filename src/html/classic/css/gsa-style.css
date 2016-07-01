@@ -1496,7 +1496,7 @@ select[multiple] {
 }
 
 .dashboard-actions .icon + .icon {
-  margin-right: 3px;
+  margin-left: 3px;
 }
 
 /* table for forms */
