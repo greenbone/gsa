@@ -5171,16 +5171,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:value-of select="$full-count"/>)
       </h2>
 
+      <xsl:if test="$top-visualization != ''">
+        <div class="dashboard-controls" id="top-dashboard-controls"/>
+      </xsl:if>
     </div>
   </div>
 
   <xsl:if test="$top-visualization != ''">
     <div id="top-dashboard-section" class="section-box">
-      <div style="text-align:right" id="top-dashboard-controls">
-<!--        <a href="javascript:gsa.dashboards ['top-dashboard'].startEdit ();"><img src="/img/edit.png"/></a>
-        <a href="javascript:gsa.dashboards ['top-dashboard'].stopEdit ();"><img src="/img/stop.png"/></a>
-        <a href="javascript:gsa.dashboards ['top-dashboard'].newComponent ();"><img src="/img/new.png"/></a>-->
-      </div>
       <xsl:copy-of select="$top-visualization"/>
     </div>
   </xsl:if>

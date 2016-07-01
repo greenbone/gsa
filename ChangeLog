@@ -1,3 +1,12 @@
+2016-07-01  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/omp.xsl (list-window): Move dashboard controls into the
+	list window header. This will display the dashboard control icons above the
+	section line.
+
+	* src/html/classic/css/gsa-style.css: Add styles to display the dashboard
+	control icons on top of the section.
+
 2016-07-01  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/js/gsa_chart_helpers.js (severity_colors_gradient):

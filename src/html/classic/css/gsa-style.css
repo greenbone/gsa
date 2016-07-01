@@ -1385,6 +1385,7 @@ select[multiple] {
 .section-header {
   margin: 10px 0px;
   border-bottom: 2px solid black;
+  position: relative;
 }
 
 .section-header h1,
@@ -1493,6 +1494,20 @@ select[multiple] {
 
 .dashboard-data-source, .dashboard-chart, .dashboard-filter {
   display: none !important;
+}
+
+.dashboard-controls {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+
+.dashboard-actions {
+  margin-bottom: 2px;
+}
+
+.dashboard-actions .icon {
+  margin-right: 0;
 }
 
 .dashboard-actions .icon + .icon {
