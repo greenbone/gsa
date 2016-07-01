@@ -5185,15 +5185,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </div>
   </xsl:if>
 
-  <div class="section-header">
-    <a href="#" class="toggle-action-icon icon icon-action"
-      data-target="#table-box" data-name="Details"
-      data-variable="table-box--collapsed">
-        <img src="/img/fold.png"/>
-    </a>
-    <h3><xsl:value-of select="gsa:i18n ('Details')"/></h3>
-  </div> <!-- /section-header -->
-
   <div class="section-box" id="table-box">
     <table style="width:100%">
       <tr>
