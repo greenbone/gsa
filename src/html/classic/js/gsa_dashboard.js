@@ -993,41 +993,8 @@
    * @return This dashboard
    */
   Dashboard.prototype.updateDisplaysFromStrings = function() {
-    var self = this;
-    var controllers_string_list = split_rows(this.controllers_string);
-    var filters_string_list = split_rows(this.filters_string);
-    var heights_list = split_rows(this.heights_string);
-
-    log.debug('Update displays from strings', controllers_string_list,
-        filters_string_list, heights_list);
-
-    var rows = [];
-    self.forEachRowOrdered(function(row) {
-      rows.push(row);
-    });
-
-    controllers_string_list.forEach(function(controllers_string, index) {
-      var height = parseInt(heights_list[index]);
-      if (isNaN(height)) {
-        height = undefined;
-      }
-      if (index <= rows.length - 1) {
-        rows[index].update(controllers_string, filters_string_list[index],
-            height);
-      }
-      else {
-        self.addNewRow({
-          row_controllers_string: controllers_string,
-          row_filters_string: filters_string_list[index],
-          height: height,
-        });
-      }
-    });
-    if (rows.length > controllers_string_list.length) {
-      rows.slice(controllers_string_list.length).forEach(function(row) {
-        row.remove();
-      });
-    }
+    this._updateDisplaysFromStrings(this.controllers_string,
+        this.filters_string, this.heights_string);
     return this;
   };
 
@@ -1156,6 +1123,59 @@
     this.filters_changed = false;
     this.controllers_changed = false;
     this.heights_changed = false;
+    return this;
+  };
+
+  /**
+   * (Re-)build the rows and displays from provided controllers, filters and
+   * heights strings. Within these strings rows are seperated by '#' and
+   * displays by '|'
+   *
+   * @param controllers_string Contains the chart names to be used for the
+   *                           displays
+   * @param filters_string     Filters to use for the displays
+   * @param heights_string     Heights for the rows
+   *
+   * @return This Dashboard
+   */
+  Dashboard.prototype._updateDisplaysFromStrings = function(controllers_string,
+      filters_string, heights_string) {
+    var self = this;
+
+    var controllers_string_list = split_rows(controllers_string);
+    var filters_string_list = split_rows(filters_string);
+    var heights_list = split_rows(heights_string);
+
+    log.debug('Update displays from strings', controllers_string_list,
+        filters_string_list, heights_list);
+
+    var rows = [];
+    self.forEachRowOrdered(function(row) {
+      rows.push(row);
+    });
+
+    controllers_string_list.forEach(function(controllers_string, index) {
+      var height = parseInt(heights_list[index]);
+      if (isNaN(height)) {
+        height = undefined;
+      }
+      if (index <= rows.length - 1) {
+        rows[index].update(controllers_string, filters_string_list[index],
+            height);
+      }
+      else {
+        self.addNewRow({
+          row_controllers_string: controllers_string,
+          row_filters_string: filters_string_list[index],
+          height: height,
+        });
+      }
+    });
+    if (rows.length > controllers_string_list.length) {
+      rows.slice(controllers_string_list.length).forEach(function(row) {
+        row.remove();
+      });
+    }
     return this;
   };
 
