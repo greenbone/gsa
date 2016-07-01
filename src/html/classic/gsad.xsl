@@ -1724,8 +1724,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <div class="empty_top_button"/>
     </xsl:when>
     <xsl:otherwise>
-      <a class="top_button"
-          href="/omp?cmd={exslt:node-set ($items)/item/page}&amp;token={/envelope/token}">
+      <xsl:variable name="first_item" select="exslt:node-set ($items)/item[1]"/>
+      <xsl:variable name="first_url">
+        <xsl:choose>
+          <xsl:when test="$first_item/url">
+            <xsl:value-of select="$first_item/url"/>
+          </xsl:when>
+          <xsl:when test="boolean (filter)">
+            <xsl:value-of select="concat ('/omp?cmd=', $first_item/page, '&amp;filter=', $first_item/filter, '&amp;token=', $token)"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="concat ('/omp?cmd=', $first_item/page, '&amp;token=', $token)"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:variable>
+      <a class="top_button" href="{$first_url}">
         <xsl:value-of select="$menu_title"/>
         <div class="first_button_overlay">
           <ul class="first_button_overlay">
