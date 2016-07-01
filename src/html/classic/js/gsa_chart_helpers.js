@@ -312,14 +312,28 @@
     return d3.scale.linear()
               .domain([-1.0,
                         gsa.severity_levels.max_log,
+                        gsa.severity_levels.min_low,
+                        (gsa.severity_levels.min_low +
+                         gsa.severity_levels.max_low) / 2,
                         gsa.severity_levels.max_low,
+                        gsa.severity_levels.min_medium,
+                        (gsa.severity_levels.min_medium +
+                         gsa.severity_levels.max_medium) / 2,
                         gsa.severity_levels.max_medium,
+                        gsa.severity_levels.min_high,
+                        (gsa.severity_levels.min_high + 10.0) / 2,
                         10.0])
-              .range([d3.rgb('grey'),
-                      d3.rgb('silver'),
-                      d3.rgb('skyblue'),
-                      d3.rgb('orange'),
-                      d3.rgb('red')]);
+              .range([d3.hcl('grey'),       // False Positive
+                      d3.hcl('silver'),     // Log
+                      d3.hcl('#b1cee9'),    // minimum Low
+                      d3.hcl('#87CEEB'),    // middle Low
+                      d3.hcl('#a5e59d'),    // maximum Low
+                      d3.hcl('#ffde00'),    // minimum Medium
+                      d3.hcl('#FFA500'),    // middle Medium
+                      d3.hcl('#f57b00'),    // maximum Medium
+                      d3.hcl('#eb5200'),    // minimum High
+                      d3.hcl('#D80000'),    // middle High
+                      d3.hcl('#ff0000')]);  // maximum High);
   };
 
   /* Bar CSS styles */
@@ -801,6 +815,8 @@
 
       }
     }
+
+    
 
     return data;
   };
