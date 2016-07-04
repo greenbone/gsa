@@ -416,7 +416,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </form>
         <!-- TODO replace submit with script-free version -->
         <div class="tooltip">
-          <a href="#" onclick="document.stop_task_{translate($task_id, '-', '_')}.submit();" class="button stop">&#9632;</a>
+          <a href="#" onclick="document.stop_task_{translate($task_id, '-', '_')}.submit();" class="menu-button stop">&#9632;</a>
           <span>
             <img class="callout" src="/img/callout_blue.gif" />
             Prüfung abbrechen.
@@ -425,7 +425,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:when>
       <xsl:otherwise>
         <div class="tooltip">
-          <a href="#" class="button stop greyed">&#9632;</a>
+          <a href="#" class="menu-button stop greyed">&#9632;</a>
           <span>
             <img class="callout" src="/img/callout_blue.gif" />
             <xsl:choose>
@@ -461,7 +461,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </form>
         <!-- TODO replace submit with script-free version -->
         <div class="tooltip">
-          <a href="#" onclick="document.clear_reports_{translate($task_id, '-', '_')}.submit();" class="button clear">X</a>
+          <a href="#" onclick="document.clear_reports_{translate($task_id, '-', '_')}.submit();" class="menu-button clear">X</a>
           <span>
             <img class="callout" src="/img/callout_blue.gif" />
             Prüfergebnisse zurücksetzen.
@@ -470,7 +470,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:when>
       <xsl:otherwise>
         <div class="tooltip">
-          <a href="#" class="button clear greyed">X</a>
+          <a href="#" class="menu-button clear greyed">X</a>
           <span>
             <img class="callout" src="/img/callout_blue.gif" />
             <xsl:choose>
@@ -530,7 +530,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </colgroup>
       <tr>
         <td style="padding-right: 5px" class="debug">
-          <a href="/omp?cmd=get_report&amp;report_id={$report/@id}&amp;token={/envelope/token}" class="button tooltip">
+          <a href="/omp?cmd=get_report&amp;report_id={$report/@id}&amp;token={/envelope/token}" class="menu-button tooltip" align="center">
             <img src="/img/details.png" width="42" height="42"/>
             <span>
               <img class="callout" src="/img/callout_blue.gif" />
@@ -563,7 +563,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     name="submit"
                     src="/img/printer.png"
                     border="0"
-                    class="button">
+                    class="menu-button">
               </input>
               <span>
                   <img class="callout" src="/img/callout_blue.gif" />
