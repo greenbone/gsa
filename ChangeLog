@@ -1,5 +1,11 @@
 2016-07-04  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/gsad_omp.c (next_page_url): Add get_name parameter for wizard_get
+	responses. This fixes the redirect url in post responses within the its
+	interface.
+
+2016-07-04  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/its/omp.xsl: Fix: Change closing tag from anchor to div.
 
 2016-07-04  Björn Ricks <bjoern.ricks@greenbone.net>

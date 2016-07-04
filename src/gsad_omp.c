@@ -1304,7 +1304,9 @@ next_page_url (credentials_t *credentials, params_t *params,
                 == param_name + strlen (param_name) - strlen ("_id"))
           || (strcmp (param_name, "name") == 0
               && strcasecmp (prev_action, "Run Wizard") == 0)
-          || strcmp (param_name, "xml") == 0)
+          || strcmp (param_name, "xml") == 0
+          || (strcmp (param_name, "get_name") == 0
+              && strcasecmp (next_cmd, "wizard_get") == 0))
         {
           g_string_append_printf (url, "&%s=%s",
                                   param_name,
