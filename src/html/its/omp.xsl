@@ -401,7 +401,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <!-- Stop button -->
     <xsl:choose>
       <xsl:when test="$task_status = 'Running'">
-        <form name="stop_task_{translate($task_id, '-', '_')}" method="post" enctype="multipart/form-data">
+        <form name="stop_task_{translate($task_id, '-', '_')}" method="post" enctype="multipart/form-data" class="form-invisible">
           <input type="hidden" name="token" value="{/envelope/token}"/>
           <input type="hidden" name="caller" value="{/envelope/caller}"/>
           <input type="hidden" name="cmd" value="stop_task"/>
@@ -437,14 +437,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:otherwise>Prüfung kann momentan nicht angehalten werden.</xsl:otherwise>
             </xsl:choose>
           </span>
-        </a>
+        </div>
       </xsl:otherwise>
     </xsl:choose>
 
-    <!-- Clear button -->
+    <!-- Clear menu-button -->
     <xsl:choose>
       <xsl:when test="$task_status='Stopped' or $task_status ='Done' or $task_status ='New'">
-        <form name="clear_reports_{translate($task_id, '-', '_')}" method="post" enctype="multipart/form-data">
+        <form name="clear_reports_{translate($task_id, '-', '_')}" method="post" enctype="multipart/form-data" class="form-invisible">
           <input type="hidden" name="token" value="{/envelope/token}"/>
           <input type="hidden" name="caller" value="{/envelope/caller}"/>
           <input type="hidden" name="cmd" value="run_wizard"/>
