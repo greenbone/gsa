@@ -330,13 +330,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <input type="hidden" name="event_data:name" value="Schwachstellenampel"/>
           <input type="hidden" name="event_data:include_configs" value="1"/>
           <input type="hidden" name="event_data:include_report_formats" value="1"/>
-          <a href="#" onclick="if (document.getElementsByName ('event_data:hosts')[0].value.replace (/^\s+|\s+$/g, '') != '') document.start_new_task.submit(); else alert('Bitte geben Sie den Namen oder die IP-Adresse des zu prüfenden Systems ein!');" class="button play tooltip">&#9658;
-            <span style="width: 100px; margin-top: 18px; margin-left: -17px">
-              <img class="callout" style="left:21px" src="/img/callout_blue.gif" />
-              Prüfung starten.
-            </span>
-          </a>
         </form>
+        <div class="tooltip">
+          <a href="#" onclick="if (document.getElementsByName ('event_data:hosts')[0].value.replace (/^\s+|\s+$/g, '') != '') document.start_new_task.submit(); else alert('Bitte geben Sie den Namen oder die IP-Adresse des zu prüfenden Systems ein!');"
+            class="menu-button play">&#9658;</a>
+          <span>
+            <img class="callout" src="/img/callout_blue.gif" />
+            Prüfung starten.
+          </span>
+        </div>
       </xsl:when>
       <!-- Continue / restart stopped task -->
       <xsl:when test="($task_status='Stopped' or $task_status='New' or $task_status='Done')">
@@ -359,13 +361,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <input type="hidden" name="event_data:include_report_formats" value="1"/>
           <input type="hidden" name="event_data:config_id" value="{$its_config}"/>
           <input type="hidden" name="event_data:scanner_id" value="{$its_scanner}"/>
-          <a href="#" onclick="document.start_task_{translate($task_id, '-', '_')}.submit();" class="button play tooltip">&#9658;
-            <span style="width: 120px; margin-top: 18px; margin-left: -17px">
-              <img class="callout" style="left:21px" src="/img/callout_blue.gif" />
-              Prüfung neu starten.
-            </span>
-          </a>
         </form>
+        <div class="tooltip">
+          <a href="#" onclick="document.start_task_{translate($task_id, '-', '_')}.submit();" class="menu-button play">&#9658;
+          </a>
+          <span>
+            <img class="callout" src="/img/callout_blue.gif" />
+            Prüfung neu starten.
+          </span>
+        </div>
       </xsl:when>
       <!-- Task cannot be started -->
       <xsl:otherwise>
@@ -376,9 +380,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:with-param name="target_ssh_login" select="$target_ssh_login"/>
           </xsl:call-template>
         </form>
-        <a href="#" class="button play greyed tooltip">&#9658;
-          <span style="width: 200px; margin-top: 18px; margin-left: -17px">
-            <img class="callout" style="left:21px" src="/img/callout_blue.gif" />
+        <div class="tooltip">
+          <a href="#" class="menu-button play greyed">&#9658;</a>
+          <span>
+            <img class="callout" src="/img/callout_blue.gif" />
             <xsl:choose>
               <xsl:when test="not ($its_config)">Fehler: Die ITS-Scankonfiguration wurde nicht gefunden.</xsl:when>
               <xsl:when test="$task_target=''">Fehler: Ziel der Prüfung ist nicht definiert.</xsl:when>
@@ -408,19 +413,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <input type="hidden" name="event_data:include_report_formats" value="1"/>
           <input type="hidden" name="event_data:config_id" value="{$its_config}"/>
           <input type="hidden" name="event_data:scanner_id" value="{$its_scanner}"/>
-          <!-- TODO replace submit with script-free version -->
-          <a href="#" onclick="document.stop_task_{translate($task_id, '-', '_')}.submit();" class="button stop tooltip">&#9632;
-            <span style="width: 100px; margin-top: 18px; margin-left: -17px">
-              <img class="callout" style="left:21px" src="/img/callout_blue.gif" />
-              Prüfung abbrechen.
-            </span>
-          </a>
         </form>
+        <!-- TODO replace submit with script-free version -->
+        <div class="tooltip">
+          <a href="#" onclick="document.stop_task_{translate($task_id, '-', '_')}.submit();" class="button stop">&#9632;</a>
+          <span>
+            <img class="callout" src="/img/callout_blue.gif" />
+            Prüfung abbrechen.
+          </span>
+        </div>
       </xsl:when>
       <xsl:otherwise>
-        <a href="#" class="button stop greyed tooltip">&#9632;
-          <span style="width: 200px; margin-top: 18px; margin-left: -17px">
-            <img class="callout" style="left:21px" src="/img/callout_blue.gif" />
+        <div class="tooltip">
+          <a href="#" class="button stop greyed">&#9632;</a>
+          <span>
+            <img class="callout" src="/img/callout_blue.gif" />
             <xsl:choose>
               <xsl:when test="$task='' or $task_status='New'">Prüfung wurde noch nicht gestartet.</xsl:when>
               <xsl:when test="$task_status='Done'">Prüfung ist bereits abgeschlossen.</xsl:when>
@@ -451,19 +458,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <input type="hidden" name="event_data:ultimate" value="1"/>
           <input type="hidden" name="event_data:config_id" value="{$its_config}"/>
           <input type="hidden" name="event_data:scanner_id" value="{$its_scanner}"/>
-          <!-- TODO replace submit with script-free version -->
-          <a href="#" onclick="document.clear_reports_{translate($task_id, '-', '_')}.submit();" class="button clear tooltip">X
-            <span style="width: 100px; margin-top: 18px; margin-left: -17px">
-              <img class="callout" style="left:21px" src="/img/callout_blue.gif" />
-              Prüfergebnisse zurücksetzen.
-            </span>
-          </a>
         </form>
+        <!-- TODO replace submit with script-free version -->
+        <div class="tooltip">
+          <a href="#" onclick="document.clear_reports_{translate($task_id, '-', '_')}.submit();" class="button clear">X</a>
+          <span>
+            <img class="callout" src="/img/callout_blue.gif" />
+            Prüfergebnisse zurücksetzen.
+          </span>
+        </div>
       </xsl:when>
       <xsl:otherwise>
-        <a href="#" class="button clear greyed tooltip">X
-          <span style="width: 200px; margin-top: 18px; margin-left: -17px">
-            <img class="callout" style="left:21px" src="/img/callout_blue.gif" />
+        <div class="tooltip">
+          <a href="#" class="button clear greyed">X</a>
+          <span>
+            <img class="callout" src="/img/callout_blue.gif" />
             <xsl:choose>
               <xsl:when test="$task_status='Running'">Prüfung läuft gerade.</xsl:when>
               <xsl:when test="$task_status='Requested' or $task_status='Resume Requested' or $task_status='Resume Waiting'">Prüfung wird gerade gestartet.</xsl:when>
@@ -471,7 +480,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:otherwise>Ergebnis kann momentan nicht zurückgesetzt werden.</xsl:otherwise>
             </xsl:choose>
           </span>
-        </a>
+        </div>
       </xsl:otherwise>
     </xsl:choose>
 
