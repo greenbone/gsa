@@ -186,51 +186,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="html-its-header">
-  <div id="header">
-    <table style="width: 100%" cellspacing="0" cellpadding="0">
-      <colgroup>
-        <col width="*"/>
-        <col width="60"/>
-        <col width="70"/>
-        <col width="70"/>
-        <col width="0"/>
-      </colgroup>
-
-      <tr>
-        <td>
-          <xsl:choose>
-            <xsl:when test="/envelope/params/cmd = 'wizard_get' and /envelope/params/get_name = 'get_tasks_deep'">
-              <a href="/help/info.html?token={/envelope/token}" class="tooltip">
-                <img src="/img/its_logo.png"/>
-                <span style="width: 300px; margin-top: 20px; margin-left: 15px">
-                  <img class="callout" src="/img/callout_blue.gif" />
-                  <h3>Über die Anwendung</h3>
-                  Die IT Schwachstellenampel ist ein Assistent um die
-                  allgemeine Cyber-Sicherheitslage der konkreten Lage im eigenen
-                  Hause gegenüberzustellen.<br/>
-                  Sie zeigt auf einfache Weise ob Sie von den Gefahren betroffen
-                  sind und welcher Handlungsbedarf bei Ihnen besteht.
-                  <p><b>[Klick auf Icon für mehr ...]</b></p>
-                </span>
-              </a>
-            </xsl:when>
-            <xsl:otherwise>
-              <a href="{$main_page_link}&amp;token={/envelope/token}" class="tooltip">
-                <img src="/img/its_logo.png"/>
-                <span style="margin-top: 20px; margin-left: 15px">
-                  <img class="callout" src="/img/callout_blue.gif" />
-                  Zurück zur Hauptseite
-                </span>
-              </a>
-            </xsl:otherwise>
-          </xsl:choose>
-        </td>
-
-        <td>
-          <a href="/help/info.html?token={/envelope/token}" class="button tooltip">
-            <img src="/img/info.png"/>
-            <span style="width: 240px; margin-top: 26px; margin-left: -8px">
-              <img class="callout" style="left:12px" src="/img/callout_blue.gif" />
+  <div id="header" class="container">
+    <div class="col-4">
+      <div class="tooltip">
+        <xsl:choose>
+          <xsl:when test="/envelope/params/cmd = 'wizard_get' and /envelope/params/get_name = 'get_tasks_deep'">
+            <a href="/help/info.html?token={/envelope/token}">
+              <img src="/img/its_logo.png"/>
+            </a>
+            <span>
+              <img class="callout" src="/img/callout_blue.gif" />
               <h3>Über die Anwendung</h3>
               Die IT Schwachstellenampel ist ein Assistent um die
               allgemeine Cyber-Sicherheitslage der konkreten Lage im eigenen
@@ -239,58 +204,81 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               sind und welcher Handlungsbedarf bei Ihnen besteht.
               <p><b>[Klick auf Icon für mehr ...]</b></p>
             </span>
-          </a>
-        </td>
-
-        <td>
-          <a href="/help/datensicherheit.html?token={/envelope/token}" class="button tooltip" align="center">
-            <img src="/img/datensicherheit.png"/>
-            <span style="width: 240px; margin-top: 26px; margin-left: -68px">
-              <img class="callout" style="left:70px" src="/img/callout_blue.gif" />
-              <h3>Datensicherheit</h3>
-              Für die Anwendung der IT Schwachstellenampel wird besonderer Wert
-              auf Sicherheit Ihrer Daten gelegt:<br/>
-              Zu keinem Zeitpunkt verlassen Informationen über Ihre IT-Umgebung die Anwendung der IT Schwachstellenampel.
-              <p><b>[Klick auf Icon für mehr ...]</b></p>
+          </xsl:when>
+          <xsl:otherwise>
+            <a href="{$main_page_link}&amp;token={/envelope/token}">
+              <img src="/img/its_logo.png"/>
+            </a>
+            <span>
+              <img class="callout" src="/img/callout_blue.gif" />
+              Zurück zur Hauptseite
             </span>
-          </a>
-        </td>
+          </xsl:otherwise>
+        </xsl:choose>
+      </div>
+    </div>
+    <div class="col-2">
+      <a href="/help/info.html?token={/envelope/token}" class="menu-button tooltip">
+        <img src="/img/info.png"/>
+        <span>
+          <img class="callout" src="/img/callout_blue.gif" />
+          <h3>Über die Anwendung</h3>
+          Die IT Schwachstellenampel ist ein Assistent um die
+          allgemeine Cyber-Sicherheitslage der konkreten Lage im eigenen
+          Hause gegenüberzustellen.<br/>
+          Sie zeigt auf einfache Weise ob Sie von den Gefahren betroffen
+          sind und welcher Handlungsbedarf bei Ihnen besteht.
+          <p><b>[Klick auf Icon für mehr ...]</b></p>
+        </span>
+      </a>
+    </div>
+    <div class="col-2">
+      <a href="/help/datensicherheit.html?token={/envelope/token}" class="menu-button tooltip">
+        <img src="/img/datensicherheit.png"/>
+        <span>
+          <img class="callout" src="/img/callout_blue.gif" />
+          <h3>Datensicherheit</h3>
+          Für die Anwendung der IT Schwachstellenampel wird besonderer Wert
+          auf Sicherheit Ihrer Daten gelegt:<br/>
+          Zu keinem Zeitpunkt verlassen Informationen über Ihre IT-Umgebung die Anwendung der IT Schwachstellenampel.
+          <p><b>[Klick auf Icon für mehr ...]</b></p>
+        </span>
+      </a>
+    </div>
 
-        <td>
-          <a href="/omp?cmd=edit_my_settings&amp;token={/envelope/token}" class="button tooltip" align="center">
-            <img src="/img/settings.png"/>
-            <span style="width: 240px; margin-top: 26px; margin-left: -138px">
-              <img class="callout" style="left:140px" src="/img/callout_blue.gif" />
-              <h3>Einstellungen</h3>
-              Hier können Sie Einstellungen wie Ihr ITS-Anmeldepasswort ändern.
-              <p><b>[Klick auf Icon: Einstellungen ...]</b></p>
-            </span>
-          </a>
-        </td>
+    <div class="col-2">
+      <a href="/omp?cmd=edit_my_settings&amp;token={/envelope/token}" class="menu-button tooltip">
+        <img src="/img/settings.png"/>
+        <span>
+          <img class="callout" src="/img/callout_blue.gif" />
+          <h3>Einstellungen</h3>
+          Hier können Sie Einstellungen wie Ihr ITS-Anmeldepasswort ändern.
+          <p><b>[Klick auf Icon: Einstellungen ...]</b></p>
+        </span>
+      </a>
+    </div>
 
-        <td>
-          <a href="/logout?token={/envelope/token}" class="button tooltip"><img src="/img/shutdown.png"/>
-          <span style="width: 240px; margin-top: 26px; margin-left: -208px">
-            <img class="callout" style="left: 210px" src="/img/callout_blue.gif" />
-            <h3>Abmelden</h3>
-            Sie melden sich von der IT Schwachstellenampel ab, setzten die
-            Prüfergebnisse aber nicht zurück. Eine laufende Prüfung wird nicht
-            abgebrochen sondern wird im Hintergrund weitergeführt.
-            Auch Daten des Benutzerkontos
-            für das Zielsystem bleiben bis zur nächsten Anmeldung erhalten.
-            Diese Daten können durch das Zurücksetzen gelöscht werden.
-            </span>
-          </a>
-        </td>
-      </tr>
-    </table>
+    <div class="col-2">
+      <a href="/logout?token={/envelope/token}" class="menu-button tooltip"><img src="/img/shutdown.png"/>
+      <span>
+        <img class="callout" src="/img/callout_blue.gif" />
+        <h3>Abmelden</h3>
+        Sie melden sich von der IT Schwachstellenampel ab, setzten die
+        Prüfergebnisse aber nicht zurück. Eine laufende Prüfung wird nicht
+        abgebrochen sondern wird im Hintergrund weitergeführt.
+        Auch Daten des Benutzerkontos
+        für das Zielsystem bleiben bis zur nächsten Anmeldung erhalten.
+        Diese Daten können durch das Zurücksetzen gelöscht werden.
+        </span>
+      </a>
+    </div>
   </div>
 </xsl:template>
 
 <xsl:template name="html-footer">
   <div id="footer_logos">
     <hr/>
-    <p align="right">IT Schwachstellenampel Version 1.2.2</p>
+    <p>IT Schwachstellenampel Version 1.2.2</p>
   </div>
 </xsl:template>
 
