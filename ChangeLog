@@ -1,5 +1,9 @@
 2016-07-04  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/its/css/gsa-style.css: Update coding stlye.
+
+2016-07-04  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/its/CMakeLists.txt, src/html/its/gsad.xsl,
 	src/html/its/gsa-base.css: Add base css from the classic interface for the
 	column based layout.
