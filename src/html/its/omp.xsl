@@ -394,7 +394,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:otherwise>Prüfung kann nicht gestartet werden.</xsl:otherwise>
             </xsl:choose>
           </span>
-        </a>
+        </div>
       </xsl:otherwise>
     </xsl:choose>
 

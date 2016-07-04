@@ -1,5 +1,9 @@
 2016-07-04  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/its/omp.xsl: Fix: Change closing tag from anchor to div.
+
+2016-07-04  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/its/omp.xsl: Change form to be invisible. These forms are only used
 	for special operations of buttons.
 
