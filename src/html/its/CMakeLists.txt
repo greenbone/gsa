@@ -24,12 +24,16 @@
 
 ## Install
 
-install (FILES favicon.gif gsad.xsl gsa-style.css
-               help.xsl omp.xsl
+install (FILES css/gsa-style.css
+         DESTINATION ${GSA_DATA_DIR}/its/css)
+
+install (FILES favicon.gif
+               gsad.xsl
+               help.xsl
+               omp.xsl
          DESTINATION ${GSA_DATA_DIR}/its)
 
-install (FILES gsa-style.css
-               favicon.gif
+install (FILES favicon.gif
          DESTINATION ${GSA_DATA_DIR}/its/login)
 
 install (FILES img/its_logo.png
