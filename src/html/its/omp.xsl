@@ -281,7 +281,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       last report: <xsl:value-of select="$last_report"/>
     </span>
 
-    <div class="innerbox" style="width:100px; margin: 1px 2px 0px 0px; float:right; background:#ffffff">
+    <div class="innerbox">
       <center>
         <xsl:call-template name="status-lights">
           <xsl:with-param name="report" select="$report"/>
@@ -521,10 +521,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </colgroup>
       <tr>
         <td style="padding-right: 5px" class="debug">
-          <a href="/omp?cmd=get_report&amp;report_id={$report/@id}&amp;token={/envelope/token}" class="button tooltip" align="center">
+          <a href="/omp?cmd=get_report&amp;report_id={$report/@id}&amp;token={/envelope/token}" class="button tooltip">
             <img src="/img/details.png" width="42" height="42"/>
-            <span style="width: 240px; margin-top: 26px; margin-left: -8px">
-              <img class="callout" style="" src="/img/callout_blue.gif" />
+            <span>
+              <img class="callout" src="/img/callout_blue.gif" />
               <h3>Detailansicht</h3>
             </span>
           </a>
@@ -556,8 +556,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     border="0"
                     class="button">
               </input>
-              <span style="width: 240px; margin-top: 19px; margin-left: 0px">
-                  <img class="callout" style="" src="/img/callout_blue.gif" />
+              <span>
+                  <img class="callout" src="/img/callout_blue.gif" />
                   <h3>Bericht zum Drucken öffnen</h3>
                   Der Bericht wird im PDF-Format erstellt und kann eingesehen,
                   verschickt oder ausgedruckt werden.
@@ -579,10 +579,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="target_ssh_login"/>
   <xsl:param name="target_smb_login"/>
 
-  <div style="width: 335px; text-align: right">
+  <div>
     <p>
-      <a style="margin-right: 20px" href="#" class="tooltip">Zu prüfendes System:
-      <span style="width: 300px; margin-top: 15px; margin-left: 77px"> <img class="callout" src="/img/callout_blue.gif" />
+      <a href="#" class="tooltip">Zu prüfendes System:
+      <span> <img class="callout" src="/img/callout_blue.gif" />
       Das zu prüfende System kann als IP-Adresse oder mit Namen angegeben werden.
       Also beispielsweise "192.168.0.1" oder "www.example.com".<br/>
 
@@ -607,7 +607,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
     <p>
       <a style="margin-right: 20px" href="#" class="tooltip">Benutzername:
-      <span style="width: 300px; margin-top: 15px; margin-left: 77px"> <img class="callout" src="/img/callout_blue.gif" />
+      <span> <img class="callout" src="/img/callout_blue.gif" />
       Dieses Benutzerkonto auf dem zu prüfenden System wird dazu verwendet
       um das Zielystem "von innen" zu analysieren und bedrohte
       Produkte zu identifizieren.<br/>
@@ -627,7 +627,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
     <p>
       <a style="margin-right: 20px" href="#" class="tooltip">Passwort:
-      <span style="width: 300px; margin-top: 15px; margin-left: 77px"> <img class="callout" src="/img/callout_blue.gif" />
+      <span> <img class="callout" src="/img/callout_blue.gif" />
       Das Passwort wird zeitweise in der Anwendung zwischengespeichert.
       Es wird gelöscht sobald Sie die Prüfergebnisse zurücksetzen.</span></a>
       <xsl:choose>
@@ -689,8 +689,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="tooltip" select="''"/>
   <a href="#" class="tooltip">
     <img src="{$src}"/>
-    <span style="width: 280px; margin-top: 18px; margin-left: -192px">
-      <img class="callout" style="left:225px" src="/img/callout_blue.gif" />
+    <span>
+      <img class="callout" src="/img/callout_blue.gif" />
       <xsl:copy-of select="$tooltip"/>
     </span>
   </a>
@@ -1030,8 +1030,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:when test="$open_critical_count > 0">
       <a href="#" class="tooltip">
         <img src="/img/rot.png" />
-        <span style="width: 170px; height: 26px; margin-top: -40px; margin-left: -195px">
-          <img class="callout" style="left: 190px; top: 6px" src="/img/callout_blue_left.gif" />
+        <span>
+          <img class="callout" src="/img/callout_blue_left.gif" />
           <xsl:value-of select="$open_count"/> offene Schwachstelle<xsl:if test="$open_count > 1">n</xsl:if>,<br/>
           davon <xsl:value-of select="$open_critical_count"/> kritisch
         </span>
@@ -1040,8 +1040,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:when test="$open_count > 0">
       <a href="#" class="tooltip">
         <img src="/img/gelb.png" />
-        <span style="width: 170px; height: 26px; margin-top: -40px; margin-left: -195px">
-          <img class="callout" style="left: 190px; top: 6px" src="/img/callout_blue_left.gif" />
+        <span>
+          <img class="callout" src="/img/callout_blue_left.gif" />
           <xsl:value-of select="$open_count"/> offene Schwachstelle<xsl:if test="$open_count > 1">n</xsl:if>,<br/>
           davon keine kritisch
         </span>
@@ -1052,8 +1052,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:when test="$found_cpes > 0">
           <a href="#" class="tooltip">
             <img src="/img/gruen.png" />
-            <span style="width: 170px; height: 26px; margin-top: -40px; margin-left: -195px">
-              <img class="callout" style="left: 190px; top: 6px" src="/img/callout_blue_left.gif" />
+            <span>
+              <img class="callout" src="/img/callout_blue_left.gif" />
               Keine offene Schwachstellen
             </span>
           </a>
@@ -1061,8 +1061,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:otherwise>
           <a href="#" class="tooltip">
             <img src="/img/grey.png" />
-            <span style="width: 170px; height: 26px; margin-top: -40px; margin-left: -195px">
-              <img class="callout" style="left: 190px; top: 6px" src="/img/callout_blue_left.gif" />
+            <span>
+              <img class="callout" src="/img/callout_blue_left.gif" />
               Kein passendes Produkt gefunden
             </span>
           </a>

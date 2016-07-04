@@ -287,7 +287,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:when test="false()"> <!-- TODO: Test for internet connection -->
       <div id="internet">
         <a href="#" class="tooltip"><img src="/img/internet_on.png"/>
-          <span style="width: 240px; margin-top: 20px; margin-left: -12px"> <img class="callout" style="left:50px" src="/img/callout_blue.gif" />
+          <span> <img class="callout" src="/img/callout_blue.gif" />
           Eine Verbindung mit dem Internet besteht. Die Anwendung kann aktualisiert werden.</span>
         </a>
         <br/>
@@ -298,7 +298,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:otherwise>
       <div id="internet">
         <a href="#" class="tooltip"><img src="/img/internet_off.png"/>
-          <span style="width: 240px; margin-top: 20px; margin-left: -12px"> <img class="callout" style="left:50px" src="/img/callout_blue.gif" />
+          <span> <img class="callout" src="/img/callout_blue.gif" />
           Ohne Internetverbindung kann die Anwendung nicht aktualisiert werden.</span>
         </a>
         <br/>
@@ -311,7 +311,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:when test="true()"> <!-- TODO: Test for network connection -->
       <div id="network">
         <a href="#" class="tooltip"><img src="/img/network_on.png"/>
-          <span style="width: 240px; margin-top: 20px; margin-left: -12px"> <img class="callout" style="left:50px" src="/img/callout_blue.gif" />
+          <span> <img class="callout" src="/img/callout_blue.gif" />
           Eine Verbindung mit dem Netzwerk besteht. Eine Sicherheits-Prüfung kann ausgeführt werden.</span>
         </a>
         <br/>
@@ -322,7 +322,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:otherwise>
       <div id="network">
         <a href="#" class="tooltip"><img src="/img/network_off.png"/>
-          <span style="width: 240px; margin-top: 20px; margin-left: -12px"> <img class="callout" style="left:50px" src="/img/callout_blue.gif" />
+          <span> <img class="callout" src="/img/callout_blue.gif" />
           Ohne Netzwerkverbindung kann keine Sicherheits-Prüfung ausgeführt werden.</span>
         </a>
         <br/>
@@ -334,12 +334,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="update-controls">
-  <div align="center">
-    <a href="#" class="button tooltip" style="float: left;"> <!-- TODO: Start program update -->
+  <div>
+    <a href="#" class="menu-button tooltip" style="float: left;"> <!-- TODO: Start program update -->
       <img src="/img/update.png"/>
       <span style="width: 240px; margin-top: 26px; margin-left: -99px">
       <img class="callout" style="left:115px" src="/img/callout_blue.gif" />
-      <div align="center">Anwendung jetzt aktualisieren.<br/>
+      <div>Anwendung jetzt aktualisieren.<br/>
       Letzte Aktualisierung:<br/><xsl:value-of select="'1.9.2013 um 12:30'"/> <!-- TODO: Add program update time --> </div></span>
     </a>
   </div>
