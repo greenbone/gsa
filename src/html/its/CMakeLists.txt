@@ -25,6 +25,7 @@
 ## Install
 
 install (FILES css/gsa-style.css
+               css/gsa-base.css
          DESTINATION ${GSA_DATA_DIR}/its/css)
 
 install (FILES favicon.gif

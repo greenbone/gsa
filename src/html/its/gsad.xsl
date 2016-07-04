@@ -43,6 +43,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template name="html-head">
   <xsl:variable name="task_status" select="//task[name='Schwachstellenampel']/status/text()"/>
   <head>
+    <link rel="stylesheet" type="text/css" href="/css/gsa-base.css"/>
     <link rel="stylesheet" type="text/css" href="/css/gsa-style.css"/>
     <link rel="icon" href="/favicon.gif" type="image/x-icon"/>
     <title>IT Schwachstellenampel</title>

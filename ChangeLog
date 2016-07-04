@@ -1,6 +1,12 @@
 2016-07-04  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/its/CMakeLists.txt, src/html/its/gsad.xsl,
+	src/html/its/gsa-base.css: Add base css from the classic interface for the
+	column based layout.
+
+2016-07-04  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/its/CMakeLists.txt, src/html/its/gsad.xsl,
 	src/html/its/gsa-style.css: Move css file to css subdir. All files in the
 	"root" directory require token as parameter in the http request. Files in js,
 	css and img subdirs not.
