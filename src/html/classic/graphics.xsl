@@ -842,6 +842,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </div>
   </noscript>
 
+  <xsl:if test="secinfo_test/get_info_response/@status != 200">
+    <div>
+      <xsl:call-template name="error_window">
+        <xsl:with-param name="heading">Warning: SecInfo Database Missing</xsl:with-param>
+        <xsl:with-param name="message">
+          SCAP and/or CERT database missing on OMP server.
+          <a href="/help/cpes.html?token={/envelope/token}#secinfo_missing"
+              title="Help: SecInfo database missing">
+            <img style="margin-left:5px" src="/img/help.png"/>
+          </a>
+        </xsl:with-param>
+      </xsl:call-template>
+    </div>
+  </xsl:if>
+
   <xsl:choose>
     <xsl:when test="name='' or name='main'">
       <xsl:apply-templates select="." mode="main"/>

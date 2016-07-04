@@ -1,3 +1,11 @@
+2016-07-04  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/gsad_omp.c (dashboard): Add a dummy get_info OMP request to
+	test if SCAP and CERT databases are available. Free entity at the end.
+
+	* src/html/classic/graphics.xsl (dashboard): Add warning message if
+	SCAP or CERT database is missing.
+
 2016-07-01  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/js/gsa_chart_helpers.js (csv_from_records): Skip

@@ -26178,6 +26178,60 @@ dashboard (credentials_t * credentials, params_t *params,
 
   response = NULL;
   entity = NULL;
+
+  // Test if SCAP and CERT databases are available
+  if (strcasecmp (name, "") == 0
+      || strcasecmp (name, "Main") == 0
+      || strcasecmp (name, "SecInfo") == 0)
+    {
+      ret = ompf (credentials,
+                  &response,
+                  &entity,
+                  response_data,
+                  "<get_info type=\"cve\" info_id=\"--\"/>");
+
+      switch (ret)
+        {
+          case 0:
+          case -1:
+            break;
+          case 1:
+            g_string_free (xml, TRUE);
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            return gsad_message (credentials,
+                                "Internal error", __FUNCTION__, __LINE__,
+                                "An internal error occurred while "
+                                "testing SecInfo database availability. "
+                                "Diagnostics: Failure to send command to "
+                                "manager daemon.",
+                                "/omp?cmd=dashboard", response_data);
+          case 2:
+            g_string_free (xml, TRUE);
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            return gsad_message (credentials,
+                                "Internal error", __FUNCTION__, __LINE__,
+                                "An internal error occurred while "
+                                "testing SecInfo database availability. "
+                                "Diagnostics: Failure to receive response from "
+                                "manager daemon.",
+                                "/omp?cmd=dashboard", response_data);
+          default:
+            g_string_free (xml, TRUE);
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            return gsad_message (credentials,
+                                "Internal error", __FUNCTION__, __LINE__,
+                                "An internal error occurred while "
+                                "testing SecInfo database availability. "
+                                "Diagnostics: Internal Error.",
+                                "/omp?cmd=dashboard", response_data);
+        }
+      g_string_append_printf (xml,
+                              "<secinfo_test>%s</secinfo_test>",
+                              response);
+      g_free (response);
+      free_entity (entity);
+    }
+
   if (strcasecmp (name, "SecInfo") == 0)
     ret = ompf (credentials,
                 &response,
@@ -26229,6 +26283,7 @@ dashboard (credentials_t * credentials, params_t *params,
 
   g_string_append (xml, response);
   g_free (response);
+  free_entity (entity);
 
   g_string_append (xml, "</dashboard>");
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
