@@ -2067,6 +2067,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <name><xsl:value-of select="gsa:i18n ('Roles', 'Role')"/></name>
           </item>
         </xsl:if>
+        <xsl:if test="gsa:may-op ('DESCRIBE_FEED')">
+          <divider/>
+          <item>
+            <page>auth_settings&amp;name=ldap</page>
+            <name><xsl:value-of select="gsa:i18n ('LDAP', 'Main menu')"/></name>
+          </item>
+          <item>
+            <page>auth_settings&amp;name=radius</page>
+            <name><xsl:value-of select="gsa:i18n ('Radius', 'Main menu')"/></name>
+          </item>
+        </xsl:if>
         <divider/>
         <xsl:if test="gsa:may-op ('DESCRIBE_FEED') or gsa:may-op ('DESCRIBE_SCAP') or gsa:may-op ('DESCRIBE_CERT')">
           <item>
