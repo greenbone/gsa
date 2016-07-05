@@ -1,5 +1,10 @@
 2016-07-05  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/omp.xsl (auth_settings): Add new template to handle
+	auth_settings elements.
+
+2016-07-05  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/gsad.c (exec_omp_get): Call auth_settings_omp function when omp is
 	called with a http get method and cmd parameter is auth_settings.
 

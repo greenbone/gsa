@@ -36398,6 +36398,17 @@ should not have received it.
 <xsl:template match="describe_auth_response">
 </xsl:template>
 
+<xsl:template match="auth_settings">
+  <xsl:choose>
+    <xsl:when test="@name='ldap'">
+      <xsl:apply-templates select="describe_auth_response/group[@name='method:ldap_connect']" mode="ldapauth"/>
+    </xsl:when>
+    <xsl:when test="@name='radius'">
+      <xsl:apply-templates select="describe_auth_response/group[@name='method:radius_connect']" mode="radiusauth"/>
+    </xsl:when>
+  </xsl:choose>
+</xsl:template>
+
 <xsl:template match="modify_auth_response" mode="show">
   <xsl:call-template name="command_result_dialog">
     <xsl:with-param name="operation">Save Authentication Configuration</xsl:with-param>
