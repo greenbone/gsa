@@ -36227,8 +36227,6 @@ should not have received it.
       </xsl:otherwise>
     </xsl:choose>
   </xsl:for-each>
-  <!-- If any describe_auth was found, match it here -->
-  <xsl:call-template name="describe_auth_response" mode="show"/>
 </xsl:template>
 
 <!-- AUTHENTICATION DESCRIPTION -->

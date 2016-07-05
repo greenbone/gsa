@@ -1,5 +1,10 @@
 2016-07-05  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/omp.xsl (get_users): Remove authentication settings from
+	users page.
+
+2016-07-05  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/gsad.xsl (html-gsa-navigation): Add menu entries for ldap
 	and radius authentication settings.
 
