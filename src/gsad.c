@@ -1007,6 +1007,7 @@ init_validator ()
                          "|(edit_target)"
                          "|(edit_task)"
                          "|(edit_user)"
+                         "|(auth_settings)"
                          "|(empty_trashcan)"
                          "|(alert_report)"
                          "|(export_agent)"
@@ -2855,6 +2856,7 @@ exec_omp_get (struct MHD_Connection *connection,
   ELSE (edit_target)
   ELSE (edit_task)
   ELSE (edit_user)
+  ELSE (auth_settings)
 
   else if (!strcmp (cmd, "export_agent"))
     return export_agent_omp (credentials, params, content_type,

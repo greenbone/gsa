@@ -1,5 +1,10 @@
 2016-07-05  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/gsad.c (exec_omp_get): Call auth_settings_omp function when omp is
+	called with a http get method and cmd parameter is auth_settings.
+
+2016-07-05  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/gsad_omp.c, src/gsad_omp.h: Add new omp command auth_settings. This will
 	allow to handle the auth settings on an own page in future.
 
