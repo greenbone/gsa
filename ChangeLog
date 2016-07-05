@@ -1,3 +1,8 @@
+2016-07-05  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/gsad.c (handle_request): Return MHD_HTTP_METHOD_NOT_ALLOWED if the an
+	other method as get or post is used in the request.
+
 2016-07-04  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/gsad_omp.c (next_page_url): Add get_name parameter for wizard_get
