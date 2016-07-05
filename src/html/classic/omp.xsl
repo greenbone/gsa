@@ -36232,115 +36232,79 @@ should not have received it.
 <!-- AUTHENTICATION DESCRIPTION -->
 
 <xsl:template match="group" mode="ldapauth">
-  <xsl:choose>
-    <xsl:when test="@name='method:ldap_connect'">
-      <div class="section-header">
-        <a href="#" class="toggle-action-icon icon icon-action"
-          data-target="#ldap-box" data-name="LDAP per-User Authentication"
-          data-variable="ldap-box--collapsed">
-          <img src="/img/fold.png"/>
-        </a>
-        <a href="/help/users.html?token={/envelope/token}#peruserldapauthentication"
-           class="icon icon-action"
-           title="{concat(gsa:i18n('Help', 'Help'),': ')}({gsa:i18n ('LDAP per-User Authentication', 'Group')})">
-          <img src="/img/help.png"/>
-        </a>
-        <h3>
-          <xsl:value-of select="gsa:i18n ('LDAP per-User Authentication', 'Group')"/>
-        </h3>
-      </div>
-
-      <div class="section-box" id="ldap-box">
-        <form action="/omp" method="post" enctype="multipart/form-data">
-          <input type="hidden" name="token" value="{/envelope/token}"/>
-          <input type="hidden" name="cmd" value="save_auth"/>
-          <input type="hidden" name="caller" value="{/envelope/current_page}"/>
-          <input type="hidden" name="next" value="get_users"/>
-          <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-          <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
-          <!-- group name is e.g. of method:ldap -->
-          <input type="hidden" name="group" value="{@name}"/>
-          <table class="gbntable" cellspacing="2" cellpadding="4">
-            <tr class="gbntablehead2">
-              <td><xsl:value-of select="gsa:i18n ('Setting', 'Group')"/></td>
-              <td><xsl:value-of select="gsa:i18n ('Value', 'Property')"/></td>
-            </tr>
-            <tr class="odd">
-              <td><xsl:value-of select="gsa:i18n ('Enable', 'Group')"/></td>
-              <td>
-                <xsl:choose>
-                  <xsl:when test="auth_conf_setting[key='enable']/value = 'true'">
-                    <input type="checkbox" name="enable" value="1" checked="1"/>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <input type="checkbox" name="enable" value="1"/>
-                  </xsl:otherwise>
-                </xsl:choose>
-              </td>
-            </tr>
-            <tr class="even">
-              <td>
-                <xsl:choose>
-                  <xsl:when test="@name='method:ldap_connect'">
-                    LDAP
-                  </xsl:when>
-                </xsl:choose>
-                <xsl:value-of select="gsa:i18n ('Host', 'Host')"/>
-              </td>
-              <td>
-                <input type="text" name="ldaphost" size="30"
-                       value="{auth_conf_setting[key='ldaphost']/value}"/>
-              </td>
-            </tr>
-            <tr class="odd">
-              <td><xsl:value-of select="gsa:i18n ('Auth. DN', 'Group')"/></td>
-              <td>
-                <input type="text" name="authdn" size="30"
-                       value="{auth_conf_setting[key='authdn']/value}"/>
-              </td>
-            </tr>
-            <tr class="even">
-              <td><xsl:value-of select="gsa:i18n ('CA Certificate', 'Auth Data')"/></td>
-              <td>
-                <xsl:variable name="certificate_info"
-                              select="auth_conf_setting[key='cacert']/certificate_info"/>
-                <xsl:if test="$certificate_info">
-                  <xsl:call-template name="certificate-info-table">
-                    <xsl:with-param name="certificate_info" select="$certificate_info"/>
-                  </xsl:call-template>
-                </xsl:if>
-                <input type="file" name="certificate" size="30"/>
-              </td>
-            </tr>
-            <tr>
-              <td colspan="2" style="text-align:right;">
-                <input type="submit" name="submit" value="{gsa:i18n ('Save', 'Group')}"/>
-              </td>
-            </tr>
-          </table>
-        </form>
-      </div>
-    </xsl:when>
-  </xsl:choose>
+  <div class="section-box" id="ldap-box">
+    <form action="/omp" method="post" enctype="multipart/form-data">
+      <input type="hidden" name="token" value="{/envelope/token}"/>
+      <input type="hidden" name="cmd" value="save_auth"/>
+      <input type="hidden" name="caller" value="{/envelope/current_page}"/>
+      <input type="hidden" name="next" value="get_users"/>
+      <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
+      <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
+      <!-- group name is e.g. of method:ldap -->
+      <input type="hidden" name="group" value="{@name}"/>
+      <table class="gbntable" cellspacing="2" cellpadding="4">
+        <tr class="gbntablehead2">
+          <td><xsl:value-of select="gsa:i18n ('Setting', 'Group')"/></td>
+          <td><xsl:value-of select="gsa:i18n ('Value', 'Property')"/></td>
+        </tr>
+        <tr class="odd">
+          <td><xsl:value-of select="gsa:i18n ('Enable', 'Group')"/></td>
+          <td>
+            <xsl:choose>
+              <xsl:when test="auth_conf_setting[key='enable']/value = 'true'">
+                <input type="checkbox" name="enable" value="1" checked="1"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <input type="checkbox" name="enable" value="1"/>
+              </xsl:otherwise>
+            </xsl:choose>
+          </td>
+        </tr>
+        <tr class="even">
+          <td>
+            <xsl:choose>
+              <xsl:when test="@name='method:ldap_connect'">
+                LDAP
+              </xsl:when>
+            </xsl:choose>
+            <xsl:value-of select="gsa:i18n ('Host', 'Host')"/>
+          </td>
+          <td>
+            <input type="text" name="ldaphost" size="30"
+              value="{auth_conf_setting[key='ldaphost']/value}"/>
+          </td>
+        </tr>
+        <tr class="odd">
+          <td><xsl:value-of select="gsa:i18n ('Auth. DN', 'Group')"/></td>
+          <td>
+            <input type="text" name="authdn" size="30"
+              value="{auth_conf_setting[key='authdn']/value}"/>
+          </td>
+        </tr>
+        <tr class="even">
+          <td><xsl:value-of select="gsa:i18n ('CA Certificate', 'Auth Data')"/></td>
+          <td>
+            <xsl:variable name="certificate_info"
+              select="auth_conf_setting[key='cacert']/certificate_info"/>
+            <xsl:if test="$certificate_info">
+              <xsl:call-template name="certificate-info-table">
+                <xsl:with-param name="certificate_info" select="$certificate_info"/>
+              </xsl:call-template>
+            </xsl:if>
+            <input type="file" name="certificate" size="30"/>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2" style="text-align:right;">
+            <input type="submit" name="submit" value="{gsa:i18n ('Save', 'Group')}"/>
+          </td>
+        </tr>
+      </table>
+    </form>
+  </div>
 </xsl:template>
 
 <xsl:template match="group" mode="radiusauth">
-  <div class="section-header">
-    <a href="#" class="toggle-action-icon icon icon-action"
-      data-target="#radius-box" data-name="RADIUS Authentication"
-      data-variable="ldap-box--collapsed">
-      <img src="/img/fold.png"/>
-    </a>
-    <a href="/help/users.html?token={/envelope/token}#radiusauthentication"
-       class="icon icon-action"
-       title="{concat(gsa:i18n('Help', 'Help'),': ')}({gsa:i18n ('RADIUS Authentication', 'Group')})">
-      <img src="/img/help.png"/>
-    </a>
-    <h3>
-      <xsl:value-of select="gsa:i18n ('RADIUS Authentication', 'Group')"/>
-    </h3>
-  </div>
-
   <div class="section-box" id="radius-box">
     <form action="/omp" method="post" enctype="multipart/form-data">
       <input type="hidden" name="token" value="{/envelope/token}"/>
@@ -36399,10 +36363,52 @@ should not have received it.
 <xsl:template match="auth_settings">
   <xsl:choose>
     <xsl:when test="@name='ldap'">
-      <xsl:apply-templates select="describe_auth_response/group[@name='method:ldap_connect']" mode="ldapauth"/>
+      <div class="toolbar">
+        <a href="/help/users.html?token={/envelope/token}#peruserldapauthentication"
+           class="icon icon-action"
+           title="{concat(gsa:i18n('Help', 'Help'),': ')}({gsa:i18n ('LDAP per-User Authentication', 'Group')})">
+          <img src="/img/help.png"/>
+        </a>
+      </div>
+      <div class="section-header">
+        <h1>
+          <img class="icon icon-lg" src="/img/ldap.svg" alt="LDAP Settings"/>
+          <xsl:value-of select="gsa:i18n ('LDAP per-User Authentication', 'Group')"/>
+        </h1>
+      </div>
+      <xsl:choose>
+        <xsl:when test="describe_auth_response/group[@name='method:ldap_connect']">
+          <xsl:apply-templates select="describe_auth_response/group[@name='method:ldap_connect']" mode="ldapauth"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="gsa:i18n ('LDAP per-User Authentication not available', 'Group')"/>
+        </xsl:otherwise>
+      </xsl:choose>
     </xsl:when>
+
     <xsl:when test="@name='radius'">
-      <xsl:apply-templates select="describe_auth_response/group[@name='method:radius_connect']" mode="radiusauth"/>
+      <div class="toolbar">
+        <a href="/help/users.html?token={/envelope/token}#radiusauthentication"
+          class="icon icon-action"
+          title="{concat(gsa:i18n('Help', 'Help'),': ')}({gsa:i18n ('RADIUS Authentication', 'Group')})">
+          <img src="/img/help.png"/>
+        </a>
+      </div>
+      <div class="section-header">
+        <h1>
+          <img class="icon icon-lg" src="/img/radius.svg" alt="Radius Settings"/>
+          <xsl:value-of select="gsa:i18n ('RADIUS Authentication', 'Group')"/>
+        </h1>
+      </div>
+      <xsl:choose>
+        <xsl:when test="describe_auth_response/group[@name='method:radius_connect']">
+
+          <xsl:apply-templates select="describe_auth_response/group[@name='method:radius_connect']" mode="radiusauth"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="gsa:i18n ('RADIUS Authentication not available', 'Group')"/>
+        </xsl:otherwise>
+      </xsl:choose>
     </xsl:when>
   </xsl:choose>
 </xsl:template>
