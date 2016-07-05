@@ -1,5 +1,11 @@
 2016-07-05  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* CMakeLists.txt, src/html/classic/img/ldap.svg,
+	src/html/classic/img/radius.svg: Install placeholder icons for radius and ldap
+	authentication.
+
+2016-07-05  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/omp.xsl (get_users): Remove authentication settings from
 	users page.
 

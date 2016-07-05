@@ -498,6 +498,8 @@ install (FILES src/html/classic/img/agent.png
                src/html/classic/img/help.svg
                src/html/classic/img/greenbone.svg
                src/html/classic/img/wizard.svg
+               src/html/classic/img/ldap.svg
+               src/html/classic/img/radius.svg
                src/html/classic/img/favicon.gif
          DESTINATION ${GSA_DATA_DIR}/classic/img)
 
