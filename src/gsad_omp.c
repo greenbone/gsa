@@ -25776,6 +25776,71 @@ edit_user_omp (credentials_t * credentials, params_t *params,
   return edit_user (credentials, params, NULL, response_data);
 }
 
+char *
+auth_settings_omp (credentials_t * credentials, params_t *params,
+                   cmd_response_data_t* response_data)
+{
+  GString * xml;
+  gchar * buf;
+  char * html;
+  const char *name;
+
+  name = params_value (params, "name");
+
+  CHECK_PARAM_INVALID (name, "Auth settings", "auth_settings");
+
+  xml = g_string_new ("");
+  buf = g_markup_printf_escaped ( "<auth_settings name=\"%s\">", name);
+  g_string_append (xml, buf);
+  g_free (buf);
+
+  if (command_enabled (credentials, "DESCRIBE_AUTH"))
+    {
+      gchar * response = NULL;
+      entity_t entity = NULL;
+
+      switch (omp (credentials, &response, &entity, response_data,
+                   "<describe_auth/>"))
+        {
+          case 0:
+          case -1:
+            break;
+          case 1:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred getting the auth list. "
+                                 "Diagnostics: Failure to send command to manager daemon.",
+                                 "/omp?cmd=get_users", response_data);
+          case 2:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred getting the auth list. "
+                                 "Diagnostics: Failure to receive response from manager daemon.",
+                                 "/omp?cmd=get_users", response_data);
+          default:
+            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+            return gsad_message (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred getting the auth list. "
+                                 "Diagnostics: Internal Error.",
+                                 "/omp?cmd=get_users", response_data);
+        }
+
+
+      g_string_append (xml, response);
+      free_entity (entity);
+      g_free (response);
+    }
+
+  g_string_append (xml, "</auth_settings>");
+
+  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+                            response_data);
+  return html;
+}
+
 /**
  * @brief Setup edit_user XML, XSL transform the result.
  *

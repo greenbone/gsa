@@ -1,5 +1,10 @@
 2016-07-05  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/gsad_omp.c, src/gsad_omp.h: Add new omp command auth_settings. This will
+	allow to handle the auth settings on an own page in future.
+
+2016-07-05  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/gsad.c (handle_request): Return MHD_HTTP_METHOD_NOT_ALLOWED if the an
 	other method as get or post is used in the request.
 

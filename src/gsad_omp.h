@@ -418,6 +418,7 @@ char * save_user_omp (credentials_t *, params_t *, char **,
 char * save_auth_omp (credentials_t *, params_t *, cmd_response_data_t*);
 char * save_chart_preference_omp (credentials_t *, params_t *, gchar **,
                                   gchar **, cmd_response_data_t*);
+char * auth_settings_omp (credentials_t *, params_t *, cmd_response_data_t*);
 
 char * process_bulk_omp (credentials_t *, params_t *, enum content_type *,
                          char **, gsize *, cmd_response_data_t*);
