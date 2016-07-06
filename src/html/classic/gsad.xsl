@@ -2041,6 +2041,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <page>cvss_calculator</page>
           <name><xsl:value-of select="gsa:i18n ('CVSS Calculator', 'CVSS Calculator')"/></name>
         </item>
+        <xsl:if test="gsa:may-op ('DESCRIBE_FEED') or gsa:may-op ('DESCRIBE_SCAP') or gsa:may-op ('DESCRIBE_CERT')">
+          <item>
+            <page>get_feeds</page>
+            <name><xsl:value-of select="gsa:i18n ('Feed Status', 'Main menu')"/></name>
+          </item>
+        </xsl:if>
       </xsl:variable>
       <xsl:call-template name="gsa-navigation-menu">
         <xsl:with-param name="items" xmlns="" select="$items"/>
@@ -2076,13 +2082,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <item>
             <page>auth_settings&amp;name=radius</page>
             <name><xsl:value-of select="gsa:i18n ('Radius', 'Main menu')"/></name>
-          </item>
-        </xsl:if>
-        <divider/>
-        <xsl:if test="gsa:may-op ('DESCRIBE_FEED') or gsa:may-op ('DESCRIBE_SCAP') or gsa:may-op ('DESCRIBE_CERT')">
-          <item>
-            <page>get_feeds</page>
-            <name><xsl:value-of select="gsa:i18n ('Feed', 'Feed Sync')"/></name>
           </item>
         </xsl:if>
       </xsl:variable>
