@@ -1,5 +1,10 @@
 2016-07-06  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/omp.xsl (get_feeds, html-feed-row): Remove actions column
+	from feed status table.
+
+2016-07-06  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/gsad.xsl (html-gsa-navigation): Move feed menu from
 	Administration to Extras and rename it to "Feed Status".
 

@@ -36449,7 +36449,7 @@ should not have received it.
          title="{gsa:i18n ('Feed', 'Feed Sync')}">
         <img class="icon icon-lg" src="/img/feed.svg" alt="Feed"/>
       </a>
-      <xsl:value-of select="gsa:i18n ('Feed', 'Feed Sync')"/>
+      <xsl:value-of select="gsa:i18n ('Feed Status', 'Feed Sync')"/>
     </h1>
   </div>
 
@@ -36460,7 +36460,6 @@ should not have received it.
       <td><xsl:value-of select="gsa:i18n ('Origin', 'Feed Sync')"/></td>
       <td><xsl:value-of select="gsa:i18n ('Version', 'Feed Sync')"/></td>
       <td><xsl:value-of select="gsa:i18n ('Status', 'Feed Sync')"/></td>
-      <td style="width: {gsa:actions-width (1)}px"><xsl:value-of select="gsa:i18n ('Actions', 'Actions')"/></td>
     </tr>
     <xsl:if test="gsa:may-op ('describe_feed')">
       <xsl:apply-templates select="commands_response/describe_feed_response"/>
@@ -36573,28 +36572,6 @@ should not have received it.
           <xsl:value-of select="@status_text"/>
         </xsl:otherwise>
       </xsl:choose>
-    </td>
-    <td>
-      <div class="icon">
-        <form action="/omp" method="post" enctype="multipart/form-data">
-          <input type="hidden" name="token" value="{/envelope/token}"/>
-          <input type="hidden" name="cmd" value="{$sync_cmd}"/>
-          <input type="hidden" name="caller" value="{/envelope/current_page}"/>
-
-          <xsl:choose>
-            <xsl:when test="$feed/currently_syncing">
-            </xsl:when>
-            <xsl:when test="$feed/sync_not_available">
-            </xsl:when>
-            <xsl:when test="gsa:may-op ($sync_cmd)">
-              <input type="image" src="/img/refresh.png" alt="{gsa:i18n ('Synchronize with Feed now', 'Feed Sync')}"
-                    name="Synchronize" value="Synchronize" title="{gsa:i18n ('Synchronize with Feed now', 'Feed Sync')}"/>
-            </xsl:when>
-            <xsl:otherwise>
-            </xsl:otherwise>
-          </xsl:choose>
-        </form>
-      </div>
     </td>
   </tr>
 </xsl:template>
