@@ -38397,6 +38397,33 @@ should not have received it.
         </td>
       </tr>
       <tr>
+        <td><xsl:value-of select="gsa:i18n ('Routes', 'Host')"/>:</td>
+        <td>
+          <ul>
+            <xsl:variable name="token" select="/envelope/token"/>
+            <xsl:for-each select="host/routes/route">
+              <li>
+                <xsl:for-each select="host">
+                  <xsl:if test="position() != 1">
+                    <xsl:text> &#x25BA; </xsl:text>
+                  </xsl:if>
+                  <xsl:choose>
+                    <xsl:when test="@id != ''">
+                      <a href="/omp?cmd=get_asset&amp;asset_type=host&amp;asset_id={@id}&amp;token={$token}">
+                        <xsl:value-of select="ip"/>
+                      </a>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <xsl:value-of select="ip"/>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </xsl:for-each>
+              </li>
+            </xsl:for-each>
+          </ul>
+        </td>
+      </tr>
+      <tr>
         <td><xsl:value-of select="gsa:i18n ('Severity', 'Property')"/>:</td>
         <td>
           <xsl:call-template name="severity-bar">
