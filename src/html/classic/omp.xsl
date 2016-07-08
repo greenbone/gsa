@@ -2129,7 +2129,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <input type="hidden" name="caller" value="{/envelope/current_page}"/>
       <input type="hidden" name="cmd" value="delete_{$type}"/>
       <input type="hidden" name="{$type}_id" value="{$id}"/>
-      <input type="image" src="/img/trashcan.png" alt="{gsa:i18n ('To Trashcan', 'Action Verb')}"
+      <input type="image" class="ajax-post" src="/img/trashcan.png" alt="{gsa:i18n ('To Trashcan', 'Action Verb')}"
              name="To Trashcan" value="To Trashcan" title="{gsa:i18n ('Move To Trashcan', 'Action Verb')}"/>
       <xsl:copy-of select="$params"/>
     </form>
@@ -2516,7 +2516,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <div class="form-group">
               <input type="image" src="/img/tag.png" alt="{gsa:i18n ('Add Tag', 'Tag')}"
                 name="Add Tag" value="Add Tag" title="{gsa:i18n ('Add Tag', 'Tag')}"
-                class="icon"/>
+                class="icon ajax-post"/>
             </div>
             <xsl:choose>
               <xsl:when test="$resource_subtype!=''">
@@ -2733,11 +2733,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="tag_id" value="{$id}"/>
         <xsl:choose>
           <xsl:when test="$enable">
-            <input type="image" src="/img/enable.png" alt="{gsa:i18n ('Enable Tag', 'Tag')}"
+            <input type="image" class="ajax-post" src="/img/enable.png" alt="{gsa:i18n ('Enable Tag', 'Tag')}"
                    name="Enable Tag" value="Enable Tag" title="{gsa:i18n ('Enable Tag', 'Tag')}"/>
           </xsl:when>
           <xsl:otherwise>
-            <input type="image" src="/img/disable.png" alt="{gsa:i18n ('Disable Tag', 'Tag')}"
+            <input type="image" class="ajax-post" src="/img/disable.png" alt="{gsa:i18n ('Disable Tag', 'Tag')}"
                    name="Disable Tag" value="Disable Tag" title="{gsa:i18n ('Disable Tag', 'Tag')}"/>
           </xsl:otherwise>
         </xsl:choose>
@@ -5594,8 +5594,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <input type="hidden" name="id" value="{@id}"/>
               <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
               <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-              <input type="image" src="/img/clone.png" alt="{gsa:i18n ('Clone', 'Action Verb')}"
-                    name="Clone" value="Clone" title="{gsa:i18n ('Clone', 'Action Verb')}"/>
+              <input type="image" class="ajax-post"
+                    src="/img/clone.png"
+                    alt="{gsa:i18n ('Clone', 'Action Verb')}"
+                    name="Clone" value="Clone"
+                    title="{gsa:i18n ('Clone', 'Action Verb')}"/>
             </form>
           </div>
         </xsl:otherwise>
@@ -17470,7 +17473,8 @@ should not have received it.
             <input type="hidden" name="id" value="{$config/@id}"/>
             <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
             <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-            <input type="image" src="/img/clone.png" alt="{gsa:i18n ('Clone', 'Action Verb')}"
+            <input type="image" class="ajax-post" src="/img/clone.png"
+                   alt="{gsa:i18n ('Clone', 'Action Verb')}"
                    name="Clone" value="Clone" title="{gsa:i18n ('Clone', 'Action Verb')}"/>
           </form>
         </div>
@@ -29581,7 +29585,7 @@ should not have received it.
                 <input type="hidden" name="overrides" value="{/envelope/params/overrides}"/>
                 <input type="hidden" name="details" value="{/envelope/params/details}"/>
                 <input type="image" src="/img/clone.png" alt="Clone Note"
-                  class="icon"
+                  class="icon ajax-post"
                   name="Clone" value="Clone" title="{gsa:i18n ('Clone', 'Action Verb')}"/>
 
                 <xsl:choose>
@@ -29856,7 +29860,7 @@ should not have received it.
                 <input type="hidden" name="overrides" value="{/envelope/params/overrides}"/>
                 <input type="hidden" name="details" value="{/envelope/params/details}"/>
                 <input type="image" src="/img/clone.png" alt="Clone Override"
-                  class="icon"
+                  class="icon ajax-post"
                   name="Clone" value="Clone" title="{gsa:i18n ('Clone', 'Action Verb')}"/>
 
                 <xsl:choose>
@@ -33090,7 +33094,7 @@ should not have received it.
     <input type="hidden" name="cmd" value="create_asset"/>
     <input type="image" src="/img/add_to_assets.png" alt="{gsa:i18n ('Add to Assets', 'Assets')}"
            name="Add to Assets" value="Add to Assets"
-           class="icon"
+           class="icon ajax-post"
            title="{gsa:i18n (concat ('Add to Assets with QOD>=', $min_qod, '% and Overrides ', $overrides), 'Action Verb')}"/>
 
     <input type="hidden" name="report_id" value="{@id}"/>
@@ -33105,7 +33109,7 @@ should not have received it.
     <input type="hidden" name="cmd" value="delete_asset"/>
     <input type="image" src="/img/remove_from_assets.png" alt="{gsa:i18n ('Remove from Assets', 'Assets')}"
            name="Remove from Assets" value="Remove from Assets"
-           class="icon"
+           class="icon ajax-post"
            title="{gsa:i18n ('Remove from Assets', 'Action Verb')}"/>
 
     <input type="hidden" name="report_id" value="{@id}"/>
@@ -33892,7 +33896,7 @@ should not have received it.
                           value="Run Alert"
                           title="{gsa:i18n ('Run Alert', 'Report')}"
                           src="/img/start.png"
-                          class="icon"
+                          class="icon ajax-post"
                           alt="{gsa:i18n ('Run Alert', 'Report')}"/>
 
                     <a href="#" title="{ gsa:i18n('Create a new alert') }"
@@ -33964,7 +33968,7 @@ should not have received it.
                            value="Run Alert"
                            title="{gsa:i18n ('Run Alert', 'Report')}"
                            src="/img/start.png"
-                           class="icon"
+                           class="icon ajax-post"
                            alt="{gsa:i18n ('Run Alert', 'Report')}"/>
 
                     <a href="#" title="{ gsa:i18n('Create a new alert') }"

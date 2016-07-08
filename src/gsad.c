@@ -1509,6 +1509,7 @@ init_validator ()
   openvas_validator_alias (validator, "next_id",      "info_id");
   openvas_validator_alias (validator, "next_type",    "resource_type");
   openvas_validator_alias (validator, "next_subtype", "info_type");
+  openvas_validator_alias (validator, "next_xml",      "boolean");
   openvas_validator_alias (validator, "notes",        "boolean");
   openvas_validator_alias (validator, "note_task_id", "optional_task_id");
   openvas_validator_alias (validator, "note_task_uuid", "note_task_id");

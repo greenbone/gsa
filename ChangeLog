@@ -1,3 +1,24 @@
+2016-07-08  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Do not redirect after POST requests returning errors and show an
+	error message dialog instead.
+
+	* src/gsad_omp.c (next_page_url): Use value of next_xml param for
+	xml param in returned url.
+	(response_from_entity): Do not redirect on errors.
+
+	* src/gsad.c (init_validator): Add next_xml parameter.
+
+	* src/html/classic/omp.xsl (trashcan-icon, user-tags-window-checked)
+	(toggle-tag-icon, details-header-icons, html-config-table)
+	(note-detailed, override-detailed, report-icons, report [summary]):
+	Add ajax-post class to submit icons for sending POST requests.
+
+	* src/html/classic/js/greenbone.js (InfoDialog): Add options for
+	changing the fade duration and making the dialog modal.
+	(on_ready): Modify submit icons with "ajax-post" class to submit forms
+	via a AJAX request that will show a dialog on errors.
+
 2016-07-08  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/graphics.xsl (dashboard): Add hosts topology chart to the

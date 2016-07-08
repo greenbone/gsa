@@ -1269,7 +1269,7 @@ next_page_url (credentials_t *credentials, params_t *params,
                const char* action_message)
 {
   GString *url;
-  const char *next_cmd;
+  const char *next_cmd, *xml_param, *next_xml_param;
   params_iterator_t iter;
   gchar *param_name;
   param_t *current_param;
@@ -1292,6 +1292,9 @@ next_page_url (credentials_t *credentials, params_t *params,
   else
     next_cmd = "get_tasks";
 
+  xml_param = params_value (params, "xml");
+  next_xml_param = params_value (params, "next_xml");
+
   g_string_append (url, next_cmd);
 
   params_iterator_init (&iter, params);
@@ -1304,7 +1307,6 @@ next_page_url (credentials_t *credentials, params_t *params,
                 == param_name + strlen (param_name) - strlen ("_id"))
           || (strcmp (param_name, "name") == 0
               && strcasecmp (prev_action, "Run Wizard") == 0)
-          || strcmp (param_name, "xml") == 0
           || (strcmp (param_name, "get_name") == 0
               && strcasecmp (next_cmd, "wizard_get") == 0))
         {
@@ -1314,6 +1316,15 @@ next_page_url (credentials_t *credentials, params_t *params,
                                     ? current_param->value
                                     : "");
         }
+    }
+
+  if (next_xml_param)
+    {
+      g_string_append_printf (url, "&xml=%s", next_xml_param);
+    }
+  else if (xml_param)
+    {
+      g_string_append_printf (url, "&xml=%s", xml_param);
     }
 
   if (action_status)
@@ -1417,8 +1428,10 @@ response_from_entity (credentials_t* credentials, params_t *params,
                       const char* action, cmd_response_data_t *response_data)
 {
   gchar *res, *next_url;
+  int success;
+  success = omp_success (entity);
 
-  if (omp_success (entity))
+  if (success)
     {
       next_url = next_page_url (credentials, params,
                                 override_next, default_next,
@@ -1436,7 +1449,7 @@ response_from_entity (credentials_t* credentials, params_t *params,
                                 entity_attribute (entity, "status_text"));
     }
 
-  if (no_redirect)
+  if (no_redirect || success == 0)
     {
       res = action_result_page (credentials, response_data, action,
                                 entity_attribute (entity, "status"),
