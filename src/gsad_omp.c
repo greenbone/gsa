@@ -18905,8 +18905,25 @@ static char *
 edit_report_format (credentials_t * credentials, params_t *params,
                     const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return edit_resource ("report_format", credentials, params, extra_xml,
-                        response_data);
+  gchar *all_rfs_response, *response, *ext_extra_xml;
+
+  if (simple_ompf ("getting Report Formats",
+                   credentials, &all_rfs_response, response_data,
+                   "<get_report_formats"
+                   " filter=\"rows=-1\"/>"))
+    {
+      return all_rfs_response;
+    }
+
+  ext_extra_xml = g_strdup_printf ("%s"
+                                   "<all_formats>%s</all_formats>",
+                                   extra_xml, all_rfs_response);
+  g_free (all_rfs_response);
+
+  response = edit_resource ("report_format", credentials, params,
+                            ext_extra_xml, response_data);
+  g_free (ext_extra_xml);
+  return response;
 }
 
 /**
@@ -19016,7 +19033,7 @@ save_report_format_omp (credentials_t * credentials, params_t *params,
 {
   int ret;
   gchar *html, *response;
-  params_t *preferences;
+  params_t *preferences, *id_list_params;
   const char *no_redirect, *report_format_id, *name, *summary, *enable;
   entity_t entity;
 
@@ -19031,6 +19048,108 @@ save_report_format_omp (credentials_t * credentials, params_t *params,
   CHECK_PARAM_INVALID (name, "Save Report Format", "edit_report_format");
   CHECK_PARAM_INVALID (summary, "Save Report Format", "edit_report_format");
   CHECK_PARAM_INVALID (enable, "Save Report Format", "edit_report_format");
+
+  id_list_params = params_values (params, "id_list:");
+  if (id_list_params)
+    {
+      GHashTable *id_lists;
+      param_t *param;
+      gchar *param_name, *pref_name, *value, *old_values, *new_values;
+      params_iterator_t iter;
+      GHashTableIter hash_table_iter;
+
+      id_lists = g_hash_table_new_full (g_str_hash, g_str_equal,
+                                        g_free, g_free);
+
+      params_iterator_init (&iter, id_list_params);
+      while (params_iterator_next (&iter, &param_name, &param))
+        {
+          gchar *colon_pos = strchr (param->value, ':');
+
+          pref_name = g_strndup (param->value, colon_pos - param->value);
+          value = g_strdup (colon_pos + 1);
+
+          old_values = g_hash_table_lookup (id_lists, pref_name);
+
+          if (old_values)
+            {
+              new_values = g_strdup_printf ("%s,%s", old_values, value);
+              g_hash_table_insert (id_lists, pref_name, new_values);
+              g_free (value);
+            }
+          else
+            {
+              g_hash_table_insert (id_lists, pref_name, value);
+            }
+        }
+
+      g_hash_table_iter_init (&hash_table_iter, id_lists);
+      while (g_hash_table_iter_next (&hash_table_iter,
+                                     (void**)&pref_name, (void**)&value))
+        {
+          gchar *value_64;
+
+          value_64 = strlen (value)
+                      ? g_base64_encode ((guchar *) value, strlen (value))
+                      : g_strdup ("");
+
+          response = NULL;
+          entity = NULL;
+          ret = ompf (credentials,
+                      &response,
+                      &entity,
+                      response_data,
+                      "<modify_report_format"
+                      " report_format_id=\"%s\">"
+                      "<param>"
+                      "<name>%s</name>"
+                      "<value>%s</value>"
+                      "</param>"
+                      "</modify_report_format>",
+                      report_format_id,
+                      pref_name,
+                      value_64);
+          g_free (value_64);
+          switch (ret)
+            {
+              case 0:
+                break;
+              case 1:
+                response_data->http_status_code
+                  = MHD_HTTP_INTERNAL_SERVER_ERROR;
+                return gsad_message (credentials,
+                                      "Internal error", __FUNCTION__, __LINE__,
+                                      "An internal error occurred while saving a Report Format. "
+                                      "The Report Format was not saved. "
+                                      "Diagnostics: Failure to send command to manager daemon.",
+                                      "/omp?cmd=get_report_formats",
+                                      response_data);
+              case 2:
+                response_data->http_status_code
+                  = MHD_HTTP_INTERNAL_SERVER_ERROR;
+                return gsad_message (credentials,
+                                      "Internal error", __FUNCTION__, __LINE__,
+                                      "An internal error occurred while saving a Report Format. "
+                                      "It is unclear whether the Report Format has been saved or not. "
+                                      "Diagnostics: Failure to receive response from manager daemon.",
+                                      "/omp?cmd=get_report_formats",
+                                      response_data);
+              case -1:
+              default:
+                response_data->http_status_code
+                  = MHD_HTTP_INTERNAL_SERVER_ERROR;
+                return gsad_message (credentials,
+                                      "Internal error", __FUNCTION__, __LINE__,
+                                      "An internal error occurred while saving a Report Format. "
+                                      "It is unclear whether the Report Format has been saved or not. "
+                                      "Diagnostics: Internal Error.",
+                                      "/omp?cmd=get_report_formats",
+                                      response_data);
+            }
+
+          /* TODO Check if succeeded.  response_from_entity_if_failed? */
+        }
+    }
 
   /* Modify the Report Format. */
 

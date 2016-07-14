@@ -1283,6 +1283,8 @@ init_validator ()
   openvas_validator_add (validator, "id",             "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "id_optional",    "^(--|[a-z0-9\\-]+)$");
   openvas_validator_add (validator, "id_or_empty",    "^(|[a-z0-9\\-]+)$");
+  openvas_validator_add (validator, "id_list:name",    "^ *[0-9]+ *$");
+  openvas_validator_add (validator, "id_list:value",    "^[[:alnum:]\\-_ ]+:[a-z0-9\\-]+$");
   openvas_validator_add (validator, "ifaces_allow", "^(0|1)$");
   openvas_validator_add (validator, "installer",      "(?s)^.*$");
   openvas_validator_add (validator, "installer_sig",  "(?s)^.*$");
@@ -1798,7 +1800,8 @@ params_append_mhd (params_t *params,
    */
   if ((strcmp (name, "alert_ids:") == 0)
       || (strcmp(name, "role_ids:") == 0)
-      || (strcmp(name, "group_ids:") == 0))
+      || (strcmp(name, "group_ids:") == 0)
+      || (strcmp(name, "id_list:") == 0))
     {
       param_t *param;
       gchar *index_str;
@@ -2679,7 +2682,8 @@ params_mhd_add (void *params, enum MHD_ValueKind kind, const char *name,
    */
   if ((strcmp (name, "alert_ids:") == 0)
       || (strcmp(name, "role_ids:") == 0)
-      || (strcmp(name, "group_ids:") == 0))
+      || (strcmp(name, "group_ids:") == 0)
+      || (strcmp(name, "id_list:") == 0))
     {
       param_t *param;
       gchar *index_str;

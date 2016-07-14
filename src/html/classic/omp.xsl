@@ -28328,6 +28328,7 @@ should not have received it.
         <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
         <td><xsl:value-of select="gsa:i18n ('Value', 'Property')"/></td>
       </tr>
+      <xsl:variable name="all_formats" select="../../../all_formats/get_report_formats_response/report_format"/>
       <xsl:for-each select="param">
 
         <tr class="{gsa:table-row-class(position())}">
@@ -28392,6 +28393,27 @@ should not have received it.
                            size="30"/>
                   </xsl:otherwise>
                 </xsl:choose>
+              </xsl:when>
+              <xsl:when test="type/text() = 'report_format_list'">
+                <xsl:variable name="selected_ids" select="str:tokenize (value, ',')"/>
+                <xsl:variable name="param_name" select="name"/>
+                <select name="id_list:" multiple="1">
+                  <xsl:for-each select="$all_formats">
+                    <xsl:variable name="id" select="@id"/>
+                    <xsl:choose>
+                      <xsl:when test="$selected_ids[text()=$id]">
+                        <option selected="1" value="{$param_name}:{$id}">
+                          <xsl:value-of select="name"/>
+                        </option>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <option value="{$param_name}:{$id}">
+                          <xsl:value-of select="name"/>
+                        </option>
+                      </xsl:otherwise>
+                    </xsl:choose>
+                  </xsl:for-each>
+                </select>
               </xsl:when>
               <xsl:otherwise>
                 <!-- Presume type "text". -->
