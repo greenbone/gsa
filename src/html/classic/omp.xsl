@@ -27031,11 +27031,11 @@ should not have received it.
             <xsl:value-of select="gsa:i18n ('Name', 'Property')"/>
           </label>
           <div class="col-10">
-            <select name="permission">
+            <select name="permission" class="form-selection-control" id="permission">
               <xsl:variable name="name">
                 <xsl:value-of select="commands_response/get_permissions_response/permission/name"/>
               </xsl:variable>
-              <option value="Super">
+              <option value="Super" data-select="super">
                 <xsl:text>Super (Has super access)</xsl:text>
               </option>
               <xsl:for-each select="/envelope/capabilities/help_response/schema/command[gsa:lower-case (name) != 'get_version']">
@@ -27182,7 +27182,7 @@ should not have received it.
             </xsl:choose>
           </div>
         </div>
-        <div class="form-group">
+        <div class="form-group form-selection-item-permission form-selection-item-permission--super">
           <label class="col-2 control-label">
             <xsl:value-of select="gsa:i18n ('Resource Type', 'Property')"/> (<xsl:value-of select="gsa:i18n ('for Super permissions', 'Permission')"/>)
           </label>
