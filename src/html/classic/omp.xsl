@@ -16936,9 +16936,6 @@ should not have received it.
         </b>
       </td>
     </tr>
-    <xsl:if test="summary != 'NOSUMMARY'">
-      <tr><td><xsl:value-of select="gsa:i18n ('Summary', 'Property')"/>:</td><td><xsl:value-of select="summary"/></td></tr>
-    </xsl:if>
     <tr><td><xsl:value-of select="gsa:i18n ('Config', 'Scan Config')"/>:</td><td><xsl:value-of select="$config/name"/></td></tr>
     <tr><td><xsl:value-of select="gsa:i18n ('Family', 'NVT')"/>:</td><td><xsl:value-of select="family"/></td></tr>
     <tr><td><xsl:value-of select="gsa:i18n ('OID', 'NVT')"/>:</td><td><xsl:value-of select="@oid"/></td></tr>
@@ -23088,9 +23085,6 @@ should not have received it.
   <xsl:param name="config"/>
   <table>
     <tr><td><b><xsl:value-of select="gsa:i18n ('Name', 'Property')"/>:</b></td><td><b><xsl:value-of select="name"/></b></td></tr>
-    <xsl:if test="summary != 'NOSUMMARY'">
-      <tr><td><xsl:value-of select="gsa:i18n ('Summary', 'Property')"/>:</td><td><xsl:value-of select="summary"/></td></tr>
-    </xsl:if>
     <tr><td><xsl:value-of select="gsa:i18n ('Config', 'Scan Config')"/>:</td><td><xsl:value-of select="$config"/></td></tr>
     <tr><td><xsl:value-of select="gsa:i18n ('Family', 'NVT')"/>:</td><td><xsl:value-of select="family"/></td></tr>
     <tr><td><xsl:value-of select="gsa:i18n ('OID', 'NVT')"/>:</td><td><xsl:value-of select="@oid"/></td></tr>

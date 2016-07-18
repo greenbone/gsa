@@ -1,3 +1,8 @@
+2016-07-18  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/html/classic/omp.xsl (nvt [edit], nvt [details]): Adjust for nvt
+	summary removal.
+
 2016-07-14  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/gsad.c (init_validator, params_append_mhd, params_mhd_add): Add
