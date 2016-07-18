@@ -1,5 +1,11 @@
 2016-07-18  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/omp.xsl (html-edit-permission-form): Change
+	html-edit-persmission-form into an edit dialog and use new horizontal form
+	class styling.
+
+2016-07-18  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/omp.xsl (html-create-permission-form): Only show Resource
 	Type if Permission field is set to super.
 

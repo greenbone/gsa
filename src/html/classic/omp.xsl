@@ -27008,19 +27008,11 @@ should not have received it.
 </xsl:template>
 
 <xsl:template name="html-edit-permission-form">
-  <div class="gb_window">
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n ('Edit Permission', 'Permission')"/>
-      <xsl:call-template name="edit-header-icons">
-        <xsl:with-param name="cap-type" select="'Permission'"/>
-        <xsl:with-param name="type" select="'permission'"/>
-        <xsl:with-param name="id"
-                        select="commands_response/get_permissions_response/permission/@id"/>
-      </xsl:call-template>
+  <div class="edit-dialog">
+    <div class="title"><xsl:value-of select="gsa:i18n ('Edit Permission', 'Permission')"/>
     </div>
-    <div class="gb_window_part_content">
-      <form action="" method="post" enctype="multipart/form-data">
+    <div class="content">
+      <form action="" method="post" enctype="multipart/form-data" class="form-horizontal">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="save_permission"/>
         <input type="hidden" name="caller" value="{/envelope/current_page}"/>
@@ -27034,193 +27026,196 @@ should not have received it.
         <input type="hidden" name="permission" value="{/envelope/params/permission}"/>
         <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-        <table class="table-form">
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
-            <td>
-              <select name="permission">
-                <xsl:variable name="name">
-                  <xsl:value-of select="commands_response/get_permissions_response/permission/name"/>
-                </xsl:variable>
-                <option value="Super">
-                  <xsl:text>Super (Has super access)</xsl:text>
-                </option>
-                <xsl:for-each select="/envelope/capabilities/help_response/schema/command[gsa:lower-case (name) != 'get_version']">
-                  <xsl:choose>
-                    <xsl:when test="gsa:lower-case (name) = $name">
-                      <option value="{$name}" selected="1">
-                        <xsl:value-of select="$name"/>
+        <div class="form-group">
+          <label class="col-2 control-label">
+            <xsl:value-of select="gsa:i18n ('Name', 'Property')"/>
+          </label>
+          <div class="col-10">
+            <select name="permission">
+              <xsl:variable name="name">
+                <xsl:value-of select="commands_response/get_permissions_response/permission/name"/>
+              </xsl:variable>
+              <option value="Super">
+                <xsl:text>Super (Has super access)</xsl:text>
+              </option>
+              <xsl:for-each select="/envelope/capabilities/help_response/schema/command[gsa:lower-case (name) != 'get_version']">
+                <xsl:choose>
+                  <xsl:when test="gsa:lower-case (name) = $name">
+                    <option value="{$name}" selected="1">
+                      <xsl:value-of select="$name"/>
+                      <xsl:text> (</xsl:text>
+                      <xsl:value-of select="gsa:capitalise (gsa:permission-description ($name, resource))"/>
+                      <xsl:text>)</xsl:text>
+                    </option>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <xsl:if test="gsa:may-op (name)">
+                      <option value="{gsa:lower-case (name)}">
+                        <xsl:value-of select="gsa:lower-case (name)"/>
                         <xsl:text> (</xsl:text>
-                        <xsl:value-of select="gsa:capitalise (gsa:permission-description ($name, resource))"/>
+                        <xsl:value-of select="gsa:capitalise (gsa:permission-description (name, resource))"/>
                         <xsl:text>)</xsl:text>
                       </option>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <xsl:if test="gsa:may-op (name)">
-                        <option value="{gsa:lower-case (name)}">
-                          <xsl:value-of select="gsa:lower-case (name)"/>
-                          <xsl:text> (</xsl:text>
-                          <xsl:value-of select="gsa:capitalise (gsa:permission-description (name, resource))"/>
-                          <xsl:text>)</xsl:text>
-                        </option>
-                      </xsl:if>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                </xsl:for-each>
-              </select>
-            </td>
-          </tr>
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/></td>
-            <td>
-              <input type="text" name="comment" size="30" maxlength="400"
-                     value="{commands_response/get_permissions_response/permission/comment}"/>
-            </td>
-          </tr>
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('Subject', 'Permission')"/></td>
-            <td>
-              <div>
-                <label>
-                  <xsl:choose>
-                    <xsl:when test="commands_response/get_permissions_response/permission/subject/type = 'user'">
-                      <input type="radio" name="subject_type" value="user" checked="1"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <input type="radio" name="subject_type" value="user"/>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                  <xsl:value-of select="gsa:i18n ('User', 'User')"/>
-                  <xsl:text> </xsl:text>
-                  <xsl:variable name="user_id"
-                                select="commands_response/get_permissions_response/permission/subject/@id"/>
-                  <select name="user_id">
-                    <xsl:for-each select="get_users_response/user">
-                      <xsl:choose>
-                        <xsl:when test="@id = $user_id">
-                          <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
-                        </xsl:when>
-                        <xsl:otherwise>
-                          <option value="{@id}"><xsl:value-of select="name"/></option>
-                        </xsl:otherwise>
-                      </xsl:choose>
-                    </xsl:for-each>
-                  </select>
-                </label>
-              </div>
-              <div>
-                <label>
-                  <xsl:choose>
-                    <xsl:when test="commands_response/get_permissions_response/permission/subject/type = 'role'">
-                      <input type="radio" name="subject_type" value="role" checked="1"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <input type="radio" name="subject_type" value="role"/>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                  <xsl:value-of select="gsa:i18n ('Role', 'Role')"/>
-                  <xsl:text> </xsl:text>
-                  <xsl:variable name="subject_id"
-                                select="commands_response/get_permissions_response/permission/subject/@id"/>
-                  <select name="role_id">
-                    <xsl:for-each select="get_roles_response/role">
-                      <xsl:choose>
-                        <xsl:when test="@id = $subject_id">
-                          <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
-                        </xsl:when>
-                        <xsl:otherwise>
-                          <option value="{@id}"><xsl:value-of select="name"/></option>
-                        </xsl:otherwise>
-                      </xsl:choose>
-                    </xsl:for-each>
-                  </select>
-                </label>
-              </div>
-              <div>
-                <label>
-                  <xsl:choose>
-                    <xsl:when test="commands_response/get_permissions_response/permission/subject/type = 'group'">
-                      <input type="radio" name="subject_type" value="group" checked="1"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <input type="radio" name="subject_type" value="group"/>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                  <xsl:value-of select="gsa:i18n ('Group', 'Group')"/>
-                  <xsl:text> </xsl:text>
-                  <select name="group_id">
-                    <xsl:for-each select="get_groups_response/group">
-                      <xsl:choose>
-                        <xsl:when test="@id = commands_response/get_permissions_response/permission/subject/@id">
-                          <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
-                        </xsl:when>
-                        <xsl:otherwise>
-                          <option value="{@id}"><xsl:value-of select="name"/></option>
-                        </xsl:otherwise>
-                      </xsl:choose>
-                    </xsl:for-each>
-                  </select>
-                </label>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('Resource ID', 'Property')"/></td>
-            <td>
+                    </xsl:if>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </xsl:for-each>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-2 control-label">
+            <xsl:value-of select="gsa:i18n ('Comment', 'Property')"/>
+          </label>
+          <div class="col-10">
+            <input type="text" name="comment" size="30" maxlength="400"
+              value="{commands_response/get_permissions_response/permission/comment}"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-2 control-label">
+            <xsl:value-of select="gsa:i18n ('Subject', 'Permission')"/>
+          </label>
+          <div class="col-10">
+            <div class="radio">
+              <label>
+                <xsl:choose>
+                  <xsl:when test="commands_response/get_permissions_response/permission/subject/type = 'user'">
+                    <input type="radio" name="subject_type" value="user" checked="1"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="radio" name="subject_type" value="user"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+                <xsl:value-of select="gsa:i18n ('User', 'User')"/>
+                <xsl:text> </xsl:text>
+                <xsl:variable name="user_id"
+                  select="commands_response/get_permissions_response/permission/subject/@id"/>
+                <select name="user_id">
+                  <xsl:for-each select="get_users_response/user">
+                    <xsl:choose>
+                      <xsl:when test="@id = $user_id">
+                        <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <option value="{@id}"><xsl:value-of select="name"/></option>
+                      </xsl:otherwise>
+                    </xsl:choose>
+                  </xsl:for-each>
+                </select>
+              </label>
+            </div>
+            <div class="radio">
+              <label>
+                <xsl:choose>
+                  <xsl:when test="commands_response/get_permissions_response/permission/subject/type = 'role'">
+                    <input type="radio" name="subject_type" value="role" checked="1"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="radio" name="subject_type" value="role"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+                <xsl:value-of select="gsa:i18n ('Role', 'Role')"/>
+                <xsl:text> </xsl:text>
+                <xsl:variable name="subject_id"
+                  select="commands_response/get_permissions_response/permission/subject/@id"/>
+                <select name="role_id">
+                  <xsl:for-each select="get_roles_response/role">
+                    <xsl:choose>
+                      <xsl:when test="@id = $subject_id">
+                        <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <option value="{@id}"><xsl:value-of select="name"/></option>
+                      </xsl:otherwise>
+                    </xsl:choose>
+                  </xsl:for-each>
+                </select>
+              </label>
+            </div>
+            <div class="radio">
+              <label>
+                <xsl:choose>
+                  <xsl:when test="commands_response/get_permissions_response/permission/subject/type = 'group'">
+                    <input type="radio" name="subject_type" value="group" checked="1"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="radio" name="subject_type" value="group"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+                <xsl:value-of select="gsa:i18n ('Group', 'Group')"/>
+                <xsl:text> </xsl:text>
+                <select name="group_id">
+                  <xsl:for-each select="get_groups_response/group">
+                    <xsl:choose>
+                      <xsl:when test="@id = commands_response/get_permissions_response/permission/subject/@id">
+                        <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <option value="{@id}"><xsl:value-of select="name"/></option>
+                      </xsl:otherwise>
+                    </xsl:choose>
+                  </xsl:for-each>
+                </select>
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-2 control-label">
+            <xsl:value-of select="gsa:i18n ('Resource ID', 'Property')"/>
+          </label>
+          <div class="col-10">
+            <xsl:choose>
+              <xsl:when test="commands_response/get_permissions_response/permission/resource/@id = '0'">
+                <input type="text" name="id_or_empty"
+                  value=""
+                  size="50"
+                  maxlength="100"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <input type="text" name="id_or_empty"
+                  value="{commands_response/get_permissions_response/permission/resource/@id}"
+                  size="50"
+                  maxlength="100"/>
+              </xsl:otherwise>
+            </xsl:choose>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-2 control-label">
+            <xsl:value-of select="gsa:i18n ('Resource Type', 'Property')"/> (<xsl:value-of select="gsa:i18n ('for Super permissions', 'Permission')"/>)
+          </label>
+          <div class="col-10">
+            <select name="optional_resource_type">
+              <option value="">--</option>
               <xsl:choose>
-                <xsl:when test="commands_response/get_permissions_response/permission/resource/@id = '0'">
-                  <input type="text" name="id_or_empty"
-                         value=""
-                         size="50"
-                         maxlength="100"/>
+                <xsl:when test="commands_response/get_permissions_response/permission/resource/type = 'user'">
+                  <option value="user" selected="1">User</option>
                 </xsl:when>
                 <xsl:otherwise>
-                  <input type="text" name="id_or_empty"
-                         value="{commands_response/get_permissions_response/permission/resource/@id}"
-                         size="50"
-                         maxlength="100"/>
+                  <option value="user">User</option>
                 </xsl:otherwise>
               </xsl:choose>
-            </td>
-          </tr>
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('Resource Type', 'Property')"/> (<xsl:value-of select="gsa:i18n ('for Super permissions', 'Permission')"/>)</td>
-            <td>
-              <select name="optional_resource_type">
-                <option value="">--</option>
-                <xsl:choose>
-                  <xsl:when test="commands_response/get_permissions_response/permission/resource/type = 'user'">
-                    <option value="user" selected="1">User</option>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <option value="user">User</option>
-                  </xsl:otherwise>
-                </xsl:choose>
-                <xsl:choose>
-                  <xsl:when test="commands_response/get_permissions_response/permission/resource/type = 'role'">
-                    <option value="role" selected="1">Role</option>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <option value="role">Role</option>
-                  </xsl:otherwise>
-                </xsl:choose>
-                <xsl:choose>
-                  <xsl:when test="commands_response/get_permissions_response/permission/resource/type = 'group'">
-                    <option value="group" selected="1">Group</option>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <option value="group">Group</option>
-                  </xsl:otherwise>
-                </xsl:choose>
-              </select>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <input type="submit" name="submit" value="{gsa:i18n ('Save Permission', 'Permission')}"/>
-            </td>
-          </tr>
-        </table>
+              <xsl:choose>
+                <xsl:when test="commands_response/get_permissions_response/permission/resource/type = 'role'">
+                  <option value="role" selected="1">Role</option>
+                </xsl:when>
+                <xsl:otherwise>
+                  <option value="role">Role</option>
+                </xsl:otherwise>
+              </xsl:choose>
+              <xsl:choose>
+                <xsl:when test="commands_response/get_permissions_response/permission/resource/type = 'group'">
+                  <option value="group" selected="1">Group</option>
+                </xsl:when>
+                <xsl:otherwise>
+                  <option value="group">Group</option>
+                </xsl:otherwise>
+              </xsl:choose>
+            </select>
+          </div>
+        </div>
       </form>
     </div>
   </div>
