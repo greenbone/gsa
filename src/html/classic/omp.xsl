@@ -26427,7 +26427,7 @@ should not have received it.
         <div class="form-group">
           <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></label>
           <div class="col-10">
-            <select name="permission">
+            <select name="permission" class="form-selection-control" id="permission">
               <xsl:variable name="restrict_type" select="/envelope/params/restrict_type"/>
               <xsl:variable name="commands">
                 <xsl:choose>
@@ -26440,7 +26440,7 @@ should not have received it.
                 </xsl:choose>
               </xsl:variable>
               <xsl:if test="not ($restrict_type)">
-                <option value="Super">
+                <option value="Super" data-select="super">
                   <xsl:text>Super (Has super access)</xsl:text>
                 </option>
               </xsl:if>
@@ -26491,7 +26491,7 @@ should not have received it.
               maxlength="100"/>
           </div>
         </div>
-        <div class="form-group">
+        <div class="form-group form-selection-item-permission form-selection-item-permission--super">
           <label class="col-2 control-label">
             <xsl:value-of select="gsa:i18n ('Resource Type', 'Property')"/> (<xsl:value-of select="gsa:i18n ('for Super permissions', 'Permission')"/>)
           </label>
