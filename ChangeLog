@@ -1,3 +1,9 @@
+2016-07-18  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/omp.xsl (html-create-permission-form): Change
+	html-create-permission-form into an edit dialog and use new horizontal form
+	class styling.
+
 2016-07-18  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/html/classic/omp.xsl (nvt [edit], nvt [details]): Adjust for nvt

@@ -26349,7 +26349,7 @@ should not have received it.
 
 <xsl:template name="permission-subject-selection">
   <xsl:if test="gsa:may-op ('get_users')">
-    <div>
+    <div class="radio">
       <label>
           <input type="radio" name="subject_type" value="user" checked="1"/>
           <xsl:value-of select="gsa:i18n ('User', 'User')"/>
@@ -26364,7 +26364,7 @@ should not have received it.
   </xsl:if>
 
   <xsl:if test="gsa:may-op ('get_roles')">
-    <div>
+    <div class="radio">
       <label>
         <xsl:choose>
           <xsl:when test="gsa:may-op ('get_users')">
@@ -26386,7 +26386,7 @@ should not have received it.
   </xsl:if>
 
   <xsl:if test="gsa:may-op ('get_groups')">
-    <div>
+    <div class="radio">
       <label>
         <xsl:choose>
           <xsl:when test="gsa:may-op ('get_users') or gsa:may-op ('get_roles')">
@@ -26409,22 +26409,12 @@ should not have received it.
 </xsl:template>
 
 <xsl:template name="html-create-permission-form">
-  <div class="gb_window">
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center">
+  <div class="edit-dialog">
+    <div class="title">
       <xsl:value-of select="gsa:i18n ('New Permission', 'Permission')"/>
-      <a href="/help/new_permission.html?token={/envelope/token}"
-         title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('New Permission', 'Permission'))}">
-        <img src="/img/help.png"/>
-      </a>
-      <a href="/omp?cmd=get_permissions&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-         title="{gsa:i18n ('Permissions', 'Permission')}" style="margin-left:3px;">
-        <img src="/img/list.png" alt="{gsa:i18n ('Permissions', 'Permission')}"/>
-      </a>
     </div>
-    <div class="gb_window_part_content">
-      <form action="" method="post" enctype="multipart/form-data">
+    <div class="content">
+      <form action="" method="post" enctype="multipart/form-data" class="form-horizontal">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="create_permission"/>
         <input type="hidden" name="caller" value="{/envelope/current_page}"/>
@@ -26434,90 +26424,86 @@ should not have received it.
         </xsl:if>
         <!-- FIX filter?. -->
         <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-        <table class="table-form">
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
-            <td>
-              <select name="permission">
-                <xsl:variable name="restrict_type" select="/envelope/params/restrict_type"/>
-                <xsl:variable name="commands">
-                  <xsl:choose>
-                    <xsl:when test="not ($restrict_type)">
-                      <xsl:copy-of select="/envelope/capabilities/help_response/schema/command[gsa:lower-case (name) != 'get_version']"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <xsl:copy-of select="/envelope/capabilities/help_response/schema/command[contains (gsa:lower-case (name), $restrict_type) and (gsa:lower-case (name) != concat ('create_', $restrict_type))]"/>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                </xsl:variable>
-                <xsl:if test="not ($restrict_type)">
-                  <option value="Super">
-                    <xsl:text>Super (Has super access)</xsl:text>
-                  </option>
-                </xsl:if>
-                <xsl:for-each select="exslt:node-set ($commands)/*">
-                  <xsl:choose>
-                    <xsl:when test="$restrict_type and gsa:may-op (name) and starts-with (gsa:lower-case (name), concat ('get_', $restrict_type))">
-                      <option value="{gsa:lower-case (name)}" selected="1">
-                        <xsl:value-of select="gsa:lower-case (name)"/>
-                        <xsl:text> (</xsl:text>
-                        <xsl:value-of select="gsa:capitalise (gsa:permission-description (name, resource))"/>
-                        <xsl:text>)</xsl:text>
-                      </option>
-                    </xsl:when>
-                    <xsl:when test="gsa:may-op (name)">
-                      <option value="{gsa:lower-case (name)}">
-                        <xsl:value-of select="gsa:lower-case (name)"/>
-                        <xsl:text> (</xsl:text>
-                        <xsl:value-of select="gsa:capitalise (gsa:permission-description (name, resource))"/>
-                        <xsl:text>)</xsl:text>
-                      </option>
-                    </xsl:when>
-                    <xsl:otherwise/>
-                  </xsl:choose>
-                </xsl:for-each>
-              </select>
-            </td>
-          </tr>
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/></td>
-            <td>
+        <div class="form-group">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></label>
+          <div class="col-10">
+            <select name="permission">
+              <xsl:variable name="restrict_type" select="/envelope/params/restrict_type"/>
+              <xsl:variable name="commands">
+                <xsl:choose>
+                  <xsl:when test="not ($restrict_type)">
+                    <xsl:copy-of select="/envelope/capabilities/help_response/schema/command[gsa:lower-case (name) != 'get_version']"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <xsl:copy-of select="/envelope/capabilities/help_response/schema/command[contains (gsa:lower-case (name), $restrict_type) and (gsa:lower-case (name) != concat ('create_', $restrict_type))]"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </xsl:variable>
+              <xsl:if test="not ($restrict_type)">
+                <option value="Super">
+                  <xsl:text>Super (Has super access)</xsl:text>
+                </option>
+              </xsl:if>
+              <xsl:for-each select="exslt:node-set ($commands)/*">
+                <xsl:choose>
+                  <xsl:when test="$restrict_type and gsa:may-op (name) and starts-with (gsa:lower-case (name), concat ('get_', $restrict_type))">
+                    <option value="{gsa:lower-case (name)}" selected="1">
+                      <xsl:value-of select="gsa:lower-case (name)"/>
+                      <xsl:text> (</xsl:text>
+                      <xsl:value-of select="gsa:capitalise (gsa:permission-description (name, resource))"/>
+                      <xsl:text>)</xsl:text>
+                    </option>
+                  </xsl:when>
+                  <xsl:when test="gsa:may-op (name)">
+                    <option value="{gsa:lower-case (name)}">
+                      <xsl:value-of select="gsa:lower-case (name)"/>
+                      <xsl:text> (</xsl:text>
+                      <xsl:value-of select="gsa:capitalise (gsa:permission-description (name, resource))"/>
+                      <xsl:text>)</xsl:text>
+                    </option>
+                  </xsl:when>
+                  <xsl:otherwise/>
+                </xsl:choose>
+              </xsl:for-each>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Comment', 'Property')"/></label>
+          <div class="col-10">
               <input type="text" name="comment" size="30" maxlength="400"
-                     value="{commands_response/get_permissions_response/permission/comment}"/>
-            </td>
-          </tr>
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('Subject', 'Permission')"/></td>
-            <td>
-              <xsl:call-template name="permission-subject-selection"/>
-            </td>
-          </tr>
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('Resource ID', 'Property')"/></td>
-            <td>
-              <input type="text" name="id_or_empty"
-                     value="{/envelope/params/resource_id}"
-                     size="50"
-                     maxlength="100"/>
-            </td>
-          </tr>
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('Resource Type', 'Property')"/> (<xsl:value-of select="gsa:i18n ('for Super permissions', 'Permission')"/>)</td>
-            <td>
-              <select name="optional_resource_type">
-                <option value="">--</option>
-                <option value="user">User</option>
-                <option value="role">Role</option>
-                <option value="group">Group</option>
-              </select>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <input type="submit" name="submit" value="{gsa:i18n ('Create Permission', 'Permission')}"/>
-            </td>
-          </tr>
-        </table>
+                class="form-control"
+                value="{commands_response/get_permissions_response/permission/comment}"/>
+              </div>
+        </div>
+        <div class="form-group">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Subject', 'Permission')"/></label>
+          <div class="col-10">
+            <xsl:call-template name="permission-subject-selection"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Resource ID', 'Property')"/></label>
+          <div class="col-10">
+            <input type="text" name="id_or_empty"
+              value="{/envelope/params/resource_id}"
+              size="50"
+              maxlength="100"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-2 control-label">
+            <xsl:value-of select="gsa:i18n ('Resource Type', 'Property')"/> (<xsl:value-of select="gsa:i18n ('for Super permissions', 'Permission')"/>)
+          </label>
+          <div class="col-10">
+            <select name="optional_resource_type">
+              <option value="">--</option>
+              <option value="user">User</option>
+              <option value="role">Role</option>
+              <option value="group">Group</option>
+            </select>
+          </div>
+        </div>
       </form>
     </div>
   </div>
