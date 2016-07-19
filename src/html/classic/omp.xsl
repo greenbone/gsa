@@ -28370,7 +28370,7 @@ should not have received it.
                 </xsl:choose>
               </xsl:when>
               <xsl:when test="type/text() = 'report_format_list'">
-                <xsl:variable name="selected_ids" select="str:tokenize (value, ',')"/>
+                <xsl:variable name="selected_ids" select="str:tokenize (value/text(), ',')"/>
                 <xsl:variable name="param_name" select="name"/>
                 <select name="id_list:" multiple="1">
                   <xsl:for-each select="$all_formats">
@@ -28389,6 +28389,8 @@ should not have received it.
                     </xsl:choose>
                   </xsl:for-each>
                 </select>
+                <!-- Needed to allow saving empty lists -->
+                <input name="include_id_list:{$param_name}" type="hidden" value="1"/> 
               </xsl:when>
               <xsl:otherwise>
                 <!-- Presume type "text". -->
@@ -28436,6 +28438,25 @@ should not have received it.
               </xsl:when>
               <xsl:when test="type/text() = 'string'">
                 <xsl:value-of select="value"/>
+              </xsl:when>
+              <xsl:when test="type/text() = 'report_format_list'">
+                <xsl:for-each select="value/report_format">
+                  <xsl:if test="position() != 1">
+                    <xsl:text>, </xsl:text>
+                  </xsl:if>
+                  <xsl:choose>
+                    <xsl:when test="name">
+                      <a href="/omp?cmd=get_report_format&amp;report_format_id={@id}&amp;token={/envelope/token}">
+                        <xsl:value-of select="name"/>
+                      </a>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <i>
+                        <xsl:value-of select="@id"/>
+                      </i>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </xsl:for-each>
               </xsl:when>
               <xsl:otherwise>
                 <!-- Presume type "text". -->

@@ -1286,6 +1286,8 @@ init_validator ()
   openvas_validator_add (validator, "id_list:name",    "^ *[0-9]+ *$");
   openvas_validator_add (validator, "id_list:value",    "^[[:alnum:]\\-_ ]+:[a-z0-9\\-]+$");
   openvas_validator_add (validator, "ifaces_allow", "^(0|1)$");
+  openvas_validator_add (validator, "include_id_list:name",  "^[[:alnum:]\\-_ ]+$");
+  openvas_validator_add (validator, "include_id_list:value", "^(0|1)$");
   openvas_validator_add (validator, "installer",      "(?s)^.*$");
   openvas_validator_add (validator, "installer_sig",  "(?s)^.*$");
   openvas_validator_add (validator, "lang",
@@ -1733,6 +1735,7 @@ params_append_mhd (params_t *params,
           == 0)
       || (strncmp (name, "settings_filter:", strlen ("settings_filter:")) == 0)
       || (strncmp (name, "file:", strlen ("file:")) == 0)
+      || (strncmp (name, "include_id_list:", strlen ("include_id_list:")) == 0)
       || (strncmp (name, "parameter:", strlen ("parameter:")) == 0)
       || (strncmp (name, "password:", strlen ("password:")) == 0)
       || (strncmp (name, "preference:", strlen ("preference:")) == 0)
@@ -2623,6 +2626,7 @@ params_mhd_add (void *params, enum MHD_ValueKind kind, const char *name,
           == 0)
       || (strncmp (name, "settings_filter:", strlen ("settings_filter:")) == 0)
       || (strncmp (name, "file:", strlen ("file:")) == 0)
+      || (strncmp (name, "include_id_list:", strlen ("include_id_list:")) == 0)
       || (strncmp (name, "parameter:", strlen ("parameter:")) == 0)
       || (strncmp (name, "password:", strlen ("password:")) == 0)
       || (strncmp (name, "preference:", strlen ("preference:")) == 0)

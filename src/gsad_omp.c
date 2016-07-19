@@ -19033,7 +19033,7 @@ save_report_format_omp (credentials_t * credentials, params_t *params,
 {
   int ret;
   gchar *html, *response;
-  params_t *preferences, *id_list_params;
+  params_t *preferences, *id_list_params, *include_id_lists;
   const char *no_redirect, *report_format_id, *name, *summary, *enable;
   entity_t entity;
 
@@ -19050,7 +19050,8 @@ save_report_format_omp (credentials_t * credentials, params_t *params,
   CHECK_PARAM_INVALID (enable, "Save Report Format", "edit_report_format");
 
   id_list_params = params_values (params, "id_list:");
-  if (id_list_params)
+  include_id_lists = params_values (params, "include_id_list:");
+  if (include_id_lists)
     {
       GHashTable *id_lists;
       param_t *param;
@@ -19061,9 +19062,21 @@ save_report_format_omp (credentials_t * credentials, params_t *params,
       id_lists = g_hash_table_new_full (g_str_hash, g_str_equal,
                                         g_free, g_free);
 
+      params_iterator_init (&iter, include_id_lists);
+      while (params_iterator_next (&iter, &param_name, &param))
+        {
+          if (param->value == NULL)
+            continue;
+
+          g_hash_table_insert (id_lists, g_strdup (param_name), g_strdup (""));
+        }
+
       params_iterator_init (&iter, id_list_params);
       while (params_iterator_next (&iter, &param_name, &param))
         {
+          if (param->value == NULL)
+            continue;
+
           gchar *colon_pos = strchr (param->value, ':');
 
           pref_name = g_strndup (param->value, colon_pos - param->value);
@@ -19071,13 +19084,13 @@ save_report_format_omp (credentials_t * credentials, params_t *params,
 
           old_values = g_hash_table_lookup (id_lists, pref_name);
 
-          if (old_values)
+          if (old_values && strcmp (old_values, ""))
             {
               new_values = g_strdup_printf ("%s,%s", old_values, value);
               g_hash_table_insert (id_lists, pref_name, new_values);
               g_free (value);
             }
-          else
+          else if (old_values)
             {
               g_hash_table_insert (id_lists, pref_name, value);
             }
