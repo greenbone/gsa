@@ -107,7 +107,7 @@
 
       var circle_scale = (5 * self.scale >= 2) ? 1 : 2 / 5 / self.scale;
 
-      self.graph.selectAll('.node').data(self.layout.nodes())
+      self.graph.selectAll('.node-marker').data(self.layout.nodes())
         .attr('cx', function (d) { return d.x })
         .attr('cy', function (d) { return d.y })
 
@@ -128,7 +128,7 @@
       var circle_scale = (5 * self.scale >= 2) ? 1 : 2 / 5 / self.scale;
       var text_scale = Math.sqrt(1/self.scale);
 
-      self.graph.selectAll('.node').data(self.layout.nodes())
+      self.graph.selectAll('.node-marker').data(self.layout.nodes())
         .attr('r', 5 * circle_scale)
 
       self.graph.selectAll('.node-label').data(self.layout.nodes())
@@ -150,22 +150,31 @@
     var color_scale = gch.severity_colors_gradient();
 
     this.graph.selectAll('.node').data(this.layout.nodes()).enter()
-      .append('circle')
+      .append('a')
         .classed('node', true)
-        .attr('r', 1.5)
-        .style('fill', function(d) {
-            if (d.id !== null)
-              return color_scale(d.severity)
-            else
-              return 'white';
-          })
-        .style('stroke', function(d) {
-            if (d.id !== null)
-              return d3.hcl(color_scale(d.severity)).darker(2);
-            else
-              return 'grey';
-          })
-        .call(self.layout.drag);
+        .attr('xlink:href',
+              function (d) {
+                  if (d.id === null)
+                    return null;
+                  return gch.details_page_url ('host', d.id, data.filter_info);
+                })
+        .append('circle')
+          .classed('node-marker', true)
+          .attr('r', 1.5)
+          .style('fill', function(d) {
+              if (d.id !== null)
+                return color_scale(d.severity)
+              else
+                return 'white';
+            })
+          .style('stroke', function(d) {
+              if (d.id !== null)
+                return d3.hcl(color_scale(d.severity)).darker(2);
+              else
+                return 'grey';
+            })
+          .on('click', function (d) { console.debug (self.layout.alpha()) })
+          .call(self.layout.drag);
 
     this.graph.selectAll('.node-label').data(this.layout.nodes()).enter()
       .append('text')

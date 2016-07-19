@@ -1,5 +1,11 @@
 2016-07-19  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/js/gsa_topology_chart.js
+	(TopologyChartGenerator.prototype.generate): Make the nodes link to
+	the host details pages if a uuid is available.
+
+2016-07-19  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/gsad.c (init_validator, params_append_mhd, params_mhd_add): Add
 	hashtable param "include_id_list".
 
