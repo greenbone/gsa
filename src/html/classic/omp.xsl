@@ -26444,9 +26444,9 @@ should not have received it.
                   <xsl:text>Super (Has super access)</xsl:text>
                 </option>
               </xsl:if>
-              <xsl:for-each select="exslt:node-set ($commands)/*">
+              <xsl:for-each select="exslt:node-set ($commands)/*[gsa:may-op (name)]">
                 <xsl:choose>
-                  <xsl:when test="$restrict_type and gsa:may-op (name) and starts-with (gsa:lower-case (name), concat ('get_', $restrict_type))">
+                  <xsl:when test="$restrict_type and starts-with (gsa:lower-case (name), concat ('get_', $restrict_type))">
                     <option value="{gsa:lower-case (name)}" selected="1">
                       <xsl:value-of select="gsa:lower-case (name)"/>
                       <xsl:text> (</xsl:text>
@@ -26454,15 +26454,22 @@ should not have received it.
                       <xsl:text>)</xsl:text>
                     </option>
                   </xsl:when>
-                  <xsl:when test="gsa:may-op (name)">
-                    <option value="{gsa:lower-case (name)}">
+                  <xsl:when test="not (preceding-sibling::node ())">
+                    <option value="{gsa:lower-case (name)}" selected="1">
                       <xsl:value-of select="gsa:lower-case (name)"/>
                       <xsl:text> (</xsl:text>
                       <xsl:value-of select="gsa:capitalise (gsa:permission-description (name, resource))"/>
                       <xsl:text>)</xsl:text>
                     </option>
                   </xsl:when>
-                  <xsl:otherwise/>
+                  <xsl:otherwise>
+                    <option value="{gsa:lower-case (name)}">
+                      <xsl:value-of select="gsa:lower-case (name)"/>
+                      <xsl:text> (</xsl:text>
+                      <xsl:value-of select="gsa:capitalise (gsa:permission-description (name, resource))"/>
+                      <xsl:text>)</xsl:text>
+                    </option>
+                  </xsl:otherwise>
                 </xsl:choose>
               </xsl:for-each>
             </select>
@@ -28390,7 +28397,7 @@ should not have received it.
                   </xsl:for-each>
                 </select>
                 <!-- Needed to allow saving empty lists -->
-                <input name="include_id_list:{$param_name}" type="hidden" value="1"/> 
+                <input name="include_id_list:{$param_name}" type="hidden" value="1"/>
               </xsl:when>
               <xsl:otherwise>
                 <!-- Presume type "text". -->
