@@ -1,5 +1,10 @@
 2016-07-20  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/omp.xsl (report): Remove Details section from report
+	results.
+
+2016-07-20  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/omp.xsl (report): Improve message if no results could be
 	found in a report.
 

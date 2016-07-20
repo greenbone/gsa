@@ -4033,14 +4033,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:with-param name="full-count" select="report/result_count/full"/>
   </xsl:call-template>
 
-  <div class="section-header">
-    <a href="#" class="toggle-action-icon icon icon-action"
-      data-target="#table-box" data-name="Details"
-      data-variable="table-box--collapsed">
-        <img src="/img/fold.png"/>
-    </a>
-    <h3><xsl:value-of select="gsa:i18n ('Details')"/></h3>
-  </div> <!-- /section-header -->
   <div id="table-box" class="section-box">
       <xsl:choose>
         <xsl:when test="count(report/results/result) &gt; 0">
