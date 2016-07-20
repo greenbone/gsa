@@ -4086,39 +4086,52 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </div>
         </xsl:when>
         <xsl:otherwise>
-          <div style="padding: 1px">
-            <p><xsl:value-of select="gsa:i18n ('0 results', 'Result')"/></p>
-            <p>
-            <xsl:value-of select="gsa:i18n ('Empty reports can happen for the following reasons:', 'Result')"/>
-            </p>
-            <p>
-            <ul>
-            <li><xsl:value-of select="gsa:i18n ('The target hosts were regarded dead.', 'Result')"/></li>
-            <li><xsl:value-of select="gsa:i18n ('The filter does not match any result.', 'Result')"/></li>
-            <li><xsl:value-of select="gsa:i18n ('A very small or non-verbose scan configuration was applied.', 'Result')"/></li>
-            </ul>
-            </p>
-            <xsl:choose>
-              <xsl:when test="report/hosts/count = 0">
-                <p><xsl:value-of select="gsa:i18n ('This report also contains no hosts.', 'Report')"/></p>
-              </xsl:when>
-              <xsl:otherwise>
-                <a href="/omp?cmd=get_report_section&amp;report_id={report/@id}&amp;report_section=hosts&amp;result_hosts_only=0&amp;token={/envelope/token}">
-                  <p><xsl:value-of select="gsa-i18n:strformat (gsa:n-i18n ('However, this report contains %1 host.', 'However, this report contains %1 hosts.', report/hosts/count), report/hosts/count)"/></p>
-                </a>
-              </xsl:otherwise>
-            </xsl:choose>
-            <xsl:if test="report/errors/count &gt; 0">
-              <xsl:apply-templates select="report" mode="section-link">
-                <xsl:with-param name="count" select="result_count/full"/>
-                <xsl:with-param name="section" select="'errors'"/>
-                <xsl:with-param name="type" select="$type"/>
-                <xsl:with-param name="link_style" select="'element'"/>
-                <xsl:with-param name="element">
-                  <p title="{gsa:i18n ('Click here to go to the Errors page', 'Result')}."><xsl:value-of select="gsa:i18n ('This report contains at least one Error message', 'Result')"/>.</p>
-                </xsl:with-param>
-              </xsl:apply-templates>
-            </xsl:if>
+          <div>
+            <p><xsl:value-of select="gsa:i18n ('The report is empty. This can happen for the following reasons:', 'Result')"/></p>
+            <div>
+              <ul>
+                <xsl:choose>
+                  <xsl:when test="report/result_count/full = 0">
+                    <li>
+                      <p><xsl:value-of select="gsa:i18n ('The target hosts were regarded dead.', 'Result')"/></p>
+                      <p><xsl:value-of select="gsa:i18n ('Solution:', 'Result')"/><br/>
+                        <xsl:value-of select="gsa:i18n ('You could change the Alive Test method of the the target id is available in the results and could be used to build this link. But in case the targets are indeed dead, the scan duration might increase significantly.', 'Result')"/>
+                      </p>
+                    </li>
+                  </xsl:when>
+                  <xsl:when test="report/result_count/full &gt; 0">
+                    <li>
+                      <p><xsl:value-of select="gsa-i18n:strformat ('The filter does not match any of %1 results.', report/result_count/full)"/></p>
+                      <p><xsl:value-of select="gsa:i18n ('Solution:', 'Result')"/>
+                      </p>
+                      <ul>
+                        <xsl:choose>
+                          <xsl:when test="not (contains ($levels, 'g')) or contains (translate (report/filters/term, ' ', ''), 'severity>')">
+                            <li>
+                              <xsl:value-of select="gsa:i18n ('You have excluded log messages. Start the filter edit dialog.', 'Result')"/>
+                            </li>
+                          </xsl:when>
+                        </xsl:choose>
+                        <xsl:choose>
+                          <xsl:when test="report/task/progress = 1">
+                            <li>
+                              <xsl:value-of select="gsa:i18n ('The scan just started. Please reload this page to update the status.', 'Result')"/>
+                            </li>
+                          </xsl:when>
+                        </xsl:choose>
+                        <xsl:choose>
+                          <xsl:when test="report/task/progress &gt; 1">
+                            <li>
+                              <xsl:value-of select="gsa:i18n ('The scan is still running. Please reload this page to update the status.', 'Result')"/>
+                            </li>
+                          </xsl:when>
+                        </xsl:choose>
+                      </ul>
+                    </li>
+                  </xsl:when>
+                </xsl:choose>
+              </ul>
+            </div>
           </div>
         </xsl:otherwise>
       </xsl:choose>
