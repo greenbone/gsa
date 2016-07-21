@@ -13910,7 +13910,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
         g_string_append (levels, "");
     }
   else if (strlen (levels->str) == 0)
-    g_string_append (levels, "hmlg");
+    g_string_append (levels, "hml");
 
   sort_field = params_value (params, "sort_field");
   sort_order = params_value (params, "sort_order");
