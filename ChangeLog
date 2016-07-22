@@ -1,5 +1,19 @@
 2016-07-22  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/gsad_omp.c (send_settings_filters, save_my_settings_omp): Wrap
+	modify_setting responses in "save_setting" elements that contain the
+	name or id of the setting.
+
+	* src/html/classic/js/greenbone.js (RESPONSE_SELECTORS): Add case for
+	edit_my_settings.
+	(OMPDialog.prototype.error): Add status_code parameter.
+	(OMPDialog.prototype.setErrorFromResponse): Only select OMP responses
+	without an "OK" status code.  Add name of setting to modify to message
+	title where applicable.  Add status code as parameter to error function
+	instead of appending it to the message here.
+
+2016-07-22  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	(handle_request): Search template for help page in the XSL files
 	and set HTTP status to 404 if it's not found.
 

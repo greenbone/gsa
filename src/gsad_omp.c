@@ -20029,11 +20029,15 @@ send_settings_filters (gnutls_session_t *session, params_t *data,
               g_free (base64);
 
               entity = NULL;
+              xml_string_append (xml,
+                                 "<save_setting id=\"%s\">",
+                                 uuid);
               if (read_entity_and_string (session, &entity, &xml))
                 {
                   free_entity (entity);
                   return -1;
                 }
+              xml_string_append (xml, "</save_setting>");
               if (! omp_success (entity))
                 {
                   set_http_status_from_entity (entity, response_data);
@@ -20195,6 +20199,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
       g_free (passwd_64);
 
       entity = NULL;
+      xml_string_append (xml, "<save_setting name=\"Password\">");
       if (read_entity_and_string (&session, &entity, &xml))
         {
           g_string_free (xml, TRUE);
@@ -20206,6 +20211,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
                                "Diagnostics: Failure to receive response from manager daemon.",
                                "/omp?cmd=get_my_settings", response_data);
         }
+      xml_string_append (xml, "</save_setting>");
 
       status = entity_attribute (entity, "status");
       if (status && (strlen (status) > 0) && (status[0] == '2'))
@@ -20249,6 +20255,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
       g_free (text_64);
 
       entity = NULL;
+      xml_string_append (xml, "<save_setting name=\"Timezone\">");
       if (read_entity_and_string (&session, &entity, &xml))
         {
           g_string_free (xml, TRUE);
@@ -20260,6 +20267,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
                                "Diagnostics: Failure to receive response from manager daemon.",
                                "/omp?cmd=get_my_settings", response_data);
         }
+      xml_string_append (xml, "</save_setting>");
 
       status = entity_attribute (entity, "status");
       if (status && (strlen (status) > 0) && (status[0] == '2'))
@@ -20315,6 +20323,9 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
       g_free (max_64);
 
       entity = NULL;
+      xml_string_append (xml,
+                         "<save_setting id=\"%s\">",
+                         "5f5a8712-8017-11e1-8556-406186ea4fc5");
       if (read_entity_and_string (&session, &entity, &xml))
         {
           g_string_free (xml, TRUE);
@@ -20327,6 +20338,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
                                "Diagnostics: Failure to receive response from manager daemon.",
                                "/omp?cmd=get_my_settings", response_data);
         }
+      xml_string_append (xml, "</save_setting>");
       if (! omp_success (entity))
         {
           set_http_status_from_entity (entity, response_data);
@@ -20363,6 +20375,9 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
       g_free (fname_64);
 
       entity = NULL;
+      xml_string_append (xml,
+                         "<save_setting id=\"%s\">",
+                         "a6ac88c5-729c-41ba-ac0a-deea4a3441f2");
       if (read_entity_and_string (&session, &entity, &xml))
         {
           g_string_free (xml, TRUE);
@@ -20375,6 +20390,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
                                "Diagnostics: Failure to receive response from manager daemon.",
                                "/omp?cmd=get_my_settings", response_data);
         }
+      xml_string_append (xml, "</save_setting>");
       if (omp_success (entity) != 1)
         {
           set_http_status_from_entity (entity, response_data);
@@ -20411,6 +20427,9 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
       g_free (fname_64);
 
       entity = NULL;
+      xml_string_append (xml,
+                         "<save_setting id=\"%s\">",
+                         "a6ac88c5-729c-41ba-ac0a-deea4a3441f2");
       if (read_entity_and_string (&session, &entity, &xml))
         {
           g_string_free (xml, TRUE);
@@ -20423,6 +20442,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
                                "Diagnostics: Failure to receive response from manager daemon.",
                                "/omp?cmd=get_my_settings", response_data);
         }
+      xml_string_append (xml, "</save_setting>");
       if (omp_success (entity) != 1)
         {
           set_http_status_from_entity (entity, response_data);
@@ -20459,6 +20479,9 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
       g_free (fname_64);
 
       entity = NULL;
+      xml_string_append (xml,
+                         "<save_setting id=\"%s\">",
+                         "e1a2ae0b-736e-4484-b029-330c9e15b900");
       if (read_entity_and_string (&session, &entity, &xml))
         {
           g_string_free (xml, TRUE);
@@ -20471,6 +20494,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
                                "Diagnostics: Failure to receive response from manager daemon.",
                                "/omp?cmd=get_my_settings", response_data);
         }
+      xml_string_append (xml, "</save_setting>");
       if (omp_success (entity) != 1)
         {
           set_http_status_from_entity (entity, response_data);
@@ -20507,6 +20531,9 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
       g_free (lang_64);
 
       entity = NULL;
+      xml_string_append (xml,
+                         "<save_setting id=\"%s\">",
+                         "6765549a-934e-11e3-b358-406186ea4fc5");
       if (read_entity_and_string (&session, &entity, &xml))
         {
           g_string_free (xml, TRUE);
@@ -20519,6 +20546,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
                                "Diagnostics: Failure to receive response from manager daemon.",
                                "/omp?cmd=get_my_settings", response_data);
         }
+      xml_string_append (xml, "</save_setting>");
       if (omp_success (entity))
         {
           gchar *language_code;
@@ -20608,6 +20636,9 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
       g_free (text_64);
 
       entity = NULL;
+      xml_string_append (xml,
+                         "<save_setting id=\"%s\">",
+                         "f16bb236-a32d-4cd5-a880-e0fcf2599f59");
       if (read_entity_and_string (&session, &entity, &xml))
         {
           g_string_free (xml, TRUE);
@@ -20620,6 +20651,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
                                "Diagnostics: Failure to receive response from manager daemon.",
                                "/omp?cmd=get_my_settings", response_data);
         }
+      xml_string_append (xml, "</save_setting>");
 
       status = entity_attribute (entity, "status");
       if (status && (strlen (status) > 0) && (status[0] == '2'))
@@ -20671,6 +20703,9 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
       g_free (text_64);
 
       entity = NULL;
+      xml_string_append (xml,
+                         "<save_setting id=\"%s\">",
+                         "77ec2444-e7f2-4a80-a59b-f4237782d93f");
       if (read_entity_and_string (&session, &entity, &xml))
         {
           g_string_free (xml, TRUE);
@@ -20683,6 +20718,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
                                "Diagnostics: Failure to receive response from manager daemon.",
                                "/omp?cmd=get_my_settings", response_data);
         }
+      xml_string_append (xml, "</save_setting>");
       if (! omp_success (entity))
         {
           set_http_status_from_entity (entity, response_data);
@@ -20720,6 +20756,29 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
                               "/omp?cmd=get_my_settings", response_data);
         }
       g_free (text_64);
+
+      entity = NULL;
+      xml_string_append (xml,
+                         "<save_setting id=\"%s\">",
+                         "7eda49c5-096c-4bef-b1ab-d080d87300df");
+      if (read_entity_and_string (&session, &entity, &xml))
+        {
+          g_string_free (xml, TRUE);
+          openvas_server_close (socket, session);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while saving settings. "
+                               "It is unclear whether all the settings were saved. "
+                               "Diagnostics: Failure to receive response from manager daemon.",
+                               "/omp?cmd=get_my_settings", response_data);
+        }
+      xml_string_append (xml, "</save_setting>");
+      if (! omp_success (entity))
+        {
+          set_http_status_from_entity (entity, response_data);
+          modify_failed = 1;
+        }
     }
 
   openvas_server_close (socket, session);

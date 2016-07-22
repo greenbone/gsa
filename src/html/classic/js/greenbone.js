@@ -193,6 +193,7 @@
     edit_credential:     'modify_credential_response',
     edit_filter:         'modify_filter_response',
     edit_group:          'modify_group_response',
+    edit_my_settings:    'modify_setting_response',
     edit_note:           'modify_note_response',
     edit_override:       'modify_override_response',
     edit_permission:     'modify_permission_response',
@@ -322,10 +323,20 @@
     });
   };
 
-  OMPDialog.prototype.error = function(message, title) {
+  OMPDialog.prototype.error = function(message, title, status_code) {
+    var displayed_title;
     if (!title) {
-      title = 'Error:';
+      displayed_title = 'Error:';
     }
+    else {
+      displayed_title = title;
+    }
+
+    if (status_code !== undefined && status_code !== '') {
+      displayed_title 
+        = displayed_title + ' <i>(Status code: ' + status_code + ')</i>';
+    }
+
     // Remove previous errors
     this.dialog.find('div.ui-state-error').remove();
     // Insert our error message
@@ -354,7 +365,8 @@
     var self = this;
     var xml = $(jqXHR.responseXML);
     var html = $(jqXHR.responseText);
-    var response = xml.find(RESPONSE_SELECTORS[self.command]);
+    var response = xml.find(RESPONSE_SELECTORS[self.command] + 
+                            '[status!="200"][status!="201"][status!="202"]');
     var gsad_msg = xml.find('gsad_msg');
     var action_result = xml.find('action_result');
     var generic_omp_response = xml.find('omp_response');
@@ -376,6 +388,21 @@
       error_code = gsad_msg.attr('status_code');
     }
     else if (response.length) {
+      var parent = response.parent();
+      if (parent[0].nodeName === 'save_setting') {
+        var id = parent.attr('id');
+        var name = parent.attr('name');
+        if (! gsa.is_defined(name)) {
+          var name_elem = xml.find ('setting[id="' + id + '"] name');
+          if (gsa.is_defined (name_elem)) {
+            name = name_elem.justtext();
+          }
+          else {
+            name = id;
+          }
+        }
+        error_title = 'Error modifying setting "' + name + '":';
+      }
       error = response.attr('status_text');
       error_code = response.attr('status');
     }
@@ -405,11 +432,7 @@
       error = login_form_html.find('.error_message').text();
     }
 
-    if (error_code !== undefined && error_code !== '') {
-      error_title = error_title + ' <i>(Status code: ' + error_code + ')</i>';
-    }
-
-    self.error(error, error_title);
+    self.error(error, error_title, error_code);
   };
 
   OMPDialog.prototype.postForm = function() {
