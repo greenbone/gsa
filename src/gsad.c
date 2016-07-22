@@ -66,6 +66,7 @@
 #include <openvas/base/openvas_file.h>
 #include <openvas/base/openvas_networking.h>
 #include <openvas/base/pidfile.h>
+#include <openvas/omp/xml.h>
 #include <openvas/misc/openvas_uuid.h>
 #include <pthread.h>
 #include <pwd.h> /* for getpwnam */
@@ -4677,6 +4678,8 @@ handle_request (void *cls, struct MHD_Connection *connection,
               gchar **preferred_languages;
               gchar *xsl_filename = NULL;
               gchar *page = g_strndup ((gchar *) &url[6], MAX_FILE_NAME_SIZE);
+              GHashTable *template_attributes;
+              int template_found = 0;
 
               // Disallow names that would be invalid for XML elements
               if (g_regex_match_simple ("^(?!xml)[[:alpha:]_][[:alnum:]-_.]*$",
@@ -4725,7 +4728,6 @@ handle_request (void *cls, struct MHD_Connection *connection,
                                      pre,
                                      credentials->capabilities);
               g_free (pre);
-              g_free (page);
 
               preferred_languages = g_strsplit (credentials->language, ":", 0);
 
@@ -4756,15 +4758,44 @@ handle_request (void *cls, struct MHD_Connection *connection,
                   index ++;
                 }
 
+              template_attributes
+                = g_hash_table_new (g_str_hash, g_str_equal);
+
+              g_hash_table_insert (template_attributes, "match", page);
+              g_hash_table_insert (template_attributes, "mode", "help");
+
               if (xsl_filename)
-                res = xsl_transform_with_stylesheet (xml, xsl_filename,
-                                                     &response_data);
+                {
+                  res = xsl_transform_with_stylesheet (xml, xsl_filename,
+                                                       &response_data);
+
+                  // Try to find the requested page template
+                  template_found 
+                    = find_element_in_xml_file (xsl_filename, "xsl:template",
+                                                template_attributes);
+                }
               else
-                res = xsl_transform_with_stylesheet (xml, "help.xsl",
-                                                     &response_data);
+                {
+                  res = xsl_transform_with_stylesheet (xml, "help.xsl",
+                                                       &response_data);
+                }
+
+              if (template_found == 0)
+                {
+                  // Try finding page template again in default help
+                  template_found 
+                    = find_element_in_xml_file ("help.xsl", "xsl:template",
+                                                template_attributes);
+                }
+
+              if (template_found == 0)
+                {
+                  response_data.http_status_code = MHD_HTTP_NOT_FOUND;
+                }
 
               g_strfreev (preferred_languages);
               g_free (xsl_filename);
+              g_free (page);
             }
           if (res == NULL)
             {
