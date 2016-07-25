@@ -234,7 +234,7 @@ table.gbntable {
 }
 
 /* dark grey row */
-.gbntablehead2 td {
+.gbntablehead2 td, .gbntablehead2 th {
   text-align:left;
   background-color: #3A3A3A;
   color: #FFFFFF;
