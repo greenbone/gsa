@@ -1436,7 +1436,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <h3>SCP</h3>
 
       <p>
-        The report will be copied to the given destination using "scp".
+        The report will be copied to the given destination using "scp" with
+        the given login credentials.
+      </p>
+
+      <p>
+        Optionally the contents of an SSH user key database file can be given
+        in the "Known Hosts" field, which will be used in addition to the
+        default files ~/.ssh/known_hosts and ~/.ssh/known_hosts2.
       </p>
 
       <p>

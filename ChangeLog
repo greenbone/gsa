@@ -1,3 +1,8 @@
+2016-07-25  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/help.xsl (new_alert.html): Add short info about the
+	credentials and the "Known Hosts" field.
+
 2016-07-25  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/css/gsa-style.css: Add table-fixed css class to allow
