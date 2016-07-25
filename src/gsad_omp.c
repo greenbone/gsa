@@ -132,6 +132,10 @@ static char *get_asset (credentials_t *, params_t *, const char *,
 static char *get_assets (credentials_t *, params_t *, const char *,
                          cmd_response_data_t*);
 
+static char *get_assets_chart (credentials_t *, params_t *, const char *,
+                               cmd_response_data_t*);
+
+
 static char *get_task (credentials_t *, params_t *, const char *,
                        cmd_response_data_t*);
 
@@ -1514,6 +1518,9 @@ generate_page (credentials_t *credentials, params_t *params, gchar *response,
 
   if (strcmp (next, "get_assets") == 0)
     return get_assets (credentials, params, response, response_data);
+
+  if (strcmp (next, "get_assets_chart") == 0)
+    return get_assets_chart (credentials, params, response, response_data);
 
   if (strcmp (next, "get_config") == 0)
     return get_config (credentials, params, response, 0, response_data);
@@ -28241,6 +28248,40 @@ save_asset_omp (credentials_t * credentials, params_t *params,
   free_entity (entity);
   g_free (response);
   return html;
+}
+
+/**
+ * @brief Get an assets chart, XSL transform the result.
+ *
+ * @param[in]  credentials       Username and password for authentication.
+ * @param[in]  params            Request parameters.
+ * @param[in]  extra_xml         Extra XML to insert inside page element.
+ * @param[out] response_data     Extra data return for the HTTP response.
+ *
+ * @return Result of XSL transformation.
+ */
+static char *
+get_assets_chart (credentials_t *credentials, params_t *params,
+                  const char *extra_xml, cmd_response_data_t* response_data)
+{
+  return xsl_transform_omp (credentials, g_strdup ("<get_assets_chart/>"),
+                            response_data);
+}
+
+/**
+ * @brief Get an assets chart, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+get_assets_chart_omp (credentials_t * credentials, params_t *params,
+                      cmd_response_data_t* response_data)
+{
+  return get_assets_chart (credentials, params, NULL, response_data);
 }
 
 

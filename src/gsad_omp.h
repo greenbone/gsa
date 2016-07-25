@@ -466,5 +466,6 @@ char * export_asset_omp (credentials_t *, params_t *, enum content_type *,
                          char **, gsize *, cmd_response_data_t*);
 char * export_assets_omp (credentials_t *, params_t *, enum content_type *,
                           char **, gsize *, cmd_response_data_t*);
+char * get_assets_chart_omp (credentials_t *, params_t *, cmd_response_data_t*);
 
 #endif /* not _GSAD_OMP_H */

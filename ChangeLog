@@ -1,3 +1,20 @@
+2016-07-25  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Add page for detached assets chart.
+
+	* src/gsad_omp.c (generate_page): Add case for get_assets_chart.
+	(get_assets_chart, get_assets_chart_omp): New functions.
+
+	* src/gsad_omp.h (get_assets_chart_omp): New function prototype.
+
+	* src/gsad.c (init_validator, exec_omp_get, handle_request): Add
+	cases for get_assets_chart command.
+
+	* src/html/classic/gsad.xsl (envelope): Do not add header and footer
+	elements for get_assets_chart.
+
+	* src/html/classic/omp.xsl (get_assets_chart): New template.
+
 2016-07-22  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/js/greenbone.js: Update coding style.

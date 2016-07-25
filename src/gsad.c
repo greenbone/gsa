@@ -1060,6 +1060,7 @@ init_validator ()
                          "|(get_aggregate)"
                          "|(get_asset)"
                          "|(get_assets)"
+                         "|(get_assets_chart)"
                          "|(get_config)"
                          "|(get_config_family)"
                          "|(get_config_nvt)"
@@ -2839,6 +2840,7 @@ exec_omp_get (struct MHD_Connection *connection,
   ELSE (new_alert)
   ELSE (new_group)
   ELSE (new_role)
+  ELSE (get_assets_chart)
   ELSE (get_task)
   ELSE (get_tasks)
   ELSE (get_tasks_chart)
@@ -4851,6 +4853,7 @@ handle_request (void *cls, struct MHD_Connection *connection,
               && strcmp (credentials->username, guest_username) == 0
               && cmd
               && (strcmp (cmd, "get_aggregate") == 0
+                  || strcmp (cmd, "get_assets_chart") == 0
                   || strcmp (cmd, "get_tasks_chart") == 0))
             {
               add_guest_chart_content_security_headers (response);

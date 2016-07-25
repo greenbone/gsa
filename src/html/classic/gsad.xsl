@@ -2472,7 +2472,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template match="envelope">
   <xsl:choose>
-    <xsl:when test="params/cmd = 'get_aggregate' or params/cmd = 'get_tasks_chart'">
+    <xsl:when test="params/cmd = 'get_aggregate' or params/cmd = 'get_assets_chart' or params/cmd = 'get_tasks_chart'">
       <xsl:apply-templates/>
     </xsl:when>
     <xsl:otherwise>
