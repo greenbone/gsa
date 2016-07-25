@@ -1,3 +1,10 @@
+2016-07-25  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Backport r25829.
+
+	* src/html/classic/help.xsl (new_alert.html): Add short info about the
+	credentials and the "Known Hosts" field.
+
 2016-06-01  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Backport r25447.
