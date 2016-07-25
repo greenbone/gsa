@@ -1,3 +1,12 @@
+2016-07-25  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/omp.xsl (list-window),
+	src/html/classic/js/greenbone.js,
+	src/html/classic/wizard.xsl (wizard-icon): Avoid opening of dialogs several
+	times. Set a data-dialog-id attribute to identifiy a dialog. If this dialog-id
+	is set it will first be checked if the dialog is already open when a user
+	clicks on the corresponding button.
+
 2016-07-25  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/help.xsl (new_alert.html): Add short info about the

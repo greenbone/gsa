@@ -47,26 +47,28 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <span class="icon-menu">
         <a href="/omp?cmd=wizard&amp;name=quick_first_scan&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
             title="{gsa:i18n ('Wizard', 'Wizard')}"
-            class="wizard-action-icon icon"
+            class="wizard-action-icon icon" data-dialog-id="quick_first_scan"
             data-name="quick_first_scan" data-button="{gsa:i18n ('Start Scan', 'Task Wizard')}">
           <img src="/img/wizard.png"/>
         </a>
         <ul>
           <li>
             <a href="/omp?cmd=wizard&amp;name=quick_first_scan&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-                class="wizard-action-icon"
+                class="wizard-action-icon" data-dialog-id="quick_first_scan"
                 data-name="quick_first_scan" data-button="{gsa:i18n ('Start Scan', 'Task Wizard')}">
               <xsl:value-of select="gsa:i18n ('Task Wizard', 'Task Wizard')"/>
             </a>
           </li>
           <li>
             <a href="/omp?cmd=wizard&amp;name=quick_task&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+              data-dialog-id="advanced_task_wizard"
                class="wizard-action-icon" data-name="quick_task" data-height="650">
               <xsl:value-of select="gsa:i18n ('Advanced Task Wizard', 'Advanced Task Wizard')"/>
             </a>
           </li>
           <li>
             <a href="/omp?cmd=wizard&amp;name=modify_task&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+              data-dialog-id="modify_task_wizard"
                class="wizard-action-icon" data-name="modify_task">
               <xsl:value-of select="gsa:i18n ('Modify Task Wizard', 'Modify Task Wizard')"/>
             </a>

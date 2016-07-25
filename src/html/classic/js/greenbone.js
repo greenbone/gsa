@@ -46,6 +46,8 @@
       .text();
   };
 
+  var DIALOGS = {};
+
   /*
   * GSA base object
   */
@@ -275,6 +277,7 @@
     this.success_reload = options.success_reload || {};
     this.close_reload = options.close_reload || {};
     this.height = is_defined(options.height) ? options.height : 500;
+    this.dialog_id = options.dialog_id;
 
     if (options.params === undefined) {
       this.params = {};
@@ -351,6 +354,11 @@
       // dereference self to avoid memory leak
       this.dialog.$omp = undefined;
     }
+    if (gsa.is_defined(this.dialog_id)) {
+      // remove dialog from global dialogs
+      delete DIALOGS[this.dialog_id];
+    }
+
     this.dialog.remove();
     this.dialog = undefined;
     this.parent_dialog = undefined;
@@ -601,6 +609,14 @@
   OMPDialog.prototype.show = function(button, callback) {
     var self = this;
     var done_func, fail_func;
+
+    if (gsa.is_defined(this.dialog_id)) {
+      // check if the dialog is already shown
+      if (gsa.is_defined(DIALOGS[this.dialog_id])) {
+        return;
+      }
+      DIALOGS[this.dialog_id] = this;
+    }
 
     if (button === undefined) { button = 'Create';}
     this.params.cmd = this.command;
@@ -956,6 +972,7 @@
     var reload_type = options.element.data('reload');
     var height = options.element.data('height');
     var close_reload_type = options.element.data('close-reload');
+    var dialog_id = options.element.data('dialog-id');
 
     if (!is_defined(reload_type)) {
       reload_type = options.default_reload;
@@ -999,6 +1016,7 @@
         close_reload: {type: close_reload_type},
         parent_dialog: parent_dialog,
         height: height,
+        dialog_id: dialog_id,
       }).show(options.button, callback);
     }
 
@@ -1200,23 +1218,27 @@
       var elem = $(this);
       var name = elem.data('name');
       var params = {name: name};
+      var dialog_id = elem.data('dialog-id');
+
+      var dialog = new OMPDialog({
+        cmd: 'wizard',
+        success_reload: {type: 'window'},
+        params: params,
+        height: elem.data('height'),
+        dialog_id: dialog_id,
+      });
+
+      if (name === 'quick_first_scan') {
+        dialog.old_postForm = dialog.postForm;
+        dialog.postForm = function() {
+          this.old_postForm();
+          // set 30 sec.
+          localStorage.setItem('autorefresh-interval', 30);
+        };
+      }
 
       elem.on('click', function(event) {
-        var dialog = new OMPDialog({
-          cmd: 'wizard',
-          success_reload: {type: 'window'},
-          params: params,
-          height: elem.data('height'),
-        });
         event.preventDefault();
-        if (name === 'quick_first_scan') {
-          dialog.old_postForm = dialog.postForm;
-          dialog.postForm = function() {
-            this.old_postForm();
-            // set 30 sec.
-            localStorage.setItem('autorefresh-interval', 30);
-          };
-        }
         dialog.show(elem.data('button'));
       });
     });
