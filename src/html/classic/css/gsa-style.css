@@ -270,12 +270,14 @@ table.gbntable {
 }
 
 table.stripped > tbody > tr:nth-child(odd),
+.gbntable > tbody > tr:nth-child(odd),
 tr.odd {
   text-align:left;
   background-color: #EEEEEE;
 }
 
 table.stripped > tbody > tr:hover,
+.gbntable > tbody > tr:hover,
 tr.odd:hover {
   background: #DDDDDD;
 }
