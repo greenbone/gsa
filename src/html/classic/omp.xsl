@@ -38478,124 +38478,130 @@ should not have received it.
         </xsl:otherwise>
       </xsl:choose>
     </h1>
-    <table class="gbntable" cellspacing="2" cellpadding="4">
+    <table class="gbntable table-fixed">
       <xsl:variable name="id" select="identifiers/identifier[1]/source/@id"/>
-      <tr class="gbntablehead2">
-        <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
-        <td><xsl:value-of select="gsa:i18n ('Value', 'Property')"/></td>
-        <td><xsl:value-of select="gsa:i18n ('Created', 'Property')"/></td>
-        <td><xsl:value-of select="gsa:i18n ('Source', 'Property')"/></td>
-        <td><xsl:value-of select="gsa:i18n ('Actions', 'Actions')"/></td>
-      </tr>
-      <xsl:for-each select="identifiers/identifier[(/envelope/params/show_all = '1') or (source/@id = $id)]">
-        <tr class="{gsa:table-row-class(position())}">
-          <td><xsl:value-of select="name"/></td>
-          <td>
-            <xsl:choose>
-              <xsl:when test="name = 'OS'">
-                <a href="/omp?cmd=get_asset&amp;asset_type=os&amp;asset_id={os/@id}&amp;token={/envelope/token}">
-                  <xsl:value-of select="value"/>
-                </a>
-              </xsl:when>
-              <xsl:otherwise>
-                <xsl:value-of select="value"/>
-              </xsl:otherwise>
-            </xsl:choose>
-          </td>
-          <td><xsl:value-of select="gsa:date (creation_time)"/></td>
-          <td>
-            <xsl:choose>
-              <xsl:when test="source/type = 'Report Host Detail'">
-                <xsl:text>Report </xsl:text>
-                <xsl:choose>
-                  <xsl:when test="source/deleted = '0'">
-                    <a href="/omp?cmd=get_report&amp;report_id={source/@id}&amp;overrides=1&amp;token={/envelope/token}">
-                      <xsl:value-of select="source/@id"/>
-                    </a>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <xsl:value-of select="source/@id"/>
-                  </xsl:otherwise>
-                </xsl:choose>
-                <xsl:text> (NVT </xsl:text>
-                <a href="/omp?cmd=get_info&amp;info_type=nvt&amp;info_id={source/data}&amp;min_qod=&amp;token={/envelope/token}">
-                  <xsl:value-of select="source/data"/>
-                </a>
-                <xsl:text>)</xsl:text>
-              </xsl:when>
-              <xsl:when test="substring (source/type, 1, 6) = 'Report'">
-                <xsl:text>Report </xsl:text>
-                <xsl:choose>
-                  <xsl:when test="source/deleted = '0'">
-                    <a href="/omp?cmd=get_report&amp;report_id={source/@id}&amp;overrides=1&amp;token={/envelope/token}">
-                      <xsl:value-of select="source/@id"/>
-                    </a>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <xsl:value-of select="source/@id"/>
-                  </xsl:otherwise>
-                </xsl:choose>
-                <xsl:text> (Target host)</xsl:text>
-              </xsl:when>
-              <xsl:when test="substring (source/type, 1, 4) = 'User'">
-                <xsl:text>User </xsl:text>
-                <xsl:choose>
-                  <xsl:when test="source/deleted = '0'">
-                    <a href="/omp?cmd=get_user&amp;user_id={source/@id}&amp;token={/envelope/token}">
-                      <xsl:value-of select="source/name"/>
-                    </a>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <xsl:value-of select="source/name"/>
-                  </xsl:otherwise>
-                </xsl:choose>
-              </xsl:when>
-              <xsl:otherwise>
-                <xsl:value-of select="source/type"/>
-                <xsl:text> </xsl:text>
-                <xsl:value-of select="source/@id"/>
-              </xsl:otherwise>
-            </xsl:choose>
-          </td>
-          <td width="100">
-            <xsl:call-template name="delete-icon">
-              <xsl:with-param name="type" select="'asset'"/>
-              <xsl:with-param name="id" select="@id"/>
-              <xsl:with-param name="params">
-                <input type="hidden" name="next_id" value="{$host_id}"/>
-                <input type="hidden" name="next" value="get_asset"/>
-              </xsl:with-param>
-            </xsl:call-template>
-          </td>
+      <thead>
+        <tr class="gbntablehead2">
+          <th style="width: 15%"><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></th>
+          <th style="width: 40%"><xsl:value-of select="gsa:i18n ('Value', 'Property')"/></th>
+          <th style="width: 10%"><xsl:value-of select="gsa:i18n ('Created', 'Property')"/></th>
+          <th style="width: 30%"><xsl:value-of select="gsa:i18n ('Source', 'Property')"/></th>
+          <th style="width: 5%"><xsl:value-of select="gsa:i18n ('Actions', 'Actions')"/></th>
         </tr>
-      </xsl:for-each>
-      <xsl:choose>
-        <xsl:when test="/envelope/params/show_all = '1'">
+      </thead>
+      <tbody>
+        <xsl:for-each select="identifiers/identifier[(/envelope/params/show_all = '1') or (source/@id = $id)]">
           <tr>
-            <td colspan="5" style="text-align:center;">
-              <a href="/omp?cmd=get_asset&amp;asset_type=host&amp;asset_id={@id}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-                title="{gsa:i18n ('Hosts', 'Host')}" style="margin-left:3px;">
-                Show only latest Identifiers
-              </a>
+            <td><xsl:value-of select="name"/></td>
+            <td>
+              <xsl:choose>
+                <xsl:when test="name = 'OS'">
+                  <a href="/omp?cmd=get_asset&amp;asset_type=os&amp;asset_id={os/@id}&amp;token={/envelope/token}">
+                    <xsl:value-of select="value"/>
+                  </a>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:value-of select="value"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </td>
+            <td><xsl:value-of select="gsa:date (creation_time)"/></td>
+            <td>
+              <xsl:choose>
+                <xsl:when test="source/type = 'Report Host Detail'">
+                  <xsl:text>Report </xsl:text>
+                  <xsl:choose>
+                    <xsl:when test="source/deleted = '0'">
+                      <a href="/omp?cmd=get_report&amp;report_id={source/@id}&amp;overrides=1&amp;token={/envelope/token}">
+                        <xsl:value-of select="source/@id"/>
+                      </a>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <xsl:value-of select="source/@id"/>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                  <xsl:text> (NVT </xsl:text>
+                  <a href="/omp?cmd=get_info&amp;info_type=nvt&amp;info_id={source/data}&amp;min_qod=&amp;token={/envelope/token}">
+                    <xsl:value-of select="source/data"/>
+                  </a>
+                  <xsl:text>)</xsl:text>
+                </xsl:when>
+                <xsl:when test="substring (source/type, 1, 6) = 'Report'">
+                  <xsl:text>Report </xsl:text>
+                  <xsl:choose>
+                    <xsl:when test="source/deleted = '0'">
+                      <a href="/omp?cmd=get_report&amp;report_id={source/@id}&amp;overrides=1&amp;token={/envelope/token}">
+                        <xsl:value-of select="source/@id"/>
+                      </a>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <xsl:value-of select="source/@id"/>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                  <xsl:text> (Target host)</xsl:text>
+                </xsl:when>
+                <xsl:when test="substring (source/type, 1, 4) = 'User'">
+                  <xsl:text>User </xsl:text>
+                  <xsl:choose>
+                    <xsl:when test="source/deleted = '0'">
+                      <a href="/omp?cmd=get_user&amp;user_id={source/@id}&amp;token={/envelope/token}">
+                        <xsl:value-of select="source/name"/>
+                      </a>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <xsl:value-of select="source/name"/>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:value-of select="source/type"/>
+                  <xsl:text> </xsl:text>
+                  <xsl:value-of select="source/@id"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </td>
+            <td width="100">
+              <xsl:call-template name="delete-icon">
+                <xsl:with-param name="type" select="'asset'"/>
+                <xsl:with-param name="id" select="@id"/>
+                <xsl:with-param name="params">
+                  <input type="hidden" name="next_id" value="{$host_id}"/>
+                  <input type="hidden" name="next" value="get_asset"/>
+                </xsl:with-param>
+              </xsl:call-template>
             </td>
           </tr>
-        </xsl:when>
-        <xsl:otherwise>
-          <tr>
-            <td colspan="4" style="text-align:center;">
-              ...
-            </td>
-          </tr>
-          <tr>
-            <td colspan="4" style="text-align:center;">
-              <a href="/omp?cmd=get_asset&amp;show_all=1&amp;asset_type=host&amp;asset_id={@id}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-                title="{gsa:i18n ('Hosts', 'Host')}" style="margin-left:3px;">
-                Show all Identifiers
-              </a>
-            </td>
-          </tr>
-        </xsl:otherwise>
-      </xsl:choose>
+        </xsl:for-each>
+      </tbody>
+      <tfoot>
+        <xsl:choose>
+          <xsl:when test="/envelope/params/show_all = '1'">
+            <tr>
+              <td colspan="5" style="text-align:center;">
+                <a href="/omp?cmd=get_asset&amp;asset_type=host&amp;asset_id={@id}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+                  title="{gsa:i18n ('Hosts', 'Host')}" style="margin-left:3px;">
+                  Show only latest Identifiers
+                </a>
+              </td>
+            </tr>
+          </xsl:when>
+          <xsl:otherwise>
+            <tr>
+              <td colspan="4" style="text-align:center;">
+                ...
+              </td>
+            </tr>
+            <tr>
+              <td colspan="4" style="text-align:center;">
+                <a href="/omp?cmd=get_asset&amp;show_all=1&amp;asset_type=host&amp;asset_id={@id}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+                  title="{gsa:i18n ('Hosts', 'Host')}" style="margin-left:3px;">
+                  Show all Identifiers
+                </a>
+              </td>
+            </tr>
+          </xsl:otherwise>
+        </xsl:choose>
+      </tfoot>
     </table>
   </div>
 
