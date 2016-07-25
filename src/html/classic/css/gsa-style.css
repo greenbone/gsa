@@ -211,9 +211,14 @@ div.label_none {
 /* BEGIN Greenbone Tables */
 
 table.gbntable {
-  text-align:left;
+  text-align: left;
   width: 100%;
   margin-bottom: 20px;
+  border-spacing: 2px; /* == cellspacing="2" */
+}
+
+.gbntable th, .gbntable td {
+  padding: 4px; /* == cellpadding="4" */
 }
 
 .gbntable th {
