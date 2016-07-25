@@ -259,6 +259,16 @@ table.gbntable {
   text-decoration: underline;
 }
 
+.table-fixed {
+  table-layout: fixed;
+}
+
+.table-fixed tr td {
+  /* hide to long text in cells */
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 table.stripped > tbody > tr:nth-child(odd),
 tr.odd {
   text-align:left;
