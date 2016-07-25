@@ -1,5 +1,11 @@
 2016-07-25  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/omp.xsl: Remove cellspacing and cellpadding attributes from
+	most tables. Both attributes are deprecated and got replaces by corresponsing
+	css styles in the gbntable classes.
+
+2016-07-25  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/omp.xsl (list-window),
 	src/html/classic/js/greenbone.js,
 	src/html/classic/wizard.xsl (wizard-icon): Avoid opening of dialogs several

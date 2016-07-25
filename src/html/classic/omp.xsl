@@ -2562,7 +2562,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:choose>
     <xsl:choose>
       <xsl:when test="$user_tags/count != 0">
-        <table class="gbntable" cellspacing="2" cellpadding="4">
+        <table class="gbntable">
           <tr class="gbntablehead2">
             <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
             <td><xsl:value-of select="gsa:i18n ('Value', 'Property')"/></td>
@@ -2823,7 +2823,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </div>
 
     <div class="section-box" id="permission-box">
-      <table class="gbntable" cellspacing="2" cellpadding="4">
+      <table class="gbntable">
         <tr class="gbntablehead2">
           <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
           <td><xsl:value-of select="gsa:i18n ('Description', 'Property')"/></td>
@@ -4045,7 +4045,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:with-param name="full-count" select="report/result_count/full"/>
               </xsl:apply-templates>
             </div>
-            <table class="gbntable" cellspacing="2" cellpadding="4">
+            <table class="gbntable">
               <xsl:apply-templates select="report" mode="details"/>
               <tr>
                 <td class="footnote" colspan="1000">
@@ -5214,7 +5214,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
       <!-- The entire table of resources, in a variable. -->
       <xsl:variable name="table">
-        <table class="gbntable" cellspacing="2" cellpadding="4" style="margin-bottom:0px;">
+        <table class="gbntable" style="margin-bottom:0px;">
 
           <!-- Column headings, top row. -->
           <tr class="gbntablehead2">
@@ -9004,7 +9004,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </h3>
     </div>
     <div class="section-box" id="using-box">
-      <table class="gbntable" cellspacing="2" cellpadding="4">
+      <table class="gbntable">
         <tr class="gbntablehead2">
           <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
         </tr>
@@ -9054,7 +9054,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 
   <div class="section-box" id="using-box2">
-    <table class="gbntable" cellspacing="2" cellpadding="4">
+    <table class="gbntable">
       <tr class="gbntablehead2">
         <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
       </tr>
@@ -12584,7 +12584,7 @@ should not have received it.
   </div>
 
   <div class="section-box" id="using-box">
-    <table class="gbntable" cellspacing="2" cellpadding="4">
+    <table class="gbntable">
       <tr class="gbntablehead2">
         <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
       </tr>
@@ -13001,7 +13001,7 @@ should not have received it.
     </div>
 
     <div class="section-box" id="using-box">
-      <table class="gbntable" cellspacing="2" cellpadding="4">
+      <table class="gbntable">
         <tr class="gbntablehead2">
           <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
         </tr>
@@ -13039,7 +13039,7 @@ should not have received it.
 
 <xsl:template name="html-filters-trash-table">
   <div>
-    <table class="gbntable" cellspacing="2" cellpadding="4">
+    <table class="gbntable">
       <tr class="gbntablehead2">
         <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
         <td><xsl:value-of select="gsa:i18n ('Term', 'Filter')"/></td>
@@ -15974,7 +15974,7 @@ should not have received it.
   </div>
 
   <div class="section-box" id="using-box">
-    <table class="gbntable" cellspacing="2" cellpadding="4">
+    <table class="gbntable">
       <tr class="gbntablehead2">
         <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
       </tr>
@@ -16213,7 +16213,7 @@ should not have received it.
         <input type="hidden" name="config_id" value="{$config_id}"/>
         <input type="hidden" name="name" value="{$config_name}"/>
         <input type="hidden" name="family" value="{$family}"/>
-        <table class="gbntable" cellspacing="2" cellpadding="4">
+        <table class="gbntable">
           <tr class="gbntablehead2">
             <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
             <td><xsl:value-of select="gsa:i18n ('OID', 'NVT')"/></td>
@@ -16349,7 +16349,7 @@ should not have received it.
 
     <h1><xsl:value-of select="gsa:i18n ('Network Vulnerability Tests', 'Scan Config')"/></h1>
 
-    <table class="gbntable" cellspacing="2" cellpadding="4">
+    <table class="gbntable">
       <tr class="gbntablehead2">
         <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
         <td><xsl:value-of select="gsa:i18n ('OID', 'NVT')"/></td>
@@ -16769,7 +16769,7 @@ should not have received it.
   <xsl:param name="config_name"></xsl:param>
   <xsl:param name="edit"></xsl:param>
   <div id="nvt-test-preferences">
-    <table class="gbntable" cellspacing="2" cellpadding="4">
+    <table class="gbntable">
       <tr class="gbntablehead2">
         <td><xsl:value-of select="gsa:i18n ('NVT', 'NVT')"/></td>
         <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
@@ -16790,7 +16790,7 @@ should not have received it.
 <xsl:template name="preferences-details" match="preferences" mode="details">
   <xsl:param name="config"></xsl:param>
   <div id="preferences">
-    <table class="gbntable" cellspacing="2" cellpadding="4">
+    <table class="gbntable">
       <tr class="gbntablehead2">
         <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
         <xsl:if test="$config != ''">
@@ -16831,7 +16831,7 @@ should not have received it.
 <xsl:template name="preferences-edit-details">
   <xsl:param name="config"></xsl:param>
   <div id="preferences">
-    <table class="gbntable" cellspacing="2" cellpadding="4">
+    <table class="gbntable">
       <tr class="gbntablehead2">
         <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
         <td><xsl:value-of select="gsa:i18n ('New Value', 'Scan Config')"/></td>
@@ -16895,7 +16895,7 @@ should not have received it.
 
 <xsl:template match="preferences" mode="scanner">
   <div id="preferences">
-    <table class="gbntable" cellspacing="2" cellpadding="4">
+    <table class="gbntable">
       <tr class="gbntablehead2">
         <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
         <td><xsl:value-of select="gsa:i18n ('Current Value', 'Scan Config')"/></td>
@@ -17284,7 +17284,7 @@ should not have received it.
 
 <xsl:template match="config" mode="families">
   <div id="families">
-    <table class="gbntable" cellspacing="2" cellpadding="4">
+    <table class="gbntable">
       <tr class="gbntablehead2">
         <td>
           <xsl:value-of select="gsa:i18n ('Family', 'Scan Config')"/>
@@ -17357,7 +17357,7 @@ should not have received it.
   <xsl:param name="config"></xsl:param>
   <xsl:param name="families"></xsl:param>
   <div id="families">
-    <table class="gbntable" cellspacing="2" cellpadding="4">
+    <table class="gbntable">
       <tr class="gbntablehead2">
         <td>
           <xsl:value-of select="gsa:i18n ('Family', 'Scan Config')"/>
@@ -17710,7 +17710,7 @@ should not have received it.
   </div>
 
   <div class="section-box" id="using-box">
-    <table class="gbntable" cellspacing="2" cellpadding="4">
+    <table class="gbntable">
       <tr class="gbntablehead2">
         <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
       </tr>
@@ -19078,7 +19078,7 @@ should not have received it.
   </div>
 
   <div class="section-box" id="using-box">
-    <table class="gbntable" cellspacing="2" cellpadding="4">
+    <table class="gbntable">
       <tr class="gbntablehead2">
         <td><xsl:value-of select="gsa:i18n('Name', 'Property')"/></td>
       </tr>
@@ -19642,7 +19642,7 @@ should not have received it.
 
         <h2><xsl:value-of select="gsa:i18n ('Scanner parameters', 'Scanner')"/></h2>
 
-        <table class="gbntable" cellspacing="2" cellpadding="4">
+        <table class="gbntable">
           <tr class="gbntablehead2">
             <td><xsl:value-of select="gsa:i18n('Name', 'Property')"/></td>
             <td><xsl:value-of select="gsa:i18n('Description', 'Property')"/></td>
@@ -19727,7 +19727,7 @@ should not have received it.
   </div>
 
   <div class="section-box" id="using-box">
-    <table class="gbntable" cellspacing="2" cellpadding="4">
+    <table class="gbntable">
       <tr class="gbntablehead2">
         <td><xsl:value-of select="gsa:i18n('Name', 'Property')"/></td>
       </tr>
@@ -20424,7 +20424,7 @@ should not have received it.
   </div>
 
   <div class="section-box" id="using-box">
-    <table class="gbntable" cellspacing="2" cellpadding="4">
+    <table class="gbntable">
       <tr class="gbntablehead2">
         <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
       </tr>
@@ -22222,7 +22222,7 @@ should not have received it.
           </xsl:when>
           <xsl:otherwise>
             <h1><xsl:value-of select="gsa:i18n ('CERT Advisories referencing this CVE', 'CVE')"/></h1>
-            <table class="gbntable" cellspacing="2" cellpadding="4">
+            <table class="gbntable">
               <tr class="gbntablehead2">
                 <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
                 <td><xsl:value-of select="gsa:i18n ('Title', 'Property')"/></td>
@@ -22260,7 +22260,7 @@ should not have received it.
           </xsl:when>
           <xsl:otherwise>
             <h1><xsl:value-of select="gsa:i18n ('Vulnerable products', 'CVE')"/></h1>
-            <table class="gbntable" cellspacing="2" cellpadding="4">
+            <table class="gbntable">
               <tr class="gbntablehead2">
                 <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
               </tr>
@@ -22285,7 +22285,7 @@ should not have received it.
           </xsl:when>
           <xsl:otherwise>
             <h1><xsl:value-of select="gsa:i18n ('NVTs addressing this CVE', 'CVE')"/></h1>
-            <table class="gbntable" cellspacing="2" cellpadding="4">
+            <table class="gbntable">
               <tr class="gbntablehead2">
                 <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
               </tr>
@@ -22449,7 +22449,7 @@ should not have received it.
       </xsl:when>
       <xsl:otherwise>
         <h1><xsl:value-of select="gsa:i18n ('Reported vulnerabilites', 'CPE')"/></h1>
-        <table class="gbntable" cellspacing="2" cellpadding="4">
+        <table class="gbntable">
           <tr class="gbntablehead2">
             <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
             <td width="104"><xsl:value-of select="gsa:i18n ('Severity', 'Severity')"/></td>
@@ -22601,7 +22601,7 @@ should not have received it.
               <h3>
               <xsl:if test="count(.)>1"><xsl:value-of select="position()"/>) </xsl:if><xsl:value-of select="gsa:i18n ('Family', 'OVAL Definition')"/>: <xsl:value-of select="./@family"/>
               </h3>
-              <table class="gbntable" cellspacing="2" cellpadding="4">
+              <table class="gbntable">
               <tr class="gbntablehead2">
                 <td><xsl:value-of select="gsa:i18n ('Type', 'Property')"/></td>
                 <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
@@ -22636,7 +22636,7 @@ should not have received it.
         <xsl:choose>
           <xsl:when test="count(info/ovaldef/raw_data/oval_definitions:definition/oval_definitions:metadata/oval_definitions:reference) > 0">
             <h2><xsl:value-of select="gsa:i18n ('References', 'SecInfo')"/></h2>
-            <table class="gbntable" cellspacing="2" cellpadding="4">
+            <table class="gbntable">
               <tr class="gbntablehead2">
                 <td><xsl:value-of select="gsa:i18n ('Source', 'OVAL Definition')"/></td>
                 <td><xsl:value-of select="gsa:i18n ('Ref.ID', 'OVAL Definition')"/></td>
@@ -22680,7 +22680,7 @@ should not have received it.
           <p><b><xsl:value-of select="gsa:i18n('Status', 'OVAL Definition')"/>: </b>
             <xsl:value-of select="info/ovaldef/raw_data/oval_definitions:definition/oval_definitions:metadata/oval_definitions:oval_repository/oval_definitions:status"/>
           </p>
-          <table class="gbntable" cellspacing="2" cellpadding="4">
+          <table class="gbntable">
             <tr class="gbntablehead2">
               <td><xsl:value-of select="gsa:i18n ('Status', 'OVAL Definition')"/></td>
               <td><xsl:value-of select="gsa:i18n ('Date', 'Date')"/></td>
@@ -23853,7 +23853,7 @@ should not have received it.
           <h3>
             <xsl:value-of select="gsa:i18n ('Associated Result', 'Note or Override')"/>
           </h3>
-          <table class="gbntable" cellspacing="2" cellpadding="4">
+          <table class="gbntable">
             <xsl:for-each select="get_results_response/result">
               <xsl:call-template name="result-detailed">
                 <xsl:with-param name="override-buttons">0</xsl:with-param>
@@ -24193,7 +24193,7 @@ should not have received it.
           <h3>
             <xsl:value-of select="gsa:i18n ('Associated Result', 'Note or Override')"/>
           </h3>
-          <table class="gbntable" cellspacing="2" cellpadding="4">
+          <table class="gbntable">
             <xsl:for-each select="get_notes_response/note/result">
               <xsl:call-template name="result-detailed">
                 <xsl:with-param name="note-buttons">0</xsl:with-param>
@@ -24574,7 +24574,7 @@ should not have received it.
 
 <xsl:template name="html-notes-trash-table">
   <div>
-    <table class="gbntable" cellspacing="2" cellpadding="4">
+    <table class="gbntable">
       <tr class="gbntablehead2">
         <td><xsl:value-of select="gsa:i18n ('NVT', 'NVT')"/></td>
         <td><xsl:value-of select="gsa:i18n ('Text', 'Note or Override')"/></td>
@@ -25032,7 +25032,7 @@ should not have received it.
           <h3>
             <xsl:value-of select="gsa:i18n ('Associated Result', 'Note or Override')"/>
           </h3>
-          <table class="gbntable" cellspacing="2" cellpadding="4">
+          <table class="gbntable">
             <xsl:for-each select="get_results_response/result">
               <xsl:call-template name="result-detailed">
                 <xsl:with-param name="override-buttons">0</xsl:with-param>
@@ -25440,7 +25440,7 @@ should not have received it.
           <h3>
             <xsl:value-of select="gsa:i18n ('Associated Result', 'Note or Override')"/>
           </h3>
-          <table class="gbntable" cellspacing="2" cellpadding="4">
+          <table class="gbntable">
             <xsl:for-each select="get_overrides_response/override/result">
               <xsl:call-template name="result-detailed">
                 <xsl:with-param name="override-buttons">0</xsl:with-param>
@@ -25911,7 +25911,7 @@ should not have received it.
 
 <xsl:template name="html-overrides-trash-table">
   <div>
-    <table class="gbntable" cellspacing="2" cellpadding="4">
+    <table class="gbntable">
       <tr class="gbntablehead2">
         <td><xsl:value-of select="gsa:i18n ('NVT', 'NVT')"/></td>
         <td><xsl:value-of select="gsa:i18n ('Text', 'Note or Override')"/></td>
@@ -26125,7 +26125,7 @@ should not have received it.
 
 <xsl:template name="html-groups-trash-table">
   <div>
-    <table class="gbntable" cellspacing="2" cellpadding="4">
+    <table class="gbntable">
       <tr class="gbntablehead2">
         <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
         <td style="width: {$trash-actions-width}px"><xsl:value-of select="gsa:i18n ('Actions', 'Actions')"/></td>
@@ -26957,7 +26957,7 @@ should not have received it.
 
 <xsl:template name="html-permissions-trash-table">
   <div>
-    <table class="gbntable" cellspacing="2" cellpadding="4">
+    <table class="gbntable">
       <tr class="gbntablehead2">
         <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
         <td><xsl:value-of select="gsa:i18n ('Resource Type', 'Property')"/></td>
@@ -27581,7 +27581,7 @@ should not have received it.
   </div>
 
   <div class="section-box" id="portranges-box">
-    <table class="gbntable" cellspacing="2" cellpadding="4">
+    <table class="gbntable">
       <tr class="gbntablehead2">
         <td><xsl:value-of select="gsa:i18n ('Start', 'Port Range')"/></td>
         <td><xsl:value-of select="gsa:i18n ('End', 'Port Range')"/></td>
@@ -27625,7 +27625,7 @@ should not have received it.
   </div>
 
   <div class="section-box" id="using-box">
-    <table class="gbntable" cellspacing="2" cellpadding="4">
+    <table class="gbntable">
       <tr class="gbntablehead2">
         <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
       </tr>
@@ -27728,7 +27728,7 @@ should not have received it.
         </xsl:choose>
         <h1><xsl:value-of select="gsa:i18n ('Port Ranges', 'Port Range')"/></h1>
       </div>
-      <table class="gbntable" cellspacing="2" cellpadding="4">
+      <table class="gbntable">
         <tr class="gbntablehead2">
           <td><xsl:value-of select="gsa:i18n ('Start', 'Port Range')"/></td>
           <td><xsl:value-of select="gsa:i18n ('End', 'Port Range')"/></td>
@@ -28316,7 +28316,7 @@ should not have received it.
 
 <xsl:template name="param-edit" match="params" mode="edit">
   <div>
-    <table class="gbntable" cellspacing="2" cellpadding="4">
+    <table class="gbntable">
       <tr class="gbntablehead2">
         <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
         <td><xsl:value-of select="gsa:i18n ('Value', 'Property')"/></td>
@@ -28427,7 +28427,7 @@ should not have received it.
 
 <xsl:template name="param-details" match="params" mode="details">
   <div id="params">
-    <table class="gbntable" cellspacing="2" cellpadding="4">
+    <table class="gbntable">
       <tr class="gbntablehead2">
         <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
         <td><xsl:value-of select="gsa:i18n ('Value', 'Property')"/></td>
@@ -28596,7 +28596,7 @@ should not have received it.
   </div>
 
   <div class="section-box" id="using-box">
-    <table class="gbntable" cellspacing="2" cellpadding="4">
+    <table class="gbntable">
       <tr class="gbntablehead2">
         <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
       </tr>
@@ -28928,7 +28928,7 @@ should not have received it.
         </tr>
       </table>
       <h1><xsl:value-of select="gsa:i18n ('Host Identification', 'Host')"/></h1>
-      <table class="gbntable" cellspacing="2" cellpadding="4">
+      <table class="gbntable">
         <tr class="gbntablehead2">
           <td><xsl:value-of select="gsa:i18n ('Identifier', 'Host')"/></td>
           <td><xsl:value-of select="gsa:i18n ('Value', 'Property')"/></td>
@@ -28990,7 +28990,7 @@ should not have received it.
         </xsl:when>
         <xsl:otherwise>
           <h1><xsl:value-of select="gsa:i18n ('Hardware', 'Host')"/></h1>
-          <table class="gbntable" cellspacing="2" cellpadding="4">
+          <table class="gbntable">
             <tr class="gbntablehead2">
               <td><xsl:value-of select="gsa:i18n ('Component', 'Host')"/></td>
               <td><xsl:value-of select="gsa:i18n ('Values', 'Host')"/></td>
@@ -29063,7 +29063,7 @@ should not have received it.
         </xsl:when>
         <xsl:otherwise>
           <h1><xsl:value-of select="gsa:i18n ('Detected Applications', 'Host')"/></h1>
-          <table class="gbntable" cellspacing="2" cellpadding="4">
+          <table class="gbntable">
             <tr class="gbntablehead2">
               <td rowspan="2"><xsl:value-of select="gsa:i18n ('CPE', 'CPE')"/></td>
               <td colspan="4">
@@ -29138,7 +29138,7 @@ should not have received it.
       </xsl:choose>
 <!--
       <h1>All host details</h1>
-      <table class="gbntable" cellspacing="2" cellpadding="4">
+      <table class="gbntable">
         <tr class="gbntablehead2">
           <td>Name</td>
           <td>Value</td>
@@ -30110,7 +30110,7 @@ should not have received it.
         </td>
       </tr>
     </table>
-    <table class="gbntable" cellspacing="2" cellpadding="4">
+    <table class="gbntable">
       <xsl:call-template name="result-detailed">
         <xsl:with-param name="note-buttons">1</xsl:with-param>
         <xsl:with-param name="override-buttons">1</xsl:with-param>
@@ -31552,7 +31552,7 @@ should not have received it.
 
 <xsl:template match="report" mode="assets">
   <xsl:variable name="apply-overrides" select="filters/keywords/keyword[column='apply_overrides']/value"/>
-  <table class="gbntable" cellspacing="2" cellpadding="4">
+  <table class="gbntable">
     <tr class="gbntablehead2">
       <td><xsl:value-of select="gsa:i18n ('IP', 'Host')"/></td>
       <td>
@@ -31726,7 +31726,7 @@ should not have received it.
 </xsl:template>
 
 <xsl:template match="get_reports_response/report/report" mode="report-assets">
-  <table class="gbntable" cellspacing="2" cellpadding="4">
+  <table class="gbntable">
     <tr class="gbntablehead2">
       <td><xsl:value-of select="gsa:i18n('IP', 'Host')"/></td>
       <td>
@@ -32143,7 +32143,7 @@ should not have received it.
     <h3><xsl:value-of select="gsa:i18n ('Details')"/></h3>
   </div> <!-- /section-header -->
   <div id="table-box" class="section-box">
-      <table class="gbntable" cellspacing="2" cellpadding="4">
+      <table class="gbntable">
         <tr class="gbntablehead2">
           <td><xsl:value-of select="gsa:i18n ('Host', 'Host')"/></td>
           <td><xsl:value-of select="gsa:i18n ('OS', 'Host')"/></td>
@@ -32398,7 +32398,7 @@ should not have received it.
     <h3><xsl:value-of select="gsa:i18n ('Details')"/></h3>
   </div> <!-- /section-header -->
   <div id="table-box" class="section-box">
-      <table class="gbntable" cellspacing="2" cellpadding="4">
+      <table class="gbntable">
         <col/>
         <col/>
         <col/>
@@ -32475,7 +32475,7 @@ should not have received it.
     <h3><xsl:value-of select="gsa:i18n ('Details')"/></h3>
   </div> <!-- /section-header -->
   <div id="table-box" class="section-box">
-      <table class="gbntable" cellspacing="2" cellpadding="4">
+      <table class="gbntable">
           <col/>
           <col/>
           <col/>
@@ -32569,7 +32569,7 @@ should not have received it.
     <h3><xsl:value-of select="gsa:i18n ('Details')"/></h3>
   </div> <!-- /section-header -->
   <div id="table-box" class="section-box">
-      <table class="gbntable" cellspacing="2" cellpadding="4">
+      <table class="gbntable">
           <col/>
           <col/>
           <col/>
@@ -32687,7 +32687,7 @@ should not have received it.
     <h3><xsl:value-of select="gsa:i18n ('Details')"/></h3>
   </div> <!-- /section-header -->
   <div id="table-box" class="section-box">
-      <table class="gbntable" cellspacing="2" cellpadding="4">
+      <table class="gbntable">
           <col/>
           <col/>
           <col width="100px"/>
@@ -32838,7 +32838,7 @@ should not have received it.
     <h3><xsl:value-of select="gsa:i18n ('Details')"/></h3>
   </div> <!-- /section-header -->
   <div id="table-box" class="section-box">
-      <table class="gbntable" cellspacing="2" cellpadding="4">
+      <table class="gbntable">
           <col/>
           <col/>
           <col/>
@@ -32942,7 +32942,7 @@ should not have received it.
     <h3><xsl:value-of select="gsa:i18n ('Details')"/></h3>
   </div> <!-- /section-header -->
   <div id="table-box" class="section-box">
-      <table class="gbntable" cellspacing="2" cellpadding="4">
+      <table class="gbntable">
           <col/>
           <col/>
           <col/>
@@ -33180,7 +33180,7 @@ should not have received it.
     <h3><xsl:value-of select="gsa:i18n ('Details')"/></h3>
   </div> <!-- /section-header -->
   <div id="table-box" class="section-box">
-      <table class="gbntable" cellspacing="2" cellpadding="4">
+      <table class="gbntable">
         <tr class="gbntablehead2">
           <td><xsl:value-of select="gsa:i18n ('CVE', 'CVE')"/></td>
           <td><xsl:value-of select="gsa:i18n ('Host', 'Host')"/></td>
@@ -33265,7 +33265,7 @@ should not have received it.
     <h3><xsl:value-of select="gsa:i18n ('Details')"/></h3>
   </div> <!-- /section-header -->
   <div id="table-box" class="section-box">
-      <table class="gbntable" cellspacing="2" cellpadding="4">
+      <table class="gbntable">
         <tr class="gbntablehead2">
           <td><xsl:value-of select="gsa:i18n ('CVE', 'CVE')"/></td>
           <td><xsl:value-of select="gsa:i18n ('Hosts', 'Host')"/></td>
@@ -33377,7 +33377,7 @@ should not have received it.
     <h3><xsl:value-of select="gsa:i18n ('Details')"/></h3>
   </div> <!-- /section-header -->
   <div id="table-box" class="section-box">
-      <table class="gbntable" cellspacing="2" cellpadding="4">
+      <table class="gbntable">
         <tr class="gbntablehead2">
           <td><xsl:value-of select="gsa:i18n ('DN', 'Auth Data')"/></td>
           <td><xsl:value-of select="gsa:i18n ('Serial', 'Auth Data')"/></td>
@@ -33533,7 +33533,7 @@ should not have received it.
     <h3><xsl:value-of select="gsa:i18n ('Details')"/></h3>
   </div> <!-- /section-header -->
   <div id="table-box" class="section-box">
-      <table class="gbntable" cellspacing="2" cellpadding="4">
+      <table class="gbntable">
         <tr class="gbntablehead2">
           <td><xsl:value-of select="gsa:i18n ('Error Message', 'Result')"/></td>
           <td><xsl:value-of select="gsa:i18n ('NVT', 'NVT')"/></td>
@@ -33824,7 +33824,7 @@ should not have received it.
     </div>
 -->
     <div>
-      <table class="gbntable" cellspacing="2" cellpadding="4">
+      <table class="gbntable">
         <tr class="gbntablehead2">
           <td></td>
           <td>
@@ -34289,7 +34289,7 @@ should not have received it.
       </form>
 
       <h1><xsl:value-of select="gsa:i18n ('General Command Permissions', 'Permission')"/></h1>
-      <table class="gbntable" cellspacing="2" cellpadding="4">
+      <table class="gbntable">
         <tr class="gbntablehead2">
           <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
           <td><xsl:value-of select="gsa:i18n ('Description', 'Property')"/></td>
@@ -34530,7 +34530,7 @@ should not have received it.
       <xsl:when test="not (gsa:may-op ('get_permissions'))"/>
       <xsl:when test="count(../../get_permissions_response/permission) = 0"/>
       <xsl:when test="boolean (../../get_permissions_response/permission[name='Everything'])">
-        <table class="gbntable" cellspacing="2" cellpadding="4">
+        <table class="gbntable">
           <xsl:variable name="id" select="../../get_permissions_response/permission[name='Everything']/@id"/>
           <tr class="gbntablehead2">
             <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
@@ -34565,7 +34565,7 @@ should not have received it.
         </table>
       </xsl:when>
       <xsl:otherwise>
-        <table class="gbntable" cellspacing="2" cellpadding="4">
+        <table class="gbntable">
           <tr class="gbntablehead2">
             <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
             <td><xsl:value-of select="gsa:i18n ('Description', 'Property')"/></td>
@@ -34599,7 +34599,7 @@ should not have received it.
 
 <xsl:template name="html-roles-trash-table">
   <div>
-    <table class="gbntable" cellspacing="2" cellpadding="4">
+    <table class="gbntable">
       <tr class="gbntablehead2">
         <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
         <td style="width: {$trash-actions-width}px"><xsl:value-of select="gsa:i18n ('Actions', 'Actions')"/></td>
@@ -34897,7 +34897,7 @@ should not have received it.
 
 <xsl:template name="html-agents-trash-table">
   <div>
-    <table class="gbntable" cellspacing="2" cellpadding="4">
+    <table class="gbntable">
       <tr class="gbntablehead2">
         <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
         <td><xsl:value-of select="gsa:i18n ('Trust', 'Trust')"/></td>
@@ -34910,7 +34910,7 @@ should not have received it.
 
 <xsl:template name="html-configs-trash-table">
   <div>
-    <table class="gbntable" cellspacing="2" cellpadding="4">
+    <table class="gbntable">
       <tr class="gbntablehead2">
         <td rowspan="2"><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
         <td colspan="2"><xsl:value-of select="gsa:i18n ('Families', 'Scan Config')"/></td>
@@ -34930,7 +34930,7 @@ should not have received it.
 
 <xsl:template name="html-alerts-trash-table">
   <div>
-    <table class="gbntable" cellspacing="2" cellpadding="4">
+    <table class="gbntable">
       <tr class="gbntablehead2">
         <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
         <td><xsl:value-of select="gsa:i18n ('Event', 'Alert')"/></td>
@@ -34946,7 +34946,7 @@ should not have received it.
 
 <xsl:template name="html-credentials-trash-table">
   <div>
-    <table class="gbntable" cellspacing="2" cellpadding="4">
+    <table class="gbntable">
       <tr class="gbntablehead2">
         <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
         <td><xsl:value-of select="gsa:i18n ('Type', 'Property')"/></td>
@@ -34962,7 +34962,7 @@ should not have received it.
 
 <xsl:template name="html-port-lists-trash-table">
   <div>
-    <table class="gbntable" cellspacing="2" cellpadding="4">
+    <table class="gbntable">
       <tr class="gbntablehead2">
         <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
         <td style="width: {$trash-actions-width}px"><xsl:value-of select="gsa:i18n ('Actions', 'Actions')"/></td>
@@ -34974,7 +34974,7 @@ should not have received it.
 
 <xsl:template name="html-report-formats-trash-table">
   <div>
-    <table class="gbntable" cellspacing="2" cellpadding="4">
+    <table class="gbntable">
       <tr class="gbntablehead2">
         <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
         <td><xsl:value-of select="gsa:i18n ('Extension', 'Report Format')"/></td>
@@ -34990,7 +34990,7 @@ should not have received it.
 
 <xsl:template name="html-scanners-trash-table">
   <div>
-    <table class="gbntable" cellspacing="2" cellpadding="4">
+    <table class="gbntable">
       <tr class="gbntablehead2">
         <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
         <td><xsl:value-of select="gsa:i18n ('Host', 'Host')"/></td>
@@ -35006,7 +35006,7 @@ should not have received it.
 
 <xsl:template name="html-schedules-trash-table">
   <div>
-    <table class="gbntable" cellspacing="2" cellpadding="4">
+    <table class="gbntable">
       <tr class="gbntablehead2">
         <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
         <td><xsl:value-of select="gsa:i18n ('First Run', 'Schedule')"/></td>
@@ -35022,7 +35022,7 @@ should not have received it.
 
 <xsl:template name="html-slaves-trash-table">
   <div>
-    <table class="gbntable" cellspacing="2" cellpadding="4">
+    <table class="gbntable">
       <tr class="gbntablehead2">
         <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
         <td><xsl:value-of select="gsa:i18n ('Host', 'Host')"/></td>
@@ -35038,7 +35038,7 @@ should not have received it.
 
 <xsl:template name="html-tags-trash-table">
   <div>
-    <table class="gbntable" cellspacing="2" cellpadding="4">
+    <table class="gbntable">
       <tr class="gbntablehead2">
         <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
         <td><xsl:value-of select="gsa:i18n ('Value', 'Property')"/></td>
@@ -35053,7 +35053,7 @@ should not have received it.
 
 <xsl:template name="html-targets-trash-table">
   <div>
-    <table class="gbntable" cellspacing="2" cellpadding="4">
+    <table class="gbntable">
       <tr class="gbntablehead2">
         <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></td>
         <td><xsl:value-of select="gsa:i18n ('Hosts', 'Host')"/></td>
@@ -35069,7 +35069,7 @@ should not have received it.
 
 <xsl:template name="html-tasks-trash-table">
   <div>
-    <table class="gbntable" cellspacing="2" cellpadding="4">
+    <table class="gbntable">
       <tr class="gbntablehead2">
         <td rowspan="2"><xsl:value-of select="gsa:i18n ('Task', 'Task')"/></td>
         <td width="1" rowspan="2"><xsl:value-of select="gsa:i18n ('Status', 'Task')"/></td>
@@ -35144,7 +35144,7 @@ should not have received it.
     </xsl:if>
 
     <h1><xsl:value-of select="gsa:i18n ('Contents', 'Trashcan')"/></h1>
-    <table class="gbntable" cellspacing="2" cellpadding="4">
+    <table class="gbntable">
       <tr class="gbntablehead2">
         <td><xsl:value-of select="gsa:i18n ('Type', 'Property')"/></td>
         <td><xsl:value-of select="gsa:i18n ('Items', 'Trashcan')"/></td>
@@ -35909,7 +35909,7 @@ should not have received it.
       </xsl:when>
       <xsl:otherwise>
         <h1>Tasks managed by this User</h1>
-        <table class="gbntable" cellspacing="2" cellpadding="4">
+        <table class="gbntable">
           <tr class="gbntablehead2">
             <td>Name</td>
             <td>Actions</td>
@@ -36282,7 +36282,7 @@ should not have received it.
       <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
       <!-- group name is e.g. of method:ldap -->
       <input type="hidden" name="group" value="{@name}"/>
-      <table class="gbntable" cellspacing="2" cellpadding="4">
+      <table class="gbntable">
         <tr class="gbntablehead2">
           <td><xsl:value-of select="gsa:i18n ('Setting', 'Group')"/></td>
           <td><xsl:value-of select="gsa:i18n ('Value', 'Property')"/></td>
@@ -36355,7 +36355,7 @@ should not have received it.
       <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
       <!-- group name is e.g. of method:radius_connect -->
       <input type="hidden" name="group" value="{@name}"/>
-      <table class="gbntable" cellspacing="2" cellpadding="4">
+      <table class="gbntable">
         <tr class="gbntablehead2">
           <td><xsl:value-of select="gsa:i18n ('Setting', 'Group')"/></td>
           <td><xsl:value-of select="gsa:i18n ('Value', 'Property')"/></td>
@@ -36493,7 +36493,7 @@ should not have received it.
     </h1>
   </div>
 
-  <table cellspacing="2" cellpadding="4" style="margin-bottom:0px;" class="gbntable">
+  <table style="margin-bottom:0px;" class="gbntable">
     <tr class="gbntablehead2">
       <td><xsl:value-of select="gsa:i18n ('Type', 'Property')"/></td>
       <td><xsl:value-of select="gsa:i18n ('Content', 'Feed Sync')"/></td>
