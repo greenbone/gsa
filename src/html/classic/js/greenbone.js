@@ -333,8 +333,8 @@
     }
 
     if (status_code !== undefined && status_code !== '') {
-      displayed_title 
-        = displayed_title + ' <i>(Status code: ' + status_code + ')</i>';
+      displayed_title = displayed_title + ' <i>(Status code: ' +
+        status_code + ')</i>';
     }
 
     // Remove previous errors
@@ -365,17 +365,17 @@
     var self = this;
     var xml = $(jqXHR.responseXML);
     var html = $(jqXHR.responseText);
-    var response = xml.find(RESPONSE_SELECTORS[self.command] + 
-                            '[status!="200"][status!="201"][status!="202"]');
+    var response = xml.find(RESPONSE_SELECTORS[self.command] +
+        '[status!="200"][status!="201"][status!="202"]');
     var gsad_msg = xml.find('gsad_msg');
     var action_result = xml.find('action_result');
     var generic_omp_response = xml.find('omp_response');
-    var internal_error_html
-          = html.find('.gb_error_dialog .gb_window_part_content_error');
-    var top_line_error_html
-          = html.find('.gb_window .gb_window_part_content_error');
-    var login_form_html
-          = html.find('.gb_login_dialog .gb_window_part_content');
+    var internal_error_html = html.find(
+        '.gb_error_dialog .gb_window_part_content_error');
+    var top_line_error_html = html.find(
+        '.gb_window .gb_window_part_content_error');
+    var login_form_html = html.find(
+        '.gb_login_dialog .gb_window_part_content');
     var error_title = 'Error:';
     var error = 'Unknown error';
     var error_code = '';
@@ -392,9 +392,9 @@
       if (parent[0].nodeName === 'save_setting') {
         var id = parent.attr('id');
         var name = parent.attr('name');
-        if (! gsa.is_defined(name)) {
-          var name_elem = xml.find ('setting[id="' + id + '"] name');
-          if (gsa.is_defined (name_elem)) {
+        if (!gsa.is_defined(name)) {
+          var name_elem = xml.find('setting[id="' + id + '"] name');
+          if (gsa.is_defined(name_elem)) {
             name = name_elem.justtext();
           }
           else {
@@ -802,8 +802,8 @@
     this.interval_time = 1000; // 1 sec
     this.progress_value = this.timeout;
     this.modal = options.modal !== undefined ? options.modal : false;
-    this.fade_in_duration = options.fade_in_duration !== undefined
-                              ? options.fade_in_duration : 1000;
+    this.fade_in_duration = options.fade_in_duration !== undefined ?
+      options.fade_in_duration : 1000;
 
     this.dialog = $('<div/>', {
       'class': 'dialog-form',
@@ -1222,7 +1222,7 @@
     });
 
     // Replace icon forms
-    doc.find('.ajax-post').each(function () {
+    doc.find('.ajax-post').each(function() {
       var elem = $(this);
       elem.on('click', function(event) {
         event.preventDefault();
@@ -1246,19 +1246,17 @@
           type: 'POST',
         };
 
-        var done_func = function (response_doc) {
-          var action_result 
-                = $($(response_doc).find('action_result'));
+        var done_func = function(response_doc) {
+          var action_result = $($(response_doc).find('action_result'));
 
           var next_url = action_result.children('next').text();
-          if (gsa.is_defined (next_url) && next_url != '') {
+          if (gsa.is_defined(next_url) && next_url !== '') {
             window.location = next_url;
           }
         };
 
-        var fail_func = function (jqXHR) {
-          var action_result 
-                = $($(jqXHR.responseXML).find('action_result'));
+        var fail_func = function(jqXHR) {
+          var action_result = $($(jqXHR.responseXML).find('action_result'));
 
           var error_div = $('<div class="ui-state-error ui-corner-all"/>');
 
@@ -1268,7 +1266,7 @@
           var error_status = action_result.children('status').text();
           var error_message = action_result.children('message').text();
 
-          $('<div><b>' + error_title +'</b></div>')
+          $('<div><b>' + error_title + '</b></div>')
             .appendTo(error_div);
           $('<div><b>' + error_status + ': </b>' + error_message + '</div>')
             .appendTo(error_div);
@@ -1286,7 +1284,7 @@
           .done(done_func)
           .fail(fail_func);
       });
-    })
+    });
 
     doc.find('.edit-filter-action-icon').each(function() {
       var elem = $(this);
@@ -1390,13 +1388,13 @@
           event = 'change';
       }
 
-      if (changed_input.length == 0) {
+      if (changed_input.length === 0) {
         changed_input = $('<input/>',
-                          {
-                            'name': input_name,
-                            'type': 'hidden',
-                            'value': 0,
-                          }).appendTo (form);
+          {
+            name: input_name,
+            type: 'hidden',
+            value: 0,
+          }).appendTo(form);
       }
       // Add input elements to indicate that a setting was changed
       elem.on(event, function() {
