@@ -621,6 +621,23 @@
   };
 
   /**
+   * Returns the number of rows in this dashboard
+   *
+   * @return The number of rows
+   */
+  Dashboard.prototype.getNumRows = function() {
+    var count = 0;
+
+    for (var key in this.rows) {
+      if (this.rows.hasOwnProperty(key)) {
+        count += 1;
+      }
+    }
+
+    return count;
+  };
+
+  /**
    * Registers a row in the dashboard and adds event listeners to the row.
    *
    * @param row  The row to register.

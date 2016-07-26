@@ -1,5 +1,10 @@
 2016-07-26  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_dashboard.js (Dashboard.prototype.getNumRows): Add
+	Dashboard method to return the current number of rows.
+
+2016-07-26  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/omp.xsl (host-details): Add a show results for host link to
 	the host details page.
 
