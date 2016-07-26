@@ -808,16 +808,16 @@
             nodes_by_link_id[new_host.link_id] = new_host;
           }
 
-          if (hop_index == 0) {
-            nodes_by_link_id[source_ip].is_scanner = true;
-          }
-
           new_link.source = nodes_by_link_id[source_ip];
           new_link.target = nodes_by_link_id[target_ip];
 
           links.push(new_link);
         }
 
+        // Mark first node in route as scanner
+        if (gsa.is_defined (nodes_by_link_id[route_split[0]])) {
+          nodes_by_link_id[route_split[0]].is_scanner = true;
+        }
       }
     }
 

@@ -1,5 +1,15 @@
 2016-07-26  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/js/gsa_topology_chart.js
+	(TopologyChartGenerator.prototype.generate): Adjust position of node
+	labels for hosts with is_scanner property and add 1px extra distance.
+
+	* src/html/classic/js/gsa_chart_helpers.js (extract_host_topology_data):
+	Change way is_scanner property is set so it also works for traceroutes
+	that consist of only one host.
+
+2016-07-26  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/js/gsa_chart_helpers.js (extract_host_topology_data):
 	Add is_scanner property to hosts which is set to true for ones that
 	are first in traceroutes.

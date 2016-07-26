@@ -113,7 +113,8 @@
 
       self.graph.selectAll('.node-label').data(self.layout.nodes())
         .attr('x', function (d) { return d.x })
-        .attr('y', function (d) { return d.y + 5 * circle_scale })
+        .attr('y', function (d) { return d.y + 1 +
+                                    (circle_scale * (d.is_scanner ? 8 : 5))})
 
       self.graph.selectAll('.link').data(self.layout.links())
         .attr('x1', function (d) { return d.source.x })
