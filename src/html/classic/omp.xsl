@@ -38474,6 +38474,11 @@ should not have received it.
         </td>
       </tr>
     </table>
+    <div class="section-box">
+      <a href="/omp?cmd=get_results&amp;filter=host={name}&amp;token={/envelope/token}">
+        <xsl:value-of select="gsa:i18n ('Show scan results for this host', 'Host')"/>
+      </a>
+    </div>
     <h1>
       <xsl:choose>
         <xsl:when test="/envelope/params/show_all = '1'">
