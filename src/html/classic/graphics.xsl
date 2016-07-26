@@ -945,10 +945,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <img class="icon icon-lg" src="/img/dashboard.svg" alt="Dashboard"/>
       <xsl:value-of select="gsa:i18n ('Dashboard', 'Dashboard')"/>
     </h1>
+    <div id="main-dashboard-controls" class="dashboard-controls">
+    </div>
   </div>
   <div class="section-box">
-    <div id="main-dashboard-controls" style="text-align:right;">
-    </div>
     <div id="main-dashboard" class="dashboard" data-dashboard-name="main-dashboard"
       data-controllers="{$controllers}"
       data-filters-string="{$filters_string}"
@@ -1228,10 +1228,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <img class="icon icon-lg" src="/img/scan.svg" alt="Scans Dashboard"/>
       <xsl:value-of select="gsa:i18n ('Scans Dashboard', 'Dashboard')"/>
     </h1>
+    <div id="scans-dashboard-controls" class="dashboard-controls">
+    </div>
   </div>
   <div class="section-box">
-    <div id="scans-dashboard-controls" style="text-align:right;">
-    </div>
     <div id="scans-dashboard" class="dashboard" data-dashboard-name="scans-dashboard"
       data-controllers="{$controllers}"
       data-filters-string="{$filters_string}"
@@ -1413,10 +1413,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <img class="icon icon-lg" src="/img/asset.svg" alt="Assets Dashboard"/>
       <xsl:value-of select="gsa:i18n ('Assets Dashboard', 'Dashboard')"/>
     </h1>
+    <div id="assets-dashboard-controls" class="dashboard-controls">
+    </div>
   </div>
   <div class="section-box">
-    <div id="assets-dashboard-controls" style="text-align:right;">
-    </div>
     <div id="assets-dashboard" class="dashboard" data-dashboard-name="assets-dashboard"
       data-controllers="{$controllers}"
       data-filters-string="{$filters_string}"
@@ -1711,10 +1711,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <img class="icon icon-lg" src="/img/allinfo.svg" alt="SecInfo Dashboard"/>
       <xsl:value-of select="gsa:i18n ('SecInfo Dashboard', 'Dashboard')"/>
     </h1>
+    <div id="secinfo-dashboard-controls" class="dashboard-controls">
+    </div>
   </div>
   <div class="section-box">
-    <div id="secinfo-dashboard-controls" style="text-align:right;">
-    </div>
     <div id="secinfo-dashboard" class="dashboard" data-dashboard-name="secinfo-dashboard"
       data-controllers="{$controllers}"
       data-filters-string="{$filters_string}"

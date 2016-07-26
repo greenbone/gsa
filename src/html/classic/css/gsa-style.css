@@ -1130,6 +1130,10 @@ select[multiple] {
   width: 100%;
 }
 
+.dashboard-controls {
+  float: left;
+}
+
 /* Chart menu. */
 #chart_list {
   position: absolute;
