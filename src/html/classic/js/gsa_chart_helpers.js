@@ -1984,14 +1984,10 @@
    */
   gch.detached_chart_resize_listener = function(dashboard) {
     return function() {
-      var window_height = window.innerHeight;
-      $(dashboard.elem())
-          .height(window_height - (Number(d3.select('.gsa-footer')
-                                            .property('clientHeight')) +
-                                    Number(d3.select('#applied_filter')
-                                                .property('clientHeight')) +
-                                    20));
-      dashboard.resized(true);
+      var height = window.innerHeight -
+        Number(d3.select('.gsa-footer').property('clientHeight')) +
+        Number(d3.select('#applied_filter').property('clientHeight')) - 20;
+      dashboard.resize(height, undefined, true);
     };
   };
 
