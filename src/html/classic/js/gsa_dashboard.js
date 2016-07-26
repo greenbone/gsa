@@ -1073,13 +1073,17 @@
   /**
    * Resizes the dashboard and its rows
    *
-   * @param height the new height if defined (optional)
-   * @param width the new width if defined (optional)
+   * @param height             the new height if defined (optional)
+   * @param width              the new width if defined (optional)
+   * @param adjust_row_heights update the height of the rows to fit in the
+   *                           dashboard
    *
    * @return This dashboard
    */
-  Dashboard.prototype.resize = function(height, width) {
+  Dashboard.prototype.resize = function(height, width, adjust_row_heights) {
     log.debug('resize dashboard', height, width);
+
+    var row_height;
 
     if (gsa.is_defined(width)) {
       this.width = width;
@@ -1087,9 +1091,12 @@
     if (gsa.is_defined(height)) {
       this.height = height;
     }
+    if (adjust_row_heights) {
+      row_height = this.height / this.getNumRows();
+    }
 
     for (var item in this.rows) {
-      this.rows[item].resize(undefined, this.width);
+      this.rows[item].resize(row_height, this.width);
     }
     return;
   };
