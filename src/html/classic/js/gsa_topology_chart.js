@@ -129,7 +129,8 @@
       var text_scale = Math.sqrt(1/self.scale);
 
       self.graph.selectAll('.node-marker').data(self.layout.nodes())
-        .attr('r', 5 * circle_scale)
+        .attr('r', function (d) { return circle_scale *
+                                         (d.is_scanner ? 8 : 5); })
 
       self.graph.selectAll('.node-label').data(self.layout.nodes())
         .style('font-size', (8 * text_scale) + 'px')
@@ -168,10 +169,18 @@
                 return 'white';
             })
           .style('stroke', function(d) {
-              if (d.id !== null)
+              if (d.is_scanner)
+                return 'green';
+              else if (d.id !== null)
                 return d3.hcl(color_scale(d.severity)).darker(2);
               else
                 return 'grey';
+            })
+          .style('stroke-width', function(d) {
+              if (d.is_scanner)
+                return '2px';
+              else
+                return '1px';
             })
           .on('click', function (d) { console.debug (self.layout.alpha()) })
           .call(self.layout.drag);

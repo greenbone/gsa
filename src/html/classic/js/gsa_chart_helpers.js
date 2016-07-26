@@ -724,6 +724,7 @@
       new_host.name = asset_elem.select('asset>name').text();
       new_host.id = asset_elem.attr('id');
       new_host.severity = Number(asset_elem.select('severity>value').text());
+      new_host.is_scanner = false;
 
       var identifiers = asset_elem.selectAll('identifiers>identifier');
       identifiers.each(function() {
@@ -807,6 +808,10 @@
             nodes_by_link_id[new_host.link_id] = new_host;
           }
 
+          if (hop_index == 0) {
+            nodes_by_link_id[source_ip].is_scanner = true;
+          }
+
           new_link.source = nodes_by_link_id[source_ip];
           new_link.target = nodes_by_link_id[target_ip];
 
@@ -815,8 +820,6 @@
 
       }
     }
-
-    
 
     return data;
   };
