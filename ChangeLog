@@ -1,5 +1,11 @@
 2016-07-26  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* CMakeLists.txt, src/html/classic/gsad.xsl (html-gsa-logo),
+	src/html/classic/css/gsa-style.css, src/html/classic/img/gsa.svg: Use svg
+	version of gsa logo instead of rastered png.
+
+2016-07-26  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/wizard.xsl: Move dashboard actions above the horizontal
 	line into the section header.
 

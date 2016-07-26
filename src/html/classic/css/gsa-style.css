@@ -612,6 +612,17 @@ a.top_button:hover div.first_button_overlay {
 .logo a {
 }
 
+.logo .greenbone-icon {
+  width: 40px;
+  margin-right: 4px;
+}
+
+.logo .greenbone-icon, .logo .greenbone-text {
+  height: 40px;
+  display: inline-block;
+  padding-top: 1px;
+  padding-bottom: 1px;
+}
 
 /* Logout panel */
 .logout_panel {

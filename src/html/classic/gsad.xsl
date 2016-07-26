@@ -897,7 +897,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div id="gb_header">
     <div class="logo">
       <a href="/omp?token={/envelope/token}" title="Dashboard">
-        <img src="/img/style/gsa-logo.png" alt="Greenbone Security Assistant" width="202" height="40"/>
+        <img src="/img/greenbone.svg" alt="Greenbone Security Assistant" class="greenbone-icon"/>
+        <img src="/img/gsa.svg" alt="Greenbone Security Assistant" class="greenbone-text"/>
       </a>
     </div>
     <div>
