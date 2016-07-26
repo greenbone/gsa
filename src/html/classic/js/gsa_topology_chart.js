@@ -183,7 +183,6 @@
               else
                 return '1px';
             })
-          .on('click', function (d) { console.debug (self.layout.alpha()) })
           .call(self.layout.drag);
 
     this.graph.selectAll('.node-label').data(this.layout.nodes()).enter()
