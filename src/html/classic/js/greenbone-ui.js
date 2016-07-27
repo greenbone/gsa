@@ -121,6 +121,10 @@
         this.allowed.push($.ui.keyCode.PERIOD); // .
       }
 
+      this._on({
+        'focusout': this._checkValue,
+      });
+
       this._super();
     },
     _getCreateOptions: function() {
@@ -153,21 +157,17 @@
       }
       return this._super(event);
     },
-    _stop: function(event) {
-      if (!this.spinning) {
-        return;
-      }
+    _checkValue: function(event) {
 
       var value = this.value();
       /* value is greater then max or value is smaller then min */
-      if ((this.options.max !== null && value > this.options.max) ||
+      if (value === null || value === undefined ||
+          (this.options.max !== null && value > this.options.max) ||
           (this.options.min !== null && value < this.options.min)) {
         // call _value instead of value to avoid triggering change event again
         this._value(this.previous);
         return;
       }
-
-      return this._super(event);
     },
     _draw: function() {
       this._super();
