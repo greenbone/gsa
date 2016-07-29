@@ -2145,17 +2145,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="message">(Missing message)</xsl:param>
   <xsl:param name="backurl">/omp?cmd=get_tasks</xsl:param>
   <xsl:param name="token"></xsl:param>
-  <div class="gsa-head">
-    <xsl:call-template name="html-gsa-logo">
-      <xsl:with-param name="username">
-        <xsl:value-of select="login/text()"/>
-      </xsl:with-param>
-      <xsl:with-param name="time">
-        <xsl:value-of select="time"/>
-      </xsl:with-param>
-    </xsl:call-template>
-    <xsl:call-template name="html-gsa-navigation"/>
-  </div>
+  <xsl:if test="$token != ''">
+    <div class="gsa-head">
+      <xsl:call-template name="html-gsa-logo">
+        <xsl:with-param name="username">
+          <xsl:value-of select="login/text()"/>
+        </xsl:with-param>
+        <xsl:with-param name="time">
+          <xsl:value-of select="time"/>
+        </xsl:with-param>
+      </xsl:call-template>
+      <xsl:call-template name="html-gsa-navigation"/>
+    </div>
+  </xsl:if>
   <div class="gsa-main">
     <div>
       <div class="panel panel-error">
@@ -2194,13 +2196,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:choose>
               | <a href="/logout?token={$token}">Logout</a>
             </xsl:when>
+            <xsl:when test="starts-with ($backurl, '/login')">
+              | <a href="{$backurl}">Go to login page</a>
+            </xsl:when>
             <xsl:otherwise>
               | <a href="/logout">Logout</a>
             </xsl:otherwise>
           </xsl:choose>
         </div>
       </div>
-      <xsl:call-template name="html-footer"/>
+      <xsl:if test="$token = ''">
+        <xsl:call-template name="html-footer"/>
+      </xsl:if>
     </div>
   </div>
 </xsl:template>

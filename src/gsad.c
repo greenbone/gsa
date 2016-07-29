@@ -202,10 +202,16 @@ GCRY_THREAD_OPTION_PTHREAD_IMPL;
 #endif
 
 /**
- * @brief Last resort HTML on failure to open "default_file".
+ * @brief Title for "Page not found" messages.
  */
-const char *FILE_NOT_FOUND =
-  "<html><head><title>File not found</title></head><body>File not found</body></html>";
+const char *NOT_FOUND_TITLE
+  = "Invalid request";
+
+/**
+ * @brief Main message for "Page not found" messages.
+ */
+const char *NOT_FOUND_MESSAGE
+  = "The requested page or file does not exist.";
 
 /**
  * @brief Error page HTML.
@@ -3833,12 +3839,19 @@ file_content_response (credentials_t *credentials,
     {
       g_debug ("File %s failed, ", path);
       g_free (path);
+      struct MHD_Response *response;
 
       *http_response_code = MHD_HTTP_NOT_FOUND;
       cmd_response_data_reset (&response_data);
-      return MHD_create_response_from_buffer (strlen (FILE_NOT_FOUND),
-                                              (void *) FILE_NOT_FOUND,
-                                              MHD_RESPMEM_PERSISTENT);
+      gchar *msg = gsad_message (NULL,
+                                 NOT_FOUND_TITLE, NULL, 0,
+                                 NOT_FOUND_MESSAGE,
+                                 "/login/login.html", NULL);
+      response = MHD_create_response_from_buffer (strlen (msg),
+                                                  (void *) msg,
+                                                  MHD_RESPMEM_MUST_COPY);
+      g_free (msg);
+      return response;
     }
 
   /* Guess content type. */
@@ -3872,9 +3885,9 @@ file_content_response (credentials_t *credentials,
     {
       struct MHD_Response *ret;
       response_data.http_status_code = MHD_HTTP_NOT_FOUND;
-      char *res = gsad_message (credentials,
-                                "Invalid request", __FUNCTION__, __LINE__,
-                                "The requested page does not exist.",
+      char *res = gsad_message (NULL,
+                                NOT_FOUND_TITLE, NULL, 0,
+                                NOT_FOUND_MESSAGE,
                                 NULL, &response_data);
       *http_response_code = response_data.http_status_code;
       g_free (path);
@@ -4121,8 +4134,13 @@ handle_request (void *cls, struct MHD_Connection *connection,
   /* Prevent guest link from leading to URL redirection. */
   if (url && (url[0] == '/') && (url[1] == '/'))
     {
-      send_response (connection, BAD_REQUEST_PAGE, MHD_HTTP_NOT_ACCEPTABLE,
-                     NULL, GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0);
+      gchar *msg = gsad_message (NULL,
+                                 NOT_FOUND_TITLE, NULL, 0,
+                                 NOT_FOUND_MESSAGE,
+                                 "/login/login.html", NULL);
+      send_response (connection, msg, MHD_HTTP_NOT_FOUND,
+                    NULL, GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0);
+      g_free (msg);
       return MHD_YES;
     }
 
@@ -4766,21 +4784,10 @@ handle_request (void *cls, struct MHD_Connection *connection,
               g_hash_table_insert (template_attributes, "match", page);
               g_hash_table_insert (template_attributes, "mode", "help");
 
-              if (xsl_filename)
-                {
-                  res = xsl_transform_with_stylesheet (xml, xsl_filename,
-                                                       &response_data);
-
-                  // Try to find the requested page template
-                  template_found 
-                    = find_element_in_xml_file (xsl_filename, "xsl:template",
-                                                template_attributes);
-                }
-              else
-                {
-                  res = xsl_transform_with_stylesheet (xml, "help.xsl",
-                                                       &response_data);
-                }
+              // Try to find the requested page template
+              template_found 
+                = find_element_in_xml_file (xsl_filename, "xsl:template",
+                                            template_attributes);
 
               if (template_found == 0)
                 {
@@ -4793,6 +4800,21 @@ handle_request (void *cls, struct MHD_Connection *connection,
               if (template_found == 0)
                 {
                   response_data.http_status_code = MHD_HTTP_NOT_FOUND;
+                  res = gsad_message (credentials,
+                                      NOT_FOUND_TITLE, NULL, 0,
+                                      NOT_FOUND_MESSAGE,
+                                      "/help/contents.html", &response_data);
+                }
+              else if (xsl_filename)
+                {
+                  res = xsl_transform_with_stylesheet (xml, xsl_filename,
+                                                       &response_data);
+
+                }
+              else
+                {
+                  res = xsl_transform_with_stylesheet (xml, "help.xsl",
+                                                       &response_data);
                 }
 
               g_strfreev (preferred_languages);
@@ -4824,9 +4846,14 @@ handle_request (void *cls, struct MHD_Connection *connection,
                                             &content_type,
                                             &content_disposition);
 #else
-          response = MHD_create_response_from_buffer (strlen (FILE_NOT_FOUND),
-                                              (void *) FILE_NOT_FOUND,
-                                              MHD_RESPMEM_PERSISTENT);
+          gchar *msg = gsad_message (NULL,
+                                     NOT_FOUND_TITLE, NULL, 0,
+                                     NOT_FOUND_MESSAGE,
+                                     "/login/login.html", NULL);
+          response = MHD_create_response_from_buffer (strlen (msg),
+                                                      (void *) msg,
+                                                      MHD_RESPMEM_MUST_COPY);
+          g_free (msg);
 #endif
         }
 

@@ -1,3 +1,20 @@
+2016-07-29  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/gsad_base.c (gsad_message): Allow sending message without a
+	function name.  Add envelope if credentials are given.
+
+	* src/gsad.c (FILE_NOT_FOUND): Remove.
+	(NOT_FOUND_TITLE, NOT_FOUND_MESSAGE): New constants.
+	(file_content_response): Use a common "not found" message generated
+	with gsad_message instead of using fixed HTML.
+	(handle_request): Return common "not found" message generated with
+	gsad_message if URL starts with "//", if help a template was
+	not found or if a file was not found.
+
+	* src/html/classic/gsad.xsl (error_dialog): Hide menu header and
+	and duplicate footer if token is missing.  Add option to go to
+	login page if the suggested URL starts with "/login".
+
 2016-07-27  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/js/greenbone-ui.js (greenbone.spinner): Only check spinner

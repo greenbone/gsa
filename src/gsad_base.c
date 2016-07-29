@@ -383,21 +383,82 @@ gsad_message (credentials_t *credentials, const char *title,
               const char *function, int line, const char *msg,
               const char *backurl, cmd_response_data_t* response_data)
 {
-  gchar *xml, *resp;
+  gchar *xml, *message, *resp;
 
-  xml = g_strdup_printf ("<gsad_response>"
-                         "<title>%s: %s:%i (GSA %s)</title>"
-                         "<message>%s</message>"
-                         "<backurl>%s</backurl>"
-                         "<token>%s</token>"
-                         "</gsad_response>",
-                         title,
-                         function,
-                         line,
-                         GSAD_VERSION,
-                         msg,
-                         backurl ? backurl : "/omp?cmd=get_tasks",
-                         credentials ? credentials->token : "");
+  if (function)
+    {
+      message = g_strdup_printf ("<gsad_response>"
+                                 "<title>%s: %s:%i (GSA %s)</title>"
+                                 "<message>%s</message>"
+                                 "<backurl>%s</backurl>"
+                                 "<token>%s</token>"
+                                 "</gsad_response>",
+                                 title,
+                                 function,
+                                 line,
+                                 GSAD_VERSION,
+                                 msg,
+                                 backurl ? backurl : "/omp?cmd=get_tasks",
+                                 credentials ? credentials->token : "");
+    }
+  else
+    {
+      message = g_strdup_printf ("<gsad_response>"
+                                 "<title>%s (GSA %s)</title>"
+                                 "<message>%s</message>"
+                                 "<backurl>%s</backurl>"
+                                 "<token>%s</token>"
+                                 "</gsad_response>",
+                                 title,
+                                 GSAD_VERSION,
+                                 msg,
+                                 backurl ? backurl : "/omp?cmd=get_tasks",
+                                 credentials ? credentials->token : "");
+    }
+
+  if (credentials) 
+    {
+      gchar *pre;
+      time_t now;
+      char ctime_now[200];
+
+      now = time (NULL);
+      ctime_r_strip_newline (&now, ctime_now);
+
+      pre = g_markup_printf_escaped
+              ("<envelope>"
+               "<version>%s</version>"
+               "<vendor_version>%s</vendor_version>"
+               "<token>%s</token>"
+               "<time>%s</time>"
+               "<login>%s</login>"
+               "<role>%s</role>"
+               "<i18n>%s</i18n>"
+               "<charts>%i</charts>"
+               "<client_address>%s</client_address>",
+               GSAD_VERSION,
+               vendor_version_get (),
+               credentials->token,
+               ctime_now,
+               credentials->username,
+               credentials->role,
+               credentials->language,
+               credentials->charts,
+               credentials->client_address);
+      xml = g_strdup_printf ("%s%s"
+                              "<capabilities>%s</capabilities>"
+                              "</envelope>",
+                              pre,
+                              message,
+                              credentials->capabilities);
+      g_free (pre);
+    }
+  else
+    {
+      xml = g_strdup (message);
+    }
+  g_free (message);
+
   resp = xsl_transform (xml, response_data);
   if (resp == NULL)
     {
