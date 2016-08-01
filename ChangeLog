@@ -1,5 +1,12 @@
 2016-08-01  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	Backport r25868.
+
+	* src/html/classic/help.xsl (new_lsc_credential.html): Fix link to installer
+	details.
+
+2016-08-01  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	Backport r25866.
 
 	* src/html/classic/wizard.xsl (quick-first-scan-wizard, quick-task-wizard):
