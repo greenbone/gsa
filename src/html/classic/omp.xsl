@@ -33151,6 +33151,12 @@ should not have received it.
     <input type="hidden" name="filter" value="{report/filters/term}"/>
     <input type="hidden" name="filt_id" value="{report/filters/@id}"/>
   </form>
+  <span class="divider"/>
+  <a href="?cmd=get_task&amp;task_id={task/@id}&amp;overrides={/envelope/params/overrides}&amp;min_qod={/envelope/params/min_qod}&amp;token={/envelope/token}"
+    title="{gsa-i18n:strformat (gsa:i18n ('Corresponding Task (%1)', 'Task'), task/name)}">
+    <img src="/img/task.svg" alt="Task"
+      class="icon icon-sm" />
+  </a>
 </xsl:template>
 
 <xsl:template match="get_report_closed_cves_response">
