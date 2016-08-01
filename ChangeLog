@@ -1,5 +1,10 @@
 2016-08-01  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/css/gsa-style.css: Remove the requirement of the css class
+	last for report_section_list. Use last-child selector instead.
+
+2016-08-01  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/omp.xsl (report section-list): Remove list item for the
 	task. The task can now be reached via an icon in the toolbar.
 

@@ -961,7 +961,8 @@ select[multiple] {
   background: #99CE48;
 }
 
-#report_section_list ul li ul .last a:hover {
+#report_section_list ul li ul .last a:hover,
+#report_section_list ul li ul li:last-child a:hover {
   background: #99CE48;
   -webkit-border-radius: 0px 0px 8px 8px;
   -moz-border-radius: 0px 0px 8px 8px;
