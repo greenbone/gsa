@@ -127,7 +127,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <input type="hidden" name="filter" value="{/envelope/params/filter}"/>
             <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
             <input type="hidden" name="next" value="get_tasks"/>
-            <input type="text" name="event_data:hosts" value="" size="30" maxlength="80"/>
+            <input type="text" name="event_data:hosts" value="" size="30" maxlength="2000"/>
             <input type="hidden" name="event_data:port_list_id" value="{../run_wizard_response/response/get_settings_response/setting[name = 'Default Port List']/value}"/>
             <input type="hidden" name="event_data:alert_id" value="{../run_wizard_response/response/get_settings_response/setting[name = 'Default Alert']/value}"/>
             <input type="hidden" name="event_data:config_id" value="{../run_wizard_response/response/get_settings_response/setting[name = 'Default OpenVAS Scan Config']/value}"/>
@@ -270,7 +270,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:value-of select="gsa:i18n ('Target Host(s)', 'Task Wizard')"/>:
         </td>
         <td>
-          <input type="text" name="event_data:target_hosts" value="" size="30" maxlength="80"/>
+          <input type="text" name="event_data:target_hosts" value="" size="30" maxlength="2000"/>
         </td>
       </tr>
       <tr>
