@@ -6706,12 +6706,6 @@ Public License instead of this License.
 
       <xsl:call-template name="filtering"/>
       <xsl:call-template name="sorting"/>
-      <h4>Extra Columns</h4>
-      <p>
-        Additionally, the Notes table can be filtered by certain fields that
-        appear on the Note Details page.  These fields are: Hosts, Port,
-        Task (task_name and task_uuid) and Result.
-      </p>
 
       <xsl:call-template name="list-window-line-actions">
         <xsl:with-param name="type" select="'Note'"/>
@@ -7584,12 +7578,6 @@ Public License instead of this License.
 
       <xsl:call-template name="filtering"/>
       <xsl:call-template name="sorting"/>
-      <h4>Extra Columns</h4>
-      <p>
-        Additionally, the Overrides table can be filtered by certain fields that
-        appear on the Override Details page.  These fields are: Hosts, Port,
-        Task (task_name and task_uuid) and Result.
-      </p>
 
       <xsl:call-template name="list-window-line-actions">
         <xsl:with-param name="type" select="'Override'"/>
@@ -7981,6 +7969,44 @@ Public License instead of this License.
         <b>y</b>ear.  For simplicity, month means the last 30 days, and year
         means the past 365 days.
       </p>
+
+      <h4>Special Resource-Specific Keywords</h4>
+
+      <p>
+        For some resource types the powerfilter offers extra keywords.
+      </p>
+
+      <h5>Tasks</h5>
+
+      <p>
+        Tasks include the extra filter terms "schedule" and "next_due".
+      </p>
+      <p>
+        "schedule" allows filtering and sorting by the name of the task's
+        schedule.  To include only scheduled tasks, use "not schedule=".
+      </p>
+      <p>
+        "next_due" allows filtering and sorting by the next time the task
+        is due to run.  For example, "next_due>2d" will list all scheduled
+        tasks that are due to start more than two days from now.
+      </p>
+
+      <h5>Notes</h5>
+
+      <p>
+        Additionally, the Notes table can be filtered by certain fields that
+        appear on the Note Details page.  These fields are: Hosts, Port,
+        Task (task_name and task_uuid) and Result.
+      </p>
+
+      <h5>Overrides</h5>
+
+      <p>
+        Additionally, the Overrides table can be filtered by certain fields that
+        appear on the Override Details page.  These fields are: Hosts, Port,
+        Task (task_name and task_uuid) and Result.
+      </p>
+
     </div>
   </div>
 </xsl:template>
@@ -9250,19 +9276,6 @@ Public License instead of this License.
 
       <xsl:call-template name="filtering"/>
       <xsl:call-template name="sorting"/>
-      <h3>Extra filtering and sorting terms</h3>
-      <p>
-        Tasks include the extra filter terms "schedule" and "next_due".
-      </p>
-      <p>
-        "schedule" allows filtering and sorting by the name of the task's
-        schedule.  To include only scheduled tasks, use "not schedule=".
-      </p>
-      <p>
-        "next_due" allows filtering and sorting by the next time the task
-        is due to run.  For example, "next_due>2d" will list all scheduled
-        tasks that are due to start more than two days from now.
-      </p>
 
       <a name="autorefresh"></a>
       <h3>Auto-refresh</h3>

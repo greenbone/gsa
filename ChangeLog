@@ -1,3 +1,11 @@
+2016-08-01  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/classic/help.xsl (mode="help" match="powerfilter.html"):
+	Added a section for resource-specfic keywords.
+	(mode="help" match="powerfilter.html", mode="help" match="notes.html",
+	mode="help" match="overrides.html"):
+	Removed the specific keywords from here.
+
 2016-08-01  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/css/gsa-style.css: Remove the requirement of the css class
