@@ -32186,14 +32186,6 @@ should not have received it.
     <xsl:with-param name="full-count" select="report/hosts/count"/>
   </xsl:call-template>
 
-  <div class="section-header">
-    <a href="#" class="toggle-action-icon icon icon-action"
-      data-target="#table-box" data-name="Details"
-      data-variable="table-box--collapsed">
-        <img src="/img/fold.png"/>
-    </a>
-    <h3><xsl:value-of select="gsa:i18n ('Details')"/></h3>
-  </div> <!-- /section-header -->
   <div id="table-box" class="section-box">
       <table class="gbntable">
         <tr class="gbntablehead2">
@@ -32441,14 +32433,6 @@ should not have received it.
     <xsl:with-param name="full-count" select="report/hosts/count"/>
   </xsl:call-template>
 
-  <div class="section-header">
-    <a href="#" class="toggle-action-icon icon icon-action"
-      data-target="#table-box" data-name="Details"
-      data-variable="table-box--collapsed">
-        <img src="/img/fold.png"/>
-    </a>
-    <h3><xsl:value-of select="gsa:i18n ('Details')"/></h3>
-  </div> <!-- /section-header -->
   <div id="table-box" class="section-box">
       <table class="gbntable">
         <col/>
@@ -32518,14 +32502,6 @@ should not have received it.
   </xsl:call-template>
 
   <xsl:variable name="report" select="report"/>
-  <div class="section-header">
-    <a href="#" class="toggle-action-icon icon icon-action"
-      data-target="#table-box" data-name="Details"
-      data-variable="table-box--collapsed">
-        <img src="/img/fold.png"/>
-    </a>
-    <h3><xsl:value-of select="gsa:i18n ('Details')"/></h3>
-  </div> <!-- /section-header -->
   <div id="table-box" class="section-box">
       <table class="gbntable">
           <col/>
@@ -32612,14 +32588,6 @@ should not have received it.
     <xsl:with-param name="full-count" select="report/vulns/count"/>
   </xsl:call-template>
 
-  <div class="section-header">
-    <a href="#" class="toggle-action-icon icon icon-action"
-      data-target="#table-box" data-name="Details"
-      data-variable="table-box--collapsed">
-        <img src="/img/fold.png"/>
-    </a>
-    <h3><xsl:value-of select="gsa:i18n ('Details')"/></h3>
-  </div> <!-- /section-header -->
   <div id="table-box" class="section-box">
       <table class="gbntable">
           <col/>
@@ -32730,14 +32698,6 @@ should not have received it.
     <xsl:with-param name="full-count" select="report/os/count + $unknown"/>
   </xsl:call-template>
 
-  <div class="section-header">
-    <a href="#" class="toggle-action-icon icon icon-action"
-      data-target="#table-box" data-name="Details"
-      data-variable="table-box--collapsed">
-        <img src="/img/fold.png"/>
-    </a>
-    <h3><xsl:value-of select="gsa:i18n ('Details')"/></h3>
-  </div> <!-- /section-header -->
   <div id="table-box" class="section-box">
       <table class="gbntable">
           <col/>
@@ -32880,15 +32840,6 @@ should not have received it.
     <xsl:with-param name="full-count" select="report/apps/count"/>
   </xsl:call-template>
 
-  <xsl:variable name="report" select="report"/>
-  <div class="section-header">
-    <a href="#" class="toggle-action-icon icon icon-action"
-      data-target="#table-box" data-name="Details"
-      data-variable="table-box--collapsed">
-        <img src="/img/fold.png"/>
-    </a>
-    <h3><xsl:value-of select="gsa:i18n ('Details')"/></h3>
-  </div> <!-- /section-header -->
   <div id="table-box" class="section-box">
       <table class="gbntable">
           <col/>
@@ -32985,14 +32936,6 @@ should not have received it.
     <xsl:with-param name="full-count" select="report/apps/count"/>
   </xsl:call-template>
 
-  <div class="section-header">
-    <a href="#" class="toggle-action-icon icon icon-action"
-      data-target="#table-box" data-name="Details"
-      data-variable="table-box--collapsed">
-        <img src="/img/fold.png"/>
-    </a>
-    <h3><xsl:value-of select="gsa:i18n ('Details')"/></h3>
-  </div> <!-- /section-header -->
   <div id="table-box" class="section-box">
       <table class="gbntable">
           <col/>
@@ -33223,14 +33166,6 @@ should not have received it.
     <xsl:with-param name="full-count" select="report/closed_cves/count"/>
   </xsl:call-template>
 
-  <div class="section-header">
-    <a href="#" class="toggle-action-icon icon icon-action"
-      data-target="#table-box" data-name="Details"
-      data-variable="table-box--collapsed">
-        <img src="/img/fold.png"/>
-    </a>
-    <h3><xsl:value-of select="gsa:i18n ('Details')"/></h3>
-  </div> <!-- /section-header -->
   <div id="table-box" class="section-box">
       <table class="gbntable">
         <tr class="gbntablehead2">
@@ -33308,14 +33243,6 @@ should not have received it.
     <xsl:with-param name="full-count" select="''"/>
   </xsl:call-template>
 
-  <div class="section-header">
-    <a href="#" class="toggle-action-icon icon icon-action"
-      data-target="#table-box" data-name="Details"
-      data-variable="table-box--collapsed">
-        <img src="/img/fold.png"/>
-    </a>
-    <h3><xsl:value-of select="gsa:i18n ('Details')"/></h3>
-  </div> <!-- /section-header -->
   <div id="table-box" class="section-box">
       <table class="gbntable">
         <tr class="gbntablehead2">
@@ -33420,14 +33347,6 @@ should not have received it.
     <xsl:with-param name="full-count" select="report/ssl_certs/count"/>
   </xsl:call-template>
 
-  <div class="section-header">
-    <a href="#" class="toggle-action-icon icon icon-action"
-      data-target="#table-box" data-name="Details"
-      data-variable="table-box--collapsed">
-        <img src="/img/fold.png"/>
-    </a>
-    <h3><xsl:value-of select="gsa:i18n ('Details')"/></h3>
-  </div> <!-- /section-header -->
   <div id="table-box" class="section-box">
       <table class="gbntable">
         <tr class="gbntablehead2">
@@ -33576,14 +33495,6 @@ should not have received it.
     <xsl:with-param name="full-count" select="report/errors/count"/>
   </xsl:call-template>
 
-  <div class="section-header">
-    <a href="#" class="toggle-action-icon icon icon-action"
-      data-target="#table-box" data-name="Details"
-      data-variable="table-box--collapsed">
-        <img src="/img/fold.png"/>
-    </a>
-    <h3><xsl:value-of select="gsa:i18n ('Details')"/></h3>
-  </div> <!-- /section-header -->
   <div id="table-box" class="section-box">
       <table class="gbntable">
         <tr class="gbntablehead2">
@@ -33658,14 +33569,6 @@ should not have received it.
     <xsl:with-param name="full-count" select="''"/>
   </xsl:call-template>
 
-  <div class="section-header">
-    <a href="#" class="toggle-action-icon icon icon-action"
-      data-target="#table-box" data-name="Details"
-      data-variable="table-box--collapsed">
-        <img src="/img/fold.png"/>
-    </a>
-    <h3><xsl:value-of select="gsa:i18n ('Details')"/></h3>
-  </div> <!-- /section-header -->
   <div id="table-box" class="section-box">
     <div>
       <xsl:choose>

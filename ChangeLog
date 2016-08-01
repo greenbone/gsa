@@ -1,5 +1,10 @@
 2016-08-01  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/omp.xsl: Remove details section header from all report
+	result pages.
+
+2016-08-01  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/omp.xsl (credential details): Add list of scanners using
 	the credential to the credential details page.
 
