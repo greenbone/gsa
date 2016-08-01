@@ -9078,6 +9078,58 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </table>
   </div>
 
+  <div class="section-header">
+    <a href="#" class="toggle-action-icon icon icon-action"
+      data-target="#using-box3" data-name="Scanners using this Credential"
+      data-variable="using-box3--collapsed">
+        <img src="/img/fold.png"/>
+    </a>
+    <h3>
+      <a href="/omp?cmd=get_targets&amp;token={/envelope/token}"
+         title="{gsa:i18n ('Targets', 'Targets')}">
+        <img class="icon icon-sm" src="/img/scanner.svg" alt="Scanners"/>
+      </a>
+      <xsl:value-of select="gsa:i18n ('Scanners using this Credential', 'Credential')"/>
+      <xsl:text> </xsl:text>
+      <xsl:choose>
+        <xsl:when test="count(scanners/scanner) != 0">
+          (<xsl:value-of select="count(scanners/scanner)"/>)
+        </xsl:when>
+        <xsl:otherwise>
+          (<xsl:value-of select="gsa:i18n ('none')"/>)
+        </xsl:otherwise>
+      </xsl:choose>
+    </h3>
+  </div>
+  <div class="section-box" id="using-box3">
+    <table class="gbntable">
+      <thead>
+        <tr class="gbntablehead2">
+          <th><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></th>
+        </tr>
+      </thead>
+      <tbody>
+        <xsl:for-each select="scanners/scanner">
+          <tr>
+            <xsl:choose>
+              <xsl:when test="boolean (permissions) and count (permissions/permission) = 0">
+                <td><xsl:value-of select="name"/> (<xsl:value-of select="gsa:i18n('Unavailable', 'Property')"/>, <xsl:value-of select="gsa:i18n('UUID', 'Property')"/>: <xsl:value-of select="@id"/>)</td>
+              </xsl:when>
+              <xsl:otherwise>
+                <td>
+                  <a href="/omp?cmd=get_scanner&amp;scanner_id={@id}&amp;token={/envelope/token}"
+                     title="{gsa:i18n ('Scanner Details', 'Scanner')}">
+                    <xsl:value-of select="name"/>
+                  </a>
+                </td>
+              </xsl:otherwise>
+            </xsl:choose>
+          </tr>
+        </xsl:for-each>
+      </tbody>
+    </table>
+  </div>
+
   <xsl:call-template name="user-tags-window">
     <xsl:with-param name="resource_type" select="'credential'"/>
   </xsl:call-template>
