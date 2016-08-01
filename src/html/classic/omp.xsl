@@ -38479,6 +38479,13 @@ should not have received it.
         <xsl:value-of select="gsa:i18n ('Show scan results for this host', 'Host')"/>
       </a>
     </div>
+  </div>
+
+  <div class="section-header">
+    <a href="#" class="icon icon-action toggle-action-icon"
+      data-target="#identifiers-box" data-name="Identifiers" data-variable="identifiers-box--collapsed">
+      <img src="/img/fold.png"/>
+    </a>
     <h1>
       <xsl:choose>
         <xsl:when test="/envelope/params/show_all = '1'">
@@ -38489,6 +38496,9 @@ should not have received it.
         </xsl:otherwise>
       </xsl:choose>
     </h1>
+  </div>
+
+  <div class="section-box" id="identifiers-box">
     <table class="gbntable table-fixed">
       <xsl:variable name="id" select="identifiers/identifier[1]/source/@id"/>
       <thead>

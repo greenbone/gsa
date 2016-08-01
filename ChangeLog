@@ -1,5 +1,10 @@
 2016-08-01  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/omp.xsl (host-details): Allow to fold identifiers in host
+	details page.
+
+2016-08-01  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/help.xsl (new_credential.html): Fix link to installer
 	details.
 
