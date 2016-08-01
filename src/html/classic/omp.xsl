@@ -38441,7 +38441,7 @@ should not have received it.
       data-target="#identifiers-box" data-name="Identifiers" data-variable="identifiers-box--collapsed">
       <img src="/img/fold.png"/>
     </a>
-    <h1>
+    <h3>
       <xsl:choose>
         <xsl:when test="/envelope/params/show_all = '1'">
           <xsl:value-of select="gsa:i18n ('All Identifiers', 'Assets')"/>
@@ -38450,7 +38450,7 @@ should not have received it.
           <xsl:value-of select="gsa:i18n ('Latest Identifiers', 'Assets')"/>
         </xsl:otherwise>
       </xsl:choose>
-    </h1>
+    </h3>
   </div>
 
   <div class="section-box" id="identifiers-box">
