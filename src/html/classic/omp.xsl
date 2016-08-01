@@ -32870,7 +32870,8 @@ should not have received it.
               <xsl:value-of select="count(../../host[detail[name = $name and value = $value]])"/>
             </td>
             <td>
-              <a href="/omp?cmd=get_report_section&amp;report_id={$report/@id}&amp;report_section=results&amp;filter=&#34;{$value}&#34; result_hosts_only=1 levels=hml autofp=0 notes=1 overrides=1 first=1 rows=100&amp;token={/envelope/token}" title="{gsa:i18n ('Report: Results', 'Report Section')} ({gsa:i18n ('for App', 'Result')}: {$value})">
+              <a href="/omp?cmd=get_report_section&amp;report_id={../../@id}&amp;report_section=results&amp;filter=&#34;{$value}&#34; result_hosts_only=1 levels=hml autofp=0 notes=1 overrides=1 first=1 rows=100&amp;token={/envelope/token}"
+                title="{gsa:i18n ('Report: Results', 'Report Section')} ({gsa:i18n ('for App', 'Result')}: {$value})">
                 <xsl:value-of select="count(../../host/detail[name = $value]) + $no_cpe_detail_hosts"/>
               </a>
               <xsl:if test="$no_cpe_detail_hosts">
