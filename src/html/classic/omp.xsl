@@ -30103,24 +30103,12 @@ should not have received it.
     </a>
     <xsl:choose>
       <xsl:when test="$delta=0">
-        <a href="?cmd=get_report&amp;report_id={$report_id}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;overrides={/envelope/params/apply_overrides}&amp;token={/envelope/token}#result-{$report_result_id}"
-           title="{gsa:i18n ('Report', 'Report')}"
-           class="icon">
-          <img src="/img/list.png" alt="{gsa:i18n ('Report', 'Report')}"/>
-        </a>
         <a href="/omp?cmd=export_result&amp;result_id={@id}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
           title="{gsa:i18n ('Export Result as XML', 'Result')}"
           class="icon">
           <img src="/img/download.png" alt="{gsa:i18n ('Export XML', 'Action Verb')}"/>
         </a>
       </xsl:when>
-      <xsl:otherwise>
-        <a href="?cmd=get_report&amp;report_id={../../@id}&amp;delta_report_id={../../delta/report/@id}&amp;delta_states={../../filters/delta/text()}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;overrides={../../../../filters/apply_overrides}&amp;token={/envelope/token}#result-{$report_result_id}"
-           title="{gsa:i18n ('Report', 'Report')}"
-           class="icon">
-          <img src="/img/list.png" alt="{gsa:i18n ('Report', 'Report')}"/>
-        </a>
-      </xsl:otherwise>
     </xsl:choose>
     <xsl:call-template name="feedback-icon">
       <xsl:with-param name="subject" select="concat ('Feedback on NVT &quot;', nvt/name,'&quot; (', nvt/@oid, ')')"/>
@@ -30136,6 +30124,30 @@ should not have received it.
                                                   'Result:&#xA;',
                                                   description)"/>
     </xsl:call-template>
+
+    <span class="divider"/>
+    <a href="?cmd=get_task&amp;task_id={$task_id}&amp;overrides={/envelope/params/overrides}&amp;min_qod={/envelope/params/min_qod}&amp;token={/envelope/token}"
+      title="{gsa-i18n:strformat (gsa:i18n ('Corresponding Task (%1)', 'Task'), $task_name)}">
+      <img src="/img/task.svg" alt="Task"
+        class="icon icon-sm" />
+    </a>
+    <xsl:choose>
+      <xsl:when test="$delta=0">
+        <a href="?cmd=get_report&amp;report_id={$report_id}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;overrides={/envelope/params/apply_overrides}&amp;token={/envelope/token}#result-{$report_result_id}"
+          title="{gsa:i18n ('Corresponding Report', 'Report')}">
+          <img src="/img/report.svg" alt="{gsa:i18n ('Corresponding Report', 'Report')}"
+            class="icon icon-sm" />
+        </a>
+      </xsl:when>
+      <xsl:otherwise>
+        <a href="?cmd=get_report&amp;report_id={../../@id}&amp;delta_report_id={../../delta/report/@id}&amp;delta_states={../../filters/delta/text()}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;overrides={../../../../filters/apply_overrides}&amp;token={/envelope/token}#result-{$report_result_id}"
+           title="{gsa:i18n ('Corresponding Report', 'Report')}"
+           class="icon">
+          <img src="/img/report.svg" alt="{gsa:i18n ('Corresponding Report', 'Report')}"
+            class="icon icon-sm" />
+        </a>
+      </xsl:otherwise>
+    </xsl:choose>
   </div>
 
   <div class="section-header">
@@ -30152,16 +30164,6 @@ should not have received it.
   </div>
 
   <div class="section-box">
-    <table>
-      <tr>
-        <td><xsl:value-of select="gsa:i18n ('Task', 'Task')"/>:</td>
-        <td>
-          <a href="?cmd=get_task&amp;task_id={$task_id}&amp;overrides={/envelope/params/overrides}&amp;min_qod={/envelope/params/min_qod}&amp;token={/envelope/token}">
-            <xsl:value-of select="$task_name"/>
-          </a>
-        </td>
-      </tr>
-    </table>
     <table class="gbntable">
       <xsl:call-template name="result-detailed">
         <xsl:with-param name="note-buttons">1</xsl:with-param>

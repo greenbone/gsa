@@ -1,5 +1,11 @@
 2016-08-01  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/omp.xsl (result-details): Add icons for links to the
+	corresponding report and task to the result details page. Remove the original
+	link and icon.
+
+2016-08-01  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/omp.xsl (host-details): Use heading level of 3 for host
 	identifier section.
 
