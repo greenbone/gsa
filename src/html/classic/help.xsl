@@ -1195,8 +1195,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         Note that if the latter option was chosen, users are not able or allowed to
         access either passwords nor so-called private keys.
         Instead, installer packages are created that can be installed on target
-        systems. Internals of these installers are explained in the
-        <a href="#actions">Actions</a> section of this help page.
+        systems. Details of these installers are explained in the
+        <a href="credentials.html?token={/envelope/token}#actions">Actions</a> section of the credentials help page.
         These actions are not available if the password was specified manually.
       </p>
       <p>
