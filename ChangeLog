@@ -1,5 +1,10 @@
 2016-08-01  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/omp.xsl (report section-list): Remove list item for the
+	task. The task can now be reached via an icon in the toolbar.
+
+2016-08-01  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/omp.xsl (report apps): Fix report of applications by using
 	the correct path to the report id and not an undefined variable.
 

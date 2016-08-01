@@ -32071,15 +32071,6 @@ should not have received it.
               </li>
             </xsl:if>
           </li>
-          <li>
-            <xsl:if test="$type != 'prognostic'">
-              <li class="last">
-                <a href="?cmd=get_task&amp;task_id={task/@id}&amp;overrides={filters/apply_overrides}&amp;min_qod={filters/min_qod}&amp;token={/envelope/token}">
-                  <xsl:value-of select="concat (gsa:i18n ('Task', 'Task'), ': ', task/name)"/>
-                </a>
-              </li>
-            </xsl:if>
-          </li>
         </ul>
       </li>
     </ul>
