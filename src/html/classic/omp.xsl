@@ -3944,6 +3944,29 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div id="list-window-header">
     <div id="list-window-title">
       <div class="section-header">
+        <div class="section-header-info">
+          <table>
+            <tr>
+              <td><xsl:value-of select="gsa:i18n ('ID', 'Property')"/>:</td>
+              <td>
+                <xsl:value-of select="@id"/>
+              </td>
+            </tr>
+            <tr>
+              <td><xsl:value-of select="gsa:i18n ('Modified', 'Date')"/>:</td>
+              <td><xsl:value-of select="gsa:long-time (modification_time)"/></td>
+            </tr>
+            <tr>
+              <td><xsl:value-of select="gsa:i18n ('Created', 'Date')"/>:</td>
+              <td><xsl:value-of select="gsa:long-time (creation_time)"/></td>
+            </tr>
+            <tr>
+              <td><xsl:value-of select="gsa:i18n ('Owner', 'Property')"/>:</td>
+              <td><xsl:value-of select="owner/name"/></td>
+            </tr>
+          </table>
+        </div>
+
         <xsl:choose>
           <xsl:when test="0">
           </xsl:when>
