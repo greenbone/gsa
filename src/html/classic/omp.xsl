@@ -33552,16 +33552,6 @@ should not have received it.
             <a href="?cmd=get_report&amp;type=assets&amp;levels={../../host_levels}&amp;search_phrase={../../host_search_phrase}&amp;first_result={../../results/@start}&amp;max_results={../../results/@max}&amp;overrides={$apply-overrides}&amp;token={/envelope/token}">Hosts</a>
           </div>
         </xsl:when>
-        <xsl:otherwise>
-          <div class="pull-right">
-            <table style="font-size: 10px;">
-              <tr>
-                <td><xsl:value-of select="gsa:i18n ('ID', 'Property')"/>:</td>
-                <td><xsl:value-of select="@id"/></td>
-              </tr>
-            </table>
-          </div>
-        </xsl:otherwise>
       </xsl:choose>
 
       <a name="summary"/>
