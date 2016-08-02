@@ -65,14 +65,13 @@
   gsa.is_function = is_function;
   gsa.is_array = Array.isArray;
   gsa.array_sum = array_sum;
+  gsa.derive = derive;
 
   function LanguageDetector() {
     global.i18nextBrowserLanguageDetector.call(this);
   }
 
-  LanguageDetector.prototype = Object.create(
-    global.i18nextBrowserLanguageDetector.prototype);
-  LanguageDetector.prototype.constructor = LanguageDetector;
+  gsa.derive(LanguageDetector, global.i18nextBrowserLanguageDetector);
 
   LanguageDetector.prototype.detect = function() {
     var lang = $('html').attr('lang');
@@ -160,6 +159,11 @@
       }
     }
     return sum;
+  }
+
+  function derive(child, base) {
+    child.prototype = Object.create(base.prototype);
+    child.prototype.constructor = child;
   }
 
   var RESPONSE_SELECTORS = {
@@ -411,8 +415,7 @@
     }
   }
 
-  OMPDialog.prototype = Object.create(Dialog.prototype);
-  OMPDialog.prototype.constructor = OMPDialog;
+  gsa.derive(OMPDialog, Dialog);
 
   OMPDialog.prototype.finished = function() {
     // I believe there have to be a better way to find this.
@@ -761,8 +764,7 @@
     this.title = title;
   }
 
-  FilterDialog.prototype = Object.create(Dialog.prototype);
-  FilterDialog.prototype.constructor = FilterDialog;
+  gsa.derive(FilterDialog, Dialog);
 
   FilterDialog.prototype.show = function() {
     var self = this;
