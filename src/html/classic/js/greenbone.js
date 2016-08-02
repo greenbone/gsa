@@ -1249,12 +1249,9 @@
       elem.on('click', function(event) {
         event.preventDefault();
 
-        var params = $(elem.parents('form')).serializeArray();
-        var form_data = new FormData();
+        var form = elem.parents('form');
+        var form_data = new FormData(form[0]);
 
-        for (var index = 0; index < params.length; index++) {
-          form_data.append(params[index].name, params[index].value);
-        }
         form_data.set('xml','1');
         form_data.set('next_xml','0');
         form_data.set('no_redirect','1');
@@ -1269,7 +1266,7 @@
         };
 
         var done_func = function(response_doc) {
-          var action_result = $($(response_doc).find('action_result'));
+          var action_result = $(response_doc).find('action_result');
 
           var next_url = action_result.children('next').text();
           if (gsa.is_defined(next_url) && next_url !== '') {
@@ -1278,7 +1275,7 @@
         };
 
         var fail_func = function(jqXHR) {
-          var action_result = $($(jqXHR.responseXML).find('action_result'));
+          var action_result = $(jqXHR.responseXML).find('action_result');
 
           var error_div = $('<div class="ui-state-error ui-corner-all"/>');
 
