@@ -35054,7 +35054,7 @@ should not have received it.
         <td><xsl:value-of select="gsa:i18n ('Type', 'Property')"/></td>
         <td><xsl:value-of select="gsa:i18n ('Items', 'Trashcan')"/></td>
       </tr>
-      <xsl:variable name="items">
+      <xsl:variable name="items" xmlns="">
         <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_AGENTS']">
           <item>
             <type>agent</type>

@@ -1,3 +1,8 @@
+2016-08-02  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/omp.xsl (get_trash): Add missing xmlns so contents
+	are shown again.
+
 2016-08-02  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/omp.xsli (ovaldef-details): Remove duplicate name row from
