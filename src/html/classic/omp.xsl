@@ -32062,15 +32062,6 @@ should not have received it.
               </xsl:apply-templates>
             </xsl:if>
           </li>
-          <li>
-            <xsl:if test="$type != 'prognostic'">
-              <li>
-                <a href="?cmd=get_results&amp;filter={filters/term} and report_id={@id}&amp;token={/envelope/token}">
-                  <xsl:value-of select="gsa:i18n ('Results view', 'Report Section')"/>
-                </a>
-              </li>
-            </xsl:if>
-          </li>
         </ul>
       </li>
     </ul>
@@ -33147,6 +33138,11 @@ should not have received it.
   <a href="?cmd=get_task&amp;task_id={task/@id}&amp;overrides={/envelope/params/overrides}&amp;min_qod={/envelope/params/min_qod}&amp;token={/envelope/token}"
     title="{gsa-i18n:strformat (gsa:i18n ('Corresponding Task (%1)', 'Task'), task/name)}">
     <img src="/img/task.svg" alt="Task"
+      class="icon icon-sm" />
+  </a>
+  <a href="?cmd=get_results&amp;filter=report_id={@id}&amp;token={/envelope/token}"
+    title="{gsa:i18n ('Corresponding Results', 'Results')}">
+    <img src="/img/result.svg" alt="Results"
       class="icon icon-sm" />
   </a>
 </xsl:template>

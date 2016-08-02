@@ -1,5 +1,10 @@
 2016-08-02  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/omp.xsl (report-icons, section-link): Move the link to the
+	list of corresponding results of a report as an icon to the toolbar.
+
+2016-08-02  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/omp.xsl: Fix displaying the names in all secinfo section
 	headers.
 
