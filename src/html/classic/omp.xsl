@@ -22124,21 +22124,6 @@ should not have received it.
   <div class="section-box">
     <table>
       <tr>
-        <td><b><xsl:value-of select="gsa:i18n ('Name', 'Property')"/>:</b></td>
-        <td>
-          <b>
-            <xsl:choose>
-              <xsl:when test="info/cve">
-                <xsl:value-of select="info/cve/raw_data/cve:entry/@id"/>
-              </xsl:when>
-              <xsl:otherwise>
-                <xsl:value-of select="/envelope/params/info_name"/>
-              </xsl:otherwise>
-            </xsl:choose>
-          </b>
-        </td>
-      </tr>
-      <tr>
         <td><xsl:value-of select="gsa:i18n ('CWE ID', 'CVE')"/>:</td>
         <td><xsl:value-of select="info/cve/raw_data/cve:entry/vuln:cwe/@id"/></td>
       </tr>
@@ -22425,20 +22410,6 @@ should not have received it.
 
   <div class="section-box">
     <table>
-      <tr>
-        <xsl:if test="info/name">
-          <td width="100"><b><xsl:value-of select="gsa:i18n ('Name', 'Property')"/>:</b></td>
-          <td>
-            <b>
-              <xsl:call-template name="cpe-icon">
-                <xsl:with-param name="cpe" select="info/@id"/>
-                <xsl:with-param name="hide_other" select="1"/>
-              </xsl:call-template>
-              <xsl:value-of select="info/name"/>
-            </b>
-          </td>
-        </xsl:if>
-      </tr>
       <xsl:if test="info/cpe/title">
         <tr>
           <td><xsl:value-of select="gsa:i18n ('Title', 'Property')"/>:</td>
@@ -22849,12 +22820,6 @@ should not have received it.
     <xsl:choose>
       <xsl:when test="info/cert_bund_adv">
         <table>
-          <tr>
-            <td valign="top" width="130px"><b><xsl:value-of select="gsa:i18n ('Name', 'Property')"/>:</b></td>
-            <td>
-              <b><xsl:value-of select="info/cert_bund_adv/raw_data/Advisory/Ref_Num"/></b>
-            </td>
-          </tr>
           <xsl:if test="info/cert_bund_adv/raw_data/Advisory/Version != ''">
             <tr>
               <td valign="top"><xsl:value-of select="gsa:i18n ('Version', 'Property')"/>:</td>
@@ -23043,12 +23008,6 @@ should not have received it.
       <xsl:when test="info/dfn_cert_adv">
         <table>
           <tr>
-            <td valign="top" width="130px"><b><xsl:value-of select="gsa:i18n ('Name', 'Property')"/>:</b></td>
-            <td>
-              <b><xsl:value-of select="info/dfn_cert_adv/raw_data/atom:entry/dfncert:refnum"/></b>
-            </td>
-          </tr>
-          <tr>
             <td valign="top"><xsl:value-of select="gsa:i18n ('Title', 'Property')"/>:</td>
             <td>
               <xsl:value-of select="info/dfn_cert_adv/raw_data/atom:entry/atom:title"/>
@@ -23147,7 +23106,6 @@ should not have received it.
 <xsl:template match="nvt" mode="details">
   <xsl:param name="config"/>
   <table>
-    <tr><td><b><xsl:value-of select="gsa:i18n ('Name', 'Property')"/>:</b></td><td><b><xsl:value-of select="name"/></b></td></tr>
     <tr><td><xsl:value-of select="gsa:i18n ('Config', 'Scan Config')"/>:</td><td><xsl:value-of select="$config"/></td></tr>
     <tr><td><xsl:value-of select="gsa:i18n ('Family', 'NVT')"/>:</td><td><xsl:value-of select="family"/></td></tr>
     <tr><td><xsl:value-of select="gsa:i18n ('OID', 'NVT')"/>:</td><td><xsl:value-of select="@oid"/></td></tr>
