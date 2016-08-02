@@ -990,9 +990,7 @@ select[multiple] {
 }
 
 .report-section-severity {
-  float: right;
-  position: relative;
-  top: 35px;
+  display: inline-block;
 }
 
 .wizard_hint {

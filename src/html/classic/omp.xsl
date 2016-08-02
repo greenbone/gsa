@@ -3917,6 +3917,48 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:call-template name="report-icons">
         <xsl:with-param name="section" select="$section"/>
       </xsl:call-template>
+
+      <span class="divider"/>
+
+      <!-- Status bar -->
+      <xsl:choose>
+        <xsl:when test="not(/envelope/params/delta_report_id != '')">
+          <div class="report-section-severity">
+            <xsl:apply-templates select="report" mode="section-link">
+              <xsl:with-param name="section" select="'summary'"/>
+              <xsl:with-param name="type">
+                <xsl:choose>
+                  <xsl:when test="@type"><xsl:value-of select="@type"/></xsl:when>
+                  <xsl:otherwise>normal</xsl:otherwise>
+                </xsl:choose>
+              </xsl:with-param>
+              <xsl:with-param name="count" select="-1"/>
+              <xsl:with-param name="link_style" select="'element'"/>
+
+              <xsl:with-param name="element">
+                <xsl:call-template name="status_bar">
+                  <xsl:with-param name="status">
+                    <xsl:choose>
+                      <xsl:when test="report/task/target/@id='' and report/scan_run_status='Running'">
+                        <xsl:text>Uploading</xsl:text>
+                      </xsl:when>
+                      <xsl:when test="report/task/target/@id=''">
+                        <xsl:text>Container</xsl:text>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <xsl:value-of select="report/scan_run_status"/>
+                      </xsl:otherwise>
+                    </xsl:choose>
+                  </xsl:with-param>
+                  <xsl:with-param name="progress">
+                    <xsl:value-of select="../../get_tasks_response/task/progress/text()"/>
+                  </xsl:with-param>
+                </xsl:call-template>
+              </xsl:with-param>
+            </xsl:apply-templates>
+          </div>
+        </xsl:when>
+      </xsl:choose>
     </div>
 
     <xsl:choose>
@@ -3991,46 +4033,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:text>)</xsl:text>
           </xsl:if>
         </h2>
-
-        <!-- Status bar -->
-        <xsl:choose>
-          <xsl:when test="not(/envelope/params/delta_report_id != '')">
-            <div class="report-section-severity">
-              <xsl:apply-templates select="report" mode="section-link">
-                <xsl:with-param name="section" select="'summary'"/>
-                <xsl:with-param name="type">
-                  <xsl:choose>
-                    <xsl:when test="@type"><xsl:value-of select="@type"/></xsl:when>
-                    <xsl:otherwise>normal</xsl:otherwise>
-                  </xsl:choose>
-                </xsl:with-param>
-                <xsl:with-param name="count" select="-1"/>
-                <xsl:with-param name="link_style" select="'element'"/>
-
-                <xsl:with-param name="element">
-                  <xsl:call-template name="status_bar">
-                    <xsl:with-param name="status">
-                      <xsl:choose>
-                        <xsl:when test="report/task/target/@id='' and report/scan_run_status='Running'">
-                          <xsl:text>Uploading</xsl:text>
-                        </xsl:when>
-                        <xsl:when test="report/task/target/@id=''">
-                          <xsl:text>Container</xsl:text>
-                        </xsl:when>
-                        <xsl:otherwise>
-                          <xsl:value-of select="report/scan_run_status"/>
-                        </xsl:otherwise>
-                      </xsl:choose>
-                    </xsl:with-param>
-                    <xsl:with-param name="progress">
-                      <xsl:value-of select="../../get_tasks_response/task/progress/text()"/>
-                    </xsl:with-param>
-                  </xsl:call-template>
-                </xsl:with-param>
-              </xsl:apply-templates>
-            </div>
-          </xsl:when>
-        </xsl:choose>
       </div>
     </div>
   </div>
