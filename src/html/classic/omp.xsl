@@ -22116,7 +22116,7 @@ should not have received it.
         <img class="icon icon-lg" src="/img/cve.svg" alt="CVEs"/>
       </a>
       <xsl:value-of select="gsa:i18n ('CVE', 'CVE')"/>:
-      <xsl:value-of select="name"/>
+      <xsl:value-of select="info/name"/>
       <xsl:text> </xsl:text>
     </h1>
   </div>
@@ -22418,7 +22418,7 @@ should not have received it.
         <img class="icon icon-lg" src="/img/cpe.svg" alt="CPEs"/>
       </a>
       <xsl:value-of select="gsa:i18n ('CPE', 'CPE')"/>:
-      <xsl:value-of select="name"/>
+      <xsl:value-of select="info/name"/>
       <xsl:text> </xsl:text>
     </h1>
   </div>
@@ -22573,7 +22573,7 @@ should not have received it.
         <img class="icon icon-lg" src="/img/ovaldef.svg" alt="OVAL Definitions"/>
       </a>
       <xsl:value-of select="gsa:i18n ('OVAL Definition', 'OVAL Definition')"/>:
-      <xsl:value-of select="name"/>
+      <xsl:value-of select="info/name"/>
       <xsl:text> </xsl:text>
     </h1>
   </div>
@@ -22840,7 +22840,7 @@ should not have received it.
         <img class="icon icon-lg" src="/img/cert_bund_adv.svg" alt="CERT-Bund Advisories"/>
       </a>
       <xsl:value-of select="gsa:i18n ('CERT-Bund Advisory', 'CERT-Bund Advisory')"/>:
-      <xsl:value-of select="name"/>
+      <xsl:value-of select="info/name"/>
       <xsl:text> </xsl:text>
     </h1>
   </div>
@@ -23033,7 +23033,7 @@ should not have received it.
         <img class="icon icon-lg" src="/img/dfn_cert_adv.svg" alt="DFN-CERT Advisories"/>
       </a>
       <xsl:value-of select="gsa:i18n ('DFN-CERT Advisory', 'DFN-CERT Advisory')"/>:
-      <xsl:value-of select="name"/>
+      <xsl:value-of select="info/name"/>
       <xsl:text> </xsl:text>
     </h1>
   </div>
@@ -23490,7 +23490,7 @@ should not have received it.
             <img class="icon icon-lg" src="/img/nvt.svg" alt="NVTs"/>
           </a>
           <xsl:value-of select="gsa:i18n ('NVT', 'NVT')"/>:
-          <xsl:value-of select="name"/>
+          <xsl:value-of select="$nvts_response/nvt/name"/>
           <xsl:text> </xsl:text>
         </h1>
       </div>
