@@ -266,67 +266,10 @@
     return undefined;
   }
 
-  /**
-   * command is the name of the gsa command that has to be send initialy
-   * done is the select that will get the value of the newly created resource or true if a global reload is to be triggered.
-   * params are extra parameters to send to the initial GET request.
-   * show_method specifies the method to send the initial request instead of GET.
-  **/
-  var OMPDialog = function(options) {
-    this.command = options.cmd;
-    this.success_reload = options.success_reload || {};
-    this.close_reload = options.close_reload || {};
-    this.height = is_defined(options.height) ? options.height : 500;
-    this.dialog_id = options.dialog_id;
+  function Dialog() {
+  }
 
-    if (options.params === undefined) {
-      this.params = {};
-    } else {
-      this.params = options.params;
-    }
-    if (options.show_method === undefined) {
-      this.show_method = 'GET';
-    } else {
-      this.show_method = options.show_method;
-    }
-    if (options.parent_dialog) {
-      this.parent_dialog = options.parent_dialog.$omp;
-    }
-  };
-
-  var waiting = function() {
-    // I believe there have to be a better way to find this.
-    var buttons = this.dialog.closest('.ui-dialog').find('button.ui-button');
-    buttons.each(function() {
-      var button = $(this);
-      if (button.button('option', 'label') !== 'Close') {
-        this.label = button.button('option', 'label');
-        if (this.label !== 'OK') {
-          button.button('option', 'label', this.label.substring(
-                0, this.label.length - 1) + 'ing ...');
-        }
-        button.button('option', 'icons', {primary: 'ui-icon-waiting'});
-        button.button('disable');
-      }
-    });
-  };
-
-  OMPDialog.prototype.waiting = waiting;
-
-  OMPDialog.prototype.finished = function() {
-    // I believe there have to be a better way to find this.
-    var buttons = this.dialog.closest('.ui-dialog').find('button.ui-button');
-    buttons.each(function() {
-      var button = $(this);
-      if (button.button('option', 'label') !== 'Close') {
-        button.button('enable');
-        button.button('option', 'label', this.label);
-        button.button('option', 'icons', {primary: null});
-      }
-    });
-  };
-
-  OMPDialog.prototype.error = function(message, title, status_code) {
+  Dialog.prototype.error = function(message, title, status_code) {
     var displayed_title;
     if (!title) {
       displayed_title = 'Error:';
@@ -349,27 +292,7 @@
     }));
   };
 
-  OMPDialog.prototype.close = function() {
-    if (this.dialog.$omp) {
-      // dereference self to avoid memory leak
-      this.dialog.$omp = undefined;
-    }
-    if (gsa.is_defined(this.dialog_id)) {
-      // remove dialog from global dialogs
-      delete DIALOGS[this.dialog_id];
-    }
-
-    this.dialog.remove();
-    this.dialog = undefined;
-    this.parent_dialog = undefined;
-    start_auto_refresh();
-
-    if (this.close_reload.type === 'window') {
-      location.reload();
-    }
-  };
-
-  OMPDialog.prototype.setErrorFromResponse = function(jqXHR) {
+  Dialog.prototype.setErrorFromResponse = function(jqXHR) {
     var self = this;
     var xml = $(jqXHR.responseXML);
     var html = $(jqXHR.responseText);
@@ -441,6 +364,87 @@
     }
 
     self.error(error, error_title, error_code);
+  };
+
+  Dialog.prototype.waiting = function() {
+    // I believe there have to be a better way to find this.
+    var buttons = this.dialog.closest('.ui-dialog').find('button.ui-button');
+    buttons.each(function() {
+      var button = $(this);
+      if (button.button('option', 'label') !== 'Close') {
+        this.label = button.button('option', 'label');
+        if (this.label !== 'OK') {
+          button.button('option', 'label', this.label.substring(
+                0, this.label.length - 1) + 'ing ...');
+        }
+        button.button('option', 'icons', {primary: 'ui-icon-waiting'});
+        button.button('disable');
+      }
+    });
+  };
+
+  /**
+   * command is the name of the gsa command that has to be send initialy
+   * done is the select that will get the value of the newly created resource or true if a global reload is to be triggered.
+   * params are extra parameters to send to the initial GET request.
+   * show_method specifies the method to send the initial request instead of GET.
+  **/
+  function OMPDialog(options) {
+    this.command = options.cmd;
+    this.success_reload = options.success_reload || {};
+    this.close_reload = options.close_reload || {};
+    this.height = is_defined(options.height) ? options.height : 500;
+    this.dialog_id = options.dialog_id;
+
+    if (options.params === undefined) {
+      this.params = {};
+    } else {
+      this.params = options.params;
+    }
+    if (options.show_method === undefined) {
+      this.show_method = 'GET';
+    } else {
+      this.show_method = options.show_method;
+    }
+    if (options.parent_dialog) {
+      this.parent_dialog = options.parent_dialog.$omp;
+    }
+  }
+
+  OMPDialog.prototype = Object.create(Dialog.prototype);
+  OMPDialog.prototype.constructor = OMPDialog;
+
+  OMPDialog.prototype.finished = function() {
+    // I believe there have to be a better way to find this.
+    var buttons = this.dialog.closest('.ui-dialog').find('button.ui-button');
+    buttons.each(function() {
+      var button = $(this);
+      if (button.button('option', 'label') !== 'Close') {
+        button.button('enable');
+        button.button('option', 'label', this.label);
+        button.button('option', 'icons', {primary: null});
+      }
+    });
+  };
+
+  OMPDialog.prototype.close = function() {
+    if (this.dialog.$omp) {
+      // dereference self to avoid memory leak
+      this.dialog.$omp = undefined;
+    }
+    if (gsa.is_defined(this.dialog_id)) {
+      // remove dialog from global dialogs
+      delete DIALOGS[this.dialog_id];
+    }
+
+    this.dialog.remove();
+    this.dialog = undefined;
+    this.parent_dialog = undefined;
+    start_auto_refresh();
+
+    if (this.close_reload.type === 'window') {
+      location.reload();
+    }
   };
 
   OMPDialog.prototype.postForm = function() {
@@ -752,12 +756,13 @@
 
   global.OMPDialog = OMPDialog;
 
-  var FilterDialog = function(id, title) {
+  function FilterDialog(id, title) {
     this.id = id;
     this.title = title;
-  };
+  }
 
-  FilterDialog.prototype.waiting = waiting;
+  FilterDialog.prototype = Object.create(Dialog.prototype);
+  FilterDialog.prototype.constructor = FilterDialog;
 
   FilterDialog.prototype.show = function() {
     var self = this;
@@ -811,7 +816,7 @@
 
   global.FilterDialog = FilterDialog;
 
-  var InfoDialog = function(options) {
+  function InfoDialog(options) {
     this.timeout = options.timeout !== undefined ? options.timeout : 5000;
     this.width = options.width !== undefined ? options.width : 600;
     this.transfer_to = options.transfer_to ? $(options.transfer_to) : undefined;
@@ -827,7 +832,7 @@
     options.element.detach();
     this.dialog.append(options.element.children());
     this.dialog_css = options.dialog_css;
-  };
+  }
 
   InfoDialog.prototype.close = function() {
     if (this.transfer_to !== undefined) {
