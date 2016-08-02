@@ -22554,10 +22554,6 @@ should not have received it.
       <xsl:when test="info/ovaldef">
         <table>
           <tr>
-            <td width="130px"><b><xsl:value-of select="gsa:i18n ('Name (OVAL ID)', 'OVAL Definition')"/>:</b></td>
-            <td><b><xsl:value-of select="info/ovaldef/raw_data/oval_definitions:definition/@id"/></b></td>
-          </tr>
-          <tr>
             <td valign="top"><xsl:value-of select="gsa:i18n ('Title', 'Property')"/>:</td>
             <td><xsl:value-of select="info/ovaldef/raw_data/oval_definitions:definition/oval_definitions:metadata/oval_definitions:title"/></td>
           </tr>
