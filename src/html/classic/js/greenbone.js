@@ -1114,7 +1114,9 @@
   };
 
   function OMPAction(options) {
-    this.params = options.params === undefined ? {} : options.params;
+    this.params = gsa.is_defined(options.params) ? options.params : {};
+    this.method = gsa.is_string(options.method) ?
+      options.method.toUpperCase() : 'POST';
     this.form = options.form;
     this.success_callback = options.success_callback;
     this.fail_callback = options.fail_callback;
@@ -1130,25 +1132,37 @@
       this.fail_callback = fail_callback;
     }
 
-    var data = new FormData(this.form);
-    for (var param in this.params) {
-      if (param === 'xml' || param === 'no_redirect') {
-        // skip values
-        continue;
-      }
-      data.append(param, this.params[param]);
+    if (this.method === 'GET') {
+      self.request_data = {
+        url: '/omp?' + $.param(this.params),
+        cache: false,
+        type: 'GET',
+      };
     }
-    data.append('xml', 1);
-    data.append('no_redirect', 1);
+    else if (this.method === 'POST') {
+      var data = new FormData(this.form);
+      for (var param in this.params) {
+        if (param === 'xml' || param === 'no_redirect') {
+          // skip values
+          continue;
+        }
+        data.append(param, this.params[param]);
+      }
+      data.append('xml', 1);
+      data.append('no_redirect', 1);
 
-    self.request_data = {
-      url: '/omp',
-      data: data,
-      cache: false,
-      processData: false,
-      contentType: false,
-      type: 'POST',
-    };
+      self.request_data = {
+        url: '/omp',
+        data: data,
+        cache: false,
+        processData: false,
+        contentType: false,
+        type: 'POST',
+      };
+    }
+    else {
+      throw new Error('Unknown method "' + this.method + '"');
+    }
 
     function done_func(data, status, jqXHR) {
       self.success(data, status, jqXHR);
