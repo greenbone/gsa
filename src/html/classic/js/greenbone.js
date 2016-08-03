@@ -1146,14 +1146,18 @@
     }
     else if (this.method === 'POST') {
       var data = new FormData(this.form);
+
       for (var param in this.params) {
-        if (param === 'no_redirect') {
+        if (this.xml && param === 'no_redirect') {
           // skip values
           continue;
         }
         data.append(param, this.params[param]);
       }
-      data.append('no_redirect', 1);
+
+      if (this.xml) {
+        data.append('no_redirect', 1);
+      }
 
       self.request_data = {
         url: '/omp',
