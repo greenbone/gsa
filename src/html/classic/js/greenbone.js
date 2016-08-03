@@ -456,32 +456,13 @@
 
   OMPDialog.prototype.postForm = function() {
     var self = this;
-    var data = new FormData(this.dialog.find('form')[0]);
 
-    data.append('xml', 1);
-    data.append('no_redirect', 1);
-    $.ajax({
-      url: '/omp',
-      data: data,
-      processData: false,
-      contentType: false,
-      type: 'POST',
-      dataType: 'xml',
-    })
-    .fail(function(response) {
-      if (response.status === 401) {
-        // not authorized (anymore)
-        // reload page to show login dialog
-        location.reload();
-        return;
-      }
+    var request = new OMPRequest({
+      form: this.dialog.find('form')[0],
+      xml: true,
+    });
 
-      self.setErrorFromResponse(response);
-
-      // restore the original button.
-      self.finished();
-    })
-    .done(function(xml) {
+    request.do(function(xml) {
       var entity;
 
       xml = $(xml);
@@ -560,6 +541,18 @@
 
       // And finally, close our dialog.
       self.close();
+    }, function(response) {
+      if (response.status === 401) {
+        // not authorized (anymore)
+        // reload page to show login dialog
+        location.reload();
+        return;
+      }
+
+      self.setErrorFromResponse(response);
+
+      // restore the original button.
+      self.finished();
     });
   };
 
@@ -690,33 +683,13 @@
       $('html').css('cursor', '');
     };
 
-    if (this.show_method === 'GET') {
-      self.request_data = {
-        url: '/omp?' + $.param(this.params),
-        cache: false,
-        type: 'GET',
-      };
-    }
-    else if (this.show_method === 'POST') {
-      var data = new FormData();
-      for (var param in this.params) {
-        data.append(param, this.params[param]);
-      }
+    self.request = new OMPRequest({
+      params: self.params,
+      method: self.show_method,
+      xml: false,
+    });
 
-      self.request_data = {
-        url: '/omp',
-        data: data,
-        cache: false,
-        processData: false,
-        contentType: false,
-        type: 'POST',
-      };
-    }
-    else {
-      throw new Error('Unknown show_method "' + this.show_method + '"');
-    }
-
-    $.ajax(self.request_data).done(done_func).fail(fail_func);
+    self.request.do(done_func, fail_func);
 
     return this;
   };
@@ -724,7 +697,7 @@
   OMPDialog.prototype.reload = function() {
     var self = this;
     self.waiting();
-    $.ajax(self.request_data).then(function(data) {
+    self.request.do(function(data) {
         self.setContent(data);
         self.finished();
       }, function() {
