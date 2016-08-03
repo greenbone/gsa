@@ -1113,7 +1113,7 @@
     this.toggleIcon();
   };
 
-  function OMPAction(options) {
+  function OMPRequest(options) {
     this.params = gsa.is_defined(options.params) ? options.params : {};
     this.method = gsa.is_string(options.method) ?
       options.method.toUpperCase() : 'POST';
@@ -1123,7 +1123,7 @@
     this.fail_callback = options.fail_callback;
   }
 
-  OMPAction.prototype.do = function(success_callback, fail_callback) {
+  OMPRequest.prototype.do = function(success_callback, fail_callback) {
     var self = this;
 
     if (success_callback) {
@@ -1176,15 +1176,16 @@
     }
 
     $.ajax(self.request_data).done(done_func).fail(fail_func);
+    return this;
   };
 
-  OMPAction.prototype.success = function(data, status, jqXHR) {
+  OMPRequest.prototype.success = function(data, status, jqXHR) {
     if (this.success_callback) {
       this.success_callback(data, status, jqXHR);
     }
   };
 
-  OMPAction.prototype.fail = function(jqXHR) {
+  OMPRequest.prototype.fail = function(jqXHR) {
     if (this.fail_callback) {
       this.fail_callback(jqXHR);
     }
@@ -1234,7 +1235,7 @@
       elem.on('click', function(event) {
         event.preventDefault();
         var dialog = elem.parents('.dialog-form')[0].$omp;
-        new OMPAction({
+        new OMPRequest({
           params: parse_params(elem.data('extra')),
           form: elem.parents('form')[0],
         }).do(function() {
@@ -1315,12 +1316,12 @@
         event.preventDefault();
 
         var form = elem.parents('form')[0];
-        var action = new OMPAction({
+        var request = new OMPRequest({
           form: form,
           params: {next_xml: 0},
         });
 
-        action.do(function(response_doc) {
+        request.do(function(response_doc) {
           var action_result = $(response_doc).find('action_result');
 
           var next_url = action_result.children('next').text();
