@@ -1101,7 +1101,6 @@
 
   function OMPAction(options) {
     this.params = options.params === undefined ? {} : options.params;
-    this.dialog = options.dialog.$omp;
     this.form = options.form;
   }
 
@@ -1127,14 +1126,29 @@
       type: 'POST',
     };
 
-    function done_func() {
-      self.dialog.reload();
+    function done_func(data, status, jqXHR) {
+      self.success(data, status, jqXHR);
     }
     function fail_func(jqXHR) {
-      self.dialog.setErrorFromResponse(jqXHR);
+      self.fail(jqXHR);
     }
 
     $.ajax(self.request_data).done(done_func).fail(fail_func);
+  };
+
+  function OMPDialogAction(options) {
+    OMPAction.call(this, options);
+    this.dialog = options.dialog.$omp;
+  }
+
+  gsa.derive(OMPDialogAction, OMPAction);
+
+  OMPDialogAction.prototype.success = function() {
+    this.dialog.reload();
+  };
+
+  OMPDialogAction.prototype.fail = function(jqXHR) {
+    this.dialog.setErrorFromResponse(jqXHR);
   };
 
   function on_ready(doc) {
@@ -1180,7 +1194,7 @@
       var elem = $(this);
       elem.on('click', function(event) {
         event.preventDefault();
-        new OMPAction({dialog: elem.parents('.dialog-form')[0],
+        new OMPDialogAction({dialog: elem.parents('.dialog-form')[0],
           params: parse_params(elem.data('extra')),
           form: elem.parents('form')[0],
         }).do();
