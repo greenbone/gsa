@@ -1,3 +1,9 @@
+2016-08-03  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/js/greenbone.js (InfoDialog): Detaching the provided
+	element is not required. We can keep its position in the DOM. Also don't set a
+	minimum height for InfoDialogs. They may be really short.
+
 2016-08-03  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/classic/help.xsl (mode="help" match="about.html"):

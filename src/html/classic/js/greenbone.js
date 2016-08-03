@@ -814,7 +814,6 @@
     this.dialog_css = options.dialog_css;
 
     if (options.element) {
-      options.element.detach();
       this.dialog.append(options.element.children());
     }
   }
@@ -905,6 +904,7 @@
       dialogClass: self.dialog_css,
       modal: self.modal,
       width: self.width,
+      minHeight: 0,
       show: {effect: 'fade', duration: self.fade_in_duration},
       beforeClose: function() {
         self.close();
