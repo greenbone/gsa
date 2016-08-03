@@ -1116,10 +1116,20 @@
   function OMPAction(options) {
     this.params = options.params === undefined ? {} : options.params;
     this.form = options.form;
+    this.success_callback = options.success_callback;
+    this.fail_callback = options.fail_callback;
   }
 
-  OMPAction.prototype.do = function() {
+  OMPAction.prototype.do = function(success_callback, fail_callback) {
     var self = this;
+
+    if (success_callback) {
+      this.success_callback = success_callback;
+    }
+    if (fail_callback) {
+      this.fail_callback = fail_callback;
+    }
+
     var data = new FormData(this.form);
     for (var param in this.params) {
       if (param === 'xml' || param === 'no_redirect') {
@@ -1148,6 +1158,18 @@
     }
 
     $.ajax(self.request_data).done(done_func).fail(fail_func);
+  };
+
+  OMPAction.prototype.success = function(data, status, jqXHR) {
+    if (this.success_callback) {
+      this.success_callback(data, status, jqXHR);
+    }
+  };
+
+  OMPAction.prototype.fail = function(jqXHR) {
+    if (this.fail_callback) {
+      this.fail_callback(jqXHR);
+    }
   };
 
   function OMPDialogAction(options) {
