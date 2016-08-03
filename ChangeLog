@@ -1,3 +1,14 @@
+2016-08-03  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/gsad_base.c (gsad_message): Do not apply xsl_transform if "xml"
+	param value is true.
+
+	* src/gsad_omp.c (logout): Do not apply xsl_transform to login dialog
+	if "xml" param value is true.
+
+	* src/gsad.c (exec_omp_post, handle_request): Do not apply
+	xsl_transform to login dialogs if "xml" param value is true.
+
 2016-08-03  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/js/greenbone.js (OMPDialog): Use OMPRequest in OMPDialog

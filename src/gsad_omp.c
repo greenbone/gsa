@@ -26070,6 +26070,8 @@ logout (credentials_t *credentials, const gchar *message,
   char *res;
   char ctime_now[200];
   int ret;
+  const char* xml_flag;
+  xml_flag = params_value (credentials->params, "xml");
 
   if (credentials->token == NULL)
     return NULL;
@@ -26082,6 +26084,10 @@ logout (credentials_t *credentials, const gchar *message,
   ctime_r_strip_newline (&now, ctime_now);
 
   xml = login_xml (message, NULL, ctime_now, NULL, NULL, NULL);
+
+  if (xml_flag && strcmp (xml_flag, "0"))
+    return xml;
+
   res = xsl_transform (xml, response_data);
   g_free (xml);
   return res;

@@ -2117,6 +2117,8 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   const char *cmd, *caller, *language;
   cmd_response_data_t response_data;
   cmd_response_data_init (&response_data);
+  const char *xml_flag;
+  xml_flag = params_value (con_info->params, "xml");
 
   /* Handle the login command specially. */
 
@@ -2180,8 +2182,14 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                        ? con_info->language
                        : DEFAULT_GSAD_LANGUAGE,
                       guest_username ? guest_username : "");
-              res = xsl_transform (xml, &response_data);
-              g_free (xml);
+
+              if (xml_flag && strcmp (xml_flag, "0"))
+                res = xml;
+              else
+                {
+                  res = xsl_transform (xml, &response_data);
+                  g_free (xml);
+                }
               con_info->response = res;
               con_info->answercode = response_data.http_status_code;
 
@@ -2225,8 +2233,13 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                            con_info->language ? con_info->language
                                               : DEFAULT_GSAD_LANGUAGE,
                            guest_username ? guest_username : "");
-          res = xsl_transform (xml, &response_data);
-          g_free (xml);
+          if (xml_flag && strcmp (xml_flag, "0"))
+            res = xml;
+          else
+            {
+              res = xsl_transform (xml, &response_data);
+              g_free (xml);
+            }
           con_info->response = res;
           con_info->answercode = response_data.http_status_code;
           g_warning ("Authentication failure for '%s' from %s",
@@ -2307,8 +2320,13 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                         : DEFAULT_GSAD_LANGUAGE,
                        guest_username ? guest_username : "");
       response_data.http_status_code = MHD_HTTP_UNAUTHORIZED;
-      con_info->response = xsl_transform (xml, &response_data);
-      g_free (xml);
+      if (xml_flag && strcmp (xml_flag, "0"))
+        con_info->response = xml;
+      else
+        {
+          con_info->response = xsl_transform (xml, &response_data);
+          g_free (xml);
+        }
       con_info->answercode = response_data.http_status_code;
       cmd_response_data_reset (&response_data);
       return 2;
@@ -2332,8 +2350,13 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                         : DEFAULT_GSAD_LANGUAGE,
                        guest_username ? guest_username : "");
       response_data.http_status_code = MHD_HTTP_UNAUTHORIZED;
-      con_info->response = xsl_transform (xml, &response_data);
-      g_free (xml);
+      if (xml_flag && strcmp (xml_flag, "0"))
+        con_info->response = xml;
+      else
+        {
+          con_info->response = xsl_transform (xml, &response_data);
+          g_free (xml);
+        }
       con_info->answercode = response_data.http_status_code;
       cmd_response_data_reset (&response_data);
       return 2;
@@ -2362,8 +2385,13 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                         ? con_info->language
                         : DEFAULT_GSAD_LANGUAGE,
                        guest_username ? guest_username : "");
-      con_info->response = xsl_transform (xml, &response_data);
-      g_free (xml);
+      if (xml_flag && strcmp (xml_flag, "0"))
+        con_info->response = xml;
+      else
+        {
+          con_info->response = xsl_transform (xml, &response_data);
+          g_free (xml);
+        }
       con_info->answercode = response_data.http_status_code;
       cmd_response_data_reset (&response_data);
       return 2;
@@ -4187,7 +4215,7 @@ handle_request (void *cls, struct MHD_Connection *connection,
 
   if (!strcmp (method, "GET"))
     {
-      const char *token, *cookie, *accept_language;
+      const char *token, *cookie, *accept_language, *xml_flag;
       const char *omp_cgi_base = "/omp";
       gchar *language;
       struct MHD_Response *response;
@@ -4198,6 +4226,10 @@ handle_request (void *cls, struct MHD_Connection *connection,
 
       token = NULL;
       cookie = NULL;
+
+      xml_flag = MHD_lookup_connection_value (connection,
+                                              MHD_GET_ARGUMENT_KIND,
+                                              "xml");
 
       /* Second or later call for this request, a GET. */
 
@@ -4239,8 +4271,13 @@ handle_request (void *cls, struct MHD_Connection *connection,
                            language,
                            guest_username ? guest_username : "");
           g_free (language);
-          res = xsl_transform (xml, &response_data);
-          g_free (xml);
+          if (xml_flag && strcmp (xml_flag, "0"))
+            res = xml;
+          else
+            {
+              res = xsl_transform (xml, &response_data);
+              g_free (xml);
+            }
           response = MHD_create_response_from_buffer (strlen (res), res,
                                                   MHD_RESPMEM_MUST_FREE);
           add_content_security_headers (response);
@@ -4377,8 +4414,13 @@ handle_request (void *cls, struct MHD_Connection *connection,
                                guest_username ? guest_username : "");
               response_data.http_status_code = MHD_HTTP_SERVICE_UNAVAILABLE;
               g_free (language);
-              res = xsl_transform (xml, &response_data);
-              g_free (xml);
+              if (xml_flag && strcmp (xml_flag, "0"))
+                res = xml;
+              else
+                {
+                  res = xsl_transform (xml, &response_data);
+                  g_free (xml);
+                }
             }
           response = MHD_create_response_from_buffer (strlen (res), res,
                                                       MHD_RESPMEM_MUST_FREE);
@@ -4485,8 +4527,13 @@ handle_request (void *cls, struct MHD_Connection *connection,
 
           g_free (language);
           g_free (full_url);
-          res = xsl_transform (xml, &response_data);
-          g_free (xml);
+          if (xml_flag && strcmp (xml_flag, "0"))
+            res = xml;
+          else
+            {
+              res = xsl_transform (xml, &response_data);
+              g_free (xml);
+            }
 
           http_response_code = response_data.http_status_code;
           response = MHD_create_response_from_buffer (strlen (res), res,
@@ -4539,9 +4586,14 @@ handle_request (void *cls, struct MHD_Connection *connection,
                            language,
                            guest_username ? guest_username : "");
           g_free (language);
-          res = xsl_transform (xml, &response_data);
           http_response_code = response_data.http_status_code;
-          g_free (xml);
+          if (xml_flag && strcmp (xml_flag, "0"))
+            res = xml;
+          else
+            {
+              res = xsl_transform (xml, &response_data);
+              g_free (xml);
+            }
           response = MHD_create_response_from_buffer (strlen (res), res,
                                                       MHD_RESPMEM_MUST_FREE);
           cmd_response_data_reset (&response_data);

@@ -384,6 +384,12 @@ gsad_message (credentials_t *credentials, const char *title,
               const char *backurl, cmd_response_data_t* response_data)
 {
   gchar *xml, *message, *resp;
+  const char* xml_flag;
+
+  if (credentials && credentials->params)
+    xml_flag = params_value (credentials->params, "xml");
+  else
+    xml_flag = NULL;
 
   if (function)
     {
@@ -458,6 +464,9 @@ gsad_message (credentials_t *credentials, const char *title,
       xml = g_strdup (message);
     }
   g_free (message);
+
+  if (xml_flag && strcmp (xml_flag, "0"))
+    return xml;
 
   resp = xsl_transform (xml, response_data);
   if (resp == NULL)
