@@ -1,3 +1,8 @@
+2016-08-03  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/classic/help.xsl (mode="help" match="about.html"):
+	Added a note about how cookies are used.
+
 2016-08-03  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/gsad_base.c (gsad_message): Do not apply xsl_transform if "xml"
