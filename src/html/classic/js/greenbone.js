@@ -846,6 +846,8 @@
     }
   }
 
+  gsa.derive(InfoDialog, Dialog);
+
   InfoDialog.prototype.close = function() {
     if (this.transfer_to !== undefined) {
       this.dialog.parent('.ui-dialog').effect('transfer', {
