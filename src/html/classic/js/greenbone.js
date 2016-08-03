@@ -837,9 +837,13 @@
     this.dialog = $('<div/>', {
       'class': 'dialog-form',
     });
-    options.element.detach();
-    this.dialog.append(options.element.children());
+
     this.dialog_css = options.dialog_css;
+
+    if (options.element) {
+      options.element.detach();
+      this.dialog.append(options.element.children());
+    }
   }
 
   InfoDialog.prototype.close = function() {
