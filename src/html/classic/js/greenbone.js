@@ -1306,59 +1306,28 @@
       elem.on('click', function(event) {
         event.preventDefault();
 
-        var form = elem.parents('form');
-        var form_data = new FormData(form[0]);
+        var form = elem.parents('form')[0];
+        var action = new OMPAction({
+          form: form,
+          params: {next_xml: 0},
+        });
 
-        form_data.set('xml','1');
-        form_data.set('next_xml','0');
-        form_data.set('no_redirect','1');
-
-        var request_data = {
-          url: '/omp',
-          data: form_data,
-          cache: false,
-          processData: false,
-          contentType: false,
-          type: 'POST',
-        };
-
-        var done_func = function(response_doc) {
+        action.do(function(response_doc) {
           var action_result = $(response_doc).find('action_result');
 
           var next_url = action_result.children('next').text();
           if (gsa.is_defined(next_url) && next_url !== '') {
             window.location = next_url;
           }
-        };
-
-        var fail_func = function(jqXHR) {
-          var action_result = $(jqXHR.responseXML).find('action_result');
-
-          var error_div = $('<div class="ui-state-error ui-corner-all"/>');
-
-          var error_title = 'Action "' +
-                            action_result.children('action').text() +
-                            '" failed';
-          var error_status = action_result.children('status').text();
-          var error_message = action_result.children('message').text();
-
-          $('<div><b>' + error_title + '</b></div>')
-            .appendTo(error_div);
-          $('<div><b>' + error_status + ': </b>' + error_message + '</div>')
-            .appendTo(error_div);
-
-          new InfoDialog({
-            element: $('<div/>').append(error_div),
+        }, function(jqXHR) {
+          var dialog = new InfoDialog({
             timeout: 15000,
             width: 500,
             modal: true,
             fade_in_duration: 250,
-          }).show();
-        };
-
-        $.ajax(request_data)
-          .done(done_func)
-          .fail(fail_func);
+          });
+          dialog.show().setErrorFromResponse(jqXHR);
+        });
       });
     });
 

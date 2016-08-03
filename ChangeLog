@@ -1,3 +1,8 @@
+2016-08-03  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/js/greenbone.js (.ajax-action): Use OMPAction for ajax-post
+	marked elements. This allows to reuse the ajax request code.
+
 2016-08-02  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/js/greenbone.js (OMPAction): Allow to set success and
