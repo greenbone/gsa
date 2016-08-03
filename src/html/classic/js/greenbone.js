@@ -368,6 +368,7 @@
     }
 
     self.error(error, error_title, error_code);
+    return self;
   };
 
   Dialog.prototype.waiting = function() {
@@ -385,6 +386,7 @@
         button.button('disable');
       }
     });
+    return this;
   };
 
   /**
@@ -448,6 +450,8 @@
     if (this.close_reload.type === 'window') {
       location.reload();
     }
+
+    return this;
   };
 
   OMPDialog.prototype.postForm = function() {
@@ -713,6 +717,8 @@
     }
 
     $.ajax(self.request_data).done(done_func).fail(fail_func);
+
+    return this;
   };
 
   OMPDialog.prototype.reload = function() {
@@ -929,6 +935,8 @@
     if (self.timeout) {
       self.startProgress();
     }
+
+    return this;
   };
 
   global.InfoDialog = InfoDialog;
