@@ -1190,21 +1190,6 @@
     }
   };
 
-  function OMPDialogAction(options) {
-    OMPAction.call(this, options);
-    this.dialog = options.dialog.$omp;
-  }
-
-  gsa.derive(OMPDialogAction, OMPAction);
-
-  OMPDialogAction.prototype.success = function() {
-    this.dialog.reload();
-  };
-
-  OMPDialogAction.prototype.fail = function(jqXHR) {
-    this.dialog.setErrorFromResponse(jqXHR);
-  };
-
   function on_ready(doc) {
     doc = $(doc);
 
@@ -1248,10 +1233,15 @@
       var elem = $(this);
       elem.on('click', function(event) {
         event.preventDefault();
-        new OMPDialogAction({dialog: elem.parents('.dialog-form')[0],
+        var dialog = elem.parents('.dialog-form')[0].$omp;
+        new OMPAction({
           params: parse_params(elem.data('extra')),
           form: elem.parents('form')[0],
-        }).do();
+        }).do(function() {
+          dialog.reload();
+        }, function(jqXHR) {
+          dialog.setErrorFromResponse(jqXHR);
+        });
       });
     });
 

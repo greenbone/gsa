@@ -1,5 +1,11 @@
 2016-08-03  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/greenbone.js (OMPDialogAction): Remove unnecessary class
+	OMPDialogAction. This class is used only once and can be replaced easily with
+	OMPAction.
+
+2016-08-03  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/greenbone.js (OMPAction): Improve handling of xml
 	parameter.
 
