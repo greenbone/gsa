@@ -1117,6 +1117,7 @@
     this.params = gsa.is_defined(options.params) ? options.params : {};
     this.method = gsa.is_string(options.method) ?
       options.method.toUpperCase() : 'POST';
+    this.xml = gsa.is_defined(options.xml) ? options.xml : true;
     this.form = options.form;
     this.success_callback = options.success_callback;
     this.fail_callback = options.fail_callback;
@@ -1132,6 +1133,10 @@
       this.fail_callback = fail_callback;
     }
 
+    if (this.xml) {
+      this.params.xml = 1;
+    }
+
     if (this.method === 'GET') {
       self.request_data = {
         url: '/omp?' + $.param(this.params),
@@ -1142,13 +1147,12 @@
     else if (this.method === 'POST') {
       var data = new FormData(this.form);
       for (var param in this.params) {
-        if (param === 'xml' || param === 'no_redirect') {
+        if (param === 'no_redirect') {
           // skip values
           continue;
         }
         data.append(param, this.params[param]);
       }
-      data.append('xml', 1);
       data.append('no_redirect', 1);
 
       self.request_data = {

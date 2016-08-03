@@ -1,5 +1,10 @@
 2016-08-03  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/greenbone.js (OMPAction): Improve handling of xml
+	parameter.
+
+2016-08-03  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/greenbone.js (OMPAction): Add handling of get requests
 	in OMPAction.
 
