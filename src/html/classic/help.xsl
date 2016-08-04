@@ -455,8 +455,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
       <p>
       Cookies: This web application uses cookies to store session information. The cookie is not
-      stored on the server-side and not submitted anywhere. It is lost when the session is closed or expired.
-      The cookie is also temporarily stored in your browser where you can examin the content.
+      stored on the server-side hard disk and not submitted anywhere. It is lost when the session is closed or expired.
+      The cookie is also temporarily stored in your browser where you can examine the content.
       </p>
 
       </td><td valign="top">
