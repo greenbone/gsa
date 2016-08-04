@@ -1289,28 +1289,72 @@
     // Replace icon forms
     doc.find('.ajax-post').each(function() {
       var elem = $(this);
+
+      function reload_next(response) {
+        var action_result = $(response).find('action_result');
+
+        var next_url = action_result.children('next').text();
+        if (gsa.is_defined(next_url) && next_url !== '') {
+          window.location = next_url;
+        }
+      }
+
       elem.on('click', function(event) {
         event.preventDefault();
 
-        var form = elem.parents('form')[0];
+        var reload = elem.data('reload');
+        var modal = elem.data('modal') && true;
+
+        var selector = 'form';
+        if (elem.data('form')) {
+          selector = elem.data('form');
+        }
+
+        var form = elem.find(selector); // search downwards first
+        if (!form.length) {
+          // search upwards for backwards compatibility
+          form = elem.parents(selector);
+        }
+        if (!form.length) {
+          throw new Error('Form for ajax request not found');
+        }
+
         var request = new OMPRequest({
-          form: form,
+          form: form[0],
           params: {next_xml: 0},
         });
 
-        request.do(function(response_doc) {
-          var action_result = $(response_doc).find('action_result');
+        var error = elem.find('.error-dialog');
+        var success = elem.find('.success-dialog');
 
-          var next_url = action_result.children('next').text();
-          if (gsa.is_defined(next_url) && next_url !== '') {
-            window.location = next_url;
+        request.do(function(response) {
+          if (success.length) {
+            if (success.data('reload')) {
+              reload = success.data('reload');
+            }
+
+            var dialog = new InfoDialog({
+              element: success.clone(),
+              timeout: 5000,
+              modal: modal,
+              width: success.data('width') || 300,
+              fade_in_duration: 0,
+            });
+            dialog.show();
           }
-        }, function(jqXHR) {
+
+          if (reload === 'next') {
+            reload_next(response);
+          }
+        },
+        function(jqXHR) {
+          var elem = error.length ? error.clone() : undefined;
           var dialog = new InfoDialog({
-            timeout: 15000,
-            width: 500,
-            modal: true,
-            fade_in_duration: 250,
+            element: elem,
+            timeout: 10000,
+            modal: modal,
+            dialog_css: 'ui-dialog-error',
+            width: error.data('width') || 300,
           });
           dialog.show().setErrorFromResponse(jqXHR);
         });
