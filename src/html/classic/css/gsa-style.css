@@ -1388,6 +1388,9 @@ select[multiple] {
   padding: 5px;
 }
 
+.success-dialog, .error-dialog {
+  display: none;
+}
 
 /* The new reworked list view */
 
@@ -1636,6 +1639,10 @@ select[multiple] {
 
 .gb-slider-container:after {
   clear: both;
+}
+
+.ajax-post {
+  cursor: pointer;
 }
 
 /* vim: set ts=2 sw=2 tw=80:*/

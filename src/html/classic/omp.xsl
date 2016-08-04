@@ -11912,13 +11912,30 @@ should not have received it.
             <xsl:with-param name="type" select="'alert'"/>
             <xsl:with-param name="id" select="@id"/>
           </xsl:call-template>
-          <xsl:call-template name="start-icon">
-            <xsl:with-param name="type">alert</xsl:with-param>
-            <xsl:with-param name="id" select="@id"/>
-            <xsl:with-param name="cmd">test_alert</xsl:with-param>
-            <xsl:with-param name="alt"><xsl:value-of select="gsa:i18n ('Test', 'Action Verb')"/></xsl:with-param>
-            <xsl:with-param name="name">Test</xsl:with-param>
-          </xsl:call-template>
+          <div class="icon ajax-post">
+              <xsl:variable name="title">
+                <xsl:value-of select="gsa:i18n ('Test Alert', 'Action Verb')"/>
+              </xsl:variable>
+              <img src="/img/start.png" alt="{$title}" title="{$title}"/>
+              <form action="/omp" method="post" enctype="multipart/form-data">
+                  <input type="hidden" name="token" value="{/envelope/token}"/>
+                  <input type="hidden" name="caller" value="{/envelope/current_page}"/>
+                  <input type="hidden" name="cmd" value="test_alert"/>
+                  <input type="hidden" name="alert_id" value="{@id}"/>
+                  <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
+                  <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
+              </form>
+              <div class="success-dialog">
+                <p class="text-center">
+                  <xsl:value-of select="gsa-i18n:strformat (gsa:i18n ('Testing the alert %1 was successful.', 'Alert'), name)"/>
+                </p>
+              </div>
+              <div class="error-dialog">
+                  <p class="text-center">
+                    <xsl:value-of select="gsa-i18n:strformat (gsa:i18n ('Testing the alert %1 failed.', 'Alert'), name)"/>
+                  </p>
+              </div>
+          </div>
         </td>
       </xsl:otherwise>
     </xsl:choose>
