@@ -798,13 +798,13 @@
   global.FilterDialog = FilterDialog;
 
   function InfoDialog(options) {
-    this.timeout = options.timeout !== undefined ? options.timeout : 5000;
-    this.width = options.width !== undefined ? options.width : 600;
+    this.timeout = gsa.is_defined(options.timeout) ? options.timeout : 5000;
+    this.width = gsa.is_defined(options.width) ? options.width : 600;
     this.transfer_to = options.transfer_to ? $(options.transfer_to) : undefined;
     this.interval_time = 1000; // 1 sec
     this.progress_value = this.timeout;
-    this.modal = options.modal !== undefined ? options.modal : false;
-    this.fade_in_duration = options.fade_in_duration !== undefined ?
+    this.modal = gsa.is_defined(options.modal) ? options.modal : true;
+    this.fade_in_duration = gsa.is_defined(options.fade_in_duration) ?
       options.fade_in_duration : 1000;
 
     this.dialog = $('<div/>', {
