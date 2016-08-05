@@ -276,7 +276,7 @@
   Dialog.prototype.error = function(message, title, status_code) {
     var displayed_title;
     if (!title) {
-      displayed_title = 'Error:';
+      displayed_title = this.title || 'Error:';
     }
     else {
       displayed_title = title;
@@ -823,6 +823,8 @@
     if (options.element) {
       this.dialog.append(options.element.children());
     }
+
+    this.title = options.title;
   }
 
   gsa.derive(InfoDialog, Dialog);
@@ -912,6 +914,7 @@
       modal: self.modal,
       width: self.width,
       minHeight: 0,
+      title: self.title,
       show: {effect: 'fade', duration: self.fade_in_duration},
       beforeClose: function() {
         self.close();
@@ -1349,6 +1352,7 @@
               element: success.clone(),
               timeout: 5000,
               modal: modal,
+              title: success.data('title'),
               width: success.data('width') || 300,
               fade_in_duration: 0,
             });
@@ -1365,6 +1369,7 @@
             element: elem,
             timeout: 10000,
             modal: modal,
+            title: error.data('title'),
             dialog_css: 'ui-dialog-error',
             width: error.data('width') || 300,
           });
