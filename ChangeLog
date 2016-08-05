@@ -1,5 +1,13 @@
 2016-08-05  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/gsad.xsl (indicator, response-indicatior): Remove all code
+	for indicators.
+
+	* src/html/classic/css/gsa-style.css: Remove css for now obsolete
+	status_panel.
+
+2016-08-05  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/gsad.c (exec_omp_get, exec_omp_post): Change verify_agent and
 	verify_scanner into POST methods.
 

@@ -636,15 +636,6 @@ a.top_button:hover div.first_button_overlay {
   color: #393637;
 }
 
-/* Status panel */
-.status_panel {
-  color: #FFFFFF;
-  float: right;
-  margin: 3px;
-  margin-right: 15px;
-  vertical-align: top;
-}
-
 /* Miniicons */
 .mini_i {
   float:left;
