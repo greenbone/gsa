@@ -9460,11 +9460,26 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             title="{gsa:i18n ('Download installer package', 'Agent')}" class="icon">
             <img src="/img/agent.png" alt="{gsa:i18n ('Download Installer', 'Agent')}"/>
           </a>
-          <a href="/omp?cmd=verify_agent&amp;agent_id={@id}&amp;token={/envelope/token}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}"
-            title="{gsa:i18n ('Verify Agent', 'Agent')}"
-            class="icon">
+          <div class="icon ajax-post" data-reload="next">
             <img src="/img/verify.png" alt="{gsa:i18n ('Verify Agent', 'Agent')}"/>
-          </a>
+            <form>
+              <input type="hidden" name="cmd" value="verify_agent"/>
+              <input type="hidden" name="agent_id" value="{@id}"/>
+              <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
+              <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
+              <input type="hidden" name="token" value="{/envelope/token}"/>
+            </form>
+            <div class="success-dialog" data-title="{gsa:i18n ('Success', 'Action Verb')}">
+              <div class="text-center">
+                <xsl:value-of select="gsa:i18n ('Agent has been verified.', 'Agent')"/>
+              </div>
+            </div>
+            <div class="error-dialog">
+              <div class="text-center">
+                <xsl:value-of select="gsa:i18n ('Agent could not be verified.', 'Agent')"/>
+              </div>
+            </div>
+          </div>
         </td>
       </xsl:otherwise>
     </xsl:choose>
@@ -33448,11 +33463,28 @@ should not have received it.
   <xsl:param name="credential"/>
   <xsl:param name="next">get_scanners</xsl:param>
 
-  <a href="/omp?cmd=verify_scanner&amp;scanner_id={$scanner_id}&amp;next={$next}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-    title="{gsa:i18n ('Verify Scanner', 'Scanner')}"
-    class="icon">
-    <img src="/img/verify.png" alt="{gsa:i18n ('Verify Scanner', 'Scanner')}"/>
-  </a>
+  <div class="icon ajax-post" data-reload="next">
+    <img src="/img/verify.png" alt="{gsa:i18n ('Verify Scanner', 'Scanner')}"
+      title="{gsa:i18n ('Verify Scanner', 'Scanner')}"/>
+    <form>
+      <input type="hidden" name="cmd" value="verify_scanner"/>
+      <input type="hidden" name="scanner_id" value="{$scanner_id}"/>
+      <input type="hidden" name="next" value="{$next}"/>
+      <input type="hidden" name="filter" value="{../filters/term}"/>
+      <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
+      <input type="hidden" name="token" value="{/envelope/token}"/>
+    </form>
+    <div class="success-dialog" data-title="{gsa:i18n ('Success', 'Action Verb')}">
+      <div class="text-center">
+        <xsl:value-of select="gsa:i18n ('Scanner has been verified.', 'Scanner')"/>
+      </div>
+    </div>
+    <div class="error-dialog">
+      <div class="text-center">
+        <xsl:value-of select="gsa:i18n ('Scanner could not be verified.', 'Scanner')"/>
+      </div>
+    </div>
+  </div>
   <xsl:if test="string-length ($credential/@id) &gt; 0">
     <a href="/omp?cmd=download_credential&amp;credential_id={$credential/@id}&amp;package_format=pem&amp;token={/envelope/token}"
       title="{gsa:i18n ('Download Certificate', 'Auth Data')} ({gsa:i18n ('from Credential', 'Auth Data')})" class="icon">
