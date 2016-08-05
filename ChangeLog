@@ -1,5 +1,10 @@
 2016-08-05  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/omp.xsl (report summary, user-tags-window-checked): Change
+	ajax posts to have the form element always as a child and not a parent.
+
+2016-08-05  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/greenbone.js (ajax-post): Remove element searches from
 	the event handler function and allow to specify an element for the the
 	ajax-post click handler.

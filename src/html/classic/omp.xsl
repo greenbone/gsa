@@ -2123,15 +2123,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="fragment"></xsl:param>
   <xsl:param name="params"></xsl:param>
 
-  <div class="icon">
+  <div class="icon ajax-post" data-reload="next">
+    <img src="/img/trashcan.png" alt="{gsa:i18n ('To Trashcan', 'Action Verb')}"
+      name="To Trashcan" title="{gsa:i18n ('Move To Trashcan', 'Action Verb')}"/>
     <form action="/omp{$fragment}" method="post" enctype="multipart/form-data">
       <input type="hidden" name="token" value="{/envelope/token}"/>
       <input type="hidden" name="caller" value="{/envelope/current_page}"/>
       <input type="hidden" name="cmd" value="delete_{$type}"/>
       <input type="hidden" name="{$type}_id" value="{$id}"/>
-      <input type="image" class="ajax-post" src="/img/trashcan.png" alt="{gsa:i18n ('To Trashcan', 'Action Verb')}"
-        data-reload="next"
-        name="To Trashcan" value="To Trashcan" title="{gsa:i18n ('Move To Trashcan', 'Action Verb')}"/>
       <xsl:copy-of select="$params"/>
     </form>
   </div>
@@ -2486,7 +2485,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:if>
     <xsl:choose>
       <xsl:when test="count($tag_names/tag) > 0">
-        <div style="margin-bottom: 10px">
+        <div class="ajax-post" data-reload="next" data-button="input.icon">
           <form class="form-inline" action="/omp#user_tags" method="post" enctype="multipart/form-data">
             <input type="hidden" name="comment"/>
             <input type="hidden" name="active" value="1"/>
@@ -2517,7 +2516,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <div class="form-group">
               <input type="image" src="/img/tag.png" alt="{gsa:i18n ('Add Tag', 'Tag')}"
                 name="Add Tag" value="Add Tag" title="{gsa:i18n ('Add Tag', 'Tag')}"
-                class="icon ajax-post" data-reload="next"/>
+                class="icon"/>
             </div>
             <xsl:choose>
               <xsl:when test="$resource_subtype!=''">
@@ -2725,25 +2724,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="params"></xsl:param>
 
   <xsl:if test="gsa:may-op ('modify_tag')">
-    <div class="icon">
+    <div class="icon ajax-post" data-reload="next">
+      <xsl:choose>
+        <xsl:when test="$enable">
+          <img src="/img/enable.png" alt="{gsa:i18n ('Enable Tag', 'Tag')}"
+            name="Enable Tag" title="{gsa:i18n ('Enable Tag', 'Tag')}"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <img src="/img/disable.png" alt="{gsa:i18n ('Disable Tag', 'Tag')}"
+            name="Disable Tag" title="{gsa:i18n ('Disable Tag', 'Tag')}"/>
+        </xsl:otherwise>
+      </xsl:choose>
       <form action="/omp{$fragment}" method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="caller" value="{/envelope/current_page}"/>
         <input type="hidden" name="cmd" value="toggle_tag"/>
         <input type="hidden" name="enable" value="{$enable}"/>
         <input type="hidden" name="tag_id" value="{$id}"/>
-        <xsl:choose>
-          <xsl:when test="$enable">
-            <input type="image" class="ajax-post" src="/img/enable.png" alt="{gsa:i18n ('Enable Tag', 'Tag')}"
-              name="Enable Tag" value="Enable Tag" title="{gsa:i18n ('Enable Tag', 'Tag')}"
-              data-reload="next"/>
-          </xsl:when>
-          <xsl:otherwise>
-            <input type="image" class="ajax-post" src="/img/disable.png" alt="{gsa:i18n ('Disable Tag', 'Tag')}"
-              name="Disable Tag" value="Disable Tag" title="{gsa:i18n ('Disable Tag', 'Tag')}"
-              data-reload="next"/>
-          </xsl:otherwise>
-        </xsl:choose>
         <xsl:copy-of select="$params"/>
       </form>
     </div>
@@ -5623,7 +5620,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                class="icon"/>
         </xsl:when>
         <xsl:otherwise>
-          <div class="icon">
+          <div class="icon ajax-post" data-reload="next">
+            <img src="/img/clone.png"
+              alt="{gsa:i18n ('Clone', 'Action Verb')}"
+              title="{gsa:i18n ('Clone', 'Action Verb')}"/>
             <form action="/omp" method="post" enctype="multipart/form-data">
               <input type="hidden" name="token" value="{/envelope/token}"/>
               <input type="hidden" name="caller" value="{/envelope/current_page}"/>
@@ -5633,11 +5633,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <input type="hidden" name="id" value="{@id}"/>
               <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
               <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-              <input type="image" class="ajax-post" data-reload="next"
-                    src="/img/clone.png"
-                    alt="{gsa:i18n ('Clone', 'Action Verb')}"
-                    name="Clone" value="Clone"
-                    title="{gsa:i18n ('Clone', 'Action Verb')}"/>
             </form>
           </div>
         </xsl:otherwise>
@@ -17568,7 +17563,10 @@ should not have received it.
     </a>
     <xsl:choose>
       <xsl:when test="gsa:may-clone ('config')">
-        <div class="icon">
+        <div class="icon ajax-post" data-reload="next">
+          <img src="/img/clone.png"
+            alt="{gsa:i18n ('Clone', 'Action Verb')}"
+            name="Clone" title="{gsa:i18n ('Clone', 'Action Verb')}"/>
           <form action="/omp" method="post" enctype="multipart/form-data">
             <input type="hidden" name="token" value="{/envelope/token}"/>
             <input type="hidden" name="caller" value="{/envelope/current_page}"/>
@@ -17578,9 +17576,6 @@ should not have received it.
             <input type="hidden" name="id" value="{$config/@id}"/>
             <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
             <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-            <input type="image" class="ajax-post" src="/img/clone.png"
-                   alt="{gsa:i18n ('Clone', 'Action Verb')}" data-reload="next"
-                   name="Clone" value="Clone" title="{gsa:i18n ('Clone', 'Action Verb')}"/>
           </form>
         </div>
       </xsl:when>
@@ -29658,7 +29653,9 @@ should not have received it.
         </xsl:choose>
         <xsl:choose>
           <xsl:when test="gsa:may-clone ('note')">
-            <div class="form-inline">
+            <div class="icon ajax-post" data-reload="next">
+              <img src="/img/clone.png" alt="Clone Note"
+                name="Clone" title="{gsa:i18n ('Clone', 'Action Verb')}"/>
               <form action="/omp#notes-{../../@id}" method="post" enctype="multipart/form-data">
                 <input type="hidden" name="token" value="{/envelope/token}"/>
                 <input type="hidden" name="caller" value="{/envelope/current_page}"/>
@@ -29671,9 +29668,6 @@ should not have received it.
                 <input type="hidden" name="apply_overrides" value="{/envelope/params/apply_overrides}"/>
                 <input type="hidden" name="overrides" value="{/envelope/params/overrides}"/>
                 <input type="hidden" name="details" value="{/envelope/params/details}"/>
-                <input type="image" src="/img/clone.png" alt="Clone Note"
-                  class="icon ajax-post" data-reload="next"
-                  name="Clone" value="Clone" title="{gsa:i18n ('Clone', 'Action Verb')}"/>
 
                 <xsl:choose>
                   <xsl:when test="$next='get_result'">
@@ -29933,7 +29927,9 @@ should not have received it.
         </xsl:choose>
         <xsl:choose>
           <xsl:when test="gsa:may-clone ('override')">
-            <div class="form-inline">
+            <div class="icon ajax-post" data-reload="next">
+              <img src="/img/clone.png" alt="Clone Override"
+                name="Clone" title="{gsa:i18n ('Clone', 'Action Verb')}"/>
               <form action="/omp#overrides-{../../@id}" method="post" enctype="multipart/form-data">
                 <input type="hidden" name="token" value="{/envelope/token}"/>
                 <input type="hidden" name="caller" value="{/envelope/current_page}"/>
@@ -29946,9 +29942,6 @@ should not have received it.
                 <input type="hidden" name="apply_overrides" value="{/envelope/params/apply_overrides}"/>
                 <input type="hidden" name="overrides" value="{/envelope/params/overrides}"/>
                 <input type="hidden" name="details" value="{/envelope/params/details}"/>
-                <input type="image" src="/img/clone.png" alt="Clone Override"
-                  class="icon ajax-post" data-reload="next"
-                  name="Clone" value="Clone" title="{gsa:i18n ('Clone', 'Action Verb')}"/>
 
                 <xsl:choose>
                   <xsl:when test="$next='get_result'">
@@ -33082,7 +33075,7 @@ should not have received it.
   <div class="form-inline">
     <xsl:call-template name="filtered-report-export-form"></xsl:call-template>
   </div>
-  <form class="form-inline" action="/omp" method="post" enctype="multipart/form-data">
+  <div class="icon ajax-post" data-reload="next">
     <xsl:variable name="min_qod">
       <xsl:choose>
         <xsl:when test="string-length (report/filters/keywords/keyword[column='min_qod' and relation='=']/value) &gt; 0">
@@ -33104,35 +33097,37 @@ should not have received it.
       </xsl:choose>
     </xsl:variable>
 
-    <input type="hidden" name="token" value="{/envelope/token}"/>
-    <input type="hidden" name="caller" value="{/envelope/current_page}"/>
-    <input type="hidden" name="cmd" value="create_asset"/>
-    <input type="image" src="/img/add_to_assets.png" alt="{gsa:i18n ('Add to Assets', 'Assets')}"
-           name="Add to Assets" value="Add to Assets"
-           class="icon ajax-post" data-reload="next"
-           title="{gsa:i18n (concat ('Add to Assets with QOD>=', $min_qod, '% and Overrides ', $overrides), 'Action Verb')}"/>
+    <img src="/img/add_to_assets.png" alt="{gsa:i18n ('Add to Assets', 'Assets')}"
+      name="Add to Assets"
+      title="{gsa:i18n (concat ('Add to Assets with QOD>=', $min_qod, '% and Overrides ', $overrides), 'Action Verb')}"/>
 
-    <input type="hidden" name="report_id" value="{@id}"/>
-    <input type="hidden" name="next" value="get_report_section"/>
-    <input type="hidden" name="report_section" value="{$section}"/>
-    <input type="hidden" name="filter" value="{report/filters/term}"/>
-    <input type="hidden" name="filt_id" value="{report/filters/@id}"/>
-  </form>
-  <form class="form-inline" action="/omp" method="post" enctype="multipart/form-data">
-    <input type="hidden" name="token" value="{/envelope/token}"/>
-    <input type="hidden" name="caller" value="{/envelope/current_page}"/>
-    <input type="hidden" name="cmd" value="delete_asset"/>
-    <input type="image" src="/img/remove_from_assets.png" alt="{gsa:i18n ('Remove from Assets', 'Assets')}"
-           name="Remove from Assets" value="Remove from Assets"
-           class="icon ajax-post" data-reload="next"
-           title="{gsa:i18n ('Remove from Assets', 'Action Verb')}"/>
+    <form action="/omp" method="post" enctype="multipart/form-data">
+      <input type="hidden" name="token" value="{/envelope/token}"/>
+      <input type="hidden" name="caller" value="{/envelope/current_page}"/>
+      <input type="hidden" name="cmd" value="create_asset"/>
+      <input type="hidden" name="report_id" value="{@id}"/>
+      <input type="hidden" name="next" value="get_report_section"/>
+      <input type="hidden" name="report_section" value="{$section}"/>
+      <input type="hidden" name="filter" value="{report/filters/term}"/>
+      <input type="hidden" name="filt_id" value="{report/filters/@id}"/>
+    </form>
+  </div>
+  <div class="icon ajax-post" data-reload="next">
+    <img src="/img/remove_from_assets.png" alt="{gsa:i18n ('Remove from Assets', 'Assets')}"
+      name="Remove from Assets"
+      title="{gsa:i18n ('Remove from Assets', 'Action Verb')}"/>
 
-    <input type="hidden" name="report_id" value="{@id}"/>
-    <input type="hidden" name="next" value="get_report_section"/>
-    <input type="hidden" name="report_section" value="{$section}"/>
-    <input type="hidden" name="filter" value="{report/filters/term}"/>
-    <input type="hidden" name="filt_id" value="{report/filters/@id}"/>
-  </form>
+    <form class="form-inline" action="/omp" method="post" enctype="multipart/form-data">
+      <input type="hidden" name="token" value="{/envelope/token}"/>
+      <input type="hidden" name="caller" value="{/envelope/current_page}"/>
+      <input type="hidden" name="cmd" value="delete_asset"/>
+      <input type="hidden" name="report_id" value="{@id}"/>
+      <input type="hidden" name="next" value="get_report_section"/>
+      <input type="hidden" name="report_section" value="{$section}"/>
+      <input type="hidden" name="filter" value="{report/filters/term}"/>
+      <input type="hidden" name="filt_id" value="{report/filters/@id}"/>
+    </form>
+  </div>
   <span class="divider"/>
   <a href="?cmd=get_task&amp;task_id={task/@id}&amp;overrides={/envelope/params/overrides}&amp;min_qod={/envelope/params/min_qod}&amp;token={/envelope/token}"
     title="{gsa-i18n:strformat (gsa:i18n ('Corresponding Task (%1)', 'Task'), task/name)}">
@@ -33833,53 +33828,53 @@ should not have received it.
                 <xsl:value-of select="report/result_count/hole/full + report/result_count/warning/full + report/result_count/info/full + report/result_count/log/full + report/result_count/false_positive/full"/>
               </td>
               <td>
-                <div id="small_form" class="pull-right">
-                  <form action="" method="post" enctype="multipart/form-data">
-                    <input type="hidden" name="cmd" value="alert_report"/>
-                    <input type="hidden" name="caller" value="{/envelope/current_page}"/>
-                    <input type="hidden" name="report_id" value="{report/@id}"/>
-                    <input type="hidden" name="report_section" value="summary"/>
-                    <input type="hidden" name="filter" value="{report/filters/term}"/>
-                    <input type="hidden" name="filt_id" value="{report/filters/@id}"/>
-                    <input type="hidden" name="token" value="{/envelope/token}"/>
+                <div id="small_form" class="form-inline pull-right">
+                  <div class="form-group ajax-post" data-reload="next" data-button=".icon">
+                    <form class="form-item" action="" method="post" enctype="multipart/form-data">
+                      <input type="hidden" name="cmd" value="alert_report"/>
+                      <input type="hidden" name="caller" value="{/envelope/current_page}"/>
+                      <input type="hidden" name="report_id" value="{report/@id}"/>
+                      <input type="hidden" name="report_section" value="summary"/>
+                      <input type="hidden" name="filter" value="{report/filters/term}"/>
+                      <input type="hidden" name="filt_id" value="{report/filters/@id}"/>
+                      <input type="hidden" name="token" value="{/envelope/token}"/>
 
-                    <!-- Report page filters. -->
-                    <input type="hidden" name="overrides" value="{$apply-overrides}"/>
-                    <input type="hidden" name="autofp" value="{report/filters/autofp}"/>
+                      <!-- Report page filters. -->
+                      <input type="hidden" name="overrides" value="{$apply-overrides}"/>
+                      <input type="hidden" name="autofp" value="{report/filters/autofp}"/>
 
-                    <!-- Alert filters. -->
-                    <xsl:variable name="esc_filter_term">
-                      <xsl:if test="string-length (report/filters/keywords/keyword[column='autofp']/value) &gt; 0">
-                        <xsl:value-of select="concat ('autofp=', report/filters/keywords/keyword[column='autofp']/value, ' ')"/>
-                      </xsl:if>
-                      <xsl:if test="string-length (report/filters/keywords/keyword[column='apply_overrides']/value) &gt; 0">
-                        <xsl:value-of select="concat ('apply_overrides=', report/filters/keywords/keyword[column='apply_overrides']/value, ' ')"/>
-                      </xsl:if>
-                      <xsl:if test="string-length (report/filters/keywords/keyword[column='timezone']/value) &gt; 0">
-                        <xsl:value-of select="concat ('timezone=', report/filters/keywords/keyword[column='timezone']/value, ' ')"/>
-                      </xsl:if>
-                      <xsl:text>result_hosts_only=0 min_qod=0 levels=hmlgfd notes=1 overrides=1 start=1 rows=-1</xsl:text>
-                    </xsl:variable>
-                    <input type="hidden" name="esc_filter" value="{$esc_filter_term}"/>
+                      <!-- Alert filters. -->
+                      <xsl:variable name="esc_filter_term">
+                        <xsl:if test="string-length (report/filters/keywords/keyword[column='autofp']/value) &gt; 0">
+                          <xsl:value-of select="concat ('autofp=', report/filters/keywords/keyword[column='autofp']/value, ' ')"/>
+                        </xsl:if>
+                        <xsl:if test="string-length (report/filters/keywords/keyword[column='apply_overrides']/value) &gt; 0">
+                          <xsl:value-of select="concat ('apply_overrides=', report/filters/keywords/keyword[column='apply_overrides']/value, ' ')"/>
+                        </xsl:if>
+                        <xsl:if test="string-length (report/filters/keywords/keyword[column='timezone']/value) &gt; 0">
+                          <xsl:value-of select="concat ('timezone=', report/filters/keywords/keyword[column='timezone']/value, ' ')"/>
+                        </xsl:if>
+                        <xsl:text>result_hosts_only=0 min_qod=0 levels=hmlgfd notes=1 overrides=1 start=1 rows=-1</xsl:text>
+                      </xsl:variable>
+                      <input type="hidden" name="esc_filter" value="{$esc_filter_term}"/>
 
-                    <select name="alert_id" title="{gsa:i18n ('Alert', 'Alert')}">
-                      <xsl:for-each select="../../get_alerts_response/alert">
-                        <option value="{@id}"><xsl:value-of select="name"/></option>
-                      </xsl:for-each>
-                    </select>
-                    <input type="image"
-                          name="submit"
-                          value="Run Alert"
-                          title="{gsa:i18n ('Run Alert', 'Report')}"
-                          src="/img/start.png"
-                          class="icon ajax-post" data-reload="next"
-                          alt="{gsa:i18n ('Run Alert', 'Report')}"/>
+                      <select name="alert_id" title="{gsa:i18n ('Alert', 'Alert')}">
+                        <xsl:for-each select="../../get_alerts_response/alert">
+                          <option value="{@id}"><xsl:value-of select="name"/></option>
+                        </xsl:for-each>
+                      </select>
+                    </form>
+                    <img
+                      title="{gsa:i18n ('Run Alert', 'Report')}"
+                      src="/img/start.png"
+                      class="icon form-item"
+                      alt="{gsa:i18n ('Run Alert', 'Report')}"/>
 
-                    <a href="#" title="{ gsa:i18n('Create a new alert') }"
-                      class="new-action-icon icon" data-type="alert" data-done="select[name=alert_id]">
-                      <img src="/img/new.png"/>
-                    </a>
-                  </form>
+                  </div>
+                  <a href="#" title="{ gsa:i18n('Create a new alert') }"
+                    class="new-action-icon icon" data-type="alert" data-done="select[name=alert_id]">
+                    <img src="/img/new.png"/>
+                  </a>
                 </div>
               </td>
               <td>
@@ -33917,41 +33912,41 @@ should not have received it.
             </xsl:when>
             <xsl:otherwise>
               <td>
-                <div id="small_form" class="pull-right">
-                  <form action="" method="post" enctype="multipart/form-data">
-                    <input type="hidden" name="cmd" value="alert_report"/>
-                    <input type="hidden" name="caller" value="{/envelope/current_page}"/>
-                    <input type="hidden" name="report_id" value="{report/@id}"/>
-                    <input type="hidden" name="report_section" value="summary"/>
-                    <input type="hidden" name="filter" value="{report/filters/term}"/>
-                    <input type="hidden" name="filt_id" value="{report/filters/@id}"/>
-                    <input type="hidden" name="token" value="{/envelope/token}"/>
+                <div id="small_form" class="form-inline pull-right">
+                  <div class="form-group ajax-post" data-reload="next" data-button=".icon">
+                    <form class="form-item" method="post" enctype="multipart/form-data">
+                      <input type="hidden" name="cmd" value="alert_report"/>
+                      <input type="hidden" name="caller" value="{/envelope/current_page}"/>
+                      <input type="hidden" name="report_id" value="{report/@id}"/>
+                      <input type="hidden" name="report_section" value="summary"/>
+                      <input type="hidden" name="filter" value="{report/filters/term}"/>
+                      <input type="hidden" name="filt_id" value="{report/filters/@id}"/>
+                      <input type="hidden" name="token" value="{/envelope/token}"/>
 
-                    <!-- Report page filters. -->
-                    <input type="hidden" name="overrides" value="{$apply-overrides}"/>
-                    <input type="hidden" name="autofp" value="{report/filters/autofp}"/>
+                      <!-- Report page filters. -->
+                      <input type="hidden" name="overrides" value="{$apply-overrides}"/>
+                      <input type="hidden" name="autofp" value="{report/filters/autofp}"/>
 
-                    <!-- Alert filters. -->
-                    <input type="hidden" name="esc_filter" value="{report/filters/term}"/>
+                      <!-- Alert filters. -->
+                      <input type="hidden" name="esc_filter" value="{report/filters/term}"/>
 
-                    <select name="alert_id" title="{gsa:i18n ('Alert', 'Alert')}">
-                      <xsl:for-each select="../../get_alerts_response/alert">
-                        <option value="{@id}"><xsl:value-of select="name"/></option>
-                      </xsl:for-each>
-                    </select>
-                    <input type="image"
-                           name="submit"
-                           value="Run Alert"
-                           title="{gsa:i18n ('Run Alert', 'Report')}"
-                           src="/img/start.png"
-                           class="icon ajax-post" data-reload="next"
-                           alt="{gsa:i18n ('Run Alert', 'Report')}"/>
+                      <select name="alert_id" title="{gsa:i18n ('Alert', 'Alert')}">
+                        <xsl:for-each select="../../get_alerts_response/alert">
+                          <option value="{@id}"><xsl:value-of select="name"/></option>
+                        </xsl:for-each>
+                      </select>
 
-                    <a href="#" title="{ gsa:i18n('Create a new alert') }"
-                      class="new-action-icon icon" data-type="alert" data-done="select[name=alert_id]">
-                      <img src="/img/new.png"/>
-                    </a>
-                  </form>
+                    </form>
+                    <img
+                      title="{gsa:i18n ('Run Alert', 'Report')}"
+                      src="/img/start.png"
+                      class="icon form-item"
+                      alt="{gsa:i18n ('Run Alert', 'Report')}"/>
+                  </div>
+                  <a href="#" title="{ gsa:i18n('Create a new alert') }"
+                    class="new-action-icon icon" data-type="alert" data-done="select[name=alert_id]">
+                    <img src="/img/new.png"/>
+                  </a>
                 </div>
               </td>
             </xsl:otherwise>
