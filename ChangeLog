@@ -5,6 +5,10 @@
 
 2016-08-04  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/css/gsa-style.css: Always display icons as inline-blocks.
+
+2016-08-04  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/omp.xsl (alert): Use new ajax-post for test alert buttons
 	to show dialogs on success and failure.
 

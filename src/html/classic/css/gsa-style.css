@@ -1452,6 +1452,10 @@ select[multiple] {
   margin-bottom: 20px;
 }
 
+.icon {
+  display: inline-block;
+}
+
 .icon-sm {
   width: 16px;
   height: 16px;
