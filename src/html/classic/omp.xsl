@@ -28284,11 +28284,27 @@ should not have received it.
           </xsl:call-template>
           <xsl:choose>
             <xsl:when test="gsa:may ('verify_report_format') or string-length (owner/name) = 0">
-              <a href="/omp?cmd=verify_report_format&amp;report_format_id={@id}&amp;next=get_report_formats&amp;filter={str:encode-uri (../filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-                title="{gsa:i18n ('Verify Report Format', 'Report Format')}"
-                class="icon">
+              <div class="icon ajax-post" data-reload="next">
                 <img src="/img/verify.png" alt="{gsa:i18n ('Verify Report Format', 'Report Format')}"/>
-              </a>
+                <form>
+                  <input type="hidden" name="cmd" value="verify_report_format"/>
+                  <input type="hidden" name="report_format_id" value="{@id}"/>
+                  <input type="hidden" name="next" value="get_report_formats"/>
+                  <input type="hidden" name="filter" value="{../filters/term}"/>
+                  <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
+                  <input type="hidden" name="token" value="{/envelope/token}"/>
+                </form>
+                <div class="success-dialog">
+                  <div class="text-center">
+                    <xsl:value-of select="gsa:i18n ('Report Format has been verified.', 'Report Format')"/>
+                  </div>
+                </div>
+                <div class="error-dialog">
+                  <div class="text-center">
+                    <xsl:value-of select="gsa:i18n ('Report Format could not be verified.', 'Report Format')"/>
+                  </div>
+                </div>
+              </div>
             </xsl:when>
             <xsl:otherwise>
               <img src="/img/verify_inactive.png"

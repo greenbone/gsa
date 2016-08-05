@@ -2613,6 +2613,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   ELSE (sync_cert)
   ELSE (test_alert)
   ELSE (toggle_tag)
+  ELSE (verify_report_format)
   else
     {
       response_data.http_status_code = MHD_HTTP_BAD_REQUEST;
@@ -3308,7 +3309,6 @@ exec_omp_get (struct MHD_Connection *connection,
   ELSE (upload_report)
   ELSE (sync_config)
   ELSE (verify_agent)
-  ELSE (verify_report_format)
   ELSE (verify_scanner)
   ELSE (wizard)
   ELSE (wizard_get)
