@@ -11920,7 +11920,7 @@ should not have received it.
                   <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
                   <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
               </form>
-              <div class="success-dialog">
+              <div class="success-dialog" data-title="{gsa:i18n ('Success', 'Action Verb')}">
                 <p class="text-center">
                   <xsl:value-of select="gsa-i18n:strformat (gsa:i18n ('Testing the alert %1 was successful.', 'Alert'), name)"/>
                 </p>
@@ -28294,7 +28294,7 @@ should not have received it.
                   <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
                   <input type="hidden" name="token" value="{/envelope/token}"/>
                 </form>
-                <div class="success-dialog">
+                <div class="success-dialog" data-title="{gsa:i18n ('Success', 'Action Verb')}">
                   <div class="text-center">
                     <xsl:value-of select="gsa:i18n ('Report Format has been verified.', 'Report Format')"/>
                   </div>

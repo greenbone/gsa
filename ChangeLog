@@ -1,5 +1,9 @@
 2016-08-05  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/omp.xsl: Set dialog title for ajax post success dialogs.
+
+2016-08-05  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/greenbone.js (InfoDialog): Allow to set a dialog title.
 
 2016-08-05  Björn Ricks <bjoern.ricks@greenbone.net>
