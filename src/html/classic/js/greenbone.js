@@ -282,17 +282,18 @@
       displayed_title = title;
     }
 
-    if (status_code !== undefined && status_code !== '') {
-      displayed_title = displayed_title + ' <i>(Status code: ' +
-        status_code + ')</i>';
+    if (gsa.is_defined(status_code) && status_code !== '') {
+      displayed_title = '(Status code: ' + status_code + ') ' + displayed_title;
     }
+
+    this.dialog.dialog('option', 'title', displayed_title);
 
     // Remove previous errors
     this.dialog.find('div.ui-state-error').remove();
     // Insert our error message
     this.dialog.prepend($('<div/>', {
       'class': 'ui-state-error ui-corner-all',
-      html: $('<p><strong>' + title + '</strong> ' + message + '</p>'),
+      html: $('<p>' + message + '</p>'),
     }));
   };
 

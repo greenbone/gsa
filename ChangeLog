@@ -1,5 +1,10 @@
 2016-08-05  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/greenbone.js (Dialog.prototype.error): Fix displaying
+	the error message.
+
+2016-08-05  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/omp.xsl (report summary, user-tags-window-checked): Change
 	ajax posts to have the form element always as a child and not a parent.
 
