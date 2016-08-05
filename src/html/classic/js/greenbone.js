@@ -304,6 +304,7 @@
     var response = xml.find(RESPONSE_SELECTORS[self.command] +
         '[status!="200"][status!="201"][status!="202"]');
     var gsad_msg = xml.find('gsad_msg');
+    var gsad_response = xml.find('gsad_response');
     var action_result = xml.find('action_result');
     var generic_omp_response = xml.find('omp_response');
     var internal_error_html = html.find(
@@ -322,6 +323,11 @@
         error = error + '<br/>' + gsad_msg.justtext();
       }
       error_code = gsad_msg.attr('status_code');
+    }
+    else if (gsad_response.length) {
+      error = gsad_response.find('message').text();
+      error_title = gsad_response.find('title').text();
+      error_code = jqXHR.status;
     }
     else if (response.length) {
       var parent = response.parent();

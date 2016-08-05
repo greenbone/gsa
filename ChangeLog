@@ -1,5 +1,10 @@
 2016-08-05  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/greenbone.js (Dialog.prototype.setErrorFromResponse):
+	Handle generic gsad_response error messages.
+
+2016-08-05  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/greenbone.js (Dialog.prototype.error): Fix displaying
 	the error message.
 
