@@ -1299,33 +1299,38 @@
         }
       }
 
-      elem.on('click', function(event) {
+      var reload = elem.data('reload');
+      var modal = elem.data('modal') && true;
+
+      var selector = 'form';
+      if (elem.data('form')) {
+        selector = elem.data('form');
+      }
+
+      var form = elem.find(selector); // search downwards first
+      if (!form.length) {
+        // search upwards for backwards compatibility
+        form = elem.parents(selector);
+      }
+      if (!form.length) {
+        throw new Error('Form for ajax request not found');
+      }
+
+      var button = elem;
+      if (elem.data('button')) {
+        button = elem.find(elem.data('button'));
+      }
+
+      var error = elem.find('.error-dialog');
+      var success = elem.find('.success-dialog');
+
+      button.on('click', function(event) {
         event.preventDefault();
-
-        var reload = elem.data('reload');
-        var modal = elem.data('modal') && true;
-
-        var selector = 'form';
-        if (elem.data('form')) {
-          selector = elem.data('form');
-        }
-
-        var form = elem.find(selector); // search downwards first
-        if (!form.length) {
-          // search upwards for backwards compatibility
-          form = elem.parents(selector);
-        }
-        if (!form.length) {
-          throw new Error('Form for ajax request not found');
-        }
 
         var request = new OMPRequest({
           form: form[0],
           params: {next_xml: 0},
         });
-
-        var error = elem.find('.error-dialog');
-        var success = elem.find('.success-dialog');
 
         request.do(function(response) {
           if (success.length) {
