@@ -1317,11 +1317,7 @@
         selector = elem.data('form');
       }
 
-      var form = elem.find(selector); // search downwards first
-      if (!form.length) {
-        // search upwards for backwards compatibility
-        form = elem.parents(selector);
-      }
+      var form = elem.find(selector);
       if (!form.length) {
         throw new Error('Form for ajax request not found');
       }
