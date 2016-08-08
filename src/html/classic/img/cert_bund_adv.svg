@@ -14,8 +14,8 @@
    height="52.52018"
    id="svg5160"
    sodipodi:version="0.32"
-   inkscape:version="0.91 r13725"
-   sodipodi:docname="cert_bund.svg"
+   inkscape:version="0.48.5 r10040"
+   sodipodi:docname="cert_bund_adv.svg"
    version="1.0"
    inkscape:export-xdpi="27.42"
    inkscape:export-ydpi="27.42">
@@ -87,7 +87,7 @@
        gradientTransform="translate(0.04547682,-0.06818501)" />
     <style
        type="text/css"
-       id="style11376"><![CDATA[
+       id="style11376">
     .str1 {stroke:#373435;stroke-width:0.19326}
     .str0 {stroke:#373435;stroke-width:0.19326;stroke-linejoin:bevel}
     .fil1 {fill:none}
@@ -99,7 +99,7 @@
     .fil3 {fill:#030101}
     .fil4 {fill:#030201}
     .fil0 {fill:#030300}
-   ]]></style>
+   </style>
   </defs>
   <sodipodi:namedview
      id="base"
@@ -108,17 +108,17 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="33.734099"
-     inkscape:cx="25.109749"
-     inkscape:cy="14.261292"
+     inkscape:zoom="2.9817013"
+     inkscape:cx="26.897913"
+     inkscape:cy="11.78195"
      inkscape:current-layer="text20406"
      showgrid="false"
      inkscape:document-units="px"
      inkscape:grid-bbox="true"
-     inkscape:window-width="1920"
-     inkscape:window-height="1058"
-     inkscape:window-x="-8"
-     inkscape:window-y="-8"
+     inkscape:window-width="1680"
+     inkscape:window-height="1030"
+     inkscape:window-x="-3"
+     inkscape:window-y="-3"
      showguides="true"
      inkscape:guide-bbox="true"
      inkscape:window-maximized="1"
@@ -1768,19 +1768,22 @@
        id="path20428"
        cx="43.055553"
        cy="26.32638"
-       r="1.988" />
+       r="1.988"
+       d="m 45.043553,26.32638 c 0,1.097942 -0.890057,1.988 -1.988,1.988 -1.097942,0 -1.988,-0.890058 -1.988,-1.988 0,-1.097942 0.890058,-1.988 1.988,-1.988 1.097943,0 1.988,0.890058 1.988,1.988 z" />
     <circle
        style="opacity:1;fill:#ff0000;fill-opacity:1;stroke:none;stroke-width:0.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="path20428-0"
        cx="33.090832"
        cy="31.420877"
-       r="1.988" />
+       r="1.988"
+       d="m 35.078832,31.420877 c 0,1.097943 -0.890058,1.988 -1.988,1.988 -1.097942,0 -1.988,-0.890057 -1.988,-1.988 0,-1.097942 0.890058,-1.988 1.988,-1.988 1.097942,0 1.988,0.890058 1.988,1.988 z" />
     <circle
        style="opacity:1;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="path20428-0-7"
        cx="27.950083"
        cy="23.582569"
-       r="1.988" />
+       r="1.988"
+       d="m 29.938083,23.582569 c 0,1.097942 -0.890058,1.988 -1.988,1.988 -1.097942,0 -1.988,-0.890058 -1.988,-1.988 0,-1.097942 0.890058,-1.988 1.988,-1.988 1.097942,0 1.988,0.890058 1.988,1.988 z" />
     <g
        id="g21062"
        transform="matrix(0.67988576,0,0,0.67988576,-20.183388,-7.918788)">
@@ -1789,7 +1792,8 @@
          cy="76.388374"
          cx="90.640549"
          id="path4940"
-         style="opacity:1;fill:#0000ff;fill-opacity:1;stroke:#000080;stroke-width:0.87952149;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+         style="opacity:1;fill:#0000ff;fill-opacity:1;stroke:#000080;stroke-width:0.87952149;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="m 103.7176,76.388374 c 0,7.222255 -5.854797,13.077049 -13.077051,13.077049 -7.222255,0 -13.077049,-5.854794 -13.077049,-13.077049 0,-7.222254 5.854794,-13.077048 13.077049,-13.077048 7.222254,0 13.077051,5.854794 13.077051,13.077048 z" />
       <g
          transform="translate(53.186136,37.275958)"
          id="text5742"
@@ -1813,7 +1817,7 @@
        sodipodi:ry="19.751495"
        sodipodi:start="3.3702308"
        sodipodi:end="0.2443461"
-       d="M 11.06361,28.991708 A 19.751495,19.751495 0 0 1 24.65832,14.540107 19.751495,19.751495 0 0 1 43.947053,19.188728 19.751495,19.751495 0 0 1 49.465884,38.24673"
+       d="M 11.06361,28.991708 C 13.536025,18.36714 24.153227,11.758514 34.777795,14.230929 c 10.624567,2.472414 17.233193,13.089616 14.760779,23.714184 -0.02344,0.100728 -0.04767,0.20127 -0.07269,0.301617"
        sodipodi:open="true" />
   </g>
 </svg>

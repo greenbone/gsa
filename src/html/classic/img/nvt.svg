@@ -14,8 +14,8 @@
    height="52.52018"
    id="svg5160"
    sodipodi:version="0.32"
-   inkscape:version="0.91 r13725"
-   sodipodi:docname="nvts.svg"
+   inkscape:version="0.48.5 r10040"
+   sodipodi:docname="nvt.svg"
    version="1.0"
    inkscape:export-xdpi="27.42"
    inkscape:export-ydpi="27.42">
@@ -87,7 +87,7 @@
        gradientTransform="translate(0.04547682,-0.06818501)" />
     <style
        type="text/css"
-       id="style11376"><![CDATA[
+       id="style11376">
     .str1 {stroke:#373435;stroke-width:0.19326}
     .str0 {stroke:#373435;stroke-width:0.19326;stroke-linejoin:bevel}
     .fil1 {fill:none}
@@ -99,7 +99,7 @@
     .fil3 {fill:#030101}
     .fil4 {fill:#030201}
     .fil0 {fill:#030300}
-   ]]></style>
+   </style>
   </defs>
   <sodipodi:namedview
      id="base"
@@ -115,10 +115,10 @@
      showgrid="false"
      inkscape:document-units="px"
      inkscape:grid-bbox="true"
-     inkscape:window-width="1920"
-     inkscape:window-height="1058"
-     inkscape:window-x="-8"
-     inkscape:window-y="-8"
+     inkscape:window-width="1680"
+     inkscape:window-height="1030"
+     inkscape:window-x="-3"
+     inkscape:window-y="-3"
      showguides="true"
      inkscape:guide-bbox="true"
      inkscape:window-maximized="1"
@@ -1989,7 +1989,8 @@
          id="path2791"
          cx="-29.986822"
          cy="46.714397"
-         r="8.9676161" />
+         r="8.9676161"
+         d="m -21.019206,46.714397 c 0,4.952678 -4.014939,8.967617 -8.967616,8.967617 -4.952678,0 -8.967616,-4.014939 -8.967616,-8.967617 0,-4.952677 4.014938,-8.967616 8.967616,-8.967616 4.952677,0 8.967616,4.014939 8.967616,8.967616 z" />
       <path
          inkscape:connector-curvature="0"
          id="path12052"
@@ -2310,7 +2311,8 @@
          cy="76.388374"
          cx="90.640549"
          id="path4940"
-         style="opacity:1;fill:#0000ff;fill-opacity:1;stroke:#000080;stroke-width:0.87952149;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+         style="opacity:1;fill:#0000ff;fill-opacity:1;stroke:#000080;stroke-width:0.87952149;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="m 103.7176,76.388374 c 0,7.222255 -5.854797,13.077049 -13.077051,13.077049 -7.222255,0 -13.077049,-5.854794 -13.077049,-13.077049 0,-7.222254 5.854794,-13.077048 13.077049,-13.077048 7.222254,0 13.077051,5.854794 13.077051,13.077048 z" />
       <g
          transform="translate(53.186136,37.275958)"
          id="text5742"
