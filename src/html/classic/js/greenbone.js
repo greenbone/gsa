@@ -1375,6 +1375,7 @@
             title: error.data('title'),
             dialog_css: 'ui-dialog-error',
             width: error.data('width') || 300,
+            cmd: elem.find('input[name=cmd]').val(),
           });
           dialog.show().setErrorFromResponse(jqXHR);
         });

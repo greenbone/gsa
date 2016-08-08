@@ -1,5 +1,11 @@
 2016-08-08  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/greenbone.js (ajax-post): Pass command to InfoDialog in
+	error cases to get the correct selector from RESPONSE_SELECTORS to show the
+	returned error message.
+
+2016-08-08  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/greenbone.js (InfoDialog): Simplify passing an element
 	to the InfoDialog. Now it is not reqiered to check wether the provided element
 	is empty or not.
