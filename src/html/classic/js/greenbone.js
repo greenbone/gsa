@@ -274,7 +274,10 @@
     return undefined;
   }
 
-  function Dialog() {
+  function Dialog(options) {
+    this.command = options.cmd;
+    this.dialog_id = options.dialog_id;
+    this.title = options.title;
   }
 
   Dialog.prototype.error = function(message, title, status_code) {
@@ -407,11 +410,10 @@
    * show_method specifies the method to send the initial request instead of GET.
   **/
   function OMPDialog(options) {
-    this.command = options.cmd;
+    Dialog.call(this, options); // call super
     this.success_reload = options.success_reload || {};
     this.close_reload = options.close_reload || {};
     this.height = is_defined(options.height) ? options.height : 500;
-    this.dialog_id = options.dialog_id;
 
     if (options.params === undefined) {
       this.params = {};
@@ -809,6 +811,7 @@
   global.FilterDialog = FilterDialog;
 
   function InfoDialog(options) {
+    Dialog.call(this, options); // call super
     this.timeout = gsa.is_defined(options.timeout) ? options.timeout : 5000;
     this.width = gsa.is_defined(options.width) ? options.width : 600;
     this.transfer_to = options.transfer_to ? $(options.transfer_to) : undefined;
@@ -827,8 +830,6 @@
     if (options.element) {
       this.dialog.append(options.element.children());
     }
-
-    this.title = options.title;
   }
 
   gsa.derive(InfoDialog, Dialog);

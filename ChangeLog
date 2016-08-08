@@ -1,5 +1,10 @@
 2016-08-08  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/greenbone.js (Dialog): Evaluate common Dialog properties
+	in Dialog constructor and call the constructor in all child dialogs.
+
+2016-08-08  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/greenbone.js (RESPONSE_SELECTORS): Add selectors for
 	verify commands.
 
