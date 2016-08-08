@@ -33479,7 +33479,7 @@ should not have received it.
         <xsl:value-of select="gsa:i18n ('Scanner has been verified.', 'Scanner')"/>
       </div>
     </div>
-    <div class="error-dialog">
+    <div class="error-dialog" data-title="{gsa:i18n ('Not verified', 'Scanner')}">
       <div class="text-center">
         <xsl:value-of select="gsa:i18n ('Scanner could not be verified.', 'Scanner')"/>
       </div>
