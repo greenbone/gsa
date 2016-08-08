@@ -282,7 +282,7 @@
 
   Dialog.prototype.error = function(message, title, status_code) {
     var displayed_title;
-    if (!title) {
+    if (!gsa.is_defined(title)) {
       displayed_title = this.title || 'Error:';
     }
     else {
@@ -351,6 +351,9 @@
           }
         }
         error_title = 'Error modifying setting "' + name + '":';
+      }
+      else {
+        error_title = undefined;
       }
       error = response.attr('status_text');
       error_code = response.attr('status');
