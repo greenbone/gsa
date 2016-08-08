@@ -1,5 +1,12 @@
 2016-08-08  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/omp.xsl (list-window): Reduce direct styles from resource
+	tables and improve layout by using divs, tbody and tfoot.
+
+	* src/html/classic/css/gsa-style.css: Add styles for resources tables.
+
+2016-08-08  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/greenbone.js (scanner-icons): Add title for the error
 	info dialog.
 

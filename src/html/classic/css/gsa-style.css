@@ -259,6 +259,47 @@ table.gbntable {
   text-decoration: underline;
 }
 
+.gbntable tfoot tr {
+  background: #DDDDDD;
+}
+
+.resources .header,
+.resources .footer {
+  font-size: 10px;
+  color: #787878;
+  text-align: left;
+}
+
+.resources .pager {
+  float: right;
+}
+
+.resources .gbntable {
+  margin-bottom: 0px;
+}
+
+.resources .bulk-select-type {
+  margin-top: -23px;
+  margin-right: 66px;
+  text-align: right;
+  height: 26px
+}
+
+.resources .footer .applied-filter {
+  text-align: left;
+  display: inline-block;
+}
+
+.resources .footer .applied-filter a {
+  color: #787878;
+  text-decoration: none;
+}
+
+.resources .footer .applied-filter a:hover,
+.resources .footer .applied-filter a:focus {
+  text-decoration: underline;
+}
+
 .table-fixed {
   table-layout: fixed;
 }
