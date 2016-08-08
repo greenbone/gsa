@@ -214,7 +214,11 @@
     // ------
     delete_user:         'delete_user_response',
     // ------
-    process_bulk:        'commands_response'
+    process_bulk:        'commands_response',
+    // ------
+    verify_scanner:      'verify_scanner_response',
+    verify_agent:        'verify_agent_response',
+    verify_report_format: 'verify_report_format_response',
   };
 
   var ENTITY_SELECTORS = {
