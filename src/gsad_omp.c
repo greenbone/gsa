@@ -7586,12 +7586,10 @@ char *
 verify_agent_omp (credentials_t * credentials, params_t *params,
                   cmd_response_data_t* response_data)
 {
-  GString *xml;
-  gnutls_session_t session;
-  int socket;
-  gchar *html;
+  gchar *html, *response;
   const char *agent_id;
-  char *ret;
+  int ret;
+  entity_t entity;
 
   agent_id = params_value (params, "agent_id");
   if (agent_id == NULL)
@@ -7603,59 +7601,70 @@ verify_agent_omp (credentials_t * credentials, params_t *params,
                            "Diagnostics: Required parameter was NULL.",
                            "/omp?cmd=get_agents", response_data);
     }
-  switch (manager_connect (credentials, &socket, &session, &html,
-                           response_data))
+  response = NULL;
+  entity = NULL;
+  ret = ompf (credentials,
+              &response,
+              &entity,
+              response_data,
+              "<verify_agent agent_id=\"%s\" />",
+              agent_id);
+
+  switch (ret)
     {
       case 0:
-        break;
       case -1:
-        if (html)
-          return html;
-        /* Fall through. */
+        break;
+      case 1:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while verifying a agent. "
+                             "The agent was not verified. "
+                             "Diagnostics: Failure to send command to manager daemon.",
+                             "/omp?cmd=get_agents", response_data);
+      case 2:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while verifying a agent. "
+                             "It is unclear whether the agent was verified or not. "
+                             "Diagnostics: Failure to send command to manager daemon.",
+                             "/omp?cmd=get_agents", response_data);
       default:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while verifying an agent. "
-                             "The agent is not verified. "
-                             "Diagnostics: Failure to connect to manager daemon.",
+                             "An internal error occurred while verifying a agent. "
+                             "It is unclear whether the agent was verified or not. "
+                             "Diagnostics: Failure to send command to manager daemon.",
                              "/omp?cmd=get_agents", response_data);
     }
 
-  if (openvas_server_sendf (&session,
-                            "<verify_agent agent_id=\"%s\" />",
-                            agent_id)
-      == -1)
+  if (omp_success (entity))
     {
-      openvas_server_close (socket, session);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while verifying an agent. "
-                           "The agent is not verified. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_agents", response_data);
+      html = next_page (credentials, params, response, response_data);
+      if (html == NULL)
+        {
+          free_entity (entity);
+          g_free (response);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while verifying a agent. "
+                               "It is unclear whether the agent was verified or not. "
+                               "Diagnostics: Failure to receive response from manager daemon.",
+                               "/omp?cmd=get_agents", response_data);
+        }
     }
-
-  xml = g_string_new ("");
-
-  if (read_string (&session, &xml))
+  else
     {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while verifying an agent. "
-                           "It is unclear whether the agent has been verified or not. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_agents", response_data);
+      set_http_status_from_entity (entity, response_data);
+      html = get_agents (credentials, params, response, response_data);
     }
-
-  ret = get_agents (credentials, params, xml->str, response_data);
-  openvas_server_close (socket, session);
-  g_string_free (xml, TRUE);
-  return ret;
+  free_entity (entity);
+  g_free (response);
+  return html;
 }
 
 /**
@@ -17825,70 +17834,82 @@ char *
 verify_scanner_omp (credentials_t * credentials, params_t *params,
                     cmd_response_data_t* response_data)
 {
-  GString *xml;
-  gnutls_session_t session;
-  int socket;
-  gchar *html;
+  gchar *html, *response;
   const char *scanner_id, *next;
-  char *ret;
+  int ret;
+  entity_t entity;
 
   scanner_id = params_value (params, "scanner_id");
   CHECK_PARAM (scanner_id, "Verify Scanner", get_scanners);
-  switch (manager_connect (credentials, &socket, &session, &html,
-                           response_data))
+
+
+  ret = ompf (credentials,
+              &response,
+              &entity,
+              response_data,
+              "<verify_scanner scanner_id=\"%s\"/>",
+              scanner_id);
+
+  switch (ret)
     {
       case 0:
-        break;
       case -1:
-        if (html)
-          return html;
-        /* Fall through. */
+        break;
+      case 1:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while verifying a scanner. "
+                             "The scanner was not verified. "
+                             "Diagnostics: Failure to send command to manager daemon.",
+                             "/omp?cmd=get_scanners", response_data);
+      case 2:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while verifying a scanner. "
+                             "It is unclear whether the scanner was verified or not. "
+                             "Diagnostics: Failure to send command to manager daemon.",
+                             "/omp?cmd=get_scanners", response_data);
       default:
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-        return gsad_message
-                (credentials, "Internal error", __FUNCTION__, __LINE__,
-                 "An internal error occurred while verifying an scanner. "
-                 "The scanner is not verified. "
-                 "Diagnostics: Failure to connect to manager daemon.",
-                 "/omp?cmd=get_scanners", response_data);
+        return gsad_message (credentials,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred while verifying a scanner. "
+                             "It is unclear whether the scanner was verified or not. "
+                             "Diagnostics: Failure to send command to manager daemon.",
+                             "/omp?cmd=get_scanners", response_data);
     }
 
-  if (openvas_server_sendf (&session, "<verify_scanner scanner_id=\"%s\"/>",
-                            scanner_id) == -1)
+  if (omp_success (entity))
     {
-      openvas_server_close (socket, session);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-      return gsad_message
-              (credentials, "Internal error", __FUNCTION__, __LINE__,
-               "An internal error occurred while verifying an scanner. "
-               "The scanner is not verified. "
-               "Diagnostics: Failure to send command to manager daemon.",
-               "/omp?cmd=get_scanners", response_data);
+      html = next_page (credentials, params, response, response_data);
+      if (html == NULL)
+        {
+          free_entity (entity);
+          g_free (response);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          return gsad_message (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred while verifying a scanner. "
+                               "It is unclear whether the scanner was verified or not. "
+                               "Diagnostics: Failure to receive response from manager daemon.",
+                               "/omp?cmd=get_scanners", response_data);
+        }
     }
-
-  xml = g_string_new ("");
-
-  if (read_string (&session, &xml))
-    {
-      g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-      return gsad_message
-              (credentials, "Internal error", __FUNCTION__, __LINE__,
-               "An internal error occurred while verifying an scanner. "
-               "It is unclear whether the scanner has been verified or not. "
-               "Diagnostics: Failure to receive response from manager daemon.",
-               "/omp?cmd=get_scanners", response_data);
-    }
-
-  next = params_value (params, "next");
-  if (next && !strcmp (next, "get_scanner"))
-    ret = get_scanner (credentials, params, xml->str, response_data);
   else
-    ret = get_scanners (credentials, params, xml->str, response_data);
-  openvas_server_close (socket, session);
-  g_string_free (xml, TRUE);
-  return ret;
+    {
+      set_http_status_from_entity (entity, response_data);
+      next = params_value (params, "next");
+      if (next && !strcmp (next, "get_scanner"))
+        html = get_scanner (credentials, params, response, response_data);
+      else
+        html = get_scanners (credentials, params, response, response_data);
+    }
+
+  free_entity (entity);
+  g_free (response);
+  return html;
 }
 
 /**

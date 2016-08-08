@@ -1,5 +1,13 @@
 2016-08-08  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/gsad_omp.c (verify_scanner_omp, verify_agent_omp): Change
+	verify_scanner_omp and verify_agent_omp to return a 4XX response in case of
+	the scanner/agent couldn't be verified. This unifies the handling of all
+	verify omp commands. Now all verify commands are post requests and are
+	returning non 2xx status in responses.
+
+2016-08-08  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/greenbone.js (ajax-post): Require form to be a child of
 	the ajax-post element.
 
