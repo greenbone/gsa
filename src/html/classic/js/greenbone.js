@@ -830,7 +830,7 @@
 
     this.dialog_css = options.dialog_css;
 
-    if (options.element) {
+    if (options.element && options.element.length) {
       this.dialog.append(options.element.children());
     }
   }
@@ -1368,9 +1368,8 @@
           }
         },
         function(jqXHR) {
-          var elem = error.length ? error.clone() : undefined;
           var dialog = new InfoDialog({
-            element: elem,
+            element: error.clone(),
             timeout: 10000,
             modal: modal,
             title: error.data('title'),
