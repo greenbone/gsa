@@ -8013,6 +8013,14 @@ Public License instead of this License.
         Task (task_name and task_uuid) and Result.
       </p>
 
+      <h5>Permissions</h5>
+
+      <p>
+        Additionally, the Permissions can be filtered for orphaned permissions by
+        using "orphan=1". Those are permissions where the referring resource were
+        meanwhile deleted. With "orphan=0" you exclude the orhphaned entries. 
+      </p>
+
     </div>
   </div>
 </xsl:template>
