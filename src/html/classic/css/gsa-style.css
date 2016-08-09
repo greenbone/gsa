@@ -1695,4 +1695,12 @@ select[multiple] {
   cursor: pointer;
 }
 
+.pager .pagination {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.pager .pagination-text {
+  padding: 0 3px;
+}
 /* vim: set ts=2 sw=2 tw=80:*/

@@ -917,48 +917,69 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
       <!-- Table has rows. -->
 
-      <!-- Left icons. -->
-      <xsl:choose>
-        <xsl:when test = "$list/@start &gt; 1">
-          <a href="?cmd={$get_cmd}{$extra_params}&amp;filter=first=1 rows={$list/@max} {filters/term}&amp;token={/envelope/token}"><img style="margin-left:10px;margin-right:3px;" src="/img/first.png" title="{gsa:i18n ('First', 'Pagination')}"/></a>
-        </xsl:when>
-        <xsl:otherwise>
-          <img style="margin-left:10px;margin-right:3px;" src="/img/first_inactive.png" title="{gsa:i18n ('Already on first page', 'Pagination')}"/>
-        </xsl:otherwise>
-      </xsl:choose>
-      <xsl:choose>
-        <xsl:when test="$list/@start > $list/@max and $list/@max &gt; 0">
-          <a href="?cmd={$get_cmd}{$extra_params}&amp;filter=first={$list/@start - $list/@max} rows={$list/@max} {filters/term}&amp;token={/envelope/token}"><img style="margin-right:3px;" src="/img/previous.png" title="{gsa:i18n ('Previous', 'Pagination')}"/></a>
-        </xsl:when>
-        <xsl:when test="$list/@start &gt; 1 and $list/@max &gt; 0">
-          <a href="?cmd={$get_cmd}{$extra_params}&amp;filter=first=1 rows={$list/@max} {filters/term}&amp;token={/envelope/token}"><img style="margin-right:3px;" src="/img/previous.png" title="{gsa:i18n ('Previous', 'Pagination')}"/></a>
-        </xsl:when>
-        <xsl:otherwise>
-          <img style="margin-right:3px;" src="/img/previous_inactive.png" title="{gsa:i18n ('Already on first page', 'Pagination')}"/>
-        </xsl:otherwise>
-      </xsl:choose>
-      <!-- Text. -->
-      <xsl:value-of select="$list/@start"/> -
-      <xsl:value-of select="$last"/>
-      <xsl:value-of select="gsa:i18n (' of ', 'Pagination')"/>
-      <div style="display: inline; margin-right: 0px;"><xsl:value-of select="$filtered_count"/></div>
-      <!-- Right icons. -->
-      <xsl:choose>
-        <xsl:when test = "$last &lt; $filtered_count">
-          <a href="?cmd={$get_cmd}{$extra_params}&amp;filter=first={$list/@start + $list/@max} rows={$list/@max} {filters/term}&amp;token={/envelope/token}"><img style="margin-left:3px;" src="/img/next.png" title="{gsa:i18n ('Next', 'Pagination')}"/></a>
-        </xsl:when>
-        <xsl:otherwise>
-          <img style="margin-left:3px;" src="/img/next_inactive.png" title="{gsa:i18n ('Already on last page', 'Pagination')}"/>
-        </xsl:otherwise>
-      </xsl:choose>
-      <xsl:choose>
-        <xsl:when test = "$last &lt; $filtered_count">
-          <a href="?cmd={$get_cmd}{$extra_params}&amp;filter=first={floor(($filtered_count - 1) div $list/@max) * $list/@max + 1} rows={$list/@max} {filters/term}&amp;token={/envelope/token}"><img style="margin-left:3px;margin-right:10px;" src="/img/last.png" title="{gsa:i18n ('Last', 'Pagination')}"/></a>
-        </xsl:when>
-        <xsl:otherwise>
-          <img style="margin-left:3px;margin-right:10px;" src="/img/last_inactive.png" title="{gsa:i18n ('Already on last page', 'Pagination')}"/>
-        </xsl:otherwise>
-      </xsl:choose>
+      <div class="pager">
+
+        <!-- Left icons. -->
+        <div class="pagination pagination-left">
+          <xsl:choose>
+            <xsl:when test = "$list/@start &gt; 1">
+              <a href="?cmd={$get_cmd}{$extra_params}&amp;filter=first=1 rows={$list/@max} {filters/term}&amp;token={/envelope/token}"
+                class="icon icon-sm">
+                <img src="/img/first.png" title="{gsa:i18n ('First', 'Pagination')}"/></a>
+            </xsl:when>
+            <xsl:otherwise>
+              <img class="icon icon-sm" src="/img/first_inactive.png" title="{gsa:i18n ('Already on first page', 'Pagination')}"/>
+            </xsl:otherwise>
+          </xsl:choose>
+          <xsl:choose>
+            <xsl:when test="$list/@start > $list/@max and $list/@max &gt; 0">
+              <a href="?cmd={$get_cmd}{$extra_params}&amp;filter=first={$list/@start - $list/@max} rows={$list/@max} {filters/term}&amp;token={/envelope/token}"
+                class="icon icon-sm">
+                <img src="/img/previous.png" title="{gsa:i18n ('Previous', 'Pagination')}"/></a>
+            </xsl:when>
+            <xsl:when test="$list/@start &gt; 1 and $list/@max &gt; 0">
+              <a href="?cmd={$get_cmd}{$extra_params}&amp;filter=first=1 rows={$list/@max} {filters/term}&amp;token={/envelope/token}"
+                class="icon icon-sm">
+                <img src="/img/previous.png" title="{gsa:i18n ('Previous', 'Pagination')}"/></a>
+            </xsl:when>
+            <xsl:otherwise>
+              <img class="icon icon-sm" src="/img/previous_inactive.png" title="{gsa:i18n ('Already on first page', 'Pagination')}"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </div>
+
+        <!-- Text. -->
+        <div class="pagination pagination-text">
+          <xsl:value-of select="$list/@start"/> -
+          <xsl:value-of select="$last"/>
+          <xsl:value-of select="gsa:i18n (' of ', 'Pagination')"/>
+          <xsl:value-of select="$filtered_count"/>
+        </div>
+
+        <!-- Right icons. -->
+        <div class="pagination pagination-right">
+          <xsl:choose>
+            <xsl:when test = "$last &lt; $filtered_count">
+              <a href="?cmd={$get_cmd}{$extra_params}&amp;filter=first={$list/@start + $list/@max} rows={$list/@max} {filters/term}&amp;token={/envelope/token}"
+                class="icon icon-sm">
+                <img src="/img/next.png" title="{gsa:i18n ('Next', 'Pagination')}"/></a>
+            </xsl:when>
+            <xsl:otherwise>
+              <img class="icon icon-sm" src="/img/next_inactive.png" title="{gsa:i18n ('Already on last page', 'Pagination')}"/>
+            </xsl:otherwise>
+          </xsl:choose>
+          <xsl:choose>
+            <xsl:when test = "$last &lt; $filtered_count">
+              <a href="?cmd={$get_cmd}{$extra_params}&amp;filter=first={floor(($filtered_count - 1) div $list/@max) * $list/@max + 1} rows={$list/@max} {filters/term}&amp;token={/envelope/token}"
+                class="icon icon-sm">
+                <img src="/img/last.png" title="{gsa:i18n ('Last', 'Pagination')}"/></a>
+            </xsl:when>
+            <xsl:otherwise>
+              <img class="icon icon-sm" src="/img/last_inactive.png" title="{gsa:i18n ('Already on last page', 'Pagination')}"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </div>
+      </div>
     </xsl:when>
   </xsl:choose>
 </xsl:template>
