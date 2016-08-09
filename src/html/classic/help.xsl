@@ -110,7 +110,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <h4>New <xsl:value-of select="$name"/></h4>
     <p>
       To create a new <xsl:value-of select="$name"/> click the new icon
-      <img src="/img/new.png" alt="New {$name}" title="New {$name}"/>
+      <img src="/img/new.svg" class="icon icon-sm" alt="New {$name}" title="New {$name}"/>
       which goes to the <a href="new_{$type}.html?token={/envelope/token}">
       New <xsl:value-of select="$name"/></a> page.
     </p>
@@ -120,7 +120,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <h4>Clone <xsl:value-of select="$name"/></h4>
     <p>
       To clone a <xsl:value-of select="$name"/> click the clone icon
-      <img src="/img/clone.png" alt="Clone" title="Clone"/>
+      <img src="/img/clone.svg" class="icon icon-sm" alt="Clone" title="Clone"/>
       which goes to the details page of the clone.
     </p>
   </xsl:if>
@@ -128,7 +128,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <h4><xsl:value-of select="$name"/>s</h4>
   <p>
     Pressing the list icon
-    <img src="/img/list.png" alt="{$name}s" title="{$name}s"/>
+    <img src="/img/list.svg" class="icon icon-sm" alt="{$name}s" title="{$name}s"/>
     will switch to the
     <a href="{$type}s.html?token={/envelope/token}">
       <xsl:value-of select="$name"/>s
@@ -140,11 +140,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     Pressing the "Delete <xsl:value-of select="$name"/>" icon
     <xsl:choose>
       <xsl:when test="$ultimate">
-        <img src="/img/delete.png" alt="Delete {$name}" title="Delete {$name}"/>
+        <img src="/img/delete.svg" class="icon icon-sm" alt="Delete {$name}" title="Delete {$name}"/>
         will delete the resource.
       </xsl:when>
       <xsl:otherwise>
-        <img src="/img/trashcan.png" alt="Delete {$name}" title="Delete {$name}"/>
+        <img src="/img/trashcan.svg" class="icon icon-sm" alt="Delete {$name}" title="Delete {$name}"/>
         will move the resource to the trashcan.
       </xsl:otherwise>
     </xsl:choose>
@@ -154,7 +154,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <h4>Edit <xsl:value-of select="$name"/></h4>
     <p>
       Pressing the "Edit <xsl:value-of select="$name"/>" icon
-      <img src="/img/edit.png" alt="Edit {$name}" title="Edit {$name}"/>
+      <img src="/img/edit.svg" class="icon icon-sm" alt="Edit {$name}" title="Edit {$name}"/>
       will switch to an overview of the configuration for this
       <xsl:value-of select="$type"/> and allows editing its properties.
     </p>
@@ -163,7 +163,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <h4>Export <xsl:value-of select="$name"/> as XML</h4>
   <p>
     Export the <xsl:value-of select="$name"/> as XML by clicking on the
-    export icon <img src="/img/download.png" alt="Export" title="Export XML"/>.
+    export icon <img src="/img/download.svg" class="icon icon-sm" alt="Export" title="Export XML"/>.
   </p>
 </xsl:template>
 
@@ -196,10 +196,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <h4>Enable / Disable <xsl:value-of select="$type"/></h4>
       <p>
       Pressing the enable icon
-      <img src="/img/enable.png" alt="Enable {$type}" title="Enable {$type}"/>
+      <img src="/img/enable.svg" class="icon icon-sm" alt="Enable {$type}" title="Enable {$type}"/>
       will set the activity status of the <xsl:value-of select="$type"/> to active
       while pressing the disable button
-      <img src="/img/disable.png" alt="Disable {$type}" title="Disable {$type}"/>
+      <img src="/img/disable.svg" class="icon icon-sm" alt="Disable {$type}" title="Disable {$type}"/>
       will set it to inactive.
       </p>
     </xsl:when>
@@ -212,7 +212,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <h4>Move <xsl:value-of select="$type"/> to Trashcan</h4>
       <p>
        Pressing the trashcan icon
-       <img src="/img/trashcan.png" alt="Move to Trashcan" title="To Trashcan"/>
+       <img src="/img/trashcan.svg" class="icon icon-sm" alt="Move to Trashcan" title="To Trashcan"/>
        will move the item to the trashcan and update the list.
       </p>
       <xsl:choose>
@@ -221,7 +221,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
            Note that if a <xsl:value-of select="$type"/> is associated with at least one
            <xsl:value-of select="$used_by"/>, it is not possible to move it. In this case
            the button is greyed out
-           <img src="/img/trashcan_inactive.png" alt="Move to Trashcan" title="To Trashcan"/>.
+           <img src="/img/trashcan_inactive.svg" class="icon icon-sm" alt="Move to Trashcan" title="To Trashcan"/>.
           </p>
         </xsl:when>
       </xsl:choose>
@@ -236,7 +236,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <h4>Edit <xsl:value-of select="$type"/></h4>
       <p>
        Pressing the "Edit <xsl:value-of select="$type"/>" icon
-       <img src="/img/edit.png" alt="Edit {$type}" title="Edit {$type}"/>
+       <img src="/img/edit.svg" class="icon icon-sm" alt="Edit {$type}" title="Edit {$type}"/>
        will switch to an overview of the configuration for this <xsl:value-of select="$type"/> and
        allows editing the <xsl:value-of select="$type"/>'s properties.
       </p>
@@ -250,7 +250,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <h4>Clone <xsl:value-of select="$type"/></h4>
       <p>
        Pressing the clone icon
-       <img src="/img/clone.png" alt="Clone" title="Clone"/>
+       <img src="/img/clone.svg" class="icon icon-sm" alt="Clone" title="Clone"/>
        will create a duplicate of the <xsl:value-of select="$type"/>.
       </p>
     </xsl:otherwise>
@@ -263,7 +263,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <h4>Export <xsl:value-of select="$type"/></h4>
       <p>
         Export the <xsl:value-of select="$type"/> as XML by clicking on the
-        export icon <img src="/img/download.png" alt="Export" title="Export XML"/>.
+        export icon <img src="/img/download.svg" class="icon icon-sm" alt="Export" title="Export XML"/>.
       </p>
     </xsl:otherwise>
   </xsl:choose>
@@ -288,10 +288,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <table style="margin-left: 10px">
           <tr>
             <td valign="top">
-              <img src="/img/view_other.png"
-                   border="0"
-                   alt="Global {$type-name}"
-                   title="Global {$type-name}"/>
+              <img src="/img/view_other.svg"
+                class="icon icon-sm"
+                border="0"
+                alt="Global {$type-name}"
+                title="Global {$type-name}"/>
             </td>
             <td>
               The <xsl:value-of select="$type-name"/> is either owned by
@@ -314,24 +315,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </p>
   <p>
     Modifying any of the values in the "Filter" field and clicking
-    the refresh icon <img src="/img/refresh.png" alt="Refresh" title="Refresh"/>
+    the refresh icon <img src="/img/refresh.svg" class="icon icon-sm" alt="Refresh" title="Refresh"/>
     will update the displayed list.  The filter syntax is described on the
     <a href="/help/powerfilter.html?token={/envelope/token}">powerfilter</a>
     page.
   </p>
   <p>
     Entering a name in the second field and clicking
-    the new icon <img src="/img/new.png" alt="New" title="New"/>
+    the new icon <img src="/img/new.svg" class="icon icon-sm" alt="New" title="New"/>
     will create a new filter from the filtering currently being applied to the
     list.
   </p>
   <p>
     The current filtering can also be changed by
     selecting a filter from the dropdown on the right and clicking the refresh
-    icon <img src="/img/refresh.png" alt="Refresh" title="Refresh"/>.
+    icon <img src="/img/refresh.svg" class="icon icon-sm" alt="Refresh" title="Refresh"/>.
   </p>
   <p>
-    Clicking the list icon <img src="/img/list.png" border="0" alt="Filters"/>
+    Clicking the list icon <img src="/img/list.svg" class="icon icon-sm" border="0" alt="Filters"/>
     goes to the full list of filters on the
     <a href="filters.html?token={/envelope/token}">Filters</a> page.
   </p>
@@ -509,7 +510,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </p>
       <p>
         An identifier can be deleted by clicking the delete icon
-        <img src="/img/delete.png" alt="Delete" title="Delete"/>.
+        <img src="/img/delete.svg" class="icon icon-sm" alt="Delete" title="Delete"/>.
       </p>
     </div>
   </div>
@@ -583,7 +584,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <h3>New Host</h3>
       <p>
         To create a new host click the
-        new icon <img src="/img/new.png" alt="New Host" title="New Host"/> which
+        new icon <img src="/img/new.svg" class="icon icon-sm" alt="New Host" title="New Host"/> which
         goes to the <a href="new_host.html?token={/envelope/token}">New Host</a>
         page.
       </p>
@@ -591,7 +592,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <h3>Exporting</h3>
       <p>
         Export the current list of hosts as XML by clicking on the
-        export icon <img src="/img/download.png" alt="Export" title="Export XML"/>.
+        export icon <img src="/img/download.svg" class="icon icon-sm" alt="Export" title="Export XML"/>.
       </p>
 
       <xsl:call-template name="filtering"/>
@@ -607,7 +608,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <p>
         To create a new Target based on a Host click the
         Create Target from Host icon
-        <img src="/img/new.png" title="Create Target from Host"/>,
+        <img src="/img/new.svg" class="icon icon-sm" title="Create Target from Host"/>,
         which will open the
         <a href="/help/new_target.html?token={/envelope/token}">New Target</a>
         dialog with an option to use the selected Host Asset selected.
@@ -620,7 +621,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
       <h4>Delete Host</h4>
       <p>
-        Pressing the delete icon <img src="/img/delete.png" alt="Delete" title="Delete"/> will
+        Pressing the delete icon <img src="/img/delete.svg" class="icon icon-sm" alt="Delete" title="Delete"/> will
         remove the host immediately, including all host identifiers.  The list of assets will
         be updated.
       </p>
@@ -659,7 +660,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        In the Filtered Hosts table the hosts and the severity counts might change
        when switching this selection.
        By pressing the refresh
-       <img src="/img/refresh.png" alt="Refresh" title="Refresh"/> icon a change is confirmed.
+       <img src="/img/refresh.svg" class="icon icon-sm" alt="Refresh" title="Refresh"/> icon a change is confirmed.
       </p>
       <p>
        The selection that is active for the present page is marked with a hook (&#8730;).
@@ -771,7 +772,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        Pressing the
        <a href="glossary.html?token={/envelope/token}#prognostic_report">prognostic report</a>
        icon
-       <img src="/img/prognosis.png" alt="Prognostic Report" title="Prognostic Report"/>
+       <img src="/img/prognosis.png" class="icon icon-sm" alt="Prognostic Report" title="Prognostic Report"/>
        will switch to a prognostic report on this host.
       </p>
 
@@ -791,9 +792,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <p>
         The prognostic reporting requires the SCAP data.  As a result all prognostic
         report icons
-        <img src="/img/prognosis.png" alt="Prognostic Report" title="Prognostic Report"/>
+        <img src="/img/prognosis.png" class="icon icon-sm" alt="Prognostic Report" title="Prognostic Report"/>
         will be greyed out
-        <img src="/img/prognosis_inactive.png" alt="Prognostic Report" title="Prognostic Report"/>
+        <img src="/img/prognosis_inactive.png" class="icon icon-sm" alt="Prognostic Report" title="Prognostic Report"/>
         when the database is missing.
       </p>
       <p>
@@ -885,7 +886,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <h3>New Agent</h3>
       <p>
         To create a new agent click the
-        new icon <img src="/img/new.png" alt="New Agent" title="New Agent"/> which
+        new icon <img src="/img/new.svg" class="icon icon-sm" alt="New Agent" title="New Agent"/> which
         goes to the <a href="new_agent.html?token={/envelope/token}">New Agent</a>
         page.
       </p>
@@ -893,7 +894,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <h3>Exporting</h3>
       <p>
         Export the current list of agents as XML by clicking on the
-        export icon <img src="/img/download.png" alt="Export" title="Export XML"/>.
+        export icon <img src="/img/download.svg" class="icon icon-sm" alt="Export" title="Export XML"/>.
       </p>
       <xsl:call-template name="filtering"/>
       <xsl:call-template name="sorting"/>
@@ -905,7 +906,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <h4>Download Installer Package</h4>
       <p>
        Pressing the "Download Installer Package" icon
-       <img src="/img/agent.png" alt="Download Installer Package"
+       <img src="/img/agent.svg" class="icon icon-sm" alt="Download Installer Package"
             title="Download Installer Package"/>
        will download an installation of the agent package.
       </p>
@@ -913,7 +914,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <h4>Verify Agent</h4>
       <p>
        Pressing the "Verify Agent" icon
-       <img src="/img/verify.png" alt="Verify Agent" title="Verify Agent"/>
+       <img src="/img/verify.svg" class="icon icon-sm" alt="Verify Agent" title="Verify Agent"/>
        will verify the trust on the agent installer package.
       </p>
 
@@ -995,7 +996,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <h4>Agents</h4>
       <p>
        Pressing the list icon
-       <img src="/img/list.png" alt="Agents" title="Agents"/>
+       <img src="/img/list.svg" class="icon icon-sm" alt="Agents" title="Agents"/>
        will switch to the <a href="agents.html?token={/envelope/token}">Agents</a>
        page.
       </p>
@@ -1042,7 +1043,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <h3>New Credential</h3>
       <p>
         To create a new credential click the
-        new icon <img src="/img/new.png"
+        new icon <img src="/img/new.svg" class="icon icon-sm"
                       alt="New Credential" title="New Credential"/>
         which goes to the
         <a href="new_credential.html?token={/envelope/token}">New Credential</a>
@@ -1052,7 +1053,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <h3>Exporting</h3>
       <p>
         Export the current list of credentials as XML by clicking on the
-        export icon <img src="/img/download.png" alt="Export" title="Export XML"/>.
+        export icon <img src="/img/download.svg" class="icon icon-sm" alt="Export" title="Export XML"/>.
       </p>
       <xsl:call-template name="filtering"/>
       <xsl:call-template name="sorting"/>
@@ -1064,7 +1065,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <h4>Download RPM Package</h4>
       <p>
        Pressing the RPM icon
-       <img src="/img/rpm.png" alt="Download RPM Package" title="Download RPM Package"/>
+       <img src="/img/rpm.svg" class="icon icon-sm" alt="Download RPM Package" title="Download RPM Package"/>
        will download a ".rpm" installation package.
       </p>
       <p>
@@ -1077,7 +1078,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <h4>Download Debian Package</h4>
       <p>
        Pressing the Debian icon
-       <img src="/img/deb.png" alt="Download Debian Package" title="Download Debian Package"/>
+       <img src="/img/deb.svg" class="icon icon-sm" alt="Download Debian Package" title="Download Debian Package"/>
        will download a ".deb" installation package.
       </p>
       <p>
@@ -1090,7 +1091,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <h4>Download Exe Package</h4>
       <p>
        Pressing the Exe icon
-       <img src="/img/exe.png" alt="Download Exe Package" title="Download Exe Package"/>
+       <img src="/img/exe.svg" class="icon icon-sm" alt="Download Exe Package" title="Download Exe Package"/>
        will download a ".exe" installation package.
       </p>
       <p>
@@ -1103,7 +1104,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <h4>Download Public Key</h4>
       <p>
        Pressing the public key icon
-       <img src="/img/key.png" alt="Download Public Key" title="Download Public Key"/>
+       <img src="/img/key.svg" class="icon icon-sm" alt="Download Public Key" title="Download Public Key"/>
        will download a SSH Public Key in ASCII form.
       </p>
       <p>
@@ -1221,7 +1222,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <h4>Credentials</h4>
       <p>
        Pressing the list icon
-       <img src="/img/list.png" alt="Credentials" title="Credentials"/>
+       <img src="/img/list.svg" class="icon icon-sm" alt="Credentials" title="Credentials"/>
        will switch to the
        <a href="credentials.html?token={/envelope/token}"> Credentials
        </a> page.
@@ -1362,7 +1363,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
       <p>
         Pressing the list icon
-        <img src="/img/list.png" alt="Alerts" title="Alerts"/>
+        <img src="/img/list.svg" class="icon icon-sm" alt="Alerts" title="Alerts"/>
         will switch to the <a href="alerts.html?token={/envelope/token}">Alerts</a>
         page.
       </p>
@@ -1539,7 +1540,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <h3>New Alert</h3>
       <p>
         To create a new alert click the
-        new icon <img src="/img/new.png" alt="New Alert" title="New Alert"/> which
+        new icon <img src="/img/new.svg" class="icon icon-sm" alt="New Alert" title="New Alert"/> which
         goes to the <a href="new_alert.html?token={/envelope/token}">New Alert</a>
         page.
       </p>
@@ -1547,7 +1548,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <h3>Exporting</h3>
       <p>
         Export the current list of alerts as XML by clicking on the
-        export icon <img src="/img/download.png" alt="Export" title="Export XML"/>.
+        export icon <img src="/img/download.svg" class="icon icon-sm" alt="Export" title="Export XML"/>.
       </p>
 
       <xsl:call-template name="filtering"/>
@@ -1561,7 +1562,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <h4>Test Alert</h4>
       <p>
        By clicking on the start icon
-       <img src="/img/start.png" alt="Test Alert" title="Test Alert"/>
+       <img src="/img/start.svg" class="icon icon-sm" alt="Test Alert" title="Test Alert"/>
        the corresponding alert is immediately executed with some
        dummy data.
       </p>
@@ -1727,7 +1728,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <h3>New Port List</h3>
       <p>
         To create a new Port List click the new icon
-        <img src="/img/new.png" alt="New Port List"
+        <img src="/img/new.svg" class="icon icon-sm" alt="New Port List"
              title="New Port List"/>
         which goes to the <a href="new_port_list.html?token={/envelope/token}">New
         Port List</a> page.
@@ -1736,7 +1737,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <h3>Exporting</h3>
       <p>
         Export the current list of Port Lists as XML by clicking on the
-        export icon <img src="/img/download.png" alt="Export" title="Export XML"/>.
+        export icon <img src="/img/download.svg" class="icon icon-sm" alt="Export" title="Export XML"/>.
       </p>
 
       <xsl:call-template name="filtering"/>
@@ -1866,7 +1867,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <h4>Port Lists</h4>
       <p>
         Pressing the list icon
-        <img src="/img/list.png" alt="Port Lists" title="Port Lists"/>
+        <img src="/img/list.svg" class="icon icon-sm" alt="Port Lists" title="Port Lists"/>
         will switch to the
         <a href="port_lists.html?token={/envelope/token}">Port Lists</a>
         page.
@@ -2051,7 +2052,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <h3>New Report Format</h3>
       <p>
         To create a new Report Format click the new icon
-        <img src="/img/new.png" alt="New Report Format"
+        <img src="/img/new.svg" class="icon icon-sm" alt="New Report Format"
              title="New Report Format"/>
         which goes to the <a href="new_report_format.html?token={/envelope/token}">New
         Report Format</a> page.
@@ -2060,7 +2061,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <h3>Exporting</h3>
       <p>
         Export the current list of Report Format as XML by clicking on the
-        export icon <img src="/img/download.png" alt="Export" title="Export XML"/>.
+        export icon <img src="/img/download.svg" class="icon icon-sm" alt="Export" title="Export XML"/>.
       </p>
 
       <xsl:call-template name="filtering"/>
@@ -2073,7 +2074,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <h4>Verify Report Format</h4>
       <p>
        Pressing the Verify icon
-       <img src="/img/verify.png" alt="Verify" title="Verify"/>
+       <img src="/img/verify.svg" class="icon icon-sm" alt="Verify" title="Verify"/>
        will verify the trust on the Report Format file.
       </p>
     </div>
@@ -2127,7 +2128,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <h4>Report Formats</h4>
       <p>
         Pressing the list icon
-        <img src="/img/list.png" alt="Report Formats" title="Report Formats"/>
+        <img src="/img/list.svg" class="icon icon-sm" alt="Report Formats" title="Report Formats"/>
         will switch to the
         <a href="report_formats.html?token={/envelope/token}">Report Formats</a>
         page.
@@ -2217,8 +2218,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <tr class="odd">
           <td>Families: Trend</td>
           <td>This field can have two states: "Grow"
-              (<img src="/img/trend_more.png"/>) or
-              "Static" (<img src="/img/trend_nochange.png"/>). "Grow" means that
+              (<img src="/img/trend_more.svg" class="icon icon-sm"/>) or
+              "Static" (<img src="/img/trend_nochange.svg" class="icon icon-sm"/>). "Grow" means that
               the NVT selection associated with the Scan Config specified to include
               any new family that occurs in the NVT set. "Static" means, that the
               NVT selection associated with the Scan Config has an explicit definition
@@ -2233,8 +2234,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <tr class="odd">
           <td>NVTs: Trend</td>
           <td>This field can have two states: "Grow"
-              (<img src="/img/trend_more.png"/>) or "Static"
-              (<img src="/img/trend_nochange.png"/>). "Grow" means that
+              (<img src="/img/trend_more.svg" class="icon icon-sm"/>) or "Static"
+              (<img src="/img/trend_nochange.svg" class="icon icon-sm"/>). "Grow" means that
               the NVT selection associated with the Scan Config specified to include
               new NVTs that occurs in the NVT set at least for one family.
               "Static" means, that the NVT selection associated with the Scan Config
@@ -2245,7 +2246,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <h3>New Scan Config</h3>
       <p>
         To create a new scan config click the
-        new icon <img src="/img/new.png" alt="New Scan Config" title="New Scan config"/> which
+        new icon <img src="/img/new.svg" class="icon icon-sm" alt="New Scan Config" title="New Scan config"/> which
         goes to the <a href="new_config.html?token={/envelope/token}">New Scan Config</a>
         page.
       </p>
@@ -2254,7 +2255,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <h3>Exporting</h3>
       <p>
         Export the current list of scan configs as XML by clicking on the
-        export icon <img src="/img/download.png" alt="Export" title="Export XML"/>.
+        export icon <img src="/img/download.svg" class="icon icon-sm" alt="Export" title="Export XML"/>.
       </p>
 
       <xsl:call-template name="filtering"/>
@@ -2344,7 +2345,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <h4>Scan Configs</h4>
       <p>
         Pressing the list icon
-        <img src="/img/list.png" alt="Scan Configs" title="Scan Configs"/>
+        <img src="/img/list.svg" class="icon icon-sm" alt="Scan Configs" title="Scan Configs"/>
         will switch to the
         <a href="configs.html?token={/envelope/token}">Scan Configs</a>
         page.
@@ -2449,7 +2450,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <h3>New Schedule</h3>
       <p>
         To create a new schedule click the
-        new icon <img src="/img/new.png" alt="New Schedule" title="New Schedule"/> which
+        new icon <img src="/img/new.svg" class="icon icon-sm" alt="New Schedule" title="New Schedule"/> which
         goes to the <a href="new_schedule.html?token={/envelope/token}">New Schedule</a>
         page.
       </p>
@@ -2457,7 +2458,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <h3>Exporting</h3>
       <p>
         Export the current list of schedules as XML by clicking on the
-        export icon <img src="/img/download.png" alt="Export" title="Export XML"/>.
+        export icon <img src="/img/download.svg" class="icon icon-sm" alt="Export" title="Export XML"/>.
       </p>
 
       <xsl:call-template name="filtering"/>
@@ -2550,7 +2551,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <h4>Schedules</h4>
       <p>
        Pressing the list icon
-       <img src="/img/list.png" alt="Schedules" title="Schedules"/>
+       <img src="/img/list.svg" class="icon icon-sm" alt="Schedules" title="Schedules"/>
        will switch to the <a href="schedules.html?token={/envelope/token}">Schedules</a>
        page.
       </p>
@@ -2567,14 +2568,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <h4>Download Certificate</h4>
     <p>
      Pressing the "Download Certificate" icon
-     <img src="/img/key.png" alt="Download Certificate"
+     <img src="/img/key.svg" class="icon icon-sm" alt="Download Certificate"
           title="Download Certificate"/>
      will download the Certificate.
     </p>
   <h4>Download CA Certificate</h4>
     <p>
      Pressing the "Download CA Certificate" icon
-     <img src="/img/key.png" alt="Download CA Certificate"
+     <img src="/img/key.svg" class="icon icon-sm" alt="Download CA Certificate"
           title="Download CA Certificate"/>
      will download the CA's Certificate.
     </p>
@@ -2627,7 +2628,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <h3>New Scanner</h3>
       <p>
         To create a new scanner click the
-        new icon <img src="/img/new.png" alt="New Scanner" title="New Scanner"/> which
+        new icon <img src="/img/new.svg" class="icon icon-sm" alt="New Scanner" title="New Scanner"/> which
         goes to the <a href="new_scanner.html?token={/envelope/token}">New Scanner</a>
         page.
       </p>
@@ -2635,7 +2636,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <h3>Exporting</h3>
       <p>
         Export the current list of scanners as XML by clicking on the
-        export icon <img src="/img/download.png" alt="Export" title="Export XML"/>.
+        export icon <img src="/img/download.svg" class="icon icon-sm" alt="Export" title="Export XML"/>.
       </p>
 
       <xsl:call-template name="filtering"/>
@@ -2815,7 +2816,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <h3>New Slave</h3>
       <p>
         To create a new slave click the
-        new icon <img src="/img/new.png" alt="New Slave" title="New Slave"/> which
+        new icon <img src="/img/new.svg" class="icon icon-sm" alt="New Slave" title="New Slave"/> which
         goes to the <a href="new_slave.html?token={/envelope/token}">New Slave</a>
         page.
       </p>
@@ -2823,7 +2824,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <h3>Exporting</h3>
       <p>
         Export the current list of slaves as XML by clicking on the
-        export icon <img src="/img/download.png" alt="Export" title="Export XML"/>.
+        export icon <img src="/img/download.svg" alt="Export" title="Export XML"/>.
       </p>
 
       <xsl:call-template name="filtering"/>
@@ -2909,7 +2910,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <h4>Slaves</h4>
       <p>
        Pressing the list icon
-       <img src="/img/list.png" alt="Slaves" title="Slaves"/>
+       <img src="/img/list.svg" alt="Slaves" title="Slaves"/>
        will switch to the <a href="slaves.html?token={/envelope/token}">Slaves</a>
        page.
       </p>
@@ -2980,7 +2981,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <h4>Delete User</h4>
       <p>
        Pressing the delete icon
-       <img src="/img/delete.png" alt="Delete" title="Delete"/>
+       <img src="/img/delete.svg" alt="Delete" title="Delete"/>
        will delete the user account.
       </p>
       <p>
@@ -3585,7 +3586,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <h3>New Permission</h3>
       <p>
         The "New Permission" icon
-        <img src="/img/new.png" alt="New Permission" title="New Permission"/>
+        <img src="/img/new.svg" alt="New Permission" title="New Permission"/>
         will open the
         <a href="new_permission.html?token={/envelope/token}">New Permission</a>
         page with the UUID of the current resource already filled into the form.
@@ -3709,7 +3710,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <h3>Exporting</h3>
       <p>
         Export the current list of roles as XML by clicking on the
-        export icon <img src="/img/download.png" alt="Export" title="Export XML"/>.
+        export icon <img src="/img/download.svg" alt="Export" title="Export XML"/>.
       </p>
 
       <xsl:call-template name="filtering"/>
@@ -3763,7 +3764,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
       <h1>Contents</h1>
       <p>
-       Small <a href="/help/contents.html?token={/envelope/token}" title="Help"><img src="/img/help.png"/></a>
+       Small <a href="/help/contents.html?token={/envelope/token}" title="Help"><img src="/img/help.svg"/></a>
        icons all over the web interface will jump you into the respective contents.
        Alternatively you can browse the following structure.
       </p>
@@ -4141,7 +4142,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
   <div class="section-box">
     <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
-    <div class="pull-right"><a href="/omp?cmd=unknown_cmd&amp;token={/envelope/token}">Provoke a harmless internal error</a> (use <img src="/img/help.png"/> to get back here)</div>
+    <div class="pull-right"><a href="/omp?cmd=unknown_cmd&amp;token={/envelope/token}">Provoke a harmless internal error</a> (use <img src="/img/help.svg"/> to get back here)</div>
     <div style="text-align:left">
 
       <br/>
@@ -4322,7 +4323,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <h3>New Filter</h3>
       <p>
         To create a new filter click the
-        new icon <img src="/img/new.png" alt="New Filter" title="New Filter"/> which
+        new icon <img src="/img/new.svg" alt="New Filter" title="New Filter"/> which
         goes to the <a href="new_filter.html?token={/envelope/token}">New Filter</a>
         page.
       </p>
@@ -4330,7 +4331,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <h3>Exporting</h3>
       <p>
         Export the current list of filters as XML by clicking on the
-        export icon <img src="/img/download.png" alt="Export" title="Export XML"/>.
+        export icon <img src="/img/download.svg" alt="Export" title="Export XML"/>.
       </p>
 
       <xsl:call-template name="filtering"/>
@@ -5158,7 +5159,7 @@ Public License instead of this License.
       <h3>New Group</h3>
       <p>
         To create a new group click the
-        new icon <img src="/img/new.png" alt="New Group" title="New Group"/> which
+        new icon <img src="/img/new.svg" alt="New Group" title="New Group"/> which
         goes to the <a href="new_group.html?token={/envelope/token}">New Group</a>
         page.
       </p>
@@ -5166,7 +5167,7 @@ Public License instead of this License.
       <h3>Exporting</h3>
       <p>
         Export the current list of groups as XML by clicking on the
-        export icon <img src="/img/download.png" alt="Export" title="Export XML"/>.
+        export icon <img src="/img/download.svg" alt="Export" title="Export XML"/>.
       </p>
 
       <xsl:call-template name="filtering"/>
@@ -5588,7 +5589,7 @@ Public License instead of this License.
       <h4>Filters</h4>
       <p>
        Pressing the list icon
-       <img src="/img/list.png" alt="Filters" title="Filters"/>
+       <img src="/img/list.svg" alt="Filters" title="Filters"/>
        will switch to the <a href="filters.html?token={/envelope/token}">Filters</a>
        page.
       </p>
@@ -5654,7 +5655,7 @@ Public License instead of this License.
       <h4>Groups</h4>
       <p>
        Pressing the list icon
-       <img src="/img/list.png" alt="Groups" title="Groups"/>
+       <img src="/img/list.svg" alt="Groups" title="Groups"/>
        will switch to the <a href="groups.html?token={/envelope/token}">Groups</a>
        page.
       </p>
@@ -5706,7 +5707,7 @@ Public License instead of this License.
       <h4>Hosts</h4>
       <p>
        Pressing the list icon
-       <img src="/img/list.png" alt="Hosts" title="Hosts"/>
+       <img src="/img/list.svg" alt="Hosts" title="Hosts"/>
        will switch to the hosts page.
       </p>
     </div>
@@ -5792,7 +5793,7 @@ Public License instead of this License.
       <h4>Notes</h4>
       <p>
        Pressing the list icon
-       <img src="/img/list.png" alt="Notes" title="Notes"/>
+       <img src="/img/list.svg" alt="Notes" title="Notes"/>
        will switch to the notes page.
       </p>
     </div>
@@ -5899,7 +5900,7 @@ Public License instead of this License.
       <h4>Overrides</h4>
       <p>
        Pressing the list icon
-       <img src="/img/list.png" alt="Overrides" title="Overrides"/>
+       <img src="/img/list.svg" alt="Overrides" title="Overrides"/>
        will switch to the overrides page.
       </p>
     </div>
@@ -5964,7 +5965,7 @@ Public License instead of this License.
       <h4>Roles</h4>
       <p>
        Pressing the list icon
-       <img src="/img/list.png" alt="Roles" title="Roles"/>
+       <img src="/img/list.svg" alt="Roles" title="Roles"/>
        will switch to the <a href="roles.html?token={/envelope/token}">Roles</a>
        page.
       </p>
@@ -6079,7 +6080,7 @@ Public License instead of this License.
       <h4>Scanners</h4>
       <p>
        Pressing the list icon
-       <img src="/img/list.png" alt="Scanners" title="Scanners"/>
+       <img src="/img/list.svg" alt="Scanners" title="Scanners"/>
        will switch to the scanners page.
       </p>
     </div>
@@ -6165,7 +6166,7 @@ Public License instead of this License.
       <h4>Tags</h4>
       <p>
        Pressing the list icon
-       <img src="/img/list.png" alt="Tags" title="Tags"/>
+       <img src="/img/list.svg" alt="Tags" title="Tags"/>
        will switch to the tags page.
       </p>
     </div>
@@ -6593,7 +6594,7 @@ Public License instead of this License.
       <h4>Users</h4>
       <p>
        Pressing the list icon
-       <img src="/img/list.png" alt="Users" title="Users"/>
+       <img src="/img/list.svg" alt="Users" title="Users"/>
        will switch to the <a href="users.html?token={/envelope/token}">Users</a>
        page.
       </p>
@@ -6674,7 +6675,8 @@ Public License instead of this License.
               <table style="margin-left: 10px">
                 <tr>
                   <td valign="top">
-                    <img src="/img/view_other.png"
+                    <img src="/img/view_other.svg"
+                      class="icon icon-sm"
                          border="0"
                          alt="Note owned by Sally"
                          title="Note owned by Sally"/>
@@ -6699,7 +6701,7 @@ Public License instead of this License.
       <h3>New Note</h3>
       <p>
         To create a new note click the
-        new icon <img src="/img/new.png" alt="New Note" title="New Note"/> which
+        new icon <img src="/img/new.svg" alt="New Note" title="New Note"/> which
         goes to the <a href="new_note.html?token={/envelope/token}">New Note</a>
         page.
       </p>
@@ -6707,7 +6709,7 @@ Public License instead of this License.
       <h3>Exporting</h3>
       <p>
         Export the current list of notes as XML by clicking on the
-        export icon <img src="/img/download.png" alt="Export" title="Export XML"/>.
+        export icon <img src="/img/download.svg" alt="Export" title="Export XML"/>.
       </p>
 
       <xsl:call-template name="filtering"/>
@@ -7008,9 +7010,9 @@ Public License instead of this License.
       <p>
         The overrides icon
         indicates whether overrides are applied
-        <img src="/img/overrides_enabled.png" alt="Overrides are Applied" title="Overrides are Applied"/>
+        <img src="/img/overrides_enabled.svg" class="icon icon-sm" alt="Overrides are Applied" title="Overrides are Applied"/>
         or not
-        <img src="/img/overrides_disabled.png" alt="No Overrides" title="No Overrides"/>.
+        <img src="/img/overrides_disabled.svg" class="icon icon-sm" alt="No Overrides" title="No Overrides"/>.
         Clicking the icon toggles overrides.
         In the table view, severity classes, severity numbers and trend might change
         when switching this selection.
@@ -7025,19 +7027,19 @@ Public License instead of this License.
       <h4>Delta</h4>
       <p>
         Pressing the delta icon
-        <img src="/img/delta.png" alt="Compare" title="Compare"/> will
+        <img src="/img/delta.svg" class="icon icon-sm" alt="Compare" title="Compare"/> will
         select the report for comparison.
       </p>
 
       <p>
         Once a report is selected for comparison, the greyed out delta icon
-        <img src="/img/delta_inactive.png" border="0" alt="Compare"/>
+        <img src="/img/delta_inactive.svg" class="icon icon-sm" border="0" alt="Compare"/>
         indicates that the report has been selected.
       </p>
 
       <p>
         Pressing the second delta icon
-        <img src="/img/delta_second.png" alt="Compare" title="Compare"/> will
+        <img src="/img/delta_second.svg" class="icon icon-sm" alt="Compare" title="Compare"/> will
         produce a comparison between the report and the previously selected one.
       </p>
 
@@ -7048,7 +7050,7 @@ Public License instead of this License.
 
       <h4>Delete Report</h4>
       <p>
-        Pressing the delete icon <img src="/img/delete.png" alt="Delete" title="Delete"/> will
+        Pressing the delete icon <img src="/img/delete.svg" alt="Delete" title="Delete"/> will
         remove the report immediately. The list of reports will be updated.
       </p>
     </div>
@@ -7057,19 +7059,19 @@ Public License instead of this License.
 
 <xsl:template name="solution-types">
   <p>
-    <b><img src="/img/st_workaround.png"/> Workaround:</b> Information is available about a configuration or specific deployment scenario that can be used to avoid exposure to the vulnerability. There may be none, one, or more workarounds available. This is typically the “first line of defense” against a new vulnerability before a mitigation or vendor fix has been issued or even discovered.
+    <b><img src="/img/st_workaround.svg" class="icon icon-sm"/> Workaround:</b> Information is available about a configuration or specific deployment scenario that can be used to avoid exposure to the vulnerability. There may be none, one, or more workarounds available. This is typically the “first line of defense” against a new vulnerability before a mitigation or vendor fix has been issued or even discovered.
   </p>
   <p>
-    <b><img src="/img/st_mitigate.png"/> Mitigation:</b> Information is available about a configuration or deployment scenario that helps to reduce the risk of the vulnerability but that does not resolve the vulnerability on the affected product. Mitigations may include using devices or access controls external to the affected product. Mitigations may or may not be issued by the original author of the affected product, and they may or may not be officially sanctioned by the document producer.
+    <b><img src="/img/st_mitigate.svg" class="icon icon-sm"/> Mitigation:</b> Information is available about a configuration or deployment scenario that helps to reduce the risk of the vulnerability but that does not resolve the vulnerability on the affected product. Mitigations may include using devices or access controls external to the affected product. Mitigations may or may not be issued by the original author of the affected product, and they may or may not be officially sanctioned by the document producer.
   </p>
   <p>
-    <b><img src="/img/st_vendorfix.png"/> VendorFix:</b> Information is available about an official fix that is issued by the original author of the affected product. Unless otherwise noted, it is assumed that this fix fully resolves the vulnerability.
+    <b><img src="/img/st_vendorfix.svg" class="icon icon-sm"/> VendorFix:</b> Information is available about an official fix that is issued by the original author of the affected product. Unless otherwise noted, it is assumed that this fix fully resolves the vulnerability.
   </p>
   <p>
-    <b><img src="/img/st_nonavailable.png"/> NoneAvailable:</b> Currently there is no fix available. Information should contain details about why there is no fix.
+    <b><img src="/img/st_nonavailable.svg" class="icon icon-sm"/> NoneAvailable:</b> Currently there is no fix available. Information should contain details about why there is no fix.
   </p>
   <p>
-    <b><img src="/img/st_willnotfix.png"/> WillNotFix:</b> There is no fix for the vulnerability and there never will be one. This is often the case when a product has been orphaned, end-of-lifed, or otherwise deprecated. Information should contain details about why there will be no fix issued.
+    <b><img src="/img/st_willnotfix.svg" class="icon icon-sm"/> WillNotFix:</b> There is no fix for the vulnerability and there never will be one. This is often the case when a product has been orphaned, end-of-lifed, or otherwise deprecated. Information should contain details about why there will be no fix issued.
   </p>
 </xsl:template>
 
@@ -7111,7 +7113,7 @@ Public License instead of this License.
           </td>
         </tr>
         <tr class="even">
-          <td>Solution Type (<img src="/img/solution_type.png" alt="Solution type" title="Solution type"/>)</td>
+          <td>Solution Type (<img src="/img/solution_type.svg" class="icon icon-sm" alt="Solution type" title="Solution type"/>)</td>
           <td>
             The type of solution available for the vulnerability.<br/><br/>
             <xsl:call-template name="solution-types"/>
@@ -7163,9 +7165,9 @@ Public License instead of this License.
       <p>
         The overrides icon
         indicates whether overrides are applied
-        <img src="/img/overrides_enabled.png" alt="Overrides are Applied" title="Overrides are Applied"/>
+        <img src="/img/overrides_enabled.svg" class="icon icon-sm" alt="Overrides are Applied" title="Overrides are Applied"/>
         or not
-        <img src="/img/overrides_disabled.png" alt="No Overrides" title="No Overrides"/>.
+        <img src="/img/overrides_disabled.svg" class="icon icon-sm" alt="No Overrides" title="No Overrides"/>.
         Clicking the icon toggles overrides.
         In the table view, severity classes, severity numbers and trend might change
         when switching this selection.
@@ -7198,39 +7200,39 @@ Public License instead of this License.
           <td>Description</td>
         </tr>
         <tr class="even">
-          <td><img src="/img/download.png" alt="Export" title="Export XML"/></td>
+          <td><img src="/img/download.svg" alt="Export" title="Export XML"/></td>
           <td>Export (download) the resource in XML format.</td>
         </tr>
         <tr class="odd">
-          <td><img src="/img/delete.png" alt="Delete" title="Delete"/></td>
+          <td><img src="/img/delete.svg" alt="Delete" title="Delete"/></td>
           <td>Remove the resource entirely from the system, immediately.<br/>
-              The icon will be greyed out <img src="/img/delete_inactive.png" alt="Delete" title="Delete"/>
+              The icon will be greyed out <img src="/img/delete_inactive.svg" class="icon icon-sm" alt="Delete" title="Delete"/>
               when some other resource depends on the resource.
           </td>
         </tr>
         <tr class="even">
-          <td><img src="/img/new.png" alt="New Resource" title="New Resource"/></td>
+          <td><img src="/img/new.svg" alt="New Resource" title="New Resource"/></td>
           <td>Open a dialog for creating a new resource.</td>
         </tr>
         <tr class="odd">
-          <td><img src="/img/trashcan.png" alt="Move to Trashcan" title="To Trashcan"/></td>
+          <td><img src="/img/trashcan.svg" class="icon icon-sm" alt="Move to Trashcan" title="To Trashcan"/></td>
           <td>
             The resource will be moved to the <a href="trashcan.html?token={/envelope/token}">trashcan</a>.<br/>
             Note that if this resource is associated with at least one other
             resource, it is not possible to move it. In this case the button is greyed out
-            <img src="/img/trashcan_inactive.png" alt="Move to Trashcan" title="To Trashcan"/>.
+            <img src="/img/trashcan_inactive.svg" class="icon icon-sm" alt="Move to Trashcan" title="To Trashcan"/>.
           </td>
         </tr>
         <tr class="even">
-          <td><img src="/img/edit.png" alt="Edit Resource" title="Edit Resource"/></td>
+          <td><img src="/img/edit.svg" alt="Edit Resource" title="Edit Resource"/></td>
           <td>Open a dialog for editing the properties of the resource.</td>
         </tr>
         <tr class="odd">
-          <td><img src="/img/clone.png" alt="Clone Resource" title="Clone Resource"/></td>
+          <td><img src="/img/clone.svg" alt="Clone Resource" title="Clone Resource"/></td>
           <td>Create a duplicate of the resource.</td>
         </tr>
         <tr class="even">
-          <td><img src="/img/list.png" alt="Resource Table View" title="Resource Table View"/></td>
+          <td><img src="/img/list.svg" alt="Resource Table View" title="Resource Table View"/></td>
           <td>Switch to the table view for this resource type.</td>
         </tr>
       </table>
@@ -7261,20 +7263,20 @@ Public License instead of this License.
 
       <h4>Delete</h4>
       <p>
-       Pressing the delete icon <img src="/img/delete.png" alt="Delete" title="Delete"/> will
+       Pressing the delete icon <img src="/img/delete.svg" alt="Delete" title="Delete"/> will
        remove the resource entirely from the system, immediately.  The
        trashcan will be updated.  The icon will be greyed out
-       <img src="/img/delete_inactive.png" alt="Delete" title="Delete"/>
+       <img src="/img/delete_inactive.svg" class="icon icon-sm" alt="Delete" title="Delete"/>
        when some other resource in the trashcan depends on the resource.
       </p>
 
       <h4>Restore</h4>
       <p>
        Pressing the restore icon
-       <img src="/img/restore.png" alt="Restore" title="Restore"/>
+       <img src="/img/restore.svg" class="icon icon-sm" alt="Restore" title="Restore"/>
        will move the resource out of the trashcan and back into normal
        operation.  The trashcan will be updated.  The icon will be greyed out
-       <img src="/img/restore_inactive.png" alt="Restore" title="Restore"/>
+       <img src="/img/restore_inactive.svg" class="icon icon-sm" alt="Restore" title="Restore"/>
        when the resource depends on some other resource that
        is in the trashcan.
       </p>
@@ -7441,7 +7443,7 @@ Public License instead of this License.
       <h3>Exporting</h3>
       <p>
         Export the current list of operating systems as XML by clicking on the
-        export icon <img src="/img/download.png" alt="Export" title="Export XML"/>.
+        export icon <img src="/img/download.svg" alt="Export" title="Export XML"/>.
       </p>
 
       <xsl:call-template name="filtering"/>
@@ -7456,7 +7458,7 @@ Public License instead of this License.
 
       <h4>Delete Operating System</h4>
       <p>
-        Pressing the delete icon <img src="/img/delete.png" alt="Delete" title="Delete"/> will
+        Pressing the delete icon <img src="/img/delete.svg" alt="Delete" title="Delete"/> will
         remove the operating system immediately.
         The list of operating systems will be updated.
       </p>
@@ -7537,8 +7539,9 @@ Public License instead of this License.
               <table style="margin-left: 10px">
                 <tr>
                   <td valign="top">
-                    <img src="/img/view_other.png"
+                    <img src="/img/view_other.svg"
                          border="0"
+                         class="icon icon-sm"
                          alt="Override owned by Sally"
                          title="Override owned by Sally"/>
                   </td>
@@ -7571,7 +7574,7 @@ Public License instead of this License.
       <h3>New Override</h3>
       <p>
         To create a new override click the
-        new icon <img src="/img/new.png" alt="New Override" title="New Override"/> which
+        new icon <img src="/img/new.svg" alt="New Override" title="New Override"/> which
         goes to the <a href="new_override.html?token={/envelope/token}">New Override</a>
         page.
       </p>
@@ -7579,7 +7582,7 @@ Public License instead of this License.
       <h3>Exporting</h3>
       <p>
         Export the current list of overrides as XML by clicking on the
-        export icon <img src="/img/download.png" alt="Export" title="Export XML"/>.
+        export icon <img src="/img/download.svg" alt="Export" title="Export XML"/>.
       </p>
 
       <xsl:call-template name="filtering"/>
@@ -8067,18 +8070,18 @@ Public License instead of this License.
       <h4>Start Task</h4>
       <p>
         To start the task click the start icon
-        <img src="/img/start.png" alt="Start Task" title="Start Task"/>.
+        <img src="/img/start.svg" class="icon icon-sm" alt="Start Task" title="Start Task"/>.
       </p>
       <h4>Stop Task</h4>
       <p>
         To stop the task click the stop icon
-        <img src="/img/stop.png" alt="Stop Task" title="Stop Task"/>.  This icon
+        <img src="/img/stop.svg" class="icon icon-sm" alt="Stop Task" title="Stop Task"/>.  This icon
         is only available when the task is running.
       </p>
       <h4>Resume Task</h4>
       <p>
         To resume the task after it has stopped, click the resume icon
-        <img src="/img/resume.png" alt="Resume Task" title="Resume Task"/>.
+        <img src="/img/resume.svg" class="icon icon-sm" alt="Resume Task" title="Resume Task"/>.
       </p>
     </div>
   </div>
@@ -8113,7 +8116,7 @@ Public License instead of this License.
 
       <h4>Sync Config</h4>
       <p>
-        Pressing the sync config icon <img src="/img/refresh.png" alt="Sync Config" title="Sync Config"/> will
+        Pressing the sync config icon <img src="/img/refresh.svg" alt="Sync Config" title="Sync Config"/> will
         synchronize the OSP config with its scanner. This icon is only visible for OSP configurations.
       </p>
 
@@ -8134,8 +8137,8 @@ Public License instead of this License.
       <p>
        This table provides an overview of the selected NVTs and NVT Families.
        A Trend icon next to the Family column of the table indicates whether new
-       families will automatically be included ("Grow") <img src="/img/trend_more.png" alt="Grow" title="Grow"/>
-       or not ("Static") <img src="/img/trend_nochange.png" alt="Static" title="Static"/>.
+       families will automatically be included ("Grow") <img src="/img/trend_more.svg" class="icon icon-sm" alt="Grow" title="Grow"/>
+       or not ("Static") <img src="/img/trend_nochange.svg" class="icon icon-sm" alt="Static" title="Static"/>.
       </p>
 
       <table class="gbntable">
@@ -8155,8 +8158,8 @@ Public License instead of this License.
         <tr class="odd">
           <td>Trend</td>
           <td>Shows the Trend, which indicates whether new NVTs of this family are
-              automatically added to the configuration ("Grow") <img src="/img/trend_more.png" alt="Grow" title="Grow"/> or
-              not ("Static") <img src="/img/trend_nochange.png" alt="Static" title="Static"/>. </td>
+              automatically added to the configuration ("Grow") <img src="/img/trend_more.svg" class="icon icon-sm" alt="Grow" title="Grow"/> or
+              not ("Static") <img src="/img/trend_nochange.svg" class="icon icon-sm" alt="Static" title="Static"/>. </td>
         </tr>
       </table>
 
@@ -8271,7 +8274,7 @@ Public License instead of this License.
       </p>
       <p>
        Note: In order to save modifications, the button labelled "Save Config" must
-       be clicked. The edit action <img src="/img/edit.png" alt="Edit" title="Edit"/>
+       be clicked. The edit action <img src="/img/edit.svg" alt="Edit" title="Edit"/>
        on NVT Families will save the selection.
       </p>
 
@@ -8290,8 +8293,8 @@ Public License instead of this License.
           <td>Family</td>
           <td>Shows the name of the NVT Family. The trend icon in the Family column
               header allows to specify whether new families will automatically be
-              included ("Grow") <img src="/img/trend_more.png" alt="Grow" title="Grow"/> or not ("Static")
-              <img src="/img/trend_nochange.png" alt="Static" title="Static"/>.</td>
+              included ("Grow") <img src="/img/trend_more.svg" class="icon icon-sm" alt="Grow" title="Grow"/> or not ("Static")
+              <img src="/img/trend_nochange.svg" class="icon icon-sm" alt="Static" title="Static"/>.</td>
         </tr>
         <tr class="even">
           <td>NVT's selected</td>
@@ -8301,9 +8304,9 @@ Public License instead of this License.
         <tr class="odd">
           <td>Trend</td>
           <td>Allows modification of the trend for this family. If the trend is set to
-             "Grow" <img src="/img/trend_more.png" alt="Grow" title="Grow"/>, new NVTs of this family are
+             "Grow" <img src="/img/trend_more.svg" class="icon icon-sm" alt="Grow" title="Grow"/>, new NVTs of this family are
               automatically added to the configuration. If it is set to "Static"
-              <img src="/img/trend_nochange.png" alt="Static" title="Static"/>, the selection will not be
+              <img src="/img/trend_nochange.svg" class="icon icon-sm" alt="Static" title="Static"/>, the selection will not be
               automatically changed. </td>
         </tr>
         <tr class="even">
@@ -8317,7 +8320,7 @@ Public License instead of this License.
 
       <h4>Save Config and edit Family Details</h4>
       <p>
-       A click on the edit icon <img src="/img/edit.png" alt="Edit" title="Edit"/>
+       A click on the edit icon <img src="/img/edit.svg" alt="Edit" title="Edit"/>
        will save the modifications and show the
        <a href="config_editor_nvt_families.html?token={/envelope/token}">Edit Scan Config Family Details</a>
        page which shows details about NVTs within the family and allows to select or
@@ -8384,7 +8387,7 @@ Public License instead of this License.
       <h4>Edit Scan Config NVT Details</h4>
 
       <p>
-       A click on the edit icon <img src="/img/edit.png" alt="Edit" title="Edit"/>
+       A click on the edit icon <img src="/img/edit.svg" alt="Edit" title="Edit"/>
        will open the <a href="config_editor_nvt.html?token={/envelope/token}">Edit Scan Config NVT Details</a>
        dialog with detailed information about a certain NVT and all its preferences.
        This page will provide an overview over all preferences and the currently set
@@ -8475,7 +8478,7 @@ Public License instead of this License.
 
       <h4>Select and Edit NVT Details</h4>
       <p>
-       A click on the edit icon <img src="/img/edit.png" alt="Edit" title="Edit"/> will add the NVT to the selection
+       A click on the edit icon <img src="/img/edit.svg" alt="Edit" title="Edit"/> will add the NVT to the selection
        and lead to a page that lists <a href="config_editor_nvt.html?token={/envelope/token}">NVT details and allows to modify preferences</a> and
        the timeout.
       </p>
@@ -8806,7 +8809,7 @@ Public License instead of this License.
       <h3>New Tag</h3>
       <p>
         To create a new tag click the
-        new icon <img src="/img/new.png" alt="New Tag" title="New Tag"/> which
+        new icon <img src="/img/new.svg" alt="New Tag" title="New Tag"/> which
         goes to the <a href="new_tag.html?token={/envelope/token}">New Tag</a>
         page.
       </p>
@@ -8814,7 +8817,7 @@ Public License instead of this License.
       <h3>Exporting</h3>
       <p>
         Export the current list of tags as XML by clicking on the
-        export icon <img src="/img/download.png" alt="Export" title="Export XML"/>.
+        export icon <img src="/img/download.svg" alt="Export" title="Export XML"/>.
       </p>
 
       <xsl:call-template name="filtering"/>
@@ -8872,7 +8875,7 @@ Public License instead of this License.
       <h3>New Tag</h3>
       <p>
         To create a new tag for the current resource click the
-        new icon <img src="/img/new.png" alt="New Tag" title="New Tag"/> which
+        new icon <img src="/img/new.svg" alt="New Tag" title="New Tag"/> which
         goes to the <a href="new_tag.html?token={/envelope/token}">New Tag</a>
         page.
       </p>
@@ -8893,7 +8896,7 @@ Public License instead of this License.
         can be quickly added to the current resource without going to the
         <a href="new_tag.html?token={/envelope/token}">New Tag</a>
         page by clicking the new icon
-        <img src="/img/new.png" alt="New Tag" title="New Tag"/>.
+        <img src="/img/new.svg" alt="New Tag" title="New Tag"/>.
       </p>
     </div>
   </div>
@@ -9015,8 +9018,9 @@ Public License instead of this License.
               <table style="margin-left: 10px">
                 <tr>
                   <td valign="top">
-                    <img src="/img/alterable.png"
+                    <img src="/img/alterable.svg"
                          border="0"
+                         class="icon icon-sm"
                          alt="Task is alterable"
                          title="Task is alterable"/>
                   </td>
@@ -9028,8 +9032,8 @@ Public License instead of this License.
                 </tr>
                 <tr>
                   <td valign="top">
-                    <img src="/img/sensor.png"
-                         border="0"
+                    <img src="/img/sensor.svg"
+                         border="0" class="icon icon-sm"
                          alt="Task is configured to run on slave Example Slave"
                          title="Task is configured to run on slave Example Slave"/>
                   </td>
@@ -9039,8 +9043,8 @@ Public License instead of this License.
                 </tr>
                 <tr>
                   <td valign="top">
-                    <img src="/img/provide_view.png"
-                         border="0"
+                    <img src="/img/provide_view.svg"
+                         border="0" class="icon icon-sm"
                          alt="Task made visible for: user1 user2"
                          title="Task made visible for: user1 user2"/>
                   </td>
@@ -9050,8 +9054,8 @@ Public License instead of this License.
                 </tr>
                 <tr>
                   <td valign="top">
-                    <img src="/img/view_other.png"
-                         border="0"
+                    <img src="/img/view_other.svg"
+                         border="0" class="icon icon-sm"
                          alt="Observing task owned by user1"
                          title="Observing task owned by user1"/>
                   </td>
@@ -9245,7 +9249,7 @@ Public License instead of this License.
             <br/>
             <table>
               <tr>
-                <td valign="top"><img src="/img/trend_up.png"/></td>
+                <td valign="top"><img src="/img/trend_up.svg" class="icon icon-sm"/></td>
                 <td>
                   Severity increased: In the newest report at
                   least one NVT for at least one target host reported a higher
@@ -9253,7 +9257,7 @@ Public License instead of this License.
                   the newest one.
                 </td>
               </tr><tr>
-                <td valign="top"><img src="/img/trend_more.png"/></td>
+                <td valign="top"><img src="/img/trend_more.svg" class="icon icon-sm"/></td>
                 <td>
                   Vulnerability count increased: The maximum severity reported
                   in the last report and the report before the last report is
@@ -9261,14 +9265,14 @@ Public License instead of this License.
                   issues of this severity level than the report before.
                 </td>
               </tr><tr>
-                <td valign="top"><img src="/img/trend_nochange.png"/></td>
+                <td valign="top"><img src="/img/trend_nochange.svg" class="icon icon-sm"/></td>
                 <td>
                   Vulnerabilities did not change: The maximum severity and the
                   severity levels of the results in the newest report and the
                   one before are identical.
                 </td>
               </tr><tr>
-                <td valign="top"><img src="/img/trend_less.png"/></td>
+                <td valign="top"><img src="/img/trend_less.svg" class="icon icon-sm"/></td>
                 <td>
                   Vulnerability count decreased: The maximum severity reported
                   in the last report and the report before the last report is
@@ -9276,7 +9280,7 @@ Public License instead of this License.
                   issues of this severity level than the report before.
                 </td>
               </tr><tr>
-                <td valign="top"><img src="/img/trend_down.png"/></td>
+                <td valign="top"><img src="/img/trend_down.svg" class="icon icon-sm"/></td>
                 <td>
                   Severity decreased: In the newest report the highest reported
                   severity score is lower than the one reported in the report
@@ -9298,7 +9302,7 @@ Public License instead of this License.
        an automatic page refresh. Select one of the
        intervals (10 seconds, 30 seconds or 60 seconds)
        and confirm with pressing the refresh
-       <img src="/img/refresh.png" alt="Refresh" title="Refresh"/> icon.
+       <img src="/img/refresh.svg" alt="Refresh" title="Refresh"/> icon.
       </p>
       <p>
        The selection that is currently for the present page is marked with a check mark (&#8730;).
@@ -9319,7 +9323,7 @@ Public License instead of this License.
        rows in the table above which the wizard will be hidden by default.
       </p>
       <p>
-       The wizard <img src="/img/wizard.png" alt="Show Wizard" title="Show Wizard"/>
+       The wizard <img src="/img/wizard.svg" class="icon icon-sm" alt="Show Wizard" title="Show Wizard"/>
        icon leads to a dedicated page providing the wizard.
       </p>
 
@@ -9328,8 +9332,8 @@ Public License instead of this License.
       <p>
        The icon in the header of the severity column shows whether the
        configured <a href="glossary.html?token={/envelope/token}#override">overrides</a>
-       are applied (<img src="/img/enabled.png" alt="Overrides are applied" title="Overrides are applied"/>)
-       or not (<img src="/img/disabled.png" alt="No Overrides" title="No Overrides"/>).
+       are applied (<img src="/img/enabled.svg" class="icon icon-sm" alt="Overrides are applied" title="Overrides are applied"/>)
+       or not (<img src="/img/disabled.svg" class="icon icon-sm" alt="No Overrides" title="No Overrides"/>).
       </p>
       <p>
        By default the overrides are applied. Clicking the icon allows to switch
@@ -9348,7 +9352,7 @@ Public License instead of this License.
 
       <h4>Start Task</h4>
       <p>
-       Pressing the start icon <img src="/img/start.png" alt="Start" title="Start"/> will
+       Pressing the start icon <img src="/img/start.svg" class="icon icon-sm" alt="Start" title="Start"/> will
        start a new scan. The list of tasks will be updated.
       </p>
       <p>
@@ -9358,7 +9362,7 @@ Public License instead of this License.
 
       <h4>Schedule Details</h4>
       <p>
-        Pressing the "Schedule Details" icon <img src="/img/scheduled.png"
+        Pressing the "Schedule Details" icon <img src="/img/scheduled.svg" class="icon icon-sm"
           alt="Schedule Details" title="Schedule Details"/> will switch to an
         overview of the details of the schedule used for this task.
       </p>
@@ -9368,7 +9372,7 @@ Public License instead of this License.
 
       <h4>Resume Task</h4>
       <p>
-       Pressing the resume icon <img src="/img/resume.png" alt="Resume"
+       Pressing the resume icon <img src="/img/resume.svg" class="icon icon-sm" alt="Resume"
          title="Resume"/> will resume a previously stopped task. The list of
        tasks will be updated.
       </p>
@@ -9379,7 +9383,7 @@ Public License instead of this License.
 
       <h4>Stop Task</h4>
       <p>
-       Pressing the stop icon <img src="/img/stop.png" alt="Stop" title="Stop"/> will
+       Pressing the stop icon <img src="/img/stop.svg" class="icon icon-sm" alt="Stop" title="Stop"/> will
        stop a running task. The list of tasks will be updated.
       </p>
       <p>
@@ -9389,7 +9393,7 @@ Public License instead of this License.
       <h4>Move Task to Trashcan</h4>
       <p>
        Pressing the trashcan icon
-       <img src="/img/trashcan.png" alt="Move to Trashcan" title="To Trashcan"/>
+       <img src="/img/trashcan.svg" class="icon icon-sm" alt="Move to Trashcan" title="To Trashcan"/>
        will move the entry to the trashcan. The list of tasks will be updated. Note that also all
        of the reports associated with this task will be moved to the trashcan.
       </p>
@@ -9401,7 +9405,7 @@ Public License instead of this License.
       <a name="edit_task"></a>
       <h4>Edit Task</h4>
       <p>
-       Pressing the "Edit Task" icon <img src="/img/edit.png" alt="Edit Task"
+       Pressing the "Edit Task" icon <img src="/img/edit.svg" alt="Edit Task"
          title="Edit Task"/> will
        switch to an overview of the configuration for this task and allows
        editing of some of the task's properties.
@@ -9443,20 +9447,20 @@ Public License instead of this License.
 
       <h4>Delete</h4>
       <p>
-       Pressing the delete icon <img src="/img/delete.png" alt="Delete" title="Delete"/> will
+       Pressing the delete icon <img src="/img/delete.svg" class="icon icon-sm" alt="Delete" title="Delete"/> will
        remove the resource entirely from the system, immediately.  The
        trashcan will be updated.  The icon will be greyed out
-       <img src="/img/delete_inactive.png" alt="Delete" title="Delete"/>
+       <img src="/img/delete_inactive.svg" class="icon icon-sm" alt="Delete" title="Delete"/>
        when some other resource in the trashcan depends on the resource.
       </p>
 
       <h4>Restore</h4>
       <p>
        Pressing the restore icon
-       <img src="/img/restore.png" alt="Restore" title="Restore"/>
+       <img src="/img/restore.svg" class="icon icon-sm" alt="Restore" title="Restore"/>
        will move the resource out of the trashcan and back into normal
        operation.  The trashcan will be updated.  The icon will be greyed out
-       <img src="/img/restore_inactive.png" alt="Restore" title="Restore"/>
+       <img src="/img/restore_inactive.svg" class="icon icon-sm" alt="Restore" title="Restore"/>
        when the resource depends on some other resource that
        is in the trashcan.
       </p>
@@ -9489,14 +9493,14 @@ Public License instead of this License.
       <h4>Report</h4>
       <p>
        Pressing the list icon
-       <img src="/img/list.png" alt="Report" title="Report"/>
+       <img src="/img/list.svg" alt="Report" title="Report"/>
        will switch to the report page.
       </p>
 
       <h4>Exporting</h4>
       <p>
         Export the result as XML by clicking on the
-        export icon <img src="/img/download.png" alt="Export" title="Export XML"/>.
+        export icon <img src="/img/download.svg" alt="Export" title="Export XML"/>.
       </p>
     </div>
   </div>
@@ -9551,7 +9555,7 @@ Public License instead of this License.
         To download the full report, the <a href="glossary.html?token={/envelope/token}#report_format">format</a>
         can be chosen in the Download column.
         The download will start shortly after a click on the download
-        <img src="/img/download.png" alt="Download" title="Download"/>
+        <img src="/img/download.svg" alt="Download" title="Download"/>
         icon.  Report formats can be configured on the
         <a href="report_formats.html?token={/envelope/token}">Report Formats</a>
         page.
@@ -9564,7 +9568,7 @@ Public License instead of this License.
        The selection allows to switch to a view without applying overrides.
        In the table views, scan results numbers might change when switching this selection.
        By pressing the refresh
-       <img src="/img/refresh.png" alt="Refresh" title="Refresh"/> icon a change is confirmed.
+       <img src="/img/refresh.svg" alt="Refresh" title="Refresh"/> icon a change is confirmed.
       </p>
       <p>
        The selection that is active for the present page is marked with a hook (&#8730;).
@@ -9578,7 +9582,7 @@ Public License instead of this License.
        To download the currently shown report, the <a href="glossary.html?token={/envelope/token}#report_format">format</a>
        can be chosen.
        The download will start shortly after a click on the download
-       <img src="/img/download.png" alt="Download" title="Download"/>
+       <img src="/img/download.svg" alt="Download" title="Download"/>
        icon.  Report formats can be configured on the
        <a href="report_formats.html?token={/envelope/token}">Report Formats</a>
        page.
@@ -9592,20 +9596,20 @@ Public License instead of this License.
       </p>
       <p>
        Each note has a group of action buttons
-       <img src="/img/delete.png" alt="Delete" title="Delete"/>
-       <img src="/img/details.png" alt="Details" title="Details"/>
-       <img src="/img/edit.png" alt="Edit" title="Edit"/>
+       <img src="/img/delete.svg" alt="Delete" title="Delete"/>
+       <img src="/img/details.svg" alt="Details" title="Details"/>
+       <img src="/img/edit.svg" alt="Edit" title="Edit"/>
        which affect the note as on the <a href="notes.html?token={/envelope/token}">Notes</a> page.
       </p>
       <p>
        To add a note to an NVT, click the new note button
-       <img src="/img/new_note.png" alt="New Note" title="New Note"/>
+       <img src="/img/new_note.svg" alt="New Note" title="New Note"/>
        on a result of the NVT.
       </p>
       <p>
        If a result has notes and note display is enabled in the filter (see below),
        then the notes icon
-       <img src="/img/note.png" alt="Note" title="Note"/>
+       <img src="/img/note.svg" alt="Note" title="Note"/>
        is shown on the result.  Clicking the icon jumps to the notes,
        which is helpful if the result has a very long description.
       </p>
@@ -9617,19 +9621,19 @@ Public License instead of this License.
       </p>
       <p>
        Each override has a group of action buttons
-       <img src="/img/delete.png" alt="Delete" title="Delete"/>
-       <img src="/img/details.png" alt="Details" title="Details"/>
-       <img src="/img/edit.png" alt="Edit" title="Edit"/>
+       <img src="/img/delete.svg" class="icon icon-sm" alt="Delete" title="Delete"/>
+       <img src="/img/details.svg" class="icon icon-sm" alt="Details" title="Details"/>
+       <img src="/img/edit.svg" class="icon icon-sm" alt="Edit" title="Edit"/>
        which affect the override as on the <a href="overrides.html?token={/envelope/token}">Overrides</a> page.
       </p>
       <p>
        To add a override to an NVT, click the new override button
-       <img src="/img/new_override.png" alt="New Override" title="New Override"/>
+       <img src="/img/new_override.svg" class="icon icon-sm" alt="New Override" title="New Override"/>
        on a result of the NVT.
       </p>
       <p>
        If a result has overrides, then the overrides icon
-       <img src="/img/override.png" alt="Overrides" title="Overrides"/>
+       <img src="/img/override.svg" class="icon icon-sm" alt="Overrides" title="Overrides"/>
        is shown on the result.  Clicking the icon jumps to the overrides,
        which is helpful if the result has a very long description.
       </p>
@@ -9935,7 +9939,7 @@ Public License instead of this License.
           <td>The version of the NVT.</td>
         </tr>
         <tr class="odd">
-          <td>Solution Type (<img src="/img/solution_type.png" alt="Solution type" title="Solution type"/>)</td>
+          <td>Solution Type (<img src="/img/solution_type.svg" class="icon icon-sm" alt="Solution type" title="Solution type"/>)</td>
           <td>
             The type of solution available for the vulnerability.<br/><br/>
             <xsl:call-template name="solution-types"/>

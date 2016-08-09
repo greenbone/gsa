@@ -264,13 +264,13 @@
 
       this.start_edit_button = $('<a/>', {
         href: 'javascript:void(0);',
-        class: 'icon',
+        class: 'icon icon-sm',
         on: {
           click: function() {self.startEdit();},
         },
       })
       .append($('<img/>', {
-        src: 'img/edit.png',
+        src: 'img/edit.svg',
         alt: gsa._('Edit Dashboard'),
         title: gsa._('Edit Dashboard'),
       }))
@@ -278,13 +278,13 @@
 
       this.new_display_button = $('<a/>', {
         href: 'javascript:void(0);',
-        class: 'icon',
+        class: 'icon icon-sm',
         on: {
           click: function() {self.newDisplay();},
         }
       })
       .append($('<img/>', {
-        src: 'img/new.png',
+        src: 'img/new.svg',
         alt: gsa._('Add new Chart'),
         title: gsa._('Add new Chart'),
       }))
@@ -294,13 +294,13 @@
 
       this.reset_defaults_button = $('<a/>', {
         href: 'javascript:void(0);',
-        class: 'icon',
+        class: 'icon icon-sm',
         on: {
           click: function() {self.resetEdit();},
         },
       })
       .append($('<img/>', {
-        src: 'img/first.png',
+        src: 'img/first.svg',
         alt: gsa._('Reset to defaults'),
         title: gsa._('Reset to defaults'),
       }))
@@ -310,13 +310,13 @@
 
       this.cancel_edit_button = $('<a/>', {
         href: 'javascript:void(0);',
-        class: 'icon',
+        class: 'icon icon-sm',
         on: {
           click: function() {self.cancelEdit();},
         },
       })
       .append($('<img/>', {
-        src: 'img/delete.png',
+        src: 'img/delete.svg',
         alt: gsa._('Cancel Editing'),
         title: gsa._('Cancel Editing'),
       }))
@@ -326,13 +326,13 @@
 
       this.stop_edit_button = $('<a/>', {
         href: 'javascript:void(0);',
-        class: 'icon',
+        class: 'icon icon-sm',
         on: {
           click: function() {self.saveEdit();},
         }
       })
       .append($('<img/>', {
-        src: 'img/indicator_operation_ok.png',
+        src: 'img/indicator_operation_ok.svg',
         alt: gsa._('Save Changes'),
         title: gsa._('Save Changes'),
       }))
@@ -1774,7 +1774,7 @@
     }).appendTo(inner_elem_d3);
 
     $('<a/>', {
-      'class': 'remove-button',
+      'class': 'remove-button icon icon-sm',
       href: 'javascript:void(0);',
       on: {
         click: function() { self.remove(); },
@@ -1784,7 +1784,7 @@
       }
     })
     .append($('<img/>', {
-      src: '/img/delete.png',
+      src: '/img/delete.svg',
       alt: gsa._('Remove'),
       title: gsa._('Remove'),
     }))
@@ -2422,12 +2422,13 @@
 
     $('<a/>', {
       href: 'javascript:void(0);',
+      class: 'icon icon-sm',
       on: {
         click: function() {self.prevController();},
       }
     })
     .append($('<img/>', {
-      src: 'img/previous.png',
+      src: 'img/previous.svg',
       css: {
         'vertical-align': 'middle'
       },
@@ -2461,6 +2462,7 @@
 
     $('<a/>', {
       href: 'javascript:void(0);',
+      class: 'icon icon-sm',
       on: {
         click: function() {
           self.nextController();
@@ -2468,7 +2470,7 @@
       },
     })
     .append($('<img/>', {
-      src: 'img/next.png',
+      src: 'img/next.svg',
       css: {
         'vertical-align': 'middle',
       },
@@ -2494,6 +2496,7 @@
 
     $('<a/>', {
       href: 'javascript:void(0);',
+      class: 'icon icon-sm',
       on: {
         click: function() {
           self.prevFilter();
@@ -2501,7 +2504,7 @@
       },
     })
     .append($('<img/>', {
-      src: 'img/previous.png',
+      src: 'img/previous.svg',
       css: {
         'vertical-align': 'middle',
       },
@@ -2535,6 +2538,7 @@
 
     $('<a/>', {
       href: 'javascript:void(0);',
+      class: 'icon icon-sm',
       on: {
         click: function() {
           self.nextFilter();
@@ -2542,7 +2546,7 @@
       },
     })
     .append($('<img/>', {
-      src: 'img/next.png',
+      src: 'img/next.svg',
       css: {
         'vertical-align': 'middle',
       },
@@ -2668,7 +2672,7 @@
   function ChartController(chart_name, icon, chart_type, chart_template,
                            data_src, display, gen_params, init_params) {
     this.chart_name = chart_name;
-    this.icon = icon ? icon : '/img/help.png';
+    this.icon = icon ? icon : '/img/help.svg';
     this.chart_type = chart_type;
     this.chart_template = chart_template ? chart_template : '';
     this.data_src = data_src;
@@ -3306,7 +3310,7 @@
             }
           }
 
-          var icon = '/img/charts/severity-bar-chart.png';
+          var icon = '/img/charts/severity-bar-chart.svg';
 
           dashboard.addControllerFactory(chart_name, function(for_display) {
             if (!gsa.is_defined(for_display)) {

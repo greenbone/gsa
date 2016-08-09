@@ -131,13 +131,13 @@ fi
 
 # Auto-generate files
 echo "  <!-- generated -->"
-for pattern in `ls -1 ${SRC_PATH}/*.png | sed -e 's/\.png//' -e 's/.*\///'`
+for pattern in `ls -1 ${SRC_PATH}/*.svg | sed -e 's/\.png//' -e 's/.*\///'`
 do
   if [ "other" != "$pattern" ]
   then
     echo "  <cpe_entry>"
     echo "    <pattern>cpe:/${pattern}</pattern>"
-    echo "    <icon>${FILE_PREFIX}${pattern}.png</icon>"
+    echo "    <icon>${FILE_PREFIX}${pattern}.svg</icon>"
     echo "  </cpe_entry>"
   fi
 done

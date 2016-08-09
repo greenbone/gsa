@@ -47,9 +47,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <span class="icon-menu">
         <a href="/omp?cmd=wizard&amp;name=quick_first_scan&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
             title="{gsa:i18n ('Wizard', 'Wizard')}"
-            class="wizard-action-icon icon" data-dialog-id="quick_first_scan"
+            class="wizard-action-icon icon icon-sm" data-dialog-id="quick_first_scan"
             data-name="quick_first_scan" data-button="{gsa:i18n ('Start Scan', 'Task Wizard')}">
-          <img src="/img/wizard.png"/>
+          <img src="/img/wizard.svg"/>
         </a>
         <ul>
           <li>

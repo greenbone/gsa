@@ -698,11 +698,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <!--
       <div class="pull-right">
         <a href="/help/error_messages.html?token={$token}" title="Help: Error Message">
-          <img src="/img/help.png"/>
+          <img src="/img/help.svg"/>
         </a>
       </div>
       <span>
-        <img src="/img/alert_sign.png" alt="" title="{$heading}"
+        <img src="/img/alert_sign.svg" alt="" title="{$heading}"
              style="margin-left:10px; margin-top:10px; text-align:left;"/>
       </span>
 -->
@@ -740,11 +740,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <div class="panel-body">
           <div class="row">
             <div class="pull-right">
-              <a href="/help/error_messages.html?token={$token}" title="Help: Error Message">
-                <img src="/img/help.png"/>
+              <a href="/help/error_messages.html?token={$token}"
+                class="icon icon-sm"
+                title="Help: Error Message">
+                <img src="/img/help.svg"/>
               </a>
             </div>
-            <img src="/img/alert_sign.png" alt="" title="{$title}"
+            <img src="/img/alert_sign.svg" alt="" title="{$title}"
               class="pull-left" style="margin-left:10px;"/>
             <h4>
               <xsl:value-of select="$title"/>

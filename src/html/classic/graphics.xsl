@@ -849,8 +849,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="message">
           SCAP and/or CERT database missing on OMP server.
           <a href="/help/cpes.html?token={/envelope/token}#secinfo_missing"
-              title="Help: SecInfo database missing">
-            <img style="margin-left:5px" src="/img/help.png"/>
+              title="Help: SecInfo database missing" class="icon icon-sm">
+            <img src="/img/help.svg"/>
           </a>
         </xsl:with-param>
       </xsl:call-template>

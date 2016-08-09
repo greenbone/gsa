@@ -1703,4 +1703,19 @@ select[multiple] {
 .pager .pagination-text {
   padding: 0 3px;
 }
+
+.cpe {
+  font-weight: bold;
+}
+
+.cpe > *,
+.os a > * {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.cpe .icon,
+.os .icon {
+  margin-right: 3px;
+}
 /* vim: set ts=2 sw=2 tw=80:*/

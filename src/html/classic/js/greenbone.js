@@ -868,7 +868,11 @@
     this.progress = $('<span />');
     this.progress.text(this.progress_value / 1000);
 
-    this.progress_button = $('<img src="/img/pause.png" alt="Pause/Resume" />');
+    this.progress_button = $('<img/>', {
+      src: '/img/pause.svg',
+      alt: 'Pause/Resume',
+      class: 'icon icon-sm',
+    });
     this.progress_button.on('click', function() {
       if (self.progress_timer === undefined) {
         self.resumeProgress();
@@ -891,13 +895,13 @@
       global.clearInterval(this.progress_timer);
       this.progress_timer = undefined;
     }
-    this.progress_button.attr('src', '/img/resume.png');
+    this.progress_button.attr('src', '/img/resume.svg');
   };
 
   InfoDialog.prototype.resumeProgress = function() {
     var self = this;
 
-    self.progress_button.attr('src', '/img/pause.png');
+    self.progress_button.attr('src', '/img/pause.svg');
 
     self.progress_timer = global.setInterval(function() {
       self.progress_value -= self.interval_time;
@@ -1075,13 +1079,13 @@
     this.icon.toggleClass('expand');
     if (this.icon.hasClass('expand')) {
       this.icon.attr({
-        src:   '/img/unfold.png',
+        src:   '/img/unfold.svg',
         title: gsa._('Unfold {{name}}', {name: this.name}),
         alt:   gsa._('Unfold {{name}}', {name: this.name}),
       });
     } else {
       this.icon.attr({
-        src:   '/img/fold.png',
+        src:   '/img/fold.svg',
         title: gsa._('Fold {{name}}', {name: this.name}),
         alt:   gsa._('Fold {{name}}', {name: this.name}),
       });
@@ -1429,7 +1433,7 @@
 
       button.datepicker({
         showOn: 'button',
-        buttonImage: 'img/calendar.png',
+        buttonImage: 'img/calendar.svg',
         buttonImageOnly: true,
         buttonText: tooltip,
         dateFormat: 'DD, d MM, yy',

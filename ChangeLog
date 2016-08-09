@@ -1,5 +1,21 @@
 2016-08-09  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* CMakeLists.txt,
+	src/html/classic/css/gsa-style.css,
+	src/html/classic/graphics.xsl,
+	src/html/classic/gsad.xsl,
+	src/html/classic/help.xsl,
+	src/html/classic/js/greenbone.js,
+	src/html/classic/js/gsa_dashboard.js,
+	src/html/classic/omp.xsl,
+	src/html/classic/os.xml,
+	src/html/classic/wizard.xsl,
+	tools/cpe-icon-dict-append.in,
+	tools/generate-cpe-icon-dict.sh: Replace png images by its svg versions.
+	Improve css and html layout. Many of the inline css got removed.
+
+2016-08-09  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/omp.xsl (filter-window-pager): Improve html for table
 	pagination layout.
 

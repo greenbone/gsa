@@ -887,8 +887,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="to_address" select="'FILL IN EMAIL ADDRESS'"/>
   <xsl:param name="subject" select="'Feedback'"/>
   <xsl:param name="body" select="'Dear%20{str:encode-uri ($to_name, true ())},&#xA;&#xA;'"/>
-  <a class="icon" href="mailto:{str:encode-uri ($to_name, true ())}%20%3C{str:encode-uri ($to_address, true ())}%3E?subject={str:encode-uri ($subject, true ())}&amp;body=Dear%20{str:encode-uri ($to_name, true ())},&#xA;&#xA;{str:encode-uri ($body, true ())}">
-    <img src="img/feedback.png" title="{gsa:i18n ('Send feedback to', 'Feedback Icon')} {$to_name}" alt="{gsa:i18n('Feedback', 'Feedback Icon')}"/>
+  <a class="icon icon-sm" href="mailto:{str:encode-uri ($to_name, true ())}%20%3C{str:encode-uri ($to_address, true ())}%3E?subject={str:encode-uri ($subject, true ())}&amp;body=Dear%20{str:encode-uri ($to_name, true ())},&#xA;&#xA;{str:encode-uri ($body, true ())}">
+    <img src="img/feedback.svg" title="{gsa:i18n ('Send feedback to', 'Feedback Icon')} {$to_name}" alt="{gsa:i18n('Feedback', 'Feedback Icon')}"/>
   </a>
 -->
 </xsl:template>
@@ -925,25 +925,25 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:when test = "$list/@start &gt; 1">
               <a href="?cmd={$get_cmd}{$extra_params}&amp;filter=first=1 rows={$list/@max} {filters/term}&amp;token={/envelope/token}"
                 class="icon icon-sm">
-                <img src="/img/first.png" title="{gsa:i18n ('First', 'Pagination')}"/></a>
+                <img src="/img/first.svg" title="{gsa:i18n ('First', 'Pagination')}"/></a>
             </xsl:when>
             <xsl:otherwise>
-              <img class="icon icon-sm" src="/img/first_inactive.png" title="{gsa:i18n ('Already on first page', 'Pagination')}"/>
+              <img class="icon icon-sm" src="/img/first_inactive.svg" title="{gsa:i18n ('Already on first page', 'Pagination')}"/>
             </xsl:otherwise>
           </xsl:choose>
           <xsl:choose>
             <xsl:when test="$list/@start > $list/@max and $list/@max &gt; 0">
               <a href="?cmd={$get_cmd}{$extra_params}&amp;filter=first={$list/@start - $list/@max} rows={$list/@max} {filters/term}&amp;token={/envelope/token}"
                 class="icon icon-sm">
-                <img src="/img/previous.png" title="{gsa:i18n ('Previous', 'Pagination')}"/></a>
+                <img src="/img/previous.svg" title="{gsa:i18n ('Previous', 'Pagination')}"/></a>
             </xsl:when>
             <xsl:when test="$list/@start &gt; 1 and $list/@max &gt; 0">
               <a href="?cmd={$get_cmd}{$extra_params}&amp;filter=first=1 rows={$list/@max} {filters/term}&amp;token={/envelope/token}"
                 class="icon icon-sm">
-                <img src="/img/previous.png" title="{gsa:i18n ('Previous', 'Pagination')}"/></a>
+                <img src="/img/previous.svg" title="{gsa:i18n ('Previous', 'Pagination')}"/></a>
             </xsl:when>
             <xsl:otherwise>
-              <img class="icon icon-sm" src="/img/previous_inactive.png" title="{gsa:i18n ('Already on first page', 'Pagination')}"/>
+              <img class="icon icon-sm" src="/img/previous_inactive.svg" title="{gsa:i18n ('Already on first page', 'Pagination')}"/>
             </xsl:otherwise>
           </xsl:choose>
         </div>
@@ -962,20 +962,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:when test = "$last &lt; $filtered_count">
               <a href="?cmd={$get_cmd}{$extra_params}&amp;filter=first={$list/@start + $list/@max} rows={$list/@max} {filters/term}&amp;token={/envelope/token}"
                 class="icon icon-sm">
-                <img src="/img/next.png" title="{gsa:i18n ('Next', 'Pagination')}"/></a>
+                <img src="/img/next.svg" title="{gsa:i18n ('Next', 'Pagination')}"/></a>
             </xsl:when>
             <xsl:otherwise>
-              <img class="icon icon-sm" src="/img/next_inactive.png" title="{gsa:i18n ('Already on last page', 'Pagination')}"/>
+              <img class="icon icon-sm" src="/img/next_inactive.svg" title="{gsa:i18n ('Already on last page', 'Pagination')}"/>
             </xsl:otherwise>
           </xsl:choose>
           <xsl:choose>
             <xsl:when test = "$last &lt; $filtered_count">
               <a href="?cmd={$get_cmd}{$extra_params}&amp;filter=first={floor(($filtered_count - 1) div $list/@max) * $list/@max + 1} rows={$list/@max} {filters/term}&amp;token={/envelope/token}"
                 class="icon icon-sm">
-                <img src="/img/last.png" title="{gsa:i18n ('Last', 'Pagination')}"/></a>
+                <img src="/img/last.svg" title="{gsa:i18n ('Last', 'Pagination')}"/></a>
             </xsl:when>
             <xsl:otherwise>
-              <img class="icon icon-sm" src="/img/last_inactive.png" title="{gsa:i18n ('Already on last page', 'Pagination')}"/>
+              <img class="icon icon-sm" src="/img/last_inactive.svg" title="{gsa:i18n ('Already on last page', 'Pagination')}"/>
             </xsl:otherwise>
           </xsl:choose>
         </div>
@@ -1097,22 +1097,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           maxlength="1000"/>
         <input type="image"
           name="Update Filter"
-          class="icon"
+          class="icon icon-sm"
           title="{gsa:i18n ('Update Filter', 'Filter')}"
-          src="/img/refresh.png"
+          src="/img/refresh.svg"
           alt="{gsa:i18n ('Update', 'Action Verb')}"/>
         <a href="?token={/envelope/token}&amp;cmd={$get_cmd}&amp;filt_id=--{$extra_params_string}"
-          class="icon"
+          class="icon icon-sm"
           title="{gsa:i18n ('Reset Filter', 'Filter')}">
-          <img src="/img/delete.png" />
+          <img src="/img/delete.svg" />
         </a>
         <a href="/help/powerfilter.html?token={/envelope/token}"
-          class="icon"
+          class="icon icon-sm"
           title="{gsa:i18n ('Help', 'Help')}: {gsa:i18n ('Powerfilter', 'Filter')}">
-          <img src="/img/help.png" />
+          <img src="/img/help.svg" />
         </a>
-        <a href="#" class="icon edit-filter-action-icon" data-id="filterbox">
-          <img src="/img/edit.png"/>
+        <a href="#" class="icon icon-sm edit-filter-action-icon" data-id="filterbox">
+          <img src="/img/edit.svg"/>
         </a>
         <xsl:variable name="extras">
           <xsl:for-each select="exslt:node-set($extra_params)/param">
@@ -1166,8 +1166,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <!-- i18n with concat : see dynamic_strings.xsl - type-new-filter -->
           <input type="image"
             name="New Filter"
-            class="icon"
-            src="/img/new.png"
+            class="icon icon-sm"
+            src="/img/new.svg"
             alt="{gsa:i18n ('New Filter', 'Filter')}"
             title="{gsa:i18n (concat ('New ', $type-name, ' Filter from current term'), $type-name)}" />
         </div>
@@ -1724,19 +1724,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
-  <a href="{$help_url}" title="{gsa:i18n ('Help', 'Help')}: {gsa:i18n (concat ('Edit ' ,$cap-type), $cap-type)}">
-    <img src="/img/help.png"/>
+  <a href="{$help_url}" title="{gsa:i18n ('Help', 'Help')}: {gsa:i18n (concat ('Edit ' ,$cap-type), $cap-type)}"
+    class="icon icon-sm">
+    <img src="/img/help.svg"/>
   </a>
   <!-- dynamic i18n : see dynamic_strings.xsl - type-name-plural -->
   <a href="/omp?cmd=get_{$type}s&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-     title="{gsa:i18n ($cap-type-plural, $cap-type)}" style="margin-left:3px;">
-    <img src="/img/list.png" alt="{gsa:i18n ($cap-type-plural, $cap-type)}"/>
+     title="{gsa:i18n ($cap-type-plural, $cap-type)}" class="icon icon-sm">
+    <img src="/img/list.svg" alt="{gsa:i18n ($cap-type-plural, $cap-type)}"/>
   </a>
   <!-- i18n with concat : see dynamic_strings.xsl - type-name-details -->
   <div class="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
       <a href="/omp?cmd=get_{$type}&amp;{$type}_id={$id}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-         title="{gsa:i18n (concat ($cap-type, ' Details'), $cap-type)}" style="margin-left:3px;">
-      <img src="/img/details.png" alt="{gsa:i18n ('Details', 'Generic Resource')}"/>
+        class="icon icon-sm"
+        title="{gsa:i18n (concat ($cap-type, ' Details'), $cap-type)}">
+      <img src="/img/details.svg" alt="{gsa:i18n ('Details', 'Generic Resource')}"/>
     </a>
   </div>
 </xsl:template>
@@ -1914,7 +1916,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:otherwise>
         </xsl:choose>
       </xsl:variable>
-      <img src="/img/trashcan_inactive.png" class="icon"
+      <img src="/img/trashcan_inactive.svg" class="icon icon-sm"
            alt="{gsa:i18n ('To Trashcan', 'Action Verb')}"
            title="{$inactive_text}"/>
     </xsl:otherwise>
@@ -1928,8 +1930,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <!-- i18n with concat : see dynamic_strings.xsl - type-edit -->
           <a href="/omp?cmd=edit_{$type}&amp;{$type}_id={$resource/@id}&amp;next={$next}{$next_params_string}{$params}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
              title="{gsa:i18n (concat ('Edit ', $cap-type), $cap-type)}" data-reload="window"
-             class="edit-action-icon icon" data-type="{$type}" data-id="{$resource/@id}">
-            <img src="/img/edit.png" alt="{gsa:i18n ('Edit', 'Action Verb')}"/>
+             class="edit-action-icon icon icon-sm" data-type="{$type}" data-id="{$resource/@id}">
+            <img src="/img/edit.svg" alt="{gsa:i18n ('Edit', 'Action Verb')}"/>
           </a>
         </xsl:when>
         <xsl:otherwise>
@@ -1947,8 +1949,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:otherwise>
             </xsl:choose>
           </xsl:variable>
-          <img src="/img/edit_inactive.png" alt="{gsa:i18n ('Edit', 'Action Verb')}"
-            title="{$inactive_text}" class="icon"/>
+          <img src="/img/edit_inactive.svg" alt="{gsa:i18n ('Edit', 'Action Verb')}"
+            title="{$inactive_text}" class="icon icon-sm"/>
         </xsl:otherwise>
       </xsl:choose>
     </xsl:otherwise>
@@ -1958,13 +1960,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:when>
     <xsl:when test="$grey-clone">
       <!-- i18n with concat : see dynamic_strings.xsl - type-action-denied -->
-      <img src="/img/clone_inactive.png"
+      <img src="/img/clone_inactive.svg"
            alt="{gsa:i18n ('Clone', 'Action Verb')}"
-           value="Clone" class="icon"
+           value="Clone" class="icon icon-sm"
            title="{gsa:i18n (concat ($cap-type, ' may not be cloned'), $cap-type)}"/>
     </xsl:when>
     <xsl:when test="gsa:may-clone ($type)">
-      <div class="icon">
+      <div class="icon icon-sm">
         <form action="/omp" method="post" enctype="multipart/form-data">
           <input type="hidden" name="token" value="{/envelope/token}"/>
           <input type="hidden" name="caller" value="{/envelope/current_page}"/>
@@ -1974,22 +1976,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <input type="hidden" name="id" value="{$resource/@id}"/>
           <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
           <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-          <input type="image" src="/img/clone.png" alt="{gsa:i18n ('Clone', 'Action Verb')}"
+          <input type="image" src="/img/clone.svg" alt="{gsa:i18n ('Clone', 'Action Verb')}"
                  name="Clone" value="Clone" title="{gsa:i18n ('Clone', 'Action Verb')}"/>
         </form>
       </div>
     </xsl:when>
     <xsl:when test="$resource/owner/name = /envelope/login/text() or string-length ($resource/owner/name) = 0">
       <!-- i18n with concat : see dynamic_strings.xsl - type-action-denied -->
-      <img src="/img/clone_inactive.png"
+      <img src="/img/clone_inactive.svg"
            alt="{gsa:i18n ('Clone', 'Action Verb')}"
-           value="Clone" class="icon"
+           value="Clone" class="icon icon-sm"
            title="{gsa:i18n (concat ($cap-type, ' must be owned or global'), $cap-type)}"/>
     </xsl:when>
     <xsl:otherwise>
-      <img src="/img/clone_inactive.png"
+      <img src="/img/clone_inactive.svg"
            alt="{gsa:i18n ('Clone', 'Action Verb')}"
-           value="Clone" class="icon"
+           value="Clone" class="icon icon-sm"
            title="{gsa:i18n ('Permission to clone denied', 'Action Message')}"/>
     </xsl:otherwise>
   </xsl:choose>
@@ -1999,9 +2001,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:otherwise>
       <!-- i18n with concat : see dynamic_strings.xsl - type-export -->
       <a href="/omp?cmd=export_{$type}&amp;{$type}_id={$resource/@id}&amp;next={$next}{$params}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-        class="icon"
+        class="icon icon-sm"
         title="{gsa:i18n (concat ('Export ', $cap-type), $cap-type)}">
-        <img src="/img/download.png" alt="{gsa:i18n ('Export', 'Action Verb')}"/>
+        <img src="/img/download.svg" alt="{gsa:i18n ('Export', 'Action Verb')}"/>
       </a>
     </xsl:otherwise>
   </xsl:choose>
@@ -2012,14 +2014,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="id"></xsl:param>
   <xsl:param name="params"></xsl:param>
 
-  <div class="icon">
+  <div class="icon icon-sm">
     <form action="/omp" method="post" enctype="multipart/form-data">
       <input type="hidden" name="token" value="{/envelope/token}"/>
       <input type="hidden" name="caller" value="{/envelope/current_page}"/>
       <input type="hidden" name="cmd" value="delete_trash_{$type}"/>
       <input type="hidden" name="next" value="get_trash"/>
       <input type="hidden" name="{$type}_id" value="{$id}"/>
-      <input type="image" src="/img/delete.png" alt="{gsa:i18n ('Delete', 'Action Verb')}"
+      <input type="image" src="/img/delete.svg" alt="{gsa:i18n ('Delete', 'Action Verb')}"
              name="Delete" value="Delete" title="{gsa:i18n ('Delete', 'Action Verb')}"/>
       <xsl:copy-of select="$params"/>
     </form>
@@ -2031,7 +2033,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="id"></xsl:param>
   <xsl:param name="params"></xsl:param>
 
-  <div class="icon">
+  <div class="icon icon-sm">
     <xsl:choose>
       <xsl:when test="$type = 'user'">
         <form action="/omp" method="get" enctype="multipart/form-data">
@@ -2039,7 +2041,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <input type="hidden" name="caller" value="{/envelope/current_page}"/>
           <input type="hidden" name="cmd" value="delete_{$type}_confirm"/>
           <input type="hidden" name="{$type}_id" value="{$id}"/>
-          <input type="image" src="/img/delete.png" alt="{gsa:i18n ('Delete', 'Action Verb')}"
+          <input type="image" src="/img/delete.svg" alt="{gsa:i18n ('Delete', 'Action Verb')}"
             class="delete-action-icon" data-type="{$type}" data-id="{$id}"
             name="Delete" value="Delete" title="{gsa:i18n ('Delete', 'Action Verb')}"/>
           <xsl:copy-of select="$params"/>
@@ -2051,7 +2053,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <input type="hidden" name="caller" value="{/envelope/current_page}"/>
           <input type="hidden" name="cmd" value="delete_{$type}"/>
           <input type="hidden" name="{$type}_id" value="{$id}"/>
-          <input type="image" src="/img/delete.png" alt="{gsa:i18n ('Delete', 'Action Verb')}"
+          <input type="image" src="/img/delete.svg" alt="{gsa:i18n ('Delete', 'Action Verb')}"
                 name="Delete" value="Delete" title="{gsa:i18n ('Delete', 'Action Verb')}"/>
           <xsl:copy-of select="$params"/>
         </form>
@@ -2064,14 +2066,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="id"></xsl:param>
 
   <xsl:if test="gsa:may-op ('restore')">
-    <div class="icon">
+    <div class="icon icon-sm">
       <form action="/omp"
             method="post" enctype="multipart/form-data">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="caller" value="{/envelope/current_page}"/>
         <input type="hidden" name="cmd" value="restore"/>
         <input type="hidden" name="target_id" value="{$id}"/>
-        <input type="image" src="/img/restore.png" alt="{gsa:i18n ('Restore', 'Action Verb')}"
+        <input type="image" src="/img/restore.svg" alt="{gsa:i18n ('Restore', 'Action Verb')}"
                name="Restore" value="Restore" title="{gsa:i18n ('Restore', 'Action Verb')}"/>
       </form>
     </div>
@@ -2084,13 +2086,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="params"></xsl:param>
   <xsl:param name="cmd">resume_<xsl:value-of select="type"/></xsl:param>
 
-  <div class="icon">
+  <div class="icon icon-sm">
     <form action="/omp" method="post" enctype="multipart/form-data">
       <input type="hidden" name="token" value="{/envelope/token}"/>
       <input type="hidden" name="caller" value="{/envelope/current_page}"/>
       <input type="hidden" name="cmd" value="{$cmd}"/>
       <input type="hidden" name="{$type}_id" value="{$id}"/>
-      <input type="image" src="/img/resume.png" alt="{gsa:i18n ('Resume', 'Action Verb')}"
+      <input type="image" src="/img/resume.svg" alt="{gsa:i18n ('Resume', 'Action Verb')}"
              name="Resume" value="Resume" title="{gsa:i18n ('Resume', 'Action Verb')}"/>
       <xsl:copy-of select="$params"/>
     </form>
@@ -2105,7 +2107,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="alt"><xsl:value-of select="gsa:i18n('Start', 'Action Verb')"/></xsl:param>
   <xsl:param name="name">Start</xsl:param>
 
-  <div class="icon">
+  <div class="icon icon-sm">
     <form action="/omp" method="post" enctype="multipart/form-data">
       <input type="hidden" name="token" value="{/envelope/token}"/>
       <input type="hidden" name="caller" value="{/envelope/current_page}"/>
@@ -2113,7 +2115,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <input type="hidden" name="{$type}_id" value="{$id}"/>
       <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
       <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-      <input type="image" src="/img/start.png" alt="{$alt}"
+      <input type="image" src="/img/start.svg" alt="{$alt}"
              name="{$name}" value="{$name}" title="{$alt}"/>
       <xsl:copy-of select="$params"/>
     </form>
@@ -2125,13 +2127,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="id"></xsl:param>
   <xsl:param name="params"></xsl:param>
 
-  <div class="icon">
+  <div class="icon icon-sm">
     <form action="/omp" method="post" enctype="multipart/form-data">
       <input type="hidden" name="token" value="{/envelope/token}"/>
       <input type="hidden" name="caller" value="{/envelope/current_page}"/>
       <input type="hidden" name="cmd" value="stop_{$type}"/>
       <input type="hidden" name="{$type}_id" value="{$id}"/>
-      <input type="image" src="/img/stop.png" alt="{gsa:i18n('Stop', 'Task')}"
+      <input type="image" src="/img/stop.svg" alt="{gsa:i18n('Stop', 'Task')}"
              name="Stop" value="Stop" title="{gsa:i18n('Stop', 'Task')}"/>
       <xsl:copy-of select="$params"/>
     </form>
@@ -2144,8 +2146,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="fragment"></xsl:param>
   <xsl:param name="params"></xsl:param>
 
-  <div class="icon ajax-post" data-reload="next">
-    <img src="/img/trashcan.png" alt="{gsa:i18n ('To Trashcan', 'Action Verb')}"
+  <div class="icon icon-sm ajax-post" data-reload="next">
+    <img src="/img/trashcan.svg" alt="{gsa:i18n ('To Trashcan', 'Action Verb')}"
       name="To Trashcan" title="{gsa:i18n ('Move To Trashcan', 'Action Verb')}"/>
     <form action="/omp{$fragment}" method="post" enctype="multipart/form-data">
       <input type="hidden" name="token" value="{/envelope/token}"/>
@@ -2405,22 +2407,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:when test="$solution_type = ''">
     </xsl:when>
     <xsl:when test="$solution_type = 'Workaround'">
-      <img src="/img/st_workaround.png" title="{$solution_type}" alt="{$solution_type}"/>
+      <img class="icon icon-sm" src="/img/st_workaround.svg" title="{$solution_type}" alt="{$solution_type}"/>
     </xsl:when>
     <xsl:when test="$solution_type = 'Mitigation'">
-      <img src="/img/st_mitigate.png" title="{$solution_type}" alt="{$solution_type}"/>
+      <img class="icon icon-sm" src="/img/st_mitigate.svg" title="{$solution_type}" alt="{$solution_type}"/>
     </xsl:when>
     <xsl:when test="$solution_type = 'VendorFix'">
-      <img src="/img/st_vendorfix.png" title="{$solution_type}" alt="{$solution_type}"/>
+      <img class="icon icon-sm" src="/img/st_vendorfix.svg" title="{$solution_type}" alt="{$solution_type}"/>
     </xsl:when>
     <xsl:when test="$solution_type = 'NoneAvailable'">
-      <img src="/img/st_nonavailable.png" title="{$solution_type}" alt="{$solution_type}"/>
+      <img class="icon icon-sm" src="/img/st_nonavailable.svg" title="{$solution_type}" alt="{$solution_type}"/>
     </xsl:when>
     <xsl:when test="$solution_type = 'WillNotFix'">
-      <img src="/img/st_willnotfix.png" title="{$solution_type}" alt="{$solution_type}"/>
+      <img class="icon icon-sm" src="/img/st_willnotfix.svg" title="{$solution_type}" alt="{$solution_type}"/>
     </xsl:when>
     <xsl:otherwise>
-      <img src="/img/os_unknown.png" title="{$solution_type}" alt="{$solution_type}"/>
+      <img class="icon icon-sm" src="/img/os_unknown.svg" title="{$solution_type}" alt="{$solution_type}"/>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
@@ -2447,14 +2449,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="tag_names"/>
 
   <div class="section-header">
-    <a href="#" class="icon icon-action toggle-action-icon"
+    <a href="#" class="icon icon-sm icon-action toggle-action-icon"
       data-target="#usertags-box" data-name="User Tags" data-variable="usertags-box--collapsed">
-      <img src="/img/fold.png"/>
+      <img src="/img/fold.svg"/>
     </a>
     <a href="/help/user-tags.html?token={/envelope/token}"
-       class="icon icon-action"
+       class="icon icon-sm icon-action"
        title="{gsa:i18n ('Help', 'Help')}: {gsa:i18n ('User Tags list', 'Tag')}">
-      <img src="/img/help.png"/>
+      <img src="/img/help.svg"/>
     </a>
       <xsl:choose>
         <xsl:when test="not (gsa:may-op ('create_tag'))"/>
@@ -2462,24 +2464,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <a href="/omp?cmd=new_tag&amp;resource_id={$resource_id}&amp;resource_type={$resource_type}&amp;next={$next}&amp;next_type={$resource_type}&amp;next_id={$resource_id}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;report_section={$report_section}&amp;token={/envelope/token}"
              title="{gsa:i18n ('New tag', 'Tag')}"
              data-reload="window"
-             class="new-action-icon icon icon-action" data-type="tag" data-extra="resource_id={$resource_id}&amp;resource_type={$resource_type}">
-            <img src="/img/new.png" alt="{gsa:i18n ('Add tag', 'Tag')}"/>
+             class="new-action-icon icon icon-sm icon-action" data-type="tag" data-extra="resource_id={$resource_id}&amp;resource_type={$resource_type}">
+            <img src="/img/new.svg" alt="{gsa:i18n ('Add tag', 'Tag')}"/>
           </a>
         </xsl:when>
         <xsl:when test="$resource_subtype != ''">
           <a href="/omp?cmd=new_tag&amp;resource_id={$resource_id}&amp;resource_type={$resource_subtype}&amp;next={$next}&amp;next_type={$resource_type}&amp;next_subtype={$resource_subtype}&amp;next_id={$resource_id}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
              title="{gsa:i18n ('New Tag', 'Tag')}"
              data-reload="window"
-             class="new-action-icon icon icon-action" data-type="tag" data-extra="resource_id={$resource_id}&amp;resource_type={$resource_subtype}">
-            <img src="/img/new.png" alt="{gsa:i18n ('Add tag', 'Tag')}"/>
+             class="new-action-icon icon icon-sm icon-action" data-type="tag" data-extra="resource_id={$resource_id}&amp;resource_type={$resource_subtype}">
+            <img src="/img/new.svg" alt="{gsa:i18n ('Add tag', 'Tag')}"/>
           </a>
         </xsl:when>
         <xsl:otherwise>
           <a href="/omp?cmd=new_tag&amp;resource_id={$resource_id}&amp;resource_type={$resource_type}&amp;next={$next}&amp;next_type={$resource_type}&amp;next_id={$resource_id}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
              title="{gsa:i18n ('New Tag', 'Tag')}"
              data-reload="window"
-             class="new-action-icon icon icon-action" data-type="tag" data-extra="resource_id={$resource_id}&amp;resource_type={$resource_type}">
-            <img src="/img/new.png" alt="{gsa:i18n ('Add tag', 'Tag')}"/>
+             class="new-action-icon icon icon-sm icon-action" data-type="tag" data-extra="resource_id={$resource_id}&amp;resource_type={$resource_type}">
+            <img src="/img/new.svg" alt="{gsa:i18n ('Add tag', 'Tag')}"/>
           </a>
         </xsl:otherwise>
       </xsl:choose>
@@ -2535,9 +2537,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <input type="text" class="form-control" name="tag_value"/>
             </div>
             <div class="form-group">
-              <input type="image" src="/img/tag.png" alt="{gsa:i18n ('Add Tag', 'Tag')}"
+              <input type="image" src="/img/tag.svg" alt="{gsa:i18n ('Add Tag', 'Tag')}"
                 name="Add Tag" value="Add Tag" title="{gsa:i18n ('Add Tag', 'Tag')}"
-                class="icon"/>
+                class="icon icon-sm"/>
             </div>
             <xsl:choose>
               <xsl:when test="$resource_subtype!=''">
@@ -2714,23 +2716,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:choose>
         <xsl:when test="$report_section != ''">
           <a href="/omp?cmd=edit_tag&amp;tag_id={@id}&amp;next={$next}&amp;next_type={$resource_type}&amp;next_subtype={$resource_subtype}&amp;next_id={$resource_id}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;report_section={$report_section}&amp;token={/envelope/token}"
-             class="edit-action-icon" data-type="tag" data-id="{@id}"
+             class="edit-action-icon icon icon-sm" data-type="tag" data-id="{@id}"
              title="{gsa:i18n ('Edit Tag', 'Tag')}">
-            <img src="/img/edit.png" style="margin-left:3px;"/>
+            <img src="/img/edit.svg"/>
           </a>
         </xsl:when>
         <xsl:when test="$resource_subtype!=''">
           <a href="/omp?cmd=edit_tag&amp;tag_id={@id}&amp;next={$next}&amp;next_type={$resource_type}&amp;next_subtype={$resource_subtype}&amp;next_id={$resource_id}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-             class="edit-action-icon" data-type="tag" data-id="{@id}"
+             class="edit-action-icon icon icon-sm" data-type="tag" data-id="{@id}"
              title="{gsa:i18n ('Edit Tag', 'Tag')}">
-            <img src="/img/edit.png" style="margin-left:3px;"/>
+            <img src="/img/edit.svg"/>
           </a>
         </xsl:when>
         <xsl:otherwise>
           <a href="/omp?cmd=edit_tag&amp;tag_id={@id}&amp;next={$next}&amp;next_type={$resource_type}&amp;next_subtype={$resource_subtype}&amp;next_id={$resource_id}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-             class="edit-action-icon" data-type="tag" data-id="{@id}"
+             class="edit-action-icon icon icon-sm" data-type="tag" data-id="{@id}"
              title="{gsa:i18n ('Edit Tag', 'Tag')}">
-            <img src="/img/edit.png" style="margin-left:3px;"/>
+            <img src="/img/edit.svg"/>
           </a>
         </xsl:otherwise>
       </xsl:choose>
@@ -2745,14 +2747,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="params"></xsl:param>
 
   <xsl:if test="gsa:may-op ('modify_tag')">
-    <div class="icon ajax-post" data-reload="next">
+    <div class="icon icon-sm ajax-post" data-reload="next">
       <xsl:choose>
         <xsl:when test="$enable">
-          <img src="/img/enable.png" alt="{gsa:i18n ('Enable Tag', 'Tag')}"
+          <img src="/img/enable.svg" alt="{gsa:i18n ('Enable Tag', 'Tag')}"
             name="Enable Tag" title="{gsa:i18n ('Enable Tag', 'Tag')}"/>
         </xsl:when>
         <xsl:otherwise>
-          <img src="/img/disable.png" alt="{gsa:i18n ('Disable Tag', 'Tag')}"
+          <img src="/img/disable.svg" alt="{gsa:i18n ('Disable Tag', 'Tag')}"
             name="Disable Tag" title="{gsa:i18n ('Disable Tag', 'Tag')}"/>
         </xsl:otherwise>
       </xsl:choose>
@@ -2803,25 +2805,25 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:variable>
 
     <div class="section-header">
-      <a href="#" class="toggle-action-icon icon icon-action"
+      <a href="#" class="toggle-action-icon icon icon-sm icon-action"
         data-target="#permission-box" data-name="Permissions"
         data-variable="permission-box--collapsed">
-          <img src="/img/fold.png"/>
+          <img src="/img/fold.svg"/>
       </a>
       <a href="/help/resource_permissions.html?token={/envelope/token}"
-         class="icon icon-action"
+         class="icon icon-sm icon-action"
          title="Help: Resource Permissions">
-        <img src="/img/help.png"/>
+        <img src="/img/help.svg"/>
       </a>
       <xsl:choose>
         <xsl:when test="gsa:may-op ('create_permission')">
           <a href="/omp?cmd=new_permissions&amp;next={$next}&amp;next_id={$resource_id}&amp;next_type={$resource_type}&amp;resource_id={$resource_id}&amp;restrict_type={$resource_type}&amp;{$related_params}token={/envelope/token}"
-             class="new-action-icon icon icon-action"
+             class="new-action-icon icon icon-sm icon-action"
              data-reload="window"
              data-type="permissions"
              data-extra="resource_id={$resource_id}&amp;restrict_type={$resource_type}&amp;{$related_params}"
              title="{gsa:i18n ('Create Multiple Permissions', 'Permission')}">
-            <img src="/img/new.png"/>
+            <img src="/img/new.svg"/>
           </a>
         </xsl:when>
         <xsl:otherwise/>
@@ -2913,8 +2915,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 </xsl:for-each>
               </select>
               <a href="#" title="{ gsa:i18n('Create a new container task') }"
-                 class="icon new-action-icon" data-type="container_task" data-done="select[name=task_id]">
-                <img src="/img/new.png" class="valign-middle"/>
+                 class="icon icon-sm new-action-icon" data-type="container_task" data-done="select[name=task_id]">
+                <img src="/img/new.svg" class="valign-middle"/>
               </a>
             </td>
           </tr>
@@ -2957,8 +2959,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:with-param name="message">
           SCAP database missing on OMP server.  Prognostic reporting disabled.
           <a href="/help/hosts_classic.html?token={/envelope/token}#scap_missing"
-            title="Help: SCAP database missing">
-            <img style="margin-left:5px" src="/img/help.png"/>
+            title="Help: SCAP database missing"
+            class="icon icon-sm">
+            <img style="margin-left:5px" src="/img/help.svg"/>
           </a>
         </xsl:with-param>
       </xsl:call-template>
@@ -2969,8 +2972,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center">
       <xsl:value-of select="gsa:i18n ('Host Filtering', 'Host')"/>
-      <a href="/help/hosts_classic.html?token={/envelope/token}" title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('Hosts', 'Host'))}">
-        <img src="/img/help.png"/>
+      <a href="/help/hosts_classic.html?token={/envelope/token}" title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('Hosts', 'Host'))}"
+        class="icon icon-sm">
+        <img src="/img/help.svg"/>
       </a>
       <div class="small_inline_form" style="display: inline; margin-left: 40px; font-weight: normal;">
         <form action="" method="get" name="switch_overrides" enctype="multipart/form-data">
@@ -2997,7 +3001,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </select>
           <input type="image"
                  name="{gsa:i18n ('Update', 'Action Verb')}"
-                 src="/img/refresh.png"
+                 src="/img/refresh.svg"
+                 class="icon icon-sm"
                  title="{gsa:i18n ('Update', 'Action Verb')}"
                  alt="{gsa:i18n ('Update', 'Action Verb')}" style="margin-left:3px;margin-right:3px;"/>
         </form>
@@ -3120,12 +3125,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:variable name="last" select="report/hosts/@start + count(report/host) - 1"/>
           <xsl:choose>
             <xsl:when test = "report/hosts/@start &gt; 1">
-              <a href="?cmd=get_report&amp;type=assets&amp;first_result=1&amp;max_results={report/hosts/@max}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;overrides={report/filters/apply_overrides}&amp;search_phrase={report/filters/phrase}&amp;levels={$levels}&amp;search_phrase={report/filters/phrase}&amp;token={/envelope/token}"><img style="margin-left:10px;margin-right:3px;" src="/img/first.png" title="{gsa:i18n ('First', 'Pagination')}"/></a>
-              <a href="?cmd=get_report&amp;type=assets&amp;first_result={report/hosts/@start - report/hosts/@max}&amp;max_results={report/hosts/@max}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;overrides={report/filters/apply_overrides}&amp;search_phrase={report/filters/phrase}&amp;levels={$levels}&amp;search_phrase={report/filters/phrase}&amp;token={/envelope/token}"><img style="margin-right:3px;" src="/img/previous.png" title="{gsa:i18n ('Previous', 'Pagination')}"/></a>
+              <a href="?cmd=get_report&amp;type=assets&amp;first_result=1&amp;max_results={report/hosts/@max}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;overrides={report/filters/apply_overrides}&amp;search_phrase={report/filters/phrase}&amp;levels={$levels}&amp;search_phrase={report/filters/phrase}&amp;token={/envelope/token}"
+                class="icon icon-sm">
+                <img style="margin-left:10px;margin-right:3px;" src="/img/first.svg" title="{gsa:i18n ('First', 'Pagination')}"/>
+              </a>
+              <a href="?cmd=get_report&amp;type=assets&amp;first_result={report/hosts/@start - report/hosts/@max}&amp;max_results={report/hosts/@max}&amp;sort_field={report/sort/field/text()}&amp;sort_order={report/sort/field/order}&amp;overrides={report/filters/apply_overrides}&amp;search_phrase={report/filters/phrase}&amp;levels={$levels}&amp;search_phrase={report/filters/phrase}&amp;token={/envelope/token}"
+                class="icon icon-sm">
+                <img style="margin-right:3px;" src="/img/previous.svg" title="{gsa:i18n ('Previous', 'Pagination')}"/>
+              </a>
             </xsl:when>
             <xsl:otherwise>
-              <img style="margin-left:10px;margin-right:3px;" src="/img/first_inactive.png" title="{gsa:i18n ('Already on first page', 'Pagination')}"/>
-              <img style="margin-right:3px;" src="/img/previous_inactive.png" title="{gsa:i18n ('Already on first page', 'Pagination')}"/>
+              <img class="icon icon-sm" style="margin-left:10px;margin-right:3px;" src="/img/first_inactive.svg" title="{gsa:i18n ('Already on first page', 'Pagination')}"/>
+              <img class="icon icon-sm" style="margin-right:3px;" src="/img/previous_inactive.svg" title="{gsa:i18n ('Already on first page', 'Pagination')}"/>
             </xsl:otherwise>
           </xsl:choose>
           <xsl:value-of select="report/hosts/@start"/> -
@@ -3134,41 +3145,49 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:value-of select="report/host_count/filtered"/>
           <xsl:choose>
             <xsl:when test = "$last &lt; report/host_count/filtered">
-              <a href="?cmd=get_report&amp;type=assets&amp;first_result={report/hosts/@start + report/hosts/@max}&amp;max_results={report/hosts/@max}&amp;overrides={report/filters/apply_overrides}&amp;search_phrase={report/filters/phrase}&amp;levels={$levels}&amp;search_phrase={report/filters/phrase}&amp;token={/envelope/token}"><img style="margin-left:3px;" src="/img/next.png" title="{gsa:i18n ('Next', 'Pagination')}"/></a>
-              <a href="?cmd=get_report&amp;type=assets&amp;first_result={floor((report/host_count/filtered - 1) div report/hosts/@max) * report/hosts/@max + 1}&amp;max_results={report/hosts/@max}&amp;overrides={report/filters/apply_overrides}&amp;search_phrase={report/filters/phrase}&amp;levels={$levels}&amp;search_phrase={report/filters/phrase}&amp;token={/envelope/token}"><img style="margin-left:3px;margin-right:10px;" src="/img/last.png" title="{gsa:i18n ('Last', 'Pagination')}"/></a>
+              <a href="?cmd=get_report&amp;type=assets&amp;first_result={report/hosts/@start + report/hosts/@max}&amp;max_results={report/hosts/@max}&amp;overrides={report/filters/apply_overrides}&amp;search_phrase={report/filters/phrase}&amp;levels={$levels}&amp;search_phrase={report/filters/phrase}&amp;token={/envelope/token}"
+                class="icon icon-sm">
+                <img style="margin-left:3px;" src="/img/next.svg" title="{gsa:i18n ('Next', 'Pagination')}"/>
+              </a>
+              <a href="?cmd=get_report&amp;type=assets&amp;first_result={floor((report/host_count/filtered - 1) div report/hosts/@max) * report/hosts/@max + 1}&amp;max_results={report/hosts/@max}&amp;overrides={report/filters/apply_overrides}&amp;search_phrase={report/filters/phrase}&amp;levels={$levels}&amp;search_phrase={report/filters/phrase}&amp;token={/envelope/token}"
+                class="icon icon-sm">
+                <img style="margin-left:3px;margin-right:10px;" src="/img/last.svg" title="{gsa:i18n ('Last', 'Pagination')}"/>
+              </a>
             </xsl:when>
             <xsl:otherwise>
-              <img style="margin-left:3px;" src="/img/next_inactive.png" title="{gsa:i18n ('Already on last page', 'Pagination')}"/>
-              <img style="margin-left:3px;margin-right:10px;" src="/img/last_inactive.png" title="{gsa:i18n ('Already on last page', 'Pagination')}"/>
+              <img class="icon icon-sm" style="margin-left:3px;" src="/img/next_inactive.svg" title="{gsa:i18n ('Already on last page', 'Pagination')}"/>
+              <img class="icon icon-sm" style="margin-left:3px;margin-right:10px;" src="/img/last_inactive.svg" title="{gsa:i18n ('Already on last page', 'Pagination')}"/>
             </xsl:otherwise>
           </xsl:choose>
         </xsl:when>
         <xsl:otherwise>
         </xsl:otherwise>
       </xsl:choose>
-      <a style="margin-left: 7px" href="/help/hosts_classic.html?token={/envelope/token}" title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('Hosts', 'Host'))}">
-        <img src="/img/help.png"/>
+      <a href="/help/hosts_classic.html?token={/envelope/token}" title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('Hosts', 'Host'))}"
+        class="icon icon-sm">
+        <img src="/img/help.svg"/>
       </a>
       <xsl:choose>
         <xsl:when test="count (report/host) = 0">
           <xsl:variable name="desc"
                         select="gsa:i18n ('No hosts available for Prognostic Report', 'Host')"/>
           <img src="/img/prognosis_inactive.png"
-               style="margin-left:3px;"
-               title="{$desc}"
-               alt="{$desc}"/>
+            class="icon icon-sm"
+            title="{$desc}"
+            alt="{$desc}"/>
         </xsl:when>
         <xsl:when test="report/@scap_loaded = 0">
           <xsl:variable name="desc"
                         select="gsa:i18n ('No SCAP data available for Prognostic Report', 'Host')"/>
           <img src="/img/prognosis_inactive.png"
-               style="margin-left:3px;"
-               title="{$desc}"
-               alt="{$desc}"/>
+            class="icon icon-sm"
+            title="{$desc}"
+            alt="{$desc}"/>
         </xsl:when>
         <xsl:otherwise>
           <a href="/omp?cmd=get_report&amp;type=prognostic&amp;pos=1&amp;host_search_phrase={report/filters/phrase}&amp;host_levels={gsa:build-levels(report/filters)}&amp;host_first_result={report/hosts/@start}&amp;host_max_results={report/hosts/@max}&amp;result_hosts_only=1&amp;overrides={$apply-overrides}&amp;token={/envelope/token}"
-             title="{gsa:i18n ('Prognostic Report', 'Host')}" style="margin-left:3px;">
+            class="icon icon-sm"
+            title="{gsa:i18n ('Prognostic Report', 'Host')}">
             <img src="/img/prognosis.png" alt="{gsa:i18n ('Prognostic Report', 'Host')}"/>
           </a>
         </xsl:otherwise>
@@ -3211,16 +3230,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="details"/>
   <xsl:choose>
     <xsl:when test="$details = 1">
-      <img src="/img/fold.png"
-           style="vertical-align:middle;margin-left:2px;margin-right:2px;"
-           alt="{gsa:i18n ('Collapse details of all vulnerabilities', 'Result')}"
-           title="{gsa:i18n ('Collapse details of all vulnerabilities', 'Result')}"/>
+      <img src="/img/fold.svg"
+        class="icon icon-sm"
+        alt="{gsa:i18n ('Collapse details of all vulnerabilities', 'Result')}"
+        title="{gsa:i18n ('Collapse details of all vulnerabilities', 'Result')}"/>
     </xsl:when>
     <xsl:otherwise>
-      <img src="/img/unfold.png"
-           style="vertical-align:middle;margin-left:2px;margin-right:2px;"
-           alt="{gsa:i18n ('Expand to full details of all vulnerabilities', 'Result')}"
-           title="{gsa:i18n ('Expand to full details of all vulnerabilities', 'Result')}"/>
+      <img src="/img/unfold.svg"
+        class="icon icon-sm"
+        alt="{gsa:i18n ('Expand to full details of all vulnerabilities', 'Result')}"
+        title="{gsa:i18n ('Expand to full details of all vulnerabilities', 'Result')}"/>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
@@ -3283,18 +3302,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="overrides"/>
   <xsl:choose>
     <xsl:when test="$overrides = 1">
-      <img src="/img/overrides_enabled.png"
-           alt="{gsa:i18n('Overrides are Applied', 'Override Controls')}"
-           value="Overrides are Applied"
-           title="{gsa:i18n('Overrides are Applied', 'Override Controls')}"
-           style="margin-left:3px;margin-right:3px;"/>
+      <img src="/img/overrides_enabled.svg"
+        alt="{gsa:i18n('Overrides are Applied', 'Override Controls')}"
+        value="Overrides are Applied"
+        title="{gsa:i18n('Overrides are Applied', 'Override Controls')}"
+        class="icon icon-sm"/>
     </xsl:when>
     <xsl:otherwise>
-      <img src="/img/overrides_disabled.png"
-           alt="{gsa:i18n('No Overrides', 'Override Controls')}"
-           value="No Overrides"
-           title="{gsa:i18n('No Overrides', 'Override Controls')}"
-           style="margin-left:3px;margin-right:3px;"/>
+      <img src="/img/overrides_disabled.svg"
+        alt="{gsa:i18n('No Overrides', 'Override Controls')}"
+        value="No Overrides"
+        title="{gsa:i18n('No Overrides', 'Override Controls')}"
+        class="icon icon-sm"/>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
@@ -3797,13 +3816,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:otherwise>
       </xsl:choose>
       <input type="image"
-              name="Update Filter"
-              title="{gsa:i18n ('Update Filter', 'Filter')}"
-              src="/img/refresh.png"
-              alt="{gsa:i18n ('Update', 'Action Verb')}" style="vertical-align:middle;margin-left:3px;margin-right:3px;"/>
-      <a href="/help/powerfilter.html?token={/envelope/token}" title="{gsa:i18n ('Help', 'Help')}: {gsa:i18n ('Powerfilter', 'Filter')}">
-        <img style="vertical-align:middle;margin-left:3px;margin-right:3px;"
-            src="/img/help.png"/>
+        name="Update Filter"
+        title="{gsa:i18n ('Update Filter', 'Filter')}"
+        src="/img/refresh.svg"
+        class="icon icon-sm"
+        alt="{gsa:i18n ('Update', 'Action Verb')}" style="vertical-align:middle;margin-left:3px;margin-right:3px;"/>
+      <a href="/help/powerfilter.html?token={/envelope/token}" title="{gsa:i18n ('Help', 'Help')}: {gsa:i18n ('Powerfilter', 'Filter')}"
+        class="icon icon-sm">
+        <img src="/img/help.svg"/>
       </a>
     </form>
   </div>
@@ -4186,19 +4206,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:choose>
     <xsl:when test="target/@id = ''">
       <a href="/omp?cmd=upload_report&amp;next=get_report&amp;task_id={@id}&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-         class="upload-action-icon icon" data-type="report"
+         class="upload-action-icon icon icon-sm" data-type="report"
          data-task_id="{@id}" data-reload="window"
          title="{gsa:i18n ('Import Report', 'Task')}">
-        <img src="/img/upload.png"/>
+        <img src="/img/upload.svg"/>
       </a>
     </xsl:when>
     <xsl:when test="gsa:may ('start_task') = 0">
-      <img class="icon" src="/img/start_inactive.png" alt="{gsa:i18n ('Start', 'Action Verb')}" title="{gsa:i18n ('Permission to start task denied', 'Task')}"/>
+      <img class="icon icon-sm" src="/img/start_inactive.svg"
+        alt="{gsa:i18n ('Start', 'Action Verb')}" title="{gsa:i18n ('Permission to start task denied', 'Task')}"/>
     </xsl:when>
     <xsl:when test="string-length(schedule/@id) &gt; 0">
       <xsl:choose>
         <xsl:when test="boolean (schedule/permissions) and count (schedule/permissions/permission) = 0">
-          <img class="icon" src="/img/scheduled_inactive.png"
+          <img class="icon icon-sm" src="/img/scheduled_inactive.svg"
                alt="{gsa:i18n ('Schedule Unavailable', 'Task|Schedule')}"
                title="{gsa:i18n ('Schedule Unavailable', 'Task|Schedule')} ({gsa:i18n ('Name', 'Property')}: {schedule/name}, ID: {schedule/@id})"/>
         </xsl:when>
@@ -4230,9 +4251,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:choose>
           </xsl:variable>
           <a href="/omp?cmd=get_schedule&amp;schedule_id={schedule/@id}&amp;token={/envelope/token}"
-             class="icon"
+             class="icon icon-sm"
              title="{concat (gsa:view_details_title ('schedule', schedule/name), $next_due_string)}">
-            <img src="/img/scheduled.png" alt="{gsa:i18n ('Schedule Details', 'Schedule')}"/>
+            <img src="/img/scheduled.svg" alt="{gsa:i18n ('Schedule Details', 'Schedule')}"/>
           </a>
         </xsl:otherwise>
       </xsl:choose>
@@ -4252,7 +4273,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:when test="status='Running'">
           </xsl:when>
           <xsl:otherwise>
-            <img class="icon" src="/img/start_inactive.png" alt="{gsa:i18n ('Start', 'Action Verb')}" title="{gsa:i18n ('Task is already active', 'Task')}"/>
+            <img class="icon icon-sm" src="/img/start_inactive.svg" alt="{gsa:i18n ('Start', 'Action Verb')}" title="{gsa:i18n ('Task is already active', 'Task')}"/>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:if>
@@ -4269,7 +4290,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:call-template>
     </xsl:when>
     <xsl:when test="status='Stop Requested' or status='Delete Requested' or status='Ultimate Delete Requested' or status='Resume Requested' or status='Requested'">
-      <img class="icon" src="/img/start_inactive.png" alt="{gsa:i18n ('Start', 'Action Verb')}" title="{gsa:i18n ('Task is already active', 'Task')}"/>
+      <img class="icon icon-sm" src="/img/start_inactive.svg" alt="{gsa:i18n ('Start', 'Action Verb')}" title="{gsa:i18n ('Task is already active', 'Task')}"/>
     </xsl:when>
     <xsl:otherwise>
       <xsl:call-template name="start-icon">
@@ -4298,18 +4319,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:choose>
   <xsl:choose>
     <xsl:when test="target/@id = ''">
-      <img src="/img/resume_inactive.png" alt="{gsa:i18n ('Resume', 'Action Verb')}" title="{gsa:i18n ('Task is a container', 'Task')}"
-         class="icon"/>
+      <img src="/img/resume_inactive.svg" alt="{gsa:i18n ('Resume', 'Action Verb')}" title="{gsa:i18n ('Task is a container', 'Task')}"
+         class="icon icon-sm"/>
     </xsl:when>
     <xsl:when test="string-length(schedule/@id) &gt; 0">
-      <img src="/img/resume_inactive.png" alt="{gsa:i18n ('Resume', 'Action Verb')}" title="{gsa:i18n ('Task is scheduled', 'Task')}"
-           class="icon"/>
+      <img src="/img/resume_inactive.svg" alt="{gsa:i18n ('Resume', 'Action Verb')}" title="{gsa:i18n ('Task is scheduled', 'Task')}"
+           class="icon icon-sm"/>
     </xsl:when>
     <xsl:when test="status='Stopped'">
       <xsl:choose>
         <xsl:when test="gsa:may ('resume_task') = 0">
-          <img src="/img/resume_inactive.png" alt="{gsa:i18n ('Resume', 'Action Verb')}" title="{gsa:i18n ('Permission to resume task denied', 'Task')}"
-             class="icon"/>
+          <img src="/img/resume_inactive.svg" alt="{gsa:i18n ('Resume', 'Action Verb')}" title="{gsa:i18n ('Permission to resume task denied', 'Task')}"
+             class="icon icon-sm"/>
         </xsl:when>
         <xsl:otherwise>
           <xsl:call-template name="resume-icon">
@@ -4326,8 +4347,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </xsl:when>
     <xsl:otherwise>
-      <img src="/img/resume_inactive.png" alt="{gsa:i18n ('Resume', 'Action Verb')}" title="{gsa:i18n ('Task is not stopped', 'Task')}"
-           class="icon"/>
+      <img src="/img/resume_inactive.svg" alt="{gsa:i18n ('Resume', 'Action Verb')}" title="{gsa:i18n ('Task is not stopped', 'Task')}"
+           class="icon icon-sm"/>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
@@ -4341,7 +4362,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:when test="gsa:may-op ('get_slaves') and gsa:may-op ('modify_task') and count ($slaves)">
       <span class="icon-menu">
         <xsl:variable name="slave_count" select="count ($slaves [@id != $current_slave_id])"/>
-        <img src="/img/wizard.png" class="icon"/>
+        <img src="/img/wizard.svg" class="icon icon-sm"/>
         <ul>
           <xsl:if test="$current_slave_id != ''">
             <xsl:variable name="class">
@@ -4397,7 +4418,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:when test="alterable = 0">
       </xsl:when>
       <xsl:otherwise>
-        <img src="/img/alterable.png" style="margin-left:0px;"
+        <img src="/img/alterable.svg" class="icon icon-sm"
              alt="{gsa:i18n ('This is an Alterable Task. Reports may not relate to current Scan Config or Target!', 'Task')}"
              title="{gsa:i18n ('This is an Alterable Task. Reports may not relate to current Scan Config or Target!', 'Task')}"/>
       </xsl:otherwise>
@@ -4891,24 +4912,29 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template name="trend_meter">
   <xsl:choose>
     <xsl:when test="trend = 'up'">
-      <img src="/img/trend_up.png" alt="{gsa:i18n ('Severity increased', 'Task')}"
-           title="{gsa:i18n ('Severity increased', 'Task')}"/>
+      <img src="/img/trend_up.svg" alt="{gsa:i18n ('Severity increased', 'Task')}"
+        class="icon icon-sm"
+        title="{gsa:i18n ('Severity increased', 'Task')}"/>
     </xsl:when>
     <xsl:when test="trend = 'down'">
-      <img src="/img/trend_down.png" alt="{gsa:i18n ('Severity decreased', 'Task')}"
-           title="{gsa:i18n ('Severity decreased', 'Task')}"/>
+      <img src="/img/trend_down.svg" alt="{gsa:i18n ('Severity decreased', 'Task')}"
+        class="icon icon-sm"
+        title="{gsa:i18n ('Severity decreased', 'Task')}"/>
     </xsl:when>
     <xsl:when test="trend = 'more'">
-      <img src="/img/trend_more.png" alt="{gsa:i18n ('Vulnerability count increased', 'Task')}"
-           title="{gsa:i18n ('Vulnerability count increased', 'Task')}"/>
+      <img src="/img/trend_more.svg" alt="{gsa:i18n ('Vulnerability count increased', 'Task')}"
+        class="icon icon-sm"
+        title="{gsa:i18n ('Vulnerability count increased', 'Task')}"/>
     </xsl:when>
     <xsl:when test="trend = 'less'">
-      <img src="/img/trend_less.png" alt="{gsa:i18n ('Vulnerability count decreased', 'Task')}"
-           title="{gsa:i18n ('Vulnerability count decreased', 'Task')}"/>
+      <img src="/img/trend_less.svg" alt="{gsa:i18n ('Vulnerability count decreased', 'Task')}"
+        class="icon icon-sm"
+        title="{gsa:i18n ('Vulnerability count decreased', 'Task')}"/>
     </xsl:when>
     <xsl:when test="trend = 'same'">
-      <img src="/img/trend_nochange.png" alt="{gsa:i18n ('Vulnerabilities did not change', 'Task')}"
-           title="{gsa:i18n ('Vulnerabilities did not change', 'Task')}"/>
+      <img src="/img/trend_nochange.svg" alt="{gsa:i18n ('Vulnerabilities did not change', 'Task')}"
+        class="icon icon-sm"
+        title="{gsa:i18n ('Vulnerabilities did not change', 'Task')}"/>
     </xsl:when>
     <xsl:otherwise>
     </xsl:otherwise>
@@ -5088,16 +5114,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:choose>
       <xsl:when test="$subtype != ''">
         <a href="/help/{gsa:type-many($subtype)}.html?token={/envelope/token}"
-           class="icon"
+           class="icon icon-sm"
            title="{gsa:i18n ('Help', 'Help')}: {gsa:i18n ($cap-type-plural, $cap-type)}">
-          <img src="/img/help.png"/>
+          <img src="/img/help.svg"/>
         </a>
       </xsl:when>
       <xsl:otherwise>
         <a href="/help/{gsa:type-many($type)}.html?token={/envelope/token}"
-           class="icon"
+           class="icon icon-sm"
            title="{gsa:i18n ('Help', 'Help')}: {gsa:i18n ($cap-type-plural, $cap-type)}">
-          <img src="/img/help.png"/>
+          <img src="/img/help.svg"/>
         </a>
       </xsl:otherwise>
     </xsl:choose>
@@ -5110,18 +5136,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:when test="$new-icon and $subtype != ''">
         <!-- i18n with concat : see dynamic_strings.xsl - type-new -->
         <a href="/omp?cmd=new_{$subtype}{$extra_params_string}&amp;next=get_{$type}&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-           class="new-action-icon icon" data-type="{$subtype}" data-reload="window"
+           class="new-action-icon icon icon-sm" data-type="{$subtype}" data-reload="window"
            title="{gsa:i18n (concat ('New ', $cap-type), $cap-type)}">
-          <img src="/img/new.png"/>
+          <img src="/img/new.svg"/>
         </a>
       </xsl:when>
       <xsl:when test="$new-icon and $type = 'task'">
         <span class="icon-menu">
           <a href="/omp?cmd=new_task{$extra_params_string}&amp;next=get_task&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-             class="new-action-icon icon" data-type="task" data-reload="window"
+             class="new-action-icon icon icon-sm" data-type="task" data-reload="window"
              data-dialog-id="create_new_task"
              title="{gsa:i18n ('New Task', 'Task')}">
-            <img src="/img/new.png"/>
+            <img src="/img/new.svg"/>
           </a>
           <ul>
             <li>
@@ -5145,21 +5171,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:when>
       <xsl:when test="$new-icon and $type = 'config'">
         <a href="/omp?cmd=new_{$type}{$extra_params_string}&amp;next=get_{$type}&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-           class="new-action-icon icon" data-type="{$type}" data-reload="dialog"
+           class="new-action-icon icon icon-sm" data-type="{$type}" data-reload="dialog"
            data-dialog-id="create_new_{$type}"
            title="{gsa:i18n (concat ('New ', $cap-type), $cap-type)}">
            <span class="success-dialog" data-type="{$type}" data-cmd="edit_{$type}"
              data-reload="window" data-close-reload="window"/>
-          <img src="/img/new.png"/>
+          <img src="/img/new.svg"/>
         </a>
       </xsl:when>
       <xsl:when test="$new-icon">
         <!-- i18n with concat : see dynamic_strings.xsl - type-new -->
         <a href="/omp?cmd=new_{$type}{$extra_params_string}&amp;next=get_{$type}&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
            data-dialog-id="create_new_{$type}"
-           class="new-action-icon icon" data-type="{$type}" data-reload="window"
+           class="new-action-icon icon icon-sm" data-type="{$type}" data-reload="window"
            title="{gsa:i18n (concat ('New ', $cap-type), $cap-type)}">
-          <img src="/img/new.png"/>
+          <img src="/img/new.svg"/>
         </a>
       </xsl:when>
     </xsl:choose>
@@ -5167,10 +5193,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:when test="$upload-icon">
         <!-- i18n with concat : see dynamic_strings.xsl - type-upload -->
         <a href="/omp?cmd=upload_{$type}{$extra_params_string}&amp;next=get_{$type}&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-           class="upload-action-icon icon" data-type="{$type}"
+           class="upload-action-icon icon icon-sm" data-type="{$type}"
            data-dialog-id="upload_{$type}"
            title="{gsa:i18n (concat ('Import ', $cap-type), $cap-type)}">
-          <img src="/img/upload.png"/>
+          <img src="/img/upload.svg"/>
         </a>
       </xsl:when>
     </xsl:choose>
@@ -5210,16 +5236,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
   <div id="list-window-header">
     <div class="section-header">
-      <xsl:choose>
-        <xsl:when test="$subtype != ''">
-          <img class="icon icon-lg" src="/img/{$subtype}.svg"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <img class="icon icon-lg" src="/img/{$type}.svg"/>
-        </xsl:otherwise>
-      </xsl:choose>
-
       <h2>
+        <xsl:choose>
+          <xsl:when test="$subtype != ''">
+            <img class="icon icon-lg" src="/img/{$subtype}.svg"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <img class="icon icon-lg" src="/img/{$type}.svg"/>
+          </xsl:otherwise>
+        </xsl:choose>
+
         <xsl:value-of select="gsa:i18n ($cap-type-plural)"/>
         (<xsl:value-of select="$filtered-count"/>
         <xsl:text> </xsl:text>
@@ -5242,16 +5268,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
   <div class="section-box resources" id="table-box">
     <div class="header">
-      <div class="pager">
-        <xsl:call-template name="filter-window-pager">
-          <xsl:with-param name="type" select="$type"/>
-          <xsl:with-param name="list" select="$resources-summary"/>
-          <xsl:with-param name="count" select="$count"/>
-          <xsl:with-param name="filtered_count" select="$filtered-count"/>
-          <xsl:with-param name="full_count" select="$full-count"/>
-          <xsl:with-param name="extra_params" select="concat($subtype_param, $extra_params_string)"/>
-        </xsl:call-template>
-      </div>
+      <xsl:call-template name="filter-window-pager">
+        <xsl:with-param name="type" select="$type"/>
+        <xsl:with-param name="list" select="$resources-summary"/>
+        <xsl:with-param name="count" select="$count"/>
+        <xsl:with-param name="filtered_count" select="$filtered-count"/>
+        <xsl:with-param name="full_count" select="$full-count"/>
+        <xsl:with-param name="extra_params" select="concat($subtype_param, $extra_params_string)"/>
+      </xsl:call-template>
     </div>
 
       <!-- The entire table of resources, in a variable. -->
@@ -5369,16 +5393,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
             <!-- i18n with concat : see dynamic_strings.xsl - bulk-actions -->
             <xsl:if test="gsa:may-op (concat ('delete_', $type)) and ($type != 'info' and $type != 'user' and $type != 'report' and $type != 'asset')">
-              <input style="margin-right:3px" type="image" class="bulk-dialog-icon" data-type="{$type}" name="bulk_trash" title="{gsa:i18n (concat ('Move ', $selection_type, ' to trashcan'), 'Bulk Action')}" src="/img/trashcan.png"/>
+              <input type="image" class="icon icon-sm bulk-dialog-icon" data-type="{$type}" name="bulk_trash" title="{gsa:i18n (concat ('Move ', $selection_type, ' to trashcan'), 'Bulk Action')}" src="/img/trashcan.svg"/>
             </xsl:if>
             <xsl:if test="gsa:may-op (concat ('delete_', $type)) and ($type = 'user' or $type = 'report' or $type = 'asset')">
-              <input style="margin-right:3px" type="image" class="bulk-dialog-icon" data-type="{$type}" name="bulk_delete" title="{gsa:i18n (concat ('Delete ', $selection_type), 'Bulk Action')}" src="/img/delete.png"/>
+              <input type="image" class="icon icon-sm bulk-dialog-icon" data-type="{$type}" name="bulk_delete" title="{gsa:i18n (concat ('Delete ', $selection_type), 'Bulk Action')}" src="/img/delete.svg"/>
             </xsl:if>
             <xsl:if test="$type = 'asset' and $subtype = 'host' and gsa:may-op ('create_target')">
-              <input style="margin-right:3px" type="image" class="bulk-dialog-icon" data-type="{$type}" name="bulk_create" title="{gsa:i18n (concat ('Create Target from ', $selection_type), 'Bulk Action')}" src="/img/new.png"/>
+              <input type="image" class="icon icon-sm bulk-dialog-icon" data-type="{$type}" name="bulk_create" title="{gsa:i18n (concat ('Create Target from ', $selection_type), 'Bulk Action')}" src="/img/new.svg"/>
             </xsl:if>
             <xsl:if test="$type != 'report'">
-              <input style="margin-right:3px" type="image" name="bulk_export" title="{gsa:i18n (concat ('Export ', $selection_type), 'Bulk Action')}" src="/img/download.png"/>
+              <input class="icon icon-sm" type="image" name="bulk_export" title="{gsa:i18n (concat ('Export ', $selection_type), 'Bulk Action')}" src="/img/download.svg"/>
             </xsl:if>
           </xsl:variable>
 
@@ -5510,16 +5534,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:value-of select="filters/term"/>
             </a>)
           </div>
-          <div class="pager">
-            <xsl:call-template name="filter-window-pager">
-              <xsl:with-param name="type" select="$type"/>
-              <xsl:with-param name="list" select="$resources-summary"/>
-              <xsl:with-param name="count" select="$count"/>
-              <xsl:with-param name="filtered_count" select="$filtered-count"/>
-              <xsl:with-param name="full_count" select="$full-count"/>
-              <xsl:with-param name="extra_params" select="concat($subtype_param, $extra_params_string)"/>
-            </xsl:call-template>
-          </div>
+          <xsl:call-template name="filter-window-pager">
+            <xsl:with-param name="type" select="$type"/>
+            <xsl:with-param name="list" select="$resources-summary"/>
+            <xsl:with-param name="count" select="$count"/>
+            <xsl:with-param name="filtered_count" select="$filtered-count"/>
+            <xsl:with-param name="full_count" select="$full-count"/>
+            <xsl:with-param name="extra_params" select="concat($subtype_param, $extra_params_string)"/>
+          </xsl:call-template>
         </div>
       </xsl:if>
 
@@ -5566,18 +5588,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="filt_id" select="/envelope/params/filt_id"/>
 
   <!-- i18n with concat : see dynamic_strings.xsl - type-details -->
-  <a class="icon" href="/help/{$type}_details.html?token={/envelope/token}"
+  <a class="icon icon-sm" href="/help/{$type}_details.html?token={/envelope/token}"
     title="{gsa:i18n ('Help', 'Help')}: {gsa:i18n(concat($cap-type, ' Details'), $cap-type)}">
-    <img src="/img/help.png"/>
+    <img src="/img/help.svg"/>
   </a>
   <xsl:choose>
     <xsl:when test="$nonew"/>
     <xsl:when test="gsa:may-op (concat ('create_', $type)) and $type = 'task'">
       <span class="icon-menu">
         <a href="/omp?cmd=new_task&amp;next=get_task&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-           class="new-action-icon icon" data-type="task"
+           class="new-action-icon icon icon-sm" data-type="task"
            title="{gsa:i18n ('New Task', 'Task')}">
-          <img src="/img/new.png"/>
+          <img src="/img/new.svg"/>
         </a>
         <ul>
           <li>
@@ -5600,9 +5622,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:when test="gsa:may-op (concat ('create_', $type))">
       <!-- i18n with concat : see dynamic_strings.xsl - type-new -->
       <a href="/omp?cmd=new_{$type}&amp;next=get_{$type}&amp;filter={str:encode-uri ($filter, true ())}&amp;filt_id={$filt_id}&amp;{$type}_id={@id}&amp;token={/envelope/token}"
-         class="new-action-icon icon" data-type="{$type}" data-reload="window"
+         class="new-action-icon icon icon-sm" data-type="{$type}" data-reload="window"
          title="{gsa:i18n (concat ('New ', $cap-type), $cap-type)}">
-        <img src="/img/new.png"/>
+        <img src="/img/new.svg"/>
       </a>
     </xsl:when>
   </xsl:choose>
@@ -5610,9 +5632,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:when test="$noupload"/>
     <xsl:when test="gsa:may-op (concat ('create_', $type))">
       <a href="/omp?cmd=upload_{$type}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-         class="upload-action-icon icon" data-type="port_list" data-reload="window"
+         class="upload-action-icon icon icon-sm" data-type="port_list" data-reload="window"
          title="{gsa:i18n ('Import Port List', 'Port List')}">
-        <img src="/img/upload.png"/>
+        <img src="/img/upload.svg"/>
       </a>
     </xsl:when>
   </xsl:choose>
@@ -5620,25 +5642,25 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:when test="$noclone"/>
     <xsl:when test="$grey-clone">
       <!-- i18n with concat : see dynamic_strings.xsl - type-action-denied -->
-      <img src="/img/clone_inactive.png"
+      <img src="/img/clone_inactive.svg"
            alt="{gsa:i18n ('Clone', 'Action Verb')}"
            value="Clone"
            title="{gsa:i18n (concat ($cap-type, ' may not be cloned'), $cap-type)}"
-           class="icon"/>
+           class="icon icon-sm"/>
     </xsl:when>
     <xsl:when test="gsa:may-clone ($type, owner)">
       <xsl:choose>
         <xsl:when test="writable='0' and $type='permission'">
           <!-- i18n with concat : see dynamic_strings.xsl - type-action-denied -->
-          <img src="/img/clone_inactive.png"
+          <img src="/img/clone_inactive.svg"
                alt="{gsa:i18n ('Clone', 'Action Verb')}"
                value="Clone"
                title="{gsa:i18n (concat ($cap-type, ' must be owned or global'), $cap-type)}"
-               class="icon"/>
+               class="icon icon-sm"/>
         </xsl:when>
         <xsl:otherwise>
-          <div class="icon ajax-post" data-reload="next">
-            <img src="/img/clone.png"
+          <div class="icon icon-sm ajax-post" data-reload="next">
+            <img src="/img/clone.svg"
               alt="{gsa:i18n ('Clone', 'Action Verb')}"
               title="{gsa:i18n ('Clone', 'Action Verb')}"/>
             <form action="/omp" method="post" enctype="multipart/form-data">
@@ -5657,119 +5679,117 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:when>
   </xsl:choose>
   <a href="/omp?cmd=get_{$type}s&amp;filter={str:encode-uri ($filter, true ())}&amp;filt_id={$filt_id}&amp;token={/envelope/token}"
-     title="{gsa:i18n ($cap-type-plural, $cap-type)}" class="icon">
-    <img src="/img/list.png" alt="{gsa:i18n ($cap-type-plural, $cap-type)}"/>
+     title="{gsa:i18n ($cap-type-plural, $cap-type)}" class="icon icon-sm">
+    <img src="/img/list.svg" alt="{gsa:i18n ($cap-type-plural, $cap-type)}"/>
   </a>
   <span class="divider"/>
-  <span>
-    <xsl:choose>
-      <xsl:when test="$type = 'user'">
-        <xsl:choose>
-          <xsl:when test="name=/envelope/login/text()">
-            <img src="/img/delete_inactive.png" alt="{gsa:i18n ('Delete', 'Action Verb')}"
-                 title="{gsa:i18n ('Currently logged in as this user', 'User')}"
-                 class="icon"/>
-          </xsl:when>
-          <xsl:when test="gsa:may (concat ('delete_', $type)) and writable!='0' and in_use='0'">
-            <xsl:call-template name="delete-icon">
-              <xsl:with-param name="type" select="$type"/>
-              <xsl:with-param name="id" select="@id"/>
-              <xsl:with-param name="params">
-                <input type="hidden" name="filter" value="{$filter}"/>
-                <input type="hidden" name="filt_id" value="{$filt_id}"/>
-              </xsl:with-param>
-            </xsl:call-template>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:variable name="inactive_text">
-              <xsl:choose>
-                <!-- i18n with concat : see dynamic_strings.xsl - type-action-denied -->
-                <xsl:when test="in_use != '0'">
-                  <xsl:value-of select="gsa:i18n (concat ($cap-type, ' is still in use'), $cap-type)"/>
-                </xsl:when>
-                <xsl:when test="writable = '0'">
-                  <xsl:value-of select="gsa:i18n (concat ($cap-type, ' is not writable'), $cap-type)"/>
-                </xsl:when>
-                <xsl:otherwise>
-                  <xsl:value-of select="gsa:i18n (concat ($cap-type, ' cannot be deleted'), $cap-type)"/>
-                </xsl:otherwise>
-              </xsl:choose>
-            </xsl:variable>
-            <img src="/img/delete_inactive.png" alt="{gsa:i18n ('Delete', 'Action Verb')}"
-                 title="{$inactive_text}"
-                 class="icon"/>
-          </xsl:otherwise>
-        </xsl:choose>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:choose>
-          <xsl:when test="gsa:may (concat ('delete_', $type)) and writable!='0' and in_use='0'">
-            <xsl:call-template name="trashcan-icon">
-              <xsl:with-param name="type" select="$type"/>
-              <xsl:with-param name="id" select="@id"/>
-              <xsl:with-param name="params">
-                <input type="hidden" name="filter" value="{$filter}"/>
-                <input type="hidden" name="filt_id" value="{$filt_id}"/>
-              </xsl:with-param>
-            </xsl:call-template>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:variable name="inactive_text">
-              <xsl:choose>
-                <!-- i18n with concat : see dynamic_strings.xsl - type-action-denied -->
-                <xsl:when test="in_use != '0'">
-                  <xsl:value-of select="gsa:i18n (concat ($cap-type, ' is still in use'), $cap-type)"/>
-                </xsl:when>
-                <xsl:when test="writable = '0'">
-                  <xsl:value-of select="gsa:i18n (concat ($cap-type, ' is not writable'), $cap-type)"/>
-                </xsl:when>
-                <xsl:otherwise>
-                  <xsl:value-of select="gsa:i18n (concat ($cap-type, ' cannot be moved to the trashcan'), $cap-type)"/>
-                </xsl:otherwise>
-              </xsl:choose>
-            </xsl:variable>
-            <img src="/img/trashcan_inactive.png" alt="{gsa:i18n ('To Trashcan', 'Action Verb')}"
-                 title="{$inactive_text}"
-                 class="icon"/>
-          </xsl:otherwise>
-        </xsl:choose>
-      </xsl:otherwise>
-    </xsl:choose>
-    <xsl:choose>
-      <xsl:when test="$noedit">
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:choose>
-          <xsl:when test="gsa:may (concat ('modify_', $type)) and writable!='0'">
-            <!-- i18n with concat : see dynamic_strings.xsl - type-edit -->
-            <a href="/omp?cmd=edit_{$type}&amp;{$type}_id={@id}&amp;next=get_{$type}&amp;filter={str:encode-uri ($filter, true ())}&amp;filt_id={$filt_id}&amp;token={/envelope/token}" data-reload="window"
-               class="edit-action-icon icon" data-type="{$type}" data-id="{@id}"
-               title="{gsa:i18n (concat ('Edit ', $cap-type), $cap-type)}">
-              <img src="/img/edit.png"/>
-            </a>
-          </xsl:when>
-          <xsl:otherwise>
-            <!-- i18n with concat : see dynamic_strings.xsl - type-action-denied -->
-            <img src="/img/edit_inactive.png" alt="{gsa:i18n ('Edit', 'Action Verb')}"
-                 title="{gsa:i18n (concat ($cap-type, ' is not writable'), $cap-type)}"
-                 class="icon"/>
-          </xsl:otherwise>
-        </xsl:choose>
-      </xsl:otherwise>
-    </xsl:choose>
-    <xsl:choose>
-      <xsl:when test="$noexport">
-      </xsl:when>
-      <xsl:otherwise>
-        <!-- i18n with concat : see dynamic_strings.xsl - type-export-xml -->
-        <a href="/omp?cmd=export_{$type}&amp;{$type}_id={@id}&amp;filter={str:encode-uri ($filter, true ())}&amp;filt_id={$filt_id}&amp;token={/envelope/token}"
-           title="{gsa:i18n (concat ('Export ', $cap-type, ' as XML'), $cap-type)}"
-           class="icon">
-          <img src="/img/download.png" alt="{gsa:i18n ('Export XML', 'Action Verb')}"/>
-        </a>
-      </xsl:otherwise>
-    </xsl:choose>
-  </span>
+  <xsl:choose>
+    <xsl:when test="$type = 'user'">
+      <xsl:choose>
+        <xsl:when test="name=/envelope/login/text()">
+          <img src="/img/delete_inactive.svg" alt="{gsa:i18n ('Delete', 'Action Verb')}"
+                title="{gsa:i18n ('Currently logged in as this user', 'User')}"
+                class="icon icon-sm"/>
+        </xsl:when>
+        <xsl:when test="gsa:may (concat ('delete_', $type)) and writable!='0' and in_use='0'">
+          <xsl:call-template name="delete-icon">
+            <xsl:with-param name="type" select="$type"/>
+            <xsl:with-param name="id" select="@id"/>
+            <xsl:with-param name="params">
+              <input type="hidden" name="filter" value="{$filter}"/>
+              <input type="hidden" name="filt_id" value="{$filt_id}"/>
+            </xsl:with-param>
+          </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:variable name="inactive_text">
+            <xsl:choose>
+              <!-- i18n with concat : see dynamic_strings.xsl - type-action-denied -->
+              <xsl:when test="in_use != '0'">
+                <xsl:value-of select="gsa:i18n (concat ($cap-type, ' is still in use'), $cap-type)"/>
+              </xsl:when>
+              <xsl:when test="writable = '0'">
+                <xsl:value-of select="gsa:i18n (concat ($cap-type, ' is not writable'), $cap-type)"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="gsa:i18n (concat ($cap-type, ' cannot be deleted'), $cap-type)"/>
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:variable>
+          <img src="/img/delete_inactive.svg" alt="{gsa:i18n ('Delete', 'Action Verb')}"
+                title="{$inactive_text}"
+                class="icon icon-sm"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:choose>
+        <xsl:when test="gsa:may (concat ('delete_', $type)) and writable!='0' and in_use='0'">
+          <xsl:call-template name="trashcan-icon">
+            <xsl:with-param name="type" select="$type"/>
+            <xsl:with-param name="id" select="@id"/>
+            <xsl:with-param name="params">
+              <input type="hidden" name="filter" value="{$filter}"/>
+              <input type="hidden" name="filt_id" value="{$filt_id}"/>
+            </xsl:with-param>
+          </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:variable name="inactive_text">
+            <xsl:choose>
+              <!-- i18n with concat : see dynamic_strings.xsl - type-action-denied -->
+              <xsl:when test="in_use != '0'">
+                <xsl:value-of select="gsa:i18n (concat ($cap-type, ' is still in use'), $cap-type)"/>
+              </xsl:when>
+              <xsl:when test="writable = '0'">
+                <xsl:value-of select="gsa:i18n (concat ($cap-type, ' is not writable'), $cap-type)"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="gsa:i18n (concat ($cap-type, ' cannot be moved to the trashcan'), $cap-type)"/>
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:variable>
+          <img src="/img/trashcan_inactive.svg" alt="{gsa:i18n ('To Trashcan', 'Action Verb')}"
+                title="{$inactive_text}"
+                class="icon icon-sm"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:otherwise>
+  </xsl:choose>
+  <xsl:choose>
+    <xsl:when test="$noedit">
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:choose>
+        <xsl:when test="gsa:may (concat ('modify_', $type)) and writable!='0'">
+          <!-- i18n with concat : see dynamic_strings.xsl - type-edit -->
+          <a href="/omp?cmd=edit_{$type}&amp;{$type}_id={@id}&amp;next=get_{$type}&amp;filter={str:encode-uri ($filter, true ())}&amp;filt_id={$filt_id}&amp;token={/envelope/token}" data-reload="window"
+              class="edit-action-icon icon icon-sm" data-type="{$type}" data-id="{@id}"
+              title="{gsa:i18n (concat ('Edit ', $cap-type), $cap-type)}">
+            <img src="/img/edit.svg"/>
+          </a>
+        </xsl:when>
+        <xsl:otherwise>
+          <!-- i18n with concat : see dynamic_strings.xsl - type-action-denied -->
+          <img src="/img/edit_inactive.svg" alt="{gsa:i18n ('Edit', 'Action Verb')}"
+                title="{gsa:i18n (concat ($cap-type, ' is not writable'), $cap-type)}"
+                class="icon icon-sm"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:otherwise>
+  </xsl:choose>
+  <xsl:choose>
+    <xsl:when test="$noexport">
+    </xsl:when>
+    <xsl:otherwise>
+      <!-- i18n with concat : see dynamic_strings.xsl - type-export-xml -->
+      <a href="/omp?cmd=export_{$type}&amp;{$type}_id={@id}&amp;filter={str:encode-uri ($filter, true ())}&amp;filt_id={$filt_id}&amp;token={/envelope/token}"
+          title="{gsa:i18n (concat ('Export ', $cap-type, ' as XML'), $cap-type)}"
+          class="icon icon-sm">
+        <img src="/img/download.svg" alt="{gsa:i18n ('Export XML', 'Action Verb')}"/>
+      </a>
+    </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 <xsl:template match="gsad_msg">
@@ -6024,12 +6044,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
    <div class="gb_window_part_left"></div>
    <div class="gb_window_part_right"></div>
    <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n ('New Container Task', 'Task')"/>
-    <a href="/help/new_task.html?token={/envelope/token}#newcontainertask" title="{gsa:i18n ('Help', 'Help')}: {gsa:i18n ('New Task', 'Task')}">
-      <img src="/img/help.png"/>
+     <a href="/help/new_task.html?token={/envelope/token}#newcontainertask" title="{gsa:i18n ('Help', 'Help')}: {gsa:i18n ('New Task', 'Task')}"
+       class="icon icon-sm">
+      <img src="/img/help.svg"/>
     </a>
     <a href="/omp?cmd=get_tasks&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-       title="{gsa:i18n ('Tasks', 'Task')}" style="margin-left:3px;">
-      <img src="/img/list.png" alt="{gsa:i18n ('Tasks', 'Task')}"/>
+      title="{gsa:i18n ('Tasks', 'Task')}"
+      class="icon icon-sm">
+      <img src="/img/list.svg" alt="{gsa:i18n ('Tasks', 'Task')}"/>
     </a>
    </div>
    <div class="gb_window_part_content">
@@ -6130,8 +6152,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </div>
           <div class="form-item">
             <a href="#" title="{ gsa:i18n('Create a new target') }"
-              class="new-action-icon" data-type="target" data-done="select[name=target_id]">
-              <img src="/img/new.png"/>
+              class="new-action-icon icon icon-sm" data-type="target" data-done="select[name=target_id]">
+              <img src="/img/new.svg"/>
             </a>
           </div>
         </div>
@@ -6151,8 +6173,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </div>
             <div class="form-item">
               <a href="#" title="{ gsa:i18n('Create a new alert') }"
-                  class="new-action-icon icon" data-type="alert" data-done="#alert_ids">
-                  <img src="/img/new.png"/>
+                  class="new-action-icon icon icon-sm" data-type="alert" data-done="#alert_ids">
+                  <img src="/img/new.svg"/>
               </a>
             </div>
           </div>
@@ -6197,9 +6219,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </div>
             <div class="form-item">
               <a href="#" title="{ gsa:i18n('Create a new schedule') }"
-                class="new-action-icon" data-type="schedule"
+                class="new-action-icon icon icon-sm" data-type="schedule"
                 data-done="select[name=schedule_id_optional]">
-                <img src="/img/new.png"/>
+                <img src="/img/new.svg"/>
               </a>
             </div>
           </div>
@@ -6446,9 +6468,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   </div>
                   <div class="form-item">
                     <a href="#" title="{ gsa:i18n('Create a new slave') }"
-                      class="new-action-icon" data-type="slave"
+                      class="new-action-icon icon icon-sm" data-type="slave"
                       data-done="select[name=slave_id_optional]">
-                      <img class="valign-middle" src="/img/new.png"/>
+                      <img class="valign-middle" src="/img/new.svg"/>
                     </a>
                   </div>
                 </div>
@@ -6719,42 +6741,42 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <td class="table-actions">
           <xsl:choose>
             <xsl:when test="$delta = @id">
-              <img src="/img/delta_inactive.png" alt="{gsa:i18n ('Compare', 'Report')}"
+              <img src="/img/delta_inactive.svg" alt="{gsa:i18n ('Compare', 'Report')}"
                   title="{gsa:i18n ('Report is already selected for delta', 'Report')}"
-                  class="icon"/>
+                  class="icon icon-sm"/>
             </xsl:when>
             <xsl:when test="string-length (../../filters/keywords/keyword[column='task_id']) = 0">
-              <img src="/img/delta_inactive.png" alt="{gsa:i18n ('Compare', 'Report')}"
+              <img src="/img/delta_inactive.svg" alt="{gsa:i18n ('Compare', 'Report')}"
                   title="{gsa:i18n ('Filter must be limited to a single Task to allow delta reports', 'Report')}"
-                  class="icon"/>
+                  class="icon icon-sm"/>
             </xsl:when>
             <xsl:when test="string-length ($delta) &gt; 0">
               <a href="/omp?cmd=get_report&amp;report_id={$delta}&amp;delta_report_id={@id}&amp;notes=1&amp;overrides={$apply_overrides}&amp;result_hosts_only=1&amp;token={/envelope/token}"
                 title="{gsa:i18n ('Compare', 'Report')}"
-                class="icon">
-                <img src="/img/delta_second.png" alt="{gsa:i18n ('Compare', 'Report')}"/>
+                class="icon icon-sm">
+                <img src="/img/delta_second.svg" alt="{gsa:i18n ('Compare', 'Report')}"/>
               </a>
             </xsl:when>
             <xsl:otherwise>
               <a href="/omp?cmd=get_reports&amp;replace_task_id=1&amp;task_id={$task_id}&amp;delta_report_id={@id}&amp;overrides={$apply_overrides}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;task_filter={str:encode-uri (/envelope/params/task_filter, true ())}&amp;task_filt_id={/envelope/params/task_filt_id}&amp;token={/envelope/token}"
                 title="{gsa:i18n ('Compare', 'Report')}"
-                class="icon">
-                <img src="/img/delta.png" alt="{gsa:i18n ('Compare', 'Report')}"/>
+                class="icon icon-sm">
+                <img src="/img/delta.svg" alt="{gsa:i18n ('Compare', 'Report')}"/>
               </a>
             </xsl:otherwise>
           </xsl:choose>
           <xsl:choose>
             <xsl:when test="boolean ($observed)">
-              <img src="/img/delete_inactive.png"
+              <img src="/img/delete_inactive.svg"
                   alt="{gsa:i18n ('Delete', 'Action Verb')}"
                   title="{gsa:i18n ('Report is observed', 'Report')}"
-                  class="icon"/>
+                  class="icon icon-sm"/>
             </xsl:when>
             <xsl:when test="scan_run_status='Running' or scan_run_status='Requested' or scan_run_status='Stop Requested' or scan_run_status='Resume Requested'">
-              <img src="/img/delete_inactive.png"
+              <img src="/img/delete_inactive.svg"
                   alt="{gsa:i18n ('Delete', 'Action Verb')}"
                   title="{gsa:i18n ('Scan is active', 'Report')}"
-                  class="icon"/>
+                  class="icon icon-sm"/>
             </xsl:when>
             <xsl:otherwise>
               <xsl:call-template name="delete-icon">
@@ -6832,8 +6854,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </div>
       <div class="form-item">
         <a href="#" title="{ gsa:i18n('Create a new scan config') }"
-          class="new-action-icon" data-type="config" data-done="select[name={$param_name}]">
-          <img src="/img/new.png"/>
+          class="new-action-icon icon icon-sm" data-type="config" data-done="select[name={$param_name}]">
+          <img src="/img/new.svg"/>
         </a>
       </div>
     </div>
@@ -6942,8 +6964,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </div>
           <div class="form-item">
             <a href="#" title="{ gsa:i18n('Create a new scan target') }"
-              class="new-action-icon" data-type="target" data-done="select[name=target_id]">
-              <img src="/img/new.png"/>
+              class="new-action-icon icon icon-sm" data-type="target" data-done="select[name=target_id]">
+              <img src="/img/new.svg"/>
             </a>
           </div>
         </div>
@@ -6997,8 +7019,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </div>
         <div class="form-item">
           <a href="#" title="{ gsa:i18n('Create a new alert') }"
-            class="new-action-icon" data-type="alert" data-done="#alert_ids">
-            <img src="/img/new.png"/>
+            class="new-action-icon icon icon-sm" data-type="alert" data-done="#alert_ids">
+            <img src="/img/new.svg"/>
           </a>
         </div>
       </div>
@@ -7113,8 +7135,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </div>
         <div class="form-item">
           <a href="#" title="{ gsa:i18n('Create a slave') }"
-            class="new-action-icon" data-type="slave" data-done="select[name=slave_id]">
-            <img src="/img/new.png"/>
+            class="new-action-icon icon icon-sm" data-type="slave" data-done="select[name=slave_id]">
+            <img src="/img/new.svg"/>
           </a>
         </div>
       </div>
@@ -7187,8 +7209,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </div>
         <div class="form-item">
           <a href="#" title="{ gsa:i18n('Create a schedule') }"
-            class="new-action-icon" data-type="schedule" data-done="select[name=schedule_id]">
-            <img src="/img/new.png"/>
+            class="new-action-icon icon icon-sm" data-type="schedule" data-done="select[name=schedule_id]">
+            <img src="/img/new.svg"/>
           </a>
         </div>
       </div>
@@ -7670,8 +7692,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <div class="gb_window_part_left"></div>
       <div class="gb_window_part_right"></div>
       <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n ('Import Report', 'Task')"/>
-        <a href="/help/task_details.html?token={/envelope/token}#import_report" title="{gsa:i18n ('Help', 'Help')}: {gsa:i18n ('Import Report', 'Task')}">
-          <img src="/img/help.png"/>
+        <a href="/help/task_details.html?token={/envelope/token}#import_report" title="{gsa:i18n ('Help', 'Help')}: {gsa:i18n ('Import Report', 'Task')}"
+          class="icon icon-sm">
+          <img src="/img/help.svg"/>
         </a>
       </div>
       <div class="gb_window_part_content">
@@ -7734,18 +7757,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:when test="alterable = 0">
               </xsl:when>
               <xsl:otherwise>
-                <img src="/img/alterable.png"
-                     style="margin-left:3px;"
-                     alt="{gsa:i18n ('Task is alterable', 'Task')}"
-                     title="{gsa:i18n ('Task is alterable', 'Task')}"/>
+                <img src="/img/alterable.svg"
+                  class="icon icon-sm"
+                  alt="{gsa:i18n ('Task is alterable', 'Task')}"
+                  title="{gsa:i18n ('Task is alterable', 'Task')}"/>
               </xsl:otherwise>
             </xsl:choose>
             <xsl:choose>
               <xsl:when test="string-length(slave/@id) &gt; 0">
-                <img src="/img/sensor.png"
-                     style="margin-left:3px;"
-                     alt="{gsa-i18n:strformat (gsa:i18n ('Task is configured to run on slave %1', 'Task'), slave/name)}"
-                     title="{gsa-i18n:strformat (gsa:i18n ('Task is configured to run on slave %1', 'Task'), slave/name)}"/>
+                <img src="/img/sensor.svg"
+                  class="icon icon-sm"
+                  alt="{gsa-i18n:strformat (gsa:i18n ('Task is configured to run on slave %1', 'Task'), slave/name)}"
+                  title="{gsa-i18n:strformat (gsa:i18n ('Task is configured to run on slave %1', 'Task'), slave/name)}"/>
               </xsl:when>
               <xsl:otherwise>
               </xsl:otherwise>
@@ -7768,10 +7791,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     <xsl:otherwise></xsl:otherwise>
                   </xsl:choose>
                 </xsl:variable>
-                <img src="/img/provide_view.png"
-                     style="margin-left:3px;"
-                     alt="{gsa:i18n ('Task made visible for:', 'Task')} {observers/text()}{$observer_groups}{$observer_roles}"
-                     title="{gsa:i18n ('Task made visible for:', 'Task')} {observers/text()}{$observer_groups}{$observer_roles}"/>
+                <img src="/img/provide_view.svg"
+                  class="icon icon-sm"
+                  alt="{gsa:i18n ('Task made visible for:', 'Task')} {observers/text()}{$observer_groups}{$observer_roles}"
+                  title="{gsa:i18n ('Task made visible for:', 'Task')} {observers/text()}{$observer_groups}{$observer_roles}"/>
               </xsl:when>
               <xsl:otherwise>
               </xsl:otherwise>
@@ -7780,10 +7803,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:when test="owner/name=/envelope/login/text()">
               </xsl:when>
               <xsl:otherwise>
-                <img src="/img/view_other.png"
-                     style="margin-left:3px;"
-                     alt="{gsa-i18n:strformat (gsa:i18n ('Observing task owned by %1', 'Task'), owner/name)}"
-                     title="{gsa-i18n:strformat (gsa:i18n ('Observing task owned by %1', 'Task'), owner/name)}"/>
+                <img src="/img/view_other.svg"
+                  class="icon icon-sm"
+                  alt="{gsa-i18n:strformat (gsa:i18n ('Observing task owned by %1', 'Task'), owner/name)}"
+                  title="{gsa-i18n:strformat (gsa:i18n ('Observing task owned by %1', 'Task'), owner/name)}"/>
               </xsl:otherwise>
             </xsl:choose>
           </div>
@@ -8008,9 +8031,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:if>
             </xsl:for-each>
           </xsl:variable>
-          <img src="/img/restore_inactive.png" alt="{gsa:i18n ('Restore', 'Action Verb')}"
+          <img src="/img/restore_inactive.svg" alt="{gsa:i18n ('Restore', 'Action Verb')}"
                title="{$resources_string}{gsa:i18n (' must be restored first.', 'Action Message')}"
-               class="icon"/>
+               class="icon icon-sm"/>
         </xsl:otherwise>
       </xsl:choose>
       <xsl:call-template name="trash-delete-icon">
@@ -8116,26 +8139,26 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <before>
             <xsl:choose xmlns="http://www.w3.org/1999/xhtml">
               <xsl:when test="/envelope/params/bulk_select = 1">
-                <div class="pull-right" style="display: inline">
+                <div class="pull-right">
                   <xsl:choose>
                     <xsl:when test="filters/keywords/keyword[column='apply_overrides']/value = 0">
-                      <img src="/img/overrides_disabled.png"
-                          alt="{gsa:i18n ('No Overrides', 'Override Controls')}"
-                          title="{gsa:i18n ('No Overrides', 'Override Controls')}"
-                          style="margin-left:3px;margin-right:3px;"/>
+                      <img src="/img/overrides_disabled.svg"
+                        alt="{gsa:i18n ('No Overrides', 'Override Controls')}"
+                        title="{gsa:i18n ('No Overrides', 'Override Controls')}"
+                        class="icon icon-sm"/>
                     </xsl:when>
                     <xsl:otherwise>
-                      <img src="/img/overrides_enabled.png"
-                          alt="{gsa:i18n ('Overrides are Applied', 'Override Controls')}"
-                          title="{gsa:i18n ('Overrides are Applied', 'Override Controls')}"
-                          style="margin-left:3px;margin-right:3px;"/>
+                      <img src="/img/overrides_enabled.svg"
+                        alt="{gsa:i18n ('Overrides are Applied', 'Override Controls')}"
+                        title="{gsa:i18n ('Overrides are Applied', 'Override Controls')}"
+                        class="icon icon-sm"/>
                     </xsl:otherwise>
                   </xsl:choose>
                 </div>
               </xsl:when>
               <xsl:otherwise>
-                <div class="pull-right" style="display: inline">
-                  <form method="get" action="" enctype="multipart/form-data">
+                <div class="pull-right">
+                  <form method="get" action="">
                     <input type="hidden" name="token" value="{/envelope/token}"/>
                     <input type="hidden" name="cmd" value="get_tasks"/>
                     <input type="hidden" name="filter" value="{filters/term}"/>
@@ -8143,22 +8166,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       <xsl:when test="filters/keywords/keyword[column='apply_overrides']/value = 0">
                         <input type="hidden" name="overrides" value="1"/>
                         <input type="image"
-                              name="No Overrides"
-                              src="/img/overrides_disabled.png"
-                              alt="{gsa:i18n ('No Overrides', 'Override Controls')}"
-                              value="No Overrides"
-                              title="{gsa:i18n ('No Overrides', 'Override Controls')}"
-                              style="margin-left:3px;margin-right:3px;"/>
+                          name="No Overrides"
+                          src="/img/overrides_disabled.svg"
+                          alt="{gsa:i18n ('No Overrides', 'Override Controls')}"
+                          value="No Overrides"
+                          title="{gsa:i18n ('No Overrides', 'Override Controls')}"
+                          class="icon icon-sm"/>
                       </xsl:when>
                       <xsl:otherwise>
                         <input type="hidden" name="overrides" value="0"/>
                         <input type="image"
-                              name="Overrides are Applied"
-                              src="/img/overrides_enabled.png"
-                              alt="{gsa:i18n ('Overrides are Applied', 'Override Controls')}"
-                              value="Overrides are Applied"
-                              title="{gsa:i18n ('Overrides are Applied', 'Override Controls')}"
-                              style="margin-left:3px;margin-right:3px;"/>
+                          name="Overrides are Applied"
+                          src="/img/overrides_enabled.svg"
+                          alt="{gsa:i18n ('Overrides are Applied', 'Override Controls')}"
+                          value="Overrides are Applied"
+                          title="{gsa:i18n ('Overrides are Applied', 'Override Controls')}"
+                          class="icon icon-sm"/>
                       </xsl:otherwise>
                     </xsl:choose>
                   </form>
@@ -8798,32 +8821,37 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
   <xsl:if test="$type='usk'">
     <a href="/omp?cmd=download_credential&amp;credential_id={@id}&amp;package_format=rpm&amp;token={/envelope/token}"
-      title="{gsa:i18n ('Download RPM package', 'Credential')}" class="icon">
-      <img src="/img/rpm.png" alt="{gsa:i18n ('Download RPM', 'Credential')}"/>
+      title="{gsa:i18n ('Download RPM package', 'Credential')}"
+      class="icon icon-sm">
+      <img src="/img/rpm.svg" alt="{gsa:i18n ('Download RPM', 'Credential')}"/>
     </a>
   </xsl:if>
   <xsl:if test="$type='usk'">
     <a href="/omp?cmd=download_credential&amp;credential_id={@id}&amp;package_format=deb&amp;token={/envelope/token}"
-      title="{gsa:i18n ('Download Debian package', 'Credential')}" class="icon">
-      <img src="/img/deb.png" alt="{gsa:i18n ('Download Deb', 'Credential')}"/>
+      title="{gsa:i18n ('Download Debian package', 'Credential')}"
+      class="icon icon-sm">
+      <img src="/img/deb.svg" alt="{gsa:i18n ('Download Deb', 'Credential')}"/>
     </a>
   </xsl:if>
   <xsl:if test="$type='up'">
     <a href="/omp?cmd=download_credential&amp;credential_id={@id}&amp;package_format=exe&amp;token={/envelope/token}"
-      title="{gsa:i18n ('Download Exe package', 'Credential')}" class="icon">
-      <img src="/img/exe.png" alt="{gsa:i18n ('Download Exe', 'Credential')}"/>
+      title="{gsa:i18n ('Download Exe package', 'Credential')}"
+      class="icon icon-sm">
+      <img src="/img/exe.svg" alt="{gsa:i18n ('Download Exe', 'Credential')}"/>
     </a>
   </xsl:if>
   <xsl:if test="$type='usk'">
     <a href="/omp?cmd=download_credential&amp;credential_id={@id}&amp;package_format=key&amp;token={/envelope/token}"
-      title="{gsa:i18n ('Download Public Key', 'Credential')}" class="icon">
-      <img src="/img/key.png" alt="{gsa:i18n ('Download Public Key', 'Credential')}"/>
+      title="{gsa:i18n ('Download Public Key', 'Credential')}"
+      class="icon icon-sm">
+      <img src="/img/key.svg" alt="{gsa:i18n ('Download Public Key', 'Credential')}"/>
     </a>
   </xsl:if>
   <xsl:if test="$type='cc'">
     <a href="/omp?cmd=download_credential&amp;credential_id={@id}&amp;package_format=pem&amp;token={/envelope/token}"
-      title="{gsa:i18n ('Download Certificate', 'Credential')}" class="icon">
-      <img src="/img/key.png" alt="{gsa:i18n ('Download Certificate', 'Credential')}"/>
+      title="{gsa:i18n ('Download Certificate', 'Credential')}"
+      class="icon icon-sm">
+      <img src="/img/key.svg" alt="{gsa:i18n ('Download Certificate', 'Credential')}"/>
     </a>
   </xsl:if>
 </xsl:template>
@@ -8925,9 +8953,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:call-template>
         </xsl:when>
         <xsl:otherwise>
-          <img src="/img/delete_inactive.png" alt="{gsa:i18n ('Delete', 'Action Verb')}"
+          <img src="/img/delete_inactive.svg" alt="{gsa:i18n ('Delete', 'Action Verb')}"
                title="{gsa:i18n ('Credential is still in use', 'Credential')}"
-               class="icon"/>
+               class="icon icon-sm"/>
         </xsl:otherwise>
       </xsl:choose>
     </td>
@@ -9021,10 +9049,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
   <xsl:if test="gsa:may-op ('get_slaves')">
     <div class="section-header">
-      <a href="#" class="toggle-action-icon icon icon-action"
+      <a href="#" class="toggle-action-icon icon icon-sm icon-action"
         data-target="#using-box" data-name="Slaves using this Credential"
         data-variable="using-box--collapsed">
-          <img src="/img/fold.png"/>
+          <img src="/img/fold.svg"/>
       </a>
       <h3>
         <a href="/omp?cmd=get_slaves&amp;token={/envelope/token}"
@@ -9070,10 +9098,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:if>
 
   <div class="section-header">
-    <a href="#" class="toggle-action-icon icon icon-action"
+    <a href="#" class="toggle-action-icon icon icon-sm icon-action"
       data-target="#using-box2" data-name="Targets using this Credential"
       data-variable="using-box2--collapsed">
-        <img src="/img/fold.png"/>
+        <img src="/img/fold.svg"/>
     </a>
     <h3>
       <a href="/omp?cmd=get_targets&amp;token={/envelope/token}"
@@ -9119,10 +9147,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 
   <div class="section-header">
-    <a href="#" class="toggle-action-icon icon icon-action"
+    <a href="#" class="toggle-action-icon icon icon-sm icon-action"
       data-target="#using-box3" data-name="Scanners using this Credential"
       data-variable="using-box3--collapsed">
-        <img src="/img/fold.png"/>
+        <img src="/img/fold.svg"/>
     </a>
     <h3>
       <a href="/omp?cmd=get_targets&amp;token={/envelope/token}"
@@ -9230,12 +9258,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_center">
       <xsl:value-of select="gsa:i18n ('New Agent', 'Agent')"/>
       <a href="/help/new_agent.html?token={/envelope/token}"
-         title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('New Agent', 'Agent'))}">
-        <img src="/img/help.png"/>
+        title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('New Agent', 'Agent'))}"
+        class="icon icon-sm">
+        <img src="/img/help.svg"/>
       </a>
       <a href="/omp?cmd=get_agents&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-         title="{gsa:i18n ('Agents', 'Agent')}" style="margin-left:3px;">
-        <img src="/img/list.png" alt="{gsa:i18n ('Agents', 'Agent')}"/>
+        class="icon icon-sm"
+        title="{gsa:i18n ('Agents', 'Agent')}">
+        <img src="/img/list.svg" alt="{gsa:i18n ('Agents', 'Agent')}"/>
       </a>
     </div>
     <div class="gb_window_part_content">
@@ -9475,10 +9505,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:call-template>
           <a href="/omp?cmd=download_agent&amp;agent_id={@id}&amp;agent_format=installer&amp;token={/envelope/token}"
             title="{gsa:i18n ('Download installer package', 'Agent')}" class="icon">
-            <img src="/img/agent.png" alt="{gsa:i18n ('Download Installer', 'Agent')}"/>
+            <img src="/img/agent.svg" alt="{gsa:i18n ('Download Installer', 'Agent')}"/>
           </a>
-          <div class="icon ajax-post" data-reload="next">
-            <img src="/img/verify.png" alt="{gsa:i18n ('Verify Agent', 'Agent')}"/>
+          <div class="icon icon-sm ajax-post" data-reload="next">
+            <img src="/img/verify.svg" alt="{gsa:i18n ('Verify Agent', 'Agent')}"/>
             <form>
               <input type="hidden" name="cmd" value="verify_agent"/>
               <input type="hidden" name="agent_id" value="{@id}"/>
@@ -10471,10 +10501,10 @@ should not have received it.
                 </option>
               </xsl:for-each>
             </select>
-            <div class="form-item icon">
+            <div class="form-item">
               <a href="#" title="{ gsa:i18n('Create a new Credential', 'Credential') }"
-                class="new-action-icon" data-type="credential" data-done="select[name='method_data:verinice_server_credential']" data-extra="restrict_credential_type=up">
-                <img src="/img/new.png"/>
+                class="new-action-icon icon icon-sm" data-type="credential" data-done="select[name='method_data:verinice_server_credential']" data-extra="restrict_credential_type=up">
+                <img src="/img/new.svg"/>
               </a>
             </div>
           </div>
@@ -10577,10 +10607,10 @@ should not have received it.
                 </option>
               </xsl:for-each>
             </select>
-            <div class="form-item icon">
+            <div class="form-item">
               <a href="#" title="{ gsa:i18n('Create a new Credential', 'Credential') }"
-                class="new-action-icon" data-type="credential" data-done="select[name='method_data:scp_credential']" data-extra="restrict_credential_type=up">
-                <img src="/img/new.png"/>
+                class="new-action-icon icon icon-sm" data-type="credential" data-done="select[name='method_data:scp_credential']" data-extra="restrict_credential_type=up">
+                <img src="/img/new.svg"/>
               </a>
             </div>
           </div>
@@ -11470,10 +11500,10 @@ should not have received it.
                 </xsl:choose>
               </xsl:for-each>
             </select>
-            <div class="form-item icon">
+            <div class="form-item">
               <a href="#" title="{ gsa:i18n('Create a new Credential', 'Credential') }"
-                class="new-action-icon" data-type="credential" data-done="select[name='method_data:verinice_server_credential']" data-extra="restrict_credential_type=up">
-                <img src="/img/new.png"/>
+                class="new-action-icon icon icon-sm" data-type="credential" data-done="select[name='method_data:verinice_server_credential']" data-extra="restrict_credential_type=up">
+                <img src="/img/new.svg"/>
               </a>
             </div>
           </div>
@@ -11605,10 +11635,10 @@ should not have received it.
                 </xsl:choose>
               </xsl:for-each>
             </select>
-            <div class="form-item icon">
+            <div class="form-item">
               <a href="#" title="{ gsa:i18n('Create a new Credential', 'Credential') }"
-                class="new-action-icon" data-type="credential" data-done="select[name='method_data:scp_credential']" data-extra="restrict_credential_type=up">
-                <img src="/img/new.png"/>
+                class="new-action-icon icon icon-sm" data-type="credential" data-done="select[name='method_data:scp_credential']" data-extra="restrict_credential_type=up">
+                <img src="/img/new.svg"/>
               </a>
             </div>
           </div>
@@ -11939,11 +11969,11 @@ should not have received it.
             <xsl:with-param name="type" select="'alert'"/>
             <xsl:with-param name="id" select="@id"/>
           </xsl:call-template>
-          <div class="icon ajax-post">
+          <div class="icon icon-sm ajax-post">
               <xsl:variable name="title">
                 <xsl:value-of select="gsa:i18n ('Test Alert', 'Action Verb')"/>
               </xsl:variable>
-              <img src="/img/start.png" alt="{$title}" title="{$title}"/>
+              <img src="/img/start.svg" alt="{$title}" title="{$title}"/>
               <form action="/omp" method="post" enctype="multipart/form-data">
                   <input type="hidden" name="token" value="{/envelope/token}"/>
                   <input type="hidden" name="caller" value="{/envelope/current_page}"/>
@@ -12037,9 +12067,9 @@ should not have received it.
       <xsl:choose>
         <xsl:when test="not (gsa:may-op ('restore'))"/>
         <xsl:when test="filter/trash = '1'">
-          <img src="/img/restore_inactive.png" alt="{gsa:i18n ('Restore', 'Action Verb')}"
+          <img src="/img/restore_inactive.svg" alt="{gsa:i18n ('Restore', 'Action Verb')}"
                title="{gsa:i18n ('Filter', 'Filter')}{gsa:i18n (' must be restored first', 'Trashcan')}"
-               class="icon"/>
+               class="icon icon-sm"/>
         </xsl:when>
         <xsl:otherwise>
           <xsl:call-template name="restore-icon">
@@ -12055,10 +12085,10 @@ should not have received it.
           </xsl:call-template>
         </xsl:when>
         <xsl:otherwise>
-          <img src="/img/delete_inactive.png"
+          <img src="/img/delete_inactive.svg"
                alt="{gsa:i18n ('Delete', 'Action Verb')}"
                title="{gsa:i18n ('Alert is still in use', 'Alert')}"
-               class="icon"/>
+               class="icon icon-sm"/>
         </xsl:otherwise>
       </xsl:choose>
     </td>
@@ -12684,10 +12714,10 @@ should not have received it.
   </div>
 
   <div class="section-header">
-    <a href="#" class="toggle-action-icon icon icon-action"
+    <a href="#" class="toggle-action-icon icon icon-sm icon-action"
       data-target="#using-box" data-name="Tasks using this Alert"
       data-variable="using-box--collapsed">
-        <img src="/img/fold.png"/>
+        <img src="/img/fold.svg"/>
     </a>
     <h3>
       <a href="/omp?cmd=get_tasks&amp;token={/envelope/token}"
@@ -13047,10 +13077,10 @@ should not have received it.
           </xsl:call-template>
         </xsl:when>
         <xsl:otherwise>
-          <img src="/img/delete_inactive.png"
+          <img src="/img/delete_inactive.svg"
                alt="{gsa:i18n ('Delete', 'Action Verb')}"
                title="{gsa:i18n ('Filter is still in use', 'Filter')}"
-               class="icon"/>
+               class="icon icon-sm"/>
         </xsl:otherwise>
       </xsl:choose>
     </td>
@@ -13101,10 +13131,10 @@ should not have received it.
 
   <xsl:if test="gsa:may-op ('get_alerts')">
     <div class="section-header">
-      <a href="#" class="toggle-action-icon icon icon-action"
+      <a href="#" class="toggle-action-icon icon icon-sm icon-action"
         data-target="#using-box" data-name="Alerts using this Filter"
         data-variable="using-box--collapsed">
-          <img src="/img/fold.png"/>
+          <img src="/img/fold.svg"/>
       </a>
       <h3>
         <a href="/omp?cmd=get_alerts&amp;token={/envelope/token}"
@@ -13210,12 +13240,14 @@ should not have received it.
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n ('New Filter', 'Filter')"/>
       <a href="/help/new_filter.html?token={/envelope/token}"
-         title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('New Filter', 'Filter'))}">
-        <img src="/img/help.png"/>
+        class="icon icon-sm"
+        title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('New Filter', 'Filter'))}">
+        <img src="/img/help.svg"/>
       </a>
       <a href="/omp?cmd=get_filters&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-         title="{gsa:i18n ('Filters', 'Filter')}" style="margin-left:3px;">
-        <img src="/img/list.png" alt="{gsa:i18n ('Filters', 'Filter')}"/>
+        title="{gsa:i18n ('Filters', 'Filter')}"
+        class="icon icon-sm">
+        <img src="/img/list.svg" alt="{gsa:i18n ('Filters', 'Filter')}"/>
       </a>
     </div>
     <div class="gb_window_part_content">
@@ -13782,10 +13814,10 @@ should not have received it.
           </xsl:call-template>
         </xsl:when>
         <xsl:otherwise>
-          <img src="/img/delete_inactive.png"
+          <img src="/img/delete_inactive.svg"
                alt="{gsa:i18n ('Delete', 'Action Verb')}"
                title="{gsa:i18n ('Tag is still in use', 'Tag')}"
-               class="icon"/>
+               class="icon icon-sm"/>
         </xsl:otherwise>
       </xsl:choose>
     </td>
@@ -13999,12 +14031,14 @@ should not have received it.
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n ('New Tag', 'Tag')"/>
       <a href="/help/new_tag.html?token={/envelope/token}"
-         title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('New Tag', 'Tag'))}">
-        <img src="/img/help.png"/>
+        class="icon icon-sm"
+        title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('New Tag', 'Tag'))}">
+        <img src="/img/help.svg"/>
       </a>
       <a href="/omp?cmd=get_tags&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-         title="{gsa:i18n ('Tags', 'Tag')}" style="margin-left:3px;">
-        <img src="/img/list.png" alt="{gsa:i18n ('Tags', 'Tag')}"/>
+        class="icon icon-sm"
+        title="{gsa:i18n ('Tags', 'Tag')}">
+        <img src="/img/list.svg" alt="{gsa:i18n ('Tags', 'Tag')}"/>
       </a>
     </div>
     <div class="gb_window_part_content">
@@ -14342,12 +14376,14 @@ should not have received it.
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n ('New Target', 'Target')"/>
       <a href="/help/new_target.html?token={/envelope/token}"
-         title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('New Target', 'Target'))}">
-        <img src="/img/help.png"/>
+        class="icon icon-sm"
+        title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('New Target', 'Target'))}">
+        <img src="/img/help.svg"/>
       </a>
       <a href="/omp?cmd=get_targets&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-         title="{gsa:i18n ('Targets', 'Target')}" style="margin-left:3px;">
-        <img src="/img/list.png" alt="{gsa:i18n ('Targets', 'Target')}"/>
+        class="icon icon-sm"
+        title="{gsa:i18n ('Targets', 'Target')}">
+        <img src="/img/list.svg" alt="{gsa:i18n ('Targets', 'Target')}"/>
       </a>
     </div>
     <div class="gb_window_part_content">
@@ -14526,8 +14562,8 @@ should not have received it.
                   </xsl:apply-templates>
                 </select>
                 <a href="#" title="{ gsa:i18n('Create a new port list') }"
-                   class="new-action-icon" data-type="port_list" data-done="select[name=port_list_id]">
-                  <img class="valign-middle" src="/img/new.png"/>
+                   class="new-action-icon icon icon-sm" data-type="port_list" data-done="select[name=port_list_id]">
+                  <img class="valign-middle" src="/img/new.svg"/>
                 </a>
               </td>
             </tr>
@@ -14570,8 +14606,8 @@ should not have received it.
                 <input type="text" name="port" value="22" size="6"
                        maxlength="400"/>
                 <a href="#" title="{ gsa:i18n('Create a credential') }"
-                  class="new-action-icon" data-type="credential" data-done="select[name=ssh_credential_id]" data-extra="restrict_credential_type=up|usk">
-                  <img class="valign-middle" src="/img/new.png"/>
+                  class="new-action-icon icon icon-sm" data-type="credential" data-done="select[name=ssh_credential_id]" data-extra="restrict_credential_type=up|usk">
+                  <img class="valign-middle" src="/img/new.svg"/>
                 </a>
               </td>
             </tr>
@@ -14585,8 +14621,8 @@ should not have received it.
                   </xsl:apply-templates>
                 </select>
                 <a href="#" title="{ gsa:i18n('Create a credential') }"
-                  class="new-action-icon" data-type="credential" data-done="select[name=smb_credential_id]" data-extra="restrict_credential_type=up">
-                  <img class="valign-middle" src="/img/new.png"/>
+                  class="new-action-icon icon icon-sm" data-type="credential" data-done="select[name=smb_credential_id]" data-extra="restrict_credential_type=up">
+                  <img class="valign-middle" src="/img/new.svg"/>
                 </a>
               </td>
             </tr>
@@ -14600,8 +14636,8 @@ should not have received it.
                   </xsl:apply-templates>
                 </select>
                 <a href="#" title="{ gsa:i18n('Create a credential') }"
-                  class="new-action-icon" data-type="credential" data-done="select[name=esxi_credential_id]" data-extra="restrict_credential_type=up">
-                  <img class="valign-middle" src="/img/new.png"/>
+                  class="new-action-icon icon icon-sm" data-type="credential" data-done="select[name=esxi_credential_id]" data-extra="restrict_credential_type=up">
+                  <img class="valign-middle" src="/img/new.svg"/>
                 </a>
               </td>
             </tr>
@@ -14615,8 +14651,8 @@ should not have received it.
                   </xsl:apply-templates>
                 </select>
                 <a href="#" title="{ gsa:i18n('Create a credential') }"
-                  class="new-action-icon" data-type="credential" data-done="select[name=snmp_credential_id]" data-extra="restrict_credential_type=snmp">
-                  <img class="valign-middle" src="/img/new.png"/>
+                  class="new-action-icon icon icon-sm" data-type="credential" data-done="select[name=snmp_credential_id]" data-extra="restrict_credential_type=snmp">
+                  <img class="valign-middle" src="/img/new.svg"/>
                 </a>
               </td>
             </tr>
@@ -14803,8 +14839,8 @@ should not have received it.
                       </xsl:for-each>
                     </select>
                     <a href="#" title="{ gsa:i18n('Create a new port list') }"
-                      class="new-action-icon" data-type="port_list" data-done="select[name=port_list_id]">
-                      <img class="valign-middle" src="/img/new.png"/>
+                      class="new-action-icon icon icon-sm" data-type="port_list" data-done="select[name=port_list_id]">
+                      <img class="valign-middle" src="/img/new.svg"/>
                     </a>
                   </td>
                 </tr>
@@ -14908,8 +14944,8 @@ should not have received it.
                       </xsl:otherwise>
                     </xsl:choose>
                     <a href="#" title="{ gsa:i18n('Create a credential') }"
-                      class="new-action-icon" data-type="credential" data-done="select[name=ssh_credential_id]" data-extra="restrict_credential_type=up|usk">
-                      <img class="valign-middle" src="/img/new.png"/>
+                      class="new-action-icon icon icon-sm" data-type="credential" data-done="select[name=ssh_credential_id]" data-extra="restrict_credential_type=up|usk">
+                      <img class="valign-middle" src="/img/new.svg"/>
                     </a>
                   </td>
                 </tr>
@@ -14940,8 +14976,8 @@ should not have received it.
                       </xsl:for-each>
                     </select>
                     <a href="#" title="{ gsa:i18n('Create a credential') }"
-                      class="new-action-icon" data-type="credential" data-done="select[name=smb_credential_id]" data-extra="restrict_credential_type=up">
-                      <img class="valign-middle" src="/img/new.png"/>
+                      class="new-action-icon icon icon-sm" data-type="credential" data-done="select[name=smb_credential_id]" data-extra="restrict_credential_type=up">
+                      <img class="valign-middle" src="/img/new.svg"/>
                     </a>
                   </td>
                 </tr>
@@ -14972,8 +15008,8 @@ should not have received it.
                       </xsl:for-each>
                     </select>
                     <a href="#" title="{ gsa:i18n('Create a credential') }"
-                      class="new-action-icon" data-type="credential" data-done="select[name=esxi_credential_id]" data-extra="restrict_credential_type=up">
-                      <img class="valign-middle" src="/img/new.png"/>
+                      class="new-action-icon icon icon-sm" data-type="credential" data-done="select[name=esxi_credential_id]" data-extra="restrict_credential_type=up">
+                      <img class="valign-middle" src="/img/new.svg"/>
                     </a>
                   </td>
                 </tr>
@@ -15004,8 +15040,8 @@ should not have received it.
                       </xsl:for-each>
                     </select>
                     <a href="#" title="{ gsa:i18n('Create a credential') }"
-                      class="new-action-icon" data-type="credential" data-done="select[name=snmp_credential_id]" data-extra="restrict_credential_type=snmp">
-                      <img class="valign-middle" src="/img/new.png"/>
+                      class="new-action-icon icon icon-sm" data-type="credential" data-done="select[name=snmp_credential_id]" data-extra="restrict_credential_type=snmp">
+                      <img class="valign-middle" src="/img/new.svg"/>
                     </a>
                   </td>
                 </tr>
@@ -15352,13 +15388,15 @@ should not have received it.
     <xsl:choose>
       <xsl:when test="image">
         <img src="{$image}"
-             alt="{$head}"
-             title="{$head}"/>
+          alt="{$head}"
+          class="icon icon-sm"
+          title="{$head}"/>
       </xsl:when>
-      <xsl:when test="contains ($head, '.png')">
+      <xsl:when test="contains ($head, '.png') or contains ($head, '.svg')">
         <img src="/img/{$head}"
-             alt="{gsa:capitalise (str:replace (gsa:lower-case ($name), '_', ' '))}"
-             title="{gsa:capitalise (str:replace (gsa:lower-case ($name), '_', ' '))}"/>
+          alt="{gsa:capitalise (str:replace (gsa:lower-case ($name), '_', ' '))}"
+          class="icon icon-sm"
+          title="{gsa:capitalise (str:replace (gsa:lower-case ($name), '_', ' '))}"/>
       </xsl:when>
       <xsl:when test="$head = 'High' or $head = 'Medium' or $head = 'Low' or $head = 'Log' or $head = 'False Positive'">
         <xsl:call-template name="severity-label">
@@ -15449,8 +15487,14 @@ should not have received it.
                 </xsl:call-template>
               </select>
               <xsl:text> </xsl:text>
-              <a id="sort_by_credential_asc" style="position:relative; top:3px;" href="#" title="{gsa:i18n ('Ascending', 'Filter')}"><img src="/img/ascending.png"/></a>
-              <a id="sort_by_credential_desc" style="position:relative; top:3px;" href="#" title="{gsa:i18n ('Descending', 'Filter')}"><img src="/img/descending.png"/></a>
+              <a id="sort_by_credential_asc" style="position:relative; top:3px;" class="icon icon-sm"
+                href="#" title="{gsa:i18n ('Ascending', 'Filter')}">
+                <img src="/img/ascending.svg"/>
+              </a>
+              <a id="sort_by_credential_desc" style="position:relative; top:3px;" class="icon icon-sm"
+                href="#" title="{gsa:i18n ('Descending', 'Filter')}">
+                <img src="/img/descending.svg"/>
+              </a>
             </span>
             <script type="text/javascript">
               var credential_url_prefix = '/omp?cmd=get_targets&amp;filter=';
@@ -15832,8 +15876,8 @@ should not have received it.
             <xsl:if test="port_list/trash = '1'"><xsl:value-of select="gsa:i18n ('Port List', 'Port List')"/></xsl:if>
             <xsl:value-of select="gsa:i18n (' must be restored first.', 'Action Message')"/>
           </xsl:variable>
-          <img src="/img/restore_inactive.png" alt="{gsa:i18n ('Restore', 'Action Verb')}" title="{$resources_string}"
-               class="icon"/>
+          <img src="/img/restore_inactive.svg" alt="{gsa:i18n ('Restore', 'Action Verb')}" title="{$resources_string}"
+               class="icon icon-sm"/>
         </xsl:when>
         <xsl:otherwise>
           <xsl:call-template name="restore-icon">
@@ -15849,10 +15893,10 @@ should not have received it.
           </xsl:call-template>
         </xsl:when>
         <xsl:otherwise>
-          <img src="/img/delete_inactive.png"
+          <img src="/img/delete_inactive.svg"
                alt="{gsa:i18n ('Delete', 'Action Verb')}"
                title="{gsa:i18n ('Target is still in use', 'Target')}"
-               class="icon"/>
+               class="icon icon-sm"/>
         </xsl:otherwise>
       </xsl:choose>
     </td>
@@ -16074,10 +16118,10 @@ should not have received it.
   </div>
 
   <div class="section-header">
-    <a href="#" class="toggle-action-icon icon icon-action"
+    <a href="#" class="toggle-action-icon icon icon-sm icon-action"
       data-target="#using-box" data-name="Tasks using this Target"
       data-variable="using-box--collapsed">
-        <img src="/img/fold.png"/>
+        <img src="/img/fold.svg"/>
     </a>
     <h3>
       <a href="/omp?cmd=get_tasks&amp;token={/envelope/token}"
@@ -16268,12 +16312,14 @@ should not have received it.
     <div class="gb_window_part_center">
       <xsl:value-of select="gsa:i18n ('Import Scan Config', 'Scan Config')"/>
       <a href="/help/new_config.html?token={/envelope/token}#importconfig"
-         title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('Import Scan Config', 'Scan Config'))}">
-        <img src="/img/help.png"/>
+        class="icon icon-sm"
+        title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('Import Scan Config', 'Scan Config'))}">
+        <img src="/img/help.svg"/>
       </a>
       <a href="/omp?cmd=get_configs&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-         title="{gsa:i18n ('Scan Configs', 'Scan Config')}" style="margin-left:3px;">
-        <img src="/img/list.png" alt="{gsa:i18n ('Scan Configs', 'Scan Config')}"/>
+        class="icon icon-sm"
+        title="{gsa:i18n ('Scan Configs', 'Scan Config')}">
+        <img src="/img/list.svg" alt="{gsa:i18n ('Scan Configs', 'Scan Config')}"/>
       </a>
     </div>
     <div class="gb_window_part_content">
@@ -16401,8 +16447,8 @@ should not have received it.
                   title="{gsa:i18n ('Select and Edit NVT Details', 'Scan Config')}"
                   data-cmd="edit_config_nvt" data-type="config" data-id="{$config_id}"
                   data-extra="name={$config_name}&amp;family={$family}&amp;oid={@oid}" data-reload="parent"
-                  class="edit-action-icon icon">
-                  <img src="/img/edit.png" alt="{gsa:i18n ('Edit', 'Action Verb')}"/>
+                  class="edit-action-icon icon icon-sm">
+                  <img src="/img/edit.svg" alt="{gsa:i18n ('Edit', 'Action Verb')}"/>
                 </a>
               </td>
             </tr>
@@ -16426,14 +16472,14 @@ should not have received it.
 <xsl:template name="html-config-family-table">
   <div class="toolbar">
     <a href="/help/config_family_details.html?token={/envelope/token}"
-      class="icon"
+      class="icon icon-sm"
       title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('Scan Configs', 'Scan Config'),' (',gsa:i18n('Scan Config Family Details', 'Scan Config'),')')}">
-      <img src="/img/help.png"/>
+      <img src="/img/help.svg"/>
     </a>
     <a href="?cmd=get_config&amp;config_id={config/@id}&amp;token={/envelope/token}"
       title="{gsa:i18n ('Scan Config', 'Scan Config')}"
-      class="icon">
-      <img src="/img/list.png" alt="{gsa:i18n ('Scan Config', 'Scan Config')}"/>
+      class="icon icon-sm">
+      <img src="/img/list.svg" alt="{gsa:i18n ('Scan Config', 'Scan Config')}"/>
     </a>
   </div>
   <div class="section-header">
@@ -16580,17 +16626,17 @@ should not have received it.
     <td>
       <xsl:if test="string-length($edit) &gt; 0">
         <a href="/omp?cmd=edit_config_nvt&amp;oid={nvt/@oid}&amp;config_id={$config_id}&amp;name={$config_name}&amp;family={nvt/family}&amp;token={/envelope/token}"
-            class="edit-action-icon icon" data-reload="parent" data-type="config_nvt"
-            data-extra="oid={nvt/@oid}&amp;config_id={$config_id}&amp;name={$config_name}&amp;family={nvt/family}"
-           title="{gsa:i18n ('Edit Scan Config NVT Details', 'Scan Config')}">
-          <img src="/img/edit.png" alt="{gsa:i18n ('Edit', 'Action Verb')}"/>
+          class="edit-action-icon icon icon-sm" data-reload="parent" data-type="config_nvt"
+          data-extra="oid={nvt/@oid}&amp;config_id={$config_id}&amp;name={$config_name}&amp;family={nvt/family}"
+          title="{gsa:i18n ('Edit Scan Config NVT Details', 'Scan Config')}">
+          <img src="/img/edit.svg" alt="{gsa:i18n ('Edit', 'Action Verb')}"/>
         </a>
       </xsl:if>
       <xsl:if test="type='file' and string-length(value) &gt; 0">
         <a href="/omp?cmd=export_preference_file&amp;config_id={$config_id}&amp;oid={nvt/@oid}&amp;preference_name={name}&amp;token={/envelope/token}"
-           title="{gsa:i18n ('Export File', 'Scan Config')}"
-           style="margin-left:3px;">
-          <img src="/img/download.png" alt="{gsa:i18n ('Export File', 'Scan Config')}"/>
+          title="{gsa:i18n ('Export File', 'Scan Config')}"
+          class="icon icon-sm">
+          <img src="/img/download.svg" alt="{gsa:i18n ('Export File', 'Scan Config')}"/>
         </a>
       </xsl:if>
     </td>
@@ -16651,9 +16697,9 @@ should not have received it.
     <td>
       <xsl:if test="type='file' and string-length(value) &gt; 0">
         <a href="/omp?cmd=export_preference_file&amp;config_id={$config/@id}&amp;oid={nvt/@oid}&amp;preference_name={name}&amp;token={/envelope/token}"
-           title="{gsa:i18n ('Export File', 'Scan Config')}"
-           style="margin-left:3px;">
-          <img src="/img/download.png" alt="{gsa:i18n ('Export File', 'Scan Config')}"/>
+          title="{gsa:i18n ('Export File', 'Scan Config')}"
+          class="icon icon-sm">
+          <img src="/img/download.svg" alt="{gsa:i18n ('Export File', 'Scan Config')}"/>
         </a>
       </xsl:if>
     </td>
@@ -16869,16 +16915,17 @@ should not have received it.
     <td>
       <xsl:if test="$for_config_details">
         <a href="/omp?cmd=edit_config_nvt&amp;oid={nvt/@oid}&amp;config_id={$config/@id}&amp;family={$family}&amp;token={/envelope/token}"
-           title="{gsa:i18n ('Edit NVT Details', 'Scan Config')}" style="margin-left:3px;">
-          <img src="/img/edit.png" alt="{gsa:i18n ('Edit', 'Action Verb')}"/>
+          title="{gsa:i18n ('Edit NVT Details', 'Scan Config')}"
+          class="icon icon-sm">
+          <img src="/img/edit.svg" alt="{gsa:i18n ('Edit', 'Action Verb')}"/>
         </a>
       </xsl:if>
       <xsl:choose>
         <xsl:when test="$config and type='file' and (string-length(value) &gt; 0)">
           <a href="/omp?cmd=export_preference_file&amp;config_id={$config/@id}&amp;oid={nvt/@oid}&amp;preference_name={name}&amp;token={/envelope/token}"
-             title="{gsa:i18n ('Export File', 'Scan Config')}"
-             style="margin-left:3px;">
-            <img src="/img/download.png" alt="{gsa:i18n ('Export File', 'Scan Config')}"/>
+            title="{gsa:i18n ('Export File', 'Scan Config')}"
+            class="icon icon-sm">
+            <img src="/img/download.svg" alt="{gsa:i18n ('Export File', 'Scan Config')}"/>
           </a>
         </xsl:when>
         <xsl:otherwise>
@@ -17195,14 +17242,14 @@ should not have received it.
   </xsl:variable>
   <div class="toolbar">
     <a href="/help/config_nvt_details.html?token={/envelope/token}"
-      class="icon"
+      class="icon icon-sm"
       title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('Scan Configs', 'Scan Config'),' (',gsa:i18n('Scan Config NVT Details', 'Scan Config'),')')}">
-      <img src="/img/help.png"/>
+      <img src="/img/help.svg"/>
     </a>
     <a href="?cmd=get_config_family&amp;config_id={config/@id}&amp;name={config/name}&amp;family={$family}&amp;token={/envelope/token}"
       title="{gsa:i18n ('Scan Config Family', 'Scan Config')}"
       class="icon">
-      <img src="/img/list.png" alt="{gsa:i18n ('Scan Config Family', 'Scan Config')}"/>
+      <img src="/img/list.svg" alt="{gsa:i18n ('Scan Config Family', 'Scan Config')}"/>
     </a>
   </div>
   <div class="section-header">
@@ -17300,8 +17347,9 @@ should not have received it.
                 <input type="radio" name="trend:{$current_name}" value="1"/>
               </xsl:otherwise>
             </xsl:choose>
-            <img src="/img/trend_more.png"
+            <img src="/img/trend_more.svg"
                  alt="{gsa:i18n ('Grows', 'Scan Config')}"
+                 class="icon icon-sm"
                  title="{gsa:i18n ('The NVT selection is DYNAMIC. New NVTs will automatically be added and considered.', 'Scan Config')}"/>
           </label>
           <label>
@@ -17322,7 +17370,8 @@ should not have received it.
                        checked="1"/>
               </xsl:otherwise>
             </xsl:choose>
-            <img src="/img/trend_nochange.png"
+            <img src="/img/trend_nochange.svg"
+                 class="icon icon-sm"
                  alt="{gsa:i18n ('Static', 'Scan Config')}"
                  title="{gsa:i18n ('The NVT selection is STATIC. New NVTs will NOT automatically be added or considered.', 'Scan Config')}"/>
           </label>
@@ -17341,10 +17390,10 @@ should not have received it.
         </td>
         <td>
           <a href="/omp?cmd=edit_config_family&amp;config_id={$config/@id}&amp;name={$config/name}&amp;family={$current_name}&amp;token={/envelope/token}"
-            class="edit-action-icon" data-cmd="edit_config_family" data-type="config" data-id="{$config/@id}"
+            class="edit-action-icon icon icon-sm" data-cmd="edit_config_family" data-type="config" data-id="{$config/@id}"
             data-extra="name={$config/name}&amp;family={$current_name}" data-reload="parent"
             title="{gsa:i18n ('Edit Scan Config Family', 'Scan Config')}">
-            <img src="/img/edit.png" alt="{gsa:i18n ('Edit', 'Action Verb')}"/>
+            <img src="/img/edit.svg" alt="{gsa:i18n ('Edit', 'Action Verb')}"/>
           </a>
         </td>
       </tr>
@@ -17387,13 +17436,15 @@ should not have received it.
         <td>
           <xsl:choose>
             <xsl:when test="growing='1'">
-              <img src="/img/trend_more.png"
+              <img src="/img/trend_more.svg"
                    alt="{gsa:i18n ('Grows', 'Scan Config')}"
+                   class="icon icon-sm"
                    title="{gsa:i18n ('The NVT selection is DYNAMIC. New NVTs will automatically be added and considered.', 'Scan Config')}"/>
             </xsl:when>
             <xsl:when test="growing='0'">
-              <img src="/img/trend_nochange.png"
+              <img src="/img/trend_nochange.svg"
                    alt="{gsa:i18n ('Static', 'Scan Config')}"
+                   class="icon icon-sm"
                    title="{gsa:i18n ('The NVT selection is STATIC. New NVTs will NOT automatically be added or considered.', 'Scan Config')}"/>
             </xsl:when>
             <xsl:otherwise>
@@ -17414,12 +17465,14 @@ should not have received it.
           <xsl:value-of select="gsa:i18n ('Family', 'Scan Config')"/>
           <xsl:choose>
             <xsl:when test="family_count/growing='1'">
-              <img src="/img/trend_more.png"
+              <img src="/img/trend_more.svg"
+                   class="icon icon-sm"
                    alt="{gsa:i18n ('Grows', 'Scan Config')}"
                    title="{gsa:i18n ('The family selection is DYNAMIC. New families will automatically be added and considered.', 'Scan Config')}"/>
             </xsl:when>
             <xsl:when test="family_count/growing='0'">
-              <img src="/img/trend_nochange.png"
+              <img src="/img/trend_nochange.svg"
+                   class="icon icon-sm"
                    alt="{gsa:i18n ('Static', 'Scan Config')}"
                    title="{gsa:i18n ('The family selection is STATIC. New families will NOT automatically be added or considered.', 'Scan Config')}"/>
             </xsl:when>
@@ -17457,12 +17510,14 @@ should not have received it.
           <td>
             <xsl:choose>
               <xsl:when test="nvt_count/growing='1'">
-                <img src="/img/trend_more.png"
+                <img src="/img/trend_more.svg"
+                     class="icon icon-sm"
                      alt="{gsa:i18n ('Grows', 'Scan Config')}"
                      title="{gsa:i18n ('The NVT selection is DYNAMIC. New NVTs will automatically be added and considered.', 'Scan Config')}"/>
               </xsl:when>
               <xsl:when test="nvt_count/growing='0'">
-                <img src="/img/trend_nochange.png"
+                <img src="/img/trend_nochange.svg"
+                     class="icon icon-sm"
                      alt="{gsa:i18n ('Static', 'Scan Config')}"
                      title="{gsa:i18n ('The NVT selection is STATIC. New NVTs will NOT automatically be added or considered.', 'Scan Config')}"/>
               </xsl:when>
@@ -17489,27 +17544,31 @@ should not have received it.
             <xsl:when test="$config/family_count/growing=1">
               <label>
                 <input type="radio" name="trend" value="1" checked="1"/>
-                <img src="/img/trend_more.png"
+                <img src="/img/trend_more.svg"
                      alt="{gsa:i18n ('Grows', 'Scan Config')}"
+                     class="icon icon-sm"
                      title="{gsa:i18n ('The family selection is DYNAMIC. New families will automatically be added and considered.', 'Scan Config')}"/>
               </label>
               <label>
                 <input type="radio" name="trend" value="0"/>
-                <img src="/img/trend_nochange.png"
+                <img src="/img/trend_nochange.svg"
                      alt="{gsa:i18n ('Static', 'Scan Config')}"
+                     class="icon icon-sm"
                      title="{gsa:i18n ('The family selection is STATIC. New families will NOT automatically be added or considered.', 'Scan Config')}"/>
               </label>
             </xsl:when>
             <xsl:otherwise>
               <label>
                 <input type="radio" name="trend" value="1"/>
-                <img src="/img/trend_more.png"
+                <img src="/img/trend_more.svg"
+                     class="icon icon-sm"
                      alt="{gsa:i18n ('Grows', 'Scan Config')}"
                      title="{gsa:i18n ('The family selection is DYNAMIC. New families will automatically be added and considered.', 'Scan Config')}"/>
               </label>
               <label>
                 <input type="radio" name="trend" value="0" checked="0"/>
-                <img src="/img/trend_nochange.png"
+                <img src="/img/trend_nochange.svg"
+                     class="icon icon-sm"
                      alt="{gsa:i18n ('Static', 'Scan Config')}"
                      title="{gsa:i18n ('The family selection is STATIC. New families will NOT automatically be added or considered.', 'Scan Config')}"/>
               </label>
@@ -17544,12 +17603,14 @@ should not have received it.
         <td>
           <xsl:choose>
             <xsl:when test="$config/nvt_count/growing='1'">
-              <img src="/img/trend_more.png"
+              <img src="/img/trend_more.svg"
+                   class="icon icon-sm"
                    alt="{gsa:i18n ('Grows', 'Scan Config')}"
                    title="{gsa:i18n ('The NVT selection is DYNAMIC. New NVTs will automatically be added and considered.', 'Scan Config')}"/>
             </xsl:when>
             <xsl:when test="$config/nvt_count/growing='0'">
-              <img src="/img/trend_nochange.png"
+              <img src="/img/trend_nochange.svg"
+                   class="icon icon-sm"
                    alt="{gsa:i18n ('Static', 'Scan Config')}"
                    title="{gsa:i18n ('The NVT selection is STATIC. New NVTs will NOT automatically be added or considered.', 'Scan Config')}"/>
             </xsl:when>
@@ -17579,24 +17640,24 @@ should not have received it.
   <xsl:variable name="config" select="get_configs_response/config"/>
 
   <div class="toolbar">
-    <a href="/help/config_details.html?token={/envelope/token}" class="icon"
+    <a href="/help/config_details.html?token={/envelope/token}" class="icon icon-sm"
        title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('Scan Config Details', 'Scan Config'))}">
-      <img src="/img/help.png"/>
+      <img src="/img/help.svg"/>
     </a>
     <a href="/omp?cmd=new_config&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;config_id={$config/@id}&amp;token={/envelope/token}"
        title="{gsa:i18n ('New Scan Config', 'Scan Config')}"
-       class="new-action-icon icon" data-type="config">
-      <img src="/img/new.png"/>
+       class="new-action-icon icon icon-sm" data-type="config">
+      <img src="/img/new.svg"/>
     </a>
     <a href="/omp?cmd=upload_config&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-       class="upload-action-icon icon" data-type="config"
+       class="upload-action-icon icon icon-sm" data-type="config"
        title="{gsa:i18n ('Import Scan Config', 'Config')}">
-      <img src="/img/upload.png"/>
+      <img src="/img/upload.svg"/>
     </a>
     <xsl:choose>
       <xsl:when test="gsa:may-clone ('config')">
-        <div class="icon ajax-post" data-reload="next">
-          <img src="/img/clone.png"
+        <div class="icon icon-sm ajax-post" data-reload="next">
+          <img src="/img/clone.svg"
             alt="{gsa:i18n ('Clone', 'Action Verb')}"
             name="Clone" title="{gsa:i18n ('Clone', 'Action Verb')}"/>
           <form action="/omp" method="post" enctype="multipart/form-data">
@@ -17612,70 +17673,68 @@ should not have received it.
         </div>
       </xsl:when>
       <xsl:otherwise>
-        <img src="/img/clone_inactive.png"
+        <img src="/img/clone_inactive.svg"
              alt="{gsa:i18n ('Clone', 'Action Verb')}"
              value="Clone"
              title="{gsa:i18n ('Permission to clone denied', 'Action Message')}"
-             class="icon"/>
+             class="icon icon-sm"/>
       </xsl:otherwise>
     </xsl:choose>
     <a href="/omp?cmd=get_configs&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-       class="icon"
+       class="icon icon-sm"
        title="{gsa:i18n ('Scan Configs', 'Scan Config')}">
-      <img src="/img/list.png" alt="{gsa:i18n ('Scan Configs', 'Scan Config')}"/>
+      <img src="/img/list.svg" alt="{gsa:i18n ('Scan Configs', 'Scan Config')}"/>
     </a>
     <span class="divider" />
-    <span>
-      <xsl:choose>
-        <xsl:when test="$config/writable!='0' and $config/in_use='0'">
-          <xsl:call-template name="trashcan-icon">
-            <xsl:with-param name="type" select="'config'"/>
-            <xsl:with-param name="id" select="$config/@id"/>
-            <xsl:with-param name="params">
-              <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
-              <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-            </xsl:with-param>
-          </xsl:call-template>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:variable name="inactive_text">
-            <xsl:choose>
-              <xsl:when test="in_use != '0'"><xsl:value-of select="gsa:i18n ('Scan Config is not writable', 'Scan Config')"/></xsl:when>
-              <xsl:when test="writable = '0'"><xsl:value-of select="gsa:i18n ('Scan Config is not writable', 'Scan Config')"/></xsl:when>
-              <xsl:otherwise><xsl:value-of select="gsa:i18n ('Cannot move Scan Config to trashcan', 'Scan Config')"/></xsl:otherwise>
-            </xsl:choose>
-          </xsl:variable>
-          <img src="/img/trashcan_inactive.png" alt="{gsa:i18n ('To Trashcan', 'Action Verb')}"
-               title="{$inactive_text}"
-               class="icon"/>
-        </xsl:otherwise>
-      </xsl:choose>
-      <xsl:choose>
-        <xsl:when test="$config/writable='0'">
-          <img src="/img/edit_inactive.png" alt="{gsa:i18n ('Edit', 'Action Verb')}"
-               title="{gsa:i18n ('Scan Config is not writable', 'Scan Config')}"
-               class="icon"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <a href="/omp?cmd=edit_config&amp;config_id={$config/@id}&amp;next=get_config&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-             class="edit-action-icon icon" data-type="config" data-id="{$config/@id}"
-             title="{gsa:i18n ('Edit Scan Config', 'Scan Config')}">
-            <img src="/img/edit.png"/>
-          </a>
-        </xsl:otherwise>
-      </xsl:choose>
-      <a href="/omp?cmd=export_config&amp;config_id={$config/@id}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-         title="{gsa:i18n ('Export Scan Config as XML', 'Scan Config')}"
-         class="icon">
-        <img src="/img/download.png" alt="{gsa:i18n ('Export XML', 'Action Verb')}"/>
-      </a>
-      <xsl:if test="$config/type = 1">
-        <a href="/omp?cmd=sync_config&amp;config_id={$config/@id}&amp;next=get_config&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-          title="{gsa:i18n ('Sync Config', 'Config')}" class="icon">
-          <img src="/img/refresh.png" alt="{gsa:i18n ('Sync Config', 'Config')}"/>
+    <xsl:choose>
+      <xsl:when test="$config/writable!='0' and $config/in_use='0'">
+        <xsl:call-template name="trashcan-icon">
+          <xsl:with-param name="type" select="'config'"/>
+          <xsl:with-param name="id" select="$config/@id"/>
+          <xsl:with-param name="params">
+            <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
+            <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
+          </xsl:with-param>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:variable name="inactive_text">
+          <xsl:choose>
+            <xsl:when test="in_use != '0'"><xsl:value-of select="gsa:i18n ('Scan Config is not writable', 'Scan Config')"/></xsl:when>
+            <xsl:when test="writable = '0'"><xsl:value-of select="gsa:i18n ('Scan Config is not writable', 'Scan Config')"/></xsl:when>
+            <xsl:otherwise><xsl:value-of select="gsa:i18n ('Cannot move Scan Config to trashcan', 'Scan Config')"/></xsl:otherwise>
+          </xsl:choose>
+        </xsl:variable>
+        <img src="/img/trashcan_inactive.svg" alt="{gsa:i18n ('To Trashcan', 'Action Verb')}"
+              title="{$inactive_text}"
+              class="icon icon-sm"/>
+      </xsl:otherwise>
+    </xsl:choose>
+    <xsl:choose>
+      <xsl:when test="$config/writable='0'">
+        <img src="/img/edit_inactive.svg" alt="{gsa:i18n ('Edit', 'Action Verb')}"
+              title="{gsa:i18n ('Scan Config is not writable', 'Scan Config')}"
+              class="icon icon-sm"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <a href="/omp?cmd=edit_config&amp;config_id={$config/@id}&amp;next=get_config&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+            class="edit-action-icon icon icon-sm" data-type="config" data-id="{$config/@id}"
+            title="{gsa:i18n ('Edit Scan Config', 'Scan Config')}">
+          <img src="/img/edit.svg"/>
         </a>
-      </xsl:if>
-    </span>
+      </xsl:otherwise>
+    </xsl:choose>
+    <a href="/omp?cmd=export_config&amp;config_id={$config/@id}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+        title="{gsa:i18n ('Export Scan Config as XML', 'Scan Config')}"
+        class="icon icon-sm">
+      <img src="/img/download.svg" alt="{gsa:i18n ('Export XML', 'Action Verb')}"/>
+    </a>
+    <xsl:if test="$config/type = 1">
+      <a href="/omp?cmd=sync_config&amp;config_id={$config/@id}&amp;next=get_config&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+        title="{gsa:i18n ('Sync Config', 'Config')}" class="icon icon-sm">
+        <img src="/img/refresh.svg" alt="{gsa:i18n ('Sync Config', 'Config')}"/>
+      </a>
+    </xsl:if>
   </div>
 
   <div class="section-header">
@@ -17726,11 +17785,11 @@ should not have received it.
   </div>
 
   <div class="section-header">
-    <a href="#" class="toggle-action-icon icon icon-action"
+    <a href="#" class="toggle-action-icon icon icon-sm icon-action"
       data-target="#nvtfamilies-box"
       data-name="Network Vulnerability Test Families"
       data-variable="nvtfamilies-box--collapsed">
-        <img src="/img/fold.png"/>
+        <img src="/img/fold.svg"/>
     </a>
     <h3>
       <xsl:value-of select="gsa:i18n ('Network Vulnerability Test Families', 'Scan Config')"/>
@@ -17751,10 +17810,10 @@ should not have received it.
   </div>
 
   <div class="section-header">
-    <a href="#" class="toggle-action-icon icon icon-action"
+    <a href="#" class="toggle-action-icon icon icon-sm icon-action"
       data-target="#scannerprefs-box" data-name="Scanner Preferences"
       data-variable="scannerprefs-box--collapsed">
-        <img src="/img/fold.png"/>
+        <img src="/img/fold.svg"/>
     </a>
     <h3>
       <a href="/omp?cmd=get_tasks&amp;token={/envelope/token}"
@@ -17778,10 +17837,10 @@ should not have received it.
   </div>
 
   <div class="section-header">
-    <a href="#" class="toggle-action-icon icon icon-action"
+    <a href="#" class="toggle-action-icon icon icon-sm icon-action"
       data-target="#nvtprefs-box" data-name="NVT Preferences"
       data-variable="nvtprefs-box--collapsed">
-        <img src="/img/fold.png"/>
+        <img src="/img/fold.svg"/>
     </a>
     <h3>
       <a href="/omp?cmd=get_tasks&amp;token={/envelope/token}"
@@ -17810,10 +17869,10 @@ should not have received it.
   </div>
 
   <div class="section-header">
-    <a href="#" class="toggle-action-icon icon icon-action"
+    <a href="#" class="toggle-action-icon icon icon-sm icon-action"
       data-target="#using-box" data-name="Tasks using this Scan Config"
       data-variable="using-box--collapsed">
-        <img src="/img/fold.png"/>
+        <img src="/img/fold.svg"/>
     </a>
     <h3>
       <a href="/omp?cmd=get_tasks&amp;token={/envelope/token}"
@@ -17933,11 +17992,11 @@ should not have received it.
 
       <xsl:if test="not($config/in_use != 0) and $config/type = 0">
         <div class="section-header">
-          <a href="#" class="toggle-action-icon icon icon-action"
+          <a href="#" class="toggle-action-icon icon icon-sm icon-action"
             data-target="#families"
             data-name="Network Vulnerability Test Families"
             data-variable="families--collapsed">
-              <img src="/img/fold.png"/>
+              <img src="/img/fold.svg"/>
           </a>
           <h1><xsl:value-of select="gsa:i18n ('Edit Network Vulnerability Test Families', 'Scan Config')"/></h1>
         </div>
@@ -17960,11 +18019,11 @@ should not have received it.
         </xsl:when>
         <xsl:otherwise>
           <div class="section-header">
-            <a href="#" class="toggle-action-icon icon icon-action"
+            <a href="#" class="toggle-action-icon icon icon-sm icon-action"
               data-target="#scanner-preferences"
               data-name="Scanner Preferences" data-collapsed="true"
               data-variable="scanner-preferences--collapsed">
-              <img src="/img/fold.png"/>
+              <img src="/img/fold.svg"/>
             </a>
             <h1><xsl:value-of select="gsa:i18n ('Edit Scanner Preferences', 'Scan Config')"/></h1>
           </div>
@@ -17973,11 +18032,11 @@ should not have received it.
 
           <xsl:if test="$config/type = 0">
             <div class="section-header">
-              <a href="#" class="toggle-action-icon icon icon-action"
+              <a href="#" class="toggle-action-icon icon icon-sm icon-action"
                 data-target="#nvt-test-preferences"
                 data-name="Scanner Preferences" data-collapsed="true"
                 data-variable="nvt-test-preferences--collapsed">
-                <img src="/img/fold.png"/>
+                <img src="/img/fold.svg"/>
               </a>
               <h1><xsl:value-of select="gsa:i18n ('Network Vulnerability Test Preferences', 'Scan Config')"/></h1>
             </div>
@@ -18123,12 +18182,14 @@ should not have received it.
     <td style="text-align:center;">
       <xsl:choose>
         <xsl:when test="family_count/growing='1'">
-          <img src="/img/trend_more.png"
+          <img src="/img/trend_more.svg"
+               class="icon icon-sm"
                alt="{gsa:i18n ('Grows', 'Scan Config')}"
                title="{gsa:i18n ('The family selection is DYNAMIC. New families will automatically be added and considered.', 'Scan Config')}"/>
         </xsl:when>
         <xsl:when test="family_count/growing='0'">
-          <img src="/img/trend_nochange.png"
+          <img src="/img/trend_nochange.svg"
+               class="icon icon-sm"
                alt="{gsa:i18n ('Static', 'Scan Config')}"
                title="{gsa:i18n ('The family selection is STATIC. New families will NOT automatically be added or considered.', 'Scan Config')}"/>
         </xsl:when>
@@ -18150,12 +18211,14 @@ should not have received it.
     <td style="text-align:center;">
       <xsl:choose>
         <xsl:when test="nvt_count/growing='1'">
-          <img src="/img/trend_more.png"
+          <img src="/img/trend_more.svg"
+               class="icon icon-sm"
                alt="{gsa:i18n ('Dynamic', 'Scan Config')}"
                title="{gsa:i18n ('The NVT selection is DYNAMIC. New NVTs of selected families will automatically be added and considered.', 'Scan Config')}"/>
         </xsl:when>
         <xsl:when test="nvt_count/growing='0'">
-          <img src="/img/trend_nochange.png"
+          <img src="/img/trend_nochange.svg"
+               class="icon icon-sm"
                alt="{gsa:i18n ('Static', 'Scan Config')}"
                title="{gsa:i18n ('The NVT selection is STATIC. New NVTs will NOT automatically be added or considered.', 'Scan Config')}"/>
         </xsl:when>
@@ -18213,12 +18276,14 @@ should not have received it.
     <td style="text-align:center;">
       <xsl:choose>
         <xsl:when test="family_count/growing='1'">
-          <img src="/img/trend_more.png"
+          <img src="/img/trend_more.svg"
+               class="icon icon-sm"
                alt="{gsa:i18n ('Grows', 'Scan Config')}"
                title="{gsa:i18n ('The family selection is DYNAMIC. New families will automatically be added and considered.', 'Scan Config')}"/>
         </xsl:when>
         <xsl:when test="family_count/growing='0'">
-          <img src="/img/trend_nochange.png"
+          <img src="/img/trend_nochange.svg"
+               class="icon icon-sm"
                alt="{gsa:i18n ('Static', 'Scan Config')}"
                title="{gsa:i18n ('The family selection is STATIC. New families will NOT automatically be added or considered.', 'Scan Config')}"/>
         </xsl:when>
@@ -18240,12 +18305,14 @@ should not have received it.
     <td style="text-align:center;">
       <xsl:choose>
         <xsl:when test="nvt_count/growing='1'">
-          <img src="/img/trend_more.png"
+          <img src="/img/trend_more.svg"
                alt="{gsa:i18n ('Grows', 'Scan Config')}"
+               class="icon icon-sm"
                title="{gsa:i18n ('The NVT selection is DYNAMIC. New NVTs of selected families will automatically be added and considered.', 'Scan Config')}"/>
         </xsl:when>
         <xsl:when test="nvt_count/growing='0'">
-          <img src="/img/trend_nochange.png"
+          <img src="/img/trend_nochange.svg"
+               class="icon icon-sm"
                alt="{gsa:i18n ('Static', 'Scan Config')}"
                title="{gsa:i18n ('The NVT selection is STATIC. New NVTs will NOT automatically be added or considered.', 'Scan Config')}"/>
         </xsl:when>
@@ -18266,9 +18333,9 @@ should not have received it.
           </xsl:call-template>
         </xsl:when>
         <xsl:otherwise>
-          <img src="/img/delete_inactive.png" alt="{gsa:i18n ('Delete', 'Action Verb')}"
+          <img src="/img/delete_inactive.svg" alt="{gsa:i18n ('Delete', 'Action Verb')}"
                title="{gsa:i18n ('Scan Config is still in use', 'Scan Config')}"
-               class="icon"/>
+               class="icon icon-sm"/>
         </xsl:otherwise>
       </xsl:choose>
     </td>
@@ -19059,10 +19126,10 @@ should not have received it.
           </xsl:call-template>
         </xsl:when>
         <xsl:otherwise>
-          <img src="/img/delete_inactive.png"
+          <img src="/img/delete_inactive.svg"
                alt="{gsa:i18n ('Delete', 'Action Verb')}"
                title="{gsa:i18n ('Schedule is still in use', 'Schedule')}"
-               class="icon"/>
+               class="icon icon-sm"/>
         </xsl:otherwise>
       </xsl:choose>
     </td>
@@ -19178,10 +19245,10 @@ should not have received it.
   </div>
 
   <div class="section-header">
-    <a href="#" class="toggle-action-icon icon icon-action"
+    <a href="#" class="toggle-action-icon icon icon-sm icon-action"
       data-target="#using-box" data-name="Tasks using this Schedule"
       data-variable="using-box--collapsed">
-        <img src="/img/fold.png"/>
+        <img src="/img/fold.svg"/>
     </a>
     <h3>
       <a href="/omp?cmd=get_tasks&amp;token={/envelope/token}"
@@ -19289,12 +19356,14 @@ should not have received it.
     <div class="gb_window_part_center">
       <xsl:value-of select="gsa:i18n ('New Scanner', 'Scanner')"/>
       <a href="/help/new_scanner.html?token={/envelope/token}"
-         title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('New Scanner', 'Scanner'))}">
-        <img src="/img/help.png"/>
+        class="icon icon-sm"
+        title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('New Scanner', 'Scanner'))}">
+        <img src="/img/help.svg"/>
       </a>
       <a href="/omp?cmd=get_scanners&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-         title="{gsa:i18n ('Scanners', 'Scanner')}" style="margin-left:3px;">
-        <img src="/img/list.png" alt="{gsa:i18n ('Scanners', 'Scanner')}"/>
+        class="icon icon-sm"
+        title="{gsa:i18n ('Scanners', 'Scanner')}">
+        <img src="/img/list.svg" alt="{gsa:i18n ('Scanners', 'Scanner')}"/>
       </a>
     </div>
     <div class="gb_window_part_content">
@@ -19355,8 +19424,8 @@ should not have received it.
                 </xsl:for-each>
               </select>
               <a href="#" title="{ gsa:i18n('Create a new Credential', 'Credential') }"
-                  class="new-action-icon" data-type="credential" data-done="select[name=credential_id]" data-extra="restrict_credential_type=cc">
-                <img class="valign-middle" src="/img/new.png"/>
+                  class="new-action-icon icon icon-sm" data-type="credential" data-done="select[name=credential_id]" data-extra="restrict_credential_type=cc">
+                <img class="valign-middle" src="/img/new.svg"/>
               </a>
             </td>
           </tr>
@@ -19577,8 +19646,8 @@ should not have received it.
                 <p class="footnote" style="margin-top:3px;">
                   <a href="/omp?cmd=download_ca_pub&amp;scanner_id={commands_response/get_scanners_response/scanner/@id}&amp;ca_pub={str:encode-uri($ca_pub, true ())}&amp;token={/envelope/token}"
                     title="{gsa:i18n ('Download CA Certificate currently in use', 'Action Verb')}"
-                    class="icon">
-                    <img src="/img/key.png"
+                    class="icon icon-sm">
+                    <img src="/img/key.svg"
                         alt="{gsa:i18n ('Download CA Certificate currently in use', 'Action Verb')}"/>
                   </a>
                   <xsl:call-template name="certificate-status">
@@ -19603,14 +19672,16 @@ should not have received it.
                 </xsl:for-each>
               </select>
               <a href="#" title="{ gsa:i18n('Create a new Credential', 'Credential') }"
-                  class="new-action-icon" data-type="credential" data-done="select[name=credential_id]" data-extra="restrict_credential_type=cc">
-                <img class="valign-middle" src="/img/new.png"/>
+                class="new-action-icon icon icon-sm"
+                data-type="credential" data-done="select[name=credential_id]" data-extra="restrict_credential_type=cc">
+                <img src="/img/new.svg"/>
               </a>
               <xsl:if test="string-length ($credential_id) &gt; 0">
                 <p class="footnote" style="margin-top:3px;">
                   <a href="/omp?cmd=download_credential&amp;credential_id={$credential_id}&amp;package_format=pem&amp;token={/envelope/token}"
-                    title="{gsa:i18n ('Download Certificate currently in use', 'Action Verb')}" class="icon">
-                    <img src="/img/key.png" alt="{gsa:i18n ('Download Certificate currently in use', 'Action Verb')}"/>
+                    title="{gsa:i18n ('Download Certificate currently in use', 'Action Verb')}"
+                    class="icon icon-sm">
+                    <img src="/img/key.svg" alt="{gsa:i18n ('Download Certificate currently in use', 'Action Verb')}"/>
                   </a>
                   <xsl:call-template name="certificate-status">
                     <xsl:with-param name="certificate_info" select="$certificate_info"/>
@@ -19827,10 +19898,10 @@ should not have received it.
   </div>
 
   <div class="section-header">
-    <a href="#" class="toggle-action-icon icon icon-action"
+    <a href="#" class="toggle-action-icon icon icon-sm icon-action"
       data-target="#using-box" data-name="Tasks using this Scanner"
       data-variable="using-box--collapsed">
-        <img src="/img/fold.png"/>
+        <img src="/img/fold.svg"/>
     </a>
     <h3>
       <a href="/omp?cmd=get_tasks&amp;token={/envelope/token}"
@@ -20061,9 +20132,9 @@ should not have received it.
           </xsl:call-template>
         </xsl:when>
         <xsl:otherwise>
-          <img src="/img/restore_inactive.png" alt="{gsa:i18n ('Restore', 'Action Verb')}"
+          <img src="/img/restore_inactive.svg" alt="{gsa:i18n ('Restore', 'Action Verb')}"
                title="{gsa:i18n ('Credential', 'Credential')}{gsa:i18n (' must be restored first.', 'Action Message')}"
-               class="icon"/>
+               class="icon icon-sm"/>
         </xsl:otherwise>
       </xsl:choose>
       <xsl:choose>
@@ -20074,10 +20145,10 @@ should not have received it.
           </xsl:call-template>
         </xsl:when>
         <xsl:otherwise>
-          <img src="/img/delete_inactive.png"
-               alt="{gsa:i18n ('Delete', 'Action Verb')}"
-               title="{gsa:i18n ('Scanner is still in use', 'Scanner')}"
-               class="icon"/>
+          <img src="/img/delete_inactive.svg"
+            alt="{gsa:i18n ('Delete', 'Action Verb')}"
+            title="{gsa:i18n ('Scanner is still in use', 'Scanner')}"
+            class="icon icon-sm"/>
         </xsl:otherwise>
       </xsl:choose>
     </td>
@@ -20093,12 +20164,14 @@ should not have received it.
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n ('New Slave', 'Slave')"/>
       <a href="/help/new_slave.html?token={/envelope/token}"
-         title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('New Slave', 'Slave'))}">
-        <img src="/img/help.png"/>
+        class="icon icon-sm"
+        title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('New Slave', 'Slave'))}">
+        <img src="/img/help.svg"/>
       </a>
       <a href="/omp?cmd=get_slaves&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-         title="{gsa:i18n ('Slaves', 'Slave')}" style="margin-left:3px;">
-        <img src="/img/list.png" alt="{gsa:i18n ('Slaves', 'Slave')}"/>
+        class="icon icon-sm"
+        title="{gsa:i18n ('Slaves', 'Slave')}" style="margin-left:3px;">
+        <img src="/img/list.svg" alt="{gsa:i18n ('Slaves', 'Slave')}"/>
       </a>
     </div>
     <div class="gb_window_part_content">
@@ -20152,8 +20225,8 @@ should not have received it.
                 </xsl:for-each>
               </select>
               <a href="#" title="{ gsa:i18n('Create a new Credential', 'Credential') }"
-                  class="new-action-icon" data-type="credential" data-done="select[name=credential_id]" data-extra="restrict_credential_type=up">
-                <img class="valign-middle" src="/img/new.png"/>
+                  class="new-action-icon icon icon-sm" data-type="credential" data-done="select[name=credential_id]" data-extra="restrict_credential_type=up">
+                <img class="valign-middle" src="/img/new.svg"/>
               </a>
             </td>
           </tr>
@@ -20324,8 +20397,8 @@ should not have received it.
                 </xsl:for-each>
               </select>
               <a href="#" title="{ gsa:i18n('Create a new Credential', 'Credential') }"
-                  class="new-action-icon" data-type="credential" data-done="select[name=credential_id]" data-extra="restrict_credential_type=up">
-                <img class="valign-middle" src="/img/new.png"/>
+                  class="new-action-icon icon icon-sm" data-type="credential" data-done="select[name=credential_id]" data-extra="restrict_credential_type=up">
+                <img class="valign-middle" src="/img/new.svg"/>
               </a>
             </td>
           </tr>
@@ -20443,9 +20516,9 @@ should not have received it.
           </xsl:call-template>
         </xsl:when>
         <xsl:otherwise>
-          <img src="/img/restore_inactive.png" alt="{gsa:i18n ('Restore', 'Action Verb')}"
-               title="{gsa:i18n ('Credential', 'Credential')}{gsa:i18n (' must be restored first.', 'Action Message')}"
-               class="icon"/>
+          <img src="/img/restore_inactive.svg" alt="{gsa:i18n ('Restore', 'Action Verb')}"
+            title="{gsa:i18n ('Credential', 'Credential')}{gsa:i18n (' must be restored first.', 'Action Message')}"
+            class="icon icon-sm"/>
         </xsl:otherwise>
       </xsl:choose>
       <xsl:choose>
@@ -20456,10 +20529,10 @@ should not have received it.
           </xsl:call-template>
         </xsl:when>
         <xsl:otherwise>
-          <img src="/img/delete_inactive.png"
-               alt="{gsa:i18n ('Delete', 'Action Verb')}"
-               title="{gsa:i18n ('Slave is still in use', 'Slave')}"
-               class="icon"/>
+          <img src="/img/delete_inactive.svg"
+            alt="{gsa:i18n ('Delete', 'Action Verb')}"
+            title="{gsa:i18n ('Slave is still in use', 'Slave')}"
+            class="icon icon-sm"/>
         </xsl:otherwise>
       </xsl:choose>
     </td>
@@ -20524,10 +20597,10 @@ should not have received it.
   </div>
 
   <div class="section-header">
-    <a href="#" class="toggle-action-icon icon icon-action"
+    <a href="#" class="toggle-action-icon icon icon-sm icon-action"
       data-target="#using-box" data-name="Tasks using this Slave"
       data-variable="using-box--collapsed">
-        <img src="/img/fold.png"/>
+        <img src="/img/fold.svg"/>
     </a>
     <h3>
       <a href="/omp?cmd=get_tasks&amp;token={/envelope/token}"
@@ -21432,7 +21505,7 @@ should not have received it.
       <xsl:otherwise>info_name=<xsl:value-of select="str:encode-uri (str:replace($cpe, '&amp;','&amp;amp;'), true())"/></xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
-  <span style="white-space:nowrap">
+  <div class="cpe">
     <xsl:if test="not($no_icon)">
       <xsl:call-template name="cpe-icon">
         <xsl:with-param name="cpe" select="$cpe"/>
@@ -21443,7 +21516,7 @@ should not have received it.
        title="{gsa:view_details_title ('CPE', $cpe)}">
       <xsl:value-of select="$cpe"/>
     </a>
-  </span>
+  </div>
 </xsl:template>
 
 <xsl:template name="get_info_cve_lnk">
@@ -21543,8 +21616,9 @@ should not have received it.
         <xsl:with-param name="message">
           SCAP and/or CERT database missing on OMP server.
           <a href="/help/cpes.html?token={/envelope/token}#secinfo_missing"
-              title="Help: SecInfo database missing">
-            <img style="margin-left:5px" src="/img/help.png"/>
+            class="icon icon-sm"
+            title="Help: SecInfo database missing">
+            <img src="/img/help.svg"/>
           </a>
         </xsl:with-param>
       </xsl:call-template>
@@ -21601,8 +21675,9 @@ should not have received it.
         <xsl:with-param name="message">
           SCAP and/or CERT database missing on OMP server.
           <a href="/help/cves.html?token={/envelope/token}#secinfo_missing"
+            class="icon icon-sm"
             title="Help: SecInfo database missing">
-            <img style="margin-left:5px" src="/img/help.png"/>
+            <img src="/img/help.svg"/>
           </a>
         </xsl:with-param>
       </xsl:call-template>
@@ -21676,8 +21751,9 @@ should not have received it.
         <xsl:with-param name="message">
           SCAP and/or CERT database missing on OMP server.
           <a href="/help/nvts.html?token={/envelope/token}#secinfo_missing"
+            class="icon icon-sm"
             title="Help: SecInfo database missing">
-            <img style="margin-left:5px" src="/img/help.png"/>
+            <img src="/img/help.svg"/>
           </a>
         </xsl:with-param>
       </xsl:call-template>
@@ -21728,7 +21804,7 @@ should not have received it.
       <column>
         <name><xsl:value-of select="gsa:i18n('Solution type', 'NVT or Result')"/></name>
         <field>solution_type</field>
-        <image>/img/solution_type.png</image>
+        <image>/img/solution_type.svg</image>
       </column>
       <column>
         <name><xsl:value-of select="gsa:i18n('Severity', 'Severity Short')"/></name>
@@ -21753,8 +21829,9 @@ should not have received it.
         <xsl:with-param name="message">
           SCAP and/or CERT database missing on OMP server.
           <a href="/help/ovaldefs.html?token={/envelope/token}#secinfo_missing"
+            class="icon icon-sm"
             title="Help: SecInfo database missing">
-            <img style="margin-left:5px" src="/img/help.png"/>
+            <img src="/img/help.svg"/>
           </a>
         </xsl:with-param>
       </xsl:call-template>
@@ -21824,8 +21901,9 @@ should not have received it.
         <xsl:with-param name="message">
           SCAP and/or CERT database missing on OMP server.
           <a href="/help/cert_bund_advs.html?token={/envelope/token}#secinfo_missing"
+            class="icon icon-sm"
             title="Help: SecInfo database missing">
-            <img style="margin-left:5px" src="/img/help.png"/>
+            <img src="/img/help.svg"/>
           </a>
         </xsl:with-param>
       </xsl:call-template>
@@ -21885,8 +21963,9 @@ should not have received it.
         <xsl:with-param name="message">
           SCAP and/or CERT database missing on OMP server.
           <a href="/help/dfn_cert_advs.html?token={/envelope/token}#secinfo_missing"
+            class="icon icon-sm"
             title="Help: SecInfo database missing">
-            <img style="margin-left:5px" src="/img/help.png"/>
+            <img src="/img/help.svg"/>
           </a>
         </xsl:with-param>
       </xsl:call-template>
@@ -21946,8 +22025,9 @@ should not have received it.
         <xsl:with-param name="message">
           SCAP and/or CERT database missing on OMP server.
           <a href="/help/allinfo.html?token={/envelope/token}#secinfo_missing"
+            class="icon icon-sm"
             title="Help: SecInfo database missing">
-            <img style="margin-left:5px" src="/img/help.png"/>
+            <img src="/img/help.svg"/>
           </a>
         </xsl:with-param>
       </xsl:call-template>
@@ -22143,12 +22223,14 @@ should not have received it.
 <xsl:template name="cve-details">
   <div class="toolbar">
     <a href="/help/cve_details.html?token={/envelope/token}"
+      class="icon icon-sm"
       title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('CVE', 'CVE'),' (',gsa:i18n('CVE Details', 'CVE'),')')}">
-      <img src="/img/help.png"/>
+      <img src="/img/help.svg"/>
     </a>
     <a href="/omp?cmd=get_info&amp;info_type=cve&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-      title="{gsa:i18n ('CVEs', 'CVE')}" style="margin-left:3px;">
-      <img src="/img/list.png" alt="{gsa:i18n ('CVEs', 'CVE')}"/>
+      class="icon icon-sm"
+      title="{gsa:i18n ('CVEs', 'CVE')}">
+      <img src="/img/list.svg" alt="{gsa:i18n ('CVEs', 'CVE')}"/>
     </a>
   </div>
 
@@ -22433,12 +22515,14 @@ should not have received it.
 <xsl:template name="cpe-details">
   <div class="toolbar">
     <a href="/help/cpe_details.html?token={/envelope/token}"
+      class="icon icon-sm"
       title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('CPE', 'CPE'),' (',gsa:i18n('CPE Details', 'CPE'),')')}">
-      <img src="/img/help.png"/>
+      <img src="/img/help.svg"/>
     </a>
     <a href="/omp?cmd=get_info&amp;info_type=cpe&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-      title="{gsa:i18n ('CPEs', 'CPE')}" style="margin-left:3px;">
-      <img src="/img/list.png" alt="{gsa:i18n ('CPEs', 'CPE')}"/>
+      class="icon icon-sm"
+      title="{gsa:i18n ('CPEs', 'CPE')}">
+      <img src="/img/list.svg" alt="{gsa:i18n ('CPEs', 'CPE')}"/>
     </a>
   </div>
 
@@ -22582,12 +22666,14 @@ should not have received it.
 <xsl:template name="ovaldef-details">
   <div class="toolbar">
     <a href="/help/ovaldef_details.html?token={/envelope/token}"
+      class="icon icon-sm"
       title="{concat(gsa:i18n('Help', 'Help'),': OVALDEF (',gsa:i18n('OVAL Definition Details', 'OVAL Definition'),')')}">
-      <img src="/img/help.png"/>
+      <img src="/img/help.svg"/>
     </a>
     <a href="/omp?cmd=get_info&amp;info_type=ovaldef&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;token={/envelope/token}"
-      title="{gsa:i18n ('OVAL Definitions', 'OVAL Definition')}" style="margin-left:3px;">
-      <img src="/img/list.png" alt="{gsa:i18n ('OVAL Definitions', 'OVAL Definition')}"/>
+      class="icon icon-sm"
+      title="{gsa:i18n ('OVAL Definitions', 'OVAL Definition')}">
+      <img src="/img/list.svg" alt="{gsa:i18n ('OVAL Definitions', 'OVAL Definition')}"/>
     </a>
   </div>
 
@@ -22845,12 +22931,14 @@ should not have received it.
 <xsl:template name="cert_bund_adv-details">
   <div class="toolbar">
     <a href="/help/cert_bund_adv_details.html?token={/envelope/token}"
+      class="icon icon-sm"
       title="{concat(gsa:i18n('Help', 'Help'),': DFN_CERT_ADV (',gsa:i18n('CERT-Bund Details', 'CERT-Bund Advisory'),')')}">
-      <img src="/img/help.png"/>
+      <img src="/img/help.svg"/>
     </a>
     <a href="/omp?cmd=get_info&amp;info_type=cert_bund_adv&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;token={/envelope/token}"
-      title="{gsa:i18n ('CERT-Bund Advisories', 'CERT-Bund Advisory')}" style="margin-left:3px;">
-      <img src="/img/list.png" alt="{gsa:i18n ('CERT-Bund Advisories', 'CERT-Bund Advisory')}"/>
+      class="icon icon-sm"
+      title="{gsa:i18n ('CERT-Bund Advisories', 'CERT-Bund Advisory')}">
+      <img src="/img/list.svg" alt="{gsa:i18n ('CERT-Bund Advisories', 'CERT-Bund Advisory')}"/>
     </a>
   </div>
 
@@ -23032,12 +23120,14 @@ should not have received it.
 
   <div class="toolbar">
     <a href="/help/dfn_cert_adv_details.html?token={/envelope/token}"
+      class="icon icon-sm"
       title="{concat(gsa:i18n('Help', 'Help'),': DFN_CERT_ADV (',gsa:i18n('DFN-CERT Advisory Details', 'DFN-CERT Advisory'),')')}">
-      <img src="/img/help.png"/>
+      <img src="/img/help.svg"/>
     </a>
     <a href="/omp?cmd=get_info&amp;info_type=dfn_cert_adv&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;token={/envelope/token}"
-      title="{gsa:i18n ('DFN-CERT Advisories', 'DFN-CERT Advisory')}" style="margin-left:3px;">
-      <img src="/img/list.png" alt="{gsa:i18n ('DFN-CERT Advisories', 'DFN-CERT Advisory')}"/>
+      class="icon icon-sm"
+      title="{gsa:i18n ('DFN-CERT Advisories', 'DFN-CERT Advisory')}">
+      <img src="/img/list.svg" alt="{gsa:i18n ('DFN-CERT Advisories', 'DFN-CERT Advisory')}"/>
     </a>
   </div>
 
@@ -23466,23 +23556,25 @@ should not have received it.
 
       <div class="toolbar">
         <a href="/help/nvt_details.html?token={/envelope/token}"
-           title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('NVT Details', 'NVT'))}">
-          <img src="/img/help.png"/>
+          class="icon icon-sm"
+          title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('NVT Details', 'NVT'))}">
+          <img src="/img/help.svg"/>
         </a>
         <a href="/omp?cmd=get_info&amp;info_type=nvt&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-          title="{gsa:i18n ('NVTs', 'NVT')}" style="margin-left:3px;">
-          <img src="/img/list.png" alt="{gsa:i18n ('NVTs', 'NVT')}"/>
+          class="icon icon-sm"
+          title="{gsa:i18n ('NVTs', 'NVT')}">
+          <img src="/img/list.svg" alt="{gsa:i18n ('NVTs', 'NVT')}"/>
         </a>
         <div class="small_inline_form" style="display: inline; margin-left: 15px; font-weight: normal;">
           <a href="/omp?cmd=new_note&amp;next=get_info&amp;info_type=nvt&amp;info_id={$nvts_response/nvt/@oid}&amp;oid={$nvts_response/nvt/@oid}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-             title="{gsa:i18n ('Add Note', 'Note')}" style="margin-left:3px;"
-             class="new-action-icon" data-type="note" data-extra="info_type=nvt&amp;info_id={$nvts_response/nvt/@oid}&amp;oid={$nvts_response/nvt/@oid}">
-            <img src="/img/new_note.png" alt="{gsa:i18n ('Add Note', 'Note')}"/>
+             title="{gsa:i18n ('Add Note', 'Note')}"
+             class="new-action-icon icon icon-sm" data-type="note" data-extra="info_type=nvt&amp;info_id={$nvts_response/nvt/@oid}&amp;oid={$nvts_response/nvt/@oid}">
+            <img src="/img/new_note.svg" alt="{gsa:i18n ('Add Note', 'Note')}"/>
           </a>
           <a href="/omp?cmd=new_override&amp;next=get_info&amp;info_type=nvt&amp;info_id={$nvts_response/nvt/@oid}&amp;oid={$nvts_response/nvt/@oid}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-             title="{gsa:i18n ('Add Override', 'Override')}" style="margin-left:3px;"
-             class="new-action-icon" data-type="override" data-extra="info_type=nvt&amp;info_id={$nvts_response/nvt/@oid}&amp;oid={$nvts_response/nvt/@oid}">
-            <img src="/img/new_override.png" alt="{gsa:i18n ('Add Override', 'Override')}"/>
+             title="{gsa:i18n ('Add Override', 'Override')}"
+             class="new-action-icon icon icon-sm" data-type="override" data-extra="info_type=nvt&amp;info_id={$nvts_response/nvt/@oid}&amp;oid={$nvts_response/nvt/@oid}">
+            <img src="/img/new_override.svg" alt="{gsa:i18n ('Add Override', 'Override')}"/>
           </a>
         </div>
       </div>
@@ -25558,15 +25650,15 @@ should not have received it.
       </xsl:when>
       <xsl:when test="string-length (owner/name) = 0">
         <!-- i18n with concat : see dynamic_strings.xsl - type-global -->
-        <img src="/img/view_other.png"
-             style="margin-left:3px;"
+        <img src="/img/view_other.svg"
+             class="icon icon-sm"
              alt="{gsa:i18n (concat ('Global ', $type), $type)}"
              title="{gsa:i18n (concat ('Global ', $type), $type)}"/>
       </xsl:when>
       <xsl:otherwise>
         <!-- i18n with concat : see dynamic_strings.xsl - type-owned-by -->
-        <img src="/img/view_other.png"
-             style="margin-left:3px;"
+        <img src="/img/view_other.svg"
+             class="icon icon-sm"
              alt="{gsa-i18n:strformat (gsa:i18n (concat ($type, ' owned by %1'), $type), owner/name)}"
              title="{gsa-i18n:strformat (gsa:i18n (concat ($type, ' owned by %1'), $type), owner/name)}"/>
       </xsl:otherwise>
@@ -26147,10 +26239,10 @@ should not have received it.
           </xsl:call-template>
         </xsl:when>
         <xsl:otherwise>
-          <img src="/img/delete_inactive.png"
-               alt="{gsa:i18n ('Delete', 'Action Verb')}"
-               title="{gsa:i18n ('Group is still in use', 'Group')}"
-               class="icon"/>
+          <img src="/img/delete_inactive.svg"
+            alt="{gsa:i18n ('Delete', 'Action Verb')}"
+            title="{gsa:i18n ('Group is still in use', 'Group')}"
+            class="icon icon-sm"/>
         </xsl:otherwise>
       </xsl:choose>
     </td>
@@ -26241,12 +26333,14 @@ should not have received it.
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n ('New Group', 'Group')"/>
       <a href="/help/new_group.html?token={/envelope/token}"
-         title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('New Group', 'Group'))}">
-        <img src="/img/help.png"/>
+        class="icon icon-sm"
+        title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('New Group', 'Group'))}">
+        <img src="/img/help.svg"/>
       </a>
       <a href="/omp?cmd=get_groups&amp;group={/envelope/params/group}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-         title="{gsa:i18n ('Groups', 'Group')}" style="margin-left:3px;">
-        <img src="/img/list.png" alt="{gsa:i18n ('Groups', 'Group')}"/>
+        class="icon icon-sm"
+        title="{gsa:i18n ('Groups', 'Group')}">
+        <img src="/img/list.svg" alt="{gsa:i18n ('Groups', 'Group')}"/>
       </a>
     </div>
     <div class="gb_window_part_content">
@@ -26753,9 +26847,10 @@ should not have received it.
       <div class="pull-right">
         <xsl:choose>
           <xsl:when test="string-length (observers) &gt; 0">
-            <img src="/img/provide_view.png"
-                 alt="{gsa:i18n ('Permission made visible for:', 'Permission')} {observers}"
-                 title="{gsa:i18n ('Permission made visible for:', 'Permission')} {observers}"/>
+            <img src="/img/provide_view.svg"
+              class="icon icon-sm"
+              alt="{gsa:i18n ('Permission made visible for:', 'Permission')} {observers}"
+              title="{gsa:i18n ('Permission made visible for:', 'Permission')} {observers}"/>
           </xsl:when>
           <xsl:otherwise>
           </xsl:otherwise>
@@ -26956,9 +27051,10 @@ should not have received it.
       <div class="pull-right">
         <xsl:choose>
           <xsl:when test="string-length (observers) &gt; 0">
-            <img src="/img/provide_view.png"
-                 alt="{gsa:i18n ('Permission made visible for:', 'Permission')} {observers}"
-                 title="{gsa:i18n ('Permission made visible for:', 'Permission')} {observers}"/>
+            <img src="/img/provide_view.svg"
+              class="icon icon-sm"
+              alt="{gsa:i18n ('Permission made visible for:', 'Permission')} {observers}"
+              title="{gsa:i18n ('Permission made visible for:', 'Permission')} {observers}"/>
           </xsl:when>
           <xsl:otherwise>
           </xsl:otherwise>
@@ -27012,10 +27108,10 @@ should not have received it.
           </xsl:call-template>
         </xsl:when>
         <xsl:otherwise>
-          <img src="/img/delete_inactive.png"
-               alt="{gsa:i18n ('Delete', 'Action Verb')}"
-               title="{gsa:i18n ('Permission is still in use', 'Permission')}"
-               class="icon"/>
+          <img src="/img/delete_inactive.svg"
+            alt="{gsa:i18n ('Delete', 'Action Verb')}"
+            title="{gsa:i18n ('Permission is still in use', 'Permission')}"
+            class="icon icon-sm"/>
         </xsl:otherwise>
       </xsl:choose>
     </td>
@@ -27362,12 +27458,14 @@ should not have received it.
     <div class="gb_window_part_center">
       <xsl:value-of select="gsa:i18n ('New Port List', 'Port List')"/>
       <a href="/help/new_port_list.html?token={/envelope/token}"
-         title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('New Port List', 'Port List'))}">
-        <img src="/img/help.png"/>
+        class="icon icon-sm"
+        title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('New Port List', 'Port List'))}">
+        <img src="/img/help.svg"/>
       </a>
       <a href="/omp?cmd=get_port_lists&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-         title="{gsa:i18n ('Port Lists', 'Port List')}" style="margin-left:3px;">
-        <img src="/img/list.png" alt="{gsa:i18n ('Port Lists', 'Port List')}"/>
+        class="icon icon-sm"
+        title="{gsa:i18n ('Port Lists', 'Port List')}">
+        <img src="/img/list.svg" alt="{gsa:i18n ('Port Lists', 'Port List')}"/>
       </a>
     </div>
     <div class="gb_window_part_content">
@@ -27586,10 +27684,10 @@ should not have received it.
           </xsl:call-template>
         </xsl:when>
         <xsl:otherwise>
-          <img src="/img/delete_inactive.png"
-               alt="{gsa:i18n ('Delete', 'Action Verb')}"
-               title="{gsa:i18n ('Port List is still in use', 'Port List')}"
-               class="icon"/>
+          <img src="/img/delete_inactive.svg"
+            alt="{gsa:i18n ('Delete', 'Action Verb')}"
+            title="{gsa:i18n ('Port List is still in use', 'Port List')}"
+            class="icon icon-sm"/>
         </xsl:otherwise>
       </xsl:choose>
     </td>
@@ -27639,10 +27737,10 @@ should not have received it.
   </div>
 
   <div class="section-header">
-    <a href="#" class="toggle-action-icon icon icon-action"
+    <a href="#" class="toggle-action-icon icon icon-sm icon-action"
       data-target="#portranges-box" data-name="Port Ranges"
       data-variable="portranges-box--collapsed">
-        <img src="/img/fold.png"/>
+        <img src="/img/fold.svg"/>
     </a>
     <h3>
       <xsl:value-of select="gsa:i18n ('Port Ranges', 'Port Range')"/>
@@ -27679,10 +27777,10 @@ should not have received it.
   </div>
 
   <div class="section-header">
-    <a href="#" class="toggle-action-icon icon icon-action"
+    <a href="#" class="toggle-action-icon icon icon-sm icon-action"
       data-target="#using-box" data-name="Targets using this Port List"
       data-variable="using-box--collapsed">
-        <img src="/img/fold.png"/>
+        <img src="/img/fold.svg"/>
     </a>
     <h3>
       <a href="/omp?cmd=get_targets&amp;token={/envelope/token}"
@@ -27797,10 +27895,10 @@ should not have received it.
         <xsl:choose>
           <xsl:when test="commands_response/get_port_lists_response/port_list/in_use = 0">
             <a href="#" title="{gsa:i18n ('Add Port Range', 'Override')}"
-              class="new-action-icon icon icon-action"
+              class="new-action-icon icon icon-sm icon-action"
               data-type="port_range" data-extra="port_list_id={$id}"
               data-reload="parent">
-              <img src="/img/new.png" alt="{gsa:i18n ('Add Port Range', 'Port Range')}"/>
+              <img src="/img/new.svg" alt="{gsa:i18n ('Add Port Range', 'Port Range')}"/>
             </a>
           </xsl:when>
         </xsl:choose>
@@ -27830,18 +27928,18 @@ should not have received it.
                     <input type="hidden" name="port_range_id" value="{@id}"/>
                     <input type="hidden" name="next" value="edit_port_list"/>
                     <input type="hidden" name="next_next" value="{/envelope/params/next}"/>
-                    <a href="#" class="icon dialog-action">
-                      <img src="/img/delete.png"
+                    <a href="#" class="icon icon-sm dialog-action">
+                      <img src="/img/delete.svg"
                           alt="{gsa:i18n ('Delete', 'Action Verb')}"
                           title="{gsa:i18n ('Delete', 'Action Verb')}"/>
                     </a>
                   </form>
                 </xsl:when>
                 <xsl:otherwise>
-                  <img src="/img/delete_inactive.png"
+                  <img src="/img/delete_inactive.svg"
                        alt="{gsa:i18n ('Delete', 'Action Verb')}"
                        title="{gsa:i18n ('Port List is still in use', 'Port List')}"
-                       style="margin-left:3px;"/>
+                       class="icon icon-sm"/>
                 </xsl:otherwise>
               </xsl:choose>
             </td>
@@ -27950,12 +28048,14 @@ should not have received it.
     <div class="gb_window_part_center">
       <xsl:value-of select="gsa:i18n ('Import Port List', 'Port List')"/>
       <a href="/help/new_port_list.html?token={/envelope/token}#import_port_list"
-         title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('New Port List', 'Port List'))}">
-        <img src="/img/help.png"/>
+        class="icon icon-sm"
+        title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('New Port List', 'Port List'))}">
+        <img src="/img/help.svg"/>
       </a>
       <a href="/omp?cmd=get_port_lists&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-         title="Port Lists" style="margin-left:3px;">
-        <img src="/img/list.png" alt="{gsa:i18n ('Port Lists', 'Port List')}"/>
+        class="icon icon-sm"
+        title="Port Lists">
+        <img src="/img/list.svg" alt="{gsa:i18n ('Port Lists', 'Port List')}"/>
       </a>
     </div>
     <div class="gb_window_part_content">
@@ -28068,12 +28168,14 @@ should not have received it.
     <div class="gb_window_part_center">
       <xsl:value-of select="gsa:i18n ('New Report Format', 'Report Format')"/>
       <a href="/help/new_report_format.html?token={/envelope/token}"
-         title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('New Report Format', 'Report Format'))}">
-        <img src="/img/help.png"/>
+        class="icon icon-sm"
+        title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('New Report Format', 'Report Format'))}">
+        <img src="/img/help.svg"/>
       </a>
       <a href="/omp?cmd=get_report_formats&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-         title="{gsa:i18n ('Report Formats', 'Report Format')}" style="margin-left:3px;">
-        <img src="/img/list.png" alt="{gsa:i18n ('Report Formats', 'Report Format')}"/>
+        class="icon icon-sm"
+        title="{gsa:i18n ('Report Formats', 'Report Format')}">
+        <img src="/img/list.svg" alt="{gsa:i18n ('Report Formats', 'Report Format')}"/>
       </a>
     </div>
     <div class="gb_window_part_content">
@@ -28316,8 +28418,8 @@ should not have received it.
           </xsl:call-template>
           <xsl:choose>
             <xsl:when test="gsa:may ('verify_report_format') or string-length (owner/name) = 0">
-              <div class="icon ajax-post" data-reload="next">
-                <img src="/img/verify.png" alt="{gsa:i18n ('Verify Report Format', 'Report Format')}"/>
+              <div class="icon icon-sm ajax-post" data-reload="next">
+                <img src="/img/verify.svg" alt="{gsa:i18n ('Verify Report Format', 'Report Format')}"/>
                 <form>
                   <input type="hidden" name="cmd" value="verify_report_format"/>
                   <input type="hidden" name="report_format_id" value="{@id}"/>
@@ -28339,10 +28441,10 @@ should not have received it.
               </div>
             </xsl:when>
             <xsl:otherwise>
-              <img src="/img/verify_inactive.png"
+              <img src="/img/verify_inactive.svg"
                   alt="{gsa:i18n ('Verify Report Format', 'Report Format')}"
                   title="{gsa:i18n ('Permission to verify Report Format denied', 'Report Format')}"
-                  class="icon"/>
+                  class="icon icon-sm"/>
             </xsl:otherwise>
           </xsl:choose>
         </td>
@@ -28398,10 +28500,10 @@ should not have received it.
           </xsl:call-template>
         </xsl:when>
         <xsl:otherwise>
-          <img src="/img/delete_inactive.png"
-               alt="{gsa:i18n ('Delete', 'Action Verb')}"
-               title="{gsa:i18n ('Report Format is still in use', 'Report Format')}"
-               class="icon"/>
+          <img src="/img/delete_inactive.svg"
+            alt="{gsa:i18n ('Delete', 'Action Verb')}"
+            title="{gsa:i18n ('Report Format is still in use', 'Report Format')}"
+            class="icon icon-sm"/>
         </xsl:otherwise>
       </xsl:choose>
     </td>
@@ -28641,10 +28743,10 @@ should not have received it.
   </div>
 
   <div class="section-header">
-    <a href="#" class="toggle-action-icon icon icon-action"
+    <a href="#" class="toggle-action-icon icon icon-sm icon-action"
       data-target="#rfp_parameters-box" data-name="Tasks using this Target"
       data-variable="rfp_parameters-box--collapsed">
-        <img src="/img/fold.png"/>
+        <img src="/img/fold.svg"/>
     </a>
     <h3>
       <xsl:value-of select="gsa:i18n ('Parameters', 'Report Format')"/>
@@ -28666,10 +28768,10 @@ should not have received it.
 
   <div class="section-header">
     <a href="#"
-      class="toggle-action-icon icon icon-action"
+      class="toggle-action-icon icon icon-sm icon-action"
       data-target="#using-box" data-name="Alerts using this Report Format"
       data-variable="using-box--collapsed">
-        <img src="/img/fold.png"/>
+        <img src="/img/fold.svg"/>
     </a>
     <h3>
       <a href="/omp?cmd=get_alerts&amp;token={/envelope/token}"
@@ -28821,8 +28923,9 @@ should not have received it.
         <xsl:with-param name="message">
           SCAP database missing on OMP server.  Prognostic reporting disabled.
           <a href="/help/hosts_classic.html?token={/envelope/token}#scap_missing"
+            class="icon icon-sm"
             title="Help: SCAP database missing">
-            <img style="margin-left:5px" src="/img/help.png"/>
+            <img src="/img/help.svg"/>
           </a>
         </xsl:with-param>
       </xsl:call-template>
@@ -28834,21 +28937,24 @@ should not have received it.
     <div class="gb_window_part_center">
        <xsl:value-of select="gsa:i18n ('Host Details (Classic)', 'Host')"/>
        <a href="/help/hosts_classic.html?token={/envelope/token}#host_details"
+         class="icon icon-sm"
          title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('Hosts', 'Host'),' (',gsa:i18n('Host Details', 'Host'),')')}">
-         <img src="/img/help.png"/>
+         <img src="/img/help.svg"/>
        </a>
        <a href="?cmd=get_report&amp;type=assets&amp;levels={../../../../levels}&amp;search_phrase={../../../../search_phrase}&amp;first_result={../../../../hosts/@start}&amp;max_results={../../../../hosts/@max}&amp;overrides={$apply-overrides}&amp;token={/envelope/token}"
-          style="margin-left:3px;" title="{gsa:i18n ('Hosts', 'Host')}">
-         <img src="/img/list.png" alt="{gsa:i18n ('Hosts', 'Host')}"/>
+         class="icon icon-sm"
+         title="{gsa:i18n ('Hosts', 'Host')}">
+         <img src="/img/list.svg" alt="{gsa:i18n ('Hosts', 'Host')}"/>
        </a>
       <xsl:choose>
         <xsl:when test="../@scap_loaded = 0">
           <img src="/img/prognosis_inactive.png" alt="{gsa:i18n ('Prognostic Report', 'Host')}"
-               style="margin-left:3px;"/>
+            class="icon icon-sm"/>
         </xsl:when>
         <xsl:otherwise>
            <a href="/omp?cmd=get_report&amp;type=prognostic&amp;host={ip}&amp;pos={detail[name/text() = 'report/pos']/value}&amp;host_search_phrase={../../../../search_phrase}&amp;host_levels={../../../../levels}&amp;host_first_result={../../../../hosts/@start}&amp;host_max_results={../../../../hosts/@max}&amp;result_hosts_only=1&amp;token={/envelope/token}"
-              title="{gsa:i18n ('Prognostic Report', 'Host')}" style="margin-left:3px;">
+             class="icon icon-sm"
+             title="{gsa:i18n ('Prognostic Report', 'Host')}">
              <img src="/img/prognosis.png" alt="{gsa:i18n ('Prognostic Report', 'Host')}"/>
            </a>
         </xsl:otherwise>
@@ -28879,10 +28985,11 @@ should not have received it.
             </xsl:choose>
           </select>
           <input type="image"
-                 name="Update"
-                 title="{gsa:i18n ('Update', 'Action Verb')}"
-                 src="/img/refresh.png"
-                 alt="{gsa:i18n ('Update', 'Action Verb')}" style="margin-left:3px;margin-right:3px;"/>
+            name="Update"
+            title="{gsa:i18n ('Update', 'Action Verb')}"
+            class="icon icon-sm"
+            src="/img/refresh.svg"
+            alt="{gsa:i18n ('Update', 'Action Verb')}" style="margin-left:3px;margin-right:3px;"/>
         </form>
       </div>
     </div>
@@ -28970,7 +29077,6 @@ should not have received it.
               <xsl:with-param name="host" select="../host"/>
               <xsl:with-param name="current_host" select="ip"/>
               <xsl:with-param name="os-name" select="1"/>
-              <xsl:with-param name="img-style" select="'padding-right: 3px'"/>
             </xsl:call-template>
           </td>
         </tr>
@@ -29334,26 +29440,26 @@ should not have received it.
           <before>
             <xsl:choose>
               <xsl:when test="/envelope/params/bulk_select = 1">
-                <div class="pull-right" style="display: inline">
+                <div class="pull-right">
                   <xsl:choose>
                     <xsl:when test="filters/keywords/keyword[column='apply_overrides']/value = 0">
-                      <img src="/img/overrides_disabled.png"
-                          alt="{gsa:i18n ('No Overrides', 'Override Controls')}"
-                          title="{gsa:i18n ('No Overrides', 'Override Controls')}"
-                          style="margin-left:3px;margin-right:3px;"/>
+                      <img src="/img/overrides_disabled.svg"
+                        alt="{gsa:i18n ('No Overrides', 'Override Controls')}"
+                        title="{gsa:i18n ('No Overrides', 'Override Controls')}"
+                        class="icon icon-sm"/>
                     </xsl:when>
                     <xsl:otherwise>
-                      <img src="/img/overrides_enabled.png"
-                          alt="{gsa:i18n ('Overrides are Applied', 'Override Controls')}"
-                          title="{gsa:i18n ('Overrides are Applied', 'Override Controls')}"
-                          style="margin-left:3px;margin-right:3px;"/>
+                      <img src="/img/overrides_enabled.svg"
+                        alt="{gsa:i18n ('Overrides are Applied', 'Override Controls')}"
+                        title="{gsa:i18n ('Overrides are Applied', 'Override Controls')}"
+                        class="icon icon-sm"/>
                     </xsl:otherwise>
                   </xsl:choose>
                 </div>
               </xsl:when>
               <xsl:otherwise>
-                <div class="pull-right" style="display: inline">
-                  <form method="get" action="" enctype="multipart/form-data">
+                <div class="pull-right">
+                  <form method="get" action="">
                     <input type="hidden" name="token" value="{/envelope/token}"/>
                     <input type="hidden" name="cmd" value="get_reports"/>
                     <input type="hidden" name="filter" value="{filters/term}"/>
@@ -29361,22 +29467,22 @@ should not have received it.
                       <xsl:when test="filters/keywords/keyword[column='apply_overrides']/value = 0">
                         <input type="hidden" name="overrides" value="1"/>
                         <input type="image"
-                              name="No Overrides"
-                              src="/img/overrides_disabled.png"
-                              alt="{gsa:i18n ('No Overrides', 'Override Controls')}"
-                              value="No Overrides"
-                              title="{gsa:i18n ('No Overrides', 'Override Controls')}"
-                              style="margin-left:3px;margin-right:3px;"/>
+                          name="No Overrides"
+                          src="/img/overrides_disabled.svg"
+                          alt="{gsa:i18n ('No Overrides', 'Override Controls')}"
+                          value="No Overrides"
+                          title="{gsa:i18n ('No Overrides', 'Override Controls')}"
+                          class="icon icon-sm"/>
                       </xsl:when>
                       <xsl:otherwise>
                         <input type="hidden" name="overrides" value="0"/>
                         <input type="image"
-                              name="Overrides are Applied"
-                              src="/img/overrides_enabled.png"
-                              alt="{gsa:i18n ('Overrides are Applied', 'Override Controls')}"
-                              value="Overrides are Applied"
-                              title="{gsa:i18n ('Overrides are Applied', 'Override Controls')}"
-                              style="margin-left:3px;margin-right:3px;"/>
+                          name="Overrides are Applied"
+                          src="/img/overrides_enabled.svg"
+                          alt="{gsa:i18n ('Overrides are Applied', 'Override Controls')}"
+                          value="Overrides are Applied"
+                          title="{gsa:i18n ('Overrides are Applied', 'Override Controls')}"
+                          class="icon icon-sm"/>
                       </xsl:otherwise>
                     </xsl:choose>
                   </form>
@@ -29558,12 +29664,12 @@ should not have received it.
       <div class="pull-right">
         <xsl:choose>
           <xsl:when test="not (gsa:may ('delete_note'))">
-            <img src="/img/trashcan_inactive.png" alt="{gsa:i18n ('Move to Trashcan', 'Action Verb')}"
+            <img src="/img/trashcan_inactive.svg" alt="{gsa:i18n ('Move to Trashcan', 'Action Verb')}"
                  title="{gsa:i18n ('Permission to move Note to trashcan denied', 'Note')}"
-                 class="icon"/>
+                 class="icon icon-sm"/>
           </xsl:when>
           <xsl:when test="gsa:may ('delete_note') and writable != '0' and in_use = '0'">
-            <div class="form-inline">
+            <div class="form-inline icon">
               <xsl:call-template name="trashcan-icon">
                 <xsl:with-param name="type" select="'note'"/>
                 <xsl:with-param name="id" select="@id"/>
@@ -29636,73 +29742,73 @@ should not have received it.
             </div>
           </xsl:when>
           <xsl:otherwise>
-            <img src="/img/trashcan_inactive.png" alt="{gsa:i18n ('Move to Trashcan', 'Action Verb')}"
+            <img src="/img/trashcan_inactive.svg" alt="{gsa:i18n ('Move to Trashcan', 'Action Verb')}"
                  title="{gsa:i18n ('Note cannot be moved to trashcan', 'Note')}"
-                 class="icon"/>
+                 class="icon icon-sm"/>
           </xsl:otherwise>
         </xsl:choose>
         <a href="/omp?cmd=get_note&amp;note_id={@id}&amp;token={/envelope/token}"
-           title="{gsa:i18n ('Note Details', 'Note')}" class="icon">
-          <img src="/img/details.png" alt="{gsa:i18n ('Details', 'Generic Resource')}"/>
+           title="{gsa:i18n ('Note Details', 'Note')}" class="icon icon-sm">
+          <img src="/img/details.svg" alt="{gsa:i18n ('Details', 'Generic Resource')}"/>
         </a>
         <xsl:choose>
           <xsl:when test="not (gsa:may ('modify_note'))">
-            <img src="/img/edit_inactive.png" alt="{gsa:i18n ('Edit', 'Action Verb')}"
+            <img src="/img/edit_inactive.svg" alt="{gsa:i18n ('Edit', 'Action Verb')}"
                  title="{gsa:i18n ('Permission to edit Note denied', 'Note')}"
-                 class="icon"/>
+                 class="icon icon-sm"/>
           </xsl:when>
           <xsl:when test="not (gsa:may ('modify_note')) or writable = '0' or in_use != '0'">
-            <img src="/img/edit_inactive.png" alt="{gsa:i18n ('Edit', 'Action Verb')}"
+            <img src="/img/edit_inactive.svg" alt="{gsa:i18n ('Edit', 'Action Verb')}"
                  title="{gsa:i18n ('Note is not writable', 'Note')}"
-                 class="icon"/>
+                 class="icon icon-sm"/>
           </xsl:when>
           <xsl:when test="$next='get_result' and $delta = 1">
             <a href="/omp?cmd=edit_note&amp;note_id={@id}&amp;next=get_report&amp;result_id={../../@id}&amp;task_id={../../../../task/@id}&amp;name={str:encode-uri (../../../../task/name, true())}&amp;report_id={../../../../../report/@id}&amp;overrides={../../../../filters/apply_overrides}&amp;delta_report_id={../../../../delta/report/@id}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
                title="{gsa:i18n ('Edit Note', 'Note')}"
-               class="edit-action-icon icon" data-type="note" data-id="{@id}">
-              <img src="/img/edit.png" alt="{gsa:i18n ('Edit', 'Action Verb')}"/>
+               class="edit-action-icon icon icon-sm" data-type="note" data-id="{@id}">
+              <img src="/img/edit.svg" alt="{gsa:i18n ('Edit', 'Action Verb')}"/>
             </a>
           </xsl:when>
           <xsl:when test="$next='get_result' and $delta = 2">
             <a href="/omp?cmd=edit_note&amp;note_id={@id}&amp;next=get_report&amp;result_id={../../../@id}&amp;task_id={../../../../../task/@id}&amp;name={str:encode-uri (../../../../../task/name, true ())}&amp;report_id={../../../../../@id}&amp;overrides={../../../../../filters/apply_overrides}&amp;delta_report_id={../../../../../delta/report/@id}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
                title="{gsa:i18n ('Edit Note', 'Note')}"
-               class="edit-action-icon icon" data-type="note" data-id="{@id}">
-              <img src="/img/edit.png" alt="{gsa:i18n ('Edit', 'Action Verb')}"/>
+               class="edit-action-icon icon icon-sm" data-type="note" data-id="{@id}">
+              <img src="/img/edit.svg" alt="{gsa:i18n ('Edit', 'Action Verb')}"/>
             </a>
           </xsl:when>
           <xsl:when test="$next='get_result'">
             <a href="/omp?cmd=edit_note&amp;note_id={@id}&amp;next=get_result&amp;result_id={../../@id}&amp;task_id={../../../../../../task/@id}&amp;name={str:encode-uri (../../../../../../task/name, true ())}&amp;report_id={../../../../../../report/@id}&amp;overrides={/envelope/params/overrides}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
                title="{gsa:i18n ('Edit Note', 'Note')}"
-               class="edit-action-icon icon" data-type="note" data-id="{@id}">
-              <img src="/img/edit.png" alt="{gsa:i18n ('Edit', 'Action Verb')}"/>
+               class="edit-action-icon icon icon-sm" data-type="note" data-id="{@id}">
+              <img src="/img/edit.svg" alt="{gsa:i18n ('Edit', 'Action Verb')}"/>
             </a>
           </xsl:when>
           <xsl:when test="$delta = 1">
             <a href="/omp?cmd=edit_note&amp;a=a&amp;note_id={@id}&amp;next=get_report&amp;report_id={../../../../../@id}&amp;overrides={../../../../filters/apply_overrides}&amp;delta_report_id={../../../../delta/report/@id}&amp;autofp={/envelope/params/autofp}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;report_result_id={../../@id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
                title="{gsa:i18n ('Edit Note', 'Note')}"
-               class="edit-action-icon icon" data-type="note" data-id="{@id}">
-              <img src="/img/edit.png" alt="{gsa:i18n ('Edit', 'Action Verb')}"/>
+               class="edit-action-icon icon icon-sm" data-type="note" data-id="{@id}">
+              <img src="/img/edit.svg" alt="{gsa:i18n ('Edit', 'Action Verb')}"/>
             </a>
           </xsl:when>
           <xsl:when test="$delta = 2">
             <a href="/omp?cmd=edit_note&amp;a=a&amp;note_id={@id}&amp;next=get_report&amp;report_id={../../../../../@id}&amp;overrides={../../../../../filters/apply_overrides}&amp;delta_report_id={../../../../../delta/report/@id}&amp;delta_states={../../../../../filters/delta/text()}&amp;autofp={../../../../../../filters/autofp}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;report_result_id={../../@id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
                title="{gsa:i18n ('Edit Note', 'Note')}"
-               class="edit-action-icon icon" data-type="note" data-id="{@id}">
-              <img src="/img/edit.png" alt="{gsa:i18n ('Edit', 'Action Verb')}"/>
+               class="edit-action-icon icon icon-sm" data-type="note" data-id="{@id}">
+              <img src="/img/edit.svg" alt="{gsa:i18n ('Edit', 'Action Verb')}"/>
             </a>
           </xsl:when>
           <xsl:otherwise>
             <a href="/omp?cmd=edit_note&amp;note_id={@id}&amp;next=get_report&amp;report_id={../../../../@id}&amp;result_id={../../@id}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;overrides={../../../../filters/apply_overrides}&amp;report_result_id={../../@id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
                title="{gsa:i18n ('Edit Note', 'Note')}"
-               class="edit-action-icon icon" data-type="note" data-id="{@id}">
-              <img src="/img/edit.png" alt="{gsa:i18n ('Edit', 'Action Verb')}"/>
+               class="edit-action-icon icon icon-sm" data-type="note" data-id="{@id}">
+              <img src="/img/edit.svg" alt="{gsa:i18n ('Edit', 'Action Verb')}"/>
             </a>
           </xsl:otherwise>
         </xsl:choose>
         <xsl:choose>
           <xsl:when test="gsa:may-clone ('note')">
-            <div class="icon ajax-post" data-reload="next">
-              <img src="/img/clone.png" alt="Clone Note"
+            <div class="icon icon-sm ajax-post" data-reload="next">
+              <img src="/img/clone.svg" alt="Clone Note"
                 name="Clone" title="{gsa:i18n ('Clone', 'Action Verb')}"/>
               <form action="/omp#notes-{../../@id}" method="post" enctype="multipart/form-data">
                 <input type="hidden" name="token" value="{/envelope/token}"/>
@@ -29771,17 +29877,17 @@ should not have received it.
             </div>
           </xsl:when>
           <xsl:otherwise>
-            <img src="/img/clone_inactive.png"
+            <img src="/img/clone_inactive.svg"
                 alt="{gsa:i18n ('Clone', 'Action Verb')}"
                 value="Clone"
                 title="{gsa:i18n ('Permission to clone denied', 'Action Message')}"
-                class="icon"/>
+                class="icon icon-sm"/>
           </xsl:otherwise>
         </xsl:choose>
         <a href="/omp?cmd=export_note&amp;note_id={@id}&amp;token={/envelope/token}"
            title="{gsa:i18n ('Export Note', 'Note')}"
-           class="icon">
-          <img src="/img/download.png" alt="{gsa:i18n ('Export', 'Action Verb')}"/>
+           class="icon icon-sm">
+          <img src="/img/download.svg" alt="{gsa:i18n ('Export', 'Action Verb')}"/>
         </a>
       </div>
     </xsl:if>
@@ -29832,12 +29938,12 @@ should not have received it.
       <div class="pull-right">
         <xsl:choose>
           <xsl:when test="not (gsa:may ('delete_override'))">
-            <img src="/img/trashcan_inactive.png" alt="{gsa:i18n ('Move to Trashcan', 'Action Verb')}"
+            <img src="/img/trashcan_inactive.svg" alt="{gsa:i18n ('Move to Trashcan', 'Action Verb')}"
                 title="{gsa:i18n ('Permission to move Override to trashcan denied', 'Override')}"
-                class="icon"/>
+                class="icon icon-sm"/>
           </xsl:when>
           <xsl:when test="gsa:may ('delete_override') and writable != '0' and in_use = '0'">
-            <div class="form-inline">
+            <div class="form-inline icon">
               <xsl:call-template name="trashcan-icon">
                 <xsl:with-param name="type" select="'override'"/>
                 <xsl:with-param name="id" select="@id"/>
@@ -29910,73 +30016,73 @@ should not have received it.
             </div>
           </xsl:when>
           <xsl:otherwise>
-            <img src="/img/trashcan_inactive.png" alt="{gsa:i18n ('Move to Trashcan', 'Action Verb')}"
+            <img src="/img/trashcan_inactive.svg" alt="{gsa:i18n ('Move to Trashcan', 'Action Verb')}"
                   title="{gsa:i18n ('Override cannot be moved to trashcan', 'Override')}"
-                  class="icon"/>
+                  class="icon icon-sm"/>
           </xsl:otherwise>
         </xsl:choose>
         <a href="/omp?cmd=get_override&amp;override_id={@id}&amp;token={/envelope/token}"
-           title="{gsa:i18n ('Override Details', 'Override')}" class="icon">
-          <img src="/img/details.png" alt="{gsa:i18n ('Details', 'Generic Resource')}"/>
+           title="{gsa:i18n ('Override Details', 'Override')}" class="icon icon-sm">
+          <img src="/img/details.svg" alt="{gsa:i18n ('Details', 'Generic Resource')}"/>
         </a>
         <xsl:choose>
           <xsl:when test="not (gsa:may ('modify_override'))">
-            <img src="/img/edit_inactive.png" alt="{gsa:i18n ('Edit', 'Action Verb')}"
+            <img src="/img/edit_inactive.svg" alt="{gsa:i18n ('Edit', 'Action Verb')}"
                  title="{gsa:i18n ('Permission to edit Override denied', 'Override')}"
-                 class="icon"/>
+                 class="icon icon-sm"/>
           </xsl:when>
           <xsl:when test="not (gsa:may ('modify_override')) or writable = '0' or in_use != '0'">
-            <img src="/img/edit_inactive.png" alt="{gsa:i18n ('Edit', 'Action Verb')}"
+            <img src="/img/edit_inactive.svg" alt="{gsa:i18n ('Edit', 'Action Verb')}"
                  title="{gsa:i18n ('Override is not writable', 'Override')}"
-                 class="icon"/>
+                 class="icon icon-sm"/>
           </xsl:when>
           <xsl:when test="$next='get_result' and $delta = 1">
             <a href="/omp?cmd=edit_override&amp;override_id={@id}&amp;next=get_report&amp;result_id={../../@id}&amp;task_id={../../../../task/@id}&amp;name={str:encode-uri (../../../../task/name, true ())}&amp;report_id={../../../../../report/@id}&amp;overrides={../../../../filters/apply_overrides}&amp;delta_report_id={../../../../delta/report/@id}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
                title="{gsa:i18n ('Edit Override', 'Override')}"
-               class="edit-action-icon icon" data-type="override" data-id="{@id}">
-              <img src="/img/edit.png" alt="{gsa:i18n ('Edit', 'Action Verb')}"/>
+               class="edit-action-icon icon icon-sm" data-type="override" data-id="{@id}">
+              <img src="/img/edit.svg" alt="{gsa:i18n ('Edit', 'Action Verb')}"/>
             </a>
           </xsl:when>
           <xsl:when test="$next='get_result' and $delta = 2">
             <a href="/omp?cmd=edit_override&amp;override_id={@id}&amp;next=get_report&amp;result_id={../../../@id}&amp;task_id={../../../../../task/@id}&amp;name={str:encode-uri (../../../../../task/name, true())}&amp;report_id={../../../../../@id}&amp;overrides={../../../../../filters/apply_overrides}&amp;delta_report_id={../../../../../delta/report/@id}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
                title="{gsa:i18n ('Edit Override', 'Override')}"
-               class="edit-action-icon icon" data-type="override" data-id="{@id}">
-              <img src="/img/edit.png" alt="{gsa:i18n ('Edit', 'Action Verb')}"/>
+               class="edit-action-icon icon icon-sm" data-type="override" data-id="{@id}">
+              <img src="/img/edit.svg" alt="{gsa:i18n ('Edit', 'Action Verb')}"/>
             </a>
           </xsl:when>
           <xsl:when test="$next='get_result'">
             <a href="/omp?cmd=edit_override&amp;override_id={@id}&amp;next=get_result&amp;result_id={../../@id}&amp;task_id={../../../../../../task/@id}&amp;name={str:encode-uri (../../../../../../task/name, true ())}&amp;report_id={../../../../../../report/@id}&amp;overrides={/envelope/params/overrides}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
                title="{gsa:i18n ('Edit Override', 'Override')}"
-               class="edit-action-icon icon" data-type="override" data-id="{@id}">
-              <img src="/img/edit.png" alt="{gsa:i18n ('Edit', 'Action Verb')}"/>
+               class="edit-action-icon icon icon-sm" data-type="override" data-id="{@id}">
+              <img src="/img/edit.svg" alt="{gsa:i18n ('Edit', 'Action Verb')}"/>
             </a>
           </xsl:when>
           <xsl:when test="$delta = 1">
             <a href="/omp?cmd=edit_override&amp;a=a&amp;override_id={@id}&amp;next=get_report&amp;report_id={../../../../../@id}&amp;overrides={../../../../filters/apply_overrides}&amp;delta_report_id={../../../../delta/report/@id}&amp;autofp={/envelope/params/autofp}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;report_result_id={../../@id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
                title="{gsa:i18n ('Edit Override', 'Override')}"
-               class="edit-action-icon icon" data-type="override" data-id="{@id}">
-              <img src="/img/edit.png" alt="{gsa:i18n ('Edit', 'Action Verb')}"/>
+               class="edit-action-icon icon icon-sm" data-type="override" data-id="{@id}">
+              <img src="/img/edit.svg" alt="{gsa:i18n ('Edit', 'Action Verb')}"/>
             </a>
           </xsl:when>
           <xsl:when test="$delta = 2">
             <a href="/omp?cmd=edit_override&amp;a=a&amp;override_id={@id}&amp;next=get_report&amp;report_id={../../../../../@id}&amp;overrides={../../../../../filters/apply_overrides}&amp;delta_report_id={../../../../../delta/report/@id}&amp;delta_states={../../../../../filters/delta/text()}&amp;autofp={../../../../../../filters/autofp}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;report_result_id={../../@id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
                title="{gsa:i18n ('Edit Override', 'Override')}"
-               class="edit-action-icon icon" data-type="override" data-id="{@id}">
-              <img src="/img/edit.png" alt="{gsa:i18n ('Edit', 'Action Verb')}"/>
+               class="edit-action-icon icon icon-sm" data-type="override" data-id="{@id}">
+              <img src="/img/edit.svg" alt="{gsa:i18n ('Edit', 'Action Verb')}"/>
             </a>
           </xsl:when>
           <xsl:otherwise>
             <a href="/omp?cmd=edit_override&amp;override_id={@id}&amp;next=get_report&amp;report_id={../../../../@id}&amp;result_id={../../@id}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;overrides={../../../../filters/apply_overrides}&amp;report_result_id={../../@id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
                title="{gsa:i18n ('Edit Override', 'Override')}"
-               class="edit-action-icon icon" data-type="override" data-id="{@id}">
-              <img src="/img/edit.png" alt="{gsa:i18n ('Edit', 'Action Verb')}"/>
+               class="edit-action-icon icon icon-sm" data-type="override" data-id="{@id}">
+              <img src="/img/edit.svg" alt="{gsa:i18n ('Edit', 'Action Verb')}"/>
             </a>
           </xsl:otherwise>
         </xsl:choose>
         <xsl:choose>
           <xsl:when test="gsa:may-clone ('override')">
-            <div class="icon ajax-post" data-reload="next">
-              <img src="/img/clone.png" alt="Clone Override"
+            <div class="icon icon-sm ajax-post" data-reload="next">
+              <img src="/img/clone.svg" alt="Clone Override"
                 name="Clone" title="{gsa:i18n ('Clone', 'Action Verb')}"/>
               <form action="/omp#overrides-{../../@id}" method="post" enctype="multipart/form-data">
                 <input type="hidden" name="token" value="{/envelope/token}"/>
@@ -30045,17 +30151,17 @@ should not have received it.
             </div>
           </xsl:when>
           <xsl:otherwise>
-            <img src="/img/clone_inactive.png"
+            <img src="/img/clone_inactive.svg"
                 alt="{gsa:i18n ('Clone', 'Action Verb')}"
                 value="Clone"
                 title="{gsa:i18n ('Permission to clone denied', 'Action Message')}"
-                class="icon"/>
+                class="icon icon-sm"/>
           </xsl:otherwise>
         </xsl:choose>
         <a href="/omp?cmd=export_override&amp;override_id={@id}&amp;token={/envelope/token}"
            title="{gsa:i18n ('Export Override', 'Override')}"
-           class="icon">
-          <img src="/img/download.png" alt="{gsa:i18n ('Export', 'Action Verb')}"/>
+           class="icon icon-sm">
+          <img src="/img/download.svg" alt="{gsa:i18n ('Export', 'Action Verb')}"/>
         </a>
       </div>
     </xsl:if>
@@ -30137,16 +30243,16 @@ should not have received it.
 
   <div class="toolbar">
     <a href="/help/result_details.html?token={/envelope/token}"
-      class="icon"
+      class="icon icon-sm"
       title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('Result Details', 'Result'))}">
-      <img src="/img/help.png"/>
+      <img src="/img/help.svg"/>
     </a>
     <xsl:choose>
       <xsl:when test="$delta=0">
         <a href="/omp?cmd=export_result&amp;result_id={@id}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
           title="{gsa:i18n ('Export Result as XML', 'Result')}"
-          class="icon">
-          <img src="/img/download.png" alt="{gsa:i18n ('Export XML', 'Action Verb')}"/>
+          class="icon icon-sm">
+          <img src="/img/download.svg" alt="{gsa:i18n ('Export XML', 'Action Verb')}"/>
         </a>
       </xsl:when>
     </xsl:choose>
@@ -30167,24 +30273,23 @@ should not have received it.
 
     <span class="divider"/>
     <a href="?cmd=get_task&amp;task_id={$task_id}&amp;overrides={/envelope/params/overrides}&amp;min_qod={/envelope/params/min_qod}&amp;token={/envelope/token}"
+      class="icon icon-sm"
       title="{gsa-i18n:strformat (gsa:i18n ('Corresponding Task (%1)', 'Task'), $task_name)}">
-      <img src="/img/task.svg" alt="Task"
-        class="icon icon-sm" />
+      <img src="/img/task.svg" alt="Task" />
     </a>
     <xsl:choose>
       <xsl:when test="$delta=0">
         <a href="?cmd=get_report&amp;report_id={$report_id}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;overrides={/envelope/params/apply_overrides}&amp;token={/envelope/token}#result-{$report_result_id}"
+          class="icon icon-sm"
           title="{gsa:i18n ('Corresponding Report', 'Report')}">
-          <img src="/img/report.svg" alt="{gsa:i18n ('Corresponding Report', 'Report')}"
-            class="icon icon-sm" />
+          <img src="/img/report.svg" alt="{gsa:i18n ('Corresponding Report', 'Report')}"/>
         </a>
       </xsl:when>
       <xsl:otherwise>
         <a href="?cmd=get_report&amp;report_id={../../@id}&amp;delta_report_id={../../delta/report/@id}&amp;delta_states={../../filters/delta/text()}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;overrides={../../../../filters/apply_overrides}&amp;token={/envelope/token}#result-{$report_result_id}"
-           title="{gsa:i18n ('Corresponding Report', 'Report')}"
-           class="icon">
-          <img src="/img/report.svg" alt="{gsa:i18n ('Corresponding Report', 'Report')}"
-            class="icon icon-sm" />
+          title="{gsa:i18n ('Corresponding Report', 'Report')}"
+          class="icon icon-sm">
+          <img src="/img/report.svg" alt="{gsa:i18n ('Corresponding Report', 'Report')}"/>
         </a>
       </xsl:otherwise>
     </xsl:choose>
@@ -30256,7 +30361,7 @@ should not have received it.
   <xsl:variable name="label">
     <xsl:choose>
       <xsl:when test="$image != ''">
-        <img src="{$image}" alt="{$label-text}" title="{$label-text}"/>
+        <img class="icon icon-sm" src="{$image}" alt="{$label-text}" title="{$label-text}"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="$label-text"/>
@@ -30317,11 +30422,12 @@ should not have received it.
           <xsl:apply-templates select="../../." mode="result-header">
             <xsl:with-param name="name" select="'solution_type'"/>
             <xsl:with-param name="label-text" select="gsa:i18n ('Solution type', 'NVT or Result')"/>
-            <xsl:with-param name="image" select="'/img/solution_type.png'"/>
+            <xsl:with-param name="image" select="'/img/solution_type.svg'"/>
           </xsl:apply-templates>
         </xsl:when>
         <xsl:otherwise>
-          <img src="/img/solution_type.png" alt="{gsa:i18n ('Solution type', 'NVT or Result')}" title="{gsa:i18n ('Solution type', 'NVT or Result')}"/>
+          <img src="/img/solution_type.svg" alt="{gsa:i18n ('Solution type', 'NVT or Result')}" title="{gsa:i18n ('Solution type', 'NVT or Result')}"
+            class="icon icon-sm"/>
         </xsl:otherwise>
       </xsl:choose>
     </td>
@@ -30339,7 +30445,7 @@ should not have received it.
         <xsl:otherwise>
           <xsl:value-of select="gsa:i18n ('Severity', 'Severity')"/>
           <div class="pull-right form-inline">
-            <form method="get" action="" enctype="multipart/form-data">
+            <form method="get" action="">
               <input type="hidden" name="token" value="{/envelope/token}"/>
               <input type="hidden" name="cmd" value="get_result"/>
               <input type="hidden" name="result_id" value="{@id}"/>
@@ -30350,19 +30456,19 @@ should not have received it.
                 <xsl:when test="/envelope/params/apply_overrides = 0">
                   <input type="hidden" name="apply_overrides" value="1"/>
                   <input type="image" name="No Overrides" value="No Overrides"
-                         src="/img/overrides_disabled.png"
+                         src="/img/overrides_disabled.svg"
                          alt="{gsa:i18n ('No Overrides', 'Override Controls')}"
                          title="{gsa:i18n ('No Overrides', 'Override Controls')}"
-                         style="margin-left:3px;margin-right:3px;"/>
+                         class="icon icon-sm"/>
                 </xsl:when>
                 <xsl:otherwise>
                   <input type="hidden" name="apply_overrides" value="0"/>
                   <input type="image" name="Overrides are Applied"
                          value="Overrides are Applied"
-                         src="/img/overrides_enabled.png"
+                         src="/img/overrides_enabled.svg"
                          alt="{gsa:i18n ('Overrides are Applied', 'Override Controls')}"
                          title="{gsa:i18n ('Overrides are Applied', 'Override Controls')}"
-                         style="margin-left:3px;margin-right:3px;"/>
+                         class="icon icon-sm"/>
                 </xsl:otherwise>
               </xsl:choose>
             </form>
@@ -30441,42 +30547,39 @@ should not have received it.
     <td> <!-- Vulnerability -->
       <div class="pull-right">
         <xsl:if test="$note-buttons = 1">
-          <div class="pull-left">
-            <xsl:if test="count(notes/note) &gt; 0">
-              <xsl:choose>
-                <xsl:when test="$result-details or /envelope/params/details &gt; 0">
-                  <a href="#notes-{@id}"
-                     title="{gsa:i18n ('Notes', 'Note')}" style="margin-left:3px;">
-                    <img src="/img/note.png" alt="{gsa:i18n ('Notes', 'Note')}"/>
-                  </a>
-                </xsl:when>
-                <xsl:otherwise>
-                  <img src="/img/note.png" title="{gsa:i18n ('Notes', 'Note')}"
-                       style="margin-left:3px;"
-                       alt="{gsa:i18n ('Notes', 'Note')}"/>
-                </xsl:otherwise>
-              </xsl:choose>
-            </xsl:if>
-          </div>
+          <xsl:if test="count(notes/note) &gt; 0">
+            <xsl:choose>
+              <xsl:when test="$result-details or /envelope/params/details &gt; 0">
+                <a href="#notes-{@id}"
+                  class="icon icon-sm"
+                  title="{gsa:i18n ('Notes', 'Note')}">
+                  <img src="/img/note.svg" alt="{gsa:i18n ('Notes', 'Note')}"/>
+                </a>
+              </xsl:when>
+              <xsl:otherwise>
+                <img src="/img/note.svg" title="{gsa:i18n ('Notes', 'Note')}"
+                  class="icon-icon-sm"
+                  alt="{gsa:i18n ('Notes', 'Note')}"/>
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:if>
         </xsl:if>
         <xsl:if test="$override-buttons = 1">
-          <div class="pull-left">
-            <xsl:if test="count(overrides/override[active != 0]) &gt; 0">
-              <xsl:choose>
-                <xsl:when test="$result-details or /envelope/params/details &gt; 0">
-                  <a href="#overrides-{@id}"
-                     title="{gsa:i18n ('Overrides', 'Override')}" style="margin-left:3px;">
-                    <img src="/img/override.png" alt="{gsa:i18n ('Overrides', 'Override')}"/>
-                  </a>
-                </xsl:when>
-                <xsl:otherwise>
-                  <img src="/img/override.png" title="{gsa:i18n ('Overrides', 'Override')}"
-                       style="margin-left:3px;"
-                       alt="{gsa:i18n ('Overrides', 'Override')}"/>
-                </xsl:otherwise>
-              </xsl:choose>
-            </xsl:if>
-          </div>
+          <xsl:if test="count(overrides/override[active != 0]) &gt; 0">
+            <xsl:choose>
+              <xsl:when test="$result-details or /envelope/params/details &gt; 0">
+                <a href="#overrides-{@id}"
+                  title="{gsa:i18n ('Overrides', 'Override')}" class="icon icon-sm">
+                  <img src="/img/override.svg" alt="{gsa:i18n ('Overrides', 'Override')}"/>
+                </a>
+              </xsl:when>
+              <xsl:otherwise>
+                <img src="/img/override.svg" title="{gsa:i18n ('Overrides', 'Override')}"
+                  class="icon icon-sm"
+                  alt="{gsa:i18n ('Overrides', 'Override')}"/>
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:if>
         </xsl:if>
       </div>
       <xsl:if test="delta/text()">
@@ -30640,88 +30743,84 @@ should not have received it.
     <xsl:if test="$prognostic != 1">
       <td>
         <xsl:if test="$note-buttons = 1">
-          <div class="pull-left table-actions">
-            <xsl:choose>
-              <xsl:when test="delta">
-              </xsl:when>
-              <xsl:when test="not (gsa:may-op ('create_note'))">
-              </xsl:when>
-              <xsl:when test="$result-details and string-length (original_severity)">
-                <a href="/omp?cmd=new_note&amp;next=get_result&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={task/@id}&amp;name={str:encode-uri (task/name, true ())}&amp;severity={original_severity}&amp;port={port}&amp;hosts={host/text()}&amp;report_id={report/@id}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
-                   title="{gsa:i18n ('Add Note', 'Note')}" style="margin-left:3px;"
-                   data-reload="window"
-                   class="new-action-icon icon" data-type="note" data-extra="result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={task/@id}&amp;severity={original_severity}&amp;port={port}&amp;hosts={host/text()}&amp;name={str:encode-uri (task/name, true ())}">
-                  <img src="/img/new_note.png" alt="{gsa:i18n ('Add Note', 'Note')}"/>
-                </a>
-              </xsl:when>
-              <xsl:when test="$result-details">
-                <a href="/omp?cmd=new_note&amp;next=get_result&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={task/@id}&amp;name={str:encode-uri (task/name, true ())}&amp;severity={severity}&amp;port={port}&amp;hosts={host/text()}&amp;report_id={report/@id}&amp;overrides={filters/apply_overrides}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
-                   title="{gsa:i18n ('Add Note', 'Note')}"
-                   data-reload="window"
-                   class="new-action-icon icon" data-type="note" data-extra="result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={task/@id}&amp;severity={severity}&amp;port={port}&amp;hosts={host/text()}&amp;name={str:encode-uri (task/name, true ())}">
-                  <img src="/img/new_note.png" alt="{gsa:i18n ('Add Note', 'Note')}"/>
-                </a>
-              </xsl:when>
-              <xsl:when test="string-length (original_severity)">
-                <a href="/omp?cmd=new_note&amp;next=get_report&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={str:encode-uri (../../task/name, true ())}&amp;report_id={../../@id}&amp;severity={original_severity}&amp;port={port}&amp;hosts={host/text()}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
-                   title="{gsa:i18n ('Add Note', 'Note')}"
-                   data-reload="window"
-                   class="new-action-icon icon" data-type="note" data-extra="result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;severity={original_severity}&amp;port={port}&amp;hosts={host/text()}&amp;name={str:encode-uri (../../task/name, true ())}">
-                  <img src="/img/new_note.png" alt="{gsa:i18n ('Add Note', 'Note')}"/>
-                </a>
-              </xsl:when>
-              <xsl:otherwise>
-                <a href="/omp?cmd=new_note&amp;next=get_report&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={str:encode-uri (../../task/name, true ())}&amp;report_id={../../@id}&amp;severity={severity}&amp;port={port}&amp;hosts={host/text()}&amp;overrides={../../filters/apply_overrides}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
-                   title="{gsa:i18n ('Add Note', 'Note')}"
-                   data-reload="window"
-                   class="new-action-icon icon" data-type="note" data-extra="result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;severity={severity}&amp;port={port}&amp;hosts={host/text()}&amp;name={str:encode-uri (../../task/name, true ())}">
-                  <img src="/img/new_note.png" alt="{gsa:i18n ('Add Note', 'Note')}"/>
-                </a>
-              </xsl:otherwise>
-            </xsl:choose>
-          </div>
+          <xsl:choose>
+            <xsl:when test="delta">
+            </xsl:when>
+            <xsl:when test="not (gsa:may-op ('create_note'))">
+            </xsl:when>
+            <xsl:when test="$result-details and string-length (original_severity)">
+              <a href="/omp?cmd=new_note&amp;next=get_result&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={task/@id}&amp;name={str:encode-uri (task/name, true ())}&amp;severity={original_severity}&amp;port={port}&amp;hosts={host/text()}&amp;report_id={report/@id}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
+                  title="{gsa:i18n ('Add Note', 'Note')}" style="margin-left:3px;"
+                  data-reload="window"
+                  class="new-action-icon icon icon-sm" data-type="note" data-extra="result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={task/@id}&amp;severity={original_severity}&amp;port={port}&amp;hosts={host/text()}&amp;name={str:encode-uri (task/name, true ())}">
+                <img src="/img/new_note.svg" alt="{gsa:i18n ('Add Note', 'Note')}"/>
+              </a>
+            </xsl:when>
+            <xsl:when test="$result-details">
+              <a href="/omp?cmd=new_note&amp;next=get_result&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={task/@id}&amp;name={str:encode-uri (task/name, true ())}&amp;severity={severity}&amp;port={port}&amp;hosts={host/text()}&amp;report_id={report/@id}&amp;overrides={filters/apply_overrides}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
+                  title="{gsa:i18n ('Add Note', 'Note')}"
+                  data-reload="window"
+                  class="new-action-icon icon icon-sm" data-type="note" data-extra="result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={task/@id}&amp;severity={severity}&amp;port={port}&amp;hosts={host/text()}&amp;name={str:encode-uri (task/name, true ())}">
+                <img src="/img/new_note.svg" alt="{gsa:i18n ('Add Note', 'Note')}"/>
+              </a>
+            </xsl:when>
+            <xsl:when test="string-length (original_severity)">
+              <a href="/omp?cmd=new_note&amp;next=get_report&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={str:encode-uri (../../task/name, true ())}&amp;report_id={../../@id}&amp;severity={original_severity}&amp;port={port}&amp;hosts={host/text()}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
+                  title="{gsa:i18n ('Add Note', 'Note')}"
+                  data-reload="window"
+                  class="new-action-icon icon icon-sm" data-type="note" data-extra="result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;severity={original_severity}&amp;port={port}&amp;hosts={host/text()}&amp;name={str:encode-uri (../../task/name, true ())}">
+                <img src="/img/new_note.svg" alt="{gsa:i18n ('Add Note', 'Note')}"/>
+              </a>
+            </xsl:when>
+            <xsl:otherwise>
+              <a href="/omp?cmd=new_note&amp;next=get_report&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={str:encode-uri (../../task/name, true ())}&amp;report_id={../../@id}&amp;severity={severity}&amp;port={port}&amp;hosts={host/text()}&amp;overrides={../../filters/apply_overrides}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
+                  title="{gsa:i18n ('Add Note', 'Note')}"
+                  data-reload="window"
+                  class="new-action-icon icon icon-sm" data-type="note" data-extra="result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;severity={severity}&amp;port={port}&amp;hosts={host/text()}&amp;name={str:encode-uri (../../task/name, true ())}">
+                <img src="/img/new_note.svg" alt="{gsa:i18n ('Add Note', 'Note')}"/>
+              </a>
+            </xsl:otherwise>
+          </xsl:choose>
         </xsl:if>
         <xsl:if test="$override-buttons = 1">
-          <div class="pull-left table-actions">
-            <xsl:choose>
-              <xsl:when test="delta">
-              </xsl:when>
-              <xsl:when test="not (gsa:may-op ('create_override'))">
-              </xsl:when>
-              <xsl:when test="$result-details and string-length (original_severity)">
-                <a href="/omp?cmd=new_override&amp;next=get_result&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={task/@id}&amp;name={str:encode-uri (task/name, true ())}&amp;severity={original_severity}&amp;port={port}&amp;hosts={host/text()}&amp;report_id={report/@id}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
-                   data-reload="window"
-                   title="{gsa:i18n ('Add Override', 'Override')}"
-                   class="new-action-icon icon" data-type="override" data-extra="result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={task/@id}&amp;name={str:encode-uri (task/name, true ())}&amp;severity={original_severity}&amp;port={port}&amp;hosts={host/text()}">
-                  <img src="/img/new_override.png" alt="{gsa:i18n ('Add Override', 'Override')}"/>
-                </a>
-              </xsl:when>
-              <xsl:when test="$result-details">
-                <a href="/omp?cmd=new_override&amp;next=get_result&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={task/@id}&amp;name={str:encode-uri (task/name, true())}&amp;severity={severity}&amp;port={port}&amp;hosts={host/text()}&amp;report_id={report/@id}&amp;overrides={filters/apply_overrides}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
-                   title="{gsa:i18n ('Add Override', 'Override')}"
-                   data-reload="window"
-                   class="new-action-icon icon" data-type="override" data-extra="result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={task/@id}&amp;name={str:encode-uri (task/name, true())}&amp;severity={severity}&amp;port={port}&amp;hosts={host/text()}">
-                  <img src="/img/new_override.png" alt="{gsa:i18n ('Add Override', 'Override')}"/>
-                </a>
-              </xsl:when>
-              <xsl:when test="string-length (original_severity)">
-                <a href="/omp?cmd=new_override&amp;next=get_report&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={str:encode-uri (../../task/name, true ())}&amp;report_id={../../@id}&amp;severity={original_severity}&amp;port={port}&amp;hosts={host/text()}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
-                   title="{gsa:i18n ('Add Override', 'Override')}"
-                   data-reload="window"
-                   class="new-action-icon icon" data-type="override" data-extra="result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={str:encode-uri (../../task/name, true ())}&amp;severity={original_severity}&amp;port={port}&amp;hosts={host/text()}">
-                  <img src="/img/new_override.png" alt="{gsa:i18n ('Add Override', 'Override')}"/>
-                </a>
-              </xsl:when>
-              <xsl:otherwise>
-                <a href="/omp?cmd=new_override&amp;next=get_report&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={str:encode-uri (../../task/name, true ())}&amp;report_id={../../@id}&amp;severity={severity}&amp;port={port}&amp;hosts={host/text()}&amp;overrides={../../filters/apply_overrides}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
-                   title="{gsa:i18n ('Add Override', 'Override')}"
-                   data-reload="window"
-                   class="new-action-icon icon" data-type="override" data-extra="result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={str:encode-uri (../../task/name, true())}&amp;severity={severity}&amp;port={port}&amp;hosts={host/text()}">
-                  <img src="/img/new_override.png" alt="{gsa:i18n ('Add Override', 'Override')}"/>
-                </a>
-              </xsl:otherwise>
-            </xsl:choose>
-          </div>
+          <xsl:choose>
+            <xsl:when test="delta">
+            </xsl:when>
+            <xsl:when test="not (gsa:may-op ('create_override'))">
+            </xsl:when>
+            <xsl:when test="$result-details and string-length (original_severity)">
+              <a href="/omp?cmd=new_override&amp;next=get_result&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={task/@id}&amp;name={str:encode-uri (task/name, true ())}&amp;severity={original_severity}&amp;port={port}&amp;hosts={host/text()}&amp;report_id={report/@id}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
+                  data-reload="window"
+                  title="{gsa:i18n ('Add Override', 'Override')}"
+                  class="new-action-icon icon icon-sm" data-type="override" data-extra="result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={task/@id}&amp;name={str:encode-uri (task/name, true ())}&amp;severity={original_severity}&amp;port={port}&amp;hosts={host/text()}">
+                <img src="/img/new_override.svg" alt="{gsa:i18n ('Add Override', 'Override')}"/>
+              </a>
+            </xsl:when>
+            <xsl:when test="$result-details">
+              <a href="/omp?cmd=new_override&amp;next=get_result&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={task/@id}&amp;name={str:encode-uri (task/name, true())}&amp;severity={severity}&amp;port={port}&amp;hosts={host/text()}&amp;report_id={report/@id}&amp;overrides={filters/apply_overrides}&amp;apply_overrides={/envelope/params/apply_overrides}&amp;autofp={/envelope/params/autofp}&amp;report_result_id={/envelope/params/report_result_id}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
+                  title="{gsa:i18n ('Add Override', 'Override')}"
+                  data-reload="window"
+                  class="new-action-icon icon icon-sm" data-type="override" data-extra="result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={task/@id}&amp;name={str:encode-uri (task/name, true())}&amp;severity={severity}&amp;port={port}&amp;hosts={host/text()}">
+                <img src="/img/new_override.svg" alt="{gsa:i18n ('Add Override', 'Override')}"/>
+              </a>
+            </xsl:when>
+            <xsl:when test="string-length (original_severity)">
+              <a href="/omp?cmd=new_override&amp;next=get_report&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={str:encode-uri (../../task/name, true ())}&amp;report_id={../../@id}&amp;severity={original_severity}&amp;port={port}&amp;hosts={host/text()}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
+                  title="{gsa:i18n ('Add Override', 'Override')}"
+                  data-reload="window"
+                  class="new-action-icon icon icon-sm" data-type="override" data-extra="result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={str:encode-uri (../../task/name, true ())}&amp;severity={original_severity}&amp;port={port}&amp;hosts={host/text()}">
+                <img src="/img/new_override.svg" alt="{gsa:i18n ('Add Override', 'Override')}"/>
+              </a>
+            </xsl:when>
+            <xsl:otherwise>
+              <a href="/omp?cmd=new_override&amp;next=get_report&amp;result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={str:encode-uri (../../task/name, true ())}&amp;report_id={../../@id}&amp;severity={severity}&amp;port={port}&amp;hosts={host/text()}&amp;overrides={../../filters/apply_overrides}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;autofp={/envelope/params/autofp}&amp;details={/envelope/params/details}&amp;token={/envelope/token}"
+                  title="{gsa:i18n ('Add Override', 'Override')}"
+                  data-reload="window"
+                  class="new-action-icon icon icon-sm" data-type="override" data-extra="result_id={@id}&amp;oid={nvt/@oid}&amp;task_id={../../task/@id}&amp;name={str:encode-uri (../../task/name, true())}&amp;severity={severity}&amp;port={port}&amp;hosts={host/text()}">
+                <img src="/img/new_override.svg" alt="{gsa:i18n ('Add Override', 'Override')}"/>
+              </a>
+            </xsl:otherwise>
+          </xsl:choose>
         </xsl:if>
       </td>
     </xsl:if>
@@ -31260,149 +31359,166 @@ should not have received it.
 
 <xsl:template name="asset-os-icon">
   <xsl:param name="host" select="host"/>
-  <xsl:param name="img-style"/>
   <xsl:param name="os-name"/>
   <xsl:param name="os-cpe" select="1"/>
   <!-- Check for detected operating system(s) -->
   <xsl:variable name="best_os_cpe" select="$host/detail[name/text() = 'best_os_cpe']/value"/>
   <xsl:variable name="best_os_txt" select="$host/detail[name/text() = 'best_os_txt']/value"/>
-  <xsl:choose>
-    <xsl:when test="contains($best_os_txt, '[possible conflict]')">
-      <a href="/omp?cmd=get_info&amp;info_type=cpe&amp;info_name={$best_os_cpe}&amp;token={/envelope/token}">
-        <xsl:choose>
-          <xsl:when test="$os-cpe">
-            <img style="{$img-style}" src="/img/os_conflict.png" alt="{gsa:i18n ('OS conflict', 'Host')}: {$best_os_txt} ({$best_os_cpe})" title="{gsa:i18n ('OS conflict', 'Host')}: {$best_os_txt} ({$best_os_cpe})"/>
-          </xsl:when>
-          <xsl:otherwise>
-            <img style="{$img-style}" src="/img/os_conflict.png" alt="{gsa:i18n ('OS conflict', 'Host')}: {$best_os_txt}" title="{gsa:i18n ('OS conflict', 'Host')}: {$best_os_txt}"/>
-          </xsl:otherwise>
-        </xsl:choose>
+  <div class="os">
+    <xsl:choose>
+      <xsl:when test="contains($best_os_txt, '[possible conflict]')">
+        <a href="/omp?cmd=get_info&amp;info_type=cpe&amp;info_name={$best_os_cpe}&amp;token={/envelope/token}">
+          <xsl:choose>
+            <xsl:when test="$os-cpe">
+              <img src="/img/os_conflict.svg" alt="{gsa:i18n ('OS conflict', 'Host')}: {$best_os_txt} ({$best_os_cpe})"
+                class="icon icon-sm"
+                title="{gsa:i18n ('OS conflict', 'Host')}: {$best_os_txt} ({$best_os_cpe})"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <img src="/img/os_conflict.svg" alt="{gsa:i18n ('OS conflict', 'Host')}: {$best_os_txt}"
+                class="icon icon-sm"
+                title="{gsa:i18n ('OS conflict', 'Host')}: {$best_os_txt}"/>
+            </xsl:otherwise>
+          </xsl:choose>
+          <xsl:if test="$os-name">
+            <xsl:value-of select="$best_os_txt"/>
+          </xsl:if>
+        </a>
+      </xsl:when>
+      <xsl:when test="not($best_os_cpe)">
+        <!-- nothing detected or matched by our CPE database -->
+        <xsl:variable name="img_desc">
+          <xsl:choose>
+            <xsl:when test="$best_os_txt">
+              <xsl:value-of select="$best_os_txt"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="gsa:i18n ('No information on Operating System.', 'Host')"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:variable>
+        <img src="/img/os_unknown.svg" alt="{$img_desc}" title="{$img_desc}"
+          class="icon icon-sm"/>
         <xsl:if test="$os-name">
           <xsl:value-of select="$best_os_txt"/>
         </xsl:if>
-      </a>
-    </xsl:when>
-    <xsl:when test="not($best_os_cpe)">
-      <!-- nothing detected or matched by our CPE database -->
-      <xsl:variable name="img_desc">
-        <xsl:choose>
-          <xsl:when test="$best_os_txt">
-            <xsl:value-of select="$best_os_txt"/>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:value-of select="gsa:i18n ('No information on Operating System.', 'Host')"/>
-          </xsl:otherwise>
-        </xsl:choose>
-      </xsl:variable>
-      <img style="{$img-style}" src="/img/os_unknown.png" alt="{$img_desc}" title="{$img_desc}"/>
-      <xsl:if test="$os-name">
-        <xsl:value-of select="$best_os_txt"/>
-      </xsl:if>
-    </xsl:when>
-    <xsl:otherwise>
-      <!-- One system detected: display the corresponding icon and name from our database -->
-      <xsl:variable name="report_id" select="$host/detail[name/text() = 'best_os_cpe']/source/@id"/>
-      <xsl:variable name="os_id" select="$host/../identifiers/identifier[name/text() = 'OS' and source/@id = $report_id and value = $best_os_cpe]/os/@id"/>
-      <xsl:variable name="os_icon" select="document('os.xml')//operating_systems/operating_system[contains($best_os_cpe, pattern)]/icon"/>
-      <xsl:variable name="img_desc">
-        <xsl:value-of select="document('os.xml')//operating_systems/operating_system[contains($best_os_cpe, pattern)]/title"/>
-        <xsl:if test="$os-cpe">
-          <xsl:text> (</xsl:text>
-          <xsl:value-of select="$best_os_cpe"/>
-          <xsl:text>)</xsl:text>
-        </xsl:if>
-      </xsl:variable>
-      <a href="/omp?cmd=get_asset&amp;asset_type=os&amp;asset_id={$os_id}&amp;token={/envelope/token}">
-        <xsl:choose>
-          <xsl:when test="$os_icon">
-            <img style="{$img-style}" src="/img/{$os_icon}" alt="{$img_desc}" title="{$img_desc}"/>
-            <xsl:if test="$os-name">
-              <xsl:value-of select="$img_desc"/>
-            </xsl:if>
-          </xsl:when>
-          <xsl:otherwise>
-            <img style="{$img-style}" src="/img/os_unknown.png" alt="{$img_desc}" title="{$img_desc}"/>
-            <xsl:if test="$os-name">
-              <xsl:value-of select="$img_desc"/>
-            </xsl:if>
-          </xsl:otherwise>
-        </xsl:choose>
-      </a>
-    </xsl:otherwise>
-  </xsl:choose>
+      </xsl:when>
+      <xsl:otherwise>
+        <!-- One system detected: display the corresponding icon and name from our database -->
+        <xsl:variable name="report_id" select="$host/detail[name/text() = 'best_os_cpe']/source/@id"/>
+        <xsl:variable name="os_id" select="$host/../identifiers/identifier[name/text() = 'OS' and source/@id = $report_id and value = $best_os_cpe]/os/@id"/>
+        <xsl:variable name="os_icon" select="document('os.xml')//operating_systems/operating_system[contains($best_os_cpe, pattern)]/icon"/>
+        <xsl:variable name="img_desc">
+          <xsl:value-of select="document('os.xml')//operating_systems/operating_system[contains($best_os_cpe, pattern)]/title"/>
+          <xsl:if test="$os-cpe">
+            <xsl:text> (</xsl:text>
+            <xsl:value-of select="$best_os_cpe"/>
+            <xsl:text>)</xsl:text>
+          </xsl:if>
+        </xsl:variable>
+        <a href="/omp?cmd=get_asset&amp;asset_type=os&amp;asset_id={$os_id}&amp;token={/envelope/token}">
+          <xsl:choose>
+            <xsl:when test="$os_icon">
+              <img src="/img/{$os_icon}" alt="{$img_desc}" title="{$img_desc}"
+                class="icon icon-sm"/>
+              <xsl:if test="$os-name">
+                <xsl:value-of select="$img_desc"/>
+              </xsl:if>
+            </xsl:when>
+            <xsl:otherwise>
+              <img src="/img/os_unknown.svg" alt="{$img_desc}" title="{$img_desc}"
+                class="icon icon-sm"/>
+              <xsl:if test="$os-name">
+                <xsl:value-of select="$img_desc"/>
+              </xsl:if>
+            </xsl:otherwise>
+          </xsl:choose>
+        </a>
+      </xsl:otherwise>
+    </xsl:choose>
+  </div>
 </xsl:template>
 
 <xsl:template name="os-icon">
   <xsl:param name="host"/>
   <xsl:param name="current_host"/>
-  <xsl:param name="img-style"/>
   <xsl:param name="os-name"/>
   <xsl:param name="os-cpe" select="1"/>
   <!-- Check for detected operating system(s) -->
   <xsl:variable name="best_os_cpe" select="$host[ip/text() = $current_host]/detail[name/text() = 'best_os_cpe']/value"/>
   <xsl:variable name="best_os_txt" select="$host[ip/text() = $current_host]/detail[name/text() = 'best_os_txt']/value"/>
-  <xsl:choose>
-    <xsl:when test="contains($best_os_txt, '[possible conflict]')">
-      <a href="/omp?cmd=get_info&amp;info_type=cpe&amp;info_name={$best_os_cpe}&amp;token={/envelope/token}">
-        <xsl:choose>
-          <xsl:when test="$os-cpe">
-            <img style="{$img-style}" src="/img/os_conflict.png" alt="{gsa:i18n ('OS conflict', 'Host')}: {$best_os_txt} ({$best_os_cpe})" title="{gsa:i18n ('OS conflict', 'Host')}: {$best_os_txt} ({$best_os_cpe})"/>
-          </xsl:when>
-          <xsl:otherwise>
-            <img style="{$img-style}" src="/img/os_conflict.png" alt="{gsa:i18n ('OS conflict', 'Host')}: {$best_os_txt}" title="{gsa:i18n ('OS conflict', 'Host')}: {$best_os_txt}"/>
-          </xsl:otherwise>
-        </xsl:choose>
+
+  <div class="os">
+    <xsl:choose>
+      <xsl:when test="contains($best_os_txt, '[possible conflict]')">
+        <a href="/omp?cmd=get_info&amp;info_type=cpe&amp;info_name={$best_os_cpe}&amp;token={/envelope/token}">
+          <xsl:choose>
+            <xsl:when test="$os-cpe">
+              <img src="/img/os_conflict.svg" alt="{gsa:i18n ('OS conflict', 'Host')}: {$best_os_txt} ({$best_os_cpe})"
+                class="icon icon-sm"
+                title="{gsa:i18n ('OS conflict', 'Host')}: {$best_os_txt} ({$best_os_cpe})"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <img src="/img/os_conflict.svg" alt="{gsa:i18n ('OS conflict', 'Host')}: {$best_os_txt}"
+                class="icon icon-sm"
+                title="{gsa:i18n ('OS conflict', 'Host')}: {$best_os_txt}"/>
+            </xsl:otherwise>
+          </xsl:choose>
+          <xsl:if test="$os-name">
+            <xsl:value-of select="$best_os_txt"/>
+          </xsl:if>
+        </a>
+      </xsl:when>
+      <xsl:when test="not($best_os_cpe)">
+        <!-- nothing detected or matched by our CPE database -->
+        <xsl:variable name="img_desc">
+          <xsl:choose>
+            <xsl:when test="$best_os_txt">
+              <xsl:value-of select="$best_os_txt"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="gsa:i18n ('No information on Operating System was gathered during scan.', 'Host')"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:variable>
+        <img src="/img/os_unknown.svg" alt="{$img_desc}" title="{$img_desc}"
+          class="icon icon-sm"/>
         <xsl:if test="$os-name">
           <xsl:value-of select="$best_os_txt"/>
         </xsl:if>
-      </a>
-    </xsl:when>
-    <xsl:when test="not($best_os_cpe)">
-      <!-- nothing detected or matched by our CPE database -->
-      <xsl:variable name="img_desc">
-        <xsl:choose>
-          <xsl:when test="$best_os_txt">
-            <xsl:value-of select="$best_os_txt"/>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:value-of select="gsa:i18n ('No information on Operating System was gathered during scan.', 'Host')"/>
-          </xsl:otherwise>
-        </xsl:choose>
-      </xsl:variable>
-      <img style="{$img-style}" src="/img/os_unknown.png" alt="{$img_desc}" title="{$img_desc}"/>
-      <xsl:if test="$os-name">
-        <xsl:value-of select="$best_os_txt"/>
-      </xsl:if>
-    </xsl:when>
-    <xsl:otherwise>
-      <!-- One system detected: display the corresponding icon and name from our database -->
-      <xsl:variable name="os_icon" select="document('os.xml')//operating_systems/operating_system[contains($best_os_cpe, pattern)]/icon"/>
-      <xsl:variable name="img_desc">
-        <xsl:value-of select="document('os.xml')//operating_systems/operating_system[contains($best_os_cpe, pattern)]/title"/>
-        <xsl:if test="$os-cpe">
-          <xsl:text> (</xsl:text>
-          <xsl:value-of select="$best_os_cpe"/>
-          <xsl:text>)</xsl:text>
-        </xsl:if>
-      </xsl:variable>
-      <a href="/omp?cmd=get_info&amp;info_type=cpe&amp;info_name={$best_os_cpe}&amp;token={/envelope/token}">
-        <xsl:choose>
-          <xsl:when test="$os_icon">
-            <img style="{$img-style}" src="/img/{$os_icon}" alt="{$img_desc}" title="{$img_desc}"/>
-            <xsl:if test="$os-name">
-              <xsl:value-of select="$img_desc"/>
-            </xsl:if>
-          </xsl:when>
-          <xsl:otherwise>
-            <img style="{$img-style}" src="/img/os_unknown.png" alt="{$img_desc}" title="{$img_desc}"/>
-            <xsl:if test="$os-name">
-              <xsl:value-of select="$img_desc"/>
-            </xsl:if>
-          </xsl:otherwise>
-        </xsl:choose>
-      </a>
-    </xsl:otherwise>
-  </xsl:choose>
+      </xsl:when>
+      <xsl:otherwise>
+        <!-- One system detected: display the corresponding icon and name from our database -->
+        <xsl:variable name="os_icon" select="document('os.xml')//operating_systems/operating_system[contains($best_os_cpe, pattern)]/icon"/>
+        <xsl:variable name="img_desc">
+          <xsl:value-of select="document('os.xml')//operating_systems/operating_system[contains($best_os_cpe, pattern)]/title"/>
+          <xsl:if test="$os-cpe">
+            <xsl:text> (</xsl:text>
+            <xsl:value-of select="$best_os_cpe"/>
+            <xsl:text>)</xsl:text>
+          </xsl:if>
+        </xsl:variable>
+        <a href="/omp?cmd=get_info&amp;info_type=cpe&amp;info_name={$best_os_cpe}&amp;token={/envelope/token}">
+          <xsl:choose>
+            <xsl:when test="$os_icon">
+              <img src="/img/{$os_icon}" alt="{$img_desc}" title="{$img_desc}"
+                class="icon icon-sm"/>
+              <xsl:if test="$os-name">
+                <xsl:value-of select="$img_desc"/>
+              </xsl:if>
+            </xsl:when>
+            <xsl:otherwise>
+              <img src="/img/os_unknown.svg" alt="{$img_desc}" title="{$img_desc}"
+                class="icon icon-sm" />
+              <xsl:if test="$os-name">
+                <xsl:value-of select="$img_desc"/>
+              </xsl:if>
+            </xsl:otherwise>
+          </xsl:choose>
+        </a>
+      </xsl:otherwise>
+    </xsl:choose>
+  </div>
 </xsl:template>
 
 <xsl:template name="cpe-icon">
@@ -31411,12 +31527,11 @@ should not have received it.
   <xsl:variable name="icon_data" select="document('cpe-icons.xml')/cpe_icon_dict/cpe_entry[contains($cpe, pattern)]"/>
   <xsl:choose>
     <xsl:when test="$icon_data != ''">
-      <img src="/img/{$icon_data/icon}" title=""
-           width="16px" height="16px" style="margin-right:3px"/>
+      <img src="/img/{$icon_data/icon}" class="icon icon-sm"/>
     </xsl:when>
     <xsl:otherwise>
       <xsl:if test="not($hide_other)">
-        <img src="img/cpe/other.png" title="" width="16px" height="16px" style="margin-right:3px"/>
+        <img src="img/cpe/other.svg" class="icon icon-sm"/>
       </xsl:if>
     </xsl:otherwise>
   </xsl:choose>
@@ -31447,7 +31562,7 @@ should not have received it.
       <column>
         <name><xsl:value-of select="gsa:i18n('Solution type', 'NVT or Result')"/></name>
         <field>solution_type</field>
-        <image>/img/solution_type.png</image>
+        <image>/img/solution_type.svg</image>
       </column>
       <column>
         <name><xsl:value-of select="gsa:i18n('Severity', 'Severity Short')"/></name>
@@ -31456,26 +31571,26 @@ should not have received it.
           <before>
             <xsl:choose>
               <xsl:when test="/envelope/params/bulk_select = 1">
-                <div class="pull-right" style="display: inline">
+                <div class="pull-right">
                   <xsl:choose>
                     <xsl:when test="filters/keywords/keyword[column='apply_overrides']/value = 0">
-                      <img src="/img/overrides_disabled.png"
-                          alt="{gsa:i18n ('No Overrides', 'Override Controls')}"
-                          title="{gsa:i18n ('No Overrides', 'Override Controls')}"
-                          style="margin-left:3px;margin-right:3px;"/>
+                      <img src="/img/overrides_disabled.svg"
+                        alt="{gsa:i18n ('No Overrides', 'Override Controls')}"
+                        title="{gsa:i18n ('No Overrides', 'Override Controls')}"
+                        class="icon icon-sm"/>
                     </xsl:when>
                     <xsl:otherwise>
-                      <img src="/img/overrides_enabled.png"
-                          alt="{gsa:i18n ('Overrides are Applied', 'Override Controls')}"
-                          title="{gsa:i18n ('Overrides are Applied', 'Override Controls')}"
-                          style="margin-left:3px;margin-right:3px;"/>
+                      <img src="/img/overrides_enabled.svg"
+                        alt="{gsa:i18n ('Overrides are Applied', 'Override Controls')}"
+                        title="{gsa:i18n ('Overrides are Applied', 'Override Controls')}"
+                        class="icon icon-sm"/>
                     </xsl:otherwise>
                   </xsl:choose>
                 </div>
               </xsl:when>
               <xsl:otherwise>
-                <div class="pull-right" style="display: inline">
-                  <form method="get" action="" enctype="multipart/form-data">
+                <div class="pull-right">
+                  <form method="get" action="">
                     <input type="hidden" name="token" value="{/envelope/token}"/>
                     <input type="hidden" name="cmd" value="get_results"/>
                     <input type="hidden" name="filter" value="{filters/term}"/>
@@ -31483,22 +31598,22 @@ should not have received it.
                       <xsl:when test="filters/keywords/keyword[column='apply_overrides']/value = 0">
                         <input type="hidden" name="overrides" value="1"/>
                         <input type="image"
-                              name="No Overrides"
-                              src="/img/overrides_disabled.png"
-                              alt="{gsa:i18n ('No Overrides', 'Override Controls')}"
-                              value="No Overrides"
-                              title="{gsa:i18n ('No Overrides', 'Override Controls')}"
-                              style="margin-left:3px;margin-right:3px;"/>
+                          name="No Overrides"
+                          src="/img/overrides_disabled.svg"
+                          alt="{gsa:i18n ('No Overrides', 'Override Controls')}"
+                          value="No Overrides"
+                          title="{gsa:i18n ('No Overrides', 'Override Controls')}"
+                          class="icon icon-sm"/>
                       </xsl:when>
                       <xsl:otherwise>
                         <input type="hidden" name="overrides" value="0"/>
                         <input type="image"
-                              name="Overrides are Applied"
-                              src="/img/overrides_enabled.png"
-                              alt="{gsa:i18n ('Overrides are Applied', 'Override Controls')}"
-                              value="Overrides are Applied"
-                              title="{gsa:i18n ('Overrides are Applied', 'Override Controls')}"
-                              style="margin-left:3px;margin-right:3px;"/>
+                          name="Overrides are Applied"
+                          src="/img/overrides_enabled.svg"
+                          alt="{gsa:i18n ('Overrides are Applied', 'Override Controls')}"
+                          value="Overrides are Applied"
+                          title="{gsa:i18n ('Overrides are Applied', 'Override Controls')}"
+                          class="icon icon-sm"/>
                       </xsl:otherwise>
                     </xsl:choose>
                   </form>
@@ -31789,13 +31904,14 @@ should not have received it.
               <xsl:variable name="desc"
                             select="gsa:i18n ('No Apps detected for Prognostic Report', 'Host')"/>
               <img src="/img/prognosis_inactive.png"
-                   style="margin-left:3px;"
-                   title="{$desc}"
-                   alt="{$desc}"/>
+                class="icon icon-sm"
+                title="{$desc}"
+                alt="{$desc}"/>
             </xsl:when>
             <xsl:otherwise>
               <a href="/omp?cmd=get_report&amp;type=prognostic&amp;host={ip}&amp;pos=1&amp;host_search_phrase={../filters/phrase}&amp;host_levels={gsa:build-levels(../filters)}&amp;host_first_result={../hosts/@start}&amp;host_max_results={../hosts/@max}&amp;result_hosts_only=1&amp;overrides={../filters/apply_overrides}&amp;token={/envelope/token}"
-                 title="{gsa:i18n ('Prognostic Report', 'Host')}" style="margin-left:3px;">
+                title="{gsa:i18n ('Prognostic Report', 'Host')}"
+                class="icon icon-sm">
                 <img src="/img/prognosis.png" alt="{gsa:i18n ('Prognostic Report', 'Host')}"/>
               </a>
             </xsl:otherwise>
@@ -32288,43 +32404,51 @@ should not have received it.
             </td>
             <td>
               <xsl:if test="detail[name = 'Auth-SSH-Success']">
-                <a href="/omp?cmd=get_results&amp;filter=report_id={$id} and host=&#34;{$current_host}&#34; and &#34;1.3.6.1.4.1.25623.1.0.90022&#34;&amp;token={/envelope/token}">
-                  <img src="/img/indicator_operation_ok.png" title="{detail[name = 'Auth-SSH-Success']/value}" style="margin-left:3px;"/>
+                <a href="/omp?cmd=get_results&amp;filter=report_id={$id} and host=&#34;{$current_host}&#34; and &#34;1.3.6.1.4.1.25623.1.0.90022&#34;&amp;token={/envelope/token}"
+                  class="icon icon-sm">
+                  <img src="/img/indicator_operation_ok.svg" title="{detail[name = 'Auth-SSH-Success']/value}"/>
                 </a>
               </xsl:if>
               <xsl:if test="detail[name = 'Auth-SSH-Failure']">
-                <a href="/omp?cmd=get_results&amp;filter=report_id={$id} and host=&#34;{$current_host}&#34; and &#34;1.3.6.1.4.1.25623.1.0.90022&#34;&amp;token={/envelope/token}">
-                  <img src="/img/indicator_operation_failed.png" title="{detail[name = 'Auth-SSH-Failure']/value}" style="margin-left:3px;"/>
+                <a href="/omp?cmd=get_results&amp;filter=report_id={$id} and host=&#34;{$current_host}&#34; and &#34;1.3.6.1.4.1.25623.1.0.90022&#34;&amp;token={/envelope/token}"
+                  class="icon icon-sm">
+                  <img src="/img/indicator_operation_failed.svg" title="{detail[name = 'Auth-SSH-Failure']/value}"/>
                 </a>
               </xsl:if>
               <xsl:if test="detail[name = 'Auth-SMB-Success']">
-                <a href="/omp?cmd=get_results&amp;filter=report_id={$id} and host=&#34;{$current_host}&#34; and &#34;1.3.6.1.4.1.25623.1.0.10394&#34;&amp;token={/envelope/token}">
-                  <img src="/img/indicator_operation_ok.png" title="{detail[name = 'Auth-SMB-Success']/value}" style="margin-left:3px;"/>
+                <a href="/omp?cmd=get_results&amp;filter=report_id={$id} and host=&#34;{$current_host}&#34; and &#34;1.3.6.1.4.1.25623.1.0.10394&#34;&amp;token={/envelope/token}"
+                  class="icon icon-sm">
+                  <img src="/img/indicator_operation_ok.svg" title="{detail[name = 'Auth-SMB-Success']/value}"/>
                 </a>
               </xsl:if>
               <xsl:if test="detail[name = 'Auth-SMB-Failure']">
-                <a href="/omp?cmd=get_results&amp;filter=report_id={$id} and host=&#34;{$current_host}&#34; and &#34;1.3.6.1.4.1.25623.1.0.10394&#34;&amp;token={/envelope/token}">
-                  <img src="/img/indicator_operation_failed.png" title="{detail[name = 'Auth-SMB-Failure']/value}" style="margin-left:3px;"/>
+                <a href="/omp?cmd=get_results&amp;filter=report_id={$id} and host=&#34;{$current_host}&#34; and &#34;1.3.6.1.4.1.25623.1.0.10394&#34;&amp;token={/envelope/token}"
+                  class="icon icon-sm">
+                  <img src="/img/indicator_operation_failed.svg" title="{detail[name = 'Auth-SMB-Failure']/value}"/>
                 </a>
               </xsl:if>
               <xsl:if test="detail[name = 'Auth-ESXi-Success']">
-                <a href="/omp?cmd=get_results&amp;filter=report_id={$id} and host=&#34;{$current_host}&#34; and &#34;1.3.6.1.4.1.25623.1.0.103447&#34;&amp;token={/envelope/token}">
-                  <img src="/img/indicator_operation_ok.png" title="{detail[name = 'Auth-ESXi-Success']/value}" style="margin-left:3px;"/>
+                <a href="/omp?cmd=get_results&amp;filter=report_id={$id} and host=&#34;{$current_host}&#34; and &#34;1.3.6.1.4.1.25623.1.0.103447&#34;&amp;token={/envelope/token}"
+                  class="icon icon-sm">
+                  <img src="/img/indicator_operation_ok.svg" title="{detail[name = 'Auth-ESXi-Success']/value}"/>
                 </a>
               </xsl:if>
               <xsl:if test="detail[name = 'Auth-ESXi-Failure']">
-                <a href="/omp?cmd=get_results&amp;filter=report_id={$id} and host=&#34;{$current_host}&#34; and &#34;1.3.6.1.4.1.25623.1.0.103447&#34;&amp;token={/envelope/token}">
-                  <img src="/img/indicator_operation_failed.png" title="{detail[name = 'Auth-ESXi-Failure']/value}" style="margin-left:3px;"/>
+                <a href="/omp?cmd=get_results&amp;filter=report_id={$id} and host=&#34;{$current_host}&#34; and &#34;1.3.6.1.4.1.25623.1.0.103447&#34;&amp;token={/envelope/token}"
+                  class="icon icon-sm">
+                  <img src="/img/indicator_operation_failed.svg" title="{detail[name = 'Auth-ESXi-Failure']/value}"/>
                 </a>
               </xsl:if>
               <xsl:if test="detail[name = 'Auth-SNMP-Success']">
-                <a href="/omp?cmd=get_results&amp;filter=report_id={$id} and host=&#34;{$current_host}&#34; and &#34;1.3.6.1.4.1.25623.1.0.105076&#34;&amp;token={/envelope/token}">
-                  <img src="/img/indicator_operation_ok.png" title="{detail[name = 'Auth-SNMP-Success']/value}" style="margin-left:3px;"/>
+                <a href="/omp?cmd=get_results&amp;filter=report_id={$id} and host=&#34;{$current_host}&#34; and &#34;1.3.6.1.4.1.25623.1.0.105076&#34;&amp;token={/envelope/token}"
+                  class="icon icon-sm">
+                  <img src="/img/indicator_operation_ok.svg" title="{detail[name = 'Auth-SNMP-Success']/value}"/>
                 </a>
               </xsl:if>
               <xsl:if test="detail[name = 'Auth-SNMP-Failure']">
-                <a href="/omp?cmd=get_results&amp;filter=report_id={$id} and host=&#34;{$current_host}&#34; and &#34;1.3.6.1.4.1.25623.1.0.105076&#34;&amp;token={/envelope/token}">
-                  <img src="/img/indicator_operation_failed.png" title="{detail[name = 'Auth-SNMP-Failure']/value}" style="margin-left:3px;"/>
+                <a href="/omp?cmd=get_results&amp;filter=report_id={$id} and host=&#34;{$current_host}&#34; and &#34;1.3.6.1.4.1.25623.1.0.105076&#34;&amp;token={/envelope/token}"
+                  class="icon icon-sm">
+                  <img src="/img/indicator_operation_failed.svg" title="{detail[name = 'Auth-SNMP-Failure']/value}"/>
                 </a>
               </xsl:if>
             </td>
@@ -32641,8 +32765,9 @@ should not have received it.
                   <xsl:when test="count (../result[nvt/@oid = $oid]/notes/note)">
                     <div class="pull-left">
                       <a href="/omp?cmd=get_notes&amp;filter=nvt_id={$oid} sort=nvt&amp;token={/envelope/token}"
-                         title="{gsa:i18n ('Notes', 'Note')}" style="margin-left:3px;">
-                        <img src="/img/note.png" alt="{gsa:i18n ('Notes', 'Note')}"/>
+                        title="{gsa:i18n ('Notes', 'Note')}"
+                        class="icon icon-sm">
+                        <img src="/img/note.svg" alt="{gsa:i18n ('Notes', 'Note')}"/>
                       </a>
                     </div>
                   </xsl:when>
@@ -32651,8 +32776,9 @@ should not have received it.
                   <xsl:when test="count (../result[nvt/@oid = $oid]/overrides/override)">
                     <div class="pull-left">
                       <a href="/omp?cmd=get_overrides&amp;filter=nvt_id={$oid} sort=nvt&amp;token={/envelope/token}"
-                         title="{gsa:i18n ('Overrides', 'Override')}" style="margin-left:3px;">
-                        <img src="/img/override.png" alt="{gsa:i18n ('Overrides', 'Override')}"/>
+                        title="{gsa:i18n ('Overrides', 'Override')}"
+                        class="icon icon-sm">
+                        <img src="/img/override.svg" alt="{gsa:i18n ('Overrides', 'Override')}"/>
                       </a>
                     </div>
                   </xsl:when>
@@ -32743,7 +32869,6 @@ should not have received it.
               <xsl:call-template name="os-icon">
                 <xsl:with-param name="host" select="$host"/>
                 <xsl:with-param name="current_host" select="$host/ip"/>
-                <xsl:with-param name="img-style" select="'margin-right:2px; vertical-align: text-top;'"/>
                 <xsl:with-param name="os-name" select="1"/>
                 <xsl:with-param name="os-cpe" select="0"/>
               </xsl:call-template>
@@ -32768,7 +32893,9 @@ should not have received it.
         <xsl:if test="$unknown_count">
           <tr class="{gsa:table-row-class($known_count + 1)}">
             <td>
-              <img style="margin-left: 2px;" src="/img/os_unknown.png" alt="{gsa:i18n ('Unknown', 'Report')}" title="{gsa:i18n ('Unknown', 'Report')}"/>
+              <img src="/img/os_unknown.svg"
+                class="icon icon-sm"
+                alt="{gsa:i18n ('Unknown', 'Report')}" title="{gsa:i18n ('Unknown', 'Report')}"/>
               <xsl:value-of select="gsa:i18n ('Unknown', 'Report')"/>
             </td>
             <td>
@@ -33007,8 +33134,9 @@ should not have received it.
 
 <xsl:template name="report-help-icon">
   <a href="/help/view_report.html?token={/envelope/token}#viewreport"
-     title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('View Report', 'Report'))}">
-    <img class="icon" src="/img/help.png"/>
+    title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('View Report', 'Report'))}"
+    class="icon icon-sm">
+    <img src="/img/help.svg"/>
   </a>
 </xsl:template>
 
@@ -33051,13 +33179,13 @@ should not have received it.
     </xsl:variable>
     <input type="hidden" name="filter" value="{$filter_term}"/>
     <input type="image"
-            name="submit"
-            value="Download"
-            title="{gsa:i18n ('Download full Report', 'Report')}"
-            src="/img/download.png"
+      name="submit"
+      value="Download"
+      title="{gsa:i18n ('Download full Report', 'Report')}"
+      src="/img/download.svg"
 
-            style="margin-left:3px;"
-            alt="{gsa:i18n ('Download', 'Report')}"/>
+      class="icon icon-sm"
+      alt="{gsa:i18n ('Download', 'Report')}"/>
   </form>
 </xsl:template>
 
@@ -33108,22 +33236,25 @@ should not have received it.
       </xsl:for-each>
     </select>
     <input type="image"
-            name="submit"
-            value="Download"
-            title="{gsa:i18n ('Download filtered Report', 'Report')}"
-            src="/img/download.png"
-            class="icon"
-            alt="{gsa:i18n ('Download', 'Report')}"/>
+      name="submit"
+      value="Download"
+      title="{gsa:i18n ('Download filtered Report', 'Report')}"
+      src="/img/download.svg"
+      class="icon icon-sm"
+      alt="{gsa:i18n ('Download', 'Report')}"/>
   </form>
 </xsl:template>
 
 <xsl:template name="report-icons">
   <xsl:param name="section"/>
+
   <xsl:call-template name="report-help-icon"/>
-  <div class="form-inline">
+
+  <div class="form-inline icon">
     <xsl:call-template name="filtered-report-export-form"></xsl:call-template>
   </div>
-  <div class="icon ajax-post" data-reload="next">
+
+  <div class="icon icon-sm ajax-post" data-reload="next">
     <xsl:variable name="min_qod">
       <xsl:choose>
         <xsl:when test="string-length (report/filters/keywords/keyword[column='min_qod' and relation='=']/value) &gt; 0">
@@ -33145,7 +33276,7 @@ should not have received it.
       </xsl:choose>
     </xsl:variable>
 
-    <img src="/img/add_to_assets.png" alt="{gsa:i18n ('Add to Assets', 'Assets')}"
+    <img src="/img/add_to_assets.svg" alt="{gsa:i18n ('Add to Assets', 'Assets')}"
       name="Add to Assets"
       title="{gsa:i18n (concat ('Add to Assets with QOD>=', $min_qod, '% and Overrides ', $overrides), 'Action Verb')}"/>
 
@@ -33160,8 +33291,9 @@ should not have received it.
       <input type="hidden" name="filt_id" value="{report/filters/@id}"/>
     </form>
   </div>
-  <div class="icon ajax-post" data-reload="next">
-    <img src="/img/remove_from_assets.png" alt="{gsa:i18n ('Remove from Assets', 'Assets')}"
+
+  <div class="icon icon-sm ajax-post" data-reload="next">
+    <img src="/img/remove_from_assets.svg" alt="{gsa:i18n ('Remove from Assets', 'Assets')}"
       name="Remove from Assets"
       title="{gsa:i18n ('Remove from Assets', 'Action Verb')}"/>
 
@@ -33178,14 +33310,14 @@ should not have received it.
   </div>
   <span class="divider"/>
   <a href="?cmd=get_task&amp;task_id={task/@id}&amp;overrides={/envelope/params/overrides}&amp;min_qod={/envelope/params/min_qod}&amp;token={/envelope/token}"
-    title="{gsa-i18n:strformat (gsa:i18n ('Corresponding Task (%1)', 'Task'), task/name)}">
-    <img src="/img/task.svg" alt="Task"
-      class="icon icon-sm" />
+    title="{gsa-i18n:strformat (gsa:i18n ('Corresponding Task (%1)', 'Task'), task/name)}"
+    class="icon icon-sm">
+    <img src="/img/task.svg" alt="Task"/>
   </a>
   <a href="?cmd=get_results&amp;filter=report_id={@id}&amp;token={/envelope/token}"
-    title="{gsa:i18n ('Corresponding Results', 'Results')}">
-    <img src="/img/result.svg" alt="Results"
-      class="icon icon-sm" />
+    title="{gsa:i18n ('Corresponding Results', 'Results')}"
+    class="icon icon-sm">
+    <img src="/img/result.svg" alt="Results"/>
   </a>
 </xsl:template>
 
@@ -33462,15 +33594,15 @@ should not have received it.
   <xsl:param name="name"/>
   <xsl:param name="cert"/>
 
-  <form action="" method="get" enctype="multipart/form-data">
+  <form action="" method="get">
     <input type="hidden" name="cmd" value="download_ssl_cert"/>
     <input type="hidden" name="name" value="{$name}"/>
     <input type="hidden" name="ssl_cert" value="{str:encode-uri($cert, true ())}"/>
     <input type="hidden" name="caller" value="{/envelope/current_page}"/>
     <input type="hidden" name="token" value="{/envelope/token}"/>
     <input type="image" name="submit" value="Download SSL Cert"
-           title="{gsa:i18n ('Download SSL Cert', 'Result')}" src="/img/download.png"
-           style="margin-left:3px;" alt="{gsa:i18n ('Download SSL Cert', 'Result')}"/>
+      title="{gsa:i18n ('Download SSL Cert', 'Result')}" src="/img/download.svg"
+      class="icon icon-sm" alt="{gsa:i18n ('Download SSL Cert', 'Result')}"/>
   </form>
 </xsl:template>
 
@@ -33480,8 +33612,8 @@ should not have received it.
   <xsl:param name="credential"/>
   <xsl:param name="next">get_scanners</xsl:param>
 
-  <div class="icon ajax-post" data-reload="next">
-    <img src="/img/verify.png" alt="{gsa:i18n ('Verify Scanner', 'Scanner')}"
+  <div class="icon icon-sm ajax-post" data-reload="next">
+    <img src="/img/verify.svg" alt="{gsa:i18n ('Verify Scanner', 'Scanner')}"
       title="{gsa:i18n ('Verify Scanner', 'Scanner')}"/>
     <form>
       <input type="hidden" name="cmd" value="verify_scanner"/>
@@ -33504,15 +33636,16 @@ should not have received it.
   </div>
   <xsl:if test="string-length ($credential/@id) &gt; 0">
     <a href="/omp?cmd=download_credential&amp;credential_id={$credential/@id}&amp;package_format=pem&amp;token={/envelope/token}"
-      title="{gsa:i18n ('Download Certificate', 'Auth Data')} ({gsa:i18n ('from Credential', 'Auth Data')})" class="icon">
-      <img src="/img/key.png" alt="{gsa:i18n ('Download Certificate', 'Auth Data')}"/>
+      title="{gsa:i18n ('Download Certificate', 'Auth Data')} ({gsa:i18n ('from Credential', 'Auth Data')})"
+      class="icon icon-sm">
+      <img src="/img/key.svg" alt="{gsa:i18n ('Download Certificate', 'Auth Data')}"/>
     </a>
   </xsl:if>
   <xsl:if test="string-length ($ca_pub) &gt; 0">
     <a href="/omp?cmd=download_ca_pub&amp;scanner_id={$scanner_id}&amp;ca_pub={str:encode-uri($ca_pub, true ())}&amp;token={/envelope/token}"
        title="{gsa:i18n ('Download CA Certificate', 'Action Verb')}"
-       class="icon">
-      <img src="/img/key.png"
+       class="icon icon-sm">
+      <img src="/img/key.svg"
            alt="{gsa:i18n ('Download CA Certificate', 'Action Verb')}"/>
     </a>
   </xsl:if>
@@ -33530,7 +33663,7 @@ should not have received it.
     <input type="hidden" name="token" value="{/envelope/token}"/>
     <input type="image" name="submit" value="Download Certificate"
            title="{gsa:i18n ('Download Certificate', 'Action Verb')}"
-           src="/img/key.png" style="margin-left:3px;"
+           src="/img/key.svg" class="icon icon-sm"
            alt="{gsa:i18n ('Download Certificate', 'Action Verb')}"/>
   </form>
 </xsl:template>
@@ -33931,14 +34064,14 @@ should not have received it.
                     </form>
                     <img
                       title="{gsa:i18n ('Run Alert', 'Report')}"
-                      src="/img/start.png"
-                      class="icon form-item"
+                      src="/img/start.svg"
+                      class="icon icon-sm form-item"
                       alt="{gsa:i18n ('Run Alert', 'Report')}"/>
 
                   </div>
                   <a href="#" title="{ gsa:i18n('Create a new alert') }"
-                    class="new-action-icon icon" data-type="alert" data-done="select[name=alert_id]">
-                    <img src="/img/new.png"/>
+                    class="new-action-icon icon icon-sm" data-type="alert" data-done="select[name=alert_id]">
+                    <img src="/img/new.svg"/>
                   </a>
                 </div>
               </td>
@@ -34004,13 +34137,13 @@ should not have received it.
                     </form>
                     <img
                       title="{gsa:i18n ('Run Alert', 'Report')}"
-                      src="/img/start.png"
-                      class="icon form-item"
+                      src="/img/start.svg"
+                      class="icon icon-sm form-item"
                       alt="{gsa:i18n ('Run Alert', 'Report')}"/>
                   </div>
                   <a href="#" title="{ gsa:i18n('Create a new alert') }"
-                    class="new-action-icon icon" data-type="alert" data-done="select[name=alert_id]">
-                    <img src="/img/new.png"/>
+                    class="new-action-icon icon icon-sm" data-type="alert" data-done="select[name=alert_id]">
+                    <img src="/img/new.svg"/>
                   </a>
                 </div>
               </td>
@@ -34079,12 +34212,14 @@ should not have received it.
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n('New Role', 'Role')"/>
       <a href="/help/new_role.html?token={/envelope/token}"
-         title="{gsa:i18n ('Help', 'Help')}: {gsa:i18n ('New Role', 'Role')}">
-        <img src="/img/help.png"/>
+        title="{gsa:i18n ('Help', 'Help')}: {gsa:i18n ('New Role', 'Role')}"
+        class="icon icon-sm">
+        <img src="/img/help.svg"/>
       </a>
       <a href="/omp?cmd=get_roles&amp;role={/envelope/params/role}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-         title="{gsa:i18n ('Roles', 'Role')}" style="margin-left:3px;">
-        <img src="/img/list.png" alt="{gsa:i18n ('Roles', 'Role')}"/>
+        title="{gsa:i18n ('Roles', 'Role')}"
+        class="icon icon-sm">
+        <img src="/img/list.svg" alt="{gsa:i18n ('Roles', 'Role')}"/>
       </a>
     </div>
     <div class="gb_window_part_content">
@@ -34315,17 +34450,17 @@ should not have received it.
                     <input type="hidden" name="next" value="edit_role"/>
                     <input type="hidden" name="next_next" value="{/envelope/params/next}"/>
 
-                    <a href="#" class="icon dialog-action">
-                      <img src="/img/trashcan.png" alt="{gsa:i18n ('To Trashcan', 'Action Verb')}"
+                    <a href="#" class="icon icon-sm dialog-action">
+                      <img src="/img/trashcan.svg" alt="{gsa:i18n ('To Trashcan', 'Action Verb')}"
                         title="{gsa:i18n ('Move To Trashcan', 'Action Verb')}"/>
                     </a>
                   </form>
                 </xsl:when>
                 <xsl:otherwise>
-                  <img src="/img/trashcan_inactive.png"
-                       alt="{gsa:i18n ('To Trashcan', 'Action Verb')}"
-                       title="{gsa:i18n ('Permission is still in use', 'Permission')}"
-                       style="margin-left:3px;"/>
+                  <img src="/img/trashcan_inactive.svg"
+                    class="icon icon-sm"
+                    alt="{gsa:i18n ('To Trashcan', 'Action Verb')}"
+                    title="{gsa:i18n ('Permission is still in use', 'Permission')}"/>
                 </xsl:otherwise>
               </xsl:choose>
             </td>
@@ -34459,10 +34594,10 @@ should not have received it.
           </xsl:call-template>
         </xsl:when>
         <xsl:otherwise>
-          <img src="/img/delete_inactive.png"
-               alt="{gsa:i18n ('Delete', 'Action Verb')}"
-               title="{gsa:i18n ('Role is still in use', 'Role')}"
-               class="icon"/>
+          <img src="/img/delete_inactive.svg"
+            alt="{gsa:i18n ('Delete', 'Action Verb')}"
+            title="{gsa:i18n ('Role is still in use', 'Role')}"
+            class="icon icon-sm"/>
         </xsl:otherwise>
       </xsl:choose>
     </td>
@@ -34504,10 +34639,10 @@ should not have received it.
   </div>
 
   <div class="section-header">
-    <a href="#" class="toggle-action-icon icon icon-action"
+    <a href="#" class="toggle-action-icon icon icon-sm icon-action"
       data-target="#perm-box" data-name="Permissions"
       data-variable="perm-box--collapsed">
-        <img src="/img/fold.png"/>
+        <img src="/img/fold.svg"/>
     </a>
     <h3>
       <xsl:choose>
@@ -34704,8 +34839,9 @@ should not have received it.
 
   <div class="toolbar">
     <a href="/help/performance.html?token={/envelope/token}"
-       title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('Performance', 'Performance'))}">
-      <img src="/img/help.png"/>
+      class="icon icon-sm"
+      title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('Performance', 'Performance'))}">
+      <img src="/img/help.svg"/>
     </a>
   </div>
 
@@ -34807,10 +34943,11 @@ should not have received it.
                   </xsl:for-each>
                 </select>
                 <input type="image"
-                       name="Update"
-                       title="{gsa:i18n ('Update', 'Action Verb')}"
-                       src="/img/refresh.png"
-                       alt="{gsa:i18n ('Update', 'Action Verb')}" style="margin-left:3px;margin-right:3px;"/>
+                  name="Update"
+                  class="icon icon-sm"
+                  title="{gsa:i18n ('Update', 'Action Verb')}"
+                  src="/img/refresh.svg"
+                  alt="{gsa:i18n ('Update', 'Action Verb')}"/>
               </form>
             </div>
           </td>
@@ -35113,8 +35250,9 @@ should not have received it.
 
   <div class="toolbar">
     <a href="/help/trashcan.html?token={/envelope/token}"
+      class="icon icon-sm"
       title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('Trashcan', 'Trashcan'))}">
-      <img src="/img/help.png"/>
+      <img src="/img/help.svg"/>
     </a>
   </div>
 
@@ -35756,12 +35894,12 @@ should not have received it.
         <td class="table-actions">
           <xsl:choose>
             <xsl:when test="name=/envelope/login/text()">
-              <img src="/img/delete_inactive.png" alt="{gsa:i18n ('Delete', 'Action Verb')}"
+              <img src="/img/delete_inactive.svg" alt="{gsa:i18n ('Delete', 'Action Verb')}"
                   title="{gsa:i18n ('Currently logged in as this user', 'User')}"
-                  class="icon"/>
+                  class="icon icon-sm"/>
             </xsl:when>
             <xsl:when test="gsa:may ('delete_user') and writable != '0' and in_use = '0'">
-              <div class="icon">
+              <div class="icon icon-sm">
                 <form action="/omp" method="get" enctype="multipart/form-data">
                   <input type="hidden" name="token" value="{/envelope/token}"/>
                   <input type="hidden" name="caller" value="{/envelope/current_page}"/>
@@ -35769,16 +35907,16 @@ should not have received it.
                   <input type="hidden" name="user_id" value="{@id}"/>
                   <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
                   <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-                  <input type="image" src="/img/delete.png" alt="{gsa:i18n ('Delete', 'Action Verb')}"
+                  <input type="image" src="/img/delete.svg" alt="{gsa:i18n ('Delete', 'Action Verb')}"
                         class="delete-action-icon" data-reload="window" data-type="user" data-id="{@id}"
                         name="Delete" value="Delete" title="{gsa:i18n ('Delete', 'Action Verb')}"/>
                 </form>
               </div>
             </xsl:when>
             <xsl:otherwise>
-              <img src="/img/delete_inactive.png" alt="{gsa:i18n ('Delete', 'Action Verb')}"
+              <img src="/img/delete_inactive.svg" alt="{gsa:i18n ('Delete', 'Action Verb')}"
                   title="{gsa:i18n ('User cannot be deleted', 'User')}"
-                  class="icon"/>
+                  class="icon icon-sm"/>
             </xsl:otherwise>
           </xsl:choose>
           <xsl:call-template name="list-window-line-icons">
@@ -35925,9 +36063,9 @@ should not have received it.
               <td><xsl:value-of select="name"/></td>
               <td width="100">
                 <a href="/omp?cmd=get_tasks&amp;task_id={@id}&amp;token={/envelope/token}" title="Reports">
-                  <img src="/img/list.png"
+                  <img src="/img/list.svg"
                        alt="Reports"
-                       style="margin-left:3px;"/>
+                       class="icon icon-sm"/>
                 </a>
               </td>
             </tr>
@@ -36405,9 +36543,9 @@ should not have received it.
     <xsl:when test="@name='ldap'">
       <div class="toolbar">
         <a href="/help/users.html?token={/envelope/token}#peruserldapauthentication"
-           class="icon icon-action"
+           class="icon icon-sm icon-action"
            title="{concat(gsa:i18n('Help', 'Help'),': ')}({gsa:i18n ('LDAP per-User Authentication', 'Group')})">
-          <img src="/img/help.png"/>
+          <img src="/img/help.svg"/>
         </a>
       </div>
       <div class="section-header">
@@ -36429,9 +36567,9 @@ should not have received it.
     <xsl:when test="@name='radius'">
       <div class="toolbar">
         <a href="/help/users.html?token={/envelope/token}#radiusauthentication"
-          class="icon icon-action"
+          class="icon icon-sm icon-action"
           title="{concat(gsa:i18n('Help', 'Help'),': ')}({gsa:i18n ('RADIUS Authentication', 'Group')})">
-          <img src="/img/help.png"/>
+          <img src="/img/help.svg"/>
         </a>
       </div>
       <div class="section-header">
@@ -36478,8 +36616,9 @@ should not have received it.
 <xsl:template match="get_feeds">
   <div class="toolbar">
     <a href="/help/feed_management.html?token={/envelope/token}"
-       title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('Feed', 'Feed Sync'))}">
-      <img src="/img/help.png"/>
+      class="icon icon-sm"
+      title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('Feed', 'Feed Sync'))}">
+      <img src="/img/help.svg"/>
     </a>
   </div>
 
@@ -36753,15 +36892,15 @@ should not have received it.
 
   <div class="toolbar">
     <a href="/help/my_settings.html?token={/envelope/token}"
-       title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('My Settings', 'My Settings'))}">
-      <img src="/img/help.png"/>
+      class="icon icon-sm"
+      title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('My Settings', 'My Settings'))}">
+      <img src="/img/help.svg"/>
     </a>
     <xsl:if test="gsa:may-op ('modify_setting')">
       <a href="/omp?cmd=edit_my_settings&amp;token={/envelope/token}"
          title="{gsa:i18n ('Edit My Settings', 'My Settings')}"
-         class="edit-action-icon" data-reload="window" data-type="my_settings"
-         style="margin-left:3px;">
-        <img src="/img/edit.png"/>
+         class="edit-action-icon icon icon-sm" data-reload="window" data-type="my_settings">
+        <img src="/img/edit.svg"/>
       </a>
     </xsl:if>
   </div>
@@ -37366,12 +37505,14 @@ should not have received it.
     <div class="gb_window_part_right"></div>
     <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n ('Edit My Settings', 'My Settings')"/>
       <a href="/help/my_settings.html?token={/envelope/token}#edit"
-         title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('My Settings', 'My Settings'), ' (', gsa:i18n ('Edit', 'Action Verb'), ')')}">
-        <img src="/img/help.png"/>
+        class="icon icon-sm"
+        title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('My Settings', 'My Settings'), ' (', gsa:i18n ('Edit', 'Action Verb'), ')')}">
+        <img src="/img/help.svg"/>
       </a>
       <a href="/omp?cmd=get_my_settings&amp;token={/envelope/token}"
-         title="{gsa:i18n ('My Settings', 'My Settings')}" style="margin-left:3px;">
-        <img src="/img/list.png" alt="{gsa:i18n ('My Settings', 'My Settings')}"/>
+        class="icon icon-sm"
+        title="{gsa:i18n ('My Settings', 'My Settings')}" style="margin-left:3px;">
+        <img src="/img/list.svg" alt="{gsa:i18n ('My Settings', 'My Settings')}"/>
       </a>
     </div>
     <div class="gb_window_part_content_no_pad">
@@ -38036,12 +38177,14 @@ should not have received it.
     <div class="gb_window_part_center">
       <xsl:value-of select="gsa:i18n ('New Host', 'Host')"/>
       <a href="/help/new_host.html?token={/envelope/token}"
-         title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('New Host', 'Host'))}">
-        <img src="/img/help.png"/>
+        class="icon icon-sm"
+        title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('New Host', 'Host'))}">
+        <img src="/img/help.svg"/>
       </a>
       <a href="/omp?cmd=get_assets&amp;type=host&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-         title="{gsa:i18n ('Hosts', 'Host')}" style="margin-left:3px;">
-        <img src="/img/list.png" alt="{gsa:i18n ('Hosts', 'Host')}"/>
+        class="icon icon-sm"
+        title="{gsa:i18n ('Hosts', 'Host')}" style="margin-left:3px;">
+        <img src="/img/list.svg" alt="{gsa:i18n ('Hosts', 'Host')}"/>
       </a>
     </div>
     <div class="gb_window_part_content">
@@ -38088,16 +38231,16 @@ should not have received it.
 <xsl:template match="asset" mode="os-details">
   <div class="toolbar">
     <a href="/help/os_details.html?token={/envelope/token}"
-      class="icon"
+      class="icon icon-sm"
       title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('Operating System', 'OS'),' (',gsa:i18n('Operating System Details', 'OS'),')')}">
-      <img src="/img/help.png"/>
+      <img src="/img/help.svg"/>
     </a>
     <a href="/omp?cmd=get_assets&amp;asset_type=os&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
       title="{gsa:i18n ('OSs', 'OS')}"
-      class="icon">
-      <img src="/img/list.png" alt="{gsa:i18n ('OSs', 'OS')}"/>
+      class="icon icon-sm">
+      <img src="/img/list.svg" alt="{gsa:i18n ('OSs', 'OS')}"/>
     </a>
-    <div class="form-inline">
+    <div class="form-inline icon">
       <xsl:choose>
         <xsl:when test="in_use='0'">
           <xsl:call-template name="delete-icon">
@@ -38110,16 +38253,16 @@ should not have received it.
           </xsl:call-template>
         </xsl:when>
         <xsl:otherwise>
-          <img src="/img/delete_inactive.png"
+          <img src="/img/delete_inactive.svg"
                alt="{gsa:i18n ('Delete', 'Action Verb')}"
-               class="icon"
+               class="icon icon-sm"
                title="{gsa:i18n ('OS is in use', 'Hosts')}"/>
         </xsl:otherwise>
       </xsl:choose>
       <a href="/omp?cmd=export_asset&amp;asset_id={@id}&amp;subtype=os&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
          title="{gsa:i18n ('Export Asset as XML')}"
-         class="icon">
-        <img src="/img/download.png" alt="{gsa:i18n ('Export XML', 'Action Verb')}"/>
+         class="icon icon-sm">
+        <img src="/img/download.svg" alt="{gsa:i18n ('Export XML', 'Action Verb')}"/>
       </a>
     </div>
   </div>
@@ -38142,11 +38285,13 @@ should not have received it.
       <tr>
         <td><xsl:value-of select="gsa:i18n ('Name', 'Property')"/>:</td>
         <td>
-          <xsl:call-template name="cpe-icon">
-            <xsl:with-param name="cpe" select="name"/>
-            <xsl:with-param name="hide_other" select="0"/>
-          </xsl:call-template>
-          <b><xsl:value-of select="name"/></b>
+          <div class="cpe">
+            <xsl:call-template name="cpe-icon">
+              <xsl:with-param name="cpe" select="name"/>
+              <xsl:with-param name="hide_other" select="0"/>
+            </xsl:call-template>
+            <b><xsl:value-of select="name"/></b>
+          </div>
         </td>
       </tr>
       <tr>
@@ -38328,20 +38473,21 @@ should not have received it.
 
   <div class="toolbar">
     <a href="/help/host_details.html?token={/envelope/token}"
-      class="icon"
+      class="icon icon-sm"
       title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('Host', 'Host'),' (',gsa:i18n('Host Details', 'Host'),')')}">
-      <img src="/img/help.png"/>
+      <img src="/img/help.svg"/>
     </a>
     <a href="/omp?cmd=new_host&amp;next=get_asset&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;asset_id={@id}&amp;token={/envelope/token}"
        title="{gsa:i18n ('New Host')}"
-       class="new-action-icon icon" data-type="host">
-      <img src="/img/new.png"/>
+       class="new-action-icon icon icon-sm" data-type="host">
+      <img src="/img/new.svg"/>
     </a>
     <a href="/omp?cmd=get_assets&amp;asset_type=host&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-      title="{gsa:i18n ('Hosts', 'Host')}" class="icon">
-      <img src="/img/list.png" alt="{gsa:i18n ('Hosts', 'Host')}"/>
+      title="{gsa:i18n ('Hosts', 'Host')}" class="icon icon-sm">
+      <img src="/img/list.svg" alt="{gsa:i18n ('Hosts', 'Host')}"/>
     </a>
-    <div class="form-inline">
+
+    <div class="form-inline icon">
       <xsl:choose>
         <xsl:when test="in_use='0'">
           <xsl:call-template name="delete-icon">
@@ -38354,8 +38500,8 @@ should not have received it.
           </xsl:call-template>
         </xsl:when>
         <xsl:otherwise>
-          <img src="/img/delete_inactive.png"
-            class="icon"
+          <img src="/img/delete_inactive.svg"
+            class="icon icon-sm"
             alt="{gsa:i18n ('Delete', 'Action Verb')}"
             title="{gsa:i18n ('Host is in use', 'Assets')}"/>
         </xsl:otherwise>
@@ -38365,8 +38511,8 @@ should not have received it.
           <!-- i18n with concat : see dynamic_strings.xsl - type-edit -->
           <a href="/omp?cmd=edit_asset&amp;asset_id={@id}&amp;next=get_asset&amp;type=host&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
              title="{gsa:i18n ('Edit Host')}"
-             class="edit-action-icon icon" data-type="asset" data-id="{@id}">
-            <img src="/img/edit.png" alt="{gsa:i18n ('Edit', 'Action Verb')}"/>
+             class="edit-action-icon icon icon-sm" data-type="asset" data-id="{@id}">
+            <img src="/img/edit.svg" alt="{gsa:i18n ('Edit', 'Action Verb')}"/>
           </a>
         </xsl:when>
         <xsl:otherwise>
@@ -38384,15 +38530,15 @@ should not have received it.
               </xsl:otherwise>
             </xsl:choose>
           </xsl:variable>
-          <img src="/img/edit_inactive.png" alt="{gsa:i18n ('Edit', 'Action Verb')}"
+          <img src="/img/edit_inactive.svg" alt="{gsa:i18n ('Edit', 'Action Verb')}"
                title="{$inactive_text}"
-               class="icon" />
+               class="icon icon-sm" />
         </xsl:otherwise>
       </xsl:choose>
       <a href="/omp?cmd=export_asset&amp;asset_id={@id}&amp;subtype=host&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
          title="{gsa:i18n ('Export Asset as XML')}"
-         class="icon">
-        <img src="/img/download.png" alt="{gsa:i18n ('Export XML', 'Action Verb')}"/>
+         class="icon icon-sm">
+        <img src="/img/download.svg" alt="{gsa:i18n ('Export XML', 'Action Verb')}"/>
       </a>
     </div>
   </div>
@@ -38482,9 +38628,9 @@ should not have received it.
   </div>
 
   <div class="section-header">
-    <a href="#" class="icon icon-action toggle-action-icon"
+    <a href="#" class="icon icon-sm icon-action toggle-action-icon"
       data-target="#identifiers-box" data-name="Identifiers" data-variable="identifiers-box--collapsed">
-      <img src="/img/fold.png"/>
+      <img src="/img/fold.svg"/>
     </a>
     <h3>
       <xsl:choose>
@@ -38844,10 +38990,10 @@ should not have received it.
               </xsl:call-template>
             </xsl:when>
             <xsl:otherwise>
-              <img src="/img/delete_inactive.png"
+              <img src="/img/delete_inactive.svg"
                    alt="{gsa:i18n ('Delete', 'Action Verb')}"
                    title="{gsa:i18n ('Host is in use', 'Hosts')}"
-                   class="icon"/>
+                   class="icon icon-sm"/>
             </xsl:otherwise>
           </xsl:choose>
           <xsl:choose>
@@ -38855,8 +39001,8 @@ should not have received it.
               <!-- i18n with concat : see dynamic_strings.xsl - type-edit -->
               <a href="/omp?cmd=edit_asset&amp;asset_id={../@id}&amp;next=get_assets&amp;type=host&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
                  title="{gsa:i18n ('Edit Host')}"
-                 class="edit-action-icon icon" data-type="asset" data-id="{../@id}">
-                <img src="/img/edit.png" alt="{gsa:i18n ('Edit', 'Action Verb')}"/>
+                 class="edit-action-icon icon icon-sm" data-type="asset" data-id="{../@id}">
+                <img src="/img/edit.svg" alt="{gsa:i18n ('Edit', 'Action Verb')}"/>
               </a>
             </xsl:when>
             <xsl:otherwise>
@@ -38874,12 +39020,12 @@ should not have received it.
                   </xsl:otherwise>
                 </xsl:choose>
               </xsl:variable>
-              <img src="/img/edit_inactive.png" alt="{gsa:i18n ('Edit', 'Action Verb')}"
+              <img src="/img/edit_inactive.svg" alt="{gsa:i18n ('Edit', 'Action Verb')}"
                    title="{$inactive_text}"
-                   class="icon"/>
+                   class="icon icon-sm"/>
             </xsl:otherwise>
           </xsl:choose>
-          <div class="icon">
+          <div class="icon icon-sm">
             <form action="/omp" method="post" enctype="multipart/form-data">
               <input type="hidden" name="token" value="{/envelope/token}"/>
               <input type="hidden" name="cmd" value="process_bulk"/>
@@ -38889,12 +39035,12 @@ should not have received it.
               <input type="hidden" name="bulk_select" value="3"/>
               <input type="hidden" name="resource_type" value="asset"/>
               <input type="hidden" name="host_count" value="1"/>
-              <input type="image" name="bulk_create" class="bulk-dialog-icon" data-type="asset" title="{gsa:i18n ('Create Target from host', 'Bulk Action')}" src="/img/new.png"/>
+              <input type="image" name="bulk_create" class="bulk-dialog-icon" data-type="asset" title="{gsa:i18n ('Create Target from host', 'Bulk Action')}" src="/img/new.svg"/>
             </form>
           </div>
           <a href="/omp?cmd=export_asset&amp;asset_id={../@id}&amp;subtype=host&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-             title="{gsa:i18n ('Export Host', 'Assets')}" class="icon">
-            <img src="/img/download.png" alt="{gsa:i18n ('Export', 'Action Verb')}"/>
+             title="{gsa:i18n ('Export Host', 'Assets')}" class="icon icon-sm">
+            <img src="/img/download.svg" alt="{gsa:i18n ('Export', 'Action Verb')}"/>
           </a>
         </td>
       </xsl:otherwise>
@@ -38905,7 +39051,7 @@ should not have received it.
 <xsl:template match="asset/os">
   <tr class="{gsa:table-row-class(position())}">
     <td>
-      <b>
+      <div class="cpe">
         <xsl:call-template name="cpe-icon">
           <xsl:with-param name="cpe" select="../name"/>
           <xsl:with-param name="hide_other" select="0"/>
@@ -38914,7 +39060,7 @@ should not have received it.
            title="{gsa:view_details_title ('Asset', name)}">
           <xsl:value-of select="../name"/>
         </a>
-      </b>
+      </div>
     </td>
     <td>
       <xsl:value-of select="title"/>
@@ -38977,15 +39123,16 @@ should not have received it.
               </xsl:call-template>
             </xsl:when>
             <xsl:otherwise>
-              <img src="/img/delete_inactive.png"
+              <img src="/img/delete_inactive.svg"
                    alt="{gsa:i18n ('Delete', 'Action Verb')}"
                    title="{gsa:i18n ('OS is in use', 'OS')}"
-                   class="icon"/>
+                   class="icon icon-sm"/>
             </xsl:otherwise>
           </xsl:choose>
           <a href="/omp?cmd=export_asset&amp;asset_id={../@id}&amp;subtype=os&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-             title="{gsa:i18n ('Export Operating System', 'Assets')}">
-            <img src="/img/download.png" alt="{gsa:i18n ('Export', 'Action Verb')}"/>
+            title="{gsa:i18n ('Export Operating System', 'Assets')}"
+            class="icon icon-sm">
+            <img src="/img/download.svg" alt="{gsa:i18n ('Export', 'Action Verb')}"/>
           </a>
         </td>
       </xsl:otherwise>
@@ -39148,7 +39295,7 @@ should not have received it.
 <xsl:template name="protocol">
   <div class="toolbar">
     <div class="small_inline_form" style="display: inline; font-weight: normal;">
-      <form action="" method="get" enctype="multipart/form-data">
+      <form action="" method="get">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="export_omp_doc"/>
         <select style="margin-bottom: 0px;" name="protocol_format" size="1">
@@ -39157,9 +39304,10 @@ should not have received it.
           <option value="xml">XML</option>
         </select>
         <input type="image"
-               name="Download OMP documentation"
-               src="/img/download.png"
-               alt="Download" style="margin-left:3px;margin-right:3px;"/>
+          name="Download OMP documentation"
+          src="/img/download.svg"
+          class="icon icon-sm"
+          alt="Download"/>
       </form>
     </div>
   </div>
@@ -39228,8 +39376,9 @@ should not have received it.
 <xsl:template match="cvss_calculator">
   <div class="toolbar">
     <a href="/help/cvss_calculator.html?token={/envelope/token}"
-       title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('CVSS Base Score Calculator', 'CVSS Calculator'))}">
-      <img src="/img/help.png"/>
+      class="icon icon-sm"
+      title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('CVSS Base Score Calculator', 'CVSS Calculator'))}">
+      <img src="/img/help.svg"/>
     </a>
   </div>
 
