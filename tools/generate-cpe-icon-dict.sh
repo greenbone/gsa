@@ -65,10 +65,10 @@ then
   exit 1
 fi
 
-TEST=`ls ${SRC_PATH}/*.png 2> /dev/null`
+TEST=`ls ${SRC_PATH}/*.svg 2> /dev/null`
 if [ -z "$TEST" ]
 then
-  echo "ERROR: No PNG images found in source path '$SRC_PATH'" >&2
+  echo "ERROR: No SVG images found in source path '$SRC_PATH'" >&2
   exit 1
 fi
 
@@ -131,7 +131,7 @@ fi
 
 # Auto-generate files
 echo "  <!-- generated -->"
-for pattern in `ls -1 ${SRC_PATH}/*.svg | sed -e 's/\.png//' -e 's/.*\///'`
+for pattern in `ls -1 ${SRC_PATH}/*.svg | sed -e 's/\.svg//' -e 's/.*\///'`
 do
   if [ "other" != "$pattern" ]
   then

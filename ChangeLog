@@ -1,5 +1,10 @@
 2016-08-09  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* tools/generate-cpe-icon-dict.sh: Fix generating cpe-icon.xml from svg icons
+	in the cpe image directory.
+
+2016-08-09  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/img/, src/html/classic/img/cpe: Remove PNG versions of SVG
 	images.
 
