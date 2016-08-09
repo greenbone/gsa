@@ -900,10 +900,6 @@ select[multiple] {
   padding: 4px;
 }
 
-.hint-box .icon {
-  margin-right: 3px;
-}
-
 .note_top_line {
   background: #ffff90;
   border:1px solid #CCCCCC;
@@ -1313,6 +1309,14 @@ select[multiple] {
   padding: 2px;
 }
 
+.chart-foot .select2 {
+  margin: 0 2px;
+}
+
+.chart-foot .select2 + .icon {
+  margin-left: 0;
+}
+
 .bar {
   fill: #5BAC0C;
 }
@@ -1378,6 +1382,8 @@ select[multiple] {
   background: none;
   cursor: pointer;
   vertical-align: middle;
+  width: 16px; /* icon-sm */
+  height: 16px; /* icon-sm */
 }
 
 .ui-icon.ui-icon-waiting {
@@ -1461,8 +1467,15 @@ select[multiple] {
   display: inline-block;
 }
 
-.section-header .icon {
+.section-header h1 .icon,
+.section-header h2 .icon,
+.section-header h3 .icon {
   margin-right: 5px;
+}
+
+.section-header .icon + .icon {
+  margin-right: 3px;
+  margin-left: 0;
 }
 
 .section-header .icon-action {
@@ -1488,19 +1501,33 @@ select[multiple] {
   display: inline-block;
 }
 
-.icon-sm {
+.icon-sm,
+.icon-sm img,
+.icon-sm input[type=image] {
   width: 16px;
   height: 16px;
 }
 
-.icon-m {
+
+.icon-m,
+.icon-m img,
+.icon-m input[type=image] {
   width: 24px;
   height: 24px;
 }
 
-.icon-lg {
+.icon-lg,
+.icon-lg img,
+.icon-lg input[type=image] {
   width: 50px;
   height: 50px;
+}
+
+.icon + .icon,
+.icon-menu + .icon,
+.icon + .icon-menu,
+.icon-menu + .icon-menu {
+  margin-left: 3px;
 }
 
 .toolbar {
@@ -1509,7 +1536,6 @@ select[multiple] {
 }
 
 .toolbar .icon {
-  margin-right: 3px;
   display: inline-block;
   vertical-align: middle;
 }
@@ -1550,10 +1576,6 @@ select[multiple] {
   clear: both;
 }
 
-.table-actions .icon {
-  margin-right: 3px;
-}
-
 .table-actions div.icon, .table-actions div.icon form {
   display: inline-block;
 }
@@ -1574,14 +1596,6 @@ select[multiple] {
 
 .dashboard-actions {
   margin-bottom: 2px;
-}
-
-.dashboard-actions .icon {
-  margin-right: 0;
-}
-
-.dashboard-actions .icon + .icon {
-  margin-left: 3px;
 }
 
 /* table for forms */
