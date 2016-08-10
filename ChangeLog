@@ -1,5 +1,10 @@
 2016-08-10  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/omp.xsl (html-create-permission-form): Only show resource
+	id field if the resource id is required for the permission.
+
+2016-08-10  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/gsad.c (main): Add new gsad console parameter login-label.
 
 	* src/gsad_base.h,
