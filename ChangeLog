@@ -1,5 +1,10 @@
 2016-08-10  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/gsad_base.c (login_xml): Now really remove unused alternate_label from
+	the login xml structure.
+
+2016-08-10  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/omp.xsl (html-create-permission-form): Only show resource
 	id field if the resource id is required for the permission.
 
