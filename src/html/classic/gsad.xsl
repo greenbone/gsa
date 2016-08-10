@@ -743,11 +743,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <a href="/help/error_messages.html?token={$token}"
                 class="icon icon-sm"
                 title="Help: Error Message">
-                <img src="/img/help.svg"/>
+                <img src="/img/help.svg" class="icon icon-sm"/>
               </a>
             </div>
-            <img src="/img/alert_sign.svg" alt="" title="{$title}"
-              class="pull-left" style="margin-left:10px;"/>
+            <img src="/img/alert_sign.svg" alt="" title="{$title}" class="pull-left icon icon-lg"/>
             <h4>
               <xsl:value-of select="$title"/>
             </h4>
