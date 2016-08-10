@@ -39323,7 +39323,9 @@ should not have received it.
   </div>
 
   <div class="section-box">
-    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
+    <div>
+      <a href="/help/contents.html?token={/envelope/token}">Help Contents</a>i
+    </div>
     <div style="text-align:left">
       <h1>OMP</h1>
 
