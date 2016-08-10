@@ -506,8 +506,7 @@ install (FILES src/html/classic/img/loading.gif
                src/html/classic/img/favicon.gif
          DESTINATION ${GSA_DATA_DIR}/classic/img)
 
-install (FILES src/html/classic/img/style/gsa-logo.png
-               src/html/classic/img/style/window_dec_a.png
+install (FILES src/html/classic/img/style/window_dec_a.png
                src/html/classic/img/style/window_dec_b.png
                src/html/classic/img/style/window_dec_c.png
                src/html/classic/img/style/window_dec_a_error.png
@@ -517,7 +516,6 @@ install (FILES src/html/classic/img/style/gsa-logo.png
                src/html/classic/img/style/dropdown_arrow.png
                src/html/classic/img/style/dropdown_arrow_black.png
                src/html/classic/img/style/dropdown_arrow_green.png
-               src/html/classic/img/style/highlight_green.png
          DESTINATION ${GSA_DATA_DIR}/classic/img/style)
 
 install (FILES  src/html/classic/img/os_aix.svg

@@ -1,5 +1,13 @@
 2016-08-10  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
+	* src/html/classic/img/style/gsa-logo.png,
+	src/html/classic/img/style/highlight_green.png: Remove these
+	meanwhile unused images.
+
+	* CMakeLists.txt: Do not install the unused images anymore.
+
+2016-08-10  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
 	* CMakeLists.txt: Remove a duplicate entry of the help icon.
 
 2016-08-10  Björn Ricks <bjoern.ricks@greenbone.net>
