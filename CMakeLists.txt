@@ -480,7 +480,6 @@ install (FILES src/html/classic/img/agent.svg
                src/html/classic/img/note.svg
                src/html/classic/img/override.svg
                src/html/classic/img/slave.svg
-               src/html/classic/img/help.svg
                src/html/classic/img/greenbone.svg
                src/html/classic/img/wizard.svg
                src/html/classic/img/ldap.svg
