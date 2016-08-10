@@ -66,6 +66,8 @@
  */
 gchar *vendor_version = NULL;
 
+gchar *label_name = NULL;
+
 /**
  * @brief Base init.
  *
@@ -119,6 +121,35 @@ const gchar *
 vendor_version_get ()
 {
   return vendor_version ? vendor_version : "";
+}
+
+/**
+ * @brief Get the login label name.
+ *
+ * @return login label name
+ */
+const gchar *
+label_name_get ()
+{
+  return label_name;
+}
+
+/**
+ * @brief Set the login label.
+ *
+ * @param[in]  name  New login label name.
+ *
+ * @return 0 on success -1 if name contains invalid characters
+ */
+int
+label_name_set (const gchar *name)
+{
+  if (!g_regex_match_simple ("^[a-zA-Z0-9\\-_\\.\\:]+$", name, 0, 0))
+    return -1;
+
+  g_free (label_name);
+  label_name = g_strdup (name);
+  return 0;
 }
 
 /**
@@ -499,6 +530,7 @@ login_xml (const gchar *message, const gchar *token, const gchar *time,
            const gchar *url, const gchar *i18n, const gchar *guest)
 {
   GString *xml;
+  const gchar *label = label_name_get();
 
   xml = g_string_new ("");
   xml_string_append (xml,
@@ -513,6 +545,11 @@ login_xml (const gchar *message, const gchar *token, const gchar *time,
                      token ? token : "",
                      time,
                      g_file_test ("img/label.png", G_FILE_TEST_EXISTS));
+
+  if (label)
+    xml_string_append(xml,
+                      "<label>%s</label>",
+                      label);
   if (message)
     xml_string_append (xml,
                        "<message>%s</message>",

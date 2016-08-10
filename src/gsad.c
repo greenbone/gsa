@@ -5578,6 +5578,7 @@ main (int argc, char **argv)
   static gchar *gsad_redirect_port_string = NULL;
   static gchar *gsad_manager_port_string = NULL;
   static gchar *gsad_vendor_version_string = NULL;
+  static gchar *gsad_login_label_name = NULL;
   static gchar *ssl_private_key_filename = OPENVAS_SERVER_KEY;
   static gchar *ssl_certificate_filename = OPENVAS_SERVER_CERTIFICATE;
   static gchar *dh_params_filename = NULL;
@@ -5635,6 +5636,9 @@ main (int argc, char **argv)
     {"vendor-version", '\0',
      0, G_OPTION_ARG_STRING, &gsad_vendor_version_string,
      "Use <string> as version in interface.", "<string>"},
+    {"login-label", '\0',
+     0, G_OPTION_ARG_STRING, &gsad_login_label_name,
+     "Use <string> as login label.", "<string>"},
     {"ssl-private-key", 'k',
      0, G_OPTION_ARG_FILENAME, &ssl_private_key_filename,
      "Use <file> as the private key for HTTPS", "<file>"},
@@ -5750,6 +5754,15 @@ main (int argc, char **argv)
 
   if (gsad_vendor_version_string)
     vendor_version_set (gsad_vendor_version_string);
+
+  if (gsad_login_label_name)
+    {
+      if (label_name_set (gsad_login_label_name))
+        {
+          g_critical ("Invalid character in login label name\n");
+          exit (EXIT_FAILURE);
+        }
+    }
 
   if (no_redirect && gsad_redirect_port_string)
     {

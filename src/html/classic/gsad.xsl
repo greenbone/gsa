@@ -924,11 +924,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="box container">
       <div class="logo col-3">
         <xsl:choose>
-          <xsl:when test="alternate_label = 0">
-            <img src="/img/login-label.png"/>
+          <xsl:when test="label">
+            <img src="/img/{label}"/>
           </xsl:when>
           <xsl:otherwise>
-            <img src="/img/label.png"/>
+            <img src="/img/login-label.png"/>
           </xsl:otherwise>
         </xsl:choose>
       </div>

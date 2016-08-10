@@ -1,3 +1,17 @@
+2016-08-10  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/gsad.c (main): Add new gsad console parameter login-label.
+
+	* src/gsad_base.h,
+	src/gsad_base.c: Add new functions label_name_get and label_name_set.
+
+	* src/gsad_base.c (login_xml): Add label tag to login xml structure if login
+	label name is set. Also remove now unused alternate_label from this xml
+	structure.
+
+	* src/html/classic/gsad.xsl (login_page): Remove test for alternate_label and
+	use label logo from label tag if set.
+
 2016-08-10  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/classic/img/style/gsa-logo.png,
