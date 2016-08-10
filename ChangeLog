@@ -1,5 +1,10 @@
 2016-08-10  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/help_de.xsl: Fix displaying override enable and disable
+	icons.
+
+2016-08-10  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/help_de.xsl, src/html/classic/help_ru.xsl,
 	src/html/classic/help_zh_CN.xsl: Use new css class bullet-list instead of id
 	list for formatting the list of help pages in non English translations.

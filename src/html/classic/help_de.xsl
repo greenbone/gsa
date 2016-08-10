@@ -495,8 +495,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        Das Icon im Kopf der Schweregrad-Spalte zeigt an, ob die eingerichteten
        <a href="glossary.html?token={/envelope/token}#override">Übersteuerungen</a>
        angewendet werden
-       (<img src="/img/enabled.svg" class="icon icon-sm" alt="Übersteuerungen werden angewendet" title="Übersteuerungen werden angewendet"/>)
-       oder nicht (<img src="/img/disabled.svg" class="icon icon-sm" alt="Keine Übersteuerungen" title="Keine Übersteuerungen"/>).
+       (<img src="/img/enable.svg" class="icon icon-sm" alt="Übersteuerungen werden angewendet" title="Übersteuerungen werden angewendet"/>)
+       oder nicht (<img src="/img/disable.svg" class="icon icon-sm" alt="Keine Übersteuerungen" title="Keine Übersteuerungen"/>).
       </p>
       <p>
        Standardmäßig werden Übersteuerungen angewendet. Indem Sie auf auf das
