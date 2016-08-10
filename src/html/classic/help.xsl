@@ -73,8 +73,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="asset-type"/>
   <xsl:param name="info-type"/>
   <div class="section-header">
-    <img class="icon icon-lg" src="/img/help.svg"/>
     <h1>
+      <img class="icon icon-lg" src="/img/help.svg"/>
       <xsl:if test="boolean ($type)">
         <a href="/omp?cmd=get_{$type}s&amp;token={/envelope/token}"
            title="Resource overview page" style="margin-right:3px;">
