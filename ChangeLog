@@ -1,5 +1,14 @@
 2016-08-10  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/help.xsl: Use new css class bullet-list instead of id list
+	for formatting the list of help pages.
+
+	* src/html/classic/css/gsa-style.css: Change #list into .bullet-list and
+	center the bullet background image. Also remove unnecessary style
+	declarations.
+
+2016-08-10  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/help.xsl: Fix size for icons in the help pages.
 
 2016-08-10  Björn Ricks <bjoern.ricks@greenbone.net>

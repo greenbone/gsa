@@ -3769,7 +3769,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        Alternatively you can browse the following structure.
       </p>
 
-      <div id="list">
+      <div class="bullet-list">
         <ul>
           <li> Scans </li>
           <ul>

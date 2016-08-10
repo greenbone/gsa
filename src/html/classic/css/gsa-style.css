@@ -725,26 +725,19 @@ a.top_button:hover div.first_button_overlay {
 
 /* BEGIN Lists */
 
-#list ul {
+.bullet-list ul {
   list-style:none;
-  padding:0px;
-  margin: 0px;
-  padding-left:4px;
-  margin-left:18px;
+  padding: 0 0 0 4px;
+  margin: 0 0 0 18px;
 }
 
-#list li {
-  padding:4px;
-  padding-left:13px;
-  margin-left:8px;
-  background:url('/img/bullet.png') no-repeat 0px 9px;
-  border:0px;
+.bullet-list li {
+  padding: 4px 4px 4px 13px;
+  background: url('/img/bullet.png') no-repeat left center;
 }
 
-#list li li {
-}
-
-#list a {
+.bullet-list li > * {
+  vertical-align: middle;
 }
 
 /* END Lists */
