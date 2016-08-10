@@ -643,14 +643,6 @@ a.top_button:hover div.first_button_overlay {
 
 .logo {
   float:left;
-  margin:0px;
-}
-
-.logo img {
-  margin-top: 0px;
-}
-
-.logo a {
 }
 
 .logo .greenbone-icon {
