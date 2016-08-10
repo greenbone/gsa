@@ -2824,7 +2824,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <h3>Exporting</h3>
       <p>
         Export the current list of slaves as XML by clicking on the
-        export icon <img src="/img/download.svg" alt="Export" title="Export XML"/>.
+        export icon <img src="/img/download.svg" class="icon icon-sm" alt="Export" title="Export XML"/>.
       </p>
 
       <xsl:call-template name="filtering"/>
@@ -2910,7 +2910,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <h4>Slaves</h4>
       <p>
        Pressing the list icon
-       <img src="/img/list.svg" alt="Slaves" title="Slaves"/>
+       <img src="/img/list.svg" class="icon icon-sm" alt="Slaves" title="Slaves"/>
        will switch to the <a href="slaves.html?token={/envelope/token}">Slaves</a>
        page.
       </p>
@@ -2981,7 +2981,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <h4>Delete User</h4>
       <p>
        Pressing the delete icon
-       <img src="/img/delete.svg" alt="Delete" title="Delete"/>
+       <img src="/img/delete.svg" class="icon icon-sm" alt="Delete" title="Delete"/>
        will delete the user account.
       </p>
       <p>
@@ -3710,7 +3710,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <h3>Exporting</h3>
       <p>
         Export the current list of roles as XML by clicking on the
-        export icon <img src="/img/download.svg" alt="Export" title="Export XML"/>.
+        export icon <img src="/img/download.svg" class="icon icon-sm" alt="Export" title="Export XML"/>.
       </p>
 
       <xsl:call-template name="filtering"/>
@@ -4061,7 +4061,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template mode="help" match="cert_bund_adv_details.html">
   <xsl:call-template name="help-header">
     <xsl:with-param name="title" select="'CERT-Bund Advisory Details'"/>
-    <xsl:with-param name="info-type" select="'certbund'"/>
+    <xsl:with-param name="info-type" select="'cert_bund_adv'"/>
   </xsl:call-template>
 
   <div class="section-box">
@@ -4105,7 +4105,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template mode="help" match="dfn_cert_adv_details.html">
   <xsl:call-template name="help-header">
     <xsl:with-param name="title" select="'DFN-CERT Advisory Details'"/>
-    <xsl:with-param name="info-type" select="'dfncert'"/>
+    <xsl:with-param name="info-type" select="'dfn_cert_adv'"/>
   </xsl:call-template>
 
   <div class="section-box">
@@ -4142,7 +4142,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
   <div class="section-box">
     <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
-    <div class="pull-right"><a href="/omp?cmd=unknown_cmd&amp;token={/envelope/token}">Provoke a harmless internal error</a> (use <img src="/img/help.svg"/> to get back here)</div>
+    <div class="pull-right">
+      <a href="/omp?cmd=unknown_cmd&amp;token={/envelope/token}">Provoke a harmless internal error</a>
+      (use <img src="/img/help.svg" class="icon icon-sm"/> to get back here)
+    </div>
     <div style="text-align:left">
 
       <br/>
@@ -4323,7 +4326,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <h3>New Filter</h3>
       <p>
         To create a new filter click the
-        new icon <img src="/img/new.svg" alt="New Filter" title="New Filter"/> which
+        new icon <img src="/img/new.svg" class="icon icon-sm" alt="New Filter" title="New Filter"/> which
         goes to the <a href="new_filter.html?token={/envelope/token}">New Filter</a>
         page.
       </p>
@@ -4331,7 +4334,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <h3>Exporting</h3>
       <p>
         Export the current list of filters as XML by clicking on the
-        export icon <img src="/img/download.svg" alt="Export" title="Export XML"/>.
+        export icon <img src="/img/download.svg" class="icon icon-sm" alt="Export" title="Export XML"/>.
       </p>
 
       <xsl:call-template name="filtering"/>
@@ -5159,7 +5162,7 @@ Public License instead of this License.
       <h3>New Group</h3>
       <p>
         To create a new group click the
-        new icon <img src="/img/new.svg" alt="New Group" title="New Group"/> which
+        new icon <img src="/img/new.svg" class="icon icon-sm" alt="New Group" title="New Group"/> which
         goes to the <a href="new_group.html?token={/envelope/token}">New Group</a>
         page.
       </p>
@@ -5167,7 +5170,7 @@ Public License instead of this License.
       <h3>Exporting</h3>
       <p>
         Export the current list of groups as XML by clicking on the
-        export icon <img src="/img/download.svg" alt="Export" title="Export XML"/>.
+        export icon <img src="/img/download.svg" class="icon icon-sm" alt="Export" title="Export XML"/>.
       </p>
 
       <xsl:call-template name="filtering"/>
@@ -5589,7 +5592,7 @@ Public License instead of this License.
       <h4>Filters</h4>
       <p>
        Pressing the list icon
-       <img src="/img/list.svg" alt="Filters" title="Filters"/>
+       <img src="/img/list.svg" class="icon icon-sm" alt="Filters" title="Filters"/>
        will switch to the <a href="filters.html?token={/envelope/token}">Filters</a>
        page.
       </p>
@@ -5655,7 +5658,7 @@ Public License instead of this License.
       <h4>Groups</h4>
       <p>
        Pressing the list icon
-       <img src="/img/list.svg" alt="Groups" title="Groups"/>
+       <img src="/img/list.svg" class="icon icon-sm" alt="Groups" title="Groups"/>
        will switch to the <a href="groups.html?token={/envelope/token}">Groups</a>
        page.
       </p>
@@ -5707,7 +5710,7 @@ Public License instead of this License.
       <h4>Hosts</h4>
       <p>
        Pressing the list icon
-       <img src="/img/list.svg" alt="Hosts" title="Hosts"/>
+       <img src="/img/list.svg" class="icon icon-sm" alt="Hosts" title="Hosts"/>
        will switch to the hosts page.
       </p>
     </div>
@@ -5793,7 +5796,7 @@ Public License instead of this License.
       <h4>Notes</h4>
       <p>
        Pressing the list icon
-       <img src="/img/list.svg" alt="Notes" title="Notes"/>
+       <img src="/img/list.svg" class="icon icon-sm" alt="Notes" title="Notes"/>
        will switch to the notes page.
       </p>
     </div>
@@ -5900,7 +5903,7 @@ Public License instead of this License.
       <h4>Overrides</h4>
       <p>
        Pressing the list icon
-       <img src="/img/list.svg" alt="Overrides" title="Overrides"/>
+       <img src="/img/list.svg" class="icon icon-sm" alt="Overrides" title="Overrides"/>
        will switch to the overrides page.
       </p>
     </div>
@@ -5965,7 +5968,7 @@ Public License instead of this License.
       <h4>Roles</h4>
       <p>
        Pressing the list icon
-       <img src="/img/list.svg" alt="Roles" title="Roles"/>
+       <img src="/img/list.svg" class="icon icon-sm" alt="Roles" title="Roles"/>
        will switch to the <a href="roles.html?token={/envelope/token}">Roles</a>
        page.
       </p>
@@ -6080,7 +6083,7 @@ Public License instead of this License.
       <h4>Scanners</h4>
       <p>
        Pressing the list icon
-       <img src="/img/list.svg" alt="Scanners" title="Scanners"/>
+       <img src="/img/list.svg" class="icon icon-sm" alt="Scanners" title="Scanners"/>
        will switch to the scanners page.
       </p>
     </div>
@@ -6166,7 +6169,7 @@ Public License instead of this License.
       <h4>Tags</h4>
       <p>
        Pressing the list icon
-       <img src="/img/list.svg" alt="Tags" title="Tags"/>
+       <img src="/img/list.svg" class="icon icon-sm" alt="Tags" title="Tags"/>
        will switch to the tags page.
       </p>
     </div>
@@ -6594,7 +6597,7 @@ Public License instead of this License.
       <h4>Users</h4>
       <p>
        Pressing the list icon
-       <img src="/img/list.svg" alt="Users" title="Users"/>
+       <img src="/img/list.svg" class="icon icon-sm" alt="Users" title="Users"/>
        will switch to the <a href="users.html?token={/envelope/token}">Users</a>
        page.
       </p>
@@ -6701,7 +6704,7 @@ Public License instead of this License.
       <h3>New Note</h3>
       <p>
         To create a new note click the
-        new icon <img src="/img/new.svg" alt="New Note" title="New Note"/> which
+        new icon <img src="/img/new.svg" class="icon icon-sm" alt="New Note" title="New Note"/> which
         goes to the <a href="new_note.html?token={/envelope/token}">New Note</a>
         page.
       </p>
@@ -6709,7 +6712,7 @@ Public License instead of this License.
       <h3>Exporting</h3>
       <p>
         Export the current list of notes as XML by clicking on the
-        export icon <img src="/img/download.svg" alt="Export" title="Export XML"/>.
+        export icon <img src="/img/download.svg" class="icon icon-sm" alt="Export" title="Export XML"/>.
       </p>
 
       <xsl:call-template name="filtering"/>
@@ -7200,18 +7203,18 @@ Public License instead of this License.
           <td>Description</td>
         </tr>
         <tr class="even">
-          <td><img src="/img/download.svg" alt="Export" title="Export XML"/></td>
+          <td><img src="/img/download.svg" class="icon icon-sm" alt="Export" title="Export XML"/></td>
           <td>Export (download) the resource in XML format.</td>
         </tr>
         <tr class="odd">
-          <td><img src="/img/delete.svg" alt="Delete" title="Delete"/></td>
+          <td><img src="/img/delete.svg" class="icon icon-sm" alt="Delete" title="Delete"/></td>
           <td>Remove the resource entirely from the system, immediately.<br/>
               The icon will be greyed out <img src="/img/delete_inactive.svg" class="icon icon-sm" alt="Delete" title="Delete"/>
               when some other resource depends on the resource.
           </td>
         </tr>
         <tr class="even">
-          <td><img src="/img/new.svg" alt="New Resource" title="New Resource"/></td>
+          <td><img src="/img/new.svg" class="icon icon-sm" alt="New Resource" title="New Resource"/></td>
           <td>Open a dialog for creating a new resource.</td>
         </tr>
         <tr class="odd">
@@ -7224,15 +7227,15 @@ Public License instead of this License.
           </td>
         </tr>
         <tr class="even">
-          <td><img src="/img/edit.svg" alt="Edit Resource" title="Edit Resource"/></td>
+          <td><img src="/img/edit.svg" class="icon icon-sm" alt="Edit Resource" title="Edit Resource"/></td>
           <td>Open a dialog for editing the properties of the resource.</td>
         </tr>
         <tr class="odd">
-          <td><img src="/img/clone.svg" alt="Clone Resource" title="Clone Resource"/></td>
+          <td><img src="/img/clone.svg" class="icon icon-sm" alt="Clone Resource" title="Clone Resource"/></td>
           <td>Create a duplicate of the resource.</td>
         </tr>
         <tr class="even">
-          <td><img src="/img/list.svg" alt="Resource Table View" title="Resource Table View"/></td>
+          <td><img src="/img/list.svg" class="icon icon-sm" alt="Resource Table View" title="Resource Table View"/></td>
           <td>Switch to the table view for this resource type.</td>
         </tr>
       </table>
@@ -7263,7 +7266,7 @@ Public License instead of this License.
 
       <h4>Delete</h4>
       <p>
-       Pressing the delete icon <img src="/img/delete.svg" alt="Delete" title="Delete"/> will
+       Pressing the delete icon <img src="/img/delete.svg" class="icon icon-sm" alt="Delete" title="Delete"/> will
        remove the resource entirely from the system, immediately.  The
        trashcan will be updated.  The icon will be greyed out
        <img src="/img/delete_inactive.svg" class="icon icon-sm" alt="Delete" title="Delete"/>
@@ -7443,7 +7446,7 @@ Public License instead of this License.
       <h3>Exporting</h3>
       <p>
         Export the current list of operating systems as XML by clicking on the
-        export icon <img src="/img/download.svg" alt="Export" title="Export XML"/>.
+        export icon <img src="/img/download.svg" class="icon icon-sm" alt="Export" title="Export XML"/>.
       </p>
 
       <xsl:call-template name="filtering"/>
@@ -7458,7 +7461,7 @@ Public License instead of this License.
 
       <h4>Delete Operating System</h4>
       <p>
-        Pressing the delete icon <img src="/img/delete.svg" alt="Delete" title="Delete"/> will
+        Pressing the delete icon <img src="/img/delete.svg" class="icon icon-sm" alt="Delete" title="Delete"/> will
         remove the operating system immediately.
         The list of operating systems will be updated.
       </p>
@@ -7574,7 +7577,7 @@ Public License instead of this License.
       <h3>New Override</h3>
       <p>
         To create a new override click the
-        new icon <img src="/img/new.svg" alt="New Override" title="New Override"/> which
+        new icon <img src="/img/new.svg" class="icon icon-sm" alt="New Override" title="New Override"/> which
         goes to the <a href="new_override.html?token={/envelope/token}">New Override</a>
         page.
       </p>
@@ -7582,7 +7585,7 @@ Public License instead of this License.
       <h3>Exporting</h3>
       <p>
         Export the current list of overrides as XML by clicking on the
-        export icon <img src="/img/download.svg" alt="Export" title="Export XML"/>.
+        export icon <img src="/img/download.svg" class="icon icon-sm" alt="Export" title="Export XML"/>.
       </p>
 
       <xsl:call-template name="filtering"/>
@@ -8116,7 +8119,7 @@ Public License instead of this License.
 
       <h4>Sync Config</h4>
       <p>
-        Pressing the sync config icon <img src="/img/refresh.svg" alt="Sync Config" title="Sync Config"/> will
+        Pressing the sync config icon <img src="/img/refresh.svg" class="icon icon-sm" alt="Sync Config" title="Sync Config"/> will
         synchronize the OSP config with its scanner. This icon is only visible for OSP configurations.
       </p>
 
@@ -8274,7 +8277,7 @@ Public License instead of this License.
       </p>
       <p>
        Note: In order to save modifications, the button labelled "Save Config" must
-       be clicked. The edit action <img src="/img/edit.svg" alt="Edit" title="Edit"/>
+       be clicked. The edit action <img src="/img/edit.svg" class="icon icon-sm" alt="Edit" title="Edit"/>
        on NVT Families will save the selection.
       </p>
 
@@ -8320,7 +8323,7 @@ Public License instead of this License.
 
       <h4>Save Config and edit Family Details</h4>
       <p>
-       A click on the edit icon <img src="/img/edit.svg" alt="Edit" title="Edit"/>
+       A click on the edit icon <img src="/img/edit.svg" class="icon icon-sm" alt="Edit" title="Edit"/>
        will save the modifications and show the
        <a href="config_editor_nvt_families.html?token={/envelope/token}">Edit Scan Config Family Details</a>
        page which shows details about NVTs within the family and allows to select or
@@ -8387,7 +8390,7 @@ Public License instead of this License.
       <h4>Edit Scan Config NVT Details</h4>
 
       <p>
-       A click on the edit icon <img src="/img/edit.svg" alt="Edit" title="Edit"/>
+       A click on the edit icon <img src="/img/edit.svg" class="icon icon-sm" alt="Edit" title="Edit"/>
        will open the <a href="config_editor_nvt.html?token={/envelope/token}">Edit Scan Config NVT Details</a>
        dialog with detailed information about a certain NVT and all its preferences.
        This page will provide an overview over all preferences and the currently set
@@ -8478,7 +8481,7 @@ Public License instead of this License.
 
       <h4>Select and Edit NVT Details</h4>
       <p>
-       A click on the edit icon <img src="/img/edit.svg" alt="Edit" title="Edit"/> will add the NVT to the selection
+       A click on the edit icon <img src="/img/edit.svg" class="icon icon-sm" alt="Edit" title="Edit"/> will add the NVT to the selection
        and lead to a page that lists <a href="config_editor_nvt.html?token={/envelope/token}">NVT details and allows to modify preferences</a> and
        the timeout.
       </p>
@@ -8809,7 +8812,7 @@ Public License instead of this License.
       <h3>New Tag</h3>
       <p>
         To create a new tag click the
-        new icon <img src="/img/new.svg" alt="New Tag" title="New Tag"/> which
+        new icon <img src="/img/new.svg" class="icon icon-sm" alt="New Tag" title="New Tag"/> which
         goes to the <a href="new_tag.html?token={/envelope/token}">New Tag</a>
         page.
       </p>
@@ -8817,7 +8820,7 @@ Public License instead of this License.
       <h3>Exporting</h3>
       <p>
         Export the current list of tags as XML by clicking on the
-        export icon <img src="/img/download.svg" alt="Export" title="Export XML"/>.
+        export icon <img src="/img/download.svg" class="icon icon-sm" alt="Export" title="Export XML"/>.
       </p>
 
       <xsl:call-template name="filtering"/>
@@ -8875,7 +8878,7 @@ Public License instead of this License.
       <h3>New Tag</h3>
       <p>
         To create a new tag for the current resource click the
-        new icon <img src="/img/new.svg" alt="New Tag" title="New Tag"/> which
+        new icon <img src="/img/new.svg" class="icon icon-sm" alt="New Tag" title="New Tag"/> which
         goes to the <a href="new_tag.html?token={/envelope/token}">New Tag</a>
         page.
       </p>
@@ -8896,7 +8899,7 @@ Public License instead of this License.
         can be quickly added to the current resource without going to the
         <a href="new_tag.html?token={/envelope/token}">New Tag</a>
         page by clicking the new icon
-        <img src="/img/new.svg" alt="New Tag" title="New Tag"/>.
+        <img src="/img/new.svg" class="icon icon-sm" alt="New Tag" title="New Tag"/>.
       </p>
     </div>
   </div>
@@ -9302,7 +9305,7 @@ Public License instead of this License.
        an automatic page refresh. Select one of the
        intervals (10 seconds, 30 seconds or 60 seconds)
        and confirm with pressing the refresh
-       <img src="/img/refresh.svg" alt="Refresh" title="Refresh"/> icon.
+       <img src="/img/refresh.svg" alt="Refresh" class="icon icon-sm" title="Refresh"/> icon.
       </p>
       <p>
        The selection that is currently for the present page is marked with a check mark (&#8730;).
@@ -9332,8 +9335,8 @@ Public License instead of this License.
       <p>
        The icon in the header of the severity column shows whether the
        configured <a href="glossary.html?token={/envelope/token}#override">overrides</a>
-       are applied (<img src="/img/enabled.svg" class="icon icon-sm" alt="Overrides are applied" title="Overrides are applied"/>)
-       or not (<img src="/img/disabled.svg" class="icon icon-sm" alt="No Overrides" title="No Overrides"/>).
+       are applied (<img src="/img/enable.svg" class="icon icon-sm" alt="Overrides are applied" title="Overrides are applied"/>)
+       or not (<img src="/img/disable.svg" class="icon icon-sm" alt="No Overrides" title="No Overrides"/>).
       </p>
       <p>
        By default the overrides are applied. Clicking the icon allows to switch
@@ -9405,7 +9408,7 @@ Public License instead of this License.
       <a name="edit_task"></a>
       <h4>Edit Task</h4>
       <p>
-       Pressing the "Edit Task" icon <img src="/img/edit.svg" alt="Edit Task"
+       Pressing the "Edit Task" icon <img src="/img/edit.svg" class="icon icon-sm" alt="Edit Task"
          title="Edit Task"/> will
        switch to an overview of the configuration for this task and allows
        editing of some of the task's properties.
@@ -9493,14 +9496,14 @@ Public License instead of this License.
       <h4>Report</h4>
       <p>
        Pressing the list icon
-       <img src="/img/list.svg" alt="Report" title="Report"/>
+       <img src="/img/list.svg" class="icon icon-sm" alt="Report" title="Report"/>
        will switch to the report page.
       </p>
 
       <h4>Exporting</h4>
       <p>
         Export the result as XML by clicking on the
-        export icon <img src="/img/download.svg" alt="Export" title="Export XML"/>.
+        export icon <img src="/img/download.svg" class="icon icon-sm" alt="Export" title="Export XML"/>.
       </p>
     </div>
   </div>
@@ -9555,7 +9558,7 @@ Public License instead of this License.
         To download the full report, the <a href="glossary.html?token={/envelope/token}#report_format">format</a>
         can be chosen in the Download column.
         The download will start shortly after a click on the download
-        <img src="/img/download.svg" alt="Download" title="Download"/>
+        <img src="/img/download.svg" class="icon icon-sm" alt="Download" title="Download"/>
         icon.  Report formats can be configured on the
         <a href="report_formats.html?token={/envelope/token}">Report Formats</a>
         page.
@@ -9568,7 +9571,7 @@ Public License instead of this License.
        The selection allows to switch to a view without applying overrides.
        In the table views, scan results numbers might change when switching this selection.
        By pressing the refresh
-       <img src="/img/refresh.svg" alt="Refresh" title="Refresh"/> icon a change is confirmed.
+       <img src="/img/refresh.svg" class="icon icon-sm" alt="Refresh" title="Refresh"/> icon a change is confirmed.
       </p>
       <p>
        The selection that is active for the present page is marked with a hook (&#8730;).
@@ -9582,7 +9585,7 @@ Public License instead of this License.
        To download the currently shown report, the <a href="glossary.html?token={/envelope/token}#report_format">format</a>
        can be chosen.
        The download will start shortly after a click on the download
-       <img src="/img/download.svg" alt="Download" title="Download"/>
+       <img src="/img/download.svg" class="icon icon-sm" alt="Download" title="Download"/>
        icon.  Report formats can be configured on the
        <a href="report_formats.html?token={/envelope/token}">Report Formats</a>
        page.
@@ -9596,21 +9599,21 @@ Public License instead of this License.
       </p>
       <p>
        Each note has a group of action buttons
-       <img src="/img/delete.svg" alt="Delete" title="Delete"/>
-       <img src="/img/details.svg" alt="Details" title="Details"/>
-       <img src="/img/edit.svg" alt="Edit" title="Edit"/>
+       <img src="/img/delete.svg" class="icon icon-sm" alt="Delete" title="Delete"/>
+       <img src="/img/details.svg" class="icon icon-sm" alt="Details" title="Details"/>
+       <img src="/img/edit.svg" class="icon icon-sm" alt="Edit" title="Edit"/>
        which affect the note as on the <a href="notes.html?token={/envelope/token}">Notes</a> page.
       </p>
       <p>
        To add a note to an NVT, click the new note button
-       <img src="/img/new_note.svg" alt="New Note" title="New Note"/>
+       <img src="/img/new_note.svg" class="icon icon-sm" alt="New Note" title="New Note"/>
        on a result of the NVT.
       </p>
       <p>
        If a result has notes and note display is enabled in the filter (see below),
        then the notes icon
-       <img src="/img/note.svg" alt="Note" title="Note"/>
-       is shown on the result.  Clicking the icon jumps to the notes,
+       <img src="/img/note.svg" class="icon icon-sm" alt="Note" title="Note"/>
+       is shown on the result. Clicking the icon jumps to the notes,
        which is helpful if the result has a very long description.
       </p>
 
@@ -10199,8 +10202,7 @@ Public License instead of this License.
     <xsl:with-param name="info-type" select="'dfn_cert_adv'"/>
   </xsl:call-template>
 
-  <div class="gb_window_part_center">Help: DFN-CERT Advisories</div>
-  <div class="gb_window_part_content">
+  <div class="section-box">
     <div class="pull-left">
       <a href="/help/contents.html?token={/envelope/token}">Help Contents</a>
     </div>
