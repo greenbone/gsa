@@ -60,7 +60,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </p>
   <p>
     Wenn Sie einen der Werte im Feld "Filter" und klickt auf auf das
-    Aktualisieren-Icon <img src="/img/refresh.png" alt="Aktualisieren"
+    Aktualisieren-Icon <img src="/img/refresh.svg" class="icon icon-sm" alt="Aktualisieren"
     title="Aktualisieren"/>, wird die angezeigte Liste aktualisiert.
     Die Syntax des Filters ist auf der Seite
     "<a href="/help/powerfilter.html?token={/envelope/token}">Powerfilter</a>"
@@ -68,21 +68,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </p>
   <p>
     Wenn Sie einen Namen in das zweite Feld eintragen und das Neu-Icon
-    <img src="/img/new.png"
-         alt="Neuen Filter aus aktuellem Suchausdruck erzeugen"
-         title="Neuen Filter aus aktuellem Suchausdruck erzeugen"/>
+    <img src="/img/new.svg"
+      class="icon icon-sm"
+      alt="Neuen Filter aus aktuellem Suchausdruck erzeugen"
+      title="Neuen Filter aus aktuellem Suchausdruck erzeugen"/>
     drücken, wird ein neuer Filter aus dem Suchausdruck erzeugt,
     der aktuell auf die Liste angewendet wird.
   </p>
   <p>
     Der aktuelle Filter kann auch geändert werden, indem Sie einen Filter
     aus der Dropdown-Liste rechts auswählen und das Aktualisieren-Icon
-    <img src="/img/refresh.png" alt="Aktualisieren" title="Aktualisieren"/>
+    <img src="/img/refresh.svg" class="icon icon-sm" alt="Aktualisieren" title="Aktualisieren"/>
     drücken.
   </p>
   <p>
     Wenn Sie auf das Listen-Icon
-    <img src="/img/list.png" border="0" alt="Filter"/>
+    <img src="/img/list.svg" class="icon icon-sm" border="0" alt="Filter"/>
     drücken, gelangen Sie zu einer vollständigen Liste aller Filter
     auf der <a href="filters.html?token={/envelope/token}">Filter</a>-Seite.
   </p>
@@ -165,10 +166,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <table style="margin-left: 10px">
                 <tr>
                   <td valign="top">
-                    <img src="/img/alterable.png"
-                         border="0"
-                         alt="Aufgabe ist änderbar"
-                         title="Aufgabe ist änderbar"/>
+                    <img src="/img/alterable.svg"
+                      class="icon icon-sm"
+                      border="0"
+                      alt="Aufgabe ist änderbar"
+                      title="Aufgabe ist änderbar"/>
                   </td>
                   <td>
                     Die Aufgabe ist änderbar. Dies ermöglicht es, Eigenschaften
@@ -178,10 +180,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 </tr>
                 <tr>
                   <td valign="top">
-                    <img src="/img/sensor.png"
-                         border="0"
-                         alt="Aufgabe ist konfiguriert, um auf Slave Beispiel-Slave ausgeführt zu werden"
-                         title="Aufgabe ist konfiguriert, um auf Slave Beispiel-Slave ausgeführt zu werden"/>
+                    <img src="/img/sensor.svg"
+                      class="icon icon-sm"
+                      border="0"
+                      alt="Aufgabe ist konfiguriert, um auf Slave Beispiel-Slave ausgeführt zu werden"
+                      title="Aufgabe ist konfiguriert, um auf Slave Beispiel-Slave ausgeführt zu werden"/>
                   </td>
                   <td>
                     Die Aufgabe is so konfiguriert, dass sie auf einem Slave ausgeführt wird.
@@ -189,10 +192,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 </tr>
                 <tr>
                   <td valign="top">
-                    <img src="/img/provide_view.png"
-                         border="0"
-                         alt="Aufgabe sichtbar gemacht für: user1 user2"
-                         title="Aufgabe sichtbar gemacht für: user1 user2"/>
+                    <img src="/img/provide_view.svg"
+                      class="icon icon-sm"
+                      border="0"
+                      alt="Aufgabe sichtbar gemacht für: user1 user2"
+                      title="Aufgabe sichtbar gemacht für: user1 user2"/>
                   </td>
                   <td>
                     Die Aufgabe wurde für einen oder mehr Benutzer sichtbar gemacht.
@@ -200,10 +204,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 </tr>
                 <tr>
                   <td valign="top">
-                    <img src="/img/view_other.png"
-                         border="0"
-                         alt="Beobachte Aufgabe von Besitzer user1"
-                         title="Beobachte Aufgabe von Besitzer user1"/>
+                    <img src="/img/view_other.svg"
+                      class="icon icon-sm"
+                      border="0"
+                      alt="Beobachte Aufgabe von Besitzer user1"
+                      title="Beobachte Aufgabe von Besitzer user1"/>
                   </td>
                   <td>
                     Die Aufgabe wird nur beobachtet.  Der Besitzer ist ein anderer Benutzer.
@@ -404,14 +409,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <br/>
             <table>
               <tr>
-                <td valign="top"><img src="/img/trend_up.png"/></td>
+                <td valign="top"><img src="/img/trend_up.svg" class="icon icon-sm"/></td>
                 <td>
                   Schweregrad hat zugenommen: Im neuesten Bericht hat mindestens
                   ein NVT für mindestens einen Ziel-Host einen höheren
                   Schweregrad gemeldet als im vorherigen Bericht.
                 </td>
               </tr><tr>
-                <td valign="top"><img src="/img/trend_more.png"/></td>
+                <td valign="top"><img src="/img/trend_more.svg" class="icon icon-sm"/></td>
                 <td>
                   Anzahl Schwachstellen hat zugenommen: Der maximale Schweregrad
                   im neuesten und vorherigen Bericht ist gleich. Allerdings
@@ -419,14 +424,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   gleichen Schwereniveau als der vorherige.
                 </td>
               </tr><tr>
-                <td valign="top"><img src="/img/trend_nochange.png"/></td>
+                <td valign="top"><img src="/img/trend_nochange.svg" class="icon icon-sm"/></td>
                 <td>
                   Schwachstellen haben sich nicht geändert: Sowohl der maximale
                   Schweregrad als auch die Schwereniveaus sind im neuesten
                   und vorherigen Bericht identisch.
                 </td>
               </tr><tr>
-                <td valign="top"><img src="/img/trend_less.png"/></td>
+                <td valign="top"><img src="/img/trend_less.svg" class="icon icon-sm"/></td>
                 <td>
                   Anzahl Schwachstellen hat abgenommen: Der maximale Schweregrad
                   im neuesten und vorherigen Bericht ist gleich. Allerdings
@@ -434,7 +439,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   gleichen Schwereniveau als der vorherige.
                 </td>
               </tr><tr>
-                <td valign="top"><img src="/img/trend_down.png"/></td>
+                <td valign="top"><img src="/img/trend_down.svg" class="icon icon-sm"/></td>
                 <td>
                   Schweregrad hat abgenommen: Im neuesten Bericht ist der
                   höchste gemeldete Schweregrad niedriger als der höchste im
@@ -456,7 +461,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        für ein automatisches Aktualisieren der Seite festzulegen.
        Wählen sie hierzu eines der Intervalle (10 Sekunden, 30 Sekunden
        oder 60 Sekunden) und bestätigen Sie durch Drücken des
-       <img src="/img/refresh.png" alt="Aktualisieren" title="Aktualisieren"/>-Icons.
+       <img src="/img/refresh.svg" class="icon icon-sm" alt="Aktualisieren" title="Aktualisieren"/>-Icons.
       </p>
       <p>
        Die momentane Auswahl für die aktuelle Seite ist mit einem Haken (&#8730;) markiert.
@@ -480,7 +485,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        Wizard standardmäßig ausgeblendet wird.
       </p>
       <p>
-       Das Wizard-Icon <img src="/img/wizard.png" alt="Wizard zeigen" title="Wizard zeigen"/>
+       Das Wizard-Icon <img src="/img/wizard.svg" class="icon icon-sm" alt="Wizard zeigen" title="Wizard zeigen"/>
        führt zu einer eigenständigen Seite, die den Wizard bereitstellt.
       </p>
 
@@ -490,8 +495,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        Das Icon im Kopf der Schweregrad-Spalte zeigt an, ob die eingerichteten
        <a href="glossary.html?token={/envelope/token}#override">Übersteuerungen</a>
        angewendet werden
-       (<img src="/img/enabled.png" alt="Übersteuerungen werden angewendet" title="Übersteuerungen werden angewendet"/>)
-       oder nicht (<img src="/img/disabled.png" alt="Keine Übersteuerungen" title="Keine Übersteuerungen"/>).
+       (<img src="/img/enabled.svg" class="icon icon-sm" alt="Übersteuerungen werden angewendet" title="Übersteuerungen werden angewendet"/>)
+       oder nicht (<img src="/img/disabled.svg" class="icon icon-sm" alt="Keine Übersteuerungen" title="Keine Übersteuerungen"/>).
       </p>
       <p>
        Standardmäßig werden Übersteuerungen angewendet. Indem Sie auf auf das
@@ -511,7 +516,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
       <h4>Aufgabe starten</h4>
       <p>
-       Indem sie auf das Start-Icon <img src="/img/start.png" alt="Starten" title="Starten"/>
+       Indem sie auf das Start-Icon <img src="/img/start.svg" class="icon icon-sm" alt="Starten" title="Starten"/>
        drücken, starten Sie einen neuen Scan. Die Liste der Aufgaben wird
        aktualisiert.
       </p>
@@ -523,7 +528,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
       <h4>Zeitplan-Details</h4>
       <p>
-        Wenn Sie auf das "Zeitplan-Details"-Icon <img src="/img/scheduled.png"
+        Wenn Sie auf das "Zeitplan-Details"-Icon <img src="/img/scheduled.svg" class="icon icon-sm"
           alt="Zeitplan-Details" title="Zeitplan-Details"/> drücken, wechseln
         Sie zu einer Übersicht der Details für den Zeitplan, der für diese
         Aufgabe verwendet wird.
@@ -535,7 +540,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
       <h4>Aufgabe fortsetzen</h4>
       <p>
-       Indem Sie auf das Fortsetzen-Icon <img src="/img/resume.png"
+       Indem Sie auf das Fortsetzen-Icon <img src="/img/resume.svg" class="icon icon-sm"
          alt="Fortsetzen" title="Fortsetzen"/> drücken, setzen Sie eine zuvor
        gestoppte Aufgabe fort. Die Liste der Aufgaben wird aktualisiert.
       </p>
@@ -546,7 +551,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
       <h4>Aufgabe stoppen</h4>
       <p>
-       Indem Sie das Stopp-Icon <img src="/img/stop.png" alt="Stoppen"
+       Indem Sie das Stopp-Icon <img src="/img/stop.svg" class="icon icon-sm" alt="Stoppen"
        title="Stoppen"/> drücken, stoppen Sie eine laufende Aufgabe.
        Die Liste der Aufgaben wird aktualisiert.
       </p>
@@ -556,7 +561,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
       <h4>Aufgabe in den Mülleimer verschieben</h4>
       <p>
-       Indem Sie das Mülleimer-Icon <img src="/img/trashcan.png"
+       Indem Sie das Mülleimer-Icon <img src="/img/trashcan.svg" class="icon icon-sm"
        alt="Move to Trashcan" title="To Trashcan"/> drücken, verschieben Sie
        den Eintrag in den Mülleimer. Die Liste der Aufgaben wird aktualisiert.
        Beachten Sie, dass alle mit der Aufgabe verbundenen Berichte ebenfalls
@@ -570,7 +575,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <a name="edit_task"></a>
       <h4>Aufgabe bearbeiten</h4>
       <p>
-       Indem Sie das "Aufgabe bearbeiten"-Icon <img src="/img/edit.png"
+       Indem Sie das "Aufgabe bearbeiten"-Icon <img src="/img/edit.svg" class="icon icon-sm"
          alt="Aufgabe bearbeiten" title="Aufgabe bearbeiten"/> drücken,
        wechseln Sie zu einer Übersicht zur Konfiguration dieser Aufgabe,
        in der Sie einige Eigenschaften der Aufgabe bearbeiten können.
@@ -592,7 +597,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <p>
        Kleine
        <a href="/help/contents.html?token={/envelope/token}" title="Hilfe">
-        <img src="/img/help.png"/>
+        <img src="/img/help.svg" class="icon icon-sm"/>
        </a>-Icons überall im Web-Interface lassen sie zu den entsprechenden
        Inhalten springen.
        Alternativ können sie auch in der folgenden Struktur blättern.

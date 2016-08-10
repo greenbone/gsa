@@ -1,5 +1,9 @@
 2016-08-10  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/help_de.xsl: Fix icons in German help page.
+
+2016-08-10  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/help.xsl (contents.html): Fix size for help icon to be
 	small.
 
