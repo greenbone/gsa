@@ -2986,7 +2986,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        </a>图标贯穿于所有网页界面，引导您跳转到相应的帮助内容去。作为可选的，您也可以根据如下结构来浏览帮助内容。
       </p>
 
-      <div id="list">
+      <div class="bullet-list">
         <ul>
           <li> 扫描管理</li>
           <ul>

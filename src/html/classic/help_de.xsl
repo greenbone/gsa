@@ -603,7 +603,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        Alternativ können sie auch in der folgenden Struktur blättern.
       </p>
 
-      <div id="list">
+      <div class="bullet-list">
         <ul>
           <li> Scans </li>
           <ul>

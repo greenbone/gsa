@@ -3230,7 +3230,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        Или вы можете воспользоваться доступом через нижеприведённое оглавление.
       </p>
 
-      <div id="list">
+      <div class="bullet-list">
         <ul>
           <li> Управление сканированиями</li>
           <ul>
