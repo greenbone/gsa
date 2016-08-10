@@ -1,5 +1,10 @@
 2016-08-10  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/help.xsl (contents.html): Fix size for help icon to be
+	small.
+
+2016-08-10  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/css/gsa-style.css: Remove unnecessary .logo style
 	declarations.
 

@@ -3764,7 +3764,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
       <h1>Contents</h1>
       <p>
-       Small <a href="/help/contents.html?token={/envelope/token}" title="Help"><img src="/img/help.svg"/></a>
+       Small <a href="/help/contents.html?token={/envelope/token}" title="Help"><img src="/img/help.svg" class="icon icon-sm"/></a>
        icons all over the web interface will jump you into the respective contents.
        Alternatively you can browse the following structure.
       </p>
