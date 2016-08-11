@@ -1,5 +1,13 @@
 2016-08-11  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/omp.xsl (html-targets-table): Remove generated JavaScript
+	from targets table.
+
+	* src/html/classic/js/greenbone.js: Add JavaScript code to handle target
+	credential column sorting.
+
+2016-08-11  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/omp.xsl: Use common heading sizes for all pages.
 
 2016-08-11  Björn Ricks <bjoern.ricks@greenbone.net>

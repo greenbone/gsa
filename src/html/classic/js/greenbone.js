@@ -1681,6 +1681,30 @@
         buttons: buttons,
       });
     });
+
+    doc.find('.credential-type-sort').each(function() {
+      var elem = $(this);
+      var select = elem.find('select');
+      var token = elem.data('token');
+      var filter = elem.data('filter');
+      var sort_colum = elem.data('sort-colum');
+      var sort_value = elem.data('sort-value');
+
+      function filter_url(column, value) {
+        return '/omp?cmd=get_targets&token=' + token + '&filter=' +
+          column + '=' + value + ' ' + filter;
+      }
+
+      elem.find('.credential-type-sort-asc').attr('href',
+          filter_url('sort', sort_value));
+      elem.find('.credential-type-sort-desc').attr('href',
+          filter_url('sort-reverse', sort_value));
+
+      select.on('change', function() {
+        var type = select.val();
+        location.href = filter_url(sort_colum, type);
+      });
+    });
   }
 
   var timeout_id;

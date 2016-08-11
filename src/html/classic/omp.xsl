@@ -15462,8 +15462,16 @@ should not have received it.
         <html>
           <after>
             <xsl:variable name="sort_keyword" select="/envelope/get_targets/get_targets_response/filters/keywords/keyword[column='sort' or column='sort-reverse']"/>
-            <span style="font-size:80%; color:silver"><xsl:text> - </xsl:text><xsl:value-of select="gsa:i18n('sort by', 'Target Credential')"/><xsl:text>: </xsl:text></span>
-            <span style="display:inline-block;">
+            <span style="font-size:80%; color:silver">
+              <xsl:text> - </xsl:text>
+              <xsl:value-of select="gsa:i18n('sort by', 'Target Credential')"/>
+              <xsl:text>: </xsl:text>
+            </span>
+            <span class="credential-type-sort"
+              data-sort-colum="{$sort_keyword/column}"
+              data-sort-value="{$sort_keyword/value}"
+              data-filter="{/envelope/get_targets/get_targets_response/filters/term}"
+              data-token="{/envelope/token}">
               <select name="sort_credential_type" onChange="select_credential_type (true)">
                 <xsl:call-template name="opt">
                   <xsl:with-param name="value" select="'ssh_credential'"/>
@@ -15487,30 +15495,15 @@ should not have received it.
                 </xsl:call-template>
               </select>
               <xsl:text> </xsl:text>
-              <a id="sort_by_credential_asc" style="position:relative; top:3px;" class="icon icon-sm"
+              <a class="credential-type-sort-asc icon icon-sm" style="position:relative; top:3px;"
                 href="#" title="{gsa:i18n ('Ascending', 'Filter')}">
                 <img src="/img/ascending.svg"/>
               </a>
-              <a id="sort_by_credential_desc" style="position:relative; top:3px;" class="icon icon-sm"
+              <a class="credential-type-sort-desc icon icon-sm" style="position:relative; top:3px;"
                 href="#" title="{gsa:i18n ('Descending', 'Filter')}">
                 <img src="/img/descending.svg"/>
               </a>
             </span>
-            <script type="text/javascript">
-              var credential_url_prefix = '/omp?cmd=get_targets&amp;filter=';
-              var credential_url_suffix = '%20<xsl:value-of select="gsa:escape-js (str:encode-uri (/envelope/get_targets/get_targets_response/filters/term, true()))"/>&amp;token=<xsl:value-of select="gsa:escape-js (/envelope/token)"/>';
-              function select_credential_type (reload)
-                {
-                  var type = $('select[name=sort_credential_type]').val ();
-                  $('#sort_by_credential_asc').attr ('href', credential_url_prefix + "sort=" + type + credential_url_suffix);
-                  $('#sort_by_credential_desc').attr ('href', credential_url_prefix + "sort-reverse=" + type + credential_url_suffix);
-                  if (reload)
-                    {
-                      window.location = ('href', credential_url_prefix + "<xsl:value-of select="gsa:escape-js ($sort_keyword/column)"/>=" + type + credential_url_suffix);
-                    }
-                }
-              select_credential_type (false);
-            </script>
           </after>
         </html>
       </column>
