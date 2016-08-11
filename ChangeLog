@@ -1,5 +1,12 @@
 2016-08-11  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_dashboard.js: Use element id for dashboard id
+	instead of seperate data-dashboard-name attribute. The Dashboard class even
+	expect that both MUST be the same to work correctly. Therefore remove the
+	data-dashboard-name usage.
+
+2016-08-11  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_chart_helpers.js,
 	src/html/classic/js/gsa_dashboard.js: Remove global dict of dashboards. The
 	global variable isn't used anywhere.

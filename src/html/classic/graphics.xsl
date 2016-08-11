@@ -135,7 +135,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:variable name="filt_id" select="/envelope/get_tasks/get_tasks_response/filters/@id | /envelope/get_reports/get_reports_response/filters/@id |  /envelope/get_results/get_results_response/filters/@id"/>
 
   <div class="dashboard" id="top-dashboard"
-    data-dashboard-name="top-dashboard"
     data-filter="{$filter}"
     data-filters-id="{$filt_id}"
     data-controllers="{$controllers}"

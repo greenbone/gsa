@@ -3213,13 +3213,12 @@
 
     doc.find('.dashboard').each(function() {
       var elem = $(this);
-      var dashboard_name = elem.data('dashboard-name');
       var max_components = gsa.is_defined(elem.data('max-components')) ?
         elem.data('max-components') : 8;
       var no_chart_links = gsa.is_defined(elem.data('no-chart-links')) ?
         !!(elem.data('no-chart-links')) : false;
 
-      var dashboard = new gch.Dashboard(dashboard_name,
+      var dashboard = new gch.Dashboard(elem.attr('id'),
           elem.data('controllers'), elem.data('heights'),
           elem.data('filters-string'),
           {
