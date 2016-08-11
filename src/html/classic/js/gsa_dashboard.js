@@ -3325,8 +3325,6 @@
         });
       });
 
-      gch.dashboards[dashboard_name] = dashboard;
-
       dashboard.initDisplaysFromString();
 
       if (elem.data('detached')) {

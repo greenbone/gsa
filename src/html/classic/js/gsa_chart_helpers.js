@@ -37,11 +37,6 @@
    * Global lists
    */
 
-  // Global list of dashboards
-  if (!gsa.is_defined(gch.dashboards)) {
-    gch.dashboards = {};
-  }
-
   // Global list of chart generator classes
   if (!gsa.is_defined(gch.chart_generators)) {
     gch.chart_generators = {};
