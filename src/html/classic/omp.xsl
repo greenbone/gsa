@@ -26673,28 +26673,7 @@ should not have received it.
           </div>
         </div>
         <div class="form-group form-selection-item-perm
-                    form-selection-item-perm--create_agent
-                    form-selection-item-perm--create_alert
-                    form-selection-item-perm--create_asset
-                    form-selection-item-perm--create_config
-                    form-selection-item-perm--create_credential
-                    form-selection-item-perm--create_filter
-                    form-selection-item-perm--create_group
-                    form-selection-item-perm--create_note
-                    form-selection-item-perm--create_override
-                    form-selection-item-perm--create_permission
-                    form-selection-item-perm--create_port_list
-                    form-selection-item-perm--create_port_range
-                    form-selection-item-perm--create_report
-                    form-selection-item-perm--create_report_format
-                    form-selection-item-perm--create_role
-                    form-selection-item-perm--create_scanner
-                    form-selection-item-perm--create_schedule
-                    form-selection-item-perm--create_slave
-                    form-selection-item-perm--create_tag
-                    form-selection-item-perm--create_target
-                    form-selection-item-perm--create_task
-                    form-selection-item-perm--create_user
+                    form-selection-item-perm--super
                     form-selection-item-perm--delete_agent
                     form-selection-item-perm--delete_alert
                     form-selection-item-perm--delete_asset
@@ -26721,7 +26700,6 @@ should not have received it.
                     form-selection-item-perm--describe_cert
                     form-selection-item-perm--describe_feed
                     form-selection-item-perm--describe_scap
-                    form-selection-item-perm--empty_trashcan
                     form-selection-item-perm--get_agents
                     form-selection-item-perm--get_alerts
                     form-selection-item-perm--get_assets
