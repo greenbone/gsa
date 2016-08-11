@@ -26798,7 +26798,7 @@ should not have received it.
       <xsl:variable name="resource_type" select="/envelope/params/restrict_type"/>
       <xsl:variable name="resource_id" select="/envelope/params/resource_id"/>
       <xsl:variable name="related" select="/envelope/params/_param[starts-with (name, 'related:')]"/>
-      <form action="/omp" method="post" enctype="multipart/form-data">
+      <form action="/omp" method="post" enctype="multipart/form-data" class="form-horizontal">
         <input type="hidden" name="cmd" value="create_permissions"/>
         <input type="hidden" name="comment" value=""/>
         <input type="hidden" name="id_or_empty" value="{$resource_id}"/>
@@ -26809,91 +26809,89 @@ should not have received it.
         <input type="hidden" name="{/envelope/params/next_type}_id" value="{$resource_id}"/>
         <input type="hidden" name="caller" value="{/envelope/current_page}"/>
         <input type="hidden" name="token" value="{/envelope/token}"/>
-        <table class="table-form">
-          <tr>
-            <td>
-              <xsl:value-of select="gsa:i18n ('Grant ', 'Permission|Grant')"/>
-            </td>
-            <td>
-              <select name="permission">
-                <option value="read"><xsl:value-of select="gsa:i18n ('read', 'Permission')"/></option>
-                <option value="proxy"><xsl:value-of select="gsa:i18n ('proxy', 'Permission')"/></option>
-              </select>
-              <xsl:value-of select="gsa:i18n (' permissions', 'Permission')"/>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <xsl:value-of select="gsa:i18n (' to ', 'Permission|Grant')"/>
-            </td>
-            <td>
-              <xsl:call-template name="permission-subject-selection"/>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <xsl:value-of select="gsa:i18n (' on ', 'Permission|Grant')"/>
-            </td>
-            <td>
-              <input name="resource_type" value="{$resource_type}" type="hidden"/>
-              <input name="resource_id" value="{$resource_id}" type="hidden"/>
-              <xsl:variable name="resource" select="*[name() = concat ('get_', $resource_type, 's_response')]/child::*[@id = $resource_id]"/>
-              <xsl:variable name="text">
-                <xsl:choose>
-                  <xsl:when test="$resource">
-                    <xsl:value-of select="concat (gsa:i18n (gsa:type-name ($resource_type), gsa:type-name ($resource_type)), ' &quot;', $resource/name, '&quot;')"/>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <xsl:value-of select="concat (gsa:i18n (gsa:type-name ($resource_type), gsa:type-name ($resource_type)), ' ', $resource_id)"/>
-                  </xsl:otherwise>
-                </xsl:choose>
-              </xsl:variable>
-            <xsl:value-of select="$text"/>
-            </td>
-          </tr>
-          <tr>
-            <td>
-            </td>
-            <td>
-              <select name="include_related">
-                <xsl:if test="$related">
-                  <option value="1"><xsl:value-of select="gsa:i18n ('including related resources', 'Permission')"/></option>
-                </xsl:if>
-                <xsl:if test="1">
-                  <option value="0"><xsl:value-of select="gsa:i18n ('for current resource only', 'Permission')"/></option>
-                </xsl:if>
-                <xsl:if test="$related">
-                  <option value="2"><xsl:value-of select="gsa:i18n ('for related resources only', 'Permission')"/></option>
-                </xsl:if>
-              </select>
-              <ul>
-                <xsl:variable name="new_permissions" select="/envelope/new_permissions"/>
-                <xsl:for-each select="$related">
-                  <xsl:sort select="gsa:i18n (gsa:type-name (value), gsa:type-name (value))"/>
-                  <xsl:variable name="related_type" select="value"/>
-                  <xsl:variable name="related_id" select="substring-after (name, ':')"/>
-                  <xsl:variable name="resource" select="$new_permissions/*[name() = concat ('get_', $related_type, 's_response')]/child::*[@id = $related_id]"/>
-                  <xsl:variable name="text">
-                    <xsl:choose>
-                      <xsl:when test="$resource">
-                        <xsl:value-of select="concat (gsa:i18n (gsa:type-name ($related_type), gsa:type-name ($related_type)), ' &quot;', $resource/name, '&quot;')"/>
-                      </xsl:when>
-                      <xsl:otherwise>
-                        <xsl:value-of select="concat (gsa:i18n (gsa:type-name ($related_type), gsa:type-name ($related_type)), ' ', $related_id)"/>
-                      </xsl:otherwise>
-                    </xsl:choose>
-                  </xsl:variable>
-                  <li>
-                    <a href="/omp?cmd=get_{$related_type}&amp;{$related_type}_id={$related_id}&amp;token={/envelope/token}" target="_blank">
-                      <xsl:value-of select="$text"/>
-                    </a>
-                    <input type="hidden" name="{name}" value="{value}"/>
-                  </li>
-                </xsl:for-each>
-              </ul>
-            </td>
-          </tr>
-        </table>
+        <input name="resource_type" value="{$resource_type}" type="hidden"/>
+        <input name="resource_id" value="{$resource_id}" type="hidden"/>
+        <div class="form-group">
+          <label class="col-2 control-label">
+            <xsl:value-of select="gsa:i18n ('Grant ', 'Permission|Grant')"/>
+          </label>
+          <div class="col-10">
+            <select name="permission">
+              <option value="read"><xsl:value-of select="gsa:i18n ('read', 'Permission')"/></option>
+              <option value="proxy"><xsl:value-of select="gsa:i18n ('proxy', 'Permission')"/></option>
+            </select>
+            <xsl:value-of select="gsa:i18n (' permissions', 'Permission')"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-2 control-label">
+            <xsl:value-of select="gsa:i18n (' to ', 'Permission|Grant')"/>
+          </label>
+          <div class="col-10">
+            <xsl:call-template name="permission-subject-selection"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-2 control-label">
+            <xsl:value-of select="gsa:i18n (' on ', 'Permission|Grant')"/>
+          </label>
+          <div class="col-10">
+            <xsl:variable name="resource" select="*[name() = concat ('get_', $resource_type, 's_response')]/child::*[@id = $resource_id]"/>
+            <xsl:variable name="text">
+              <xsl:choose>
+                <xsl:when test="$resource">
+                  <xsl:value-of select="concat (gsa:i18n (gsa:type-name ($resource_type), gsa:type-name ($resource_type)), ' &quot;', $resource/name, '&quot;')"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:value-of select="concat (gsa:i18n (gsa:type-name ($resource_type), gsa:type-name ($resource_type)), ' ', $resource_id)"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </xsl:variable>
+            <p class="form-control-static">
+              <xsl:value-of select="$text"/>
+            </p>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="offset-2 col-10">
+            <select name="include_related">
+              <xsl:if test="$related">
+                <option value="1"><xsl:value-of select="gsa:i18n ('including related resources', 'Permission')"/></option>
+              </xsl:if>
+              <xsl:if test="1">
+                <option value="0"><xsl:value-of select="gsa:i18n ('for current resource only', 'Permission')"/></option>
+              </xsl:if>
+              <xsl:if test="$related">
+                <option value="2"><xsl:value-of select="gsa:i18n ('for related resources only', 'Permission')"/></option>
+              </xsl:if>
+            </select>
+            <ul>
+              <xsl:variable name="new_permissions" select="/envelope/new_permissions"/>
+              <xsl:for-each select="$related">
+                <xsl:sort select="gsa:i18n (gsa:type-name (value), gsa:type-name (value))"/>
+                <xsl:variable name="related_type" select="value"/>
+                <xsl:variable name="related_id" select="substring-after (name, ':')"/>
+                <xsl:variable name="resource" select="$new_permissions/*[name() = concat ('get_', $related_type, 's_response')]/child::*[@id = $related_id]"/>
+                <xsl:variable name="text">
+                  <xsl:choose>
+                    <xsl:when test="$resource">
+                      <xsl:value-of select="concat (gsa:i18n (gsa:type-name ($related_type), gsa:type-name ($related_type)), ' &quot;', $resource/name, '&quot;')"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <xsl:value-of select="concat (gsa:i18n (gsa:type-name ($related_type), gsa:type-name ($related_type)), ' ', $related_id)"/>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </xsl:variable>
+                <li>
+                  <a href="/omp?cmd=get_{$related_type}&amp;{$related_type}_id={$related_id}&amp;token={/envelope/token}" target="_blank">
+                    <xsl:value-of select="$text"/>
+                  </a>
+                  <input type="hidden" name="{name}" value="{value}"/>
+                </li>
+              </xsl:for-each>
+            </ul>
+          </div>
+        </div>
       </form>
     </div>
   </div>
