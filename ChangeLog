@@ -1,5 +1,9 @@
 2016-08-11  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/omp.xsl: Use common heading sizes for all pages.
+
+2016-08-11  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/omp.xsl (html-create-permissions-form): Fix layout of
 	create multiple permissions form by using a horizontal form layout.
 

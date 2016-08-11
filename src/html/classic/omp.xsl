@@ -2485,7 +2485,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </a>
         </xsl:otherwise>
       </xsl:choose>
-    <h3>
+    <h2>
       <a href="/omp?cmd=get_tags&amp;filter=resource_uuid={$resource_id}&amp;token={/envelope/token}"
          title="{gsa:i18n ('Tags', 'Tags')}">
         <img class="icon icon-sm" src="/img/tag.svg" alt="Tags"/>
@@ -2499,7 +2499,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           (<xsl:value-of select="gsa:i18n ('none', 'Tags')"/>)
         </xsl:otherwise>
       </xsl:choose>
-    </h3>
+    </h2>
   </div>
 
   <div class="section-box" id="usertags-box">
@@ -2828,7 +2828,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:when>
         <xsl:otherwise/>
       </xsl:choose>
-      <h3>
+      <h2>
         <a href="/omp?cmd=get_permissions&amp;filter=name:^.*({$resource_type})s?$ and resource_uuid={$resource_id}&amp;token={/envelope/token}"
            title="{gsa:i18n ('Permissions', 'Permission')}">
           <img class="icon icon-sm" src="/img/permission.svg" alt="Permissions"/>
@@ -2842,7 +2842,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             (<xsl:value-of select="gsa:i18n ('none', 'Permissions')"/>)
           </xsl:otherwise>
         </xsl:choose>
-      </h3>
+      </h2>
     </div>
 
     <div class="section-box" id="permission-box">
@@ -4058,7 +4058,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:otherwise>
         </xsl:choose>
 
-        <h2>
+        <h1>
           <xsl:apply-templates select="report" mode="section-list">
             <xsl:with-param name="current" select="$section"/>
           </xsl:apply-templates>
@@ -4073,7 +4073,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:if>
             <xsl:text>)</xsl:text>
           </xsl:if>
-        </h2>
+        </h1>
       </div>
     </div>
   </div>
@@ -5236,7 +5236,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
   <div id="list-window-header">
     <div class="section-header">
-      <h2>
+      <h1>
         <xsl:choose>
           <xsl:when test="$subtype != ''">
             <img class="icon icon-lg" src="/img/{$subtype}.svg"/>
@@ -5252,7 +5252,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:value-of select="gsa:i18n ('of')"/>
         <xsl:text> </xsl:text>
         <xsl:value-of select="$full-count"/>)
-      </h2>
+      </h1>
 
       <xsl:if test="$top-visualization != ''">
         <div class="dashboard-controls" id="top-dashboard-controls"/>
@@ -9054,7 +9054,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         data-variable="using-box--collapsed">
           <img src="/img/fold.svg"/>
       </a>
-      <h3>
+      <h2>
         <a href="/omp?cmd=get_slaves&amp;token={/envelope/token}"
            title="{gsa:i18n ('Slaves', 'Slave')}">
           <img class="icon icon-sm" src="/img/slave.svg" alt="Slaves"/>
@@ -9069,7 +9069,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             (<xsl:value-of select="gsa:i18n ('none')"/>)
           </xsl:otherwise>
         </xsl:choose>
-      </h3>
+      </h2>
     </div>
     <div class="section-box" id="using-box">
       <table class="gbntable">
@@ -9103,7 +9103,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       data-variable="using-box2--collapsed">
         <img src="/img/fold.svg"/>
     </a>
-    <h3>
+    <h2>
       <a href="/omp?cmd=get_targets&amp;token={/envelope/token}"
          title="{gsa:i18n ('Targets', 'Targets')}">
         <img class="icon icon-sm" src="/img/target.svg" alt="Targets"/>
@@ -9118,7 +9118,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           (<xsl:value-of select="gsa:i18n ('none')"/>)
         </xsl:otherwise>
       </xsl:choose>
-    </h3>
+    </h2>
   </div>
 
   <div class="section-box" id="using-box2">
@@ -9152,7 +9152,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       data-variable="using-box3--collapsed">
         <img src="/img/fold.svg"/>
     </a>
-    <h3>
+    <h2>
       <a href="/omp?cmd=get_targets&amp;token={/envelope/token}"
          title="{gsa:i18n ('Targets', 'Targets')}">
         <img class="icon icon-sm" src="/img/scanner.svg" alt="Scanners"/>
@@ -9167,7 +9167,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           (<xsl:value-of select="gsa:i18n ('none')"/>)
         </xsl:otherwise>
       </xsl:choose>
-    </h3>
+    </h2>
   </div>
   <div class="section-box" id="using-box3">
     <table class="gbntable">
@@ -12719,7 +12719,7 @@ should not have received it.
       data-variable="using-box--collapsed">
         <img src="/img/fold.svg"/>
     </a>
-    <h3>
+    <h2>
       <a href="/omp?cmd=get_tasks&amp;token={/envelope/token}"
          title="{gsa:i18n ('Tasks', 'Tasks')}">
         <img class="icon icon-sm" src="/img/task.svg" alt="Tasks"/>
@@ -12734,7 +12734,7 @@ should not have received it.
           (<xsl:value-of select="gsa:i18n ('none')"/>)
         </xsl:otherwise>
       </xsl:choose>
-    </h3>
+    </h2>
   </div>
 
   <div class="section-box" id="using-box">
@@ -13136,7 +13136,7 @@ should not have received it.
         data-variable="using-box--collapsed">
           <img src="/img/fold.svg"/>
       </a>
-      <h3>
+      <h2>
         <a href="/omp?cmd=get_alerts&amp;token={/envelope/token}"
            title="{gsa:i18n ('Alerts', 'Alert')}">
           <img class="icon-sm icon" src="/img/alert.svg" style="margin-right:5px" alt="Alerts"/>
@@ -13151,7 +13151,7 @@ should not have received it.
             (<xsl:value-of select="gsa:i18n ('none')"/>)
           </xsl:otherwise>
         </xsl:choose>
-      </h3>
+      </h2>
     </div>
 
     <div class="section-box" id="using-box">
@@ -16123,7 +16123,7 @@ should not have received it.
       data-variable="using-box--collapsed">
         <img src="/img/fold.svg"/>
     </a>
-    <h3>
+    <h2>
       <a href="/omp?cmd=get_tasks&amp;token={/envelope/token}"
          title="{gsa:i18n ('Tasks', 'Tasks')}">
         <img class="icon icon-sm" src="/img/task.svg" alt="Tasks"/>
@@ -16138,7 +16138,7 @@ should not have received it.
           (<xsl:value-of select="gsa:i18n ('none')"/>)
         </xsl:otherwise>
       </xsl:choose>
-    </h3>
+    </h2>
   </div>
 
   <div class="section-box" id="using-box">
@@ -17791,7 +17791,7 @@ should not have received it.
       data-variable="nvtfamilies-box--collapsed">
         <img src="/img/fold.svg"/>
     </a>
-    <h3>
+    <h2>
       <xsl:value-of select="gsa:i18n ('Network Vulnerability Test Families', 'Scan Config')"/>
       <xsl:text> </xsl:text>
       <xsl:choose>
@@ -17802,7 +17802,7 @@ should not have received it.
           (<xsl:value-of select="gsa:i18n ('none')"/>)
         </xsl:otherwise>
       </xsl:choose>
-    </h3>
+    </h2>
   </div>
 
   <div class="section-box" id="nvtfamilies-box">
@@ -17815,7 +17815,7 @@ should not have received it.
       data-variable="scannerprefs-box--collapsed">
         <img src="/img/fold.svg"/>
     </a>
-    <h3>
+    <h2>
       <a href="/omp?cmd=get_tasks&amp;token={/envelope/token}"
          title="{gsa:i18n ('Scanner Preferences', 'Scan Config')}">
       </a>
@@ -17829,7 +17829,7 @@ should not have received it.
           (<xsl:value-of select="gsa:i18n ('none')"/>)
         </xsl:otherwise>
       </xsl:choose>
-    </h3>
+    </h2>
   </div>
 
   <div class="section-box" id="scannerprefs-box">
@@ -17842,7 +17842,7 @@ should not have received it.
       data-variable="nvtprefs-box--collapsed">
         <img src="/img/fold.svg"/>
     </a>
-    <h3>
+    <h2>
       <a href="/omp?cmd=get_tasks&amp;token={/envelope/token}"
          title="{gsa:i18n ('Network Vulnerability Test Preferences', 'Scan Config')}">
       </a>
@@ -17856,7 +17856,7 @@ should not have received it.
           (<xsl:value-of select="gsa:i18n ('none')"/>)
         </xsl:otherwise>
       </xsl:choose>
-    </h3>
+    </h2>
   </div>
 
   <div class="section-box" id="nvtprefs-box">
@@ -17874,7 +17874,7 @@ should not have received it.
       data-variable="using-box--collapsed">
         <img src="/img/fold.svg"/>
     </a>
-    <h3>
+    <h2>
       <a href="/omp?cmd=get_tasks&amp;token={/envelope/token}"
          title="{gsa:i18n ('Tasks', 'Task')}">
         <img class="icon icon-sm" src="/img/task.svg" alt="Tasks"/>
@@ -17889,7 +17889,7 @@ should not have received it.
           (<xsl:value-of select="gsa:i18n ('none')"/>)
         </xsl:otherwise>
       </xsl:choose>
-    </h3>
+    </h2>
   </div>
 
   <div class="section-box" id="using-box">
@@ -19250,7 +19250,7 @@ should not have received it.
       data-variable="using-box--collapsed">
         <img src="/img/fold.svg"/>
     </a>
-    <h3>
+    <h2>
       <a href="/omp?cmd=get_tasks&amp;token={/envelope/token}"
          title="{gsa:i18n ('Tasks', 'Tasks')}">
         <img class="icon icon-sm" src="/img/task.svg" alt="Tasks"/>
@@ -19265,7 +19265,7 @@ should not have received it.
           (<xsl:value-of select="gsa:i18n ('none')"/>)
         </xsl:otherwise>
       </xsl:choose>
-    </h3>
+    </h2>
   </div>
 
   <div class="section-box" id="using-box">
@@ -19903,7 +19903,7 @@ should not have received it.
       data-variable="using-box--collapsed">
         <img src="/img/fold.svg"/>
     </a>
-    <h3>
+    <h2>
       <a href="/omp?cmd=get_tasks&amp;token={/envelope/token}"
          title="{gsa:i18n ('Tasks', 'Tasks')}">
         <img class="icon icon-sm" src="/img/task.svg" alt="Tasks"/>
@@ -19918,7 +19918,7 @@ should not have received it.
           (<xsl:value-of select="gsa:i18n ('none')"/>)
         </xsl:otherwise>
       </xsl:choose>
-    </h3>
+    </h2>
   </div>
 
   <div class="section-box" id="using-box">
@@ -20602,7 +20602,7 @@ should not have received it.
       data-variable="using-box--collapsed">
         <img src="/img/fold.svg"/>
     </a>
-    <h3>
+    <h2>
       <a href="/omp?cmd=get_tasks&amp;token={/envelope/token}"
          title="{gsa:i18n ('Slaves', 'Slave')}">
         <img class="icon icon-sm" src="/img/task.svg" alt="Slaves"/>
@@ -20617,7 +20617,7 @@ should not have received it.
           (<xsl:value-of select="gsa:i18n ('none')"/>)
         </xsl:otherwise>
       </xsl:choose>
-    </h3>
+    </h2>
   </div>
 
   <div class="section-box" id="using-box">
@@ -27823,7 +27823,7 @@ should not have received it.
       data-variable="portranges-box--collapsed">
         <img src="/img/fold.svg"/>
     </a>
-    <h3>
+    <h2>
       <xsl:value-of select="gsa:i18n ('Port Ranges', 'Port Range')"/>
       <xsl:text> </xsl:text>
       <xsl:choose>
@@ -27834,7 +27834,7 @@ should not have received it.
           (<xsl:value-of select="gsa:i18n ('none')"/>)
         </xsl:otherwise>
       </xsl:choose>
-    </h3>
+    </h2>
   </div>
 
   <div class="section-box" id="portranges-box">
@@ -27863,7 +27863,7 @@ should not have received it.
       data-variable="using-box--collapsed">
         <img src="/img/fold.svg"/>
     </a>
-    <h3>
+    <h2>
       <a href="/omp?cmd=get_targets&amp;token={/envelope/token}"
          title="{gsa:i18n ('Targets', 'Targets')}">
         <img class="icon icon-sm" src="/img/target.svg" alt="Targets"/>
@@ -27878,7 +27878,7 @@ should not have received it.
           (<xsl:value-of select="gsa:i18n ('none')"/>)
         </xsl:otherwise>
       </xsl:choose>
-    </h3>
+    </h2>
   </div>
 
   <div class="section-box" id="using-box">
@@ -28829,7 +28829,7 @@ should not have received it.
       data-variable="rfp_parameters-box--collapsed">
         <img src="/img/fold.svg"/>
     </a>
-    <h3>
+    <h2>
       <xsl:value-of select="gsa:i18n ('Parameters', 'Report Format')"/>
       <xsl:text> </xsl:text>
       <xsl:choose>
@@ -28840,7 +28840,7 @@ should not have received it.
           (<xsl:value-of select="gsa:i18n ('none')"/>)
         </xsl:otherwise>
       </xsl:choose>
-    </h3>
+    </h2>
   </div>
 
   <div class="section-box" id="rfp_parameters-box">
@@ -28854,7 +28854,7 @@ should not have received it.
       data-variable="using-box--collapsed">
         <img src="/img/fold.svg"/>
     </a>
-    <h3>
+    <h2>
       <a href="/omp?cmd=get_alerts&amp;token={/envelope/token}"
          title="{gsa:i18n ('Alerts', 'Alert')}">
         <img class="icon icon-sm" src="/img/alert.svg" alt="Alerts"/>
@@ -28869,7 +28869,7 @@ should not have received it.
           (<xsl:value-of select="gsa:i18n ('none')"/>)
         </xsl:otherwise>
       </xsl:choose>
-    </h3>
+    </h2>
   </div>
 
   <div class="section-box" id="using-box">
@@ -34725,7 +34725,7 @@ should not have received it.
       data-variable="perm-box--collapsed">
         <img src="/img/fold.svg"/>
     </a>
-    <h3>
+    <h2>
       <xsl:choose>
         <xsl:when test="not (gsa:may-op ('get_permissions'))"/>
         <xsl:when test="count(../../get_permissions_response/permission) = 0">
@@ -34738,7 +34738,7 @@ should not have received it.
           <xsl:value-of select="gsa:i18n ('General Command Permissions', 'Permission')"/>
         </xsl:otherwise>
       </xsl:choose>
-    </h3>
+    </h2>
   </div>
 
   <div class="section-box" id="perm-box">
@@ -38713,7 +38713,7 @@ should not have received it.
       data-target="#identifiers-box" data-name="Identifiers" data-variable="identifiers-box--collapsed">
       <img src="/img/fold.svg"/>
     </a>
-    <h3>
+    <h2>
       <xsl:choose>
         <xsl:when test="/envelope/params/show_all = '1'">
           <xsl:value-of select="gsa:i18n ('All Identifiers', 'Assets')"/>
@@ -38722,7 +38722,7 @@ should not have received it.
           <xsl:value-of select="gsa:i18n ('Latest Identifiers', 'Assets')"/>
         </xsl:otherwise>
       </xsl:choose>
-    </h3>
+    </h2>
   </div>
 
   <div class="section-box" id="identifiers-box">
