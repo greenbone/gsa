@@ -2688,11 +2688,7 @@
 
     this.selector_label = chart_title;
 
-    this.title_generator = get_title_generator(data_src.options.type,
-                              chart_type, chart_template,
-                              data_src.options.aggregate_type,
-                              data_src.options.group_column,
-                              chart_title, count_field);
+    this.title_generator = get_title_generator(chart_title, count_field);
 
     this.current_request = null;
 
@@ -3393,8 +3389,7 @@
   /**
    * Creates a title generator function.
    */
-  function get_title_generator(type, chart_type, chart_template, aggregate_type,
-      group_column, title_text, count_field) {
+  function get_title_generator(title_text, count_field) {
 
     if (title_text) {
       if (gsa.is_defined(count_field)) {
@@ -3404,62 +3399,8 @@
           {title_text: title_text}), title_text);
     }
 
-    if (type === 'task') {
-      return gch.title_static(gsa._('Next scheduled tasks (Loading...)'),
-          gsa._('Next scheduled Tasks'));
-    }
-
-    if (type === 'host') {
-      return gch.title_static(gsa._('Hosts topology  (Loading...)'),
-                              gsa._('Hosts topology'));
-    }
-
-    if (chart_template === 'info_by_class' ||
-        chart_template === 'info_by_cvss') {
-      return gch.title_total(gsa._('{{resource_type_plural}} by {{field_name}}',
-            {
-              resource_type_plural:
-                gch.resource_type_name_plural(aggregate_type),
-              field_name: 'severity',
-              interpolation: {escape: false},
-            }), 'count');
-    }
-
-    if (chart_type === 'bubbles') {
-      return gch.title_total(gsa._('{{resource_type_plural}} by {{field_name}}',
-          {
-            resource_type_plural:
-              gch.resource_type_name_plural(aggregate_type),
-            field_name: gch.field_name(group_column),
-            interpolation: {escape: false},
-          }), 'size_value');
-    }
-
-    if (chart_type === 'cloud') {
-      var cloud_text = gsa._(
-        '{{resource_type_plural}} {{field_name}} word cloud', {
-        resource_type_plural:
-          gch.resource_type_name_plural(aggregate_type),
-        field_name: gch.field_name(group_column),
-      });
-      var cloud_text_loading = gsa._(
-          '{{resource_type_plural}} {{field_name}} word cloud (Loading...)',
-          {
-            resource_type_plural:
-              gch.resource_type_name_plural(aggregate_type),
-            field_name: gch.field_name(group_column),
-            interpolation: {escape: false}
-          });
-      return gch.title_static(cloud_text_loading, cloud_text);
-    }
-
-    return gch.title_total(gsa._('{{resource_type_plural}} by {{field_name}}',
-          {
-            resource_type_plural:
-              gch.resource_type_name_plural(aggregate_type),
-            field_name: gch.field_name(group_column),
-            interpolation: {escape: false},
-          }), 'count');
+    log.error('Chart title not set. Please add a data-chart-title attribute');
+    return gsa._('Unkown chart');
   }
 
   function split_rows(row_string) {
