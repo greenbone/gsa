@@ -3,6 +3,7 @@
       version="1.0"
       xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
       xmlns:gsa="http://openvas.org"
+      xmlns:gsa-i18n="http://openvas.org/i18n"
       xmlns:exslt="http://exslt.org/common"
       xmlns:str="http://exslt.org/strings"
       xmlns="http://www.w3.org/1999/xhtml"
@@ -70,6 +71,584 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </script>
 </xsl:template>
 
+<xsl:template name="task-charts">
+  <xsl:param name="filter"/>
+  <xsl:param name="filt_id"/>
+
+  <div class="dashboard-data-source"
+    data-source-name="task-severity-count-source"
+    data-group-column="severity"
+    data-aggregate-type="task"
+    data-filter="{$filter}"
+    data-filter-id="{$filt_id}">
+    <span class="dashboard-chart"
+      data-chart-name="task-by-cvss"
+      data-chart-title="{gsa:i18n ('Tasks by CVSS', 'Chart')}"
+      data-chart-title-count="count"
+      data-chart-type="bar"
+      data-chart-template="info_by_cvss"/>
+    <span class="dashboard-chart"
+      data-chart-name="task-by-severity-class"
+      data-chart-title="{gsa:i18n ('Tasks by Severity Class', 'Chart')}"
+      data-chart-title-count="count"
+      data-chart-type="donut"
+      data-chart-template="info_by_class"/>
+  </div>
+  <div class="dashboard-data-source"
+    data-source-name="task-status-count-source"
+    data-aggregate-type="task"
+    data-group-column="status"
+    data-filter="{$filter}"
+    data-filter-id="{$filt_id}">
+    <span class="dashboard-chart"
+      data-chart-name="task-by-status"
+      data-chart-title="{gsa:i18n ('Tasks by status', 'Chart')}"
+      data-chart-title-count="count"
+      data-chart-type="donut"/>
+  </div>
+  <div class="dashboard-data-source"
+    data-source-name="task-high-results-source"
+    data-aggregate-type="task"
+    data-group-column="uuid"
+    data-columns="severity,high_per_host"
+    data-text-columns="name,modified"
+    data-sort-fields="high_per_host,modified"
+    data-sort-orders="descending,descending"
+    data-sort-stats="max,value"
+    data-filter="{$filter}"
+    data-filter-id="{$filt_id}">
+    <span class="dashboard-chart"
+      data-chart-name="task-by-high-results"
+      data-chart-type="bubbles"
+      data-chart-title="{gsa:i18n ('Tasks: High results per host', 'Chart')}"
+      data-x-field="name"
+      data-y-fields="high_per_host_max"
+      data-z-fields="severity_max"
+      data-gen-params='{{"empty_text": "No Tasks with High severity found"}}'/>
+    <span class="dashboard-chart"
+      data-chart-name="task-by-most-high-results"
+      data-chart-type="horizontal_bar"
+      data-chart-title="{gsa:i18n ('Tasks with most High results per host')}"
+      data-x-field="name"
+      data-y-fields="high_per_host_max"
+      data-z-fields="severity_max"
+      data-gen-params='{{"empty_text": "No Tasks with High severity found"}}'/>
+  </div>
+  <div class="dashboard-data-source"
+    data-source-name="task-schedules-source"
+    data-type="task"
+    data-filter="{$filter}"
+    data-filter-id="{$filt_id}">
+    <span class="dashboard-chart"
+      data-chart-name="task-by-schedules"
+      data-chart-type="gantt"
+      data-chart-title="{gsa:i18n ('Next scheduled tasks')}"
+      data-gen-params='{{"empty_text": "No scheduled Tasks found"}}'/>
+  </div>
+</xsl:template>
+
+<xsl:template name="report-charts">
+  <xsl:param name="filter"/>
+  <xsl:param name="filt_id"/>
+
+  <div class="dashboard-data-source"
+    data-source-name="report-high-results-timeline-source"
+    data-aggregate-type="report"
+    data-group-column="date"
+    data-columns="high,high_per_host"
+    data-filter="{$filter}"
+    data-filter-id="{$filt_id}">
+    <span class="dashboard-chart"
+      data-chart-name="report-by-high-results"
+      data-chart-type="line"
+      data-y-fields="high_max"
+      data-z-fields="high_per_host_max"
+      data-chart-title="{gsa:i18n ('Reports: High results timeline')}"
+      data-gen-params='{{"show_stat_type": 0}}'/>
+  </div>
+  <div class="dashboard-data-source"
+    data-source-name="report-severity-count-source"
+    data-group-column="severity"
+    data-aggregate-type="report"
+    data-filter="{$filter}"
+    data-filter-id="{$filt_id}">
+    <span class="dashboard-chart"
+      data-chart-name="report-by-cvss"
+      data-chart-type="bar"
+      data-chart-title="{gsa:i18n ('Reports by CVSS')}"
+      data-chart-title-count="count"
+      data-chart-template="info_by_cvss"/>
+    <span class="dashboard-chart"
+      data-chart-name="report-by-severity-class"
+      data-chart-type="donut"
+      data-chart-title="{gsa:i18n ('Reports by Severity Class')}"
+      data-chart-title-count="count"
+      data-chart-template="info_by_class"/>
+  </div>
+</xsl:template>
+
+<xsl:template name="result-charts">
+  <xsl:param name="filter"/>
+  <xsl:param name="filt_id"/>
+
+  <div class="dashboard-data-source"
+    data-source-name="results-severity-count-source"
+    data-group-column="severity"
+    data-aggregate-type="result"
+    data-filter="{$filter}"
+    data-filter-id="{$filt_id}">
+    <span class="dashboard-chart"
+      data-chart-name="result-by-cvss"
+      data-chart-type="bar"
+      data-chart-title="{gsa:i18n ('Results by CVSS', 'Chart')}"
+      data-chart-title-count="count"
+      data-chart-template="info_by_cvss"/>
+    <span class="dashboard-chart"
+      data-chart-name="result-by-severity-class"
+      data-chart-type="donut"
+      data-chart-title="{gsa:i18n ('Results by Severity Class', 'Chart')}"
+      data-chart-title-count="count"
+      data-chart-template="info_by_class"/>
+  </div>
+  <div class="dashboard-data-source"
+    data-source-name="result-vuln-words-source"
+    data-aggregate-type="result"
+    data-group-column="vulnerability"
+    data-aggregate-mode="word_counts"
+    data-sort-stat="count"
+    data-sort-order="descending"
+    data-max-groups="250"
+    data-filter="{$filter}"
+    data-filter-id="{$filt_id}">
+    <span class="dashboard-chart"
+      data-chart-name="result-by-vuln-words"
+      data-chart-type="cloud"
+      data-chart-title="{gsa:i18n ('Results vulnerability word cloud', 'Chart')}"/>
+  </div>
+  <div class="dashboard-data-source"
+    data-source-name="result-desc-words-source"
+    data-aggregate-type="result"
+    data-group-column="description"
+    data-aggregate-mode="word_counts"
+    data-sort-stat="count"
+    data-sort-order="descending"
+    data-max-groups="250"
+    data-filter="{$filter}"
+    data-filter-id="{$filt_id}">
+    <span class="dashboard-chart"
+      data-chart-name="result-by-desc-words"
+      data-chart-type="cloud"
+      data-chart-title="{gsa:i18n ('Results description word cloud', 'Chart')}"/>
+  </div>
+</xsl:template>
+
+<xsl:template name="host-charts">
+  <xsl:param name="filter"/>
+  <xsl:param name="filt_id"/>
+
+  <div class="dashboard-data-source"
+    data-source-name="host-severity-count-source"
+    data-group-column="severity"
+    data-aggregate-type="host"
+    data-filter="{$filter}"
+    data-filter-id="{$filt_id}">
+    <span class="dashboard-chart"
+      data-chart-name="host-by-cvss"
+      data-chart-type="bar"
+      data-chart-title="{gsa:i18n ('Hosts by CVSS', 'Chart')}"
+      data-chart-title-count="count"
+      data-chart-template="info_by_cvss"/>
+    <span class="dashboard-chart"
+      data-chart-name="host-by-severity-class"
+      data-chart-type="donut"
+      data-chart-title="{gsa:i18n ('Hosts by Severity Class', 'Chart')}"
+      data-chart-title-count="count"
+      data-chart-template="info_by_class"/>
+  </div>
+  <div class="dashboard-data-source"
+    data-source-name="host-most-vulnerable-source"
+    data-aggregate-type="host"
+    data-group-column="uuid"
+    data-columns="severity"
+    data-text-columns="name,modified"
+    data-sort-fields="severity,modified"
+    data-sort-orders="descending,descending"
+    data-sort-stats="max,value"
+    data-filter="{$filter}"
+    data-filter-id="{$filt_id}">
+    <span class="dashboard-chart"
+      data-chart-name="host-by-most-vulnerable"
+      data-chart-type="horizontal_bar"
+      data-x-field="name"
+      data-y-fields="severity_max"
+      data-z-fields="severity_max"
+      data-gen-params='{{"empty_text": "No vulnerable Hosts found",
+                         "extra_tooltip_field_1": "modified",
+                         "extra_tooltip_label_1": "Updated" }}'
+      data-chart-title="{gsa:i18n ('Most vulnerable hosts')}"/>
+  </div>
+  <div class="dashboard-data-source"
+    data-source-name="host-counts-timeline-source"
+    data-aggregate-type="host"
+    data-group-column="modified"
+    data-subgroup-column="severity_level"
+    data-filter="{$filter}"
+    data-filter-id="{$filt_id}">
+    <span class="dashboard-chart"
+      data-chart-name="host-by-modification-time"
+      data-chart-title="{gsa:i18n ('Hosts by modification time', 'Chart')}"
+      data-chart-title-count="count"
+      data-y-fields="c_count,c_count[High]"
+      data-z-fields="count,count[High]"
+      data-chart-type="line"/>
+  </div>
+  <div class="dashboard-data-source"
+    data-source-name="host-topology-source"
+    data-aggregate-type="host"
+    data-type="host"
+    data-filter="{$filter}"
+    data-filter-id="{$filt_id}">
+    <span class="dashboard-chart"
+      data-chart-name="host-by-topology"
+      data-chart-title="{gsa:i18n ('Hosts topology', 'Chart')}"
+      data-chart-type="topology"/>
+  </div>
+</xsl:template>
+
+<xsl:template name="os-charts">
+  <xsl:param name="filter"/>
+  <xsl:param name="filt_id"/>
+
+  <div class="dashboard-data-source"
+    data-source-name="os-average-severity-count-source"
+    data-group-column="average_severity"
+    data-aggregate-type="os"
+    data-filter="{$filter}"
+    data-filter-id="{$filt_id}">
+    <span class="dashboard-chart"
+      data-chart-name="os-by-cvss"
+      data-chart-type="bar"
+      data-chart-title="{gsa:i18n ('Operating Systems by CVSS', 'Chart')}"
+      data-chart-title-count="count"
+      data-chart-template="info_by_cvss"/>
+    <span class="dashboard-chart"
+      data-chart-name="os-by-severity-class"
+      data-chart-title="{gsa:i18n ('Operating Systems by Severity Class', 'Chart')}"
+      data-chart-title-count="count"
+      data-chart-type="donut"
+      data-chart-template="info_by_class"/>
+  </div>
+  <div class="dashboard-data-source"
+    data-source-name="os-most-vulnerable-source"
+    data-aggregate-type="os"
+    data-group-column="uuid"
+    data-columns="average_severity,average_severity_score,hosts"
+    data-text-columns="name,modified"
+    data-sort-fields="average_severity_score,modified"
+    data-sort-orders="descending,descending"
+    data-sort-stats="max,value"
+    data-filter="{$filter}"
+    data-filter-id="{$filt_id}">
+    <span class="dashboard-chart"
+      data-chart-name="os-by-most-vulnerable"
+      data-chart-type="horizontal_bar"
+      data-x-field="name"
+      data-y-fields="average_severity_score_max"
+      data-z-fields="average_severity_max"
+      data-gen-params='{{"empty_text": "No vulnerable Operating Systems found",
+                         "score_severity" : "average_severity_max",
+                         "score_assets" : "hosts_max",
+                         "score_asset_type" : "hosts",
+                         "extra_tooltip_field_1": "modified",
+                         "extra_tooltip_label_1": "Updated"}}'
+      data-chart-title="{gsa:i18n ('Operating Systems by Vulnerability Score', 'Chart')}"/>
+  </div>
+</xsl:template>
+
+<xsl:template name="note-charts">
+  <xsl:param name="filter"/>
+  <xsl:param name="filt_id"/>
+
+  <div class="dashboard-data-source"
+    data-source-name="note-created-count-source"
+    data-aggregate-type="note"
+    data-aggregate-mode="count"
+    data-group-column="created"
+    data-filter="{$filter}"
+    data-filter-id="{$filt_id}">
+    <span class="dashboard-chart"
+      data-chart-name="note-by-created"
+      data-chart-title="{gsa:i18n ('Notes by creation time', 'Chart')}"
+      data-chart-title-count="count"
+      data-chart-type="line"/>
+  </div>
+  <div class="dashboard-data-source"
+    data-source-name="note-text-words-source"
+    data-aggregate-type="note"
+    data-group-column="text"
+    data-aggregate-mode="word_counts"
+    data-filter="{$filter}"
+    data-filter-id="{$filt_id}">
+    <span class="dashboard-chart"
+      data-chart-name="note-by-text-words"
+      data-chart-title="{gsa:i18n ('Notes text word cloud', 'Chart')}"
+      data-chart-type="cloud"/>
+  </div>
+  <div class="dashboard-data-source"
+    data-source-name="note-active-status-source"
+    data-aggregate-type="note"
+    data-group-column="active_days"
+    data-sort-stat="count"
+    data-sort-order="descending"
+    data-max-groups="250"
+    data-filter="{$filter}"
+    data-filter-id="{$filt_id}">
+    <span class="dashboard-chart"
+      data-chart-name="note-by-active-days"
+      data-chart-template="active_status"
+      data-chart-title="{gsa:i18n ('Notes by active days', 'Chart')}"
+      data-chart-title-count="count"
+      data-chart-type="donut"/>
+  </div>
+</xsl:template>
+
+<xsl:template name="override-charts">
+  <xsl:param name="filter"/>
+  <xsl:param name="filt_id"/>
+
+  <div class="dashboard-data-source"
+    data-source-name="override-created-count-source"
+    data-aggregate-type="override"
+    data-aggregate-mode="count"
+    data-group-column="created"
+    data-filter="{$filter}"
+    data-filter-id="{$filt_id}">
+    <span class="dashboard-chart"
+      data-chart-name="override-by-created"
+      data-chart-title="{gsa:i18n ('Overrides by creation time', 'Chart')}"
+      data-chart-title-count="count"
+      data-chart-type="line"/>
+  </div>
+  <div class="dashboard-data-source"
+    data-source-name="override-text-words-source"
+    data-aggregate-type="override"
+    data-group-column="text"
+    data-aggregate-mode="word_counts"
+    data-filter="{$filter}"
+    data-filter-id="{$filt_id}">
+    <span class="dashboard-chart"
+      data-chart-name="override-by-text-words"
+      data-chart-title="{gsa:i18n ('Overrides text word cloud', 'Chart')}"
+      data-chart-type="cloud"/>
+  </div>
+  <div class="dashboard-data-source"
+    data-source-name="override-status-source"
+    data-aggregate-type="override"
+    data-group-column="active_days"
+    data-sort-stat="count"
+    data-sort-order="descending"
+    data-max-groups="250"
+    data-filter="{$filter}"
+    data-filter-id="{$filt_id}">
+    <span class="dashboard-chart"
+      data-chart-name="override-by-active-days"
+      data-chart-template="active_status"
+      data-chart-title="{gsa:i18n ('Overrides by active days', 'Chart')}"
+      data-chart-title-count="count"
+      data-chart-type="donut"/>
+  </div>
+</xsl:template>
+
+<xsl:template name="common-charts">
+  <xsl:param name="filter"/>
+  <xsl:param name="filt_id"/>
+  <xsl:param name="type"/>
+  <xsl:param name="title_type"/>
+
+  <div class="dashboard-data-source"
+    data-source-name="{$type}-severity-count-source"
+    data-aggregate-type="{$type}"
+    data-group-column="severity"
+    data-filter="{$filter}"
+    data-filter-id="{$filt_id}">
+    <span class="dashboard-chart"
+      data-chart-name="{$type}-by-cvss"
+      data-chart-type="bar"
+      data-chart-title="{gsa-i18n:strformat (gsa:i18n ('%1 by CVSS', 'Chart'), $title_type)}"
+      data-chart-title-count="count"
+      data-chart-template="info_by_cvss"/>
+    <span class="dashboard-chart"
+      data-chart-name="{$type}-by-severity-class"
+      data-chart-type="donut"
+      data-chart-title="{gsa-i18n:strformat (gsa:i18n ('%1 by Severity Class', 'Chart'), $title_type)}"
+      data-chart-title-count="count"
+      data-chart-template="info_by_class"/>
+  </div>
+  <div class="dashboard-data-source"
+    data-source-name="{$type}-created-count-source"
+    data-aggregate-type="{$type}"
+    data-group-column="created"
+    data-filter="{$filter}"
+    data-filter-id="{$filt_id}">
+    <span class="dashboard-chart"
+      data-chart-name="{$type}-by-created"
+      data-chart-title="{gsa-i18n:strformat (gsa:i18n ('%1 by creation time', 'Chart'), $title_type)}"
+      data-chart-title-count="count"
+      data-chart-type="line"/>
+  </div>
+</xsl:template>
+
+<xsl:template name="nvt-charts">
+  <xsl:param name="filter"/>
+  <xsl:param name="filt_id"/>
+
+  <xsl:call-template name="common-charts">
+    <xsl:with-param name="filter" select="$filter" />
+    <xsl:with-param name="filt_id" select="$filt_id" />
+    <xsl:with-param name="type" select="'nvt'" />
+    <xsl:with-param name="title_type" select="'NVTs'" />
+  </xsl:call-template>
+
+  <div class="dashboard-data-source"
+    data-source-name="nvt-by-family-source"
+    data-aggregate-type="nvt"
+    data-group-column="family"
+    data-column="severity"
+    data-filter="{$filter}"
+    data-filter-id="{$filt_id}">
+    <span class="dashboard-chart"
+      data-chart-name="nvt-by-family"
+      data-chart-title="{gsa:i18n ('NVTs by Family', 'Chart')}"
+      data-chart-title-count="size_value"
+      data-chart-type="bubbles"/>
+  </div>
+  <div class="dashboard-data-source"
+    data-source-name="nvt-by-qod-type-source"
+    data-aggregate-type="nvt"
+    data-group-column="qod_type"
+    data-filter="{$filter}"
+    data-filter-id="{$filt_id}">
+    <span class="dashboard-chart"
+      data-chart-name="nvt-by-qod_type"
+      data-chart-template="qod_type_counts"
+      data-chart-title="{gsa:i18n ('NVTs by QoD type', 'Chart')}"
+      data-chart-title-count="count"
+      data-chart-type="donut"/>
+  </div>
+  <div class="dashboard-data-source"
+    data-source-name="nvt-by-qod-source"
+    data-aggregate-type="nvt"
+    data-group-column="qod"
+    data-filter="{$filter}"
+    data-filter-id="{$filt_id}">
+    <span class="dashboard-chart"
+      data-chart-name="nvt-by-qod"
+      data-chart-template="percentage_counts"
+      data-chart-title="{gsa:i18n ('NVTs by QoD', 'Chart')}"
+      data-chart-title-count="count"
+      data-chart-type="donut"/>
+  </div>
+</xsl:template>
+
+<xsl:template name="ovaldef-charts">
+  <xsl:param name="filter"/>
+  <xsl:param name="filt_id"/>
+
+  <xsl:call-template name="common-charts">
+    <xsl:with-param name="filter" select="$filter" />
+    <xsl:with-param name="filt_id" select="$filt_id" />
+    <xsl:with-param name="type" select="'ovaldef'" />
+    <xsl:with-param name="title_type" select="'OVAL Definitions'" />
+  </xsl:call-template>
+
+  <div class="dashboard-data-source"
+    data-source-name="ovaldef-class-source"
+    data-aggregate-type="ovaldef"
+    data-group-column="class"
+    data-filter="{$filter}"
+    data-filter-id="{$filt_id}">
+    <span class="dashboard-chart"
+      data-chart-name="ovaldef-by-class"
+      data-chart-title="{gsa:i18n ('OVAL Definitions by class', 'Chart')}"
+      data-chart-title-count="count"
+      data-chart-type="donut"/>
+  </div>
+</xsl:template>
+
+<xsl:template name="cert-bund-adv-charts">
+  <xsl:param name="filter"/>
+  <xsl:param name="filt_id"/>
+
+  <xsl:call-template name="common-charts">
+    <xsl:with-param name="filter" select="$filter" />
+    <xsl:with-param name="filt_id" select="$filt_id" />
+    <xsl:with-param name="type" select="'cert_bund_adv'" />
+    <xsl:with-param name="title_type" select="'CERT-Bund Advisories'" />
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template name="cve-charts">
+  <xsl:param name="filter"/>
+  <xsl:param name="filt_id"/>
+
+  <xsl:call-template name="common-charts">
+    <xsl:with-param name="filter" select="$filter" />
+    <xsl:with-param name="filt_id" select="$filt_id" />
+    <xsl:with-param name="type" select="'cve'" />
+    <xsl:with-param name="title_type" select="'CVEs'" />
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template name="cpe-charts">
+  <xsl:param name="filter"/>
+  <xsl:param name="filt_id"/>
+
+  <xsl:call-template name="common-charts">
+    <xsl:with-param name="filter" select="$filter" />
+    <xsl:with-param name="filt_id" select="$filt_id" />
+    <xsl:with-param name="type" select="'cpe'" />
+    <xsl:with-param name="title_type" select="'CPEs'" />
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template name="dfn-cert-adv-charts">
+  <xsl:param name="filter"/>
+  <xsl:param name="filt_id"/>
+
+  <xsl:call-template name="common-charts">
+    <xsl:with-param name="filter" select="$filter" />
+    <xsl:with-param name="filt_id" select="$filt_id" />
+    <xsl:with-param name="type" select="'dfn_cert_adv'" />
+    <xsl:with-param name="title_type" select="'DFN-CERT Advisories'" />
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template name="allinfo-charts">
+  <xsl:param name="filter"/>
+  <xsl:param name="filt_id"/>
+
+  <xsl:call-template name="common-charts">
+    <xsl:with-param name="filter" select="$filter" />
+    <xsl:with-param name="filt_id" select="$filt_id" />
+    <xsl:with-param name="type" select="'allinfo'" />
+    <xsl:with-param name="title_type" select="'SecInfo Items'" />
+  </xsl:call-template>
+
+  <div class="dashboard-data-source"
+    data-source-name="allinfo-by-type-source"
+    data-aggregate-type="allinfo"
+    data-group-column="type"
+    data-filter="{$filter}"
+    data-filter-id="{$filt_id}">
+    <span class="dashboard-chart"
+      data-chart-name="allinfo-by-type"
+      data-chart-template="resource_type_counts"
+      data-chart-title="{gsa:i18n ('SecInfo Items by type', 'Chart')}"
+      data-chart-title-count="count"
+      data-chart-type="donut"/>
+  </div>
+</xsl:template>
+
 <xsl:template name="js-scan-management-top-visualization">
   <xsl:param name="type" select="'task'"/>
   <!-- Setting UUIDs for chart selection preferences -->
@@ -93,11 +672,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         rows separated with "#" -->
   <xsl:param name="default_controllers">
     <xsl:choose>
-      <xsl:when test="$type='task'">by-class|top-high-results|by-task-status</xsl:when>
-      <xsl:when test="$type='report'">by-class|report-high-results-timeline|by-cvss</xsl:when>
-      <xsl:when test="$type='result'">by-class|result-vuln-words|by-cvss</xsl:when>
+      <xsl:when test="$type='task'">task-by-severity-class|task-by-most-high-results|task-by-status</xsl:when>
+      <xsl:when test="$type='report'">report-by-severity-class|report-by-high-results|report-by-cvss</xsl:when>
+      <xsl:when test="$type='result'">result-by-severity-class|result-by-vuln-words|result-by-cvss</xsl:when>
       <!-- fallback for all other types -->
-      <xsl:otherwise>by-cvss|by-class</xsl:otherwise>
+      <xsl:otherwise><xsl:value-of select="$type"/>-by-cvss|<xsl:value-of select="$type"/>-by-severity-class</xsl:otherwise>
     </xsl:choose>
   </xsl:param>
   <!-- Default row heights, rows separated with "#",
@@ -141,96 +720,29 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     data-heights="{$heights}"
     data-default-controllers="{$default_controllers}"
     data-default-heights="{$default_heights}"
+    data-default-controller-string="{$type}-by-cvss"
     data-controllers-pref-id="{$controllers_pref_id}"
     data-heights-pref-id="{$heights_pref_id}"
     data-dashboard-controls="top-dashboard-controls"
     data-no-chart-links="{/envelope/params/no_chart_links}"
     data-max-components="4">
-    <div class="dashboard-data-source"
-      data-source-name="severity-count-source"
-      data-group-column="severity"
-      data-aggregate-type="{$type}"
-      data-filter="{$filter}"
-      data-filter-id="{$filt_id}">
-      <span class="dashboard-chart"
-        data-chart-name="by-cvss"
-        data-chart-type="bar"
-        data-chart-template="info_by_cvss"/>
-      <span class="dashboard-chart"
-        data-chart-name="by-class"
-        data-chart-type="donut"
-        data-chart-template="info_by_class"/>
-    </div>
 
     <xsl:if test="$type='task'">
-      <div class="dashboard-data-source"
-        data-source-name="task-status-count-source"
-        data-aggregate-type="{$type}"
-        data-group-column="status"
-        data-filter="{$filter}"
-        data-filter-id="{$filt_id}">
-        <span class="dashboard-chart"
-          data-chart-name="by-task-status"
-          data-chart-type="donut"/>
-      </div>
-      <div class="dashboard-data-source"
-        data-source-name="task-high-results-source"
-        data-aggregate-type="{$type}"
-        data-group-column="uuid"
-        data-columns="severity,high_per_host"
-        data-text-columns="name,modified"
-        data-sort-fields="high_per_host,modified"
-        data-sort-orders="descending,descending"
-        data-sort-stats="max,value"
-        data-filter="{$filter}"
-        data-filter-id="{$filt_id}">
-        <span class="dashboard-chart"
-          data-chart-name="by-high-results"
-          data-chart-type="bubbles"
-          data-x-field="name"
-          data-y-fields="high_per_host_max"
-          data-z-fields="severity_max"
-          data-gen-params='{{"empty_text": "No Tasks with High severity found"}}'
-          data-init-params='{{"title_text": "Tasks: High results per host"}}'/>
-        <span class="dashboard-chart"
-          data-chart-name="top-high-results"
-          data-chart-type="horizontal_bar"
-          data-x-field="name"
-          data-y-fields="high_per_host_max"
-          data-z-fields="severity_max"
-          data-gen-params='{{"empty_text": "No Tasks with High severity found"}}'
-          data-init-params='{{"title_text": "Tasks with most High results per host"}}'/>
-      </div>
-      <div class="dashboard-data-source"
-        data-source-name="task-schedules-source"
-        data-filter="{$filter}"
-        data-filter-id="{$filt_id}"
-        data-type="task">
-        <span class="dashboard-chart"
-          data-chart-name="task-schedules"
-          data-chart-type="gantt"
-          data-gen-params='{{"empty_text": "No scheduled Tasks found"}}'/>
-      </div>
+      <xsl:call-template name="task-charts">
+        <xsl:with-param name="filter" select="$filter"/>
+        <xsl:with-param name="filt_id" select="$filt_id"/>
+      </xsl:call-template>
     </xsl:if>
+
     <xsl:if test="$type='report'">
-      <div class="dashboard-data-source"
-        data-source-name="report-high-results-timeline-source"
-        data-aggregate-type="{$type}"
-        data-group-column="date"
-        data-columns="high,high_per_host"
-        data-filter="{$filter}"
-        data-filter-id="{$filt_id}">
-        <span class="dashboard-chart"
-          data-chart-name="report-high-results-timeline"
-          data-chart-type="line"
-          data-y-fields="high_max"
-          data-z-fields="high_per_host_max"
-          data-init-params='{{"title_text": "Reports: High results timeline"}}'
-          data-gen-params='{{"show_stat_type": 0}}'/>
-      </div>
+      <xsl:call-template name="report-charts">
+        <xsl:with-param name="filter" select="$filter"/>
+        <xsl:with-param name="filt_id" select="$filt_id"/>
+      </xsl:call-template>
+
       <div class="dashboard-data-source"
         data-source-name="report-duration-timeline-source"
-        data-aggregate-type="{$type}"
+        data-aggregate-type="report"
         data-group-column="date"
         data-columns="duration,duration_per_host"
         data-filter="{$filter}"
@@ -238,42 +750,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <span class="dashboard-chart"
           data-chart-name="report-duration-timeline"
           data-chart-type="line"
+          data-chart-title="{gsa:i18n ('Reports: Duration timeline')}"
           data-y-fields="duration_mean,duration_max"
           data-z-fields="duration_per_host_mean,duration_per_host_max"
-          data-init-params='{{"title_text": "Reports: Duration timeline"}}'
           data-gen-params='{{"show_stat_type": 0, "y_format": "duration", "y2_format": "duration"}}'/>
       </div>
     </xsl:if>
+
     <xsl:if test="$type='result'">
-      <div class="dashboard-data-source"
-        data-source-name="result-vuln-words-source"
-        data-aggregate-type="{$type}"
-        data-group-column="vulnerability"
-        data-aggregate-mode="word_counts"
-        data-sort-stat="count"
-        data-sort-order="descending"
-        data-max-groups="250"
-        data-filter="{$filter}"
-        data-filter-id="{$filt_id}">
-        <span class="dashboard-chart"
-          data-chart-name="result-vuln-words"
-          data-chart-type="cloud"/>
-      </div>
-      <div class="dashboard-data-source"
-        data-source-name="result-desc-words-source"
-        data-aggregate-type="{$type}"
-        data-group-column="description"
-        data-aggregate-mode="word_counts"
-        data-sort-stat="count"
-        data-sort-order="descending"
-        data-max-groups="250"
-        data-filter="{$filter}"
-        data-filter-id="{$filt_id}">
-        <span class="dashboard-chart"
-          data-chart-name="result-desc-words"
-          data-chart-type="cloud"/>
-      </div>
+      <xsl:call-template name="result-charts">
+        <xsl:with-param name="filter" select="$filter"/>
+        <xsl:with-param name="filt_id" select="$filt_id"/>
+      </xsl:call-template>
     </xsl:if>
+
   </div>
 </xsl:template>
 
@@ -298,10 +788,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         rows separated with "#" -->
   <xsl:param name="default_controllers">
     <xsl:choose>
-      <xsl:when test="$type='host'">by-class|hosts-topology|host-counts-timeline</xsl:when>
-      <xsl:when test="$type='os'">by-class|most-vulnerable-oss|by-cvss</xsl:when>
+      <xsl:when test="$type='host'">host-by-severity-class|host-by-topology|host-by-modification-time</xsl:when>
+      <xsl:when test="$type='os'">os-by-severity-class|os-by-most-vulnerable|os-by-cvss</xsl:when>
       <!-- fallback for all other types -->
-      <xsl:otherwise>by-cvss|by-class</xsl:otherwise>
+      <xsl:otherwise><xsl:value-of select="$type"/>-by-cvss|<xsl:value-of select="$type"/>-by-severity-class</xsl:otherwise>
     </xsl:choose>
   </xsl:param>
   <!-- Default row heights, rows separated with "#",
@@ -346,115 +836,27 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     data-heights="{$heights}"
     data-default-controllers="{$default_controllers}"
     data-default-heights="{$default_heights}"
+    data-default-controller-string="{$type}-by-cvss"
     data-controllers-pref-id="{$controllers_pref_id}"
     data-heights-pref-id="{$heights_pref_id}"
     data-dashboard-controls="top-dashboard-controls"
     data-no-chart-links="{/envelope/params/no_chart_links}"
     data-max-components="4">
+
     <xsl:if test="$type = 'host'">
-      <div class="dashboard-data-source"
-        data-source-name="severity-count-source"
-        data-group-column="severity"
-        data-aggregate-type="{$type}"
-        data-filter="{$filter}"
-        data-filter-id="{$filt_id}">
-        <span class="dashboard-chart"
-          data-chart-name="by-cvss"
-          data-chart-type="bar"
-          data-chart-template="info_by_cvss"/>
-        <span class="dashboard-chart"
-          data-chart-name="by-class"
-          data-chart-type="donut"
-          data-chart-template="info_by_class"/>
-      </div>
-      <div class="dashboard-data-source"
-        data-source-name="most-vulnerable-hosts-source"
-        data-aggregate-type="{$type}"
-        data-group-column="uuid"
-        data-columns="severity"
-        data-text-columns="name,modified"
-        data-sort-fields="severity,modified"
-        data-sort-orders="descending,descending"
-        data-sort-stats="max,value"
-        data-filter="{$filter}"
-        data-filter-id="{$filt_id}">
-        <span class="dashboard-chart"
-          data-chart-name="most-vulnerable-hosts"
-          data-chart-type="horizontal_bar"
-          data-x-field="name"
-          data-y-fields="severity_max"
-          data-z-fields="severity_max"
-          data-gen-params='{{"empty_text": "No vulnerable Hosts found",
-                             "extra_tooltip_field_1": "modified",
-                             "extra_tooltip_label_1": "Updated" }}'
-          data-init-params='{{"title_text": "Most vulnerable hosts"}}'/>
-      </div>
-      <div class="dashboard-data-source"
-        data-source-name="host-counts-timeline-source"
-        data-aggregate-type="{$type}"
-        data-group-column="modified"
-        data-subgroup-column="severity_level"
-        data-filter="{$filter}"
-        data-filter-id="{$filt_id}">
-        <span class="dashboard-chart"
-          data-chart-name="host-counts-timeline"
-          data-y-fields="c_count,c_count[High]"
-          data-z-fields="count,count[High]"
-          data-chart-type="line"/>
-      </div>
-      <div class="dashboard-data-source"
-        data-source-name="hosts-topology-source"
-        data-aggregate-type="{$type}"
-        data-type="host"
-        data-filter="{$filter}"
-        data-filter-id="{$filt_id}">
-        <span class="dashboard-chart"
-          data-chart-name="hosts-topology"
-          data-chart-type="topology"/>
-      </div>
+      <xsl:call-template name="host-charts">
+        <xsl:with-param name="filter" select="$filter"/>
+        <xsl:with-param name="filt_id" select="$filt_id"/>
+      </xsl:call-template>
     </xsl:if>
+
     <xsl:if test="$type = 'os'">
-      <div class="dashboard-data-source"
-        data-source-name="average-severity-count-source"
-        data-group-column="average_severity"
-        data-aggregate-type="{$type}"
-        data-filter="{$filter}"
-        data-filter-id="{$filt_id}">
-        <span class="dashboard-chart"
-          data-chart-name="by-cvss"
-          data-chart-type="bar"
-          data-chart-template="info_by_cvss"/>
-        <span class="dashboard-chart"
-          data-chart-name="by-class"
-          data-chart-type="donut"
-          data-chart-template="info_by_class"/>
-      </div>
-      <div class="dashboard-data-source"
-        data-source-name="most-vulnerable-oss-source"
-        data-aggregate-type="{$type}"
-        data-group-column="uuid"
-        data-columns="average_severity,average_severity_score,hosts"
-        data-text-columns="name,modified"
-        data-sort-fields="average_severity_score,modified"
-        data-sort-orders="descending,descending"
-        data-sort-stats="max,value"
-        data-filter="{$filter}"
-        data-filter-id="{$filt_id}">
-        <span class="dashboard-chart"
-          data-chart-name="most-vulnerable-oss"
-          data-chart-type="horizontal_bar"
-          data-x-field="name"
-          data-y-fields="average_severity_score_max"
-          data-z-fields="average_severity_max"
-          data-gen-params='{{"empty_text": "No vulnerable Operating Systems found",
-                             "score_severity" : "average_severity_max",
-                             "score_assets" : "hosts_max",
-                             "score_asset_type" : "hosts",
-                             "extra_tooltip_field_1": "modified",
-                             "extra_tooltip_label_1": "Updated"}}'
-          data-init-params='{{"title_text": "Operating Systems by Vulnerability Score"}}'/>
-      </div>
+      <xsl:call-template name="os-charts">
+        <xsl:with-param name="filter" select="$filter"/>
+        <xsl:with-param name="filt_id" select="$filt_id"/>
+      </xsl:call-template>
     </xsl:if>
+
   </div>
 </xsl:template>
 
@@ -490,10 +892,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="default_controllers">
     <xsl:choose>
       <xsl:when test="$type='allinfo'"></xsl:when>
-      <xsl:when test="$type='nvt'">by-class|by-created|nvt-by-family</xsl:when>
-      <xsl:when test="$type='ovaldef'">by-class|by-created|by-oval-class</xsl:when>
+      <xsl:when test="$type='nvt'">nvt-by-severity-class|nvt-by-created|nvt-by-family</xsl:when>
+      <xsl:when test="$type='ovaldef'">ovaldef-by-severity-class|ovaldef-by-created|ovaldef-by-class</xsl:when>
       <!-- fallback for all other types -->
-      <xsl:otherwise>by-class|by-created|by-cvss</xsl:otherwise>
+      <xsl:otherwise><xsl:value-of select="$type"/>-by-severity-class|<xsl:value-of select="$type"/>-by-created|<xsl:value-of select="$type"/>-by-cvss</xsl:otherwise>
     </xsl:choose>
   </xsl:param>
   <!-- Default row heights, rows separated with "#",
@@ -537,107 +939,74 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     data-controllers="{$controllers}"
     data-heights="{$heights}"
     data-default-controllers="{$default_controllers}"
+    data-default-controller-string="{$type}-by-cvss"
     data-default-heights="{$default_heights}"
     data-controllers-pref-id="{$controllers_pref_id}"
     data-heights-pref-id="{$heights_pref_id}"
     data-dashboard-controls="top-dashboard-controls"
     data-no-chart-links="{/envelope/params/no_chart_links}"
     data-max-components="4">
-    <div class="dashboard-data-source"
-      data-source-name="severity-count-source"
-      data-aggregate-type="{$type}"
-      data-group-column="severity"
-      data-filter="{$filter}"
-      data-filter-id="{$filt_id}">
-      <span class="dashboard-chart"
-        data-chart-name="by-cvss"
-        data-chart-type="bar"
-        data-chart-template="info_by_cvss"/>
-      <span class="dashboard-chart"
-        data-chart-name="by-class"
-        data-chart-type="donut"
-        data-chart-template="info_by_class"/>
-    </div>
-    <div class="dashboard-data-source"
-      data-source-name="created-count-source"
-      data-aggregate-type="{$type}"
-      data-group-column="created"
-      data-filter="{$filter}"
-      data-filter-id="{$filt_id}">
-      <span class="dashboard-chart"
-        data-chart-name="by-created"
-        data-chart-type="line"/>
-    </div>
+
     <xsl:if test="$type = 'nvt'">
+      <xsl:call-template name="nvt-charts">
+        <xsl:with-param name="filter" select="$filter"/>
+        <xsl:with-param name="filt_id" select="$filt_id"/>
+      </xsl:call-template>
+
       <div class="dashboard-data-source"
-        data-source-name="nvt-by-family-source"
-        data-aggregate-type="{$type}"
-        data-group-column="family"
-        data-column="severity"
-        data-filter="{$filter}"
-        data-filter-id="{$filt_id}">
-        <span class="dashboard-chart"
-          data-chart-name="nvt-by-family"
-          data-chart-type="bubbles"/>
-      </div>
-      <div class="dashboard-data-source"
-        data-source-name="nvt-by-solution_type-source"
+        data-source-name="nvt-by-solution-type-source"
         data-aggregate-type="{$type}"
         data-group-column="solution_type"
         data-filter="{$filter}"
         data-filter-id="{$filt_id}">
         <span class="dashboard-chart"
-          data-chart-name="nvt-by-solution_type"
-          data-chart-type="donut"/>
-      </div>
-      <div class="dashboard-data-source"
-        data-source-name="nvt-by-qod_type-source"
-        data-aggregate-type="{$type}"
-        data-group-column="qod_type"
-        data-filter="{$filter}"
-        data-filter-id="{$filt_id}">
-        <span class="dashboard-chart"
-          data-chart-name="nvt-by-qod_type"
-          data-chart-template="qod_type_counts"
-          data-chart-type="donut"/>
-      </div>
-      <div class="dashboard-data-source"
-        data-source-name="nvt-by-qod-source"
-        data-aggregate-type="{$type}"
-        data-group-column="qod"
-        data-filter="{$filter}"
-        data-filter-id="{$filt_id}">
-        <span class="dashboard-chart"
-          data-chart-name="nvt-by-qod"
-          data-chart-template="percentage_counts"
+          data-chart-name="nvt-by-solution-type"
           data-chart-type="donut"/>
       </div>
     </xsl:if>
+
     <xsl:if test="$type = 'ovaldef'">
-      <div class="dashboard-data-source"
-        data-source-name="ovaldef-by-class-source"
-        data-aggregate-type="{$type}"
-        data-group-column="class"
-        data-filter="{$filter}"
-        data-filter-id="{$filt_id}">
-        <span class="dashboard-chart"
-          data-chart-name="by-oval-class"
-          data-chart-type="donut"/>
-      </div>
+      <xsl:call-template name="ovaldef-charts">
+        <xsl:with-param name="filter" select="$filter"/>
+        <xsl:with-param name="filt_id" select="$filt_id"/>
+      </xsl:call-template>
     </xsl:if>
+
+    <xsl:if test="$type = 'cert_bund_adv'">
+      <xsl:call-template name="cert-bund-adv-charts">
+        <xsl:with-param name="filter" select="$filter"/>
+        <xsl:with-param name="filt_id" select="$filt_id"/>
+      </xsl:call-template>
+    </xsl:if>
+
+    <xsl:if test="$type = 'cve'">
+      <xsl:call-template name="cve-charts">
+        <xsl:with-param name="filter" select="$filter"/>
+        <xsl:with-param name="filt_id" select="$filt_id"/>
+      </xsl:call-template>
+    </xsl:if>
+
+    <xsl:if test="$type = 'cpe'">
+      <xsl:call-template name="cpe-charts">
+        <xsl:with-param name="filter" select="$filter"/>
+        <xsl:with-param name="filt_id" select="$filt_id"/>
+      </xsl:call-template>
+    </xsl:if>
+
+    <xsl:if test="$type = 'dfn_cert_adv'">
+      <xsl:call-template name="dfn-cert-adv-charts">
+        <xsl:with-param name="filter" select="$filter"/>
+        <xsl:with-param name="filt_id" select="$filt_id"/>
+      </xsl:call-template>
+    </xsl:if>
+
     <xsl:if test="$type = 'allinfo'">
-      <div class="dashboard-data-source"
-        data-source-name="allinfo-by-type-source"
-        data-aggregate-type="{$type}"
-        data-group-column="type"
-        data-filter="{$filter}"
-        data-filter-id="{$filt_id}">
-        <span class="dashboard-chart"
-          data-chart-name="by-info-type"
-          data-chart-template="resource_type_counts"
-          data-chart-type="donut"/>
-      </div>
+      <xsl:call-template name="allinfo-charts">
+        <xsl:with-param name="filter" select="$filter"/>
+        <xsl:with-param name="filt_id" select="$filt_id"/>
+      </xsl:call-template>
     </xsl:if>
+
   </div>
 </xsl:template>
 
@@ -647,7 +1016,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <!-- Setting UUIDs for row height preferences -->
   <xsl:variable name="heights_pref_id" select="'05eb63e9-ccd7-481d-841d-9406d3281040'"/>
 
-  <xsl:variable name="default_controllers" select="'notes_donut_chart|by-created|notes-text-words'"/>
+  <xsl:variable name="default_controllers" select="'note-by-active-days|note-by-created|note-by-text-words'"/>
   <!-- Default row heights, rows separated with "#",
         number of rows must match default_controllers -->
   <xsl:variable name="default_heights" select="'280'"/>
@@ -691,45 +1060,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       data-default-heights="{$default_heights}"
       data-controllers-pref-id="{$controllers_pref_id}"
       data-heights-pref-id="{$heights_pref_id}"
-      data-default-controller-string="notes_donut_chart"
+      data-default-controller-string="note-by-active-days"
       data-dashboard-controls="top-dashboard-controls"
       data-max-components="4">
-      <div class="dashboard-data-source"
-        data-source-name="notes-created-count-src"
-        data-aggregate-type="note"
-        data-aggregate-mode="count"
-        data-group-column="created"
-        data-filter="{$filter}"
-        data-filter-id="{$filt_id}">
-        <span class="dashboard-chart"
-          data-chart-name="by-created"
-          data-chart-type="line"/>
-      </div>
-      <div class="dashboard-data-source"
-        data-source-name="notes-text-words-src"
-        data-aggregate-type="note"
-        data-group-column="text"
-        data-aggregate-mode="word_counts"
-        data-filter="{$filter}"
-        data-filter-id="{$filt_id}">
-        <span class="dashboard-chart"
-          data-chart-name="notes-text-words"
-          data-chart-type="cloud"/>
-      </div>
-      <div class="dashboard-data-source"
-        data-source-name="notes-status-src"
-        data-aggregate-type="note"
-        data-group-column="active_days"
-        data-sort-stat="count"
-        data-sort-order="descending"
-        data-max-groups="250"
-        data-filter="{$filter}"
-        data-filter-id="{$filt_id}">
-        <span class="dashboard-chart"
-          data-chart-name="notes_donut_chart"
-          data-chart-template="active_status"
-          data-chart-type="donut"/>
-      </div>
+
+      <xsl:call-template name="note-charts">
+        <xsl:with-param name="filter" select="$filter"/>
+        <xsl:with-param name="filt_id" select="$filt_id"/>
+      </xsl:call-template>
+
     </div>
   </div>
 </xsl:template>
@@ -740,7 +1079,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <!-- Setting UUIDs for row height preferences -->
   <xsl:variable name="heights_pref_id" select="'a8c246f9-0506-4d8d-be35-a3befb22fbca'"/>
 
-  <xsl:variable name="default_controllers" select="'overrides_donut_chart|by-created|overrides-text-words'"/>
+  <xsl:variable name="default_controllers" select="'override-by-active-days|override-by-created|override-by-text-words'"/>
   <!-- Default row heights, rows separated with "#",
         number of rows must match default_controllers -->
   <xsl:variable name="default_heights" select="'280'"/>
@@ -784,45 +1123,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       data-default-heights="{$default_heights}"
       data-controllers-pref-id="{$controllers_pref_id}"
       data-heights-pref-id="{$heights_pref_id}"
-      data-default-controller-string="overrides_donut_chart"
+      data-default-controller-string="override-by-active-days"
       data-dashboard-controls="top-dashboard-controls"
       data-max-components="4">
-      <div class="dashboard-data-source"
-        data-source-name="overrides-created-count-src"
-        data-aggregate-type="override"
-        data-aggregate-mode="count"
-        data-group-column="created"
-        data-filter="{$filter}"
-        data-filter-id="{$filt_id}">
-        <span class="dashboard-chart"
-          data-chart-name="by-created"
-          data-chart-type="line"/>
-      </div>
-      <div class="dashboard-data-source"
-        data-source-name="overrides-text-words-src"
-        data-aggregate-type="override"
-        data-group-column="text"
-        data-aggregate-mode="word_counts"
-        data-filter="{$filter}"
-        data-filter-id="{$filt_id}">
-        <span class="dashboard-chart"
-          data-chart-name="overrides-text-words"
-          data-chart-type="cloud"/>
-      </div>
-      <div class="dashboard-data-source"
-        data-source-name="overrides-status-src"
-        data-aggregate-type="override"
-        data-group-column="active_days"
-        data-sort-stat="count"
-        data-sort-order="descending"
-        data-max-groups="250"
-        data-filter="{$filter}"
-        data-filter-id="{$filt_id}">
-        <span class="dashboard-chart"
-          data-chart-name="overrides_donut_chart"
-          data-chart-template="active_status"
-          data-chart-type="donut"/>
-      </div>
+
+      <xsl:call-template name="override-charts">
+        <xsl:with-param name="filter" select="$filter"/>
+        <xsl:with-param name="filt_id" select="$filt_id"/>
+      </xsl:call-template>
+
     </div>
   </div>
 </xsl:template>
@@ -889,7 +1198,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <!-- Default chart selections:
         Controller names of boxes in a row separated with "|",
         rows separated with "#" -->
-  <xsl:variable name="default_controllers" select="'tasks-by-class|by-task-status#cve_timeline_chart|hosts-topology|nvt_donut_chart'"/>
+  <xsl:variable name="default_controllers" select="'task-by-severity-class|task-by-status#cve-by-created|host-by-topology|nvt-by-severity-class'"/>
   <!-- Default row heights, rows separated with "#",
         number of rows must match default_controllers -->
   <xsl:variable name="default_heights" select="'280#280'"/>
@@ -958,7 +1267,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       data-controllers-pref-id="{$controllers_pref_id}"
       data-filters-pref-id="{$filters_pref_id}"
       data-heights-pref-id="{$heights_pref_id}"
-      data-default-controller-string="tasks-by-class"
+      data-default-controller-string="task-by-severity-class"
       data-dashboard-controls="main-dashboard-controls"
       data-no-chart-links="{/envelope/params/no_chart_links}"
       data-max-components="8">
@@ -979,192 +1288,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template name="scans-dashboard-data">
   <!-- Tasks -->
-  <div class="dashboard-data-source"
-    data-source-name="tasks-severity-count-source"
-    data-group-column="severity"
-    data-aggregate-type="task">
-    <span class="dashboard-chart"
-      data-chart-name="tasks-by-cvss"
-      data-chart-type="bar"
-      data-chart-template="info_by_cvss"/>
-    <span class="dashboard-chart"
-      data-chart-name="tasks-by-class"
-      data-chart-type="donut"
-      data-chart-template="info_by_class"/>
-  </div>
-  <div class="dashboard-data-source"
-    data-source-name="task-status-count-source"
-    data-aggregate-type="task"
-    data-group-column="status">
-    <span class="dashboard-chart"
-      data-chart-name="by-task-status"
-      data-chart-type="donut"/>
-  </div>
-  <div class="dashboard-data-source"
-    data-source-name="task-high-results-source"
-    data-aggregate-type="task"
-    data-group-column="uuid"
-    data-columns="severity,high_per_host"
-    data-text-columns="name,modified"
-    data-sort-fields="high_per_host,modified"
-    data-sort-orders="descending,descending"
-    data-sort-stats="max,value">
-    <span class="dashboard-chart"
-      data-chart-name="tasks-by-high-results"
-      data-chart-type="bubbles"
-      data-x-field="name"
-      data-y-fields="high_per_host_max"
-      data-z-fields="severity_max"
-      data-gen-params='{{"empty_text": "No Tasks with High severity found"}}'
-      data-init-params='{{"title_text": "Tasks: High results per host"}}'/>
-    <span class="dashboard-chart"
-      data-chart-name="tasks-top-high-results"
-      data-chart-type="horizontal_bar"
-      data-x-field="name"
-      data-y-fields="high_per_host_max"
-      data-z-fields="severity_max"
-      data-gen-params='{{"empty_text": "No Tasks with High severity found"}}'
-      data-init-params='{{"title_text": "Tasks with most High results per host"}}'/>
-  </div>
-  <div class="dashboard-data-source"
-    data-source-name="task-schedules-source"
-    data-type="task">
-    <span class="dashboard-chart"
-      data-chart-name="task-schedules"
-      data-chart-type="gantt"
-      data-gen-params='{{"empty_text": "No scheduled Tasks found"}}'/>
-  </div>
+  <xsl:call-template name="task-charts"/>
 
   <!-- Reports -->
-  <div class="dashboard-data-source"
-    data-source-name="reports-severity-count-source"
-    data-group-column="severity"
-    data-aggregate-type="report">
-    <span class="dashboard-chart"
-      data-chart-name="reports-by-cvss"
-      data-chart-type="bar"
-      data-chart-template="info_by_cvss"/>
-    <span class="dashboard-chart"
-      data-chart-name="reports-by-class"
-      data-chart-type="donut"
-      data-chart-template="info_by_class"/>
-  </div>
-  <div class="dashboard-data-source"
-    data-source-name="report-high-results-timeline-source"
-    data-aggregate-type="report"
-    data-group-column="date"
-    data-columns="high,high_per_host">
-    <span class="dashboard-chart"
-      data-chart-name="report-high-results-timeline"
-      data-chart-type="line"
-      data-y-fields="high_max"
-      data-z-fields="high_per_host_max"
-      data-init-params='{{"title_text": "Reports: High results timeline"}}'
-      data-gen-params='{{"show_stat_type": 0}}'/>
-  </div>
+  <xsl:call-template name="report-charts"/>
 
   <!-- Results -->
-  <div class="dashboard-data-source"
-    data-source-name="results-severity-count-source"
-    data-group-column="severity"
-    data-aggregate-type="result">
-    <span class="dashboard-chart"
-      data-chart-name="results-by-cvss"
-      data-chart-type="bar"
-      data-chart-template="info_by_cvss"/>
-    <span class="dashboard-chart"
-      data-chart-name="results-by-class"
-      data-chart-type="donut"
-      data-chart-template="info_by_class"/>
-  </div>
-  <div class="dashboard-data-source"
-    data-source-name="result-vuln-words-source"
-    data-aggregate-type="result"
-    data-group-column="vulnerability"
-    data-aggregate-mode="word_counts"
-    data-sort-stat="count"
-    data-sort-order="descending"
-    data-max-groups="250">
-    <span class="dashboard-chart"
-      data-chart-name="result-vuln-words"
-      data-chart-type="cloud"/>
-  </div>
-  <div class="dashboard-data-source"
-    data-source-name="result-desc-words-source"
-    data-aggregate-type="result"
-    data-group-column="description"
-    data-aggregate-mode="word_counts"
-    data-sort-stat="count"
-    data-sort-order="descending"
-    data-max-groups="250">
-    <span class="dashboard-chart"
-      data-chart-name="result-desc-words"
-      data-chart-type="cloud"/>
-  </div>
+  <xsl:call-template name="result-charts"/>
 
   <!-- Notes -->
-  <div class="dashboard-data-source"
-    data-source-name="notes-created-count-src"
-    data-aggregate-type="note"
-    data-aggregate-mode="count"
-    data-group-column="created">
-    <span class="dashboard-chart"
-      data-chart-name="notes-by-created"
-      data-chart-type="line"/>
-  </div>
-  <div class="dashboard-data-source"
-    data-source-name="notes-text-words-src"
-    data-aggregate-type="note"
-    data-group-column="text"
-    data-aggregate-mode="word_counts">
-    <span class="dashboard-chart"
-      data-chart-name="notes-text-words"
-      data-chart-type="cloud"/>
-  </div>
-  <div class="dashboard-data-source"
-    data-source-name="notes-status-src"
-    data-aggregate-type="note"
-    data-group-column="active_days"
-    data-sort-stat="count"
-    data-sort-order="descending"
-    data-max-groups="250">
-    <span class="dashboard-chart"
-      data-chart-name="notes_donut_chart"
-      data-chart-template="active_status"
-      data-chart-type="donut"/>
-  </div>
+  <xsl:call-template name="note-charts"/>
 
   <!-- Overrides -->
-  <div class="dashboard-data-source"
-    data-source-name="overrides-created-count-src"
-    data-aggregate-type="override"
-    data-aggregate-mode="count"
-    data-group-column="created">
-    <span class="dashboard-chart"
-      data-chart-name="overrides-by-created"
-      data-chart-type="line"/>
-  </div>
-  <div class="dashboard-data-source"
-    data-source-name="overrides-text-words-src"
-    data-aggregate-type="override"
-    data-group-column="text"
-    data-aggregate-mode="word_counts">
-    <span class="dashboard-chart"
-      data-chart-name="overrides-text-words"
-      data-chart-type="cloud"/>
-  </div>
-  <div class="dashboard-data-source"
-    data-source-name="overrides-status-src"
-    data-aggregate-type="override"
-    data-group-column="active_days"
-    data-sort-stat="count"
-    data-sort-order="descending"
-    data-max-groups="250">
-    <span class="dashboard-chart"
-      data-chart-name="overrides_donut_chart"
-      data-chart-template="active_status"
-      data-chart-type="donut"/>
-  </div>
+  <xsl:call-template name="override-charts"/>
 </xsl:template>
 
 <xsl:template match="dashboard" mode="scans">
@@ -1172,7 +1308,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <!-- Default chart selections:
         Controller names of boxes in a row separated with "|",
         rows separated with "#" -->
-  <xsl:variable name="default_controllers" select="'results-by-class|reports-by-class#by-task-status|report-high-results-timeline|tasks-by-class'"/>
+  <xsl:variable name="default_controllers" select="'result-by-severity-class|report-by-severity-class#task-by-status|report-by-high-results|task-by-severity-class'"/>
   <!-- Default row heights, rows separated with "#",
         number of rows must match default_controllers -->
   <xsl:variable name="default_heights" select="'280#280'"/>
@@ -1241,7 +1377,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       data-controllers-pref-id="{$controllers_pref_id}"
       data-filters-pref-id="{$filters_pref_id}"
       data-heights-pref-id="{$heights_pref_id}"
-      data-default-controller-string="tasks-by-class"
+      data-default-controller-string="task-by-severity-class"
       data-dashboard-controls="scans-dashboard-controls"
       data-no-chart-links="{/envelope/params/no_chart_links}"
       data-max-components="8">
@@ -1260,96 +1396,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template name="assets-dashboard-data">
   <!-- Hosts -->
-  <div class="dashboard-data-source"
-    data-source-name="hosts-severity-count-source"
-    data-group-column="severity"
-    data-aggregate-type="host">
-    <span class="dashboard-chart"
-      data-chart-name="hosts-by-cvss"
-      data-chart-type="bar"
-      data-chart-template="info_by_cvss"/>
-    <span class="dashboard-chart"
-      data-chart-name="hosts-by-class"
-      data-chart-type="donut"
-      data-chart-template="info_by_class"/>
-  </div>
-  <div class="dashboard-data-source"
-    data-source-name="most-vulnerable-hosts-source"
-    data-aggregate-type="host"
-    data-group-column="uuid"
-    data-columns="severity"
-    data-text-columns="name,modified"
-    data-sort-fields="severity,modified"
-    data-sort-orders="descending,descending"
-    data-sort-stats="max,value">
-    <span class="dashboard-chart"
-      data-chart-name="most-vulnerable-hosts"
-      data-chart-type="horizontal_bar"
-      data-x-field="name"
-      data-y-fields="severity_max"
-      data-z-fields="severity_max"
-      data-gen-params='{{"empty_text": "No vulnerable Hosts found",
-                          "extra_tooltip_field_1": "modified",
-                          "extra_tooltip_label_1": "Updated" }}'
-      data-init-params='{{"title_text": "Most vulnerable hosts"}}'/>
-  </div>
-  <div class="dashboard-data-source"
-    data-source-name="host-counts-timeline-source"
-    data-aggregate-type="host"
-    data-group-column="modified"
-    data-subgroup-column="severity_level">
-    <span class="dashboard-chart"
-      data-chart-name="host-counts-timeline"
-      data-y-fields="c_count,c_count[High]"
-      data-z-fields="count,count[High]"
-      data-chart-type="line"/>
-  </div>
-  <div class="dashboard-data-source"
-    data-source-name="hosts-topology-source"
-    data-aggregate-type="host"
-    data-type="host">
-    <span class="dashboard-chart"
-      data-chart-name="hosts-topology"
-      data-chart-type="topology"/>
-  </div>
+  <xsl:call-template name="host-charts"/>
 
   <!-- Operating Systems -->
-  <div class="dashboard-data-source"
-    data-source-name="os-average-severity-count-source"
-    data-group-column="average_severity"
-    data-aggregate-type="os">
-    <span class="dashboard-chart"
-      data-chart-name="oss-by-cvss"
-      data-chart-type="bar"
-      data-chart-template="info_by_cvss"/>
-    <span class="dashboard-chart"
-      data-chart-name="oss-by-class"
-      data-chart-type="donut"
-      data-chart-template="info_by_class"/>
-  </div>
-  <div class="dashboard-data-source"
-    data-source-name="most-vulnerable-oss-source"
-    data-aggregate-type="os"
-    data-group-column="uuid"
-    data-columns="average_severity,average_severity_score,hosts"
-    data-text-columns="name,modified"
-    data-sort-fields="average_severity_score,modified"
-    data-sort-orders="descending,descending"
-    data-sort-stats="max,value">
-    <span class="dashboard-chart"
-      data-chart-name="most-vulnerable-oss"
-      data-chart-type="horizontal_bar"
-      data-x-field="name"
-      data-y-fields="average_severity_score_max"
-      data-z-fields="average_severity_max"
-      data-gen-params='{{"empty_text": "No vulnerable Operating Systems found",
-                          "score_severity" : "average_severity_max",
-                          "score_assets" : "hosts_max",
-                          "score_asset_type" : "hosts",
-                          "extra_tooltip_field_1": "modified",
-                          "extra_tooltip_label_1": "Updated"}}'
-      data-init-params='{{"title_text": "Operating Systems by Vulnerability Score"}}'/>
-  </div>
+  <xsl:call-template name="os-charts"/>
 </xsl:template>
 
 <xsl:template match="dashboard" mode="assets">
@@ -1357,7 +1407,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <!-- Default chart selections:
         Controller names of boxes in a row separated with "|",
         rows separated with "#" -->
-  <xsl:variable name="default_controllers" select="'most-vulnerable-hosts|hosts-topology|most-vulnerable-oss#oss-by-class|host-counts-timeline'"/>
+  <xsl:variable name="default_controllers" select="'host-by-most-vulnerable|host-by-topology|os-by-most-vulnerable#os-by-severity-class|host-by-modification-time'"/>
   <!-- Default row heights, rows separated with "#",
         number of rows must match default_controllers -->
   <xsl:variable name="default_heights" select="'280#280'"/>
@@ -1426,7 +1476,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       data-controllers-pref-id="{$controllers_pref_id}"
       data-filters-pref-id="{$filters_pref_id}"
       data-heights-pref-id="{$heights_pref_id}"
-      data-default-controller-string="hosts-by-class"
+      data-default-controller-string="host-by-severity-class"
       data-dashboard-controls="assets-dashboard-controls"
       data-no-chart-links="{/envelope/params/no_chart_links}"
       data-max-components="8">
@@ -1445,209 +1495,25 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template name="secinfo-dashboard-data">
   <!-- NVTs -->
-  <div class="dashboard-data-source"
-    data-source-name="nvt_severity_src"
-    data-aggregate-type="nvt"
-    data-group-column="severity">
-    <span class="dashboard-chart"
-      data-chart-name="nvt_bar_chart"
-      data-chart-type="bar"
-      data-chart-template="info_by_cvss"/>
-    <span class="dashboard-chart"
-      data-chart-name="nvt_donut_chart"
-      data-chart-type="donut"
-      data-chart-template="info_by_class"/>
-  </div>
-  <div class="dashboard-data-source"
-    data-source-name="nvt_timeline_src"
-    data-aggregate-type="nvt"
-    data-group-column="created">
-    <span class="dashboard-chart"
-      data-chart-name="nvt_timeline_chart"
-      data-chart-type="line"/>
-  </div>
-  <div class="dashboard-data-source"
-    data-source-name="nvt_families_src"
-    data-aggregate-type="nvt"
-    data-group-column="family"
-    data-column="severity">
-    <span class="dashboard-chart"
-      data-chart-name="nvt_bubble_chart"
-      data-chart-type="bubbles"/>
-  </div>
-  <div class="dashboard-data-source"
-    data-source-name="nvt_qod_type_src"
-    data-aggregate-type="nvt"
-    data-group-column="qod_type">
-    <span class="dashboard-chart"
-      data-chart-name="nvt_qod_type"
-      data-chart-type="donut"
-      data-chart-template="qod_type_counts"/>
-  </div>
-  <div class="dashboard-data-source"
-    data-source-name="nvt_qod_src"
-    data-aggregate-type="nvt"
-    data-group-column="qod">
-    <span class="dashboard-chart"
-      data-chart-name="nvt_qod"
-      data-chart-type="donut"
-      data-chart-template="percentage_counts"/>
-  </div>
-
-  <!-- CVEs -->
-  <div class="dashboard-data-source"
-    data-source-name="cve_severity_src"
-    data-aggregate-type="cve"
-    data-group-column="severity">
-    <span class="dashboard-chart"
-      data-chart-name="cve_bar_chart"
-      data-chart-type="bar"
-      data-chart-template="info_by_cvss"/>
-    <span class="dashboard-chart"
-      data-chart-name="cve_donut_chart"
-      data-chart-type="donut"
-      data-chart-template="info_by_class"/>
-  </div>
-  <div class="dashboard-data-source"
-    data-source-name="cve_timeline_src"
-    data-aggregate-type="cve"
-    data-group-column="created">
-    <span class="dashboard-chart"
-      data-chart-name="cve_timeline_chart"
-      data-chart-type="line"/>
-  </div>
-
-  <!-- CPEs -->
-  <div class="dashboard-data-source"
-    data-source-name="cpe_severity_src"
-    data-aggregate-type="cpe"
-    data-group-column="severity">
-    <span class="dashboard-chart"
-      data-chart-name="cpe_bar_chart"
-      data-chart-type="bar"
-      data-chart-template="info_by_cvss"/>
-    <span class="dashboard-chart"
-      data-chart-name="cpe_donut_chart"
-      data-chart-type="donut"
-      data-chart-template="info_by_class"/>
-  </div>
-  <div class="dashboard-data-source"
-    data-source-name="cpe_timeline_src"
-    data-aggregate-type="cpe"
-    data-group-column="created">
-    <span class="dashboard-chart"
-      data-chart-name="cpe_timeline_chart"
-      data-chart-type="line"/>
-  </div>
+  <xsl:call-template name="nvt-charts"/>
 
   <!-- OVAL Definitions -->
-  <div class="dashboard-data-source"
-    data-source-name="ovaldef_severity_src"
-    data-aggregate-type="ovaldef"
-    data-group-column="severity">
-    <span class="dashboard-chart"
-      data-chart-name="ovaldef_bar_chart"
-      data-chart-type="bar"
-      data-chart-template="info_by_cvss"/>
-    <span class="dashboard-chart"
-      data-chart-name="ovaldef_donut_chart"
-      data-chart-type="donut"
-      data-chart-template="info_by_class"/>
-  </div>
-  <div class="dashboard-data-source"
-    data-source-name="ovaldef_timeline_src"
-    data-aggregate-type="ovaldef"
-    data-group-column="created">
-    <span class="dashboard-chart"
-      data-chart-name="ovaldef_timeline_chart"
-      data-chart-type="line"/>
-  </div>
-  <div class="dashboard-data-source"
-    data-source-name="ovaldef_class_src"
-    data-aggregate-type="ovaldef"
-    data-group-column="class">
-    <span class="dashboard-chart"
-      data-chart-name="ovaldef_class_donut_chart"
-      data-chart-type="donut"/>
-  </div>
+  <xsl:call-template name="ovaldef-charts"/>
 
   <!-- CERT Bund -->
-  <div class="dashboard-data-source"
-    data-source-name="cert_bund_adv_severity_src"
-    data-group-column="severity"
-    data-aggregate-type="cert_bund_adv">
-    <span class="dashboard-chart"
-      data-chart-name="cert_bund_adv_bar_chart"
-      data-chart-template="info_by_cvss"
-      data-chart-type="bar"/>
-    <span class="dashboard-chart"
-      data-chart-name="cert_bund_adv_donut_chart"
-      data-chart-template="info_by_class"
-      data-chart-type="donut"/>
-  </div>
-  <div class="dashboard-data-source"
-    data-source-name="cert_bund_adv_timeline_src"
-    data-aggregate-type="cert_bund_adv"
-    data-group-column="created">
-    <span class="dashboard-chart"
-      data-chart-name="cert_bund_adv_timeline_chart"
-      data-chart-type="line"/>
-  </div>
+  <xsl:call-template name="cert-bund-adv-charts"/>
+
+  <!-- CVEs -->
+  <xsl:call-template name="cve-charts"/>
+
+  <!-- CPEs -->
+  <xsl:call-template name="cpe-charts"/>
 
   <!-- DFN CERT -->
-  <div class="dashboard-data-source"
-    data-source-name="dfn_cert_adv_severity_src"
-    data-aggregate-type="dfn_cert_adv"
-    data-group-column="severity">
-    <span class="dashboard-chart"
-      data-chart-name="dfn_cert_adv_bar_chart"
-      data-chart-type="bar"
-      data-chart-template="info_by_cvss"/>
-    <span class="dashboard-chart"
-      data-chart-name="dfn_cert_adv_donut_chart"
-      data-chart-type="donut"
-      data-chart-template="info_by_class"/>
-  </div>
-  <div class="dashboard-data-source"
-    data-source-name="dfn_cert_adv_timeline_src"
-    data-aggregate-type="dfn_cert_adv"
-    data-group-column="created">
-    <span class="dashboard-chart"
-      data-chart-name="dfn_cert_adv_timeline_chart"
-      data-chart-type="line"/>
-  </div>
+  <xsl:call-template name="dfn-cert-adv-charts"/>
 
   <!-- All SecInfo -->
-  <div class="dashboard-data-source"
-    data-source-name="allinfo_severity_src"
-    data-aggregate-type="allinfo"
-    data-group-column="severity">
-    <span class="dashboard-chart"
-      data-chart-name="allinfo_chart"
-      data-chart-type="bar"
-      data-chart-template="info_by_cvss"/>
-    <span class="dashboard-chart"
-      data-chart-name="allinfo_donut_chart"
-      data-chart-type="donut"
-      data-chart-template="info_by_class"/>
-  </div>
-  <div class="dashboard-data-source"
-    data-source-name="allinfo_timeline_src"
-    data-aggregate-type="allinfo"
-    data-group-column="created">
-    <span class="dashboard-chart"
-      data-chart-name="allinfo_timeline_chart"
-      data-chart-type="line"/>
-  </div>
-  <div class="dashboard-data-source"
-    data-source-name="allinfo_by_info_type_src"
-    data-aggregate-type="allinfo"
-    data-group-column="type">
-    <span class="dashboard-chart"
-      data-chart-name="allinfo_by_info_type"
-      data-chart-type="donut"
-      data-chart-template="resource_type_counts"/>
-  </div>
+  <xsl:call-template name="allinfo-charts"/>
 </xsl:template>
 
 <xsl:template match="dashboard" mode="secinfo">
@@ -1655,7 +1521,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <!-- Default chart selections:
         Controller names of boxes in a row separated with "|",
         rows separated with "#" -->
-  <xsl:variable name="default_controllers" select="'nvt_donut_chart|cve_timeline_chart|cve_donut_chart#cert_bund_adv_timeline_chart|cert_bund_adv_bar_chart'"/>
+  <xsl:variable name="default_controllers" select="'nvt-by-severity-class|cve-by-created|cve-by-severity-class#cert_bund_adv-by-created|cert_bund_adv-by-cvss'"/>
   <!-- Default row heights, rows separated with "#",
         number of rows must match default_controllers -->
   <xsl:variable name="default_heights" select="'280#280'"/>
@@ -1724,7 +1590,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       data-controllers-pref-id="{$controllers_pref_id}"
       data-filters-pref-id="{$filters_pref_id}"
       data-heights-pref-id="{$heights_pref_id}"
-      data-default-controller-string="nvt_bar_chart"
+      data-default-controller-string="nvt-by-cvss"
       data-dashboard-controls="secinfo-dashboard-controls"
       data-no-chart-links="{/envelope/params/no_chart_links}"
       data-max-components="8">

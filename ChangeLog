@@ -1,5 +1,16 @@
 2016-08-12  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_dashboard.js: Allow to set the title and it's count
+	parameter via data attributes on the chart.
+
+	* src/html/classic/graphics.xsl: Refactor charts to reuse more template code.
+	All charts have been implemented twice. Using templates allows to use the same
+	code for all chart generation. Also use new title attributes to set the chart
+	titles directly. Additionally all charts and data source have now a common
+	naming schema.
+
+2016-08-12  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_dashboard.js (get_title_generator):
 	Allow to pass a title count field parameter.
 

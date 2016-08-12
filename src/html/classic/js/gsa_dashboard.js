@@ -2670,11 +2670,13 @@
    * @param icon            Icon to use for the chart // TODO: remove?
    * @param chart_type      The type of chart (bubble, donut, etc.).
    * @param chart_template  Special chart template to use.
+   * @param chart_title     Title to be shown for the chart
    * @param gen_params      Parameters for the generator.
    * @param init_params     Parameters to init the chart controller.
+   * @param count_field     Column for title count
    */
   function ChartController(chart_name, icon, chart_type, chart_template,
-                           data_src, display, gen_params, init_params) {
+      chart_title, data_src, display, gen_params, init_params, count_field) {
     this.chart_name = chart_name;
     this.icon = icon ? icon : '/img/help.svg';
     this.chart_type = chart_type;
@@ -2688,13 +2690,13 @@
                               chart_type, chart_template,
                               data_src.options.aggregate_type,
                               data_src.options.group_column,
-                              init_params.title_text);
+                              chart_title);
 
     this.title_generator = get_title_generator(data_src.options.type,
                               chart_type, chart_template,
                               data_src.options.aggregate_type,
                               data_src.options.group_column,
-                              init_params.title_text);
+                              chart_title, count_field);
 
     this.current_request = null;
 
@@ -3279,6 +3281,8 @@
           var chart_template = c_elem.data('chart-template');
           var chart_type = c_elem.data('chart-type');
           var chart_name = c_elem.data('chart-name');
+          var chart_title = c_elem.data('chart-title');
+          var chart_title_count_column = c_elem.data('chart-title-count');
           var gen_params = {extra: {}};
           var init_params = {};
 
@@ -3322,8 +3326,8 @@
             }
 
             return new ChartController(chart_name, icon, chart_type,
-                chart_template, data_source, for_display, gen_params,
-                init_params);
+                chart_template, chart_title, data_source, for_display,
+                gen_params, init_params, chart_title_count_column);
           });
         });
       });
