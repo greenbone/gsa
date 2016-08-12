@@ -2686,11 +2686,7 @@
     this.gen_params = gen_params;
     this.init_params = init_params;
 
-    this.selector_label = get_selector_label(data_src.options.type,
-                              chart_type, chart_template,
-                              data_src.options.aggregate_type,
-                              data_src.options.group_column,
-                              chart_title);
+    this.selector_label = chart_title;
 
     this.title_generator = get_title_generator(data_src.options.type,
                               chart_type, chart_template,
@@ -3392,83 +3388,6 @@
     }
     params_str = params_str + '&token=' + encodeURIComponent(gsa.gsa_token);
     return params_str;
-  }
-
-  /**
-   * Creates a selector label.
-   */
-  function get_selector_label(type, chart_type, chart_template, aggregate_type,
-      group_column, title_text) {
-
-    if (title_text) {
-      return title_text;
-    }
-
-    if (type === 'task') {
-      return gsa._('Next scheduled tasks');
-    }
-
-    if (type === 'host') {
-      return gsa._('Hosts topology');
-    }
-
-    if (chart_template === 'info_by_class' ||
-        chart_template === 'recent_info_by_class') {
-      if (group_column === 'average_severity') {
-        return gsa._('{{resource_type_plural}} by average Severity Class',
-            {
-              resource_type_plural:
-                gch.resource_type_name_plural(aggregate_type),
-              interpolation: {escape: false}
-            });
-      }
-      else {
-        return gsa._('{{resource_type_plural}} by Severity Class',
-            {
-              resource_type_plural:
-                gch.resource_type_name_plural(aggregate_type),
-              interpolation: {escape: false}
-            });
-      }
-    }
-
-    if (chart_template === 'info_by_cvss' ||
-        chart_template === 'recent_info_by_cvss') {
-      if (group_column === 'average_severity') {
-        return gsa._('{{resource_type_plural}} by average CVSS',
-            {
-              resource_type_plural:
-                gch.resource_type_name_plural(aggregate_type),
-              interpolation: {escape: false}
-            });
-      }
-      else {
-        return gsa._('{{resource_type_plural}} by CVSS',
-            {
-              resource_type_plural:
-                gch.resource_type_name_plural(aggregate_type),
-              interpolation: {escape: false}
-            });
-      }
-    }
-
-    if (chart_type === 'cloud') {
-      return gsa._('{{resource_type_plural}} {{field_name}} word cloud',
-          {
-            resource_type_plural:
-              gch.resource_type_name_plural(aggregate_type),
-            field_name: gch.field_name(group_column),
-            interpolation: {escape: false}
-          });
-    }
-
-    return gsa._('{{resource_type_plural}} by {{field_name}}',
-        {
-          resource_type_plural:
-            gch.resource_type_name_plural(aggregate_type),
-          field_name: gch.field_name(group_column),
-          interpolation: {escape: false},
-        });
   }
 
   /**
