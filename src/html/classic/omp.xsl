@@ -30632,7 +30632,7 @@ should not have received it.
               </xsl:when>
               <xsl:otherwise>
                 <img src="/img/note.svg" title="{gsa:i18n ('Notes', 'Note')}"
-                  class="icon-icon-sm"
+                  class="icon icon-sm"
                   alt="{gsa:i18n ('Notes', 'Note')}"/>
               </xsl:otherwise>
             </xsl:choose>

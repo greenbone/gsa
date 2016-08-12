@@ -1,5 +1,9 @@
 2016-08-12  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/omp.xsl (result result-row): Fix typo in icon class.
+
+2016-08-12  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_dashboard.js (get_chart_title): Simplify chart title
 	generation by only considering title text and count field.
 
