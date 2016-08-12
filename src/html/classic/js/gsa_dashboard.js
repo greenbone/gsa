@@ -2235,7 +2235,8 @@
         controller_string, 'old controller:', this.controller_string,
         'new filter:', filter_string, 'old filter:', this.filter_string);
 
-    if (controller_string !== this.current_controller.chart_name) {
+    if (!gsa.is_defined(this.current_controller) ||
+        controller_string !== this.current_controller.chart_name) {
       log.debug('Controller has changed');
       this.controller_string = controller_string;
       this._updateCurrentController();
@@ -2243,7 +2244,8 @@
       changed = true;
     }
 
-    if (filter_string !== this.current_filter.id) {
+    if (!gsa.is_defined(this.current_filter) ||
+        filter_string !== this.current_filter.id) {
       log.debug('Filter has changed');
       this.filter_string = filter_string;
       this._updateCurrentFilter();
@@ -2567,7 +2569,9 @@
    */
   DashboardDisplay.prototype._requestNewChart = function() {
     if (!gsa.is_defined(this.current_controller)) {
-      log.warn('No controller selected');
+      this.showError(gsa._('Could not load chart {{chart}}',
+            {chart: this.controller_string}));
+      log.error('No controller selected');
       return;
     }
 

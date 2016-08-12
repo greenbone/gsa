@@ -1,3 +1,9 @@
+2016-08-12  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/js/gsa_dashboard.js: Check if a current_controller and
+	current_filter are set when updaating a DashboardDisplay. This stills allows
+	to reset a display if no controller was set.
+
 2016-08-11  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/js/gsa_dashboard.js: Use element id for dashboard id
