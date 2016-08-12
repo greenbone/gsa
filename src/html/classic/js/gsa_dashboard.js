@@ -3471,11 +3471,14 @@
    * Creates a title generator function.
    */
   function get_title_generator(type, chart_type, chart_template, aggregate_type,
-      group_column, title_text) {
+      group_column, title_text, count_field) {
 
     if (title_text) {
+      if (gsa.is_defined(count_field)) {
+        return gch.title_total(title_text, count_field);
+      }
       return gch.title_static(gsa._('{{title_text}} (Loading...)',
-            {title_text: title_text}), title_text);
+          {title_text: title_text}), title_text);
     }
 
     if (type === 'task') {
