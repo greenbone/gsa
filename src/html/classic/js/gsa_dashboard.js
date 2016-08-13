@@ -3049,9 +3049,9 @@
         !!(elem.data('no-chart-links')) : false;
 
       var dashboard = new gch.Dashboard(elem.attr('id'),
-          elem.data('controllers'),
+          elem.data('config'),
           {
-            config_pref_id: elem.data('controllers-pref-id'),
+            config_pref_id: elem.data('config-pref-id'),
             filter: elem.data('filter'),
             filt_id: elem.data('filter-id'),
             max_components: max_components,

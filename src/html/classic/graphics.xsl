@@ -651,22 +651,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template name="js-scan-management-top-visualization">
   <xsl:param name="type" select="'task'"/>
-  <!-- Setting UUIDs for chart selection preferences -->
-  <xsl:param name="controllers_pref_id">
-    <xsl:choose>
-      <xsl:when test="$type='task'">3d5db3c7-5208-4b47-8c28-48efc621b1e0</xsl:when>
-      <xsl:when test="$type='report'">e599bb6b-b95a-4bb2-a6bb-fe8ac69bc071</xsl:when>
-      <xsl:when test="$type='result'">0b8ae70d-d8fc-4418-8a72-e65ac8d2828e</xsl:when>
-    </xsl:choose>
-  </xsl:param>
-  <!-- Setting UUIDs for dashboard row height preferences -->
-  <xsl:param name="heights_pref_id">
-    <xsl:choose>
-      <xsl:when test="$type='task'">ce8608af-7e66-45a8-aa8a-76def4f9f838</xsl:when>
-      <xsl:when test="$type='report'">fc875cd4-16bf-42d1-98ed-c0c9bd6015cd</xsl:when>
-      <xsl:when test="$type='result'">cb7db2fe-3fe4-4704-9fa1-efd4b9e522a8</xsl:when>
-    </xsl:choose>
-  </xsl:param>
   <!-- Default chart selections:
         Controller names of boxes in a row separated with "|",
         rows separated with "#" -->
@@ -689,24 +673,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:choose>
   </xsl:param>
 
-  <xsl:variable name="controllers">
+  <!-- Setting UUIDs for chart selection preferences -->
+  <xsl:param name="config_pref_id">
     <xsl:choose>
-      <xsl:when test="/envelope/chart_preferences/chart_preference[@id = $controllers_pref_id]">
-        <xsl:value-of select="/envelope/chart_preferences/chart_preference[@id = $controllers_pref_id]/value"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="$default_controllers"/>
-      </xsl:otherwise>
+      <xsl:when test="$type='task'">3d5db3c7-5208-4b47-8c28-48efc621b1e0</xsl:when>
+      <xsl:when test="$type='report'">e599bb6b-b95a-4bb2-a6bb-fe8ac69bc071</xsl:when>
+      <xsl:when test="$type='result'">0b8ae70d-d8fc-4418-8a72-e65ac8d2828e</xsl:when>
     </xsl:choose>
-  </xsl:variable>
-  <xsl:variable name="heights">
+  </xsl:param>
+
+  <xsl:variable name="config">
     <xsl:choose>
-      <xsl:when test="/envelope/chart_preferences/chart_preference[@id = $heights_pref_id]">
-        <xsl:value-of select="/envelope/chart_preferences/chart_preference[@id = $heights_pref_id]/value"/>
+      <xsl:when test="/envelope/chart_preferences/chart_preference[@id = $config_pref_id]">
+        <xsl:value-of select="/envelope/chart_preferences/chart_preference[@id = $config_pref_id]/value"/>
       </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="$default_heights"/>
-      </xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
 
@@ -716,13 +696,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="dashboard" id="top-dashboard"
     data-filter="{$filter}"
     data-filters-id="{$filt_id}"
-    data-controllers="{$controllers}"
-    data-heights="{$heights}"
+    data-config="{$config}"
+    data-config-pref-id="{$config_pref_id}"
     data-default-controllers="{$default_controllers}"
     data-default-heights="{$default_heights}"
     data-default-controller-string="{$type}-by-cvss"
-    data-controllers-pref-id="{$controllers_pref_id}"
-    data-heights-pref-id="{$heights_pref_id}"
     data-dashboard-controls="top-dashboard-controls"
     data-no-chart-links="{/envelope/params/no_chart_links}"
     data-max-components="4">
@@ -769,20 +747,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template name="js-assets-top-visualization">
   <xsl:param name="type" select="'host'"/>
-  <!-- Setting UUIDs for chart selection preferences -->
-  <xsl:param name="controllers_pref_id">
-    <xsl:choose>
-      <xsl:when test="$type='host'">d3f5f2de-a85b-43f2-a817-b127457cc8ba</xsl:when>
-      <xsl:when test="$type='os'">e93b51ed-5881-40e0-bc4f-7d3268a36177</xsl:when>
-    </xsl:choose>
-  </xsl:param>
-  <!-- Setting UUIDs for dashboard row height preferences -->
-  <xsl:param name="heights_pref_id">
-    <xsl:choose>
-      <xsl:when test="$type='host'">1cef4fae-57a6-4c1d-856c-0368ead863d4</xsl:when>
-      <xsl:when test="$type='os'">3006052f-3f28-419b-bffa-65b41605d5c3</xsl:when>
-    </xsl:choose>
-  </xsl:param>
   <!-- Default chart selections:
         Controller names of boxes in a row separated with "|",
         rows separated with "#" -->
@@ -804,24 +768,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:choose>
   </xsl:param>
 
-  <xsl:variable name="controllers">
+  <!-- Setting UUIDs for chart selection preferences -->
+  <xsl:param name="config_pref_id">
     <xsl:choose>
-      <xsl:when test="/envelope/chart_preferences/chart_preference[@id = $controllers_pref_id]">
-        <xsl:value-of select="/envelope/chart_preferences/chart_preference[@id = $controllers_pref_id]/value"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="$default_controllers"/>
-      </xsl:otherwise>
+      <xsl:when test="$type='host'">d3f5f2de-a85b-43f2-a817-b127457cc8ba</xsl:when>
+      <xsl:when test="$type='os'">e93b51ed-5881-40e0-bc4f-7d3268a36177</xsl:when>
     </xsl:choose>
-  </xsl:variable>
-  <xsl:variable name="heights">
+  </xsl:param>
+
+  <xsl:variable name="config">
     <xsl:choose>
-      <xsl:when test="/envelope/chart_preferences/chart_preference[@id = $heights_pref_id]">
-        <xsl:value-of select="/envelope/chart_preferences/chart_preference[@id = $heights_pref_id]/value"/>
+      <xsl:when test="/envelope/chart_preferences/chart_preference[@id = $config_pref_id]">
+        <xsl:value-of select="/envelope/chart_preferences/chart_preference[@id = $config_pref_id]/value"/>
       </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="$default_heights"/>
-      </xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
 
@@ -832,13 +791,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     data-dashboard-name="top-dashboard"
     data-filter="{$filter}"
     data-filters-id="{$filt_id}"
-    data-controllers="{$controllers}"
-    data-heights="{$heights}"
+    data-config="{$config}"
+    data-config-pref-id="{$config_pref_id}"
     data-default-controllers="{$default_controllers}"
     data-default-heights="{$default_heights}"
     data-default-controller-string="{$type}-by-cvss"
-    data-controllers-pref-id="{$controllers_pref_id}"
-    data-heights-pref-id="{$heights_pref_id}"
     data-dashboard-controls="top-dashboard-controls"
     data-no-chart-links="{/envelope/params/no_chart_links}"
     data-max-components="4">
@@ -862,30 +819,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template name="js-secinfo-top-visualization">
   <xsl:param name="type" select="'nvt'"/>
-  <!-- Setting UUIDs for chart selection preferences -->
-  <xsl:param name="controllers_pref_id">
-    <xsl:choose>
-      <xsl:when test="$type='nvt'">f68d9369-1945-477b-968f-121c6029971b</xsl:when>
-      <xsl:when test="$type='cve'">815ddd2e-8654-46c7-a05b-d73224102240</xsl:when>
-      <xsl:when test="$type='cpe'">9cff9b4d-b164-43ce-8687-f2360afc7500</xsl:when>
-      <xsl:when test="$type='ovaldef'">9563efc0-9f4e-4d1f-8f8d-0205e32b90a4</xsl:when>
-      <xsl:when test="$type='cert_bund_adv'">a6946f44-480f-4f37-8a73-28a4cd5310c4</xsl:when>
-      <xsl:when test="$type='dfn_cert_adv'">9812ea49-682d-4f99-b3cc-eca051d1ce59</xsl:when>
-      <xsl:when test="$type='allinfo'">4c7b1ea7-b7e6-4d12-9791-eb9f72b6f864</xsl:when>
-    </xsl:choose>
-  </xsl:param>
-  <!-- Setting UUIDs for dashboard row height preferences -->
-  <xsl:param name="heights_pref_id">
-    <xsl:choose>
-      <xsl:when test="$type='nvt'">af89a84a-d3ec-43a8-97a8-aa688bf093bc</xsl:when>
-      <xsl:when test="$type='cve'">418a5746-d68a-4a2d-864a-0da993b32220</xsl:when>
-      <xsl:when test="$type='cpe'">629fdb73-35fa-4247-9018-338c202f7c03</xsl:when>
-      <xsl:when test="$type='ovaldef'">fe1610a3-4e87-4b0d-9b7a-f0f66fef586b</xsl:when>
-      <xsl:when test="$type='cert_bund_adv'">469d50da-880a-4bfc-88ed-22e53764c683</xsl:when>
-      <xsl:when test="$type='dfn_cert_adv'">72014b52-4389-435d-9438-8c13601ecbd2</xsl:when>
-      <xsl:when test="$type='allinfo'">985f38eb-1a30-4a35-abb6-3eec05b5d54a</xsl:when>
-    </xsl:choose>
-  </xsl:param>
   <!-- Default chart selections:
         Controller names of boxes in a row separated with "|",
         rows separated with "#" -->
@@ -908,24 +841,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:choose>
   </xsl:param>
 
-  <xsl:variable name="controllers">
+  <!-- Setting UUIDs for chart selection preferences -->
+  <xsl:param name="config_pref_id">
     <xsl:choose>
-      <xsl:when test="/envelope/chart_preferences/chart_preference[@id = $controllers_pref_id]">
-        <xsl:value-of select="/envelope/chart_preferences/chart_preference[@id = $controllers_pref_id]/value"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="$default_controllers"/>
-      </xsl:otherwise>
+      <xsl:when test="$type='nvt'">f68d9369-1945-477b-968f-121c6029971b</xsl:when>
+      <xsl:when test="$type='cve'">815ddd2e-8654-46c7-a05b-d73224102240</xsl:when>
+      <xsl:when test="$type='cpe'">9cff9b4d-b164-43ce-8687-f2360afc7500</xsl:when>
+      <xsl:when test="$type='ovaldef'">9563efc0-9f4e-4d1f-8f8d-0205e32b90a4</xsl:when>
+      <xsl:when test="$type='cert_bund_adv'">a6946f44-480f-4f37-8a73-28a4cd5310c4</xsl:when>
+      <xsl:when test="$type='dfn_cert_adv'">9812ea49-682d-4f99-b3cc-eca051d1ce59</xsl:when>
+      <xsl:when test="$type='allinfo'">4c7b1ea7-b7e6-4d12-9791-eb9f72b6f864</xsl:when>
     </xsl:choose>
-  </xsl:variable>
-  <xsl:variable name="heights">
+  </xsl:param>
+
+  <xsl:variable name="config">
     <xsl:choose>
-      <xsl:when test="/envelope/chart_preferences/chart_preference[@id = $heights_pref_id]">
-        <xsl:value-of select="gsa:escape-js (/envelope/chart_preferences/chart_preference[@id = $heights_pref_id]/value)"/>
+      <xsl:when test="/envelope/chart_preferences/chart_preference[@id = $config_pref_id]">
+        <xsl:value-of select="/envelope/chart_preferences/chart_preference[@id = $config_pref_id]/value"/>
       </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="$default_heights"/>
-      </xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
 
@@ -936,13 +869,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     data-dashboard-name="top-dashboard"
     data-filter="{$filter}"
     data-filters-id="{$filt_id}"
-    data-controllers="{$controllers}"
-    data-heights="{$heights}"
+    data-config="{$config}"
+    data-config-pref-id="{$config_pref_id}"
     data-default-controllers="{$default_controllers}"
     data-default-controller-string="{$type}-by-cvss"
     data-default-heights="{$default_heights}"
-    data-controllers-pref-id="{$controllers_pref_id}"
-    data-heights-pref-id="{$heights_pref_id}"
     data-dashboard-controls="top-dashboard-controls"
     data-no-chart-links="{/envelope/params/no_chart_links}"
     data-max-components="4">
@@ -1011,36 +942,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="js-notes-top-visualization">
-  <!-- Setting UUID for chart selection preferences -->
-  <xsl:variable name="controllers_pref_id" select="'ce7b121-c609-47b0-ab57-fd020a0336f4'"/>
-  <!-- Setting UUIDs for row height preferences -->
-  <xsl:variable name="heights_pref_id" select="'05eb63e9-ccd7-481d-841d-9406d3281040'"/>
-
   <xsl:variable name="default_controllers" select="'note-by-active-days|note-by-created|note-by-text-words'"/>
   <!-- Default row heights, rows separated with "#",
         number of rows must match default_controllers -->
   <xsl:variable name="default_heights" select="'280'"/>
 
+  <!-- Setting UUID for chart selection preferences -->
+  <xsl:variable name="config_pref_id" select="'ce7b121-c609-47b0-ab57-fd020a0336f4'"/>
+
   <xsl:variable name="envelope" select="/envelope"/>
 
-  <xsl:variable name="controllers">
+  <xsl:variable name="config">
     <xsl:choose>
-      <xsl:when test="/envelope/chart_preferences/chart_preference[@id = $controllers_pref_id]">
-        <xsl:value-of select="/envelope/chart_preferences/chart_preference[@id = $controllers_pref_id]/value"/>
+      <xsl:when test="/envelope/chart_preferences/chart_preference[@id = $config_pref_id]">
+        <xsl:value-of select="/envelope/chart_preferences/chart_preference[@id = $config_pref_id]/value"/>
       </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="$default_controllers"/>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-  <xsl:variable name="heights">
-    <xsl:choose>
-      <xsl:when test="/envelope/chart_preferences/chart_preference[@id = $heights_pref_id]">
-        <xsl:value-of select="gsa:escape-js (/envelope/chart_preferences/chart_preference[@id = $heights_pref_id]/value)"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="$default_heights"/>
-      </xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
 
@@ -1054,12 +970,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       data-dashboard-name="top-notes-dashboard"
       data-filter="{$filter}"
       data-filters-id="{$filt_id}"
-      data-controllers="{$controllers}"
-      data-heights="{$heights}"
+      data-config="{$config}"
+      data-config-pref-id="{$config_pref_id}"
       data-default-controllers="{$default_controllers}"
       data-default-heights="{$default_heights}"
-      data-controllers-pref-id="{$controllers_pref_id}"
-      data-heights-pref-id="{$heights_pref_id}"
       data-default-controller-string="note-by-active-days"
       data-dashboard-controls="top-dashboard-controls"
       data-max-components="4">
@@ -1074,36 +988,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="js-overrides-top-visualization">
-  <!-- Setting UUID for chart selection preferences -->
-  <xsl:variable name="controllers_pref_id" select="'054862fe-0781-4527-b1aa-2113bcd16ce7'"/>
-  <!-- Setting UUIDs for row height preferences -->
-  <xsl:variable name="heights_pref_id" select="'a8c246f9-0506-4d8d-be35-a3befb22fbca'"/>
-
   <xsl:variable name="default_controllers" select="'override-by-active-days|override-by-created|override-by-text-words'"/>
   <!-- Default row heights, rows separated with "#",
         number of rows must match default_controllers -->
   <xsl:variable name="default_heights" select="'280'"/>
 
+  <!-- Setting UUID for chart selection preferences -->
+  <xsl:variable name="config_pref_id" select="'054862fe-0781-4527-b1aa-2113bcd16ce7'"/>
+
   <xsl:variable name="envelope" select="/envelope"/>
 
-  <xsl:variable name="controllers">
+  <xsl:variable name="config">
     <xsl:choose>
-      <xsl:when test="/envelope/chart_preferences/chart_preference[@id = $controllers_pref_id]">
-        <xsl:value-of select="/envelope/chart_preferences/chart_preference[@id = $controllers_pref_id]/value"/>
+      <xsl:when test="/envelope/chart_preferences/chart_preference[@id = $config_pref_id]">
+        <xsl:value-of select="/envelope/chart_preferences/chart_preference[@id = $config_pref_id]/value"/>
       </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="$default_controllers"/>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-  <xsl:variable name="heights">
-    <xsl:choose>
-      <xsl:when test="/envelope/chart_preferences/chart_preference[@id = $heights_pref_id]">
-        <xsl:value-of select="gsa:escape-js (/envelope/chart_preferences/chart_preference[@id = $heights_pref_id]/value)"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="$default_heights"/>
-      </xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
 
@@ -1115,14 +1014,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </div>
     <div class="dashboard" id="top-dashboard"
       data-dashboard-name="top-overrides-dashboard"
+      data-config="{$config}"
+      data-config-pref-id="{$config_pref_id}"
       data-filter="{$filter}"
       data-filters-id="{$filt_id}"
-      data-controllers="{$controllers}"
-      data-heights="{$heights}"
       data-default-controllers="{$default_controllers}"
       data-default-heights="{$default_heights}"
-      data-controllers-pref-id="{$controllers_pref_id}"
-      data-heights-pref-id="{$heights_pref_id}"
       data-default-controller-string="override-by-active-days"
       data-dashboard-controls="top-dashboard-controls"
       data-max-components="4">
@@ -1211,40 +1108,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:variable name="envelope" select="/envelope"/>
 
   <!-- Setting UUID for chart selection preferences -->
-  <xsl:variable name="controllers_pref_id" select="'d97eca9f-0386-4e5d-88f2-0ed7f60c0646'"/>
-  <!-- Setting UUID for chart selection preferences -->
-  <xsl:variable name="filters_pref_id" select="'8190fe85-3bc3-47fb-a9d4-bf1c8fcaa79c'"/>
-  <!-- Setting UUIDs for row height preferences -->
-  <xsl:variable name="heights_pref_id" select="'fdde8a8a-0d10-491c-8eb0-46eb0792b417'"/>
+  <xsl:variable name="config_pref_id" select="'d97eca9f-0386-4e5d-88f2-0ed7f60c0646'"/>
 
-  <xsl:variable name="controllers">
+  <xsl:variable name="config">
     <xsl:choose>
-      <xsl:when test="/envelope/chart_preferences/chart_preference[@id = $controllers_pref_id]">
-        <xsl:value-of select="/envelope/chart_preferences/chart_preference[@id = $controllers_pref_id]/value"/>
+      <xsl:when test="/envelope/chart_preferences/chart_preference[@id = $config_pref_id]">
+        <xsl:value-of select="/envelope/chart_preferences/chart_preference[@id = $config_pref_id]/value"/>
       </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="$default_controllers"/>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-  <xsl:variable name="heights">
-    <xsl:choose>
-      <xsl:when test="/envelope/chart_preferences/chart_preference[@id = $heights_pref_id]">
-        <xsl:value-of select="gsa:escape-js (/envelope/chart_preferences/chart_preference[@id = $heights_pref_id]/value)"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="$default_heights"/>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-  <xsl:variable name="filters_string">
-    <xsl:choose>
-      <xsl:when test="/envelope/chart_preferences/chart_preference[@id = $filters_pref_id]">
-        <xsl:value-of select="gsa:escape-js (/envelope/chart_preferences/chart_preference[@id = $filters_pref_id]/value)"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="$default_filters"/>
-      </xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
 
@@ -1258,15 +1128,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
   <div class="section-box">
     <div id="main-dashboard" class="dashboard" data-dashboard-name="main-dashboard"
-      data-controllers="{$controllers}"
-      data-filters-string="{$filters_string}"
-      data-heights="{$heights}"
+      data-config="{$config}"
+      data-config-pref-id="{$config_pref_id}"
       data-default-controllers="{$default_controllers}"
       data-default-filters="{$default_filters}"
       data-default-heights="{$default_heights}"
-      data-controllers-pref-id="{$controllers_pref_id}"
-      data-filters-pref-id="{$filters_pref_id}"
-      data-heights-pref-id="{$heights_pref_id}"
       data-default-controller-string="task-by-severity-class"
       data-dashboard-controls="main-dashboard-controls"
       data-no-chart-links="{/envelope/params/no_chart_links}"
@@ -1321,40 +1187,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:variable name="envelope" select="/envelope"/>
 
   <!-- Setting UUID for chart selection preferences -->
-  <xsl:variable name="controllers_pref_id" select="'c7584d7c-649f-4f8b-9ded-9e1dc20f24c8'"/>
-  <!-- Setting UUID for chart selection preferences -->
-  <xsl:variable name="filters_pref_id" select="'39311e88-0d10-4a46-bc0c-5becd034667b'"/>
-  <!-- Setting UUIDs for row height preferences -->
-  <xsl:variable name="heights_pref_id" select="'fd846514-cfb1-48b1-8deb-0cf3b5eaedcd'"/>
+  <xsl:variable name="config_pref_id" select="'c7584d7c-649f-4f8b-9ded-9e1dc20f24c8'"/>
 
-  <xsl:variable name="controllers">
+  <xsl:variable name="config">
     <xsl:choose>
-      <xsl:when test="/envelope/chart_preferences/chart_preference[@id = $controllers_pref_id]">
-        <xsl:value-of select="/envelope/chart_preferences/chart_preference[@id = $controllers_pref_id]/value"/>
+      <xsl:when test="/envelope/chart_preferences/chart_preference[@id = $config_pref_id]">
+        <xsl:value-of select="/envelope/chart_preferences/chart_preference[@id = $config_pref_id]/value"/>
       </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="$default_controllers"/>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-  <xsl:variable name="heights">
-    <xsl:choose>
-      <xsl:when test="/envelope/chart_preferences/chart_preference[@id = $heights_pref_id]">
-        <xsl:value-of select="gsa:escape-js (/envelope/chart_preferences/chart_preference[@id = $heights_pref_id]/value)"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="$default_heights"/>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-  <xsl:variable name="filters_string">
-    <xsl:choose>
-      <xsl:when test="/envelope/chart_preferences/chart_preference[@id = $filters_pref_id]">
-        <xsl:value-of select="gsa:escape-js (/envelope/chart_preferences/chart_preference[@id = $filters_pref_id]/value)"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="$default_filters"/>
-      </xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
 
@@ -1368,15 +1207,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
   <div class="section-box">
     <div id="scans-dashboard" class="dashboard" data-dashboard-name="scans-dashboard"
-      data-controllers="{$controllers}"
-      data-filters-string="{$filters_string}"
-      data-heights="{$heights}"
+      data-config="{$config}"
+      data-config-pref-id="{$config_pref_id}"
       data-default-controllers="{$default_controllers}"
       data-default-filters="{$default_filters}"
       data-default-heights="{$default_heights}"
-      data-controllers-pref-id="{$controllers_pref_id}"
-      data-filters-pref-id="{$filters_pref_id}"
-      data-heights-pref-id="{$heights_pref_id}"
       data-default-controller-string="task-by-severity-class"
       data-dashboard-controls="scans-dashboard-controls"
       data-no-chart-links="{/envelope/params/no_chart_links}"
@@ -1467,13 +1302,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
   <div class="section-box">
     <div id="assets-dashboard" class="dashboard" data-dashboard-name="assets-dashboard"
-      data-controllers="{$controllers}"
+      data-config="{$controllers}"
       data-filters-string="{$filters_string}"
       data-heights="{$heights}"
       data-default-controllers="{$default_controllers}"
       data-default-filters="{$default_filters}"
       data-default-heights="{$default_heights}"
-      data-controllers-pref-id="{$controllers_pref_id}"
+      data-config-pref-id="{$controllers_pref_id}"
       data-filters-pref-id="{$filters_pref_id}"
       data-heights-pref-id="{$heights_pref_id}"
       data-default-controller-string="host-by-severity-class"
@@ -1534,40 +1369,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:variable name="envelope" select="/envelope"/>
 
   <!-- Setting UUID for chart selection preferences -->
-  <xsl:variable name="controllers_pref_id" select="'84ab32da-fe69-44d8-8a8f-70034cf28d4e'"/>
-  <!-- Setting UUIDs for row height preferences -->
-  <xsl:variable name="heights_pref_id" select="'42d48049-3153-43bf-b30d-72ca5ab1eb49'"/>
-  <!-- Setting UUID for chart selection preferences -->
-  <xsl:variable name="filters_pref_id" select="'517d0efe-426e-49a9-baa7-eda2832c93e8'"/>
+  <xsl:variable name="config_pref_id" select="'84ab32da-fe69-44d8-8a8f-70034cf28d4e'"/>
 
-  <xsl:variable name="controllers">
+  <xsl:variable name="config">
     <xsl:choose>
-      <xsl:when test="/envelope/chart_preferences/chart_preference[@id = $controllers_pref_id]">
-        <xsl:value-of select="/envelope/chart_preferences/chart_preference[@id = $controllers_pref_id]/value"/>
+      <xsl:when test="/envelope/chart_preferences/chart_preference[@id = $config_pref_id]">
+        <xsl:value-of select="/envelope/chart_preferences/chart_preference[@id = $config_pref_id]/value"/>
       </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="$default_controllers"/>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-  <xsl:variable name="heights">
-    <xsl:choose>
-      <xsl:when test="/envelope/chart_preferences/chart_preference[@id = $heights_pref_id]">
-        <xsl:value-of select="gsa:escape-js (/envelope/chart_preferences/chart_preference[@id = $heights_pref_id]/value)"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="$default_heights"/>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-  <xsl:variable name="filters_string">
-    <xsl:choose>
-      <xsl:when test="/envelope/chart_preferences/chart_preference[@id = $filters_pref_id]">
-        <xsl:value-of select="gsa:escape-js (/envelope/chart_preferences/chart_preference[@id = $filters_pref_id]/value)"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="$default_filters"/>
-      </xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
 
@@ -1581,15 +1389,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
   <div class="section-box">
     <div id="secinfo-dashboard" class="dashboard" data-dashboard-name="secinfo-dashboard"
-      data-controllers="{$controllers}"
-      data-filters-string="{$filters_string}"
-      data-heights="{$heights}"
+      data-config="{$config}"
+      data-config-pref-id="{$config_pref_id}"
       data-default-controllers="{$default_controllers}"
       data-default-filters="{$default_filters}"
       data-default-heights="{$default_heights}"
-      data-controllers-pref-id="{$controllers_pref_id}"
-      data-filters-pref-id="{$filters_pref_id}"
-      data-heights-pref-id="{$heights_pref_id}"
       data-default-controller-string="nvt-by-cvss"
       data-dashboard-controls="secinfo-dashboard-controls"
       data-no-chart-links="{/envelope/params/no_chart_links}"
