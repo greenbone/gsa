@@ -1,5 +1,10 @@
 2016-08-13  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_chart_helpers.js: Update coding style to remove
+	style checker warnings.
+
+2016-08-13  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/omp.xsl (get_tasks_chart, get_aggregates,
 	get_assets_chart): Change data-controllers to data-default-controllers.
 	data-controllers now expects to be a json config. Therefore use

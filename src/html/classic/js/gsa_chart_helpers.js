@@ -810,7 +810,7 @@
         }
 
         // Mark first node in route as scanner
-        if (gsa.is_defined (nodes_by_link_id[route_split[0]])) {
+        if (gsa.is_defined(nodes_by_link_id[route_split[0]])) {
           nodes_by_link_id[route_split[0]].is_scanner = true;
         }
       }
@@ -2125,7 +2125,7 @@
         var col = columns [col_i];
         var record = records[row][col];
         if (gsa.has_value(record)) {
-          if (gsa.is_defined (column_info)) {
+          if (gsa.is_defined(column_info)) {
             csv_data += '"' + gch.format_data(record, column_info.columns[col])
               .replace('"', '""') + '"';
           }
@@ -2216,7 +2216,7 @@
         .attr('class', row_class);
       for (col_i in columns) {
         var col = columns[col_i];
-        if (gsa.is_defined (column_info)) {
+        if (gsa.is_defined(column_info)) {
           tr_s.append('td')
                 .text(gch.format_data(records[row][col],
                                       column_info.columns[col]));
@@ -2247,11 +2247,10 @@
    */
   gch.clone_svg = function(elem) {
     var clone;
-    if ($(elem).hasClass ('remove_on_static')) {
+    if ($(elem).hasClass('remove_on_static')) {
       return null;
     }
     else {
-      var child_elems;
       // replace "a" elems with "g"
       if (elem.tagName === 'a') {
         clone = $('<g/>');
@@ -2265,28 +2264,28 @@
            attr_index++) {
         var attribute = elem.attributes[attr_index];
         // remove href attributes
-        if (attribute.name !== 'href')
-          clone.attr(attribute.prefix 
-                      ? attribute.prefix + ':' + attribute.name
-                      : attribute.name,
-                     attribute.value);
+        if (attribute.name !== 'href') {
+          clone.attr(attribute.prefix ?
+              attribute.prefix + ':' + attribute.name :
+              attribute.name,
+              attribute.value);
+        }
       }
 
-      for (var child_index = 0;
-           child_index < elem.childNodes.length;
-           child_index++) {
+      for (var child_index = 0; child_index < elem.childNodes.length;
+          child_index++) {
         var child = elem.childNodes[child_index];
         switch (child.nodeType) {
           case Node.ELEMENT_NODE:
-            clone.append (gch.clone_svg (child));
+            clone.append(gch.clone_svg(child));
             break;
           default:
-            clone.append (child.cloneNode());
+            clone.append(child.cloneNode());
         }
       }
       return clone[0];
     }
-  }
+  };
 
   /**
    * Convert SVG element to export format.
