@@ -2522,17 +2522,15 @@
 
     this.selector_label = chart_title;
 
-    this.title_generator = get_title_generator(chart_title, count_field);
-
-    this.current_request = null;
-
     this.id = chart_name + '@' + display.id;
 
     this.generator = gch.new_chart_generator(this.chart_type);
 
-    // TODO: Move title generator and style function calls.
-    this.generator.setTitleGenerator(this.title_generator);
+    this.generator.setTitleGenerator(
+        get_title_generator(chart_title, count_field));
 
+    // FIXME move this to the corresponding chart generators. they should now
+    // their default style
     if (this.chart_template === 'info_by_cvss' ||
         this.chart_template === 'recent_info_by_cvss' &&
         this.chart_type !== 'donut') {

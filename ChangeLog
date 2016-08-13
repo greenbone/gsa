@@ -1,5 +1,11 @@
 2016-08-13  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_dashboard.js (ChartController): Remove unnecessary
+	and unused properties title_generator and current_request from ChartGenerator
+	instances.
+
+2016-08-13  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_chart_helpers.js: Update coding style to remove
 	style checker warnings.
 
