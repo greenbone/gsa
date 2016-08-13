@@ -2396,6 +2396,7 @@
   gch.get_chart_generator = function(chart_type) {
     var Generator = gch.chart_generators[chart_type];
     if (!gsa.has_value(Generator)) {
+      console.warn('Could not find chart generator for', chart_type);
       return null;
     }
     return Generator;

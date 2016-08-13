@@ -1,5 +1,10 @@
 2016-08-13  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_chart_helpers.js (gch.get_chart_generator): Warn if
+	chart generator could not be found.
+
+2016-08-13  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/graphics.xsl (js-secinfo-top-visualization): Add missing
 	chart title for nvt-by-solution-type.
 
