@@ -1,5 +1,10 @@
 2016-08-13  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_dashboard.js (split_rows, split_elements): Check if
+	expected values are a strings to avoid tracebacks if they aren't.
+
+2016-08-13  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_dashboard.js (get_chart_title): Fix returning a
 	valid title generator function when no chart title is provided.
 

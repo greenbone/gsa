@@ -3404,11 +3404,11 @@
   }
 
   function split_rows(row_string) {
-    return row_string ? row_string.split('#') : [];
+    return gsa.is_string(row_string) ? row_string.split('#') : [];
   }
 
   function split_elements(elements_string) {
-    return elements_string ? elements_string.split('|') : [];
+    return gsa.is_string(elements_string) ? elements_string.split('|') : [];
   }
 
 })(window, window, window.document, window.gsa, window.d3, window.$,
