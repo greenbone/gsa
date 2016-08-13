@@ -3400,7 +3400,7 @@
     }
 
     log.error('Chart title not set. Please add a data-chart-title attribute');
-    return gsa._('Unkown chart');
+    return gch.title_static(gsa._('Unkown chart'));
   }
 
   function split_rows(row_string) {
