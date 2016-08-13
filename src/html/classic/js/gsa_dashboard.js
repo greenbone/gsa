@@ -152,19 +152,12 @@
    *
    * @constructor
    *
-   * @param id     The id of the dashboard and its container element
-   * @param controllers_string Names of the controllers for the displays
-   * @param heights_string '|' seperated values for the height of the rows
-   * @param filters_string uuids of the filters for the displays
+   * @param id             The id of the dashboard and its container element
+   * @param config         Names of the controllers for the displays
    * @param dashboard_opts Optional parameters for the dashboard and its
    *                       components.
    */
-  function Dashboard(id, controllers_string, heights_string, filters_string,
-        dashboard_opts) {
-    if (gsa.has_value(heights_string)) {
-      // ensure a string
-      heights_string += '';
-    }
+  function Dashboard(id, config, dashboard_opts) {
     this.id = id;
     this.elem = $('#' + id);
     this.rows = {};
@@ -180,29 +173,20 @@
 
     this.edit_mode = false;
 
-    this.controllers_string = controllers_string;
-    this.prev_controllers_string = controllers_string;
+    this.config = config;
+    this.config_pref_id = '';
+    this.prev_config = config ? JSON.stringify(config) : '';
+
     this.default_controller_string = 'by-cvss';
-    this.controllers_pref_id = '';
 
-    // Row heights preference
-    this.heights_pref_id = '';
-    this.heights_string = heights_string;
-    this.prev_heights_string = heights_string;
-
-    // Filter selection preference
-    this.filters_string = filters_string;
-    this.filters_pref_id = '';
-    // Filter String for new displays
     this.default_filter_string = '';
-    this.prev_filters_string = filters_string;
 
     this.controller_factories = {};
     this.filters = [EMPTY_FILTER];
 
     this.reordering = false; // indicator if the dashboard rows are currently reorderd
 
-    this._allUnchanged();
+    this._configUnchanged();
 
     this.init();
   }
@@ -214,17 +198,8 @@
     var self = this;
 
     if (this.dashboard_opts) {
-      if (this.dashboard_opts.controllers_pref_id) {
-        this.controllers_pref_id = this.dashboard_opts.controllers_pref_id;
-      }
-      if (this.dashboard_opts.heights_pref_id) {
-        this.heights_pref_id = this.dashboard_opts.heights_pref_id;
-      }
-      if (this.dashboard_opts.filters_pref_id) {
-        this.filters_pref_id = this.dashboard_opts.filters_pref_id;
-      }
-      if (this.dashboard_opts.default_filter_string) {
-        this.default_filter_string = this.dashboard_opts.default_filter_string;
+      if (this.dashboard_opts.config_pref_id) {
+        this.config_pref_id = this.dashboard_opts.config_pref_id;
       }
       if (this.dashboard_opts.default_controller_string) {
         this.default_controller_string =
@@ -467,8 +442,8 @@
 
     if (this.hasChanged()) {
       // reset displays
-      this.updateDisplaysFromStrings();
-      this._allUnchanged();
+      this.updateDisplaysFromConfig();
+      this._configUnchanged();
     }
   };
 
@@ -483,7 +458,7 @@
     }
 
     this.updateDisplaysFromDefaultStrings();
-    this._allChanged();
+    this._configChanged();
   };
 
   /**
@@ -524,8 +499,10 @@
     if (!row) {
       row = this.addNewRow({position: 'bottom'});
     }
-    row.createNewDisplay(this.default_controller_string,
-        this.default_filter_string);
+
+    var config = create_display_config_from_strings(
+        this.default_controller_string, this.default_filter_string);
+    row.createNewDisplay(config);
     row.resize();
 
     if (!this.canAddDisplay()) {
@@ -562,17 +539,16 @@
     if (!gsa.is_defined(options)) {
       options = {};
     }
-    if (!gsa.is_defined(options.height)) {
-      options.height = 280;
-    }
-    else if (options.height < 150) {
-      options.height = 150;
+    if (!gsa.is_defined(options.config)) {
+      options.config = {
+        type: 'row',
+        data: [],
+      };
     }
 
-    var row = new DashboardRow(this.getNextRowId(),
-        options.row_controllers_string, options.row_filters_string,
+    var row = new DashboardRow(this.getNextRowId(), options.config,
         this.controller_factories, this.filters,
-        options.height, this.width, this.edit_mode, this.dashboard_opts);
+        this.width, this.edit_mode, this.dashboard_opts);
 
     this.total_displays += row.getNumDisplays();
 
@@ -653,7 +629,7 @@
       log.debug('on display removed', self.reordering);
       self.total_displays -= 1;
       self._removeEmptyRows(); // triggers row removed if empty
-      self._allChanged();
+      self._configChanged();
 
       if (self.dashboard_controls && self.edit_mode && self.canAddDisplay()) {
         self.new_display_button.show();
@@ -662,19 +638,19 @@
     row.on('display_added', function(event, display) {
       log.debug('on display added');
       self.total_displays += 1;
-      self._allChanged();
+      self._configChanged();
     });
     row.on('display_filter_changed', function(event, display) {
       log.debug('on display filter changed');
-      self.filters_changed = true;
+      self._configChanged();
     });
     row.on('display_controller_changed', function(event, display) {
       log.debug('on display controller changed');
-      self.controllers_changed = true;
+      self._configChanged();
     });
     row.on('resized', function(event, row) {
       log.debug('on resized');
-      self.heights_changed = true;
+      self._configChanged();
     });
     row.on('reorder', function(event, row) {
       log.debug('on reorder');
@@ -683,7 +659,7 @@
       log.debug('on reordered');
       self._removeEmptyRows();
       self.reordering = false;
-      self._allChanged();
+      self._configChanged();
     });
     row.on('removed', function(event, row) {
       log.debug('on removed');
@@ -702,7 +678,7 @@
    */
   Dashboard.prototype.unregisterRow = function(row) {
     delete this.rows[row.id];
-    this._allChanged();
+    this._configChanged();
     return this;
   };
 
@@ -717,160 +693,46 @@
   };
 
   /**
-   * Updates the controllers string of the dashboard using the ones of the rows.
+   * Returns the newly created config from all rows
    *
-   * @return  This dashboard
+   * @return An array of row configs
    */
-  Dashboard.prototype.updateControllersString = function() {
-    var self = this;
-    self.controllers_string = '';
-
-    self.forEachRowOrdered(function(row) {
-      var row_controllers_string = row.getControllersString();
-      if (row.getNumDisplays() !== 0) {
-        self.controllers_string += row_controllers_string;
-        self.controllers_string += '#';
-      }
-    });
-
-    self.controllers_string = self.controllers_string.slice(0, -1);
-
-    return self;
-  };
-
-  /**
-   * Saves the controllers string to the user's setting.
-   *
-   * @return  This dashboard
-   */
-  Dashboard.prototype.saveControllersString = function() {
-    if (this.controllers_string !== this.prev_controllers_string) {
-
-      if (this.controllers_pref_id !== '') {
-
-        this.prev_controllers_string = this.controllers_string;
-
-        if (this.controllers_pref_request) {
-          this.controllers_pref_request.abort();
-        }
-
-        this.controllers_pref_request = d3.xhr('/omp');
-
-        var form_data = new FormData();
-        form_data.append('chart_preference_id', this.controllers_pref_id);
-        form_data.append('chart_preference_value', this.controllers_string);
-        form_data.append('token', gsa.gsa_token);
-        form_data.append('cmd', 'save_chart_preference');
-
-        log.debug('saving dashboard controllers string');
-
-        this.controllers_pref_request.post(form_data);
-      }
-    }
-    return this;
-  };
-
-  /**
-   * Updates the filters string of the dashboard using the ones of the rows.
-   *
-   * @return  This dashboard
-   */
-  Dashboard.prototype.updateFiltersString = function() {
-    var self = this;
-    self.filters_string = '';
-
-    self.forEachRowOrdered(function(row) {
-      var row_filters_string = row.getFiltersString();
-      if (row.getNumDisplays() !== 0) {
-        self.filters_string += row_filters_string;
-        self.filters_string += '#';
-      }
-    });
-
-    self.filters_string = this.filters_string.slice(0, -1);
-
-    return this;
-  };
-
-  /**
-   * Saves the filters string to the user's setting.
-   *
-   * @return  This dashboard
-   */
-  Dashboard.prototype.saveFiltersString = function() {
-    if (this.filters_string !== this.prev_filters_string) {
-
-      if (this.filters_pref_id !== '') {
-
-        this.prev_filters_string = this.filters_string;
-
-        if (this.filters_pref_request) {
-          this.filters_pref_request.abort();
-        }
-
-        this.filters_pref_request = d3.xhr('/omp');
-
-        var form_data = new FormData();
-        form_data.append('chart_preference_id', this.filters_pref_id);
-        form_data.append('chart_preference_value', this.filters_string);
-        form_data.append('token', gsa.gsa_token);
-        form_data.append('cmd', 'save_chart_preference');
-
-        log.debug('saving dashboard filters string');
-
-        this.filters_pref_request.post(form_data);
-      }
-    }
-    return this;
-  };
-
-  /**
-   * Updates the heights string of the dashboard from the containing rows
-   *
-   * @return  This dashboard
-   */
-  Dashboard.prototype.updateHeightsString =  function() {
-    var self = this;
-    this.heights_string = '';
-
+  Dashboard.prototype.getConfig = function() {
+    var config = [];
     this.forEachRowOrdered(function(row) {
-      if (row.getNumDisplays() !== 0) {
-        var row_height = row.getHeight();
-        self.heights_string += row_height;
-        self.heights_string += '#';
-      }
+      config.push(row.getConfig());
     });
-
-    this.heights_string = this.heights_string.slice(0, -1);
-
-    return this;
+    return {
+      version: 1,
+      data: config,
+    };
   };
 
-  /**
-   * Saves the heights string of the dashboard to the user's setting.
-   *
-   * @return  This dashboard
-   */
-  Dashboard.prototype.saveHeightsString = function() {
-    if (this.heights_string !== this.prev_heights_string) {
-      this.prev_heights_string = this.heights_string;
+  Dashboard.prototype.saveConfig = function() {
+    this.config = this.getConfig();
 
-      if (this.heights_pref_id !== '' && gsa.has_value(this.heights_pref_id)) {
-        if (this.heights_pref_request) {
-          this.heights_pref_request.abort();
-        }
+    var json_config = JSON.stringify(this.config);
 
-        this.heights_pref_request = d3.xhr('/omp');
-
-        var form_data = new FormData();
-        form_data.append('chart_preference_id', this.heights_pref_id);
-        form_data.append('chart_preference_value', this.heights_string);
-        form_data.append('token', gsa.gsa_token);
-        form_data.append('cmd', 'save_chart_preference');
-
-        this.heights_pref_request.post(form_data);
+    if (json_config !== this.prev_config) {
+      if (this.config_pref_request) {
+        this.config_pref_request.abort();
       }
+
+      this.config_pref_request = d3.xhr('/omp');
+
+      var form_data = new FormData();
+      form_data.append('chart_preference_id', this.config_pref_id);
+      form_data.append('chart_preference_value', json_config);
+      form_data.append('token', gsa.gsa_token);
+      form_data.append('cmd', 'save_chart_preference');
+
+      log.debug('saving dashboard config', json_config);
+
+      this.config_pref_request.post(form_data);
+
+      this.prev_config = json_config;
     }
+    this._configUnchanged();
     return this;
   };
 
@@ -883,51 +745,9 @@
    * @return  This dashboard
    */
   Dashboard.prototype.save = function(force) {
-    if (force || this.hasFilterChanged()) {
-      this.saveFilters();
+    if (force || this.hasConfigChanged()) {
+      this.saveConfig();
     }
-    if (force || this.hasControllerChanged()) {
-      this.saveControllers();
-    }
-    if (force || this.hasHeightsChanged()) {
-      this.saveHeights();
-    }
-    return this;
-  };
-
-  /**
-   * Update the heights string and save it to the user's settings.
-   *
-   * @return  This dashboard
-   */
-  Dashboard.prototype.saveHeights = function() {
-    this.updateHeightsString();
-    this.saveHeightsString();
-    this.heights_changed = false;
-    return this;
-  };
-
-  /**
-   * Update the controllers string and save it to the user's settings.
-   *
-   * @return  This dashboard
-   */
-  Dashboard.prototype.saveControllers = function() {
-    this.updateControllersString();
-    this.saveControllersString();
-    this.controllers_changed = false;
-    return this;
-  };
-
-  /**
-   * Update the filters string and save it to the user's settings.
-   *
-   * @return  This dashboard
-   */
-  Dashboard.prototype.saveFilters = function() {
-    this.updateFiltersString();
-    this.saveFiltersString();
-    this.filters_changed = false;
     return this;
   };
 
@@ -984,40 +804,79 @@
     });
   };
 
+  Dashboard.prototype.initDisplays = function() {
+    if (gsa.is_object(this.config) && gsa.is_array(this.config.data)) {
+      return this.initDisplaysFromConfig();
+    }
+    return this.initDisplaysFromStrings();
+  };
+
+  Dashboard.prototype.initDisplaysFromConfig = function() {
+    var self = this;
+
+    log.debug('Init displays from config', this.config);
+
+    this.config.data.forEach(function(config, index) {
+      self.addNewRow({config: config});
+    });
+    return this;
+  };
+
   /**
-   * Initializes the Displays with the values in the displays string.
+   * Initializes the Displays with the values in the defailt displays string.
    *
    * @return  This dashboard
    */
-  Dashboard.prototype.initDisplaysFromString = function() {
+  Dashboard.prototype.initDisplaysFromStrings = function() {
 
-    var row_controllers_string_list = split_rows(this.controllers_string);
-    var row_filters_string_list = split_rows(this.filters_string);
+    log.debug('Init displays from string', this.default_controllers_string,
+        this.default_filters_string, this.default_heights_string);
+
+    var row_controllers_string_list = split_rows(
+        this.default_controllers_string);
+    var row_filters_string_list = split_rows(this.default_filters_string);
     var row_heights_list = split_rows(this.heights_string);
 
     for (var index in row_controllers_string_list) {
-      var height = parseInt(row_heights_list[index]);
-      if (isNaN(height)) {
-        height = undefined;
-      }
+      var height = gsa.parse_int(row_heights_list[index]);
+      var config = create_row_config_from_strings(
+          row_controllers_string_list[index], row_filters_string_list[index],
+          height);
 
-      this.addNewRow({
-        row_controllers_string: row_controllers_string_list[index],
-        row_filters_string: row_filters_string_list[index],
-        height: height,
-      });
+      this.addNewRow({config: config});
     }
     return this;
   };
 
   /**
-   * Rebuilds the displays (and rows) from controllers and filters string
+   * Rebuilds the displays (and rows) from config
    *
    * @return This dashboard
    */
-  Dashboard.prototype.updateDisplaysFromStrings = function() {
-    this._updateDisplaysFromStrings(this.controllers_string,
-        this.filters_string, this.heights_string);
+  Dashboard.prototype.updateDisplaysFromConfig = function() {
+    var self = this;
+
+    log.debug('Update displays from config', this.config);
+
+    var rows = [];
+    self.forEachRowOrdered(function(row) {
+      rows.push(row);
+    });
+
+    this.config.data.forEach(function(config, index) {
+      if (index <= rows.length - 1) {
+        rows[index].update(config);
+      }
+      else {
+        self.addNewRow({config: config});
+      }
+    });
+
+    if (rows.length > this.config.data.length) {
+      rows.slice(this.config.data.length).forEach(function(row) {
+        row.remove();
+      });
+    }
     return this;
   };
 
@@ -1034,30 +893,12 @@
   };
 
   /**
-   * Returns true if any height of the rows has changed
+   * Returns true if any config of the rows has changed
    *
-   * @return true if a height of a row has changed
+   * @return true if a config of a row has changed
    */
-  Dashboard.prototype.hasHeightsChanged = function() {
-    return this.heights_changed;
-  };
-
-  /**
-   * Returns true if any controller of the rows has changed
-   *
-   * @return true if a controller of a row has changed
-   */
-  Dashboard.prototype.hasControllerChanged = function() {
-    return this.controllers_changed;
-  };
-
-  /**
-   * Returns true if any filter of the rows has changed
-   *
-   * @return true if a filter of a row has changed
-   */
-  Dashboard.prototype.hasFilterChanged = function() {
-    return this.filters_changed;
+  Dashboard.prototype.hasConfigChanged = function() {
+    return this.config_changed;
   };
 
   /**
@@ -1066,8 +907,7 @@
    * @return true if a filter, controller of height of a row has changed
    */
   Dashboard.prototype.hasChanged = function() {
-    return this.hasHeightsChanged() || this.hasFilterChanged() ||
-      this.hasControllerChanged();
+    this.hasConfigChanged();
   };
 
   /**
@@ -1133,10 +973,8 @@
    *
    * @return This Dashboard
    */
-  Dashboard.prototype._allChanged = function() {
-    this.filters_changed = true;
-    this.controllers_changed = true;
-    this.heights_changed = true;
+  Dashboard.prototype._configChanged = function() {
+    this.config_changed = true;
     return this;
   };
 
@@ -1145,10 +983,8 @@
    *
    * @return This Dashboard
    */
-  Dashboard.prototype._allUnchanged = function() {
-    this.filters_changed = false;
-    this.controllers_changed = false;
-    this.heights_changed = false;
+  Dashboard.prototype._configUnchanged = function() {
+    this.config_changed = false;
     return this;
   };
 
@@ -1168,12 +1004,14 @@
       filters_string, heights_string) {
     var self = this;
 
+    var config;
+
     var controllers_string_list = split_rows(controllers_string);
     var filters_string_list = split_rows(filters_string);
     var heights_list = split_rows(heights_string);
 
-    log.debug('Update displays from strings', controllers_string_list,
-        filters_string_list, heights_list);
+    log.debug('Update displays from strings', controllers_string,
+        filters_string, heights_string);
 
     var rows = [];
     self.forEachRowOrdered(function(row) {
@@ -1181,20 +1019,14 @@
     });
 
     controllers_string_list.forEach(function(controllers_string, index) {
-      var height = parseInt(heights_list[index]);
-      if (isNaN(height)) {
-        height = undefined;
-      }
+      var height = gsa.parse_int(heights_list[index]);
+      config = create_row_config_from_strings(controllers_string,
+          filters_string_list[index], height);
       if (index <= rows.length - 1) {
-        rows[index].update(controllers_string, filters_string_list[index],
-            height);
+        rows[index].update(config);
       }
       else {
-        self.addNewRow({
-          row_controllers_string: controllers_string,
-          row_filters_string: filters_string_list[index],
-          height: height,
-        });
+        self.addNewRow({config: config});
       }
     });
     if (rows.length > controllers_string_list.length) {
@@ -1213,8 +1045,7 @@
    * @constructor
    *
    * @param id                   The id of the row.
-   * @param controllers_string   String listing the controllers to use.
-   * @param filters_string       String listing the filters to use.
+   * @param config               The row config
    * @param controller_factories Factories for ChartController
    * @param fiters               All filters as array
    * @param height               The initial height of the row
@@ -1222,15 +1053,17 @@
    * @param edit_mode            Whether to create the row in edit mode.
    * @param dashboard_opts       Dashboard options
    */
-  function DashboardRow(id, controllers_string, filters_string,
-      controller_factories, filters, height, width, edit_mode, dashboard_opts) {
+  function DashboardRow(id, config, controller_factories, filters, width,
+      edit_mode, dashboard_opts) {
     this.id = id;
+
+    this.setConfig(config);
 
     this.controller_factories = controller_factories;
 
     this.filters = filters;
 
-    this.height = height;
+    this.height = config.height;
     this.prev_height = this.height;
 
     this.width = width;
@@ -1246,9 +1079,6 @@
       dashboard_opts.max_per_row : MAX_PER_ROW;
 
     this.last_display_index = 0;
-
-    this._updateControllersStringList(controllers_string);
-    this._updateFiltersStringList(filters_string);
 
     this.init();
   }
@@ -1272,9 +1102,8 @@
 
     this.elem.css('height', this.height);
 
-    this.controller_string_list.forEach(function(controller_string, index) {
-      self.createNewDisplay(controller_string, self.filter_string_list[index],
-          self.controller_string_list.length);
+    this.config.data.forEach(function(config) {
+      self.createNewDisplay(config, self.config.data.length);
     });
 
     this._updateCssClasses();
@@ -1283,18 +1112,15 @@
   /**
    * Creates a new DashboardDisplay and adds it to this row
    *
-   * @param controller_string Initial ChartController name for the new display
-   * @param filter_string     Initial filter id for the new display
-   * @param display_count     Expected number of displays in this row (optional)
+   * @param config         Initial config for the new display
+   * @param display_count  Expected number of displays in this row (optional)
    *
    * @return This row
    */
-  DashboardRow.prototype.createNewDisplay = function(controller_string,
-      filter_string, display_count) {
+  DashboardRow.prototype.createNewDisplay = function(config, display_count) {
 
-    var display = new DashboardDisplay(this._getNextDisplayId(),
-        controller_string, filter_string, this.controller_factories,
-        this.filters, this.edit_mode, this.height,
+    var display = new DashboardDisplay(this._getNextDisplayId(), config,
+        this.controller_factories, this.filters, this.edit_mode, this.height,
         this._getDisplayWidth(display_count), this.dashboard_opts);
     this.addDisplay(display);
 
@@ -1401,31 +1227,37 @@
   };
 
   /**
-   * Returns the controllers string from the ones of the displays.
+   * Returns an array of configs from the ones of the displays.
    *
-   * @return  The controllers string.
+   * @return The config objects of all displays
    */
-  DashboardRow.prototype.getControllersString = function() {
-    var controllers_string = '';
+  DashboardRow.prototype.getConfig = function() {
+    var configs = [];
     this.forEachDisplayOrdered(function(display) {
-      controllers_string += display.getControllerString();
-      controllers_string += '|';
+      configs.push(display.getConfig());
     });
-    return controllers_string.slice(0, -1);
+    return {
+      type: 'row',
+      height: this.getHeight(),
+      data: configs,
+    };
   };
 
-  /**
-   * Returns the filters string from the ones of the displays.
-   *
-   * @return  The filters string.
-   */
-  DashboardRow.prototype.getFiltersString = function() {
-    var filters_string = '';
-    this.forEachDisplayOrdered(function(display) {
-      filters_string += display.getFilterString();
-      filters_string += '|';
-    });
-    return filters_string.slice(0, -1);
+  DashboardRow.prototype.setConfig = function(config) {
+    if (!gsa.is_object(config)) {
+      config = {};
+    }
+    if (!gsa.is_array(config.data)) {
+      config.data = [];
+    }
+    if (!gsa.is_defined(config.height)) {
+      config.height = 280;
+    }
+    else if (config.height < 150) {
+      config.height = 150;
+    }
+    this.config = config;
+    return this;
   };
 
   /**
@@ -1575,47 +1407,40 @@
   /**
    * Rebuild displays from controllers and filter string
    *
-   * @param controllers_string   String listing the controllers to use.
-   * @param filters_string       String listing the filters to use.
-   * @param height               Height to set for this row.
+   * @param config  Configs to use for this row and its displays.
    *
    * @return This row
    */
-  DashboardRow.prototype.update = function(controllers_string, filters_string,
-      height) {
+  DashboardRow.prototype.update = function(config) {
     var self = this;
 
-    this._updateControllersStringList(controllers_string);
-    this._updateFiltersStringList(filters_string);
+    log.debug('Updating row ' + this.id, config);
+
+    this.setConfig(config);
 
     var displays = [];
     self.forEachDisplayOrdered(function(display) {
       displays.push(display);
     });
 
-    log.debug('Updating row ' + this.id, controllers_string, filters_string,
-        height);
-
-    this.controller_string_list.forEach(function(controller_string, index) {
+    this.config.data.forEach(function(config, index) {
       if (index <= displays.length - 1) {
-        displays[index].update(controller_string,
-            self.filter_string_list[index]);
+        displays[index].update(config);
       }
       else {
-        self.createNewDisplay(controller_string,
-            self.filter_string_list[index], self.controller_string_list.length);
+        self.createNewDisplay(config);
       }
     });
 
-    if (displays.length > this.controller_string_list.length) {
-      displays.slice(this.controller_string_list.length).forEach(function(d) {
+    if (displays.length > this.config.data.length) {
+      displays.slice(this.config.data.length).forEach(function(d) {
         d.remove();
       });
     }
 
     this._updateCssClasses();
 
-    this.resize(height);
+    this.resize(this.config.height);
     return this;
   };
 
@@ -1666,17 +1491,6 @@
     return this.id + '-box-' + (++this.last_display_index);
   };
 
-  DashboardRow.prototype._updateControllersStringList = function(
-      controllers_string) {
-    this.controller_string_list = split_elements(controllers_string);
-    return this;
-  };
-
-  DashboardRow.prototype._updateFiltersStringList = function(filters_string) {
-    this.filter_string_list = split_elements(filters_string);
-    return this;
-  };
-
   /* Chart display */
 
   /**
@@ -1685,8 +1499,7 @@
    * @constructor
    *
    * @param id                   The id of the display.
-   * @param controller_string    String name of the chart controllers to use.
-   * @param filters_string       String id of the filters to use.
+   * @param config               Config to use.
    * @param controller_factories Factories for ChartController
    * @param fiters               All filters as array
    * @param height               The initial height of the display
@@ -1694,15 +1507,15 @@
    * @param edit_mode            Whether to create the display in edit mode.
    * @param dashboard_opts       Dashboard options
    */
-  function DashboardDisplay(id, controller_string, filter_string,
-      controller_factories, filters, edit_mode, height, width, dashboard_opts) {
+  function DashboardDisplay(id, config, controller_factories, filters,
+      edit_mode, height, width, dashboard_opts) {
     this.id = id;
-    this.controller_string = controller_string;
-    this.filter_string = filter_string;
     this.height = gsa.is_defined(height) ? height : 200;
     this.width = gsa.is_defined(width) ? width : 450;
     this.last_height = this.height;
     this.last_width = this.width;
+
+    this.setConfig(config);
 
     if (dashboard_opts) {
       if (gsa.is_defined(dashboard_opts.hide_controller_select)) {
@@ -1720,7 +1533,7 @@
 
     for (var controller_name in controller_factories) {
       var new_controller = controller_factories[controller_name](this);
-      if (controller_name === this.controller_string) {
+      if (controller_name === this.config.name) {
         this.current_controller = new_controller;
       }
       this.controllers.push(new_controller);
@@ -1794,7 +1607,7 @@
       'class': 'chart-head',
       id: this.id + '-head',
       text: gsa._('Initializing display for "{{display}}"...',
-          {display: this.controller_string}),
+          {display: this.config.name}),
     }).appendTo(inner_elem_d3);
 
     this.content = $('<div/>', {
@@ -1897,6 +1710,16 @@
    */
   DashboardDisplay.prototype.setTitle = function(new_title) {
     this.header.text(new_title);
+    return this;
+  };
+
+  /**
+   * Sets tht config og the display
+   *
+   * @return This display
+   */
+  DashboardDisplay.prototype.setConfig = function(config) {
+    this.config = config || {name: '', filt_id: ''};
     return this;
   };
 
@@ -2056,6 +1879,20 @@
       return this.current_controller.chart_name;
     }
     return '';
+  };
+
+  /**
+   * Returns the current config object of this chart
+   *
+   * @return The current config of this chart
+   *
+   */
+  DashboardDisplay.prototype.getConfig = function() {
+    return {
+      type: 'chart',
+      name: this.current_controller ? this.current_controller.chart_name : '',
+      filt_id: this.current_filter ? this.current_filter.id : '',
+    };
   };
 
   /**
@@ -2222,32 +2059,29 @@
    * Update this display to use new controller and/or filter. Data will be
    * reloaded if the controller and/or filter is changed.
    *
-   * @param controller_string Name of the new controller to use.
-   * @param filter_string     ID of the new filter to use.
+   * @param config New config to use.
    *
    * @return This display
    */
-  DashboardDisplay.prototype.update = function(controller_string,
-      filter_string) {
+  DashboardDisplay.prototype.update = function(config) {
     var changed = false;
 
-    log.debug('Updating display ' + this.id, 'new controller:',
-        controller_string, 'old controller:', this.controller_string,
-        'new filter:', filter_string, 'old filter:', this.filter_string);
+    log.debug('Updating display ' + this.id, 'new config:', config,
+        'old config:', this.config);
+
+    this.setConfig(config);
 
     if (!gsa.is_defined(this.current_controller) ||
-        controller_string !== this.current_controller.chart_name) {
+        this.config.name !== this.current_controller.chart_name) {
       log.debug('Controller has changed');
-      this.controller_string = controller_string;
       this._updateCurrentController();
       this._updateFilters(); // maybe unnecessary because it will be updated by new request
       changed = true;
     }
 
     if (!gsa.is_defined(this.current_filter) ||
-        filter_string !== this.current_filter.id) {
+        this.config.filt_id !== this.current_filter.id) {
       log.debug('Filter has changed');
-      this.filter_string = filter_string;
       this._updateCurrentFilter();
       this._updateFilterSelection();
       changed = true;
@@ -3217,12 +3051,9 @@
         !!(elem.data('no-chart-links')) : false;
 
       var dashboard = new gch.Dashboard(elem.attr('id'),
-          elem.data('controllers'), elem.data('heights'),
-          elem.data('filters-string'),
+          elem.data('controllers'),
           {
-            controllers_pref_id: elem.data('controllers-pref-id'),
-            filters_pref_id: elem.data('filters-pref-id'),
-            heights_pref_id: elem.data('heights-pref-id'),
+            config_pref_id: elem.data('controllers-pref-id'),
             filter: elem.data('filter'),
             filt_id: elem.data('filter-id'),
             max_components: max_components,
@@ -3324,7 +3155,7 @@
         });
       });
 
-      dashboard.initDisplaysFromString();
+      dashboard.initDisplays();
 
       if (elem.data('detached')) {
         $(window).on('resize', gch.detached_chart_resize_listener(dashboard));
