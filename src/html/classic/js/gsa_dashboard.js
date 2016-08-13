@@ -2501,7 +2501,6 @@
    * @param display         The Display to use.
    * @param chart_name      Name of the chart.
    * @param label           Label of the chart.
-   * @param icon            Icon to use for the chart // TODO: remove?
    * @param chart_type      The type of chart (bubble, donut, etc.).
    * @param chart_template  Special chart template to use.
    * @param chart_title     Title to be shown for the chart
@@ -2509,10 +2508,9 @@
    * @param init_params     Parameters to init the chart controller.
    * @param count_field     Column for title count
    */
-  function ChartController(chart_name, icon, chart_type, chart_template,
+  function ChartController(chart_name, chart_type, chart_template,
       chart_title, data_src, display, gen_params, init_params, count_field) {
     this.chart_name = chart_name;
-    this.icon = icon ? icon : '/img/help.svg';
     this.chart_type = chart_type;
     this.chart_template = chart_template ? chart_template : '';
     this.data_src = data_src;
@@ -3138,15 +3136,13 @@
             }
           }
 
-          var icon = '/img/charts/severity-bar-chart.svg';
-
           dashboard.addControllerFactory(chart_name, function(for_display) {
             if (!gsa.is_defined(for_display)) {
               log.error('Display not defined');
               return null;
             }
 
-            return new ChartController(chart_name, icon, chart_type,
+            return new ChartController(chart_name, chart_type,
                 chart_template, chart_title, data_source, for_display,
                 gen_params, init_params, chart_title_count_column);
           });
