@@ -3411,5 +3411,31 @@
     return gsa.is_string(elements_string) ? elements_string.split('|') : [];
   }
 
+  function create_display_config_from_strings(controllers_string,
+      filters_string) {
+    return {
+      type: 'chart',
+      name: controllers_string,
+      filt_id: filters_string,
+    };
+  }
+
+  function create_row_config_from_strings(controllers_string, filters_string,
+      height) {
+    var controllers = split_elements(controllers_string);
+    var filters = split_elements(filters_string);
+    var configs = [];
+
+    controllers.forEach(function(name, i) {
+      var filter = i < filters.length ? filters[i] : '';
+      configs.push(create_display_config_from_strings(name, filter));
+    });
+    return {
+      type: 'row',
+      height: height,
+      data: configs,
+    };
+  }
+
 })(window, window, window.document, window.gsa, window.d3, window.$,
   window.console, window.Promise);

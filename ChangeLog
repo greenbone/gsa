@@ -1,5 +1,11 @@
 2016-08-13  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_dashboard.js (create_display_config_from_strings,
+	create_row_config_from_strings): Add helper functions to create new config
+	objects from the "old" config strings for rows and displays.
+
+2016-08-13  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_dashboard.js (split_rows, split_elements): Check if
 	expected values are a strings to avoid tracebacks if they aren't.
 
