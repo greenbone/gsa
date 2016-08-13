@@ -1,5 +1,13 @@
 2016-08-13  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/omp.xsl (get_tasks_chart, get_aggregates,
+	get_assets_chart): Change data-controllers to data-default-controllers.
+	data-controllers now expects to be a json config. Therefore use
+	data-default-controllers and set no new config to use them in the old config
+	format instead.
+
+2016-08-13  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_dashboard.js: Refactor dashboard classes to use
 	config objects instead of seperated strings for chart names, heights and
 	filters. The config will be stored in the previous controller settings
