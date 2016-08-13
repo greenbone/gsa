@@ -892,6 +892,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         data-filter-id="{$filt_id}">
         <span class="dashboard-chart"
           data-chart-name="nvt-by-solution-type"
+          data-chart-title="NVTs by solution type"
+          data-chart-title-count="count"
           data-chart-type="donut"/>
       </div>
     </xsl:if>

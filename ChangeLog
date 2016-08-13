@@ -1,5 +1,10 @@
 2016-08-13  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/graphics.xsl (js-secinfo-top-visualization): Add missing
+	chart title for nvt-by-solution-type.
+
+2016-08-13  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_dashboard.js (on_ready): Rename
 	data-controller-pref-id to data-config-pref-id and data-controller to
 	data-config.
