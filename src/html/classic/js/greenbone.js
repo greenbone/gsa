@@ -66,6 +66,7 @@
   gsa.is_array = Array.isArray;
   gsa.array_sum = array_sum;
   gsa.derive = derive;
+  gsa.parse_int = parse_int;
 
   function LanguageDetector() {
     global.i18nextBrowserLanguageDetector.call(this);
@@ -164,6 +165,14 @@
   function derive(child, base) {
     child.prototype = Object.create(base.prototype);
     child.prototype.constructor = child;
+  }
+
+  function parse_int(value) {
+    var val = parseInt(value);
+    if (isNaN(val)) {
+      val = undefined;
+    }
+    return val;
   }
 
   var RESPONSE_SELECTORS = {
