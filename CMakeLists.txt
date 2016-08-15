@@ -342,7 +342,7 @@ endif (CMAKE_BUILD_TYPE MATCHES "Release")
 install (FILES src/html/classic/css/gsa-login.css
          DESTINATION ${GSA_DATA_DIR}/classic/login)
 
-install (FILES src/html/classic/img/gsa_splash.png
+install (FILES src/html/classic/img/gsa_splash.svg
          DESTINATION ${GSA_DATA_DIR}/classic/login/img)
 
 install (FILES src/html/classic/help_de.xsl
@@ -485,14 +485,15 @@ install (FILES src/html/classic/img/agent.svg
                src/html/classic/img/ldap.svg
                src/html/classic/img/radius.svg
                src/html/classic/img/gsa.svg
+               src/html/classic/img/enchantress.svg
+               src/html/classic/img/bullet.svg
+               src/html/classic/img/bullet2.svg
+               src/html/classic/img/gsa_splash.svg
          DESTINATION ${GSA_DATA_DIR}/classic/img)
 
 install (FILES src/html/classic/img/login-label.png
-               src/html/classic/img/enchantress.png
                src/html/classic/img/prognosis.png
                src/html/classic/img/prognosis_inactive.png
-               src/html/classic/img/bullet.png
-               src/html/classic/img/bullet2.png
                src/html/classic/img/p_bar_done.png
                src/html/classic/img/p_bar_error.png
                src/html/classic/img/p_bar_new.png

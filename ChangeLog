@@ -1,3 +1,24 @@
+2016-08-15  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* CMakeLists.txt: Install src/html/classic/img/bullet.svg,
+	src/html/classic/img/bullet2.svg, src/html/classic/img/enchantress.svg
+	and src/html/classic/img/gsa_splash.svg instead of the PNG versions.
+
+	* src/html/classic/css/gsa-style.css (#nav li, #nav li li)
+	(.bullet-list li): Use bullet.svg and bullet2.svg instead of the
+	PNG versions.
+
+	* src/html/classic/help.xsl, src/html/classic/help_ru.xsl,
+	src/html/classic/help_zh_CN.xsl: Use gsa_splash.svg instead of the
+	PNG version.
+
+	* src/html/classic/wizard.xsl: Use enchantress.svg instead of the
+	PNG version.
+
+	* src/html/classic/img/bullet.svg, src/html/classic/img/bullet2.svg,
+	src/html/classic/img/enchantress.svg,
+	src/html/classic/img/gsa_splash.svg: New image files.
+
 2016-08-13  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/js/gsa_dashboard.js (ChartController): Remove unnecessary

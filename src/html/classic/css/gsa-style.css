@@ -692,7 +692,8 @@ a.top_button:hover div.first_button_overlay {
   margin-left:2px;
   color: #313131;
   font-weight:bold;
-  background:url('/img/bullet.png') no-repeat 0px 6px #f9f9f9;
+  background:url('/img/bullet.svg') no-repeat 0px 6px #f9f9f9;
+  background-size: 10px 10px;
 }
 
 #nav a {
@@ -706,7 +707,8 @@ a.top_button:hover div.first_button_overlay {
 }
 
 #nav li li {
-  background:url('/img/bullet2.png') no-repeat 0px 8px #EEEEEE;
+  background:url('/img/bullet2.svg') no-repeat 0px 8px #EEEEEE;
+  background-size: 10px 10px;
   text-align:left;
 }
 
@@ -725,7 +727,8 @@ a.top_button:hover div.first_button_overlay {
 
 .bullet-list li {
   padding: 4px 4px 4px 13px;
-  background: url('/img/bullet.png') no-repeat left center;
+  background: url('/img/bullet.svg') no-repeat left center;
+  background-size: 10px 10px;
 }
 
 .bullet-list li > * {

@@ -97,7 +97,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template name="quick-first-scan-wizard">
   <a name="wizard"></a>
-  <div id="wizardess" class="pull-left"><img src="img/enchantress.png"/></div>
+  <div id="wizardess" class="pull-left">
+    <img src="img/enchantress.svg" style="height:300px;"/>
+  </div>
   <div class="clearfix">
     <p>
       <b><xsl:value-of select="gsa:i18n('Quick start: Immediately scan an IP address', 'Task Wizard')"/> </b>
@@ -187,7 +189,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="container">
       <div class="col-5">
         <div class="col-12">
-          <div class="pull-right" id="wizardess"><img src="img/enchantress.png"/></div>
+          <div class="pull-right" id="wizardess">
+            <img src="img/enchantress.svg" style="height:300px"/>
+          </div>
           <p><xsl:value-of select="gsa:i18n ('I can help you by creating a new scan task and automatically starting it.', 'Advanced Task Wizard')"/></p>
           <p><xsl:value-of select="gsa:i18n ('All you need to do is enter a name for the new task and the IP address or host name of the target, and select a scan configuration.', 'Advanced Task Wizard')"/></p>
           <p><xsl:value-of select="gsa:i18n ('You can choose if you want me to run the scan immediately, schedule the task for a later date and time, or just create the task so you can run it manually later.', 'Advanced Task Wizard')"/></p>
@@ -487,7 +491,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </p>
         </div>
         <div class="col-6">
-          <img src="img/enchantress.png"/>
+          <img src="img/enchantress.svg" style="height:300px"/>
         </div>
       </div>
 
