@@ -36489,7 +36489,6 @@ should not have received it.
       <input type="hidden" name="token" value="{/envelope/token}"/>
       <input type="hidden" name="cmd" value="save_auth"/>
       <input type="hidden" name="caller" value="{/envelope/current_page}"/>
-      <input type="hidden" name="next" value="get_users"/>
       <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
       <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
       <!-- group name is e.g. of method:ldap -->
@@ -36562,7 +36561,6 @@ should not have received it.
       <input type="hidden" name="token" value="{/envelope/token}"/>
       <input type="hidden" name="cmd" value="save_auth"/>
       <input type="hidden" name="caller" value="{/envelope/current_page}"/>
-      <input type="hidden" name="next" value="get_users"/>
       <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
       <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
       <!-- group name is e.g. of method:radius_connect -->

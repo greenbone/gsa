@@ -1,5 +1,16 @@
 2016-08-16  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (auth_settings_omp): Remove stray html variable and
+	space.
+	(save_auth_omp): Remove "get_users" as the next page because the Auth
+	pages are no longer on the user page.  Similary make the fail case
+	"modify_auth".
+
+	* src/html/classic/omp.xsl (group [ldapauth], group [radiusauth]): Remove
+	next param, as above.
+
+2016-08-16  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/classic/gsad.xsl (html-gsa-navigation): Check AUTH commands
 	for auth menus.
 

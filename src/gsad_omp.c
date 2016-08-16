@@ -26014,7 +26014,6 @@ auth_settings_omp (credentials_t * credentials, params_t *params,
 {
   GString * xml;
   gchar * buf;
-  char * html;
   const char *name;
 
   name = params_value (params, "name");
@@ -26022,7 +26021,7 @@ auth_settings_omp (credentials_t * credentials, params_t *params,
   CHECK_PARAM_INVALID (name, "Auth settings", "auth_settings");
 
   xml = g_string_new ("");
-  buf = g_markup_printf_escaped ( "<auth_settings name=\"%s\">", name);
+  buf = g_markup_printf_escaped ("<auth_settings name=\"%s\">", name);
   g_string_append (xml, buf);
   g_free (buf);
 
@@ -26070,7 +26069,6 @@ auth_settings_omp (credentials_t * credentials, params_t *params,
 
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
                             response_data);
-  return html;
 }
 
 /**
@@ -26723,8 +26721,8 @@ save_auth_omp (credentials_t* credentials, params_t *params,
 
   html = response_from_entity (credentials, params, entity,
                                (no_redirect && strcmp (no_redirect, "0")),
-                               NULL, "get_users",
-                               NULL, "get_users",
+                               NULL, NULL,
+                               NULL, "modify_auth",
                                "Save Authentication Configuration",
                                response_data);
   free_entity (entity);
