@@ -3171,7 +3171,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:when test="count (report/host) = 0">
           <xsl:variable name="desc"
                         select="gsa:i18n ('No hosts available for Prognostic Report', 'Host')"/>
-          <img src="/img/prognosis_inactive.png"
+          <img src="/img/prognosis_inactive.svg"
             class="icon icon-sm"
             title="{$desc}"
             alt="{$desc}"/>
@@ -3179,7 +3179,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:when test="report/@scap_loaded = 0">
           <xsl:variable name="desc"
                         select="gsa:i18n ('No SCAP data available for Prognostic Report', 'Host')"/>
-          <img src="/img/prognosis_inactive.png"
+          <img src="/img/prognosis_inactive.svg"
             class="icon icon-sm"
             title="{$desc}"
             alt="{$desc}"/>
@@ -3188,7 +3188,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <a href="/omp?cmd=get_report&amp;type=prognostic&amp;pos=1&amp;host_search_phrase={report/filters/phrase}&amp;host_levels={gsa:build-levels(report/filters)}&amp;host_first_result={report/hosts/@start}&amp;host_max_results={report/hosts/@max}&amp;result_hosts_only=1&amp;overrides={$apply-overrides}&amp;token={/envelope/token}"
             class="icon icon-sm"
             title="{gsa:i18n ('Prognostic Report', 'Host')}">
-            <img src="/img/prognosis.png" alt="{gsa:i18n ('Prognostic Report', 'Host')}"/>
+            <img src="/img/prognosis.svg" alt="{gsa:i18n ('Prognostic Report', 'Host')}"/>
           </a>
         </xsl:otherwise>
       </xsl:choose>
@@ -29022,14 +29022,14 @@ should not have received it.
        </a>
       <xsl:choose>
         <xsl:when test="../@scap_loaded = 0">
-          <img src="/img/prognosis_inactive.png" alt="{gsa:i18n ('Prognostic Report', 'Host')}"
+          <img src="/img/prognosis_inactive.svg" alt="{gsa:i18n ('Prognostic Report', 'Host')}"
             class="icon icon-sm"/>
         </xsl:when>
         <xsl:otherwise>
            <a href="/omp?cmd=get_report&amp;type=prognostic&amp;host={ip}&amp;pos={detail[name/text() = 'report/pos']/value}&amp;host_search_phrase={../../../../search_phrase}&amp;host_levels={../../../../levels}&amp;host_first_result={../../../../hosts/@start}&amp;host_max_results={../../../../hosts/@max}&amp;result_hosts_only=1&amp;token={/envelope/token}"
              class="icon icon-sm"
              title="{gsa:i18n ('Prognostic Report', 'Host')}">
-             <img src="/img/prognosis.png" alt="{gsa:i18n ('Prognostic Report', 'Host')}"/>
+             <img src="/img/prognosis.svg" alt="{gsa:i18n ('Prognostic Report', 'Host')}"/>
            </a>
         </xsl:otherwise>
       </xsl:choose>
@@ -31977,7 +31977,7 @@ should not have received it.
             <xsl:when test="(count (detail[name = 'App']) = 0) or (string-length ($threat) = 0)">
               <xsl:variable name="desc"
                             select="gsa:i18n ('No Apps detected for Prognostic Report', 'Host')"/>
-              <img src="/img/prognosis_inactive.png"
+              <img src="/img/prognosis_inactive.svg"
                 class="icon icon-sm"
                 title="{$desc}"
                 alt="{$desc}"/>
@@ -31986,7 +31986,7 @@ should not have received it.
               <a href="/omp?cmd=get_report&amp;type=prognostic&amp;host={ip}&amp;pos=1&amp;host_search_phrase={../filters/phrase}&amp;host_levels={gsa:build-levels(../filters)}&amp;host_first_result={../hosts/@start}&amp;host_max_results={../hosts/@max}&amp;result_hosts_only=1&amp;overrides={../filters/apply_overrides}&amp;token={/envelope/token}"
                 title="{gsa:i18n ('Prognostic Report', 'Host')}"
                 class="icon icon-sm">
-                <img src="/img/prognosis.png" alt="{gsa:i18n ('Prognostic Report', 'Host')}"/>
+                <img src="/img/prognosis.svg" alt="{gsa:i18n ('Prognostic Report', 'Host')}"/>
               </a>
             </xsl:otherwise>
           </xsl:choose>

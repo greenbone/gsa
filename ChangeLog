@@ -1,3 +1,18 @@
+2016-08-16  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* CMakeLists.txt: Install src/html/classic/img/prognosis.svg and
+	prognosis_inactive.svg instead of the PNG versions.
+
+	* src/html/classic/img/help.svg: Replace with a version where the
+	question mark is a path instead of a text element.
+
+	* src/html/classic/img/prognosis.svg: New image file.
+
+	* src/html/classic/img/prognosis_inactive.svg: New image file.
+
+	* src/html/classic/omp.xsl (assets, host [classic], report [assets]):
+	Use SVG versions of the prognosis icons instead of the PNG ones.
+
 2016-08-15  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* CMakeLists.txt: Install src/html/classic/img/bullet.svg,

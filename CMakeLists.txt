@@ -489,11 +489,11 @@ install (FILES src/html/classic/img/agent.svg
                src/html/classic/img/bullet.svg
                src/html/classic/img/bullet2.svg
                src/html/classic/img/gsa_splash.svg
+               src/html/classic/img/prognosis.svg
+               src/html/classic/img/prognosis_inactive.svg
          DESTINATION ${GSA_DATA_DIR}/classic/img)
 
 install (FILES src/html/classic/img/login-label.png
-               src/html/classic/img/prognosis.png
-               src/html/classic/img/prognosis_inactive.png
                src/html/classic/img/p_bar_done.png
                src/html/classic/img/p_bar_error.png
                src/html/classic/img/p_bar_new.png
