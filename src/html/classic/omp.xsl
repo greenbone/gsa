@@ -33215,6 +33215,7 @@ should not have received it.
 </xsl:template>
 
 <xsl:template name="full-report-export-form">
+  <xsl:variable name="report_format_id" select="../../report_format_id"/>
   <form action="" method="get" enctype="multipart/form-data">
     <input type="hidden" name="token" value="{/envelope/token}"/>
     <input type="hidden" name="cmd" value="get_report"/>
@@ -33224,17 +33225,37 @@ should not have received it.
     <select name="report_format_id" title="{gsa:i18n ('Download Format', 'Report')}">
       <xsl:for-each select="../../get_report_formats_response/report_format[active=1 and (trust/text()='yes' or predefined='1')]">
         <xsl:choose>
-          <xsl:when test="$outer_type='prognostic' and name='PDF'">
-            <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
-          </xsl:when>
-          <xsl:when test="../../delta and name='PDF'">
-            <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
-          </xsl:when>
-          <xsl:when test="name='PDF'">
-            <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+          <xsl:when test="string-length ($report_format_id) &gt; 0">
+            <xsl:choose>
+              <xsl:when test="$outer_type='prognostic' and @id=$report_format_id">
+                <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+              </xsl:when>
+              <xsl:when test="../../delta and @id=$report_format_id">
+                <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+              </xsl:when>
+              <xsl:when test="@id=$report_format_id">
+                <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+              </xsl:when>
+              <xsl:otherwise>
+                <option value="{@id}"><xsl:value-of select="name"/></option>
+              </xsl:otherwise>
+            </xsl:choose>
           </xsl:when>
           <xsl:otherwise>
-            <option value="{@id}"><xsl:value-of select="name"/></option>
+            <xsl:choose>
+              <xsl:when test="$outer_type='prognostic' and name='PDF'">
+                <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+              </xsl:when>
+              <xsl:when test="../../delta and name='PDF'">
+                <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+              </xsl:when>
+              <xsl:when test="name='PDF'">
+                <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+              </xsl:when>
+              <xsl:otherwise>
+                <option value="{@id}"><xsl:value-of select="name"/></option>
+              </xsl:otherwise>
+            </xsl:choose>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:for-each>
@@ -33264,6 +33285,7 @@ should not have received it.
 </xsl:template>
 
 <xsl:template name="filtered-report-export-form">
+  <xsl:variable name="report_format_id" select="../../report_format_id"/>
   <form action="" method="get" enctype="multipart/form-data">
     <input type="hidden" name="token" value="{/envelope/token}"/>
     <input type="hidden" name="cmd" value="get_report"/>
@@ -33294,17 +33316,37 @@ should not have received it.
     <select name="report_format_id" title="{gsa:i18n ('Download Format', 'Report')}">
       <xsl:for-each select="../../get_report_formats_response/report_format[active=1 and (trust/text()='yes' or predefined='1')]">
         <xsl:choose>
-          <xsl:when test="$outer_type='prognostic' and name='PDF'">
-            <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
-          </xsl:when>
-          <xsl:when test="../../delta and name='PDF'">
-            <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
-          </xsl:when>
-          <xsl:when test="name='PDF'">
-            <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+          <xsl:when test="string-length ($report_format_id) &gt; 0">
+            <xsl:choose>
+              <xsl:when test="$outer_type='prognostic' and @id=$report_format_id">
+                <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+              </xsl:when>
+              <xsl:when test="../../delta and @id=$report_format_id">
+                <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+              </xsl:when>
+              <xsl:when test="@id=$report_format_id">
+                <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+              </xsl:when>
+              <xsl:otherwise>
+                <option value="{@id}"><xsl:value-of select="name"/></option>
+              </xsl:otherwise>
+            </xsl:choose>
           </xsl:when>
           <xsl:otherwise>
-            <option value="{@id}"><xsl:value-of select="name"/></option>
+            <xsl:choose>
+              <xsl:when test="$outer_type='prognostic' and name='PDF'">
+                <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+              </xsl:when>
+              <xsl:when test="../../delta and name='PDF'">
+                <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+              </xsl:when>
+              <xsl:when test="name='PDF'">
+                <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+              </xsl:when>
+              <xsl:otherwise>
+                <option value="{@id}"><xsl:value-of select="name"/></option>
+              </xsl:otherwise>
+            </xsl:choose>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:for-each>
@@ -37215,6 +37257,20 @@ should not have received it.
           </tr>
         </xsl:if>
 
+        <xsl:if test="gsa:may-op ('get_report_formats')">
+          <tr>
+            <td><xsl:value-of select="gsa:i18n ('Default Report Format', 'Report Format')"/></td>
+            <td>
+              <xsl:call-template name="get-settings-resource">
+                <xsl:with-param name="id"
+                                select="get_settings_response/setting[name='Default Report Format']/value"/>
+                <xsl:with-param name="resources" select="commands_response/get_report_formats_response/report_format"/>
+                <xsl:with-param name="type" select="'report_format'"/>
+              </xsl:call-template>
+            </td>
+          </tr>
+        </xsl:if>
+
         <xsl:if test="gsa:may-op ('get_schedules')">
           <tr>
             <td><xsl:value-of select="gsa:i18n ('Default Schedule', 'Schedule')"/></td>
@@ -37858,6 +37914,21 @@ should not have received it.
                                     select="get_settings_response/setting[name='Default Port List']/value"/>
                     <xsl:with-param name="type" select="'port_list'"/>
                     <xsl:with-param name="resources" select="commands_response/get_port_lists_response/port_list"/>
+                  </xsl:call-template>
+                </td>
+              </tr>
+            </xsl:if>
+
+            <xsl:if test="gsa:may-op ('get_report_formats')">
+              <tr>
+                <td><xsl:value-of select="gsa:i18n ('Default Report Format', 'Report Format')"/></td>
+                <td>
+                  <xsl:call-template name="edit-settings-resource">
+                    <xsl:with-param name="setting" select="'353304fc-645e-11e6-ba7a-28d24461215b'"/>
+                    <xsl:with-param name="selected_id"
+                                    select="get_settings_response/setting[name='Default Report Format']/value"/>
+                    <xsl:with-param name="type" select="'report_format'"/>
+                    <xsl:with-param name="resources" select="commands_response/get_report_formats_response/report_format"/>
                   </xsl:call-template>
                 </td>
               </tr>

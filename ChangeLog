@@ -1,3 +1,16 @@
+2016-08-17  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add setting Default Report Format.
+
+	* src/html/classic/omp.xsl (full-report-export-form)
+	(filtered-report-export-form): Default to REPORT_FORMAT_ID from the XML
+	if given.
+	(get_my_settings, edit_my_settings): Add Default Report Format.
+
+	* src/gsad_omp.c (get_report): Get Default Report Format.
+	(get_my_settings_omp, edit_my_settings): Get report formats for Default
+	Report Format.
+
 2016-08-17  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad.c (init_validator): Add hostpath and scanner_host validators.

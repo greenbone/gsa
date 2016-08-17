@@ -14598,7 +14598,9 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
     }
   else
     {
-      gchar *task_id = NULL;
+      gchar *task_id;
+
+      task_id = NULL;
 
       /* Format is NULL, send XSL transformed XML. */
 
@@ -14864,6 +14866,64 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
 
       if (command_enabled (credentials, "GET_REPORT_FORMATS"))
         {
+          gchar *default_report_format;
+
+          /* Get Default Report Format. */
+
+          switch (setting_get_value (&session,
+                                     "353304fc-645e-11e6-ba7a-28d24461215b",
+                                     &default_report_format,
+                                     response_data))
+            {
+              case 0:
+                break;
+              case 1:
+                g_string_free (xml, TRUE);
+                openvas_server_close (socket, session);
+                if (error) *error = ret;
+                response_data->http_status_code
+                  = MHD_HTTP_INTERNAL_SERVER_ERROR;
+                return gsad_message (credentials,
+                                    "Internal error", __FUNCTION__, __LINE__,
+                                    "An internal error occurred while getting a setting. "
+                                    "The setting could not be delivered. "
+                                    "Diagnostics: Failure to send command to manager daemon.",
+                                    "/omp?cmd=get_tasks",
+                                     response_data);
+              case 2:
+                g_string_free (xml, TRUE);
+                openvas_server_close (socket, session);
+                if (error) *error = ret;
+                response_data->http_status_code
+                  = MHD_HTTP_INTERNAL_SERVER_ERROR;
+                return gsad_message (credentials,
+                                    "Internal error", __FUNCTION__, __LINE__,
+                                    "An internal error occurred while getting a setting. "
+                                    "The setting could not be delivered. "
+                                    "Diagnostics: Failure to receive response from manager daemon.",
+                                    "/omp?cmd=get_tasks",
+                                     response_data);
+              default:
+                g_string_free (xml, TRUE);
+                openvas_server_close (socket, session);
+                if (error) *error = ret;
+                response_data->http_status_code
+                  = MHD_HTTP_INTERNAL_SERVER_ERROR;
+                return gsad_message (credentials,
+                                    "Internal error", __FUNCTION__, __LINE__,
+                                    "An internal error occurred while getting a setting. "
+                                    "The setting could not be delivered. "
+                                    "Diagnostics: Internal error.",
+                                    "/omp?cmd=get_tasks",
+                                     response_data);
+            }
+
+          g_string_append_printf (xml,
+                                  "<report_format_id>%s</report_format_id>",
+                                  default_report_format);
+
+          /* Get all the report formats. */
+
           if (openvas_server_sendf
                (&session,
                 "<get_report_formats"
@@ -19796,6 +19856,8 @@ get_my_settings_omp (credentials_t * credentials, params_t *params,
     g_string_append (commands, "<get_credentials/>");
   if (command_enabled (credentials, "GET_PORT_LISTS"))
     g_string_append (commands, "<get_port_lists/>");
+  if (command_enabled (credentials, "GET_REPORT_FORMATS"))
+    g_string_append (commands, "<get_report_formats/>");
   if (command_enabled (credentials, "GET_SCANNERS"))
     g_string_append (commands, "<get_scanners/>");
   if (command_enabled (credentials, "GET_SCHEDULES"))
@@ -19879,6 +19941,8 @@ edit_my_settings (credentials_t * credentials, params_t *params,
     g_string_append (commands, "<get_filters/>");
   if (command_enabled (credentials, "GET_PORT_LISTS"))
     g_string_append (commands, "<get_port_lists/>");
+  if (command_enabled (credentials, "GET_REPORT_FORMAT"))
+    g_string_append (commands, "<get_report_formats/>");
   if (command_enabled (credentials, "GET_SCANNERS"))
     g_string_append (commands, "<get_scanners/>");
   if (command_enabled (credentials, "GET_SCHEDULES"))
