@@ -19383,7 +19383,7 @@ should not have received it.
           </tr>
           <tr>
             <td><xsl:value-of select="gsa:i18n ('Host', 'Host')"/></td>
-            <td><input type="text" name="host" value="localhost" size="30"/></td>
+            <td><input type="text" name="scanner_host" value="localhost" size="30"/></td>
           </tr>
           <tr>
             <td><xsl:value-of select="gsa:i18n ('Port', 'Port')"/></td>
@@ -19559,12 +19559,12 @@ should not have received it.
             <td>
               <xsl:choose>
                 <xsl:when test="$in_use">
-                  <input type="text" name="host" size="30" maxlength="400"
+                  <input type="text" name="scanner_host" size="30" maxlength="400"
                          disabled="1"
                          value="{commands_response/get_scanners_response/scanner/host}"/>
                 </xsl:when>
                 <xsl:otherwise>
-                  <input type="text" name="host" size="30" maxlength="400"
+                  <input type="text" name="scanner_host" size="30" maxlength="400"
                          value="{commands_response/get_scanners_response/scanner/host}"/>
                 </xsl:otherwise>
               </xsl:choose>

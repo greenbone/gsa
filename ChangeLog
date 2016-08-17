@@ -1,6 +1,16 @@
+2016-08-17  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/gsad.c (init_validator): Add hostpath and scanner_host validators.
+
+	* src/gsad_omp.c (create_scanner_omp, save_scanner_omp): Adjust for
+	parameter name change.
+
+	* src/html/classic/omp.xsl (html-create-scanner-form)
+	(html-edit-scanner-form): Change host parameter name to scanner_host.
+
 2016-08-17  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
-	* src/html/classic/help.xsl (powerfilter.html): Add descriptions of 
+	* src/html/classic/help.xsl (powerfilter.html): Add descriptions of
 	special keywords for Tasks, Reports and Results.
 
 2016-08-16  Matthew Mundell <matthew.mundell@greenbone.net>

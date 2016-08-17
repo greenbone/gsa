@@ -1281,6 +1281,7 @@ init_validator ()
   openvas_validator_add (validator, "format",     "^[-[:alnum:]]{1,15}$");
   openvas_validator_add (validator, "host",       "^[[:alnum:]:\\.]{1,80}$");
   openvas_validator_add (validator, "hostport",   "^[-[:alnum:]\\. :]{1,80}$");
+  openvas_validator_add (validator, "hostpath",   "^[-[:alnum:]\\. :/]{1,80}$");
   openvas_validator_add (validator, "hosts",      "^[-[:alnum:],: \\./]{1,2000}$");
   openvas_validator_add (validator, "hosts_allow", "^(0|1)$");
   openvas_validator_add (validator, "hosts_opt",  "^[-[:alnum:], \\./]{0,2000}$");
@@ -1563,6 +1564,7 @@ init_validator ()
   openvas_validator_alias (validator, "roles",             "optional_number");
   openvas_validator_alias (validator, "period",       "optional_number");
   openvas_validator_alias (validator, "period_unit",  "calendar_unit");
+  openvas_validator_alias (validator, "scanner_host",     "hostpath");
   openvas_validator_alias (validator, "scanner_type", "number");
   openvas_validator_alias (validator, "schedules_only", "boolean");
   openvas_validator_alias (validator, "schedule_periods", "number");

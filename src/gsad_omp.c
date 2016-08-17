@@ -17934,7 +17934,7 @@ create_scanner_omp (credentials_t * credentials, params_t *params,
   no_redirect = params_value (params, "no_redirect");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
-  host = params_value (params, "host");
+  host = params_value (params, "scanner_host");
   port = params_value (params, "port");
   type = params_value (params, "scanner_type");
   ca_pub = params_value (params, "ca_pub");
@@ -18176,7 +18176,7 @@ save_scanner_omp (credentials_t * credentials, params_t *params,
   scanner_id = params_value (params, "scanner_id");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
-  host = params_value (params, "host");
+  host = params_value (params, "scanner_host");
   port = params_value (params, "port");
   type = params_value (params, "scanner_type");
   which_cert = params_value (params, "which_cert");
