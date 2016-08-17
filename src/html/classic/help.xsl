@@ -7988,10 +7988,27 @@ Public License instead of this License.
         For some resource types the powerfilter offers extra keywords.
       </p>
 
+      <h5>Tasks, Reports, Results</h5>
+      <p>
+        For Tasks, Reports and Results the powerfilter can contain the special
+         keywords "apply_overrides" and "min_qod".
+      </p>
+      <p>
+        "apply_overrides" sets whether overrides are applied to the
+         results, which can also affect the overall severity of a report
+         or task.
+      </p>
+      <p>
+        "min_qod" specifies an overall minimum QoD. Results below this QoD
+        are neither shown nor considered in the overall severity of a report
+        or task.
+      </p>
+
       <h5>Tasks</h5>
 
       <p>
-        Tasks include the extra filter terms "schedule" and "next_due".
+        In addition to the keywords above Task filters can include the keywords
+        "schedule" and "next_due".
       </p>
       <p>
         "schedule" allows filtering and sorting by the name of the task's
@@ -8002,6 +8019,45 @@ Public License instead of this License.
         is due to run.  For example, "next_due>2d" will list all scheduled
         tasks that are due to start more than two days from now.
       </p>
+
+      <h5>Results</h5>
+      <p>
+        In addition to the keywords above Result filters can include the
+        keywords "autofp", "levels", "notes" and "overrides".
+      </p>
+      <p>
+        "autofp" controls whether results are automatically marked as
+        "False Positive". "1" means the CVEs marked as closed must match fully,
+        "2" means partial matches are sufficient.
+      </p>
+      <p>
+        In a delta report "delta_states" specifies which states are shown.
+        The value given is a string of letters, each representing a state
+        that will be included:
+        "c" for "<b>c</b>hanged",
+        "g" for "<b>g</b>one",
+        "n" for "<b>n</b>ew" and
+        "s" for "<b>s</b>ame".
+      </p>
+      <p>
+        "levels" is a compact way to select the severity levels shown.
+        The value given is a string of letters, each representing a severity
+        level that will be included:
+        "h" for "<b>h</b>igh",
+        "m" for "<b>m</b>edium",
+        "l" for "<b>l</b>ow",
+        "g" for "lo<b>g</b>" and
+        "f" for "<b>f</b>alse positive".
+      </p>
+      <p>
+        "notes" specifies whether Notes are are shown.
+      </p>
+      <p>
+        "overrides" specifies whether Overrides are are shown. This option is
+        independent from "apply_overrides" and does <i>not</i> change whether
+        Overrides are applied to the results.
+      </p>
+
 
       <h5>Notes</h5>
 
