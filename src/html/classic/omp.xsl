@@ -38726,7 +38726,7 @@ should not have received it.
         </td>
       </tr>
       <tr>
-        <td><xsl:value-of select="gsa:i18n ('Routes', 'Host')"/>:</td>
+        <td><xsl:value-of select="gsa:i18n ('Route', 'Host')"/>:</td>
         <td>
           <ul>
             <xsl:variable name="token" select="/envelope/token"/>
