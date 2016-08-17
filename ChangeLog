@@ -1,5 +1,10 @@
 2016-08-17  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/classic/help.xsl (help [my_settings.html]): Add entry for
+	Default Report Format.
+
+2016-08-17  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Add setting Default Report Format.
 
 	* src/html/classic/omp.xsl (full-report-export-form)

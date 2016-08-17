@@ -5408,6 +5408,10 @@ Public License instead of this License.
       <p>
         Default <a href="glossary.html?token={/envelope/token}#port_list">Port List</a> for new Targets.
       </p>
+      <h4>Default Report Format</h4>
+      <p>
+        Default <a href="glossary.html?token={/envelope/token}#report_format">Report Format</a> for report downloading.
+      </p>
       <h4>Default OpenVAS Scan Config</h4>
       <p>
         Default OpenVAS <a href="glossary.html?token={/envelope/token}#scanner">Scanner</a> for new Tasks.
@@ -8080,7 +8084,7 @@ Public License instead of this License.
       <p>
         Additionally, the Permissions can be filtered for orphaned permissions by
         using "orphan=1". Those are permissions where the referring resource were
-        meanwhile deleted. With "orphan=0" you exclude the orhphaned entries. 
+        meanwhile deleted. With "orphan=0" you exclude the orhphaned entries.
       </p>
 
     </div>
