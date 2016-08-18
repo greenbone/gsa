@@ -3459,20 +3459,20 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
   PARAM_OR_SETTING (schedule, "schedule_id_optional",
                     "778eedad-5550-4de0-abb6-1320d13b5e18",
                     openvas_server_close (socket, session);
-                    g_free (alert);)
+                    g_free (alert));
 
   PARAM_OR_SETTING (slave, "slave_id_optional",
                     "aec201fa-8a82-4b61-bebe-a44ea93b2909",
                     openvas_server_close (socket, session);
                     g_free (alert);
-                    g_free (schedule);)
+                    g_free (schedule));
 
   PARAM_OR_SETTING (target, "target_id",
                     "23409203-940a-4b4a-b70c-447475f18323",
                     openvas_server_close (socket, session);
                     g_free (alert);
                     g_free (schedule);
-                    g_free (slave);)
+                    g_free (slave));
 
   PARAM_OR_SETTING (openvas_config, "config_id",
                     "fe7ea321-e3e3-4cc6-9952-da836aae83ce",
@@ -3480,7 +3480,7 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
                     g_free (alert);
                     g_free (schedule);
                     g_free (slave);
-                    g_free (target);)
+                    g_free (target));
 
   PARAM_OR_SETTING (osp_config, "osp_config_id",
                     "fb19ac4b-614c-424c-b046-0bc32bf1be73",
@@ -3489,7 +3489,7 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
                     g_free (schedule);
                     g_free (slave);
                     g_free (target);
-                    g_free (openvas_config);)
+                    g_free (openvas_config));
 
   PARAM_OR_SETTING (openvas_scanner, "scanner_id",
                     "f7d0f6ed-6f9e-45dc-8bd9-05cced84e80d",
@@ -3499,7 +3499,7 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
                     g_free (slave);
                     g_free (target);
                     g_free (openvas_config);
-                    g_free (osp_config);)
+                    g_free (osp_config));
 
   PARAM_OR_SETTING (osp_scanner, "osp_scanner_id",
                     "b20697c9-be0a-4cd4-8b4d-5fe7841ebb03",
@@ -3510,7 +3510,7 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
                     g_free (target);
                     g_free (openvas_config);
                     g_free (osp_config);
-                    g_free (openvas_scanner);)
+                    g_free (openvas_scanner));
 
   xml = g_string_new ("<new_task>");
 
@@ -9426,25 +9426,25 @@ new_target (credentials_t *credentials, params_t *params, const char *extra_xml,
 
   PARAM_OR_SETTING (port_list, "port_list_id",
                     "d74a9ee8-7d35-4879-9485-ab23f1bd45bc",
-                    openvas_server_close (socket, session);)
+                    openvas_server_close (socket, session));
 
   PARAM_OR_SETTING (ssh_credential, "ssh_credential_id",
                     "6fc56b72-c1cf-451c-a4c4-3a9dc784c3bd",
                     openvas_server_close (socket, session);
-                    g_free (port_list);)
+                    g_free (port_list));
 
   PARAM_OR_SETTING (smb_credential, "smb_credential_id",
                     "a25c0cfe-f977-417b-b1da-47da370c03e8",
                     openvas_server_close (socket, session);
                     g_free (port_list);
-                    g_free (ssh_credential);)
+                    g_free (ssh_credential));
 
   PARAM_OR_SETTING (esxi_credential, "esxi_credential_id",
                     "83545bcf-0c49-4b4c-abbf-63baf82cc2a7",
                     openvas_server_close (socket, session);
                     g_free (port_list);
                     g_free (ssh_credential);
-                    g_free (smb_credential);)
+                    g_free (smb_credential));
 
   PARAM_OR_SETTING (snmp_credential, "snmp_credential_id",
                     "024550b8-868e-4b3c-98bf-99bb732f6a0d",
@@ -9452,7 +9452,7 @@ new_target (credentials_t *credentials, params_t *params, const char *extra_xml,
                     g_free (port_list);
                     g_free (ssh_credential);
                     g_free (smb_credential);
-                    g_free (esxi_credential);)
+                    g_free (esxi_credential));
 
   xml = g_string_new ("<new_target>");
 

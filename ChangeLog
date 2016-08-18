@@ -1,5 +1,11 @@
 2016-08-18  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (new_task, new_target): Remove the last cleanup semicolon
+	and put one after the macro call, because the convention is that the
+	caller will terminate the statement, not the macro.
+
+2016-08-18  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (setting_get_value_error): New function.
 	(PARAM_OR_SETTING): Move work out to new function, to keep the macro
 	cleaner.
