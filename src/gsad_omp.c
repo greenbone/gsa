@@ -3301,6 +3301,55 @@ resource_action (credentials_t *credentials, params_t *params, const char *type,
  */
 
 /**
+ * @brief Get setting, returning HTML message on error.
+ *
+ * @param[in]  credentials  Credentials of user issuing the action.
+ * @param[in]  session     Username and password for authentication.
+ * @param[in]  setting_id  UUID of the setting to get.
+ * @param[out] value       Value of the setting.
+ * @param[out] response_data  Extra data return for the HTTP response.
+ *
+ * @return NULL on success, else error message page HTML.
+ */
+static char *
+setting_get_value_error (credentials_t * credentials,
+                         gnutls_session_t *session,
+                         const gchar *setting_id,
+                         gchar **value,
+                         cmd_response_data_t* response_data)
+{
+  switch (setting_get_value (session, setting_id, value, response_data))
+    {
+      case 0:
+        return NULL;
+      case 1:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        return gsad_message (credentials,
+                            "Internal error", __FUNCTION__, __LINE__,
+                            "An internal error occurred while getting a setting. "
+                            "The setting could not be delivered. "
+                            "Diagnostics: Failure to send command to manager daemon.",
+                            "/omp?cmd=get_tasks", response_data);
+      case 2:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        return gsad_message (credentials,
+                            "Internal error", __FUNCTION__, __LINE__,
+                            "An internal error occurred while getting a setting. "
+                            "The setting could not be delivered. "
+                            "Diagnostics: Failure to receive response from manager daemon.",
+                            "/omp?cmd=get_tasks", response_data);
+      default:
+        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+        return gsad_message (credentials,
+                            "Internal error", __FUNCTION__, __LINE__,
+                            "An internal error occurred while getting a setting. "
+                            "The setting could not be delivered. "
+                            "Diagnostics: Internal error.",
+                            "/omp?cmd=get_tasks", response_data);
+    }
+}
+
+/**
  * @brief Get a value from a param or fall back to a setting
  *
  * @param[out]  value       Variable to assign the value to.
@@ -3312,38 +3361,13 @@ resource_action (credentials_t *credentials, params_t *params, const char *type,
     value = g_strdup (params_value (params, param));                          \
   else                                                                        \
     {                                                                         \
-      int ret;                                                                \
-      ret = setting_get_value (&session, setting_id, &value, response_data);  \
-      if (ret)                                                                \
+      char *message;                                                          \
+      message = setting_get_value_error (credentials, &session, setting_id,   \
+                                         &value, response_data);              \
+      if (message)                                                            \
         {                                                                     \
-          cleanup                                                             \
-          switch (ret)                                                        \
-            {                                                                 \
-              case 1:                                                         \
-                response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR; \
-                return gsad_message (credentials,                             \
-                                    "Internal error", __FUNCTION__, __LINE__, \
-                                    "An internal error occurred while getting a setting. " \
-                                    "The setting could not be delivered. " \
-                                    "Diagnostics: Failure to send command to manager daemon.", \
-                                    "/omp?cmd=get_tasks", response_data);     \
-              case 2:                                                         \
-                response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR; \
-                return gsad_message (credentials,                             \
-                                    "Internal error", __FUNCTION__, __LINE__, \
-                                    "An internal error occurred while getting a setting. " \
-                                    "The setting could not be delivered. " \
-                                    "Diagnostics: Failure to receive response from manager daemon.", \
-                                    "/omp?cmd=get_tasks", response_data);     \
-              default:                                                        \
-                response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR; \
-                return gsad_message (credentials,                             \
-                                    "Internal error", __FUNCTION__, __LINE__, \
-                                    "An internal error occurred while getting a setting. " \
-                                    "The setting could not be delivered. "    \
-                                    "Diagnostics: Internal error.",           \
-                                    "/omp?cmd=get_tasks", response_data);     \
-            }                                                                 \
+          cleanup;                                                            \
+          return message;                                                     \
         }                                                                     \
     }
 

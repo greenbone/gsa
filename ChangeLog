@@ -1,3 +1,9 @@
+2016-08-18  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (setting_get_value_error): New function.
+	(PARAM_OR_SETTING): Move work out to new function, to keep the macro
+	cleaner.
+
 2016-08-18  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/omp.xsl (report [section-filter-full]): Add correct
