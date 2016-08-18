@@ -149,8 +149,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:value-of select="gsa:i18n('By clicking the New Task icon', 'Task Wizard')"/>
       <xsl:text> </xsl:text>
       <a href="/omp?cmd=new_task&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+         class="icon icon-sm"
          title="{gsa:i18n ('New Task', 'Task')}">
-        <img src="/img/new.png" />
+        <img src="/img/new.svg" />
       </a>
       <xsl:text> </xsl:text>
       <xsl:value-of select="gsa:i18n('you can create a new Task yourself.', 'Task Wizard')"/>

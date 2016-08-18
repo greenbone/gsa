@@ -772,7 +772,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
        Pressing the
        <a href="glossary.html?token={/envelope/token}#prognostic_report">prognostic report</a>
        icon
-       <img src="/img/prognosis.png" class="icon icon-sm" alt="Prognostic Report" title="Prognostic Report"/>
+       <img src="/img/prognosis.svg" class="icon icon-sm" alt="Prognostic Report" title="Prognostic Report"/>
        will switch to a prognostic report on this host.
       </p>
 
@@ -792,9 +792,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <p>
         The prognostic reporting requires the SCAP data.  As a result all prognostic
         report icons
-        <img src="/img/prognosis.png" class="icon icon-sm" alt="Prognostic Report" title="Prognostic Report"/>
+        <img src="/img/prognosis.svg" class="icon icon-sm" alt="Prognostic Report" title="Prognostic Report"/>
         will be greyed out
-        <img src="/img/prognosis_inactive.png" class="icon icon-sm" alt="Prognostic Report" title="Prognostic Report"/>
+        <img src="/img/prognosis_inactive.svg" class="icon icon-sm" alt="Prognostic Report" title="Prognostic Report"/>
         when the database is missing.
       </p>
       <p>
