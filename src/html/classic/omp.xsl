@@ -1401,7 +1401,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:if test="filters/keywords/keyword[column='notes'] or $filter_options_nodes/option[text()='notes']">
         <div class="form-group">
           <label class="col-2 control-label">
-            <xsl:value-of select="gsa:i18n ('Show Notes', 'Filter')"/>:
+            <xsl:value-of select="gsa:i18n ('Show Notes', 'Report Filter')"/>:
           </label>
           <div class="col-10 checkbox">
             <label>
@@ -1421,7 +1421,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:if test="filters/keywords/keyword[column='overrides'] or $filter_options_nodes/option[text()='overrides']">
         <div class="form-group">
           <label class="col-2 control-label">
-            <xsl:value-of select="gsa:i18n ('Show Overrides', 'Filter')"/>:
+            <xsl:value-of select="gsa:i18n ('Show Overrides', 'Report Filter')"/>:
           </label>
           <div class="col-10 checkbox">
             <label>
@@ -1441,7 +1441,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:if test="filters/keywords/keyword[column='result_hosts_only'] or $filter_options_nodes/option[text()='result_hosts_only']">
         <div class="form-group">
           <label class="col-2 control-label">
-            <xsl:value-of select="gsa:i18n ('Only show hosts that have results', 'Filter')"/>:
+            <xsl:value-of select="gsa:i18n ('Only show hosts that have results', 'Report Filter')"/>:
           </label>
           <div class="col-10 checkbox">
             <label>
@@ -1461,7 +1461,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:if test="filters/keywords/keyword[column='min_qod'] or $filter_options_nodes/option[text()='min_qod']">
         <div class="form-group">
           <label class="col-2 control-label">
-            <xsl:value-of select="gsa:i18n ('QoD', 'Filter')"/>:
+            <xsl:value-of select="gsa:i18n ('QoD', 'NVT or Result')"/>:
           </label>
           <span class="col-10">
             <div class="form-item">
@@ -2487,7 +2487,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     <h2>
       <a href="/omp?cmd=get_tags&amp;filter=resource_uuid={$resource_id}&amp;token={/envelope/token}"
-         title="{gsa:i18n ('Tags', 'Tags')}">
+         title="{gsa:i18n ('Tags', 'Tag')}">
         <img class="icon icon-sm" src="/img/tag.svg" alt="Tags"/>
       </a>
       <xsl:value-of select="gsa:i18n ('User Tags', 'Tags')"/>
@@ -2833,7 +2833,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
            title="{gsa:i18n ('Permissions', 'Permission')}">
           <img class="icon icon-sm" src="/img/permission.svg" alt="Permissions"/>
         </a>
-        <xsl:value-of select="gsa:i18n ('Permissions', 'Permissions')"/>
+        <xsl:value-of select="gsa:i18n ('Permissions', 'Permission')"/>
         <xsl:choose>
           <xsl:when test="$permissions/permission_count/filtered != 0">
             (<xsl:value-of select="$permissions/permission_count/filtered"/>)
@@ -3480,7 +3480,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <input type="checkbox" name="apply_overrides" value="1" checked="1"/>
             </xsl:otherwise>
           </xsl:choose>
-          <xsl:value-of select="gsa:i18n ('Apply Overrides', 'Report Filter')"/>
+          <xsl:value-of select="gsa:i18n ('Apply Overrides', 'Overrides')"/>
         </label>
       </div>
 
@@ -4228,7 +4228,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <a href="/omp?cmd=upload_report&amp;next=get_report&amp;task_id={@id}&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
          class="upload-action-icon icon icon-sm" data-type="report"
          data-task_id="{@id}" data-reload="window"
-         title="{gsa:i18n ('Import Report', 'Task')}">
+         title="{gsa:i18n ('Import Report', 'Report')}">
         <img src="/img/upload.svg"/>
       </a>
     </xsl:when>
@@ -4584,7 +4584,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:if test="target/@id != ''">
         <tr>
           <td>
-            <xsl:value-of select="gsa:i18n ('Add to Assets', 'Task')"/>:
+            <xsl:value-of select="gsa:i18n ('Add to Assets', 'Assets')"/>:
           </td>
           <td>
             <xsl:value-of select="gsa:i18n (normalize-space($in_assets/value), 'Task')"/>
@@ -8459,7 +8459,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </div>
         <div class="form-group form-selection-item-credentials form-selection-item-credentials--snmp"
             id="auth_algo_row" style="display:none;">
-          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Auth Algorithm', 'Credential')"/></label>
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Auth Algorithm', 'Auth Data')"/></label>
           <div class="col-10">
             <label class="radio-inline">
               <input name="auth_algorithm" value="md5" type="radio"/>
@@ -8473,7 +8473,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </div>
         <div class="form-group form-selection-item-credentials form-selection-item-credentials--snmp"
             id="priv_algo_row" style="display:none;">
-          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Privacy Algorithm', 'Credential')"/></label>
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Privacy Algorithm', 'Auth Data')"/></label>
           <div class="col-10">
             <label class="radio-inline">
               <input name="privacy_algorithm" value="aes" type="radio" checked="1"/>
@@ -8744,7 +8744,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:if>
         <xsl:if test="$credential_type = 'snmp'">
           <div class="form-group">
-            <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Auth Algorithm', 'Credential')"/></label>
+            <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Auth Algorithm', 'Auth Data')"/></label>
             <div class="col-10">
               <label class="radio-inline">
                 <xsl:choose>
@@ -8773,7 +8773,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:if>
         <xsl:if test="$credential_type = 'snmp'">
           <div class="form-group">
-            <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Privacy Algorithm', 'Credential')"/></label>
+            <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Privacy Algorithm', 'Auth Data')"/></label>
             <div class="col-10">
               <label class="radio-inline">
                 <xsl:choose>
@@ -8841,37 +8841,37 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
   <xsl:if test="$type='usk'">
     <a href="/omp?cmd=download_credential&amp;credential_id={@id}&amp;package_format=rpm&amp;token={/envelope/token}"
-      title="{gsa:i18n ('Download RPM package', 'Credential')}"
+      title="{gsa:i18n ('Download RPM package', 'Action Verb')}"
       class="icon icon-sm">
-      <img src="/img/rpm.svg" alt="{gsa:i18n ('Download RPM', 'Credential')}"/>
+      <img src="/img/rpm.svg" alt="{gsa:i18n ('Download RPM', 'Action Verb')}"/>
     </a>
   </xsl:if>
   <xsl:if test="$type='usk'">
     <a href="/omp?cmd=download_credential&amp;credential_id={@id}&amp;package_format=deb&amp;token={/envelope/token}"
-      title="{gsa:i18n ('Download Debian package', 'Credential')}"
+      title="{gsa:i18n ('Download Debian package', 'Action Verb')}"
       class="icon icon-sm">
-      <img src="/img/deb.svg" alt="{gsa:i18n ('Download Deb', 'Credential')}"/>
+      <img src="/img/deb.svg" alt="{gsa:i18n ('Download Deb', 'Action Verb')}"/>
     </a>
   </xsl:if>
   <xsl:if test="$type='up'">
     <a href="/omp?cmd=download_credential&amp;credential_id={@id}&amp;package_format=exe&amp;token={/envelope/token}"
-      title="{gsa:i18n ('Download Exe package', 'Credential')}"
+      title="{gsa:i18n ('Download Exe package', 'Action Verb')}"
       class="icon icon-sm">
-      <img src="/img/exe.svg" alt="{gsa:i18n ('Download Exe', 'Credential')}"/>
+      <img src="/img/exe.svg" alt="{gsa:i18n ('Download Exe', 'Action Verb')}"/>
     </a>
   </xsl:if>
   <xsl:if test="$type='usk'">
     <a href="/omp?cmd=download_credential&amp;credential_id={@id}&amp;package_format=key&amp;token={/envelope/token}"
-      title="{gsa:i18n ('Download Public Key', 'Credential')}"
+      title="{gsa:i18n ('Download Public Key', 'Action Verb')}"
       class="icon icon-sm">
-      <img src="/img/key.svg" alt="{gsa:i18n ('Download Public Key', 'Credential')}"/>
+      <img src="/img/key.svg" alt="{gsa:i18n ('Download Public Key', 'Action Verb')}"/>
     </a>
   </xsl:if>
   <xsl:if test="$type='cc'">
     <a href="/omp?cmd=download_credential&amp;credential_id={@id}&amp;package_format=pem&amp;token={/envelope/token}"
-      title="{gsa:i18n ('Download Certificate', 'Credential')}"
+      title="{gsa:i18n ('Download Certificate', 'Action Verb')}"
       class="icon icon-sm">
-      <img src="/img/key.svg" alt="{gsa:i18n ('Download Certificate', 'Credential')}"/>
+      <img src="/img/key.svg" alt="{gsa:i18n ('Download Certificate', 'Action Verb')}"/>
     </a>
   </xsl:if>
 </xsl:template>
@@ -9125,7 +9125,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </a>
     <h2>
       <a href="/omp?cmd=get_targets&amp;token={/envelope/token}"
-         title="{gsa:i18n ('Targets', 'Targets')}">
+         title="{gsa:i18n ('Targets', 'Target')}">
         <img class="icon icon-sm" src="/img/target.svg" alt="Targets"/>
       </a>
       <xsl:value-of select="gsa:i18n ('Targets using this Credential', 'Credential')"/>
@@ -9174,7 +9174,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </a>
     <h2>
       <a href="/omp?cmd=get_targets&amp;token={/envelope/token}"
-         title="{gsa:i18n ('Targets', 'Targets')}">
+         title="{gsa:i18n ('Targets', 'Target')}">
         <img class="icon icon-sm" src="/img/scanner.svg" alt="Scanners"/>
       </a>
       <xsl:value-of select="gsa:i18n ('Scanners using this Credential', 'Credential')"/>
@@ -10598,7 +10598,7 @@ should not have received it.
         </div>
 
         <div class="form-group form-selection-item-method form-selection-item-method--send" id="send_to_host_report_row">
-          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Report', 'Alert')"/></label>
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Report', 'Report')"/></label>
           <div class="col-10">
             <select name="method_data:send_report_format">
               <xsl:for-each select="$report-formats/report_format">
@@ -10671,7 +10671,7 @@ should not have received it.
         </div>
 
         <div class="form-group form-selection-item-method form-selection-item-method--scp">
-          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Report', 'Alert')"/></label>
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Report', 'Report')"/></label>
           <div class="col-10">
             <select name="method_data:scp_report_format">
               <xsl:for-each select="$report-formats/report_format">
@@ -11608,7 +11608,7 @@ should not have received it.
         </div>
 
         <div class="form-group form-selection-item-method form-selection-item-method--send" id="send_to_host_report_row">
-          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Report', 'Alert')"/></label>
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Report', 'Report')"/></label>
           <div class="col-10">
             <select name="method_data:send_report_format">
               <xsl:for-each select="$report-formats/report_format">
@@ -11712,7 +11712,7 @@ should not have received it.
         </div>
 
         <div class="form-group form-selection-item-method form-selection-item-method--scp">
-          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Report', 'Alert')"/></label>
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Report', 'Report')"/></label>
           <div class="col-10">
             <select name="method_data:scp_report_format">
               <xsl:for-each select="$report-formats/report_format">
@@ -12385,7 +12385,7 @@ should not have received it.
                 </tr>
                 <tr>
                   <td width="45"></td>
-                  <td><xsl:value-of select="gsa:i18n ('Message', 'Alert|Email')"/>:</td>
+                  <td><xsl:value-of select="gsa:i18n ('Message', 'Alert')"/>:</td>
                   <td>
                     <xsl:choose>
                       <xsl:when test="string-length(method/data[name='message']/text()) &gt; 0">
@@ -12497,7 +12497,7 @@ should not have received it.
               <xsl:when test="method/text()='Start Task'">
                 <tr>
                   <td width="45"></td>
-                  <td><xsl:value-of select="gsa:i18n ('Task', 'Alert')"/>:</td>
+                  <td><xsl:value-of select="gsa:i18n ('Task', 'Task')"/>:</td>
                   <td>
                     <xsl:variable name="id" select="method/data[name='start_task_task']/text()"/>
                     <xsl:variable name="name" select="../../get_tasks_response/task[@id = $id]/name"/>
@@ -12518,12 +12518,12 @@ should not have received it.
               <xsl:when test="method/text()='Send'">
                 <tr>
                   <td width="45"></td>
-                  <td><xsl:value-of select="gsa:i18n ('Host', 'Alert')"/>:</td>
+                  <td><xsl:value-of select="gsa:i18n ('Host', 'Host')"/>:</td>
                   <td><xsl:value-of select="method/data[name='send_host']/text()"/></td>
                 </tr>
                 <tr>
                   <td width="45"></td>
-                  <td><xsl:value-of select="gsa:i18n ('Port', 'Alert')"/>:</td>
+                  <td><xsl:value-of select="gsa:i18n ('Port', 'Port')"/>:</td>
                   <td><xsl:value-of select="method/data[name='send_port']/text()"/></td>
                 </tr>
                 <xsl:choose>
@@ -12583,7 +12583,7 @@ should not have received it.
                 </tr>
                 <tr>
                   <td width="45"></td>
-                  <td><xsl:value-of select="gsa:i18n ('Host', 'Alert|Email')"/>:</td>
+                  <td><xsl:value-of select="gsa:i18n ('Host', 'Host')"/>:</td>
                   <td>
                     <xsl:choose>
                       <xsl:when test="string-length(method/data[name='scp_host']/text()) &gt; 0">
@@ -12594,7 +12594,7 @@ should not have received it.
                 </tr>
                 <tr>
                   <td width="45"></td>
-                  <td><xsl:value-of select="gsa:i18n ('Known Hosts', 'Alert|Email')"/>:</td>
+                  <td><xsl:value-of select="gsa:i18n ('Known Hosts', 'Alert')"/>:</td>
                   <td>
                     <xsl:if test="string-length (method/data[name='scp_known_hosts']/text ()) &gt; 0">
                       <xsl:choose>
@@ -12623,7 +12623,7 @@ should not have received it.
                 </tr>
                 <tr>
                   <td width="45"></td>
-                  <td><xsl:value-of select="gsa:i18n ('Path', 'Alert|Email')"/>:</td>
+                  <td><xsl:value-of select="gsa:i18n ('Path', 'Alert')"/>:</td>
                   <td>
                     <xsl:choose>
                       <xsl:when test="string-length(method/data[name='scp_path']/text()) &gt; 0">
@@ -12741,7 +12741,7 @@ should not have received it.
     </a>
     <h2>
       <a href="/omp?cmd=get_tasks&amp;token={/envelope/token}"
-         title="{gsa:i18n ('Tasks', 'Tasks')}">
+         title="{gsa:i18n ('Tasks', 'Task')}">
         <img class="icon icon-sm" src="/img/task.svg" alt="Tasks"/>
       </a>
       <xsl:value-of select="gsa:i18n ('Tasks using this Alert', 'Alert')"/>
@@ -13870,7 +13870,7 @@ should not have received it.
   <xsl:if test="$select_type = 'os' or gsa:may-op ('get_assets')">
     <xsl:call-template name="opt">
       <xsl:with-param name="value" select="'os'"/>
-      <xsl:with-param name="content" select="gsa:i18n ('Operating System', 'OS')"/>
+      <xsl:with-param name="content" select="gsa:i18n ('Operating System', 'Operating System')"/>
       <xsl:with-param name="select-value" select="$select_type"/>
     </xsl:call-template>
   </xsl:if>
@@ -15469,7 +15469,7 @@ should not have received it.
         <field>hosts</field>
       </column>
       <column>
-        <name><xsl:value-of select="gsa:i18n('IPs', 'Target')"/></name>
+        <name><xsl:value-of select="gsa:i18n('IPs', 'Host')"/></name>
         <field>ips</field>
       </column>
       <column>
@@ -15928,7 +15928,7 @@ should not have received it.
     <xsl:call-template name="minor-details"/>
     <h1>
       <a href="/omp?cmd=get_targets&amp;token={/envelope/token}"
-         title="{gsa:i18n ('Targets', 'Targets')}">
+         title="{gsa:i18n ('Targets', 'Target')}">
         <img class="icon icon-lg" src="/img/target.svg" alt="Targets"/>
       </a>
       <xsl:value-of select="gsa:i18n ('Target', 'Target')"/>:
@@ -16138,7 +16138,7 @@ should not have received it.
     </a>
     <h2>
       <a href="/omp?cmd=get_tasks&amp;token={/envelope/token}"
-         title="{gsa:i18n ('Tasks', 'Tasks')}">
+         title="{gsa:i18n ('Tasks', 'Task')}">
         <img class="icon icon-sm" src="/img/task.svg" alt="Tasks"/>
       </a>
       <xsl:value-of select="gsa:i18n ('Tasks using this Target', 'Target')"/>
@@ -16384,7 +16384,7 @@ should not have received it.
       <xsl:variable name="family" select="config/family"/>
 
       <table>
-        <tr><td><xsl:value-of select="gsa:i18n ('Config', 'Scan Config')"/>:</td><td><xsl:value-of select="$config_name"/></td></tr>
+        <tr><td><xsl:value-of select="gsa:i18n ('Config', 'Config')"/>:</td><td><xsl:value-of select="$config_name"/></td></tr>
         <tr><td><b><xsl:value-of select="gsa:i18n ('Family', 'Scan Config')"/>:</b></td><td><b><xsl:value-of select="$family"/></b></td></tr>
       </table>
 
@@ -16526,7 +16526,7 @@ should not have received it.
     <xsl:variable name="family" select="config/family"/>
 
     <table>
-      <tr><td><xsl:value-of select="gsa:i18n ('Config', 'Scan Config')"/>:</td><td><xsl:value-of select="$config_name"/></td></tr>
+      <tr><td><xsl:value-of select="gsa:i18n ('Config', 'Config')"/>:</td><td><xsl:value-of select="$config_name"/></td></tr>
       <tr><td><b><xsl:value-of select="gsa:i18n ('Family', 'Scan Config')"/>:</b></td><td><b><xsl:value-of select="$family"/></b></td></tr>
     </table>
 
@@ -17131,7 +17131,7 @@ should not have received it.
         </b>
       </td>
     </tr>
-    <tr><td><xsl:value-of select="gsa:i18n ('Config', 'Scan Config')"/>:</td><td><xsl:value-of select="$config/name"/></td></tr>
+    <tr><td><xsl:value-of select="gsa:i18n ('Config', 'Config')"/>:</td><td><xsl:value-of select="$config/name"/></td></tr>
     <tr><td><xsl:value-of select="gsa:i18n ('Family', 'NVT')"/>:</td><td><xsl:value-of select="family"/></td></tr>
     <tr><td><xsl:value-of select="gsa:i18n ('OID', 'NVT')"/>:</td><td><xsl:value-of select="@oid"/></td></tr>
     <tr><td><xsl:value-of select="gsa:i18n ('Version', 'NVT')"/>:</td><td><xsl:value-of select="version"/></td></tr>
@@ -17664,7 +17664,7 @@ should not have received it.
     </a>
     <a href="/omp?cmd=upload_config&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
        class="upload-action-icon icon icon-sm" data-type="config"
-       title="{gsa:i18n ('Import Scan Config', 'Config')}">
+       title="{gsa:i18n ('Import Scan Config', 'Scan Config')}">
       <img src="/img/upload.svg"/>
     </a>
     <xsl:choose>
@@ -19265,7 +19265,7 @@ should not have received it.
     </a>
     <h2>
       <a href="/omp?cmd=get_tasks&amp;token={/envelope/token}"
-         title="{gsa:i18n ('Tasks', 'Tasks')}">
+         title="{gsa:i18n ('Tasks', 'Task')}">
         <img class="icon icon-sm" src="/img/task.svg" alt="Tasks"/>
       </a>
       <xsl:value-of select="gsa:i18n ('Tasks using this Schedule', 'Schedule')"/>
@@ -19636,23 +19636,23 @@ should not have received it.
                 <xsl:when test="string-length ($ca_pub) &gt; 0">
                   <label>
                     <input type="radio" name="which_cert" value="existing" checked="1"/>
-                    <xsl:value-of select="gsa:i18n ('Existing', 'Auth Data')"/>
+                    <xsl:value-of select="gsa:i18n ('Existing', 'Certificate')"/>
                   </label>
                   <label>
                     <input type="radio" name="which_cert" value="default"/>
-                    <xsl:value-of select="gsa:i18n ('Default', 'Auth Data')"/>
+                    <xsl:value-of select="gsa:i18n ('Default', 'Certificate')"/>
                   </label>
                 </xsl:when>
                 <xsl:otherwise>
                   <label>
                     <input type="radio" name="which_cert" value="default" checked="1"/>
-                    <xsl:value-of select="gsa:i18n ('Default', 'Auth Data')"/>
+                    <xsl:value-of select="gsa:i18n ('Default', 'Certificate')"/>
                   </label>
                 </xsl:otherwise>
               </xsl:choose>
               <label>
                 <input type="radio" name="which_cert" value="new"/>
-                <xsl:value-of select="gsa:i18n ('New:', 'Auth Data')"/>
+                <xsl:value-of select="gsa:i18n ('New:', 'Certificate')"/>
                 <input type="file" name="ca_pub"/>
               </label>
               <xsl:if test="string-length ($ca_pub) &gt; 0">
@@ -19918,7 +19918,7 @@ should not have received it.
     </a>
     <h2>
       <a href="/omp?cmd=get_tasks&amp;token={/envelope/token}"
-         title="{gsa:i18n ('Tasks', 'Tasks')}">
+         title="{gsa:i18n ('Tasks', 'Task')}">
         <img class="icon icon-sm" src="/img/task.svg" alt="Tasks"/>
       </a>
       <xsl:value-of select="gsa:i18n ('Tasks using this Scanner', 'Scanner')"/>
@@ -23277,7 +23277,7 @@ should not have received it.
 <xsl:template match="nvt" mode="details">
   <xsl:param name="config"/>
   <table>
-    <tr><td><xsl:value-of select="gsa:i18n ('Config', 'Scan Config')"/>:</td><td><xsl:value-of select="$config"/></td></tr>
+    <tr><td><xsl:value-of select="gsa:i18n ('Config', 'Config')"/>:</td><td><xsl:value-of select="$config"/></td></tr>
     <tr><td><xsl:value-of select="gsa:i18n ('Family', 'NVT')"/>:</td><td><xsl:value-of select="family"/></td></tr>
     <tr><td><xsl:value-of select="gsa:i18n ('OID', 'NVT')"/>:</td><td><xsl:value-of select="@oid"/></td></tr>
     <tr><td><xsl:value-of select="gsa:i18n ('Version', 'NVT')"/>:</td><td><xsl:value-of select="version"/></td></tr>
@@ -27878,7 +27878,7 @@ should not have received it.
     </a>
     <h2>
       <a href="/omp?cmd=get_targets&amp;token={/envelope/token}"
-         title="{gsa:i18n ('Targets', 'Targets')}">
+         title="{gsa:i18n ('Targets', 'Target')}">
         <img class="icon icon-sm" src="/img/target.svg" alt="Targets"/>
       </a>
       <xsl:value-of select="gsa:i18n ('Targets using this Port List', 'Port List')"/>
@@ -27988,7 +27988,7 @@ should not have received it.
       <div class="section-header">
         <xsl:choose>
           <xsl:when test="commands_response/get_port_lists_response/port_list/in_use = 0">
-            <a href="#" title="{gsa:i18n ('Add Port Range', 'Override')}"
+            <a href="#" title="{gsa:i18n ('Add Port Range', 'Port Range')}"
               class="new-action-icon icon icon-sm icon-action"
               data-type="port_range" data-extra="port_list_id={$id}"
               data-reload="parent">
@@ -32948,7 +32948,7 @@ should not have received it.
           <col/>
           <col width="100px"/>
         <tr class="gbntablehead2">
-          <td><xsl:value-of select="gsa:i18n ('Operating System', 'Report OS')"/></td>
+          <td><xsl:value-of select="gsa:i18n ('Operating System', 'Operating System')"/></td>
           <td><xsl:value-of select="gsa:i18n ('CPE', 'CPE')"/></td>
           <td><xsl:value-of select="gsa:i18n ('Hosts', 'Host')"/></td>
           <td><xsl:value-of select="gsa:i18n ('Severity', 'Severity')"/></td>
@@ -33429,7 +33429,7 @@ should not have received it.
   </div>
 
   <div class="icon icon-sm ajax-post" data-reload="next">
-    <img src="/img/remove_from_assets.svg" alt="{gsa:i18n ('Remove from Assets', 'Assets')}"
+    <img src="/img/remove_from_assets.svg" alt="{gsa:i18n ('Remove from Assets', 'Action Verb')}"
       name="Remove from Assets"
       title="{gsa:i18n ('Remove from Assets', 'Action Verb')}"/>
 
@@ -33772,9 +33772,9 @@ should not have received it.
   </div>
   <xsl:if test="string-length ($credential/@id) &gt; 0">
     <a href="/omp?cmd=download_credential&amp;credential_id={$credential/@id}&amp;package_format=pem&amp;token={/envelope/token}"
-      title="{gsa:i18n ('Download Certificate', 'Auth Data')} ({gsa:i18n ('from Credential', 'Auth Data')})"
+      title="{gsa:i18n ('Download Certificate', 'Action Verb')} ({gsa:i18n ('from Credential', 'Auth Data')})"
       class="icon icon-sm">
-      <img src="/img/key.svg" alt="{gsa:i18n ('Download Certificate', 'Auth Data')}"/>
+      <img src="/img/key.svg" alt="{gsa:i18n ('Download Certificate', 'Action Verb')}"/>
     </a>
   </xsl:if>
   <xsl:if test="string-length ($ca_pub) &gt; 0">
@@ -35766,7 +35766,7 @@ should not have received it.
               <div class="radio">
                 <label>
                   <input type="radio" name="auth_method" value="1"/>
-                  <xsl:value-of select="gsa:i18n ('LDAP Authentication Only', 'User')"/>
+                  <xsl:value-of select="gsa:i18n ('LDAP Authentication Only', 'Auth Method')"/>
                 </label>
               </div>
             </xsl:if>
@@ -35774,7 +35774,7 @@ should not have received it.
               <div class="radio">
                 <label>
                   <input type="radio" name="auth_method" value="2"/>
-                  <xsl:value-of select="gsa:i18n ('RADIUS Authentication Only', 'User')"/>
+                  <xsl:value-of select="gsa:i18n ('RADIUS Authentication Only', 'Auth Method')"/>
                 </label>
               </div>
             </xsl:if>
@@ -36008,13 +36008,13 @@ should not have received it.
     <td>
       <xsl:choose>
         <xsl:when test="sources/source/text() = 'ldap_connect'">
-          <xsl:value-of select="gsa:i18n ('LDAP', 'User')"/>
+          <xsl:value-of select="gsa:i18n ('LDAP', 'Auth Method')"/>
         </xsl:when>
         <xsl:when test="sources/source/text() = 'radius_connect'">
-          <xsl:value-of select="gsa:i18n ('RADIUS', 'User')"/>
+          <xsl:value-of select="gsa:i18n ('RADIUS', 'Auth Method')"/>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:value-of select="gsa:i18n ('Local', 'User')"/>
+          <xsl:value-of select="gsa:i18n ('Local', 'Auth Method')"/>
         </xsl:otherwise>
       </xsl:choose>
     </td>
@@ -36163,13 +36163,13 @@ should not have received it.
         <td>
           <xsl:choose>
             <xsl:when test="sources/source/text() = 'ldap_connect'">
-              <xsl:value-of select="gsa:i18n ('LDAP', 'User')"/>
+              <xsl:value-of select="gsa:i18n ('LDAP', 'Auth Method')"/>
             </xsl:when>
             <xsl:when test="sources/source/text() = 'radius_connect'">
-              <xsl:value-of select="gsa:i18n ('RADIUS', 'User')"/>
+              <xsl:value-of select="gsa:i18n ('RADIUS', 'Auth Method')"/>
             </xsl:when>
             <xsl:otherwise>
-              <xsl:value-of select="gsa:i18n ('Local', 'User')"/>
+              <xsl:value-of select="gsa:i18n ('Local', 'Auth Method')"/>
             </xsl:otherwise>
           </xsl:choose>
         </td>
@@ -36292,7 +36292,7 @@ should not have received it.
                       <input type="radio" name="modify_password" value="2"/>
                     </xsl:otherwise>
                   </xsl:choose>
-                  <xsl:value-of select="gsa:i18n ('LDAP Authentication Only', 'User')"/>
+                  <xsl:value-of select="gsa:i18n ('LDAP Authentication Only', 'Auth Method')"/>
                 </label>
               </div>
             </xsl:if>
@@ -36307,7 +36307,7 @@ should not have received it.
                       <input type="radio" name="modify_password" value="3"/>
                     </xsl:otherwise>
                   </xsl:choose>
-                  <xsl:value-of select="gsa:i18n ('RADIUS Authentication Only', 'User')"/>
+                  <xsl:value-of select="gsa:i18n ('RADIUS Authentication Only', 'Auth Method')"/>
                 </label>
               </div>
             </xsl:if>
@@ -36678,14 +36678,14 @@ should not have received it.
       <div class="toolbar">
         <a href="/help/users.html?token={/envelope/token}#peruserldapauthentication"
            class="icon icon-sm icon-action"
-           title="{concat(gsa:i18n('Help', 'Help'),': ')}({gsa:i18n ('LDAP per-User Authentication', 'Group')})">
+           title="{concat(gsa:i18n('Help', 'Help'),': ')}({gsa:i18n ('LDAP per-User Authentication', 'Auth Method')})">
           <img src="/img/help.svg"/>
         </a>
       </div>
       <div class="section-header">
         <h1>
           <img class="icon icon-lg" src="/img/ldap.svg" alt="LDAP Settings"/>
-          <xsl:value-of select="gsa:i18n ('LDAP per-User Authentication', 'Group')"/>
+          <xsl:value-of select="gsa:i18n ('LDAP per-User Authentication', 'Auth Method')"/>
         </h1>
       </div>
       <xsl:choose>
@@ -36693,7 +36693,7 @@ should not have received it.
           <xsl:apply-templates select="describe_auth_response/group[@name='method:ldap_connect']" mode="ldapauth"/>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:value-of select="gsa:i18n ('LDAP per-User Authentication not available', 'Group')"/>
+          <xsl:value-of select="gsa:i18n ('LDAP per-User Authentication not available', 'Auth Method')"/>
         </xsl:otherwise>
       </xsl:choose>
     </xsl:when>
@@ -36702,14 +36702,14 @@ should not have received it.
       <div class="toolbar">
         <a href="/help/users.html?token={/envelope/token}#radiusauthentication"
           class="icon icon-sm icon-action"
-          title="{concat(gsa:i18n('Help', 'Help'),': ')}({gsa:i18n ('RADIUS Authentication', 'Group')})">
+          title="{concat(gsa:i18n('Help', 'Help'),': ')}({gsa:i18n ('RADIUS Authentication', 'Auth Method')})">
           <img src="/img/help.svg"/>
         </a>
       </div>
       <div class="section-header">
         <h1>
           <img class="icon icon-lg" src="/img/radius.svg" alt="Radius Settings"/>
-          <xsl:value-of select="gsa:i18n ('RADIUS Authentication', 'Group')"/>
+          <xsl:value-of select="gsa:i18n ('RADIUS Authentication', 'Auth Method')"/>
         </h1>
       </div>
       <xsl:choose>
@@ -36718,7 +36718,7 @@ should not have received it.
           <xsl:apply-templates select="describe_auth_response/group[@name='method:radius_connect']" mode="radiusauth"/>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:value-of select="gsa:i18n ('RADIUS Authentication not available', 'Group')"/>
+          <xsl:value-of select="gsa:i18n ('RADIUS Authentication not available', 'Auth Method')"/>
         </xsl:otherwise>
       </xsl:choose>
     </xsl:when>
@@ -37560,7 +37560,7 @@ should not have received it.
             </td>
           </tr>
           <tr>
-            <td><xsl:value-of select="gsa:i18n ('All SecInfo Filter', 'SecInfo')"/></td>
+            <td><xsl:value-of select="gsa:i18n ('All SecInfo Filter', 'All SecInfo Information')"/></td>
             <td>
               <xsl:call-template name="get-settings-filter">
                 <xsl:with-param name="filter"
@@ -38305,7 +38305,7 @@ should not have received it.
               </tr>
 
               <tr>
-                <td><xsl:value-of select="gsa:i18n ('All SecInfo Filter', 'SecInfo')"/></td>
+                <td><xsl:value-of select="gsa:i18n ('All SecInfo Filter', 'All SecInfo Information')"/></td>
                 <td>
                   <xsl:call-template name="edit-settings-filters">
                     <xsl:with-param name="uuid" select="'feefe56b-e2da-4913-81cc-1a6ae3b36e64'"/>
@@ -38395,13 +38395,13 @@ should not have received it.
   <div class="toolbar">
     <a href="/help/os_details.html?token={/envelope/token}"
       class="icon icon-sm"
-      title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('Operating System', 'OS'),' (',gsa:i18n('Operating System Details', 'OS'),')')}">
+      title="{concat(gsa:i18n('Help', 'Help'),': ',gsa:i18n('Operating System', 'Operating System'),' (',gsa:i18n('Operating System Details', 'Operating System'),')')}">
       <img src="/img/help.svg"/>
     </a>
     <a href="/omp?cmd=get_assets&amp;asset_type=os&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-      title="{gsa:i18n ('OSs', 'OS')}"
+      title="{gsa:i18n ('OSs', 'Operating System')}"
       class="icon icon-sm">
-      <img src="/img/list.svg" alt="{gsa:i18n ('OSs', 'OS')}"/>
+      <img src="/img/list.svg" alt="{gsa:i18n ('OSs', 'Operating System')}"/>
     </a>
     <div class="form-inline icon">
       <xsl:choose>
@@ -38419,7 +38419,7 @@ should not have received it.
           <img src="/img/delete_inactive.svg"
                alt="{gsa:i18n ('Delete', 'Action Verb')}"
                class="icon icon-sm"
-               title="{gsa:i18n ('OS is in use', 'Hosts')}"/>
+               title="{gsa:i18n ('OS is in use', 'Operating System')}"/>
         </xsl:otherwise>
       </xsl:choose>
       <a href="/omp?cmd=export_asset&amp;asset_id={@id}&amp;subtype=os&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
@@ -38492,7 +38492,7 @@ should not have received it.
         </td>
       </tr>
       <tr>
-        <td><xsl:value-of select="gsa:i18n ('Hosts', 'Property')"/>:</td>
+        <td><xsl:value-of select="gsa:i18n ('Hosts', 'Host')"/>:</td>
         <td>
           <a href="/omp?cmd=get_assets&amp;asset_type=host&amp;filter=oss~&quot;{name}&quot;&amp;filt_id=&amp;token={/envelope/token}"
              title="{gsa:i18n ('Hosts', 'Host')}" style="margin-left:3px;">
@@ -38666,7 +38666,7 @@ should not have received it.
           <img src="/img/delete_inactive.svg"
             class="icon icon-sm"
             alt="{gsa:i18n ('Delete', 'Action Verb')}"
-            title="{gsa:i18n ('Host is in use', 'Assets')}"/>
+            title="{gsa:i18n ('Host is in use', 'Host')}"/>
         </xsl:otherwise>
       </xsl:choose>
       <xsl:choose>
@@ -38738,7 +38738,7 @@ should not have received it.
         </td>
       </tr>
       <tr>
-        <td><xsl:value-of select="gsa:i18n ('OS', 'Host')"/>:</td>
+        <td><xsl:value-of select="gsa:i18n ('OS', 'Operating System')"/>:</td>
         <td>
           <xsl:call-template name="asset-os-icon">
             <xsl:with-param name="os-name" select="1"/>
@@ -38773,7 +38773,7 @@ should not have received it.
         </td>
       </tr>
       <tr>
-        <td><xsl:value-of select="gsa:i18n ('Severity', 'Property')"/>:</td>
+        <td><xsl:value-of select="gsa:i18n ('Severity', 'Severity')"/>:</td>
         <td>
           <xsl:call-template name="severity-bar">
             <xsl:with-param name="cvss" select="host/severity/value"/>
@@ -38814,7 +38814,7 @@ should not have received it.
         <tr class="gbntablehead2">
           <th style="width: 15%"><xsl:value-of select="gsa:i18n ('Name', 'Property')"/></th>
           <th style="width: 40%"><xsl:value-of select="gsa:i18n ('Value', 'Property')"/></th>
-          <th style="width: 10%"><xsl:value-of select="gsa:i18n ('Created', 'Property')"/></th>
+          <th style="width: 10%"><xsl:value-of select="gsa:i18n ('Created', 'Date')"/></th>
           <th style="width: 30%"><xsl:value-of select="gsa:i18n ('Source', 'Property')"/></th>
           <th style="width: 5%"><xsl:value-of select="gsa:i18n ('Actions', 'Actions')"/></th>
         </tr>
@@ -38986,7 +38986,7 @@ should not have received it.
         <field>os</field>
       </column>
       <column>
-        <name><xsl:value-of select="gsa:i18n('Severity', 'Property')"/></name>
+        <name><xsl:value-of select="gsa:i18n('Severity', 'Severity')"/></name>
         <field>severity</field>
       </column>
       <column>
@@ -39026,7 +39026,7 @@ should not have received it.
         <sort-reverse/>
       </column>
       <column>
-        <name><xsl:value-of select="gsa:i18n('Severity', 'Property')"/></name>
+        <name><xsl:value-of select="gsa:i18n('Severity', 'Severity')"/></name>
         <column>
           <name><xsl:value-of select="gsa:i18n('Latest', 'Property')"/></name>
           <field>latest_severity</field>
@@ -39044,7 +39044,7 @@ should not have received it.
         </column>
       </column>
       <column>
-        <name><xsl:value-of select="gsa:i18n('Hosts', 'OS')"/></name>
+        <name><xsl:value-of select="gsa:i18n('Hosts', 'Host')"/></name>
         <field>hosts</field>
         <sort-reverse/>
       </column>
@@ -39155,7 +39155,7 @@ should not have received it.
             <xsl:otherwise>
               <img src="/img/delete_inactive.svg"
                    alt="{gsa:i18n ('Delete', 'Action Verb')}"
-                   title="{gsa:i18n ('Host is in use', 'Hosts')}"
+                   title="{gsa:i18n ('Host is in use', 'Host')}"
                    class="icon icon-sm"/>
             </xsl:otherwise>
           </xsl:choose>
@@ -39288,12 +39288,12 @@ should not have received it.
             <xsl:otherwise>
               <img src="/img/delete_inactive.svg"
                    alt="{gsa:i18n ('Delete', 'Action Verb')}"
-                   title="{gsa:i18n ('OS is in use', 'OS')}"
+                   title="{gsa:i18n ('OS is in use', 'Operating System')}"
                    class="icon icon-sm"/>
             </xsl:otherwise>
           </xsl:choose>
           <a href="/omp?cmd=export_asset&amp;asset_id={../@id}&amp;subtype=os&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-            title="{gsa:i18n ('Export Operating System', 'Assets')}"
+            title="{gsa:i18n ('Export Operating System', 'Operating System')}"
             class="icon icon-sm">
             <img src="/img/download.svg" alt="{gsa:i18n ('Export', 'Action Verb')}"/>
           </a>

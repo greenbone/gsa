@@ -500,7 +500,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:variable>
       <xsl:call-template name="gsa-navigation-menu">
         <xsl:with-param name="items" xmlns="" select="$items"/>
-        <xsl:with-param name="menu_title" select="gsa:i18n ('SecInfo', 'Main Menu')"/>
+        <xsl:with-param name="menu_title" select="gsa:i18n ('SecInfo', 'SecInfo')"/>
       </xsl:call-template>
     </li>
     <li>
@@ -618,7 +618,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:if test="gsa:may-op ('DESCRIBE_FEED') or gsa:may-op ('DESCRIBE_SCAP') or gsa:may-op ('DESCRIBE_CERT')">
           <item>
             <page>get_feeds</page>
-            <name><xsl:value-of select="gsa:i18n ('Feed Status', 'Main menu')"/></name>
+            <name><xsl:value-of select="gsa:i18n ('Feed Status', 'Feed Sync')"/></name>
           </item>
         </xsl:if>
       </xsl:variable>
@@ -651,11 +651,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <divider/>
           <item>
             <page>auth_settings&amp;name=ldap</page>
-            <name><xsl:value-of select="gsa:i18n ('LDAP', 'Main menu')"/></name>
+            <name><xsl:value-of select="gsa:i18n ('LDAP', 'Auth Method')"/></name>
           </item>
           <item>
             <page>auth_settings&amp;name=radius</page>
-            <name><xsl:value-of select="gsa:i18n ('Radius', 'Main menu')"/></name>
+            <name><xsl:value-of select="gsa:i18n ('Radius', 'Auth Method')"/></name>
           </item>
         </xsl:if>
       </xsl:variable>

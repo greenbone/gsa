@@ -340,7 +340,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:if test="../run_wizard_response/response/commands_response/get_credentials_response">
           <div class="form-group">
             <label class="col-3 control-label">
-              <xsl:value-of select="gsa:i18n ('SSH Credential', 'Target|Credentials')"/>
+              <xsl:value-of select="gsa:i18n ('SSH Credential', 'Target Credential')"/>
             </label>
             <div class="col-9">
               <xsl:variable name="ssh_credential_id" select="../run_wizard_response/response/commands_response/get_settings_response/setting[name = 'Default SSH Credential']/value"/>
@@ -363,7 +363,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </div>
           <div class="form-group">
             <label class="col-3 control-label">
-              <xsl:value-of select="gsa:i18n ('SMB Credential', 'Target|Credentials')"/>
+              <xsl:value-of select="gsa:i18n ('SMB Credential', 'Target Credential')"/>
             </label>
             <div class="col-9">
               <xsl:variable name="smb_credential_id" select="../run_wizard_response/response/commands_response/get_settings_response/setting[name = 'Default SMB Credential']/value"/>
@@ -384,7 +384,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </div>
           <div class="form-group">
             <label class="col-3 control-label">
-              <xsl:value-of select="gsa:i18n ('ESXi Credential', 'Target|Credentials')"/>
+              <xsl:value-of select="gsa:i18n ('ESXi Credential', 'Target Credential')"/>
             </label>
             <div class="col-9">
               <xsl:variable name="esxi_credential_id" select="../run_wizard_response/response/commands_response/get_settings_response/setting[name = 'Default ESXi Credential']/value"/>
