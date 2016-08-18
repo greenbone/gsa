@@ -3841,8 +3841,28 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:with-param name="full-count" select="result_count/full/text ()"/>
       <xsl:with-param name="columns" xmlns="">
         <column>
-          <name><xsl:value-of select="gsa:i18n('Name', 'Property')"/></name>
-          <field>name</field>
+          <name><xsl:value-of select="gsa:i18n('Vulnerability', 'Result')"/></name>
+          <field>vulnerability</field>
+        </column>
+        <column>
+          <name><xsl:value-of select="gsa:i18n('Solution type', 'NVT or Result')"/></name>
+          <field>solution_type</field>
+        </column>
+        <column>
+          <name><xsl:value-of select="gsa:i18n('Severity', 'Severity')"/></name>
+          <field>severity</field>
+        </column>
+        <column>
+          <name><xsl:value-of select="gsa:i18n('QoD', 'NVT or Result')"/></name>
+          <field>qod</field>
+        </column>
+        <column>
+          <name><xsl:value-of select="gsa:i18n('Host', 'Host')"/></name>
+          <field>host</field>
+        </column>
+        <column>
+          <name><xsl:value-of select="gsa:i18n('Location', 'Host')"/></name>
+          <field>location</field>
         </column>
       </xsl:with-param>
       <xsl:with-param name="filter_options" xmlns="">

@@ -1,5 +1,10 @@
 2016-08-18  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/omp.xsl (report [section-filter-full]): Add correct
+	columns for sorting in filter dialog.
+
+2016-08-18  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/help.xsl (hosts_classic.html): Replace the PNG
 	prognosis icon with SVG version.
 
