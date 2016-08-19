@@ -1,3 +1,14 @@
+2016-08-19  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/gsad.xsl (gsa:i18n, gsa:n-i18n): Handle messages
+	without a context.
+
+	* tools/pot-test: Add list of messages occurring only in a single
+	context and handle ones without a context.
+
+	* tools/xsl2pot: Handle messages without a context.  Output relative
+	paths instead of absolute ones.
+
 2016-08-18  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/gsad.xsl, src/html/classic/omp.xsl,

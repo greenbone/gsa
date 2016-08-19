@@ -55,6 +55,7 @@ def main(potfilepath, pofilepath=None):
 
     multi_context_msgids = 0
     multi_context_entries = 0
+    no_context_entries = []
     empty_context_entries = []
     msgid_occurrences = {}
     msgctxt_occurrences = {}
@@ -72,34 +73,64 @@ def main(potfilepath, pofilepath=None):
         else:
             msgctxt_occurrences [entry.msgctxt] = [entry.msgid]
 
+        if entry.msgctxt is None:
+            no_context_entries.append (entry)
+
         if entry.msgctxt == "":
             empty_context_entries.append (entry)
+
+    print "Messages occurring in a single context"
+    print "--------------------------------------"
+    for msgid in sorted (msgid_occurrences):
+        if len (msgid_occurrences [msgid]) == 1:
+            msgctxt = msgid_occurrences [msgid][0]
+            if (msgctxt is not None):
+              print "'%s' appears in:" % msgid
+              print "\t'%s'" % msgctxt
+    print ""
+    print ""
 
     print "Messages occurring in multiple contexts"
     print "---------------------------------------"
     for msgid in sorted (msgid_occurrences):
         if len (msgid_occurrences [msgid]) > 1:
             multi_context_msgids += 1
-            print "'%s' appears in multiple contexts:" % msgid
+            print "'%s' appears in:" % msgid
 
             for msgctxt in sorted (msgid_occurrences [msgid]):
-                print "\t'%s'" % msgctxt
+                if (msgctxt is None):
+                    print "\t* no context *"
+                else:
+                    print "\t'%s'" % msgctxt
 
     print ""
     print "%d msgids / %d entries with multiple contexts found" % (multi_context_msgids, multi_context_entries)
-    print "Note: Some of these may be intentional"
     print ""
     print ""
 
     print "Message counts per context"
     print "--------------------------"
     for context in sorted (msgctxt_occurrences, key=lambda item: len (msgctxt_occurrences [item])):
-        print "%d in '%s':" % (len (msgctxt_occurrences [context]), context)
+        if (context is None):
+            print "%d without context':" % (len (msgctxt_occurrences [context]))
+        else:
+            print "%d in '%s':" % (len (msgctxt_occurrences [context]), context)
+
         if (len (msgctxt_occurrences [context]) <= max_msgids):
             for msgid in msgctxt_occurrences [context]:
                 print "\t'%s'" % msgid
         else:
             print "\t-- more than %d msgids --" % max_msgids
+    print ""
+    print ""
+
+    print "Messages without context"
+    print "---------------------------"
+    if len (no_context_entries):
+        for entry in no_context_entries:
+            print "* '%s'" % entry.msgid
+    else:
+        print "none"
     print ""
     print ""
 

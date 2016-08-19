@@ -76,7 +76,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:choose>
     <xsl:when test="function-available('gsa-i18n:gettext')">
       <!-- Use new gettext extension based i18n -->
-      <xsl:variable name="new_msg" select="gsa-i18n:gettext ($i18n_language, $id, $context)"/>
+      <xsl:variable name="new_msg">
+        <xsl:choose test="string ($context)">
+          <xsl:when test="$context != ''">
+            <xsl:value-of select="gsa-i18n:gettext ($i18n_language, $id, $context)"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="gsa-i18n:gettext ($i18n_language, $id)"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:variable>
       <func:result>
         <xsl:choose>
           <xsl:when test="$new_msg != '### N/A ###'">
@@ -107,7 +116,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:choose>
     <xsl:when test="function-available('gsa-i18n:ngettext')">
       <!-- Use new gettext extension based i18n -->
-      <xsl:variable name="new_msg" select="gsa-i18n:ngettext ($i18n_language, $id, $id_plural, $count, $context)"/>
+      <xsl:variable name="new_msg">
+        <xsl:choose test="string ($context)">
+          <xsl:when test="$context != ''">
+            <xsl:value-of select="gsa-i18n:ngettext ($i18n_language, $id, $id_plural, $count, $context)"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="gsa-i18n:ngettext ($i18n_language, $id, $id_plural, $count)"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:variable>
       <func:result>
         <xsl:choose>
           <xsl:when test="$new_msg != '### N/A ###'">
