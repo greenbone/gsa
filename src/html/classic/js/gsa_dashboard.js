@@ -2414,8 +2414,7 @@
       this.last_request = undefined;
     }
 
-    this.current_controller
-        .addRequest(this.current_filter);
+    this.current_controller.addRequest(this.current_filter);
 
     this.last_request = {
       controller: this.current_controller,
@@ -2669,7 +2668,7 @@
 
     var command = this.data_src.command;
     if (command !== 'get_aggregate') {
-      command = encodeURIComponent(command) + '_chart';
+      command = command + '_chart';
     }
 
     return create_uri(command, this.display.getCurrentFilter(),

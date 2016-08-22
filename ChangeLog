@@ -1,5 +1,12 @@
 2016-08-22  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_dashboard.js
+	(DashboardDisplay.prototype._requestNewChart): Update coding style.
+	(ChartController.prototype.getDetachedUrl): Remove unnecessary
+	encodeURIComponent call. It will be encoded later on already.
+
+2016-08-22  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/greenbone.js (on_ready): Add new functionality to set a
 	label text based on a selected value.
 
