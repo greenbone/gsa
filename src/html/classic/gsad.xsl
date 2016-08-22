@@ -208,7 +208,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </div>
     <div>
       <div class="logout_panel">
-        <xsl:value-of select="gsa:i18n('Logged in as', 'Logo')"/>&#160;
+        <xsl:value-of select="gsa:i18n('Logged in as')"/>&#160;
         <xsl:value-of select="/envelope/role"/>&#160;
         <b><a href="/omp?cmd=get_my_settings&amp;token={/envelope/token}">
         <xsl:choose>
@@ -397,7 +397,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <a class="top_button"
           href="/omp?cmd=dashboard&amp;token={/envelope/token}">
         <img class="logo" src="/img/greenbone.svg"/>
-        <xsl:value-of select="gsa:i18n ('Dashboard', 'Dashboard')"/>
+        <xsl:value-of select="gsa:i18n ('Dashboard')"/>
       </a>
     </li>
     <li>
@@ -405,47 +405,47 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:if test="gsa:may-op ('GET_TASKS') or gsa:may-op ('GET_REPORTS') or gsa:may-op ('GET_RESULTS') or gsa:may-op ('GET_NOTES') or gsa:may-op ('GET_OVERRIDES')">
           <item>
             <page>dashboard&amp;dashboard_name=scans</page>
-            <name><xsl:value-of select="gsa:i18n ('Dashboard', 'Dashboard')"/></name>
+            <name><xsl:value-of select="gsa:i18n ('Dashboard')"/></name>
           </item>
         </xsl:if>
         <divider/>
         <xsl:if test="gsa:may-op ('GET_TASKS')">
           <item>
             <page>get_tasks</page>
-            <name><xsl:value-of select="gsa:i18n ('Tasks', 'Task')"/></name>
+            <name><xsl:value-of select="gsa:i18n ('Tasks')"/></name>
           </item>
         </xsl:if>
         <xsl:if test="gsa:may-op ('GET_REPORTS')">
           <item>
             <page>get_reports</page>
-            <name><xsl:value-of select="gsa:i18n ('Reports', 'Report')"/></name>
+            <name><xsl:value-of select="gsa:i18n ('Reports')"/></name>
           </item>
         </xsl:if>
         <xsl:if test="gsa:may-op ('GET_RESULTS')">
           <item>
             <page>get_results</page>
-            <name><xsl:value-of select="gsa:i18n ('Results', 'Result')"/></name>
+            <name><xsl:value-of select="gsa:i18n ('Results')"/></name>
           </item>
         </xsl:if>
         <divider/>
         <xsl:if test="gsa:may-op ('GET_NOTES')">
           <item>
             <page>get_notes</page>
-            <name><xsl:value-of select="gsa:i18n ('Notes', 'Note')"/></name>
+            <name><xsl:value-of select="gsa:i18n ('Notes')"/></name>
             <filter>sort=nvt</filter>
           </item>
         </xsl:if>
         <xsl:if test="gsa:may-op ('GET_OVERRIDES')">
           <item>
             <page>get_overrides</page>
-            <name><xsl:value-of select="gsa:i18n ('Overrides', 'Override')"/></name>
+            <name><xsl:value-of select="gsa:i18n ('Overrides')"/></name>
             <filter>sort=nvt</filter>
           </item>
         </xsl:if>
       </xsl:variable>
       <xsl:call-template name="gsa-navigation-menu">
         <xsl:with-param name="items" xmlns="" select="$items"/>
-        <xsl:with-param name="menu_title" select="gsa:i18n ('Scans', 'Main Menu')"/>
+        <xsl:with-param name="menu_title" select="gsa:i18n ('Scans')"/>
       </xsl:call-template>
     </li>
     <li>
@@ -453,28 +453,28 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:if test="gsa:may-op ('GET_ASSETS')">
           <item>
             <page>dashboard&amp;dashboard_name=assets</page>
-            <name><xsl:value-of select="gsa:i18n ('Dashboard', 'Dashboard')"/></name>
+            <name><xsl:value-of select="gsa:i18n ('Dashboard')"/></name>
           </item>
           <divider/>
           <item>
             <page>get_assets&amp;asset_type=host</page>
-            <name><xsl:value-of select="gsa:i18n ('Hosts', 'Host')"/></name>
+            <name><xsl:value-of select="gsa:i18n ('Hosts')"/></name>
           </item>
           <item>
             <page>get_assets&amp;asset_type=os</page>
-            <name><xsl:value-of select="gsa:i18n ('Operating Systems', 'Operating System')"/></name>
+            <name><xsl:value-of select="gsa:i18n ('Operating Systems')"/></name>
           </item>
         </xsl:if>
         <xsl:if test="gsa:may-op ('GET_REPORTS')">
           <item>
             <page>get_report&amp;type=assets&amp;apply_overrides=1&amp;levels=hm</page>
-            <name><xsl:value-of select="gsa:i18n ('Hosts (Classic)', 'Host')"/></name>
+            <name><xsl:value-of select="gsa:i18n ('Hosts (Classic)')"/></name>
           </item>
         </xsl:if>
       </xsl:variable>
       <xsl:call-template name="gsa-navigation-menu">
         <xsl:with-param name="items" xmlns="" select="$items"/>
-        <xsl:with-param name="menu_title" select="gsa:i18n ('Assets', 'Main Menu')"/>
+        <xsl:with-param name="menu_title" select="gsa:i18n ('Assets')"/>
       </xsl:call-template>
     </li>
     <li>
@@ -482,43 +482,43 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:if test="gsa:may-op ('GET_INFO')">
           <item>
             <page>dashboard&amp;dashboard_name=secinfo</page>
-            <name><xsl:value-of select="gsa:i18n ('Dashboard', 'Dashboard')"/></name>
+            <name><xsl:value-of select="gsa:i18n ('Dashboard')"/></name>
           </item>
           <divider/>
           <item>
             <page>get_info&amp;info_type=nvt</page>
-            <name><xsl:value-of select="gsa:i18n ('NVTs', 'NVT')"/></name>
+            <name><xsl:value-of select="gsa:i18n ('NVTs')"/></name>
           </item>
           <item>
             <page>get_info&amp;info_type=cve</page>
-            <name><xsl:value-of select="gsa:i18n ('CVEs', 'CVE')"/></name>
+            <name><xsl:value-of select="gsa:i18n ('CVEs')"/></name>
           </item>
           <item>
             <page>get_info&amp;info_type=cpe</page>
-            <name><xsl:value-of select="gsa:i18n ('CPEs', 'CPE')"/></name>
+            <name><xsl:value-of select="gsa:i18n ('CPEs')"/></name>
           </item>
           <item>
             <page>get_info&amp;info_type=ovaldef</page>
-            <name><xsl:value-of select="gsa:i18n ('OVAL Definitions', 'OVAL Definition')"/></name>
+            <name><xsl:value-of select="gsa:i18n ('OVAL Definitions')"/></name>
           </item>
           <item>
             <page>get_info&amp;info_type=cert_bund_adv</page>
-            <name><xsl:value-of select="gsa:i18n ('CERT-Bund Advisories', 'CERT-Bund Advisory')"/></name>
+            <name><xsl:value-of select="gsa:i18n ('CERT-Bund Advisories')"/></name>
           </item>
           <item>
             <page>get_info&amp;info_type=dfn_cert_adv</page>
-            <name><xsl:value-of select="gsa:i18n ('DFN-CERT Advisories', 'DFN-CERT Advisory')"/></name>
+            <name><xsl:value-of select="gsa:i18n ('DFN-CERT Advisories')"/></name>
           </item>
           <divider/>
           <item>
             <page>get_info&amp;info_type=allinfo</page>
-            <name><xsl:value-of select="gsa:i18n ('All SecInfo', 'All SecInfo Information')"/></name>
+            <name><xsl:value-of select="gsa:i18n ('All SecInfo')"/></name>
           </item>
         </xsl:if>
       </xsl:variable>
       <xsl:call-template name="gsa-navigation-menu">
         <xsl:with-param name="items" xmlns="" select="$items"/>
-        <xsl:with-param name="menu_title" select="gsa:i18n ('SecInfo', 'SecInfo')"/>
+        <xsl:with-param name="menu_title" select="gsa:i18n ('SecInfo')"/>
       </xsl:call-template>
     </li>
     <li>
@@ -526,87 +526,87 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:if test="gsa:may-op ('GET_TARGETS')">
           <item>
             <page>get_targets</page>
-            <name><xsl:value-of select="gsa:i18n ('Targets', 'Target')"/></name>
+            <name><xsl:value-of select="gsa:i18n ('Targets')"/></name>
           </item>
         </xsl:if>
         <xsl:if test="gsa:may-op ('GET_PORT_LISTS')">
           <item>
             <page>get_port_lists</page>
-            <name><xsl:value-of select="gsa:i18n ('Port Lists', 'Port List')"/></name>
+            <name><xsl:value-of select="gsa:i18n ('Port Lists')"/></name>
           </item>
         </xsl:if>
         <xsl:if test="gsa:may-op ('GET_CREDENTIALS')">
           <item>
             <page>get_credentials</page>
-            <name><xsl:value-of select="gsa:i18n ('Credentials', 'Credential')"/></name>
+            <name><xsl:value-of select="gsa:i18n ('Credentials')"/></name>
           </item>
         </xsl:if>
         <xsl:if test="gsa:may-op ('GET_CONFIGS')">
           <item>
             <page>get_configs</page>
-            <name><xsl:value-of select="gsa:i18n ('Scan Configs', 'Scan Config')"/></name>
+            <name><xsl:value-of select="gsa:i18n ('Scan Configs')"/></name>
           </item>
         </xsl:if>
         <divider/>
         <xsl:if test="gsa:may-op ('GET_ALERTS')">
           <item>
             <page>get_alerts</page>
-            <name><xsl:value-of select="gsa:i18n ('Alerts', 'Alert')"/></name>
+            <name><xsl:value-of select="gsa:i18n ('Alerts')"/></name>
           </item>
         </xsl:if>
         <xsl:if test="gsa:may-op ('GET_SCHEDULES')">
           <item>
             <page>get_schedules</page>
-            <name><xsl:value-of select="gsa:i18n ('Schedules', 'Schedule')"/></name>
+            <name><xsl:value-of select="gsa:i18n ('Schedules')"/></name>
           </item>
         </xsl:if>
         <xsl:if test="gsa:may-op ('GET_REPORT_FORMATS')">
           <item>
             <page>get_report_formats</page>
-            <name><xsl:value-of select="gsa:i18n ('Report Formats', 'Report Format')"/></name>
+            <name><xsl:value-of select="gsa:i18n ('Report Formats')"/></name>
           </item>
         </xsl:if>
         <xsl:if test="gsa:may-op ('GET_SLAVES')">
           <item>
             <page>get_slaves</page>
-            <name><xsl:value-of select="gsa:i18n ('Slaves', 'Slave')"/></name>
+            <name><xsl:value-of select="gsa:i18n ('Slaves')"/></name>
           </item>
         </xsl:if>
         <xsl:if test="gsa:may-op ('GET_AGENTS')">
           <item>
             <page>get_agents</page>
-            <name><xsl:value-of select="gsa:i18n ('Agents', 'Agent')"/></name>
+            <name><xsl:value-of select="gsa:i18n ('Agents')"/></name>
           </item>
         </xsl:if>
         <divider/>
         <xsl:if test="gsa:may-op ('GET_SCANNERS')">
           <item>
             <page>get_scanners</page>
-            <name><xsl:value-of select="gsa:i18n ('Scanners', 'Scanner')"/></name>
+            <name><xsl:value-of select="gsa:i18n ('Scanners')"/></name>
           </item>
         </xsl:if>
         <xsl:if test="gsa:may-op ('GET_FILTERS')">
           <item>
             <page>get_filters</page>
-            <name><xsl:value-of select="gsa:i18n ('Filters', 'Filter')"/></name>
+            <name><xsl:value-of select="gsa:i18n ('Filters')"/></name>
           </item>
         </xsl:if>
         <xsl:if test="gsa:may-op ('GET_TAGS')">
           <item>
             <page>get_tags</page>
-            <name><xsl:value-of select="gsa:i18n ('Tags', 'Tag')"/></name>
+            <name><xsl:value-of select="gsa:i18n ('Tags')"/></name>
           </item>
         </xsl:if>
         <xsl:if test="gsa:may-op ('GET_PERMISSIONS')">
           <item>
             <page>get_permissions</page>
-            <name><xsl:value-of select="gsa:i18n ('Permissions', 'Permission')"/></name>
+            <name><xsl:value-of select="gsa:i18n ('Permissions')"/></name>
           </item>
         </xsl:if>
       </xsl:variable>
       <xsl:call-template name="gsa-navigation-menu">
         <xsl:with-param name="items" xmlns="" select="$items"/>
-        <xsl:with-param name="menu_title" select="gsa:i18n ('Configuration', 'Main Menu')"/>
+        <xsl:with-param name="menu_title" select="gsa:i18n ('Configuration')"/>
       </xsl:call-template>
     </li>
     <li>
@@ -614,35 +614,35 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:if test="gsa:may-get-trash ()">
           <item>
             <page>get_trash</page>
-            <name><xsl:value-of select="gsa:i18n ('Trashcan', 'Trashcan')"/></name>
+            <name><xsl:value-of select="gsa:i18n ('Trashcan')"/></name>
           </item>
         </xsl:if>
         <xsl:if test="gsa:may-op ('GET_SETTINGS')">
           <item>
             <page>get_my_settings</page>
-            <name><xsl:value-of select="gsa:i18n ('My Settings', 'My Settings')"/></name>
+            <name><xsl:value-of select="gsa:i18n ('My Settings')"/></name>
           </item>
         </xsl:if>
         <xsl:if test="gsa:may-op ('GET_SYSTEM_REPORTS')">
           <item>
             <page>get_system_reports&amp;duration=86400&amp;slave_id=0</page>
-            <name><xsl:value-of select="gsa:i18n ('Performance', 'Performance')"/></name>
+            <name><xsl:value-of select="gsa:i18n ('Performance')"/></name>
           </item>
         </xsl:if>
         <item>
           <page>cvss_calculator</page>
-          <name><xsl:value-of select="gsa:i18n ('CVSS Calculator', 'CVSS Calculator')"/></name>
+          <name><xsl:value-of select="gsa:i18n ('CVSS Calculator')"/></name>
         </item>
         <xsl:if test="gsa:may-op ('DESCRIBE_FEED') or gsa:may-op ('DESCRIBE_SCAP') or gsa:may-op ('DESCRIBE_CERT')">
           <item>
             <page>get_feeds</page>
-            <name><xsl:value-of select="gsa:i18n ('Feed Status', 'Feed Sync')"/></name>
+            <name><xsl:value-of select="gsa:i18n ('Feed Status')"/></name>
           </item>
         </xsl:if>
       </xsl:variable>
       <xsl:call-template name="gsa-navigation-menu">
         <xsl:with-param name="items" xmlns="" select="$items"/>
-        <xsl:with-param name="menu_title" select="gsa:i18n ('Extras', 'Main Menu')"/>
+        <xsl:with-param name="menu_title" select="gsa:i18n ('Extras')"/>
       </xsl:call-template>
     </li>
     <li>
@@ -650,19 +650,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:if test="gsa:may-op ('GET_USERS')">
           <item>
             <page>get_users</page>
-            <name><xsl:value-of select="gsa:i18n ('Users', 'User')"/></name>
+            <name><xsl:value-of select="gsa:i18n ('Users')"/></name>
           </item>
         </xsl:if>
         <xsl:if test="gsa:may-op ('GET_GROUPS')">
           <item>
             <page>get_groups</page>
-            <name><xsl:value-of select="gsa:i18n ('Groups', 'Group')"/></name>
+            <name><xsl:value-of select="gsa:i18n ('Groups')"/></name>
           </item>
         </xsl:if>
         <xsl:if test="gsa:may-op ('GET_ROLES')">
           <item>
             <page>get_roles</page>
-            <name><xsl:value-of select="gsa:i18n ('Roles', 'Role')"/></name>
+            <name><xsl:value-of select="gsa:i18n ('Roles')"/></name>
           </item>
         </xsl:if>
         <xsl:if test="gsa:may-op ('DESCRIBE_AUTH') and gsa:may-op ('MODIFY_AUTH')">
@@ -679,7 +679,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:variable>
       <xsl:call-template name="gsa-navigation-menu">
         <xsl:with-param name="items" xmlns="" select="$items"/>
-        <xsl:with-param name="menu_title" select="gsa:i18n ('Administration', 'Main Menu')"/>
+        <xsl:with-param name="menu_title" select="gsa:i18n ('Administration')"/>
       </xsl:call-template>
     </li>
     <li>
@@ -695,7 +695,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:variable>
       <xsl:call-template name="gsa-navigation-menu">
         <xsl:with-param name="items" xmlns="" select="$items"/>
-        <xsl:with-param name="menu_title" select="gsa:i18n ('Help', 'Help')"/>
+        <xsl:with-param name="menu_title" select="gsa:i18n ('Help')"/>
       </xsl:call-template>
     </li>
    </ul>
@@ -927,7 +927,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:when test="string-length (message) &gt; 0">
         <div class="box container">
           <div class="error_message">
-            <xsl:value-of select="gsa:i18n (message, 'Login Message')"/>
+            <xsl:value-of select="gsa:i18n (message)"/>
           </div>
         </div>
       </xsl:when>
@@ -962,14 +962,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </xsl:otherwise>
           </xsl:choose>
           <div class="form-group">
-            <label for="login" class="col-4 control-label"><xsl:value-of select="gsa:i18n('Username:')"/></label>
+            <label for="login" class="col-4 control-label"><xsl:value-of select="gsa:i18n('Username')"/>:</label>
             <div class="col-8">
               <input type="text" autocomplete="off" id="login" name="login"
                 value="" autofocus="autofocus" tabindex="1" class="form-control"/>
             </div>
           </div>
           <div class="form-group">
-            <label for="password" class="control-label col-4"><xsl:value-of select="gsa:i18n('Password:')"/></label>
+            <label for="password" class="control-label col-4"><xsl:value-of select="gsa:i18n('Password')"/>:</label>
             <div class="col-8">
               <input type="password" class="form-control"
                     autocomplete="off" id="password" name="password" tabindex="2"
@@ -978,7 +978,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </div>
           <div class="form-group">
             <div class="col-6 offset-6 container">
-              <input type="submit" class="col-12 button" tabindex="3" value="{gsa:i18n('Login')}" />
+              <input type="submit" class="col-12 button" tabindex="3" value="{gsa:i18n('Login', 'Action Verb')}" />
             </div>
           </div>
         </form>
@@ -1101,11 +1101,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="gb_window_part_left_error"></div>
     <div class="gb_window_part_right_error"></div>
     <div class="gb_window_part_center_error">
-      <xsl:value-of select="gsa:i18n ('Warning', 'Login Message')"/>
+      <xsl:value-of select="gsa:i18n ('Warning')"/>
     </div>
     <div class="gb_window_part_content_error">
       <p>
-        <xsl:value-of select="gsa:i18n ('Your current password does not comply with the password policy:', 'Login Message')"/><br/>
+        <xsl:value-of select="gsa:i18n ('Your current password does not comply with the password policy:')"/><br/>
         <xsl:value-of select="text()"/>
       </p>
     </div>

@@ -1,3 +1,26 @@
+2016-08-22  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/dynamic_strings.xsl: Remove redundant i18n contexts
+	and clarify others in most templates.
+
+	* src/html/classic/graphics.xsl: Remove redundant i18n contexts and
+	clarify others in most templates.
+
+	* src/html/classic/gsad.xsl: Remove redundant i18n contexts and clarify
+	others in most templates.
+
+	* src/html/classic/omp.xsl: Remove redundant i18n contexts and clarify
+	others in most templates.  Fix some inconsistent captialisation.
+	(gsa:date-diff): Use gsa:n-i18n to pluralize time units.
+	(filter-window-pager, assets, report-section-header, list-window): Use
+	gsa-i18n:strformat for pagination.
+	(asset [host-details]): Add i18n for "Show only latest/all identifiers".
+	(edit-config-family): Consolidate into number of selected NVTs into
+	one message.
+
+	* src/html/classic/wizard.xsl: Remove redundant i18n contexts and
+	clarify others in most templates.
+
 2016-08-22  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/omp.xsl (gsa:command-type-label): Add new function to get a

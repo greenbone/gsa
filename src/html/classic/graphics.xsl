@@ -83,13 +83,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     data-filter-id="{$filt_id}">
     <span class="dashboard-chart"
       data-chart-name="task-by-cvss"
-      data-chart-title="{gsa:i18n ('Tasks by CVSS', 'Chart')}"
+      data-chart-title="{gsa:i18n ('Tasks by CVSS')}"
       data-chart-title-count="count"
       data-chart-type="bar"
       data-chart-template="info_by_cvss"/>
     <span class="dashboard-chart"
       data-chart-name="task-by-severity-class"
-      data-chart-title="{gsa:i18n ('Tasks by Severity Class', 'Chart')}"
+      data-chart-title="{gsa:i18n ('Tasks by Severity Class')}"
       data-chart-title-count="count"
       data-chart-type="donut"
       data-chart-template="info_by_class"/>
@@ -102,7 +102,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     data-filter-id="{$filt_id}">
     <span class="dashboard-chart"
       data-chart-name="task-by-status"
-      data-chart-title="{gsa:i18n ('Tasks by status', 'Chart')}"
+      data-chart-title="{gsa:i18n ('Tasks by status')}"
       data-chart-title-count="count"
       data-chart-type="donut"/>
   </div>
@@ -120,7 +120,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <span class="dashboard-chart"
       data-chart-name="task-by-high-results"
       data-chart-type="bubbles"
-      data-chart-title="{gsa:i18n ('Tasks: High results per host', 'Chart')}"
+      data-chart-title="{gsa:i18n ('Tasks: High results per host')}"
       data-x-field="name"
       data-y-fields="high_per_host_max"
       data-z-fields="severity_max"
@@ -200,13 +200,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <span class="dashboard-chart"
       data-chart-name="result-by-cvss"
       data-chart-type="bar"
-      data-chart-title="{gsa:i18n ('Results by CVSS', 'Chart')}"
+      data-chart-title="{gsa:i18n ('Results by CVSS')}"
       data-chart-title-count="count"
       data-chart-template="info_by_cvss"/>
     <span class="dashboard-chart"
       data-chart-name="result-by-severity-class"
       data-chart-type="donut"
-      data-chart-title="{gsa:i18n ('Results by Severity Class', 'Chart')}"
+      data-chart-title="{gsa:i18n ('Results by Severity Class')}"
       data-chart-title-count="count"
       data-chart-template="info_by_class"/>
   </div>
@@ -223,7 +223,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <span class="dashboard-chart"
       data-chart-name="result-by-vuln-words"
       data-chart-type="cloud"
-      data-chart-title="{gsa:i18n ('Results vulnerability word cloud', 'Chart')}"/>
+      data-chart-title="{gsa:i18n ('Results vulnerability word cloud')}"/>
   </div>
   <div class="dashboard-data-source"
     data-source-name="result-desc-words-source"
@@ -238,7 +238,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <span class="dashboard-chart"
       data-chart-name="result-by-desc-words"
       data-chart-type="cloud"
-      data-chart-title="{gsa:i18n ('Results description word cloud', 'Chart')}"/>
+      data-chart-title="{gsa:i18n ('Results description word cloud')}"/>
   </div>
 </xsl:template>
 
@@ -255,13 +255,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <span class="dashboard-chart"
       data-chart-name="host-by-cvss"
       data-chart-type="bar"
-      data-chart-title="{gsa:i18n ('Hosts by CVSS', 'Chart')}"
+      data-chart-title="{gsa:i18n ('Hosts by CVSS')}"
       data-chart-title-count="count"
       data-chart-template="info_by_cvss"/>
     <span class="dashboard-chart"
       data-chart-name="host-by-severity-class"
       data-chart-type="donut"
-      data-chart-title="{gsa:i18n ('Hosts by Severity Class', 'Chart')}"
+      data-chart-title="{gsa:i18n ('Hosts by Severity Class')}"
       data-chart-title-count="count"
       data-chart-template="info_by_class"/>
   </div>
@@ -296,7 +296,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     data-filter-id="{$filt_id}">
     <span class="dashboard-chart"
       data-chart-name="host-by-modification-time"
-      data-chart-title="{gsa:i18n ('Hosts by modification time', 'Chart')}"
+      data-chart-title="{gsa:i18n ('Hosts by modification time')}"
       data-chart-title-count="count"
       data-y-fields="c_count,c_count[High]"
       data-z-fields="count,count[High]"
@@ -310,7 +310,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     data-filter-id="{$filt_id}">
     <span class="dashboard-chart"
       data-chart-name="host-by-topology"
-      data-chart-title="{gsa:i18n ('Hosts topology', 'Chart')}"
+      data-chart-title="{gsa:i18n ('Hosts topology')}"
       data-chart-type="topology"/>
   </div>
 </xsl:template>
@@ -328,12 +328,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <span class="dashboard-chart"
       data-chart-name="os-by-cvss"
       data-chart-type="bar"
-      data-chart-title="{gsa:i18n ('Operating Systems by CVSS', 'Chart')}"
+      data-chart-title="{gsa:i18n ('Operating Systems by CVSS')}"
       data-chart-title-count="count"
       data-chart-template="info_by_cvss"/>
     <span class="dashboard-chart"
       data-chart-name="os-by-severity-class"
-      data-chart-title="{gsa:i18n ('Operating Systems by Severity Class', 'Chart')}"
+      data-chart-title="{gsa:i18n ('Operating Systems by Severity Class')}"
       data-chart-title-count="count"
       data-chart-type="donut"
       data-chart-template="info_by_class"/>
@@ -361,7 +361,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                          "score_asset_type" : "hosts",
                          "extra_tooltip_field_1": "modified",
                          "extra_tooltip_label_1": "Updated"}}'
-      data-chart-title="{gsa:i18n ('Operating Systems by Vulnerability Score', 'Chart')}"/>
+      data-chart-title="{gsa:i18n ('Operating Systems by Vulnerability Score')}"/>
   </div>
 </xsl:template>
 
@@ -378,7 +378,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     data-filter-id="{$filt_id}">
     <span class="dashboard-chart"
       data-chart-name="note-by-created"
-      data-chart-title="{gsa:i18n ('Notes by creation time', 'Chart')}"
+      data-chart-title="{gsa:i18n ('Notes by creation time')}"
       data-chart-title-count="count"
       data-chart-type="line"/>
   </div>
@@ -391,7 +391,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     data-filter-id="{$filt_id}">
     <span class="dashboard-chart"
       data-chart-name="note-by-text-words"
-      data-chart-title="{gsa:i18n ('Notes text word cloud', 'Chart')}"
+      data-chart-title="{gsa:i18n ('Notes text word cloud')}"
       data-chart-type="cloud"/>
   </div>
   <div class="dashboard-data-source"
@@ -406,7 +406,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <span class="dashboard-chart"
       data-chart-name="note-by-active-days"
       data-chart-template="active_status"
-      data-chart-title="{gsa:i18n ('Notes by active days', 'Chart')}"
+      data-chart-title="{gsa:i18n ('Notes by active days')}"
       data-chart-title-count="count"
       data-chart-type="donut"/>
   </div>
@@ -425,7 +425,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     data-filter-id="{$filt_id}">
     <span class="dashboard-chart"
       data-chart-name="override-by-created"
-      data-chart-title="{gsa:i18n ('Overrides by creation time', 'Chart')}"
+      data-chart-title="{gsa:i18n ('Overrides by creation time')}"
       data-chart-title-count="count"
       data-chart-type="line"/>
   </div>
@@ -438,7 +438,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     data-filter-id="{$filt_id}">
     <span class="dashboard-chart"
       data-chart-name="override-by-text-words"
-      data-chart-title="{gsa:i18n ('Overrides text word cloud', 'Chart')}"
+      data-chart-title="{gsa:i18n ('Overrides text word cloud')}"
       data-chart-type="cloud"/>
   </div>
   <div class="dashboard-data-source"
@@ -453,7 +453,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <span class="dashboard-chart"
       data-chart-name="override-by-active-days"
       data-chart-template="active_status"
-      data-chart-title="{gsa:i18n ('Overrides by active days', 'Chart')}"
+      data-chart-title="{gsa:i18n ('Overrides by active days')}"
       data-chart-title-count="count"
       data-chart-type="donut"/>
   </div>
@@ -474,13 +474,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <span class="dashboard-chart"
       data-chart-name="{$type}-by-cvss"
       data-chart-type="bar"
-      data-chart-title="{gsa-i18n:strformat (gsa:i18n ('%1 by CVSS', 'Chart'), $title_type)}"
+      data-chart-title="{gsa-i18n:strformat (gsa:i18n ('%1 by CVSS'), $title_type)}"
       data-chart-title-count="count"
       data-chart-template="info_by_cvss"/>
     <span class="dashboard-chart"
       data-chart-name="{$type}-by-severity-class"
       data-chart-type="donut"
-      data-chart-title="{gsa-i18n:strformat (gsa:i18n ('%1 by Severity Class', 'Chart'), $title_type)}"
+      data-chart-title="{gsa-i18n:strformat (gsa:i18n ('%1 by Severity Class'), $title_type)}"
       data-chart-title-count="count"
       data-chart-template="info_by_class"/>
   </div>
@@ -492,7 +492,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     data-filter-id="{$filt_id}">
     <span class="dashboard-chart"
       data-chart-name="{$type}-by-created"
-      data-chart-title="{gsa-i18n:strformat (gsa:i18n ('%1 by creation time', 'Chart'), $title_type)}"
+      data-chart-title="{gsa-i18n:strformat (gsa:i18n ('%1 by creation time'), $title_type)}"
       data-chart-title-count="count"
       data-chart-type="line"/>
   </div>
@@ -518,7 +518,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     data-filter-id="{$filt_id}">
     <span class="dashboard-chart"
       data-chart-name="nvt-by-family"
-      data-chart-title="{gsa:i18n ('NVTs by Family', 'Chart')}"
+      data-chart-title="{gsa:i18n ('NVTs by Family')}"
       data-chart-title-count="size_value"
       data-chart-type="bubbles"/>
   </div>
@@ -531,7 +531,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <span class="dashboard-chart"
       data-chart-name="nvt-by-qod_type"
       data-chart-template="qod_type_counts"
-      data-chart-title="{gsa:i18n ('NVTs by QoD type', 'Chart')}"
+      data-chart-title="{gsa:i18n ('NVTs by QoD type')}"
       data-chart-title-count="count"
       data-chart-type="donut"/>
   </div>
@@ -544,7 +544,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <span class="dashboard-chart"
       data-chart-name="nvt-by-qod"
       data-chart-template="percentage_counts"
-      data-chart-title="{gsa:i18n ('NVTs by QoD', 'Chart')}"
+      data-chart-title="{gsa:i18n ('NVTs by QoD')}"
       data-chart-title-count="count"
       data-chart-type="donut"/>
   </div>
@@ -569,7 +569,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     data-filter-id="{$filt_id}">
     <span class="dashboard-chart"
       data-chart-name="ovaldef-by-class"
-      data-chart-title="{gsa:i18n ('OVAL Definitions by class', 'Chart')}"
+      data-chart-title="{gsa:i18n ('OVAL Definitions by class')}"
       data-chart-title-count="count"
       data-chart-type="donut"/>
   </div>
@@ -643,7 +643,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <span class="dashboard-chart"
       data-chart-name="allinfo-by-type"
       data-chart-template="resource_type_counts"
-      data-chart-title="{gsa:i18n ('SecInfo Items by type', 'Chart')}"
+      data-chart-title="{gsa:i18n ('SecInfo Items by type')}"
       data-chart-title-count="count"
       data-chart-type="donut"/>
   </div>
@@ -1123,7 +1123,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="section-header">
     <h1>
       <img class="icon icon-lg" src="/img/dashboard.svg" alt="Dashboard"/>
-      <xsl:value-of select="gsa:i18n ('Dashboard', 'Dashboard')"/>
+      <xsl:value-of select="gsa:i18n ('Dashboard')"/>
     </h1>
     <div id="main-dashboard-controls" class="dashboard-controls">
     </div>
@@ -1202,7 +1202,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="section-header">
     <h1>
       <img class="icon icon-lg" src="/img/scan.svg" alt="Scans Dashboard"/>
-      <xsl:value-of select="gsa:i18n ('Scans Dashboard', 'Dashboard')"/>
+      <xsl:value-of select="gsa:i18n ('Scans Dashboard')"/>
     </h1>
     <div id="scans-dashboard-controls" class="dashboard-controls">
     </div>
@@ -1297,7 +1297,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="section-header">
     <h1>
       <img class="icon icon-lg" src="/img/asset.svg" alt="Assets Dashboard"/>
-      <xsl:value-of select="gsa:i18n ('Assets Dashboard', 'Dashboard')"/>
+      <xsl:value-of select="gsa:i18n ('Assets Dashboard')"/>
     </h1>
     <div id="assets-dashboard-controls" class="dashboard-controls">
     </div>
@@ -1384,7 +1384,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="section-header">
     <h1>
       <img class="icon icon-lg" src="/img/allinfo.svg" alt="SecInfo Dashboard"/>
-      <xsl:value-of select="gsa:i18n ('SecInfo Dashboard', 'Dashboard')"/>
+      <xsl:value-of select="gsa:i18n ('SecInfo Dashboard')"/>
     </h1>
     <div id="secinfo-dashboard-controls" class="dashboard-controls">
     </div>
