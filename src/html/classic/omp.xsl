@@ -26619,7 +26619,7 @@ should not have received it.
         <div class="form-group">
           <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Name')"/></label>
           <div class="col-10">
-            <select name="permission" class="form-selection-control" id="perm">
+            <select name="permission" class="form-selection-control form-label-control" id="perm">
               <xsl:variable name="restrict_type" select="/envelope/params/restrict_type"/>
               <xsl:variable name="commands">
                 <xsl:choose>
@@ -26632,14 +26632,14 @@ should not have received it.
                 </xsl:choose>
               </xsl:variable>
               <xsl:if test="not ($restrict_type)">
-                <option value="Super" data-select="super">
+                <option value="Super" data-select="super" data-label-name="Resource ID">
                   <xsl:text>Super (Has super access)</xsl:text>
                 </option>
               </xsl:if>
               <xsl:for-each select="exslt:node-set ($commands)/*[gsa:may-op (name)]">
                 <xsl:choose>
                   <xsl:when test="$restrict_type and starts-with (gsa:lower-case (name), concat ('get_', $restrict_type))">
-                    <option value="{gsa:lower-case (name)}" selected="1">
+                    <option value="{gsa:lower-case (name)}" selected="1" data-label-name="{gsa-i18n:strformat (gsa:i18n ('%1 ID'), gsa:command-type-label (name))}">
                       <xsl:value-of select="gsa:lower-case (name)"/>
                       <xsl:text> (</xsl:text>
                       <xsl:value-of select="gsa:capitalise (gsa:permission-description (name, resource))"/>
@@ -26647,7 +26647,7 @@ should not have received it.
                     </option>
                   </xsl:when>
                   <xsl:when test="not (preceding-sibling::node ())">
-                    <option value="{gsa:lower-case (name)}" selected="1">
+                      <option value="{gsa:lower-case (name)}" selected="1" data-label-name="{gsa-i18n:strformat (gsa:i18n ('%1 ID'), gsa:command-type-label (name))}">
                       <xsl:value-of select="gsa:lower-case (name)"/>
                       <xsl:text> (</xsl:text>
                       <xsl:value-of select="gsa:capitalise (gsa:permission-description (name, resource))"/>
@@ -26655,7 +26655,7 @@ should not have received it.
                     </option>
                   </xsl:when>
                   <xsl:otherwise>
-                    <option value="{gsa:lower-case (name)}">
+                    <option value="{gsa:lower-case (name)}" data-label-name="{gsa-i18n:strformat (gsa:i18n ('%1 ID'), gsa:command-type-label (name))}">
                       <xsl:value-of select="gsa:lower-case (name)"/>
                       <xsl:text> (</xsl:text>
                       <xsl:value-of select="gsa:capitalise (gsa:permission-description (name, resource))"/>
@@ -26765,7 +26765,9 @@ should not have received it.
                     form-selection-item-perm--verify_report_format
                     form-selection-item-perm--verify_scanner
           ">
-          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Resource ID')"/></label>
+          <label class="col-2 control-label form-label-item-perm">
+              <xsl:value-of select="gsa:i18n ('Resource ID')"/>
+          </label>
           <div class="col-10">
             <input type="text" name="id_or_empty"
               value="{/envelope/params/resource_id}"
