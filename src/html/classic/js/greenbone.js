@@ -1592,15 +1592,29 @@
 
     doc.find('select:not(.no-select2)').select2();
 
+    doc.find('.form-label-control').each(function() {
+      var elem = $(this);
+      var form = elem.parents('form');
+      var name = elem.attr('id');
+
+      function on_change() {
+        var option = get_option(elem);
+        var value = option.data('label-name');
+
+        form.find('.form-label-item-' + name).text(value);
+      }
+
+      elem.on('change', on_change);
+
+      init_input(elem, on_change);
+    });
+
     doc.find('.form-selection-control').each(function() {
       var elem = $(this);
       var form = elem.parents('form');
       var name = elem.attr('id');
 
       function on_change() {
-
-
-
         var value = get_value(elem);
 
         /* hide all elements of the selection */
