@@ -1562,6 +1562,30 @@
       }
     }
 
+    function get_option(elem) {
+      if (elem.attr('type') === 'radio' || elem.attr('type') === 'checkbox') {
+        return elem;
+      }
+      return elem.find(':selected');
+    }
+
+    function get_value(elem) {
+      var value;
+      var option = get_option(elem);
+
+      if (is_defined(option)) {
+        value = option.data('select');
+      }
+
+      if (!is_defined(value)) {
+        /* fallback to elem.val() if data-select is not set or option not
+          * found */
+        return elem.val();
+      }
+
+      return value;
+    }
+
     doc.find('input.spinner').spinner();
 
     doc.find('.slider').slider();
@@ -1574,25 +1598,10 @@
       var name = elem.attr('id');
 
       function on_change() {
-        var value;
-        var option;
 
-        if (elem.attr('type') === 'radio' || elem.attr('type') === 'checkbox') {
-          option = elem;
-        }
-        else {
-          option = elem.find(':selected');
-        }
 
-        if (is_defined(option)) {
-          value = option.data('select');
-        }
 
-        if (!has_value(value)) {
-          /* fallback to elem.val() if data-select is not set or option not
-           * found */
-          value = elem.val();
-        }
+        var value = get_value(elem);
 
         /* hide all elements of the selection */
         form.find('.form-selection-input-' + name).prop('disabled', true);
