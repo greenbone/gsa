@@ -1,4 +1,10 @@
-2016-08-22  Matthew Mundell <matthew.mundell@greenbone.net>
+2016-08-23  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/classic/omp.xsl (html-create-permission-form): Remove "for
+	Super permissions" because the field now only displays when "Super" is
+	selected.
+
+2016-08-23  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/omp.xsl (gsa:command-type-label): Use gsa:command-type,
 	so that GET commands use the singular type name.

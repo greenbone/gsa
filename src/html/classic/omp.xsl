@@ -26773,7 +26773,7 @@ should not have received it.
         </div>
         <div class="form-group form-selection-item-perm form-selection-item-perm--super">
           <label class="col-2 control-label">
-            <xsl:value-of select="gsa:i18n ('Resource Type')"/> (<xsl:value-of select="gsa:i18n ('for Super permissions')"/>)
+            <xsl:value-of select="gsa:i18n ('Resource Type')"/>
           </label>
           <div class="col-10">
             <select name="optional_resource_type">
