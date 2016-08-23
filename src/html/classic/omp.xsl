@@ -26684,11 +26684,11 @@ should not have received it.
             <xsl:value-of select="gsa:i18n ('Resource Type')"/>
           </label>
           <div class="col-10">
-            <select name="optional_resource_type">
-              <option value="">--</option>
-              <option value="user">User</option>
-              <option value="role">Role</option>
-              <option value="group">Group</option>
+            <select name="optional_resource_type" class="form-label-control" id="resource">
+              <option value="" data-label-name="{gsa:i18n ('Resource ID')}">--</option>
+              <option value="user" data-label-name="{gsa:i18n ('User ID')}">User</option>
+              <option value="role" data-label-name="{gsa:i18n ('Role ID')}">Role</option>
+              <option value="group" data-label-name="{gsa:i18n ('Group ID')}">Group</option>
             </select>
           </div>
         </div>
@@ -26776,7 +26776,7 @@ should not have received it.
                     form-selection-item-perm--verify_report_format
                     form-selection-item-perm--verify_scanner
           ">
-          <label class="col-2 control-label form-label-item-perm">
+          <label class="col-2 control-label form-label-item-perm form-label-item-resource">
               <xsl:value-of select="gsa:i18n ('Resource ID')"/>
           </label>
           <div class="col-10">
