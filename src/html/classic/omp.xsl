@@ -502,11 +502,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <func:function name="gsa:command-type-label">
   <xsl:param name="command"/>
-  <xsl:variable name="after"
-                select="substring-after (str:replace (gsa:lower-case ($command), '_', ' '), ' ')"/>
-  <xsl:variable name="command_type" select="gsa:type-name ($after)"/>
-
-  <func:result select="gsa:capitalise ($command_type)"/>
+  <func:result select="gsa:capitalise (gsa:command-type ($command))"/>
 </func:function>
 
 <func:function name="gsa:type-name">
