@@ -1,5 +1,10 @@
 2016-08-23  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_h_bar_chart.js: Fix calls to severity_level and
+	resource_type_name functions. They are in namespace gch now.
+
+2016-08-23  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	 * src/html/classic/js/gsa_dashboard.js
 	 (ChartController.prototype.getDetachedUrl): Remove encoding of url params
 	 from getDetachedUrl and let create_uri encode all params.

@@ -152,7 +152,7 @@
     if (!gsa.is_defined(this.empty_text)) {
       this.empty_text = gsa._('No matching {{resource_type}}',
           {
-            resource_type: gsa.resource_type_name(
+            resource_type: gch.resource_type_name(
                                 data.column_info.columns[this.x_field].type)
           });
     }
@@ -312,13 +312,13 @@
             if (self.y_label !== '') {
               return '<strong>' + self.y_label + ' (' + x +
                   '):</strong><br/> ' + d[self.y_field].toFixed(1) +
-                  ' (' + gsa.severity_level(d[self.y_field]) + ')' +
+                  ' (' + gch.severity_level(d[self.y_field]) + ')' +
                   extra;
             }
             else {
               return '<strong>' + x + ':</strong><br/> ' +
                   d[self.y_field].toFixed(1) +
-                  ' (' + gsa.severity_level(d[self.y_field]) + ')' +
+                  ' (' + gch.severity_level(d[self.y_field]) + ')' +
                   extra;
             }
           }
