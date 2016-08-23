@@ -26630,7 +26630,7 @@ should not have received it.
                 </xsl:choose>
               </xsl:variable>
               <xsl:if test="not ($restrict_type)">
-                <option value="Super" data-select="super" data-label-name="Resource ID">
+                <option value="Super" data-select="super" data-label-name="{gsa:i18n ('Resource ID')}">
                   <xsl:text>Super (Has super access)</xsl:text>
                 </option>
               </xsl:if>

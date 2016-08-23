@@ -1,5 +1,10 @@
 2016-08-23  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/omp.xsl (html-create-permission-form): Mark Resource ID
+	term for translation.
+
+2016-08-23  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/omp.xsl (html-create-permission-form): Adjust id_or_empty
 	field label when command type super is selected and resource type is changed.
 
