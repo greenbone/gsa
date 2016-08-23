@@ -40,24 +40,7 @@
   var MAX_PER_ROW = 4;
   var MAX_DISPLAYS = 8;
 
-  var log = {};
-
-  log.error =  function() {
-    console.error.apply(console, arguments);
-  };
-  log.warn = function() {
-    console.warn.apply(console, arguments);
-  };
-
-  if (gch.DEBUG) {
-    log.debug = function() {
-      console.log.apply(console, arguments);
-    };
-  }
-  else {
-    log.debug = function() {
-    };
-  }
+  var log = gsa.log;
 
   var EMPTY_FILTER = {id: '', name: '--', term: '', type: null};
 

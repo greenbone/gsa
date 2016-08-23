@@ -69,6 +69,25 @@
   gsa.parse_int = parse_int;
   gsa.shallow_copy = shallow_copy;
   gsa.extend = extend;
+  gsa.log = {};
+
+  gsa.log.error =  function() {
+    console.error.apply(console, arguments);
+  };
+
+  gsa.log.warn = function() {
+    console.warn.apply(console, arguments);
+  };
+
+  if (gsa.DEBUG) {
+    gsa.log.debug = function() {
+      console.log.apply(console, arguments);
+    };
+  }
+  else {
+    gsa.log.debug = function() {
+    };
+  }
 
   function LanguageDetector() {
     global.i18nextBrowserLanguageDetector.call(this);
