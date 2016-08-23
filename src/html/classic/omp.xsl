@@ -26677,6 +26677,19 @@ should not have received it.
             <xsl:call-template name="permission-subject-selection"/>
           </div>
         </div>
+        <div class="form-group form-selection-item-perm form-selection-item-perm--super">
+          <label class="col-2 control-label">
+            <xsl:value-of select="gsa:i18n ('Resource Type')"/>
+          </label>
+          <div class="col-10">
+            <select name="optional_resource_type">
+              <option value="">--</option>
+              <option value="user">User</option>
+              <option value="role">Role</option>
+              <option value="group">Group</option>
+            </select>
+          </div>
+        </div>
         <div class="form-group form-selection-item-perm
                     form-selection-item-perm--super
                     form-selection-item-perm--delete_agent
@@ -26769,19 +26782,6 @@ should not have received it.
               value="{/envelope/params/resource_id}"
               size="50"
               maxlength="100"/>
-          </div>
-        </div>
-        <div class="form-group form-selection-item-perm form-selection-item-perm--super">
-          <label class="col-2 control-label">
-            <xsl:value-of select="gsa:i18n ('Resource Type')"/>
-          </label>
-          <div class="col-10">
-            <select name="optional_resource_type">
-              <option value="">--</option>
-              <option value="user">User</option>
-              <option value="role">Role</option>
-              <option value="group">Group</option>
-            </select>
           </div>
         </div>
       </form>

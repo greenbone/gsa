@@ -1,5 +1,12 @@
 2016-08-23  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/classic/omp.xsl (html-create-permission-form): Move "Resource
+	Type" above "Resource ID", because "Resource Type" determines what goes in
+	"Resource ID".  Also "Resource Type" is only shown when needed now, so it
+	does not need to be "hidden" at the end.
+
+2016-08-23  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/classic/omp.xsl (html-create-permission-form): Remove "for
 	Super permissions" because the field now only displays when "Super" is
 	selected.
