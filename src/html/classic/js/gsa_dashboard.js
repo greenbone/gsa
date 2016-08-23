@@ -2648,6 +2648,7 @@
 
     params.chart_type = this.chart_type;
     params.chart_template = this.chart_template;
+    params.chart_title = this.display.getTitle();
 
     return create_uri(command, this.display.getCurrentFilter(), params,
         this.data_src.prefix, true);

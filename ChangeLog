@@ -1,5 +1,18 @@
 2016-08-23  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	Add the chart title for detached charts.
+
+	* src/gsad.c (init_validator): Add validator for param chart_title.
+
+	* src/html/classic/js/gsa_dashboard.js
+	(ChartController.prototype.getDetachedUrl): Add parameter chart_title when
+	creating a detached url.
+
+	* src/html/classic/omp.xsl (get_aggregates, get_tasks_chart): Pass chart_title
+	parameter as data-chart-title attribute.
+
+2016-08-23  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/greenbone.js,
 	* src/html/classic/js/gsa_dashboard.js: Move log object into greenbone.js to
 	allow usage in all our js files.

@@ -8279,6 +8279,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         data-chart-name="tasks-chart"
         data-chart-type="{/envelope/params/chart_type}"
         data-chart-template="{/envelope/params/chart_template}"
+        data-chart-title="{/envelope/params/chart_title}"
         data-init-params="{$init_params_js}"
         data-gen-params="{$gen_params_js}"
         />
@@ -9777,6 +9778,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         data-chart-name="aggregate-chart"
         data-chart-type="{/envelope/params/chart_type}"
         data-chart-template="{/envelope/params/chart_template}"
+        data-chart-title="{/envelope/params/chart_title}"
         data-x-field="{/envelope/params/x_field}"
         data-y-fields="{$y_fields}"
         data-z-fields="{$z_fields}"
