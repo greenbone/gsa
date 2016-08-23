@@ -67,6 +67,8 @@
   gsa.array_sum = array_sum;
   gsa.derive = derive;
   gsa.parse_int = parse_int;
+  gsa.shallow_copy = shallow_copy;
+  gsa.extend = extend;
 
   function LanguageDetector() {
     global.i18nextBrowserLanguageDetector.call(this);
@@ -173,6 +175,14 @@
       val = undefined;
     }
     return val;
+  }
+
+  function shallow_copy(object) {
+    return $.extend({}, object);
+  }
+
+  function extend() { //  extend(target [, object1 ] [, objectN ])
+    return $.extend.apply(null, arguments);
   }
 
   var RESPONSE_SELECTORS = {
