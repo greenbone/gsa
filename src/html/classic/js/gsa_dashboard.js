@@ -1441,7 +1441,8 @@
     if (count <= 0) {
       count = 1;
     }
-    return (this.width - 2) / count;
+    /* 4 == 2 Pixels for left and right border + some safety space */
+    return Math.floor((this.width - 4) / count);
   };
 
   /**
