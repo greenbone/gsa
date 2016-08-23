@@ -2625,45 +2625,37 @@
    * @return The generated URL.
    */
   ChartController.prototype.getDetachedUrl = function() {
-    var extra_params_str = '';
     var field;
+    var param;
+    var params = gsa.shallow_copy(this.data_src.params);
+
     if (gsa.has_value(this.gen_params.no_chart_links)) {
-      extra_params_str = extra_params_str + '&no_chart_links=' +
-                          (this.gen_params.no_chart_links ? '1' : '0');
+      params.no_chart_links = this.gen_params.no_chart_links ? '1' : '0';
     }
 
     if (gsa.has_value(this.gen_params.x_field)) {
-      extra_params_str = extra_params_str + '&x_field=' +
-                          encodeURIComponent(this.gen_params.x_field);
+      params.x_field = this.gen_params.x_field;
     }
     if (gsa.has_value(this.gen_params.y_fields)) {
       for (field in this.gen_params.y_fields) {
-        extra_params_str = extra_params_str + '&y_fields:' +
-                            (1 + Number(field)) +
-                            '=' +
-                            encodeURIComponent(this.gen_params.y_fields[field]);
+        params['y_fields:' + (1 + Number(field))] =
+                this.gen_params.y_fields[field];
       }
     }
     if (gsa.has_value(this.gen_params.z_fields)) {
       for (field in this.gen_params.z_fields) {
-        extra_params_str = extra_params_str + '&z_fields:' +
-                            (1 + Number(field)) +
-                            '=' +
-                            encodeURIComponent(this.gen_params.z_fields[field]);
+        params['z_fields:' + (1 + Number(field))] =
+            this.gen_params.z_fields[field];
       }
     }
-    var param;
+
     for (param in this.init_params) {
-      extra_params_str = extra_params_str + '&chart_init:' +
-                          encodeURIComponent(param) +
-                          '=' +
-                          encodeURIComponent(this.init_params[param]);
+      params['chart_init:' + encodeURIComponent(param)] =
+          this.init_params[param];
     }
     for (param in this.gen_params.extra) {
-      extra_params_str = extra_params_str + '&chart_gen:' +
-                          encodeURIComponent(param) +
-                          '=' +
-                          encodeURIComponent(this.gen_params.extra[param]);
+      params['chart_gen:' + encodeURIComponent(param)] =
+          this.gen_params.extra[param];
     }
 
     var command = this.data_src.command;
@@ -2671,11 +2663,11 @@
       command = command + '_chart';
     }
 
-    return create_uri(command, this.display.getCurrentFilter(),
-        this.data_src.params, this.data_src.prefix, true) +
-      '&chart_type=' + encodeURIComponent(this.chart_type) +
-      '&chart_template=' + encodeURIComponent(this.chart_template) +
-      extra_params_str;
+    params.chart_type = this.chart_type;
+    params.chart_template = this.chart_template;
+
+    return create_uri(command, this.display.getCurrentFilter(), params,
+        this.data_src.prefix, true);
   };
 
   /**
