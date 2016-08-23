@@ -111,8 +111,7 @@
     });
   }
 
-  RowTarget.prototype = Object.create(EventNode.prototype);
-  RowTarget.prototype.constructor = RowTarget;
+  gsa.derive(RowTarget, EventNode);
 
   /**
    * Shows the drop target
@@ -1067,8 +1066,7 @@
   }
 
   // derive DashboardRow from EventNode
-  DashboardRow.prototype = Object.create(EventNode.prototype);
-  DashboardRow.prototype.constructor = DashboardRow;
+  gsa.derive(DashboardRow, EventNode);
 
   /**
    * Initializes the dashboard row.
@@ -1529,8 +1527,7 @@
     this.init();
   }
 
-  DashboardDisplay.prototype = Object.create(EventNode.prototype);
-  DashboardDisplay.prototype.constructor = DashboardDisplay;
+  gsa.derive(DashboardDisplay, EventNode);
 
   DashboardDisplay.prototype.init = function() {
     var self = this;

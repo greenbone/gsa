@@ -1,5 +1,11 @@
 2016-08-23  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_dashboard.js,
+	src/html/classic/js/gsa_graphics_base.js: Use gsa.derive function for class
+	derivation.
+
+2016-08-23  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_dashboard.js
 	(DashboardRow.prototype._getDisplayWidth): Fix calculating the width of the
 	displays of a row. It seems that the css border-width setting of 1px can

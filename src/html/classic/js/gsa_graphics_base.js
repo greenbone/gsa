@@ -322,9 +322,7 @@
     this.command = 'get_aggregate';
   }
 
-  AggregateChartGenerator.prototype = Object.create(
-      BaseChartGenerator.prototype);
-  AggregateChartGenerator.prototype.constructor = AggregateChartGenerator;
+  gsa.derive(AggregateChartGenerator, BaseChartGenerator);
 
   AggregateChartGenerator.prototype.extractData = function(xml_select,
       gen_params) {
@@ -342,9 +340,7 @@
     this.command = 'get_tasks';
   }
 
-  TaskChartGenerator.prototype = Object.create(
-      BaseChartGenerator.prototype);
-  TaskChartGenerator.prototype.constructor = TaskChartGenerator;
+  gsa.derive(TaskChartGenerator, BaseChartGenerator);
 
   TaskChartGenerator.prototype.extractData = function(xml_select,
       gen_params) {
@@ -361,9 +357,7 @@
     this.command = 'get_assets';
   }
 
-  AssetChartGenerator.prototype = Object.create(
-      BaseChartGenerator.prototype);
-  AssetChartGenerator.prototype.constructor = AssetChartGenerator;
+  gsa.derive(AssetChartGenerator, BaseChartGenerator);
 
   AssetChartGenerator.prototype.extractData = function(xml_select,
       gen_params) {
