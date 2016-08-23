@@ -27313,17 +27313,18 @@ should not have received it.
             <xsl:value-of select="gsa:i18n ('Name')"/>
           </label>
           <div class="col-10">
-            <select name="permission" class="form-selection-control" id="permission">
+            <select name="permission" class="form-selection-control form-label-control" id="perm">
               <xsl:variable name="name">
                 <xsl:value-of select="commands_response/get_permissions_response/permission/name"/>
               </xsl:variable>
-              <option value="Super" data-select="super">
+              <option value="Super" data-select="super" data-label-name="{gsa:i18n ('Resource ID')}">
                 <xsl:text>Super (Has super access)</xsl:text>
               </option>
               <xsl:for-each select="/envelope/capabilities/help_response/schema/command[gsa:lower-case (name) != 'get_version']">
                 <xsl:choose>
                   <xsl:when test="gsa:lower-case (name) = $name">
-                    <option value="{$name}" selected="1">
+                    <option value="{gsa:lower-case (name)}" selected="1"
+                      data-label-name="{gsa-i18n:strformat (gsa:i18n ('%1 ID'), gsa:command-type-label (name))}">
                       <xsl:value-of select="$name"/>
                       <xsl:text> (</xsl:text>
                       <xsl:value-of select="gsa:capitalise (gsa:permission-description ($name, resource))"/>
@@ -27332,7 +27333,7 @@ should not have received it.
                   </xsl:when>
                   <xsl:otherwise>
                     <xsl:if test="gsa:may-op (name)">
-                      <option value="{gsa:lower-case (name)}">
+                      <option value="{gsa:lower-case (name)}" data-label-name="{gsa-i18n:strformat (gsa:i18n ('%1 ID'), gsa:command-type-label (name))}">
                         <xsl:value-of select="gsa:lower-case (name)"/>
                         <xsl:text> (</xsl:text>
                         <xsl:value-of select="gsa:capitalise (gsa:permission-description (name, resource))"/>
@@ -27443,8 +27444,125 @@ should not have received it.
             </div>
           </div>
         </div>
-        <div class="form-group">
+        <div class="form-group form-selection-item-perm form-selection-item-perm--super">
           <label class="col-2 control-label">
+            <xsl:value-of select="gsa:i18n ('Resource Type')"/>
+          </label>
+          <div class="col-10">
+            <select name="optional_resource_type" class="form-label-control" id="resource">
+              <option value="" data-label-name="{gsa:i18n ('Resource ID')}">--</option>
+              <xsl:choose>
+                <xsl:when test="commands_response/get_permissions_response/permission/resource/type = 'user'">
+                  <option value="user" selected="1" data-label-name="{gsa:i18n ('User ID')}">User</option>
+                </xsl:when>
+                <xsl:otherwise>
+                  <option value="user" data-label-name="{gsa:i18n ('User ID')}">User</option>
+                </xsl:otherwise>
+              </xsl:choose>
+              <xsl:choose>
+                <xsl:when test="commands_response/get_permissions_response/permission/resource/type = 'role'">
+                  <option value="role" selected="1" data-label-name="{gsa:i18n ('Role ID')}">Role</option>
+                </xsl:when>
+                <xsl:otherwise>
+                  <option value="role" data-label-name="{gsa:i18n ('Role ID')}">Role</option>
+                </xsl:otherwise>
+              </xsl:choose>
+              <xsl:choose>
+                <xsl:when test="commands_response/get_permissions_response/permission/resource/type = 'group'">
+                  <option value="group" selected="1" data-label-name="{gsa:i18n ('Group ID')}">Group</option>
+                </xsl:when>
+                <xsl:otherwise>
+                  <option value="group" data-label-name="{gsa:i18n ('Group ID')}">Group</option>
+                </xsl:otherwise>
+              </xsl:choose>
+            </select>
+          </div>
+        </div>
+        <div class="form-group form-selection-item-perm
+                    form-selection-item-perm--super
+                    form-selection-item-perm--delete_agent
+                    form-selection-item-perm--delete_alert
+                    form-selection-item-perm--delete_asset
+                    form-selection-item-perm--delete_config
+                    form-selection-item-perm--delete_credential
+                    form-selection-item-perm--delete_filter
+                    form-selection-item-perm--delete_group
+                    form-selection-item-perm--delete_note
+                    form-selection-item-perm--delete_override
+                    form-selection-item-perm--delete_permission
+                    form-selection-item-perm--delete_port_list
+                    form-selection-item-perm--delete_port_range
+                    form-selection-item-perm--delete_report
+                    form-selection-item-perm--delete_report_format
+                    form-selection-item-perm--delete_role
+                    form-selection-item-perm--delete_scanner
+                    form-selection-item-perm--delete_schedule
+                    form-selection-item-perm--delete_slave
+                    form-selection-item-perm--delete_tag
+                    form-selection-item-perm--delete_target
+                    form-selection-item-perm--delete_task
+                    form-selection-item-perm--delete_user
+                    form-selection-item-perm--describe_auth
+                    form-selection-item-perm--describe_cert
+                    form-selection-item-perm--describe_feed
+                    form-selection-item-perm--describe_scap
+                    form-selection-item-perm--get_agents
+                    form-selection-item-perm--get_alerts
+                    form-selection-item-perm--get_assets
+                    form-selection-item-perm--get_configs
+                    form-selection-item-perm--get_credentials
+                    form-selection-item-perm--get_filters
+                    form-selection-item-perm--get_groups
+                    form-selection-item-perm--get_info
+                    form-selection-item-perm--get_notes
+                    form-selection-item-perm--get_nvts
+                    form-selection-item-perm--get_overrides
+                    form-selection-item-perm--get_permissions
+                    form-selection-item-perm--get_port_lists
+                    form-selection-item-perm--get_reports
+                    form-selection-item-perm--get_report_formats
+                    form-selection-item-perm--get_results
+                    form-selection-item-perm--get_roles
+                    form-selection-item-perm--get_scanners
+                    form-selection-item-perm--get_schedules
+                    form-selection-item-perm--get_settings
+                    form-selection-item-perm--get_slaves
+                    form-selection-item-perm--get_tags
+                    form-selection-item-perm--get_targets
+                    form-selection-item-perm--get_tasks
+                    form-selection-item-perm--get_users
+                    form-selection-item-perm--modify_agent
+                    form-selection-item-perm--modify_alert
+                    form-selection-item-perm--modify_asset
+                    form-selection-item-perm--modify_config
+                    form-selection-item-perm--modify_credential
+                    form-selection-item-perm--modify_filter
+                    form-selection-item-perm--modify_group
+                    form-selection-item-perm--modify_note
+                    form-selection-item-perm--modify_override
+                    form-selection-item-perm--modify_permission
+                    form-selection-item-perm--modify_port_list
+                    form-selection-item-perm--modify_report
+                    form-selection-item-perm--modify_report_format
+                    form-selection-item-perm--modify_role
+                    form-selection-item-perm--modify_scanner
+                    form-selection-item-perm--modify_schedule
+                    form-selection-item-perm--modify_setting
+                    form-selection-item-perm--modify_slave
+                    form-selection-item-perm--modify_tag
+                    form-selection-item-perm--modify_target
+                    form-selection-item-perm--modify_task
+                    form-selection-item-perm--modify_user
+                    form-selection-item-perm--move_task
+                    form-selection-item-perm--resume_task
+                    form-selection-item-perm--start_task
+                    form-selection-item-perm--stop_task
+                    form-selection-item-perm--test_alert
+                    form-selection-item-perm--verify_agent
+                    form-selection-item-perm--verify_report_format
+                    form-selection-item-perm--verify_scanner
+          ">
+          <label class="col-2 control-label form-label-item-perm form-label-item-resource">
             <xsl:value-of select="gsa:i18n ('Resource ID')"/>
           </label>
           <div class="col-10">
@@ -27462,40 +27580,6 @@ should not have received it.
                   maxlength="100"/>
               </xsl:otherwise>
             </xsl:choose>
-          </div>
-        </div>
-        <div class="form-group form-selection-item-permission form-selection-item-permission--super">
-          <label class="col-2 control-label">
-            <xsl:value-of select="gsa:i18n ('Resource Type')"/> (<xsl:value-of select="gsa:i18n ('for Super permissions')"/>)
-          </label>
-          <div class="col-10">
-            <select name="optional_resource_type">
-              <option value="">--</option>
-              <xsl:choose>
-                <xsl:when test="commands_response/get_permissions_response/permission/resource/type = 'user'">
-                  <option value="user" selected="1">User</option>
-                </xsl:when>
-                <xsl:otherwise>
-                  <option value="user">User</option>
-                </xsl:otherwise>
-              </xsl:choose>
-              <xsl:choose>
-                <xsl:when test="commands_response/get_permissions_response/permission/resource/type = 'role'">
-                  <option value="role" selected="1">Role</option>
-                </xsl:when>
-                <xsl:otherwise>
-                  <option value="role">Role</option>
-                </xsl:otherwise>
-              </xsl:choose>
-              <xsl:choose>
-                <xsl:when test="commands_response/get_permissions_response/permission/resource/type = 'group'">
-                  <option value="group" selected="1">Group</option>
-                </xsl:when>
-                <xsl:otherwise>
-                  <option value="group">Group</option>
-                </xsl:otherwise>
-              </xsl:choose>
-            </select>
           </div>
         </div>
       </form>
