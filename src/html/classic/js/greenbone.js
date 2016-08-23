@@ -1629,8 +1629,16 @@
       function on_change() {
         var option = get_option(elem);
         var value = option.data('label-name');
+        var field = option.data('label-field');
 
-        form.find('.form-label-item-' + name).text(value);
+        if (!gsa.is_defined(value) && gsa.is_defined(field)) {
+          option = get_option($(field));
+          value = option.data('label-name');
+        }
+
+        if (gsa.is_defined(value)) {
+          form.find('.form-label-item-' + name).text(value);
+        }
       }
 
       elem.on('change', on_change);
