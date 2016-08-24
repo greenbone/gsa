@@ -19583,59 +19583,61 @@ should not have received it.
                      value="{commands_response/get_scanners_response/scanner/comment}"/>
             </td>
           </tr>
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('Host')"/></td>
-            <td>
-              <xsl:choose>
-                <xsl:when test="$in_use">
-                  <input type="text" name="scanner_host" size="30" maxlength="400"
-                         disabled="1"
-                         value="{commands_response/get_scanners_response/scanner/host}"/>
-                </xsl:when>
-                <xsl:otherwise>
-                  <input type="text" name="scanner_host" size="30" maxlength="400"
-                         value="{commands_response/get_scanners_response/scanner/host}"/>
-                </xsl:otherwise>
-              </xsl:choose>
-            </td>
-          </tr>
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('Port')"/></td>
-            <td>
-              <xsl:choose>
-                <xsl:when test="$in_use">
-                  <input type="text" name="port" size="30" maxlength="400"
-                         disabled="1"
-                         value="{commands_response/get_scanners_response/scanner/port}"/>
-                </xsl:when>
-                <xsl:otherwise>
-                  <input type="text" name="port" size="30" maxlength="400"
-                         value="{commands_response/get_scanners_response/scanner/port}"/>
-                </xsl:otherwise>
-              </xsl:choose>
-            </td>
-          </tr>
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('Type')"/></td>
-            <td>
-              <xsl:choose>
-                <xsl:when test="$in_use">
-                  <select name="scanner_type" disabled="1">
-                    <xsl:call-template name="scanner-type-list">
-                      <xsl:with-param name="default" select="commands_response/get_scanners_response/scanner/type"/>
-                    </xsl:call-template>
-                  </select>
-                </xsl:when>
-                <xsl:otherwise>
-                  <select name="scanner_type">
-                    <xsl:call-template name="scanner-type-list">
-                      <xsl:with-param name="default" select="commands_response/get_scanners_response/scanner/type"/>
-                    </xsl:call-template>
-                  </select>
-                </xsl:otherwise>
-              </xsl:choose>
-            </td>
-          </tr>
+          <xsl:if test="not (gsa:is_absolute_path (commands_response/get_scanners_response/scanner/host))">
+            <tr>
+              <td><xsl:value-of select="gsa:i18n ('Host')"/></td>
+              <td>
+                <xsl:choose>
+                  <xsl:when test="$in_use">
+                    <input type="text" name="scanner_host" size="30" maxlength="400"
+                          disabled="1"
+                          value="{commands_response/get_scanners_response/scanner/host}"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="text" name="scanner_host" size="30" maxlength="400"
+                          value="{commands_response/get_scanners_response/scanner/host}"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </td>
+            </tr>
+            <tr>
+              <td><xsl:value-of select="gsa:i18n ('Port')"/></td>
+              <td>
+                <xsl:choose>
+                  <xsl:when test="$in_use">
+                    <input type="text" name="port" size="30" maxlength="400"
+                          disabled="1"
+                          value="{commands_response/get_scanners_response/scanner/port}"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="text" name="port" size="30" maxlength="400"
+                          value="{commands_response/get_scanners_response/scanner/port}"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </td>
+            </tr>
+            <tr>
+              <td><xsl:value-of select="gsa:i18n ('Type')"/></td>
+              <td>
+                <xsl:choose>
+                  <xsl:when test="$in_use">
+                    <select name="scanner_type" disabled="1">
+                      <xsl:call-template name="scanner-type-list">
+                        <xsl:with-param name="default" select="commands_response/get_scanners_response/scanner/type"/>
+                      </xsl:call-template>
+                    </select>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <select name="scanner_type">
+                      <xsl:call-template name="scanner-type-list">
+                        <xsl:with-param name="default" select="commands_response/get_scanners_response/scanner/type"/>
+                      </xsl:call-template>
+                    </select>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </td>
+            </tr>
+          </xsl:if>
           <tr>
             <td><xsl:value-of select="gsa:i18n ('CA Certificate')"/></td>
             <td>
