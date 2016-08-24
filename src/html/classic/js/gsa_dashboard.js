@@ -2097,7 +2097,7 @@
     var self = this;
 
     this.current_controller = this.controllers.find(function(controller) {
-      return controller.chart_name === self.controller_string;
+      return controller.chart_name === self.config.name;
     });
     return this;
   };
@@ -2108,11 +2108,11 @@
    * @return This display
    */
   DashboardDisplay.prototype._updateCurrentFilter = function() {
-    var self = this;
+    var filt_id = this.config.filt_id;
 
     this.current_filter = this.all_filters.find(function(filter, index) {
-      return filter.type === null && !gsa.has_value(self.filter_string) ||
-        filter.id === self.filter_string;
+      return filter.type === null && !gsa.has_value(filt_id) ||
+        filter.id === filt_id;
     });
     return this;
   };
@@ -2385,7 +2385,7 @@
   DashboardDisplay.prototype._requestNewChart = function() {
     if (!gsa.is_defined(this.current_controller)) {
       this.showError(gsa._('Could not load chart {{chart}}',
-            {chart: this.controller_string}));
+            {chart: this.config.name}));
       log.error('No controller selected');
       return;
     }
