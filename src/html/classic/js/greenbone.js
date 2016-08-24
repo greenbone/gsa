@@ -70,6 +70,7 @@
   gsa.shallow_copy = shallow_copy;
   gsa.extend = extend;
   gsa.log = {};
+  gsa.for_each = for_each;
 
   gsa.log.error =  function() {
     console.error.apply(console, arguments);
@@ -202,6 +203,13 @@
 
   function extend() { //  extend(target [, object1 ] [, objectN ])
     return $.extend.apply(null, arguments);
+  }
+
+  function for_each(array, func) {
+    if (!gsa.is_array(array)) {
+      array = [array];
+    }
+    array.forEach(func);
   }
 
   var RESPONSE_SELECTORS = {
