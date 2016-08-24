@@ -90,7 +90,7 @@ if (GETTEXT_FOUND)
                         ARGS    "${CMAKE_SOURCE_DIR}/src/html/classic"
                                 "${CMAKE_CURRENT_BINARY_DIR}/gsad_xsl.pot"
                         DEPENDS ${CMAKE_SOURCE_DIR}/src/html/classic/*.xsl
-                        COMMENT "Creating translation template (.pot) filei from XSLT")
+                        COMMENT "Creating translation template (.pot) file from XSLT")
     add_custom_target (gettext-pot-files
                        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_xsl.pot)
 
