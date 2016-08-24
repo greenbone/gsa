@@ -1,5 +1,10 @@
 2016-08-24  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/omp.xsl (scanner details): Only show host and port rows if
+	scanner doesn't use a unix socket by checking if the host is an absolute path.
+
+2016-08-24  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/omp.xsl (gsa:is_absolute_path): Add new exslt function for
 	checking if a string is an absolute path.
 

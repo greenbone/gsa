@@ -19763,32 +19763,34 @@ should not have received it.
         <td><xsl:value-of select="gsa:i18n ('Comment')"/>:</td>
         <td><xsl:value-of select="comment"/></td>
       </tr>
-      <tr>
-        <td><xsl:value-of select="gsa:i18n ('Host')"/>:</td>
-        <td>
-          <xsl:choose>
-            <xsl:when test="type = 3">
-              <xsl:value-of select="gsa:i18n('N/A')"/> <i>(<xsl:value-of select="gsa:i18n('builtin scanner')"/>)</i>
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:value-of select="host"/>
-            </xsl:otherwise>
-          </xsl:choose>
-        </td>
-      </tr>
-      <tr>
-        <td><xsl:value-of select="gsa:i18n ('Port')"/>:</td>
-        <td>
-          <xsl:choose>
-            <xsl:when test="type = 3">
-              <xsl:value-of select="gsa:i18n('N/A')"/> <i>(<xsl:value-of select="gsa:i18n('builtin scanner')"/>)</i>
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:value-of select="port"/>
-            </xsl:otherwise>
-          </xsl:choose>
-        </td>
-      </tr>
+      <xsl:if test="not (gsa:is_absolute_path (host))">
+        <tr>
+          <td><xsl:value-of select="gsa:i18n ('Host')"/>:</td>
+          <td>
+            <xsl:choose>
+              <xsl:when test="type = 3">
+                <xsl:value-of select="gsa:i18n('N/A')"/> <i>(<xsl:value-of select="gsa:i18n('builtin scanner')"/>)</i>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="host"/>
+              </xsl:otherwise>
+            </xsl:choose>
+          </td>
+        </tr>
+        <tr>
+          <td><xsl:value-of select="gsa:i18n ('Port')"/>:</td>
+          <td>
+            <xsl:choose>
+              <xsl:when test="type = 3">
+                <xsl:value-of select="gsa:i18n('N/A')"/> <i>(<xsl:value-of select="gsa:i18n('builtin scanner')"/>)</i>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="port"/>
+              </xsl:otherwise>
+            </xsl:choose>
+          </td>
+        </tr>
+      </xsl:if>
       <tr>
         <td><xsl:value-of select="gsa:i18n ('Type')"/>:</td>
         <td>
