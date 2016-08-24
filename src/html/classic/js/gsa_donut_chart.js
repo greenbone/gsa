@@ -683,7 +683,6 @@
     });
 
     var data = {
-      original_xml: old_data.original_xml,
       records: records,
       column_info: old_data.column_info,
       filter_info: old_data.filter_info

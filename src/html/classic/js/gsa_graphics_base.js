@@ -343,11 +343,9 @@
   AggregateChartGenerator.prototype.extractData = function(xml_select,
       gen_params) {
     return {
-      original_xml: xml_select,
-      records: gch.extract_simple_records(xml_select,
-          'aggregate group'),
+      records: gch.extract_simple_records(xml_select, 'aggregate group'),
       column_info: gch.extract_column_info(xml_select, gen_params),
-      filter_info: gch.extract_filter_info(xml_select, gen_params)
+      filter_info: gch.extract_filter_info(xml_select)
     };
   };
 
@@ -361,7 +359,6 @@
   TaskChartGenerator.prototype.extractData = function(xml_select,
       gen_params) {
     return {
-      original_xml: xml_select,
       records: gch.extract_task_records(xml_select),
       column_info: gch.tasks_column_info(),
       filter_info: gch.extract_filter_info(xml_select)
@@ -378,7 +375,6 @@
   AssetChartGenerator.prototype.extractData = function(xml_select,
       gen_params) {
     return {
-      original_xml: xml_select,
       topology: gch.extract_host_topology_data(xml_select),
       filter_info: gch.extract_filter_info(xml_select)
     };

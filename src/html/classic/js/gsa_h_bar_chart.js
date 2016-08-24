@@ -40,7 +40,6 @@
   */
   function data_top_list(old_data, params) {
     var new_data = {
-      original_xml: old_data.original_xml,
       records: [],
       column_info: old_data.column_info,
       filter_info: old_data.filter_info

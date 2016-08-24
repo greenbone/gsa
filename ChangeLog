@@ -1,5 +1,15 @@
 2016-08-24  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_bubble_chart.js,
+	src/html/classic/js/gsa_chart_helpers.js,
+	src/html/classic/js/gsa_donut_chart.js,
+	src/html/classic/js/gsa_graphics_base.js,
+	src/html/classic/js/gsa_h_bar_chart.js,
+	src/html/classic/js/gsa_line_chart.js: Remove original_xml property from the
+	data objects. It wasn't used anymore.
+
+2016-08-24  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/omp.xsl (html-edit-scanner-form): Only show host and port
 	input fields in edit scanner form if the host name is not an absolute path.
 
