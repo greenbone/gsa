@@ -343,7 +343,8 @@
   AggregateChartGenerator.prototype.extractData = function(xml_select,
       gen_params) {
     return {
-      records: gch.extract_simple_records(xml_select, 'aggregate group'),
+      records: gch.extract_simple_records(
+                   xml_select.selectAll('aggregate group')),
       column_info: gch.extract_column_info(xml_select, gen_params),
       filter_info: gch.extract_filter_info(xml_select)
     };

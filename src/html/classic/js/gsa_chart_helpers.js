@@ -385,12 +385,11 @@
   /**
    * Extracts records from XML
    *
-   * @param xml_data  The root node of the XML to extract the data from.
-   * @param selector  Selector for the individual records.
+   * @param data  The root node of the XML to extract the data from.
    *
    * @return  An array of records as used by chart generators.
    */
-  gch.extract_simple_records = function(xml_data, selector) {
+  gch.extract_simple_records = function(data) {
     var date_regex = /^\d{4}-(0\d|1[0-2])-([0-2]\d|3[01])T([0-1]\d|2[0-3]):[0-5]\d(:[0-5]\d)?([+-](0\d|1[0-4]):[0-5]\d|Z|)$/;
     var records = [];
 
@@ -420,7 +419,7 @@
       }
     }
 
-    xml_data.selectAll(selector).each(function() {
+    data.each(function() {
       var record = {};
       d3.select(this)
         .selectAll('value, count, c_count, stats, text')
