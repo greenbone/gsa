@@ -1,3 +1,8 @@
+2016-08-23  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/po/gsad_xsl-de.po: Replace with updated version using new
+	contexts and added messages.
+
 2016-08-23  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/js/gsa_dashboard.js,
