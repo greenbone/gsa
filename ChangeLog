@@ -1,3 +1,9 @@
+2016-08-24  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/js/gsa_dashboard.js (Dashboard.prototype.hasChanged): Fix
+	method by returning true if the config has changed. This fixes canceling of
+	editing the dashboards.
+
 2016-08-24  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/gsad_log_conf.cmake_in: Lower level of domains "gsad main" and

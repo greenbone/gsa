@@ -889,7 +889,7 @@
    * @return true if a filter, controller of height of a row has changed
    */
   Dashboard.prototype.hasChanged = function() {
-    this.hasConfigChanged();
+    return this.hasConfigChanged();
   };
 
   /**
