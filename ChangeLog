@@ -1,3 +1,9 @@
+2016-08-24  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/js/gsa_graphics_base.js
+	(BaseChartGenerator.prototype.generateData): Remove duplicate defined method
+	generateData.
+
 2016-08-23  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/po/gsad_xsl-de.po: Replace with updated version using new

@@ -134,11 +134,6 @@
   BaseChartGenerator.prototype.generate = function(display, data) {
   };
 
-  BaseChartGenerator.prototype.generateData = function(controller,
-      original_data, gen_params) {
-    return null;
-  };
-
   BaseChartGenerator.prototype.generateCsvData = function(controller, data) {
     return null;
   };
