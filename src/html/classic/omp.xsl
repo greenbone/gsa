@@ -20055,12 +20055,12 @@ should not have received it.
       </xsl:choose>
     </td>
     <td>
-      <xsl:if test="type != 3">
+      <xsl:if test="type != 3 and not (gsa:is_absolute_path (host))">
         <xsl:value-of select="host"/>
       </xsl:if>
     </td>
     <td>
-      <xsl:if test="type != 3">
+      <xsl:if test="type != 3 and not (gsa:is_absolute_path (host))">
         <xsl:value-of select="port"/>
       </xsl:if>
     </td>
