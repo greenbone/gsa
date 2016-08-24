@@ -818,6 +818,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </func:result>
 </func:function>
 
+<func:function name="gsa:is_absolute_path">
+  <xsl:param name="path"/>
+
+  <xsl:variable name="first"
+    select="substring ($path, 1, 1)"/>
+
+  <xsl:choose>
+    <xsl:when test="$first = '/'">
+      <func:result select="true()"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <func:result select="false()"/>
+    </xsl:otherwise>
+  </xsl:choose>
+</func:function>
 <!-- BEGIN NAMED TEMPLATES -->
 
 <xsl:template name="shy-long-rest">
