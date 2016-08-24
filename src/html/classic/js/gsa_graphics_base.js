@@ -126,12 +126,37 @@
   };
 
   /**
-   * Generates the chart from data, drawing it in a given display.
+   * Extracts data from a xml selection
    *
-   * @param display   The display to draw in.
-   * @param data      The data to generate a chart for.
+   * Child classes MUST implement this method. Per default it throws an error.
+   *
+   * @param xml_select  A d3.selection of the root xml element.
+   * @param gen_params  Generator parameters.
+   *
+   * @return Must return an object which represents the original data
    */
-  BaseChartGenerator.prototype.generate = function(display, data) {
+  BaseChartGenerator.prototype.extractData = function(xml_select, gen_params) {
+    throw new Error('Not implemented');
+  };
+
+  /**
+   * Generates the chart data from the original data by using the generator
+   * params.
+   *
+   * Per default it calls transformData.
+   *
+   * @param original_data   The original data.
+   * @param gen_params      Generator parameters.
+   *
+   * @return The chart data.
+   */
+  BaseChartGenerator.prototype.generateData = function(original_data,
+      gen_params) {
+    return this.transformData(original_data, gen_params);
+  };
+
+  BaseChartGenerator.prototype.generateLink = function(d, i, column, type,
+      filter_info) {
   };
 
   BaseChartGenerator.prototype.generateCsvData = function(controller, data) {
@@ -141,6 +166,15 @@
   BaseChartGenerator.prototype.generateHtmlTableData = function(controller,
       data) {
     return null;
+  };
+
+  /**
+   * Generates the chart from data, drawing it in a given display.
+   *
+   * @param display   The display to draw in.
+   * @param data      The data to generate a chart for.
+   */
+  BaseChartGenerator.prototype.generate = function(display, data) {
   };
 
   BaseChartGenerator.prototype.addMenuItems = function(controller, data) {
@@ -295,21 +329,8 @@
     };
   };
 
-  BaseChartGenerator.prototype.generateData = function(original_data,
-      gen_params) {
-    return this.transformData(original_data, gen_params);
-  };
-
-  BaseChartGenerator.prototype.generateLink = function(d, i, column, type,
-      filter_info) {
-  };
-
   BaseChartGenerator.prototype.supportsCommand = function(command) {
     return this.command === command;
-  };
-
-  BaseChartGenerator.prototype.extractData = function(xml_select, gen_params) {
-    throw new Error('Not implemented');
   };
 
   function AggregateChartGenerator(name) {

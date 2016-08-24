@@ -1,5 +1,10 @@
 2016-08-24  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_graphics_base.js (BaseChartGenerator): Rearrange
+	data methods and update documentation.
+
+2016-08-24  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_graphics_base.js
 	(BaseChartGenerator.prototype.generateData): Remove duplicate defined method
 	generateData.
