@@ -1,3 +1,10 @@
+2016-08-25  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* omp.xsl (report [results]): Rewrite and reformat hints shown when
+	report is empty.  Add links to target and filter edit dialogs where
+	appropriate.  Show progress dependent hints only if there are no
+	results in total.  Add filter hints when QoD keywords are used.
+
 2016-08-25  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/js/gsa_dashboard.js (ChartController.prototype.dataLoaded):

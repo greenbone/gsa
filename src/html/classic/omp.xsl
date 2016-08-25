@@ -4185,41 +4185,119 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <ul>
                 <xsl:choose>
                   <xsl:when test="report/result_count/full = 0">
-                    <li>
-                      <p><xsl:value-of select="gsa:i18n ('The target hosts were regarded dead.')"/></p>
-                      <p><xsl:value-of select="gsa:i18n ('Solution')"/>:<br/>
-                        <xsl:value-of select="gsa:i18n ('You could change the Alive Test method of the the target id is available in the results and could be used to build this link. But in case the targets are indeed dead, the scan duration might increase significantly.')"/>
-                      </p>
-                    </li>
+                    <xsl:choose>
+                      <xsl:when test="report/task/progress = 1">
+                        <li>
+                          <p>
+                            <xsl:value-of select="gsa:i18n ('The scan just started and no results have arrived yet.')"/>
+                          </p>
+                          <p>
+                            <a href="{/envelope/current_page}&amp;token={/envelope/token}">
+                              <img src="/img/refresh.svg" class="icon icon-sm"/>
+                              <xsl:value-of select="gsa:i18n ('Click here to reload this page and update the status.')"/>
+                            </a>
+                          </p>
+                        </li>
+                      </xsl:when>
+                      <xsl:when test="report/task/progress &gt; 1">
+                        <li>
+                          <p>
+                            <xsl:value-of select="gsa:i18n ('The scan is still running and no results have arrived yet.')"/>
+                          </p>
+                          <p>
+                            <a href="{/envelope/current_page}&amp;token={/envelope/token}">
+                              <img src="/img/refresh.svg" class="icon icon-sm"/>
+                              <xsl:value-of select="gsa:i18n ('Click here to reload this page and update the status.')"/>
+                            </a>
+                          </p>
+                        </li>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <li>
+                          <p><xsl:value-of select="gsa:i18n ('The target hosts could be regarded dead.')"/></p>
+                          <p>
+                            <b><xsl:value-of select="gsa:i18n ('Solution')"/>: </b>
+                            <xsl:value-of select="gsa:i18n ('You could change the Alive Test method of the target. However, if the targets are indeed dead, the scan duration might increase significantly.')"/>
+                            <xsl:choose>
+                              <xsl:when test="gsa:may-op ('modify_target')">
+                                <xsl:text> (</xsl:text>
+                                <!-- i18n with concat : see dynamic_strings.xsl - type-edit -->
+                                <a href="/omp?cmd=edit_target&amp;target_id={report/task/target/@id}&amp;next=get_report&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}" data-reload="window"
+                                    class="edit-action-icon" data-type="target" data-id="{report/task/target/@id}"
+                                    title="{gsa:i18n ('Edit Target')}">
+                                  <img src="/img/edit.svg" class="icon icon-sm"/>
+                                  <xsl:value-of select="gsa:i18n ('Click here to edit the target')"/>
+                                </a>
+                                <xsl:text>)</xsl:text>
+                              </xsl:when>
+                            </xsl:choose>
+                          </p>
+                        </li>
+                      </xsl:otherwise>
+                    </xsl:choose>
                   </xsl:when>
                   <xsl:when test="report/result_count/full &gt; 0">
                     <li>
-                      <p><xsl:value-of select="gsa-i18n:strformat (gsa:i18n ('The filter does not match any of %1 results.'), report/result_count/full)"/></p>
-                      <p><xsl:value-of select="gsa:i18n ('Solution')"/>:
+                      <p>
+                        <xsl:value-of select="gsa-i18n:strformat (gsa:i18n ('The filter does not match any of %1 results.'), report/result_count/full)"/>
                       </p>
-                      <ul>
-                        <xsl:choose>
-                          <xsl:when test="not (contains ($levels, 'g')) or contains (translate (report/filters/term, ' ', ''), 'severity>')">
+                      <p>
+                        <ul>
+                          <xsl:if test="not (contains ($levels, 'g'))">
                             <li>
-                              <xsl:value-of select="gsa:i18n ('You have excluded log messages. Start the filter edit dialog.')"/>
+                              <p>
+                                <xsl:choose>
+                                  <xsl:when test="number(report/severity/full) = 0">
+                                    <xsl:value-of select="gsa:i18n ('The report only contains log messages, which are currently excluded.')"/>
+                                  </xsl:when>
+                                  <xsl:otherwise>
+                                    <xsl:value-of select="gsa:i18n ('Log messages are currently excluded.')"/>
+                                  </xsl:otherwise>
+                                </xsl:choose>
+                              </p>
+                              <p>
+                                <b><xsl:value-of select="gsa:i18n ('Solution')"/>: </b>
+                                <xsl:value-of select="gsa:i18n ('Try enabling them in the Severity (Class) filter setting.')"/>
+                              </p>
                             </li>
-                          </xsl:when>
-                        </xsl:choose>
-                        <xsl:choose>
-                          <xsl:when test="report/task/progress = 1">
+                          </xsl:if>
+                          <xsl:if test="contains (translate (report/filters/term, ' ', ''), 'severity>')">
                             <li>
-                              <xsl:value-of select="gsa:i18n ('The scan just started. Please reload this page to update the status.')"/>
+                              <p>
+                                <xsl:value-of select="gsa:i18n ('You are using keywords setting a lower limit on severity.')"/>
+                              </p>
+                              <p>
+                                <b><xsl:value-of select="gsa:i18n ('Solution')"/>: </b>
+                                <xsl:value-of select="gsa:i18n ('Try removing them or raising the limit.')"/>
+                              </p>
                             </li>
-                          </xsl:when>
-                        </xsl:choose>
-                        <xsl:choose>
-                          <xsl:when test="report/task/progress &gt; 1">
+                          </xsl:if>
+                          <xsl:if test="contains (translate (report/filters/term, ' ', ''), 'min_qod=') and not (contains (translate (report/filters/term, ' ', ''), 'min_qod=0'))">
                             <li>
-                              <xsl:value-of select="gsa:i18n ('The scan is still running. Please reload this page to update the status.')"/>
+                              <p>
+                                <xsl:value-of select="gsa:i18n ('There may be results below the current minimum Quality of Detection level.')"/>
+                              </p>
+                              <p>
+                                <b><xsl:value-of select="gsa:i18n ('Solution')"/>: </b>
+                                <xsl:value-of select="gsa:i18n ('Try decreasing the minimum QoD in the Filter to see those results.')"/>
+                              </p>
                             </li>
-                          </xsl:when>
-                        </xsl:choose>
-                      </ul>
+                          </xsl:if>
+                          <xsl:if test="contains (translate (report/filters/term, ' ', ''), 'qod>')">
+                            <li>
+                              <xsl:value-of select="gsa:i18n ('You are using keywords setting a lower limit on QoD.')"/>
+                            </li>
+                            <li>
+                              <b><xsl:value-of select="gsa:i18n ('Solution')"/>: </b>
+                              <xsl:value-of select="gsa:i18n ('Try removing them or raising the limit.')"/>
+                            </li>
+                          </xsl:if>
+                        </ul>
+                        <a href="#" class="edit-filter-action-icon" data-id="filterbox">
+                          <img src="/img/edit.svg" class="icon icon-sm"/>
+                          <xsl:value-of select="gsa:i18n ('Click here to edit the filter')"/>
+                        </a>
+                      </p>
                     </li>
                   </xsl:when>
                 </xsl:choose>
