@@ -126,16 +126,16 @@
   };
 
   /**
-   * Extracts data from a xml selection
+   * Extracts chart data from response data
    *
    * Child classes MUST implement this method. Per default it throws an error.
    *
-   * @param xml_select  A d3.selection of the root xml element.
+   * @param data        JSON data from the response
    * @param gen_params  Generator parameters.
    *
    * @return Must return an object which represents the original data
    */
-  BaseChartGenerator.prototype.extractData = function(xml_select, gen_params) {
+  BaseChartGenerator.prototype.extractData = function(data, gen_params) {
     throw new Error('Not implemented');
   };
 
@@ -340,10 +340,8 @@
 
   gsa.derive(AggregateChartGenerator, BaseChartGenerator);
 
-  AggregateChartGenerator.prototype.extractData = function(xml_select,
-      gen_params) {
-    var json = gch.xml2json(xml_select.node());
-    var response = json.get_aggregate.get_aggregates_response;
+  AggregateChartGenerator.prototype.extractData = function(data, gen_params) {
+    var response = data.get_aggregate.get_aggregates_response;
     var aggregate = response.aggregate;
     var column_info = gch.extract_column_info_json(aggregate, gen_params);
     var records = gch.extract_simple_records_json(aggregate.group);
@@ -362,10 +360,8 @@
 
   gsa.derive(TaskChartGenerator, BaseChartGenerator);
 
-  TaskChartGenerator.prototype.extractData = function(xml_select,
-      gen_params) {
-    var json = gch.xml2json(xml_select.node());
-    var response = json.get_tasks.get_tasks_response;
+  TaskChartGenerator.prototype.extractData = function(data, gen_params) {
+    var response = data.get_tasks.get_tasks_response;
     var records = gch.extract_task_records_json(response);
     return {
       records: records,
@@ -381,10 +377,8 @@
 
   gsa.derive(AssetChartGenerator, BaseChartGenerator);
 
-  AssetChartGenerator.prototype.extractData = function(xml_select,
-      gen_params) {
-    var json = gch.xml2json(xml_select.node());
-    var response = json.get_assets.get_assets_response;
+  AssetChartGenerator.prototype.extractData = function(data, gen_params) {
+    var response = data.get_assets.get_assets_response;
     return {
       topology: gch.extract_host_topology_data_json(response),
       filter_info: gch.extract_filter_info_json(response.filters)

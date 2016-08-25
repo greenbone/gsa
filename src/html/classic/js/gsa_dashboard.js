@@ -2590,7 +2590,8 @@
 
     self.generator.evaluateParams(self.gen_params);
 
-    var orig_data = self.generator.extractData(xml_select, self.gen_params);
+    var json = gch.xml2json(xml_select.node());
+    var orig_data = self.generator.extractData(json, self.gen_params);
     var data = self.generator.generateData(orig_data, self.gen_params);
 
     self.display.setTitle(self.generator.getTitle(data));
