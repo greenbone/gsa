@@ -1,3 +1,8 @@
+2016-08-25  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/js/greenbone.js (gsa.for_each): Handle undefined and null
+	values correctly.
+
 2016-08-24  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/js/greenbone.js (gsa.for_each): Add a for_each function to

@@ -206,6 +206,10 @@
   }
 
   function for_each(array, func) {
+    if (!gsa.has_value(array)) {
+      return;
+    }
+
     if (!gsa.is_array(array)) {
       array = [array];
     }
