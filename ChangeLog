@@ -1,5 +1,13 @@
 2016-08-25  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_graphics_base.js
+	(AggregateChartGenerator.prototype.extractData,
+	TaskChartGenerator.prototype.extractData,
+	AssetChartGenerator.prototype.extractData): Use new json data function in
+	extractData methods of base chart classes.
+
+2016-08-25  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_chart_helpers.js: Add additional helper functions to
 	extract chart data from json data.
 

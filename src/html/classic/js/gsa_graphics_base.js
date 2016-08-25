@@ -342,11 +342,16 @@
 
   AggregateChartGenerator.prototype.extractData = function(xml_select,
       gen_params) {
+    var json = gch.xml2json(xml_select.node());
+    var response = json.get_aggregate.get_aggregates_response;
+    var aggregate = response.aggregate;
+    var column_info = gch.extract_column_info_json(aggregate, gen_params);
+    var records = gch.extract_simple_records_json(aggregate.group);
+    var filter_info = gch.extract_filter_info_json(response.filters);
     return {
-      records: gch.extract_simple_records(
-                   xml_select.selectAll('aggregate group')),
-      column_info: gch.extract_column_info(xml_select, gen_params),
-      filter_info: gch.extract_filter_info(xml_select)
+      records: records,
+      column_info: column_info,
+      filter_info: filter_info,
     };
   };
 
@@ -359,10 +364,13 @@
 
   TaskChartGenerator.prototype.extractData = function(xml_select,
       gen_params) {
+    var json = gch.xml2json(xml_select.node());
+    var response = json.get_tasks.get_tasks_response;
+    var records = gch.extract_task_records_json(response);
     return {
-      records: gch.extract_task_records(xml_select),
+      records: records,
       column_info: gch.tasks_column_info(),
-      filter_info: gch.extract_filter_info(xml_select)
+      filter_info: gch.extract_filter_info_json(response.filters)
     };
   };
 
@@ -375,9 +383,11 @@
 
   AssetChartGenerator.prototype.extractData = function(xml_select,
       gen_params) {
+    var json = gch.xml2json(xml_select.node());
+    var response = json.get_assets.get_assets_response;
     return {
-      topology: gch.extract_host_topology_data(xml_select),
-      filter_info: gch.extract_filter_info(xml_select)
+      topology: gch.extract_host_topology_data_json(response),
+      filter_info: gch.extract_filter_info_json(response.filters)
     };
   };
 
