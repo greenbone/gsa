@@ -65,6 +65,7 @@
   gsa.is_function = is_function;
   gsa.is_array = Array.isArray;
   gsa.is_float = is_float;
+  gsa.is_float_string = is_float_string;
   gsa.array_sum = array_sum;
   gsa.derive = derive;
   gsa.parse_int = parse_int;
@@ -169,6 +170,13 @@
 
   function is_float(value) {
     return !isNaN(value) && isFinite(value); // !isNaN may be superfluous
+  }
+
+  function is_float_string(value, f_value) {
+    if (!gsa.is_defined(f_value)) {
+      f_value = gsa.parse_float(value);
+    }
+    return !isNaN(f_value) && isFinite(value);
   }
 
   function array_sum(array) {
