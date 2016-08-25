@@ -1,5 +1,10 @@
 2016-08-25  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/greenbone.js (gsa.is_float, gsa.parse_float): Add
+	is_float and parse_float functions to gsa namespace.
+
+2016-08-25  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/greenbone.js (gsa.for_each): Handle undefined and null
 	values correctly.
 
