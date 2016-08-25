@@ -462,6 +462,83 @@
     return records;
   };
 
+  gch.extract_simple_records_json = function(data) {
+    var date_regex = /^\d{4}-(0\d|1[0-2])-([0-2]\d|3[01])T([0-1]\d|2[0-3]):[0-5]\d(:[0-5]\d)?([+-](0\d|1[0-4]):[0-5]\d|Z|)$/;
+    var records = [];
+
+    function get_date(value) {
+      return new Date(value.substr(0, 19) + 'Z');
+    }
+
+    function set_record_value(record, field_name, value) {
+      var f_value = gsa.parse_float(value);
+      if (gsa.is_float_string(value, f_value)) {
+        record[field_name] = f_value;
+      }
+      else {
+        set_text_record_value(record, field_name, value);
+      }
+    }
+
+    function set_text_record_value(record, field_name, value) {
+      if (gsa.is_string(value) && value.match(date_regex)) {
+        record[field_name] = get_date(value);
+      }
+      else {
+        record[field_name] = value;
+      }
+    }
+
+    function set_values(record, group, subgroup_value) {
+      var field_name;
+      var name;
+      var fields = ['value', 'count', 'c_count'];
+
+      fields.forEach(function(name) {
+        var value = group[name];
+
+        if (gsa.is_defined(value)) {
+          field_name = gsa.is_defined(subgroup_value) ?
+            name + '[' + subgroup_value + ']' : name;
+
+          set_record_value(record, field_name, value);
+        }
+      });
+
+      gsa.for_each(group.subgroup, function(subgroup) {
+        set_values(record, subgroup, subgroup.value);
+      });
+
+      gsa.for_each(group.text, function(text) {
+        set_text_record_value(record, text._column, text.__text);
+      });
+
+      gsa.for_each(group.stats, function(stats) {
+        var col_name = stats._column;
+        for (var child in stats) {
+          if (child[0] === '_') {
+            continue;
+          }
+
+          name = col_name + '_' + child;
+          field_name = gsa.is_defined(subgroup_value) ?
+            name + '[' + subgroup_value + ']' : name;
+          set_record_value(record, field_name, stats[child]);
+        }
+      });
+    }
+
+    gsa.for_each(data, function(group) {
+      var record = {};
+
+      set_values(record, group);
+
+      records.push(record);
+    });
+
+    return records;
+  };
+
   /**
    * Extracts column info from XML.
    *
@@ -594,6 +671,111 @@
         }
       }
 
+    }
+    return column_info;
+  };
+
+  /**
+   * Extracts column info from JSON.
+   *
+   * @param data        The root aggregate object
+   * @param gen_params  Generator parameters.
+   *
+   * @return  A column_info object as used by chart generators.
+   */
+  gch.extract_column_info_json = function(data, gen_params) {
+    var column_info = {
+      group_columns: [],
+      subgroup_columns: [],
+      data_columns: [],
+      text_columns: [],
+      columns: {},
+      subgroups: [],
+    };
+
+    function add_missing_column(field) {
+      if (field.indexOf('[') !== -1 && field.lastIndexOf(']') !== -1) {
+        var base = field.substr(0, field.indexOf('['));
+        var subgroup = field.substr(field.indexOf('[') + 1,
+            field.lastIndexOf(']') - field.indexOf('[') - 1);
+        var base_column = column_info.columns[base];
+
+        if (gsa.is_defined(base_column)) {
+          var column_copy = {};
+          var copy_name = base + '[' + subgroup + ']';
+          for (var prop in base_column) {
+            column_copy[prop] = base_column[prop];
+          }
+          column_copy.name = copy_name;
+          column_copy.subgroup_value = subgroup;
+          column_info.columns[copy_name] = column_copy;
+        }
+        else {
+          console.warn('Could not find base column info "' + base +
+              '" for "' + field + '"');
+        }
+      }
+    }
+
+    if (gsa.is_defined(data.subgroups)) {
+      gsa.for_each(data.subgroups.value, function(value) {
+        column_info.subgroups.push(value);
+      });
+    }
+
+    gsa.for_each(data.group_column, function(value) {
+      column_info.group_columns.push(value);
+    });
+
+    gsa.for_each(data.subgroup_column, function(value) {
+      column_info.group_columns.push(value);
+    });
+
+    gsa.for_each(data.data_column, function(value) {
+      column_info.data_columns.push(value);
+    });
+
+    gsa.for_each(data.text_column, function(value) {
+      column_info.text_columns.push(value);
+    });
+
+    gsa.for_each(data.column_info.aggregate_column, function(entry) {
+      var column = {};
+
+      for (var name in entry) {
+        var value = entry[name];
+        var f_value = gsa.parse_float(value);
+        if (gsa.is_float_string(value, f_value)) {
+          value = f_value;
+        }
+        column[name] = value;
+      }
+
+      column_info.columns[column.name] = column;
+      if (column.name !== 'value' && column.name !== 'subgroup_value') {
+        column_info.subgroups.forEach(function(subgroup) {
+          // Create copies of columns for subgroups
+          var column_copy = {};
+          var copy_name = column.name + '[' + subgroup + ']';
+          for (var prop in column) {
+            column_copy[prop] = column[prop];
+          }
+          column_copy.name = copy_name;
+          column_copy.subgroup_value = subgroup;
+          column_info.columns[copy_name] = column_copy;
+        });
+      }
+    });
+
+    if (gen_params) {
+      gsa.for_each(['y_fields', 'z_fields'], function(name) {
+        var fields = gen_params[name];
+        gsa.for_each(fields, function(field) {
+          if (!gsa.is_defined(column_info.columns[field])) {
+            add_missing_column(field);
+          }
+        });
+      });
     }
     return column_info;
   };
@@ -819,6 +1001,134 @@
   };
 
   /**
+   * Extracts host topology data from assets response data
+   *
+   * @param data  The assets response object
+   *
+   * @return  An array of records as used by chart generators.
+   */
+  gch.extract_host_topology_data_json = function(data) {
+    var nodes = [];
+    var nodes_by_link_id = {};
+    var links = [];
+    var records = {
+      nodes: nodes,
+      nodes_by_link_id: nodes_by_link_id,
+      links: links
+    };
+
+    gsa.for_each(data.asset, function(asset) {
+      var new_host = {
+        type: 'host',
+        hostname: null,
+        os: null,
+        os_cpe: null,
+        traceroute: null,
+        link_id: asset.name,
+        name: asset.name,
+        id: asset._id,
+        severity: asset.host.severity.value,
+        is_scanner: false,
+      };
+
+      var identifiers = asset.identifiers.identifier;
+      gsa.for_each(identifiers, function(identifier) {
+        switch (identifier.name) {
+          case 'hostname':
+            if (new_host.hostname === null) {
+              new_host.hostname = identifier.value;
+            }
+            break;
+        }
+      });
+
+      var host_details = asset.host.detail;
+      gsa.for_each(host_details, function(detail) {
+        switch (detail.name) {
+          case 'traceroute':
+            if (new_host.traceroute === null) {
+              new_host.traceroute = detail.value;
+            }
+            break;
+          case 'best_os_txt':
+            if (new_host.os === null) {
+              new_host.os = detail.value;
+            }
+            break;
+          case 'best_os_cpe':
+            if (new_host.os_cpe === null) {
+              new_host.os_cpe = detail.value;
+            }
+            break;
+        }
+      });
+
+      nodes.push(new_host);
+      nodes_by_link_id[new_host.link_id] = new_host;
+    });
+
+    // Create links between host;
+    for (var node_index = 0; node_index < nodes.length; node_index++) {
+      var host = nodes[node_index];
+
+      if (host.traceroute !== null) {
+        var route_split = host.traceroute.split(',');
+        for (var hop_index = 0; hop_index < route_split.length - 1;
+            hop_index++) {
+          var new_link = {};
+          var source_ip = route_split[hop_index];
+          var target_ip = route_split[hop_index + 1];
+          var new_host;
+
+          // Create source node if its IP address is not in the list.
+          if (!gsa.is_defined(nodes_by_link_id[source_ip])) {
+            new_host = {};
+            new_host.type = 'host';
+            new_host.hostname = null;
+            new_host.os = null;
+            new_host.os_cpe = null;
+            new_host.traceroute = null;
+            new_host.link_id = source_ip;
+            new_host.name = source_ip;
+            new_host.id = null;
+            new_host.severity = null;
+            nodes.push(new_host);
+            nodes_by_link_id[new_host.link_id] = new_host;
+          }
+
+          // Create target node if its IP address is not in the list.
+          if (!gsa.is_defined(nodes_by_link_id[target_ip])) {
+            new_host = {};
+            new_host.type = 'host';
+            new_host.hostname = null;
+            new_host.os = null;
+            new_host.os_cpe = null;
+            new_host.traceroute = null;
+            new_host.link_id = target_ip;
+            new_host.name = target_ip;
+            new_host.id = null;
+            new_host.severity = null;
+            nodes.push(new_host);
+            nodes_by_link_id[new_host.link_id] = new_host;
+          }
+
+          new_link.source = nodes_by_link_id[source_ip];
+          new_link.target = nodes_by_link_id[target_ip];
+
+          links.push(new_link);
+        }
+
+        // Mark first node in route as scanner
+        if (gsa.is_defined(nodes_by_link_id[route_split[0]])) {
+          nodes_by_link_id[route_split[0]].is_scanner = true;
+        }
+      }
+    }
+
+    return records;
+  };
+
+  /**
    * Extracts filter info from XML.
    *
    * @param xml_data  The root element of the XML to extract from.
@@ -900,6 +1210,120 @@
     });
 
     return filter_info;
+  };
+
+  /**
+   * Extracts filter info from json data.
+   *
+   * @param data  The root object to extract from.
+   *
+   * @return  A filter_info object as used by chart generators.
+   */
+  gch.extract_filter_info_json = function(data) {
+    var filter_info = {
+      id: data._id,
+      term: data.term,
+      name: gsa.is_defined(data.name) ? data.name : '',
+      keywords: [],
+      criteria_str: '',
+      extra_options_str: '',
+      criteria: [],
+      extra_options: [],
+    };
+
+    if (gsa.is_defined(data.keywords)) {
+      gsa.for_each(data.keywords.keyword, function(keyword) {
+        var current_keyword = {
+          column: keyword.column,
+          relation: keyword.relation,
+          value: keyword.value,
+        };
+
+        if (current_keyword.column === '') {
+          // boolean operators and search phrase
+          if (filter_info.criteria.length) {
+            filter_info.criteria_str += ' ';
+          }
+
+          filter_info.criteria.push(current_keyword);
+
+          if (current_keyword.relation === '=') {
+            filter_info.criteria_str += '=' + current_keyword.value;
+          } else {
+            filter_info.criteria_str += current_keyword.value;
+          }
+        } else if (current_keyword.column === 'apply_overrides' ||
+            current_keyword.column === 'autofp' ||
+            current_keyword.column === 'rows' ||
+            current_keyword.column === 'first' ||
+            current_keyword.column === 'sort' ||
+            current_keyword.column === 'sort-reverse' ||
+            current_keyword.column === 'notes' ||
+            current_keyword.column === 'overrides' ||
+            current_keyword.column === 'timezone' ||
+            current_keyword.column === 'result_hosts_only' ||
+            current_keyword.column === 'levels' ||
+            current_keyword.column === 'min_cvss_base' ||
+            current_keyword.column === 'min_qod' ||
+            current_keyword.column === 'delta_states') {
+          // special options
+          if (filter_info.extra_options.length !== '') {
+            filter_info.extra_options_str += ' ';
+          }
+          filter_info.extra_options.push(current_keyword);
+          filter_info.extra_options_str += current_keyword.column +
+            current_keyword.relation + current_keyword.value;
+        } else {
+          // normal column criteria
+          if (filter_info.criteria.length) {
+            filter_info.criteria_str += ' ';
+          }
+          filter_info.criteria.push(current_keyword);
+          filter_info.criteria_str += current_keyword.column +
+            current_keyword.relation + current_keyword.value;
+        }
+      });
+    }
+
+    return filter_info;
+  };
+
+  /**
+   * Extracts schedule records from tasks
+   *
+   * @param data  The response object
+   *
+   * @return  An array of records as used by chart generators.
+   */
+  gch.extract_task_records_json = function(data) {
+    var records = [];
+
+    gsa.for_each(data.task, function(task) {
+      var record = {
+        id: task._id,
+        name: task.name,
+        schedule_id: task.schedule._id,
+      };
+
+      if (gsa.is_defined(task.schedule)) {
+        record.schedule_id = task.schedule._id;
+      }
+
+      for (var name in task.schedule) {
+        if (name[0] === '_') { // skip former xml attributes
+          continue;
+        }
+        record['schedule_' + name] = task.schedule[name];
+      }
+
+      if (gsa.is_defined(task.schedule_periods)) {
+        record.schedule_periods = task.schedule_periods;
+      }
+
+      records.push(record);
+    });
+
+    return records;
   };
 
   /**
