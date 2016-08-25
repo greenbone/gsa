@@ -30,10 +30,6 @@
   var gch = gsa.charts;
   gch.register_chart_generator('topology', TopologyChartGenerator);
 
-  function default_bar_style(d) {
-    return ('');
-  }
-
   /* Main chart generator */
   function TopologyChartGenerator() {
     // call super constructor
@@ -61,11 +57,6 @@
     if (gen_params.y_fields && gen_params.y_fields[0]) {
       this.y_field = gen_params.y_fields[0];
     }
-
-    if (gsa.is_defined(gen_params.extra)) {
-
-
-    }
   };
 
   TopologyChartGenerator.prototype.generate = function(svg, data, update) {
@@ -83,105 +74,114 @@
     if (update || !this.layout) {
       this.layout = d3.layout.force();
       this.layout
-            .charge(function (n) { return -(10) })
+            .charge(function(n) { return -(10); })
             .gravity(0.01)
             .friction(0.95)
-            .linkDistance(function (l) { return 20 + 10 * Math.sqrt (l.source.weight + l.target.weight) })
+            .linkDistance(function(l) {
+              return 20 + 10 * Math.sqrt(l.source.weight + l.target.weight);
+            })
             .linkStrength(0.2)
             .nodes(topology.nodes)
             .links(topology.links)
             .size([width, height])
             .start();
-      this.layout.drag().on('dragstart',
-                            function () {
-                              d3.event.sourceEvent.stopPropagation();
-                            });
+      this.layout.drag().on('dragstart', function() {
+        d3.event.sourceEvent.stopPropagation();
+      });
       this.scale = 1;
       this.translate = [0,0];
     }
 
     self.layout.size([width, height]);
 
-    this.update_layout = function () {
+    this.update_layout = function() {
       self.layout.tick();
 
       var circle_scale = (5 * self.scale >= 2) ? 1 : 2 / 5 / self.scale;
 
       self.graph.selectAll('.node-marker').data(self.layout.nodes())
-        .attr('cx', function (d) { return d.x })
-        .attr('cy', function (d) { return d.y })
+        .attr('cx', function(d) { return d.x; })
+        .attr('cy', function(d) { return d.y; });
 
       self.graph.selectAll('.node-label').data(self.layout.nodes())
-        .attr('x', function (d) { return d.x })
-        .attr('y', function (d) { return d.y + 1 +
-                                    (circle_scale * (d.is_scanner ? 8 : 5))})
+        .attr('x', function(d) { return d.x; })
+        .attr('y', function(d) {
+          return d.y + 1 + (circle_scale * (d.is_scanner ? 8 : 5));
+        });
 
       self.graph.selectAll('.link').data(self.layout.links())
-        .attr('x1', function (d) { return d.source.x })
-        .attr('y1', function (d) { return d.source.y })
-        .attr('x2', function (d) { return d.target.x })
-        .attr('y2', function (d) { return d.target.y });
-    }
+        .attr('x1', function(d) { return d.source.x; })
+        .attr('y1', function(d) { return d.source.y; })
+        .attr('x2', function(d) { return d.target.x; })
+        .attr('y2', function(d) { return d.target.y; });
+    };
 
-    this.resize_graph = function ()  {
+    this.resize_graph = function()  {
       this.layout.size([width, height]);
 
       var circle_scale = (5 * self.scale >= 2) ? 1 : 2 / 5 / self.scale;
-      var text_scale = Math.sqrt(1/self.scale);
+      var text_scale = Math.sqrt(1 / self.scale);
 
       self.graph.selectAll('.node-marker').data(self.layout.nodes())
-        .attr('r', function (d) { return circle_scale *
-                                         (d.is_scanner ? 8 : 5); })
+        .attr('r', function(d) {
+          return circle_scale * (d.is_scanner ? 8 : 5);
+        });
 
       self.graph.selectAll('.node-label').data(self.layout.nodes())
         .style('font-size', (8 * text_scale) + 'px')
-        .style('display', self.scale >= 0.9 ? '' : 'none')
+        .style('display', self.scale >= 0.9 ? '' : 'none');
 
-//       self.graph.selectAll('.link').data(self.layout.links())
+      // self.graph.selectAll('.link').data(self.layout.links())
 
-      self.graph.attr ('transform',
-                       'translate(' + self.translate + '),' +
-                       'scale(' + self.scale + ')')
-    }
+      self.graph.attr('transform',
+          'translate(' + self.translate + '),scale(' + self.scale + ')');
+    };
 
     this.graph.selectAll('.link').data(this.layout.links()).enter()
       .append('line')
         .attr('class', 'link')
-        .style('stroke', 'green')
+        .style('stroke', 'green');
 
     var color_scale = gch.severity_colors_gradient();
 
     this.graph.selectAll('.node').data(this.layout.nodes()).enter()
       .append('a')
         .classed('node', true)
-        .attr('xlink:href',
-              function (d) {
-                  if (d.id === null)
-                    return null;
-                  return gch.details_page_url ('host', d.id, data.filter_info);
-                })
+        .attr('xlink:href', function(d) {
+          if (d.id === null) {
+            return null;
+          }
+          return gch.details_page_url('host', d.id, data.filter_info);
+        })
         .append('circle')
           .classed('node-marker', true)
           .attr('r', 1.5)
           .style('fill', function(d) {
-              if (d.id !== null)
-                return color_scale(d.severity)
-              else
-                return 'white';
-            })
+            if (d.id !== null) {
+              return color_scale(d.severity);
+            }
+            else {
+              return 'white';
+            }
+          })
           .style('stroke', function(d) {
-              if (d.is_scanner)
+              if (d.is_scanner) {
                 return 'green';
-              else if (d.id !== null)
+              }
+              else if (d.id !== null) {
                 return d3.hcl(color_scale(d.severity)).darker(2);
-              else
+              }
+              else {
                 return 'grey';
+              }
             })
           .style('stroke-width', function(d) {
-              if (d.is_scanner)
+              if (d.is_scanner) {
                 return '2px';
-              else
+              }
+              else {
                 return '1px';
+              }
             })
           .call(self.layout.drag);
 
@@ -192,23 +192,23 @@
       .style('font-weight', 'normal')
       .style('text-anchor', 'middle')
       .style('dominant-baseline', 'hanging')
-      .style('fill', function (n) { return n.id !== null ? 'black' : 'grey' })
-      .text(function (n) { return n.name });
+      .style('fill', function(n) { return n.id !== null ? 'black' : 'grey'; })
+      .text(function(n) { return n.name; });
 
-    if (! gsa.is_defined(self.interval)) {
-      self.interval = window.setInterval(self.update_layout, 0.0625)
+    if (!gsa.is_defined(self.interval)) {
+      self.interval = window.setInterval(self.update_layout, 0.0625);
     }
-    var zoomed = function () {
+    var zoomed = function() {
       self.scale = d3.event.scale;
       self.translate = d3.event.translate;
       self.resize_graph();
-    }
+    };
 
     var zoom = d3.behavior.zoom()
       .translate([0, 0])
       .scale(this.scale)
       .scaleExtent([0.125, 2])
-      .on("zoom", zoomed);
+      .on('zoom', zoomed);
 
     svg.call(zoom);
 
@@ -226,21 +226,21 @@
 
   TopologyChartGenerator.prototype.generateCsvData = function(controller,
       data) {
-    return  gch.csv_from_records (data.topology.nodes, 
-                                  undefined /* column_info */,
-                                  ['link_id', 'hostname', 'traceroute'],
-                                  ['IP', 'Hostname', 'Route'],
-                                  controller.display.getTitle());
+    return gch.csv_from_records(data.topology.nodes,
+        undefined, /* column_info */
+        ['link_id', 'hostname', 'traceroute'],
+        ['IP', 'Hostname', 'Route'],
+        controller.display.getTitle());
   };
 
   TopologyChartGenerator.prototype.generateHtmlTableData = function(controller,
       data) {
-    return gch.html_table_from_records (data.topology.nodes,
-                                        undefined /* column_info */,
-                                        ['link_id', 'hostname', 'traceroute'],
-                                        ['IP', 'Hostname', 'Route'],
-                                        controller.display.getTitle(),
-                                        controller.data_src.getParam('filter'));
+    return gch.html_table_from_records(data.topology.nodes,
+        undefined, /* column_info */
+        ['link_id', 'hostname', 'traceroute'],
+        ['IP', 'Hostname', 'Route'],
+        controller.display.getTitle(),
+        controller.data_src.getParam('filter'));
   };
 
   TopologyChartGenerator.prototype.generateLink = function(d, i, column, type,
