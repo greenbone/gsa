@@ -25,7 +25,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-(function(global, window, document, gsa, d3, $, console) {
+(function(global, window, document, gsa, d3, $, console, X2JS) {
   'use strict';
 
   if (!gsa.is_defined(gsa.charts)) {
@@ -2408,5 +2408,12 @@
     gch.chart_generators[generator.name] = generator;
   };
 
+  /**
+   * XML to JSON conversion
+   */
+
+  var x2js = new X2JS();
+  gch.xml2json = x2js.xml2json.bind(x2js);
+
 })(window, window, window.document, window.gsa, window.d3, window.$,
-  window.console);
+  window.console, window.X2JS);

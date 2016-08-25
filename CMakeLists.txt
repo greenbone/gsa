@@ -327,6 +327,7 @@ if (CMAKE_BUILD_TYPE MATCHES "Release")
                  src/html/classic/js/lib/min/i18next-2.3.4.js
                  src/html/classic/js/lib/min/i18next-xhr-0.5.3.js
                  src/html/classic/js/lib/min/i18next-languagedetector-0.2.2.js
+                 src/html/classic/js/lib/min/xml2json.js
            DESTINATION ${GSA_DATA_DIR}/classic/js)
 else (CMAKE_BUILD_TYPE MATCHES "Release")
   install (FILES src/html/classic/js/lib/d3.v3.js
@@ -336,6 +337,7 @@ else (CMAKE_BUILD_TYPE MATCHES "Release")
                  src/html/classic/js/lib/i18next-2.3.4.js
                  src/html/classic/js/lib/i18next-xhr-0.5.3.js
                  src/html/classic/js/lib/i18next-languagedetector-0.2.2.js
+                 src/html/classic/js/lib/xml2json.js
            DESTINATION ${GSA_DATA_DIR}/classic/js)
 endif (CMAKE_BUILD_TYPE MATCHES "Release")
 

@@ -1,5 +1,19 @@
 2016-08-25  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* CMakeLists.txt: Install xml2json.js files.
+
+	* src/html/classic/js/lib/xml2json.js,
+	src/html/classic/js/lib/min/xml2json.js: Add a small library to convert xml
+	data to json objects easily. The library can be found at
+	https://github.com/abdmob/x2js an is licenced under ASLv2.
+
+	* src/html/classic/graphics.xsl: Include xml2json.js when charts are used.
+
+	* src/html/classic/js/gsa_chart_helpers.js (gch.xml2json): Add new helper
+	function to convert xml to json in the gch namespace.
+
+2016-08-25  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/greenbone.js (gsa.is_float_string): Add function to
 	check if a string contains a valid float.
 
