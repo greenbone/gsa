@@ -1,3 +1,8 @@
+2016-08-26  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/js/gsa_dashboard.js (DataSource.prototype.checkRequests):
+	Reformat method by removing unnecessary else case.
+
 2016-08-25  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* omp.xsl (report [results]): Rewrite and reformat hints shown when
