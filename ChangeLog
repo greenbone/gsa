@@ -1,5 +1,10 @@
 2016-08-26  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_dashboard.js (DataSource): Rename xml_data variable
+	to cached_data. It won't store xml in future anymore.
+
+2016-08-26  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_dashboard.js (DataSource.prototype.checkRequests,
 	DataSource.prototype.addNewXmlRequest): Simplify handling the data requests by
 	using new methods addData, getData and dataLoaded. This reduces duplicate code

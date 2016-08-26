@@ -2668,7 +2668,7 @@
 
     this.requesting_controllers = {};
     this.active_requests = {};
-    this.xml_data = {};
+    this.cached_data = {};
     this.column_info = {};
     this.data = {};
     this.params = {
@@ -2985,7 +2985,7 @@
    */
   DataSource.prototype.addData = function(data, filter_id) {
     filter_id = gsa.is_defined(filter_id) ? filter_id : '';
-    this.xml_data[filter_id] = data;
+    this.cached_data[filter_id] = data;
     return this;
   };
 
@@ -2998,7 +2998,7 @@
    */
   DataSource.prototype.getData = function(filter_id) {
     filter_id = gsa.is_defined(filter_id) ? filter_id : '';
-    return this.xml_data[filter_id];
+    return this.cached_data[filter_id];
   };
 
   /**
