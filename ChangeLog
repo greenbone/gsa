@@ -1,5 +1,11 @@
 2016-08-26  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_dashboard.js (DataSource): Add new addData and
+	getData methods. This will create an api to access the internal data source
+	data cache.
+
+2016-08-26  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_dashboard.js (DataSource.prototype.checkRequests,
 	DataSource.prototype.outputError): Split creating a new XMLHttpRequest into a
 	new method called addNewXmlRequest. Also change the outputError method

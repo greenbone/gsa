@@ -2967,6 +2967,35 @@
   };
 
   /**
+   * Store request data in the local cache
+   *
+   * This data will delivered to each requesting chart using the filter id
+   * afterwards.
+   *
+   * @param data       Data to use for requesting charts
+   * @param filter_id  Filter ID (optional)
+   *
+   * @return This data source
+   */
+  DataSource.prototype.addData = function(data, filter_id) {
+    filter_id = gsa.is_defined(filter_id) ? filter_id : '';
+    this.xml_data[filter_id] = data;
+    return this;
+  };
+
+  /**
+   * Get request data from the local cache
+   *
+   * @param filter_id  Filter ID (optional)
+   *
+   * @return The cached data or undefined of not available
+   */
+  DataSource.prototype.getData = function(filter_id) {
+    filter_id = gsa.is_defined(filter_id) ? filter_id : '';
+    return this.xml_data[filter_id];
+  };
+
+  /**
    * Prints an error to the console and shows it on the display of a chart.
    *
    * @param controllers       Controller of the chart where the error occurred.
