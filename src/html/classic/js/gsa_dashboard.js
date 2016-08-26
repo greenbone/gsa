@@ -2967,6 +2967,33 @@
   };
 
   /**
+   * Notifiy all controllers about available data
+   *
+   * @param data       Data to notify the requesting controllers about
+   * @param filter_id  Filter ID (optional)
+   *
+   * @return This data source
+   */
+  DataSource.prototype.dataLoaded = function(data, filter_id) {
+    filter_id = gsa.is_defined(filter_id) ? filter_id : '';
+
+    var ctrls = this.requesting_controllers[filter_id];
+
+    for (var controller_id in ctrls) {
+      var ctrl = ctrls[controller_id];
+
+      if (!ctrl.active) {
+        continue;
+      }
+
+      ctrl.active = false;
+      ctrl.controller.dataLoaded(data);
+    }
+    delete this.requesting_controllers[filter_id];
+    return this;
+  };
+
+  /**
    * Store request data in the local cache
    *
    * This data will delivered to each requesting chart using the filter id

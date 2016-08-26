@@ -1,5 +1,11 @@
 2016-08-26  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_dashboard.js (DataSource): Add new dataLoaded method
+	to DataSource class. The new method will notify all requesting controllers
+	about available data for the charts.
+
+2016-08-26  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_dashboard.js (DataSource): Add new addData and
 	getData methods. This will create an api to access the internal data source
 	data cache.
