@@ -1,5 +1,12 @@
 2016-08-26  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_dashboard.js (ChartController.prototype.dataLoaded,
+	DataSource.prototype.addNewXmlRequest): Store json data in the data source
+	cache instead of xml. This moves converting the xml data to json another
+	layer upwards.
+
+2016-08-26  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_dashboard.js (DataSource): Rename xml_data variable
 	to cached_data. It won't store xml in future anymore.
 

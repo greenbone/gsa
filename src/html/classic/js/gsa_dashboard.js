@@ -2575,9 +2575,9 @@
   /**
    * Callback for when data is loaded.
    *
-   * @param xml_select  The xml data that was loaded.
+   * @param data  The data that was loaded.
    */
-  ChartController.prototype.dataLoaded = function(xml_select) {
+  ChartController.prototype.dataLoaded = function(data) {
     var self = this;
 
     self.display.hideLoading();
@@ -2590,15 +2590,14 @@
 
     self.generator.evaluateParams(self.gen_params);
 
-    var json = gch.xml2json(xml_select.node());
-    var orig_data = self.generator.extractData(json, self.gen_params);
-    var data = self.generator.generateData(orig_data, self.gen_params);
+    var orig_data = self.generator.extractData(data, self.gen_params);
+    var chart_data = self.generator.generateData(orig_data, self.gen_params);
 
-    self.display.setTitle(self.generator.getTitle(data));
-    self.generator.generate(self.display.svg, data, self.hasChanged());
+    self.display.setTitle(self.generator.getTitle(chart_data));
+    self.generator.generate(self.display.svg, chart_data, self.hasChanged());
     self.last_filter = self.filter;
     self.display.updateGenData(self.generator, self.gen_params);
-    self.generator.addMenuItems(self, data);
+    self.generator.addMenuItems(self, chart_data);
   };
 
   /**
@@ -2932,8 +2931,9 @@
         return self;
       }
 
-      self.addData(xml_select, filter_id);
-      self.dataLoaded(xml_select, filter_id);
+      var data = gch.xml2json(xml_select.node());
+      self.addData(data, filter_id);
+      self.dataLoaded(data, filter_id);
 
       delete self.active_requests[filter_id];
     });
