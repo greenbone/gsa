@@ -2827,21 +2827,10 @@
   DataSource.prototype.checkRequests = function(filter) {
     var filter_id = filter ? filter.id : '';
 
-    var controllers = this.requesting_controllers[filter_id];
-    var xml_select = this.xml_data[filter_id];
-    if (xml_select) {
-      // data has already been received once
-      for (var controller_id in controllers) {
-        if (!controllers[controller_id].active) {
-          // controller already has received the requested data
-          continue;
-        }
-
-        controllers[controller_id].active = false;
-        controllers[controller_id].controller.dataLoaded(xml_select);
-      }
-      delete this.requesting_controllers[filter_id];
-      return;
+    var data = this.getData(filter_id);
+    if (data) {
+      this.dataLoaded(data, filter_id);
+      return this;
     }
 
     this.addNewXmlRequest(filter);
@@ -2943,19 +2932,9 @@
         return self;
       }
 
-      self.xml_data[filter_id] = xml_select;
+      self.addData(xml_select, filter_id);
+      self.dataLoaded(xml_select, filter_id);
 
-      for (controller_id in ctrls) {
-        var ctrl = ctrls[controller_id];
-
-        if (!ctrl.active) {
-          continue;
-        }
-
-        ctrl.active = false;
-        ctrl.controller.dataLoaded(xml_select);
-      }
-      delete self.requesting_controllers[filter_id];
       delete self.active_requests[filter_id];
     });
 
