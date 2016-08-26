@@ -36426,6 +36426,7 @@ should not have received it.
           <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Login Name')"/></label>
           <div class="col-10">
             <input type="hidden" name="user_id" value="{@id}"/>
+            <input type="hidden" name="old_login" value="{name}"/>
             <div>
               <xsl:choose>
                 <xsl:when test="name=/envelope/login/text()">

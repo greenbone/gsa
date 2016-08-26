@@ -26171,24 +26171,30 @@ logout (credentials_t *credentials, const gchar *message,
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] password_return  Password.  Caller must free.
+ * @param[out] modified_user    Name of user modified. Caller must free.
+ * @param[out] logout_user      Whether the user should be logged out.
  * @param[out] response_data    Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
 save_user_omp (credentials_t * credentials, params_t *params,
-               char **password_return, cmd_response_data_t* response_data)
+               char **password_return, char **modified_user,
+               int *logout_user, cmd_response_data_t* response_data)
 {
   int ret;
   gchar *html, *response, *buf;
   const char *no_redirect;
-  const char *user_id, *login, *modify_password, *password;
+  const char *user_id, *login, *old_login, *modify_password, *password;
   const char *hosts, *hosts_allow, *ifaces, *ifaces_allow;
   entity_t entity;
   GString *command, *group_elements, *role_elements;
   params_t *groups, *roles;
+  const char *status;
 
   *password_return = NULL;
+  *modified_user = NULL;
+  *logout_user = 0;
 
   no_redirect = params_value (params, "no_redirect");
   /* List of hosts user has/lacks access rights. */
@@ -26199,6 +26205,7 @@ save_user_omp (credentials_t * credentials, params_t *params,
   ifaces = params_value (params, "access_ifaces");
   ifaces_allow = params_value (params, "ifaces_allow");
   login = params_value (params, "login");
+  old_login = params_value (params, "old_login");
   modify_password = params_value (params, "modify_password");
   password = params_value (params, "password");
   user_id = params_value (params, "user_id");
@@ -26211,8 +26218,12 @@ save_user_omp (credentials_t * credentials, params_t *params,
   CHECK_PARAM_INVALID (ifaces, "Save User", "edit_user");
   CHECK_PARAM_INVALID (ifaces_allow, "Save User", "edit_user");
 
-  if (params_given (params, "login"))
-    CHECK_PARAM_INVALID (login, "Save User", "edit_user");
+  if (params_given (params, "login")
+      && !(params_given (params, "current_user")))
+    {
+      CHECK_PARAM_INVALID (login, "Save User", "edit_user");
+      CHECK_PARAM_INVALID (old_login, "Save User", "edit_user");
+    }
 
   /* Modify the user. */
 
@@ -26312,14 +26323,20 @@ save_user_omp (credentials_t * credentials, params_t *params,
   switch (ret)
     {
       case 0:
-        if (strcmp (modify_password, "0")
-            && strcmp (modify_password, "2")
-            && strcmp (modify_password, "3")
-            && params_given (params, "current_user"))
+        status = entity_attribute (entity, "status");
+        if (status && (strlen (status) > 0) && (status[0] == '2'))
           {
-            const char *status;
-            status = entity_attribute (entity, "status");
-            if (status && (strlen (status) > 0) && (status[0] == '2'))
+            *modified_user
+              = g_strdup (old_login ? old_login : credentials->username);
+
+            if (strcmp (modify_password, "0")
+                || (login && strcmp (old_login, login)))
+              *logout_user = 1;
+
+            if (strcmp (modify_password, "0")
+                && strcmp (modify_password, "2")
+                && strcmp (modify_password, "3")
+                && params_given (params, "current_user"))
               {
                 g_free (credentials->password);
                 credentials->password = g_strdup (password);

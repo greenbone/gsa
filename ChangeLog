@@ -1,3 +1,19 @@
+2016-08-26  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/gsad_omp.c (save_user_omp): Add output params "modified_user" and
+	"logout_user" to allow updating or logging out modified users.  Log
+	out users where the name or password has changed.  Check that the old
+	username is given or the current user is being modified.
+
+	* src/gsad_omp.h (save_user_omp): Add parameters.
+
+	* src/gsad.c (user_logout_all_sessions): New function.
+	(init_validator): Add param "old_login".
+	(exec_omp_post): Logout users when their password has changed in
+	save_my_settings or save_user.
+	
+	* src/html/classic/omp.xsl (user [edit]): Add hidden "old_login" field.
+
 2016-08-26  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/js/gsa_dashboard.js (ChartController.prototype.dataLoaded,

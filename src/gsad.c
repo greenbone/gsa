@@ -817,6 +817,37 @@ user_set_autorefresh (const gchar *token, const gchar *autorefresh)
 }
 
 /**
+ * @brief Logs out all sessions of a given user, except the current one.
+ *
+ * @param[in]   username        User name.
+ * @param[in]   credentials     Current user's credentials.
+ *
+ * @return 0 ok, -1 error.
+ */
+int
+user_logout_all_sessions (const gchar *username, credentials_t *credentials)
+{
+  int index;
+  g_mutex_lock (mutex);
+  for (index = 0; index < users->len; index++)
+    {
+      user_t *item;
+      item = (user_t*) g_ptr_array_index (users, index);
+      if (strcmp (item->username, username) == 0
+          && strcmp (item->token, credentials->token))
+        {
+          g_debug ("%s: logging out user '%s', token '%s'",
+                   __FUNCTION__, item->username, item->token);
+          g_ptr_array_remove (users, (gpointer) item);
+          index --;
+        }
+    }
+  g_mutex_unlock (mutex);
+
+  return 0;
+}
+
+/**
  * @brief Release a user_t returned by user_add or user_find.
  *
  * @param[in]  user  User.
@@ -1532,6 +1563,7 @@ init_validator ()
   openvas_validator_alias (validator, "no_filter_history", "boolean");
   openvas_validator_alias (validator, "no_redirect", "boolean");
   openvas_validator_alias (validator, "nvt:value",         "uuid");
+  openvas_validator_alias (validator, "old_login", "login");
   openvas_validator_alias (validator, "old_password", "password");
   openvas_validator_alias (validator, "original_overrides",  "boolean");
   openvas_validator_alias (validator, "overrides",        "boolean");
@@ -2572,8 +2604,12 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
         /* credentials->timezone set in save_my_settings_omp before XSLT. */
         user_set_timezone (credentials->token, timezone);
       if (password)
-        /* credentials->password set in save_my_settings_omp before XSLT. */
-        user_set_password (credentials->token, password);
+        {
+          /* credentials->password set in save_my_settings_omp before XSLT. */
+          user_set_password (credentials->token, password);
+
+          user_logout_all_sessions (credentials->username, credentials);
+        }
       if (severity)
         /* credentials->severity set in save_my_settings_omp before XSLT. */
         user_set_severity (credentials->token, severity);
@@ -2600,9 +2636,14 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   ELSE (save_container_task)
   else if (!strcmp (cmd, "save_user"))
     {
-      char *password;
+      char *password, *modified_user;
+      int logout;
       con_info->response = save_user_omp (credentials, con_info->params,
-                                          &password, &response_data);
+                                          &password, &modified_user, &logout,
+                                          &response_data);
+      if (modified_user && logout)
+        user_logout_all_sessions (modified_user, credentials);
+
       if (password)
         /* credentials->password set in save_user_omp before XSLT. */
         user_set_password (credentials->token, password);
