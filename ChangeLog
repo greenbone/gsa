@@ -1,3 +1,10 @@
+2016-08-29  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/css/gsa-base.css: Add css for panel infos and add new alert
+	css classes.
+
+	* src/html/classic/css/gsa-style.css: Add styles for result infos.
+
 2016-08-29  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Add options to add "Strict-Transport-Security" header to HTTPS
