@@ -70,6 +70,12 @@ X-Frame-Options HTTP header. Defaults to ""
 .BR --http-csp=\fICSP\fR
 Content-Security-Policy HTTP header. Defaults to "default-src 'self' 'unsafe-inline'; img-src 'self' blob:; frame-ancestors *"
 .TP
+.BR --http-sts
+Enable HTTP Strict-Tranport-Security header.
+.TP
+.BR --http-sts-max-age=\fImax-age\fR
+max-age in seconds for HTTP Strict-Tranport-Security header.  Defaults to 31536000.
+.TP
 .BR -? ", " --help
 Show help.
 .SH EXAMPLES

@@ -190,6 +190,11 @@
  " frame-ancestors *"
 
 /**
+ * @brief Default "max-age" for HTTP header "Strict-Transport-Security"
+ */
+#define DEFAULT_GSAD_HSTS_MAX_AGE 31536000
+
+/**
  * @brief Flag for signal handler.
  */
 volatile int termination_signal = 0;
@@ -324,15 +329,20 @@ gchar *http_guest_chart_x_frame_options;
 gchar *http_guest_chart_content_security_policy;
 
 /**
+ * @brief Current value of for HTTP header "Strict-Transport-Security"
+ */
+gchar *http_strict_transport_security;
+
+/**
  * @brief Current preference for using X_Real_IP from HTTP header
  */
 gboolean ignore_http_x_real_ip;
 
 /**
- * @brief Add content security headers to a MHD response.
+ * @brief Add security headers to a MHD response.
  */
 void
-add_content_security_headers (struct MHD_Response *response)
+add_security_headers (struct MHD_Response *response)
 {
   if (strcmp (http_x_frame_options, ""))
     MHD_add_response_header (response, "X-Frame-Options",
@@ -340,6 +350,9 @@ add_content_security_headers (struct MHD_Response *response)
   if (strcmp (http_content_security_policy, ""))
     MHD_add_response_header (response, "Content-Security-Policy",
                              http_content_security_policy);
+  if (http_strict_transport_security)
+    MHD_add_response_header (response, "Strict-Transport-Security",
+                             http_strict_transport_security);
 }
 
 /**
@@ -3632,7 +3645,7 @@ send_response (struct MHD_Connection *connection, const char *content,
             }
         }
     }
-  add_content_security_headers (response);
+  add_security_headers (response);
   ret = MHD_queue_response (connection, status_code, response);
   MHD_destroy_response (response);
   return ret;
@@ -3694,7 +3707,7 @@ send_redirect_to_uri (struct MHD_Connection *connection, const char *uri,
   MHD_add_response_header (response, MHD_HTTP_HEADER_EXPIRES, "-1");
   MHD_add_response_header (response, MHD_HTTP_HEADER_CACHE_CONTROL, "no-cache");
 
-  add_content_security_headers (response);
+  add_security_headers (response);
   ret = MHD_queue_response (connection, MHD_HTTP_SEE_OTHER, response);
   MHD_destroy_response (response);
   return ret;
@@ -4325,7 +4338,7 @@ handle_request (void *cls, struct MHD_Connection *connection,
             }
           response = MHD_create_response_from_buffer (strlen (res), res,
                                                   MHD_RESPMEM_MUST_FREE);
-          add_content_security_headers (response);
+          add_security_headers (response);
           cmd_response_data_reset (&response_data);
           return handler_send_response (connection,
                                         response,
@@ -4345,7 +4358,7 @@ handle_request (void *cls, struct MHD_Connection *connection,
                                             &http_response_code,
                                             &content_type,
                                             &content_disposition);
-          add_content_security_headers (response);
+          add_security_headers (response);
           return handler_send_response (connection,
                                         response,
                                         &content_type,
@@ -4365,7 +4378,7 @@ handle_request (void *cls, struct MHD_Connection *connection,
                                             &http_response_code,
                                             &content_type,
                                             &content_disposition);
-          add_content_security_headers (response);
+          add_security_headers (response);
           return handler_send_response (connection,
                                         response,
                                         &content_type,
@@ -4470,7 +4483,7 @@ handle_request (void *cls, struct MHD_Connection *connection,
           response = MHD_create_response_from_buffer (strlen (res), res,
                                                       MHD_RESPMEM_MUST_FREE);
           http_response_code = response_data.http_status_code;
-          add_content_security_headers (response);
+          add_security_headers (response);
           cmd_response_data_reset (&response_data);
           return handler_send_response (connection,
                                         response,
@@ -4583,7 +4596,7 @@ handle_request (void *cls, struct MHD_Connection *connection,
           http_response_code = response_data.http_status_code;
           response = MHD_create_response_from_buffer (strlen (res), res,
                                                       MHD_RESPMEM_MUST_FREE);
-          add_content_security_headers (response);
+          add_security_headers (response);
           cmd_response_data_reset (&response_data);
           return handler_send_response (connection,
                                         response,
@@ -4642,7 +4655,7 @@ handle_request (void *cls, struct MHD_Connection *connection,
           response = MHD_create_response_from_buffer (strlen (res), res,
                                                       MHD_RESPMEM_MUST_FREE);
           cmd_response_data_reset (&response_data);
-          add_content_security_headers (response);
+          add_security_headers (response);
           return handler_send_response (connection,
                                         response,
                                         &content_type,
@@ -4984,7 +4997,7 @@ handle_request (void *cls, struct MHD_Connection *connection,
             }
           else
             {
-              add_content_security_headers (response);
+              add_security_headers (response);
             }
 
           credentials_free (credentials);
@@ -5639,6 +5652,8 @@ main (int argc, char **argv)
                   = DEFAULT_GSAD_GUEST_CHART_X_FRAME_OPTIONS;
   static gchar *http_guest_chart_csp
                   = DEFAULT_GSAD_GUEST_CHART_CONTENT_SECURITY_POLICY;
+  static int hsts_enabled = FALSE;
+  static int hsts_max_age = DEFAULT_GSAD_HSTS_MAX_AGE;
   static gboolean ignore_x_real_ip = FALSE;
   static int verbose = 0;
   GError *error = NULL;
@@ -5733,6 +5748,14 @@ main (int argc, char **argv)
      0, G_OPTION_ARG_STRING, &http_guest_chart_csp,
      "Content-Security-Policy HTTP header.  Defaults to \""
      DEFAULT_GSAD_GUEST_CHART_CONTENT_SECURITY_POLICY"\".", "<csp>"},
+    {"http-sts", 0,
+     0, G_OPTION_ARG_NONE, &hsts_enabled,
+     "Enable HTTP Strict-Tranport-Security header.", NULL},
+    {"http-sts-max-age", 0,
+     0, G_OPTION_ARG_INT, &hsts_max_age,
+     "max-age in seconds for HTTP Strict-Tranport-Security header."
+     "  Defaults to \"" G_STRINGIFY (DEFAULT_GSAD_HSTS_MAX_AGE) "\".",
+     "<max-age>"},
     {"ignore-x-real-ip", '\0',
      0, G_OPTION_ARG_NONE, &ignore_x_real_ip,
      "Do not use X-Real-IP to determine the client address.", NULL},
@@ -5756,6 +5779,17 @@ main (int argc, char **argv)
   http_content_security_policy = http_csp;
   http_guest_chart_x_frame_options = http_guest_chart_frame_opts;
   http_guest_chart_content_security_policy = http_guest_chart_csp;
+
+  if (http_only == FALSE && hsts_enabled)
+    {
+      http_strict_transport_security
+        = g_strdup_printf ("max-age=%d",
+                           hsts_max_age >= 0 ? hsts_max_age 
+                                             : DEFAULT_GSAD_HSTS_MAX_AGE);
+    }
+  else
+    http_strict_transport_security = NULL;
+
   ignore_http_x_real_ip = ignore_x_real_ip;
 
   if (register_signal_handlers ())

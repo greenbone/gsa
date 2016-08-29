@@ -1,5 +1,21 @@
 2016-08-29  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	Add options to add "Strict-Transport-Security" header to HTTPS
+	responses.
+
+	* doc/gsad.8: Add options --http-sts and --http-sts-max-age.
+
+	* src/gsad.c (DEFAULT_GSAD_HSTS_MAX_AGE): New #define.
+	(http_strict_transport_security): New variable.
+	(add_security_headers): New.  Renamed add_content_security_headers with
+	added "Strict-Transport-Security" header.
+	(add_content_security_headers): Renamed to add_security_headers.
+	(send_response, send_redirect_to_uri, handle_request): Change
+	add_content_security_headers to add_security_headers.
+	(main): Add options "http-sts" and "http-sts-max-age".
+
+2016-08-29  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Hide "main" dashboard for guest user and show "secinfo" one instead.
 
 	* src/gsad_base.h (credentials_t): Add guest field.
