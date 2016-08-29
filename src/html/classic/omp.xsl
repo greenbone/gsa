@@ -4202,130 +4202,190 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </div>
         </xsl:when>
         <xsl:otherwise>
-          <div>
-            <p><xsl:value-of select="gsa:i18n ('The report is empty. This can happen for the following reasons:')"/></p>
-            <div>
-              <ul>
-                <xsl:choose>
-                  <xsl:when test="report/result_count/full = 0">
-                    <xsl:choose>
-                      <xsl:when test="report/task/progress = 1">
-                        <li>
-                          <p>
-                            <xsl:value-of select="gsa:i18n ('The scan just started and no results have arrived yet.')"/>
-                          </p>
-                          <p>
-                            <a href="{/envelope/current_page}&amp;token={/envelope/token}">
-                              <img src="/img/refresh.svg" class="icon icon-sm"/>
+          <xsl:variable name="report_url" select="concat ('/omp?token=', /envelope/token, '&amp;cmd=get_report_section&amp;report_id=', report/@id, '&amp;report_section=results')"/>
+          <div class="result-info">
+            <xsl:choose>
+              <xsl:when test="report/result_count/full = 0">
+                <p class="alert alert-info"><xsl:value-of select="gsa:i18n ('The report is empty. This can happen for the following reasons:')"/></p>
+                <ul>
+                  <xsl:choose>
+                    <xsl:when test="report/task/progress = 1">
+                      <li class="panel panel-info">
+                        <div class="panel-heading">
+                          <xsl:value-of select="gsa:i18n ('The scan just started and no results have arrived yet.')"/>
+                        </div>
+                        <p class="panel-body">
+                          <a href="{/envelope/current_page}&amp;token={/envelope/token}">
+                            <img src="/img/refresh.svg" class="icon icon-lg valign-middle"/>
+                            <span>
                               <xsl:value-of select="gsa:i18n ('Click here to reload this page and update the status.')"/>
-                            </a>
-                          </p>
-                        </li>
-                      </xsl:when>
-                      <xsl:when test="report/task/progress &gt; 1">
-                        <li>
-                          <p>
-                            <xsl:value-of select="gsa:i18n ('The scan is still running and no results have arrived yet.')"/>
-                          </p>
-                          <p>
-                            <a href="{/envelope/current_page}&amp;token={/envelope/token}">
-                              <img src="/img/refresh.svg" class="icon icon-sm"/>
+                            </span>
+                          </a>
+                        </p>
+                      </li>
+                    </xsl:when>
+                    <xsl:when test="report/task/progress &gt; 1">
+                      <li class="panel panel-info">
+                        <div class="panel-heading">
+                          <xsl:value-of select="gsa:i18n ('The scan is still running and no results have arrived yet.')"/>
+                        </div>
+                        <p class="panel-body">
+                          <a href="{/envelope/current_page}&amp;token={/envelope/token}">
+                            <img src="/img/refresh.svg" class="icon icon-lg valign-middle"/>
+                            <span>
                               <xsl:value-of select="gsa:i18n ('Click here to reload this page and update the status.')"/>
-                            </a>
-                          </p>
-                        </li>
-                      </xsl:when>
-                      <xsl:otherwise>
-                        <li>
-                          <p><xsl:value-of select="gsa:i18n ('The target hosts could be regarded dead.')"/></p>
-                          <p>
-                            <b><xsl:value-of select="gsa:i18n ('Solution')"/>: </b>
-                            <xsl:value-of select="gsa:i18n ('You could change the Alive Test method of the target. However, if the targets are indeed dead, the scan duration might increase significantly.')"/>
-                            <xsl:choose>
-                              <xsl:when test="gsa:may-op ('modify_target')">
-                                <xsl:text> (</xsl:text>
-                                <!-- i18n with concat : see dynamic_strings.xsl - type-edit -->
-                                <a href="/omp?cmd=edit_target&amp;target_id={report/task/target/@id}&amp;next=get_report&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}" data-reload="window"
-                                    class="edit-action-icon" data-type="target" data-id="{report/task/target/@id}"
-                                    title="{gsa:i18n ('Edit Target')}">
-                                  <img src="/img/edit.svg" class="icon icon-sm"/>
+                            </span>
+                          </a>
+                        </p>
+                      </li>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <li class="panel panel-info">
+                        <div class="panel-heading">
+                          <xsl:value-of select="gsa:i18n ('The target hosts could be regarded dead.')"/>
+                        </div>
+                        <div class="panel-body">
+                          <xsl:choose>
+                            <xsl:when test="gsa:may-op ('modify_target')">
+                              <!-- i18n with concat : see dynamic_strings.xsl - type-edit -->
+                              <a href="/omp?cmd=edit_target&amp;target_id={report/task/target/@id}&amp;next=get_report&amp;filter={str:encode-uri (/envelope/params/filter, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}" data-reload="window"
+                                class="edit-action-icon" data-type="target" data-id="{report/task/target/@id}"
+                                title="{gsa:i18n ('Edit Target')}">
+                                <img src="/img/target.svg" class="icon icon-lg"/>
+                                <span>
+                                  <xsl:value-of select="gsa:i18n ('You could change the Alive Test method of the target. However, if the targets are indeed dead, the scan duration might increase significantly.')"/>
+                                  <xsl:text> (</xsl:text>
                                   <xsl:value-of select="gsa:i18n ('Click here to edit the target')"/>
-                                </a>
-                                <xsl:text>)</xsl:text>
-                              </xsl:when>
-                            </xsl:choose>
-                          </p>
-                        </li>
-                      </xsl:otherwise>
-                    </xsl:choose>
-                  </xsl:when>
-                  <xsl:when test="report/result_count/full &gt; 0">
-                    <li>
-                      <p>
-                        <xsl:value-of select="gsa-i18n:strformat (gsa:i18n ('The filter does not match any of %1 results.'), report/result_count/full)"/>
-                      </p>
-                      <p>
-                        <ul>
-                          <xsl:if test="not (contains ($levels, 'g'))">
-                            <li>
-                              <p>
-                                <xsl:choose>
-                                  <xsl:when test="number(report/severity/full) = 0">
-                                    <xsl:value-of select="gsa:i18n ('The report only contains log messages, which are currently excluded.')"/>
-                                  </xsl:when>
-                                  <xsl:otherwise>
-                                    <xsl:value-of select="gsa:i18n ('Log messages are currently excluded.')"/>
-                                  </xsl:otherwise>
-                                </xsl:choose>
-                              </p>
-                              <p>
-                                <b><xsl:value-of select="gsa:i18n ('Solution')"/>: </b>
-                                <xsl:value-of select="gsa:i18n ('Try enabling them in the Severity (Class) filter setting.')"/>
-                              </p>
-                            </li>
-                          </xsl:if>
-                          <xsl:if test="contains (translate (report/filters/term, ' ', ''), 'severity>')">
-                            <li>
-                              <p>
-                                <xsl:value-of select="gsa:i18n ('You are using keywords setting a lower limit on severity.')"/>
-                              </p>
-                              <p>
-                                <b><xsl:value-of select="gsa:i18n ('Solution')"/>: </b>
-                                <xsl:value-of select="gsa:i18n ('Try removing them or raising the limit.')"/>
-                              </p>
-                            </li>
-                          </xsl:if>
-                          <xsl:if test="contains (translate (report/filters/term, ' ', ''), 'min_qod=') and not (contains (translate (report/filters/term, ' ', ''), 'min_qod=0'))">
-                            <li>
-                              <p>
-                                <xsl:value-of select="gsa:i18n ('There may be results below the current minimum Quality of Detection level.')"/>
-                              </p>
-                              <p>
-                                <b><xsl:value-of select="gsa:i18n ('Solution')"/>: </b>
-                                <xsl:value-of select="gsa:i18n ('Try decreasing the minimum QoD in the Filter to see those results.')"/>
-                              </p>
-                            </li>
-                          </xsl:if>
-                          <xsl:if test="contains (translate (report/filters/term, ' ', ''), 'qod>')">
-                            <li>
-                              <xsl:value-of select="gsa:i18n ('You are using keywords setting a lower limit on QoD.')"/>
-                            </li>
-                            <li>
-                              <b><xsl:value-of select="gsa:i18n ('Solution')"/>: </b>
-                              <xsl:value-of select="gsa:i18n ('Try removing them or raising the limit.')"/>
-                            </li>
-                          </xsl:if>
-                        </ul>
-                        <a href="#" class="edit-filter-action-icon" data-id="filterbox">
-                          <img src="/img/edit.svg" class="icon icon-sm"/>
-                          <xsl:value-of select="gsa:i18n ('Click here to edit the filter')"/>
+                                  <xsl:text>)</xsl:text>
+                                </span>
+                              </a>
+                            </xsl:when>
+                            <xsl:otherwise>
+                              <img src="/img/target.svg" class="icon icon-lg"/>
+                              <span>
+                                <xsl:value-of select="gsa:i18n ('You could change the Alive Test method of the target. However, if the targets are indeed dead, the scan duration might increase significantly.')"/>
+                              </span>
+                            </xsl:otherwise>
+                          </xsl:choose>
+                        </div>
+                      </li>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </ul>
+              </xsl:when>
+              <xsl:when test="report/result_count/full &gt; 0">
+                <p class="alert alert-info">
+                  <xsl:value-of select="gsa:i18n ('The report is empty.')"/>
+                  <xsl:value-of select="' '"/>
+                  <b><xsl:value-of select="gsa-i18n:strformat (gsa:i18n ('The filter does not match any of %1 results.'), report/result_count/full)"/></b>
+                </p>
+                <ul>
+                  <xsl:if test="not (contains ($levels, 'g'))">
+                    <xsl:variable name="filter" select="gsa:build-filter (report/filters, 'levels', 'levels=hmlg')" />
+                    <li class="panel panel-info">
+                      <div class="panel-heading">
+                        <xsl:choose>
+                          <xsl:when test="number(report/severity/full) = 0">
+                            <xsl:value-of select="gsa:i18n ('The report only contains log messages, which are currently excluded.')"/>
+                          </xsl:when>
+                          <xsl:otherwise>
+                            <xsl:value-of select="gsa:i18n ('Log messages are currently excluded.')"/>
+                          </xsl:otherwise>
+                        </xsl:choose>
+                      </div>
+                      <p class="panel-body">
+                        <a href="{$report_url}&amp;filter={$filter}"
+                          title="{gsa:i18n ('Add log messages to the filter')}">
+                          <img src="/img/filter.svg" class="valign-middle icon icon-lg"/>
+                          <span>
+                            <xsl:value-of select="gsa:i18n ('Include log messages in your filter setting.')"/>
+                          </span>
                         </a>
                       </p>
                     </li>
-                  </xsl:when>
-                </xsl:choose>
-              </ul>
-            </div>
+                  </xsl:if>
+                  <xsl:if test="contains (report/filters/term, 'severity>')">
+                    <xsl:variable name="filter" select="gsa:build-filter (report/filters, 'severity', '')" />
+                    <li class="panel panel-info">
+                      <div class="panel-heading">
+                        <xsl:value-of select="gsa:i18n ('You are using keywords setting a minimum limit on severity.')"/>
+                      </div>
+                      <p class="panel-body">
+                        <a href="{$report_url}&amp;filter={$filter}"
+                          title="{gsa:i18n ('Remove severity limit')}">
+                          <img src="/img/filter.svg" class="valign-middle icon icon-lg"/>
+                          <span>
+                            <xsl:value-of select="gsa:i18n ('Remove the severity limit from your filter settings.')"/>
+                          </span>
+                        </a>
+                      </p>
+                    </li>
+                  </xsl:if>
+                  <xsl:if test="contains (report/filters/term, 'min_qod=') and not (contains (report/filters/term, 'min_qod=0'))">
+                    <xsl:variable name="filter" select="gsa:build-filter (report/filters, 'min_qod', 'min_qod=30')" />
+                    <li class="panel panel-info">
+                      <div class="panel-heading">
+                        <xsl:value-of select="gsa:i18n ('There may be results below the current minimum Quality of Detection level.')"/>
+                      </div>
+                      <p class="panel-body">
+                        <a href="{$report_url}&amp;filter={$filter}"
+                          title="{gsa:i18n ('Descrease minimum QoD')}">
+                          <img src="/img/filter.svg" class="valign-middle icon icon-lg"/>
+                          <span>
+                            <xsl:value-of select="gsa:i18n ('Decrease the minimum QoD in the Filter to 30 percent to see those results.')"/>
+                          </span>
+                        </a>
+                      </p>
+                    </li>
+                  </xsl:if>
+                  <xsl:if test="contains (report/filters/term, 'qod>')">
+                    <xsl:variable name="filter" select="gsa:build-filter (report/filters, 'qod', '')" />
+                    <li class="panel panel-info">
+                      <div class="panel-heading">
+                        <xsl:value-of select="gsa:i18n ('You are using keywords setting a lower limit on QoD.')"/>
+                      </div>
+                      <p class="panel-body">
+                        <a href="{$report_url}&amp;filter={$filter}"
+                          title="{gsa:i18n ('Remove QoD limit')}">
+                          <img src="/img/filter.svg" class="valign-middle icon icon-lg"/>
+                          <span>
+                            <xsl:value-of select="gsa:i18n ('Remove Quality of Detection limit.')"/>
+                          </span>
+                        </a>
+                      </p>
+                    </li>
+                  </xsl:if>
+                  <li class="panel panel-info">
+                    <div class="panel-heading">
+                      <xsl:value-of select="gsa:i18n ('Your filter settings may be too refined.')"/>
+                    </div>
+                    <p class="panel-body">
+                      <a href="#" class="edit-filter-action-icon"
+                        data-id="filterbox" title="{gsa:i18n ('Edit filter')}">
+                        <img src="/img/edit.svg" class="valign-middle icon icon-lg"/>
+                        <span>
+                          <xsl:value-of select="gsa:i18n ('Update and adjust your filter settings.')"/>
+                        </span>
+                      </a>
+                    </p>
+                  </li>
+                  <li class="panel panel-info">
+                    <div class="panel-heading">
+                      <xsl:value-of select="gsa:i18n ('Your last filter change may be too restrictive.')"/>
+                    </div>
+                    <p class="panel-body">
+                      <a href="/omp?token={/envelope/token}&amp;cmd=get_report_section&amp;report_id={report/@id}&amp;report_section=results&amp;filt_id=--"
+                        title="{gsa:i18n ('Reset filter')}">
+                        <img src="/img/delete.svg" class="valign-middle icon icon-lg"/>
+                        <span>
+                          <xsl:value-of select="gsa:i18n ('Reset the filter settings to the defaults.')"/>
+                        </span>
+                      </a>
+                    </p>
+                  </li>
+                </ul>
+              </xsl:when>
+            </xsl:choose>
           </div>
         </xsl:otherwise>
       </xsl:choose>
