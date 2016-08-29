@@ -1,5 +1,10 @@
 2016-08-29  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/omp.xsl: Add new function gsa:build-filter to build filters
+	by allowing to replace existing filter keywords.
+
+2016-08-29  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/css/gsa-base.css: Add css for panel infos and add new alert
 	css classes.
 

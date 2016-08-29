@@ -120,6 +120,29 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </func:result>
 </func:function>
 
+<func:function name="gsa:build-filter">
+  <xsl:param name="filters"></xsl:param>
+  <xsl:param name="replace"></xsl:param>
+  <xsl:param name="with"></xsl:param>
+
+  <func:result>
+    <xsl:for-each select="$filters/keywords/keyword">
+      <xsl:choose>
+        <xsl:when test="column = $replace">
+          <xsl:value-of select="$with"/>
+          <xsl:text> </xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="column"/>
+          <xsl:value-of select="relation"/>
+          <xsl:value-of select="value"/>
+          <xsl:text> </xsl:text>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:for-each>
+  </func:result>
+</func:function>
+
 <func:function name="gsa:join">
   <xsl:param name="nodes"/>
   <func:result>
