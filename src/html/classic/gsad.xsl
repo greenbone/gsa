@@ -394,11 +394,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div id="gb_menu" class="clearfix">
    <ul>
     <li>
-      <a class="top_button"
-          href="/omp?cmd=dashboard&amp;token={/envelope/token}">
-        <img class="logo" src="/img/greenbone.svg"/>
-        <xsl:value-of select="gsa:i18n ('Dashboard')"/>
-      </a>
+      <xsl:choose>
+        <xsl:when test="number (/envelope/guest)">
+          <div class="empty_top_button"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <a class="top_button"
+              href="/omp?cmd=dashboard&amp;token={/envelope/token}">
+            <img class="logo" src="/img/greenbone.svg"/>
+            <xsl:value-of select="gsa:i18n ('Dashboard')"/>
+          </a>
+        </xsl:otherwise>
+      </xsl:choose>
     </li>
     <li>
       <xsl:variable name="items" xmlns="">
@@ -1062,6 +1069,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="charts">
+</xsl:template>
+
+<xsl:template match="guest">
 </xsl:template>
 
 <xsl:template match="chart_preferences">

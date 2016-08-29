@@ -467,6 +467,7 @@ xsl_transform_omp (credentials_t * credentials, gchar * xml,
                                  "<severity>%s</severity>"
                                  "<i18n>%s</i18n>"
                                  "<charts>%d</charts>"
+                                 "<guest>%d</guest>"
                                  "<client_address>%s</client_address>"
                                  "<backend_operation>%.2f</backend_operation>",
                                  GSAD_VERSION,
@@ -486,6 +487,7 @@ xsl_transform_omp (credentials_t * credentials, gchar * xml,
                                  credentials->severity,
                                  credentials->language,
                                  credentials->charts,
+                                 credentials->guest,
                                  credentials->client_address,
                                  (double) ((tv.tv_sec
                                             - credentials->cmd_start.tv_sec)
@@ -26544,7 +26546,12 @@ dashboard (credentials_t * credentials, params_t *params,
 
   name = params_value (params, "dashboard_name");
   if (name == NULL)
-    name = "main";
+    {
+      if (credentials->guest)
+        name = "secinfo";
+      else
+        name = "main";
+    }
 
   xml = g_string_new ("<dashboard>");
   g_string_append_printf (xml, "<name>%s</name>", name);

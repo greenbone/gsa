@@ -2101,6 +2101,7 @@ credentials_new (user_t *user, const char *language, const char *client_address)
                               ? g_strdup (user->autorefresh) : NULL;
   credentials->last_filt_ids = user->last_filt_ids;
   credentials->client_address = g_strdup (client_address);
+  credentials->guest = user->guest;
 
   return credentials;
 }

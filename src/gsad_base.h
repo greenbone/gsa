@@ -83,6 +83,7 @@ typedef struct
   GTree *last_filt_ids; ///< Last filter ids.
   params_t *params;   ///< Request parameters.
   int charts;         ///< Whether to show charts for this user.
+  int guest;          ///< Whether the user is a guest user.
 } credentials_t;
 
 /**

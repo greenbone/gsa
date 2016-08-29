@@ -1,3 +1,19 @@
+2016-08-29  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Hide "main" dashboard for guest user and show "secinfo" one instead.
+
+	* src/gsad_base.h (credentials_t): Add guest field.
+
+	* src/gsad_omp.c (xsl_transform_omp): Add "guest" element to envelope.
+	(dashboard): Show "secinfo" instead of "main" dashboard for the guest
+	user.
+
+	* src/gsad.c (credentials_new): Copy guest field.
+
+	* src/html/classic/gsad.xsl (html-gsa-navigation): Hide "Dashboard"
+	button for guest user.
+	(guest): New dummy template.
+
 2016-08-26  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/gsad_omp.c (save_user_omp): Add output params "modified_user" and
