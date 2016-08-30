@@ -4321,7 +4321,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       </p>
                     </li>
                   </xsl:if>
-                  <xsl:if test="contains (report/filters/term, 'min_qod=') and not (contains (report/filters/term, 'min_qod=0'))">
+                  <xsl:if test="report/filters/keywords/keyword[column='min_qod']/value > 30">
                     <xsl:variable name="filter" select="gsa:build-filter (report/filters, 'min_qod', 'min_qod=30')" />
                     <li class="panel panel-info">
                       <div class="panel-heading">
