@@ -2960,6 +2960,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </a>
             </td>
           </tr>
+          <xsl:if test="gsa:may-op ('create_asset')">
+            <tr>
+              <td><xsl:value-of select="gsa:i18n ('Add to Assets')"/></td>
+              <td>
+                <div>
+                  <xsl:value-of select="gsa-i18n:strformat (gsa:i18n ('Add to Assets with QoD>=%1%% and Overrides enabled'), 70)"/>
+                </div>
+                <label>
+                  <input type="radio" name="in_assets" value="1" checked="1"/>
+                  <xsl:value-of select="gsa:i18n ('yes')"/>
+                </label>
+                <label>
+                  <input type="radio" name="in_assets" value="0"/>
+                  <xsl:value-of select="gsa:i18n ('no')"/>
+                </label>
+              </td>
+            </tr>
+          </xsl:if>
         </table>
       </form>
     </div>

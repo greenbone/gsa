@@ -1,3 +1,11 @@
+2016-08-30  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/gsad_omp.c (create_report_omp): Add in_assets param and OMP
+	command element.
+
+	* src/html/classic/omp.xsl (html-import-report-form): Add selection
+	whether to add the report to the assets or not.
+
 2016-08-30  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/omp.xsl (html-edit-permission-form): Add a permission

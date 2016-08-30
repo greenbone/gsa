@@ -3967,12 +3967,14 @@ create_report_omp (credentials_t * credentials, params_t *params,
   int ret;
   gchar *command, *html, *response;
   const char *no_redirect, *cmd, *task_id, *name, *comment, *xml_file;
+  const char *in_assets;
 
   no_redirect = params_value (params, "no_redirect");
   task_id = params_value (params, "task_id");
   xml_file = params_value (params, "xml_file");
   name = params_value (params, "name");
   comment = params_value (params, "comment");
+  in_assets = params_value (params, "in_assets");
 
   if (task_id == NULL)
     {
@@ -3980,6 +3982,9 @@ create_report_omp (credentials_t * credentials, params_t *params,
       CHECK_PARAM_INVALID (comment, "Create Report", "new_container_task");
     }
   CHECK_PARAM_INVALID (xml_file, "Create Report", "new_container_task");
+
+  if (params_given (params, "in_assets"))
+    CHECK_PARAM_INVALID (xml_file, "Create Report", "new_container_task");
 
   if (strlen (xml_file) == 0)
     {
@@ -4012,19 +4017,23 @@ create_report_omp (credentials_t * credentials, params_t *params,
 
       if (task_id)
         command = g_strdup_printf ("<create_report>"
+                                   "<in_assets>%s</in_assets>"
                                    "<task id=\"%s\"/>"
                                    "%s"
                                    "</create_report>",
+                                   in_assets ? in_assets : "0",
                                    task_id ? task_id : "0",
                                    xml_file_escaped ? xml_file_escaped : "");
       else
         command = g_strdup_printf ("<create_report>"
+                                   "<in_assets>%s</in_assets>"
                                    "<task>"
                                    "<name>%s</name>"
                                     "<comment>%s</comment>"
                                    "</task>"
                                    "%s"
                                    "</create_report>",
+                                   in_assets ? in_assets : "",
                                    name,
                                    comment,
                                    xml_file_escaped);
