@@ -1,3 +1,8 @@
+2016-08-30  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/css/gsa-style.css: Remove left margin if a box is wrapped
+	to the next line. It's nicer to have the margin in the right.
+
 2016-08-30  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/omp.xsl (report-icons): Show response dialogs

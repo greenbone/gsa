@@ -1719,10 +1719,11 @@ select[multiple] {
   vertical-align: top;
   max-width: 33%;
   min-height: 150px;
+  margin-right: 20px;
 }
 
-.result-info ul li + li {
-  margin-left: 20px;
+.result-info ul li:last-child {
+  margin-right: 0;
 }
 
 .result-info li a {
