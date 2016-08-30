@@ -1,5 +1,10 @@
 2016-08-30  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/greenbone.js (gsa.upper_case_first): Add new js function
+	to convert the first character of a string to upper case.
+
+2016-08-30  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/omp.xsl (html-create-permission-form): Add a description
 	field to the create permission form. This will contain a full description text
 	of the to be created permission in future.

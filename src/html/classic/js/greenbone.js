@@ -74,6 +74,7 @@
   gsa.extend = extend;
   gsa.log = {};
   gsa.for_each = for_each;
+  gsa.upper_case_first = upper_case_first;
 
   gsa.log.error =  function() {
     console.error.apply(console, arguments);
@@ -228,6 +229,13 @@
       array = [array];
     }
     array.forEach(func);
+  }
+
+  function upper_case_first(value) {
+    if (gsa.is_string(value)) {
+      return value.charAt(0).toUpperCase() + value.substr(1);
+    }
+    return value;
   }
 
   var RESPONSE_SELECTORS = {
