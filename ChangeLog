@@ -1,5 +1,11 @@
 2016-08-30  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/greenbone.js (on_ready): Add new js code to create a
+	dynamically changing permission description. This code is very specific and
+	currently not suited for other purposes then the create permission form.
+
+2016-08-30  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/css/gsa-style.css: Add top margin to
 	permission-descriptions. This will move the description text to the same
 	position as it's label.

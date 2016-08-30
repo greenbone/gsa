@@ -1808,6 +1808,61 @@
         location.href = filter_url(sort_colum, type);
       });
     });
+
+    doc.find('.permission-description').each(function() {
+      var elem = $(this);
+      var form = elem.parents('form');
+      var perm = form.find('select[name="permission"]');
+      var resource_type = form.find('select[name="optional_resource_type"]');
+      var subject_type = form.find('input[name="subject_type"]');
+      var id = form.find('input[name="id_or_empty"]');
+
+      function on_change() {
+        var text;
+        var subject = subject_type.filter(':checked');
+        var subject_id = subject.parents('.radio')
+          .find('select option:selected');
+        var values = {
+          subject: gsa.upper_case_first(subject.val()),
+          subject_id: subject_id.text(),
+          description: perm.find('option:selected').data('description'),
+          id: id.val(),
+        };
+
+        if (id.is(':visible') && id.val()) {
+          if (resource_type.is(':visible')) {
+            var resource = resource_type.val();
+            if (resource) {
+              values.resource = resource;
+            }
+            else {
+              values.resource = 'resource';
+            }
+            text = gsa._('{{subject}} {{subject_id}} {{description}} to the ' +
+                '{{resource}} that has ID {{id}}', values);
+          }
+          else {
+            text = gsa._('{{subject}} {{subject_id}} {{description}} ' +
+                'that has ID {{id}}', values);
+          }
+        }
+        else {
+          text = gsa._('{{subject}} {{subject_id}} {{description}}', values);
+        }
+
+        elem.text(text);
+      }
+
+      perm.on('change', on_change);
+      resource_type.on('change', on_change);
+      subject_type.on('change', on_change);
+      id.on('keyup', on_change);
+      form.find('select[name="permission_user_id"]').on('change', on_change);
+      form.find('select[name="permission_role_id"]').on('change', on_change);
+      form.find('select[name="permission_group_id"]').on('change', on_change);
+
+      on_change();
+    });
   }
 
   var timeout_id;
