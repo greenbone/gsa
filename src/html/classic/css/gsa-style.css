@@ -1729,4 +1729,8 @@ select[multiple] {
 .result-info li a {
   color: #1A1A1A;
 }
+
+.permission-description {
+  margin-top: 5px;
+}
 /* vim: set ts=2 sw=2 tw=80:*/
