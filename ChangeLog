@@ -1,5 +1,10 @@
 2016-08-30  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/omp.xsl (report [results]): Only show info about qod limit
+	if the keyword is qod and not if it is min_qod.
+
+2016-08-30  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/omp.xsl (report [results]): Don't show info alert about min
 	qod limit if the limit is greater then 30.
 

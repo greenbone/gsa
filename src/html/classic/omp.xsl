@@ -4338,7 +4338,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       </p>
                     </li>
                   </xsl:if>
-                  <xsl:if test="contains (report/filters/term, 'qod>')">
+                  <xsl:if test="report/filters/keywords/keyword[column='qod' and not (relation='&lt;')]">
                     <xsl:variable name="filter" select="gsa:build-filter (report/filters, 'qod', '')" />
                     <li class="panel panel-info">
                       <div class="panel-heading">
