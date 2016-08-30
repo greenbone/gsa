@@ -1,3 +1,9 @@
+2016-08-30  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/omp.xsl (report-icons): Show response dialogs
+	when adding report to assets and removing it.  Consolidate text
+	for these actions.
+
 2016-08-29  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/omp.xsl (report [results]): Use new alert-info and

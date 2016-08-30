@@ -33661,7 +33661,7 @@ should not have received it.
     <xsl:call-template name="filtered-report-export-form"></xsl:call-template>
   </div>
 
-  <div class="icon icon-sm ajax-post" data-reload="next">
+  <div class="icon icon-sm ajax-post" data-reload="dialog">
     <xsl:variable name="min_qod">
       <xsl:choose>
         <xsl:when test="string-length (report/filters/keywords/keyword[column='min_qod' and relation='=']/value) &gt; 0">
@@ -33672,20 +33672,42 @@ should not have received it.
         </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
-    <xsl:variable name="overrides">
+    <xsl:variable name="overrides" select="report/filters/keywords/keyword[column='apply_overrides' and relation='=']/value = '1'"/>
+    <xsl:variable name="add_to_assets_title">
       <xsl:choose>
-        <xsl:when test="report/filters/keywords/keyword[column='apply_overrides' and relation='=']/value = '1'">
-          <xsl:text>enabled</xsl:text>
+        <xsl:when test="$overrides">
+          <xsl:value-of select="gsa-i18n:strformat (gsa:i18n ('Add to Assets with QoD>=%1%% and Overrides enabled'), $min_qod)"/>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:text>disabled</xsl:text>
+          <xsl:value-of select="gsa-i18n:strformat (gsa:i18n ('Add to Assets with QoD>=%1%% and Overrides disabled'), $min_qod)"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="add_to_assets_success_message">
+      <xsl:choose>
+        <xsl:when test="$overrides">
+          <xsl:value-of select="gsa-i18n:strformat (gsa:i18n ('Report content added to Assets with QoD>=%1%% and Overrides enabled.'), $min_qod)"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="gsa-i18n:strformat (gsa:i18n ('Report content added to Assets with QoD>=%1%% and Overrides disabled.'), $min_qod)"/>
         </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
 
     <img src="/img/add_to_assets.svg" alt="{gsa:i18n ('Add to Assets')}"
       name="Add to Assets"
-      title="{gsa:i18n (concat ('Add to Assets with QoD>=', $min_qod, '% and Overrides ', $overrides), 'Action Verb')}"/>
+      title="{$add_to_assets_title}">
+      <div class="success-dialog" data-title="{gsa:i18n ('Success')}">
+        <div class="text-center">
+          <xsl:value-of select="$add_to_assets_success_message"/>
+        </div>
+      </div>
+      <div class="error-dialog">
+        <div class="text-center">
+          <xsl:value-of select="gsa:i18n ('Report content could not be added to Assets.')"/>
+        </div>
+      </div>
+    </img>
 
     <form action="/omp" method="post" enctype="multipart/form-data">
       <input type="hidden" name="token" value="{/envelope/token}"/>
@@ -33699,10 +33721,21 @@ should not have received it.
     </form>
   </div>
 
-  <div class="icon icon-sm ajax-post" data-reload="next">
+  <div class="icon icon-sm ajax-post" data-reload="dialog">
     <img src="/img/remove_from_assets.svg" alt="{gsa:i18n ('Remove from Assets')}"
       name="Remove from Assets"
-      title="{gsa:i18n ('Remove from Assets')}"/>
+      title="{gsa:i18n ('Remove from Assets')}">
+      <div class="success-dialog" data-title="{gsa:i18n ('Success')}">
+        <div class="text-center">
+          <xsl:value-of select="gsa:i18n ('Report content removed from Assets.')"/>
+        </div>
+      </div>
+      <div class="error-dialog">
+        <div class="text-center">
+          <xsl:value-of select="gsa:i18n ('Report content could not be removed from Assets.')"/>
+        </div>
+      </div>
+    </img>
 
     <form class="form-inline" action="/omp" method="post" enctype="multipart/form-data">
       <input type="hidden" name="token" value="{/envelope/token}"/>
