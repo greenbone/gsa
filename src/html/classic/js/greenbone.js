@@ -1839,11 +1839,11 @@
               values.resource = 'resource';
             }
             text = gsa._('{{subject}} {{subject_id}} {{description}} to the ' +
-                '{{resource}} that has ID {{id}}', values);
+                '{{resource}} with ID {{id}}', values);
           }
           else {
             text = gsa._('{{subject}} {{subject_id}} {{description}} ' +
-                'that has ID {{id}}', values);
+                'with ID {{id}}', values);
           }
         }
         else {

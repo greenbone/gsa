@@ -1,3 +1,8 @@
+2016-08-30  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/classic/greenbone.js (on_ready): Use "with" instead of
+	"that has" because it's closer to being English.
+
 2016-08-30  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/gsad_omp.c (create_report_omp): Add in_assets param and OMP
@@ -125,7 +130,7 @@
 	(init_validator): Add param "old_login".
 	(exec_omp_post): Logout users when their password has changed in
 	save_my_settings or save_user.
-	
+
 	* src/html/classic/omp.xsl (user [edit]): Add hidden "old_login" field.
 
 2016-08-26  Björn Ricks <bjoern.ricks@greenbone.net>
