@@ -1,5 +1,11 @@
 2016-08-30  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/omp.xsl (html-create-permission-form): Add a description
+	field to the create permission form. This will contain a full description text
+	of the to be created permission in future.
+
+2016-08-30  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/omp.xsl (html-create-permission-form): Add data-description
 	attribute to permission selection options. This will allow to get the
 	permission description in a javascript function.

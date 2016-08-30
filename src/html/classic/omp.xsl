@@ -26981,6 +26981,15 @@ should not have received it.
               maxlength="100"/>
           </div>
         </div>
+        <div class="form-group">
+          <label class="col-2 control-label">
+            <xsl:value-of select="gsa:i18n ('Description')"/>
+          </label>
+          <div class="col-10">
+            <div class="permission-description">
+            </div>
+          </div>
+        </div>
       </form>
     </div>
   </div>
