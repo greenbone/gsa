@@ -26810,8 +26810,9 @@ should not have received it.
                 </xsl:choose>
               </xsl:variable>
               <xsl:if test="not ($restrict_type)">
-                <option value="Super" data-select="super" data-label-field="#resource">
-                  <xsl:text>Super (Has super access)</xsl:text>
+                <option value="Super" data-select="super" data-label-field="#resource"
+                  data-description="{gsa:i18n ('has super access')}">
+                  <xsl:value-of select="gsa:i18n ('Super (Has super access)')"/>
                 </option>
               </xsl:if>
               <xsl:for-each select="exslt:node-set ($commands)/*[gsa:may-op (name)]">
@@ -26828,7 +26829,8 @@ should not have received it.
                 </xsl:variable>
                 <xsl:choose>
                   <xsl:when test="$restrict_type and starts-with (gsa:lower-case (name), concat ('get_', $restrict_type))">
-                    <option value="{gsa:lower-case (name)}" selected="1" data-label-name="{$label_name}">
+                    <option value="{gsa:lower-case (name)}" selected="1" data-label-name="{$label_name}"
+                      data-description="{gsa:permission-description (name, resource)}">
                       <xsl:value-of select="gsa:lower-case (name)"/>
                       <xsl:text> (</xsl:text>
                       <xsl:value-of select="gsa:capitalise (gsa:permission-description (name, resource))"/>
@@ -26836,7 +26838,8 @@ should not have received it.
                     </option>
                   </xsl:when>
                   <xsl:when test="not (preceding-sibling::node ())">
-                      <option value="{gsa:lower-case (name)}" selected="1" data-label-name="{$label_name}">
+                    <option value="{gsa:lower-case (name)}" selected="1" data-label-name="{$label_name}"
+                      data-description="{gsa:permission-description (name, resource)}">
                       <xsl:value-of select="gsa:lower-case (name)"/>
                       <xsl:text> (</xsl:text>
                       <xsl:value-of select="gsa:capitalise (gsa:permission-description (name, resource))"/>
@@ -26844,7 +26847,8 @@ should not have received it.
                     </option>
                   </xsl:when>
                   <xsl:otherwise>
-                    <option value="{gsa:lower-case (name)}" data-label-name="{$label_name}">
+                    <option value="{gsa:lower-case (name)}" data-label-name="{$label_name}"
+                      data-description="{gsa:permission-description (name, resource)}">
                       <xsl:value-of select="gsa:lower-case (name)"/>
                       <xsl:text> (</xsl:text>
                       <xsl:value-of select="gsa:capitalise (gsa:permission-description (name, resource))"/>
