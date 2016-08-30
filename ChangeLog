@@ -1,5 +1,11 @@
 2016-08-30  Michael Wiegand <michael.wiegand@greenbone.net>
 
+	Post release version bump.
+
+	* src/html/classic/help.xsl, CMakeLists.txt: Set version to 6.0.12.
+
+2016-08-30  Michael Wiegand <michael.wiegand@greenbone.net>
+
 	Preparing the gsa 6.0.11 release.
 
 	* CHANGES: Updated.
