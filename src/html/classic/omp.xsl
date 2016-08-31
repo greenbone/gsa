@@ -153,6 +153,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </func:result>
 </func:function>
 
+<func:function name="gsa:build-css-classes">
+  <xsl:param name="prefix"/>
+  <xsl:param name="nodes"/>
+
+  <xsl:variable name="classes" select="exslt:node-set($nodes)/classes"/>
+
+  <func:result>
+    <xsl:for-each select="$classes/class">
+      <xsl:message><xsl:value-of select="name(.)"/>: <xsl:value-of select="."/></xsl:message>
+      <xsl:value-of select="$prefix"/><xsl:value-of select="."/><xsl:text> </xsl:text>
+    </xsl:for-each>
+  </func:result>
+</func:function>
+
 <func:function name="gsa:actions-width">
   <xsl:param name="icon-count"/>
   <func:result select="15 + ($icon-count * $icon-width)"/>
