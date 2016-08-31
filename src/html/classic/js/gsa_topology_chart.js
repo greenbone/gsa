@@ -61,7 +61,17 @@
 
   TopologyChartGenerator.prototype.generate = function(svg, data, update) {
     var self = this;
-    var topology = data.topology;
+
+    // Create copy of topology containing only nodes with links
+    var topology = { nodes: [], nodes_by_link_id: {} };
+    topology.links = data.topology.links;
+    for (var id in data.topology.nodes_by_link_id) {
+      var node = data.topology.nodes_by_link_id[id];
+      if (node.in_links.length || node.out_links.length) {
+        topology.nodes.push(node);
+        topology.nodes_by_link_id[id] = node;
+      }
+    }
 
     // Setup display parameters
     var height = svg.attr('height');

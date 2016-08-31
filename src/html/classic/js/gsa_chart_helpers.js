@@ -901,6 +901,8 @@
       new_host.id = asset_elem.attr('id');
       new_host.severity = Number(asset_elem.select('severity>value').text());
       new_host.is_scanner = false;
+      new_host.in_links = [];
+      new_host.out_links = [];
 
       var identifiers = asset_elem.selectAll('identifiers>identifier');
       identifiers.each(function() {
@@ -964,6 +966,8 @@
             new_host.name = source_ip;
             new_host.id = null;
             new_host.severity = null;
+            new_host.in_links = [];
+            new_host.out_links = [];
             nodes.push(new_host);
             nodes_by_link_id[new_host.link_id] = new_host;
           }
@@ -980,6 +984,8 @@
             new_host.name = target_ip;
             new_host.id = null;
             new_host.severity = null;
+            new_host.in_links = [];
+            new_host.out_links = [];
             nodes.push(new_host);
             nodes_by_link_id[new_host.link_id] = new_host;
           }
@@ -988,6 +994,8 @@
           new_link.target = nodes_by_link_id[target_ip];
 
           links.push(new_link);
+          new_link.target.in_links.push (new_link);
+          new_link.source.out_links.push (new_link);
         }
 
         // Mark first node in route as scanner
@@ -1029,6 +1037,8 @@
         id: asset._id,
         severity: asset.host.severity.value,
         is_scanner: false,
+        in_links: [],
+        out_links: [],
       };
 
       var identifiers = asset.identifiers.identifier;
@@ -1092,6 +1102,8 @@
             new_host.name = source_ip;
             new_host.id = null;
             new_host.severity = null;
+            new_host.in_links = [];
+            new_host.out_links = [];
             nodes.push(new_host);
             nodes_by_link_id[new_host.link_id] = new_host;
           }
@@ -1108,6 +1120,8 @@
             new_host.name = target_ip;
             new_host.id = null;
             new_host.severity = null;
+            new_host.in_links = [];
+            new_host.out_links = [];
             nodes.push(new_host);
             nodes_by_link_id[new_host.link_id] = new_host;
           }
@@ -1116,6 +1130,8 @@
           new_link.target = nodes_by_link_id[target_ip];
 
           links.push(new_link);
+          new_link.target.in_links.push (new_link);
+          new_link.source.out_links.push (new_link);
         }
 
         // Mark first node in route as scanner
