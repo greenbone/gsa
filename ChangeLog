@@ -1,3 +1,8 @@
+2016-08-31  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	* src/html/classic/omp-doc.xsl: Use consistent domain name in
+	mail addresses.
+
 2016-08-31  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/js/gsa_chart_helpers.js (extract_host_topology_data)
