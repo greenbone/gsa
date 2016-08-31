@@ -1655,31 +1655,6 @@
 
     doc.find('select:not(.no-select2)').select2();
 
-    doc.find('.form-label-control').each(function() {
-      var elem = $(this);
-      var form = elem.parents('form');
-      var name = elem.attr('id');
-
-      function on_change() {
-        var option = get_option(elem);
-        var value = option.data('label-name');
-        var field = option.data('label-field');
-
-        if (!gsa.is_defined(value) && gsa.is_defined(field)) {
-          option = get_option($(field));
-          value = option.data('label-name');
-        }
-
-        if (gsa.is_defined(value)) {
-          form.find('.form-label-item-' + name).text(value);
-        }
-      }
-
-      elem.on('change', on_change);
-
-      init_input(elem, on_change);
-    });
-
     doc.find('.form-selection-control').each(function() {
       var elem = $(this);
       var form = elem.parents('form');
@@ -1739,6 +1714,35 @@
             cur.prop('disabled', value === disable);
           }
         });
+      }
+
+      elem.on('change', on_change);
+
+      init_input(elem, on_change);
+    });
+
+    doc.find('.form-label-control').each(function() {
+      var elem = $(this);
+      var form = elem.parents('form');
+      var name = elem.attr('id');
+
+      function on_change() {
+        if (elem.prop('disabled')) {
+          return;
+        }
+
+        var option = get_option(elem);
+        var value = option.data('label-name');
+        var field = option.data('label-field');
+
+        if (!gsa.is_defined(value) && gsa.is_defined(field)) {
+          option = get_option($(field));
+          value = option.data('label-name');
+        }
+
+        if (gsa.is_defined(value)) {
+          form.find('.form-label-item-' + name).text(value);
+        }
       }
 
       elem.on('change', on_change);
