@@ -1,3 +1,9 @@
+2016-08-30  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/js/greenbone.js (on_ready): Remove ending s from permission
+	descriptions if it is a get command permission and a resource id is set. This
+	will remove the plural term e.g. tasks and change it to task in this case.
+
 2016-08-30  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/greenbone.js (on_ready): Use "with" instead of

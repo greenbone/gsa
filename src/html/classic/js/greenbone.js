@@ -1822,10 +1822,11 @@
         var subject = subject_type.filter(':checked');
         var subject_id = subject.parents('.radio')
           .find('select option:selected');
+        var description = perm.find('option:selected').data('description');
         var values = {
           subject: gsa.upper_case_first(subject.val()),
           subject_id: subject_id.text(),
-          description: perm.find('option:selected').data('description'),
+          description: description,
           id: id.val(),
         };
 
@@ -1842,6 +1843,10 @@
                 '{{resource}} with ID {{id}}', values);
           }
           else {
+            if (perm.val().startsWith('get_') && description.endsWith('s')) {
+              // this is a hack and may not work for all get commands ...
+              values.description = description.slice(0, -1);
+            }
             text = gsa._('{{subject}} {{subject_id}} {{description}} ' +
                 'with ID {{id}}', values);
           }
