@@ -26911,7 +26911,7 @@ should not have received it.
             <xsl:value-of select="gsa:i18n ('Resource Type')"/>
           </label>
           <div class="col-10">
-            <select name="optional_resource_type" class="form-label-control" id="resource">
+            <select name="optional_resource_type" class="form-label-control form-selection-input-perm form-selection-input-perm--super" id="resource">
               <option value="" data-label-name="{gsa:i18n ('Resource ID')}">--</option>
               <option value="user" data-label-name="{gsa:i18n ('User ID')}">User</option>
               <option value="role" data-label-name="{gsa:i18n ('Role ID')}">Role</option>
@@ -27011,6 +27011,7 @@ should not have received it.
           </label>
           <div class="col-10">
             <input type="text" name="id_or_empty"
+              class="form-selection-input-perm {gsa:build-css-classes ('form-selection-input-perm--', $classes)}"
               value="{/envelope/params/resource_id}"
               size="50"
               maxlength="100"/>
@@ -27691,7 +27692,7 @@ should not have received it.
             <xsl:value-of select="gsa:i18n ('Resource Type')"/>
           </label>
           <div class="col-10">
-            <select name="optional_resource_type" class="form-label-control" id="resource">
+            <select name="optional_resource_type" class="form-label-control form-selection-input-perm form-selection-input-perm--super" id="resource">
               <option value="" data-label-name="{gsa:i18n ('Resource ID')}">--</option>
               <xsl:choose>
                 <xsl:when test="commands_response/get_permissions_response/permission/resource/type = 'user'">
@@ -27814,12 +27815,14 @@ should not have received it.
             <xsl:choose>
               <xsl:when test="commands_response/get_permissions_response/permission/resource/@id = '0'">
                 <input type="text" name="id_or_empty"
+                  class="form-selection-input-perm {gsa:build-css-classes ('form-selection-input-perm--', $classes)}"
                   value=""
                   size="50"
                   maxlength="100"/>
               </xsl:when>
               <xsl:otherwise>
                 <input type="text" name="id_or_empty"
+                  class="form-selection-input-perm {gsa:build-css-classes ('form-selection-input-perm--', $classes)}"
                   value="{commands_response/get_permissions_response/permission/resource/@id}"
                   size="50"
                   maxlength="100"/>
