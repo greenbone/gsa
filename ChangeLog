@@ -1,5 +1,11 @@
 2016-08-30  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/greenbone.js (on_ready): Update permission description
+	also if id field has changed. This will recognize changes made by copy and
+	paste.
+
+2016-08-30  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/greenbone.js (on_ready): Remove ending s from permission
 	descriptions if it is a get command permission and a resource id is set. This
 	will remove the plural term e.g. tasks and change it to task in this case.

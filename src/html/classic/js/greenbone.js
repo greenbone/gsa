@@ -1862,6 +1862,7 @@
       resource_type.on('change', on_change);
       subject_type.on('change', on_change);
       id.on('keyup', on_change);
+      id.on('change', on_change);
       form.find('select[name="permission_user_id"]').on('change', on_change);
       form.find('select[name="permission_role_id"]').on('change', on_change);
       form.find('select[name="permission_group_id"]').on('change', on_change);
