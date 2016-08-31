@@ -1,5 +1,11 @@
 2016-08-31  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/greenbone.js (on_ready): Only consider id field for
+	permission description if the field is not disabled. Checking for visibility
+	doesn't work reliable in edit permission dialog.
+
+2016-08-31  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/greenbone.js (on_ready): Move label control after the
 	enable control to only consider changes from enabled and visible input fields.
 	Also don't change the label if a input field is disabled.

@@ -1834,7 +1834,7 @@
           id: id.val(),
         };
 
-        if (id.is(':visible') && id.val()) {
+        if (!id.prop('disabled') && id.val()) {
           if (resource_type.is(':visible')) {
             var resource = resource_type.val();
             if (resource) {
