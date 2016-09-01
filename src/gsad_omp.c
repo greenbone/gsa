@@ -4134,6 +4134,7 @@ create_container_task_omp (credentials_t * credentials, params_t *params,
   name = params_value (params, "name");
   comment = params_value (params, "comment");
   CHECK_PARAM_INVALID (name, "Create Container Task", "new_container_task");
+  CHECK_PARAM_INVALID (comment, "Create Container Task", "new_container_task");
 
   command = g_strdup_printf ("<create_task>"
                              "<target id=\"0\"/>"
