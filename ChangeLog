@@ -1,5 +1,12 @@
 2016-09-05  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Backport r24452, by Bjoern Ricks.
+
+	* src/html/classic/omp.xsl: Use an order by date descending for links to
+	report lists at the task detail page.
+
+2016-09-05  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Backport r24557, by Bjoern Ricks.
 
 	* src/html/classic/omp.xsl: Add sort reverse by date to the links to the
