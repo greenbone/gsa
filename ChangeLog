@@ -1,5 +1,10 @@
 2016-09-05  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/greenbone.js (on_ready): Use input event instead of
+	change and keyup on id field to update the permission description.
+
+2016-09-05  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/omp.xsl (gsa:build-css-classes): Remove accidentally
 	committed debug message.
 
