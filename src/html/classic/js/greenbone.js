@@ -1843,8 +1843,8 @@
             else {
               values.resource = 'resource';
             }
-            text = gsa._('{{subject}} {{subject_id}} {{description}} to the ' +
-                '{{resource}} with ID {{id}}', values);
+            text = gsa._('{{subject}} {{subject_id}} {{description}} to ' +
+                '{{resource}} {{id}}', values);
           }
           else {
             if (perm.val().startsWith('get_') && description.endsWith('s')) {
@@ -1852,7 +1852,7 @@
               values.description = description.slice(0, -1);
             }
             text = gsa._('{{subject}} {{subject_id}} {{description}} ' +
-                'with ID {{id}}', values);
+                ' {{id}}', values);
           }
         }
         else {

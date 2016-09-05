@@ -1,3 +1,9 @@
+2016-09-05  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/classic/js/greenbone.js (on_ready): Remove "with" from the
+	description because it sounds better and it matches the Permissions
+	page.
+
 2016-09-05  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/js/greenbone.js (on_ready): Use input event instead of
