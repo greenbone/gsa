@@ -161,7 +161,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
   <func:result>
     <xsl:for-each select="$classes/class">
-      <xsl:message><xsl:value-of select="name(.)"/>: <xsl:value-of select="."/></xsl:message>
       <xsl:value-of select="$prefix"/><xsl:value-of select="."/><xsl:text> </xsl:text>
     </xsl:for-each>
   </func:result>
