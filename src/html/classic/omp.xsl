@@ -7022,11 +7022,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <td>
           <xsl:choose>
             <xsl:when test="report_count &gt; 0">
-              <a href="/omp?cmd=get_reports&amp;replace_task_id=1&amp;filt_id=-2&amp;filter=task_id={@id} and status=Done apply_overrides={../apply_overrides} min_qod={../filters/keywords/keyword[column='min_qod']/value} sort-reverse=name&amp;task_filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;task_filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+              <a href="/omp?cmd=get_reports&amp;replace_task_id=1&amp;filt_id=-2&amp;filter=task_id={@id} and status=Done apply_overrides={../apply_overrides} min_qod={../filters/keywords/keyword[column='min_qod']/value} sort-reverse=date&amp;task_filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;task_filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
                 title="{gsa-i18n:strformat (gsa:i18n ('View list of all finished reports for Task %1', 'Task'), name)}">
                 <xsl:value-of select="report_count/finished"/>
               </a>
-              (<a href="/omp?cmd=get_reports&amp;replace_task_id=1&amp;filt_id=-2&amp;filter=task_id={@id} apply_overrides={../apply_overrides} min_qod={../filters/keywords/keyword[column='min_qod']/value} sort-reverse=name&amp;task_filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;task_filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+              (<a href="/omp?cmd=get_reports&amp;replace_task_id=1&amp;filt_id=-2&amp;filter=task_id={@id} apply_overrides={../apply_overrides} min_qod={../filters/keywords/keyword[column='min_qod']/value} sort-reverse=date&amp;task_filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;task_filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
                 title="{gsa-i18n:strformat (gsa:i18n ('View list of all reports for Task %1, including unfinished ones', 'Task'), name)}">
                 <xsl:value-of select="report_count/text()"/>
                </a>)

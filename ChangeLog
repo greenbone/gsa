@@ -1,3 +1,11 @@
+2016-09-05  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Backport r24557, by Bjoern Ricks.
+
+	* src/html/classic/omp.xsl: Add sort reverse by date to the links to the
+	reports at the tasks list page. Reports should be sorted by date descending by
+	default.
+
 2016-08-30  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	Post release version bump.
@@ -409,7 +417,7 @@
 
 	* CHANGES: Updated.
 
-2015-01-11  Matthew Mundell <matthew.mundell@greenbone.net>
+2016-01-11  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Backport r24079.
 
