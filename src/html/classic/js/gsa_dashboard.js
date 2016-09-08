@@ -2497,6 +2497,7 @@
     this.display = display;
 
     this.gen_params = gsa.is_object(gen_params) ? gen_params : {};
+    this.gen_params.chart_template = chart_template;
 
     this.init_params = gsa.is_object(init_params) ? init_params : {};
 
@@ -3108,9 +3109,6 @@
           }
           if (c_elem.data('z-fields')) {
             gen_params.z_fields = c_elem.data('z-fields').split(',');
-          }
-          if (gsa.is_defined(chart_template)) {
-            gen_params.chart_template = chart_template;
           }
 
           var key;
