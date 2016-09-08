@@ -2484,12 +2484,12 @@
    * @param chart_type      The type of chart (bubble, donut, etc.).
    * @param chart_template  Special chart template to use.
    * @param chart_title     Title to be shown for the chart
+   * @param count_field     Column for title count (optional).
    * @param gen_params      Parameters for the generator (optional).
    * @param init_params     Parameters to init the chart controller (optional).
-   * @param count_field     Column for title count (optional).
    */
   function ChartController(chart_name, chart_type, chart_template,
-      chart_title, data_src, display, gen_params, init_params, count_field) {
+      chart_title, data_src, display, count_field, gen_params, init_params) {
     this.chart_name = chart_name;
     this.chart_type = chart_type;
     this.chart_template = chart_template ? chart_template : '';
@@ -3134,7 +3134,7 @@
 
             return new ChartController(chart_name, chart_type,
                 chart_template, chart_title, data_source, for_display,
-                gen_params, init_params, chart_title_count_column);
+                chart_title_count_column, gen_params, init_params);
           });
         });
       });

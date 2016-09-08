@@ -1,5 +1,10 @@
 2016-09-08  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_dashboard.js (ChartController): Reorder parameters
+	for ChartController constructor.
+
+2016-09-08  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_dashboard.js (ChartController): Always set
 	chart_template in the generator params. This also avoids having to set them
 	when creating a new ChartController.
