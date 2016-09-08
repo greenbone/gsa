@@ -2522,16 +2522,8 @@
   }
 
   /* Delegates a data request to the data source */
-  ChartController.prototype.addRequest = function(filter, gen_params) {
+  ChartController.prototype.addRequest = function(filter) {
     this.filter = filter;
-
-    if (gen_params) {
-      this.gen_params = gen_params;
-    }
-
-    if (!gsa.is_defined(this.gen_params)) {
-      throw new Error('gen_params are undefined');
-    }
 
     if (this.hasChanged()) {
       this.showLoading();

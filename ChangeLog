@@ -1,5 +1,11 @@
 2016-09-08  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_dashboard.js (ChartController.prototype.addRequest):
+	Remove optional parameter gen_params. This parameter isn't used currently and
+	we ensure now that gen_params are always set correctly.
+
+2016-09-08  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_dashboard.js (ChartGenerator): Always initialize
 	gen_params and init_params.
 
