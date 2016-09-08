@@ -2628,9 +2628,12 @@
       params['chart_init:' + encodeURIComponent(param)] =
           this.init_params[param];
     }
-    for (param in this.gen_params.extra) {
-      params['chart_gen:' + encodeURIComponent(param)] =
-          this.gen_params.extra[param];
+
+    if (gsa.is_defined(this.gen_params.extra)) {
+      for (param in this.gen_params.extra) {
+        params['chart_gen:' + encodeURIComponent(param)] =
+            this.gen_params.extra[param];
+      }
     }
 
     var command = this.data_src.command;
