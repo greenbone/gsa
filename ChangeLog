@@ -1,3 +1,7 @@
+2016-09-12  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	* src/html/classic/omp.xsl (report): Fix typo in no-results case.
+
 2016-09-05  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Backport r24452, by Bjoern Ricks.
