@@ -3018,7 +3018,7 @@
 
     for (var id in controllers) {
       var controller = controllers[id];
-      controller.showError(display_message);
+      controller.controller.showError(display_message);
     }
   };
 

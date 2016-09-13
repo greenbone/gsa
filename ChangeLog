@@ -1,3 +1,8 @@
+2016-09-13  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/js/gsa_dashboard.js (DataSource): Fix setting error on the
+	controller.
+
 2016-09-13  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/js/gsa_chart_helpers.js
