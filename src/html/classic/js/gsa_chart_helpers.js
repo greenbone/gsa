@@ -1019,10 +1019,12 @@
     var nodes = [];
     var nodes_by_link_id = {};
     var links = [];
+    var links_by_link_ids = {};
     var records = {
       nodes: nodes,
       nodes_by_link_id: nodes_by_link_id,
-      links: links
+      links: links,
+      links_by_link_ids: links_by_link_ids,
     };
 
     gsa.for_each(data.asset, function(asset) {
@@ -1085,9 +1087,14 @@
         var route_split = host.traceroute.split(',');
         for (var hop_index = 0; hop_index < route_split.length - 1;
             hop_index++) {
-          var new_link = {};
           var source_ip = route_split[hop_index];
           var target_ip = route_split[hop_index + 1];
+          var link_ips = source_ip + ">" + target_ip;
+
+          if (gsa.is_defined (links_by_link_ids [link_ips]))
+            continue;
+
+          var new_link = {};
           var new_host;
 
           // Create source node if its IP address is not in the list.
@@ -1130,6 +1137,7 @@
           new_link.target = nodes_by_link_id[target_ip];
 
           links.push(new_link);
+          links_by_link_ids [link_ips] = new_link;
           new_link.target.in_links.push (new_link);
           new_link.source.out_links.push (new_link);
         }

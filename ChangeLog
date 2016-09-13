@@ -1,5 +1,11 @@
 2016-09-13  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/js/gsa_chart_helpers.js
+	(extract_host_topology_data_json): Add links between hosts only once
+	in case they appear in multiple routes.
+
+2016-09-13  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/gsad_omp.c (edit_task): Add missing placeholder for get_groups
 	OMP command.
 	(get_task): Remove unused extra openvas_server_sendf parameter.
