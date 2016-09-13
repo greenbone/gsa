@@ -4657,6 +4657,7 @@ edit_task (credentials_t * credentials, params_t *params, const char *extra_xml,
                             "%s"
                             "%s"
                             "%s"
+                            "%s"
                             "</commands>",
                             task_id,
                             command_enabled (credentials, "GET_ALERTS")
@@ -5789,8 +5790,7 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml,
                                " task_id=\""
                              : "",
                             get_overrides ? task_id : "",
-                            get_overrides ? "\"/>" : "",
-                            task_id)
+                            get_overrides ? "\"/>" : "")
       == -1)
     {
       openvas_server_close (socket, session);
@@ -12264,7 +12264,9 @@ save_osp_prefs (credentials_t *credentials, gnutls_session_t session,
                                 "<preference><name>%s</name>"
                                 "<value>%s</value></preference>"
                                 "</modify_config>",
-                                config_id, param_name, value)
+                                config_id,
+                                (char *) param_name,
+                                value)
           == -1)
         {
           g_free (value);
