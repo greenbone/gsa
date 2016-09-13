@@ -61,6 +61,51 @@
 
   TopologyChartGenerator.prototype.generate = function(svg, data, update) {
     var self = this;
+    var node_limit = 1000;
+
+    if (data.topology.nodes.length > node_limit) {
+      var height = svg.attr('height');
+      var width = svg.attr('width');
+
+      if (self.layout) {
+        self.layout.stop();
+      }
+      if (self.interval) {
+        window.clearInterval(self.interval);
+        self.interval = undefined;
+      }
+      svg.html ('');
+
+      // Add a text if records list is empty
+
+      // Text if record set is empty
+      self.limit_text =
+        svg.insert('text')
+          .attr('class', 'limit_text')
+          .style('dominant-baseline', 'middle')
+          .style('text-anchor', 'middle');
+
+      self.limit_text.insert ('tspan')
+        .attr ('x', width / 2)
+        .text (gsa._('Too many nodes to display'))
+
+      self.limit_text.insert ('tspan')
+        .attr ('dy', '1.2em')
+        .attr ('x', width / 2)
+        .style ('font-weight', 'normal')
+        .text (gsa._('Please try a filter selecting less hosts'))
+
+      svg.selectAll('.limit_text')
+        .attr('x', width / 2)
+        .attr('y', height / 2);
+
+      return;
+    }
+    else {
+      if (self.limit_text)
+        self.limit_text.remove();
+      self.limit_text = null;
+    }
 
     // Create copy of topology containing only nodes with links
     var topology = { nodes: [], nodes_by_link_id: {} };
