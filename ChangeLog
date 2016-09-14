@@ -1,3 +1,23 @@
+2016-09-14  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Switch from DESCRIBE feed commands to GET_FEEDS.
+
+	* src/gsad_omp.c (get_feeds_omp): Replace commands.
+
+	* src/html/classic/dynamic_strings.xsl (permission-descriptions): Update
+	for command replacements.
+
+	* src/html/classic/gsad.xsl (html-gsa-navigation): Use new commands.
+
+	* src/html/classic/omp.xsl (gsa:permission-description): Remove old commands.
+	(html-create-permission-form, html-edit-permission-form): Replace commands.
+	(get_feeds): Handle new command.
+	(html-feed-row): Adjust for new offset.
+	(describe_feed_response, describe_scap_response)
+	(describe_cert_response): Remove.  Renamed.
+	(get_feeds_nvt, get_feeds_scap, get_feeds_cert): New functions.  From
+	rename, with GET_FEEDS adjustment.
+
 2016-09-13  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/js/gsa_topology_chart.js (generate): Limit the

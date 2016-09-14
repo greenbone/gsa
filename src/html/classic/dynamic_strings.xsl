@@ -704,10 +704,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
   <!-- describe_... -->
   <xsl:value-of select="gsa:i18n ('may get details about the authentication configuration')"/>
-  <xsl:value-of select="gsa:i18n ('may get details about the CERT feed')"/>
-  <xsl:value-of select="gsa:i18n ('may get details about the NVT feed')"/>
-  <xsl:value-of select="gsa:i18n ('may get details about the SCAP feed')"/>
-  <xsl:value-of select="gsa:i18n ('may get details about %1')"/>
 
   <!-- empty_trashcan -->
   <xsl:value-of select="gsa:i18n ('may empty the trashcan')"/>
@@ -740,6 +736,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:value-of select="gsa:i18n ('has read access to agents')"/>
   <xsl:value-of select="gsa:i18n ('has read access to alerts')"/>
   <xsl:value-of select="gsa:i18n ('has read access to scan configs')"/>
+  <xsl:value-of select="gsa:i18n ('has read access to feeds')"/>
   <xsl:value-of select="gsa:i18n ('has read access to filters')"/>
   <xsl:value-of select="gsa:i18n ('has read access to groups')"/>
   <xsl:value-of select="gsa:i18n ('has read access to SecInfo')"/>

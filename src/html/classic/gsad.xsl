@@ -640,7 +640,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <page>cvss_calculator</page>
           <name><xsl:value-of select="gsa:i18n ('CVSS Calculator')"/></name>
         </item>
-        <xsl:if test="gsa:may-op ('DESCRIBE_FEED') or gsa:may-op ('DESCRIBE_SCAP') or gsa:may-op ('DESCRIBE_CERT')">
+        <xsl:if test="gsa:may-op ('GET_FEEDS')">
           <item>
             <page>get_feeds</page>
             <name><xsl:value-of select="gsa:i18n ('Feed Status')"/></name>

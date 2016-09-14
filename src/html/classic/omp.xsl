@@ -68,7 +68,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:variable name="icon-width" select="19"/>
 <xsl:variable name="trash-actions-width" select="3 + (2 * $icon-width)"/>
 
-
 <!-- BEGIN XPATH FUNCTIONS -->
 
 <func:function name="gsa:envelope-filter">
@@ -794,15 +793,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:choose>
             <xsl:when test="$described = 'auth'">
               <xsl:value-of select="gsa:i18n ('may get details about the authentication configuration')"/>
-            </xsl:when>
-            <xsl:when test="$described = 'cert'">
-              <xsl:value-of select="gsa:i18n ('may get details about the CERT feed')"/>
-            </xsl:when>
-            <xsl:when test="$described = 'feed'">
-              <xsl:value-of select="gsa:i18n ('may get details about the NVT feed')"/>
-            </xsl:when>
-            <xsl:when test="$described = 'scap'">
-              <xsl:value-of select="gsa:i18n ('may get details about the SCAP feed')"/>
             </xsl:when>
             <xsl:otherwise>
               <!-- This should only be a fallback for unexpected output -->
@@ -26944,14 +26934,12 @@ should not have received it.
             <class>delete_task</class>
             <class>delete_user</class>
             <class>describe_auth</class>
-            <class>describe_cert</class>
-            <class>describe_feed</class>
-            <class>describe_scap</class>
             <class>get_agents</class>
             <class>get_alerts</class>
             <class>get_assets</class>
             <class>get_configs</class>
             <class>get_credentials</class>
+            <class>get_feeds</class>
             <class>get_filters</class>
             <class>get_groups</class>
             <class>get_info</class>
@@ -27746,15 +27734,13 @@ should not have received it.
             <class>delete_task</class>
             <class>delete_user</class>
             <class>describe_auth</class>
-            <class>describe_cert</class>
-            <class>describe_feed</class>
-            <class>describe_scap</class>
             <class>get_agents</class>
             <class>get_alerts</class>
             <class>get_assets</class>
             <class>get_configs</class>
             <class>get_credentials</class>
             <class>get_filters</class>
+            <class>get_feeds</class>
             <class>get_groups</class>
             <class>get_info</class>
             <class>get_notes</class>
@@ -37143,14 +37129,20 @@ should not have received it.
       <td><xsl:value-of select="gsa:i18n ('Version')"/></td>
       <td><xsl:value-of select="gsa:i18n ('Status')"/></td>
     </tr>
-    <xsl:if test="gsa:may-op ('describe_feed')">
-      <xsl:apply-templates select="commands_response/describe_feed_response"/>
-    </xsl:if>
-    <xsl:if test="gsa:may-op ('describe_scap')">
-      <xsl:apply-templates select="commands_response/describe_scap_response"/>
-    </xsl:if>
-    <xsl:if test="gsa:may-op ('describe_cert')">
-      <xsl:apply-templates select="commands_response/describe_cert_response"/>
+    <xsl:if test="gsa:may-op ('get_feeds')">
+      <xsl:for-each select="commands_response/get_feeds_response/feed">
+        <xsl:choose>
+          <xsl:when test="type = 'NVT'">
+            <xsl:call-template name="get_feeds_nvt"/>
+          </xsl:when>
+          <xsl:when test="type = 'SCAP'">
+            <xsl:call-template name="get_feeds_scap"/>
+          </xsl:when>
+          <xsl:when test="type = 'CERT'">
+            <xsl:call-template name="get_feeds_cert"/>
+          </xsl:when>
+        </xsl:choose>
+      </xsl:for-each>
     </xsl:if>
   </table>
 </xsl:template>
@@ -37161,7 +37153,7 @@ should not have received it.
   <xsl:param name="type_text" select="gsa:i18n ('NVT')"/>
   <xsl:param name="content_html" select="'unknown content'"/>
   <xsl:param name="feed" select="feed"/>
-  <xsl:param name="current_timestamp" select="../../current_time_utc"/>
+  <xsl:param name="current_timestamp" select="../../../current_time_utc"/>
   <xsl:param name="sync_cmd" select="'sync_feed'"/>
 
   <xsl:variable name="class">
@@ -37190,7 +37182,7 @@ should not have received it.
       <!-- Status -->
       <xsl:variable name="version" select="normalize-space ($feed/version)"/>
       <xsl:choose>
-        <xsl:when test="@status='200'">
+        <xsl:when test="../@status='200'">
           <xsl:choose>
             <xsl:when test="$feed/sync_not_available">
               <tr>
@@ -37278,7 +37270,8 @@ should not have received it.
 </xsl:template>
 
 <!-- NVT FEED -->
-<xsl:template match="describe_feed_response">
+
+<xsl:template name="get_feeds_nvt">
   <xsl:call-template name="html-feed-row">
     <xsl:with-param name="position" select="1"/>
     <xsl:with-param name="id_prefix" select="'nvt-feed'"/>
@@ -37288,7 +37281,7 @@ should not have received it.
         <xsl:with-param name="type" select="'nvt'"/>
       </xsl:call-template>
     </xsl:with-param>
-    <xsl:with-param name="feed" select="feed"/>
+    <xsl:with-param name="feed" select="."/>
     <xsl:with-param name="sync_cmd" select="'sync_feed'"/>
   </xsl:call-template>
 </xsl:template>
@@ -37306,9 +37299,10 @@ should not have received it.
 </xsl:template>
 
 <!-- SCAP FEED -->
-<xsl:template match="describe_scap_response">
+
+<xsl:template name="get_feeds_scap">
   <xsl:call-template name="html-feed-row">
-    <xsl:with-param name="position" select="1 + gsa:may-op ('describe_feed')"/>
+    <xsl:with-param name="position" select="2"/>
     <xsl:with-param name="id_prefix" select="'scap-feed'"/>
     <xsl:with-param name="type_text" select="gsa:i18n ('SCAP')"/>
     <xsl:with-param name="content_html">
@@ -37324,7 +37318,7 @@ should not have received it.
         <xsl:with-param name="type" select="'ovaldef'"/>
       </xsl:call-template>
     </xsl:with-param>
-    <xsl:with-param name="feed" select="scap"/>
+    <xsl:with-param name="feed" select="."/>
     <xsl:with-param name="sync_cmd" select="'sync_scap'"/>
   </xsl:call-template>
 </xsl:template>
@@ -37342,9 +37336,10 @@ should not have received it.
 </xsl:template>
 
 <!-- CERT FEED -->
-<xsl:template match="describe_cert_response">
+
+<xsl:template name="get_feeds_cert">
   <xsl:call-template name="html-feed-row">
-    <xsl:with-param name="position" select="1 + gsa:may-op ('describe_feed') + gsa:may-op ('describe_scap')"/>
+    <xsl:with-param name="position" select="3"/>
     <xsl:with-param name="id_prefix" select="'cert-feed'"/>
     <xsl:with-param name="type_text" select="gsa:i18n ('CERT')"/>
     <xsl:with-param name="content_html">
@@ -37356,7 +37351,7 @@ should not have received it.
         <xsl:with-param name="type" select="'dfn_cert_adv'"/>
       </xsl:call-template>
     </xsl:with-param>
-    <xsl:with-param name="feed" select="cert"/>
+    <xsl:with-param name="feed" select="."/>
     <xsl:with-param name="sync_cmd" select="'sync_cert'"/>
   </xsl:call-template>
 </xsl:template>

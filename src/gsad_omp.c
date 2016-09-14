@@ -24416,9 +24416,7 @@ get_feeds_omp (credentials_t * credentials, params_t *params,
 
   if (openvas_server_sendf (&session,
                             "<commands>"
-                            "<describe_feed/>"
-                            "<describe_scap/>"
-                            "<describe_cert/>"
+                            "<get_feeds/>"
                             "</commands>")
       == -1)
     {
