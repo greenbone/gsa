@@ -4840,6 +4840,7 @@ handle_request (void *cls, struct MHD_Connection *connection,
                       "<role>%s</role>"
                       "<i18n>%s</i18n>"
                       "<charts>%i</charts>"
+                      "<guest>%d</guest>"
                       "<client_address>%s</client_address>"
                       "<help><%s/></help>",
                       GSAD_VERSION,
@@ -4850,6 +4851,7 @@ handle_request (void *cls, struct MHD_Connection *connection,
                       credentials->role,
                       credentials->language,
                       credentials->charts,
+                      credentials->guest,
                       credentials->client_address,
                       page);
               xml = g_strdup_printf ("%s"
