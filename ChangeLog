@@ -1,3 +1,17 @@
+2016-09-14  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/gsad_omp.c (next_page_url, action_result_page)
+	(response_from_entity): Add static function prototypes.
+	(check_modify_config): Always return the response and indicate success
+	with a output parameter.  Use response_from_entity or
+	action_result_page to create responses.  Also add parameters for
+	request params and next pages.
+	(save_osp_prefs): Always return the response and use success output
+	parameter like check_modify_config.
+	(save_config_omp): Adapt to new save_config_omp and save_osp_prefs.
+	(save_config_family_omp, save_config_nvt_omp): Adapt to new
+	save_config_omp.
+
 2016-09-14  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Switch from DESCRIBE feed commands to GET_FEEDS.

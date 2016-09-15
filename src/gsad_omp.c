@@ -278,6 +278,19 @@ static char *wizard_get (credentials_t *, params_t *, const char *,
 int token_user_remove (const char *);
 
 static int omp_success (entity_t entity);
+
+static gchar *next_page_url (credentials_t *, params_t *, const char *,
+                             const char *, const char *, const char *,
+                             const char *);
+
+static gchar *action_result_page (credentials_t *, cmd_response_data_t *,
+                                  const char*, const char*, const char*,
+                                  const char*);
+
+static gchar* response_from_entity (credentials_t*, params_t *,
+                                    entity_t, int, const char*, const char *,
+                                    const char*, const char*, const char*,
+                                    cmd_response_data_t *);
 
 /* Helpers. */
 
@@ -702,16 +715,27 @@ member1 (params_t *params, const char *string)
  *
  * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  session      Session with manager.
+ * @param[in]  params       HTTP request parameters.
+ * @param[in]  next         Next page command on success.
+ * @param[in]  fail_next    Next page command on failure.
+ * @param[out] success      Whether the command returned a success response.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return XSL transformed error message on failure, NULL on success.
  */
 static char *
 check_modify_config (credentials_t *credentials, gnutls_session_t *session,
-                     cmd_response_data_t *response_data)
+                     params_t *params, const char* next, const char* fail_next,
+                     int* success, cmd_response_data_t *response_data)
 {
   entity_t entity;
-  const char *status_text;
+  gchar *response;
+  const char *no_redirect, *status_text;
+
+  no_redirect = params_value (params, "no_redirect");
+
+  if (success)
+    *success = 0;
 
   /** @todo This would be much easier with real error codes. */
 
@@ -745,41 +769,57 @@ check_modify_config (credentials_t *credentials, gnutls_session_t *session,
 
   if (strcmp (status_text, "Config is in use") == 0)
     {
+      const char* message = "The config is now in use by a task,"
+                            " so only name and comment can be modified.";
+      gchar *next_url = next_page_url (credentials, params,
+                                       NULL, fail_next,
+                                       "Save Config",
+                                       entity_attribute (entity, "status"),
+                                       message);
+
+      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      response 
+        = action_result_page (credentials, response_data, "Save Config",
+                              entity_attribute (entity, "status"),
+                              message, next_url);
+
+      g_free (next_url);
       free_entity (entity);
-      return xsl_transform_omp
-              (credentials,
-               g_strdup ("<gsad_msg status_text=\"Config is in use.\""
-                         " operation=\"Save Config\">"
-                         "The config is now in use by a task,"
-                         " so only name and comment can be modified."
-                         "</gsad_msg>"),
-               response_data);
+      return response;
     }
   else if (strcmp (status_text, "MODIFY_CONFIG name must be unique") == 0)
     {
+      const char* message = "A config with the given name exists already.";
+      gchar *next_url = next_page_url (credentials, params,
+                                       NULL, fail_next,
+                                       "Save Config",
+                                       entity_attribute (entity, "status"),
+                                       message);
+
+      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      response 
+        = action_result_page (credentials, response_data, "Save Config",
+                              entity_attribute (entity, "status"),
+                              message, next_url);
+
+      g_free (next_url);
       free_entity (entity);
-      return xsl_transform_omp
-              (credentials,
-               g_strdup ("<gsad_msg status_text=\"Config name must be unique\""
-                         " operation=\"Save Config\">"
-                         "A config with the given name exists already."
-                         "</gsad_msg>"),
-               response_data);
+      return response;
     }
-  else if (strcmp (status_text, "OK"))
+  else if (success && omp_success (entity))
     {
-      free_entity (entity);
-      /** @todo Put in XML for "result of previous..." window. */
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while saving a config. "
-                           "It is unclear whether the entire config has been saved. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_configs", response_data);
+      *success = 1;
     }
 
-  return NULL;
+  response
+    = response_from_entity (credentials, params, entity,
+                            (no_redirect && strcmp (no_redirect, "0")),
+                            NULL, next,
+                            NULL, fail_next,
+                            "Save Config", response_data);
+  free_entity (entity);
+
+  return response;
 }
 
 /**
@@ -12231,13 +12271,17 @@ sync_config_omp (credentials_t * credentials, params_t *params,
  *
  * @param[in]   session     GNUTLS session.
  * @param[in]   params      Request parameters.
+ * @param[in]   next        The next command on success.
+ * @param[in]   fail_next   The next command on failure.
+ * @param[out]  success     Whether the last command was successful.
  * @param[out]  response_data  Extra data return for the HTTP response.
  *
- * @return NULL success.  HTML result of XSL transformation on error.
+ * @return HTML result of XSL transformation.
  */
 static char *
 save_osp_prefs (credentials_t *credentials, gnutls_session_t session,
-                params_t *params, cmd_response_data_t* response_data)
+                params_t *params, const char *next, const char *fail_next,
+                int *success, cmd_response_data_t* response_data)
 {
   GHashTableIter iter;
   gpointer param_name, val;
@@ -12246,10 +12290,14 @@ save_osp_prefs (credentials_t *credentials, gnutls_session_t session,
 
   config_id = params_value (params, "config_id");
   g_hash_table_iter_init (&iter, params);
+  ret = NULL;
   while (g_hash_table_iter_next (&iter, &param_name, &val))
     {
       gchar *value;
       param_t *param = val;
+
+      g_free (ret);
+      ret = NULL;
 
       if (!g_str_has_prefix (param_name, "osp_pref_"))
         continue;
@@ -12280,11 +12328,12 @@ save_osp_prefs (credentials_t *credentials, gnutls_session_t session,
         }
       g_free (value);
 
-      ret = check_modify_config (credentials, &session, response_data);
-      if (ret)
+      ret = check_modify_config (credentials, &session, params, next, fail_next,
+                                 success, response_data);
+      if (*success == 0)
         return ret;
     }
-  return NULL;
+  return ret;
 }
 
 /**
@@ -12307,6 +12356,7 @@ save_config_omp (credentials_t * credentials, params_t *params,
   gchar *html;
   params_t *preferences, *selects, *trends;
   const char *config_id, *name, *comment, *scanner_id;
+  int success;
 
   config_id = params_value (params, "config_id");
   name = params_value (params, "name");
@@ -12371,12 +12421,15 @@ save_config_omp (credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_configs", response_data);
     }
 
-  ret = check_modify_config (credentials, &session, response_data);
-  if (ret)
+  ret = check_modify_config (credentials, &session, params,
+                             "get_config", "edit_config",
+                             &success, response_data);
+  if (success == 0)
     {
       openvas_server_close (socket, session);
       return ret;
     }
+  g_free (ret);
 
   /* Save preferences. */
 
@@ -12421,8 +12474,10 @@ save_config_omp (credentials_t * credentials, params_t *params,
             }
           g_free (value);
 
-          ret = check_modify_config (credentials, &session, response_data);
-          if (ret)
+          ret = check_modify_config (credentials, &session, params,
+                                     "get_config", "edit_config",
+                                     &success, response_data);
+          if (success == 0)
             {
               openvas_server_close (socket, session);
               return ret;
@@ -12431,12 +12486,15 @@ save_config_omp (credentials_t * credentials, params_t *params,
     }
 
   /* OSP config file preference. */
-  ret = save_osp_prefs (credentials, session, params, response_data);
-  if (ret)
+  ret = save_osp_prefs (credentials, session, params,
+                        "get_config", "edit_config",
+                        &success, response_data);
+  if (success == 0)
     {
       openvas_server_close (socket, session);
       return ret;
     }
+  g_free (ret);
 
   /* Update the config. */
 
@@ -12541,18 +12599,12 @@ save_config_omp (credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_configs", response_data);
     }
 
-  ret = check_modify_config (credentials, &session, response_data);
-  if (ret)
-    {
-      openvas_server_close (socket, session);
-      return ret;
-    }
+  ret = check_modify_config (credentials, &session, params,
+                             "get_config", "edit_config",
+                             NULL, response_data);
 
   openvas_server_close (socket, session);
-
-  /* Return the next page. */
-
-  return get_config (credentials, params, NULL, 1, response_data);
+  return ret;
 }
 
 /**
@@ -12859,18 +12911,12 @@ save_config_family_omp (credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_configs", response_data);
     }
 
-  ret = check_modify_config (credentials, &session, response_data);
-  if (ret)
-    {
-      openvas_server_close (socket, session);
-      return ret;
-    }
+  ret = check_modify_config (credentials, &session, params,
+                             "get_config_family", "edit_config_family",
+                             NULL, response_data);
 
   openvas_server_close (socket, session);
-
-  /* Return the Edit family page. */
-
-  return get_config_family (credentials, params, 1, response_data);
+  return ret;
 }
 
 /**
@@ -13092,7 +13138,10 @@ save_config_nvt_omp (credentials_t * credentials, params_t *params,
 {
   params_t *preferences;
   const char *config_id;
+  int success;
+  char *modify_config_ret;
 
+  modify_config_ret = NULL;
   config_id = params_value (params, "config_id");
 
   preferences = params_values (params, "preference:");
@@ -13131,7 +13180,9 @@ save_config_nvt_omp (credentials_t * credentials, params_t *params,
         {
           int type_start, type_end, count, ret, is_timeout = 0;
           gchar *value;
-          char *modify_config_ret;
+
+          g_free (modify_config_ret);
+          modify_config_ret = NULL;
 
           /* Passwords and files have checkboxes to control whether they
            * must be reset.  This works around the need for the Manager to
@@ -13287,8 +13338,11 @@ save_config_nvt_omp (credentials_t * credentials, params_t *params,
           g_free (value);
 
           modify_config_ret = check_modify_config (credentials, &session,
-                                                   response_data);
-          if (modify_config_ret)
+                                                   params,
+                                                   "get_config_nvt",
+                                                   "edit_config_nvt",
+                                                   &success, response_data);
+          if (success == 0)
             {
               openvas_server_close (socket, session);
               return modify_config_ret;
@@ -13298,9 +13352,7 @@ save_config_nvt_omp (credentials_t * credentials, params_t *params,
       openvas_server_close (socket, session);
     }
 
-  /* Return the Edit NVT page. */
-
-  return get_config_nvt (credentials, params, 1, response_data);
+  return modify_config_ret;
 }
 
 /**
