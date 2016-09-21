@@ -1,5 +1,13 @@
 2016-09-21  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/gsad.xsl (autorefresh [html-header-meta]): Enable
+	auto-refresh on dashboard pages.
+
+	* src/html/classic/js/greenbone.js (on_ready): Change auto-refresh
+	dropdown selection to "No auto-refresh" while auto-refresh is disabled.
+
+2016-09-21  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/omp.xsl (date-diff-text): New function.  Text
 	generator from date-diff.
 	(date-diff): Move text generation to new function date-diff-text.
