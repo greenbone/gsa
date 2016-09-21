@@ -1,3 +1,16 @@
+2016-09-21  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add support for connecting to Manager over a UNIX socket.
+
+	* src/gsad.c (main): Add option --munix-socket.  Pass to omp_init.
+
+	* src/gsad_omp.c: Everywhere that used a session, use a connection
+	instead.
+	(manager_use_tls): New variable.
+	(omp_init): Take both addresses, and init accordingly.
+
+	* src/gsad_omp.h: Update header accordingly.
+
 2016-09-21  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/gsad.xsl (autorefresh [html-header-meta]): Enable

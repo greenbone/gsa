@@ -4897,14 +4897,14 @@ handle_request (void *cls, struct MHD_Connection *connection,
               g_hash_table_insert (template_attributes, "mode", "help");
 
               // Try to find the requested page template
-              template_found 
+              template_found
                 = find_element_in_xml_file (xsl_filename, "xsl:template",
                                             template_attributes);
 
               if (template_found == 0)
                 {
                   // Try finding page template again in default help
-                  template_found 
+                  template_found
                     = find_element_in_xml_file ("help.xsl", "xsl:template",
                                                 template_attributes);
                 }
@@ -5634,6 +5634,7 @@ main (int argc, char **argv)
   static int timeout = SESSION_TIMEOUT;
   static gchar *gsad_address_string = NULL;
   static gchar *gsad_manager_address_string = NULL;
+  static gchar *gsad_manager_unix_socket_path = NULL;
   static gchar *gsad_port_string = NULL;
   static gchar *gsad_redirect_port_string = NULL;
   static gchar *gsad_manager_port_string = NULL;
@@ -5764,6 +5765,9 @@ main (int argc, char **argv)
     {"unix-socket", '\0',
      0, G_OPTION_ARG_FILENAME, &unix_socket_path,
      "Path to unix socket to listen on", "<file>"},
+    {"munix-socket", '\0',
+     0, G_OPTION_ARG_FILENAME, &gsad_manager_unix_socket_path,
+     "Path to Manager unix socket", "<file>"},
     {NULL}
   };
 
@@ -5786,7 +5790,7 @@ main (int argc, char **argv)
     {
       http_strict_transport_security
         = g_strdup_printf ("max-age=%d",
-                           hsts_max_age >= 0 ? hsts_max_age 
+                           hsts_max_age >= 0 ? hsts_max_age
                                              : DEFAULT_GSAD_HSTS_MAX_AGE);
     }
   else
@@ -6107,6 +6111,8 @@ main (int argc, char **argv)
     {
       /* Start the unix socket server. */
 
+      // FIX should omp_init, did this really work?  probly used default mgr addr/port
+
       gsad_daemon = start_unix_http_daemon (unix_socket_path, handle_request);
 
       if (gsad_daemon == NULL)
@@ -6123,9 +6129,12 @@ main (int argc, char **argv)
     }
   else
     {
-      omp_init (gsad_manager_address_string, gsad_manager_port);
-
       /* Start the real server. */
+
+      omp_init (gsad_manager_unix_socket_path,
+                gsad_manager_address_string,
+                gsad_manager_port);
+
       if (http_only)
         {
           gsad_daemon = start_http_daemon (gsad_port, handle_request);

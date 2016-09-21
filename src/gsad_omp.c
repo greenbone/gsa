@@ -37,10 +37,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include <glib.h>
-#include <gnutls/gnutls.h>
 #include <netinet/in.h>
 #include <netdb.h>
 #include <sys/socket.h>
+#include <sys/un.h>
 #include <sys/time.h>
 #include <arpa/inet.h>
 #include <unistd.h>
@@ -85,6 +85,11 @@
 #define OPENVASMD_ADDRESS "127.0.0.1"
 
 /**
+ * @brief Whether to use TLS for Manager connections.
+ */
+int manager_use_tls = 0;
+
+/**
  * @brief The address the manager is on.
  */
 gchar *manager_address = NULL;
@@ -105,7 +110,7 @@ static int
 ompf (credentials_t *, gchar **, entity_t *, cmd_response_data_t*,
       const char *, ...);
 
-int manager_connect (credentials_t *, int *, gnutls_session_t *, gchar **,
+int manager_connect (credentials_t *, openvas_connection_t *, gchar **,
                      cmd_response_data_t*);
 
 static char *edit_role (credentials_t *, params_t *, const char *,
@@ -310,14 +315,24 @@ command_enabled (credentials_t *credentials, const gchar *name)
 /**
  * @brief Init the GSA OMP library.
  *
- * @param[in]  address_manager  Manager address (copied).
- * @param[in]  port_manager     Manager port.
+ * @param[in]  manager_address_unix  Manager address when using UNIX socket.
+ * @param[in]  manager_address_tls   Manager address when using TLS-TCP.
+ * @param[in]  port_manager          Manager port.
  */
 void
-omp_init (const gchar *address_manager, int port_manager)
+omp_init (const gchar *manager_address_unix, const gchar *manager_address_tls,
+          int port_manager)
 {
-  if (address_manager)
-    manager_address = g_strdup (address_manager);
+  if (manager_address_unix)
+    {
+      manager_address = g_strdup (manager_address_unix);
+      manager_use_tls = 0;
+    }
+  if (manager_address_tls)
+    {
+      manager_address = g_strdup (manager_address_tls);
+      manager_use_tls = 1;
+    }
   manager_port = port_manager;
 }
 
@@ -413,7 +428,7 @@ find_by_value (gchar *key, gchar *value,  find_by_value_t *data)
  *         -3 could not read entity from server.
  */
 static int
-filter_exists (gnutls_session_t *session, const char *filt_id)
+filter_exists (openvas_connection_t *connection, const char *filt_id)
 {
   entity_t entity;
 
@@ -423,17 +438,18 @@ filter_exists (gnutls_session_t *session, const char *filt_id)
     return 1;
 
   /* check if filter still exists */
-  if (openvas_server_sendf (session, "<get_filters filter_id='%s'/>", filt_id))
+  if (openvas_connection_sendf (connection, "<get_filters filter_id='%s'/>",
+                                filt_id))
     {
       return -2;
     }
 
-  if (read_entity (session, &entity))
+  if (read_entity_c (connection, &entity))
     {
       return -3;
     }
 
-  return omp_success(entity);
+  return omp_success (entity);
 }
 
 /**
@@ -714,7 +730,7 @@ member1 (params_t *params, const char *string)
  * @brief Check a modify_config response.
  *
  * @param[in]  credentials  Credentials of user issuing the action.
- * @param[in]  session      Session with manager.
+ * @param[in]  connection   Connection with manager.
  * @param[in]  params       HTTP request parameters.
  * @param[in]  next         Next page command on success.
  * @param[in]  fail_next    Next page command on failure.
@@ -724,9 +740,10 @@ member1 (params_t *params, const char *string)
  * @return XSL transformed error message on failure, NULL on success.
  */
 static char *
-check_modify_config (credentials_t *credentials, gnutls_session_t *session,
-                     params_t *params, const char* next, const char* fail_next,
-                     int* success, cmd_response_data_t *response_data)
+check_modify_config (credentials_t *credentials,
+                     openvas_connection_t *connection, params_t *params,
+                     const char* next, const char* fail_next, int* success,
+                     cmd_response_data_t *response_data)
 {
   entity_t entity;
   gchar *response;
@@ -741,7 +758,7 @@ check_modify_config (credentials_t *credentials, gnutls_session_t *session,
 
   /* Read the response. */
 
-  if (read_entity (session, &entity))
+  if (read_entity_c (connection, &entity))
     {
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
@@ -778,7 +795,7 @@ check_modify_config (credentials_t *credentials, gnutls_session_t *session,
                                        message);
 
       response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
-      response 
+      response
         = action_result_page (credentials, response_data, "Save Config",
                               entity_attribute (entity, "status"),
                               message, next_url);
@@ -797,7 +814,7 @@ check_modify_config (credentials_t *credentials, gnutls_session_t *session,
                                        message);
 
       response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
-      response 
+      response
         = action_result_page (credentials, response_data, "Save Config",
                               entity_attribute (entity, "status"),
                               message, next_url);
@@ -883,15 +900,14 @@ static int
 omp (credentials_t *credentials, gchar **response, entity_t *entity_return,
      cmd_response_data_t *response_data, const char *command)
 {
-  gnutls_session_t session;
-  int socket, ret;
+  openvas_connection_t connection;
+  int ret;
   entity_t entity;
 
   if (entity_return)
     *entity_return = NULL;
 
-  switch (manager_connect (credentials, &socket, &session, response,
-                           response_data))
+  switch (manager_connect (credentials, &connection, response, response_data))
     {
       case 0:
         break;
@@ -909,24 +925,24 @@ omp (credentials_t *credentials, gchar **response, entity_t *entity_return,
         return -1;
     }
 
-  ret = openvas_server_sendf (&session, "%s", command);
+  ret = openvas_connection_sendf (&connection, "%s", command);
   if (ret == -1)
     {
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       return 1;
     }
 
   entity = NULL;
-  if (read_entity_and_text (&session, &entity, response))
+  if (read_entity_and_text_c (&connection, &entity, response))
     {
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       return 2;
     }
   if (entity_return)
     *entity_return = entity;
   else
     free_entity (entity);
-  openvas_server_close (socket, session);
+  openvas_connection_close (&connection);
   return 0;
 }
 
@@ -1078,9 +1094,9 @@ ompf (credentials_t *credentials, gchar **response, entity_t *entity_return,
 }
 
 /**
- * @brief Get a setting by UUID for the current user of an OMP server session.
+ * @brief Get a setting by UUID for the current user of an OMP connection.
  *
- * @param[in]  session     Username and password for authentication.
+ * @param[in]  connection  Connection.
  * @param[in]  setting_id  UUID of the setting to get.
  * @param[out] value       Value of the setting.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -1088,7 +1104,7 @@ ompf (credentials_t *credentials, gchar **response, entity_t *entity_return,
  * @return     -1 internal error, 0 success, 1 send error, 2 read error.
  */
 static int
-setting_get_value (gnutls_session_t *session, const char *setting_id,
+setting_get_value (openvas_connection_t *connection, const char *setting_id,
                    gchar **value, cmd_response_data_t *response_data)
 {
   int ret;
@@ -1098,15 +1114,15 @@ setting_get_value (gnutls_session_t *session, const char *setting_id,
 
   *value = NULL;
 
-  ret = openvas_server_sendf
-          (session,
+  ret = openvas_connection_sendf
+          (connection,
            "<get_settings setting_id=\"%s\"/>",
            setting_id);
   if (ret)
     return 1;
 
   entity = NULL;
-  if (read_entity_and_text (session, &entity, &response))
+  if (read_entity_and_text_c (connection, &entity, &response))
     return 2;
 
   status = entity_attribute (entity, "status");
@@ -1749,8 +1765,8 @@ get_one (const char *type, credentials_t * credentials, params_t *params,
          cmd_response_data_t* response_data)
 {
   GString *xml;
-  gnutls_session_t session;
-  int socket, ret;
+  openvas_connection_t connection;
+  int ret;
   gchar *html, *end, *id_name;
   const char *id, *sort_field, *sort_order, *filter, *first, *max;
 
@@ -1770,8 +1786,7 @@ get_one (const char *type, credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_tasks", response_data);
     }
 
-  switch (manager_connect (credentials, &socket, &session, &html,
-                           response_data))
+  switch (manager_connect (credentials, &connection, &html, response_data))
     {
       case 0:
         break;
@@ -1859,23 +1874,23 @@ get_one (const char *type, credentials_t * credentials, params_t *params,
 
   /* Get the resource. */
 
-  if (openvas_server_sendf (&session,
-                            "<get_%ss"
-                            " %s_id=\"%s\""
-                            " sort_field=\"%s\""
-                            " sort_order=\"%s\""
-                            " details=\"1\""
-                            " %s/>",
-                            type,
-                            type,
-                            id,
-                            sort_field ? sort_field : "name",
-                            sort_order ? sort_order : "ascending",
-                            extra_attribs ? extra_attribs : "")
+  if (openvas_connection_sendf (&connection,
+                                "<get_%ss"
+                                " %s_id=\"%s\""
+                                " sort_field=\"%s\""
+                                " sort_order=\"%s\""
+                                " details=\"1\""
+                                " %s/>",
+                                type,
+                                type,
+                                id,
+                                sort_field ? sort_field : "name",
+                                sort_order ? sort_order : "ascending",
+                                extra_attribs ? extra_attribs : "")
       == -1)
     {
       g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -1885,10 +1900,10 @@ get_one (const char *type, credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_resources", response_data);
     }
 
-  if (read_string (&session, &xml))
+  if (read_string_c (&connection, &xml))
     {
       g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -1900,18 +1915,18 @@ get_one (const char *type, credentials_t * credentials, params_t *params,
 
   /* Get tag names */
 
-  if (openvas_server_sendf (&session,
-                            "<get_tags"
-                            " filter=\"resource_type=%s"
-                            "          first=1"
-                            "          rows=-1\""
-                            " names_only=\"1\""
-                            "/>",
-                            type)
+  if (openvas_connection_sendf (&connection,
+                                "<get_tags"
+                                " filter=\"resource_type=%s"
+                                "          first=1"
+                                "          rows=-1\""
+                                " names_only=\"1\""
+                                "/>",
+                                type)
       == -1)
     {
       g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -1921,10 +1936,10 @@ get_one (const char *type, credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_resources", response_data);
     }
 
-  if (read_string (&session, &xml))
+  if (read_string_c (&connection, &xml))
     {
       g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -1941,24 +1956,24 @@ get_one (const char *type, credentials_t * credentials, params_t *params,
   if ((strcmp (type, "user") == 0)
       || (strcmp (type, "group") == 0)
       || (strcmp (type, "role") == 0))
-    ret = openvas_server_sendf (&session,
-                                "<get_permissions"
-                                " filter=\"subject_uuid=%s"
-                                "          and not resource_uuid=&quot;&quot;"
-                                "          or resource_uuid=%s"
-                                "          first=1 rows=-1\"/>",
-                                id,
-                                id);
+    ret = openvas_connection_sendf (&connection,
+                                    "<get_permissions"
+                                    " filter=\"subject_uuid=%s"
+                                    "          and not resource_uuid=&quot;&quot;"
+                                    "          or resource_uuid=%s"
+                                    "          first=1 rows=-1\"/>",
+                                    id,
+                                    id);
   else
-    ret = openvas_server_sendf (&session,
-                                "<get_permissions"
-                                " filter=\"resource_uuid=%s"
-                                "          first=1 rows=-1\"/>",
-                                id);
+    ret = openvas_connection_sendf (&connection,
+                                    "<get_permissions"
+                                    " filter=\"resource_uuid=%s"
+                                    "          first=1 rows=-1\"/>",
+                                    id);
   if (ret == -1)
     {
       g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -1968,10 +1983,10 @@ get_one (const char *type, credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_resources", response_data);
     }
 
-  if (read_string (&session, &xml))
+  if (read_string_c (&connection, &xml))
     {
       g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -1986,7 +2001,7 @@ get_one (const char *type, credentials_t * credentials, params_t *params,
   /* Cleanup, and return transformed XML. */
 
   g_string_append_printf (xml, "</get_%s>", type);
-  openvas_server_close (socket, session);
+  openvas_connection_close (&connection);
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
                             response_data);
 }
@@ -2010,8 +2025,7 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
 {
   GString *xml;
   GString *type_many; /* The plural form of type */
-  gnutls_session_t session;
-  int socket;
+  openvas_connection_t connection;
   gchar *filter_type, *html, *request, *built_filter;
   int no_filter_history;
   const char *build_filter, *given_filt_id, *filt_id, *filter, *filter_extra;
@@ -2067,8 +2081,7 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
       g_free (filter_type);
     }
 
-  switch (manager_connect (credentials, &socket, &session, &html,
-                           response_data))
+  switch (manager_connect (credentials, &connection, &html, response_data))
     {
       case 0:
         break;
@@ -2087,7 +2100,7 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
     }
 
   /* check if filter still exists */
-  switch (filter_exists (&session, filt_id))
+  switch (filter_exists (&connection, filt_id))
     {
       case 1:
         break;
@@ -2291,18 +2304,18 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
                                      sort_order ? sort_order : "ascending");
 
   g_free (built_filter);
-  if (openvas_server_sendf (&session,
-                            "<get_%s%s%s %s/>",
-                            type_many->str,
-                            strcmp (type, "report") ? "" : " details=\"0\"",
-                            request,
-                            extra_attribs ? extra_attribs : "")
+  if (openvas_connection_sendf (&connection,
+                                "<get_%s%s%s %s/>",
+                                type_many->str,
+                                strcmp (type, "report") ? "" : " details=\"0\"",
+                                request,
+                                extra_attribs ? extra_attribs : "")
       == -1)
     {
       g_free(request);
       g_string_free (xml, TRUE);
       g_string_free (type_many, TRUE);
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -2312,11 +2325,11 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_tasks", response_data);
     }
   g_free(request);
-  if (read_string (&session, &xml))
+  if (read_string_c (&connection, &xml))
     {
       g_string_free (xml, TRUE);
       g_string_free (type_many, TRUE);
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -2334,15 +2347,16 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
 
       g_string_append (xml, "<filters>");
 
-      if (openvas_server_sendf_xml (&session,
-                                    "<get_filters"
-                                    " filter=\"rows=-1 type=%s or type=\"/>",
-                                    type)
+      if (openvas_connection_sendf_xml
+           (&connection,
+            "<get_filters"
+            " filter=\"rows=-1 type=%s or type=\"/>",
+            type)
           == -1)
         {
           g_string_free (xml, TRUE);
           g_string_free (type_many, TRUE);
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -2352,11 +2366,11 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
                                "/omp?cmd=get_tasks", response_data);
         }
 
-      if (read_string (&session, &xml))
+      if (read_string_c (&connection, &xml))
         {
           g_string_free (xml, TRUE);
           g_string_free (type_many, TRUE);
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -2373,8 +2387,8 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
     {
       /* Get the Wizard Rows setting. */
 
-      if (openvas_server_sendf_xml
-           (&session,
+      if (openvas_connection_sendf_xml
+           (&connection,
             "<get_settings"
             " setting_id=\"20f3034c-e709-11e1-87e7-406186ea4fc5\"/>",
             type)
@@ -2382,7 +2396,7 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
         {
           g_string_free (xml, TRUE);
           g_string_free (type_many, TRUE);
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -2392,11 +2406,11 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
                                "/omp?cmd=get_tasks", response_data);
         }
 
-      if (read_string (&session, &xml))
+      if (read_string_c (&connection, &xml))
         {
           g_string_free (xml, TRUE);
           g_string_free (type_many, TRUE);
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -2412,20 +2426,20 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
     {
       /* Get tag names */
 
-      if (openvas_server_sendf (&session,
-                                "<get_tags"
-                                " filter=\"resource_type=%s"
-                                "          first=1"
-                                "          rows=-1\""
-                                " names_only=\"1\""
-                                "/>",
-                                strcmp (type, "info")
-                                  ? type
-                                  : params_value (params, "info_type"))
+      if (openvas_connection_sendf (&connection,
+                                    "<get_tags"
+                                    " filter=\"resource_type=%s"
+                                    "          first=1"
+                                    "          rows=-1\""
+                                    " names_only=\"1\""
+                                    "/>",
+                                    strcmp (type, "info")
+                                      ? type
+                                      : params_value (params, "info_type"))
           == -1)
         {
           g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                               "Internal error", __FUNCTION__, __LINE__,
@@ -2435,10 +2449,10 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
                               "/omp?cmd=get_resources", response_data);
         }
 
-      if (read_string (&session, &xml))
+      if (read_string_c (&connection, &xml))
         {
           g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                               "Internal error", __FUNCTION__, __LINE__,
@@ -2451,7 +2465,7 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
 
   /* Cleanup, and return transformed XML. */
   g_string_append_printf (xml, "</get_%s>", type_many->str);
-  openvas_server_close (socket, session);
+  openvas_connection_close (&connection);
   g_string_free (type_many, TRUE);
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
                             response_data);
@@ -2473,8 +2487,7 @@ edit_resource (const char *type, credentials_t *credentials, params_t *params,
                const char *extra_xml, cmd_response_data_t* response_data)
 {
   GString *xml;
-  gnutls_session_t session;
-  int socket;
+  openvas_connection_t connection;
   gchar *html, *id_name;
   const char *resource_id;
 
@@ -2493,7 +2506,7 @@ edit_resource (const char *type, credentials_t *credentials, params_t *params,
                            "/omp?cmd=get_tasks", response_data);
     }
 
-  switch (manager_connect (credentials, &socket, &session, &html,
+  switch (manager_connect (credentials, &connection, &html,
                            response_data))
     {
       case 0:
@@ -2512,19 +2525,19 @@ edit_resource (const char *type, credentials_t *credentials, params_t *params,
                              "/omp?cmd=get_tasks", response_data);
     }
 
-  if (openvas_server_sendf (&session,
-                            /* TODO: Remove redundant COMMANDS. */
-                            "<commands>"
-                            "<get_%ss"
-                            " %s_id=\"%s\""
-                            " details=\"1\"/>"
-                            "</commands>",
-                            type,
-                            type,
-                            resource_id)
+  if (openvas_connection_sendf (&connection,
+                                /* TODO: Remove redundant COMMANDS. */
+                                "<commands>"
+                                "<get_%ss"
+                                " %s_id=\"%s\""
+                                " details=\"1\"/>"
+                                "</commands>",
+                                type,
+                                type,
+                                resource_id)
       == -1)
     {
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -2540,10 +2553,10 @@ edit_resource (const char *type, credentials_t *credentials, params_t *params,
   if (extra_xml)
     g_string_append (xml, extra_xml);
 
-  if (read_string (&session, &xml))
+  if (read_string_c (&connection, &xml))
     {
       g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -2555,7 +2568,7 @@ edit_resource (const char *type, credentials_t *credentials, params_t *params,
   /* Cleanup, and return transformed XML. */
 
   g_string_append_printf (xml, "</edit_%s>", type);
-  openvas_server_close (socket, session);
+  openvas_connection_close (&connection);
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
                             response_data);
 }
@@ -2669,8 +2682,7 @@ export_resource (const char *type, credentials_t * credentials,
   GString *xml;
   entity_t entity;
   entity_t resource_entity;
-  gnutls_session_t session;
-  int socket;
+  openvas_connection_t connection;
   char *content = NULL;
   gchar *html, *id_name;
   gchar *fname_format, *file_name;
@@ -2679,7 +2691,7 @@ export_resource (const char *type, credentials_t * credentials,
 
   *content_length = 0;
 
-  switch (manager_connect (credentials, &socket, &session, &html,
+  switch (manager_connect (credentials, &connection, &html,
                            response_data))
     {
       case 0:
@@ -2707,30 +2719,29 @@ export_resource (const char *type, credentials_t * credentials,
   if (resource_id == NULL)
     {
       g_string_append (xml, GSAD_MESSAGE_INVALID_PARAM ("Export Resource"));
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
                                 response_data);
     }
 
   subtype = params_value (params, "subtype");
 
-  if (openvas_server_sendf (&session,
-                            "<get_%ss"
-                            " %s_id=\"%s\""
-                            "%s%s%s"
-                            " export=\"1\""
-                            " details=\"1\"/>",
-                            type,
-                            type,
-                            resource_id,
-                            subtype ? " type=\"" : "",
-                            subtype ? subtype : "",
-                            subtype ? "\"" : "")
-
+  if (openvas_connection_sendf (&connection,
+                                "<get_%ss"
+                                " %s_id=\"%s\""
+                                "%s%s%s"
+                                " export=\"1\""
+                                " details=\"1\"/>",
+                                type,
+                                type,
+                                resource_id,
+                                subtype ? " type=\"" : "",
+                                subtype ? subtype : "",
+                                subtype ? "\"" : "")
       == -1)
     {
       g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -2741,10 +2752,10 @@ export_resource (const char *type, credentials_t * credentials,
     }
 
   entity = NULL;
-  if (read_entity_and_text (&session, &entity, &content))
+  if (read_entity_and_text_c (&connection, &entity, &content))
     {
       g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -2764,7 +2775,7 @@ export_resource (const char *type, credentials_t * credentials,
       g_free (content);
       free_entity (entity);
       g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -2774,7 +2785,7 @@ export_resource (const char *type, credentials_t * credentials,
                            "/omp?cmd=get_tasks", response_data);
     }
 
-  ret = setting_get_value (&session,
+  ret = setting_get_value (&connection,
                            "a6ac88c5-729c-41ba-ac0a-deea4a3441f2",
                            &fname_format,
                            response_data);
@@ -2783,7 +2794,7 @@ export_resource (const char *type, credentials_t * credentials,
       g_free (content);
       free_entity (entity);
       g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       switch (ret)
         {
           case 1:
@@ -2831,7 +2842,7 @@ export_resource (const char *type, credentials_t * credentials,
   free_entity (entity);
   g_free (file_name);
   g_string_free (xml, TRUE);
-  openvas_server_close (socket, session);
+  openvas_connection_close (&connection);
   return content;
 }
 
@@ -2853,8 +2864,7 @@ export_many (const char *type, credentials_t * credentials, params_t *params,
              gsize *content_length, cmd_response_data_t* response_data)
 {
   entity_t entity;
-  gnutls_session_t session;
-  int socket;
+  openvas_connection_t connection;
   char *content = NULL;
   gchar *html;
   const char *filter;
@@ -2865,7 +2875,7 @@ export_many (const char *type, credentials_t * credentials, params_t *params,
 
   *content_length = 0;
 
-  switch (manager_connect (credentials, &socket, &session, &html,
+  switch (manager_connect (credentials, &connection, &html,
                            response_data))
     {
       case 0:
@@ -2890,17 +2900,17 @@ export_many (const char *type, credentials_t * credentials, params_t *params,
 
   if (strcmp (type, "info") == 0)
     {
-      if (openvas_server_sendf (&session,
-                                "<get_info"
-                                " type=\"%s\""
-                                " export=\"1\""
-                                " details=\"1\""
-                                " filter=\"%s\"/>",
-                                params_value (params, "info_type"),
-                                filter_escaped ? filter_escaped : "")
+      if (openvas_connection_sendf (&connection,
+                                    "<get_info"
+                                    " type=\"%s\""
+                                    " export=\"1\""
+                                    " details=\"1\""
+                                    " filter=\"%s\"/>",
+                                    params_value (params, "info_type"),
+                                    filter_escaped ? filter_escaped : "")
           == -1)
         {
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           g_free (filter_escaped);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
@@ -2913,17 +2923,17 @@ export_many (const char *type, credentials_t * credentials, params_t *params,
     }
   else if (strcmp (type, "asset") == 0)
     {
-      if (openvas_server_sendf (&session,
-                                "<get_assets"
-                                " type=\"%s\""
-                                " export=\"1\""
-                                " details=\"1\""
-                                " filter=\"%s\"/>",
-                                params_value (params, "asset_type"),
-                                filter_escaped ? filter_escaped : "")
+      if (openvas_connection_sendf (&connection,
+                                    "<get_assets"
+                                    " type=\"%s\""
+                                    " export=\"1\""
+                                    " details=\"1\""
+                                    " filter=\"%s\"/>",
+                                    params_value (params, "asset_type"),
+                                    filter_escaped ? filter_escaped : "")
           == -1)
         {
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           g_free (filter_escaped);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
@@ -2936,16 +2946,16 @@ export_many (const char *type, credentials_t * credentials, params_t *params,
     }
   else
     {
-      if (openvas_server_sendf (&session,
-                                "<get_%ss"
-                                " export=\"1\""
-                                " details=\"1\""
-                                " filter=\"%s\"/>",
-                                type,
-                                filter_escaped ? filter_escaped : "")
+      if (openvas_connection_sendf (&connection,
+                                    "<get_%ss"
+                                    " export=\"1\""
+                                    " details=\"1\""
+                                    " filter=\"%s\"/>",
+                                    type,
+                                    filter_escaped ? filter_escaped : "")
           == -1)
         {
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           g_free (filter_escaped);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
@@ -2959,9 +2969,9 @@ export_many (const char *type, credentials_t * credentials, params_t *params,
   g_free (filter_escaped);
 
   entity = NULL;
-  if (read_entity_and_text (&session, &entity, &content))
+  if (read_entity_and_text_c (&connection, &entity, &content))
     {
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -2974,7 +2984,7 @@ export_many (const char *type, credentials_t * credentials, params_t *params,
   if (!omp_success (entity))
     set_http_status_from_entity (entity, response_data);
 
-  ret = setting_get_value (&session,
+  ret = setting_get_value (&connection,
                            "0872a6ed-4f85-48c5-ac3f-a5ef5e006745",
                            &fname_format,
                            response_data);
@@ -2982,7 +2992,7 @@ export_many (const char *type, credentials_t * credentials, params_t *params,
     {
       g_free (content);
       free_entity (entity);
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       switch (ret)
         {
           case 1:
@@ -3036,7 +3046,7 @@ export_many (const char *type, credentials_t * credentials, params_t *params,
   *content_length = strlen (content);
   free_entity (entity);
   g_free (file_name);
-  openvas_server_close (socket, session);
+  openvas_connection_close (&connection);
   return content;
 }
 
@@ -3057,8 +3067,7 @@ delete_resource (const char *type, credentials_t * credentials,
                  params_t *params, int ultimate,
                  const char *get, cmd_response_data_t* response_data)
 {
-  gnutls_session_t session;
-  int socket;
+  openvas_connection_t connection;
   gchar *html, *response, *id_name, *resource_id, *extra_attribs;
   const char *no_redirect, *next_id;
   entity_t entity;
@@ -3094,7 +3103,7 @@ delete_resource (const char *type, credentials_t * credentials,
 
   g_free (id_name);
 
-  switch (manager_connect (credentials, &socket, &session, &html,
+  switch (manager_connect (credentials, &connection, &html,
                            response_data))
     {
       case 0:
@@ -3132,17 +3141,17 @@ delete_resource (const char *type, credentials_t * credentials,
 
   /* Delete the resource and get all resources. */
 
-  if (openvas_server_sendf (&session,
-                            "<delete_%s %s_id=\"%s\" ultimate=\"%i\"%s%s/>",
-                            type,
-                            type,
-                            resource_id,
-                            !!ultimate,
-                            extra_attribs ? " " : "",
-                            extra_attribs ? extra_attribs : "")
+  if (openvas_connection_sendf (&connection,
+                                "<delete_%s %s_id=\"%s\" ultimate=\"%i\"%s%s/>",
+                                type,
+                                type,
+                                resource_id,
+                                !!ultimate,
+                                extra_attribs ? " " : "",
+                                extra_attribs ? extra_attribs : "")
       == -1)
     {
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       g_free (resource_id);
       g_free (extra_attribs);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
@@ -3158,9 +3167,9 @@ delete_resource (const char *type, credentials_t * credentials,
   g_free (extra_attribs);
 
   entity = NULL;
-  if (read_entity_and_text (&session, &entity, &response))
+  if (read_entity_and_text_c (&connection, &entity, &response))
     {
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -3172,7 +3181,7 @@ delete_resource (const char *type, credentials_t * credentials,
 
   if (!omp_success (entity))
     set_http_status_from_entity (entity, response_data);
-  openvas_server_close (socket, session);
+  openvas_connection_close (&connection);
 
   cap_type = capitalize (type);
   default_next = g_strdup_printf ("get_%ss", type);
@@ -3346,7 +3355,7 @@ resource_action (credentials_t *credentials, params_t *params, const char *type,
  * @brief Get setting, returning HTML message on error.
  *
  * @param[in]  credentials  Credentials of user issuing the action.
- * @param[in]  session     Username and password for authentication.
+ * @param[in]  connection   Connection
  * @param[in]  setting_id  UUID of the setting to get.
  * @param[out] value       Value of the setting.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -3354,13 +3363,13 @@ resource_action (credentials_t *credentials, params_t *params, const char *type,
  * @return NULL on success, else error message page HTML.
  */
 static char *
-setting_get_value_error (credentials_t * credentials,
-                         gnutls_session_t *session,
+setting_get_value_error (credentials_t *credentials,
+                         openvas_connection_t *connection,
                          const gchar *setting_id,
                          gchar **value,
                          cmd_response_data_t* response_data)
 {
-  switch (setting_get_value (session, setting_id, value, response_data))
+  switch (setting_get_value (connection, setting_id, value, response_data))
     {
       case 0:
         return NULL;
@@ -3404,7 +3413,7 @@ setting_get_value_error (credentials_t * credentials,
   else                                                                        \
     {                                                                         \
       char *message;                                                          \
-      message = setting_get_value_error (credentials, &session, setting_id,   \
+      message = setting_get_value_error (credentials, &connection, setting_id,\
                                          &value, response_data);              \
       if (message)                                                            \
         {                                                                     \
@@ -3429,8 +3438,7 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
           const char *extra_xml, cmd_response_data_t* response_data)
 {
   GString *xml;
-  gnutls_session_t session;
-  int socket;
+  openvas_connection_t connection;
   gchar *html;
   int apply_overrides;
   const char *alerts, *overrides;
@@ -3443,7 +3451,7 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
 
   apply_overrides = overrides ? strcmp (overrides, "0") : 0;
 
-  switch (manager_connect (credentials, &socket, &session, &html,
+  switch (manager_connect (credentials, &connection, &html,
                            response_data))
     {
       case 0:
@@ -3462,13 +3470,13 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
                              "/omp?cmd=get_tasks", response_data);
     }
 
-  ret = setting_get_value (&session,
+  ret = setting_get_value (&connection,
                            "f9f5a546-8018-48d0-bef5-5ad4926ea899",
                            &alert,
                            response_data);
   if (ret)
     {
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       switch (ret)
         {
           case 1:
@@ -3500,25 +3508,25 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
 
   PARAM_OR_SETTING (schedule, "schedule_id_optional",
                     "778eedad-5550-4de0-abb6-1320d13b5e18",
-                    openvas_server_close (socket, session);
+                    openvas_connection_close (&connection);
                     g_free (alert));
 
   PARAM_OR_SETTING (slave, "slave_id_optional",
                     "aec201fa-8a82-4b61-bebe-a44ea93b2909",
-                    openvas_server_close (socket, session);
+                    openvas_connection_close (&connection);
                     g_free (alert);
                     g_free (schedule));
 
   PARAM_OR_SETTING (target, "target_id",
                     "23409203-940a-4b4a-b70c-447475f18323",
-                    openvas_server_close (socket, session);
+                    openvas_connection_close (&connection);
                     g_free (alert);
                     g_free (schedule);
                     g_free (slave));
 
   PARAM_OR_SETTING (openvas_config, "config_id",
                     "fe7ea321-e3e3-4cc6-9952-da836aae83ce",
-                    openvas_server_close (socket, session);
+                    openvas_connection_close (&connection);
                     g_free (alert);
                     g_free (schedule);
                     g_free (slave);
@@ -3526,7 +3534,7 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
 
   PARAM_OR_SETTING (osp_config, "osp_config_id",
                     "fb19ac4b-614c-424c-b046-0bc32bf1be73",
-                    openvas_server_close (socket, session);
+                    openvas_connection_close (&connection);
                     g_free (alert);
                     g_free (schedule);
                     g_free (slave);
@@ -3535,7 +3543,7 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
 
   PARAM_OR_SETTING (openvas_scanner, "scanner_id",
                     "f7d0f6ed-6f9e-45dc-8bd9-05cced84e80d",
-                    openvas_server_close (socket, session);
+                    openvas_connection_close (&connection);
                     g_free (alert);
                     g_free (schedule);
                     g_free (slave);
@@ -3545,7 +3553,7 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
 
   PARAM_OR_SETTING (osp_scanner, "osp_scanner_id",
                     "b20697c9-be0a-4cd4-8b4d-5fe7841ebb03",
-                    openvas_server_close (socket, session);
+                    openvas_connection_close (&connection);
                     g_free (alert);
                     g_free (schedule);
                     g_free (slave);
@@ -3587,13 +3595,13 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
   g_free (osp_scanner);
 
   /* Get list of targets. */
-  if (openvas_server_sendf (&session,
-                            "<get_targets"
-                            " filter=\"rows=-1 sort=name\"/>")
+  if (openvas_connection_sendf (&connection,
+                                "<get_targets"
+                                " filter=\"rows=-1 sort=name\"/>")
       == -1)
     {
       g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -3603,10 +3611,10 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
                            "/omp?cmd=get_tasks", response_data);
     }
 
-  if (read_string (&session, &xml))
+  if (read_string_c (&connection, &xml))
     {
       g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -3617,13 +3625,13 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
     }
 
   /* Get configs to select in new task UI. */
-  if (openvas_server_sendf (&session,
-                            "<get_configs"
-                            " filter=\"rows=-1 sort=name\"/>")
+  if (openvas_connection_sendf (&connection,
+                                "<get_configs"
+                                " filter=\"rows=-1 sort=name\"/>")
       == -1)
     {
       g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -3633,10 +3641,10 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
                            "/omp?cmd=get_tasks", response_data);
     }
 
-  if (read_string (&session, &xml))
+  if (read_string_c (&connection, &xml))
     {
       g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -3649,13 +3657,13 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
   if (command_enabled (credentials, "GET_ALERTS"))
     {
       /* Get alerts to select in new task UI. */
-      if (openvas_server_sendf (&session,
-                                "<get_alerts"
-                                " filter=\"rows=-1 sort=name\"/>")
+      if (openvas_connection_sendf (&connection,
+                                    "<get_alerts"
+                                    " filter=\"rows=-1 sort=name\"/>")
           == -1)
         {
           g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -3665,10 +3673,10 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
                                "/omp?cmd=get_tasks", response_data);
         }
 
-      if (read_string (&session, &xml))
+      if (read_string_c (&connection, &xml))
         {
           g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -3682,14 +3690,14 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
   if (command_enabled (credentials, "GET_SCHEDULES"))
     {
       /* Get schedules to select in new task UI. */
-      if (openvas_server_sendf
-           (&session,
+      if (openvas_connection_sendf
+           (&connection,
             "<get_schedules"
             " filter=\"rows=-1 sort=name\"/>")
           == -1)
         {
           g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -3699,10 +3707,10 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
                                "/omp?cmd=get_tasks", response_data);
         }
 
-      if (read_string (&session, &xml))
+      if (read_string_c (&connection, &xml))
         {
           g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -3716,13 +3724,13 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
   if (command_enabled (credentials, "GET_SLAVES"))
     {
       /* Get slaves to select in new task UI. */
-      if (openvas_server_sendf (&session,
-                                "<get_slaves"
-                                " filter=\"rows=-1\"/>")
+      if (openvas_connection_sendf (&connection,
+                                    "<get_slaves"
+                                    " filter=\"rows=-1\"/>")
           == -1)
         {
           g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -3732,10 +3740,10 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
                                "/omp?cmd=get_tasks", response_data);
         }
 
-      if (read_string (&session, &xml))
+      if (read_string_c (&connection, &xml))
         {
           g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -3749,13 +3757,13 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
   if (command_enabled (credentials, "GET_SCANNERS"))
     {
       /* Get scanners to select in new task UI. */
-      if (openvas_server_sendf (&session,
-                                "<get_scanners"
-                                " filter=\"rows=-1\"/>")
+      if (openvas_connection_sendf (&connection,
+                                    "<get_scanners"
+                                    " filter=\"rows=-1\"/>")
           == -1)
         {
           g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -3767,10 +3775,10 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
                                "/omp?cmd=get_tasks", response_data);
         }
 
-      if (read_string (&session, &xml))
+      if (read_string_c (&connection, &xml))
         {
           g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -3787,12 +3795,12 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
     {
       /* Get groups for Observer Groups. */
 
-      if (openvas_server_sendf (&session,
-                                "<get_groups/>")
+      if (openvas_connection_sendf (&connection,
+                                    "<get_groups/>")
           == -1)
         {
           g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -3802,10 +3810,10 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
                                "/omp?cmd=get_tasks", response_data);
         }
 
-      if (read_string (&session, &xml))
+      if (read_string_c (&connection, &xml))
         {
           g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -3820,13 +3828,13 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
     {
       /* Get tag names. */
 
-      if (openvas_server_sendf (&session,
-                                "<get_tags names_only=\"1\""
-                                " filter=\"resource_type=task rows=-1\"/>")
+      if (openvas_connection_sendf (&connection,
+                                    "<get_tags names_only=\"1\""
+                                    " filter=\"resource_type=task rows=-1\"/>")
           == -1)
         {
           g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -3836,10 +3844,10 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
                                "/omp?cmd=get_tasks", response_data);
         }
 
-      if (read_string (&session, &xml))
+      if (read_string_c (&connection, &xml))
         {
           g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -3863,7 +3871,7 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
                           apply_overrides,
                           alerts ? alerts : "1");
 
-  openvas_server_close (socket, session);
+  openvas_connection_close (&connection);
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
                             response_data);
 }
@@ -4636,8 +4644,7 @@ edit_task (credentials_t * credentials, params_t *params, const char *extra_xml,
            cmd_response_data_t* response_data)
 {
   GString *xml;
-  gnutls_session_t session;
-  int socket;
+  openvas_connection_t connection;
   gchar *html;
   const char *task_id, *next, *refresh_interval, *sort_field, *sort_order;
   const char *overrides, *alerts;
@@ -4667,7 +4674,7 @@ edit_task (credentials_t * credentials, params_t *params, const char *extra_xml,
   if (next == NULL)
     next = "get_task";
 
-  switch (manager_connect (credentials, &socket, &session, &html,
+  switch (manager_connect (credentials, &connection, &html,
                            response_data))
     {
       case 0:
@@ -4686,42 +4693,42 @@ edit_task (credentials_t * credentials, params_t *params, const char *extra_xml,
                              "/omp?cmd=get_tasks", response_data);
     }
 
-  if (openvas_server_sendf (&session,
-                            "<commands>"
-                            "<get_tasks task_id=\"%s\" details=\"1\" />"
-                            "<get_targets"
-                            " filter=\"rows=-1 sort=name\"/>"
-                            "<get_configs"
-                            " filter=\"rows=-1 sort=name\"/>"
-                            "%s"
-                            "%s"
-                            "%s"
-                            "%s"
-                            "%s"
-                            "</commands>",
-                            task_id,
-                            command_enabled (credentials, "GET_ALERTS")
-                             ? "<get_alerts"
-                               " filter=\"rows=-1 sort=name\"/>"
-                             : "",
-                            command_enabled (credentials, "GET_SCHEDULES")
-                             ? "<get_schedules"
-                               " filter=\"rows=-1 sort=name\"/>"
-                             : "",
-                            command_enabled (credentials, "GET_SLAVES")
-                             ? "<get_slaves"
-                               " filter=\"rows=-1\"/>"
-                             : "",
-                            command_enabled (credentials, "GET_SCANNERS")
-                             ? "<get_scanners"
-                               " filter=\"rows=-1\"/>"
-                             : "",
-                            command_enabled (credentials, "GET_GROUPS")
-                             ? "<get_groups/>"
-                             : "")
+  if (openvas_connection_sendf (&connection,
+                                "<commands>"
+                                "<get_tasks task_id=\"%s\" details=\"1\" />"
+                                "<get_targets"
+                                " filter=\"rows=-1 sort=name\"/>"
+                                "<get_configs"
+                                " filter=\"rows=-1 sort=name\"/>"
+                                "%s"
+                                "%s"
+                                "%s"
+                                "%s"
+                                "%s"
+                                "</commands>",
+                                task_id,
+                                command_enabled (credentials, "GET_ALERTS")
+                                 ? "<get_alerts"
+                                   " filter=\"rows=-1 sort=name\"/>"
+                                 : "",
+                                command_enabled (credentials, "GET_SCHEDULES")
+                                 ? "<get_schedules"
+                                   " filter=\"rows=-1 sort=name\"/>"
+                                 : "",
+                                command_enabled (credentials, "GET_SLAVES")
+                                 ? "<get_slaves"
+                                   " filter=\"rows=-1\"/>"
+                                 : "",
+                                command_enabled (credentials, "GET_SCANNERS")
+                                 ? "<get_scanners"
+                                   " filter=\"rows=-1\"/>"
+                                 : "",
+                                command_enabled (credentials, "GET_GROUPS")
+                                 ? "<get_groups/>"
+                                 : "")
       == -1)
     {
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -4756,10 +4763,10 @@ edit_task (credentials_t * credentials, params_t *params, const char *extra_xml,
                           sort_order,
                           apply_overrides);
 
-  if (read_string (&session, &xml))
+  if (read_string_c (&connection, &xml))
     {
       g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -4771,7 +4778,7 @@ edit_task (credentials_t * credentials, params_t *params, const char *extra_xml,
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</edit_task>");
-  openvas_server_close (socket, session);
+  openvas_connection_close (&connection);
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
                             response_data);
 }
@@ -5331,8 +5338,7 @@ get_nvts (credentials_t *credentials, params_t *params, const char *commands,
           const char *extra_xml, cmd_response_data_t* response_data)
 {
   GString *xml = NULL;
-  gnutls_session_t session;
-  int socket;
+  openvas_connection_t connection;
   gchar *html;
   const char *oid;
 
@@ -5346,7 +5352,7 @@ get_nvts (credentials_t *credentials, params_t *params, const char *commands,
                            "Diagnostics: Required parameter was NULL.",
                            "/omp?cmd=get_tasks", response_data);
     }
-  switch (manager_connect (credentials, &socket, &session, &html,
+  switch (manager_connect (credentials, &connection, &html,
                            response_data))
     {
       case 0:
@@ -5364,27 +5370,27 @@ get_nvts (credentials_t *credentials, params_t *params, const char *commands,
                              "/omp?cmd=get_tasks", response_data);
     }
 
-  if (openvas_server_sendf (&session,
-                            "<commands>"
-                            "%s"
-                            "<get_nvts"
-                            " nvt_oid=\"%s\""
-                            " details=\"1\""
-                            " preferences=\"1\"/>"
-                            "<get_notes"
-                            " nvt_oid=\"%s\""
-                            " sort_field=\"notes.text\"/>"
-                            "<get_overrides"
-                            " nvt_oid=\"%s\""
-                            " sort_field=\"overrides.text\"/>"
-                            "</commands>",
-                            commands ? commands : "",
-                            oid,
-                            oid,
-                            oid)
+  if (openvas_connection_sendf (&connection,
+                                "<commands>"
+                                "%s"
+                                "<get_nvts"
+                                " nvt_oid=\"%s\""
+                                " details=\"1\""
+                                " preferences=\"1\"/>"
+                                "<get_notes"
+                                " nvt_oid=\"%s\""
+                                " sort_field=\"notes.text\"/>"
+                                "<get_overrides"
+                                " nvt_oid=\"%s\""
+                                " sort_field=\"overrides.text\"/>"
+                                "</commands>",
+                                commands ? commands : "",
+                                oid,
+                                oid,
+                                oid)
         == -1)
     {
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -5394,9 +5400,9 @@ get_nvts (credentials_t *credentials, params_t *params, const char *commands,
     }
 
   xml = g_string_new ("<get_nvts>");
-  if (read_string (&session, &xml))
+  if (read_string_c (&connection, &xml))
     {
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       g_string_free (xml, TRUE);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
@@ -5412,17 +5418,17 @@ get_nvts (credentials_t *credentials, params_t *params, const char *commands,
 
   /* Get tag names */
 
-  if (openvas_server_sendf (&session,
-                            "<get_tags"
-                            " filter=\"resource_type=nvt"
-                            "          first=1"
-                            "          rows=-1\""
-                            " names_only=\"1\""
-                            "/>")
+  if (openvas_connection_sendf (&connection,
+                                "<get_tags"
+                                " filter=\"resource_type=nvt"
+                                "          first=1"
+                                "          rows=-1\""
+                                " names_only=\"1\""
+                                "/>")
       == -1)
     {
       g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -5432,10 +5438,10 @@ get_nvts (credentials_t *credentials, params_t *params, const char *commands,
                            "/omp?cmd=get_resources", response_data);
     }
 
-  if (read_string (&session, &xml))
+  if (read_string_c (&connection, &xml))
     {
       g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -5447,7 +5453,7 @@ get_nvts (credentials_t *credentials, params_t *params, const char *commands,
 
   g_string_append (xml, "</get_nvts>");
 
-  openvas_server_close (socket, session);
+  openvas_connection_close (&connection);
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
                             response_data);
 }
@@ -5772,8 +5778,8 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml,
   GString *commands_xml = NULL;
   entity_t commands_entity = NULL;
   entity_t task_entity = NULL;
-  gnutls_session_t session;
-  int socket, notes, get_overrides, apply_overrides;
+  openvas_connection_t connection;
+  int notes, get_overrides, apply_overrides;
   int get_target, get_alerts;
   const char *overrides, *task_id;
   gchar *html;
@@ -5785,7 +5791,7 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml,
   overrides = params_value (params, "overrides");
   apply_overrides = overrides ? strcmp (overrides, "0") : 1;
 
-  switch (manager_connect (credentials, &socket, &session, &html,
+  switch (manager_connect (credentials, &connection, &html,
                            response_data))
     {
       case 0:
@@ -5806,34 +5812,35 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml,
 
   notes = command_enabled (credentials, "GET_NOTES");
   get_overrides = command_enabled (credentials, "GET_OVERRIDES");
-  if (openvas_server_sendf (&session,
-                            "<commands>"
-                            "<get_tasks"
-                            " task_id=\"%s\""
-                            " filter=\"apply_overrides=%i\""
-                            " details=\"0\"/>"
-                            "%s%s%s"
-                            "%s%s%s"
-                            "</commands>",
-                            task_id,
-                            apply_overrides,
-                            notes
-                             ? "<get_notes"
-                               " sort_field=\"notes_nvt_name, notes.text\""
-                               " task_id=\""
-                             : "",
-                            notes ? task_id : "",
-                            notes ? "\"/>" : "",
-                            get_overrides
-                             ? "<get_overrides"
-                               " sort_field=\"overrides_nvt_name, overrides.text\""
-                               " task_id=\""
-                             : "",
-                            get_overrides ? task_id : "",
-                            get_overrides ? "\"/>" : "")
+  if (openvas_connection_sendf
+       (&connection,
+        "<commands>"
+        "<get_tasks"
+        " task_id=\"%s\""
+        " filter=\"apply_overrides=%i\""
+        " details=\"0\"/>"
+        "%s%s%s"
+        "%s%s%s"
+        "</commands>",
+        task_id,
+        apply_overrides,
+        notes
+         ? "<get_notes"
+           " sort_field=\"notes_nvt_name, notes.text\""
+           " task_id=\""
+         : "",
+        notes ? task_id : "",
+        notes ? "\"/>" : "",
+        get_overrides
+         ? "<get_overrides"
+           " sort_field=\"overrides_nvt_name, overrides.text\""
+           " task_id=\""
+         : "",
+        get_overrides ? task_id : "",
+        get_overrides ? "\"/>" : "")
       == -1)
     {
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -5856,9 +5863,9 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml,
                           params_value (params, "delta_report_id")
                            ? params_value (params, "delta_report_id")
                            : "");
-  if (read_string (&session, &commands_xml))
+  if (read_string_c (&connection, &commands_xml))
     {
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       g_string_free (commands_xml, TRUE);
       g_string_free (xml, TRUE);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
@@ -5873,7 +5880,7 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml,
 
   if (parse_entity (commands_xml->str, &commands_entity))
     {
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       g_string_free (commands_xml, TRUE);
       g_string_free (xml, TRUE);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
@@ -5914,12 +5921,12 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml,
 
                   if (resource_id != NULL && strcmp (resource_id, ""))
                     {
-                      if (openvas_server_sendf (&session,
-                                                "<get_alerts"
-                                                " alert_id=\"%s\"/>",
-                                                resource_id))
+                      if (openvas_connection_sendf (&connection,
+                                                    "<get_alerts"
+                                                    " alert_id=\"%s\"/>",
+                                                    resource_id))
                         {
-                          openvas_server_close (socket, session);
+                          openvas_connection_close (&connection);
                           g_string_free (xml, TRUE);
                           g_string_free (commands_xml, TRUE);
                           free_entity (commands_entity);
@@ -5933,9 +5940,9 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml,
                                               "/omp?cmd=get_tasks",
                                                response_data);
                         }
-                      if (read_string (&session, &xml))
+                      if (read_string_c (&connection, &xml))
                         {
-                          openvas_server_close (socket, session);
+                          openvas_connection_close (&connection);
                           g_string_free (commands_xml, TRUE);
                           g_string_free (xml, TRUE);
                           free_entity (commands_entity);
@@ -5960,12 +5967,12 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml,
 
                   if (resource_id != NULL && strcmp (resource_id, ""))
                     {
-                      if (openvas_server_sendf (&session,
-                                                "<get_targets"
-                                                " target_id=\"%s\"/>",
-                                                resource_id))
+                      if (openvas_connection_sendf (&connection,
+                                                    "<get_targets"
+                                                    " target_id=\"%s\"/>",
+                                                    resource_id))
                         {
-                          openvas_server_close (socket, session);
+                          openvas_connection_close (&connection);
                           g_string_free (xml, TRUE);
                           g_string_free (commands_xml, TRUE);
                           free_entity (commands_entity);
@@ -5979,9 +5986,9 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml,
                                               "/omp?cmd=get_tasks",
                                                response_data);
                         }
-                      if (read_string (&session, &xml))
+                      if (read_string_c (&connection, &xml))
                         {
-                          openvas_server_close (socket, session);
+                          openvas_connection_close (&connection);
                           g_string_free (commands_xml, TRUE);
                           g_string_free (xml, TRUE);
                           free_entity (commands_entity);
@@ -6009,15 +6016,15 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml,
   /* Get slaves */
   if (command_enabled (credentials, "GET_SLAVES"))
     {
-      if (openvas_server_sendf (&session,
-                                "<get_slaves"
-                                " filter=\"first=1"
-                                "          rows=-1\""
-                                " />")
+      if (openvas_connection_sendf (&connection,
+                                    "<get_slaves"
+                                    " filter=\"first=1"
+                                    "          rows=-1\""
+                                    " />")
           == -1)
         {
           g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                               "Internal error", __FUNCTION__, __LINE__,
@@ -6027,10 +6034,10 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml,
                               "/omp?cmd=get_tasks", response_data);
         }
 
-      if (read_string (&session, &xml))
+      if (read_string_c (&connection, &xml))
         {
           g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                               "Internal error", __FUNCTION__, __LINE__,
@@ -6043,17 +6050,17 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml,
 
   /* Get tag names */
 
-  if (openvas_server_sendf (&session,
-                            "<get_tags"
-                            " filter=\"resource_type=task"
-                            "          first=1"
-                            "          rows=-1\""
-                            " names_only=\"1\""
-                            "/>")
+  if (openvas_connection_sendf (&connection,
+                                "<get_tags"
+                                " filter=\"resource_type=task"
+                                "          first=1"
+                                "          rows=-1\""
+                                " names_only=\"1\""
+                                "/>")
       == -1)
     {
       g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -6063,10 +6070,10 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml,
                            "/omp?cmd=get_resources", response_data);
     }
 
-  if (read_string (&session, &xml))
+  if (read_string_c (&connection, &xml))
     {
       g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -6080,16 +6087,16 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml,
 
   g_string_append (xml, "<permissions>");
 
-  if (openvas_server_sendf (&session,
-                            "<get_permissions"
-                            " filter=\"name:^.*(task)s?$"
-                            "          and resource_uuid=%s"
-                            "          first=1 rows=-1\"/>",
-                            task_id)
+  if (openvas_connection_sendf (&connection,
+                                "<get_permissions"
+                                " filter=\"name:^.*(task)s?$"
+                                "          and resource_uuid=%s"
+                                "          first=1 rows=-1\"/>",
+                                task_id)
       == -1)
     {
       g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -6099,10 +6106,10 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml,
                            "/omp?cmd=get_resources", response_data);
     }
 
-  if (read_string (&session, &xml))
+  if (read_string_c (&connection, &xml))
     {
       g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -6116,7 +6123,7 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml,
 
   g_string_append (xml, "</get_task>");
 
-  openvas_server_close (socket, session);
+  openvas_connection_close (&connection);
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
                             response_data);
 }
@@ -6523,8 +6530,7 @@ download_credential_omp (credentials_t * credentials,
                          cmd_response_data_t* response_data)
 {
   entity_t entity;
-  gnutls_session_t session;
-  int socket;
+  openvas_connection_t connection;
   gchar *connect_html;
   const char *credential_id, *format;
 
@@ -6532,7 +6538,7 @@ download_credential_omp (credentials_t * credentials,
 
   if (result_len) *result_len = 0;
 
-  switch (manager_connect (credentials, &socket, &session, &connect_html,
+  switch (manager_connect (credentials, &connection, &connect_html,
                            response_data))
     {
       case 0:
@@ -6561,7 +6567,7 @@ download_credential_omp (credentials_t * credentials,
 
   if ((credential_id == NULL) || (format == NULL))
     {
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
       *html = gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
@@ -6571,15 +6577,15 @@ download_credential_omp (credentials_t * credentials,
       return 1;
     }
 
-  if (openvas_server_sendf (&session,
-                            "<get_credentials"
-                            " credential_id=\"%s\""
-                            " format=\"%s\"/>",
-                            credential_id,
-                            format)
+  if (openvas_connection_sendf (&connection,
+                                "<get_credentials"
+                                " credential_id=\"%s\""
+                                " format=\"%s\"/>",
+                                credential_id,
+                                format)
       == -1)
     {
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       *html = gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
@@ -6601,9 +6607,9 @@ download_credential_omp (credentials_t * credentials,
       /* A base64 encoded package. */
 
       entity = NULL;
-      if (read_entity (&session, &entity))
+      if (read_entity_c (&connection, &entity))
         {
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           *html = gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
@@ -6637,7 +6643,7 @@ download_credential_omp (credentials_t * credentials,
               len = 0;
             }
           if (result_len) *result_len = len;
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           *html = package_decoded;
           if (login)
             {
@@ -6654,7 +6660,7 @@ download_credential_omp (credentials_t * credentials,
       else
         {
           free_entity (entity);
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           *html = gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
@@ -6672,9 +6678,9 @@ download_credential_omp (credentials_t * credentials,
       /* A key or certificate. */
 
       entity = NULL;
-      if (read_entity (&session, &entity))
+      if (read_entity_c (&connection, &entity))
         {
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           *html = gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
@@ -6684,7 +6690,7 @@ download_credential_omp (credentials_t * credentials,
                                 "/omp?cmd=get_credentials", response_data);
           return 1;
         }
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
 
       credential_entity = entity_child (entity, "credential");
       if (credential_entity)
@@ -7288,8 +7294,7 @@ download_agent_omp (credentials_t * credentials,
                     cmd_response_data_t* response_data)
 {
   entity_t entity;
-  gnutls_session_t session;
-  int socket;
+  openvas_connection_t connection;
   gchar *connect_html;
   const char *agent_id, *format;
 
@@ -7310,7 +7315,7 @@ download_agent_omp (credentials_t * credentials,
 
   *result_len = 0;
 
-  switch (manager_connect (credentials, &socket, &session, &connect_html,
+  switch (manager_connect (credentials, &connection, &connect_html,
                            response_data))
     {
       case 0:
@@ -7337,13 +7342,13 @@ download_agent_omp (credentials_t * credentials,
 
   /* Send the request. */
 
-  if (openvas_server_sendf (&session,
-                            "<get_agents agent_id=\"%s\" format=\"%s\"/>",
-                            agent_id,
-                            format)
+  if (openvas_connection_sendf (&connection,
+                                "<get_agents agent_id=\"%s\" format=\"%s\"/>",
+                                agent_id,
+                                format)
       == -1)
     {
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       *html = gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
@@ -7366,9 +7371,9 @@ download_agent_omp (credentials_t * credentials,
       /* A base64 encoded package. */
 
       entity = NULL;
-      if (read_entity (&session, &entity))
+      if (read_entity_c (&connection, &entity))
         {
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           *html = gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
@@ -7400,7 +7405,7 @@ download_agent_omp (credentials_t * credentials,
               package_decoded = (gchar *) g_strdup ("");
               *result_len = 0;
             }
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           *html = package_decoded;
           if (filename)
             {
@@ -7423,7 +7428,7 @@ download_agent_omp (credentials_t * credentials,
       else
         {
           free_entity (entity);
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           *html = gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
@@ -7439,9 +7444,9 @@ download_agent_omp (credentials_t * credentials,
       /* An error. */
 
       entity = NULL;
-      if (read_entity (&session, &entity))
+      if (read_entity_c (&connection, &entity))
         {
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           *html = gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
@@ -7451,7 +7456,7 @@ download_agent_omp (credentials_t * credentials,
                                 "/omp?cmd=get_tasks", response_data);
           return 1;
         }
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
 
       free_entity (entity);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
@@ -8893,8 +8898,7 @@ edit_alert (credentials_t * credentials, params_t *params,
             const char *extra_xml, cmd_response_data_t* response_data)
 {
   GString *xml;
-  gnutls_session_t session;
-  int socket;
+  openvas_connection_t connection;
   gchar *html, *edit;
   const char *alert_id, *next, *filter;
 
@@ -8916,7 +8920,7 @@ edit_alert (credentials_t * credentials, params_t *params,
   if (next == NULL)
     next = "get_alerts";
 
-  switch (manager_connect (credentials, &socket, &session, &html,
+  switch (manager_connect (credentials, &connection, &html,
                            response_data))
     {
       case 0:
@@ -8935,14 +8939,14 @@ edit_alert (credentials_t * credentials, params_t *params,
                              "/omp?cmd=get_alerts", response_data);
     }
 
-  if (openvas_server_sendf (&session,
-                            "<get_alerts"
-                            " alert_id=\"%s\""
-                            " details=\"1\"/>",
-                            alert_id)
+  if (openvas_connection_sendf (&connection,
+                                "<get_alerts"
+                                " alert_id=\"%s\""
+                                " details=\"1\"/>",
+                                alert_id)
       == -1)
     {
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -8967,10 +8971,10 @@ edit_alert (credentials_t * credentials, params_t *params,
   g_string_append (xml, edit);
   g_free (edit);
 
-  if (read_string (&session, &xml))
+  if (read_string_c (&connection, &xml))
     {
       g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -8983,13 +8987,13 @@ edit_alert (credentials_t * credentials, params_t *params,
     {
       /* Get the report formats. */
 
-      if (openvas_server_sendf (&session,
-                                "<get_report_formats"
-                                " filter=\"rows=-1\"/>")
+      if (openvas_connection_sendf (&connection,
+                                    "<get_report_formats"
+                                    " filter=\"rows=-1\"/>")
           == -1)
         {
           g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -8999,10 +9003,10 @@ edit_alert (credentials_t * credentials, params_t *params,
                                "/omp?cmd=get_alerts", response_data);
         }
 
-      if (read_string (&session, &xml))
+      if (read_string_c (&connection, &xml))
         {
           g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -9017,11 +9021,12 @@ edit_alert (credentials_t * credentials, params_t *params,
     {
       /* Get filters. */
 
-      if (openvas_server_sendf (&session, "<get_filters filter=\"rows=-1\"/>")
+      if (openvas_connection_sendf (&connection,
+                                    "<get_filters filter=\"rows=-1\"/>")
           == -1)
         {
           g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -9032,10 +9037,10 @@ edit_alert (credentials_t * credentials, params_t *params,
                                "/omp?cmd=get_alerts", response_data);
         }
 
-      if (read_string (&session, &xml))
+      if (read_string_c (&connection, &xml))
         {
           g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -9051,15 +9056,15 @@ edit_alert (credentials_t * credentials, params_t *params,
     {
       /* Get tasks. */
 
-      if (openvas_server_sendf (&session,
-                                "<get_tasks"
-                                " schedules_only=\"1\""
-                                " filter=\"owner=any permission=start_task"
-                                "          rows=-1\"/>")
+      if (openvas_connection_sendf (&connection,
+                                    "<get_tasks"
+                                    " schedules_only=\"1\""
+                                    " filter=\"owner=any permission=start_task"
+                                    "          rows=-1\"/>")
           == -1)
         {
           g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -9070,10 +9075,10 @@ edit_alert (credentials_t * credentials, params_t *params,
                                "/omp?cmd=get_alerts", response_data);
         }
 
-      if (read_string (&session, &xml))
+      if (read_string_c (&connection, &xml))
         {
           g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -9089,14 +9094,14 @@ edit_alert (credentials_t * credentials, params_t *params,
 
   if (command_enabled (credentials, "GET_CREDENTIALS"))
     {
-      if (openvas_server_sendf (&session,
-                                "<get_credentials"
-                                " filter=\"type=up owner=any permission=any"
-                                "          rows=-1\"/>")
+      if (openvas_connection_sendf (&connection,
+                                    "<get_credentials"
+                                    " filter=\"type=up owner=any permission=any"
+                                    "          rows=-1\"/>")
           == -1)
         {
           g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -9107,10 +9112,10 @@ edit_alert (credentials_t * credentials, params_t *params,
                                "/omp?cmd=get_alerts", response_data);
         }
 
-      if (read_string (&session, &xml))
+      if (read_string_c (&connection, &xml))
         {
           g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -9125,7 +9130,7 @@ edit_alert (credentials_t * credentials, params_t *params,
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</edit_alert>");
-  openvas_server_close (socket, session);
+  openvas_connection_close (&connection);
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
                             response_data);
 }
@@ -9302,8 +9307,7 @@ char *
 test_alert_omp (credentials_t * credentials, params_t *params,
                 cmd_response_data_t* response_data)
 {
-  gnutls_session_t session;
-  int socket;
+  openvas_connection_t connection;
   gchar *html, *response;
   const char *no_redirect, *alert_id;
   entity_t entity;
@@ -9320,7 +9324,7 @@ test_alert_omp (credentials_t * credentials, params_t *params,
                            "Diagnostics: Required parameter was NULL.",
                            "/omp?cmd=get_alerts", response_data);
     }
-  switch (manager_connect (credentials, &socket, &session, &html,
+  switch (manager_connect (credentials, &connection, &html,
                            response_data))
     {
       case 0:
@@ -9340,12 +9344,12 @@ test_alert_omp (credentials_t * credentials, params_t *params,
 
   /* Test the alert. */
 
-  if (openvas_server_sendf (&session,
-                            "<test_alert alert_id=\"%s\"/>",
-                            alert_id)
+  if (openvas_connection_sendf (&connection,
+                                "<test_alert alert_id=\"%s\"/>",
+                                alert_id)
       == -1)
     {
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -9355,9 +9359,9 @@ test_alert_omp (credentials_t * credentials, params_t *params,
     }
 
   entity = NULL;
-  if (read_entity_and_text (&session, &entity, &response))
+  if (read_entity_and_text_c (&connection, &entity, &response))
     {
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -9368,7 +9372,7 @@ test_alert_omp (credentials_t * credentials, params_t *params,
 
   /* Cleanup, and return transformed XML. */
 
-  openvas_server_close (socket, session);
+  openvas_connection_close (&connection);
   html = response_from_entity (credentials, params, entity,
                                (no_redirect && strcmp (no_redirect, "0")),
                                NULL, "get_alerts",
@@ -9438,8 +9442,7 @@ new_target (credentials_t *credentials, params_t *params, const char *extra_xml,
             cmd_response_data_t* response_data)
 {
   GString *xml;
-  gnutls_session_t session;
-  int socket;
+  openvas_connection_t connection;
   gchar *port_list;
   gchar *ssh_credential, *smb_credential, *esxi_credential, *snmp_credential;
   gchar *html, *end;
@@ -9457,7 +9460,7 @@ new_target (credentials_t *credentials, params_t *params, const char *extra_xml,
   if (max == NULL)
     max = "";
 
-  switch (manager_connect (credentials, &socket, &session, &html,
+  switch (manager_connect (credentials, &connection, &html,
                            response_data))
     {
       case 0:
@@ -9478,29 +9481,29 @@ new_target (credentials_t *credentials, params_t *params, const char *extra_xml,
 
   PARAM_OR_SETTING (port_list, "port_list_id",
                     "d74a9ee8-7d35-4879-9485-ab23f1bd45bc",
-                    openvas_server_close (socket, session));
+                    openvas_connection_close (&connection));
 
   PARAM_OR_SETTING (ssh_credential, "ssh_credential_id",
                     "6fc56b72-c1cf-451c-a4c4-3a9dc784c3bd",
-                    openvas_server_close (socket, session);
+                    openvas_connection_close (&connection);
                     g_free (port_list));
 
   PARAM_OR_SETTING (smb_credential, "smb_credential_id",
                     "a25c0cfe-f977-417b-b1da-47da370c03e8",
-                    openvas_server_close (socket, session);
+                    openvas_connection_close (&connection);
                     g_free (port_list);
                     g_free (ssh_credential));
 
   PARAM_OR_SETTING (esxi_credential, "esxi_credential_id",
                     "83545bcf-0c49-4b4c-abbf-63baf82cc2a7",
-                    openvas_server_close (socket, session);
+                    openvas_connection_close (&connection);
                     g_free (port_list);
                     g_free (ssh_credential);
                     g_free (smb_credential));
 
   PARAM_OR_SETTING (snmp_credential, "snmp_credential_id",
                     "024550b8-868e-4b3c-98bf-99bb732f6a0d",
-                    openvas_server_close (socket, session);
+                    openvas_connection_close (&connection);
                     g_free (port_list);
                     g_free (ssh_credential);
                     g_free (smb_credential);
@@ -9534,13 +9537,13 @@ new_target (credentials_t *credentials, params_t *params, const char *extra_xml,
     {
       /* Get the credentials. */
 
-      if (openvas_server_sendf (&session,
-                                "<get_credentials"
-                                " filter=\"rows=-1 sort=name\"/>")
+      if (openvas_connection_sendf (&connection,
+                                    "<get_credentials"
+                                    " filter=\"rows=-1 sort=name\"/>")
           == -1)
         {
           g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -9550,10 +9553,10 @@ new_target (credentials_t *credentials, params_t *params, const char *extra_xml,
                                "/omp?cmd=get_targets", response_data);
         }
 
-      if (read_string (&session, &xml))
+      if (read_string_c (&connection, &xml))
         {
           g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -9568,13 +9571,13 @@ new_target (credentials_t *credentials, params_t *params, const char *extra_xml,
     {
       /* Get the port lists. */
 
-      if (openvas_server_sendf (&session,
-                                "<get_port_lists"
-                                " filter=\"rows=-1 sort=name\"/>")
+      if (openvas_connection_sendf (&connection,
+                                    "<get_port_lists"
+                                    " filter=\"rows=-1 sort=name\"/>")
           == -1)
         {
           g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -9584,10 +9587,10 @@ new_target (credentials_t *credentials, params_t *params, const char *extra_xml,
                                "/omp?cmd=get_tasks", response_data);
         }
 
-      if (read_string (&session, &xml))
+      if (read_string_c (&connection, &xml))
         {
           g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -9607,7 +9610,7 @@ new_target (credentials_t *credentials, params_t *params, const char *extra_xml,
   g_string_append (xml, end);
   g_free (end);
 
-  openvas_server_close (socket, session);
+  openvas_connection_close (&connection);
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
                             response_data);
 }
@@ -9862,8 +9865,7 @@ char *
 clone_omp (credentials_t *credentials, params_t *params,
            cmd_response_data_t* response_data)
 {
-  gnutls_session_t session;
-  int socket;
+  openvas_connection_t connection;
   gchar *html, *response;
   const char *id, *type, *alterable, *no_redirect, *next_id;
   gchar *next_id_name, *cap_type, *prev_action;
@@ -9877,7 +9879,7 @@ clone_omp (credentials_t *credentials, params_t *params,
   CHECK (id);
   CHECK (type);
 
-  switch (manager_connect (credentials, &socket, &session, &html,
+  switch (manager_connect (credentials, &connection, &html,
                            response_data))
     {
       case 0:
@@ -9900,17 +9902,17 @@ clone_omp (credentials_t *credentials, params_t *params,
 
   if (alterable && strcmp (alterable, "0"))
     {
-      if (openvas_server_sendf (&session,
-                                "<create_%s>"
-                                "<copy>%s</copy>"
-                                "<alterable>1</alterable>"
-                                "</create_%s>",
-                                type,
-                                id,
-                                type)
+      if (openvas_connection_sendf (&connection,
+                                    "<create_%s>"
+                                    "<copy>%s</copy>"
+                                    "<alterable>1</alterable>"
+                                    "</create_%s>",
+                                    type,
+                                    id,
+                                    type)
           == -1)
         {
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -9920,16 +9922,16 @@ clone_omp (credentials_t *credentials, params_t *params,
                                "/omp?cmd=get_tasks", response_data);
         }
     }
-  else if (openvas_server_sendf (&session,
-                                 "<create_%s>"
-                                 "<copy>%s</copy>"
-                                 "</create_%s>",
-                                 type,
-                                 id,
-                                 type)
+  else if (openvas_connection_sendf (&connection,
+                                     "<create_%s>"
+                                     "<copy>%s</copy>"
+                                     "</create_%s>",
+                                     type,
+                                     id,
+                                     type)
            == -1)
     {
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -9940,9 +9942,9 @@ clone_omp (credentials_t *credentials, params_t *params,
     }
 
   entity = NULL;
-  if (read_entity_and_text (&session, &entity, &response))
+  if (read_entity_and_text_c (&connection, &entity, &response))
     {
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -9952,7 +9954,7 @@ clone_omp (credentials_t *credentials, params_t *params,
                            "/omp?cmd=get_tasks", response_data);
     }
 
-  openvas_server_close (socket, session);
+  openvas_connection_close (&connection);
 
   /* Cleanup, and return next page. */
 
@@ -10193,8 +10195,7 @@ restore_omp (credentials_t * credentials, params_t *params,
 {
   GString *xml;
   gchar *ret;
-  gnutls_session_t session;
-  int socket;
+  openvas_connection_t connection;
   entity_t entity;
   gchar *html;
   const char *target_id, *no_redirect;
@@ -10213,7 +10214,7 @@ restore_omp (credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_tasks", response_data);
     }
 
-  switch (manager_connect (credentials, &socket, &session, &html,
+  switch (manager_connect (credentials, &connection, &html,
                            response_data))
     {
       case 0:
@@ -10236,14 +10237,14 @@ restore_omp (credentials_t * credentials, params_t *params,
 
   /* Restore the resource. */
 
-  if (openvas_server_sendf (&session,
-                            "<restore"
-                            " id=\"%s\"/>",
-                            target_id)
+  if (openvas_connection_sendf (&connection,
+                                "<restore"
+                                " id=\"%s\"/>",
+                                target_id)
       == -1)
     {
       g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -10253,10 +10254,10 @@ restore_omp (credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_trash", response_data);
     }
 
-  if (read_entity_and_string (&session, &entity, &xml))
+  if (read_entity_and_string_c (&connection, &entity, &xml))
     {
       g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -10268,7 +10269,7 @@ restore_omp (credentials_t * credentials, params_t *params,
 
   /* Cleanup, and return trash page. */
 
-  openvas_server_close (socket, session);
+  openvas_connection_close (&connection);
   ret = response_from_entity (credentials, params, entity,
                               (no_redirect && strcmp (no_redirect, "0")),
                               NULL, "get_trash",
@@ -10295,14 +10296,13 @@ empty_trashcan_omp (credentials_t * credentials, params_t *params,
   GString *xml;
   const char* no_redirect;
   gchar *ret;
-  gnutls_session_t session;
-  int socket;
+  openvas_connection_t connection;
   entity_t entity;
   gchar *html;
 
   no_redirect = params_value (params, "no_redirect");
 
-  switch (manager_connect (credentials, &socket, &session, &html,
+  switch (manager_connect (credentials, &connection, &html,
                            response_data))
     {
       case 0:
@@ -10324,12 +10324,12 @@ empty_trashcan_omp (credentials_t * credentials, params_t *params,
 
   /* Empty the trash. */
 
-  if (openvas_server_sendf (&session,
-                            "<empty_trashcan/>")
+  if (openvas_connection_sendf (&connection,
+                                "<empty_trashcan/>")
       == -1)
     {
       g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -10338,10 +10338,10 @@ empty_trashcan_omp (credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_trash", response_data);
     }
 
-  if (read_entity_and_string (&session, &entity, &xml))
+  if (read_entity_and_string_c (&connection, &entity, &xml))
     {
       g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -10352,7 +10352,7 @@ empty_trashcan_omp (credentials_t * credentials, params_t *params,
 
   /* Cleanup, and return trash page. */
 
-  openvas_server_close (socket, session);
+  openvas_connection_close (&connection);
 
   ret = response_from_entity (credentials, params, entity,
                               (no_redirect && strcmp (no_redirect, "0")),
@@ -10577,8 +10577,7 @@ edit_tag (credentials_t * credentials, params_t *params,
           const char *extra_xml, cmd_response_data_t* response_data)
 {
   GString *xml;
-  gnutls_session_t session;
-  int socket;
+  openvas_connection_t connection;
   gchar *html, *edit;
   const char *tag_id;
 
@@ -10594,7 +10593,7 @@ edit_tag (credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_tags", response_data);
     }
 
-  switch (manager_connect (credentials, &socket, &session, &html,
+  switch (manager_connect (credentials, &connection, &html,
                            response_data))
     {
       case 0:
@@ -10613,14 +10612,14 @@ edit_tag (credentials_t * credentials, params_t *params,
                              "/omp?cmd=get_tags", response_data);
     }
 
-  if (openvas_server_sendf (&session,
-                            "<get_tags"
-                            " tag_id=\"%s\""
-                            "/>",
-                            tag_id)
+  if (openvas_connection_sendf (&connection,
+                                "<get_tags"
+                                " tag_id=\"%s\""
+                                "/>",
+                                tag_id)
       == -1)
     {
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -10641,10 +10640,10 @@ edit_tag (credentials_t * credentials, params_t *params,
   if (extra_xml)
     g_string_append (xml, extra_xml);
 
-  if (read_string (&session, &xml))
+  if (read_string_c (&connection, &xml))
     {
       g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -10656,7 +10655,7 @@ edit_tag (credentials_t * credentials, params_t *params,
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</edit_tag>");
-  openvas_server_close (socket, session);
+  openvas_connection_close (&connection);
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
                             response_data);
 }
@@ -10904,8 +10903,7 @@ char *
 toggle_tag_omp (credentials_t * credentials, params_t *params,
                 cmd_response_data_t* response_data)
 {
-  gnutls_session_t session;
-  int socket;
+  openvas_connection_t connection;
   gchar *html, *response;
   const char *no_redirect, *tag_id, *enable;
   entity_t entity;
@@ -10935,7 +10933,7 @@ toggle_tag_omp (credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_tasks", response_data);
     }
 
-  switch (manager_connect (credentials, &socket, &session, &html,
+  switch (manager_connect (credentials, &connection, &html,
                            response_data))
     {
       case 0:
@@ -10957,16 +10955,15 @@ toggle_tag_omp (credentials_t * credentials, params_t *params,
 
   /* Delete the resource and get all resources. */
 
-  if (openvas_server_sendf (&session,
-                            "<modify_tag tag_id=\"%s\">"
-                            "<active>%s</active>"
-                            "</modify_tag>",
-                            tag_id,
-                            enable
-                            )
+  if (openvas_connection_sendf (&connection,
+                                "<modify_tag tag_id=\"%s\">"
+                                "<active>%s</active>"
+                                "</modify_tag>",
+                                tag_id,
+                                enable)
       == -1)
     {
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -10978,9 +10975,9 @@ toggle_tag_omp (credentials_t * credentials, params_t *params,
     }
 
   entity = NULL;
-  if (read_entity_and_text (&session, &entity, &response))
+  if (read_entity_and_text_c (&connection, &entity, &response))
     {
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -11002,7 +10999,7 @@ toggle_tag_omp (credentials_t * credentials, params_t *params,
 
   free_entity (entity);
   g_free (response);
-  openvas_server_close (socket, session);
+  openvas_connection_close (&connection);
 
   return html;
 }
@@ -11022,8 +11019,7 @@ edit_target (credentials_t * credentials, params_t *params,
              const char *extra_xml, cmd_response_data_t* response_data)
 {
   GString *xml;
-  gnutls_session_t session;
-  int socket;
+  openvas_connection_t connection;
   gchar *html, *edit;
   const char *target_id, *next, *filter, *first, *max;
 
@@ -11047,7 +11043,7 @@ edit_target (credentials_t * credentials, params_t *params,
   if (next == NULL)
     next = "get_target";
 
-  switch (manager_connect (credentials, &socket, &session, &html,
+  switch (manager_connect (credentials, &connection, &html,
                            response_data))
     {
       case 0:
@@ -11066,14 +11062,14 @@ edit_target (credentials_t * credentials, params_t *params,
                              "/omp?cmd=get_targets", response_data);
     }
 
-  if (openvas_server_sendf (&session,
-                            "<get_targets"
-                            " target_id=\"%s\""
-                            " details=\"1\"/>",
-                            target_id)
+  if (openvas_connection_sendf (&connection,
+                                "<get_targets"
+                                " target_id=\"%s\""
+                                " details=\"1\"/>",
+                                target_id)
       == -1)
     {
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -11103,10 +11099,10 @@ edit_target (credentials_t * credentials, params_t *params,
   g_string_append (xml, edit);
   g_free (edit);
 
-  if (read_string (&session, &xml))
+  if (read_string_c (&connection, &xml))
     {
       g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -11119,13 +11115,13 @@ edit_target (credentials_t * credentials, params_t *params,
     {
       /* Get the credentials. */
 
-      if (openvas_server_sendf (&session,
-                                "<get_credentials"
-                                " filter=\"rows=-1 sort=name\"/>")
+      if (openvas_connection_sendf (&connection,
+                                    "<get_credentials"
+                                    " filter=\"rows=-1 sort=name\"/>")
           == -1)
         {
           g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -11135,10 +11131,10 @@ edit_target (credentials_t * credentials, params_t *params,
                                "/omp?cmd=get_targets", response_data);
         }
 
-      if (read_string (&session, &xml))
+      if (read_string_c (&connection, &xml))
         {
           g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -11153,13 +11149,13 @@ edit_target (credentials_t * credentials, params_t *params,
     {
       /* Get the port lists. */
 
-      if (openvas_server_sendf (&session,
-                                "<get_port_lists"
-                                " filter=\"rows=-1 sort=name\"/>")
+      if (openvas_connection_sendf (&connection,
+                                    "<get_port_lists"
+                                    " filter=\"rows=-1 sort=name\"/>")
           == -1)
         {
           g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -11169,10 +11165,10 @@ edit_target (credentials_t * credentials, params_t *params,
                                "/omp?cmd=get_tasks", response_data);
         }
 
-      if (read_string (&session, &xml))
+      if (read_string_c (&connection, &xml))
         {
           g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -11186,7 +11182,7 @@ edit_target (credentials_t * credentials, params_t *params,
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</edit_target>");
-  openvas_server_close (socket, session);
+  openvas_connection_close (&connection);
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
                             response_data);
 }
@@ -11288,8 +11284,7 @@ char *
 save_target_omp (credentials_t * credentials, params_t *params,
                  cmd_response_data_t* response_data)
 {
-  gnutls_session_t session;
-  int socket;
+  openvas_connection_t connection;
   gchar *html, *response;
   const char *no_redirect, *name, *hosts, *exclude_hosts, *comment;
   const char *target_ssh_credential, *port, *target_smb_credential;
@@ -11399,7 +11394,7 @@ save_target_omp (credentials_t * credentials, params_t *params,
       && strcmp (target_ssh_credential, "0"))
     CHECK_PARAM_INVALID (port, "Save Target", "edit_target");
 
-  switch (manager_connect (credentials, &socket, &session, &html,
+  switch (manager_connect (credentials, &connection, &html,
                            response_data))
     {
       case 0:
@@ -11420,7 +11415,7 @@ save_target_omp (credentials_t * credentials, params_t *params,
 
   if (hosts == NULL && strcmp (target_source, "manual") == 0)
     {
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       return new_target (credentials, params,
                          GSAD_MESSAGE_INVALID_PARAM ("Modify Target"),
                          response_data);
@@ -11428,7 +11423,7 @@ save_target_omp (credentials_t * credentials, params_t *params,
   if (strcmp (target_source, "import") == 0 && name == NULL)
     {
       gchar *msg;
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       msg = g_strdup_printf (GSAD_MESSAGE_INVALID,
                             "Given target_source was invalid",
                             "Modify Target");
@@ -11519,12 +11514,12 @@ save_target_omp (credentials_t * credentials, params_t *params,
 
     /* Modify the target. */
 
-    ret = openvas_server_sendf (&session, "%s", command->str);
+    ret = openvas_connection_sendf (&connection, "%s", command->str);
     g_string_free (command, TRUE);
 
     if (ret == -1)
       {
-        openvas_server_close (socket, session);
+        openvas_connection_close (&connection);
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
@@ -11535,9 +11530,9 @@ save_target_omp (credentials_t * credentials, params_t *params,
       }
 
     entity = NULL;
-    if (read_entity_and_text (&session, &entity, &response))
+    if (read_entity_and_text_c (&connection, &entity, &response))
       {
-        openvas_server_close (socket, session);
+        openvas_connection_close (&connection);
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
@@ -11547,7 +11542,7 @@ save_target_omp (credentials_t * credentials, params_t *params,
                              "/omp?cmd=get_targets", response_data);
       }
 
-    openvas_server_close (socket, session);
+    openvas_connection_close (&connection);
 
     html = response_from_entity (credentials, params, entity,
                                  (no_redirect && strcmp (no_redirect, "0")),
@@ -11937,8 +11932,7 @@ get_config (credentials_t * credentials, params_t *params,
             const char *extra_xml, int edit, cmd_response_data_t* response_data)
 {
   GString *xml;
-  gnutls_session_t session;
-  int socket;
+  openvas_connection_t connection;
   gchar *html;
   const char *config_id;
 
@@ -11947,7 +11941,7 @@ get_config (credentials_t * credentials, params_t *params,
   if (config_id == NULL)
     return get_configs (credentials, params, extra_xml, response_data);
 
-  switch (manager_connect (credentials, &socket, &session, &html,
+  switch (manager_connect (credentials, &connection, &html,
                            response_data))
     {
       case 0:
@@ -11973,17 +11967,17 @@ get_config (credentials_t * credentials, params_t *params,
     g_string_append (xml, extra_xml);
   /* Get the config families. */
 
-  if (openvas_server_sendf (&session,
-                            "<get_configs"
-                            " config_id=\"%s\""
-                            " families=\"1\""
-                            " tasks=\"1\""
-                            " preferences=\"1\"/>",
-                            config_id)
+  if (openvas_connection_sendf (&connection,
+                                "<get_configs"
+                                " config_id=\"%s\""
+                                " families=\"1\""
+                                " tasks=\"1\""
+                                " preferences=\"1\"/>",
+                                config_id)
       == -1)
     {
       g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -11993,10 +11987,10 @@ get_config (credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_configs", response_data);
     }
 
-  if (read_string (&session, &xml))
+  if (read_string_c (&connection, &xml))
     {
       g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -12008,10 +12002,10 @@ get_config (credentials_t * credentials, params_t *params,
 
   /* Get all the families. */
 
-  if (openvas_server_sendf (&session, "<get_nvt_families/>") == -1)
+  if (openvas_connection_sendf (&connection, "<get_nvt_families/>") == -1)
     {
       g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -12021,10 +12015,10 @@ get_config (credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_configs", response_data);
     }
 
-  if (read_string (&session, &xml))
+  if (read_string_c (&connection, &xml))
     {
       g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -12037,11 +12031,11 @@ get_config (credentials_t * credentials, params_t *params,
   if (edit)
     {
       /* Get OSP scanners */
-      if (openvas_server_sendf (&session, "<get_scanners filter=\"type=1\"/>")
+      if (openvas_connection_sendf (&connection, "<get_scanners filter=\"type=1\"/>")
           == -1)
         {
           g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message
                   (credentials, "Internal error", __FUNCTION__, __LINE__,
@@ -12051,10 +12045,10 @@ get_config (credentials_t * credentials, params_t *params,
                    "/omp?cmd=get_configs", response_data);
         }
 
-      if (read_string (&session, &xml))
+      if (read_string_c (&connection, &xml))
         {
           g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message
                   (credentials, "Internal error", __FUNCTION__, __LINE__,
@@ -12067,10 +12061,10 @@ get_config (credentials_t * credentials, params_t *params,
     }
 
   /* Get Credentials */
-  if (openvas_server_sendf (&session, "<get_credentials/>") == -1)
+  if (openvas_connection_sendf (&connection, "<get_credentials/>") == -1)
     {
       g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message
               (credentials, "Internal error", __FUNCTION__, __LINE__,
@@ -12079,10 +12073,10 @@ get_config (credentials_t * credentials, params_t *params,
                "Diagnostics: Failure to send command to manager daemon.",
                "/omp?cmd=get_configs", response_data);
     }
-  if (read_string (&session, &xml))
+  if (read_string_c (&connection, &xml))
     {
       g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message
               (credentials, "Internal error", __FUNCTION__, __LINE__,
@@ -12096,16 +12090,16 @@ get_config (credentials_t * credentials, params_t *params,
 
   g_string_append (xml, "<permissions>");
 
-  if (openvas_server_sendf (&session,
-                            "<get_permissions"
-                            " filter=\"name:^.*(config)s?$"
-                            "          and resource_uuid=%s"
-                            "          first=1 rows=-1\"/>",
-                            config_id)
+  if (openvas_connection_sendf (&connection,
+                                "<get_permissions"
+                                " filter=\"name:^.*(config)s?$"
+                                "          and resource_uuid=%s"
+                                "          first=1 rows=-1\"/>",
+                                config_id)
       == -1)
     {
       g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -12115,10 +12109,10 @@ get_config (credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_resources", response_data);
     }
 
-  if (read_string (&session, &xml))
+  if (read_string_c (&connection, &xml))
     {
       g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -12133,7 +12127,7 @@ get_config (credentials_t * credentials, params_t *params,
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</get_config_response>");
-  openvas_server_close (socket, session);
+  openvas_connection_close (&connection);
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
                             response_data);
 }
@@ -12200,15 +12194,14 @@ sync_config_omp (credentials_t * credentials, params_t *params,
                  cmd_response_data_t* response_data)
 {
   GString *xml;
-  gnutls_session_t session;
-  int socket;
+  openvas_connection_t connection;
   gchar *html;
   const char *config_id, *next;
   char *ret;
 
   config_id = params_value (params, "config_id");
   CHECK_PARAM (config_id, "Synchronize Config", get_configs);
-  switch (manager_connect (credentials, &socket, &session, &html,
+  switch (manager_connect (credentials, &connection, &html,
                            response_data))
     {
       case 0:
@@ -12227,10 +12220,11 @@ sync_config_omp (credentials_t * credentials, params_t *params,
                  "/omp?cmd=get_configs", response_data);
     }
 
-  if (openvas_server_sendf (&session, "<sync_config config_id=\"%s\"/>",
-                            config_id) == -1)
+  if (openvas_connection_sendf (&connection, "<sync_config config_id=\"%s\"/>",
+                                config_id)
+      == -1)
     {
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message
               (credentials, "Internal error", __FUNCTION__, __LINE__,
@@ -12242,10 +12236,10 @@ sync_config_omp (credentials_t * credentials, params_t *params,
 
   xml = g_string_new ("");
 
-  if (read_string (&session, &xml))
+  if (read_string_c (&connection, &xml))
     {
       g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message
               (credentials, "Internal error", __FUNCTION__, __LINE__,
@@ -12260,7 +12254,7 @@ sync_config_omp (credentials_t * credentials, params_t *params,
     ret = get_config (credentials, params, xml->str, 0, response_data);
   else
     ret = get_configs (credentials, params, xml->str, response_data);
-  openvas_server_close (socket, session);
+  openvas_connection_close (&connection);
   g_string_free (xml, TRUE);
   return ret;
 }
@@ -12269,7 +12263,8 @@ sync_config_omp (credentials_t * credentials, params_t *params,
 /**
  * @brief Save OSP file preferences.
  *
- * @param[in]   session     GNUTLS session.
+ * @param[in]   credentials  Username and password for authentication.
+ * @param[in]   connection   Connection.
  * @param[in]   params      Request parameters.
  * @param[in]   next        The next command on success.
  * @param[in]   fail_next   The next command on failure.
@@ -12279,7 +12274,7 @@ sync_config_omp (credentials_t * credentials, params_t *params,
  * @return HTML result of XSL transformation.
  */
 static char *
-save_osp_prefs (credentials_t *credentials, gnutls_session_t session,
+save_osp_prefs (credentials_t *credentials, openvas_connection_t *connection,
                 params_t *params, const char *next, const char *fail_next,
                 int *success, cmd_response_data_t* response_data)
 {
@@ -12307,14 +12302,14 @@ save_osp_prefs (credentials_t *credentials, gnutls_session_t session,
 
       /* Send the name without the osp_pref_ prefix. */
       param_name = ((char *) param_name) + 9;
-      if (openvas_server_sendf (&session,
-                                "<modify_config config_id=\"%s\">"
-                                "<preference><name>%s</name>"
-                                "<value>%s</value></preference>"
-                                "</modify_config>",
-                                config_id,
-                                (char *) param_name,
-                                value)
+      if (openvas_connection_sendf (connection,
+                                    "<modify_config config_id=\"%s\">"
+                                    "<preference><name>%s</name>"
+                                    "<value>%s</value></preference>"
+                                    "</modify_config>",
+                                    config_id,
+                                    (char *) param_name,
+                                    value)
           == -1)
         {
           g_free (value);
@@ -12328,8 +12323,8 @@ save_osp_prefs (credentials_t *credentials, gnutls_session_t session,
         }
       g_free (value);
 
-      ret = check_modify_config (credentials, &session, params, next, fail_next,
-                                 success, response_data);
+      ret = check_modify_config (credentials, connection, params, next,
+                                 fail_next, success, response_data);
       if (*success == 0)
         return ret;
     }
@@ -12349,8 +12344,7 @@ char *
 save_config_omp (credentials_t * credentials, params_t *params,
                  cmd_response_data_t* response_data)
 {
-  gnutls_session_t session;
-  int socket;
+  openvas_connection_t connection;
   int omp_ret;
   char *ret;
   gchar *html;
@@ -12367,7 +12361,7 @@ save_config_omp (credentials_t * credentials, params_t *params,
   CHECK_PARAM_INVALID (name, "Save Config", "edit_config");
   CHECK_PARAM_INVALID (comment, "Save Config", "edit_config");
 
-  switch (manager_connect (credentials, &socket, &session, &html,
+  switch (manager_connect (credentials, &connection, &html,
                            response_data))
     {
       case 0:
@@ -12389,29 +12383,29 @@ save_config_omp (credentials_t * credentials, params_t *params,
   /* Save name and comment. */
 
   if (scanner_id)
-    omp_ret = openvas_server_sendf_xml (&session,
-                                        "<modify_config config_id=\"%s\">"
-                                        "<name>%s</name>"
-                                        "<comment>%s</comment>"
-                                        "<scanner>%s</scanner>"
-                                        "</modify_config>",
-                                        params_value (params, "config_id"),
-                                        name,
-                                        comment,
-                                        scanner_id);
+    omp_ret = openvas_connection_sendf_xml (&connection,
+                                            "<modify_config config_id=\"%s\">"
+                                            "<name>%s</name>"
+                                            "<comment>%s</comment>"
+                                            "<scanner>%s</scanner>"
+                                            "</modify_config>",
+                                            params_value (params, "config_id"),
+                                            name,
+                                            comment,
+                                            scanner_id);
   else
-    omp_ret = openvas_server_sendf_xml (&session,
-                                        "<modify_config config_id=\"%s\">"
-                                        "<name>%s</name>"
-                                        "<comment>%s</comment>"
-                                        "</modify_config>",
-                                        params_value (params, "config_id"),
-                                        name,
-                                        comment);
+    omp_ret = openvas_connection_sendf_xml (&connection,
+                                            "<modify_config config_id=\"%s\">"
+                                            "<name>%s</name>"
+                                            "<comment>%s</comment>"
+                                            "</modify_config>",
+                                            params_value (params, "config_id"),
+                                            name,
+                                            comment);
 
   if (omp_ret == -1)
     {
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -12421,12 +12415,12 @@ save_config_omp (credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_configs", response_data);
     }
 
-  ret = check_modify_config (credentials, &session, params,
+  ret = check_modify_config (credentials, &connection, params,
                              "get_config", "edit_config",
                              &success, response_data);
   if (success == 0)
     {
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       return ret;
     }
   g_free (ret);
@@ -12450,20 +12444,20 @@ save_config_omp (credentials_t * credentials, params_t *params,
                                      param->value_size)
                   : g_strdup ("");
 
-          if (openvas_server_sendf (&session,
-                                    "<modify_config config_id=\"%s\">"
-                                    "<preference>"
-                                    "<name>%s</name>"
-                                    "<value>%s</value>"
-                                    "</preference>"
-                                    "</modify_config>",
-                                    params_value (params, "config_id"),
-                                    param_name,
-                                    value)
+          if (openvas_connection_sendf (&connection,
+                                        "<modify_config config_id=\"%s\">"
+                                        "<preference>"
+                                        "<name>%s</name>"
+                                        "<value>%s</value>"
+                                        "</preference>"
+                                        "</modify_config>",
+                                        params_value (params, "config_id"),
+                                        param_name,
+                                        value)
               == -1)
             {
               g_free (value);
-              openvas_server_close (socket, session);
+              openvas_connection_close (&connection);
               response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
               return gsad_message (credentials,
                                    "Internal error", __FUNCTION__, __LINE__,
@@ -12474,24 +12468,24 @@ save_config_omp (credentials_t * credentials, params_t *params,
             }
           g_free (value);
 
-          ret = check_modify_config (credentials, &session, params,
+          ret = check_modify_config (credentials, &connection, params,
                                      "get_config", "edit_config",
                                      &success, response_data);
           if (success == 0)
             {
-              openvas_server_close (socket, session);
+              openvas_connection_close (&connection);
               return ret;
             }
         }
     }
 
   /* OSP config file preference. */
-  ret = save_osp_prefs (credentials, session, params,
+  ret = save_osp_prefs (credentials, &connection, params,
                         "get_config", "edit_config",
                         &success, response_data);
   if (success == 0)
     {
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       return ret;
     }
   g_free (ret);
@@ -12500,17 +12494,17 @@ save_config_omp (credentials_t * credentials, params_t *params,
 
   trends = params_values (params, "trend:");
 
-  if (openvas_server_sendf (&session,
-                            "<modify_config config_id=\"%s\">"
-                            "<family_selection>"
-                            "<growing>%i</growing>",
-                            params_value (params, "config_id"),
-                            trends
-                            && params_value (params, "trend")
-                            && strcmp (params_value (params, "trend"), "0"))
+  if (openvas_connection_sendf (&connection,
+                                "<modify_config config_id=\"%s\">"
+                                "<family_selection>"
+                                "<growing>%i</growing>",
+                                params_value (params, "config_id"),
+                                trends
+                                && params_value (params, "trend")
+                                && strcmp (params_value (params, "trend"), "0"))
       == -1)
     {
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -12530,17 +12524,17 @@ save_config_omp (credentials_t * credentials, params_t *params,
 
       params_iterator_init (&iter, selects);
       while (params_iterator_next (&iter, &family, &param))
-        if (openvas_server_sendf (&session,
-                                  "<family>"
-                                  "<name>%s</name>"
-                                  "<all>1</all>"
-                                  "<growing>%i</growing>"
-                                  "</family>",
-                                  family,
-                                  trends && member1 (trends, family))
+        if (openvas_connection_sendf (&connection,
+                                      "<family>"
+                                      "<name>%s</name>"
+                                      "<all>1</all>"
+                                      "<growing>%i</growing>"
+                                      "</family>",
+                                      family,
+                                      trends && member1 (trends, family))
             == -1)
           {
-            openvas_server_close (socket, session);
+            openvas_connection_close (&connection);
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
@@ -12563,16 +12557,16 @@ save_config_omp (credentials_t * credentials, params_t *params,
           if (param->value_size == 0) continue;
           if (param->value[0] == '0') continue;
           if (selects && member (selects, family)) continue;
-          if (openvas_server_sendf (&session,
-                                    "<family>"
-                                    "<name>%s</name>"
-                                    "<all>0</all>"
-                                    "<growing>1</growing>"
-                                    "</family>",
-                                    family)
+          if (openvas_connection_sendf (&connection,
+                                        "<family>"
+                                        "<name>%s</name>"
+                                        "<all>0</all>"
+                                        "<growing>1</growing>"
+                                        "</family>",
+                                        family)
               == -1)
             {
-              openvas_server_close (socket, session);
+              openvas_connection_close (&connection);
               response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
               return gsad_message (credentials,
                                    "Internal error", __FUNCTION__, __LINE__,
@@ -12584,12 +12578,12 @@ save_config_omp (credentials_t * credentials, params_t *params,
         }
     }
 
-  if (openvas_server_sendf (&session,
-                            "</family_selection>"
-                            "</modify_config>")
+  if (openvas_connection_sendf (&connection,
+                                "</family_selection>"
+                                "</modify_config>")
       == -1)
     {
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -12599,11 +12593,11 @@ save_config_omp (credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_configs", response_data);
     }
 
-  ret = check_modify_config (credentials, &session, params,
+  ret = check_modify_config (credentials, &connection, params,
                              "get_config", "edit_config",
                              NULL, response_data);
 
-  openvas_server_close (socket, session);
+  openvas_connection_close (&connection);
   return ret;
 }
 
@@ -12622,8 +12616,7 @@ get_config_family (credentials_t * credentials, params_t *params, int edit,
                    cmd_response_data_t* response_data)
 {
   GString *xml;
-  gnutls_session_t session;
-  int socket;
+  openvas_connection_t connection;
   gchar *html;
   const char *config_id, *name, *family, *sort_field, *sort_order;
 
@@ -12641,7 +12634,7 @@ get_config_family (credentials_t * credentials, params_t *params, int edit,
                            "/omp?cmd=get_configs", response_data);
     }
 
-  switch (manager_connect (credentials, &socket, &session, &html,
+  switch (manager_connect (credentials, &connection, &html,
                            response_data))
     {
       case 0:
@@ -12676,19 +12669,19 @@ get_config_family (credentials_t * credentials, params_t *params, int edit,
   sort_field = params_value (params, "sort_field");
   sort_order = params_value (params, "sort_order");
 
-  if (openvas_server_sendf (&session,
-                            "<get_nvts"
-                            " config_id=\"%s\" details=\"1\""
-                            " family=\"%s\" timeout=\"1\" preference_count=\"1\""
-                            " sort_field=\"%s\" sort_order=\"%s\"/>",
-                            config_id,
-                            family,
-                            sort_field ? sort_field : "nvts.name",
-                            sort_order ? sort_order : "ascending")
+  if (openvas_connection_sendf (&connection,
+                                "<get_nvts"
+                                " config_id=\"%s\" details=\"1\""
+                                " family=\"%s\" timeout=\"1\" preference_count=\"1\""
+                                " sort_field=\"%s\" sort_order=\"%s\"/>",
+                                config_id,
+                                family,
+                                sort_field ? sort_field : "nvts.name",
+                                sort_order ? sort_order : "ascending")
       == -1)
     {
       g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -12698,10 +12691,10 @@ get_config_family (credentials_t * credentials, params_t *params, int edit,
                            "/omp?cmd=get_configs", response_data);
     }
 
-  if (read_string (&session, &xml))
+  if (read_string_c (&connection, &xml))
     {
       g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -12717,23 +12710,23 @@ get_config_family (credentials_t * credentials, params_t *params, int edit,
 
       g_string_append (xml, "<all>");
 
-      if (openvas_server_sendf (&session,
-                                "<get_nvts"
-                                " details=\"1\""
-                                " timeout=\"1\""
-                                " family=\"%s\""
-                                " preferences_config_id=\"%s\""
-                                " preference_count=\"1\""
-                                " sort_field=\"%s\""
-                                " sort_order=\"%s\"/>",
-                                family,
-                                config_id,
-                                sort_field ? sort_field : "nvts.name",
-                                sort_order ? sort_order : "ascending")
+      if (openvas_connection_sendf (&connection,
+                                    "<get_nvts"
+                                    " details=\"1\""
+                                    " timeout=\"1\""
+                                    " family=\"%s\""
+                                    " preferences_config_id=\"%s\""
+                                    " preference_count=\"1\""
+                                    " sort_field=\"%s\""
+                                    " sort_order=\"%s\"/>",
+                                    family,
+                                    config_id,
+                                    sort_field ? sort_field : "nvts.name",
+                                    sort_order ? sort_order : "ascending")
           == -1)
         {
           g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -12743,10 +12736,10 @@ get_config_family (credentials_t * credentials, params_t *params, int edit,
                                "/omp?cmd=get_configs", response_data);
         }
 
-      if (read_string (&session, &xml))
+      if (read_string_c (&connection, &xml))
         {
           g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -12760,7 +12753,7 @@ get_config_family (credentials_t * credentials, params_t *params, int edit,
     }
 
   g_string_append (xml, "</get_config_family_response>");
-  openvas_server_close (socket, session);
+  openvas_connection_close (&connection);
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
                             response_data);
 }
@@ -12810,8 +12803,7 @@ char *
 save_config_family_omp (credentials_t * credentials, params_t *params,
                         cmd_response_data_t* response_data)
 {
-  gnutls_session_t session;
-  int socket;
+  openvas_connection_t connection;
   char *ret;
   gchar *html;
   const char *config_id, *family;
@@ -12831,7 +12823,7 @@ save_config_family_omp (credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_configs", response_data);
     }
 
-  switch (manager_connect (credentials, &socket, &session, &html,
+  switch (manager_connect (credentials, &connection, &html,
                            response_data))
     {
       case 0:
@@ -12853,15 +12845,15 @@ save_config_family_omp (credentials_t * credentials, params_t *params,
 
   /* Set the NVT selection. */
 
-  if (openvas_server_sendf (&session,
-                            "<modify_config config_id=\"%s\">"
-                            "<nvt_selection>"
-                            "<family>%s</family>",
-                            config_id,
-                            family)
+  if (openvas_connection_sendf (&connection,
+                                "<modify_config config_id=\"%s\">"
+                                "<nvt_selection>"
+                                "<family>%s</family>",
+                                config_id,
+                                family)
       == -1)
     {
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -12880,12 +12872,12 @@ save_config_family_omp (credentials_t * credentials, params_t *params,
 
       params_iterator_init (&iter, nvts);
       while (params_iterator_next (&iter, &name, &param))
-        if (openvas_server_sendf (&session,
-                                  "<nvt oid=\"%s\"/>",
-                                  name)
+        if (openvas_connection_sendf (&connection,
+                                      "<nvt oid=\"%s\"/>",
+                                      name)
             == -1)
           {
-            openvas_server_close (socket, session);
+            openvas_connection_close (&connection);
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
@@ -12896,12 +12888,12 @@ save_config_family_omp (credentials_t * credentials, params_t *params,
           }
     }
 
-  if (openvas_server_sendf (&session,
-                            "</nvt_selection>"
-                            "</modify_config>")
+  if (openvas_connection_sendf (&connection,
+                                "</nvt_selection>"
+                                "</modify_config>")
       == -1)
     {
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -12911,11 +12903,11 @@ save_config_family_omp (credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_configs", response_data);
     }
 
-  ret = check_modify_config (credentials, &session, params,
+  ret = check_modify_config (credentials, &connection, params,
                              "get_config_family", "edit_config_family",
                              NULL, response_data);
 
-  openvas_server_close (socket, session);
+  openvas_connection_close (&connection);
   return ret;
 }
 
@@ -12934,8 +12926,7 @@ get_config_nvt (credentials_t * credentials, params_t *params, int edit,
                 cmd_response_data_t* response_data)
 {
   GString *xml;
-  gnutls_session_t session;
-  int socket;
+  openvas_connection_t connection;
   gchar *html;
   const char *config_id, *name, *family, *sort_field, *sort_order, *nvt;
 
@@ -12954,7 +12945,7 @@ get_config_nvt (credentials_t * credentials, params_t *params, int edit,
                            "/omp?cmd=get_configs", response_data);
     }
 
-  switch (manager_connect (credentials, &socket, &session, &html,
+  switch (manager_connect (credentials, &connection, &html,
                            response_data))
     {
       case 0:
@@ -12987,19 +12978,19 @@ get_config_nvt (credentials_t * credentials, params_t *params, int edit,
   sort_field = params_value (params, "sort_field");
   sort_order = params_value (params, "sort_order");
 
-  if (openvas_server_sendf (&session,
-                            "<get_nvts"
-                            " config_id=\"%s\" nvt_oid=\"%s\""
-                            " details=\"1\" preferences=\"1\""
-                            " sort_field=\"%s\" sort_order=\"%s\"/>",
-                            config_id,
-                            nvt,
-                            sort_field ? sort_field : "nvts.name",
-                            sort_order ? sort_order : "ascending")
+  if (openvas_connection_sendf (&connection,
+                                "<get_nvts"
+                                " config_id=\"%s\" nvt_oid=\"%s\""
+                                " details=\"1\" preferences=\"1\""
+                                " sort_field=\"%s\" sort_order=\"%s\"/>",
+                                config_id,
+                                nvt,
+                                sort_field ? sort_field : "nvts.name",
+                                sort_order ? sort_order : "ascending")
       == -1)
     {
       g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -13009,10 +13000,10 @@ get_config_nvt (credentials_t * credentials, params_t *params, int edit,
                            "/omp?cmd=get_configs", response_data);
     }
 
-  if (read_string (&session, &xml))
+  if (read_string_c (&connection, &xml))
     {
       g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -13024,15 +13015,15 @@ get_config_nvt (credentials_t * credentials, params_t *params, int edit,
 
   g_string_append (xml, "</get_config_nvt_response>");
 
-  if (openvas_server_sendf (&session,
-                            "<get_notes"
-                            " nvt_oid=\"%s\""
-                            " sort_field=\"notes.text\"/>",
-                            nvt)
+  if (openvas_connection_sendf (&connection,
+                                "<get_notes"
+                                " nvt_oid=\"%s\""
+                                " sort_field=\"notes.text\"/>",
+                                nvt)
       == -1)
     {
       g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -13042,10 +13033,10 @@ get_config_nvt (credentials_t * credentials, params_t *params, int edit,
                            "/omp?cmd=get_configs", response_data);
     }
 
-  if (read_string (&session, &xml))
+  if (read_string_c (&connection, &xml))
     {
       g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -13055,15 +13046,15 @@ get_config_nvt (credentials_t * credentials, params_t *params, int edit,
                            "/omp?cmd=get_configs", response_data);
     }
 
-  if (openvas_server_sendf (&session,
-                            "<get_overrides"
-                            " nvt_oid=\"%s\""
-                            " sort_field=\"overrides.text\"/>",
-                            nvt)
+  if (openvas_connection_sendf (&connection,
+                                "<get_overrides"
+                                " nvt_oid=\"%s\""
+                                " sort_field=\"overrides.text\"/>",
+                                nvt)
       == -1)
     {
       g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -13073,10 +13064,10 @@ get_config_nvt (credentials_t * credentials, params_t *params, int edit,
                            "/omp?cmd=get_configs", response_data);
     }
 
-  if (read_string (&session, &xml))
+  if (read_string_c (&connection, &xml))
     {
       g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -13086,7 +13077,7 @@ get_config_nvt (credentials_t * credentials, params_t *params, int edit,
                            "/omp?cmd=get_configs", response_data);
     }
 
-  openvas_server_close (socket, session);
+  openvas_connection_close (&connection);
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
                             response_data);
 }
@@ -13147,8 +13138,7 @@ save_config_nvt_omp (credentials_t * credentials, params_t *params,
   preferences = params_values (params, "preference:");
   if (preferences)
     {
-      gnutls_session_t session;
-      int socket;
+      openvas_connection_t connection;
       gchar *html;
       param_t *preference;
       gchar *preference_name;
@@ -13156,7 +13146,7 @@ save_config_nvt_omp (credentials_t * credentials, params_t *params,
 
       /* Save preferences. */
 
-      switch (manager_connect (credentials, &socket, &session, &html,
+      switch (manager_connect (credentials, &connection, &html,
                                response_data))
         {
           case 0:
@@ -13277,7 +13267,7 @@ save_config_nvt_omp (credentials_t * credentials, params_t *params,
               if (timeout == NULL)
                 {
                   g_free (value);
-                  openvas_server_close (socket, session);
+                  openvas_connection_close (&connection);
                   response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
                   return gsad_message (credentials,
                                        "Internal error", __FUNCTION__, __LINE__,
@@ -13289,44 +13279,47 @@ save_config_nvt_omp (credentials_t * credentials, params_t *params,
 
               if (strcmp (timeout, "0") == 0)
                 /* Leave out the value to clear the preference. */
-                ret = openvas_server_sendf (&session,
-                                            "<modify_config config_id=\"%s\">"
-                                            "<preference>"
-                                            "<name>%s</name>"
-                                            "</preference>"
-                                            "</modify_config>",
-                                            config_id,
-                                            preference_name);
+                ret = openvas_connection_sendf (&connection,
+                                                "<modify_config"
+                                                " config_id=\"%s\">"
+                                                "<preference>"
+                                                "<name>%s</name>"
+                                                "</preference>"
+                                                "</modify_config>",
+                                                config_id,
+                                                preference_name);
               else
-                ret = openvas_server_sendf (&session,
-                                            "<modify_config config_id=\"%s\">"
+                ret = openvas_connection_sendf (&connection,
+                                                "<modify_config"
+                                                " config_id=\"%s\">"
+                                                "<preference>"
+                                                "<name>%s</name>"
+                                                "<value>%s</value>"
+                                                "</preference>"
+                                                "</modify_config>",
+                                                config_id,
+                                                preference_name,
+                                                value);
+            }
+          else
+            ret = openvas_connection_sendf (&connection,
+                                            "<modify_config"
+                                            " config_id=\"%s\">"
                                             "<preference>"
+                                            "<nvt oid=\"%s\"/>"
                                             "<name>%s</name>"
                                             "<value>%s</value>"
                                             "</preference>"
                                             "</modify_config>",
                                             config_id,
+                                            params_value (params, "oid"),
                                             preference_name,
                                             value);
-            }
-          else
-            ret = openvas_server_sendf (&session,
-                                        "<modify_config config_id=\"%s\">"
-                                        "<preference>"
-                                        "<nvt oid=\"%s\"/>"
-                                        "<name>%s</name>"
-                                        "<value>%s</value>"
-                                        "</preference>"
-                                        "</modify_config>",
-                                        config_id,
-                                        params_value (params, "oid"),
-                                        preference_name,
-                                        value);
 
           if (ret == -1)
             {
               g_free (value);
-              openvas_server_close (socket, session);
+              openvas_connection_close (&connection);
               response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
               return gsad_message (credentials,
                                    "Internal error", __FUNCTION__, __LINE__,
@@ -13337,19 +13330,19 @@ save_config_nvt_omp (credentials_t * credentials, params_t *params,
             }
           g_free (value);
 
-          modify_config_ret = check_modify_config (credentials, &session,
+          modify_config_ret = check_modify_config (credentials, &connection,
                                                    params,
                                                    "get_config_nvt",
                                                    "edit_config_nvt",
                                                    &success, response_data);
           if (success == 0)
             {
-              openvas_server_close (socket, session);
+              openvas_connection_close (&connection);
               return modify_config_ret;
             }
         }
 
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
     }
 
   return modify_config_ret;
@@ -13570,14 +13563,13 @@ export_preference_file_omp (credentials_t * credentials, params_t *params,
 {
   GString *xml;
   entity_t entity, preference_entity, value_entity;
-  gnutls_session_t session;
-  int socket;
+  openvas_connection_t connection;
   gchar *html;
   const char *config_id, *oid, *preference_name;
 
   *content_length = 0;
 
-  switch (manager_connect (credentials, &socket, &session, &html,
+  switch (manager_connect (credentials, &connection, &html,
                            response_data))
     {
       case 0:
@@ -13606,18 +13598,18 @@ export_preference_file_omp (credentials_t * credentials, params_t *params,
     g_string_append (xml, GSAD_MESSAGE_INVALID_PARAM ("Export Preference File"));
   else
     {
-      if (openvas_server_sendf (&session,
-                                "<get_preferences"
-                                " config_id=\"%s\""
-                                " nvt_oid=\"%s\""
-                                " preference=\"%s\"/>",
-                                config_id,
-                                oid,
-                                preference_name)
+      if (openvas_connection_sendf (&connection,
+                                    "<get_preferences"
+                                    " config_id=\"%s\""
+                                    " nvt_oid=\"%s\""
+                                    " preference=\"%s\"/>",
+                                    config_id,
+                                    oid,
+                                    preference_name)
           == -1)
         {
           g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -13628,10 +13620,10 @@ export_preference_file_omp (credentials_t * credentials, params_t *params,
         }
 
       entity = NULL;
-      if (read_entity (&session, &entity))
+      if (read_entity_c (&connection, &entity))
         {
           g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -13651,14 +13643,14 @@ export_preference_file_omp (credentials_t * credentials, params_t *params,
           *content_length = strlen (content);
           free_entity (entity);
           g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           return content;
         }
       else
         {
           free_entity (entity);
           g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -13670,7 +13662,7 @@ export_preference_file_omp (credentials_t * credentials, params_t *params,
     }
 
   g_string_append (xml, "</get_preferences_response>");
-  openvas_server_close (socket, session);
+  openvas_connection_close (&connection);
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
                             response_data);
 }
@@ -13762,8 +13754,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
   GString *xml, *commands_xml;
   entity_t entity;
   entity_t report_entity;
-  gnutls_session_t session;
-  int socket;
+  openvas_connection_t connection;
   gchar *html;
   unsigned int first, max;
   GString *levels, *delta_states;
@@ -13904,7 +13895,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
   if (result_hosts_only == NULL || strlen (result_hosts_only) == 0)
     result_hosts_only = "1";
 
-  switch (manager_connect (credentials, &socket, &session, &html,
+  switch (manager_connect (credentials, &connection, &html,
                            response_data))
     {
       case 0:
@@ -13935,11 +13926,11 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
   commands_xml = g_string_new ("");
   if (commands)
     {
-      if (openvas_server_sendf (&session, "%s", commands)
+      if (openvas_connection_sendf (&connection, "%s", commands)
           == -1)
         {
           g_string_free (commands_xml, TRUE);
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           if (error) *error = 1;
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
@@ -13950,10 +13941,10 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                                "/omp?cmd=get_tasks", response_data);
         }
 
-      if (read_string (&session, &commands_xml))
+      if (read_string_c (&connection, &commands_xml))
         {
           g_string_free (commands_xml, TRUE);
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           if (error) *error = 1;
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
@@ -14042,31 +14033,31 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                            "  sort-reverse=severity");
 
       if (ignore_filter)
-        ret = openvas_server_sendf_xml (&session,
-                                        "<get_reports"
-                                        " report_id=\"%s\""
-                                        " filter=\"first=1 rows=-1"
-                                        "  result_hosts_only=0"
-                                        "  apply_overrides=1"
-                                        "  notes=1 overrides=1"
-                                        "  sort-reverse=severity\""
-                                        " alert_id=\"%s\"/>",
-                                        report_id,
-                                        alert_id);
+        ret = openvas_connection_sendf_xml (&connection,
+                                            "<get_reports"
+                                            " report_id=\"%s\""
+                                            " filter=\"first=1 rows=-1"
+                                            "  result_hosts_only=0"
+                                            "  apply_overrides=1"
+                                            "  notes=1 overrides=1"
+                                            "  sort-reverse=severity\""
+                                            " alert_id=\"%s\"/>",
+                                            report_id,
+                                            alert_id);
       else
-        ret = openvas_server_sendf_xml (&session,
-                                        "<get_reports"
-                                        " report_id=\"%s\""
-                                        " ignore_pagination=\"%d\""
-                                        " filter=\"%s\""
-                                        " alert_id=\"%s\"/>",
-                                        report_id,
-                                        ignore_pagination,
-                                        esc_filter ? esc_filter : "",
-                                        alert_id);
+        ret = openvas_connection_sendf_xml (&connection,
+                                            "<get_reports"
+                                            " report_id=\"%s\""
+                                            " ignore_pagination=\"%d\""
+                                            " filter=\"%s\""
+                                            " alert_id=\"%s\"/>",
+                                            report_id,
+                                            ignore_pagination,
+                                            esc_filter ? esc_filter : "",
+                                            alert_id);
       if (ret == -1)
         {
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           g_string_free (commands_xml, TRUE);
           g_string_free (delta_states, TRUE);
           g_string_free (levels, TRUE);
@@ -14080,9 +14071,9 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                                "/omp?cmd=get_tasks", response_data);
         }
 
-      if (read_entity_and_text (&session, &entity, &esc_response))
+      if (read_entity_and_text_c (&connection, &entity, &esc_response))
         {
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           g_string_free (commands_xml, TRUE);
           g_string_free (delta_states, TRUE);
           g_string_free (levels, TRUE);
@@ -14100,7 +14091,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
           || (strlen (status) == 0))
         {
           free_entity (entity);
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           g_string_free (commands_xml, TRUE);
           g_string_free (delta_states, TRUE);
           if (error) *error = 1;
@@ -14131,28 +14122,28 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
       || sscanf (max_results, "%u", &max) != 1)
     max_results = G_STRINGIFY (RESULTS_PER_PAGE);
 
-  if (openvas_server_sendf (&session,
-                            "<get_reports"
-                            "%s%s"
-                            " details=\"%i\""
-                            "%s%s%s",
-                            (type && (strcmp (type, "prognostic") == 0))
-                             ? " type=\"prognostic\""
-                             : "",
-                            (type && (strcmp (type, "assets") == 0))
-                             ? " type=\"assets\""
-                             : "",
-                            (type
-                             && (strcmp (type, "assets") == 0)
-                             && host)
-                            || delta_report_id
-                            || strcmp (report_section, "summary"),
-                            host ? " host=\"" : "",
-                            host ? host : "",
-                            host ? "\"" : "")
+  if (openvas_connection_sendf (&connection,
+                                "<get_reports"
+                                "%s%s"
+                                " details=\"%i\""
+                                "%s%s%s",
+                                (type && (strcmp (type, "prognostic") == 0))
+                                 ? " type=\"prognostic\""
+                                 : "",
+                                (type && (strcmp (type, "assets") == 0))
+                                 ? " type=\"assets\""
+                                 : "",
+                                (type
+                                 && (strcmp (type, "assets") == 0)
+                                 && host)
+                                || delta_report_id
+                                || strcmp (report_section, "summary"),
+                                host ? " host=\"" : "",
+                                host ? host : "",
+                                host ? "\"" : "")
       == -1)
     {
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       g_string_free (delta_states, TRUE);
       g_string_free (commands_xml, TRUE);
       g_string_free (levels, TRUE);
@@ -14287,7 +14278,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
 
       if (host_search_phrase == NULL)
         {
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           g_string_free (delta_states, TRUE);
           g_string_free (commands_xml, TRUE);
           g_string_free (levels, TRUE);
@@ -14300,17 +14291,17 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
           return g_string_free (xml, FALSE);
         }
 
-      if (openvas_server_sendf_xml (&session,
-                                    " host_search_phrase=\"%s\""
-                                    " host_levels=\"%s\""
-                                    " host_first_result=\"%s\""
-                                    " host_max_results=\"%s\"",
-                                    host_search_phrase,
-                                    host_levels,
-                                    host_first_result,
-                                    host_max_results))
+      if (openvas_connection_sendf_xml (&connection,
+                                        " host_search_phrase=\"%s\""
+                                        " host_levels=\"%s\""
+                                        " host_first_result=\"%s\""
+                                        " host_max_results=\"%s\"",
+                                        host_search_phrase,
+                                        host_levels,
+                                        host_first_result,
+                                        host_max_results))
         {
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           g_string_free (delta_states, TRUE);
           g_string_free (commands_xml, TRUE);
           g_string_free (levels, TRUE);
@@ -14340,66 +14331,66 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
       filt_id = "-2";
 
   if (ignore_filter)
-    ret = openvas_server_sendf_xml (&session,
-                                    " filt_id=\"0\""
-                                    " filter=\"first=1 rows=-1"
-                                    "  result_hosts_only=0 apply_overrides=1"
-                                    "  notes=1 overrides=1"
-                                    "  sort-reverse=severity\""
-                                    " report_id=\"%s\""
-                                    " delta_report_id=\"%s\""
-                                    " format_id=\"%s\"/>",
-                                    (type && ((strcmp (type, "assets") == 0)
-                                              || (strcmp (type, "prognostic")
-                                                  == 0)))
-                                      ? ""
-                                      : report_id,
-                                    delta_report_id ? delta_report_id : "0",
-                                    format_id
-                                     ? format_id
-                                     : "a994b278-1f62-11e1-96ac-406186ea4fc5");
+    ret = openvas_connection_sendf_xml (&connection,
+                                        " filt_id=\"0\""
+                                        " filter=\"first=1 rows=-1"
+                                        "  result_hosts_only=0 apply_overrides=1"
+                                        "  notes=1 overrides=1"
+                                        "  sort-reverse=severity\""
+                                        " report_id=\"%s\""
+                                        " delta_report_id=\"%s\""
+                                        " format_id=\"%s\"/>",
+                                        (type && ((strcmp (type, "assets") == 0)
+                                                  || (strcmp (type, "prognostic")
+                                                      == 0)))
+                                          ? ""
+                                          : report_id,
+                                        delta_report_id ? delta_report_id : "0",
+                                        format_id
+                                         ? format_id
+                                         : "a994b278-1f62-11e1-96ac-406186ea4fc5");
   else
-    ret = openvas_server_sendf_xml (&session,
-                                    " ignore_pagination=\"%d\""
-                                    " filt_id=\"%s\""
-                                    " filter=\"%s\""
-                                    " pos=\"%s\""
-                                    " notes_details=\"1\""
-                                    " overrides_details=\"1\""
-                                    " report_id=\"%s\""
-                                    " delta_report_id=\"%s\""
-                                    " format_id=\"%s\"/>",
-                                    ignore_pagination,
-                                    filt_id ? filt_id : "0",
-                                    built_filter ? built_filter : "",
-                                    pos ? pos : "1",
-                                    (type && ((strcmp (type, "assets") == 0)
-                                              || (strcmp (type, "prognostic")
-                                                  == 0)))
-                                     ? ""
-                                     : report_id,
-                                    delta_report_id ? delta_report_id : "0",
-                                    format_id
-                                     ? format_id
-                                     : "a994b278-1f62-11e1-96ac-406186ea4fc5",
-                                    first_result,
-                                    max_results,
-                                    sort_field ? sort_field : "severity",
-                                    sort_order
-                                     ? sort_order
-                                     : ((sort_field == NULL
-                                        || strcmp (sort_field, "type") == 0
-                                        || strcmp (sort_field, "severity") == 0)
-                                       ? "descending"
-                                       : "ascending"),
-                                    levels->str,
-                                    delta_states->str,
-                                    search_phrase,
-                                    min_qod,
-                                    zone);
+    ret = openvas_connection_sendf_xml (&connection,
+                                        " ignore_pagination=\"%d\""
+                                        " filt_id=\"%s\""
+                                        " filter=\"%s\""
+                                        " pos=\"%s\""
+                                        " notes_details=\"1\""
+                                        " overrides_details=\"1\""
+                                        " report_id=\"%s\""
+                                        " delta_report_id=\"%s\""
+                                        " format_id=\"%s\"/>",
+                                        ignore_pagination,
+                                        filt_id ? filt_id : "0",
+                                        built_filter ? built_filter : "",
+                                        pos ? pos : "1",
+                                        (type && ((strcmp (type, "assets") == 0)
+                                                  || (strcmp (type, "prognostic")
+                                                      == 0)))
+                                         ? ""
+                                         : report_id,
+                                        delta_report_id ? delta_report_id : "0",
+                                        format_id
+                                         ? format_id
+                                         : "a994b278-1f62-11e1-96ac-406186ea4fc5",
+                                        first_result,
+                                        max_results,
+                                        sort_field ? sort_field : "severity",
+                                        sort_order
+                                         ? sort_order
+                                         : ((sort_field == NULL
+                                            || strcmp (sort_field, "type") == 0
+                                            || strcmp (sort_field, "severity") == 0)
+                                           ? "descending"
+                                           : "ascending"),
+                                        levels->str,
+                                        delta_states->str,
+                                        search_phrase,
+                                        min_qod,
+                                        zone);
   if (ret == -1)
     {
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       g_string_free (delta_states, TRUE);
       g_string_free (commands_xml, TRUE);
       g_string_free (levels, TRUE);
@@ -14425,9 +14416,9 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
           const char *extension, *requested_content_type;
           /* Manager sends XML report as plain XML. */
 
-          if (read_entity (&session, &entity))
+          if (read_entity_c (&connection, &entity))
             {
-              openvas_server_close (socket, session);
+              openvas_connection_close (&connection);
               if (error) *error = 1;
               response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
               return gsad_message (credentials,
@@ -14441,7 +14432,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
           if (report == NULL)
             {
               free_entity (entity);
-              openvas_server_close (socket, session);
+              openvas_connection_close (&connection);
               if (error) *error = 1;
               response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
               return gsad_message (credentials,
@@ -14457,13 +14448,13 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
               && content_disposition)
             {
               gchar *file_name;
-              ret = setting_get_value (&session,
+              ret = setting_get_value (&connection,
                                        "e1a2ae0b-736e-4484-b029-330c9e15b900",
                                        &fname_format,
                                        response_data);
               if (ret)
                 {
-                  openvas_server_close (socket, session);
+                  openvas_connection_close (&connection);
                   switch (ret)
                     {
                       case 1:
@@ -14534,7 +14525,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
 
               g_free (file_name);
             }
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           xml = g_string_new ("");
           print_entity_to_string (report, xml);
           free_entity (entity);
@@ -14558,9 +14549,9 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
             }
 
           entity = NULL;
-          if (read_entity (&session, &entity))
+          if (read_entity_c (&connection, &entity))
             {
-              openvas_server_close (socket, session);
+              openvas_connection_close (&connection);
               if (error) *error = 1;
               response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
               return gsad_message (credentials,
@@ -14603,13 +14594,13 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                     id = "ERROR";
 
                   ret = setting_get_value
-                          (&session,
+                          (&connection,
                            "e1a2ae0b-736e-4484-b029-330c9e15b900",
                            &fname_format,
                            response_data);
                   if (ret)
                     {
-                      openvas_server_close (socket, session);
+                      openvas_connection_close (&connection);
                       switch (ret)
                         {
                           case 1:
@@ -14667,14 +14658,14 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                   g_free (file_name);
                 }
               free_entity (entity);
-              openvas_server_close (socket, session);
+              openvas_connection_close (&connection);
               if (error) *error = 1;
               return report_decoded;
             }
           else
             {
               free_entity (entity);
-              openvas_server_close (socket, session);
+              openvas_connection_close (&connection);
               if (error) *error = 1;
               response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
               return gsad_message (credentials,
@@ -14753,9 +14744,9 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                                 result_id ? result_id : "0");
 
       entity = NULL;
-      if (read_entity_and_string (&session, &entity, &xml))
+      if (read_entity_and_string_c (&connection, &entity, &xml))
         {
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           if (error) *error = 1;
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
@@ -14789,14 +14780,14 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
       if ((type && (strcmp (type, "prognostic") == 0))
           && (command_enabled (credentials, "GET_REPORT_FORMATS")))
         {
-          if (openvas_server_sendf
-               (&session,
+          if (openvas_connection_sendf
+               (&connection,
                 "<get_report_formats"
                 " filter=\"rows=-1 sort=name\"/>")
               == -1)
             {
               g_string_free (xml, TRUE);
-              openvas_server_close (socket, session);
+              openvas_connection_close (&connection);
               if (error) *error = 1;
               response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
               return gsad_message (credentials,
@@ -14807,10 +14798,10 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                                    "/omp?cmd=get_tasks", response_data);
             }
 
-          if (read_string (&session, &xml))
+          if (read_string_c (&connection, &xml))
             {
               g_string_free (xml, TRUE);
-              openvas_server_close (socket, session);
+              openvas_connection_close (&connection);
               if (error) *error = 1;
               response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
               return gsad_message (credentials,
@@ -14830,13 +14821,13 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
 
               g_string_append (xml, "<filters>");
 
-              if (openvas_server_sendf_xml (&session,
-                                            "<get_filters"
-                                            " filter=\"type=result\"/>")
+              if (openvas_connection_sendf_xml (&connection,
+                                                "<get_filters"
+                                                " filter=\"type=result\"/>")
                   == -1)
                 {
                   g_string_free (xml, TRUE);
-                  openvas_server_close (socket, session);
+                  openvas_connection_close (&connection);
                   if (error) *error = 1;
                   response_data->http_status_code
                     = MHD_HTTP_INTERNAL_SERVER_ERROR;
@@ -14848,10 +14839,10 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                                        "/omp?cmd=get_tasks", response_data);
                 }
 
-              if (read_string (&session, &xml))
+              if (read_string_c (&connection, &xml))
                 {
                   g_string_free (xml, TRUE);
-                  openvas_server_close (socket, session);
+                  openvas_connection_close (&connection);
                   if (error) *error = 1;
                   response_data->http_status_code
                     = MHD_HTTP_INTERNAL_SERVER_ERROR;
@@ -14867,7 +14858,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
             }
 
           g_string_append (xml, "</get_prognostic_report>");
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           return g_string_free (xml, FALSE);
         }
 
@@ -14877,7 +14868,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
             g_string_append (xml, "</get_asset>");
           else
             g_string_append (xml, "</get_report>");
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           return g_string_free (xml, FALSE);
         }
 
@@ -14911,14 +14902,14 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
 
       if (task_id)
         {
-          if (openvas_server_sendf (&session,
-                                    "<get_tasks task_id=\"%s\" details=\"0\" />",
-                                    task_id)
+          if (openvas_connection_sendf (&connection,
+                                        "<get_tasks task_id=\"%s\" details=\"0\" />",
+                                        task_id)
               == -1)
             {
               g_free (task_id);
               g_string_free (xml, TRUE);
-              openvas_server_close (socket, session);
+              openvas_connection_close (&connection);
               if (error) *error = 1;
               response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
               return gsad_message (credentials,
@@ -14929,11 +14920,11 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                                    "/omp?cmd=get_tasks", response_data);
             }
 
-          if (read_string (&session, &xml))
+          if (read_string_c (&connection, &xml))
             {
               g_free (task_id);
               g_string_free (xml, TRUE);
-              openvas_server_close (socket, session);
+              openvas_connection_close (&connection);
               if (error) *error = 1;
               response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
               return gsad_message (credentials,
@@ -14950,7 +14941,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
       if (delta_report_id && result_id && strcmp (result_id, "0"))
         {
           g_string_append (xml, "</get_delta_result>");
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           return g_string_free (xml, FALSE);
         }
 
@@ -14961,14 +14952,14 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
           /* Get Default Report Format. */
 
           err = setting_get_value_error (credentials,
-                                         &session,
+                                         &connection,
                                          "353304fc-645e-11e6-ba7a-28d24461215b",
                                          &default_report_format,
                                          response_data);
           if (err)
             {
               g_string_free (xml, TRUE);
-              openvas_server_close (socket, session);
+              openvas_connection_close (&connection);
               if (error) *error = 1;
               return err;
             }
@@ -14979,14 +14970,14 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
 
           /* Get all the report formats. */
 
-          if (openvas_server_sendf
-               (&session,
+          if (openvas_connection_sendf
+               (&connection,
                 "<get_report_formats"
                 " filter=\"rows=-1 sort=name\"/>")
               == -1)
             {
               g_string_free (xml, TRUE);
-              openvas_server_close (socket, session);
+              openvas_connection_close (&connection);
               if (error) *error = 1;
               response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
               return gsad_message (credentials,
@@ -14997,10 +14988,10 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                                    "/omp?cmd=get_tasks", response_data);
             }
 
-          if (read_string (&session, &xml))
+          if (read_string_c (&connection, &xml))
             {
               g_string_free (xml, TRUE);
-              openvas_server_close (socket, session);
+              openvas_connection_close (&connection);
               if (error) *error = 1;
               response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
               return gsad_message (credentials,
@@ -15014,14 +15005,14 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
 
       if (command_enabled (credentials, "GET_ALERTS"))
         {
-          if (openvas_server_sendf
-               (&session,
+          if (openvas_connection_sendf
+               (&connection,
                 "<get_alerts"
                 " filter=\"rows=-1 sort=name\"/>")
               == -1)
             {
               g_string_free (xml, TRUE);
-              openvas_server_close (socket, session);
+              openvas_connection_close (&connection);
               if (error) *error = 1;
               response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
               return gsad_message (credentials,
@@ -15032,10 +15023,10 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                                    "/omp?cmd=get_tasks", response_data);
             }
 
-          if (read_string (&session, &xml))
+          if (read_string_c (&connection, &xml))
             {
               g_string_free (xml, TRUE);
-              openvas_server_close (socket, session);
+              openvas_connection_close (&connection);
               if (error) *error = 1;
               response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
               return gsad_message (credentials,
@@ -15053,13 +15044,13 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
 
           g_string_append (xml, "<filters>");
 
-          if (openvas_server_sendf_xml (&session,
-                                        "<get_filters"
-                                        " filter=\"type=result\"/>")
+          if (openvas_connection_sendf_xml (&connection,
+                                            "<get_filters"
+                                            " filter=\"type=result\"/>")
               == -1)
             {
               g_string_free (xml, TRUE);
-              openvas_server_close (socket, session);
+              openvas_connection_close (&connection);
               if (error) *error = 1;
               response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
               return gsad_message (credentials,
@@ -15070,10 +15061,10 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                                    "/omp?cmd=get_tasks", response_data);
             }
 
-          if (read_string (&session, &xml))
+          if (read_string_c (&connection, &xml))
             {
               g_string_free (xml, TRUE);
-              openvas_server_close (socket, session);
+              openvas_connection_close (&connection);
               if (error) *error = 1;
               response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
               return gsad_message (credentials,
@@ -15089,17 +15080,17 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
 
       /* Get tag names */
 
-      if (openvas_server_sendf (&session,
-                                "<get_tags"
-                                " filter=\"resource_type=report"
-                                "          first=1"
-                                "          rows=-1\""
-                                " names_only=\"1\""
-                                "/>")
+      if (openvas_connection_sendf (&connection,
+                                    "<get_tags"
+                                    " filter=\"resource_type=report"
+                                    "          first=1"
+                                    "          rows=-1\""
+                                    " names_only=\"1\""
+                                    "/>")
           == -1)
         {
           g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                               "Internal error", __FUNCTION__, __LINE__,
@@ -15109,10 +15100,10 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                               "/omp?cmd=get_resources", response_data);
         }
 
-      if (read_string (&session, &xml))
+      if (read_string_c (&connection, &xml))
         {
           g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                               "Internal error", __FUNCTION__, __LINE__,
@@ -15123,7 +15114,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
         }
 
       g_string_append (xml, "</get_report>");
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       return g_string_free (xml, FALSE);
     }
 }
@@ -15544,8 +15535,7 @@ get_result (credentials_t *credentials, const char *result_id,
             const char *extra_xml, cmd_response_data_t* response_data)
 {
   GString *xml;
-  gnutls_session_t session;
-  int socket;
+  openvas_connection_t connection;
   gchar *html;
 
   if (apply_overrides == NULL)
@@ -15554,7 +15544,7 @@ get_result (credentials_t *credentials, const char *result_id,
   if (autofp == NULL)
     autofp = "0";
 
-  switch (manager_connect (credentials, &socket, &session, &html,
+  switch (manager_connect (credentials, &connection, &html,
                            response_data))
     {
       case 0:
@@ -15586,32 +15576,32 @@ get_result (credentials_t *credentials, const char *result_id,
 
   /* Get the result. */
 
-  if (openvas_server_sendf (&session,
-                            "<commands>"
-                            "%s"
-                            "<get_results"
-                            " result_id=\"%s\""
-                            "%s%s%s"
-                            " filter=\"autofp=%s"
-                            " apply_overrides=%s"
-                            " overrides=%s"
-                            " notes=1\""
-                            " overrides_details=\"1\""
-                            " notes_details=\"1\""
-                            " details=\"1\"/>"
-                            "</commands>",
-                            commands ? commands : "",
-                            result_id,
-                            task_id ? " task_id=\"" : "",
-                            task_id ? task_id : "",
-                            task_id ? "\"" : "",
-                            autofp,
-                            apply_overrides,
-                            apply_overrides)
+  if (openvas_connection_sendf (&connection,
+                                "<commands>"
+                                "%s"
+                                "<get_results"
+                                " result_id=\"%s\""
+                                "%s%s%s"
+                                " filter=\"autofp=%s"
+                                " apply_overrides=%s"
+                                " overrides=%s"
+                                " notes=1\""
+                                " overrides_details=\"1\""
+                                " notes_details=\"1\""
+                                " details=\"1\"/>"
+                                "</commands>",
+                                commands ? commands : "",
+                                result_id,
+                                task_id ? " task_id=\"" : "",
+                                task_id ? task_id : "",
+                                task_id ? "\"" : "",
+                                autofp,
+                                apply_overrides,
+                                apply_overrides)
       == -1)
     {
       g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -15620,10 +15610,10 @@ get_result (credentials_t *credentials, const char *result_id,
                            "/omp?cmd=get_tasks", response_data);
     }
 
-  if (read_string (&session, &xml))
+  if (read_string_c (&connection, &xml))
     {
       g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -15634,17 +15624,17 @@ get_result (credentials_t *credentials, const char *result_id,
 
   /* Get tag names */
 
-  if (openvas_server_sendf (&session,
-                            "<get_tags"
-                            " filter=\"resource_type=result"
-                            "          first=1"
-                            "          rows=-1\""
-                            " names_only=\"1\""
-                            "/>")
+  if (openvas_connection_sendf (&connection,
+                                "<get_tags"
+                                " filter=\"resource_type=result"
+                                "          first=1"
+                                "          rows=-1\""
+                                " names_only=\"1\""
+                                "/>")
       == -1)
     {
       g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -15654,10 +15644,10 @@ get_result (credentials_t *credentials, const char *result_id,
                            "/omp?cmd=get_resources", response_data);
     }
 
-  if (read_string (&session, &xml))
+  if (read_string_c (&connection, &xml))
     {
       g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -15670,7 +15660,7 @@ get_result (credentials_t *credentials, const char *result_id,
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</get_result>");
-  openvas_server_close (socket, session);
+  openvas_connection_close (&connection);
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
                             response_data);
 }
@@ -15808,8 +15798,7 @@ new_note (credentials_t *credentials, params_t *params, const char *extra_xml,
           cmd_response_data_t* response_data)
 {
   GString *xml;
-  gnutls_session_t session;
-  int socket;
+  openvas_connection_t connection;
   gchar *html;
   const char *oid, *hosts, *port, *severity, *task_id, *task_name, *result_id;
   const char *next;
@@ -15840,7 +15829,7 @@ new_note (credentials_t *credentials, params_t *params, const char *extra_xml,
   port = params_value (params, "port");
   overrides = params_value (params, "overrides");
 
-  switch (manager_connect (credentials, &socket, &session, &html,
+  switch (manager_connect (credentials, &connection, &html,
                            response_data))
     {
       case 0:
@@ -15873,13 +15862,13 @@ new_note (credentials_t *credentials, params_t *params, const char *extra_xml,
       if (extra_xml)
         g_string_append (xml, extra_xml);
 
-      if (openvas_server_sendf (&session,
-                                "<get_tasks"
-                                " schedules_only=\"1\""
-                                " details=\"0\"/>")
+      if (openvas_connection_sendf (&connection,
+                                    "<get_tasks"
+                                    " schedules_only=\"1\""
+                                    " details=\"0\"/>")
           == -1)
         {
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -15889,10 +15878,10 @@ new_note (credentials_t *credentials, params_t *params, const char *extra_xml,
                                "/omp?cmd=get_notes", response_data);
         }
 
-      if (read_string (&session, &xml))
+      if (read_string_c (&connection, &xml))
         {
           g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -15903,23 +15892,23 @@ new_note (credentials_t *credentials, params_t *params, const char *extra_xml,
         }
 
       g_string_append (xml, "</new_note>");
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
                                 response_data);
     }
 
-  if (openvas_server_sendf (&session,
-                            "<get_results"
-                            " result_id=\"%s\""
-                            " task_id=\"%s\""
-                            " notes_details=\"1\""
-                            " notes=\"1\""
-                            " result_hosts_only=\"1\"/>",
-                            result_id,
-                            task_id)
+  if (openvas_connection_sendf (&connection,
+                                "<get_results"
+                                " result_id=\"%s\""
+                                " task_id=\"%s\""
+                                " notes_details=\"1\""
+                                " notes=\"1\""
+                                " result_hosts_only=\"1\"/>",
+                                result_id,
+                                task_id)
       == -1)
     {
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -15978,10 +15967,10 @@ new_note (credentials_t *credentials, params_t *params, const char *extra_xml,
   if (extra_xml)
     g_string_append (xml, extra_xml);
 
-  if (read_string (&session, &xml))
+  if (read_string_c (&connection, &xml))
     {
       g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -15994,7 +15983,7 @@ new_note (credentials_t *credentials, params_t *params, const char *extra_xml,
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</new_note>");
-  openvas_server_close (socket, session);
+  openvas_connection_close (&connection);
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
                             response_data);
 }
@@ -16223,14 +16212,13 @@ edit_note (credentials_t *credentials, params_t *params, const char *extra_xml,
            cmd_response_data_t* response_data)
 {
   GString *xml;
-  gnutls_session_t session;
-  int socket;
+  openvas_connection_t connection;
   gchar *html;
   const char *note_id;
 
   note_id = params_value (params, "note_id");
 
-  switch (manager_connect (credentials, &socket, &session, &html,
+  switch (manager_connect (credentials, &connection, &html,
                            response_data))
     {
       case 0:
@@ -16249,7 +16237,7 @@ edit_note (credentials_t *credentials, params_t *params, const char *extra_xml,
                              "/omp?cmd=get_notes", response_data);
     }
 
-  if (openvas_server_sendf (&session,
+  if (openvas_connection_sendf (&connection,
                             "<get_notes"
                             " note_id=\"%s\""
                             " details=\"1\""
@@ -16257,7 +16245,7 @@ edit_note (credentials_t *credentials, params_t *params, const char *extra_xml,
                             note_id)
       == -1)
     {
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -16274,10 +16262,10 @@ edit_note (credentials_t *credentials, params_t *params, const char *extra_xml,
   if (extra_xml)
     g_string_append (xml, extra_xml);
 
-  if (read_string (&session, &xml))
+  if (read_string_c (&connection, &xml))
     {
       g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -16290,7 +16278,7 @@ edit_note (credentials_t *credentials, params_t *params, const char *extra_xml,
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</edit_note>");
-  openvas_server_close (socket, session);
+  openvas_connection_close (&connection);
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
                             response_data);
 }
@@ -16524,8 +16512,7 @@ new_override (credentials_t *credentials, params_t *params,
               const char *extra_xml, cmd_response_data_t* response_data)
 {
   GString *xml;
-  gnutls_session_t session;
-  int socket;
+  openvas_connection_t connection;
   gchar *html;
   const char *oid, *hosts, *port, *severity, *task_id, *task_name, *result_id;
   const char *next;
@@ -16556,7 +16543,7 @@ new_override (credentials_t *credentials, params_t *params,
   port = params_value (params, "port");
   overrides = params_value (params, "overrides");
 
-  switch (manager_connect (credentials, &socket, &session, &html,
+  switch (manager_connect (credentials, &connection, &html,
                            response_data))
     {
       case 0:
@@ -16589,13 +16576,13 @@ new_override (credentials_t *credentials, params_t *params,
       if (extra_xml)
         g_string_append (xml, extra_xml);
 
-      if (openvas_server_sendf (&session,
-                                "<get_tasks"
-                                " schedules_only=\"1\""
-                                " details=\"0\"/>")
+      if (openvas_connection_sendf (&connection,
+                                    "<get_tasks"
+                                    " schedules_only=\"1\""
+                                    " details=\"0\"/>")
           == -1)
         {
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -16605,10 +16592,10 @@ new_override (credentials_t *credentials, params_t *params,
                                "/omp?cmd=get_overrides", response_data);
         }
 
-      if (read_string (&session, &xml))
+      if (read_string_c (&connection, &xml))
         {
           g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -16619,25 +16606,25 @@ new_override (credentials_t *credentials, params_t *params,
         }
 
       g_string_append (xml, "</new_override>");
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
                                 response_data);
     }
 
-  if (openvas_server_sendf (&session,
-                            "<get_results"
-                            " result_id=\"%s\""
-                            " task_id=\"%s\""
-                            " notes_details=\"1\""
-                            " notes=\"1\""
-                            " overrides_details=\"1\""
-                            " overrides=\"1\""
-                            " result_hosts_only=\"1\"/>",
-                            result_id,
-                            task_id)
+  if (openvas_connection_sendf (&connection,
+                                "<get_results"
+                                " result_id=\"%s\""
+                                " task_id=\"%s\""
+                                " notes_details=\"1\""
+                                " notes=\"1\""
+                                " overrides_details=\"1\""
+                                " overrides=\"1\""
+                                " result_hosts_only=\"1\"/>",
+                                result_id,
+                                task_id)
       == -1)
     {
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -16696,10 +16683,10 @@ new_override (credentials_t *credentials, params_t *params,
   if (extra_xml)
     g_string_append (xml, extra_xml);
 
-  if (read_string (&session, &xml))
+  if (read_string_c (&connection, &xml))
     {
       g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -16712,7 +16699,7 @@ new_override (credentials_t *credentials, params_t *params,
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</new_override>");
-  openvas_server_close (socket, session);
+  openvas_connection_close (&connection);
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
                             response_data);
 }
@@ -16970,14 +16957,13 @@ edit_override (credentials_t *credentials, params_t *params,
                const char *extra_xml, cmd_response_data_t* response_data)
 {
   GString *xml;
-  gnutls_session_t session;
-  int socket;
+  openvas_connection_t connection;
   gchar *html;
   const char *override_id;
 
   override_id = params_value (params, "override_id");
 
-  switch (manager_connect (credentials, &socket, &session, &html,
+  switch (manager_connect (credentials, &connection, &html,
                            response_data))
     {
       case 0:
@@ -16996,15 +16982,15 @@ edit_override (credentials_t *credentials, params_t *params,
                              "/omp?cmd=get_overrides", response_data);
     }
 
-  if (openvas_server_sendf (&session,
-                            "<get_overrides"
-                            " override_id=\"%s\""
-                            " details=\"1\""
-                            " result=\"1\"/>",
-                            override_id)
+  if (openvas_connection_sendf (&connection,
+                                "<get_overrides"
+                                " override_id=\"%s\""
+                                " details=\"1\""
+                                " result=\"1\"/>",
+                                override_id)
       == -1)
     {
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -17021,10 +17007,10 @@ edit_override (credentials_t *credentials, params_t *params,
   if (extra_xml)
     g_string_append (xml, extra_xml);
 
-  if (read_string (&session, &xml))
+  if (read_string_c (&connection, &xml))
     {
       g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -17037,7 +17023,7 @@ edit_override (credentials_t *credentials, params_t *params,
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</edit_override>");
-  openvas_server_close (socket, session);
+  openvas_connection_close (&connection);
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
                             response_data);
 }
@@ -17213,12 +17199,11 @@ static char *
 new_slave (credentials_t *credentials, params_t *params,
            const char *extra_xml, cmd_response_data_t* response_data)
 {
-  gnutls_session_t session;
-  int socket;
+  openvas_connection_t connection;
   gchar *html;
   GString *xml;
 
-  switch (manager_connect (credentials, &socket, &session, &html,
+  switch (manager_connect (credentials, &connection, &html,
                            response_data))
     {
       case 0:
@@ -17237,12 +17222,12 @@ new_slave (credentials_t *credentials, params_t *params,
                              "/omp?cmd=get_tasks", response_data);
     }
 
-  if (openvas_server_sendf (&session,
-                            "<get_credentials"
-                            " filter=\"first=1 rows=-1 type=up\" />")
+  if (openvas_connection_sendf (&connection,
+                                "<get_credentials"
+                                " filter=\"first=1 rows=-1 type=up\" />")
       == -1)
     {
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -17255,10 +17240,10 @@ new_slave (credentials_t *credentials, params_t *params,
   if (extra_xml)
     g_string_append (xml, extra_xml);
 
-  if (read_string (&session, &xml))
+  if (read_string_c (&connection, &xml))
     {
       g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -17489,8 +17474,7 @@ edit_slave (credentials_t * credentials, params_t *params,
             const char *extra_xml, cmd_response_data_t* response_data)
 {
   GString *xml;
-  gnutls_session_t session;
-  int socket;
+  openvas_connection_t connection;
   gchar *html;
   const char *slave_id, *next;
 
@@ -17511,7 +17495,7 @@ edit_slave (credentials_t * credentials, params_t *params,
   if (next == NULL)
     next = "get_slave";
 
-  switch (manager_connect (credentials, &socket, &session, &html,
+  switch (manager_connect (credentials, &connection, &html,
                            response_data))
     {
       case 0:
@@ -17530,15 +17514,15 @@ edit_slave (credentials_t * credentials, params_t *params,
                              "/omp?cmd=get_tasks", response_data);
     }
 
-  if (openvas_server_sendf (&session,
-                            "<commands>"
-                            "<get_slaves slave_id=\"%s\" details=\"1\" />"
-                            "<get_credentials filter=\"first=1 rows=-1 type=up\" />"
-                            "</commands>",
-                            slave_id)
+  if (openvas_connection_sendf (&connection,
+                                "<commands>"
+                                "<get_slaves slave_id=\"%s\" details=\"1\" />"
+                                "<get_credentials filter=\"first=1 rows=-1 type=up\" />"
+                                "</commands>",
+                                slave_id)
       == -1)
     {
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -17560,10 +17544,10 @@ edit_slave (credentials_t * credentials, params_t *params,
                           slave_id,
                           next);
 
-  if (read_string (&session, &xml))
+  if (read_string_c (&connection, &xml))
     {
       g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -17575,7 +17559,7 @@ edit_slave (credentials_t * credentials, params_t *params,
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</edit_slave>");
-  openvas_server_close (socket, session);
+  openvas_connection_close (&connection);
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
                             response_data);
 }
@@ -17862,12 +17846,11 @@ static char *
 new_scanner (credentials_t *credentials, params_t *params,
               const char *extra_xml, cmd_response_data_t* response_data)
 {
-  gnutls_session_t session;
-  int socket;
+  openvas_connection_t connection;
   gchar *html;
   GString *xml;
 
-  switch (manager_connect (credentials, &socket, &session, &html,
+  switch (manager_connect (credentials, &connection, &html,
                            response_data))
     {
       case 0:
@@ -17885,12 +17868,12 @@ new_scanner (credentials_t *credentials, params_t *params,
                              "/omp?cmd=get_tasks", response_data);
     }
 
-  if (openvas_server_sendf (&session,
-                            "<get_credentials"
-                            " filter=\"first=1 rows=-1 type=cc\" />")
+  if (openvas_connection_sendf (&connection,
+                                "<get_credentials"
+                                " filter=\"first=1 rows=-1 type=cc\" />")
       == -1)
     {
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -17903,10 +17886,10 @@ new_scanner (credentials_t *credentials, params_t *params,
   if (extra_xml)
     g_string_append (xml, extra_xml);
 
-  if (read_string (&session, &xml))
+  if (read_string_c (&connection, &xml))
     {
       g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -18159,8 +18142,7 @@ edit_scanner (credentials_t * credentials, params_t *params,
               const char *extra_xml, cmd_response_data_t* response_data)
 {
   GString *xml;
-  gnutls_session_t session;
-  int socket;
+  openvas_connection_t connection;
   gchar *html;
   const char *scanner_id, *next;
 
@@ -18181,7 +18163,7 @@ edit_scanner (credentials_t * credentials, params_t *params,
   if (next == NULL)
     next = "get_scanner";
 
-  switch (manager_connect (credentials, &socket, &session, &html,
+  switch (manager_connect (credentials, &connection, &html,
                            response_data))
     {
       case 0:
@@ -18200,15 +18182,15 @@ edit_scanner (credentials_t * credentials, params_t *params,
                              "/omp?cmd=get_tasks", response_data);
     }
 
-  if (openvas_server_sendf (&session,
-                            "<commands>"
-                            "<get_scanners scanner_id=\"%s\" details=\"1\" />"
-                            "<get_credentials filter=\"first=1 rows=-1 type=cc\" />"
-                            "</commands>",
-                            scanner_id)
+  if (openvas_connection_sendf (&connection,
+                                "<commands>"
+                                "<get_scanners scanner_id=\"%s\" details=\"1\" />"
+                                "<get_credentials filter=\"first=1 rows=-1 type=cc\" />"
+                                "</commands>",
+                                scanner_id)
       == -1)
     {
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -18230,10 +18212,10 @@ edit_scanner (credentials_t * credentials, params_t *params,
                           scanner_id,
                           next);
 
-  if (read_string (&session, &xml))
+  if (read_string_c (&connection, &xml))
     {
       g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -18245,7 +18227,7 @@ edit_scanner (credentials_t * credentials, params_t *params,
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</edit_scanner>");
-  openvas_server_close (socket, session);
+  openvas_connection_close (&connection);
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
                             response_data);
 }
@@ -18700,15 +18682,14 @@ get_system_reports_omp (credentials_t * credentials, params_t *params,
                         cmd_response_data_t* response_data)
 {
   GString *xml;
-  gnutls_session_t session;
-  int socket;
+  openvas_connection_t connection;
   gchar *html;
   const char *duration, *slave_id;
 
   duration = params_value (params, "duration");
   slave_id = params_value (params, "slave_id");
 
-  switch (manager_connect (credentials, &socket, &session, &html,
+  switch (manager_connect (credentials, &connection, &html,
                            response_data))
     {
       case 0:
@@ -18736,13 +18717,13 @@ get_system_reports_omp (credentials_t * credentials, params_t *params,
 
   /* Get the system reports. */
 
-  if (openvas_server_sendf (&session,
-                            "<get_system_reports brief=\"1\" slave_id=\"%s\"/>",
-                            slave_id ? slave_id : "0")
+  if (openvas_connection_sendf (&connection,
+                                "<get_system_reports brief=\"1\" slave_id=\"%s\"/>",
+                                slave_id ? slave_id : "0")
       == -1)
     {
       g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -18752,10 +18733,10 @@ get_system_reports_omp (credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_tasks", response_data);
     }
 
-  if (read_string (&session, &xml))
+  if (read_string_c (&connection, &xml))
     {
       g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -18769,14 +18750,14 @@ get_system_reports_omp (credentials_t * credentials, params_t *params,
     {
       /* Get the slaves. */
 
-      if (openvas_server_sendf (&session,
-                                "<get_slaves"
-                                " sort_field=\"name\""
-                                " sort_order=\"ascending\"/>")
+      if (openvas_connection_sendf (&connection,
+                                    "<get_slaves"
+                                    " sort_field=\"name\""
+                                    " sort_order=\"ascending\"/>")
           == -1)
         {
           g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -18786,10 +18767,10 @@ get_system_reports_omp (credentials_t * credentials, params_t *params,
                                "/omp?cmd=get_tasks", response_data);
         }
 
-      if (read_string (&session, &xml))
+      if (read_string_c (&connection, &xml))
         {
           g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -18803,7 +18784,7 @@ get_system_reports_omp (credentials_t * credentials, params_t *params,
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</get_system_reports>");
-  openvas_server_close (socket, session);
+  openvas_connection_close (&connection);
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
                             response_data);
 }
@@ -18830,8 +18811,7 @@ get_system_report_omp (credentials_t *credentials, const char *url,
 {
   entity_t entity;
   entity_t report_entity;
-  gnutls_session_t session;
-  int socket;
+  openvas_connection_t connection;
   char name[501];
 
   *content_length = 0;
@@ -18842,28 +18822,28 @@ get_system_report_omp (credentials_t *credentials, const char *url,
   /* fan/report.png */
   if (sscanf (url, "%500[^ /]./report.png", name) == 1)
     {
-      if (manager_connect (credentials, &socket, &session, NULL,
+      if (manager_connect (credentials, &connection, NULL,
                            response_data))
         return NULL;
 
-      if (openvas_server_sendf (&session,
-                                "<get_system_reports"
-                                " name=\"%s\""
-                                " duration=\"%s\""
-                                " slave_id=\"%s\"/>",
-                                name,
-                                duration ? duration : "86400",
-                                slave_id ? slave_id : "0")
+      if (openvas_connection_sendf (&connection,
+                                    "<get_system_reports"
+                                    " name=\"%s\""
+                                    " duration=\"%s\""
+                                    " slave_id=\"%s\"/>",
+                                    name,
+                                    duration ? duration : "86400",
+                                    slave_id ? slave_id : "0")
           == -1)
         {
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           return NULL;
         }
 
       entity = NULL;
-      if (read_entity (&session, &entity))
+      if (read_entity_c (&connection, &entity))
         {
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           return NULL;
         }
 
@@ -18871,7 +18851,7 @@ get_system_report_omp (credentials_t *credentials, const char *url,
       if (report_entity == NULL)
         {
           free_entity (entity);
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           return NULL;
         }
 
@@ -18879,7 +18859,7 @@ get_system_report_omp (credentials_t *credentials, const char *url,
       if (report_entity == NULL)
         {
           free_entity (entity);
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           return NULL;
         }
       else
@@ -18902,7 +18882,7 @@ get_system_report_omp (credentials_t *credentials, const char *url,
             }
 
           free_entity (entity);
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           return content;
        }
     }
@@ -19661,15 +19641,15 @@ run_wizard_omp (credentials_t *credentials, params_t *params,
 #define GET_TRASH_RESOURCE(capability, command, name)                         \
   if (command_enabled (credentials, capability))                              \
       {                                                                       \
-        if (openvas_server_sendf                                              \
-             (&session,                                                       \
+        if (openvas_connection_sendf                                          \
+             (&connection,                                                    \
               "<" command                                                     \
               " filter=\"rows=-1 sort=name\""                                 \
               " trash=\"1\"/>")                                               \
             == -1)                                                            \
           {                                                                   \
             g_string_free (xml, TRUE);                                        \
-            openvas_server_close (socket, session);                           \
+            openvas_connection_close (&connection);                           \
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR; \
             return gsad_message                                               \
                     (credentials,                                             \
@@ -19681,10 +19661,10 @@ run_wizard_omp (credentials_t *credentials, params_t *params,
                      "/omp?cmd=get_trash", response_data);                    \
           }                                                                   \
                                                                               \
-        if (read_string (&session, &xml))                                     \
+        if (read_string_c (&connection, &xml))                                \
           {                                                                   \
             g_string_free (xml, TRUE);                                        \
-            openvas_server_close (socket, session);                           \
+            openvas_connection_close (&connection);                           \
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR; \
             return gsad_message                                               \
                     (credentials,                                             \
@@ -19711,11 +19691,10 @@ get_trash (credentials_t * credentials, params_t *params, const char *extra_xml,
            cmd_response_data_t* response_data)
 {
   GString *xml;
-  gnutls_session_t session;
-  int socket;
+  openvas_connection_t connection;
   gchar *html;
 
-  switch (manager_connect (credentials, &socket, &session, &html,
+  switch (manager_connect (credentials, &connection, &html,
                            response_data))
     {
       case 0:
@@ -19778,7 +19757,7 @@ get_trash (credentials_t * credentials, params_t *params, const char *extra_xml,
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</get_trash>");
-  openvas_server_close (socket, session);
+  openvas_connection_close (&connection);
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
                             response_data);
 }
@@ -19815,11 +19794,10 @@ get_my_settings (credentials_t * credentials, params_t *params,
                  const char *extra_xml, cmd_response_data_t* response_data)
 {
   GString *xml;
-  gnutls_session_t session;
-  int socket;
+  openvas_connection_t connection;
   gchar *html;
 
-  switch (manager_connect (credentials, &socket, &session, &html,
+  switch (manager_connect (credentials, &connection, &html,
                            response_data))
     {
       case 0:
@@ -19844,14 +19822,14 @@ get_my_settings (credentials_t * credentials, params_t *params,
 
   /* Get the settings. */
 
-  if (openvas_server_sendf (&session,
-                            "<get_settings"
-                            " sort_field=\"name\""
-                            " sort_order=\"ascending\"/>")
+  if (openvas_connection_sendf (&connection,
+                                "<get_settings"
+                                " sort_field=\"name\""
+                                " sort_order=\"ascending\"/>")
       == -1)
     {
       g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -19861,10 +19839,10 @@ get_my_settings (credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_tasks", response_data);
     }
 
-  if (read_string (&session, &xml))
+  if (read_string_c (&connection, &xml))
     {
       g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -19877,7 +19855,7 @@ get_my_settings (credentials_t * credentials, params_t *params,
   buffer_languages_xml (xml);
 
   g_string_append (xml, "</get_my_settings>");
-  openvas_server_close (socket, session);
+  openvas_connection_close (&connection);
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
                             response_data);
 }
@@ -19979,8 +19957,8 @@ edit_my_settings (credentials_t * credentials, params_t *params,
                   const char *extra_xml, cmd_response_data_t* response_data)
 {
   GString *commands, *xml;
-  gnutls_session_t session;
-  int socket, ret;
+  openvas_connection_t connection;
+  int ret;
   gchar *html, *filters_xml;
   entity_t entity;
 
@@ -20044,7 +20022,7 @@ edit_my_settings (credentials_t * credentials, params_t *params,
     }
   free_entity (entity);
 
-  switch (manager_connect (credentials, &socket, &session, &html,
+  switch (manager_connect (credentials, &connection, &html,
                            response_data))
     {
       case 0:
@@ -20072,14 +20050,14 @@ edit_my_settings (credentials_t * credentials, params_t *params,
 
   /* Get the settings. */
 
-  if (openvas_server_sendf (&session,
-                            "<get_settings"
-                            " sort_field=\"name\""
-                            " sort_order=\"ascending\"/>")
+  if (openvas_connection_sendf (&connection,
+                                "<get_settings"
+                                " sort_field=\"name\""
+                                " sort_order=\"ascending\"/>")
       == -1)
     {
       g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -20089,10 +20067,10 @@ edit_my_settings (credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_my_settings", response_data);
     }
 
-  if (read_string (&session, &xml))
+  if (read_string_c (&connection, &xml))
     {
       g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -20105,7 +20083,7 @@ edit_my_settings (credentials_t * credentials, params_t *params,
   buffer_languages_xml (xml);
 
   g_string_append (xml, "</edit_my_settings>");
-  openvas_server_close (socket, session);
+  openvas_connection_close (&connection);
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
                             response_data);
 }
@@ -20129,7 +20107,7 @@ edit_my_settings_omp (credentials_t * credentials, params_t *params,
 /**
  * @brief Send settings resource filters.
  *
- * @param[in]   session             GNUTLS session.
+ * @param[in]   connection          Connection to Manager.
  * @param[in]   data                Data.
  * @param[in]   changed             Params indicating which settings changed.
  * @param[out]  xml                 GString to write responses to.
@@ -20138,7 +20116,7 @@ edit_my_settings_omp (credentials_t * credentials, params_t *params,
  * @return 0 on success, -1 on error.
  */
 static int
-send_settings_filters (gnutls_session_t *session, params_t *data,
+send_settings_filters (openvas_connection_t *connection, params_t *data,
                        params_t *changed, GString *xml, int *modify_failed_flag,
                        cmd_response_data_t* response_data)
 {
@@ -20162,12 +20140,12 @@ send_settings_filters (gnutls_session_t *session, params_t *data,
                                           strlen (param->value));
               else
                 base64 = g_strdup("");
-              if (openvas_server_sendf_xml (session,
-                                            "<modify_setting setting_id=\"%s\">"
-                                            "<value>%s</value>"
-                                            "</modify_setting>",
-                                            uuid,
-                                            base64))
+              if (openvas_connection_sendf_xml (connection,
+                                                "<modify_setting setting_id=\"%s\">"
+                                                "<value>%s</value>"
+                                                "</modify_setting>",
+                                                uuid,
+                                                base64))
                 {
                   g_free (base64);
                   return -1;
@@ -20179,7 +20157,7 @@ send_settings_filters (gnutls_session_t *session, params_t *data,
               xml_string_append (xml,
                                  "<save_setting id=\"%s\">",
                                  uuid);
-              if (read_entity_and_string (session, &entity, &xml))
+              if (read_entity_and_string_c (connection, &entity, &xml))
                 {
                   free_entity (entity);
                   return -1;
@@ -20218,8 +20196,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
                       char **password, char **severity, char **language,
                       cmd_response_data_t* response_data)
 {
-  int socket;
-  gnutls_session_t session;
+  openvas_connection_t connection;
   gchar *html;
   const char *lang, *text, *old_passwd, *passwd, *status, *max;
   const char *details_fname, *list_fname, *report_fname;
@@ -20257,7 +20234,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
                                ("Save My Settings"),
                              response_data);
 
-  switch (manager_connect (credentials, &socket, &session, &html,
+  switch (manager_connect (credentials, &connection, &html,
                            response_data))
     {
       case 0:
@@ -20284,9 +20261,14 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
           || (strcmp (changed_value, "") && strcmp (changed_value, "0"))))
     {
       gchar *passwd_64;
+      omp_authenticate_info_opts_t auth_opts;
+
       /* Send Password setting */
 
-      switch (omp_authenticate (&session, credentials->username, old_passwd))
+      auth_opts = omp_authenticate_info_opts_defaults;
+      auth_opts.username = credentials->username;
+      auth_opts.password = old_passwd;
+      switch (omp_authenticate_info_ext_c (&connection, auth_opts))
         {
           case 0:
             break;
@@ -20325,16 +20307,16 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
 
       passwd_64 = g_base64_encode ((guchar*) passwd, strlen (passwd));
 
-      if (openvas_server_sendf (&session,
-                                "<modify_setting>"
-                                "<name>Password</name>"
-                                "<value>%s</value>"
-                                "</modify_setting>",
-                                passwd_64 ? passwd_64 : "")
+      if (openvas_connection_sendf (&connection,
+                                    "<modify_setting>"
+                                    "<name>Password</name>"
+                                    "<value>%s</value>"
+                                    "</modify_setting>",
+                                    passwd_64 ? passwd_64 : "")
           == -1)
         {
           g_free (passwd_64);
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -20347,10 +20329,10 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
 
       entity = NULL;
       xml_string_append (xml, "<save_setting name=\"Password\">");
-      if (read_entity_and_string (&session, &entity, &xml))
+      if (read_entity_and_string_c (&connection, &entity, &xml))
         {
           g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -20381,16 +20363,16 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
     {
       text_64 = g_base64_encode ((guchar*) text, strlen (text));
 
-      if (openvas_server_sendf (&session,
-                                "<modify_setting>"
-                                "<name>Timezone</name>"
-                                "<value>%s</value>"
-                                "</modify_setting>",
-                                text_64 ? text_64 : "")
+      if (openvas_connection_sendf (&connection,
+                                    "<modify_setting>"
+                                    "<name>Timezone</name>"
+                                    "<value>%s</value>"
+                                    "</modify_setting>",
+                                    text_64 ? text_64 : "")
           == -1)
         {
           g_free (text_64);
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -20403,10 +20385,10 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
 
       entity = NULL;
       xml_string_append (xml, "<save_setting name=\"Timezone\">");
-      if (read_entity_and_string (&session, &entity, &xml))
+      if (read_entity_and_string_c (&connection, &entity, &xml))
         {
           g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -20428,7 +20410,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
 
           if (setenv ("TZ", credentials->timezone, 1) == -1)
             {
-              openvas_server_close (socket, session);
+              openvas_connection_close (&connection);
               g_critical ("%s: failed to set TZ\n", __FUNCTION__);
               exit (EXIT_FAILURE);
             }
@@ -20448,17 +20430,17 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
     {
       max_64 = g_base64_encode ((guchar*) max, strlen (max));
 
-      if (openvas_server_sendf (&session,
-                                "<modify_setting"
-                                " setting_id"
-                                "=\"5f5a8712-8017-11e1-8556-406186ea4fc5\">"
-                                "<value>%s</value>"
-                                "</modify_setting>",
-                                max_64 ? max_64 : "")
+      if (openvas_connection_sendf (&connection,
+                                    "<modify_setting"
+                                    " setting_id"
+                                    "=\"5f5a8712-8017-11e1-8556-406186ea4fc5\">"
+                                    "<value>%s</value>"
+                                    "</modify_setting>",
+                                    max_64 ? max_64 : "")
           == -1)
         {
           g_free (max_64);
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -20473,10 +20455,10 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
       xml_string_append (xml,
                          "<save_setting id=\"%s\">",
                          "5f5a8712-8017-11e1-8556-406186ea4fc5");
-      if (read_entity_and_string (&session, &entity, &xml))
+      if (read_entity_and_string_c (&connection, &entity, &xml))
         {
           g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -20500,17 +20482,17 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
     {
       fname_64 = g_base64_encode ((guchar*) details_fname, strlen (details_fname));
 
-      if (openvas_server_sendf (&session,
-                                "<modify_setting"
-                                " setting_id"
-                                "=\"a6ac88c5-729c-41ba-ac0a-deea4a3441f2\">"
-                                "<value>%s</value>"
-                                "</modify_setting>",
-                                fname_64 ? fname_64 : "")
+      if (openvas_connection_sendf (&connection,
+                                    "<modify_setting"
+                                    " setting_id"
+                                    "=\"a6ac88c5-729c-41ba-ac0a-deea4a3441f2\">"
+                                    "<value>%s</value>"
+                                    "</modify_setting>",
+                                    fname_64 ? fname_64 : "")
           == -1)
         {
           g_free (fname_64);
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -20525,10 +20507,10 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
       xml_string_append (xml,
                          "<save_setting id=\"%s\">",
                          "a6ac88c5-729c-41ba-ac0a-deea4a3441f2");
-      if (read_entity_and_string (&session, &entity, &xml))
+      if (read_entity_and_string_c (&connection, &entity, &xml))
         {
           g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -20552,17 +20534,17 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
     {
       fname_64 = g_base64_encode ((guchar*) list_fname, strlen (list_fname));
 
-      if (openvas_server_sendf (&session,
-                                "<modify_setting"
-                                " setting_id"
-                                "=\"0872a6ed-4f85-48c5-ac3f-a5ef5e006745\">"
-                                "<value>%s</value>"
-                                "</modify_setting>",
-                                fname_64 ? fname_64 : "")
+      if (openvas_connection_sendf (&connection,
+                                    "<modify_setting"
+                                    " setting_id"
+                                    "=\"0872a6ed-4f85-48c5-ac3f-a5ef5e006745\">"
+                                    "<value>%s</value>"
+                                    "</modify_setting>",
+                                    fname_64 ? fname_64 : "")
           == -1)
         {
           g_free (fname_64);
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -20577,10 +20559,10 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
       xml_string_append (xml,
                          "<save_setting id=\"%s\">",
                          "a6ac88c5-729c-41ba-ac0a-deea4a3441f2");
-      if (read_entity_and_string (&session, &entity, &xml))
+      if (read_entity_and_string_c (&connection, &entity, &xml))
         {
           g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -20604,17 +20586,17 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
     {
       fname_64 = g_base64_encode ((guchar*) report_fname, strlen (report_fname));
 
-      if (openvas_server_sendf (&session,
-                                "<modify_setting"
-                                " setting_id"
-                                "=\"e1a2ae0b-736e-4484-b029-330c9e15b900\">"
-                                "<value>%s</value>"
-                                "</modify_setting>",
-                                fname_64 ? fname_64 : "")
+      if (openvas_connection_sendf (&connection,
+                                    "<modify_setting"
+                                    " setting_id"
+                                    "=\"e1a2ae0b-736e-4484-b029-330c9e15b900\">"
+                                    "<value>%s</value>"
+                                    "</modify_setting>",
+                                    fname_64 ? fname_64 : "")
           == -1)
         {
           g_free (fname_64);
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -20629,10 +20611,10 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
       xml_string_append (xml,
                          "<save_setting id=\"%s\">",
                          "e1a2ae0b-736e-4484-b029-330c9e15b900");
-      if (read_entity_and_string (&session, &entity, &xml))
+      if (read_entity_and_string_c (&connection, &entity, &xml))
         {
           g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -20656,17 +20638,17 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
     {
       lang_64 = g_base64_encode ((guchar*) lang, strlen (lang));
 
-      if (openvas_server_sendf (&session,
-                                "<modify_setting"
-                                " setting_id"
-                                "=\"6765549a-934e-11e3-b358-406186ea4fc5\">"
-                                "<value>%s</value>"
-                                "</modify_setting>",
-                                lang_64 ? lang_64 : "")
+      if (openvas_connection_sendf (&connection,
+                                    "<modify_setting"
+                                    " setting_id"
+                                    "=\"6765549a-934e-11e3-b358-406186ea4fc5\">"
+                                    "<value>%s</value>"
+                                    "</modify_setting>",
+                                    lang_64 ? lang_64 : "")
           == -1)
         {
           g_free (lang_64);
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -20681,10 +20663,10 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
       xml_string_append (xml,
                          "<save_setting id=\"%s\">",
                          "6765549a-934e-11e3-b358-406186ea4fc5");
-      if (read_entity_and_string (&session, &entity, &xml))
+      if (read_entity_and_string_c (&connection, &entity, &xml))
         {
           g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -20721,10 +20703,10 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
   /* Send default resources */
 
   defaults = params_values (params, "settings_default:");
-  if (send_settings_filters (&session, defaults, changed, xml, &modify_failed,
-                             response_data))
+  if (send_settings_filters (&connection, defaults, changed, xml,
+                             &modify_failed, response_data))
     {
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -20737,10 +20719,10 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
   /* Send resources filters */
 
   filters = params_values (params, "settings_filter:");
-  if (send_settings_filters (&session, filters, changed, xml, &modify_failed,
+  if (send_settings_filters (&connection, filters, changed, xml, &modify_failed,
                              response_data))
     {
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -20761,17 +20743,17 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
                     ? g_base64_encode ((guchar*) text, strlen (text))
                     : g_strdup (""));
 
-      if (openvas_server_sendf (&session,
-                                "<modify_setting"
-                                " setting_id"
-                                "=\"f16bb236-a32d-4cd5-a880-e0fcf2599f59\">"
-                                "<value>%s</value>"
-                                "</modify_setting>",
-                                text_64 ? text_64 : "")
+      if (openvas_connection_sendf (&connection,
+                                    "<modify_setting"
+                                    " setting_id"
+                                    "=\"f16bb236-a32d-4cd5-a880-e0fcf2599f59\">"
+                                    "<value>%s</value>"
+                                    "</modify_setting>",
+                                    text_64 ? text_64 : "")
           == -1)
         {
           g_free (text_64);
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -20786,10 +20768,10 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
       xml_string_append (xml,
                          "<save_setting id=\"%s\">",
                          "f16bb236-a32d-4cd5-a880-e0fcf2599f59");
-      if (read_entity_and_string (&session, &entity, &xml))
+      if (read_entity_and_string_c (&connection, &entity, &xml))
         {
           g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -20828,17 +20810,17 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
                     ? g_base64_encode ((guchar*) text, strlen (text))
                     : g_strdup (""));
 
-      if (openvas_server_sendf (&session,
-                                "<modify_setting"
-                                " setting_id"
-                                "=\"77ec2444-e7f2-4a80-a59b-f4237782d93f\">"
-                                "<value>%s</value>"
-                                "</modify_setting>",
-                                text_64 ? text_64 : "")
+      if (openvas_connection_sendf (&connection,
+                                    "<modify_setting"
+                                    " setting_id"
+                                    "=\"77ec2444-e7f2-4a80-a59b-f4237782d93f\">"
+                                    "<value>%s</value>"
+                                    "</modify_setting>",
+                                    text_64 ? text_64 : "")
           == -1)
         {
           g_free (text_64);
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -20853,10 +20835,10 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
       xml_string_append (xml,
                          "<save_setting id=\"%s\">",
                          "77ec2444-e7f2-4a80-a59b-f4237782d93f");
-      if (read_entity_and_string (&session, &entity, &xml))
+      if (read_entity_and_string_c (&connection, &entity, &xml))
         {
           g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -20883,17 +20865,17 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
                     ? g_base64_encode ((guchar*) text, strlen (text))
                     : g_strdup (""));
 
-      if (openvas_server_sendf (&session,
-                                "<modify_setting"
-                                " setting_id"
-                                "=\"7eda49c5-096c-4bef-b1ab-d080d87300df\">"
-                                "<value>%s</value>"
-                                "</modify_setting>",
-                                text_64 ? text_64 : "")
+      if (openvas_connection_sendf (&connection,
+                                    "<modify_setting"
+                                    " setting_id"
+                                    "=\"7eda49c5-096c-4bef-b1ab-d080d87300df\">"
+                                    "<value>%s</value>"
+                                    "</modify_setting>",
+                                    text_64 ? text_64 : "")
           == -1)
         {
           g_free (text_64);
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                               "Internal error", __FUNCTION__, __LINE__,
@@ -20908,10 +20890,10 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
       xml_string_append (xml,
                          "<save_setting id=\"%s\">",
                          "7eda49c5-096c-4bef-b1ab-d080d87300df");
-      if (read_entity_and_string (&session, &entity, &xml))
+      if (read_entity_and_string_c (&connection, &entity, &xml))
         {
           g_string_free (xml, TRUE);
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -20928,7 +20910,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
         }
     }
 
-  openvas_server_close (socket, session);
+  openvas_connection_close (&connection);
   if (modify_failed)
     return edit_my_settings (credentials, params, g_string_free (xml, FALSE),
                              response_data);
@@ -20951,12 +20933,11 @@ get_protocol_doc_omp (credentials_t * credentials, params_t *params,
                       cmd_response_data_t* response_data)
 {
   GString *xml;
-  gnutls_session_t session;
-  int socket;
+  openvas_connection_t connection;
   gchar *html;
   entity_t help_response;
 
-  switch (manager_connect (credentials, &socket, &session, &html,
+  switch (manager_connect (credentials, &connection, &html,
                            response_data))
     {
       case 0:
@@ -20980,11 +20961,11 @@ get_protocol_doc_omp (credentials_t * credentials, params_t *params,
 
   /* Get the resource. */
 
-  if (openvas_server_sendf (&session, "<help format=\"XML\"/>")
+  if (openvas_connection_sendf (&connection, "<help format=\"XML\"/>")
       == -1)
     {
       g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -20994,10 +20975,10 @@ get_protocol_doc_omp (credentials_t * credentials, params_t *params,
     }
 
   help_response = NULL;
-  if (read_entity_and_string (&session, &help_response, &xml))
+  if (read_entity_and_string_c (&connection, &help_response, &xml))
     {
       g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -21007,7 +20988,7 @@ get_protocol_doc_omp (credentials_t * credentials, params_t *params,
     }
   free_entity (help_response);
 
-  openvas_server_close (socket, session);
+  openvas_connection_close (&connection);
 
   /* Cleanup, and return transformed XML. */
 
@@ -21035,8 +21016,7 @@ export_omp_doc_omp (credentials_t * credentials, params_t *params,
                     cmd_response_data_t* response_data)
 {
   entity_t entity, response;
-  gnutls_session_t session;
-  int socket;
+  openvas_connection_t connection;
   char *content = NULL;
   gchar *html;
   const char *format;
@@ -21045,7 +21025,7 @@ export_omp_doc_omp (credentials_t * credentials, params_t *params,
 
   *content_length = 0;
 
-  switch (manager_connect (credentials, &socket, &session, &html,
+  switch (manager_connect (credentials, &connection, &html,
                            response_data))
     {
       case 0:
@@ -21067,12 +21047,12 @@ export_omp_doc_omp (credentials_t * credentials, params_t *params,
             ? params_value (params, "protocol_format")
             : "xml";
 
-  if (openvas_server_sendf (&session,
-                            "<help format=\"%s\"/>",
-                            format)
+  if (openvas_connection_sendf (&connection,
+                                "<help format=\"%s\"/>",
+                                format)
       == -1)
     {
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -21083,9 +21063,9 @@ export_omp_doc_omp (credentials_t * credentials, params_t *params,
     }
 
   response = NULL;
-  if (read_entity_and_text (&session, &response, &content))
+  if (read_entity_and_text_c (&connection, &response, &content))
     {
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -21093,7 +21073,7 @@ export_omp_doc_omp (credentials_t * credentials, params_t *params,
                            "Diagnostics: Failure to receive response from manager daemon.",
                            "/omp?cmd=get_protocol_doc", response_data);
     }
-  openvas_server_close (socket, session);
+  openvas_connection_close (&connection);
 
   if (strcmp (format, "xml") == 0)
     *content_length = strlen (content);
@@ -21137,7 +21117,7 @@ export_omp_doc_omp (credentials_t * credentials, params_t *params,
                                           tm->tm_year +1900,
                                           format);
   free_entity (response);
-  openvas_server_close (socket, session);
+  openvas_connection_close (&connection);
   return content;
 }
 
@@ -24434,14 +24414,13 @@ get_feeds_omp (credentials_t * credentials, params_t *params,
 {
   entity_t entity;
   char *text = NULL;
-  gnutls_session_t session;
-  int socket;
+  openvas_connection_t connection;
   gchar *html, *response;
   time_t now;
   struct tm *tm;
   gchar current_timestamp[30];
 
-  switch (manager_connect (credentials, &socket, &session, &html,
+  switch (manager_connect (credentials, &connection, &html,
                            response_data))
     {
       case -1:
@@ -24466,13 +24445,13 @@ get_feeds_omp (credentials_t * credentials, params_t *params,
                                   response_data);
     }
 
-  if (openvas_server_sendf (&session,
-                            "<commands>"
-                            "<get_feeds/>"
-                            "</commands>")
+  if (openvas_connection_sendf (&connection,
+                                "<commands>"
+                                "<get_feeds/>"
+                                "</commands>")
       == -1)
     {
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -24482,9 +24461,9 @@ get_feeds_omp (credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_tasks", response_data);
     }
 
-  if (read_entity_and_text (&session, &entity, &text))
+  if (read_entity_and_text_c (&connection, &entity, &text))
     {
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -24515,7 +24494,7 @@ get_feeds_omp (credentials_t * credentials, params_t *params,
 
   g_free (text);
 
-  openvas_server_close (socket, session);
+  openvas_connection_close (&connection);
   return xsl_transform_omp (credentials, response, response_data);
 }
 
@@ -24540,13 +24519,12 @@ sync_feed (credentials_t * credentials, params_t *params,
   const char *no_redirect;
   entity_t entity;
   char *text = NULL;
-  gnutls_session_t session;
-  int socket;
+  openvas_connection_t connection;
   gchar *html, *msg;
 
   no_redirect = params_value (params, "no_redirect");
 
-  switch (manager_connect (credentials, &socket, &session, &html,
+  switch (manager_connect (credentials, &connection, &html,
                            response_data))
     {
       case -1:
@@ -24576,12 +24554,12 @@ sync_feed (credentials_t * credentials, params_t *params,
                                   response_data);
     }
 
-  if (openvas_server_sendf (&session,
-                            "<%s/>",
-                            sync_cmd)
+  if (openvas_connection_sendf (&connection,
+                                "<%s/>",
+                                sync_cmd)
       == -1)
     {
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
 
       msg = g_strdup_printf
@@ -24596,9 +24574,9 @@ sync_feed (credentials_t * credentials, params_t *params,
       return html;
     }
 
-  if (read_entity_and_text (&session, &entity, &text))
+  if (read_entity_and_text_c (&connection, &entity, &text))
     {
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
 
       msg = g_strdup_printf
@@ -24613,7 +24591,7 @@ sync_feed (credentials_t * credentials, params_t *params,
       return html;
     }
 
-  openvas_server_close (socket, session);
+  openvas_connection_close (&connection);
   html = response_from_entity (credentials, params, entity,
                                (no_redirect && strcmp (no_redirect, "0")),
                                NULL, "get_feeds",
@@ -25040,8 +25018,7 @@ char *
 save_filter_omp (credentials_t * credentials, params_t *params,
                  cmd_response_data_t* response_data)
 {
-  gnutls_session_t session;
-  int socket;
+  openvas_connection_t connection;
   entity_t entity;
   gchar *html, *response;
   const char *no_redirect, *filter_id, *name, *comment, *term, *type;
@@ -25059,7 +25036,7 @@ save_filter_omp (credentials_t * credentials, params_t *params,
   CHECK_PARAM_INVALID (term, "Save Filter", "edit_filter");
   CHECK_PARAM_INVALID (type, "Save Filter", "edit_filter");
 
-  switch (manager_connect (credentials, &socket, &session, &html,
+  switch (manager_connect (credentials, &connection, &html,
                            response_data))
     {
       case 0:
@@ -25083,22 +25060,22 @@ save_filter_omp (credentials_t * credentials, params_t *params,
 
     /* Modify the filter. */
 
-    ret = openvas_server_sendf_xml (&session,
-                                "<modify_filter filter_id=\"%s\">"
-                                "<name>%s</name>"
-                                "<comment>%s</comment>"
-                                "<term>%s</term>"
-                                "<type>%s</type>"
-                                "</modify_filter>",
-                                filter_id,
-                                name,
-                                comment,
-                                term,
-                                type);
+    ret = openvas_connection_sendf_xml (&connection,
+                                        "<modify_filter filter_id=\"%s\">"
+                                        "<name>%s</name>"
+                                        "<comment>%s</comment>"
+                                        "<term>%s</term>"
+                                        "<type>%s</type>"
+                                        "</modify_filter>",
+                                        filter_id,
+                                        name,
+                                        comment,
+                                        term,
+                                        type);
 
     if (ret == -1)
       {
-        openvas_server_close (socket, session);
+        openvas_connection_close (&connection);
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
@@ -25109,9 +25086,9 @@ save_filter_omp (credentials_t * credentials, params_t *params,
       }
 
     entity = NULL;
-    if (read_entity_and_text (&session, &entity, &response))
+    if (read_entity_and_text_c (&connection, &entity, &response))
       {
-        openvas_server_close (socket, session);
+        openvas_connection_close (&connection);
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
@@ -25123,7 +25100,7 @@ save_filter_omp (credentials_t * credentials, params_t *params,
 
   }
 
-  openvas_server_close (socket, session);
+  openvas_connection_close (&connection);
 
   /* Pass response to handler of following page. */
 
@@ -26983,12 +26960,11 @@ wizard (credentials_t *credentials, params_t *params, const char *extra_xml,
         cmd_response_data_t* response_data)
 {
   GString *xml;
-  gnutls_session_t session;
-  int socket;
+  openvas_connection_t connection;
   gchar *html;
   const char* name = params_value (params, "name");
 
-  switch (manager_connect (credentials, &socket, &session, &html,
+  switch (manager_connect (credentials, &connection, &html,
                            response_data))
     {
       case 0:
@@ -27023,16 +26999,16 @@ wizard (credentials_t *credentials, params_t *params, const char *extra_xml,
                           name);
 
   /* Try to run init mode of the wizard */
-  if (openvas_server_sendf_xml (&session,
-                                "<run_wizard read_only=\"1\">"
-                                "<name>%s</name>"
-                                "<mode>init</mode>"
-                                "</run_wizard>",
-                                name)
+  if (openvas_connection_sendf_xml (&connection,
+                                    "<run_wizard read_only=\"1\">"
+                                    "<name>%s</name>"
+                                    "<mode>init</mode>"
+                                    "</run_wizard>",
+                                    name)
       == -1)
     {
       g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -27041,10 +27017,10 @@ wizard (credentials_t *credentials, params_t *params, const char *extra_xml,
                            "/omp?cmd=get_tasks", response_data);
     }
 
-  if (read_string (&session, &xml))
+  if (read_string_c (&connection, &xml))
     {
       g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -27057,13 +27033,13 @@ wizard (credentials_t *credentials, params_t *params, const char *extra_xml,
 
   /* Get the setting. */
 
-  if (openvas_server_sendf_xml (&session,
-                                "<get_settings"
-                                " setting_id=\"20f3034c-e709-11e1-87e7-406186ea4fc5\"/>")
+  if (openvas_connection_sendf_xml (&connection,
+                                    "<get_settings"
+                                    " setting_id=\"20f3034c-e709-11e1-87e7-406186ea4fc5\"/>")
       == -1)
     {
       g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -27072,10 +27048,10 @@ wizard (credentials_t *credentials, params_t *params, const char *extra_xml,
                            "/omp?cmd=get_tasks", response_data);
     }
 
-  if (read_string (&session, &xml))
+  if (read_string_c (&connection, &xml))
     {
       g_string_free (xml, TRUE);
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -27087,7 +27063,7 @@ wizard (credentials_t *credentials, params_t *params, const char *extra_xml,
   /* Cleanup, and return transformed XML. */
 
   g_string_append_printf (xml, "</wizard>");
-  openvas_server_close (socket, session);
+  openvas_connection_close (&connection);
   return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
                             response_data);
 }
@@ -27533,8 +27509,7 @@ char *
 bulk_delete_omp (credentials_t * credentials, params_t *params,
                  cmd_response_data_t* response_data)
 {
-  gnutls_session_t session;
-  int socket;
+  openvas_connection_t connection;
   const char *no_redirect, *type;
   GString *commands_xml;
   params_t *selected_ids;
@@ -27592,7 +27567,7 @@ bulk_delete_omp (credentials_t * credentials, params_t *params,
 
   g_string_append (commands_xml, "</commands>");
 
-  switch (manager_connect (credentials, &socket, &session, &html,
+  switch (manager_connect (credentials, &connection, &html,
                            response_data))
     {
       case 0:
@@ -27613,12 +27588,12 @@ bulk_delete_omp (credentials_t * credentials, params_t *params,
 
   /* Delete the resources and get all resources. */
 
-  if (openvas_server_sendf_xml (&session,
-                                commands_xml->str)
+  if (openvas_connection_sendf_xml (&connection,
+                                    commands_xml->str)
       == -1)
     {
       g_string_free (commands_xml, TRUE);
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -27630,9 +27605,9 @@ bulk_delete_omp (credentials_t * credentials, params_t *params,
   g_string_free (commands_xml, TRUE);
 
   entity = NULL;
-  if (read_entity_and_text (&session, &entity, &response))
+  if (read_entity_and_text_c (&connection, &entity, &response))
     {
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -27642,7 +27617,7 @@ bulk_delete_omp (credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_tasks", response_data);
     }
 
-  openvas_server_close (socket, session);
+  openvas_connection_close (&connection);
 
   /* Cleanup, and return transformed XML. */
 
@@ -28057,8 +28032,7 @@ char *
 delete_asset_omp (credentials_t * credentials, params_t *params,
                   cmd_response_data_t* response_data)
 {
-  gnutls_session_t session;
-  int socket;
+  openvas_connection_t connection;
   gchar *html, *response, *resource_id;
   const char *next_id, *no_redirect;
   entity_t entity;
@@ -28092,7 +28066,7 @@ delete_asset_omp (credentials_t * credentials, params_t *params,
       param->value_size = strlen (param->value);
     }
 
-  switch (manager_connect (credentials, &socket, &session, &html,
+  switch (manager_connect (credentials, &connection, &html,
                            response_data))
     {
       case 0:
@@ -28117,14 +28091,14 @@ delete_asset_omp (credentials_t * credentials, params_t *params,
 
   /* Delete the resource and get all resources. */
 
-  if (openvas_server_sendf (&session,
-                            "<delete_asset %s_id=\"%s\"/>",
-                            params_value (params, "asset_id")
-                             ? "asset" : "report",
-                            resource_id)
+  if (openvas_connection_sendf (&connection,
+                                "<delete_asset %s_id=\"%s\"/>",
+                                params_value (params, "asset_id")
+                                 ? "asset" : "report",
+                                resource_id)
       == -1)
     {
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       g_free (resource_id);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
@@ -28138,9 +28112,9 @@ delete_asset_omp (credentials_t * credentials, params_t *params,
   g_free (resource_id);
 
   entity = NULL;
-  if (read_entity_and_text (&session, &entity, &response))
+  if (read_entity_and_text_c (&connection, &entity, &response))
     {
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -28150,7 +28124,7 @@ delete_asset_omp (credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_tasks", response_data);
     }
 
-  openvas_server_close (socket, session);
+  openvas_connection_close (&connection);
 
   /* Cleanup, and return transformed XML. */
 
@@ -28452,6 +28426,73 @@ get_assets_chart_omp (credentials_t * credentials, params_t *params,
 /* Manager communication. */
 
 /**
+ * @brief Connect to OpenVAS Manager daemon.
+ *
+ * @param[in]  path  Path to the Manager socket.
+ *
+ * @return Socket, or -1 on error.
+ */
+int
+connect_unix (const gchar *path)
+{
+  struct sockaddr_un address;
+  int sock;
+
+  /* Make socket. */
+
+  sock = socket (AF_UNIX, SOCK_STREAM, 0);
+  if (sock == -1)
+    {
+      g_warning ("Failed to create server socket");
+      return -1;
+    }
+
+  /* Connect to server. */
+
+  address.sun_family = AF_UNIX;
+  strncpy (address.sun_path, path, sizeof (address.sun_path) - 1);
+  if (connect (sock, (struct sockaddr *) &address, sizeof (address)) == -1)
+    {
+      g_warning ("Failed to connect to server");
+      close (sock);
+      return -1;
+    }
+
+  return sock;
+}
+
+/**
+ * @brief Connect to an address.
+ *
+ * @param[out]  connection  Connection.
+ * @param[out]  address     Address.
+ * @param[out]  port        Port.
+ *
+ * @return 0 success, -1 failed to connect.
+ */
+int
+openvas_connection_open (openvas_connection_t *connection,
+                         const gchar *address,
+                         int port)
+{
+  connection->tls = manager_use_tls;
+  if (manager_use_tls)
+    connection->socket = openvas_server_open (&connection->session,
+                                              address
+                                               ? address
+                                               : OPENVASMD_ADDRESS,
+                                              port);
+  else
+    connection->socket = connect_unix (address
+                                        ? address
+                                        // FIX default socket
+                                        : OPENVASMD_ADDRESS);
+  if (connection->socket == -1)
+    return -1;
+  return 0;
+}
+
+/**
  * @brief Check authentication credentials.
  *
  * @param[in]  username      Username.
@@ -28473,17 +28514,15 @@ authenticate_omp (const gchar * username, const gchar * password,
                   gchar **capabilities, gchar **language, gchar **pw_warning,
                   GTree **chart_prefs, gchar **autorefresh)
 {
-  gnutls_session_t session;
-  int socket;
+  openvas_connection_t connection;
   int auth;
   omp_authenticate_info_opts_t auth_opts;
 
-  socket = openvas_server_open (&session,
-                                manager_address
-                                 ? manager_address
-                                 : OPENVASMD_ADDRESS,
-                                manager_port);
-  if (socket == -1)
+  if (openvas_connection_open (&connection,
+                               manager_address
+                                ? manager_address
+                                : OPENVASMD_ADDRESS,
+                               manager_port))
     {
       g_debug ("%s failed to acquire socket!\n", __FUNCTION__);
       return 2;
@@ -28509,7 +28548,7 @@ authenticate_omp (const gchar * username, const gchar * password,
   auth_opts.timezone = timezone;
   auth_opts.pw_warning = pw_warning;
 
-  auth = omp_authenticate_info_ext (&session, auth_opts);
+  auth = omp_authenticate_info_ext_c (&connection, auth_opts);
   if (auth == 0)
     {
       entity_t entity;
@@ -28520,7 +28559,7 @@ authenticate_omp (const gchar * username, const gchar * password,
 
       /* Get language setting. */
 
-      ret = setting_get_value (&session,
+      ret = setting_get_value (&connection,
                                "6765549a-934e-11e3-b358-406186ea4fc5",
                                language,
                                NULL);
@@ -28531,29 +28570,29 @@ authenticate_omp (const gchar * username, const gchar * password,
             break;
           case 1:
           case 2:
-            openvas_server_close (socket, session);
+            openvas_connection_close (&connection);
             return 2;
           default:
-            openvas_server_close (socket, session);
+            openvas_connection_close (&connection);
             return -1;
         }
 
       /* Request help. */
 
-      ret = openvas_server_sendf (&session,
-                                  "<help format=\"XML\" type=\"brief\"/>");
+      ret = openvas_connection_sendf (&connection,
+                                      "<help format=\"XML\" type=\"brief\"/>");
       if (ret)
         {
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           return 2;
         }
 
       /* Read the response. */
 
       entity = NULL;
-      if (read_entity_and_text (&session, &entity, &response))
+      if (read_entity_and_text_c (&connection, &entity, &response))
         {
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           return 2;
         }
 
@@ -28575,27 +28614,27 @@ authenticate_omp (const gchar * username, const gchar * password,
         }
       else
         {
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           g_free (response);
           return -1;
         }
 
       /* Get the chart preferences */
 
-      ret = openvas_server_sendf (&session,
-                                  "<get_settings"
-                                  " filter='name~\"Dashboard\"'/>");
+      ret = openvas_connection_sendf (&connection,
+                                      "<get_settings"
+                                      " filter='name~\"Dashboard\"'/>");
       if (ret)
         {
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           return 2;
         }
 
       /* Read the response */
       entity = NULL;
-      if (read_entity_and_text (&session, &entity, &response))
+      if (read_entity_and_text_c (&connection, &entity, &response))
         {
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           return 2;
         }
 
@@ -28639,13 +28678,13 @@ authenticate_omp (const gchar * username, const gchar * password,
         {
           free_entity (entity);
           g_free (response);
-          openvas_server_close (socket, session);
+          openvas_connection_close (&connection);
           return -1;
         }
 
       /* Get autorefresh setting. */
 
-      ret = setting_get_value (&session,
+      ret = setting_get_value (&connection,
                                "578a1c14-e2dc-45ef-a591-89d31391d007",
                                autorefresh,
                                NULL);
@@ -28656,19 +28695,19 @@ authenticate_omp (const gchar * username, const gchar * password,
             break;
           case 1:
           case 2:
-            openvas_server_close (socket, session);
+            openvas_connection_close (&connection);
             return 2;
           default:
-            openvas_server_close (socket, session);
+            openvas_connection_close (&connection);
             return -1;
         }
 
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       return 0;
     }
   else
     {
-      openvas_server_close (socket, session);
+      openvas_connection_close (&connection);
       return 1;
     }
 }
@@ -28679,27 +28718,26 @@ authenticate_omp (const gchar * username, const gchar * password,
  * If the Manager is down, logout and return the login HTML in \p html.
  *
  * @param[in]   credentials  Username and password for authentication.
- * @param[out]  socket       Manager socket on success.
- * @param[out]  session      GNUTLS session on success.
+ * @param[out]  connection   Connection to Manager on success.
  * @param[out]  html         HTML on failure to connect if possible, else NULL.
  * @param[out]  response_data  Extra data return for the HTTP response.
  *
  * @return 0 success, -1 failed to connect, -2 authentication failed.
  */
 int
-manager_connect (credentials_t *credentials, int *socket,
-                 gnutls_session_t *session, gchar **html,
-                 cmd_response_data_t *response_data)
+manager_connect (credentials_t *credentials, openvas_connection_t *connection,
+                 gchar **html, cmd_response_data_t *response_data)
 {
+  omp_authenticate_info_opts_t auth_opts;
+
   if (html)
     *html = NULL;  /* Keep compiler quiet. */
 
-  *socket = openvas_server_open (session,
-                                 manager_address
-                                  ? manager_address
-                                  : OPENVASMD_ADDRESS,
-                                 manager_port);
-  if (*socket == -1)
+  if (openvas_connection_open (connection,
+                               manager_address
+                                ? manager_address
+                                : OPENVASMD_ADDRESS,
+                               manager_port))
     {
       response_data->http_status_code = MHD_HTTP_SERVICE_UNAVAILABLE;
       if (html)
@@ -28714,10 +28752,14 @@ manager_connect (credentials_t *credentials, int *socket,
            credentials->password);
 #endif
 
-  if (omp_authenticate (session, credentials->username, credentials->password))
+
+  auth_opts = omp_authenticate_info_opts_defaults;
+  auth_opts.username = credentials->username;
+  auth_opts.password = credentials->password;
+  if (omp_authenticate_info_ext_c (connection, auth_opts))
     {
       g_debug ("authenticate failed!\n");
-      openvas_server_close (*socket, *session);
+      openvas_connection_close (connection);
       return -2;
     }
 

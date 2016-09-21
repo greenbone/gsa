@@ -37,7 +37,7 @@
 
 #include "gsad_base.h" /* for credentials_t */
 
-void omp_init (const gchar *, int);
+void omp_init (const gchar *, const gchar *, int);
 
 void cmd_response_data_init (cmd_response_data_t*);
 void cmd_response_data_reset (cmd_response_data_t*);
