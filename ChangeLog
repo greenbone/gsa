@@ -1,3 +1,8 @@
+2016-09-21  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/gsad_base.c (login_xml): Add missing comma in first call of
+	xml_string_append.
+
 2016-09-21  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Sort of UNIX socket default.

@@ -538,7 +538,7 @@ login_xml (const gchar *message, const gchar *token, const gchar *time,
                      "<version>%s</version>"
                      "<vendor_version>%s</vendor_version>"
                      "<token>%s</token>"
-                     "<time>%s</time>"
+                     "<time>%s</time>",
                      GSAD_VERSION,
                      vendor_version_get (),
                      token ? token : "",
