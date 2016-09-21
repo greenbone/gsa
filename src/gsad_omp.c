@@ -423,7 +423,7 @@ find_by_value (gchar *key, gchar *value,  find_by_value_t *data)
 }
 
 /**
- * @brief Check whether an filter exists
+ * @brief Check whether a filter exists
  *
  * @param[in] entity  Response entity.
  *

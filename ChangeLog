@@ -1,5 +1,9 @@
 2016-09-21  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (filter_exists): Correct grammar.
+
+2016-09-21  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (init_find_by_value, free_find_by_value): Standardise
 	formatting.
 
