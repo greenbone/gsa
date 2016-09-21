@@ -328,10 +328,17 @@ omp_init (const gchar *manager_address_unix, const gchar *manager_address_tls,
       manager_address = g_strdup (manager_address_unix);
       manager_use_tls = 0;
     }
-  if (manager_address_tls)
+  else if (manager_address_tls)
     {
       manager_address = g_strdup (manager_address_tls);
       manager_use_tls = 1;
+    }
+  else
+    {
+      manager_address = g_build_filename (OPENVAS_RUN_DIR,
+                                          "openvasmd.sock",
+                                          NULL);
+      manager_use_tls = 0;
     }
   manager_port = port_manager;
 }
@@ -28478,20 +28485,21 @@ openvas_connection_open (openvas_connection_t *connection,
                          const gchar *address,
                          int port)
 {
+  if (address == NULL)
+    return -1;
+
   connection->tls = manager_use_tls;
+
   if (manager_use_tls)
     connection->socket = openvas_server_open (&connection->session,
-                                              address
-                                               ? address
-                                               : OPENVASMD_ADDRESS,
+                                              address,
                                               port);
   else
-    connection->socket = connect_unix (address
-                                        ? address
-                                        // FIX default socket
-                                        : OPENVASMD_ADDRESS);
+    connection->socket = connect_unix (address);
+
   if (connection->socket == -1)
     return -1;
+
   return 0;
 }
 
@@ -28522,9 +28530,7 @@ authenticate_omp (const gchar * username, const gchar * password,
   omp_authenticate_info_opts_t auth_opts;
 
   if (openvas_connection_open (&connection,
-                               manager_address
-                                ? manager_address
-                                : OPENVASMD_ADDRESS,
+                               manager_address,
                                manager_port))
     {
       g_debug ("%s failed to acquire socket!\n", __FUNCTION__);
@@ -28737,9 +28743,7 @@ manager_connect (credentials_t *credentials, openvas_connection_t *connection,
     *html = NULL;  /* Keep compiler quiet. */
 
   if (openvas_connection_open (connection,
-                               manager_address
-                                ? manager_address
-                                : OPENVASMD_ADDRESS,
+                               manager_address,
                                manager_port))
     {
       response_data->http_status_code = MHD_HTTP_SERVICE_UNAVAILABLE;

@@ -1,5 +1,16 @@
 2016-09-21  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Sort of UNIX socket default.
+
+	* src/gsad_omp.c (omp_init): Prefer the UNIX option to connection to
+	Manager, and use the OPENVAS_RUN_DIR socket if one is not specified.
+	(openvas_connection_open): Expect address to be set, now that omp_init
+	has a default.
+	(authenticate_omp, manager_connect): Remove connect defaults now that
+	omp_init sets them.
+
+2016-09-21  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad_omp.c (filter_exists): Correct grammar.
 
 2016-09-21  Matthew Mundell <matthew.mundell@greenbone.net>
