@@ -626,11 +626,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </func:result>
 </func:function>
 
-<func:function name="gsa:date-diff">
-  <xsl:param name="start"/>
-  <xsl:param name="end"/>
+<func:function name="gsa:date-diff-text">
+  <xsl:param name="difference"/>
 
-  <xsl:variable name="difference" select="date:difference ($start, $end)"/>
   <xsl:variable name="fromepoch"
                 select="date:add ('1970-01-01T00:00:00Z', $difference)"/>
   <xsl:variable name="seconds"
@@ -641,6 +639,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 select="date:hour-in-day($fromepoch)"/>
   <xsl:variable name="days"
                 select="date:day-in-year($fromepoch) - 1"/>
+
   <func:result>
       <xsl:if test="$days">
           <xsl:value-of select="concat (gsa-i18n:strformat (gsa:n-i18n ('%1 day', '%1 days', $days, ''), $days), ' ')"/>
@@ -654,6 +653,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:if test="$seconds">
           <xsl:value-of select="concat (gsa-i18n:strformat (gsa:n-i18n ('%1 second', '%1 seconds', $seconds, ''), $seconds), ' ')"/>
       </xsl:if>
+  </func:result>
+</func:function>
+
+<func:function name="gsa:date-diff">
+  <xsl:param name="start"/>
+  <xsl:param name="end"/>
+
+  <xsl:variable name="difference" select="date:difference ($start, $end)"/>
+  <func:result>
+    <xsl:value-of select="gsa:date-diff-text ($difference)"/>
   </func:result>
 </func:function>
 
@@ -4981,6 +4990,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:value-of select="progress/text()"/>
             </xsl:with-param>
           </xsl:call-template>
+        </td>
+      </tr>
+      <tr>
+        <td><xsl:value-of select="gsa:i18n ('Duration of last scan')"/>:</td>
+        <td>
+          <xsl:choose>
+            <xsl:when test="last_report/report/scan_end">
+              <xsl:value-of select="gsa:date-diff (last_report/report/scan_start, last_report/report/scan_end)"/>
+            </xsl:when>
+          </xsl:choose>
+        </td>
+      </tr>
+      <tr>
+        <td><xsl:value-of select="gsa:i18n ('Average scan duration')"/>:</td>
+        <td>
+          <xsl:value-of select="gsa:date-diff-text (date:duration (average_duration))"/>
         </td>
       </tr>
       <tr>
