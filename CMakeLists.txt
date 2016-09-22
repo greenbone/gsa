@@ -227,7 +227,6 @@ endif (NOT GSAD_PID_DIR)
 
 set (OPENVAS_STATE_DIR "${LOCALSTATEDIR}/lib/openvas")
 set (OPENVAS_LOG_DIR   "${LOCALSTATEDIR}/log/openvas")
-set (OPENVAS_RUN_DIR   "${LOCALSTATEDIR}/run")
 set (GSA_DATA_DIR "${DATADIR}/openvas/gsa")
 set (GSA_LOCALE_DIR "${DATADIR}/locale")
 
@@ -239,6 +238,10 @@ set (OPENVAS_CA_CERTIFICATE     "${OPENVAS_STATE_DIR}/CA/cacert.pem")
 # TODO: Eventually have all configurations collected here:
 set (GSA_CONFIG_DIR         "${SYSCONFDIR}/openvas/")
 set (GSA_CONFIG_FILE        "${SYSCONFDIR}/openvas/gsa.conf")
+
+if (NOT OPENVAS_RUN_DIR)
+  set (OPENVAS_RUN_DIR      "${LOCALSTATEDIR}/run")
+endif (NOT OPENVAS_RUN_DIR)
 
 message ("-- Install prefix: ${CMAKE_INSTALL_PREFIX}")
 
