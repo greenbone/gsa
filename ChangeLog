@@ -1,5 +1,10 @@
 2016-09-22  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad.c (main): Call omp_init in the --unix-socket case, so that
+	the manager address variables are setup.
+
+2016-09-22  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* CMakeLists.txt: Add OPENVAS_RUN_DIR.
 
 	* src/CMakeLists.txt: Add OPENVAS_RUN_DIR.

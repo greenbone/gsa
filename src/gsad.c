@@ -6111,7 +6111,9 @@ main (int argc, char **argv)
     {
       /* Start the unix socket server. */
 
-      // FIX should omp_init, did this really work?  probly used default mgr addr/port
+      omp_init (gsad_manager_unix_socket_path,
+                gsad_manager_address_string,
+                gsad_manager_port);
 
       gsad_daemon = start_unix_http_daemon (unix_socket_path, handle_request);
 
