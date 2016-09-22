@@ -1,5 +1,11 @@
 2016-09-22  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/js/greenbone.js (start_auto_refresh)
+	(stop_auto_refresh): Replace conditions for keeping the auto-refresh
+	stopped with a counter.
+
+2016-09-22  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/js/greenbone.js (start_auto_refresh): Add to gsa
 	object and do not start auto-refresh as long a dashboard is in edit
 	mode.

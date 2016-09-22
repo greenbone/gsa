@@ -1879,10 +1879,15 @@
   }
 
   var timeout_id;
+  var auto_refresh_stop_counter = 0;
 
   function start_auto_refresh() {
-    if ($('.dialog-form').length > 0) {
-      // Still open dialogs.
+    if (auto_refresh_stop_counter > 0) {
+      auto_refresh_stop_counter --;
+    }
+
+    if (auto_refresh_stop_counter >= 1) {
+      // Still open dialogs, edit mode dashboards, etc.
       return;
     }
 
@@ -1900,6 +1905,8 @@
   }
 
   function stop_auto_refresh() {
+    auto_refresh_stop_counter ++;
+
     if (timeout_id !== undefined) {
       clearTimeout(timeout_id);
       timeout_id = undefined;
