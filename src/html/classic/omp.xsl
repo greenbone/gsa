@@ -8490,6 +8490,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     data-default-controllers="tasks-chart"
     data-filter-id="{$filt_id}"
     data-hide-controller-select="1"
+    data-hide-filter-select="1"
     data-detached="1"
     data-max-components="1">
     <div class="dashboard-data-source"
@@ -9978,7 +9979,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     data-no-chart-links="{/envelope/params/no_chart_links}"
     data-max-components="1"
     data-detached="1"
-    data-hide-controller-select="1">
+    data-hide-controller-select="1"
+    data-hide-filter-select="1">
     <div class="dashboard-data-source"
       data-soure-name="aggregate-source"
       data-type="aggregate"
@@ -39735,6 +39737,7 @@ should not have received it.
     data-default-controllers="assets-chart"
     data-filter-id="{$filt_id}"
     data-hide-controller-select="1"
+    data-hide-filter-select="1"
     data-detached="1"
     data-max-components="1">
     <div class="dashboard-data-source"

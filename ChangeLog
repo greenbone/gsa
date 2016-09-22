@@ -1,3 +1,20 @@
+2016-09-22  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/graphics.xsl (js-scan-management-top-visualization)
+	(js-assets-top-visualization, js-secinfo-top-visualization)
+	(js-notes-top-visualization, js-overrides-top-visualization): Add
+	data-hide-filter-select attribute to dashboard definition divs to
+	hide the filter drop-downs.
+
+	* src/html/classic/omp.xsl (get_tasks_chart, get_aggregate)
+	(get_assets_chart): Add data-hide-filter-select attribute to dashboard
+	definition divs.
+
+	* src/html/classic/js/gsa_dashboard.js
+	(DashboardDisplay.prototype._updateFilters): Also include filters where
+	type is an empty string, i.e. filters without type restrictions.
+	(on_ready): Get hide_filter_select option from dashboard div.
+
 2016-09-22  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (main): Call omp_init in the --unix-socket case, so that

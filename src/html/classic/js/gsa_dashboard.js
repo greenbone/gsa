@@ -2417,7 +2417,7 @@
       return;
     }
     this.filters = this.all_filters.filter(function(filter) {
-      return filter.type === null ||
+      return filter.type === null || filter.type === '' ||
         filter.type === self.current_controller.data_src.filter_type;
     });
     return this;
@@ -3051,6 +3051,7 @@
             default_filters_string: elem.data('default-filters'),
             default_heights_string: elem.data('default-heights'),
             hide_controller_select: elem.data('hide-controller-select'),
+            hide_filter_select: elem.data('hide-filter-select'),
             dashboard_controls: '#' + elem.data('dashboard-controls'),
           }
       );

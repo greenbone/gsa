@@ -704,7 +704,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     data-default-controller-string="{$type}-by-cvss"
     data-dashboard-controls="top-dashboard-controls"
     data-no-chart-links="{/envelope/params/no_chart_links}"
-    data-max-components="4">
+    data-max-components="4"
+    data-hide-filter-select="1">
 
     <xsl:if test="$type='task'">
       <xsl:call-template name="task-charts">
@@ -799,7 +800,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     data-default-controller-string="{$type}-by-cvss"
     data-dashboard-controls="top-dashboard-controls"
     data-no-chart-links="{/envelope/params/no_chart_links}"
-    data-max-components="4">
+    data-max-components="4"
+    data-hide-filter-select="1">
 
     <xsl:if test="$type = 'host'">
       <xsl:call-template name="host-charts">
@@ -877,7 +879,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     data-default-heights="{$default_heights}"
     data-dashboard-controls="top-dashboard-controls"
     data-no-chart-links="{/envelope/params/no_chart_links}"
-    data-max-components="4">
+    data-max-components="4"
+    data-hide-filter-select="1">
 
     <xsl:if test="$type = 'nvt'">
       <xsl:call-template name="nvt-charts">
@@ -979,7 +982,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       data-default-heights="{$default_heights}"
       data-default-controller-string="note-by-active-days"
       data-dashboard-controls="top-dashboard-controls"
-      data-max-components="4">
+      data-max-components="4"
+      data-hide-filter-select="1">
 
       <xsl:call-template name="note-charts">
         <xsl:with-param name="filter" select="$filter"/>
@@ -1025,7 +1029,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       data-default-heights="{$default_heights}"
       data-default-controller-string="override-by-active-days"
       data-dashboard-controls="top-dashboard-controls"
-      data-max-components="4">
+      data-max-components="4"
+      data-hide-filter-select="1">
 
       <xsl:call-template name="override-charts">
         <xsl:with-param name="filter" select="$filter"/>
