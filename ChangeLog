@@ -1,3 +1,9 @@
+2016-09-22  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* CMakeLists.txt: Add OPENVAS_RUN_DIR.
+
+	* src/CMakeLists.txt: Add OPENVAS_RUN_DIR.
+
 2016-09-21  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/gsad_base.c (login_xml): Add missing comma in first call of
@@ -5,7 +11,7 @@
 
 2016-09-21  Matthew Mundell <matthew.mundell@greenbone.net>
 
-	Sort of UNIX socket default.
+	Sort out UNIX socket default.
 
 	* src/gsad_omp.c (omp_init): Prefer the UNIX option to connection to
 	Manager, and use the OPENVAS_RUN_DIR socket if one is not specified.

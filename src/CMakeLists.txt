@@ -122,6 +122,10 @@ if (OPENVAS_CA_CERTIFICATE)
   add_definitions (-DOPENVAS_CA_CERTIFICATE=\\\"${OPENVAS_CA_CERTIFICATE}\\\")
 endif (OPENVAS_CA_CERTIFICATE)
 
+if (OPENVAS_RUN_DIR)
+  add_definitions (-DOPENVAS_RUN_DIR=\\\"${OPENVAS_RUN_DIR}\\\")
+endif (OPENVAS_RUN_DIR)
+
 if (GSA_DATA_DIR)
   add_definitions (-DGSA_DATA_DIR=\\\"${GSA_DATA_DIR}\\\")
 endif (GSA_DATA_DIR)
