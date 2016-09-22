@@ -1,3 +1,15 @@
+2016-09-22  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/js/greenbone.js (start_auto_refresh): Add to gsa
+	object and do not start auto-refresh as long a dashboard is in edit
+	mode.
+	(stop_auto_refresh): Add to gsa object.
+
+	* src/html/classic/js/gsa_dashboard.js (Dashboard.prototype.startEdit):
+	Stop the auto-refresh on starting edit mode.
+	(Dashboard.prototype.stopEdit): Start the auto-refresh on stopping
+	edit mode.
+
 2016-09-22  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* CMakeLists.txt: Allow OPENVAS_RUN_DIR to be passed in.

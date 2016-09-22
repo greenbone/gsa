@@ -75,6 +75,8 @@
   gsa.log = {};
   gsa.for_each = for_each;
   gsa.upper_case_first = upper_case_first;
+  gsa.start_auto_refresh = start_auto_refresh;
+  gsa.stop_auto_refresh = stop_auto_refresh;
 
   gsa.log.error =  function() {
     console.error.apply(console, arguments);
@@ -1883,6 +1885,12 @@
       // Still open dialogs.
       return;
     }
+
+    if ($(document).find('.dashboard.edit').length > 0) {
+      // Dashboard(s) in edit mode.
+      return;
+    }
+
     if (!timeout_id && +localStorage.getItem('autorefresh-interval') &&
         global.autorefresh_enabled) {
       timeout_id = global.setTimeout(function() {

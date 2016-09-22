@@ -359,6 +359,7 @@
         event.preventDefault();
       }
     });
+    gsa.stop_auto_refresh();
 
     return this;
   };
@@ -392,6 +393,7 @@
     }
 
     $(window).off('keydown'); // remove event listener
+    gsa.start_auto_refresh();
 
     return this;
   };
