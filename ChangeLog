@@ -1,3 +1,8 @@
+2016-09-23  Christian Fischer <christian.fischer@greenbone.net>
+
+	* src/html/classic/omp.xsl (preference [edit-details]): Use yes/no
+	radio buttons for preference "report_host_details".
+
 2016-09-23  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/omp.xsl (preference [edit-details]): Use yes/no
