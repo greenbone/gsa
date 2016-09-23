@@ -1,3 +1,9 @@
+2016-09-23  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/omp.xsl (preference [edit-details]): Use yes/no
+	radio buttons for preference "unscanned_closed_udp" by replacing
+	a duplicate "unscanned_closed" entry accordingly.
+
 2016-09-22  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/js/greenbone.js (start_auto_refresh)
