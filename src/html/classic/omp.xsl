@@ -30281,7 +30281,7 @@ should not have received it.
     <input type="hidden" name="autofp"
             value="{report/filters/autofp}"/>
     <xsl:variable name="outer_type" select="@type"/>
-    <select name="report_format_id" title="{gsa:i18n ('Download Format', 'Report')}">
+    <select name="report_format_id" style="max-width:150px;" title="{gsa:i18n ('Download Format', 'Report')}">
       <xsl:for-each select="../../get_report_formats_response/report_format[active=1 and (trust/text()='yes' or predefined='1')]">
         <xsl:choose>
           <xsl:when test="$outer_type='prognostic' and name='PDF'">
@@ -30374,7 +30374,7 @@ should not have received it.
     <input type="hidden" name="autofp"
             value="{report/filters/autofp}"/>
     <xsl:variable name="outer_type" select="@type"/>
-    <select name="report_format_id" title="{gsa:i18n ('Download Format', 'Report')}">
+    <select name="report_format_id" style="max-width:150px;" title="{gsa:i18n ('Download Format', 'Report')}">
       <xsl:for-each select="../../get_report_formats_response/report_format[active=1 and (trust/text()='yes' or predefined='1')]">
         <xsl:choose>
           <xsl:when test="$outer_type='prognostic' and name='PDF'">
