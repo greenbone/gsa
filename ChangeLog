@@ -1,3 +1,7 @@
+2016-09-22  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad.c (params_append_mhd): Add comments.
+
 2016-09-23  Christian Fischer <christian.fischer@greenbone.net>
 
 	* src/html/classic/omp.xsl (preference [edit-details]): Use yes/no

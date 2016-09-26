@@ -1823,10 +1823,14 @@ params_append_mhd (params_t *params,
 
       if ((colon - name) == (strlen (name) - 1))
         {
+          /* name: "example:", value "abc". */
+
           params_append_bin (params, name, chunk_data, chunk_size, chunk_offset);
 
           return MHD_YES;
         }
+
+      /* name: "nvt:1.3.6.1.4.1.25623.1.0.105058", value "1". */
 
       prefix = g_strndup (name, 1 + colon - name);
       param = params_get (params, prefix);
