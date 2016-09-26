@@ -33591,7 +33591,7 @@ should not have received it.
     <input type="hidden" name="report_id" value="{report/@id}"/>
     <input type="hidden" name="ignore_pagination" value="1"/>
     <xsl:variable name="outer_type" select="@type"/>
-    <select name="report_format_id" title="{gsa:i18n ('Download Format', 'Property')}">
+    <select name="report_format_id" style="max-width:150px;" title="{gsa:i18n ('Download Format', 'Property')}">
       <xsl:for-each select="../../get_report_formats_response/report_format[active=1 and (trust/text()='yes' or predefined='1')]">
         <xsl:choose>
           <xsl:when test="string-length ($report_format_id) &gt; 0">
@@ -33682,7 +33682,7 @@ should not have received it.
             value="{report/filters/term}"/>
     <input type="hidden" name="ignore_pagination" value="1"/>
     <xsl:variable name="outer_type" select="@type"/>
-    <select name="report_format_id" title="{gsa:i18n ('Download Format', 'Property')}">
+    <select name="report_format_id" style="max-width:150px;" title="{gsa:i18n ('Download Format', 'Property')}">
       <xsl:for-each select="../../get_report_formats_response/report_format[active=1 and (trust/text()='yes' or predefined='1')]">
         <xsl:choose>
           <xsl:when test="string-length ($report_format_id) &gt; 0">
