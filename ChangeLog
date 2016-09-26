@@ -1,3 +1,12 @@
+2016-09-26  Christian Fischer <christian.fischer@greenbone.net>
+
+	Backport r26269 and r26267.
+
+	* src/html/classic/omp.xsl (preference [edit-details]): Use yes/no
+	radio buttons for preference "unscanned_closed_udp" by replacing
+	a duplicate "unscanned_closed" entry accordingly. Use yes/no
+	radio buttons for preference "report_host_details".
+
 2016-09-26  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Backport r26280.
