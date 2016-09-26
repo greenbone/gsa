@@ -36,6 +36,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <errno.h>
 #include <glib.h>
 #include <netinet/in.h>
 #include <netdb.h>
@@ -28463,7 +28464,7 @@ connect_unix (const gchar *path)
   strncpy (address.sun_path, path, sizeof (address.sun_path) - 1);
   if (connect (sock, (struct sockaddr *) &address, sizeof (address)) == -1)
     {
-      g_warning ("Failed to connect to server");
+      g_warning ("Failed to connect to server: %s", strerror (errno));
       close (sock);
       return -1;
     }

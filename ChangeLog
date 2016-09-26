@@ -1,5 +1,9 @@
 2016-09-26  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (connect_unix): Improve error message.
+
+2016-09-26  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/gsad.c (drop_privileges): Rename variable because user may not
 	be nobody.
 	(chroot_drop_privileges): Change drop to string, for username.
