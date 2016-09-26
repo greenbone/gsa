@@ -1,4 +1,11 @@
-2016-09-22  Matthew Mundell <matthew.mundell@greenbone.net>
+2016-09-26  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad.c (drop_privileges): Rename variable because user may not
+	be nobody.
+	(chroot_drop_privileges): Change drop to string, for username.
+	(main): Make --drop arg take the user.
+
+2016-09-26  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c (params_append_mhd): Add comments.
 

@@ -5168,29 +5168,31 @@ handle_request (void *cls, struct MHD_Connection *connection,
 
 
 /**
- * @brief Attempt to drop privileges (become user "nobody").
+ * @brief Attempt to drop privileges (become another user).
  *
- * @param[in]  nobody_pw  User details of "nobody".
+ * @param[in]  user_pw  User details of new user.
  *
  * @return TRUE if successfull, FALSE if failed (will g_critical in fail case).
  */
 static gboolean
-drop_privileges (struct passwd * nobody_pw)
+drop_privileges (struct passwd * user_pw)
 {
-
-  if (setgroups (0,NULL) != 0)
+  if (setgroups (0, NULL))
     {
-      g_critical ("%s: Failed to drop groups privileges!\n", __FUNCTION__);
+      g_critical ("%s: failed to set groups: %s\n", __FUNCTION__,
+                  strerror (errno));
       return FALSE;
     }
-  if (setgid (nobody_pw->pw_gid) != 0)
+  if (setgid (user_pw->pw_gid))
     {
-      g_critical ("%s: Failed to drop group privileges!\n", __FUNCTION__);
+      g_critical ("%s: failed to drop group privileges: %s\n", __FUNCTION__,
+                  strerror (errno));
       return FALSE;
     }
-  if (setuid (nobody_pw->pw_uid) != 0)
+  if (setuid (user_pw->pw_uid))
     {
-      g_critical ("%s: Failed to drop user privileges!\n", __FUNCTION__);
+      g_critical ("%s: failed to drop user privileges: %s\n", __FUNCTION__,
+                  strerror (errno));
       return FALSE;
     }
 
@@ -5201,31 +5203,31 @@ drop_privileges (struct passwd * nobody_pw)
  * @brief Chroot and drop privileges, if requested.
  *
  * @param[in]  do_chroot  Whether to chroot.
- * @param[in]  drop       Whether to drop privileges.
+ * @param[in]  drop       Username to drop privileges to.  Null for no dropping.
  * @param[in]  subdir     Subdirectory of GSA_DATA_DIR to chroot or chdir to.
  *
  * @return 0 success, 1 failed (will g_critical in fail case).
  */
 static int
-chroot_drop_privileges (gboolean do_chroot, gboolean drop,
+chroot_drop_privileges (gboolean do_chroot, gchar *drop,
                         const gchar *subdir)
 {
-  struct passwd *nobody_pw;
+  struct passwd *user_pw;
 
   if (drop)
     {
-      nobody_pw = getpwnam ("nobody");
-      if (nobody_pw == NULL)
+      user_pw = getpwnam (drop);
+      if (user_pw == NULL)
         {
           g_critical ("%s: Failed to drop privileges."
-                      "  Could not determine UID and GID for user \"nobody\"!\n",
-                      __FUNCTION__);
+                      "  Could not determine UID and GID for user \"%s\"!\n",
+                      __FUNCTION__,
+                      drop);
           return 1;
         }
     }
   else
-    nobody_pw = NULL;
-
+    user_pw = NULL;
 
   if (do_chroot)
     {
@@ -5241,7 +5243,7 @@ chroot_drop_privileges (gboolean do_chroot, gboolean drop,
         }
     }
 
-  if (nobody_pw && (drop_privileges (nobody_pw) == FALSE))
+  if (user_pw && (drop_privileges (user_pw) == FALSE))
     {
       g_critical ("%s: Failed to drop privileges\n",
                   __FUNCTION__);
@@ -5629,7 +5631,7 @@ main (int argc, char **argv)
   /* Process command line options. */
 
   static gboolean do_chroot = FALSE;
-  static gboolean drop = FALSE;
+  static gchar *drop = NULL;
   static gboolean foreground = FALSE;
   static gboolean http_only = FALSE;
   static gboolean print_version = FALSE;
@@ -5667,8 +5669,8 @@ main (int argc, char **argv)
   GOptionContext *option_context;
   static GOptionEntry option_entries[] = {
     {"drop-privileges", '\0',
-     0, G_OPTION_ARG_NONE, &drop,
-     "Drop privileges.", NULL},
+     0, G_OPTION_ARG_STRING, &drop,
+     "Drop privileges to <user>.", "<user>" },
     {"foreground", 'f',
      0, G_OPTION_ARG_NONE, &foreground,
      "Run in foreground.", NULL},
