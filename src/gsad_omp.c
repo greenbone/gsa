@@ -28492,9 +28492,12 @@ openvas_connection_open (openvas_connection_t *connection,
   connection->tls = manager_use_tls;
 
   if (manager_use_tls)
-    connection->socket = openvas_server_open (&connection->session,
-                                              address,
-                                              port);
+    {
+      connection->socket = openvas_server_open (&connection->session,
+                                                address,
+                                                port);
+      connection->credentials = NULL;
+    }
   else
     connection->socket = connect_unix (address);
 
