@@ -2488,6 +2488,7 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
  * @param[in]  type         Type or resource to edit.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
+ * @param[in]  extra_get_attribs  Extra attributes for the get_... command.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
@@ -2495,7 +2496,8 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
  */
 char *
 edit_resource (const char *type, credentials_t *credentials, params_t *params,
-               const char *extra_xml, cmd_response_data_t* response_data)
+               const char *extra_get_attribs, const char *extra_xml,
+               cmd_response_data_t* response_data)
 {
   GString *xml;
   openvas_connection_t connection;
@@ -2540,10 +2542,12 @@ edit_resource (const char *type, credentials_t *credentials, params_t *params,
                                 /* TODO: Remove redundant COMMANDS. */
                                 "<commands>"
                                 "<get_%ss"
+                                " %s"
                                 " %s_id=\"%s\""
                                 " details=\"1\"/>"
                                 "</commands>",
                                 type,
+                                extra_get_attribs ? extra_get_attribs : "",
                                 type,
                                 resource_id)
       == -1)
@@ -6865,7 +6869,7 @@ static char *
 edit_credential (credentials_t * credentials, params_t *params,
                  const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return edit_resource ("credential", credentials, params, extra_xml,
+  return edit_resource ("credential", credentials, params, NULL, extra_xml,
                         response_data);
 }
 
@@ -7495,7 +7499,8 @@ char *
 edit_agent (credentials_t * credentials, params_t *params,
             const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return edit_resource ("agent", credentials, params, extra_xml, response_data);
+  return edit_resource ("agent", credentials, params, NULL, extra_xml,
+                        response_data);
 }
 
 /**
@@ -19055,7 +19060,7 @@ edit_report_format (credentials_t * credentials, params_t *params,
   g_free (all_rfs_response);
 
   response = edit_resource ("report_format", credentials, params,
-                            ext_extra_xml, response_data);
+                            ext_extra_xml, NULL, response_data);
   g_free (ext_extra_xml);
   return response;
 }
@@ -21392,7 +21397,8 @@ char *
 edit_group (credentials_t * credentials, params_t *params,
             const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return edit_resource ("group", credentials, params, extra_xml, response_data);
+  return edit_resource ("group", credentials, params, NULL, extra_xml,
+                        response_data);
 }
 
 /**
@@ -23132,7 +23138,7 @@ edit_permission (credentials_t * credentials, params_t *params,
 
   if (extra_xml)
     g_string_append (extra, extra_xml);
-  html = edit_resource ("permission", credentials, params, extra->str,
+  html = edit_resource ("permission", credentials, params, NULL, extra->str,
                         response_data);
   g_string_free (extra, TRUE);
   return html;
@@ -23690,7 +23696,7 @@ char *
 edit_port_list (credentials_t * credentials, params_t *params,
                 const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return edit_resource ("port_list", credentials, params, extra_xml,
+  return edit_resource ("port_list", credentials, params, NULL, extra_xml,
                         response_data);
 }
 
@@ -24189,7 +24195,8 @@ edit_role (credentials_t * credentials, params_t *params,
 
   if (extra_xml)
     g_string_append (extra, extra_xml);
-  html = edit_resource ("role", credentials, params, extra->str, response_data);
+  html = edit_resource ("role", credentials, params, extra->str, NULL,
+                        response_data);
   g_string_free (extra, TRUE);
   return html;
 }
@@ -24937,7 +24944,7 @@ char *
 edit_filter (credentials_t * credentials, params_t *params,
              const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return edit_resource ("filter", credentials, params, extra_xml,
+  return edit_resource ("filter", credentials, params, NULL, extra_xml,
                         response_data);
 }
 
@@ -25143,8 +25150,8 @@ char *
 edit_schedule (credentials_t * credentials, params_t *params,
                const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return edit_resource ("schedule", credentials, params, extra_xml,
-                        response_data);
+  return edit_resource ("schedule", credentials, params,
+                        "tasks=\"1\"", extra_xml, response_data);
 }
 
 /**
@@ -26092,7 +26099,8 @@ edit_user (credentials_t * credentials, params_t *params,
 
   if (extra_xml)
     g_string_append (extra, extra_xml);
-  html = edit_resource ("user", credentials, params, extra->str, response_data);
+  html = edit_resource ("user", credentials, params, extra->str, NULL,
+                        response_data);
   g_string_free (extra, TRUE);
   return html;
 }

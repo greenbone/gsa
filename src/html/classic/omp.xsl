@@ -18886,6 +18886,14 @@ should not have received it.
       <xsl:value-of select="gsa:i18n ('Edit Schedule')"/>
     </div>
     <div class="content">
+      <xsl:variable name="task_count" select="count (commands_response/get_schedules_response/schedule/tasks/task)"/>
+      <xsl:if test="$task_count &gt; 0">
+        <p>
+          <b><xsl:value-of select="gsa:i18n ('Notice')"/>:</b>
+          <xsl:text> </xsl:text>
+          <xsl:value-of select="gsa-i18n:strformat (gsa:n-i18n ('A Task using this schedule will be affected by changes made here.', '%1 Tasks using this schedule will be affected by changes made here.', $task_count), $task_count)"/>
+        </p>
+      </xsl:if>
       <form action="" method="post" enctype="multipart/form-data" class="form-horizontal">
         <input type="hidden" name="token" value="{/envelope/token}"/>
         <input type="hidden" name="cmd" value="save_schedule"/>

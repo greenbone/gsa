@@ -1,3 +1,16 @@
+2016-09-27  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/gsad_omp.c (edit_resource): Add new parameter extra_get_attribs.
+	(edit_credential, edit_agent, edit_report_format, edit_group)
+	(edit_permission, edit_port_list, edit_role, edit_filter): Update
+	edit_resource parameters.
+	(edit_schedule): Add "tasks" parameter to get command by adding it as
+	extra_get_attribs param value.
+	(edit_user): Update edit_resource parameters.
+
+	* src/html/classic/omp.xsl (html-edit-schedule-form): Add notice
+	when tasks will be affected by editing the schedule.
+
 2016-09-27  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (openvas_connection_open): Init credentials in TLS
