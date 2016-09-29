@@ -1428,7 +1428,6 @@ init_validator ()
   openvas_validator_add (validator, "tag_name",       "^[\\:-_[:alnum:], \\./]{1,80}$");
   openvas_validator_add (validator, "tag_value",       "^[\\-_@[:alnum:], \\./]{0,200}$");
   openvas_validator_add (validator, "target_id",  "^[a-z0-9\\-]+$");
-  openvas_validator_add (validator, "target_id_optional",  "^(--|[a-z0-9\\-]+)$");
   openvas_validator_add (validator, "task_id",    "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "term",       "^.{0,1000}");
   openvas_validator_add (validator, "text",       "^.{0,1000}");
