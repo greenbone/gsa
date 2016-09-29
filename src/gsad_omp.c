@@ -3526,7 +3526,7 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
                     openvas_connection_close (&connection);
                     g_free (alert));
 
-  PARAM_OR_SETTING (slave, "slave_id_optional",
+  PARAM_OR_SETTING (slave, "slave_id",
                     "aec201fa-8a82-4b61-bebe-a44ea93b2909",
                     openvas_connection_close (&connection);
                     g_free (alert);
@@ -4291,7 +4291,7 @@ create_task_omp (credentials_t * credentials, params_t *params,
   target_id = params_value (params, "target_id");
   scanner_type = params_value (params, "scanner_type");
   hosts_ordering = params_value (params, "hosts_ordering");
-  slave_id = params_value (params, "slave_id_optional");
+  slave_id = params_value (params, "slave_id");
   schedule_id = params_value (params, "schedule_id_optional");
   schedule_periods = params_value (params, "schedule_periods");
   scanner_id = params_value (params, "scanner_id");

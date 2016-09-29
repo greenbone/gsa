@@ -1421,7 +1421,6 @@ init_validator ()
   openvas_validator_add (validator, "nvt:name",          "(?s)^.*$");
   openvas_validator_add (validator, "restrict_credential_type", "^[a-z0-9\\_|]+$");
   openvas_validator_add (validator, "slave_id",   "^[a-z0-9\\-]+$");
-  openvas_validator_add (validator, "slave_id_optional",   "^(--|[a-z0-9\\-]+)$");
   openvas_validator_add (validator, "subject_type",  "^(group|role|user)$");
   openvas_validator_add (validator, "summary",    "^.{0,400}$");
   openvas_validator_add (validator, "tag_id",  "^[a-z0-9\\-]+$");

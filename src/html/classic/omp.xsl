@@ -6353,7 +6353,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <input type="hidden" name="schedule_id_optional" value="--"/>
       </xsl:if>
       <xsl:if test="not (gsa:may-op ('get_slaves'))">
-        <input type="hidden" name="slave_id_optional" value="--"/>
+        <input type="hidden" name="slave_id" value="--"/>
       </xsl:if>
       <div class="form-group">
         <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Name')"/></label>
@@ -6682,7 +6682,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 </label>
                 <div class="col-8">
                   <div class="form-item">
-                    <select name="slave_id_optional">
+                    <select name="slave_id">
                       <xsl:variable name="slave_id">
                         <xsl:value-of select="slave_id"/>
                       </xsl:variable>
@@ -6709,7 +6709,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <div class="form-item">
                     <a href="#" title="{ gsa:i18n('Create a new slave') }"
                       class="new-action-icon icon icon-sm" data-type="slave"
-                      data-done="select[name=slave_id_optional]">
+                      data-done="select[name=slave_id]">
                       <img class="valign-middle" src="/img/new.svg"/>
                     </a>
                   </div>
