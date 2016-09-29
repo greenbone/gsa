@@ -6350,7 +6350,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
       <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
       <xsl:if test="not (gsa:may-op ('get_schedules'))">
-        <input type="hidden" name="schedule_id_optional" value="--"/>
+        <input type="hidden" name="schedule_id" value="--"/>
       </xsl:if>
       <xsl:if test="not (gsa:may-op ('get_slaves'))">
         <input type="hidden" name="slave_id" value="--"/>
@@ -6425,7 +6425,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Schedule')"/></label>
           <div class="col-10">
             <div class="form-item">
-              <select name="schedule_id_optional">
+              <select name="schedule_id">
                 <xsl:variable name="schedule_id"
                   select="schedule_id"/>
                 <xsl:choose>
@@ -6460,7 +6460,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <div class="form-item">
               <a href="#" title="{ gsa:i18n('Create a new schedule') }"
                 class="new-action-icon icon icon-sm" data-type="schedule"
-                data-done="select[name=schedule_id_optional]">
+                data-done="select[name=schedule_id]">
                 <img src="/img/new.svg"/>
               </a>
             </div>

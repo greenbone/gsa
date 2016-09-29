@@ -1453,7 +1453,6 @@ init_validator ()
   openvas_validator_add (validator, "cve_scanner_id", "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "osp_scanner_id", "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "schedule_id", "^[a-z0-9\\-]+$");
-  openvas_validator_add (validator, "schedule_id_optional", "^(--|[a-z0-9\\-]+)$");
   openvas_validator_add (validator, "severity", "^(-1(\\.0)?|[0-9](\\.[0-9])?|10(\\.0)?)$");
   openvas_validator_add (validator, "severity_class", "^(classic|nist|bsi|pci\\-dss)$");
   openvas_validator_add (validator, "severity_optional", "^(-1(\\.0)?|[0-9](\\.[0-9])?|10(\\.0)?)?$");
