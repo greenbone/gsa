@@ -1,3 +1,18 @@
+2016-09-39  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/greenbone.js (on_read): Add disabled css class to each
+	element that is disbaled based on form-item-control selection.
+
+	* src/html/classic/css/gsa-base.css: Add new styles for an offset-container.
+	within horizontal forms. This allows to move a form group visual into a parent
+	form group.
+
+	Also set the text color to gray for disabled horizontal form elements.
+
+	* src/html/classic/omp.xsl (new_task, html-edit-task-scan-options): Indent
+	apply overrides and min qod form groups to be visualy a sub group of add
+	results to assets.
+
 2016-09-29  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/gsad.c (init_validator): Remove validator for schedule_id_optional. The --

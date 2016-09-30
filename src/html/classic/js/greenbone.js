@@ -1711,6 +1711,11 @@
 
         form.find('.form-enable-item--' + name).each(function() {
           var cur = $(this);
+
+          cur.removeClass('disabled');
+          if (value === disable) {
+            cur.addClass('disabled');
+          }
           if (cur.hasClass('spinner')) {
             cur.spinner('option', 'disabled', value === disable);
           }

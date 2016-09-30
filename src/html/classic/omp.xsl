@@ -6511,39 +6511,41 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </div>
         </div>
       </div>
-      <div class="form-group">
-        <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Apply Overrides')"/></label>
-        <div class="col-10">
-          <div class="form-item">
-            <div class="radio">
-              <label>
-                <input type="radio" name="apply_overrides" value="1" checked="1"
-                  class="form-enable-item--in-assets" />
-                <xsl:value-of select="gsa:i18n ('yes')"/>
-              </label>
+      <div class="offset-container offset-2 col-10 form-enable-item--in-assets">
+        <div class="form-group">
+          <label class="col-3 control-label"><xsl:value-of select="gsa:i18n ('Apply Overrides')"/></label>
+          <div class="col-9">
+            <div class="form-item">
+              <div class="radio">
+                <label>
+                  <input type="radio" name="apply_overrides" value="1" checked="1"
+                    class="form-enable-item--in-assets" />
+                  <xsl:value-of select="gsa:i18n ('yes')"/>
+                </label>
+              </div>
             </div>
-          </div>
-          <div class="form-item">
-            <div class="radio">
-              <label>
-                <input type="radio" name="apply_overrides" value="0"
-                  class="form-enable-item--in-assets" />
-                <xsl:value-of select="gsa:i18n ('no')"/>
-              </label>
+            <div class="form-item">
+              <div class="radio">
+                <label>
+                  <input type="radio" name="apply_overrides" value="0"
+                    class="form-enable-item--in-assets" />
+                  <xsl:value-of select="gsa:i18n ('no')"/>
+                </label>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <div class="form-group">
-        <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Min QoD')"/></label>
-        <div class="col-10">
-          <div class="form-item">
-            <input type="text" name="min_qod" value="70" size="4"
-              class="spinner form-enable-item--in-assets"
-              data-type="float" min="0" max="100"/>
-          </div>
-          <div class="form-item">
-            <xsl:text>%</xsl:text>
+        <div class="form-group">
+          <label class="col-3 control-label"><xsl:value-of select="gsa:i18n ('Min QoD')"/></label>
+          <div class="col-9">
+            <div class="form-item">
+              <input type="text" name="min_qod" value="70" size="4"
+                class="spinner form-enable-item--in-assets"
+                data-type="float" min="0" max="100"/>
+            </div>
+            <div class="form-item">
+              <xsl:text>%</xsl:text>
+            </div>
           </div>
         </div>
       </div>
@@ -7513,71 +7515,73 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </div>
   </div>
-  <div class="form-group">
-    <xsl:variable name="apply_overrides"
-      select="commands_response/get_tasks_response/task/preferences/preference[scanner_name='assets_apply_overrides']"/>
-    <label class="col-2 control-label">
-      <xsl:value-of select="gsa:i18n ('Apply Overrides')"/>
-    </label>
-    <div class="col-10">
-      <xsl:choose>
-        <xsl:when test="$apply_overrides/value='yes'">
-          <div class="form-item">
-            <div class="radio">
-              <label>
-                <input type="radio" name="apply_overrides" value="1" checked="1"
-                  class="form-enable-item--in-assets" />
-                <xsl:value-of select="gsa:i18n ('yes')"/>
-              </label>
+  <div class="offset-container offset-2 col-10 form-enable-item--in-assets">
+    <div class="form-group">
+      <xsl:variable name="apply_overrides"
+        select="commands_response/get_tasks_response/task/preferences/preference[scanner_name='assets_apply_overrides']"/>
+      <label class="col-3 control-label">
+        <xsl:value-of select="gsa:i18n ('Apply Overrides')"/>
+      </label>
+      <div class="col-9">
+        <xsl:choose>
+          <xsl:when test="$apply_overrides/value='yes'">
+            <div class="form-item">
+              <div class="radio">
+                <label>
+                  <input type="radio" name="apply_overrides" value="1" checked="1"
+                    class="form-enable-item--in-assets" />
+                  <xsl:value-of select="gsa:i18n ('yes')"/>
+                </label>
+              </div>
             </div>
-          </div>
-          <div class="form-item">
-            <div class="radio">
-              <label>
-                <input type="radio" name="apply_overrides" value="0"
-                  class="form-enable-item--in-assets" />
-                <xsl:value-of select="gsa:i18n ('no')"/>
-              </label>
+            <div class="form-item">
+              <div class="radio">
+                <label>
+                  <input type="radio" name="apply_overrides" value="0"
+                    class="form-enable-item--in-assets" />
+                  <xsl:value-of select="gsa:i18n ('no')"/>
+                </label>
+              </div>
             </div>
-          </div>
-        </xsl:when>
-        <xsl:otherwise>
-          <div class="form-item">
-            <div class="radio">
-              <label>
-                <input type="radio" name="apply_overrides" value="1"
-                  class="form-enable-item--in-assets" />
-                <xsl:value-of select="gsa:i18n ('yes')"/>
-              </label>
+          </xsl:when>
+          <xsl:otherwise>
+            <div class="form-item">
+              <div class="radio">
+                <label>
+                  <input type="radio" name="apply_overrides" value="1"
+                    class="form-enable-item--in-assets" />
+                  <xsl:value-of select="gsa:i18n ('yes')"/>
+                </label>
+              </div>
             </div>
-          </div>
-          <div class="form-item">
-            <div class="radio">
-              <label>
-                <input type="radio" name="apply_overrides" value="0" checked="1"
-                  class="form-enable-item--in-assets" />
-                <xsl:value-of select="gsa:i18n ('no')"/>
-              </label>
+            <div class="form-item">
+              <div class="radio">
+                <label>
+                  <input type="radio" name="apply_overrides" value="0" checked="1"
+                    class="form-enable-item--in-assets" />
+                  <xsl:value-of select="gsa:i18n ('no')"/>
+                </label>
+              </div>
             </div>
-          </div>
-        </xsl:otherwise>
-      </xsl:choose>
-    </div>
-  </div>
-  <div class="form-group">
-    <xsl:variable name="min_qod"
-      select="commands_response/get_tasks_response/task/preferences/preference[scanner_name='assets_min_qod']"/>
-    <label class="col-2 control-label">
-      <xsl:value-of select="gsa:i18n ('Min QoD')"/>
-    </label>
-    <div class="col-10">
-      <div class="form-item">
-        <input type="text" name="min_qod" value="{$min_qod/value}" size="4"
-          class="spinner form-enable-item--in-assets"
-          data-type="float" min="0"/>
+          </xsl:otherwise>
+        </xsl:choose>
       </div>
-      <div class="form-item">
-        <xsl:text>%</xsl:text>
+    </div>
+    <div class="form-group">
+      <xsl:variable name="min_qod"
+        select="commands_response/get_tasks_response/task/preferences/preference[scanner_name='assets_min_qod']"/>
+      <label class="col-3 control-label">
+        <xsl:value-of select="gsa:i18n ('Min QoD')"/>
+      </label>
+      <div class="col-9">
+        <div class="form-item">
+          <input type="text" name="min_qod" value="{$min_qod/value}" size="4"
+            class="spinner form-enable-item--in-assets"
+            data-type="float" min="0"/>
+        </div>
+        <div class="form-item">
+          <xsl:text>%</xsl:text>
+        </div>
       </div>
     </div>
   </div>
