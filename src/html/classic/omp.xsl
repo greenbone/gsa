@@ -6843,9 +6843,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:if>
 
       <xsl:if test="gsa:may-op ('get_tags') and gsa:may-op ('create_task') and count(get_tags_response/tag) != 0">
-        <h3><xsl:value-of select="gsa:i18n ('Tag')"/></h3>
         <div class="form-group">
-          <div class="col-12">
+          <label class="col-2 control-label">
+            <xsl:value-of select="gsa:i18n ('Tag')"/>
+          </label>
+          <div class="col-10">
             <div class="form-item">
               <div class="checkbox">
                 <label>

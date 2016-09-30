@@ -1,5 +1,10 @@
 2016-09-39  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/omp.xsl (new_task): Change adding tags to use the standard
+	horizontal form layout (2 columns label and 10 columns input).
+
+2016-09-39  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/greenbone.js (on_read): Add disabled css class to each
 	element that is disbaled based on form-item-control selection.
 
