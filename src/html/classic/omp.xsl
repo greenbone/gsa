@@ -868,6 +868,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:otherwise>
   </xsl:choose>
 </func:function>
+
+<func:function name="gsa:column_is_extra">
+  <xsl:param name="column"/>
+  <xsl:choose>
+    <xsl:when test="$column = 'apply_overrides' or $column = 'autofp' or $column = 'rows' or $column = 'first' or $column = 'sort' or $column = 'sort-reverse' or $column = 'notes' or $column = 'overrides' or $column = 'timezone' or $column = 'result_hosts_only' or $column = 'levels' or $column = 'min_qod' or $column = 'delta_states'">
+      <func:result select="true()"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <func:result select="false()"/>
+    </xsl:otherwise>
+  </xsl:choose>
+</func:function>
+
 <!-- BEGIN NAMED TEMPLATES -->
 
 <xsl:template name="shy-long-rest">
@@ -1038,7 +1051,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template name="filter-criteria">
   <xsl:variable name="operator_count" select="count (filters/keywords/keyword[column='' and (value='and' or value='not' or value='or')])"/>
-  <xsl:for-each select="filters/keywords/keyword[column != 'apply_overrides' and column != 'autofp' and column != 'rows' and column != 'first' and column != 'sort' and column != 'sort-reverse' and column != 'notes' and column != 'overrides' and column != 'timezone' and column != 'result_hosts_only' and column != 'levels' and column != 'min_qod' and column != 'delta_states' and (column != 'task_id' or $operator_count != 0)]">
+  <xsl:for-each select="filters/keywords/keyword[not (gsa:column_is_extra (column) or (column = 'task_id' and $operator_count = 0))]">
     <xsl:value-of select="column"/>
     <xsl:choose>
       <xsl:when test="column = '' and relation != '='">
@@ -1056,7 +1069,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template name="filter-extra">
   <xsl:variable name="operator_count" select="count (filters/keywords/keyword[column='' and (value='and' or value='not' or value='or')])"/>
-  <xsl:for-each select="filters/keywords/keyword[not(column != 'apply_overrides' and column != 'autofp' and column != 'rows' and column != 'first' and column != 'sort' and column != 'sort-reverse' and column != 'notes' and column != 'overrides' and column != 'timezone' and column != 'result_hosts_only' and column != 'levels' and column != 'min_qod' and column != 'delta_states' and (column != 'task_id' or $operator_count != 0))]">
+  <xsl:for-each select="filters/keywords/keyword[gsa:column_is_extra (column) or (column = 'task_id' and $operator_count = 0)]">
     <xsl:value-of select="column"/>
     <xsl:choose>
       <xsl:when test="column = '' and relation != '='">
@@ -32714,14 +32727,15 @@ should not have received it.
       <xsl:when test="$levels = 'g'">Log</xsl:when>
       <xsl:when test="$levels = 'f'">False Positive</xsl:when>
       <xsl:when test="$levels = 'hmlgf'">All</xsl:when>
+      <xsl:otherwise>All filtered</xsl:otherwise>
     </xsl:choose>
   </xsl:param>
   <xsl:variable name="count">
     <xsl:choose>
-      <xsl:when test="$name = 'All' and $current_host = ''">
+      <xsl:when test="($name = 'All' or $name = 'All filtered') and $current_host = ''">
         <xsl:value-of select="count(report/results/result)"/>
       </xsl:when>
-      <xsl:when test="$name = 'All'">
+      <xsl:when test="$name = 'All' or $name = 'All filtered'">
         <xsl:value-of select="count(../results/result[host/text() = $current_host])"/>
       </xsl:when>
       <xsl:when test="$current_host = ''">
@@ -32733,15 +32747,50 @@ should not have received it.
     </xsl:choose>
   </xsl:variable>
 
+  <xsl:variable name="filter_term">
+    <xsl:if test="$count &gt; 0">
+      <xsl:for-each select="$filter/keywords/keyword">
+        <xsl:choose>
+          <xsl:when test="column = 'levels'"/> <!-- remove old levels -->
+          <xsl:when test="column = '' and (value = 'and' or value = 'or' or value = 'not')">
+            <xsl:value-of select="value"/>
+          </xsl:when>
+          <xsl:when test="not (gsa:column_is_extra (column))">
+            <xsl:if test="$current_host != '' and not (preceding-sibling::*[1]/value = 'and' and preceding-sibling::*[1]/column = '')">
+              <xsl:text>host=&quot;</xsl:text>
+              <xsl:value-of select="$current_host"/>
+              <xsl:text>&quot; and </xsl:text>
+            </xsl:if>
+            <xsl:value-of select="column"/>
+            <xsl:if test="column != '' or relation != '='">
+              <xsl:value-of select="relation"/>
+              <xsl:value-of select="value"/>
+            </xsl:if>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="column"/>
+            <xsl:value-of select="relation"/>
+            <xsl:value-of select="value"/>
+          </xsl:otherwise>
+        </xsl:choose>
+        <xsl:text> </xsl:text>
+      </xsl:for-each>
+      <xsl:value-of select="concat ('levels=', $levels)"/>
+      <xsl:if test="$current_host != '' and count ($filter/keywords/keyword[not (gsa:column_is_extra (column/text()))]) = 0">
+        <xsl:value-of select="concat (' host=', $current_host)"/>
+      </xsl:if>
+    </xsl:if>
+  </xsl:variable>
+
   <xsl:choose>
     <xsl:when test="$count &gt; 0 and $current_host = ''">
-      <a href="/omp?cmd=get_report&amp;report_id={$report_id}&amp;filter=levels={$levels} {$filter}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_report&amp;report_id={$report_id}&amp;filter={$filter_term}&amp;token={/envelope/token}"
          title="{gsa:i18n ('Report: Results')} ({gsa:i18n ($name, 'Severity')})" style="margin-left:3px;">
          <xsl:value-of select="$count"/>
       </a>
     </xsl:when>
     <xsl:when test="$count &gt; 0">
-      <a href="/omp?cmd=get_report&amp;report_id={$report_id}&amp;filter==&#34;{$current_host}&#34; levels={$levels} {$filter}&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_report&amp;report_id={$report_id}&amp;filter={$filter_term}&amp;token={/envelope/token}"
          title="{gsa:i18n ('Report: Results')} ({$current_host} {gsa:i18n ($name, 'Severity')})" style="margin-left:3px;">
          <xsl:value-of select="$count"/>
       </a>
@@ -32924,7 +32973,7 @@ should not have received it.
               <xsl:call-template name="report-hosts-link">
                 <xsl:with-param name="report_id" select="$id"/>
                 <xsl:with-param name="current_host" select="$current_host"/>
-                <xsl:with-param name="filter" select="../filters/term"/>
+                <xsl:with-param name="filter" select="../filters"/>
                 <xsl:with-param name="levels" select="'h'"/>
               </xsl:call-template>
             </td>
@@ -32932,7 +32981,7 @@ should not have received it.
               <xsl:call-template name="report-hosts-link">
                 <xsl:with-param name="report_id" select="$id"/>
                 <xsl:with-param name="current_host" select="$current_host"/>
-                <xsl:with-param name="filter" select="../filters/term"/>
+                <xsl:with-param name="filter" select="../filters"/>
                 <xsl:with-param name="levels" select="'m'"/>
               </xsl:call-template>
             </td>
@@ -32940,7 +32989,7 @@ should not have received it.
               <xsl:call-template name="report-hosts-link">
                 <xsl:with-param name="report_id" select="$id"/>
                 <xsl:with-param name="current_host" select="$current_host"/>
-                <xsl:with-param name="filter" select="../filters/term"/>
+                <xsl:with-param name="filter" select="../filters"/>
                 <xsl:with-param name="levels" select="'l'"/>
               </xsl:call-template>
             </td>
@@ -32948,7 +32997,7 @@ should not have received it.
               <xsl:call-template name="report-hosts-link">
                 <xsl:with-param name="report_id" select="$id"/>
                 <xsl:with-param name="current_host" select="$current_host"/>
-                <xsl:with-param name="filter" select="../filters/term"/>
+                <xsl:with-param name="filter" select="../filters"/>
                 <xsl:with-param name="levels" select="'g'"/>
               </xsl:call-template>
             </td>
@@ -32956,7 +33005,7 @@ should not have received it.
               <xsl:call-template name="report-hosts-link">
                 <xsl:with-param name="report_id" select="$id"/>
                 <xsl:with-param name="current_host" select="$current_host"/>
-                <xsl:with-param name="filter" select="../filters/term"/>
+                <xsl:with-param name="filter" select="../filters"/>
                 <xsl:with-param name="levels" select="'f'"/>
               </xsl:call-template>
             </td>
@@ -32964,8 +33013,8 @@ should not have received it.
               <xsl:call-template name="report-hosts-link">
                 <xsl:with-param name="report_id" select="$id"/>
                 <xsl:with-param name="current_host" select="$current_host"/>
-                <xsl:with-param name="filter" select="../filters/term"/>
-                <xsl:with-param name="levels" select="'hmlgf'"/>
+                <xsl:with-param name="filter" select="../filters"/>
+                <xsl:with-param name="levels" select="../filters/keywords/keyword[column='levels']/value"/>
               </xsl:call-template>
             </td>
           </tr>
@@ -32983,42 +33032,42 @@ should not have received it.
               <xsl:call-template name="report-hosts-link">
                 <xsl:with-param name="report_id" select="report/@id"/>
                 <xsl:with-param name="levels" select="'h'"/>
-                <xsl:with-param name="filter" select="report/filters/term"/>
+                <xsl:with-param name="filter" select="report/filters"/>
               </xsl:call-template>
           </td>
           <td style="text-align:right">
             <xsl:call-template name="report-hosts-link">
               <xsl:with-param name="report_id" select="report/@id"/>
               <xsl:with-param name="levels" select="'m'"/>
-              <xsl:with-param name="filter" select="report/filters/term"/>
+              <xsl:with-param name="filter" select="report/filters"/>
             </xsl:call-template>
           </td>
           <td style="text-align:right">
             <xsl:call-template name="report-hosts-link">
               <xsl:with-param name="report_id" select="report/@id"/>
               <xsl:with-param name="levels" select="'l'"/>
-              <xsl:with-param name="filter" select="report/filters/term"/>
+              <xsl:with-param name="filter" select="report/filters"/>
             </xsl:call-template>
           </td>
           <td style="text-align:right">
             <xsl:call-template name="report-hosts-link">
               <xsl:with-param name="report_id" select="report/@id"/>
               <xsl:with-param name="levels" select="'g'"/>
-              <xsl:with-param name="filter" select="report/filters/term"/>
+              <xsl:with-param name="filter" select="report/filters"/>
             </xsl:call-template>
           </td>
           <td style="text-align:right">
             <xsl:call-template name="report-hosts-link">
               <xsl:with-param name="report_id" select="report/@id"/>
               <xsl:with-param name="levels" select="'f'"/>
-              <xsl:with-param name="filter" select="report/filters/term"/>
+              <xsl:with-param name="filter" select="report/filters"/>
             </xsl:call-template>
           </td>
           <td style="text-align:right">
             <xsl:call-template name="report-hosts-link">
               <xsl:with-param name="report_id" select="report/@id"/>
-              <xsl:with-param name="levels" select="'hmlgf'"/>
-              <xsl:with-param name="filter" select="report/filters/term"/>
+              <xsl:with-param name="levels" select="report/filters/keywords/keyword[column='levels']/value"/>
+              <xsl:with-param name="filter" select="report/filters"/>
             </xsl:call-template>
           </td>
         </tr>

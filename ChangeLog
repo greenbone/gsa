@@ -1,3 +1,13 @@
+2016-09-30  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/omp.xsl (gsa:column_is_extra): New function.
+	(filter-criteria, filter-extra): Use new gsa:column_is_extra function.
+	(report-hosts-link): Allow any levels string as "All filtered".
+	Build filters from keywords in filters element instead of simply
+	appending to the filter term.
+	(report [hosts]): Pass filters element to report-host-link instead of
+	the filter term and use levels from filter in "Total" case.
+
 2016-09-39  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/omp.xsl (new_task): Change adding tags to use the standard
