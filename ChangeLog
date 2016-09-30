@@ -1,5 +1,11 @@
 2016-09-30  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/omp.xsl (new_task): Use selection box to display all
+	scanners in create task dialog. Only if a scanner is selected the
+	corresponding required data will be shown.
+
+2016-09-30  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/omp.xsl (html-edit-task-form): Fix displaying osp scanner
 	config in edit task dialog.
 
