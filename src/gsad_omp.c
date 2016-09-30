@@ -4308,11 +4308,10 @@ create_task_omp (credentials_t * credentials, params_t *params,
   add_tag = params_value (params, "add_tag");
   tag_name = params_value (params, "tag_name");
   tag_value = params_value (params, "tag_value");
+  scanner_id = params_value (params, "scanner_id");
   CHECK (scanner_type);
   if (!strcmp (scanner_type, "1"))
     {
-      scanner_id = params_value (params, "osp_scanner_id");
-      config_id = params_value (params, "osp_config_id");
       slave_id = "";
       hosts_ordering = "";
       max_checks = "";
@@ -4321,7 +4320,6 @@ create_task_omp (credentials_t * credentials, params_t *params,
     }
   else if (!strcmp (scanner_type, "3"))
     {
-      scanner_id = params_value (params, "cve_scanner_id");
       config_id = "";
       slave_id = "";
       hosts_ordering = "";

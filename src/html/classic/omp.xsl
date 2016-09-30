@@ -6667,33 +6667,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <input type="hidden" name="scanner_type" value="2" class="form-selection-input-scanner form-selection-input-scanner--2"/>
           <div class="form-group">
             <label class="col-4 control-label">
-              <xsl:call-template name="scanner-type-name">
-                <xsl:with-param name="type" select="2"/>
-              </xsl:call-template>
-            </label>
-            <div class="col-8">
-              <xsl:variable name="scanner_id" select="scanner_id"/>
-              <select name="scanner_id">
-                <xsl:for-each select="get_scanners_response/scanner[type = 2]">
-                  <xsl:choose>
-                    <xsl:when test="@id = $scanner_id">
-                      <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <option value="{@id}"><xsl:value-of select="name"/></option>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                </xsl:for-each>
-              </select>
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="col-4 control-label">
               <xsl:value-of select="gsa:i18n ('Scan Config')"/>
             </label>
             <div class="col-8">
               <xsl:variable name="config_id" select="config_id"/>
-              <select name="config_id">
+              <select name="config_id" class="form-selection-input-scanner form-selection-input-scanner--2">
                 <!-- Skip the "empty" config. -->
                 <xsl:for-each select="get_configs_response/config[@id!='085569ce-73ed-11df-83c3-002264764cea' and type = 0]">
                   <xsl:choose>
@@ -6801,33 +6779,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <input type="hidden" name="scanner_type" value="1" class="form-selection-input-scanner form-selection-input-scanner--1"/>
           <div class="form-group">
             <label class="col-4 control-label">
-              <xsl:call-template name="scanner-type-name">
-                <xsl:with-param name="type" select="1"/>
-              </xsl:call-template>
-            </label>
-            <div class="col-8">
-              <xsl:variable name="osp_scanner_id" select="osp_scanner_id"/>
-              <select name="osp_scanner_id">
-                <xsl:for-each select="get_scanners_response/scanner[type = 1]">
-                  <xsl:choose>
-                    <xsl:when test="@id = $osp_scanner_id">
-                      <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <option value="{@id}"><xsl:value-of select="name"/></option>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                </xsl:for-each>
-              </select>
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="col-4 control-label">
               <xsl:value-of select="gsa:i18n ('Scan Config')"/>
             </label>
             <div class="col-8">
               <xsl:variable name="osp_config_id" select="osp_config_id"/>
-              <select name="osp_config_id">
+              <select name="config_id" class="form-selection-input-scanner form-selection-input-scanner--1">
                 <!-- Skip the "empty" config. -->
                 <xsl:for-each select="get_configs_response/config[type = 1]">
                   <xsl:choose>
@@ -6838,7 +6794,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                       <option value="{@id}"><xsl:value-of select="name"/></option>
                     </xsl:otherwise>
                   </xsl:choose>
-                  n                 </xsl:for-each>
+                </xsl:for-each>
               </select>
             </div>
           </div>
@@ -6848,16 +6804,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:if test="count(get_scanners_response/scanner[type = 3])">
         <div class="form-group offset-container offset-2 form-selection-item-scanner form-selection-item-scanner--3">
           <input type="hidden" name="scanner_type" value="3" class="form-selection-input-scanner form-selection-input-scanner--3"/>
-          <div class="form-group">
-            <label class="col-4 control-label">
-              <xsl:call-template name="scanner-type-name">
-                <xsl:with-param name="type" select="3"/>
-              </xsl:call-template>
-            </label>
-            <input type="hidden"
-                    name="cve_scanner_id"
-                    value="{get_scanners_response/scanner[type = 3]/@id}"/>
-          </div>
         </div>
       </xsl:if>
 
