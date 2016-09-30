@@ -7911,7 +7911,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:call-template>
 
           <!-- Radio: OSP Scanner. -->
-          <xsl:if test="count(get_configs_response/config[type = 1])">
+          <xsl:if test="count(commands_response/get_configs_response/config[type = 1])">
             <xsl:call-template name="html-edit-task-scanner">
                 <xsl:with-param name="title">
                 <xsl:call-template name="scanner-type-name">
