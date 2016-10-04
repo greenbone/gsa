@@ -6644,13 +6644,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </label>
         <div class="col-10">
           <div class="form-item">
-            <xsl:variable name="scanner_id" select="scanner_id"/>
+            <xsl:variable name="scanner_id">
+              <xsl:choose>
+                <xsl:when test="string-length (scanner_id) &gt; 0">
+                  <xsl:value-of select="scanner_id"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <!-- use default scanner -->
+                  <xsl:value-of select="'08b69003-5fc2-4037-a479-93b440211c73'"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </xsl:variable>
             <select name="scanner_id" class="form-selection-control"
               id="scanner">
               <xsl:for-each select="get_scanners_response/scanner">
                 <xsl:choose>
                   <xsl:when test="@id = $scanner_id">
-                    <option value="{@id}" selected="1" data-select="{@type}"><xsl:value-of select="name"/></option>
+                    <option value="{@id}" selected="1" data-select="{type}"><xsl:value-of select="name"/></option>
                   </xsl:when>
                   <xsl:otherwise>
                     <option value="{@id}" data-select="{type}"><xsl:value-of select="name"/></option>

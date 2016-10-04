@@ -1,3 +1,8 @@
+2016-10-04  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/omp.xsl (new_task): Use default scanner (OpenVAS Default)
+	if not scanner id is preferred in the settings when creating a new task.
+
 2016-10-04  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/classic/img/ldap.svg, src/html/classic/img/radius.svg:
