@@ -4862,8 +4862,6 @@ save_task_omp (credentials_t * credentials, params_t *params,
   CHECK_PARAM_INVALID (scanner_type, "Save Task", "edit_task");
   if (!strcmp (scanner_type, "1"))
     {
-      scanner_id = params_value (params, "osp_scanner_id");
-      config_id = params_value (params, "osp_config_id");
       slave_id = "0";
       hosts_ordering = "";
       max_checks = "";
@@ -4872,7 +4870,6 @@ save_task_omp (credentials_t * credentials, params_t *params,
     }
   else if (!strcmp (scanner_type, "3"))
     {
-      scanner_id = params_value (params, "cve_scanner_id");
       config_id = "0";
       slave_id = "0";
       hosts_ordering = "";

@@ -1,5 +1,15 @@
 2016-10-04  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/omp.xsl (html-edit-task-form): Refactor edit task dialog to
+	use one selection box for all scanners and displaying the corresponding
+	required config for the scanner type only if the scanner is changed.
+
+	* src/gsad_omp.c (save_task_omp): Remove usage of osp_scanner_id,
+	cve_scanner_id and osp_config_id. Instead use general scanner_id and
+	config_id.
+
+2016-10-04  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/omp.xsl (new_task): Use default scanner (OpenVAS Default)
 	if not scanner id is preferred in the settings when creating a new task.
 

@@ -7043,15 +7043,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template name="html-edit-task-config">
   <xsl:param name="type"/>
   <xsl:param name="param_name"/>
+  <xsl:param name="scanner_type"/>
   <div class="form-group">
     <label class="col-4 control-label">
       <xsl:value-of select="gsa:i18n ('Scan Config')"/>
     </label>
     <div class="col-8">
-      <input type="hidden" name="cmd" value="save_task"/>
       <xsl:variable name="config_id" select="gsa:param-or ('config_id', commands_response/get_tasks_response/task/config/@id)"/>
       <div class="form-item">
-        <select name="{$param_name}">
+        <select name="config_id" class="form-selection-input-scanner form-selection-input-scanner--{$scanner_type}">
           <xsl:choose>
             <xsl:when test="string-length (commands_response/get_configs_response/config/name) &gt; 0">
               <xsl:for-each select="commands_response/get_configs_response/config[type = $type]">
@@ -7073,7 +7073,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </div>
       <div class="form-item">
         <a href="#" title="{ gsa:i18n('Create a new scan config') }"
-          class="new-action-icon icon icon-sm" data-type="config" data-done="select[name={$param_name}]">
+          class="new-action-icon icon icon-sm" data-type="config" data-done="select[name=config_id]">
           <img src="/img/new.svg"/>
         </a>
       </div>
@@ -7087,9 +7087,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:value-of select="gsa:i18n ('Scan Config')"/> (<xsl:value-of select="gsa:i18n ('immutable')"/>)
     </label>
     <div class="col-8">
-      <input type="hidden" name="cmd" value="save_task"/>
-      <input type="hidden" name="config_id" value="0"/>
-      <input type="hidden" name="osp_config_id" value="0"/>
       <select name="dummy" disabled="0">
         <xsl:choose>
           <xsl:when test="string-length (commands_response/get_tasks_response/task/config/name) &gt; 0">
@@ -7105,48 +7102,35 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="html-edit-task-scanner-disabled">
-  <xsl:param name="params"/>
   <div class="form-group">
-    <div class="col-10 offset-2">
-      <div class="form-group">
-        <label class="col-4 control-label">
-          <xsl:call-template name="scanner-type-name">
-            <xsl:with-param name="type" select="commands_response/get_tasks_response/task/scanner/type"/>
-          </xsl:call-template>
-        </label>
-        <div class="col-8">
-          <input type="hidden" name="cmd" value="save_task"/>
-          <input type="hidden" name="scanner_type" value="{commands_response/get_tasks_response/task/scanner/type}"/>
-          <input type="hidden" name="scanner_id" value="0"/>
-          <input type="hidden" name="osp_scanner_id" value="0"/>
-          <input type="hidden" name="cve_scanner_id" value="0"/>
-          <xsl:variable name="scanner_id">
-            <xsl:choose>
-              <xsl:when test="string-length (/envelope/params/scanner_id) &gt; 0">
-                <xsl:value-of select="/envelope/params/scanner_id"/>
-              </xsl:when>
-              <xsl:otherwise>
-                <xsl:value-of select="commands_response/get_tasks_response/task/scanner/@id"/>
-              </xsl:otherwise>
-            </xsl:choose>
-          </xsl:variable>
-          <select name="dummy" disabled="0">
-            <xsl:choose>
-              <xsl:when test="string-length (commands_response/get_tasks_response/task/scanner/name) &gt; 0">
-                <xsl:for-each select="commands_response/get_scanners_response/scanner">
-                  <xsl:if test="@id = $scanner_id">
-                    <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
-                  </xsl:if>
-                </xsl:for-each>
-              </xsl:when>
-              <xsl:otherwise>
-                <option value="0">--</option>
-              </xsl:otherwise>
-            </xsl:choose>
-          </select>
-        </div>
-      </div>
-      <xsl:copy-of select="$params"/>
+    <label class="col-2 control-label">
+      <xsl:value-of select="gsa:i18n ('Scanner')"/>
+    </label>
+    <div class="col-10">
+      <xsl:variable name="scanner_id">
+        <xsl:choose>
+          <xsl:when test="string-length (/envelope/params/scanner_id) &gt; 0">
+            <xsl:value-of select="/envelope/params/scanner_id"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="commands_response/get_tasks_response/task/scanner/@id"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:variable>
+      <select name="dummy" disabled="0">
+        <xsl:choose>
+          <xsl:when test="string-length (commands_response/get_tasks_response/task/scanner/name) &gt; 0">
+            <xsl:for-each select="commands_response/get_scanners_response/scanner">
+              <xsl:if test="@id = $scanner_id">
+                <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+              </xsl:if>
+            </xsl:for-each>
+          </xsl:when>
+          <xsl:otherwise>
+            <option value="0">--</option>
+          </xsl:otherwise>
+        </xsl:choose>
+      </select>
     </div>
   </div>
 </xsl:template>
@@ -7248,69 +7232,36 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="html-edit-task-scanner">
-  <xsl:param name="title"/>
-  <xsl:param name="param_name"/>
-  <xsl:param name="type"/>
-  <xsl:param name="params"/>
-  <xsl:if test="count(commands_response/get_scanners_response/scanner[type = $type])">
-    <div class="form-group">
-      <div class="col-1 offset-1">
-        <div class="radio">
+  <div class="form-group">
+    <label class="col-2 control-label">
+      <xsl:value-of select="gsa:i18n ('Scanner')"/>
+    </label>
+    <div class="col-10">
+      <select name="scanner_id" class="form-selection-control"
+        id="scanner">
+        <xsl:variable name="scanner_id">
           <xsl:choose>
-            <xsl:when test="commands_response/get_tasks_response/task/scanner/type = $type">
-              <input type="radio" name="scanner_type" value="{$type}" checked="1"/>
+            <xsl:when test="string-length (/envelope/params/scanner_id) &gt; 0">
+              <xsl:value-of select="/envelope/params/scanner_id"/>
             </xsl:when>
             <xsl:otherwise>
-              <input type="radio" name="scanner_type" value="{$type}"/>
+              <xsl:value-of select="commands_response/get_tasks_response/task/scanner/@id"/>
             </xsl:otherwise>
           </xsl:choose>
-        </div>
-      </div>
-
-      <div class="col-10">
-        <div class="form-group">
-          <label class="col-4 control-label">
-            <xsl:value-of select="gsa:i18n ($title)"/>
-          </label>
-          <div class="col-8">
-            <xsl:choose>
-              <xsl:when test="$type = 3">
-                <!-- There is only ever one CVE scanner. -->
-                <input type="hidden"
-                  name="{$param_name}"
-                  value="{commands_response/get_scanners_response/scanner[type = $type]/@id}"/>
-              </xsl:when>
-              <xsl:otherwise>
-                <select name="{$param_name}">
-                  <xsl:variable name="scanner_id">
-                    <xsl:choose>
-                      <xsl:when test="string-length (/envelope/params/scanner_id) &gt; 0">
-                        <xsl:value-of select="/envelope/params/scanner_id"/>
-                      </xsl:when>
-                      <xsl:otherwise>
-                        <xsl:value-of select="commands_response/get_tasks_response/task/scanner/@id"/>
-                      </xsl:otherwise>
-                    </xsl:choose>
-                  </xsl:variable>
-                  <xsl:for-each select="commands_response/get_scanners_response/scanner[type = $type]">
-                    <xsl:choose>
-                      <xsl:when test="@id = $scanner_id">
-                        <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
-                      </xsl:when>
-                      <xsl:otherwise>
-                        <option value="{@id}"><xsl:value-of select="name"/></option>
-                      </xsl:otherwise>
-                    </xsl:choose>
-                  </xsl:for-each>
-                </select>
-              </xsl:otherwise>
-            </xsl:choose>
-          </div>
-        </div>
-        <xsl:copy-of select="$params"/>
-      </div>
+        </xsl:variable>
+        <xsl:for-each select="commands_response/get_scanners_response/scanner">
+          <xsl:choose>
+            <xsl:when test="@id = $scanner_id">
+              <option value="{@id}" selected="1" data-select="{type}"><xsl:value-of select="name"/></option>
+            </xsl:when>
+            <xsl:otherwise>
+              <option value="{@id}" data-select="{type}"><xsl:value-of select="name"/></option>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:for-each>
+      </select>
     </div>
-  </xsl:if>
+  </div>
 </xsl:template>
 
 <xsl:template name="html-edit-task-slave">
@@ -7817,6 +7768,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:call-template name="html-edit-task-scan-options"/>
           </xsl:when>
           <xsl:otherwise>
+            <input type="hidden" name="cmd" value="save_task"/>
 
             <!-- Regular task.  Immutable. -->
 
@@ -7826,81 +7778,66 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:call-template name="html-edit-task-scan-options"/>
 
             <xsl:if test="$new_task = 0">
-              <h3>
-                <xsl:value-of select="gsa:i18n ('Scanner')"/>
-              </h3>
+              <input type="hidden" name="scanner_type" value="{commands_response/get_tasks_response/task/scanner/type}"/>
+              <input type="hidden" name="scanner_id" value="0"/>
+              <input type="hidden" name="osp_scanner_id" value="0"/>
+              <input type="hidden" name="cve_scanner_id" value="0"/>
+              <input type="hidden" name="cmd" value="save_task"/>
+              <input type="hidden" name="config_id" value="0"/>
+              <input type="hidden" name="osp_config_id" value="0"/>
 
-              <input type="hidden" name="scanner_type" value="1"/>
               <xsl:call-template name="html-edit-task-scanner-disabled">
-                <xsl:with-param name="params">
-                  <xsl:if test="commands_response/get_tasks_response/task/scanner/type != 3">
-                    <xsl:call-template name="html-edit-task-config-disabled"/>
-                  </xsl:if>
-                  <xsl:if test="commands_response/get_tasks_response/task/scanner/type = 2">
-                    <xsl:call-template name="html-edit-task-slave"/>
-                    <xsl:call-template name="html-edit-task-openvas-options"/>
-                  </xsl:if>
-                </xsl:with-param>
               </xsl:call-template>
+
+              <div class="form-group offset-container offset-2 form-selection-item-scanner form-selection-item-scanner--{commands_response/get_tasks_response/task/scanner/type}">
+                <xsl:if test="commands_response/get_tasks_response/task/scanner/type != 3">
+                  <xsl:call-template name="html-edit-task-config-disabled"/>
+                </xsl:if>
+                <xsl:if test="commands_response/get_tasks_response/task/scanner/type = 2">
+                  <xsl:call-template name="html-edit-task-slave"/>
+                  <xsl:call-template name="html-edit-task-openvas-options"/>
+                </xsl:if>
+              </div>
             </xsl:if>
           </xsl:otherwise>
         </xsl:choose>
         <xsl:if test="$new_task != 0">
 
           <!-- Regular task.  Alterable. -->
-
-          <h3>
-            <xsl:value-of select="gsa:i18n ('Scanner')"/>
-          </h3>
-
-          <!-- Radio: OpenVAS Scanner. -->
           <xsl:call-template name="html-edit-task-scanner">
-            <xsl:with-param name="title">
-              <xsl:call-template name="scanner-type-name">
-                <xsl:with-param name="type" select="2"/>
-              </xsl:call-template>
-            </xsl:with-param>
-            <xsl:with-param name="type">2</xsl:with-param>
-            <xsl:with-param name="param_name">scanner_id</xsl:with-param>
-            <xsl:with-param name="params">
+          </xsl:call-template>
+
+          <!-- OpenVAS Scanner. -->
+
+          <xsl:if test="count(commands_response/get_scanners_response/scanner[type = 2])">
+            <div class="form-group offset-container offset-2 form-selection-item-scanner form-selection-item-scanner--2">
+              <input type="hidden" name="scanner_type" value="2" class="form-selection-input-scanner form-selection-input-scanner--2"/>
               <xsl:call-template name="html-edit-task-config">
-                <xsl:with-param name="param_name">config_id</xsl:with-param>
+                <xsl:with-param name="scanner_type">2</xsl:with-param>
                 <xsl:with-param name="type">0</xsl:with-param>
               </xsl:call-template>
               <xsl:call-template name="html-edit-task-slave"/>
               <xsl:call-template name="html-edit-task-openvas-options"/>
-            </xsl:with-param>
-          </xsl:call-template>
-
-          <!-- Radio: OSP Scanner. -->
-          <xsl:if test="count(commands_response/get_configs_response/config[type = 1])">
-            <xsl:call-template name="html-edit-task-scanner">
-                <xsl:with-param name="title">
-                <xsl:call-template name="scanner-type-name">
-                    <xsl:with-param name="type" select="1"/>
-                </xsl:call-template>
-                </xsl:with-param>
-                <xsl:with-param name="type">1</xsl:with-param>
-                <xsl:with-param name="param_name">osp_scanner_id</xsl:with-param>
-                <xsl:with-param name="params">
-                <xsl:call-template name="html-edit-task-config">
-                    <xsl:with-param name="param_name">osp_config_id</xsl:with-param>
-                    <xsl:with-param name="type">1</xsl:with-param>
-                </xsl:call-template>
-                </xsl:with-param>
-            </xsl:call-template>
+            </div>
           </xsl:if>
 
-            <!-- Radio: CVE Scanner. -->
-            <xsl:call-template name="html-edit-task-scanner">
-              <xsl:with-param name="title">
-                <xsl:call-template name="scanner-type-name">
-                  <xsl:with-param name="type" select="3"/>
-                </xsl:call-template>
-              </xsl:with-param>
-              <xsl:with-param name="type">3</xsl:with-param>
-              <xsl:with-param name="param_name">cve_scanner_id</xsl:with-param>
-            </xsl:call-template>
+          <!-- OSP Scanner. -->
+          <xsl:if test="count(commands_response/get_scanners_response/scanner[type = 1]) and count(commands_response/get_configs_response/config[type = 1])">
+            <div class="form-group offset-container offset-2 form-selection-item-scanner form-selection-item-scanner--1">
+              <input type="hidden" name="scanner_type" value="1" class="form-selection-input-scanner form-selection-input-scanner--1"/>
+              <xsl:call-template name="html-edit-task-config">
+                <xsl:with-param name="type">1</xsl:with-param>
+                <xsl:with-param name="scanner_type">1</xsl:with-param>
+              </xsl:call-template>
+            </div>
+          </xsl:if>
+
+          <!-- CVE Scanner. -->
+          <xsl:if test="count(commands_response/get_scanners_response/scanner[type = 3])">
+            <div class="form-group offset-container offset-2 form-selection-item-scanner form-selection-item-scanner--3">
+              <input type="hidden" name="scanner_type" value="3" class="form-selection-input-scanner form-selection-input-scanner--3"/>
+            </div>
+          </xsl:if>
         </xsl:if>
       </form>
     </div>
