@@ -1,3 +1,21 @@
+2016-10-04  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Show a dialog when starting an AJAX post request and close it
+	automatically when a response is returned.
+
+	* src/html/classic/omp.xsl (trashcan-icon, user-tags-window-checked)
+	(toggle-tag-icon, details-header-icons, agent, alert)
+	(html-config-table, report_format, note-detailed, override-detailed)
+	(report-icons, scanner-icons, report [summary]): Add "busy" text for
+	actions using AJAX post requests.
+
+	* src/html/classic/js/greenbone.js (OMPRequest.prototype.do): Save AJAX
+	request object.
+	(on_ready): Show a dialog on AJAX post request that closes 
+	automatically when done.  Do not show error message if the request
+	was aborted.
+	(show_busy_dialog): New function.
+
 2016-10-04  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/omp.xsl (html-edit-task-form): Refactor edit task dialog to

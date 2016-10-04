@@ -2211,7 +2211,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="fragment"></xsl:param>
   <xsl:param name="params"></xsl:param>
 
-  <div class="icon icon-sm ajax-post" data-reload="next">
+  <div class="icon icon-sm ajax-post" data-reload="next" data-busy-text="{gsa:i18n ('Moving to trashcan...')}">
     <img src="/img/trashcan.svg" alt="{gsa:i18n ('To Trashcan', 'Action Verb')}"
       name="To Trashcan" title="{gsa:i18n ('Move To Trashcan', 'Action Verb')}"/>
     <form action="/omp{$fragment}" method="post" enctype="multipart/form-data">
@@ -2573,7 +2573,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:if>
     <xsl:choose>
       <xsl:when test="count($tag_names/tag) > 0">
-        <div class="ajax-post" data-reload="next" data-button="input.icon">
+        <div class="ajax-post" data-reload="next" data-button="input.icon" data-busy-text="{gsa:i18n ('Adding Tag...')}">
           <form class="form-inline" action="/omp#user_tags" method="post" enctype="multipart/form-data">
             <input type="hidden" name="comment"/>
             <input type="hidden" name="active" value="1"/>
@@ -2812,7 +2812,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:param name="params"></xsl:param>
 
   <xsl:if test="gsa:may-op ('modify_tag')">
-    <div class="icon icon-sm ajax-post" data-reload="next">
+    <div class="icon icon-sm ajax-post" data-reload="next" data-busy-text="{gsa:i18n ('Toggling Tag...')}">
       <xsl:choose>
         <xsl:when test="$enable">
           <img src="/img/enable.svg" alt="{gsa:i18n ('Enable Tag')}"
@@ -5912,7 +5912,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                class="icon icon-sm"/>
         </xsl:when>
         <xsl:otherwise>
-          <div class="icon icon-sm ajax-post" data-reload="next">
+          <div class="icon icon-sm ajax-post" data-reload="next" data-busy-text="{gsa:i18n ('Cloning...')}">
             <img src="/img/clone.svg"
               alt="{gsa:i18n ('Clone', 'Action Verb')}"
               title="{gsa:i18n ('Clone', 'Action Verb')}"/>
@@ -9667,7 +9667,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             title="{gsa:i18n ('Download installer package')}" class="icon">
             <img src="/img/agent.svg" alt="{gsa:i18n ('Download Installer')}"/>
           </a>
-          <div class="icon icon-sm ajax-post" data-reload="next">
+          <div class="icon icon-sm ajax-post" data-reload="next" data-busy-text="{gsa:i18n ('Verifying Agent...')}">
             <img src="/img/verify.svg" alt="{gsa:i18n ('Verify Agent')}"/>
             <form>
               <input type="hidden" name="cmd" value="verify_agent"/>
@@ -12133,7 +12133,7 @@ should not have received it.
             <xsl:with-param name="type" select="'alert'"/>
             <xsl:with-param name="id" select="@id"/>
           </xsl:call-template>
-          <div class="icon icon-sm ajax-post">
+          <div class="icon icon-sm ajax-post" data-busy-text="{gsa:i18n ('Testing Alert...')}">
               <xsl:variable name="title">
                 <xsl:value-of select="gsa:i18n ('Test Alert', 'Action Verb')"/>
               </xsl:variable>
@@ -17805,7 +17805,7 @@ should not have received it.
     </a>
     <xsl:choose>
       <xsl:when test="gsa:may-clone ('config')">
-        <div class="icon icon-sm ajax-post" data-reload="next">
+        <div class="icon icon-sm ajax-post" data-reload="next" data-busy-text="{gsa:i18n ('Cloning...')}">
           <img src="/img/clone.svg"
             alt="{gsa:i18n ('Clone', 'Action Verb')}"
             name="Clone" title="{gsa:i18n ('Clone', 'Action Verb')}"/>
@@ -28787,7 +28787,7 @@ should not have received it.
           </xsl:call-template>
           <xsl:choose>
             <xsl:when test="gsa:may ('verify_report_format') or string-length (owner/name) = 0">
-              <div class="icon icon-sm ajax-post" data-reload="next">
+              <div class="icon icon-sm ajax-post" data-reload="next" data-busy-text="{gsa:i18n ('Verifying Report Format...')}">
                 <img src="/img/verify.svg" alt="{gsa:i18n ('Verify Report Format')}"/>
                 <form>
                   <input type="hidden" name="cmd" value="verify_report_format"/>
@@ -30176,7 +30176,7 @@ should not have received it.
         </xsl:choose>
         <xsl:choose>
           <xsl:when test="gsa:may-clone ('note')">
-            <div class="icon icon-sm ajax-post" data-reload="next">
+            <div class="icon icon-sm ajax-post" data-reload="next" data-busy-text="{gsa:i18n ('Cloning...')}">
               <img src="/img/clone.svg" alt="Clone Note"
                 name="Clone" title="{gsa:i18n ('Clone', 'Action Verb')}"/>
               <form action="/omp#notes-{../../@id}" method="post" enctype="multipart/form-data">
@@ -30450,7 +30450,7 @@ should not have received it.
         </xsl:choose>
         <xsl:choose>
           <xsl:when test="gsa:may-clone ('override')">
-            <div class="icon icon-sm ajax-post" data-reload="next">
+            <div class="icon icon-sm ajax-post" data-reload="next" data-busy-text="{gsa:i18n ('Cloning...')}">
               <img src="/img/clone.svg" alt="Clone Override"
                 name="Clone" title="{gsa:i18n ('Clone', 'Action Verb')}"/>
               <form action="/omp#overrides-{../../@id}" method="post" enctype="multipart/form-data">
@@ -33701,7 +33701,7 @@ should not have received it.
     <xsl:call-template name="filtered-report-export-form"></xsl:call-template>
   </div>
 
-  <div class="icon icon-sm ajax-post" data-reload="dialog">
+  <div class="icon icon-sm ajax-post" data-reload="dialog" data-busy-text="{gsa:i18n ('Adding Report to Assets...')}">
     <xsl:variable name="min_qod">
       <xsl:choose>
         <xsl:when test="string-length (report/filters/keywords/keyword[column='min_qod' and relation='=']/value) &gt; 0">
@@ -33761,7 +33761,7 @@ should not have received it.
     </form>
   </div>
 
-  <div class="icon icon-sm ajax-post" data-reload="dialog">
+  <div class="icon icon-sm ajax-post" data-reload="dialog" data-busy-text="{gsa:i18n ('Removing Report from Assets...')}">
     <img src="/img/remove_from_assets.svg" alt="{gsa:i18n ('Remove from Assets')}"
       name="Remove from Assets"
       title="{gsa:i18n ('Remove from Assets')}">
@@ -34091,7 +34091,7 @@ should not have received it.
   <xsl:param name="credential"/>
   <xsl:param name="next">get_scanners</xsl:param>
 
-  <div class="icon icon-sm ajax-post" data-reload="next">
+  <div class="icon icon-sm ajax-post" data-reload="next" data-busy-text="{gsa:i18n ('Verifying Scanner...')}">
     <img src="/img/verify.svg" alt="{gsa:i18n ('Verify Scanner')}"
       title="{gsa:i18n ('Verify Scanner')}"/>
     <form>
@@ -34506,7 +34506,7 @@ should not have received it.
               </td>
               <td>
                 <div id="small_form" class="form-inline pull-right">
-                  <div class="form-group ajax-post" data-reload="next" data-button=".icon">
+                  <div class="form-group ajax-post" data-reload="next" data-button=".icon" data-busy-text="{gsa:i18n ('Running Alert...')}">
                     <form class="form-item" action="" method="post" enctype="multipart/form-data">
                       <input type="hidden" name="cmd" value="alert_report"/>
                       <input type="hidden" name="caller" value="{/envelope/current_page}"/>
@@ -34590,7 +34590,7 @@ should not have received it.
             <xsl:otherwise>
               <td>
                 <div id="small_form" class="form-inline pull-right">
-                  <div class="form-group ajax-post" data-reload="next" data-button=".icon">
+                  <div class="form-group ajax-post" data-reload="next" data-button=".icon" data-busy-text="{gsa:i18n ('Running Alert...')}">
                     <form class="form-item" method="post" enctype="multipart/form-data">
                       <input type="hidden" name="cmd" value="alert_report"/>
                       <input type="hidden" name="caller" value="{/envelope/current_page}"/>

@@ -1248,7 +1248,8 @@
       self.fail(jqXHR);
     }
 
-    $.ajax(self.request_data).done(done_func).fail(fail_func);
+    self.ajax_request
+      = $.ajax(self.request_data).done(done_func).fail(fail_func);
     return this;
   };
 
@@ -1385,6 +1386,9 @@
     // Replace icon forms
     doc.find('.ajax-post').each(function() {
       var elem = $(this);
+      var busy_text = elem.data('busy-text');
+      if (! busy_text)
+        busy_text = gsa._('Please wait...');
 
       function reload_next(response) {
         var action_result = $(response).find('action_result');
@@ -1423,8 +1427,12 @@
           form: form[0],
           params: {next_xml: 0},
         });
+        var busy_dialog = show_busy_dialog(busy_text, request);
 
         request.do(function(response) {
+          if (busy_dialog) {
+            busy_dialog.dialog('close');
+          }
           if (success.length) {
             if (success.data('reload')) {
               reload = success.data('reload');
@@ -1446,6 +1454,11 @@
           }
         },
         function(jqXHR) {
+          if (jqXHR.status == 0 && jqXHR.readyState == 0) {
+            // Request was aborted. Do not show error dialog.
+            return;
+          }
+
           var dialog = new InfoDialog({
             element: error.clone(),
             timeout: 10000,
@@ -1916,6 +1929,33 @@
       clearTimeout(timeout_id);
       timeout_id = undefined;
     }
+  }
+
+  function show_busy_dialog(busy_text, request) {
+    var box = $('<div/>');
+    var text = $('<b>');
+    var img = $('<img/>');
+
+    box.css ('text-align', 'center');
+
+    img.attr ('src', '/img/loading.gif');
+    img.css ('margin-right', '16px');
+    box.append (img);
+
+    text.text(busy_text);
+    box.append (text);
+
+    box.dialog({
+                height: 'auto',
+                width: 400,
+                modal: true,
+                closeText: 'Cancel',
+                close: function() {
+                  request.ajax_request.abort('Aborted');
+                },
+               });
+
+    return box;
   }
 
   $(document).ready(function() {
