@@ -1,3 +1,8 @@
+2016-10-04  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/classic/img/ldap.svg, src/html/classic/img/radius.svg:
+	Updated with nicer versions.
+
 2016-09-30  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/omp.xsl (new_task): Remove now unnecessary scanner
