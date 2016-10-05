@@ -4922,7 +4922,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
         </xsl:if>
-        <xsl:if test="config/type = 0">
+        <xsl:if test="scanner/type = 2 and config/type = 0">
           <xsl:if test="gsa:may-op ('get_slaves')">
             <tr>
               <td></td>
@@ -4948,6 +4948,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </td>
             </tr>
           </xsl:if>
+        </xsl:if>
+        <xsl:if test="config/type = 0">
           <tr>
             <td></td>
             <td>

@@ -1,5 +1,9 @@
 2016-10-05  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/classic/omp.xsl (task [details]): Hide slave for OMP Scanner.
+
+2016-10-05  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/classic/omp.xsl (new_task): Use 0 for slave_id and schedule_id
 	values.
 
