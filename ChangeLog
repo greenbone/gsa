@@ -1,3 +1,10 @@
+2016-10-05  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/classic/omp.xsl (scanner-type-name): Add OMP scanner.
+	(new-task-scanner-fields): New template.
+	(new_task): Use new-task-scanner-fields for the OTP scanner options, and
+	add a case for OMP scanner options.
+
 2016-10-05  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/css/images/ui-bg_diagonals-thick_18_aa0000_40x40.png,
@@ -48,7 +55,7 @@
 
 	* src/html/classic/js/greenbone.js (OMPRequest.prototype.do): Save AJAX
 	request object.
-	(on_ready): Show a dialog on AJAX post request that closes 
+	(on_ready): Show a dialog on AJAX post request that closes
 	automatically when done.  Do not show error message if the request
 	was aborted.
 	(show_busy_dialog): New function.

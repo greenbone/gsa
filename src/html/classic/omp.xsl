@@ -2448,6 +2448,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:when test="$type = '1'">OSP Scanner</xsl:when>
     <xsl:when test="$type = '2'">OpenVAS Scanner</xsl:when>
     <xsl:when test="$type = '3'">CVE Scanner</xsl:when>
+    <xsl:when test="$type = '4'">OMP Slave</xsl:when>
     <xsl:otherwise>Unknown type (<xsl:value-of select="type"/>)</xsl:otherwise>
   </xsl:choose>
 </xsl:template>
@@ -6343,6 +6344,120 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
+<xsl:template name="new-task-scanner-fields">
+  <xsl:param name="scanner-type" select="2"/>
+
+  <div class="form-group offset-container offset-2 form-selection-item-scanner form-selection-item-scanner--{$scanner-type}">
+    <input type="hidden" name="scanner_type" value="{$scanner-type}" class="form-selection-input-scanner form-selection-input-scanner--{$scanner-type}"/>
+    <div class="form-group">
+      <label class="col-4 control-label">
+        <xsl:value-of select="gsa:i18n ('Scan Config')"/>
+      </label>
+      <div class="col-8">
+        <xsl:variable name="config_id" select="config_id"/>
+        <select name="config_id" class="form-selection-input-scanner form-selection-input-scanner--{$scanner-type}">
+          <!-- Skip the "empty" config. -->
+          <xsl:for-each select="get_configs_response/config[@id!='085569ce-73ed-11df-83c3-002264764cea' and type = 0]">
+            <xsl:choose>
+              <xsl:when test="@id = $config_id">
+                <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+              </xsl:when>
+              <xsl:otherwise>
+                <option value="{@id}"><xsl:value-of select="name"/></option>
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:for-each>
+        </select>
+      </div>
+    </div>
+    <xsl:if test="$scanner-type = 2 and gsa:may-op ('get_slaves')">
+      <div class="form-group">
+        <label class="col-4 control-label">
+          <xsl:value-of select="gsa:i18n ('Slave')"/>
+        </label>
+        <div class="col-8">
+          <div class="form-item">
+            <select name="slave_id">
+              <xsl:variable name="slave_id">
+                <xsl:value-of select="slave_id"/>
+              </xsl:variable>
+              <xsl:choose>
+                <xsl:when test="string-length ($slave_id) &gt; 0">
+                  <option value="0">--</option>
+                </xsl:when>
+                <xsl:otherwise>
+                  <option value="0" selected="1">--</option>
+                </xsl:otherwise>
+              </xsl:choose>
+              <xsl:for-each select="get_slaves_response/slave">
+                <xsl:choose>
+                  <xsl:when test="@id = $slave_id">
+                    <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <option value="{@id}"><xsl:value-of select="name"/></option>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </xsl:for-each>
+            </select>
+          </div>
+          <div class="form-item">
+            <a href="#" title="{ gsa:i18n('Create a new slave') }"
+              class="new-action-icon icon icon-sm" data-type="slave"
+              data-done="select[name=slave_id]">
+              <img class="valign-middle" src="/img/new.svg"/>
+            </a>
+          </div>
+        </div>
+      </div>
+    </xsl:if>
+    <div class="form-group">
+      <label class="col-4 control-label">
+        <xsl:value-of select="gsa:i18n ('Network Source Interface')"/>
+      </label>
+      <div class="col-8">
+        <div class="form-item">
+          <input type="text" name="source_iface"
+            class="form-control"
+            value="{/envelope/params/source_iface}"/>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-4 control-label">
+        <xsl:value-of select="gsa:i18n ('Order for target hosts')"/>
+      </label>
+      <div class="col-8">
+        <select name="hosts_ordering">
+          <option value="sequential" selected="1"><xsl:value-of select="gsa:i18n ('Sequential', 'Task|Hosts Ordering')"/></option>
+          <option value="random"><xsl:value-of select="gsa:i18n ('Random', 'Task|Hosts Ordering')"/></option>
+          <option value="reverse"><xsl:value-of select="gsa:i18n ('Reverse', 'Task|Hosts Ordering')"/></option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-4 control-label">
+        <xsl:value-of select="gsa:i18n ('Maximum concurrently executed NVTs per host')"/>
+      </label>
+      <div class="col-8">
+        <input type="text" name="max_checks" value="{gsa:param-or ('max_checks', '4')}"
+          data-type="int" min="0" class="spinner"
+          size="10" maxlength="10"/>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-4 control-label">
+        <xsl:value-of select="gsa:i18n ('Maximum concurrently scanned hosts')"/>
+      </label>
+      <div class="col-8">
+        <input type="text" name="max_hosts" value="{gsa:param-or ('max_hosts', '20')}"
+          data-type="int" class="spinner" min="0"
+          size="10" maxlength="10"/>
+      </div>
+    </div>
+  </div>
+</xsl:template>
+
 <xsl:template match="new_task">
   <xsl:apply-templates select="gsad_msg"/>
   <xsl:apply-templates select="create_task_response"/>
@@ -6673,115 +6788,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </div>
 
       <xsl:if test="count(get_scanners_response/scanner[type = 2])">
-        <div class="form-group offset-container offset-2 form-selection-item-scanner form-selection-item-scanner--2">
-          <input type="hidden" name="scanner_type" value="2" class="form-selection-input-scanner form-selection-input-scanner--2"/>
-          <div class="form-group">
-            <label class="col-4 control-label">
-              <xsl:value-of select="gsa:i18n ('Scan Config')"/>
-            </label>
-            <div class="col-8">
-              <xsl:variable name="config_id" select="config_id"/>
-              <select name="config_id" class="form-selection-input-scanner form-selection-input-scanner--2">
-                <!-- Skip the "empty" config. -->
-                <xsl:for-each select="get_configs_response/config[@id!='085569ce-73ed-11df-83c3-002264764cea' and type = 0]">
-                  <xsl:choose>
-                    <xsl:when test="@id = $config_id">
-                      <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <option value="{@id}"><xsl:value-of select="name"/></option>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                </xsl:for-each>
-              </select>
-            </div>
-          </div>
-          <xsl:if test="gsa:may-op ('get_slaves')">
-            <div class="form-group">
-              <label class="col-4 control-label">
-                <xsl:value-of select="gsa:i18n ('Slave')"/>
-              </label>
-              <div class="col-8">
-                <div class="form-item">
-                  <select name="slave_id">
-                    <xsl:variable name="slave_id">
-                      <xsl:value-of select="slave_id"/>
-                    </xsl:variable>
-                    <xsl:choose>
-                      <xsl:when test="string-length ($slave_id) &gt; 0">
-                        <option value="0">--</option>
-                      </xsl:when>
-                      <xsl:otherwise>
-                        <option value="0" selected="1">--</option>
-                      </xsl:otherwise>
-                    </xsl:choose>
-                    <xsl:for-each select="get_slaves_response/slave">
-                      <xsl:choose>
-                        <xsl:when test="@id = $slave_id">
-                          <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
-                        </xsl:when>
-                        <xsl:otherwise>
-                          <option value="{@id}"><xsl:value-of select="name"/></option>
-                        </xsl:otherwise>
-                      </xsl:choose>
-                    </xsl:for-each>
-                  </select>
-                </div>
-                <div class="form-item">
-                  <a href="#" title="{ gsa:i18n('Create a new slave') }"
-                    class="new-action-icon icon icon-sm" data-type="slave"
-                    data-done="select[name=slave_id]">
-                    <img class="valign-middle" src="/img/new.svg"/>
-                  </a>
-                </div>
-              </div>
-            </div>
-          </xsl:if>
-          <div class="form-group">
-            <label class="col-4 control-label">
-              <xsl:value-of select="gsa:i18n ('Network Source Interface')"/>
-            </label>
-            <div class="col-8">
-              <div class="form-item">
-                <input type="text" name="source_iface"
-                  class="form-control"
-                  value="{/envelope/params/source_iface}"/>
-              </div>
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="col-4 control-label">
-              <xsl:value-of select="gsa:i18n ('Order for target hosts')"/>
-            </label>
-            <div class="col-8">
-              <select name="hosts_ordering">
-                <option value="sequential" selected="1"><xsl:value-of select="gsa:i18n ('Sequential', 'Task|Hosts Ordering')"/></option>
-                <option value="random"><xsl:value-of select="gsa:i18n ('Random', 'Task|Hosts Ordering')"/></option>
-                <option value="reverse"><xsl:value-of select="gsa:i18n ('Reverse', 'Task|Hosts Ordering')"/></option>
-              </select>
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="col-4 control-label">
-              <xsl:value-of select="gsa:i18n ('Maximum concurrently executed NVTs per host')"/>
-            </label>
-            <div class="col-8">
-              <input type="text" name="max_checks" value="{gsa:param-or ('max_checks', '4')}"
-                data-type="int" min="0" class="spinner"
-                size="10" maxlength="10"/>
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="col-4 control-label">
-              <xsl:value-of select="gsa:i18n ('Maximum concurrently scanned hosts')"/>
-            </label>
-            <div class="col-8">
-              <input type="text" name="max_hosts" value="{gsa:param-or ('max_hosts', '20')}"
-                data-type="int" class="spinner" min="0"
-                size="10" maxlength="10"/>
-            </div>
-          </div>
-        </div>
+        <xsl:call-template name="new-task-scanner-fields">
+          <xsl:with-param name="scanner-type" select="2"/>
+        </xsl:call-template>
+      </xsl:if>
+
+      <xsl:if test="count(get_scanners_response/scanner[type = 4])">
+        <xsl:call-template name="new-task-scanner-fields">
+          <xsl:with-param name="scanner-type" select="4"/>
+        </xsl:call-template>
       </xsl:if>
 
       <xsl:if test="count(get_scanners_response/scanner[type = 1]) and count(get_configs_response/config[type = 1])">
