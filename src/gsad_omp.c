@@ -4827,7 +4827,7 @@ save_task_omp (credentials_t * credentials, params_t *params,
 {
   gchar *html, *response, *format;
   const char *no_redirect;
-  const char *comment, *name, *next, *schedule_id, *in_assets;
+  const char *comment, *name, *schedule_id, *in_assets;
   const char *slave_id, *scanner_id, *task_id, *max_checks, *max_hosts;
   const char *config_id, *target_id, *hosts_ordering, *alterable, *source_iface;
   const char *scanner_type, *schedule_periods, *auto_delete, *auto_delete_data;
@@ -4841,7 +4841,6 @@ save_task_omp (credentials_t * credentials, params_t *params,
   comment = params_value (params, "comment");
   name = params_value (params, "name");
   task_id = params_value (params, "task_id");
-  next = params_value (params, "next");
   in_assets = params_value (params, "in_assets");
   apply_overrides = params_value (params, "apply_overrides");
   min_qod = params_value (params, "min_qod");
@@ -4892,7 +4891,6 @@ save_task_omp (credentials_t * credentials, params_t *params,
     schedule_periods = "0";
   CHECK_PARAM_INVALID (slave_id, "Save Task", "edit_task");
   CHECK_PARAM_INVALID (scanner_id, "Save Task", "edit_task");
-  CHECK_PARAM_INVALID (next, "Save Task", "edit_task");
   CHECK_PARAM_INVALID (task_id, "Save Task", "edit_task");
   CHECK_PARAM_INVALID (max_checks, "Save Task", "edit_task");
   CHECK_PARAM_INVALID (source_iface, "Save Task", "edit_task");

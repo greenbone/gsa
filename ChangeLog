@@ -1,5 +1,10 @@
 2016-10-05  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/gsad_omp.c (save_task_omp): Remove not necessary validation of next
+	parameter in save_task_omp. The parameter isn't used.
+
+2016-10-05  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/gsad_omp.c (save_task_omp, create_task_omp),
 	* src/html/classic/omp.xsl (new_taks, html-edit-task-form): Use "0" as not set
 	value instead of "--". Before it was mixed behavior by using "--" and "0" for
