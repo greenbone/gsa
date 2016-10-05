@@ -7329,6 +7329,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </xsl:if>
 </xsl:template>
 
+<xsl:template name="html-edit-task-slave-disabled">
+  <input type="hidden" name="slave_id" value="0"/>
+</xsl:template>
+
 <xsl:template name="html-edit-task-schedule">
   <xsl:if test="gsa:may-op ('get_schedules')">
     <div class="form-group">
@@ -7801,8 +7805,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <input type="hidden" name="config_id" value="0"/>
               <input type="hidden" name="osp_config_id" value="0"/>
 
-              <xsl:call-template name="html-edit-task-scanner-disabled">
-              </xsl:call-template>
+              <xsl:call-template name="html-edit-task-scanner-disabled"/>
 
               <div class="form-group offset-container offset-2 form-selection-item-scanner form-selection-item-scanner--{commands_response/get_tasks_response/task/scanner/type}">
                 <xsl:if test="commands_response/get_tasks_response/task/scanner/type != 3">
@@ -7823,7 +7826,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           </xsl:call-template>
 
           <!-- OpenVAS Scanner. -->
-
           <xsl:if test="count(commands_response/get_scanners_response/scanner[type = 2])">
             <div class="form-group offset-container offset-2 form-selection-item-scanner form-selection-item-scanner--2">
               <input type="hidden" name="scanner_type" value="2" class="form-selection-input-scanner form-selection-input-scanner--2"/>
@@ -7832,6 +7834,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:with-param name="type">0</xsl:with-param>
               </xsl:call-template>
               <xsl:call-template name="html-edit-task-slave"/>
+              <xsl:call-template name="html-edit-task-openvas-options"/>
+            </div>
+          </xsl:if>
+
+          <!-- OMP Scanner. -->
+          <xsl:if test="count(commands_response/get_scanners_response/scanner[type = 4])">
+            <div class="form-group offset-container offset-2 form-selection-item-scanner form-selection-item-scanner--4">
+              <input type="hidden" name="scanner_type" value="4" class="form-selection-input-scanner form-selection-input-scanner--4"/>
+              <xsl:call-template name="html-edit-task-config">
+                <xsl:with-param name="scanner_type">4</xsl:with-param>
+                <xsl:with-param name="type">0</xsl:with-param>
+              </xsl:call-template>
+              <xsl:call-template name="html-edit-task-slave-disabled"/>
               <xsl:call-template name="html-edit-task-openvas-options"/>
             </div>
           </xsl:if>

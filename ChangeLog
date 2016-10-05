@@ -1,3 +1,8 @@
+2016-10-05  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/classic/omp.xsl (html-edit-task-slave-disabled): New template.
+	(html-edit-task-form): Add OMP Scanner case.
+
 2016-10-05  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/css/gsa-style.css: Add new rules for classes
