@@ -1,3 +1,7 @@
+2016-10-05  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/omp.xsl (get_assets_chart): Add chart title.
+
 2016-10-05  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/omp.xsl (task [details]): Hide slave for OMP Scanner.

@@ -39743,6 +39743,7 @@ should not have received it.
         data-chart-name="assets-chart"
         data-chart-type="{/envelope/params/chart_type}"
         data-chart-template="{/envelope/params/chart_template}"
+        data-chart-title="{/envelope/params/chart_title}"
         data-init-params="{$init_params_js}"
         data-gen-params="{$gen_params_js}"
         />
