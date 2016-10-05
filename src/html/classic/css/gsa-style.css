@@ -1414,6 +1414,16 @@ select[multiple] {
   padding: 5px;
 }
 
+.dialog-transparent {
+  background: rgba(221, 221, 221, 0.75);
+  border: none !important;
+}
+
+.dialog-title-transparent {
+  background: none !important;
+  border: none !important;
+}
+
 .success-dialog, .error-dialog {
   display: none;
 }

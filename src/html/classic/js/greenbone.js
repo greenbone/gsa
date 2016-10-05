@@ -1946,14 +1946,20 @@
     box.append (text);
 
     box.dialog({
-                height: 'auto',
-                width: 400,
+                height: 100,
+                width: 300,
                 modal: true,
                 closeText: 'Cancel',
                 close: function() {
                   request.ajax_request.abort('Aborted');
+                  box.dialog('destroy');
                 },
+                classes: {
+                          "ui-dialog": "dialog-transparent",
+                          "ui-dialog-titlebar": "dialog-title-transparent",
+                         },
                });
+    $('.ui-widget-overlay').css('opacity', '0.25');
 
     return box;
   }

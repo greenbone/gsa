@@ -1,3 +1,11 @@
+2016-10-05  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/css/gsa-style.css: Add new rules for classes
+	.dialog-transparent and .dialog-title-transparent.
+
+	* src/html/classic/js/greenbone.js (show_busy_dialog): Add new classes
+	to dialog to make it transparent. Reduce opacity of background overlay.
+
 2016-10-05  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/omp.xsl (scanner-type-name): Add OMP scanner.
