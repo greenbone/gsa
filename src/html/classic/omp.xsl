@@ -6709,10 +6709,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                     </xsl:variable>
                     <xsl:choose>
                       <xsl:when test="string-length ($slave_id) &gt; 0">
-                        <option value="--">--</option>
+                        <option value="0">--</option>
                       </xsl:when>
                       <xsl:otherwise>
-                        <option value="--" selected="1">--</option>
+                        <option value="0" selected="1">--</option>
                       </xsl:otherwise>
                     </xsl:choose>
                     <xsl:for-each select="get_slaves_response/slave">
@@ -7662,7 +7662,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
   <xsl:choose>
     <xsl:when test="commands_response/get_tasks_response/task/target/@id = ''">
-      <input type="hidden" name="target_id" value="--"/>
+      <input type="hidden" name="target_id" value="0"/>
     </xsl:when>
     <xsl:otherwise>
       <div class="form-group">
@@ -7763,7 +7763,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
             <!-- Container -->
 
-            <input type="hidden" name="target_id" value="--"/>
+            <input type="hidden" name="target_id" value="0"/>
             <input type="hidden" name="cmd" value="save_container_task"/>
             <xsl:call-template name="html-edit-task-scan-options"/>
           </xsl:when>

@@ -4371,7 +4371,7 @@ create_task_omp (credentials_t * credentials, params_t *params,
       CHECK (tag_value);
     }
 
-  if (schedule_id == NULL || strcmp (schedule_id, "--") == 0)
+  if (schedule_id == NULL || strcmp (schedule_id, "0") == 0)
     schedule_element = g_strdup ("");
   else
     schedule_element = g_strdup_printf ("<schedule id=\"%s\"/>", schedule_id);
@@ -4390,13 +4390,13 @@ create_task_omp (credentials_t * credentials, params_t *params,
 
       params_iterator_init (&iter, alerts);
       while (params_iterator_next (&iter, &name, &param))
-        if (param->value && strcmp (param->value, "--"))
+        if (param->value && strcmp (param->value, "0"))
           g_string_append_printf (alert_element,
                                   "<alert id=\"%s\"/>",
                                   param->value ? param->value : "");
     }
 
-  if (slave_id == NULL || !strcmp (slave_id, "") || !strcmp (slave_id, "--"))
+  if (slave_id == NULL || !strcmp (slave_id, "") || !strcmp (slave_id, "0"))
     slave_element = g_strdup ("");
   else
     slave_element = g_strdup_printf ("<slave id=\"%s\"/>", slave_id);
@@ -4932,7 +4932,7 @@ save_task_omp (credentials_t * credentials, params_t *params,
       params_iterator_init (&iter, alerts);
       while (params_iterator_next (&iter, &name, &param))
       {
-        if (param->value && strcmp (param->value, "--"))
+        if (param->value && strcmp (param->value, "0"))
           g_string_append_printf (alert_element,
                                   "<alert id=\"%s\"/>",
                                   param->value ? param->value : "");

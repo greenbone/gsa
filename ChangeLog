@@ -1,3 +1,11 @@
+2016-10-05  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/gsad_omp.c (save_task_omp, create_task_omp),
+	* src/html/classic/omp.xsl (new_taks, html-edit-task-form): Use "0" as not set
+	value instead of "--". Before it was mixed behavior by using "--" and "0" for
+	a not selected/optional value. With this change "0" is used in edit and
+	create task dialogs.
+
 2016-10-04  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Show a dialog when starting an AJAX post request and close it
