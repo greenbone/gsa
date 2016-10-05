@@ -1,5 +1,10 @@
 2016-10-05  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/classic/omp.xsl (new_task): Use 0 for slave_id and schedule_id
+	values.
+
+2016-10-05  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/classic/omp.xsl (html-edit-task-slave-disabled): New template.
 	(html-edit-task-form): Add OMP Scanner case.
 

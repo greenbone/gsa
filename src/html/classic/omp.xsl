@@ -6478,10 +6478,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
       <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
       <xsl:if test="not (gsa:may-op ('get_schedules'))">
-        <input type="hidden" name="schedule_id" value="--"/>
+        <input type="hidden" name="schedule_id" value="0"/>
       </xsl:if>
       <xsl:if test="not (gsa:may-op ('get_slaves'))">
-        <input type="hidden" name="slave_id" value="--"/>
+        <input type="hidden" name="slave_id" value="0"/>
       </xsl:if>
       <div class="form-group">
         <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Name')"/></label>
@@ -6558,10 +6558,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   select="schedule_id"/>
                 <xsl:choose>
                   <xsl:when test="string-length ($schedule_id) &gt; 0">
-                    <option value="--">--</option>
+                    <option value="0">--</option>
                   </xsl:when>
                   <xsl:otherwise>
-                    <option value="--" selected="1">--</option>
+                    <option value="0" selected="1">--</option>
                   </xsl:otherwise>
                 </xsl:choose>
                 <xsl:for-each select="get_schedules_response/schedule">
