@@ -17879,7 +17879,7 @@ new_scanner (credentials_t *credentials, params_t *params,
 
   if (openvas_connection_sendf (&connection,
                                 "<get_credentials"
-                                " filter=\"first=1 rows=-1 type=cc\" />")
+                                " filter=\"first=1 rows=-1\" />")
       == -1)
     {
       openvas_connection_close (&connection);
@@ -18032,7 +18032,8 @@ char *
 create_scanner_omp (credentials_t * credentials, params_t *params,
                     cmd_response_data_t* response_data)
 {
-  char *ret;
+  int ret;
+  char *html;
   gchar *response = NULL;
   const char *no_redirect;
   const char *name, *comment, *host, *port, *type, *ca_pub, *credential_id;
@@ -18051,15 +18052,28 @@ create_scanner_omp (credentials_t * credentials, params_t *params,
   CHECK_PARAM_INVALID (host, "Create Scanner", "new_scanner");
   CHECK_PARAM_INVALID (port, "Create Scanner", "new_scanner");
   CHECK_PARAM_INVALID (type, "Create Scanner", "new_scanner");
-  CHECK_PARAM_INVALID (ca_pub, "Create Scanner", "new_scanner");
+  if (params_given (params, "ca_pub"))
+    CHECK_PARAM_INVALID (ca_pub, "Create Scanner", "new_scanner");
   CHECK_PARAM_INVALID (credential_id, "Create Scanner", "new_scanner");
 
-  switch (ompf (credentials, &response, &entity, response_data,
-                "<create_scanner><name>%s</name><comment>%s</comment>"
+  if (ca_pub)
+    ret = ompf (credentials, &response, &entity, response_data,
+                "<create_scanner>"
+                "<name>%s</name><comment>%s</comment>"
                 "<host>%s</host><port>%s</port><type>%s</type>"
-                "<ca_pub>%s</ca_pub><credential id=\"%s\"/>"
+                "<ca_pub>%s</ca_pub>"
+                "<credential id=\"%s\"/>"
                 "</create_scanner>",
-                name, comment, host, port, type, ca_pub, credential_id))
+                name, comment, host, port, type, ca_pub, credential_id);
+  else
+    ret = ompf (credentials, &response, &entity, response_data,
+                "<create_scanner>"
+                "<name>%s</name><comment>%s</comment>"
+                "<host>%s</host><port>%s</port><type>%s</type>"
+                "<credential id=\"%s\"/>"
+                "</create_scanner>",
+                name, comment, host, port, type, credential_id);
+  switch (ret)
     {
       case 0:
       case -1:
@@ -18092,14 +18106,14 @@ create_scanner_omp (credentials_t * credentials, params_t *params,
 
   if (entity_attribute (entity, "id"))
     params_add (params, "scanner_id", entity_attribute (entity, "id"));
-  ret = response_from_entity (credentials, params, entity,
-                              (no_redirect && strcmp (no_redirect, "0")),
-                              NULL, "get_scanners",
-                              NULL, "new_scanner",
-                              "Create Scanner", response_data);
+  html = response_from_entity (credentials, params, entity,
+                               (no_redirect && strcmp (no_redirect, "0")),
+                               NULL, "get_scanners",
+                               NULL, "new_scanner",
+                               "Create Scanner", response_data);
   free_entity (entity);
   g_free (response);
-  return ret;
+  return html;
 }
 
 /**

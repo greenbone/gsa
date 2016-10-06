@@ -2456,13 +2456,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <xsl:template name="scanner-type-list">
   <xsl:param name="default"/>
   <xsl:call-template name="opt">
-    <xsl:with-param name="value" select="1"/>
-    <xsl:with-param name="content" select="'OSP Scanner'"/>
+    <xsl:with-param name="value" select="4"/>
+    <xsl:with-param name="content" select="'OMP Slave'"/>
     <xsl:with-param name="select-value" select="$default"/>
   </xsl:call-template>
   <xsl:call-template name="opt">
     <xsl:with-param name="value" select="2"/>
     <xsl:with-param name="content" select="'OpenVAS Scanner'"/>
+    <xsl:with-param name="select-value" select="$default"/>
+  </xsl:call-template>
+  <xsl:call-template name="opt">
+    <xsl:with-param name="value" select="1"/>
+    <xsl:with-param name="content" select="'OSP Scanner'"/>
     <xsl:with-param name="select-value" select="$default"/>
   </xsl:call-template>
 </xsl:template>
@@ -18583,7 +18588,18 @@ should not have received it.
   <xsl:param name="value"></xsl:param>
   <xsl:param name="content"><xsl:value-of select="$value"/></xsl:param>
   <xsl:param name="select-value"></xsl:param>
+  <xsl:param name="data-select" select="false ()"></xsl:param>
   <xsl:choose>
+    <xsl:when test="$data-select and $value = $select-value">
+      <option value="{$value}" selected="1" data-select="{$value}">
+        <xsl:value-of select="$content"/>
+      </option>
+    </xsl:when>
+    <xsl:when test="$data-select">
+      <option value="{$value}" data-select="{$value}">
+        <xsl:value-of select="$content"/>
+      </option>
+    </xsl:when>
     <xsl:when test="$value = $select-value">
       <option value="{$value}" selected="1"><xsl:value-of select="$content"/></option>
     </xsl:when>
@@ -19538,6 +19554,30 @@ should not have received it.
 
 <!--    BEGIN SCANNERS MANAGEMENT -->
 
+<xsl:template name="html-create-scanner-form-credentials">
+  <xsl:param name="type" select="'cc'"/>
+  <xsl:param name="input-classes"/>
+  <td><xsl:value-of select="gsa:i18n ('Credential')"/></td>
+  <td>
+    <xsl:variable name="credential_id" select="/envelope/params/credential_id"/>
+    <select name="credential_id" class="{$input-classes}">
+      <xsl:for-each select="get_credentials_response/credential[type=$type]">
+        <xsl:call-template name="opt">
+          <xsl:with-param name="content" select="name"/>
+          <xsl:with-param name="value" select="@id"/>
+          <xsl:with-param name="select-value" select="$credential_id"/>
+        </xsl:call-template>
+      </xsl:for-each>
+    </select>
+    <a href="#" title="{ gsa:i18n('Create a new Credential') }"
+       class="new-action-icon icon icon-sm" data-type="credential"
+       data-done="select[name=credential_id]"
+       data-extra="restrict_credential_type={$type}">
+      <img class="valign-middle" src="/img/new.svg"/>
+    </a>
+  </td>
+</xsl:template>
+
 <xsl:template name="html-create-scanner-form">
   <div class="gb_window">
     <div class="gb_window_part_left"></div>
@@ -19588,35 +19628,53 @@ should not have received it.
           <tr>
             <td><xsl:value-of select="gsa:i18n ('Type')"/></td>
             <td>
-              <select name="scanner_type">
+              <select class="form-selection-control" id="scanner" name="scanner_type">
                 <xsl:call-template name="scanner-type-list">
                   <xsl:with-param name="default" select="2"/>
+                  <xsl:with-param name="data-select" select="true ()"/>
                 </xsl:call-template>
               </select>
             </td>
           </tr>
-          <tr>
+          <tr class="form-selection-item-scanner form-selection-item-scanner--1">
             <td><xsl:value-of select="gsa:i18n ('CA Certificate')"/></td>
-            <td><input type="file" name="ca_pub"/></td>
-          </tr>
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('Credential')"/></td>
             <td>
-              <xsl:variable name="credential_id" select="/envelope/params/credential_id"/>
-              <select name="credential_id">
-                <xsl:for-each select="get_credentials_response/credential">
-                  <xsl:call-template name="opt">
-                    <xsl:with-param name="content" select="name"/>
-                    <xsl:with-param name="value" select="@id"/>
-                    <xsl:with-param name="select-value" select="$credential_id"/>
-                  </xsl:call-template>
-                </xsl:for-each>
-              </select>
-              <a href="#" title="{ gsa:i18n('Create a new Credential') }"
-                  class="new-action-icon icon icon-sm" data-type="credential" data-done="select[name=credential_id]" data-extra="restrict_credential_type=cc">
-                <img class="valign-middle" src="/img/new.svg"/>
-              </a>
+              <input class="form-selection-input-scanner form-selection-input-scanner--1"
+                     type="file"
+                     name="ca_pub"/>
             </td>
+          </tr>
+          <tr class="form-selection-item-scanner form-selection-item-scanner--2">
+            <td><xsl:value-of select="gsa:i18n ('CA Certificate')"/></td>
+            <td>
+              <input class="form-selection-input-scanner form-selection-input-scanner--2"
+                     type="file"
+                     name="ca_pub"/>
+            </td>
+          </tr>
+          <tr class="form-selection-item-scanner form-selection-item-scanner--1">
+            <xsl:call-template name="html-create-scanner-form-credentials">
+              <xsl:with-param name="type" select="'cc'"/>
+              <xsl:with-param
+                name="input-classes"
+                select="'form-selection-input-scanner form-selection-input-scanner--1'"/>
+            </xsl:call-template>
+          </tr>
+          <tr class="form-selection-item-scanner form-selection-item-scanner--2">
+            <xsl:call-template name="html-create-scanner-form-credentials">
+              <xsl:with-param name="type" select="'cc'"/>
+              <xsl:with-param
+                name="input-classes"
+                select="'form-selection-input-scanner form-selection-input-scanner--2'"/>
+            </xsl:call-template>
+          </tr>
+          <tr class="form-selection-item-scanner form-selection-item-scanner--4">
+            <xsl:call-template name="html-create-scanner-form-credentials">
+              <xsl:with-param name="type" select="'up'"/>
+              <xsl:with-param
+                name="input-classes"
+                select="'form-selection-input-scanner form-selection-input-scanner--4'"/>
+            </xsl:call-template>
           </tr>
           <tr>
             <td>

@@ -1,3 +1,18 @@
+2016-10-06  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Add OMP Slaves to New Scanner dialog.
+
+	* src/gsad_omp.c (new_scanner): Get all types of credentials.  Filtered
+	in XSL now.
+	(create_scanner_omp): Only use ca_pub if given.  OMP Slave does not use.
+
+	* src/html/classic/omp.xsl (scanner-type-list): Add OMP Slave.
+	(opt): Add optional data-select.
+	(html-create-scanner-form-credentials): New template.
+	(html-create-scanner-form): Add data-select to scanner SELECT.  Hide
+	CA Certificate field according to scanner type.  Separate OMP and
+	OTP/OSP Credential fields, so that OMP one can offer "up" credentials.
+
 2016-10-05  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/omp.xsl (get_assets_chart): Add chart title.
