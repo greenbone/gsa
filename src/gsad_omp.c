@@ -18208,7 +18208,7 @@ edit_scanner (credentials_t * credentials, params_t *params,
   if (openvas_connection_sendf (&connection,
                                 "<commands>"
                                 "<get_scanners scanner_id=\"%s\" details=\"1\" />"
-                                "<get_credentials filter=\"first=1 rows=-1 type=cc\" />"
+                                "<get_credentials filter=\"first=1 rows=-1\" />"
                                 "</commands>",
                                 scanner_id)
       == -1)

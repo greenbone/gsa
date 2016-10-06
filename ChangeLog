@@ -1,5 +1,18 @@
 2016-10-06  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Add OMP Slaves to Edit Scanner dialog.
+
+	* src/gsad_omp.c (edit_scanner): Get all types of credentials.  Filtered
+	in XSL now.
+
+	* src/html/classic/omp.xsl (html-edit-scanner-form-credentials)
+	(html-edit-scanner-form-ca-cert): New templates.
+	(html-edit-scanner-form): Add control class and id to scanner SELECT.  Hide
+	CA Certificate field according to scanner type.  Separate OMP and
+	OTP/OSP Credential fields, so that OMP one can offer "up" credentials.
+
+2016-10-06  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Add OMP Slaves to New Scanner dialog.
 
 	* src/gsad_omp.c (new_scanner): Get all types of credentials.  Filtered

@@ -19769,6 +19769,87 @@ should not have received it.
   </xsl:call-template>
 </xsl:template>
 
+<xsl:template name="html-edit-scanner-form-credentials">
+  <xsl:param name="type" select="'cc'"/>
+  <xsl:param name="input-classes"/>
+
+  <td><xsl:value-of select="gsa:i18n ('Credential')"/></td>
+  <td>
+    <xsl:variable name="credential_id" select="commands_response/get_scanners_response/scanner/credential/@id"/>
+    <xsl:variable name="certificate_info" select="commands_response/get_scanners_response/scanner/credential/certificate_info"/>
+    <select name="credential_id" class="{$input-classes}">
+      <xsl:for-each select="commands_response/get_credentials_response/credential[type = $type]">
+        <xsl:call-template name="opt">
+          <xsl:with-param name="content" select="name"/>
+          <xsl:with-param name="value" select="@id"/>
+          <xsl:with-param name="select-value" select="$credential_id"/>
+        </xsl:call-template>
+      </xsl:for-each>
+    </select>
+    <a href="#" title="{ gsa:i18n('Create a new Credential') }"
+       class="new-action-icon icon icon-sm"
+       data-type="credential" data-done="select[name=credential_id]" data-extra="restrict_credential_type={$type}">
+      <img src="/img/new.svg"/>
+    </a>
+    <xsl:if test="string-length ($credential_id) &gt; 0">
+      <p class="footnote" style="margin-top:3px;">
+        <a href="/omp?cmd=download_credential&amp;credential_id={$credential_id}&amp;package_format=pem&amp;token={/envelope/token}"
+          title="{gsa:i18n ('Download Certificate currently in use', 'Action Verb')}"
+          class="icon icon-sm">
+          <img src="/img/key.svg" alt="{gsa:i18n ('Download Certificate currently in use', 'Action Verb')}"/>
+        </a>
+        <xsl:call-template name="certificate-status">
+          <xsl:with-param name="certificate_info" select="$certificate_info"/>
+        </xsl:call-template>
+      </p>
+    </xsl:if>
+  </td>
+</xsl:template>
+
+<xsl:template name="html-edit-scanner-form-ca-cert">
+  <td><xsl:value-of select="gsa:i18n ('CA Certificate')"/></td>
+  <td>
+    <xsl:variable name="ca_pub" select="commands_response/get_scanners_response/scanner/ca_pub"/>
+    <xsl:variable name="ca_pub_info" select="commands_response/get_scanners_response/scanner/ca_pub_info"/>
+    <xsl:choose>
+      <xsl:when test="string-length ($ca_pub) &gt; 0">
+        <label>
+          <input type="radio" name="which_cert" value="existing" checked="1"/>
+          <xsl:value-of select="gsa:i18n ('Existing', 'Certificate')"/>
+        </label>
+        <label>
+          <input type="radio" name="which_cert" value="default"/>
+          <xsl:value-of select="gsa:i18n ('Default', 'Certificate')"/>
+        </label>
+      </xsl:when>
+      <xsl:otherwise>
+        <label>
+          <input type="radio" name="which_cert" value="default" checked="1"/>
+          <xsl:value-of select="gsa:i18n ('Default', 'Certificate')"/>
+        </label>
+      </xsl:otherwise>
+    </xsl:choose>
+    <label>
+      <input type="radio" name="which_cert" value="new"/>
+      <xsl:value-of select="gsa:i18n ('New:', 'Certificate')"/>
+      <input type="file" name="ca_pub"/>
+    </label>
+    <xsl:if test="string-length ($ca_pub) &gt; 0">
+      <p class="footnote" style="margin-top:3px;">
+        <a href="/omp?cmd=download_ca_pub&amp;scanner_id={commands_response/get_scanners_response/scanner/@id}&amp;ca_pub={str:encode-uri($ca_pub, true ())}&amp;token={/envelope/token}"
+          title="{gsa:i18n ('Download CA Certificate currently in use', 'Action Verb')}"
+          class="icon icon-sm">
+          <img src="/img/key.svg"
+              alt="{gsa:i18n ('Download CA Certificate currently in use', 'Action Verb')}"/>
+        </a>
+        <xsl:call-template name="certificate-status">
+          <xsl:with-param name="certificate_info" select="$ca_pub_info"/>
+        </xsl:call-template>
+      </p>
+    </xsl:if>
+  </td>
+</xsl:template>
+
 <xsl:template name="html-edit-scanner-form">
   <xsl:variable name="in_use"
                 select="commands_response/get_scanners_response/scanner/in_use = 1"/>
@@ -19815,12 +19896,12 @@ should not have received it.
                 <xsl:choose>
                   <xsl:when test="$in_use">
                     <input type="text" name="scanner_host" size="30" maxlength="400"
-                          disabled="1"
-                          value="{commands_response/get_scanners_response/scanner/host}"/>
+                           disabled="1"
+                           value="{commands_response/get_scanners_response/scanner/host}"/>
                   </xsl:when>
                   <xsl:otherwise>
                     <input type="text" name="scanner_host" size="30" maxlength="400"
-                          value="{commands_response/get_scanners_response/scanner/host}"/>
+                           value="{commands_response/get_scanners_response/scanner/host}"/>
                   </xsl:otherwise>
                 </xsl:choose>
               </td>
@@ -19846,14 +19927,16 @@ should not have received it.
               <td>
                 <xsl:choose>
                   <xsl:when test="$in_use">
-                    <select name="scanner_type" disabled="1">
+                    <select class="form-selection-control" id="scanner"
+                            name="scanner_type" disabled="1">
                       <xsl:call-template name="scanner-type-list">
                         <xsl:with-param name="default" select="commands_response/get_scanners_response/scanner/type"/>
                       </xsl:call-template>
                     </select>
                   </xsl:when>
                   <xsl:otherwise>
-                    <select name="scanner_type">
+                    <select class="form-selection-control" id="scanner"
+                            name="scanner_type">
                       <xsl:call-template name="scanner-type-list">
                         <xsl:with-param name="default" select="commands_response/get_scanners_response/scanner/type"/>
                       </xsl:call-template>
@@ -19863,81 +19946,43 @@ should not have received it.
               </td>
             </tr>
           </xsl:if>
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('CA Certificate')"/></td>
-            <td>
-              <xsl:variable name="ca_pub" select="commands_response/get_scanners_response/scanner/ca_pub"/>
-              <xsl:variable name="ca_pub_info" select="commands_response/get_scanners_response/scanner/ca_pub_info"/>
-              <xsl:choose>
-                <xsl:when test="string-length ($ca_pub) &gt; 0">
-                  <label>
-                    <input type="radio" name="which_cert" value="existing" checked="1"/>
-                    <xsl:value-of select="gsa:i18n ('Existing', 'Certificate')"/>
-                  </label>
-                  <label>
-                    <input type="radio" name="which_cert" value="default"/>
-                    <xsl:value-of select="gsa:i18n ('Default', 'Certificate')"/>
-                  </label>
-                </xsl:when>
-                <xsl:otherwise>
-                  <label>
-                    <input type="radio" name="which_cert" value="default" checked="1"/>
-                    <xsl:value-of select="gsa:i18n ('Default', 'Certificate')"/>
-                  </label>
-                </xsl:otherwise>
-              </xsl:choose>
-              <label>
-                <input type="radio" name="which_cert" value="new"/>
-                <xsl:value-of select="gsa:i18n ('New:', 'Certificate')"/>
-                <input type="file" name="ca_pub"/>
-              </label>
-              <xsl:if test="string-length ($ca_pub) &gt; 0">
-                <p class="footnote" style="margin-top:3px;">
-                  <a href="/omp?cmd=download_ca_pub&amp;scanner_id={commands_response/get_scanners_response/scanner/@id}&amp;ca_pub={str:encode-uri($ca_pub, true ())}&amp;token={/envelope/token}"
-                    title="{gsa:i18n ('Download CA Certificate currently in use', 'Action Verb')}"
-                    class="icon icon-sm">
-                    <img src="/img/key.svg"
-                        alt="{gsa:i18n ('Download CA Certificate currently in use', 'Action Verb')}"/>
-                  </a>
-                  <xsl:call-template name="certificate-status">
-                    <xsl:with-param name="certificate_info" select="$ca_pub_info"/>
-                  </xsl:call-template>
-                </p>
-              </xsl:if>
-            </td>
+          <tr class="form-selection-item-scanner form-selection-item-scanner--1">
+            <xsl:call-template name="html-edit-scanner-form-ca-cert">
+              <xsl:with-param
+                name="input-classes"
+                select="'form-selection-input-scanner form-selection-input-scanner--1'"/>
+            </xsl:call-template>
           </tr>
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('Credential')"/></td>
-            <td>
-              <xsl:variable name="credential_id" select="commands_response/get_scanners_response/scanner/credential/@id"/>
-              <xsl:variable name="certificate_info" select="commands_response/get_scanners_response/scanner/credential/certificate_info"/>
-              <select name="credential_id">
-                <xsl:for-each select="commands_response/get_credentials_response/credential">
-                  <xsl:call-template name="opt">
-                    <xsl:with-param name="content" select="name"/>
-                    <xsl:with-param name="value" select="@id"/>
-                    <xsl:with-param name="select-value" select="$credential_id"/>
-                  </xsl:call-template>
-                </xsl:for-each>
-              </select>
-              <a href="#" title="{ gsa:i18n('Create a new Credential') }"
-                class="new-action-icon icon icon-sm"
-                data-type="credential" data-done="select[name=credential_id]" data-extra="restrict_credential_type=cc">
-                <img src="/img/new.svg"/>
-              </a>
-              <xsl:if test="string-length ($credential_id) &gt; 0">
-                <p class="footnote" style="margin-top:3px;">
-                  <a href="/omp?cmd=download_credential&amp;credential_id={$credential_id}&amp;package_format=pem&amp;token={/envelope/token}"
-                    title="{gsa:i18n ('Download Certificate currently in use', 'Action Verb')}"
-                    class="icon icon-sm">
-                    <img src="/img/key.svg" alt="{gsa:i18n ('Download Certificate currently in use', 'Action Verb')}"/>
-                  </a>
-                  <xsl:call-template name="certificate-status">
-                    <xsl:with-param name="certificate_info" select="$certificate_info"/>
-                  </xsl:call-template>
-                </p>
-              </xsl:if>
-            </td>
+          <tr class="form-selection-item-scanner form-selection-item-scanner--2">
+            <xsl:call-template name="html-edit-scanner-form-ca-cert">
+              <xsl:with-param
+                name="input-classes"
+                select="'form-selection-input-scanner form-selection-input-scanner--2'"/>
+            </xsl:call-template>
+          </tr>
+          <tr class="form-selection-item-scanner form-selection-item-scanner--1">
+            <xsl:call-template name="html-edit-scanner-form-credentials">
+              <xsl:with-param name="type" select="'cc'"/>
+              <xsl:with-param
+                name="input-classes"
+                select="'form-selection-input-scanner form-selection-input-scanner--1'"/>
+            </xsl:call-template>
+          </tr>
+          <tr class="form-selection-item-scanner form-selection-item-scanner--2">
+            <xsl:call-template name="html-edit-scanner-form-credentials">
+              <xsl:with-param name="type" select="'cc'"/>
+              <xsl:with-param
+                name="input-classes"
+                select="'form-selection-input-scanner form-selection-input-scanner--2'"/>
+            </xsl:call-template>
+          </tr>
+          <tr class="form-selection-item-scanner form-selection-item-scanner--4">
+            <xsl:call-template name="html-edit-scanner-form-credentials">
+              <xsl:with-param name="type" select="'up'"/>
+              <xsl:with-param
+                name="input-classes"
+                select="'form-selection-input-scanner form-selection-input-scanner--4'"/>
+            </xsl:call-template>
           </tr>
           <tr>
             <td>
