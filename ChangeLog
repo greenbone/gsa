@@ -1,5 +1,10 @@
 2016-10-06  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (save_scanner_omp): Correct host param name.  Was renamed
+	on 2016-08-17.
+
+2016-10-06  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Add OMP Slaves to Edit Scanner dialog.
 
 	* src/gsad_omp.c (edit_scanner): Get all types of credentials.  Filtered

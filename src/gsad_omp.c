@@ -18304,7 +18304,7 @@ save_scanner_omp (credentials_t * credentials, params_t *params,
   credential_id = params_value (params, "credential_id");
   CHECK_PARAM_INVALID (scanner_id, "Edit Scanner", "edit_scanner");
   CHECK_PARAM_INVALID (name, "Edit Scanner", "edit_scanner");
-  if (params_given (params, "host") == 0)
+  if (params_given (params, "scanner_host") == 0)
     in_use = 1;
   else
    {
