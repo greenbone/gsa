@@ -1,3 +1,9 @@
+2016-10-07  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/omp.xsl (host [classic], report [assets])
+	(report [report-assets], report [hosts]): Select only current host
+	for os-icon template to avoid searching the host in lists.
+
 2016-10-06  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (save_scanner_omp): Correct host param name.  Was renamed
