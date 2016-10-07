@@ -26075,7 +26075,7 @@ should not have received it.
           <td><xsl:value-of select="gsa:i18n ('OS', 'Host')"/>:</td>
           <td>
             <xsl:call-template name="os-icon">
-              <xsl:with-param name="host" select="../host"/>
+              <xsl:with-param name="host" select="."/>
               <xsl:with-param name="current_host" select="ip"/>
               <xsl:with-param name="os-name" select="1"/>
               <xsl:with-param name="img-style" select="'padding-right: 3px'"/>
@@ -28687,7 +28687,7 @@ should not have received it.
         </td>
         <td>
           <xsl:call-template name="os-icon">
-            <xsl:with-param name="host" select="../host"/>
+            <xsl:with-param name="host" select="."/>
             <xsl:with-param name="current_host" select="$current_host"/>
           </xsl:call-template>
         </td>
@@ -28827,7 +28827,7 @@ should not have received it.
         </td>
         <td>
           <xsl:call-template name="os-icon">
-            <xsl:with-param name="host" select="../host"/>
+            <xsl:with-param name="host" select="."/>
             <xsl:with-param name="current_host" select="$current_host"/>
           </xsl:call-template>
         </td>
@@ -29459,7 +29459,7 @@ should not have received it.
             </td>
             <td>
               <xsl:call-template name="os-icon">
-                <xsl:with-param name="host" select="../host"/>
+                <xsl:with-param name="host" select="."/>
                 <xsl:with-param name="current_host" select="$current_host"/>
               </xsl:call-template>
             </td>

@@ -1,3 +1,11 @@
+2016-10-07  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Backport r26354.
+
+	* src/html/classic/omp.xsl (host, report [assets])
+	(report [report-assets], report [hosts]): Select only current host
+	for os-icon template to avoid searching the host in lists.
+
 2016-09-26  Christian Fischer <christian.fischer@greenbone.net>
 
 	Backport r26269 and r26267.
