@@ -32750,6 +32750,7 @@ should not have received it.
 
 <xsl:template name="report-hosts-link">
   <xsl:param name="report_id"/>
+  <xsl:param name="host"/>
   <xsl:param name="current_host"/>
   <xsl:param name="levels"/>
   <xsl:param name="filter"/>
@@ -32769,15 +32770,27 @@ should not have received it.
       <xsl:when test="($name = 'All' or $name = 'All filtered') and $current_host = ''">
         <xsl:value-of select="count(report/results/result)"/>
       </xsl:when>
-      <xsl:when test="$name = 'All' or $name = 'All filtered'">
-        <xsl:value-of select="count(../results/result[host/text() = $current_host])"/>
+      <xsl:when test="$name = 'All' or $name = 'All filtered' and $host">
+        <xsl:value-of select="$host/results/page"/>
       </xsl:when>
       <xsl:when test="$current_host = ''">
         <xsl:value-of select="count(report/results/result[threat/text() = $name])"/>
       </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="count(../results/result[host/text() = $current_host][threat/text() = $name])"/>
-      </xsl:otherwise>
+      <xsl:when test="$name = 'High' and $host">
+        <xsl:value-of select="$host/results/hole/page"/>
+      </xsl:when>
+      <xsl:when test="$name = 'Medium' and $host">
+        <xsl:value-of select="$host/results/warning/page"/>
+      </xsl:when>
+      <xsl:when test="$name = 'Low' and $host">
+        <xsl:value-of select="$host/results/info/page"/>
+      </xsl:when>
+      <xsl:when test="$name = 'Log' and $host">
+        <xsl:value-of select="$host/results/log/page"/>
+      </xsl:when>
+      <xsl:when test="$name = 'False Positive' and $host">
+        <xsl:value-of select="$host/results/false_positive/page"/>
+      </xsl:when>
     </xsl:choose>
   </xsl:variable>
 
@@ -32925,7 +32938,7 @@ should not have received it.
               </xsl:call-template>
             </td>
             <td>
-              <xsl:variable name="port-count" select="count (../ports/port[host = $current_host and not(contains(text(), 'general/'))])"/>
+              <xsl:variable name="port-count" select="ports/page"/>
 
               <xsl:call-template name="report-ports-link">
                 <xsl:with-param name="report_id" select="$id"/>
@@ -33006,6 +33019,7 @@ should not have received it.
             <td style="text-align:right">
               <xsl:call-template name="report-hosts-link">
                 <xsl:with-param name="report_id" select="$id"/>
+                <xsl:with-param name="host" select="."/>
                 <xsl:with-param name="current_host" select="$current_host"/>
                 <xsl:with-param name="filter" select="../filters"/>
                 <xsl:with-param name="levels" select="'h'"/>
@@ -33014,6 +33028,7 @@ should not have received it.
             <td style="text-align:right">
               <xsl:call-template name="report-hosts-link">
                 <xsl:with-param name="report_id" select="$id"/>
+                <xsl:with-param name="host" select="."/>
                 <xsl:with-param name="current_host" select="$current_host"/>
                 <xsl:with-param name="filter" select="../filters"/>
                 <xsl:with-param name="levels" select="'m'"/>
@@ -33022,6 +33037,7 @@ should not have received it.
             <td style="text-align:right">
               <xsl:call-template name="report-hosts-link">
                 <xsl:with-param name="report_id" select="$id"/>
+                <xsl:with-param name="host" select="."/>
                 <xsl:with-param name="current_host" select="$current_host"/>
                 <xsl:with-param name="filter" select="../filters"/>
                 <xsl:with-param name="levels" select="'l'"/>
@@ -33030,6 +33046,7 @@ should not have received it.
             <td style="text-align:right">
               <xsl:call-template name="report-hosts-link">
                 <xsl:with-param name="report_id" select="$id"/>
+                <xsl:with-param name="host" select="."/>
                 <xsl:with-param name="current_host" select="$current_host"/>
                 <xsl:with-param name="filter" select="../filters"/>
                 <xsl:with-param name="levels" select="'g'"/>
@@ -33038,6 +33055,7 @@ should not have received it.
             <td style="text-align:right">
               <xsl:call-template name="report-hosts-link">
                 <xsl:with-param name="report_id" select="$id"/>
+                <xsl:with-param name="host" select="."/>
                 <xsl:with-param name="current_host" select="$current_host"/>
                 <xsl:with-param name="filter" select="../filters"/>
                 <xsl:with-param name="levels" select="'f'"/>
@@ -33046,6 +33064,7 @@ should not have received it.
             <td style="text-align:right">
               <xsl:call-template name="report-hosts-link">
                 <xsl:with-param name="report_id" select="$id"/>
+                <xsl:with-param name="host" select="."/>
                 <xsl:with-param name="current_host" select="$current_host"/>
                 <xsl:with-param name="filter" select="../filters"/>
                 <xsl:with-param name="levels" select="../filters/keywords/keyword[column='levels']/value"/>
