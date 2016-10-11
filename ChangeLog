@@ -1,5 +1,14 @@
 2016-10-11  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/omp.xsl (report-hosts-link): Change filter param
+	to filter_template, so host and levels only have to be inserted into
+	a template string instead of building the filter from the keywords
+	every time.
+	(report [hosts]): Build template strings for report-hosts-link here
+	and update the parameters of report-hosts-link.
+
+2016-10-11  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/omp.xsl (report-hosts-link): Add param "host"
 	and get result counts directly from host element.
 	(report [hosts]): Get ports count directly from host element and 
