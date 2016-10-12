@@ -1,3 +1,10 @@
+2016-10-12  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/omp.xsl (report-hosts-link): Get number of results
+	from "result_count" instead of "results" subelement of host.
+	(report [hosts]): Get number of ports from "port_count" instead of
+	"ports" subelement of host.
+
 2016-10-11  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/omp.xsl (report-hosts-link): Change filter param
