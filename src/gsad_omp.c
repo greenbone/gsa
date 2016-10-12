@@ -13265,6 +13265,7 @@ save_config_nvt_omp (credentials_t * credentials, params_t *params,
           if (is_timeout)
             {
               const char *timeout;
+              gchar *preference_name_escaped;
 
               timeout = params_value (params, "timeout");
 
@@ -13281,6 +13282,9 @@ save_config_nvt_omp (credentials_t * credentials, params_t *params,
                                        "/omp?cmd=get_configs", response_data);
                 }
 
+              preference_name_escaped = g_markup_escape_text (preference_name,
+                                                              -1);
+
               if (strcmp (timeout, "0") == 0)
                 /* Leave out the value to clear the preference. */
                 ret = openvas_connection_sendf (&connection,
@@ -13291,7 +13295,7 @@ save_config_nvt_omp (credentials_t * credentials, params_t *params,
                                                 "</preference>"
                                                 "</modify_config>",
                                                 config_id,
-                                                preference_name);
+                                                preference_name_escaped);
               else
                 ret = openvas_connection_sendf (&connection,
                                                 "<modify_config"
@@ -13302,23 +13306,31 @@ save_config_nvt_omp (credentials_t * credentials, params_t *params,
                                                 "</preference>"
                                                 "</modify_config>",
                                                 config_id,
-                                                preference_name,
+                                                preference_name_escaped,
                                                 value);
+
+              g_free (preference_name_escaped);
             }
           else
-            ret = openvas_connection_sendf (&connection,
-                                            "<modify_config"
-                                            " config_id=\"%s\">"
-                                            "<preference>"
-                                            "<nvt oid=\"%s\"/>"
-                                            "<name>%s</name>"
-                                            "<value>%s</value>"
-                                            "</preference>"
-                                            "</modify_config>",
-                                            config_id,
-                                            params_value (params, "oid"),
-                                            preference_name,
-                                            value);
+            {
+              gchar *preference_name_escaped;
+              preference_name_escaped = g_markup_escape_text (preference_name,
+                                                              -1);
+              ret = openvas_connection_sendf (&connection,
+                                              "<modify_config"
+                                              " config_id=\"%s\">"
+                                              "<preference>"
+                                              "<nvt oid=\"%s\"/>"
+                                              "<name>%s</name>"
+                                              "<value>%s</value>"
+                                              "</preference>"
+                                              "</modify_config>",
+                                              config_id,
+                                              params_value (params, "oid"),
+                                              preference_name_escaped,
+                                              value);
+              g_free (preference_name_escaped);
+            }
 
           if (ret == -1)
             {
