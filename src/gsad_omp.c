@@ -9696,11 +9696,11 @@ create_target_omp (credentials_t * credentials, params_t *params,
                             "Given target_source was invalid",
                             G_STRINGIFY (MHD_HTTP_BAD_REQUEST),
                             "Create Target", "new_target");
-  CHECK_PARAM_INVALID (hosts_filter, "Create Target", "new_target");
-  if (hosts_filter == NULL && strcmp (target_source, "asset_hosts") == 0)
-    return new_target (credentials, params,
-                       GSAD_MESSAGE_INVALID_PARAM ("Create Target"),
-                       response_data);
+
+  /* require hosts_filter if target_source is "asset_hosts" */
+  if (strcmp (target_source, "asset_hosts") == 0)
+    CHECK_PARAM_INVALID (hosts_filter, "Create Target", "new_target");
+
   CHECK_PARAM_INVALID (comment, "Create Target", "new_target");
   CHECK_PARAM_INVALID (port_list_id, "Create Target", "new_target");
   CHECK_PARAM_INVALID (target_ssh_credential, "Create Target", "new_target");

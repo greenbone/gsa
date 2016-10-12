@@ -1,3 +1,9 @@
+2016-10-12 Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/gsad_omp.c (create_target_omp): Fix checking hosts_filter parameter.
+	The hosts_filter parameter is only required and used if target_source is set
+	to asset_hosts.
+
 2016-10-12  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/omp.xsl (report-hosts-link): Get number of results
