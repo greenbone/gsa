@@ -29331,25 +29331,25 @@ should not have received it.
         <xsl:value-of select="count(report/results/result)"/>
       </xsl:when>
       <xsl:when test="$name = 'All' or $name = 'All filtered' and $host">
-        <xsl:value-of select="$host/results/page"/>
+        <xsl:value-of select="$host/result_count/page"/>
       </xsl:when>
       <xsl:when test="$current_host = ''">
         <xsl:value-of select="count(report/results/result[threat/text() = $name])"/>
       </xsl:when>
       <xsl:when test="$name = 'High' and $host">
-        <xsl:value-of select="$host/results/hole/page"/>
+        <xsl:value-of select="$host/result_count/hole/page"/>
       </xsl:when>
       <xsl:when test="$name = 'Medium' and $host">
-        <xsl:value-of select="$host/results/warning/page"/>
+        <xsl:value-of select="$host/result_count/warning/page"/>
       </xsl:when>
       <xsl:when test="$name = 'Low' and $host">
-        <xsl:value-of select="$host/results/info/page"/>
+        <xsl:value-of select="$host/result_count/info/page"/>
       </xsl:when>
       <xsl:when test="$name = 'Log' and $host">
-        <xsl:value-of select="$host/results/log/page"/>
+        <xsl:value-of select="$host/result_count/log/page"/>
       </xsl:when>
       <xsl:when test="$name = 'False Positive' and $host">
-        <xsl:value-of select="$host/results/false_positive/page"/>
+        <xsl:value-of select="$host/result_count/false_positive/page"/>
       </xsl:when>
     </xsl:choose>
   </xsl:variable>
@@ -29477,7 +29477,7 @@ should not have received it.
               </xsl:call-template>
             </td>
             <td>
-              <xsl:variable name="port-count" select="ports/page"/>
+              <xsl:variable name="port-count" select="port_count/page"/>
 
               <xsl:call-template name="report-ports-link">
                 <xsl:with-param name="report_id" select="$id"/>
