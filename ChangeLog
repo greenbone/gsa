@@ -1,5 +1,12 @@
 2016-10-12  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	Backport r26385.
+
+	* src/gsad_omp.c (save_config_nvt_omp): Escape preference name when
+	sending it to manager.
+
+2016-10-12  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Backport r26372.
 
 	* src/html/classic/omp.xsl (report-hosts-link): Get number of results
