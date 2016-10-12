@@ -9716,7 +9716,7 @@ create_target_omp (credentials_t * credentials, params_t *params,
   else
     comment_element = g_strdup ("");
 
-  if (strcmp (target_ssh_credential, "--") == 0)
+  if (strcmp (target_ssh_credential, "0") == 0)
     ssh_credentials_element = g_strdup ("");
   else
     ssh_credentials_element =
@@ -9726,21 +9726,21 @@ create_target_omp (credentials_t * credentials, params_t *params,
                        target_ssh_credential,
                        port);
 
-  if (strcmp (target_smb_credential, "--") == 0)
+  if (strcmp (target_smb_credential, "0") == 0)
     smb_credentials_element = g_strdup ("");
   else
     smb_credentials_element =
       g_strdup_printf ("<smb_credential id=\"%s\"/>",
                        target_smb_credential);
 
-  if (strcmp (target_esxi_credential, "--") == 0)
+  if (strcmp (target_esxi_credential, "0") == 0)
     esxi_credentials_element = g_strdup ("");
   else
     esxi_credentials_element =
       g_strdup_printf ("<esxi_credential id=\"%s\"/>",
                        target_esxi_credential);
 
-  if (strcmp (target_snmp_credential, "--") == 0)
+  if (strcmp (target_snmp_credential, "0") == 0)
     snmp_credentials_element = g_strdup ("");
   else
     snmp_credentials_element =

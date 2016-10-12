@@ -14816,7 +14816,7 @@ should not have received it.
               <td><xsl:value-of select="gsa:i18n ('SMB')"/></td>
               <td>
                 <select name="smb_credential_id">
-                  <option value="--">--</option>
+                  <option value="0">--</option>
                   <xsl:apply-templates select="$credentials/credential [type = 'up']" mode="select">
                     <xsl:with-param name="select_id" select="smb_credential_id"/>
                   </xsl:apply-templates>
@@ -14831,7 +14831,7 @@ should not have received it.
               <td><xsl:value-of select="gsa:i18n ('ESXi')"/></td>
               <td>
                 <select name="esxi_credential_id">
-                  <option value="--">--</option>
+                  <option value="0">--</option>
                   <xsl:apply-templates select="$credentials/credential [type = 'up']" mode="select">
                     <xsl:with-param name="select_id" select="esxi_credential_id"/>
                   </xsl:apply-templates>
@@ -14846,7 +14846,7 @@ should not have received it.
               <td><xsl:value-of select="gsa:i18n ('SNMP')"/></td>
               <td>
                 <select name="snmp_credential_id">
-                  <option value="--">--</option>
+                  <option value="0">--</option>
                   <xsl:apply-templates select="$credentials/credential [type = 'snmp']" mode="select">
                     <xsl:with-param name="select_id" select="snmp_credential_id"/>
                   </xsl:apply-templates>

@@ -1,5 +1,11 @@
 2016-10-12 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/gsad_omp.c (create_target_omp),
+	* src/html/classic/omp.xsl (html-create-target-form): Use "0" as default for
+	empty value instead of "--".
+
+2016-10-12 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/gsad_omp.c (create_target_omp): Fix checking hosts_filter parameter.
 	The hosts_filter parameter is only required and used if target_source is set
 	to asset_hosts.
