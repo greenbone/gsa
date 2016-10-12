@@ -9691,11 +9691,6 @@ create_target_omp (credentials_t * credentials, params_t *params,
                             "Missing manual list of hosts",
                             G_STRINGIFY (MHD_HTTP_BAD_REQUEST),
                             "Create Target", "new_target");
-  if (strcmp (target_source, "import") == 0 && name == NULL)
-    return message_invalid (credentials, params, response_data,
-                            "Given target_source was invalid",
-                            G_STRINGIFY (MHD_HTTP_BAD_REQUEST),
-                            "Create Target", "new_target");
 
   /* require hosts_filter if target_source is "asset_hosts" */
   if (strcmp (target_source, "asset_hosts") == 0)

@@ -1,5 +1,10 @@
 2016-10-12 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/gsad_omp.c (create_target_omp): Remove obsolete check for target_source
+	import and name parameter is set. import feature got removed a while ago.
+
+2016-10-12 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/gsad_omp.c (create_target_omp): Improve error message if target_source
 	is set to manual and no list of hosts is given.
 
