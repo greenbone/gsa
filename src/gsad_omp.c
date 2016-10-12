@@ -10711,7 +10711,7 @@ save_config_nvt_omp (credentials_t * credentials, params_t *params)
                                           "</modify_config>",
                                           config_id,
                                           params_value (params, "oid"),
-                                          preference_name,
+                                          preference_name_escaped,
                                           value);
               g_free (preference_name_escaped);
             }

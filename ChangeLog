@@ -1,5 +1,10 @@
 2016-10-12  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/gsad_omp.c (save_config_nvt_omp): Use correct variable
+	preference_name_escaped in non-timeout case.
+
+2016-10-12  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Backport r26385.
 
 	* src/gsad_omp.c (save_config_nvt_omp): Escape preference name when
