@@ -1,5 +1,10 @@
 2016-10-12 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/gsad_omp.c (create_target_omp): Improve error message if target_source
+	is set to manual and no list of hosts is given.
+
+2016-10-12 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/gsad_omp.c (create_target_omp),
 	* src/html/classic/omp.xsl (html-create-target-form): Use "0" as default for
 	empty value instead of "--".

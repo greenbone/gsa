@@ -9688,7 +9688,7 @@ create_target_omp (credentials_t * credentials, params_t *params,
   CHECK_PARAM_INVALID (target_source, "Create Target", "new_target")
   if (hosts == NULL && strcmp (target_source, "manual") == 0)
     return message_invalid (credentials, params, response_data,
-                            "Given target_source was invalid",
+                            "Missing manual list of hosts",
                             G_STRINGIFY (MHD_HTTP_BAD_REQUEST),
                             "Create Target", "new_target");
   if (strcmp (target_source, "import") == 0 && name == NULL)
