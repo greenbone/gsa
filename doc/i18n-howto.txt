@@ -4,7 +4,7 @@ GSA INTERNATIONALIZATION HOWTO
 Requirements
 ============
 In addition to the usual GSA requirements, the following are needed as well:
-- msgmerge (part of the GNU gettext tools)
+- msgmerge and xgettext (part of the GNU gettext tools)
 - Python (scripts were tested with version 2.7.3)
 - polib (Python gettext manipulation library)
 
@@ -20,7 +20,10 @@ General notes
  format is no longer used. (See section "Migrating old XML translations" on
  how to migrate translations using this format.)
 - Help pages are translated separately. See "Translating help pages" for more.
-- Charts are currently not translated.
+- The locale codes used by GSA should be either
+ * an ISO 639 two-letter language code, like "de" for German
+ * an ISO 639 two-letter code followed "_" and an ISO 3166 country code, like
+   "pt_BR" for Brazilian Portuguese
 
 
 Updating existing translations
@@ -28,49 +31,74 @@ Updating existing translations
 To update existing translations using the gettext format follow these steps.
  For old XML-based translations, see "Migrating old XML translations".
 
-1 - Creating a new template (.pot) file
----------------------------------------
-To create a new template file run
+Summary
+-------
+1) Create new template files with
+  make gettext-pot
 
-  make gettext-pot-files
+2) Merge the template with the .po files in the source directory
 
-which will generate the file "gsad_xsl.pot" in the "src/po" subdirectory of
- your build directory.
-You can then use this as a template for your new translation.
+3) Edit the merged .po file
 
-Alternatively you can run the script directly:
+4) Copy the .po file back to the source directory, renaming as necessary
 
-  python "${SRC_DIR}/tools/xsl2pot" "${SRC_DIR}/src/html/classic" "${OUT_FILE}"
 
-with ${SRC_DIR} being the GSA source directory and ${OUT_FILE} being the path
- to your desired output file.
+1 - Creating new template (.pot) files
+--------------------------------------
+To create a new template file simply run
+
+  make gettext-pot
+
+which will generate the files "gsad_xsl.pot" and "gsad_js.pot" in the "src/po"
+ subdirectory of your build directory.
+You can then use this as a template for your new translation or merge it with
+ existing translation files.
+
+To only create a template file for the XSL or JavaScript you can also use the
+  make target "gettext-xsl-pot" or "gettext-js-pot".
 
 
 2 - Merge the template and existing translations
 ------------------------------------------------
-To merge the template run
+a) Using a custom tool
 
-  make gettext-po-files
+To merge the template and existing translations with a tool other than the
+ basic pomerge you need to import / specify the following files:
+- The .pot files generated in step 1
+- The .po files from the "src/po" subdirectory of your GSA source directory.
 
-This will generate "gsad_xsl-XX-merged.po" files in the "src/po" subdirectory
- of your build directory, with "XX" being ISO 639 language codes.
+b) Using make and pomerge
 
-3 - Copying the merged .po
---------------------------
-The next step is to copy the file for your language to "src/po" in the
- source directory, removing the part "-merged" from the file name.
+If your tool does not have its own functions for merging translation files,
+ you can use the following make target to merge the new .pot file with the
+ current .po files from the source directory:
 
-As this means overwrites the old source .po file, you should verify the new
- file is correct and/or backup the old file first.
+  make gettext-po
 
-4 - Update the translations
+This will generate "gsad_xsl-XX-merged.po" and "gsad_js-XX-merged.po"
+ files in the "src/po" subdirectory of your build directory,
+ with "XX" being a locale code as defined above in the section "General notes".
+
+There are also separate make targets for JS and XSL .po files,
+ gettext-js-po and gettext-xsl-po.
+
+
+3 - Update the translations
 ---------------------------
-Finally you can can update the actual translations in the .po file.
-To apply the changes, build, install and restart GSA.
+Next you can update the actual translations in the .po file.
 
-(Technically you can update the merged .po before copying and installing it,
- but doing it last allows testing the translations in progress)
+If you want to edit the translations locally you can also copy them as
+ described in step 4 before editing them.
 
+
+4 - Copying the new .po
+-----------------------
+The next step is to copy the file for your language back to "src/po" in the
+ source directory, naming the files "gsad_xsl-XX.po" and "gsad_js-XX.po",
+ with "XX" again being the locale code.
+
+As this means overwriting the old source .po file, you should verify the new
+ file is correct and/or backup the old file first.
 
 
 Creating new translations
@@ -90,8 +118,7 @@ Next you have to use the generated file as a template for your new translation.
 
 Once you are finished or want to install the in-progress translation for
  testing, copy it to "src/po/gsad_xsl-XX.po" in your source directory with "XX"
- being the ISO 639-1 code of your target language.
-If no ISO 639-1 code exists, use the ISO 639-2 three-letter code instead.
+ being the locale code as defined above in the section "General notes".
 
 
 3 - Setting up the installation
@@ -100,20 +127,32 @@ In the file "CMakeLists.txt" in the "src/po" add a line
 
   MAKE_TRANSLATION (XX)
 
-near the other MAKE_TRANSLATION (...) lines, with "XX" again being the ISO
- language code.
+near the other MAKE_TRANSLATION (...) lines, with "XX" again being the 
+ locale code.
 
-Also add your language to the dependencies of the targets "gettext-mo-files"
- and "gettext-po-files", again replacing XX with the language code:
+Also add your language to the dependencies of the targets
+ "gettext-mo", "gettext-json", "gettext-js-merge" and "gettext-xsl-merge"
+ again replacing XX with the locale code:
 
-  add_custom_target (gettext-mo-files
-                     [...]
-                     DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/XX/gsad_xsl.mo)
+    add_custom_target (gettext-mo
+                       [...]
+                       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/XX/gsad_xsl.mo
+                       [...])
 
-  add_custom_target (gettext-po-files
-                     DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_xsl.pot
-                     [...]
-                     DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_xsl-XX-merged.po)
+    add_custom_target (gettext-json
+                       [...]
+                       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad-XX.json
+                       [...])
+
+    add_custom_target (gettext-js-merge
+                       [...]
+                       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_js-XX-merged.po
+                       [...])
+
+    add_custom_target (gettext-xsl-merge
+                       [...]
+                       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_xsl-XX-merged.po
+                       [...])
 
 
 Migrating old XML translations
@@ -130,8 +169,8 @@ First run the XML to PO conversion script:
 with ${SRC_DIR} being the GSA source directory, ${XML_FILE} the XML translation
  file and ${PO_FILE} the destination po file.
 The destination file should be "gsad_xsl-XX.po" in the "src/po" subdirectory of
- your GSA source directory, replacing "XX" with the ISO 639-1 or 639-2 code
- of your target language.
+ your GSA source directory, replacing "XX" with the locale code as defined
+ above in the section "General notes".
 
 
 2 - Set up the build file
@@ -160,84 +199,30 @@ Since the migration leaves many unused contexts and text fragments it may be
 
 Message Contexts
 ================
-The messages in GSA all use the msgctxt to either point to the resource type
- they are used (which can be important to determine the grammatical gender
- of adjective for example) for or to disambiguate in another way how they are
- used (for example if a word like "login" used as a noun or a verb).
+Some messages in GSA use the msgctxt to avoid ambiguity, for example if a
+ word like "login" could be used both as a noun or as a verb.
+Unlike previous versions of GSA contexts are only used for this kind of
+ disambiguation.
 
-Resource-specific messages
+Typical contexts and rules
 --------------------------
-Most messages that are specific to a certain resource type will use the
- singular type name (e.g. "Port List") as the context.
+* If a word or phrase can be used both as a verb and a noun, like "Login",
+  the verb should be given the context "Action Verb".
 
-In cases where there is ambiguity regarding the number of resources referred
- to, the plural (e.g. "Port Lists") will be used if the message is used
- in a context where it can be referring to multiple resources.
-For examples if "None" refers to the selection of a single resource, the
- singular is used, but when it refers to a list of resources, the plural is
- used as the context.
+* If a string contains an adjective but not the corresponding noun, the implied
+ noun should be used as a context, e.g. "Active" should have the resource type
+ like "Note" as the context.
 
-Nested contexts
----------------
-In some cases contexts can contain subcontexts like groups or values of
- properties of resource types, which are appended to the parent context
- after a vertical line symbol.
+* Property names which may be ambiguous should have the resource type
+ or some kind of category as the context.
+ 
+* Other ambiguous value should have the property name as context. If the
+ property name would also be ambiguous, a context as described in the previous
+ rule should be prepended followed by a "|", e.g. "Alert|Email"
 
-For example "Total" having the context "Task|Reports" means that the message
- is referring to the total number of Reports of a Task.
-Or "Task|Hosts Ordering" means that a string is a possible value for the
- "Hosts Ordering" property of a Task.
-
-Generic contexts
-----------------
-
-Actions
-  This is a context for the "Actions" column header in resource lists.
-
-Action Verb
-  Messages in this context are used for labeling UI elements performing an
-  action rather than referring to the concept of the action itself.
-  For example "Login" in this context is used on a button for actually logging
-  in while in another context it may be used as a noun, for example as
-  a short version of "Login name" or "Login attempt".
-  Most of these messages are verbs in the grammatical sense, but in some cases
-  the actual verb can be implied, for example "To Trashcan" is short for
-  "Move to Trashcan".
-
-Binary Choice
-  This refers to a simple choice with two options (yes/no, true/false) and is
-  mainly used to clarify that "no" is used this way, not in the sense of
-  "zero" as in "no items were found".
-
-Date
-  This means the string is referring to a calendar date. For example
-
-Login Data
-  Generic login data related messages like "Username" and "Password" not
-  specific to LSC Credential objects.
-
-Login Message
-  Messages returned by the GSA login page.
-
-Meta Property
-  This context is used for messages that describe properties, for example if
-  a property is optional or immutable.
-
-Pagination
-  These are messages used in the pagination, e.g. on buttons for the first
-  and last page or in text like "Results 1 to 10".
-
-Property
-  These messages are either frequently reused nouns that name something
-  describing a resource (for example "Name" or "Comment").
-
-Time
-  This means the message is referring to a time span or a point in time.
-  For example "second" in this context means the time unit, not an item after
-  a first one.
-
-Value
-  A common generic property value like "N/A"
+* Some special contexts that may override some of the above:
+  - "Pagination" is used for strings on pagination controls like a "Next" page
+   button
 
 
 Translating help pages
