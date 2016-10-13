@@ -17434,7 +17434,7 @@ should not have received it.
     </a>
     <a href="?cmd=get_config_family&amp;config_id={config/@id}&amp;name={config/name}&amp;family={$family}&amp;token={/envelope/token}"
       title="{gsa:i18n ('Scan Config Family')}"
-      class="icon">
+      class="icon icon-sm">
       <img src="/img/list.svg" alt="{gsa:i18n ('Scan Config Family')}"/>
     </a>
   </div>

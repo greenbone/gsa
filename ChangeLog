@@ -1,5 +1,10 @@
 2016-10-13 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/omp.xsl (html-config-nvt-table): Fix icon size at scan
+	config nvt details page.
+
+2016-10-13 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/gsad_omp.c (create_target_omp): Add check for submitted file if
 	target_source is file.
 
