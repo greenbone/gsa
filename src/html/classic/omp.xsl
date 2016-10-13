@@ -14597,10 +14597,10 @@ should not have received it.
         <input type="hidden" name="first" value="{targets/@start}"/>
         <input type="hidden" name="max" value="{targets/@max}"/>
         <xsl:if test="not (gsa:may-op ('get_credentials'))">
-          <input type="hidden" name="ssh_credential_id" value="--"/>
-          <input type="hidden" name="smb_credential_id" value="--"/>
-          <input type="hidden" name="esxi_credential_id" value="--"/>
-          <input type="hidden" name="snmp_credential_id" value="--"/>
+          <input type="hidden" name="ssh_credential_id" value="0"/>
+          <input type="hidden" name="smb_credential_id" value="0"/>
+          <input type="hidden" name="esxi_credential_id" value="0"/>
+          <input type="hidden" name="snmp_credential_id" value="0"/>
         </xsl:if>
         <xsl:if test="not (gsa:may-op ('get_port_lists'))">
           <!-- Use port list "OpenVAS Default". -->
@@ -14796,7 +14796,7 @@ should not have received it.
               <td><xsl:value-of select="gsa:i18n ('SSH')"/></td>
               <td>
                 <select name="ssh_credential_id">
-                  <option value="--">--</option>
+                  <option value="0">--</option>
                   <xsl:apply-templates select="$credentials/credential [type = 'up' or type = 'usk']" mode="select">
                     <xsl:with-param name="select_id" select="ssh_credential_id"/>
                   </xsl:apply-templates>
