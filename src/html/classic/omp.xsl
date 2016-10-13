@@ -8602,12 +8602,21 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </div>
           </div>
         </div>
+        <div class="form-group form-selection-item-credentials form-selection-item-credentials--usk"
+            id="passphrase_row" style="display:none;">
+          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Passphrase')"/></label>
+          <div class="col-10">
+            <div class="form-item">
+              <input type="password" name="passphrase" size="30" class="form-control form-enable-item--autogenerate"/>
+            </div>
+          </div>
+        </div>
         <div class="form-group form-selection-item-credentials form-selection-item-credentials--snmp"
             id="priv_password_row" style="display:none;">
           <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Privacy Password')"/></label>
           <div class="col-10">
             <div class="form-item">
-              <input type="password" name="privacy_password" size="30" class="form-control form-enable-item--autogenerate"/>
+              <input type="password" name="privacy_password" size="30" class="form-control"/>
             </div>
           </div>
         </div>
@@ -8623,15 +8632,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Private Key')"/></label>
           <div class="col-10">
             <input type="file" name="private_key" size="30"/>
-          </div>
-        </div>
-        <div class="form-group form-selection-item-credentials form-selection-item-credentials--sk"
-            id="passphrase_row" style="display:none;">
-          <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Passphrase')"/></label>
-          <div class="col-10">
-            <div class="form-item">
-              <input type="password" name="passphrase" size="30" class="form-control form-enable-item--autogenerate"/>
-            </div>
           </div>
         </div>
         <div class="form-group form-selection-item-credentials form-selection-item-credentials--snmp"
