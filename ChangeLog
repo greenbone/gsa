@@ -1,5 +1,10 @@
 2016-10-13 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/gsad_omp.c (create_target_omp): Add check for submitted file if
+	target_source is file.
+
+2016-10-13 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/omp.xsl (html-create-target-form): Use 0 instead of -- as
 	default credential ids. This commit fixes the last missing select options in
 	this form.

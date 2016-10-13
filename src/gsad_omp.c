@@ -9659,7 +9659,7 @@ create_target_omp (credentials_t * credentials, params_t *params,
   const char *target_ssh_credential, *port, *target_smb_credential;
   const char *target_esxi_credential, *target_snmp_credential, *target_source;
   const char *port_list_id, *reverse_lookup_only, *reverse_lookup_unify;
-  const char *alive_tests, *hosts_filter;
+  const char *alive_tests, *hosts_filter, *file;
   gchar *ssh_credentials_element, *smb_credentials_element;
   gchar *esxi_credentials_element, *snmp_credentials_element;
   gchar *asset_hosts_element;
@@ -9683,12 +9683,18 @@ create_target_omp (credentials_t * credentials, params_t *params,
   target_snmp_credential = params_value (params, "snmp_credential_id");
   alive_tests = params_value (params, "alive_tests");
   hosts_filter = params_value (params, "hosts_filter");
+  file = params_value (params, "file");
 
   CHECK_PARAM_INVALID (name, "Create Target", "new_target");
   CHECK_PARAM_INVALID (target_source, "Create Target", "new_target")
   if (hosts == NULL && strcmp (target_source, "manual") == 0)
     return message_invalid (credentials, params, response_data,
                             "Missing manual list of hosts",
+                            G_STRINGIFY (MHD_HTTP_BAD_REQUEST),
+                            "Create Target", "new_target");
+  if (strcmp (target_source, "file") == 0 && file == NULL)
+    return message_invalid (credentials, params, response_data,
+                            "Missing hosts file",
                             G_STRINGIFY (MHD_HTTP_BAD_REQUEST),
                             "Create Target", "new_target");
 
@@ -9761,9 +9767,7 @@ create_target_omp (credentials_t * credentials, params_t *params,
                      "<port_list id=\"%s\"/>"
                      "<alive_tests>%s</alive_tests>",
                      name,
-                     strcmp (target_source, "file") == 0
-                      ? params_value (params, "file")
-                      : hosts,
+                     strcmp (target_source, "file") == 0 ? file : hosts,
                      exclude_hosts ? exclude_hosts : "",
                      reverse_lookup_only ? reverse_lookup_only : "0",
                      reverse_lookup_unify ? reverse_lookup_unify : "0",
