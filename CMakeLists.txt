@@ -228,7 +228,9 @@ endif (NOT GSAD_PID_DIR)
 set (OPENVAS_STATE_DIR "${LOCALSTATEDIR}/lib/openvas")
 set (OPENVAS_LOG_DIR   "${LOCALSTATEDIR}/log/openvas")
 set (GSA_DATA_DIR "${DATADIR}/openvas/gsa")
-set (GSA_LOCALE_DIR "${DATADIR}/locale")
+set (GSA_LOCALE_SUBDIR "locale")
+set (GSA_LOCALE_DIR "${GSA_DATA_DIR}/${GSA_LOCALE_SUBDIR}")
+set (GSA_CHROOT_LOCALE_DIR "/${GSA_LOCALE_SUBDIR}")
 
 # TODO: Eventually use own certificates
 set (OPENVAS_SERVER_CERTIFICATE "${OPENVAS_STATE_DIR}/CA/servercert.pem")

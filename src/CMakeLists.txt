@@ -142,6 +142,10 @@ if (GSA_LOCALE_DIR)
   add_definitions (-DGSA_LOCALE_DIR=\\\"${GSA_LOCALE_DIR}\\\")
 endif (GSA_LOCALE_DIR)
 
+if (GSA_CHROOT_LOCALE_DIR)
+  add_definitions (-DGSA_CHROOT_LOCALE_DIR=\\\"${GSA_CHROOT_LOCALE_DIR}\\\")
+endif (GSA_CHROOT_LOCALE_DIR)
+
 add_definitions (-DOPENVAS_OS_NAME=\\\"${CMAKE_SYSTEM}\\\")
 add_definitions (-DPREFIX=\\\"${CMAKE_INSTALL_PREFIX}\\\")
 

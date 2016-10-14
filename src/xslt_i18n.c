@@ -24,6 +24,7 @@
  */
 
 #include "xslt_i18n.h"
+#include "gsad_base.h"
 #include <assert.h>
 #include <dirent.h>
 #include <errno.h>
@@ -537,7 +538,10 @@ register_i18n_ext_module ()
                         init_i18n_module,
                         shutdown_i18n_module);
 
-  if (bindtextdomain (GSA_XSL_TEXTDOMAIN, GSA_LOCALE_DIR) == NULL)
+  if (bindtextdomain (GSA_XSL_TEXTDOMAIN,
+                      get_chroot_state () ? GSA_CHROOT_LOCALE_DIR
+                                          : GSA_LOCALE_DIR)
+      == NULL)
     {
       g_critical ("%s: Failed to bind text domain for gettext", __FUNCTION__);
       abort ();
@@ -576,6 +580,7 @@ int
 init_language_lists ()
 {
   FILE *lang_names_file;
+  const char *locale_dir_name;
   DIR *locale_dir;
   struct dirent *entry;
 
@@ -649,7 +654,9 @@ init_language_lists ()
     }
 
   /* Get installed translations */
-  locale_dir = opendir (GSA_LOCALE_DIR);
+  locale_dir_name = get_chroot_state () ? GSA_CHROOT_LOCALE_DIR 
+                                        : GSA_LOCALE_DIR;
+  locale_dir = opendir (locale_dir_name);
 
   if (locale_dir == NULL)
     {
@@ -668,7 +675,7 @@ init_language_lists ()
         {
           FILE *mo_file;
           gchar *lang_mo_path;
-          lang_mo_path = g_build_filename (GSA_LOCALE_DIR,
+          lang_mo_path = g_build_filename (locale_dir_name,
                                            entry->d_name,
                                            "LC_MESSAGES",
                                            GSA_XSL_TEXTDOMAIN ".mo",

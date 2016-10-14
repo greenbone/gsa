@@ -96,6 +96,8 @@ typedef struct {
 
 int gsad_base_init ();
 int gsad_base_cleanup ();
+int get_chroot_state ();
+void set_chroot_state (int);
 void vendor_version_set (const gchar *);
 const gchar *vendor_version_get ();
 int label_name_set (const gchar *);

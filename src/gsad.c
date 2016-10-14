@@ -339,6 +339,11 @@ gchar *http_strict_transport_security;
 gboolean ignore_http_x_real_ip;
 
 /**
+ * @brief Whether chroot is used
+ */
+int chroot_state = 0;
+
+/**
  * @brief Add security headers to a MHD response.
  */
 void
@@ -5238,6 +5243,7 @@ chroot_drop_privileges (gboolean do_chroot, gchar *drop,
                       strerror (errno));
           return 1;
         }
+      set_chroot_state (1);
     }
 
   if (user_pw && (drop_privileges (user_pw) == FALSE))

@@ -1,3 +1,23 @@
+2016-10-14  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Install locale .mo files in a different location to make them
+	accessible if --do-chroot is used.
+
+	* CMakeLists.txt: Change GSA_LOCALE_DIR to a subdirectory of
+	GSA_DATA_DIR instead of DATADIR.  Add variables GSA_LOCALE_SUBDIR and
+	GSA_CHROOT_LOCALE_DIR.
+
+	* src/CMakeLists.txt: Add add_definitions for GSA_CHROOT_LOCALE_DIR.
+
+	* src/gsad_base.c: Add static variable chroot_state.
+	(get_chroot_state, set_chroot_state): New functions.
+
+	* src/gsad_base.h (get_chroot_state, set_chroot_state): New prototypes.
+
+	* src/xslt_i18n.c: Add #include "gsad_base.h".
+	(register_i18n_ext_module, init_language_lists): Adapt locale directory
+	to whether chroot is used.
+
 2016-10-14 Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/gsad_omp.c (edit_user): Fix passing the extra_xml to edit_resource.

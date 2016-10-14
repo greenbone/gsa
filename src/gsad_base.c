@@ -69,6 +69,11 @@ gchar *vendor_version = NULL;
 gchar *label_name = NULL;
 
 /**
+ * @brief The chroot state: 0 = no chroot, 1 = chroot used
+ */
+static int chroot_state = 0;
+
+/**
  * @brief Base init.
  *
  * @return 0 success, 1 XML needs thread support.
@@ -98,6 +103,28 @@ gsad_base_cleanup ()
   xmlCleanupParser ();
 #endif
   return 0;
+}
+
+/**
+ * @brief Gets the chroot state.
+ *
+ * @return  The chroot state: 0 = no chroot, 1 = chroot in effect
+ */
+int
+get_chroot_state () 
+{
+  return chroot_state;
+}
+
+/**
+ * @brief Sets the chroot state.
+ *
+ * @param[in]  state The new chroot state.
+ */
+void
+set_chroot_state (int state)
+{
+  chroot_state = state;
 }
 
 /**
