@@ -1,3 +1,8 @@
+2016-10-14 Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/js/greenbone.js (OMPDialog.prototype.show): Fix showing
+	error. The dialog must be created before we can set it's error title.
+
 2016-10-13  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* doc/i18n-howto.txt: Update dependencies, make targets and info

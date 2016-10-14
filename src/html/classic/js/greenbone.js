@@ -762,13 +762,13 @@
         return;
       }
 
-      self.setErrorFromResponse(response);
-
       self.dialog.dialog({
         modal: true,
         width: 800,
         maxHeight: self.height
       });
+
+      self.setErrorFromResponse(response);
 
       $('html').css('cursor', '');
     };
