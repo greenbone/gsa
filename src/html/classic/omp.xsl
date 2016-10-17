@@ -9701,7 +9701,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:with-param name="id" select="@id"/>
           </xsl:call-template>
           <a href="/omp?cmd=download_agent&amp;agent_id={@id}&amp;agent_format=installer&amp;token={/envelope/token}"
-            title="{gsa:i18n ('Download installer package')}" class="icon">
+            title="{gsa:i18n ('Download installer package')}" class="icon icon-sm">
             <img src="/img/agent.svg" alt="{gsa:i18n ('Download Installer')}"/>
           </a>
           <div class="icon icon-sm ajax-post" data-reload="next" data-busy-text="{gsa:i18n ('Verifying Agent...')}">

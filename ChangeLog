@@ -1,3 +1,8 @@
+2016-10-17  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/omp.xsl (agent): Add class "icon-sm" to installer
+	download icon.
+
 2016-10-14  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Install locale .mo files in a different location to make them
