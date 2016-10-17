@@ -19074,11 +19074,12 @@ edit_report_format (credentials_t * credentials, params_t *params,
 
   ext_extra_xml = g_strdup_printf ("%s"
                                    "<all_formats>%s</all_formats>",
-                                   extra_xml, all_rfs_response);
+                                   extra_xml ? extra_xml : "",
+                                   all_rfs_response);
   g_free (all_rfs_response);
 
-  response = edit_resource ("report_format", credentials, params,
-                            ext_extra_xml, NULL, response_data);
+  response = edit_resource ("report_format", credentials, params, NULL,
+                            ext_extra_xml, response_data);
   g_free (ext_extra_xml);
   return response;
 }
