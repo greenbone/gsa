@@ -1,5 +1,10 @@
 2016-10-18  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/po/gsad_js-de.po, src/po/gsad_xsl-de.po: Update to latest version
+	from translate.greenbone.net.
+
+2016-10-18  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/omp.xsl (report [results]): Swap order of "adjust"
 	and "update" in filter hint text.
 	(cert_bund_adv-details, dfn_cert_adv-details): Change "SCAP database"

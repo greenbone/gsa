@@ -24,291 +24,449 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-14 13:22+0000\n"
-"PO-Revision-Date: 2016-03-14 13:41+0000\n"
-"Last-Translator:  <openvas-devel@wald.intevation.org>\n"
+"POT-Creation-Date: 2016-10-18 10:12+0200\n"
+"PO-Revision-Date: 2016-10-18 08:33+0200\n"
+"Last-Translator: Timo <timo.pollmeier@greenbone.net>\n"
 "Language-Team: German <openvas-devel@wald.intevation.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Pootle 2.5.1.3\n"
+"X-POOTLE-MTIME: 1476776012.656652\n"
 
-#: /home/bricks/source/gsad/src/html/classic/js/greenbone.js:766
-#: /home/bricks/source/gsad/src/html/classic/js/greenbone.js:767
-msgid "Unfold {{name}}"
-msgstr ""
-
-#: /home/bricks/source/gsad/src/html/classic/js/greenbone.js:772
-#: /home/bricks/source/gsad/src/html/classic/js/greenbone.js:773
-msgid "Fold {{name}}"
-msgstr ""
-
-#: /home/bricks/source/gsad/src/html/classic/js/greenbone.js:832
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/greenbone.js:590
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/greenbone.js:1276
 msgid "Save"
 msgstr "Speichern"
 
-#: /home/bricks/source/gsad/src/html/classic/js/greenbone.js:836
-#: /home/bricks/source/gsad/src/html/classic/js/greenbone.js:843
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/greenbone.js:1157
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/greenbone.js:1158
+msgid "Unfold {{name}}"
+msgstr "{{name}} ausklappen"
+
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/greenbone.js:1163
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/greenbone.js:1164
+msgid "Fold {{name}}"
+msgstr "{{name}} einklappen"
+
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/greenbone.js:1285
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/greenbone.js:1293
 msgid "Create"
 msgstr "Erstellen"
 
-#: /home/bricks/source/gsad/src/html/classic/js/greenbone.js:851
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/greenbone.js:1301
 msgid "Delete"
 msgstr "Löschen"
 
-#: /home/bricks/source/gsad/src/html/classic/js/greenbone.js:929
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/greenbone.js:1391
+msgid "Please wait..."
+msgstr "Bitte warten..."
+
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/greenbone.js:1481
 msgid "Update Filter"
 msgstr "Filter aktualisieren"
 
-#: /home/bricks/source/gsad/src/html/classic/js/greenbone.js:975
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/greenbone.js:1498
 msgid "Select date"
 msgstr "Datum auswählen"
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:265
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:266
-msgid "Edit Dashboard"
-msgstr "Dashboard bearbeiten"
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/greenbone.js:1786
+msgid "Follow link?"
+msgstr "Link folgen?"
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:278
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:279
-msgid "Add new Component"
-msgstr "Neue Komponente hinzufügen"
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/greenbone.js:1789
+msgid ""
+"This dialog will open a new window for <a>{{url}}</a> if you click on follow "
+"link. Following this link is on your own responsibility. Greenbone doesn't "
+"endorse the content you will see there."
+msgstr ""
+"Dieser Dialog wird ein neues Fenster für <a>{{url}}</a> öffnen, wenn sie auf "
+"den Folgen-Link klicken. Diesem Link zu folgen geschieht auf Ihre eigene "
+"Verantwortung. Greenbone befürwortet nicht die Inhalte, die Sie dort sehen."
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:293
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:294
-msgid "Stop Editing"
-msgstr "Editieren beenden"
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/greenbone.js:1794
+msgid "Abort"
+msgstr "Abbrechen"
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:1215
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:1216
-msgid "Remove"
-msgstr "Entfernen"
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/greenbone.js:1795
+msgid "Follow link"
+msgstr "Link folgen"
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:1223
-msgid "Initializing component \"{{component}}\"..."
-msgstr "Komponente \"{{component}}\" wird initialisiert..."
-
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:1705
-msgid "Unnamed chart"
-msgstr "Unbenannte Grafik"
-
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2121
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2274
-msgid "Internal error: Invalid request"
-msgstr "Interner Fehler: Ungültige Anfrage"
-
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2122
-msgid "Invalid request command: \"{{command}}\""
-msgstr "Ungültiger Befehl für diese Anfrage: \"{{command}}\""
-
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2147
-msgid "Loading aborted"
-msgstr "Laden wurde abgebrochen"
-
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2160
-msgid "HTTP error {{error}}"
-msgstr "HTTP Fehler {{error}}"
-
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2162
-msgid "Error: HTTP request returned status {{status}} for URL: {{url}}"
-msgstr "Fehler: Die HTTP Anfrage hat den Status {{status}} für die URL {{url}}"
-" zurückgegeben"
-
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2172
-msgid "Error reading XML"
-msgstr "Fehler beim Lesen der XML Daten"
-
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2173
-msgid "Error reading XML from URL {{url}}: {{error}}"
-msgstr "Fehler beim Lesen der XML Daten von der URL {{url}}: {{error}}"
-
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2184
-msgid "Error parsing XML data"
-msgstr "Fehler beim Parsen der XML Daten"
-
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2185
-msgid "Error parsing XML data. Details: {{details}}"
-msgstr "Fehler beim Parsen der XML Daten. Details: {{details}}"
-
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2204
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2246
-msgid "Error {{omp_status}}: {{omp_status_text}}"
-msgstr "Fehler {{omp_status}}: {{omp_status_text}}"
-
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2207
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2249
-msgid "OMP Error {{omp_status}}: {{omp_status_text}}"
-msgstr "OMP Fehler {{omp_status}}: {{omp_status_text}}"
-
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2275
-msgid "Invalid request command: \"{{command}}"
-msgstr "Ungültiger Befehl für Anfrage: \"{{command}}\""
-
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2649
-msgid "OVAL definition"
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/greenbone.js:1868
+msgid "{{subject}} {{subject_id}} {{description}} to {{resource}} {{id}}"
 msgstr ""
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2651
-msgid "CERT-Bund Advisory"
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/greenbone.js:1876
+msgid "{{subject}} {{subject_id}} {{description}}  {{id}}"
 msgstr ""
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2653
-msgid "DFN-CERT Advisory"
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/greenbone.js:1881
+msgid "{{subject}} {{subject_id}} {{description}}"
 msgstr ""
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2655
-msgid "SecInfo Item"
-msgstr ""
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_bar_chart.js:68
+msgid "Loading bar chart ..."
+msgstr "Lade Balkendiagramm ..."
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2669
-msgid "DFN-CERT Advisories"
-msgstr ""
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_bar_chart.js:68
+msgid "Bar Chart"
+msgstr "Balkendiagramm"
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2671
-msgid "CERT-Bund Advisories"
-msgstr ""
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_bubble_chart.js:57
+msgid "Loading bubble chart ..."
+msgstr "Lade Blasendiagramm ..."
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2685
-msgid "total {{resource_type_plural}}"
-msgstr "gesamt {{resource_type_plural}}"
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_bubble_chart.js:57
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_line_chart.js:79
+msgid "Bubble Chart"
+msgstr "Blasendiagramm"
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2693
-msgid "creation time"
-msgstr ""
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_bubble_chart.js:102
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_gantt_chart.js:123
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_h_bar_chart.js:152
+msgid "No matching {{resource_type}}"
+msgstr "Kein(e) passende(r/s) {{resource_type}}"
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2695
-msgid "modification time"
-msgstr ""
-
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2697
-msgid "QoD"
-msgstr ""
-
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2699
-msgid "QoD type"
-msgstr ""
-
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2701
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_chart_helpers.js:1424
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_chart_helpers.js:1545
 msgid "High"
-msgstr ""
+msgstr "Hoch"
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:2703
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_chart_helpers.js:1427
+msgid "Medium"
+msgstr "Mittel"
+
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_chart_helpers.js:1430
+msgid "Low"
+msgstr "Niedrig"
+
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_chart_helpers.js:1433
+msgid "Log"
+msgstr "Log"
+
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_chart_helpers.js:1436
+msgid "False Positive"
+msgstr "Falsch-Positiv"
+
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_chart_helpers.js:1439
+msgid "Debug"
+msgstr "Debug"
+
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_chart_helpers.js:1442
+msgid "Error"
+msgstr "Fehler"
+
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_chart_helpers.js:1445
+msgid "N/A"
+msgstr "N/A"
+
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_chart_helpers.js:1459
+msgid "Operating System"
+msgstr "Betriebssystem"
+
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_chart_helpers.js:1461
+msgid "OVAL definition"
+msgstr "OVAL-Definition"
+
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_chart_helpers.js:1463
+msgid "CERT-Bund Advisory"
+msgstr "CERT-Bund-Meldung"
+
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_chart_helpers.js:1465
+msgid "DFN-CERT Advisory"
+msgstr "DFN-CERT-Meldung"
+
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_chart_helpers.js:1467
+msgid "SecInfo Item"
+msgstr "SecInfo-Eintrag"
+
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_chart_helpers.js:1483
+msgid "DFN-CERT Advisories"
+msgstr "DFN-CERT-Meldungen"
+
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_chart_helpers.js:1485
+msgid "CERT-Bund Advisories"
+msgstr "CERT-Bund-Meldungen"
+
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_chart_helpers.js:1529
+msgid "total {{resource_type_plural}}"
+msgstr "{{resource_type_plural}} gesamt"
+
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_chart_helpers.js:1537
+msgid "creation time"
+msgstr "Erstellungszeit"
+
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_chart_helpers.js:1539
+msgid "modification time"
+msgstr "Änderungszeit"
+
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_chart_helpers.js:1541
+msgid "QoD"
+msgstr "QoD"
+
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_chart_helpers.js:1543
+msgid "QoD type"
+msgstr "QoD-Typ"
+
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_chart_helpers.js:1547
 msgid "High / host"
-msgstr ""
+msgstr "Hoch / Host"
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3118
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_chart_helpers.js:2017
 msgid "None"
-msgstr ""
+msgstr "Keiner"
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3121
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_chart_helpers.js:2020
 msgid "Exploit"
-msgstr ""
+msgstr "Exploit"
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3124
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_chart_helpers.js:2023
 msgid "Remote vulnerability"
-msgstr ""
+msgstr "Remote-Schwachstelle"
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3127
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_chart_helpers.js:2026
 msgid "Package check"
-msgstr ""
+msgstr "Package-Check"
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3130
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_chart_helpers.js:2029
 msgid "Registry check"
-msgstr ""
+msgstr "Registry-Check"
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3133
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_chart_helpers.js:2032
+#, fuzzy
 msgid "Executable version"
-msgstr ""
+msgstr "Programmdatei-Version"
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3136
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_chart_helpers.js:2035
 msgid "Remote analysis"
-msgstr ""
+msgstr "Remote-Analyse"
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3139
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_chart_helpers.js:2038
 msgid "Remote probe"
 msgstr ""
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3142
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_chart_helpers.js:2041
 msgid "Unreliable rem. banner"
 msgstr ""
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3145
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_chart_helpers.js:2044
+#, fuzzy
 msgid "Unreliable exec. version"
-msgstr ""
+msgstr "Unzuverlässige Prog.-Version"
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3415
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_chart_helpers.js:2521
 msgid "{{title}} (Loading...)"
-msgstr ""
+msgstr "{{title}} (Lädt...)"
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3422
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_chart_helpers.js:2528
 msgid "{{title}} {{filter_text}} (Total: {{count}})"
 msgstr "{{title}} {{filter_text}} (Gesamt: {{count}})"
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3502
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_chart_helpers.js:2625
 msgid "Greenbone Security Assistant - Chart data table"
 msgstr "Greenbone Security Assistant - Datentabelle"
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3549
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_chart_helpers.js:2677
 msgid "Applied filter: {{filter}}"
 msgstr "Angewandter Filter: {{filter}}"
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3659
-msgid "Next scheduled tasks"
-msgstr ""
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_cloud_chart.js:54
+msgid "Loading word cloud ..."
+msgstr "Lade Wortwolke ..."
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3664
-msgid "{{resource_type_plural}} by Severity Class"
-msgstr ""
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_cloud_chart.js:55
+msgid "Word Cloud"
+msgstr "Wortwolke"
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3673
-msgid "{{resource_type_plural}} by CVSS"
-msgstr ""
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_dashboard.js:231
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_dashboard.js:232
+msgid "Edit Dashboard"
+msgstr "Dashboard bearbeiten"
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3681
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3731
-msgid "{{resource_type_plural}} {{field_name}} word cloud"
-msgstr ""
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_dashboard.js:245
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_dashboard.js:246
+msgid "Add new Chart"
+msgstr "Neues Diagramm hinzufügen"
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3689
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3712
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3721
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3744
-msgid "{{resource_type_plural}} by {{field_name}}"
-msgstr ""
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_dashboard.js:261
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_dashboard.js:262
+msgid "Reset to defaults"
+msgstr "Auf Voreinstellungen zurücksetzen"
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3701
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_dashboard.js:277
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_dashboard.js:278
+msgid "Cancel Editing"
+msgstr "Bearbeitung abbrechen"
+
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_dashboard.js:293
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_dashboard.js:294
+msgid "Save Changes"
+msgstr "Änderungen speichern"
+
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_dashboard.js:1584
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_dashboard.js:1585
+msgid "Remove"
+msgstr "Entfernen"
+
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_dashboard.js:1592
+msgid "Initializing display for \"{{display}}\"..."
+msgstr "Initialisiere Anzeige für \"{{display}}\""
+
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_dashboard.js:1611
+msgid "Loading data ..."
+msgstr "Daten werden geladen ..."
+
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_dashboard.js:2389
+msgid "Could not load chart {{chart}}"
+msgstr "Konnte Diagramm \"{{chart}}\" nicht laden"
+
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_dashboard.js:2861
+msgid "Loading aborted"
+msgstr "Laden wurde abgebrochen"
+
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_dashboard.js:2873
+msgid "HTTP error {{error}}"
+msgstr "HTTP Fehler {{error}}"
+
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_dashboard.js:2874
+msgid "Error: HTTP request returned status {{status}} for URL: {{url}}"
+msgstr ""
+"Fehler: Die HTTP Anfrage hat den Status {{status}} für die URL {{url}} "
+"zurückgegeben"
+
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_dashboard.js:2880
+msgid "Error reading XML"
+msgstr "Fehler beim Lesen der XML Daten"
+
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_dashboard.js:2881
+msgid "Error reading XML from URL {{url}}: {{error}}"
+msgstr "Fehler beim Lesen der XML Daten von der URL {{url}}: {{error}}"
+
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_dashboard.js:2889
+msgid "Error parsing XML data"
+msgstr "Fehler beim Parsen der XML Daten"
+
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_dashboard.js:2890
+msgid "Error parsing XML data. Details: {{details}}"
+msgstr "Fehler beim Parsen der XML Daten. Details: {{details}}"
+
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_dashboard.js:2919
+msgid "Internal error: Invalid request"
+msgstr "Interner Fehler: Ungültige Anfrage"
+
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_dashboard.js:2920
+msgid "Invalid request command: \"{{command}}"
+msgstr "Ungültiger Befehl für Anfrage: \"{{command}}\""
+
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_dashboard.js:2927
+msgid "Error {{omp_status}}: {{omp_status_text}}"
+msgstr "Fehler {{omp_status}}: {{omp_status_text}}"
+
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_dashboard.js:2929
+msgid "OMP Error {{omp_status}}: {{omp_status_text}}"
+msgstr "OMP Fehler {{omp_status}}: {{omp_status_text}}"
+
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_dashboard.js:3216
 msgid "{{title_text}} (Loading...)"
 msgstr "{{title_text}} (Lädt...)"
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3706
-msgid "Next scheduled tasks (Loading...)"
-msgstr ""
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_dashboard.js:3221
+msgid "Unknown chart"
+msgstr "Unbekanntes Diagramm"
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3707
-msgid "Next scheduled Tasks"
-msgstr ""
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_donut_chart.js:64
+msgid "Loading donut chart ..."
+msgstr "Lade Ringdiagramm ..."
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3735
-msgid "{{resource_type_plural}} {{field_name}} word cloud (Loading...)"
-msgstr ""
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_donut_chart.js:64
+msgid "Donut Chart"
+msgstr "Ringdiagramm"
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3843
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_donut_chart.js:672
+msgid "Inactive"
+msgstr "Inaktiv"
+
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_donut_chart.js:675
+msgid "Active (unlimited)"
+msgstr "Aktiv (unbegrenzt)"
+
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_donut_chart.js:678
+msgid "Active for next {{days}} days"
+msgstr "Aktiv für die nächsten {{days}} Tage"
+
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_gantt_chart.js:77
+msgid "Loading Gantt chart ..."
+msgstr "Lade Gantt-Diagramm ..."
+
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_gantt_chart.js:77
+msgid "Gantt Chart"
+msgstr "Gantt-Diagramm"
+
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_graphics_base.js:203
 msgid "Show detached chart window"
 msgstr "In neuem Fenster öffnen"
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3860
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_graphics_base.js:220
 msgid "Download CSV"
 msgstr "CSV Daten herunterladen"
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3883
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_graphics_base.js:243
 msgid "Show HTML table"
 msgstr "HTML Tabelle anzeigen"
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3907
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_graphics_base.js:267
 msgid "Show copyable SVG"
 msgstr "Kopierbare SVG Grafik anzeigen"
 
-#: /home/bricks/source/gsad/src/html/classic/js/gsa_graphics_base.js:3915
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_graphics_base.js:275
 msgid "Download SVG"
 msgstr "SVG Grafik herunterladen"
+
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_h_bar_chart.js:109
+msgid "Loading horizontal bar chart ..."
+msgstr "Lade horizontales Balkendiagramm ..."
+
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_h_bar_chart.js:110
+msgid "Horizontal Bar Chart"
+msgstr "Horizontales Balkendiagramm"
+
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_h_bar_chart.js:275
+msgid "<br/>({{assets}} Host(s) with average severity {{severity}})"
+msgstr ""
+
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_line_chart.js:79
+msgid "Loading line chart ..."
+msgstr "Lade Liniediagramm ..."
+
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_topology_chart.js:47
+msgid "Loading topology chart ..."
+msgstr "Lade Topologiediagramm"
+
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_topology_chart.js:47
+msgid "Topology Chart"
+msgstr "Topologiediagramm"
+
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_topology_chart.js:90
+msgid "Too many nodes to display"
+msgstr "Zu viele Knoten zum Anzeigen"
+
+#: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_topology_chart.js:96
+msgid "Please try a filter selecting less hosts"
+msgstr "Bitte versuchen Sie einen Filter, der weniger Hosts auswählt"
+
+#~ msgid "Add new Component"
+#~ msgstr "Neue Komponente hinzufügen"
+
+#~ msgid "Stop Editing"
+#~ msgstr "Editieren beenden"
+
+#~ msgid "Initializing component \"{{component}}\"..."
+#~ msgstr "Komponente \"{{component}}\" wird initialisiert..."
+
+#~ msgid "Unnamed chart"
+#~ msgstr "Unbenannte Grafik"
+
+#~ msgid "Invalid request command: \"{{command}}\""
+#~ msgstr "Ungültiger Befehl für diese Anfrage: \"{{command}}\""
