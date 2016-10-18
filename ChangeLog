@@ -1,5 +1,14 @@
 2016-10-18  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/po/CMakeLists.txt: Adjust gsad_js.pot target to new js2pot
+	parameters.
+
+	* tools/js2pot: Split the input directory param into two params, a base
+	directory and subdirectory.  Change to base directory to make paths in
+	the .pot file relative to the source directory.
+
+2016-10-18  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/po/gsad_js-de.po, src/po/gsad_xsl-de.po: Update to latest version
 	from translate.greenbone.net.
 

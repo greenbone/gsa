@@ -119,7 +119,8 @@ if (GETTEXT_FOUND)
 
     add_custom_command (OUTPUT  ${CMAKE_CURRENT_BINARY_DIR}/gsad_js.pot
                         COMMAND "${CMAKE_SOURCE_DIR}/tools/js2pot"
-                        ARGS    "${CMAKE_SOURCE_DIR}/src/html/classic/js"
+                        ARGS    "${CMAKE_SOURCE_DIR}"
+                                "src/html/classic/js"
                                 "${CMAKE_CURRENT_BINARY_DIR}/gsad_js.pot"
                         DEPENDS ${CMAKE_SOURCE_DIR}/src/html/classic/js/*.js
                         COMMENT "Creating translation template (.pot) file from JS")

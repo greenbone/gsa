@@ -24,8 +24,9 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 
-SOURCE_DIR=$1
-POT_FILE=$2
+SOURCE_BASEDIR=$1
+SOURCE_SUBDIR=$2
+POT_FILE=$3
 
 if [ -z "$SOURCE_DIR" ]; then
   SOURCE_DIR=`dirname $0`/../src/html/classic/js
@@ -38,4 +39,5 @@ fi
 
 mkdir -p `dirname $POT_FILE`
 
-xgettext --from-code=UTF-8 -o $POT_FILE -L JavaScript $SOURCE_DIR/*.js
+cd "$SOURCE_BASEDIR"
+xgettext --from-code=UTF-8 -o $POT_FILE -L JavaScript ./$SOURCE_SUBDIR/*.js
