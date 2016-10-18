@@ -1,3 +1,13 @@
+2016-10-18  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/omp.xsl (report [results]): Swap order of "adjust"
+	and "update" in filter hint text.
+	(cert_bund_adv-details, dfn_cert_adv-details): Change "SCAP database"
+	to "CERT database" in text shown if advisory is not found.
+
+	* src/html/classic/wizard.xsl (wizard): Rewrite second line in welcome
+	message.
+
 2016-10-17  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/gsad_omp.c (edit_report_format): Use empty string for extra_xml

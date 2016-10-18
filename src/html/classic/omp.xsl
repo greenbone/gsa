@@ -4413,7 +4413,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                         data-id="filterbox" title="{gsa:i18n ('Edit filter')}">
                         <img src="/img/edit.svg" class="valign-middle icon icon-lg"/>
                         <span>
-                          <xsl:value-of select="gsa:i18n ('Update and adjust your filter settings.')"/>
+                          <xsl:value-of select="gsa:i18n ('Adjust and update your filter settings.')"/>
                         </span>
                       </a>
                     </p>
@@ -23396,7 +23396,7 @@ should not have received it.
       </xsl:when>
       <xsl:otherwise>
         <h1><xsl:value-of select="gsa:i18n ('CERT-Bund advisory not found')"/></h1>
-        <xsl:value-of select="gsa:i18n ('No CERT-Bund advisory with the requested ID could be found in the SCAP database.')"/>
+        <xsl:value-of select="gsa:i18n ('No CERT-Bund advisory with the requested ID could be found in the CERT database.')"/>
       </xsl:otherwise>
     </xsl:choose>
   </div>
@@ -23539,7 +23539,7 @@ should not have received it.
       </xsl:when>
       <xsl:otherwise>
         <h1><xsl:value-of select="gsa:i18n ('DFN-CERT advisory not found')"/></h1>
-        <xsl:value-of select="gsa:i18n ('No DFN-CERT advisory with the requested ID could be found in the SCAP database.')"/>
+        <xsl:value-of select="gsa:i18n ('No DFN-CERT advisory with the requested ID could be found in the CERT database.')"/>
       </xsl:otherwise>
     </xsl:choose>
   </div>

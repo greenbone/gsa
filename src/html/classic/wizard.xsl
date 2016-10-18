@@ -87,7 +87,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <p class="wizard_hint">
           <img class="icon-lg valign-middle pull-left" style="margin-right:10px" src="/img/wizard.svg" />
           <xsl:value-of select="gsa:i18n('Welcome to the scan task management!')"/><br/>
-          <xsl:value-of select="gsa:i18n('To start your first vulnerability scan, the scan wizard can help you to do so with just one click.')"/><br/>
+          <xsl:value-of select="gsa:i18n('If you would like to start your first vulnerability scan, the scan wizard can help you to do so with just one click.')"/><br/>
           <xsl:value-of select="gsa:i18n('Simply select the wizard icon from the icon bar in the top-left of this page.')"/>
         </p>
       </div>
