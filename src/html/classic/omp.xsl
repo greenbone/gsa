@@ -27430,6 +27430,12 @@ should not have received it.
             <xsl:when test="boolean (resource/permissions) and count (resource/permissions/permission) = 0">
               <xsl:value-of select="resource/name"/> (<xsl:value-of select="gsa:i18n('Unavailable')"/>, <xsl:value-of select="gsa:i18n('UUID')"/>: <xsl:value-of select="resource/@id"/>)
             </xsl:when>
+            <xsl:when test="(resource/type = 'host' or resource/type = 'os') and gsa:may-op ('get_assets')">
+              <a href="/omp?cmd=get_assets&amp;asset_type={resource/type}&amp;asset_id={resource/@id}&amp;token={/envelope/token}"
+                 title="{gsa:i18n ('Details')}">
+                <xsl:value-of select="resource/name"/>
+              </a>
+            </xsl:when>
             <xsl:when test="gsa:may-op (concat ('get_', resource/type, 's'))">
               <a href="/omp?cmd=get_{resource/type}&amp;{resource/type}_id={resource/@id}&amp;token={/envelope/token}"
                  title="{gsa:i18n ('Details')}">
@@ -39042,6 +39048,13 @@ should not have received it.
     <xsl:with-param name="resource_id"   select="@id"/>
     <xsl:with-param name="resource_subtype" select="'os'"/>
   </xsl:call-template>
+
+  <xsl:call-template name="resource-permissions-window">
+    <xsl:with-param name="resource_type" select="'asset'"/>
+    <xsl:with-param name="permissions" select="../../permissions/get_permissions_response"/>
+    <xsl:with-param name="related">
+    </xsl:with-param>
+  </xsl:call-template>
 </xsl:template>
 
 <xsl:template match="create_asset_response">
@@ -39451,12 +39464,12 @@ should not have received it.
           </xsl:when>
           <xsl:otherwise>
             <tr>
-              <td colspan="4" style="text-align:center;">
+              <td colspan="5" style="text-align:center;">
                 ...
               </td>
             </tr>
             <tr>
-              <td colspan="4" style="text-align:center;">
+              <td colspan="5" style="text-align:center;">
                 <a href="/omp?cmd=get_asset&amp;show_all=1&amp;asset_type=host&amp;asset_id={@id}&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
                   title="{gsa:i18n ('Hosts')}" style="margin-left:3px;">
                   <xsl:value-of select="gsa:i18n ('Show all Identifiers')"/>
@@ -39473,6 +39486,13 @@ should not have received it.
     <xsl:with-param name="resource_type" select="'asset'"/>
     <xsl:with-param name="resource_id"   select="@id"/>
     <xsl:with-param name="resource_subtype" select="'host'"/>
+  </xsl:call-template>
+
+  <xsl:call-template name="resource-permissions-window">
+    <xsl:with-param name="resource_type" select="'asset'"/>
+    <xsl:with-param name="permissions" select="../../permissions/get_permissions_response"/>
+    <xsl:with-param name="related">
+    </xsl:with-param>
   </xsl:call-template>
 </xsl:template>
 

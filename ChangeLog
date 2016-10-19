@@ -1,3 +1,11 @@
+2016-10-19  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/omp.xsl (permission): Add case for assets in
+	resource links because they use a type and subtype pattern.
+	(asset [os-details]): Add permissions section.
+	(asset [host-details]): Add permissions section and fix width of
+	bottom rows in identifiers table.
+
 2016-10-18  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/po/CMakeLists.txt: Adjust gsad_js.pot target to new js2pot
