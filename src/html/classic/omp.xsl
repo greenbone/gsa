@@ -35513,7 +35513,7 @@ should not have received it.
 
   <div class="section-header">
     <h1>
-      <a href="/omp?cmd=get_system_report&amp;duration=86400&amp;slave_id=0&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_system_reports&amp;duration=86400&amp;slave_id=0&amp;token={/envelope/token}"
          title="{gsa:i18n ('Performance')}">
         <img class="icon icon-lg" src="/img/performance.svg" alt="Performance"/>
       </a>
@@ -37289,7 +37289,7 @@ should not have received it.
 
   <div class="section-header">
     <h1>
-      <a href="/omp?cmd=get_feed&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_feeds&amp;token={/envelope/token}"
          title="{gsa:i18n ('Feed')}">
         <img class="icon icon-lg" src="/img/feed.svg" alt="Feed"/>
       </a>
