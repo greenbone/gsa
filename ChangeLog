@@ -1,3 +1,41 @@
+2016-10-20  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Remove slaves.  They've been replaced by OMP scanners.
+
+	* src/gsad.c (init_validator, exec_omp_post, exec_omp_get): Remove
+	slaves.
+
+	* src/gsad_omp.c (generate_page, new_task, creaet_task_omp, edit_task)
+	(save_task_omp, get_task): Remove slaves.
+	(delete_trash_slave_omp, new_slave, new_slave_omp, create_slave_omp)
+	(get_slave, get_slaves, delete_slave_omp, get_slaves_omp, get_slave_omp)
+	(edit_slave, edit_slave_omp, save_slave_omp, export_slave_omp)
+	(export_slaves_omp): Remove.
+	(get_system_reports_omp): Replace slaves with scanners.
+	(get_trash, get_my_settings, edit_my_settings): Remove slaves.
+
+	* src/html/classic/gsad.xsl (html-gsa-navigation): Remove slave item.
+
+	* src/html/classic/help.xsl (slave_details.html, slaves.html)
+	(new_slave.html): Remove.
+	(new_permission.html): Remove slave from example.
+	(contents.html, glossary.html, my_settings.html, new_task.html)
+	(task_details.html, tasks.html): Remove slaves.
+
+	* src/html/classic/omp.xsl (move_task_icon): Replace slave with scanner.
+	(task [details], new-task-scanner-fields, new_task, html-edit-task-form)
+	(task, task [trash], credential [details], filter_resource_types)
+	(tag_resource_types): Remove slaves.
+	(slave [newtask], html-edit-task-slave, html-edit-task-slave-disabled)
+	(html-create-slave-form, new_slave, html-slaves-table)
+	(create_slave_response, delete_slave_response, modify_slave_response)
+	(html-edit-task-form, edit_slave, slave, slave [trash], slave [details])
+	(get_slave, get_slaves): Remove.
+	(html-create-permission-form, get_trash, get_my_settings)
+	(edit_my_settings): Remove slaves.
+	(get_system_reports_response): Replace slave with scanner.
+	(html-slaves-trash-table): Remove.
+
 2016-10-20  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/omp.xsl (get_system_reports_response, get_feeds):
@@ -156,7 +194,7 @@
 
 	* src/html/classic/omp.xsl (report-hosts-link): Add param "host"
 	and get result counts directly from host element.
-	(report [hosts]): Get ports count directly from host element and 
+	(report [hosts]): Get ports count directly from host element and
 	add host parameter for report-hosts-link template.
 
 2016-10-07  Timo Pollmeier <timo.pollmeier@greenbone.net>

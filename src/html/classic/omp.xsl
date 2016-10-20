@@ -4600,11 +4600,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template name="move_task_icon">
   <xsl:param name="task" select="."/>
-  <xsl:param name="slaves" select="../../../get_slaves_response/slave"/>
+  <xsl:param name="slaves" select="../../../get_scanners_response/scanner"/>
   <xsl:param name="next" select="'get_task'"/>
-  <xsl:variable name="current_slave_id" select="$task/slave/@id"/>
+  <xsl:variable name="current_slave_id" select="$task/scanner/@id"/>
   <xsl:choose>
-    <xsl:when test="gsa:may-op ('get_slaves') and gsa:may-op ('modify_task') and count ($slaves)">
+    <xsl:when test="gsa:may-op ('get_scanners') and gsa:may-op ('modify_task') and count ($slaves)">
       <span class="icon-menu">
         <xsl:variable name="slave_count" select="count ($slaves [@id != $current_slave_id])"/>
         <img src="/img/wizard.svg" class="icon icon-sm"/>
@@ -4927,33 +4927,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </td>
           </tr>
         </xsl:if>
-        <xsl:if test="scanner/type = 2 and config/type = 0">
-          <xsl:if test="gsa:may-op ('get_slaves')">
-            <tr>
-              <td></td>
-              <td>
-                <xsl:value-of select="gsa:i18n ('Slave')"/>:
-                  <xsl:choose>
-                    <xsl:when test="boolean (slave/permissions) and count (slave/permissions/permission) = 0">
-                      <xsl:value-of select="gsa:i18n('Unavailable')"/>
-                      <xsl:text> (</xsl:text>
-                      <xsl:value-of select="gsa:i18n ('Name')"/>
-                      <xsl:text>: </xsl:text>
-                      <xsl:value-of select="slave/name"/>
-                      <xsl:text>, </xsl:text>
-                      <xsl:value-of select="gsa:i18n ('ID')"/>: <xsl:value-of select="slave/@id"/>
-                      <xsl:text>)</xsl:text>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <a href="/omp?cmd=get_slave&amp;slave_id={slave/@id}&amp;token={/envelope/token}">
-                        <xsl:value-of select="slave/name"/>
-                      </a>
-                    </xsl:otherwise>
-                  </xsl:choose>
-              </td>
-            </tr>
-          </xsl:if>
-        </xsl:if>
         <xsl:if test="config/type = 0">
           <tr>
             <td></td>
@@ -5140,9 +5113,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:if test="schedule/@id != ''">
         <schedule id="{schedule/@id}"/>
       </xsl:if>
-      <xsl:if test="slave/@id != ''">
-        <slave id="{slave/@id}"/>
-      </xsl:if>
     </xsl:with-param>
   </xsl:call-template>
 </xsl:template>
@@ -5229,10 +5199,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="schedule" mode="newtask">
-  <option value="{@id}"><xsl:value-of select="name"/></option>
-</xsl:template>
-
-<xsl:template match="slave" mode="newtask">
   <option value="{@id}"><xsl:value-of select="name"/></option>
 </xsl:template>
 
@@ -6377,47 +6343,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </select>
       </div>
     </div>
-    <xsl:if test="$scanner-type = 2 and gsa:may-op ('get_slaves')">
-      <div class="form-group">
-        <label class="col-4 control-label">
-          <xsl:value-of select="gsa:i18n ('Slave')"/>
-        </label>
-        <div class="col-8">
-          <div class="form-item">
-            <select name="slave_id">
-              <xsl:variable name="slave_id">
-                <xsl:value-of select="slave_id"/>
-              </xsl:variable>
-              <xsl:choose>
-                <xsl:when test="string-length ($slave_id) &gt; 0">
-                  <option value="0">--</option>
-                </xsl:when>
-                <xsl:otherwise>
-                  <option value="0" selected="1">--</option>
-                </xsl:otherwise>
-              </xsl:choose>
-              <xsl:for-each select="get_slaves_response/slave">
-                <xsl:choose>
-                  <xsl:when test="@id = $slave_id">
-                    <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <option value="{@id}"><xsl:value-of select="name"/></option>
-                  </xsl:otherwise>
-                </xsl:choose>
-              </xsl:for-each>
-            </select>
-          </div>
-          <div class="form-item">
-            <a href="#" title="{ gsa:i18n('Create a new slave') }"
-              class="new-action-icon icon icon-sm" data-type="slave"
-              data-done="select[name=slave_id]">
-              <img class="valign-middle" src="/img/new.svg"/>
-            </a>
-          </div>
-        </div>
-      </div>
-    </xsl:if>
     <div class="form-group">
       <label class="col-4 control-label">
         <xsl:value-of select="gsa:i18n ('Network Source Interface')"/>
@@ -6486,9 +6411,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
       <xsl:if test="not (gsa:may-op ('get_schedules'))">
         <input type="hidden" name="schedule_id" value="0"/>
-      </xsl:if>
-      <xsl:if test="not (gsa:may-op ('get_slaves'))">
-        <input type="hidden" name="slave_id" value="0"/>
       </xsl:if>
       <div class="form-group">
         <label class="col-2 control-label"><xsl:value-of select="gsa:i18n ('Name')"/></label>
@@ -7286,60 +7208,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
-<xsl:template name="html-edit-task-slave">
-  <xsl:if test="gsa:may-op ('get_slaves')">
-    <div class="form-group">
-      <label class="col-4 control-label">
-        <xsl:value-of select="gsa:i18n ('Slave')"/>
-      </label>
-      <div class="col-8">
-        <div class="form-item">
-          <select name="slave_id">
-            <xsl:variable name="slave_id">
-              <xsl:choose>
-                <xsl:when test="string-length (/envelope/params/slave_id) &gt; 0">
-                  <xsl:value-of select="/envelope/params/slave_id"/>
-                </xsl:when>
-                <xsl:otherwise>
-                  <xsl:value-of select="commands_response/get_tasks_response/task/slave/@id"/>
-                </xsl:otherwise>
-              </xsl:choose>
-            </xsl:variable>
-            <xsl:choose>
-              <xsl:when test="string-length ($slave_id) &gt; 0">
-                <option value="0">--</option>
-              </xsl:when>
-              <xsl:otherwise>
-                <option value="0" selected="1">--</option>
-              </xsl:otherwise>
-            </xsl:choose>
-            <xsl:for-each select="commands_response/get_slaves_response/slave">
-              <xsl:choose>
-                <xsl:when test="@id = $slave_id">
-                  <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
-                </xsl:when>
-                <xsl:otherwise>
-                  <option value="{@id}"><xsl:value-of select="name"/></option>
-                </xsl:otherwise>
-              </xsl:choose>
-            </xsl:for-each>
-          </select>
-        </div>
-        <div class="form-item">
-          <a href="#" title="{ gsa:i18n('Create a slave') }"
-            class="new-action-icon icon icon-sm" data-type="slave" data-done="select[name=slave_id]">
-            <img src="/img/new.svg"/>
-          </a>
-        </div>
-      </div>
-    </div>
-  </xsl:if>
-</xsl:template>
-
-<xsl:template name="html-edit-task-slave-disabled">
-  <input type="hidden" name="slave_id" value="0"/>
-</xsl:template>
-
 <xsl:template name="html-edit-task-schedule">
   <xsl:if test="gsa:may-op ('get_schedules')">
     <div class="form-group">
@@ -7769,9 +7637,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:if test="not (gsa:may-op ('get_schedules'))">
           <input type="hidden" name="schedule_id" value="0"/>
         </xsl:if>
-        <xsl:if test="not (gsa:may-op ('get_slaves'))">
-          <input type="hidden" name="slave_id" value="0"/>
-        </xsl:if>
         <xsl:variable name="new_task">
           <xsl:choose>
             <xsl:when test="commands_response/get_tasks_response/task/status = 'New' or commands_response/get_tasks_response/task/alterable != 0">1</xsl:when>
@@ -7819,7 +7684,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <xsl:call-template name="html-edit-task-config-disabled"/>
                 </xsl:if>
                 <xsl:if test="commands_response/get_tasks_response/task/scanner/type = 2">
-                  <xsl:call-template name="html-edit-task-slave"/>
                   <xsl:call-template name="html-edit-task-openvas-options"/>
                 </xsl:if>
               </div>
@@ -7840,7 +7704,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:with-param name="scanner_type">2</xsl:with-param>
                 <xsl:with-param name="type">0</xsl:with-param>
               </xsl:call-template>
-              <xsl:call-template name="html-edit-task-slave"/>
               <xsl:call-template name="html-edit-task-openvas-options"/>
             </div>
           </xsl:if>
@@ -7853,7 +7716,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:with-param name="scanner_type">4</xsl:with-param>
                 <xsl:with-param name="type">0</xsl:with-param>
               </xsl:call-template>
-              <xsl:call-template name="html-edit-task-slave-disabled"/>
               <xsl:call-template name="html-edit-task-openvas-options"/>
             </div>
           </xsl:if>
@@ -7959,11 +7821,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:otherwise>
             </xsl:choose>
             <xsl:choose>
+<!-- FIX when scanner type OMP -->
               <xsl:when test="string-length(slave/@id) &gt; 0">
                 <img src="/img/sensor.svg"
                   class="icon icon-sm"
-                  alt="{gsa-i18n:strformat (gsa:i18n ('Task is configured to run on slave %1'), slave/name)}"
-                  title="{gsa-i18n:strformat (gsa:i18n ('Task is configured to run on slave %1'), slave/name)}"/>
+                  alt="{gsa-i18n:strformat (gsa:i18n ('Task is configured to run on slave scanner %1'), slave/name)}"
+                  title="{gsa-i18n:strformat (gsa:i18n ('Task is configured to run on slave scanner %1'), slave/name)}"/>
               </xsl:when>
               <xsl:otherwise>
               </xsl:otherwise>
@@ -8210,13 +8073,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <td class="table-actions">
       <xsl:choose>
         <xsl:when test="not (gsa:may-op ('restore'))"/>
-        <xsl:when test="(target/trash = '0') and (config/trash = '0') and (schedule/trash = '0') and (slave/trash = '0') and (gsa:alert-in-trash () = 0)">
+<!-- FIX scanner -->
+        <xsl:when test="(target/trash = '0') and (config/trash = '0') and (schedule/trash = '0') and (gsa:alert-in-trash () = 0)">
           <xsl:call-template name="restore-icon">
             <xsl:with-param name="id" select="@id"/>
           </xsl:call-template>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:variable name="resources_list" select="target[trash!='0'] | config[trash!='0'] | schedule[trash!='0'] | slave[trash!='0'] | (alert[trash!='0'])[0]"/>
+          <xsl:variable name="resources_list" select="target[trash!='0'] | config[trash!='0'] | schedule[trash!='0'] | (alert[trash!='0'])[0]"/>
           <xsl:variable name="resources_string">
             <xsl:for-each select="$resources_list">
               <xsl:value-of select="gsa:i18n (gsa:type-name (name (.)), gsa:type-name (name (.)))"/>
@@ -9243,56 +9107,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:call-template>
     </xsl:if>
   </div>
-
-  <xsl:if test="gsa:may-op ('get_slaves')">
-    <div class="section-header">
-      <a href="#" class="toggle-action-icon icon icon-sm icon-action"
-        data-target="#using-box" data-name="Slaves using this Credential"
-        data-variable="using-box--collapsed">
-          <img src="/img/fold.svg"/>
-      </a>
-      <h2>
-        <a href="/omp?cmd=get_slaves&amp;token={/envelope/token}"
-           title="{gsa:i18n ('Slaves')}">
-          <img class="icon icon-sm" src="/img/slave.svg" alt="Slaves"/>
-        </a>
-        <xsl:value-of select="gsa:i18n ('Slaves using this Credential')"/>
-        <xsl:text> </xsl:text>
-        <xsl:choose>
-          <xsl:when test="count(slaves/slave) != 0">
-            (<xsl:value-of select="count(slaves/slave)"/>)
-          </xsl:when>
-          <xsl:otherwise>
-            (<xsl:value-of select="gsa:i18n ('none')"/>)
-          </xsl:otherwise>
-        </xsl:choose>
-      </h2>
-    </div>
-    <div class="section-box" id="using-box">
-      <table class="gbntable">
-        <tr class="gbntablehead2">
-          <td><xsl:value-of select="gsa:i18n ('Name')"/></td>
-        </tr>
-        <xsl:for-each select="slaves/slave">
-          <tr class="{gsa:table-row-class(position())}">
-            <xsl:choose>
-              <xsl:when test="boolean (permissions) and count (permissions/permission) = 0">
-                <td><xsl:value-of select="name"/> (<xsl:value-of select="gsa:i18n('Unavailable')"/>, <xsl:value-of select="gsa:i18n('UUID')"/>: <xsl:value-of select="@id"/>)</td>
-              </xsl:when>
-              <xsl:otherwise>
-                <td>
-                  <a href="/omp?cmd=get_slave&amp;slave_id={@id}&amp;token={/envelope/token}"
-                     title="{gsa:i18n ('Slave Details')}">
-                    <xsl:value-of select="name"/>
-                  </a>
-                </td>
-              </xsl:otherwise>
-            </xsl:choose>
-          </tr>
-        </xsl:for-each>
-      </table>
-    </div>
-  </xsl:if>
 
   <div class="section-header">
     <a href="#" class="toggle-action-icon icon icon-sm icon-action"
@@ -13169,13 +12983,6 @@ should not have received it.
       <xsl:with-param name="select-value" select="$select_type"/>
     </xsl:call-template>
   </xsl:if>
-  <xsl:if test="$select_type = 'slave' or gsa:may-op ('get_slaves')">
-    <xsl:call-template name="opt">
-      <xsl:with-param name="value" select="'Slave'"/>
-      <xsl:with-param name="content" select="gsa:i18n ('Slave')"/>
-      <xsl:with-param name="select-value" select="$select_type"/>
-    </xsl:call-template>
-  </xsl:if>
   <xsl:if test="$select_type = 'tag' or gsa:may-op ('get_tags')">
     <xsl:call-template name="opt">
       <xsl:with-param name="value" select="'Tag'"/>
@@ -14185,13 +13992,6 @@ should not have received it.
     <xsl:call-template name="opt">
       <xsl:with-param name="value" select="'schedule'"/>
       <xsl:with-param name="content" select="gsa:i18n ('Schedule')"/>
-      <xsl:with-param name="select-value" select="$select_type"/>
-    </xsl:call-template>
-  </xsl:if>
-  <xsl:if test="$select_type = 'slave' or gsa:may-op ('get_slaves')">
-    <xsl:call-template name="opt">
-      <xsl:with-param name="value" select="'slave'"/>
-      <xsl:with-param name="content" select="gsa:i18n ('Slave')"/>
       <xsl:with-param name="select-value" select="$select_type"/>
     </xsl:call-template>
   </xsl:if>
@@ -20452,554 +20252,6 @@ should not have received it.
 </xsl:template>
 
 
-<!-- BEGIN SLAVES MANAGEMENT -->
-
-<xsl:template name="html-create-slave-form">
-  <div class="gb_window">
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n ('New Slave')"/>
-      <a href="/help/new_slave.html?token={/envelope/token}"
-        class="icon icon-sm"
-        title="{concat(gsa:i18n('Help'),': ',gsa:i18n('New Slave'))}">
-        <img src="/img/help.svg"/>
-      </a>
-      <a href="/omp?cmd=get_slaves&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-        class="icon icon-sm"
-        title="{gsa:i18n ('Slaves')}" style="margin-left:3px;">
-        <img src="/img/list.svg" alt="{gsa:i18n ('Slaves')}"/>
-      </a>
-    </div>
-    <div class="gb_window_part_content">
-      <form action="/omp" method="post" enctype="multipart/form-data">
-        <input type="hidden" name="token" value="{/envelope/token}"/>
-        <input type="hidden" name="cmd" value="create_slave"/>
-        <input type="hidden" name="caller" value="{/envelope/current_page}"/>
-        <input type="hidden" name="next" value="get_slave"/>
-        <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
-        <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-        <table class="table-form">
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('Name')"/>
-            </td>
-            <td>
-              <input type="text" name="name" value="unnamed" size="30"
-                     maxlength="80"/>
-            </td>
-          </tr>
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('Comment')"/></td>
-            <td>
-              <input type="text" name="comment" size="30" maxlength="400"/>
-            </td>
-          </tr>
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('Host')"/></td>
-            <td>
-              <input type="text" name="host" value="localhost" size="30"
-                      maxlength="80"/>
-            </td>
-          </tr>
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('Port')"/></td>
-            <td>
-              <input type="text" name="port" value="9390" size="30"
-                     maxlength="80"/>
-            </td>
-          </tr>
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('Credential')"/></td>
-            <td>
-              <xsl:variable name="credential_id" select="/envelope/params/credential_id"/>
-              <select name="credential_id">
-                <xsl:for-each select="get_credentials_response/credential">
-                  <xsl:call-template name="opt">
-                    <xsl:with-param name="content" select="name"/>
-                    <xsl:with-param name="value" select="@id"/>
-                    <xsl:with-param name="select-value" select="$credential_id"/>
-                  </xsl:call-template>
-                </xsl:for-each>
-              </select>
-              <a href="#" title="{ gsa:i18n('Create a new Credential') }"
-                  class="new-action-icon icon icon-sm" data-type="credential" data-done="select[name=credential_id]" data-extra="restrict_credential_type=up">
-                <img class="valign-middle" src="/img/new.svg"/>
-              </a>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <input type="submit" name="submit" value="{gsa:i18n ('Create Slave')}"/>
-            </td>
-          </tr>
-        </table>
-      </form>
-    </div>
-  </div>
-</xsl:template>
-
-<xsl:template match="new_slave">
-  <xsl:apply-templates select="gsad_msg"/>
-  <xsl:apply-templates select="create_slave_response"/>
-  <xsl:apply-templates select="commands_response/delete_slave_response"/>
-  <xsl:call-template name="html-create-slave-form"/>
-</xsl:template>
-
-<xsl:template name="html-slaves-table">
-  <xsl:call-template name="list-window">
-    <xsl:with-param name="type" select="'slave'"/>
-    <xsl:with-param name="cap-type" select="'Slave'"/>
-    <xsl:with-param name="resources-summary" select="slaves"/>
-    <xsl:with-param name="resources" select="slave"/>
-    <xsl:with-param name="count" select="count (slave)"/>
-    <xsl:with-param name="filtered-count" select="slave_count/filtered"/>
-    <xsl:with-param name="full-count" select="slave_count/text ()"/>
-    <xsl:with-param name="columns" xmlns="">
-      <column>
-        <name><xsl:value-of select="gsa:i18n('Name')"/></name>
-        <field>name</field>
-      </column>
-      <column>
-        <name><xsl:value-of select="gsa:i18n('Host')"/></name>
-        <field>host</field>
-      </column>
-      <column>
-        <name><xsl:value-of select="gsa:i18n('Port')"/></name>
-        <field>port</field>
-      </column>
-      <column>
-        <name><xsl:value-of select="gsa:i18n('Credential')"/></name>
-        <field>credential</field>
-      </column>
-      <column>
-        <name><xsl:value-of select="gsa:i18n('Login', 'Auth Data')"/></name>
-        <field>login</field>
-      </column>
-    </xsl:with-param>
-    <xsl:with-param name="icon-count" select="4"/>
-  </xsl:call-template>
-</xsl:template>
-
-<!--     CREATE_SLAVE_RESPONSE -->
-
-<xsl:template match="create_slave_response">
-  <xsl:call-template name="command_result_dialog">
-    <xsl:with-param name="operation">Create Slave</xsl:with-param>
-    <xsl:with-param name="status">
-      <xsl:value-of select="@status"/>
-    </xsl:with-param>
-    <xsl:with-param name="msg">
-      <xsl:value-of select="@status_text"/>
-    </xsl:with-param>
-  </xsl:call-template>
-</xsl:template>
-
-<!--     DELETE_SLAVE_RESPONSE -->
-
-<xsl:template match="delete_slave_response">
-  <xsl:call-template name="command_result_dialog">
-    <xsl:with-param name="operation">
-      Delete Slave
-    </xsl:with-param>
-    <xsl:with-param name="status">
-      <xsl:value-of select="@status"/>
-    </xsl:with-param>
-    <xsl:with-param name="msg">
-      <xsl:value-of select="@status_text"/>
-    </xsl:with-param>
-  </xsl:call-template>
-</xsl:template>
-
-<!--     MODIFY_SLAVE_RESPONSE -->
-
-<xsl:template match="modify_slave_response">
-  <xsl:call-template name="command_result_dialog">
-    <xsl:with-param name="operation">Save Slave</xsl:with-param>
-    <xsl:with-param name="status">
-      <xsl:value-of select="@status"/>
-    </xsl:with-param>
-    <xsl:with-param name="msg">
-      <xsl:value-of select="@status_text"/>
-    </xsl:with-param>
-  </xsl:call-template>
-</xsl:template>
-
-<!--     EDIT_SLAVE -->
-
-<xsl:template name="html-edit-slave-form">
-  <div class="gb_window">
-    <div class="gb_window_part_left"></div>
-    <div class="gb_window_part_right"></div>
-    <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n ('Edit Slave')"/>
-      <xsl:call-template name="edit-header-icons">
-        <xsl:with-param name="cap-type" select="'Slave'"/>
-        <xsl:with-param name="type" select="'slave'"/>
-        <xsl:with-param name="id"
-                        select="commands_response/get_slaves_response/slave/@id"/>
-      </xsl:call-template>
-    </div>
-    <div class="gb_window_part_content">
-      <form action="" method="post" enctype="multipart/form-data">
-        <input type="hidden" name="token" value="{/envelope/token}"/>
-        <input type="hidden" name="cmd" value="save_slave"/>
-        <input type="hidden" name="caller" value="{/envelope/current_page}"/>
-        <input type="hidden"
-               name="slave_id"
-               value="{commands_response/get_slaves_response/slave/@id}"/>
-        <input type="hidden" name="next" value="{/envelope/params/next}"/>
-        <input type="hidden" name="slave" value="{/envelope/params/slave}"/>
-        <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-        <table class="table-form">
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('Name')"/></td>
-            <td>
-              <input type="text" name="name" size="30" maxlength="80"
-                     value="{commands_response/get_slaves_response/slave/name}"/>
-            </td>
-          </tr>
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('Comment')"/></td>
-            <td>
-              <input type="text" name="comment" size="30" maxlength="400"
-                     value="{commands_response/get_slaves_response/slave/comment}"/>
-            </td>
-          </tr>
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('Host')"/></td>
-            <td>
-              <input type="text" name="host"
-                     value="{commands_response/get_slaves_response/slave/host}"
-                     size="30"
-                     maxlength="1000"/>
-            </td>
-          </tr>
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('Port')"/></td>
-            <td>
-              <input type="text" name="port" size="30" maxlength="1000"
-                     value="{commands_response/get_slaves_response/slave/port}"/>
-            </td>
-          </tr>
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('Credential')"/></td>
-            <td>
-              <xsl:variable name="credential_id" select="commands_response/get_slaves_response/slave/credential/@id"/>
-              <select name="credential_id">
-                <xsl:for-each select="commands_response/get_credentials_response/credential">
-                  <xsl:call-template name="opt">
-                    <xsl:with-param name="content" select="name"/>
-                    <xsl:with-param name="value" select="@id"/>
-                    <xsl:with-param name="select-value" select="$credential_id"/>
-                  </xsl:call-template>
-                </xsl:for-each>
-              </select>
-              <a href="#" title="{ gsa:i18n('Create a new Credential') }"
-                  class="new-action-icon icon icon-sm" data-type="credential" data-done="select[name=credential_id]" data-extra="restrict_credential_type=up">
-                <img class="valign-middle" src="/img/new.svg"/>
-              </a>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <input type="submit" name="submit" value="{gsa:i18n ('Save Slave')}"/>
-            </td>
-          </tr>
-        </table>
-      </form>
-    </div>
-  </div>
-</xsl:template>
-
-<xsl:template match="edit_slave">
-  <xsl:apply-templates select="gsad_msg"/>
-  <xsl:apply-templates select="modify_slave_response"/>
-  <xsl:call-template name="html-edit-slave-form"/>
-</xsl:template>
-
-<!--     SLAVE -->
-
-<xsl:template match="slave">
-  <tr class="{gsa:table-row-class(position())}">
-    <td>
-      <xsl:call-template name="observers-icon">
-        <xsl:with-param name="type" select="'Slave'"/>
-      </xsl:call-template>
-      <b>
-        <a href="/omp?cmd=get_slave&amp;slave_id={@id}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;token={/envelope/token}"
-           title="{gsa:view_details_title ('Slave', name)}">
-          <xsl:value-of select="name"/>
-        </a>
-      </b>
-      <xsl:choose>
-        <xsl:when test="comment != ''">
-          <div class="comment">(<xsl:value-of select="comment"/>)</div>
-        </xsl:when>
-        <xsl:otherwise></xsl:otherwise>
-      </xsl:choose>
-    </td>
-    <td><xsl:value-of select="host"/></td>
-    <td><xsl:value-of select="port"/></td>
-    <td>
-      <xsl:choose>
-        <xsl:when test="gsa:may-op ('get_credentials')">
-          <a href="/omp?cmd=get_credential&amp;credential_id={credential/@id}&amp;token={/envelope/token}">
-            <xsl:value-of select="credential/name"/>
-          </a>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="credential/name"/>
-        </xsl:otherwise>
-      </xsl:choose>
-    </td>
-    <td><xsl:value-of select="credential/login"/></td>
-    <xsl:choose>
-      <xsl:when test="/envelope/params/bulk_select = 1">
-        <td style="text-align:center">
-          <label style="width:100%">
-            <input name="bulk_selected:{@id}" type="checkbox" style="width:100%; height:100%" title="{gsa:i18n ('Select for bulk action')}"/>
-          </label>
-        </td>
-      </xsl:when>
-      <xsl:otherwise>
-        <td class="table-actions">
-          <xsl:call-template name="list-window-line-icons">
-            <xsl:with-param name="cap-type" select="'Slave'"/>
-            <xsl:with-param name="type" select="'slave'"/>
-            <xsl:with-param name="id" select="@id"/>
-          </xsl:call-template>
-        </td>
-      </xsl:otherwise>
-    </xsl:choose>
-  </tr>
-</xsl:template>
-
-<xsl:template match="slave" mode="trash">
-  <tr class="{gsa:table-row-class(position())}">
-    <td>
-      <xsl:call-template name="observers-icon">
-        <xsl:with-param name="type" select="'Slave'"/>
-      </xsl:call-template>
-      <b><xsl:value-of select="name"/></b>
-      <xsl:choose>
-        <xsl:when test="comment != ''">
-          <div class="comment">(<xsl:value-of select="comment"/>)</div>
-        </xsl:when>
-        <xsl:otherwise></xsl:otherwise>
-      </xsl:choose>
-    </td>
-    <td><xsl:value-of select="host"/></td>
-    <td><xsl:value-of select="port"/></td>
-    <td>
-      <xsl:choose>
-        <xsl:when test="credential/trash != '0'">
-          <xsl:value-of select="credential/name"/>
-          <div>(<xsl:value-of select="gsa:i18n ('in trashcan')"/>)</div>
-        </xsl:when>
-        <xsl:otherwise>
-          <a href="/omp?cmd=get_credential&amp;credential_id={credential/@id}&amp;token={/envelope/token}"
-            title="{gsa:i18n ('Credential Details')}">
-            <xsl:value-of select="credential/name"/>
-          </a>
-        </xsl:otherwise>
-      </xsl:choose>
-    </td>
-    <td><xsl:value-of select="credential/login"/></td>
-    <td class="table-actions">
-      <xsl:choose>
-        <xsl:when test="not (gsa:may-op ('restore'))"/>
-        <xsl:when test="credential/trash = '0'">
-          <xsl:call-template name="restore-icon">
-            <xsl:with-param name="id" select="@id"/>
-          </xsl:call-template>
-        </xsl:when>
-        <xsl:otherwise>
-          <img src="/img/restore_inactive.svg" alt="{gsa:i18n ('Restore')}"
-            title="{gsa:i18n ('Credential')}{gsa:i18n (' must be restored first.', 'Trashcan')}"
-            class="icon icon-sm"/>
-        </xsl:otherwise>
-      </xsl:choose>
-      <xsl:choose>
-        <xsl:when test="in_use='0'">
-          <xsl:call-template name="trash-delete-icon">
-            <xsl:with-param name="type" select="'slave'"/>
-            <xsl:with-param name="id" select="@id"/>
-          </xsl:call-template>
-        </xsl:when>
-        <xsl:otherwise>
-          <img src="/img/delete_inactive.svg"
-            alt="{gsa:i18n ('Delete')}"
-            title="{gsa:i18n ('Slave is still in use')}"
-            class="icon icon-sm"/>
-        </xsl:otherwise>
-      </xsl:choose>
-    </td>
-  </tr>
-</xsl:template>
-
-<xsl:template match="slave" mode="details">
-  <div class="toolbar">
-    <xsl:call-template name="details-header-icons">
-      <xsl:with-param name="cap-type" select="'Slave'"/>
-      <xsl:with-param name="type" select="'slave'"/>
-    </xsl:call-template>
-  </div>
-
-  <div class="section-header">
-    <xsl:call-template name="minor-details"/>
-    <h1>
-      <a href="/omp?cmd=get_slaves&amp;token={/envelope/token}"
-         title="{gsa:i18n ('Slaves')}">
-        <img class="icon icon-lg" src="/img/slave.svg" alt="Targets"/>
-      </a>
-      <xsl:value-of select="gsa:i18n ('Slave')"/>:
-      <xsl:value-of select="name"/>
-      <xsl:text> </xsl:text>
-    </h1>
-  </div>
-
-  <div class="section-box">
-    <table>
-      <tr>
-        <td><xsl:value-of select="gsa:i18n ('Comment')"/>:</td>
-        <td><xsl:value-of select="comment"/></td>
-      </tr>
-      <tr>
-        <td><xsl:value-of select="gsa:i18n ('Host')"/>:</td>
-        <td><xsl:value-of select="host"/></td>
-      </tr>
-      <tr>
-        <td><xsl:value-of select="gsa:i18n ('Port')"/>:</td>
-        <td><xsl:value-of select="port"/></td>
-      </tr>
-      <tr>
-        <td><xsl:value-of select="gsa:i18n ('Credential')"/>:</td>
-        <td>
-          <xsl:choose>
-            <xsl:when test="gsa:may-op ('get_credentials')">
-              <a href="/omp?cmd=get_credential&amp;credential_id={credential/@id}&amp;token={/envelope/token}">
-                <xsl:value-of select="credential/name"/>
-              </a>
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:value-of select="credential/name"/>
-            </xsl:otherwise>
-          </xsl:choose>
-        </td>
-      </tr>
-      <tr>
-        <td><xsl:value-of select="gsa:i18n ('Login', 'Auth Data')"/>:</td>
-        <td><xsl:value-of select="credential/login"/></td>
-      </tr>
-    </table>
-  </div>
-
-  <div class="section-header">
-    <a href="#" class="toggle-action-icon icon icon-sm icon-action"
-      data-target="#using-box" data-name="Tasks using this Slave"
-      data-variable="using-box--collapsed">
-        <img src="/img/fold.svg"/>
-    </a>
-    <h2>
-      <a href="/omp?cmd=get_tasks&amp;token={/envelope/token}"
-         title="{gsa:i18n ('Slaves')}">
-        <img class="icon icon-sm" src="/img/task.svg" alt="Slaves"/>
-      </a>
-      <xsl:value-of select="gsa:i18n ('Tasks using this Slave')"/>
-      <xsl:text> </xsl:text>
-      <xsl:choose>
-        <xsl:when test="count(tasks/task) != 0">
-          (<xsl:value-of select="count(tasks/task)"/>)
-        </xsl:when>
-        <xsl:otherwise>
-          (<xsl:value-of select="gsa:i18n ('none')"/>)
-        </xsl:otherwise>
-      </xsl:choose>
-    </h2>
-  </div>
-
-  <div class="section-box" id="using-box">
-    <table class="gbntable">
-      <tr class="gbntablehead2">
-        <td><xsl:value-of select="gsa:i18n ('Name')"/></td>
-      </tr>
-      <xsl:for-each select="tasks/task">
-
-        <tr class="{gsa:table-row-class(position())}">
-          <xsl:choose>
-            <xsl:when test="boolean (permissions) and count (permissions/permission) = 0">
-              <td><xsl:value-of select="name"/> (<xsl:value-of select="gsa:i18n('Unavailable')"/>, <xsl:value-of select="gsa:i18n('UUID')"/>: <xsl:value-of select="@id"/>)</td>
-            </xsl:when>
-            <xsl:otherwise>
-              <td>
-                <a href="/omp?cmd=get_task&amp;task_id={@id}&amp;token={/envelope/token}" title="{gsa:i18n ('Details')}">
-                  <xsl:value-of select="name"/>
-                </a>
-              </td>
-            </xsl:otherwise>
-          </xsl:choose>
-        </tr>
-      </xsl:for-each>
-    </table>
-  </div>
-
-  <xsl:call-template name="user-tags-window">
-    <xsl:with-param name="resource_type" select="'slave'"/>
-  </xsl:call-template>
-
-  <xsl:call-template name="resource-permissions-window">
-    <xsl:with-param name="resource_type" select="'slave'"/>
-    <xsl:with-param name="permissions" select="../../permissions/get_permissions_response"/>
-    <xsl:with-param name="related">
-      <xsl:if test="credential/@id != ''">
-        <credential id="{credential/@id}"/>
-      </xsl:if>
-    </xsl:with-param>
-  </xsl:call-template>
-</xsl:template>
-
-<!--     GET_SLAVE -->
-
-<xsl:template match="get_slave">
-  <xsl:apply-templates select="gsad_msg"/>
-  <xsl:apply-templates select="commands_response/delete_slave_response"/>
-  <xsl:apply-templates select="modify_slave_response"/>
-  <xsl:apply-templates select="delete_tag_response"/>
-  <xsl:apply-templates select="create_tag_response"/>
-  <xsl:apply-templates select="modify_tag_response"/>
-  <xsl:apply-templates select="get_slaves_response/slave" mode="details"/>
-</xsl:template>
-
-<!--     GET_SLAVES -->
-
-<xsl:template match="get_slaves">
-  <xsl:apply-templates select="gsad_msg"/>
-  <xsl:apply-templates select="delete_slave_response"/>
-  <xsl:apply-templates select="create_filter_response"/>
-  <xsl:apply-templates select="create_slave_response"/>
-  <xsl:apply-templates select="modify_slave_response"/>
-  <!-- The for-each makes the get_slaves_response the current node. -->
-  <xsl:for-each select="get_slaves_response | commands_response/get_slaves_response">
-    <xsl:choose>
-      <xsl:when test="substring(@status, 1, 1) = '4' or substring(@status, 1, 1) = '5'">
-        <xsl:call-template name="command_result_dialog">
-          <xsl:with-param name="operation">
-            Get Slaves
-          </xsl:with-param>
-          <xsl:with-param name="status">
-            <xsl:value-of select="@status"/>
-          </xsl:with-param>
-          <xsl:with-param name="msg">
-            <xsl:value-of select="@status_text"/>
-          </xsl:with-param>
-        </xsl:call-template>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:call-template name="html-slaves-table"/>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:for-each>
-</xsl:template>
-
-
 <!-- BEGIN GET RAW INFO -->
 
 <xsl:template name="ref_cve_list">
@@ -27016,7 +26268,6 @@ should not have received it.
             <class>delete_role</class>
             <class>delete_scanner</class>
             <class>delete_schedule</class>
-            <class>delete_slave</class>
             <class>delete_tag</class>
             <class>delete_target</class>
             <class>delete_task</class>
@@ -27043,7 +26294,6 @@ should not have received it.
             <class>get_scanners</class>
             <class>get_schedules</class>
             <class>get_settings</class>
-            <class>get_slaves</class>
             <class>get_tags</class>
             <class>get_targets</class>
             <class>get_tasks</class>
@@ -27065,7 +26315,6 @@ should not have received it.
             <class>modify_scanner</class>
             <class>modify_schedule</class>
             <class>modify_setting</class>
-            <class>modify_slave</class>
             <class>modify_tag</class>
             <class>modify_target</class>
             <class>modify_task</class>
@@ -27822,7 +27071,6 @@ should not have received it.
             <class>delete_role</class>
             <class>delete_scanner</class>
             <class>delete_schedule</class>
-            <class>delete_slave</class>
             <class>delete_tag</class>
             <class>delete_target</class>
             <class>delete_task</class>
@@ -27849,7 +27097,6 @@ should not have received it.
             <class>get_scanners</class>
             <class>get_schedules</class>
             <class>get_settings</class>
-            <class>get_slaves</class>
             <class>get_tags</class>
             <class>get_targets</class>
             <class>get_tasks</class>
@@ -27871,7 +27118,6 @@ should not have received it.
             <class>modify_scanner</class>
             <class>modify_schedule</class>
             <class>modify_setting</class>
-            <class>modify_slave</class>
             <class>modify_tag</class>
             <class>modify_target</class>
             <class>modify_task</class>
@@ -34592,6 +33838,7 @@ should not have received it.
                 </xsl:call-template>
               </td>
             </tr>
+<!-- FIX -->
             <xsl:if test="boolean (report/scan/task/slave)">
               <tr>
                 <td><xsl:value-of select="gsa:i18n ('Slave')"/>:</td>
@@ -35574,10 +34821,10 @@ should not have received it.
           </xsl:choose>
         </td>
       </tr>
-      <xsl:if test="gsa:may-op ('get_slaves')">
+      <xsl:if test="gsa:may-op ('get_scanners')">
         <tr>
           <td>
-            <xsl:value-of select="gsa:i18n ('Reports for slave')"/>:
+            <xsl:value-of select="gsa:i18n ('Reports for slave scanner')"/>:
           </td>
           <td>
             <div id="small_form" class="pull-left">
@@ -35587,7 +34834,7 @@ should not have received it.
                 <input type="hidden" name="duration" value="{$duration}"/>
                 <select name="slave_id" onchange="switch_slave.submit ()">
                   <xsl:variable name="slave_id">
-                    <xsl:value-of select="../slave/@id"/>
+                    <xsl:value-of select="../scanner/@id"/>
                   </xsl:variable>
                   <xsl:choose>
                     <xsl:when test="string-length ($slave_id) &gt; 0">
@@ -35597,7 +34844,7 @@ should not have received it.
                       <option value="0" selected="1">--</option>
                     </xsl:otherwise>
                   </xsl:choose>
-                  <xsl:for-each select="../get_slaves_response/slave">
+                  <xsl:for-each select="../get_scanners_response/scanner">
                     <xsl:choose>
                       <xsl:when test="@id = $slave_id">
                         <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
@@ -35623,10 +34870,10 @@ should not have received it.
     <xsl:choose>
       <xsl:when test="@status = '500'">
         <p>
-          <xsl:value-of select="gsa:i18n ('The selected Scan Slave can currently not be reached for retrieval of performance data.')"/>
+          <xsl:value-of select="gsa:i18n ('The selected Slave Scanner can currently not be reached for retrieval of performance data.')"/>
         </p>
         <p>
-          <xsl:value-of select="gsa:i18n ('Please check network connection or Slave configuration.  The problem may also be temporary, so you could try again at a later time.')"/>
+          <xsl:value-of select="gsa:i18n ('Please check network connection or Scanner configuration.  The problem may also be temporary, so you could try again at a later time.')"/>
         </p>
       </xsl:when>
       <xsl:otherwise>
@@ -35823,22 +35070,6 @@ should not have received it.
   </div>
 </xsl:template>
 
-<xsl:template name="html-slaves-trash-table">
-  <div>
-    <table class="gbntable">
-      <tr class="gbntablehead2">
-        <td><xsl:value-of select="gsa:i18n ('Name')"/></td>
-        <td><xsl:value-of select="gsa:i18n ('Host')"/></td>
-        <td><xsl:value-of select="gsa:i18n ('Port')"/></td>
-        <td><xsl:value-of select="gsa:i18n ('Credential')"/></td>
-        <td><xsl:value-of select="gsa:i18n ('Login', 'Auth Data')"/></td>
-        <td style="width: {$trash-actions-width}px"><xsl:value-of select="gsa:i18n ('Actions')"/></td>
-      </tr>
-      <xsl:apply-templates select="slave" mode="trash"/>
-    </table>
-  </div>
-</xsl:template>
-
 <xsl:template name="html-tags-trash-table">
   <div>
     <table class="gbntable">
@@ -35907,7 +35138,6 @@ should not have received it.
   <xsl:apply-templates select="delete_role_response"/>
   <xsl:apply-templates select="delete_scanner_response"/>
   <xsl:apply-templates select="delete_schedule_response"/>
-  <xsl:apply-templates select="delete_slave_response"/>
   <xsl:apply-templates select="delete_tag_response"/>
   <xsl:apply-templates select="delete_target_response"/>
   <xsl:apply-templates select="delete_task_response"/>
@@ -36036,12 +35266,6 @@ should not have received it.
           <item>
             <type>schedule</type>
             <count><xsl:value-of select="count(get_schedules_response/schedule)"/></count>
-          </item>
-        </xsl:if>
-        <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_SLAVES']">
-          <item>
-            <type>slave</type>
-            <count><xsl:value-of select="count(get_slaves_response/slave)"/></count>
           </item>
         </xsl:if>
         <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_TAGS']">
@@ -36195,15 +35419,6 @@ should not have received it.
       <!-- The for-each makes the get_schedules_response the current node. -->
       <xsl:for-each select="get_schedules_response">
         <xsl:call-template name="html-schedules-trash-table"/>
-      </xsl:for-each>
-    </xsl:if>
-
-    <xsl:if test="/envelope/capabilities/help_response/schema/command[name='GET_SLAVES']">
-      <a name="slaves"></a>
-      <h1><xsl:value-of select="gsa:i18n ('Slaves')"/></h1>
-      <!-- The for-each makes the get_slaves_response the current node. -->
-      <xsl:for-each select="get_slaves_response">
-        <xsl:call-template name="html-slaves-trash-table"/>
       </xsl:for-each>
     </xsl:if>
 
@@ -37845,20 +37060,6 @@ should not have received it.
           </tr>
         </xsl:if>
 
-        <xsl:if test="gsa:may-op ('get_slaves')">
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('Default Slave')"/></td>
-            <td>
-              <xsl:call-template name="get-settings-resource">
-                <xsl:with-param name="id"
-                                select="get_settings_response/setting[name='Default Slave']/value"/>
-                <xsl:with-param name="resources" select="commands_response/get_slaves_response/slave"/>
-                <xsl:with-param name="type" select="'slave'"/>
-              </xsl:call-template>
-            </td>
-          </tr>
-        </xsl:if>
-
         <xsl:if test="gsa:may-op ('get_targets')">
           <tr>
             <td><xsl:value-of select="gsa:i18n ('Default Target')"/></td>
@@ -38006,15 +37207,6 @@ should not have received it.
               <xsl:call-template name="get-settings-filter">
                 <xsl:with-param name="filter"
                                 select="get_settings_response/setting[name='Schedules Filter']/value"/>
-              </xsl:call-template>
-            </td>
-          </tr>
-          <tr>
-            <td><xsl:value-of select="gsa:i18n ('Slaves Filter')"/></td>
-            <td>
-              <xsl:call-template name="get-settings-filter">
-                <xsl:with-param name="filter"
-                                select="get_settings_response/setting[name='Slaves Filter']/value"/>
               </xsl:call-template>
             </td>
           </tr>
@@ -38537,21 +37729,6 @@ should not have received it.
               </tr>
             </xsl:if>
 
-            <xsl:if test="gsa:may-op ('get_slaves')">
-              <tr>
-                <td><xsl:value-of select="gsa:i18n ('Default Slave')"/></td>
-                <td>
-                  <xsl:call-template name="edit-settings-resource">
-                    <xsl:with-param name="setting" select="'aec201fa-8a82-4b61-bebe-a44ea93b2909'"/>
-                    <xsl:with-param name="selected_id"
-                                    select="get_settings_response/setting[name='Default Slave']/value"/>
-                    <xsl:with-param name="type" select="'slave'"/>
-                    <xsl:with-param name="resources" select="commands_response/get_slaves_response/slave"/>
-                  </xsl:call-template>
-                </td>
-              </tr>
-            </xsl:if>
-
             <xsl:if test="gsa:may-op ('get_targets')">
               <tr>
                 <td><xsl:value-of select="gsa:i18n ('Default Target')"/></td>
@@ -38730,17 +37907,6 @@ should not have received it.
                     <xsl:with-param name="filter-type" select="'Schedule'"/>
                     <xsl:with-param name="filter"
                                     select="gsa:param-or (concat ('settings_filter:', 'a83e321b-d994-4ae8-beec-bfb5fe3e7336'), get_settings_response/setting[name='Schedules Filter']/value)"/>
-                  </xsl:call-template>
-                </td>
-              </tr>
-              <tr>
-                <td><xsl:value-of select="gsa:i18n ('Slaves Filter')"/></td>
-                <td>
-                  <xsl:call-template name="edit-settings-filters">
-                    <xsl:with-param name="uuid" select="'2681c32a-8dfd-40c9-a9c6-8d4e2c7799eb'"/>
-                    <xsl:with-param name="filter-type" select="'Slave'"/>
-                    <xsl:with-param name="filter"
-                                    select="gsa:param-or (concat ('settings_filter:', '2681c32a-8dfd-40c9-a9c6-8d4e2c7799eb'), get_settings_response/setting[name='Slaves Filter']/value)"/>
                   </xsl:call-template>
                 </td>
               </tr>

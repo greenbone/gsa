@@ -2720,204 +2720,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
-<xsl:template mode="help" match="slave_details.html">
-  <xsl:call-template name="help-header">
-    <xsl:with-param name="title" select="'Slave Details'"/>
-    <xsl:with-param name="type" select="'slave'"/>
-  </xsl:call-template>
-
-  <div class="section-box">
-    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
-    <div style="text-align:left">
-
-      <br/>
-
-      <xsl:call-template name="availability">
-        <xsl:with-param name="command" select="'GET_SLAVES'"/>
-      </xsl:call-template>
-
-      <p>
-        Provides detailed information about a
-        <a href="glossary.html?token={/envelope/token}#slave">Slave</a>.
-        This includes the Name, creation time, modification time,
-        comment, host, port, credential, login username and a list of
-        Tasks using this slave.
-      </p>
-
-      <xsl:call-template name="details-window-line-actions">
-        <xsl:with-param name="type" select="'slave'"/>
-        <xsl:with-param name="name" select="'Slave'"/>
-      </xsl:call-template>
-      <xsl:call-template name="object-used-by">
-        <xsl:with-param name="name" select="'Slave'"/>
-        <xsl:with-param name="used_by" select="'Task'"/>
-      </xsl:call-template>
-    </div>
-  </div>
-</xsl:template>
-
-<xsl:template mode="help" match="slaves.html">
-  <xsl:call-template name="help-header">
-    <xsl:with-param name="title" select="'Slaves'"/>
-    <xsl:with-param name="type" select="'slave'"/>
-  </xsl:call-template>
-
-  <div class="section-box">
-    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
-    <div style="text-align:left">
-
-      <br/>
-
-      <xsl:call-template name="availability">
-        <xsl:with-param name="command" select="'GET_SLAVES'"/>
-      </xsl:call-template>
-
-      <p>
-        This table provides an overview of all configured
-        <a href="glossary.html?token={/envelope/token}#slave">Slaves</a>.
-        The complete contents of the slave entries
-        are shown (name, host, port and login).
-      </p>
-
-      <table class="gbntable">
-        <tr class="gbntablehead2">
-          <td>Column</td>
-          <td>Description</td>
-        </tr>
-        <xsl:call-template name="name-column">
-          <xsl:with-param name="type" select="'slave'"/>
-        </xsl:call-template>
-        <tr class="even">
-          <td>Host</td>
-          <td>
-              Host of the slave.
-          </td>
-        </tr>
-        <tr class="odd">
-          <td>Port</td>
-          <td>
-            Network port on the host of the slave.
-          </td>
-        </tr>
-        <tr class="even">
-          <td>Credential</td>
-          <td>
-            Name of the credential to login to the slave host.
-          </td>
-        </tr>
-        <tr class="odd">
-          <td>Login</td>
-          <td>
-            Username from credential to login to the slave host.
-          </td>
-        </tr>
-      </table>
-
-      <h3>New Slave</h3>
-      <p>
-        To create a new slave click the
-        new icon <img src="/img/new.svg" class="icon icon-sm" alt="New Slave" title="New Slave"/> which
-        goes to the <a href="new_slave.html?token={/envelope/token}">New Slave</a>
-        page.
-      </p>
-
-      <h3>Exporting</h3>
-      <p>
-        Export the current list of slaves as XML by clicking on the
-        export icon <img src="/img/download.svg" class="icon icon-sm" alt="Export" title="Export XML"/>.
-      </p>
-
-      <xsl:call-template name="filtering"/>
-      <xsl:call-template name="sorting"/>
-
-      <xsl:call-template name="list-window-line-actions">
-        <xsl:with-param name="type" select="'Slave'"/>
-        <xsl:with-param name="used_by" select="'Task'"/>
-      </xsl:call-template>
-    </div>
-  </div>
-</xsl:template>
-
-<xsl:template mode="help" match="new_slave.html">
-  <xsl:call-template name="help-header">
-    <xsl:with-param name="title" select="'New Slave'"/>
-    <xsl:with-param name="type" select="'slave'"/>
-  </xsl:call-template>
-
-  <div class="section-box">
-    <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
-    <div style="text-align:left">
-
-      <br/>
-
-      <xsl:call-template name="availability">
-        <xsl:with-param name="command" select="'CREATE_SLAVE'"/>
-      </xsl:call-template>
-
-      <p>
-        For creating a new
-        <a href="glossary.html?token={/envelope/token}#slave">Slave</a>
-        the dialog offers these entries.
-        Hit the button "Create Slave" to submit the new slave.
-        The Slaves page will be shown.
-      </p>
-
-      <table class="gbntable">
-        <tr class="gbntablehead2">
-          <td></td>
-          <td>Mandatory</td>
-          <td>Max Length</td>
-          <td>Syntax</td>
-          <td>Example</td>
-        </tr>
-        <tr class="odd">
-          <td>Name</td>
-          <td>yes</td>
-          <td>80</td>
-          <td>Alphanumeric</td>
-          <td>Rome</td>
-        </tr>
-        <tr class="even">
-          <td>Comment</td>
-          <td>no</td>
-          <td>400</td>
-          <td>Alphanumeric</td>
-          <td></td>
-        </tr>
-        <tr class="odd">
-          <td>Host</td>
-          <td>Yes</td>
-          <td>80</td>
-          <td>Alphanumeric</td>
-          <td>192.168.3.200</td>
-        </tr>
-        <tr class="even">
-          <td>Port</td>
-          <td>Yes</td>
-          <td>80</td>
-          <td>Integer</td>
-          <td>9390</td>
-        </tr>
-        <tr class="odd">
-          <td>Credential</td>
-          <td>Yes</td>
-          <td>---</td>
-          <td>Choice</td>
-          <td>User on Slave Manager</td>
-        </tr>
-      </table>
-
-      <h4>Slaves</h4>
-      <p>
-       Pressing the list icon
-       <img src="/img/list.svg" class="icon icon-sm" alt="Slaves" title="Slaves"/>
-       will switch to the <a href="slaves.html?token={/envelope/token}">Slaves</a>
-       page.
-      </p>
-    </div>
-  </div>
-</xsl:template>
-
 <xsl:template mode="help" match="users.html">
   <xsl:call-template name="help-header">
     <xsl:with-param name="title" select="'Users'"/>
@@ -3383,13 +3185,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <p>
                 A resource level permission allows the subject to run the given OMP
                 command on a specific resource.  Examples of resources include
-                tasks, targets and slaves.
+                tasks, targets and schedules.
               </p>
               <p>
-                For example, a permission named "GET_SLAVES" can be added with
-                "Resource ID" set to the ID of a slave, and subject set to a
+                For example, a permission named "GET_SCHEDULES" can be added with
+                "Resource ID" set to the ID of a schedule, and subject set to a
                 particular user.  This will give the user the ability to view the
-                slave.  The slave will show up on the user's Slaves page.
+                schedule.  The schedule will show up on the user's Schedules page.
               </p>
             </li>
           </ul>
@@ -3398,7 +3200,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <b>Super Permissions</b>
           <p>
             Every resource is either global, or has an owner.  Examples of
-            resources include tasks, targets and slaves.
+            resources include tasks, targets and schedules.
           </p>
           <p>
             Super permissions give the subject effective ownership of all the
@@ -3408,7 +3210,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             For example, a user Alice can be given Super permission on user Bob.
             This gives gives Alice full access to all of Bob's resources.
             Alice can modify and run all of Bob's tasks, view Bob's reports,
-            delete Bob's slaves, etc.
+            delete Bob's schedules, etc.
           </p>
           <p>
             Super permissions can be given on:
@@ -3511,7 +3313,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </p>
       <p>
         <ul>
-          <li>For <b>Tasks</b> this can include the Alerts and their Filters, the Target as well as its related Credentials and Port List, the Schedule, the Scanner, the Scan Config and the Slave.</li>
+          <li>For <b>Tasks</b> this can include the Alerts and their Filters, the Target as well as its related Credentials and Port List, the Schedule, the Scanner and the Scan Config.</li>
           <li><b>Targets</b> can include the up to three LSC Credentials
           (SSH, SMB and ESXi) and the Port List.</li>
           <li><b>Alerts</b> can include the Filter that is used on the Report.</li>
@@ -3897,11 +3699,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <ul>
                 <li> <a href="new_report_format.html?token={/envelope/token}">New Report Format</a></li>
                 <li> <a href="report_format_details.html?token={/envelope/token}">Report Format Details</a></li>
-              </ul>
-            <li> <a href="slaves.html?token={/envelope/token}">Slaves</a></li>
-              <ul>
-                <li> <a href="new_slave.html?token={/envelope/token}">New Slave</a></li>
-                <li> <a href="slave_details.html?token={/envelope/token}">Slave Details</a></li>
               </ul>
           </ul>
           <li> Administration</li>
@@ -4640,13 +4437,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <p>
        A role defines a set of <a href="#permission">permissions</a> that can be applied to a user or
        a <a href="#group">group</a>.
-      </p>
-
-      <a name="slave"></a>
-      <h2>Slave</h2>
-      <p>
-        A slave is another OpenVAS manager on which a <a href="#task">task</a>
-        could be run.
       </p>
 
       <a name="scan"></a>
@@ -5424,10 +5214,6 @@ Public License instead of this License.
       <p>
         Default <a href="glossary.html?token={/envelope/token}#schedule">Schedule</a> for new Tasks.
       </p>
-      <h4>Default Slave</h4>
-      <p>
-        Default <a href="glossary.html?token={/envelope/token}#slave">Slave</a> for new Tasks.
-      </p>
       <h4>Default Target</h4>
       <p>
         Default <a href="glossary.html?token={/envelope/token}#target">Target</a> for new Tasks.
@@ -5482,10 +5268,6 @@ Public License instead of this License.
       <h4>Schedules filter</h4>
       <p>
         Default filter to use when getting the <a href="schedules.html?token={/envelope/token}">Schedules</a> page.
-      </p>
-      <h4>Slaves filter</h4>
-      <p>
-        Default filter to use when getting the <a href="slaves.html?token={/envelope/token}">Slaves</a> page.
       </p>
       <h4>Tags filter</h4>
       <p>
@@ -6438,16 +6220,6 @@ Public License instead of this License.
           <td>Choice</td>
           <td>Full and fast</td>
         </tr>
-        <tr class="even">
-          <td>
-            Slave
-            <xsl:if test="not (gsa:may-op ('get_slaves'))">*</xsl:if>
-          </td>
-          <td>no</td>
-          <td>---</td>
-          <td>Choice</td>
-          <td></td>
-        </tr>
         <tr class="odd">
           <td>Network Source Interface</td>
           <td>no</td>
@@ -6484,7 +6256,7 @@ Public License instead of this License.
           <td></td>
         </tr>
       </table>
-      <xsl:if test="not (gsa:may-op ('get_alerts')) or not (gsa:may-op ('get_schedules')) or not (gsa:may-op ('get_slaves')) or not (gsa:may-op ('get_groups'))">
+      <xsl:if test="not (gsa:may-op ('get_alerts')) or not (gsa:may-op ('get_schedules')) or not (gsa:may-op ('get_scanners')) or not (gsa:may-op ('get_groups'))">
         <b>*</b> not available with the current OMP Server connection.
       </xsl:if>
 
@@ -8119,7 +7891,7 @@ Public License instead of this License.
        <a href="glossary.html?token={/envelope/token}#target">Target</a>,
        <a href="glossary.html?token={/envelope/token}#alert">Alert</a>,
        <a href="glossary.html?token={/envelope/token}#schedule">Schedule</a> and
-       <a href="glossary.html?token={/envelope/token}#slave">Slave</a>.
+       <a href="glossary.html?token={/envelope/token}#scanner">Scanner</a>.
       </p>
       <p>
         Further information about certain details is available by clicking on
@@ -9097,11 +8869,11 @@ Public License instead of this License.
                   <td valign="top">
                     <img src="/img/sensor.svg"
                          border="0" class="icon icon-sm"
-                         alt="Task is configured to run on slave Example Slave"
-                         title="Task is configured to run on slave Example Slave"/>
+                         alt="Task is configured to run on slave scanner Example Slave"
+                         title="Task is configured to run on slave scanner Example Slave"/>
                   </td>
                   <td>
-                    The task is configured to run on a slave.
+                    The task is configured to run on a slave scanner.
                   </td>
                 </tr>
                 <tr>

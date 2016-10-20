@@ -263,12 +263,6 @@ static char *get_schedule (credentials_t *, params_t *, const char *,
 static char *get_schedules (credentials_t *, params_t *, const char *,
                             cmd_response_data_t*);
 
-static char *get_slave (credentials_t *, params_t *, const char *,
-                        cmd_response_data_t*);
-
-static char *get_slaves (credentials_t *, params_t *, const char *,
-                         cmd_response_data_t*);
-
 static char *get_user (credentials_t *, params_t *, const char *,
                        cmd_response_data_t*);
 
@@ -1710,12 +1704,6 @@ generate_page (credentials_t *credentials, params_t *params, gchar *response,
 
   if (strcmp (next, "get_schedules") == 0)
     return get_schedules (credentials, params, response, response_data);
-
-  if (strcmp (next, "get_slave") == 0)
-    return get_slave (credentials, params, response, response_data);
-
-  if (strcmp (next, "get_slaves") == 0)
-    return get_slaves (credentials, params, response, response_data);
 
   if (strcmp (next, "get_user") == 0)
     return get_user (credentials, params, response, response_data);
@@ -3458,7 +3446,7 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
   int apply_overrides;
   const char *alerts, *overrides;
   int ret;
-  gchar *alert, *schedule, *slave, *target;
+  gchar *alert, *schedule, *target;
   gchar *openvas_config, *osp_config, *openvas_scanner, *osp_scanner;
 
   alerts = params_value (params, "alerts");
@@ -3526,25 +3514,17 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
                     openvas_connection_close (&connection);
                     g_free (alert));
 
-  PARAM_OR_SETTING (slave, "slave_id",
-                    "aec201fa-8a82-4b61-bebe-a44ea93b2909",
-                    openvas_connection_close (&connection);
-                    g_free (alert);
-                    g_free (schedule));
-
   PARAM_OR_SETTING (target, "target_id",
                     "23409203-940a-4b4a-b70c-447475f18323",
                     openvas_connection_close (&connection);
                     g_free (alert);
-                    g_free (schedule);
-                    g_free (slave));
+                    g_free (schedule));
 
   PARAM_OR_SETTING (openvas_config, "config_id",
                     "fe7ea321-e3e3-4cc6-9952-da836aae83ce",
                     openvas_connection_close (&connection);
                     g_free (alert);
                     g_free (schedule);
-                    g_free (slave);
                     g_free (target));
 
   PARAM_OR_SETTING (osp_config, "osp_config_id",
@@ -3552,7 +3532,6 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
                     openvas_connection_close (&connection);
                     g_free (alert);
                     g_free (schedule);
-                    g_free (slave);
                     g_free (target);
                     g_free (openvas_config));
 
@@ -3561,7 +3540,6 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
                     openvas_connection_close (&connection);
                     g_free (alert);
                     g_free (schedule);
-                    g_free (slave);
                     g_free (target);
                     g_free (openvas_config);
                     g_free (osp_config));
@@ -3571,7 +3549,6 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
                     openvas_connection_close (&connection);
                     g_free (alert);
                     g_free (schedule);
-                    g_free (slave);
                     g_free (target);
                     g_free (openvas_config);
                     g_free (osp_config);
@@ -3586,7 +3563,6 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
                           "<scanner_id>%s</scanner_id>"
                           "<osp_scanner_id>%s</osp_scanner_id>"
                           "<schedule_id>%s</schedule_id>"
-                          "<slave_id>%s</slave_id>"
                           "<target_id>%s</target_id>",
                           alert ? alert : "",
                           (openvas_config && strlen (openvas_config))
@@ -3596,13 +3572,11 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
                           openvas_scanner ? openvas_scanner : "",
                           osp_scanner ? osp_scanner : "",
                           schedule ? schedule : "",
-                          slave ? slave : "",
                           (target && strlen (target))
                            ? target
                            : "b493b7a8-7489-11df-a3ec-002264764cea");
 
   g_free (schedule);
-  g_free (slave);
   g_free (target);
   g_free (openvas_config);
   g_free (osp_config);
@@ -3736,45 +3710,12 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
         }
     }
 
-  if (command_enabled (credentials, "GET_SLAVES"))
-    {
-      /* Get slaves to select in new task UI. */
-      if (openvas_connection_sendf (&connection,
-                                    "<get_slaves"
-                                    " filter=\"rows=-1\"/>")
-          == -1)
-        {
-          g_string_free (xml, TRUE);
-          openvas_connection_close (&connection);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-          return gsad_message (credentials,
-                               "Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while getting the slave list. "
-                               "The current list of slaves is not available. "
-                               "Diagnostics: Failure to send command to manager daemon.",
-                               "/omp?cmd=get_tasks", response_data);
-        }
-
-      if (read_string_c (&connection, &xml))
-        {
-          g_string_free (xml, TRUE);
-          openvas_connection_close (&connection);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-          return gsad_message (credentials,
-                               "Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while getting the slave list. "
-                               "The current list of slaves is not available. "
-                               "Diagnostics: Failure to receive response from manager daemon.",
-                               "/omp?cmd=get_tasks", response_data);
-        }
-    }
-
   if (command_enabled (credentials, "GET_SCANNERS"))
     {
       /* Get scanners to select in new task UI. */
       if (openvas_connection_sendf (&connection,
                                     "<get_scanners"
-                                    " filter=\"rows=-1\"/>")
+                                    " filter=\"rows=-1 type=4\"/>")
           == -1)
         {
           g_string_free (xml, TRUE);
@@ -4273,11 +4214,11 @@ create_task_omp (credentials_t * credentials, params_t *params,
 {
   entity_t entity;
   int ret;
-  gchar *schedule_element, *slave_element, *command;
+  gchar *schedule_element, *command;
   gchar *response, *html;
   const char *no_redirect;
   const char *name, *comment, *config_id, *target_id, *scanner_type;
-  const char *slave_id, *scanner_id, *schedule_id, *schedule_periods;
+  const char *scanner_id, *schedule_id, *schedule_periods;
   const char *max_checks, *max_hosts;
   const char *in_assets, *hosts_ordering, *alterable, *source_iface;
   const char *add_tag, *tag_name, *tag_value, *auto_delete, *auto_delete_data;
@@ -4291,7 +4232,6 @@ create_task_omp (credentials_t * credentials, params_t *params,
   target_id = params_value (params, "target_id");
   scanner_type = params_value (params, "scanner_type");
   hosts_ordering = params_value (params, "hosts_ordering");
-  slave_id = params_value (params, "slave_id");
   schedule_id = params_value (params, "schedule_id");
   schedule_periods = params_value (params, "schedule_periods");
   scanner_id = params_value (params, "scanner_id");
@@ -4312,7 +4252,6 @@ create_task_omp (credentials_t * credentials, params_t *params,
   CHECK (scanner_type);
   if (!strcmp (scanner_type, "1"))
     {
-      slave_id = "";
       hosts_ordering = "";
       max_checks = "";
       source_iface = "";
@@ -4321,7 +4260,6 @@ create_task_omp (credentials_t * credentials, params_t *params,
   else if (!strcmp (scanner_type, "3"))
     {
       config_id = "";
-      slave_id = "";
       hosts_ordering = "";
       max_checks = "";
       source_iface = "";
@@ -4333,7 +4271,6 @@ create_task_omp (credentials_t * credentials, params_t *params,
   CHECK (config_id);
   CHECK (target_id);
   CHECK (hosts_ordering);
-  CHECK (slave_id);
   CHECK (scanner_id);
   CHECK (schedule_id);
   if (params_given (params, "schedule_periods"))
@@ -4396,15 +4333,10 @@ create_task_omp (credentials_t * credentials, params_t *params,
                                   param->value ? param->value : "");
     }
 
-  if (slave_id == NULL || !strcmp (slave_id, "") || !strcmp (slave_id, "0"))
-    slave_element = g_strdup ("");
-  else
-    slave_element = g_strdup_printf ("<slave id=\"%s\"/>", slave_id);
-
   command = g_strdup_printf ("<create_task>"
                              "<config id=\"%s\"/>"
                              "<schedule_periods>%s</schedule_periods>"
-                             "%s%s%s"
+                             "%s%s"
                              "<target id=\"%s\"/>"
                              "<scanner id=\"%s\"/>"
                              "<hosts_ordering>%s</hosts_ordering>"
@@ -4452,7 +4384,6 @@ create_task_omp (credentials_t * credentials, params_t *params,
                              schedule_periods,
                              schedule_element,
                              alert_element->str,
-                             slave_element,
                              target_id,
                              scanner_id,
                              hosts_ordering,
@@ -4477,7 +4408,6 @@ create_task_omp (credentials_t * credentials, params_t *params,
 
   g_free (schedule_element);
   g_string_free (alert_element, TRUE);
-  g_free (slave_element);
 
   switch (ret)
     {
@@ -4717,7 +4647,6 @@ edit_task (credentials_t * credentials, params_t *params, const char *extra_xml,
                                 "%s"
                                 "%s"
                                 "%s"
-                                "%s"
                                 "</commands>",
                                 task_id,
                                 command_enabled (credentials, "GET_ALERTS")
@@ -4727,10 +4656,6 @@ edit_task (credentials_t * credentials, params_t *params, const char *extra_xml,
                                 command_enabled (credentials, "GET_SCHEDULES")
                                  ? "<get_schedules"
                                    " filter=\"rows=-1 sort=name\"/>"
-                                 : "",
-                                command_enabled (credentials, "GET_SLAVES")
-                                 ? "<get_slaves"
-                                   " filter=\"rows=-1\"/>"
                                  : "",
                                 command_enabled (credentials, "GET_SCANNERS")
                                  ? "<get_scanners"
@@ -4828,7 +4753,7 @@ save_task_omp (credentials_t * credentials, params_t *params,
   gchar *html, *response, *format;
   const char *no_redirect;
   const char *comment, *name, *schedule_id, *in_assets;
-  const char *slave_id, *scanner_id, *task_id, *max_checks, *max_hosts;
+  const char *scanner_id, *task_id, *max_checks, *max_hosts;
   const char *config_id, *target_id, *hosts_ordering, *alterable, *source_iface;
   const char *scanner_type, *schedule_periods, *auto_delete, *auto_delete_data;
   const char *apply_overrides, *min_qod;
@@ -4850,7 +4775,6 @@ save_task_omp (credentials_t * credentials, params_t *params,
   config_id = params_value (params, "config_id");
   schedule_id = params_value (params, "schedule_id");
   schedule_periods = params_value (params, "schedule_periods");
-  slave_id = params_value (params, "slave_id");
   scanner_id = params_value (params, "scanner_id");
   max_checks = params_value (params, "max_checks");
   source_iface = params_value (params, "source_iface");
@@ -4861,7 +4785,6 @@ save_task_omp (credentials_t * credentials, params_t *params,
   CHECK_PARAM_INVALID (scanner_type, "Save Task", "edit_task");
   if (!strcmp (scanner_type, "1"))
     {
-      slave_id = "0";
       hosts_ordering = "";
       max_checks = "";
       source_iface = "";
@@ -4870,7 +4793,6 @@ save_task_omp (credentials_t * credentials, params_t *params,
   else if (!strcmp (scanner_type, "3"))
     {
       config_id = "0";
-      slave_id = "0";
       hosts_ordering = "";
       max_checks = "";
       source_iface = "";
@@ -4889,7 +4811,6 @@ save_task_omp (credentials_t * credentials, params_t *params,
     }
   else
     schedule_periods = "0";
-  CHECK_PARAM_INVALID (slave_id, "Save Task", "edit_task");
   CHECK_PARAM_INVALID (scanner_id, "Save Task", "edit_task");
   CHECK_PARAM_INVALID (task_id, "Save Task", "edit_task");
   CHECK_PARAM_INVALID (max_checks, "Save Task", "edit_task");
@@ -4950,7 +4871,6 @@ save_task_omp (credentials_t * credentials, params_t *params,
                             "<config id=\"%%s\"/>"
                             "<schedule id=\"%%s\"/>"
                             "<schedule_periods>%%s</schedule_periods>"
-                            "<slave id=\"%%s\"/>"
                             "<scanner id=\"%%s\"/>"
                             "<preferences>"
                             "<preference>"
@@ -5007,7 +4927,6 @@ save_task_omp (credentials_t * credentials, params_t *params,
               config_id,
               schedule_id,
               schedule_periods,
-              slave_id,
               scanner_id,
               max_checks,
               max_hosts,
@@ -5257,7 +5176,7 @@ start_task_omp (credentials_t * credentials, params_t *params,
 }
 
 /**
- * @brief Reassign a task to a new slave.
+ * @brief Reassign a task to a new OMP slave.
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
@@ -6021,41 +5940,6 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml,
   g_string_free (commands_xml, TRUE);
   free_entity (commands_entity);
 
-  /* Get slaves */
-  if (command_enabled (credentials, "GET_SLAVES"))
-    {
-      if (openvas_connection_sendf (&connection,
-                                    "<get_slaves"
-                                    " filter=\"first=1"
-                                    "          rows=-1\""
-                                    " />")
-          == -1)
-        {
-          g_string_free (xml, TRUE);
-          openvas_connection_close (&connection);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-          return gsad_message (credentials,
-                              "Internal error", __FUNCTION__, __LINE__,
-                              "An internal error occurred while getting slaves list. "
-                              "The current list of resources is not available. "
-                              "Diagnostics: Failure to send command to manager daemon.",
-                              "/omp?cmd=get_tasks", response_data);
-        }
-
-      if (read_string_c (&connection, &xml))
-        {
-          g_string_free (xml, TRUE);
-          openvas_connection_close (&connection);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-          return gsad_message (credentials,
-                              "Internal error", __FUNCTION__, __LINE__,
-                              "An internal error occurred while getting slaves list. "
-                              "The current list of resources is not available. "
-                              "Diagnostics: Failure to receive response from manager daemon.",
-                              "/omp?cmd=get_tasks", response_data);
-        }
-    }
-
   /* Get tag names */
 
   if (openvas_connection_sendf (&connection,
@@ -6497,7 +6381,7 @@ get_credential (credentials_t * credentials, params_t *params,
                 const char *extra_xml, cmd_response_data_t* response_data)
 {
   return get_one ("credential", credentials, params, extra_xml,
-                  "targets=\"1\" scanners=\"1\" slaves=\"1\"", response_data);
+                  "targets=\"1\" scanners=\"1\"", response_data);
 }
 
 /**
@@ -10134,23 +10018,6 @@ delete_trash_schedule_omp (credentials_t * credentials, params_t *params,
                            cmd_response_data_t* response_data)
 {
   return delete_resource ("schedule", credentials, params, 1, "get_trash",
-                          response_data);
-}
-
-/**
- * @brief Delete a trash slave, get all trash, XSL transform the result.
- *
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Result of XSL transformation.
- */
-char *
-delete_trash_slave_omp (credentials_t * credentials, params_t *params,
-                        cmd_response_data_t* response_data)
-{
-  return delete_resource ("slave", credentials, params, 1, "get_trash",
                           response_data);
 }
 
@@ -17203,542 +17070,8 @@ save_override_omp (credentials_t * credentials, params_t *params,
   return ret;
 }
 
-/* Slaves */
-
-/**
- * @brief Returns page to create a new slave.
- *
- * @param[in]  credentials  Credentials of user issuing the action.
- * @param[in]  params       Request parameters.
- * @param[in]  extra_xml    Extra XML to insert inside page element.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Result of XSL transformation.
- */
-static char *
-new_slave (credentials_t *credentials, params_t *params,
-           const char *extra_xml, cmd_response_data_t* response_data)
-{
-  openvas_connection_t connection;
-  gchar *html;
-  GString *xml;
-
-  switch (manager_connect (credentials, &connection, &html,
-                           response_data))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting the credentials list. "
-                             "The slave remains as it was. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_tasks", response_data);
-    }
-
-  if (openvas_connection_sendf (&connection,
-                                "<get_credentials"
-                                " filter=\"first=1 rows=-1 type=up\" />")
-      == -1)
-    {
-      openvas_connection_close (&connection);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting the credentials list. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
-    }
-
-  xml = g_string_new ("<new_slave>");
-  if (extra_xml)
-    g_string_append (xml, extra_xml);
-
-  if (read_string_c (&connection, &xml))
-    {
-      g_string_free (xml, TRUE);
-      openvas_connection_close (&connection);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting the credentials list. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
-    }
-
-  g_string_append (xml, "</new_slave>");
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
-                            response_data);
-}
-
-/**
- * @brief Return the new slave page.
- *
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Result of XSL transformation.
- */
-char *
-new_slave_omp (credentials_t *credentials, params_t *params,
-               cmd_response_data_t* response_data)
-{
-  return new_slave (credentials, params, NULL, response_data);
-}
-
-/**
- * @brief Create a slave, get all slaves, XSL transform the result.
- *
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Result of XSL transformation.
- */
-char *
-create_slave_omp (credentials_t *credentials, params_t *params,
-                  cmd_response_data_t* response_data)
-{
-  int ret;
-  gchar *html, *command, *response;
-  const char *no_redirect, *name, *comment, *host, *port, *credential_id;
-  entity_t entity;
-
-  no_redirect = params_value (params, "no_redirect");
-  name = params_value (params, "name");
-  comment = params_value (params, "comment");
-  host = params_value (params, "host");
-  port = params_value (params, "port");
-  credential_id = params_value (params, "credential_id");
-
-  CHECK_PARAM_INVALID (name, "Create Slave", "new_slave");
-  CHECK_PARAM_INVALID (comment, "Create Slave", "new_slave");
-  CHECK_PARAM_INVALID (host, "Create Slave", "new_slave");
-  CHECK_PARAM_INVALID (port, "Create Slave", "new_slave");
-  CHECK_PARAM_INVALID (credential_id, "Create Slave", "new_slave");
-
-  if (comment)
-    command = g_strdup_printf ("<create_slave>"
-                               "<name>%s</name>"
-                               "<comment>%s</comment>"
-                               "<host>%s</host>"
-                               "<port>%s</port>"
-                               "<credential id=\"%s\"/>"
-                               "</create_slave>",
-                               name,
-                               comment,
-                               host,
-                               port,
-                               credential_id);
-  else
-    command = g_strdup_printf ("<create_slave>"
-                               "<name>%s</name>"
-                               "<host>%s</host>"
-                               "<port>%s</port>"
-                               "<credential id=\"%s\"/>"
-                               "</create_slave>",
-                               name,
-                               host,
-                               port,
-                               credential_id);
-
-  ret = omp (credentials, &response, &entity, response_data, command);
-  g_free (command);
-  switch (ret)
-    {
-      case 0:
-      case -1:
-        break;
-      case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while creating a new slave. "
-                             "No new slave was created. "
-                             "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_slaves", response_data);
-      case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while creating a new slave. "
-                             "It is unclear whether the slave has been created or not. "
-                             "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_slaves", response_data);
-      default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while creating a new slave. "
-                             "It is unclear whether the slave has been created or not. "
-                             "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_slaves", response_data);
-    }
-
-  if (entity_attribute (entity, "id"))
-    params_add (params, "slave_id", entity_attribute (entity, "id"));
-  html = response_from_entity (credentials, params, entity,
-                               (no_redirect && strcmp (no_redirect, "0")),
-                               NULL, "get_slaves",
-                               NULL, "new_slave",
-                               "Create Slave", response_data);
-  free_entity (entity);
-  g_free (response);
-  return html;
-}
-
-/**
- * @brief Get one slave, XSL transform the result.
- *
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- * @param[in]  extra_xml    Extra XML to insert inside page element.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Result of XSL transformation.
- */
-char *
-get_slave (credentials_t * credentials, params_t *params,
-            const char *extra_xml, cmd_response_data_t* response_data)
-{
-  return get_one ("slave", credentials, params, extra_xml, "tasks=\"1\"",
-                  response_data);
-}
-
-/**
- * @brief Get all slaves, XSL transform the result.
- *
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- * @param[in]  extra_xml    Extra XML to insert inside page element.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Result of XSL transformation.
- */
-char *
-get_slaves (credentials_t * credentials, params_t *params,
-             const char *extra_xml, cmd_response_data_t* response_data)
-{
-  return get_many ("slave", credentials, params, extra_xml, NULL,
-                   response_data);
-}
-
-/**
- * @brief Delete a slave, get all slaves, XSL transform the result.
- *
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Result of XSL transformation.
- */
-char *
-delete_slave_omp (credentials_t * credentials, params_t *params,
-                  cmd_response_data_t* response_data)
-{
-  return delete_resource ("slave", credentials, params, 0, "get_slaves",
-                          response_data);
-}
-
-/**
- * @brief Get all slaves, XSL transform the result.
- *
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Result of XSL transformation.
- */
-char *
-get_slaves_omp (credentials_t * credentials, params_t *params,
-                cmd_response_data_t* response_data)
-{
-  return get_slaves (credentials, params, NULL, response_data);
-}
-
-/**
- * @brief Get one slave, XSL transform the result.
- *
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Result of XSL transformation.
- */
-char *
-get_slave_omp (credentials_t * credentials, params_t *params,
-               cmd_response_data_t* response_data)
-{
-  return get_slave (credentials, params, NULL, response_data);
-}
-
-/**
- * @brief Setup edit_slave XML, XSL transform the result.
- *
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- * @param[in]  extra_xml    Extra XML to insert inside page element.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Result of XSL transformation.
- */
-char *
-edit_slave (credentials_t * credentials, params_t *params,
-            const char *extra_xml, cmd_response_data_t* response_data)
-{
-  GString *xml;
-  openvas_connection_t connection;
-  gchar *html;
-  const char *slave_id, *next;
-
-  slave_id = params_value (params, "slave_id");
-  next = params_value (params, "next");
-
-  if (slave_id == NULL)
-    {
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while editing a slave. "
-                           "The slave remains as it was. "
-                           "Diagnostics: Required parameter was NULL.",
-                           "/omp?cmd=get_tasks", response_data);
-    }
-
-  if (next == NULL)
-    next = "get_slave";
-
-  switch (manager_connect (credentials, &connection, &html,
-                           response_data))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while editing a slave. "
-                             "The slave remains as it was. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_tasks", response_data);
-    }
-
-  if (openvas_connection_sendf (&connection,
-                                "<commands>"
-                                "<get_slaves slave_id=\"%s\" details=\"1\" />"
-                                "<get_credentials filter=\"first=1 rows=-1 type=up\" />"
-                                "</commands>",
-                                slave_id)
-      == -1)
-    {
-      openvas_connection_close (&connection);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting slave info. "
-                           "Diagnostics: Failure to send command to manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
-    }
-
-  xml = g_string_new ("");
-
-  if (extra_xml)
-    g_string_append (xml, extra_xml);
-
-  g_string_append_printf (xml,
-                          "<edit_slave>"
-                          "<slave id=\"%s\"/>"
-                          /* Page that follows. */
-                          "<next>%s</next>",
-                          slave_id,
-                          next);
-
-  if (read_string_c (&connection, &xml))
-    {
-      g_string_free (xml, TRUE);
-      openvas_connection_close (&connection);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred while getting slave info. "
-                           "Diagnostics: Failure to receive response from manager daemon.",
-                           "/omp?cmd=get_tasks", response_data);
-    }
-
-  /* Cleanup, and return transformed XML. */
-
-  g_string_append (xml, "</edit_slave>");
-  openvas_connection_close (&connection);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
-                            response_data);
-}
-
-/**
- * @brief Setup edit_slave XML, XSL transform the result.
- *
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Result of XSL transformation.
- */
-char *
-edit_slave_omp (credentials_t * credentials, params_t *params,
-                cmd_response_data_t* response_data)
-{
-  return edit_slave (credentials, params, NULL, response_data);
-}
-
-/**
- * @brief Modify a slave, get all slaves, XSL transform the result.
- *
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Result of XSL transformation.
- */
-char *
-save_slave_omp (credentials_t * credentials, params_t *params,
-                cmd_response_data_t* response_data)
-{
-  int ret;
-  gchar *html, *response;
-  const char *no_redirect;
-  const char *slave_id, *name, *comment, *host, *port, *credential_id;
-  entity_t entity;
-
-  no_redirect = params_value (params, "no_redirect");
-  slave_id = params_value (params, "slave_id");
-  name = params_value (params, "name");
-  comment = params_value (params, "comment");
-  host = params_value (params, "host");
-  port = params_value (params, "port");
-  credential_id = params_value (params, "credential_id");
-
-  CHECK_PARAM_INVALID (slave_id, "Save Slave", "edit_slave");
-  CHECK_PARAM_INVALID (name, "Save Slave", "edit_slave");
-  CHECK_PARAM_INVALID (comment, "Save Slave", "edit_slave");
-  CHECK_PARAM_INVALID (host, "Save Slave", "edit_slave");
-  CHECK_PARAM_INVALID (port, "Save Slave", "edit_slave");
-  CHECK_PARAM_INVALID (credential_id, "Save Slave", "edit_slave");
-
-  /* Modify the slave. */
-
-  response = NULL;
-  entity = NULL;
-  ret = ompf (credentials,
-              &response,
-              &entity,
-              response_data,
-              "<modify_slave slave_id=\"%s\">"
-              "<name>%s</name>"
-              "<comment>%s</comment>"
-              "<host>%s</host>"
-              "<port>%s</port>"
-              "<credential id=\"%s\"/>"
-              "</modify_slave>",
-              slave_id,
-              name,
-              comment,
-              host,
-              port,
-              credential_id);
-
-  switch (ret)
-    {
-      case 0:
-      case -1:
-        break;
-      case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while saving a slave. "
-                             "The slave was not saved. "
-                             "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_slaves", response_data);
-      case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while saving a slave. "
-                             "It is unclear whether the slave has been saved or not. "
-                             "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_slaves", response_data);
-      default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while saving a slave. "
-                             "It is unclear whether the slave has been saved or not. "
-                             "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_slaves", response_data);
-    }
-
-  html = response_from_entity (credentials, params, entity,
-                               (no_redirect && strcmp (no_redirect, "0")),
-                               NULL, "get_slaves",
-                               NULL, "edit_slave",
-                               "Save Slave", response_data);
-  free_entity (entity);
-  g_free (response);
-  return html;
-}
-
-/**
- * @brief Export a slave.
- *
- * @param[in]   credentials          Username and password for authentication.
- * @param[in]   params               Request parameters.
- * @param[out]  content_type         Content type return.
- * @param[out]  content_disposition  Content disposition return.
- * @param[out]  content_length       Content length return.
- * @param[out]  response_data        Extra data return for the HTTP response.
- *
- * @return Slave XML on success.  HTML result of XSL transformation on error.
- */
-char *
-export_slave_omp (credentials_t * credentials, params_t *params,
-                  enum content_type * content_type, char **content_disposition,
-                  gsize *content_length, cmd_response_data_t* response_data)
-{
-  return export_resource ("slave", credentials, params, content_type,
-                          content_disposition, content_length, response_data);
-}
-
-/**
- * @brief Export a list of slaves.
- *
- * @param[in]   credentials          Username and password for authentication.
- * @param[in]   params               Request parameters.
- * @param[out]  content_type         Content type return.
- * @param[out]  content_disposition  Content disposition return.
- * @param[out]  content_length       Content length return.
- * @param[out]  response_data        Extra data return for the HTTP response.
- *
- * @return Slaves XML on success.  HTML result of XSL transformation
- *         on error.
- */
-char *
-export_slaves_omp (credentials_t * credentials, params_t *params,
-                   enum content_type * content_type, char **content_disposition,
-                   gsize *content_length, cmd_response_data_t* response_data)
-{
-  return export_many ("slave", credentials, params, content_type,
-                      content_disposition, content_length, response_data);
-}
+
+/* Scanners. */
 
 /**
  * @brief Get all scanners, XSL transform the result.
@@ -18425,6 +17758,9 @@ save_scanner_omp (credentials_t * credentials, params_t *params,
   return html;
 }
 
+
+/* Schedules. */
+
 /**
  * @brief Get one schedule, XSL transform the result.
  *
@@ -18780,14 +18116,13 @@ get_system_reports_omp (credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_tasks", response_data);
     }
 
-  if (command_enabled (credentials, "GET_SLAVES"))
+  if (command_enabled (credentials, "GET_SCANNERS"))
     {
-      /* Get the slaves. */
+      /* Get the OMP scanners. */
 
       if (openvas_connection_sendf (&connection,
-                                    "<get_slaves"
-                                    " sort_field=\"name\""
-                                    " sort_order=\"ascending\"/>")
+                                    "<get_scanners"
+                                    " filter=\"sort=name rows=-1 type=OMP\"/>")
           == -1)
         {
           g_string_free (xml, TRUE);
@@ -19781,8 +19116,6 @@ get_trash (credentials_t * credentials, params_t *params, const char *extra_xml,
 
   GET_TRASH_RESOURCE ("GET_SCHEDULES", "get_schedules", "schedules");
 
-  GET_TRASH_RESOURCE ("GET_SLAVES", "get_slaves", "slaves");
-
   GET_TRASH_RESOURCE ("GET_TAGS", "get_tags", "tags");
 
   GET_TRASH_RESOURCE ("GET_TARGETS", "get_targets", "targets");
@@ -19930,8 +19263,6 @@ get_my_settings_omp (credentials_t * credentials, params_t *params,
     g_string_append (commands, "<get_scanners/>");
   if (command_enabled (credentials, "GET_SCHEDULES"))
     g_string_append (commands, "<get_schedules/>");
-  if (command_enabled (credentials, "GET_SLAVES"))
-    g_string_append (commands, "<get_slaves/>");
   if (command_enabled (credentials, "GET_TARGETS"))
     g_string_append (commands, "<get_targets/>");
   g_string_append (commands, "</commands>");
@@ -20015,8 +19346,6 @@ edit_my_settings (credentials_t * credentials, params_t *params,
     g_string_append (commands, "<get_scanners/>");
   if (command_enabled (credentials, "GET_SCHEDULES"))
     g_string_append (commands, "<get_schedules/>");
-  if (command_enabled (credentials, "GET_SLAVES"))
-    g_string_append (commands, "<get_slaves/>");
   if (command_enabled (credentials, "GET_TARGETS"))
     g_string_append (commands, "<get_targets/>");
   g_string_append (commands, "</commands>");
