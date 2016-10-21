@@ -23543,7 +23543,7 @@ edit_role (credentials_t * credentials, params_t *params,
 
   if (extra_xml)
     g_string_append (extra, extra_xml);
-  html = edit_resource ("role", credentials, params, extra->str, NULL,
+  html = edit_resource ("role", credentials, params, NULL, extra->str,
                         response_data);
   g_string_free (extra, TRUE);
   return html;
