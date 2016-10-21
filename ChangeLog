@@ -1,3 +1,7 @@
+2016-10-21  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (new_task): Allow any type of scanner.
+
 2016-10-21  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/gsad_omp.c (edit_role): Fix order of parameters in edit_resource

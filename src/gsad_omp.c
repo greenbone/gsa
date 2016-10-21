@@ -3715,7 +3715,7 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
       /* Get scanners to select in new task UI. */
       if (openvas_connection_sendf (&connection,
                                     "<get_scanners"
-                                    " filter=\"rows=-1 type=4\"/>")
+                                    " filter=\"rows=-1\"/>")
           == -1)
         {
           g_string_free (xml, TRUE);
