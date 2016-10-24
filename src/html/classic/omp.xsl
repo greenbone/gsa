@@ -21932,7 +21932,7 @@ should not have received it.
                 </tr>
                 <tr>
                   <td></td>
-                  <td><xsl:value-of select="vuln:reference/@href"/></td>
+                  <td><a class="external" href="{vuln:reference/@href}"><xsl:value-of select="vuln:reference/@href"/></a></td>
                 </tr>
               </xsl:for-each>
             </table>
@@ -22566,7 +22566,11 @@ should not have received it.
           </xsl:if>
           <tr>
             <td valign="top"><xsl:value-of select="gsa:i18n ('Reference URL')"/>:</td>
-            <td valign="top"><xsl:value-of select="info/cert_bund_adv/raw_data/Advisory/Reference_URL"/></td>
+            <td valign="top">
+              <a class="external" href="{info/cert_bund_adv/raw_data/Advisory/Reference_URL}">
+                <xsl:value-of select="info/cert_bund_adv/raw_data/Advisory/Reference_URL"/>
+              </a>
+            </td>
           </tr>
         </table>
 
@@ -22620,7 +22624,13 @@ should not have received it.
             <h2><xsl:value-of select="gsa:i18n ('Other links')"/></h2>
             <ul>
             <xsl:for-each select="info/cert_bund_adv/raw_data/Advisory/Description/Element/Infos/Info">
-              <li><p><b><xsl:value-of select="@Info_Issuer"/>:</b><br/> <xsl:value-of select="@Info_URL"/></p></li>
+              <li>
+                <p><b><xsl:value-of select="@Info_Issuer"/>:</b><br/>
+                  <a class="external" href="{@Info_URL}">
+                    <xsl:value-of select="@Info_URL"/>
+                  </a>
+                </p>
+              </li>
             </xsl:for-each>
             </ul>
           </xsl:when>
@@ -22704,7 +22714,11 @@ should not have received it.
           </tr>
           <tr>
             <td valign="top"><xsl:value-of select="gsa:i18n ('Advisory link')"/>:</td>
-            <td valign="top"><xsl:value-of select="info/dfn_cert_adv/raw_data/atom:entry/atom:link[@rel='alternate']/@href"/></td>
+            <td valign="top">
+              <a class="external" href="{info/dfn_cert_adv/raw_data/atom:entry/atom:link[@rel='alternate']/@href}">
+                <xsl:value-of select="info/dfn_cert_adv/raw_data/atom:entry/atom:link[@rel='alternate']/@href"/>
+              </a>
+            </td>
           </tr>
           <tr>
             <td valign="top"><xsl:value-of select="gsa:i18n ('Severity')"/>:</td>
