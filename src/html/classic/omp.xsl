@@ -7268,6 +7268,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="html-edit-task-scan-options">
+  <xsl:variable name="container_task">
+    <xsl:choose>
+      <xsl:when test="commands_response/get_tasks_response/task/target/@id = ''">1</xsl:when>
+      <xsl:otherwise>0</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
   <div class="form-group">
     <xsl:variable name="in_assets" select="commands_response/get_tasks_response/task/preferences/preference[scanner_name='in_assets']"/>
     <label class="col-2 control-label">
@@ -7322,77 +7329,79 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </div>
   </div>
-  <div class="offset-container offset-2 col-10 form-enable-item--in-assets">
-    <div class="form-group">
-      <xsl:variable name="apply_overrides"
-        select="commands_response/get_tasks_response/task/preferences/preference[scanner_name='assets_apply_overrides']"/>
-      <label class="col-3 control-label">
-        <xsl:value-of select="gsa:i18n ('Apply Overrides')"/>
-      </label>
-      <div class="col-9">
-        <xsl:choose>
-          <xsl:when test="$apply_overrides/value='yes'">
-            <div class="form-item">
-              <div class="radio">
-                <label>
-                  <input type="radio" name="apply_overrides" value="1" checked="1"
-                    class="form-enable-item--in-assets" />
-                  <xsl:value-of select="gsa:i18n ('yes')"/>
-                </label>
+  <xsl:if test="$container_task = 0">
+    <div class="offset-container offset-2 col-10 form-enable-item--in-assets">
+      <div class="form-group">
+        <xsl:variable name="apply_overrides"
+          select="commands_response/get_tasks_response/task/preferences/preference[scanner_name='assets_apply_overrides']"/>
+        <label class="col-3 control-label">
+          <xsl:value-of select="gsa:i18n ('Apply Overrides')"/>
+        </label>
+        <div class="col-9">
+          <xsl:choose>
+            <xsl:when test="$apply_overrides/value='yes'">
+              <div class="form-item">
+                <div class="radio">
+                  <label>
+                    <input type="radio" name="apply_overrides" value="1" checked="1"
+                      class="form-enable-item--in-assets" />
+                    <xsl:value-of select="gsa:i18n ('yes')"/>
+                  </label>
+                </div>
               </div>
-            </div>
-            <div class="form-item">
-              <div class="radio">
-                <label>
-                  <input type="radio" name="apply_overrides" value="0"
-                    class="form-enable-item--in-assets" />
-                  <xsl:value-of select="gsa:i18n ('no')"/>
-                </label>
+              <div class="form-item">
+                <div class="radio">
+                  <label>
+                    <input type="radio" name="apply_overrides" value="0"
+                      class="form-enable-item--in-assets" />
+                    <xsl:value-of select="gsa:i18n ('no')"/>
+                  </label>
+                </div>
               </div>
-            </div>
-          </xsl:when>
-          <xsl:otherwise>
-            <div class="form-item">
-              <div class="radio">
-                <label>
-                  <input type="radio" name="apply_overrides" value="1"
-                    class="form-enable-item--in-assets" />
-                  <xsl:value-of select="gsa:i18n ('yes')"/>
-                </label>
+            </xsl:when>
+            <xsl:otherwise>
+              <div class="form-item">
+                <div class="radio">
+                  <label>
+                    <input type="radio" name="apply_overrides" value="1"
+                      class="form-enable-item--in-assets" />
+                    <xsl:value-of select="gsa:i18n ('yes')"/>
+                  </label>
+                </div>
               </div>
-            </div>
-            <div class="form-item">
-              <div class="radio">
-                <label>
-                  <input type="radio" name="apply_overrides" value="0" checked="1"
-                    class="form-enable-item--in-assets" />
-                  <xsl:value-of select="gsa:i18n ('no')"/>
-                </label>
+              <div class="form-item">
+                <div class="radio">
+                  <label>
+                    <input type="radio" name="apply_overrides" value="0" checked="1"
+                      class="form-enable-item--in-assets" />
+                    <xsl:value-of select="gsa:i18n ('no')"/>
+                  </label>
+                </div>
               </div>
-            </div>
-          </xsl:otherwise>
-        </xsl:choose>
-      </div>
-    </div>
-    <div class="form-group">
-      <xsl:variable name="min_qod"
-        select="commands_response/get_tasks_response/task/preferences/preference[scanner_name='assets_min_qod']"/>
-      <label class="col-3 control-label">
-        <xsl:value-of select="gsa:i18n ('Min QoD')"/>
-      </label>
-      <div class="col-9">
-        <div class="form-item">
-          <input type="text" name="min_qod" value="{$min_qod/value}" size="4"
-            class="spinner form-enable-item--in-assets"
-            data-type="float" min="0"/>
-        </div>
-        <div class="form-item">
-          <xsl:text>%</xsl:text>
+            </xsl:otherwise>
+          </xsl:choose>
         </div>
       </div>
+      <div class="form-group">
+        <xsl:variable name="min_qod"
+          select="commands_response/get_tasks_response/task/preferences/preference[scanner_name='assets_min_qod']"/>
+        <label class="col-3 control-label">
+          <xsl:value-of select="gsa:i18n ('Min QoD')"/>
+        </label>
+        <div class="col-9">
+          <div class="form-item">
+            <input type="text" name="min_qod" value="{$min_qod/value}" size="4"
+              class="spinner form-enable-item--in-assets"
+              data-type="float" min="0"/>
+          </div>
+          <div class="form-item">
+            <xsl:text>%</xsl:text>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
-  <xsl:if test="commands_response/get_tasks_response/task/status = 'New'">
+  </xsl:if>
+  <xsl:if test="commands_response/get_tasks_response/task/status = 'New' and $container_task = 0">
     <div class="form-group">
       <label class="col-2 control-label">
         <xsl:value-of select="gsa:i18n ('Alterable Task')"/>
@@ -7602,9 +7611,31 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template name="html-edit-task-form">
+
+  <xsl:variable name="container_task">
+    <xsl:choose>
+      <xsl:when test="commands_response/get_tasks_response/task/target/@id = ''">1</xsl:when>
+      <xsl:otherwise>0</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
+  <xsl:variable name="new_task">
+    <xsl:choose>
+      <xsl:when test="commands_response/get_tasks_response/task/status = 'New' or commands_response/get_tasks_response/task/alterable != 0">1</xsl:when>
+      <xsl:otherwise>0</xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
   <div class="edit-dialog">
     <div class="title">
-      <xsl:value-of select="gsa:i18n ('Edit Task')"/>
+      <xsl:choose>
+        <xsl:when test="$container_task = 1">
+          <xsl:value-of select="gsa:i18n ('Edit Container Task')"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="gsa:i18n ('Edit Task')"/>
+        </xsl:otherwise>
+      </xsl:choose>
     </div>
 
     <div class="content">
@@ -7622,12 +7653,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:if test="not (gsa:may-op ('get_schedules'))">
           <input type="hidden" name="schedule_id" value="0"/>
         </xsl:if>
-        <xsl:variable name="new_task">
-          <xsl:choose>
-            <xsl:when test="commands_response/get_tasks_response/task/status = 'New' or commands_response/get_tasks_response/task/alterable != 0">1</xsl:when>
-            <xsl:otherwise>0</xsl:otherwise>
-          </xsl:choose>
-        </xsl:variable>
 
         <xsl:call-template name="html-edit-task-name"/>
 
@@ -7635,7 +7660,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 
         <xsl:choose>
-          <xsl:when test="commands_response/get_tasks_response/task/target/@id = ''">
+          <xsl:when test="$container_task = 1">
 
             <!-- Container -->
 
@@ -7653,108 +7678,82 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <xsl:call-template name="html-edit-task-schedule"/>
             <xsl:call-template name="html-edit-task-scan-options"/>
 
-            <xsl:if test="$new_task = 0">
-              <input type="hidden" name="scanner_type" value="{commands_response/get_tasks_response/task/scanner/type}"/>
-              <input type="hidden" name="scanner_id" value="0"/>
-              <input type="hidden" name="osp_scanner_id" value="0"/>
-              <input type="hidden" name="cve_scanner_id" value="0"/>
-              <input type="hidden" name="cmd" value="save_task"/>
-              <input type="hidden" name="config_id" value="0"/>
-              <input type="hidden" name="osp_config_id" value="0"/>
+            <xsl:choose>
+              <xsl:when test="$new_task = 0">
+                <input type="hidden" name="scanner_type" value="{commands_response/get_tasks_response/task/scanner/type}"/>
+                <input type="hidden" name="scanner_id" value="0"/>
+                <input type="hidden" name="osp_scanner_id" value="0"/>
+                <input type="hidden" name="cve_scanner_id" value="0"/>
+                <input type="hidden" name="cmd" value="save_task"/>
+                <input type="hidden" name="config_id" value="0"/>
+                <input type="hidden" name="osp_config_id" value="0"/>
 
-              <xsl:call-template name="html-edit-task-scanner-disabled"/>
+                <xsl:call-template name="html-edit-task-scanner-disabled"/>
 
-              <div class="form-group offset-container offset-2 form-selection-item-scanner form-selection-item-scanner--{commands_response/get_tasks_response/task/scanner/type}">
-                <xsl:if test="commands_response/get_tasks_response/task/scanner/type != 3">
-                  <xsl:call-template name="html-edit-task-config-disabled"/>
+                <div class="form-group offset-container offset-2 form-selection-item-scanner form-selection-item-scanner--{commands_response/get_tasks_response/task/scanner/type}">
+                  <xsl:if test="commands_response/get_tasks_response/task/scanner/type != 3">
+                    <xsl:call-template name="html-edit-task-config-disabled"/>
+                  </xsl:if>
+                  <xsl:if test="commands_response/get_tasks_response/task/scanner/type = 2">
+                    <xsl:call-template name="html-edit-task-openvas-options"/>
+                  </xsl:if>
+                </div>
+              </xsl:when>
+              <xsl:otherwise>
+                <!-- Regular task.  Alterable. -->
+                <xsl:call-template name="html-edit-task-scanner">
+                </xsl:call-template>
+
+                <!-- OpenVAS Scanner. -->
+                <xsl:if test="count(commands_response/get_scanners_response/scanner[type = 2])">
+                  <div class="form-group offset-container offset-2 form-selection-item-scanner form-selection-item-scanner--2">
+                    <input type="hidden" name="scanner_type" value="2" class="form-selection-input-scanner form-selection-input-scanner--2"/>
+                    <xsl:call-template name="html-edit-task-config">
+                      <xsl:with-param name="scanner_type">2</xsl:with-param>
+                      <xsl:with-param name="type">0</xsl:with-param>
+                    </xsl:call-template>
+                    <xsl:call-template name="html-edit-task-openvas-options"/>
+                  </div>
                 </xsl:if>
-                <xsl:if test="commands_response/get_tasks_response/task/scanner/type = 2">
-                  <xsl:call-template name="html-edit-task-openvas-options"/>
+
+                <!-- OMP Scanner. -->
+                <xsl:if test="count(commands_response/get_scanners_response/scanner[type = 4])">
+                  <div class="form-group offset-container offset-2 form-selection-item-scanner form-selection-item-scanner--4">
+                    <input type="hidden" name="scanner_type" value="4" class="form-selection-input-scanner form-selection-input-scanner--4"/>
+                    <xsl:call-template name="html-edit-task-config">
+                      <xsl:with-param name="scanner_type">4</xsl:with-param>
+                      <xsl:with-param name="type">0</xsl:with-param>
+                    </xsl:call-template>
+                    <xsl:call-template name="html-edit-task-openvas-options"/>
+                  </div>
                 </xsl:if>
-              </div>
-            </xsl:if>
+
+                <!-- OSP Scanner. -->
+                <xsl:if test="count(commands_response/get_scanners_response/scanner[type = 1]) and count(commands_response/get_configs_response/config[type = 1])">
+                  <div class="form-group offset-container offset-2 form-selection-item-scanner form-selection-item-scanner--1">
+                    <input type="hidden" name="scanner_type" value="1" class="form-selection-input-scanner form-selection-input-scanner--1"/>
+                    <xsl:call-template name="html-edit-task-config">
+                      <xsl:with-param name="type">1</xsl:with-param>
+                      <xsl:with-param name="scanner_type">1</xsl:with-param>
+                    </xsl:call-template>
+                  </div>
+                </xsl:if>
+
+                <!-- CVE Scanner. -->
+                <xsl:if test="count(commands_response/get_scanners_response/scanner[type = 3])">
+                  <div class="form-group offset-container offset-2 form-selection-item-scanner form-selection-item-scanner--3">
+                    <input type="hidden" name="scanner_type" value="3" class="form-selection-input-scanner form-selection-input-scanner--3"/>
+                  </div>
+                </xsl:if>
+              </xsl:otherwise>
+            </xsl:choose>
           </xsl:otherwise>
         </xsl:choose>
-        <xsl:if test="$new_task != 0">
-
-          <!-- Regular task.  Alterable. -->
-          <xsl:call-template name="html-edit-task-scanner">
-          </xsl:call-template>
-
-          <!-- OpenVAS Scanner. -->
-          <xsl:if test="count(commands_response/get_scanners_response/scanner[type = 2])">
-            <div class="form-group offset-container offset-2 form-selection-item-scanner form-selection-item-scanner--2">
-              <input type="hidden" name="scanner_type" value="2" class="form-selection-input-scanner form-selection-input-scanner--2"/>
-              <xsl:call-template name="html-edit-task-config">
-                <xsl:with-param name="scanner_type">2</xsl:with-param>
-                <xsl:with-param name="type">0</xsl:with-param>
-              </xsl:call-template>
-              <xsl:call-template name="html-edit-task-openvas-options"/>
-            </div>
-          </xsl:if>
-
-          <!-- OMP Scanner. -->
-          <xsl:if test="count(commands_response/get_scanners_response/scanner[type = 4])">
-            <div class="form-group offset-container offset-2 form-selection-item-scanner form-selection-item-scanner--4">
-              <input type="hidden" name="scanner_type" value="4" class="form-selection-input-scanner form-selection-input-scanner--4"/>
-              <xsl:call-template name="html-edit-task-config">
-                <xsl:with-param name="scanner_type">4</xsl:with-param>
-                <xsl:with-param name="type">0</xsl:with-param>
-              </xsl:call-template>
-              <xsl:call-template name="html-edit-task-openvas-options"/>
-            </div>
-          </xsl:if>
-
-          <!-- OSP Scanner. -->
-          <xsl:if test="count(commands_response/get_scanners_response/scanner[type = 1]) and count(commands_response/get_configs_response/config[type = 1])">
-            <div class="form-group offset-container offset-2 form-selection-item-scanner form-selection-item-scanner--1">
-              <input type="hidden" name="scanner_type" value="1" class="form-selection-input-scanner form-selection-input-scanner--1"/>
-              <xsl:call-template name="html-edit-task-config">
-                <xsl:with-param name="type">1</xsl:with-param>
-                <xsl:with-param name="scanner_type">1</xsl:with-param>
-              </xsl:call-template>
-            </div>
-          </xsl:if>
-
-          <!-- CVE Scanner. -->
-          <xsl:if test="count(commands_response/get_scanners_response/scanner[type = 3])">
-            <div class="form-group offset-container offset-2 form-selection-item-scanner form-selection-item-scanner--3">
-              <input type="hidden" name="scanner_type" value="3" class="form-selection-input-scanner form-selection-input-scanner--3"/>
-            </div>
-          </xsl:if>
-        </xsl:if>
       </form>
     </div>
   </div>
 
-  <!-- Import Report window. -->
-
   <xsl:if test="commands_response/get_tasks_response/task/target/@id = '' and gsa:may-op ('create_report')">
-    <div class="gb_window">
-      <div class="gb_window_part_left"></div>
-      <div class="gb_window_part_right"></div>
-      <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n ('Import Report')"/>
-        <a href="/help/task_details.html?token={/envelope/token}#import_report" title="{gsa:i18n ('Help')}: {gsa:i18n ('Import Report')}"
-          class="icon icon-sm">
-          <img src="/img/help.svg"/>
-        </a>
-      </div>
-      <div class="gb_window_part_content">
-        <form action="/omp" method="post" enctype="multipart/form-data">
-          <div class="pull-right">
-            <input type="submit" name="submit" value="{gsa:i18n ('Add Report')}"/>
-          </div>
-          <input type="hidden" name="token" value="{/envelope/token}"/>
-          <input type="hidden" name="cmd" value="create_report"/>
-          <input type="hidden" name="caller" value="{/envelope/current_page}"/>
-          <input type="hidden" name="next" value="{next}"/>
-          <input type="hidden" name="task_id" value="{task/@id}"/>
-          <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
-          <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-          <input type="file" name="xml_file" size="30"/>
-        </form>
-      </div>
-    </div>
   </xsl:if>
 </xsl:template>
 
