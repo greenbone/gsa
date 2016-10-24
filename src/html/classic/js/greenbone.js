@@ -1387,8 +1387,10 @@
     doc.find('.ajax-post').each(function() {
       var elem = $(this);
       var busy_text = elem.data('busy-text');
-      if (! busy_text)
+
+      if (!busy_text) {
         busy_text = gsa._('Please wait...');
+      }
 
       function reload_next(response) {
         var action_result = $(response).find('action_result');
@@ -1427,6 +1429,7 @@
           form: form[0],
           params: {next_xml: 0},
         });
+
         var busy_dialog = show_busy_dialog(busy_text, request);
 
         request.do(function(response) {
@@ -1457,6 +1460,10 @@
           if (jqXHR.status == 0 && jqXHR.readyState == 0) {
             // Request was aborted. Do not show error dialog.
             return;
+          }
+
+          if (busy_dialog) {
+            busy_dialog.dialog('close');
           }
 
           var dialog = new InfoDialog({
@@ -1936,29 +1943,30 @@
     var text = $('<b>');
     var img = $('<img/>');
 
-    box.css ('text-align', 'center');
+    box.css('text-align', 'center');
 
-    img.attr ('src', '/img/loading.gif');
-    img.css ('margin-right', '16px');
-    box.append (img);
+    img.attr('src', '/img/loading.gif');
+    img.css('margin-right', '16px');
+    box.append(img);
 
     text.text(busy_text);
-    box.append (text);
+    box.append(text);
 
     box.dialog({
-                height: 100,
-                width: 300,
-                modal: true,
-                closeText: 'Cancel',
-                close: function() {
-                  request.ajax_request.abort('Aborted');
-                  box.dialog('destroy');
-                },
-                classes: {
-                          "ui-dialog": "dialog-transparent",
-                          "ui-dialog-titlebar": "dialog-title-transparent",
-                         },
-               });
+      height: 100,
+      width: 300,
+      modal: true,
+      closeText: 'Cancel',
+      close: function() {
+        request.ajax_request.abort('Aborted');
+        box.dialog('destroy');
+      },
+      classes: {
+        "ui-dialog": "dialog-transparent",
+        "ui-dialog-titlebar": "dialog-title-transparent",
+      },
+    });
+
     $('.ui-widget-overlay').css('opacity', '0.25');
 
     return box;
