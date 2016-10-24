@@ -770,6 +770,9 @@
 
       self.setErrorFromResponse(response);
 
+      // restore the original button.
+      self.finished();
+
       $('html').css('cursor', '');
     };
 

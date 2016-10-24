@@ -10,6 +10,11 @@
 
 2016-10-24  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/greenbone.js (OMPDialog.prototype.show): Restore
+	original OMPDialog button if request has failed.
+
+2016-10-24  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/greenbone.js (ajax-post): Close busy dialog if the
 	request was not successfully. Also update coding style.
 
