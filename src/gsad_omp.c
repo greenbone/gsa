@@ -5940,6 +5940,40 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml,
   g_string_free (commands_xml, TRUE);
   free_entity (commands_entity);
 
+  /* Get slave scanners. */
+
+  if (command_enabled (credentials, "GET_SCANNERS"))
+    {
+      if (openvas_connection_sendf (&connection,
+                                    "<get_scanners"
+                                    " filter=\"first=1 rows=-1 type=4\"/>")
+          == -1)
+        {
+          g_string_free (xml, TRUE);
+          openvas_connection_close (&connection);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          return gsad_message (credentials,
+                              "Internal error", __FUNCTION__, __LINE__,
+                              "An internal error occurred while getting slaves list. "
+                              "The current list of resources is not available. "
+                              "Diagnostics: Failure to send command to manager daemon.",
+                              "/omp?cmd=get_tasks", response_data);
+        }
+
+      if (read_string_c (&connection, &xml))
+        {
+          g_string_free (xml, TRUE);
+          openvas_connection_close (&connection);
+          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          return gsad_message (credentials,
+                              "Internal error", __FUNCTION__, __LINE__,
+                              "An internal error occurred while getting slaves list. "
+                              "The current list of resources is not available. "
+                              "Diagnostics: Failure to receive response from manager daemon.",
+                              "/omp?cmd=get_tasks", response_data);
+        }
+    }
+
   /* Get tag names */
 
   if (openvas_connection_sendf (&connection,

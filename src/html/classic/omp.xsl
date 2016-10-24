@@ -4600,7 +4600,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template name="move_task_icon">
   <xsl:param name="task" select="."/>
-  <xsl:param name="slaves" select="../../../get_scanners_response/scanner"/>
+  <xsl:param name="slaves" select="../../../get_scanners_response/scanner[type=4]"/>
   <xsl:param name="next" select="'get_task'"/>
   <xsl:variable name="current_slave_id" select="$task/scanner/@id"/>
   <xsl:choose>
@@ -4609,7 +4609,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:variable name="slave_count" select="count ($slaves [@id != $current_slave_id])"/>
         <img src="/img/wizard.svg" class="icon icon-sm"/>
         <ul>
-          <xsl:if test="$current_slave_id != ''">
+          <xsl:if test="$current_slave_id != '08b69003-5fc2-4037-a479-93b440211c73'">
             <xsl:variable name="class">
               <xsl:text>first</xsl:text>
               <xsl:if test="$slave_count = 0"> last</xsl:if>

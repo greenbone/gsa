@@ -1,7 +1,14 @@
+2016-10-24  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/gsad_omp.c (get_task): Also get scanners, for the move icon.
+
+	* src/html/classic/omp.xsl (move_task_icon): Restrict to OMP scanners.
+	Use default scanner UUID for "Move to Master" check.
+
 2016-10-24  Björn Ricks <bjoern.ricks@greenbone.net>
 
-	* src/html/classic/omp.xsl (cert_bund_adv-details, cve-details,
-	dfn_cert_adv-details): Allow to follow external links.
+	* src/html/classic/omp.xsl (cert_bund_adv-details, cve-details)
+	(dfn_cert_adv-details): Allow to follow external links.
 
 2016-10-24  Matthew Mundell <matthew.mundell@greenbone.net>
 
