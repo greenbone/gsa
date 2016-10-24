@@ -73,14 +73,14 @@ If your tool does not have its own functions for merging translation files,
  you can use the following make target to merge the new .pot file with the
  current .po files from the source directory:
 
-  make gettext-po
+  make gettext-merge
 
 This will generate "gsad_xsl-XX-merged.po" and "gsad_js-XX-merged.po"
  files in the "src/po" subdirectory of your build directory,
  with "XX" being a locale code as defined above in the section "General notes".
 
 There are also separate make targets for JS and XSL .po files,
- gettext-js-po and gettext-xsl-po.
+ gettext-js-merge and gettext-xsl-merge.
 
 
 3 - Update the translations
@@ -91,9 +91,9 @@ If you want to edit the translations locally you can also copy them as
  described in step 4 before editing them.
 
 
-4 - Copying the new .po
------------------------
-The next step is to copy the file for your language back to "src/po" in the
+4 - Copying the new .po files
+-----------------------------
+The next step is to copy the files for your language back to "src/po" in the
  source directory, naming the files "gsad_xsl-XX.po" and "gsad_js-XX.po",
  with "XX" again being the locale code.
 
@@ -101,20 +101,20 @@ As this means overwriting the old source .po file, you should verify the new
  file is correct and/or backup the old file first.
 
 
-Creating new translations
-=========================
+Creating new translations for another locale
+============================================
 1 - Creating the template (.pot) file
 -------------------------------------
-The first step to a new translation is generating a new template (.pot) file.
+The first step to a new translation is generating new template (.pot) files.
 To do so, follow the first step under "Updating existing translations".
 
-The destination file of the make target is "gsad_xsl.pot" in the "src/po"
- subdirectory of your GSA source directory.
+The destination files of the make target "gettext-pot" are "gsad_xsl.pot" and
+"gsad_js.pot" in the "src/po" subdirectory of your GSA build directory.
 
 
-2 - Preparing the .po file
---------------------------
-Next you have to use the generated file as a template for your new translation.
+2 - Preparing the .po files
+---------------------------
+Next you have to use the generated files as templates for your new translation.
 
 Once you are finished or want to install the in-progress translation for
  testing, copy it to "src/po/gsad_xsl-XX.po" in your source directory with "XX"
@@ -123,7 +123,8 @@ Once you are finished or want to install the in-progress translation for
 
 3 - Setting up the installation
 -------------------------------
-In the file "CMakeLists.txt" in the "src/po" add a line
+In the file "CMakeLists.txt" in the "src/po" of your GSA source directory add an
+additional line
 
   MAKE_TRANSLATION (XX)
 
@@ -215,7 +216,7 @@ Typical contexts and rules
 
 * Property names which may be ambiguous should have the resource type
  or some kind of category as the context.
- 
+
 * Other ambiguous value should have the property name as context. If the
  property name would also be ambiguous, a context as described in the previous
  rule should be prepended followed by a "|", e.g. "Alert|Email"
@@ -231,7 +232,7 @@ Translations for the help pages are contained in a file called "help_<lc>.xsl",
 where <lc> is the two-letter language code the translation is for.
 
 For the stylesheet to work properly, it must include the default "help.xsl"
-at the beginning. 
+at the beginning.
 
 Next should be the named templates, which must use different names than the
 included default stylesheets. This is to avoid conflicts which would not only
