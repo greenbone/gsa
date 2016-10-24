@@ -20167,6 +20167,7 @@ should not have received it.
             <xsl:with-param name="cap-type" select="'Scanner'"/>
             <xsl:with-param name="type" select="'scanner'"/>
             <xsl:with-param name="id" select="@id"/>
+            <xsl:with-param name="grey-clone" select="type = 3"/>
           </xsl:call-template>
           <xsl:call-template name="scanner-icons">
             <xsl:with-param name="scanner_id" select="@id"/>
