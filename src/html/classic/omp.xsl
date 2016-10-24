@@ -6264,25 +6264,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <xsl:template match="new_container_task">
-  <xsl:apply-templates select="gsad_msg"/>
-  <xsl:apply-templates select="create_task_response"/>
-  <xsl:apply-templates select="create_report_response"/>
-  <div class="gb_window">
-   <div class="gb_window_part_left"></div>
-   <div class="gb_window_part_right"></div>
-   <div class="gb_window_part_center"><xsl:value-of select="gsa:i18n ('New Container Task')"/>
-     <a href="/help/new_task.html?token={/envelope/token}#newcontainertask" title="{gsa:i18n ('Help')}: {gsa:i18n ('New Task')}"
-       class="icon icon-sm">
-      <img src="/img/help.svg"/>
-    </a>
-    <a href="/omp?cmd=get_tasks&amp;filter={str:encode-uri (gsa:envelope-filter (), true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-      title="{gsa:i18n ('Tasks')}"
-      class="icon icon-sm">
-      <img src="/img/list.svg" alt="{gsa:i18n ('Tasks')}"/>
-    </a>
+  <div class="edit-dialog">
+    <div class="title">
+      <xsl:value-of select="gsa:i18n ('New Container Task')"/>
    </div>
-   <div class="gb_window_part_content">
-    <form action="/omp" method="post" enctype="multipart/form-data">
+   <div class="content">
+    <form action="/omp" method="post" enctype="multipart/form-data" class="form-horizontal">
       <input type="hidden" name="token" value="{/envelope/token}"/>
       <input type="hidden" name="cmd" value="create_container_task"/>
       <input type="hidden" name="caller" value="{/envelope/current_page}"/>
@@ -6292,26 +6279,24 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:if>
       <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
       <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
-      <table class="table-form">
-        <tr>
-         <td><xsl:value-of select="gsa:i18n ('Name')"/></td>
-         <td>
-           <input type="text" name="name" value="unnamed" size="30"
-                  maxlength="80"/>
-         </td>
-        </tr>
-        <tr>
-          <td><xsl:value-of select="gsa:i18n ('Comment')"/></td>
-          <td>
-            <input type="text" name="comment" size="30" maxlength="400"/>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <input type="submit" name="submit" value="{gsa:i18n ('Create Task')}"/>
-          </td>
-        </tr>
-      </table>
+      <div class="form-group">
+        <label class="col-2 control-label">
+          <xsl:value-of select="gsa:i18n ('Name')"/>
+        </label>
+        <div class="col-10">
+          <input type="text" name="name" value="unnamed" size="30"
+            maxlength="80" class="form-control"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-2 control-label">
+          <xsl:value-of select="gsa:i18n ('Comment')"/>
+        </label>
+        <div class="col-10">
+          <input type="text" name="comment" size="30" maxlength="400"
+            class="form-control"/>
+        </div>
+      </div>
     </form>
    </div>
   </div>
