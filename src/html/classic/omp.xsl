@@ -7806,8 +7806,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               </xsl:otherwise>
             </xsl:choose>
             <xsl:choose>
-<!-- FIX when scanner type OMP -->
-              <xsl:when test="string-length(slave/@id) &gt; 0">
+              <xsl:when test="scanner/type = 4">
                 <img src="/img/sensor.svg"
                   class="icon icon-sm"
                   alt="{gsa-i18n:strformat (gsa:i18n ('Task is configured to run on slave scanner %1'), slave/name)}"
@@ -8058,14 +8057,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <td class="table-actions">
       <xsl:choose>
         <xsl:when test="not (gsa:may-op ('restore'))"/>
-<!-- FIX scanner -->
-        <xsl:when test="(target/trash = '0') and (config/trash = '0') and (schedule/trash = '0') and (gsa:alert-in-trash () = 0)">
+        <xsl:when test="(target/trash = '0') and (config/trash = '0') and (schedule/trash = '0') and (scanner/trash = '0') and (gsa:alert-in-trash () = 0)">
           <xsl:call-template name="restore-icon">
             <xsl:with-param name="id" select="@id"/>
           </xsl:call-template>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:variable name="resources_list" select="target[trash!='0'] | config[trash!='0'] | schedule[trash!='0'] | (alert[trash!='0'])[0]"/>
+          <xsl:variable name="resources_list" select="target[trash!='0'] | config[trash!='0'] | schedule[trash!='0'] | scanner[trash!='0'] | (alert[trash!='0'])[0]"/>
           <xsl:variable name="resources_string">
             <xsl:for-each select="$resources_list">
               <xsl:value-of select="gsa:i18n (gsa:type-name (name (.)), gsa:type-name (name (.)))"/>
@@ -33824,18 +33822,6 @@ should not have received it.
                 </xsl:call-template>
               </td>
             </tr>
-<!-- FIX -->
-            <xsl:if test="boolean (report/scan/task/slave)">
-              <tr>
-                <td><xsl:value-of select="gsa:i18n ('Slave')"/>:</td>
-                <td>
-                  <xsl:if test="string-length (report/scan/task/slave/name) &gt; 0">
-                    <xsl:value-of select="report/scan/task/slave/name"/>
-                    (<xsl:value-of select="report/scan/task/slave/host"/>:<xsl:value-of select="report/scan/task/slave/port"/>)
-                  </xsl:if>
-                </td>
-              </tr>
-            </xsl:if>
             <xsl:if test="boolean (report/scan/task/preferences/preference[scanner_name='source_iface'])">
               <tr>
                 <td><xsl:value-of select="gsa:i18n ('Network Source Interface')"/>:</td>
