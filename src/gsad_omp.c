@@ -18122,7 +18122,7 @@ get_system_reports_omp (credentials_t * credentials, params_t *params,
 
       if (openvas_connection_sendf (&connection,
                                     "<get_scanners"
-                                    " filter=\"sort=name rows=-1 type=OMP\"/>")
+                                    " filter=\"sort=name rows=-1 type=4\"/>")
           == -1)
         {
           g_string_free (xml, TRUE);

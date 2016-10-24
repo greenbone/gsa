@@ -34805,7 +34805,7 @@ should not have received it.
                 <input type="hidden" name="duration" value="{$duration}"/>
                 <select name="slave_id" onchange="switch_slave.submit ()">
                   <xsl:variable name="slave_id">
-                    <xsl:value-of select="../scanner/@id"/>
+                    <xsl:value-of select="../slave/@id"/>
                   </xsl:variable>
                   <xsl:choose>
                     <xsl:when test="string-length ($slave_id) &gt; 0">

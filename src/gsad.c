@@ -1607,6 +1607,7 @@ init_validator ()
   openvas_validator_alias (validator, "schedule_periods", "number");
   openvas_validator_alias (validator, "select:name",  "family");
   openvas_validator_alias (validator, "show_all",     "boolean");
+  openvas_validator_alias (validator, "slave_id",     "id");
   openvas_validator_alias (validator, "smb_credential_id", "credential_id");
   openvas_validator_alias (validator, "snmp_credential_id", "credential_id");
   openvas_validator_alias (validator, "ssh_credential_id", "credential_id");
