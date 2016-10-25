@@ -1,5 +1,10 @@
 2016-10-25  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/po/gsad_xsl-ru.po, src/po/gsad_xsl-zh_CN.po: Update to latest
+	version from translate.greenbone.net.
+
+2016-10-25  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Add French and Turkish translations.
 
 	* src/po/CMakeLists.txt: Add targets for French and Turkish.
