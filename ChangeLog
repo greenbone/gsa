@@ -1,3 +1,8 @@
+2016-10-25  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/omp.xsl (task): Display task slave scanner name in task
+	list.
+
 2016-10-25  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Add Arabic and Brazilian Portuguese translations.

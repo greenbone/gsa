@@ -7808,8 +7808,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:when test="scanner/type = 4">
                 <img src="/img/sensor.svg"
                   class="icon icon-sm"
-                  alt="{gsa-i18n:strformat (gsa:i18n ('Task is configured to run on slave scanner %1'), slave/name)}"
-                  title="{gsa-i18n:strformat (gsa:i18n ('Task is configured to run on slave scanner %1'), slave/name)}"/>
+                  alt="{gsa-i18n:strformat (gsa:i18n ('Task is configured to run on slave scanner %1'), scanner/name)}"
+                  title="{gsa-i18n:strformat (gsa:i18n ('Task is configured to run on slave scanner %1'), scanner/name)}"/>
               </xsl:when>
               <xsl:otherwise>
               </xsl:otherwise>
