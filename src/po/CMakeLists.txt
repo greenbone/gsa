@@ -70,8 +70,10 @@ if (GETTEXT_FOUND)
   if (PY_POLIB_FOUND)
     MAKE_TRANSLATION (ar)
     MAKE_TRANSLATION (de)
+    MAKE_TRANSLATION (fr)
     MAKE_TRANSLATION (pt_BR)
     MAKE_TRANSLATION (ru)
+    MAKE_TRANSLATION (tr)
     MAKE_TRANSLATION (zh_CN)
 
     # Installed files
@@ -79,8 +81,10 @@ if (GETTEXT_FOUND)
                        ALL
                        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/ar/gsad_xsl.mo
                        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/de/gsad_xsl.mo
+                       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/fr/gsad_xsl.mo
                        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/pt_BR/gsad_xsl.mo
                        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/ru/gsad_xsl.mo
+                       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/tr/gsad_xsl.mo
                        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/zh_CN/gsad_xsl.mo
                        COMMENT "Created translation .mo files")
 
@@ -88,8 +92,10 @@ if (GETTEXT_FOUND)
                        ALL
                        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad-ar.json
                        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad-de.json
+                       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad-fr.json
                        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad-pt_BR.json
                        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad-ru.json
+                       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad-tr.json
                        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad-zh_CN.json
                        COMMENT "Created translation .json files")
 
@@ -103,8 +109,10 @@ if (GETTEXT_FOUND)
                        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_js.pot
                        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_js-ar-merged.po
                        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_js-de-merged.po
+                       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_js-fr-merged.po
                        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_js-pt_BR-merged.po
                        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_js-ru-merged.po
+                       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_js-tr-merged.po
                        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_js-zh_CN-merged.po
                        COMMENT "Merged translation .po files for JS")
 
@@ -112,8 +120,10 @@ if (GETTEXT_FOUND)
                        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_xsl.pot
                        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_xsl-ar-merged.po
                        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_xsl-de-merged.po
+                       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_xsl-fr-merged.po
                        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_xsl-pt_BR-merged.po
                        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_xsl-ru-merged.po
+                       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_xsl-tr-merged.po
                        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_xsl-zh_CN-merged.po
                        COMMENT "Merged translation .po files for XSL")
 
