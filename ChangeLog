@@ -1,3 +1,8 @@
+2016-10-25  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/gsad_omp.c (create_permission_omp): Allow id_or_empty to be
+	missing.
+
 2016-10-25  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/omp.xsl (get_info_allinfo_lnk): Disable cpe icons in

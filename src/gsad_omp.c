@@ -21246,7 +21246,8 @@ create_permission_omp (credentials_t *credentials, params_t *params,
 
   CHECK_PARAM_INVALID (name, "Create Permission", "new_permission");
   CHECK_PARAM_INVALID (comment, "Create Permission", "new_permission");
-  CHECK_PARAM_INVALID (resource_id, "Create Permission", "new_permission");
+  if (params_given (params, "id_or_empty"))
+    CHECK_PARAM_INVALID (resource_id, "Create Permission", "new_permission");
   CHECK_PARAM_INVALID (subject_type, "Create Permission", "new_permission");
   if (params_given (params, "optional_resource_type"))
     CHECK_PARAM_INVALID (resource_type, "Create Permission", "new_permission");
@@ -21372,23 +21373,23 @@ create_permission_omp (credentials_t *credentials, params_t *params,
                   "</create_permission>"
                   "</commands>",
                   comment ? comment : "",
-                  resource_id,
+                  resource_id ? resource_id : "",
                   subject_id,
                   subject_type,
                   comment ? comment : "",
-                  resource_id,
+                  resource_id ? resource_id : "",
                   subject_id,
                   subject_type,
                   comment ? comment : "",
-                  resource_id,
+                  resource_id ? resource_id : "",
                   subject_id,
                   subject_type,
                   comment ? comment : "",
-                  resource_id,
+                  resource_id ? resource_id : "",
                   subject_id,
                   subject_type,
                   comment ? comment : "",
-                  resource_id,
+                  resource_id ? resource_id : "",
                   subject_id,
                   subject_type);
 
@@ -21452,7 +21453,7 @@ create_permission_omp (credentials_t *credentials, params_t *params,
                   "</create_permission>",
                   name,
                   comment ? comment : "",
-                  resource_id,
+                  resource_id ? resource_id : "",
                   resource_type ? resource_type : "",
                   subject_id,
                   subject_type);
