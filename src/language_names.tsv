@@ -22,12 +22,14 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 # Format: ISO code<tab>English name<tab>Name in the language itself
+ar	Arabic	العربية
 de	German	Deutsch
 en	English	English
 es	Spanish	español
 fr	French	français
 it	Italian	italiano
 ja	Japanese	日本語
+pt_BR	Portuguese (Brazil)	português (Brasil)
 ru	Russian	ру́сский
 tr	Turkish	Türkçe
 zh_CN	Chinese (China)	中文 (中国)

@@ -68,21 +68,27 @@ endmacro ()
 
 if (GETTEXT_FOUND)
   if (PY_POLIB_FOUND)
+    MAKE_TRANSLATION (ar)
     MAKE_TRANSLATION (de)
+    MAKE_TRANSLATION (pt_BR)
     MAKE_TRANSLATION (ru)
     MAKE_TRANSLATION (zh_CN)
 
     # Installed files
     add_custom_target (gettext-mo
                        ALL
+                       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/ar/gsad_xsl.mo
                        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/de/gsad_xsl.mo
+                       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/pt_BR/gsad_xsl.mo
                        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/ru/gsad_xsl.mo
                        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/zh_CN/gsad_xsl.mo
                        COMMENT "Created translation .mo files")
 
     add_custom_target (gettext-json
                        ALL
+                       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad-ar.json
                        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad-de.json
+                       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad-pt_BR.json
                        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad-ru.json
                        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad-zh_CN.json
                        COMMENT "Created translation .json files")
@@ -95,14 +101,18 @@ if (GETTEXT_FOUND)
 
     add_custom_target (gettext-js-merge
                        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_js.pot
+                       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_js-ar-merged.po
                        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_js-de-merged.po
+                       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_js-pt_BR-merged.po
                        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_js-ru-merged.po
                        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_js-zh_CN-merged.po
                        COMMENT "Merged translation .po files for JS")
 
     add_custom_target (gettext-xsl-merge
                        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_xsl.pot
+                       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_xsl-ar-merged.po
                        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_xsl-de-merged.po
+                       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_xsl-pt_BR-merged.po
                        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_xsl-ru-merged.po
                        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gsad_xsl-zh_CN-merged.po
                        COMMENT "Merged translation .po files for XSL")

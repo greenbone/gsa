@@ -1,3 +1,20 @@
+2016-10-25  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Add Arabic and Brazilian Portuguese translations.
+
+	* src/language_names.tsv: Add Arabic and Portuguese (Brazil).
+
+	* src/po/CMakeLists.txt: Add targets for Arabic and Brazilian
+	Portuguese.
+
+	* src/po/gsad_js-ar.po: New translation file.
+	
+	* src/po/gsad_js-pt_BR.po: New translation file.
+
+	* src/po/gsad_xsl-ar.po: New translation file.
+
+	* src/po/gsad_xsl-pt_BR.po: New translation file.
+
 2016-10-24  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad_omp.c (get_task): Also get scanners, for the move icon.
