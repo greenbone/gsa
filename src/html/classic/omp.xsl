@@ -20996,6 +20996,7 @@ should not have received it.
       <xsl:call-template name="get_info_cpe_lnk">
         <xsl:with-param name="cpe" select="$name"/>
         <xsl:with-param name="cpe_id" select="$id"/>
+        <xsl:with-param name="no_icon" select="1"/>
       </xsl:call-template>
     </xsl:when>
     <xsl:when test="$type = 'ovaldef'">

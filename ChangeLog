@@ -1,3 +1,8 @@
+2016-10-25  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/omp.xsl (get_info_allinfo_lnk): Disable cpe icons in
+	all secinfo list. The transparent "other.png" icon is disturbing the list.
+
 2016-10-25  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/po/gsad_xsl-ru.po, src/po/gsad_xsl-zh_CN.po: Update to latest
