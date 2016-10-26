@@ -1,3 +1,9 @@
+2016-10-26  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/omp.xsl (break-diff-line): New template.
+	(highlight-diff-line): Simplify by handling line-breaks in new template
+	break-diff-line, also ensuring coloring is based on original lines.
+
 2016-10-25  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/gsad_omp.c (create_permission_omp): Allow id_or_empty to be

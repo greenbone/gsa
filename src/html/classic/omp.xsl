@@ -2235,128 +2235,57 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 </xsl:template>
 
 <!-- This is called within a PRE. -->
+<xsl:template name="break-diff-line">
+  <xsl:param name="string"></xsl:param>
+  <xsl:param name="break-length" select="90"/>
+  <xsl:choose>
+    <xsl:when test="string-length ($string) &gt; $break-length">
+      <xsl:value-of select="substring ($string, 1, $break-length)"/>
+      <xsl:text>&#8629;&#10;</xsl:text>
+      <xsl:call-template name="break-diff-line">
+        <xsl:with-param name="string" select="substring ($string, $break-length+1, string-length ($string))"/>
+      </xsl:call-template>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:value-of select="$string"/>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+<!-- This is called within a PRE. -->
 <xsl:template name="highlight-diff-line">
   <xsl:param name="string"></xsl:param>
-
-  <xsl:variable name="to-next-newline">
-    <xsl:value-of select="substring-before($string, '&#10;')"/>
-  </xsl:variable>
-
   <xsl:choose>
     <xsl:when test="string-length($string) = 0">
       <!-- The string is empty. -->
     </xsl:when>
-    <xsl:when test="(string-length($to-next-newline) = 0) and (substring($string, 1, 1) != '&#10;')">
-      <!-- A single line missing a newline, output up to the edge. -->
-      <xsl:choose>
-        <xsl:when test="(substring($string, 1, 1) = '@')">
-<div class="diff-line-hunk">
-<xsl:value-of select="substring($string, 1, 90)"/>
-          <xsl:if test="string-length($string) &gt; 90">
-            <xsl:text>&#8629;</xsl:text>
-          </xsl:if>
-</div>
-        </xsl:when>
-        <xsl:when test="(substring($string, 1, 1) = '+')">
-<div class="diff-line-plus">
-<xsl:value-of select="substring($string, 1, 90)"/>
-          <xsl:if test="string-length($string) &gt; 90">
-            <xsl:text>&#8629;</xsl:text>
-          </xsl:if>
-</div>
-        </xsl:when>
-        <xsl:when test="(substring($string, 1, 1) = '-')">
-<div class="diff-line-minus">
-<xsl:value-of select="substring($string, 1, 90)"/>
-          <xsl:if test="string-length($string) &gt; 90">
-            <xsl:text>&#8629;</xsl:text>
-          </xsl:if>
-</div>
-        </xsl:when>
-        <xsl:otherwise>
-<div class="diff-line">
-<xsl:value-of select="substring($string, 1, 90)"/>
-          <xsl:if test="string-length($string) &gt; 90">
-            <xsl:text>&#8629;</xsl:text>
-          </xsl:if>
-</div>
-        </xsl:otherwise>
-      </xsl:choose>
-      <xsl:if test="string-length($string) &gt; 90">
-<xsl:call-template name="highlight-diff-line">
-  <xsl:with-param name="string"><xsl:value-of select="substring($string, 91, string-length($string))"/></xsl:with-param>
-</xsl:call-template>
-      </xsl:if>
+    <xsl:when test="(substring($string, 1, 1) = '@')">
+      <div class="diff-line-hunk">
+        <xsl:call-template name="break-diff-line">
+          <xsl:with-param name="string" select="$string"/>
+        </xsl:call-template>
+      </div>
     </xsl:when>
-    <xsl:when test="(string-length($to-next-newline) + 1 &lt; string-length($string)) and (string-length($to-next-newline) &lt; 90)">
-      <!-- There's a newline before the edge, so output the line. -->
-      <xsl:choose>
-        <xsl:when test="(substring($string, 1, 1) = '@')">
-<div class="diff-line-hunk">
-<xsl:value-of select="substring($string, 1, string-length($to-next-newline) + 1)"/>
-</div>
-        </xsl:when>
-        <xsl:when test="(substring($string, 1, 1) = '+')">
-<div class="diff-line-plus">
-<xsl:value-of select="substring($string, 1, 90)"/>
-</div>
-        </xsl:when>
-        <xsl:when test="(substring($string, 1, 1) = '-')">
-<div class="diff-line-minus">
-<xsl:value-of select="substring($string, 1, 90)"/>
-</div>
-        </xsl:when>
-        <xsl:otherwise>
-<div class="diff-line">
-<xsl:value-of select="substring($string, 1, string-length($to-next-newline) + 1)"/>
-</div>
-        </xsl:otherwise>
-      </xsl:choose>
-<xsl:call-template name="highlight-diff-line">
-  <xsl:with-param name="string"><xsl:value-of select="substring($string, string-length($to-next-newline) + 2, string-length($string))"/></xsl:with-param>
-</xsl:call-template>
+    <xsl:when test="(substring($string, 1, 1) = '+')">
+      <div class="diff-line-plus">
+        <xsl:call-template name="break-diff-line">
+          <xsl:with-param name="string" select="$string"/>
+        </xsl:call-template>
+      </div>
+    </xsl:when>
+    <xsl:when test="(substring($string, 1, 1) = '-')">
+      <div class="diff-line-minus">
+        <xsl:call-template name="break-diff-line">
+          <xsl:with-param name="string" select="$string"/>
+        </xsl:call-template>
+      </div>
     </xsl:when>
     <xsl:otherwise>
-      <!-- Any newline comes after the edge, so output up to the edge. -->
-      <xsl:choose>
-        <xsl:when test="(substring($string, 1, 1) = '@')">
-<div class="diff-line-hunk">
-<xsl:value-of select="substring($string, 1, 90)"/>
-          <xsl:if test="string-length($string) &gt; 90">
-            <xsl:text>&#8629;</xsl:text>
-          </xsl:if>
-</div>
-        </xsl:when>
-        <xsl:when test="(substring($string, 1, 1) = '+')">
-<div class="diff-line-plus">
-<xsl:value-of select="substring($string, 1, 90)"/>
-          <xsl:if test="string-length($string) &gt; 90">
-            <xsl:text>&#8629;</xsl:text>
-          </xsl:if>
-</div>
-        </xsl:when>
-        <xsl:when test="(substring($string, 1, 1) = '-')">
-<div class="diff-line-minus">
-<xsl:value-of select="substring($string, 1, 90)"/>
-</div>
-          <xsl:if test="string-length($string) &gt; 90">
-            <xsl:text>&#8629;</xsl:text>
-          </xsl:if>
-        </xsl:when>
-        <xsl:otherwise>
-<div class="diff-line">
-<xsl:value-of select="substring($string, 1, 90)"/>
-</div>
-          <xsl:if test="string-length($string) &gt; 90">
-            <xsl:text>&#8629;</xsl:text>
-          </xsl:if>
-        </xsl:otherwise>
-      </xsl:choose>
-      <xsl:if test="string-length($string) &gt; 90">
-<xsl:call-template name="hightlight-diff-line">
-  <xsl:with-param name="string"><xsl:value-of select="substring($string, 91, string-length($string))"/></xsl:with-param>
-</xsl:call-template>
-      </xsl:if>
+      <div class="diff-line">
+        <xsl:call-template name="break-diff-line">
+          <xsl:with-param name="string" select="$string"/>
+        </xsl:call-template>
+      </div>
     </xsl:otherwise>
   </xsl:choose>
 
