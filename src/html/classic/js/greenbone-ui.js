@@ -147,11 +147,14 @@
       return options;
     },
     _keydown: function(event) {
-      if ((event.which > 57 ||
-            this.disallowed.indexOf(event.which) > 0) &&
+      if ((event.which <= 0 || (event.which > 57 && event.which < 96) ||
+            event.which > 105 || this.disallowed.indexOf(event.which) > 0) &&
           this.allowed.indexOf(event.which) === -1 &&
           !event.ctrlKey) {
-        // ('9' == keycode 57) only allow ints
+        // '9' == keycode 57 and 105 on numpad
+        // '0' == keycode 48 and 96 on numpad
+        // umlauts have keycode 0
+        // only allow ints
         event.preventDefault();
         return true;
       }
