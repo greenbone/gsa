@@ -1,5 +1,12 @@
 2016-10-26  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/omp.xsl (highlight-diff): Use color from previous
+	line if a line starts with "\" like "\ No newline at end of file".
+	(highlight-diff-line): Add optional param class-string to allow
+	class to be based on another string.
+
+2016-10-26  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/omp.xsl (break-diff-line): New template.
 	(highlight-diff-line): Simplify by handling line-breaks in new template
 	break-diff-line, also ensuring coloring is based on original lines.

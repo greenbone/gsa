@@ -2230,6 +2230,18 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:for-each select="str:tokenize($string, '&#10;')">
     <xsl:call-template name="highlight-diff-line">
       <xsl:with-param name="string"><xsl:value-of select="."/></xsl:with-param>
+      <xsl:with-param name="class-string">
+        <xsl:choose>
+          <xsl:when test="(substring (., 1, 1) = '\') and preceding-sibling::*">
+            <!-- Use class from previous line for one like
+                 "\ No newline at end of file" -->
+            <xsl:value-of select="preceding-sibling::*[1]"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="."/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:with-param>
     </xsl:call-template>
   </xsl:for-each>
 </xsl:template>
@@ -2255,25 +2267,27 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <!-- This is called within a PRE. -->
 <xsl:template name="highlight-diff-line">
   <xsl:param name="string"></xsl:param>
+  <!-- class-string : String to base class on (e.g. for \ ... lines) -->
+  <xsl:param name="class-string" select="$string"/>
   <xsl:choose>
     <xsl:when test="string-length($string) = 0">
       <!-- The string is empty. -->
     </xsl:when>
-    <xsl:when test="(substring($string, 1, 1) = '@')">
+    <xsl:when test="(substring($class-string, 1, 1) = '@')">
       <div class="diff-line-hunk">
         <xsl:call-template name="break-diff-line">
           <xsl:with-param name="string" select="$string"/>
         </xsl:call-template>
       </div>
     </xsl:when>
-    <xsl:when test="(substring($string, 1, 1) = '+')">
+    <xsl:when test="(substring($class-string, 1, 1) = '+')">
       <div class="diff-line-plus">
         <xsl:call-template name="break-diff-line">
           <xsl:with-param name="string" select="$string"/>
         </xsl:call-template>
       </div>
     </xsl:when>
-    <xsl:when test="(substring($string, 1, 1) = '-')">
+    <xsl:when test="(substring($class-string, 1, 1) = '-')">
       <div class="diff-line-minus">
         <xsl:call-template name="break-diff-line">
           <xsl:with-param name="string" select="$string"/>
