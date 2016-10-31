@@ -1,3 +1,9 @@
+2016-10-31  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/classic/omp.xsl (html-create-scanner-form)
+	(html-edit-scanner-form): Always show CA cert field, now that OMP scanners
+	use them.
+
 2016-10-31  Michael Meyer <michael.meyer@greenbone.net>
 
 	* src/html/classic/os.xml:
@@ -43,7 +49,7 @@
 	* src/po/CMakeLists.txt: Add targets for French and Turkish.
 
 	* src/po/gsad_js-fr.po: New translation file.
-	
+
 	* src/po/gsad_js-tr.po: New translation file.
 
 	* src/po/gsad_xsl-fr.po: New translation file.
@@ -65,7 +71,7 @@
 	Portuguese.
 
 	* src/po/gsad_js-ar.po: New translation file.
-	
+
 	* src/po/gsad_js-pt_BR.po: New translation file.
 
 	* src/po/gsad_xsl-ar.po: New translation file.

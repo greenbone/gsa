@@ -19361,20 +19361,10 @@ should not have received it.
               </select>
             </td>
           </tr>
-          <tr class="form-selection-item-scanner form-selection-item-scanner--1">
+          <tr>
             <td><xsl:value-of select="gsa:i18n ('CA Certificate')"/></td>
             <td>
-              <input class="form-selection-input-scanner form-selection-input-scanner--1"
-                     type="file"
-                     name="ca_pub"/>
-            </td>
-          </tr>
-          <tr class="form-selection-item-scanner form-selection-item-scanner--2">
-            <td><xsl:value-of select="gsa:i18n ('CA Certificate')"/></td>
-            <td>
-              <input class="form-selection-input-scanner form-selection-input-scanner--2"
-                     type="file"
-                     name="ca_pub"/>
+              <input type="file" name="ca_pub"/>
             </td>
           </tr>
           <tr class="form-selection-item-scanner form-selection-item-scanner--1">
@@ -19671,19 +19661,8 @@ should not have received it.
               </td>
             </tr>
           </xsl:if>
-          <tr class="form-selection-item-scanner form-selection-item-scanner--1">
-            <xsl:call-template name="html-edit-scanner-form-ca-cert">
-              <xsl:with-param
-                name="input-classes"
-                select="'form-selection-input-scanner form-selection-input-scanner--1'"/>
-            </xsl:call-template>
-          </tr>
-          <tr class="form-selection-item-scanner form-selection-item-scanner--2">
-            <xsl:call-template name="html-edit-scanner-form-ca-cert">
-              <xsl:with-param
-                name="input-classes"
-                select="'form-selection-input-scanner form-selection-input-scanner--2'"/>
-            </xsl:call-template>
+          <tr>
+            <xsl:call-template name="html-edit-scanner-form-ca-cert"/>
           </tr>
           <tr class="form-selection-item-scanner form-selection-item-scanner--1">
             <xsl:call-template name="html-edit-scanner-form-credentials">
