@@ -1,3 +1,8 @@
+2016-10-31  Michael Meyer <michael.meyer@greenbone.net>
+
+	* src/html/classic/os.xml:
+	Added Windows Embedded.
+
 2016-10-26  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/js/greenbone-ui.js (spinner _keydown): Allow to insert

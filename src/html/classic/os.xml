@@ -84,6 +84,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <pattern>cpe:/o:microsoft:windows_server_2003</pattern><title>Microsoft Windows Server 2003</title><icon>os_windows.svg</icon>
     </operating_system>
     <operating_system>
+        <pattern>cpe:/o:microsoft:windows_embedded</pattern><title>Microsoft Windows Embedded</title><icon>os_windows.svg</icon>
+    </operating_system>
+    <operating_system>
         <pattern>cpe:/o:microsoft:windows</pattern><title>Microsoft Windows</title><icon>os_windows.svg</icon>
     </operating_system>
     <operating_system>
