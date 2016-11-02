@@ -1,5 +1,10 @@
 2016-11-02  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/classic/omp.xsl (html-edit-task-form): Also enable the scanner
+	options for OMP scanners.
+
+2016-11-02  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/classic/css/gsa-style.css (.d3-tip): Flush trailing space.
 	(.toolbar): Add missing colon.
 

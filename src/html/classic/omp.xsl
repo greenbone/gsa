@@ -7637,7 +7637,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                   <xsl:if test="commands_response/get_tasks_response/task/scanner/type != 3">
                     <xsl:call-template name="html-edit-task-config-disabled"/>
                   </xsl:if>
-                  <xsl:if test="commands_response/get_tasks_response/task/scanner/type = 2">
+                  <xsl:if test="commands_response/get_tasks_response/task/scanner/type = 2 or commands_response/get_tasks_response/task/scanner/type = 4">
                     <xsl:call-template name="html-edit-task-openvas-options"/>
                   </xsl:if>
                 </div>
