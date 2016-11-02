@@ -1,3 +1,8 @@
+2016-11-02  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/classic/css/gsa-style.css (.d3-tip): Flush trailing space.
+	(.toolbar): Add missing colon.
+
 2016-10-31  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/html/classic/omp.xsl (html-create-scanner-form)

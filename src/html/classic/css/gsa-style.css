@@ -1334,7 +1334,7 @@ select[multiple] {
   background: rgba(0, 0, 0, 0.8);
   color: #fff;
   border-radius: 2px;
-  text-align: center; 
+  text-align: center;
 }
 
 /* Creates a small triangle extender for the tooltip */
@@ -1530,7 +1530,7 @@ select[multiple] {
 }
 
 .toolbar {
-  padding-top 5px;
+  padding-top: 5px;
   padding-bottom: 5px;
 }
 
