@@ -1,5 +1,9 @@
 2016-11-02  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/html/classic/omp.xsl (agent): Add next arg to verify icon.
+
+2016-11-02  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	* src/html/classic/omp.xsl (html-edit-task-form): Also enable the scanner
 	options for OMP scanners.
 

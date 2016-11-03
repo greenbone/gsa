@@ -9451,6 +9451,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <input type="hidden" name="filter" value="{gsa:envelope-filter ()}"/>
               <input type="hidden" name="filt_id" value="{/envelope/params/filt_id}"/>
               <input type="hidden" name="token" value="{/envelope/token}"/>
+              <input type="hidden" name="next" value="get_agent"/>
             </form>
             <div class="success-dialog" data-title="{gsa:i18n ('Success')}">
               <div class="text-center">
