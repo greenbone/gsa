@@ -34639,7 +34639,7 @@ should not have received it.
           <pre style="margin-left: 5%"><xsl:value-of select="report/text()"/></pre>
         </xsl:when>
         <xsl:otherwise>
-          <img src="/system_report/{name}/report.{report/@format}?duration={../../duration}&amp;slave_id={../../slave/@id}&amp;token={/envelope/token}"/>
+          <img src="/system_report/{name}/report.{report/@format}?duration={../../duration}&amp;slave_id={../../slave/@id}&amp;range_type={../../range_type}&amp;start_year={../../start_time/year}&amp;start_month={../../start_time/month}&amp;start_day={../../start_time/day_of_month}&amp;start_hour={../../start_time/hour}&amp;start_minute={../../start_time/minute}&amp;end_year={../../end_time/year}&amp;end_month={../../end_time/month}&amp;end_day={../../end_time/day_of_month}&amp;end_hour={../../end_time/hour}&amp;end_minute={../../end_time/minute}&amp;token={/envelope/token}"/>
         </xsl:otherwise>
       </xsl:choose>
     </td>
@@ -34678,69 +34678,221 @@ should not have received it.
   </div>
 
   <div class="section-box">
-    <table>
-      <tr>
-        <td>
-          <xsl:value-of select="gsa:i18n ('Reports span the last')"/>:
-        </td>
-        <td>
-          <xsl:choose>
-            <xsl:when test="$duration='3600'">
-              <xsl:value-of select="gsa:i18n ('hour')"/>
-            </xsl:when>
-            <xsl:otherwise>
-              <a href="/omp?cmd=get_system_reports&amp;duration={3600}&amp;slave_id={../slave/@id}&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('hour')"/></a>
-            </xsl:otherwise>
-          </xsl:choose>
-          <xsl:text> | </xsl:text>
-          <xsl:choose>
-            <xsl:when test="$duration='86400'">
-              <xsl:value-of select="gsa:i18n ('day')"/>
-            </xsl:when>
-            <xsl:otherwise>
-              <a href="/omp?cmd=get_system_reports&amp;duration={86400}&amp;slave_id={../slave/@id}&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('day')"/></a>
-            </xsl:otherwise>
-          </xsl:choose>
-          <xsl:text> | </xsl:text>
-          <xsl:choose>
-            <xsl:when test="$duration='604800'">
-              <xsl:value-of select="gsa:i18n ('week')"/>
-            </xsl:when>
-            <xsl:otherwise>
-              <a href="/omp?cmd=get_system_reports&amp;duration={604800}&amp;slave_id={../slave/@id}&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('week')"/></a>
-            </xsl:otherwise>
-          </xsl:choose>
-          <xsl:text> | </xsl:text>
-          <xsl:choose>
-            <xsl:when test="$duration='2592000'">
-              <xsl:value-of select="gsa:i18n ('month')"/>
-            </xsl:when>
-            <xsl:otherwise>
-              <a href="/omp?cmd=get_system_reports&amp;duration={2592000}&amp;slave_id={../slave/@id}&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('month')"/></a>
-            </xsl:otherwise>
-          </xsl:choose>
-          <xsl:text> | </xsl:text>
-          <xsl:choose>
-            <xsl:when test="$duration='31536000'">
-              <xsl:value-of select="gsa:i18n ('year')"/>
-            </xsl:when>
-            <xsl:otherwise>
-              <a href="/omp?cmd=get_system_reports&amp;duration={31536000}&amp;slave_id={../slave/@id}&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('year')"/></a>
-            </xsl:otherwise>
-          </xsl:choose>
-        </td>
-      </tr>
-      <xsl:if test="gsa:may-op ('get_scanners')">
+    <form action="" method="get" name="switch_slave" enctype="multipart/form-data">
+      <input type="hidden" name="token" value="{/envelope/token}"/>
+      <input type="hidden" name="cmd" value="get_system_reports"/>
+
+      <table>
         <tr>
           <td>
-            <xsl:value-of select="gsa:i18n ('Reports for slave scanner')"/>:
+            <b><xsl:value-of select="gsa:i18n ('Reports span the last')"/>:</b>
           </td>
           <td>
-            <div id="small_form" class="pull-left">
-              <form action="" method="get" name="switch_slave" enctype="multipart/form-data">
-                <input type="hidden" name="token" value="{/envelope/token}"/>
-                <input type="hidden" name="cmd" value="get_system_reports"/>
-                <input type="hidden" name="duration" value="{$duration}"/>
+            <xsl:choose>
+              <xsl:when test="$duration='3600'">
+                <xsl:value-of select="gsa:i18n ('hour')"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <a href="/omp?cmd=get_system_reports&amp;duration={3600}&amp;slave_id={../slave/@id}&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('hour')"/></a>
+              </xsl:otherwise>
+            </xsl:choose>
+            <xsl:text> | </xsl:text>
+            <xsl:choose>
+              <xsl:when test="$duration='86400'">
+                <xsl:value-of select="gsa:i18n ('day')"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <a href="/omp?cmd=get_system_reports&amp;duration={86400}&amp;slave_id={../slave/@id}&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('day')"/></a>
+              </xsl:otherwise>
+            </xsl:choose>
+            <xsl:text> | </xsl:text>
+            <xsl:choose>
+              <xsl:when test="$duration='604800'">
+                <xsl:value-of select="gsa:i18n ('week')"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <a href="/omp?cmd=get_system_reports&amp;duration={604800}&amp;slave_id={../slave/@id}&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('week')"/></a>
+              </xsl:otherwise>
+            </xsl:choose>
+            <xsl:text> | </xsl:text>
+            <xsl:choose>
+              <xsl:when test="$duration='2592000'">
+                <xsl:value-of select="gsa:i18n ('month')"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <a href="/omp?cmd=get_system_reports&amp;duration={2592000}&amp;slave_id={../slave/@id}&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('month')"/></a>
+              </xsl:otherwise>
+            </xsl:choose>
+            <xsl:text> | </xsl:text>
+            <xsl:choose>
+              <xsl:when test="$duration='31536000'">
+                <xsl:value-of select="gsa:i18n ('year')"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <a href="/omp?cmd=get_system_reports&amp;duration={31536000}&amp;slave_id={../slave/@id}&amp;token={/envelope/token}"><xsl:value-of select="gsa:i18n ('year')"/></a>
+              </xsl:otherwise>
+            </xsl:choose>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <hr/>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <b><xsl:value-of select="gsa:i18n ('Time range')"/>:</b>
+          </td>
+          <td>
+            <select name="range_type">
+              <xsl:call-template name="opt">
+                <xsl:with-param name="value" select="'duration'"/>
+                <xsl:with-param name="select-value" select="/envelope/params/range_type"/>
+                <xsl:with-param name="content" select="gsa:i18n ('Duration until now')"/>
+              </xsl:call-template>
+              <xsl:call-template name="opt">
+                <xsl:with-param name="value" select="'start_to_end'"/>
+                <xsl:with-param name="select-value" select="/envelope/params/range_type"/>
+                <xsl:with-param name="content" select="gsa:i18n ('Start to end')"/>
+              </xsl:call-template>
+              <xsl:call-template name="opt">
+                <xsl:with-param name="value" select="'from_start'"/>
+                <xsl:with-param name="select-value" select="/envelope/params/range_type"/>
+                <xsl:with-param name="content" select="gsa:i18n ('Duration from start')"/>
+              </xsl:call-template>
+              <xsl:call-template name="opt">
+                <xsl:with-param name="value" select="'until_end'"/>
+                <xsl:with-param name="select-value" select="/envelope/params/range_type"/>
+                <xsl:with-param name="content" select="gsa:i18n ('Duration until end')"/>
+              </xsl:call-template>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <xsl:value-of select="gsa:i18n ('Start time')"/>:
+          </td>
+          <td>
+            <div class="datepicker form-item" data-limit-type="none">
+              <input class="datepicker-button" size="24"/>
+              <input class="datepicker-day" name="start_day" type="hidden" value="{../start_time/day_of_month}"/>
+              <input class="datepicker-month" name="start_month" type="hidden" value="{../start_time/month}"/>
+              <input class="datepicker-year" name="start_year" type="hidden" value="{../start_time/year}"/>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>
+            <div class="form-item">
+              <input type="text"
+                name="start_hour"
+                value="{../start_time/hour}"
+                size="2"
+                class="spinner"
+                data-type="int"
+                min="0"
+                max="23"
+                maxlength="2"/>
+              h
+            </div>
+            <div class="form-item">
+              <input type="text"
+                name="start_minute"
+                value="{../start_time/minute - (../start_time/minute mod 5)}"
+                size="2"
+                class="spinner"
+                data-type="int"
+                min="0"
+                max="59"
+                maxlength="2"/>
+              m
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <xsl:value-of select="gsa:i18n ('End time')"/>:
+          </td>
+          <td>
+            <div class="datepicker form-item" data-limit-type="none">
+              <input class="datepicker-button" size="24"/>
+              <input class="datepicker-day" name="end_day" type="hidden" value="{../end_time/day_of_month}"/>
+              <input class="datepicker-month" name="end_month" type="hidden" value="{../end_time/month}"/>
+              <input class="datepicker-year" name="end_year" type="hidden" value="{../end_time/year}"/>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>
+            <div class="form-item">
+              <input type="text"
+                name="end_hour"
+                value="{../end_time/hour}"
+                size="2"
+                class="spinner"
+                data-type="int"
+                min="0"
+                max="23"
+                maxlength="2"/>
+              h
+            </div>
+            <div class="form-item">
+              <input type="text"
+                name="end_minute"
+                value="{../end_time/minute - (../end_time/minute mod 5)}"
+                size="2"
+                class="spinner"
+                data-type="int"
+                min="0"
+                max="59"
+                maxlength="2"/>
+              m
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <xsl:value-of select="gsa:i18n ('Duration')"/>:
+          </td>
+          <td>
+            <select name="duration">
+              <xsl:call-template name="opt">
+                <xsl:with-param name="value" select="'3600'"/>
+                <xsl:with-param name="select-value" select="$duration"/>
+                <xsl:with-param name="content" select="gsa-i18n:strformat (gsa:n-i18n ('%1 hour', '%1 hours', 1, ''), 1)"/>
+              </xsl:call-template>
+              <xsl:call-template name="opt">
+                <xsl:with-param name="value" select="'86400'"/>
+                <xsl:with-param name="select-value" select="$duration"/>
+                <xsl:with-param name="content" select="gsa-i18n:strformat (gsa:n-i18n ('%1 day', '%1 days', 1, ''), 1)"/>
+              </xsl:call-template>
+              <xsl:call-template name="opt">
+                <xsl:with-param name="value" select="'604800'"/>
+                <xsl:with-param name="select-value" select="$duration"/>
+                <xsl:with-param name="content" select="gsa-i18n:strformat (gsa:n-i18n ('%1 week', '%1 weeks', 1, ''), 1)"/>
+              </xsl:call-template>
+              <xsl:call-template name="opt">
+                <xsl:with-param name="value" select="'2592000'"/>
+                <xsl:with-param name="select-value" select="$duration"/>
+                <xsl:with-param name="content" select="gsa-i18n:strformat (gsa:n-i18n ('%1 month', '%1 months', 1, ''), 1)"/>
+              </xsl:call-template>
+              <xsl:call-template name="opt">
+                <xsl:with-param name="value" select="'31536000'"/>
+                <xsl:with-param name="select-value" select="$duration"/>
+                <xsl:with-param name="content" select="gsa-i18n:strformat (gsa:n-i18n ('%1 year', '%1 years', 1, ''), 1)"/>
+              </xsl:call-template>
+            </select>
+          </td>
+        </tr>
+        <xsl:if test="gsa:may-op ('get_scanners')">
+          <tr>
+            <td>
+              <b><xsl:value-of select="gsa:i18n ('Reports for slave scanner')"/>:</b>
+            </td>
+            <td>
+              <div id="small_form" class="pull-left">
                 <select name="slave_id" onchange="switch_slave.submit ()">
                   <xsl:variable name="slave_id">
                     <xsl:value-of select="../slave/@id"/>
@@ -34764,18 +34916,24 @@ should not have received it.
                     </xsl:choose>
                   </xsl:for-each>
                 </select>
-                <input type="image"
-                  name="Update"
-                  class="icon icon-sm"
-                  title="{gsa:i18n ('Update', 'Action Verb')}"
-                  src="/img/refresh.svg"
-                  alt="{gsa:i18n ('Update', 'Action Verb')}"/>
-              </form>
-            </div>
+              </div>
+            </td>
+          </tr>
+        </xsl:if>
+        <tr>
+          <td></td>
+          <td>
+            <input type="image"
+              name="Update"
+              class="icon icon-sm pull-right"
+              title="{gsa:i18n ('Update', 'Action Verb')}"
+              src="/img/refresh.svg"
+              alt="{gsa:i18n ('Update', 'Action Verb')}"/>
           </td>
         </tr>
-      </xsl:if>
-    </table>
+      </table>
+    </form>
+
     <xsl:choose>
       <xsl:when test="@status = '500'">
         <p>

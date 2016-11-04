@@ -1510,6 +1510,21 @@
       var elem_month = elem.find('.datepicker-month');
       var elem_day = elem.find('.datepicker-day');
       var cur_date = new Date();
+      var limit_type = elem.data ('limit-type');
+      var min_date;
+      var max_date;
+      if (limit_type === 'none') {
+        min_date = undefined;
+        max_date = undefined;
+      }
+      else if (limit_type === 'backward') {
+        min_date = '-3Y'
+        max_date = cur_date;
+      }
+      else {
+        min_date = cur_date;
+        max_date = '+3Y'
+      }
 
       if (elem_year.length && is_defined(elem_year.val())) {
         var year = parseInt(elem_year.val(), 10);
@@ -1534,8 +1549,8 @@
         buttonImageOnly: true,
         buttonText: tooltip,
         dateFormat: 'DD, d MM, yy',
-        minDate: cur_date,
-        maxDate: '+3Y',
+        minDate: min_date,
+        maxDate: max_date,
         onClose: function() {
           var date = button.datepicker('getDate');
           if (has_value(date)) {

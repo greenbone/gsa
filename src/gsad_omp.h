@@ -359,8 +359,8 @@ char * export_slaves_omp (credentials_t *, params_t *, enum content_type *,
 
 char * get_system_reports_omp (credentials_t *, params_t *,
                                cmd_response_data_t*);
-char * get_system_report_omp (credentials_t *, const char *, const char *,
-                              const char *, enum content_type*, gsize *,
+char * get_system_report_omp (credentials_t *, const char *, params_t *,
+                              enum content_type*, gsize *,
                               cmd_response_data_t*);
 
 char * get_report_format_omp (credentials_t *, params_t *,

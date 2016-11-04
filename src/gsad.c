@@ -1387,6 +1387,7 @@ init_validator ()
   openvas_validator_add (validator, "key_pub",   "(?s)^.*$");
   openvas_validator_add (validator, "key_priv",   "(?s)^.*$");
   openvas_validator_add (validator, "radiuskey",   "^.{0,40}$");
+  openvas_validator_add (validator, "range_type", "^(duration|until_end|from_start|start_to_end)$");
   openvas_validator_add (validator, "related:name",  "^(.*){0,400}$");
   openvas_validator_add (validator, "related:value", "^(.*){0,400}$");
   openvas_validator_add (validator, "report_id",  "^[a-z0-9\\-]+$");
@@ -1507,6 +1508,11 @@ init_validator ()
   openvas_validator_alias (validator, "dynamic_severity", "boolean");
   openvas_validator_alias (validator, "enable",       "boolean");
   openvas_validator_alias (validator, "enable_stop",             "boolean");
+  openvas_validator_alias (validator, "end_day", "day_of_month");
+  openvas_validator_alias (validator, "end_hour", "hour");
+  openvas_validator_alias (validator, "end_minute", "minute");
+  openvas_validator_alias (validator, "end_month", "month");
+  openvas_validator_alias (validator, "end_year", "year");
   openvas_validator_alias (validator, "esxi_credential_id", "credential_id");
   openvas_validator_alias (validator, "filt_id",            "id");
   openvas_validator_alias (validator, "filter_extra",       "filter");
@@ -1611,6 +1617,11 @@ init_validator ()
   openvas_validator_alias (validator, "smb_credential_id", "credential_id");
   openvas_validator_alias (validator, "snmp_credential_id", "credential_id");
   openvas_validator_alias (validator, "ssh_credential_id", "credential_id");
+  openvas_validator_alias (validator, "start_day", "day_of_month");
+  openvas_validator_alias (validator, "start_hour", "hour");
+  openvas_validator_alias (validator, "start_minute", "minute");
+  openvas_validator_alias (validator, "start_month", "month");
+  openvas_validator_alias (validator, "start_year", "year");
   openvas_validator_alias (validator, "subgroup_column", "group_column");
   openvas_validator_alias (validator, "subject_id",   "id");
   openvas_validator_alias (validator, "subject_id_optional", "id_optional");
@@ -4722,14 +4733,16 @@ handle_request (void *cls, struct MHD_Connection *connection,
       else if (!strncmp (&url[0], "/system_report/",
                          strlen ("/system_report/")))
         {
+          params_t *params;
           gsize res_len;
-          const char *duration, *slave_id;
+          const char *slave_id;
 
-          duration = MHD_lookup_connection_value (connection,
-                                                  MHD_GET_ARGUMENT_KIND,
-                                                  "duration");
-          if (openvas_validate (validator, "duration", duration))
-            duration = NULL;
+          params = params_new ();
+
+          MHD_get_connection_values (connection, MHD_GET_ARGUMENT_KIND,
+                                    params_mhd_add, params);
+
+          params_mhd_validate (params);
 
           slave_id = MHD_lookup_connection_value (connection,
                                                   MHD_GET_ARGUMENT_KIND,
@@ -4748,8 +4761,7 @@ handle_request (void *cls, struct MHD_Connection *connection,
 
           res = get_system_report_omp (credentials,
                                        &url[0] + strlen ("/system_report/"),
-                                       duration,
-                                       slave_id,
+                                       params,
                                        &content_type,
                                        &res_len,
                                        &response_data);
