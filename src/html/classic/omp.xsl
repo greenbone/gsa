@@ -755,9 +755,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:when test="$lower = 'get_dependencies'">
         <xsl:value-of select="gsa:i18n ('may get the dependencies of NVTs')"/>
       </xsl:when>
-      <xsl:when test="$lower = 'get_nvt_feed_version'">
-        <xsl:value-of select="gsa:i18n ('may get NVT feed version information')"/>
-      </xsl:when>
       <xsl:when test="$lower = 'get_version'">
         <xsl:value-of select="gsa:i18n ('may get version information')"/>
       </xsl:when>

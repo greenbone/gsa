@@ -1,3 +1,8 @@
+2016-11-07  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	* src/html/classic/omp.xsl (gsa:permission-description): Remove
+	GET_NVT_FEED_VERSION.
+
 2016-11-04  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/gsad.c (init_validator): Add params range_type, end_day,
