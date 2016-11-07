@@ -1052,6 +1052,7 @@ select[multiple] {
 .icon-menu ul li {
   width: 255px;
   line-height: 22px;
+  cursor: pointer;
 }
 
 .icon-menu ul li a {

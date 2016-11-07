@@ -1,5 +1,10 @@
 2016-11-07  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/css/gsa-style.css: Always use pointer corsor for icon menu
+	entries.
+
+2016-11-07  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/omp.xsl (get_system_reports_response): Update layout of
 	duration selection for system reports.
 
