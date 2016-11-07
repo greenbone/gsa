@@ -343,18 +343,20 @@ omp_init (const gchar *manager_address_unix, const gchar *manager_address_tls,
  *
  * @param[in]  data  The cmd_response_data_t struct to initialize
  */
-void cmd_response_data_init (cmd_response_data_t* data)
+void
+cmd_response_data_init (cmd_response_data_t* data)
 {
   data->http_status_code = MHD_HTTP_OK;
   data->redirect = NULL;
 }
 
 /**
- * @brief Frees resources of a cmd_response_data_t struct.
+ * @brief Clears a cmd_response_data_t struct.
  *
- * @param[in]  response_data
+ * @param[in]  data  Struct to reset.
  */
-void cmd_response_data_reset (cmd_response_data_t* data)
+void
+cmd_response_data_reset (cmd_response_data_t* data)
 {
   memset (data, 0, sizeof (cmd_response_data_t));
 }
@@ -1195,9 +1197,9 @@ setting_get_value (openvas_connection_t *connection, const char *setting_id,
 /**
  * @brief Check a param using the direct response method.
  *
- * @param[in]  name     Param name.
- * @param[in]  op_name  Operation name.
- * @param[in]  ret_func Function to return message.
+ * @param[in]  name      Param name.
+ * @param[in]  op_name   Operation name.
+ * @param[in]  next_cmd  Next command.
  */
 #define CHECK_PARAM_INVALID(name, op_name, next_cmd)                           \
   if (name == NULL)                                                            \
@@ -1458,9 +1460,11 @@ action_result_page (credentials_t *credentials,
  *
  * @param[in]  credentials    Username and password for authentication.
  * @param[in]  params         Request parameters.
- * @param[in]  message  Message.
- * @param[in]  status   Status code.
- * @param[in]  op_name  Operation name.
+ * @param[in]  response_data  Response data.
+ * @param[in]  message        Message.
+ * @param[in]  status         Status code.
+ * @param[in]  op_name        Operation name.
+ * @param[in]  next_cmd       Next command.
  *
  * @return Result of XSL transformation.
  */
@@ -3409,6 +3413,7 @@ setting_get_value_error (credentials_t *credentials,
  * @param[out]  value       Variable to assign the value to.
  * @param[in]   param       The param to try get the value from first.
  * @param[in]   setting_id  The UUID of the setting to try next.
+ * @param[in]   cleanup     Code to run on failure.
  */
 #define PARAM_OR_SETTING(value, param, setting_id, cleanup)                   \
   if (params_valid (params, param))                                           \
@@ -26386,11 +26391,13 @@ save_auth_omp (credentials_t* credentials, params_t *params,
 /**
  * @brief Save chart preferences.
  *
- * @param[in]  credentials   Username and password for authentication.
- * @param[in]  params        Request parameters.
+ * @param[in]  credentials    Username and password for authentication.
+ * @param[in]  params         Request parameters.
+ * @param[in]  pref_id        Preference ID.
+ * @param[in]  pref_value     Preference value.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
- * @return .
+ * @return SAVE_CHART_PREFERENCE OMP response.
  */
 char*
 save_chart_preference_omp (credentials_t* credentials, params_t *params,
@@ -26745,15 +26752,18 @@ wizard_get_omp (credentials_t *credentials, params_t *params,
 /**
  * @brief Returns a process_bulk page.
  *
- * @param[in]  credentials  Credentials of user issuing the action.
- * @param[in]  params       Request parameters.
- * @param[out] response_data  Extra data return for the HTTP response.
+ * @param[in]   credentials    Credentials of user issuing the action.
+ * @param[in]   params         Request parameters.
+ * @param[out]  content_type         Content type return.
+ * @param[out]  content_disposition  Content disposition return.
+ * @param[out]  content_length       Content length return.
+ * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
 process_bulk_omp (credentials_t *credentials, params_t *params,
-                  enum content_type * content_type,
+                  enum content_type *content_type,
                   char **content_disposition, gsize *content_length,
                   cmd_response_data_t* response_data)
 {
@@ -27744,10 +27754,9 @@ export_assets_omp (credentials_t * credentials, params_t *params,
 /**
  * @brief Setup edit XML, XSL transform the result.
  *
- * @param[in]  type         Type or asset to edit.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[in]  credentials    Username and password for authentication.
+ * @param[in]  params         Request parameters.
+ * @param[in]  extra_xml      Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.

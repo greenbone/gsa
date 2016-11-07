@@ -2156,9 +2156,10 @@ credentials_free (credentials_t *creds)
  * parameters and calls the appropriate OMP function (like
  * create_task_omp).
  *
- * @param[in]   con_info     Connection info.
- * @param[out]  user_return  User after successful login.
- * @param[out]  new_sid      SID when appropriate to attach.
+ * @param[in]   con_info        Connection info.
+ * @param[out]  user_return     User after successful login.
+ * @param[out]  new_sid         SID when appropriate to attach.
+ * @param[out]  client_address  Client address.
  *
  * @return 0 after authenticated page, 1 after login, 2 after logout,
  *         3 after internal error or login failure.
@@ -2842,6 +2843,8 @@ params_mhd_add (void *params, enum MHD_ValueKind kind, const char *name,
  * @param[out]  content_disposition  Return location for the
  *                                   content_disposition, if any.
  * @param[out]  response_size        Return location for response size, if any.
+ * @param[in]   response_data        Response data.  Return info is written
+ *                                   into here.
  *
  * @return Newly allocated response string.
  */

@@ -111,7 +111,7 @@ gsad_base_cleanup ()
  * @return  The chroot state: 0 = no chroot, 1 = chroot in effect
  */
 int
-get_chroot_state () 
+get_chroot_state ()
 {
   return chroot_state;
 }
@@ -480,7 +480,7 @@ gsad_message (credentials_t *credentials, const char *title,
                                  credentials ? credentials->token : "");
     }
 
-  if (credentials) 
+  if (credentials)
     {
       gchar *pre;
       time_t now;
@@ -547,6 +547,7 @@ gsad_message (credentials_t *credentials, const char *title,
  * @param[in]  message      Login screen message, or NULL.
  * @param[out] token        Token, or NULL.
  * @param[out] time         Time.
+ * @param[out] url          URL.
  * @param[out] i18n         i18n language code, or NULL.
  * @param[out] guest        Username for guest login, or NULL.
  *
