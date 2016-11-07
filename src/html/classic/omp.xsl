@@ -34636,7 +34636,7 @@ should not have received it.
           <pre style="margin-left: 5%"><xsl:value-of select="report/text()"/></pre>
         </xsl:when>
         <xsl:otherwise>
-          <img src="/system_report/{name}/report.{report/@format}?duration={../../duration}&amp;slave_id={../../slave/@id}&amp;start_year={../../start_time/year}&amp;start_month={../../start_time/month}&amp;start_day={../../start_time/day_of_month}&amp;start_hour={../../start_time/hour}&amp;start_minute={../../start_time/minute}&amp;end_year={../../end_time/year}&amp;end_month={../../end_time/month}&amp;end_day={../../end_time/day_of_month}&amp;end_hour={../../end_time/hour}&amp;end_minute={../../end_time/minute}&amp;token={/envelope/token}"/>
+          <img src="/system_report/{name}/report.{report/@format}?slave_id={../../slave/@id}&amp;start_year={../../start_time/year}&amp;start_month={../../start_time/month}&amp;start_day={../../start_time/day_of_month}&amp;start_hour={../../start_time/hour}&amp;start_minute={../../start_time/minute}&amp;end_year={../../end_time/year}&amp;end_month={../../end_time/month}&amp;end_day={../../end_time/day_of_month}&amp;end_hour={../../end_time/hour}&amp;end_minute={../../end_time/minute}&amp;token={/envelope/token}"/>
         </xsl:otherwise>
       </xsl:choose>
     </td>
@@ -34666,7 +34666,7 @@ should not have received it.
 
   <div class="section-header">
     <h1>
-      <a href="/omp?cmd=get_system_reports&amp;duration=86400&amp;slave_id=0&amp;token={/envelope/token}"
+      <a href="/omp?cmd=get_system_reports&amp;slave_id=0&amp;token={/envelope/token}"
          title="{gsa:i18n ('Performance')}">
         <img class="icon icon-lg" src="/img/performance.svg" alt="Performance"/>
       </a>
