@@ -34662,6 +34662,76 @@ should not have received it.
       title="{concat(gsa:i18n('Help'),': ',gsa:i18n('Performance'))}">
       <img src="/img/help.svg"/>
     </a>
+    <span class="icon-menu">
+      <img src="/img/wizard.svg" class="icon icon-sm"/>
+      <ul>
+        <li>
+          <a class="systemsettings-set-date"
+            data-form="#timeselect"
+            data-start-date="#start-date"
+            data-end-date="#end-date"
+            data-start-hour="#start-hour"
+            data-end-hour="#end-hour"
+            data-start-minute="#start-minute"
+            data-end-minute="#end-minute"
+            data-duration="hour">
+            <xsl:value-of select="gsa:i18n ('hour')"/>
+          </a>
+        </li>
+        <li>
+          <a class="systemsettings-set-date"
+            data-form="#timeselect"
+            data-start-date="#start-date"
+            data-end-date="#end-date"
+            data-start-hour="#start-hour"
+            data-end-hour="#end-hour"
+            data-start-minute="#start-minute"
+            data-end-minute="#end-minute"
+            data-duration="day">
+            <xsl:value-of select="gsa:i18n ('day')"/>
+          </a>
+        </li>
+        <li>
+          <a class="systemsettings-set-date"
+            data-form="#timeselect"
+            data-start-date="#start-date"
+            data-end-date="#end-date"
+            data-start-hour="#start-hour"
+            data-end-hour="#end-hour"
+            data-start-minute="#start-minute"
+            data-end-minute="#end-minute"
+            data-duration="week">
+            <xsl:value-of select="gsa:i18n ('week')"/>
+          </a>
+        </li>
+        <li>
+          <a class="systemsettings-set-date"
+            data-form="#timeselect"
+            data-start-date="#start-date"
+            data-end-date="#end-date"
+            data-start-hour="#start-hour"
+            data-end-hour="#end-hour"
+            data-start-minute="#start-minute"
+            data-end-minute="#end-minute"
+            data-duration="month">
+            <xsl:value-of select="gsa:i18n ('month')"/>
+          </a>
+        </li>
+        <li>
+          <a class="systemsettings-set-date"
+            data-form="#timeselect"
+            data-start-date="#start-date"
+            data-end-date="#end-date"
+            data-start-hour="#start-hour"
+            data-end-hour="#end-hour"
+            data-start-minute="#start-minute"
+            data-end-minute="#end-minute"
+            data-duration="year">
+            <xsl:value-of select="gsa:i18n ('year')"/>
+          </a>
+        </li>
+      </ul>
+    </span>
   </div>
 
   <div class="section-header">
@@ -34675,167 +34745,99 @@ should not have received it.
   </div>
 
   <div class="section-box">
-    <form action="" method="get" class="form-horizontal">
+    <form action="" method="get" class="form-horizontal container" id="timeselect">
       <input type="hidden" name="token" value="{/envelope/token}"/>
       <input type="hidden" name="cmd" value="get_system_reports"/>
 
-      <table>
-        <tr>
-          <td>
-            <b><xsl:value-of select="gsa:i18n ('Reports span the last')"/>:</b>
-          </td>
-          <td>
-            <a class="systemsettings-set-date"
-              data-start-date="#start-date"
-              data-end-date="#end-date"
-              data-start-hour="#start-hour"
-              data-end-hour="#end-hour"
-              data-start-minute="#start-minute"
-              data-end-minute="#end-minute"
-              data-duration="hour">
-              <xsl:value-of select="gsa:i18n ('hour')"/>
-            </a>
-
-            |
-            <a class="systemsettings-set-date"
-              data-start-date="#start-date"
-              data-end-date="#end-date"
-              data-start-hour="#start-hour"
-              data-end-hour="#end-hour"
-              data-start-minute="#start-minute"
-              data-end-minute="#end-minute"
-              data-duration="day">
-              <xsl:value-of select="gsa:i18n ('day')"/>
-            </a>
-            |
-            <a class="systemsettings-set-date"
-              data-start-date="#start-date"
-              data-end-date="#end-date"
-              data-start-hour="#start-hour"
-              data-end-hour="#end-hour"
-              data-start-minute="#start-minute"
-              data-end-minute="#end-minute"
-              data-duration="week">
-              <xsl:value-of select="gsa:i18n ('week')"/>
-            </a>
-            |
-            <a class="systemsettings-set-date"
-              data-start-date="#start-date"
-              data-end-date="#end-date"
-              data-start-hour="#start-hour"
-              data-end-hour="#end-hour"
-              data-start-minute="#start-minute"
-              data-end-minute="#end-minute"
-              data-duration="month">
-              <xsl:value-of select="gsa:i18n ('month')"/>
-            </a>
-            |
-            <a class="systemsettings-set-date"
-              data-start-date="#start-date"
-              data-end-date="#end-date"
-              data-start-hour="#start-hour"
-              data-end-hour="#end-hour"
-              data-start-minute="#start-minute"
-              data-end-minute="#end-minute"
-              data-duration="year">
-              <xsl:value-of select="gsa:i18n ('year')"/>
-            </a>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <xsl:value-of select="gsa:i18n ('Start time')"/>:
-          </td>
-          <td>
+      <div class="col-8">
+        <div class="form-group">
+          <label class="col-2 control-label">
+            <xsl:value-of select="gsa:i18n ('Start time')"/>
+          </label>
+          <div class="col-10">
             <div class="datepicker form-item" data-limit-type="none" id="start-date">
               <input class="datepicker-button" size="24"/>
               <input class="datepicker-day" name="start_day" type="hidden" value="{../start_time/day_of_month}"/>
               <input class="datepicker-month" name="start_month" type="hidden" value="{../start_time/month}"/>
               <input class="datepicker-year" name="start_year" type="hidden" value="{../start_time/year}"/>
             </div>
-          </td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>
-            <div class="form-item">
-              <input type="text"
-                name="start_hour"
-                id="start-hour"
-                value="{../start_time/hour}"
-                size="2"
-                class="spinner"
-                data-type="int"
-                min="0"
-                max="23"
-                maxlength="2"/>
-              h
+            <div class="form-group">
+              <div class="form-item">
+                <input type="text"
+                  name="start_hour"
+                  id="start-hour"
+                  value="{../start_time/hour}"
+                  size="2"
+                  class="spinner"
+                  data-type="int"
+                  min="0"
+                  max="23"
+                  maxlength="2"/>
+                h
+              </div>
+              <div class="form-item">
+                <input type="text"
+                  name="start_minute"
+                  id="start-minute"
+                  value="{../start_time/minute - (../start_time/minute mod 5)}"
+                  size="2"
+                  class="spinner"
+                  data-type="int"
+                  min="0"
+                  max="59"
+                  maxlength="2"/>
+                m
+              </div>
             </div>
-            <div class="form-item">
-              <input type="text"
-                name="start_minute"
-                id="start-minute"
-                value="{../start_time/minute - (../start_time/minute mod 5)}"
-                size="2"
-                class="spinner"
-                data-type="int"
-                min="0"
-                max="59"
-                maxlength="2"/>
-              m
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <xsl:value-of select="gsa:i18n ('End time')"/>:
-          </td>
-          <td>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-2 control-label">
+            <xsl:value-of select="gsa:i18n ('End time')"/>
+          </label>
+          <div class="col-10">
             <div class="datepicker form-item" data-limit-type="none" id="end-date">
               <input class="datepicker-button" size="24"/>
               <input class="datepicker-day" name="end_day" type="hidden" value="{../end_time/day_of_month}"/>
               <input class="datepicker-month" name="end_month" type="hidden" value="{../end_time/month}"/>
               <input class="datepicker-year" name="end_year" type="hidden" value="{../end_time/year}"/>
             </div>
-          </td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>
-            <div class="form-item">
-              <input type="text"
-                name="end_hour"
-                id="end-hour"
-                value="{../end_time/hour}"
-                size="2"
-                class="spinner"
-                data-type="int"
-                min="0"
-                max="23"
-                maxlength="2"/>
-              h
+            <div class="form-group">
+              <div class="form-item">
+                <input type="text"
+                  name="end_hour"
+                  id="end-hour"
+                  value="{../end_time/hour}"
+                  size="2"
+                  class="spinner"
+                  data-type="int"
+                  min="0"
+                  max="23"
+                  maxlength="2"/>
+                h
+              </div>
+              <div class="form-item">
+                <input type="text"
+                  name="end_minute"
+                  id="end-minute"
+                  value="{../end_time/minute - (../end_time/minute mod 5)}"
+                  size="2"
+                  class="spinner"
+                  data-type="int"
+                  min="0"
+                  max="59"
+                  maxlength="2"/>
+                m
+              </div>
             </div>
-            <div class="form-item">
-              <input type="text"
-                name="end_minute"
-                id="end-minute"
-                value="{../end_time/minute - (../end_time/minute mod 5)}"
-                size="2"
-                class="spinner"
-                data-type="int"
-                min="0"
-                max="59"
-                maxlength="2"/>
-              m
-            </div>
-          </td>
-        </tr>
+          </div>
+        </div>
         <xsl:if test="gsa:may-op ('get_scanners')">
-          <tr>
-            <td>
-              <b><xsl:value-of select="gsa:i18n ('Reports for slave scanner')"/>:</b>
-            </td>
-            <td>
+          <div class="form-group">
+            <label class="col-2 control-label">
+              <xsl:value-of select="gsa:i18n ('Reports for slave scanner')"/>
+            </label>
+            <div class="col-10">
               <div id="small_form" class="pull-left">
                 <select name="slave_id" onchange="switch_slave.submit ()">
                   <xsl:variable name="slave_id">
@@ -34861,21 +34863,19 @@ should not have received it.
                   </xsl:for-each>
                 </select>
               </div>
-            </td>
-          </tr>
+            </div>
+          </div>
         </xsl:if>
-        <tr>
-          <td></td>
-          <td>
-            <input type="image"
+        <div class="form-group">
+          <div class="col-6 offset-6">
+            <input type="submit"
               name="Update"
-              class="icon icon-sm pull-right"
+              class="button"
               title="{gsa:i18n ('Update', 'Action Verb')}"
-              src="/img/refresh.svg"
-              alt="{gsa:i18n ('Update', 'Action Verb')}"/>
-          </td>
-        </tr>
-      </table>
+              value="{gsa:i18n ('Update', 'Action Verb')}"/>
+          </div>
+        </div>
+      </div>
     </form>
 
     <xsl:choose>
