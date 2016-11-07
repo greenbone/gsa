@@ -34675,7 +34675,7 @@ should not have received it.
             data-start-minute="#start-minute"
             data-end-minute="#end-minute"
             data-duration="hour">
-            <xsl:value-of select="gsa:i18n ('hour')"/>
+            <xsl:value-of select="gsa:i18n ('Report for last hour')"/>
           </a>
         </li>
         <li>
@@ -34688,7 +34688,7 @@ should not have received it.
             data-start-minute="#start-minute"
             data-end-minute="#end-minute"
             data-duration="day">
-            <xsl:value-of select="gsa:i18n ('day')"/>
+            <xsl:value-of select="gsa:i18n ('Report for last day')"/>
           </a>
         </li>
         <li>
@@ -34701,7 +34701,7 @@ should not have received it.
             data-start-minute="#start-minute"
             data-end-minute="#end-minute"
             data-duration="week">
-            <xsl:value-of select="gsa:i18n ('week')"/>
+            <xsl:value-of select="gsa:i18n ('Report for last week')"/>
           </a>
         </li>
         <li>
@@ -34714,7 +34714,7 @@ should not have received it.
             data-start-minute="#start-minute"
             data-end-minute="#end-minute"
             data-duration="month">
-            <xsl:value-of select="gsa:i18n ('month')"/>
+            <xsl:value-of select="gsa:i18n ('Report for last month')"/>
           </a>
         </li>
         <li>
@@ -34727,7 +34727,7 @@ should not have received it.
             data-start-minute="#start-minute"
             data-end-minute="#end-minute"
             data-duration="year">
-            <xsl:value-of select="gsa:i18n ('year')"/>
+            <xsl:value-of select="gsa:i18n ('Report for last year')"/>
           </a>
         </li>
       </ul>
