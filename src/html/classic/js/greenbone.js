@@ -1268,6 +1268,16 @@
     }
   };
 
+  function set_datepicker_date(elem, date) {
+    var elem_year = elem.find('.datepicker-year');
+    var elem_month = elem.find('.datepicker-month');
+    var elem_day = elem.find('.datepicker-day');
+
+    elem_day.val(date.getDate());
+    elem_month.val(date.getMonth() + 1);
+    elem_year.val(date.getFullYear());
+  }
+
   function on_ready(doc) {
     doc = $(doc);
 
@@ -1510,9 +1520,10 @@
       var elem_month = elem.find('.datepicker-month');
       var elem_day = elem.find('.datepicker-day');
       var cur_date = new Date();
-      var limit_type = elem.data ('limit-type');
+      var limit_type = elem.data('limit-type');
       var min_date;
       var max_date;
+
       if (limit_type === 'none') {
         min_date = undefined;
         max_date = undefined;
@@ -1554,9 +1565,7 @@
         onClose: function() {
           var date = button.datepicker('getDate');
           if (has_value(date)) {
-            elem_day.val(date.getDate());
-            elem_month.val(date.getMonth() + 1);
-            elem_year.val(date.getFullYear());
+            set_datepicker_date(elem, date);
           }
         },
       });
@@ -1577,6 +1586,69 @@
           event.stopPropagation();
           button.datepicker('show');
         }
+      });
+    });
+
+    doc.find('.systemsettings-set-date').each(function() {
+      var elem = $(this);
+
+      elem.on('click', function(event) {
+        var start_date = $(elem.data('start-date'));
+        var start_hour = $(elem.data('start-hour'));
+        var start_minute = $(elem.data('start-minute'));
+
+        var end_date = $(elem.data('end-date'));
+        var end_hour = $(elem.data('end-hour'));
+        var end_minute = $(elem.data('end-minute'));
+
+        var sdp = start_date.find('.datepicker-button').first();
+        var edp = end_date.find('.datepicker-button').first();
+
+        var e_date = new Date();
+        var timestamp = e_date.getTime();
+        var s_date;
+
+        switch(elem.data('duration')) {
+          case 'hour':
+            s_date = new Date(timestamp - 3600000);
+            break;
+          case 'day':
+            s_date = new Date(timestamp - 86400000);
+            break;
+          case 'week':
+            s_date = new Date(timestamp - 604800000);
+            break;
+          case 'month':
+            s_date = new Date(e_date.getTime());
+
+            var month = s_date.getUTCMonth() - 1;
+            var year = s_date.getUTCFullYear();
+
+            if (month === 0) {
+              month = 12;
+              year = year - 1;
+            }
+
+            s_date.setUTCFullYear(year);
+            s_date.setUTCMonth(month);
+            break;
+          case 'year':
+            s_date = new Date(e_date.getTime());
+            s_date.setUTCFullYear(s_date.getUTCFullYear() - 1);
+            break;
+        }
+
+
+        sdp.datepicker('setDate', s_date);
+        edp.datepicker('setDate', e_date);
+        set_datepicker_date(start_date, s_date);
+        set_datepicker_date(end_date, e_date);
+
+        start_hour.val(s_date.getUTCHours());
+        end_hour.val(e_date.getUTCHours());
+
+        start_minute.val(s_date.getUTCMinutes());
+        end_minute.val(e_date.getUTCMinutes());
       });
     });
 

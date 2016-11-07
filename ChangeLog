@@ -1,5 +1,10 @@
 2016-11-07  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/greenbone.js (on_ready): Add JavaScript code to set
+	durations in systemsettings from hour, day, week, month and year shortcuts.
+
+2016-11-07  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/gsad_omp.c (get_system_reports_omp, get_system_report_omp)): Remove
 	parameters range_type and duration. Only use start and end parameters.
 	This reduces the complexity and simplifies the client code.
