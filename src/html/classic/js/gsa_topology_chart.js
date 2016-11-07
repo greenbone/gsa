@@ -118,6 +118,42 @@
       }
     }
 
+    if (topology.nodes.length == 0) {
+      // Show text if no nodes are shown
+      var height = svg.attr('height');
+      var width = svg.attr('width');
+
+      if (self.layout) {
+        self.layout.stop();
+      }
+      if (self.interval) {
+        window.clearInterval(self.interval);
+        self.interval = undefined;
+      }
+      svg.html ('');
+
+      self.empty_text =
+        svg.insert('text')
+          .attr('class', 'empty_text')
+          .style('dominant-baseline', 'middle')
+          .style('text-anchor', 'middle');
+
+      self.empty_text.insert ('tspan')
+        .attr ('x', width / 2)
+        .text (gsa._('No hosts with topology selected'))
+
+      svg.selectAll('.empty_text')
+        .attr('x', width / 2)
+        .attr('y', height / 2);
+
+      return;
+    }
+    else {
+      if (self.empty_text)
+        self.empty_text.remove();
+      self.empty_text = null;
+    }
+
     // Setup display parameters
     var height = svg.attr('height');
     var width = svg.attr('width');

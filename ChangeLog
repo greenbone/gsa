@@ -1,5 +1,11 @@
 2016-11-07  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/js/gsa_topology_chart.js
+	(TopologyChartGenerator.prototype.generate): Show a short info text
+	if there are no nodes to display.
+
+2016-11-07  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/omp.xsl (get_system_reports_response): Do not round
 	minutes.
 
