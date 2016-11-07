@@ -1,3 +1,8 @@
+2016-11-07  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/omp.xsl (get_system_reports_response): Do not round
+	minutes.
+
 2016-11-07  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/omp.xsl (get_system_reports_response): Improve icon menu
