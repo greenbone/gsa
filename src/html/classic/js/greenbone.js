@@ -1593,6 +1593,7 @@
       var elem = $(this);
 
       elem.on('click', function(event) {
+        var form = $(elem.data('form'));
         var start_date = $(elem.data('start-date'));
         var start_hour = $(elem.data('start-hour'));
         var start_minute = $(elem.data('start-minute'));
@@ -1649,6 +1650,8 @@
 
         start_minute.val(s_date.getUTCMinutes());
         end_minute.val(e_date.getUTCMinutes());
+
+        form.submit();
       });
     });
 
