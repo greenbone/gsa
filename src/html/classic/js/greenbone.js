@@ -463,8 +463,16 @@
   };
 
   Dialog.prototype.waiting = function() {
-    // I believe there have to be a better way to find this.
     var buttons = this.dialog.closest('.ui-dialog').find('button.ui-button');
+    buttons.each(function() {
+      // disable ALL ui dialog buttons in title and footer
+      var button = $(this);
+      button.button('disable');
+    });
+
+    buttons = this.dialog.closest('.ui-dialog')
+      .find('.ui-dialog-buttonset button.ui-button');
+
     buttons.each(function() {
       var button = $(this);
       if (button.button('option', 'label') !== 'Close') {
@@ -473,8 +481,7 @@
           button.button('option', 'label', this.label.substring(
                 0, this.label.length - 1) + 'ing ...');
         }
-        button.button('option', 'icons', {primary: 'ui-icon-waiting'});
-        button.button('disable');
+        button.button('option', 'icon', 'ui-icon-waiting');
       }
     });
     return this;
@@ -510,14 +517,23 @@
   gsa.derive(OMPDialog, Dialog);
 
   OMPDialog.prototype.finished = function() {
-    // I believe there have to be a better way to find this.
     var buttons = this.dialog.closest('.ui-dialog').find('button.ui-button');
+
+    buttons.each(function() {
+      // reenable all dialog buttons
+      var button = $(this);
+      button.button('enable');
+    });
+
+    buttons = this.dialog.closest('.ui-dialog')
+      .find('.ui-dialog-buttonset button.ui-button');
+
     buttons.each(function() {
       var button = $(this);
+
       if (button.button('option', 'label') !== 'Close') {
-        button.button('enable');
         button.button('option', 'label', this.label);
-        button.button('option', 'icons', {primary: null});
+        button.button('option', 'icon', null);
       }
     });
   };
