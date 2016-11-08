@@ -1278,6 +1278,13 @@
     elem_year.val(date.getFullYear());
   }
 
+  function moment_to_timezone_date(moment_date) {
+    // returns a date with CET === moment_date.tz
+    return new Date(moment_date.year(), moment_date.month(), moment_date.date(),
+      moment_date.hours(), moment_date.minutes(), moment_date.seconds(),
+      moment_date.milliseconds());
+  }
+
   function on_ready(doc) {
     doc = $(doc);
 
@@ -1609,19 +1616,22 @@
         var sdp = f_start_date.find('.datepicker-button').first();
         var edp = f_end_date.find('.datepicker-button').first();
 
-        var e_date = moment().tz(tz);
-        var s_date = e_date.clone().subtract(1, elem.data('duration'));
+        var e_mom = moment().tz(tz);
+        var s_mom = e_mom.clone().subtract(1, elem.data('duration'));
 
-        sdp.datepicker('setDate', s_date.toDate());
-        edp.datepicker('setDate', e_date.toDate());
-        set_datepicker_date(f_start_date, s_date.toDate());
-        set_datepicker_date(f_end_date, e_date.toDate());
+        var s_date = moment_to_timezone_date(s_mom);
+        var e_date = moment_to_timezone_date(e_mom);
 
-        f_start_hour.val(s_date.hours());
-        f_end_hour.val(e_date.hours());
+        sdp.datepicker('setDate', s_date);
+        edp.datepicker('setDate', e_date);
+        set_datepicker_date(f_start_date, s_date);
+        set_datepicker_date(f_end_date, e_date);
 
-        f_start_minute.val(s_date.minutes());
-        f_end_minute.val(e_date.minutes());
+        f_start_hour.val(s_mom.hours());
+        f_end_hour.val(e_mom.hours());
+
+        f_start_minute.val(s_mom.minutes());
+        f_end_minute.val(e_mom.minutes());
 
         form.submit();
       });

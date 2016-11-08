@@ -1,5 +1,10 @@
 2016-11-08  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/greenbone.js (on_ready): Fix setting the timezone aware
+	date in the systemreport datepickers.
+
+2016-11-08  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/omp.xsl (get_system_reports_response): Add timezone
 	information to systemsettings set date anchors.
 
