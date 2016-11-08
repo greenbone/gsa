@@ -34668,6 +34668,7 @@ should not have received it.
         <li>
           <a class="systemsettings-set-date"
             data-form="#timeselect"
+            data-timezone="{/envelope/timezone}"
             data-start-date="#start-date"
             data-end-date="#end-date"
             data-start-hour="#start-hour"
@@ -34681,6 +34682,7 @@ should not have received it.
         <li>
           <a class="systemsettings-set-date"
             data-form="#timeselect"
+            data-timezone="{/envelope/timezone}"
             data-start-date="#start-date"
             data-end-date="#end-date"
             data-start-hour="#start-hour"
@@ -34694,6 +34696,7 @@ should not have received it.
         <li>
           <a class="systemsettings-set-date"
             data-form="#timeselect"
+            data-timezone="{/envelope/timezone}"
             data-start-date="#start-date"
             data-end-date="#end-date"
             data-start-hour="#start-hour"
@@ -34707,6 +34710,7 @@ should not have received it.
         <li>
           <a class="systemsettings-set-date"
             data-form="#timeselect"
+            data-timezone="{/envelope/timezone}"
             data-start-date="#start-date"
             data-end-date="#end-date"
             data-start-hour="#start-hour"
@@ -34720,6 +34724,7 @@ should not have received it.
         <li>
           <a class="systemsettings-set-date"
             data-form="#timeselect"
+            data-timezone="{/envelope/timezone}"
             data-start-date="#start-date"
             data-end-date="#end-date"
             data-start-hour="#start-hour"

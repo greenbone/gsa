@@ -1,3 +1,20 @@
+2016-11-08  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/omp.xsl (get_system_reports_response): Add timezone
+	information to systemsettings set date anchors.
+
+	* src/html/classic/js/lib/moment-timezone-with-data.js,
+	src/html/classic/js/lib/moment.js: Add moment.js and full timezone information
+	data.
+
+	* CMakeLists.txt: Add and install moment.js files.
+
+	* src/html/classic/js/greenbone.js (on_ready): Use moment.js for setting the
+	system reports. Using moment.js allows to handle timezone correctly and also
+	simplifies calculating the differences.
+
+	* src/html/classic/gsad.xsl: Include moment.js in html header.
+
 2016-11-07  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	* src/gsad.c, src/gsad_base.c, src/gsad_omp.c: Bring Doxygen docs up to

@@ -1593,63 +1593,35 @@
       var elem = $(this);
 
       elem.on('click', function(event) {
+        var tz = elem.data('timezone');
+        var duration = elem.data('duration');
+
         var form = $(elem.data('form'));
-        var start_date = $(elem.data('start-date'));
-        var start_hour = $(elem.data('start-hour'));
-        var start_minute = $(elem.data('start-minute'));
 
-        var end_date = $(elem.data('end-date'));
-        var end_hour = $(elem.data('end-hour'));
-        var end_minute = $(elem.data('end-minute'));
+        var f_start_date = $(elem.data('start-date'));
+        var f_start_hour = $(elem.data('start-hour'));
+        var f_start_minute = $(elem.data('start-minute'));
 
-        var sdp = start_date.find('.datepicker-button').first();
-        var edp = end_date.find('.datepicker-button').first();
+        var f_end_date = $(elem.data('end-date'));
+        var f_end_hour = $(elem.data('end-hour'));
+        var f_end_minute = $(elem.data('end-minute'));
 
-        var e_date = new Date();
-        var timestamp = e_date.getTime();
-        var s_date;
+        var sdp = f_start_date.find('.datepicker-button').first();
+        var edp = f_end_date.find('.datepicker-button').first();
 
-        switch(elem.data('duration')) {
-          case 'hour':
-            s_date = new Date(timestamp - 3600000);
-            break;
-          case 'day':
-            s_date = new Date(timestamp - 86400000);
-            break;
-          case 'week':
-            s_date = new Date(timestamp - 604800000);
-            break;
-          case 'month':
-            s_date = new Date(e_date.getTime());
+        var e_date = moment().tz(tz);
+        var s_date = e_date.clone().subtract(1, elem.data('duration'));
 
-            var month = s_date.getUTCMonth() - 1;
-            var year = s_date.getUTCFullYear();
+        sdp.datepicker('setDate', s_date.toDate());
+        edp.datepicker('setDate', e_date.toDate());
+        set_datepicker_date(f_start_date, s_date.toDate());
+        set_datepicker_date(f_end_date, e_date.toDate());
 
-            if (month === 0) {
-              month = 12;
-              year = year - 1;
-            }
+        f_start_hour.val(s_date.hours());
+        f_end_hour.val(e_date.hours());
 
-            s_date.setUTCFullYear(year);
-            s_date.setUTCMonth(month);
-            break;
-          case 'year':
-            s_date = new Date(e_date.getTime());
-            s_date.setUTCFullYear(s_date.getUTCFullYear() - 1);
-            break;
-        }
-
-
-        sdp.datepicker('setDate', s_date);
-        edp.datepicker('setDate', e_date);
-        set_datepicker_date(start_date, s_date);
-        set_datepicker_date(end_date, e_date);
-
-        start_hour.val(s_date.getUTCHours());
-        end_hour.val(e_date.getUTCHours());
-
-        start_minute.val(s_date.getUTCMinutes());
-        end_minute.val(e_date.getUTCMinutes());
+        f_start_minute.val(s_date.minutes());
+        f_end_minute.val(e_date.minutes());
 
         form.submit();
       });

@@ -310,6 +310,8 @@ install (FILES src/html/classic/css/images/ui-bg_diagonals-thick_18_aa0000_40x40
 
 install (FILES src/html/classic/js/lib/d3.tip.js
                src/html/classic/js/lib/d3.layout.cloud.js
+               src/html/classic/js/lib/moment.js
+               src/html/classic/js/lib/moment-timezone-with-data.js
                src/html/classic/js/gsa_bar_chart.js
                src/html/classic/js/gsa_bubble_chart.js
                src/html/classic/js/gsa_chart_helpers.js
