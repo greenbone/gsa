@@ -24419,7 +24419,6 @@ delete_filter_omp (credentials_t * credentials, params_t *params,
 {
   param_t *filt_id, *id;
   GList *list;
-  find_by_value_t find;
 
   filt_id = params_get (params, "filt_id");
   id = params_get (params, "filter_id");
@@ -24429,24 +24428,29 @@ delete_filter_omp (credentials_t * credentials, params_t *params,
     filt_id->value = NULL;
 
   /* remove to be deleted key from the user credentials */
-  init_find_by_value (&find, id->value);
-
-  g_tree_foreach (credentials->last_filt_ids, (GTraverseFunc)find_by_value,
-                  &find);
-  if (find.keys != NULL)
+  if (id && id->value)
     {
-      list = g_list_first (find.keys);
+      find_by_value_t find;
 
-      while (list != NULL)
+      init_find_by_value (&find, id->value);
+
+      g_tree_foreach (credentials->last_filt_ids, (GTraverseFunc)find_by_value,
+                      &find);
+      if (find.keys != NULL)
         {
-          g_debug ("%s removing filter from last filter ids for %s\n",
-                   __FUNCTION__, (char *)list->data);
-          g_tree_remove (credentials->last_filt_ids, list->data);
-          list = g_list_next (find.keys);
-        }
-    }
+          list = g_list_first (find.keys);
 
-  free_find_by_value(&find);
+          while (list != NULL)
+            {
+              g_debug ("%s removing filter from last filter ids for %s\n",
+                      __FUNCTION__, (char *)list->data);
+              g_tree_remove (credentials->last_filt_ids, list->data);
+              list = g_list_next (find.keys);
+            }
+        }
+
+      free_find_by_value(&find);
+    }
 
   return delete_resource ("filter", credentials, params, 0, "get_filters",
                           response_data);
