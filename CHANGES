@@ -24,13 +24,13 @@ Main changes compared to the 6.0 series:
 * Increased several build dependencies.
 
 Main changes compared to 6.1+beta4:
-* Comprenensive rework of the charts.
-* Comprenensive rework of the dialogs.
+* Comprehensive rework of the charts.
+* Comprehensive rework of the dialogs.
 * Send filter when creating assets from a report, so that the overrides
   and min QOD settings are used.
 * Scanner OMP Slave replaces the Slaves type and require valid TLS certificate.
-* Reworked I18N support and added first parts of portoguese, french,
-  turkish and arabic.
+* Reworked I18N support and added first parts of Portuguese, French,
+  Turkish and Arabic.
 * Changed performance overview to use from-to ranges.
 * Add "Most vulnerable Operating Systems" chart.
 * Add alert method SNMP.
