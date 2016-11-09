@@ -36938,7 +36938,7 @@ should not have received it.
             <td>
               <xsl:call-template name="get-settings-resource">
                 <xsl:with-param name="id"
-                                select="get_settings_response/setting[name='Default OpenVAS Scan Config']/value"/>
+                                select="get_settings_response/setting[name='Default OpenVAS Scan Config']/value[type='1']"/>
                 <xsl:with-param name="resources" select="commands_response/get_configs_response/config"/>
                 <xsl:with-param name="type" select="'config'"/>
               </xsl:call-template>
@@ -36950,7 +36950,7 @@ should not have received it.
             <td>
               <xsl:call-template name="get-settings-resource">
                 <xsl:with-param name="id"
-                                select="get_settings_response/setting[name='Default OSP Scan Config']/value"/>
+                                select="get_settings_response/setting[name='Default OSP Scan Config']/value[type='2']"/>
                 <xsl:with-param name="resources" select="commands_response/get_configs_response/config"/>
                 <xsl:with-param name="type" select="'config'"/>
               </xsl:call-template>
@@ -36965,7 +36965,7 @@ should not have received it.
               <xsl:call-template name="get-settings-resource">
                 <xsl:with-param name="id"
                                 select="get_settings_response/setting[name='Default SSH Credential']/value"/>
-                <xsl:with-param name="resources" select="commands_response/get_credentials_response/credential"/>
+                <xsl:with-param name="resources" select="commands_response/get_credentials_response/credential[type='up' or type='usk']"/>
                 <xsl:with-param name="type" select="'credential'"/>
               </xsl:call-template>
             </td>
@@ -36977,7 +36977,7 @@ should not have received it.
               <xsl:call-template name="get-settings-resource">
                 <xsl:with-param name="id"
                                 select="get_settings_response/setting[name='Default SMB Credential']/value"/>
-                <xsl:with-param name="resources" select="commands_response/get_credentials_response/credential"/>
+                <xsl:with-param name="resources" select="commands_response/get_credentials_response/credential[type='up']"/>
                 <xsl:with-param name="type" select="'credential'"/>
               </xsl:call-template>
             </td>
@@ -36989,7 +36989,7 @@ should not have received it.
               <xsl:call-template name="get-settings-resource">
                 <xsl:with-param name="id"
                                 select="get_settings_response/setting[name='Default ESXi Credential']/value"/>
-                <xsl:with-param name="resources" select="commands_response/get_credentials_response/credential"/>
+                <xsl:with-param name="resources" select="commands_response/get_credentials_response/credential[type='up']"/>
                 <xsl:with-param name="type" select="'credential'"/>
               </xsl:call-template>
             </td>
@@ -37001,7 +37001,7 @@ should not have received it.
               <xsl:call-template name="get-settings-resource">
                 <xsl:with-param name="id"
                                 select="get_settings_response/setting[name='Default SNMP Credential']/value"/>
-                <xsl:with-param name="resources" select="commands_response/get_credentials_response/credential"/>
+                <xsl:with-param name="resources" select="commands_response/get_credentials_response/credential[type='snmp']"/>
                 <xsl:with-param name="type" select="'credential'"/>
               </xsl:call-template>
             </td>

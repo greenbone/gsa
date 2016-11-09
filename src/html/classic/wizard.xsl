@@ -346,7 +346,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:variable name="ssh_credential_id" select="../run_wizard_response/response/commands_response/get_settings_response/setting[name = 'Default SSH Credential']/value"/>
               <select name="event_data:ssh_credential">
                 <option value="" selected="1">--</option>
-                <xsl:for-each select="../run_wizard_response/response/commands_response/get_credentials_response/credential">
+                <xsl:for-each select="../run_wizard_response/response/commands_response/get_credentials_response/credential[type='up' or type='usk']">
                   <xsl:choose>
                     <xsl:when test="@id = $ssh_credential_id">
                       <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
@@ -369,7 +369,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:variable name="smb_credential_id" select="../run_wizard_response/response/commands_response/get_settings_response/setting[name = 'Default SMB Credential']/value"/>
               <select name="event_data:smb_credential">
                 <option value="" selected="1">--</option>
-                <xsl:for-each select="../run_wizard_response/response/commands_response/get_credentials_response/credential">
+                <xsl:for-each select="../run_wizard_response/response/commands_response/get_credentials_response/credential[type='up']">
                   <xsl:choose>
                     <xsl:when test="@id = $smb_credential_id">
                       <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
@@ -390,7 +390,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:variable name="esxi_credential_id" select="../run_wizard_response/response/commands_response/get_settings_response/setting[name = 'Default ESXi Credential']/value"/>
               <select name="event_data:esxi_credential">
                 <option value="" selected="1">--</option>
-                <xsl:for-each select="../run_wizard_response/response/commands_response/get_credentials_response/credential">
+                <xsl:for-each select="../run_wizard_response/response/commands_response/get_credentials_response/credential[type='up']">
                   <xsl:choose>
                     <xsl:when test="@id = $esxi_credential_id">
                       <option value="{@id}" selected="1"><xsl:value-of select="name"/></option>
