@@ -1,3 +1,11 @@
+2016-11-09  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	Preparing the gsa 7.0.0 release.
+
+	* CHANGES: Updated.
+
+	* CMakeLists.txt: Change release type from beta to stable.
+
 2016-11-09  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/gsad_omp.c (delete_filter_omp): Only try to remove filter from

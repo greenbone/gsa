@@ -1,3 +1,58 @@
+gsa 7.0.0 (2016-11-09)
+
+This is the first release of the Greenbone Security Assistant (GSA) 7.0 module
+for the Open Vulnerability Assessment System release 9 (OpenVAS-9). It is the
+web client that makes the full feature set of OpenVAS Manager available in a web
+browser.
+
+GSA 7.0 introduces an entirely new layout and style of the user interface.
+This includes a new dashboard feature as well as numerous new charts.
+The new GSA also introduces the explicit asset management for hosts and
+operating systems.
+
+Many thanks to everyone who has contributed to this release:
+Benoît Allard, Hani Benhabiles, Björn Ricks, Matthew Mundell, Timo Pollmeier,
+Jan-Oliver Wagner and Michael Wiegand.
+
+Main changes compared to the 6.0 series:
+* Comprehensively updated user interface with new style and workflows, dialogs
+  and various comfort functions using JS technology.
+* Introduced configurable dashboards.
+* Several new charts, from schedule gantt to host network topology.
+* Explicit asset management for hosts and operating systems.
+* Built-in CVE Scanner for immediate offline evaluation of assets.
+* Increased several build dependencies.
+
+Main changes compared to 6.1+beta4:
+* Comprenensive rework of the charts.
+* Comprenensive rework of the dialogs.
+* Send filter when creating assets from a report, so that the overrides
+  and min QOD settings are used.
+* Scanner OMP Slave replaces the Slaves type and require valid TLS certificate.
+* Reworked I18N support and added first parts of portoguese, french,
+  turkish and arabic.
+* Changed performance overview to use from-to ranges.
+* Add "Most vulnerable Operating Systems" chart.
+* Add alert method SNMP.
+* Added a global dashboard.
+* Combine individual feed management pages into a single one.
+* SCP and verinice credentials now credentials objects.
+* Added dashboards to more sections.
+* Add Default CA Cert setting.
+* Replaced png graphics by svg graphics.
+* Add support for connecting to Manager over a UNIX socket.
+* Add command line options --munix-socket and --unix-socket.
+* Add command line options --http-sts and --http-sts-max-age.
+* Increase limit of maximum connections per IP.
+* Increase dependency for gnutls from 2.8 to 3.2.15.
+* Increase dependency for glib from 2.16 to 2.32.
+* Increase required cmake version from 2.6 to 2.8.
+* Numerous minor fixes and improvements.
+* Some improvements for the logging.
+* Fixes for UTF-8.
+* Reduced memory consumption and fixed memory leaks.
+
+
 gsa 6.1+beta4 (2016-04-15)
 
 This is the fourth beta release of the upcoming version 6.1 of the
