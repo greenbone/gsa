@@ -4253,7 +4253,6 @@ create_task_omp (credentials_t * credentials, params_t *params,
   add_tag = params_value (params, "add_tag");
   tag_name = params_value (params, "tag_name");
   tag_value = params_value (params, "tag_value");
-  scanner_id = params_value (params, "scanner_id");
   CHECK (scanner_type);
   if (!strcmp (scanner_type, "1"))
     {
