@@ -4004,25 +4004,53 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
 <xsl:template mode="help" match="feed_management.html">
   <xsl:call-template name="help-header">
-    <xsl:with-param name="title" select="'Feed'"/>
+    <xsl:with-param name="title" select="'Feed Status'"/>
   </xsl:call-template>
 
   <div class="section-box">
     <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
     <div class="pull-right"><a href="/omp?cmd=get_feed&amp;token={/envelope/token}">Jump to dialog</a></div>
     <div style="text-align:left">
-
       <br/>
       <a name="feed_synchronization"></a>
-      <h2>Synchronization with an NVT, SCAP or CERT Feed</h2>
       <p>
-       This dialog allows you synchronize your NVT collection and SecInfo with
-       a feed. For each feed type (NVT, SCAP and CERT) it shows the name of the
-       Feed Service your installation is configured to use and a short
-       description of the tool which will be use to synchronize your NVT
-       collection or SecInfo with the Feed Service.
-       Hit the "Synchronize with Feed now" button to start the synchronization.
+       This dialog shows the synchronization status of your NVT collection and
+       SecInfo and general information about the Feed Services:
       </p>
+      <table class="gbntable">
+        <tr class="gbntablehead2">
+          <td>Column</td>
+          <td>Description</td>
+        </tr>
+        <tr class="odd">
+          <td>Type</td>
+          <td>The feed type (NVT, SCAP or CERT).</td>
+        </tr>
+        <tr class="even">
+          <td>Content</td>
+          <td>The types of information provided by the feed.</td>
+        </tr>
+        <tr class="odd">
+          <td>Origin</td>
+          <td>
+            The name of the Feed Service your installation is configured to use.
+            Hover over the name for a tooltip containing a description provided
+            by the tool which will be used to synchronize your NVT collection
+            or SecInfo with the Feed Service.
+          </td>
+        </tr>
+        <tr class="even">
+          <td>Version</td>
+          <td>The version number of the feed data.</td>
+        </tr>
+        <tr class="odd">
+          <td>Status</td>
+          <td>
+            Status information of the feed like the time since the last
+            update.
+          </td>
+        </tr>
+      </table>
 
       <a name="side_effects"></a>
       <h2>Side effects of a Synchronization</h2>

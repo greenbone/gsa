@@ -1,3 +1,10 @@
+2016-11-10  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Backport r26626.
+
+	* src/html/classic/help.xsl (feed_management.html): Rewrite first
+	section so it better reflects the recent redesign of the page.
+
 2016-11-09  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	Post release version bump.
