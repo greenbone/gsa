@@ -450,7 +450,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
       <p>
       Contact: For updates, feature proposals and bug reports
-      contact the <a href="http://www.greenbone.net/company/contact.html" target="_blank">
+      contact the <a href="http://www.greenbone.net/en/contact/" target="_blank">
       Greenbone team</a> or visit the <a href="http://www.openvas.org" target="_blank">OpenVAS homepage</a>.
       </p>
 
