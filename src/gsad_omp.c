@@ -409,7 +409,7 @@ free_find_by_value (find_by_value_t *find)
  *
  * @param[in]  key current key in the iteraton
  * @param[in]  value current value in the iteration
- * @param[out] data data->value contains the value to seach for. data->keys will
+ * @param[out] data data->value contains the value to search for. data->keys will
  *                  contain all found keys for the passed value
  *
  * @return FALSE to iterrate over all items in the tree

@@ -1,5 +1,9 @@
 2016-11-15  Michael Wiegand <michael.wiegand@greenbone.net>
 
+	* src/gsad.c, src/gsad_omp.c: Fix typos in comments.
+
+2016-11-15  Michael Wiegand <michael.wiegand@greenbone.net>
+
 	* src/html/classic/help.xsl (about.html): Fix URL for Greenbone
 	contact page.
 

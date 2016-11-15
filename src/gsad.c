@@ -1695,7 +1695,7 @@ struct gsad_connection_info
   int connectiontype;                      ///< 1=POST, 2=GET.
   int answercode;                          ///< HTTP response code.
   enum content_type content_type;          ///< Content type of response.
-  char *content_disposition;               ///< Content disposition of reponse.
+  char *content_disposition;               ///< Content disposition of response.
   size_t content_length;                   ///< Content length.
   gchar *redirect;                         ///< Redirect URL.
 };
@@ -5161,7 +5161,7 @@ handle_request (void *cls, struct MHD_Connection *connection,
  *
  * @param[in]  user_pw  User details of new user.
  *
- * @return TRUE if successfull, FALSE if failed (will g_critical in fail case).
+ * @return TRUE if successful, FALSE if failed (will g_critical in fail case).
  */
 static gboolean
 drop_privileges (struct passwd * user_pw)
