@@ -1,3 +1,10 @@
+2016-11-15  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	Backport r26646.
+
+	* src/html/classic/help.xsl (about.html): Fix URL for Greenbone
+	contact page.
+
 2016-11-11  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Backport r26630.
