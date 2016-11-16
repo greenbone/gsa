@@ -1326,7 +1326,6 @@
       var record = {
         id: task._id,
         name: task.name,
-        schedule_id: task.schedule._id,
       };
 
       if (gsa.is_defined(task.schedule)) {

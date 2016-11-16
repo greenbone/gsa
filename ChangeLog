@@ -1,3 +1,12 @@
+2016-11-16  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/js/gsa_chart_helpers.js (gch.extract_task_records_json):
+	Fix setting the schedule id of extracted records.
+
+	* src/html/classic/js/gsa_gantt_chart.js (data_task_schedules): Only add data
+	records if schedule ids are valid. We must skip records with invalid schedule
+	ids for next scheduled tasks gantt chart.
+
 2016-11-15  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	* src/gsad.c, src/gsad_omp.c: Fix typos in comments.
