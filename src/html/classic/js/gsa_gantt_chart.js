@@ -41,7 +41,9 @@
 
     for (var i in old_data.records) {
       var record = old_data.records[i];
-      if (record.schedule_id !== '' && record.schedule_next_time !== 'over') {
+      // only add records with valid schedules
+      if (gsa.is_defined(record.schedule_id) && record.schedule_id !== ''
+        && record.schedule_next_time !== 'over') {
         new_data.records.push(record);
       }
     }
