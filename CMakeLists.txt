@@ -398,6 +398,7 @@ install (FILES src/html/classic/img/agent.svg
                src/html/classic/img/trend_nochange.svg
                src/html/classic/img/delete_note.svg
                src/html/classic/img/new.svg
+               src/html/classic/img/new_inactive.svg
                src/html/classic/img/rpm.svg
                src/html/classic/img/trend_up.svg
                src/html/classic/img/delete.svg

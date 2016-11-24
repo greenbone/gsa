@@ -1,3 +1,9 @@
+2016-11-24  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/html/classic/img/new_inactive.svg: New.
+
+	* CMakeLists.txt: Install new icon.
+
 2016-11-16  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/js/gsa_chart_helpers.js (gch.extract_task_records_json):
