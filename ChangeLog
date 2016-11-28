@@ -1,5 +1,13 @@
 2016-11-28  Björn Ricks <bjoern.ricks@greenbone.neto
 
+	* src/gsad_base.h (content_type): Add enum value for content type image gif.
+
+	* src/gsad.c (file_content_response): Set content type image/gif for files with
+	.gif extension. Always fallback to "application/octet-stream" in
+	file_content_response if extension is unkown.
+
+2016-11-28  Björn Ricks <bjoern.ricks@greenbone.neto
+
 	Allow to header for Cross-Origin Resource Sharing (CORS)
 
 	src/gsad.c (main): Add new command line option for setting the

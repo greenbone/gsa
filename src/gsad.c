@@ -3575,6 +3575,10 @@ gsad_add_content_type_header (struct MHD_Response *response,
         MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
                                  "image/svg+xml");
         break;
+      case GSAD_CONTENT_TYPE_IMAGE_GIF:
+        MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
+                                 "image/gif");
+        break;
       case GSAD_CONTENT_TYPE_OCTET_STREAM:
         MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
                                  "application/octet-stream");
@@ -3963,6 +3967,10 @@ file_content_response (credentials_t *credentials,
     *content_type = GSAD_CONTENT_TYPE_TEXT_CSS;
   else if (strstr (path, ".js"))
     *content_type = GSAD_CONTENT_TYPE_TEXT_JS;
+  else if (strstr (path, ".gif"))
+    *content_type = GSAD_CONTENT_TYPE_IMAGE_GIF;
+  else
+    *content_type = GSAD_CONTENT_TYPE_OCTET_STREAM;
   /** @todo Set content disposition? */
 
   struct stat buf;
