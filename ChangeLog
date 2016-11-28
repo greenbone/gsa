@@ -1,3 +1,22 @@
+2016-11-28  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Add "Vulnerabilities" page.
+
+	* src/gsad_omp.c (generate_page): Add command get_vulns.
+	(get_vulns_omp, get_vulns): New functions.
+
+	* src/gsad_omp.h (get_vulns_omp): New function prototype.
+
+	* src/gsad.c (init_validator, exec_omp_get): Add command get_vulns.
+
+	* src/html/classic/gsad.xsl (html-gsa-navigation): Add new item
+	"Vulnerabilities" to the "Scans" menu.
+
+	* src/html/classic/omp.xsl (gsa:type-name, gsa:type-name-plural): Add
+	cases for "Vulnerability".
+	(html-vulns-table, vuln, get_vulns_response, vuln [select])
+	(vulns_response [select]): New templates.
+
 2016-11-24  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/html/classic/img/new_inactive.svg: New.

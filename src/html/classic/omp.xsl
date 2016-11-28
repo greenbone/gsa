@@ -552,6 +552,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <xsl:when test="$type = 'ovaldef'">
       <func:result select="'OVAL Definition'"/>
     </xsl:when>
+    <xsl:when test="$type = 'vuln'">
+      <func:result select="'Vulnerability'"/>
+    </xsl:when>
     <xsl:when test="$type = 'cert_bund_adv'">
       <func:result select="'CERT-Bund Advisory'"/>
     </xsl:when>
@@ -570,6 +573,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 <func:function name="gsa:type-name-plural">
   <xsl:param name="type"/>
   <xsl:choose>
+    <xsl:when test="$type = 'vuln'">
+      <func:result select="'Vulnerabilities'"/>
+    </xsl:when>
     <xsl:when test="$type = 'cert_bund_adv'">
       <func:result select="'CERT-Bund Advisories'"/>
     </xsl:when>
@@ -39486,6 +39492,115 @@ should not have received it.
       </xsl:when>
     </xsl:choose>
   </div>
+</xsl:template>
+
+<!-- BEGIN VULNS MANAGEMENT -->
+
+<xsl:template name="html-vulns-table">
+  <xsl:call-template name="list-window">
+    <xsl:with-param name="type" select="'vuln'"/>
+    <xsl:with-param name="cap-type" select="'Vulnerability'"/>
+    <xsl:with-param name="cap-type-plural" select="'Vulnerabilities'"/>
+    <xsl:with-param name="resources-summary" select="vulns"/>
+    <xsl:with-param name="resources" select="vuln"/>
+    <xsl:with-param name="count" select="count (vuln)"/>
+    <xsl:with-param name="filtered-count" select="vuln_count/filtered"/>
+    <xsl:with-param name="full-count" select="vuln_count/text ()"/>
+    <xsl:with-param name="columns" xmlns="">
+      <column>
+        <name><xsl:value-of select="gsa:i18n('Name')"/></name>
+        <field>name</field>
+      </column>
+      <column>
+        <name><xsl:value-of select="gsa:i18n('Modified')"/></name>
+        <field>modified</field>
+      </column>
+      <column>
+        <name><xsl:value-of select="gsa:i18n('Severity')"/></name>
+        <field>severity</field>
+      </column>
+      <column>
+        <name><xsl:value-of select="gsa:i18n('Results')"/></name>
+        <field>results</field>
+      </column>
+      <column>
+        <name><xsl:value-of select="gsa:i18n('Hosts')"/></name>
+        <field>hosts</field>
+      </column>
+    </xsl:with-param>
+    <xsl:with-param name="icon-count" select="0"/>
+  </xsl:call-template>
+</xsl:template>
+
+<!-- VULN -->
+
+<xsl:template match="vuln">
+  <tr class="{gsa:table-row-class(position())}">
+    <td>
+      <b>
+        <a href="/omp?cmd=get_info&amp;info_type=nvt&amp;info_id={@id}&amp;filter={str:encode-uri (../filters/term, true ())}&amp;token={/envelope/token}"
+           title="{gsa:view_details_title ('Vulnerability', name)}">
+          <xsl:value-of select="name"/>
+        </a>
+      </b>
+      <xsl:choose>
+        <xsl:when test="comment != ''">
+          <div class="comment">(<xsl:value-of select="comment"/>)</div>
+        </xsl:when>
+        <xsl:otherwise></xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td>
+      <xsl:value-of select="gsa:date (modification_time)"/>
+    </td>
+    <td>
+      <xsl:call-template name="severity-bar">
+        <xsl:with-param name="cvss" select="severity"/>
+      </xsl:call-template>
+    </td>
+    <td>
+      <xsl:variable name="filter_term">
+        <xsl:value-of select="concat ('nvt=', @id)"/>
+      </xsl:variable>
+      <a href="/omp?cmd=get_results&amp;filter={$filter_term}&amp;token={/envelope/token}" title="{gsa:i18n ('View Results for this Vulnerability')}">
+        <xsl:value-of select="results/count"/>
+      </a>
+    </td>
+    <td>
+      <xsl:value-of select="hosts/count"/>
+    </td>
+  </tr>
+</xsl:template>
+
+<!--     GET_VULNS_RESPONSE -->
+
+<xsl:template match="get_vulns_response">
+  <xsl:choose>
+    <xsl:when test="substring(@status, 1, 1) = '4' or substring(@status, 1, 1) = '5'">
+      <xsl:call-template name="command_result_dialog">
+        <xsl:with-param name="operation">
+          Get Vulnerabilities
+        </xsl:with-param>
+        <xsl:with-param name="status">
+          <xsl:value-of select="@status"/>
+        </xsl:with-param>
+        <xsl:with-param name="msg">
+          <xsl:value-of select="@status_text"/>
+        </xsl:with-param>
+      </xsl:call-template>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:call-template name="html-vulns-table"/>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+<xsl:template match="vuln" mode="select">
+  <option value="{name}"><xsl:value-of select="name"/></option>
+</xsl:template>
+
+<xsl:template match="vulns_response" mode="select">
+  <xsl:apply-templates select="vuln" mode="select"/>
 </xsl:template>
 
 </xsl:stylesheet>

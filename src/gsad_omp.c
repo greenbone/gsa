@@ -269,6 +269,9 @@ static char *get_user (credentials_t *, params_t *, const char *,
 static char *get_users (credentials_t *, params_t *, const char *,
                         cmd_response_data_t*);
 
+static char *get_vulns (credentials_t *, params_t *, const char *,
+                        cmd_response_data_t*);
+
 static char *wizard (credentials_t *, params_t *, const char *,
                      cmd_response_data_t*);
 
@@ -1714,6 +1717,9 @@ generate_page (credentials_t *credentials, params_t *params, gchar *response,
 
   if (strcmp (next, "get_users") == 0)
     return get_users (credentials, params, response, response_data);
+
+  if (strcmp (next, "get_vulns") == 0)
+    return get_vulns (credentials, params, response, response_data);
 
   if (strcmp (next, "get_info") == 0)
     return get_info (credentials, params, response, response_data);
@@ -25645,6 +25651,40 @@ edit_user_omp (credentials_t * credentials, params_t *params,
                cmd_response_data_t* response_data)
 {
   return edit_user (credentials, params, NULL, response_data);
+}
+
+/**
+ * @brief Get multiple vulns, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+get_vulns_omp (credentials_t * credentials, params_t *params,
+               cmd_response_data_t* response_data)
+{
+  return get_vulns (credentials, params, NULL, response_data);
+}
+
+/**
+ * @brief Get multiple vulns, XSL transform the result.
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
+ *
+ * @return Result of XSL transformation.
+ */
+static char *
+get_vulns (credentials_t * credentials, params_t *params, const char *extra_xml,
+          cmd_response_data_t* response_data)
+{
+  return get_many ("vuln", credentials, params, extra_xml, NULL,
+                   response_data);
 }
 
 char *

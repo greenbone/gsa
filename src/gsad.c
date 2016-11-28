@@ -1159,6 +1159,7 @@ init_validator ()
                          "|(get_trash)"
                          "|(get_user)"
                          "|(get_users)"
+                         "|(get_vulns)"
                          "|(import_config)"
                          "|(import_port_list)"
                          "|(import_report)"
@@ -3336,6 +3337,7 @@ exec_omp_get (struct MHD_Connection *connection,
   ELSE (get_trash)
   ELSE (get_user)
   ELSE (get_users)
+  ELSE (get_vulns)
   ELSE (get_feeds)
   ELSE (get_config)
   ELSE (get_configs)

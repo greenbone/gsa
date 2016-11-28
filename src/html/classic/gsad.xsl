@@ -436,6 +436,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             <name><xsl:value-of select="gsa:i18n ('Results')"/></name>
           </item>
         </xsl:if>
+        <xsl:if test="gsa:may-op ('GET_RESULTS')">
+          <item>
+            <page>get_vulns</page>
+            <name><xsl:value-of select="gsa:i18n ('Vulnerabilities')"/></name>
+          </item>
+        </xsl:if>
         <divider/>
         <xsl:if test="gsa:may-op ('GET_NOTES')">
           <item>
