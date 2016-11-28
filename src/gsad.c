@@ -334,6 +334,11 @@ gchar *http_guest_chart_content_security_policy;
 gchar *http_strict_transport_security;
 
 /**
+ * @brief Current value of for HTTP header "Access-Control-Allow-Origin"
+ */
+gchar *http_cors_origin;
+
+/**
  * @brief Current preference for using X_Real_IP from HTTP header
  */
 gboolean ignore_http_x_real_ip;
@@ -372,6 +377,17 @@ add_guest_chart_content_security_headers (struct MHD_Response *response)
   if (strcmp (http_content_security_policy, ""))
     MHD_add_response_header (response, "Content-Security-Policy",
                              http_guest_chart_content_security_policy);
+}
+
+void
+add_cors_headers (struct MHD_Response *response)
+{
+  if (strcmp (http_cors_origin, "")) {
+    MHD_add_response_header (response, "Access-Control-Allow-Origin",
+                             http_cors_origin);
+    MHD_add_response_header (response, "Access-Control-Allow-Credentials",
+                             "true");
+  }
 }
 
 /**
@@ -3640,6 +3656,7 @@ send_response (struct MHD_Connection *connection, const char *content,
         }
     }
   add_security_headers (response);
+  add_cors_headers (response);
   ret = MHD_queue_response (connection, status_code, response);
   MHD_destroy_response (response);
   return ret;
@@ -3702,6 +3719,7 @@ send_redirect_to_uri (struct MHD_Connection *connection, const char *uri,
   MHD_add_response_header (response, MHD_HTTP_HEADER_CACHE_CONTROL, "no-cache");
 
   add_security_headers (response);
+  add_cors_headers (response);
   ret = MHD_queue_response (connection, MHD_HTTP_SEE_OTHER, response);
   MHD_destroy_response (response);
   return ret;
@@ -4333,6 +4351,7 @@ handle_request (void *cls, struct MHD_Connection *connection,
           response = MHD_create_response_from_buffer (strlen (res), res,
                                                   MHD_RESPMEM_MUST_FREE);
           add_security_headers (response);
+          add_cors_headers (response);
           cmd_response_data_reset (&response_data);
           return handler_send_response (connection,
                                         response,
@@ -4353,6 +4372,7 @@ handle_request (void *cls, struct MHD_Connection *connection,
                                             &content_type,
                                             &content_disposition);
           add_security_headers (response);
+          add_cors_headers (response);
           return handler_send_response (connection,
                                         response,
                                         &content_type,
@@ -4373,6 +4393,7 @@ handle_request (void *cls, struct MHD_Connection *connection,
                                             &content_type,
                                             &content_disposition);
           add_security_headers (response);
+          add_cors_headers (response);
           return handler_send_response (connection,
                                         response,
                                         &content_type,
@@ -4478,6 +4499,7 @@ handle_request (void *cls, struct MHD_Connection *connection,
                                                       MHD_RESPMEM_MUST_FREE);
           http_response_code = response_data.http_status_code;
           add_security_headers (response);
+          add_cors_headers (response);
           cmd_response_data_reset (&response_data);
           return handler_send_response (connection,
                                         response,
@@ -4591,6 +4613,7 @@ handle_request (void *cls, struct MHD_Connection *connection,
           response = MHD_create_response_from_buffer (strlen (res), res,
                                                       MHD_RESPMEM_MUST_FREE);
           add_security_headers (response);
+          add_cors_headers (response);
           cmd_response_data_reset (&response_data);
           return handler_send_response (connection,
                                         response,
@@ -4650,6 +4673,7 @@ handle_request (void *cls, struct MHD_Connection *connection,
                                                       MHD_RESPMEM_MUST_FREE);
           cmd_response_data_reset (&response_data);
           add_security_headers (response);
+          add_cors_headers (response);
           return handler_send_response (connection,
                                         response,
                                         &content_type,
@@ -4725,6 +4749,7 @@ handle_request (void *cls, struct MHD_Connection *connection,
 
           response = MHD_create_response_from_buffer (res_len, (void *) res,
                                                       MHD_RESPMEM_MUST_FREE);
+
           if (content_type_string)
             {
               MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
@@ -4983,6 +5008,7 @@ handle_request (void *cls, struct MHD_Connection *connection,
             }
           g_free (sid);
 
+          add_cors_headers (response);
           if (guest_password
               && strcmp (credentials->username, guest_username) == 0
               && cmd
@@ -5655,6 +5681,7 @@ main (int argc, char **argv)
                   = DEFAULT_GSAD_GUEST_CHART_CONTENT_SECURITY_POLICY;
   static int hsts_enabled = FALSE;
   static int hsts_max_age = DEFAULT_GSAD_HSTS_MAX_AGE;
+  static gchar *http_cors = "";
   static gboolean ignore_x_real_ip = FALSE;
   static int verbose = 0;
   GError *error = NULL;
@@ -5766,6 +5793,10 @@ main (int argc, char **argv)
     {"munix-socket", '\0',
      0, G_OPTION_ARG_FILENAME, &gsad_manager_unix_socket_path,
      "Path to Manager unix socket", "<file>"},
+    {"http-cors", 0,
+     0, G_OPTION_ARG_STRING, &http_cors,
+     "Set Cross-Origin Resource Sharing (CORS) allow origin http header ",
+     "<cors>"},
     {NULL}
   };
 
@@ -5783,6 +5814,7 @@ main (int argc, char **argv)
   http_content_security_policy = http_csp;
   http_guest_chart_x_frame_options = http_guest_chart_frame_opts;
   http_guest_chart_content_security_policy = http_guest_chart_csp;
+  http_cors_origin = http_cors;
 
   if (http_only == FALSE && hsts_enabled)
     {

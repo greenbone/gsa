@@ -1,3 +1,17 @@
+2016-11-28  Björn Ricks <bjoern.ricks@greenbone.neto
+
+	Allow to header for Cross-Origin Resource Sharing (CORS)
+
+	src/gsad.c (main): Add new command line option for setting the
+	"Access-Control-Allow-Origin" http header.
+
+	src/gsad.c (add_cors_headers): Add new function to set
+	Access-Control-Allow-Origin and Access-Control-Allow-Credential http headers
+	in a response.
+
+	src/gsad.c (send_response, send_redirect_to_uri, handle_request): Add cors
+	header to responses.
+
 2016-11-28  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Add "Vulnerabilities" page.
