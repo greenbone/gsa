@@ -5413,6 +5413,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     <div class="section-header">
       <h1>
         <xsl:choose>
+          <xsl:when test="$type = 'vuln'">
+            <img class="icon icon-lg" src="/img/vulnerability.svg"/>
+          </xsl:when>
           <xsl:when test="$subtype != ''">
             <img class="icon icon-lg" src="/img/{$subtype}.svg"/>
           </xsl:when>
@@ -33155,6 +33158,11 @@ should not have received it.
     title="{gsa:i18n ('Corresponding Results')}"
     class="icon icon-sm">
     <img src="/img/result.svg" alt="Results"/>
+  </a>
+  <a href="?cmd=get_vulns&amp;filter=report_id={@id}&amp;token={/envelope/token}"
+    title="{gsa:i18n ('Corresponding Vulnerabilities')}"
+    class="icon icon-sm">
+    <img src="/img/vulnerability.svg" alt="Vulnerabilities"/>
   </a>
 </xsl:template>
 

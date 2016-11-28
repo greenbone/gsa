@@ -502,6 +502,7 @@ install (FILES src/html/classic/img/agent.svg
                src/html/classic/img/gsa_splash.svg
                src/html/classic/img/prognosis.svg
                src/html/classic/img/prognosis_inactive.svg
+               src/html/classic/img/vulnerability.svg
          DESTINATION ${GSA_DATA_DIR}/classic/img)
 
 install (FILES src/html/classic/img/login-label.png
