@@ -22763,12 +22763,6 @@ should not have received it.
     </tr>
   </table>
 
-  <p>
-    <a href="/omp?cmd=get_results&amp;filter={@oid}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}">
-      <xsl:value-of select="gsa:i18n ('Show scan results for this NVT')"/>
-    </a>
-  </p>
-
   <xsl:choose>
     <xsl:when test="contains(tags, 'summary=')">
       <h2><xsl:value-of select="gsa:i18n ('Summary')"/></h2>
@@ -23052,6 +23046,17 @@ should not have received it.
             <img src="/img/new_override.svg" alt="{gsa:i18n ('Add Override')}"/>
           </a>
         </div>
+        <span class="divider"/>
+        <a href="/omp?cmd=get_results&amp;filter=nvt={info/nvt/@oid}&amp;token={/envelope/token}"
+          title="{gsa:i18n ('Corresponding Results')}"
+          class="icon icon-sm">
+          <img src="/img/result.svg" title="{gsa:i18n ('Corresponding Results')}" alt="{gsa:i18n ('Results')}"/>
+        </a>
+        <a href="/omp?cmd=get_vulns&amp;filter=uuid={info/nvt/@oid}&amp;token={/envelope/token}"
+          title="{gsa:i18n ('Corresponding Vulnerability')}"
+          class="icon icon-sm">
+          <img src="/img/vulnerability.svg" title="{gsa:i18n ('Corresponding Vulnerability')}" alt="{gsa:i18n ('Vulnerabilities')}"/>
+        </a>
       </div>
 
       <div class="section-header">
