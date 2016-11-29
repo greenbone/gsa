@@ -39533,6 +39533,10 @@ should not have received it.
         <field>severity</field>
       </column>
       <column>
+        <name><xsl:value-of select="gsa:i18n('QoD')"/></name>
+        <field>qod</field>
+      </column>
+      <column>
         <name><xsl:value-of select="gsa:i18n('Results')"/></name>
         <field>results</field>
       </column>
@@ -39570,6 +39574,10 @@ should not have received it.
       <xsl:call-template name="severity-bar">
         <xsl:with-param name="cvss" select="severity"/>
       </xsl:call-template>
+    </td>
+    <td>
+      <xsl:value-of select="qod"/>
+      <xsl:text>%</xsl:text>
     </td>
     <td>
       <xsl:variable name="filter_term">
