@@ -39525,8 +39525,12 @@ should not have received it.
         <field>name</field>
       </column>
       <column>
-        <name><xsl:value-of select="gsa:i18n('Modified')"/></name>
-        <field>modified</field>
+        <name><xsl:value-of select="gsa:i18n('Oldest Result')"/></name>
+        <field>oldest</field>
+      </column>
+      <column>
+        <name><xsl:value-of select="gsa:i18n('Newest Result')"/></name>
+        <field>newest</field>
       </column>
       <column>
         <name><xsl:value-of select="gsa:i18n('Severity')"/></name>
@@ -39568,7 +39572,10 @@ should not have received it.
       </xsl:choose>
     </td>
     <td>
-      <xsl:value-of select="gsa:date (modification_time)"/>
+      <xsl:value-of select="gsa:date (results/oldest)"/>
+    </td>
+    <td>
+      <xsl:value-of select="gsa:date (results/newest)"/>
     </td>
     <td>
       <xsl:call-template name="severity-bar">

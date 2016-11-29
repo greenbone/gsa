@@ -1,5 +1,10 @@
 2016-11-29  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/omp.xsl (html-vulns-table, vuln): Replace "Modified"
+	column with "Oldest Result" and "Newest Result".
+
+2016-11-29  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/omp.xsl (html-vulns-table, vuln): Add "QoD" column.
 
 2016-11-29  Timo Pollmeier <timo.pollmeier@greenbone.net>
