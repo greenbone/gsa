@@ -1,3 +1,8 @@
+2016-11-30  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/omp.xsl (nvt-details): Rename the button
+	"Corresponding Vulnerability" to "Corresponding Vulnerabilities".
+
 2016-11-29  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/omp.xsl (html-vulns-table, vuln): Replace "Modified"

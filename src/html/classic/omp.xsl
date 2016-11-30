@@ -23053,9 +23053,9 @@ should not have received it.
           <img src="/img/result.svg" title="{gsa:i18n ('Corresponding Results')}" alt="{gsa:i18n ('Results')}"/>
         </a>
         <a href="/omp?cmd=get_vulns&amp;filter=uuid={info/nvt/@oid}&amp;token={/envelope/token}"
-          title="{gsa:i18n ('Corresponding Vulnerability')}"
+          title="{gsa:i18n ('Corresponding Vulnerabilities')}"
           class="icon icon-sm">
-          <img src="/img/vulnerability.svg" title="{gsa:i18n ('Corresponding Vulnerability')}" alt="{gsa:i18n ('Vulnerabilities')}"/>
+          <img src="/img/vulnerability.svg" title="{gsa:i18n ('Corresponding Vulnerabilities')}" alt="{gsa:i18n ('Vulnerabilities')}"/>
         </a>
       </div>
 
