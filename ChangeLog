@@ -1,3 +1,26 @@
+2016-12-02  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Fix several script errors occurring mostly in Internet Explorer 11.
+
+	* CMakeLists.txt: Install src/html/classic/js/gsa_polyfill.js.
+
+	* src/html/classic/graphics.xsl (init-d3charts): Add new JS file
+	/js/gsa_polyfill.js.
+
+	* src/html/classic/js/gsa_chart_helpers.js (register_chart_generator):
+	Do not use function name as key because it is undefined in IE 11.
+
+	* src/html/classic/js/gsa_graphics_base.js (addHtmlTableMenuItem):
+	Create Blob with empty string if data is undefined.
+
+	* src/html/classic/js/gsa_h_bar_chart.js: Use "bar" instead of 
+	"BarChartGenerator" in get_chart_generator calls.
+
+	* src/html/classic/js/gsa_polyfill.js: New JavaScript file.
+
+	* src/html/classic/js/lib/d3.tip.js (getScreenBBox): Fix loop condition
+	for finding ancestor element with getScreenCTM function.
+
 2016-11-30  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/omp.xsl (nvt-details): Rename the button

@@ -224,13 +224,14 @@
   BaseChartGenerator.prototype.addHtmlTableMenuItem = function(controller,
       html_table_data) {
     var self = this;
+    var data = gsa.is_defined (html_table_data) ? html_table_data : "";
 
     if (this.html_table_url !== null) {
       URL.revokeObjectURL(this.html_table_url);
       this.html_table_url = null;
     }
 
-    var html_table_blob = new Blob([html_table_data],
+    var html_table_blob = new Blob([data],
         {type: 'text/html'});
     this.html_table_url = URL.createObjectURL(html_table_blob);
 
