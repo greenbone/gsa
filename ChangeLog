@@ -1,3 +1,9 @@
+2016-12-02  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/img/, src/html/classic/img/cpe: Add viewBox
+	attribute to SVG images, which is required for scaling to work
+	correctly in some browsers.
+
 2016-12-02  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	Make it possible to compile gsa on FreeBSD.
