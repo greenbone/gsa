@@ -2852,7 +2852,6 @@
    */
   gch.register_chart_generator = function(chart_type, generator) {
     gch.chart_generators[chart_type] = generator;
-    gch.chart_generators[generator.name] = generator;
   };
 
   /**

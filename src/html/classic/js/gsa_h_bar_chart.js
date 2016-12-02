@@ -75,7 +75,7 @@
   }
 
   HorizontalBarChartGenerator.prototype = Object.create(
-      gch.get_chart_generator('BarChartGenerator').prototype);
+      gch.get_chart_generator('bar').prototype);
   HorizontalBarChartGenerator.prototype.constructor =
     HorizontalBarChartGenerator;
 
@@ -111,7 +111,7 @@
   };
 
   HorizontalBarChartGenerator.prototype.evaluateParams = function(gen_params) {
-    gch.get_chart_generator('BarChartGenerator').prototype.evaluateParams.call(
+    gch.get_chart_generator('bar').prototype.evaluateParams.call(
         this, gen_params);
 
     if (gsa.is_defined(gen_params.extra)) {

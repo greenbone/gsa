@@ -335,7 +335,7 @@
       var targetel   = target || d3.event.target;
 
       while ('undefined' === typeof targetel.getScreenCTM &&
-          'undefined' === targetel.parentNode) {
+          'undefined' !== typeof targetel.parentNode) {
         targetel = targetel.parentNode;
       }
 
