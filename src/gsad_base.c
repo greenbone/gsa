@@ -48,7 +48,10 @@
 #include <libxslt/xsltInternals.h> /* for xsltStylesheetPtr */
 #include <libxslt/transform.h> /* for xsltApplyStylesheet() */
 #include <libxslt/xsltutils.h> /* for xsltSaveResultToString() */
+#include <sys/param.h>
+#ifndef __FreeBSD__
 #include <malloc.h>
+#endif
 #else
 #include <string.h>
 #include <sys/wait.h>
@@ -312,7 +315,9 @@ xsl_transform_with_stylesheet (const char *xml_text,
 
   xsltFreeStylesheet (cur);
   xmlFreeDoc (res);
+#ifndef __FreeBSD__
   malloc_trim (0);
+#endif
 
   return (char *) doc_txt_ptr;
 #else

@@ -1,3 +1,15 @@
+2016-12-02  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	Make it possible to compile gsa on FreeBSD.
+
+	* src/gsad_base.c: Do not include malloc.h on FreeBSD since it is
+	superfluous there.
+	(xsl_transform_with_stylesheet): Do not call malloc_trim () on FreeBSD
+	as it is not available.
+
+	* src/xslt_i18n.c: Unconditionally define _GNU_SOURCE to make getline
+	properly available.
+
 2016-12-02  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Fix several script errors occurring mostly in Internet Explorer 11.

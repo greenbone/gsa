@@ -23,6 +23,8 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+#define _GNU_SOURCE
+
 #include "xslt_i18n.h"
 #include "gsad_base.h"
 #include <assert.h>
