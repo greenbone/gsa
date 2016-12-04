@@ -65,7 +65,6 @@
 #include <openvas/misc/openvas_logging.h>
 #include <openvas/base/openvas_file.h>
 #include <openvas/base/openvas_networking.h>
-#include <openvas/base/pidfile.h>
 #include <openvas/omp/xml.h>
 #include <openvas/misc/openvas_uuid.h>
 #include <pthread.h>
@@ -86,6 +85,8 @@
 #include <unistd.h>
 /* This must follow the system includes. */
 #include <microhttpd.h>
+
+#include <gvm/base/pidfile.h>
 
 #include "gsad_base.h"
 #include "gsad_omp.h"

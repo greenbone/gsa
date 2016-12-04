@@ -13,6 +13,7 @@ See at the end of this section how to easily install these prerequisites on
 some supported platforms.
 
 Prerequisites:
+* libgvm_base >= 1.0.0
 * libopenvas_omp, libopenvas_base, libopenvas_misc >= 9.0.0
 * gnutls >= 3.2.15
 * libgcrypt

@@ -60,7 +60,7 @@ target_link_libraries (gsad_omp ${LIBMICROHTTPD_LDFLAGS} ${LIBXML_LDFLAGS}
 ## Program
 
 add_executable (gsad gsad.c validator.c)
-target_link_libraries (gsad gsad_omp gsad_base gsad_xslt_ext ${LIBGCRYPT_LDFLAGS} ${CMAKE_THREAD_LIBS_INIT} ${LINKER_HARDENING_FLAGS})
+target_link_libraries (gsad gsad_omp gsad_base gsad_xslt_ext ${LIBGVM_BASE_LDFLAGS} ${LIBGCRYPT_LDFLAGS} ${CMAKE_THREAD_LIBS_INIT} ${LINKER_HARDENING_FLAGS})
 set_target_properties (gsad PROPERTIES LINKER_LANGUAGE C)
 
 if (NOT CMAKE_BUILD_TYPE MATCHES "Release")
