@@ -37,8 +37,6 @@
 
 #include "gsad_user.h" /* for credentials_t */
 
-#define params_t GHashTable
-
 /**
  * @brief Response information for commands.
  */
@@ -86,10 +84,6 @@ enum content_type
 } ;
 
 
-/* temporary setting to show charts - defined in gsad.c */
-int user_set_charts (const gchar*, const int);
 
-/* default refresh interval setting */
-int user_set_autorefresh (const gchar*, const gchar*);
 
 #endif /* not _GSAD_BASE_H */
