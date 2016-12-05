@@ -90,6 +90,7 @@
 
 #include "gsad_base.h"
 #include "gsad_omp.h"
+#include "gsad_omp_auth.h" /* for authenticate_omp */
 #include "gsad_settings.h"
 #include "validator.h"
 #include "xslt_i18n.h"
