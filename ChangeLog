@@ -1,3 +1,7 @@
+2016-12-05  Benoît Allard  <benoit.allard@greenbone.net>
+
+	* CMakeLists.txt: Don't optimize in debug mode.
+
 2016-12-05  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/gsad_omp.h, src/gsad_omp_auth.h: Split out authenticate_omp from
