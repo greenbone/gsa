@@ -35,6 +35,8 @@
 #include <glib.h>
 #include <sys/time.h>
 
+#include "gsad_user.h" /* for credentials_t */
+
 /**
  * @brief Initial filtered results per page on the report summary.
  */
@@ -59,32 +61,6 @@
   "</gsad_msg>"
 
 #define params_t GHashTable
-
-/**
- *  @brief Structure of credential related information.
- */
-typedef struct
-{
-  struct timeval cmd_start; ///< Seconds since command page handler started.
-  char *username;     ///< Name of user.
-  char *password;     ///< User's password.
-  char *role;         ///< User's role.
-  char *timezone;     ///< User's timezone.
-  char *token;        ///< Session token.
-  char *caller;       ///< Caller URL, for POST relogin.
-  char *current_page; ///< Current page URL, for refresh.
-  char *capabilities; ///< Capabilites of manager.
-  char *language;     ///< Accept-Language browser header.
-  char *severity;     ///< Severity class.
-  char *pw_warning;   ///< Password policy warning message
-  char *client_address; ///< Client's address.
-  GTree *chart_prefs; ///< Chart preferences.
-  char *autorefresh;  ///< Auto-refresh interval.
-  GTree *last_filt_ids; ///< Last filter ids.
-  params_t *params;   ///< Request parameters.
-  int charts;         ///< Whether to show charts for this user.
-  int guest;          ///< Whether the user is a guest user.
-} credentials_t;
 
 /**
  * @brief Response information for commands.

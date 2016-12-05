@@ -4,6 +4,19 @@
 
 2016-12-05  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/gsad.c: Move user and credential handling structs and functions into new
+	gsad_user.c and gsad_user.h files.
+
+	* src/gsad_base.h: Remove credentials_t from base header and include
+	gsad_user.h instead.
+
+	* src/gsad_user.h, src/gsad_user.c: Seperate the user handling from the other
+	code paths.
+
+	* src/CMakeLists: Add gsad_user.c to source files.
+
+2016-12-05  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/gsad_base.h: Remove param definitions from gsad_base.h. They are now in
 	gsad_params.h.
 
