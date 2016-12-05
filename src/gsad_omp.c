@@ -86,6 +86,29 @@
  */
 #define OPENVASMD_ADDRESS "127.0.0.1"
 
+/** @brief Answer for invalid input. */
+#define GSAD_MESSAGE_INVALID                                                      \
+  "<gsad_msg status_text=\"%s\" operation=\"%s\">"                                \
+  "At least one entered value contains invalid characters or exceeds"             \
+  " a size limit.  You may use the Back button of your browser to adjust"         \
+  " the entered values.  If in doubt, the online help of the respective section"  \
+  " will lead you to the appropriate help page."                                  \
+  "</gsad_msg>"
+
+/** @brief Answer for invalid input. */
+#define GSAD_MESSAGE_INVALID_PARAM(op)                                            \
+  "<gsad_msg status_text=\"Invalid parameter\" operation=\"" op "\">"             \
+  "At least one entered value contains invalid characters or exceeds"             \
+  " a size limit.  You may use the Back button of your browser to adjust"         \
+  " the entered values.  If in doubt, the online help of the respective section"  \
+  " will lead you to the appropriate help page."                                  \
+  "</gsad_msg>"
+
+/**
+ * @brief Initial filtered results per page on the report summary.
+ */
+#define RESULTS_PER_PAGE 100
+
 /**
  * @brief Whether to use TLS for Manager connections.
  */

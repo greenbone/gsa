@@ -1,3 +1,9 @@
+2016-12-05  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/gsad_base.h, src/gsad_omp.c: Move GSAD_MESSAGE_INVALID,
+	GSAD_MESSAGE_INVALID_PARAM and RESULTS_PER_PAGE defines to gsad_omp.c. They
+	are only used in this c file.
+
 2016-12-05  Benoît Allard  <benoit.allard@greenbone.net>
 
 	* CMakeLists.txt: Don't optimize in debug mode.
