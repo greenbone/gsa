@@ -55,6 +55,7 @@
 #include "gsad_params.h"
 #include "gsad_omp.h"
 #include "gsad_settings.h" /* for vendor_version_get */
+#include "gsad_http.h" /* for gsad_message */
 #include "xslt_i18n.h"
 
 #include <openvas/misc/openvas_server.h>

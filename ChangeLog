@@ -1,5 +1,20 @@
 2016-12-05  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	Move most http specific code out of gsad.c.
+
+	* src/gsad.c, src/gsad_http.c, src/gsad_http.h: Move reusable http functions
+	from gsad.c to gsad_http.c.
+
+	* src/gsad_base.h, src/gsad_base.c: Move gsad_message and login_xml to
+	new gsad http. Add content_type_t to base header.
+
+	* src/gsad_omp.c: Include new gsad_http.h for gsad_message usage in
+	gsad_omp.c.
+
+	* src/CMakeLists: Add gsad_http.c to source files.
+
+2016-12-05  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/gsad_omp.h, src/gsad_omp.c, src/gsad_cmd.h, src/gsad_cmd.c:
 	Sperate cmd_response_data_t from other code paths.
 

@@ -47,10 +47,6 @@ char *ctime_r_strip_newline (time_t *, char *);
 char * xsl_transform_with_stylesheet (const char *, const char *,
                                       cmd_response_data_t *);
 char * xsl_transform (const char *, cmd_response_data_t *);
-char * gsad_message (credentials_t *, const char *, const char *, int,
-                     const char *, const char *, cmd_response_data_t *);
-gchar *login_xml (const gchar *, const gchar *, const gchar *, const gchar *,
-                  const gchar *, const gchar *);
 
 /**
  * @brief Content types.
@@ -74,9 +70,8 @@ enum content_type
   GSAD_CONTENT_TYPE_OCTET_STREAM,
   GSAD_CONTENT_TYPE_IMAGE_SVG,
   GSAD_CONTENT_TYPE_IMAGE_GIF
-} ;
+};
 
-
-
+typedef enum content_type content_type_t;
 
 #endif /* not _GSAD_BASE_H */
