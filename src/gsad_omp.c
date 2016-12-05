@@ -17707,7 +17707,7 @@ save_scanner_omp (credentials_t * credentials, params_t *params,
 
   if (strcmp (which_cert, "new") == 0 || strcmp (which_cert, "default") == 0)
     {
-      if (ca_pub == NULL)
+      if (ca_pub == NULL || *host == '/')
         ca_pub = "";
       if (in_use)
         ret = ompf (credentials, &response, &entity, response_data,

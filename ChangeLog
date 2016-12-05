@@ -1,3 +1,11 @@
+2016-12-05  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/gsad_omp.c (save_scanner_omp): Don't send the ca public
+	certificate in unix file socket case.
+
+	* src/html/classic/omp.xsl (scanner [details]): Don't show client
+	certificate in unix file socket case.
+
 2016-12-04  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* CMakeLists.txt, INSTALL: Require libgvm_base.

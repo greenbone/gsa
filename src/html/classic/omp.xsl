@@ -19885,22 +19885,24 @@ should not have received it.
       </xsl:otherwise>
     </xsl:choose>
 
-    <xsl:if test="credential/certificate_info">
-      <h3>
-        <xsl:value-of select="gsa:i18n ('Client Certificate')"/>
-        <xsl:text> </xsl:text>
-        (<xsl:value-of select="gsa:i18n ('from Credential')"/>)
-      </h3>
-      <xsl:call-template name="certificate-info-table">
-        <xsl:with-param name="certificate_info" select="credential/certificate_info"/>
-      </xsl:call-template>
-    </xsl:if>
+    <xsl:if test="not (starts-with (host, '/'))">
+      <xsl:if test="credential/certificate_info">
+        <h3>
+          <xsl:value-of select="gsa:i18n ('Client Certificate')"/>
+          <xsl:text> </xsl:text>
+          (<xsl:value-of select="gsa:i18n ('from Credential')"/>)
+        </h3>
+        <xsl:call-template name="certificate-info-table">
+          <xsl:with-param name="certificate_info" select="credential/certificate_info"/>
+        </xsl:call-template>
+      </xsl:if>
 
-    <xsl:if test="ca_pub_info">
-      <h3><xsl:value-of select="gsa:i18n ('CA Certificate')"/></h3>
-      <xsl:call-template name="certificate-info-table">
-        <xsl:with-param name="certificate_info" select="ca_pub_info"/>
-      </xsl:call-template>
+      <xsl:if test="ca_pub_info">
+        <h3><xsl:value-of select="gsa:i18n ('CA Certificate')"/></h3>
+        <xsl:call-template name="certificate-info-table">
+          <xsl:with-param name="certificate_info" select="ca_pub_info"/>
+        </xsl:call-template>
+      </xsl:if>
     </xsl:if>
   </div>
 
