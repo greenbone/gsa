@@ -133,58 +133,6 @@ enum content_type
 } ;
 
 
-/* Params. */
-
-/**
- * @brief Request parameter.
- */
-struct param
-{
-  gchar *value;          /* Value. */
-  gchar *original_value; /* Original value, before validation. */
-  gchar *filename;       /* Filename. */
-  params_t *values;      /* Multiple binary values. */
-  int valid;             /* Validation flag. */
-  int valid_utf8;        /* UTF8 validation flag. */
-  int value_size;        /* Size of value, excluding trailing NULL. */
-  int array_len;         /* The number of items of "array" params */
-};
-
-/**
- * @brief Request parameter.
- */
-typedef struct param param_t;
-
-params_t *params_new ();
-
-void params_free (params_t *);
-
-int params_given (params_t *, const char *);
-
-const char *params_value (params_t *, const char *);
-
-int params_value_size (params_t *, const char *);
-
-const char *params_original_value (params_t *, const char *);
-
-const char *params_filename (params_t *, const char *);
-
-params_t *params_values (params_t *, const char *);
-
-param_t *params_get (params_t *, const char *);
-
-int params_valid (params_t *, const char *);
-
-param_t *params_add (params_t *, const char *, const char *);
-
-param_t *params_append_bin (params_t *, const char *, const char *, int, int);
-
-#define params_iterator_t GHashTableIter
-
-#define params_iterator_init g_hash_table_iter_init
-
-gboolean params_iterator_next (params_iterator_t *, char **, param_t **);
-
 /* temporary setting to show charts - defined in gsad.c */
 int user_set_charts (const gchar*, const int);
 

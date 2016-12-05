@@ -35,6 +35,7 @@
 #define XSL_PATH "gsad.xsl"
 
 #include "gsad_base.h"
+#include "gsad_params.h"
 #include "gsad_settings.h" /* for vendor_version_get */
 
 #include <openvas/omp/xml.h>

@@ -52,7 +52,7 @@
 
 #include <microhttpd.h>
 
-#include "gsad_base.h"
+#include "gsad_params.h"
 #include "gsad_omp.h"
 #include "gsad_settings.h" /* for vendor_version_get */
 #include "xslt_i18n.h"

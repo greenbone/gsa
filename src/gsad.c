@@ -89,6 +89,7 @@
 #include <gvm/base/pidfile.h>
 
 #include "gsad_base.h"
+#include "gsad_params.h"
 #include "gsad_omp.h"
 #include "gsad_omp_auth.h" /* for authenticate_omp */
 #include "gsad_settings.h"
@@ -2014,7 +2015,7 @@ params_mhd_validate_values (const char *parent_name, void *params)
  *
  * @param[in]  params  Params.
  */
-static void
+void
 params_mhd_validate (void *params)
 {
   GHashTableIter iter;
@@ -2682,7 +2683,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
  * @param[in]  name    Name.
  * @param[in]  value   Value.
  */
-static int
+int
 params_mhd_add (void *params, enum MHD_ValueKind kind, const char *name,
                 const char *value)
 {
