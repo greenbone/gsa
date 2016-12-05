@@ -35,6 +35,7 @@
 #define XSL_PATH "gsad.xsl"
 
 #include "gsad_base.h"
+#include "gsad_settings.h" /* for vendor_version_get */
 
 #include <openvas/omp/xml.h>
 
@@ -63,13 +64,6 @@
  * @brief GLib log domain.
  */
 #define G_LOG_DOMAIN "gsad base"
-
-/**
- * @brief Version from vendor, or NULL.
- */
-gchar *vendor_version = NULL;
-
-gchar *label_name = NULL;
 
 /**
  * @brief The chroot state: 0 = no chroot, 1 = chroot used
@@ -128,58 +122,6 @@ void
 set_chroot_state (int state)
 {
   chroot_state = state;
-}
-
-/**
- * @brief Set the vendor version.
- *
- * @param[in]  version  Vendor version.
- */
-void
-vendor_version_set (const gchar *version)
-{
-  g_free (vendor_version);
-  vendor_version = g_strdup (version);
-}
-
-/**
- * @brief Get the vendor version.
- *
- * @return Vendor version.
- */
-const gchar *
-vendor_version_get ()
-{
-  return vendor_version ? vendor_version : "";
-}
-
-/**
- * @brief Get the login label name.
- *
- * @return login label name
- */
-const gchar *
-label_name_get ()
-{
-  return label_name;
-}
-
-/**
- * @brief Set the login label.
- *
- * @param[in]  name  New login label name.
- *
- * @return 0 on success -1 if name contains invalid characters
- */
-int
-label_name_set (const gchar *name)
-{
-  if (!g_regex_match_simple ("^[a-zA-Z0-9\\-_\\.\\:]+$", name, 0, 0))
-    return -1;
-
-  g_free (label_name);
-  label_name = g_strdup (name);
-  return 0;
 }
 
 /**

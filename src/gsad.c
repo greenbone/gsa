@@ -90,6 +90,7 @@
 
 #include "gsad_base.h"
 #include "gsad_omp.h"
+#include "gsad_settings.h"
 #include "validator.h"
 #include "xslt_i18n.h"
 
@@ -270,11 +271,6 @@ pid_t redirect_pid = 0;
  */
 pid_t unix_pid = 0;
 
-/**
- * @brief Unix socket to listen on.
- */
-int unix_socket = 0;
-
 /** @todo Ensure the accesses to these are thread safe. */
 
 /**
@@ -283,66 +279,9 @@ int unix_socket = 0;
 GSList *log_config = NULL;
 
 /**
- * @brief Whether to use a secure cookie.
- *
- * This is always true when using HTTPS.
- */
-int use_secure_cookie = 1;
-
-/**
- * @brief Maximum number of minutes of user idle time.
- */
-int session_timeout;
-
-/**
- * @brief Guest username.
- */
-gchar *guest_username = NULL;
-
-/**
- * @brief Guest password.
- */
-gchar *guest_password = NULL;
-
-/**
  * @brief User session data.
  */
 GPtrArray *users = NULL;
-
-/**
- * @brief Current value for HTTP header "X-Frame-Options"
- */
-gchar *http_x_frame_options;
-
-/**
- * @brief Current value for HTTP header "Content-Security-Policy"
- */
-gchar *http_content_security_policy;
-
-/**
- * @brief Current guest chart specific value for HTTP header "X-Frame-Options"
- */
-gchar *http_guest_chart_x_frame_options;
-
-/**
- * @brief Current guest chart value for HTTP header "Content-Security-Policy"
- */
-gchar *http_guest_chart_content_security_policy;
-
-/**
- * @brief Current value of for HTTP header "Strict-Transport-Security"
- */
-gchar *http_strict_transport_security;
-
-/**
- * @brief Current value of for HTTP header "Access-Control-Allow-Origin"
- */
-gchar *http_cors_origin;
-
-/**
- * @brief Current preference for using X_Real_IP from HTTP header
- */
-gboolean ignore_http_x_real_ip;
 
 /**
  * @brief Whether chroot is used
@@ -355,6 +294,12 @@ int chroot_state = 0;
 void
 add_security_headers (struct MHD_Response *response)
 {
+  const gchar * http_x_frame_options = get_http_x_frame_options ();
+  const gchar * http_content_security_policy =
+    get_http_content_security_policy ();
+  const gchar * http_strict_transport_security =
+    get_http_strict_transport_security ();
+
   if (strcmp (http_x_frame_options, ""))
     MHD_add_response_header (response, "X-Frame-Options",
                              http_x_frame_options);
@@ -372,17 +317,19 @@ add_security_headers (struct MHD_Response *response)
 void
 add_guest_chart_content_security_headers (struct MHD_Response *response)
 {
-  if (strcmp (http_x_frame_options, ""))
+  if (strcmp (get_http_x_frame_options (), ""))
     MHD_add_response_header (response, "X-Frame-Options",
-                             http_guest_chart_x_frame_options);
-  if (strcmp (http_content_security_policy, ""))
+                             get_http_guest_chart_x_frame_options ());
+  if (strcmp (get_http_content_security_policy (), ""))
     MHD_add_response_header (response, "Content-Security-Policy",
-                             http_guest_chart_content_security_policy);
+                             get_http_guest_chart_content_security_policy ());
 }
 
 void
 add_cors_headers (struct MHD_Response *response)
 {
+  const gchar * http_cors_origin = get_http_cors_origin ();
+
   if (strcmp (http_cors_origin, "")) {
     MHD_add_response_header (response, "Access-Control-Allow-Origin",
                              http_cors_origin);
@@ -453,6 +400,7 @@ user_add (const gchar *username, const gchar *password, const gchar *timezone,
           const gchar *autorefresh, const char *address)
 {
   user_t *user = NULL;
+  const gchar * guest_username = get_guest_username ();
   int index;
   g_mutex_lock (mutex);
   for (index = 0; index < users->len; index++)
@@ -461,7 +409,7 @@ user_add (const gchar *username, const gchar *password, const gchar *timezone,
       item = (user_t*) g_ptr_array_index (users, index);
       if (strcmp (item->username, username) == 0)
         {
-          if (time (NULL) - item->time > (session_timeout * 60))
+          if (time (NULL) - item->time > (get_session_timeout () * 60))
             g_ptr_array_remove (users, (gpointer) item);
         }
     }
@@ -522,7 +470,10 @@ user_find (const gchar *cookie, const gchar *token, const char *address,
 {
   int ret;
   user_t *user = NULL;
+  const gchar * guest_username = get_guest_username ();
+  const gchar * guest_password = get_guest_password ();
   int index;
+
   if (token == NULL)
     return USER_BAD_MISSING_TOKEN;
 
@@ -605,7 +556,7 @@ user_find (const gchar *cookie, const gchar *token, const char *address,
           if ((cookie == NULL) || strcmp (item->cookie, cookie))
             {
               /* Check if the session has expired. */
-              if (time (NULL) - item->time > (session_timeout * 60))
+              if (time (NULL) - item->time > (get_session_timeout () * 60))
                 /* Probably the browser removed the cookie. */
                 ret = USER_EXPIRED_TOKEN;
               else
@@ -621,7 +572,7 @@ user_find (const gchar *cookie, const gchar *token, const char *address,
       /* Verify that the user address matches the client's address. */
       if (strcmp (address, user->address))
         ret = USER_IP_ADDRESS_MISSMATCH;
-      else if (time (NULL) - user->time > (session_timeout * 60))
+      else if (time (NULL) - user->time > (get_session_timeout () * 60))
         ret = USER_EXPIRED_TOKEN;
       else
         {
@@ -934,7 +885,7 @@ token_user (const gchar *token, user_t **user_return)
     }
   if (user)
     {
-      if (time (NULL) - user->time > (session_timeout * 60))
+      if (time (NULL) - user->time > (get_session_timeout () * 60))
         ret = 2;
       else
         {
@@ -2194,6 +2145,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   cmd_response_data_init (&response_data);
   const char *xml_flag;
   xml_flag = params_value (con_info->params, "xml");
+  const gchar * guest_username = get_guest_username ();
 
   /* Handle the login command specially. */
 
@@ -3433,7 +3385,7 @@ attach_sid (struct MHD_Response *response, const char *sid)
   setlocale (LC_ALL, "C");
 
   now = time (NULL);
-  expire_time = now + (session_timeout * 60) + 30;
+  expire_time = now + (get_session_timeout () * 60) + 30;
   if (localtime_r (&expire_time, &expire_time_broken) == NULL)
     abort ();
   ret = strftime (expires, EXPIRES_LENGTH, "%a, %d-%b-%Y %T GMT",
@@ -3467,7 +3419,7 @@ attach_sid (struct MHD_Response *response, const char *sid)
                            "=%s; expires=%s; path=/; %sHTTPonly",
                            sid,
                            expires,
-                           (use_secure_cookie ? "secure; " : ""));
+                           (is_use_secure_cookie () ? "secure; " : ""));
   ret = MHD_add_response_header (response, "Set-Cookie", value);
   g_free (value);
   return ret;
@@ -3512,7 +3464,7 @@ remove_sid (struct MHD_Response *response)
 
   value = g_strdup_printf (SID_COOKIE_NAME "=0; expires=%s; path=/; %sHTTPonly",
                            expires,
-                           (use_secure_cookie ? "secure; " : ""));
+                           (is_use_secure_cookie () ? "secure; " : ""));
   ret = MHD_add_response_header (response, "Set-Cookie", value);
   g_free (value);
   return ret;
@@ -3783,7 +3735,7 @@ send_redirect_to_urn (struct MHD_Connection *connection, const char *urn,
   else if ((protocol == NULL)
            || (strcmp(protocol, "http") && strcmp(protocol, "https")))
     {
-      if (use_secure_cookie)
+      if (is_use_secure_cookie ())
         protocol = "https";
       else
         protocol = "http";
@@ -4163,12 +4115,12 @@ get_client_address (struct MHD_Connection *conn, char *client_address)
                                            MHD_HEADER_KIND,
                                            "X-Real-IP");
 
-  if (!ignore_http_x_real_ip
+  if (!is_ignore_http_x_real_ip ()
       && x_real_ip && g_utf8_validate (x_real_ip, -1, NULL) == FALSE)
     return 1;
-  else if (!ignore_http_x_real_ip && x_real_ip != NULL)
+  else if (!is_ignore_http_x_real_ip () && x_real_ip != NULL)
     strncpy (client_address, x_real_ip, INET6_ADDRSTRLEN);
-  else if (unix_socket)
+  else if (is_unix_socket ())
     strncpy (client_address, "unix_socket", INET6_ADDRSTRLEN);
   else
     {
@@ -4212,6 +4164,7 @@ handle_request (void *cls, struct MHD_Connection *connection,
   gsize response_size = 0;
   int http_response_code = MHD_HTTP_OK;
   const char *xml_flag = NULL;
+  const gchar * guest_username = get_guest_username ();
   int ret;
 
   /* Never respond on first call of a GET. */
@@ -5018,7 +4971,7 @@ handle_request (void *cls, struct MHD_Connection *connection,
           g_free (sid);
 
           add_cors_headers (response);
-          if (guest_password
+          if (get_guest_password ()
               && strcmp (credentials->username, guest_username) == 0
               && cmd
               && (strcmp (cmd, "get_aggregate") == 0
@@ -5478,7 +5431,10 @@ start_unix_http_daemon (const char *unix_socket_path,
   struct stat ustat;
   mode_t oldmask = 0;
 
-  unix_socket = socket (AF_UNIX, SOCK_STREAM, 0);
+  int unix_socket = socket (AF_UNIX, SOCK_STREAM, 0);
+
+  set_unix_socket (unix_socket);
+
   if (unix_socket == -1)
     {
       g_warning ("%s: Couldn't create UNIX socket", __FUNCTION__);
@@ -5819,23 +5775,23 @@ main (int argc, char **argv)
     }
   g_option_context_free (option_context);
 
-  http_x_frame_options = http_frame_opts;
-  http_content_security_policy = http_csp;
-  http_guest_chart_x_frame_options = http_guest_chart_frame_opts;
-  http_guest_chart_content_security_policy = http_guest_chart_csp;
-  http_cors_origin = http_cors;
+  set_http_x_frame_options (http_frame_opts);
+  set_http_content_security_policy (http_csp);
+  set_http_guest_chart_x_frame_options (http_guest_chart_frame_opts);
+  set_http_guest_chart_content_security_policy (http_guest_chart_csp);
+  set_http_cors_origin (http_cors);
 
   if (http_only == FALSE && hsts_enabled)
     {
-      http_strict_transport_security
-        = g_strdup_printf ("max-age=%d",
-                           hsts_max_age >= 0 ? hsts_max_age
-                                             : DEFAULT_GSAD_HSTS_MAX_AGE);
+      set_http_strict_transport_security (
+        g_strdup_printf ("max-age=%d",
+                         hsts_max_age >= 0 ? hsts_max_age
+                                           : DEFAULT_GSAD_HSTS_MAX_AGE));
     }
   else
-    http_strict_transport_security = NULL;
+    set_http_strict_transport_security (NULL);
 
-  ignore_http_x_real_ip = ignore_x_real_ip;
+  set_ignore_http_x_real_ip (ignore_x_real_ip);
 
   if (register_signal_handlers ())
     {
@@ -5925,7 +5881,7 @@ main (int argc, char **argv)
 
   /* Finish processing the command line options. */
 
-  use_secure_cookie = secure_cookie;
+  set_use_secure_cookie (secure_cookie);
 
   if ((timeout < 1) || (timeout > 1440))
     {
@@ -5933,12 +5889,13 @@ main (int argc, char **argv)
                   __FUNCTION__);
       exit (EXIT_FAILURE);
     }
-  session_timeout = timeout;
+
+  set_session_timeout (timeout);
 
   if (guest_user)
     {
-      guest_username = guest_user;
-      guest_password = guest_pass ? guest_pass : guest_user;
+      set_guest_username (guest_user);
+      set_guest_password (guest_pass ? guest_pass : guest_user);
     }
 
   gsad_port = http_only ? DEFAULT_GSAD_HTTP_PORT : DEFAULT_GSAD_HTTPS_PORT;
@@ -6194,7 +6151,7 @@ main (int argc, char **argv)
           gchar *ssl_certificate = NULL;
           gchar *dh_params = NULL;
 
-          use_secure_cookie = 1;
+          set_use_secure_cookie (1);
 
           if (!g_file_get_contents (ssl_private_key_filename, &ssl_private_key,
                                     NULL, &error))
