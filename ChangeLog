@@ -1,5 +1,10 @@
 2016-12-05  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/gsad_user.h: Remove duplicate definitions of user_set_charts and
+	user_set_autorefresh functions.
+
+2016-12-05  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/gsad_base.h, src/gsad_omp.c: Move GSAD_MESSAGE_INVALID,
 	GSAD_MESSAGE_INVALID_PARAM and RESULTS_PER_PAGE defines to gsad_omp.c. They
 	are only used in this c file.

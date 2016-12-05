@@ -126,12 +126,6 @@ int user_set_autorefresh (const gchar *token, const gchar *autorefresh);
 int user_logout_all_sessions (const gchar *username,
                               credentials_t *credentials);
 
-/* temporary setting to show charts - defined in gsad.c */
-int user_set_charts (const gchar*, const int);
-
-/* default refresh interval setting */
-int user_set_autorefresh (const gchar*, const gchar*);
-
 
 int token_user (const gchar *token, user_t **user_return);
 
