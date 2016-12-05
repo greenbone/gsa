@@ -366,29 +366,6 @@ omp_init (const gchar *manager_address_unix, const gchar *manager_address_tls,
 }
 
 /**
- * @brief Initializes a cmd_response_data_t struct.
- *
- * @param[in]  data  The cmd_response_data_t struct to initialize
- */
-void
-cmd_response_data_init (cmd_response_data_t* data)
-{
-  data->http_status_code = MHD_HTTP_OK;
-  data->redirect = NULL;
-}
-
-/**
- * @brief Clears a cmd_response_data_t struct.
- *
- * @param[in]  data  Struct to reset.
- */
-void
-cmd_response_data_reset (cmd_response_data_t* data)
-{
-  memset (data, 0, sizeof (cmd_response_data_t));
-}
-
-/**
  * @brief Traverse a chart preference tree and output xml elements.
  *
  * @param id     ID of the preference.

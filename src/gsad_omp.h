@@ -35,12 +35,11 @@
 
 #include <glib.h> /* for gboolean */
 
-#include "gsad_base.h" /* for credentials_t */
+#include "gsad_base.h" /* for content_type */
+#include "gsad_user.h" /* for credentials_t */
+#include "gsad_cmd.h" /* for cmd_response_data_t */
 
 void omp_init (const gchar *, const gchar *, int);
-
-void cmd_response_data_init (cmd_response_data_t*);
-void cmd_response_data_reset (cmd_response_data_t*);
 
 char * clone_omp (credentials_t *, params_t *, cmd_response_data_t*);
 
