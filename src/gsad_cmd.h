@@ -35,12 +35,15 @@
 
 #include <glib.h>
 
+#include "gsad_content_type.h" /* for content_type_t */
+
 /**
  * @brief Response information for commands.
  */
 typedef struct {
-  int http_status_code;  ///> HTTP status code.
-  gchar *redirect;       ///> Redirect URL or NULL.
+  int http_status_code;        ///> HTTP status code.
+  gchar *redirect;             ///> Redirect URL or NULL.
+  content_type_t content_type; ///> Content type. Default is text/html
 } cmd_response_data_t;
 
 void cmd_response_data_init (cmd_response_data_t* data);

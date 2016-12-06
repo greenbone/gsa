@@ -1,5 +1,12 @@
 2016-12-06  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/gsad_cmd.h: Add content_type to cmd_response_data_t. This allows to set
+	the content type for commands.
+
+	* src/gsad_cmd.c: Initalize content type of cmd_response_data_t with text/html.
+
+2016-12-06  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/gsad_base.h, src/gsad_content_type.h: Move content_type definition into
 	a seperate header.
 
