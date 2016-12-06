@@ -1,5 +1,15 @@
 2016-12-06  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/gsad_base.h, src/gsad_content_type.h: Move content_type definition into
+	a seperate header.
+
+	* src/gsad_http.c, src/gsad_omp.c: Include gsad_base.h for xsl_transform and
+	ctime_r_strip_newline functions.
+
+	* src/gsad_http.h, src/gsad_omp.h: Include gsad_content_type.h.
+
+2016-12-06  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/gsad_http.c, src/gsad_http.h: Update coding style and add missing
 	docstrings. Use content_type_t instead of enum content_type.
 

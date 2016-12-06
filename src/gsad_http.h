@@ -29,7 +29,7 @@
 #include <microhttpd.h>
 #include <glib.h>
 
-#include "gsad_base.h" /* for content_type_t */
+#include "gsad_content_type.h" /* for content_type_t */
 #include "gsad_user.h"
 #include "gsad_cmd.h" /* for cmd_response_data_t */
 

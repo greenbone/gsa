@@ -35,7 +35,7 @@
 
 #include <glib.h> /* for gboolean */
 
-#include "gsad_base.h" /* for content_type */
+#include "gsad_content_type.h" /* for content_type */
 #include "gsad_user.h" /* for credentials_t */
 #include "gsad_cmd.h" /* for cmd_response_data_t */
 

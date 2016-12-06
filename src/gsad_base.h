@@ -48,30 +48,4 @@ char * xsl_transform_with_stylesheet (const char *, const char *,
                                       cmd_response_data_t *);
 char * xsl_transform (const char *, cmd_response_data_t *);
 
-/**
- * @brief Content types.
- */
-enum content_type
-{
-  GSAD_CONTENT_TYPE_APP_DEB,
-  GSAD_CONTENT_TYPE_APP_EXE,
-  GSAD_CONTENT_TYPE_APP_HTML,
-  GSAD_CONTENT_TYPE_APP_KEY,
-  GSAD_CONTENT_TYPE_APP_NBE,
-  GSAD_CONTENT_TYPE_APP_PDF,
-  GSAD_CONTENT_TYPE_APP_RPM,
-  GSAD_CONTENT_TYPE_APP_XML,
-  GSAD_CONTENT_TYPE_DONE,         ///< Special marker.
-  GSAD_CONTENT_TYPE_IMAGE_PNG,
-  GSAD_CONTENT_TYPE_TEXT_CSS,
-  GSAD_CONTENT_TYPE_TEXT_HTML,
-  GSAD_CONTENT_TYPE_TEXT_JS,
-  GSAD_CONTENT_TYPE_TEXT_PLAIN,
-  GSAD_CONTENT_TYPE_OCTET_STREAM,
-  GSAD_CONTENT_TYPE_IMAGE_SVG,
-  GSAD_CONTENT_TYPE_IMAGE_GIF
-};
-
-typedef enum content_type content_type_t;
-
 #endif /* not _GSAD_BASE_H */
