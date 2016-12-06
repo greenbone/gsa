@@ -475,6 +475,10 @@ td p {
   display:table-cell;
 }
 
+#gb_header .logo {
+  width:225px;
+}
+
 /* Menu Bar */
 #gb_menu {
   background-color: #393637;
@@ -646,7 +650,6 @@ a.top_button:hover div.first_button_overlay {
 
 .logo {
   float:left;
-  width:225px;
 }
 
 .logo .greenbone-icon {
