@@ -74,7 +74,7 @@
         window.clearInterval(self.interval);
         self.interval = undefined;
       }
-      svg.html ('');
+      svg.selectAll ('*').remove();
 
       // Add a text if records list is empty
 
@@ -130,7 +130,7 @@
         window.clearInterval(self.interval);
         self.interval = undefined;
       }
-      svg.html ('');
+      svg.selectAll ('*').remove();
 
       self.empty_text =
         svg.insert('text')

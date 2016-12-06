@@ -97,7 +97,7 @@
 
     // generate cloud
     cloud.stop();
-    this.svg.html('');
+    this.svg.selectAll('*').remove();
 
     var i;
     var x;
