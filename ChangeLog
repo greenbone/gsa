@@ -1,3 +1,8 @@
+2016-12-06  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/gsad_omp.c (save_scanner_omp): Don't check for unix socket file
+	case as this is done on manager-side.
+
 2016-12-06  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Fix various issues with layout and charts in Internet Explorer.
