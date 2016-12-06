@@ -93,6 +93,7 @@
 #include "gsad_omp.h"
 #include "gsad_omp_auth.h" /* for authenticate_omp */
 #include "gsad_http.h"
+#include "gsad_http_handler.h" /* for init_http_handlers */
 #include "gsad_settings.h"
 #include "gsad_user.h"
 #include "validator.h"
@@ -2599,1019 +2600,6 @@ redirect_handler (void *cls, struct MHD_Connection *connection,
 }
 
 /**
- * @brief HTTP request handler for GSAD.
- *
- * This routine is an MHD_AccessHandlerCallback, the request handler for
- * microhttpd.
- *
- * @param[in]  cls              Not used for this callback.
- * @param[in]  connection       Connection handle, e.g. used to send response.
- * @param[in]  url              The URL requested.
- * @param[in]  method           "GET" or "POST", others are disregarded.
- * @param[in]  version          Not used for this callback.
- * @param[in]  upload_data      Data used for POST requests.
- * @param[in]  upload_data_size Size of upload_data.
- * @param[out] con_cls          For exchange of connection-related data
- *                              (here a struct gsad_connection_info).
- *
- * @return MHD_NO in case of problems. MHD_YES if all is OK.
- */
-int
-handle_request (void *cls, struct MHD_Connection *connection,
-                 const char *url, const char *method,
-                 const char *version, const char *upload_data,
-                 size_t * upload_data_size, void **con_cls)
-{
-  const char *url_base = "/";
-  char *default_file = "/login/login.html", client_address[INET6_ADDRSTRLEN];
-  enum content_type content_type;
-  char *content_disposition = NULL;
-  gsize response_size = 0;
-  int http_response_code = MHD_HTTP_OK;
-  const char *xml_flag = NULL;
-  const gchar * guest_username = get_guest_username ();
-  int ret;
-
-  /* Never respond on first call of a GET. */
-  if ((!strcmp (method, "GET")) && *con_cls == NULL)
-    {
-      struct gsad_connection_info *con_info;
-
-      /* First call for this request, a GET. */
-
-      /* Freed by MHD_OPTION_NOTIFY_COMPLETED callback, free_resources. */
-      con_info = g_malloc0 (sizeof (struct gsad_connection_info));
-      con_info->params = params_new ();
-      con_info->connectiontype = 2;
-
-      *con_cls = (void *) con_info;
-      return MHD_YES;
-    }
-
-  /* If called with undefined URL, abort request handler. */
-  if (&url[0] == NULL)
-    {
-      send_response (connection, BAD_REQUEST_PAGE, MHD_HTTP_NOT_ACCEPTABLE,
-                     NULL, GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0);
-      return MHD_YES;
-    }
-
-  /* Prevent guest link from leading to URL redirection. */
-  if (url && (url[0] == '/') && (url[1] == '/'))
-    {
-      gchar *msg = gsad_message (NULL,
-                                 NOT_FOUND_TITLE, NULL, 0,
-                                 NOT_FOUND_MESSAGE,
-                                 "/login/login.html", NULL);
-      send_response (connection, msg, MHD_HTTP_NOT_FOUND,
-                    NULL, GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0);
-      g_free (msg);
-      return MHD_YES;
-    }
-
-  /* Many Glib functions require valid UTF-8. */
-  if (url && (g_utf8_validate (url, -1, NULL) == FALSE))
-    {
-      send_response (connection,
-                     UTF8_ERROR_PAGE ("URL"),
-                     MHD_HTTP_BAD_REQUEST, NULL,
-                     GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0);
-      return MHD_YES;
-    }
-
-  /* Only accept GET and POST methods and send ERROR_PAGE in other cases. */
-  if (strcmp (method, "GET") && strcmp (method, "POST"))
-    {
-      send_response (connection, ERROR_PAGE, MHD_HTTP_METHOD_NOT_ALLOWED,
-                     NULL, GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0);
-      return MHD_YES;
-    }
-
-  /* Redirect the base URL to the login page.  Serve the login page
-   * even if the user is already logged in.
-   *
-   * This might make users think that they have been logged out.  The only
-   * way to logout, however, is with a token.  I guess this is where a cookie
-   * would be useful. */
-
-  g_debug ("============= url: %s\n", reconstruct_url (connection, url));
-
-  if (!strcmp (&url[0], url_base))
-    {
-      return send_redirect_to_urn (connection, default_file, NULL);
-    }
-
-  if ((!strcmp (method, "GET"))
-        && (!strncmp (&url[0], "/login/", strlen ("/login/")))
-        && !url[strlen ("/login/")])
-    {
-      return send_redirect_to_urn (connection, default_file, NULL);
-    }
-
-  /* Set HTTP Header values. */
-
-  if (!strcmp (method, "GET"))
-    {
-      const char *token, *cookie, *accept_language, *xml_flag;
-      const char *omp_cgi_base = "/omp";
-      gchar *language;
-      struct MHD_Response *response;
-      credentials_t *credentials;
-      user_t *user;
-      gchar *sid;
-      char *res;
-
-      token = NULL;
-      cookie = NULL;
-
-      xml_flag = MHD_lookup_connection_value (connection,
-                                              MHD_GET_ARGUMENT_KIND,
-                                              "xml");
-
-      /* Second or later call for this request, a GET. */
-
-      content_type = GSAD_CONTENT_TYPE_TEXT_HTML;
-
-      /* Special case the login page, stylesheet and icon. */
-
-      if (!strcmp (url, default_file))
-        {
-          time_t now;
-          gchar *xml;
-          char *res;
-          char ctime_now[200];
-          const char* accept_language;
-          gchar *language;
-          cmd_response_data_t response_data;
-          cmd_response_data_init (&response_data);
-
-          now = time (NULL);
-          ctime_r_strip_newline (&now, ctime_now);
-
-          accept_language = MHD_lookup_connection_value (connection,
-                                                         MHD_HEADER_KIND,
-                                                         "Accept-Language");
-          if (accept_language
-              && g_utf8_validate (accept_language, -1, NULL) == FALSE)
-            {
-              send_response (connection,
-                             UTF8_ERROR_PAGE ("'Accept-Language' header"),
-                             MHD_HTTP_BAD_REQUEST, NULL,
-                             GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0);
-              return MHD_YES;
-            }
-          language = accept_language_to_env_fmt (accept_language);
-          xml = login_xml (NULL,
-                           NULL,
-                           ctime_now,
-                           NULL,
-                           language,
-                           guest_username ? guest_username : "");
-          g_free (language);
-          if (xml_flag && strcmp (xml_flag, "0"))
-            res = xml;
-          else
-            {
-              res = xsl_transform (xml, &response_data);
-              g_free (xml);
-            }
-          response = MHD_create_response_from_buffer (strlen (res), res,
-                                                  MHD_RESPMEM_MUST_FREE);
-          add_security_headers (response);
-          add_cors_headers (response);
-          cmd_response_data_reset (&response_data);
-          return handler_send_response (connection,
-                                        response,
-                                        &content_type,
-                                        content_disposition,
-                                        http_response_code,
-                                        1);
-        }
-
-#ifdef SERVE_STATIC_ASSETS
-
-      if (!strcmp (url, "/favicon.ico")
-          || !strcmp (url, "/favicon.gif"))
-        {
-          response = file_content_response (NULL,
-                                            connection, url,
-                                            &http_response_code,
-                                            &content_type,
-                                            &content_disposition);
-          add_security_headers (response);
-          add_cors_headers (response);
-          return handler_send_response (connection,
-                                        response,
-                                        &content_type,
-                                        content_disposition,
-                                        http_response_code,
-                                        0);
-        }
-
-      /* Allow the decorative images and scripts to anyone. */
-
-      if (strncmp (url, "/img/", strlen ("/img/")) == 0
-          || strncmp (url, "/js/", strlen ("/js/")) == 0
-          || strncmp (url, "/css/", strlen ("/css/")) == 0)
-        {
-          response = file_content_response (NULL,
-                                            connection, url,
-                                            &http_response_code,
-                                            &content_type,
-                                            &content_disposition);
-          add_security_headers (response);
-          add_cors_headers (response);
-          return handler_send_response (connection,
-                                        response,
-                                        &content_type,
-                                        content_disposition,
-                                        http_response_code,
-                                        0);
-        }
-#endif
-
-      /* Setup credentials from token. */
-
-      token = MHD_lookup_connection_value (connection,
-                                           MHD_GET_ARGUMENT_KIND,
-                                           "token");
-      if (token == NULL)
-        {
-          g_debug ("%s: Missing token in arguments", __FUNCTION__);
-          cookie = NULL;
-          ret = USER_BAD_MISSING_TOKEN;
-        }
-      else
-        {
-          if (openvas_validate (validator, "token", token))
-            token = NULL;
-
-          cookie = MHD_lookup_connection_value (connection,
-                                                MHD_COOKIE_KIND,
-                                                SID_COOKIE_NAME);
-          if (openvas_validate (validator, "token", cookie))
-            cookie = NULL;
-
-          get_client_address (connection, client_address);
-          ret = get_client_address (connection, client_address);
-          if (ret == 1)
-            {
-              send_response (connection,
-                             UTF8_ERROR_PAGE ("'X-Real-IP' header"),
-                             MHD_HTTP_BAD_REQUEST, NULL,
-                             GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0);
-              return MHD_YES;
-            }
-
-          ret = user_find (cookie, token, client_address, &user);
-        }
-
-      if (ret == USER_BAD_TOKEN || ret == USER_GUEST_LOGIN_FAILED
-          || ret == USER_OMP_DOWN || ret == USER_GUEST_LOGIN_ERROR)
-        {
-          cmd_response_data_t response_data;
-          cmd_response_data_init (&response_data);
-          if (ret == 1)
-            {
-              response_data.http_status_code = MHD_HTTP_BAD_REQUEST;
-              res = gsad_message (NULL,
-                                  "Internal error", __FUNCTION__, __LINE__,
-                                  "An internal error occurred inside GSA daemon. "
-                                  "Diagnostics: Bad token.",
-                                  "/omp?cmd=get_tasks", &response_data);
-            }
-          else
-            {
-              time_t now;
-              gchar *xml;
-              char ctime_now[200];
-
-              now = time (NULL);
-              ctime_r_strip_newline (&now, ctime_now);
-
-              accept_language = MHD_lookup_connection_value (connection,
-                                                             MHD_HEADER_KIND,
-                                                             "Accept-Language");
-              if (accept_language
-                  && g_utf8_validate (accept_language, -1, NULL) == FALSE)
-                {
-                  send_response (connection,
-                                UTF8_ERROR_PAGE ("'Accept-Language' header"),
-                                MHD_HTTP_BAD_REQUEST, NULL,
-                                GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0);
-                  return MHD_YES;
-                }
-              language = accept_language_to_env_fmt (accept_language);
-              xml = login_xml (ret == 6
-                                ? "Login failed.  OMP service is down."
-                                : (ret == -1
-                                    ? "Login failed.  Error during authentication."
-                                    : "Login failed."),
-                               NULL,
-                               ctime_now,
-                               NULL,
-                               language,
-                               guest_username ? guest_username : "");
-              response_data.http_status_code = MHD_HTTP_SERVICE_UNAVAILABLE;
-              g_free (language);
-              if (xml_flag && strcmp (xml_flag, "0"))
-                res = xml;
-              else
-                {
-                  res = xsl_transform (xml, &response_data);
-                  g_free (xml);
-                }
-            }
-          response = MHD_create_response_from_buffer (strlen (res), res,
-                                                      MHD_RESPMEM_MUST_FREE);
-          http_response_code = response_data.http_status_code;
-          add_security_headers (response);
-          add_cors_headers (response);
-          cmd_response_data_reset (&response_data);
-          return handler_send_response (connection,
-                                        response,
-                                        &content_type,
-                                        content_disposition,
-                                        http_response_code,
-                                        1);
-        }
-
-      if ((ret == USER_EXPIRED_TOKEN) || (ret == USER_BAD_MISSING_COOKIE)
-          || (ret == USER_BAD_MISSING_TOKEN)
-          || (ret == USER_IP_ADDRESS_MISSMATCH))
-        {
-          time_t now;
-          gchar *xml;
-          char *res;
-          gchar *full_url;
-          char ctime_now[200];
-          const char *cmd;
-          int export;
-          cmd_response_data_t response_data;
-          cmd_response_data_init (&response_data);
-
-          now = time (NULL);
-          ctime_r_strip_newline (&now, ctime_now);
-
-          cmd = MHD_lookup_connection_value (connection,
-                                             MHD_GET_ARGUMENT_KIND,
-                                             "cmd");
-
-          export = 0;
-          if (cmd && g_utf8_validate (cmd, -1, NULL))
-            {
-              if (strncmp (cmd, "export", strlen ("export")) == 0)
-                export = 1;
-              else if (strcmp (cmd, "get_report") == 0)
-                {
-                  const char *report_format_id;
-
-                  report_format_id = MHD_lookup_connection_value
-                                      (connection,
-                                       MHD_GET_ARGUMENT_KIND,
-                                       "report_format_id");
-                  if (report_format_id
-                      && g_utf8_validate (report_format_id, -1, NULL))
-                    export = 1;
-                }
-            }
-
-          accept_language = MHD_lookup_connection_value (connection,
-                                                         MHD_HEADER_KIND,
-                                                         "Accept-Language");
-          if (accept_language
-              && g_utf8_validate (accept_language, -1, NULL) == FALSE)
-            {
-              send_response (connection,
-                             UTF8_ERROR_PAGE ("'Accept-Language' header"),
-                             MHD_HTTP_BAD_REQUEST, NULL,
-                             GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0);
-              return MHD_YES;
-            }
-          language = accept_language_to_env_fmt (accept_language);
-
-          if ((export == 0) && strncmp (url, "/logout", strlen ("/logout")))
-            {
-              full_url = reconstruct_url (connection, url);
-              if (full_url && g_utf8_validate (full_url, -1, NULL) == FALSE)
-                {
-                  g_free (full_url);
-                  full_url = NULL;
-                }
-            }
-          else
-            full_url = NULL;
-
-          if (ret == USER_EXPIRED_TOKEN)
-            {
-              if (strncmp (url, "/logout", strlen ("/logout")))
-                response_data.http_status_code = MHD_HTTP_UNAUTHORIZED;
-              else
-                response_data.http_status_code = MHD_HTTP_BAD_REQUEST;
-            }
-          else
-            response_data.http_status_code = MHD_HTTP_UNAUTHORIZED;
-
-          xml = login_xml
-                 ((ret == USER_EXPIRED_TOKEN)
-                   ? (strncmp (url, "/logout", strlen ("/logout"))
-                       ? "Session has expired.  Please login again."
-                       : "Already logged out.")
-                   : ((ret == USER_BAD_MISSING_COOKIE)
-                      ? "Cookie missing or bad.  Please login again."
-                      : "Token missing or bad.  Please login again."),
-                  NULL,
-                  ctime_now,
-                  full_url ? full_url : "",
-                  language,
-                  guest_username ? guest_username : "");
-
-          g_free (language);
-          g_free (full_url);
-          if (xml_flag && strcmp (xml_flag, "0"))
-            res = xml;
-          else
-            {
-              res = xsl_transform (xml, &response_data);
-              g_free (xml);
-            }
-
-          http_response_code = response_data.http_status_code;
-          response = MHD_create_response_from_buffer (strlen (res), res,
-                                                      MHD_RESPMEM_MUST_FREE);
-          add_security_headers (response);
-          add_cors_headers (response);
-          cmd_response_data_reset (&response_data);
-          return handler_send_response (connection,
-                                        response,
-                                        &content_type,
-                                        content_disposition,
-                                        http_response_code,
-                                        1);
-        }
-
-      if (ret)
-        abort ();
-
-      /* From here on, the user is authenticated. */
-
-      if (!strncmp (url, "/logout", strlen ("/logout")))
-        {
-          time_t now;
-          gchar *xml;
-          char ctime_now[200];
-          cmd_response_data_t response_data;
-          cmd_response_data_init (&response_data);
-
-          now = time (NULL);
-          ctime_r_strip_newline (&now, ctime_now);
-
-          user_remove (user);
-
-          accept_language = MHD_lookup_connection_value (connection,
-                                                         MHD_HEADER_KIND,
-                                                         "Accept-Language");
-          if (accept_language
-              && g_utf8_validate (accept_language, -1, NULL) == FALSE)
-            {
-              send_response (connection,
-                             UTF8_ERROR_PAGE ("'Accept-Language' header"),
-                             MHD_HTTP_BAD_REQUEST, NULL,
-                             GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0);
-              return MHD_YES;
-            }
-          language = accept_language_to_env_fmt (accept_language);
-          xml = login_xml ("Successfully logged out.",
-                           NULL,
-                           ctime_now,
-                           NULL,
-                           language,
-                           guest_username ? guest_username : "");
-          g_free (language);
-          http_response_code = response_data.http_status_code;
-          if (xml_flag && strcmp (xml_flag, "0"))
-            res = xml;
-          else
-            {
-              res = xsl_transform (xml, &response_data);
-              g_free (xml);
-            }
-          response = MHD_create_response_from_buffer (strlen (res), res,
-                                                      MHD_RESPMEM_MUST_FREE);
-          cmd_response_data_reset (&response_data);
-          add_security_headers (response);
-          add_cors_headers (response);
-          return handler_send_response (connection,
-                                        response,
-                                        &content_type,
-                                        content_disposition,
-                                        http_response_code,
-                                        1);
-        }
-
-      language = g_strdup (user->language);
-      if (!language)
-        /* Accept-Language: de; q=1.0, en; q=0.5 */
-        {
-          accept_language = MHD_lookup_connection_value
-                              (connection, MHD_HEADER_KIND, "Accept-Language");
-          if (accept_language
-              && g_utf8_validate (accept_language, -1, NULL) == FALSE)
-            {
-              send_response (connection,
-                             UTF8_ERROR_PAGE ("'Accept-Language' header"),
-                             MHD_HTTP_BAD_REQUEST, NULL,
-                             GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0);
-              return MHD_YES;
-            }
-          language = accept_language_to_env_fmt (accept_language);
-          credentials = credentials_new (user, language, client_address);
-          g_free (language);
-        }
-      else
-        credentials = credentials_new (user, language, client_address);
-
-      credentials->caller = reconstruct_url (connection, url);
-      if (credentials->caller
-          && g_utf8_validate (credentials->caller, -1, NULL) == FALSE)
-        {
-          g_free (credentials->caller);
-          credentials->caller = NULL;
-        }
-
-      sid = g_strdup (user->cookie);
-
-      user_release (user);
-
-      /* Serve the request. */
-
-      if (!strncmp (&url[0], omp_cgi_base, strlen (omp_cgi_base)))
-        {
-          /* URL requests to run OMP command. */
-
-          unsigned int res_len = 0;
-          gchar *content_type_string = NULL;
-
-          cmd_response_data_t response_data;
-          cmd_response_data_init (&response_data);
-
-          res = exec_omp_get (connection, credentials, &content_type,
-                              &content_type_string, &content_disposition,
-                              &response_size, &response_data);
-          if (response_size > 0)
-            {
-              res_len = response_size;
-              response_size = 0;
-            }
-          else
-            {
-              res_len = strlen (res);
-
-              xml_flag = credentials->params
-                          ? params_value (credentials->params, "xml")
-                          : NULL;
-              if (xml_flag && strcmp (xml_flag, "0"))
-                content_type = GSAD_CONTENT_TYPE_APP_XML;
-            }
-
-          response = MHD_create_response_from_buffer (res_len, (void *) res,
-                                                      MHD_RESPMEM_MUST_FREE);
-
-          if (content_type_string)
-            {
-              MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
-                                       content_type_string);
-              g_free (content_type_string);
-            }
-          http_response_code = response_data.http_status_code;
-          cmd_response_data_reset (&response_data);
-        }
-      /* URL does not request OMP command but perhaps a special GSAD command? */
-      else if (!strncmp (&url[0], "/system_report/",
-                         strlen ("/system_report/")))
-        {
-          params_t *params;
-          gsize res_len;
-          const char *slave_id;
-
-          params = params_new ();
-
-          MHD_get_connection_values (connection, MHD_GET_ARGUMENT_KIND,
-                                    params_mhd_add, params);
-
-          params_mhd_validate (params);
-
-          slave_id = MHD_lookup_connection_value (connection,
-                                                  MHD_GET_ARGUMENT_KIND,
-                                                  "slave_id");
-          if (slave_id && openvas_validate (validator, "slave_id", slave_id))
-            {
-              g_free (sid);
-              credentials_free (credentials);
-              g_warning ("%s: failed to validate slave_id, dropping request",
-                         __FUNCTION__);
-              return MHD_NO;
-            }
-
-          cmd_response_data_t response_data;
-          cmd_response_data_init (&response_data);
-
-          res = get_system_report_omp (credentials,
-                                       &url[0] + strlen ("/system_report/"),
-                                       params,
-                                       &content_type,
-                                       &res_len,
-                                       &response_data);
-          if (res == NULL)
-            {
-              g_free (sid);
-              credentials_free (credentials);
-              g_warning ("%s: failed to get system reports, dropping request",
-                         __FUNCTION__);
-              return MHD_NO;
-            }
-          response = MHD_create_response_from_buffer ((unsigned int) res_len,
-                                                      res, MHD_RESPMEM_MUST_FREE);
-
-          http_response_code = response_data.http_status_code;
-          cmd_response_data_reset (&response_data);
-        }
-      else if (!strncmp (&url[0], "/help/",
-                         strlen ("/help/")))
-        {
-          cmd_response_data_t response_data;
-          cmd_response_data_init (&response_data);
-
-          if (!g_ascii_isalpha (url[6]))
-            {
-              response_data.http_status_code = MHD_HTTP_BAD_REQUEST;
-              res = gsad_message (credentials,
-                                  "Invalid request", __FUNCTION__, __LINE__,
-                                  "The requested help page does not exist.",
-                                  "/help/contents.html", &response_data);
-            }
-          else
-            {
-              gchar **preferred_languages;
-              gchar *xsl_filename = NULL;
-              gchar *page = g_strndup ((gchar *) &url[6], MAX_FILE_NAME_SIZE);
-              GHashTable *template_attributes;
-              int template_found = 0;
-
-              // Disallow names that would be invalid for XML elements
-              if (g_regex_match_simple ("^(?!xml)[[:alpha:]_][[:alnum:]-_.]*$",
-                                        page, G_REGEX_CASELESS, 0) == 0)
-                {
-                  g_free (page);
-                  page = g_strdup ("_invalid_");
-                }
-              // XXX: url subsearch could be nicer and xsl transform could
-              // be generalized with the other transforms.
-              time_t now;
-              char ctime_now[200];
-              gchar *xml, *pre;
-              int index;
-
-              assert (credentials->token);
-
-              now = time (NULL);
-              ctime_r_strip_newline (&now, ctime_now);
-
-              pre = g_markup_printf_escaped
-                     ("<envelope>"
-                      "<version>%s</version>"
-                      "<vendor_version>%s</vendor_version>"
-                      "<token>%s</token>"
-                      "<time>%s</time>"
-                      "<login>%s</login>"
-                      "<role>%s</role>"
-                      "<i18n>%s</i18n>"
-                      "<charts>%i</charts>"
-                      "<guest>%d</guest>"
-                      "<client_address>%s</client_address>"
-                      "<help><%s/></help>",
-                      GSAD_VERSION,
-                      vendor_version_get (),
-                      credentials->token,
-                      ctime_now,
-                      credentials->username,
-                      credentials->role,
-                      credentials->language,
-                      credentials->charts,
-                      credentials->guest,
-                      credentials->client_address,
-                      page);
-              xml = g_strdup_printf ("%s"
-                                     "<capabilities>%s</capabilities>"
-                                     "</envelope>",
-                                     pre,
-                                     credentials->capabilities);
-              g_free (pre);
-
-              preferred_languages = g_strsplit (credentials->language, ":", 0);
-
-              index = 0;
-              while (preferred_languages [index] && xsl_filename == NULL)
-                {
-                  gchar *help_language;
-                  help_language = g_strdup (preferred_languages [index]);
-                  xsl_filename = g_strdup_printf ("help_%s.xsl",
-                                                  help_language);
-                  if (access (xsl_filename, R_OK) != 0)
-                    {
-                      g_free (xsl_filename);
-                      xsl_filename = NULL;
-                      if (strchr (help_language, '_'))
-                        {
-                          *strchr (help_language, '_') = '\0';
-                          xsl_filename = g_strdup_printf ("help_%s.xsl",
-                                                          help_language);
-                          if (access (xsl_filename, R_OK) != 0)
-                            {
-                              g_free (xsl_filename);
-                              xsl_filename = NULL;
-                            }
-                        }
-                    }
-                  g_free (help_language);
-                  index ++;
-                }
-
-              template_attributes
-                = g_hash_table_new (g_str_hash, g_str_equal);
-
-              g_hash_table_insert (template_attributes, "match", page);
-              g_hash_table_insert (template_attributes, "mode", "help");
-
-              // Try to find the requested page template
-              template_found
-                = find_element_in_xml_file (xsl_filename, "xsl:template",
-                                            template_attributes);
-
-              if (template_found == 0)
-                {
-                  // Try finding page template again in default help
-                  template_found
-                    = find_element_in_xml_file ("help.xsl", "xsl:template",
-                                                template_attributes);
-                }
-
-              if (template_found == 0)
-                {
-                  response_data.http_status_code = MHD_HTTP_NOT_FOUND;
-                  res = gsad_message (credentials,
-                                      NOT_FOUND_TITLE, NULL, 0,
-                                      NOT_FOUND_MESSAGE,
-                                      "/help/contents.html", &response_data);
-                }
-              else if (xsl_filename)
-                {
-                  res = xsl_transform_with_stylesheet (xml, xsl_filename,
-                                                       &response_data);
-
-                }
-              else
-                {
-                  res = xsl_transform_with_stylesheet (xml, "help.xsl",
-                                                       &response_data);
-                }
-
-              g_strfreev (preferred_languages);
-              g_free (xsl_filename);
-              g_free (page);
-            }
-          if (res == NULL)
-            {
-              response_data.http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-              res = gsad_message (credentials,
-                                  "Invalid request", __FUNCTION__, __LINE__,
-                                  "Error generating help page.",
-                                  "/help/contents.html", &response_data);
-            }
-          http_response_code = response_data.http_status_code;
-          response = MHD_create_response_from_buffer (strlen (res), res,
-                                                      MHD_RESPMEM_MUST_FREE);
-          cmd_response_data_reset (&response_data);
-        }
-      else
-        {
-          /* URL requests neither an OMP command nor a special GSAD command,
-           * so it is a simple file. */
-          /* Serve a file. */
-#ifdef SERVE_STATIC_ASSETS
-          response = file_content_response (credentials,
-                                            connection, url,
-                                            &http_response_code,
-                                            &content_type,
-                                            &content_disposition);
-#else
-          gchar *msg = gsad_message (NULL,
-                                     NOT_FOUND_TITLE, NULL, 0,
-                                     NOT_FOUND_MESSAGE,
-                                     "/login/login.html", NULL);
-          response = MHD_create_response_from_buffer (strlen (msg),
-                                                      (void *) msg,
-                                                      MHD_RESPMEM_MUST_COPY);
-          g_free (msg);
-#endif
-        }
-
-      if (response)
-        {
-          const char* cmd;
-
-          if (credentials->params)
-            cmd = params_value (credentials->params, "cmd");
-          else
-            cmd = NULL;
-
-          if (attach_sid (response, sid) == MHD_NO)
-            {
-              g_free (sid);
-              MHD_destroy_response (response);
-              g_warning ("%s: failed to attach SID, dropping request",
-                         __FUNCTION__);
-              return MHD_NO;
-            }
-          g_free (sid);
-
-          add_cors_headers (response);
-          if (get_guest_password ()
-              && strcmp (credentials->username, guest_username) == 0
-              && cmd
-              && (strcmp (cmd, "get_aggregate") == 0
-                  || strcmp (cmd, "get_assets_chart") == 0
-                  || strcmp (cmd, "get_tasks_chart") == 0))
-            {
-              add_guest_chart_content_security_headers (response);
-            }
-          else
-            {
-              add_security_headers (response);
-            }
-
-          credentials_free (credentials);
-          return handler_send_response (connection,
-                                        response,
-                                        &content_type,
-                                        content_disposition,
-                                        http_response_code,
-                                        0);
-        }
-      else
-        {
-          /* Severe memory or file access problem. */
-          g_free (sid);
-          credentials_free (credentials);
-          g_warning ("%s: memory or file access problem, dropping request",
-                     __FUNCTION__);
-          return MHD_NO;
-        }
-    }
-
-  if (!strcmp (method, "POST"))
-    {
-      user_t *user;
-      const char *sid, *accept_language;
-      gchar *new_sid;
-      int ret;
-
-      if (NULL == *con_cls)
-        {
-          /* First call for this request, a POST. */
-
-          struct gsad_connection_info *con_info;
-
-          /* Freed by MHD_OPTION_NOTIFY_COMPLETED callback, free_resources. */
-          con_info = g_malloc0 (sizeof (struct gsad_connection_info));
-
-          con_info->postprocessor =
-            MHD_create_post_processor (connection, POST_BUFFER_SIZE,
-                                       serve_post, (void *) con_info);
-          if (NULL == con_info->postprocessor)
-            {
-              g_free (con_info);
-              /* Both bad request or running out of memory will lead here, but
-               * we return the Bad Request page always, to prevent bad requests
-               * from leading to "Internal application error" in the log. */
-              send_response (connection, BAD_REQUEST_PAGE,
-                             MHD_HTTP_NOT_ACCEPTABLE, NULL,
-                             GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0);
-              return MHD_YES;
-            }
-          con_info->params = params_new ();
-          con_info->connectiontype = 1;
-          con_info->answercode = MHD_HTTP_OK;
-          con_info->content_type = GSAD_CONTENT_TYPE_TEXT_HTML;
-          con_info->content_disposition = NULL;
-          con_info->content_length = 0;
-          con_info->redirect = NULL;
-
-          *con_cls = (void *) con_info;
-          return MHD_YES;
-        }
-
-      /* Second or later call for this request, a POST. */
-
-      struct gsad_connection_info *con_info = *con_cls;
-      if (0 != *upload_data_size)
-        {
-          MHD_post_process (con_info->postprocessor, upload_data,
-                            *upload_data_size);
-          *upload_data_size = 0;
-          return MHD_YES;
-        }
-
-      sid = MHD_lookup_connection_value (connection,
-                                         MHD_COOKIE_KIND,
-                                         SID_COOKIE_NAME);
-      if (openvas_validate (validator, "token", sid))
-        con_info->cookie = NULL;
-      else
-        con_info->cookie = g_strdup (sid);
-
-      accept_language = MHD_lookup_connection_value (connection,
-                                                     MHD_HEADER_KIND,
-                                                     "Accept-Language");
-      if (accept_language
-          && g_utf8_validate (accept_language, -1, NULL) == FALSE)
-        {
-          send_response (connection,
-                         UTF8_ERROR_PAGE ("'Accept-Language' header"),
-                         MHD_HTTP_BAD_REQUEST, NULL,
-                         GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0);
-          return MHD_YES;
-        }
-      con_info->language = accept_language_to_env_fmt (accept_language);
-
-      get_client_address (connection, client_address);
-      ret = get_client_address (connection, client_address);
-      if (ret == 1)
-        {
-          send_response (connection,
-                         UTF8_ERROR_PAGE ("'X-Real-IP' header"),
-                         MHD_HTTP_BAD_REQUEST, NULL,
-                         GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0);
-          return MHD_YES;
-        }
-
-      user = NULL;
-      new_sid = NULL;
-      ret = exec_omp_post (con_info, &user, &new_sid, client_address);
-
-      if (ret == 1)
-        {
-          gchar *url;
-          url = g_strdup_printf ("%s&token=%s",
-                                 params_value (con_info->params, "text"),
-                                 user->token);
-          user_release (user);
-          ret = send_redirect_to_urn (connection, url, user);
-          g_free (url);
-          return ret;
-        }
-
-      if (con_info->redirect)
-        {
-          ret = send_redirect_to_uri (connection, con_info->redirect, user);
-          g_free (con_info->redirect);
-          con_info->redirect = NULL;
-        }
-      else
-        {
-          xml_flag = con_info->params
-            ? params_value (con_info->params, "xml")
-            : NULL;
-
-          if (xml_flag && strcmp (xml_flag, "0"))
-            {
-              content_type = GSAD_CONTENT_TYPE_APP_XML;
-            }
-          else
-          {
-            content_type = con_info->content_type;
-          }
-
-          ret = send_response (connection, con_info->response,
-              con_info->answercode,
-              new_sid ? new_sid : "0",
-              content_type,
-              con_info->content_disposition,
-              con_info->content_length);
-        }
-
-      g_free (new_sid);
-      return ret;
-    }
-
-  assert (0);
-  g_warning ("%s: something went wrong, dropping request",
-             __FUNCTION__);
-  return MHD_NO;
-}
-
-
-/**
  * @brief Attempt to drop privileges (become another user).
  *
  * @param[in]  user_pw  User details of new user.
@@ -3833,6 +2821,8 @@ gsad_cleanup ()
 
   MHD_stop_daemon (gsad_daemon);
 
+  cleanup_http_handlers ();
+
   if (log_config) free_log_configuration (log_config);
 
   gsad_base_cleanup ();
@@ -3888,7 +2878,8 @@ static struct MHD_Daemon *
 start_unix_http_daemon (const char *unix_socket_path,
                         int handler (void *, struct MHD_Connection *,
                                      const char *, const char *, const char *,
-                                     const char *, size_t *, void **))
+                                     const char *, size_t *, void **),
+                   http_handler_t * http_handlers)
 {
   struct sockaddr_un addr;
   struct stat ustat;
@@ -3929,7 +2920,7 @@ start_unix_http_daemon (const char *unix_socket_path,
 
   return MHD_start_daemon
           (MHD_USE_THREAD_PER_CONNECTION | MHD_USE_DEBUG, 0,
-           NULL, NULL, handler, NULL, MHD_OPTION_NOTIFY_COMPLETED,
+           NULL, NULL, handler, http_handlers, MHD_OPTION_NOTIFY_COMPLETED,
            free_resources, NULL, MHD_OPTION_LISTEN_SOCKET, unix_socket,
            MHD_OPTION_PER_IP_CONNECTION_LIMIT, 30,
            MHD_OPTION_EXTERNAL_LOGGER, mhd_logger, NULL, MHD_OPTION_END);
@@ -3939,7 +2930,8 @@ static struct MHD_Daemon *
 start_http_daemon (int port,
                    int handler (void *, struct MHD_Connection *, const char *,
                                 const char *, const char *, const char *,
-                                size_t *, void **))
+                                size_t *, void **),
+                   http_handler_t * http_handlers)
 {
   int ipv6_flag;
 
@@ -3954,7 +2946,7 @@ start_http_daemon (int port,
     ipv6_flag = MHD_NO_FLAG;
   return MHD_start_daemon
           (MHD_USE_THREAD_PER_CONNECTION | MHD_USE_DEBUG | ipv6_flag, port,
-           NULL, NULL, handler, NULL, MHD_OPTION_NOTIFY_COMPLETED,
+           NULL, NULL, handler, http_handlers, MHD_OPTION_NOTIFY_COMPLETED,
            free_resources, NULL, MHD_OPTION_SOCK_ADDR, &address,
            MHD_OPTION_PER_IP_CONNECTION_LIMIT, 30,
            MHD_OPTION_EXTERNAL_LOGGER, mhd_logger, NULL, MHD_OPTION_END);
@@ -3962,7 +2954,8 @@ start_http_daemon (int port,
 
 static struct MHD_Daemon *
 start_https_daemon (int port, const char *key, const char *cert,
-                    const char *priorities, const char *dh_params)
+                    const char *priorities, const char *dh_params,
+                    http_handler_t * http_handlers)
 {
   int ipv6_flag;
 
@@ -3977,7 +2970,7 @@ start_https_daemon (int port, const char *key, const char *cert,
     ipv6_flag = MHD_NO_FLAG;
   return MHD_start_daemon
           (MHD_USE_THREAD_PER_CONNECTION | MHD_USE_DEBUG | MHD_USE_SSL
-           | ipv6_flag, port, NULL, NULL, &handle_request, NULL,
+           | ipv6_flag, port, NULL, NULL, &handle_request, http_handlers,
            MHD_OPTION_HTTPS_MEM_KEY, key,
            MHD_OPTION_HTTPS_MEM_CERT, cert,
            MHD_OPTION_NOTIFY_COMPLETED, free_resources, NULL,
@@ -4548,12 +3541,16 @@ main (int argc, char **argv)
 
   if (gsad_address_init (gsad_address_string, gsad_port))
     return 1;
+
+  http_handler_t * handlers = init_http_handlers ();
+
   if (!no_redirect)
     {
       /* Start the HTTP to HTTPS redirect server. */
 
       gsad_address_set_port (gsad_redirect_port);
-      gsad_daemon = start_http_daemon (gsad_redirect_port, redirect_handler);
+      gsad_daemon = start_http_daemon (gsad_redirect_port, redirect_handler,
+                                       NULL);
 
       if (gsad_daemon == NULL)
         {
@@ -4574,7 +3571,8 @@ main (int argc, char **argv)
                 gsad_manager_address_string,
                 gsad_manager_port);
 
-      gsad_daemon = start_unix_http_daemon (unix_socket_path, handle_request);
+      gsad_daemon = start_unix_http_daemon (unix_socket_path, handle_request,
+                                            handlers);
 
       if (gsad_daemon == NULL)
         {
@@ -4598,14 +3596,15 @@ main (int argc, char **argv)
 
       if (http_only)
         {
-          gsad_daemon = start_http_daemon (gsad_port, handle_request);
+          gsad_daemon = start_http_daemon (gsad_port, handle_request, handlers);
           if (gsad_daemon == NULL && gsad_port_string == NULL)
             {
               g_warning ("Binding to port %d failed, trying default port %d next.",
                          gsad_port, DEFAULT_GSAD_PORT);
               gsad_port = DEFAULT_GSAD_PORT;
               gsad_address_set_port (gsad_port);
-              gsad_daemon = start_http_daemon (gsad_port, handle_request);
+              gsad_daemon = start_http_daemon (gsad_port, handle_request,
+                                               handlers);
             }
         }
       else
@@ -4650,7 +3649,7 @@ main (int argc, char **argv)
 
           gsad_daemon = start_https_daemon (gsad_port, ssl_private_key,
                                             ssl_certificate, gnutls_priorities,
-                                            dh_params);
+                                            dh_params, handlers);
           if (gsad_daemon == NULL && gsad_port_string == NULL)
             {
               g_warning ("Binding to port %d failed, trying default port %d next.",
@@ -4659,7 +3658,7 @@ main (int argc, char **argv)
               gsad_address_set_port (gsad_port);
               gsad_daemon = start_https_daemon
                              (gsad_port, ssl_private_key, ssl_certificate,
-                              gnutls_priorities, dh_params);
+                              gnutls_priorities, dh_params, handlers);
             }
 
         }

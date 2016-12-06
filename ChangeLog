@@ -1,5 +1,17 @@
 2016-12-06  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	Refactoring of http request handling and code splitting
+
+	* src/gsad.c, src/gsad_http_handler.c, src/gsad_http_handler.h: Move http
+	request handling from gsad.c to gsad_http.c. Remove a lot of duplicate code.
+	Introduce a http_handler struct that acts like a chain of functions. Each
+	function in the chain can be called to handle the current request. In the
+	function it can be decided to create a response or leave the response for the
+	next http_handler in the chain. Additionally it is possible to only pass some
+	data to the following http_handlers in the chain.
+
+2016-12-06  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/gsad_http.c: Set content_type to application/xml in gsad_message if xml
 	param is set. This fixes setting the content type for xml responses.
 

@@ -65,6 +65,7 @@ add_executable (gsad
                 gsad_user.c
                 gsad_cmd.c
                 gsad_http.c
+                gsad_http_handler.c
                 validator.c)
 
 target_link_libraries (gsad gsad_omp gsad_base gsad_xslt_ext ${LIBGVM_BASE_LDFLAGS} ${LIBGCRYPT_LDFLAGS} ${CMAKE_THREAD_LIBS_INIT} ${LINKER_HARDENING_FLAGS})
