@@ -466,10 +466,13 @@ td p {
   height: 40px;
   background-color: #99CE48;
   padding: 0px 5px 0px 5px;
+  display:table;
+  width:100%;
 }
 
 #gb_header > div {
   margin: auto;
+  display:table-cell;
 }
 
 /* Menu Bar */
@@ -643,6 +646,7 @@ a.top_button:hover div.first_button_overlay {
 
 .logo {
   float:left;
+  width:225px;
 }
 
 .logo .greenbone-icon {

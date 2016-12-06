@@ -1,3 +1,29 @@
+2016-12-06  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Backport r26806.
+
+	Fix various issues with layout and charts in Internet Explorer.
+
+	* src/html/classic/css/gsa-style.css (#gb_header): Set width and
+	display to show as a full width table.
+	(#gb_header > div): Set display to table-cell.
+	(.logo): Set width to 225px.
+
+	* src/html/classic/img/gsa.svg: New SVG image containing text from
+	old version.  Created to fix issues with viewBox.
+
+	* src/html/classic/js/gsa_cloud_chart.js: Use selectAll and remove
+	to clear svg element.
+
+	* src/html/classic/js/gsa_dashboard.js
+	(Dashboard.prototype.initDisplaysFromStrings): Call _onWindowResized
+	at the end to ensure chart boxes have the correct size.
+	(DashboardDisplay.prototype._rebuildFilterSelection): Use selectAll
+	and remove to clear filter_select_elem.
+
+	* src/html/classic/js/gsa_topology_chart.js: Use selectAll and remove
+	to clear svg element.
+	
 2016-12-02  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Backport r26757.

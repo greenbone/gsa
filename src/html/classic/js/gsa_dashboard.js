@@ -829,6 +829,7 @@
 
       this.addNewRow({config: config});
     }
+    this._onWindowResized();
     return this;
   };
 
@@ -2146,7 +2147,7 @@
       this.filters.forEach(function(filter, index) {
         select2_data.push({id: index, text: filter.name});
       });
-      this.filter_select_elem.html('');
+      this.filter_select_elem.selectAll('*').remove();
       this.filter_select_elem.select2({'data': select2_data});
     }
     return this;
