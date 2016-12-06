@@ -20056,6 +20056,8 @@ should not have received it.
     </td>
     <td>
       <xsl:choose>
+        <xsl:when test="gsa:is_absolute_path (host)">
+        </xsl:when>
         <xsl:when test="gsa:may-op ('get_credentials')">
           <a href="/omp?cmd=get_credential&amp;credential_id={credential/@id}&amp;token={/envelope/token}">
             <xsl:value-of select="credential/name"/>
