@@ -1,5 +1,13 @@
 2016-12-06  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	Backport r26814.
+
+	* src/html/classic/css/gsa-style.css (#gb_header .logo): New rule to
+	set width of logo area.
+	(.logo): Remove size.
+
+2016-12-06  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Backport r26806.
 
 	Fix various issues with layout and charts in Internet Explorer.
