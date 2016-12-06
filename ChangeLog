@@ -1,3 +1,8 @@
+2016-12-06  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/gsad_http.c, src/gsad_http.h: Update coding style and add missing
+	docstrings. Use content_type_t instead of enum content_type.
+
 2016-12-05  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	Move most http specific code out of gsad.c.

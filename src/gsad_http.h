@@ -140,10 +140,10 @@ typedef struct MHD_Connection http_connection_t;
 typedef struct MHD_Response http_response_t;
 
 
-content_type_t guess_content_type(gchar * path);
+content_type_t guess_content_type(gchar *path);
 
 void gsad_add_content_type_header (http_response_t *response,
-                                   enum content_type* ct);
+                                   content_type_t *ct);
 
 
 int handler_send_response (http_connection_t *connection,
@@ -154,10 +154,10 @@ int handler_send_response (http_connection_t *connection,
                            int remove_cookie);
 
 int handler_send_not_found (http_connection_t *connection,
-                            const gchar * url);
+                            const gchar *url);
 
 int handler_send_login_page(http_connection_t *connection,
-                            int http_status_code, const gchar * message,
+                            int http_status_code, const gchar *message,
                             const gchar *url);
 
 int send_response (http_connection_t *connection, const char *content,
@@ -182,9 +182,9 @@ void add_cors_headers (http_response_t *response);
 /* helper functions required in gsad_http */
 http_response_t *
 file_content_response (credentials_t *credentials,
-                       http_connection_t *connection, const char* url,
-                       int* http_response_code, enum content_type* content_type,
-                       char** content_disposition);
+                       http_connection_t *connection, const char *url,
+                       int *http_response_code, content_type_t *content_type,
+                       char **content_disposition);
 
 gboolean is_export(http_connection_t *connection);
 
@@ -205,10 +205,10 @@ int attach_sid (http_response_t *response, const char *sid);
 /* params_append_mhd, exec_omp_... are still in gsad.c */
 char * exec_omp_get (http_connection_t *connection,
                      credentials_t *credentials,
-                     enum content_type* content_type,
+                     content_type_t *content_type,
                      gchar **content_type_string,
-                     char** content_disposition,
-                     gsize* response_size,
+                     char **content_disposition,
+                     gsize *response_size,
                      cmd_response_data_t *response_data);
 
 int exec_omp_post (gsad_connection_info_t *con_info, user_t **user_return,
@@ -217,6 +217,7 @@ int exec_omp_post (gsad_connection_info_t *con_info, user_t **user_return,
 int params_append_mhd (params_t *params, const char *name, const char *filename,
                        const char *chunk_data, int chunk_size,
                        int chunk_offset);
+
 
 char * gsad_message (credentials_t *, const char *, const char *, int,
                      const char *, const char *, cmd_response_data_t *);

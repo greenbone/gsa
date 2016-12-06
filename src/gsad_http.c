@@ -50,8 +50,15 @@
  */
 #define G_LOG_DOMAIN "gsad http"
 
+/**
+ * @brief Guess a content type from a file extension
+ *
+ * @param[in]  path  filename with extension
+ *
+ * @return a content_type_t for the file
+ */
 content_type_t
-guess_content_type (gchar * path)
+guess_content_type (gchar *path)
 {
   /* Guess content type. */
   if (g_str_has_suffix (path, ".png"))
@@ -81,7 +88,7 @@ guess_content_type (gchar * path)
  */
 void
 gsad_add_content_type_header (http_response_t *response,
-                              enum content_type* ct)
+                              content_type_t* ct)
 {
   if (!response)
     return;
@@ -388,9 +395,18 @@ handler_send_response (http_connection_t *connection,
   return ret;
 }
 
+/**
+ * @brief Create a default 404 (not found) http response
+ *
+ * @param[in]   url                 Requested (not found) url
+ * @param[out]  content_type        Content type of the response
+ * @param[out]  http_response_code  HTTP response status code
+ *
+ * @return A http response
+ */
 http_response_t *
-create_not_found_response(const gchar * url, content_type_t * content_type,
-                          int * http_response_code)
+create_not_found_response(const gchar *url, content_type_t *content_type,
+                          int *http_response_code)
 {
   *content_type = GSAD_CONTENT_TYPE_TEXT_HTML; // FIXME gsad_message should determine the content type
   http_response_t *response;
@@ -410,23 +426,36 @@ create_not_found_response(const gchar * url, content_type_t * content_type,
   return response;
 }
 
+/**
+ * @brief Send a 404 response for a request
+ *
+ * @param[in]  connection  Connection handle, e.g. used to send response.
+ * @param[in]  url         Requested url.
+ *
+ * @return MHD_YES on success. MHD_NO on errors.
+ */
 int
 handler_send_not_found (http_connection_t *connection, const gchar * url)
 {
   content_type_t content_type;
   int http_status_code;
 
-  http_response_t *response = create_not_found_response(url,
-                                                            &content_type,
-                                                            &http_status_code);
-  return handler_send_response (connection,
-                                response,
-                                &content_type,
-                                NULL,
-                                http_status_code,
-                                0);
+  http_response_t *response = create_not_found_response(url, &content_type,
+                                                        &http_status_code);
+  return handler_send_response (connection, response, &content_type, NULL,
+                                http_status_code, 0);
 }
 
+/**
+ * @brief Send the login page to the user
+ *
+ * @param[in]  connection        Connection handle, e.g. used to send response.
+ * @param[in]  http_status_code  HTTP status code for the response.
+ * @param[in]  message           Message to add in the response.
+ * @param[in]  url               Requested url.
+ *
+ * @return MHD_YES on success. MHD_NO on errors.
+ */
 int
 handler_send_login_page (http_connection_t *connection,
                          int http_status_code, const gchar * message,
@@ -654,9 +683,9 @@ file_reader (void *cls, uint64_t pos, char *buf, int max)
  */
 http_response_t *
 file_content_response (credentials_t *credentials,
-                       http_connection_t *connection, const char* url,
-                       int* http_response_code, enum content_type* content_type,
-                       char** content_disposition)
+                       http_connection_t *connection, const char *url,
+                       int *http_response_code, content_type_t *content_type,
+                       char **content_disposition)
 {
   FILE* file;
   gchar* path;
@@ -978,7 +1007,7 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
 char *
 gsad_message (credentials_t *credentials, const char *title,
               const char *function, int line, const char *msg,
-              const char *backurl, cmd_response_data_t* response_data)
+              const char *backurl, cmd_response_data_t *response_data)
 {
   gchar *xml, *message, *resp;
   const char* xml_flag;
