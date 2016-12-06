@@ -1,5 +1,10 @@
 2016-12-06  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/gsad_http.c: Set content_type to application/xml in gsad_message if xml
+	param is set. This fixes setting the content type for xml responses.
+
+2016-12-06  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/gsad_cmd.h: Add content_type to cmd_response_data_t. This allows to set
 	the content type for commands.
 

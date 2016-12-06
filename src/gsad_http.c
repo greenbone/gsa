@@ -409,7 +409,6 @@ http_response_t *
 create_not_found_response(const gchar *url, content_type_t *content_type,
                           int *http_response_code)
 {
-  *content_type = GSAD_CONTENT_TYPE_TEXT_HTML; // FIXME gsad_message should determine the content type
   http_response_t *response;
 
   cmd_response_data_t response_data;
@@ -423,6 +422,7 @@ create_not_found_response(const gchar *url, content_type_t *content_type,
   response = MHD_create_response_from_buffer (strlen (msg), (void *) msg,
                                               MHD_RESPMEM_MUST_COPY);
   *http_response_code = response_data.http_status_code;
+  *content_type = response_data.content_type;
   g_free (msg);
   return response;
 }
@@ -1093,7 +1093,12 @@ gsad_message (credentials_t *credentials, const char *title,
   g_free (message);
 
   if (xml_flag && strcmp (xml_flag, "0"))
-    return xml;
+    {
+      response_data->content_type = GSAD_CONTENT_TYPE_APP_XML;
+      return xml;
+    }
+
+  response_data->content_type = GSAD_CONTENT_TYPE_TEXT_HTML;
 
   resp = xsl_transform (xml, response_data);
   if (resp == NULL)
