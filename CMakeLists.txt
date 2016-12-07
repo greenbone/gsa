@@ -309,11 +309,7 @@ install (FILES src/html/classic/css/images/ui-bg_diagonals-thick_18_aa0000_40x40
                src/html/classic/css/images/ui-icons_ffffff_256x240.png
          DESTINATION ${GSA_DATA_DIR}/classic/css/images)
 
-install (FILES src/html/classic/js/lib/d3.tip.js
-               src/html/classic/js/lib/d3.layout.cloud.js
-               src/html/classic/js/lib/moment.js
-               src/html/classic/js/lib/moment-timezone-with-data.js
-               src/html/classic/js/gsa_bar_chart.js
+install (FILES src/html/classic/js/gsa_bar_chart.js
                src/html/classic/js/gsa_bubble_chart.js
                src/html/classic/js/gsa_chart_helpers.js
                src/html/classic/js/gsa_graphics_base.js
@@ -332,6 +328,12 @@ install (FILES src/html/classic/js/lib/d3.tip.js
                src/html/classic/js/greenbone-init.js
          DESTINATION ${GSA_DATA_DIR}/classic/js)
 
+install (FILES src/html/classic/js/lib/d3.tip.js
+               src/html/classic/js/lib/d3.layout.cloud.js
+               src/html/classic/js/lib/moment.js
+               src/html/classic/js/lib/moment-timezone-with-data.js
+         DESTINATION ${GSA_DATA_DIR}/classic/js/lib)
+
 if (CMAKE_BUILD_TYPE MATCHES "Release")
   install (FILES src/html/classic/js/lib/min/d3.v3.js
                  src/html/classic/js/lib/min/jquery-2.1.4.js
@@ -341,7 +343,7 @@ if (CMAKE_BUILD_TYPE MATCHES "Release")
                  src/html/classic/js/lib/min/i18next-xhr-0.5.3.js
                  src/html/classic/js/lib/min/i18next-languagedetector-0.2.2.js
                  src/html/classic/js/lib/min/xml2json.js
-           DESTINATION ${GSA_DATA_DIR}/classic/js)
+           DESTINATION ${GSA_DATA_DIR}/classic/js/lib)
 else (CMAKE_BUILD_TYPE MATCHES "Release")
   install (FILES src/html/classic/js/lib/d3.v3.js
                  src/html/classic/js/lib/jquery-2.1.4.js
@@ -351,7 +353,7 @@ else (CMAKE_BUILD_TYPE MATCHES "Release")
                  src/html/classic/js/lib/i18next-xhr-0.5.3.js
                  src/html/classic/js/lib/i18next-languagedetector-0.2.2.js
                  src/html/classic/js/lib/xml2json.js
-           DESTINATION ${GSA_DATA_DIR}/classic/js)
+           DESTINATION ${GSA_DATA_DIR}/classic/js/lib)
 endif (CMAKE_BUILD_TYPE MATCHES "Release")
 
 install (FILES src/html/classic/css/gsa-login.css

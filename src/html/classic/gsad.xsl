@@ -172,12 +172,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <link rel="stylesheet" type="text/css" href="/css/jquery-ui.structure.min.css"/>
         <link rel="stylesheet" type="text/css" href="/css/jquery-ui.theme.min.css"/>
         <link rel="stylesheet" type="text/css" href="/css/gsa-style.css"/>
-        <script src="/js/jquery-2.1.4.js" type="text/javascript"></script>
-        <script src="/js/jquery-ui.js" type="text/javascript"></script>
-        <script src="/js/select2.js" type="text/javascript"></script>
-        <script src="/js/i18next-2.3.4.js" type="text/javascript"></script>
-        <script src="/js/i18next-xhr-0.5.3.js" type="text/javascript"></script>
-        <script src="/js/i18next-languagedetector-0.2.2.js" type="text/javascript"></script>
+        <script src="/js/lib/jquery-2.1.4.js" type="text/javascript"></script>
+        <script src="/js/lib/jquery-ui.js" type="text/javascript"></script>
+        <script src="/js/lib/select2.js" type="text/javascript"></script>
+        <script src="/js/lib/i18next-2.3.4.js" type="text/javascript"></script>
+        <script src="/js/lib/i18next-xhr-0.5.3.js" type="text/javascript"></script>
+        <script src="/js/lib/i18next-languagedetector-0.2.2.js" type="text/javascript"></script>
         <script src="/js/moment.js" type="text/javascript"></script>
         <script src="/js/moment-timezone-with-data.js" type="text/javascript"></script>
         <script src="/js/greenbone-ui.js" type="text/javascript"></script>
