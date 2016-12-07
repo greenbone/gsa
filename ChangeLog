@@ -1,5 +1,10 @@
 2016-12-07  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_dashboard.js: Export ChartController to gsa.charts
+	"namespace".
+
+2016-12-07  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_dashboard.js: Allow to init dashboards explicitly
 	not automatically.
 

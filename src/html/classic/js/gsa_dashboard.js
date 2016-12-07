@@ -39,6 +39,7 @@
   gch.Dashboard = Dashboard;
   gch.DataSource = DataSource;
   gch.Promise = promise;
+  gch.ChartController = ChartController;
 
   var MAX_PER_ROW = 4;
   var MAX_DISPLAYS = 8;
