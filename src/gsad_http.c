@@ -59,7 +59,7 @@
  * @return a content_type_t for the file
  */
 content_type_t
-guess_content_type (gchar *path)
+guess_content_type (const gchar *path)
 {
   /* Guess content type. */
   if (g_str_has_suffix (path, ".png"))

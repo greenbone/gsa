@@ -140,7 +140,7 @@ typedef struct MHD_Connection http_connection_t;
 typedef struct MHD_Response http_response_t;
 
 
-content_type_t guess_content_type(gchar *path);
+content_type_t guess_content_type(const gchar *path);
 
 void gsad_add_content_type_header (http_response_t *response,
                                    content_type_t *ct);
