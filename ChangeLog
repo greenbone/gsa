@@ -1,5 +1,17 @@
 2016-12-07  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/greenbone.js, src/html/classic/js/greenbone-i18n.js,
+	src/html/classic/js/greenbone-dialog.js,
+	src/html/classic/js/greenbone-init.js: Split greenbone.js file into
+	several distinct modules. This allows to include only the necessary code paths
+	in the single page app.
+
+	* src/html/classic/gsad.xsl: Load new greenbone js files.
+
+	* CMakeLists.txt: Install new greenbone js files.
+
+2016-12-07  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/gsad_http.h, src/gsad_http.c: Refactor
 	file_content_response function to create a response from a passed file path
 	and not from an url. Remove also unused param credentials.
