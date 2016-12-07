@@ -2363,7 +2363,7 @@
     result += new_criteria;
 
     // Add token
-    result += '&token=' + gsa.gsa_token;
+    result += '&token=' + gsa.token;
 
     return result;
   };
@@ -2397,7 +2397,7 @@
     result += ('&filt_id=' + filter_info.id);
 
     // Add token
-    result += ('&token=' + gsa.gsa_token);
+    result += ('&token=' + gsa.token);
 
     return result;
   };

@@ -60,7 +60,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <script src="/js/gsa_line_chart.js"></script>
   <script src="/js/gsa_topology_chart.js"></script>
   <script type="text/javascript">
-    gsa.gsa_token = "<xsl:value-of select="gsa:escape-js (/envelope/params/token)"/>";
+    gsa.token = "<xsl:value-of select="gsa:escape-js (/envelope/params/token)"/>";
 
     gsa.severity_levels =
       {max_high : <xsl:value-of select="gsa:risk-factor-max-cvss ('high')"/>,

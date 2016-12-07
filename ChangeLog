@@ -1,5 +1,12 @@
 2016-12-07  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/graphics.xsl, src/html/classic/js/gsa_chart_helpers.js,
+	src/html/classic/js/gsa_dashboard.js: Rename global gsa.gsa_token to
+	gsa.token. Pass token to objects and functions instead of using the gloabl
+	one.
+
+2016-12-07  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/gsad.xsl, src/html/classic/graphics.xsl: JS libraries are
 	now loaded from js/lib/ url path.
 

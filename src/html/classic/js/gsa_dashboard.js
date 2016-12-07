@@ -707,7 +707,7 @@
       var form_data = new FormData();
       form_data.append('chart_preference_id', this.config_pref_id);
       form_data.append('chart_preference_value', json_config);
-      form_data.append('token', gsa.gsa_token);
+      form_data.append('token', this.token);
       form_data.append('cmd', 'save_chart_preference');
 
       log.debug('saving dashboard config', json_config);
@@ -2641,16 +2641,14 @@
     }
 
     var command = this.data_src.command;
-    if (command !== 'get_aggregate') {
-      command = command + '_chart';
-    }
+    command = command === 'get_aggregate' ? command : command + '_chart';
 
     params.chart_type = this.chart_type;
     params.chart_template = this.chart_template;
     params.chart_title = this.display.getTitle();
 
-    return create_uri(command, this.display.getCurrentFilter(), params,
-        this.data_src.prefix, true);
+    return create_uri(command, this.data_src.token,
+      this.display.getCurrentFilter(), params, this.data_src.prefix, true);
   };
 
   /**
@@ -2661,7 +2659,7 @@
    * @param options   Options of the data source.
    * @param prefix    Prefix for requests.
    */
-  function DataSource(name, options, prefix) {
+  function DataSource(name, options, prefix, token) {
     this.name = name;
     this.options = gsa.is_defined(options) ? options : {};
     this.prefix = gsa.is_defined(prefix) ? prefix : '/omp?';
@@ -2674,6 +2672,8 @@
     this.params = {
       xml: 1,
     };
+
+    this.token = gsa.is_defined(token) ? token : gsa.token;
 
     this.init();
   }
@@ -3178,7 +3178,7 @@
    * Creates a GSA request URI from a command name, parameters array and prefix.
    *
    */
-  function create_uri(command, filter, params, prefix, no_xml) {
+  function create_uri(command, token, filter, params, prefix, no_xml) {
     var params_str = prefix + 'cmd=' + encodeURIComponent(command);
     for (var prop_name in params) {
       if ((!no_xml || prop_name !== 'xml') &&
@@ -3201,8 +3201,8 @@
     if (gsa.has_value(filter) && filter.id && filter.id !== '') {
       params_str = params_str + '&filt_id=' + encodeURIComponent(filter.id);
     }
-    params_str = params_str + '&token=' + encodeURIComponent(gsa.gsa_token);
-    return params_str;
+    params_str = params_str + '&token=' + encodeURIComponent(token);
+    return 'https://127.0.0.1:9392' + params_str;
   }
 
   /**
