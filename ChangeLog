@@ -1,5 +1,10 @@
 2016-12-07  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/gsad.xsl, src/html/classic/graphics.xsl: JS libraries are
+	now loaded from js/lib/ url path.
+
+2016-12-07  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/gsad.xsl, CMakeLists.txt: Install external js libraries
 	into js/lib. This seperates the external libraries from our js files.
 

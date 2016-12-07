@@ -43,10 +43,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 -->
 
 <xsl:template name="init-d3charts">
-  <script src="/js/xml2json.js"></script>
-  <script src="/js/d3.v3.js"></script>
-  <script src="/js/d3.layout.cloud.js"></script>
-  <script src="/js/d3.tip.js"></script>
+  <script src="/js/lib/xml2json.js"></script>
+  <script src="/js/lib/d3.v3.js"></script>
+  <script src="/js/lib/d3.layout.cloud.js"></script>
+  <script src="/js/lib/d3.tip.js"></script>
   <script src="/js/gsa_polyfill.js"></script>
   <script src="/js/gsa_chart_helpers.js"></script>
   <script src="/js/gsa_graphics_base.js"></script>
