@@ -670,14 +670,11 @@ file_reader (void *cls, uint64_t pos, char *buf, int max)
 }
 
 /**
- * @brief Create a response to serve a file.
+ * @brief Create a response to serve a file from a path.
  *
- * If the file does not exist, but user is logged in, refuse credentials
- * ("logout"). Otherwise, serve the default (login) page.
- *
- * @param[in]   credentials          User authentication information.
  * @param[in]   connection           Connection.
  * @param[in]   url                  Requested URL.
+ * @param[in]   path                 Path to file.
  * @param[out]  http_response_code   Return location for response code.
  * @param[out]  content_type         Return location for content type.
  * @param[out]  content_disposition  Return location for content disposition.
@@ -686,39 +683,22 @@ file_reader (void *cls, uint64_t pos, char *buf, int max)
  *         if file information could not be retrieved.
  */
 http_response_t *
-file_content_response (credentials_t *credentials,
-                       http_connection_t *connection, const char *url,
-                       int *http_response_code, content_type_t *content_type,
+file_content_response (http_connection_t *connection, const char *url,
+                       const char *path, int *http_response_code,
+                       content_type_t *content_type,
                        char **content_disposition)
 {
-  FILE* file;
-  gchar* path;
-  char *default_file = "login/login.html";
-  struct MHD_Response* response;
   char date_2822[DATE_2822_LEN];
   struct tm *mtime;
   time_t next_week;
-
-  /** @todo validation, URL length restriction (allows you to view ANY
-    *       file that the user running the gsad might look at!) */
-  /** @todo use glibs path functions */
-  /* Attempt to prevent disclosing non-gsa content. */
-  if (strstr (url, ".."))
-    path = g_strconcat (default_file, NULL);
-  else
-    {
-      /* Ensure that url is relative. */
-      const char* relative_url = url;
-      if (*url == '/') relative_url = url + 1;
-      path = g_strconcat (relative_url, NULL);
-    }
+  http_response_t * response;
+  FILE* file;
 
   file = fopen (path, "r"); /* this file is just read and sent */
 
   if (file == NULL)
     {
       g_debug ("File %s failed, ", path);
-      g_free (path);
       return create_not_found_response(url, content_type, http_response_code);
     }
 
@@ -735,7 +715,6 @@ file_content_response (credentials_t *credentials,
       g_critical ("%s: file <%s> can not be stat'ed.\n",
                   __FUNCTION__,
                   path);
-      g_free (path);
       fclose (file);
       return NULL;
     }
@@ -743,7 +722,6 @@ file_content_response (credentials_t *credentials,
   /* Make sure the requested path really is a file. */
   if ((buf.st_mode & S_IFMT) != S_IFREG)
     {
-      g_free (path);
       fclose (file);
       return create_not_found_response(url, content_type, http_response_code);
     }
@@ -769,7 +747,6 @@ file_content_response (credentials_t *credentials,
       MHD_add_response_header (response, "Expires", date_2822);
     }
 
-  g_free (path);
   *http_response_code = MHD_HTTP_OK;
   return response;
 }

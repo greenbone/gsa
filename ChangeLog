@@ -1,5 +1,14 @@
 2016-12-07  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/gsad_http.h, src/gsad_http.c: Refactor
+	file_content_response function to create a response from a passed file path
+	and not from an url. Remove also unused param credentials.
+
+	* src/gsad_http_handler.c: Update handle_static_file for
+	file_content_response changes. Map url in handle_static_file to a file path.
+
+2016-12-07  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/gsad_http.c, src/gsad_http_handler.c: Move setting the response http
 	headers to handler_send_response. Avoid having to add duplicate code for
 	creating responses.

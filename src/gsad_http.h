@@ -181,9 +181,9 @@ void add_cors_headers (http_response_t *response);
 
 /* helper functions required in gsad_http */
 http_response_t *
-file_content_response (credentials_t *credentials,
-                       http_connection_t *connection, const char *url,
-                       int *http_response_code, content_type_t *content_type,
+file_content_response (http_connection_t *connection, const char *url,
+                       const char *path, int *http_response_code,
+                       content_type_t *content_type,
                        char **content_disposition);
 
 gboolean is_export(http_connection_t *connection);

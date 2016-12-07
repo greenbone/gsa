@@ -342,15 +342,30 @@ handle_static_file (http_connection_t *connection, const char * method,
                     http_handler_t *handler, void * data)
 {
   int http_response_code;
+  gchar* path;
+  http_response_t *response;
   content_type_t content_type;
   char *content_disposition = NULL;
-  http_response_t *response;
+  char *default_file = "login/login.html";
 
-  response = file_content_response (NULL,
-                                    connection, url,
-                                    &http_response_code,
-                                    &content_type,
-                                    &content_disposition);
+  /** @todo validation, URL length restriction (allows you to view ANY
+    *       file that the user running the gsad might look at!) */
+  /** @todo use glibs path functions */
+  /* Attempt to prevent disclosing non-gsa content. */
+  if (strstr (url, ".."))
+    path = g_strconcat (default_file, NULL);
+  else
+    {
+      /* Ensure that url is relative. */
+      const char* relative_url = url;
+      if (*url == '/') relative_url = url + 1;
+      path = g_strconcat (relative_url, NULL);
+    }
+
+  response = file_content_response(connection, url, path, &http_response_code,
+                              &content_type, &content_disposition);
+  g_free (path);
+
   return handler_send_response (connection, response, &content_type,
                                 content_disposition, http_response_code, 0);
 }
