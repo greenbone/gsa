@@ -376,13 +376,19 @@ handler_send_response (http_connection_t *connection,
                    __FUNCTION__);
         return MHD_NO;
       }
+
   gsad_add_content_type_header (response, content_type);
+
   if (content_disposition != NULL)
     {
       MHD_add_response_header (response, "Content-Disposition",
                                content_disposition);
       g_free (content_disposition);
     }
+
+  add_security_headers (response);
+  add_cors_headers (response);
+
   ret = MHD_queue_response (connection, http_response_code, response);
   if (ret == MHD_NO)
     {
@@ -513,9 +519,6 @@ handler_send_login_page (http_connection_t *connection,
 
   response = MHD_create_response_from_buffer (strlen (res), res,
                                               MHD_RESPMEM_MUST_FREE);
-  add_security_headers (response);
-  add_cors_headers (response);
-
   http_status_code = response_data.http_status_code;
 
   cmd_response_data_reset (&response_data);

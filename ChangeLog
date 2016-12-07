@@ -1,5 +1,11 @@
 2016-12-07  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/gsad_http.c, src/gsad_http_handler.c: Move setting the response http
+	headers to handler_send_response. Avoid having to add duplicate code for
+	creating responses.
+
+2016-12-07  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/gsad_http.h, src/gsad_http.c: Change path parameter of
 	guess_content_type to const.
 

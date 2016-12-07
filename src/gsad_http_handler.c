@@ -351,8 +351,6 @@ handle_static_file (http_connection_t *connection, const char * method,
                                     &http_response_code,
                                     &content_type,
                                     &content_disposition);
-  add_security_headers (response);
-  add_cors_headers (response);
   return handler_send_response (connection, response, &content_type,
                                 content_disposition, http_response_code, 0);
 }
@@ -459,8 +457,6 @@ handle_setup_user (http_connection_t *connection,
       response = MHD_create_response_from_buffer (strlen (res), res,
                                                   MHD_RESPMEM_MUST_FREE);
       http_response_code = response_data.http_status_code;
-      add_security_headers (response);
-      add_cors_headers (response);
       cmd_response_data_reset (&response_data);
       return handler_send_response (connection,
                                     response,
@@ -668,8 +664,6 @@ handle_omp_get (http_connection_t *connection,
                   __FUNCTION__);
       return MHD_NO;
     }
-
-  add_cors_headers (response);
 
   if (get_guest_password()
       && strcmp (credentials->username, get_guest_username()) == 0
@@ -951,8 +945,6 @@ handle_help_pages (http_connection_t *connection,
       return MHD_NO;
     }
 
-  add_cors_headers (response);
-  add_security_headers (response);
   credentials_free (credentials);
   return handler_send_response (connection,
                                 response,
@@ -1027,8 +1019,6 @@ handle_system_report (http_connection_t *connection,
       return MHD_NO;
     }
 
-  add_cors_headers (response);
-  add_security_headers (response);
   credentials_free (credentials);
   return handler_send_response (connection, response, &content_type, NULL,
                                 http_response_code, 0);
