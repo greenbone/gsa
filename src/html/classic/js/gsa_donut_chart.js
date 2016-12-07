@@ -81,7 +81,7 @@
       this.y_field = gen_params.y_fields[0];
     }
 
-    if (gen_params.extra.show_stat_type) {
+    if (gen_params.extra && gen_params.extra.show_stat_type) {
       this.show_stat_type = !!JSON.parse(gen_params.extra.show_stat_type);
     }
 
@@ -662,9 +662,7 @@
     var count_field = 'count';
     var value_field = 'value';
 
-    var records = [];
-
-    old_data.records.map(function(d) {
+    var records = old_data.records.map(function(d) {
       var value = d[value_field];
       var new_record = {};
       new_record[count_field] = d[count_field];
@@ -679,7 +677,7 @@
             {days: value});
       }
       new_record[value_field + '~original'] = value;
-      records.push(new_record);
+      return new_record;
     });
 
     var data = {
