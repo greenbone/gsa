@@ -2844,14 +2844,18 @@
 
     if (this.active_requests[filter_id]) {
       // we already have an request
-      return;
+      return this;
     }
 
-    var data_uri = create_uri(this.command, filter, this.params, this.prefix,
-        false);
+    var data_uri = create_uri(this.command, this.token, filter, this.params,
+      this.prefix, false);
 
-    self.active_requests[filter_id] = d3.xml(data_uri, 'application/xml');
-    self.active_requests[filter_id].get(function(error, xml) {
+    var d3_request = d3.xml(data_uri, 'application/xml');
+    d3_request.on('beforesend', function(request) {
+      request.withCredentials = true;
+    });
+    this.active_requests[filter_id] = d3_request;
+    d3_request.get(function(error, xml) {
       var ctrls = self.requesting_controllers[filter_id];
       var omp_status;
       var omp_status_text;
