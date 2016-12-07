@@ -432,7 +432,7 @@
 
     donut.attr('opacity', 0)
       .transition(500)
-      .attr('opacity', (slices.length !== 0) ? 1 : 0.25);
+      .attr('opacity', slices.length === 0 ? 0.25 : 1);
 
     function relax_labels() {
       // adjust labels to not having overlapping texts

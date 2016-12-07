@@ -56,7 +56,7 @@
    * Register an event callback for a specific event triggered by this node
    *
    * @param event_name The name of the triggered event
-   * @param callabck   Function to be called when the event is triggered
+   * @param callback   Function to be called when the event is triggered
    *
    * @return This node
    */
@@ -223,7 +223,6 @@
       }).appendTo($(this.dashboard_controls));
 
       this.start_edit_button = $('<a/>', {
-        href: 'javascript:void(0);',
         class: 'icon icon-sm',
         on: {
           click: function() {self.startEdit();},
@@ -237,7 +236,6 @@
       .appendTo(container);
 
       this.new_display_button = $('<a/>', {
-        href: 'javascript:void(0);',
         class: 'icon icon-sm',
         on: {
           click: function() {self.newDisplay();},
@@ -253,7 +251,6 @@
       this.new_display_button.hide();
 
       this.reset_defaults_button = $('<a/>', {
-        href: 'javascript:void(0);',
         class: 'icon icon-sm',
         on: {
           click: function() {self.resetEdit();},
@@ -269,7 +266,6 @@
       this.reset_defaults_button.hide();
 
       this.cancel_edit_button = $('<a/>', {
-        href: 'javascript:void(0);',
         class: 'icon icon-sm',
         on: {
           click: function() {self.cancelEdit();},
@@ -285,7 +281,6 @@
       this.cancel_edit_button.hide();
 
       this.stop_edit_button = $('<a/>', {
-        href: 'javascript:void(0);',
         class: 'icon icon-sm',
         on: {
           click: function() {self.saveEdit();},
@@ -332,7 +327,7 @@
     var self = this;
 
     if (this.edit_mode) {
-      return;
+      return this;
     }
     this.edit_mode = true;
 
@@ -374,7 +369,7 @@
    */
   Dashboard.prototype.stopEdit = function() {
     if (!this.edit_mode) {
-      return;
+      return this;
     }
 
     this.top_target.hide();
@@ -479,7 +474,7 @@
   Dashboard.prototype.newDisplay = function() {
     if (!this.canAddDisplay()) {
       log.error('Maximum number of displays reached');
-      return;
+      return this;
     }
 
     var row = this.getLastNotFullRow();
@@ -1445,6 +1440,7 @@
     if (count <= 0) {
       count = 1;
     }
+
     /* 4 == 2 Pixels for left and right border + some safety space */
     return Math.floor((this.width - 4) / count);
   };
@@ -1575,7 +1571,6 @@
 
     $('<a/>', {
       'class': 'remove-button icon icon-sm',
-      href: 'javascript:void(0);',
       on: {
         click: function() { self.remove(); },
       },
@@ -1948,7 +1943,7 @@
    */
   DashboardDisplay.prototype.prevController = function() {
     if (!this.edit_mode) {
-      return;
+      return this;
     }
 
     var index = this.getCurrentControllerIndex();
@@ -1974,7 +1969,7 @@
    */
   DashboardDisplay.prototype.nextController = function() {
     if (!this.edit_mode) {
-      return;
+      return this;
     }
 
     var index = this.getCurrentControllerIndex();
@@ -2001,7 +1996,7 @@
    */
   DashboardDisplay.prototype.prevFilter = function() {
     if (!this.edit_mode) {
-      return;
+      return this;
     }
 
     var index = this.getCurrentFilterIndex();
@@ -2024,7 +2019,7 @@
    */
   DashboardDisplay.prototype.nextFilter = function() {
     if (!this.edit_mode) {
-      return;
+      return this;
     }
 
     var index = this.getCurrentFilterIndex();
@@ -2117,7 +2112,7 @@
     var filt_id = this.config.filt_id;
 
     this.current_filter = this.all_filters.find(function(filter, index) {
-      return filter.type === null && !gsa.has_value(filt_id) ||
+      return (filter.type === null && !gsa.has_value(filt_id)) ||
         filter.id === filt_id;
     });
     return this;
@@ -2175,7 +2170,7 @@
 
     if (!gsa.is_defined(new_controller)) {
       log.warn('No controller found for index "' + index + '"');
-      return;
+      return this;
     }
 
     if (this.current_controller !== new_controller) {
@@ -2207,19 +2202,19 @@
   DashboardDisplay.prototype._selectFilter = function(index) {
     var new_filter;
 
-    if (!gsa.is_defined(index)) {
+    if (gsa.is_defined(index)) {
+      new_filter = this.filters[index];
+    }
+    else {
       new_filter = this.filters.find(function(filter) {
         // find empty filter
         return filter.type === null;
       });
     }
-    else {
-      new_filter = this.filters[index];
-    }
 
     if (!gsa.is_defined(new_filter)) {
       log.warn('No filter found for index "' + index + '"');
-      return;
+      return this;
     }
 
     if (gsa.has_value(new_filter) && (!gsa.has_value(this.current_filter) ||
@@ -2244,7 +2239,6 @@
     this.controller_select_container = $('<div/>').appendTo(this.footer);
 
     $('<a/>', {
-      href: 'javascript:void(0);',
       class: 'icon icon-sm',
       on: {
         click: function() {self.prevController();},
@@ -2284,7 +2278,6 @@
     });
 
     $('<a/>', {
-      href: 'javascript:void(0);',
       class: 'icon icon-sm',
       on: {
         click: function() {
@@ -2318,7 +2311,6 @@
     this.filter_select_container = $('<div/>').appendTo(this.footer);
 
     $('<a/>', {
-      href: 'javascript:void(0);',
       class: 'icon icon-sm',
       on: {
         click: function() {
@@ -2360,7 +2352,6 @@
     });
 
     $('<a/>', {
-      href: 'javascript:void(0);',
       class: 'icon icon-sm',
       on: {
         click: function() {
@@ -2393,7 +2384,7 @@
       this.showError(gsa._('Could not load chart {{chart}}',
             {chart: this.config.name}));
       log.error('No controller selected');
-      return;
+      return this;
     }
 
     if (gsa.is_defined(this.last_request)) {
@@ -2420,7 +2411,7 @@
 
     if (!gsa.is_defined(this.current_controller)) {
       this.filters = [];
-      return;
+      return this;
     }
     this.filters = this.all_filters.filter(function(filter) {
       return filter.type === null || filter.type === '' ||
@@ -2461,7 +2452,7 @@
 
     if (!gsa.is_defined(index)) {
       index = this.filters.findIndex(function(filter) {
-        return filter.type === null && !gsa.has_value(self.filter_string) ||
+        return (filter.type === null && !gsa.has_value(self.filter_string)) ||
           filter.id === self.current_filter.id;
       });
     }
@@ -2503,7 +2494,7 @@
     this.display = display;
 
     this.gen_params = gsa.is_object(gen_params) ? gen_params : {};
-    this.gen_params.chart_template = chart_template;
+    this.gen_params.chart_template = this.chart_template;
 
     this.init_params = gsa.is_object(init_params) ? init_params : {};
 
@@ -2518,8 +2509,8 @@
 
     // FIXME move this to the corresponding chart generators. they should now
     // their default style
-    if (this.chart_template === 'info_by_cvss' ||
-        this.chart_template === 'recent_info_by_cvss' &&
+    if ((this.chart_template === 'info_by_cvss' ||
+        this.chart_template === 'recent_info_by_cvss') &&
         this.chart_type !== 'donut') {
       this.generator.setBarStyle(gch.severity_bar_style('value',
           gsa.severity_levels.max_log,
@@ -2927,7 +2918,7 @@
         self.outputError(ctrls, gsa._('Internal error: Invalid request'),
             gsa._('Invalid request command: "{{command}}',
               {command: self.command}));
-        return self;
+        return;
       }
 
       if (omp_status !== '200') {
@@ -2936,7 +2927,7 @@
               {omp_status: omp_status, omp_status_text: omp_status_text}),
             gsa._('OMP Error {{omp_status}}: {{omp_status_text}}',
               {omp_status: omp_status, omp_status_text: omp_status_text}));
-        return self;
+        return;
       }
 
       var data = gch.xml2json(xml_select.node());
@@ -2969,12 +2960,10 @@
     for (var controller_id in ctrls) {
       var ctrl = ctrls[controller_id];
 
-      if (!ctrl.active) {
-        continue;
+      if (ctrl.active) {
+        ctrl.active = false;
+        ctrl.controller.dataLoaded(data);
       }
-
-      ctrl.active = false;
-      ctrl.controller.dataLoaded(data);
     }
     delete this.requesting_controllers[filter_id];
     return this;

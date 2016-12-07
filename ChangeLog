@@ -1,5 +1,11 @@
 2016-12-07  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_chart_helpers.js,
+	src/html/classic/js/gsa_dashboard.js, src/html/classic/js/gsa_donut_chart.js:
+	Update coding style and small code improvements.
+
+2016-12-07  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_dashboard.js: Export ChartController to gsa.charts
 	"namespace".
 

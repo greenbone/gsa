@@ -64,7 +64,7 @@
    *
    * @return  The color scale function for the column and type.
    */
-  gch.field_color_scale = function field_color_scale(type, column) {
+  gch.field_color_scale = function(type, column) {
     var scale = d3.scale.ordinal();
 
     var red = d3.interpolateHcl('#d62728', '#ff9896');
@@ -1732,8 +1732,8 @@
 
     var records = bins.map(function(d) {
       var record = {};
-      record [severity_field] = d;
-      record [count_field] = 0;
+      record[severity_field] = d;
+      record[count_field] = 0;
       return record;
     });
 
@@ -1741,7 +1741,7 @@
       {
           name: severity_field,
           type: old_data.column_info.columns[severity_field].type,
-          column: old_data.column_info.columns [severity_field].column,
+          column: old_data.column_info.columns[severity_field].column,
           stat: old_data.column_info.columns[severity_field].stat,
           data_type: 'text'
         };
@@ -1749,7 +1749,7 @@
     column_info.columns[count_field] =
       {
           name: count_field,
-          type: old_data.column_info.columns [count_field].type,
+          type: old_data.column_info.columns[count_field].type,
           column: '',
           stat: 'count',
           data_type: 'integer'
@@ -1869,7 +1869,7 @@
     }
 
     for (i in records) {
-      records[i][severity_field + '~long'] = bins_long [i];
+      records[i][severity_field + '~long'] = bins_long[i];
     }
 
     if (gsa.severity_levels.min_high === gsa.severity_levels.max_medium) {
@@ -2161,10 +2161,10 @@
     for (record in old_data.records) {
       var new_record = {};
       var empty_x = false;
-      for (var field in old_data.records [record]) {
+      for (var field in old_data.records[record]) {
         if (old_data.records[record][field] ||
             old_data.records[record][field] === 0) {
-          new_record[field] = old_data.records [record][field];
+          new_record[field] = old_data.records[record][field];
         }
         else if (field.lastIndexOf('~original') !== (field.length - 9)) {
           switch (old_data.column_info.columns[field].data_type) {
@@ -2564,7 +2564,7 @@
 
     for (var row in records) {
       for (col_i in columns) {
-        var col = columns [col_i];
+        var col = columns[col_i];
         var record = records[row][col];
         if (gsa.has_value(record)) {
           if (gsa.is_defined(column_info)) {
