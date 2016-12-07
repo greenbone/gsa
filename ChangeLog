@@ -1,5 +1,10 @@
 2016-12-07  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_dashboard.js: Redirect to login page on 401
+	responses for chart data requests.
+
+2016-12-07  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_dashboard.js: Fix creating request for chart data.
 	Pass correct parameters to create_uri and always include credentials (session
 	cookies) in the ajax requests.

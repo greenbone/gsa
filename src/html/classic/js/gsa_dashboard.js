@@ -31,6 +31,9 @@
   if (!gsa.is_defined(gsa.charts)) {
     gsa.charts = {};
   }
+
+  gsa.login_page = './login';
+
   var gch = gsa.charts;
 
   gch.Dashboard = Dashboard;
@@ -2870,7 +2873,7 @@
           if (error.status === 401) {
             // not authorized (anymore)
             // reload page to show login dialog
-            window.location.reload();
+            window.location.replace(gsa.login_page); // FIXME
             return;
           }
 
