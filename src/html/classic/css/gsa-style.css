@@ -472,7 +472,6 @@ td p {
 
 #gb_header > div {
   margin: auto;
-  display:table-cell;
 }
 
 #gb_header .logo {
