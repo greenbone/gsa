@@ -144,7 +144,6 @@
    */
   function Dashboard(id, config, dashboard_opts) {
     this.id = id;
-    this.elem = $('#' + id);
     this.rows = {};
     this.width = -1;
     this.height = -1;
@@ -172,8 +171,6 @@
     this.reordering = false; // indicator if the dashboard rows are currently reorderd
 
     this._configUnchanged();
-
-    this.init();
   }
 
   /**
@@ -181,6 +178,8 @@
    */
   Dashboard.prototype.init = function() {
     var self = this;
+
+    this.elem = $('#' + this.id);
 
     if (this.dashboard_opts) {
       if (this.dashboard_opts.config_pref_id) {
@@ -3150,6 +3149,7 @@
         });
       });
 
+      dashboard.init();
       dashboard.initDisplays();
 
       if (elem.data('detached')) {
