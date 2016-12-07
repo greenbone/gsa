@@ -1,5 +1,10 @@
 2016-12-07  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_chart_helpers.js: Fix setting the stylesheet href
+	for html record tables.
+
+2016-12-07  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_donut_chart.js: Fix checking for
 	gen_params.extra.show_stat_type if gen_params.extra is not defined.
 	Also use map function correctly when generating record data.

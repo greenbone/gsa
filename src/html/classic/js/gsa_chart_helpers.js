@@ -2609,14 +2609,13 @@
     var body_s = d3.select(doc.documentElement).append('body');
     var table_s;
     var row_class = 'odd';
+    var href;
 
-    var stylesheet;
-    for (var sheet_i = 0; !gsa.is_defined(stylesheet) &&
-        sheet_i < document.styleSheets.length; sheet_i++) {
-      if (document.styleSheets[sheet_i].href.indexOf(
-            '/gsa-style.css', document.styleSheets[sheet_i].href.length -
-            '/gsa-style.css'.length) !== -1) {
-        stylesheet = document.styleSheets[sheet_i];
+    for (var sheet_i = 0; sheet_i < document.styleSheets.length; sheet_i++) {
+      href = document.styleSheets[sheet_i].href;
+      if (href && href.indexOf('/gsa-style.css',
+            href.length - '/gsa-style.css'.length) !== -1) {
+        break;
       }
     }
 
@@ -2624,7 +2623,7 @@
             .text(gsa._('Greenbone Security Assistant - Chart data table'));
 
     head_s.append('link')
-            .attr('href', stylesheet.href)
+            .attr('href', href)
             .attr('type', 'text/css')
             .attr('rel', 'stylesheet');
 
