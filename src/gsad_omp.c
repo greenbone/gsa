@@ -59,9 +59,10 @@
 #include "gsad_base.h" /* for xsl_transform */
 #include "xslt_i18n.h"
 
+#include <gvm/base/cvss.h>
+
 #include <openvas/misc/openvas_server.h>
 #include <openvas/base/openvas_file.h>
-#include <openvas/base/cvss.h>
 #include <openvas/omp/omp.h>
 #include <openvas/omp/xml.h>
 

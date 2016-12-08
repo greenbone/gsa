@@ -1,3 +1,8 @@
+2016-12-08  Christian Fischer <christian.fischer@greenbone.net>
+
+	* src/gsad_omp.c: Change include file from openvas/base/cvss.h
+	to gvm/base/cvss.h.
+
 2016-12-08  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/js/greenbone-init.js (ajax-post): Reload current page via
