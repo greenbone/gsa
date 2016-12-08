@@ -229,7 +229,7 @@
         },
       })
       .append($('<img/>', {
-        src: 'img/edit.svg',
+        src: '/img/edit.svg',
         alt: gsa._('Edit Dashboard'),
         title: gsa._('Edit Dashboard'),
       }))
@@ -242,7 +242,7 @@
         }
       })
       .append($('<img/>', {
-        src: 'img/new.svg',
+        src: '/img/new.svg',
         alt: gsa._('Add new Chart'),
         title: gsa._('Add new Chart'),
       }))
@@ -257,7 +257,7 @@
         },
       })
       .append($('<img/>', {
-        src: 'img/first.svg',
+        src: '/img/first.svg',
         alt: gsa._('Reset to defaults'),
         title: gsa._('Reset to defaults'),
       }))
@@ -272,7 +272,7 @@
         },
       })
       .append($('<img/>', {
-        src: 'img/delete.svg',
+        src: '/img/delete.svg',
         alt: gsa._('Cancel Editing'),
         title: gsa._('Cancel Editing'),
       }))
@@ -287,7 +287,7 @@
         }
       })
       .append($('<img/>', {
-        src: 'img/indicator_operation_ok.svg',
+        src: '/img/indicator_operation_ok.svg',
         alt: gsa._('Save Changes'),
         title: gsa._('Save Changes'),
       }))
@@ -2245,7 +2245,7 @@
       }
     })
     .append($('<img/>', {
-      src: 'img/previous.svg',
+      src: '/img/previous.svg',
       css: {
         'vertical-align': 'middle'
       },
@@ -2286,7 +2286,7 @@
       },
     })
     .append($('<img/>', {
-      src: 'img/next.svg',
+      src: '/img/next.svg',
       css: {
         'vertical-align': 'middle',
       },
@@ -2319,7 +2319,7 @@
       },
     })
     .append($('<img/>', {
-      src: 'img/previous.svg',
+      src: '/img/previous.svg',
       css: {
         'vertical-align': 'middle',
       },
@@ -2360,7 +2360,7 @@
       },
     })
     .append($('<img/>', {
-      src: 'img/next.svg',
+      src: '/img/next.svg',
       css: {
         'vertical-align': 'middle',
       },
