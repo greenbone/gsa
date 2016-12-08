@@ -3176,7 +3176,10 @@
    *
    */
   function create_uri(command, token, filter, params, prefix, no_xml) {
+    var url = '';
+    var config = global.config;
     var params_str = prefix + 'cmd=' + encodeURIComponent(command);
+
     for (var prop_name in params) {
       if ((!no_xml || prop_name !== 'xml') &&
           (!gsa.is_defined(filter) || filter.type === null ||
@@ -3199,7 +3202,16 @@
       params_str = params_str + '&filt_id=' + encodeURIComponent(filter.id);
     }
     params_str = params_str + '&token=' + encodeURIComponent(token);
-    return 'https://127.0.0.1:9392' + params_str;
+
+    if (gsa.is_defined(config)) {
+      var protocol = gsa.is_defined(config.protocol) ? config.protocol :
+        window.location.protocol;
+      var server = gsa.is_defined(config.server) ? config.server :
+        window.location.host;
+
+      url = protocol + '//' + server;
+    }
+    return url + params_str;
   }
 
   /**
