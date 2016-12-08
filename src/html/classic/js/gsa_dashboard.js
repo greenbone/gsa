@@ -2717,39 +2717,39 @@
           this.options.subgroup_column :
           '';
 
-      if (!this.options.data_columns) {
+      if (this.options.data_columns) {
+        this.params.data_columns = this.options.data_columns;
+      }
+      else {
         this.params.data_columns = [];
       }
-      else {
-        this.params.data_columns = this.options.data_columns.split(',');
-      }
 
-      if (!this.options.text_columns) {
+      if (this.options.text_columns) {
+        this.params.text_columns = this.options.text_columns;
+      }
+      else {
         this.params.text_columns = [];
       }
-      else {
-        this.params.text_columns = this.options.text_columns.split(',');
-      }
 
-      if (!this.options.sort_fields) {
+      if (this.options.sort_fields) {
+        this.params.sort_fields = this.options.sort_fields;
+      }
+      else {
         this.params.sort_fields = [];
       }
-      else {
-        this.params.sort_fields = this.options.sort_fields.split(',');
-      }
 
-      if (!this.options.sort_orders) {
+      if (this.options.sort_orders) {
+        this.params.sort_orders = this.options.sort_orders;
+      }
+      else {
         this.params.sort_orders = [];
       }
-      else {
-        this.params.sort_orders = this.options.sort_orders.split(',');
-      }
 
-      if (!this.options.sort_stats) {
-        this.params.sort_stats = [];
+      if (this.options.sort_stats) {
+        this.params.sort_stats = this.options.sort_stats;
       }
       else {
-        this.params.sort_stats = this.options.sort_stats.split(',');
+        this.params.sort_stats = [];
       }
 
       if (this.options.first_group) {

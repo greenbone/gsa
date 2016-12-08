@@ -51,6 +51,13 @@
     return doc.documentElement.textContent;
   }
 
+  function split(str, pattern) {
+    if (str) {
+      return str.split(pattern ? pattern : ',');
+    }
+    return undefined;
+  }
+
   /* Initialization on page load */
 
   /**
@@ -106,13 +113,13 @@
               group_column: group_column,
               subgroup_column: subgroup_column,
               data_column: ds_elem.data('column'),
-              data_columns: ds_elem.data('columns'),
-              text_columns: ds_elem.data('text-columns'),
+              data_columns: split(ds_elem.data('columns')),
+              text_columns: split(ds_elem.data('text-columns')),
               filter: ds_elem.data('filter'),
               filt_id: ds_elem.data('filter-id'),
-              sort_fields: ds_elem.data('sort-fields'),
-              sort_orders: ds_elem.data('sort-orders'),
-              sort_stats: ds_elem.data('sort-stats'),
+              sort_fields: split(ds_elem.data('sort-fields')),
+              sort_orders: split(ds_elem.data('sort-orders')),
+              sort_stats: split(ds_elem.data('sort-stats')),
               aggregate_mode: ds_elem.data('aggregate-mode'),
               max_groups: ds_elem.data('max-groups'),
               first_group: ds_elem.data('first-group'),

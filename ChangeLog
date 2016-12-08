@@ -5,6 +5,12 @@
 
 2016-12-08  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_dashboard.js,
+	src/html/classic/js/gsa_dashboard_init.js: Move splitting data source
+	parameter with lists into gsa_dashboard_init.
+
+2016-12-08  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/gsad_content_type.h: Add content type enum for application/json.
 
 	* src/gsad_http.c (guess_content_type): Return content type
