@@ -189,7 +189,7 @@
 
         var next_url = action_result.children('next').text();
         if (gsa.is_defined(next_url) && next_url !== '') {
-          location = next_url;
+          location.replace(next_url);
         }
       }
 
