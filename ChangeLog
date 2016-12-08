@@ -1,5 +1,15 @@
 2016-12-08  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_dashboard.js,
+	src/html/classic/js/gsa_dashboard_init.js: Extract initalization of dashboard
+	from document onload event into an own js file.
+
+	* src/html/classic/graphics.xsl: Load new gsa_dashboard_init.js file.
+
+	* CMakeLists.txt: Install new gsa_dashboard_init.js file.
+
+2016-12-08  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/greenbone-init.js: Fix creating OMPRequest objects.
 
 2016-12-08  Björn Ricks <bjoern.ricks@greenbone.net>
