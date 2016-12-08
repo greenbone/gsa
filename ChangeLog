@@ -1,5 +1,9 @@
 2016-12-08  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/greenbone-init.js: Fix creating OMPRequest objects.
+
+2016-12-08  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_dashboard.js (create_uri): Don't hardcode protocol
 	and host. Allow to configure these in a global config object and fallback to
 	current used host and protocol via location api.

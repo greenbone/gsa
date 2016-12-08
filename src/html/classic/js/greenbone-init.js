@@ -101,7 +101,7 @@
       elem.on('click', function(event) {
         event.preventDefault();
         var dialog = elem.parents('.dialog-form')[0].$omp;
-        new OMPRequest({
+        new gsa.OMPRequest({
           params: parse_params(elem.data('extra')),
           form: elem.parents('form')[0],
         }).do(function() {
@@ -217,7 +217,7 @@
       button.on('click', function(event) {
         event.preventDefault();
 
-        var request = new OMPRequest({
+        var request = new gsa.OMPRequest({
           form: form[0],
           params: {next_xml: 0},
         });
