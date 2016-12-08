@@ -74,6 +74,8 @@ guess_content_type (const gchar *path)
     return GSAD_CONTENT_TYPE_TEXT_JS;
   else if (g_str_has_suffix (path, ".gif"))
     return GSAD_CONTENT_TYPE_IMAGE_GIF;
+  else if (g_str_has_suffix (path, ".json"))
+    return GSAD_CONTENT_TYPE_APP_JSON;
   else
     return GSAD_CONTENT_TYPE_OCTET_STREAM;
 }
@@ -159,6 +161,10 @@ gsad_add_content_type_header (http_response_t *response,
       case GSAD_CONTENT_TYPE_TEXT_PLAIN:
         MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
                                  "text/plain; charset=utf-8");
+        break;
+      case GSAD_CONTENT_TYPE_APP_JSON:
+        MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
+                                 "application/json; charset=utf-8");
         break;
       case GSAD_CONTENT_TYPE_DONE:
         break;

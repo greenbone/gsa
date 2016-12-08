@@ -5,6 +5,16 @@
 
 2016-12-08  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/gsad_content_type.h: Add content type enum for application/json.
+
+	* src/gsad_http.c (guess_content_type): Return content type
+	GSAD_CONTENT_TYPE_APPLICATION_JSON for files with .json extension.
+
+	* src/gsad_http.c (gsad_add_content_type_header): Handle
+	GSAD_CONTENT_TYPE_APPLICATION_JSON when setting http response header.
+
+2016-12-08  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/greenbone-init.js (ajax-post): Reload current page via
 	location.replace if ajax-post next property is set.
 
