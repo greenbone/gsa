@@ -1,3 +1,15 @@
+2016-12-08  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/gsad.c: Change include from openvas/base/openvas_file.h
+	to gvm/base/fileutils.h.
+	(gsad_init): Adjust function call from
+	openvas_file_check_is_dir to gvm_file_check_is_dir.
+
+	* src/gsad_omp.c: Change include from openvas/base/openvas_file.h
+	to gvm/base/fileutils.h.
+	(format_file_name): Adjust function call from
+	openvas_export_file_name to gvm_export_file_name.
+
 2016-12-08  Christian Fischer <christian.fischer@greenbone.net>
 
 	* src/gsad_omp.c: Change include file from openvas/base/cvss.h

@@ -59,10 +59,10 @@
 #include "gsad_base.h" /* for xsl_transform */
 #include "xslt_i18n.h"
 
+#include <gvm/base/fileutils.h>
 #include <gvm/base/cvss.h>
 
 #include <openvas/misc/openvas_server.h>
-#include <openvas/base/openvas_file.h>
 #include <openvas/omp/omp.h>
 #include <openvas/omp/xml.h>
 
@@ -2670,9 +2670,9 @@ format_file_name (gchar* fname_format, credentials_t* credentials,
       format_name = NULL;
     }
 
-  ret = openvas_export_file_name (fname_format, credentials->username,
-                                  type, uuid, creation_time, modification_time,
-                                  name, format_name);
+  ret = gvm_export_file_name (fname_format, credentials->username,
+                              type, uuid, creation_time, modification_time,
+                              name, format_name);
   return ret;
 }
 

@@ -63,7 +63,6 @@
 #include <locale.h>
 #include <netinet/in.h>
 #include <openvas/misc/openvas_logging.h>
-#include <openvas/base/openvas_file.h>
 #include <openvas/base/openvas_networking.h>
 #include <openvas/omp/xml.h>
 #include <openvas/misc/openvas_uuid.h>
@@ -86,6 +85,7 @@
 /* This must follow the system includes. */
 #include <microhttpd.h>
 
+#include <gvm/base/fileutils.h>
 #include <gvm/base/pidfile.h>
 
 #include "gsad_base.h"
@@ -2749,7 +2749,7 @@ gsad_init ()
   init_users ();
 
   /* Check for required files. */
-  if (openvas_file_check_is_dir (GSA_DATA_DIR) < 1)
+  if (gvm_file_check_is_dir (GSA_DATA_DIR) < 1)
     {
       g_critical ("%s: Could not access %s!\n", __FUNCTION__, GSA_DATA_DIR);
       return MHD_NO;
