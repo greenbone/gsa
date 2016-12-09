@@ -66,6 +66,17 @@
   };
 
   /**
+   * Unregister an event callback for a specific event triggered by this node
+   *
+   * @param event_name The name of the triggered event
+   *
+   * @return This node
+   */
+  EventNode.prototype.off = function(event_name) {
+    this.event_node.off(event_name);
+    return this;
+  }
+  /**
    * Trigger event
    *
    * @param event_name The name of the triggered event
@@ -1533,10 +1544,12 @@
     this.filters = [];
     this.controllers = [];
 
+    this.onDataSourceChanged = this.onDataSourceChanged.bind(this);
+
     for (var controller_name in controller_factories) {
       var new_controller = controller_factories[controller_name](this);
       if (controller_name === this.config.name) {
-        this.current_controller = new_controller;
+        this._setCurrentController(new_controller);
       }
       this.controllers.push(new_controller);
     }
@@ -1646,6 +1659,26 @@
 
     this.resize(); // will also request the data
   };
+
+  DashboardDisplay.prototype._setCurrentController = function(controller) {
+    var self = this;
+
+    if (this.current_controller) {
+      this.current_controller.off('data_source_changed');
+    }
+
+    this.current_controller = controller;
+
+    if (this.current_controller) {
+      this.current_controller.on('data_source_changed',
+        this.onDataSourceChanged);
+    }
+  }
+
+  DashboardDisplay.prototype.onDataSourceChanged = function() {
+    log.debug('data source changed', this.id);
+    this.redraw();
+  }
 
   /**
    * Gets a menu item or creates it if it does not exist.
@@ -2115,9 +2148,9 @@
   DashboardDisplay.prototype._updateCurrentController = function() {
     var self = this;
 
-    this.current_controller = this.controllers.find(function(controller) {
+    this._setCurrentController(this.controllers.find(function(controller) {
       return controller.chart_name === self.config.name;
-    });
+    }));
     return this;
   };
 
@@ -2192,7 +2225,7 @@
     }
 
     if (this.current_controller !== new_controller) {
-      this.current_controller = new_controller;
+      this._setCurrentController(new_controller);
 
       if (new_controller.data_src.filter_type !== old_filter_type) {
         this._updateFilters();
@@ -2505,6 +2538,9 @@
    */
   function ChartController(chart_name, chart_type, chart_template,
       chart_title, data_src, display, count_field, gen_params, init_params) {
+
+    EventNode.call(this);
+
     this.chart_name = chart_name;
     this.chart_type = chart_type;
     this.chart_template = chart_template ? chart_template : '';
@@ -2525,7 +2561,13 @@
     this.generator.setTitleGenerator(
         get_title_generator(chart_title, count_field));
 
-    // FIXME move this to the corresponding chart generators. they should now
+    var self = this;
+
+    this.data_src.on('changed', function() {
+      self._trigger('data_source_changed');
+    });
+
+    // FIXME move this to the corresponding chart generators. they should know
     // their default style
     if ((this.chart_template === 'info_by_cvss' ||
         this.chart_template === 'recent_info_by_cvss') &&
@@ -2536,6 +2578,8 @@
           gsa.severity_levels.max_medium));
     }
   }
+
+  gsa.derive(ChartController, EventNode);
 
   /* Delegates a data request to the data source */
   ChartController.prototype.addRequest = function(filter) {
@@ -2687,15 +2731,19 @@
 
     this.token = gsa.is_defined(token) ? token : gsa.token;
 
+    EventNode.call(this);
+
     this.init();
   }
+
+  gsa.derive(DataSource, EventNode);
 
   /**
    * Initializes a data source.
    */
   DataSource.prototype.init = function() {
     if (gsa.is_defined(this.options.filter)) {
-      this.params.filter = this.options.filter;
+      this._setFilter(this.options.filter);
     }
 
     if (gsa.is_defined(this.options.filt_id)) {
@@ -2781,6 +2829,24 @@
       }
     }
   };
+
+  DataSource.prototype.setFilter = function(filter) {
+    var cur_filter = this.getFilter();
+
+    if (cur_filter !== filter) {
+      this._setFilter(filter);
+      this._trigger('changed');
+    }
+  };
+
+  DataSource.prototype._setFilter = function(filter) {
+    this.params.filter = filter;
+    this.cached_data = {};
+  };
+
+  DataSource.prototype.getFilter = function() {
+    return this.params.filter;
+  }
 
   /**
    * Adds a request from a controller to a data source.
