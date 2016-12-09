@@ -1,5 +1,10 @@
 2016-12-09  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_dashboard.js: Fix creating xhr requests to save
+	chart prefreneces by adding the current token.
+
+2016-12-09  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_dashboard.js: Allow to set the current config of a
 	Dashboard.
 

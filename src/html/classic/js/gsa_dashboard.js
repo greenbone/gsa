@@ -316,6 +316,8 @@
     this.bottom_target = new RowTarget(this.id, 'bottom', this.edit_mode);
     this.bottom_target.on('received', received);
     this.elem.append(this.bottom_target.elem);
+
+    this.token = gsa.token; // FIXME token should be configurable
   };
 
   /**
