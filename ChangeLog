@@ -1,5 +1,11 @@
 2016-12-09  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_dashboard.js
+	(Dashboard.prototype.forEachRowOrdered): Fix calling dashboard
+	forEachRowOrdered when init hasn't been called yet.
+
+2016-12-09  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_dashboard.js: Allow changing the filter of a
 	datasource. All displays using the data source will be redrawed if the filter
 	has changed.

@@ -801,6 +801,11 @@
    */
   Dashboard.prototype.forEachRowOrdered = function(callback) {
     var self = this;
+
+    if (!gsa.is_defined(this.elem)) {
+      return;
+    }
+
     this.elem.find('.dashboard-row').each(function() {
       var id = $(this).attr('id');
       var row = self.getRow(id);
