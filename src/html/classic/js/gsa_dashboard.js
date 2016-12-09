@@ -158,9 +158,9 @@
 
     this.edit_mode = false;
 
-    this.config = config;
     this.config_pref_id = '';
-    this.prev_config = config ? JSON.stringify(config) : '';
+
+    this.setConfig(config);
 
     this.default_controller_string = 'by-cvss';
 
@@ -689,6 +689,18 @@
       data: config,
     };
   };
+
+  /**
+   * Set the current config
+   *
+   * @param config  New config to set
+   *
+   * @return This dashboard
+   */
+  Dashboard.prototype.setConfig = function(config) {
+    this.config = config;
+    this.prev_config = config ? JSON.stringify(config) : '';
+  }
 
   Dashboard.prototype.saveConfig = function() {
     this.config = this.getConfig();
