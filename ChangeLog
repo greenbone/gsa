@@ -1,5 +1,11 @@
 2016-12-09  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_dashboard.js: Allow to configure the requests for
+	saving chart preferences. Also always include credentials (session cookie) in
+	these requests.
+
+2016-12-09  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_dashboard.js: Fix creating xhr requests to save
 	chart prefreneces by adding the current token.
 

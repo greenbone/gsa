@@ -714,7 +714,11 @@
         this.config_pref_request.abort();
       }
 
-      this.config_pref_request = d3.xhr('/omp');
+      this.config_pref_request = d3.xhr(create_hostname() + '/omp');
+
+      this.config_pref_request.on('beforesend', function(request) {
+        request.withCredentials = true;
+      });
 
       var form_data = new FormData();
       form_data.append('chart_preference_id', this.config_pref_id);
@@ -3037,12 +3041,27 @@
 
   /* Dashboard helper function */
 
+  function create_hostname() {
+    var url = ''
+    var config = global.config;
+
+    if (gsa.is_defined(config)) {
+      var protocol = gsa.is_defined(config.protocol) ? config.protocol :
+        window.location.protocol;
+      var server = gsa.is_defined(config.server) ? config.server :
+        window.location.host;
+
+      url = protocol + '//' + server;
+    }
+    return url;
+  }
+
   /*
    * Creates a GSA request URI from a command name, parameters array and prefix.
    *
    */
   function create_uri(command, token, filter, params, prefix, no_xml) {
-    var url = '';
+    var url = create_hostname();
     var config = global.config;
     var params_str = prefix + 'cmd=' + encodeURIComponent(command);
 
@@ -3064,19 +3083,13 @@
         }
       }
     }
+
     if (gsa.has_value(filter) && filter.id && filter.id !== '') {
       params_str = params_str + '&filt_id=' + encodeURIComponent(filter.id);
     }
+
     params_str = params_str + '&token=' + encodeURIComponent(token);
 
-    if (gsa.is_defined(config)) {
-      var protocol = gsa.is_defined(config.protocol) ? config.protocol :
-        window.location.protocol;
-      var server = gsa.is_defined(config.server) ? config.server :
-        window.location.host;
-
-      url = protocol + '//' + server;
-    }
     return url + params_str;
   }
 
