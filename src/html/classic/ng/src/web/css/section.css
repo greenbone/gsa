@@ -1,0 +1,45 @@
+/* section */
+
+.section-header {
+  margin: 10px 0px;
+  border-bottom: 2px solid black;
+  position: relative;
+  align-items: flex-end;
+}
+
+.section-header h1,
+.section-header h2,
+.section-header h3 {
+  margin: 0;
+  display: inline-block;
+}
+
+.section-header h1 .icon,
+.section-header h2 .icon,
+.section-header h3 .icon {
+  margin-right: 5px;
+}
+
+.section-header .icon + .icon {
+  margin-right: 3px;
+  margin-left: 0;
+}
+
+.section-header .icon-action {
+  float: right;
+}
+
+.section-header .section-header-info {
+  float: right;
+  font-size: 10px;
+}
+
+.section-header .section-header-info table {
+  font-size: inherit;
+  border-spacing: 0;
+}
+
+.section-box {
+  margin: 10px 0px;
+  margin-bottom: 20px;
+}

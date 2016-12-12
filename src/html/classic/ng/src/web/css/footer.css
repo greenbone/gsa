@@ -1,0 +1,16 @@
+/* Footer */
+
+footer,
+.gsa-footer {
+  font-size:10px;
+  text-align:right;
+  color: #787878;
+  margin:10px 5px;
+}
+
+footer,
+.gsa-footer a {
+  color: #787878;
+}
+
+/* vim: set ts=2 sw=2 tw=80:*/

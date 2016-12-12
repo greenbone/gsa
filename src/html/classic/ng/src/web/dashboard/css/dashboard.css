@@ -1,0 +1,289 @@
+/*
+ * Dashboard / charts styles
+ */
+
+/* Chart table layout */
+.dashboard {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.dashboard.edit .dashboard-row {
+  padding: 0;
+  border: 1px dotted silver;
+}
+
+.dashboard-add-row {
+  padding: 1px;
+  display: block;
+  min-height: 16px;
+  overflow: hidden;
+  border: 1px dotted #99ce48;
+}
+
+.dashboard-row {
+  padding: 1px;
+  display: block;
+  min-height: 16px;
+  overflow: hidden;
+  margin-bottom: 5px;
+}
+
+.dashboard-display {
+  display: inline-block;
+  text-align: center;
+  padding: 4px;
+  vertical-align: top;
+}
+
+.dashboard-display-content {
+  position: relative;
+}
+
+.dashboard-loading {
+  position: absolute;
+  top: 50%;
+  padding: 5px;
+  width: 100%;
+}
+
+.dashboard-loading span {
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0 5px;
+}
+
+.num-displays-1 .dashboard-placeholder {
+  width: 100%;
+}
+
+.num-displays-2 .dashboard-placeholder {
+  width: 50%;
+}
+
+.num-displays-3 .dashboard-placeholder {
+  width: 33.33333333%;
+}
+
+.num-displays-4 .dashboard-placeholder {
+  width: 25%;
+}
+
+.dashboard-placeholder {
+  display: inline-block;
+  text-align: center;
+  padding: 4px;
+  vertical-align: top;
+  border: 1px dashed gray;
+  background: #EEEEEE;
+  height: 100%;
+  width: 100%;
+}
+
+.dashboard-controls {
+  float: left;
+}
+
+.dashboard-actions a {
+  cursor: pointer;
+}
+
+/* Chart menu. */
+#chart_list {
+  position: absolute;
+}
+
+#chart_list ul {
+  list-style: none;
+  margin: 0px;
+  padding: 0px;
+}
+
+#chart_list ul li {
+  float:left;
+  width: 100%;
+}
+
+#chart_list ul li a {
+  display: block;
+  color: #FFFFFF;
+  width: 100%;
+  text-decoration: none;
+}
+
+#chart_list ul li a#section_list_first {
+  height: 18px;
+  width: 48px;
+  background: url('/img/style/dropdown_arrow.png') no-repeat 3px center;
+  margin-bottom: 0px;
+  margin-top: 0px;
+}
+
+#chart_list:hover ul li a#section_list_first {
+  background: url('/img/style/dropdown_arrow_green.png') no-repeat 3px center;
+}
+
+#chart_list ul li ul {
+  width: 255px;
+  z-index: 6;
+  position: absolute;
+  display:none;
+  background: #FAFAFA;
+  border: 1px solid #3A3A3A;
+  border-radius: 0px 0px 8px 8px;
+}
+
+#chart_list ul li ul a {
+  text-align: left;
+  text-indent: 12px;
+  line-height: 22px;
+  font-size: 10px;
+  color: #3A3A3A;
+  width: 100%;
+  height: 22px;
+}
+
+#chart_list ul li ul a:hover {
+  background: #99CE48;
+}
+
+#chart_list ul li ul .last a:hover {
+  background: #99CE48;
+  -webkit-border-radius: 0px 0px 8px 8px;
+  -moz-border-radius: 0px 0px 8px 8px;
+  border-radius: 0px 0px 8px 8px;
+}
+
+#chart_list .pointy {
+  background: url('/static/img/menu_pointy.png');
+  display: block;
+  width: 17px;
+  height: 15px;
+  margin-top: -14px;
+  margin-left: 25px;
+}
+
+#chart_list li:hover ul ul,
+#chart_list li:hover ul ul ul {
+  display: none;
+}
+
+#chart_list li:hover a,
+#chart_list li:hover ul,
+#chart_list li:hover ul li {
+  display: block;
+}
+
+.charts-bar:link,
+.charts-bar:visited,
+.charts-bar:active {
+  background: #595959 url('/static/img/p_bar_bg.png') repeat-x;
+  display: block;
+  font-size: 75%;
+  color: white;
+}
+
+.charts-bar:hover,
+.charts-bar:focus {
+  text-decoration: none;
+  color: #70C000;
+}
+
+.chart-box {
+  background: #EEEEEE;
+  display: inline-block;
+  font-weight: bold;
+  width: 100%;
+  height: 100%;
+}
+
+.chart-head {
+  height: 18px;
+  background: #3A3A3A;
+  color: #EEEEEE;
+  padding: 1px 22px 2px 22px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.dashboard .edit .chart-head {
+  cursor: grab;
+}
+
+.chart-top-buttons {
+  background: #3A3A3A;
+  padding: 1px;
+  height: 18px;
+  float: right;
+}
+
+.chart-foot {
+  background: #EEEEEE;
+  color: #3A3A3A;
+  padding: 2px;
+}
+
+.chart-foot .select2 {
+  margin: 0 2px;
+}
+
+.chart-foot .select2 + .icon {
+  margin-left: 0;
+}
+
+.bar {
+  fill: #5BAC0C;
+}
+
+.axis text {
+  font-family: sans-serif;
+  font-size: 8pt;
+  font-weight: normal;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.chart-label {
+  font: 8pt sans-serif;
+}
+
+/* Tooltip */
+.d3-tip {
+  line-height: 1;
+  font-weight: bold;
+  padding: 3px;
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  border-radius: 2px;
+  text-align: center; 
+}
+
+/* Creates a small triangle extender for the tooltip */
+.d3-tip:after {
+  box-sizing: border-box;
+  display: inline;
+  font-size: 10px;
+  width: 100%;
+  line-height: 1;
+  color: rgba(0, 0, 0, 0.8);
+  content: "\25BC";
+  position: absolute;
+  text-align: center;
+}
+
+/* Style northward tooltips differently */
+.d3-tip.n:after {
+  margin: -1px 0 0 0;
+  top: 100%;
+  left: 0;
+}
+
+/* vim: set ts=2 sw=2 tw=80:*/

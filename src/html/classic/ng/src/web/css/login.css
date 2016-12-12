@@ -1,0 +1,39 @@
+/* login page */
+.login {
+  height: 100%;
+}
+
+.login main {
+  background: #393637;
+  height: 100%;
+}
+
+.login header {
+  height: 40px;
+  background-color: #99CE48;
+  color: #393637;
+}
+
+.login main .greenbone-icon {
+  width: 400px;
+}
+
+.login .box {
+  margin-top: 30px;
+  margin-bottom: 30px;
+  padding: 10px;
+  width: 480px;
+  font-size: 9pt;
+  background-color: #dddddd;
+  border-radius: 15px;
+  box-shadow: 10px 10px 15px #1a1a1a;
+}
+
+.login .error {
+  color: red;
+  font-weight: bold;
+  text-align: center;
+  margin: 10px;
+}
+
+/* vim: set ts=2 sw=2 tw=80:*/

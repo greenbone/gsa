@@ -1,0 +1,27 @@
+.form-horizontal .form-group::after,
+.form-horizontal .form-group::before {
+  content: " ";
+  display: table;
+}
+
+.form-horizontal .form-group::after {
+  clear: both;
+}
+
+.form-group {
+  margin-bottom: 5px;
+}
+
+.form-inline .form-group {
+  display: inline-block;
+  margin-bottom: 0;
+  vertical-align: middle;
+}
+
+.form-inline .form-group + .form-group {
+  margin-left: 5px;
+}
+
+.form-inline .form-group .control-label {
+  margin-right: 5px;
+}

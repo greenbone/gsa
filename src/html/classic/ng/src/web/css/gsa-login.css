@@ -1,0 +1,107 @@
+/*
+ * Greenbone Security Assistant
+ * $Id$
+ * Description: Login page HTML stylesheet
+ *
+ * Authors:
+ * Timo Pollmeier <timo.pollmeier@greenbone.net>
+ *
+ * Copyright:
+ * Copyright (C) 2015 Greenbone Networks GmbH
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
+
+body {
+  background: #393637;
+  height: 100%;
+}
+
+.page-wrap {
+  min-height: 100%;
+}
+
+header {
+  height: 40px;
+  background-color: #99CE48;
+  color: #393637;
+}
+
+header > span {
+  position: absolute;
+  top: 15px;
+  padding: 5px;
+}
+
+header .title {
+  left: 0;
+  margin-left: 12px;
+  font-weight: bold;
+}
+
+header .version {
+  margin-right: 12px;
+  right: 0;
+}
+
+.logo_box {
+  z-index: -10;
+  position: fixed;
+  top: 20%;
+  left: 50%;
+  width: 35%;
+  min-width: 200px;
+  max-width: 400px;
+}
+
+.logo_box img {
+  width: 100%;
+}
+
+.box {
+  margin-top: 30px;
+  margin-bottom: 30px;
+  padding: 5px;
+  width: 480px;
+  font-size: 9pt;
+  background-color: #dddddd;
+  border-radius: 15px;
+  box-shadow: 10px 10px 15px #1a1a1a;
+}
+
+.login-box {
+  margin-top: 10%;
+  margin-left: 20%;
+  width: 480px;
+}
+
+.logo > img {
+  margin: 10px;
+  height: 130px;
+  width: 95px;
+}
+
+.login {
+  padding: 10px;
+}
+
+.error_message {
+  color: red;
+  font-weight: bold;
+  text-align: center;
+  margin: 10px;
+}
+
+/* vim: set ts=2 sw=2 tw=80:*/

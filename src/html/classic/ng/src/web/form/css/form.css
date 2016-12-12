@@ -1,0 +1,90 @@
+/* formulars */
+
+form, .form-horizontal {
+  font-size: 12px;
+}
+
+input, select, textarea {
+  /* use font and line settings from parents not from browser default */
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+label {
+  display: inline-block;
+  max-width: 100%;
+}
+
+.form-inline {
+  display: inline-block;
+}
+
+.form-inline .form-control {
+  display: inline-block;
+  width: auto;
+  vertical-align: middle;
+}
+
+.control-label {
+  font-weight: bold;
+  text-align: right;
+}
+
+.form-horizontal .control-label {
+  margin-bottom: 0;
+  margin-top: 5px;
+  display: inline-block;
+  max-width: 100%;
+  vertical-align: middle;
+}
+
+.form-control {
+  display: block;
+  width: 100%;
+  height: 22px;
+  color: #555;
+  background-color: #fff;
+  background-image: none;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 1px 8px;
+}
+
+.form-control[disabled] {
+  cursor: not-allowed;
+}
+
+.form-control[disabled],
+.form-control[readonly] {
+  background-color: #eee;
+  opacity: 1;
+}
+
+textarea.form-control {
+  height: auto;
+}
+
+.form-control-static {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  margin-bottom: 0;
+}
+
+.form-horizontal .offset-container  {
+  margin-bottom: 20px;
+}
+
+.form-horizontal .offset-container .control-label {
+  text-align: left;
+}
+
+.form-horizontal .disabled {
+  color: gray;
+}
+
+.form-horizontal h4 {
+  margin-bottom: 1em;
+}
+
+/* vim: set ts=2 sw=2 tw=80: */

@@ -1,0 +1,38 @@
+/* icon */
+.icon {
+  display: inline-block;
+}
+
+.icon-sm,
+.icon-sm img,
+.icon-sm input[type=image] {
+  width: 16px;
+  height: 16px;
+}
+
+
+.icon-m,
+.icon-m img,
+.icon-m input[type=image] {
+  width: 24px;
+  height: 24px;
+}
+
+.icon-lg,
+.icon-lg img,
+.icon-lg input[type=image] {
+  width: 50px;
+  height: 50px;
+}
+
+.icon + .icon,
+.icon + *,
+.icon-menu + .icon,
+.icon + .icon-menu,
+.icon-menu + .icon-menu {
+  margin-left: 3px;
+}
+
+.icon-button {
+  cursor: pointer;
+}

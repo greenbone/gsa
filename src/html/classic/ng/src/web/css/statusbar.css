@@ -1,0 +1,49 @@
+/* statusbar */
+
+.statusbar {
+  height: 12px;
+}
+
+.statusbar.statusbar-box {
+  box-sizing: content-box; /* height includes border */
+  display: inline-block;
+  margin-left: 0;
+  margin-top: 0;
+  width: 100px;
+  background: #454545 url('/img/p_bar_bg.png');
+  vertical-align: middle;
+  text-align: center;
+  border: 1px solid #999999;
+}
+
+.statusbar.done {
+  background: #CCCCCC url('/img/p_bar_done.png');
+}
+
+.statusbar.new {
+  background: #99CE48 url('/img/p_bar_new.png');
+}
+
+.statusbar.error {
+  background: #bd3309 url('/img/p_bar_error.png');
+}
+
+.statusbar.request {
+  background: #bd8634 url('/img/p_bar_request.png');
+}
+
+.statusbar.running {
+  background:#70C000 url('/img/p_bar.png');
+}
+
+.statusbar p {
+  z-index:3;
+  position: relative;
+  top: -12px;
+  font-weight: bold;
+  color: #FFFFFF;
+  font-size: 9px;
+  margin: 0;
+}
+
+/* vim: set ts=2 sw=2 tw=80:*/

@@ -1,0 +1,88 @@
+.form-horizontal .radio,
+.form-horizontal .checkbox,
+.form-horizontal .radio-inline,
+.form-horizontal .checkbox-inline {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.form-horizontal .radio,
+.form-horizontal .checkbox {
+  padding-top: 5px;
+}
+
+.form-item .radio,
+.form-item .checkbox {
+  padding-top: 0;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.form-item .checkbox input[type="checkbox"],
+.form-item .radio input[type="radio"] {
+  top: 5px;
+}
+
+input[type="radio"],
+input[type="checkbox"] {
+  padding: 0;
+  margin: 0;
+  line-height: normal;
+}
+
+.form-horizontal .radio,
+.form-horizontal .checkbox {
+  position: relative;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.form-horizontal .radio label,
+.form-horizontal .checkbox label {
+  padding-left: 20px;
+  margin-bottom: 0;
+  font-weight: normal;
+  cursor: pointer;
+}
+
+.form-horizontal .radio input[type="radio"],
+.form-horizontal .checkbox input[type="checkbox"] {
+  position: absolute;
+  margin-left: -20px;
+}
+
+.radio-inline,
+.checkbox-inline {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  font-weight: normal;
+  cursor: pointer;
+}
+
+.radio-inline + .radio-inline,
+.checkbox-inline + .checkbox-inline {
+  margin-top: 0;
+  margin-left: 10px;
+}
+
+.radio-inline.disabled,
+.checkbox-inline.disabled,
+input[type="radio"][disabled],
+input[type="checkbox"][disabled],
+input[type="text"][disabled],
+input[type="radio"].disabled,
+input[type="checkbox"].disabled,
+input[type="text"].disabled,
+fieldset[disabled] input[type="radio"],
+fieldset[disabled] input[type="checkbox"] {
+  cursor: not-allowed;
+}
+
+.radio.disabled label,
+.checkbox.disabled label,
+fieldset[disabled] .radio label,
+fieldset[disabled] .checkbox label {
+  cursor: not-allowed;
+}
+

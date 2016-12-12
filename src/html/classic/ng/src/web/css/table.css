@@ -1,0 +1,45 @@
+/* table */
+
+table {
+  font-size: 12px;
+  border: 0;
+}
+
+.table {
+  text-align: left;
+  width: 100%;
+  border-spacing: 2px;
+}
+
+.table th,
+.table td {
+  padding: 4px;
+}
+
+.table th {
+  color: #FFFFFF;
+  background-color: #3A3A3A;
+  font-weight: bold;
+}
+
+.table thead a {
+  text-decoration: none;
+}
+
+.table thead a:hover {
+  text-decoration: underline;
+}
+
+.table tfoot tr {
+  background: #DDDDDD;
+}
+
+.table-stripped > tbody > tr:nth-child(odd) {
+  background-color: #EEEEEE;
+}
+
+.table-stripped > tbody > tr:hover {
+  background: #DDDDDD;
+}
+
+/* vim: set ts=2 sw=2 tw=80:*/

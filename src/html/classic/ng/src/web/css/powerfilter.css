@@ -1,0 +1,8 @@
+.powerfilter .select2-container {
+    min-width: 100px;
+}
+
+.powerfilter .form-group,
+.powerfilter .form-group .control-label {
+    margin-right: 5px;
+}

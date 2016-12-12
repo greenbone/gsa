@@ -1,0 +1,40 @@
+/* Menu Bar */
+
+.menubar {
+  background-color: #393637;
+}
+
+.menubar ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.menubar > ul {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+}
+
+/* Set background of first menu entry */
+.menubar .menu > a:hover ~ ul > .menu-entry:nth-child(2) > a {
+  background: #99CE48;
+}
+
+.menubar .menu-section {
+  border-top: 1px solid #b0b0b0;
+}
+
+/* Sticky menubar */
+
+.menubar  .greenbone-icon {
+  visibility: hidden;
+}
+
+.sticky.menubar .greenbone-icon {
+  visibility: visible;
+}
+
+.sticky {
+  z-index: 20;
+}

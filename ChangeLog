@@ -1,5 +1,29 @@
 2016-12-12  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	Preperation for adding the Single Page Application based on react
+
+	The single page application can be devided into two parts: First a javascript
+	api for the gmp and second the actual web application based on react.
+
+	* src/html/classic/ng/src/*.js: Common js files for gmp api and web
+	application.
+
+	* src/html/classic/ng/src/web: React web components building the new gsa
+	single page app.
+
+	* src/html/classic/ng/src/gmp: GMP JavaScript api files
+
+	* src/html/classic/ng/public/index.html: HTML template for the main entry
+	file.
+
+	* src/html/classic/ng/public/config.js: Empty config. The config file can be
+	used to set sever url and port for the ajax requests.
+
+	* src/html/classic/ng/package.json: node package json file describing the
+	js application, its dependencies and scripts.
+
+2016-12-12  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_dashboard.js
 	(DashboardDisplay.prototype._rebuildFilterSelection): Fix removing sub
 	elements of selects. A jquery selectAll function is not available.

@@ -1,0 +1,9 @@
+html, body, #app, #app > div, #main {
+  height: 100%;
+}
+
+main {
+  padding: 5px 10px;
+}
+
+/* vim: set ts=2 sw=2 tw=80:*/
