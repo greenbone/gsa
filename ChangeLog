@@ -1,5 +1,11 @@
 2016-12-12  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/gsa_dashboard.js
+	(DashboardDisplay.prototype._rebuildFilterSelection): Fix removing sub
+	elements of selects. A jquery selectAll function is not available.
+
+2016-12-12  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_dashboard.js (initDisplaysFromStrings):
 	Always have a valid js based config in a dashboard. This fixes cancelling
 	editing of a dashboard if it has been initalized from a string config.
