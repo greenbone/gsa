@@ -1,5 +1,14 @@
 2016-12-12  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/web/css/jquery-ui.structure.min.css,
+	src/web/css/jquery-ui.theme.min.css: Remove minimized jquer-ui css files. They
+	are not required and used anymore.
+
+	* src/web/css/jquery-ui.theme.css: Use same path to images as the original css
+	file.
+
+2016-12-12  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	Preperation for adding the Single Page Application based on react
 
 	The single page application can be devided into two parts: First a javascript
