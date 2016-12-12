@@ -1448,19 +1448,33 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </p>
 
       <p>
-        Optionally the contents of an SSH user key database file can be given
-        in the "Known Hosts" field, which will be used in addition to the
-        default files ~/.ssh/known_hosts and ~/.ssh/known_hosts2.
-      </p>
-
-      <p>
-        The following replacements in the filename will be done:
+        The following replacements will be done in the "Path" field:
       </p>
 
       <ul>
         <li> $$: $ </li>
         <li> $n: task name </li>
       </ul>
+
+      <p>
+        Optionally, the "Known Hosts" field can list a number of known hosts.
+        Each line specifies a single host in the format "<code>host protocol public_key</code>",
+        for example:
+      </p>
+
+      <p>
+        <pre>    localhost ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAAB...P3pCquVb</pre>
+      </p>
+
+      <p>
+        Note that the host name must exactly match the "Host" field.  If "Host" is
+        an IP then the host in "Known Hosts" must also be an IP.
+      </p>
+
+      <p>
+        The "Known Hosts" field will be used in
+        addition to the system's default SSH known hosts configuration.
+      </p>
 
       <h3>SNMP</h3>
 
