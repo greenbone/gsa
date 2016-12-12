@@ -21,9 +21,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import X2JS from 'x2js';
-
-const x2js = new X2JS();
+const x2js = new window.X2JS();
 
 export const is_array = Array.isArray;
 

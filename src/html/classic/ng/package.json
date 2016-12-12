@@ -35,8 +35,7 @@
     "react-dom": "^15.3.2",
     "react-router": "^3.0.0",
     "react-sticky": "<5.0.5",
-    "select2": "^4.0.3",
-    "x2js": "github:abdmob/x2js#v1.2.0"
+    "select2": "^4.0.3"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
