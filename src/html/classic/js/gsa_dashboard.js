@@ -861,6 +861,7 @@
 
       this.addNewRow({config: config});
     }
+    this.config = this.getConfig(); // create js config to have a always valid config
     this._onWindowResized();
     return this;
   };
