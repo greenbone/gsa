@@ -1,3 +1,10 @@
+2016-12-12  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Backport r26890.
+
+	* src/html/classic/help.xsl (new_alert.html): Improve the description of
+	the Known Hosts field.
+
 2016-12-06  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Backport r26814.
@@ -31,7 +38,7 @@
 
 	* src/html/classic/js/gsa_topology_chart.js: Use selectAll and remove
 	to clear svg element.
-	
+
 2016-12-02  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Backport r26757.
@@ -61,14 +68,14 @@
 	* src/html/classic/js/gsa_graphics_base.js (addHtmlTableMenuItem):
 	Create Blob with empty string if data is undefined.
 
-	* src/html/classic/js/gsa_h_bar_chart.js: Use "bar" instead of 
+	* src/html/classic/js/gsa_h_bar_chart.js: Use "bar" instead of
 	"BarChartGenerator" in get_chart_generator calls.
 
 	* src/html/classic/js/gsa_polyfill.js: New JavaScript file.
 
 	* src/html/classic/js/lib/d3.tip.js (getScreenBBox): Fix loop condition
 	for finding ancestor element with getScreenCTM function.
-	
+
 2016-11-16  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	Backport r26692
@@ -134,7 +141,7 @@
 	* src/html/classic/omp.xsl (get_my_settings): Restrict scanner and
 	credential type selections to the ones allowed for each default
 	scanner or credential.
-	
+
 	* src/html/classic/wizard.xsl (quick-task-wizard): Restrict credential
 	type selections to the ones allowed for each credential.
 
