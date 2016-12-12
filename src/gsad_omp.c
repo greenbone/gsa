@@ -14281,9 +14281,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                                           ? ""
                                           : report_id,
                                         delta_report_id ? delta_report_id : "0",
-                                        format_id
-                                         ? format_id
-                                         : "a994b278-1f62-11e1-96ac-406186ea4fc5");
+                                        format_id ? format_id : "");
   else
     ret = openvas_connection_sendf_xml (&connection,
                                         " ignore_pagination=\"%d\""
@@ -14305,9 +14303,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                                          ? ""
                                          : report_id,
                                         delta_report_id ? delta_report_id : "0",
-                                        format_id
-                                         ? format_id
-                                         : "a994b278-1f62-11e1-96ac-406186ea4fc5",
+                                        format_id ? format_id : "",
                                         first_result,
                                         max_results,
                                         sort_field ? sort_field : "severity",
