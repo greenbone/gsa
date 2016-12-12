@@ -1,10 +1,13 @@
 {
-  "name": "omp.js",
+  "name": "gsa",
   "version": "0.1.0",
-  "description": "JavaScript client library speaking OpenVAS management protocol",
+  "description": "Greenbone Security Assistent Next Generation",
   "keywords": [
     "openvas",
-    "omp"
+    "gmp",
+    "gsa",
+    "greenbone",
+    "greenbone security assistent"
   ],
   "author": "Björn Ricks <bjoern.ricks@greenbone.net>",
   "license": "GPL-2.0+",
