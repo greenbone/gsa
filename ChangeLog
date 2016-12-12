@@ -1,5 +1,10 @@
 2016-12-12  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/package.json: Adjust dependencies for
+	eslint-confg-react-app peer dependencies.
+
+2016-12-12  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/package.json, src/html/classic/ng/src/utils.js: Remove
 	dependency for x2js. There is no package for this x2js on npmjs.org. Therefore
 	the npm version of debian stable seems to have issues with this package during
