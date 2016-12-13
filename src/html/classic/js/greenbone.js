@@ -75,6 +75,7 @@
   gsa.upper_case_first = upper_case_first;
   gsa.start_auto_refresh = start_auto_refresh;
   gsa.stop_auto_refresh = stop_auto_refresh;
+  gsa.set_token = set_token;
 
   gsa.OMPRequest = OMPRequest;
 
@@ -94,6 +95,11 @@
   else {
     gsa.log.debug = function() {
     };
+  }
+
+  function set_token(token) {
+    global.sessionStorage.token = token;
+    gsa.token = token;
   }
 
   function is_date(value) {

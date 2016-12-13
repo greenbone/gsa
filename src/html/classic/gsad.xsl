@@ -185,6 +185,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <script src="/js/greenbone-i18n.js" type="text/javascript"></script>
         <script src="/js/greenbone-dialog.js" type="text/javascript"></script>
         <script src="/js/greenbone-init.js" type="text/javascript"></script>
+        <script type="text/javascript">
+          gsa.set_token("<xsl:value-of select="gsa:escape-js (/envelope/params/token)"/>");
+        </script>
         <xsl:apply-templates select="envelope/autorefresh" mode="html-header-meta" />
       </xsl:otherwise>
     </xsl:choose>

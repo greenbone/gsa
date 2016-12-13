@@ -1,5 +1,17 @@
 2016-12-13  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/js/greenbone.js: Add function to set the current token. The
+	token is also stored in the session storage which allows for better
+	interoperability with gsa ng without having to relogin.
+
+	* src/html/classic/graphics.xsl: Remove setting the js gsa token from
+	graphics.xsl. Setting the token is now included in gsad.xsl.
+
+	* src/html/classic/gsad.xsl: Use new gsa.set_token function to always store
+	the current token in the session storage.
+
+2016-12-13  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* cmake/FindPythonModule.cmake, src/po/CMakeLists.txt: Move
 	FindPythonModule.cmake from root to cmake directory.
 
