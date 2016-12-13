@@ -1,5 +1,10 @@
 2016-12-13  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* cmake/FindPythonModule.cmake, src/po/CMakeLists.txt: Move
+	FindPythonModule.cmake from root to cmake directory.
+
+2016-12-13  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	Allow to activate gsa ng single page app
 
 	* CMakeLists.txt: Load cmake modules from cmake/ subdir and allow to activate
