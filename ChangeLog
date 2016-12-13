@@ -1,5 +1,10 @@
 2016-12-13  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/package.json: Add repo info to package.json to keep npm
+	quiet.
+
+2016-12-13  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/omp.xsl (list-window-line-icons): Fix checking for edit
 	permissions when displaying the icon title if resource can't be edited.
 
