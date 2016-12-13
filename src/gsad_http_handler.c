@@ -604,8 +604,12 @@ handle_logout (http_connection_t *connection,
 
   user_remove (user);
 
+#ifdef USE_GSA_NG
+  return send_redirect_to_urn (connection, LOGIN_URL"?type=logout", NULL);
+#else
   return handler_send_login_page (connection,MHD_HTTP_OK,
                                   "Successfully logged out.", NULL);
+#endif
 }
 
 int
@@ -1039,6 +1043,80 @@ handle_system_report (http_connection_t *connection,
                                 http_response_code, 0);
 }
 
+int
+handle_index_ng (http_connection_t *connection,
+                 const char *method, const char *url,
+                 gsad_connection_info_t *con_info,
+                 http_handler_t *handler, void *data)
+{
+  int http_response_code;
+  content_type_t content_type;
+  http_response_t *response;
+
+  response = file_content_response (connection, url,
+                                    "ng/index.html",
+                                    &http_response_code,
+                                    &content_type,
+                                    NULL);
+  return handler_send_response (connection, response, &content_type,
+                                NULL, http_response_code, 0);
+}
+
+int
+handle_config_ng (http_connection_t *connection,
+                 const char *method, const char *url,
+                 gsad_connection_info_t *con_info,
+                 http_handler_t *handler, void *data)
+{
+  int http_response_code;
+  content_type_t content_type;
+  http_response_t *response;
+
+  response = file_content_response (connection, url,
+                                    "ng/config.js",
+                                    &http_response_code,
+                                    &content_type,
+                                    NULL);
+  return handler_send_response (connection, response, &content_type,
+                                NULL, http_response_code, 0);
+}
+
+int
+handle_static_ng_file (http_connection_t *connection, const char * method,
+                       const char *url, gsad_connection_info_t *con_info,
+                       http_handler_t *handler, void * data)
+{
+  int http_response_code;
+  gchar* path;
+  http_response_t *response;
+  content_type_t content_type;
+  char *content_disposition = NULL;
+  char *default_file = "login/login.html";
+
+  /** @todo validation, URL length restriction (allows you to view ANY
+    *       file that the user running the gsad might look at!) */
+  /** @todo use glibs path functions */
+  /* Attempt to prevent disclosing non-gsa content. */
+  if (strstr (url, ".."))
+    path = g_strconcat (default_file, NULL);
+  else
+    {
+      /* Ensure that url is relative. */
+      const char* relative_url = url;
+      if (*url == '/') relative_url = url + 1;
+      path = g_strconcat ("ng/", relative_url, NULL);
+    }
+
+  g_debug ("Requesting url %s for static ng path %s", url, path);
+
+  response = file_content_response (connection, url, path, &http_response_code,
+                                    &content_type, &content_disposition);
+  g_free (path);
+
+  return handler_send_response (connection, response, &content_type,
+                                content_disposition, http_response_code, 0);
+}
+
 http_handler_t *
 init_http_handlers()
 {
@@ -1071,9 +1149,20 @@ init_http_handlers()
                    handle_static_file);
 #endif
 
+#ifdef USE_GSA_NG
+  url_handler_add (anon_url_handlers, "^/login/?$", handle_index_ng);
+#else
   url_handler_add (anon_url_handlers, "^/login/?$", handle_login_page);
+#endif
   url_handler_add (anon_url_handlers, "^/login/.+$",
                    handle_redirect_to_login_page);
+
+#ifdef USE_GSA_NG
+  url_handler_add (anon_url_handlers, "^/ng(/.*)?$", handle_index_ng);
+  url_handler_add (anon_url_handlers, "^/config.js$", handle_config_ng);
+  url_handler_add (anon_url_handlers, "^/static/(img|js|css)/.+$",
+                   handle_static_ng_file);
+#endif
 
   user_url_handlers = url_handler_new ("^/logout/?$", handle_logout);
   http_handler_add (user_url_handlers, credential_handler);

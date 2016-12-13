@@ -36,6 +36,8 @@ endif (POLICY CMP0005)
 # Needed for 'pkg_check_modules' function
 include (FindPkgConfig)
 
+SET(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
+
 if (NOT PKG_CONFIG_FOUND)
   message(FATAL_ERROR "pkg-config executable not found. Aborting.")
 endif (NOT PKG_CONFIG_FOUND)
@@ -245,6 +247,13 @@ set (GSA_CONFIG_FILE        "${SYSCONFDIR}/openvas/gsa.conf")
 if (NOT OPENVAS_RUN_DIR)
   set (OPENVAS_RUN_DIR      "${LOCALSTATEDIR}/run")
 endif (NOT OPENVAS_RUN_DIR)
+
+if (USE_GSA_NG MATCHES "yes")
+  message ("-- Next-Gen Single Page App will be activated.")
+
+  add_definitions (-DUSE_GSA_NG)
+  add_subdirectory (src/html/classic/ng)
+endif (USE_GSA_NG MATCHES "yes")
 
 message ("-- Install prefix: ${CMAKE_INSTALL_PREFIX}")
 

@@ -1,5 +1,28 @@
 2016-12-13  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	Allow to activate gsa ng single page app
+
+	* CMakeLists.txt: Load cmake modules from cmake/ subdir and allow to activate
+	gsa ng with the USE_GSA_NG cmake switch (-DCMAKE_GSA_NG=yes)
+
+	* cmake/FindNode.cmake, cmake/FindNpm.cmake, cmake/FindYarn.cmake: Add find
+	package cmake scripts for nodejs, npm and yarn.
+
+	* src/gsad_http_handler.c: Add new http handlers for gsa ng. The handlers will
+	only be used if USE_GSA_NG is defined.
+
+	* src/html/classic/ng/CMakeLists.txt: Add CMakeLists.txt for building and
+	installing gsa ng.
+
+	* src/html/classic/ng/src/web/css/images: Add symbolic link to the current css
+	images. This is only required until gsa is completely based on gsa ng.
+
+	* src/html/classic/ng/yarn.lock: Add a yarn lock file. This allows
+	reproducable builds for gsa ng on different machines with different
+	node environments.
+
+2016-12-13  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/models/chartpreferences.js: Chart preferences
 	may be old and contain only strings not json as a string. Avoid failing if
 	json could not be parsed.
