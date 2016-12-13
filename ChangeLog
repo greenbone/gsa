@@ -1,3 +1,12 @@
+2016-12-13  Matthew Mundell <matthew.mundell@greenbone.net>
+
+	Backport r26214, by Timo Pollmeier.
+
+	* src/gsad_omp.c (edit_task): Add missing placeholder for get_groups
+	OMP command.
+	(get_task): Remove unused extra openvas_server_sendf parameter.
+	(save_osp_prefs): Add explicit cast of param_name to char*.
+
 2016-10-12  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/gsad_omp.c (save_config_nvt_omp): Use correct variable
@@ -25,7 +34,7 @@
 
 	* src/html/classic/omp.xsl (report-hosts-link): Add param "host"
 	and get result counts directly from host element.
-	(report [hosts]): Get ports count directly from host element and 
+	(report [hosts]): Get ports count directly from host element and
 	add host parameter for report-hosts-link template.
 
 2016-10-07  Timo Pollmeier <timo.pollmeier@greenbone.net>
