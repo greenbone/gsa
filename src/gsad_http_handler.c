@@ -849,6 +849,9 @@ handle_help_pages (http_connection_t *connection,
           "<charts>%i</charts>"
           "<guest>%d</guest>"
           "<client_address>%s</client_address>"
+#ifdef USE_GSA_NG
+          "<ng/>"
+#endif
           "<help><%s/></help>",
           GSAD_VERSION,
           vendor_version_get (),

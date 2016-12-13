@@ -1,5 +1,13 @@
 2016-12-13  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/gsad_http.c, src/gsad_http_handler.c, src/gsad_omp.c: Set ng element on
+	envelope xml if USE_GSA_NG is defined.
+
+	* src/html/classic/gsad.xsl: Link global dashboard and tasks in menu to gsa ng
+	if envelope contains ng element.
+
+2016-12-13  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/greenbone.js: Add function to set the current token. The
 	token is also stored in the session storage which allows for better
 	interoperability with gsa ng without having to relogin.

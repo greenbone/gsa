@@ -512,6 +512,9 @@ xsl_transform_omp (credentials_t * credentials, gchar * xml,
                                  "<charts>%d</charts>"
                                  "<guest>%d</guest>"
                                  "<client_address>%s</client_address>"
+#ifdef USE_GSA_NG
+                                 "<ng/>"
+#endif
                                  "<backend_operation>%.2f</backend_operation>",
                                  GSAD_VERSION,
                                  vendor_version_get (),

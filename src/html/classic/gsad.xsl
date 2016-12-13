@@ -406,6 +406,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:when test="number (/envelope/guest)">
           <div class="empty_top_button"/>
         </xsl:when>
+        <xsl:when test="/envelope/ng">
+          <a class="top_button"
+            href="/ng">
+            <img class="logo" src="/img/greenbone.svg"/>
+            <xsl:value-of select="gsa:i18n ('Dashboard')"/>
+          </a>
+        </xsl:when>
         <xsl:otherwise>
           <a class="top_button"
               href="/omp?cmd=dashboard&amp;token={/envelope/token}">
@@ -426,7 +433,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <divider/>
         <xsl:if test="gsa:may-op ('GET_TASKS')">
           <item>
-            <page>get_tasks</page>
+            <xsl:choose>
+              <xsl:when test="/envelope/ng">
+                <url>/ng/tasks</url>
+              </xsl:when>
+              <xsl:otherwise>
+                <page>get_tasks</page>
+              </xsl:otherwise>
+            </xsl:choose>
             <name><xsl:value-of select="gsa:i18n ('Tasks')"/></name>
           </item>
         </xsl:if>

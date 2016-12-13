@@ -1054,6 +1054,9 @@ gsad_message (credentials_t *credentials, const char *title,
                "<role>%s</role>"
                "<i18n>%s</i18n>"
                "<charts>%i</charts>"
+#ifdef USE_GSA_NG
+               "<ng/>"
+#endif
                "<client_address>%s</client_address>",
                GSAD_VERSION,
                vendor_version_get (),
