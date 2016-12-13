@@ -17313,8 +17313,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
     g_string_append (commands, "<get_targets/>");
   g_string_append (commands, "</commands>");
 
-  if (openvas_server_sendf (&session,
-                            commands->str)
+  if (openvas_server_sendf (&session, "%s", commands->str)
       == -1)
     {
       g_string_free (commands, TRUE);

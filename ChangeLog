@@ -1,5 +1,10 @@
 2016-12-13  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	* src/gsad_omp.c (save_my_settings): Add format string to make it easier
+	to compile with warnings.
+
+2016-12-13  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Backport r26890.
 
 	* src/html/classic/help.xsl (new_alert.html): Improve the description of
