@@ -1,5 +1,12 @@
 2016-12-13  Matthew Mundell <matthew.mundell@greenbone.net>
 
+	Backport r26890.
+
+	* src/html/classic/help.xsl (new_alert.html): Improve the description of
+	the Known Hosts field.
+
+2016-12-13  Matthew Mundell <matthew.mundell@greenbone.net>
+
 	Backport r26214, by Timo Pollmeier.
 
 	* src/gsad_omp.c (edit_task): Add missing placeholder for get_groups
