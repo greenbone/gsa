@@ -2009,7 +2009,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
               <xsl:when test="$resource/writable = '0'">
                 <xsl:value-of select="gsa:i18n (concat ($cap-type, ' is not writable'))"/>
               </xsl:when>
-              <xsl:when test="not(gsa:may (concat ('delete_', $type)))">
+              <xsl:when test="not(gsa:may (concat ('modify_', $type)))">
                 <xsl:value-of select="gsa:i18n (concat ('Permission to edit ', $cap-type, ' denied'))"/>
               </xsl:when>
               <xsl:otherwise>
