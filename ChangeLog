@@ -1,5 +1,11 @@
 2016-12-13  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/models/chartpreferences.js: Chart preferences
+	may be old and contain only strings not json as a string. Avoid failing if
+	json could not be parsed.
+
+2016-12-13  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* CMakeLists.txt: Install gsa_dashboard_init.js file.
 
 2016-12-12  Björn Ricks <bjoern.ricks@greenbone.net>

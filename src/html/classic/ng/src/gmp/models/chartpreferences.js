@@ -21,7 +21,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {is_defined, for_each} from '../../utils.js';
+import {is_defined, for_each, log} from '../../utils.js';
 
 import Model from '../model.js';
 
@@ -46,7 +46,15 @@ export class ChartPreferences extends Model {
     let preferences = {};
 
     for_each(elem, pref => {
-      preferences[pref._id] = JSON.parse(pref.value);
+      let value;
+      try {
+        value = JSON.parse(pref.value);
+      }
+      catch (e) {
+        log.warn('Could not parse chart preference value', pref.value);
+        value = pref.value;
+      }
+      preferences[pref._id] = value;
     });
 
     return preferences;
