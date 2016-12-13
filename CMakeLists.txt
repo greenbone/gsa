@@ -315,6 +315,7 @@ install (FILES src/html/classic/js/gsa_bar_chart.js
                src/html/classic/js/gsa_graphics_base.js
                src/html/classic/js/gsa_cloud_chart.js
                src/html/classic/js/gsa_dashboard.js
+               src/html/classic/js/gsa_dashboard_init.js
                src/html/classic/js/gsa_donut_chart.js
                src/html/classic/js/gsa_gantt_chart.js
                src/html/classic/js/gsa_h_bar_chart.js
