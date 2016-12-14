@@ -1237,6 +1237,11 @@ handle_request(void *cls, http_connection_t *connection,
       con_info->params = params_new ();
       con_info->connectiontype = 2;
 
+      MHD_get_connection_values (connection, MHD_GET_ARGUMENT_KIND,
+                                 params_mhd_add, con_info->params);
+
+      params_mhd_validate (con_info->params);
+
       *con_cls = (void *) con_info;
       return MHD_YES;
     }
