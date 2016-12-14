@@ -1448,18 +1448,22 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
       response_data.http_status_code = MHD_HTTP_BAD_REQUEST;
       if (params_given (con_info->params, "token") == 0)
         con_info->response
-         = gsad_message (NULL,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred inside GSA daemon. "
-                         "Diagnostics: Token missing.",
-                         "/omp?cmd=get_tasks", &response_data);
+         = gsad_message_new (NULL,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred inside GSA daemon. "
+                             "Diagnostics: Token missing.",
+                             "/omp?cmd=get_tasks",
+                             params_value_bool (con_info->params, "xml"),
+                             &response_data);
       else
         con_info->response
-         = gsad_message (NULL,
-                         "Internal error", __FUNCTION__, __LINE__,
-                         "An internal error occurred inside GSA daemon. "
-                         "Diagnostics: Token bad.",
-                         "/omp?cmd=get_tasks", &response_data);
+         = gsad_message_new (NULL,
+                             "Internal error", __FUNCTION__, __LINE__,
+                             "An internal error occurred inside GSA daemon. "
+                             "Diagnostics: Token bad.",
+                             "/omp?cmd=get_tasks",
+                             params_value_bool (con_info->params, "xml"),
+                             &response_data);
       con_info->answercode = response_data.http_status_code;
       cmd_response_data_reset (&response_data);
       return 3;
@@ -1471,11 +1475,13 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
     {
       response_data.http_status_code = MHD_HTTP_BAD_REQUEST;
       con_info->response
-       = gsad_message (NULL,
-                       "Internal error", __FUNCTION__, __LINE__,
-                       "An internal error occurred inside GSA daemon. "
-                       "Diagnostics: Bad token.",
-                       "/omp?cmd=get_tasks", &response_data);
+       = gsad_message_new (NULL,
+                           "Internal error", __FUNCTION__, __LINE__,
+                           "An internal error occurred inside GSA daemon. "
+                           "Diagnostics: Bad token.",
+                           "/omp?cmd=get_tasks",
+                           params_value_bool (con_info->params, "xml"),
+                           &response_data);
       con_info->answercode = response_data.http_status_code;
       cmd_response_data_reset (&response_data);
       return 3;
@@ -1625,19 +1631,58 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
       tzset ();
     }
 
+  /* Connect to manager */
+  switch (manager_connect (credentials, &connection, &response_data))
+    {
+      case 0:
+        break;
+      case -1:
+        con_info->response
+            = logout_xml (credentials,
+                          params_value_bool (con_info->params, "xml"),
+                          "Logged out.  OMP service is down.",
+                          &response_data);
+
+        return 3;
+      case -2:
+        con_info->response
+            = gsad_message_new (credentials,
+                                "Internal error", __FUNCTION__, __LINE__,
+                                "An internal error occurred. "
+                                "Diagnostics: Could not authenticate to manager "
+                                "daemon.",
+                                "/omp?cmd=get_tasks",
+                                params_value_bool (con_info->params, "xml"),
+                                &response_data);
+        return 3;
+      default:
+        con_info->response
+            = gsad_message_new (credentials,
+                                "Internal error", __FUNCTION__, __LINE__,
+                                "An internal error occurred. "
+                                "Diagnostics: Failure to connect to manager daemon.",
+                                "/omp?cmd=get_tasks",
+                                params_value_bool (con_info->params, "xml"),
+                                &response_data);
+        return 3;
+    }
+
   /* Handle the usual commands. */
 
   if (!cmd)
     {
       response_data.http_status_code = MHD_HTTP_BAD_REQUEST;
-      con_info->response = gsad_message (credentials,
-                                         "Internal error",
-                                         __FUNCTION__,
-                                         __LINE__,
-                                         "An internal error occurred inside GSA daemon. "
-                                         "Diagnostics: Empty command.",
-                                         "/omp?cmd=get_tasks", &response_data);
+      con_info->response = gsad_message_new (credentials,
+                                             "Internal error",
+                                             __FUNCTION__,
+                                             __LINE__,
+                                             "An internal error occurred inside GSA daemon. "
+                                             "Diagnostics: Empty command.",
+                                             "/omp?cmd=get_tasks",
+                                             params_value_bool (con_info->params, "xml"),
+                                             &response_data);
     }
+
   ELSE (bulk_delete)
   ELSE (clone)
   ELSE (create_agent)
@@ -1815,13 +1860,15 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   else
     {
       response_data.http_status_code = MHD_HTTP_BAD_REQUEST;
-      con_info->response = gsad_message (credentials,
-                                         "Internal error",
-                                         __FUNCTION__,
-                                         __LINE__,
-                                         "An internal error occurred inside GSA daemon. "
-                                         "Diagnostics: Unknown command.",
-                                         "/omp?cmd=get_tasks", &response_data);
+      con_info->response = gsad_message_new (credentials,
+                                             "Internal error",
+                                             __FUNCTION__,
+                                             __LINE__,
+                                             "An internal error occurred inside GSA daemon. "
+                                             "Diagnostics: Unknown command.",
+                                             "/omp?cmd=get_tasks",
+                                             params_value_bool (con_info->params, "xml"),
+                                             &response_data);
     }
 
   if (response_data.redirect)
@@ -2012,11 +2059,13 @@ exec_omp_get (gsad_connection_info_t *con_info,
   else
     {
       response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
-      return gsad_message (credentials,
-                          "Internal error", __FUNCTION__, __LINE__,
-                          "An internal error occurred inside GSA daemon. "
-                          "Diagnostics: No valid command for omp.",
-                          "/omp?cmd=get_tasks", response_data);
+      return gsad_message_new (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred inside GSA daemon. "
+                               "Diagnostics: No valid command for omp.",
+                               "/omp?cmd=get_tasks",
+                               params_value_bool (params, "xml"),
+                               response_data);
     }
 
 
@@ -2494,11 +2543,13 @@ exec_omp_get (gsad_connection_info_t *con_info,
   else
     {
       response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
-      return gsad_message (credentials,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred inside GSA daemon. "
-                           "Diagnostics: Unknown command.",
-                           "/omp?cmd=get_tasks", response_data);
+      return gsad_message_new (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred inside GSA daemon. "
+                               "Diagnostics: Unknown command.",
+                               "/omp?cmd=get_tasks",
+                               params_value_bool (params, "xml"),
+                               response_data);
     }
 }
 

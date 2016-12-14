@@ -1,5 +1,10 @@
 2016-12-14  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/gsad.c, src/gsad_http.c, src/gsad_http_handler.c: Use new
+	gsad_message_new function instead of gsad_message.
+
+2016-12-14  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/gsad_http.h, src/gsad.c (exec_omp_get): Expect gsad_connection_info as
 	parameter instead of http connection. Use already parsed params from passed
 	connnection info.

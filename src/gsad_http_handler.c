@@ -463,11 +463,13 @@ handle_setup_user (http_connection_t *connection,
   if (ret == USER_BAD_TOKEN)
     {
       response_data.http_status_code = MHD_HTTP_BAD_REQUEST;
-      res = gsad_message (NULL,
-          "Internal error", __FUNCTION__, __LINE__,
-          "An internal error occurred inside GSA daemon. "
-          "Diagnostics: Bad token.",
-          "/omp?cmd=get_tasks", &response_data);
+      res = gsad_message_new (NULL,
+                              "Internal error", __FUNCTION__, __LINE__,
+                              "An internal error occurred inside GSA daemon. "
+                              "Diagnostics: Bad token.",
+                              "/omp?cmd=get_tasks",
+                              params_value_bool (con_info->params, "xml"),
+                              &response_data);
 
       response = MHD_create_response_from_buffer (strlen (res), res,
                                                   MHD_RESPMEM_MUST_FREE);
@@ -924,10 +926,12 @@ handle_help_pages (http_connection_t *connection,
   if (template_found == 0)
     {
       response_data.http_status_code = MHD_HTTP_NOT_FOUND;
-      res = gsad_message (credentials,
-                          NOT_FOUND_TITLE, NULL, 0,
-                          NOT_FOUND_MESSAGE,
-                          "/help/contents.html", &response_data);
+      res = gsad_message_new (credentials,
+                              NOT_FOUND_TITLE, NULL, 0,
+                              NOT_FOUND_MESSAGE,
+                              "/help/contents.html",
+                              params_value_bool (con_info->params, "xml"),
+                              &response_data);
     }
   else if (xsl_filename)
     {
@@ -948,10 +952,12 @@ handle_help_pages (http_connection_t *connection,
   if (res == NULL)
     {
       response_data.http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-      res = gsad_message (credentials,
-                          "Invalid request", __FUNCTION__, __LINE__,
-                          "Error generating help page.",
-                          "/help/contents.html", &response_data);
+      res = gsad_message_new (credentials,
+                              "Invalid request", __FUNCTION__, __LINE__,
+                              "Error generating help page.",
+                              "/help/contents.html",
+                              params_value_bool (con_info->params, "xml"),
+                              &response_data);
     }
 
   http_response_code = response_data.http_status_code;

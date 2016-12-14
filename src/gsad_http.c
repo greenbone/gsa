@@ -429,8 +429,9 @@ create_not_found_response(const gchar *url, content_type_t *content_type,
 
   response_data.http_status_code = MHD_HTTP_NOT_FOUND;
 
-  gchar *msg = gsad_message (NULL, NOT_FOUND_TITLE, NULL, 0, NOT_FOUND_MESSAGE,
-                             "/login", &response_data);
+  gchar *msg = gsad_message_new (NULL, NOT_FOUND_TITLE, NULL, 0,
+                                 NOT_FOUND_MESSAGE,
+                                 "/login", 0, &response_data);
   response = MHD_create_response_from_buffer (strlen (msg), (void *) msg,
                                               MHD_RESPMEM_MUST_COPY);
   *http_response_code = response_data.http_status_code;
