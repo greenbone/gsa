@@ -987,22 +987,19 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
  * @param[in]  msg       The response message.
  * @param[in]  backurl   The URL offered to get back to a sane situation.
  *                       If NULL, the tasks page is used.
+ * @param[in]  xml_flag  Flag to indicate if the returned content should contain
+ *                       xml or html.
  * @param[out] response_data   Extra data return for the HTTP response.
  *
  * @return An HTML document as a newly allocated string.
  */
 char *
-gsad_message (credentials_t *credentials, const char *title,
-              const char *function, int line, const char *msg,
-              const char *backurl, cmd_response_data_t *response_data)
+gsad_message_new (credentials_t *credentials, const char *title,
+                  const char *function, int line, const char *msg,
+                  const char *backurl, gboolean xml_flag,
+                  cmd_response_data_t *response_data)
 {
   gchar *xml, *message, *resp;
-  const char* xml_flag;
-
-  if (credentials && credentials->params)
-    xml_flag = params_value (credentials->params, "xml");
-  else
-    xml_flag = NULL;
 
   if (function)
     {
@@ -1081,7 +1078,7 @@ gsad_message (credentials_t *credentials, const char *title,
     }
   g_free (message);
 
-  if (xml_flag && strcmp (xml_flag, "0"))
+  if (xml_flag)
     {
       response_data->content_type = GSAD_CONTENT_TYPE_APP_XML;
       return xml;
@@ -1102,6 +1099,39 @@ gsad_message (credentials_t *credentials, const char *title,
     }
   g_free (xml);
   return resp;
+}
+
+/**
+ * @brief Handles fatal errors.
+ *
+ * @todo Make it accept formatted strings.
+ *
+ * @param[in]  credentials  User authentication information.
+ * @param[in]  title     The title for the message.
+ * @param[in]  function  The function in which the error occurred.
+ * @param[in]  line      The line number at which the error occurred.
+ * @param[in]  msg       The response message.
+ * @param[in]  backurl   The URL offered to get back to a sane situation.
+ *                       If NULL, the tasks page is used.
+ * @param[in]  xml_flag  Flag to indicate if the returned content should contain
+ *                       xml or html.
+ * @param[out] response_data   Extra data return for the HTTP response.
+ *
+ * @return An HTML document as a newly allocated string.
+ */
+char *
+gsad_message (credentials_t *credentials, const char *title,
+              const char *function, int line, const char *msg,
+              const char *backurl, cmd_response_data_t *response_data)
+{
+  gboolean xml_flag = 0;
+
+  if (credentials && credentials->params)
+    xml_flag = params_value_bool (credentials->params, "xml");
+
+  return gsad_message_new (credentials, title, function, line, msg, backurl,
+                           xml_flag, response_data);
+
 }
 
 /**
