@@ -63,6 +63,8 @@ const char *params_value (params_t *, const char *);
 
 int params_value_size (params_t *, const char *);
 
+gboolean params_value_bool (params_t *, const char *);
+
 const char *params_original_value (params_t *, const char *);
 
 const char *params_filename (params_t *, const char *);

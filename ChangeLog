@@ -1,3 +1,7 @@
+2016-12-14  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/gsad_base.c, src/gsad_params.h: Add new function params_value_bool.
+
 2016-12-13  Christian Fischer <christian.fischer@greenbone.net>
 
 	* INSTALL:  Fix typo.

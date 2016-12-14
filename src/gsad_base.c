@@ -454,6 +454,22 @@ params_value (params_t *params, const char *name)
 }
 
 /**
+ * @brief Get boolean value of param.
+ *
+ * @param[in]  params  Params.
+ * @param[in]  name    Name.
+ *
+ * @return 1 if param present and != 0, else 0.
+ */
+gboolean
+params_value_bool (params_t *params, const char *name)
+{
+  param_t *param;
+  param = g_hash_table_lookup (params, name);
+
+  return param ? strcmp (param->value, "0") != 0 : 0;
+}
+/**
  * @brief Get the size of the value of param.
  *
  * @param[in]  params  Params.
