@@ -55,7 +55,7 @@
 #include "gsad_params.h"
 #include "gsad_omp.h"
 #include "gsad_settings.h" /* for vendor_version_get */
-#include "gsad_http.h" /* for gsad_message */
+#include "gsad_http.h" /* for gsad_message, logout_xml */
 #include "gsad_base.h" /* for xsl_transform */
 #include "xslt_i18n.h"
 
@@ -131,179 +131,180 @@ int manager_port = 9390;
 /* Headers. */
 
 static int
-omp (credentials_t *, gchar **, entity_t *, cmd_response_data_t*,
-     const char *);
+omp (openvas_connection_t *, credentials_t *, gchar **, entity_t *,
+     cmd_response_data_t*, const char *);
 
 static int
-ompf (credentials_t *, gchar **, entity_t *, cmd_response_data_t*,
+ompf (openvas_connection_t *, credentials_t *, gchar **, entity_t *,
+      cmd_response_data_t*,
       const char *, ...);
 
-int manager_connect (credentials_t *, openvas_connection_t *, gchar **,
-                     cmd_response_data_t*);
+static char *edit_role (openvas_connection_t *, credentials_t *, params_t *,
+                        const char *, cmd_response_data_t*);
 
-static char *edit_role (credentials_t *, params_t *, const char *,
-                        cmd_response_data_t*);
+static char *edit_task (openvas_connection_t *, credentials_t *, params_t *,
+                        const char *, cmd_response_data_t*);
 
-static char *edit_task (credentials_t *, params_t *, const char *,
-                        cmd_response_data_t*);
+static char *get_alert (openvas_connection_t *, credentials_t *, params_t *,
+                        const char *, cmd_response_data_t*);
 
-static char *get_alert (credentials_t *, params_t *, const char *,
-                        cmd_response_data_t*);
+static char *get_alerts (openvas_connection_t *, credentials_t *, params_t *,
+                         const char *, cmd_response_data_t*);
 
-static char *get_alerts (credentials_t *, params_t *, const char *,
-                         cmd_response_data_t*);
+static char *get_agent (openvas_connection_t *, credentials_t *, params_t *,
+                        const char *, cmd_response_data_t*);
 
-static char *get_agent (credentials_t *, params_t *, const char *,
-                        cmd_response_data_t*);
+static char *get_agents (openvas_connection_t *, credentials_t *, params_t *,
+                         const char *, cmd_response_data_t*);
 
-static char *get_agents (credentials_t *, params_t *, const char *,
-                         cmd_response_data_t*);
+static char *get_asset (openvas_connection_t *, credentials_t *, params_t *,
+                        const char *, cmd_response_data_t*);
 
-static char *get_asset (credentials_t *, params_t *, const char *,
-                        cmd_response_data_t*);
+static char *get_assets (openvas_connection_t *, credentials_t *, params_t *,
+                         const char *, cmd_response_data_t*);
 
-static char *get_assets (credentials_t *, params_t *, const char *,
-                         cmd_response_data_t*);
-
-static char *get_assets_chart (credentials_t *, params_t *, const char *,
-                               cmd_response_data_t*);
+static char *get_assets_chart (openvas_connection_t *, credentials_t *,
+                               params_t *, const char *, cmd_response_data_t*);
 
 
-static char *get_task (credentials_t *, params_t *, const char *,
+static char *get_task (openvas_connection_t *, credentials_t *, params_t *,
+                       const char *, cmd_response_data_t*);
+
+static char *get_tasks (openvas_connection_t *, credentials_t *, params_t *,
+                        const char *, cmd_response_data_t*);
+
+static char *get_tasks_chart (openvas_connection_t *, credentials_t *,
+                              params_t *, const char *, cmd_response_data_t*);
+
+static char *get_trash (openvas_connection_t *, credentials_t *, params_t *,
+                        const char *, cmd_response_data_t*);
+
+static char *get_config_family (openvas_connection_t *, credentials_t *,
+                                params_t *, int, cmd_response_data_t*);
+
+static char *get_config (openvas_connection_t *, credentials_t *, params_t *,
+                         const char *, int, cmd_response_data_t*);
+
+static char *get_configs (openvas_connection_t *, credentials_t *, params_t *,
+                          const char *, cmd_response_data_t*);
+
+static char *get_filter (openvas_connection_t *, credentials_t *, params_t *,
+                         const char *, cmd_response_data_t*);
+
+static char *get_filters (openvas_connection_t *, credentials_t *, params_t *,
+                          const char *, cmd_response_data_t*);
+
+static char *get_group (openvas_connection_t *, credentials_t *, params_t *,
+                        const char *, cmd_response_data_t*);
+
+static char *get_groups (openvas_connection_t *, credentials_t *, params_t *,
+                         const char *, cmd_response_data_t*);
+
+static char *get_credential (openvas_connection_t *, credentials_t *,
+                             params_t *, const char *, cmd_response_data_t*);
+
+static char *get_credentials (openvas_connection_t *, credentials_t *,
+                              params_t *, const char *, cmd_response_data_t*);
+
+static char *get_notes (openvas_connection_t *, credentials_t *, params_t *,
+                        const char *, cmd_response_data_t*);
+
+static char *get_note (openvas_connection_t *, credentials_t *, params_t *,
+                       const char *, cmd_response_data_t*);
+
+static char *get_nvts (openvas_connection_t *, credentials_t *credentials,
+                       params_t *, const char *, const char *,
                        cmd_response_data_t*);
 
-static char *get_tasks (credentials_t *, params_t *, const char *,
-                        cmd_response_data_t*);
+static char *get_overrides (openvas_connection_t *, credentials_t *, params_t *,
+                            const char *, cmd_response_data_t*);
 
-static char *get_tasks_chart (credentials_t *, params_t *, const char *,
-                              cmd_response_data_t*);
+static char *get_override (openvas_connection_t *, credentials_t *, params_t *,
+                           const char *, cmd_response_data_t*);
 
-static char *get_trash (credentials_t *, params_t *, const char *,
-                        cmd_response_data_t*);
+static char *get_permission (openvas_connection_t *, credentials_t *,
+                             params_t *, const char *, cmd_response_data_t*);
 
-static char *get_config_family (credentials_t *, params_t *, int,
-                                cmd_response_data_t*);
+static char *get_permissions (openvas_connection_t *, credentials_t *,
+                              params_t *, const char *, cmd_response_data_t*);
 
-static char *get_config (credentials_t *, params_t *, const char *, int,
-                         cmd_response_data_t*);
+static char *get_port_list (openvas_connection_t *, credentials_t *, params_t *,
+                            const char *, cmd_response_data_t*);
 
-static char *get_configs (credentials_t *, params_t *, const char *,
-                          cmd_response_data_t*);
+static char *get_port_lists (openvas_connection_t *, credentials_t *,
+                             params_t *, const char *, cmd_response_data_t*);
 
-static char *get_filter (credentials_t *, params_t *, const char *,
-                         cmd_response_data_t*);
+static char *edit_port_list (openvas_connection_t *, credentials_t *,
+                             params_t *, const char *, cmd_response_data_t*);
 
-static char *get_filters (credentials_t *, params_t *, const char *,
-                          cmd_response_data_t*);
+static char *get_tag (openvas_connection_t *, credentials_t *, params_t *,
+                      const char *, cmd_response_data_t*);
 
-static char *get_group (credentials_t *, params_t *, const char *,
-                        cmd_response_data_t*);
+static char *get_tags (openvas_connection_t *, credentials_t *, params_t *,
+                       const char *, cmd_response_data_t*);
 
-static char *get_groups (credentials_t *, params_t *, const char *,
-                         cmd_response_data_t*);
+static char *get_target (openvas_connection_t *, credentials_t *, params_t *,
+                         const char *, cmd_response_data_t*);
 
-static char *get_credential (credentials_t *, params_t *, const char *,
-                             cmd_response_data_t*);
+static char *get_targets (openvas_connection_t *, credentials_t *, params_t *,
+                          const char *, cmd_response_data_t*);
 
-static char *get_credentials (credentials_t *, params_t *, const char *,
-                              cmd_response_data_t*);
+static char *get_report (openvas_connection_t *, credentials_t *, params_t *,
+                         const char *, gsize *, gchar **, char **, const char *,
+                         int *, cmd_response_data_t*);
 
-static char *get_notes (credentials_t *, params_t *, const char *,
-                        cmd_response_data_t*);
+static char *get_report_format (openvas_connection_t *, credentials_t *,
+                                params_t *, const char *, cmd_response_data_t*);
 
-static char *get_note (credentials_t *, params_t *, const char *,
-                       cmd_response_data_t*);
-
-static char *get_nvts (credentials_t *credentials, params_t *,
-                       const char *, const char *, cmd_response_data_t*);
-
-static char *get_overrides (credentials_t *, params_t *, const char *,
-                            cmd_response_data_t*);
-
-static char *get_override (credentials_t *, params_t *, const char *,
-                           cmd_response_data_t*);
-
-static char *get_permission (credentials_t *, params_t *, const char *,
-                             cmd_response_data_t*);
-
-static char *get_permissions (credentials_t *, params_t *, const char *,
-                              cmd_response_data_t*);
-
-static char *get_port_list (credentials_t *, params_t *, const char *,
-                            cmd_response_data_t*);
-
-static char *get_port_lists (credentials_t *, params_t *, const char *,
-                             cmd_response_data_t*);
-
-static char *edit_port_list (credentials_t *, params_t *, const char *,
-                             cmd_response_data_t*);
-
-static char *get_tag (credentials_t *, params_t *, const char *,
-                      cmd_response_data_t*);
-
-static char *get_tags (credentials_t *, params_t *, const char *,
-                       cmd_response_data_t*);
-
-static char *get_target (credentials_t *, params_t *, const char *,
-                         cmd_response_data_t*);
-
-static char *get_targets (credentials_t *, params_t *, const char *,
-                          cmd_response_data_t*);
-
-static char *get_report (credentials_t *, params_t *, const char *, gsize *,
-                         gchar **, char **, const char *, int *,
-                         cmd_response_data_t*);
-
-static char *get_report_format (credentials_t *, params_t *, const char *,
-                                cmd_response_data_t*);
-
-static char *get_report_formats (credentials_t *, params_t *, const char *,
+static char *get_report_formats (openvas_connection_t *, credentials_t *,
+                                 params_t *, const char *,
                                  cmd_response_data_t*);
 
-static char *get_report_section (credentials_t *, params_t *, const char *,
+static char *get_report_section (openvas_connection_t *, credentials_t *,
+                                 params_t *, const char *,
                                  cmd_response_data_t*);
 
-static char *get_reports (credentials_t *, params_t *, const char *,
-                          cmd_response_data_t*);
+static char *get_reports (openvas_connection_t *, credentials_t *, params_t *,
+                          const char *, cmd_response_data_t*);
 
-static char *get_result_page (credentials_t *, params_t *, const char *,
-                              cmd_response_data_t*);
+static char *get_result_page (openvas_connection_t *, credentials_t *,
+                              params_t *, const char *, cmd_response_data_t*);
 
-static char *get_results (credentials_t *, params_t *, const char *,
-                          cmd_response_data_t*);
+static char *get_results (openvas_connection_t *, credentials_t *, params_t *,
+                          const char *, cmd_response_data_t*);
 
-static char *get_role (credentials_t *, params_t *, const char *,
-                       cmd_response_data_t*);
+static char *get_role (openvas_connection_t *, credentials_t *, params_t *,
+                       const char *, cmd_response_data_t*);
 
-static char *get_roles (credentials_t *, params_t *, const char *,
-                        cmd_response_data_t*);
+static char *get_roles (openvas_connection_t *, credentials_t *, params_t *,
+                        const char *, cmd_response_data_t*);
 
-static char *get_scanner (credentials_t *, params_t *, const char *,
-                          cmd_response_data_t*);
+static char *get_scanner (openvas_connection_t *, credentials_t *, params_t *,
+                          const char *, cmd_response_data_t*);
 
-static char *get_scanners (credentials_t *, params_t *, const char *,
-                           cmd_response_data_t*);
+static char *get_scanners (openvas_connection_t *, credentials_t *, params_t *,
+                           const char *, cmd_response_data_t*);
 
-static char *get_schedule (credentials_t *, params_t *, const char *,
-                           cmd_response_data_t*);
+static char *get_schedule (openvas_connection_t *, credentials_t *, params_t *,
+                           const char *, cmd_response_data_t*);
 
-static char *get_schedules (credentials_t *, params_t *, const char *,
-                            cmd_response_data_t*);
+static char *get_schedules (openvas_connection_t *, credentials_t *, params_t *,
+                            const char *, cmd_response_data_t*);
 
-static char *get_user (credentials_t *, params_t *, const char *,
-                       cmd_response_data_t*);
+static char *get_user (openvas_connection_t *, credentials_t *, params_t *,
+                       const char *, cmd_response_data_t*);
 
-static char *get_users (credentials_t *, params_t *, const char *,
-                        cmd_response_data_t*);
+static char *get_users (openvas_connection_t *, credentials_t *, params_t *,
+                        const char *, cmd_response_data_t*);
 
-static char *get_vulns (credentials_t *, params_t *, const char *,
-                        cmd_response_data_t*);
+static char *get_vulns (openvas_connection_t *, credentials_t *, params_t *,
+                        const char *, cmd_response_data_t*);
 
-static char *wizard (credentials_t *, params_t *, const char *,
-                     cmd_response_data_t*);
+static char *wizard (openvas_connection_t *, credentials_t *, params_t *,
+                     const char *, cmd_response_data_t*);
 
-static char *wizard_get (credentials_t *, params_t *, const char *,
-                         cmd_response_data_t*);
+static char *wizard_get (openvas_connection_t *, credentials_t *, params_t *,
+                         const char *, cmd_response_data_t*);
 
 int token_user_remove (const char *);
 
@@ -313,14 +314,15 @@ static gchar *next_page_url (credentials_t *, params_t *, const char *,
                              const char *, const char *, const char *,
                              const char *);
 
-static gchar *action_result_page (credentials_t *, cmd_response_data_t *,
+static gchar *action_result_page (openvas_connection_t *, credentials_t *,
+                                  params_t *, cmd_response_data_t *,
                                   const char*, const char*, const char*,
                                   const char*);
 
-static gchar* response_from_entity (credentials_t*, params_t *,
-                                    entity_t, int, const char*, const char *,
-                                    const char*, const char*, const char*,
-                                    cmd_response_data_t *);
+static gchar* response_from_entity (openvas_connection_t *, credentials_t*,
+                                    params_t *, entity_t, int, const char*,
+                                    const char *, const char*, const char*,
+                                    const char *, cmd_response_data_t *);
 
 /* Helpers. */
 
@@ -436,7 +438,8 @@ find_by_value (gchar *key, gchar *value,  find_by_value_t *data)
 /**
  * @brief Check whether a filter exists
  *
- * @param[in] entity  Response entity.
+ * @param[in] connection  Connection to manager.
+ * @param[in] entity      Response entity.
  *
  * @return 1 success, 0 fail, -1 error, -2 could not send command to server,
  *         -3 could not read entity from server.
@@ -469,14 +472,17 @@ filter_exists (openvas_connection_t *connection, const char *filt_id)
 /**
  * @brief Wrap some XML in an envelope and XSL transform the envelope.
  *
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  xml          XML string.  Freed before exit.
+ * @param[in]  connection     Connection to manager
+ * @param[in]  credentials    Username and password for authentication.
+ * @param[in]  params         HTTP request params
+ * @param[in]  xml            XML string.  Freed before exit.
  * @param[out] response_data  Extra data return for the HTTP response or NULL.
  *
  * @return Result of XSL transformation.
  */
 static char *
-xsl_transform_omp (credentials_t * credentials, gchar * xml,
+xsl_transform_omp (openvas_connection_t *connection,
+                   credentials_t * credentials, params_t *params, gchar * xml,
                    cmd_response_data_t *response_data)
 {
   time_t now;
@@ -561,7 +567,7 @@ xsl_transform_omp (credentials_t * credentials, gchar * xml,
       g_free (warning_elem);
     }
 
-  refresh_interval = params_value (credentials->params, "refresh_interval");
+  refresh_interval = params_value (params, "refresh_interval");
   if ((refresh_interval == NULL) || (strcmp (refresh_interval, "") == 0))
     g_string_append_printf (string,
                             "<autorefresh interval=\"%s\"/>",
@@ -576,7 +582,7 @@ xsl_transform_omp (credentials_t * credentials, gchar * xml,
                      ? g_base64_encode ((guchar*) refresh_interval,
                                         strlen (refresh_interval))
                      : g_strdup (""));
-      ret = ompf (credentials, &response, &entity, response_data,
+      ret = ompf (connection, credentials, &response, &entity, response_data,
                   "<modify_setting"
                   " setting_id=\"578a1c14-e2dc-45ef-a591-89d31391d007\">"
                   "<value>%s</value>"
@@ -627,7 +633,7 @@ xsl_transform_omp (credentials_t * credentials, gchar * xml,
     }
 
   g_string_append (string, "<params>");
-  params_iterator_init (&iter, credentials->params);
+  params_iterator_init (&iter, params);
   while (params_iterator_next (&iter, &name, &param))
     {
       if (name && strcmp (name, ""))
@@ -668,7 +674,7 @@ xsl_transform_omp (credentials_t * credentials, gchar * xml,
                           xml);
   g_free (xml);
 
-  xml_flag = params_value (credentials->params, "xml");
+  xml_flag = params_value (params, "xml");
   if (xml_flag && strcmp (xml_flag, "0"))
     return g_string_free (string, FALSE);
 
@@ -746,8 +752,8 @@ member1 (params_t *params, const char *string)
 /**
  * @brief Check a modify_config response.
  *
- * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  connection   Connection with manager.
+ * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  params       HTTP request parameters.
  * @param[in]  next         Next page command on success.
  * @param[in]  fail_next    Next page command on failure.
@@ -757,8 +763,8 @@ member1 (params_t *params, const char *string)
  * @return XSL transformed error message on failure, NULL on success.
  */
 static char *
-check_modify_config (credentials_t *credentials,
-                     openvas_connection_t *connection, params_t *params,
+check_modify_config (openvas_connection_t *connection,
+                     credentials_t *credentials, params_t *params,
                      const char* next, const char* fail_next, int* success,
                      cmd_response_data_t *response_data)
 {
@@ -813,7 +819,8 @@ check_modify_config (credentials_t *credentials,
 
       response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
       response
-        = action_result_page (credentials, response_data, "Save Config",
+        = action_result_page (connection, credentials, params, response_data,
+                              "Save Config",
                               entity_attribute (entity, "status"),
                               message, next_url);
 
@@ -832,7 +839,7 @@ check_modify_config (credentials_t *credentials,
 
       response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
       response
-        = action_result_page (credentials, response_data, "Save Config",
+        = action_result_page (connection, credentials, params, response_data, "Save Config",
                               entity_attribute (entity, "status"),
                               message, next_url);
 
@@ -846,7 +853,7 @@ check_modify_config (credentials_t *credentials,
     }
 
   response
-    = response_from_entity (credentials, params, entity,
+    = response_from_entity (connection, credentials, params, entity,
                             (no_redirect && strcmp (no_redirect, "0")),
                             NULL, next,
                             NULL, fail_next,
@@ -904,6 +911,7 @@ set_http_status_from_entity (entity_t entity,
 /**
  * @brief Run a single OMP command.
  *
+ * @param[in]  connection     Connection to manager
  * @param[in]  credentials    Username and password for authentication.
  * @param[out] response       Response.
  * @param[out] entity_return  Response entity.
@@ -914,58 +922,38 @@ set_http_status_from_entity (entity_t entity,
  *         error.
  */
 static int
-omp (credentials_t *credentials, gchar **response, entity_t *entity_return,
+omp (openvas_connection_t *connection, credentials_t *credentials,
+     gchar **response, entity_t *entity_return,
      cmd_response_data_t *response_data, const char *command)
 {
-  openvas_connection_t connection;
   int ret;
   entity_t entity;
 
   if (entity_return)
     *entity_return = NULL;
 
-  switch (manager_connect (credentials, &connection, response, response_data))
-    {
-      case 0:
-        break;
-      case -1:
-        return -1;
-      default:
-        if (response_data)
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-        if (response)
-          *response = gsad_message (credentials,
-                                    "Internal error", __FUNCTION__, __LINE__,
-                                    "An internal error occurred. "
-                                    "Diagnostics: Failure to connect to manager daemon.",
-                                    "/omp?cmd=get_tasks", response_data);
-        return -1;
-    }
-
-  ret = openvas_connection_sendf (&connection, "%s", command);
+  ret = openvas_connection_sendf (connection, "%s", command);
   if (ret == -1)
     {
-      openvas_connection_close (&connection);
       return 1;
     }
 
   entity = NULL;
-  if (read_entity_and_text_c (&connection, &entity, response))
+  if (read_entity_and_text_c (connection, &entity, response))
     {
-      openvas_connection_close (&connection);
       return 2;
     }
   if (entity_return)
     *entity_return = entity;
   else
     free_entity (entity);
-  openvas_connection_close (&connection);
   return 0;
 }
 
 /**
  * @brief Run a single OMP command, preparing a response even on error.
  *
+ * @param[in]  connection         Connection to manager
  * @param[out] message_operation  Operation for error message
  * @param[in]  credentials        Username and password for authentication.
  * @param[out] response           Response.
@@ -977,8 +965,9 @@ omp (credentials_t *credentials, gchar **response, entity_t *entity_return,
  *         3 command failed, 4 connect error.
  */
 static int
-simple_ompf (const gchar *message_operation, credentials_t *credentials,
-             gchar **response, cmd_response_data_t *response_data,
+simple_ompf (openvas_connection_t *connection, const gchar *message_operation,
+             credentials_t *credentials, gchar **response,
+             cmd_response_data_t *response_data,
              const char *format, ...)
 {
   int ret;
@@ -990,7 +979,8 @@ simple_ompf (const gchar *message_operation, credentials_t *credentials,
   command = g_markup_vprintf_escaped (format, args);
   va_end (args);
 
-  ret = omp (credentials, response, &entity, response_data, command);
+  ret = omp (connection, credentials, response, &entity, response_data,
+             command);
   g_free (command);
   switch (ret)
     {
@@ -1083,6 +1073,7 @@ simple_ompf (const gchar *message_operation, credentials_t *credentials,
 /**
  * @brief Run a single formatted OMP command.
  *
+ * @param[in]  connection     Connection to manager
  * @param[in]  credentials    Username and password for authentication.
  * @param[out] response       Response.
  * @param[out] entity_return  Response entity.
@@ -1094,7 +1085,8 @@ simple_ompf (const gchar *message_operation, credentials_t *credentials,
  *         2 read error.
  */
 static int
-ompf (credentials_t *credentials, gchar **response, entity_t *entity_return,
+ompf (openvas_connection_t *connection, credentials_t *credentials,
+      gchar **response, entity_t *entity_return,
       cmd_response_data_t *response_data, const char *format, ...)
 {
   int ret;
@@ -1105,7 +1097,8 @@ ompf (credentials_t *credentials, gchar **response, entity_t *entity_return,
   command = g_markup_vprintf_escaped (format, args);
   va_end (args);
 
-  ret = omp (credentials, response, entity_return, response_data, command);
+  ret = omp (connection, credentials, response, entity_return, response_data,
+             command);
   g_free (command);
   return ret;
 }
@@ -1131,10 +1124,9 @@ setting_get_value (openvas_connection_t *connection, const char *setting_id,
 
   *value = NULL;
 
-  ret = openvas_connection_sendf
-          (connection,
-           "<get_settings setting_id=\"%s\"/>",
-           setting_id);
+  ret = openvas_connection_sendf (connection,
+                                  "<get_settings setting_id=\"%s\"/>",
+                                  setting_id);
   if (ret)
     return 1;
 
@@ -1198,7 +1190,8 @@ setting_get_value (openvas_connection_t *connection, const char *setting_id,
       msg = g_strdup_printf (GSAD_MESSAGE_INVALID,                             \
                              "Given " G_STRINGIFY (name) " was invalid",       \
                              op_name);                                         \
-      ret_html = ret_func (credentials, params, msg, response_data);           \
+      ret_html = ret_func (connection, credentials, params, msg,               \
+                          response_data);                                      \
       g_free (msg);                                                            \
       response_data->http_status_code = MHD_HTTP_BAD_REQUEST;                  \
       return ret_html;                                                         \
@@ -1214,7 +1207,7 @@ setting_get_value (openvas_connection_t *connection, const char *setting_id,
 #define CHECK_PARAM_INVALID(name, op_name, next_cmd)                           \
   if (name == NULL)                                                            \
     {                                                                          \
-      return message_invalid (credentials, params, response_data,              \
+      return message_invalid (connection, credentials, params, response_data,  \
                               "Given " G_STRINGIFY (name) " was invalid",      \
                               G_STRINGIFY (MHD_HTTP_BAD_REQUEST),              \
                               op_name, next_cmd);                              \
@@ -1436,7 +1429,9 @@ next_page_url (credentials_t *credentials, params_t *params,
 /**
  * @brief Generate a page containing a result.
  *
+ * @param[in]  connection     Connection to manager
  * @param[in]  credentials    Username and password for authentication.
+ * @param[in]  params       HTTP request params
  * @param[out] response_data  Extra data return for the HTTP response.
  * @param[in]  action         Name of the action.
  * @param[in]  status         Status code.
@@ -1446,7 +1441,8 @@ next_page_url (credentials_t *credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 static gchar *
-action_result_page (credentials_t *credentials,
+action_result_page (openvas_connection_t *connection,
+                    credentials_t *credentials, params_t *params,
                     cmd_response_data_t *response_data,
                     const char* action, const char* status,
                     const char* message, const char* next_url)
@@ -1462,12 +1458,14 @@ action_result_page (credentials_t *credentials,
                                  status ? status : "",
                                  message ? message : "",
                                  next_url ? next_url : "");
-  return xsl_transform_omp (credentials, xml, response_data);
+  return xsl_transform_omp (connection, credentials, params, xml,
+                            response_data);
 }
 
 /**
  * @brief Check a param using the direct response method.
  *
+ * @param[in]  connection     Connection to manager
  * @param[in]  credentials    Username and password for authentication.
  * @param[in]  params         Request parameters.
  * @param[in]  response_data  Response data.
@@ -1479,7 +1477,8 @@ action_result_page (credentials_t *credentials,
  * @return Result of XSL transformation.
  */
 gchar *
-message_invalid (credentials_t *credentials, params_t *params,
+message_invalid (openvas_connection_t *connection,
+                 credentials_t *credentials, params_t *params,
                  cmd_response_data_t *response_data, const char *message,
                  const char *status, const char *op_name, const char *next_cmd)
 {
@@ -1488,8 +1487,8 @@ message_invalid (credentials_t *credentials, params_t *params,
 
   next_url = next_page_url (credentials, params, next_cmd, NULL, op_name,
                             status, message);
-  ret = action_result_page (credentials, response_data, op_name,
-                            G_STRINGIFY (MHD_HTTP_BAD_REQUEST),
+  ret = action_result_page (connection, credentials, params, response_data,
+                            op_name, G_STRINGIFY (MHD_HTTP_BAD_REQUEST),
                             message,
                             next_url);
   g_free (next_url);
@@ -1499,9 +1498,12 @@ message_invalid (credentials_t *credentials, params_t *params,
 
 /**
  * @brief Set redirect or return a basic action_result page based on entity.
+ *
+ * @param[in]  connection     Connection to manager
  */
 static gchar*
-response_from_entity (credentials_t* credentials, params_t *params,
+response_from_entity (openvas_connection_t *connection,
+                      credentials_t* credentials, params_t *params,
                       entity_t entity, int no_redirect,
                       const char* override_next, const char *default_next,
                       const char* override_fail_next,
@@ -1532,8 +1534,8 @@ response_from_entity (credentials_t* credentials, params_t *params,
 
   if (no_redirect || success == 0)
     {
-      res = action_result_page (credentials, response_data, action,
-                                entity_attribute (entity, "status"),
+      res = action_result_page (connection, credentials, params, response_data,
+                                action, entity_attribute (entity, "status"),
                                 entity_attribute (entity, "status_text"),
                                 next_url);
       g_free (next_url);
@@ -1549,6 +1551,7 @@ response_from_entity (credentials_t* credentials, params_t *params,
 /**
  * @brief Generate a page.
  *
+ * @param[in]  connection     Connection to manager
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  response     Extra XML to insert inside page element for XSLT.
@@ -1558,8 +1561,9 @@ response_from_entity (credentials_t* credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 static char *
-generate_page (credentials_t *credentials, params_t *params, gchar *response,
-               const gchar *next, cmd_response_data_t* response_data)
+generate_page (openvas_connection_t *connection, credentials_t *credentials,
+               params_t *params, gchar *response, const gchar *next,
+               cmd_response_data_t* response_data)
 {
   credentials->current_page = page_url (credentials, next);
   if (g_utf8_validate (credentials->current_page, -1, NULL) == FALSE)
@@ -1570,172 +1574,193 @@ generate_page (credentials_t *credentials, params_t *params, gchar *response,
     }
 
   if (strcmp (next, "edit_role") == 0)
-    return edit_role (credentials, params, response, response_data);
+    return edit_role (connection, credentials, params, response, response_data);
 
   if (strcmp (next, "edit_task") == 0)
-    return edit_task (credentials, params, response, response_data);
+    return edit_task (connection, credentials, params, response, response_data);
 
   if (strcmp (next, "get_alerts") == 0)
-    return get_alerts (credentials, params, response, response_data);
+    return get_alerts (connection, credentials, params, response,
+                       response_data);
 
   if (strcmp (next, "get_alert") == 0)
-    return get_alert (credentials, params, response, response_data);
+    return get_alert (connection, credentials, params, response, response_data);
 
   if (strcmp (next, "edit_port_list") == 0)
-    return edit_port_list (credentials, params, response, response_data);
+    return edit_port_list (connection, credentials, params, response,
+                           response_data);
 
   if (strcmp (next, "get_agents") == 0)
-    return get_agents (credentials, params, response, response_data);
+    return get_agents (connection, credentials, params, response,
+                       response_data);
 
   if (strcmp (next, "get_agent") == 0)
-    return get_agent (credentials, params, response, response_data);
+    return get_agent (connection, credentials, params, response, response_data);
 
   if (strcmp (next, "get_asset") == 0)
-    return get_asset (credentials, params, response, response_data);
+    return get_asset (connection, credentials, params, response, response_data);
 
   if (strcmp (next, "get_assets") == 0)
-    return get_assets (credentials, params, response, response_data);
+    return get_assets (connection, credentials, params, response, response_data);
 
   if (strcmp (next, "get_assets_chart") == 0)
-    return get_assets_chart (credentials, params, response, response_data);
+    return get_assets_chart (connection, credentials, params, response,
+                             response_data);
 
   if (strcmp (next, "get_config") == 0)
-    return get_config (credentials, params, response, 0, response_data);
+    return get_config (connection, credentials, params, response, 0,
+                       response_data);
 
   if (strcmp (next, "get_configs") == 0)
-    return get_configs (credentials, params, response, response_data);
+    return get_configs (connection, credentials, params, response,
+                        response_data);
 
   if (strcmp (next, "get_filter") == 0)
-    return get_filter (credentials, params, response, response_data);
+    return get_filter (connection, credentials, params, response,
+                       response_data);
 
   if (strcmp (next, "get_filters") == 0)
-    return get_filters (credentials, params, response, response_data);
+    return get_filters (connection, credentials, params, response,
+                        response_data);
 
   if (strcmp (next, "get_group") == 0)
-    return get_group (credentials, params, response, response_data);
+    return get_group (connection, credentials, params, response, response_data);
 
   if (strcmp (next, "get_groups") == 0)
-    return get_groups (credentials, params, response, response_data);
+    return get_groups (connection, credentials, params, response,
+                       response_data);
 
   if (strcmp (next, "get_credential") == 0)
-    return get_credential (credentials, params, response, response_data);
+    return get_credential (connection, credentials, params, response,
+                           response_data);
 
   if (strcmp (next, "get_credentials") == 0)
-    return get_credentials (credentials, params, response, response_data);
+    return get_credentials (connection, credentials, params, response, response_data);
 
   if (strcmp (next, "get_note") == 0)
-    return get_note (credentials, params, response, response_data);
+    return get_note (connection, credentials, params, response, response_data);
 
   if (strcmp (next, "get_notes") == 0)
-    return get_notes (credentials, params, response, response_data);
+    return get_notes (connection, credentials, params, response, response_data);
 
   if (strcmp (next, "get_nvts") == 0)
-    return get_nvts (credentials, params, NULL, response, response_data);
+    return get_nvts (connection, credentials, params, NULL, response, response_data);
 
   if (strcmp (next, "get_override") == 0)
-    return get_override (credentials, params, response, response_data);
+    return get_override (connection, credentials, params, response, response_data);
 
   if (strcmp (next, "get_overrides") == 0)
-    return get_overrides (credentials, params, response, response_data);
+    return get_overrides (connection, credentials, params, response, response_data);
 
   if (strcmp (next, "get_permission") == 0)
-    return get_permission (credentials, params, response, response_data);
+    return get_permission (connection, credentials, params, response, response_data);
 
   if (strcmp (next, "get_permissions") == 0)
-    return get_permissions (credentials, params, response, response_data);
+    return get_permissions (connection, credentials, params, response, response_data);
 
   if (strcmp (next, "get_port_list") == 0)
-    return get_port_list (credentials, params, response, response_data);
+    return get_port_list (connection, credentials, params, response, response_data);
 
   if (strcmp (next, "get_port_lists") == 0)
-    return get_port_lists (credentials, params, response, response_data);
+    return get_port_lists (connection, credentials, params, response, response_data);
 
   if (strcmp (next, "get_tag") == 0)
-    return get_tag (credentials, params, response, response_data);
+    return get_tag (connection, credentials, params, response, response_data);
 
   if (strcmp (next, "get_tags") == 0)
-    return get_tags (credentials, params, response, response_data);
+    return get_tags (connection, credentials, params, response, response_data);
 
   if (strcmp (next, "get_target") == 0)
-    return get_target (credentials, params, response, response_data);
+    return get_target (connection, credentials, params, response, response_data);
 
   if (strcmp (next, "get_targets") == 0)
-    return get_targets (credentials, params, response, response_data);
+    return get_targets (connection, credentials, params, response, response_data);
 
   if (strcmp (next, "get_task") == 0)
-    return get_task (credentials, params, response, response_data);
+    return get_task (connection, credentials, params, response, response_data);
 
   if (strcmp (next, "get_tasks") == 0)
-    return get_tasks (credentials, params, response, response_data);
+    return get_tasks (connection, credentials, params, response, response_data);
 
   if (strcmp (next, "get_tasks_chart") == 0)
-    return get_tasks_chart (credentials, params, response, response_data);
+    return get_tasks_chart (connection, credentials, params, response, response_data);
 
   if (strcmp (next, "get_report") == 0)
     {
       char *result;
       int error = 0;
 
-      result = get_report (credentials, params, NULL, NULL, NULL,
+      result = get_report (connection, credentials, params, NULL, NULL, NULL,
                            NULL, response, &error, response_data);
 
-      return error ? result : xsl_transform_omp (credentials, result,
+      return error ? result : xsl_transform_omp (connection, credentials,
+                                                 params, result,
                                                  response_data);
     }
 
   if (strcmp (next, "get_report_format") == 0)
-    return get_report_format (credentials, params, response, response_data);
+    return get_report_format (connection, credentials, params, response,
+                              response_data);
 
   if (strcmp (next, "get_report_formats") == 0)
-    return get_report_formats (credentials, params, response, response_data);
+    return get_report_formats (connection, credentials, params, response,
+                               response_data);
 
   if (strcmp (next, "get_report_section") == 0)
-    return get_report_section (credentials, params, response, response_data);
+    return get_report_section (connection, credentials, params, response,
+                               response_data);
 
   if (strcmp (next, "get_reports") == 0)
-    return get_reports (credentials, params, response, response_data);
+    return get_reports (connection, credentials, params, response,
+                        response_data);
 
   if (strcmp (next, "get_results") == 0)
-    return get_results (credentials, params, response, response_data);
+    return get_results (connection, credentials, params, response,
+                        response_data);
 
   if (strcmp (next, "get_result") == 0)
-    return get_result_page (credentials, params, response, response_data);
+    return get_result_page (connection, credentials, params, response,
+                            response_data);
 
   if (strcmp (next, "get_role") == 0)
-    return get_role (credentials, params, response, response_data);
+    return get_role (connection, credentials, params, response, response_data);
 
   if (strcmp (next, "get_roles") == 0)
-    return get_roles (credentials, params, response, response_data);
+    return get_roles (connection, credentials, params, response, response_data);
 
   if (strcmp (next, "get_scanner") == 0)
-    return get_scanner (credentials, params, response, response_data);
+    return get_scanner (connection, credentials, params, response,
+                        response_data);
 
   if (strcmp (next, "get_scanners") == 0)
-    return get_scanners (credentials, params, response, response_data);
+    return get_scanners (connection, credentials, params, response,
+                         response_data);
 
   if (strcmp (next, "get_schedule") == 0)
-    return get_schedule (credentials, params, response, response_data);
+    return get_schedule (connection, credentials, params, response,
+                         response_data);
 
   if (strcmp (next, "get_schedules") == 0)
-    return get_schedules (credentials, params, response, response_data);
+    return get_schedules (connection, credentials, params, response,
+                          response_data);
 
   if (strcmp (next, "get_user") == 0)
-    return get_user (credentials, params, response, response_data);
+    return get_user (connection, credentials, params, response, response_data);
 
   if (strcmp (next, "get_users") == 0)
-    return get_users (credentials, params, response, response_data);
+    return get_users (connection, credentials, params, response, response_data);
 
   if (strcmp (next, "get_vulns") == 0)
-    return get_vulns (credentials, params, response, response_data);
+    return get_vulns (connection, credentials, params, response, response_data);
 
   if (strcmp (next, "get_info") == 0)
-    return get_info (credentials, params, response, response_data);
+    return get_info (connection, credentials, params, response, response_data);
 
   if (strcmp (next, "wizard") == 0)
-    return wizard (credentials, params, response, response_data);
+    return wizard (connection, credentials, params, response, response_data);
 
   if (strcmp (next, "wizard_get") == 0)
-    return wizard_get (credentials, params, response, response_data);
+    return wizard_get (connection, credentials, params, response, response_data);
 
   return NULL;
 }
@@ -1743,15 +1768,17 @@ generate_page (credentials_t *credentials, params_t *params, gchar *response,
 /**
  * @brief Generate next page.
  *
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- * @param[in]  response     Extra XML to insert inside page element for XSLT.
+ * @param[in]  connection     Connection to manager
+ * @param[in]  credentials    Username and password for authentication.
+ * @param[in]  params         Request parameters.
+ * @param[in]  response       Extra XML to insert inside page element for XSLT.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 static char *
-next_page (credentials_t *credentials, params_t *params, gchar *response,
+next_page (openvas_connection_t *connection, credentials_t *credentials,
+           params_t *params, gchar *response,
            cmd_response_data_t* response_data)
 {
   const char *next;
@@ -1760,30 +1787,32 @@ next_page (credentials_t *credentials, params_t *params, gchar *response,
   if (next == NULL)
     return NULL;
 
-  return generate_page (credentials, params, response, next, response_data);
+  return generate_page (connection, credentials, params, response, next,
+                        response_data);
 }
 
 /**
  * @brief Get one resource, XSL transform the result.
  *
- * @param[in]  type         Type of resource.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[in]  connection     Connection to manager
+ * @param[in]  type           Type of resource.
+ * @param[in]  credentials    Username and password for authentication.
+ * @param[in]  params         Request parameters.
+ * @param[in]  extra_xml      Extra XML to insert inside page element.
  * @param[in]  extra_attribs  Extra attributes for OMP GET command.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_one (const char *type, credentials_t * credentials, params_t *params,
+get_one (openvas_connection_t *connection, const char *type,
+         credentials_t * credentials, params_t *params,
          const char *extra_xml, const char *extra_attribs,
          cmd_response_data_t* response_data)
 {
   GString *xml;
-  openvas_connection_t connection;
   int ret;
-  gchar *html, *end, *id_name;
+  gchar *end, *id_name;
   const char *id, *sort_field, *sort_order, *filter, *first, *max;
 
   id_name = g_strdup_printf ("%s_id", type);
@@ -1802,24 +1831,6 @@ get_one (const char *type, credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_tasks", response_data);
     }
 
-  switch (manager_connect (credentials, &connection, &html, response_data))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting a resource. "
-                             "The resource is currently not available. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_tasks", response_data);
-    }
-
   xml = g_string_new ("");
   g_string_append_printf (xml, "<get_%s>", type);
 
@@ -1832,7 +1843,7 @@ get_one (const char *type, credentials_t * credentials, params_t *params,
 
       response = NULL;
       entity = NULL;
-      switch (ompf (credentials, &response, &entity, response_data,
+      switch (ompf (connection, credentials, &response, &entity, response_data,
                     "<get_permissions"
                     " filter=\"rows=-1 subject_type=role and subject_uuid=%s\"/>",
                     params_value (params, "role_id")))
@@ -1890,7 +1901,7 @@ get_one (const char *type, credentials_t * credentials, params_t *params,
 
   /* Get the resource. */
 
-  if (openvas_connection_sendf (&connection,
+  if (openvas_connection_sendf (connection,
                                 "<get_%ss"
                                 " %s_id=\"%s\""
                                 " sort_field=\"%s\""
@@ -1906,7 +1917,6 @@ get_one (const char *type, credentials_t * credentials, params_t *params,
       == -1)
     {
       g_string_free (xml, TRUE);
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -1916,10 +1926,9 @@ get_one (const char *type, credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_resources", response_data);
     }
 
-  if (read_string_c (&connection, &xml))
+  if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -1931,7 +1940,7 @@ get_one (const char *type, credentials_t * credentials, params_t *params,
 
   /* Get tag names */
 
-  if (openvas_connection_sendf (&connection,
+  if (openvas_connection_sendf (connection,
                                 "<get_tags"
                                 " filter=\"resource_type=%s"
                                 "          first=1"
@@ -1942,7 +1951,6 @@ get_one (const char *type, credentials_t * credentials, params_t *params,
       == -1)
     {
       g_string_free (xml, TRUE);
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -1952,10 +1960,9 @@ get_one (const char *type, credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_resources", response_data);
     }
 
-  if (read_string_c (&connection, &xml))
+  if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -1972,7 +1979,7 @@ get_one (const char *type, credentials_t * credentials, params_t *params,
   if ((strcmp (type, "user") == 0)
       || (strcmp (type, "group") == 0)
       || (strcmp (type, "role") == 0))
-    ret = openvas_connection_sendf (&connection,
+    ret = openvas_connection_sendf (connection,
                                     "<get_permissions"
                                     " filter=\"subject_uuid=%s"
                                     "          and not resource_uuid=&quot;&quot;"
@@ -1981,7 +1988,7 @@ get_one (const char *type, credentials_t * credentials, params_t *params,
                                     id,
                                     id);
   else
-    ret = openvas_connection_sendf (&connection,
+    ret = openvas_connection_sendf (connection,
                                     "<get_permissions"
                                     " filter=\"resource_uuid=%s"
                                     "          first=1 rows=-1\"/>",
@@ -1989,7 +1996,6 @@ get_one (const char *type, credentials_t * credentials, params_t *params,
   if (ret == -1)
     {
       g_string_free (xml, TRUE);
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -1999,10 +2005,9 @@ get_one (const char *type, credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_resources", response_data);
     }
 
-  if (read_string_c (&connection, &xml))
+  if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -2017,32 +2022,32 @@ get_one (const char *type, credentials_t * credentials, params_t *params,
   /* Cleanup, and return transformed XML. */
 
   g_string_append_printf (xml, "</get_%s>", type);
-  openvas_connection_close (&connection);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
-                            response_data);
+  return xsl_transform_omp (connection, credentials, params,
+                            g_string_free (xml, FALSE), response_data);
 }
 
 /**
  * @brief Get all of a particular type of resource, XSL transform the result.
  *
- * @param[in]  type         Resource type.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[in]  connection     Connection to manager
+ * @param[in]  type           Resource type.
+ * @param[in]  credentials    Username and password for authentication.
+ * @param[in]  params         Request parameters.
+ * @param[in]  extra_xml      Extra XML to insert inside page element.
  * @param[in]  extra_attribs  Extra attributes for OMP GET command.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 static char *
-get_many (const char *type, credentials_t * credentials, params_t *params,
+get_many (openvas_connection_t *connection, const char *type,
+          credentials_t *credentials, params_t *params,
           const char *extra_xml, const char *extra_attribs,
           cmd_response_data_t* response_data)
 {
   GString *xml;
   GString *type_many; /* The plural form of type */
-  openvas_connection_t connection;
-  gchar *filter_type, *html, *request, *built_filter;
+  gchar *filter_type, *request, *built_filter;
   int no_filter_history;
   const char *build_filter, *given_filt_id, *filt_id, *filter, *filter_extra;
   const char *first, *max, *sort_field, *sort_order, *owner, *permission;
@@ -2097,26 +2102,8 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
       g_free (filter_type);
     }
 
-  switch (manager_connect (credentials, &connection, &html, response_data))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting a resource list. "
-                             "The current list of resources is not available. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_tasks", response_data);
-    }
-
   /* check if filter still exists */
-  switch (filter_exists (&connection, filt_id))
+  switch (filter_exists (connection, filt_id))
     {
       case 1:
         break;
@@ -2320,7 +2307,7 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
                                      sort_order ? sort_order : "ascending");
 
   g_free (built_filter);
-  if (openvas_connection_sendf (&connection,
+  if (openvas_connection_sendf (connection,
                                 "<get_%s%s%s %s/>",
                                 type_many->str,
                                 strcmp (type, "report") ? "" : " details=\"0\"",
@@ -2331,7 +2318,6 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
       g_free(request);
       g_string_free (xml, TRUE);
       g_string_free (type_many, TRUE);
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -2341,11 +2327,10 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_tasks", response_data);
     }
   g_free(request);
-  if (read_string_c (&connection, &xml))
+  if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
       g_string_free (type_many, TRUE);
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -2364,7 +2349,7 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
       g_string_append (xml, "<filters>");
 
       if (openvas_connection_sendf_xml
-           (&connection,
+           (connection,
             "<get_filters"
             " filter=\"rows=-1 type=%s or type=\"/>",
             type)
@@ -2372,7 +2357,6 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
         {
           g_string_free (xml, TRUE);
           g_string_free (type_many, TRUE);
-          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -2382,11 +2366,10 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
                                "/omp?cmd=get_tasks", response_data);
         }
 
-      if (read_string_c (&connection, &xml))
+      if (read_string_c (connection, &xml))
         {
           g_string_free (xml, TRUE);
           g_string_free (type_many, TRUE);
-          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -2404,7 +2387,7 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
       /* Get the Wizard Rows setting. */
 
       if (openvas_connection_sendf_xml
-           (&connection,
+           (connection,
             "<get_settings"
             " setting_id=\"20f3034c-e709-11e1-87e7-406186ea4fc5\"/>",
             type)
@@ -2412,7 +2395,6 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
         {
           g_string_free (xml, TRUE);
           g_string_free (type_many, TRUE);
-          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -2422,11 +2404,10 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
                                "/omp?cmd=get_tasks", response_data);
         }
 
-      if (read_string_c (&connection, &xml))
+      if (read_string_c (connection, &xml))
         {
           g_string_free (xml, TRUE);
           g_string_free (type_many, TRUE);
-          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -2442,7 +2423,7 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
     {
       /* Get tag names */
 
-      if (openvas_connection_sendf (&connection,
+      if (openvas_connection_sendf (connection,
                                     "<get_tags"
                                     " filter=\"resource_type=%s"
                                     "          first=1"
@@ -2455,7 +2436,6 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
           == -1)
         {
           g_string_free (xml, TRUE);
-          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                               "Internal error", __FUNCTION__, __LINE__,
@@ -2465,10 +2445,9 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
                               "/omp?cmd=get_resources", response_data);
         }
 
-      if (read_string_c (&connection, &xml))
+      if (read_string_c (connection, &xml))
         {
           g_string_free (xml, TRUE);
-          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                               "Internal error", __FUNCTION__, __LINE__,
@@ -2481,32 +2460,32 @@ get_many (const char *type, credentials_t * credentials, params_t *params,
 
   /* Cleanup, and return transformed XML. */
   g_string_append_printf (xml, "</get_%s>", type_many->str);
-  openvas_connection_close (&connection);
   g_string_free (type_many, TRUE);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
-                            response_data);
+  return xsl_transform_omp (connection, credentials, params,
+                            g_string_free (xml, FALSE), response_data);
 }
 
 /**
  * @brief Setup edit XML, XSL transform the result.
  *
- * @param[in]  type         Type or resource to edit.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
+ * @param[in]  connection         Connection to manager
+ * @param[in]  type               Type or resource to edit.
+ * @param[in]  credentials        Username and password for authentication.
+ * @param[in]  params             Request parameters.
  * @param[in]  extra_get_attribs  Extra attributes for the get_... command.
- * @param[in]  extra_xml    Extra XML to insert inside page element.
- * @param[out] response_data  Extra data return for the HTTP response.
+ * @param[in]  extra_xml          Extra XML to insert inside page element.
+ * @param[out] response_data      Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-edit_resource (const char *type, credentials_t *credentials, params_t *params,
+edit_resource (openvas_connection_t *connection, const char *type,
+               credentials_t *credentials, params_t *params,
                const char *extra_get_attribs, const char *extra_xml,
                cmd_response_data_t* response_data)
 {
   GString *xml;
-  openvas_connection_t connection;
-  gchar *html, *id_name;
+  gchar *id_name;
   const char *resource_id;
 
   id_name = g_strdup_printf ("%s_id", type);
@@ -2524,26 +2503,7 @@ edit_resource (const char *type, credentials_t *credentials, params_t *params,
                            "/omp?cmd=get_tasks", response_data);
     }
 
-  switch (manager_connect (credentials, &connection, &html,
-                           response_data))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while editing a resource. "
-                             "The resource remains as it was. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_tasks", response_data);
-    }
-
-  if (openvas_connection_sendf (&connection,
+  if (openvas_connection_sendf (connection,
                                 /* TODO: Remove redundant COMMANDS. */
                                 "<commands>"
                                 "<get_%ss"
@@ -2557,7 +2517,6 @@ edit_resource (const char *type, credentials_t *credentials, params_t *params,
                                 resource_id)
       == -1)
     {
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -2573,10 +2532,9 @@ edit_resource (const char *type, credentials_t *credentials, params_t *params,
   if (extra_xml)
     g_string_append (xml, extra_xml);
 
-  if (read_string_c (&connection, &xml))
+  if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -2588,9 +2546,8 @@ edit_resource (const char *type, credentials_t *credentials, params_t *params,
   /* Cleanup, and return transformed XML. */
 
   g_string_append_printf (xml, "</edit_%s>", type);
-  openvas_connection_close (&connection);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
-                            response_data);
+  return xsl_transform_omp (connection, credentials, params,
+                            g_string_free (xml, FALSE), response_data);
 }
 
 /**
@@ -2683,6 +2640,7 @@ format_file_name (gchar* fname_format, credentials_t* credentials,
 /**
  * @brief Export a resource.
  *
+ * @param[in]   connection           Connection to manager.
  * @param[in]   type                 Type of resource.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
@@ -2694,41 +2652,22 @@ format_file_name (gchar* fname_format, credentials_t* credentials,
  * @return Resource XML on success.  HTML result of XSL transformation on error.
  */
 char *
-export_resource (const char *type, credentials_t * credentials,
-                 params_t *params, enum content_type * content_type,
+export_resource (openvas_connection_t *connection, const char *type,
+                 credentials_t * credentials, params_t *params,
+                 enum content_type * content_type,
                  char **content_disposition, gsize *content_length,
                  cmd_response_data_t* response_data)
 {
   GString *xml;
   entity_t entity;
   entity_t resource_entity;
-  openvas_connection_t connection;
   char *content = NULL;
-  gchar *html, *id_name;
+  gchar *id_name;
   gchar *fname_format, *file_name;
   int ret;
   const char *resource_id, *subtype;
 
   *content_length = 0;
-
-  switch (manager_connect (credentials, &connection, &html,
-                           response_data))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting a resource. "
-                             "The resource could not be delivered. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_tasks", response_data);
-    }
 
   xml = g_string_new ("");
 
@@ -2739,14 +2678,13 @@ export_resource (const char *type, credentials_t * credentials,
   if (resource_id == NULL)
     {
       g_string_append (xml, GSAD_MESSAGE_INVALID_PARAM ("Export Resource"));
-      openvas_connection_close (&connection);
-      return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
-                                response_data);
+      return xsl_transform_omp (connection, credentials, params,
+                                g_string_free (xml, FALSE), response_data);
     }
 
   subtype = params_value (params, "subtype");
 
-  if (openvas_connection_sendf (&connection,
+  if (openvas_connection_sendf (connection,
                                 "<get_%ss"
                                 " %s_id=\"%s\""
                                 "%s%s%s"
@@ -2761,7 +2699,6 @@ export_resource (const char *type, credentials_t * credentials,
       == -1)
     {
       g_string_free (xml, TRUE);
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -2772,10 +2709,9 @@ export_resource (const char *type, credentials_t * credentials,
     }
 
   entity = NULL;
-  if (read_entity_and_text_c (&connection, &entity, &content))
+  if (read_entity_and_text_c (connection, &entity, &content))
     {
       g_string_free (xml, TRUE);
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -2795,7 +2731,6 @@ export_resource (const char *type, credentials_t * credentials,
       g_free (content);
       free_entity (entity);
       g_string_free (xml, TRUE);
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -2805,7 +2740,7 @@ export_resource (const char *type, credentials_t * credentials,
                            "/omp?cmd=get_tasks", response_data);
     }
 
-  ret = setting_get_value (&connection,
+  ret = setting_get_value (connection,
                            "a6ac88c5-729c-41ba-ac0a-deea4a3441f2",
                            &fname_format,
                            response_data);
@@ -2814,7 +2749,6 @@ export_resource (const char *type, credentials_t * credentials,
       g_free (content);
       free_entity (entity);
       g_string_free (xml, TRUE);
-      openvas_connection_close (&connection);
       switch (ret)
         {
           case 1:
@@ -2862,13 +2796,13 @@ export_resource (const char *type, credentials_t * credentials,
   free_entity (entity);
   g_free (file_name);
   g_string_free (xml, TRUE);
-  openvas_connection_close (&connection);
   return content;
 }
 
 /**
  * @brief Export a list of resources.
  *
+ * @param[in]   connection           Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
  * @param[out]  content_type         Content type return.
@@ -2879,14 +2813,13 @@ export_resource (const char *type, credentials_t * credentials,
  * @return XML on success.  HTML result of XSL transformation on error.
  */
 static char *
-export_many (const char *type, credentials_t * credentials, params_t *params,
+export_many (openvas_connection_t *connection, const char *type,
+             credentials_t * credentials, params_t *params,
              enum content_type * content_type, char **content_disposition,
              gsize *content_length, cmd_response_data_t* response_data)
 {
   entity_t entity;
-  openvas_connection_t connection;
   char *content = NULL;
-  gchar *html;
   const char *filter;
   gchar *filter_escaped;
   gchar *type_many;
@@ -2895,32 +2828,13 @@ export_many (const char *type, credentials_t * credentials, params_t *params,
 
   *content_length = 0;
 
-  switch (manager_connect (credentials, &connection, &html,
-                           response_data))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting a list. "
-                             "The list could not be delivered. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_tasks", response_data);
-    }
-
   filter = params_value (params, "filter");
 
   filter_escaped = g_markup_escape_text (filter, -1);
 
   if (strcmp (type, "info") == 0)
     {
-      if (openvas_connection_sendf (&connection,
+      if (openvas_connection_sendf (connection,
                                     "<get_info"
                                     " type=\"%s\""
                                     " export=\"1\""
@@ -2930,7 +2844,6 @@ export_many (const char *type, credentials_t * credentials, params_t *params,
                                     filter_escaped ? filter_escaped : "")
           == -1)
         {
-          openvas_connection_close (&connection);
           g_free (filter_escaped);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
@@ -2943,7 +2856,7 @@ export_many (const char *type, credentials_t * credentials, params_t *params,
     }
   else if (strcmp (type, "asset") == 0)
     {
-      if (openvas_connection_sendf (&connection,
+      if (openvas_connection_sendf (connection,
                                     "<get_assets"
                                     " type=\"%s\""
                                     " export=\"1\""
@@ -2953,7 +2866,6 @@ export_many (const char *type, credentials_t * credentials, params_t *params,
                                     filter_escaped ? filter_escaped : "")
           == -1)
         {
-          openvas_connection_close (&connection);
           g_free (filter_escaped);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
@@ -2966,7 +2878,7 @@ export_many (const char *type, credentials_t * credentials, params_t *params,
     }
   else
     {
-      if (openvas_connection_sendf (&connection,
+      if (openvas_connection_sendf (connection,
                                     "<get_%ss"
                                     " export=\"1\""
                                     " details=\"1\""
@@ -2975,7 +2887,6 @@ export_many (const char *type, credentials_t * credentials, params_t *params,
                                     filter_escaped ? filter_escaped : "")
           == -1)
         {
-          openvas_connection_close (&connection);
           g_free (filter_escaped);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
@@ -2989,9 +2900,8 @@ export_many (const char *type, credentials_t * credentials, params_t *params,
   g_free (filter_escaped);
 
   entity = NULL;
-  if (read_entity_and_text_c (&connection, &entity, &content))
+  if (read_entity_and_text_c (connection, &entity, &content))
     {
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -3004,7 +2914,7 @@ export_many (const char *type, credentials_t * credentials, params_t *params,
   if (!omp_success (entity))
     set_http_status_from_entity (entity, response_data);
 
-  ret = setting_get_value (&connection,
+  ret = setting_get_value (connection,
                            "0872a6ed-4f85-48c5-ac3f-a5ef5e006745",
                            &fname_format,
                            response_data);
@@ -3012,7 +2922,6 @@ export_many (const char *type, credentials_t * credentials, params_t *params,
     {
       g_free (content);
       free_entity (entity);
-      openvas_connection_close (&connection);
       switch (ret)
         {
           case 1:
@@ -3066,28 +2975,27 @@ export_many (const char *type, credentials_t * credentials, params_t *params,
   *content_length = strlen (content);
   free_entity (entity);
   g_free (file_name);
-  openvas_connection_close (&connection);
   return content;
 }
 
 /**
  * @brief Delete a resource, get all resources, XSL transform the result.
  *
- * @param[in]  type         Type of resource.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- * @param[in]  ultimate     0 move to trash, 1 remove entirely.
- * @param[in]  get          Next page get command.
+ * @param[in]  connection     Connection to manager.
+ * @param[in]  type           Type of resource.
+ * @param[in]  credentials    Username and password for authentication.
+ * @param[in]  params         Request parameters.
+ * @param[in]  ultimate       0 move to trash, 1 remove entirely.
+ * @param[in]  get            Next page get command.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-delete_resource (const char *type, credentials_t * credentials,
-                 params_t *params, int ultimate,
+delete_resource (openvas_connection_t *connection, const char *type,
+                 credentials_t * credentials, params_t *params, int ultimate,
                  const char *get, cmd_response_data_t* response_data)
 {
-  openvas_connection_t connection;
   gchar *html, *response, *id_name, *resource_id, *extra_attribs;
   const char *no_redirect, *next_id;
   entity_t entity;
@@ -3123,30 +3031,6 @@ delete_resource (const char *type, credentials_t * credentials,
 
   g_free (id_name);
 
-  switch (manager_connect (credentials, &connection, &html,
-                           response_data))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          {
-            response_data->http_status_code = MHD_HTTP_SERVICE_UNAVAILABLE;
-            g_free (resource_id);
-            return html;
-          }
-        /* Fall through. */
-      default:
-        g_free (resource_id);
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while deleting a resource. "
-                             "The resource is not deleted. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_tasks", response_data);
-    }
-
   /* Extra attributes */
   extra_attribs = NULL;
 
@@ -3161,7 +3045,7 @@ delete_resource (const char *type, credentials_t * credentials,
 
   /* Delete the resource and get all resources. */
 
-  if (openvas_connection_sendf (&connection,
+  if (openvas_connection_sendf (connection,
                                 "<delete_%s %s_id=\"%s\" ultimate=\"%i\"%s%s/>",
                                 type,
                                 type,
@@ -3171,7 +3055,6 @@ delete_resource (const char *type, credentials_t * credentials,
                                 extra_attribs ? extra_attribs : "")
       == -1)
     {
-      openvas_connection_close (&connection);
       g_free (resource_id);
       g_free (extra_attribs);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
@@ -3187,9 +3070,8 @@ delete_resource (const char *type, credentials_t * credentials,
   g_free (extra_attribs);
 
   entity = NULL;
-  if (read_entity_and_text_c (&connection, &entity, &response))
+  if (read_entity_and_text_c (connection, &entity, &response))
     {
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -3201,13 +3083,12 @@ delete_resource (const char *type, credentials_t * credentials,
 
   if (!omp_success (entity))
     set_http_status_from_entity (entity, response_data);
-  openvas_connection_close (&connection);
 
   cap_type = capitalize (type);
   default_next = g_strdup_printf ("get_%ss", type);
   prev_action = g_strdup_printf ("Delete %s", cap_type);
 
-  html = response_from_entity (credentials, params, entity,
+  html = response_from_entity (connection, credentials, params, entity,
                                (no_redirect && strcmp (no_redirect, "0")),
                                NULL, default_next,
                                NULL, default_next,
@@ -3225,17 +3106,19 @@ delete_resource (const char *type, credentials_t * credentials,
 /**
  * @brief Perform action on resource, get next page, XSL transform result.
  *
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- * @param[in]  type         Type of resource.
- * @param[in]  action       Action to perform.
+ * @param[in]  connection     Connection to manager.
+ * @param[in]  credentials    Username and password for authentication.
+ * @param[in]  params         Request parameters.
+ * @param[in]  type           Type of resource.
+ * @param[in]  action         Action to perform.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-resource_action (credentials_t *credentials, params_t *params, const char *type,
-                 const char *action, cmd_response_data_t* response_data)
+resource_action (openvas_connection_t *connection, credentials_t *credentials,
+                 params_t *params, const char *type, const char *action,
+                 cmd_response_data_t* response_data)
 {
   gchar *html, *response, *param_name;
   const char *no_redirect, *resource_id;
@@ -3271,7 +3154,7 @@ resource_action (credentials_t *credentials, params_t *params, const char *type,
 
   response = NULL;
   entity = NULL;
-  ret = ompf (credentials, &response, &entity, response_data,
+  ret = ompf (connection, credentials, &response, &entity, response_data,
               "<%s_%s %s_id=\"%s\"/>",
               action,
               type,
@@ -3315,7 +3198,7 @@ resource_action (credentials_t *credentials, params_t *params, const char *type,
   cap_type = capitalize (type);
   get_cmd = g_strdup_printf ("get_%ss", type);
   prev_action = g_strdup_printf ("%s %s", cap_action, cap_type);
-  html = response_from_entity (credentials, params, entity,
+  html = response_from_entity (connection, credentials, params, entity,
                                (no_redirect && strcmp (no_redirect, "0")),
                                NULL, get_cmd,
                                NULL, get_cmd,
@@ -3374,8 +3257,8 @@ resource_action (credentials_t *credentials, params_t *params, const char *type,
 /**
  * @brief Get setting, returning HTML message on error.
  *
- * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  connection   Connection
+ * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  setting_id  UUID of the setting to get.
  * @param[out] value       Value of the setting.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -3383,8 +3266,8 @@ resource_action (credentials_t *credentials, params_t *params, const char *type,
  * @return NULL on success, else error message page HTML.
  */
 static char *
-setting_get_value_error (credentials_t *credentials,
-                         openvas_connection_t *connection,
+setting_get_value_error (openvas_connection_t *connection,
+                         credentials_t *credentials,
                          const gchar *setting_id,
                          gchar **value,
                          cmd_response_data_t* response_data)
@@ -3434,7 +3317,7 @@ setting_get_value_error (credentials_t *credentials,
   else                                                                        \
     {                                                                         \
       char *message;                                                          \
-      message = setting_get_value_error (credentials, &connection, setting_id,\
+      message = setting_get_value_error (connection, credentials, setting_id, \
                                          &value, response_data);              \
       if (message)                                                            \
         {                                                                     \
@@ -3446,21 +3329,21 @@ setting_get_value_error (credentials_t *credentials,
 /**
  * @brief Returns page to create a new task.
  *
- * @param[in]  credentials  Credentials of user issuing the action.
- * @param[in]  params       Request parameters.
- * @param[in]  message      If not NULL, display message.
- * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[in]  connection     Connection to manager.
+ * @param[in]  credentials    Credentials of user issuing the action.
+ * @param[in]  params         Request parameters.
+ * @param[in]  message        If not NULL, display message.
+ * @param[in]  extra_xml      Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 static char *
-new_task (credentials_t * credentials, const char *message, params_t *params,
+new_task (openvas_connection_t *connection, credentials_t * credentials,
+          const char *message, params_t *params,
           const char *extra_xml, cmd_response_data_t* response_data)
 {
   GString *xml;
-  openvas_connection_t connection;
-  gchar *html;
   int apply_overrides;
   const char *alerts, *overrides;
   int ret;
@@ -3472,32 +3355,12 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
 
   apply_overrides = overrides ? strcmp (overrides, "0") : 0;
 
-  switch (manager_connect (credentials, &connection, &html,
-                           response_data))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting targets list. "
-                             "The current list of targets is not available. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_tasks", response_data);
-    }
-
-  ret = setting_get_value (&connection,
+  ret = setting_get_value (connection,
                            "f9f5a546-8018-48d0-bef5-5ad4926ea899",
                            &alert,
                            response_data);
   if (ret)
     {
-      openvas_connection_close (&connection);
       switch (ret)
         {
           case 1:
@@ -3529,25 +3392,21 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
 
   PARAM_OR_SETTING (schedule, "schedule_id",
                     "778eedad-5550-4de0-abb6-1320d13b5e18",
-                    openvas_connection_close (&connection);
                     g_free (alert));
 
   PARAM_OR_SETTING (target, "target_id",
                     "23409203-940a-4b4a-b70c-447475f18323",
-                    openvas_connection_close (&connection);
                     g_free (alert);
                     g_free (schedule));
 
   PARAM_OR_SETTING (openvas_config, "config_id",
                     "fe7ea321-e3e3-4cc6-9952-da836aae83ce",
-                    openvas_connection_close (&connection);
                     g_free (alert);
                     g_free (schedule);
                     g_free (target));
 
   PARAM_OR_SETTING (osp_config, "osp_config_id",
                     "fb19ac4b-614c-424c-b046-0bc32bf1be73",
-                    openvas_connection_close (&connection);
                     g_free (alert);
                     g_free (schedule);
                     g_free (target);
@@ -3555,7 +3414,6 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
 
   PARAM_OR_SETTING (openvas_scanner, "scanner_id",
                     "f7d0f6ed-6f9e-45dc-8bd9-05cced84e80d",
-                    openvas_connection_close (&connection);
                     g_free (alert);
                     g_free (schedule);
                     g_free (target);
@@ -3564,7 +3422,6 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
 
   PARAM_OR_SETTING (osp_scanner, "osp_scanner_id",
                     "b20697c9-be0a-4cd4-8b4d-5fe7841ebb03",
-                    openvas_connection_close (&connection);
                     g_free (alert);
                     g_free (schedule);
                     g_free (target);
@@ -3602,13 +3459,12 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
   g_free (osp_scanner);
 
   /* Get list of targets. */
-  if (openvas_connection_sendf (&connection,
+  if (openvas_connection_sendf (connection,
                                 "<get_targets"
                                 " filter=\"rows=-1 sort=name\"/>")
       == -1)
     {
       g_string_free (xml, TRUE);
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -3618,10 +3474,9 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
                            "/omp?cmd=get_tasks", response_data);
     }
 
-  if (read_string_c (&connection, &xml))
+  if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -3632,13 +3487,12 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
     }
 
   /* Get configs to select in new task UI. */
-  if (openvas_connection_sendf (&connection,
+  if (openvas_connection_sendf (connection,
                                 "<get_configs"
                                 " filter=\"rows=-1 sort=name\"/>")
       == -1)
     {
       g_string_free (xml, TRUE);
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -3648,10 +3502,9 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
                            "/omp?cmd=get_tasks", response_data);
     }
 
-  if (read_string_c (&connection, &xml))
+  if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -3664,13 +3517,12 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
   if (command_enabled (credentials, "GET_ALERTS"))
     {
       /* Get alerts to select in new task UI. */
-      if (openvas_connection_sendf (&connection,
+      if (openvas_connection_sendf (connection,
                                     "<get_alerts"
                                     " filter=\"rows=-1 sort=name\"/>")
           == -1)
         {
           g_string_free (xml, TRUE);
-          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -3680,10 +3532,9 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
                                "/omp?cmd=get_tasks", response_data);
         }
 
-      if (read_string_c (&connection, &xml))
+      if (read_string_c (connection, &xml))
         {
           g_string_free (xml, TRUE);
-          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -3698,13 +3549,12 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
     {
       /* Get schedules to select in new task UI. */
       if (openvas_connection_sendf
-           (&connection,
+           (connection,
             "<get_schedules"
             " filter=\"rows=-1 sort=name\"/>")
           == -1)
         {
           g_string_free (xml, TRUE);
-          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -3714,10 +3564,9 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
                                "/omp?cmd=get_tasks", response_data);
         }
 
-      if (read_string_c (&connection, &xml))
+      if (read_string_c (connection, &xml))
         {
           g_string_free (xml, TRUE);
-          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -3731,13 +3580,12 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
   if (command_enabled (credentials, "GET_SCANNERS"))
     {
       /* Get scanners to select in new task UI. */
-      if (openvas_connection_sendf (&connection,
+      if (openvas_connection_sendf (connection,
                                     "<get_scanners"
                                     " filter=\"rows=-1\"/>")
           == -1)
         {
           g_string_free (xml, TRUE);
-          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -3749,10 +3597,9 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
                                "/omp?cmd=get_tasks", response_data);
         }
 
-      if (read_string_c (&connection, &xml))
+      if (read_string_c (connection, &xml))
         {
           g_string_free (xml, TRUE);
-          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -3769,12 +3616,11 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
     {
       /* Get groups for Observer Groups. */
 
-      if (openvas_connection_sendf (&connection,
+      if (openvas_connection_sendf (connection,
                                     "<get_groups/>")
           == -1)
         {
           g_string_free (xml, TRUE);
-          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -3784,10 +3630,9 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
                                "/omp?cmd=get_tasks", response_data);
         }
 
-      if (read_string_c (&connection, &xml))
+      if (read_string_c (connection, &xml))
         {
           g_string_free (xml, TRUE);
-          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -3802,13 +3647,12 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
     {
       /* Get tag names. */
 
-      if (openvas_connection_sendf (&connection,
+      if (openvas_connection_sendf (connection,
                                     "<get_tags names_only=\"1\""
                                     " filter=\"resource_type=task rows=-1\"/>")
           == -1)
         {
           g_string_free (xml, TRUE);
-          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -3818,10 +3662,9 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
                                "/omp?cmd=get_tasks", response_data);
         }
 
-      if (read_string_c (&connection, &xml))
+      if (read_string_c (connection, &xml))
         {
           g_string_free (xml, TRUE);
-          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -3845,30 +3688,31 @@ new_task (credentials_t * credentials, const char *message, params_t *params,
                           apply_overrides,
                           alerts ? alerts : "1");
 
-  openvas_connection_close (&connection);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
-                            response_data);
+  return xsl_transform_omp (connection, credentials, params,
+                            g_string_free (xml, FALSE), response_data);
 }
 
 /**
  * @brief Returns page to create a new task.
  *
- * @param[in]  credentials  Credentials of user issuing the action.
- * @param[in]  params       Request parameters.
+ * @param[in]  connection     Connection to manager.
+ * @param[in]  credentials    Credentials of user issuing the action.
+ * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-new_task_omp (credentials_t * credentials, params_t *params,
-              cmd_response_data_t* response_data)
+new_task_omp (openvas_connection_t *connection, credentials_t * credentials,
+              params_t *params, cmd_response_data_t* response_data)
 {
-  return new_task (credentials, NULL, params, NULL, response_data);
+  return new_task (connection, credentials, NULL, params, NULL, response_data);
 }
 
 /**
  * @brief Returns page to create a new container task.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  params       Request parameters.
  * @param[in]  message      If not NULL, display message.
@@ -3878,7 +3722,8 @@ new_task_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 static char *
-new_container_task (credentials_t * credentials, const char *message,
+new_container_task (openvas_connection_t *connection,
+                    credentials_t * credentials, const char *message,
                     params_t *params, const char *extra_xml,
                     cmd_response_data_t* response_data)
 {
@@ -3894,29 +3739,34 @@ new_container_task (credentials_t * credentials, const char *message,
 
   g_string_append_printf (xml, "</new_container_task>");
 
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+  return xsl_transform_omp (connection, credentials, params,
+                            g_string_free (xml, FALSE),
                             response_data);
 }
 
 /**
  * @brief Returns page to create a new task.
  *
- * @param[in]  credentials  Credentials of user issuing the action.
- * @param[in]  params       Request parameters.
+ * @param[in]  connection     Connection to manager.
+ * @param[in]  credentials    Credentials of user issuing the action.
+ * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-new_container_task_omp (credentials_t * credentials, params_t *params,
+new_container_task_omp (openvas_connection_t *connection,
+                        credentials_t * credentials, params_t *params,
                         cmd_response_data_t* response_data)
 {
-  return new_container_task (credentials, NULL, params, NULL, response_data);
+  return new_container_task (connection, credentials, NULL, params, NULL,
+                             response_data);
 }
 
 /**
  * @brief Returns page to upload a new report.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
@@ -3925,8 +3775,9 @@ new_container_task_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 static char *
-upload_report (credentials_t *credentials, params_t *params,
-               const char *extra_xml, cmd_response_data_t* response_data)
+upload_report (openvas_connection_t *connection, credentials_t *credentials,
+               params_t *params, const char *extra_xml,
+               cmd_response_data_t* response_data)
 {
   GString *xml;
 
@@ -3938,7 +3789,8 @@ upload_report (credentials_t *credentials, params_t *params,
     {
       gchar *response;
 
-      if (simple_ompf ("getting Tasks", credentials, &response, response_data,
+      if (simple_ompf (connection, "getting Tasks", credentials, &response,
+                       response_data,
                        "<get_tasks"
                        /* All container tasks. */
                        " filter=\"target= rows=-1 owner=any permission=any\"/>"))
@@ -3952,13 +3804,15 @@ upload_report (credentials_t *credentials, params_t *params,
 
   g_string_append (xml, "</upload_report>");
 
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+  return xsl_transform_omp (connection, credentials, params,
+                            g_string_free (xml, FALSE),
                             response_data);
 }
 
 /**
  * @brief Return the upload report page.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -3966,23 +3820,25 @@ upload_report (credentials_t *credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-upload_report_omp (credentials_t *credentials, params_t *params,
-                   cmd_response_data_t* response_data)
+upload_report_omp (openvas_connection_t *connection, credentials_t *credentials,
+                   params_t *params, cmd_response_data_t* response_data)
 {
-  return upload_report (credentials, params, NULL, response_data);
+  return upload_report (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Create a report, get all tasks, XSL transform the result.
  *
- * @param[in]  credentials   Username and password for authentication.
- * @param[in]  params       Request parameters.
+ * @param[in]  connection     Connection to manager.
+ * @param[in]  credentials    Username and password for authentication.
+ * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-create_report_omp (credentials_t * credentials, params_t *params,
+create_report_omp (openvas_connection_t *connection,
+                   credentials_t *credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
   entity_t entity;
@@ -4011,7 +3867,7 @@ create_report_omp (credentials_t * credentials, params_t *params,
   if (strlen (xml_file) == 0)
     {
       if (task_id)
-        return message_invalid (credentials, params, response_data,
+        return message_invalid (connection, credentials, params, response_data,
                                 "Report required",
                                 G_STRINGIFY (MHD_HTTP_BAD_REQUEST),
                                 "Create Report", "new_container_task");
@@ -4062,7 +3918,7 @@ create_report_omp (credentials_t * credentials, params_t *params,
       g_free (xml_file_escaped);
     }
 
-  ret = omp (credentials,
+  ret = omp (connection, credentials,
              &response,
              &entity,
              response_data,
@@ -4103,7 +3959,7 @@ create_report_omp (credentials_t * credentials, params_t *params,
     }
 
   cmd = params_value (params, "cmd");
-  html = response_from_entity (credentials, params, entity,
+  html = response_from_entity (connection, credentials, params, entity,
                                (no_redirect && strcmp (no_redirect, "0")),
                                NULL, "get_tasks",
                                NULL,
@@ -4118,17 +3974,19 @@ create_report_omp (credentials_t * credentials, params_t *params,
 /**
  * @brief Import report, get all reports, XSL transform the result.
  *
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
+ * @param[in]  connection     Connection to manager.
+ * @param[in]  credentials    Username and password for authentication.
+ * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-import_report_omp (credentials_t * credentials, params_t *params,
+import_report_omp (openvas_connection_t *connection,
+                   credentials_t * credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
-  return create_report_omp (credentials, params, response_data);
+  return create_report_omp (connection, credentials, params, response_data);
 }
 
 #define CHECK(name)                                                        \
@@ -4137,14 +3995,16 @@ CHECK_PARAM_INVALID (name, "Create Task", "new_task")
 /**
  * @brief Create a container task, serve next page.
  *
- * @param[in]  credentials   Username and password for authentication.
- * @param[in]  params       Request parameters.
+ * @param[in]  connection     Connection to manager.
+ * @param[in]  credentials    Username and password for authentication.
+ * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-create_container_task_omp (credentials_t * credentials, params_t *params,
+create_container_task_omp (openvas_connection_t *connection,
+                           credentials_t * credentials, params_t *params,
                            cmd_response_data_t* response_data)
 {
   entity_t entity;
@@ -4165,7 +4025,7 @@ create_container_task_omp (credentials_t * credentials, params_t *params,
                              "</create_task>",
                              name,
                              comment);
-  ret = omp (credentials,
+  ret = omp (connection, credentials,
              &response,
              &entity,
              response_data,
@@ -4207,7 +4067,7 @@ create_container_task_omp (credentials_t * credentials, params_t *params,
 
   if (entity_attribute (entity, "id"))
     params_add (params, "task_id", entity_attribute (entity, "id"));
-  html = response_from_entity (credentials, params, entity,
+  html = response_from_entity (connection, credentials, params, entity,
                                (no_redirect && strcmp (no_redirect, "0")),
                                NULL, "get_tasks",
                                NULL, "new_container_task",
@@ -4220,15 +4080,16 @@ create_container_task_omp (credentials_t * credentials, params_t *params,
 /**
  * @brief Create a task, get all tasks, XSL transform the result.
  *
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
+ * @param[in]  connection     Connection to manager.
+ * @param[in]  credentials    Username and password for authentication.
+ * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-create_task_omp (credentials_t * credentials, params_t *params,
-                 cmd_response_data_t* response_data)
+create_task_omp (openvas_connection_t *connection, credentials_t * credentials,
+                 params_t *params, cmd_response_data_t* response_data)
 {
   entity_t entity;
   int ret;
@@ -4416,7 +4277,7 @@ create_task_omp (credentials_t * credentials, params_t *params,
                              auto_delete_data,
                              alterable ? strcmp (alterable, "0") : 0);
 
-  ret = omp (credentials,
+  ret = omp (connection, credentials,
              &response,
              &entity,
              response_data,
@@ -4490,7 +4351,7 @@ create_task_omp (credentials_t * credentials, params_t *params,
                                          tag_name,
                                          new_task_id);
 
-          ret = omp (credentials,
+          ret = omp (connection, credentials,
                      &tag_response,
                      &tag_entity,
                      response_data,
@@ -4539,7 +4400,7 @@ create_task_omp (credentials_t * credentials, params_t *params,
           if (entity_attribute (entity, "id"))
             params_add (params, "task_id", entity_attribute (entity, "id"));
           html
-            = response_from_entity (credentials, params, tag_entity,
+            = response_from_entity (connection, credentials, params, tag_entity,
                                     (no_redirect && strcmp (no_redirect, "0")),
                                     NULL, "get_tasks",
                                     NULL, "new_tasks",
@@ -4552,7 +4413,7 @@ create_task_omp (credentials_t * credentials, params_t *params,
           if (entity_attribute (entity, "id"))
             params_add (params, "task_id", entity_attribute (entity, "id"));
           html
-            = response_from_entity (credentials, params, entity,
+            = response_from_entity (connection, credentials, params, entity,
                                     (no_redirect && strcmp (no_redirect, "0")),
                                     NULL, "get_tasks",
                                     NULL, "new_task",
@@ -4561,7 +4422,7 @@ create_task_omp (credentials_t * credentials, params_t *params,
     }
   else
     {
-      html = response_from_entity (credentials, params, entity,
+      html = response_from_entity (connection, credentials, params, entity,
                                    (no_redirect && strcmp (no_redirect, "0")),
                                    NULL, "get_tasks",
                                    NULL, "new_task",
@@ -4576,36 +4437,38 @@ create_task_omp (credentials_t * credentials, params_t *params,
 /**
  * @brief Delete a task, get all tasks, XSL transform the result.
  *
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
+ * @param[in]  connection     Connection to manager.
+ * @param[in]  credentials    Username and password for authentication.
+ * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-delete_task_omp (credentials_t * credentials, params_t *params,
-                 cmd_response_data_t* response_data)
+delete_task_omp (openvas_connection_t *connection, credentials_t * credentials,
+                 params_t *params, cmd_response_data_t* response_data)
 {
-  return delete_resource ("task", credentials, params, 0, NULL, response_data);
+  return delete_resource (connection, "task", credentials, params, 0, NULL,
+                          response_data);
 }
 
 /**
  * @brief Setup edit_task XML, XSL transform the result.
  *
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[in]  connection     Connection to manager.
+ * @param[in]  credentials    Username and password for authentication.
+ * @param[in]  params         Request parameters.
+ * @param[in]  extra_xml      Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-edit_task (credentials_t * credentials, params_t *params, const char *extra_xml,
+edit_task (openvas_connection_t *connection, credentials_t * credentials,
+           params_t *params, const char *extra_xml,
            cmd_response_data_t* response_data)
 {
   GString *xml;
-  openvas_connection_t connection;
-  gchar *html;
   const char *task_id, *next, *refresh_interval, *sort_field, *sort_order;
   const char *overrides, *alerts;
   int apply_overrides;
@@ -4634,26 +4497,7 @@ edit_task (credentials_t * credentials, params_t *params, const char *extra_xml,
   if (next == NULL)
     next = "get_task";
 
-  switch (manager_connect (credentials, &connection, &html,
-                           response_data))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while editing a task. "
-                             "The task remains as it was. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_tasks", response_data);
-    }
-
-  if (openvas_connection_sendf (&connection,
+  if (openvas_connection_sendf (connection,
                                 "<commands>"
                                 "<get_tasks task_id=\"%s\" details=\"1\" />"
                                 "<get_targets"
@@ -4683,7 +4527,6 @@ edit_task (credentials_t * credentials, params_t *params, const char *extra_xml,
                                  : "")
       == -1)
     {
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -4718,10 +4561,9 @@ edit_task (credentials_t * credentials, params_t *params, const char *extra_xml,
                           sort_order,
                           apply_overrides);
 
-  if (read_string_c (&connection, &xml))
+  if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -4733,39 +4575,41 @@ edit_task (credentials_t * credentials, params_t *params, const char *extra_xml,
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</edit_task>");
-  openvas_connection_close (&connection);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+  return xsl_transform_omp (connection, credentials, params,
+                            g_string_free (xml, FALSE),
                             response_data);
 }
 
 /**
  * @brief Setup edit_task XML, XSL transform the result.
  *
- * @param[in]  credentials       Username and password for authentication.
- * @param[in]  params       Request parameters.
+ * @param[in]  connection     Connection to manager.
+ * @param[in]  credentials    Username and password for authentication.
+ * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-edit_task_omp (credentials_t * credentials, params_t *params,
-               cmd_response_data_t* response_data)
+edit_task_omp (openvas_connection_t *connection, credentials_t * credentials,
+               params_t *params, cmd_response_data_t* response_data)
 {
-  return edit_task (credentials, params, NULL, response_data);
+  return edit_task (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Save task, get next page, XSL transform the result.
  *
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
+ * @param[in]  connection     Connection to manager.
+ * @param[in]  credentials    Username and password for authentication.
+ * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-save_task_omp (credentials_t * credentials, params_t *params,
-               cmd_response_data_t* response_data)
+save_task_omp (openvas_connection_t *connection, credentials_t * credentials,
+               params_t *params, cmd_response_data_t* response_data)
 {
   gchar *html, *response, *format;
   const char *no_redirect;
@@ -4932,7 +4776,8 @@ save_task_omp (credentials_t * credentials, params_t *params,
                             alterable ? "</alterable>" : "");
   response = NULL;
   entity = NULL;
-  ret = ompf (credentials,
+  ret = ompf (connection,
+              credentials,
               &response,
               &entity,
               response_data,
@@ -4988,7 +4833,7 @@ save_task_omp (credentials_t * credentials, params_t *params,
                              "/omp?cmd=get_tasks", response_data);
     }
 
-  html = response_from_entity (credentials, params, entity,
+  html = response_from_entity (connection, credentials, params, entity,
                                (no_redirect && strcmp (no_redirect, "0")),
                                NULL, "get_tasks",
                                NULL, "edit_task",
@@ -5003,15 +4848,16 @@ save_task_omp (credentials_t * credentials, params_t *params,
 /**
  * @brief Save container task, get next page, XSL transform the result.
  *
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
+ * @param[in]  connection     Connection to manager.
+ * @param[in]  credentials    Username and password for authentication.
+ * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
-char *
-save_container_task_omp (credentials_t * credentials, params_t *params,
-                         cmd_response_data_t* response_data)
+char * save_container_task_omp (openvas_connection_t *connection,
+                                credentials_t *credentials, params_t *params,
+                                cmd_response_data_t *response_data)
 {
   gchar *format, *response, *html;
   const char *no_redirect, *comment, *name, *task_id;
@@ -5054,7 +4900,7 @@ save_container_task_omp (credentials_t * credentials, params_t *params,
 
   response = NULL;
   entity = NULL;
-  ret = ompf (credentials, &response, &entity, response_data,
+  ret = ompf (connection, credentials, &response, &entity, response_data,
               format, task_id, name, comment,
               strcmp (in_assets, "0") ? "yes" : "no",
               auto_delete,
@@ -5091,7 +4937,7 @@ save_container_task_omp (credentials_t * credentials, params_t *params,
                              "/omp?cmd=get_tasks", response_data);
     }
 
-  html = response_from_entity (credentials, params, entity,
+  html = response_from_entity (connection, credentials, params, entity,
                                (no_redirect && strcmp (no_redirect, "0")),
                                NULL, "get_tasks",
                                NULL, "edit_task",
@@ -5104,6 +4950,7 @@ save_container_task_omp (credentials_t * credentials, params_t *params,
 /**
  * @brief Export a task.
  *
+ * @param[in]   connection           Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
  * @param[out]  content_type         Content type return.
@@ -5114,17 +4961,19 @@ save_container_task_omp (credentials_t * credentials, params_t *params,
  * @return Note XML on success.  HTML result of XSL transformation on error.
  */
 char *
-export_task_omp (credentials_t * credentials, params_t *params,
-                   enum content_type * content_type, char **content_disposition,
-                   gsize *content_length, cmd_response_data_t* response_data)
+export_task_omp (openvas_connection_t *connection, credentials_t *credentials,
+                 params_t *params, enum content_type *content_type,
+                 char **content_disposition, gsize *content_length,
+                 cmd_response_data_t *response_data)
 {
-  return export_resource ("task", credentials, params, content_type,
+  return export_resource (connection, "task", credentials, params, content_type,
                           content_disposition, content_length, response_data);
 }
 
 /**
  * @brief Export a list of tasks.
  *
+ * @param[in]   connection           Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
  * @param[out]  content_type         Content type return.
@@ -5135,75 +4984,83 @@ export_task_omp (credentials_t * credentials, params_t *params,
  * @return Tasks XML on success.  HTML result of XSL transformation
  *         on error.
  */
-char *
-export_tasks_omp (credentials_t * credentials, params_t *params,
-                  enum content_type * content_type, char **content_disposition,
-                  gsize *content_length, cmd_response_data_t* response_data)
+char * export_tasks_omp (openvas_connection_t *connection,
+                         credentials_t *credentials, params_t *params,
+                         enum content_type *content_type,
+                         char **content_disposition, gsize *content_length,
+                         cmd_response_data_t *response_data)
 {
-  return export_many ("task", credentials, params, content_type,
+  return export_many (connection, "task", credentials, params, content_type,
                       content_disposition, content_length, response_data);
 }
 
 /**
  * @brief Stop a task, get all tasks, XSL transform the result.
  *
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
+ * @param[in]  connection     Connection to manager.
+ * @param[in]  credentials    Username and password for authentication.
+ * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-stop_task_omp (credentials_t * credentials, params_t *params,
-               cmd_response_data_t* response_data)
+stop_task_omp (openvas_connection_t *connection, credentials_t * credentials,
+               params_t *params, cmd_response_data_t* response_data)
 {
-  return resource_action (credentials, params, "task", "stop", response_data);
+  return resource_action (connection, credentials, params, "task", "stop",
+                          response_data);
 }
 
 /**
  * @brief Resume a task, get all tasks, XSL transform the result.
  *
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
+ * @param[in]  connection     Connection to manager.
+ * @param[in]  credentials    Username and password for authentication.
+ * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-resume_task_omp (credentials_t * credentials, params_t *params,
-                 cmd_response_data_t* response_data)
+resume_task_omp (openvas_connection_t *connection, credentials_t *credentials,
+                 params_t *params, cmd_response_data_t *response_data)
 {
-  return resource_action (credentials, params, "task", "resume", response_data);
+  return resource_action (connection, credentials, params, "task", "resume",
+                          response_data);
 }
 
 /**
  * @brief Start a task, get all tasks, XSL transform the result.
  *
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
+ * @param[in]  connection     Connection to manager.
+ * @param[in]  credentials    Username and password for authentication.
+ * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-start_task_omp (credentials_t * credentials, params_t *params,
-                cmd_response_data_t* response_data)
+start_task_omp (openvas_connection_t *connection, credentials_t * credentials,
+                params_t *params, cmd_response_data_t* response_data)
 {
-  return resource_action (credentials, params, "task", "start", response_data);
+  return resource_action (connection, credentials, params, "task", "start",
+                          response_data);
 }
 
 /**
  * @brief Reassign a task to a new OMP slave.
  *
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
+ * @param[in]  connection     Connection to manager.
+ * @param[in]  credentials    Username and password for authentication.
+ * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-move_task_omp (credentials_t * credentials, params_t *params,
-               cmd_response_data_t* response_data)
+move_task_omp (openvas_connection_t *connection, credentials_t * credentials,
+               params_t *params, cmd_response_data_t* response_data)
 {
   gchar *command, *response, *html;
   const char *no_redirect, *task_id, *slave_id;
@@ -5220,7 +5077,8 @@ move_task_omp (credentials_t * credentials, params_t *params,
 
   response = NULL;
   entity = NULL;
-  ret = omp (credentials, &response, &entity, response_data, command);
+  ret = omp (connection, credentials, &response, &entity, response_data,
+             command);
   g_free (command);
   switch (ret)
     {
@@ -5255,7 +5113,7 @@ move_task_omp (credentials_t * credentials, params_t *params,
                              "/omp?cmd=get_tasks", response_data);
     }
 
-  html = response_from_entity (credentials, params, entity,
+  html = response_from_entity (connection, credentials, params, entity,
                                (no_redirect && strcmp (no_redirect, "0")),
                                NULL, "get_tasks",
                                NULL, "get_tasks",
@@ -5269,21 +5127,21 @@ move_task_omp (credentials_t * credentials, params_t *params,
 /**
  * @brief Requests NVT details, accepting extra commands.
  *
- * @param[in]  credentials  Credentials for the manager connection.
- * @param[in]  params            Request parameters.
- * @param[in]  commands     Extra commands to run before the others.
- * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[in]  connection     Connection to manager.
+ * @param[in]  credentials    Credentials for the manager connection.
+ * @param[in]  params         Request parameters.
+ * @param[in]  commands       Extra commands to run before the others.
+ * @param[in]  extra_xml      Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return XSL transformed NVT details response or error message.
  */
 static char*
-get_nvts (credentials_t *credentials, params_t *params, const char *commands,
+get_nvts (openvas_connection_t *connection, credentials_t *credentials,
+          params_t *params, const char *commands,
           const char *extra_xml, cmd_response_data_t* response_data)
 {
   GString *xml = NULL;
-  openvas_connection_t connection;
-  gchar *html;
   const char *oid;
 
   oid = params_value (params, "oid");
@@ -5296,25 +5154,8 @@ get_nvts (credentials_t *credentials, params_t *params, const char *commands,
                            "Diagnostics: Required parameter was NULL.",
                            "/omp?cmd=get_tasks", response_data);
     }
-  switch (manager_connect (credentials, &connection, &html,
-                           response_data))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting nvt details. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_tasks", response_data);
-    }
 
-  if (openvas_connection_sendf (&connection,
+  if (openvas_connection_sendf (connection,
                                 "<commands>"
                                 "%s"
                                 "<get_nvts"
@@ -5334,7 +5175,6 @@ get_nvts (credentials_t *credentials, params_t *params, const char *commands,
                                 oid)
         == -1)
     {
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -5344,9 +5184,8 @@ get_nvts (credentials_t *credentials, params_t *params, const char *commands,
     }
 
   xml = g_string_new ("<get_nvts>");
-  if (read_string_c (&connection, &xml))
+  if (read_string_c (connection, &xml))
     {
-      openvas_connection_close (&connection);
       g_string_free (xml, TRUE);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
@@ -5362,7 +5201,7 @@ get_nvts (credentials_t *credentials, params_t *params, const char *commands,
 
   /* Get tag names */
 
-  if (openvas_connection_sendf (&connection,
+  if (openvas_connection_sendf (connection,
                                 "<get_tags"
                                 " filter=\"resource_type=nvt"
                                 "          first=1"
@@ -5372,7 +5211,6 @@ get_nvts (credentials_t *credentials, params_t *params, const char *commands,
       == -1)
     {
       g_string_free (xml, TRUE);
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -5382,10 +5220,9 @@ get_nvts (credentials_t *credentials, params_t *params, const char *commands,
                            "/omp?cmd=get_resources", response_data);
     }
 
-  if (read_string_c (&connection, &xml))
+  if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -5397,23 +5234,24 @@ get_nvts (credentials_t *credentials, params_t *params, const char *commands,
 
   g_string_append (xml, "</get_nvts>");
 
-  openvas_connection_close (&connection);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
-                            response_data);
+  return xsl_transform_omp (connection, credentials, params,
+                            g_string_free (xml, FALSE), response_data);
 }
 
 /**
  * @brief Requests SecInfo.
  *
- * @param[in]  credentials  Credentials for the manager connection.
- * @param[in]  params       Request parameters.
- * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[in]  connection     Connection to manager.
+ * @param[in]  credentials    Credentials for the manager connection.
+ * @param[in]  params         Request parameters.
+ * @param[in]  extra_xml      Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return XSL transformed SecInfo response or error message.
  */
 char *
-get_info (credentials_t *credentials, params_t *params, const char *extra_xml,
+get_info (openvas_connection_t *connection, credentials_t *credentials,
+          params_t *params, const char *extra_xml,
           cmd_response_data_t* response_data)
 {
   char *ret;
@@ -5471,7 +5309,8 @@ get_info (credentials_t *credentials, params_t *params, const char *extra_xml,
     {
       gchar *response;
 
-      if (simple_ompf ("getting SecInfo", credentials, &response, response_data,
+      if (simple_ompf (connection, "getting SecInfo", credentials, &response,
+                       response_data,
                        "<get_notes"
                        " nvt_oid=\"%s\""
                        " sort_field=\"notes.text\"/>",
@@ -5490,7 +5329,8 @@ get_info (credentials_t *credentials, params_t *params, const char *extra_xml,
     {
       gchar *response;
 
-      if (simple_ompf ("getting SecInfo", credentials, &response, response_data,
+      if (simple_ompf (connection, "getting SecInfo", credentials, &response,
+                       response_data,
                        "<get_overrides"
                        " nvt_oid=\"%s\""
                        " sort_field=\"overrides.text\"/>",
@@ -5518,7 +5358,7 @@ get_info (credentials_t *credentials, params_t *params, const char *extra_xml,
     g_string_append_printf (extra_attribs,
                             " details=\"%s\"",
                             params_value (params, "details"));
-  ret = get_many ("info", credentials, params, extra_response->str,
+  ret = get_many (connection, "info", credentials, params, extra_response->str,
                   extra_attribs->str, response_data);
 
   g_string_free (extra_response, TRUE);
@@ -5530,22 +5370,24 @@ get_info (credentials_t *credentials, params_t *params, const char *extra_xml,
 /**
  * @brief Get info, XSL transform the result.
  *
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
+ * @param[in]  connection     Connection to manager.
+ * @param[in]  credentials    Username and password for authentication.
+ * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_info_omp (credentials_t * credentials, params_t *params,
-              cmd_response_data_t* response_data)
+get_info_omp (openvas_connection_t *connection, credentials_t * credentials,
+              params_t *params, cmd_response_data_t* response_data)
 {
-  return get_info (credentials, params, NULL, response_data);
+  return get_info (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Requests NVT details, accepting extra commands.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Credentials for the manager connection.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -5553,10 +5395,10 @@ get_info_omp (credentials_t * credentials, params_t *params,
  * @return XSL transformed NVT details response or error message.
  */
 char*
-get_nvts_omp (credentials_t *credentials, params_t *params,
-              cmd_response_data_t* response_data)
+get_nvts_omp (openvas_connection_t *connection, credentials_t *credentials,
+              params_t *params, cmd_response_data_t* response_data)
 {
-  return get_nvts (credentials, params, NULL, NULL, response_data);
+  return get_nvts (connection, credentials, params, NULL, NULL, response_data);
 }
 
 /**
@@ -5614,6 +5456,7 @@ params_toggle_overrides (params_t *params, const char *overrides)
 /**
  * @brief Get all tasks, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials       Username and password for authentication.
  * @param[in]  params            Request parameters.
  * @param[in]  extra_xml         Extra XML to insert inside page element.
@@ -5622,7 +5465,7 @@ params_toggle_overrides (params_t *params, const char *overrides)
  * @return Result of XSL transformation.
  */
 static char *
-get_tasks (credentials_t *credentials, params_t *params, const char *extra_xml,
+get_tasks (openvas_connection_t *connection, credentials_t *credentials, params_t *params, const char *extra_xml,
            cmd_response_data_t* response_data)
 {
   const char *overrides, *schedules_only, *ignore_pagination;
@@ -5647,7 +5490,7 @@ get_tasks (credentials_t *credentials, params_t *params, const char *extra_xml,
                                    ignore_pagination ? ignore_pagination : "",
                                    ignore_pagination ? "\" " : "");
 
-  ret = get_many ("task", credentials, params, extra_xml, extra_attribs,
+  ret = get_many (connection, "task", credentials, params, extra_xml, extra_attribs,
                   response_data);
   g_free (extra_attribs);
   return ret;
@@ -5656,6 +5499,7 @@ get_tasks (credentials_t *credentials, params_t *params, const char *extra_xml,
 /**
  * @brief Get all tasks, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -5663,15 +5507,16 @@ get_tasks (credentials_t *credentials, params_t *params, const char *extra_xml,
  * @return Result of XSL transformation.
  */
 char *
-get_tasks_omp (credentials_t * credentials, params_t *params,
+get_tasks_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                cmd_response_data_t* response_data)
 {
-  return get_tasks (credentials, params, NULL, response_data);
+  return get_tasks (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Get a tasks chart, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials       Username and password for authentication.
  * @param[in]  params            Request parameters.
  * @param[in]  extra_xml         Extra XML to insert inside page element.
@@ -5680,16 +5525,17 @@ get_tasks_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 static char *
-get_tasks_chart (credentials_t *credentials, params_t *params,
+get_tasks_chart (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
                  const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return xsl_transform_omp (credentials, g_strdup ("<get_tasks_chart/>"),
+  return xsl_transform_omp (connection, credentials, params, g_strdup ("<get_tasks_chart/>"),
                             response_data);
 }
 
 /**
  * @brief Get a tasks chart, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -5697,67 +5543,48 @@ get_tasks_chart (credentials_t *credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-get_tasks_chart_omp (credentials_t * credentials, params_t *params,
+get_tasks_chart_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                      cmd_response_data_t* response_data)
 {
-  return get_tasks_chart (credentials, params, NULL, response_data);
+  return get_tasks_chart (connection, credentials, params, NULL, response_data);
 }
 
 
 /**
  * @brief Get all tasks, XSL transform the result.
  *
- * @param[in]  credentials       Username and password for authentication.
- * @param[in]  params            Request parameters.
- * @param[in]  extra_xml         Extra XML to insert inside page element.
- * @param[out] response_data     Extra data return for the HTTP response.
+ * @param[in]  connection     Connection to manager.
+ * @param[in]  credentials    Username and password for authentication.
+ * @param[in]  params         Request parameters.
+ * @param[in]  extra_xml      Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 static char *
-get_task (credentials_t *credentials, params_t *params, const char *extra_xml,
+get_task (openvas_connection_t *connection, credentials_t *credentials,
+          params_t *params, const char *extra_xml,
           cmd_response_data_t* response_data)
 {
   GString *xml = NULL;
   GString *commands_xml = NULL;
   entity_t commands_entity = NULL;
   entity_t task_entity = NULL;
-  openvas_connection_t connection;
   int notes, get_overrides, apply_overrides;
   int get_target, get_alerts;
   const char *overrides, *task_id;
-  gchar *html;
 
   task_id = params_value (params, "task_id");
   if (task_id == NULL)
-    return get_tasks (credentials, params, extra_xml, response_data);
+    return get_tasks (connection, credentials, params, extra_xml, response_data);
 
   overrides = params_value (params, "overrides");
   apply_overrides = overrides ? strcmp (overrides, "0") : 1;
 
-  switch (manager_connect (credentials, &connection, &html,
-                           response_data))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting the status. "
-                             "No update on status can be retrieved. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_tasks", response_data);
-    }
-
   notes = command_enabled (credentials, "GET_NOTES");
   get_overrides = command_enabled (credentials, "GET_OVERRIDES");
   if (openvas_connection_sendf
-       (&connection,
+       (connection,
         "<commands>"
         "<get_tasks"
         " task_id=\"%s\""
@@ -5784,7 +5611,6 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml,
         get_overrides ? "\"/>" : "")
       == -1)
     {
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -5807,9 +5633,8 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml,
                           params_value (params, "delta_report_id")
                            ? params_value (params, "delta_report_id")
                            : "");
-  if (read_string_c (&connection, &commands_xml))
+  if (read_string_c (connection, &commands_xml))
     {
-      openvas_connection_close (&connection);
       g_string_free (commands_xml, TRUE);
       g_string_free (xml, TRUE);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
@@ -5824,7 +5649,6 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml,
 
   if (parse_entity (commands_xml->str, &commands_entity))
     {
-      openvas_connection_close (&connection);
       g_string_free (commands_xml, TRUE);
       g_string_free (xml, TRUE);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
@@ -5865,12 +5689,11 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml,
 
                   if (resource_id != NULL && strcmp (resource_id, ""))
                     {
-                      if (openvas_connection_sendf (&connection,
+                      if (openvas_connection_sendf (connection,
                                                     "<get_alerts"
                                                     " alert_id=\"%s\"/>",
                                                     resource_id))
                         {
-                          openvas_connection_close (&connection);
                           g_string_free (xml, TRUE);
                           g_string_free (commands_xml, TRUE);
                           free_entity (commands_entity);
@@ -5884,9 +5707,8 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml,
                                               "/omp?cmd=get_tasks",
                                                response_data);
                         }
-                      if (read_string_c (&connection, &xml))
+                      if (read_string_c (connection, &xml))
                         {
-                          openvas_connection_close (&connection);
                           g_string_free (commands_xml, TRUE);
                           g_string_free (xml, TRUE);
                           free_entity (commands_entity);
@@ -5911,12 +5733,11 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml,
 
                   if (resource_id != NULL && strcmp (resource_id, ""))
                     {
-                      if (openvas_connection_sendf (&connection,
+                      if (openvas_connection_sendf (connection,
                                                     "<get_targets"
                                                     " target_id=\"%s\"/>",
                                                     resource_id))
                         {
-                          openvas_connection_close (&connection);
                           g_string_free (xml, TRUE);
                           g_string_free (commands_xml, TRUE);
                           free_entity (commands_entity);
@@ -5930,9 +5751,8 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml,
                                               "/omp?cmd=get_tasks",
                                                response_data);
                         }
-                      if (read_string_c (&connection, &xml))
+                      if (read_string_c (connection, &xml))
                         {
-                          openvas_connection_close (&connection);
                           g_string_free (commands_xml, TRUE);
                           g_string_free (xml, TRUE);
                           free_entity (commands_entity);
@@ -5961,13 +5781,12 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml,
 
   if (command_enabled (credentials, "GET_SCANNERS"))
     {
-      if (openvas_connection_sendf (&connection,
+      if (openvas_connection_sendf (connection,
                                     "<get_scanners"
                                     " filter=\"first=1 rows=-1 type=4\"/>")
           == -1)
         {
           g_string_free (xml, TRUE);
-          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                               "Internal error", __FUNCTION__, __LINE__,
@@ -5977,10 +5796,9 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml,
                               "/omp?cmd=get_tasks", response_data);
         }
 
-      if (read_string_c (&connection, &xml))
+      if (read_string_c (connection, &xml))
         {
           g_string_free (xml, TRUE);
-          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                               "Internal error", __FUNCTION__, __LINE__,
@@ -5993,7 +5811,7 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml,
 
   /* Get tag names */
 
-  if (openvas_connection_sendf (&connection,
+  if (openvas_connection_sendf (connection,
                                 "<get_tags"
                                 " filter=\"resource_type=task"
                                 "          first=1"
@@ -6003,7 +5821,6 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml,
       == -1)
     {
       g_string_free (xml, TRUE);
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -6013,10 +5830,9 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml,
                            "/omp?cmd=get_resources", response_data);
     }
 
-  if (read_string_c (&connection, &xml))
+  if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -6030,7 +5846,7 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml,
 
   g_string_append (xml, "<permissions>");
 
-  if (openvas_connection_sendf (&connection,
+  if (openvas_connection_sendf (connection,
                                 "<get_permissions"
                                 " filter=\"name:^.*(task)s?$"
                                 "          and resource_uuid=%s"
@@ -6039,7 +5855,6 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml,
       == -1)
     {
       g_string_free (xml, TRUE);
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -6049,10 +5864,9 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml,
                            "/omp?cmd=get_resources", response_data);
     }
 
-  if (read_string_c (&connection, &xml))
+  if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -6066,61 +5880,67 @@ get_task (credentials_t *credentials, params_t *params, const char *extra_xml,
 
   g_string_append (xml, "</get_task>");
 
-  openvas_connection_close (&connection);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+  return xsl_transform_omp (connection, credentials, params,
+                            g_string_free (xml, FALSE),
                             response_data);
 }
 
 /**
  * @brief Get a task, XSL transform the result.
  *
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
+ * @param[in]  connection     Connection to manager.
+ * @param[in]  credentials    Username and password for authentication.
+ * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_task_omp (credentials_t * credentials, params_t *params,
-              cmd_response_data_t* response_data)
+get_task_omp (openvas_connection_t *connection, credentials_t * credentials,
+              params_t *params, cmd_response_data_t* response_data)
 {
-  return get_task (credentials, params, NULL, response_data);
+  return get_task (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Returns page to create a new Credential.
  *
- * @param[in]  credentials  Credentials of user issuing the action.
- * @param[in]  params       Request parameters.
- * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[in]  connection     Connection to manager.
+ * @param[in]  credentials    Credentials of user issuing the action.
+ * @param[in]  params         Request parameters.
+ * @param[in]  extra_xml      Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 static char *
-new_credential (credentials_t *credentials, params_t *params,
-                    const char *extra_xml, cmd_response_data_t* response_data)
+new_credential (openvas_connection_t *connection, credentials_t *credentials,
+                params_t *params, const char *extra_xml,
+                cmd_response_data_t* response_data)
 {
   GString *xml;
   xml = g_string_new ("<new_credential>");
   if (extra_xml)
     g_string_append (xml, extra_xml);
   g_string_append (xml, "</new_credential>");
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+  return xsl_transform_omp (connection, credentials, params,
+                            g_string_free (xml, FALSE),
                             response_data);
 }
 
 /**
  * @brief Create a credential, get all credentials, XSL transform result.
  *
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
+ * @param[in]  connection     Connection to manager.
+ * @param[in]  credentials    Username and password for authentication.
+ * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-create_credential_omp (credentials_t * credentials, params_t *params,
+create_credential_omp (openvas_connection_t *connection,
+                       credentials_t * credentials, params_t *params,
                        cmd_response_data_t* response_data)
 {
   int ret;
@@ -6150,7 +5970,7 @@ create_credential_omp (credentials_t * credentials, params_t *params,
   if (params_value (params, "autogenerate"))
     autogenerate = strcmp (params_value (params, "autogenerate"), "0");
   else
-    return message_invalid (credentials, params, response_data,
+    return message_invalid (connection, credentials, params, response_data,
                             "Given autogenerate was invalid",
                             G_STRINGIFY (MHD_HTTP_BAD_REQUEST),
                             "Create Credential", "new_credential");
@@ -6165,7 +5985,8 @@ create_credential_omp (credentials_t * credentials, params_t *params,
       if (type && (strcmp (type, "cc") == 0))
         {
           // Auto-generate types without username
-          ret = ompf (credentials,
+          ret = ompf (connection,
+                      credentials,
                       &response,
                       &entity,
                       response_data,
@@ -6185,7 +6006,7 @@ create_credential_omp (credentials_t * credentials, params_t *params,
           // Auto-generate types with username
           CHECK_PARAM_INVALID (login, "Create Credential", "new_credential");
 
-          ret = ompf (credentials,
+          ret = ompf (connection, credentials,
                       &response,
                       &entity,
                       response_data,
@@ -6212,7 +6033,7 @@ create_credential_omp (credentials_t * credentials, params_t *params,
           CHECK_PARAM_INVALID (password,
                                 "Create Credential", "new_credential");
 
-          ret = ompf (credentials,
+          ret = ompf (connection, credentials,
                       &response,
                       &entity,
                       response_data,
@@ -6240,7 +6061,7 @@ create_credential_omp (credentials_t * credentials, params_t *params,
           CHECK_PARAM_INVALID (private_key,
                                 "Create Credential", "new_credential");
 
-          ret = ompf (credentials,
+          ret = ompf (connection, credentials,
                       &response,
                       &entity,
                       response_data,
@@ -6270,7 +6091,7 @@ create_credential_omp (credentials_t * credentials, params_t *params,
           CHECK_PARAM_INVALID (private_key,
                                 "Create Credential", "new_credential");
 
-          ret = ompf (credentials,
+          ret = ompf (connection, credentials,
                       &response,
                       &entity,
                       response_data,
@@ -6308,7 +6129,7 @@ create_credential_omp (credentials_t * credentials, params_t *params,
                                 "Create Credential", "new_credential");
 
           if (privacy_password && strcmp (privacy_password, ""))
-            ret = ompf (credentials,
+            ret = ompf (connection, credentials,
                         &response,
                         &entity,
                         response_data,
@@ -6337,7 +6158,7 @@ create_credential_omp (credentials_t * credentials, params_t *params,
                         auth_algorithm ? auth_algorithm : "",
                         allow_insecure);
           else
-            ret = ompf (credentials,
+            ret = ompf (connection, credentials,
                         &response,
                         &entity,
                         response_data,
@@ -6406,7 +6227,7 @@ create_credential_omp (credentials_t * credentials, params_t *params,
 
   if (entity_attribute (entity, "id"))
     params_add (params, "credential_id", entity_attribute (entity, "id"));
-  html = response_from_entity (credentials, params, entity,
+  html = response_from_entity (connection, credentials, params, entity,
                                (no_redirect && strcmp (no_redirect, "0")),
                                NULL, "get_credentials",
                                NULL, "new_credential",
@@ -6420,6 +6241,7 @@ create_credential_omp (credentials_t * credentials, params_t *params,
 /**
  * @brief Get one credential, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]   credentials        Username and password for authentication.
  * @param[in]   params             Request parameters.
  * @param[in]   commands           Extra commands to run before the others.
@@ -6428,44 +6250,48 @@ create_credential_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 static char *
-get_credential (credentials_t * credentials, params_t *params,
+get_credential (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                 const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return get_one ("credential", credentials, params, extra_xml,
+  return get_one (connection, "credential", credentials, params, extra_xml,
                   "targets=\"1\" scanners=\"1\"", response_data);
 }
 
 /**
  * @brief Get one credential, XSL transform the result.
  *
- * @param[in]  credentials       Username and password for authentication.
- * @param[in]  params            Request parameters.
- * @param[out] response_data     Extra data return for the HTTP response.
+ * @param[in]  connection     Connection to manager.
+ * @param[in]  credentials    Username and password for authentication.
+ * @param[in]  params         Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_credential_omp (credentials_t * credentials, params_t *params,
-                        cmd_response_data_t* response_data)
+get_credential_omp (openvas_connection_t *connection,
+                    credentials_t * credentials, params_t *params,
+                    cmd_response_data_t* response_data)
 {
-  return get_credential (credentials, params, NULL, response_data);
+  return get_credential (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Export a Credential in a defined format.
  *
- * @param[in]   credentials  Username and password for authentication.
- * @param[in]   params       Request parameters.
- * @param[out]  result_len   Length of result.
- * @param[out]  html         Result of XSL transformation.  Required.
- * @param[out]  login        Login name return.  NULL to skip.  Only set on
- *                           success with credential_id.
+ * @param[in]   connection     Connection to manager.
+ * @param[in]   credentials    Username and password for authentication.
+ * @param[in]   params         Request parameters.
+ * @param[out]  result_len     Length of result.
+ * @param[out]  html           Result of XSL transformation.  Required.
+ * @param[out]  login          Login name return.  NULL to skip.  Only set on
+ *                             success with credential_id.
  * @param[out]  response_data  Extra data return for the HTTP response.
  *
  * @return 0 success, 1 failure.
  */
 int
-download_credential_omp (credentials_t * credentials,
+download_credential_omp (openvas_connection_t *connection,
+                         credentials_t * credentials,
                          params_t *params,
                          gsize *result_len,
                          char ** html,
@@ -6473,35 +6299,11 @@ download_credential_omp (credentials_t * credentials,
                          cmd_response_data_t* response_data)
 {
   entity_t entity;
-  openvas_connection_t connection;
-  gchar *connect_html;
   const char *credential_id, *format;
 
   assert (html);
 
   if (result_len) *result_len = 0;
-
-  switch (manager_connect (credentials, &connection, &connect_html,
-                           response_data))
-    {
-      case 0:
-        break;
-      case -1:
-        if (connect_html)
-          {
-            *html = connect_html;
-            return 1;
-          }
-        /* Fall through. */
-      default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-        *html = gsad_message (credentials,
-                              "Internal error", __FUNCTION__, __LINE__,
-                              "An internal error occurred while getting a credential. "
-                              "Diagnostics: Failure to connect to manager daemon.",
-                              "/omp?cmd=get_credentials", response_data);
-        return 1;
-    }
 
   /* Send the request. */
 
@@ -6510,7 +6312,6 @@ download_credential_omp (credentials_t * credentials,
 
   if ((credential_id == NULL) || (format == NULL))
     {
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
       *html = gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
@@ -6520,7 +6321,7 @@ download_credential_omp (credentials_t * credentials,
       return 1;
     }
 
-  if (openvas_connection_sendf (&connection,
+  if (openvas_connection_sendf (connection,
                                 "<get_credentials"
                                 " credential_id=\"%s\""
                                 " format=\"%s\"/>",
@@ -6528,7 +6329,6 @@ download_credential_omp (credentials_t * credentials,
                                 format)
       == -1)
     {
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       *html = gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
@@ -6550,9 +6350,8 @@ download_credential_omp (credentials_t * credentials,
       /* A base64 encoded package. */
 
       entity = NULL;
-      if (read_entity_c (&connection, &entity))
+      if (read_entity_c (connection, &entity))
         {
-          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           *html = gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
@@ -6586,7 +6385,6 @@ download_credential_omp (credentials_t * credentials,
               len = 0;
             }
           if (result_len) *result_len = len;
-          openvas_connection_close (&connection);
           *html = package_decoded;
           if (login)
             {
@@ -6603,7 +6401,6 @@ download_credential_omp (credentials_t * credentials,
       else
         {
           free_entity (entity);
-          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           *html = gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
@@ -6621,9 +6418,8 @@ download_credential_omp (credentials_t * credentials,
       /* A key or certificate. */
 
       entity = NULL;
-      if (read_entity_c (&connection, &entity))
+      if (read_entity_c (connection, &entity))
         {
-          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           *html = gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
@@ -6633,7 +6429,6 @@ download_credential_omp (credentials_t * credentials,
                                 "/omp?cmd=get_credentials", response_data);
           return 1;
         }
-      openvas_connection_close (&connection);
 
       credential_entity = entity_child (entity, "credential");
       if (credential_entity)
@@ -6672,6 +6467,7 @@ download_credential_omp (credentials_t * credentials,
 /**
  * @brief Export a Credential.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
  * @param[out]  content_type         Content type return.
@@ -6683,18 +6479,19 @@ download_credential_omp (credentials_t * credentials,
  *         on error.
  */
 char *
-export_credential_omp (credentials_t * credentials, params_t *params,
+export_credential_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                        enum content_type * content_type,
                        char **content_disposition, gsize *content_length,
                        cmd_response_data_t* response_data)
 {
-  return export_resource ("credential", credentials, params, content_type,
+  return export_resource (connection, "credential", credentials, params, content_type,
                           content_disposition, content_length, response_data);
 }
 
 /**
  * @brief Export a list of Credentials.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
  * @param[out]  content_type         Content type return.
@@ -6706,18 +6503,19 @@ export_credential_omp (credentials_t * credentials, params_t *params,
  *         on error.
  */
 char *
-export_credentials_omp (credentials_t * credentials, params_t *params,
+export_credentials_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                         enum content_type * content_type,
                         char **content_disposition, gsize *content_length,
                         cmd_response_data_t* response_data)
 {
-  return export_many ("credential", credentials, params, content_type,
+  return export_many (connection, "credential", credentials, params, content_type,
                       content_disposition, content_length, response_data);
 }
 
 /**
  * @brief Get one or all credentials, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  commands     Extra commands to run before the others when
@@ -6727,16 +6525,17 @@ export_credentials_omp (credentials_t * credentials, params_t *params,
  * @return 0 success, 1 failure.
  */
 static char *
-get_credentials (credentials_t * credentials, params_t *params,
+get_credentials (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                  const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return get_many ("credential", credentials, params, extra_xml, NULL,
+  return get_many (connection, "credential", credentials, params, extra_xml, NULL,
                    response_data);
 }
 
 /**
  * @brief Get one or all credentials, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -6744,15 +6543,16 @@ get_credentials (credentials_t * credentials, params_t *params,
  * @return 0 success, 1 failure.
  */
 char *
-get_credentials_omp (credentials_t * credentials, params_t *params,
+get_credentials_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                      cmd_response_data_t* response_data)
 {
-  return get_credentials (credentials, params, NULL, response_data);
+  return get_credentials (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Delete credential, get all credentials, XSL transform result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -6760,16 +6560,17 @@ get_credentials_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-delete_credential_omp (credentials_t * credentials, params_t *params,
+delete_credential_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                        cmd_response_data_t* response_data)
 {
-  return delete_resource ("credential", credentials, params, 0,
+  return delete_resource (connection, "credential", credentials, params, 0,
                           "get_credentials", response_data);
 }
 
 /**
  * @brief Returns page to create a new Credential.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -6777,15 +6578,16 @@ delete_credential_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-new_credential_omp (credentials_t *credentials, params_t *params,
+new_credential_omp (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
                     cmd_response_data_t* response_data)
 {
-  return new_credential (credentials, params, NULL, response_data);
+  return new_credential (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Setup edit_credential XML, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials       Username and password for authentication.
  * @param[in]  params            Request parameters.
  * @param[in]  extra_xml         Extra XML to insert inside page element.
@@ -6794,16 +6596,17 @@ new_credential_omp (credentials_t *credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 static char *
-edit_credential (credentials_t * credentials, params_t *params,
+edit_credential (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                  const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return edit_resource ("credential", credentials, params, NULL, extra_xml,
+  return edit_resource (connection, "credential", credentials, params, NULL, extra_xml,
                         response_data);
 }
 
 /**
  * @brief Setup edit_credential XML, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials       Username and password for authentication.
  * @param[in]  params            Request parameters.
  * @param[out] response_data     Extra data return for the HTTP response.
@@ -6811,15 +6614,16 @@ edit_credential (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-edit_credential_omp (credentials_t * credentials, params_t *params,
+edit_credential_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                      cmd_response_data_t* response_data)
 {
-  return edit_credential (credentials, params, NULL, response_data);
+  return edit_credential (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Save credential, get next page, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials       Username and password for authentication.
  * @param[in]  params            Request parameters.
  * @param[out] response_data     Extra data return for the HTTP response.
@@ -6827,7 +6631,7 @@ edit_credential_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-save_credential_omp (credentials_t * credentials, params_t *params,
+save_credential_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                      cmd_response_data_t* response_data)
 {
   int ret, change_password, change_passphrase;
@@ -6972,7 +6776,7 @@ save_credential_omp (credentials_t * credentials, params_t *params,
   /* Modify the credential. */
   response = NULL;
   entity = NULL;
-  ret = omp (credentials,
+  ret = omp (connection, credentials,
              &response,
              &entity,
              response_data,
@@ -7012,7 +6816,7 @@ save_credential_omp (credentials_t * credentials, params_t *params,
                              "/omp?cmd=get_credentials", response_data);
     }
 
-  html = response_from_entity (credentials, params, entity,
+  html = response_from_entity (connection, credentials, params, entity,
                                (no_redirect && strcmp (no_redirect, "0")),
                                NULL, "get_credentials",
                                NULL, "edit_credential",
@@ -7025,6 +6829,7 @@ save_credential_omp (credentials_t * credentials, params_t *params,
 /**
  * @brief Returns page to create a new agent.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
@@ -7033,7 +6838,7 @@ save_credential_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 static char *
-new_agent (credentials_t *credentials, params_t *params,
+new_agent (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
            const char *extra_xml, cmd_response_data_t* response_data)
 {
   GString *xml;
@@ -7041,13 +6846,14 @@ new_agent (credentials_t *credentials, params_t *params,
   if (extra_xml)
     g_string_append (xml, extra_xml);
   g_string_append (xml, "</new_agent>");
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+  return xsl_transform_omp (connection, credentials, params, g_string_free (xml, FALSE),
                             response_data);
 }
 
 /**
  * @brief Return the new agent page.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -7055,15 +6861,16 @@ new_agent (credentials_t *credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-new_agent_omp (credentials_t *credentials, params_t *params,
+new_agent_omp (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
                cmd_response_data_t* response_data)
 {
-  return new_agent (credentials, params, NULL, response_data);
+  return new_agent (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Create an agent, get all agents, XSL transform result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials          Username and password for authentication.
  * @param[in]  params               Request parameters.
  * @param[out] response_data        Extra data return for the HTTP response.
@@ -7071,7 +6878,7 @@ new_agent_omp (credentials_t *credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-create_agent_omp (credentials_t * credentials, params_t *params,
+create_agent_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                   cmd_response_data_t* response_data)
 {
   entity_t entity;
@@ -7142,7 +6949,7 @@ create_agent_omp (credentials_t * credentials, params_t *params,
                              howto_install_64,
                              howto_use_64);
 
-  ret = omp (credentials,
+  ret = omp (connection, credentials,
              &response,
              &entity,
              response_data,
@@ -7188,7 +6995,7 @@ create_agent_omp (credentials_t * credentials, params_t *params,
 
   if (entity_attribute (entity, "id"))
     params_add (params, "agent_id", entity_attribute (entity, "id"));
-  html = response_from_entity (credentials, params, entity,
+  html = response_from_entity (connection, credentials, params, entity,
                                (no_redirect && strcmp (no_redirect, "0")),
                                NULL, "get_agents",
                                NULL, "new_agent",
@@ -7201,6 +7008,7 @@ create_agent_omp (credentials_t * credentials, params_t *params,
 /**
  * @brief Delete agent, get all agents, XSL transform result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -7208,28 +7016,30 @@ create_agent_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-delete_agent_omp (credentials_t * credentials, params_t *params,
+delete_agent_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                   cmd_response_data_t* response_data)
 {
-  return delete_resource ("agent", credentials, params, 0, "get_agents",
+  return delete_resource (connection, "agent", credentials, params, 0, "get_agents",
                           response_data);
 }
 
 /**
  * @brief Get an agent, XSL transform the result.
  *
- * @param[in]   credentials  Username and password for authentication.
- * @param[in]   params       Request parameters.
- * @param[out]  result_len   Length of result.
- * @param[out]  html         Result of XSL transformation.  Required.
- * @param[out]  filename     Agent filename return.  NULL to skip.  Only set
- *                           on success with agent_id.
+ * @param[in]   connection     Connection to manager.
+ * @param[in]   credentials    Username and password for authentication.
+ * @param[in]   params         Request parameters.
+ * @param[out]  result_len     Length of result.
+ * @param[out]  html           Result of XSL transformation.  Required.
+ * @param[out]  filename       Agent filename return.  NULL to skip.  Only set
+ *                             on success with agent_id.
  * @param[out]  response_data  Extra data return for the HTTP response.
  *
  * @return 0 success, 1 failure.
  */
 int
-download_agent_omp (credentials_t * credentials,
+download_agent_omp (openvas_connection_t *connection,
+                    credentials_t * credentials,
                     params_t *params,
                     gsize *result_len,
                     char ** html,
@@ -7237,8 +7047,6 @@ download_agent_omp (credentials_t * credentials,
                     cmd_response_data_t* response_data)
 {
   entity_t entity;
-  openvas_connection_t connection;
-  gchar *connect_html;
   const char *agent_id, *format;
 
   agent_id = params_value (params, "agent_id");
@@ -7258,40 +7066,14 @@ download_agent_omp (credentials_t * credentials,
 
   *result_len = 0;
 
-  switch (manager_connect (credentials, &connection, &connect_html,
-                           response_data))
-    {
-      case 0:
-        break;
-      case -1:
-        if (connect_html)
-          {
-            *html = connect_html;
-            return 1;
-          }
-        /* Fall through. */
-      default:
-        {
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-          *html = gsad_message (credentials,
-                                "Internal error", __FUNCTION__, __LINE__,
-                                "An internal error occurred while getting the agent list. "
-                                "The current list of agents is not available. "
-                                "Diagnostics: Failure to connect to manager daemon.",
-                                "/omp?cmd=get_agents", response_data);
-          return 1;
-        }
-    }
-
   /* Send the request. */
 
-  if (openvas_connection_sendf (&connection,
+  if (openvas_connection_sendf (connection,
                                 "<get_agents agent_id=\"%s\" format=\"%s\"/>",
                                 agent_id,
                                 format)
       == -1)
     {
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       *html = gsad_message (credentials,
                             "Internal error", __FUNCTION__, __LINE__,
@@ -7314,9 +7096,8 @@ download_agent_omp (credentials_t * credentials,
       /* A base64 encoded package. */
 
       entity = NULL;
-      if (read_entity_c (&connection, &entity))
+      if (read_entity_c (connection, &entity))
         {
-          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           *html = gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
@@ -7348,7 +7129,6 @@ download_agent_omp (credentials_t * credentials,
               package_decoded = (gchar *) g_strdup ("");
               *result_len = 0;
             }
-          openvas_connection_close (&connection);
           *html = package_decoded;
           if (filename)
             {
@@ -7371,7 +7151,6 @@ download_agent_omp (credentials_t * credentials,
       else
         {
           free_entity (entity);
-          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           *html = gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
@@ -7387,9 +7166,8 @@ download_agent_omp (credentials_t * credentials,
       /* An error. */
 
       entity = NULL;
-      if (read_entity_c (&connection, &entity))
+      if (read_entity_c (connection, &entity))
         {
-          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           *html = gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
@@ -7399,7 +7177,6 @@ download_agent_omp (credentials_t * credentials,
                                 "/omp?cmd=get_tasks", response_data);
           return 1;
         }
-      openvas_connection_close (&connection);
 
       free_entity (entity);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
@@ -7416,6 +7193,7 @@ download_agent_omp (credentials_t * credentials,
 /**
  * @brief Setup edit_agent XML, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
@@ -7424,16 +7202,17 @@ download_agent_omp (credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-edit_agent (credentials_t * credentials, params_t *params,
+edit_agent (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
             const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return edit_resource ("agent", credentials, params, NULL, extra_xml,
+  return edit_resource (connection, "agent", credentials, params, NULL, extra_xml,
                         response_data);
 }
 
 /**
  * @brief Setup edit_agent XML, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -7441,15 +7220,16 @@ edit_agent (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-edit_agent_omp (credentials_t * credentials, params_t *params,
+edit_agent_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                 cmd_response_data_t* response_data)
 {
-  return edit_agent (credentials, params, NULL, response_data);
+  return edit_agent (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Modify a agent, get all agents, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -7457,7 +7237,7 @@ edit_agent_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-save_agent_omp (credentials_t * credentials, params_t *params,
+save_agent_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                 cmd_response_data_t* response_data)
 {
   int ret;
@@ -7478,7 +7258,7 @@ save_agent_omp (credentials_t * credentials, params_t *params,
 
   response = NULL;
   entity = NULL;
-  ret = ompf (credentials,
+  ret = ompf (connection, credentials,
               &response,
               &entity,
               response_data,
@@ -7521,7 +7301,7 @@ save_agent_omp (credentials_t * credentials, params_t *params,
                              "/omp?cmd=get_agents", response_data);
     }
 
-  html = response_from_entity (credentials, params, entity,
+  html = response_from_entity (connection, credentials, params, entity,
                                (no_redirect && strcmp (no_redirect, "0")),
                                NULL, "get_agents",
                                NULL, "edit_agent",
@@ -7534,6 +7314,7 @@ save_agent_omp (credentials_t * credentials, params_t *params,
 /**
  * @brief Get one agent, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
@@ -7542,15 +7323,16 @@ save_agent_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-get_agent (credentials_t * credentials, params_t *params,
+get_agent (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
             const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return get_one ("agent", credentials, params, extra_xml, NULL, response_data);
+  return get_one (connection, "agent", credentials, params, extra_xml, NULL, response_data);
 }
 
 /**
  * @brief Get one agent, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -7558,15 +7340,16 @@ get_agent (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-get_agent_omp (credentials_t * credentials, params_t *params,
+get_agent_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                cmd_response_data_t* response_data)
 {
-  return get_agent (credentials, params, NULL, response_data);
+  return get_agent (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Get all agents, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
@@ -7575,16 +7358,17 @@ get_agent_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-get_agents (credentials_t * credentials, params_t *params,
+get_agents (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
             const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return get_many ("agent", credentials, params, extra_xml, NULL,
+  return get_many (connection, "agent", credentials, params, extra_xml, NULL,
                    response_data);
 }
 
 /**
  * @brief Get all agents, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]   credentials  Username and password for authentication.
  * @param[in]   params       Request parameters.
  * @param[out]  response_data  Extra data return for the HTTP response.
@@ -7592,15 +7376,16 @@ get_agents (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-get_agents_omp (credentials_t * credentials, params_t *params,
+get_agents_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                 cmd_response_data_t* response_data)
 {
-  return get_agents (credentials, params, NULL, response_data);
+  return get_agents (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Verify agent, get agents, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -7608,7 +7393,7 @@ get_agents_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-verify_agent_omp (credentials_t * credentials, params_t *params,
+verify_agent_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                   cmd_response_data_t* response_data)
 {
   gchar *html, *response;
@@ -7628,7 +7413,7 @@ verify_agent_omp (credentials_t * credentials, params_t *params,
     }
   response = NULL;
   entity = NULL;
-  ret = ompf (credentials,
+  ret = ompf (connection, credentials,
               &response,
               &entity,
               response_data,
@@ -7668,7 +7453,8 @@ verify_agent_omp (credentials_t * credentials, params_t *params,
 
   if (omp_success (entity))
     {
-      html = next_page (credentials, params, response, response_data);
+      html = next_page (connection, credentials, params, response,
+                        response_data);
       if (html == NULL)
         {
           free_entity (entity);
@@ -7685,7 +7471,7 @@ verify_agent_omp (credentials_t * credentials, params_t *params,
   else
     {
       set_http_status_from_entity (entity, response_data);
-      html = get_agents (credentials, params, response, response_data);
+      html = get_agents (connection, credentials, params, response, response_data);
     }
   free_entity (entity);
   g_free (response);
@@ -7695,6 +7481,7 @@ verify_agent_omp (credentials_t * credentials, params_t *params,
 /**
  * @brief Export a agent.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
  * @param[out]  content_type         Content type return.
@@ -7705,17 +7492,18 @@ verify_agent_omp (credentials_t * credentials, params_t *params,
  * @return Agent XML on success.  HTML result of XSL transformation on error.
  */
 char *
-export_agent_omp (credentials_t * credentials, params_t *params,
+export_agent_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                   enum content_type * content_type, char **content_disposition,
                   gsize *content_length, cmd_response_data_t* response_data)
 {
-  return export_resource ("agent", credentials, params, content_type,
+  return export_resource (connection, "agent", credentials, params, content_type,
                           content_disposition, content_length, response_data);
 }
 
 /**
  * @brief Export a list of agents.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
  * @param[out]  content_type         Content type return.
@@ -7727,17 +7515,18 @@ export_agent_omp (credentials_t * credentials, params_t *params,
  *         on error.
  */
 char *
-export_agents_omp (credentials_t * credentials, params_t *params,
+export_agents_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                     enum content_type * content_type, char **content_disposition,
                     gsize *content_length, cmd_response_data_t* response_data)
 {
-  return export_many ("agent", credentials, params, content_type,
+  return export_many (connection, "agent", credentials, params, content_type,
                       content_disposition, content_length, response_data);
 }
 
 /**
  * @brief Get an aggregate of resources.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -7745,7 +7534,7 @@ export_agents_omp (credentials_t * credentials, params_t *params,
  * @return The aggregate.
  */
 char *
-get_aggregate_omp (credentials_t * credentials, params_t *params,
+get_aggregate_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
   params_t *data_columns, *text_columns;
@@ -7794,8 +7583,8 @@ get_aggregate_omp (credentials_t * credentials, params_t *params,
 
   if (xml_param == NULL || atoi (xml_param) == 0)
     {
-      return xsl_transform_omp (credentials, g_strdup ("<get_aggregate/>"),
-                                response_data);
+      return xsl_transform_omp (connection, credentials,params,
+                                g_strdup ("<get_aggregate/>"), response_data);
     }
   xml = g_string_new ("<get_aggregate>");
 
@@ -7885,7 +7674,7 @@ get_aggregate_omp (credentials_t * credentials, params_t *params,
   g_string_append (xml, command_escaped);
   g_free (command_escaped);
 
-  ret = omp (credentials, &response, &entity, response_data, command->str);
+  ret = omp (connection, credentials, &response, &entity, response_data, command->str);
   g_string_free (command, TRUE);
   switch (ret)
     {
@@ -7921,13 +7710,14 @@ get_aggregate_omp (credentials_t * credentials, params_t *params,
 
   g_string_append (xml, "</get_aggregate>");
 
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+  return xsl_transform_omp (connection, credentials, params, g_string_free (xml, FALSE),
                             response_data);
 }
 
 /**
  * @brief Returns page to create a new alert.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
@@ -7936,7 +7726,7 @@ get_aggregate_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 static char *
-new_alert (credentials_t *credentials, params_t *params, const char *extra_xml,
+new_alert (openvas_connection_t *connection, credentials_t *credentials, params_t *params, const char *extra_xml,
            cmd_response_data_t* response_data)
 {
   GString *xml;
@@ -7952,7 +7742,7 @@ new_alert (credentials_t *credentials, params_t *params, const char *extra_xml,
 
   response = NULL;
   entity = NULL;
-  ret = omp (credentials, &response, &entity, response_data,
+  ret = omp (connection, credentials, &response, &entity, response_data,
              "<get_report_formats filter=\"rows=-1\"/>");
   switch (ret)
     {
@@ -7991,7 +7781,7 @@ new_alert (credentials_t *credentials, params_t *params, const char *extra_xml,
 
   /* Get Report Filters. */
 
-  ret = omp (credentials, &response, &entity, response_data,
+  ret = omp (connection, credentials, &response, &entity, response_data,
              "<get_filters filter=\"rows=-1\"/>");
 
   switch (ret)
@@ -8031,7 +7821,7 @@ new_alert (credentials_t *credentials, params_t *params, const char *extra_xml,
 
   /* Get Tasks. */
 
-  ret = omp (credentials, &response, &entity, response_data,
+  ret = omp (connection, credentials, &response, &entity, response_data,
              "<get_tasks"
              " schedules_only=\"1\""
              " filter=\"owner=any permission=start_task rows=-1\"/>");
@@ -8076,7 +7866,7 @@ new_alert (credentials_t *credentials, params_t *params, const char *extra_xml,
 
   /* Get Credentials. */
 
-  ret = omp (credentials, &response, &entity, response_data,
+  ret = omp (connection, credentials, &response, &entity, response_data,
              "<get_credentials"
              " filter=\"type=up owner=any permission=any rows=-1\"/>");
 
@@ -8120,13 +7910,14 @@ new_alert (credentials_t *credentials, params_t *params, const char *extra_xml,
   free_entity (entity);
 
   g_string_append (xml, "</new_alert>");
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+  return xsl_transform_omp (connection, credentials, params, g_string_free (xml, FALSE),
                             response_data);
 }
 
 /**
  * @brief Returns page to create a new alert.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -8134,14 +7925,14 @@ new_alert (credentials_t *credentials, params_t *params, const char *extra_xml,
  * @return Result of XSL transformation.
  */
 char *
-new_alert_omp (credentials_t *credentials, params_t *params,
+new_alert_omp (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
                cmd_response_data_t* response_data)
 {
-  return new_alert (credentials, params, NULL, response_data);
+  return new_alert (connection, credentials, params, NULL, response_data);
 }
 
 char *
-get_alerts (credentials_t *, params_t *, const char *, cmd_response_data_t*);
+get_alerts (openvas_connection_t *connection, credentials_t *, params_t *, const char *, cmd_response_data_t*);
 
 /**
  * @brief Send event data for an alert.
@@ -8350,6 +8141,7 @@ append_alert_method_data (GString *xml, params_t *data, const char *method)
 /**
  * @brief Create an alert, get all alerts, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -8357,7 +8149,7 @@ append_alert_method_data (GString *xml, params_t *data, const char *method)
  * @return Result of XSL transformation.
  */
 char *
-create_alert_omp (credentials_t * credentials, params_t *params,
+create_alert_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                   cmd_response_data_t* response_data)
 {
   int ret;
@@ -8439,7 +8231,7 @@ create_alert_omp (credentials_t * credentials, params_t *params,
                      "</condition>"
                      "</create_alert>");
 
-  ret = omp (credentials,
+  ret = omp (connection, credentials,
              &response,
              &entity,
              response_data,
@@ -8478,7 +8270,7 @@ create_alert_omp (credentials_t * credentials, params_t *params,
 
   if (entity_attribute (entity, "id"))
     params_add (params, "alert_id", entity_attribute (entity, "id"));
-  html = response_from_entity (credentials, params, entity,
+  html = response_from_entity (connection, credentials, params, entity,
                                (no_redirect && strcmp (no_redirect, "0")),
                                NULL, "get_alerts",
                                NULL, "new_alert",
@@ -8491,6 +8283,7 @@ create_alert_omp (credentials_t * credentials, params_t *params,
 /**
  * @brief Delete an alert, get all alerts, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -8498,16 +8291,17 @@ create_alert_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-delete_alert_omp (credentials_t * credentials, params_t *params,
+delete_alert_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                   cmd_response_data_t* response_data)
 {
-  return delete_resource ("alert", credentials, params, 0, "get_alerts",
+  return delete_resource (connection, "alert", credentials, params, 0, "get_alerts",
                           response_data);
 }
 
 /**
  * @brief Get one alert, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
@@ -8516,7 +8310,7 @@ delete_alert_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-get_alert (credentials_t * credentials, params_t *params,
+get_alert (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
            const char *extra_xml, cmd_response_data_t* response_data)
 {
   gchar *html;
@@ -8532,7 +8326,7 @@ get_alert (credentials_t * credentials, params_t *params,
 
       response = NULL;
       entity = NULL;
-      switch (omp (credentials, &response, &entity, response_data,
+      switch (omp (connection, credentials, &response, &entity, response_data,
                    "<get_report_formats"
                    " filter=\"rows=-1\"/>"))
         {
@@ -8579,7 +8373,7 @@ get_alert (credentials_t * credentials, params_t *params,
 
       response = NULL;
       entity = NULL;
-      switch (omp (credentials, &response, &entity, response_data,
+      switch (omp (connection, credentials, &response, &entity, response_data,
                    "<get_tasks"
                    " schedules_only=\"1\""
                    " filter=\"owner=any permission=start_task rows=-1\"/>"))
@@ -8628,7 +8422,7 @@ get_alert (credentials_t * credentials, params_t *params,
 
       response = NULL;
       entity = NULL;
-      switch (omp (credentials, &response, &entity, response_data,
+      switch (omp (connection, credentials, &response, &entity, response_data,
                    "<get_filters"
                    " filter=\"type=result rows=-1\"/>"))
         {
@@ -8667,7 +8461,7 @@ get_alert (credentials_t * credentials, params_t *params,
       g_free (response);
     }
 
-  html = get_one ("alert", credentials, params, extra->str, "tasks=\"1\"",
+  html = get_one (connection, "alert", credentials, params, extra->str, "tasks=\"1\"",
                   response_data);
   g_string_free (extra, TRUE);
   return html;
@@ -8676,6 +8470,7 @@ get_alert (credentials_t * credentials, params_t *params,
 /**
  * @brief Get one alert, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials   Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -8683,15 +8478,16 @@ get_alert (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-get_alert_omp (credentials_t * credentials, params_t *params,
+get_alert_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                cmd_response_data_t* response_data)
 {
-  return get_alert (credentials, params, NULL, response_data);
+  return get_alert (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Get all alerts, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
@@ -8700,7 +8496,7 @@ get_alert_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-get_alerts (credentials_t * credentials, params_t *params,
+get_alerts (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
             const char *extra_xml, cmd_response_data_t* response_data)
 {
   gchar *html;
@@ -8714,7 +8510,7 @@ get_alerts (credentials_t * credentials, params_t *params,
 
       response = NULL;
       entity = NULL;
-      switch (omp (credentials, &response, &entity, response_data,
+      switch (omp (connection, credentials, &response, &entity, response_data,
                    "<get_tasks"
                    " schedules_only=\"1\""
                    " filter=\"owner=any permission=start_task rows=-1\"/>"))
@@ -8764,7 +8560,7 @@ get_alerts (credentials_t * credentials, params_t *params,
 
       response = NULL;
       entity = NULL;
-      switch (omp (credentials, &response, &entity, response_data,
+      switch (omp (connection, credentials, &response, &entity, response_data,
                    "<get_filters"
                    " filter=\"type=result rows=-1\"/>"))
         {
@@ -8805,7 +8601,7 @@ get_alerts (credentials_t * credentials, params_t *params,
 
   if (extra_xml)
     g_string_append (extra, extra_xml);
-  html = get_many ("alert", credentials, params, extra->str, NULL,
+  html = get_many (connection, "alert", credentials, params, extra->str, NULL,
                    response_data);
   g_string_free (extra, TRUE);
   return html;
@@ -8814,6 +8610,7 @@ get_alerts (credentials_t * credentials, params_t *params,
 /**
  * @brief Get all alerts, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -8821,29 +8618,30 @@ get_alerts (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-get_alerts_omp (credentials_t * credentials, params_t *params,
+get_alerts_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                 cmd_response_data_t* response_data)
 {
-  return get_alerts (credentials, params, NULL, response_data);
+  return get_alerts (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Setup edit_alert XML, XSL transform the result.
  *
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[in]  connection     Connection to manager.
+ * @param[in]  credentials    Username and password for authentication.
+ * @param[in]  params         Request parameters.
+ * @param[in]  extra_xml      Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-edit_alert (credentials_t * credentials, params_t *params,
-            const char *extra_xml, cmd_response_data_t* response_data)
+edit_alert (openvas_connection_t *connection, credentials_t * credentials,
+            params_t *params, const char *extra_xml,
+            cmd_response_data_t* response_data)
 {
   GString *xml;
-  openvas_connection_t connection;
-  gchar *html, *edit;
+  gchar *edit;
   const char *alert_id, *next, *filter;
 
   alert_id = params_value (params, "alert_id");
@@ -8864,33 +8662,13 @@ edit_alert (credentials_t * credentials, params_t *params,
   if (next == NULL)
     next = "get_alerts";
 
-  switch (manager_connect (credentials, &connection, &html,
-                           response_data))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while editing an alert. "
-                             "The alert remains as it was. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_alerts", response_data);
-    }
-
-  if (openvas_connection_sendf (&connection,
+  if (openvas_connection_sendf (connection,
                                 "<get_alerts"
                                 " alert_id=\"%s\""
                                 " details=\"1\"/>",
                                 alert_id)
       == -1)
     {
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -8915,10 +8693,9 @@ edit_alert (credentials_t * credentials, params_t *params,
   g_string_append (xml, edit);
   g_free (edit);
 
-  if (read_string_c (&connection, &xml))
+  if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -8931,13 +8708,12 @@ edit_alert (credentials_t * credentials, params_t *params,
     {
       /* Get the report formats. */
 
-      if (openvas_connection_sendf (&connection,
+      if (openvas_connection_sendf (connection,
                                     "<get_report_formats"
                                     " filter=\"rows=-1\"/>")
           == -1)
         {
           g_string_free (xml, TRUE);
-          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -8947,10 +8723,9 @@ edit_alert (credentials_t * credentials, params_t *params,
                                "/omp?cmd=get_alerts", response_data);
         }
 
-      if (read_string_c (&connection, &xml))
+      if (read_string_c (connection, &xml))
         {
           g_string_free (xml, TRUE);
-          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -8965,12 +8740,11 @@ edit_alert (credentials_t * credentials, params_t *params,
     {
       /* Get filters. */
 
-      if (openvas_connection_sendf (&connection,
+      if (openvas_connection_sendf (connection,
                                     "<get_filters filter=\"rows=-1\"/>")
           == -1)
         {
           g_string_free (xml, TRUE);
-          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -8981,10 +8755,9 @@ edit_alert (credentials_t * credentials, params_t *params,
                                "/omp?cmd=get_alerts", response_data);
         }
 
-      if (read_string_c (&connection, &xml))
+      if (read_string_c (connection, &xml))
         {
           g_string_free (xml, TRUE);
-          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -9000,7 +8773,7 @@ edit_alert (credentials_t * credentials, params_t *params,
     {
       /* Get tasks. */
 
-      if (openvas_connection_sendf (&connection,
+      if (openvas_connection_sendf (connection,
                                     "<get_tasks"
                                     " schedules_only=\"1\""
                                     " filter=\"owner=any permission=start_task"
@@ -9008,7 +8781,6 @@ edit_alert (credentials_t * credentials, params_t *params,
           == -1)
         {
           g_string_free (xml, TRUE);
-          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -9019,10 +8791,9 @@ edit_alert (credentials_t * credentials, params_t *params,
                                "/omp?cmd=get_alerts", response_data);
         }
 
-      if (read_string_c (&connection, &xml))
+      if (read_string_c (connection, &xml))
         {
           g_string_free (xml, TRUE);
-          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -9038,14 +8809,13 @@ edit_alert (credentials_t * credentials, params_t *params,
 
   if (command_enabled (credentials, "GET_CREDENTIALS"))
     {
-      if (openvas_connection_sendf (&connection,
+      if (openvas_connection_sendf (connection,
                                     "<get_credentials"
                                     " filter=\"type=up owner=any permission=any"
                                     "          rows=-1\"/>")
           == -1)
         {
           g_string_free (xml, TRUE);
-          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -9056,10 +8826,9 @@ edit_alert (credentials_t * credentials, params_t *params,
                                "/omp?cmd=get_alerts", response_data);
         }
 
-      if (read_string_c (&connection, &xml))
+      if (read_string_c (connection, &xml))
         {
           g_string_free (xml, TRUE);
-          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -9074,39 +8843,41 @@ edit_alert (credentials_t * credentials, params_t *params,
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</edit_alert>");
-  openvas_connection_close (&connection);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+  return xsl_transform_omp (connection, credentials, params,
+                            g_string_free (xml, FALSE),
                             response_data);
 }
 
 /**
  * @brief Setup edit_alert XML, XSL transform the result.
  *
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
+ * @param[in]  connection     Connection to manager.
+ * @param[in]  credentials    Username and password for authentication.
+ * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-edit_alert_omp (credentials_t * credentials, params_t *params,
-                cmd_response_data_t* response_data)
+edit_alert_omp (openvas_connection_t *connection, credentials_t * credentials,
+                params_t *params, cmd_response_data_t* response_data)
 {
-  return edit_alert (credentials, params, NULL, response_data);
+  return edit_alert (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Modify an alert, get all alerts, XSL transform the result.
  *
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
+ * @param[in]  connection     Connection to manager.
+ * @param[in]  credentials    Username and password for authentication.
+ * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-save_alert_omp (credentials_t * credentials, params_t *params,
-                cmd_response_data_t* response_data)
+save_alert_omp (openvas_connection_t *connection, credentials_t * credentials,
+                params_t *params, cmd_response_data_t* response_data)
 {
   GString *xml;
   int ret;
@@ -9191,7 +8962,7 @@ save_alert_omp (credentials_t * credentials, params_t *params,
                      "</condition>"
                      "</modify_alert>");
 
-  ret = omp (credentials,
+  ret = omp (connection, credentials,
              &response,
              &entity,
              response_data,
@@ -9228,11 +8999,11 @@ save_alert_omp (credentials_t * credentials, params_t *params,
                             "/omp?cmd=get_alerts", response_data);
     }
 
-  html = response_from_entity (credentials, params, entity,
-                               (no_redirect && strcmp (no_redirect, "0")),
-                               NULL, "get_alerts",
-                               NULL, "edit_alert",
-                               "Save Alert", response_data);
+  html = response_from_entity (connection, credentials, params, entity,
+                              (no_redirect && strcmp (no_redirect, "0")),
+                              NULL, "get_alerts",
+                              NULL, "edit_alert",
+                              "Save Alert", response_data);
   free_entity (entity);
   g_free (response);
   return html;
@@ -9241,6 +9012,7 @@ save_alert_omp (credentials_t * credentials, params_t *params,
 /**
  * @brief Test an alert, get all alerts XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -9248,10 +9020,9 @@ save_alert_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-test_alert_omp (credentials_t * credentials, params_t *params,
-                cmd_response_data_t* response_data)
+test_alert_omp (openvas_connection_t *connection, credentials_t * credentials,
+                params_t *params, cmd_response_data_t* response_data)
 {
-  openvas_connection_t connection;
   gchar *html, *response;
   const char *no_redirect, *alert_id;
   entity_t entity;
@@ -9268,32 +9039,14 @@ test_alert_omp (credentials_t * credentials, params_t *params,
                            "Diagnostics: Required parameter was NULL.",
                            "/omp?cmd=get_alerts", response_data);
     }
-  switch (manager_connect (credentials, &connection, &html,
-                           response_data))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while testing an alert. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_alerts", response_data);
-    }
 
   /* Test the alert. */
 
-  if (openvas_connection_sendf (&connection,
+  if (openvas_connection_sendf (connection,
                                 "<test_alert alert_id=\"%s\"/>",
                                 alert_id)
       == -1)
     {
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -9303,9 +9056,8 @@ test_alert_omp (credentials_t * credentials, params_t *params,
     }
 
   entity = NULL;
-  if (read_entity_and_text_c (&connection, &entity, &response))
+  if (read_entity_and_text_c (connection, &entity, &response))
     {
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -9316,12 +9068,11 @@ test_alert_omp (credentials_t * credentials, params_t *params,
 
   /* Cleanup, and return transformed XML. */
 
-  openvas_connection_close (&connection);
-  html = response_from_entity (credentials, params, entity,
-                               (no_redirect && strcmp (no_redirect, "0")),
-                               NULL, "get_alerts",
-                               NULL, "get_alerts",
-                               "Test Alert", response_data);
+  html = response_from_entity (connection, credentials, params, entity,
+                              (no_redirect && strcmp (no_redirect, "0")),
+                              NULL, "get_alerts",
+                              NULL, "get_alerts",
+                              "Test Alert", response_data);
 
   free_entity (entity);
   g_free (response);
@@ -9331,6 +9082,7 @@ test_alert_omp (credentials_t * credentials, params_t *params,
 /**
  * @brief Export an alert.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
  * @param[out]  content_type         Content type return.
@@ -9341,17 +9093,18 @@ test_alert_omp (credentials_t * credentials, params_t *params,
  * @return Alert XML on success.  HTML result of XSL transformation on error.
  */
 char *
-export_alert_omp (credentials_t * credentials, params_t *params,
+export_alert_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                   enum content_type * content_type, char **content_disposition,
                   gsize *content_length, cmd_response_data_t* response_data)
 {
-  return export_resource ("alert", credentials, params, content_type,
+  return export_resource (connection, "alert", credentials, params, content_type,
                           content_disposition, content_length, response_data);
 }
 
 /**
  * @brief Export a list of alerts.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
  * @param[out]  content_type         Content type return.
@@ -9363,33 +9116,34 @@ export_alert_omp (credentials_t * credentials, params_t *params,
  *         on error.
  */
 char *
-export_alerts_omp (credentials_t * credentials, params_t *params,
+export_alerts_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                    enum content_type * content_type, char **content_disposition,
                    gsize *content_length, cmd_response_data_t* response_data)
 {
-  return export_many ("alert", credentials, params, content_type,
+  return export_many (connection, "alert", credentials, params, content_type,
                       content_disposition, content_length, response_data);
 }
 
 /**
  * @brief Returns page to create a new target.
  *
- * @param[in]  credentials  Credentials of user issuing the action.
- * @param[in]  params       Request parameters.
- * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[in]  connection     Connection to manager.
+ * @param[in]  credentials    Credentials of user issuing the action.
+ * @param[in]  params         Request parameters.
+ * @param[in]  extra_xml      Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 static char *
-new_target (credentials_t *credentials, params_t *params, const char *extra_xml,
+new_target (openvas_connection_t *connection, credentials_t *credentials,
+            params_t *params, const char *extra_xml,
             cmd_response_data_t* response_data)
 {
   GString *xml;
-  openvas_connection_t connection;
   gchar *port_list;
   gchar *ssh_credential, *smb_credential, *esxi_credential, *snmp_credential;
-  gchar *html, *end;
+  gchar *end;
   const char *filter, *first, *max;
 
   filter = params_value (params, "filter");
@@ -9404,50 +9158,26 @@ new_target (credentials_t *credentials, params_t *params, const char *extra_xml,
   if (max == NULL)
     max = "";
 
-  switch (manager_connect (credentials, &connection, &html,
-                           response_data))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting targets list. "
-                             "The current list of targets is not available. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_targets", response_data);
-    }
-
   PARAM_OR_SETTING (port_list, "port_list_id",
-                    "d74a9ee8-7d35-4879-9485-ab23f1bd45bc",
-                    openvas_connection_close (&connection));
+                    "d74a9ee8-7d35-4879-9485-ab23f1bd45bc",);
 
   PARAM_OR_SETTING (ssh_credential, "ssh_credential_id",
                     "6fc56b72-c1cf-451c-a4c4-3a9dc784c3bd",
-                    openvas_connection_close (&connection);
                     g_free (port_list));
 
   PARAM_OR_SETTING (smb_credential, "smb_credential_id",
                     "a25c0cfe-f977-417b-b1da-47da370c03e8",
-                    openvas_connection_close (&connection);
                     g_free (port_list);
                     g_free (ssh_credential));
 
   PARAM_OR_SETTING (esxi_credential, "esxi_credential_id",
                     "83545bcf-0c49-4b4c-abbf-63baf82cc2a7",
-                    openvas_connection_close (&connection);
                     g_free (port_list);
                     g_free (ssh_credential);
                     g_free (smb_credential));
 
   PARAM_OR_SETTING (snmp_credential, "snmp_credential_id",
                     "024550b8-868e-4b3c-98bf-99bb732f6a0d",
-                    openvas_connection_close (&connection);
                     g_free (port_list);
                     g_free (ssh_credential);
                     g_free (smb_credential);
@@ -9481,13 +9211,12 @@ new_target (credentials_t *credentials, params_t *params, const char *extra_xml,
     {
       /* Get the credentials. */
 
-      if (openvas_connection_sendf (&connection,
+      if (openvas_connection_sendf (connection,
                                     "<get_credentials"
                                     " filter=\"rows=-1 sort=name\"/>")
           == -1)
         {
           g_string_free (xml, TRUE);
-          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -9497,10 +9226,9 @@ new_target (credentials_t *credentials, params_t *params, const char *extra_xml,
                                "/omp?cmd=get_targets", response_data);
         }
 
-      if (read_string_c (&connection, &xml))
+      if (read_string_c (connection, &xml))
         {
           g_string_free (xml, TRUE);
-          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -9515,13 +9243,12 @@ new_target (credentials_t *credentials, params_t *params, const char *extra_xml,
     {
       /* Get the port lists. */
 
-      if (openvas_connection_sendf (&connection,
+      if (openvas_connection_sendf (connection,
                                     "<get_port_lists"
                                     " filter=\"rows=-1 sort=name\"/>")
           == -1)
         {
           g_string_free (xml, TRUE);
-          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -9531,10 +9258,9 @@ new_target (credentials_t *credentials, params_t *params, const char *extra_xml,
                                "/omp?cmd=get_tasks", response_data);
         }
 
-      if (read_string_c (&connection, &xml))
+      if (read_string_c (connection, &xml))
         {
           g_string_free (xml, TRUE);
-          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -9554,14 +9280,15 @@ new_target (credentials_t *credentials, params_t *params, const char *extra_xml,
   g_string_append (xml, end);
   g_free (end);
 
-  openvas_connection_close (&connection);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+  return xsl_transform_omp (connection, credentials, params,
+                            g_string_free (xml, FALSE),
                             response_data);
 }
 
 /**
  * @brief Returns page to create a new target.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -9569,15 +9296,16 @@ new_target (credentials_t *credentials, params_t *params, const char *extra_xml,
  * @return Result of XSL transformation.
  */
 char *
-new_target_omp (credentials_t *credentials, params_t *params,
-                cmd_response_data_t* response_data)
+new_target_omp (openvas_connection_t *connection, credentials_t *credentials,
+                params_t *params, cmd_response_data_t* response_data)
 {
-  return new_target (credentials, params, NULL, response_data);
+  return new_target (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Create a target, get all targets, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -9585,7 +9313,8 @@ new_target_omp (credentials_t *credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-create_target_omp (credentials_t * credentials, params_t *params,
+create_target_omp (openvas_connection_t *connection, credentials_t *
+                   credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
   int ret;
@@ -9623,12 +9352,12 @@ create_target_omp (credentials_t * credentials, params_t *params,
   CHECK_PARAM_INVALID (name, "Create Target", "new_target");
   CHECK_PARAM_INVALID (target_source, "Create Target", "new_target")
   if (hosts == NULL && strcmp (target_source, "manual") == 0)
-    return message_invalid (credentials, params, response_data,
+    return message_invalid (connection, credentials, params, response_data,
                             "Missing manual list of hosts",
                             G_STRINGIFY (MHD_HTTP_BAD_REQUEST),
                             "Create Target", "new_target");
   if (strcmp (target_source, "file") == 0 && file == NULL)
-    return message_invalid (credentials, params, response_data,
+    return message_invalid (connection, credentials, params, response_data,
                             "Missing hosts file",
                             G_STRINGIFY (MHD_HTTP_BAD_REQUEST),
                             "Create Target", "new_target");
@@ -9726,7 +9455,7 @@ create_target_omp (credentials_t * credentials, params_t *params,
   g_free (smb_credentials_element);
   g_free (esxi_credentials_element);
 
-  ret = omp (credentials,
+  ret = omp (connection, credentials,
              &response,
              &entity,
              response_data,
@@ -9767,11 +9496,11 @@ create_target_omp (credentials_t * credentials, params_t *params,
 
   if (entity_attribute (entity, "id"))
     params_add (params, "target_id", entity_attribute (entity, "id"));
-  html = response_from_entity (credentials, params, entity,
-                               (no_redirect && strcmp (no_redirect, "0")),
-                               NULL, "get_targets",
-                               NULL, "new_target",
-                               "Create Target", response_data);
+  html = response_from_entity (connection, credentials, params, entity,
+                              (no_redirect && strcmp (no_redirect, "0")),
+                              NULL, "get_targets",
+                              NULL, "new_target",
+                              "Create Target", response_data);
   free_entity (entity);
   g_free (response);
   return html;
@@ -9798,6 +9527,7 @@ create_target_omp (credentials_t * credentials, params_t *params,
 /**
  * @brief Clone a resource, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -9805,10 +9535,9 @@ create_target_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-clone_omp (credentials_t *credentials, params_t *params,
-           cmd_response_data_t* response_data)
+clone_omp (openvas_connection_t *connection, credentials_t *credentials,
+           params_t *params, cmd_response_data_t* response_data)
 {
-  openvas_connection_t connection;
   gchar *html, *response;
   const char *id, *type, *alterable, *no_redirect, *next_id;
   gchar *next_id_name, *cap_type, *prev_action;
@@ -9822,30 +9551,11 @@ clone_omp (credentials_t *credentials, params_t *params,
   CHECK (id);
   CHECK (type);
 
-  switch (manager_connect (credentials, &connection, &html,
-                           response_data))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while cloning a resource. "
-                             "The resource was not cloned. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_tasks", response_data);
-    }
-
   /* Clone the resource. */
 
   if (alterable && strcmp (alterable, "0"))
     {
-      if (openvas_connection_sendf (&connection,
+      if (openvas_connection_sendf (connection,
                                     "<create_%s>"
                                     "<copy>%s</copy>"
                                     "<alterable>1</alterable>"
@@ -9855,7 +9565,6 @@ clone_omp (credentials_t *credentials, params_t *params,
                                     type)
           == -1)
         {
-          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -9865,7 +9574,7 @@ clone_omp (credentials_t *credentials, params_t *params,
                                "/omp?cmd=get_tasks", response_data);
         }
     }
-  else if (openvas_connection_sendf (&connection,
+  else if (openvas_connection_sendf (connection,
                                      "<create_%s>"
                                      "<copy>%s</copy>"
                                      "</create_%s>",
@@ -9874,7 +9583,6 @@ clone_omp (credentials_t *credentials, params_t *params,
                                      type)
            == -1)
     {
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -9885,9 +9593,8 @@ clone_omp (credentials_t *credentials, params_t *params,
     }
 
   entity = NULL;
-  if (read_entity_and_text_c (&connection, &entity, &response))
+  if (read_entity_and_text_c (connection, &entity, &response))
     {
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -9896,8 +9603,6 @@ clone_omp (credentials_t *credentials, params_t *params,
                            "Diagnostics: Failure to read response from manager daemon.",
                            "/omp?cmd=get_tasks", response_data);
     }
-
-  openvas_connection_close (&connection);
 
   /* Cleanup, and return next page. */
 
@@ -9937,11 +9642,11 @@ clone_omp (credentials_t *credentials, params_t *params,
 
   cap_type = capitalize (type);
   prev_action = g_strdup_printf ("Clone %s", cap_type);
-  html = response_from_entity (credentials, params, entity,
-                               (no_redirect && strcmp (no_redirect, "0")),
-                               NULL, NULL,
-                               NULL, NULL,
-                               prev_action, response_data);
+  html = response_from_entity (connection, credentials, params, entity,
+                              (no_redirect && strcmp (no_redirect, "0")),
+                              NULL, NULL,
+                              NULL, NULL,
+                              prev_action, response_data);
 
   free_entity (entity);
   g_free (cap_type);
@@ -9956,6 +9661,7 @@ clone_omp (credentials_t *credentials, params_t *params,
 /**
  * @brief Delete a target, get all targets, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -9963,16 +9669,18 @@ clone_omp (credentials_t *credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-delete_target_omp (credentials_t * credentials, params_t *params,
+delete_target_omp (openvas_connection_t *connection, credentials_t *
+                   credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
-  return delete_resource ("target", credentials, params, 0, "get_targets",
-                          response_data);
+  return delete_resource (connection, "target", credentials, params, 0,
+                          "get_targets", response_data);
 }
 
 /**
  * @brief Delete a trash agent, get all agents, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -9980,16 +9688,17 @@ delete_target_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-delete_trash_agent_omp (credentials_t * credentials, params_t *params,
+delete_trash_agent_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                         cmd_response_data_t* response_data)
 {
-  return delete_resource ("agent", credentials, params, 1, "get_trash",
+  return delete_resource (connection, "agent", credentials, params, 1, "get_trash",
                           response_data);
 }
 
 /**
  * @brief Delete a trash config, get all trash, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -9997,16 +9706,17 @@ delete_trash_agent_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-delete_trash_config_omp (credentials_t * credentials, params_t *params,
+delete_trash_config_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                          cmd_response_data_t* response_data)
 {
-  return delete_resource ("config", credentials, params, 1, "get_trash",
+  return delete_resource (connection, "config", credentials, params, 1, "get_trash",
                           response_data);
 }
 
 /**
  * @brief Delete a trash alert, get all trash, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -10014,16 +9724,17 @@ delete_trash_config_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-delete_trash_alert_omp (credentials_t * credentials, params_t *params,
+delete_trash_alert_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                         cmd_response_data_t* response_data)
 {
-  return delete_resource ("alert", credentials, params, 1, "get_trash",
+  return delete_resource (connection, "alert", credentials, params, 1, "get_trash",
                           response_data);
 }
 
 /**
  * @brief Delete a trash credential, get all trash, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -10031,16 +9742,17 @@ delete_trash_alert_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-delete_trash_credential_omp (credentials_t * credentials, params_t *params,
+delete_trash_credential_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                              cmd_response_data_t* response_data)
 {
-  return delete_resource ("credential", credentials, params, 1, "get_trash",
+  return delete_resource (connection, "credential", credentials, params, 1, "get_trash",
                           response_data);
 }
 
 /**
  * @brief Delete a trash report format, get all trash, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -10048,16 +9760,17 @@ delete_trash_credential_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-delete_trash_report_format_omp (credentials_t * credentials, params_t *params,
+delete_trash_report_format_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                                 cmd_response_data_t* response_data)
 {
-  return delete_resource ("report_format", credentials, params, 1, "get_trash",
+  return delete_resource (connection, "report_format", credentials, params, 1, "get_trash",
                           response_data);
 }
 
 /**
  * @brief Delete a trash schedule, get all trash, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -10065,16 +9778,17 @@ delete_trash_report_format_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-delete_trash_schedule_omp (credentials_t * credentials, params_t *params,
+delete_trash_schedule_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                            cmd_response_data_t* response_data)
 {
-  return delete_resource ("schedule", credentials, params, 1, "get_trash",
+  return delete_resource (connection, "schedule", credentials, params, 1, "get_trash",
                           response_data);
 }
 
 /**
  * @brief Delete a trash target, get all trash, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -10082,16 +9796,17 @@ delete_trash_schedule_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-delete_trash_target_omp (credentials_t * credentials, params_t *params,
+delete_trash_target_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                          cmd_response_data_t* response_data)
 {
-  return delete_resource ("target", credentials, params, 1, "get_trash",
+  return delete_resource (connection, "target", credentials, params, 1, "get_trash",
                           response_data);
 }
 
 /**
  * @brief Delete a trash task, get all trash, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -10099,16 +9814,18 @@ delete_trash_target_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-delete_trash_task_omp (credentials_t * credentials, params_t *params,
+delete_trash_task_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                        cmd_response_data_t* response_data)
 {
-  return delete_resource ("task", credentials, params, 1, "get_trash",
+  return delete_resource (connection, "task", credentials, params, 1, "get_trash",
                           response_data);
 }
 
 /**
  * @brief Restore a resource, get all trash, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -10116,14 +9833,12 @@ delete_trash_task_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-restore_omp (credentials_t * credentials, params_t *params,
-             cmd_response_data_t* response_data)
+restore_omp (openvas_connection_t *connection, credentials_t * credentials,
+             params_t *params, cmd_response_data_t* response_data)
 {
   GString *xml;
   gchar *ret;
-  openvas_connection_t connection;
   entity_t entity;
-  gchar *html;
   const char *target_id, *no_redirect;
 
   target_id = params_value (params, "target_id");
@@ -10140,37 +9855,17 @@ restore_omp (credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_tasks", response_data);
     }
 
-  switch (manager_connect (credentials, &connection, &html,
-                           response_data))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while restoring a resource. "
-                             "The resource was not restored. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_trash", response_data);
-    }
-
   xml = g_string_new ("");
 
   /* Restore the resource. */
 
-  if (openvas_connection_sendf (&connection,
+  if (openvas_connection_sendf (connection,
                                 "<restore"
                                 " id=\"%s\"/>",
                                 target_id)
       == -1)
     {
       g_string_free (xml, TRUE);
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -10180,10 +9875,9 @@ restore_omp (credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_trash", response_data);
     }
 
-  if (read_entity_and_string_c (&connection, &entity, &xml))
+  if (read_entity_and_string_c (connection, &entity, &xml))
     {
       g_string_free (xml, TRUE);
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -10195,12 +9889,11 @@ restore_omp (credentials_t * credentials, params_t *params,
 
   /* Cleanup, and return trash page. */
 
-  openvas_connection_close (&connection);
-  ret = response_from_entity (credentials, params, entity,
-                              (no_redirect && strcmp (no_redirect, "0")),
-                              NULL, "get_trash",
-                              NULL, "get_trash",
-                              "Restore", response_data);
+  ret = response_from_entity (connection, credentials, params, entity,
+                             (no_redirect && strcmp (no_redirect, "0")),
+                             NULL, "get_trash",
+                             NULL, "get_trash",
+                             "Restore", response_data);
   free_entity (entity);
   g_string_free (xml, FALSE);
   return ret;
@@ -10209,6 +9902,7 @@ restore_omp (credentials_t * credentials, params_t *params,
 /**
  * @brief Empty the trashcan, get all trash, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -10216,46 +9910,26 @@ restore_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-empty_trashcan_omp (credentials_t * credentials, params_t *params,
+empty_trashcan_omp (openvas_connection_t *connection, credentials_t *
+                    credentials, params_t *params,
                     cmd_response_data_t* response_data)
 {
   GString *xml;
   const char* no_redirect;
   gchar *ret;
-  openvas_connection_t connection;
   entity_t entity;
-  gchar *html;
 
   no_redirect = params_value (params, "no_redirect");
-
-  switch (manager_connect (credentials, &connection, &html,
-                           response_data))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while emptying the trashcan. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_trash", response_data);
-    }
 
   xml = g_string_new ("");
 
   /* Empty the trash. */
 
-  if (openvas_connection_sendf (&connection,
+  if (openvas_connection_sendf (connection,
                                 "<empty_trashcan/>")
       == -1)
     {
       g_string_free (xml, TRUE);
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -10264,10 +9938,9 @@ empty_trashcan_omp (credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_trash", response_data);
     }
 
-  if (read_entity_and_string_c (&connection, &entity, &xml))
+  if (read_entity_and_string_c (connection, &entity, &xml))
     {
       g_string_free (xml, TRUE);
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -10278,9 +9951,7 @@ empty_trashcan_omp (credentials_t * credentials, params_t *params,
 
   /* Cleanup, and return trash page. */
 
-  openvas_connection_close (&connection);
-
-  ret = response_from_entity (credentials, params, entity,
+  ret = response_from_entity (connection, credentials, params, entity,
                               (no_redirect && strcmp (no_redirect, "0")),
                               NULL, "get_trash",
                               NULL, "get_trash",
@@ -10293,6 +9964,7 @@ empty_trashcan_omp (credentials_t * credentials, params_t *params,
 /**
  * @brief Returns page to create a new tag.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
@@ -10301,7 +9973,8 @@ empty_trashcan_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 static char *
-new_tag (credentials_t *credentials, params_t *params, const char *extra_xml,
+new_tag (openvas_connection_t *connection, credentials_t *credentials,
+         params_t *params, const char *extra_xml,
          cmd_response_data_t* response_data)
 {
   GString *xml;
@@ -10337,13 +10010,15 @@ new_tag (credentials_t *credentials, params_t *params, const char *extra_xml,
   g_string_append (xml, end);
   g_free (end);
 
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+  return xsl_transform_omp (connection, credentials, params,
+                            g_string_free (xml, FALSE),
                             response_data);
 }
 
 /**
  * @brief Returns page to create a new target.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -10351,15 +10026,16 @@ new_tag (credentials_t *credentials, params_t *params, const char *extra_xml,
  * @return Result of XSL transformation.
  */
 char *
-new_tag_omp (credentials_t *credentials, params_t *params,
-             cmd_response_data_t* response_data)
+new_tag_omp (openvas_connection_t *connection, credentials_t *credentials,
+             params_t *params, cmd_response_data_t* response_data)
 {
-  return new_tag (credentials, params, NULL, response_data);
+  return new_tag (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Create a tag, get report, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -10367,8 +10043,8 @@ new_tag_omp (credentials_t *credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-create_tag_omp (credentials_t *credentials, params_t *params,
-                cmd_response_data_t* response_data)
+create_tag_omp (openvas_connection_t *connection, credentials_t *credentials,
+                params_t *params, cmd_response_data_t* response_data)
 {
   char *ret;
   const char* no_redirect;
@@ -10393,7 +10069,7 @@ create_tag_omp (credentials_t *credentials, params_t *params,
 
   response = NULL;
   entity = NULL;
-  switch (ompf (credentials,
+  switch (ompf (connection, credentials,
                 &response,
                 &entity,
                 response_data,
@@ -10444,7 +10120,7 @@ create_tag_omp (credentials_t *credentials, params_t *params,
 
   if (entity_attribute (entity, "id"))
     params_add (params, "tag_id", entity_attribute (entity, "id"));
-  ret = response_from_entity (credentials, params, entity,
+  ret = response_from_entity (connection, credentials, params, entity,
                               (no_redirect && strcmp (no_redirect, "0")),
                               NULL, "get_tags",
                               NULL, "new_tag",
@@ -10458,6 +10134,7 @@ create_tag_omp (credentials_t *credentials, params_t *params,
 /**
  * @brief Delete note, get next page, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -10465,15 +10142,16 @@ create_tag_omp (credentials_t *credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-delete_tag_omp (credentials_t * credentials, params_t *params,
+delete_tag_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                 cmd_response_data_t* response_data)
 {
-  return delete_resource ("tag", credentials, params, 0, NULL, response_data);
+  return delete_resource (connection, "tag", credentials, params, 0, NULL, response_data);
 }
 
 /**
  * @brief Delete a note, get all notes, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -10481,30 +10159,31 @@ delete_tag_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-delete_trash_tag_omp (credentials_t * credentials, params_t *params,
+delete_trash_tag_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                       cmd_response_data_t* response_data)
 {
-  return delete_resource ("tag", credentials, params, 1, "get_trash",
+  return delete_resource (connection, "tag", credentials, params, 1, "get_trash",
                           response_data);
 }
 
 /**
  * @brief Setup edit_tag XML, XSL transform the result.
  *
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[in]  connection     Connection to manager.
+ * @param[in]  credentials    Username and password for authentication.
+ * @param[in]  params         Request parameters.
+ * @param[in]  extra_xml      Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-edit_tag (credentials_t * credentials, params_t *params,
-          const char *extra_xml, cmd_response_data_t* response_data)
+edit_tag (openvas_connection_t *connection, credentials_t * credentials,
+          params_t *params, const char *extra_xml,
+          cmd_response_data_t* response_data)
 {
   GString *xml;
-  openvas_connection_t connection;
-  gchar *html, *edit;
+  gchar *edit;
   const char *tag_id;
 
   tag_id = params_value (params, "tag_id");
@@ -10519,33 +10198,13 @@ edit_tag (credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_tags", response_data);
     }
 
-  switch (manager_connect (credentials, &connection, &html,
-                           response_data))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while editing a tag. "
-                             "The tag remains as it was. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_tags", response_data);
-    }
-
-  if (openvas_connection_sendf (&connection,
+  if (openvas_connection_sendf (connection,
                                 "<get_tags"
                                 " tag_id=\"%s\""
                                 "/>",
                                 tag_id)
       == -1)
     {
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -10566,10 +10225,9 @@ edit_tag (credentials_t * credentials, params_t *params,
   if (extra_xml)
     g_string_append (xml, extra_xml);
 
-  if (read_string_c (&connection, &xml))
+  if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -10581,14 +10239,15 @@ edit_tag (credentials_t * credentials, params_t *params,
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</edit_tag>");
-  openvas_connection_close (&connection);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+  return xsl_transform_omp (connection, credentials, params,
+                            g_string_free (xml, FALSE),
                             response_data);
 }
 
 /**
  * @brief Setup edit_tag XML, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -10596,15 +10255,16 @@ edit_tag (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-edit_tag_omp (credentials_t * credentials, params_t *params,
-              cmd_response_data_t* response_data)
+edit_tag_omp (openvas_connection_t *connection, credentials_t * credentials,
+              params_t *params, cmd_response_data_t* response_data)
 {
-  return edit_tag (credentials, params, NULL, response_data);
+  return edit_tag (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Modify a tag, get all tags, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -10612,8 +10272,8 @@ edit_tag_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-save_tag_omp (credentials_t * credentials, params_t *params,
-              cmd_response_data_t* response_data)
+save_tag_omp (openvas_connection_t *connection, credentials_t * credentials,
+              params_t *params, cmd_response_data_t* response_data)
 {
   gchar *response;
   const char *name, *comment, *value, *resource_type, *resource_id, *active;
@@ -10640,7 +10300,7 @@ save_tag_omp (credentials_t * credentials, params_t *params,
 
   response = NULL;
   entity = NULL;
-  switch (ompf (credentials,
+  switch (ompf (connection, credentials,
                 &response,
                 &entity,
                 response_data,
@@ -10694,7 +10354,7 @@ save_tag_omp (credentials_t * credentials, params_t *params,
                              "/omp?cmd=get_tags", response_data);
     }
 
-  ret = response_from_entity (credentials, params, entity,
+  ret = response_from_entity (connection, credentials, params, entity,
                               (no_redirect && strcmp (no_redirect, "0")),
                               NULL, "get_tags",
                               NULL, "edit_tag",
@@ -10709,6 +10369,7 @@ save_tag_omp (credentials_t * credentials, params_t *params,
 /**
  * @brief Export a tag.
  *
+ * @param[in]   connection           Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
  * @param[out]  content_type         Content type return.
@@ -10720,17 +10381,19 @@ save_tag_omp (credentials_t * credentials, params_t *params,
  *         on error.
  */
 char *
-export_tag_omp (credentials_t * credentials, params_t *params,
-                enum content_type * content_type, char **content_disposition,
-                gsize *content_length, cmd_response_data_t* response_data)
+export_tag_omp (openvas_connection_t *connection, credentials_t * credentials,
+                params_t *params, enum content_type * content_type,
+                char **content_disposition, gsize *content_length,
+                cmd_response_data_t* response_data)
 {
-  return export_resource ("tag", credentials, params, content_type,
+  return export_resource (connection, "tag", credentials, params, content_type,
                           content_disposition, content_length, response_data);
 }
 
 /**
  * @brief Export a list of tags.
  *
+ * @param[in]   connection           Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
  * @param[out]  content_type         Content type return.
@@ -10742,17 +10405,19 @@ export_tag_omp (credentials_t * credentials, params_t *params,
  *         on error.
  */
 char *
-export_tags_omp (credentials_t * credentials, params_t *params,
-                 enum content_type * content_type, char **content_disposition,
-                 gsize *content_length, cmd_response_data_t* response_data)
+export_tags_omp (openvas_connection_t *connection, credentials_t * credentials,
+                 params_t *params, enum content_type * content_type,
+                 char **content_disposition, gsize *content_length,
+                 cmd_response_data_t* response_data)
 {
-  return export_many ("tag", credentials, params, content_type,
+  return export_many (connection, "tag", credentials, params, content_type,
                       content_disposition, content_length, response_data);
 }
 
 /**
  * @brief Get one tag, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
@@ -10761,15 +10426,18 @@ export_tags_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 static char *
-get_tag (credentials_t * credentials, params_t *params,
-         const char *extra_xml, cmd_response_data_t* response_data)
+get_tag (openvas_connection_t *connection, credentials_t * credentials,
+         params_t *params, const char *extra_xml,
+         cmd_response_data_t* response_data)
 {
-  return get_one ("tag", credentials, params, extra_xml, NULL, response_data);
+  return get_one (connection, "tag", credentials, params, extra_xml, NULL,
+                  response_data);
 }
 
 /**
  * @brief Get one tag, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -10777,15 +10445,16 @@ get_tag (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-get_tag_omp (credentials_t * credentials, params_t *params,
-             cmd_response_data_t* response_data)
+get_tag_omp (openvas_connection_t *connection, credentials_t * credentials,
+             params_t *params, cmd_response_data_t* response_data)
 {
-  return get_tag (credentials, params, NULL, response_data);
+  return get_tag (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Get all tags, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
@@ -10794,15 +10463,18 @@ get_tag_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 static char *
-get_tags (credentials_t * credentials, params_t *params,
-          const char *extra_xml, cmd_response_data_t* response_data)
+get_tags (openvas_connection_t *connection, credentials_t * credentials,
+          params_t *params, const char *extra_xml,
+          cmd_response_data_t* response_data)
 {
-  return get_many ("tag", credentials, params, extra_xml, NULL, response_data);
+  return get_many (connection, "tag", credentials, params, extra_xml, NULL,
+                   response_data);
 }
 
 /**
  * @brief Get all tags, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -10810,15 +10482,16 @@ get_tags (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-get_tags_omp (credentials_t * credentials, params_t *params,
-              cmd_response_data_t* response_data)
+get_tags_omp (openvas_connection_t *connection, credentials_t * credentials,
+              params_t *params, cmd_response_data_t* response_data)
 {
-  return get_tags (credentials, params, NULL, response_data);
+  return get_tags (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Set tag enabled status.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -10826,10 +10499,9 @@ get_tags_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-toggle_tag_omp (credentials_t * credentials, params_t *params,
-                cmd_response_data_t* response_data)
+toggle_tag_omp (openvas_connection_t *connection, credentials_t * credentials,
+                params_t *params, cmd_response_data_t* response_data)
 {
-  openvas_connection_t connection;
   gchar *html, *response;
   const char *no_redirect, *tag_id, *enable;
   entity_t entity;
@@ -10859,29 +10531,9 @@ toggle_tag_omp (credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_tasks", response_data);
     }
 
-  switch (manager_connect (credentials, &connection, &html,
-                           response_data))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while modifying a tag."
-                             " The tag is not modified. "
-                             "Diagnostics: Failure to connect to"
-                             " manager daemon.",
-                             "/omp?cmd=get_tasks", response_data);
-    }
-
   /* Delete the resource and get all resources. */
 
-  if (openvas_connection_sendf (&connection,
+  if (openvas_connection_sendf (connection,
                                 "<modify_tag tag_id=\"%s\">"
                                 "<active>%s</active>"
                                 "</modify_tag>",
@@ -10889,7 +10541,6 @@ toggle_tag_omp (credentials_t * credentials, params_t *params,
                                 enable)
       == -1)
     {
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -10901,9 +10552,8 @@ toggle_tag_omp (credentials_t * credentials, params_t *params,
     }
 
   entity = NULL;
-  if (read_entity_and_text_c (&connection, &entity, &response))
+  if (read_entity_and_text_c (connection, &entity, &response))
     {
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -10917,7 +10567,7 @@ toggle_tag_omp (credentials_t * credentials, params_t *params,
 
   if (! omp_success (entity))
     set_http_status_from_entity (entity, response_data);
-  html = response_from_entity (credentials, params, entity,
+  html = response_from_entity (connection, credentials, params, entity,
                                (no_redirect && strcmp (no_redirect, "0")),
                                NULL, "get_tags",
                                NULL, "get_tags",
@@ -10925,7 +10575,6 @@ toggle_tag_omp (credentials_t * credentials, params_t *params,
 
   free_entity (entity);
   g_free (response);
-  openvas_connection_close (&connection);
 
   return html;
 }
@@ -10933,6 +10582,7 @@ toggle_tag_omp (credentials_t * credentials, params_t *params,
 /**
  * @brief Setup edit_target XML, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
@@ -10941,12 +10591,12 @@ toggle_tag_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-edit_target (credentials_t * credentials, params_t *params,
-             const char *extra_xml, cmd_response_data_t* response_data)
+edit_target (openvas_connection_t *connection, credentials_t * credentials,
+             params_t *params, const char *extra_xml,
+             cmd_response_data_t* response_data)
 {
   GString *xml;
-  openvas_connection_t connection;
-  gchar *html, *edit;
+  gchar *edit;
   const char *target_id, *next, *filter, *first, *max;
 
   target_id = params_value (params, "target_id");
@@ -10969,33 +10619,13 @@ edit_target (credentials_t * credentials, params_t *params,
   if (next == NULL)
     next = "get_target";
 
-  switch (manager_connect (credentials, &connection, &html,
-                           response_data))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while editing a target. "
-                             "The target remains as it was. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_targets", response_data);
-    }
-
-  if (openvas_connection_sendf (&connection,
+  if (openvas_connection_sendf (connection,
                                 "<get_targets"
                                 " target_id=\"%s\""
                                 " details=\"1\"/>",
                                 target_id)
       == -1)
     {
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -11025,10 +10655,9 @@ edit_target (credentials_t * credentials, params_t *params,
   g_string_append (xml, edit);
   g_free (edit);
 
-  if (read_string_c (&connection, &xml))
+  if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -11041,13 +10670,12 @@ edit_target (credentials_t * credentials, params_t *params,
     {
       /* Get the credentials. */
 
-      if (openvas_connection_sendf (&connection,
+      if (openvas_connection_sendf (connection,
                                     "<get_credentials"
                                     " filter=\"rows=-1 sort=name\"/>")
           == -1)
         {
           g_string_free (xml, TRUE);
-          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -11057,10 +10685,9 @@ edit_target (credentials_t * credentials, params_t *params,
                                "/omp?cmd=get_targets", response_data);
         }
 
-      if (read_string_c (&connection, &xml))
+      if (read_string_c (connection, &xml))
         {
           g_string_free (xml, TRUE);
-          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -11075,13 +10702,12 @@ edit_target (credentials_t * credentials, params_t *params,
     {
       /* Get the port lists. */
 
-      if (openvas_connection_sendf (&connection,
+      if (openvas_connection_sendf (connection,
                                     "<get_port_lists"
                                     " filter=\"rows=-1 sort=name\"/>")
           == -1)
         {
           g_string_free (xml, TRUE);
-          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -11091,10 +10717,9 @@ edit_target (credentials_t * credentials, params_t *params,
                                "/omp?cmd=get_tasks", response_data);
         }
 
-      if (read_string_c (&connection, &xml))
+      if (read_string_c (connection, &xml))
         {
           g_string_free (xml, TRUE);
-          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -11108,14 +10733,15 @@ edit_target (credentials_t * credentials, params_t *params,
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</edit_target>");
-  openvas_connection_close (&connection);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+  return xsl_transform_omp (connection, credentials, params,
+                            g_string_free (xml, FALSE),
                             response_data);
 }
 
 /**
  * @brief Setup edit_target XML, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -11123,15 +10749,16 @@ edit_target (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-edit_target_omp (credentials_t * credentials, params_t *params,
-                 cmd_response_data_t* response_data)
+edit_target_omp (openvas_connection_t *connection, credentials_t * credentials,
+                 params_t *params, cmd_response_data_t* response_data)
 {
-  return edit_target (credentials, params, NULL, response_data);
+  return edit_target (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Get one target, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
@@ -11140,16 +10767,18 @@ edit_target_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 static char *
-get_target (credentials_t * credentials, params_t *params,
-            const char *extra_xml, cmd_response_data_t* response_data)
+get_target (openvas_connection_t *connection, credentials_t * credentials,
+            params_t *params, const char *extra_xml,
+            cmd_response_data_t* response_data)
 {
-  return get_one ("target", credentials, params, extra_xml, "tasks=\"1\"",
-                  response_data);
+  return get_one (connection, "target", credentials, params, extra_xml,
+                  "tasks=\"1\"", response_data);
 }
 
 /**
  * @brief Get one target, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -11157,15 +10786,16 @@ get_target (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-get_target_omp (credentials_t * credentials, params_t *params,
-                cmd_response_data_t* response_data)
+get_target_omp (openvas_connection_t *connection, credentials_t * credentials,
+                params_t *params, cmd_response_data_t* response_data)
 {
-  return get_target (credentials, params, NULL, response_data);
+  return get_target (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Get all targets, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
@@ -11174,16 +10804,18 @@ get_target_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 static char *
-get_targets (credentials_t * credentials, params_t *params,
-             const char *extra_xml, cmd_response_data_t* response_data)
+get_targets (openvas_connection_t *connection, credentials_t * credentials,
+             params_t *params, const char *extra_xml,
+             cmd_response_data_t* response_data)
 {
-  return get_many ("target", credentials, params, extra_xml, NULL,
+  return get_many (connection, "target", credentials, params, extra_xml, NULL,
                    response_data);
 }
 
 /**
  * @brief Get all targets, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -11191,15 +10823,16 @@ get_targets (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-get_targets_omp (credentials_t * credentials, params_t *params,
-                 cmd_response_data_t* response_data)
+get_targets_omp (openvas_connection_t *connection, credentials_t * credentials,
+                 params_t *params, cmd_response_data_t* response_data)
 {
-  return get_targets (credentials, params, NULL, response_data);
+  return get_targets (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Modify a target, get all targets, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -11207,10 +10840,9 @@ get_targets_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-save_target_omp (credentials_t * credentials, params_t *params,
-                 cmd_response_data_t* response_data)
+save_target_omp (openvas_connection_t *connection, credentials_t * credentials,
+                 params_t *params, cmd_response_data_t* response_data)
 {
-  openvas_connection_t connection;
   gchar *html, *response;
   const char *no_redirect, *name, *hosts, *exclude_hosts, *comment;
   const char *target_ssh_credential, *port, *target_smb_credential;
@@ -11253,7 +10885,8 @@ save_target_omp (credentials_t * credentials, params_t *params,
 
       response = NULL;
       entity = NULL;
-      ret = omp (credentials, &response, &entity, response_data, command->str);
+      ret = omp (connection, credentials, &response, &entity, response_data,
+                 command->str);
       g_string_free (command, TRUE);
       switch (ret)
         {
@@ -11286,7 +10919,7 @@ save_target_omp (credentials_t * credentials, params_t *params,
                                  "/omp?cmd=get_targets", response_data);
         }
 
-      html = response_from_entity (credentials, params, entity,
+      html = response_from_entity (connection, credentials, params, entity,
                                    (no_redirect && strcmp (no_redirect, "0")),
                                    NULL, "get_targets",
                                    NULL, "edit_target",
@@ -11320,40 +10953,19 @@ save_target_omp (credentials_t * credentials, params_t *params,
       && strcmp (target_ssh_credential, "0"))
     CHECK_PARAM_INVALID (port, "Save Target", "edit_target");
 
-  switch (manager_connect (credentials, &connection, &html,
-                           response_data))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while modifying a target. "
-                             "The target was not modified. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_targets", response_data);
-    }
-
   if (hosts == NULL && strcmp (target_source, "manual") == 0)
     {
-      openvas_connection_close (&connection);
-      return new_target (credentials, params,
+      return new_target (connection, credentials, params,
                          GSAD_MESSAGE_INVALID_PARAM ("Modify Target"),
                          response_data);
     }
   if (strcmp (target_source, "import") == 0 && name == NULL)
     {
       gchar *msg;
-      openvas_connection_close (&connection);
       msg = g_strdup_printf (GSAD_MESSAGE_INVALID,
                             "Given target_source was invalid",
                             "Modify Target");
-      html = new_target (credentials, params, msg, response_data);
+      html = new_target (connection, credentials, params, msg, response_data);
       g_free (msg);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return html;
@@ -11440,12 +11052,11 @@ save_target_omp (credentials_t * credentials, params_t *params,
 
     /* Modify the target. */
 
-    ret = openvas_connection_sendf (&connection, "%s", command->str);
+    ret = openvas_connection_sendf (connection, "%s", command->str);
     g_string_free (command, TRUE);
 
     if (ret == -1)
       {
-        openvas_connection_close (&connection);
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
@@ -11456,9 +11067,8 @@ save_target_omp (credentials_t * credentials, params_t *params,
       }
 
     entity = NULL;
-    if (read_entity_and_text_c (&connection, &entity, &response))
+    if (read_entity_and_text_c (connection, &entity, &response))
       {
-        openvas_connection_close (&connection);
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
@@ -11468,9 +11078,7 @@ save_target_omp (credentials_t * credentials, params_t *params,
                              "/omp?cmd=get_targets", response_data);
       }
 
-    openvas_connection_close (&connection);
-
-    html = response_from_entity (credentials, params, entity,
+    html = response_from_entity (connection, credentials, params, entity,
                                  (no_redirect && strcmp (no_redirect, "0")),
                                  NULL, "get_targets",
                                  NULL, "edit_target",
@@ -11485,6 +11093,7 @@ save_target_omp (credentials_t * credentials, params_t *params,
 /**
  * @brief Export a target.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
  * @param[out]  content_type         Content type return.
@@ -11496,17 +11105,20 @@ save_target_omp (credentials_t * credentials, params_t *params,
  *         on error.
  */
 char *
-export_target_omp (credentials_t * credentials, params_t *params,
+export_target_omp (openvas_connection_t *connection, credentials_t *
+                   credentials, params_t *params,
                    enum content_type * content_type, char **content_disposition,
                    gsize *content_length, cmd_response_data_t* response_data)
 {
-  return export_resource ("target", credentials, params, content_type,
-                          content_disposition, content_length, response_data);
+  return export_resource (connection, "target", credentials, params,
+                          content_type, content_disposition, content_length,
+                          response_data);
 }
 
 /**
  * @brief Export a list of targets.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
  * @param[out]  content_type         Content type return.
@@ -11518,17 +11130,19 @@ export_target_omp (credentials_t * credentials, params_t *params,
  *         on error.
  */
 char *
-export_targets_omp (credentials_t * credentials, params_t *params,
+export_targets_omp (openvas_connection_t *connection, credentials_t *
+                    credentials, params_t *params,
                     enum content_type * content_type, char **content_disposition,
                     gsize *content_length, cmd_response_data_t* response_data)
 {
-  return export_many ("target", credentials, params, content_type,
+  return export_many (connection, "target", credentials, params, content_type,
                       content_disposition, content_length, response_data);
 }
 
 /**
  * @brief Returns page to create a new scan config.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
@@ -11537,8 +11151,9 @@ export_targets_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 static char *
-new_config (credentials_t *credentials, params_t *params,
-            const char *extra_xml, cmd_response_data_t* response_data)
+new_config (openvas_connection_t *connection, credentials_t *credentials,
+            params_t *params, const char *extra_xml,
+            cmd_response_data_t* response_data)
 {
   GString *xml;
   int ret;
@@ -11550,7 +11165,8 @@ new_config (credentials_t *credentials, params_t *params,
     g_string_append (xml, extra_xml);
 
   /* Get Scanners. */
-  ret = omp (credentials, &response, &entity, response_data, "<get_scanners/>");
+  ret = omp (connection, credentials, &response, &entity, response_data,
+             "<get_scanners/>");
   switch (ret)
     {
       case 0:
@@ -11587,13 +11203,15 @@ new_config (credentials_t *credentials, params_t *params,
   free_entity (entity);
 
   g_string_append (xml, "</new_config>");
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+  return xsl_transform_omp (connection, credentials, params,
+                            g_string_free (xml, FALSE),
                             response_data);
 }
 
 /**
  * @brief Return the new scan config page.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -11601,15 +11219,16 @@ new_config (credentials_t *credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-new_config_omp (credentials_t *credentials, params_t *params,
-                cmd_response_data_t* response_data)
+new_config_omp (openvas_connection_t *connection, credentials_t *credentials,
+                params_t *params, cmd_response_data_t* response_data)
 {
-  return new_config (credentials, params, NULL, response_data);
+  return new_config (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Returns page to upload a new scan config.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
@@ -11618,7 +11237,7 @@ new_config_omp (credentials_t *credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 static char *
-upload_config (credentials_t *credentials, params_t *params,
+upload_config (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
                const char *extra_xml, cmd_response_data_t* response_data)
 {
   GString *xml;
@@ -11628,13 +11247,14 @@ upload_config (credentials_t *credentials, params_t *params,
     g_string_append (xml, extra_xml);
   g_string_append (xml, "</upload_config>");
 
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+  return xsl_transform_omp (connection, credentials, params, g_string_free (xml, FALSE),
                             response_data);
 }
 
 /**
  * @brief Return the upload scan config page.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -11642,15 +11262,16 @@ upload_config (credentials_t *credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-upload_config_omp (credentials_t *credentials, params_t *params,
+upload_config_omp (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
-  return upload_config (credentials, params, NULL, response_data);
+  return upload_config (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Create config, get all configs, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -11658,7 +11279,7 @@ upload_config_omp (credentials_t *credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-create_config_omp (credentials_t * credentials, params_t *params,
+create_config_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
   gchar *html, *response;
@@ -11680,7 +11301,7 @@ create_config_omp (credentials_t * credentials, params_t *params,
     }
 
   /* Create the config. */
-  switch (ompf (credentials,
+  switch (ompf (connection, credentials,
                 &response,
                 &entity,
                 response_data,
@@ -11724,7 +11345,7 @@ create_config_omp (credentials_t * credentials, params_t *params,
 
   if (entity_attribute (entity, "id"))
     params_add (params, "config_id", entity_attribute (entity, "id"));
-  html = response_from_entity (credentials, params, entity,
+  html = response_from_entity (connection, credentials, params, entity,
                                (no_redirect && strcmp (no_redirect, "0")),
                                NULL, "get_configs",
                                NULL, "new_config",
@@ -11738,6 +11359,7 @@ create_config_omp (credentials_t * credentials, params_t *params,
 /**
  * @brief Import config, get all configs, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -11745,7 +11367,7 @@ create_config_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-import_config_omp (credentials_t * credentials, params_t *params,
+import_config_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
   const char *no_redirect;
@@ -11763,7 +11385,7 @@ import_config_omp (credentials_t * credentials, params_t *params,
                              "%s"
                              "</create_config>",
                              params_value (params, "xml_file"));
-  ret = omp (credentials, &response, &entity, response_data, command);
+  ret = omp (connection, credentials, &response, &entity, response_data, command);
   g_free (command);
   switch (ret)
     {
@@ -11798,7 +11420,7 @@ import_config_omp (credentials_t * credentials, params_t *params,
 
   /* Cleanup, and return transformed XML. */
 
-  html = response_from_entity (credentials, params, entity,
+  html = response_from_entity (connection, credentials, params, entity,
                                (no_redirect && strcmp (no_redirect, "0")),
                                NULL, "get_configs",
                                NULL, "new_config",
@@ -11811,6 +11433,7 @@ import_config_omp (credentials_t * credentials, params_t *params,
 /**
  * @brief Get all scan configs, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
@@ -11819,16 +11442,17 @@ import_config_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 static char *
-get_configs (credentials_t *credentials, params_t *params,
+get_configs (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
              const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return get_many ("config", credentials, params, extra_xml, NULL,
+  return get_many (connection, "config", credentials, params, extra_xml, NULL,
                    response_data);
 }
 
 /**
  * @brief Get all scan configs, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -11836,15 +11460,16 @@ get_configs (credentials_t *credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-get_configs_omp (credentials_t * credentials, params_t *params,
+get_configs_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                  cmd_response_data_t* response_data)
 {
-  return get_configs (credentials, params, NULL, response_data);
+  return get_configs (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Get a config, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
@@ -11854,37 +11479,17 @@ get_configs_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 static char *
-get_config (credentials_t * credentials, params_t *params,
-            const char *extra_xml, int edit, cmd_response_data_t* response_data)
+get_config (openvas_connection_t *connection, credentials_t * credentials,
+            params_t *params, const char *extra_xml, int edit,
+            cmd_response_data_t* response_data)
 {
   GString *xml;
-  openvas_connection_t connection;
-  gchar *html;
   const char *config_id;
 
   config_id = params_value (params, "config_id");
 
   if (config_id == NULL)
-    return get_configs (credentials, params, extra_xml, response_data);
-
-  switch (manager_connect (credentials, &connection, &html,
-                           response_data))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting list of configs. "
-                             "The current list of configs is not available. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_configs", response_data);
-    }
+    return get_configs (connection, credentials, params, extra_xml, response_data);
 
   xml = g_string_new ("<get_config_response>");
   if (edit) g_string_append (xml, "<edit/>");
@@ -11893,7 +11498,7 @@ get_config (credentials_t * credentials, params_t *params,
     g_string_append (xml, extra_xml);
   /* Get the config families. */
 
-  if (openvas_connection_sendf (&connection,
+  if (openvas_connection_sendf (connection,
                                 "<get_configs"
                                 " config_id=\"%s\""
                                 " families=\"1\""
@@ -11903,7 +11508,6 @@ get_config (credentials_t * credentials, params_t *params,
       == -1)
     {
       g_string_free (xml, TRUE);
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -11913,10 +11517,9 @@ get_config (credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_configs", response_data);
     }
 
-  if (read_string_c (&connection, &xml))
+  if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -11928,10 +11531,9 @@ get_config (credentials_t * credentials, params_t *params,
 
   /* Get all the families. */
 
-  if (openvas_connection_sendf (&connection, "<get_nvt_families/>") == -1)
+  if (openvas_connection_sendf (connection, "<get_nvt_families/>") == -1)
     {
       g_string_free (xml, TRUE);
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -11941,10 +11543,9 @@ get_config (credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_configs", response_data);
     }
 
-  if (read_string_c (&connection, &xml))
+  if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -11957,11 +11558,10 @@ get_config (credentials_t * credentials, params_t *params,
   if (edit)
     {
       /* Get OSP scanners */
-      if (openvas_connection_sendf (&connection, "<get_scanners filter=\"type=1\"/>")
+      if (openvas_connection_sendf (connection, "<get_scanners filter=\"type=1\"/>")
           == -1)
         {
           g_string_free (xml, TRUE);
-          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message
                   (credentials, "Internal error", __FUNCTION__, __LINE__,
@@ -11971,10 +11571,9 @@ get_config (credentials_t * credentials, params_t *params,
                    "/omp?cmd=get_configs", response_data);
         }
 
-      if (read_string_c (&connection, &xml))
+      if (read_string_c (connection, &xml))
         {
           g_string_free (xml, TRUE);
-          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message
                   (credentials, "Internal error", __FUNCTION__, __LINE__,
@@ -11987,10 +11586,9 @@ get_config (credentials_t * credentials, params_t *params,
     }
 
   /* Get Credentials */
-  if (openvas_connection_sendf (&connection, "<get_credentials/>") == -1)
+  if (openvas_connection_sendf (connection, "<get_credentials/>") == -1)
     {
       g_string_free (xml, TRUE);
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message
               (credentials, "Internal error", __FUNCTION__, __LINE__,
@@ -11999,10 +11597,9 @@ get_config (credentials_t * credentials, params_t *params,
                "Diagnostics: Failure to send command to manager daemon.",
                "/omp?cmd=get_configs", response_data);
     }
-  if (read_string_c (&connection, &xml))
+  if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message
               (credentials, "Internal error", __FUNCTION__, __LINE__,
@@ -12016,7 +11613,7 @@ get_config (credentials_t * credentials, params_t *params,
 
   g_string_append (xml, "<permissions>");
 
-  if (openvas_connection_sendf (&connection,
+  if (openvas_connection_sendf (connection,
                                 "<get_permissions"
                                 " filter=\"name:^.*(config)s?$"
                                 "          and resource_uuid=%s"
@@ -12025,7 +11622,6 @@ get_config (credentials_t * credentials, params_t *params,
       == -1)
     {
       g_string_free (xml, TRUE);
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -12035,10 +11631,9 @@ get_config (credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_resources", response_data);
     }
 
-  if (read_string_c (&connection, &xml))
+  if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -12053,14 +11648,14 @@ get_config (credentials_t * credentials, params_t *params,
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</get_config_response>");
-  openvas_connection_close (&connection);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+  return xsl_transform_omp (connection, credentials, params, g_string_free (xml, FALSE),
                             response_data);
 }
 
 /**
  * @brief Get a config, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -12068,15 +11663,16 @@ get_config (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-get_config_omp (credentials_t * credentials, params_t *params,
+get_config_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                 cmd_response_data_t* response_data)
 {
-  return get_config (credentials, params, NULL, 0, response_data);
+  return get_config (connection, credentials, params, NULL, 0, response_data);
 }
 
 /**
  * @brief Get a config, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -12084,15 +11680,16 @@ get_config_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 static char *
-edit_config (credentials_t * credentials, params_t *params,
+edit_config (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
              const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return get_config (credentials, params, extra_xml, 1, response_data);
+  return get_config (connection, credentials, params, extra_xml, 1, response_data);
 }
 
 /**
  * @brief Get a config, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -12100,15 +11697,16 @@ edit_config (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-edit_config_omp (credentials_t * credentials, params_t *params,
+edit_config_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                  cmd_response_data_t* response_data)
 {
-  return edit_config (credentials, params, NULL, response_data);
+  return edit_config (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Sync config, get configs, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -12116,41 +11714,20 @@ edit_config_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-sync_config_omp (credentials_t * credentials, params_t *params,
-                 cmd_response_data_t* response_data)
+sync_config_omp (openvas_connection_t *connection, credentials_t * credentials,
+                 params_t *params, cmd_response_data_t* response_data)
 {
   GString *xml;
-  openvas_connection_t connection;
-  gchar *html;
   const char *config_id, *next;
   char *ret;
 
   config_id = params_value (params, "config_id");
   CHECK_PARAM (config_id, "Synchronize Config", get_configs);
-  switch (manager_connect (credentials, &connection, &html,
-                           response_data))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-        return gsad_message
-                (credentials, "Internal error", __FUNCTION__, __LINE__,
-                 "An internal error occurred while synchronizing a config. "
-                 "The config is not synchronized. "
-                 "Diagnostics: Failure to connect to manager daemon.",
-                 "/omp?cmd=get_configs", response_data);
-    }
 
-  if (openvas_connection_sendf (&connection, "<sync_config config_id=\"%s\"/>",
+  if (openvas_connection_sendf (connection, "<sync_config config_id=\"%s\"/>",
                                 config_id)
       == -1)
     {
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message
               (credentials, "Internal error", __FUNCTION__, __LINE__,
@@ -12162,10 +11739,9 @@ sync_config_omp (credentials_t * credentials, params_t *params,
 
   xml = g_string_new ("");
 
-  if (read_string_c (&connection, &xml))
+  if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message
               (credentials, "Internal error", __FUNCTION__, __LINE__,
@@ -12177,10 +11753,12 @@ sync_config_omp (credentials_t * credentials, params_t *params,
 
   next = params_value (params, "next");
   if (next && !strcmp (next, "get_config"))
-    ret = get_config (credentials, params, xml->str, 0, response_data);
+    ret = get_config (connection, credentials, params, xml->str, 0,
+                      response_data);
   else
-    ret = get_configs (credentials, params, xml->str, response_data);
-  openvas_connection_close (&connection);
+    ret = get_configs (connection, credentials, params, xml->str,
+                       response_data);
+
   g_string_free (xml, TRUE);
   return ret;
 }
@@ -12189,18 +11767,18 @@ sync_config_omp (credentials_t * credentials, params_t *params,
 /**
  * @brief Save OSP file preferences.
  *
- * @param[in]   credentials  Username and password for authentication.
- * @param[in]   connection   Connection.
- * @param[in]   params      Request parameters.
- * @param[in]   next        The next command on success.
- * @param[in]   fail_next   The next command on failure.
- * @param[out]  success     Whether the last command was successful.
+ * @param[in]   connection     Connection.
+ * @param[in]   credentials    Username and password for authentication.
+ * @param[in]   params         Request parameters.
+ * @param[in]   next           The next command on success.
+ * @param[in]   fail_next      The next command on failure.
+ * @param[out]  success        Whether the last command was successful.
  * @param[out]  response_data  Extra data return for the HTTP response.
  *
  * @return HTML result of XSL transformation.
  */
 static char *
-save_osp_prefs (credentials_t *credentials, openvas_connection_t *connection,
+save_osp_prefs (openvas_connection_t *connection, credentials_t *credentials,
                 params_t *params, const char *next, const char *fail_next,
                 int *success, cmd_response_data_t* response_data)
 {
@@ -12249,7 +11827,7 @@ save_osp_prefs (credentials_t *credentials, openvas_connection_t *connection,
         }
       g_free (value);
 
-      ret = check_modify_config (credentials, connection, params, next,
+      ret = check_modify_config (connection, credentials, params, next,
                                  fail_next, success, response_data);
       if (*success == 0)
         return ret;
@@ -12260,6 +11838,7 @@ save_osp_prefs (credentials_t *credentials, openvas_connection_t *connection,
 /**
  * @brief Save details of an NVT for a config and return the next page.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -12267,13 +11846,11 @@ save_osp_prefs (credentials_t *credentials, openvas_connection_t *connection,
  * @return Following page.
  */
 char *
-save_config_omp (credentials_t * credentials, params_t *params,
-                 cmd_response_data_t* response_data)
+save_config_omp (openvas_connection_t *connection, credentials_t * credentials,
+                 params_t *params, cmd_response_data_t* response_data)
 {
-  openvas_connection_t connection;
   int omp_ret;
   char *ret;
-  gchar *html;
   params_t *preferences, *selects, *trends;
   const char *config_id, *name, *comment, *scanner_id;
   int success;
@@ -12287,29 +11864,10 @@ save_config_omp (credentials_t * credentials, params_t *params,
   CHECK_PARAM_INVALID (name, "Save Config", "edit_config");
   CHECK_PARAM_INVALID (comment, "Save Config", "edit_config");
 
-  switch (manager_connect (credentials, &connection, &html,
-                           response_data))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while saving a config. "
-                             "The current list of configs is not available. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_configs", response_data);
-    }
-
   /* Save name and comment. */
 
   if (scanner_id)
-    omp_ret = openvas_connection_sendf_xml (&connection,
+    omp_ret = openvas_connection_sendf_xml (connection,
                                             "<modify_config config_id=\"%s\">"
                                             "<name>%s</name>"
                                             "<comment>%s</comment>"
@@ -12320,7 +11878,7 @@ save_config_omp (credentials_t * credentials, params_t *params,
                                             comment,
                                             scanner_id);
   else
-    omp_ret = openvas_connection_sendf_xml (&connection,
+    omp_ret = openvas_connection_sendf_xml (connection,
                                             "<modify_config config_id=\"%s\">"
                                             "<name>%s</name>"
                                             "<comment>%s</comment>"
@@ -12331,7 +11889,6 @@ save_config_omp (credentials_t * credentials, params_t *params,
 
   if (omp_ret == -1)
     {
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -12341,12 +11898,11 @@ save_config_omp (credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_configs", response_data);
     }
 
-  ret = check_modify_config (credentials, &connection, params,
+  ret = check_modify_config (connection, credentials, params,
                              "get_config", "edit_config",
                              &success, response_data);
   if (success == 0)
     {
-      openvas_connection_close (&connection);
       return ret;
     }
   g_free (ret);
@@ -12370,7 +11926,7 @@ save_config_omp (credentials_t * credentials, params_t *params,
                                      param->value_size)
                   : g_strdup ("");
 
-          if (openvas_connection_sendf (&connection,
+          if (openvas_connection_sendf (connection,
                                         "<modify_config config_id=\"%s\">"
                                         "<preference>"
                                         "<name>%s</name>"
@@ -12383,7 +11939,6 @@ save_config_omp (credentials_t * credentials, params_t *params,
               == -1)
             {
               g_free (value);
-              openvas_connection_close (&connection);
               response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
               return gsad_message (credentials,
                                    "Internal error", __FUNCTION__, __LINE__,
@@ -12394,24 +11949,22 @@ save_config_omp (credentials_t * credentials, params_t *params,
             }
           g_free (value);
 
-          ret = check_modify_config (credentials, &connection, params,
+          ret = check_modify_config (connection, credentials, params,
                                      "get_config", "edit_config",
                                      &success, response_data);
           if (success == 0)
             {
-              openvas_connection_close (&connection);
               return ret;
             }
         }
     }
 
   /* OSP config file preference. */
-  ret = save_osp_prefs (credentials, &connection, params,
+  ret = save_osp_prefs (connection, credentials, params,
                         "get_config", "edit_config",
                         &success, response_data);
   if (success == 0)
     {
-      openvas_connection_close (&connection);
       return ret;
     }
   g_free (ret);
@@ -12420,7 +11973,7 @@ save_config_omp (credentials_t * credentials, params_t *params,
 
   trends = params_values (params, "trend:");
 
-  if (openvas_connection_sendf (&connection,
+  if (openvas_connection_sendf (connection,
                                 "<modify_config config_id=\"%s\">"
                                 "<family_selection>"
                                 "<growing>%i</growing>",
@@ -12430,7 +11983,6 @@ save_config_omp (credentials_t * credentials, params_t *params,
                                 && strcmp (params_value (params, "trend"), "0"))
       == -1)
     {
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -12450,7 +12002,7 @@ save_config_omp (credentials_t * credentials, params_t *params,
 
       params_iterator_init (&iter, selects);
       while (params_iterator_next (&iter, &family, &param))
-        if (openvas_connection_sendf (&connection,
+        if (openvas_connection_sendf (connection,
                                       "<family>"
                                       "<name>%s</name>"
                                       "<all>1</all>"
@@ -12460,7 +12012,6 @@ save_config_omp (credentials_t * credentials, params_t *params,
                                       trends && member1 (trends, family))
             == -1)
           {
-            openvas_connection_close (&connection);
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
@@ -12483,7 +12034,7 @@ save_config_omp (credentials_t * credentials, params_t *params,
           if (param->value_size == 0) continue;
           if (param->value[0] == '0') continue;
           if (selects && member (selects, family)) continue;
-          if (openvas_connection_sendf (&connection,
+          if (openvas_connection_sendf (connection,
                                         "<family>"
                                         "<name>%s</name>"
                                         "<all>0</all>"
@@ -12492,7 +12043,6 @@ save_config_omp (credentials_t * credentials, params_t *params,
                                         family)
               == -1)
             {
-              openvas_connection_close (&connection);
               response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
               return gsad_message (credentials,
                                    "Internal error", __FUNCTION__, __LINE__,
@@ -12504,12 +12054,11 @@ save_config_omp (credentials_t * credentials, params_t *params,
         }
     }
 
-  if (openvas_connection_sendf (&connection,
+  if (openvas_connection_sendf (connection,
                                 "</family_selection>"
                                 "</modify_config>")
       == -1)
     {
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -12519,17 +12068,17 @@ save_config_omp (credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_configs", response_data);
     }
 
-  ret = check_modify_config (credentials, &connection, params,
+  ret = check_modify_config (connection, credentials, params,
                              "get_config", "edit_config",
                              NULL, response_data);
 
-  openvas_connection_close (&connection);
   return ret;
 }
 
 /**
  * @brief Get details of a family for a config, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  edit         0 for config view page, else config edit page.
@@ -12538,12 +12087,11 @@ save_config_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 static char *
-get_config_family (credentials_t * credentials, params_t *params, int edit,
+get_config_family (openvas_connection_t *connection, credentials_t *
+                   credentials, params_t *params, int edit,
                    cmd_response_data_t* response_data)
 {
   GString *xml;
-  openvas_connection_t connection;
-  gchar *html;
   const char *config_id, *name, *family, *sort_field, *sort_order;
 
   config_id = params_value (params, "config_id");
@@ -12558,25 +12106,6 @@ get_config_family (credentials_t * credentials, params_t *params, int edit,
                            "An internal error occurred while getting config family. "
                            "Diagnostics: Required parameter was NULL.",
                            "/omp?cmd=get_configs", response_data);
-    }
-
-  switch (manager_connect (credentials, &connection, &html,
-                           response_data))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting config family. "
-                             "The current list of configs is not available. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_configs", response_data);
     }
 
   xml = g_string_new ("<get_config_family_response>");
@@ -12595,7 +12124,7 @@ get_config_family (credentials_t * credentials, params_t *params, int edit,
   sort_field = params_value (params, "sort_field");
   sort_order = params_value (params, "sort_order");
 
-  if (openvas_connection_sendf (&connection,
+  if (openvas_connection_sendf (connection,
                                 "<get_nvts"
                                 " config_id=\"%s\" details=\"1\""
                                 " family=\"%s\" timeout=\"1\" preference_count=\"1\""
@@ -12607,7 +12136,6 @@ get_config_family (credentials_t * credentials, params_t *params, int edit,
       == -1)
     {
       g_string_free (xml, TRUE);
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -12617,10 +12145,9 @@ get_config_family (credentials_t * credentials, params_t *params, int edit,
                            "/omp?cmd=get_configs", response_data);
     }
 
-  if (read_string_c (&connection, &xml))
+  if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -12636,7 +12163,7 @@ get_config_family (credentials_t * credentials, params_t *params, int edit,
 
       g_string_append (xml, "<all>");
 
-      if (openvas_connection_sendf (&connection,
+      if (openvas_connection_sendf (connection,
                                     "<get_nvts"
                                     " details=\"1\""
                                     " timeout=\"1\""
@@ -12652,7 +12179,6 @@ get_config_family (credentials_t * credentials, params_t *params, int edit,
           == -1)
         {
           g_string_free (xml, TRUE);
-          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -12662,10 +12188,9 @@ get_config_family (credentials_t * credentials, params_t *params, int edit,
                                "/omp?cmd=get_configs", response_data);
         }
 
-      if (read_string_c (&connection, &xml))
+      if (read_string_c (connection, &xml))
         {
           g_string_free (xml, TRUE);
-          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -12679,14 +12204,14 @@ get_config_family (credentials_t * credentials, params_t *params, int edit,
     }
 
   g_string_append (xml, "</get_config_family_response>");
-  openvas_connection_close (&connection);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+  return xsl_transform_omp (connection, credentials, params, g_string_free (xml, FALSE),
                             response_data);
 }
 
 /**
  * @brief Get details of a family for a config, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -12694,15 +12219,16 @@ get_config_family (credentials_t * credentials, params_t *params, int edit,
  * @return Result of XSL transformation.
  */
 char *
-get_config_family_omp (credentials_t * credentials, params_t *params,
+get_config_family_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                        cmd_response_data_t* response_data)
 {
-  return get_config_family (credentials, params, 0, response_data);
+  return get_config_family (connection, credentials, params, 0, response_data);
 }
 
 /**
  * @brief Get details of a family for editing a config, XSL transform result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -12710,15 +12236,16 @@ get_config_family_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-edit_config_family_omp (credentials_t * credentials, params_t *params,
+edit_config_family_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                         cmd_response_data_t* response_data)
 {
-  return get_config_family (credentials, params, 1, response_data);
+  return get_config_family (connection, credentials, params, 1, response_data);
 }
 
 /**
  * @brief Get details of an NVT for a config, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -12726,12 +12253,11 @@ edit_config_family_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-save_config_family_omp (credentials_t * credentials, params_t *params,
+save_config_family_omp (openvas_connection_t *connection, credentials_t *
+                        credentials, params_t *params,
                         cmd_response_data_t* response_data)
 {
-  openvas_connection_t connection;
   char *ret;
-  gchar *html;
   const char *config_id, *family;
   params_t *nvts;
 
@@ -12749,29 +12275,9 @@ save_config_family_omp (credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_configs", response_data);
     }
 
-  switch (manager_connect (credentials, &connection, &html,
-                           response_data))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while saving a config. "
-                             "The current list of configs is not available. "
-                             "The config has not been saved. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_configs", response_data);
-    }
-
   /* Set the NVT selection. */
 
-  if (openvas_connection_sendf (&connection,
+  if (openvas_connection_sendf (connection,
                                 "<modify_config config_id=\"%s\">"
                                 "<nvt_selection>"
                                 "<family>%s</family>",
@@ -12779,7 +12285,6 @@ save_config_family_omp (credentials_t * credentials, params_t *params,
                                 family)
       == -1)
     {
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -12798,12 +12303,11 @@ save_config_family_omp (credentials_t * credentials, params_t *params,
 
       params_iterator_init (&iter, nvts);
       while (params_iterator_next (&iter, &name, &param))
-        if (openvas_connection_sendf (&connection,
+        if (openvas_connection_sendf (connection,
                                       "<nvt oid=\"%s\"/>",
                                       name)
             == -1)
           {
-            openvas_connection_close (&connection);
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                  "Internal error", __FUNCTION__, __LINE__,
@@ -12814,12 +12318,11 @@ save_config_family_omp (credentials_t * credentials, params_t *params,
           }
     }
 
-  if (openvas_connection_sendf (&connection,
+  if (openvas_connection_sendf (connection,
                                 "</nvt_selection>"
                                 "</modify_config>")
       == -1)
     {
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -12829,17 +12332,17 @@ save_config_family_omp (credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_configs", response_data);
     }
 
-  ret = check_modify_config (credentials, &connection, params,
+  ret = check_modify_config (connection, credentials, params,
                              "get_config_family", "edit_config_family",
                              NULL, response_data);
 
-  openvas_connection_close (&connection);
   return ret;
 }
 
 /**
  * @brief Get details of an NVT for a config, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  edit         0 for config view page, else config edit page.
@@ -12848,12 +12351,10 @@ save_config_family_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 static char *
-get_config_nvt (credentials_t * credentials, params_t *params, int edit,
-                cmd_response_data_t* response_data)
+get_config_nvt (openvas_connection_t *connection, credentials_t * credentials,
+                params_t *params, int edit, cmd_response_data_t* response_data)
 {
   GString *xml;
-  openvas_connection_t connection;
-  gchar *html;
   const char *config_id, *name, *family, *sort_field, *sort_order, *nvt;
 
   config_id = params_value (params, "config_id");
@@ -12871,25 +12372,6 @@ get_config_nvt (credentials_t * credentials, params_t *params, int edit,
                            "/omp?cmd=get_configs", response_data);
     }
 
-  switch (manager_connect (credentials, &connection, &html,
-                           response_data))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting list of configs. "
-                             "The current list of configs is not available. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_configs", response_data);
-    }
-
   xml = g_string_new ("<get_config_nvt_response>");
   if (edit) g_string_append (xml, "<edit/>");
   /* @todo Would it be better include this in the get_nvts response? */
@@ -12904,7 +12386,7 @@ get_config_nvt (credentials_t * credentials, params_t *params, int edit,
   sort_field = params_value (params, "sort_field");
   sort_order = params_value (params, "sort_order");
 
-  if (openvas_connection_sendf (&connection,
+  if (openvas_connection_sendf (connection,
                                 "<get_nvts"
                                 " config_id=\"%s\" nvt_oid=\"%s\""
                                 " details=\"1\" preferences=\"1\""
@@ -12916,7 +12398,6 @@ get_config_nvt (credentials_t * credentials, params_t *params, int edit,
       == -1)
     {
       g_string_free (xml, TRUE);
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -12926,10 +12407,9 @@ get_config_nvt (credentials_t * credentials, params_t *params, int edit,
                            "/omp?cmd=get_configs", response_data);
     }
 
-  if (read_string_c (&connection, &xml))
+  if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -12941,7 +12421,7 @@ get_config_nvt (credentials_t * credentials, params_t *params, int edit,
 
   g_string_append (xml, "</get_config_nvt_response>");
 
-  if (openvas_connection_sendf (&connection,
+  if (openvas_connection_sendf (connection,
                                 "<get_notes"
                                 " nvt_oid=\"%s\""
                                 " sort_field=\"notes.text\"/>",
@@ -12949,7 +12429,6 @@ get_config_nvt (credentials_t * credentials, params_t *params, int edit,
       == -1)
     {
       g_string_free (xml, TRUE);
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -12959,10 +12438,9 @@ get_config_nvt (credentials_t * credentials, params_t *params, int edit,
                            "/omp?cmd=get_configs", response_data);
     }
 
-  if (read_string_c (&connection, &xml))
+  if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -12972,7 +12450,7 @@ get_config_nvt (credentials_t * credentials, params_t *params, int edit,
                            "/omp?cmd=get_configs", response_data);
     }
 
-  if (openvas_connection_sendf (&connection,
+  if (openvas_connection_sendf (connection,
                                 "<get_overrides"
                                 " nvt_oid=\"%s\""
                                 " sort_field=\"overrides.text\"/>",
@@ -12980,7 +12458,6 @@ get_config_nvt (credentials_t * credentials, params_t *params, int edit,
       == -1)
     {
       g_string_free (xml, TRUE);
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -12990,10 +12467,9 @@ get_config_nvt (credentials_t * credentials, params_t *params, int edit,
                            "/omp?cmd=get_configs", response_data);
     }
 
-  if (read_string_c (&connection, &xml))
+  if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -13003,14 +12479,14 @@ get_config_nvt (credentials_t * credentials, params_t *params, int edit,
                            "/omp?cmd=get_configs", response_data);
     }
 
-  openvas_connection_close (&connection);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+  return xsl_transform_omp (connection, credentials, params, g_string_free (xml, FALSE),
                             response_data);
 }
 
 /**
  * @brief Get details of an NVT for a config, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -13018,15 +12494,16 @@ get_config_nvt (credentials_t * credentials, params_t *params, int edit,
  * @return Result of XSL transformation.
  */
 char *
-get_config_nvt_omp (credentials_t * credentials, params_t *params,
+get_config_nvt_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                     cmd_response_data_t* response_data)
 {
-  return get_config_nvt (credentials, params, 0, response_data);
+  return get_config_nvt (connection, credentials, params, 0, response_data);
 }
 
 /**
  * @brief Edit details of an NVT for a config, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -13034,15 +12511,16 @@ get_config_nvt_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-edit_config_nvt_omp (credentials_t * credentials, params_t *params,
+edit_config_nvt_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                      cmd_response_data_t* response_data)
 {
-  return get_config_nvt (credentials, params, 1, response_data);
+  return get_config_nvt (connection, credentials, params, 1, response_data);
 }
 
 /**
  * @brief Save NVT prefs for a config, get NVT details, XSL transform result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -13050,7 +12528,8 @@ edit_config_nvt_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-save_config_nvt_omp (credentials_t * credentials, params_t *params,
+save_config_nvt_omp (openvas_connection_t *connection, credentials_t *
+                     credentials, params_t *params,
                      cmd_response_data_t* response_data)
 {
   params_t *preferences;
@@ -13064,32 +12543,11 @@ save_config_nvt_omp (credentials_t * credentials, params_t *params,
   preferences = params_values (params, "preference:");
   if (preferences)
     {
-      openvas_connection_t connection;
-      gchar *html;
       param_t *preference;
       gchar *preference_name;
       params_iterator_t iter;
 
       /* Save preferences. */
-
-      switch (manager_connect (credentials, &connection, &html,
-                               response_data))
-        {
-          case 0:
-            break;
-          case -1:
-            if (html)
-              return html;
-            /* Fall through. */
-          default:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-            return gsad_message (credentials,
-                                 "Internal error", __FUNCTION__, __LINE__,
-                                 "An internal error occurred while getting list of configs. "
-                                 "The current list of configs is not available. "
-                                 "Diagnostics: Failure to connect to manager daemon.",
-                                 "/omp?cmd=get_configs", response_data);
-        }
 
       params_iterator_init (&iter, preferences);
       while (params_iterator_next (&iter, &preference_name, &preference))
@@ -13194,7 +12652,6 @@ save_config_nvt_omp (credentials_t * credentials, params_t *params,
               if (timeout == NULL)
                 {
                   g_free (value);
-                  openvas_connection_close (&connection);
                   response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
                   return gsad_message (credentials,
                                        "Internal error", __FUNCTION__, __LINE__,
@@ -13209,7 +12666,7 @@ save_config_nvt_omp (credentials_t * credentials, params_t *params,
 
               if (strcmp (timeout, "0") == 0)
                 /* Leave out the value to clear the preference. */
-                ret = openvas_connection_sendf (&connection,
+                ret = openvas_connection_sendf (connection,
                                                 "<modify_config"
                                                 " config_id=\"%s\">"
                                                 "<preference>"
@@ -13219,7 +12676,7 @@ save_config_nvt_omp (credentials_t * credentials, params_t *params,
                                                 config_id,
                                                 preference_name_escaped);
               else
-                ret = openvas_connection_sendf (&connection,
+                ret = openvas_connection_sendf (connection,
                                                 "<modify_config"
                                                 " config_id=\"%s\">"
                                                 "<preference>"
@@ -13238,7 +12695,7 @@ save_config_nvt_omp (credentials_t * credentials, params_t *params,
               gchar *preference_name_escaped;
               preference_name_escaped = g_markup_escape_text (preference_name,
                                                               -1);
-              ret = openvas_connection_sendf (&connection,
+              ret = openvas_connection_sendf (connection,
                                               "<modify_config"
                                               " config_id=\"%s\">"
                                               "<preference>"
@@ -13257,7 +12714,6 @@ save_config_nvt_omp (credentials_t * credentials, params_t *params,
           if (ret == -1)
             {
               g_free (value);
-              openvas_connection_close (&connection);
               response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
               return gsad_message (credentials,
                                    "Internal error", __FUNCTION__, __LINE__,
@@ -13268,19 +12724,17 @@ save_config_nvt_omp (credentials_t * credentials, params_t *params,
             }
           g_free (value);
 
-          modify_config_ret = check_modify_config (credentials, &connection,
+          modify_config_ret = check_modify_config (connection, credentials,
                                                    params,
                                                    "get_config_nvt",
                                                    "edit_config_nvt",
                                                    &success, response_data);
           if (success == 0)
             {
-              openvas_connection_close (&connection);
               return modify_config_ret;
             }
         }
 
-      openvas_connection_close (&connection);
     }
 
   return modify_config_ret;
@@ -13289,6 +12743,7 @@ save_config_nvt_omp (credentials_t * credentials, params_t *params,
 /**
  * @brief Delete config, get all configs, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -13296,16 +12751,17 @@ save_config_nvt_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-delete_config_omp (credentials_t * credentials, params_t *params,
+delete_config_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
-  return delete_resource ("config", credentials, params, 0, "get_configs",
+  return delete_resource (connection, "config", credentials, params, 0, "get_configs",
                           response_data);
 }
 
 /**
  * @brief Export a config.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
  * @param[out]  content_type         Content type return.
@@ -13316,17 +12772,18 @@ delete_config_omp (credentials_t * credentials, params_t *params,
  * @return Config XML on success.  HTML result of XSL transformation on error.
  */
 char *
-export_config_omp (credentials_t * credentials, params_t *params,
+export_config_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                    enum content_type * content_type, char **content_disposition,
                    gsize *content_length, cmd_response_data_t* response_data)
 {
-  return export_resource ("config", credentials, params, content_type,
+  return export_resource (connection, "config", credentials, params, content_type,
                           content_disposition, content_length, response_data);
 }
 
 /**
  * @brief Export a list of scan configs.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
  * @param[out]  content_type         Content type return.
@@ -13338,17 +12795,18 @@ export_config_omp (credentials_t * credentials, params_t *params,
  *         on error.
  */
 char *
-export_configs_omp (credentials_t * credentials, params_t *params,
+export_configs_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                     enum content_type * content_type, char **content_disposition,
                     gsize *content_length, cmd_response_data_t* response_data)
 {
-  return export_many ("config", credentials, params, content_type,
+  return export_many (connection, "config", credentials, params, content_type,
                       content_disposition, content_length, response_data);
 }
 
 /**
  * @brief Export a note.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
  * @param[out]  content_type         Content type return.
@@ -13359,17 +12817,18 @@ export_configs_omp (credentials_t * credentials, params_t *params,
  * @return Note XML on success.  HTML result of XSL transformation on error.
  */
 char *
-export_note_omp (credentials_t * credentials, params_t *params,
+export_note_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                  enum content_type * content_type, char **content_disposition,
                  gsize *content_length, cmd_response_data_t* response_data)
 {
-  return export_resource ("note", credentials, params, content_type,
+  return export_resource (connection, "note", credentials, params, content_type,
                           content_disposition, content_length, response_data);
 }
 
 /**
  * @brief Export a list of notes.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
  * @param[out]  content_type         Content type return.
@@ -13381,17 +12840,18 @@ export_note_omp (credentials_t * credentials, params_t *params,
  *         on error.
  */
 char *
-export_notes_omp (credentials_t * credentials, params_t *params,
+export_notes_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                   enum content_type * content_type, char **content_disposition,
                   gsize *content_length, cmd_response_data_t* response_data)
 {
-  return export_many ("note", credentials, params, content_type,
+  return export_many (connection, "note", credentials, params, content_type,
                       content_disposition, content_length, response_data);
 }
 
 /**
  * @brief Export an override.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
  * @param[out]  content_type         Content type return.
@@ -13402,18 +12862,19 @@ export_notes_omp (credentials_t * credentials, params_t *params,
  * @return Override XML on success.  HTML result of XSL transformation on error.
  */
 char *
-export_override_omp (credentials_t * credentials, params_t *params,
+export_override_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                      enum content_type * content_type,
                      char **content_disposition, gsize *content_length,
                      cmd_response_data_t* response_data)
 {
-  return export_resource ("override", credentials, params, content_type,
+  return export_resource (connection, "override", credentials, params, content_type,
                           content_disposition, content_length, response_data);
 }
 
 /**
  * @brief Export a list of overrides.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
  * @param[out]  content_type         Content type return.
@@ -13425,18 +12886,19 @@ export_override_omp (credentials_t * credentials, params_t *params,
  *         on error.
  */
 char *
-export_overrides_omp (credentials_t * credentials, params_t *params,
+export_overrides_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                       enum content_type * content_type,
                       char **content_disposition, gsize *content_length,
                       cmd_response_data_t* response_data)
 {
-  return export_many ("override", credentials, params, content_type,
+  return export_many (connection, "override", credentials, params, content_type,
                       content_disposition, content_length, response_data);
 }
 
 /**
  * @brief Export a Port List.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
  * @param[out]  content_type         Content type return.
@@ -13448,12 +12910,12 @@ export_overrides_omp (credentials_t * credentials, params_t *params,
  *         error.
  */
 char *
-export_port_list_omp (credentials_t * credentials, params_t *params,
+export_port_list_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                       enum content_type * content_type,
                       char **content_disposition, gsize *content_length,
                       cmd_response_data_t* response_data)
 {
-  return export_resource ("port_list", credentials, params, content_type,
+  return export_resource (connection, "port_list", credentials, params, content_type,
                           content_disposition, content_length,
                           response_data);
 }
@@ -13461,6 +12923,7 @@ export_port_list_omp (credentials_t * credentials, params_t *params,
 /**
  * @brief Export a list of Port Lists.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
  * @param[out]  content_type         Content type return.
@@ -13472,18 +12935,19 @@ export_port_list_omp (credentials_t * credentials, params_t *params,
  *         on error.
  */
 char *
-export_port_lists_omp (credentials_t * credentials, params_t *params,
+export_port_lists_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                        enum content_type * content_type,
                        char **content_disposition, gsize *content_length,
                        cmd_response_data_t* response_data)
 {
-  return export_many ("port_list", credentials, params, content_type,
+  return export_many (connection, "port_list", credentials, params, content_type,
                       content_disposition, content_length, response_data);
 }
 
 /**
  * @brief Export a file preference.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
  * @param[out]  content_type         Content type return.
@@ -13494,37 +12958,17 @@ export_port_lists_omp (credentials_t * credentials, params_t *params,
  * @return Config XML on success.  HTML result of XSL transformation on error.
  */
 char *
-export_preference_file_omp (credentials_t * credentials, params_t *params,
+export_preference_file_omp (openvas_connection_t *connection,
+                            credentials_t * credentials, params_t *params,
                             enum content_type * content_type,
                             char **content_disposition, gsize *content_length,
                             cmd_response_data_t* response_data)
 {
   GString *xml;
   entity_t entity, preference_entity, value_entity;
-  openvas_connection_t connection;
-  gchar *html;
   const char *config_id, *oid, *preference_name;
 
   *content_length = 0;
-
-  switch (manager_connect (credentials, &connection, &html,
-                           response_data))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting a preference file. "
-                             "The file could not be delivered. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_tasks", response_data);
-    }
 
   config_id = params_value (params, "config_id");
   oid = params_value (params, "oid");
@@ -13536,7 +12980,7 @@ export_preference_file_omp (credentials_t * credentials, params_t *params,
     g_string_append (xml, GSAD_MESSAGE_INVALID_PARAM ("Export Preference File"));
   else
     {
-      if (openvas_connection_sendf (&connection,
+      if (openvas_connection_sendf (connection,
                                     "<get_preferences"
                                     " config_id=\"%s\""
                                     " nvt_oid=\"%s\""
@@ -13547,7 +12991,6 @@ export_preference_file_omp (credentials_t * credentials, params_t *params,
           == -1)
         {
           g_string_free (xml, TRUE);
-          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -13558,10 +13001,9 @@ export_preference_file_omp (credentials_t * credentials, params_t *params,
         }
 
       entity = NULL;
-      if (read_entity_c (&connection, &entity))
+      if (read_entity_c (connection, &entity))
         {
           g_string_free (xml, TRUE);
-          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -13581,14 +13023,12 @@ export_preference_file_omp (credentials_t * credentials, params_t *params,
           *content_length = strlen (content);
           free_entity (entity);
           g_string_free (xml, TRUE);
-          openvas_connection_close (&connection);
           return content;
         }
       else
         {
           free_entity (entity);
           g_string_free (xml, TRUE);
-          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -13600,14 +13040,14 @@ export_preference_file_omp (credentials_t * credentials, params_t *params,
     }
 
   g_string_append (xml, "</get_preferences_response>");
-  openvas_connection_close (&connection);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+  return xsl_transform_omp (connection, credentials, params, g_string_free (xml, FALSE),
                             response_data);
 }
 
 /**
  * @brief Export a report format.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
  * @param[out]  content_type         Content type return.
@@ -13619,18 +13059,19 @@ export_preference_file_omp (credentials_t * credentials, params_t *params,
  *         on error.
  */
 char *
-export_report_format_omp (credentials_t * credentials, params_t *params,
+export_report_format_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                           enum content_type * content_type,
                           char **content_disposition, gsize *content_length,
                           cmd_response_data_t* response_data)
 {
-  return export_resource ("report_format", credentials, params, content_type,
+  return export_resource (connection, "report_format", credentials, params, content_type,
                           content_disposition, content_length, response_data);
 }
 
 /**
  * @brief Export a list of Report Formats.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
  * @param[out]  content_type         Content type return.
@@ -13642,18 +13083,19 @@ export_report_format_omp (credentials_t * credentials, params_t *params,
  *         on error.
  */
 char *
-export_report_formats_omp (credentials_t * credentials, params_t *params,
+export_report_formats_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                            enum content_type * content_type,
                            char **content_disposition, gsize *content_length,
                            cmd_response_data_t* response_data)
 {
-  return export_many ("report_format", credentials, params, content_type,
+  return export_many (connection, "report_format", credentials, params, content_type,
                       content_disposition, content_length, response_data);
 }
 
 /**
  * @brief Delete report, get task status, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -13661,16 +13103,17 @@ export_report_formats_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-delete_report_omp (credentials_t * credentials, params_t *params,
+delete_report_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
-  return delete_resource ("report", credentials, params, 0, NULL,
+  return delete_resource (connection, "report", credentials, params, 0, NULL,
                           response_data);
 }
 
 /**
  * @brief Get a report and return the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  commands     Extra commands to run before the others.
@@ -13684,16 +13127,15 @@ delete_report_omp (credentials_t * credentials, params_t *params,
  * @return Report.
  */
 char *
-get_report (credentials_t * credentials, params_t *params, const char *commands,
-            gsize *report_len, gchar **content_type, char **content_disposition,
+get_report (openvas_connection_t *connection, credentials_t * credentials,
+            params_t *params, const char *commands, gsize *report_len,
+            gchar **content_type, char **content_disposition,
             const char *extra_xml, int *error,
             cmd_response_data_t* response_data)
 {
   GString *xml, *commands_xml;
   entity_t entity;
   entity_t report_entity;
-  openvas_connection_t connection;
-  gchar *html;
   unsigned int first, max;
   GString *levels, *delta_states;
   const char *alert_id, *search_phrase, *min_qod, *type, *zone;
@@ -13833,42 +13275,15 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
   if (result_hosts_only == NULL || strlen (result_hosts_only) == 0)
     result_hosts_only = "1";
 
-  switch (manager_connect (credentials, &connection, &html,
-                           response_data))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          {
-            if (error) *error = 1;
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-            return html;
-          }
-        /* Fall through. */
-      default:
-        {
-          if (error) *error = 1;
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-          return gsad_message (credentials,
-                               "Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred while getting a report. "
-                               "The report could not be delivered. "
-                               "Diagnostics: Failure to connect to manager daemon.",
-                               "/omp?cmd=get_tasks", response_data);
-        }
-    }
-
   /* Run any extra commands. */
 
   commands_xml = g_string_new ("");
   if (commands)
     {
-      if (openvas_connection_sendf (&connection, "%s", commands)
+      if (openvas_connection_sendf (connection, "%s", commands)
           == -1)
         {
           g_string_free (commands_xml, TRUE);
-          openvas_connection_close (&connection);
           if (error) *error = 1;
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
@@ -13879,10 +13294,9 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                                "/omp?cmd=get_tasks", response_data);
         }
 
-      if (read_string_c (&connection, &commands_xml))
+      if (read_string_c (connection, &commands_xml))
         {
           g_string_free (commands_xml, TRUE);
-          openvas_connection_close (&connection);
           if (error) *error = 1;
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
@@ -13955,7 +13369,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
       && (type == NULL
           || (strcmp (type, "prognostic")
               && strcmp (type, "assets"))))
-    return get_reports (credentials, params, extra_xml, response_data);
+    return get_reports (connection, credentials, params, extra_xml, response_data);
 
   if (strcmp (alert_id, "0"))
     {
@@ -13971,7 +13385,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                            "  sort-reverse=severity");
 
       if (ignore_filter)
-        ret = openvas_connection_sendf_xml (&connection,
+        ret = openvas_connection_sendf_xml (connection,
                                             "<get_reports"
                                             " report_id=\"%s\""
                                             " filter=\"first=1 rows=-1"
@@ -13983,7 +13397,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                                             report_id,
                                             alert_id);
       else
-        ret = openvas_connection_sendf_xml (&connection,
+        ret = openvas_connection_sendf_xml (connection,
                                             "<get_reports"
                                             " report_id=\"%s\""
                                             " ignore_pagination=\"%d\""
@@ -13995,7 +13409,6 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                                             alert_id);
       if (ret == -1)
         {
-          openvas_connection_close (&connection);
           g_string_free (commands_xml, TRUE);
           g_string_free (delta_states, TRUE);
           g_string_free (levels, TRUE);
@@ -14009,9 +13422,8 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                                "/omp?cmd=get_tasks", response_data);
         }
 
-      if (read_entity_and_text_c (&connection, &entity, &esc_response))
+      if (read_entity_and_text_c (connection, &entity, &esc_response))
         {
-          openvas_connection_close (&connection);
           g_string_free (commands_xml, TRUE);
           g_string_free (delta_states, TRUE);
           g_string_free (levels, TRUE);
@@ -14029,7 +13441,6 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
           || (strlen (status) == 0))
         {
           free_entity (entity);
-          openvas_connection_close (&connection);
           g_string_free (commands_xml, TRUE);
           g_string_free (delta_states, TRUE);
           if (error) *error = 1;
@@ -14060,7 +13471,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
       || sscanf (max_results, "%u", &max) != 1)
     max_results = G_STRINGIFY (RESULTS_PER_PAGE);
 
-  if (openvas_connection_sendf (&connection,
+  if (openvas_connection_sendf (connection,
                                 "<get_reports"
                                 "%s%s"
                                 " details=\"%i\""
@@ -14081,7 +13492,6 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                                 host ? "\"" : "")
       == -1)
     {
-      openvas_connection_close (&connection);
       g_string_free (delta_states, TRUE);
       g_string_free (commands_xml, TRUE);
       g_string_free (levels, TRUE);
@@ -14216,7 +13626,6 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
 
       if (host_search_phrase == NULL)
         {
-          openvas_connection_close (&connection);
           g_string_free (delta_states, TRUE);
           g_string_free (commands_xml, TRUE);
           g_string_free (levels, TRUE);
@@ -14229,7 +13638,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
           return g_string_free (xml, FALSE);
         }
 
-      if (openvas_connection_sendf_xml (&connection,
+      if (openvas_connection_sendf_xml (connection,
                                         " host_search_phrase=\"%s\""
                                         " host_levels=\"%s\""
                                         " host_first_result=\"%s\""
@@ -14239,7 +13648,6 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                                         host_first_result,
                                         host_max_results))
         {
-          openvas_connection_close (&connection);
           g_string_free (delta_states, TRUE);
           g_string_free (commands_xml, TRUE);
           g_string_free (levels, TRUE);
@@ -14269,7 +13677,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
       filt_id = "-2";
 
   if (ignore_filter)
-    ret = openvas_connection_sendf_xml (&connection,
+    ret = openvas_connection_sendf_xml (connection,
                                         " filt_id=\"0\""
                                         " filter=\"first=1 rows=-1"
                                         "  result_hosts_only=0 apply_overrides=1"
@@ -14286,7 +13694,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                                         delta_report_id ? delta_report_id : "0",
                                         format_id ? format_id : "");
   else
-    ret = openvas_connection_sendf_xml (&connection,
+    ret = openvas_connection_sendf_xml (connection,
                                         " ignore_pagination=\"%d\""
                                         " filt_id=\"%s\""
                                         " filter=\"%s\""
@@ -14324,7 +13732,6 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                                         zone);
   if (ret == -1)
     {
-      openvas_connection_close (&connection);
       g_string_free (delta_states, TRUE);
       g_string_free (commands_xml, TRUE);
       g_string_free (levels, TRUE);
@@ -14350,9 +13757,8 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
           const char *extension, *requested_content_type;
           /* Manager sends XML report as plain XML. */
 
-          if (read_entity_c (&connection, &entity))
+          if (read_entity_c (connection, &entity))
             {
-              openvas_connection_close (&connection);
               if (error) *error = 1;
               response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
               return gsad_message (credentials,
@@ -14366,7 +13772,6 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
           if (report == NULL)
             {
               free_entity (entity);
-              openvas_connection_close (&connection);
               if (error) *error = 1;
               response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
               return gsad_message (credentials,
@@ -14382,13 +13787,12 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
               && content_disposition)
             {
               gchar *file_name;
-              ret = setting_get_value (&connection,
+              ret = setting_get_value (connection,
                                        "e1a2ae0b-736e-4484-b029-330c9e15b900",
                                        &fname_format,
                                        response_data);
               if (ret)
                 {
-                  openvas_connection_close (&connection);
                   switch (ret)
                     {
                       case 1:
@@ -14459,7 +13863,6 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
 
               g_free (file_name);
             }
-          openvas_connection_close (&connection);
           xml = g_string_new ("");
           print_entity_to_string (report, xml);
           free_entity (entity);
@@ -14483,9 +13886,8 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
             }
 
           entity = NULL;
-          if (read_entity_c (&connection, &entity))
+          if (read_entity_c (connection, &entity))
             {
-              openvas_connection_close (&connection);
               if (error) *error = 1;
               response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
               return gsad_message (credentials,
@@ -14528,13 +13930,12 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                     id = "ERROR";
 
                   ret = setting_get_value
-                          (&connection,
+                          (connection,
                            "e1a2ae0b-736e-4484-b029-330c9e15b900",
                            &fname_format,
                            response_data);
                   if (ret)
                     {
-                      openvas_connection_close (&connection);
                       switch (ret)
                         {
                           case 1:
@@ -14592,14 +13993,12 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                   g_free (file_name);
                 }
               free_entity (entity);
-              openvas_connection_close (&connection);
               if (error) *error = 1;
               return report_decoded;
             }
           else
             {
               free_entity (entity);
-              openvas_connection_close (&connection);
               if (error) *error = 1;
               response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
               return gsad_message (credentials,
@@ -14678,9 +14077,8 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                                 result_id ? result_id : "0");
 
       entity = NULL;
-      if (read_entity_and_string_c (&connection, &entity, &xml))
+      if (read_entity_and_string_c (connection, &entity, &xml))
         {
-          openvas_connection_close (&connection);
           if (error) *error = 1;
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
@@ -14715,13 +14113,12 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
           && (command_enabled (credentials, "GET_REPORT_FORMATS")))
         {
           if (openvas_connection_sendf
-               (&connection,
+               (connection,
                 "<get_report_formats"
                 " filter=\"rows=-1 sort=name\"/>")
               == -1)
             {
               g_string_free (xml, TRUE);
-              openvas_connection_close (&connection);
               if (error) *error = 1;
               response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
               return gsad_message (credentials,
@@ -14732,10 +14129,9 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                                    "/omp?cmd=get_tasks", response_data);
             }
 
-          if (read_string_c (&connection, &xml))
+          if (read_string_c (connection, &xml))
             {
               g_string_free (xml, TRUE);
-              openvas_connection_close (&connection);
               if (error) *error = 1;
               response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
               return gsad_message (credentials,
@@ -14755,13 +14151,12 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
 
               g_string_append (xml, "<filters>");
 
-              if (openvas_connection_sendf_xml (&connection,
+              if (openvas_connection_sendf_xml (connection,
                                                 "<get_filters"
                                                 " filter=\"type=result\"/>")
                   == -1)
                 {
                   g_string_free (xml, TRUE);
-                  openvas_connection_close (&connection);
                   if (error) *error = 1;
                   response_data->http_status_code
                     = MHD_HTTP_INTERNAL_SERVER_ERROR;
@@ -14773,10 +14168,9 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                                        "/omp?cmd=get_tasks", response_data);
                 }
 
-              if (read_string_c (&connection, &xml))
+              if (read_string_c (connection, &xml))
                 {
                   g_string_free (xml, TRUE);
-                  openvas_connection_close (&connection);
                   if (error) *error = 1;
                   response_data->http_status_code
                     = MHD_HTTP_INTERNAL_SERVER_ERROR;
@@ -14792,7 +14186,6 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
             }
 
           g_string_append (xml, "</get_prognostic_report>");
-          openvas_connection_close (&connection);
           return g_string_free (xml, FALSE);
         }
 
@@ -14802,7 +14195,6 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
             g_string_append (xml, "</get_asset>");
           else
             g_string_append (xml, "</get_report>");
-          openvas_connection_close (&connection);
           return g_string_free (xml, FALSE);
         }
 
@@ -14836,14 +14228,13 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
 
       if (task_id)
         {
-          if (openvas_connection_sendf (&connection,
+          if (openvas_connection_sendf (connection,
                                         "<get_tasks task_id=\"%s\" details=\"0\" />",
                                         task_id)
               == -1)
             {
               g_free (task_id);
               g_string_free (xml, TRUE);
-              openvas_connection_close (&connection);
               if (error) *error = 1;
               response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
               return gsad_message (credentials,
@@ -14854,11 +14245,10 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                                    "/omp?cmd=get_tasks", response_data);
             }
 
-          if (read_string_c (&connection, &xml))
+          if (read_string_c (connection, &xml))
             {
               g_free (task_id);
               g_string_free (xml, TRUE);
-              openvas_connection_close (&connection);
               if (error) *error = 1;
               response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
               return gsad_message (credentials,
@@ -14875,7 +14265,6 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
       if (delta_report_id && result_id && strcmp (result_id, "0"))
         {
           g_string_append (xml, "</get_delta_result>");
-          openvas_connection_close (&connection);
           return g_string_free (xml, FALSE);
         }
 
@@ -14885,15 +14274,14 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
 
           /* Get Default Report Format. */
 
-          err = setting_get_value_error (credentials,
-                                         &connection,
+          err = setting_get_value_error (connection,
+                                         credentials,
                                          "353304fc-645e-11e6-ba7a-28d24461215b",
                                          &default_report_format,
                                          response_data);
           if (err)
             {
               g_string_free (xml, TRUE);
-              openvas_connection_close (&connection);
               if (error) *error = 1;
               return err;
             }
@@ -14905,13 +14293,12 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
           /* Get all the report formats. */
 
           if (openvas_connection_sendf
-               (&connection,
+               (connection,
                 "<get_report_formats"
                 " filter=\"rows=-1 sort=name\"/>")
               == -1)
             {
               g_string_free (xml, TRUE);
-              openvas_connection_close (&connection);
               if (error) *error = 1;
               response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
               return gsad_message (credentials,
@@ -14922,10 +14309,9 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                                    "/omp?cmd=get_tasks", response_data);
             }
 
-          if (read_string_c (&connection, &xml))
+          if (read_string_c (connection, &xml))
             {
               g_string_free (xml, TRUE);
-              openvas_connection_close (&connection);
               if (error) *error = 1;
               response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
               return gsad_message (credentials,
@@ -14940,13 +14326,12 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
       if (command_enabled (credentials, "GET_ALERTS"))
         {
           if (openvas_connection_sendf
-               (&connection,
+               (connection,
                 "<get_alerts"
                 " filter=\"rows=-1 sort=name\"/>")
               == -1)
             {
               g_string_free (xml, TRUE);
-              openvas_connection_close (&connection);
               if (error) *error = 1;
               response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
               return gsad_message (credentials,
@@ -14957,10 +14342,9 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                                    "/omp?cmd=get_tasks", response_data);
             }
 
-          if (read_string_c (&connection, &xml))
+          if (read_string_c (connection, &xml))
             {
               g_string_free (xml, TRUE);
-              openvas_connection_close (&connection);
               if (error) *error = 1;
               response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
               return gsad_message (credentials,
@@ -14978,13 +14362,12 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
 
           g_string_append (xml, "<filters>");
 
-          if (openvas_connection_sendf_xml (&connection,
+          if (openvas_connection_sendf_xml (connection,
                                             "<get_filters"
                                             " filter=\"type=result\"/>")
               == -1)
             {
               g_string_free (xml, TRUE);
-              openvas_connection_close (&connection);
               if (error) *error = 1;
               response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
               return gsad_message (credentials,
@@ -14995,10 +14378,9 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                                    "/omp?cmd=get_tasks", response_data);
             }
 
-          if (read_string_c (&connection, &xml))
+          if (read_string_c (connection, &xml))
             {
               g_string_free (xml, TRUE);
-              openvas_connection_close (&connection);
               if (error) *error = 1;
               response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
               return gsad_message (credentials,
@@ -15014,7 +14396,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
 
       /* Get tag names */
 
-      if (openvas_connection_sendf (&connection,
+      if (openvas_connection_sendf (connection,
                                     "<get_tags"
                                     " filter=\"resource_type=report"
                                     "          first=1"
@@ -15024,7 +14406,6 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
           == -1)
         {
           g_string_free (xml, TRUE);
-          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                               "Internal error", __FUNCTION__, __LINE__,
@@ -15034,10 +14415,9 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
                               "/omp?cmd=get_resources", response_data);
         }
 
-      if (read_string_c (&connection, &xml))
+      if (read_string_c (connection, &xml))
         {
           g_string_free (xml, TRUE);
-          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                               "Internal error", __FUNCTION__, __LINE__,
@@ -15048,7 +14428,6 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
         }
 
       g_string_append (xml, "</get_report>");
-      openvas_connection_close (&connection);
       return g_string_free (xml, FALSE);
     }
 }
@@ -15056,6 +14435,7 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
 /**
  * @brief Get a report and XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] report_len   Length of report.
@@ -15066,23 +14446,24 @@ get_report (credentials_t * credentials, params_t *params, const char *commands,
  * @return Report.
  */
 char *
-get_report_omp (credentials_t * credentials, params_t *params,
+get_report_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                 gsize *report_len, gchar ** content_type,
                 char **content_disposition, cmd_response_data_t* response_data)
 {
   char *result;
   int error = 0;
 
-  result = get_report (credentials, params, NULL, report_len, content_type,
+  result = get_report (connection, credentials, params, NULL, report_len, content_type,
                        content_disposition, NULL, &error, response_data);
 
-  return error ? result : xsl_transform_omp (credentials, result,
+  return error ? result : xsl_transform_omp (connection, credentials, params, result,
                                              response_data);
 }
 
 /**
  * @brief Get all reports, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
@@ -15091,7 +14472,7 @@ get_report_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 static char *
-get_reports (credentials_t * credentials, params_t *params,
+get_reports (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
              const char *extra_xml, cmd_response_data_t* response_data)
 {
   const char *overrides;
@@ -15101,13 +14482,14 @@ get_reports (credentials_t * credentials, params_t *params,
     /* User toggled overrides.  Set the overrides value in the filter. */
     params_toggle_overrides (params, overrides);
 
-  return get_many ("report", credentials, params, extra_xml, NULL,
+  return get_many (connection, "report", credentials, params, extra_xml, NULL,
                    response_data);
 }
 
 /**
  * @brief Get all reports, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -15115,15 +14497,16 @@ get_reports (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-get_reports_omp (credentials_t * credentials, params_t *params,
+get_reports_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                  cmd_response_data_t* response_data)
 {
-  return get_reports (credentials, params, NULL, response_data);
+  return get_reports (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Get the hosts for a report, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -15131,7 +14514,7 @@ get_reports_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 static char *
-get_report_section (credentials_t * credentials, params_t *params,
+get_report_section (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                     const char *extra_xml, cmd_response_data_t* response_data)
 {
   GString *xml;
@@ -15160,14 +14543,14 @@ get_report_section (credentials_t * credentials, params_t *params,
     {
       char *result;
 
-      result = get_report (credentials, params, NULL, NULL, NULL, NULL,
+      result = get_report (connection, credentials, params, NULL, NULL, NULL, NULL,
                            extra_xml, &error, response_data);
 
-      return error ? result : xsl_transform_omp (credentials, result,
+      return error ? result : xsl_transform_omp (connection, credentials, params, result,
                                                  response_data);
     }
 
-  result = get_report (credentials, params, NULL, NULL, NULL,
+  result = get_report (connection, credentials, params, NULL, NULL, NULL,
                        NULL, NULL, &error, response_data);
   if (error)
     return result;
@@ -15182,7 +14565,7 @@ get_report_section (credentials_t * credentials, params_t *params,
       int ret;
       char *response;
 
-      ret = omp (credentials,
+      ret = omp (connection, credentials,
                  &response,
                  NULL,
                  response_data,
@@ -15229,13 +14612,14 @@ get_report_section (credentials_t * credentials, params_t *params,
 
   g_string_append_printf (xml, "</get_report_%s_response>", report_section);
 
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+  return xsl_transform_omp (connection, credentials, params, g_string_free (xml, FALSE),
                             response_data);
 }
 
 /**
  * @brief Get a report section, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -15243,15 +14627,16 @@ get_report_section (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-get_report_section_omp (credentials_t * credentials, params_t *params,
+get_report_section_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                         cmd_response_data_t* response_data)
 {
-  return get_report_section (credentials, params, NULL, response_data);
+  return get_report_section (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Get an SSL Certificate.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  response_size  Size of cert.
@@ -15260,7 +14645,7 @@ get_report_section_omp (credentials_t * credentials, params_t *params,
  * @return SSL Certificate.
  */
 char *
-download_ssl_cert (credentials_t * credentials, params_t *params,
+download_ssl_cert (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                    gsize *response_size, cmd_response_data_t* response_data)
 {
   const char *ssl_cert;
@@ -15293,6 +14678,7 @@ download_ssl_cert (credentials_t * credentials, params_t *params,
 /**
  * @brief Get a Scanner's CA Certificate.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  response_size  Size of cert.
@@ -15301,7 +14687,7 @@ download_ssl_cert (credentials_t * credentials, params_t *params,
  * @return CA Certificate.
  */
 char *
-download_ca_pub (credentials_t * credentials, params_t *params,
+download_ca_pub (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                  gsize *response_size, cmd_response_data_t* response_data)
 {
   const char *ca_pub;
@@ -15326,6 +14712,7 @@ download_ca_pub (credentials_t * credentials, params_t *params,
 /**
  * @brief Get a Scanner's Certificate.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  response_size  Size of cert.
@@ -15334,7 +14721,7 @@ download_ca_pub (credentials_t * credentials, params_t *params,
  * @return Certificate.
  */
 char *
-download_key_pub (credentials_t * credentials, params_t *params,
+download_key_pub (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                   gsize *response_size, cmd_response_data_t* response_data)
 {
   const char *key_pub;
@@ -15360,6 +14747,7 @@ download_key_pub (credentials_t * credentials, params_t *params,
 /**
  * @brief Export a result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
  * @param[out]  content_type         Content type return.
@@ -15371,17 +14759,18 @@ download_key_pub (credentials_t * credentials, params_t *params,
  *         on error.
  */
 char *
-export_result_omp (credentials_t * credentials, params_t *params,
+export_result_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                    enum content_type * content_type, char **content_disposition,
                    gsize *content_length, cmd_response_data_t* response_data)
 {
-  return export_resource ("result", credentials, params, content_type,
+  return export_resource (connection, "result", credentials, params, content_type,
                           content_disposition, content_length, response_data);
 }
 
 /**
  * @brief Export a list of results.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
  * @param[out]  content_type         Content type return.
@@ -15393,18 +14782,20 @@ export_result_omp (credentials_t * credentials, params_t *params,
  *         on error.
  */
 char *
-export_results_omp (credentials_t * credentials, params_t *params,
+export_results_omp (openvas_connection_t *connection, credentials_t *
+                    credentials, params_t *params,
                     enum content_type * content_type,
                     char **content_disposition, gsize *content_length,
                     cmd_response_data_t* response_data)
 {
-  return export_many ("result", credentials, params, content_type,
+  return export_many (connection, "result", credentials, params, content_type,
                       content_disposition, content_length, response_data);
 }
 
 /**
  * @brief Get all results, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
@@ -15413,8 +14804,9 @@ export_results_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-get_results (credentials_t * credentials, params_t *params,
-             const char *extra_xml, cmd_response_data_t* response_data)
+get_results (openvas_connection_t *connection, credentials_t * credentials,
+             params_t *params, const char *extra_xml,
+             cmd_response_data_t* response_data)
 {
   const char *overrides;
   overrides = params_value (params, "overrides");
@@ -15423,13 +14815,14 @@ get_results (credentials_t * credentials, params_t *params,
     /* User toggled overrides.  Set the overrides value in the filter. */
     params_toggle_overrides (params, overrides);
 
-  return get_many ("result", credentials, params, extra_xml, NULL,
+  return get_many (connection, "result", credentials, params, extra_xml, NULL,
                    response_data);
 }
 
 /**
  * @brief Get all results, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -15437,10 +14830,11 @@ get_results (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-get_results_omp (credentials_t *credentials, params_t *params,
-                 cmd_response_data_t* response_data)
+get_results_omp (openvas_connection_t *connection, credentials_t *credentials,
+                 params_t *params, cmd_response_data_t* response_data)
 {
-  return get_results (credentials,
+  return get_results (connection,
+                      credentials,
                       params,
                       NULL,
                       response_data);
@@ -15449,7 +14843,9 @@ get_results_omp (credentials_t *credentials, params_t *params,
 /**
  * @brief Get one result, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials      Username and password for authentication.
+ * @param[in]  params           HTTP request params
  * @param[in]  result_id        Result UUID.
  * @param[in]  task_id          Result task UUID.
  * @param[in]  apply_overrides  Whether to apply overrides.
@@ -15462,39 +14858,19 @@ get_results_omp (credentials_t *credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 static char *
-get_result (credentials_t *credentials, const char *result_id,
-            const char *task_id, const char *task_name,
-            const char *apply_overrides, const char *commands,
-            const char *report_id, const char *autofp,
+get_result (openvas_connection_t *connection, credentials_t *credentials,
+            params_t * params, const char *result_id, const char *task_id,
+            const char *task_name, const char *apply_overrides,
+            const char *commands, const char *report_id, const char *autofp,
             const char *extra_xml, cmd_response_data_t* response_data)
 {
   GString *xml;
-  openvas_connection_t connection;
-  gchar *html;
 
   if (apply_overrides == NULL)
     apply_overrides = "1";
 
   if (autofp == NULL)
     autofp = "0";
-
-  switch (manager_connect (credentials, &connection, &html,
-                           response_data))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting a result. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_tasks", response_data);
-    }
 
   xml = g_string_new ("<get_result>");
 
@@ -15510,7 +14886,7 @@ get_result (credentials_t *credentials, const char *result_id,
 
   /* Get the result. */
 
-  if (openvas_connection_sendf (&connection,
+  if (openvas_connection_sendf (connection,
                                 "<commands>"
                                 "%s"
                                 "<get_results"
@@ -15535,7 +14911,6 @@ get_result (credentials_t *credentials, const char *result_id,
       == -1)
     {
       g_string_free (xml, TRUE);
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -15544,10 +14919,9 @@ get_result (credentials_t *credentials, const char *result_id,
                            "/omp?cmd=get_tasks", response_data);
     }
 
-  if (read_string_c (&connection, &xml))
+  if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -15558,7 +14932,7 @@ get_result (credentials_t *credentials, const char *result_id,
 
   /* Get tag names */
 
-  if (openvas_connection_sendf (&connection,
+  if (openvas_connection_sendf (connection,
                                 "<get_tags"
                                 " filter=\"resource_type=result"
                                 "          first=1"
@@ -15568,7 +14942,6 @@ get_result (credentials_t *credentials, const char *result_id,
       == -1)
     {
       g_string_free (xml, TRUE);
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -15578,10 +14951,9 @@ get_result (credentials_t *credentials, const char *result_id,
                            "/omp?cmd=get_resources", response_data);
     }
 
-  if (read_string_c (&connection, &xml))
+  if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -15594,14 +14966,14 @@ get_result (credentials_t *credentials, const char *result_id,
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</get_result>");
-  openvas_connection_close (&connection);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+  return xsl_transform_omp (connection, credentials, params, g_string_free (xml, FALSE),
                             response_data);
 }
 
 /**
  * @brief Get one result, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -15609,10 +14981,10 @@ get_result (credentials_t *credentials, const char *result_id,
  * @return Result of XSL transformation.
  */
 char *
-get_result_omp (credentials_t *credentials, params_t *params,
+get_result_omp (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
                 cmd_response_data_t* response_data)
 {
-  return get_result (credentials,
+  return get_result (connection, credentials, params,
                      params_value (params, "result_id"),
                      params_value (params, "task_id"),
                      params_value (params, "name"),
@@ -15627,6 +14999,7 @@ get_result_omp (credentials_t *credentials, params_t *params,
 /**
  * @brief Get result details page.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
@@ -15635,10 +15008,10 @@ get_result_omp (credentials_t *credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 static char *
-get_result_page (credentials_t *credentials, params_t *params,
+get_result_page (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
                  const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return get_result (credentials,
+  return get_result (connection, credentials, params,
                      params_value (params, "result_id"),
                      params_value (params, "task_id"),
                      params_value (params, "name"),
@@ -15654,6 +15027,7 @@ get_result_page (credentials_t *credentials, params_t *params,
 /**
  * @brief Get all notes, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
@@ -15662,15 +15036,16 @@ get_result_page (credentials_t *credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 static char *
-get_notes (credentials_t *credentials, params_t *params, const char *extra_xml,
+get_notes (openvas_connection_t *connection, credentials_t *credentials, params_t *params, const char *extra_xml,
            cmd_response_data_t* response_data)
 {
-  return get_many ("note", credentials, params, extra_xml, NULL, response_data);
+  return get_many (connection, "note", credentials, params, extra_xml, NULL, response_data);
 }
 
 /**
  * @brief Get all notes, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -15678,15 +15053,16 @@ get_notes (credentials_t *credentials, params_t *params, const char *extra_xml,
  * @return Result of XSL transformation.
  */
 char *
-get_notes_omp (credentials_t *credentials, params_t *params,
+get_notes_omp (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
                cmd_response_data_t* response_data)
 {
-  return get_notes (credentials, params, NULL, response_data);
+  return get_notes (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Get a note, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
@@ -15695,15 +15071,16 @@ get_notes_omp (credentials_t *credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 static char *
-get_note (credentials_t *credentials, params_t *params, const char *extra_xml,
+get_note (openvas_connection_t *connection, credentials_t *credentials, params_t *params, const char *extra_xml,
           cmd_response_data_t* response_data)
 {
-  return get_one ("note", credentials, params, extra_xml, NULL, response_data);
+  return get_one (connection, "note", credentials, params, extra_xml, NULL, response_data);
 }
 
 /**
  * @brief Get a note, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -15711,15 +15088,16 @@ get_note (credentials_t *credentials, params_t *params, const char *extra_xml,
  * @return Result of XSL transformation.
  */
 char *
-get_note_omp (credentials_t *credentials, params_t *params,
+get_note_omp (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
               cmd_response_data_t* response_data)
 {
-  return get_note (credentials, params, NULL, response_data);
+  return get_note (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Return the new notes page.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
@@ -15728,12 +15106,11 @@ get_note_omp (credentials_t *credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-new_note (credentials_t *credentials, params_t *params, const char *extra_xml,
+new_note (openvas_connection_t *connection, credentials_t *credentials,
+          params_t *params, const char *extra_xml,
           cmd_response_data_t* response_data)
 {
   GString *xml;
-  openvas_connection_t connection;
-  gchar *html;
   const char *oid, *hosts, *port, *severity, *task_id, *task_name, *result_id;
   const char *next;
   /* Passthroughs. */
@@ -15763,25 +15140,6 @@ new_note (credentials_t *credentials, params_t *params, const char *extra_xml,
   port = params_value (params, "port");
   overrides = params_value (params, "overrides");
 
-  switch (manager_connect (credentials, &connection, &html,
-                           response_data))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while creating a new note. "
-                             "No new note was created. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_notes", response_data);
-    }
-
   if (result_id == NULL || task_id == NULL)
     {
       xml = g_string_new ("");
@@ -15796,13 +15154,12 @@ new_note (credentials_t *credentials, params_t *params, const char *extra_xml,
       if (extra_xml)
         g_string_append (xml, extra_xml);
 
-      if (openvas_connection_sendf (&connection,
+      if (openvas_connection_sendf (connection,
                                     "<get_tasks"
                                     " schedules_only=\"1\""
                                     " details=\"0\"/>")
           == -1)
         {
-          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -15812,10 +15169,9 @@ new_note (credentials_t *credentials, params_t *params, const char *extra_xml,
                                "/omp?cmd=get_notes", response_data);
         }
 
-      if (read_string_c (&connection, &xml))
+      if (read_string_c (connection, &xml))
         {
           g_string_free (xml, TRUE);
-          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -15826,12 +15182,11 @@ new_note (credentials_t *credentials, params_t *params, const char *extra_xml,
         }
 
       g_string_append (xml, "</new_note>");
-      openvas_connection_close (&connection);
-      return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
-                                response_data);
+      return xsl_transform_omp (connection, credentials, params,
+                                g_string_free (xml, FALSE), response_data);
     }
 
-  if (openvas_connection_sendf (&connection,
+  if (openvas_connection_sendf (connection,
                                 "<get_results"
                                 " result_id=\"%s\""
                                 " task_id=\"%s\""
@@ -15842,7 +15197,6 @@ new_note (credentials_t *credentials, params_t *params, const char *extra_xml,
                                 task_id)
       == -1)
     {
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -15901,10 +15255,9 @@ new_note (credentials_t *credentials, params_t *params, const char *extra_xml,
   if (extra_xml)
     g_string_append (xml, extra_xml);
 
-  if (read_string_c (&connection, &xml))
+  if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -15917,14 +15270,14 @@ new_note (credentials_t *credentials, params_t *params, const char *extra_xml,
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</new_note>");
-  openvas_connection_close (&connection);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+  return xsl_transform_omp (connection, credentials, params, g_string_free (xml, FALSE),
                             response_data);
 }
 
 /**
  * @brief Return the new notes page.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -15932,15 +15285,16 @@ new_note (credentials_t *credentials, params_t *params, const char *extra_xml,
  * @return Result of XSL transformation.
  */
 char *
-new_note_omp (credentials_t *credentials, params_t *params,
+new_note_omp (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
               cmd_response_data_t* response_data)
 {
-  return new_note (credentials, params, NULL, response_data);
+  return new_note (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Create a note, get report, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -15948,7 +15302,7 @@ new_note_omp (credentials_t *credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-create_note_omp (credentials_t *credentials, params_t *params,
+create_note_omp (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
                  cmd_response_data_t* response_data)
 {
   char *ret;
@@ -16032,7 +15386,7 @@ create_note_omp (credentials_t *credentials, params_t *params,
 
   response = NULL;
   entity = NULL;
-  switch (ompf (credentials,
+  switch (ompf (connection, credentials,
                 &response,
                 &entity,
                 response_data,
@@ -16088,7 +15442,7 @@ create_note_omp (credentials_t *credentials, params_t *params,
 
   if (entity_attribute (entity, "id"))
     params_add (params, "note_id", entity_attribute (entity, "id"));
-  ret = response_from_entity (credentials, params, entity,
+  ret = response_from_entity (connection, credentials, params, entity,
                               (no_redirect && strcmp (no_redirect, "0")),
                               NULL, "get_notes",
                               NULL, "new_note",
@@ -16101,6 +15455,7 @@ create_note_omp (credentials_t *credentials, params_t *params,
 /**
  * @brief Delete note, get next page, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -16108,15 +15463,16 @@ create_note_omp (credentials_t *credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-delete_note_omp (credentials_t * credentials, params_t *params,
+delete_note_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                  cmd_response_data_t* response_data)
 {
-  return delete_resource ("note", credentials, params, 0, NULL, response_data);
+  return delete_resource (connection, "note", credentials, params, 0, NULL, response_data);
 }
 
 /**
  * @brief Delete a note, get all notes, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -16124,16 +15480,17 @@ delete_note_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-delete_trash_note_omp (credentials_t * credentials, params_t *params,
+delete_trash_note_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                        cmd_response_data_t* response_data)
 {
-  return delete_resource ("note", credentials, params, 1, "get_trash",
+  return delete_resource (connection, "note", credentials, params, 1, "get_trash",
                           response_data);
 }
 
 /**
  * @brief Edit note, get next page, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
@@ -16142,44 +15499,23 @@ delete_trash_note_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-edit_note (credentials_t *credentials, params_t *params, const char *extra_xml,
+edit_note (openvas_connection_t *connection, credentials_t *credentials,
+           params_t *params, const char *extra_xml,
            cmd_response_data_t* response_data)
 {
   GString *xml;
-  openvas_connection_t connection;
-  gchar *html;
   const char *note_id;
 
   note_id = params_value (params, "note_id");
 
-  switch (manager_connect (credentials, &connection, &html,
-                           response_data))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while editing a note. "
-                             "The note remains as it was. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_notes", response_data);
-    }
-
-  if (openvas_connection_sendf (&connection,
-                            "<get_notes"
-                            " note_id=\"%s\""
-                            " details=\"1\""
-                            " result=\"1\"/>",
-                            note_id)
+  if (openvas_connection_sendf (connection,
+                                "<get_notes"
+                                " note_id=\"%s\""
+                                " details=\"1\""
+                                " result=\"1\"/>",
+                                note_id)
       == -1)
     {
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -16196,10 +15532,9 @@ edit_note (credentials_t *credentials, params_t *params, const char *extra_xml,
   if (extra_xml)
     g_string_append (xml, extra_xml);
 
-  if (read_string_c (&connection, &xml))
+  if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -16212,14 +15547,14 @@ edit_note (credentials_t *credentials, params_t *params, const char *extra_xml,
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</edit_note>");
-  openvas_connection_close (&connection);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+  return xsl_transform_omp (connection, credentials, params, g_string_free (xml, FALSE),
                             response_data);
 }
 
 /**
  * @brief Edit note, get next page, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -16227,15 +15562,16 @@ edit_note (credentials_t *credentials, params_t *params, const char *extra_xml,
  * @return Result of XSL transformation.
  */
 char *
-edit_note_omp (credentials_t *credentials, params_t *params,
+edit_note_omp (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
                cmd_response_data_t* response_data)
 {
-  return edit_note (credentials, params, NULL, response_data);
+  return edit_note (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Save note, get next page, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials     Username and password for authentication.
  * @param[in]  params          Request parameters.
  * @param[out] response_data   Extra data return for the HTTP response.
@@ -16243,7 +15579,7 @@ edit_note_omp (credentials_t *credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-save_note_omp (credentials_t * credentials, params_t *params,
+save_note_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                cmd_response_data_t* response_data)
 {
   gchar *response;
@@ -16299,7 +15635,7 @@ save_note_omp (credentials_t * credentials, params_t *params,
 
   response = NULL;
   entity = NULL;
-  switch (ompf (credentials,
+  switch (ompf (connection, credentials,
                 &response,
                 &entity,
                 response_data,
@@ -16352,7 +15688,7 @@ save_note_omp (credentials_t * credentials, params_t *params,
                              "/omp?cmd=get_notes", response_data);
     }
 
-  ret = response_from_entity (credentials, params, entity,
+  ret = response_from_entity (connection, credentials, params, entity,
                               (no_redirect && strcmp (no_redirect, "0")),
                               NULL, "get_notes",
                               NULL, "edit_note",
@@ -16366,6 +15702,7 @@ save_note_omp (credentials_t * credentials, params_t *params,
 /**
  * @brief Get all overrides, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
@@ -16374,16 +15711,17 @@ save_note_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 static char *
-get_overrides (credentials_t *credentials, params_t *params,
+get_overrides (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
                const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return get_many ("override", credentials, params, extra_xml, NULL,
+  return get_many (connection, "override", credentials, params, extra_xml, NULL,
                    response_data);
 }
 
 /**
  * @brief Get all overrides, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -16391,15 +15729,16 @@ get_overrides (credentials_t *credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-get_overrides_omp (credentials_t *credentials, params_t *params,
+get_overrides_omp (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
-  return get_overrides (credentials, params, NULL, response_data);
+  return get_overrides (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Get a override, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
@@ -16408,16 +15747,17 @@ get_overrides_omp (credentials_t *credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 static char *
-get_override (credentials_t *credentials, params_t *params,
+get_override (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
               const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return get_one ("override", credentials, params, extra_xml, NULL,
+  return get_one (connection, "override", credentials, params, extra_xml, NULL,
                   response_data);
 }
 
 /**
  * @brief Get an override, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -16425,15 +15765,16 @@ get_override (credentials_t *credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-get_override_omp (credentials_t *credentials, params_t *params,
+get_override_omp (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
                   cmd_response_data_t* response_data)
 {
-  return get_override (credentials, params, NULL, response_data);
+  return get_override (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Return the new overrides page.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
@@ -16442,12 +15783,11 @@ get_override_omp (credentials_t *credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-new_override (credentials_t *credentials, params_t *params,
-              const char *extra_xml, cmd_response_data_t* response_data)
+new_override (openvas_connection_t *connection, credentials_t *credentials,
+              params_t *params, const char *extra_xml,
+              cmd_response_data_t* response_data)
 {
   GString *xml;
-  openvas_connection_t connection;
-  gchar *html;
   const char *oid, *hosts, *port, *severity, *task_id, *task_name, *result_id;
   const char *next;
   /* Passthroughs. */
@@ -16477,25 +15817,6 @@ new_override (credentials_t *credentials, params_t *params,
   port = params_value (params, "port");
   overrides = params_value (params, "overrides");
 
-  switch (manager_connect (credentials, &connection, &html,
-                           response_data))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while creating a new override. "
-                             "No new override was created. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_overrides", response_data);
-    }
-
   if (result_id == NULL || task_id == NULL)
     {
       xml = g_string_new ("");
@@ -16510,13 +15831,12 @@ new_override (credentials_t *credentials, params_t *params,
       if (extra_xml)
         g_string_append (xml, extra_xml);
 
-      if (openvas_connection_sendf (&connection,
+      if (openvas_connection_sendf (connection,
                                     "<get_tasks"
                                     " schedules_only=\"1\""
                                     " details=\"0\"/>")
           == -1)
         {
-          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -16526,10 +15846,9 @@ new_override (credentials_t *credentials, params_t *params,
                                "/omp?cmd=get_overrides", response_data);
         }
 
-      if (read_string_c (&connection, &xml))
+      if (read_string_c (connection, &xml))
         {
           g_string_free (xml, TRUE);
-          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -16540,12 +15859,11 @@ new_override (credentials_t *credentials, params_t *params,
         }
 
       g_string_append (xml, "</new_override>");
-      openvas_connection_close (&connection);
-      return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+      return xsl_transform_omp (connection, credentials, params, g_string_free (xml, FALSE),
                                 response_data);
     }
 
-  if (openvas_connection_sendf (&connection,
+  if (openvas_connection_sendf (connection,
                                 "<get_results"
                                 " result_id=\"%s\""
                                 " task_id=\"%s\""
@@ -16558,7 +15876,6 @@ new_override (credentials_t *credentials, params_t *params,
                                 task_id)
       == -1)
     {
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -16617,10 +15934,9 @@ new_override (credentials_t *credentials, params_t *params,
   if (extra_xml)
     g_string_append (xml, extra_xml);
 
-  if (read_string_c (&connection, &xml))
+  if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -16633,14 +15949,14 @@ new_override (credentials_t *credentials, params_t *params,
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</new_override>");
-  openvas_connection_close (&connection);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+  return xsl_transform_omp (connection, credentials, params, g_string_free (xml, FALSE),
                             response_data);
 }
 
 /**
  * @brief Return the new overrides page.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -16648,15 +15964,16 @@ new_override (credentials_t *credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-new_override_omp (credentials_t *credentials, params_t *params,
+new_override_omp (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
                   cmd_response_data_t* response_data)
 {
-  return new_override (credentials, params, NULL, response_data);
+  return new_override (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Create an override, get report, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -16664,7 +15981,7 @@ new_override_omp (credentials_t *credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-create_override_omp (credentials_t *credentials, params_t *params,
+create_override_omp (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
                      cmd_response_data_t* response_data)
 {
   char *ret;
@@ -16774,7 +16091,7 @@ create_override_omp (credentials_t *credentials, params_t *params,
 
   response = NULL;
   entity = NULL;
-  switch (ompf (credentials,
+  switch (ompf (connection, credentials,
                 &response,
                 &entity,
                 response_data,
@@ -16832,7 +16149,7 @@ create_override_omp (credentials_t *credentials, params_t *params,
 
   if (entity_attribute (entity, "id"))
     params_add (params, "override_id", entity_attribute (entity, "id"));
-  ret = response_from_entity (credentials, params, entity,
+  ret = response_from_entity (connection, credentials, params, entity,
                               (no_redirect && strcmp (no_redirect, "0")),
                               NULL, "get_overrides",
                               NULL, "new_override",
@@ -16845,6 +16162,7 @@ create_override_omp (credentials_t *credentials, params_t *params,
 /**
  * @brief Delete override, get next page, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -16852,16 +16170,17 @@ create_override_omp (credentials_t *credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-delete_override_omp (credentials_t * credentials, params_t *params,
+delete_override_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                      cmd_response_data_t* response_data)
 {
-  return delete_resource ("override", credentials, params, 0, NULL,
+  return delete_resource (connection, "override", credentials, params, 0, NULL,
                           response_data);
 }
 
 /**
  * @brief Delete a override, get all overrides, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -16869,16 +16188,17 @@ delete_override_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-delete_trash_override_omp (credentials_t * credentials, params_t *params,
+delete_trash_override_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                            cmd_response_data_t* response_data)
 {
-  return delete_resource ("override", credentials, params, 1, "get_trash",
+  return delete_resource (connection, "override", credentials, params, 1, "get_trash",
                           response_data);
 }
 
 /**
  * @brief Edit override, get next page, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
@@ -16887,36 +16207,16 @@ delete_trash_override_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-edit_override (credentials_t *credentials, params_t *params,
-               const char *extra_xml, cmd_response_data_t* response_data)
+edit_override (openvas_connection_t *connection, credentials_t *credentials,
+               params_t *params, const char *extra_xml,
+               cmd_response_data_t* response_data)
 {
   GString *xml;
-  openvas_connection_t connection;
-  gchar *html;
   const char *override_id;
 
   override_id = params_value (params, "override_id");
 
-  switch (manager_connect (credentials, &connection, &html,
-                           response_data))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while editing an override. "
-                             "The override remains as it was. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_overrides", response_data);
-    }
-
-  if (openvas_connection_sendf (&connection,
+  if (openvas_connection_sendf (connection,
                                 "<get_overrides"
                                 " override_id=\"%s\""
                                 " details=\"1\""
@@ -16924,7 +16224,6 @@ edit_override (credentials_t *credentials, params_t *params,
                                 override_id)
       == -1)
     {
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -16941,10 +16240,9 @@ edit_override (credentials_t *credentials, params_t *params,
   if (extra_xml)
     g_string_append (xml, extra_xml);
 
-  if (read_string_c (&connection, &xml))
+  if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -16957,14 +16255,14 @@ edit_override (credentials_t *credentials, params_t *params,
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</edit_override>");
-  openvas_connection_close (&connection);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+  return xsl_transform_omp (connection, credentials, params, g_string_free (xml, FALSE),
                             response_data);
 }
 
 /**
  * @brief Edit override, get next page, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -16972,15 +16270,16 @@ edit_override (credentials_t *credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-edit_override_omp (credentials_t *credentials, params_t *params,
+edit_override_omp (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
-  return edit_override (credentials, params, NULL, response_data);
+  return edit_override (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Save override, get next page, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials     Username and password for authentication.
  * @param[in]  params          Request parameters.
  * @param[out] response_data   Extra data return for the HTTP response.
@@ -16988,7 +16287,7 @@ edit_override_omp (credentials_t *credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-save_override_omp (credentials_t * credentials, params_t *params,
+save_override_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
   gchar *response;
@@ -17051,7 +16350,7 @@ save_override_omp (credentials_t * credentials, params_t *params,
 
   response = NULL;
   entity = NULL;
-  switch (ompf (credentials,
+  switch (ompf (connection, credentials,
                 &response,
                 &entity,
                 response_data,
@@ -17106,7 +16405,7 @@ save_override_omp (credentials_t * credentials, params_t *params,
                              "/omp?cmd=get_overrides", response_data);
     }
 
-  ret = response_from_entity (credentials, params, entity,
+  ret = response_from_entity (connection, credentials, params, entity,
                               (no_redirect && strcmp (no_redirect, "0")),
                               NULL, "get_overrides",
                               NULL, "edit_override",
@@ -17123,6 +16422,7 @@ save_override_omp (credentials_t * credentials, params_t *params,
 /**
  * @brief Get all scanners, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
@@ -17131,16 +16431,17 @@ save_override_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 static char *
-get_scanners (credentials_t *credentials, params_t *params,
+get_scanners (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
                const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return get_many ("scanner", credentials, params, extra_xml, NULL,
+  return get_many (connection, "scanner", credentials, params, extra_xml, NULL,
                    response_data);
 }
 
 /**
  * @brief Get all scanners, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -17148,15 +16449,16 @@ get_scanners (credentials_t *credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-get_scanners_omp (credentials_t * credentials, params_t *params,
+get_scanners_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                   cmd_response_data_t* response_data)
 {
-  return get_scanners (credentials, params, NULL, response_data);
+  return get_scanners (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Get one scanner, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
@@ -17165,16 +16467,17 @@ get_scanners_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 static char *
-get_scanner (credentials_t * credentials, params_t *params,
+get_scanner (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
               const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return get_one ("scanner", credentials, params, extra_xml, NULL,
+  return get_one (connection, "scanner", credentials, params, extra_xml, NULL,
                   response_data);
 }
 
 /**
  * @brief Get one scanner, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -17182,15 +16485,16 @@ get_scanner (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-get_scanner_omp (credentials_t * credentials, params_t *params,
+get_scanner_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                  cmd_response_data_t* response_data)
 {
-  return get_scanner (credentials, params, NULL, response_data);
+  return get_scanner (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Export a scanner.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
  * @param[out]  content_type         Content type return.
@@ -17201,18 +16505,19 @@ get_scanner_omp (credentials_t * credentials, params_t *params,
  * @return Scanner XML on success.  HTML result of XSL transformation on error.
  */
 char *
-export_scanner_omp (credentials_t * credentials, params_t *params,
+export_scanner_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                     enum content_type * content_type,
                     char **content_disposition, gsize *content_length,
                     cmd_response_data_t* response_data)
 {
-  return export_resource ("scanner", credentials, params, content_type,
+  return export_resource (connection, "scanner", credentials, params, content_type,
                           content_disposition, content_length, response_data);
 }
 
 /**
  * @brief Export a list of scanners.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
  * @param[out]  content_type         Content type return.
@@ -17223,18 +16528,19 @@ export_scanner_omp (credentials_t * credentials, params_t *params,
  * @return Scanners XML on success. HTML result of XSL transformation on error.
  */
 char *
-export_scanners_omp (credentials_t * credentials, params_t *params,
+export_scanners_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                      enum content_type * content_type,
                      char **content_disposition, gsize *content_length,
                      cmd_response_data_t* response_data)
 {
-  return export_many ("scanner", credentials, params, content_type,
+  return export_many (connection, "scanner", credentials, params, content_type,
                       content_disposition, content_length, response_data);
 }
 
 /**
  * @brief Returns page to create a new scanner.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
@@ -17243,37 +16549,17 @@ export_scanners_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 static char *
-new_scanner (credentials_t *credentials, params_t *params,
-              const char *extra_xml, cmd_response_data_t* response_data)
+new_scanner (openvas_connection_t *connection, credentials_t *credentials,
+             params_t *params, const char *extra_xml,
+             cmd_response_data_t* response_data)
 {
-  openvas_connection_t connection;
-  gchar *html;
   GString *xml;
 
-  switch (manager_connect (credentials, &connection, &html,
-                           response_data))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting the credentials list. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_tasks", response_data);
-    }
-
-  if (openvas_connection_sendf (&connection,
+  if (openvas_connection_sendf (connection,
                                 "<get_credentials"
                                 " filter=\"first=1 rows=-1\" />")
       == -1)
     {
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -17286,10 +16572,9 @@ new_scanner (credentials_t *credentials, params_t *params,
   if (extra_xml)
     g_string_append (xml, extra_xml);
 
-  if (read_string_c (&connection, &xml))
+  if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -17299,13 +16584,15 @@ new_scanner (credentials_t *credentials, params_t *params,
     }
 
   g_string_append (xml, "</new_scanner>");
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+  return xsl_transform_omp (connection, credentials, params,
+                            g_string_free (xml, FALSE),
                             response_data);
 }
 
 /**
  * @brief Return the new scanner page.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -17313,15 +16600,16 @@ new_scanner (credentials_t *credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-new_scanner_omp (credentials_t *credentials, params_t *params,
+new_scanner_omp (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
                  cmd_response_data_t* response_data)
 {
-  return new_scanner (credentials, params, NULL, response_data);
+  return new_scanner (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Verify scanner, get scanners, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -17329,7 +16617,7 @@ new_scanner_omp (credentials_t *credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-verify_scanner_omp (credentials_t * credentials, params_t *params,
+verify_scanner_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                     cmd_response_data_t* response_data)
 {
   gchar *html, *response;
@@ -17341,7 +16629,7 @@ verify_scanner_omp (credentials_t * credentials, params_t *params,
   CHECK_PARAM (scanner_id, "Verify Scanner", get_scanners);
 
 
-  ret = ompf (credentials,
+  ret = ompf (connection, credentials,
               &response,
               &entity,
               response_data,
@@ -17381,7 +16669,7 @@ verify_scanner_omp (credentials_t * credentials, params_t *params,
 
   if (omp_success (entity))
     {
-      html = next_page (credentials, params, response, response_data);
+      html = next_page (connection, credentials, params, response, response_data);
       if (html == NULL)
         {
           free_entity (entity);
@@ -17400,9 +16688,9 @@ verify_scanner_omp (credentials_t * credentials, params_t *params,
       set_http_status_from_entity (entity, response_data);
       next = params_value (params, "next");
       if (next && !strcmp (next, "get_scanner"))
-        html = get_scanner (credentials, params, response, response_data);
+        html = get_scanner (connection, credentials, params, response, response_data);
       else
-        html = get_scanners (credentials, params, response, response_data);
+        html = get_scanners (connection, credentials, params, response, response_data);
     }
 
   free_entity (entity);
@@ -17413,6 +16701,7 @@ verify_scanner_omp (credentials_t * credentials, params_t *params,
 /**
  * @brief Create a scanner, get all scanners, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -17420,7 +16709,7 @@ verify_scanner_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-create_scanner_omp (credentials_t * credentials, params_t *params,
+create_scanner_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                     cmd_response_data_t* response_data)
 {
   int ret;
@@ -17448,7 +16737,7 @@ create_scanner_omp (credentials_t * credentials, params_t *params,
   CHECK_PARAM_INVALID (credential_id, "Create Scanner", "new_scanner");
 
   if (ca_pub)
-    ret = ompf (credentials, &response, &entity, response_data,
+    ret = ompf (connection, credentials, &response, &entity, response_data,
                 "<create_scanner>"
                 "<name>%s</name><comment>%s</comment>"
                 "<host>%s</host><port>%s</port><type>%s</type>"
@@ -17457,7 +16746,7 @@ create_scanner_omp (credentials_t * credentials, params_t *params,
                 "</create_scanner>",
                 name, comment, host, port, type, ca_pub, credential_id);
   else
-    ret = ompf (credentials, &response, &entity, response_data,
+    ret = ompf (connection, credentials, &response, &entity, response_data,
                 "<create_scanner>"
                 "<name>%s</name><comment>%s</comment>"
                 "<host>%s</host><port>%s</port><type>%s</type>"
@@ -17497,7 +16786,7 @@ create_scanner_omp (credentials_t * credentials, params_t *params,
 
   if (entity_attribute (entity, "id"))
     params_add (params, "scanner_id", entity_attribute (entity, "id"));
-  html = response_from_entity (credentials, params, entity,
+  html = response_from_entity (connection, credentials, params, entity,
                                (no_redirect && strcmp (no_redirect, "0")),
                                NULL, "get_scanners",
                                NULL, "new_scanner",
@@ -17510,6 +16799,7 @@ create_scanner_omp (credentials_t * credentials, params_t *params,
 /**
  * @brief Delete a scanner, get all scanners, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -17517,16 +16807,17 @@ create_scanner_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-delete_scanner_omp (credentials_t * credentials, params_t *params,
+delete_scanner_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                     cmd_response_data_t* response_data)
 {
-  return delete_resource ("scanner", credentials, params, 0, "get_scanners",
+  return delete_resource (connection, "scanner", credentials, params, 0, "get_scanners",
                           response_data);
 }
 
 /**
  * @brief Delete a trash scanner, get all scanners, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -17534,16 +16825,17 @@ delete_scanner_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-delete_trash_scanner_omp (credentials_t * credentials, params_t *params,
+delete_trash_scanner_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                           cmd_response_data_t* response_data)
 {
-  return delete_resource ("scanner", credentials, params, 1, "get_trash",
+  return delete_resource (connection, "scanner", credentials, params, 1, "get_trash",
                           response_data);
 }
 
 /**
  * @brief Setup edit_scanner XML, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
@@ -17552,12 +16844,11 @@ delete_trash_scanner_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-edit_scanner (credentials_t * credentials, params_t *params,
-              const char *extra_xml, cmd_response_data_t* response_data)
+edit_scanner (openvas_connection_t *connection, credentials_t * credentials,
+              params_t *params, char *extra_xml,
+              cmd_response_data_t* response_data)
 {
   GString *xml;
-  openvas_connection_t connection;
-  gchar *html;
   const char *scanner_id, *next;
 
   scanner_id = params_value (params, "scanner_id");
@@ -17577,26 +16868,7 @@ edit_scanner (credentials_t * credentials, params_t *params,
   if (next == NULL)
     next = "get_scanner";
 
-  switch (manager_connect (credentials, &connection, &html,
-                           response_data))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while editing a scanner. "
-                             "The scanner remains as it was. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_tasks", response_data);
-    }
-
-  if (openvas_connection_sendf (&connection,
+  if (openvas_connection_sendf (connection,
                                 "<commands>"
                                 "<get_scanners scanner_id=\"%s\" details=\"1\" />"
                                 "<get_credentials filter=\"first=1 rows=-1\" />"
@@ -17604,7 +16876,6 @@ edit_scanner (credentials_t * credentials, params_t *params,
                                 scanner_id)
       == -1)
     {
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -17626,10 +16897,9 @@ edit_scanner (credentials_t * credentials, params_t *params,
                           scanner_id,
                           next);
 
-  if (read_string_c (&connection, &xml))
+  if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -17641,14 +16911,14 @@ edit_scanner (credentials_t * credentials, params_t *params,
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</edit_scanner>");
-  openvas_connection_close (&connection);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+  return xsl_transform_omp (connection, credentials, params, g_string_free (xml, FALSE),
                             response_data);
 }
 
 /**
  * @brief Setup edit_scanner XML, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -17656,15 +16926,16 @@ edit_scanner (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-edit_scanner_omp (credentials_t * credentials, params_t *params,
+edit_scanner_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                   cmd_response_data_t* response_data)
 {
-  return edit_scanner (credentials, params, NULL, response_data);
+  return edit_scanner (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Save scanner, get next page, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials     Username and password for authentication.
  * @param[in]  params          Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -17672,7 +16943,7 @@ edit_scanner_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-save_scanner_omp (credentials_t * credentials, params_t *params,
+save_scanner_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                   cmd_response_data_t* response_data)
 {
   gchar *response = NULL;
@@ -17713,7 +16984,7 @@ save_scanner_omp (credentials_t * credentials, params_t *params,
       if (ca_pub == NULL)
         ca_pub = "";
       if (in_use)
-        ret = ompf (credentials, &response, &entity, response_data,
+        ret = ompf (connection, credentials, &response, &entity, response_data,
                     "<modify_scanner scanner_id=\"%s\">"
                     "<name>%s</name>"
                     "<comment>%s</comment>"
@@ -17724,7 +16995,7 @@ save_scanner_omp (credentials_t * credentials, params_t *params,
                     strcmp (which_cert, "new") == 0 ? ca_pub : "",
                     credential_id);
       else
-        ret = ompf (credentials, &response, &entity, response_data,
+        ret = ompf (connection, credentials, &response, &entity, response_data,
                     "<modify_scanner scanner_id=\"%s\">"
                     "<name>%s</name>"
                     "<comment>%s</comment>"
@@ -17742,7 +17013,7 @@ save_scanner_omp (credentials_t * credentials, params_t *params,
     {
       /* Using existing CA cert. */
       if (in_use)
-        ret = ompf (credentials, &response, &entity, response_data,
+        ret = ompf (connection, credentials, &response, &entity, response_data,
                     "<modify_scanner scanner_id=\"%s\">"
                     "<name>%s</name>"
                     "<comment>%s</comment>"
@@ -17750,7 +17021,7 @@ save_scanner_omp (credentials_t * credentials, params_t *params,
                     "</modify_scanner>",
                     scanner_id, name, comment ?: "", credential_id);
       else
-        ret = ompf (credentials, &response, &entity, response_data,
+        ret = ompf (connection, credentials, &response, &entity, response_data,
                     "<modify_scanner scanner_id=\"%s\">"
                     "<name>%s</name>"
                     "<comment>%s</comment>"
@@ -17794,7 +17065,7 @@ save_scanner_omp (credentials_t * credentials, params_t *params,
                  "/omp?cmd=get_scanners", response_data);
     }
 
-  html = response_from_entity (credentials, params, entity,
+  html = response_from_entity (connection, credentials, params, entity,
                                (no_redirect && strcmp (no_redirect, "0")),
                                NULL, "get_scanners",
                                NULL, "edit_scanner",
@@ -17811,6 +17082,7 @@ save_scanner_omp (credentials_t * credentials, params_t *params,
 /**
  * @brief Get one schedule, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
@@ -17819,16 +17091,17 @@ save_scanner_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 static char *
-get_schedule (credentials_t * credentials, params_t *params,
+get_schedule (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
               const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return get_one ("schedule", credentials, params, extra_xml, "tasks=\"1\"",
+  return get_one (connection, "schedule", credentials, params, extra_xml, "tasks=\"1\"",
                   response_data);
 }
 
 /**
  * @brief Get one schedule, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -17836,15 +17109,16 @@ get_schedule (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-get_schedule_omp (credentials_t * credentials, params_t *params,
+get_schedule_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                   cmd_response_data_t* response_data)
 {
-  return get_schedule (credentials, params, NULL, response_data);
+  return get_schedule (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Get all schedules, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
@@ -17853,16 +17127,17 @@ get_schedule_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 static char *
-get_schedules (credentials_t *credentials, params_t *params,
+get_schedules (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
                const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return get_many ("schedule", credentials, params, extra_xml, NULL,
+  return get_many (connection, "schedule", credentials, params, extra_xml, NULL,
                    response_data);
 }
 
 /**
  * @brief Get all schedules, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -17870,15 +17145,16 @@ get_schedules (credentials_t *credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-get_schedules_omp (credentials_t * credentials, params_t *params,
+get_schedules_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
-  return get_schedules (credentials, params, NULL, response_data);
+  return get_schedules (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Returns page to create a new schedule.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
@@ -17887,7 +17163,7 @@ get_schedules_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 static char *
-new_schedule (credentials_t *credentials, params_t *params,
+new_schedule (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
               const char *extra_xml, cmd_response_data_t* response_data)
 {
   GString *xml;
@@ -17917,13 +17193,14 @@ new_schedule (credentials_t *credentials, params_t *params,
   if (extra_xml)
     g_string_append (xml, extra_xml);
   g_string_append (xml, "</new_schedule>");
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+  return xsl_transform_omp (connection, credentials, params, g_string_free (xml, FALSE),
                             response_data);
 }
 
 /**
  * @brief Return the new schedule page.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -17931,14 +17208,15 @@ new_schedule (credentials_t *credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-new_schedule_omp (credentials_t *credentials, params_t *params,
+new_schedule_omp (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
                   cmd_response_data_t* response_data)
 {
-  return new_schedule (credentials, params, NULL, response_data);
+  return new_schedule (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Create a schedule, get all schedules, XSL transform the result.
+ * @param[in]  connection     Connection to manager.
  *
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
@@ -17947,7 +17225,7 @@ new_schedule_omp (credentials_t *credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-create_schedule_omp (credentials_t * credentials, params_t *params,
+create_schedule_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                      cmd_response_data_t* response_data)
 {
   char *ret;
@@ -17986,7 +17264,7 @@ create_schedule_omp (credentials_t * credentials, params_t *params,
 
   response = NULL;
   entity = NULL;
-  switch (ompf (credentials,
+  switch (ompf (connection, credentials,
                 &response,
                 &entity,
                 response_data,
@@ -18058,7 +17336,7 @@ create_schedule_omp (credentials_t * credentials, params_t *params,
 
   if (entity_attribute (entity, "id"))
     params_add (params, "schedule_id", entity_attribute (entity, "id"));
-  ret = response_from_entity (credentials, params, entity,
+  ret = response_from_entity (connection, credentials, params, entity,
                               (no_redirect && strcmp (no_redirect, "0")),
                               NULL, "get_schedules",
                               NULL, "new_schedule",
@@ -18071,6 +17349,7 @@ create_schedule_omp (credentials_t * credentials, params_t *params,
 /**
  * @brief Delete a schedule, get all schedules, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -18078,16 +17357,17 @@ create_schedule_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-delete_schedule_omp (credentials_t * credentials, params_t *params,
+delete_schedule_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                      cmd_response_data_t* response_data)
 {
-  return delete_resource ("schedule", credentials, params, 0, "get_schedules",
+  return delete_resource (connection, "schedule", credentials, params, 0, "get_schedules",
                           response_data);
 }
 
 /**
  * @brief Get all system reports, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -18095,12 +17375,11 @@ delete_schedule_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-get_system_reports_omp (credentials_t * credentials, params_t *params,
+get_system_reports_omp (openvas_connection_t *connection, credentials_t *
+                        credentials, params_t *params,
                         cmd_response_data_t* response_data)
 {
   GString *xml;
-  openvas_connection_t connection;
-  gchar *html;
   time_t now;
   struct tm *now_broken;
   struct tm start_time, end_time;
@@ -18142,25 +17421,6 @@ get_system_reports_omp (credentials_t * credentials, params_t *params,
   end_time.tm_hour = end_hour ? atoi (end_hour) : now_broken->tm_hour;
   end_time.tm_min = end_minute ? atoi (end_minute) : now_broken->tm_min;
 
-  switch (manager_connect (credentials, &connection, &html,
-                           response_data))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting the system reports. "
-                             "The current list of system reports is not available. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_tasks", response_data);
-    }
-
   xml = g_string_new ("<get_system_reports>");
 
   g_string_append_printf (xml,
@@ -18198,13 +17458,12 @@ get_system_reports_omp (credentials_t * credentials, params_t *params,
 
   /* Get the system reports. */
 
-  if (openvas_connection_sendf (&connection,
+  if (openvas_connection_sendf (connection,
                                 "<get_system_reports brief=\"1\" slave_id=\"%s\"/>",
                                 slave_id ? slave_id : "0")
       == -1)
     {
       g_string_free (xml, TRUE);
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -18214,10 +17473,9 @@ get_system_reports_omp (credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_tasks", response_data);
     }
 
-  if (read_string_c (&connection, &xml))
+  if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -18231,13 +17489,12 @@ get_system_reports_omp (credentials_t * credentials, params_t *params,
     {
       /* Get the OMP scanners. */
 
-      if (openvas_connection_sendf (&connection,
+      if (openvas_connection_sendf (connection,
                                     "<get_scanners"
                                     " filter=\"sort=name rows=-1 type=4\"/>")
           == -1)
         {
           g_string_free (xml, TRUE);
-          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -18247,10 +17504,9 @@ get_system_reports_omp (credentials_t * credentials, params_t *params,
                                "/omp?cmd=get_tasks", response_data);
         }
 
-      if (read_string_c (&connection, &xml))
+      if (read_string_c (connection, &xml))
         {
           g_string_free (xml, TRUE);
-          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -18264,14 +17520,14 @@ get_system_reports_omp (credentials_t * credentials, params_t *params,
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</get_system_reports>");
-  openvas_connection_close (&connection);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+  return xsl_transform_omp (connection, credentials, params, g_string_free (xml, FALSE),
                             response_data);
 }
 
 /**
  * @brief Return system report image.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]   credentials          Credentials of user issuing the action.
  * @param[in]   url                  URL of report image.
  * @param[in]   params               Request parameters.
@@ -18282,15 +17538,14 @@ get_system_reports_omp (credentials_t * credentials, params_t *params,
  * @return Image, or NULL.
  */
 char *
-get_system_report_omp (credentials_t *credentials, const char *url,
-                       params_t *params,
+get_system_report_omp (openvas_connection_t *connection, credentials_t
+                       *credentials, const char *url, params_t *params,
                        enum content_type *content_type,
                        gsize *content_length,
                        cmd_response_data_t* response_data)
 {
   entity_t entity;
   entity_t report_entity;
-  openvas_connection_t connection;
   char name[501];
   time_t now;
   struct tm *now_broken;
@@ -18344,12 +17599,7 @@ get_system_report_omp (credentials_t *credentials, const char *url,
     {
       gchar *omp_command;
 
-      if (manager_connect (credentials, &connection, NULL,
-                           response_data))
-        return NULL;
-
       gchar *start_time_str, *end_time_str;
-
 
       start_time_str
       = g_strdup_printf ("%04d-%02d-%02dT%02d:%02d:00",
@@ -18380,21 +17630,19 @@ get_system_report_omp (credentials_t *credentials, const char *url,
       g_free (start_time_str);
       g_free (end_time_str);
 
-      if (openvas_connection_sendf (&connection,
+      if (openvas_connection_sendf (connection,
                                     "%s",
                                     omp_command)
           == -1)
         {
           g_free (omp_command);
-          openvas_connection_close (&connection);
           return NULL;
         }
       g_free (omp_command);
 
       entity = NULL;
-      if (read_entity_c (&connection, &entity))
+      if (read_entity_c (connection, &entity))
         {
-          openvas_connection_close (&connection);
           return NULL;
         }
 
@@ -18402,7 +17650,6 @@ get_system_report_omp (credentials_t *credentials, const char *url,
       if (report_entity == NULL)
         {
           free_entity (entity);
-          openvas_connection_close (&connection);
           return NULL;
         }
 
@@ -18410,7 +17657,6 @@ get_system_report_omp (credentials_t *credentials, const char *url,
       if (report_entity == NULL)
         {
           free_entity (entity);
-          openvas_connection_close (&connection);
           return NULL;
         }
       else
@@ -18433,7 +17679,6 @@ get_system_report_omp (credentials_t *credentials, const char *url,
             }
 
           free_entity (entity);
-          openvas_connection_close (&connection);
           return content;
        }
     }
@@ -18444,6 +17689,7 @@ get_system_report_omp (credentials_t *credentials, const char *url,
 /**
  * @brief Get one report format, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
@@ -18452,16 +17698,17 @@ get_system_report_omp (credentials_t *credentials, const char *url,
  * @return Result of XSL transformation.
  */
 static char *
-get_report_format (credentials_t * credentials, params_t *params,
+get_report_format (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                    const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return get_one ("report_format", credentials, params, extra_xml,
+  return get_one (connection, "report_format", credentials, params, extra_xml,
                   "alerts =\"1\" params=\"1\"", response_data);
 }
 
 /**
  * @brief Get one report format, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -18469,15 +17716,16 @@ get_report_format (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-get_report_format_omp (credentials_t * credentials, params_t *params,
+get_report_format_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                        cmd_response_data_t* response_data)
 {
-  return get_report_format (credentials, params, NULL, response_data);
+  return get_report_format (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Get all Report Formats, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
@@ -18486,16 +17734,17 @@ get_report_format_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 static char *
-get_report_formats (credentials_t * credentials, params_t *params,
+get_report_formats (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                     const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return get_many ("report_format", credentials, params, extra_xml, NULL,
+  return get_many (connection, "report_format", credentials, params, extra_xml, NULL,
                    response_data);
 }
 
 /**
  * @brief Get all Report Formats, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -18503,15 +17752,16 @@ get_report_formats (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-get_report_formats_omp (credentials_t * credentials, params_t *params,
+get_report_formats_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                         cmd_response_data_t* response_data)
 {
-  return get_report_formats (credentials, params, NULL, response_data);
+  return get_report_formats (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Returns page to create a new report format.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
@@ -18520,7 +17770,7 @@ get_report_formats_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 static char *
-new_report_format (credentials_t *credentials, params_t *params,
+new_report_format (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
                    const char *extra_xml, cmd_response_data_t* response_data)
 {
   GString *xml;
@@ -18528,13 +17778,14 @@ new_report_format (credentials_t *credentials, params_t *params,
   if (extra_xml)
     g_string_append (xml, extra_xml);
   g_string_append (xml, "</new_report_format>");
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+  return xsl_transform_omp (connection, credentials, params, g_string_free (xml, FALSE),
                             response_data);
 }
 
 /**
  * @brief Return the new report format page.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -18542,15 +17793,16 @@ new_report_format (credentials_t *credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-new_report_format_omp (credentials_t *credentials, params_t *params,
+new_report_format_omp (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
                        cmd_response_data_t* response_data)
 {
-  return new_report_format (credentials, params, NULL, response_data);
+  return new_report_format (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Delete report format, get report formats, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -18558,16 +17810,18 @@ new_report_format_omp (credentials_t *credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-delete_report_format_omp (credentials_t * credentials, params_t *params,
+delete_report_format_omp (openvas_connection_t *connection,
+                          credentials_t *credentials, params_t *params,
                           cmd_response_data_t* response_data)
 {
-  return delete_resource ("report_format", credentials, params, 0,
+  return delete_resource (connection, "report_format", credentials, params, 0,
                           "get_report_formats", response_data);
 }
 
 /**
  * @brief Setup edit_report_format XML, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
@@ -18576,12 +17830,14 @@ delete_report_format_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 static char *
-edit_report_format (credentials_t * credentials, params_t *params,
-                    const char *extra_xml, cmd_response_data_t* response_data)
+edit_report_format (openvas_connection_t *connection,
+                    credentials_t *credentials,
+                    params_t *params, const char *extra_xml,
+                    cmd_response_data_t* response_data)
 {
   gchar *all_rfs_response, *response, *ext_extra_xml;
 
-  if (simple_ompf ("getting Report Formats",
+  if (simple_ompf (connection, "getting Report Formats",
                    credentials, &all_rfs_response, response_data,
                    "<get_report_formats"
                    " filter=\"rows=-1\"/>"))
@@ -18595,8 +17851,8 @@ edit_report_format (credentials_t * credentials, params_t *params,
                                    all_rfs_response);
   g_free (all_rfs_response);
 
-  response = edit_resource ("report_format", credentials, params, NULL,
-                            ext_extra_xml, response_data);
+  response = edit_resource (connection, "report_format", credentials, params,
+                            NULL, ext_extra_xml, response_data);
   g_free (ext_extra_xml);
   return response;
 }
@@ -18604,6 +17860,7 @@ edit_report_format (credentials_t * credentials, params_t *params,
 /**
  * @brief Setup edit_report_format XML, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -18611,15 +17868,18 @@ edit_report_format (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-edit_report_format_omp (credentials_t * credentials, params_t *params,
+edit_report_format_omp (openvas_connection_t *connection,
+                        credentials_t *credentials, params_t *params,
                         cmd_response_data_t* response_data)
 {
-  return edit_report_format (credentials, params, NULL, response_data);
+  return edit_report_format (connection, credentials, params, NULL,
+                             response_data);
 }
 
 /**
  * @brief Import report format, get all report formats, XSL transform result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -18627,7 +17887,7 @@ edit_report_format_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-import_report_format_omp (credentials_t * credentials, params_t *params,
+import_report_format_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                           cmd_response_data_t* response_data)
 {
   const char* no_redirect;
@@ -18645,7 +17905,7 @@ import_report_format_omp (credentials_t * credentials, params_t *params,
                              "%s"
                              "</create_report_format>",
                              params_value (params, "xml_file"));
-  ret = omp (credentials, &response, &entity, response_data, command);
+  ret = omp (connection, credentials, &response, &entity, response_data, command);
   g_free (command);
   switch (ret)
     {
@@ -18682,7 +17942,7 @@ import_report_format_omp (credentials_t * credentials, params_t *params,
 
   if (entity_attribute (entity, "id"))
     params_add (params, "report_format_id", entity_attribute (entity, "id"));
-  html = response_from_entity (credentials, params, entity,
+  html = response_from_entity (connection, credentials, params, entity,
                                (no_redirect && strcmp (no_redirect, "0")),
                                NULL, "get_report_formats",
                                NULL, "new_report_format",
@@ -18696,6 +17956,7 @@ import_report_format_omp (credentials_t * credentials, params_t *params,
 /**
  * @brief Save report_format, get next page, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials       Username and password for authentication.
  * @param[in]  params            Request parameters.
  * @param[out] response_data     Extra data return for the HTTP response.
@@ -18703,7 +17964,7 @@ import_report_format_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-save_report_format_omp (credentials_t * credentials, params_t *params,
+save_report_format_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                         cmd_response_data_t* response_data)
 {
   int ret;
@@ -18783,7 +18044,7 @@ save_report_format_omp (credentials_t * credentials, params_t *params,
 
           response = NULL;
           entity = NULL;
-          ret = ompf (credentials,
+          ret = ompf (connection, credentials,
                       &response,
                       &entity,
                       response_data,
@@ -18872,7 +18133,7 @@ save_report_format_omp (credentials_t * credentials, params_t *params,
 
               response = NULL;
               entity = NULL;
-              ret = ompf (credentials,
+              ret = ompf (connection, credentials,
                           &response,
                           &entity,
                           response_data,
@@ -18931,7 +18192,7 @@ save_report_format_omp (credentials_t * credentials, params_t *params,
 
   response = NULL;
   entity = NULL;
-  ret = ompf (credentials,
+  ret = ompf (connection, credentials,
               &response,
               &entity,
               response_data,
@@ -18978,7 +18239,7 @@ save_report_format_omp (credentials_t * credentials, params_t *params,
                              "/omp?cmd=get_report_formats", response_data);
     }
 
-  html = response_from_entity (credentials, params, entity,
+  html = response_from_entity (connection, credentials, params, entity,
                                (no_redirect && strcmp (no_redirect, "0")),
                                NULL, "get_report_formats",
                                NULL, "edit_report_format",
@@ -18991,6 +18252,7 @@ save_report_format_omp (credentials_t * credentials, params_t *params,
 /**
  * @brief Verify report format, get report formats, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -18998,7 +18260,7 @@ save_report_format_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-verify_report_format_omp (credentials_t * credentials, params_t *params,
+verify_report_format_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                           cmd_response_data_t* response_data)
 {
   int ret;
@@ -19021,7 +18283,7 @@ verify_report_format_omp (credentials_t * credentials, params_t *params,
 
   response = NULL;
   entity = NULL;
-  ret = ompf (credentials,
+  ret = ompf (connection, credentials,
               &response,
               &entity,
               response_data,
@@ -19061,7 +18323,7 @@ verify_report_format_omp (credentials_t * credentials, params_t *params,
 
   if (omp_success (entity))
     {
-      html = next_page (credentials, params, response, response_data);
+      html = next_page (connection, credentials, params, response, response_data);
       if (html == NULL)
         {
           free_entity (entity);
@@ -19078,7 +18340,7 @@ verify_report_format_omp (credentials_t * credentials, params_t *params,
   else
     {
       set_http_status_from_entity (entity, response_data);
-      html = get_report_formats (credentials, params, response, response_data);
+      html = get_report_formats (connection, credentials, params, response, response_data);
     }
   free_entity (entity);
   g_free (response);
@@ -19088,6 +18350,7 @@ verify_report_format_omp (credentials_t * credentials, params_t *params,
 /**
  * @brief Run a wizard and XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -19095,7 +18358,7 @@ verify_report_format_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-run_wizard_omp (credentials_t *credentials, params_t *params,
+run_wizard_omp (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
                 cmd_response_data_t* response_data)
 {
   const char *no_redirect, *name;
@@ -19147,7 +18410,7 @@ run_wizard_omp (credentials_t *credentials, params_t *params,
 
   response = NULL;
   entity = NULL;
-  ret = omp (credentials, &response, &entity, response_data, run->str);
+  ret = omp (connection, credentials, &response, &entity, response_data, run->str);
   g_string_free (run, TRUE);
   switch (ret)
     {
@@ -19180,7 +18443,7 @@ run_wizard_omp (credentials_t *credentials, params_t *params,
                              "/omp?cmd=get_tasks", response_data);
     }
 
-  html = response_from_entity (credentials, params, entity,
+  html = response_from_entity (connection, credentials, params, entity,
                                (no_redirect && strcmp (no_redirect, "0")),
                                NULL, "wizard",
                                NULL, "wizard",
@@ -19194,14 +18457,13 @@ run_wizard_omp (credentials_t *credentials, params_t *params,
   if (command_enabled (credentials, capability))                              \
       {                                                                       \
         if (openvas_connection_sendf                                          \
-             (&connection,                                                    \
+             (connection,                                                    \
               "<" command                                                     \
               " filter=\"rows=-1 sort=name\""                                 \
               " trash=\"1\"/>")                                               \
             == -1)                                                            \
           {                                                                   \
             g_string_free (xml, TRUE);                                        \
-            openvas_connection_close (&connection);                           \
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR; \
             return gsad_message                                               \
                     (credentials,                                             \
@@ -19213,10 +18475,9 @@ run_wizard_omp (credentials_t *credentials, params_t *params,
                      "/omp?cmd=get_trash", response_data);                    \
           }                                                                   \
                                                                               \
-        if (read_string_c (&connection, &xml))                                \
+        if (read_string_c (connection, &xml))                                \
           {                                                                   \
             g_string_free (xml, TRUE);                                        \
-            openvas_connection_close (&connection);                           \
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR; \
             return gsad_message                                               \
                     (credentials,                                             \
@@ -19231,6 +18492,7 @@ run_wizard_omp (credentials_t *credentials, params_t *params,
 /**
  * @brief Setup trash page XML, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
@@ -19239,30 +18501,11 @@ run_wizard_omp (credentials_t *credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-get_trash (credentials_t * credentials, params_t *params, const char *extra_xml,
+get_trash (openvas_connection_t *connection, credentials_t * credentials,
+           params_t *params, const char *extra_xml,
            cmd_response_data_t* response_data)
 {
   GString *xml;
-  openvas_connection_t connection;
-  gchar *html;
-
-  switch (manager_connect (credentials, &connection, &html,
-                           response_data))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting the trash. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_tasks", response_data);
-    }
 
   xml = g_string_new ("<get_trash>");
 
@@ -19307,8 +18550,8 @@ get_trash (credentials_t * credentials, params_t *params, const char *extra_xml,
   /* Cleanup, and return transformed XML. */
 
   g_string_append (xml, "</get_trash>");
-  openvas_connection_close (&connection);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+  return xsl_transform_omp (connection, credentials, params,
+                            g_string_free (xml, FALSE),
                             response_data);
 }
 #undef GET_TRASH_RESOURCE
@@ -19316,6 +18559,7 @@ get_trash (credentials_t * credentials, params_t *params, const char *extra_xml,
 /**
  * @brief Get all trash, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -19323,15 +18567,16 @@ get_trash (credentials_t * credentials, params_t *params, const char *extra_xml,
  * @return Result of XSL transformation.
  */
 char *
-get_trash_omp (credentials_t * credentials, params_t *params,
-               cmd_response_data_t* response_data)
+get_trash_omp (openvas_connection_t *connection, credentials_t * credentials,
+               params_t *params, cmd_response_data_t* response_data)
 {
-  return get_trash (credentials, params, NULL, response_data);
+  return get_trash (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Returns page with user's settings.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
@@ -19340,30 +18585,11 @@ get_trash_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 static char *
-get_my_settings (credentials_t * credentials, params_t *params,
-                 const char *extra_xml, cmd_response_data_t* response_data)
+get_my_settings (openvas_connection_t *connection, credentials_t * credentials,
+                 params_t *params, const char *extra_xml,
+                 cmd_response_data_t* response_data)
 {
   GString *xml;
-  openvas_connection_t connection;
-  gchar *html;
-
-  switch (manager_connect (credentials, &connection, &html,
-                           response_data))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting the settings. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_tasks", response_data);
-    }
 
   xml = g_string_new ("<get_my_settings>");
 
@@ -19372,14 +18598,13 @@ get_my_settings (credentials_t * credentials, params_t *params,
 
   /* Get the settings. */
 
-  if (openvas_connection_sendf (&connection,
+  if (openvas_connection_sendf (connection,
                                 "<get_settings"
                                 " sort_field=\"name\""
                                 " sort_order=\"ascending\"/>")
       == -1)
     {
       g_string_free (xml, TRUE);
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -19389,10 +18614,9 @@ get_my_settings (credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_tasks", response_data);
     }
 
-  if (read_string_c (&connection, &xml))
+  if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -19405,14 +18629,15 @@ get_my_settings (credentials_t * credentials, params_t *params,
   buffer_languages_xml (xml);
 
   g_string_append (xml, "</get_my_settings>");
-  openvas_connection_close (&connection);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+  return xsl_transform_omp (connection, credentials, params,
+                            g_string_free (xml, FALSE),
                             response_data);
 }
 
 /**
  * @brief Returns page with user's settings.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -19420,7 +18645,8 @@ get_my_settings (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-get_my_settings_omp (credentials_t * credentials, params_t *params,
+get_my_settings_omp (openvas_connection_t *connection, credentials_t *
+                     credentials, params_t *params,
                      cmd_response_data_t* response_data)
 {
   GString *commands;
@@ -19452,7 +18678,8 @@ get_my_settings_omp (credentials_t * credentials, params_t *params,
   /* Get Filters and other resource lists. */
   response = NULL;
   entity = NULL;
-  ret = omp (credentials, &response, &entity, response_data, commands->str);
+  ret = omp (connection, credentials, &response, &entity, response_data,
+             commands->str);
   g_string_free (commands, TRUE);
   switch (ret)
     {
@@ -19487,12 +18714,13 @@ get_my_settings_omp (credentials_t * credentials, params_t *params,
     }
   free_entity (entity);
 
-  return get_my_settings (credentials, params, response, response_data);
+  return get_my_settings (connection, credentials, params, response, response_data);
 }
 
 /**
  * @brief Returns page with user's settings, for editing.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
@@ -19501,13 +18729,13 @@ get_my_settings_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 static char *
-edit_my_settings (credentials_t * credentials, params_t *params,
-                  const char *extra_xml, cmd_response_data_t* response_data)
+edit_my_settings (openvas_connection_t *connection, credentials_t * credentials,
+                  params_t *params, const char *extra_xml,
+                  cmd_response_data_t* response_data)
 {
   GString *commands, *xml;
-  openvas_connection_t connection;
   int ret;
-  gchar *html, *filters_xml;
+  gchar *filters_xml;
   entity_t entity;
 
   /* Get the Filters and other resources. */
@@ -19534,7 +18762,8 @@ edit_my_settings (credentials_t * credentials, params_t *params,
 
   filters_xml = NULL;
   entity = NULL;
-  ret = omp (credentials, &filters_xml, &entity, response_data, commands->str);
+  ret = omp (connection, credentials, &filters_xml, &entity, response_data,
+             commands->str);
   g_string_free (commands, TRUE);
   switch (ret)
     {
@@ -19568,24 +18797,6 @@ edit_my_settings (credentials_t * credentials, params_t *params,
     }
   free_entity (entity);
 
-  switch (manager_connect (credentials, &connection, &html,
-                           response_data))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting the settings. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_my_settings", response_data);
-    }
-
   xml = g_string_new ("<edit_my_settings>");
 
   if (extra_xml)
@@ -19596,14 +18807,13 @@ edit_my_settings (credentials_t * credentials, params_t *params,
 
   /* Get the settings. */
 
-  if (openvas_connection_sendf (&connection,
+  if (openvas_connection_sendf (connection,
                                 "<get_settings"
                                 " sort_field=\"name\""
                                 " sort_order=\"ascending\"/>")
       == -1)
     {
       g_string_free (xml, TRUE);
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -19613,10 +18823,9 @@ edit_my_settings (credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_my_settings", response_data);
     }
 
-  if (read_string_c (&connection, &xml))
+  if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -19629,14 +18838,15 @@ edit_my_settings (credentials_t * credentials, params_t *params,
   buffer_languages_xml (xml);
 
   g_string_append (xml, "</edit_my_settings>");
-  openvas_connection_close (&connection);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+  return xsl_transform_omp (connection, credentials, params,
+                            g_string_free (xml, FALSE),
                             response_data);
 }
 
 /**
  * @brief Returns page with user's settings, for editing.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -19644,10 +18854,12 @@ edit_my_settings (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-edit_my_settings_omp (credentials_t * credentials, params_t *params,
+edit_my_settings_omp (openvas_connection_t *connection, credentials_t *
+                      credentials, params_t *params,
                       cmd_response_data_t* response_data)
 {
-  return edit_my_settings (credentials, params, NULL, response_data);
+  return edit_my_settings (connection, credentials, params, NULL,
+                           response_data);
 }
 
 /**
@@ -19725,6 +18937,7 @@ send_settings_filters (openvas_connection_t *connection, params_t *data,
 /**
  * @brief Returns page with user's settings, for editing.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  params       Request parameters.
  * @param[in]  accept_language  Accept-Language, from browser.
@@ -19737,13 +18950,12 @@ send_settings_filters (openvas_connection_t *connection, params_t *data,
  * @return Result of XSL transformation.
  */
 char *
-save_my_settings_omp (credentials_t * credentials, params_t *params,
+save_my_settings_omp (openvas_connection_t *connection, credentials_t *
+                      credentials, params_t *params,
                       const char *accept_language, char **timezone,
                       char **password, char **severity, char **language,
                       cmd_response_data_t* response_data)
 {
-  openvas_connection_t connection;
-  gchar *html;
   const char *lang, *text, *old_passwd, *passwd, *status, *max;
   const char *details_fname, *list_fname, *report_fname;
   gchar *lang_64, *text_64, *max_64, *fname_64;
@@ -19767,6 +18979,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
   details_fname = params_value (params, "details_fname");
   list_fname = params_value (params, "list_fname");
   report_fname = params_value (params, "report_fname");
+
   if ((text == NULL)
       || (passwd == NULL)
       || (old_passwd == NULL)
@@ -19775,29 +18988,10 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
       || (details_fname == NULL)
       || (list_fname == NULL)
       || (report_fname == NULL))
-    return edit_my_settings (credentials, params,
+    return edit_my_settings (connection, credentials, params,
                              GSAD_MESSAGE_INVALID_PARAM
                                ("Save My Settings"),
                              response_data);
-
-  switch (manager_connect (credentials, &connection, &html,
-                           response_data))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while saving settings. "
-                             "The settings remains the same. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_my_settings", response_data);
-    }
 
   xml = g_string_new ("");
 
@@ -19814,7 +19008,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
       auth_opts = omp_authenticate_info_opts_defaults;
       auth_opts.username = credentials->username;
       auth_opts.password = old_passwd;
-      switch (omp_authenticate_info_ext_c (&connection, auth_opts))
+      switch (omp_authenticate_info_ext_c (connection, auth_opts))
         {
           case 0:
             break;
@@ -19838,7 +19032,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
                              " old and new passwords to apply any other changes"
                              " of your settings."
                              "</gsad_msg>");
-            return edit_my_settings (credentials, params,
+            return edit_my_settings (connection, credentials, params,
                                      g_string_free (xml, FALSE),
                                      response_data);
           default:
@@ -19853,7 +19047,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
 
       passwd_64 = g_base64_encode ((guchar*) passwd, strlen (passwd));
 
-      if (openvas_connection_sendf (&connection,
+      if (openvas_connection_sendf (connection,
                                     "<modify_setting>"
                                     "<name>Password</name>"
                                     "<value>%s</value>"
@@ -19862,7 +19056,6 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
           == -1)
         {
           g_free (passwd_64);
-          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -19875,10 +19068,9 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
 
       entity = NULL;
       xml_string_append (xml, "<save_setting name=\"Password\">");
-      if (read_entity_and_string_c (&connection, &entity, &xml))
+      if (read_entity_and_string_c (connection, &entity, &xml))
         {
           g_string_free (xml, TRUE);
-          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -19909,7 +19101,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
     {
       text_64 = g_base64_encode ((guchar*) text, strlen (text));
 
-      if (openvas_connection_sendf (&connection,
+      if (openvas_connection_sendf (connection,
                                     "<modify_setting>"
                                     "<name>Timezone</name>"
                                     "<value>%s</value>"
@@ -19918,7 +19110,6 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
           == -1)
         {
           g_free (text_64);
-          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -19931,10 +19122,9 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
 
       entity = NULL;
       xml_string_append (xml, "<save_setting name=\"Timezone\">");
-      if (read_entity_and_string_c (&connection, &entity, &xml))
+      if (read_entity_and_string_c (connection, &entity, &xml))
         {
           g_string_free (xml, TRUE);
-          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -19956,7 +19146,6 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
 
           if (setenv ("TZ", credentials->timezone, 1) == -1)
             {
-              openvas_connection_close (&connection);
               g_critical ("%s: failed to set TZ\n", __FUNCTION__);
               exit (EXIT_FAILURE);
             }
@@ -19976,7 +19165,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
     {
       max_64 = g_base64_encode ((guchar*) max, strlen (max));
 
-      if (openvas_connection_sendf (&connection,
+      if (openvas_connection_sendf (connection,
                                     "<modify_setting"
                                     " setting_id"
                                     "=\"5f5a8712-8017-11e1-8556-406186ea4fc5\">"
@@ -19986,7 +19175,6 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
           == -1)
         {
           g_free (max_64);
-          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -20001,10 +19189,9 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
       xml_string_append (xml,
                          "<save_setting id=\"%s\">",
                          "5f5a8712-8017-11e1-8556-406186ea4fc5");
-      if (read_entity_and_string_c (&connection, &entity, &xml))
+      if (read_entity_and_string_c (connection, &entity, &xml))
         {
           g_string_free (xml, TRUE);
-          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -20028,7 +19215,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
     {
       fname_64 = g_base64_encode ((guchar*) details_fname, strlen (details_fname));
 
-      if (openvas_connection_sendf (&connection,
+      if (openvas_connection_sendf (connection,
                                     "<modify_setting"
                                     " setting_id"
                                     "=\"a6ac88c5-729c-41ba-ac0a-deea4a3441f2\">"
@@ -20038,7 +19225,6 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
           == -1)
         {
           g_free (fname_64);
-          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -20053,10 +19239,9 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
       xml_string_append (xml,
                          "<save_setting id=\"%s\">",
                          "a6ac88c5-729c-41ba-ac0a-deea4a3441f2");
-      if (read_entity_and_string_c (&connection, &entity, &xml))
+      if (read_entity_and_string_c (connection, &entity, &xml))
         {
           g_string_free (xml, TRUE);
-          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -20080,7 +19265,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
     {
       fname_64 = g_base64_encode ((guchar*) list_fname, strlen (list_fname));
 
-      if (openvas_connection_sendf (&connection,
+      if (openvas_connection_sendf (connection,
                                     "<modify_setting"
                                     " setting_id"
                                     "=\"0872a6ed-4f85-48c5-ac3f-a5ef5e006745\">"
@@ -20090,7 +19275,6 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
           == -1)
         {
           g_free (fname_64);
-          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -20105,10 +19289,9 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
       xml_string_append (xml,
                          "<save_setting id=\"%s\">",
                          "a6ac88c5-729c-41ba-ac0a-deea4a3441f2");
-      if (read_entity_and_string_c (&connection, &entity, &xml))
+      if (read_entity_and_string_c (connection, &entity, &xml))
         {
           g_string_free (xml, TRUE);
-          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -20132,7 +19315,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
     {
       fname_64 = g_base64_encode ((guchar*) report_fname, strlen (report_fname));
 
-      if (openvas_connection_sendf (&connection,
+      if (openvas_connection_sendf (connection,
                                     "<modify_setting"
                                     " setting_id"
                                     "=\"e1a2ae0b-736e-4484-b029-330c9e15b900\">"
@@ -20142,7 +19325,6 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
           == -1)
         {
           g_free (fname_64);
-          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -20157,10 +19339,9 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
       xml_string_append (xml,
                          "<save_setting id=\"%s\">",
                          "e1a2ae0b-736e-4484-b029-330c9e15b900");
-      if (read_entity_and_string_c (&connection, &entity, &xml))
+      if (read_entity_and_string_c (connection, &entity, &xml))
         {
           g_string_free (xml, TRUE);
-          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -20184,7 +19365,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
     {
       lang_64 = g_base64_encode ((guchar*) lang, strlen (lang));
 
-      if (openvas_connection_sendf (&connection,
+      if (openvas_connection_sendf (connection,
                                     "<modify_setting"
                                     " setting_id"
                                     "=\"6765549a-934e-11e3-b358-406186ea4fc5\">"
@@ -20194,7 +19375,6 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
           == -1)
         {
           g_free (lang_64);
-          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -20209,10 +19389,9 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
       xml_string_append (xml,
                          "<save_setting id=\"%s\">",
                          "6765549a-934e-11e3-b358-406186ea4fc5");
-      if (read_entity_and_string_c (&connection, &entity, &xml))
+      if (read_entity_and_string_c (connection, &entity, &xml))
         {
           g_string_free (xml, TRUE);
-          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -20249,10 +19428,9 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
   /* Send default resources */
 
   defaults = params_values (params, "settings_default:");
-  if (send_settings_filters (&connection, defaults, changed, xml,
+  if (send_settings_filters (connection, defaults, changed, xml,
                              &modify_failed, response_data))
     {
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -20265,10 +19443,9 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
   /* Send resources filters */
 
   filters = params_values (params, "settings_filter:");
-  if (send_settings_filters (&connection, filters, changed, xml, &modify_failed,
+  if (send_settings_filters (connection, filters, changed, xml, &modify_failed,
                              response_data))
     {
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -20289,7 +19466,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
                     ? g_base64_encode ((guchar*) text, strlen (text))
                     : g_strdup (""));
 
-      if (openvas_connection_sendf (&connection,
+      if (openvas_connection_sendf (connection,
                                     "<modify_setting"
                                     " setting_id"
                                     "=\"f16bb236-a32d-4cd5-a880-e0fcf2599f59\">"
@@ -20299,7 +19476,6 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
           == -1)
         {
           g_free (text_64);
-          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -20314,10 +19490,9 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
       xml_string_append (xml,
                          "<save_setting id=\"%s\">",
                          "f16bb236-a32d-4cd5-a880-e0fcf2599f59");
-      if (read_entity_and_string_c (&connection, &entity, &xml))
+      if (read_entity_and_string_c (connection, &entity, &xml))
         {
           g_string_free (xml, TRUE);
-          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -20356,7 +19531,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
                     ? g_base64_encode ((guchar*) text, strlen (text))
                     : g_strdup (""));
 
-      if (openvas_connection_sendf (&connection,
+      if (openvas_connection_sendf (connection,
                                     "<modify_setting"
                                     " setting_id"
                                     "=\"77ec2444-e7f2-4a80-a59b-f4237782d93f\">"
@@ -20366,7 +19541,6 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
           == -1)
         {
           g_free (text_64);
-          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -20381,10 +19555,9 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
       xml_string_append (xml,
                          "<save_setting id=\"%s\">",
                          "77ec2444-e7f2-4a80-a59b-f4237782d93f");
-      if (read_entity_and_string_c (&connection, &entity, &xml))
+      if (read_entity_and_string_c (connection, &entity, &xml))
         {
           g_string_free (xml, TRUE);
-          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -20411,7 +19584,7 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
                     ? g_base64_encode ((guchar*) text, strlen (text))
                     : g_strdup (""));
 
-      if (openvas_connection_sendf (&connection,
+      if (openvas_connection_sendf (connection,
                                     "<modify_setting"
                                     " setting_id"
                                     "=\"7eda49c5-096c-4bef-b1ab-d080d87300df\">"
@@ -20421,7 +19594,6 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
           == -1)
         {
           g_free (text_64);
-          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                               "Internal error", __FUNCTION__, __LINE__,
@@ -20436,10 +19608,9 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
       xml_string_append (xml,
                          "<save_setting id=\"%s\">",
                          "7eda49c5-096c-4bef-b1ab-d080d87300df");
-      if (read_entity_and_string_c (&connection, &entity, &xml))
+      if (read_entity_and_string_c (connection, &entity, &xml))
         {
           g_string_free (xml, TRUE);
-          openvas_connection_close (&connection);
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
           return gsad_message (credentials,
                                "Internal error", __FUNCTION__, __LINE__,
@@ -20456,18 +19627,20 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
         }
     }
 
-  openvas_connection_close (&connection);
   if (modify_failed)
-    return edit_my_settings (credentials, params, g_string_free (xml, FALSE),
+    return edit_my_settings (connection, credentials, params,
+                             g_string_free (xml, FALSE),
                              response_data);
   else
-    return get_my_settings (credentials, params, g_string_free (xml, FALSE),
+    return get_my_settings (connection, credentials, params,
+                            g_string_free (xml, FALSE),
                             response_data);
 }
 
 /**
  * @brief Get OMP doc.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -20475,43 +19648,22 @@ save_my_settings_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-get_protocol_doc_omp (credentials_t * credentials, params_t *params,
+get_protocol_doc_omp (openvas_connection_t *connection, credentials_t *
+                      credentials, params_t *params,
                       cmd_response_data_t* response_data)
 {
   GString *xml;
-  openvas_connection_t connection;
-  gchar *html;
   entity_t help_response;
-
-  switch (manager_connect (credentials, &connection, &html,
-                           response_data))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting the OMP doc. "
-                             "The resource is currently not available. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_tasks", response_data);
-    }
 
   xml = g_string_new ("");
   g_string_append_printf (xml, "<get_protocol_doc>");
 
   /* Get the resource. */
 
-  if (openvas_connection_sendf (&connection, "<help format=\"XML\"/>")
+  if (openvas_connection_sendf (connection, "<help format=\"XML\"/>")
       == -1)
     {
       g_string_free (xml, TRUE);
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -20521,10 +19673,9 @@ get_protocol_doc_omp (credentials_t * credentials, params_t *params,
     }
 
   help_response = NULL;
-  if (read_entity_and_string_c (&connection, &help_response, &xml))
+  if (read_entity_and_string_c (connection, &help_response, &xml))
     {
       g_string_free (xml, TRUE);
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -20534,18 +19685,19 @@ get_protocol_doc_omp (credentials_t * credentials, params_t *params,
     }
   free_entity (help_response);
 
-  openvas_connection_close (&connection);
 
   /* Cleanup, and return transformed XML. */
 
   g_string_append_printf (xml, "</get_protocol_doc>");
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+  return xsl_transform_omp (connection, credentials, params,
+                            g_string_free (xml, FALSE),
                             response_data);
 }
 
 /**
  * @brief Download the OMP doc.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
  * @param[out]  content_type         Content type return.
@@ -20556,49 +19708,29 @@ get_protocol_doc_omp (credentials_t * credentials, params_t *params,
  * @return XML on success.  HTML result of XSL transformation on error.
  */
 char *
-export_omp_doc_omp (credentials_t * credentials, params_t *params,
+export_omp_doc_omp (openvas_connection_t *connection,
+                    credentials_t * credentials, params_t *params,
                     enum content_type * content_type,
                     char **content_disposition, gsize *content_length,
                     cmd_response_data_t* response_data)
 {
   entity_t entity, response;
-  openvas_connection_t connection;
   char *content = NULL;
-  gchar *html;
   const char *format;
   time_t now;
   struct tm *tm;
 
   *content_length = 0;
 
-  switch (manager_connect (credentials, &connection, &html,
-                           response_data))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting the OMP doc. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_protocol_doc", response_data);
-    }
-
   format = params_value (params, "protocol_format")
             ? params_value (params, "protocol_format")
             : "xml";
 
-  if (openvas_connection_sendf (&connection,
+  if (openvas_connection_sendf (connection,
                                 "<help format=\"%s\"/>",
                                 format)
       == -1)
     {
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -20609,9 +19741,8 @@ export_omp_doc_omp (credentials_t * credentials, params_t *params,
     }
 
   response = NULL;
-  if (read_entity_and_text_c (&connection, &response, &content))
+  if (read_entity_and_text_c (connection, &response, &content))
     {
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -20619,7 +19750,6 @@ export_omp_doc_omp (credentials_t * credentials, params_t *params,
                            "Diagnostics: Failure to receive response from manager daemon.",
                            "/omp?cmd=get_protocol_doc", response_data);
     }
-  openvas_connection_close (&connection);
 
   if (strcmp (format, "xml") == 0)
     *content_length = strlen (content);
@@ -20663,7 +19793,6 @@ export_omp_doc_omp (credentials_t * credentials, params_t *params,
                                           tm->tm_year +1900,
                                           format);
   free_entity (response);
-  openvas_connection_close (&connection);
   return content;
 }
 
@@ -20673,6 +19802,7 @@ export_omp_doc_omp (credentials_t * credentials, params_t *params,
 /**
  * @brief Get one group, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
@@ -20681,15 +19811,18 @@ export_omp_doc_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 static char *
-get_group (credentials_t * credentials, params_t *params,
-           const char *extra_xml, cmd_response_data_t* response_data)
+get_group (openvas_connection_t *connection, credentials_t * credentials,
+           params_t *params, const char *extra_xml,
+           cmd_response_data_t* response_data)
 {
-  return get_one ("group", credentials, params, extra_xml, NULL, response_data);
+  return get_one (connection, "group", credentials, params, extra_xml, NULL,
+                  response_data);
 }
 
 /**
  * @brief Get one group, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -20697,15 +19830,16 @@ get_group (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-get_group_omp (credentials_t * credentials, params_t *params,
-               cmd_response_data_t* response_data)
+get_group_omp (openvas_connection_t *connection, credentials_t * credentials,
+               params_t *params, cmd_response_data_t* response_data)
 {
-  return get_group (credentials, params, NULL, response_data);
+  return get_group (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Get all groups, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
@@ -20714,16 +19848,18 @@ get_group_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 static char *
-get_groups (credentials_t * credentials, params_t *params,
-            const char *extra_xml, cmd_response_data_t* response_data)
+get_groups (openvas_connection_t *connection, credentials_t * credentials,
+            params_t *params, const char *extra_xml,
+            cmd_response_data_t* response_data)
 {
-  return get_many ("group", credentials, params, extra_xml, NULL,
+  return get_many (connection, "group", credentials, params, extra_xml, NULL,
                    response_data);
 }
 
 /**
  * @brief Get all groups, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -20731,15 +19867,16 @@ get_groups (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-get_groups_omp (credentials_t * credentials, params_t *params,
+get_groups_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                 cmd_response_data_t* response_data)
 {
-  return get_groups (credentials, params, NULL, response_data);
+  return get_groups (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Returns page to create a new group.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
@@ -20748,7 +19885,7 @@ get_groups_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 static char *
-new_group (credentials_t *credentials, params_t *params, const char *extra_xml,
+new_group (openvas_connection_t *connection, credentials_t *credentials, params_t *params, const char *extra_xml,
            cmd_response_data_t* response_data)
 {
   GString *xml;
@@ -20756,13 +19893,14 @@ new_group (credentials_t *credentials, params_t *params, const char *extra_xml,
   if (extra_xml)
     g_string_append (xml, extra_xml);
   g_string_append (xml, "</new_group>");
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+  return xsl_transform_omp (connection, credentials, params, g_string_free (xml, FALSE),
                             response_data);
 }
 
 /**
  * @brief Returns page to create a new group.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -20770,15 +19908,16 @@ new_group (credentials_t *credentials, params_t *params, const char *extra_xml,
  * @return Result of XSL transformation.
  */
 char *
-new_group_omp (credentials_t *credentials, params_t *params,
+new_group_omp (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
                cmd_response_data_t* response_data)
 {
-  return new_group (credentials, params, NULL, response_data);
+  return new_group (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Delete a group from trash, get all groups, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -20786,16 +19925,17 @@ new_group_omp (credentials_t *credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-delete_trash_group_omp (credentials_t * credentials, params_t *params,
+delete_trash_group_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                         cmd_response_data_t* response_data)
 {
-  return delete_resource ("group", credentials, params, 1, "get_trash",
+  return delete_resource (connection, "group", credentials, params, 1, "get_trash",
                           response_data);
 }
 
 /**
  * @brief Delete a group, get all groups, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -20803,16 +19943,17 @@ delete_trash_group_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-delete_group_omp (credentials_t * credentials, params_t *params,
+delete_group_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                   cmd_response_data_t* response_data)
 {
-  return delete_resource ("group", credentials, params, 0,
+  return delete_resource (connection, "group", credentials, params, 0,
                           "get_groups", response_data);
 }
 
 /**
  * @brief Create a group, get all groups, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -20820,7 +19961,7 @@ delete_group_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-create_group_omp (credentials_t *credentials, params_t *params,
+create_group_omp (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
                   cmd_response_data_t* response_data)
 {
   gchar *html, *response, *command, *specials_element;
@@ -20868,7 +20009,7 @@ create_group_omp (credentials_t *credentials, params_t *params,
   g_string_free (xml, TRUE);
   g_free (specials_element);
 
-  ret = omp (credentials, &response, &entity, response_data, command);
+  ret = omp (connection, credentials, &response, &entity, response_data, command);
   g_free (command);
   switch (ret)
     {
@@ -20903,7 +20044,7 @@ create_group_omp (credentials_t *credentials, params_t *params,
 
   if (entity_attribute (entity, "id"))
     params_add (params, "group_id", entity_attribute (entity, "id"));
-  html = response_from_entity (credentials, params, entity,
+  html = response_from_entity (connection, credentials, params, entity,
                                (no_redirect && strcmp (no_redirect, "0")),
                                NULL, "get_groups",
                                NULL, "new_group",
@@ -20916,6 +20057,7 @@ create_group_omp (credentials_t *credentials, params_t *params,
 /**
  * @brief Setup edit_group XML, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
@@ -20924,16 +20066,17 @@ create_group_omp (credentials_t *credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-edit_group (credentials_t * credentials, params_t *params,
+edit_group (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
             const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return edit_resource ("group", credentials, params, NULL, extra_xml,
+  return edit_resource (connection, "group", credentials, params, NULL, extra_xml,
                         response_data);
 }
 
 /**
  * @brief Setup edit_group XML, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -20941,15 +20084,16 @@ edit_group (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-edit_group_omp (credentials_t * credentials, params_t *params,
+edit_group_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                 cmd_response_data_t* response_data)
 {
-  return edit_group (credentials, params, NULL, response_data);
+  return edit_group (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Export a group.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
  * @param[out]  content_type         Content type return.
@@ -20960,17 +20104,18 @@ edit_group_omp (credentials_t * credentials, params_t *params,
  * @return Group XML on success.  HTML result of XSL transformation on error.
  */
 char *
-export_group_omp (credentials_t * credentials, params_t *params,
+export_group_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                   enum content_type * content_type, char **content_disposition,
                   gsize *content_length, cmd_response_data_t* response_data)
 {
-  return export_resource ("group", credentials, params, content_type,
+  return export_resource (connection, "group", credentials, params, content_type,
                           content_disposition, content_length, response_data);
 }
 
 /**
  * @brief Export a list of groups.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
  * @param[out]  content_type         Content type return.
@@ -20982,17 +20127,18 @@ export_group_omp (credentials_t * credentials, params_t *params,
  *         on error.
  */
 char *
-export_groups_omp (credentials_t * credentials, params_t *params,
+export_groups_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                    enum content_type * content_type, char **content_disposition,
                    gsize *content_length, cmd_response_data_t* response_data)
 {
-  return export_many ("group", credentials, params, content_type,
+  return export_many (connection, "group", credentials, params, content_type,
                       content_disposition, content_length, response_data);
 }
 
 /**
  * @brief Modify a group, return the next page.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -21000,7 +20146,7 @@ export_groups_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-save_group_omp (credentials_t * credentials, params_t *params,
+save_group_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                 cmd_response_data_t* response_data)
 {
   int ret;
@@ -21023,7 +20169,7 @@ save_group_omp (credentials_t * credentials, params_t *params,
 
   response = NULL;
   entity = NULL;
-  ret = ompf (credentials,
+  ret = ompf (connection, credentials,
               &response,
               &entity,
               response_data,
@@ -21068,7 +20214,7 @@ save_group_omp (credentials_t * credentials, params_t *params,
                              "/omp?cmd=get_groups", response_data);
     }
 
-  html = response_from_entity (credentials, params, entity,
+  html = response_from_entity (connection, credentials, params, entity,
                                (no_redirect && strcmp (no_redirect, "0")),
                                NULL, "get_groups",
                                NULL, "edit_group",
@@ -21084,6 +20230,7 @@ save_group_omp (credentials_t * credentials, params_t *params,
 /**
  * @brief Get one permission, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
@@ -21092,16 +20239,17 @@ save_group_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-get_permission (credentials_t * credentials, params_t *params,
+get_permission (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                 const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return get_one ("permission", credentials, params, extra_xml, "alerts=\"1\"",
+  return get_one (connection, "permission", credentials, params, extra_xml, "alerts=\"1\"",
                   response_data);
 }
 
 /**
  * @brief Get one permission, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -21109,15 +20257,16 @@ get_permission (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-get_permission_omp (credentials_t * credentials, params_t *params,
+get_permission_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                     cmd_response_data_t* response_data)
 {
-  return get_permission (credentials, params, NULL, response_data);
+  return get_permission (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Get all permissions, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
@@ -21126,16 +20275,17 @@ get_permission_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 static char *
-get_permissions (credentials_t * credentials, params_t *params,
+get_permissions (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                  const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return get_many ("permission", credentials, params, extra_xml, NULL,
+  return get_many (connection, "permission", credentials, params, extra_xml, NULL,
                    response_data);
 }
 
 /**
  * @brief Get all permissions, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -21143,15 +20293,16 @@ get_permissions (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-get_permissions_omp (credentials_t * credentials, params_t *params,
+get_permissions_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                      cmd_response_data_t* response_data)
 {
-  return get_permissions (credentials, params, NULL, response_data);
+  return get_permissions (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Delete a permission, get all permissions, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -21159,16 +20310,17 @@ get_permissions_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-delete_trash_permission_omp (credentials_t * credentials, params_t *params,
+delete_trash_permission_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                              cmd_response_data_t* response_data)
 {
-  return delete_resource ("permission", credentials, params, 1, "get_trash",
+  return delete_resource (connection, "permission", credentials, params, 1, "get_trash",
                           response_data);
 }
 
 /**
  * @brief Delete a permission, get all permissions, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -21176,16 +20328,17 @@ delete_trash_permission_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-delete_permission_omp (credentials_t * credentials, params_t *params,
+delete_permission_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                        cmd_response_data_t* response_data)
 {
-  return delete_resource ("permission", credentials, params, 0, NULL,
+  return delete_resource (connection, "permission", credentials, params, 0, NULL,
                           response_data);
 }
 
 /**
  * @brief Setup new_permission XML, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
@@ -21194,7 +20347,7 @@ delete_permission_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-new_permission (credentials_t * credentials, params_t *params,
+new_permission (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                 const char *extra_xml, cmd_response_data_t* response_data)
 {
   GString *xml;
@@ -21208,7 +20361,7 @@ new_permission (credentials_t * credentials, params_t *params,
 
       response = NULL;
       entity = NULL;
-      switch (omp (credentials, &response, &entity, response_data,
+      switch (omp (connection, credentials, &response, &entity, response_data,
                    "<get_users filter=\"rows=-1 permission=get_users\"/>"))
         {
           case 0:
@@ -21253,7 +20406,7 @@ new_permission (credentials_t * credentials, params_t *params,
 
       response = NULL;
       entity = NULL;
-      switch (omp (credentials, &response, &entity, response_data,
+      switch (omp (connection, credentials, &response, &entity, response_data,
                    "<get_groups filter=\"rows=-1 permission=get_groups\"/>"))
         {
           case 0:
@@ -21298,7 +20451,7 @@ new_permission (credentials_t * credentials, params_t *params,
 
       response = NULL;
       entity = NULL;
-      switch (omp (credentials, &response, &entity, response_data,
+      switch (omp (connection, credentials, &response, &entity, response_data,
                    "<get_roles filter=\"rows=-1 permission=get_roles\"/>"))
         {
           case 0:
@@ -21341,13 +20494,14 @@ new_permission (credentials_t * credentials, params_t *params,
 
   g_string_append (xml, "</new_permission>");
 
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+  return xsl_transform_omp (connection, credentials, params, g_string_free (xml, FALSE),
                             response_data);
 }
 
 /**
  * @brief Setup new_permission XML, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -21355,15 +20509,16 @@ new_permission (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-new_permission_omp (credentials_t * credentials, params_t *params,
+new_permission_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                     cmd_response_data_t* response_data)
 {
-  return new_permission (credentials, params, NULL, response_data);
+  return new_permission (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Create a permission, get all permissions, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -21371,7 +20526,7 @@ new_permission_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-create_permission_omp (credentials_t *credentials, params_t *params,
+create_permission_omp (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
                        cmd_response_data_t* response_data)
 {
   int ret;
@@ -21405,7 +20560,7 @@ create_permission_omp (credentials_t *credentials, params_t *params,
       CHECK_PARAM_INVALID (subject_name,
                             "Create Permission", "new_permission");
       subject_id = NULL;
-      ret = ompf (credentials,
+      ret = ompf (connection, credentials,
                   &subject_response,
                   &get_subject_entity,
                   response_data,
@@ -21465,7 +20620,7 @@ create_permission_omp (credentials_t *credentials, params_t *params,
                                  "</gsad_msg>",
                                  subject_type,
                                  subject_name ? subject_name : "");
-          return next_page (credentials, params, msg, response_data);
+          return next_page (connection, credentials, params, msg, response_data);
         }
     }
   else if (strcmp (subject_type, "user") == 0)
@@ -21484,7 +20639,7 @@ create_permission_omp (credentials_t *credentials, params_t *params,
     {
       response = NULL;
       entity = NULL;
-      ret = ompf (credentials,
+      ret = ompf (connection, credentials,
                   &response,
                   &entity,
                   response_data,
@@ -21577,7 +20732,7 @@ create_permission_omp (credentials_t *credentials, params_t *params,
 
         if (entity_attribute (entity, "id"))
           params_add (params, "permission_id", entity_attribute (entity, "id"));
-        html = response_from_entity (credentials, params, entity,
+        html = response_from_entity (connection, credentials, params, entity,
                                      (no_redirect && strcmp (no_redirect, "0")),
                                      NULL, "get_permissions",
                                      NULL, "new_permission",
@@ -21587,7 +20742,7 @@ create_permission_omp (credentials_t *credentials, params_t *params,
     {
       response = NULL;
       entity = NULL;
-      ret = ompf (credentials,
+      ret = ompf (connection, credentials,
                   &response,
                   &entity,
                   response_data,
@@ -21642,7 +20797,7 @@ create_permission_omp (credentials_t *credentials, params_t *params,
 
         if (entity_attribute (entity, "id"))
           params_add (params, "permission_id", entity_attribute (entity, "id"));
-        html = response_from_entity (credentials, params, entity,
+        html = response_from_entity (connection, credentials, params, entity,
                                      (no_redirect && strcmp (no_redirect, "0")),
                                      NULL, "get_permissions",
                                      NULL, "new_permission",
@@ -21693,7 +20848,7 @@ create_permission_omp (credentials_t *credentials, params_t *params,
   else                                                                        \
     {                                                                         \
       html                                                                    \
-        = response_from_entity (credentials, params, entity,                  \
+        = response_from_entity (connection, credentials, params, entity,                  \
                                 (no_redirect && strcmp (no_redirect, "0")),   \
                                 NULL, "get_permissions",                      \
                                 NULL, "new_permissions",                      \
@@ -21706,6 +20861,7 @@ create_permission_omp (credentials_t *credentials, params_t *params,
 /**
  * @brief Setup new_permissions XML, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
@@ -21714,7 +20870,7 @@ create_permission_omp (credentials_t *credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-new_permissions (credentials_t * credentials, params_t *params,
+new_permissions (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                  const char *extra_xml, cmd_response_data_t* response_data)
 {
   GString *xml;
@@ -21733,7 +20889,7 @@ new_permissions (credentials_t * credentials, params_t *params,
 
       response = NULL;
       entity = NULL;
-      switch (omp (credentials, &response, &entity, response_data,
+      switch (omp (connection, credentials, &response, &entity, response_data,
                    "<get_users filter=\"rows=-1 permission=get_users\"/>"))
         {
           case 0:
@@ -21778,7 +20934,7 @@ new_permissions (credentials_t * credentials, params_t *params,
 
       response = NULL;
       entity = NULL;
-      switch (omp (credentials, &response, &entity, response_data,
+      switch (omp (connection, credentials, &response, &entity, response_data,
                    "<get_groups filter=\"rows=-1 permission=get_groups\"/>"))
         {
           case 0:
@@ -21823,7 +20979,7 @@ new_permissions (credentials_t * credentials, params_t *params,
 
       response = NULL;
       entity = NULL;
-      switch (omp (credentials, &response, &entity, response_data,
+      switch (omp (connection, credentials, &response, &entity, response_data,
                    "<get_roles filter=\"rows=-1 permission=get_roles\"/>"))
         {
           case 0:
@@ -21872,7 +21028,7 @@ new_permissions (credentials_t * credentials, params_t *params,
       get_command = g_strdup_printf ("get_%ss", restrict_type);
       response = NULL;
       entity = NULL;
-      switch (ompf (credentials, &response, &entity, response_data,
+      switch (ompf (connection, credentials, &response, &entity, response_data,
                     "<%s %s_id=\"%s\" details=\"0\"/>",
                     get_command, restrict_type, resource_id))
         {
@@ -21930,7 +21086,7 @@ new_permissions (credentials_t * credentials, params_t *params,
       get_command = g_strdup_printf ("get_%ss", related_type);
       response = NULL;
       entity = NULL;
-      switch (ompf (credentials, &response, &entity, response_data,
+      switch (ompf (connection, credentials, &response, &entity, response_data,
                     "<%s %s_id=\"%s\" details=\"0\"/>",
                     get_command, related_type, related_id))
         {
@@ -21979,13 +21135,14 @@ new_permissions (credentials_t * credentials, params_t *params,
 
   g_string_append (xml, "</new_permissions>");
 
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+  return xsl_transform_omp (connection, credentials, params, g_string_free (xml, FALSE),
                             response_data);
 }
 
 /**
  * @brief Setup new_permission XML, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -21993,15 +21150,16 @@ new_permissions (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-new_permissions_omp (credentials_t * credentials, params_t *params,
+new_permissions_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                      cmd_response_data_t* response_data)
 {
-  return new_permissions (credentials, params, NULL, response_data);
+  return new_permissions (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Create multiple permission, get next page, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -22009,7 +21167,7 @@ new_permissions_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-create_permissions_omp (credentials_t *credentials, params_t *params,
+create_permissions_omp (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
                         cmd_response_data_t* response_data)
 {
   int ret;
@@ -22047,7 +21205,7 @@ create_permissions_omp (credentials_t *credentials, params_t *params,
     {
       CHECK_PARAM (subject_name, "Create Permission", new_permission);
       subject_id = NULL;
-      ret = ompf (credentials,
+      ret = ompf (connection, credentials,
                   &subject_response,
                   &get_subject_entity,
                   response_data,
@@ -22107,7 +21265,7 @@ create_permissions_omp (credentials_t *credentials, params_t *params,
                                  "</gsad_msg>",
                                  subject_type,
                                  subject_name ? subject_name : "");
-          return next_page (credentials, params, msg, response_data);
+          return next_page (connection, credentials, params, msg, response_data);
         }
     }
   else if (strcmp (subject_type, "user") == 0)
@@ -22132,7 +21290,7 @@ create_permissions_omp (credentials_t *credentials, params_t *params,
         {
           response = NULL;
           entity = NULL;
-          ret = ompf (credentials,
+          ret = ompf (connection, credentials,
                       &response,
                       &entity,
                       response_data,
@@ -22158,7 +21316,7 @@ create_permissions_omp (credentials_t *credentials, params_t *params,
         {
           response = NULL;
           entity = NULL;
-          ret = ompf (credentials,
+          ret = ompf (connection, credentials,
                       &response,
                       &entity,
                       response_data,
@@ -22181,7 +21339,7 @@ create_permissions_omp (credentials_t *credentials, params_t *params,
             {
               response = NULL;
               entity = NULL;
-              ret = ompf (credentials,
+              ret = ompf (connection, credentials,
                           &response,
                           &entity,
                           response_data,
@@ -22202,7 +21360,7 @@ create_permissions_omp (credentials_t *credentials, params_t *params,
 
               response = NULL;
               entity = NULL;
-              ret = ompf (credentials,
+              ret = ompf (connection, credentials,
                           &response,
                           &entity,
                           response_data,
@@ -22223,7 +21381,7 @@ create_permissions_omp (credentials_t *credentials, params_t *params,
 
               response = NULL;
               entity = NULL;
-              ret = ompf (credentials,
+              ret = ompf (connection, credentials,
                           &response,
                           &entity,
                           response_data,
@@ -22247,7 +21405,7 @@ create_permissions_omp (credentials_t *credentials, params_t *params,
             {
               response = NULL;
               entity = NULL;
-              ret = ompf (credentials,
+              ret = ompf (connection, credentials,
                           &response,
                           &entity,
                           response_data,
@@ -22273,7 +21431,7 @@ create_permissions_omp (credentials_t *credentials, params_t *params,
             {
               response = NULL;
               entity = NULL;
-              ret = ompf (credentials,
+              ret = ompf (connection, credentials,
                           &response,
                           &entity,
                           response_data,
@@ -22317,7 +21475,7 @@ create_permissions_omp (credentials_t *credentials, params_t *params,
                 {
                   response = NULL;
                   entity = NULL;
-                  ret = ompf (credentials,
+                  ret = ompf (connection, credentials,
                               &response,
                               &entity,
                               response_data,
@@ -22343,7 +21501,7 @@ create_permissions_omp (credentials_t *credentials, params_t *params,
                 {
                   response = NULL;
                   entity = NULL;
-                  ret = ompf (credentials,
+                  ret = ompf (connection, credentials,
                               &response,
                               &entity,
                               response_data,
@@ -22366,7 +21524,7 @@ create_permissions_omp (credentials_t *credentials, params_t *params,
                     {
                       response = NULL;
                       entity = NULL;
-                      ret = ompf (credentials,
+                      ret = ompf (connection, credentials,
                                   &response,
                                   &entity,
                                   response_data,
@@ -22387,7 +21545,7 @@ create_permissions_omp (credentials_t *credentials, params_t *params,
 
                       response = NULL;
                       entity = NULL;
-                      ret = ompf (credentials,
+                      ret = ompf (connection, credentials,
                                   &response,
                                   &entity,
                                   response_data,
@@ -22408,7 +21566,7 @@ create_permissions_omp (credentials_t *credentials, params_t *params,
 
                       response = NULL;
                       entity = NULL;
-                      ret = ompf (credentials,
+                      ret = ompf (connection, credentials,
                                   &response,
                                   &entity,
                                   response_data,
@@ -22432,7 +21590,7 @@ create_permissions_omp (credentials_t *credentials, params_t *params,
                     {
                       response = NULL;
                       entity = NULL;
-                      ret = ompf (credentials,
+                      ret = ompf (connection, credentials,
                                   &response,
                                   &entity,
                                   response_data,
@@ -22458,7 +21616,7 @@ create_permissions_omp (credentials_t *credentials, params_t *params,
                     {
                       response = NULL;
                       entity = NULL;
-                      ret = ompf (credentials,
+                      ret = ompf (connection, credentials,
                                   &response,
                                   &entity,
                                   response_data,
@@ -22496,7 +21654,7 @@ create_permissions_omp (credentials_t *credentials, params_t *params,
 
   if (no_redirect)
     {
-      html = action_result_page (credentials, response_data,
+      html = action_result_page (connection, credentials, params, response_data,
                                  "Create Permissions",
                                  G_STRINGIFY (MHD_HTTP_CREATED),
                                  summary_response,
@@ -22516,6 +21674,7 @@ create_permissions_omp (credentials_t *credentials, params_t *params,
 /**
  * @brief Setup edit_permission XML, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
@@ -22524,7 +21683,7 @@ create_permissions_omp (credentials_t *credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-edit_permission (credentials_t * credentials, params_t *params,
+edit_permission (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                  const char *extra_xml, cmd_response_data_t* response_data)
 {
   gchar *html;
@@ -22539,7 +21698,7 @@ edit_permission (credentials_t * credentials, params_t *params,
 
       response = NULL;
       entity = NULL;
-      switch (omp (credentials, &response, &entity, response_data,
+      switch (omp (connection, credentials, &response, &entity, response_data,
                    "<get_users filter=\"rows=-1\"/>"))
         {
           case 0:
@@ -22584,7 +21743,7 @@ edit_permission (credentials_t * credentials, params_t *params,
 
       response = NULL;
       entity = NULL;
-      switch (omp (credentials, &response, &entity, response_data,
+      switch (omp (connection, credentials, &response, &entity, response_data,
                    "<get_groups filter=\"rows=-1\"/>"))
         {
           case 0:
@@ -22629,7 +21788,7 @@ edit_permission (credentials_t * credentials, params_t *params,
 
       response = NULL;
       entity = NULL;
-      switch (omp (credentials, &response, &entity, response_data,
+      switch (omp (connection, credentials, &response, &entity, response_data,
                    "<get_roles filter=\"rows=-1\"/>"))
         {
           case 0:
@@ -22669,7 +21828,7 @@ edit_permission (credentials_t * credentials, params_t *params,
 
   if (extra_xml)
     g_string_append (extra, extra_xml);
-  html = edit_resource ("permission", credentials, params, NULL, extra->str,
+  html = edit_resource (connection, "permission", credentials, params, NULL, extra->str,
                         response_data);
   g_string_free (extra, TRUE);
   return html;
@@ -22678,6 +21837,7 @@ edit_permission (credentials_t * credentials, params_t *params,
 /**
  * @brief Setup edit_permission XML, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -22685,15 +21845,16 @@ edit_permission (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-edit_permission_omp (credentials_t * credentials, params_t *params,
+edit_permission_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                      cmd_response_data_t* response_data)
 {
-  return edit_permission (credentials, params, NULL, response_data);
+  return edit_permission (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Export a permission.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
  * @param[out]  content_type         Content type return.
@@ -22704,18 +21865,19 @@ edit_permission_omp (credentials_t * credentials, params_t *params,
  * @return Permission XML on success.  HTML result of XSL transformation on error.
  */
 char *
-export_permission_omp (credentials_t * credentials, params_t *params,
+export_permission_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                        enum content_type * content_type,
                        char **content_disposition, gsize *content_length,
                        cmd_response_data_t* response_data)
 {
-  return export_resource ("permission", credentials, params, content_type,
+  return export_resource (connection, "permission", credentials, params, content_type,
                           content_disposition, content_length, response_data);
 }
 
 /**
  * @brief Export a list of permissions.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
  * @param[out]  content_type         Content type return.
@@ -22727,18 +21889,19 @@ export_permission_omp (credentials_t * credentials, params_t *params,
  *         on error.
  */
 char *
-export_permissions_omp (credentials_t * credentials, params_t *params,
+export_permissions_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                         enum content_type * content_type,
                         char **content_disposition, gsize *content_length,
                         cmd_response_data_t* response_data)
 {
-  return export_many ("permission", credentials, params, content_type,
+  return export_many (connection, "permission", credentials, params, content_type,
                       content_disposition, content_length, response_data);
 }
 
 /**
  * @brief Modify a permission, get all permissions, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -22746,7 +21909,7 @@ export_permissions_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-save_permission_omp (credentials_t * credentials, params_t *params,
+save_permission_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                      cmd_response_data_t* response_data)
 {
   gchar *html, *response;
@@ -22786,7 +21949,7 @@ save_permission_omp (credentials_t * credentials, params_t *params,
 
   response = NULL;
   entity = NULL;
-  ret = ompf (credentials,
+  ret = ompf (connection, credentials,
               &response,
               &entity,
               response_data,
@@ -22838,7 +22001,7 @@ save_permission_omp (credentials_t * credentials, params_t *params,
                              "/omp?cmd=get_permissions", response_data);
     }
 
-  html = response_from_entity (credentials, params, entity,
+  html = response_from_entity (connection, credentials, params, entity,
                                (no_redirect && strcmp (no_redirect, "0")),
                                NULL, "get_permissions",
                                NULL, "edit_permission",
@@ -22854,6 +22017,7 @@ save_permission_omp (credentials_t * credentials, params_t *params,
 /**
  * @brief Returns page to create a new Port List.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
@@ -22862,7 +22026,7 @@ save_permission_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 static char *
-new_port_list (credentials_t *credentials, params_t *params,
+new_port_list (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
                const char *extra_xml, cmd_response_data_t* response_data)
 {
   GString *xml;
@@ -22870,13 +22034,14 @@ new_port_list (credentials_t *credentials, params_t *params,
   if (extra_xml)
     g_string_append (xml, extra_xml);
   g_string_append (xml, "</new_port_list>");
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+  return xsl_transform_omp (connection, credentials, params, g_string_free (xml, FALSE),
                             response_data);
 }
 
 /**
  * @brief Returns page to upload a new port list.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
@@ -22885,7 +22050,7 @@ new_port_list (credentials_t *credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 static char *
-upload_port_list (credentials_t *credentials, params_t *params,
+upload_port_list (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
                   const char *extra_xml, cmd_response_data_t* response_data)
 {
   GString *xml;
@@ -22895,13 +22060,14 @@ upload_port_list (credentials_t *credentials, params_t *params,
     g_string_append (xml, extra_xml);
   g_string_append (xml, "</upload_port_list>");
 
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+  return xsl_transform_omp (connection, credentials, params, g_string_free (xml, FALSE),
                             response_data);
 }
 
 /**
  * @brief Return the upload port list page.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -22909,15 +22075,16 @@ upload_port_list (credentials_t *credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-upload_port_list_omp (credentials_t *credentials, params_t *params,
+upload_port_list_omp (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
                       cmd_response_data_t* response_data)
 {
-  return upload_port_list (credentials, params, NULL, response_data);
+  return upload_port_list (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Create a port list, get all port lists, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -22925,7 +22092,7 @@ upload_port_list_omp (credentials_t *credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-create_port_list_omp (credentials_t * credentials, params_t *params,
+create_port_list_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                       cmd_response_data_t* response_data)
 {
   gchar *html, *response;
@@ -22945,7 +22112,7 @@ create_port_list_omp (credentials_t * credentials, params_t *params,
 
   /* Create the port_list. */
 
-  switch (ompf (credentials,
+  switch (ompf (connection, credentials,
                 &response,
                 &entity,
                 response_data,
@@ -22991,7 +22158,7 @@ create_port_list_omp (credentials_t * credentials, params_t *params,
 
   if (entity_attribute (entity, "id"))
     params_add (params, "port_list_id", entity_attribute (entity, "id"));
-  html = response_from_entity (credentials, params, entity,
+  html = response_from_entity (connection, credentials, params, entity,
                                (no_redirect && strcmp (no_redirect, "0")),
                                NULL, "get_port_lists",
                                NULL, "new_port_list",
@@ -23004,6 +22171,7 @@ create_port_list_omp (credentials_t * credentials, params_t *params,
 /**
  * @brief Returns page to create a new Port Range.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
@@ -23012,7 +22180,7 @@ create_port_list_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 static char *
-new_port_range (credentials_t *credentials, params_t *params,
+new_port_range (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
                const char *extra_xml, cmd_response_data_t* response_data)
 {
   GString *xml;
@@ -23020,13 +22188,14 @@ new_port_range (credentials_t *credentials, params_t *params,
   if (extra_xml)
     g_string_append (xml, extra_xml);
   g_string_append (xml, "</new_port_range>");
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+  return xsl_transform_omp (connection, credentials, params, g_string_free (xml, FALSE),
                             response_data);
 }
 
 /**
  * @brief Return the new Port Range page.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -23034,15 +22203,16 @@ new_port_range (credentials_t *credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-new_port_range_omp (credentials_t *credentials, params_t *params,
+new_port_range_omp (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
-  return new_port_range (credentials, params, NULL, response_data);
+  return new_port_range (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Add a range to a port list, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -23050,7 +22220,7 @@ new_port_range_omp (credentials_t *credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-create_port_range_omp (credentials_t * credentials, params_t *params,
+create_port_range_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                        cmd_response_data_t* response_data)
 {
   int ret;
@@ -23073,7 +22243,7 @@ create_port_range_omp (credentials_t * credentials, params_t *params,
 
   response = NULL;
   entity = NULL;
-  ret = ompf (credentials,
+  ret = ompf (connection, credentials,
               &response,
               &entity,
               response_data,
@@ -23119,7 +22289,7 @@ create_port_range_omp (credentials_t * credentials, params_t *params,
                              "/omp?cmd=get_port_lists", response_data);
     }
 
-  html = response_from_entity (credentials, params, entity,
+  html = response_from_entity (connection, credentials, params, entity,
                                (no_redirect && strcmp (no_redirect, "0")),
                                NULL, "edit_port_list",
                                NULL, "edit_port_list",
@@ -23132,6 +22302,7 @@ create_port_range_omp (credentials_t * credentials, params_t *params,
 /**
  * @brief Get one port_list, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  commands     Extra commands to run before the others.
@@ -23140,16 +22311,17 @@ create_port_range_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 static char *
-get_port_list (credentials_t * credentials, params_t *params,
+get_port_list (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                const char * extra_xml, cmd_response_data_t* response_data)
 {
-  return get_one ("port_list", credentials, params, extra_xml,
+  return get_one (connection, "port_list", credentials, params, extra_xml,
                   "targets=\"1\" details=\"1\"", response_data);
 }
 
 /**
  * @brief Get one port_list, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -23157,15 +22329,16 @@ get_port_list (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-get_port_list_omp (credentials_t * credentials, params_t *params,
+get_port_list_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
-  return get_port_list (credentials, params, NULL, response_data);
+  return get_port_list (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Get all Port Lists, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
@@ -23174,16 +22347,17 @@ get_port_list_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 static char *
-get_port_lists (credentials_t * credentials, params_t *params,
+get_port_lists (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                 const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return get_many ("port_list", credentials, params, extra_xml, NULL,
+  return get_many (connection, "port_list", credentials, params, extra_xml, NULL,
                    response_data);
 }
 
 /**
  * @brief Get all port_lists, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -23191,15 +22365,16 @@ get_port_lists (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-get_port_lists_omp (credentials_t * credentials, params_t *params,
+get_port_lists_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                     cmd_response_data_t* response_data)
 {
-  return get_port_lists (credentials, params, NULL, response_data);
+  return get_port_lists (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Return the new Port List page.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -23207,15 +22382,16 @@ get_port_lists_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-new_port_list_omp (credentials_t *credentials, params_t *params,
+new_port_list_omp (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
-  return new_port_list (credentials, params, NULL, response_data);
+  return new_port_list (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Setup edit_port_list XML, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
@@ -23224,16 +22400,17 @@ new_port_list_omp (credentials_t *credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-edit_port_list (credentials_t * credentials, params_t *params,
+edit_port_list (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                 const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return edit_resource ("port_list", credentials, params, NULL, extra_xml,
+  return edit_resource (connection, "port_list", credentials, params, NULL, extra_xml,
                         response_data);
 }
 
 /**
  * @brief Setup edit_port_list XML, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -23241,15 +22418,16 @@ edit_port_list (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-edit_port_list_omp (credentials_t * credentials, params_t *params,
+edit_port_list_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                     cmd_response_data_t* response_data)
 {
-  return edit_port_list (credentials, params, NULL, response_data);
+  return edit_port_list (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Modify a port list, get all port list, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -23257,7 +22435,7 @@ edit_port_list_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-save_port_list_omp (credentials_t * credentials, params_t *params,
+save_port_list_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                     cmd_response_data_t* response_data)
 {
   int ret;
@@ -23278,7 +22456,7 @@ save_port_list_omp (credentials_t * credentials, params_t *params,
 
   response = NULL;
   entity = NULL;
-  ret = ompf (credentials,
+  ret = ompf (connection, credentials,
               &response,
               &entity,
               response_data,
@@ -23321,7 +22499,7 @@ save_port_list_omp (credentials_t * credentials, params_t *params,
                              "/omp?cmd=get_port_lists", response_data);
     }
 
-  html = response_from_entity (credentials, params, entity,
+  html = response_from_entity (connection, credentials, params, entity,
                                (no_redirect && strcmp (no_redirect, "0")),
                                NULL, "get_port_lists",
                                NULL, "edit_port_list",
@@ -23334,6 +22512,7 @@ save_port_list_omp (credentials_t * credentials, params_t *params,
 /**
  * @brief Delete a port list, get all port lists, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -23341,16 +22520,17 @@ save_port_list_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-delete_port_list_omp (credentials_t * credentials, params_t *params,
+delete_port_list_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                       cmd_response_data_t* response_data)
 {
-  return delete_resource ("port_list", credentials, params, 0, "get_port_lists",
+  return delete_resource (connection, "port_list", credentials, params, 0, "get_port_lists",
                           response_data);
 }
 
 /**
  * @brief Delete a trash port list, get all trash, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -23358,16 +22538,17 @@ delete_port_list_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-delete_trash_port_list_omp (credentials_t * credentials, params_t *params,
+delete_trash_port_list_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                             cmd_response_data_t* response_data)
 {
-  return delete_resource ("port_list", credentials, params, 1, "get_trash",
+  return delete_resource (connection, "port_list", credentials, params, 1, "get_trash",
                           response_data);
 }
 
 /**
  * @brief Delete a port range, get the port list, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -23375,16 +22556,17 @@ delete_trash_port_list_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-delete_port_range_omp (credentials_t * credentials, params_t *params,
+delete_port_range_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                        cmd_response_data_t* response_data)
 {
-  return delete_resource ("port_range", credentials, params, 1,
+  return delete_resource (connection, "port_range", credentials, params, 1,
                           "edit_port_list", response_data);
 }
 
 /**
  * @brief Import port list, get all port_lists, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -23392,7 +22574,7 @@ delete_port_range_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-import_port_list_omp (credentials_t * credentials, params_t *params,
+import_port_list_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                       cmd_response_data_t* response_data)
 {
   const char *no_redirect;
@@ -23410,7 +22592,7 @@ import_port_list_omp (credentials_t * credentials, params_t *params,
                              "%s"
                              "</create_port_list>",
                              params_value (params, "xml_file"));
-  ret = omp (credentials, &response, &entity, response_data, command);
+  ret = omp (connection, credentials, &response, &entity, response_data, command);
   g_free (command);
   switch (ret)
     {
@@ -23448,7 +22630,7 @@ import_port_list_omp (credentials_t * credentials, params_t *params,
 
   /* Cleanup, and return transformed XML. */
 
-  html = response_from_entity (credentials, params, entity,
+  html = response_from_entity (connection, credentials, params, entity,
                                (no_redirect && strcmp (no_redirect, "0")),
                                NULL, "get_port_lists",
                                NULL, "new_port_list",
@@ -23464,6 +22646,7 @@ import_port_list_omp (credentials_t * credentials, params_t *params,
 /**
  * @brief Returns page to create a new role.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
@@ -23472,7 +22655,7 @@ import_port_list_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 static char *
-new_role (credentials_t *credentials, params_t *params, const char *extra_xml,
+new_role (openvas_connection_t *connection, credentials_t *credentials, params_t *params, const char *extra_xml,
           cmd_response_data_t* response_data)
 {
   GString *xml;
@@ -23480,13 +22663,14 @@ new_role (credentials_t *credentials, params_t *params, const char *extra_xml,
   if (extra_xml)
     g_string_append (xml, extra_xml);
   g_string_append (xml, "</new_role>");
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+  return xsl_transform_omp (connection, credentials, params, g_string_free (xml, FALSE),
                             response_data);
 }
 
 /**
  * @brief Returns page to create a new role.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -23494,15 +22678,16 @@ new_role (credentials_t *credentials, params_t *params, const char *extra_xml,
  * @return Result of XSL transformation.
  */
 char *
-new_role_omp (credentials_t *credentials, params_t *params,
+new_role_omp (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
               cmd_response_data_t* response_data)
 {
-  return new_role (credentials, params, NULL, response_data);
+  return new_role (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Delete a role from trash, get all roles, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -23510,16 +22695,17 @@ new_role_omp (credentials_t *credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-delete_trash_role_omp (credentials_t * credentials, params_t *params,
+delete_trash_role_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                        cmd_response_data_t* response_data)
 {
-  return delete_resource ("role", credentials, params, 1, "get_trash",
+  return delete_resource (connection, "role", credentials, params, 1, "get_trash",
                           response_data);
 }
 
 /**
  * @brief Delete a role, get all roles, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -23527,16 +22713,17 @@ delete_trash_role_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-delete_role_omp (credentials_t * credentials, params_t *params,
+delete_role_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                  cmd_response_data_t* response_data)
 {
-  return delete_resource ("role", credentials, params, 0, "get_roles",
+  return delete_resource (connection, "role", credentials, params, 0, "get_roles",
                           response_data);
 }
 
 /**
  * @brief Create a role, get all roles, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -23544,7 +22731,7 @@ delete_role_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-create_role_omp (credentials_t *credentials, params_t *params,
+create_role_omp (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
                  cmd_response_data_t* response_data)
 {
   char *ret;
@@ -23563,7 +22750,7 @@ create_role_omp (credentials_t *credentials, params_t *params,
 
   response = NULL;
   entity = NULL;
-  switch (ompf (credentials,
+  switch (ompf (connection, credentials,
                 &response,
                 &entity,
                 response_data,
@@ -23607,7 +22794,7 @@ create_role_omp (credentials_t *credentials, params_t *params,
 
   if (entity_attribute (entity, "id"))
     params_add (params, "role_id", entity_attribute (entity, "id"));
-  ret = response_from_entity (credentials, params, entity,
+  ret = response_from_entity (connection, credentials, params, entity,
                               (no_redirect && strcmp (no_redirect, "0")),
                               NULL, "get_roles",
                               NULL, "new_role",
@@ -23620,6 +22807,7 @@ create_role_omp (credentials_t *credentials, params_t *params,
 /**
  * @brief Setup edit_role XML, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
@@ -23628,7 +22816,7 @@ create_role_omp (credentials_t *credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-edit_role (credentials_t * credentials, params_t *params,
+edit_role (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
            const char *extra_xml, cmd_response_data_t* response_data)
 {
   gchar *html;
@@ -23643,7 +22831,7 @@ edit_role (credentials_t * credentials, params_t *params,
 
       response = NULL;
       entity = NULL;
-      switch (ompf (credentials, &response, &entity, response_data,
+      switch (ompf (connection, credentials, &response, &entity, response_data,
                     "<get_permissions"
                     " filter=\"rows=-1 subject_type=role and subject_uuid=%s\"/>",
                     params_value (params, "role_id")))
@@ -23687,7 +22875,7 @@ edit_role (credentials_t * credentials, params_t *params,
 
       response = NULL;
       entity = NULL;
-      switch (ompf (credentials, &response, &entity, response_data,
+      switch (ompf (connection, credentials, &response, &entity, response_data,
                     "<get_groups"
                     " filter=\"rows=-1 owner=%s\"/>",
                     credentials->username))
@@ -23726,7 +22914,7 @@ edit_role (credentials_t * credentials, params_t *params,
 
   if (extra_xml)
     g_string_append (extra, extra_xml);
-  html = edit_resource ("role", credentials, params, NULL, extra->str,
+  html = edit_resource (connection, "role", credentials, params, NULL, extra->str,
                         response_data);
   g_string_free (extra, TRUE);
   return html;
@@ -23735,6 +22923,7 @@ edit_role (credentials_t * credentials, params_t *params,
 /**
  * @brief Setup edit_role XML, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -23742,15 +22931,16 @@ edit_role (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-edit_role_omp (credentials_t * credentials, params_t *params,
+edit_role_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                cmd_response_data_t* response_data)
 {
-  return edit_role (credentials, params, NULL, response_data);
+  return edit_role (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Get one role, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
@@ -23759,15 +22949,16 @@ edit_role_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 static char *
-get_role (credentials_t * credentials, params_t *params,
+get_role (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
           const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return get_one ("role", credentials, params, extra_xml, NULL, response_data);
+  return get_one (connection, "role", credentials, params, extra_xml, NULL, response_data);
 }
 
 /**
  * @brief Get one role, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -23775,15 +22966,16 @@ get_role (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-get_role_omp (credentials_t * credentials, params_t *params,
+get_role_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
               cmd_response_data_t* response_data)
 {
-  return get_role (credentials, params, NULL, response_data);
+  return get_role (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Get all roles, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
@@ -23792,15 +22984,16 @@ get_role_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 static char *
-get_roles (credentials_t * credentials, params_t *params,
+get_roles (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
            const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return get_many ("role", credentials, params, extra_xml, NULL, response_data);
+  return get_many (connection, "role", credentials, params, extra_xml, NULL, response_data);
 }
 
 /**
  * @brief Get all roles, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -23808,15 +23001,16 @@ get_roles (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-get_roles_omp (credentials_t * credentials, params_t *params,
+get_roles_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                cmd_response_data_t* response_data)
 {
-  return get_roles (credentials, params, NULL, response_data);
+  return get_roles (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Export a role.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
  * @param[out]  content_type         Content type return.
@@ -23827,17 +23021,18 @@ get_roles_omp (credentials_t * credentials, params_t *params,
  * @return Role XML on success.  HTML result of XSL transformation on error.
  */
 char *
-export_role_omp (credentials_t * credentials, params_t *params,
+export_role_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                  enum content_type * content_type, char **content_disposition,
                  gsize *content_length, cmd_response_data_t* response_data)
 {
-  return export_resource ("role", credentials, params, content_type,
+  return export_resource (connection, "role", credentials, params, content_type,
                           content_disposition, content_length, response_data);
 }
 
 /**
  * @brief Export a list of roles.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
  * @param[out]  content_type         Content type return.
@@ -23849,17 +23044,18 @@ export_role_omp (credentials_t * credentials, params_t *params,
  *         on error.
  */
 char *
-export_roles_omp (credentials_t * credentials, params_t *params,
+export_roles_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                   enum content_type * content_type, char **content_disposition,
                   gsize *content_length, cmd_response_data_t* response_data)
 {
-  return export_many ("role", credentials, params, content_type,
+  return export_many (connection, "role", credentials, params, content_type,
                       content_disposition, content_length, response_data);
 }
 
 /**
  * @brief Modify a role, return the next page.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -23867,7 +23063,7 @@ export_roles_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-save_role_omp (credentials_t * credentials, params_t *params,
+save_role_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                cmd_response_data_t* response_data)
 {
   int ret;
@@ -23890,7 +23086,7 @@ save_role_omp (credentials_t * credentials, params_t *params,
 
   response = NULL;
   entity = NULL;
-  ret = ompf (credentials,
+  ret = ompf (connection, credentials,
               &response,
               &entity,
               response_data,
@@ -23935,7 +23131,7 @@ save_role_omp (credentials_t * credentials, params_t *params,
                              "/omp?cmd=get_roles", response_data);
     }
 
-  html = response_from_entity (credentials, params, entity,
+  html = response_from_entity (connection, credentials, params, entity,
                                (no_redirect && strcmp (no_redirect, "0")),
                                NULL, "get_roles",
                                NULL, "edit_role",
@@ -23951,6 +23147,7 @@ save_role_omp (credentials_t * credentials, params_t *params,
 /**
  * @brief Get descriptions of the feeds connected to the manager.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -23958,49 +23155,22 @@ save_role_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-get_feeds_omp (credentials_t * credentials, params_t *params,
-               cmd_response_data_t* response_data)
+get_feeds_omp (openvas_connection_t *connection, credentials_t * credentials,
+               params_t *params, cmd_response_data_t* response_data)
 {
   entity_t entity;
   char *text = NULL;
-  openvas_connection_t connection;
-  gchar *html, *response;
+  gchar *response;
   time_t now;
   struct tm *tm;
   gchar current_timestamp[30];
 
-  switch (manager_connect (credentials, &connection, &html,
-                           response_data))
-    {
-      case -1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-        if (html)
-          return html;
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting the feed list. "
-                             "The current list of feeds is not available. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_tasks", response_data);
-      case -2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-        return xsl_transform_omp (credentials,
-                                  g_strdup
-                                   ("<gsad_msg status_text=\"Access refused.\""
-                                    " operation=\"List Feeds\">"
-                                    "Only users given the Administrator role"
-                                    " may access Feed Administration."
-                                    "</gsad_msg>"),
-                                  response_data);
-    }
-
-  if (openvas_connection_sendf (&connection,
+  if (openvas_connection_sendf (connection,
                                 "<commands>"
                                 "<get_feeds/>"
                                 "</commands>")
       == -1)
     {
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -24010,9 +23180,8 @@ get_feeds_omp (credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_tasks", response_data);
     }
 
-  if (read_entity_and_text_c (&connection, &entity, &text))
+  if (read_entity_and_text_c (connection, &entity, &text))
     {
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -24043,13 +23212,14 @@ get_feeds_omp (credentials_t * credentials, params_t *params,
 
   g_free (text);
 
-  openvas_connection_close (&connection);
-  return xsl_transform_omp (credentials, response, response_data);
+  return xsl_transform_omp (connection, credentials, params,  response,
+                            response_data);
 }
 
 /**
  * @brief Synchronize with a feed and XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials    Username and password for authentication
  * @param[in]  params         Request parameters.
  * @param[in]  sync_cmd       Name of the OMP command used to sync the feed.
@@ -24060,7 +23230,7 @@ get_feeds_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 static char*
-sync_feed (credentials_t * credentials, params_t *params,
+sync_feed (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
            const char *sync_cmd, const char *action,
            const char *feed_name,
            cmd_response_data_t* response_data)
@@ -24068,47 +23238,15 @@ sync_feed (credentials_t * credentials, params_t *params,
   const char *no_redirect;
   entity_t entity;
   char *text = NULL;
-  openvas_connection_t connection;
   gchar *html, *msg;
 
   no_redirect = params_value (params, "no_redirect");
 
-  switch (manager_connect (credentials, &connection, &html,
-                           response_data))
-    {
-      case -1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-        if (html)
-          return html;
-        msg = g_strdup_printf
-                ("An internal error occurred while synchronizing with %s. "
-                  "Feed synchronization is currently not available. "
-                  "Diagnostics: Failure to connect to manager daemon.",
-                  feed_name);
-        html = gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             msg, "/omp?cmd=get_tasks", response_data);
-        g_free (msg);
-        return html;
-      case -2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-        return xsl_transform_omp (credentials,
-                                  g_strdup_printf
-                                   ("<gsad_msg status_text=\"Access refused.\""
-                                    " operation=\"%s\">"
-                                    "Only users given the Administrator role"
-                                    " may access Feed Administration."
-                                    "</gsad_msg>",
-                                    action),
-                                  response_data);
-    }
-
-  if (openvas_connection_sendf (&connection,
+  if (openvas_connection_sendf (connection,
                                 "<%s/>",
                                 sync_cmd)
       == -1)
     {
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
 
       msg = g_strdup_printf
@@ -24123,9 +23261,8 @@ sync_feed (credentials_t * credentials, params_t *params,
       return html;
     }
 
-  if (read_entity_and_text_c (&connection, &entity, &text))
+  if (read_entity_and_text_c (connection, &entity, &text))
     {
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
 
       msg = g_strdup_printf
@@ -24140,8 +23277,7 @@ sync_feed (credentials_t * credentials, params_t *params,
       return html;
     }
 
-  openvas_connection_close (&connection);
-  html = response_from_entity (credentials, params, entity,
+  html = response_from_entity (connection, credentials, params, entity,
                                (no_redirect && strcmp (no_redirect, "0")),
                                NULL, "get_feeds",
                                NULL, "get_feeds",
@@ -24153,6 +23289,7 @@ sync_feed (credentials_t * credentials, params_t *params,
 /**
  * @brief Synchronize with an NVT feed and XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -24160,10 +23297,10 @@ sync_feed (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-sync_feed_omp (credentials_t * credentials, params_t *params,
-               cmd_response_data_t* response_data)
+sync_feed_omp (openvas_connection_t *connection, credentials_t * credentials,
+               params_t *params, cmd_response_data_t* response_data)
 {
-  return sync_feed (credentials, params,
+  return sync_feed (connection, credentials, params,
                     "sync_feed", "Synchronize Feed", "the NVT feed",
                     response_data);
 }
@@ -24171,6 +23308,7 @@ sync_feed_omp (credentials_t * credentials, params_t *params,
 /**
  * @brief Synchronize with a SCAP feed and XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -24178,10 +23316,10 @@ sync_feed_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-sync_scap_omp (credentials_t * credentials, params_t *params,
-               cmd_response_data_t* response_data)
+sync_scap_omp (openvas_connection_t *connection, credentials_t * credentials,
+               params_t *params, cmd_response_data_t* response_data)
 {
-  return sync_feed (credentials, params,
+  return sync_feed (connection, credentials, params,
                     "sync_scap", "Synchronize Feed", "the SCAP feed",
                     response_data);
 }
@@ -24189,6 +23327,7 @@ sync_scap_omp (credentials_t * credentials, params_t *params,
 /**
  * @brief Synchronize with a CERT feed and XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -24196,10 +23335,10 @@ sync_scap_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-sync_cert_omp (credentials_t * credentials, params_t *params,
-               cmd_response_data_t* response_data)
+sync_cert_omp (openvas_connection_t *connection, credentials_t * credentials,
+               params_t *params, cmd_response_data_t* response_data)
 {
-  return sync_feed (credentials, params,
+  return sync_feed (connection, credentials, params,
                     "sync_cert", "Synchronize CERT Feed", "the CERT feed",
                     response_data);
 }
@@ -24210,6 +23349,7 @@ sync_cert_omp (credentials_t * credentials, params_t *params,
 /**
  * @brief Get one filter, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
@@ -24218,16 +23358,17 @@ sync_cert_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-get_filter (credentials_t * credentials, params_t *params,
+get_filter (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
             const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return get_one ("filter", credentials, params, extra_xml, "alerts=\"1\"",
+  return get_one (connection, "filter", credentials, params, extra_xml, "alerts=\"1\"",
                   response_data);
 }
 
 /**
  * @brief Get one filter, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -24235,15 +23376,16 @@ get_filter (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-get_filter_omp (credentials_t * credentials, params_t *params,
+get_filter_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                 cmd_response_data_t* response_data)
 {
-  return get_filter (credentials, params, NULL, response_data);
+  return get_filter (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Get all filters, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
@@ -24252,16 +23394,17 @@ get_filter_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-get_filters (credentials_t * credentials, params_t *params,
+get_filters (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
              const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return get_many ("filter", credentials, params, extra_xml, NULL,
+  return get_many (connection, "filter", credentials, params, extra_xml, NULL,
                    response_data);
 }
 
 /**
  * @brief Get all filters, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -24269,15 +23412,16 @@ get_filters (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-get_filters_omp (credentials_t * credentials, params_t *params,
+get_filters_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                  cmd_response_data_t* response_data)
 {
-  return get_filters (credentials, params, NULL, response_data);
+  return get_filters (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Returns page to create a new filter.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
@@ -24286,7 +23430,7 @@ get_filters_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 static char *
-new_filter (credentials_t *credentials, params_t *params, const char *extra_xml,
+new_filter (openvas_connection_t *connection, credentials_t *credentials, params_t *params, const char *extra_xml,
             cmd_response_data_t* response_data)
 {
   GString *xml;
@@ -24294,13 +23438,14 @@ new_filter (credentials_t *credentials, params_t *params, const char *extra_xml,
   if (extra_xml)
     g_string_append (xml, extra_xml);
   g_string_append (xml, "</new_filter>");
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+  return xsl_transform_omp (connection, credentials, params, g_string_free (xml, FALSE),
                             response_data);
 }
 
 /**
  * @brief Create a filter, get all filters, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -24308,7 +23453,7 @@ new_filter (credentials_t *credentials, params_t *params, const char *extra_xml,
  * @return Result of XSL transformation.
  */
 char *
-create_filter_omp (credentials_t *credentials, params_t *params,
+create_filter_omp (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
   gchar *html, *response;
@@ -24326,7 +23471,7 @@ create_filter_omp (credentials_t *credentials, params_t *params,
   CHECK_PARAM_INVALID (term, "Create Filter", "new_filter");
   CHECK_PARAM_INVALID (type, "Create Filter", "new_filter");
 
-  switch (ompf (credentials,
+  switch (ompf (connection, credentials,
                 &response,
                 &entity,
                 response_data,
@@ -24386,7 +23531,7 @@ create_filter_omp (credentials_t *credentials, params_t *params,
 
   if (entity_attribute (entity, "id"))
     params_add (params, "filter_id", entity_attribute (entity, "id"));
-  html = response_from_entity (credentials, params, entity,
+  html = response_from_entity (connection, credentials, params, entity,
                                (no_redirect && strcmp (no_redirect, "0")),
                                NULL, "get_filters",
                                NULL, "new_filter",
@@ -24399,6 +23544,7 @@ create_filter_omp (credentials_t *credentials, params_t *params,
 /**
  * @brief Delete a filter, get all filters, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -24406,16 +23552,17 @@ create_filter_omp (credentials_t *credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-delete_trash_filter_omp (credentials_t * credentials, params_t *params,
+delete_trash_filter_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                          cmd_response_data_t* response_data)
 {
-  return delete_resource ("filter", credentials, params, 1, "get_trash",
+  return delete_resource (connection, "filter", credentials, params, 1, "get_trash",
                           response_data);
 }
 
 /**
  * @brief Delete a filter, get all filters, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -24423,7 +23570,7 @@ delete_trash_filter_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-delete_filter_omp (credentials_t * credentials, params_t *params,
+delete_filter_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
   param_t *filt_id, *id;
@@ -24461,13 +23608,14 @@ delete_filter_omp (credentials_t * credentials, params_t *params,
       free_find_by_value(&find);
     }
 
-  return delete_resource ("filter", credentials, params, 0, "get_filters",
+  return delete_resource (connection, "filter", credentials, params, 0, "get_filters",
                           response_data);
 }
 
 /**
  * @brief Setup edit_filter XML, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
@@ -24476,16 +23624,17 @@ delete_filter_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-edit_filter (credentials_t * credentials, params_t *params,
+edit_filter (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
              const char *extra_xml, cmd_response_data_t* response_data)
 {
-  return edit_resource ("filter", credentials, params, NULL, extra_xml,
+  return edit_resource (connection, "filter", credentials, params, NULL, extra_xml,
                         response_data);
 }
 
 /**
  * @brief Setup edit_filter XML, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -24493,15 +23642,16 @@ edit_filter (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-edit_filter_omp (credentials_t * credentials, params_t *params,
+edit_filter_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                  cmd_response_data_t* response_data)
 {
-  return edit_filter (credentials, params, NULL, response_data);
+  return edit_filter (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Export a filter.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
  * @param[out]  content_type         Content type return.
@@ -24512,17 +23662,18 @@ edit_filter_omp (credentials_t * credentials, params_t *params,
  * @return Filter XML on success.  HTML result of XSL transformation on error.
  */
 char *
-export_filter_omp (credentials_t * credentials, params_t *params,
+export_filter_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                    enum content_type * content_type, char **content_disposition,
                    gsize *content_length, cmd_response_data_t* response_data)
 {
-  return export_resource ("filter", credentials, params, content_type,
+  return export_resource (connection, "filter", credentials, params, content_type,
                           content_disposition, content_length, response_data);
 }
 
 /**
  * @brief Export a list of filters.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
  * @param[out]  content_type         Content type return.
@@ -24534,17 +23685,18 @@ export_filter_omp (credentials_t * credentials, params_t *params,
  *         on error.
  */
 char *
-export_filters_omp (credentials_t * credentials, params_t *params,
+export_filters_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                     enum content_type * content_type, char **content_disposition,
                     gsize *content_length, cmd_response_data_t* response_data)
 {
-  return export_many ("filter", credentials, params, content_type,
+  return export_many (connection, "filter", credentials, params, content_type,
                       content_disposition, content_length, response_data);
 }
 
 /**
  * @brief Returns page to create a new filter.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -24552,15 +23704,16 @@ export_filters_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-new_filter_omp (credentials_t *credentials, params_t *params,
+new_filter_omp (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
                 cmd_response_data_t* response_data)
 {
-  return new_filter (credentials, params, NULL, response_data);
+  return new_filter (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Modify a filter, get all filters, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -24568,10 +23721,9 @@ new_filter_omp (credentials_t *credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-save_filter_omp (credentials_t * credentials, params_t *params,
-                 cmd_response_data_t* response_data)
+save_filter_omp (openvas_connection_t *connection, credentials_t * credentials,
+                 params_t *params, cmd_response_data_t* response_data)
 {
-  openvas_connection_t connection;
   entity_t entity;
   gchar *html, *response;
   const char *no_redirect, *filter_id, *name, *comment, *term, *type;
@@ -24589,31 +23741,12 @@ save_filter_omp (credentials_t * credentials, params_t *params,
   CHECK_PARAM_INVALID (term, "Save Filter", "edit_filter");
   CHECK_PARAM_INVALID (type, "Save Filter", "edit_filter");
 
-  switch (manager_connect (credentials, &connection, &html,
-                           response_data))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while saving a filter. "
-                             "The filter was not saved. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_filters", response_data);
-    }
-
   {
     int ret;
 
     /* Modify the filter. */
 
-    ret = openvas_connection_sendf_xml (&connection,
+    ret = openvas_connection_sendf_xml (connection,
                                         "<modify_filter filter_id=\"%s\">"
                                         "<name>%s</name>"
                                         "<comment>%s</comment>"
@@ -24628,7 +23761,6 @@ save_filter_omp (credentials_t * credentials, params_t *params,
 
     if (ret == -1)
       {
-        openvas_connection_close (&connection);
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
@@ -24639,9 +23771,8 @@ save_filter_omp (credentials_t * credentials, params_t *params,
       }
 
     entity = NULL;
-    if (read_entity_and_text_c (&connection, &entity, &response))
+    if (read_entity_and_text_c (connection, &entity, &response))
       {
-        openvas_connection_close (&connection);
         response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
         return gsad_message (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
@@ -24653,11 +23784,10 @@ save_filter_omp (credentials_t * credentials, params_t *params,
 
   }
 
-  openvas_connection_close (&connection);
 
   /* Pass response to handler of following page. */
 
-  html = response_from_entity (credentials, params, entity,
+  html = response_from_entity (connection, credentials, params, entity,
                                (no_redirect && strcmp (no_redirect, "0")),
                                NULL, "get_filters",
                                NULL, "edit_filter",
@@ -24674,6 +23804,7 @@ save_filter_omp (credentials_t * credentials, params_t *params,
 /**
  * @brief Setup edit_schedule XML, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
@@ -24682,16 +23813,18 @@ save_filter_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-edit_schedule (credentials_t * credentials, params_t *params,
-               const char *extra_xml, cmd_response_data_t* response_data)
+edit_schedule (openvas_connection_t *connection, credentials_t * credentials,
+               params_t *params, const char *extra_xml,
+               cmd_response_data_t* response_data)
 {
-  return edit_resource ("schedule", credentials, params,
+  return edit_resource (connection, "schedule", credentials, params,
                         "tasks=\"1\"", extra_xml, response_data);
 }
 
 /**
  * @brief Setup edit_schedule XML, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -24699,15 +23832,17 @@ edit_schedule (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-edit_schedule_omp (credentials_t * credentials, params_t *params,
+edit_schedule_omp (openvas_connection_t *connection, credentials_t *
+                   credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
-  return edit_schedule (credentials, params, NULL, response_data);
+  return edit_schedule (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Export a schedule.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
  * @param[out]  content_type         Content type return.
@@ -24718,18 +23853,19 @@ edit_schedule_omp (credentials_t * credentials, params_t *params,
  * @return Schedule XML on success.  HTML result of XSL transformation on error.
  */
 char *
-export_schedule_omp (credentials_t * credentials, params_t *params,
+export_schedule_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                      enum content_type * content_type,
                      char **content_disposition, gsize *content_length,
                      cmd_response_data_t* response_data)
 {
-  return export_resource ("schedule", credentials, params, content_type,
+  return export_resource (connection, "schedule", credentials, params, content_type,
                           content_disposition, content_length, response_data);
 }
 
 /**
  * @brief Export a list of schedules.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
  * @param[out]  content_type         Content type return.
@@ -24740,18 +23876,19 @@ export_schedule_omp (credentials_t * credentials, params_t *params,
  * @return Schedules XML on success. HTML result of XSL transformation on error.
  */
 char *
-export_schedules_omp (credentials_t * credentials, params_t *params,
+export_schedules_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                       enum content_type * content_type,
                       char **content_disposition, gsize *content_length,
                       cmd_response_data_t* response_data)
 {
-  return export_many ("schedule", credentials, params, content_type,
+  return export_many (connection, "schedule", credentials, params, content_type,
                       content_disposition, content_length, response_data);
 }
 
 /**
  * @brief Save schedule, get next page, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials     Username and password for authentication.
  * @param[in]  params          Request parameters.
  * @param[out] response_data   Extra data return for the HTTP response.
@@ -24759,7 +23896,7 @@ export_schedules_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-save_schedule_omp (credentials_t * credentials, params_t *params,
+save_schedule_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
   gchar *response;
@@ -24800,7 +23937,7 @@ save_schedule_omp (credentials_t * credentials, params_t *params,
 
   response = NULL;
   entity = NULL;
-  switch (ompf (credentials,
+  switch (ompf (connection, credentials,
                 &response,
                 &entity,
                 response_data,
@@ -24871,7 +24008,7 @@ save_schedule_omp (credentials_t * credentials, params_t *params,
                              "/omp?cmd=get_schedules", response_data);
     }
 
-  ret = response_from_entity (credentials, params, entity,
+  ret = response_from_entity (connection, credentials, params, entity,
                               (no_redirect && strcmp (no_redirect, "0")),
                               NULL, "get_schedules",
                               NULL, "edit_schedule",
@@ -24887,6 +24024,7 @@ save_schedule_omp (credentials_t * credentials, params_t *params,
 /**
  * @brief Returns page to create a new user.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
@@ -24895,7 +24033,7 @@ save_schedule_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 static char *
-new_user (credentials_t *credentials, params_t *params, const char *extra_xml,
+new_user (openvas_connection_t *connection, credentials_t *credentials, params_t *params, const char *extra_xml,
           cmd_response_data_t* response_data)
 {
   GString *xml;
@@ -24911,7 +24049,7 @@ new_user (credentials_t *credentials, params_t *params, const char *extra_xml,
 
       response = NULL;
       entity = NULL;
-      switch (omp (credentials, &response, &entity, response_data,
+      switch (omp (connection, credentials, &response, &entity, response_data,
                    "<describe_auth/>"))
         {
           case 0:
@@ -24956,7 +24094,7 @@ new_user (credentials_t *credentials, params_t *params, const char *extra_xml,
 
       response = NULL;
       entity = NULL;
-      switch (omp (credentials, &response, &entity, response_data,
+      switch (omp (connection, credentials, &response, &entity, response_data,
                    "<get_groups/>"))
         {
           case 0:
@@ -25001,7 +24139,7 @@ new_user (credentials_t *credentials, params_t *params, const char *extra_xml,
 
       response = NULL;
       entity = NULL;
-      switch (omp (credentials, &response, &entity, response_data,
+      switch (omp (connection, credentials, &response, &entity, response_data,
                    "<get_roles/>"))
         {
           case 0:
@@ -25040,13 +24178,14 @@ new_user (credentials_t *credentials, params_t *params, const char *extra_xml,
     }
 
   g_string_append (xml, "</new_user>");
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+  return xsl_transform_omp (connection, credentials, params, g_string_free (xml, FALSE),
                             response_data);
 }
 
 /**
  * @brief Returns page to create a new user.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -25054,15 +24193,16 @@ new_user (credentials_t *credentials, params_t *params, const char *extra_xml,
  * @return Result of XSL transformation.
  */
 char *
-new_user_omp (credentials_t *credentials, params_t *params,
-              cmd_response_data_t* response_data)
+new_user_omp (openvas_connection_t *connection, credentials_t *credentials,
+              params_t *params, cmd_response_data_t* response_data)
 {
-  return new_user (credentials, params, NULL, response_data);
+  return new_user (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Delete a user, get all users, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -25070,16 +24210,17 @@ new_user_omp (credentials_t *credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-delete_user_omp (credentials_t * credentials, params_t *params,
-                 cmd_response_data_t* response_data)
+delete_user_omp (openvas_connection_t *connection, credentials_t * credentials,
+                 params_t *params, cmd_response_data_t* response_data)
 {
-  return delete_resource ("user", credentials, params, 0, "get_users",
-                          response_data);
+  return delete_resource (connection, "user", credentials, params, 0,
+                          "get_users", response_data);
 }
 
 /**
  * @brief Returns page to create a new user.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Credentials of user issuing the action.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
@@ -25088,7 +24229,8 @@ delete_user_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 static char *
-delete_user_confirm (credentials_t *credentials, params_t *params,
+delete_user_confirm (openvas_connection_t *connection, credentials_t
+                     *credentials, params_t *params,
                      const char *extra_xml, cmd_response_data_t* response_data)
 {
   GString *xml;
@@ -25097,7 +24239,7 @@ delete_user_confirm (credentials_t *credentials, params_t *params,
 
   if (command_enabled (credentials, "GET_USERS"))
     {
-      switch (omp (credentials, &response, &entity, response_data,
+      switch (omp (connection, credentials, &response, &entity, response_data,
                    "<get_users filter=\"first=1 rows=-1\"/>"))
         {
           case 0:
@@ -25140,13 +24282,15 @@ delete_user_confirm (credentials_t *credentials, params_t *params,
     g_string_append (xml, extra_xml);
 
   g_string_append (xml, "</delete_user>");
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+  return xsl_transform_omp (connection, credentials, params,
+                            g_string_free (xml, FALSE),
                             response_data);
 }
 
 /**
  * @brief Show confirmation deleting a user, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -25154,24 +24298,28 @@ delete_user_confirm (credentials_t *credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-delete_user_confirm_omp (credentials_t * credentials, params_t *params,
+delete_user_confirm_omp (openvas_connection_t *connection, credentials_t *
+                         credentials, params_t *params,
                          cmd_response_data_t* response_data)
 {
-  return delete_user_confirm (credentials, params, NULL, response_data);
+  return delete_user_confirm (connection, credentials, params, NULL,
+                              response_data);
 }
 
 /**
  * @brief Get one user, XSL transform the result.
  *
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[in]  connection     Connection to manager.
+ * @param[in]  credentials    Username and password for authentication.
+ * @param[in]  params         Request parameters.
+ * @param[in]  extra_xml      Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_user (credentials_t * credentials, params_t *params, const char *extra_xml,
+get_user (openvas_connection_t *connection, credentials_t * credentials,
+          params_t *params, const char *extra_xml,
           cmd_response_data_t* response_data)
 {
   gchar *html;
@@ -25187,7 +24335,7 @@ get_user (credentials_t * credentials, params_t *params, const char *extra_xml,
 
       response = NULL;
       entity = NULL;
-      switch (omp (credentials, &response, &entity, response_data,
+      switch (omp (connection, credentials, &response, &entity, response_data,
                    "<describe_auth/>"))
         {
           case 0:
@@ -25221,7 +24369,8 @@ get_user (credentials_t * credentials, params_t *params, const char *extra_xml,
       free_entity (entity);
       g_free (response);
     }
-  html = get_one ("user", credentials, params, extra->str, NULL, response_data);
+  html = get_one (connection, "user", credentials, params, extra->str, NULL,
+                  response_data);
   g_string_free (extra, TRUE);
   return html;
 }
@@ -25229,22 +24378,24 @@ get_user (credentials_t * credentials, params_t *params, const char *extra_xml,
 /**
  * @brief Get one user, XSL transform the result.
  *
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
+ * @param[in]  connection     Connection to manager.
+ * @param[in]  credentials    Username and password for authentication.
+ * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_user_omp (credentials_t * credentials, params_t *params,
-              cmd_response_data_t* response_data)
+get_user_omp (openvas_connection_t *connection, credentials_t * credentials,
+              params_t *params, cmd_response_data_t* response_data)
 {
-  return get_user (credentials, params, NULL, response_data);
+  return get_user (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Get all users, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
@@ -25253,7 +24404,7 @@ get_user_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 static char *
-get_users (credentials_t * credentials, params_t *params,
+get_users (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
            const char *extra_xml, cmd_response_data_t* response_data)
 {
   gchar *html;
@@ -25267,7 +24418,7 @@ get_users (credentials_t * credentials, params_t *params,
 
       response = NULL;
       entity = NULL;
-      switch (omp (credentials, &response, &entity, response_data,
+      switch (omp (connection, credentials, &response, &entity, response_data,
                    "<describe_auth/>"))
         {
           case 0:
@@ -25303,7 +24454,7 @@ get_users (credentials_t * credentials, params_t *params,
     }
   if (extra_xml)
     g_string_append (extra, extra_xml);
-  html = get_many ("user", credentials, params, extra->str, NULL,
+  html = get_many (connection, "user", credentials, params, extra->str, NULL,
                    response_data);
   g_string_free (extra, TRUE);
   return html;
@@ -25312,6 +24463,7 @@ get_users (credentials_t * credentials, params_t *params,
 /**
  * @brief Get all users, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -25319,15 +24471,16 @@ get_users (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-get_users_omp (credentials_t * credentials, params_t *params,
+get_users_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
                cmd_response_data_t* response_data)
 {
-  return get_users (credentials, params, NULL, response_data);
+  return get_users (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Create a user, get all users, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -25335,8 +24488,8 @@ get_users_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-create_user_omp (credentials_t * credentials, params_t *params,
-                 cmd_response_data_t* response_data)
+create_user_omp (openvas_connection_t *connection, credentials_t * credentials,
+                 params_t *params, cmd_response_data_t* response_data)
 {
   const char *no_redirect;
   const char *name, *password, *hosts, *hosts_allow, *ifaces, *ifaces_allow;
@@ -25440,7 +24593,7 @@ create_user_omp (credentials_t * credentials, params_t *params,
 
   response = NULL;
   entity = NULL;
-  ret = omp (credentials, &response, &entity, response_data, buf);
+  ret = omp (connection, credentials, &response, &entity, response_data, buf);
   g_free (buf);
   switch (ret)
     {
@@ -25475,7 +24628,7 @@ create_user_omp (credentials_t * credentials, params_t *params,
 
   if (entity_attribute (entity, "id"))
     params_add (params, "user_id", entity_attribute (entity, "id"));
-  html = response_from_entity (credentials, params, entity,
+  html = response_from_entity (connection, credentials, params, entity,
                                (no_redirect && strcmp (no_redirect, "0")),
                                NULL, "get_users",
                                NULL, "new_user",
@@ -25488,6 +24641,7 @@ create_user_omp (credentials_t * credentials, params_t *params,
 /**
  * @brief Setup edit_user XML, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
@@ -25496,8 +24650,9 @@ create_user_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-edit_user (credentials_t * credentials, params_t *params,
-           const char *extra_xml, cmd_response_data_t* response_data)
+edit_user (openvas_connection_t *connection, credentials_t * credentials,
+           params_t *params, const char *extra_xml,
+           cmd_response_data_t* response_data)
 {
   gchar *html;
   GString *extra;
@@ -25510,7 +24665,7 @@ edit_user (credentials_t * credentials, params_t *params,
 
       response = NULL;
       entity = NULL;
-      switch (omp (credentials, &response, &entity, response_data,
+      switch (omp (connection, credentials, &response, &entity, response_data,
                    "<describe_auth/>"))
         {
           case 0:
@@ -25552,7 +24707,7 @@ edit_user (credentials_t * credentials, params_t *params,
 
       response = NULL;
       entity = NULL;
-      switch (omp (credentials, &response, &entity, response_data,
+      switch (omp (connection, credentials, &response, &entity, response_data,
                    "<get_groups/>"))
         {
           case 0:
@@ -25594,7 +24749,7 @@ edit_user (credentials_t * credentials, params_t *params,
 
       response = NULL;
       entity = NULL;
-      switch (omp (credentials, &response, &entity, response_data,
+      switch (omp (connection, credentials, &response, &entity, response_data,
                    "<get_roles/>"))
         {
           case 0:
@@ -25634,8 +24789,9 @@ edit_user (credentials_t * credentials, params_t *params,
 
   if (extra_xml)
     g_string_append (extra, extra_xml);
-  html = edit_resource ("user", credentials, params, NULL, extra->str,
-                        response_data);
+
+  html = edit_resource (connection, "user", credentials, params, NULL,
+                        extra->str, response_data);
   g_string_free (extra, TRUE);
   return html;
 }
@@ -25643,6 +24799,7 @@ edit_user (credentials_t * credentials, params_t *params,
 /**
  * @brief Setup edit_user XML, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -25650,15 +24807,16 @@ edit_user (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-edit_user_omp (credentials_t * credentials, params_t *params,
-               cmd_response_data_t* response_data)
+edit_user_omp (openvas_connection_t *connection, credentials_t * credentials,
+               params_t *params, cmd_response_data_t* response_data)
 {
-  return edit_user (credentials, params, NULL, response_data);
+  return edit_user (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Get multiple vulns, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -25666,15 +24824,16 @@ edit_user_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-get_vulns_omp (credentials_t * credentials, params_t *params,
-               cmd_response_data_t* response_data)
+get_vulns_omp (openvas_connection_t *connection, credentials_t * credentials,
+               params_t *params, cmd_response_data_t* response_data)
 {
-  return get_vulns (credentials, params, NULL, response_data);
+  return get_vulns (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Get multiple vulns, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
@@ -25683,15 +24842,17 @@ get_vulns_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 static char *
-get_vulns (credentials_t * credentials, params_t *params, const char *extra_xml,
-          cmd_response_data_t* response_data)
+get_vulns (openvas_connection_t *connection, credentials_t * credentials,
+           params_t *params, const char *extra_xml,
+           cmd_response_data_t* response_data)
 {
-  return get_many ("vuln", credentials, params, extra_xml, NULL,
+  return get_many (connection, "vuln", credentials, params, extra_xml, NULL,
                    response_data);
 }
 
 char *
-auth_settings_omp (credentials_t * credentials, params_t *params,
+auth_settings_omp (openvas_connection_t *connection, credentials_t *
+                   credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
   GString * xml;
@@ -25712,7 +24873,7 @@ auth_settings_omp (credentials_t * credentials, params_t *params,
       gchar * response = NULL;
       entity_t entity = NULL;
 
-      switch (omp (credentials, &response, &entity, response_data,
+      switch (omp (connection, credentials, &response, &entity, response_data,
                    "<describe_auth/>"))
         {
           case 0:
@@ -25749,56 +24910,17 @@ auth_settings_omp (credentials_t * credentials, params_t *params,
 
   g_string_append (xml, "</auth_settings>");
 
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+  return xsl_transform_omp (connection, credentials, params,
+                            g_string_free (xml, FALSE),
                             response_data);
-}
-
-/**
- * @brief Setup edit_user XML, XSL transform the result.
- *
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  message      Login screen message.
- * @param[out] response_data  Extra data return for the HTTP response.
- *
- * @return Result of XSL transformation.
- */
-static char *
-logout (credentials_t *credentials, const gchar *message,
-        cmd_response_data_t *response_data)
-{
-  time_t now;
-  gchar *xml;
-  char *res;
-  char ctime_now[200];
-  int ret;
-  const char* xml_flag;
-  xml_flag = params_value (credentials->params, "xml");
-
-  if (credentials->token == NULL)
-    return NULL;
-
-  ret = token_user_remove (credentials->token);
-  if (ret)
-    return NULL;
-
-  now = time (NULL);
-  ctime_r_strip_newline (&now, ctime_now);
-
-  xml = login_xml (message, NULL, ctime_now, NULL, NULL, NULL);
-
-  if (xml_flag && strcmp (xml_flag, "0"))
-    return xml;
-
-  res = xsl_transform (xml, response_data);
-  g_free (xml);
-  return res;
 }
 
 /**
  * @brief Modify a user, get all users, XSL transform the result.
  *
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
+ * @param[in]  connection       Connection to manager.
+ * @param[in]  credentials      Username and password for authentication.
+ * @param[in]  params           Request parameters.
  * @param[out] password_return  Password.  Caller must free.
  * @param[out] modified_user    Name of user modified. Caller must free.
  * @param[out] logout_user      Whether the user should be logged out.
@@ -25807,9 +24929,9 @@ logout (credentials_t *credentials, const gchar *message,
  * @return Result of XSL transformation.
  */
 char *
-save_user_omp (credentials_t * credentials, params_t *params,
-               char **password_return, char **modified_user,
-               int *logout_user, cmd_response_data_t* response_data)
+save_user_omp (openvas_connection_t *connection, credentials_t *credentials,
+               params_t *params, char **password_return, char **modified_user,
+               int *logout_user, cmd_response_data_t *response_data)
 {
   int ret;
   gchar *html, *response, *buf;
@@ -25881,9 +25003,11 @@ save_user_omp (credentials_t * credentials, params_t *params,
   g_free (buf);
 
   if (modify_password && !strcmp (modify_password, "2"))
-    g_string_append (command, "<sources><source>ldap_connect</source></sources>");
+    g_string_append (command,
+                     "<sources><source>ldap_connect</source></sources>");
   else if (modify_password && !strcmp (modify_password, "3"))
-    g_string_append (command, "<sources><source>radius_connect</source></sources>");
+    g_string_append (command,
+                     "<sources><source>radius_connect</source></sources>");
   else
     g_string_append (command, "<sources><source>file</source></sources>");
 
@@ -25943,7 +25067,7 @@ save_user_omp (credentials_t * credentials, params_t *params,
 
   response = NULL;
   entity = NULL;
-  ret = omp (credentials,
+  ret = omp (connection, credentials,
              &response,
              &entity,
              response_data,
@@ -26008,13 +25132,12 @@ save_user_omp (credentials_t * credentials, params_t *params,
     {
       free_entity (entity);
       g_free (response);
-      html = logout (credentials,
-                     "Authentication method changed."
-                     "  Please login with LDAP password.",
-                     response_data);
+      html = logout_xml (credentials, params_value_bool (params, "xml"),
+                         "Authentication method changed. Please login with "
+                         "LDAP password.", response_data);
     }
   else
-    html = response_from_entity (credentials, params, entity,
+    html = response_from_entity (connection, credentials, params, entity,
                                  (no_redirect && strcmp (no_redirect, "0")),
                                  NULL, "get_users",
                                  NULL, "edit_user",
@@ -26027,6 +25150,7 @@ save_user_omp (credentials_t * credentials, params_t *params,
 /**
  * @brief Export a user.
  *
+ * @param[in]   connection           Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
  * @param[out]  content_type         Content type return.
@@ -26037,17 +25161,19 @@ save_user_omp (credentials_t * credentials, params_t *params,
  * @return Note XML on success.  HTML result of XSL transformation on error.
  */
 char *
-export_user_omp (credentials_t * credentials, params_t *params,
-                   enum content_type * content_type, char **content_disposition,
-                   gsize *content_length, cmd_response_data_t* response_data)
+export_user_omp (openvas_connection_t *connection, credentials_t * credentials,
+                 params_t *params, enum content_type *content_type,
+                 char **content_disposition, gsize *content_length,
+                 cmd_response_data_t *response_data)
 {
-  return export_resource ("user", credentials, params, content_type,
+  return export_resource (connection, "user", credentials, params, content_type,
                           content_disposition, content_length, response_data);
 }
 
 /**
  * @brief Export a list of users.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
  * @param[out]  content_type         Content type return.
@@ -26059,17 +25185,18 @@ export_user_omp (credentials_t * credentials, params_t *params,
  *         on error.
  */
 char *
-export_users_omp (credentials_t * credentials, params_t *params,
-                  enum content_type * content_type, char **content_disposition,
-                  gsize *content_length, cmd_response_data_t* response_data)
+export_users_omp (openvas_connection_t *connection, credentials_t * credentials,
+                  params_t *params, enum content_type * content_type,
+                  char **content_disposition, gsize *content_length,
+                  cmd_response_data_t* response_data)
 {
-  return export_many ("user", credentials, params, content_type,
+  return export_many (connection, "user", credentials, params, content_type,
                       content_disposition, content_length, response_data);
 }
 
 char *
-cvss_calculator (credentials_t * credentials, params_t *params,
-                 cmd_response_data_t* response_data)
+cvss_calculator (openvas_connection_t *connection, credentials_t * credentials,
+                 params_t *params, cmd_response_data_t* response_data)
 {
   GString *xml;
   const char *cvss_av, *cvss_au, *cvss_ac, *cvss_c, *cvss_i, *cvss_a;
@@ -26148,22 +25275,24 @@ cvss_calculator (credentials_t * credentials, params_t *params,
     }
 
   g_string_append (xml, "</cvss_calculator>");
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+  return xsl_transform_omp (connection, credentials, params,
+                            g_string_free (xml, FALSE),
                             response_data);
 }
 
 /**
  * @brief Show a dashboard.
  *
- * @param[in]  credentials   Username and password for authentication.
- * @param[in]  params        Request parameters.
+ * @param[in]  connection     Connection to manager.
+ * @param[in]  credentials    Username and password for authentication.
+ * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return XSL transformed dashboard.
  */
 char *
-dashboard (credentials_t * credentials, params_t *params,
-           cmd_response_data_t* response_data)
+dashboard (openvas_connection_t *connection, credentials_t * credentials,
+           params_t *params, cmd_response_data_t* response_data)
 {
   GString *xml;
   const char *name;
@@ -26191,7 +25320,8 @@ dashboard (credentials_t * credentials, params_t *params,
       || strcasecmp (name, "Main") == 0
       || strcasecmp (name, "SecInfo") == 0)
     {
-      ret = ompf (credentials,
+      ret = ompf (connection,
+                  credentials,
                   &response,
                   &entity,
                   response_data,
@@ -26240,13 +25370,15 @@ dashboard (credentials_t * credentials, params_t *params,
     }
 
   if (strcasecmp (name, "SecInfo") == 0)
-    ret = ompf (credentials,
+    ret = ompf (connection,
+                credentials,
                 &response,
                 &entity,
                 response_data,
                 "<get_filters filter=\"type=info or type= first=1 rows=-1\"/>");
   else
-    ret = ompf (credentials,
+    ret = ompf (connection,
+                credentials,
                 &response,
                 &entity,
                 response_data,
@@ -26293,7 +25425,8 @@ dashboard (credentials_t * credentials, params_t *params,
   free_entity (entity);
 
   g_string_append (xml, "</dashboard>");
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+  return xsl_transform_omp (connection, credentials, params,
+                            g_string_free (xml, FALSE),
                             response_data);
 }
 
@@ -26309,15 +25442,16 @@ dashboard (credentials_t * credentials, params_t *params,
 /**
  * @brief Save authentication settings.
  *
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params        Request parameters.
+ * @param[in]  connection     Connection to manager.
+ * @param[in]  credentials    Username and password for authentication.
+ * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return XSL transformated list of users and configuration.
  */
 char*
-save_auth_omp (credentials_t* credentials, params_t *params,
-               cmd_response_data_t* response_data)
+save_auth_omp (openvas_connection_t *connection, credentials_t* credentials,
+               params_t *params, cmd_response_data_t* response_data)
 {
   int ret;
   entity_t entity = NULL;
@@ -26346,7 +25480,8 @@ save_auth_omp (credentials_t* credentials, params_t *params,
         {
           CHECK_PARAM_INVALID (certificate, "Save Authentication", "get_users");
           /** @warning authdn shall contain a single %s, handle with care. */
-          ret = ompf (credentials, &response, &entity, response_data,
+          ret = ompf (connection, credentials, &response, &entity,
+                      response_data,
                       "<modify_auth>"
                       "<group name=\"%s\">"
                       AUTH_CONF_SETTING ("enable", "%s")
@@ -26359,7 +25494,7 @@ save_auth_omp (credentials_t* credentials, params_t *params,
         }
       else
         /** @warning authdn shall contain a single %s, handle with care. */
-        ret = ompf (credentials, &response, &entity, response_data,
+        ret = ompf (connection, credentials, &response, &entity, response_data,
                     "<modify_auth>"
                     "<group name=\"%s\">"
                     AUTH_CONF_SETTING ("enable", "%s")
@@ -26377,7 +25512,7 @@ save_auth_omp (credentials_t* credentials, params_t *params,
       CHECK_PARAM_INVALID (radiushost, "Save Authentication", "get_users");
       CHECK_PARAM_INVALID (radiuskey, "Save Authentication", "get_users");
       /** @warning authdn shall contain a single %s, handle with care. */
-      ret = ompf (credentials, &response, &entity, response_data,
+      ret = ompf (connection, credentials, &response, &entity, response_data,
                   "<modify_auth>"
                   "<group name=\"%s\">"
                   AUTH_CONF_SETTING ("enable", "%s")
@@ -26387,7 +25522,7 @@ save_auth_omp (credentials_t* credentials, params_t *params,
                   "</modify_auth>", method, truefalse, radiushost, radiuskey);
     }
   else
-    return get_users (credentials, params,
+    return get_users (connection, credentials, params,
                       GSAD_MESSAGE_INVALID_PARAM
                        ("Save Authentication Configuration"),
                       response_data);
@@ -26423,12 +25558,12 @@ save_auth_omp (credentials_t* credentials, params_t *params,
                              "/omp?cmd=get_users", response_data);
     }
 
-  html = response_from_entity (credentials, params, entity,
-                               (no_redirect && strcmp (no_redirect, "0")),
-                               NULL, NULL,
-                               NULL, "modify_auth",
-                               "Save Authentication Configuration",
-                               response_data);
+  html = response_from_entity (connection, credentials, params, entity,
+                              (no_redirect && strcmp (no_redirect, "0")),
+                              NULL, NULL,
+                              NULL, "modify_auth",
+                              "Save Authentication Configuration",
+                              response_data);
   free_entity (entity);
   g_free (response);
   return html;
@@ -26437,6 +25572,7 @@ save_auth_omp (credentials_t* credentials, params_t *params,
 /**
  * @brief Save chart preferences.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials    Username and password for authentication.
  * @param[in]  params         Request parameters.
  * @param[in]  pref_id        Preference ID.
@@ -26446,7 +25582,8 @@ save_auth_omp (credentials_t* credentials, params_t *params,
  * @return SAVE_CHART_PREFERENCE OMP response.
  */
 char*
-save_chart_preference_omp (credentials_t* credentials, params_t *params,
+save_chart_preference_omp (openvas_connection_t *connection,
+                           credentials_t* credentials, params_t *params,
                            gchar **pref_id, gchar **pref_value,
                            cmd_response_data_t* response_data)
 {
@@ -26474,7 +25611,7 @@ save_chart_preference_omp (credentials_t* credentials, params_t *params,
 
   response = NULL;
   entity = NULL;
-  ret = ompf (credentials, &response, &entity, response_data,
+  ret = ompf (connection, credentials, &response, &entity, response_data,
               "<modify_setting setting_id=\"%s\">"
               "<value>%s</value>"
               "</modify_setting>",
@@ -26538,39 +25675,21 @@ save_chart_preference_omp (credentials_t* credentials, params_t *params,
 /**
  * @brief Returns a wizard page.
  *
- * @param[in]  credentials  Credentials of user issuing the action.
- * @param[in]  params       Request parameters.
- * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[in]  connection     Connection to manager.
+ * @param[in]  credentials    Credentials of user issuing the action.
+ * @param[in]  params         Request parameters.
+ * @param[in]  extra_xml      Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-wizard (credentials_t *credentials, params_t *params, const char *extra_xml,
+wizard (openvas_connection_t *connection, credentials_t *credentials,
+        params_t *params, const char *extra_xml,
         cmd_response_data_t* response_data)
 {
   GString *xml;
-  openvas_connection_t connection;
-  gchar *html;
   const char* name = params_value (params, "name");
-
-  switch (manager_connect (credentials, &connection, &html,
-                           response_data))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while getting the wizard. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_tasks", response_data);
-    }
 
   if (name == NULL)
     {
@@ -26589,7 +25708,7 @@ wizard (credentials_t *credentials, params_t *params, const char *extra_xml,
                           name);
 
   /* Try to run init mode of the wizard */
-  if (openvas_connection_sendf_xml (&connection,
+  if (openvas_connection_sendf_xml (connection,
                                     "<run_wizard read_only=\"1\">"
                                     "<name>%s</name>"
                                     "<mode>init</mode>"
@@ -26598,7 +25717,6 @@ wizard (credentials_t *credentials, params_t *params, const char *extra_xml,
       == -1)
     {
       g_string_free (xml, TRUE);
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -26607,10 +25725,9 @@ wizard (credentials_t *credentials, params_t *params, const char *extra_xml,
                            "/omp?cmd=get_tasks", response_data);
     }
 
-  if (read_string_c (&connection, &xml))
+  if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -26623,13 +25740,12 @@ wizard (credentials_t *credentials, params_t *params, const char *extra_xml,
 
   /* Get the setting. */
 
-  if (openvas_connection_sendf_xml (&connection,
+  if (openvas_connection_sendf_xml (connection,
                                     "<get_settings"
                                     " setting_id=\"20f3034c-e709-11e1-87e7-406186ea4fc5\"/>")
       == -1)
     {
       g_string_free (xml, TRUE);
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -26638,10 +25754,9 @@ wizard (credentials_t *credentials, params_t *params, const char *extra_xml,
                            "/omp?cmd=get_tasks", response_data);
     }
 
-  if (read_string_c (&connection, &xml))
+  if (read_string_c (connection, &xml))
     {
       g_string_free (xml, TRUE);
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -26653,39 +25768,42 @@ wizard (credentials_t *credentials, params_t *params, const char *extra_xml,
   /* Cleanup, and return transformed XML. */
 
   g_string_append_printf (xml, "</wizard>");
-  openvas_connection_close (&connection);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+  return xsl_transform_omp (connection, credentials, params,
+                            g_string_free (xml, FALSE),
                             response_data);
 }
 
 /**
  * @brief Returns a wizard page.
  *
- * @param[in]  credentials  Credentials of user issuing the action.
- * @param[in]  params       Request parameters.
+ * @param[in]  connection     Connection to manager.
+ * @param[in]  credentials    Credentials of user issuing the action.
+ * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-wizard_omp (credentials_t *credentials, params_t *params,
-            cmd_response_data_t* response_data)
+wizard_omp (openvas_connection_t *connection, credentials_t *credentials,
+            params_t *params, cmd_response_data_t* response_data)
 {
-  return wizard (credentials, params, NULL, response_data);
+  return wizard (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Returns a wizard_get page.
  *
- * @param[in]  credentials  Credentials of user issuing the action.
- * @param[in]  params       Request parameters.
- * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[in]  connection     Connection to manager.
+ * @param[in]  credentials    Credentials of user issuing the action.
+ * @param[in]  params         Request parameters.
+ * @param[in]  extra_xml      Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-wizard_get (credentials_t *credentials, params_t *params, const char *extra_xml,
+wizard_get (openvas_connection_t *connection, credentials_t *credentials,
+            params_t *params, const char *extra_xml,
             cmd_response_data_t* response_data)
 {
   const char *name;
@@ -26738,7 +25856,8 @@ wizard_get (credentials_t *credentials, params_t *params, const char *extra_xml,
 
   response = NULL;
   entity = NULL;
-  ret = omp (credentials, &response, &entity, response_data, run->str);
+  ret = omp (connection, credentials, &response, &entity, response_data,
+             run->str);
   g_string_free (run, TRUE);
   switch (ret)
     {
@@ -26776,30 +25895,33 @@ wizard_get (credentials_t *credentials, params_t *params, const char *extra_xml,
                                 extra_xml ? extra_xml : "",
                                 response);
 
-  return xsl_transform_omp (credentials, wizard_xml, response_data);
+  return xsl_transform_omp (connection, credentials, params, wizard_xml,
+                            response_data);
 }
 
 /**
  * @brief Returns a wizard_get page.
  *
- * @param[in]  credentials  Credentials of user issuing the action.
- * @param[in]  params       Request parameters.
+ * @param[in]  connection     Connection to manager.
+ * @param[in]  credentials    Credentials of user issuing the action.
+ * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-wizard_get_omp (credentials_t *credentials, params_t *params,
-                cmd_response_data_t* response_data)
+wizard_get_omp (openvas_connection_t *connection, credentials_t *credentials,
+                params_t *params, cmd_response_data_t* response_data)
 {
-  return wizard_get (credentials, params, NULL, response_data);
+  return wizard_get (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Returns a process_bulk page.
  *
- * @param[in]   credentials    Credentials of user issuing the action.
- * @param[in]   params         Request parameters.
+ * @param[in]   connection           Connection to manager.
+ * @param[in]   credentials          Credentials of user issuing the action.
+ * @param[in]   params               Request parameters.
  * @param[out]  content_type         Content type return.
  * @param[out]  content_disposition  Content disposition return.
  * @param[out]  content_length       Content length return.
@@ -26808,8 +25930,8 @@ wizard_get_omp (credentials_t *credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-process_bulk_omp (credentials_t *credentials, params_t *params,
-                  enum content_type *content_type,
+process_bulk_omp (openvas_connection_t *connection, credentials_t *credentials,
+                  params_t *params, enum content_type *content_type,
                   char **content_disposition, gsize *content_length,
                   cmd_response_data_t* response_data)
 {
@@ -26896,7 +26018,7 @@ process_bulk_omp (credentials_t *credentials, params_t *params,
       param->valid_utf8 = g_utf8_validate (param->value, -1, NULL);
       g_string_free (bulk_string, TRUE);
 
-      return new_target (credentials, params, NULL, response_data);
+      return new_target (connection, credentials, params, NULL, response_data);
     }
 
   if (strcmp (action, "export") == 0)
@@ -26931,7 +26053,7 @@ process_bulk_omp (credentials_t *credentials, params_t *params,
         }
       params_add (params, "filter", g_string_free (bulk_string, FALSE));
 
-      return export_many (type, credentials, params, content_type,
+      return export_many (connection, type, credentials, params, content_type,
                           content_disposition, content_length, response_data);
     }
 
@@ -26952,7 +26074,7 @@ process_bulk_omp (credentials_t *credentials, params_t *params,
       entity_t entity;
       gchar *response;
 
-      ret = ompf (credentials, &response, &entity, response_data,
+      ret = ompf (connection, credentials, &response, &entity, response_data,
                   "<get_%ss filter=\"first=1 rows=-1 %s\"/>",
                   type,
                   params_value (params, "filter") ? : "");
@@ -27034,7 +26156,7 @@ process_bulk_omp (credentials_t *credentials, params_t *params,
       entity_t entity;
       gchar *response;
 
-      ret = ompf (credentials, &response, &entity, response_data,
+      ret = ompf (connection, credentials, &response, &entity, response_data,
                   "<get_users filter=\"first=1 rows=-1\"/>",
                   type,
                   params_value (params, "filter") ? : "");
@@ -27085,24 +26207,24 @@ process_bulk_omp (credentials_t *credentials, params_t *params,
 
   g_string_append (bulk_string, "</process_bulk>");
 
-  return xsl_transform_omp (credentials, g_string_free (bulk_string, FALSE),
-                            response_data);
+  return xsl_transform_omp (connection, credentials, params,
+                            g_string_free (bulk_string, FALSE), response_data);
 }
 
 /**
  * @brief Delete multiple resources, get next page, XSL transform the result.
  *
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
+ * @param[in]  connection     Connection to manager.
+ * @param[in]  credentials    Username and password for authentication.
+ * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-bulk_delete_omp (credentials_t * credentials, params_t *params,
-                 cmd_response_data_t* response_data)
+bulk_delete_omp (openvas_connection_t *connection, credentials_t * credentials,
+                 params_t *params, cmd_response_data_t* response_data)
 {
-  openvas_connection_t connection;
   const char *no_redirect, *type;
   GString *commands_xml;
   params_t *selected_ids;
@@ -27160,33 +26282,13 @@ bulk_delete_omp (credentials_t * credentials, params_t *params,
 
   g_string_append (commands_xml, "</commands>");
 
-  switch (manager_connect (credentials, &connection, &html,
-                           response_data))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          return html;
-        /* Fall through. */
-      default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while deleting resources. "
-                             "The resources were not deleted. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_tasks", response_data);
-    }
-
   /* Delete the resources and get all resources. */
 
-  if (openvas_connection_sendf_xml (&connection,
+  if (openvas_connection_sendf_xml (connection,
                                     commands_xml->str)
       == -1)
     {
       g_string_free (commands_xml, TRUE);
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -27198,9 +26300,8 @@ bulk_delete_omp (credentials_t * credentials, params_t *params,
   g_string_free (commands_xml, TRUE);
 
   entity = NULL;
-  if (read_entity_and_text_c (&connection, &entity, &response))
+  if (read_entity_and_text_c (connection, &entity, &response))
     {
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -27210,7 +26311,6 @@ bulk_delete_omp (credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_tasks", response_data);
     }
 
-  openvas_connection_close (&connection);
 
   /* Cleanup, and return transformed XML. */
 
@@ -27221,11 +26321,12 @@ bulk_delete_omp (credentials_t * credentials, params_t *params,
       params_add (params, "next", next);
       g_free (next);
     }
-  html = response_from_entity (credentials, params, entity,
-                               (no_redirect && strcmp (no_redirect, "0")),
-                               NULL, NULL,
-                               NULL, NULL,
-                               "Bulk Delete", response_data);
+
+  html = response_from_entity (connection, credentials, params, entity,
+                              (no_redirect && strcmp (no_redirect, "0")),
+                              NULL, NULL,
+                              NULL, NULL,
+                              "Bulk Delete", response_data);
   g_free (response);
   free_entity (entity);
 
@@ -27238,54 +26339,59 @@ bulk_delete_omp (credentials_t * credentials, params_t *params,
 /**
  * @brief Returns page to create a new host.
  *
- * @param[in]  credentials  Credentials of user issuing the action.
- * @param[in]  params       Request parameters.
- * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[in]  connection     Connection to manager.
+ * @param[in]  credentials    Credentials of user issuing the action.
+ * @param[in]  params         Request parameters.
+ * @param[in]  extra_xml      Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 static char *
-new_host (credentials_t *credentials, params_t *params,
-          const char *extra_xml, cmd_response_data_t* response_data)
+new_host (openvas_connection_t *connection, credentials_t *credentials,
+          params_t *params, const char *extra_xml,
+          cmd_response_data_t* response_data)
 {
   GString *xml;
   xml = g_string_new ("<new_host>");
   if (extra_xml)
     g_string_append (xml, extra_xml);
   g_string_append (xml, "</new_host>");
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+  return xsl_transform_omp (connection, credentials, params,
+                            g_string_free (xml, FALSE),
                             response_data);
 }
 
 /**
  * @brief Return the new host page.
  *
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
+ * @param[in]  connection     Connection to manager.
+ * @param[in]  credentials    Username and password for authentication.
+ * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-new_host_omp (credentials_t *credentials, params_t *params,
-              cmd_response_data_t* response_data)
+new_host_omp (openvas_connection_t *connection, credentials_t *credentials,
+              params_t *params, cmd_response_data_t* response_data)
 {
-  return new_host (credentials, params, NULL, response_data);
+  return new_host (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Create a host, serve next page.
  *
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
+ * @param[in]  connection     Connection to manager.
+ * @param[in]  credentials    Username and password for authentication.
+ * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-create_host_omp (credentials_t * credentials, params_t *params,
-                 cmd_response_data_t* response_data)
+create_host_omp (openvas_connection_t *connection, credentials_t * credentials,
+                 params_t *params, cmd_response_data_t* response_data)
 {
   int ret;
   gchar *html, *response;
@@ -27316,7 +26422,7 @@ create_host_omp (credentials_t * credentials, params_t *params,
                      name,
                      comment);
 
-  ret = omp (credentials,
+  ret = omp (connection, credentials,
              &response,
              &entity,
              response_data,
@@ -27355,11 +26461,11 @@ create_host_omp (credentials_t * credentials, params_t *params,
 
   if (entity_attribute (entity, "id"))
     params_add (params, "asset_id", entity_attribute (entity, "id"));
-  html = response_from_entity (credentials, params, entity,
-                               (no_redirect && strcmp (no_redirect, "0")),
-                               NULL, "get_assets",
-                               NULL, "new_host",
-                               "Create Host", response_data);
+  html = response_from_entity (connection, credentials, params, entity,
+                              (no_redirect && strcmp (no_redirect, "0")),
+                              NULL, "get_assets",
+                              NULL, "new_host",
+                              "Create Host", response_data);
   free_entity (entity);
   g_free (response);
   return html;
@@ -27368,6 +26474,7 @@ create_host_omp (credentials_t * credentials, params_t *params,
 /**
  * @brief Request an asset.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Credentials for the manager connection.
  * @param[in]  params       Request parameters.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
@@ -27376,7 +26483,8 @@ create_host_omp (credentials_t * credentials, params_t *params,
  * @return XSL transformed asset response or error message.
  */
 char *
-get_asset (credentials_t *credentials, params_t *params, const char *extra_xml,
+get_asset (openvas_connection_t *connection, credentials_t *credentials,
+           params_t *params, const char *extra_xml,
            cmd_response_data_t* response_data)
 {
   char *ret;
@@ -27433,7 +26541,7 @@ get_asset (credentials_t *credentials, params_t *params, const char *extra_xml,
                             " details=\"%s\"",
                             params_value (params, "details"));
 
-  ret = get_one ("asset", credentials, params, extra_response->str,
+  ret = get_one (connection, "asset", credentials, params, extra_response->str,
                  extra_attribs->str, response_data);
 
   g_string_free (extra_response, TRUE);
@@ -27445,31 +26553,34 @@ get_asset (credentials_t *credentials, params_t *params, const char *extra_xml,
 /**
  * @brief Get asset, XSL transform the result.
  *
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
+ * @param[in]  connection     Connection to manager.
+ * @param[in]  credentials    Username and password for authentication.
+ * @param[in]  params         Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
-get_asset_omp (credentials_t * credentials, params_t *params,
-               cmd_response_data_t* response_data)
+get_asset_omp (openvas_connection_t *connection, credentials_t * credentials,
+               params_t *params, cmd_response_data_t* response_data)
 {
-  return get_asset (credentials, params, NULL, response_data);
+  return get_asset (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Request assets.
  *
- * @param[in]  credentials  Credentials for the manager connection.
- * @param[in]  params       Request parameters.
- * @param[in]  extra_xml    Extra XML to insert inside page element.
+ * @param[in]  connection     Connection to manager.
+ * @param[in]  credentials    Credentials for the manager connection.
+ * @param[in]  params         Request parameters.
+ * @param[in]  extra_xml      Extra XML to insert inside page element.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return XSL transformed assets response or error message.
  */
 char *
-get_assets (credentials_t *credentials, params_t *params, const char *extra_xml,
+get_assets (openvas_connection_t *connection, credentials_t *credentials,
+            params_t *params, const char *extra_xml,
             cmd_response_data_t* response_data)
 {
   char *ret;
@@ -27509,7 +26620,7 @@ get_assets (credentials_t *credentials, params_t *params, const char *extra_xml,
     g_string_append_printf (extra_attribs,
                             " details=\"%s\"",
                             params_value (params, "details"));
-  ret = get_many ("asset", credentials, params, extra_response->str,
+  ret = get_many (connection, "asset", credentials, params, extra_response->str,
                   extra_attribs->str, response_data);
 
   g_string_free (extra_response, TRUE);
@@ -27521,6 +26632,7 @@ get_assets (credentials_t *credentials, params_t *params, const char *extra_xml,
 /**
  * @brief Get assets, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -27528,15 +26640,16 @@ get_assets (credentials_t *credentials, params_t *params, const char *extra_xml,
  * @return Result of XSL transformation.
  */
 char *
-get_assets_omp (credentials_t * credentials, params_t *params,
-                cmd_response_data_t* response_data)
+get_assets_omp (openvas_connection_t *connection, credentials_t * credentials,
+                params_t *params, cmd_response_data_t* response_data)
 {
-  return get_assets (credentials, params, NULL, response_data);
+  return get_assets (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Create an asset, get report, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -27544,8 +26657,8 @@ get_assets_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-create_asset_omp (credentials_t *credentials, params_t *params,
-                  cmd_response_data_t* response_data)
+create_asset_omp (openvas_connection_t *connection, credentials_t *credentials,
+                  params_t *params, cmd_response_data_t* response_data)
 {
   char *ret;
   gchar *response;
@@ -27561,7 +26674,7 @@ create_asset_omp (credentials_t *credentials, params_t *params,
 
   response = NULL;
   entity = NULL;
-  switch (ompf (credentials,
+  switch (ompf (connection, credentials,
                 &response,
                 &entity,
                 response_data,
@@ -27602,7 +26715,7 @@ create_asset_omp (credentials_t *credentials, params_t *params,
                              "/omp?cmd=get_tasks", response_data);
     }
 
-  ret = response_from_entity (credentials, params, entity,
+  ret = response_from_entity (connection, credentials, params, entity,
                               (no_redirect && strcmp (no_redirect, "0")),
                               NULL, "get_report_section",
                               NULL, "get_report_section",
@@ -27615,6 +26728,7 @@ create_asset_omp (credentials_t *credentials, params_t *params,
 /**
  * @brief Delete an asset, go to the next page.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -27622,10 +26736,9 @@ create_asset_omp (credentials_t *credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-delete_asset_omp (credentials_t * credentials, params_t *params,
-                  cmd_response_data_t* response_data)
+delete_asset_omp (openvas_connection_t *connection, credentials_t * credentials,
+                  params_t *params, cmd_response_data_t* response_data)
 {
-  openvas_connection_t connection;
   gchar *html, *response, *resource_id;
   const char *next_id, *no_redirect;
   entity_t entity;
@@ -27659,39 +26772,15 @@ delete_asset_omp (credentials_t * credentials, params_t *params,
       param->value_size = strlen (param->value);
     }
 
-  switch (manager_connect (credentials, &connection, &html,
-                           response_data))
-    {
-      case 0:
-        break;
-      case -1:
-        if (html)
-          {
-            g_free (resource_id);
-            return html;
-          }
-        /* Fall through. */
-      default:
-        g_free (resource_id);
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-        return gsad_message (credentials,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred while deleting an asset. "
-                             "The asset is not deleted. "
-                             "Diagnostics: Failure to connect to manager daemon.",
-                             "/omp?cmd=get_tasks", response_data);
-    }
-
   /* Delete the resource and get all resources. */
 
-  if (openvas_connection_sendf (&connection,
+  if (openvas_connection_sendf (connection,
                                 "<delete_asset %s_id=\"%s\"/>",
                                 params_value (params, "asset_id")
                                  ? "asset" : "report",
                                 resource_id)
       == -1)
     {
-      openvas_connection_close (&connection);
       g_free (resource_id);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
@@ -27705,9 +26794,8 @@ delete_asset_omp (credentials_t * credentials, params_t *params,
   g_free (resource_id);
 
   entity = NULL;
-  if (read_entity_and_text_c (&connection, &entity, &response))
+  if (read_entity_and_text_c (connection, &entity, &response))
     {
-      openvas_connection_close (&connection);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -27717,8 +26805,6 @@ delete_asset_omp (credentials_t * credentials, params_t *params,
                            "/omp?cmd=get_tasks", response_data);
     }
 
-  openvas_connection_close (&connection);
-
   /* Cleanup, and return transformed XML. */
 
   if (params_given (params, "next") == 0)
@@ -27727,7 +26813,8 @@ delete_asset_omp (credentials_t * credentials, params_t *params,
   no_redirect = params_value (params, "no_redirect");
   if (no_redirect && strcmp (no_redirect, "0"))
     {
-      html = next_page (credentials, params, response, response_data);
+      html = next_page (connection, credentials, params, response,
+                        response_data);
       if (html == NULL)
         {
           response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
@@ -27740,10 +26827,10 @@ delete_asset_omp (credentials_t * credentials, params_t *params,
     }
   else
     {
-      next_url = next_page_url (credentials, params,
-          NULL, "get_asset", "delete_asset",
-          entity_attribute (entity, "status"),
-          entity_attribute (entity, "status_text"));
+      next_url = next_page_url (credentials, params, NULL, "get_asset",
+                                "delete_asset",
+                                entity_attribute (entity, "status"),
+                                entity_attribute (entity, "status_text"));
       response_data->redirect = next_url;
 
       html = NULL;
@@ -27757,6 +26844,7 @@ delete_asset_omp (credentials_t * credentials, params_t *params,
 /**
  * @brief Export an asset.
  *
+ * @param[in]   connection           Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
  * @param[out]  content_type         Content type return.
@@ -27767,17 +26855,20 @@ delete_asset_omp (credentials_t * credentials, params_t *params,
  * @return Asset XML on success.  HTML result of XSL transformation on error.
  */
 char *
-export_asset_omp (credentials_t * credentials, params_t *params,
-                  enum content_type * content_type, char **content_disposition,
-                  gsize *content_length, cmd_response_data_t* response_data)
+export_asset_omp (openvas_connection_t *connection, credentials_t * credentials,
+                  params_t *params, enum content_type * content_type,
+                  char **content_disposition, gsize *content_length,
+                  cmd_response_data_t* response_data)
 {
-  return export_resource ("asset", credentials, params, content_type,
-                          content_disposition, content_length, response_data);
+  return export_resource (connection, "asset", credentials, params,
+                          content_type, content_disposition, content_length,
+                          response_data);
 }
 
 /**
  * @brief Export a list of assets.
  *
+ * @param[in]   connection           Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
  * @param[out]  content_type         Content type return.
@@ -27789,17 +26880,19 @@ export_asset_omp (credentials_t * credentials, params_t *params,
  *         on error.
  */
 char *
-export_assets_omp (credentials_t * credentials, params_t *params,
+export_assets_omp (openvas_connection_t *connection, credentials_t *
+                   credentials, params_t *params,
                    enum content_type * content_type, char **content_disposition,
                    gsize *content_length, cmd_response_data_t* response_data)
 {
-  return export_many ("asset", credentials, params, content_type,
+  return export_many (connection, "asset", credentials, params, content_type,
                       content_disposition, content_length, response_data);
 }
 
 /**
  * @brief Setup edit XML, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials    Username and password for authentication.
  * @param[in]  params         Request parameters.
  * @param[in]  extra_xml      Extra XML to insert inside page element.
@@ -27808,7 +26901,8 @@ export_assets_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-edit_asset (credentials_t *credentials, params_t *params, const char *extra_xml,
+edit_asset (openvas_connection_t *connection, credentials_t *credentials,
+            params_t *params, const char *extra_xml,
             cmd_response_data_t* response_data)
 {
   GString *xml;
@@ -27837,7 +26931,7 @@ edit_asset (credentials_t *credentials, params_t *params, const char *extra_xml,
 
   response = NULL;
   entity = NULL;
-  switch (ompf (credentials,
+  switch (ompf (connection, credentials,
                 &response,
                 &entity,
                 response_data,
@@ -27880,13 +26974,15 @@ edit_asset (credentials_t *credentials, params_t *params, const char *extra_xml,
   g_string_append_printf (xml, "</edit_asset>");
   free_entity (entity);
   g_free (response);
-  return xsl_transform_omp (credentials, g_string_free (xml, FALSE),
+  return xsl_transform_omp (connection, credentials, params,
+                            g_string_free (xml, FALSE),
                             response_data);
 }
 
 /**
  * @brief Setup edit_asset XML, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -27894,15 +26990,16 @@ edit_asset (credentials_t *credentials, params_t *params, const char *extra_xml,
  * @return Result of XSL transformation.
  */
 char *
-edit_asset_omp (credentials_t * credentials, params_t *params,
-                cmd_response_data_t* response_data)
+edit_asset_omp (openvas_connection_t *connection, credentials_t * credentials,
+                params_t *params, cmd_response_data_t* response_data)
 {
-  return edit_asset (credentials, params, NULL, response_data);
+  return edit_asset (connection, credentials, params, NULL, response_data);
 }
 
 /**
  * @brief Modify an asset, get all assets, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -27910,8 +27007,8 @@ edit_asset_omp (credentials_t * credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-save_asset_omp (credentials_t * credentials, params_t *params,
-                cmd_response_data_t* response_data)
+save_asset_omp (openvas_connection_t *connection, credentials_t * credentials,
+                params_t *params, cmd_response_data_t* response_data)
 {
   int ret;
   gchar *html, *response;
@@ -27929,7 +27026,7 @@ save_asset_omp (credentials_t * credentials, params_t *params,
 
   response = NULL;
   entity = NULL;
-  ret = ompf (credentials,
+  ret = ompf (connection, credentials,
               &response,
               &entity,
               response_data,
@@ -27970,7 +27067,7 @@ save_asset_omp (credentials_t * credentials, params_t *params,
                              "/omp?cmd=get_assets", response_data);
     }
 
-  html = response_from_entity (credentials, params, entity,
+  html = response_from_entity (connection, credentials, params, entity,
                                (no_redirect && strcmp (no_redirect, "0")),
                                NULL, "get_assets",
                                NULL, "edit_asset",
@@ -27983,24 +27080,27 @@ save_asset_omp (credentials_t * credentials, params_t *params,
 /**
  * @brief Get an assets chart, XSL transform the result.
  *
- * @param[in]  credentials       Username and password for authentication.
- * @param[in]  params            Request parameters.
- * @param[in]  extra_xml         Extra XML to insert inside page element.
- * @param[out] response_data     Extra data return for the HTTP response.
+ * @param[in]  connection     Connection to manager.
+ * @param[in]  credentials    Username and password for authentication.
+ * @param[in]  params         Request parameters.
+ * @param[in]  extra_xml      Extra XML to insert inside page element.
+ * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 static char *
-get_assets_chart (credentials_t *credentials, params_t *params,
-                  const char *extra_xml, cmd_response_data_t* response_data)
+get_assets_chart (openvas_connection_t *connection, credentials_t *credentials,
+                  params_t *params, const char *extra_xml,
+                  cmd_response_data_t* response_data)
 {
-  return xsl_transform_omp (credentials, g_strdup ("<get_assets_chart/>"),
-                            response_data);
+  return xsl_transform_omp (connection, credentials, params,
+                            g_strdup ("<get_assets_chart/>"), response_data);
 }
 
 /**
  * @brief Get an assets chart, XSL transform the result.
  *
+ * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -28008,10 +27108,12 @@ get_assets_chart (credentials_t *credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 char *
-get_assets_chart_omp (credentials_t * credentials, params_t *params,
+get_assets_chart_omp (openvas_connection_t *connection, credentials_t *
+                      credentials, params_t *params,
                       cmd_response_data_t* response_data)
 {
-  return get_assets_chart (credentials, params, NULL, response_data);
+  return get_assets_chart (connection, credentials, params, NULL,
+                           response_data);
 }
 
 
@@ -28309,32 +27411,24 @@ authenticate_omp (const gchar * username, const gchar * password,
 /**
  * @brief Connect to OpenVAS Manager daemon.
  *
- * If the Manager is down, logout and return the login HTML in \p html.
- *
  * @param[in]   credentials  Username and password for authentication.
  * @param[out]  connection   Connection to Manager on success.
- * @param[out]  html         HTML on failure to connect if possible, else NULL.
  * @param[out]  response_data  Extra data return for the HTTP response.
  *
  * @return 0 success, -1 failed to connect, -2 authentication failed.
  */
 int
-manager_connect (credentials_t *credentials, openvas_connection_t *connection,
-                 gchar **html, cmd_response_data_t *response_data)
+manager_connect (credentials_t *credentials,
+                 openvas_connection_t *connection,
+                 cmd_response_data_t *response_data)
 {
   omp_authenticate_info_opts_t auth_opts;
-
-  if (html)
-    *html = NULL;  /* Keep compiler quiet. */
 
   if (openvas_connection_open (connection,
                                manager_address,
                                manager_port))
     {
       response_data->http_status_code = MHD_HTTP_SERVICE_UNAVAILABLE;
-      if (html)
-        *html = logout (credentials, "Logged out.  OMP service is down.",
-                        response_data);
       return -1;
     }
 

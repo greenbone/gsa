@@ -1,5 +1,16 @@
 2016-12-14  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/gsad_omp.c, src/gsad_omp.h: Remove manager_connect from all omp command
+	functions. Instead pass a openvas_connection_t pointer to all these functions.
+	This allows to create a connection and handle the connection failure on less
+	places and avoids to closing and opening several connections when executing
+	many omp commands in sequence.
+
+	* src/gsad.c, src/gsad_http_handler.c: Create connection to manager before
+	executing omp command functions.
+
+2016-12-14  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/gsad.c, src/gsad_http.c, src/gsad_http_handler.c: Use new
 	gsad_message_new function instead of gsad_message.
 

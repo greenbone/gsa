@@ -994,6 +994,7 @@ handle_system_report (http_connection_t *connection,
   const char *slave_id;
   char *res;
   http_response_t * response;
+  openvas_connection_t con;
   int http_response_code = MHD_HTTP_OK;
   content_type_t content_type = GSAD_CONTENT_TYPE_TEXT_HTML;
   cmd_response_data_t response_data;
@@ -1019,12 +1020,46 @@ handle_system_report (http_connection_t *connection,
 
   cmd_response_data_init (&response_data);
 
-  res = get_system_report_omp (credentials,
-                               &url[0] + strlen ("/system_report/"),
-                               params,
-                               &content_type,
-                               &res_len,
+  /* Connect to manager */
+  switch (manager_connect (credentials, &con, &response_data))
+    {
+      case 0:
+        res = get_system_report_omp (&con,
+                                     credentials,
+                                     &url[0] + strlen ("/system_report/"),
+                                     params,
+                                     &content_type,
+                                     &res_len,
+                                     &response_data);
+        break;
+      case -1:
+        res = logout_xml (credentials,
+                               params_value_bool (con_info->params, "xml"),
+                               "Logged out.  OMP service is down.",
                                &response_data);
+
+        break;
+      case -2:
+       res = gsad_message_new (credentials,
+                               "Internal error", __FUNCTION__, __LINE__,
+                               "An internal error occurred. "
+                               "Diagnostics: Could not authenticate to manager "
+                               "daemon.",
+                               "/omp?cmd=get_tasks",
+                               params_value_bool (con_info->params, "xml"),
+                               &response_data);
+        break;
+      default:
+        res = gsad_message_new (credentials,
+                                "Internal error", __FUNCTION__, __LINE__,
+                                "An internal error occurred. "
+                                "Diagnostics: Failure to connect to manager daemon.",
+                                "/omp?cmd=get_tasks",
+                                params_value_bool (con_info->params, "xml"),
+                                &response_data);
+        break;
+    }
+
   if (res == NULL)
     {
       credentials_free (credentials);

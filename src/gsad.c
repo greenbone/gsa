@@ -1279,8 +1279,8 @@ params_mhd_validate (void *params)
  */
 #define ELSE(name) \
   else if (!strcmp (cmd, G_STRINGIFY (name))) \
-    con_info->response = name ## _omp (credentials, con_info->params, \
-                                       &response_data);
+    con_info->response = name ## _omp (&connection, credentials, \
+                                       con_info->params, &response_data);
 
 /**
  * @brief Handle a complete POST request.
@@ -1310,6 +1310,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   const char *xml_flag;
   xml_flag = params_value (con_info->params, "xml");
   const gchar * guest_username = get_guest_username ();
+  openvas_connection_t connection;
 
   /* Handle the login command specially. */
 
@@ -1602,7 +1603,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
 
   language = user->language ?: con_info->language ?: DEFAULT_GSAD_LANGUAGE;
   credentials = credentials_new (user, language, client_address);
-  credentials->params = con_info->params;
+  credentials->params = con_info->params; // FIXME remove params from credentials
   gettimeofday (&credentials->cmd_start, NULL);
 
   /* The caller of a POST is usually the caller of the page that the POST form
@@ -1750,7 +1751,8 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   else if (!strcmp (cmd, "alert_report"))
     {
       con_info->response = get_report_section_omp
-                            (credentials, con_info->params, &response_data);
+                            (&connection, credentials, con_info->params,
+                             &response_data);
     }
   ELSE (import_config)
   ELSE (import_port_list)
@@ -1758,7 +1760,8 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   ELSE (import_report_format)
   else if (!strcmp (cmd, "process_bulk"))
     {
-      con_info->response =  process_bulk_omp (credentials,
+      con_info->response =  process_bulk_omp (&connection,
+                                              credentials,
                                               con_info->params,
                                               &con_info->content_type,
                                               &con_info->content_disposition,
@@ -1777,7 +1780,8 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
     {
       gchar *pref_id, *pref_value;
 
-      con_info->response = save_chart_preference_omp (credentials,
+      con_info->response = save_chart_preference_omp (&connection,
+                                                      credentials,
                                                       con_info->params,
                                                       &pref_id, &pref_value,
                                                       &response_data);
@@ -1793,7 +1797,8 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   else if (!strcmp (cmd, "save_my_settings"))
     {
       char *timezone, *password, *severity, *language;
-      con_info->response = save_my_settings_omp (credentials, con_info->params,
+      con_info->response = save_my_settings_omp (&connection,
+                                                 credentials, con_info->params,
                                                  con_info->language,
                                                  &timezone, &password,
                                                  &severity, &language,
@@ -1835,7 +1840,8 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
     {
       char *password, *modified_user;
       int logout;
-      con_info->response = save_user_omp (credentials, con_info->params,
+      con_info->response = save_user_omp (&connection, credentials,
+                                          con_info->params,
                                           &password, &modified_user, &logout,
                                           &response_data);
       if (modified_user && logout)
@@ -1881,6 +1887,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
 
   cmd_response_data_reset (&response_data);
   credentials_free (credentials);
+  openvas_connection_close (&connection);
   return 0;
 }
 
@@ -2008,7 +2015,7 @@ params_mhd_add (void *params, enum MHD_ValueKind kind, const char *name,
  */
 #define ELSE(name) \
   else if (!strcmp (cmd, G_STRINGIFY (name))) \
-    return name ## _omp (credentials, params, response_data);
+    ret = name ## _omp (&connection, credentials, params, response_data);
 
 /**
  * @brief Handle a complete GET request.
@@ -2041,6 +2048,8 @@ exec_omp_get (gsad_connection_info_t *con_info,
   const char *cmd = NULL;
   const int CMD_MAX_SIZE = 27;   /* delete_trash_lsc_credential */
   params_t *params = con_info->params;
+  openvas_connection_t connection;
+  char * ret = NULL;
 
   cmd = params_value (params, "cmd");
 
@@ -2083,6 +2092,37 @@ exec_omp_get (gsad_connection_info_t *con_info,
       tzset ();
     }
 
+  /* Connect to manager */
+  switch (manager_connect (credentials, &connection, response_data))
+    {
+      case 0:
+        break;
+      case -1:
+        return logout_xml (credentials,
+                           params_value_bool (params, "xml"),
+                           "Logged out.  OMP service is down.",
+                           response_data);
+
+      case -2:
+        return gsad_message_new (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred. "
+                                 "Diagnostics: Could not authenticate to manager "
+                                 "daemon.",
+                                 "/omp?cmd=get_tasks",
+                                 params_value_bool (params, "xml"),
+                                 response_data);
+      default:
+        return gsad_message_new (credentials,
+                                 "Internal error", __FUNCTION__, __LINE__,
+                                 "An internal error occurred. "
+                                 "Diagnostics: Failure to connect to manager "
+                                 "daemon.",
+                                 "/omp?cmd=get_tasks",
+                                 params_value_bool (params, "xml"),
+                                 response_data);
+    }
+
   /* Set page display settings */
 
   /* Show / hide charts */
@@ -2101,13 +2141,13 @@ exec_omp_get (gsad_connection_info_t *con_info,
   /* Check cmd and precondition, start respective OMP command(s). */
 
   if (!strcmp (cmd, "cvss_calculator"))
-    return cvss_calculator (credentials, params, response_data);
+    ret = cvss_calculator (&connection, credentials, params, response_data);
 
   else if (!strcmp (cmd, "dashboard"))
-    return dashboard (credentials, params, response_data);
+    ret = dashboard (&connection, credentials, params, response_data);
 
   else if (!strcmp (cmd, "new_filter"))
-    return new_filter_omp (credentials, params, response_data);
+    ret = new_filter_omp (&connection, credentials, params, response_data);
 
   ELSE (new_container_task)
   ELSE (new_target)
@@ -2147,42 +2187,42 @@ exec_omp_get (gsad_connection_info_t *con_info,
   ELSE (auth_settings)
 
   else if (!strcmp (cmd, "export_agent"))
-    return export_agent_omp (credentials, params, content_type,
-                             content_disposition, response_size,
-                             response_data);
+    ret = export_agent_omp (&connection, credentials, params, content_type,
+                            content_disposition, response_size,
+                            response_data);
 
   else if (!strcmp (cmd, "export_agents"))
-    return export_agents_omp (credentials, params, content_type,
+    ret = export_agents_omp (&connection, credentials, params, content_type,
                               content_disposition, response_size,
                               response_data);
 
   else if (!strcmp (cmd, "export_alert"))
-    return export_alert_omp (credentials, params, content_type,
+    ret = export_alert_omp (&connection, credentials, params, content_type,
                              content_disposition, response_size,
                              response_data);
 
   else if (!strcmp (cmd, "export_alerts"))
-    return export_alerts_omp (credentials, params, content_type,
+    ret = export_alerts_omp (&connection, credentials, params, content_type,
                               content_disposition, response_size,
                               response_data);
 
   else if (!strcmp (cmd, "export_asset"))
-    return export_asset_omp (credentials, params, content_type,
+    ret = export_asset_omp (&connection, credentials, params, content_type,
                              content_disposition, response_size,
                              response_data);
 
   else if (!strcmp (cmd, "export_assets"))
-    return export_assets_omp (credentials, params, content_type,
+    ret = export_assets_omp (&connection, credentials, params, content_type,
                               content_disposition, response_size,
                               response_data);
 
   else if (!strcmp (cmd, "export_config"))
-    return export_config_omp (credentials, params, content_type,
+    ret = export_config_omp (&connection, credentials, params, content_type,
                               content_disposition, response_size,
                               response_data);
 
   else if (!strcmp (cmd, "export_configs"))
-    return export_configs_omp (credentials, params, content_type,
+    ret = export_configs_omp (&connection, credentials, params, content_type,
                                content_disposition, response_size,
                                response_data);
 
@@ -2197,13 +2237,14 @@ exec_omp_get (gsad_connection_info_t *con_info,
       credential_login = NULL;
       credential_id = params_value (params, "credential_id");
 
-      if (download_credential_omp (credentials,
+      if (download_credential_omp (&connection,
+                                   credentials,
                                    params,
                                    response_size,
                                    &html,
                                    &credential_login,
                                    response_data))
-        return html;
+        ret = html;
 
       /* Returned above if package_format was NULL. */
       content_type_from_format_string (content_type, package_format);
@@ -2219,176 +2260,175 @@ exec_omp_get (gsad_connection_info_t *con_info,
                                  : package_format));
       g_free (credential_login);
 
-      return html;
+      ret = html;
     }
 
   else if (!strcmp (cmd, "export_credential"))
-    return export_credential_omp (credentials, params, content_type,
+    ret = export_credential_omp (&connection, credentials, params, content_type,
                                   content_disposition, response_size,
                                   response_data);
 
   else if (!strcmp (cmd, "export_credentials"))
-    return export_credentials_omp (credentials, params, content_type,
-                                   content_disposition, response_size,
-                                   response_data);
+    ret = export_credentials_omp (&connection, credentials, params,
+                                  content_type, content_disposition,
+                                  response_size, response_data);
 
   else if (!strcmp (cmd, "export_filter"))
-    return export_filter_omp (credentials, params, content_type,
+    ret = export_filter_omp (&connection, credentials, params, content_type,
                               content_disposition, response_size,
                               response_data);
 
   else if (!strcmp (cmd, "export_filters"))
-    return export_filters_omp (credentials, params, content_type,
+    ret = export_filters_omp (&connection, credentials, params, content_type,
                                content_disposition, response_size,
                                response_data);
 
   else if (!strcmp (cmd, "export_group"))
-    return export_group_omp (credentials, params, content_type,
+    ret = export_group_omp (&connection, credentials, params, content_type,
                              content_disposition, response_size,
                              response_data);
 
   else if (!strcmp (cmd, "export_groups"))
-    return export_groups_omp (credentials, params, content_type,
+    ret = export_groups_omp (&connection, credentials, params, content_type,
                               content_disposition, response_size,
                               response_data);
 
   else if (!strcmp (cmd, "export_note"))
-    return export_note_omp (credentials, params, content_type,
+    ret = export_note_omp (&connection, credentials, params, content_type,
                             content_disposition, response_size,
                             response_data);
 
   else if (!strcmp (cmd, "export_notes"))
-    return export_notes_omp (credentials, params, content_type,
+    ret = export_notes_omp (&connection, credentials, params, content_type,
                              content_disposition, response_size,
                              response_data);
 
   else if (!strcmp (cmd, "export_omp_doc"))
-    return export_omp_doc_omp (credentials, params, content_type,
+    ret = export_omp_doc_omp (&connection, credentials, params, content_type,
                                content_disposition, response_size,
                                response_data);
 
   else if (!strcmp (cmd, "export_override"))
-    return export_override_omp (credentials, params, content_type,
+    ret = export_override_omp (&connection, credentials, params, content_type,
                                 content_disposition, response_size,
                                 response_data);
 
   else if (!strcmp (cmd, "export_overrides"))
-    return export_overrides_omp (credentials, params, content_type,
+    ret = export_overrides_omp (&connection, credentials, params, content_type,
                                  content_disposition, response_size,
                                  response_data);
 
   else if (!strcmp (cmd, "export_permission"))
-    return export_permission_omp (credentials, params, content_type,
+    ret = export_permission_omp (&connection, credentials, params, content_type,
                                   content_disposition, response_size,
                                   response_data);
 
   else if (!strcmp (cmd, "export_permissions"))
-    return export_permissions_omp (credentials, params, content_type,
+    ret = export_permissions_omp (&connection, credentials, params, content_type,
                                    content_disposition, response_size,
                                    response_data);
 
   else if (!strcmp (cmd, "export_port_list"))
-    return export_port_list_omp (credentials, params, content_type,
+    ret = export_port_list_omp (&connection, credentials, params, content_type,
                                  content_disposition, response_size,
                                  response_data);
 
   else if (!strcmp (cmd, "export_port_lists"))
-    return export_port_lists_omp (credentials, params, content_type,
+    ret = export_port_lists_omp (&connection, credentials, params, content_type,
                                   content_disposition, response_size,
                                   response_data);
 
   else if (!strcmp (cmd, "export_preference_file"))
-    return export_preference_file_omp (credentials, params, content_type,
-                                       content_disposition, response_size,
-                                       response_data);
+    ret = export_preference_file_omp (&connection, credentials, params,
+                                      content_type, content_disposition,
+                                      response_size, response_data);
 
   else if (!strcmp (cmd, "export_report_format"))
-    return export_report_format_omp (credentials, params, content_type,
-                                     content_disposition, response_size,
-                                     response_data);
+    ret = export_report_format_omp (&connection, credentials, params,
+                                    content_type, content_disposition,
+                                    response_size, response_data);
 
   else if (!strcmp (cmd, "export_report_formats"))
-    return export_report_formats_omp (credentials, params, content_type,
-                                      content_disposition, response_size,
-                                      response_data);
+    ret = export_report_formats_omp (&connection, credentials, params,
+                                     content_type, content_disposition,
+                                     response_size, response_data);
 
   else if (!strcmp (cmd, "export_result"))
-    return export_result_omp (credentials, params, content_type,
-                              content_disposition, response_size,
-                              response_data);
+    ret = export_result_omp (&connection, credentials, params, content_type,
+                             content_disposition, response_size, response_data);
 
   else if (!strcmp (cmd, "export_results"))
-    return export_results_omp (credentials, params, content_type,
+    ret = export_results_omp (&connection, credentials, params, content_type,
                                content_disposition, response_size,
                                response_data);
 
   else if (!strcmp (cmd, "export_role"))
-    return export_role_omp (credentials, params, content_type,
+    ret = export_role_omp (&connection, credentials, params, content_type,
                             content_disposition, response_size,
                             response_data);
 
   else if (!strcmp (cmd, "export_roles"))
-    return export_roles_omp (credentials, params, content_type,
+    ret = export_roles_omp (&connection, credentials, params, content_type,
                              content_disposition, response_size,
                              response_data);
 
   else if (!strcmp (cmd, "export_scanner"))
-    return export_scanner_omp (credentials, params, content_type,
+    ret = export_scanner_omp (&connection, credentials, params, content_type,
                                content_disposition, response_size,
                                response_data);
 
   else if (!strcmp (cmd, "export_scanners"))
-    return export_scanners_omp (credentials, params, content_type,
+    ret = export_scanners_omp (&connection, credentials, params, content_type,
                                  content_disposition, response_size,
                                 response_data);
 
   else if (!strcmp (cmd, "export_schedule"))
-    return export_schedule_omp (credentials, params, content_type,
+    ret = export_schedule_omp (&connection, credentials, params, content_type,
                                 content_disposition, response_size,
                                 response_data);
 
   else if (!strcmp (cmd, "export_schedules"))
-    return export_schedules_omp (credentials, params, content_type,
+    ret = export_schedules_omp (&connection, credentials, params, content_type,
                                  content_disposition, response_size,
                                  response_data);
 
   else if (!strcmp (cmd, "export_tag"))
-    return export_tag_omp (credentials, params, content_type,
+    ret = export_tag_omp (&connection, credentials, params, content_type,
                            content_disposition, response_size,
                            response_data);
 
   else if (!strcmp (cmd, "export_tags"))
-    return export_tags_omp (credentials, params, content_type,
+    ret = export_tags_omp (&connection, credentials, params, content_type,
                             content_disposition, response_size,
                             response_data);
 
   else if (!strcmp (cmd, "export_target"))
-    return export_target_omp (credentials, params, content_type,
+    ret = export_target_omp (&connection, credentials, params, content_type,
                               content_disposition, response_size,
                               response_data);
 
   else if (!strcmp (cmd, "export_targets"))
-    return export_targets_omp (credentials, params, content_type,
+    ret = export_targets_omp (&connection, credentials, params, content_type,
                                content_disposition, response_size,
                                response_data);
 
   else if (!strcmp (cmd, "export_task"))
-    return export_task_omp (credentials, params, content_type,
+    ret = export_task_omp (&connection, credentials, params, content_type,
                             content_disposition, response_size,
                             response_data);
 
   else if (!strcmp (cmd, "export_tasks"))
-    return export_tasks_omp (credentials, params, content_type,
+    ret = export_tasks_omp (&connection, credentials, params, content_type,
                              content_disposition, response_size,
                              response_data);
 
   else if (!strcmp (cmd, "export_user"))
-    return export_user_omp (credentials, params, content_type,
+    ret = export_user_omp (&connection, credentials, params, content_type,
                             content_disposition, response_size,
                             response_data);
 
   else if (!strcmp (cmd, "export_users"))
-    return export_users_omp (credentials, params, content_type,
+    ret = export_users_omp (&connection, credentials, params, content_type,
                              content_disposition, response_size,
                              response_data);
 
@@ -2401,13 +2441,13 @@ exec_omp_get (gsad_connection_info_t *con_info,
     {
       char *html, *filename;
 
-      if (download_agent_omp (credentials,
+      if (download_agent_omp (&connection, credentials,
                               params,
                               response_size,
                               &html,
                               &filename,
                               response_data))
-        return html;
+        ret = html;
 
       *content_type = GSAD_CONTENT_TYPE_OCTET_STREAM;
       g_free (*content_disposition);
@@ -2415,7 +2455,7 @@ exec_omp_get (gsad_connection_info_t *con_info,
                                               filename);
       g_free (filename);
 
-      return html;
+      ret = html;
     }
 
   else if (!strcmp (cmd, "download_ssl_cert"))
@@ -2426,7 +2466,7 @@ exec_omp_get (gsad_connection_info_t *con_info,
                               ("attachment; filename=ssl-cert-%s.pem",
                                params_value (params, "name"));
 
-      return download_ssl_cert (credentials, params, response_size,
+      ret = download_ssl_cert (&connection, credentials, params, response_size,
                                 response_data);
     }
 
@@ -2437,7 +2477,7 @@ exec_omp_get (gsad_connection_info_t *con_info,
       *content_disposition = g_strdup_printf
                               ("attachment; filename=scanner-ca-pub-%s.pem",
                                params_value (params, "scanner_id"));
-      return download_ca_pub (credentials, params, response_size,
+      ret = download_ca_pub (&connection, credentials, params, response_size,
                               response_data);
     }
 
@@ -2448,7 +2488,7 @@ exec_omp_get (gsad_connection_info_t *con_info,
       *content_disposition = g_strdup_printf
                               ("attachment; filename=scanner-key-pub-%s.pem",
                                params_value (params, "scanner_id"));
-      return download_key_pub (credentials, params, response_size,
+      ret = download_key_pub (&connection, credentials, params, response_size,
                                response_data);
     }
 
@@ -2474,9 +2514,8 @@ exec_omp_get (gsad_connection_info_t *con_info,
 
   else if (!strcmp (cmd, "get_report"))
     {
-      char *ret;
       gchar *content_type_omp;
-      ret = get_report_omp (credentials,
+      ret = get_report_omp (&connection, credentials,
                             params,
                             response_size,
                             &content_type_omp,
@@ -2488,8 +2527,6 @@ exec_omp_get (gsad_connection_info_t *con_info,
           *content_type = GSAD_CONTENT_TYPE_DONE;
           *content_type_string = content_type_omp;
         }
-
-      return ret;
     }
 
   ELSE (get_reports)
@@ -2543,14 +2580,17 @@ exec_omp_get (gsad_connection_info_t *con_info,
   else
     {
       response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
-      return gsad_message_new (credentials,
-                               "Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred inside GSA daemon. "
-                               "Diagnostics: Unknown command.",
-                               "/omp?cmd=get_tasks",
-                               params_value_bool (params, "xml"),
-                               response_data);
+      ret = gsad_message_new (credentials,
+                              "Internal error", __FUNCTION__, __LINE__,
+                              "An internal error occurred inside GSA daemon. "
+                              "Diagnostics: Unknown command.",
+                              "/omp?cmd=get_tasks",
+                              params_value_bool (params, "xml"),
+                              response_data);
     }
+
+  openvas_connection_close (&connection);
+  return ret;
 }
 
 /**
