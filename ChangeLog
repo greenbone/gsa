@@ -1,3 +1,14 @@
+2016-12-14  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	Backport r26934.
+
+	* README: Updated text and removed the detailed output of --help which
+	it too easily outdated here.
+
+	* src/gsad.c: Add all licenses to the Doxygen documentation.
+
+	* COPYING: Fix filename.
+
 2016-12-12  Matthew Mundell <matthew.mundell@greenbone.net>
 
 	Backport r26890.
