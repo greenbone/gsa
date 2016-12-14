@@ -642,7 +642,7 @@ handle_omp_get (http_connection_t *connection,
 
   g_debug("Handling OMP GET for cmd %s\n", cmd);
 
-  res = exec_omp_get (connection, credentials, &content_type,
+  res = exec_omp_get (con_info, credentials, &content_type,
                       &content_type_string, &content_disposition,
                       &response_size, &response_data);
   if (response_size > 0)

@@ -203,7 +203,7 @@ int attach_sid (http_response_t *response, const char *sid);
 
 
 /* params_append_mhd, exec_omp_... are still in gsad.c */
-char * exec_omp_get (http_connection_t *connection,
+char * exec_omp_get (gsad_connection_info_t *con_info,
                      credentials_t *credentials,
                      content_type_t *content_type,
                      gchar **content_type_string,

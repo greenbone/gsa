@@ -1,5 +1,14 @@
 2016-12-14  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/gsad_http.h, src/gsad.c (exec_omp_get): Expect gsad_connection_info as
+	parameter instead of http connection. Use already parsed params from passed
+	connnection info.
+
+	* src/gsad_http_handler.c (handle_omp_get): Pass con_info instead of http
+	connection to exec_omp_get.
+
+2016-12-14  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/gsad_http_handler.c (handle_request): Add params to con_info also for
 	get requests. In future the params of con_info should be used always instead
 	of the params from the credentials in get requests.

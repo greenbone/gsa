@@ -1969,7 +1969,7 @@ params_mhd_add (void *params, enum MHD_ValueKind kind, const char *name,
  * After some input checking, depending on the cmd parameter of the connection,
  * issue an omp command (via *_omp functions).
  *
- * @param[in]   connection           Connection.
+ * @param[in]   con_info             Connection info.
  * @param[in]   credentials          User credentials.
  * @param[out]  content_type         Return location for the content type of
  *                                   the response.
@@ -1983,7 +1983,7 @@ params_mhd_add (void *params, enum MHD_ValueKind kind, const char *name,
  * @return Newly allocated response string.
  */
 char *
-exec_omp_get (struct MHD_Connection *connection,
+exec_omp_get (gsad_connection_info_t *con_info,
               credentials_t *credentials,
               enum content_type* content_type,
               gchar **content_type_string,
@@ -1991,13 +1991,12 @@ exec_omp_get (struct MHD_Connection *connection,
               gsize* response_size,
               cmd_response_data_t *response_data)
 {
-  char *cmd = NULL;
+  const char *cmd = NULL;
   const int CMD_MAX_SIZE = 27;   /* delete_trash_lsc_credential */
-  params_t *params;
+  params_t *params = con_info->params;
 
-  cmd =
-    (char *) MHD_lookup_connection_value (connection, MHD_GET_ARGUMENT_KIND,
-                                          "cmd");
+  cmd = params_value (params, "cmd");
+
   if (cmd == NULL)
     {
       cmd = "dashboard";  // TODO: Allow settings for face + users(?)
@@ -2009,14 +2008,6 @@ exec_omp_get (struct MHD_Connection *connection,
   if ((cmd != NULL) && (strlen (cmd) <= CMD_MAX_SIZE))
     {
       g_debug ("cmd: [%s]\n", cmd);
-
-      params = params_new ();
-
-      MHD_get_connection_values (connection, MHD_GET_ARGUMENT_KIND,
-                                 params_mhd_add, params);
-
-      params_mhd_validate (params);
-      credentials->params = params;
     }
   else
     {
@@ -2028,6 +2019,8 @@ exec_omp_get (struct MHD_Connection *connection,
                           "/omp?cmd=get_tasks", response_data);
     }
 
+
+  credentials->params = params; // FIXME remove params from credentials
 
   /* Set the timezone. */
 
