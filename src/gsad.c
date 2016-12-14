@@ -43,8 +43,17 @@
  * \section Installation
  * \verbinclude INSTALL
  *
- * \section copying License Information
+ * \section copying License
  * \verbinclude COPYING
+ *
+ * \subsection copying_gplv2 GPLv2
+ * \verbinclude COPYING.GPL
+ *
+ * \subsection copying_bsd3 BSD-3
+ * \verbinclude COPYING.BSD3
+ *
+ * \subsection copying_mit MIT
+ * \verbinclude COPYING.MIT
  */
 
 /**

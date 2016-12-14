@@ -1,52 +1,35 @@
 About Greenbone Security Assistant
 ----------------------------------
 
-The Greenbone Security Assistant is a web application that
-connects to the OpenVAS Manager to provide for a full-featured user interface
-for vulnerability management.
+The Greenbone Security Assistant is the web interface developed for the
+Greenbone Security Manager appliances. It connects to the OpenVAS Manager
+to provide for a full-featured user interface for vulnerability management.
 
 Greenbone Security Assistant is licensed under GNU General Public License
 Version 2 or any later version. Please see file COPYING for details.
 
-All parts of Greenbone Security Assistant are
 Copyright (C) by Greenbone Networks GmbH (see http://www.greenbone.net).
+
+Greenbone Security Assistant integrates helper libraries. Respective
+copyright and license details are provided in file COPYING. 
 
 
 Howto use
 ---------
 
-For example, if openvasmd (OpenVAS Manager daemon) is running on
-port 9390, the following command starts Greenbone Security
-Assistant daemon on port 443.
+Starting Greenbone Security Assistant:
+
+In case everything was installed using the defaults, then starting the daemon
+of the Greenbone Security Assistant can be done with this simple command:
 
     gsad
 
+The daemon will then listen on port 443, in other words the web interface
+is available in your network under "https://<your host>".
 
-The program usage message follows.
+If port 443 was not available, gsad tries to serve at port 9392 as a fallback
+("https://<your host>:9392").
 
-    Usage:
-      gsad [OPTION...] - Greenbone Security Assistant Daemon
+To see all available command line options of gsad enter this command:
 
-    Help Options:
-      -h, --help                       Show help options
-
-    Application Options:
-      --drop-privileges                Drop privileges.
-      -f, --foreground                 Run in foreground.
-      --http-only                      Serve HTTP only, without SSL.
-      --listen=<address>               Listen on <address>.
-      --mlisten=<address>              Manager address.
-      -p, --port=<number>              Use port number <number>.
-      -m, --mport=<number>             Use manager port number <number>.
-      -r, --rport=<number>             Redirect HTTP from this port number <number>.
-      -R, --redirect                   Redirect HTTP to HTTPS.
-      -v, --verbose                    Print progress messages.
-      -V, --version                    Print version and exit.
-      -k, --ssl-private-key=<file>     Use <file> as the private key for HTTPS
-      -c, --ssl-certificate=<file>     Use <file> as the certificate for HTTPS
-      --do-chroot                      Do chroot.
-      --secure-cookie                  Use a secure cookie (implied when using HTTPS).
-      --timeout=<number>               Minutes of user idle time before session expires.
-      --debug-tls=<level>              Enable TLS debugging at <level>
-      --gnutls-priorities=<string>     GnuTLS priorities string.
-      --face=<dir>                     Use interface files from subdirectory <dir>
+    gsad --help
