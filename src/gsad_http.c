@@ -1189,3 +1189,38 @@ login_xml (const gchar *message, const gchar *token, const gchar *time,
 
   return g_string_free (xml, FALSE);
 }
+
+/**
+ * @brief Removes user token and returns logout page or logout xml in case of
+ * xml_flag is set to true
+ *
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  xml_flag     Flag to indicate if the response should be xml
+ * @param[in]  message      Login screen message.
+ * @param[out] response_data  Extra data return for the HTTP response.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+logout_xml (credentials_t *credentials, gboolean xml_flag,
+            const gchar *message, cmd_response_data_t *response_data)
+{
+  time_t now;
+  gchar *xml;
+  char *res;
+  char ctime_now[200];
+
+  logout(credentials);
+
+  now = time (NULL);
+  ctime_r_strip_newline (&now, ctime_now);
+
+  xml = login_xml (message, NULL, ctime_now, NULL, NULL, NULL);
+
+  if (xml_flag)
+    return xml;
+
+  res = xsl_transform (xml, response_data);
+  g_free (xml);
+  return res;
+}

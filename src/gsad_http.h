@@ -228,4 +228,7 @@ char * gsad_message_new (credentials_t *, const char *, const char *, int,
 gchar *login_xml (const gchar *, const gchar *, const gchar *, const gchar *,
                   const gchar *, const gchar *);
 
+gchar * logout_xml (credentials_t *credentials, gboolean xml_flag,
+                    const gchar *message, cmd_response_data_t *response_data);
+
 #endif /* _GSAD_HTTP_H */

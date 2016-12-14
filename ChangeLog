@@ -1,5 +1,10 @@
 2016-12-14  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/gsad_http.c, src/gsad_http.h: Introduce new logout_xml function. This
+	function encapsulates the generation of the logout page.
+
+2016-12-14  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/gsad_http.c, src/gsad_http.h: Extract a gsad_message_new function from
 	gsad_message. This function has a new xml_flag parameter to allow to decide
 	to return xml or html explicitly. In future the gsad_message function shold be
