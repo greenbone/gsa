@@ -642,6 +642,22 @@ credentials_free (credentials_t *creds)
   g_free (creds);
 }
 
+/**
+ * @brief Removes the users token
+ *
+ * @param[in]  credentials  Use credentials.
+ *
+ * @return 0 success, -1 error.
+ */
+int
+logout (credentials_t *credentials)
+{
+  if (credentials->token == NULL)
+    return 0;
+
+  return token_user_remove (credentials->token);
+}
+
 void
 init_users ()
 {

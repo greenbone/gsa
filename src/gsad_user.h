@@ -136,6 +136,8 @@ credentials_t * credentials_new (user_t *user, const char *language,
 
 void credentials_free (credentials_t *creds);
 
+int logout (credentials_t *);
+
 void init_users ();
 
 #endif /* _GSAD_USER_H_ */
