@@ -93,7 +93,7 @@ Prerequisites for using the Next Generation GUI:
 * node.js >= 4.0
 * Either yarn or npm. yarn is faster, but younger.
 
-On Debian Jessie node.js si too old. Follow these steps for a
+On Debian Jessie node.js is too old. Follow these steps for a
 sufficiently new version. Be aware that this will remove your
 current installation of node.js, npm and related packages.
 

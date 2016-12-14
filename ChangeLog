@@ -1,6 +1,10 @@
+2016-12-13  Christian Fischer <christian.fischer@greenbone.net>
+
+	* INSTALL:  Fix typo.
+
 2016-12-13  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
-	* INTALL: Add hints on how to get the Next Generation GUI compiled.
+	* INSTALL: Add hints on how to get the Next Generation GUI compiled.
 
 2016-12-13  Björn Ricks <bjoern.ricks@greenbone.net>
 
