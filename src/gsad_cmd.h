@@ -41,9 +41,11 @@
  * @brief Response information for commands.
  */
 typedef struct {
-  int http_status_code;        ///> HTTP status code.
-  gchar *redirect;             ///> Redirect URL or NULL.
-  content_type_t content_type; ///> Content type. Default is text/html
+  int http_status_code;              ///> HTTP status code.
+  gchar *redirect;                   ///> Redirect URL or NULL.
+  content_type_t content_type;       ///> Content type. Default is text/html
+  gsize content_length;              ///> Content length of the response
+  const gchar *content_disposition;  ///> Content disposition
 } cmd_response_data_t;
 
 void cmd_response_data_init (cmd_response_data_t* data);
@@ -59,5 +61,16 @@ void cmd_response_data_set_status_code (cmd_response_data_t *data,
                                         int http_status_code);
 
 int cmd_response_data_get_status_code (cmd_response_data_t *data);
+
+void cmd_response_data_set_content_length (cmd_response_data_t *data,
+                                           gsize content_length);
+
+gsize cmd_response_data_get_content_length (cmd_response_data_t *data);
+
+void cmd_response_data_set_content_disposition
+  (cmd_response_data_t *data, const gchar *content_disposition);
+
+const gchar * cmd_response_data_get_content_disposition
+  (cmd_response_data_t *data);
 
 #endif /* not _GSAD_CMD_H */

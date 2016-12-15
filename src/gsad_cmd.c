@@ -44,6 +44,8 @@ cmd_response_data_init (cmd_response_data_t* data)
   data->http_status_code = MHD_HTTP_OK;
   data->content_type = GSAD_CONTENT_TYPE_APP_HTML;
   data->redirect = NULL;
+  data->content_disposition = NULL;
+  data->content_length = 0;
 }
 
 /**
@@ -60,7 +62,7 @@ cmd_response_data_reset (cmd_response_data_t* data)
 /**
  * @brief Set content type of cmd_response_data_t struct
  *
- * @param[in]  data          Struct to reset.
+ * @param[in]  data          Command response data struct
  * @param[in]  content_type  Content Type to set
  */
 void
@@ -73,7 +75,7 @@ cmd_response_data_set_content_type (cmd_response_data_t *data,
 /**
  * @brief Get content type of cmd_response_data_t struct
  *
- * @param[in]  data  Struct to reset.
+ * @param[in]  data  Command response data struct
  *
  * @return The content type
  */
@@ -86,7 +88,7 @@ cmd_response_data_get_content_type (cmd_response_data_t *data)
 /**
  * @brief Set status code of cmd_response_data_t struct
  *
- * @param[in]  data              Struct to reset.
+ * @param[in]  data              Command response data struct
  * @param[in]  http_status_code  HTTP status code
  */
 void
@@ -99,7 +101,7 @@ cmd_response_data_set_status_code (cmd_response_data_t *data,
 /**
  * @brief Get http status code of cmd_response_data_t struct
  *
- * @param[in]  data              Struct to reset.
+ * @param[in]  data  Command response data struct
  *
  * @return  HTTP status code
  */
@@ -107,4 +109,57 @@ int
 cmd_response_data_get_status_code (cmd_response_data_t *data)
 {
   return data->http_status_code;
+}
+
+/**
+ * @brief Set response content length of cmd_response_data_t struct
+ *
+ * @param[in]  data            Command response data struct
+ * @param[in]  content_length  Content length of the response
+ */
+void
+cmd_response_data_set_content_length (cmd_response_data_t *data,
+                                      gsize content_length)
+{
+  data->content_length = content_length;
+}
+
+/**
+ * @brief Get response content length of cmd_response_data_t struct
+ *
+ * @param[in]  data  Command response data struct
+ *
+ * @return Content length of the response
+ */
+gsize
+cmd_response_data_get_content_length (cmd_response_data_t *data)
+{
+  return data->content_length;
+}
+
+/**
+ * @brief Set content disposition of cmd_response_data_t struct
+ *
+ * @param[in]  data  Command response data struct
+ *
+ * @return Content disposition
+ */
+void
+cmd_response_data_set_content_disposition (cmd_response_data_t *data,
+                                           const gchar *content_disposition)
+{
+  data->content_disposition = content_disposition;
+}
+
+/**
+ * @brief Get content disposition of cmd_response_data_t struct
+ *
+ * @param[in]  data  Command response data struct
+ *
+ * @return  Size of the response
+ */
+const gchar *
+cmd_response_data_get_content_disposition (cmd_response_data_t *data)
+{
+  return data->content_disposition;
 }

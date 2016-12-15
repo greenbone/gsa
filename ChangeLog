@@ -26,6 +26,12 @@
 
 2016-12-15  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/gsad_cmd.h, src/gsad_cmd.c: Add content_length and content_disposition
+	to cmd_response_data_t. Also add getter and setter functions. This will allow
+	to use cmd_response_data_t really for all response data in the omp functions.
+
+2016-12-15  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/gsad_omp.c (xsl_transform_omp): Set content type to xml if xml flag is
 	set and xml content will be returned in xsl_transform_omp.
 
