@@ -91,17 +91,14 @@ char * get_tasks_omp (openvas_connection_t *, credentials_t *,
 char * get_tasks_chart_omp (openvas_connection_t *, credentials_t *,
                             params_t *, cmd_response_data_t*);
 char * export_task_omp (openvas_connection_t *, credentials_t *,
-                        params_t *, enum content_type *,
-                        char **, gsize *, cmd_response_data_t*);
+                        params_t *, cmd_response_data_t*);
 char * export_tasks_omp (openvas_connection_t *, credentials_t *,
-                         params_t *, enum content_type *,
-                         char **, gsize *, cmd_response_data_t*);
+                         params_t *, cmd_response_data_t*);
 
 char * delete_report_omp (openvas_connection_t *, credentials_t *,
                           params_t *, cmd_response_data_t*);
 char * get_report_omp (openvas_connection_t *, credentials_t *,
-                       params_t *, gsize *, gchar **, char **,
-                       cmd_response_data_t*);
+                       params_t *, gchar **, cmd_response_data_t*);
 char * get_reports_omp (openvas_connection_t *, credentials_t *,
                         params_t *, cmd_response_data_t*);
 
@@ -110,19 +107,16 @@ char * get_report_section_omp (openvas_connection_t *,
                                cmd_response_data_t*);
 
 char * download_ssl_cert (openvas_connection_t *, credentials_t *,
-                          params_t *, gsize *,
-                          cmd_response_data_t*);
+                          params_t *, cmd_response_data_t*);
 char * download_ca_pub (openvas_connection_t *, credentials_t *,
-                        params_t *, gsize *, cmd_response_data_t*);
+                        params_t *, cmd_response_data_t*);
 char * download_key_pub (openvas_connection_t *, credentials_t *,
-                         params_t *, gsize *, cmd_response_data_t*);
+                         params_t *, cmd_response_data_t*);
 
 char * export_result_omp (openvas_connection_t *, credentials_t *,
-                          params_t *, enum content_type *,
-                          char **, gsize *, cmd_response_data_t*);
+                          params_t *, cmd_response_data_t*);
 char * export_results_omp (openvas_connection_t *, credentials_t *,
-                           params_t *, enum content_type *,
-                          char **, gsize *, cmd_response_data_t*);
+                           params_t *, cmd_response_data_t*);
 char * get_result_omp (openvas_connection_t *, credentials_t *,
                        params_t *, cmd_response_data_t*);
 char * get_results_omp (openvas_connection_t *, credentials_t *,
@@ -148,23 +142,19 @@ char * save_alert_omp (openvas_connection_t *, credentials_t *,
 char * get_alerts_omp (openvas_connection_t *, credentials_t *,
                        params_t *, cmd_response_data_t*);
 char * export_alert_omp (openvas_connection_t *, credentials_t *,
-                         params_t *, enum content_type *,
-                         char **, gsize *, cmd_response_data_t*);
+                         params_t *, cmd_response_data_t*);
 char * export_alerts_omp (openvas_connection_t *, credentials_t *,
-                          params_t *, enum content_type *,
-                          char **, gsize *, cmd_response_data_t*);
+                          params_t *, cmd_response_data_t*);
 
 int download_credential_omp (openvas_connection_t *, credentials_t *,
-                             params_t *, gsize *, char **,
-                             char **, cmd_response_data_t*);
+                             params_t *, char **, char **,
+                             cmd_response_data_t*);
 
 char * export_credential_omp (openvas_connection_t *,
                               credentials_t *, params_t *,
-                              enum content_type *, char **, gsize *,
                               cmd_response_data_t*);
 char * export_credentials_omp (openvas_connection_t *,
                                credentials_t *, params_t *,
-                               enum content_type *, char **, gsize *,
                                cmd_response_data_t*);
 char * get_credential_omp (openvas_connection_t *, credentials_t *, params_t *,
                            cmd_response_data_t*);
@@ -190,7 +180,7 @@ char * get_agent_omp (openvas_connection_t *, credentials_t *, params_t *,
 char * get_agents_omp (openvas_connection_t *, credentials_t *, params_t *,
                        cmd_response_data_t*);
 int download_agent_omp (openvas_connection_t *, credentials_t *, params_t *,
-                        gsize *, char **, char **, cmd_response_data_t*);
+                        char **, char **, cmd_response_data_t*);
 char * edit_agent_omp (openvas_connection_t *, credentials_t *, params_t *,
                        cmd_response_data_t*);
 char * save_agent_omp (openvas_connection_t *, credentials_t *, params_t *,
@@ -204,10 +194,8 @@ char * delete_trash_agent_omp (openvas_connection_t *, credentials_t *,
 char * verify_agent_omp (openvas_connection_t *, credentials_t *, params_t *,
                          cmd_response_data_t*);
 char * export_agent_omp (openvas_connection_t *, credentials_t *, params_t *,
-                         enum content_type *, char **, gsize *,
                          cmd_response_data_t*);
 char * export_agents_omp (openvas_connection_t *, credentials_t *, params_t *,
-                          enum content_type *, char **, gsize *,
                           cmd_response_data_t*);
 
 char * get_aggregate_omp (openvas_connection_t *, credentials_t *, params_t *,
@@ -230,10 +218,8 @@ char * delete_trash_scanner_omp (openvas_connection_t *, credentials_t *,
 char * edit_scanner_omp (openvas_connection_t *, credentials_t *, params_t *,
                          cmd_response_data_t*);
 char * export_scanner_omp (openvas_connection_t *, credentials_t *, params_t *,
-                           enum content_type *, char **, gsize *,
                            cmd_response_data_t*);
 char * export_scanners_omp (openvas_connection_t *, credentials_t *, params_t *,
-                            enum content_type *, char **, gsize *,
                             cmd_response_data_t*);
 char * verify_scanner_omp (openvas_connection_t *, credentials_t *, params_t *,
                            cmd_response_data_t*);
@@ -255,11 +241,9 @@ char * get_schedules_omp (openvas_connection_t *, credentials_t *, params_t *,
 char * save_schedule_omp (openvas_connection_t *, credentials_t *, params_t *,
                           cmd_response_data_t*);
 char * export_schedule_omp (openvas_connection_t *, credentials_t *, params_t *,
-                            enum content_type *, char **, gsize *,
                             cmd_response_data_t*);
 char * export_schedules_omp (openvas_connection_t *, credentials_t *,
-                             params_t *, enum content_type *,
-                             char **, gsize *, cmd_response_data_t*);
+                             params_t *, cmd_response_data_t*);
 
 char * create_tag_omp (openvas_connection_t *, credentials_t *, params_t *,
                        cmd_response_data_t*);
@@ -270,10 +254,8 @@ char * delete_trash_tag_omp (openvas_connection_t *, credentials_t *,
 char * edit_tag_omp (openvas_connection_t *, credentials_t *, params_t *,
                      cmd_response_data_t*);
 char * export_tags_omp (openvas_connection_t *, credentials_t *, params_t *,
-                        enum content_type *,
-                        char **, gsize *, cmd_response_data_t*);
+                        cmd_response_data_t*);
 char * export_tag_omp (openvas_connection_t *, credentials_t *, params_t *,
-                       enum content_type *, char **, gsize *,
                        cmd_response_data_t*);
 char * get_tag_omp (openvas_connection_t *, credentials_t *, params_t *,
                     cmd_response_data_t*);
@@ -293,10 +275,8 @@ char * get_target_omp (openvas_connection_t *, credentials_t *, params_t *,
 char * get_targets_omp (openvas_connection_t *, credentials_t *, params_t *,
                         cmd_response_data_t*);
 char * export_targets_omp (openvas_connection_t *, credentials_t *, params_t *,
-                           enum content_type *, char **, gsize *,
                            cmd_response_data_t*);
 char * export_target_omp (openvas_connection_t *, credentials_t *, params_t *,
-                          enum content_type *, char **, gsize *,
                           cmd_response_data_t*);
 char * create_target_omp (openvas_connection_t *, credentials_t *, params_t *,
                           cmd_response_data_t*);
@@ -344,21 +324,16 @@ char * delete_trash_config_omp (openvas_connection_t *, credentials_t *,
 char * sync_config_omp (openvas_connection_t *, credentials_t *, params_t *,
                         cmd_response_data_t*);
 char * export_config_omp (openvas_connection_t *, credentials_t *, params_t *,
-                          enum content_type*, char **, gsize *,
                           cmd_response_data_t*);
 char * export_configs_omp (openvas_connection_t *, credentials_t *, params_t *,
-                           enum content_type *, char **, gsize *,
                            cmd_response_data_t*);
 
 char * export_preference_file_omp (openvas_connection_t *, credentials_t *,
-                                   params_t *, enum content_type *,
-                                  char **, gsize *, cmd_response_data_t*);
+                                   params_t *, cmd_response_data_t*);
 char * export_report_format_omp (openvas_connection_t *, credentials_t *,
-                                 params_t *, enum content_type *,
-                                 char **, gsize *, cmd_response_data_t*);
+                                 params_t *, cmd_response_data_t*);
 char * export_report_formats_omp (openvas_connection_t *, credentials_t *,
-                                  params_t *, enum content_type *, char **,
-                                  gsize *, cmd_response_data_t*);
+                                  params_t *, cmd_response_data_t*);
 
 char * create_group_omp (openvas_connection_t *, credentials_t *, params_t *,
                          cmd_response_data_t*);
@@ -369,10 +344,8 @@ char * delete_trash_group_omp (openvas_connection_t *, credentials_t *,
 char * edit_group_omp (openvas_connection_t *, credentials_t *, params_t *,
                        cmd_response_data_t*);
 char * export_group_omp (openvas_connection_t *, credentials_t *, params_t *,
-                         enum content_type *, char **, gsize *,
                          cmd_response_data_t*);
 char * export_groups_omp (openvas_connection_t *, credentials_t *, params_t *,
-                          enum content_type *, char **, gsize *,
                           cmd_response_data_t*);
 char * get_group_omp (openvas_connection_t *, credentials_t *, params_t *,
                       cmd_response_data_t*);
@@ -400,10 +373,8 @@ char * edit_note_omp (openvas_connection_t *, credentials_t *, params_t *,
 char * save_note_omp (openvas_connection_t *, credentials_t *, params_t *,
                       cmd_response_data_t*);
 char * export_note_omp (openvas_connection_t *, credentials_t *, params_t *,
-                        enum content_type *, char **, gsize *,
                         cmd_response_data_t*);
 char * export_notes_omp (openvas_connection_t *, credentials_t *, params_t *,
-                         enum content_type *, char **, gsize *,
                          cmd_response_data_t*);
 
 char * create_permission_omp (openvas_connection_t *, credentials_t *,
@@ -417,11 +388,9 @@ char * delete_trash_permission_omp (openvas_connection_t *, credentials_t *,
 char * edit_permission_omp (openvas_connection_t *, credentials_t *, params_t *,
                             cmd_response_data_t*);
 char * export_permission_omp (openvas_connection_t *, credentials_t *,
-                              params_t *, enum content_type *,
-                              char **, gsize *, cmd_response_data_t*);
+                              params_t *, cmd_response_data_t*);
 char * export_permissions_omp (openvas_connection_t *, credentials_t *,
-                               params_t *, enum content_type *,
-                               char **, gsize *, cmd_response_data_t*);
+                               params_t *, cmd_response_data_t*);
 char * get_permission_omp (openvas_connection_t *, credentials_t *, params_t *,
                            cmd_response_data_t*);
 char * get_permissions_omp (openvas_connection_t *, credentials_t *, params_t *,
@@ -457,11 +426,9 @@ char * delete_trash_port_list_omp (openvas_connection_t *, credentials_t *,
 char * delete_port_range_omp (openvas_connection_t *, credentials_t *,
                               params_t *, cmd_response_data_t*);
 char * export_port_list_omp (openvas_connection_t *, credentials_t *,
-                             params_t *, enum content_type *,
-                             char **, gsize *, cmd_response_data_t*);
+                             params_t *, cmd_response_data_t*);
 char * export_port_lists_omp (openvas_connection_t *, credentials_t *,
-                              params_t *, enum content_type *,
-                              char **, gsize *, cmd_response_data_t*);
+                              params_t *, cmd_response_data_t*);
 char * import_port_list_omp (openvas_connection_t *, credentials_t *,
                              params_t *, cmd_response_data_t*);
 
@@ -474,10 +441,8 @@ char * delete_trash_role_omp (openvas_connection_t *, credentials_t *,
 char * edit_role_omp (openvas_connection_t *, credentials_t *, params_t *,
                       cmd_response_data_t*);
 char * export_role_omp (openvas_connection_t *, credentials_t *, params_t *,
-                        enum content_type *, char **, gsize *,
                         cmd_response_data_t*);
 char * export_roles_omp (openvas_connection_t *, credentials_t *, params_t *,
-                         enum content_type *, char **, gsize *,
                          cmd_response_data_t*);
 char * get_role_omp (openvas_connection_t *, credentials_t *, params_t *,
                      cmd_response_data_t*);
@@ -505,11 +470,9 @@ char * edit_override_omp (openvas_connection_t *, credentials_t *, params_t *,
 char * save_override_omp (openvas_connection_t *, credentials_t *, params_t *,
                           cmd_response_data_t*);
 char * export_override_omp (openvas_connection_t *, credentials_t *, params_t *,
-                            enum content_type *, char **, gsize *,
                             cmd_response_data_t*);
 char * export_overrides_omp (openvas_connection_t *, credentials_t *,
-                             params_t *, enum content_type *,
-                             char **, gsize *, cmd_response_data_t*);
+                             params_t *, cmd_response_data_t*);
 
 char * get_slave_omp (openvas_connection_t *, credentials_t *, params_t *,
                       cmd_response_data_t*);
@@ -528,17 +491,15 @@ char * delete_trash_slave_omp (openvas_connection_t *, credentials_t *,
 char * edit_slave_omp (openvas_connection_t *, credentials_t *, params_t *,
                        cmd_response_data_t*);
 char * export_slave_omp (openvas_connection_t *, credentials_t *, params_t *,
-                         enum content_type *, char **, gsize *,
                          cmd_response_data_t*);
 char * export_slaves_omp (openvas_connection_t *, credentials_t *, params_t *,
-                          enum content_type *, char **, gsize *,
                           cmd_response_data_t*);
 
 char * get_system_reports_omp (openvas_connection_t *, credentials_t *,
                                params_t *, cmd_response_data_t*);
 char * get_system_report_omp (openvas_connection_t *, credentials_t *,
-                              const char *, params_t *, enum content_type*,
-                              gsize *, cmd_response_data_t*);
+                              const char *, params_t *,
+                              cmd_response_data_t*);
 
 char * get_report_format_omp (openvas_connection_t *, credentials_t *,
                               params_t *, cmd_response_data_t*);
@@ -577,10 +538,8 @@ char * delete_trash_filter_omp (openvas_connection_t *, credentials_t *,
 char * edit_filter_omp (openvas_connection_t *, credentials_t *, params_t *,
                         cmd_response_data_t*);
 char * export_filter_omp (openvas_connection_t *, credentials_t *, params_t *,
-                          enum content_type *, char **, gsize *,
                           cmd_response_data_t*);
 char * export_filters_omp (openvas_connection_t *, credentials_t *, params_t *,
-                           enum content_type *, char **, gsize *,
                            cmd_response_data_t*);
 char * get_filter_omp (openvas_connection_t *, credentials_t *, params_t *,
                        cmd_response_data_t*);
@@ -600,10 +559,8 @@ char * delete_user_confirm_omp (openvas_connection_t *, credentials_t *,
 char * edit_user_omp (openvas_connection_t *, credentials_t *, params_t *,
                       cmd_response_data_t*);
 char * export_user_omp (openvas_connection_t *, credentials_t *, params_t *,
-                        enum content_type *, char **, gsize *,
                         cmd_response_data_t*);
 char * export_users_omp (openvas_connection_t *, credentials_t *, params_t *,
-                         enum content_type *, char **, gsize *,
                          cmd_response_data_t*);
 char * get_user_omp (openvas_connection_t *, credentials_t *, params_t *,
                      cmd_response_data_t*);
@@ -612,7 +569,7 @@ char * get_users_omp (openvas_connection_t *, credentials_t *, params_t *,
 char * new_user_omp (openvas_connection_t *, credentials_t *, params_t *,
                      cmd_response_data_t*);
 char * save_user_omp (openvas_connection_t *, credentials_t *, params_t *,
-                      char **, char **, int*, cmd_response_data_t*);
+                      char **, char **, int *, cmd_response_data_t*);
 char * get_vulns_omp (openvas_connection_t *, credentials_t *, params_t *,
                       cmd_response_data_t*);
 char * save_auth_omp (openvas_connection_t *, credentials_t *, params_t *,
@@ -624,7 +581,6 @@ char * auth_settings_omp (openvas_connection_t *, credentials_t *, params_t *,
                           cmd_response_data_t*);
 
 char * process_bulk_omp (openvas_connection_t *, credentials_t *, params_t *,
-                         enum content_type *, char **, gsize *,
                          cmd_response_data_t*);
 char * bulk_delete_omp (openvas_connection_t *, credentials_t *, params_t *,
                         cmd_response_data_t*);
@@ -651,7 +607,6 @@ char * empty_trashcan_omp (openvas_connection_t *, credentials_t *, params_t *,
 char * get_protocol_doc_omp (openvas_connection_t *, credentials_t *,
                              params_t *, cmd_response_data_t*);
 char * export_omp_doc_omp (openvas_connection_t *, credentials_t *, params_t *,
-                           enum content_type *, char **, gsize *,
                            cmd_response_data_t*);
 
 char * edit_my_settings_omp (openvas_connection_t *, credentials_t *,
@@ -686,10 +641,8 @@ char * get_assets_omp (openvas_connection_t *, credentials_t *, params_t *,
 char * get_asset_omp (openvas_connection_t *, credentials_t *, params_t *,
                       cmd_response_data_t*);
 char * export_asset_omp (openvas_connection_t *, credentials_t *, params_t *,
-                         enum content_type *, char **, gsize *,
                          cmd_response_data_t*);
 char * export_assets_omp (openvas_connection_t *, credentials_t *, params_t *,
-                          enum content_type *, char **, gsize *,
                           cmd_response_data_t*);
 char * get_assets_chart_omp (openvas_connection_t *, credentials_t *,
                              params_t *, cmd_response_data_t*);

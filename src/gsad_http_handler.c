@@ -624,7 +624,7 @@ handle_omp_get (http_connection_t *connection,
 
   credentials_t *credentials = (credentials_t*)data;
   char *res;
-  unsigned int res_len = 0;
+  gsize res_len = 0;
   content_type_t content_type = GSAD_CONTENT_TYPE_TEXT_HTML;
   gchar *content_type_string = NULL;
   gsize response_size = 0;
@@ -643,14 +643,14 @@ handle_omp_get (http_connection_t *connection,
 
   g_debug("Handling OMP GET for cmd %s\n", cmd);
 
-  res = exec_omp_get (con_info, credentials, &content_type,
-                      &content_type_string, &content_disposition,
-                      &response_size, &response_data);
+  res = exec_omp_get (con_info, credentials, &content_type_string,
+                      &response_data);
+
+  response_size = cmd_response_data_get_content_length (&response_data);
 
   if (response_size > 0)
     {
       res_len = response_size;
-      response_size = 0;
     }
   else
     {
@@ -1022,8 +1022,6 @@ handle_system_report (http_connection_t *connection,
                                      credentials,
                                      &url[0] + strlen ("/system_report/"),
                                      params,
-                                     &content_type,
-                                     &res_len,
                                      &response_data);
         break;
       case -1:
@@ -1062,11 +1060,14 @@ handle_system_report (http_connection_t *connection,
       return MHD_NO;
     }
 
-  response = MHD_create_response_from_buffer ((unsigned int) res_len,
-                                              res, MHD_RESPMEM_MUST_FREE);
+  http_response_code = cmd_response_data_get_status_code (&response_data);
+  content_type = cmd_response_data_get_content_type (&response_data);
+  res_len = cmd_response_data_get_content_length(&response_data);
 
-  http_response_code = response_data.http_status_code;
   cmd_response_data_reset (&response_data);
+
+  response = MHD_create_response_from_buffer (res_len, res,
+                                              MHD_RESPMEM_MUST_FREE);
 
   if (attach_sid (response, credentials->sid) == MHD_NO)
     {

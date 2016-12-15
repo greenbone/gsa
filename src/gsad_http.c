@@ -1081,11 +1081,14 @@ gsad_message_new (credentials_t *credentials, const char *title,
 
   if (xml_flag)
     {
-      response_data->content_type = GSAD_CONTENT_TYPE_APP_XML;
+      cmd_response_data_set_content_type (response_data,
+                                          GSAD_CONTENT_TYPE_APP_XML);
+      cmd_response_data_set_content_length (response_data, strlen (xml));
       return xml;
     }
 
-  response_data->content_type = GSAD_CONTENT_TYPE_TEXT_HTML;
+  cmd_response_data_set_content_type (response_data,
+                                      GSAD_CONTENT_TYPE_TEXT_HTML);
 
   resp = xsl_transform (xml, response_data);
   if (resp == NULL)
@@ -1096,8 +1099,12 @@ gsad_message_new (credentials_t *credentials, const char *title,
                        " transformation."
                        "</body>"
                        "</html>");
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
     }
+
+  cmd_response_data_set_content_length (response_data, strlen (resp));
+
   g_free (xml);
   return resp;
 }

@@ -249,9 +249,11 @@ static char *get_target (openvas_connection_t *, credentials_t *, params_t *,
 static char *get_targets (openvas_connection_t *, credentials_t *, params_t *,
                           const char *, cmd_response_data_t*);
 
-static char *get_report (openvas_connection_t *, credentials_t *, params_t *,
-                         const char *, gsize *, gchar **, char **, const char *,
-                         int *, cmd_response_data_t*);
+static char *get_report (openvas_connection_t *connection,
+                         credentials_t * credentials,
+                         params_t *params, const char *commands,
+                         gchar **content_type, const char *extra_xml,
+                         int *error, cmd_response_data_t* response_data);
 
 static char *get_report_format (openvas_connection_t *, credentials_t *,
                                 params_t *, const char *, cmd_response_data_t*);
@@ -1695,8 +1697,8 @@ generate_page (openvas_connection_t *connection, credentials_t *credentials,
       char *result;
       int error = 0;
 
-      result = get_report (connection, credentials, params, NULL, NULL, NULL,
-                           NULL, response, &error, response_data);
+      result = get_report (connection, credentials, params, NULL, NULL,
+                           response, &error, response_data);
 
       return error ? result : xsl_transform_omp (connection, credentials,
                                                  params, result,
@@ -2649,9 +2651,6 @@ format_file_name (gchar* fname_format, credentials_t* credentials,
  * @param[in]   type                 Type of resource.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
- * @param[out]  content_type         Content type return.
- * @param[out]  content_disposition  Content disposition return.
- * @param[out]  content_length       Content length return.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Resource XML on success.  HTML result of XSL transformation on error.
@@ -2659,8 +2658,6 @@ format_file_name (gchar* fname_format, credentials_t* credentials,
 char *
 export_resource (openvas_connection_t *connection, const char *type,
                  credentials_t * credentials, params_t *params,
-                 enum content_type * content_type,
-                 char **content_disposition, gsize *content_length,
                  cmd_response_data_t* response_data)
 {
   GString *xml;
@@ -2671,8 +2668,6 @@ export_resource (openvas_connection_t *connection, const char *type,
   gchar *fname_format, *file_name;
   int ret;
   const char *resource_id, *subtype;
-
-  *content_length = 0;
 
   xml = g_string_new ("");
 
@@ -2704,7 +2699,8 @@ export_resource (openvas_connection_t *connection, const char *type,
       == -1)
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting a resource. "
@@ -2717,7 +2713,8 @@ export_resource (openvas_connection_t *connection, const char *type,
   if (read_entity_and_text_c (connection, &entity, &content))
     {
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting a resource. "
@@ -2736,7 +2733,8 @@ export_resource (openvas_connection_t *connection, const char *type,
       g_free (content);
       free_entity (entity);
       g_string_free (xml, TRUE);
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting a resource. "
@@ -2754,10 +2752,11 @@ export_resource (openvas_connection_t *connection, const char *type,
       g_free (content);
       free_entity (entity);
       g_string_free (xml, TRUE);
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       switch (ret)
         {
           case 1:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting a setting. "
@@ -2765,7 +2764,6 @@ export_resource (openvas_connection_t *connection, const char *type,
                                 "Diagnostics: Failure to send command to manager daemon.",
                                 "/omp?cmd=get_tasks", response_data);
           case 2:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting a setting. "
@@ -2773,7 +2771,6 @@ export_resource (openvas_connection_t *connection, const char *type,
                                 "Diagnostics: Failure to receive response from manager daemon.",
                                 "/omp?cmd=get_tasks", response_data);
           default:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting a setting. "
@@ -2794,10 +2791,13 @@ export_resource (openvas_connection_t *connection, const char *type,
   if (file_name == NULL)
     file_name = g_strdup_printf ("%s-%s", type, resource_id);
 
-  *content_type = GSAD_CONTENT_TYPE_APP_XML;
-  *content_disposition = g_strdup_printf ("attachment; filename=\"%s.xml\"",
-                                          file_name);
-  *content_length = strlen (content);
+  cmd_response_data_set_content_type (response_data,
+                                      GSAD_CONTENT_TYPE_APP_XML);
+  cmd_response_data_set_content_disposition
+    (response_data, g_strdup_printf ("attachment; filename=\"%s.xml\"",
+                                     file_name));
+  cmd_response_data_set_content_length (response_data, strlen (content));
+
   free_entity (entity);
   g_free (file_name);
   g_string_free (xml, TRUE);
@@ -2810,9 +2810,6 @@ export_resource (openvas_connection_t *connection, const char *type,
  * @param[in]   connection           Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
- * @param[out]  content_type         Content type return.
- * @param[out]  content_disposition  Content disposition return.
- * @param[out]  content_length       Content length return.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return XML on success.  HTML result of XSL transformation on error.
@@ -2820,8 +2817,7 @@ export_resource (openvas_connection_t *connection, const char *type,
 static char *
 export_many (openvas_connection_t *connection, const char *type,
              credentials_t * credentials, params_t *params,
-             enum content_type * content_type, char **content_disposition,
-             gsize *content_length, cmd_response_data_t* response_data)
+             cmd_response_data_t* response_data)
 {
   entity_t entity;
   char *content = NULL;
@@ -2830,8 +2826,6 @@ export_many (openvas_connection_t *connection, const char *type,
   gchar *type_many;
   gchar *fname_format, *file_name;
   int ret;
-
-  *content_length = 0;
 
   filter = params_value (params, "filter");
 
@@ -2850,7 +2844,8 @@ export_many (openvas_connection_t *connection, const char *type,
           == -1)
         {
           g_free (filter_escaped);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                               "Internal error", __FUNCTION__, __LINE__,
                               "An internal error occurred while getting a list. "
@@ -2872,7 +2867,8 @@ export_many (openvas_connection_t *connection, const char *type,
           == -1)
         {
           g_free (filter_escaped);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                               "Internal error", __FUNCTION__, __LINE__,
                               "An internal error occurred while getting a list. "
@@ -2893,7 +2889,8 @@ export_many (openvas_connection_t *connection, const char *type,
           == -1)
         {
           g_free (filter_escaped);
-          response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_INTERNAL_SERVER_ERROR);
           return gsad_message (credentials,
                               "Internal error", __FUNCTION__, __LINE__,
                               "An internal error occurred while getting a list. "
@@ -2907,7 +2904,8 @@ export_many (openvas_connection_t *connection, const char *type,
   entity = NULL;
   if (read_entity_and_text_c (connection, &entity, &content))
     {
-      response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (response_data,
+                                          MHD_HTTP_INTERNAL_SERVER_ERROR);
       return gsad_message (credentials,
                            "Internal error", __FUNCTION__, __LINE__,
                            "An internal error occurred while getting a list. "
@@ -2927,10 +2925,11 @@ export_many (openvas_connection_t *connection, const char *type,
     {
       g_free (content);
       free_entity (entity);
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       switch (ret)
         {
           case 1:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting a setting. "
@@ -2938,7 +2937,6 @@ export_many (openvas_connection_t *connection, const char *type,
                                 "Diagnostics: Failure to send command to manager daemon.",
                                 "/omp?cmd=get_tasks", response_data);
           case 2:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting a setting. "
@@ -2946,7 +2944,6 @@ export_many (openvas_connection_t *connection, const char *type,
                                 "Diagnostics: Failure to receive response from manager daemon.",
                                 "/omp?cmd=get_tasks", response_data);
           default:
-            response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
             return gsad_message (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred while getting a setting. "
@@ -2974,10 +2971,13 @@ export_many (openvas_connection_t *connection, const char *type,
 
   g_free (type_many);
 
-  *content_type = GSAD_CONTENT_TYPE_APP_XML;
-  *content_disposition = g_strdup_printf ("attachment; filename=\"%s.xml\"",
-                                          file_name);
-  *content_length = strlen (content);
+  cmd_response_data_set_content_type (response_data,
+                                      GSAD_CONTENT_TYPE_APP_XML);
+  cmd_response_data_set_content_disposition
+    (response_data, g_strdup_printf ("attachment; filename=\"%s.xml\"",
+                                     file_name));
+  cmd_response_data_set_content_length (response_data, strlen (content));
+
   free_entity (entity);
   g_free (file_name);
   return content;
@@ -4958,21 +4958,16 @@ char * save_container_task_omp (openvas_connection_t *connection,
  * @param[in]   connection           Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
- * @param[out]  content_type         Content type return.
- * @param[out]  content_disposition  Content disposition return.
- * @param[out]  content_length       Content length return.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Note XML on success.  HTML result of XSL transformation on error.
  */
 char *
 export_task_omp (openvas_connection_t *connection, credentials_t *credentials,
-                 params_t *params, enum content_type *content_type,
-                 char **content_disposition, gsize *content_length,
-                 cmd_response_data_t *response_data)
+                 params_t *params, cmd_response_data_t *response_data)
 {
-  return export_resource (connection, "task", credentials, params, content_type,
-                          content_disposition, content_length, response_data);
+  return export_resource (connection, "task", credentials, params,
+                          response_data);
 }
 
 /**
@@ -4981,9 +4976,6 @@ export_task_omp (openvas_connection_t *connection, credentials_t *credentials,
  * @param[in]   connection           Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
- * @param[out]  content_type         Content type return.
- * @param[out]  content_disposition  Content disposition return.
- * @param[out]  content_length       Content length return.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Tasks XML on success.  HTML result of XSL transformation
@@ -4991,12 +4983,10 @@ export_task_omp (openvas_connection_t *connection, credentials_t *credentials,
  */
 char * export_tasks_omp (openvas_connection_t *connection,
                          credentials_t *credentials, params_t *params,
-                         enum content_type *content_type,
-                         char **content_disposition, gsize *content_length,
                          cmd_response_data_t *response_data)
 {
-  return export_many (connection, "task", credentials, params, content_type,
-                      content_disposition, content_length, response_data);
+  return export_many (connection, "task", credentials, params,
+                      response_data);
 }
 
 /**
@@ -6286,7 +6276,6 @@ get_credential_omp (openvas_connection_t *connection,
  * @param[in]   connection     Connection to manager.
  * @param[in]   credentials    Username and password for authentication.
  * @param[in]   params         Request parameters.
- * @param[out]  result_len     Length of result.
  * @param[out]  html           Result of XSL transformation.  Required.
  * @param[out]  login          Login name return.  NULL to skip.  Only set on
  *                             success with credential_id.
@@ -6298,7 +6287,6 @@ int
 download_credential_omp (openvas_connection_t *connection,
                          credentials_t * credentials,
                          params_t *params,
-                         gsize *result_len,
                          char ** html,
                          char ** login,
                          cmd_response_data_t* response_data)
@@ -6307,8 +6295,6 @@ download_credential_omp (openvas_connection_t *connection,
   const char *credential_id, *format;
 
   assert (html);
-
-  if (result_len) *result_len = 0;
 
   /* Send the request. */
 
@@ -6389,7 +6375,9 @@ download_credential_omp (openvas_connection_t *connection,
               package_decoded = (gchar *) g_strdup ("");
               len = 0;
             }
-          if (result_len) *result_len = len;
+
+          cmd_response_data_set_content_length (response_data, len);
+
           *html = package_decoded;
           if (login)
             {
@@ -6472,25 +6460,21 @@ download_credential_omp (openvas_connection_t *connection,
 /**
  * @brief Export a Credential.
  *
- * @param[in]  connection     Connection to manager.
+ * @param[in]   connection           Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
- * @param[out]  content_type         Content type return.
- * @param[out]  content_disposition  Content disposition return.
- * @param[out]  content_length       Content length return.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Credential XML on success.  HTML result of XSL transformation
  *         on error.
  */
 char *
-export_credential_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
-                       enum content_type * content_type,
-                       char **content_disposition, gsize *content_length,
+export_credential_omp (openvas_connection_t *connection,
+                       credentials_t * credentials, params_t *params,
                        cmd_response_data_t* response_data)
 {
-  return export_resource (connection, "credential", credentials, params, content_type,
-                          content_disposition, content_length, response_data);
+  return export_resource (connection, "credential", credentials, params,
+                          response_data);
 }
 
 /**
@@ -6499,22 +6483,18 @@ export_credential_omp (openvas_connection_t *connection, credentials_t * credent
  * @param[in]  connection     Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
- * @param[out]  content_type         Content type return.
- * @param[out]  content_disposition  Content disposition return.
- * @param[out]  content_length       Content length return.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Credentials XML on success.  HTML result of XSL transformation
  *         on error.
  */
 char *
-export_credentials_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
-                        enum content_type * content_type,
-                        char **content_disposition, gsize *content_length,
+export_credentials_omp (openvas_connection_t *connection,
+                        credentials_t * credentials, params_t *params,
                         cmd_response_data_t* response_data)
 {
-  return export_many (connection, "credential", credentials, params, content_type,
-                      content_disposition, content_length, response_data);
+  return export_many (connection, "credential", credentials, params,
+                      response_data);
 }
 
 /**
@@ -7034,7 +7014,6 @@ delete_agent_omp (openvas_connection_t *connection, credentials_t * credentials,
  * @param[in]   connection     Connection to manager.
  * @param[in]   credentials    Username and password for authentication.
  * @param[in]   params         Request parameters.
- * @param[out]  result_len     Length of result.
  * @param[out]  html           Result of XSL transformation.  Required.
  * @param[out]  filename       Agent filename return.  NULL to skip.  Only set
  *                             on success with agent_id.
@@ -7046,13 +7025,13 @@ int
 download_agent_omp (openvas_connection_t *connection,
                     credentials_t * credentials,
                     params_t *params,
-                    gsize *result_len,
                     char ** html,
                     char ** filename,
                     cmd_response_data_t* response_data)
 {
   entity_t entity;
   const char *agent_id, *format;
+  gsize result_len = 0;
 
   agent_id = params_value (params, "agent_id");
   format = params_value (params, "agent_format");
@@ -7069,7 +7048,6 @@ download_agent_omp (openvas_connection_t *connection,
       return 1;
     }
 
-  *result_len = 0;
 
   /* Send the request. */
 
@@ -7122,17 +7100,17 @@ download_agent_omp (openvas_connection_t *connection,
           if (strlen (package_encoded))
             {
               package_decoded = (gchar *) g_base64_decode (package_encoded,
-                                                           result_len);
+                                                           &result_len);
               if (package_decoded == NULL)
                 {
                   package_decoded = (gchar *) g_strdup ("");
-                  *result_len = 0;
+                  result_len = 0;
                 }
             }
           else
             {
               package_decoded = (gchar *) g_strdup ("");
-              *result_len = 0;
+              result_len = 0;
             }
           *html = package_decoded;
           if (filename)
@@ -7150,6 +7128,7 @@ download_agent_omp (openvas_connection_t *connection,
                   *filename = g_strdup_printf ("agent-%s-%s", agent_id, format);
                 }
             }
+          cmd_response_data_set_content_length (response_data, result_len);
           free_entity (entity);
           return 0;
         }
@@ -7486,7 +7465,7 @@ verify_agent_omp (openvas_connection_t *connection, credentials_t * credentials,
 /**
  * @brief Export a agent.
  *
- * @param[in]  connection     Connection to manager.
+ * @param[in]   connection           Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
  * @param[out]  content_type         Content type return.
@@ -7497,12 +7476,12 @@ verify_agent_omp (openvas_connection_t *connection, credentials_t * credentials,
  * @return Agent XML on success.  HTML result of XSL transformation on error.
  */
 char *
-export_agent_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
-                  enum content_type * content_type, char **content_disposition,
-                  gsize *content_length, cmd_response_data_t* response_data)
+export_agent_omp (openvas_connection_t *connection,
+                  credentials_t * credentials, params_t *params,
+                  cmd_response_data_t* response_data)
 {
-  return export_resource (connection, "agent", credentials, params, content_type,
-                          content_disposition, content_length, response_data);
+  return export_resource (connection, "agent", credentials, params,
+                          response_data);
 }
 
 /**
@@ -7511,21 +7490,18 @@ export_agent_omp (openvas_connection_t *connection, credentials_t * credentials,
  * @param[in]  connection     Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
- * @param[out]  content_type         Content type return.
- * @param[out]  content_disposition  Content disposition return.
- * @param[out]  content_length       Content length return.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Agents XML on success.  HTML result of XSL transformation
  *         on error.
  */
 char *
-export_agents_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
-                    enum content_type * content_type, char **content_disposition,
-                    gsize *content_length, cmd_response_data_t* response_data)
+export_agents_omp (openvas_connection_t *connection,
+                   credentials_t * credentials, params_t *params,
+                   cmd_response_data_t* response_data)
 {
-  return export_many (connection, "agent", credentials, params, content_type,
-                      content_disposition, content_length, response_data);
+  return export_many (connection, "agent", credentials, params,
+                      response_data);
 }
 
 /**
@@ -9087,23 +9063,20 @@ test_alert_omp (openvas_connection_t *connection, credentials_t * credentials,
 /**
  * @brief Export an alert.
  *
- * @param[in]  connection     Connection to manager.
+ * @param[in]   connection           Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
- * @param[out]  content_type         Content type return.
- * @param[out]  content_disposition  Content disposition return.
- * @param[out]  content_length       Content length return.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Alert XML on success.  HTML result of XSL transformation on error.
  */
 char *
-export_alert_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
-                  enum content_type * content_type, char **content_disposition,
-                  gsize *content_length, cmd_response_data_t* response_data)
+export_alert_omp (openvas_connection_t *connection,
+                  credentials_t * credentials, params_t *params,
+                  cmd_response_data_t* response_data)
 {
-  return export_resource (connection, "alert", credentials, params, content_type,
-                          content_disposition, content_length, response_data);
+  return export_resource (connection, "alert", credentials, params,
+                          response_data);
 }
 
 /**
@@ -9121,12 +9094,12 @@ export_alert_omp (openvas_connection_t *connection, credentials_t * credentials,
  *         on error.
  */
 char *
-export_alerts_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
-                   enum content_type * content_type, char **content_disposition,
-                   gsize *content_length, cmd_response_data_t* response_data)
+export_alerts_omp (openvas_connection_t *connection,
+                   credentials_t * credentials, params_t *params,
+                   cmd_response_data_t* response_data)
 {
-  return export_many (connection, "alert", credentials, params, content_type,
-                      content_disposition, content_length, response_data);
+  return export_many (connection, "alert", credentials, params,
+                      response_data);
 }
 
 /**
@@ -10377,9 +10350,6 @@ save_tag_omp (openvas_connection_t *connection, credentials_t * credentials,
  * @param[in]   connection           Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
- * @param[out]  content_type         Content type return.
- * @param[out]  content_disposition  Content disposition return.
- * @param[out]  content_length       Content length return.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Target XML on success.  HTML result of XSL transformation
@@ -10387,12 +10357,10 @@ save_tag_omp (openvas_connection_t *connection, credentials_t * credentials,
  */
 char *
 export_tag_omp (openvas_connection_t *connection, credentials_t * credentials,
-                params_t *params, enum content_type * content_type,
-                char **content_disposition, gsize *content_length,
-                cmd_response_data_t* response_data)
+                params_t *params, cmd_response_data_t* response_data)
 {
-  return export_resource (connection, "tag", credentials, params, content_type,
-                          content_disposition, content_length, response_data);
+  return export_resource (connection, "tag", credentials, params,
+                          response_data);
 }
 
 /**
@@ -10401,9 +10369,6 @@ export_tag_omp (openvas_connection_t *connection, credentials_t * credentials,
  * @param[in]   connection           Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
- * @param[out]  content_type         Content type return.
- * @param[out]  content_disposition  Content disposition return.
- * @param[out]  content_length       Content length return.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Targets XML on success.  HTML result of XSL transformation
@@ -10411,12 +10376,10 @@ export_tag_omp (openvas_connection_t *connection, credentials_t * credentials,
  */
 char *
 export_tags_omp (openvas_connection_t *connection, credentials_t * credentials,
-                 params_t *params, enum content_type * content_type,
-                 char **content_disposition, gsize *content_length,
-                 cmd_response_data_t* response_data)
+                 params_t *params, cmd_response_data_t* response_data)
 {
-  return export_many (connection, "tag", credentials, params, content_type,
-                      content_disposition, content_length, response_data);
+  return export_many (connection, "tag", credentials, params,
+                      response_data);
 }
 
 /**
@@ -11101,9 +11064,6 @@ save_target_omp (openvas_connection_t *connection, credentials_t * credentials,
  * @param[in]  connection     Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
- * @param[out]  content_type         Content type return.
- * @param[out]  content_disposition  Content disposition return.
- * @param[out]  content_length       Content length return.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Target XML on success.  HTML result of XSL transformation
@@ -11112,11 +11072,9 @@ save_target_omp (openvas_connection_t *connection, credentials_t * credentials,
 char *
 export_target_omp (openvas_connection_t *connection, credentials_t *
                    credentials, params_t *params,
-                   enum content_type * content_type, char **content_disposition,
-                   gsize *content_length, cmd_response_data_t* response_data)
+                   cmd_response_data_t* response_data)
 {
   return export_resource (connection, "target", credentials, params,
-                          content_type, content_disposition, content_length,
                           response_data);
 }
 
@@ -11126,9 +11084,6 @@ export_target_omp (openvas_connection_t *connection, credentials_t *
  * @param[in]  connection     Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
- * @param[out]  content_type         Content type return.
- * @param[out]  content_disposition  Content disposition return.
- * @param[out]  content_length       Content length return.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Targets XML on success.  HTML result of XSL transformation
@@ -11137,11 +11092,10 @@ export_target_omp (openvas_connection_t *connection, credentials_t *
 char *
 export_targets_omp (openvas_connection_t *connection, credentials_t *
                     credentials, params_t *params,
-                    enum content_type * content_type, char **content_disposition,
-                    gsize *content_length, cmd_response_data_t* response_data)
+                    cmd_response_data_t* response_data)
 {
-  return export_many (connection, "target", credentials, params, content_type,
-                      content_disposition, content_length, response_data);
+  return export_many (connection, "target", credentials, params,
+                      response_data);
 }
 
 /**
@@ -12769,20 +12723,17 @@ delete_config_omp (openvas_connection_t *connection, credentials_t * credentials
  * @param[in]  connection     Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
- * @param[out]  content_type         Content type return.
- * @param[out]  content_disposition  Content dispositions return.
- * @param[out]  content_length       Content length return.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Config XML on success.  HTML result of XSL transformation on error.
  */
 char *
-export_config_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
-                   enum content_type * content_type, char **content_disposition,
-                   gsize *content_length, cmd_response_data_t* response_data)
+export_config_omp (openvas_connection_t *connection,
+                   credentials_t * credentials, params_t *params,
+                   cmd_response_data_t* response_data)
 {
-  return export_resource (connection, "config", credentials, params, content_type,
-                          content_disposition, content_length, response_data);
+  return export_resource (connection, "config", credentials, params,
+                          response_data);
 }
 
 /**
@@ -12791,21 +12742,17 @@ export_config_omp (openvas_connection_t *connection, credentials_t * credentials
  * @param[in]  connection     Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
- * @param[out]  content_type         Content type return.
- * @param[out]  content_disposition  Content disposition return.
- * @param[out]  content_length       Content length return.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Scan configs XML on success.  HTML result of XSL transformation
  *         on error.
  */
 char *
-export_configs_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
-                    enum content_type * content_type, char **content_disposition,
-                    gsize *content_length, cmd_response_data_t* response_data)
+export_configs_omp (openvas_connection_t *connection,
+                    credentials_t * credentials, params_t *params,
+                    cmd_response_data_t* response_data)
 {
-  return export_many (connection, "config", credentials, params, content_type,
-                      content_disposition, content_length, response_data);
+  return export_many (connection, "config", credentials, params, response_data);
 }
 
 /**
@@ -12822,12 +12769,11 @@ export_configs_omp (openvas_connection_t *connection, credentials_t * credential
  * @return Note XML on success.  HTML result of XSL transformation on error.
  */
 char *
-export_note_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
-                 enum content_type * content_type, char **content_disposition,
-                 gsize *content_length, cmd_response_data_t* response_data)
+export_note_omp (openvas_connection_t *connection, credentials_t * credentials,
+                 params_t *params, cmd_response_data_t* response_data)
 {
-  return export_resource (connection, "note", credentials, params, content_type,
-                          content_disposition, content_length, response_data);
+  return export_resource (connection, "note", credentials, params,
+                          response_data);
 }
 
 /**
@@ -12836,21 +12782,17 @@ export_note_omp (openvas_connection_t *connection, credentials_t * credentials, 
  * @param[in]  connection     Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
- * @param[out]  content_type         Content type return.
- * @param[out]  content_disposition  Content disposition return.
- * @param[out]  content_length       Content length return.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Notes XML on success.  HTML result of XSL transformation
  *         on error.
  */
 char *
-export_notes_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
-                  enum content_type * content_type, char **content_disposition,
-                  gsize *content_length, cmd_response_data_t* response_data)
+export_notes_omp (openvas_connection_t *connection, credentials_t * credentials,
+                  params_t *params, cmd_response_data_t* response_data)
 {
-  return export_many (connection, "note", credentials, params, content_type,
-                      content_disposition, content_length, response_data);
+  return export_many (connection, "note", credentials, params,
+                      response_data);
 }
 
 /**
@@ -12859,21 +12801,17 @@ export_notes_omp (openvas_connection_t *connection, credentials_t * credentials,
  * @param[in]  connection     Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
- * @param[out]  content_type         Content type return.
- * @param[out]  content_disposition  Content disposition return.
- * @param[out]  content_length       Content length return.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Override XML on success.  HTML result of XSL transformation on error.
  */
 char *
-export_override_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
-                     enum content_type * content_type,
-                     char **content_disposition, gsize *content_length,
+export_override_omp (openvas_connection_t *connection,
+                     credentials_t * credentials, params_t *params,
                      cmd_response_data_t* response_data)
 {
-  return export_resource (connection, "override", credentials, params, content_type,
-                          content_disposition, content_length, response_data);
+  return export_resource (connection, "override", credentials, params,
+                          response_data);
 }
 
 /**
@@ -12882,22 +12820,18 @@ export_override_omp (openvas_connection_t *connection, credentials_t * credentia
  * @param[in]  connection     Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
- * @param[out]  content_type         Content type return.
- * @param[out]  content_disposition  Content disposition return.
- * @param[out]  content_length       Content length return.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Overrides XML on success.  HTML result of XSL transformation
  *         on error.
  */
 char *
-export_overrides_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
-                      enum content_type * content_type,
-                      char **content_disposition, gsize *content_length,
+export_overrides_omp (openvas_connection_t *connection,
+                      credentials_t * credentials, params_t *params,
                       cmd_response_data_t* response_data)
 {
-  return export_many (connection, "override", credentials, params, content_type,
-                      content_disposition, content_length, response_data);
+  return export_many (connection, "override", credentials, params,
+                      response_data);
 }
 
 /**
@@ -12906,22 +12840,17 @@ export_overrides_omp (openvas_connection_t *connection, credentials_t * credenti
  * @param[in]  connection     Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
- * @param[out]  content_type         Content type return.
- * @param[out]  content_disposition  Content disposition return.
- * @param[out]  content_length       Content length return.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Port List XML on success.  HTML result of XSL transformation on
  *         error.
  */
 char *
-export_port_list_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
-                      enum content_type * content_type,
-                      char **content_disposition, gsize *content_length,
+export_port_list_omp (openvas_connection_t *connection,
+                      credentials_t * credentials, params_t *params,
                       cmd_response_data_t* response_data)
 {
-  return export_resource (connection, "port_list", credentials, params, content_type,
-                          content_disposition, content_length,
+  return export_resource (connection, "port_list", credentials, params,
                           response_data);
 }
 
@@ -12931,22 +12860,18 @@ export_port_list_omp (openvas_connection_t *connection, credentials_t * credenti
  * @param[in]  connection     Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
- * @param[out]  content_type         Content type return.
- * @param[out]  content_disposition  Content disposition return.
- * @param[out]  content_length       Content length return.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Port Lists XML on success.  HTML result of XSL transformation
  *         on error.
  */
 char *
-export_port_lists_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
-                       enum content_type * content_type,
-                       char **content_disposition, gsize *content_length,
+export_port_lists_omp (openvas_connection_t *connection,
+                       credentials_t * credentials, params_t *params,
                        cmd_response_data_t* response_data)
 {
-  return export_many (connection, "port_list", credentials, params, content_type,
-                      content_disposition, content_length, response_data);
+  return export_many (connection, "port_list", credentials, params,
+                      response_data);
 }
 
 /**
@@ -12955,9 +12880,6 @@ export_port_lists_omp (openvas_connection_t *connection, credentials_t * credent
  * @param[in]  connection     Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
- * @param[out]  content_type         Content type return.
- * @param[out]  content_disposition  Content dispositions return.
- * @param[out]  content_length       Content length return.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Config XML on success.  HTML result of XSL transformation on error.
@@ -12965,15 +12887,11 @@ export_port_lists_omp (openvas_connection_t *connection, credentials_t * credent
 char *
 export_preference_file_omp (openvas_connection_t *connection,
                             credentials_t * credentials, params_t *params,
-                            enum content_type * content_type,
-                            char **content_disposition, gsize *content_length,
                             cmd_response_data_t* response_data)
 {
   GString *xml;
   entity_t entity, preference_entity, value_entity;
   const char *config_id, *oid, *preference_name;
-
-  *content_length = 0;
 
   config_id = params_value (params, "config_id");
   oid = params_value (params, "oid");
@@ -13023,9 +12941,13 @@ export_preference_file_omp (openvas_connection_t *connection,
           && (value_entity = entity_child (preference_entity, "value")))
         {
           char *content = strdup (entity_text (value_entity));
-          *content_type = GSAD_CONTENT_TYPE_OCTET_STREAM;
-          *content_disposition = g_strdup_printf ("attachment; filename=\"pref_file.bin\"");
-          *content_length = strlen (content);
+          cmd_response_data_set_content_type (response_data,
+                                              GSAD_CONTENT_TYPE_OCTET_STREAM);
+          cmd_response_data_set_content_disposition
+            (response_data,
+             g_strdup_printf ("attachment; filename=\"pref_file.bin\""));
+          cmd_response_data_set_content_length (response_data,
+                                                strlen (content));
           free_entity (entity);
           g_string_free (xml, TRUE);
           return content;
@@ -13045,7 +12967,8 @@ export_preference_file_omp (openvas_connection_t *connection,
     }
 
   g_string_append (xml, "</get_preferences_response>");
-  return xsl_transform_omp (connection, credentials, params, g_string_free (xml, FALSE),
+  return xsl_transform_omp (connection, credentials, params,
+                            g_string_free (xml, FALSE),
                             response_data);
 }
 
@@ -13055,22 +12978,18 @@ export_preference_file_omp (openvas_connection_t *connection,
  * @param[in]  connection     Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
- * @param[out]  content_type         Content type return.
- * @param[out]  content_disposition  Content disposition return.
- * @param[out]  content_length       Content length return.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Report format XML on success.  HTML result of XSL transformation
  *         on error.
  */
 char *
-export_report_format_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
-                          enum content_type * content_type,
-                          char **content_disposition, gsize *content_length,
+export_report_format_omp (openvas_connection_t *connection,
+                          credentials_t * credentials, params_t *params,
                           cmd_response_data_t* response_data)
 {
-  return export_resource (connection, "report_format", credentials, params, content_type,
-                          content_disposition, content_length, response_data);
+  return export_resource (connection, "report_format", credentials, params,
+                          response_data);
 }
 
 /**
@@ -13079,22 +12998,18 @@ export_report_format_omp (openvas_connection_t *connection, credentials_t * cred
  * @param[in]  connection     Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
- * @param[out]  content_type         Content type return.
- * @param[out]  content_disposition  Content disposition return.
- * @param[out]  content_length       Content length return.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Report Formats XML on success.  HTML result of XSL transformation
  *         on error.
  */
 char *
-export_report_formats_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
-                           enum content_type * content_type,
-                           char **content_disposition, gsize *content_length,
+export_report_formats_omp (openvas_connection_t *connection,
+                           credentials_t * credentials, params_t *params,
                            cmd_response_data_t* response_data)
 {
-  return export_many (connection, "report_format", credentials, params, content_type,
-                      content_disposition, content_length, response_data);
+  return export_many (connection, "report_format", credentials, params,
+                      response_data);
 }
 
 /**
@@ -13122,9 +13037,7 @@ delete_report_omp (openvas_connection_t *connection, credentials_t * credentials
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  commands     Extra commands to run before the others.
- * @param[out] report_len   Length of report.
- * @param[out] content_type         Content type if known, else NULL.
- * @param[out] content_disposition  Content disposition, if content_type set.
+ * @param[out] content_type Content type as string if known, else NULL.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] error        Set to 1 if error, else 0.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -13133,8 +13046,7 @@ delete_report_omp (openvas_connection_t *connection, credentials_t * credentials
  */
 char *
 get_report (openvas_connection_t *connection, credentials_t * credentials,
-            params_t *params, const char *commands, gsize *report_len,
-            gchar **content_type, char **content_disposition,
+            params_t *params, const char *commands, gchar **content_type,
             const char *extra_xml, int *error,
             cmd_response_data_t* response_data)
 {
@@ -13264,7 +13176,6 @@ get_report (openvas_connection_t *connection, credentials_t * credentials,
     }
 
   if (content_type) *content_type = NULL;
-  if (report_len) *report_len = 0;
 
   if (autofp == NULL || strlen (autofp) == 0) autofp = "0";
 
@@ -13374,7 +13285,8 @@ get_report (openvas_connection_t *connection, credentials_t * credentials,
       && (type == NULL
           || (strcmp (type, "prognostic")
               && strcmp (type, "assets"))))
-    return get_reports (connection, credentials, params, extra_xml, response_data);
+    return get_reports (connection, credentials, params, extra_xml,
+                        response_data);
 
   if (strcmp (alert_id, "0"))
     {
@@ -13788,8 +13700,7 @@ get_report (openvas_connection_t *connection, credentials_t * credentials,
             }
           extension = entity_attribute (report, "extension");
           requested_content_type = entity_attribute (report, "content_type");
-          if (extension && requested_content_type && content_type
-              && content_disposition)
+          if (extension && requested_content_type && content_type)
             {
               gchar *file_name;
               ret = setting_get_value (connection,
@@ -13861,10 +13772,11 @@ get_report (openvas_connection_t *connection, credentials_t * credentials,
                                               : report_id);
 
               *content_type = g_strdup (requested_content_type);
-              *content_disposition
-                = g_strdup_printf ("attachment; filename=\"%s.%s\"",
-                                   file_name,
-                                   extension);
+              cmd_response_data_set_content_disposition
+                (response_data,
+                 g_strdup_printf ("attachment; filename=\"%s.%s\"",
+                                  file_name,
+                                  extension));
 
               g_free (file_name);
             }
@@ -13877,18 +13789,6 @@ get_report (openvas_connection_t *connection, credentials_t * credentials,
       else
         {
           /* "nbe", "pdf", "dvi", "html", "html-pdf"... */
-
-          if (report_len == NULL)
-            {
-              if (error) *error = 1;
-              response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-              return gsad_message (credentials,
-                                   "Internal error", __FUNCTION__, __LINE__,
-                                   "An internal error occurred while getting a report. "
-                                   "The report could not be delivered. "
-                                   "Diagnostics: Parameter error.",
-                                   "/omp?cmd=get_tasks", response_data);
-            }
 
           entity = NULL;
           if (read_entity_c (connection, &entity))
@@ -13908,22 +13808,22 @@ get_report (openvas_connection_t *connection, credentials_t * credentials,
             {
               const char *extension, *requested_content_type;
               char *report_encoded;
+              gsize report_len;
               gchar *report_decoded;
               extension = entity_attribute (report_entity, "extension");
               requested_content_type = entity_attribute (report_entity,
                                                          "content_type");
               report_encoded = entity_text (report_entity);
               report_decoded =
-                (gchar *) g_base64_decode (report_encoded, report_len);
+                (gchar *) g_base64_decode (report_encoded, &report_len);
               /* g_base64_decode can return NULL (Glib 2.12.4-2), at least
                * when *report_len is zero. */
               if (report_decoded == NULL)
                 {
                   report_decoded = g_strdup ("");
-                  *report_len = 0;
+                  report_len = 0;
                 }
-              if (extension && requested_content_type && content_type
-                  && content_disposition)
+              if (extension && requested_content_type && content_type)
                 {
                   gchar *file_name;
                   const char *id;
@@ -13990,15 +13890,19 @@ get_report (openvas_connection_t *connection, credentials_t * credentials,
                                                 "report", id);
 
                   *content_type = g_strdup (requested_content_type);
-                  *content_disposition
-                    = g_strdup_printf ("attachment; filename=\"%s.%s\"",
+                  cmd_response_data_set_content_disposition
+                    (response_data,
+                     g_strdup_printf ("attachment; filename=\"%s.%s\"",
                                       file_name,
-                                      extension);
+                                      extension));
 
                   g_free (file_name);
                 }
+
               free_entity (entity);
               if (error) *error = 1;
+
+              cmd_response_data_set_content_length (response_data, report_len);
               return report_decoded;
             }
           else
@@ -14443,26 +14347,24 @@ get_report (openvas_connection_t *connection, credentials_t * credentials,
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
- * @param[out] report_len   Length of report.
  * @param[out] content_type         Content type if known, else NULL.
- * @param[out] content_disposition  Content disposition, if content_type set.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Report.
  */
 char *
-get_report_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
-                gsize *report_len, gchar ** content_type,
-                char **content_disposition, cmd_response_data_t* response_data)
+get_report_omp (openvas_connection_t *connection, credentials_t * credentials,
+                params_t *params, gchar ** content_type,
+                cmd_response_data_t* response_data)
 {
   char *result;
   int error = 0;
 
-  result = get_report (connection, credentials, params, NULL, report_len, content_type,
-                       content_disposition, NULL, &error, response_data);
+  result = get_report (connection, credentials, params, NULL, content_type,
+                       NULL, &error, response_data);
 
-  return error ? result : xsl_transform_omp (connection, credentials, params, result,
-                                             response_data);
+  return error ? result : xsl_transform_omp (connection, credentials, params,
+                                             result, response_data);
 }
 
 /**
@@ -14477,8 +14379,9 @@ get_report_omp (openvas_connection_t *connection, credentials_t * credentials, p
  * @return Result of XSL transformation.
  */
 static char *
-get_reports (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
-             const char *extra_xml, cmd_response_data_t* response_data)
+get_reports (openvas_connection_t *connection, credentials_t * credentials,
+             params_t *params, const char *extra_xml,
+             cmd_response_data_t* response_data)
 {
   const char *overrides;
 
@@ -14502,8 +14405,8 @@ get_reports (openvas_connection_t *connection, credentials_t * credentials, para
  * @return Result of XSL transformation.
  */
 char *
-get_reports_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
-                 cmd_response_data_t* response_data)
+get_reports_omp (openvas_connection_t *connection, credentials_t * credentials,
+                 params_t *params, cmd_response_data_t* response_data)
 {
   return get_reports (connection, credentials, params, NULL, response_data);
 }
@@ -14519,7 +14422,8 @@ get_reports_omp (openvas_connection_t *connection, credentials_t * credentials, 
  * @return Result of XSL transformation.
  */
 static char *
-get_report_section (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+get_report_section (openvas_connection_t *connection,
+                    credentials_t * credentials, params_t *params,
                     const char *extra_xml, cmd_response_data_t* response_data)
 {
   GString *xml;
@@ -14548,15 +14452,15 @@ get_report_section (openvas_connection_t *connection, credentials_t * credential
     {
       char *result;
 
-      result = get_report (connection, credentials, params, NULL, NULL, NULL, NULL,
+      result = get_report (connection, credentials, params, NULL, NULL,
                            extra_xml, &error, response_data);
 
-      return error ? result : xsl_transform_omp (connection, credentials, params, result,
-                                                 response_data);
+      return error ? result : xsl_transform_omp (connection, credentials,
+                                                 params, result, response_data);
     }
 
   result = get_report (connection, credentials, params, NULL, NULL, NULL,
-                       NULL, NULL, &error, response_data);
+                       &error, response_data);
   if (error)
     return result;
 
@@ -14644,14 +14548,14 @@ get_report_section_omp (openvas_connection_t *connection, credentials_t * creden
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
- * @param[in]  response_size  Size of cert.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return SSL Certificate.
  */
 char *
-download_ssl_cert (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
-                   gsize *response_size, cmd_response_data_t* response_data)
+download_ssl_cert (openvas_connection_t *connection,
+                   credentials_t * credentials, params_t *params,
+                   cmd_response_data_t* response_data)
 {
   const char *ssl_cert;
   gchar *cert;
@@ -14674,7 +14578,7 @@ download_ssl_cert (openvas_connection_t *connection, credentials_t * credentials
                           "%s\n-----END CERTIFICATE-----\n",
                           unescaped);
 
-  *response_size = strlen (cert);
+  cmd_response_data_set_content_length (response_data, strlen (cert));
 
   g_free (unescaped);
   return cert;
@@ -14686,14 +14590,13 @@ download_ssl_cert (openvas_connection_t *connection, credentials_t * credentials
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
- * @param[in]  response_size  Size of cert.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return CA Certificate.
  */
 char *
-download_ca_pub (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
-                 gsize *response_size, cmd_response_data_t* response_data)
+download_ca_pub (openvas_connection_t *connection, credentials_t * credentials,
+                 params_t *params, cmd_response_data_t* response_data)
 {
   const char *ca_pub;
   char *unescaped;
@@ -14710,7 +14613,7 @@ download_ca_pub (openvas_connection_t *connection, credentials_t * credentials, 
     }
   /* The Base64 comes URI escaped as it may contain special characters. */
   unescaped = g_uri_unescape_string (ca_pub, NULL);
-  *response_size = strlen (unescaped);
+  cmd_response_data_set_content_length (response_data, strlen (unescaped));
   return unescaped;
 }
 
@@ -14720,14 +14623,13 @@ download_ca_pub (openvas_connection_t *connection, credentials_t * credentials, 
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
- * @param[in]  response_size  Size of cert.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Certificate.
  */
 char *
-download_key_pub (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
-                  gsize *response_size, cmd_response_data_t* response_data)
+download_key_pub (openvas_connection_t *connection, credentials_t * credentials,
+                  params_t *params, cmd_response_data_t* response_data)
 {
   const char *key_pub;
   char *unescaped;
@@ -14745,7 +14647,7 @@ download_key_pub (openvas_connection_t *connection, credentials_t * credentials,
 
   /* The Base64 comes URI escaped as it may contain special characters. */
   unescaped = g_uri_unescape_string (key_pub, NULL);
-  *response_size = strlen (unescaped);
+  cmd_response_data_set_content_length (response_data, strlen (unescaped));
   return unescaped;
 }
 
@@ -14755,21 +14657,18 @@ download_key_pub (openvas_connection_t *connection, credentials_t * credentials,
  * @param[in]  connection     Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
- * @param[out]  content_type         Content type return.
- * @param[out]  content_disposition  Content disposition return.
- * @param[out]  content_length       Content length return.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Result XML on success.  HTML result of XSL transformation
  *         on error.
  */
 char *
-export_result_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
-                   enum content_type * content_type, char **content_disposition,
-                   gsize *content_length, cmd_response_data_t* response_data)
+export_result_omp (openvas_connection_t *connection,
+                   credentials_t * credentials, params_t *params,
+                   cmd_response_data_t* response_data)
 {
-  return export_resource (connection, "result", credentials, params, content_type,
-                          content_disposition, content_length, response_data);
+  return export_resource (connection, "result", credentials, params,
+                          response_data);
 }
 
 /**
@@ -14778,9 +14677,6 @@ export_result_omp (openvas_connection_t *connection, credentials_t * credentials
  * @param[in]  connection     Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
- * @param[out]  content_type         Content type return.
- * @param[out]  content_disposition  Content disposition return.
- * @param[out]  content_length       Content length return.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Results XML on success.  HTML result of XSL transformation
@@ -14789,12 +14685,10 @@ export_result_omp (openvas_connection_t *connection, credentials_t * credentials
 char *
 export_results_omp (openvas_connection_t *connection, credentials_t *
                     credentials, params_t *params,
-                    enum content_type * content_type,
-                    char **content_disposition, gsize *content_length,
                     cmd_response_data_t* response_data)
 {
-  return export_many (connection, "result", credentials, params, content_type,
-                      content_disposition, content_length, response_data);
+  return export_many (connection, "result", credentials, params,
+                      response_data);
 }
 
 /**
@@ -16502,21 +16396,17 @@ get_scanner_omp (openvas_connection_t *connection, credentials_t * credentials, 
  * @param[in]  connection     Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
- * @param[out]  content_type         Content type return.
- * @param[out]  content_disposition  Content disposition return.
- * @param[out]  content_length       Content length return.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Scanner XML on success.  HTML result of XSL transformation on error.
  */
 char *
-export_scanner_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
-                    enum content_type * content_type,
-                    char **content_disposition, gsize *content_length,
+export_scanner_omp (openvas_connection_t *connection,
+                    credentials_t * credentials, params_t *params,
                     cmd_response_data_t* response_data)
 {
-  return export_resource (connection, "scanner", credentials, params, content_type,
-                          content_disposition, content_length, response_data);
+  return export_resource (connection, "scanner", credentials, params,
+                          response_data);
 }
 
 /**
@@ -16525,21 +16415,17 @@ export_scanner_omp (openvas_connection_t *connection, credentials_t * credential
  * @param[in]  connection     Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
- * @param[out]  content_type         Content type return.
- * @param[out]  content_disposition  Content disposition return.
- * @param[out]  content_length       Content length return.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Scanners XML on success. HTML result of XSL transformation on error.
  */
 char *
-export_scanners_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
-                     enum content_type * content_type,
-                     char **content_disposition, gsize *content_length,
+export_scanners_omp (openvas_connection_t *connection,
+                     credentials_t *credentials, params_t *params,
                      cmd_response_data_t* response_data)
 {
-  return export_many (connection, "scanner", credentials, params, content_type,
-                      content_disposition, content_length, response_data);
+  return export_many (connection, "scanner", credentials, params,
+                      response_data);
 }
 
 /**
@@ -17380,8 +17266,8 @@ delete_schedule_omp (openvas_connection_t *connection, credentials_t * credentia
  * @return Result of XSL transformation.
  */
 char *
-get_system_reports_omp (openvas_connection_t *connection, credentials_t *
-                        credentials, params_t *params,
+get_system_reports_omp (openvas_connection_t *connection,
+                        credentials_t * credentials, params_t *params,
                         cmd_response_data_t* response_data)
 {
   GString *xml;
@@ -17536,17 +17422,14 @@ get_system_reports_omp (openvas_connection_t *connection, credentials_t *
  * @param[in]   credentials          Credentials of user issuing the action.
  * @param[in]   url                  URL of report image.
  * @param[in]   params               Request parameters.
- * @param[out]  content_type         Content type return.
- * @param[out]  content_length       Content length return.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Image, or NULL.
  */
 char *
-get_system_report_omp (openvas_connection_t *connection, credentials_t
-                       *credentials, const char *url, params_t *params,
-                       enum content_type *content_type,
-                       gsize *content_length,
+get_system_report_omp (openvas_connection_t *connection,
+                       credentials_t *credentials, const char *url,
+                       params_t *params,
                        cmd_response_data_t* response_data)
 {
   entity_t entity;
@@ -17558,8 +17441,6 @@ get_system_report_omp (openvas_connection_t *connection, credentials_t
   const char *start_year, *start_month, *start_day, *start_hour, *start_minute;
   const char *end_year, *end_month, *end_day, *end_hour, *end_minute;
   struct tm start_time, end_time;
-
-  *content_length = 0;
 
   if (url == NULL)
     return NULL;
@@ -17668,14 +17549,16 @@ get_system_report_omp (openvas_connection_t *connection, credentials_t
         {
           char *content_64 = entity_text (report_entity);
           char *content = NULL;
+          gsize content_length = 0;
 
           if (content_64 && strlen (content_64))
             {
               content = (char *) g_base64_decode (content_64,
-                                                  content_length);
+                                                  &content_length);
 
 #if 1
-              *content_type = GSAD_CONTENT_TYPE_IMAGE_PNG;
+              cmd_response_data_set_content_type (response_data,
+                                                  GSAD_CONTENT_TYPE_IMAGE_PNG);
               //*content_disposition = g_strdup_printf ("attachment; filename=\"xxx.png\"");
 #else
               g_free (content);
@@ -17683,6 +17566,8 @@ get_system_report_omp (openvas_connection_t *connection, credentials_t
 #endif
             }
 
+          cmd_response_data_set_content_length (response_data,
+                                                content_length);
           free_entity (entity);
           return content;
        }
@@ -17703,7 +17588,8 @@ get_system_report_omp (openvas_connection_t *connection, credentials_t
  * @return Result of XSL transformation.
  */
 static char *
-get_report_format (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+get_report_format (openvas_connection_t *connection, credentials_t *
+                   credentials, params_t *params,
                    const char *extra_xml, cmd_response_data_t* response_data)
 {
   return get_one (connection, "report_format", credentials, params, extra_xml,
@@ -19705,9 +19591,6 @@ get_protocol_doc_omp (openvas_connection_t *connection, credentials_t *
  * @param[in]  connection     Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
- * @param[out]  content_type         Content type return.
- * @param[out]  content_disposition  Content disposition return.
- * @param[out]  content_length       Content length return.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return XML on success.  HTML result of XSL transformation on error.
@@ -19715,8 +19598,6 @@ get_protocol_doc_omp (openvas_connection_t *connection, credentials_t *
 char *
 export_omp_doc_omp (openvas_connection_t *connection,
                     credentials_t * credentials, params_t *params,
-                    enum content_type * content_type,
-                    char **content_disposition, gsize *content_length,
                     cmd_response_data_t* response_data)
 {
   entity_t entity, response;
@@ -19724,8 +19605,6 @@ export_omp_doc_omp (openvas_connection_t *connection,
   const char *format;
   time_t now;
   struct tm *tm;
-
-  *content_length = 0;
 
   format = params_value (params, "protocol_format")
             ? params_value (params, "protocol_format")
@@ -19757,10 +19636,11 @@ export_omp_doc_omp (openvas_connection_t *connection,
     }
 
   if (strcmp (format, "xml") == 0)
-    *content_length = strlen (content);
+    cmd_response_data_set_content_length (response_data, strlen (content));
   else
     {
       char *content_64;
+      gsize content_length;
       entity = entity_child (response, "schema");
       if (entity == NULL)
         {
@@ -19785,18 +19665,19 @@ export_omp_doc_omp (openvas_connection_t *connection,
                                "/omp?cmd=get_protocol_doc", response_data);
         }
 
-      content = (char *) g_base64_decode (content_64, content_length);
+      content = (char *) g_base64_decode (content_64, &content_length);
+      cmd_response_data_set_content_length (response_data, content_length);
     }
 
   now = time (NULL);
   tm = localtime (&now);
-  *content_type = GSAD_CONTENT_TYPE_APP_XML;
-  *content_disposition = g_strdup_printf ("attachment;"
-                                          " filename=\"omp-%d-%d-%d.%s\"",
-                                          tm->tm_mday,
-                                          tm->tm_mon + 1,
-                                          tm->tm_year +1900,
-                                          format);
+  cmd_response_data_set_content_type (response_data, GSAD_CONTENT_TYPE_APP_XML);
+  cmd_response_data_set_content_disposition
+    (response_data, g_strdup_printf ("attachment; filename=\"omp-%d-%d-%d.%s\"",
+                                     tm->tm_mday,
+                                     tm->tm_mon + 1,
+                                     tm->tm_year +1900,
+                                     format));
   free_entity (response);
   return content;
 }
@@ -20101,20 +19982,16 @@ edit_group_omp (openvas_connection_t *connection, credentials_t * credentials, p
  * @param[in]  connection     Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
- * @param[out]  content_type         Content type return.
- * @param[out]  content_disposition  Content disposition return.
- * @param[out]  content_length       Content length return.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Group XML on success.  HTML result of XSL transformation on error.
  */
 char *
-export_group_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
-                  enum content_type * content_type, char **content_disposition,
-                  gsize *content_length, cmd_response_data_t* response_data)
+export_group_omp (openvas_connection_t *connection, credentials_t * credentials,
+                  params_t *params, cmd_response_data_t* response_data)
 {
-  return export_resource (connection, "group", credentials, params, content_type,
-                          content_disposition, content_length, response_data);
+  return export_resource (connection, "group", credentials, params,
+                          response_data);
 }
 
 /**
@@ -20123,21 +20000,17 @@ export_group_omp (openvas_connection_t *connection, credentials_t * credentials,
  * @param[in]  connection     Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
- * @param[out]  content_type         Content type return.
- * @param[out]  content_disposition  Content disposition return.
- * @param[out]  content_length       Content length return.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Groups XML on success.  HTML result of XSL transformation
  *         on error.
  */
 char *
-export_groups_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
-                   enum content_type * content_type, char **content_disposition,
-                   gsize *content_length, cmd_response_data_t* response_data)
+export_groups_omp (openvas_connection_t *connection,
+                   credentials_t * credentials, params_t *params,
+                   cmd_response_data_t* response_data)
 {
-  return export_many (connection, "group", credentials, params, content_type,
-                      content_disposition, content_length, response_data);
+  return export_many (connection, "group", credentials, params, response_data);
 }
 
 /**
@@ -21862,21 +21735,17 @@ edit_permission_omp (openvas_connection_t *connection, credentials_t * credentia
  * @param[in]  connection     Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
- * @param[out]  content_type         Content type return.
- * @param[out]  content_disposition  Content disposition return.
- * @param[out]  content_length       Content length return.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Permission XML on success.  HTML result of XSL transformation on error.
  */
 char *
-export_permission_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
-                       enum content_type * content_type,
-                       char **content_disposition, gsize *content_length,
+export_permission_omp (openvas_connection_t *connection,
+                       credentials_t * credentials, params_t *params,
                        cmd_response_data_t* response_data)
 {
-  return export_resource (connection, "permission", credentials, params, content_type,
-                          content_disposition, content_length, response_data);
+  return export_resource (connection, "permission", credentials, params,
+                          response_data);
 }
 
 /**
@@ -21885,22 +21754,18 @@ export_permission_omp (openvas_connection_t *connection, credentials_t * credent
  * @param[in]  connection     Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
- * @param[out]  content_type         Content type return.
- * @param[out]  content_disposition  Content disposition return.
- * @param[out]  content_length       Content length return.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Permissions XML on success.  HTML result of XSL transformation
  *         on error.
  */
 char *
-export_permissions_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
-                        enum content_type * content_type,
-                        char **content_disposition, gsize *content_length,
+export_permissions_omp (openvas_connection_t *connection,
+                        credentials_t * credentials, params_t *params,
                         cmd_response_data_t* response_data)
 {
-  return export_many (connection, "permission", credentials, params, content_type,
-                      content_disposition, content_length, response_data);
+  return export_many (connection, "permission", credentials, params,
+                      response_data);
 }
 
 /**
@@ -23018,20 +22883,16 @@ get_roles_omp (openvas_connection_t *connection, credentials_t * credentials, pa
  * @param[in]  connection     Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
- * @param[out]  content_type         Content type return.
- * @param[out]  content_disposition  Content disposition return.
- * @param[out]  content_length       Content length return.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Role XML on success.  HTML result of XSL transformation on error.
  */
 char *
-export_role_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
-                 enum content_type * content_type, char **content_disposition,
-                 gsize *content_length, cmd_response_data_t* response_data)
+export_role_omp (openvas_connection_t *connection, credentials_t * credentials,
+                 params_t *params, cmd_response_data_t* response_data)
 {
-  return export_resource (connection, "role", credentials, params, content_type,
-                          content_disposition, content_length, response_data);
+  return export_resource (connection, "role", credentials, params,
+                          response_data);
 }
 
 /**
@@ -23040,21 +22901,16 @@ export_role_omp (openvas_connection_t *connection, credentials_t * credentials, 
  * @param[in]  connection     Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
- * @param[out]  content_type         Content type return.
- * @param[out]  content_disposition  Content disposition return.
- * @param[out]  content_length       Content length return.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Roles XML on success.  HTML result of XSL transformation
  *         on error.
  */
 char *
-export_roles_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
-                  enum content_type * content_type, char **content_disposition,
-                  gsize *content_length, cmd_response_data_t* response_data)
+export_roles_omp (openvas_connection_t *connection, credentials_t * credentials,
+                  params_t *params, cmd_response_data_t* response_data)
 {
-  return export_many (connection, "role", credentials, params, content_type,
-                      content_disposition, content_length, response_data);
+  return export_many (connection, "role", credentials, params, response_data);
 }
 
 /**
@@ -23659,20 +23515,17 @@ edit_filter_omp (openvas_connection_t *connection, credentials_t * credentials, 
  * @param[in]  connection     Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
- * @param[out]  content_type         Content type return.
- * @param[out]  content_disposition  Content disposition return.
- * @param[out]  content_length       Content length return.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Filter XML on success.  HTML result of XSL transformation on error.
  */
 char *
-export_filter_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
-                   enum content_type * content_type, char **content_disposition,
-                   gsize *content_length, cmd_response_data_t* response_data)
+export_filter_omp (openvas_connection_t *connection,
+                   credentials_t * credentials, params_t *params,
+                   cmd_response_data_t* response_data)
 {
-  return export_resource (connection, "filter", credentials, params, content_type,
-                          content_disposition, content_length, response_data);
+  return export_resource (connection, "filter", credentials, params,
+                          response_data);
 }
 
 /**
@@ -23681,21 +23534,18 @@ export_filter_omp (openvas_connection_t *connection, credentials_t * credentials
  * @param[in]  connection     Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
- * @param[out]  content_type         Content type return.
- * @param[out]  content_disposition  Content disposition return.
- * @param[out]  content_length       Content length return.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Filters XML on success.  HTML result of XSL transformation
  *         on error.
  */
 char *
-export_filters_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
-                    enum content_type * content_type, char **content_disposition,
-                    gsize *content_length, cmd_response_data_t* response_data)
+export_filters_omp (openvas_connection_t *connection,
+                    credentials_t * credentials, params_t *params,
+                    cmd_response_data_t* response_data)
 {
-  return export_many (connection, "filter", credentials, params, content_type,
-                      content_disposition, content_length, response_data);
+  return export_many (connection, "filter", credentials, params,
+                      response_data);
 }
 
 /**
@@ -23850,21 +23700,17 @@ edit_schedule_omp (openvas_connection_t *connection, credentials_t *
  * @param[in]  connection     Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
- * @param[out]  content_type         Content type return.
- * @param[out]  content_disposition  Content disposition return.
- * @param[out]  content_length       Content length return.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Schedule XML on success.  HTML result of XSL transformation on error.
  */
 char *
-export_schedule_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
-                     enum content_type * content_type,
-                     char **content_disposition, gsize *content_length,
+export_schedule_omp (openvas_connection_t *connection,
+                     credentials_t * credentials, params_t *params,
                      cmd_response_data_t* response_data)
 {
-  return export_resource (connection, "schedule", credentials, params, content_type,
-                          content_disposition, content_length, response_data);
+  return export_resource (connection, "schedule", credentials, params,
+                          response_data);
 }
 
 /**
@@ -23873,21 +23719,17 @@ export_schedule_omp (openvas_connection_t *connection, credentials_t * credentia
  * @param[in]  connection     Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
- * @param[out]  content_type         Content type return.
- * @param[out]  content_disposition  Content disposition return.
- * @param[out]  content_length       Content length return.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Schedules XML on success. HTML result of XSL transformation on error.
  */
 char *
-export_schedules_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
-                      enum content_type * content_type,
-                      char **content_disposition, gsize *content_length,
+export_schedules_omp (openvas_connection_t *connection,
+                      credentials_t * credentials, params_t *params,
                       cmd_response_data_t* response_data)
 {
-  return export_many (connection, "schedule", credentials, params, content_type,
-                      content_disposition, content_length, response_data);
+  return export_many (connection, "schedule", credentials, params,
+                      response_data);
 }
 
 /**
@@ -25158,21 +25000,16 @@ save_user_omp (openvas_connection_t *connection, credentials_t *credentials,
  * @param[in]   connection           Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
- * @param[out]  content_type         Content type return.
- * @param[out]  content_disposition  Content disposition return.
- * @param[out]  content_length       Content length return.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Note XML on success.  HTML result of XSL transformation on error.
  */
 char *
 export_user_omp (openvas_connection_t *connection, credentials_t * credentials,
-                 params_t *params, enum content_type *content_type,
-                 char **content_disposition, gsize *content_length,
-                 cmd_response_data_t *response_data)
+                 params_t *params, cmd_response_data_t *response_data)
 {
-  return export_resource (connection, "user", credentials, params, content_type,
-                          content_disposition, content_length, response_data);
+  return export_resource (connection, "user", credentials, params,
+                          response_data);
 }
 
 /**
@@ -25181,9 +25018,6 @@ export_user_omp (openvas_connection_t *connection, credentials_t * credentials,
  * @param[in]  connection     Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
- * @param[out]  content_type         Content type return.
- * @param[out]  content_disposition  Content disposition return.
- * @param[out]  content_length       Content length return.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Users XML on success.  HTML result of XSL transformation
@@ -25191,12 +25025,10 @@ export_user_omp (openvas_connection_t *connection, credentials_t * credentials,
  */
 char *
 export_users_omp (openvas_connection_t *connection, credentials_t * credentials,
-                  params_t *params, enum content_type * content_type,
-                  char **content_disposition, gsize *content_length,
-                  cmd_response_data_t* response_data)
+                  params_t *params, cmd_response_data_t* response_data)
 {
-  return export_many (connection, "user", credentials, params, content_type,
-                      content_disposition, content_length, response_data);
+  return export_many (connection, "user", credentials, params,
+                      response_data);
 }
 
 char *
@@ -25927,18 +25759,13 @@ wizard_get_omp (openvas_connection_t *connection, credentials_t *credentials,
  * @param[in]   connection           Connection to manager.
  * @param[in]   credentials          Credentials of user issuing the action.
  * @param[in]   params               Request parameters.
- * @param[out]  content_type         Content type return.
- * @param[out]  content_disposition  Content disposition return.
- * @param[out]  content_length       Content length return.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Result of XSL transformation.
  */
 char *
 process_bulk_omp (openvas_connection_t *connection, credentials_t *credentials,
-                  params_t *params, enum content_type *content_type,
-                  char **content_disposition, gsize *content_length,
-                  cmd_response_data_t* response_data)
+                  params_t *params, cmd_response_data_t* response_data)
 {
   GString *bulk_string;
   const char *type, *subtype, *action;
@@ -26058,8 +25885,8 @@ process_bulk_omp (openvas_connection_t *connection, credentials_t *credentials,
         }
       params_add (params, "filter", g_string_free (bulk_string, FALSE));
 
-      return export_many (connection, type, credentials, params, content_type,
-                          content_disposition, content_length, response_data);
+      return export_many (connection, type, credentials, params,
+                          response_data);
     }
 
   bulk_string = g_string_new ("<process_bulk>");
@@ -26852,21 +26679,15 @@ delete_asset_omp (openvas_connection_t *connection, credentials_t * credentials,
  * @param[in]   connection           Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
- * @param[out]  content_type         Content type return.
- * @param[out]  content_disposition  Content disposition return.
- * @param[out]  content_length       Content length return.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Asset XML on success.  HTML result of XSL transformation on error.
  */
 char *
 export_asset_omp (openvas_connection_t *connection, credentials_t * credentials,
-                  params_t *params, enum content_type * content_type,
-                  char **content_disposition, gsize *content_length,
-                  cmd_response_data_t* response_data)
+                  params_t *params, cmd_response_data_t* response_data)
 {
   return export_resource (connection, "asset", credentials, params,
-                          content_type, content_disposition, content_length,
                           response_data);
 }
 
@@ -26876,9 +26697,6 @@ export_asset_omp (openvas_connection_t *connection, credentials_t * credentials,
  * @param[in]   connection           Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
- * @param[out]  content_type         Content type return.
- * @param[out]  content_disposition  Content disposition return.
- * @param[out]  content_length       Content length return.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Assets XML on success.  HTML result of XSL transformation
@@ -26887,11 +26705,10 @@ export_asset_omp (openvas_connection_t *connection, credentials_t * credentials,
 char *
 export_assets_omp (openvas_connection_t *connection, credentials_t *
                    credentials, params_t *params,
-                   enum content_type * content_type, char **content_disposition,
-                   gsize *content_length, cmd_response_data_t* response_data)
+                   cmd_response_data_t* response_data)
 {
-  return export_many (connection, "asset", credentials, params, content_type,
-                      content_disposition, content_length, response_data);
+  return export_many (connection, "asset", credentials, params,
+                      response_data);
 }
 
 /**
