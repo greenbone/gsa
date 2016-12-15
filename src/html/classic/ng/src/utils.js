@@ -21,6 +21,8 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+import d3 from 'd3';
+
 const x2js = new window.X2JS();
 
 export const is_array = Array.isArray;
@@ -300,7 +302,7 @@ export function get_severity_levels(type) {
     max_medium: 6.9,
     min_medium: 4.0,
     max_low: 3.9,
-    min_low: 0.0,
+    min_low: 0.1,
     max_log: 0.0,
   };
 }
@@ -308,5 +310,7 @@ export function get_severity_levels(type) {
 export function capitalize_first_letter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
+
+export const cvss_number_format = d3.format('0.1f');
 
 // vim: set ts=2 sw=2 tw=80:

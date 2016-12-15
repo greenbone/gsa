@@ -23,7 +23,7 @@
 
 import React from 'react';
 
-import {parse_float, is_defined} from '../utils.js';
+import {parse_float, is_defined, cvss_number_format} from '../utils.js';
 import {translate as _} from '../locale.js';
 
 import './css/statusbar.css';
@@ -102,7 +102,8 @@ export const SeverityBar = props => {
     text = result_cvss_risk_factor(severity);
   }
   else {
-    text = cvss + ' (' + result_cvss_risk_factor(severity) + ')';
+    text = cvss_number_format (cvss) +
+        ' (' + result_cvss_risk_factor(severity) + ')';
   }
 
   let css;

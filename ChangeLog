@@ -1,5 +1,14 @@
 2016-12-15  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/ng/src/utils.js (get_severity_levels): Set min_low
+	of default type to 0.1.
+	(cvss_number_format): New number format function.
+
+	* src/html/classic/ng/src/web/severitybar.js (SeverityBar): Apply
+	number formatter cvss_number_format to the CVSS value.
+
+2016-12-15  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/js/gsa_donut_chart.js
 	(DonutChartGenerator.prototype.generate): Wait until the new donut has
 	faded in before removing the old one.
