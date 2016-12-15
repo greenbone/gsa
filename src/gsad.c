@@ -681,7 +681,7 @@ init_validator ()
   openvas_validator_add (validator, "report_format_id", "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "report_section",
                                     "^(summary|results|hosts|ports"
-                                    "|closed_cves|vulns|os|apps|errors"
+                                    "|closed_cves|os|apps|errors"
                                     "|topology|ssl_certs|cves)$");
   openvas_validator_add (validator, "result_id",        "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "role",             "^[[:alnum:] ]{1,40}$");

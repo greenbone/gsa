@@ -712,7 +712,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:when test="$section = 'os'"><xsl:value-of select="gsa:i18n ('Report: Operating Systems')"/></xsl:when>
       <xsl:when test="$section = 'apps' and $type = 'prognostic'"><xsl:value-of select="gsa:i18n ('Report: Prognostic Applications')"/></xsl:when>
       <xsl:when test="$section = 'apps'"><xsl:value-of select="gsa:i18n ('Report: Applications')"/></xsl:when>
-      <xsl:when test="$section = 'vulns'"><xsl:value-of select="gsa:i18n ('Report: Vulnerabilities')"/></xsl:when>
       <xsl:when test="$section = 'cves'"><xsl:value-of select="gsa:i18n ('Report: CVEs')"/></xsl:when>
       <xsl:when test="$section = 'closed_cves'"><xsl:value-of select="gsa:i18n ('Report: Closed CVEs')"/></xsl:when>
       <xsl:when test="$section = 'topology'"><xsl:value-of select="gsa:i18n ('Report: Topology')"/></xsl:when>
@@ -32484,110 +32483,6 @@ should not have received it.
                 </xsl:for-each>
               </td>
             </tr>
-        </xsl:for-each>
-      </table>
-  </div>
-</xsl:template>
-
-<xsl:template match="get_report_vulns_response">
-  <xsl:apply-templates select="get_report/get_reports_response/report"
-                       mode="vulns"/>
-</xsl:template>
-
-<xsl:key name="key_vulns_hosts" match="report/results/result" use="concat(nvt/@oid, '|', host)"/>
-<xsl:key name="key_report_vulns" match="report/results/result" use="nvt/@oid"/>
-
-<xsl:template match="report" mode="vulns">
-  <xsl:apply-templates select="gsad_msg"/>
-  <xsl:variable name="report" select="report"/>
-
-  <xsl:apply-templates select="." mode="report-section-toolbar">
-    <xsl:with-param name="section" select="'vulns'"/>
-  </xsl:apply-templates>
-  <xsl:call-template name="report-section-header">
-    <xsl:with-param name="section" select="'vulns'"/>
-    <xsl:with-param name="filtered-count" select="count(report/results/result[nvt/@oid != '0' and generate-id() = generate-id(key('key_report_vulns', nvt/@oid))])"/>
-    <xsl:with-param name="full-count" select="report/vulns/count"/>
-  </xsl:call-template>
-
-  <div id="table-box" class="section-box">
-      <table class="gbntable">
-          <col/>
-          <col/>
-          <col/>
-          <col width="100px"/>
-        <tr class="gbntablehead2">
-          <td><xsl:value-of select="gsa:i18n ('Vulnerability')"/></td>
-          <td><xsl:value-of select="gsa:i18n ('Occurrences')"/></td>
-          <td><xsl:value-of select="gsa:i18n ('Hosts')"/></td>
-          <td><xsl:value-of select="gsa:i18n ('Severity')"/></td>
-        </tr>
-
-        <xsl:for-each select="report/results/result[nvt/@oid != '0' and generate-id() = generate-id(key('key_report_vulns', nvt/@oid))]">
-          <xsl:sort data-type="number" select="nvt/cvss_base" order="descending"/>
-
-          <xsl:variable name="oid" select="nvt/@oid"/>
-          <xsl:variable name="host" select="host"/>
-          <tr class="{gsa:table-row-class(position())}">
-            <td>
-              <xsl:call-template name="get_info_nvt_lnk">
-                <xsl:with-param name="nvt" select="nvt/name"/>
-                <xsl:with-param name="oid" select="$oid"/>
-              </xsl:call-template>
-              <div class="pull-right">
-                <xsl:choose>
-                  <xsl:when test="count (../result[nvt/@oid = $oid]/notes/note)">
-                    <div class="pull-left">
-                      <a href="/omp?cmd=get_notes&amp;filter=nvt_id={$oid} sort=nvt&amp;token={/envelope/token}"
-                        title="{gsa:i18n ('Notes')}"
-                        class="icon icon-sm">
-                        <img src="/img/note.svg" alt="{gsa:i18n ('Notes')}"/>
-                      </a>
-                    </div>
-                  </xsl:when>
-                </xsl:choose>
-                <xsl:choose>
-                  <xsl:when test="count (../result[nvt/@oid = $oid]/overrides/override)">
-                    <div class="pull-left">
-                      <a href="/omp?cmd=get_overrides&amp;filter=nvt_id={$oid} sort=nvt&amp;token={/envelope/token}"
-                        title="{gsa:i18n ('Overrides')}"
-                        class="icon icon-sm">
-                        <img src="/img/override.svg" alt="{gsa:i18n ('Overrides')}"/>
-                      </a>
-                    </div>
-                  </xsl:when>
-                </xsl:choose>
-              </div>
-            </td>
-            <td>
-              <xsl:variable name="filter" select="../../../report/filters/term"/>
-              <a href="/omp?cmd=get_report_section&amp;report_id={../../../report/@id}&amp;report_section=results&amp;filter=&#34;{nvt/@oid}&#34; {$filter}&amp;token={/envelope/token}"
-                 title="{gsa:i18n ('Report: Results')} ({nvt/name})">
-                 <xsl:value-of select="count(../result[nvt/@oid = $oid])"/>
-              </a>
-            </td>
-            <td>
-              <xsl:value-of select="count(../result[nvt/@oid = $oid and host != $host and generate-id() = generate-id(key('key_vulns_hosts', concat(nvt/@oid, '|' ,host)))]) + 1"/>
-            </td>
-            <td>
-              <xsl:choose>
-                <xsl:when test="severity &gt;= 0.0">
-                  <xsl:call-template name="severity-bar">
-                    <xsl:with-param name="cvss" select="severity"/>
-                    <xsl:with-param name="extra_text" select="concat (' (', gsa:i18n (gsa:result-cvss-risk-factor (severity), 'Severity'), ')')"/>
-                    <xsl:with-param name="title" select="gsa:i18n (gsa:result-cvss-risk-factor (severity), 'Severity')"/>
-                  </xsl:call-template>
-                </xsl:when>
-                <xsl:otherwise>
-                  <xsl:call-template name="severity-bar">
-                    <xsl:with-param name="cvss" select="''"/>
-                    <xsl:with-param name="extra_text" select="gsa:i18n (gsa:result-cvss-risk-factor (severity), 'Severity')"/>
-                    <xsl:with-param name="title" select="gsa:i18n (gsa:result-cvss-risk-factor (severity), 'Severity')"/>
-                  </xsl:call-template>
-                </xsl:otherwise>
-              </xsl:choose>
-            </td>
-          </tr>
         </xsl:for-each>
       </table>
   </div>
