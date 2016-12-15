@@ -492,7 +492,7 @@ xsl_transform_omp (openvas_connection_t *connection,
   char ctime_now[200];
   params_iterator_t iter;
   param_t *param;
-  const char *refresh_interval, *xml_flag;
+  const char *refresh_interval;
   struct timeval tv;
 
   assert (credentials);
@@ -674,11 +674,16 @@ xsl_transform_omp (openvas_connection_t *connection,
                           xml);
   g_free (xml);
 
-  xml_flag = params_value (params, "xml");
-  if (xml_flag && strcmp (xml_flag, "0"))
-    return g_string_free (string, FALSE);
+  if (params_value_bool (params, "xml"))
+    {
+      cmd_response_data_set_content_type(response_data,
+                                         GSAD_CONTENT_TYPE_APP_XML);
+      return g_string_free (string, FALSE);
+    }
 
   html = xsl_transform (string->str, response_data);
+  cmd_response_data_set_content_type(response_data,
+                                     GSAD_CONTENT_TYPE_TEXT_HTML);
   g_string_free (string, TRUE);
   if (html == NULL)
     {
