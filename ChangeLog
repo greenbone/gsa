@@ -1,3 +1,13 @@
+2016-12-15  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/gsad_cmd.h, src/gsad_cmd.c: Add getters and setters for
+	cmd_response_data_t content type and status code.
+
+2016-12-15  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/CMakeLists.txt: Use YARN_FOUND instead of Yarn_FOUND.
+	CMake from debian stable seems not recognizing the lower case variable.
+
 2016-12-14  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* README: Updated text and removed the detailed output of --help which

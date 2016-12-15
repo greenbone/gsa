@@ -32,17 +32,17 @@ set (NG_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 set (NG_PKG_FILES
      ${NG_SRC_DIR}/package.json)
 
-if (NOT Yarn_FOUND)
+if (NOT YARN_FOUND)
   MESSAGE (WARNING "Yarn package manager not found. Please install "
     "yarn for reproducable builds (see https://yarnpkg.com/en/docs/install). "
     "Trying to use npm instead.")
   find_package (Npm REQUIRED)
   set (INSTALLER ${NPM_EXECUTABLE})
-else (NOT Yarn_FOUND)
+else (NOT YARN_FOUND)
   message (STATUS "Found Yarn: ${YARN_EXECUTABLE}")
   set (INSTALLER ${YARN_EXECUTABLE})
   list (APPEND NG_PKG_FILES ${NG_SRC_DIR}/yarn.lock)
-endif (NOT Yarn_FOUND)
+endif (NOT YARN_FOUND)
 
 set (NG_SRC_FILES
      ${NG_SRC_DIR}/public/index.html

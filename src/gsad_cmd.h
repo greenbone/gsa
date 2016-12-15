@@ -50,4 +50,14 @@ void cmd_response_data_init (cmd_response_data_t* data);
 
 void cmd_response_data_reset (cmd_response_data_t* data);
 
+void cmd_response_data_set_content_type (cmd_response_data_t *data,
+                                         content_type_t content_type);
+
+content_type_t cmd_response_data_get_content_type (cmd_response_data_t *data);
+
+void cmd_response_data_set_status_code (cmd_response_data_t *data,
+                                        int http_status_code);
+
+int cmd_response_data_get_status_code (cmd_response_data_t *data);
+
 #endif /* not _GSAD_CMD_H */

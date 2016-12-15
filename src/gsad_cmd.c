@@ -56,3 +56,55 @@ cmd_response_data_reset (cmd_response_data_t* data)
 {
   memset (data, 0, sizeof (cmd_response_data_t));
 }
+
+/**
+ * @brief Set content type of cmd_response_data_t struct
+ *
+ * @param[in]  data          Struct to reset.
+ * @param[in]  content_type  Content Type to set
+ */
+void
+cmd_response_data_set_content_type (cmd_response_data_t *data,
+                                    content_type_t content_type)
+{
+  data->content_type = content_type;
+}
+
+/**
+ * @brief Get content type of cmd_response_data_t struct
+ *
+ * @param[in]  data  Struct to reset.
+ *
+ * @return The content type
+ */
+content_type_t
+cmd_response_data_get_content_type (cmd_response_data_t *data)
+{
+  return data->content_type;
+}
+
+/**
+ * @brief Set status code of cmd_response_data_t struct
+ *
+ * @param[in]  data              Struct to reset.
+ * @param[in]  http_status_code  HTTP status code
+ */
+void
+cmd_response_data_set_status_code (cmd_response_data_t *data,
+                                   int http_status_code)
+{
+  data->http_status_code = http_status_code;
+}
+
+/**
+ * @brief Get http status code of cmd_response_data_t struct
+ *
+ * @param[in]  data              Struct to reset.
+ *
+ * @return  HTTP status code
+ */
+int
+cmd_response_data_get_status_code (cmd_response_data_t *data)
+{
+  return data->http_status_code;
+}
