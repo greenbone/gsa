@@ -637,8 +637,8 @@ handle_omp_get (http_connection_t *connection,
   cmd_response_data_t response_data;
   cmd_response_data_init (&response_data);
 
-  if (credentials->params)
-    cmd = params_value (credentials->params, "cmd");
+  if (con_info->params)
+    cmd = params_value (con_info->params, "cmd");
   else
     cmd = NULL;
 

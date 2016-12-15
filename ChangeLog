@@ -1,5 +1,10 @@
 2016-12-15  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/gsad_http_handler.c (handle_omp_get): Don't use params from credentials.
+	Always use them from connection info struct.
+
+2016-12-15  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/gsad_cmd.h, src/gsad_cmd.c: Add getters and setters for
 	cmd_response_data_t content type and status code.
 
