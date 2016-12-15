@@ -261,7 +261,9 @@
 
     // Remove old donut
     this.svg.selectAll('.donut')
-      .remove();
+      .attr ('class', 'old_donut')
+      .transition(500)
+        .remove();
 
     // Add new donut
     var donut = this.svg.insert('g')

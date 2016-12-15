@@ -1,3 +1,9 @@
+2016-12-15  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/js/gsa_donut_chart.js
+	(DonutChartGenerator.prototype.generate): Wait until the new donut has
+	faded in before removing the old one.
+
 2016-12-15  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/gsad_omp.c (xsl_transform_omp): Set content type to xml if xml flag is
