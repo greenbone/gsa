@@ -624,7 +624,6 @@ handle_omp_get (http_connection_t *connection,
 
   credentials_t *credentials = (credentials_t*)data;
   char *res;
-  const char * xml_flag;
   unsigned int res_len = 0;
   content_type_t content_type = GSAD_CONTENT_TYPE_TEXT_HTML;
   gchar *content_type_string = NULL;
@@ -647,6 +646,7 @@ handle_omp_get (http_connection_t *connection,
   res = exec_omp_get (con_info, credentials, &content_type,
                       &content_type_string, &content_disposition,
                       &response_size, &response_data);
+
   if (response_size > 0)
     {
       res_len = response_size;
@@ -655,17 +655,10 @@ handle_omp_get (http_connection_t *connection,
   else
     {
       res_len = strlen (res);
-
-      xml_flag = credentials->params
-                  ? params_value (credentials->params, "xml")
-                  : NULL;
-      if (xml_flag && strcmp (xml_flag, "0"))
-        content_type = GSAD_CONTENT_TYPE_APP_XML;
     }
 
   response = MHD_create_response_from_buffer (res_len, (void *) res,
                                               MHD_RESPMEM_MUST_FREE);
-
   if (content_type_string)
     {
       MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
@@ -675,7 +668,8 @@ handle_omp_get (http_connection_t *connection,
 
   g_debug("Content-Type: %s", content_type_string);
 
-  http_response_code = response_data.http_status_code;
+  content_type = cmd_response_data_get_content_type (&response_data);
+  http_response_code = cmd_response_data_get_status_code(&response_data);
   cmd_response_data_reset (&response_data);
 
   if (attach_sid (response, credentials->sid) == MHD_NO)
