@@ -1,5 +1,11 @@
 2016-12-16  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/gsad_cmd.c, src/gsad_cmd.h: Introduce cmd_response_data_new and
+	cmd_response_data_free for dynamic cmd_response_data_t struct memory
+	allocation.
+
+2016-12-16  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	Improve new login page usability
 
 	* src/html/classic/ng/src/web/css/button.css: Display small green border

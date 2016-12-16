@@ -33,6 +33,41 @@
 #include <string.h> /* for memset */
 #include <microhttpd.h> /* for MHD_HTTP_OK */
 
+static void
+cmd_response_data_init (cmd_response_data_t* data);
+
+/**
+ * @brief Allocates memory for a cmd_response_data_t sturct and initializes it
+ *
+ * @return Pointer to the newly allocated cmd_response_data_t struct
+ */
+cmd_response_data_t *
+cmd_response_data_new ()
+{
+  cmd_response_data_t *data = g_malloc0 (sizeof (cmd_response_data_t));
+  cmd_response_data_init (data);
+  return data;
+}
+
+/**
+ * @brief Frees the memory of a cmd_response_data_t struct
+ *
+ * If content_disposition of data is not NULL the content_disposition is also
+ * beeing freed.
+ *
+ * @param[in] data The cmd_response_data_t struct to free
+ */
+void
+cmd_response_data_free (cmd_response_data_t* data)
+{
+  if (data->content_disposition)
+    {
+      g_free (data->content_disposition);
+    }
+
+  g_free (data);
+}
+
 /**
  * @brief Initializes a cmd_response_data_t struct.
  *
@@ -146,7 +181,7 @@ cmd_response_data_get_content_length (cmd_response_data_t *data)
  */
 void
 cmd_response_data_set_content_disposition (cmd_response_data_t *data,
-                                           const gchar *content_disposition)
+                                           gchar *content_disposition)
 {
   data->content_disposition = content_disposition;
 }

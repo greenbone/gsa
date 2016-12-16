@@ -45,12 +45,16 @@ typedef struct {
   gchar *redirect;                   ///> Redirect URL or NULL.
   content_type_t content_type;       ///> Content type. Default is text/html
   gsize content_length;              ///> Content length of the response
-  const gchar *content_disposition;  ///> Content disposition
+  gchar *content_disposition;  ///> Content disposition
 } cmd_response_data_t;
 
 void cmd_response_data_init (cmd_response_data_t* data);
 
+cmd_response_data_t * cmd_response_data_new ();
+
 void cmd_response_data_reset (cmd_response_data_t* data);
+
+void cmd_response_data_free (cmd_response_data_t* data);
 
 void cmd_response_data_set_content_type (cmd_response_data_t *data,
                                          content_type_t content_type);
@@ -68,7 +72,7 @@ void cmd_response_data_set_content_length (cmd_response_data_t *data,
 gsize cmd_response_data_get_content_length (cmd_response_data_t *data);
 
 void cmd_response_data_set_content_disposition
-  (cmd_response_data_t *data, const gchar *content_disposition);
+  (cmd_response_data_t *data, gchar *content_disposition);
 
 const gchar * cmd_response_data_get_content_disposition
   (cmd_response_data_t *data);
