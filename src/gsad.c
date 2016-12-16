@@ -1315,10 +1315,17 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   credentials_t *credentials;
   const char *cmd, *caller, *language;
   cmd_response_data_t *response_data;
-  const char *xml_flag;
-  xml_flag = params_value (con_info->params, "xml");
-  const gchar * guest_username = get_guest_username ();
+  gboolean xml_flag;
+  char *res;
+  time_t now;
+  gchar *xml;
+  char ctime_now[200];
+  const gchar *guest_username;
   openvas_connection_t connection;
+
+  xml_flag = params_value_bool (con_info->params, "xml");
+
+  guest_username = get_guest_username ();
 
   response_data = cmd_response_data_new ();
 
@@ -1338,7 +1345,6 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
       if (params_value (con_info->params, "login")
           && password)
         {
-          int ret;
           gchar *timezone, *role, *capabilities, *severity, *language;
           gchar *pw_warning, *autorefresh;
           GTree *chart_prefs;
@@ -1354,11 +1360,6 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                                   &autorefresh);
           if (ret)
             {
-              time_t now;
-              gchar *xml;
-              char *res;
-              char ctime_now[200];
-
               if (ret == -1 || ret == 2)
                 cmd_response_data_set_status_code (response_data,
                                                    MHD_HTTP_SERVICE_UNAVAILABLE);
@@ -1385,7 +1386,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                        : DEFAULT_GSAD_LANGUAGE,
                       guest_username ? guest_username : "");
 
-              if (xml_flag && strcmp (xml_flag, "0"))
+              if (xml_flag)
                 res = xml;
               else
                 {
@@ -1422,11 +1423,6 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
         }
       else
         {
-          time_t now;
-          gchar *xml;
-          char *res;
-          char ctime_now[200];
-
           cmd_response_data_set_status_code (response_data,
                                              MHD_HTTP_UNAUTHORIZED);
 
@@ -1437,7 +1433,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                            con_info->language ? con_info->language
                                               : DEFAULT_GSAD_LANGUAGE,
                            guest_username ? guest_username : "");
-          if (xml_flag && strcmp (xml_flag, "0"))
+          if (xml_flag)
             res = xml;
           else
             {
@@ -1509,10 +1505,6 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
 
   if (ret == USER_EXPIRED_TOKEN)
     {
-      time_t now;
-      gchar *xml;
-      char ctime_now[200];
-
       now = time (NULL);
       ctime_r_strip_newline (&now, ctime_now);
 
@@ -1539,7 +1531,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
 
       cmd_response_data_set_status_code (response_data, MHD_HTTP_UNAUTHORIZED);
 
-      if (xml_flag && strcmp (xml_flag, "0"))
+      if (xml_flag)
         con_info->response = xml;
       else
         {
@@ -1555,10 +1547,6 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
 
   if (ret == USER_BAD_MISSING_COOKIE || ret == USER_IP_ADDRESS_MISSMATCH)
     {
-      time_t now;
-      gchar *xml;
-      char ctime_now[200];
-
       now = time (NULL);
       ctime_r_strip_newline (&now, ctime_now);
 
@@ -1573,7 +1561,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
 
       cmd_response_data_set_status_code (response_data, MHD_HTTP_UNAUTHORIZED);
 
-      if (xml_flag && strcmp (xml_flag, "0"))
+      if (xml_flag)
         con_info->response = xml;
       else
         {
@@ -1590,10 +1578,6 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   if (ret == USER_GUEST_LOGIN_FAILED || ret == USER_OMP_DOWN ||
           ret == USER_GUEST_LOGIN_ERROR)
     {
-      time_t now;
-      gchar *xml;
-      char ctime_now[200];
-
       now = time (NULL);
       ctime_r_strip_newline (&now, ctime_now);
 
@@ -1612,7 +1596,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                         ? con_info->language
                         : DEFAULT_GSAD_LANGUAGE,
                        guest_username ? guest_username : "");
-      if (xml_flag && strcmp (xml_flag, "0"))
+      if (xml_flag)
         con_info->response = xml;
       else
         {
