@@ -1,5 +1,9 @@
 2016-12-16  Michael Wiegand <michael.wiegand@greenbone.net>
 
+	* src/gsad_http.c (handler_send_reauthentication): Fix another typo.
+
+2016-12-16  Michael Wiegand <michael.wiegand@greenbone.net>
+
 	* src/html/classic/os.xml: Match "cpe:/o:linux:linux_kernel" as well
 	for Linux Kernel.
 

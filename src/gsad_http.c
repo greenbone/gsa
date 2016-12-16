@@ -599,7 +599,7 @@ handler_send_reauthentication (http_connection_t *connection,
         type = "logout";
       default:
         msg = "";
-        type = "unkown";
+        type = "unknown";
     }
 
 #ifdef USE_GSA_NG
