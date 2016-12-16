@@ -24,7 +24,7 @@
 import React from 'react';
 
 import _ from '../locale.js';
-import {autobind, log} from '../utils.js';
+import {autobind, log, KeyCode} from '../utils.js';
 
 import Header from './header.js';
 import Footer from './footer.js';
@@ -131,6 +131,12 @@ class LoginForm extends React.Component {
     this.setState({password});
   }
 
+  onKeyDown(event) {
+    if (event.keyCode === KeyCode.ENTER) {
+      this.onSubmit(event);
+    }
+  }
+
   render() {
     let {error} = this.props;
     let {username, password} = this.state;
@@ -154,6 +160,7 @@ class LoginForm extends React.Component {
             <FormGroup title={_('Password')} titleSize="4">
               <PasswordField name="password" placeholder={_('Password')}
                 value={password}
+                onKeyDown={this.onKeyDown}
                 onChange={this.onPasswordChange}/>
             </FormGroup>
             <FormGroup size="6" offset="6">

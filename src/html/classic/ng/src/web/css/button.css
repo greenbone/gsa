@@ -36,10 +36,11 @@ button {
   text-decoration: none;
   color: #555;
 }
+.button:hover, .button:focus {
+  border: 1px solid #519032;
+}
 
 .button:hover {
-  border: 1px solid #519032;
-  outline: 0;
   text-decoration: none;
   background: #519032;
   font-weight: bold;
