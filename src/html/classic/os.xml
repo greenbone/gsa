@@ -573,6 +573,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <pattern>cpe:/o:linux:kernel</pattern><title>Linux Kernel</title><icon>os_linux.svg</icon>
     </operating_system>
     <operating_system>
+        <pattern>cpe:/o:linux:linux_kernel</pattern><title>Linux Kernel</title><icon>os_linux.svg</icon>
+    </operating_system>
+    <operating_system>
         <pattern>cpe:/o:netbsd:netbsd</pattern><title>NetBSD</title><icon>os_netbsd.svg</icon>
     </operating_system>
     <operating_system>
