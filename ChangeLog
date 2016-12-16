@@ -1,5 +1,9 @@
 2016-12-16  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/gsad.c (exec_omp_get): Remove duplicate asignment of ret value.
+
+2016-12-16  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/gsad.c (exec_omp_post): Cleanup function variables.
 
 2016-12-16  Björn Ricks <bjoern.ricks@greenbone.net>

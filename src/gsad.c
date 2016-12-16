@@ -2290,8 +2290,6 @@ exec_omp_get (gsad_connection_info_t *con_info,
                               &html,
                               &filename,
                               response_data))
-        ret = html;
-
       cmd_response_data_set_content_type (response_data,
                                           GSAD_CONTENT_TYPE_OCTET_STREAM);
       cmd_response_data_set_content_disposition
