@@ -357,22 +357,21 @@ send_response (http_connection_t *connection, const char *content,
  *
  * @param[in]  connection     Connection handle, e.g. used to send response.
  * @param[in]  response       Response.
- * @param[in]  content_type         Content type.
- * @param[in]  content_disposition  Content disposition.
- * @param[in]  http_response_code   Response code.
- * @param[in]  remove_cookie        Whether to remove SID cookie.
+ * @param[in]  response_data  Response data strurct
+ * @param[in]  remove_cookie  Whether to remove SID cookie.
  *
  * @return MHD_YES on success, else MHD_NO.
  */
 int
 handler_send_response (http_connection_t *connection,
                        http_response_t *response,
-                       content_type_t *content_type,
-                       char *content_disposition,
-                       int http_response_code,
-                       int remove_cookie)
+                       cmd_response_data_t *response_data,
+                       gboolean remove_cookie)
 {
   int ret;
+  const gchar * content_disposition;
+  content_type_t content_type;
+  int status_code;
 
   if (remove_cookie)
     if (remove_sid (response) == MHD_NO)
@@ -383,19 +382,26 @@ handler_send_response (http_connection_t *connection,
         return MHD_NO;
       }
 
-  gsad_add_content_type_header (response, content_type);
+  content_type = cmd_response_data_get_content_type (response_data);
+  gsad_add_content_type_header (response, &content_type);
+
+  content_disposition = cmd_response_data_get_content_disposition
+    (response_data);
 
   if (content_disposition != NULL)
     {
       MHD_add_response_header (response, "Content-Disposition",
                                content_disposition);
-      g_free (content_disposition);
     }
 
   add_security_headers (response);
   add_cors_headers (response);
 
-  ret = MHD_queue_response (connection, http_response_code, response);
+  status_code = cmd_response_data_get_status_code (response_data);
+
+  cmd_response_data_reset (response_data);
+
+  ret = MHD_queue_response (connection, status_code, response);
   if (ret == MHD_NO)
     {
       /* Assume this was due to a bad request, to keep the MHD "Internal
@@ -412,30 +418,24 @@ handler_send_response (http_connection_t *connection,
  * @brief Create a default 404 (not found) http response
  *
  * @param[in]   url                 Requested (not found) url
- * @param[out]  content_type        Content type of the response
- * @param[out]  http_response_code  HTTP response status code
+ * @param[out]  response_data       Response data to return
  *
  * @return A http response
  */
 http_response_t *
-create_not_found_response(const gchar *url, content_type_t *content_type,
-                          int *http_response_code)
+create_not_found_response(const gchar *url, cmd_response_data_t *response_data)
 {
   http_response_t *response;
+  int len;
 
-  cmd_response_data_t response_data;
-
-  cmd_response_data_init (&response_data);
-
-  response_data.http_status_code = MHD_HTTP_NOT_FOUND;
+  cmd_response_data_set_status_code (response_data, MHD_HTTP_NOT_FOUND);
 
   gchar *msg = gsad_message_new (NULL, NOT_FOUND_TITLE, NULL, 0,
                                  NOT_FOUND_MESSAGE,
-                                 "/login", 0, &response_data);
-  response = MHD_create_response_from_buffer (strlen (msg), (void *) msg,
+                                 "/login", 0, response_data);
+  len = cmd_response_data_get_content_length (response_data);
+  response = MHD_create_response_from_buffer (len, msg,
                                               MHD_RESPMEM_MUST_COPY);
-  *http_response_code = response_data.http_status_code;
-  *content_type = response_data.content_type;
   g_free (msg);
   return response;
 }
@@ -451,13 +451,13 @@ create_not_found_response(const gchar *url, content_type_t *content_type,
 int
 handler_send_not_found (http_connection_t *connection, const gchar * url)
 {
-  content_type_t content_type;
-  int http_status_code;
+  http_response_t *response;
+  cmd_response_data_t response_data;
 
-  http_response_t *response = create_not_found_response(url, &content_type,
-                                                        &http_status_code);
-  return handler_send_response (connection, response, &content_type, NULL,
-                                http_status_code, 0);
+  cmd_response_data_init (&response_data);
+
+  response = create_not_found_response (url, &response_data);
+  return handler_send_response (connection, response, &response_data, 0);
 }
 
 /**
@@ -479,9 +479,9 @@ handler_send_login_page (http_connection_t *connection,
                                                        MHD_GET_ARGUMENT_KIND,
                                                        "xml");
   time_t now;
-  content_type_t content_type;
   char ctime_now[200];
   char *res;
+  gsize len;
   http_response_t *response;
   const gchar * guest_username = get_guest_username ();
   gchar *language;
@@ -494,8 +494,8 @@ handler_send_login_page (http_connection_t *connection,
 
   cmd_response_data_t response_data;
   cmd_response_data_init (&response_data);
+  cmd_response_data_set_status_code (&response_data, http_status_code);
 
-  response_data.http_status_code = http_status_code;
   if (accept_language && g_utf8_validate (accept_language, -1, NULL) == FALSE)
     {
       send_response (connection,
@@ -515,25 +515,29 @@ handler_send_login_page (http_connection_t *connection,
   if (xml_flag && strcmp (xml_flag, "0"))
     {
       res = xml;
-      content_type = GSAD_CONTENT_TYPE_APP_XML;
+      cmd_response_data_set_content_type (&response_data,
+                                          GSAD_CONTENT_TYPE_APP_XML);
     }
   else
     {
-      content_type = GSAD_CONTENT_TYPE_TEXT_HTML;
+      cmd_response_data_set_content_type (&response_data,
+                                          GSAD_CONTENT_TYPE_TEXT_HTML);
       res = xsl_transform (xml, &response_data);
       g_free (xml);
     }
 
-  response = MHD_create_response_from_buffer (strlen (res), res,
-                                              MHD_RESPMEM_MUST_FREE);
-  http_status_code = response_data.http_status_code;
+  len = cmd_response_data_get_content_length (&response_data);
 
-  cmd_response_data_reset (&response_data);
+  if (len == 0)
+    {
+      len = strlen (res);
+    }
+
+  response = MHD_create_response_from_buffer (len, res,
+                                              MHD_RESPMEM_MUST_FREE);
   return handler_send_response (connection,
                                 response,
-                                &content_type,
-                                NULL,
-                                http_status_code,
+                                &response_data,
                                 1);
 }
 
@@ -682,39 +686,35 @@ file_reader (void *cls, uint64_t pos, char *buf, int max)
  * @param[in]   connection           Connection.
  * @param[in]   url                  Requested URL.
  * @param[in]   path                 Path to file.
- * @param[out]  http_response_code   Return location for response code.
- * @param[out]  content_type         Return location for content type.
- * @param[out]  content_disposition  Return location for content disposition.
+ * @param[out]  response_data        Return response data
  *
  * @return Response to send in combination with the response code. NULL only
  *         if file information could not be retrieved.
  */
 http_response_t *
 file_content_response (http_connection_t *connection, const char *url,
-                       const char *path, int *http_response_code,
-                       content_type_t *content_type,
-                       char **content_disposition)
+                       const char *path, cmd_response_data_t *response_data)
 {
   char date_2822[DATE_2822_LEN];
   struct tm *mtime;
   time_t next_week;
   http_response_t * response;
   FILE* file;
+  struct stat buf;
 
   file = fopen (path, "r"); /* this file is just read and sent */
 
   if (file == NULL)
     {
       g_debug ("File %s failed, ", path);
-      return create_not_found_response(url, content_type, http_response_code);
+      return create_not_found_response(url, response_data);
     }
 
   /* Guess content type. */
-  *content_type = guess_content_type (path);
+  cmd_response_data_set_content_type (response_data, guess_content_type (path));
 
   /** @todo Set content disposition? */
 
-  struct stat buf;
   g_debug ("Default file successful.\n");
   if (stat (path, &buf))
     {
@@ -730,7 +730,7 @@ file_content_response (http_connection_t *connection, const char *url,
   if ((buf.st_mode & S_IFMT) != S_IFREG)
     {
       fclose (file);
-      return create_not_found_response(url, content_type, http_response_code);
+      return create_not_found_response(url, response_data);
     }
 
   response = MHD_create_response_from_callback (buf.st_size, 32 * 1024,
@@ -754,7 +754,8 @@ file_content_response (http_connection_t *connection, const char *url,
       MHD_add_response_header (response, "Expires", date_2822);
     }
 
-  *http_response_code = MHD_HTTP_OK;
+  cmd_response_data_set_status_code (response_data, MHD_HTTP_OK);
+
   return response;
 }
 

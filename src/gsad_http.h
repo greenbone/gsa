@@ -148,10 +148,8 @@ void gsad_add_content_type_header (http_response_t *response,
 
 int handler_send_response (http_connection_t *connection,
                            http_response_t *response,
-                           content_type_t *content_type,
-                           char *content_disposition,
-                           int http_response_code,
-                           int remove_cookie);
+                           cmd_response_data_t *response_data,
+                           gboolean remove_cookie);
 
 int handler_send_not_found (http_connection_t *connection,
                             const gchar *url);
@@ -182,9 +180,7 @@ void add_cors_headers (http_response_t *response);
 /* helper functions required in gsad_http */
 http_response_t *
 file_content_response (http_connection_t *connection, const char *url,
-                       const char *path, int *http_response_code,
-                       content_type_t *content_type,
-                       char **content_disposition);
+                       const char *path, cmd_response_data_t *response_data);
 
 gboolean is_export(http_connection_t *connection);
 

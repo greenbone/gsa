@@ -341,12 +341,12 @@ handle_static_file (http_connection_t *connection, const char * method,
                     const char *url, gsad_connection_info_t *con_info,
                     http_handler_t *handler, void * data)
 {
-  int http_response_code;
   gchar* path;
   http_response_t *response;
-  content_type_t content_type;
-  char *content_disposition = NULL;
+  cmd_response_data_t response_data;
   char *default_file = "login/login.html";
+
+  cmd_response_data_init (&response_data);
 
   /** @todo validation, URL length restriction (allows you to view ANY
     *       file that the user running the gsad might look at!) */
@@ -362,12 +362,11 @@ handle_static_file (http_connection_t *connection, const char * method,
       path = g_strconcat (relative_url, NULL);
     }
 
-  response = file_content_response(connection, url, path, &http_response_code,
-                              &content_type, &content_disposition);
+  response = file_content_response(connection, url, path, &response_data);
+
   g_free (path);
 
-  return handler_send_response (connection, response, &content_type,
-                                content_disposition, http_response_code, 0);
+  return handler_send_response (connection, response, &response_data, 0);
 }
 
 int
@@ -410,17 +409,15 @@ handle_setup_user (http_connection_t *connection,
                    gsad_connection_info_t *con_info,
                    http_handler_t *handler, void *data)
 {
-  int ret;
+  int ret, len;
   int http_response_code = MHD_HTTP_OK;
   char *res;
-  char *content_disposition = NULL;
   const char *cookie;
   char client_address[INET6_ADDRSTRLEN];
   const char *token;
   const gchar *msg;
 
   user_t *user;
-  content_type_t content_type;
   cmd_response_data_t response_data;
   http_response_t *response;
 
@@ -462,7 +459,8 @@ handle_setup_user (http_connection_t *connection,
 
   if (ret == USER_BAD_TOKEN)
     {
-      response_data.http_status_code = MHD_HTTP_BAD_REQUEST;
+      cmd_response_data_set_status_code (&response_data, MHD_HTTP_BAD_REQUEST);
+
       res = gsad_message_new (NULL,
                               "Internal error", __FUNCTION__, __LINE__,
                               "An internal error occurred inside GSA daemon. "
@@ -470,16 +468,12 @@ handle_setup_user (http_connection_t *connection,
                               "/omp?cmd=get_tasks",
                               params_value_bool (con_info->params, "xml"),
                               &response_data);
-
-      response = MHD_create_response_from_buffer (strlen (res), res,
+      len = cmd_response_data_get_content_length (&response_data);
+      response = MHD_create_response_from_buffer (len, res,
                                                   MHD_RESPMEM_MUST_FREE);
-      http_response_code = response_data.http_status_code;
-      cmd_response_data_reset (&response_data);
       return handler_send_response (connection,
                                     response,
-                                    &content_type,
-                                    content_disposition,
-                                    http_response_code,
+                                    &response_data,
                                     1);
     }
 
@@ -625,12 +619,9 @@ handle_omp_get (http_connection_t *connection,
   credentials_t *credentials = (credentials_t*)data;
   char *res;
   gsize res_len = 0;
-  content_type_t content_type = GSAD_CONTENT_TYPE_TEXT_HTML;
   gchar *content_type_string = NULL;
   gsize response_size = 0;
-  char *content_disposition = NULL;
   http_response_t *response;
-  int http_response_code = MHD_HTTP_OK;
   const char* cmd;
 
   cmd_response_data_t response_data;
@@ -662,15 +653,11 @@ handle_omp_get (http_connection_t *connection,
   if (content_type_string)
     {
       MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
-                                content_type_string);
+                               content_type_string);
       g_free (content_type_string);
     }
 
   g_debug("Content-Type: %s", content_type_string);
-
-  content_type = cmd_response_data_get_content_type (&response_data);
-  http_response_code = cmd_response_data_get_status_code(&response_data);
-  cmd_response_data_reset (&response_data);
 
   if (attach_sid (response, credentials->sid) == MHD_NO)
     {
@@ -689,14 +676,9 @@ handle_omp_get (http_connection_t *connection,
     {
       add_guest_chart_content_security_headers (response);
     }
-  else
-    {
-      add_security_headers (response);
-    }
 
   credentials_free (credentials);
-  return handler_send_response (connection, response, &content_type,
-                                content_disposition, http_response_code, 0);
+  return handler_send_response (connection, response, &response_data, 0);
 }
 
 int
@@ -807,8 +789,6 @@ handle_help_pages (http_connection_t *connection,
 {
   cmd_response_data_t response_data;
   credentials_t *credentials = (credentials_t*)data;
-  content_type_t content_type = GSAD_CONTENT_TYPE_TEXT_HTML;
-  char *content_disposition = NULL;
 
   gchar **preferred_languages;
   gchar *xsl_filename = NULL;
@@ -822,7 +802,7 @@ handle_help_pages (http_connection_t *connection,
   int index;
   char *res;
   http_response_t * response;
-  int http_response_code = MHD_HTTP_OK;
+  gsize len;
 
   cmd_response_data_init (&response_data);
 
@@ -919,7 +899,7 @@ handle_help_pages (http_connection_t *connection,
 
   if (template_found == 0)
     {
-      response_data.http_status_code = MHD_HTTP_NOT_FOUND;
+      cmd_response_data_set_status_code (&response_data, MHD_HTTP_NOT_FOUND);
       res = gsad_message_new (credentials,
                               NOT_FOUND_TITLE, NULL, 0,
                               NOT_FOUND_MESSAGE,
@@ -930,13 +910,13 @@ handle_help_pages (http_connection_t *connection,
   else if (xsl_filename)
     {
       res = xsl_transform_with_stylesheet (xml, xsl_filename,
-                                            &response_data);
+                                           &response_data);
 
     }
   else
     {
       res = xsl_transform_with_stylesheet (xml, "help.xsl",
-                                            &response_data);
+                                           &response_data);
     }
 
   g_strfreev (preferred_languages);
@@ -945,7 +925,8 @@ handle_help_pages (http_connection_t *connection,
 
   if (res == NULL)
     {
-      response_data.http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
+      cmd_response_data_set_status_code (&response_data,
+                                         MHD_HTTP_INTERNAL_SERVER_ERROR);
       res = gsad_message_new (credentials,
                               "Invalid request", __FUNCTION__, __LINE__,
                               "Error generating help page.",
@@ -954,10 +935,14 @@ handle_help_pages (http_connection_t *connection,
                               &response_data);
     }
 
-  http_response_code = response_data.http_status_code;
-  response = MHD_create_response_from_buffer (strlen (res), res,
+  len = cmd_response_data_get_content_length (&response_data);
+
+  if (len == 0) {
+    len = strlen (res);
+  }
+
+  response = MHD_create_response_from_buffer (len, res,
                                               MHD_RESPMEM_MUST_FREE);
-  cmd_response_data_reset (&response_data);
 
   if (attach_sid (response, credentials->sid) == MHD_NO)
     {
@@ -970,9 +955,7 @@ handle_help_pages (http_connection_t *connection,
   credentials_free (credentials);
   return handler_send_response (connection,
                                 response,
-                                &content_type,
-                                content_disposition,
-                                http_response_code,
+                                &response_data,
                                 0);
 }
 
@@ -989,8 +972,6 @@ handle_system_report (http_connection_t *connection,
   char *res;
   http_response_t * response;
   openvas_connection_t con;
-  int http_response_code = MHD_HTTP_OK;
-  content_type_t content_type = GSAD_CONTENT_TYPE_TEXT_HTML;
   cmd_response_data_t response_data;
 
   g_debug("Request for system report url %s", url);
@@ -1060,11 +1041,7 @@ handle_system_report (http_connection_t *connection,
       return MHD_NO;
     }
 
-  http_response_code = cmd_response_data_get_status_code (&response_data);
-  content_type = cmd_response_data_get_content_type (&response_data);
-  res_len = cmd_response_data_get_content_length(&response_data);
-
-  cmd_response_data_reset (&response_data);
+  res_len = cmd_response_data_get_content_length (&response_data);
 
   response = MHD_create_response_from_buffer (res_len, res,
                                               MHD_RESPMEM_MUST_FREE);
@@ -1078,8 +1055,8 @@ handle_system_report (http_connection_t *connection,
     }
 
   credentials_free (credentials);
-  return handler_send_response (connection, response, &content_type, NULL,
-                                http_response_code, 0);
+
+  return handler_send_response (connection, response, &response_data, 0);
 }
 
 int
@@ -1088,17 +1065,15 @@ handle_index_ng (http_connection_t *connection,
                  gsad_connection_info_t *con_info,
                  http_handler_t *handler, void *data)
 {
-  int http_response_code;
-  content_type_t content_type;
   http_response_t *response;
+  cmd_response_data_t response_data;
+
+  cmd_response_data_init (&response_data);
 
   response = file_content_response (connection, url,
                                     "ng/index.html",
-                                    &http_response_code,
-                                    &content_type,
-                                    NULL);
-  return handler_send_response (connection, response, &content_type,
-                                NULL, http_response_code, 0);
+                                    &response_data);
+  return handler_send_response (connection, response, &response_data, 0);
 }
 
 int
@@ -1107,17 +1082,15 @@ handle_config_ng (http_connection_t *connection,
                  gsad_connection_info_t *con_info,
                  http_handler_t *handler, void *data)
 {
-  int http_response_code;
-  content_type_t content_type;
   http_response_t *response;
+  cmd_response_data_t response_data;
+
+  cmd_response_data_init (&response_data);
 
   response = file_content_response (connection, url,
                                     "ng/config.js",
-                                    &http_response_code,
-                                    &content_type,
-                                    NULL);
-  return handler_send_response (connection, response, &content_type,
-                                NULL, http_response_code, 0);
+                                    &response_data);
+  return handler_send_response (connection, response, &response_data, 0);
 }
 
 int
@@ -1125,12 +1098,12 @@ handle_static_ng_file (http_connection_t *connection, const char * method,
                        const char *url, gsad_connection_info_t *con_info,
                        http_handler_t *handler, void * data)
 {
-  int http_response_code;
   gchar* path;
   http_response_t *response;
-  content_type_t content_type;
-  char *content_disposition = NULL;
   char *default_file = "login/login.html";
+  cmd_response_data_t response_data;
+
+  cmd_response_data_init (&response_data);
 
   /** @todo validation, URL length restriction (allows you to view ANY
     *       file that the user running the gsad might look at!) */
@@ -1148,12 +1121,11 @@ handle_static_ng_file (http_connection_t *connection, const char * method,
 
   g_debug ("Requesting url %s for static ng path %s", url, path);
 
-  response = file_content_response (connection, url, path, &http_response_code,
-                                    &content_type, &content_disposition);
+  response = file_content_response (connection, url, path, &response_data);
+
   g_free (path);
 
-  return handler_send_response (connection, response, &content_type,
-                                content_disposition, http_response_code, 0);
+  return handler_send_response (connection, response, &response_data, 0);
 }
 
 http_handler_t *
