@@ -2154,9 +2154,7 @@ exec_omp_get (gsad_connection_info_t *con_info,
   else if (!strcmp (cmd, "dashboard"))
     ret = dashboard (&connection, credentials, params, response_data);
 
-  else if (!strcmp (cmd, "new_filter"))
-    ret = new_filter_omp (&connection, credentials, params, response_data);
-
+  ELSE (new_filter)
   ELSE (new_container_task)
   ELSE (new_target)
   ELSE (new_tag)
@@ -2423,7 +2421,7 @@ exec_omp_get (gsad_connection_info_t *con_info,
 
   else
     {
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      cmd_response_data_set_status_code (response_data, MHD_HTTP_BAD_REQUEST);
       ret = gsad_message_new (credentials,
                               "Internal error", __FUNCTION__, __LINE__,
                               "An internal error occurred inside GSA daemon. "

@@ -1,5 +1,11 @@
 2016-12-16  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/gsad.c (exec_omp_post): new_filter_omp can be used with ELSE makro too.
+	Use cmd_response_data_set_statu_code instead of accessing the status property
+	directly.
+
+2016-12-16  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/gsad_http.c, src/gsad_http.h: Introduce new
 	handler_send_reauthentication function. This function handles displaying the
 	login page dependend of using gsa ng and passing the xml parameter.
