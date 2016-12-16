@@ -48,11 +48,7 @@ typedef struct {
   gchar *content_disposition;  ///> Content disposition
 } cmd_response_data_t;
 
-void cmd_response_data_init (cmd_response_data_t* data);
-
 cmd_response_data_t * cmd_response_data_new ();
-
-void cmd_response_data_reset (cmd_response_data_t* data);
 
 void cmd_response_data_free (cmd_response_data_t* data);
 

@@ -355,6 +355,8 @@ send_response (http_connection_t *connection, const char *content,
 /**
  * @brief Send response for handle_request.
  *
+ * The passed response data will be freed and can't be used afterwards
+ *
  * @param[in]  connection     Connection handle, e.g. used to send response.
  * @param[in]  response       Response.
  * @param[in]  response_data  Response data strurct
@@ -379,6 +381,7 @@ handler_send_response (http_connection_t *connection,
         MHD_destroy_response (response);
         g_warning ("%s: failed to remove SID, dropping request",
                    __FUNCTION__);
+        cmd_response_data_free (response_data);
         return MHD_NO;
       }
 
@@ -399,7 +402,7 @@ handler_send_response (http_connection_t *connection,
 
   status_code = cmd_response_data_get_status_code (response_data);
 
-  cmd_response_data_reset (response_data);
+  cmd_response_data_free (response_data);
 
   ret = MHD_queue_response (connection, status_code, response);
   if (ret == MHD_NO)
@@ -452,12 +455,12 @@ int
 handler_send_not_found (http_connection_t *connection, const gchar * url)
 {
   http_response_t *response;
-  cmd_response_data_t response_data;
+  cmd_response_data_t *response_data;
 
-  cmd_response_data_init (&response_data);
+  response_data = cmd_response_data_new ();
 
-  response = create_not_found_response (url, &response_data);
-  return handler_send_response (connection, response, &response_data, 0);
+  response = create_not_found_response (url, response_data);
+  return handler_send_response (connection, response, response_data, 0);
 }
 
 /**
@@ -483,6 +486,7 @@ handler_send_login_page (http_connection_t *connection,
   char *res;
   gsize len;
   http_response_t *response;
+  cmd_response_data_t *response_data;
   const gchar * guest_username = get_guest_username ();
   gchar *language;
   const char* accept_language = MHD_lookup_connection_value (connection,
@@ -491,10 +495,6 @@ handler_send_login_page (http_connection_t *connection,
 
   now = time (NULL);
   ctime_r_strip_newline (&now, ctime_now);
-
-  cmd_response_data_t response_data;
-  cmd_response_data_init (&response_data);
-  cmd_response_data_set_status_code (&response_data, http_status_code);
 
   if (accept_language && g_utf8_validate (accept_language, -1, NULL) == FALSE)
     {
@@ -512,21 +512,24 @@ handler_send_login_page (http_connection_t *connection,
 
   g_free(language);
 
+  response_data = cmd_response_data_new ();
+  cmd_response_data_set_status_code (response_data, http_status_code);
+
   if (xml_flag && strcmp (xml_flag, "0"))
     {
       res = xml;
-      cmd_response_data_set_content_type (&response_data,
+      cmd_response_data_set_content_type (response_data,
                                           GSAD_CONTENT_TYPE_APP_XML);
     }
   else
     {
-      cmd_response_data_set_content_type (&response_data,
+      cmd_response_data_set_content_type (response_data,
                                           GSAD_CONTENT_TYPE_TEXT_HTML);
-      res = xsl_transform (xml, &response_data);
+      res = xsl_transform (xml, response_data);
       g_free (xml);
     }
 
-  len = cmd_response_data_get_content_length (&response_data);
+  len = cmd_response_data_get_content_length (response_data);
 
   if (len == 0)
     {
@@ -537,7 +540,7 @@ handler_send_login_page (http_connection_t *connection,
                                               MHD_RESPMEM_MUST_FREE);
   return handler_send_response (connection,
                                 response,
-                                &response_data,
+                                response_data,
                                 1);
 }
 

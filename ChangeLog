@@ -1,5 +1,21 @@
 2016-12-16  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	Use dynamic memory allocation for cmd_response_data_t structs
+
+	* src/gsad_cmd.c, src/gsad_cmd.h: Remove cmd_response_data_reset function.
+	Change cmd_response_data_init to a static and therefore private function.
+
+	* src/gsad_http.c: Change handler_send_response function to always free
+	cmd_response_data_t. Use pointers to cmd_response_data_t structs.
+
+	* src/gsad_http: Allocate memory for cmd_response_data_t structs dynamically
+	and use only functions to access cmd_response_data_t properties.
+
+	* src/gsad.c: Use pointer to cmd_response_data_t in exec_omp_post and free it
+	afterwards. Also use functions to access cmd_response_data_t properties.
+
+2016-12-16  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/gsad_cmd.c, src/gsad_cmd.h: Introduce cmd_response_data_new and
 	cmd_response_data_free for dynamic cmd_response_data_t struct memory
 	allocation.

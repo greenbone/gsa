@@ -1289,7 +1289,7 @@ params_mhd_validate (void *params)
 #define ELSE(name) \
   else if (!strcmp (cmd, G_STRINGIFY (name))) \
     con_info->response = name ## _omp (&connection, credentials, \
-                                       con_info->params, &response_data);
+                                       con_info->params, response_data);
 
 /**
  * @brief Handle a complete POST request.
@@ -1314,14 +1314,13 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   user_t *user;
   credentials_t *credentials;
   const char *cmd, *caller, *language;
-  cmd_response_data_t response_data;
-  cmd_response_data_init (&response_data);
+  cmd_response_data_t *response_data;
   const char *xml_flag;
   xml_flag = params_value (con_info->params, "xml");
   const gchar * guest_username = get_guest_username ();
   openvas_connection_t connection;
 
-  /* Handle the login command specially. */
+  response_data = cmd_response_data_new ();
 
   params_mhd_validate (con_info->params);
 
@@ -1361,9 +1360,11 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
               char ctime_now[200];
 
               if (ret == -1 || ret == 2)
-                response_data.http_status_code = MHD_HTTP_SERVICE_UNAVAILABLE;
+                cmd_response_data_set_status_code (response_data,
+                                                   MHD_HTTP_SERVICE_UNAVAILABLE);
               else
-                response_data.http_status_code = MHD_HTTP_UNAUTHORIZED;
+                cmd_response_data_set_status_code (response_data,
+                                                   MHD_HTTP_UNAUTHORIZED);
 
               now = time (NULL);
               ctime_r_strip_newline (&now, ctime_now);
@@ -1388,11 +1389,12 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                 res = xml;
               else
                 {
-                  res = xsl_transform (xml, &response_data);
+                  res = xsl_transform (xml, response_data);
                   g_free (xml);
                 }
               con_info->response = res;
-              con_info->answercode = response_data.http_status_code;
+              con_info->answercode =
+                cmd_response_data_get_status_code (response_data);
 
               g_warning ("Authentication failure for '%s' from %s",
                          params_value (con_info->params, "login") ?: "",
@@ -1414,7 +1416,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
               g_free (role);
               g_free (pw_warning);
               g_free (autorefresh);
-              cmd_response_data_reset (&response_data);
+              cmd_response_data_free (response_data);
               return 1;
             }
         }
@@ -1425,7 +1427,8 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
           char *res;
           char ctime_now[200];
 
-          response_data.http_status_code = MHD_HTTP_UNAUTHORIZED;
+          cmd_response_data_set_status_code (response_data,
+                                             MHD_HTTP_UNAUTHORIZED);
 
           now = time (NULL);
           ctime_r_strip_newline (&now, ctime_now);
@@ -1438,16 +1441,17 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
             res = xml;
           else
             {
-              res = xsl_transform (xml, &response_data);
+              res = xsl_transform (xml, response_data);
               g_free (xml);
             }
           con_info->response = res;
-          con_info->answercode = response_data.http_status_code;
+          con_info->answercode =
+            cmd_response_data_get_status_code (response_data);
           g_warning ("Authentication failure for '%s' from %s",
                      params_value (con_info->params, "login") ?: "",
                      client_address);
         }
-      cmd_response_data_reset (&response_data);
+      cmd_response_data_free (response_data);
       return 3;
     }
 
@@ -1455,7 +1459,9 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
 
   if (params_value (con_info->params, "token") == NULL)
     {
-      response_data.http_status_code = MHD_HTTP_BAD_REQUEST;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_BAD_REQUEST);
+
       if (params_given (con_info->params, "token") == 0)
         con_info->response
          = gsad_message_new (NULL,
@@ -1464,7 +1470,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                              "Diagnostics: Token missing.",
                              "/omp?cmd=get_tasks",
                              params_value_bool (con_info->params, "xml"),
-                             &response_data);
+                             response_data);
       else
         con_info->response
          = gsad_message_new (NULL,
@@ -1473,9 +1479,10 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                              "Diagnostics: Token bad.",
                              "/omp?cmd=get_tasks",
                              params_value_bool (con_info->params, "xml"),
-                             &response_data);
-      con_info->answercode = response_data.http_status_code;
-      cmd_response_data_reset (&response_data);
+                             response_data);
+      con_info->answercode =
+        cmd_response_data_get_status_code (response_data);
+      cmd_response_data_free (response_data);
       return 3;
     }
 
@@ -1483,7 +1490,8 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                    client_address, &user);
   if (ret == USER_BAD_TOKEN)
     {
-      response_data.http_status_code = MHD_HTTP_BAD_REQUEST;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_BAD_REQUEST);
       con_info->response
        = gsad_message_new (NULL,
                            "Internal error", __FUNCTION__, __LINE__,
@@ -1491,9 +1499,11 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                            "Diagnostics: Bad token.",
                            "/omp?cmd=get_tasks",
                            params_value_bool (con_info->params, "xml"),
-                           &response_data);
-      con_info->answercode = response_data.http_status_code;
-      cmd_response_data_reset (&response_data);
+                           response_data);
+
+      con_info->answercode =
+        cmd_response_data_get_status_code (response_data);
+      cmd_response_data_free (response_data);
       return 3;
     }
 
@@ -1526,16 +1536,20 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                         ? con_info->language
                         : DEFAULT_GSAD_LANGUAGE,
                        guest_username ? guest_username : "");
-      response_data.http_status_code = MHD_HTTP_UNAUTHORIZED;
+
+      cmd_response_data_set_status_code (response_data, MHD_HTTP_UNAUTHORIZED);
+
       if (xml_flag && strcmp (xml_flag, "0"))
         con_info->response = xml;
       else
         {
-          con_info->response = xsl_transform (xml, &response_data);
+          con_info->response = xsl_transform (xml, response_data);
           g_free (xml);
         }
-      con_info->answercode = response_data.http_status_code;
-      cmd_response_data_reset (&response_data);
+
+      con_info->answercode =
+        cmd_response_data_get_status_code (response_data);
+      cmd_response_data_free (response_data);
       return 2;
     }
 
@@ -1556,16 +1570,20 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                         ? con_info->language
                         : DEFAULT_GSAD_LANGUAGE,
                        guest_username ? guest_username : "");
-      response_data.http_status_code = MHD_HTTP_UNAUTHORIZED;
+
+      cmd_response_data_set_status_code (response_data, MHD_HTTP_UNAUTHORIZED);
+
       if (xml_flag && strcmp (xml_flag, "0"))
         con_info->response = xml;
       else
         {
-          con_info->response = xsl_transform (xml, &response_data);
+          con_info->response = xsl_transform (xml, response_data);
           g_free (xml);
         }
-      con_info->answercode = response_data.http_status_code;
-      cmd_response_data_reset (&response_data);
+
+      con_info->answercode =
+        cmd_response_data_get_status_code (response_data);
+      cmd_response_data_free (response_data);
       return 2;
     }
 
@@ -1579,7 +1597,9 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
       now = time (NULL);
       ctime_r_strip_newline (&now, ctime_now);
 
-      response_data.http_status_code = MHD_HTTP_SERVICE_UNAVAILABLE;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_SERVICE_UNAVAILABLE);
+
       xml = login_xml (ret == USER_OMP_DOWN
                         ? "Login failed.  OMP service is down."
                         : (ret == USER_GUEST_LOGIN_ERROR
@@ -1596,16 +1616,20 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
         con_info->response = xml;
       else
         {
-          con_info->response = xsl_transform (xml, &response_data);
+          con_info->response = xsl_transform (xml, response_data);
           g_free (xml);
         }
-      con_info->answercode = response_data.http_status_code;
-      cmd_response_data_reset (&response_data);
+      con_info->answercode =
+        cmd_response_data_get_status_code (response_data);
+      cmd_response_data_free (response_data);
       return 2;
     }
 
   if (ret)
-    abort ();
+    {
+      cmd_response_data_free (response_data);
+      abort ();
+    }
 
   /* From here, the user is authenticated. */
 
@@ -1642,7 +1666,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
     }
 
   /* Connect to manager */
-  switch (manager_connect (credentials, &connection, &response_data))
+  switch (manager_connect (credentials, &connection, response_data))
     {
       case 0:
         break;
@@ -1651,7 +1675,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
             = logout_xml (credentials,
                           params_value_bool (con_info->params, "xml"),
                           "Logged out.  OMP service is down.",
-                          &response_data);
+                          response_data);
 
         return 3;
       case -2:
@@ -1663,7 +1687,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                                 "daemon.",
                                 "/omp?cmd=get_tasks",
                                 params_value_bool (con_info->params, "xml"),
-                                &response_data);
+                                response_data);
         return 3;
       default:
         con_info->response
@@ -1673,7 +1697,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                                 "Diagnostics: Failure to connect to manager daemon.",
                                 "/omp?cmd=get_tasks",
                                 params_value_bool (con_info->params, "xml"),
-                                &response_data);
+                                response_data);
         return 3;
     }
 
@@ -1681,7 +1705,9 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
 
   if (!cmd)
     {
-      response_data.http_status_code = MHD_HTTP_BAD_REQUEST;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_BAD_REQUEST);
+
       con_info->response = gsad_message_new (credentials,
                                              "Internal error",
                                              __FUNCTION__,
@@ -1690,7 +1716,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                                              "Diagnostics: Empty command.",
                                              "/omp?cmd=get_tasks",
                                              params_value_bool (con_info->params, "xml"),
-                                             &response_data);
+                                             response_data);
     }
 
   ELSE (bulk_delete)
@@ -1761,7 +1787,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
     {
       con_info->response = get_report_section_omp
                             (&connection, credentials, con_info->params,
-                             &response_data);
+                             response_data);
     }
   ELSE (import_config)
   ELSE (import_port_list)
@@ -1784,7 +1810,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                                                       credentials,
                                                       con_info->params,
                                                       &pref_id, &pref_value,
-                                                      &response_data);
+                                                      response_data);
       if (pref_id && pref_value)
         user_set_chart_pref (credentials->token, pref_id, pref_value);
     }
@@ -1802,7 +1828,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                                                  con_info->language,
                                                  &timezone, &password,
                                                  &severity, &language,
-                                                 &response_data);
+                                                 response_data);
       if (timezone)
         /* credentials->timezone set in save_my_settings_omp before XSLT. */
         user_set_timezone (credentials->token, timezone);
@@ -1843,7 +1869,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
       con_info->response = save_user_omp (&connection, credentials,
                                           con_info->params,
                                           &password, &modified_user, &logout,
-                                          &response_data);
+                                          response_data);
       if (modified_user && logout)
         user_logout_all_sessions (modified_user, credentials);
 
@@ -1865,7 +1891,8 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   ELSE (verify_scanner)
   else
     {
-      response_data.http_status_code = MHD_HTTP_BAD_REQUEST;
+      cmd_response_data_set_status_code (response_data,
+                                         MHD_HTTP_BAD_REQUEST);
       con_info->response = gsad_message_new (credentials,
                                              "Internal error",
                                              __FUNCTION__,
@@ -1874,18 +1901,18 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                                              "Diagnostics: Unknown command.",
                                              "/omp?cmd=get_tasks",
                                              params_value_bool (con_info->params, "xml"),
-                                             &response_data);
+                                             response_data);
     }
 
-  if (response_data.redirect)
+  if (response_data->redirect)
     {
       con_info->answercode = MHD_HTTP_SEE_OTHER;
-      con_info->redirect = response_data.redirect;
+      con_info->redirect = response_data->redirect;
     }
   else
-    con_info->answercode = response_data.http_status_code;
+    con_info->answercode = cmd_response_data_get_status_code (response_data);
 
-  cmd_response_data_reset (&response_data);
+  cmd_response_data_free (response_data);
   credentials_free (credentials);
   openvas_connection_close (&connection);
   return 0;
@@ -2197,7 +2224,7 @@ exec_omp_get (gsad_connection_info_t *con_info,
       gchar *credential_login;
       const char *credential_id;
       const char *package_format;
-      const char *content_disposition;
+      char *content_disposition;
       content_type_t content_type;
 
       package_format = params_value (params, "package_format");

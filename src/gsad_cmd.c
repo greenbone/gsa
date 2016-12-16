@@ -33,8 +33,21 @@
 #include <string.h> /* for memset */
 #include <microhttpd.h> /* for MHD_HTTP_OK */
 
+/**
+ * @brief Initializes a cmd_response_data_t struct.
+ *
+ * @param[in]  data  The cmd_response_data_t struct to initialize
+ */
 static void
-cmd_response_data_init (cmd_response_data_t* data);
+cmd_response_data_init (cmd_response_data_t* data)
+{
+  data->http_status_code = MHD_HTTP_OK;
+  data->content_type = GSAD_CONTENT_TYPE_APP_HTML;
+  data->redirect = NULL;
+  data->content_disposition = NULL;
+  data->content_length = 0;
+}
+
 
 /**
  * @brief Allocates memory for a cmd_response_data_t sturct and initializes it
@@ -66,32 +79,6 @@ cmd_response_data_free (cmd_response_data_t* data)
     }
 
   g_free (data);
-}
-
-/**
- * @brief Initializes a cmd_response_data_t struct.
- *
- * @param[in]  data  The cmd_response_data_t struct to initialize
- */
-void
-cmd_response_data_init (cmd_response_data_t* data)
-{
-  data->http_status_code = MHD_HTTP_OK;
-  data->content_type = GSAD_CONTENT_TYPE_APP_HTML;
-  data->redirect = NULL;
-  data->content_disposition = NULL;
-  data->content_length = 0;
-}
-
-/**
- * @brief Clears a cmd_response_data_t struct.
- *
- * @param[in]  data  Struct to reset.
- */
-void
-cmd_response_data_reset (cmd_response_data_t* data)
-{
-  memset (data, 0, sizeof (cmd_response_data_t));
 }
 
 /**
