@@ -415,7 +415,8 @@ handle_setup_user (http_connection_t *connection,
   const char *cookie;
   char client_address[INET6_ADDRSTRLEN];
   const char *token;
-  const gchar *msg;
+  gboolean xml = params_value_bool (con_info->params, "xml");
+  authentication_reason_t auth_reason;
 
   user_t *user;
   cmd_response_data_t *response_data;
@@ -481,14 +482,15 @@ handle_setup_user (http_connection_t *connection,
   if (ret == USER_GUEST_LOGIN_FAILED
       || ret == USER_OMP_DOWN || ret == USER_GUEST_LOGIN_ERROR)
     {
-      const char * msg = ret == USER_OMP_DOWN
-                           ? "Login failed.  OMP service is down."
-                           : (ret == USER_GUEST_LOGIN_ERROR
-                               ? "Login failed.  Error during authentication."
-                               : "Login failed.");
+      auth_reason = ret == USER_OMP_DOWN
+                    ? GMP_SERVICE_DOWN
+                    : (ret == USER_GUEST_LOGIN_ERROR
+                      ? LOGIN_ERROR
+                      : LOGIN_FAILED);
 
-      return handler_send_login_page (connection, MHD_HTTP_SERVICE_UNAVAILABLE,
-                                      msg, NULL);
+      return handler_send_reauthentication (connection,
+                                            MHD_HTTP_SERVICE_UNAVAILABLE,
+                                            auth_reason, xml);
     }
 
   if ((ret == USER_EXPIRED_TOKEN) || (ret == USER_BAD_MISSING_COOKIE)
@@ -520,16 +522,16 @@ handle_setup_user (http_connection_t *connection,
       else
         http_response_code = MHD_HTTP_UNAUTHORIZED;
 
-      msg = (ret == USER_EXPIRED_TOKEN)
+      auth_reason = (ret == USER_EXPIRED_TOKEN)
                ? (strncmp (url, LOGOUT_URL, strlen (LOGOUT_URL))
-                 ? "Session has expired.  Please login again."
-                 : "Already logged out.")
+                 ? SESSION_EXPIRED
+                 : LOGOUT_ALREADY)
                : ((ret == USER_BAD_MISSING_COOKIE)
-                 ? "Cookie missing or bad.  Please login again."
-                 : "Token missing or bad.  Please login again.");
+                 ? BAD_MISSING_COOKIE
+                 : BAD_MISSING_TOKEN);
 
-      return handler_send_login_page (connection, http_response_code, msg,
-                                      full_url);
+      return handler_send_reauthentication (connection, http_response_code,
+                                            auth_reason, xml);
     }
 
   if (ret)
@@ -601,12 +603,9 @@ handle_logout (http_connection_t *connection,
 
   user_remove (user);
 
-#ifdef USE_GSA_NG
-  return send_redirect_to_urn (connection, LOGIN_URL"?type=logout", NULL);
-#else
-  return handler_send_login_page (connection,MHD_HTTP_OK,
-                                  "Successfully logged out.", NULL);
-#endif
+  return handler_send_reauthentication (connection, MHD_HTTP_OK, LOGOUT,
+                                        params_value_bool (con_info->params,
+                                                           "xml"));
 }
 
 int

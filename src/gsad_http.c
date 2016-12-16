@@ -545,6 +545,82 @@ handler_send_login_page (http_connection_t *connection,
 }
 
 /**
+ * @brief Allow for reauthentication of a user
+ *
+ * @param[in]  connection        Connection handle, e.g. used to send response.
+ * @param[in]  http_status_code  HTTP status code for the response.
+ * @param[in]  reason            Reason for re-authentication
+ * @param[in]  xml               XML is requested
+ *
+ * @return MHD_YES on success. MHD_NO on errors.
+ */
+int
+handler_send_reauthentication (http_connection_t *connection,
+                               int http_status_code,
+                               authentication_reason_t reason,
+                               gboolean xml)
+{
+
+  const char *msg;
+  const char *type;
+
+  switch (reason)
+    {
+      case LOGIN_FAILED:
+        msg = "Login failed.";
+        type = "failed";
+        break;
+      case LOGIN_ERROR:
+        msg = "Login failed. Error during authencication:";
+        type = "error";
+        break;
+      case GMP_SERVICE_DOWN:
+        msg = "Login failed. GMP Service is down.";
+        type = "gmpdown";
+        break;
+      case SESSION_EXPIRED:
+        msg = "Session expired. Please login again.";
+        type = "session";
+        break;
+      case LOGOUT_ALREADY:
+        msg = "Already logged out.";
+        type = "already";
+        break;
+      case BAD_MISSING_TOKEN:
+        msg = "Token missing or bad. Please login again.";
+        type = "token";
+        break;
+      case BAD_MISSING_COOKIE:
+        msg = "Cookie missing or bad. Please login again.";
+        type = "cookie";
+        break;
+      case LOGOUT:
+        msg = "Successfully logged out.";
+        type = "logout";
+      default:
+        msg = "";
+        type = "unkown";
+    }
+
+#ifdef USE_GSA_NG
+  if (xml)
+    return handler_send_login_page (connection, http_status_code, msg,
+                                    NULL);
+  int ret;
+  char *param;
+
+  param = g_strdup_printf ("%s?type=%s", LOGIN_URL, type);
+  ret = send_redirect_to_urn (connection, param, NULL);
+
+  g_free (param);
+
+  return ret;
+#else
+  return handler_send_login_page (connection, http_status_code, msg, NULL);
+#endif
+}
+
+/**
  * @brief Attach expired SID cookie to response.
  *
  * @param[in]  response  Response.

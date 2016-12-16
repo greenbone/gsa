@@ -1,5 +1,17 @@
 2016-12-16  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/gsad_http.c, src/gsad_http.h: Introduce new
+	handler_send_reauthentication function. This function handles displaying the
+	login page dependend of using gsa ng and passing the xml parameter.
+	If gsa ng is activated and a normal page is requested the user should be
+	redirected to the ng login page. If the request is an api request
+	(xml param is 1) then a 40X must be returned and a redirect most not occur.
+
+	* src/gsad_http_handler.c: Call handler_send_reauthentication in
+	handle_setup_user and handle_logout functions.
+
+2016-12-16  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/gsad.c (exec_omp_get): Remove duplicate asignment of ret value.
 
 2016-12-16  Björn Ricks <bjoern.ricks@greenbone.net>

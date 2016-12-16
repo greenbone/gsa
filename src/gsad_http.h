@@ -158,6 +158,28 @@ int handler_send_login_page(http_connection_t *connection,
                             int http_status_code, const gchar *message,
                             const gchar *url);
 
+/**
+ * @brief Content types.
+ */
+enum authentication_reason
+{
+  LOGIN_FAILED,
+  LOGIN_ERROR,
+  LOGOUT,
+  LOGOUT_ALREADY,
+  GMP_SERVICE_DOWN,
+  SESSION_EXPIRED,
+  BAD_MISSING_COOKIE,
+  BAD_MISSING_TOKEN,
+};
+
+typedef enum authentication_reason authentication_reason_t;
+
+int handler_send_reauthentication (http_connection_t *connection,
+                                   int http_status_code,
+                                   authentication_reason_t reason,
+                                   gboolean xml);
+
 int send_response (http_connection_t *connection, const char *content,
                    int status_code, const gchar *sid,
                    content_type_t content_type,
