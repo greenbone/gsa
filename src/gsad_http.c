@@ -571,7 +571,7 @@ handler_send_reauthentication (http_connection_t *connection,
         type = "failed";
         break;
       case LOGIN_ERROR:
-        msg = "Login failed. Error during authencication:";
+        msg = "Login failed. Error during authencication.";
         type = "error";
         break;
       case GMP_SERVICE_DOWN:
