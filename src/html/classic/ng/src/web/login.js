@@ -77,15 +77,51 @@ export class Login extends React.Component {
   }
 
   render() {
+    let {type} = this.props.location.query;
+    let message;
+
+    switch (type) {
+      case 'failed':
+        message = _('Login failed.');
+        break;
+      case 'error':
+        message = _('Login failed. Error during authencication.');
+        break;
+      case 'gmpdown':
+        message = _('Login failed. GMP Service is down.');
+        break;
+      case 'session':
+        message = _('Session expired. Please login again.');
+        break;
+      case 'already':
+        message = _('Already logged out.');
+        break;
+      case 'token':
+        message = _('Token missing or bad. Please login again.');
+        break;
+      case 'cookie':
+        message = _('Cookie missing or bad. Please login again.');
+        break;
+      case 'logout':
+        message = _('Successfully logged out.');
+        break;
+      default:
+        break;
+    }
+
+    if (this.state.error) {
+      message = _('Bad login information');
+    }
+
     return (
-      <div className="login flex column">
+      <Layout flex="column" className="login">
         <Header/>
         <main className="auto flex row wrap align-center justify-space-around">
-          <LoginForm onSubmit={this.onSubmit} error={this.state.error}/>
+          <LoginForm onSubmit={this.onSubmit} error={message}/>
           <LogoBox/>
         </main>
         <Footer className="none"/>
-      </div>
+      </Layout>
     );
   }
 }
@@ -144,7 +180,7 @@ class LoginForm extends React.Component {
       <div className="none">
         {error &&
           <div className="box">
-            <p className="error">{_('Bad login information')}</p>
+            <p className="error">{error}</p>
           </div>
         }
         <Layout flex align="space-arround" className="box">
