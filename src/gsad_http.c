@@ -320,31 +320,18 @@ send_response (http_connection_t *connection, const char *content,
 
   response = MHD_create_response_from_buffer (size, (void *) content,
                                               MHD_RESPMEM_MUST_COPY);
+
   gsad_add_content_type_header (response, &content_type);
 
   if (content_disposition)
     MHD_add_response_header (response, "Content-Disposition",
                              content_disposition);
 
-  if (sid)
+  if (attach_remove_sid (response, sid) == MHD_NO)
     {
-      if (strcmp (sid, "0"))
-        {
-          if (attach_sid (response, sid) == MHD_NO)
-            {
-              MHD_destroy_response (response);
-              return MHD_NO;
-            }
-        }
-      else
-        {
-          if (remove_sid (response) == MHD_NO)
-            {
-              MHD_destroy_response (response);
-              return MHD_NO;
-            }
-        }
+      return MHD_NO;
     }
+
   add_security_headers (response);
   add_cors_headers (response);
   ret = MHD_queue_response (connection, status_code, response);
@@ -744,6 +731,45 @@ attach_sid (http_response_t *response, const char *sid)
   return ret;
 }
 
+/**
+ * Attach or remove session id
+ *
+ * If sid is "0" the session id will be removed. Otherwise if the sid is not
+ * NULL the sid will be attached to the response.
+ *
+ * @param[in]  response  HTTP response
+ * @param[in]  sid       Session ID
+ *
+ * @return MHD_YES on success, MHD_NO on failure
+ */
+int
+attach_remove_sid (http_response_t *response, const gchar *sid)
+{
+  if (sid)
+    {
+      if (strcmp (sid, "0"))
+        {
+          if (attach_sid (response, sid) == MHD_NO)
+            {
+              MHD_destroy_response (response);
+              g_warning ("%s: failed to attach SID, dropping request",
+                        __FUNCTION__);
+              return MHD_NO;
+            }
+        }
+      else
+        {
+          if (remove_sid (response) == MHD_NO)
+            {
+              MHD_destroy_response (response);
+              g_warning ("%s: failed to remove SID, dropping request",
+                        __FUNCTION__);
+              return MHD_NO;
+            }
+        }
+    }
+  return MHD_YES;
+}
 /**
  * @brief Reads from a file.
  *

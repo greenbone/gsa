@@ -219,6 +219,7 @@ int remove_sid (http_response_t *response);
 
 int attach_sid (http_response_t *response, const char *sid);
 
+int attach_remove_sid (http_response_t *response, const gchar *sid);
 
 /* params_append_mhd, exec_omp_... are still in gsad.c */
 char * exec_omp_get (gsad_connection_info_t *con_info,
