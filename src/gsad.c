@@ -1288,8 +1288,8 @@ params_mhd_validate (void *params)
  */
 #define ELSE(name) \
   else if (!strcmp (cmd, G_STRINGIFY (name))) \
-    con_info->response = name ## _omp (&connection, credentials, \
-                                       con_info->params, response_data);
+    res = name ## _omp (&connection, credentials, \
+                        con_info->params, response_data);
 
 /**
  * @brief Handle a complete POST request.
@@ -1298,45 +1298,41 @@ params_mhd_validate (void *params)
  * parameters and calls the appropriate OMP function (like
  * create_task_omp).
  *
+ * @param[in]   connection      HTTP connection
  * @param[in]   con_info        Connection info.
- * @param[out]  user_return     User after successful login.
- * @param[out]  new_sid         SID when appropriate to attach.
- * @param[out]  client_address  Client address.
+ * @param[in]   client_address  Client address.
+ * @param[out]  response_data   Response data.  Return info is written
+ *                              into here.
  *
- * @return 0 after authenticated page, 1 after login, 2 after logout,
- *         3 after internal error or login failure.
+ * @return MHD_YES on success, MHD_NO on error.
  */
 int
-exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
-               gchar **new_sid, const char *client_address)
+exec_omp_post (http_connection_t *con,
+               gsad_connection_info_t *con_info,
+               const char *client_address,
+               cmd_response_data_t *response_data)
 {
   int ret;
   user_t *user;
   credentials_t *credentials;
-  const char *cmd, *caller, *language;
-  cmd_response_data_t *response_data;
+  gchar *xml, *res = NULL, *new_sid, *url;
+  const gchar *cmd, *caller, *language;
+  const gchar *guest_username, *password;
   gboolean xml_flag;
-  char *res;
   time_t now;
-  gchar *xml;
   char ctime_now[200];
-  const gchar *guest_username;
+
   openvas_connection_t connection;
 
-  xml_flag = params_value_bool (con_info->params, "xml");
-
   guest_username = get_guest_username ();
-
-  response_data = cmd_response_data_new ();
 
   params_mhd_validate (con_info->params);
 
   cmd = params_value (con_info->params, "cmd");
+  xml_flag = params_value_bool (con_info->params, "xml");
 
   if (cmd && !strcmp (cmd, "login"))
     {
-      const char *password;
-
       password = params_value (con_info->params, "password");
       if ((password == NULL)
           && (params_original_value (con_info->params, "password") == NULL))
@@ -1393,9 +1389,6 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                   res = xsl_transform (xml, response_data);
                   g_free (xml);
                 }
-              con_info->response = res;
-              con_info->answercode =
-                cmd_response_data_get_status_code (response_data);
 
               g_warning ("Authentication failure for '%s' from %s",
                          params_value (con_info->params, "login") ?: "",
@@ -1409,7 +1402,13 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                                language, pw_warning, chart_prefs, autorefresh,
                                client_address);
               /* Redirect to get_tasks. */
-              *user_return = user;
+              url = g_strdup_printf ("%s&token=%s",
+                                     params_value (con_info->params, "text"),
+                                     user->token);
+              ret = send_redirect_to_urn (con, url, user);
+              user_release (user);
+
+              g_free (url);
               g_free (timezone);
               g_free (severity);
               g_free (capabilities);
@@ -1417,8 +1416,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
               g_free (role);
               g_free (pw_warning);
               g_free (autorefresh);
-              cmd_response_data_free (response_data);
-              return 1;
+              return ret;
             }
         }
       else
@@ -1440,15 +1438,11 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
               res = xsl_transform (xml, response_data);
               g_free (xml);
             }
-          con_info->response = res;
-          con_info->answercode =
-            cmd_response_data_get_status_code (response_data);
           g_warning ("Authentication failure for '%s' from %s",
                      params_value (con_info->params, "login") ?: "",
                      client_address);
         }
-      cmd_response_data_free (response_data);
-      return 3;
+      return handler_create_response (con, res, response_data, REMOVE_SID);
     }
 
   /* Check the session. */
@@ -1459,27 +1453,23 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                                          MHD_HTTP_BAD_REQUEST);
 
       if (params_given (con_info->params, "token") == 0)
-        con_info->response
-         = gsad_message_new (NULL,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred inside GSA daemon. "
-                             "Diagnostics: Token missing.",
-                             "/omp?cmd=get_tasks",
-                             params_value_bool (con_info->params, "xml"),
-                             response_data);
+        res = gsad_message_new (NULL,
+                                "Internal error", __FUNCTION__, __LINE__,
+                                "An internal error occurred inside GSA daemon. "
+                                "Diagnostics: Token missing.",
+                                "/omp?cmd=get_tasks",
+                                params_value_bool (con_info->params, "xml"),
+                                response_data);
       else
-        con_info->response
-         = gsad_message_new (NULL,
-                             "Internal error", __FUNCTION__, __LINE__,
-                             "An internal error occurred inside GSA daemon. "
-                             "Diagnostics: Token bad.",
-                             "/omp?cmd=get_tasks",
-                             params_value_bool (con_info->params, "xml"),
-                             response_data);
-      con_info->answercode =
-        cmd_response_data_get_status_code (response_data);
-      cmd_response_data_free (response_data);
-      return 3;
+        res = gsad_message_new (NULL,
+                                "Internal error", __FUNCTION__, __LINE__,
+                                "An internal error occurred inside GSA daemon. "
+                                "Diagnostics: Token bad.",
+                                "/omp?cmd=get_tasks",
+                                params_value_bool (con_info->params, "xml"),
+                                response_data);
+
+      return handler_create_response (con, res, response_data, NULL);
     }
 
   ret = user_find (con_info->cookie, params_value (con_info->params, "token"),
@@ -1488,19 +1478,13 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
     {
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_BAD_REQUEST);
-      con_info->response
-       = gsad_message_new (NULL,
-                           "Internal error", __FUNCTION__, __LINE__,
-                           "An internal error occurred inside GSA daemon. "
-                           "Diagnostics: Bad token.",
-                           "/omp?cmd=get_tasks",
-                           params_value_bool (con_info->params, "xml"),
-                           response_data);
-
-      con_info->answercode =
-        cmd_response_data_get_status_code (response_data);
-      cmd_response_data_free (response_data);
-      return 3;
+      res = gsad_message_new (NULL,
+                              "Internal error", __FUNCTION__, __LINE__,
+                              "An internal error occurred inside GSA daemon. "
+                              "Diagnostics: Bad token.",
+                              "/omp?cmd=get_tasks",
+                              params_value_bool (con_info->params, "xml"),
+                              response_data);
     }
 
   if (ret == USER_EXPIRED_TOKEN)
@@ -1532,17 +1516,12 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
       cmd_response_data_set_status_code (response_data, MHD_HTTP_UNAUTHORIZED);
 
       if (xml_flag)
-        con_info->response = xml;
+        res = xml;
       else
         {
-          con_info->response = xsl_transform (xml, response_data);
+          res = xsl_transform (xml, response_data);
           g_free (xml);
         }
-
-      con_info->answercode =
-        cmd_response_data_get_status_code (response_data);
-      cmd_response_data_free (response_data);
-      return 2;
     }
 
   if (ret == USER_BAD_MISSING_COOKIE || ret == USER_IP_ADDRESS_MISSMATCH)
@@ -1562,17 +1541,13 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
       cmd_response_data_set_status_code (response_data, MHD_HTTP_UNAUTHORIZED);
 
       if (xml_flag)
-        con_info->response = xml;
+        res = xml;
       else
         {
-          con_info->response = xsl_transform (xml, response_data);
+          res = xsl_transform (xml, response_data);
           g_free (xml);
         }
 
-      con_info->answercode =
-        cmd_response_data_get_status_code (response_data);
-      cmd_response_data_free (response_data);
-      return 2;
     }
 
   if (ret == USER_GUEST_LOGIN_FAILED || ret == USER_OMP_DOWN ||
@@ -1597,22 +1572,18 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                         : DEFAULT_GSAD_LANGUAGE,
                        guest_username ? guest_username : "");
       if (xml_flag)
-        con_info->response = xml;
+        res = xml;
       else
         {
-          con_info->response = xsl_transform (xml, response_data);
+          res = xsl_transform (xml, response_data);
           g_free (xml);
         }
-      con_info->answercode =
-        cmd_response_data_get_status_code (response_data);
-      cmd_response_data_free (response_data);
-      return 2;
     }
 
-  if (ret)
+  if (res)
     {
       cmd_response_data_free (response_data);
-      abort ();
+      return handler_create_response (con, res, response_data, NULL);
     }
 
   /* From here, the user is authenticated. */
@@ -1633,7 +1604,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
     }
   credentials->caller = g_strdup (caller ?: "");
 
-  if (new_sid) *new_sid = g_strdup (user->cookie);
+  new_sid = g_strdup (user->cookie);
 
   user_release (user);
 
@@ -1655,16 +1626,12 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
       case 0:
         break;
       case -1:
-        con_info->response
-            = logout_xml (credentials,
-                          params_value_bool (con_info->params, "xml"),
-                          "Logged out.  OMP service is down.",
-                          response_data);
-
-        return 3;
+        return handler_send_reauthentication (con, MHD_HTTP_SERVICE_UNAVAILABLE,
+                                              GMP_SERVICE_DOWN,
+                                              params_value_bool
+                                                (con_info->params, "xml"));
       case -2:
-        con_info->response
-            = gsad_message_new (credentials,
+        res = gsad_message_new (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred. "
                                 "Diagnostics: Could not authenticate to manager "
@@ -1672,17 +1639,21 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
                                 "/omp?cmd=get_tasks",
                                 params_value_bool (con_info->params, "xml"),
                                 response_data);
-        return 3;
+        break;
       default:
-        con_info->response
-            = gsad_message_new (credentials,
+        res = gsad_message_new (credentials,
                                 "Internal error", __FUNCTION__, __LINE__,
                                 "An internal error occurred. "
                                 "Diagnostics: Failure to connect to manager daemon.",
                                 "/omp?cmd=get_tasks",
                                 params_value_bool (con_info->params, "xml"),
                                 response_data);
-        return 3;
+        break;
+    }
+
+  if (res)
+    {
+      return handler_create_response (con, res, response_data, NULL);
     }
 
   /* Handle the usual commands. */
@@ -1692,15 +1663,15 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_BAD_REQUEST);
 
-      con_info->response = gsad_message_new (credentials,
-                                             "Internal error",
-                                             __FUNCTION__,
-                                             __LINE__,
-                                             "An internal error occurred inside GSA daemon. "
-                                             "Diagnostics: Empty command.",
-                                             "/omp?cmd=get_tasks",
-                                             params_value_bool (con_info->params, "xml"),
-                                             response_data);
+      res = gsad_message_new (credentials,
+                              "Internal error",
+                              __FUNCTION__,
+                              __LINE__,
+                              "An internal error occurred inside GSA daemon. "
+                              "Diagnostics: Empty command.",
+                              "/omp?cmd=get_tasks",
+                              params_value_bool (con_info->params, "xml"),
+                              response_data);
     }
 
   ELSE (bulk_delete)
@@ -1769,7 +1740,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   ELSE (empty_trashcan)
   else if (!strcmp (cmd, "alert_report"))
     {
-      con_info->response = get_report_section_omp
+      res = get_report_section_omp
                             (&connection, credentials, con_info->params,
                              response_data);
     }
@@ -1790,7 +1761,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
     {
       gchar *pref_id, *pref_value;
 
-      con_info->response = save_chart_preference_omp (&connection,
+      res = save_chart_preference_omp (&connection,
                                                       credentials,
                                                       con_info->params,
                                                       &pref_id, &pref_value,
@@ -1807,7 +1778,7 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
   else if (!strcmp (cmd, "save_my_settings"))
     {
       char *timezone, *password, *severity, *language;
-      con_info->response = save_my_settings_omp (&connection,
+      res = save_my_settings_omp (&connection,
                                                  credentials, con_info->params,
                                                  con_info->language,
                                                  &timezone, &password,
@@ -1850,10 +1821,10 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
     {
       char *password, *modified_user;
       int logout;
-      con_info->response = save_user_omp (&connection, credentials,
-                                          con_info->params,
-                                          &password, &modified_user, &logout,
-                                          response_data);
+      res = save_user_omp (&connection, credentials,
+                           con_info->params,
+                           &password, &modified_user, &logout,
+                           response_data);
       if (modified_user && logout)
         user_logout_all_sessions (modified_user, credentials);
 
@@ -1877,29 +1848,24 @@ exec_omp_post (struct gsad_connection_info *con_info, user_t **user_return,
     {
       cmd_response_data_set_status_code (response_data,
                                          MHD_HTTP_BAD_REQUEST);
-      con_info->response = gsad_message_new (credentials,
-                                             "Internal error",
-                                             __FUNCTION__,
-                                             __LINE__,
-                                             "An internal error occurred inside GSA daemon. "
-                                             "Diagnostics: Unknown command.",
-                                             "/omp?cmd=get_tasks",
-                                             params_value_bool (con_info->params, "xml"),
-                                             response_data);
+      res = gsad_message_new (credentials,
+                              "Internal error",
+                              __FUNCTION__,
+                              __LINE__,
+                              "An internal error occurred inside GSA daemon. "
+                              "Diagnostics: Unknown command.",
+                              "/omp?cmd=get_tasks",
+                              params_value_bool (con_info->params, "xml"),
+                              response_data);
     }
 
-  if (response_data->redirect)
-    {
-      con_info->answercode = MHD_HTTP_SEE_OTHER;
-      con_info->redirect = response_data->redirect;
-    }
-  else
-    con_info->answercode = cmd_response_data_get_status_code (response_data);
+  ret = handler_create_response (con, res, response_data, new_sid);
 
-  cmd_response_data_free (response_data);
   credentials_free (credentials);
   openvas_connection_close (&connection);
-  return 0;
+  g_free (new_sid);
+
+  return ret;
 }
 
 /**
@@ -2026,7 +1992,7 @@ params_mhd_add (void *params, enum MHD_ValueKind kind, const char *name,
  */
 #define ELSE(name) \
   else if (!strcmp (cmd, G_STRINGIFY (name))) \
-    ret = name ## _omp (&connection, credentials, params, response_data);
+    res = name ## _omp (&connection, credentials, params, response_data);
 
 /**
  * @brief Handle a complete GET request.
@@ -2034,30 +2000,27 @@ params_mhd_add (void *params, enum MHD_ValueKind kind, const char *name,
  * After some input checking, depending on the cmd parameter of the connection,
  * issue an omp command (via *_omp functions).
  *
+ * @param[in]   con                  HTTP Connection
  * @param[in]   con_info             Connection info.
  * @param[in]   credentials          User credentials.
- * @param[out]  content_type         Return location for the content type of
- *                                   the response.
- * @param[out]  content_type_string  Return location for dynamic content type.
- * @param[out]  content_disposition  Return location for the
- *                                   content_disposition, if any.
- * @param[out]  response_size        Return location for response size, if any.
- * @param[in]   response_data        Response data.  Return info is written
+ * @param[out]  response_data        Response data.  Return info is written
  *                                   into here.
  *
- * @return Newly allocated response string.
+ * @return MHD_YES on success, MHD_NO on error.
  */
-char *
-exec_omp_get (gsad_connection_info_t *con_info,
+int
+exec_omp_get (http_connection_t *con,
+              gsad_connection_info_t *con_info,
               credentials_t *credentials,
-              gchar **content_type_string,
               cmd_response_data_t *response_data)
 {
   const char *cmd = NULL;
   const int CMD_MAX_SIZE = 27;   /* delete_trash_lsc_credential */
   params_t *params = con_info->params;
   openvas_connection_t connection;
-  char * ret = NULL;
+  char *res = NULL;
+  gsize res_len = 0;
+  http_response_t *response;
 
   cmd = params_value (params, "cmd");
 
@@ -2075,14 +2038,15 @@ exec_omp_get (gsad_connection_info_t *con_info,
     }
   else
     {
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
-      return gsad_message_new (credentials,
-                               "Internal error", __FUNCTION__, __LINE__,
-                               "An internal error occurred inside GSA daemon. "
-                               "Diagnostics: No valid command for omp.",
-                               "/omp?cmd=get_tasks",
-                               params_value_bool (params, "xml"),
-                               response_data);
+      cmd_response_data_set_status_code (response_data, MHD_HTTP_BAD_REQUEST);
+      res = gsad_message_new (credentials,
+                              "Internal error", __FUNCTION__, __LINE__,
+                              "An internal error occurred inside GSA daemon. "
+                              "Diagnostics: No valid command for omp.",
+                              "/omp?cmd=get_tasks",
+                              params_value_bool (params, "xml"),
+                              response_data);
+      return handler_create_response (con, res, response_data, NULL);
     }
 
 
@@ -2106,29 +2070,36 @@ exec_omp_get (gsad_connection_info_t *con_info,
       case 0:
         break;
       case -1:
-        return logout_xml (credentials,
-                           params_value_bool (params, "xml"),
-                           "Logged out.  OMP service is down.",
-                           response_data);
+        return handler_send_reauthentication (con,
+                                              MHD_HTTP_SERVICE_UNAVAILABLE,
+                                              GMP_SERVICE_DOWN,
+                                              params_value_bool
+                                                (con_info->params, "xml"));
 
       case -2:
-        return gsad_message_new (credentials,
-                                 "Internal error", __FUNCTION__, __LINE__,
-                                 "An internal error occurred. "
-                                 "Diagnostics: Could not authenticate to manager "
-                                 "daemon.",
-                                 "/omp?cmd=get_tasks",
-                                 params_value_bool (params, "xml"),
-                                 response_data);
+        res = gsad_message_new (credentials,
+                                "Internal error", __FUNCTION__, __LINE__,
+                                "An internal error occurred. "
+                                "Diagnostics: Could not authenticate to manager "
+                                "daemon.",
+                                "/omp?cmd=get_tasks",
+                                params_value_bool (params, "xml"),
+                                response_data);
+        break;
       default:
-        return gsad_message_new (credentials,
-                                 "Internal error", __FUNCTION__, __LINE__,
-                                 "An internal error occurred. "
-                                 "Diagnostics: Failure to connect to manager "
-                                 "daemon.",
-                                 "/omp?cmd=get_tasks",
-                                 params_value_bool (params, "xml"),
-                                 response_data);
+        res = gsad_message_new (credentials,
+                                "Internal error", __FUNCTION__, __LINE__,
+                                "An internal error occurred. "
+                                "Diagnostics: Failure to connect to manager "
+                                "daemon.",
+                                "/omp?cmd=get_tasks",
+                                params_value_bool (params, "xml"),
+                                response_data);
+    }
+
+  if (res)
+    {
+      return handler_create_response (con, res, response_data, NULL);
     }
 
   /* Set page display settings */
@@ -2149,10 +2120,10 @@ exec_omp_get (gsad_connection_info_t *con_info,
   /* Check cmd and precondition, start respective OMP command(s). */
 
   if (!strcmp (cmd, "cvss_calculator"))
-    ret = cvss_calculator (&connection, credentials, params, response_data);
+    res = cvss_calculator (&connection, credentials, params, response_data);
 
   else if (!strcmp (cmd, "dashboard"))
-    ret = dashboard (&connection, credentials, params, response_data);
+    res = dashboard (&connection, credentials, params, response_data);
 
   ELSE (new_filter)
   ELSE (new_container_task)
@@ -2219,7 +2190,7 @@ exec_omp_get (gsad_connection_info_t *con_info,
                                    &html,
                                    &credential_login,
                                    response_data))
-        ret = html;
+        res = html;
 
       /* Returned above if package_format was NULL. */
       content_type_from_format_string (&content_type, package_format);
@@ -2237,7 +2208,7 @@ exec_omp_get (gsad_connection_info_t *con_info,
       cmd_response_data_set_content_type (response_data, content_type);
       g_free (credential_login);
 
-      ret = html;
+      res = html;
     }
 
   ELSE (export_credential)
@@ -2295,7 +2266,7 @@ exec_omp_get (gsad_connection_info_t *con_info,
                                            filename));
       g_free (filename);
 
-      ret = html;
+      res = html;
     }
 
   else if (!strcmp (cmd, "download_ssl_cert"))
@@ -2307,7 +2278,7 @@ exec_omp_get (gsad_connection_info_t *con_info,
            g_strdup_printf ("attachment; filename=ssl-cert-%s.pem",
                             params_value (params, "name")));
 
-      ret = download_ssl_cert (&connection, credentials, params,
+      res = download_ssl_cert (&connection, credentials, params,
                                response_data);
     }
 
@@ -2319,7 +2290,7 @@ exec_omp_get (gsad_connection_info_t *con_info,
           (response_data,
            g_strdup_printf ("attachment; filename=scanner-ca-pub-%s.pem",
                             params_value (params, "scanner_id")));
-      ret = download_ca_pub (&connection, credentials, params,
+      res = download_ca_pub (&connection, credentials, params,
                              response_data);
     }
 
@@ -2331,7 +2302,7 @@ exec_omp_get (gsad_connection_info_t *con_info,
           (response_data,
            g_strdup_printf ("attachment; filename=scanner-key-pub-%s.pem",
                             params_value (params, "scanner_id")));
-      ret = download_key_pub (&connection, credentials, params,
+      res = download_key_pub (&connection, credentials, params,
                               response_data);
     }
 
@@ -2406,7 +2377,7 @@ exec_omp_get (gsad_connection_info_t *con_info,
   else
     {
       cmd_response_data_set_status_code (response_data, MHD_HTTP_BAD_REQUEST);
-      ret = gsad_message_new (credentials,
+      res = gsad_message_new (credentials,
                               "Internal error", __FUNCTION__, __LINE__,
                               "An internal error occurred inside GSA daemon. "
                               "Diagnostics: Unknown command.",
@@ -2415,8 +2386,26 @@ exec_omp_get (gsad_connection_info_t *con_info,
                               response_data);
     }
 
+  res_len = cmd_response_data_get_content_length (response_data);
+
+  if (res_len == 0)
+    res_len = strlen (res);
+
+  response = MHD_create_response_from_buffer (res_len, (void *) res,
+                                              MHD_RESPMEM_MUST_FREE);
+  if (get_guest_password()
+      && strcmp (credentials->username, get_guest_username()) == 0
+      && cmd
+      && (strcmp (cmd, "get_aggregate") == 0
+          || strcmp (cmd, "get_assets_chart") == 0
+          || strcmp (cmd, "get_tasks_chart") == 0))
+    {
+      add_guest_chart_content_security_headers (response);
+    }
+
   openvas_connection_close (&connection);
-  return ret;
+
+  return handler_send_response (con, response, response_data, credentials->sid);
 }
 
 /**

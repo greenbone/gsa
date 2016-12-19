@@ -409,7 +409,7 @@ handle_setup_user (http_connection_t *connection,
                    gsad_connection_info_t *con_info,
                    http_handler_t *handler, void *data)
 {
-  int ret, len;
+  int ret;
   int http_response_code = MHD_HTTP_OK;
   char *res;
   const char *cookie;
@@ -420,7 +420,6 @@ handle_setup_user (http_connection_t *connection,
 
   user_t *user;
   cmd_response_data_t *response_data;
-  http_response_t *response;
 
   token = MHD_lookup_connection_value (connection, MHD_GET_ARGUMENT_KIND,
                                        "token");
@@ -470,13 +469,10 @@ handle_setup_user (http_connection_t *connection,
                               "/omp?cmd=get_tasks",
                               params_value_bool (con_info->params, "xml"),
                               response_data);
-      len = cmd_response_data_get_content_length (response_data);
-      response = MHD_create_response_from_buffer (len, res,
-                                                  MHD_RESPMEM_MUST_FREE);
-      return handler_send_response (connection,
-                                    response,
-                                    response_data,
-                                    REMOVE_SID);
+      return handler_create_response (connection,
+                                      res,
+                                      response_data,
+                                      REMOVE_SID);
     }
 
   if (ret == USER_GUEST_LOGIN_FAILED
@@ -615,71 +611,17 @@ handle_omp_get (http_connection_t *connection,
                 http_handler_t *handler, void *data)
 {
   /* URL requests to run OMP command. */
-
+  int ret;
   credentials_t *credentials = (credentials_t*)data;
-  char *res;
-  gsize res_len = 0;
-  gchar *content_type_string = NULL;
-  gsize response_size = 0;
-  http_response_t *response;
-  const char* cmd;
 
   cmd_response_data_t *response_data;
 
-  if (con_info->params)
-    cmd = params_value (con_info->params, "cmd");
-  else
-    cmd = NULL;
-
-  g_debug("Handling OMP GET for cmd %s\n", cmd);
-
   response_data = cmd_response_data_new ();
 
-  res = exec_omp_get (con_info, credentials, &content_type_string,
-                      response_data);
-
-  response_size = cmd_response_data_get_content_length (response_data);
-
-  if (response_size > 0)
-    {
-      res_len = response_size;
-    }
-  else
-    {
-      res_len = strlen (res);
-    }
-
-  response = MHD_create_response_from_buffer (res_len, (void *) res,
-                                              MHD_RESPMEM_MUST_FREE);
-  if (content_type_string)
-    {
-      MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
-                               content_type_string);
-      g_free (content_type_string);
-    }
-
-  g_debug("Content-Type: %s", content_type_string);
-
-  if (attach_sid (response, credentials->sid) == MHD_NO)
-    {
-      MHD_destroy_response (response);
-      g_warning ("%s: failed to attach SID, dropping request",
-                  __FUNCTION__);
-      return MHD_NO;
-    }
-
-  if (get_guest_password()
-      && strcmp (credentials->username, get_guest_username()) == 0
-      && cmd
-      && (strcmp (cmd, "get_aggregate") == 0
-          || strcmp (cmd, "get_assets_chart") == 0
-          || strcmp (cmd, "get_tasks_chart") == 0))
-    {
-      add_guest_chart_content_security_headers (response);
-    }
+  ret = exec_omp_get (connection, con_info, credentials, response_data);
 
   credentials_free (credentials);
-  return handler_send_response (connection, response, response_data, NULL);
+  return ret;
 }
 
 int
@@ -688,17 +630,14 @@ handle_omp_post (http_connection_t *connection,
                  gsad_connection_info_t *con_info,
                  http_handler_t *handler, void *data)
 {
-  user_t *user;
-  const char *sid, *accept_language;
-  gchar *new_sid;
+  const gchar *sid, *accept_language;
   int ret;
-  content_type_t content_type;
-  const char *xml_flag = NULL;
   char client_address[INET6_ADDRSTRLEN];
+  cmd_response_data_t *response_data;
 
   sid = MHD_lookup_connection_value (connection,
-                                      MHD_COOKIE_KIND,
-                                      SID_COOKIE_NAME);
+                                     MHD_COOKIE_KIND,
+                                     SID_COOKIE_NAME);
 
   if (openvas_validate (http_validator, "token", sid))
     con_info->cookie = NULL;
@@ -706,15 +645,15 @@ handle_omp_post (http_connection_t *connection,
     con_info->cookie = g_strdup (sid);
 
   accept_language = MHD_lookup_connection_value (connection,
-                                                  MHD_HEADER_KIND,
-                                                  "Accept-Language");
+                                                 MHD_HEADER_KIND,
+                                                 "Accept-Language");
   if (accept_language
       && g_utf8_validate (accept_language, -1, NULL) == FALSE)
     {
       send_response (connection,
-                      UTF8_ERROR_PAGE ("'Accept-Language' header"),
-                      MHD_HTTP_BAD_REQUEST, NULL,
-                      GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0);
+                     UTF8_ERROR_PAGE ("'Accept-Language' header"),
+                     MHD_HTTP_BAD_REQUEST, NULL,
+                     GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0);
       return MHD_YES;
     }
   con_info->language = accept_language_to_env_fmt (accept_language);
@@ -727,59 +666,15 @@ handle_omp_post (http_connection_t *connection,
   if (ret == 1)
     {
       send_response (connection,
-                      UTF8_ERROR_PAGE ("'X-Real-IP' header"),
-                      MHD_HTTP_BAD_REQUEST, NULL,
-                      GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0);
+                     UTF8_ERROR_PAGE ("'X-Real-IP' header"),
+                     MHD_HTTP_BAD_REQUEST, NULL,
+                     GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0);
       return MHD_YES;
     }
 
-  user = NULL;
-  new_sid = NULL;
-  ret = exec_omp_post (con_info, &user, &new_sid, client_address);
+  response_data = cmd_response_data_new ();
 
-  if (ret == 1)
-    {
-      gchar *url;
-      url = g_strdup_printf ("%s&token=%s",
-                             params_value (con_info->params, "text"),
-                             user->token);
-      user_release (user);
-      ret = send_redirect_to_urn (connection, url, user);
-      g_free (url);
-      return ret;
-    }
-
-  if (con_info->redirect)
-    {
-      ret = send_redirect_to_uri (connection, con_info->redirect, user->token);
-      g_free (con_info->redirect);
-      con_info->redirect = NULL;
-    }
-  else
-    {
-      xml_flag = con_info->params
-        ? params_value (con_info->params, "xml")
-        : NULL;
-
-      if (xml_flag && strcmp (xml_flag, "0"))
-        {
-          content_type = GSAD_CONTENT_TYPE_APP_XML;
-        }
-      else
-      {
-        content_type = con_info->content_type;
-      }
-
-      ret = send_response (connection, con_info->response,
-                           con_info->answercode,
-                           new_sid ? new_sid : "0",
-                           content_type,
-                           con_info->content_disposition,
-                           con_info->content_length);
-    }
-
-  g_free (new_sid);
-  return ret;
+  return exec_omp_post (connection, con_info, client_address, response_data);
 }
 
 int
@@ -802,8 +697,6 @@ handle_help_pages (http_connection_t *connection,
   gchar *xml, *pre;
   int index;
   char *res;
-  http_response_t * response;
-  gsize len;
 
   page = g_strndup ((gchar *) &url[6], MAX_FILE_NAME_SIZE);
 
@@ -936,30 +829,11 @@ handle_help_pages (http_connection_t *connection,
                               response_data);
     }
 
-  len = cmd_response_data_get_content_length (response_data);
-
-  if (len == 0) {
-    len = strlen (res);
-  }
-
-  response = MHD_create_response_from_buffer (len, res,
-                                              MHD_RESPMEM_MUST_FREE);
-
-  if (attach_sid (response, credentials->sid) == MHD_NO)
-    {
-      MHD_destroy_response (response);
-      g_warning ("%s: failed to attach SID, dropping request",
-                  __FUNCTION__);
-
-      cmd_response_data_free (response_data);
-      return MHD_NO;
-    }
-
   credentials_free (credentials);
-  return handler_send_response (connection,
-                                response,
-                                response_data,
-                                credentials->sid);
+  return handler_create_response (connection,
+                                  res,
+                                  response_data,
+                                  credentials->sid);
 }
 
 int
@@ -970,10 +844,8 @@ handle_system_report (http_connection_t *connection,
 {
   params_t *params = params_new();
   credentials_t *credentials = (credentials_t*)data;
-  gsize res_len;
   const char *slave_id;
   char *res;
-  http_response_t * response;
   openvas_connection_t con;
   cmd_response_data_t *response_data;
 
@@ -1009,10 +881,9 @@ handle_system_report (http_connection_t *connection,
                                      response_data);
         break;
       case -1:
-        res = logout_xml (credentials,
-                               params_value_bool (con_info->params, "xml"),
-                               "Logged out.  OMP service is down.",
-                               response_data);
+        return handler_send_reauthentication
+          (connection, MHD_HTTP_SERVICE_UNAVAILABLE, GMP_SERVICE_DOWN,
+           params_value_bool (con_info->params, "xml"));
 
         break;
       case -2:
@@ -1045,24 +916,10 @@ handle_system_report (http_connection_t *connection,
       return MHD_NO;
     }
 
-  res_len = cmd_response_data_get_content_length (response_data);
-
-  response = MHD_create_response_from_buffer (res_len, res,
-                                              MHD_RESPMEM_MUST_FREE);
-
-  if (attach_sid (response, credentials->sid) == MHD_NO)
-    {
-      MHD_destroy_response (response);
-      g_warning ("%s: failed to attach SID, dropping request",
-                  __FUNCTION__);
-      cmd_response_data_free (response_data);
-      return MHD_NO;
-    }
-
   credentials_free (credentials);
 
-  return handler_send_response (connection, response, response_data,
-                                NULL);
+  return handler_create_response (connection, res, response_data,
+                                  credentials->sid);
 }
 
 int
