@@ -34755,7 +34755,7 @@ should not have received it.
             </div>
           </div>
         </div>
-        <xsl:if test="gsa:may-op ('get_scanners')">
+        <xsl:if test="gsa:may-op ('get_scanners') and count(../get_scanners_response/scanner)">
           <div class="form-group">
             <label class="col-2 control-label">
               <xsl:value-of select="gsa:i18n ('Reports for slave scanner')"/>
