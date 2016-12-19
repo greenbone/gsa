@@ -352,7 +352,7 @@ int
 handler_send_response (http_connection_t *connection,
                        http_response_t *response,
                        cmd_response_data_t *response_data,
-                       gboolean remove_cookie)
+                       const gchar *sid)
 {
   int ret;
   const gchar * content_disposition;
@@ -370,7 +370,17 @@ handler_send_response (http_connection_t *connection,
       }
 
   content_type = cmd_response_data_get_content_type (response_data);
-  gsad_add_content_type_header (response, &content_type);
+
+  if (content_type == GSAD_CONTENT_TYPE_STRING)
+    {
+      MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
+                               cmd_response_data_get_content_type_string
+                               (response_data));
+    }
+  else
+    {
+      gsad_add_content_type_header (response, &content_type);
+    }
 
   content_disposition = cmd_response_data_get_content_disposition
     (response_data);
