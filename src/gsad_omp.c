@@ -7468,9 +7468,6 @@ verify_agent_omp (openvas_connection_t *connection, credentials_t * credentials,
  * @param[in]   connection           Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
- * @param[out]  content_type         Content type return.
- * @param[out]  content_disposition  Content disposition return.
- * @param[out]  content_length       Content length return.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Agent XML on success.  HTML result of XSL transformation on error.
@@ -9085,9 +9082,6 @@ export_alert_omp (openvas_connection_t *connection,
  * @param[in]  connection     Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
- * @param[out]  content_type         Content type return.
- * @param[out]  content_disposition  Content disposition return.
- * @param[out]  content_length       Content length return.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Alerts XML on success.  HTML result of XSL transformation
@@ -12761,9 +12755,6 @@ export_configs_omp (openvas_connection_t *connection,
  * @param[in]  connection     Connection to manager.
  * @param[in]   credentials          Username and password for authentication.
  * @param[in]   params               Request parameters.
- * @param[out]  content_type         Content type return.
- * @param[out]  content_disposition  Content disposition return.
- * @param[out]  content_length       Content length return.
  * @param[out]  response_data        Extra data return for the HTTP response.
  *
  * @return Note XML on success.  HTML result of XSL transformation on error.
