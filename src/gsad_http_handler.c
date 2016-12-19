@@ -23,6 +23,9 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+#include <string.h> /* for strcmp */
+#include <assert.h> /* for assert */
+
 #include "gsad_http_handler.h"
 #include "gsad_omp.h" /* for get_system_report_omp */
 #include "validator.h" /* for openvas_validate */
@@ -30,7 +33,6 @@
 #include "gsad_settings.h" /* for get_guest_usernmae */
 #include "gsad_base.h" /* for ctime_r_strip_newline */
 
-#include <string.h> /* for strcmp */
 #include <openvas/base/openvas_networking.h> /* for INET6_ADDRSTRLEN */
 #include <openvas/omp/xml.h> /* for find_element_in_xml_file */
 
