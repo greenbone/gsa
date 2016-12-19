@@ -190,7 +190,7 @@ int send_redirect_to_urn (http_connection_t *connection, const char *urn,
                           user_t *user);
 
 int send_redirect_to_uri (http_connection_t *connection, const char *uri,
-                          user_t *user);
+                          const gchar *sid);
 
 
 void add_security_headers (http_response_t *response);

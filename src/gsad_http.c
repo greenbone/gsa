@@ -228,7 +228,7 @@ send_redirect_to_urn (http_connection_t *connection, const char *urn,
     }
 
   snprintf (uri, sizeof (uri), "%s://%s%s", protocol, host, urn);
-  return send_redirect_to_uri (connection, uri, user);
+  return send_redirect_to_uri (connection, uri, user ? user->cookie : NULL);
 }
 
 /**
@@ -236,13 +236,13 @@ send_redirect_to_urn (http_connection_t *connection, const char *urn,
  *
  * @param[in]  connection  The connection handle.
  * @param[in]  uri         The full URI to redirect to.
- * @param[in]  user        User to add cookie for, or NULL.
+ * @param[in]  sid         Session ID ot add, or NULL.
  *
  * @return MHD_NO in case of a problem. Else MHD_YES.
  */
 int
 send_redirect_to_uri (http_connection_t *connection, const char *uri,
-                      user_t *user)
+                      const gchar *sid)
 {
   int ret;
   http_response_t *response;
@@ -273,15 +273,12 @@ send_redirect_to_uri (http_connection_t *connection, const char *uri,
       return MHD_NO;
     }
 
-  if (user)
+  if (attach_remove_sid (response, sid) == MHD_NO)
     {
-      if (attach_sid (response, user->cookie) == MHD_NO)
-        {
-          MHD_destroy_response (response);
-          g_warning ("%s: failed to attach SID, dropping request",
-                     __FUNCTION__);
-          return MHD_NO;
-        }
+      MHD_destroy_response (response);
+      g_warning ("%s: failed to attach SID, dropping request",
+                  __FUNCTION__);
+      return MHD_NO;
     }
 
   MHD_add_response_header (response, MHD_HTTP_HEADER_EXPIRES, "-1");

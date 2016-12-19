@@ -751,7 +751,7 @@ handle_omp_post (http_connection_t *connection,
 
   if (con_info->redirect)
     {
-      ret = send_redirect_to_uri (connection, con_info->redirect, user);
+      ret = send_redirect_to_uri (connection, con_info->redirect, user->token);
       g_free (con_info->redirect);
       con_info->redirect = NULL;
     }
