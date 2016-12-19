@@ -1,5 +1,12 @@
 2016-12-19  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	Backport r26985.
+
+	* src/html/classic/omp.xsl (get_system_reports_response): Show slave
+	selection only if there are slave scanners to select from.
+
+2016-12-19  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Backport r26981.
 
 	* src/gsad_omp.c (save_user_omp): Check *modified_user instead of
