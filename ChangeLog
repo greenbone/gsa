@@ -1,5 +1,11 @@
 2016-12-19  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/gsad.c (exec_omp_post): Use handler_send_reauthentication in
+	exec_omp_post. This allows to use the same patterns for reauthentication in
+	get and post requests finally.
+
+2016-12-19  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/gsad_omp.c: Docstring cleanup. Parameters have been removed.
 
 2016-12-19  Björn Ricks <bjoern.ricks@greenbone.net>

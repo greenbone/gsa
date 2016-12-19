@@ -1314,16 +1314,11 @@ exec_omp_post (http_connection_t *con,
   int ret;
   user_t *user;
   credentials_t *credentials;
-  gchar *xml, *res = NULL, *new_sid, *url;
-  const gchar *cmd, *caller, *language;
-  const gchar *guest_username, *password;
+  gchar *res = NULL, *new_sid, *url;
+  const gchar *cmd, *caller, *language, *password;
   gboolean xml_flag;
-  time_t now;
-  char ctime_now[200];
-
+  authentication_reason_t auth_reason;
   openvas_connection_t connection;
-
-  guest_username = get_guest_username ();
 
   params_mhd_validate (con_info->params);
 
@@ -1355,43 +1350,24 @@ exec_omp_post (http_connection_t *con,
                                   &autorefresh);
           if (ret)
             {
+              int status;
               if (ret == -1 || ret == 2)
-                cmd_response_data_set_status_code (response_data,
-                                                   MHD_HTTP_SERVICE_UNAVAILABLE);
+                status = MHD_HTTP_SERVICE_UNAVAILABLE;
               else
-                cmd_response_data_set_status_code (response_data,
-                                                   MHD_HTTP_UNAUTHORIZED);
+                status = MHD_HTTP_UNAUTHORIZED;
 
-              now = time (NULL);
-              ctime_r_strip_newline (&now, ctime_now);
-
-              xml = login_xml
-                     (ret == 2
-                       ? "Login failed."
-                         "  Waiting for OMP service to become available."
+              auth_reason =
+                     ret == 2
+                       ? GMP_SERVICE_DOWN
                        : (ret == -1
-                           ? "Login failed."
-                             "  Error during authentication."
-                           : "Login failed."),
-                      NULL,
-                      ctime_now,
-                      NULL,
-                      con_info->language
-                       ? con_info->language
-                       : DEFAULT_GSAD_LANGUAGE,
-                      guest_username ? guest_username : "");
-
-              if (xml_flag)
-                res = xml;
-              else
-                {
-                  res = xsl_transform (xml, response_data);
-                  g_free (xml);
-                }
+                           ? LOGIN_ERROR
+                           : LOGIN_FAILED);
 
               g_warning ("Authentication failure for '%s' from %s",
                          params_value (con_info->params, "login") ?: "",
                          client_address);
+              return handler_send_reauthentication(con, status,
+                                                   auth_reason, xml_flag);
             }
           else
             {
@@ -1420,28 +1396,12 @@ exec_omp_post (http_connection_t *con,
         }
       else
         {
-          cmd_response_data_set_status_code (response_data,
-                                             MHD_HTTP_UNAUTHORIZED);
-
-          now = time (NULL);
-          ctime_r_strip_newline (&now, ctime_now);
-
-          xml = login_xml ("Login failed.", NULL, ctime_now, NULL,
-                           con_info->language ? con_info->language
-                                              : DEFAULT_GSAD_LANGUAGE,
-                           guest_username ? guest_username : "");
-          if (xml_flag)
-            res = xml;
-          else
-            {
-              res = xsl_transform (xml, response_data);
-              g_free (xml);
-            }
           g_warning ("Authentication failure for '%s' from %s",
                      params_value (con_info->params, "login") ?: "",
                      client_address);
+          return handler_send_reauthentication(con, MHD_HTTP_UNAUTHORIZED,
+                                               LOGIN_FAILED, xml_flag);
         }
-      return handler_create_response (con, res, response_data, REMOVE_SID);
     }
 
   /* Check the session. */
@@ -1484,13 +1444,11 @@ exec_omp_post (http_connection_t *con,
                               "/omp?cmd=get_tasks",
                               params_value_bool (con_info->params, "xml"),
                               response_data);
+      return handler_create_response (con, res, response_data, NULL);
     }
 
   if (ret == USER_EXPIRED_TOKEN)
     {
-      now = time (NULL);
-      ctime_r_strip_newline (&now, ctime_now);
-
       caller = params_value (con_info->params, "caller");
 
       if (caller && g_utf8_validate (caller, -1, NULL) == FALSE)
@@ -1501,88 +1459,26 @@ exec_omp_post (http_connection_t *con,
 
       /* @todo Validate caller. */
 
-      xml = login_xml ("Session has expired.  Please login again.",
-                       NULL,
-                       ctime_now,
-                       caller
-                        ? caller
-                        : "",
-                       con_info->language
-                        ? con_info->language
-                        : DEFAULT_GSAD_LANGUAGE,
-                       guest_username ? guest_username : "");
-
-      cmd_response_data_set_status_code (response_data, MHD_HTTP_UNAUTHORIZED);
-
-      if (xml_flag)
-        res = xml;
-      else
-        {
-          res = xsl_transform (xml, response_data);
-          g_free (xml);
-        }
+      return handler_send_reauthentication(con, MHD_HTTP_UNAUTHORIZED,
+                                           SESSION_EXPIRED, xml_flag);
     }
 
   if (ret == USER_BAD_MISSING_COOKIE || ret == USER_IP_ADDRESS_MISSMATCH)
     {
-      now = time (NULL);
-      ctime_r_strip_newline (&now, ctime_now);
-
-      xml = login_xml ("Cookie missing or bad.  Please login again.",
-                       NULL,
-                       ctime_now,
-                       NULL,
-                       con_info->language
-                        ? con_info->language
-                        : DEFAULT_GSAD_LANGUAGE,
-                       guest_username ? guest_username : "");
-
-      cmd_response_data_set_status_code (response_data, MHD_HTTP_UNAUTHORIZED);
-
-      if (xml_flag)
-        res = xml;
-      else
-        {
-          res = xsl_transform (xml, response_data);
-          g_free (xml);
-        }
-
+      return handler_send_reauthentication(con, MHD_HTTP_UNAUTHORIZED,
+                                           BAD_MISSING_COOKIE, xml_flag);
     }
 
   if (ret == USER_GUEST_LOGIN_FAILED || ret == USER_OMP_DOWN ||
           ret == USER_GUEST_LOGIN_ERROR)
     {
-      now = time (NULL);
-      ctime_r_strip_newline (&now, ctime_now);
-
-      cmd_response_data_set_status_code (response_data,
-                                         MHD_HTTP_SERVICE_UNAVAILABLE);
-
-      xml = login_xml (ret == USER_OMP_DOWN
-                        ? "Login failed.  OMP service is down."
-                        : (ret == USER_GUEST_LOGIN_ERROR
-                            ? "Login failed.  Error during authentication."
-                            : "Login failed."),
-                       NULL,
-                       ctime_now,
-                       NULL,
-                       con_info->language
-                        ? con_info->language
-                        : DEFAULT_GSAD_LANGUAGE,
-                       guest_username ? guest_username : "");
-      if (xml_flag)
-        res = xml;
-      else
-        {
-          res = xsl_transform (xml, response_data);
-          g_free (xml);
-        }
-    }
-
-  if (res)
-    {
-      cmd_response_data_free (response_data);
-      return handler_create_response (con, res, response_data, NULL);
+      auth_reason = ret == USER_OMP_DOWN
+                    ? GMP_SERVICE_DOWN
+                    : (ret == USER_GUEST_LOGIN_ERROR
+                      ? LOGIN_ERROR
+                      : LOGIN_FAILED);
+      return handler_send_reauthentication(con, MHD_HTTP_SERVICE_UNAVAILABLE,
+                                           auth_reason, xml_flag);
     }
 
   /* From here, the user is authenticated. */
