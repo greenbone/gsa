@@ -24930,7 +24930,7 @@ save_user_omp (openvas_connection_t *connection, credentials_t *credentials,
               = g_strdup (old_login ? old_login : credentials->username);
 
             if (strcmp (modify_password, "0")
-                || (login && old_login && strcmp (old_login, login)))
+                || (login && *modified_user && strcmp (*modified_user, login)))
               *logout_user = 1;
 
             if (strcmp (modify_password, "0")
