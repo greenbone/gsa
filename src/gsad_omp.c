@@ -25916,7 +25916,7 @@ save_user_omp (credentials_t * credentials, params_t *params,
               = g_strdup (old_login ? old_login : credentials->username);
 
             if (strcmp (modify_password, "0")
-                || (login && strcmp (old_login, login)))
+                || (login && old_login && strcmp (old_login, login)))
               *logout_user = 1;
 
             if (strcmp (modify_password, "0")

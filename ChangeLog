@@ -1,5 +1,12 @@
 2016-12-19  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	Backport r26978.
+
+	* src/gsad_omp.c (save_user_omp): Check if old_login is not NULL before
+	comparing to login in test for setting logout_user.
+
+2016-12-19  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Backport r26976.
 
 	* src/html/classic/wizard.xsl (quick-task-wizard, modify-task-wizard):
