@@ -94,7 +94,7 @@
 /* This must follow the system includes. */
 #include <microhttpd.h>
 
-#include <gvm/base/fileutils.h>
+#include <gvm/util/fileutils.h>
 #include <gvm/base/pidfile.h>
 
 #include "gsad_base.h"

@@ -1,3 +1,14 @@
+2016-12-19  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	Adapt to changes in gvm-libs.
+
+	* CMakeLists.txt: Check for and require libgvm_util.
+
+	* src/CMakeLists.txt: Use include directories supplied by libgvm. Link
+	against libgvm_util.
+
+	* src/gsad.c, src/gsad_omp.c: Update include path for fileutils.h.
+
 2016-12-16  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	* src/gsad_http.c (handler_send_reauthentication): Fix another typo.

@@ -27,6 +27,8 @@
 
 include_directories (${LIBMICROHTTPD_INCLUDE_DIRS} ${LIBXML_INCLUDE_DIRS}
                      ${GLIB_INCLUDE_DIRS} ${LIBEXSLT_INCLUDE_DIRS}
+                     ${LIBGVM_BASE_INCLUDE_DIRS}
+                     ${LIBGVM_UTIL_INCLUDE_DIRS}
                      ${LIBOPENVAS_OMP_INCLUDE_DIRS}
                      ${LIBOPENVAS_BASE_INCLUDE_DIRS}
                      ${LIBOPENVAS_MISC_INCLUDE_DIRS} ${LIBXSLT_INCLUDE_DIRS}
@@ -68,7 +70,7 @@ add_executable (gsad
                 gsad_http_handler.c
                 validator.c)
 
-target_link_libraries (gsad gsad_omp gsad_base gsad_xslt_ext ${LIBGVM_BASE_LDFLAGS} ${LIBGCRYPT_LDFLAGS} ${CMAKE_THREAD_LIBS_INIT} ${LINKER_HARDENING_FLAGS})
+target_link_libraries (gsad gsad_omp gsad_base gsad_xslt_ext ${LIBGVM_BASE_LDFLAGS} ${LIBGVM_UTIL_LDFLAGS} ${LIBGCRYPT_LDFLAGS} ${CMAKE_THREAD_LIBS_INIT} ${LINKER_HARDENING_FLAGS})
 set_target_properties (gsad PROPERTIES LINKER_LANGUAGE C)
 
 if (NOT CMAKE_BUILD_TYPE MATCHES "Release")
