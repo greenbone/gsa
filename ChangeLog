@@ -1,5 +1,12 @@
 2016-12-19  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/gsad_http.c, src/gsad_http.h, src/gsad_http_handler.c: Change
+	handler_send_response function signature to accept a session id as char
+	instead of a boolean for removing the sid from the response. This allows to
+	use attach_remove_sid function inside of handler_send_response.
+
+2016-12-19  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/gsad_http.c: Use content_type_string from response data if content_type
 	is GSAD_CONTENT_TYPE_STRING in handler_send_response function.
 

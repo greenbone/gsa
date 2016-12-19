@@ -366,7 +366,7 @@ handle_static_file (http_connection_t *connection, const char * method,
 
   g_free (path);
 
-  return handler_send_response (connection, response, response_data, 0);
+  return handler_send_response (connection, response, response_data, NULL);
 }
 
 int
@@ -476,7 +476,7 @@ handle_setup_user (http_connection_t *connection,
       return handler_send_response (connection,
                                     response,
                                     response_data,
-                                    1);
+                                    REMOVE_SID);
     }
 
   if (ret == USER_GUEST_LOGIN_FAILED
@@ -679,7 +679,7 @@ handle_omp_get (http_connection_t *connection,
     }
 
   credentials_free (credentials);
-  return handler_send_response (connection, response, response_data, 0);
+  return handler_send_response (connection, response, response_data, NULL);
 }
 
 int
@@ -959,7 +959,7 @@ handle_help_pages (http_connection_t *connection,
   return handler_send_response (connection,
                                 response,
                                 response_data,
-                                0);
+                                credentials->sid);
 }
 
 int
@@ -1061,7 +1061,8 @@ handle_system_report (http_connection_t *connection,
 
   credentials_free (credentials);
 
-  return handler_send_response (connection, response, response_data, 0);
+  return handler_send_response (connection, response, response_data,
+                                NULL);
 }
 
 int
@@ -1078,7 +1079,7 @@ handle_index_ng (http_connection_t *connection,
   response = file_content_response (connection, url,
                                     "ng/index.html",
                                     response_data);
-  return handler_send_response (connection, response, response_data, 0);
+  return handler_send_response (connection, response, response_data, NULL);
 }
 
 int
@@ -1095,7 +1096,7 @@ handle_config_ng (http_connection_t *connection,
   response = file_content_response (connection, url,
                                     "ng/config.js",
                                     response_data);
-  return handler_send_response (connection, response, response_data, 0);
+  return handler_send_response (connection, response, response_data, NULL);
 }
 
 int
@@ -1130,7 +1131,7 @@ handle_static_ng_file (http_connection_t *connection, const char * method,
 
   g_free (path);
 
-  return handler_send_response (connection, response, response_data, 0);
+  return handler_send_response (connection, response, response_data, NULL);
 }
 
 http_handler_t *

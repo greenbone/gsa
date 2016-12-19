@@ -57,6 +57,8 @@
  */
 #define SID_COOKIE_NAME "GSAD_SID"
 
+#define REMOVE_SID "0"
+
 /**
  * @brief Title for "Page not found" messages.
  */
@@ -149,7 +151,7 @@ void gsad_add_content_type_header (http_response_t *response,
 int handler_send_response (http_connection_t *connection,
                            http_response_t *response,
                            cmd_response_data_t *response_data,
-                           gboolean remove_cookie);
+                           const gchar *sid);
 
 int handler_send_not_found (http_connection_t *connection,
                             const gchar *url);

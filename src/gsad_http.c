@@ -344,7 +344,7 @@ send_response (http_connection_t *connection, const char *content,
  * @param[in]  connection     Connection handle, e.g. used to send response.
  * @param[in]  response       Response.
  * @param[in]  response_data  Response data strurct
- * @param[in]  remove_cookie  Whether to remove SID cookie.
+ * @param[in]  sid            Session ID, or NULL. "0" to remove session.
  *
  * @return MHD_YES on success, else MHD_NO.
  */
@@ -359,15 +359,11 @@ handler_send_response (http_connection_t *connection,
   content_type_t content_type;
   int status_code;
 
-  if (remove_cookie)
-    if (remove_sid (response) == MHD_NO)
-      {
-        MHD_destroy_response (response);
-        g_warning ("%s: failed to remove SID, dropping request",
-                   __FUNCTION__);
-        cmd_response_data_free (response_data);
-        return MHD_NO;
-      }
+  if (attach_remove_sid (response, sid) == MHD_NO)
+    {
+      cmd_response_data_free (response_data);
+      return MHD_NO;
+    }
 
   content_type = cmd_response_data_get_content_type (response_data);
 
@@ -454,7 +450,7 @@ handler_send_not_found (http_connection_t *connection, const gchar * url)
   response_data = cmd_response_data_new ();
 
   response = create_not_found_response (url, response_data);
-  return handler_send_response (connection, response, response_data, 0);
+  return handler_send_response (connection, response, response_data, NULL);
 }
 
 /**
@@ -535,7 +531,7 @@ handler_send_login_page (http_connection_t *connection,
   return handler_send_response (connection,
                                 response,
                                 response_data,
-                                1);
+                                REMOVE_SID);
 }
 
 /**
