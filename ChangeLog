@@ -1,3 +1,11 @@
+2016-12-19  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Backport r26976.
+
+	* src/html/classic/wizard.xsl (quick-task-wizard, modify-task-wizard):
+	Hide schedule option if the user does not have the create_schedule
+	or get_schedules permission.
+
 2016-12-14  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	Backport r26934.

@@ -264,71 +264,72 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
                 <xsl:value-of select="gsa:i18n ('Start immediately')"/>
               </label>
             </div>
-            <div class="radio">
-              <label>
-                <input type="radio" name="event_data:auto_start" value="1"/>
-                <xsl:value-of select="gsa:i18n ('Create Schedule')"/>
-              </label>
-            </div>
-            <div class="offset-1">
-              <div class="datepicker form-group">
-                <xsl:variable name="day"
-                  select="format-number (date:day-in-month (date:date ()), '00')"/>
-                <xsl:variable name="month"
-                  select="format-number (date:month-in-year (date:date ()), '00')"/>
-                <xsl:variable name="year" select="date:year()"/>
-
-                <input class="datepicker-button" size="26"/>
-                <input class="datepicker-day" name="event_data:start_day" value="{$day}" type="hidden"/>
-                <input class="datepicker-month" name="event_data:start_month" value="{$month}" type="hidden"/>
-                <input class="datepicker-year" name="event_data:start_year" value="{$year}" type="hidden"/>
+            <xsl:if test="gsa:may-op ('get_schedules') and gsa:may-op ('create_schedule')">
+              <div class="radio">
+                <label>
+                  <input type="radio" name="event_data:auto_start" value="1"/>
+                  <xsl:value-of select="gsa:i18n ('Create Schedule')"/>
+                </label>
               </div>
+              <div class="offset-1">
+                <div class="datepicker form-group">
+                  <xsl:variable name="day"
+                    select="format-number (date:day-in-month (date:date ()), '00')"/>
+                  <xsl:variable name="month"
+                    select="format-number (date:month-in-year (date:date ()), '00')"/>
+                  <xsl:variable name="year" select="date:year()"/>
 
-              <div class="form-group">
-                <xsl:variable name="hour"
-                  select="format-number (date:hour-in-day (date:time ()), '00')"/>
-                <xsl:variable name="minute"
-                  select="format-number (date:minute-in-hour (date:time ()), '00')"/>
-
-                <div class="form-item">
-                  at
+                  <input class="datepicker-button" size="26"/>
+                  <input class="datepicker-day" name="event_data:start_day" value="{$day}" type="hidden"/>
+                  <input class="datepicker-month" name="event_data:start_month" value="{$month}" type="hidden"/>
+                  <input class="datepicker-year" name="event_data:start_year" value="{$year}" type="hidden"/>
                 </div>
 
-                <div class="form-item">
-                  <input type="text"
-                    name="event_data:start_hour"
-                    value="{$hour}"
-                    size="2"
-                    class="spinner"
-                    data-type="int"
-                    min="0"
-                    max="23"
-                    maxlength="2"/>
-                  h
+                <div class="form-group">
+                  <xsl:variable name="hour"
+                    select="format-number (date:hour-in-day (date:time ()), '00')"/>
+                  <xsl:variable name="minute"
+                    select="format-number (date:minute-in-hour (date:time ()), '00')"/>
+
+                  <div class="form-item">
+                    at
+                  </div>
+
+                  <div class="form-item">
+                    <input type="text"
+                      name="event_data:start_hour"
+                      value="{$hour}"
+                      size="2"
+                      class="spinner"
+                      data-type="int"
+                      min="0"
+                      max="23"
+                      maxlength="2"/>
+                    h
+                  </div>
+
+                  <div class="form-item">
+                    <input type="text"
+                      name="event_data:start_minute"
+                      value="{$minute - ($minute mod 5)}"
+                      size="2"
+                      class="spinner"
+                      data-type="int"
+                      min="0"
+                      max="59"
+                      maxlength="2"/>
+                    m
+                  </div>
                 </div>
 
-                <div class="form-item">
-                  <input type="text"
-                    name="event_data:start_minute"
-                    value="{$minute - ($minute mod 5)}"
-                    size="2"
-                    class="spinner"
-                    data-type="int"
-                    min="0"
-                    max="59"
-                    maxlength="2"/>
-                  m
+                <div class="form-group">
+                  <xsl:call-template name="timezone-select">
+                    <xsl:with-param name="timezone" select="/envelope/timezone"/>
+                    <xsl:with-param name="input-name" select="'event_data:start_timezone'"/>
+                  </xsl:call-template>
                 </div>
               </div>
-
-              <div class="form-group">
-                <xsl:call-template name="timezone-select">
-                  <xsl:with-param name="timezone" select="/envelope/timezone"/>
-                  <xsl:with-param name="input-name" select="'event_data:start_timezone'"/>
-                </xsl:call-template>
-              </div>
-            </div>
-
+            </xsl:if>
             <div class="radio">
               <label>
                 <input type="radio" name="event_data:auto_start" value="0"/>
@@ -518,82 +519,84 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
             </select>
           </div>
         </div>
-        <div class="form-group">
-          <label class="col-3 control-label">
-            <xsl:value-of select="gsa:i18n ('Start time')"/>:
-          </label>
-          <div class="col-9">
-            <div class="radio">
-              <label>
-                <input type="radio" name="event_data:reschedule" value="0" checked="1"/>
-                <xsl:value-of select="gsa:i18n ('Do not change')"/>
-              </label>
-            </div>
-            <div class="radio">
-              <label>
-                <input type="radio" name="event_data:reschedule" value="1"/>
-                <xsl:value-of select="gsa:i18n ('Create Schedule')"/>
-              </label>
-            </div>
-            <div class="offset-1">
-              <xsl:variable name="day"
-                select="format-number (date:day-in-month (date:date ()), '00')"/>
-              <xsl:variable name="month"
-                select="format-number (date:month-in-year (date:date ()), '00')"/>
-              <xsl:variable name="year" select="date:year()"/>
-              <xsl:variable name="hour"
-                select="format-number (date:hour-in-day (date:time ()), '00')"/>
-              <xsl:variable name="minute"
-                select="format-number (date:minute-in-hour (date:time ()), '00')"/>
-
-              <div class="datepicker form-group">
-                <input class="datepicker-button" size="26"/>
-                <input class="datepicker-day" name="event_data:start_day" value="{$day}" type="hidden"/>
-                <input class="datepicker-month" name="event_data:start_month" value="{$month}" type="hidden"/>
-                <input class="datepicker-year" name="event_data:start_year" value="{$year}" type="hidden"/>
+        <xsl:if test="gsa:may ('get_schedules') and gsa:may ('create_schedule')">
+          <div class="form-group">
+            <label class="col-3 control-label">
+              <xsl:value-of select="gsa:i18n ('Start time')"/>:
+            </label>
+            <div class="col-9">
+              <div class="radio">
+                <label>
+                  <input type="radio" name="event_data:reschedule" value="0" checked="1"/>
+                  <xsl:value-of select="gsa:i18n ('Do not change')"/>
+                </label>
               </div>
-
-              <div class="form-group">
-                <div class="form-item">
-                  at
-                </div>
-
-                <div class="form-item">
-                  <input type="text"
-                    name="event_data:start_hour"
-                    value="{$hour}"
-                    size="2"
-                    class="spinner"
-                    data-type="int"
-                    min="0"
-                    max="23"
-                    maxlength="2"/>
-                  h
-                </div>
-
-                <div class="form-item">
-                  <input type="text"
-                    name="event_data:start_minute"
-                    value="{$minute - ($minute mod 5)}"
-                    size="2"
-                    class="spinner"
-                    data-type="int"
-                    min="0"
-                    max="59"
-                    maxlength="2"/>
-                  m
-                </div>
+              <div class="radio">
+                <label>
+                  <input type="radio" name="event_data:reschedule" value="1"/>
+                  <xsl:value-of select="gsa:i18n ('Create Schedule')"/>
+                </label>
               </div>
+              <div class="offset-1">
+                <xsl:variable name="day"
+                  select="format-number (date:day-in-month (date:date ()), '00')"/>
+                <xsl:variable name="month"
+                  select="format-number (date:month-in-year (date:date ()), '00')"/>
+                <xsl:variable name="year" select="date:year()"/>
+                <xsl:variable name="hour"
+                  select="format-number (date:hour-in-day (date:time ()), '00')"/>
+                <xsl:variable name="minute"
+                  select="format-number (date:minute-in-hour (date:time ()), '00')"/>
 
-              <div class="form-group">
-                <xsl:call-template name="timezone-select">
-                  <xsl:with-param name="timezone" select="/envelope/timezone"/>
-                  <xsl:with-param name="input-name" select="'event_data:start_timezone'"/>
-                </xsl:call-template>
+                <div class="datepicker form-group">
+                  <input class="datepicker-button" size="26"/>
+                  <input class="datepicker-day" name="event_data:start_day" value="{$day}" type="hidden"/>
+                  <input class="datepicker-month" name="event_data:start_month" value="{$month}" type="hidden"/>
+                  <input class="datepicker-year" name="event_data:start_year" value="{$year}" type="hidden"/>
+                </div>
+
+                <div class="form-group">
+                  <div class="form-item">
+                    at
+                  </div>
+
+                  <div class="form-item">
+                    <input type="text"
+                      name="event_data:start_hour"
+                      value="{$hour}"
+                      size="2"
+                      class="spinner"
+                      data-type="int"
+                      min="0"
+                      max="23"
+                      maxlength="2"/>
+                    h
+                  </div>
+
+                  <div class="form-item">
+                    <input type="text"
+                      name="event_data:start_minute"
+                      value="{$minute - ($minute mod 5)}"
+                      size="2"
+                      class="spinner"
+                      data-type="int"
+                      min="0"
+                      max="59"
+                      maxlength="2"/>
+                    m
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <xsl:call-template name="timezone-select">
+                    <xsl:with-param name="timezone" select="/envelope/timezone"/>
+                    <xsl:with-param name="input-name" select="'event_data:start_timezone'"/>
+                  </xsl:call-template>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        </xsl:if>
 
         <xsl:if test="gsa:may-op ('create_alert') and gsa:may-op ('get_alerts')">
           <div class="form-group">
