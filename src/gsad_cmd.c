@@ -43,6 +43,7 @@ cmd_response_data_init (cmd_response_data_t* data)
 {
   data->http_status_code = MHD_HTTP_OK;
   data->content_type = GSAD_CONTENT_TYPE_APP_HTML;
+  data->content_type_string = NULL;
   data->redirect = NULL;
   data->content_disposition = NULL;
   data->content_length = 0;
@@ -76,6 +77,16 @@ cmd_response_data_free (cmd_response_data_t* data)
   if (data->content_disposition)
     {
       g_free (data->content_disposition);
+    }
+
+  if (data->redirect)
+    {
+      g_free (data->redirect);
+    }
+
+  if (data->content_type_string)
+    {
+      g_free (data->content_type_string);
     }
 
   g_free (data);
@@ -184,4 +195,61 @@ const gchar *
 cmd_response_data_get_content_disposition (cmd_response_data_t *data)
 {
   return data->content_disposition;
+}
+
+/**
+ * @brief Set response data to redirect to url
+ *
+ * @param[in]  data  Command response data struct
+ * @param[in]  url   URL to redirect
+ */
+void
+cmd_response_data_set_redirect (cmd_response_data_t *data, gchar *url)
+{
+  if (url)
+    {
+      data->http_status_code = MHD_HTTP_SEE_OTHER;
+    }
+  data->redirect = url;
+}
+
+/**
+ * @brief Get redirect url
+ *
+ * @param[in]  data  Command response data struct
+ * @return URL to redirect
+ */
+const gchar *
+cmd_response_data_get_redirect (cmd_response_data_t *data)
+{
+  return data->redirect;
+}
+
+/**
+ * @brief Set a content type as string
+ *
+ * If content type is set as a string content_type is set to
+ * GSAD_CONTENT_TYPE_STRING.
+ *
+ * @param[in]  data                  Command response data struct
+ * @param[in]  content_type_string   Content type as string
+ */
+void
+cmd_response_data_set_content_type_string (cmd_response_data_t *data,
+                                           gchar *content_type_string)
+{
+  data->content_type = GSAD_CONTENT_TYPE_STRING;
+  data->content_type_string = content_type_string;;
+}
+
+/**
+ * @brief Get a content type string if set
+ *
+ * @param[in]  data  Command response data struct
+ * @return Content type string if set
+ */
+const gchar *
+cmd_response_data_get_content_type_string (cmd_response_data_t *data)
+{
+  return data->content_type_string;
 }
