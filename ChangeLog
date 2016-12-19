@@ -1,3 +1,8 @@
+2016-12-19  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/gsad_content_type.h: Add content type for using a string value instead
+	of content_type_t.
+
 2016-12-19  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/omp.xsl (get_system_reports_response): Show slave

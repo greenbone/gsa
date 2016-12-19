@@ -47,6 +47,7 @@ enum content_type
   GSAD_CONTENT_TYPE_APP_RPM,
   GSAD_CONTENT_TYPE_APP_XML,
   GSAD_CONTENT_TYPE_DONE,         ///< Special marker.
+  GSAD_CONTENT_TYPE_STRING,       ///< Special marker for using content type string.
   GSAD_CONTENT_TYPE_IMAGE_PNG,
   GSAD_CONTENT_TYPE_TEXT_CSS,
   GSAD_CONTENT_TYPE_TEXT_HTML,
