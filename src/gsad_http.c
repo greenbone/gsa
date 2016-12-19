@@ -408,6 +408,45 @@ handler_send_response (http_connection_t *connection,
 }
 
 /**
+ * @brief Create and send a response
+ *
+ * The passed response data will be freed and can't be used afterwards
+ *
+ * @param[in]  connection     Connection handle, e.g. used to send response.
+ * @param[in]  data           Data to send in response
+ * @param[in]  response_data  Response data strurct
+ * @param[in]  sid            Session ID, or NULL. "0" to remove session.
+ *
+ * @return MHD_YES on success, else MHD_NO.
+ */
+int
+handler_create_response (http_connection_t *connection,
+                         gchar *data,
+                         cmd_response_data_t *response_data,
+                         const gchar *sid)
+{
+  http_response_t *response;
+  gsize len = 0;
+  const gchar *redirect;
+
+  redirect = cmd_response_data_get_redirect (response_data);
+  if (redirect)
+    {
+      return send_redirect_to_uri (connection, redirect, sid);
+    }
+
+  len = cmd_response_data_get_content_length (response_data);
+  if (len == 0 && data)
+    {
+      len = strlen (data);
+    }
+
+  response = MHD_create_response_from_buffer (len, data,
+                                              MHD_RESPMEM_MUST_FREE);
+  return handler_send_response (connection, response, response_data, sid);
+}
+
+/**
  * @brief Create a default 404 (not found) http response
  *
  * @param[in]   url                 Requested (not found) url

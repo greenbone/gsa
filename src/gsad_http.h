@@ -148,6 +148,11 @@ void gsad_add_content_type_header (http_response_t *response,
                                    content_type_t *ct);
 
 
+int handler_create_response (http_connection_t *connection,
+                             gchar *data,
+                             cmd_response_data_t *response_data,
+                             const gchar *sid);
+
 int handler_send_response (http_connection_t *connection,
                            http_response_t *response,
                            cmd_response_data_t *response_data,
