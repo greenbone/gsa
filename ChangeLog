@@ -1,3 +1,8 @@
+2016-12-19  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	* src/gsad_http.c (handler_send_reauthentication): Indicate that
+	variable 'type' is unused when USE_GSA_NG is not defined.
+
 2016-12-19  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/gsad_omp.c (save_user_omp): Check if old_login is not NULL before

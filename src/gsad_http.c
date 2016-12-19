@@ -562,7 +562,11 @@ handler_send_reauthentication (http_connection_t *connection,
 {
 
   const char *msg;
+#ifdef USE_GSA_NG
   const char *type;
+#else
+  const char *type __attribute__((unused));
+#endif
 
   switch (reason)
     {
