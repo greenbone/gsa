@@ -997,7 +997,6 @@ free_resources (void *cls, struct MHD_Connection *connection,
 
   params_free (con_info->params);
   g_free (con_info->cookie);
-  g_free (con_info->content_disposition);
   g_free (con_info->language);
   g_free (con_info);
   *con_cls = NULL;

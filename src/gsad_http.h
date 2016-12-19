@@ -125,15 +125,10 @@
 typedef struct gsad_connection_info
 {
   struct MHD_PostProcessor *postprocessor; ///< POST processor.
-  char *response;                          ///< HTTP response text.
   params_t *params;                        ///< Request parameters.
   char *cookie;                            ///< Value of SID cookie param.
   char *language;                          ///< Language code e.g. en
   int connectiontype;                      ///< 1=POST, 2=GET.
-  int answercode;                          ///< HTTP response code.
-  content_type_t content_type;             ///< Content type of response.
-  char *content_disposition;               ///< Content disposition of response.
-  size_t content_length;                   ///< Content length.
   gchar *redirect;                         ///< Redirect URL.
 } gsad_connection_info_t;
 

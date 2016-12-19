@@ -1142,11 +1142,6 @@ handle_request(void *cls, http_connection_t *connection,
             }
           con_info->params = params_new ();
           con_info->connectiontype = 1;
-          con_info->answercode = MHD_HTTP_OK;
-          con_info->content_type = GSAD_CONTENT_TYPE_TEXT_HTML;
-          con_info->content_disposition = NULL;
-          con_info->content_length = 0;
-          con_info->redirect = NULL;
 
           *con_cls = (void *) con_info;
           return MHD_YES;

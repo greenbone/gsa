@@ -1116,13 +1116,9 @@ serve_post (void *coninfo_cls, enum MHD_ValueKind kind, const char *key,
 {
   gsad_connection_info_t *con_info = (gsad_connection_info_t *) coninfo_cls;
 
-  con_info->answercode = MHD_HTTP_INTERNAL_SERVER_ERROR;
-  con_info->response   = SERVER_ERROR;
-
   if (NULL != key)
     {
       params_append_mhd (con_info->params, key, filename, data, size, off);
-      con_info->answercode = MHD_HTTP_OK;
       return MHD_YES;
     }
   return MHD_NO;
