@@ -2354,23 +2354,7 @@ exec_omp_get (gsad_connection_info_t *con_info,
   ELSE (get_permissions)
   ELSE (get_port_list)
   ELSE (get_port_lists)
-
-  else if (!strcmp (cmd, "get_report"))
-    {
-      gchar *content_type_omp;
-      ret = get_report_omp (&connection, credentials,
-                            params,
-                            &content_type_omp,
-                            response_data);
-
-      if (content_type_omp)
-        {
-          cmd_response_data_set_content_type (response_data,
-                                              GSAD_CONTENT_TYPE_DONE);
-          *content_type_string = content_type_omp;
-        }
-    }
-
+  ELSE (get_report)
   ELSE (get_reports)
   ELSE (get_result)
   ELSE (get_results)

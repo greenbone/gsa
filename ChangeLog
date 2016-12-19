@@ -1,5 +1,11 @@
 2016-12-19  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/gsad.c, src/gsad_omp.c, src/gsad_omp.h: Change get_report to set
+	content_type_string via response_data and not another param. This allows to
+	use the standard omp function signature for get_report.
+
+2016-12-19  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/gsad_cmd.c, src/gsad_cmd.h: Add content_type_string property to
 	cmd_response_data_t struct. Add setters and getters for redirect and
 	content_type_string properties.

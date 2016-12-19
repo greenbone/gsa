@@ -98,7 +98,7 @@ char * export_tasks_omp (openvas_connection_t *, credentials_t *,
 char * delete_report_omp (openvas_connection_t *, credentials_t *,
                           params_t *, cmd_response_data_t*);
 char * get_report_omp (openvas_connection_t *, credentials_t *,
-                       params_t *, gchar **, cmd_response_data_t*);
+                       params_t *, cmd_response_data_t*);
 char * get_reports_omp (openvas_connection_t *, credentials_t *,
                         params_t *, cmd_response_data_t*);
 

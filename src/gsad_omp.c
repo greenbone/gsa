@@ -252,7 +252,7 @@ static char *get_targets (openvas_connection_t *, credentials_t *, params_t *,
 static char *get_report (openvas_connection_t *connection,
                          credentials_t * credentials,
                          params_t *params, const char *commands,
-                         gchar **content_type, const char *extra_xml,
+                         const char *extra_xml,
                          int *error, cmd_response_data_t* response_data);
 
 static char *get_report_format (openvas_connection_t *, credentials_t *,
@@ -1697,7 +1697,7 @@ generate_page (openvas_connection_t *connection, credentials_t *credentials,
       char *result;
       int error = 0;
 
-      result = get_report (connection, credentials, params, NULL, NULL,
+      result = get_report (connection, credentials, params, NULL,
                            response, &error, response_data);
 
       return error ? result : xsl_transform_omp (connection, credentials,
@@ -13037,7 +13037,6 @@ delete_report_omp (openvas_connection_t *connection, credentials_t * credentials
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
  * @param[in]  commands     Extra commands to run before the others.
- * @param[out] content_type Content type as string if known, else NULL.
  * @param[in]  extra_xml    Extra XML to insert inside page element.
  * @param[out] error        Set to 1 if error, else 0.
  * @param[out] response_data  Extra data return for the HTTP response.
@@ -13046,7 +13045,7 @@ delete_report_omp (openvas_connection_t *connection, credentials_t * credentials
  */
 char *
 get_report (openvas_connection_t *connection, credentials_t * credentials,
-            params_t *params, const char *commands, gchar **content_type,
+            params_t *params, const char *commands,
             const char *extra_xml, int *error,
             cmd_response_data_t* response_data)
 {
@@ -13068,6 +13067,7 @@ get_report (openvas_connection_t *connection, credentials_t * credentials,
   int ignore_filter, ignore_pagination;
   gchar *built_filter;
   gchar *fname_format, *esc_response;
+  const gchar *extension, *requested_content_type;
 
   build_filter = params_value (params, "build_filter");
 
@@ -13174,8 +13174,6 @@ get_report (openvas_connection_t *connection, credentials_t * credentials,
       else
         params_given (params, "result_hosts_only") || (result_hosts_only = "1");
     }
-
-  if (content_type) *content_type = NULL;
 
   if (autofp == NULL || strlen (autofp) == 0) autofp = "0";
 
@@ -13671,7 +13669,6 @@ get_report (openvas_connection_t *connection, credentials_t * credentials,
       if ((strcmp (format_id, "a994b278-1f62-11e1-96ac-406186ea4fc5") == 0)
           || strcmp (format_id, "5057e5cc-b825-11e4-9d0e-28d24461215b") == 0)
         {
-          const char *extension, *requested_content_type;
           /* Manager sends XML report as plain XML. */
 
           if (read_entity_c (connection, &entity))
@@ -13700,7 +13697,7 @@ get_report (openvas_connection_t *connection, credentials_t * credentials,
             }
           extension = entity_attribute (report, "extension");
           requested_content_type = entity_attribute (report, "content_type");
-          if (extension && requested_content_type && content_type)
+          if (extension && requested_content_type)
             {
               gchar *file_name;
               ret = setting_get_value (connection,
@@ -13771,7 +13768,8 @@ get_report (openvas_connection_t *connection, credentials_t * credentials,
                                               ? type
                                               : report_id);
 
-              *content_type = g_strdup (requested_content_type);
+              cmd_response_data_set_content_type_string
+                (response_data, g_strdup (requested_content_type));
               cmd_response_data_set_content_disposition
                 (response_data,
                  g_strdup_printf ("attachment; filename=\"%s.%s\"",
@@ -13806,7 +13804,6 @@ get_report (openvas_connection_t *connection, credentials_t * credentials,
           report_entity = entity_child (entity, "report");
           if (report_entity != NULL)
             {
-              const char *extension, *requested_content_type;
               char *report_encoded;
               gsize report_len;
               gchar *report_decoded;
@@ -13823,7 +13820,7 @@ get_report (openvas_connection_t *connection, credentials_t * credentials,
                   report_decoded = g_strdup ("");
                   report_len = 0;
                 }
-              if (extension && requested_content_type && content_type)
+              if (extension && requested_content_type)
                 {
                   gchar *file_name;
                   const char *id;
@@ -13889,7 +13886,8 @@ get_report (openvas_connection_t *connection, credentials_t * credentials,
                     file_name = g_strdup_printf ("%s-%s",
                                                 "report", id);
 
-                  *content_type = g_strdup (requested_content_type);
+                  cmd_response_data_set_content_type_string
+                    (response_data, g_strdup (requested_content_type));
                   cmd_response_data_set_content_disposition
                     (response_data,
                      g_strdup_printf ("attachment; filename=\"%s.%s\"",
@@ -14347,21 +14345,19 @@ get_report (openvas_connection_t *connection, credentials_t * credentials,
  * @param[in]  connection     Connection to manager.
  * @param[in]  credentials  Username and password for authentication.
  * @param[in]  params       Request parameters.
- * @param[out] content_type         Content type if known, else NULL.
  * @param[out] response_data  Extra data return for the HTTP response.
  *
  * @return Report.
  */
 char *
 get_report_omp (openvas_connection_t *connection, credentials_t * credentials,
-                params_t *params, gchar ** content_type,
-                cmd_response_data_t* response_data)
+                params_t *params, cmd_response_data_t* response_data)
 {
   char *result;
   int error = 0;
 
-  result = get_report (connection, credentials, params, NULL, content_type,
-                       NULL, &error, response_data);
+  result = get_report (connection, credentials, params, NULL, NULL, &error,
+                       response_data);
 
   return error ? result : xsl_transform_omp (connection, credentials, params,
                                              result, response_data);
@@ -14452,14 +14448,14 @@ get_report_section (openvas_connection_t *connection,
     {
       char *result;
 
-      result = get_report (connection, credentials, params, NULL, NULL,
+      result = get_report (connection, credentials, params, NULL,
                            extra_xml, &error, response_data);
 
       return error ? result : xsl_transform_omp (connection, credentials,
                                                  params, result, response_data);
     }
 
-  result = get_report (connection, credentials, params, NULL, NULL, NULL,
+  result = get_report (connection, credentials, params, NULL, NULL,
                        &error, response_data);
   if (error)
     return result;
