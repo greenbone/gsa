@@ -25417,21 +25417,29 @@ save_chart_preference_omp (openvas_connection_t *connection,
   gchar* value_64 = g_base64_encode ((guchar*)*pref_value,
                                      strlen (*pref_value));
   gboolean xml_flag = params_value_bool (params, "xml");
-  gchar* response;
+  gchar* response = NULL;
   entity_t entity;
   int ret;
 
+  cmd_response_data_set_content_type (response_data, GSAD_CONTENT_TYPE_APP_XML);
+
   if (*pref_id == NULL)
     {
-      cmd_response_data_set_status_code (response_data, MHD_HTTP_BAD_REQUEST);
-      return ("<save_chart_preference_response"
-              " status=\"400\" status_text=\"Invalid or missing name\"/>");
+      response = g_strdup
+        ("<save_chart_preference_response"
+         " status=\"400\" status_text=\"Invalid or missing name\"/>");
     }
   if (*pref_value == NULL)
     {
+      response = g_strdup
+        ("<save_chart_preference_response"
+         " status=\"400\" status_text=\"Invalid or missing value\"/>");
+    }
+
+  if (response)
+    {
       cmd_response_data_set_status_code (response_data, MHD_HTTP_BAD_REQUEST);
-      return ("<save_chart_preference_response"
-              " status=\"400\" status_text=\"Invalid or missing value\"/>");
+      return response;
     }
 
   response = NULL;

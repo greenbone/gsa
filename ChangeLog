@@ -1,5 +1,10 @@
 2016-12-20  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/gsad_omp.c (save_chart_preference_omp): Fix segfault in error cases and
+	set content type to application/xml by default.
+
+2016-12-20  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/gsad.c: Code cleanup: Fix indentation and remove dubplicate variable
 	assignment.
 
