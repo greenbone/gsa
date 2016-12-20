@@ -1,3 +1,10 @@
+2016-12-20  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Backport r27018.
+
+	* src/html/classic/omp.xsl (delete-icon): Set the reload type for the
+	"Delete User" button to "next".
+
 2016-12-20  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	Backport r26966.
