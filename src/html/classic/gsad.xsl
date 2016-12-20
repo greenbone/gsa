@@ -426,7 +426,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:variable name="items" xmlns="">
         <xsl:if test="gsa:may-op ('GET_TASKS') or gsa:may-op ('GET_REPORTS') or gsa:may-op ('GET_RESULTS') or gsa:may-op ('GET_NOTES') or gsa:may-op ('GET_OVERRIDES')">
           <item>
-            <page>dashboard&amp;dashboard_name=scans</page>
+            <xsl:choose>
+              <xsl:when test="/envelope/ng">
+                <url>/ng/dashboards/tasks</url>
+              </xsl:when>
+              <xsl:otherwise>
+                <page>dashboard&amp;dashboard_name=scans</page>
+              </xsl:otherwise>
+            </xsl:choose>
             <name><xsl:value-of select="gsa:i18n ('Dashboard')"/></name>
           </item>
         </xsl:if>
@@ -487,7 +494,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:variable name="items" xmlns="">
         <xsl:if test="gsa:may-op ('GET_ASSETS')">
           <item>
-            <page>dashboard&amp;dashboard_name=assets</page>
+            <xsl:choose>
+              <xsl:when test="/envelope/ng">
+                <url>/ng/dashboards/assets</url>
+              </xsl:when>
+              <xsl:otherwise>
+                <page>dashboard&amp;dashboard_name=assets</page>
+              </xsl:otherwise>
+            </xsl:choose>
             <name><xsl:value-of select="gsa:i18n ('Dashboard')"/></name>
           </item>
           <divider/>
@@ -516,7 +530,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:variable name="items" xmlns="">
         <xsl:if test="gsa:may-op ('GET_INFO')">
           <item>
-            <page>dashboard&amp;dashboard_name=secinfo</page>
+            <xsl:choose>
+              <xsl:when test="/envelope/ng">
+                <url>/ng/dashboards/secinfo</url>
+              </xsl:when>
+              <xsl:otherwise>
+                <page>dashboard&amp;dashboard_name=secinfo</page>
+              </xsl:otherwise>
+            </xsl:choose>
             <name><xsl:value-of select="gsa:i18n ('Dashboard')"/></name>
           </item>
           <divider/>
