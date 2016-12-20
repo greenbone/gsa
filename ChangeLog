@@ -1,3 +1,10 @@
+2016-12-20  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	Backport r26966.
+
+	* src/html/classic/os.xml: Match "cpe:/o:linux:linux_kernel" as well
+	for Linux Kernel.
+
 2016-12-19  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Backport r26985.
