@@ -42,7 +42,7 @@ static void
 cmd_response_data_init (cmd_response_data_t* data)
 {
   data->http_status_code = MHD_HTTP_OK;
-  data->content_type = GSAD_CONTENT_TYPE_APP_HTML;
+  data->content_type = GSAD_CONTENT_TYPE_TEXT_HTML;
   data->content_type_string = NULL;
   data->redirect = NULL;
   data->content_disposition = NULL;

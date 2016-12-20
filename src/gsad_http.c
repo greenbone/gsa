@@ -106,9 +106,9 @@ gsad_add_content_type_header (http_response_t *response,
         MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
                                  "application/exe");
         break;
-      case GSAD_CONTENT_TYPE_APP_HTML:
+      case GSAD_CONTENT_TYPE_APP_XHTML:
         MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,
-                                 "application/html");
+                                 "application/xhtml+xml");
         break;
       case GSAD_CONTENT_TYPE_APP_KEY:
         MHD_add_response_header (response, MHD_HTTP_HEADER_CONTENT_TYPE,

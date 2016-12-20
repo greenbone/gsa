@@ -930,7 +930,7 @@ init_validator ()
  * format "deb".
  *
  * @param[out]  content_type  Return location for the newly set content type,
- *                            defaults to GSAD_CONTENT_TYPE_APP_HTML.
+ *                            defaults to GSAD_CONTENT_TYPE_OCTET_STREAM.
  * @param[in]   format        Lowercase format string as in the respective
  *                            OMP commands.
  */
@@ -939,14 +939,14 @@ content_type_from_format_string (enum content_type* content_type,
                                  const char* format)
 {
   if (!format)
-    *content_type = GSAD_CONTENT_TYPE_APP_HTML;
+    *content_type = GSAD_CONTENT_TYPE_OCTET_STREAM;
 
   else if (strcmp (format, "deb") == 0)
     *content_type = GSAD_CONTENT_TYPE_APP_DEB;
   else if (strcmp (format, "exe") == 0)
     *content_type = GSAD_CONTENT_TYPE_APP_EXE;
   else if (strcmp (format, "html") == 0)
-    *content_type = GSAD_CONTENT_TYPE_APP_HTML;
+    *content_type = GSAD_CONTENT_TYPE_TEXT_HTML;
   else if (strcmp (format, "key") == 0)
     *content_type = GSAD_CONTENT_TYPE_APP_KEY;
   else if (strcmp (format, "nbe") == 0)
@@ -957,9 +957,8 @@ content_type_from_format_string (enum content_type* content_type,
     *content_type = GSAD_CONTENT_TYPE_APP_RPM;
   else if (strcmp (format, "xml") == 0)
     *content_type = GSAD_CONTENT_TYPE_APP_XML;
-  // Defaults to GSAD_CONTENT_TYPE_APP_HTML
   else
-    *content_type = GSAD_CONTENT_TYPE_APP_HTML;
+    *content_type = GSAD_CONTENT_TYPE_OCTET_STREAM;
 }
 
 /**
