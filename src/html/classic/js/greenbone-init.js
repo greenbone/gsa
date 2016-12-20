@@ -449,9 +449,9 @@
         autorefresh.val(localStorage.getItem('autorefresh-interval'));
       }
       autorefresh.change(function() {
-        stop_auto_refresh();
+        gsa.stop_auto_refresh();
         localStorage.setItem('autorefresh-interval', $(this).val());
-        start_auto_refresh();
+        gsa.start_auto_refresh();
       });
       if (!global.autorefresh_enabled) {
         var autorefresh_off = autorefresh.find('option[value="0"]');

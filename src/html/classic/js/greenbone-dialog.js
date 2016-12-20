@@ -427,7 +427,7 @@
         var url = parse_url(xml.find('action_result next').text());
         // we need the html page
         url.params.xml = 0;
-        location.href = encode_url_object(url);
+        location.href = gsa.encode_url_object(url);
       }
       else if (self.success_reload.type === 'dialog') {
         var elem = $(self.success_reload.data);

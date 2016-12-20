@@ -1,3 +1,15 @@
+2016-12-20  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/js/greenbone-dialog.js
+	(OMPDialog.prototype.postForm): Specify that function encode_url_object
+	is from gsa object.
+
+	* src/html/classic/js/greenbone-init.js (on_ready): Specify that
+	functions stop_auto_refresh and start_auto_refresh are from gsa object.
+
+	* src/html/classic/js/greenbone.js (encode_url_object): Add
+	encode_url_object function to gsa object.
+
 2016-12-20  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/gsad.xsl: Add links to the ng dashboards.

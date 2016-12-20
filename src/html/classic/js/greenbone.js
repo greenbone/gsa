@@ -73,6 +73,7 @@
   gsa.log = {};
   gsa.for_each = for_each;
   gsa.upper_case_first = upper_case_first;
+  gsa.encode_url_object = encode_url_object;
   gsa.start_auto_refresh = start_auto_refresh;
   gsa.stop_auto_refresh = stop_auto_refresh;
   gsa.set_token = set_token;
