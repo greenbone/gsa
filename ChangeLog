@@ -1,5 +1,10 @@
 2016-12-20  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/omp.xsl (delete-icon): Set the reload type for the
+	"Delete User" button to "next".
+
+2016-12-20  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/js/greenbone-dialog.js
 	(OMPDialog.prototype.postForm): Specify that function encode_url_object
 	is from gsa object.

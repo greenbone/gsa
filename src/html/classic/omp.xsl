@@ -2109,7 +2109,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <input type="hidden" name="cmd" value="delete_{$type}_confirm"/>
           <input type="hidden" name="{$type}_id" value="{$id}"/>
           <input type="image" src="/img/delete.svg" alt="{gsa:i18n ('Delete')}"
-            class="delete-action-icon" data-type="{$type}" data-id="{$id}"
+            class="delete-action-icon" data-reload="next" data-type="{$type}" data-id="{$id}"
             name="Delete" value="Delete" title="{gsa:i18n ('Delete')}"/>
           <xsl:copy-of select="$params"/>
         </form>
