@@ -630,6 +630,7 @@ handler_send_reauthentication (http_connection_t *connection,
       case LOGOUT:
         msg = "Successfully logged out.";
         type = "logout";
+        break;
       default:
         msg = "";
         type = "unknown";

@@ -1656,10 +1656,10 @@ exec_omp_post (http_connection_t *con,
       gchar *pref_id, *pref_value;
 
       res = save_chart_preference_omp (&connection,
-                                                      credentials,
-                                                      con_info->params,
-                                                      &pref_id, &pref_value,
-                                                      response_data);
+                                       credentials,
+                                       con_info->params,
+                                       &pref_id, &pref_value,
+                                       response_data);
       if (pref_id && pref_value)
         user_set_chart_pref (credentials->token, pref_id, pref_value);
     }
@@ -1673,11 +1673,11 @@ exec_omp_post (http_connection_t *con,
     {
       char *timezone, *password, *severity, *language;
       res = save_my_settings_omp (&connection,
-                                                 credentials, con_info->params,
-                                                 con_info->language,
-                                                 &timezone, &password,
-                                                 &severity, &language,
-                                                 response_data);
+                                  credentials, con_info->params,
+                                  con_info->language,
+                                  &timezone, &password,
+                                  &severity, &language,
+                                  response_data);
       if (timezone)
         /* credentials->timezone set in save_my_settings_omp before XSLT. */
         user_set_timezone (credentials->token, timezone);
@@ -2084,7 +2084,6 @@ exec_omp_get (http_connection_t *con,
                                    &html,
                                    &credential_login,
                                    response_data))
-        res = html;
 
       /* Returned above if package_format was NULL. */
       content_type_from_format_string (&content_type, package_format);
