@@ -1,5 +1,14 @@
 2016-12-20  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/app.js,
+	src/html/classic/ng/src/web/dashboard/assets.js,
+	src/html/classic/ng/src/web/dashboard/scans.js,
+	src/html/classic/ng/src/web/dashboard/secinfo.js,
+	src/html/classic/ng/src/web/menu/menubar.js: Add dashboards for assets, scans
+	and secinfo.
+
+2016-12-20  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/login.js: Fix typo.
 
 	* src/html/classic/ng/src/web/tasks/taskslistentry.js: Fix loading task after

@@ -55,9 +55,8 @@ export const MenuBar = (props, context) => {
             </div>
           </Link>
         </li>
-        <Menu legacy title={_('Scans')} cmd="dashboard" dashboard_name="scans">
-          <MenuEntry legacy title={_('Dashboard')} cmd="dashboard"
-            dashboard_name="scans"/>
+        <Menu title={_('Scans')} to="dashboards/scans">
+          <MenuEntry title={_('Dashboard')} to="dashboards/scans"/>
           <MenuEntry section title={_('Tasks')} to="tasks"/>
           <MenuEntry legacy title={_('Reports')} cmd="get_reports"/>
           <MenuEntry legacy title={_('Results')} cmd="get_results"/>
@@ -67,10 +66,8 @@ export const MenuBar = (props, context) => {
           <MenuEntry legacy title={_('Overrides')} cmd="get_overrides"
             filter="sort=nvt"/>
         </Menu>
-        <Menu legacy title={_('Assets')} cmd="dashboard"
-          dashboard_name="assets">
-          <MenuEntry legacy title={_('Dashboard')} cmd="dashboard"
-            dashboard_name="assets"/>
+        <Menu title={_('Assets')} to="dashboards/assets">
+          <MenuEntry title={_('Dashboard')} to="dashboards/assets"/>
           <MenuEntry legacy section title={_('Hosts')} cmd="get_assets"
             asset_type="host"/>
           <MenuEntry legacy title={_('Operating Systems')} cmd="get_assets"
@@ -78,10 +75,8 @@ export const MenuBar = (props, context) => {
           <MenuEntry legacy title={_('Hosts (Classic)')} cmd="get_report"
             type="assets" apply_overrides="1" levels="hm"/>
         </Menu>
-        <Menu legacy title={_('SecInfo')} cmd="dashboard"
-          dashboard_name="secinfo">
-          <MenuEntry legacy title={_('Dashboard')} cmd="dashboard"
-            dashboard_name="secinfo"/>
+        <Menu title={_('SecInfo')} to="dashboards/secinfo">
+          <MenuEntry title={_('Dashboard')} to="dashboards/secinfo"/>
           <MenuEntry legacy section title={_('NVTs')} cmd="get_info"
             info_type="nvt"/>
           <MenuEntry legacy title={_('CVEs')} cmd="get_info" info_type="cve"/>

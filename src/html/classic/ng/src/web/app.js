@@ -38,6 +38,9 @@ import Main from './main.js';
 import Home from './home.js';
 import Task from './tasks/task.js';
 import Tasks from './tasks/tasks.js';
+import ScansDashboard from './dashboard/scans.js';
+import AssetsDashboard from './dashboard/assets.js';
+import SecinfoDashboard from './dashboard/secinfo.js';
 
 import './css/gsa-base.css';
 
@@ -135,6 +138,12 @@ ReactDOM.render(
         <IndexRoute component={Home} onEnter={is_logged_in}/>
         <Route path="tasks" component={Tasks} onEnter={is_logged_in}/>
         <Route path="tasks/:id" component={Task} onEnter={is_logged_in}/>
+        <Route path="dashboards/scans" component={ScansDashboard}
+          onEnter={is_logged_in}/>
+        <Route path="dashboards/assets" component={AssetsDashboard}
+          onEnter={is_logged_in}/>
+        <Route path="dashboards/secinfo" component={SecinfoDashboard}
+          onEnter={is_logged_in}/>
       </Route>
     </Route>
     <Redirect from="/" to="/ng"/>
