@@ -4023,7 +4023,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
   <div class="section-box">
     <div class="pull-left"><a href="/help/contents.html?token={/envelope/token}">Help Contents</a></div>
-    <div class="pull-right"><a href="/omp?cmd=get_feed&amp;token={/envelope/token}">Jump to dialog</a></div>
+    <div class="pull-right"><a href="/omp?cmd=get_feeds&amp;token={/envelope/token}">Jump to dialog</a></div>
     <div style="text-align:left">
       <br/>
       <a name="feed_synchronization"></a>

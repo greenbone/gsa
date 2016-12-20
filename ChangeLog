@@ -1,5 +1,12 @@
 2016-12-20  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	Backport r27020.
+
+	* src/html/classic/help.xsl (feed_management.html): Use correct command
+	"get_feeds" in "Jump to dialog" link.
+
+2016-12-20  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	Backport r27018.
 
 	* src/html/classic/omp.xsl (delete-icon): Set the reload type for the
