@@ -23,7 +23,7 @@
 
 import React from 'react';
 
-import {is_defined} from '../../utils.js';
+import {is_defined, log} from '../../utils.js';
 
 import './css/dashboard.css';
 
@@ -66,7 +66,13 @@ export class Dashboard extends React.Component {
     let pref_id = this.props['config-pref-id'];
 
     gmp.user.currentChartPreferences().then(prefs => {
-      dashboard.setConfig(prefs.get(pref_id));
+      let pref = prefs.get(pref_id);
+
+      if (!is_defined(pref)) {
+        log.warn('No dashboard preference config found for id', pref_id);
+      }
+
+      dashboard.setConfig(pref);
 
       dashboard.init();
       dashboard.initDisplays();

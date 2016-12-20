@@ -37,7 +37,7 @@ export class ChartPreferences extends Model {
 
   get(id) {
     let pref = this._preferences[id];
-    return is_defined(pref) ? pref : {};
+    return is_defined(pref) ? pref : undefined;
   }
 
   setProperties() {};
