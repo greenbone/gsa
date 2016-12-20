@@ -114,7 +114,7 @@ export class TasksListEntry extends React.Component {
 
   onSave() {
     let {gmp} = this.context;
-    gmp.task.get(this.state.task.id).then(task => {
+    gmp.task.get(this.state.task).then(task => {
       this.setState({task});
     });
   }

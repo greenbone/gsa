@@ -85,7 +85,7 @@ export class Login extends React.Component {
         message = _('Login failed.');
         break;
       case 'error':
-        message = _('Login failed. Error during authencication.');
+        message = _('Login failed. Error during authentication.');
         break;
       case 'gmpdown':
         message = _('Login failed. GMP Service is down.');

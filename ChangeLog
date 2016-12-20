@@ -1,5 +1,12 @@
 2016-12-20  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/login.js: Fix typo.
+
+	* src/html/classic/ng/src/web/tasks/taskslistentry.js: Fix loading task after
+	task has been changed.
+
+2016-12-20  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/models/chartpreferences.js,
 	src/html/classic/ng/src/web/dashboard/dashboard.js: Add log warning if chart
 	preferences could not be found.
