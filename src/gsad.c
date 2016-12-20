@@ -2072,7 +2072,7 @@ exec_omp_get (http_connection_t *con,
       const char *credential_id;
       const char *package_format;
       char *content_disposition;
-      content_type_t content_type;
+      content_type_t content_type = GSAD_CONTENT_TYPE_OCTET_STREAM;
 
       package_format = params_value (params, "package_format");
       credential_login = NULL;
@@ -2083,22 +2083,24 @@ exec_omp_get (http_connection_t *con,
                                    params,
                                    &html,
                                    &credential_login,
-                                   response_data))
+                                   response_data) == 0)
+        {
+          content_type_from_format_string (&content_type, package_format);
 
-      /* Returned above if package_format was NULL. */
-      content_type_from_format_string (&content_type, package_format);
-      content_disposition = g_strdup_printf
-                              ("attachment; filename=credential-%s.%s",
-                               (credential_login
-                                && strcmp (credential_login, ""))
-                                  ? credential_login
-                                  : credential_id,
-                               (strcmp (package_format, "key") == 0
-                                 ? "pub"
-                                 : package_format));
-      cmd_response_data_set_content_disposition (response_data,
-                                                 content_disposition);
-      cmd_response_data_set_content_type (response_data, content_type);
+          content_disposition = g_strdup_printf
+                                  ("attachment; filename=credential-%s.%s",
+                                  (credential_login
+                                    && strcmp (credential_login, ""))
+                                      ? credential_login
+                                      : credential_id,
+                                  (strcmp (package_format, "key") == 0
+                                    ? "pub"
+                                    : package_format));
+          cmd_response_data_set_content_disposition (response_data,
+                                                    content_disposition);
+          cmd_response_data_set_content_type (response_data, content_type);
+        }
+
       g_free (credential_login);
 
       res = html;
