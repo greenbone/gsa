@@ -25416,19 +25416,20 @@ save_chart_preference_omp (openvas_connection_t *connection,
 
   gchar* value_64 = g_base64_encode ((guchar*)*pref_value,
                                      strlen (*pref_value));
+  gboolean xml_flag = params_value_bool (params, "xml");
   gchar* response;
   entity_t entity;
   int ret;
 
   if (*pref_id == NULL)
     {
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      cmd_response_data_set_status_code (response_data, MHD_HTTP_BAD_REQUEST);
       return ("<save_chart_preference_response"
               " status=\"400\" status_text=\"Invalid or missing name\"/>");
     }
   if (*pref_value == NULL)
     {
-      response_data->http_status_code = MHD_HTTP_BAD_REQUEST;
+      cmd_response_data_set_status_code (response_data, MHD_HTTP_BAD_REQUEST);
       return ("<save_chart_preference_response"
               " status=\"400\" status_text=\"Invalid or missing value\"/>");
     }
@@ -25447,46 +25448,51 @@ save_chart_preference_omp (openvas_connection_t *connection,
       case -1:
         break;
       case 1:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-        return gsad_message (credentials,
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
+        return gsad_message_new (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving settings. "
                              "It is unclear whether all the settings were saved. "
                              "Diagnostics: Failure to send command to manager daemon.",
-                             "/omp?cmd=get_my_settings", response_data);
+                             "/omp?cmd=get_my_settings", xml_flag, response_data);
       case 2:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-        return gsad_message (credentials,
+
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
+        return gsad_message_new (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving settings. "
                              "It is unclear whether all the settings were saved. "
                              "Diagnostics: Failure to receive response from manager daemon.",
-                             "/omp?cmd=get_my_settings", response_data);
+                             "/omp?cmd=get_my_settings", xml_flag, response_data);
       default:
-        response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
-        return gsad_message (credentials,
+
+        cmd_response_data_set_status_code (response_data,
+                                           MHD_HTTP_INTERNAL_SERVER_ERROR);
+        return gsad_message_new (credentials,
                              "Internal error", __FUNCTION__, __LINE__,
                              "An internal error occurred while saving settings. "
                              "It is unclear whether all the settings were saved. "
                              "Diagnostics: Internal Error.",
-                             "/omp?cmd=get_my_settings", response_data);
+                             "/omp?cmd=get_my_settings", xml_flag, response_data);
     }
 
   if (omp_success (entity))
     {
       free_entity (entity);
       g_free (response);
-      return ("<save_chart_preference_response"
-              " status=\"200\" status_text=\"OK\"/>");
+      return g_strdup ("<save_chart_preference_response"
+                       " status=\"200\" status_text=\"OK\"/>");
     }
   else
     {
       set_http_status_from_entity (entity, response_data);
       gchar* ret_response
-        = g_strdup_printf("<save_chart_preference_response"
-                          " status=\"%s\" status_text=\"%s\"/>",
-                          entity_attribute (entity, "status"),
-                          entity_attribute (entity, "status_text"));
+        = g_strdup_printf ("<save_chart_preference_response"
+                           " status=\"%s\" status_text=\"%s\"/>",
+                           entity_attribute (entity, "status"),
+                           entity_attribute (entity, "status_text"));
       free_entity (entity);
       g_free (response);
       return ret_response;
