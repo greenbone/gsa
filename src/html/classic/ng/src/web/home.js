@@ -49,7 +49,7 @@ export const Home = () => {
     <Section title={_('Dashboard')} img="dashboard.svg"
       extra={<DashboardControls/>}>
       <Dashboard
-        conf-pref-id="d97eca9f-0386-4e5d-88f2-0ed7f60c0646"
+        config-pref-id="d97eca9f-0386-4e5d-88f2-0ed7f60c0646"
         default-controllers-string={'task-by-severity-class|task-by-status#' +
           'cve-by-created|host-by-topology|nvt-by-severity-class'}
         default-controller-string="task-by-severity-class"
