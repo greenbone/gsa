@@ -106,6 +106,10 @@ current installation of node.js, npm and related packages.
 
 # apt-get install nodejs yarn
 
+When using npm you might need to install the additional nodejs legacy symlink.
+
+# apt-get install nodejs-legacy
+
 
 For building the Next Generation GUI simply add -DUSE_GSA_NG=yes to
 the cmake call. The rest remains the same as in the section above.
