@@ -1,5 +1,10 @@
 2016-12-21  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/severitybar.js: Fix displaying the severity bar
+	message.
+
+2016-12-21  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/web/icons/exporticon.js,
 	src/html/classic/ng/src/web/icons/overridesicon.js,
