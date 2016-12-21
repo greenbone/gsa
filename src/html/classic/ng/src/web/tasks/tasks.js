@@ -23,7 +23,7 @@
 
 import React from 'react';
 
-import {is_defined, autobind, log} from '../../utils.js';
+import {autobind} from '../../utils.js';
 import  _ from '../../locale.js';
 
 import Section from '../section.js';
@@ -31,6 +31,9 @@ import Icon from '../icon.js';
 import HelpIcon from '../helpicon.js';
 import Toolbar from '../toolbar.js';
 import PowerFilter from '../powerfilter.js';
+
+import EntitiesComponent from '../entities/component.js';
+
 import {Dashboard, DashboardControls} from '../dashboard/dashboard.js';
 
 import TaskDialog from './dialog.js';
@@ -47,43 +50,17 @@ import ModifyTaskWizard from '../wizard/modifytaskwizard.js';
 
 import {TASKS_FILTER_FILTER} from '../../gmp/commands/filters.js';
 
-export class Tasks extends React.Component {
+export class Tasks extends EntitiesComponent {
 
   constructor(props) {
     super(props);
-    this.state = {
-      tasks: undefined,
-      filters: [],
-    };
-    this.reload = this.reload.bind(this);
+
     autobind(this, 'on');
   }
 
-  componentDidMount() {
-    let {gmp} = this.context;
-    let refresh = gmp.globals.autorefresh;
-
-    this.loadTasks();
-    this.loadFilters();
-
-    if (refresh) {
-      log.debug('Setting reload interval', refresh);
-      this.timer = window.setInterval(this.reload, refresh * 1000);
-    }
-  }
-
-  componentWillUnmount() {
-    if (is_defined(this.timer)) {
-      log.debug('Clearing reload interval');
-      window.clearInterval(this.timer);
-    }
-  }
-
-  loadTasks(filter) {
+  load(filter) {
     this.context.gmp.tasks.get(filter).then(tasks => {
-      if (!is_defined(filter)) {
-        filter = tasks.getFilter();
-      }
+      filter = tasks.getFilter();
       this.setState({tasks, filter});
     });
   }
@@ -94,8 +71,8 @@ export class Tasks extends React.Component {
     });
   }
 
-  reload() {
-    this.loadTasks(this.state.filter);
+  getCounts() {
+    return this.state.tasks.getCounts();
   }
 
   onDeleteTask(task) {
@@ -108,57 +85,6 @@ export class Tasks extends React.Component {
 
   onNewTask() {
     this.reload();
-  }
-
-  onFirst() {
-    let {filter} = this.state;
-
-    this.loadTasks(filter.first());
-  }
-
-  onNext() {
-    let {filter} = this.state;
-
-    this.loadTasks(filter.next());
-  }
-
-  onPrevious() {
-    let {filter} = this.state;
-
-    this.loadTasks(filter.previous());
-  }
-
-  onLast() {
-    let {tasks, filter} = this.state;
-    let counts = tasks.getCounts();
-
-    let last = Math.floor(counts.filtered / counts.rows) * counts.rows + 1;
-
-    this.loadTasks(filter.first(last));
-  }
-
-  onFilterReset() {
-    this.loadTasks();
-  }
-
-  onFilterUpdate(filter) {
-    this.loadTasks(filter);
-  }
-
-  onFilterCreated(filter) {
-    let {filters = []} = this.state;
-
-    filters.push(filter);
-
-    this.setState({filters});
-  }
-
-  onToggleOverrides() {
-    let {filter} = this.state;
-    let overrides = filter.get('apply_overrides');
-    filter.set('apply_overrides', overrides ? 0 : 1, '=');
-
-    this.loadTasks(filter);
   }
 
   render() {

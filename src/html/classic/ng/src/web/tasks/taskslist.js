@@ -23,165 +23,49 @@
 
 import React from 'react';
 
-
 import _ from '../../locale.js';
-import {is_defined, log, autobind} from '../../utils.js';
 
-import Icon from '../icon.js';
-import {StrippedTable, TableRow, TableHead} from '../table.js';
+import {TableRow, TableHead} from '../table.js';
 import Layout from '../layout.js';
-import Pagination from '../pagination.js';
+import SelectionType from '../selectiontype.js';
 
-import Select2 from '../form/select2.js';
-import Download from '../form/download.js';
+import EntitiesList from '../entities/list.js';
+import EntitiesFooter from '../entities/footer.js';
 
 import TasksListEntry from './taskslistentry.js';
 
-const SELECTION_PAGE_CONTENTS = '0';
-const SELECTION_USER = '1';
-const SELECTION_FILTER = '2';
+import OverridesIcon from '../icons/overridesicon.js';
 
-export class TasksList extends React.Component {
+export class TasksList extends EntitiesList {
 
   constructor(...args) {
     super(...args);
 
-    let {tasks} = this.props;
-
-    this.state = {
-      selection_type: SELECTION_PAGE_CONTENTS,
-      selected: tasks ? tasks : [],
-    };
-
-    autobind(this, 'on');
+    this.export_filename = 'tasks.xml';
+    this.empty_title = _('No tasks available');
   }
 
-  componentWillReceiveProps(props) {
-    let {selection_type} = this.state;
-    let {tasks} = props;
-
-    if (selection_type !== SELECTION_USER) {
-      this.setState({selected: tasks});
-    }
+  getGmp() {
+    return this.context.gmp.tasks;
   }
 
-  onDeleteTasks() {
-    let {onDeleteBulk, tasks} = this.props;
-    let {selected, selection_type} = this.state;
-    let {gmp} = this.context;
-    let promise;
-
-    if (selection_type === SELECTION_FILTER) {
-      let filter = tasks.getFilter().all();
-      promise  = gmp.tasks.deleteByFilter(filter);
-    }
-    else {
-      promise = gmp.tasks.delete(selected);
-    }
-
-    promise.then(deleted => {
-      if (onDeleteBulk) {
-        onDeleteBulk(deleted);
-      }
-      log.debug('successfully deleted tasks', deleted);
-    }, err => log.error(err));
+  getEntities() {
+    return this.props.tasks;
   }
 
-  onDownloadTasks() {
-    let {gmp} = this.context;
-    let {tasks} = this.props;
-    let {selected, selection_type} = this.state;
-    let promise;
-
-    if (selection_type === SELECTION_USER) {
-      promise = gmp.tasks.export(selected);
-    }
-    else if (selection_type === SELECTION_PAGE_CONTENTS) {
-      promise = gmp.tasks.exportByFilter(tasks.getFilter());
-    }
-    else {
-      promise = gmp.tasks.exportByFilter(tasks.getFilter().all());
-    }
-
-    promise.then(xhr => {
-      this.download.setData(xhr.responseText);
-      this.download.download();
-    }, err => log.error(err));
-  }
-
-  onSelectionTypeChange(value) {
-    let {tasks} = this.props;
-    let selected = tasks;
-
-    if (value === SELECTION_USER) {
-      selected = new Set();
-    }
-
-    this.setState({selection_type: value, selected});
-  }
-
-  onSelectTask(task) {
-    let {selected} = this.state;
-
-    selected.add(task);
-
-    this.setState({selected});
-  }
-
-  onDeselectTask(task) {
-    let {selected} = this.state;
-
-    selected.delete(task);
-
-    this.setState({selected});
-  }
-
-  render() {
-    let {tasks} = this.props;
-    let {selection_type} = this.state;
-
-    if (!is_defined(tasks) || tasks.length === 0) {
-      return <div>{_('No tasks available')}</div>;
-    }
-
-    let filter = tasks.getFilter();
-    let counts = tasks.getCounts();
+  renderHeader() {
+    let entities = this.getEntities();
+    let filter = entities.getFilter();
     let overrides = filter.get('apply_overrides');
-    let entries = tasks.map(task => {
-      return (
-        <TasksListEntry key={task.id} task={task}
-          selection={selection_type === SELECTION_USER}
-          onSelected={this.onSelectTask}
-          onDeselected={this.onDeselectTask}
-          onDelete={this.props.onDelete}
-          onCloned={this.props.onCloned}/>
-      );
-    });
-
-    let overrides_icon;
-    if (overrides === 1) {
-      overrides_icon = (
-        <Icon size="small" img="overrides_enabled.svg"
-          title={_('Overrides are applied')}
-          onClick={this.props.onToggleOverridesClick}/>
-      );
-    }
-    else {
-      overrides_icon = (
-        <Icon size="small" img="overrides_disabled.svg"
-          title={_('No Overrides')}
-          onClick={this.props.onToggleOverridesClick}/>
-      );
-    }
-
-    let header = [
+    return [
       <TableRow key="1">
         <TableHead rowSpan="2">{_('Name')}</TableHead>
         <TableHead rowSpan="2" width="10em">{_('Status')}</TableHead>
         <TableHead colSpan="2">{_('Reports')}</TableHead>
         <TableHead rowSpan="2" width="10em">
           <Layout flex align="space-between">
-            {_('Severity')} {overrides_icon}
+            {_('Severity')} <OverridesIcon overrides={overrides}
+              onClick={this.props.onToggleOverridesClick}/>
           </Layout>
         </TableHead>
         <TableHead rowSpan="2" width="6em">{_('Trend')}</TableHead>
@@ -192,75 +76,33 @@ export class TasksList extends React.Component {
         <TableHead>Last</TableHead>
       </TableRow>
     ];
+  }
 
-    let delete_title;
-    let download_title;
-    if (selection_type === SELECTION_PAGE_CONTENTS) {
-      delete_title = _('Move page contents to trashcan');
-      download_title = _('Export page contents');
-    }
-    else if (selection_type === SELECTION_USER) {
-      delete_title = _('Move selection to trashcan');
-      download_title = _('Export selection');
-    }
-    else if (selection_type === SELECTION_FILTER) {
-      delete_title = _('Move all filtered to trashcan');
-      download_title = _('Export all filtered');
-    }
-
-    let footer = (
-      <TableRow>
-        <td colSpan="8">
-          <Layout flex align={['end', 'center']}>
-            <Select2
-              value={selection_type}
-              onChange={this.onSelectionTypeChange}>
-              <option value={SELECTION_PAGE_CONTENTS}>
-                {_('Apply to page contents')}
-              </option>
-              <option value={SELECTION_USER}>
-                {_('Apply to selection')}
-              </option>
-              <option value={SELECTION_FILTER}>
-                {_('Apply to all filtered')}
-              </option>
-            </Select2>
-            <Icon img="trashcan.svg"
-              title={delete_title}
-              onClick={this.onDeleteTasks}/>
-            <Icon img="download.svg"
-              title={download_title}
-              onClick={this.onDownloadTasks}/>
-            <Download ref={ref => this.download = ref} filename="tasks.xml"/>
-          </Layout>
-        </td>
-      </TableRow>
-    );
-
-    let pagination = (
-      <Pagination
-        counts={counts}
-        onFirstClick={this.props.onFirstClick}
-        onLastClick={this.props.onLastClick}
-        onNextClick={this.props.onNextClick}
-        onPreviousClick={this.props.onPreviousClick}/>
-    );
-
-    let filterstring = filter ? filter.toFilterString() : '';
+  renderFooter() {
+    let {selection_type} = this.state;
     return (
-      <div className="entities-table">
-        {pagination}
-        <StrippedTable header={header} footer={footer}>
-          {entries}
-        </StrippedTable>
-        <Layout flex align="space-between">
-          <div className="footnote">
-            {_('(Applied filter: {{filter}})', {filter: filterstring})}
-          </div>
-          {pagination}
-        </Layout>
-      </div>
+      <EntitiesFooter span="8" download trash
+        selectionType={selection_type}
+        onTrashClick={this.onDelete}
+        onDownloadClick={this.onDownload}
+        onSelectionTypeChange={this.onSelectionTypeChange}>
+      </EntitiesFooter>
     );
+  }
+
+  renderEntities() {
+    let entities = this.getEntities();
+    let {selection_type} = this.state;
+    return entities.map(task => {
+      return (
+        <TasksListEntry key={task.id} task={task}
+          selection={selection_type === SelectionType.SELECTION_USER}
+          onSelected={this.onSelect}
+          onDeselected={this.onDeselect}
+          onDelete={this.props.onDelete}
+          onCloned={this.props.onCloned}/>
+      );
+    });
   }
 };
 
@@ -274,10 +116,6 @@ TasksList.propTypes = {
   onPreviousClick: React.PropTypes.func,
   onNextClick: React.PropTypes.func,
   onToggleOverridesClick: React.PropTypes.func,
-};
-
-TasksList.contextTypes = {
-  gmp: React.PropTypes.object.isRequired,
 };
 
 export default TasksList;
