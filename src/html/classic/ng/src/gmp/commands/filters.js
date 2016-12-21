@@ -28,6 +28,7 @@ import {is_defined, log} from '../../utils.js';
 import Filter from '../models/filter.js';
 
 export const TASKS_FILTER_FILTER = Filter.fromString('type=task');
+export const RESULTS_FILTER_FILTER = Filter.fromString('type=result');
 
 export class FilterCommand extends EntityCommand {
 

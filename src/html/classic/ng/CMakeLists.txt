@@ -167,11 +167,15 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/render.js
      ${NG_SRC_DIR}/src/web/reports/charts.js
      ${NG_SRC_DIR}/src/web/results/charts.js
+     ${NG_SRC_DIR}/src/web/results/results.js
+     ${NG_SRC_DIR}/src/web/results/resultslist.js
+     ${NG_SRC_DIR}/src/web/results/resultslistentry.js
      ${NG_SRC_DIR}/src/web/schedules/dialog.js
      ${NG_SRC_DIR}/src/web/secinfo/charts.js
      ${NG_SRC_DIR}/src/web/section.js
      ${NG_SRC_DIR}/src/web/selectiontype.js
      ${NG_SRC_DIR}/src/web/severitybar.js
+     ${NG_SRC_DIR}/src/web/solutiontype.js
      ${NG_SRC_DIR}/src/web/table.js
      ${NG_SRC_DIR}/src/web/targets/dialog.js
      ${NG_SRC_DIR}/src/web/tasks/charts.js
