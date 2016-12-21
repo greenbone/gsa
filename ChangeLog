@@ -1,3 +1,10 @@
+2016-12-21  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	* INSTALL: Make instructions for installing the requirements of the
+	next generation interface more consistent: Use long options for curl
+	calls. Use consistent options for curl call. Make use of HTTP and
+	HTTPS and deb-src consistent. List 'apt-get update' for completeness.
+
 2016-12-21  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/img.js,

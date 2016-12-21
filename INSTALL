@@ -97,12 +97,13 @@ On Debian Jessie node.js is too old. Follow these steps for a
 sufficiently new version. Be aware that this will remove your
 current installation of node.js, npm and related packages.
 
-# curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+# curl --silent --show-error https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
 # echo "deb http://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
-  
-# curl --silent https://deb.nodesource.com/gpgkey/nodesource.gpg.key | sudo apt-key add -
-# echo "deb https://deb.nodesource.com/node_4.x jessie main" | sudo tee /etc/apt/sources.list.d/nodesource.list
-# echo "deb-src https://deb.nodesource.com/node_4.x jessie main" | sudo tee -a /etc/apt/sources.list.d/nodesource.list
+
+# curl --silent --show-error https://deb.nodesource.com/gpgkey/nodesource.gpg.key | sudo apt-key add -
+# echo "deb http://deb.nodesource.com/node_4.x jessie main" | sudo tee /etc/apt/sources.list.d/nodesource.list
+
+# apt-get update
 
 # apt-get install nodejs yarn
 
