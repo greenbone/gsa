@@ -844,7 +844,7 @@ handle_help_pages (http_connection_t *connection,
   return handler_create_response (connection,
                                   res,
                                   response_data,
-                                  credentials->sid);
+                                  NULL);
 }
 
 int
