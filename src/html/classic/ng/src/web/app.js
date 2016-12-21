@@ -38,6 +38,7 @@ import Main from './main.js';
 import Home from './home.js';
 import Task from './tasks/task.js';
 import Tasks from './tasks/tasks.js';
+import Results from './results/results.js';
 import ScansDashboard from './dashboard/scans.js';
 import AssetsDashboard from './dashboard/assets.js';
 import SecinfoDashboard from './dashboard/secinfo.js';
@@ -138,6 +139,7 @@ ReactDOM.render(
         <IndexRoute component={Home} onEnter={is_logged_in}/>
         <Route path="tasks" component={Tasks} onEnter={is_logged_in}/>
         <Route path="tasks/:id" component={Task} onEnter={is_logged_in}/>
+        <Route path="results" component={Results} onEnter={is_logged_in}/>
         <Route path="dashboards/scans" component={ScansDashboard}
           onEnter={is_logged_in}/>
         <Route path="dashboards/assets" component={AssetsDashboard}
