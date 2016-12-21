@@ -1,5 +1,11 @@
 2016-12-21  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/web/entities/component.js, src/web/entities/footer.js,
+	src/web/entities/list.js, src/web/entities/table.js,
+	src/html/classic/ng/CMakeLists.txt: Add generic components for list pages.
+
+2016-12-21  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/severitybar.js: Fix displaying the severity bar
 	message.
 

@@ -111,6 +111,10 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/dashboard/commoncharts.js
      ${NG_SRC_DIR}/src/web/dfncert/charts.js
      ${NG_SRC_DIR}/src/web/dialog.js
+     ${NG_SRC_DIR}/src/web/entities/component.js
+     ${NG_SRC_DIR}/src/web/entities/footer.js
+     ${NG_SRC_DIR}/src/web/entities/list.js
+     ${NG_SRC_DIR}/src/web/entities/table.js
      ${NG_SRC_DIR}/src/web/filterdialog.js
      ${NG_SRC_DIR}/src/web/footer.js
      ${NG_SRC_DIR}/src/web/form.js
