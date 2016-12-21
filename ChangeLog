@@ -1,5 +1,10 @@
 2016-12-21  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/gsad_http_handler.c (handle_help_pages): Allow to show xml response to
+	a help pages request.
+
+2016-12-21  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/gsad.xsl, src/html/classic/ng/src/web/app.js,
 	src/html/classic/ng/src/web/menu/menubar.js: Add menu entries for ng results
 	page.

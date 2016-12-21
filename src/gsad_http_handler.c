@@ -803,16 +803,25 @@ handle_help_pages (http_connection_t *connection,
                               params_value_bool (con_info->params, "xml"),
                               response_data);
     }
-  else if (xsl_filename)
-    {
-      res = xsl_transform_with_stylesheet (xml, xsl_filename,
-                                           response_data);
-
-    }
   else
     {
-      res = xsl_transform_with_stylesheet (xml, "help.xsl",
-                                           response_data);
+      if (params_value_bool (con_info->params, "xml"))
+        {
+          res = xml;
+          cmd_response_data_set_content_type (response_data,
+                                              GSAD_CONTENT_TYPE_APP_XML);
+        }
+      else
+        {
+          if (!xsl_filename)
+            {
+              xsl_filename = g_strdup ("help.xsl");
+            }
+
+          res = xsl_transform_with_stylesheet (xml, xsl_filename,
+                                               response_data);
+        }
+
     }
 
   g_strfreev (preferred_languages);
