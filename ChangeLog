@@ -1,5 +1,10 @@
 2016-12-21  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/menu/menubar.js: Fix menu entry link to
+	CERT-BUND Advisories
+
+2016-12-21  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/gsad.xsl, src/gsad_http_handler.c: Fix setting session id
 	and token for help pages.
 

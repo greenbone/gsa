@@ -84,7 +84,7 @@ export const MenuBar = (props, context) => {
           <MenuEntry legacy title={_('OVAL Definitions')} cmd="get_info"
             info_type="ovaldef"/>
           <MenuEntry legacy title={_('CERT-Bund Advisories')}
-            cmd="get_info" info_type="cert_bung_adv"/>
+            cmd="get_info" info_type="cert_bund_adv"/>
           <MenuEntry legacy title={_('DFN-CERT Advisories')} cmd="get_info"
             info_type="dfn_cert_adv"/>
           <MenuEntry legacy title={_('All SecInfo')} cmd="get_info"
