@@ -137,6 +137,9 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/home.js
      ${NG_SRC_DIR}/src/web/hosts/charts.js
      ${NG_SRC_DIR}/src/web/icon.js
+     ${NG_SRC_DIR}/src/web/icons/exporticon.js
+     ${NG_SRC_DIR}/src/web/icons/overridesicon.js
+     ${NG_SRC_DIR}/src/web/icons/trashicon.js
      ${NG_SRC_DIR}/src/web/img.js
      ${NG_SRC_DIR}/src/web/layout.js
      ${NG_SRC_DIR}/src/web/legacylink.js
@@ -160,6 +163,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/schedules/dialog.js
      ${NG_SRC_DIR}/src/web/secinfo/charts.js
      ${NG_SRC_DIR}/src/web/section.js
+     ${NG_SRC_DIR}/src/web/selectiontype.js
      ${NG_SRC_DIR}/src/web/severitybar.js
      ${NG_SRC_DIR}/src/web/table.js
      ${NG_SRC_DIR}/src/web/targets/dialog.js
