@@ -62,6 +62,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/gmp/commands/login.js
      ${NG_SRC_DIR}/src/gmp/commands/portlists.js
      ${NG_SRC_DIR}/src/gmp/commands/reports.js
+     ${NG_SRC_DIR}/src/gmp/commands/results.js
      ${NG_SRC_DIR}/src/gmp/commands/scanners.js
      ${NG_SRC_DIR}/src/gmp/commands/schedules.js
      ${NG_SRC_DIR}/src/gmp/commands/targets.js
@@ -76,8 +77,10 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/gmp/models/credential.js
      ${NG_SRC_DIR}/src/gmp/models/filter.js
      ${NG_SRC_DIR}/src/gmp/models/login.js
+     ${NG_SRC_DIR}/src/gmp/models/nvt.js
      ${NG_SRC_DIR}/src/gmp/models/portlist.js
      ${NG_SRC_DIR}/src/gmp/models/report.js
+     ${NG_SRC_DIR}/src/gmp/models/result.js
      ${NG_SRC_DIR}/src/gmp/models/scanner.js
      ${NG_SRC_DIR}/src/gmp/models/schedule.js
      ${NG_SRC_DIR}/src/gmp/models/settings.js
