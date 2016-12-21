@@ -137,6 +137,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/home.js
      ${NG_SRC_DIR}/src/web/hosts/charts.js
      ${NG_SRC_DIR}/src/web/icon.js
+     ${NG_SRC_DIR}/src/web/img.js
      ${NG_SRC_DIR}/src/web/layout.js
      ${NG_SRC_DIR}/src/web/legacylink.js
      ${NG_SRC_DIR}/src/web/link.js

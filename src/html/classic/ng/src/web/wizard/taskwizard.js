@@ -29,6 +29,7 @@ import _ from '../../locale.js';
 import Dialog from '../dialog.js';
 import Layout from '../layout.js';
 import Icon from '../icon.js';
+import Img from '../img.js';
 import TextField from '../form/textfield.js';
 
 import './css/wizard.css';
@@ -89,7 +90,7 @@ export class TaskWizard extends Dialog {
     return (
       <Layout flex>
         <div className="wizardess">
-          <Icon img="enchantress.svg"/>
+          <Img src="enchantress.svg"/>
         </div>
         <div className="wizard-content">
           <p>
@@ -98,6 +99,7 @@ export class TaskWizard extends Dialog {
           <div>
             {_('IP address or hostname:')}
             <TextField value={hosts}
+              name="hosts"
               size="40" maxLength="2000"
               onChange={this.onValueChange}/>
           </div>

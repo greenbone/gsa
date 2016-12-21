@@ -28,7 +28,7 @@ import moment from 'moment-timezone';
 import _ from '../../locale.js';
 import {is_defined, select_save_id, extend} from '../../utils.js';
 
-import Icon from '../icon.js';
+import Img from '../img.js';
 import Dialog from '../dialog.js';
 import Layout from '../layout.js';
 import {render_options} from '../render.js';
@@ -130,7 +130,7 @@ export class AdvancedTaskWizard extends Dialog {
       <Layout flex>
         <Layout basis="40%">
           <div className="wizardess pull-right">
-            <Icon img="enchantress.svg"/>
+            <Img src="enchantress.svg"/>
           </div>
           <div className="wizard-content">
             <p>
