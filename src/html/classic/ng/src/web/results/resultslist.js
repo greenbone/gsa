@@ -132,8 +132,8 @@ export class ResultsList extends EntitiesList {
         <ResultsListEntry key={result.id}
           result={result}
           selection={selection_type === SelectionType.SELECTION_USER}
-          onSelected={this.onSelectTask}
-          onDeselected={this.onDeselectTask}/>
+          onSelected={this.onSelect}
+          onDeselected={this.onDeselect}/>
       );
     });
   }

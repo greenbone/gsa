@@ -20,6 +20,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+
+import {map} from '../../utils.js';
+
 import {EntitiesCommand, register_command} from '../command.js';
 
 import Result from '../models/result.js';
@@ -48,6 +51,34 @@ export class ResultsCommand extends EntitiesCommand {
 
   getEntitiesResponse(root) {
     return root.get_results.get_results_response;
+  }
+
+  export(results) {
+    return this.exportByIds(map(results, result => result.id));
+  }
+
+  exportByIds(ids) {
+    let params = {
+      cmd: 'process_bulk',
+      resource_type: 'result',
+      bulk_select: 1,
+      'bulk_export.x': 1,
+    };
+    for (let id of ids) {
+      params['bulk_selected:' + id] = 1;
+    }
+    return this.httpPost(params, {plain: true});
+  }
+
+  exportByFilter(filter) {
+    let params = {
+      cmd: 'process_bulk',
+      resource_type: 'result',
+      bulk_select: 0,
+      'bulk_export.x': 1,
+      filter,
+    };
+    return this.httpPost(params, {plain: true});
   }
 };
 
