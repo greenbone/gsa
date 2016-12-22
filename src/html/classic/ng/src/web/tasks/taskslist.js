@@ -32,6 +32,7 @@ import SelectionType from '../selectiontype.js';
 import EntitiesList from '../entities/list.js';
 import EntitiesFooter from '../entities/footer.js';
 
+import Sort from '../sortby.js';
 import TasksListEntry from './taskslistentry.js';
 
 import OverridesIcon from '../icons/overridesicon.js';
@@ -54,26 +55,50 @@ export class TasksList extends EntitiesList {
   }
 
   renderHeader() {
+    let {onSortChange} = this.props;
     let entities = this.getEntities();
     let filter = entities.getFilter();
     let overrides = filter.get('apply_overrides');
     return [
       <TableRow key="1">
-        <TableHead rowSpan="2">{_('Name')}</TableHead>
-        <TableHead rowSpan="2" width="10em">{_('Status')}</TableHead>
+        <TableHead rowSpan="2">
+          <Sort by="name" onClick={onSortChange}>
+            {_('Name')}
+          </Sort>
+        </TableHead>
+        <TableHead rowSpan="2" width="10em">
+          <Sort by="status" onClick={onSortChange}>
+            {_('Status')}
+          </Sort>
+        </TableHead>
         <TableHead colSpan="2">{_('Reports')}</TableHead>
         <TableHead rowSpan="2" width="10em">
           <Layout flex align="space-between">
-            {_('Severity')} <OverridesIcon overrides={overrides}
+            <Sort by="severity" onClick={onSortChange}>
+              {_('Severity')}
+            </Sort>
+            <OverridesIcon overrides={overrides}
               onClick={this.props.onToggleOverridesClick}/>
           </Layout>
         </TableHead>
-        <TableHead rowSpan="2" width="6em">{_('Trend')}</TableHead>
+        <TableHead rowSpan="2" width="6em">
+          <Sort by="trend" onClick={onSortChange}>
+            {_('Trend')}
+          </Sort>
+        </TableHead>
         <TableHead rowSpan="2" width="10em">{_('Actions')}</TableHead>
       </TableRow>,
       <TableRow key="2">
-        <TableHead>Total</TableHead>
-        <TableHead>Last</TableHead>
+        <TableHead>
+          <Sort by="total" onClick={onSortChange}>
+            {_('Total')}
+          </Sort>
+        </TableHead>
+        <TableHead>
+          <Sort by="last" onClick={onSortChange}>
+            {_('Last')}
+          </Sort>
+        </TableHead>
       </TableRow>
     ];
   }

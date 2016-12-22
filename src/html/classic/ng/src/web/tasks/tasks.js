@@ -145,6 +145,7 @@ export class Tasks extends EntitiesComponent {
             onLastClick={this.onLast}
             onNextClick={this.onNext}
             onPreviousClick={this.onPrevious}
+            onSortChange={this.onSortChange}
             onToggleOverridesClick={this.onToggleOverrides}/>
         </Section>
       </div>

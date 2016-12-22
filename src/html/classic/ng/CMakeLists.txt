@@ -178,6 +178,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/severitybar.js
      ${NG_SRC_DIR}/src/web/severityclasslabels.js
      ${NG_SRC_DIR}/src/web/solutiontype.js
+     ${NG_SRC_DIR}/src/web/sortby.js
      ${NG_SRC_DIR}/src/web/table.js
      ${NG_SRC_DIR}/src/web/targets/dialog.js
      ${NG_SRC_DIR}/src/web/tasks/charts.js

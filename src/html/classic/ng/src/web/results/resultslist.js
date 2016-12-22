@@ -29,6 +29,7 @@ import {TableRow, TableHead} from '../table.js';
 import Layout from '../layout.js';
 import Icon from '../icon.js';
 import SelectionType from '../selectiontype.js';
+import Sort from '../sortby.js';
 
 import OverridesIcon from '../icons/overridesicon.js';
 
@@ -55,29 +56,55 @@ export class ResultsList extends EntitiesList {
   }
 
   renderHeader() {
+    let {onSortChange} = this.props;
     let {selection_type} = this.state;
     let entities = this.getEntities();
     let filter = entities.getFilter();
     let overrides = filter.get('apply_overrides');
     return (
       <TableRow key="1">
-        <TableHead>{_('Vulnerability')}</TableHead>
+        <TableHead>
+          <Sort by="vulnerability" onClick={onSortChange}>
+            {_('Vulnerability')}
+          </Sort>
+        </TableHead>
         <TableHead width="10em">
-          <Layout flex align="space-between">
-            <Icon title={_('Solution type')} img="solution_type.svg"/>
-            {_('Solution type')}
-          </Layout>
+          <Sort by="solution_type" onClick={onSortChange}>
+            <Layout flex align="space-between">
+              <Icon title={_('Solution type')} img="solution_type.svg"/>
+              {_('Solution type')}
+            </Layout>
+          </Sort>
         </TableHead>
         <TableHead width="10em">
           <Layout flex align="space-between">
-            {_('Severity')} <OverridesIcon overrides={overrides}
+            <Sort by="severity" onClick={onSortChange}>
+              {_('Severity')}
+            </Sort>
+            <OverridesIcon overrides={overrides}
               onClick={this.props.onToggleOverridesClick}/>
           </Layout>
         </TableHead>
-        <TableHead width="6em">{_('QoD')}</TableHead>
-        <TableHead width="10em">{_('Host')}</TableHead>
-        <TableHead width="10em">{_('Location')}</TableHead>
-        <TableHead width="20em">{_('Created')}</TableHead>
+        <TableHead width="6em">
+          <Sort by="qod" onClick={onSortChange}>
+            {_('QoD')}
+          </Sort>
+        </TableHead>
+        <TableHead width="10em">
+          <Sort by="host" onClick={onSortChange}>
+            {_('Host')}
+          </Sort>
+        </TableHead>
+        <TableHead width="10em">
+          <Sort by="location" onClick={onSortChange}>
+            {_('Location')}
+          </Sort>
+        </TableHead>
+        <TableHead width="20em">
+          <Sort by="created" onClick={onSortChange}>
+            {_('Created')}
+          </Sort>
+        </TableHead>
         {selection_type === SelectionType.SELECTION_USER &&
           <TableHead width="6em">{_('Actions')}</TableHead>
         }

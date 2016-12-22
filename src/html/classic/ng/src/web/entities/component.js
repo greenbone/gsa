@@ -45,6 +45,7 @@ export class EntitiesComponent extends React.Component {
     this.onFilterUpdate = this.onFilterUpdate.bind(this);
     this.onFilterCreated = this.onFilterCreated.bind(this);
     this.onToggleOverrides = this.onToggleOverrides.bind(this);
+    this.onSortChange = this.onSortChange.bind(this);
   }
 
   componentDidMount() {
@@ -118,6 +119,23 @@ export class EntitiesComponent extends React.Component {
     filters.push(filter);
 
     this.setState({filters});
+  }
+
+  onSortChange(field) {
+    let {filter} = this.state;
+
+    let sort = 'sort';
+    let sort_field = filter.get('sort');
+
+    if (sort_field) {
+      if (sort_field === field) {
+        sort = 'sort-reverse';
+      }
+    }
+
+    filter.set(sort, field);
+
+    this.load(filter);
   }
 
   onToggleOverrides() {

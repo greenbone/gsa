@@ -200,6 +200,7 @@ EntitiesList.propTypes = {
   onLastClick: React.PropTypes.func,
   onPreviousClick: React.PropTypes.func,
   onNextClick: React.PropTypes.func,
+  onSortChange: React.PropTypes.func,
 };
 
 EntitiesList.contextTypes = {

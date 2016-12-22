@@ -24,10 +24,12 @@ table {
 
 .table thead a {
   text-decoration: none;
+  color: white;
 }
 
 .table thead a:hover {
   text-decoration: underline;
+  color: white;
 }
 
 .table tfoot tr {

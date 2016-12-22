@@ -1,5 +1,19 @@
 2016-12-22  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/css/sortby.css,
+	src/html/classic/ng/src/web/css/table.css,
+	src/html/classic/ng/src/web/entities/component.js,
+	src/html/classic/ng/src/web/entities/list.js,
+	src/html/classic/ng/src/web/results/results.js,
+	src/html/classic/ng/src/web/results/resultslist.js,
+	src/html/classic/ng/src/web/sortby.js,
+	src/html/classic/ng/src/web/tasks/tasks.js,
+	src/html/classic/ng/src/web/tasks/taskslist.js: Allow sorting of results and
+	tasks list by clicking on their columns.
+
+2016-12-22  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/CMakeLists.txt: Only run yarn/npm install if
 	package.json or yarn.lock files have changed.
 
