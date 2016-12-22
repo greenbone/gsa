@@ -1,5 +1,9 @@
 2016-12-22  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* INSTALL: Update INSTALL documentation for running the js development server.
+
+2016-12-22  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/web/css/severityclasslabels.css,
 	src/html/classic/ng/src/web/results/filterdialog.js,
