@@ -202,24 +202,25 @@ set (NG_FILES
 
 
 
-add_custom_command (OUTPUT ${NG_SRC_DIR}/node_modules
+add_custom_command (OUTPUT node-modules.stamp
                     DEPENDS ${NG_PKG_FILES}
                     COMMAND ${INSTALLER} "install"
+                    COMMAND cmake -E touch ${CMAKE_CURRENT_BINARY_DIR}/node-modules.stamp
                     WORKING_DIRECTORY ${NG_SRC_DIR}
-                    COMMENT "Install js dependencies")
+                    COMMENT "Install gsa-ng js dependencies")
 
 
 add_custom_command (OUTPUT ${NG_FILES}
                     COMMAND ${INSTALLER} run build
                     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-                    DEPENDS  ${NG_SRC_DIR}/node_modules
+                    DEPENDS  ${CMAKE_CURRENT_BINARY_DIR}/node-modules.stamp
                              ${NG_PKG_FILES}
                              ${NG_SRC_FILES}
                              ${NG_JS_SRC_FILES}
                     COMMENT "Build gsa-ng install files")
 
 add_custom_target (gsa-ng ALL
-                   DEPENDS ${NG_FILES})
+                   DEPENDS node-modules.stamp ${NG_FILES})
 
 install (FILES ${NG_FILES}
          DESTINATION ${NG_DEST_DIR})
