@@ -1,5 +1,14 @@
 2016-12-22  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/css/severityclasslabels.css,
+	src/html/classic/ng/src/web/results/filterdialog.js,
+	src/html/classic/ng/src/web/results/results.js,
+	src/html/classic/ng/src/web/severityclasslabels.js: Implement result filter
+	dialog for chaning the powerfilter.
+
+2016-12-22  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/form/checkbox.js,
 	src/html/classic/ng/src/web/form/css/checkboxradio.css,
 	src/html/classic/ng/src/web/form/radio.js: Update checkbox and radio

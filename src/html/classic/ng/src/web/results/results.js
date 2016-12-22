@@ -37,6 +37,7 @@ import {Dashboard, DashboardControls} from '../dashboard/dashboard.js';
 
 import ResultCharts from './charts.js';
 import ResultsList from './resultslist.js';
+import ResultsFilterDialog from './filterdialog.js';
 
 import {RESULTS_FILTER_FILTER} from '../../gmp/commands/filters.js';
 
@@ -78,6 +79,10 @@ export class Results extends EntitiesComponent {
             onResetClick={this.onFilterReset}
             onEditClick={() => this.filter_dialog.show()}
             onUpdate={this.onFilterUpdate}/>
+          <ResultsFilterDialog
+            filter={filter}
+            ref={ref => this.filter_dialog = ref}
+            onSave={this.onFilterUpdate}/>
         </Toolbar>
 
         <Section title={_('Results')} img="result.svg"
