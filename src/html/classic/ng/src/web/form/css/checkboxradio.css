@@ -51,6 +51,8 @@ input[type="checkbox"] {
   margin-left: -20px;
 }
 
+.checkbox label,
+.radio label,
 .radio-inline,
 .checkbox-inline {
   display: inline-flex;
@@ -60,6 +62,15 @@ input[type="checkbox"] {
   cursor: pointer;
 }
 
+.checkbox > label > div,
+.checkbox > label > span,
+.radio > label > span,
+label.radio-inline > span {
+  margin-left: 2px;
+}
+
+.checkbox.inline + .checkbox.inline,
+.radio.inline + .radio.inline,
 .radio-inline + .radio-inline,
 .checkbox-inline + .checkbox-inline {
   margin-top: 0;
@@ -75,14 +86,11 @@ input[type="radio"].disabled,
 input[type="checkbox"].disabled,
 input[type="text"].disabled,
 fieldset[disabled] input[type="radio"],
-fieldset[disabled] input[type="checkbox"] {
-  cursor: not-allowed;
-}
-
+fieldset[disabled] input[type="checkbox"],
 .radio.disabled label,
 .checkbox.disabled label,
 fieldset[disabled] .radio label,
 fieldset[disabled] .checkbox label {
   cursor: not-allowed;
+  opacity: 0.5;
 }
-

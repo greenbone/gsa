@@ -23,7 +23,7 @@
 
 import React from 'react';
 
-import {classes} from '../../utils.js';
+import {classes, is_defined} from '../../utils.js';
 
 import './css/form.css';
 import './css/checkboxradio.css';
@@ -38,21 +38,41 @@ export class Checkbox extends React.Component {
 
   handleChange(event) {
     let {checked} = event.target;
-    let {onChange, name} = this.props;
+    let {onChange, name, checkedValue, uncheckedValue} = this.props;
+
+    let value = checked;
+
+    if (value && is_defined(checkedValue)) {
+      value = checkedValue;
+    }
+    else if (!value && is_defined(uncheckedValue)) {
+      value = uncheckedValue;
+    }
 
     if (onChange) {
-      onChange(checked, name);
+      onChange(value, name);
     }
   }
 
   render() {
-    let {title, className, ...other} = this.props;
-    className = classes(className, 'checkbox');
+    let {title, className, children, disabled, ...other} = this.props;
+
+    /* remove additional props to keep react quiet */
+    delete other.checkedValue;
+    delete other.uncheckedValue;
+
+    className = classes(className, 'checkbox', disabled ? 'disabled' : '');
+
     return (
       <div className={className}>
         <label>
           <input {...other} onChange={this.handleChange} type="checkbox" />
-          {title}
+          {is_defined(title) &&
+            <span>
+              {title}
+            </span>
+          }
+          {children}
         </label>
       </div>
     );
@@ -61,9 +81,12 @@ export class Checkbox extends React.Component {
 
 Checkbox.propTypes = {
   name: React.PropTypes.string,
+  disabled: React.PropTypes.bool,
   title: React.PropTypes.string,
   className: React.PropTypes.string,
   onChange: React.PropTypes.func,
+  checkedValue: React.PropTypes.any,
+  uncheckedValue: React.PropTypes.any,
 };
 
 export default Checkbox;

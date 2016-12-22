@@ -1,5 +1,15 @@
 2016-12-22  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/form/checkbox.js,
+	src/html/classic/ng/src/web/form/css/checkboxradio.css,
+	src/html/classic/ng/src/web/form/radio.js: Update checkbox and radio
+	components. Support easier styling with flexbox. Especially for inline radios
+	and checkboxes. Allow to render arbitrary children inside of radio and
+	checkbox. Add setting checked and unchecked values for checkboxes.
+	Mark RadioInline as deprecated. Better support for disabled states.
+
+2016-12-22  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/filterdialog.js,
 	src/html/classic/ng/src/web/tasks/filterdialog.js: Move common filter dialog
 	input rendering to filterdialog component.
