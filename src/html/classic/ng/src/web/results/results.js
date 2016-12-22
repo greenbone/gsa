@@ -50,7 +50,10 @@ export class Results extends EntitiesComponent {
   }
 
   getCounts() {
-    return this.state.results.getCounts();
+    if (this.state.results) {
+      return this.state.results.getCounts();
+    }
+    return {};
   }
 
   load(filter) {
@@ -64,6 +67,14 @@ export class Results extends EntitiesComponent {
     this.context.gmp.filters.get(RESULTS_FILTER_FILTER).then(filters => {
       this.setState({filters});
     });
+  }
+
+  getSectionTitle() {
+    if (!this.state.results) {
+      return _('Tasks');
+    }
+    let counts = this.getCounts();
+    return _('Results ({{filtered}} of {{all}})', counts);
   }
 
   render() {
@@ -85,7 +96,8 @@ export class Results extends EntitiesComponent {
             onSave={this.onFilterUpdate}/>
         </Toolbar>
 
-        <Section title={_('Results')} img="result.svg"
+        <Section title={this.getSectionTitle()}
+          img="result.svg"
           extra={<DashboardControls/>}>
           <Dashboard hide-filter-select
             filter={filter}

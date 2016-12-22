@@ -72,7 +72,10 @@ export class Tasks extends EntitiesComponent {
   }
 
   getCounts() {
-    return this.state.tasks.getCounts();
+    if (this.state.tasks) {
+      return this.state.tasks.getCounts();
+    }
+    return {};
   }
 
   onDeleteTask(task) {
@@ -85,6 +88,14 @@ export class Tasks extends EntitiesComponent {
 
   onNewTask() {
     this.reload();
+  }
+
+  getSectionTitle() {
+    if (!this.state.tasks) {
+      return _('Tasks');
+    }
+    let counts = this.getCounts();
+    return _('Tasks ({{filtered}} of {{all}})', counts);
   }
 
   render() {
@@ -127,7 +138,9 @@ export class Tasks extends EntitiesComponent {
             onSave={this.onFilterUpdate}/>
         </Toolbar>
 
-        <Section title={_('Tasks')} img="task.svg" extra={<DashboardControls/>}>
+        <Section title={this.getSectionTitle()}
+          img="task.svg"
+          extra={<DashboardControls/>}>
           <Dashboard hide-filter-select
             filter={filter}
             config-pref-id="3d5db3c7-5208-4b47-8c28-48efc621b1e0"
