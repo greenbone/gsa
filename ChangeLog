@@ -1,5 +1,11 @@
 2016-12-22  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/filterdialog.js,
+	src/html/classic/ng/src/web/tasks/filterdialog.js: Move common filter dialog
+	input rendering to filterdialog component.
+
+2016-12-22  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/models/filter.js: Add special handling for sort
 	and sort-reverse filter terms. This will only allow to set one of both
 	keywords.

@@ -28,24 +28,13 @@ import  _ from '../../locale.js';
 import Layout from '../layout.js';
 import FilterDialog from '../filterdialog.js';
 
-import Spinner from '../form/spinner.js';
-import Select2 from '../form/select2.js';
 import FormGroup from '../form/formgroup.js';
-import FormItem from '../form/formitem.js';
 import TextField from '../form/textfield.js';
-import YesNoRadio from '../form/yesnoradio.js';
-import {RadioInline} from '../form/radio.js';
 
 export class TaskFilterDialog extends FilterDialog {
 
-  renderContent() {
-    let {filter, filterstring, sort_field, sort_order} = this.state;
-    let apply_overrides = filter.get('apply_overrides');
-    let first = filter.get('first');
-    let rows = filter.get('rows');
-    let min_qod = filter.get('min_qod');
-
-    let sort_field_opts = [
+  renderSortFieldOptions() {
+    return [
       <option key="name" value="name">{_('Name')}</option>,
       <option key="status" value="status">{_('Status')}</option>,
       <option key="total" value="total">{_('Reports: Total')}</option>,
@@ -53,6 +42,10 @@ export class TaskFilterDialog extends FilterDialog {
       <option key="severity" value="severity">{_('Severity')}</option>,
       <option key="trend" value="trend">{_('Trend')}</option>,
     ];
+  }
+
+  renderContent() {
+    let {filterstring} = this.state;
 
     return (
       <Layout flex="column">
@@ -62,63 +55,11 @@ export class TaskFilterDialog extends FilterDialog {
             onChange={this.onFilterStringChange}
             maxLength="80"/>
         </FormGroup>
-        <FormGroup title={_('Apply Overrides')} flex>
-          <YesNoRadio
-            value={apply_overrides}
-            name="apply_overrides"
-            onChange={this.onFilterValueChange}/>
-        </FormGroup>
-        <FormGroup title={_('QoD')} flex>
-          <FormItem>
-            {_('must be at least')}
-          </FormItem>
-          <FormItem>
-            <Spinner
-              type="int"
-              name="min_qod"
-              min="0" max="100"
-              step="1"
-              value={min_qod}
-              size="1"
-              onChange={this.onFilterValueChange}/>
-          </FormItem>
-        </FormGroup>
-        <FormGroup title={_('First result')} flex>
-          <Spinner type="int" name="first"
-            value={first}
-            size="5"
-            onChange={this.onFilterValueChange}/>
-        </FormGroup>
-        <FormGroup title={_('Results per page')} flex>
-          <Spinner type="int" name="rows"
-            value={rows}
-            size="5"
-            onChange={this.onFilterValueChange}/>
-        </FormGroup>
-        <FormGroup title={_('Sort by')} flex>
-          <FormItem>
-            <Select2
-              name="sort_field"
-              value={sort_field}
-              onChange={this.onSortFieldChange}>
-              {sort_field_opts}
-            </Select2>
-          </FormItem>
-          <FormItem>
-            <RadioInline
-              name="sort_order"
-              value="sort"
-              checked={sort_order === 'sort'}
-              title={_('Ascending')}
-              onChange={this.onSortOrderChange}/>
-            <RadioInline
-              name="sort_order"
-              value="sort-reverse"
-              checked={sort_order === 'sort-reverse'}
-              title={_('Descending')}
-              onChange={this.onSortOrderChange}/>
-          </FormItem>
-        </FormGroup>
+        {this.renderApplyOverrides()}
+        {this.renderQoD()}
+        {this.renderFirstResult()}
+        {this.renderResultsPerPage()}
+        {this.renderSortBy()}
       </Layout>
     );
   }
