@@ -1,3 +1,9 @@
+2016-12-22  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/src/gmp/models/filter.js: Add special handling for sort
+	and sort-reverse filter terms. This will only allow to set one of both
+	keywords.
+
 2016-12-21  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/menu/menubar.js: Fix menu entry link to

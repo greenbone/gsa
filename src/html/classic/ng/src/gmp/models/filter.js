@@ -422,6 +422,18 @@ export class Filter extends Model {
   }
 
   /**
+   * Remove all FilterTerms with this key
+   *
+   * @param {String} key Filter term key to remove
+   *
+   * @return {Filter} This filter
+   */
+  delete(key) {
+    this.terms.delete(key);
+    return this;
+  }
+
+  /**
    * Get the the first FilterTerm for a keyword
    *
    * @param {String} key  FilterTerm keyword to seach for
@@ -449,6 +461,15 @@ export class Filter extends Model {
    */
   setTerm(term) {
     let key = term.keyword;
+
+    // special handling of sort. should be put into a more generic solution in
+    // future
+    if (key === 'sort' && this.has('sort-reverse')) {
+      this.delete('sort-reverse');
+    }
+    if (key === 'sort-reverse' && this.has('sort')) {
+      this.delete('sort');
+    }
 
     if (!this.has(key)) {
       this.setTermList(key, new FilterTermList([term]));
