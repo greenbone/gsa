@@ -23,7 +23,7 @@
 
 import React from 'react';
 
-import {is_defined, log} from '../../utils.js';
+import {is_defined, for_each, log} from '../../utils.js';
 
 import './css/dashboard.css';
 
@@ -65,8 +65,20 @@ export class Dashboard extends React.Component {
     let {dashboard} = this.state;
     let pref_id = this.props['config-pref-id'];
 
-    gmp.user.currentChartPreferences().then(prefs => {
+    let promises = [
+      gmp.user.currentChartPreferences(),
+    ];
+
+    if (!this.props['hide-filter-select']) {
+      promises.push(gmp.filters.get());
+    }
+
+    gmp.promise.all(promises).then(([prefs, filters]) => {
       let pref = prefs.get(pref_id);
+
+      for_each(filters, filter => {
+        dashboard.addFilter(filter.id, filter.name, filter.term, filter.type);
+      });
 
       if (!is_defined(pref)) {
         log.warn('No dashboard preference config found for id', pref_id);
