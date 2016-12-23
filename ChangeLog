@@ -1,5 +1,11 @@
 2016-12-23  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* INSTALL, src/html/classic/js/gsa_dashboard.js,
+	src/html/classic/ng/src/gmp/http.js: Allow to specify server protocol without
+	a colon at the end in config.js file.
+
+2016-12-23  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* CMakeLists.txt, src/gsad_http.c, src/gsad_http_handler.c, src/gsad_omp.c,
 	src/html/classic/gsad.xsl: Make GSA NG mandatory. GSA NG is now the defaulti
 	and the classic page will be removed step by step.
