@@ -2234,6 +2234,9 @@
     return get_type;
   };
 
+  function is_ng(type) {
+    return type === 'task' || type === 'result';
+  }
   /**
    * @summary Generates a filtered list page URL
    *
@@ -2246,7 +2249,7 @@
    * @return {string} The page URL.
    */
   gch.filtered_list_url = function(type, column, value, filter_info, relation) {
-    var result = '/omp?';
+    var result;
     var get_type;
     var get_type_plural;
 
@@ -2264,15 +2267,21 @@
       get_type_plural = get_type + 's';
     }
 
-    // Add command and (if needed) subtype
-    result += ('cmd=get_' + get_type_plural);
+    if (is_ng(get_type)) {
+      result = '/ng/' + get_type_plural + '?';
+    }
+    else {
 
-    if (get_type !== type) {
-      result += ('&' + get_type + '_type=' + type);
+      // Add command and (if needed) subtype
+      result = '/omp?cmd=get_' + get_type_plural + '&';
+
+      if (get_type !== type) {
+        result += get_type + '_type=' + type + '&';
+      }
     }
 
     // Add existing extra options from filter
-    result += '&filter=' + filter_info.extra_options_str + ' ';
+    result += 'filter=' + filter_info.extra_options_str + ' ';
 
     // Create new column filter keyword(s)
     var criteria_addition = '';
@@ -2362,8 +2371,10 @@
 
     result += new_criteria;
 
-    // Add token
-    result += '&token=' + gsa.token;
+    if (!is_ng(get_type)) {
+      // Add token
+      result += '&token=' + gsa.token;
+    }
 
     return result;
   };
