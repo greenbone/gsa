@@ -54,7 +54,7 @@ export const EntitiesFooter = props => {
             </option>
           </Select2>
           {trash &&
-            <TrashIcon onClikc={props.onTrashClick}
+            <TrashIcon onClick={props.onTrashClick}
               selectionType={selectionType}/>
           }
           {download &&

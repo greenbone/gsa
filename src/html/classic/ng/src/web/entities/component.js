@@ -124,7 +124,8 @@ export class EntitiesComponent extends React.Component {
     let {filter} = this.state;
     let counts = this.getCounts();
 
-    let last = Math.floor(counts.filtered / counts.rows) * counts.rows + 1;
+    let last = Math.floor((counts.filtered - 1) / counts.rows) *
+      counts.rows + 1;
 
     this.load(filter.first(last));
   }
