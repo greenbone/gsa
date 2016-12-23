@@ -25,6 +25,8 @@ import React from 'react';
 
 import {is_defined, log} from '../../utils.js';
 
+import SelectionType from '../selectiontype.js';
+
 import Filter from '../../gmp/models/filter.js';
 
 export class EntitiesComponent extends React.Component {
@@ -34,6 +36,8 @@ export class EntitiesComponent extends React.Component {
 
     this.state = {
       filters: [],
+      selection_type: SelectionType.SELECTION_PAGE_CONTENTS,
+      selected: [],
     };
 
     this.reload = this.reload.bind(this);
@@ -46,6 +50,26 @@ export class EntitiesComponent extends React.Component {
     this.onFilterCreated = this.onFilterCreated.bind(this);
     this.onToggleOverrides = this.onToggleOverrides.bind(this);
     this.onSortChange = this.onSortChange.bind(this);
+    this.onDownloadBulk = this.onDownloadBulk.bind(this);
+    this.onDeleteBulk = this.onDeleteBulk.bind(this);
+    this.onSelect = this.onSelect.bind(this);
+    this.onDeselect = this.onDeselect.bind(this);
+    this.onSelectionTypeChange = this.onSelectionTypeChange.bind(this);
+  }
+
+  load(filter) {
+    let gmp = this.getGmp();
+    gmp.get(filter).then(entities => {
+      let {selection_type} = this.state;
+
+      filter = entities.getFilter();
+
+      this.setState({entities, filter});
+
+      if (selection_type !== SelectionType.SELECTION_USER) {
+        this.setState({selected: entities});
+      }
+    });
   }
 
   componentDidMount() {
@@ -144,6 +168,93 @@ export class EntitiesComponent extends React.Component {
     filter.set('apply_overrides', overrides ? 0 : 1, '=');
 
     this.load(filter);
+  }
+
+  onDownloadBulk() {
+    let {selected, selection_type} = this.state;
+    let entities = this.getEntities();
+    let gmp = this.getGmp();
+    let filter = entities.getFilter();
+    let promise;
+
+    if (selection_type === SelectionType.SELECTION_USER) {
+      promise = gmp.export(selected);
+    }
+    else if (selection_type === SelectionType.SELECTION_PAGE_CONTENTS) {
+      promise = gmp.exportByFilter(filter);
+    }
+    else {
+      promise = gmp.exportByFilter(filter.all());
+    }
+
+    promise.then(xhr => {
+      this.download.setData(xhr.responseText);
+      this.download.download();
+    }, err => log.error(err));
+  }
+
+  onDeleteBulk() {
+    let {selected, selection_type} = this.state;
+    let gmp = this.getGmp();
+    let entities = this.getEntities();
+    let promise;
+
+    if (selection_type === SelectionType.SELECTION_FILTER) {
+      let filter = entities.getFilter().all();
+      promise  = gmp.deleteByFilter(filter);
+    }
+    else {
+      promise = gmp.delete(selected);
+    }
+
+    promise.then(deleted => {
+      this.reload();
+      log.debug('successfully deleted entities', deleted);
+    }, err => log.error(err));
+  }
+
+  onSelect(entity) {
+    let {selected} = this.state;
+
+    selected.add(entity);
+
+    this.setState({selected});
+  }
+
+  onDeselect(entity) {
+    let {selected} = this.state;
+
+    selected.delete(entity);
+
+    this.setState({selected});
+  }
+
+  onSelectionTypeChange(value) {
+    let selected;
+    if (value === SelectionType.SELECTION_USER) {
+      selected = new Set();
+    }
+    else {
+      selected = this.getEntities();
+    }
+
+    this.setState({selection_type: value, selected});
+  }
+
+  getEntities() {
+    return this.state.entities;
+  }
+
+  getCounts() {
+    let entities = this.getEntities();
+    if (entities) {
+      return entities.getCounts();
+    }
+    return {};
+  }
+
+  getGmp() {
+    return null;
   }
 
 }

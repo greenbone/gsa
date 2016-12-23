@@ -23,7 +23,7 @@
 
 import React from 'react';
 
-import {autobind} from '../../utils.js';
+import {is_defined} from '../../utils.js';
 import  _ from '../../locale.js';
 
 import Section from '../section.js';
@@ -31,39 +31,37 @@ import Icon from '../icon.js';
 import HelpIcon from '../helpicon.js';
 import Toolbar from '../toolbar.js';
 import PowerFilter from '../powerfilter.js';
+import {TableRow, TableHead} from '../table.js';
+import Layout from '../layout.js';
+import Sort from '../sortby.js';
+import SelectionType from '../selectiontype.js';
+
+import OverridesIcon from '../icons/overridesicon.js';
 
 import EntitiesComponent from '../entities/component.js';
+import EntitiesFooter from '../entities/footer.js';
+import EntitiesTable from '../entities/table.js';
 
 import {Dashboard, DashboardControls} from '../dashboard/dashboard.js';
 
 import TaskDialog from './dialog.js';
-import TasksList from './taskslist.js';
 import TaskFilterDialog from './filterdialog.js';
 import TaskCharts from './charts.js';
 
 import IconMenu from '../menu/iconmenu.js';
 import MenuEntry from '../menu/menuentry.js';
 
+import Download from '../form/download.js';
+
 import TaskWizard from '../wizard/taskwizard.js';
 import AdvancedTaskWizard from '../wizard/advancedtaskwizard.js';
 import ModifyTaskWizard from '../wizard/modifytaskwizard.js';
 
+import TasksListEntry from './taskslistentry.js';
+
 import {TASKS_FILTER_FILTER} from '../../gmp/commands/filters.js';
 
 export class Tasks extends EntitiesComponent {
-
-  constructor(props) {
-    super(props);
-
-    autobind(this, 'on');
-  }
-
-  load(filter) {
-    this.context.gmp.tasks.get(filter).then(tasks => {
-      filter = tasks.getFilter();
-      this.setState({tasks, filter});
-    });
-  }
 
   loadFilters() {
     this.context.gmp.filters.get(TASKS_FILTER_FILTER).then(filters => {
@@ -71,35 +69,108 @@ export class Tasks extends EntitiesComponent {
     });
   }
 
-  getCounts() {
-    if (this.state.tasks) {
-      return this.state.tasks.getCounts();
-    }
-    return {};
-  }
-
-  onDeleteTask(task) {
-    this.reload();
-  }
-
-  onClonedTask(task) {
-    this.reload();
-  }
-
-  onNewTask() {
-    this.reload();
-  }
-
   getSectionTitle() {
-    if (!this.state.tasks) {
+    let entities = this.getEntities();
+    if (!entities) {
       return _('Tasks');
     }
     let counts = this.getCounts();
     return _('Tasks ({{filtered}} of {{all}})', counts);
   }
 
+  getGmp() {
+    return this.context.gmp.tasks;
+  }
+
+  renderFooter() {
+    let {selection_type} = this.state;
+    return (
+      <EntitiesFooter span="8" download trash
+        selectionType={selection_type}
+        onTrashClick={this.onDeleteBulk}
+        onDownloadClick={this.onDownloadBulk}
+        onSelectionTypeChange={this.onSelectionTypeChange}>
+      </EntitiesFooter>
+    );
+  }
+
+  renderHeader() {
+    let entities = this.getEntities();
+
+    if (!is_defined(entities)) {
+      return null;
+    }
+
+    let filter = entities.getFilter();
+    let overrides = filter.get('apply_overrides');
+    return [
+      <TableRow key="1">
+        <TableHead rowSpan="2">
+          <Sort by="name" onClick={this.onSortChange}>
+            {_('Name')}
+          </Sort>
+        </TableHead>
+        <TableHead rowSpan="2" width="10em">
+          <Sort by="status" onClick={this.onSortChange}>
+            {_('Status')}
+          </Sort>
+        </TableHead>
+        <TableHead colSpan="2">{_('Reports')}</TableHead>
+        <TableHead rowSpan="2" width="10em">
+          <Layout flex align="space-between">
+            <Sort by="severity" onClick={this.onSortChange}>
+              {_('Severity')}
+            </Sort>
+            <OverridesIcon overrides={overrides}
+              onClick={this.onToggleOverrides}/>
+          </Layout>
+        </TableHead>
+        <TableHead rowSpan="2" width="6em">
+          <Sort by="trend" onClick={this.onSortChange}>
+            {_('Trend')}
+          </Sort>
+        </TableHead>
+        <TableHead rowSpan="2" width="10em">{_('Actions')}</TableHead>
+      </TableRow>,
+      <TableRow key="2">
+        <TableHead>
+          <Sort by="total" onClick={this.onSortChange}>
+            {_('Total')}
+          </Sort>
+        </TableHead>
+        <TableHead>
+          <Sort by="last" onClick={this.onSortChange}>
+            {_('Last')}
+          </Sort>
+        </TableHead>
+      </TableRow>
+    ];
+  }
+
+
+  renderEntries() {
+    let entities = this.getEntities();
+    let {selection_type} = this.state;
+
+    if (!is_defined(entities)) {
+      return null;
+    }
+
+    return entities.map(task => {
+      return (
+        <TasksListEntry key={task.id} task={task}
+          selection={selection_type === SelectionType.SELECTION_USER}
+          onSelected={this.onSelect}
+          onDeselected={this.onDeselect}
+          onDelete={this.reload}
+          onCloned={this.reload}/>
+      );
+    });
+  }
+
   render() {
     let {filters, filter} = this.state;
+    let counts = this.getCounts();
     return (
       <div>
         <Toolbar>
@@ -116,15 +187,15 @@ export class Tasks extends EntitiesComponent {
           <Icon img="new.svg" title={_('New Task')}
             onClick={() => { this.create_dialog.show(); }}/>
           <TaskWizard ref={ref => this.task_wizard = ref}
-            onSave={this.onNewTask}
+            onSave={this.reload}
             onNewClick={() => this.create_dialog.show()}/>
           <AdvancedTaskWizard ref={ref => this.advanced_task_wizard = ref}
-            onSave={this.onNewTask}/>
+            onSave={this.reload}/>
           <ModifyTaskWizard ref={ref => this.modify_task_wizard = ref}
-            onSave={this.onNewTask}/>
+            onSave={this.reload}/>
           <TaskDialog ref={ref => this.create_dialog = ref}
             title={_('Create new Task')} onClose={this.reload}
-            onSave={this.onNewTask}/>
+            onSave={this.reload}/>
           <PowerFilter
             filter={filter}
             filters={filters}
@@ -150,16 +221,20 @@ export class Tasks extends EntitiesComponent {
             <TaskCharts filter={filter}/>
           </Dashboard>
 
-          <TasksList tasks={this.state.tasks}
-            onDelete={this.onDeleteTask}
-            onCloned={this.onClonedTask}
-            onDeleteBulk={this.reload}
+          <EntitiesTable
+            header={this.renderHeader()}
+            footer={this.renderFooter()}
+            counts={counts}
+            filter={filter}
+            emptyTitle={_('No tasks available')}
+            entries={this.renderEntries()}
             onFirstClick={this.onFirst}
             onLastClick={this.onLast}
             onNextClick={this.onNext}
-            onPreviousClick={this.onPrevious}
-            onSortChange={this.onSortChange}
-            onToggleOverridesClick={this.onToggleOverrides}/>
+            onPreviousClick={this.onPrevious}/>
+
+          <Download ref={ref => this.download = ref}
+            filename="tasks.xml"/>
         </Section>
       </div>
     );

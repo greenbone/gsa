@@ -1,5 +1,19 @@
 2016-12-23  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/entities/component.js,
+	src/html/classic/ng/src/web/entities/list.js,
+	src/html/classic/ng/src/web/entities/table.js,
+	src/html/classic/ng/src/web/results/results.js,
+	src/html/classic/ng/src/web/results/resultslist.js,
+	src/html/classic/ng/src/web/tasks/tasks.js,
+	src/html/classic/ng/src/web/tasks/taskslist.js:
+	Simplify list pages by removing a complete component hierarchy. All states are
+	moved into the top page component. For new list pages only two components have
+	to be developed instead of three now. This reduces the code complexity for
+	list pages a lot.
+
+2016-12-23  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/login.js: Add meta viewport tag for mobile
 	devices.
 

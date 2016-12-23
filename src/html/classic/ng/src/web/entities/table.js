@@ -24,15 +24,24 @@
 import React from 'react';
 
 import _ from '../../locale.js';
+import {has_value} from '../../utils.js';
 
 import {StrippedTable} from '../table.js';
 import Pagination from '../pagination.js';
 import Layout from '../layout.js';
 
 export const EntitiesTable = props => {
-  let {filter, header, footer, entries, counts} = props;
+  let {filter, header, footer, entries, counts, emptyTitle} = props;
 
   let filterstring = filter ? filter.toFilterString() : '';
+
+  if (!has_value(entries)) {
+    return <div className="entities-table">{_('Loading')}</div>;
+  }
+
+  if (entries.length === 0) {
+    return <div className="entities-table">{emptyTitle}</div>;
+  }
 
   let pagination = (
     <Pagination
@@ -60,6 +69,7 @@ export const EntitiesTable = props => {
 };
 
 EntitiesTable.propTypes = {
+  emptyTitle: React.PropTypes.string,
   filter: React.PropTypes.object,
   header: React.PropTypes.node,
   footer: React.PropTypes.node,

@@ -23,45 +23,36 @@
 
 import React from 'react';
 
-import {autobind} from '../../utils.js';
+import {is_defined} from '../../utils.js';
 import  _ from '../../locale.js';
 
 import HelpIcon from '../helpicon.js';
+import Icon from '../icon.js';
 import Toolbar from '../toolbar.js';
 import Section from '../section.js';
 import PowerFilter from '../powerfilter.js';
+import {TableRow, TableHead} from '../table.js';
+import Layout from '../layout.js';
+import Sort from '../sortby.js';
+import SelectionType from '../selectiontype.js';
+
+import OverridesIcon from '../icons/overridesicon.js';
 
 import EntitiesComponent from '../entities/component.js';
+import EntitiesFooter from '../entities/footer.js';
+import EntitiesTable from '../entities/table.js';
 
 import {Dashboard, DashboardControls} from '../dashboard/dashboard.js';
 
+import Download from '../form/download.js';
+
 import ResultCharts from './charts.js';
-import ResultsList from './resultslist.js';
 import ResultsFilterDialog from './filterdialog.js';
+import ResultsListEntry from './resultslistentry.js';
 
 import {RESULTS_FILTER_FILTER} from '../../gmp/commands/filters.js';
 
 export class Results extends EntitiesComponent {
-
-  constructor(props) {
-    super(props);
-
-    autobind(this, 'on');
-  }
-
-  getCounts() {
-    if (this.state.results) {
-      return this.state.results.getCounts();
-    }
-    return {};
-  }
-
-  load(filter) {
-    this.context.gmp.results.get(filter).then(results => {
-      filter = results.getFilter();
-      this.setState({results, filter});
-    });
-  }
 
   loadFilters() {
     this.context.gmp.filters.get(RESULTS_FILTER_FILTER).then(filters => {
@@ -70,15 +61,113 @@ export class Results extends EntitiesComponent {
   }
 
   getSectionTitle() {
-    if (!this.state.results) {
+    let entities = this.getEntities();
+    if (!entities) {
       return _('Tasks');
     }
     let counts = this.getCounts();
     return _('Results ({{filtered}} of {{all}})', counts);
   }
 
+  getGmp() {
+    return this.context.gmp.results;
+  }
+
+  renderHeader() {
+    let entities = this.getEntities();
+
+    if (!is_defined(entities)) {
+      return null;
+    }
+
+    let {selection_type} = this.state;
+    let filter = entities.getFilter();
+    let overrides = filter.get('apply_overrides');
+    return (
+      <TableRow key="1">
+        <TableHead>
+          <Sort by="vulnerability" onClick={this.onSortChange}>
+            {_('Vulnerability')}
+          </Sort>
+        </TableHead>
+        <TableHead width="10em">
+          <Sort by="solution_type" onClick={this.onSortChange}>
+            <Layout flex align="space-between">
+              <Icon title={_('Solution type')} img="solution_type.svg"/>
+              {_('Solution type')}
+            </Layout>
+          </Sort>
+        </TableHead>
+        <TableHead width="10em">
+          <Layout flex align="space-between">
+            <Sort by="severity" onClick={this.onSortChange}>
+              {_('Severity')}
+            </Sort>
+            <OverridesIcon overrides={overrides}
+              onClick={this.onToggleOverrides}/>
+          </Layout>
+        </TableHead>
+        <TableHead width="6em">
+          <Sort by="qod" onClick={this.onSortChange}>
+            {_('QoD')}
+          </Sort>
+        </TableHead>
+        <TableHead width="10em">
+          <Sort by="host" onClick={this.onSortChange}>
+            {_('Host')}
+          </Sort>
+        </TableHead>
+        <TableHead width="10em">
+          <Sort by="location" onClick={this.onSortChange}>
+            {_('Location')}
+          </Sort>
+        </TableHead>
+        <TableHead width="20em">
+          <Sort by="created" onClick={this.onSortChange}>
+            {_('Created')}
+          </Sort>
+        </TableHead>
+        {selection_type === SelectionType.SELECTION_USER &&
+          <TableHead width="6em">{_('Actions')}</TableHead>
+        }
+      </TableRow>
+    );
+  }
+
+  renderFooter() {
+    let {selection_type} = this.state;
+    let span = selection_type === SelectionType.SELECTION_USER ? 8 : 7;
+    return (
+      <EntitiesFooter span={span} download
+        selectionType={selection_type}
+        onDownloadClick={this.onDownloadBulk}
+        onSelectionTypeChange={this.onSelectionTypeChange}>
+      </EntitiesFooter>
+    );
+  }
+
+  renderEntries() {
+    let entities = this.getEntities();
+
+    if (!is_defined(entities)) {
+      return null;
+    }
+
+    let {selection_type} = this.state;
+    return entities.map(result => {
+      return (
+        <ResultsListEntry key={result.id}
+          result={result}
+          selection={selection_type === SelectionType.SELECTION_USER}
+          onSelected={this.onSelect}
+          onDeselected={this.onDeselect}/>
+      );
+    });
+  }
+
   render() {
     let {filters, filter} = this.state;
+    let counts = this.getCounts();
     return (
       <div>
         <Toolbar>
@@ -108,14 +197,20 @@ export class Results extends EntitiesComponent {
             <ResultCharts filter={filter}/>
           </Dashboard>
 
-          <ResultsList
-            results={this.state.results}
+          <EntitiesTable
+            header={this.renderHeader()}
+            footer={this.renderFooter()}
+            counts={counts}
+            filter={filter}
+            emptyTitle={_('No results available')}
+            entries={this.renderEntries()}
             onFirstClick={this.onFirst}
             onLastClick={this.onLast}
             onNextClick={this.onNext}
-            onPreviousClick={this.onPrevious}
-            onSortChange={this.onSortChange}
-            onToggleOverridesClick={this.onToggleOverrides}/>
+            onPreviousClick={this.onPrevious}/>
+
+          <Download ref={ref => this.download = ref}
+            filename="results.xml"/>
         </Section>
       </div>
     );
