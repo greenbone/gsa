@@ -116,7 +116,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/dialog.js
      ${NG_SRC_DIR}/src/web/entities/component.js
      ${NG_SRC_DIR}/src/web/entities/footer.js
-     ${NG_SRC_DIR}/src/web/entities/list.js
      ${NG_SRC_DIR}/src/web/entities/table.js
      ${NG_SRC_DIR}/src/web/filterdialog.js
      ${NG_SRC_DIR}/src/web/footer.js
@@ -169,7 +168,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/results/charts.js
      ${NG_SRC_DIR}/src/web/results/filterdialog.js
      ${NG_SRC_DIR}/src/web/results/results.js
-     ${NG_SRC_DIR}/src/web/results/resultslist.js
      ${NG_SRC_DIR}/src/web/results/resultslistentry.js
      ${NG_SRC_DIR}/src/web/schedules/dialog.js
      ${NG_SRC_DIR}/src/web/secinfo/charts.js
@@ -187,7 +185,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/tasks/statusbar.js
      ${NG_SRC_DIR}/src/web/tasks/task.js
      ${NG_SRC_DIR}/src/web/tasks/tasks.js
-     ${NG_SRC_DIR}/src/web/tasks/taskslist.js
      ${NG_SRC_DIR}/src/web/tasks/taskslistentry.js
      ${NG_SRC_DIR}/src/web/tasks/trend.js
      ${NG_SRC_DIR}/src/web/titlebar.js
