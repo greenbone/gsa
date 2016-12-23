@@ -1,5 +1,10 @@
 2016-12-23  Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/models/filter.js: Support all column filters.
+	They have already been applied put couldn't be parsed correctly.
+
+2016-12-23  Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/CMakeLists.txt: Fix build be removing deleted files from
 	ng CMakeLists.txt.
 

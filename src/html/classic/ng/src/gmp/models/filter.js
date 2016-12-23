@@ -304,7 +304,15 @@ export class Filter extends Model {
       for_each(elem.keywords.keyword, keyword => {
 
         let key = keyword.column;
-        let value = convert(key, keyword.value);
+        let value;
+
+        if (is_string(key) && key.length === 0) {
+          key = keyword.value;
+          value = '';
+        }
+        else {
+          value = convert(key, keyword.value);
+        }
 
         if (is_string(key) && key.length > 0) {
           this.addTerm(new FilterTerm(key, value, keyword.relation));
