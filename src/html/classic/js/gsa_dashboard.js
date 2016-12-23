@@ -3116,11 +3116,21 @@
   function create_hostname() {
     var url = ''
     var config = global.config;
+    var protocol;
+    var server;
 
     if (gsa.is_defined(config)) {
-      var protocol = gsa.is_defined(config.protocol) ? config.protocol :
-        window.location.protocol;
-      var server = gsa.is_defined(config.server) ? config.server :
+      if (gsa.is_defined(config.protocol)) {
+        protocol = config.protocol;
+        if (protocol.indexOf(':', protocol.length - 1) === -1) {
+          protocol += ':';
+        }
+      }
+      else {
+        protocol = window.location.protocol;
+      }
+
+      server = gsa.is_defined(config.server) ? config.server :
         window.location.host;
 
       url = protocol + '//' + server;

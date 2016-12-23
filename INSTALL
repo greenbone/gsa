@@ -137,16 +137,15 @@ Besides the development server gsad needs to be running with CORS enabled.
 To be able to communicate with gsad the web application needs to know the server
 url. This can be accomplished by editing the
 /path/to/gsa-sources/src/html/classic/ng/public/config.js file.
-The following lines can be used for a local gsad running with httpsy on port
+The following lines can be used for a local gsad running with https on port
 9392:
 
   window.config = {
-    protocol: 'https:',
+    protocol: 'https',
     server: '127.0.0.1:9392',
   };
 
-For http only the protocol property must be 'http:' accordingly (don't forget
-the colon at the end).
+For http only the protocol property must be 'http' accordingly.
 
 After changing the config.js file the browser window should be reloaded
 manually.

@@ -122,7 +122,12 @@ export class HttpInterceptor {
 }
 
 export function build_server_url(server, path = '', protocol) {
-  if (!is_defined(protocol)) {
+  if (is_defined(protocol)) {
+    if (!protocol.endsWith(':')) {
+      protocol += ':';
+    }
+  }
+  else {
     protocol = window.location.protocol;
   }
   return protocol + '//' + server + '/' + path;
