@@ -38,7 +38,7 @@
 #include <unistd.h>
 #include <assert.h> /* for asset */
 
-#include <openvas/base/openvas_networking.h> /* for sockaddr_as_str */
+#include <gvm/base/networking.h> /* for sockaddr_as_str */
 #include <openvas/omp/xml.h> /* for xml_string_append */
 
 #include "xslt_i18n.h" /* for accept_language_to_env_fmt */

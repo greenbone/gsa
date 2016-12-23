@@ -1,3 +1,8 @@
+2016-12-23  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/gsad_http.c, src/gsad_http_handler.c, src/gsad.c: Include
+	gvm/base/netowrking.h instead of openvas/base/openvas_networking.h.
+
 2016-12-23  Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/dashboard/dashboard.js: Load and display filter

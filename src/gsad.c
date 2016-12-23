@@ -72,7 +72,6 @@
 #include <locale.h>
 #include <netinet/in.h>
 #include <openvas/misc/openvas_logging.h>
-#include <openvas/base/openvas_networking.h>
 #include <openvas/omp/xml.h>
 #include <openvas/misc/openvas_uuid.h>
 #include <pthread.h>
@@ -95,6 +94,7 @@
 #include <microhttpd.h>
 
 #include <gvm/util/fileutils.h>
+#include <gvm/base/networking.h> /* for ipv6_is_enabled */
 #include <gvm/base/pidfile.h>
 
 #include "gsad_base.h"

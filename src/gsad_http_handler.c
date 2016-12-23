@@ -33,7 +33,7 @@
 #include "gsad_settings.h" /* for get_guest_usernmae */
 #include "gsad_base.h" /* for ctime_r_strip_newline */
 
-#include <openvas/base/openvas_networking.h> /* for INET6_ADDRSTRLEN */
+#include <gvm/base/networking.h> /* for INET6_ADDRSTRLEN */
 #include <openvas/omp/xml.h> /* for find_element_in_xml_file */
 
 #undef G_LOG_DOMAIN
