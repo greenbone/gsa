@@ -406,16 +406,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <xsl:when test="number (/envelope/guest)">
           <div class="empty_top_button"/>
         </xsl:when>
-        <xsl:when test="/envelope/ng">
-          <a class="top_button"
-            href="/ng">
-            <img class="logo" src="/img/greenbone.svg"/>
-            <xsl:value-of select="gsa:i18n ('Dashboard')"/>
-          </a>
-        </xsl:when>
         <xsl:otherwise>
           <a class="top_button"
-              href="/omp?cmd=dashboard&amp;token={/envelope/token}">
+            href="/ng">
             <img class="logo" src="/img/greenbone.svg"/>
             <xsl:value-of select="gsa:i18n ('Dashboard')"/>
           </a>
@@ -426,28 +419,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:variable name="items" xmlns="">
         <xsl:if test="gsa:may-op ('GET_TASKS') or gsa:may-op ('GET_REPORTS') or gsa:may-op ('GET_RESULTS') or gsa:may-op ('GET_NOTES') or gsa:may-op ('GET_OVERRIDES')">
           <item>
-            <xsl:choose>
-              <xsl:when test="/envelope/ng">
-                <url>/ng/dashboards/tasks</url>
-              </xsl:when>
-              <xsl:otherwise>
-                <page>dashboard&amp;dashboard_name=scans</page>
-              </xsl:otherwise>
-            </xsl:choose>
+            <url>/ng/dashboards/tasks</url>
             <name><xsl:value-of select="gsa:i18n ('Dashboard')"/></name>
           </item>
         </xsl:if>
         <divider/>
         <xsl:if test="gsa:may-op ('GET_TASKS')">
           <item>
-            <xsl:choose>
-              <xsl:when test="/envelope/ng">
-                <url>/ng/tasks</url>
-              </xsl:when>
-              <xsl:otherwise>
-                <page>get_tasks</page>
-              </xsl:otherwise>
-            </xsl:choose>
+            <url>/ng/tasks</url>
             <name><xsl:value-of select="gsa:i18n ('Tasks')"/></name>
           </item>
         </xsl:if>
@@ -459,14 +438,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </xsl:if>
         <xsl:if test="gsa:may-op ('GET_RESULTS')">
           <item>
-            <xsl:choose>
-              <xsl:when test="/envelope/ng">
-                <url>/ng/results</url>
-              </xsl:when>
-              <xsl:otherwise>
-                <page>get_results</page>
-              </xsl:otherwise>
-            </xsl:choose>
+            <url>/ng/results</url>
             <name><xsl:value-of select="gsa:i18n ('Results')"/></name>
           </item>
         </xsl:if>
@@ -501,14 +473,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:variable name="items" xmlns="">
         <xsl:if test="gsa:may-op ('GET_ASSETS')">
           <item>
-            <xsl:choose>
-              <xsl:when test="/envelope/ng">
-                <url>/ng/dashboards/assets</url>
-              </xsl:when>
-              <xsl:otherwise>
-                <page>dashboard&amp;dashboard_name=assets</page>
-              </xsl:otherwise>
-            </xsl:choose>
+            <url>/ng/dashboards/assets</url>
             <name><xsl:value-of select="gsa:i18n ('Dashboard')"/></name>
           </item>
           <divider/>
@@ -537,14 +502,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:variable name="items" xmlns="">
         <xsl:if test="gsa:may-op ('GET_INFO')">
           <item>
-            <xsl:choose>
-              <xsl:when test="/envelope/ng">
-                <url>/ng/dashboards/secinfo</url>
-              </xsl:when>
-              <xsl:otherwise>
-                <page>dashboard&amp;dashboard_name=secinfo</page>
-              </xsl:otherwise>
-            </xsl:choose>
+            <url>/ng/dashboards/secinfo</url>
             <name><xsl:value-of select="gsa:i18n ('Dashboard')"/></name>
           </item>
           <divider/>

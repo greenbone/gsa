@@ -249,12 +249,7 @@ if (NOT OPENVAS_RUN_DIR)
   set (OPENVAS_RUN_DIR      "${LOCALSTATEDIR}/run")
 endif (NOT OPENVAS_RUN_DIR)
 
-if (USE_GSA_NG MATCHES "yes")
-  message ("-- Next-Gen Single Page App will be activated.")
-
-  add_definitions (-DUSE_GSA_NG)
-  add_subdirectory (src/html/classic/ng)
-endif (USE_GSA_NG MATCHES "yes")
+add_subdirectory (src/html/classic/ng)
 
 message ("-- Install prefix: ${CMAKE_INSTALL_PREFIX}")
 

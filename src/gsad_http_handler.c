@@ -719,9 +719,6 @@ handle_help_pages (http_connection_t *connection,
           "<charts>%i</charts>"
           "<guest>%d</guest>"
           "<client_address>%s</client_address>"
-#ifdef USE_GSA_NG
-          "<ng/>"
-#endif
           "<help><%s/></help>",
           GSAD_VERSION,
           vendor_version_get (),
@@ -1034,20 +1031,14 @@ init_http_handlers()
                    handle_static_file);
 #endif
 
-#ifdef USE_GSA_NG
   url_handler_add (anon_url_handlers, "^/login/?$", handle_index_ng);
-#else
-  url_handler_add (anon_url_handlers, "^/login/?$", handle_login_page);
-#endif
   url_handler_add (anon_url_handlers, "^/login/.+$",
                    handle_redirect_to_login_page);
 
-#ifdef USE_GSA_NG
   url_handler_add (anon_url_handlers, "^/ng(/.*)?$", handle_index_ng);
   url_handler_add (anon_url_handlers, "^/config.js$", handle_config_ng);
   url_handler_add (anon_url_handlers, "^/static/(img|js|css)/.+$",
                    handle_static_ng_file);
-#endif
 
   user_url_handlers = url_handler_new ("^/logout/?$", handle_logout);
   http_handler_add (user_url_handlers, credential_handler);

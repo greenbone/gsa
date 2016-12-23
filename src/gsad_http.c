@@ -591,11 +591,7 @@ handler_send_reauthentication (http_connection_t *connection,
 {
 
   const char *msg;
-#ifdef USE_GSA_NG
   const char *type;
-#else
-  const char *type __attribute__((unused));
-#endif
 
   switch (reason)
     {
@@ -636,7 +632,6 @@ handler_send_reauthentication (http_connection_t *connection,
         type = "unknown";
     }
 
-#ifdef USE_GSA_NG
   if (xml)
     return handler_send_login_page (connection, http_status_code, msg,
                                     NULL);
@@ -649,9 +644,6 @@ handler_send_reauthentication (http_connection_t *connection,
   g_free (param);
 
   return ret;
-#else
-  return handler_send_login_page (connection, http_status_code, msg, NULL);
-#endif
 }
 
 /**
@@ -1201,9 +1193,6 @@ gsad_message_new (credentials_t *credentials, const char *title,
                "<role>%s</role>"
                "<i18n>%s</i18n>"
                "<charts>%i</charts>"
-#ifdef USE_GSA_NG
-               "<ng/>"
-#endif
                "<client_address>%s</client_address>",
                GSAD_VERSION,
                vendor_version_get (),
