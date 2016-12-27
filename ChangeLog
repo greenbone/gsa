@@ -1,3 +1,9 @@
+2016-12-27  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	Preparing the gsa 7.0.1 release.
+
+	* CHANGES: Updated.
+
 2016-12-20  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Backport r27020.

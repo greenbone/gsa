@@ -1,3 +1,31 @@
+gsa 7.0.1 (2016-12-27)
+
+This is the first maintenance release of the Greenbone Security
+Assistant (GSA) 7.0 module for the Open Vulnerability Assessment System
+release 9 (OpenVAS-9). It is the web client that makes the full feature
+set of OpenVAS Manager available in a web browser.
+
+This release includes a number of small changes from the OpenVAS
+development branch. For a comprehensive list of changes please refer to
+the list below.
+
+Many thanks to everyone who has contributed to this release:
+Matthew Mundell, Timo Pollmeier, Björn Ricks, Jan-Oliver Wagner and
+Michael Wiegand.
+
+Main changes compared to 7.0.0:
+* Invalid schedule IDs are now ignored in the tasks gantt chart.
+* Compatibility with Microsoft Internet Explorer 11 has been greatly
+  improved.
+* Objects for which the user does not have the necessary permission or
+  for which no instance exists are now properly hidden in the Task
+  Wizard and on the System Reports page.
+* A potential NULL-pointer use found by static code analysis has been
+  addressed.
+* Deleting a user no longer leads to a blank page.
+* Documentation and help have been updated.
+
+
 gsa 7.0.0 (2016-11-09)
 
 This is the first release of the Greenbone Security Assistant (GSA) 7.0 module
