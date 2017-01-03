@@ -525,7 +525,7 @@ init_validator ()
   openvas_validator_add (validator, "agent_format", "^(installer)$");
   openvas_validator_add (validator, "agent_id",     "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "aggregate_mode", "^[a-z0-9_]+$");
-  openvas_validator_add (validator, "aggregate_type", "^(agent|alert|config|credential|filter|group|host|nvt|note|os|override|permission|port_list|report|report_format|result|role|scanner|schedule|tag|target|task|user|allinfo|cve|cpe|ovaldef|cert_bund_adv|dfn_cert_adv)$");
+  openvas_validator_add (validator, "aggregate_type", "^(agent|alert|config|credential|filter|group|host|nvt|note|os|override|permission|port_list|report|report_format|result|role|scanner|schedule|tag|target|task|user|allinfo|cve|cpe|ovaldef|cert_bund_adv|dfn_cert_adv|vuln)$");
   openvas_validator_add (validator, "alive_tests", "^(Scan Config Default|ICMP Ping|TCP-ACK Service Ping|TCP-SYN Service Ping|ARP Ping|ICMP & TCP-ACK Service Ping|ICMP & ARP Ping|TCP-ACK Service & ARP Ping|ICMP, TCP-ACK Service & ARP Ping|Consider Alive)$");
   openvas_validator_add (validator, "apply_filter", "^(no|no_pagination|full)$");
   openvas_validator_add (validator, "asset_name",   "(?s)^.*$");

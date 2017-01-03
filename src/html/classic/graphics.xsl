@@ -243,6 +243,31 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </div>
 </xsl:template>
 
+<xsl:template name="vuln-charts">
+  <xsl:param name="filter"/>
+  <xsl:param name="filt_id"/>
+
+  <div class="dashboard-data-source"
+    data-source-name="vuln-severity-count-source"
+    data-group-column="severity"
+    data-aggregate-type="vuln"
+    data-filter="{$filter}"
+    data-filter-id="{$filt_id}">
+    <span class="dashboard-chart"
+      data-chart-name="vuln-by-cvss"
+      data-chart-title="{gsa:i18n ('Vulnerabilities by CVSS')}"
+      data-chart-title-count="count"
+      data-chart-type="bar"
+      data-chart-template="info_by_cvss"/>
+    <span class="dashboard-chart"
+      data-chart-name="vuln-by-severity-class"
+      data-chart-title="{gsa:i18n ('Vulnerabilities by Severity Class')}"
+      data-chart-title-count="count"
+      data-chart-type="donut"
+      data-chart-template="info_by_class"/>
+  </div>
+</xsl:template>
+
 <xsl:template name="host-charts">
   <xsl:param name="filter"/>
   <xsl:param name="filt_id"/>
@@ -691,8 +716,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     </xsl:choose>
   </xsl:variable>
 
-  <xsl:variable name="filter" select="/envelope/get_tasks/get_tasks_response/filters/term | /envelope/get_reports/get_reports_response/filters/term | /envelope/get_results/get_results_response/filters/term"/>
-  <xsl:variable name="filt_id" select="/envelope/get_tasks/get_tasks_response/filters/@id | /envelope/get_reports/get_reports_response/filters/@id |  /envelope/get_results/get_results_response/filters/@id"/>
+  <xsl:variable name="filter" select="/envelope/get_tasks/get_tasks_response/filters/term | /envelope/get_reports/get_reports_response/filters/term | /envelope/get_results/get_results_response/filters/term | /envelope/get_vulns/get_vulns_response/filters/term"/>
+  <xsl:variable name="filt_id" select="/envelope/get_tasks/get_tasks_response/filters/@id | /envelope/get_reports/get_reports_response/filters/@id |  /envelope/get_results/get_results_response/filters/@id | /envelope/get_vulns/get_vulns_response/filters/@id"/>
 
   <div class="dashboard" id="top-dashboard"
     data-filter="{$filter}"
@@ -739,6 +764,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
     <xsl:if test="$type='result'">
       <xsl:call-template name="result-charts">
+        <xsl:with-param name="filter" select="$filter"/>
+        <xsl:with-param name="filt_id" select="$filt_id"/>
+      </xsl:call-template>
+    </xsl:if>
+
+    <xsl:if test="$type='vuln'">
+      <xsl:call-template name="vuln-charts">
         <xsl:with-param name="filter" select="$filter"/>
         <xsl:with-param name="filt_id" select="$filt_id"/>
       </xsl:call-template>
@@ -1169,6 +1201,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
   <!-- Results -->
   <xsl:call-template name="result-charts"/>
+
+  <!-- Results -->
+  <xsl:call-template name="vuln-charts"/>
 
   <!-- Notes -->
   <xsl:call-template name="note-charts"/>

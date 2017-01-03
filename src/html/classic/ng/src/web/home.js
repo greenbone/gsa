@@ -34,6 +34,7 @@ import ReportCharts from './reports/charts.js';
 import ResultCharts from './results/charts.js';
 import NoteCharts from './notes/charts.js';
 import OverrideCharts from './overrides/charts.js';
+import VulnCharts from './vulns/charts.js';
 import HostCharts from './hosts/charts.js';
 import OsCharts from './os/charts.js';
 import NvtCharts from './nvts/charts.js';
@@ -59,6 +60,7 @@ export const Home = () => {
         <ResultCharts/>
         <NoteCharts/>
         <OverrideCharts/>
+        <VulnCharts/>
         <HostCharts/>
         <OsCharts/>
         <NvtCharts/>

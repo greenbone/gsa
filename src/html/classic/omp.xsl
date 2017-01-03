@@ -39449,6 +39449,14 @@ should not have received it.
       </column>
     </xsl:with-param>
     <xsl:with-param name="icon-count" select="0"/>
+    <xsl:with-param name="top-visualization">
+      <xsl:call-template name="init-d3charts"/>
+      <xsl:call-template name="js-scan-management-top-visualization">
+        <xsl:with-param name="type" select="'vuln'"/>
+        <xsl:with-param name="auto_load_left_default" select="'left-by-class'"/>
+        <xsl:with-param name="auto_load_right_default" select="'right-by-cvss'"/>
+      </xsl:call-template>
+    </xsl:with-param>
   </xsl:call-template>
 </xsl:template>
 
