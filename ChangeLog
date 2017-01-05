@@ -1,3 +1,8 @@
+2017-01-05  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	* INSTALL: Remove reference to USE_GSA_NG cmake switch. The next
+	generation GUI is now the default and can no longer be switched off.
+
 2017-01-03  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/gsad.c (init_validator): Add "vuln" option to "aggregate_type".

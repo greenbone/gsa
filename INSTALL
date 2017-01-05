@@ -112,9 +112,6 @@ When using npm you might need to install the additional nodejs legacy symlink.
 # apt-get install nodejs-legacy
 
 
-For building the Next Generation GUI simply add -DUSE_GSA_NG=yes to
-the cmake call. The rest remains the same as in the section above.
-
 Developing Greenbone Security Assistant Next Generation GUI
 -----------------------------------------------------------
 
