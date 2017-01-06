@@ -55,7 +55,7 @@ export const OsCharts = props => {
         name="os-most-vulnerable-source"
         aggregate-type="os"
         group-column="uuid"
-        columns={['average_severity', 'average_severity_score,hosts']}
+        columns={['average_severity', 'average_severity_score', 'hosts']}
         text-columns={['name', 'modified']}
         sort-fields={['average_severity_score', 'modified']}
         sort-orders={['descending', 'descending']}
