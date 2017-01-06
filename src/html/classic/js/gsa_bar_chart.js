@@ -71,6 +71,17 @@
   BarChartGenerator.prototype.evaluateParams = function(gen_params) {
     gch.AggregateChartGenerator.prototype.evaluateParams.call(this, gen_params);
 
+    if ((gen_params.chart_template === 'info_by_cvss' ||
+        gen_params.chart_template === 'recent_info_by_cvss')) {
+      this.setBarStyle(gch.severity_bar_style('value',
+          gsa.severity_levels.max_log,
+          gsa.severity_levels.max_low,
+          gsa.severity_levels.max_medium));
+    }
+    else if (gen_params.chart_template === 'quantile_histogram') {
+      this.setBarStyle(gch.quantile_bar_style('min_value_quantile'));
+    }
+
     if (gen_params.x_field) {
       this.x_field = gen_params.x_field;
     }

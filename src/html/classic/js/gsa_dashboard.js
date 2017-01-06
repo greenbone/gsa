@@ -2573,19 +2573,6 @@
       self._trigger('data_source_changed');
     });
 
-    // FIXME move this to the corresponding chart generators. they should know
-    // their default style
-    if ((this.chart_template === 'info_by_cvss' ||
-        this.chart_template === 'recent_info_by_cvss') &&
-        this.chart_type !== 'donut') {
-      this.generator.setBarStyle(gch.severity_bar_style('value',
-          gsa.severity_levels.max_log,
-          gsa.severity_levels.max_low,
-          gsa.severity_levels.max_medium));
-    }
-    else if (this.chart_template === 'quantile_histogram') {
-      this.generator.setBarStyle(gch.quantile_bar_style('min_value_quantile'));
-    }
   }
 
   gsa.derive(ChartController, EventNode);

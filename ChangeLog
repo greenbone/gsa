@@ -1,5 +1,15 @@
 2017-01-06  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/js/gsa_bar_chart.js
+	(BarChartGenerator.prototype.evaluateParams): Set bar style according
+	to chart_template here instead of in the ChartController constructor.
+
+	* src/html/classic/js/gsa_dashboard.js (ChartController): Do not set
+	the bar style function here. This is now done by evaluateParams in
+	bar charts.
+
+2017-01-06  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/graphics.xsl (vuln-charts): Add quantile histogram
 	chart.
 	(js-scan-management-top-visualization): Add config_pref_id case for
