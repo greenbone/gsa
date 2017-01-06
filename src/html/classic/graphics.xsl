@@ -266,6 +266,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       data-chart-type="donut"
       data-chart-template="info_by_class"/>
   </div>
+  <div class="dashboard-data-source"
+    data-source-name="vuln-host-count-source"
+    data-group-column="hosts"
+    data-aggregate-type="vuln"
+    data-filter="{$filter}"
+    data-filter-id="{$filt_id}">
+    <span class="dashboard-chart"
+      data-chart-name="vuln-by-hosts"
+      data-chart-title="{gsa:i18n ('Vulnerabilities by Hosts')}"
+      data-chart-title-count="count"
+      data-chart-type="bar"
+      data-chart-template="quantile_histogram"/>
+  </div>
 </xsl:template>
 
 <xsl:template name="host-charts">
@@ -705,6 +718,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:when test="$type='task'">3d5db3c7-5208-4b47-8c28-48efc621b1e0</xsl:when>
       <xsl:when test="$type='report'">e599bb6b-b95a-4bb2-a6bb-fe8ac69bc071</xsl:when>
       <xsl:when test="$type='result'">0b8ae70d-d8fc-4418-8a72-e65ac8d2828e</xsl:when>
+      <xsl:when test="$type='vuln'">43690dcb-3174-4d84-aa88-58c1936c7f5c</xsl:when>
     </xsl:choose>
   </xsl:param>
 

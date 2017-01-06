@@ -378,6 +378,38 @@
     return func;
   };
 
+  /**
+   * Creates a quantile bar chart style.
+   *
+   * @param field Name of the field containing the severity.
+   *
+   * @return  Function returning the CSS style for a CVSS score.
+   */
+  gch.quantile_bar_style = function quantile_bar_style(field) {
+    var color_scale =
+      d3.scale.linear()
+        .domain([0, 0.05, 0.25, 0.50, 0.75, 0.95, 1.00])
+        .range([d3.hsl('#008644'), // 0.00
+                d3.hsl('#55B200'), // 0.05
+                d3.hsl('#94D800'), // 0.25
+                d3.hsl('#E6E600'), // 0.50
+                d3.hsl('#EDBA00'), // 0.75
+                d3.hsl('#EC6E00'), // 0.95
+                d3.hsl('#D63900')] // 1.00
+              );
+
+    var func = function(d) {
+      var value = d[field];
+      var color;
+      if (gsa.is_defined (value))
+        color = color_scale(value);
+      else
+        return null;
+      return 'fill: ' + color;
+    };
+    return func;
+  };
+
   /*
    * Data Source Helper functions
    */
@@ -1681,6 +1713,181 @@
    * @return The unmodified data.
    */
   gch.data_raw = function(data) {
+    return data;
+  };
+
+  /**
+   * Transforms data into a quantile histogram.
+   *
+   * @param old_data  The original data.
+   * @param params    The generator parameters.
+   *
+   * @return The data transformed into a quantile histogram.
+   */
+  gch.data_quantile_histogram = function(old_data, params) {
+
+    var count_field = 'count';
+    var value_field = 'value';
+
+    if (params) {
+      if (params.value_field) {
+        value_field = params.value_field;
+      }
+      if (params.count_field) {
+        count_field = params.count_field;
+      }
+    }
+
+    var min_value = +Infinity;
+    var max_value = -Infinity;
+    var total_count = 0;
+
+    // Get min and max value and total count
+    gsa.for_each (old_data.records, function (record) {
+      if (record[value_field] < min_value)
+        min_value = record[value_field];
+
+      if (record[value_field] > max_value)
+        max_value = record[value_field];
+
+      total_count += record[count_field];
+    });
+
+    var temp_total = 0;
+    var quantiles = [0.05, 0.25, 0.50, 0.75, 0.95];
+    var quantile_values = [];
+    var record_quantiles = [];
+    var min_q_index = 0;
+
+    // Get quantile values
+    for (var record_index = 0; record_index < old_data.records.length;
+         record_index++) {
+      var record = old_data.records[record_index];
+      temp_total += record[count_field];
+      for (var q_index = min_q_index; q_index < quantiles.length; q_index++) {
+        var nq = total_count * quantiles[q_index];
+        if (nq < temp_total && quantile_values[q_index] === undefined) {
+          min_q_index = q_index + 1;
+          quantile_values[q_index] = record[value_field];
+        }
+      }
+    }
+
+    for (var record_index = 0; record_index < old_data.records.length;
+         record_index ++) {
+      var record = old_data.records[record_index];
+      var value = record[value_field];
+
+      for (q_index = quantiles.length - 1; q_index >= 0; q_index--) {
+        if (Number(quantile_values[q_index]) >= Number (value)) {
+          record_quantiles[record_index] = quantiles[q_index]
+        }
+      }
+      if (record_quantiles[record_index] === undefined)
+        record_quantiles[record_index] = 1.0;
+    }
+
+    var n_bins = Math.ceil(Math.log2(total_count)) + 1;
+    var bin_width = Math.round ((max_value - min_value) / n_bins);
+    n_bins = (max_value - min_value) / bin_width;
+
+    var bins = [];
+    var bins_long = [];
+
+    for (var bin_index = 0; bin_index < n_bins; bin_index++) {
+      var bin_min = min_value + (bin_index * bin_width)
+      var bin_max = min_value + ((bin_index + 1) * bin_width) - 1;
+      if (bin_min == bin_max) {
+        bins[bin_index] = bin_min;
+        bins_long[bin_index] = bin_min;
+      }
+      else {
+        bins[bin_index] = bin_max;
+        bins_long[bin_index] = bin_min + " - " + bin_max;
+      }
+    }
+
+    var column_info = {
+      group_columns: [value_field],
+      data_columns: [count_field],
+      columns: {}
+    };
+
+    var bin_func = function(val) {
+      var index = Math.floor ((val - min_value) / bin_width);
+      if (index >= n_bins)
+        index = n_bins - 1;
+      return index;
+    }
+
+    var records = bins.map(function(d) {
+      var record = {};
+      record[value_field] = d;
+      record[count_field] = 0;
+      return record;
+    });
+
+    column_info.columns[value_field] =
+      {
+        name: value_field,
+        type: old_data.column_info.columns[value_field].type,
+        column: old_data.column_info.columns[value_field].column,
+        stat: old_data.column_info.columns[value_field].stat,
+        data_type: 'text'
+      };
+
+    column_info.columns['min_' + value_field + "_quantile"] =
+      {
+        name: 'min_' + value_field  + "_quantile",
+        type: old_data.column_info.columns[value_field].type,
+        column: old_data.column_info.columns[value_field].column,
+        stat: 'quantile',
+        data_type: 'decimal'
+      };
+
+    column_info.columns['max_' + value_field + "_quantile"] =
+      {
+        name: 'max_' + value_field  + "_quantile",
+        type: old_data.column_info.columns[value_field].type,
+        column: old_data.column_info.columns[value_field].column,
+        stat: 'quantile',
+        data_type: 'decimal'
+      };
+
+    column_info.columns[count_field] =
+      {
+        name: count_field,
+        type: old_data.column_info.columns[count_field].type,
+        column: '',
+        stat: 'count',
+        data_type: 'integer'
+      };
+
+    for (var record_index in old_data.records) {
+      var new_record_index = bin_func(old_data.records[record_index][value_field])
+      var new_record = records[new_record_index];
+      var old_record = old_data.records[record_index];
+      new_record[count_field] =
+        Number(new_record[count_field]) + Number(old_record[count_field]);
+
+      if (new_record['min_' + value_field + '_quantile'] === undefined) {
+        new_record['min_' + value_field + '_quantile'] =
+          record_quantiles[record_index];
+      }
+      new_record['max_' + value_field + '_quantile'] =
+        record_quantiles[record_index];
+    }
+
+    for (var record_index in records) {
+      records[record_index][value_field + '~long'] = bins_long[record_index];
+    }
+
+    var data = {
+      records: records,
+      column_info: column_info,
+      filter_info: old_data.filter_info
+    };
+
     return data;
   };
 

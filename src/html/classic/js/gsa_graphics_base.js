@@ -318,6 +318,10 @@
         gen_params.chart_template === 'recent_info_by_cvss') {
       this.setDataTransformFunc(gch.data_severity_histogram);
     }
+    else if (gen_params.chart_template === 'quantile_histogram')
+    {
+      this.setDataTransformFunc(gch.data_quantile_histogram);
+    }
   };
 
   BaseChartGenerator.prototype.createGenerateLinkFunc = function(column, type,

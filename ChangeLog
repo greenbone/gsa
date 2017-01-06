@@ -1,3 +1,21 @@
+2017-01-06  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/graphics.xsl (vuln-charts): Add quantile histogram
+	chart.
+	(js-scan-management-top-visualization): Add config_pref_id case for
+	type "vuln".
+
+	* src/html/classic/js/gsa_chart_helpers.js (quantile_bar_style): New
+	bar styling function.
+	(data_quantile_histogram): New data transformation function.
+
+	* src/html/classic/js/gsa_dashboard.js (ChartController): Handle new
+	chart_template "quantile_histogram".
+
+	* src/html/classic/js/gsa_graphics_base.js
+	(BaseChartGenerator.prototype.evaluateParams): Handle new
+	chart_template "quantile_histogram".
+
 2017-01-05  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	* INSTALL: Remove reference to USE_GSA_NG cmake switch. The next

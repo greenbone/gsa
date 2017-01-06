@@ -2583,6 +2583,9 @@
           gsa.severity_levels.max_low,
           gsa.severity_levels.max_medium));
     }
+    else if (this.chart_template === 'quantile_histogram') {
+      this.generator.setBarStyle(gch.quantile_bar_style('min_value_quantile'));
+    }
   }
 
   gsa.derive(ChartController, EventNode);
