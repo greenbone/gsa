@@ -1,3 +1,9 @@
+2017-01-09 Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/src/web/menu/menubar.js,
+	src/html/classic/ng/src/web/menu/menuentry.js: Add permission checks for menu
+	entries.
+
 2017-01-09  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	* src/gsad.c (exec_omp_post): Use correct parameter name in

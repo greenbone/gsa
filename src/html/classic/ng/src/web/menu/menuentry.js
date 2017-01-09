@@ -26,14 +26,30 @@ import React from 'react';
 import Link from '../link.js';
 import LegacyLink from '../legacylink.js';
 
-import {is_defined} from '../../utils.js';
+import {is_defined, is_array} from '../../utils.js';
 
 import './css/menuentry.css';
 
-export const MenuEntry = props => {
-  let {to, title, legacy, section, onClick, ...other} = props;
+export const MenuEntry = (props, context) => {
+  let {to, title, legacy, section, onClick, caps, ...other} = props;
   let entry;
   let css = section ? "menu-entry menu-section" : "menu-entry";
+
+  if (is_defined(caps) && is_defined(context) &&
+    is_defined(context.capabilities)) {
+
+    if (!is_array(caps)) {
+      caps = [caps];
+    }
+
+    let may_op = caps.reduce((a, b) => {
+      return context.capabilities.mayOp(b) && a;
+    }, true);
+
+    if (!may_op) {
+      return null;
+    }
+  }
 
   if (is_defined(to)) {
     entry = <Link to={to}>{title}</Link>;
@@ -50,11 +66,19 @@ export const MenuEntry = props => {
 };
 
 MenuEntry.propTypes = {
+  caps: React.PropTypes.oneOfType([
+    React.PropTypes.string,
+    React.PropTypes.array,
+  ]),
   section: React.PropTypes.bool,
   legacy: React.PropTypes.bool,
   to: React.PropTypes.string,
   title: React.PropTypes.string.isRequired,
   onClick: React.PropTypes.func,
+};
+
+MenuEntry.contextTypes = {
+  capabilities: React.PropTypes.object,
 };
 
 export default MenuEntry;
