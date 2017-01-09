@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,9 +23,12 @@
 
 import React from 'react';
 
-import {is_defined, for_each, log} from '../../utils.js';
+import {is_defined, for_each} from '../../utils.js';
+import logger from '../../log.js';
 
 import './css/dashboard.css';
+
+const log = logger.getLogger('web.dashboard');
 
 export class Dashboard extends React.Component {
 

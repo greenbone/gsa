@@ -24,7 +24,8 @@
 import React from 'react';
 
 import _ from '../locale.js';
-import {KeyCode, autobind, log, is_defined} from '../utils.js';
+import {KeyCode, autobind, is_defined} from '../utils.js';
+import logger from '../log.js';
 
 import Layout from './layout.js';
 import {render_options} from './render.js';
@@ -40,6 +41,8 @@ import CollectionList from '../gmp/collectionlist.js';
 import Filter from '../gmp/models/filter.js';
 
 import './css/powerfilter.css';
+
+const log = logger.getLogger('web.powerfilter');
 
 const DEFAULT_FILTER_ID = '0';
 

@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,12 +23,15 @@
 
 import {EntityCommand, register_command} from '../command.js';
 
-import {for_each, log} from '../../utils.js';
+import {for_each} from '../../utils.js';
+import logger from '../../log.js';
 
 import User from '../models/user.js';
 import Settings from '../models/settings.js';
 import Capabilities from '../models/capabilities.js';
 import ChartPreferences from '../models/chartpreferences.js';
+
+const log = logger.getLogger('gmp.commands.users');
 
 export class UserCommand extends EntityCommand {
 

@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,7 +21,8 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {log, map} from '../../utils.js';
+import {map} from '../../utils.js';
+import logger from '../../log.js';
 
 import {EntitiesCommand, EntityCommand, register_command} from '../command.js';
 import Model from '../model.js';
@@ -30,6 +31,8 @@ import Scanner from '../models/scanner.js';
 import Schedule from '../models/schedule.js';
 import Target from '../models/target.js';
 import Task from '../models/task.js';
+
+const log = logger.getLogger('gmp.commands.tasks');
 
 export class TaskCommand extends EntityCommand {
 

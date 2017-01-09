@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,13 +21,16 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {log, map, extend, convert_data} from '../../utils.js';
+import {map, extend, convert_data} from '../../utils.js';
+import logger from '../../log.js';
 
 import {EntityCommand, EntitiesCommand, register_command} from '../command.js';
 import Model from '../model.js';
 
 import Alert from '../models/alert.js';
 import Credential from '../models/credential.js';
+
+const log = logger.getLogger('gmp.commands.alerts');
 
 const event_data_fields = ['status', 'feed_event', 'secinfo_type'];
 const method_data_fields = [

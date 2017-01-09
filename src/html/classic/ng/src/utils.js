@@ -219,22 +219,6 @@ export function autobind(instance, options) {
   }
 }
 
-/* eslint-disable no-console */
-
-export const log = {
-  error: (...args) => {
-    console.error(...args);
-  },
-  warn: (...args) => {
-    console.warn(...args);
-  },
-  debug: (...args) => {
-    console.debug(...args);
-  }
-};
-
-/* eslint-enable no-console */
-
 export function first(array, non = {}) {
   if (is_empty(array)) {
     return non;

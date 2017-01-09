@@ -1,5 +1,33 @@
 2017-01-09 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/gmp/command.js,
+	src/html/classic/ng/src/gmp/commands/alerts.js,
+	src/html/classic/ng/src/gmp/commands/credentials.js,
+	src/html/classic/ng/src/gmp/commands/filters.js,
+	src/html/classic/ng/src/gmp/commands/portlists.js,
+	src/html/classic/ng/src/gmp/commands/schedules.js,
+	src/html/classic/ng/src/gmp/commands/targets.js,
+	src/html/classic/ng/src/gmp/commands/tasks.js,
+	src/html/classic/ng/src/gmp/commands/users.js,
+	src/html/classic/ng/src/gmp/gmp.js,
+	src/html/classic/ng/src/gmp/models/chartpreferences.js,
+	src/html/classic/ng/src/log.js,
+	src/html/classic/ng/src/utils.js,
+	src/html/classic/ng/src/web/alerts/dialog.js,
+	src/html/classic/ng/src/web/dashboard/dashboard.js,
+	src/html/classic/ng/src/web/dialog.js,
+	src/html/classic/ng/src/web/entities/component.js,
+	src/html/classic/ng/src/web/form/radio.js,
+	src/html/classic/ng/src/web/login.js,
+	src/html/classic/ng/src/web/powerfilter.js,
+	src/html/classic/ng/src/web/targets/dialog.js,
+	src/html/classic/ng/src/web/tasks/dialog.js:
+	Move logging into an own module. Also allow more flexible and configurable
+	logging.
+
+2017-01-09 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/CMakeLists.txt: Fix paths to moved icon js files.
 
 2017-01-09 Björn Ricks <bjoern.ricks@greenbone.net>

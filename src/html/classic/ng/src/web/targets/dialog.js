@@ -23,8 +23,9 @@
 
 import React from 'react';
 
-import {autobind, log, extend} from '../../utils.js';
-import {translate as _} from '../../locale.js';
+import {autobind, extend} from '../../utils.js';
+import _ from '../../locale.js';
+import logger from '../../log.js';
 
 import Dialog from '../dialog.js';
 import Layout from '../layout.js';
@@ -46,6 +47,8 @@ import {SSH_CREDENTIAL_TYPES, SMB_CREDENTIAL_TYPES, ESXI_CREDENTIAL_TYPES,
 
 import CredentialsDialog from '../credentials/dialog.js';
 import PortListsDialog from '../portlists/dialog.js';
+
+const log = logger.getLogger('web.targets.dialog');
 
 const DEFAULT_PORT_LIST_ID = 'c7e03b6c-3bbe-11e1-a057-406186ea4fc5';
 const ALIVE_TESTS_DEFAULT = 'Scan Config Default';

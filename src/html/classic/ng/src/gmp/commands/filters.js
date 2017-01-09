@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,14 +21,17 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {EntitiesCommand, EntityCommand, register_command} from '../command.js';
+import {is_defined} from '../../utils.js';
+import logger from '../../log.js';
 
-import {is_defined, log} from '../../utils.js';
+import {EntitiesCommand, EntityCommand, register_command} from '../command.js';
 
 import Filter from '../models/filter.js';
 
 export const TASKS_FILTER_FILTER = Filter.fromString('type=task');
 export const RESULTS_FILTER_FILTER = Filter.fromString('type=result');
+
+const log = logger.getLogger('gmp.commands.filters');
 
 export class FilterCommand extends EntityCommand {
 

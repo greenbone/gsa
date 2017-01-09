@@ -23,8 +23,9 @@
 
 import React from 'react';
 
-import {translate as _} from '../../locale.js';
-import {extend, log} from '../../utils.js';
+import _ from '../../locale.js';
+import {extend} from '../../utils.js';
+import logger from '../../log.js';
 
 import Dialog from '../dialog.js';
 import Layout from '../layout.js';
@@ -51,6 +52,8 @@ import SeverityChangedConditionPart from './severitychangedconditionpart.js';
 import FilterCountLeastConditionPart from './filtercountleastconditionpart.js';
 import FilterCountChangedConditionPart from
   './filtercountchangedconditionpart.js';
+
+const log = logger.getLogger('web.alerts.dialog');
 
 export class AlertDialog extends Dialog {
 

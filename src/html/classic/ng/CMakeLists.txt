@@ -51,6 +51,7 @@ set (NG_SRC_FILES
 set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/index.js
      ${NG_SRC_DIR}/src/locale.js
+     ${NG_SRC_DIR}/src/log.js
      ${NG_SRC_DIR}/src/timezones.js
      ${NG_SRC_DIR}/src/utils.js
      ${NG_SRC_DIR}/src/gmp/collectioncounts.js

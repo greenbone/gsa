@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,14 +23,17 @@
 
 import React from 'react';
 
-import {KeyCode, is_defined, log} from '../utils.js';
+import {KeyCode, is_defined} from '../utils.js';
 import {translate as _} from '../locale.js';
+import logger from '../log.js';
 
 import {render_options} from './render.js';
 
 import Button from './button.js';
 
 import './css/dialog.css';
+
+const log = logger.getLogger('web.dialog');
 
 export class Dialog extends React.Component {
 

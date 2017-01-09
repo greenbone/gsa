@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,12 +23,15 @@
 
 import React from 'react';
 
-import {classes, is_defined, log} from '../../utils.js';
+import {classes, is_defined} from '../../utils.js';
+import logger from '../../log.js';
 
 import FormItem from './formitem.js';
 
 import './css/form.css';
 import './css/checkboxradio.css';
+
+const log = logger.getLogger('web.form.radio');
 
 export class Radio extends React.Component {
 

@@ -24,7 +24,8 @@
 import React from 'react';
 
 import _ from '../locale.js';
-import {autobind, log, KeyCode} from '../utils.js';
+import {autobind, KeyCode} from '../utils.js';
+import logger from '../log.js';
 
 import Header from './header.js';
 import Footer from './footer.js';
@@ -38,6 +39,8 @@ import SubmitButton from './form/submitbutton.js';
 import Icon from './icons/icon.js';
 
 import './css/login.css';
+
+const log = logger.getLogger('web.login');
 
 export class Login extends React.Component {
 

@@ -23,9 +23,10 @@
 
 import React from 'react'; // eslint-disable-line max-lines
 
-import {parse_int, for_each, map, is_array, is_defined, is_empty, first, log,
+import {parse_int, for_each, map, is_array, is_defined, is_empty, first,
   includes, autobind, classes, select_save_id, extend} from '../../utils.js';
-import {translate as _} from '../../locale.js';
+import _ from '../../locale.js';
+import logger from '../../log.js';
 
 import {OSP_SCANNER_TYPE, OPENVAS_SCANNER_TYPE, OSP_SCAN_CONFIG_TYPE,
   OPENVAS_SCAN_CONFIG_TYPE, OPENVAS_DEFAULT_SCANNER_ID, OPENVAS_CONFIG_EMPTY_ID,
@@ -49,6 +50,8 @@ import Icon from '../icons/icon.js';
 import ScheduleDialog from '../schedules/dialog.js';
 import TargetsDialog from '../targets/dialog.js';
 import AlertDialog from '../alerts/dialog.js';
+
+const log = logger.getLogger('web.tasks.dialog');
 
 export class TaskDialog extends Dialog {
 

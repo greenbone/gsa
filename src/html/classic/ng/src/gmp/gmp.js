@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,7 +21,9 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {PromiseFactory, is_defined, is_empty, log} from '../utils.js';
+import {PromiseFactory, is_defined, is_empty} from '../utils.js';
+
+import logger from '../log.js';
 
 import './commands/tasks.js';
 import './commands/reports.js';
@@ -39,6 +41,8 @@ import './commands/results.js';
 import {GmpHttp, TIMEOUT, build_server_url, build_url_params} from './http.js';
 import {get_commands} from './command.js';
 import LoginCommand from './commands/login.js';
+
+const log = logger.getLogger('gmp');
 
 export class Gmp {
 
