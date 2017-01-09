@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,9 +27,10 @@ import _ from '../locale.js';
 import {KeyCode, autobind, log, is_defined} from '../utils.js';
 
 import Layout from './layout.js';
-import Icon from './icon.js';
-import HelpIcon from './helpicon.js';
 import {render_options} from './render.js';
+
+import Icon from './icons/icon.js';
+import HelpIcon from './icons/helpicon.js';
 
 import Select2 from './form/select2.js';
 import TextField from './form/textfield.js';

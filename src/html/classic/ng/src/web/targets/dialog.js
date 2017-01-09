@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,6 +26,9 @@ import React from 'react';
 import {autobind, log, extend} from '../../utils.js';
 import {translate as _} from '../../locale.js';
 
+import Dialog from '../dialog.js';
+import Layout from '../layout.js';
+
 import FormGroup from '../form/formgroup.js';
 import FormItem from '../form/formitem.js';
 import TextField from '../form/textfield.js';
@@ -34,9 +37,7 @@ import YesNoRadio from '../form/yesnoradio.js';
 import Select2 from '../form/select2.js';
 import {RadioFormItem} from '../form/radio.js';
 
-import Dialog from '../dialog.js';
-import Icon from '../icon.js';
-import Layout from '../layout.js';
+import Icon from '../icons/icon.js';
 
 import {SSH_CREDENTIAL_TYPES, SMB_CREDENTIAL_TYPES, ESXI_CREDENTIAL_TYPES,
   SNMP_CREDENTIAL_TYPES, USERNAME_PASSWORD_CREDENTIAL_TYPE,

@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,12 +26,13 @@ import React from 'react';
 import {translate as _, short_date} from '../../locale.js';
 import {is_defined, is_string, is_empty} from '../../utils.js';
 
-import Icon from '../icon.js';
 import Layout from '../layout.js';
 import SeverityBar from '../severitybar.js';
 import LegacyLink from '../legacylink.js';
 
 import Checkbox from '../form/checkbox.js';
+
+import Icon from '../icons/icon.js';
 
 import TaskDialog from './dialog.js';
 import Trend from './trend.js';

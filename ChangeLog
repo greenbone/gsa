@@ -1,3 +1,34 @@
+2017-01-09 Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/src/web/alerts/scpmethodpart.js,
+	src/html/classic/ng/src/web/alerts/verinicemethodpart.js,
+	src/html/classic/ng/src/web/css/icon.css,
+	src/html/classic/ng/src/web/icons/css/icon.css,
+	src/html/classic/ng/src/web/icons/exporticon.js,
+	src/html/classic/ng/src/web/helpicon.js,
+	src/html/classic/ng/src/web/icons/helpicon.js,
+	src/html/classic/ng/src/web/icon.js,
+	src/html/classic/ng/src/web/icons/icon.js,
+	src/html/classic/ng/src/web/icons/overridesicon.js,
+	src/html/classic/ng/src/web/icons/trashicon.js,
+	src/html/classic/ng/src/web/login.js,
+	src/html/classic/ng/src/web/menu/iconmenu.js,
+	src/html/classic/ng/src/web/menu/menubar.js,
+	src/html/classic/ng/src/web/pagination.js,
+	src/html/classic/ng/src/web/powerfilter.js,
+	src/html/classic/ng/src/web/results/results.js,
+	src/html/classic/ng/src/web/section.js,
+	src/html/classic/ng/src/web/solutiontype.js,
+	src/html/classic/ng/src/web/targets/dialog.js,
+	src/html/classic/ng/src/web/tasks/dialog.js,
+	src/html/classic/ng/src/web/tasks/tasks.js,
+	src/html/classic/ng/src/web/tasks/taskslistentry.js,
+	src/html/classic/ng/src/web/tasks/trend.js,
+	src/html/classic/ng/src/web/titlebar.js,
+	src/html/classic/ng/src/web/wizard/taskwizard.js:
+	Move all icon components into src/web/icons sub directory. Also update
+	copyright for 2017.
+
 2017-01-06  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/ng/src/web/os/charts.js: Fix columns for data source

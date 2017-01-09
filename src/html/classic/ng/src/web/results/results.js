@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,8 +26,6 @@ import React from 'react';
 import {is_defined} from '../../utils.js';
 import  _ from '../../locale.js';
 
-import HelpIcon from '../helpicon.js';
-import Icon from '../icon.js';
 import Toolbar from '../toolbar.js';
 import Section from '../section.js';
 import PowerFilter from '../powerfilter.js';
@@ -36,8 +34,6 @@ import Layout from '../layout.js';
 import Sort from '../sortby.js';
 import SelectionType from '../selectiontype.js';
 
-import OverridesIcon from '../icons/overridesicon.js';
-
 import EntitiesComponent from '../entities/component.js';
 import EntitiesFooter from '../entities/footer.js';
 import EntitiesTable from '../entities/table.js';
@@ -45,6 +41,10 @@ import EntitiesTable from '../entities/table.js';
 import {Dashboard, DashboardControls} from '../dashboard/dashboard.js';
 
 import Download from '../form/download.js';
+
+import Icon from '../icons/icon.js';
+import HelpIcon from '../icons/helpicon.js';
+import OverridesIcon from '../icons/overridesicon.js';
 
 import ResultCharts from './charts.js';
 import ResultsFilterDialog from './filterdialog.js';

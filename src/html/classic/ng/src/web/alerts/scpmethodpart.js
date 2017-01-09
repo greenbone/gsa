@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,7 +27,6 @@ import {translate as _} from '../../locale.js';
 import {select_save_id, is_defined} from '../../utils.js';
 
 import {render_options} from '../render.js';
-import Icon from '../icon.js';
 
 import CredentialsDialog from '../credentials/dialog.js';
 
@@ -37,6 +36,8 @@ import FormItem from '../form/formitem.js';
 import TextField from '../form/textfield.js';
 import TextArea from '../form/textarea.js';
 import FormPart from '../form/formpart.js';
+
+import Icon from '../icons/icon.js';
 
 export class ScpMethodPart extends FormPart {
 

@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,7 +32,6 @@ import {OSP_SCANNER_TYPE, OPENVAS_SCANNER_TYPE, OSP_SCAN_CONFIG_TYPE,
   OPENVAS_CONFIG_FULL_AND_FAST_ID,
   SLAVE_SCANNER_TYPE} from '../../gmp/commands/scanners.js';
 
-import Icon from '../icon.js';
 import Dialog from '../dialog.js';
 import Layout from '../layout.js';
 
@@ -44,6 +43,8 @@ import Checkbox from '../form/checkbox.js';
 import Radio from '../form/radio.js';
 import YesNoRadio from '../form/yesnoradio.js';
 import TextField from '../form/textfield.js';
+
+import Icon from '../icons/icon.js';
 
 import ScheduleDialog from '../schedules/dialog.js';
 import TargetsDialog from '../targets/dialog.js';

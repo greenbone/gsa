@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,13 +28,14 @@ import {autobind, log, KeyCode} from '../utils.js';
 
 import Header from './header.js';
 import Footer from './footer.js';
-import Icon from './icon.js';
 import Layout from './layout.js';
 
 import FormGroup from './form/formgroup.js';
 import TextField from './form/textfield.js';
 import PasswordField from './form/passwordfield.js';
 import SubmitButton from './form/submitbutton.js';
+
+import Icon from './icons/icon.js';
 
 import './css/login.css';
 

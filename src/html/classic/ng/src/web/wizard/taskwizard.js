@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,9 +28,11 @@ import _ from '../../locale.js';
 
 import Dialog from '../dialog.js';
 import Layout from '../layout.js';
-import Icon from '../icon.js';
 import Img from '../img.js';
+
 import TextField from '../form/textfield.js';
+
+import Icon from '../icons/icon.js';
 
 import './css/wizard.css';
 

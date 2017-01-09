@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,13 +25,14 @@ import React from 'react';
 
 import {Sticky} from 'react-sticky';
 
-import Link from '../link.js';
-import Icon from '../icon.js';
-
 import _ from '../../locale.js';
+
+import Link from '../link.js';
 
 import Menu from './menu.js';
 import MenuEntry from './menuentry.js';
+
+import Icon from '../icons/icon.js';
 
 import './css/menubar.css';
 
