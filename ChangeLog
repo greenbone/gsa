@@ -11,6 +11,10 @@
 
 2017-01-09 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/omp.xsl: Always use ng page for tasks list.
+
+2017-01-09 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/gmp.js: Don't cause errors on logout. We need to
 	pass xml parameter to logout request to avoid a http redirect response.
 

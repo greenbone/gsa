@@ -4625,7 +4625,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <div class="section-header">
     <xsl:call-template name="minor-details"/>
     <h1>
-      <a href="/omp?cmd=get_tasks&amp;token={/envelope/token}"
+      <a href="/ng/tasks"
          title="{gsa:i18n ('Tasks')}">
         <img class="icon icon-lg" src="/img/task.svg" alt="Tasks"/>
       </a>
@@ -5853,10 +5853,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       </xsl:choose>
     </xsl:when>
   </xsl:choose>
-  <a href="/omp?cmd=get_{$type}s&amp;filter={str:encode-uri ($filter, true ())}&amp;filt_id={$filt_id}&amp;token={/envelope/token}"
-     title="{gsa:i18n ($cap-type-plural)}" class="icon icon-sm">
-    <img src="/img/list.svg" alt="{gsa:i18n ($cap-type-plural)}"/>
-  </a>
+  <xsl:choose>
+    <xsl:when test="$type = 'task'">
+      <a href="/ng/{$type}s?filter={str:encode-uri ($filter, true ())}&amp;filt_id={$filt_id}"
+        title="{gsa:i18n ($cap-type-plural)}" class="icon icon-sm">
+        <img src="/img/list.svg" alt="{gsa:i18n ($cap-type-plural)}"/>
+      </a>
+    </xsl:when>
+    <xsl:otherwise>
+      <a href="/omp?cmd=get_{$type}s&amp;filter={str:encode-uri ($filter, true ())}&amp;filt_id={$filt_id}&amp;token={/envelope/token}"
+        title="{gsa:i18n ($cap-type-plural)}" class="icon icon-sm">
+        <img src="/img/list.svg" alt="{gsa:i18n ($cap-type-plural)}"/>
+      </a>
+    </xsl:otherwise>
+  </xsl:choose>
   <span class="divider"/>
   <xsl:choose>
     <xsl:when test="$type = 'user'">
@@ -12666,7 +12676,7 @@ should not have received it.
         <img src="/img/fold.svg"/>
     </a>
     <h2>
-      <a href="/omp?cmd=get_tasks&amp;token={/envelope/token}"
+      <a href="/ng/tasks"
          title="{gsa:i18n ('Tasks')}">
         <img class="icon icon-sm" src="/img/task.svg" alt="Tasks"/>
       </a>
@@ -16049,7 +16059,7 @@ should not have received it.
         <img src="/img/fold.svg"/>
     </a>
     <h2>
-      <a href="/omp?cmd=get_tasks&amp;token={/envelope/token}"
+      <a href="/ng/tasks"
          title="{gsa:i18n ('Tasks')}">
         <img class="icon icon-sm" src="/img/task.svg" alt="Tasks"/>
       </a>
@@ -17733,7 +17743,7 @@ should not have received it.
         <img src="/img/fold.svg"/>
     </a>
     <h2>
-      <a href="/omp?cmd=get_tasks&amp;token={/envelope/token}"
+      <a href="/ng/tasks"
          title="{gsa:i18n ('Scanner Preferences')}">
       </a>
       <xsl:value-of select="gsa:i18n ('Scanner Preferences')"/>
@@ -17760,7 +17770,7 @@ should not have received it.
         <img src="/img/fold.svg"/>
     </a>
     <h2>
-      <a href="/omp?cmd=get_tasks&amp;token={/envelope/token}"
+      <a href="/ng/tasks"
          title="{gsa:i18n ('Network Vulnerability Test Preferences')}">
       </a>
       <xsl:value-of select="gsa:i18n ('Network Vulnerability Test Preferences')"/>
@@ -17792,7 +17802,7 @@ should not have received it.
         <img src="/img/fold.svg"/>
     </a>
     <h2>
-      <a href="/omp?cmd=get_tasks&amp;token={/envelope/token}"
+      <a href="/ng/tasks"
          title="{gsa:i18n ('Tasks')}">
         <img class="icon icon-sm" src="/img/task.svg" alt="Tasks"/>
       </a>
@@ -19187,7 +19197,7 @@ should not have received it.
         <img src="/img/fold.svg"/>
     </a>
     <h2>
-      <a href="/omp?cmd=get_tasks&amp;token={/envelope/token}"
+      <a href="/ng/tasks"
          title="{gsa:i18n ('Tasks')}">
         <img class="icon icon-sm" src="/img/task.svg" alt="Tasks"/>
       </a>
@@ -19912,7 +19922,7 @@ should not have received it.
         <img src="/img/fold.svg"/>
     </a>
     <h2>
-      <a href="/omp?cmd=get_tasks&amp;token={/envelope/token}"
+      <a href="/ng/tasks"
          title="{gsa:i18n ('Tasks')}">
         <img class="icon icon-sm" src="/img/task.svg" alt="Tasks"/>
       </a>
