@@ -95,7 +95,8 @@ export class Gmp {
 
   logout() {
     let uri = this.buildUrl('logout');
-    return this.http.request('get', {uri})
+    let args = {xml: 1};
+    return this.http.request('get', {uri, args})
       .then(xhr => {
         this.token = undefined;
         return xhr;

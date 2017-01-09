@@ -11,6 +11,14 @@
 
 2017-01-09 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/gmp.js: Don't cause errors on logout. We need to
+	pass xml parameter to logout request to avoid a http redirect response.
+
+	* src/html/classic/ng/src/gmp/http.js: Add xhr to console output on xml to js
+	conversion errors. This allows easier debugging of the cause.
+
+2017-01-09 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/powerfilter.js: Add capabilites checks to
 	powerfilter.
 

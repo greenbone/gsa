@@ -164,7 +164,7 @@ export class GmpHttp extends Http {
       }
       catch (error) {
         log.error('An error occured while converting gmp response to js for ' +
-          'url', this.url);
+          'url', this.url, xhr);
         throw error;
       }
     }, xhr => {
