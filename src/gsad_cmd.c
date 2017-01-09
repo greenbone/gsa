@@ -173,9 +173,8 @@ cmd_response_data_get_content_length (cmd_response_data_t *data)
 /**
  * @brief Set content disposition of cmd_response_data_t struct
  *
- * @param[in]  data  Command response data struct
- *
- * @return Content disposition
+ * @param[in]  data                 Command response data struct
+ * @param[in]  content_disposition  Content disposition
  */
 void
 cmd_response_data_set_content_disposition (cmd_response_data_t *data,

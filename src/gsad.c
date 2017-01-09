@@ -1296,7 +1296,7 @@ params_mhd_validate (void *params)
  * parameters and calls the appropriate OMP function (like
  * create_task_omp).
  *
- * @param[in]   connection      HTTP connection
+ * @param[in]   con             HTTP connection
  * @param[in]   con_info        Connection info.
  * @param[in]   client_address  Client address.
  * @param[out]  response_data   Response data.  Return info is written

@@ -1259,8 +1259,6 @@ gsad_message_new (credentials_t *credentials, const char *title,
  * @param[in]  msg       The response message.
  * @param[in]  backurl   The URL offered to get back to a sane situation.
  *                       If NULL, the tasks page is used.
- * @param[in]  xml_flag  Flag to indicate if the returned content should contain
- *                       xml or html.
  * @param[out] response_data   Extra data return for the HTTP response.
  *
  * @return An HTML document as a newly allocated string.
