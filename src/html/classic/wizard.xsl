@@ -40,46 +40,8 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 -->
-
-<xsl:template name="wizard-icon">
-  <xsl:choose>
-    <xsl:when test="name (..) = 'get_tasks'">
-      <span class="icon-menu">
-        <a href="/omp?cmd=wizard&amp;name=quick_first_scan&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-            title="{gsa:i18n ('Wizard')}"
-            class="wizard-action-icon icon icon-sm" data-dialog-id="quick_first_scan"
-            data-name="quick_first_scan" data-button="{gsa:i18n ('Start Scan', 'Action Verb')}">
-          <img src="/img/wizard.svg"/>
-        </a>
-        <ul>
-          <li>
-            <a href="/omp?cmd=wizard&amp;name=quick_first_scan&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-                class="wizard-action-icon" data-dialog-id="quick_first_scan"
-                data-name="quick_first_scan" data-button="{gsa:i18n ('Start Scan', 'Action Verb')}">
-              <xsl:value-of select="gsa:i18n ('Task Wizard')"/>
-            </a>
-          </li>
-          <li>
-            <a href="/omp?cmd=wizard&amp;name=quick_task&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-              data-dialog-id="advanced_task_wizard"
-               class="wizard-action-icon" data-name="quick_task" data-height="650">
-              <xsl:value-of select="gsa:i18n ('Advanced Task Wizard')"/>
-            </a>
-          </li>
-          <li>
-            <a href="/omp?cmd=wizard&amp;name=modify_task&amp;filter={/envelope/params/filter}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-              data-dialog-id="modify_task_wizard"
-               class="wizard-action-icon" data-name="modify_task">
-              <xsl:value-of select="gsa:i18n ('Modify Task Wizard')"/>
-            </a>
-          </li>
-        </ul>
-      </span>
-    </xsl:when>
-  </xsl:choose>
-</xsl:template>
-
 <xsl:template name="wizard">
+  <!-- TODO add to ng -->
   <xsl:param name="force-wizard" select="/envelope/params/force_wizard"/>
   <xsl:choose>
     <xsl:when test="(/envelope/role != 'Observer') and (name (..) = 'get_tasks') and (number (task_count/text ()) = 0) or ($force-wizard = 1)">

@@ -5301,9 +5301,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         </a>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:if test="gsa:may-op ('run_wizard')">
-      <xsl:call-template name="wizard-icon"/>
-    </xsl:if>
     <xsl:choose>
       <xsl:when test="$type = 'report'"/>
       <xsl:when test="$type = 'info'"/>
@@ -5314,34 +5311,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
            title="{gsa:i18n (concat ('New ', $cap-type))}">
           <img src="/img/new.svg"/>
         </a>
-      </xsl:when>
-      <xsl:when test="$new-icon and $type = 'task'">
-        <span class="icon-menu">
-          <a href="/omp?cmd=new_task{$extra_params_string}&amp;next=get_task&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-             class="new-action-icon icon icon-sm" data-type="task" data-reload="window"
-             data-dialog-id="create_new_task"
-             title="{gsa:i18n ('New Task')}">
-            <img src="/img/new.svg"/>
-          </a>
-          <ul>
-            <li>
-              <a href="/omp?cmd=new_task{$extra_params_string}&amp;next=get_task&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-                 class="new-action-icon" data-type="task" data-reload="window"
-                 data-dialog-id="create_new_task"
-                 title="{gsa:i18n ('New Task')}">
-                <xsl:value-of select="gsa:i18n ('New Task')"/>
-              </a>
-            </li>
-            <li>
-              <a href="/omp?cmd=new_container_task{$extra_params_string}&amp;next=get_task&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
-                 class="last new-action-icon" data-type="container_task" data-reload="window"
-                 data-dialog-id="create_new_container_task"
-                 title="{gsa:i18n ('New Container Task')}">
-                <xsl:value-of select="gsa:i18n ('New Container Task')"/>
-              </a>
-            </li>
-          </ul>
-        </span>
       </xsl:when>
       <xsl:when test="$new-icon and $type = 'config'">
         <a href="/omp?cmd=new_{$type}{$extra_params_string}&amp;next=get_{$type}&amp;filter={str:encode-uri (filters/term, true ())}&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
@@ -5722,8 +5691,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
   </div> <!-- /table-box -->
 
-  <!-- Wizard. -->
-  <xsl:call-template name="wizard"/>
 </xsl:template>
 
 <xsl:template name="minor-details">
@@ -8043,27 +8010,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </tr>
 </xsl:template>
 
-<!-- GET_TASKS_RESPONSE -->
-
-<xsl:template match="get_tasks_response">
-  <xsl:choose>
-    <xsl:when test="substring(@status, 1, 1) = '4' or substring(@status, 1, 1) = '5'">
-      <xsl:call-template name="command_result_dialog">
-        <xsl:with-param name="operation">Get Tasks</xsl:with-param>
-        <xsl:with-param name="status">
-          <xsl:value-of select="@status"/>
-        </xsl:with-param>
-        <xsl:with-param name="msg">
-          <xsl:value-of select="@status_text"/>
-        </xsl:with-param>
-      </xsl:call-template>
-    </xsl:when>
-    <xsl:otherwise>
-      <xsl:call-template name="html-tasks-table"/>
-    </xsl:otherwise>
-  </xsl:choose>
-</xsl:template>
-
 <!-- GET_TASK -->
 
 <xsl:template match="get_task">
@@ -8098,179 +8044,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   <xsl:apply-templates select="resume_task_response"/>
   <xsl:apply-templates select="get_tasks_response"/>
 </xsl:template>
-
-<xsl:template name="html-tasks-table">
-  <xsl:call-template name="list-window">
-    <xsl:with-param name="type" select="'task'"/>
-    <xsl:with-param name="cap-type" select="'Task'"/>
-    <xsl:with-param name="resources-summary" select="tasks"/>
-    <xsl:with-param name="resources" select="task"/>
-    <xsl:with-param name="count" select="count (task)"/>
-    <xsl:with-param name="filtered-count" select="task_count/filtered"/>
-    <xsl:with-param name="full-count" select="task_count/text ()"/>
-    <xsl:with-param name="columns" xmlns="">
-      <column>
-        <name><xsl:value-of select="gsa:i18n('Name')"/></name>
-        <field>name</field>
-      </column>
-      <column>
-        <name><xsl:value-of select="gsa:i18n('Status')"/></name>
-        <field>status</field>
-      </column>
-      <column>
-        <name><xsl:value-of select="gsa:i18n('Reports')"/></name>
-        <column>
-          <name><xsl:value-of select="gsa:i18n('Total', 'Task|Reports')"/></name>
-          <field>total</field>
-          <sort-reverse/>
-        </column>
-        <column>
-          <name><xsl:value-of select="gsa:i18n('Last', 'Task|Report')"/></name>
-          <field>last</field>
-          <sort-reverse/>
-        </column>
-      </column>
-      <column>
-        <name><xsl:value-of select="gsa:i18n('Severity', 'Severity Short')"/></name>
-        <field>severity</field>
-        <sort-reverse/>
-        <html>
-          <before>
-            <xsl:choose xmlns="http://www.w3.org/1999/xhtml">
-              <xsl:when test="/envelope/params/bulk_select = 1">
-                <div class="pull-right">
-                  <xsl:choose>
-                    <xsl:when test="filters/keywords/keyword[column='apply_overrides']/value = 0">
-                      <img src="/img/overrides_disabled.svg"
-                        alt="{gsa:i18n ('No Overrides')}"
-                        title="{gsa:i18n ('No Overrides')}"
-                        class="icon icon-sm"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <img src="/img/overrides_enabled.svg"
-                        alt="{gsa:i18n ('Overrides are Applied')}"
-                        title="{gsa:i18n ('Overrides are Applied')}"
-                        class="icon icon-sm"/>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                </div>
-              </xsl:when>
-              <xsl:otherwise>
-                <div class="pull-right">
-                  <form method="get" action="">
-                    <input type="hidden" name="token" value="{/envelope/token}"/>
-                    <input type="hidden" name="cmd" value="get_tasks"/>
-                    <input type="hidden" name="filter" value="{filters/term}"/>
-                    <xsl:choose>
-                      <xsl:when test="filters/keywords/keyword[column='apply_overrides']/value = 0">
-                        <input type="hidden" name="overrides" value="1"/>
-                        <input type="image"
-                          name="No Overrides"
-                          src="/img/overrides_disabled.svg"
-                          alt="{gsa:i18n ('No Overrides')}"
-                          value="No Overrides"
-                          title="{gsa:i18n ('No Overrides')}"
-                          class="icon icon-sm"/>
-                      </xsl:when>
-                      <xsl:otherwise>
-                        <input type="hidden" name="overrides" value="0"/>
-                        <input type="image"
-                          name="Overrides are Applied"
-                          src="/img/overrides_enabled.svg"
-                          alt="{gsa:i18n ('Overrides are Applied')}"
-                          value="Overrides are Applied"
-                          title="{gsa:i18n ('Overrides are Applied')}"
-                          class="icon icon-sm"/>
-                      </xsl:otherwise>
-                    </xsl:choose>
-                  </form>
-                </div>
-              </xsl:otherwise>
-            </xsl:choose>
-          </before>
-        </html>
-      </column>
-      <column>
-        <name><xsl:value-of select="gsa:i18n('Trend')"/></name>
-        <field>trend</field>
-      </column>
-    </xsl:with-param>
-    <xsl:with-param name="icon-count" select="6"/>
-    <xsl:with-param name="top-visualization">
-      <xsl:call-template name="init-d3charts"/>
-      <xsl:call-template name="js-scan-management-top-visualization">
-        <xsl:with-param name="type" select="'task'"/>
-        <xsl:with-param name="auto_load_left_default" select="'left-by-class'"/>
-        <xsl:with-param name="auto_load_right_default" select="'right-by-task-status'"/>
-      </xsl:call-template>
-    </xsl:with-param>
-  </xsl:call-template>
-</xsl:template>
-
-<!-- GET_TASKS_CHART -->
-
-<xsl:template match="get_tasks_chart">
-  <xsl:variable name="filter_term" select="/envelope/params/filter"/>
-  <xsl:variable name="filt_id" select="/envelope/params/filt_id"/>
-
-  <xsl:call-template name="init-d3charts"/>
-  <xsl:choose>
-    <xsl:when test="$filter_term != ''">
-      <div id="applied_filter" class="footnote" style="padding: 5px 10px">
-        <b><xsl:value-of select="gsa:i18n('Applied filter:')"/></b>
-        <xsl:text> </xsl:text>
-        <xsl:value-of select="$filter_term"/>
-      </div>
-    </xsl:when>
-    <xsl:otherwise>
-      <div id="applied_filter"/>
-    </xsl:otherwise>
-  </xsl:choose>
-
-  <xsl:variable name="init_params_js">
-    <xsl:if test="/envelope/params/_param[starts-with (name, 'chart_init:')]">{
-      <xsl:for-each select="/envelope/params/_param[starts-with (name, 'chart_init:')]">
-        "<xsl:value-of select="substring-after (name, 'chart_init:')"/>": "<xsl:value-of select="value"/>"<xsl:if test="position() &lt; count(exslt:node-set (/envelope/params/_param[starts-with (name, 'chart_init:')]))">, </xsl:if>
-      </xsl:for-each>
-      }</xsl:if>
-  </xsl:variable>
-
-  <xsl:variable name="gen_params_js">
-    <xsl:if test="/envelope/params/_param[starts-with (name, 'chart_gen:')]">{
-      <xsl:for-each select="/envelope/params/_param[starts-with (name, 'chart_gen:')]">
-        "<xsl:value-of select="substring-after (name, 'chart_gen:')"/>": "<xsl:value-of select="value"/>"<xsl:if test="position() &lt; count(exslt:node-set (/envelope/params/_param[starts-with (name, 'chart_gen:')]))">, </xsl:if>
-      </xsl:for-each>
-      }</xsl:if>
-  </xsl:variable>
-
-  <div id="single-box-dashboard" class="dashboard"
-    data-dashboard-name="single-box-dashboard"
-    data-filter="{$filter_term}"
-    data-default-controllers="tasks-chart"
-    data-filter-id="{$filt_id}"
-    data-hide-controller-select="1"
-    data-hide-filter-select="1"
-    data-detached="1"
-    data-max-components="1">
-    <div class="dashboard-data-source"
-      data-soure-name="tasks-source"
-      data-type="task"
-      data-filter="{$filter_term}"
-      data-filter-id="{$filt_id}">
-      <span class="dashboard-chart"
-        data-chart-name="tasks-chart"
-        data-chart-type="{/envelope/params/chart_type}"
-        data-chart-template="{/envelope/params/chart_template}"
-        data-chart-title="{/envelope/params/chart_title}"
-        data-init-params="{$init_params_js}"
-        data-gen-params="{$gen_params_js}"
-        />
-    </div>
-  </div>
-
-  <xsl:call-template name="html-footer"/>
-</xsl:template>
-
 
 <!-- BEGIN CREDENTIALS MANAGEMENT -->
 
