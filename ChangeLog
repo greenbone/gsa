@@ -1,5 +1,9 @@
 2017-01-09 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt: Fix paths to moved icon js files.
+
+2017-01-09 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/alerts/scpmethodpart.js,
 	src/html/classic/ng/src/web/alerts/verinicemethodpart.js,
 	src/html/classic/ng/src/web/css/icon.css,
