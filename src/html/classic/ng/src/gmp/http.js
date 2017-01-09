@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,8 +21,12 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+import logger from '../log.js';
+
 import {is_defined, has_value, extend, xml2json,
   PromiseFactory} from '../utils.js';
+
+const log = logger.getLogger('gmp.http');
 
 export const TIMEOUT = 10000; // 10 sec
 
@@ -155,7 +159,14 @@ export class GmpHttp extends Http {
       if (plain) {
         return xhr;
       }
-      return xml2json(xhr.responseXML).envelope;
+      try {
+        return xml2json(xhr.responseXML).envelope;
+      }
+      catch (error) {
+        log.error('An error occured while converting gmp response to js for ' +
+          'url', this.url);
+        throw error;
+      }
     }, xhr => {
       if (xhr.responseXML) {
         throw xml2json(xhr.responseXML).envelope;
