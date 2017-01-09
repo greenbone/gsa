@@ -11,6 +11,11 @@
 
 2017-01-09 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/powerfilter.js: Add capabilites checks to
+	powerfilter.
+
+2017-01-09 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/footer.js: We are in 2017 now.
 
 2017-01-09 Björn Ricks <bjoern.ricks@greenbone.net>

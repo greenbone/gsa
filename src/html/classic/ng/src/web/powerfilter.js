@@ -148,6 +148,7 @@ export class PowerFilter extends React.Component {
   }
 
   render() {
+    let {capabilities} = this.context;
     let {userfilter = '', filter, filtername = ''} = this.state;
     let {filters} = this.props;
     let namedfilterid = filter && filter.id ? filter.id : DEFAULT_FILTER_ID;
@@ -156,7 +157,8 @@ export class PowerFilter extends React.Component {
 
     let filter_opts = render_options(filters, DEFAULT_FILTER_ID);
 
-    let can_create = filtername.trim().length > 0;
+    let can_create = capabilities.mayOp('create_filter') &&
+      filtername.trim().length > 0;
 
     return (
       <Layout flex align={['end', 'center']} className="powerfilter">
@@ -181,9 +183,11 @@ export class PowerFilter extends React.Component {
                 onClick={this.props.onEditClick}/>
             </Layout>
             <Layout flex align={['start', 'center']} className="form-group">
-              <TextField name="filtername" size="10" maxLength="80"
-                value={filtername}
-                onChange={this.onValueChange}/>
+              {capabilities.mayOp('create_filter') &&
+                <TextField name="filtername" size="10" maxLength="80"
+                  value={filtername}
+                  onChange={this.onValueChange}/>
+              }
             </Layout>
             <Layout flex align={['start', 'center']} className="form-group">
               {can_create ?
@@ -195,10 +199,12 @@ export class PowerFilter extends React.Component {
                 }
             </Layout>
             <Layout flex align={['start', 'center']} className="form-group">
-              <Select2 value={namedfilterid}
-                onChange={this.onNamedFilterChange}>
-                {filter_opts}
-              </Select2>
+              {capabilities.mayOp('get_filters') &&
+                <Select2 value={namedfilterid}
+                  onChange={this.onNamedFilterChange}>
+                  {filter_opts}
+                </Select2>
+              }
             </Layout>
           </Layout>
           <div className="footnote">
@@ -224,6 +230,7 @@ PowerFilter.propTypes = {
 
 PowerFilter.contextTypes = {
   gmp: React.PropTypes.object.isRequired,
+  capabilities: React.PropTypes.object.isRequired,
 };
 
 export default PowerFilter;
