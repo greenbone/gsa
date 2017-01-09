@@ -11,6 +11,10 @@
 
 2017-01-09 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/footer.js: We are in 2017 now.
+
+2017-01-09 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/http.js: Add error handling when xml response
 	can't be converted to js objects.
 
