@@ -27,17 +27,21 @@ import XHRBackend from 'i18next-xhr-backend';
 import BrowserDetector from 'i18next-browser-languagedetector';
 
 import {is_string} from './utils.js';
+import logger from './log.js';
+
+const log = logger.getLogger('locale');
 
 export class LanguageDetector extends BrowserDetector {
 
   detect(...options) {
-    const lang = $('html').attr('lang');
+    let lang = $('html').attr('lang');
 
-    if (lang) {
-      return lang;
+    if (!lang) {
+      lang = super.detect(...options);
     }
 
-    return super.detect(...options);
+    log.debug('Detected language', lang);
+    return lang;
   }
 }
 
