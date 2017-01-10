@@ -1,3 +1,9 @@
+2017-01-10  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/js/gsa_bar_chart.js
+	(BarChartGenerator.prototype.generate): Remove the "- 1" from the bar
+	height calculation.
+
 2017-01-10 Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/omp.xsl: Remove obsolete results list. It got replaces by a
