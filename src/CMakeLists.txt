@@ -5,9 +5,10 @@
 # Authors:
 # Matthew Mundell <matthew.mundell@greenbone.net>
 # Michael Wiegand <michael.wiegand@greenbone.net>
+# Björn Ricks <bjoern.ricks@greenbone.net>
 #
 # Copyright:
-# Copyright (C) 2009, 2014 Greenbone Networks GmbH
+# Copyright (C) 2009 - 2017 Greenbone Networks GmbH
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -222,6 +223,9 @@ add_custom_target (ctags COMMENT "Building tags..."
                    COMMAND ctags ${C_FILES})
 add_custom_target (tags COMMENT "Building tags files...")
 add_dependencies (tags etags ctags)
+
+## NG
+add_subdirectory (html/classic/ng)
 
 ## gettext translations
 add_subdirectory (po)

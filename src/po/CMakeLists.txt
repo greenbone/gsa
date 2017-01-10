@@ -4,9 +4,10 @@
 #
 # Authors:
 # Timo Pollmeier <timo.pollmeier@greenbone.net>
+# Björn Ricks <bjoern.ricks@greenbone.net>
 #
 # Copyright:
-# Copyright (C) 2015 Greenbone Networks GmbH
+# Copyright (C) 2015 - 2017 Greenbone Networks GmbH
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -140,9 +141,10 @@ if (GETTEXT_FOUND)
     add_custom_command (OUTPUT  ${CMAKE_CURRENT_BINARY_DIR}/gsad_js.pot
                         COMMAND "${CMAKE_SOURCE_DIR}/tools/js2pot"
                         ARGS    "${CMAKE_SOURCE_DIR}"
-                                "src/html/classic/js"
                                 "${CMAKE_CURRENT_BINARY_DIR}/gsad_js.pot"
+                                "src/html/classic/"
                         DEPENDS ${CMAKE_SOURCE_DIR}/src/html/classic/js/*.js
+                                ${NG_JS_SRC_FILES}
                         COMMENT "Creating translation template (.pot) file from JS")
 
     # XSL template files

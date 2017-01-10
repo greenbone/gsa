@@ -7,7 +7,7 @@
 #  Björn Ricks <bjoern.ricks@greenbone.net>
 #
 # Copyright:
-#  Copyright (C) 2016 Greenbone Networks GmbH
+#  Copyright (C) 2016 - 2017 Greenbone Networks GmbH
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2,
@@ -23,21 +23,18 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
 
+if [ $# -lt 3 ]; then
+  echo "Missing required parameters" > 2;
+  exit 1;
+fi
 
 SOURCE_BASEDIR=$1
-SOURCE_SUBDIR=$2
-POT_FILE=$3
-
-if [ -z "$SOURCE_DIR" ]; then
-  SOURCE_DIR=`dirname $0`/../src/html/classic/js
-fi
-
-if [ -z "$POT_FILE" ]; then
-  POT_FILE=`dirname $0`/../src/po/gsad-js.pot
-fi
-
+POT_FILE=$2
+SOURCE_DIR=$3
 
 mkdir -p `dirname $POT_FILE`
 
-cd "$SOURCE_BASEDIR"
-xgettext --from-code=UTF-8 -o $POT_FILE -L JavaScript ./$SOURCE_SUBDIR/*.js
+cd "$SOURCE_BASEDIR" || exit 2
+SOURCES=`find $SOURCE_DIR -name "*.js" -not -path "*/node_modules/*" -not -path "*/build/*"`
+
+xgettext --from-code=UTF-8 -o "$POT_FILE" -L JavaScript $SOURCES

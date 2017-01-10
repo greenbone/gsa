@@ -5,9 +5,10 @@
 # Authors:
 # Matthew Mundell <matthew.mundell@greenbone.net>
 # Michael Wiegand <michael.wiegand@greenbone.net>
+# Björn Ricks <bjoern.ricks@greenbone.net>
 #
 # Copyright:
-# Copyright (C) 2009-2016 Greenbone Networks GmbH
+# Copyright (C) 2009 - 2017 Greenbone Networks GmbH
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -248,8 +249,6 @@ set (GSA_CONFIG_FILE        "${SYSCONFDIR}/openvas/gsa.conf")
 if (NOT OPENVAS_RUN_DIR)
   set (OPENVAS_RUN_DIR      "${LOCALSTATEDIR}/run")
 endif (NOT OPENVAS_RUN_DIR)
-
-add_subdirectory (src/html/classic/ng)
 
 message ("-- Install prefix: ${CMAKE_INSTALL_PREFIX}")
 
