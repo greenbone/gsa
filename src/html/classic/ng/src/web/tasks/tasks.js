@@ -170,28 +170,35 @@ export class Tasks extends EntitiesComponent {
   render() {
     let {filters, filter} = this.state;
     let counts = this.getCounts();
+    let caps = this.context.capabilities;
     return (
       <div>
         <Toolbar>
           <HelpIcon page="tasks"/>
-          <IconMenu img="wizard.svg" title={_('Wizard')}
-            onClick={() => this.task_wizard.show()}>
-            <MenuEntry title={_('Task Wizard')}
-              onClick={() => this.task_wizard.show()}/>
-            <MenuEntry title={_('Advanced Task Wizard')}
-              onClick={() => this.advanced_task_wizard.show()}/>
-            <MenuEntry title={_('Modify Task Wizard')}
-              onClick={ () => this.modify_task_wizard.show()}/>
-          </IconMenu>
+          {caps.mayOp('run_wizard') &&
+            <IconMenu img="wizard.svg" title={_('Wizard')}
+              onClick={() => this.task_wizard.show()}>
+              <MenuEntry title={_('Task Wizard')}
+                onClick={() => this.task_wizard.show()}/>
+              <MenuEntry title={_('Advanced Task Wizard')}
+                onClick={() => this.advanced_task_wizard.show()}/>
+              <MenuEntry title={_('Modify Task Wizard')}
+                onClick={ () => this.modify_task_wizard.show()}/>
+            </IconMenu>
+          }
           <Icon img="new.svg" title={_('New Task')}
             onClick={() => { this.create_dialog.show(); }}/>
-          <TaskWizard ref={ref => this.task_wizard = ref}
-            onSave={this.reload}
-            onNewClick={() => this.create_dialog.show()}/>
-          <AdvancedTaskWizard ref={ref => this.advanced_task_wizard = ref}
-            onSave={this.reload}/>
-          <ModifyTaskWizard ref={ref => this.modify_task_wizard = ref}
-            onSave={this.reload}/>
+          {caps.mayOp('run_wizard') &&
+            <div>
+              <TaskWizard ref={ref => this.task_wizard = ref}
+                onSave={this.reload}
+                onNewClick={() => this.create_dialog.show()}/>
+              <AdvancedTaskWizard ref={ref => this.advanced_task_wizard = ref}
+                onSave={this.reload}/>
+              <ModifyTaskWizard ref={ref => this.modify_task_wizard = ref}
+                onSave={this.reload}/>
+            </div>
+          }
           <TaskDialog ref={ref => this.create_dialog = ref}
             title={_('Create new Task')} onClose={this.reload}
             onSave={this.reload}/>
@@ -242,6 +249,7 @@ export class Tasks extends EntitiesComponent {
 
 Tasks.contextTypes = {
   gmp: React.PropTypes.object.isRequired,
+  capabilities: React.PropTypes.object.isRequired,
 };
 
 export default Tasks;

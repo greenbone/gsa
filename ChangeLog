@@ -1,3 +1,8 @@
+2017-01-10 Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/src/web/tasks/tasks.js: Check capabilities for running
+	the tasks wizards.
+
 2017-01-09 Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/menu/menubar.js,
