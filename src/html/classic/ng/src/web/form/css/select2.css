@@ -459,16 +459,16 @@
   margin-left: 5px;
 }
 
-.form-horizontal .select2-container {
+.select2-container {
   min-width: 180px;
   width: auto !important;
 }
 
-.form-horizontal .select2-selection {
+.select2-selection {
   padding: 1px 0; /* use same padding top and bottom as inputs */
 }
 
-.form-horizontal .select2-container .select2-selection--multiple {
+.select2-container .select2-selection--multiple {
   min-width: 300px;
   padding-bottom: 5px;
 }
