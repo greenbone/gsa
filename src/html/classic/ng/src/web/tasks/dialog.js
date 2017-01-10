@@ -110,6 +110,8 @@ export class TaskDialog extends Dialog {
       gmp.task.editTaskSettings(task).then(settings => {
         let {targets, scan_configs, alerts, scanners, schedules} = settings;
 
+        log.debug('Loaded edit task dialog settings', settings);
+
         let sorted_scan_configs = this.getSortedScanConfigs(scan_configs);
         let osp_config_id = select_save_id(
           sorted_scan_configs[OSP_SCAN_CONFIG_TYPE], task.config.id);
@@ -155,6 +157,8 @@ export class TaskDialog extends Dialog {
           targets, scanner_id = OPENVAS_DEFAULT_SCANNER_ID, scan_configs,
           config_id = OPENVAS_CONFIG_FULL_AND_FAST_ID, alerts, scanners,
           schedules, tags} = settings;
+
+        log.debug('Loaded new task dialog settings', settings);
 
         let sorted_scan_configs = this.getSortedScanConfigs(scan_configs);
 
