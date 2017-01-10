@@ -4980,7 +4980,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:value-of select="gsa:i18n ('Results')"/>:
         </td>
         <td>
-          <a href="/omp?cmd=get_results&amp;filter=severity&gt;Error and task_id={@id} sort=nvt&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+          <a href="/ng/results?filter=severity&gt;Error and task_id={@id} sort=nvt&amp;filt_id={/envelope/params/filt_id}"
              title="{gsa-i18n:strformat (gsa:i18n ('Results on Task %1'), name)}">
             <xsl:value-of select="result_count/text ()"/>
           </a>
@@ -22833,7 +22833,7 @@ should not have received it.
           </a>
         </div>
         <span class="divider"/>
-        <a href="/omp?cmd=get_results&amp;filter=nvt={info/nvt/@oid}&amp;token={/envelope/token}"
+        <a href="/ng/results?filter=nvt={info/nvt/@oid}"
           title="{gsa:i18n ('Corresponding Results')}"
           class="icon icon-sm">
           <img src="/img/result.svg" title="{gsa:i18n ('Corresponding Results')}" alt="{gsa:i18n ('Results')}"/>
@@ -29772,7 +29772,7 @@ should not have received it.
   <div class="section-header">
     <xsl:call-template name="minor-details"/>
     <h1>
-      <a href="/omp?cmd=get_results&amp;token={/envelope/token}"
+      <a href="/ng/results"
          title="{gsa:i18n ('Results')}">
         <img class="icon icon-lg" src="/img/result.svg" alt="Results"/>
       </a>
@@ -31954,49 +31954,49 @@ should not have received it.
             </td>
             <td>
               <xsl:if test="detail[name = 'Auth-SSH-Success']">
-                <a href="/omp?cmd=get_results&amp;filter=report_id={$id} and host=&#34;{$current_host}&#34; and &#34;1.3.6.1.4.1.25623.1.0.90022&#34;&amp;token={/envelope/token}"
+                <a href="/ng/results?filter=report_id={$id} and host=&#34;{$current_host}&#34; and &#34;1.3.6.1.4.1.25623.1.0.90022&#34;"
                   class="icon icon-sm">
                   <img src="/img/indicator_operation_ok.svg" title="{detail[name = 'Auth-SSH-Success']/value}"/>
                 </a>
               </xsl:if>
               <xsl:if test="detail[name = 'Auth-SSH-Failure']">
-                <a href="/omp?cmd=get_results&amp;filter=report_id={$id} and host=&#34;{$current_host}&#34; and &#34;1.3.6.1.4.1.25623.1.0.90022&#34;&amp;token={/envelope/token}"
+                <a href="/ng/results?filter=report_id={$id} and host=&#34;{$current_host}&#34; and &#34;1.3.6.1.4.1.25623.1.0.90022&#34;"
                   class="icon icon-sm">
                   <img src="/img/indicator_operation_failed.svg" title="{detail[name = 'Auth-SSH-Failure']/value}"/>
                 </a>
               </xsl:if>
               <xsl:if test="detail[name = 'Auth-SMB-Success']">
-                <a href="/omp?cmd=get_results&amp;filter=report_id={$id} and host=&#34;{$current_host}&#34; and &#34;1.3.6.1.4.1.25623.1.0.10394&#34;&amp;token={/envelope/token}"
+                <a href="/ng/results?filter=report_id={$id} and host=&#34;{$current_host}&#34; and &#34;1.3.6.1.4.1.25623.1.0.10394&#34;"
                   class="icon icon-sm">
                   <img src="/img/indicator_operation_ok.svg" title="{detail[name = 'Auth-SMB-Success']/value}"/>
                 </a>
               </xsl:if>
               <xsl:if test="detail[name = 'Auth-SMB-Failure']">
-                <a href="/omp?cmd=get_results&amp;filter=report_id={$id} and host=&#34;{$current_host}&#34; and &#34;1.3.6.1.4.1.25623.1.0.10394&#34;&amp;token={/envelope/token}"
+                <a href="/ng/results?filter=report_id={$id} and host=&#34;{$current_host}&#34; and &#34;1.3.6.1.4.1.25623.1.0.10394&#34;"
                   class="icon icon-sm">
                   <img src="/img/indicator_operation_failed.svg" title="{detail[name = 'Auth-SMB-Failure']/value}"/>
                 </a>
               </xsl:if>
               <xsl:if test="detail[name = 'Auth-ESXi-Success']">
-                <a href="/omp?cmd=get_results&amp;filter=report_id={$id} and host=&#34;{$current_host}&#34; and &#34;1.3.6.1.4.1.25623.1.0.103447&#34;&amp;token={/envelope/token}"
+                <a href="/ng/results?filter=report_id={$id} and host=&#34;{$current_host}&#34; and &#34;1.3.6.1.4.1.25623.1.0.103447&#34;"
                   class="icon icon-sm">
                   <img src="/img/indicator_operation_ok.svg" title="{detail[name = 'Auth-ESXi-Success']/value}"/>
                 </a>
               </xsl:if>
               <xsl:if test="detail[name = 'Auth-ESXi-Failure']">
-                <a href="/omp?cmd=get_results&amp;filter=report_id={$id} and host=&#34;{$current_host}&#34; and &#34;1.3.6.1.4.1.25623.1.0.103447&#34;&amp;token={/envelope/token}"
+                <a href="/ng/results?filter=report_id={$id} and host=&#34;{$current_host}&#34; and &#34;1.3.6.1.4.1.25623.1.0.103447&#34;"
                   class="icon icon-sm">
                   <img src="/img/indicator_operation_failed.svg" title="{detail[name = 'Auth-ESXi-Failure']/value}"/>
                 </a>
               </xsl:if>
               <xsl:if test="detail[name = 'Auth-SNMP-Success']">
-                <a href="/omp?cmd=get_results&amp;filter=report_id={$id} and host=&#34;{$current_host}&#34; and &#34;1.3.6.1.4.1.25623.1.0.105076&#34;&amp;token={/envelope/token}"
+                <a href="/ng/results?filter=report_id={$id} and host=&#34;{$current_host}&#34; and &#34;1.3.6.1.4.1.25623.1.0.105076&#34;"
                   class="icon icon-sm">
                   <img src="/img/indicator_operation_ok.svg" title="{detail[name = 'Auth-SNMP-Success']/value}"/>
                 </a>
               </xsl:if>
               <xsl:if test="detail[name = 'Auth-SNMP-Failure']">
-                <a href="/omp?cmd=get_results&amp;filter=report_id={$id} and host=&#34;{$current_host}&#34; and &#34;1.3.6.1.4.1.25623.1.0.105076&#34;&amp;token={/envelope/token}"
+                <a href="/ng/results?filter=report_id={$id} and host=&#34;{$current_host}&#34; and &#34;1.3.6.1.4.1.25623.1.0.105076&#34;"
                   class="icon icon-sm">
                   <img src="/img/indicator_operation_failed.svg" title="{detail[name = 'Auth-SNMP-Failure']/value}"/>
                 </a>
@@ -32841,7 +32841,7 @@ should not have received it.
     class="icon icon-sm">
     <img src="/img/task.svg" alt="Task"/>
   </a>
-  <a href="?cmd=get_results&amp;filter=report_id={@id}&amp;token={/envelope/token}"
+  <a href="/ng/results?filter=report_id={@id}"
     title="{gsa:i18n ('Corresponding Results')}"
     class="icon icon-sm">
     <img src="/img/result.svg" alt="Results"/>
@@ -38214,7 +38214,7 @@ should not have received it.
       </tr>
     </table>
     <div class="section-box">
-      <a href="/omp?cmd=get_results&amp;filter=host={name}&amp;token={/envelope/token}">
+      <a href="/ng/results?filter=host={name}">
         <xsl:value-of select="gsa:i18n ('Show scan results for this host')"/>
       </a>
     </div>
@@ -39280,7 +39280,7 @@ should not have received it.
       <xsl:variable name="filter_term">
         <xsl:value-of select="concat ('nvt=', @id)"/>
       </xsl:variable>
-      <a href="/omp?cmd=get_results&amp;filter={$filter_term}&amp;token={/envelope/token}" title="{gsa:i18n ('View Results for this Vulnerability')}">
+      <a href="/ng/results?filter={$filter_term}" title="{gsa:i18n ('View Results for this Vulnerability')}">
         <xsl:value-of select="results/count"/>
       </a>
     </td>
