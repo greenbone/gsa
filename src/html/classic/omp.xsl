@@ -30784,9 +30784,6 @@ should not have received it.
         </xsl:with-param>
       </xsl:call-template>
     </xsl:when>
-    <xsl:when test="not (/envelope/params/result_id)">
-      <xsl:call-template name="html-results-table"/>
-    </xsl:when>
     <xsl:otherwise>
       <xsl:apply-templates select="result" mode="details"/>
     </xsl:otherwise>
@@ -31012,114 +31009,6 @@ should not have received it.
 </xsl:template>
 
 <!--     GET_RESULTS -->
-
-<xsl:template name="html-results-table">
-  <xsl:call-template name="list-window">
-    <xsl:with-param name="type" select="'result'"/>
-    <xsl:with-param name="cap-type" select="'Result'"/>
-    <xsl:with-param name="resources-summary" select="results"/>
-    <xsl:with-param name="resources" select="result"/>
-    <xsl:with-param name="count" select="count (result)"/>
-    <xsl:with-param name="filtered-count" select="result_count/filtered"/>
-    <xsl:with-param name="full-count" select="result_count/text()"/>
-    <xsl:with-param name="top-visualization">
-      <xsl:call-template name="init-d3charts"/>
-      <xsl:call-template name="js-scan-management-top-visualization">
-        <xsl:with-param name="type" select="'result'"/>
-      </xsl:call-template>
-    </xsl:with-param>
-    <xsl:with-param name="columns" xmlns="">
-      <column>
-        <name><xsl:value-of select="gsa:i18n('Vulnerability')"/></name>
-        <field>vulnerability</field>
-      </column>
-      <column>
-        <name><xsl:value-of select="gsa:i18n('Solution type')"/></name>
-        <field>solution_type</field>
-        <image>/img/solution_type.svg</image>
-      </column>
-      <column>
-        <name><xsl:value-of select="gsa:i18n('Severity', 'Severity Short')"/></name>
-        <field>severity</field>
-        <html>
-          <before>
-            <xsl:choose>
-              <xsl:when test="/envelope/params/bulk_select = 1">
-                <div class="pull-right">
-                  <xsl:choose>
-                    <xsl:when test="filters/keywords/keyword[column='apply_overrides']/value = 0">
-                      <img src="/img/overrides_disabled.svg"
-                        alt="{gsa:i18n ('No Overrides')}"
-                        title="{gsa:i18n ('No Overrides')}"
-                        class="icon icon-sm"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <img src="/img/overrides_enabled.svg"
-                        alt="{gsa:i18n ('Overrides are Applied')}"
-                        title="{gsa:i18n ('Overrides are Applied')}"
-                        class="icon icon-sm"/>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                </div>
-              </xsl:when>
-              <xsl:otherwise>
-                <div class="pull-right">
-                  <form method="get" action="">
-                    <input type="hidden" name="token" value="{/envelope/token}"/>
-                    <input type="hidden" name="cmd" value="get_results"/>
-                    <input type="hidden" name="filter" value="{filters/term}"/>
-                    <xsl:choose>
-                      <xsl:when test="filters/keywords/keyword[column='apply_overrides']/value = 0">
-                        <input type="hidden" name="overrides" value="1"/>
-                        <input type="image"
-                          name="No Overrides"
-                          src="/img/overrides_disabled.svg"
-                          alt="{gsa:i18n ('No Overrides')}"
-                          value="No Overrides"
-                          title="{gsa:i18n ('No Overrides')}"
-                          class="icon icon-sm"/>
-                      </xsl:when>
-                      <xsl:otherwise>
-                        <input type="hidden" name="overrides" value="0"/>
-                        <input type="image"
-                          name="Overrides are Applied"
-                          src="/img/overrides_enabled.svg"
-                          alt="{gsa:i18n ('Overrides are Applied')}"
-                          value="Overrides are Applied"
-                          title="{gsa:i18n ('Overrides are Applied')}"
-                          class="icon icon-sm"/>
-                      </xsl:otherwise>
-                    </xsl:choose>
-                  </form>
-                </div>
-              </xsl:otherwise>
-            </xsl:choose>
-          </before>
-        </html>
-      </column>
-      <column>
-        <name><xsl:value-of select="gsa:i18n('QoD')"/></name>
-        <field>qod</field>
-        <sort-reverse/>
-      </column>
-      <column>
-        <name><xsl:value-of select="gsa:i18n('Host')"/></name>
-        <field>host</field>
-        <sort-reverse/>
-      </column>
-      <column>
-        <name><xsl:value-of select="gsa:i18n('Location', 'Result')"/></name>
-        <field>location</field>
-      </column>
-      <column>
-        <name><xsl:value-of select="gsa:i18n('Created', 'Date')"/></name>
-        <field>created</field>
-        <sort-reverse/>
-      </column>
-    </xsl:with-param>
-    <xsl:with-param name="icon-count" select="/envelope/params/bulk_select = 1"/>
-  </xsl:call-template>
-</xsl:template>
 
 <xsl:template match="result">
   <tr class="{gsa:table-row-class(position())}">
