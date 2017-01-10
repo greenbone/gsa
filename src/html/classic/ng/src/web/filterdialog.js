@@ -34,7 +34,7 @@ import YesNoRadio from './form/yesnoradio.js';
 import Spinner from './form/spinner.js';
 import Select2 from './form/select2.js';
 import TextField from './form/textfield.js';
-import {RadioInline} from './form/radio.js';
+import Radio from './form/radio.js';
 
 import Filter from '../gmp/models/filter.js';
 
@@ -216,13 +216,15 @@ export class FilterDialog extends Dialog {
           </Select2>
         </FormItem>
         <FormItem>
-          <RadioInline
+          <Radio
+            className="inline"
             name="sort_order"
             value="sort"
             checked={sort_order === 'sort'}
             title={_('Ascending')}
             onChange={this.onSortOrderChange}/>
-          <RadioInline
+          <Radio
+            className="inline"
             name="sort_order"
             value="sort-reverse"
             checked={sort_order === 'sort-reverse'}

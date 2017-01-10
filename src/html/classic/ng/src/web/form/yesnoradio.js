@@ -29,13 +29,15 @@ import _ from '../../locale.js';
 import Layout from '../layout.js';
 import {handle_value_change} from '../form.js';
 
-import {RadioInline} from './radio.js';
+import Radio from './radio.js';
 
 export const YesNoRadio = ({disabled, onChange, value, name}) => {
   value = parse_int(value);
   return (
     <Layout flex>
-      <RadioInline title={_('Yes')}
+      <Radio
+        title={_('Yes')}
+        className="inline"
         value="1"
         checked={value === 1} disabled={disabled}
         onChange={val => handle_value_change({
@@ -44,7 +46,9 @@ export const YesNoRadio = ({disabled, onChange, value, name}) => {
           conversion: parse_int,
           name,
         })}/>
-      <RadioInline title={_('No')}
+      <Radio
+        title={_('No')}
+        className="inline"
         value="0"
         checked={value === 0} disabled={disabled}
         onChange={val => handle_value_change({

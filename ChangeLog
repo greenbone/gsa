@@ -1,5 +1,13 @@
 2017-01-10 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/credentials/dialog.js,
+	src/html/classic/ng/src/web/filterdialog.js,
+	src/html/classic/ng/src/web/form/radio.js,
+	src/html/classic/ng/src/web/form/yesnoradio.js: Get rid of obsolete
+	RadioInline component.
+
+2017-01-10 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/po/gsad_js-de.po: Update German js translations to test NG localization.
 
 2017-01-10 Björn Ricks <bjoern.ricks@greenbone.net>

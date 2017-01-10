@@ -24,14 +24,11 @@
 import React from 'react';
 
 import {classes, is_defined} from '../../utils.js';
-import logger from '../../log.js';
 
 import FormItem from './formitem.js';
 
 import './css/form.css';
 import './css/checkboxradio.css';
-
-const log = logger.getLogger('web.form.radio');
 
 export class Radio extends React.Component {
 
@@ -77,36 +74,6 @@ Radio.propTypes = {
   title: React.PropTypes.string,
   onChange: React.PropTypes.func,
 };
-
-/* RadioInline should not be used anymore */
-export class RadioInline extends Radio {
-
-  constructor(...args) {
-    super(...args);
-
-    log.warn('RadioInline is deprecated. Please use Radio with ' +
-      'className="inline" instead.');
-  }
-
-  render() {
-    let {title, children, disabled, ...other} = this.props;
-
-    let css = classes('radio-inline', disabled ? 'disabled' : '');
-
-    return (
-      <label className={css}>
-        <input {...other} type="radio"
-          onChange={this.handleChange}/>
-        {is_defined(title) &&
-          <span>
-            {title}
-          </span>
-        }
-        {children}
-      </label>
-    );
-  }
-}
 
 export class RadioFormItem extends Radio {
 
