@@ -21,7 +21,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {map} from '../../utils.js';
+import {map, is_empty} from '../../utils.js';
 import logger from '../../log.js';
 
 import {EntitiesCommand, EntityCommand, register_command} from '../command.js';
@@ -119,20 +119,35 @@ export class TaskCommand extends EntityCommand {
 
   newTaskSettings() {
     return this.httpGet({cmd: 'new_task'}).then(xhr => {
+      let settings = {};
       let {new_task} = xhr;
-      new_task.targets = map(new_task.get_targets_response.target,
+      settings.targets = map(new_task.get_targets_response.target,
         target => new Target(target));
-      new_task.scan_configs = map(new_task.get_configs_response.config,
+      settings.scan_configs = map(new_task.get_configs_response.config,
         config => new Model(config));
-      new_task.alerts = map(new_task.get_alerts_response.alert,
+      settings.alerts = map(new_task.get_alerts_response.alert,
         alert => new Model(alert));
-      new_task.schedules = map(new_task.get_schedules_response.schedule,
+      settings.schedules = map(new_task.get_schedules_response.schedule,
         schedule => new Schedule(schedule));
-      new_task.scanners = map(new_task.get_scanners_response.scanner,
+      settings.scanners = map(new_task.get_scanners_response.scanner,
         scanner => new Scanner(scanner));
-      new_task.tags = map(new_task.get_tags_response.tag,
+      settings.tags = map(new_task.get_tags_response.tag,
         tag => new Model(tag));
-      return new_task;
+      settings.alert_id = is_empty(new_task.alert_id) ?
+        undefined : new_task.alert_id;
+      settings.config_id = is_empty(new_task.config_id) ?
+        undefined : new_task.config_id;
+      settings.osp_config_id = is_empty(new_task.osp_config_id) ?
+        undefined : new_task.osp_config_id;
+      settings.osp_scanner_id = is_empty(new_task.osp_scanner_id) ?
+        undefined : new_task.osp_scanner_id;
+      settings.scanner_id = is_empty(new_task.scanner_id) ?
+        undefined : new_task.scanner_id;
+      settings.schedule_id = is_empty(new_task.schedule_id) ?
+        undefined : new_task.schedule_id;
+      settings.target_id = is_empty(new_task.target_id) ?
+        undefined : new_task.target_id;
+      return settings;
     });
   }
 

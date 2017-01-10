@@ -24,7 +24,7 @@
 import React from 'react'; // eslint-disable-line max-lines
 
 import {parse_int, for_each, map, is_array, is_defined, is_empty, first,
-  includes, autobind, classes, select_save_id, extend} from '../../utils.js';
+  includes_id, autobind, classes, select_save_id, extend} from '../../utils.js';
 import _ from '../../locale.js';
 import logger from '../../log.js';
 
@@ -115,8 +115,7 @@ export class TaskDialog extends Dialog {
           sorted_scan_configs[OSP_SCAN_CONFIG_TYPE], task.config.id);
 
         let openvas_config_id =  select_save_id(
-          sorted_scan_configs[OPENVAS_SCAN_CONFIG_TYPE], task.config.id,
-          OPENVAS_CONFIG_FULL_AND_FAST_ID);
+          sorted_scan_configs[OPENVAS_SCAN_CONFIG_TYPE], task.config.id);
 
         let schedule_id;
         if (capabilities.mayOp('get_schedules') &&
@@ -152,14 +151,14 @@ export class TaskDialog extends Dialog {
     }
     else {
       gmp.task.newTaskSettings().then(settings => {
-        let {schedule_id, alert_id, config_id, osp_config_id, target_id,
-          targets, scanner_id, scan_configs, alerts, scanners, schedules,
-          tags} = settings;
+        let {schedule_id, alert_id, osp_config_id, target_id,
+          targets, scanner_id = OPENVAS_DEFAULT_SCANNER_ID, scan_configs,
+          config_id = OPENVAS_CONFIG_FULL_AND_FAST_ID, alerts, scanners,
+          schedules, tags} = settings;
 
         let sorted_scan_configs = this.getSortedScanConfigs(scan_configs);
 
-        scanner_id = select_save_id(scanners, scanner_id,
-          OPENVAS_DEFAULT_SCANNER_ID);
+        scanner_id = select_save_id(scanners, scanner_id);
 
         let scanner = this.getScanner(scanner_id, scanners);
 
@@ -167,15 +166,14 @@ export class TaskDialog extends Dialog {
 
         schedule_id = select_save_id(schedules, schedule_id, 0);
 
-        alert_id = includes(alerts, alert_id) ? alert_id : undefined;
+        alert_id = includes_id(alerts, alert_id) ? alert_id : undefined;
 
         let alert_ids = is_defined(alert_id) ? [alert_id] : [];
 
         osp_config_id = select_save_id(
           sorted_scan_configs[OSP_SCAN_CONFIG_TYPE], osp_config_id);
         config_id = select_save_id(
-          sorted_scan_configs[OPENVAS_SCAN_CONFIG_TYPE], config_id,
-          OPENVAS_CONFIG_FULL_AND_FAST_ID);
+          sorted_scan_configs[OPENVAS_SCAN_CONFIG_TYPE], config_id);
 
         this.setState({
           alert_ids,
@@ -410,11 +408,11 @@ export class TaskDialog extends Dialog {
       );
     });
 
-    let target_opts = this.renderOptions(targets, target_id);
+    let target_opts = this.renderOptions(targets);
 
     let schedule_opts = this.renderOptions(schedules, schedule_id, 0);
 
-    let scanner_opts = scanner && this.renderOptions(scanners, scanner.id);
+    let scanner_opts = this.renderOptions(scanners);
 
     let osp_scan_config_opts = is_osp_scanner && this.renderOptions(
       scan_configs[OSP_SCAN_CONFIG_TYPE], osp_config_id);
@@ -424,9 +422,9 @@ export class TaskDialog extends Dialog {
         scan_configs[OPENVAS_SCAN_CONFIG_TYPE].filter(config => {
           // Skip the "empty" config
           return config.id !== OPENVAS_CONFIG_EMPTY_ID;
-        }), openvas_config_id);
+        }));
 
-    let alert_opts = this.renderOptions(alerts, alert_ids);
+    let alert_opts = this.renderOptions(alerts);
 
     let change_task = task ? task.isNew() : true;
 
