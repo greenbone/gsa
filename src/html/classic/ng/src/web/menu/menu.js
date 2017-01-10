@@ -23,20 +23,35 @@
 
 import React from 'react';
 
+import {is_defined} from '../../utils.js';
+
 import Link from '../link.js';
 import LegacyLink from '../legacylink.js';
 
 import './css/menu.css';
 
-export const Menu = props => {
-  let {to, title, legacy, children, ...other} = props;
-
-  let link;
+function create_link(title, options = {}) {
+  let {to, legacy, children, caps, ...other} = options; // eslint-disable-line no-unused-vars
   if (legacy) {
-    link = <LegacyLink {...other}>{title}</LegacyLink>;
+    return <LegacyLink {...other}>{title}</LegacyLink>;
   }
-  else {
-    link = <Link to={to}>{title}</Link>;
+  else if (to) {
+    return <Link to={to}>{title}</Link>;
+  }
+  return undefined;
+}
+
+export const Menu = props => {
+  let {children, title} = props;
+
+  let link = create_link(title, props);
+
+  if (!is_defined(link) && is_defined(children) && children.length > 0) {
+    // create link from first menu entry
+    // this allows to have different links depending on the capabilities of a
+    // user
+    let child = children[0];
+    link = create_link(title, child.props);
   }
   return (
     <li className="menu">

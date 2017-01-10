@@ -61,7 +61,7 @@ export const MenuBar = (props, context) => {
           </Link>
         </li>
         {may_op_scans &&
-          <Menu title={_('Scans')} to="dashboards/scans">
+          <Menu title={_('Scans')}>
             <MenuEntry title={_('Dashboard')} to="dashboards/scans"/>
             <MenuEntry section title={_('Tasks')} to="tasks" caps="get_tasks"/>
             <MenuEntry legacy title={_('Reports')} cmd="get_reports"
@@ -77,7 +77,7 @@ export const MenuBar = (props, context) => {
           </Menu>
         }
         {caps.mayOp('get_assets') &&
-          <Menu title={_('Assets')} to="dashboards/assets">
+          <Menu title={_('Assets')}>
             <MenuEntry title={_('Dashboard')} to="dashboards/assets"/>
             <MenuEntry legacy section title={_('Hosts')} cmd="get_assets"
               asset_type="host"/>
@@ -89,7 +89,7 @@ export const MenuBar = (props, context) => {
           </Menu>
         }
         {caps.mayOp('get_info') &&
-          <Menu title={_('SecInfo')} to="dashboards/secinfo">
+          <Menu title={_('SecInfo')}>
             <MenuEntry title={_('Dashboard')} to="dashboards/secinfo"/>
             <MenuEntry legacy section title={_('NVTs')} cmd="get_info"
               info_type="nvt"/>
@@ -105,7 +105,7 @@ export const MenuBar = (props, context) => {
               info_type="allinfo"/>
           </Menu>
         }
-        <Menu legacy title={_('Configuration')} cmd="get_targets">
+        <Menu title={_('Configuration')}>
           <MenuEntry legacy title={_('Targets')} cmd="get_targets"
             caps="get_targets"/>
           <MenuEntry legacy title={_('Port Lists')} cmd="get_port_lists"
@@ -131,7 +131,7 @@ export const MenuBar = (props, context) => {
           <MenuEntry legacy title={_('Permissions')} cmd="get_permissions"
             caps="get_permissions"/>
         </Menu>
-        <Menu legacy title={_('Extras')} cmd="get_trash">
+        <Menu title={_('Extras')}>
           <MenuEntry legacy title={_('Trashcan')} cmd="get_trash"/>
           <MenuEntry legacy title={_('My Settings')} cmd="get_my_settings"
             caps="get_settings"/>
@@ -141,7 +141,7 @@ export const MenuBar = (props, context) => {
           <MenuEntry legacy title={_('Feed Status')} cmd="get_feeds"
             caps="get_feeds"/>
         </Menu>
-        <Menu legacy title={_('Administration')} cmd="get_users">
+        <Menu title={_('Administration')}>
           <MenuEntry legacy title={_('Users')} cmd="get_users"
             caps="get_users"/>
           <MenuEntry legacy title={_('Groups')} cmd="get_groups"

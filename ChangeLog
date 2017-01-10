@@ -1,3 +1,10 @@
+2017-01-10 Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/src/web/menu/menu.js,
+	src/html/classic/ng/src/web/menu/menubar.js: Allow to use the first menu entry
+	for the link of a menu. This avoids getting a link to an invalid page if a
+	user doesn't have the permission to access it.
+
 2017-01-10  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/js/gsa_bar_chart.js
