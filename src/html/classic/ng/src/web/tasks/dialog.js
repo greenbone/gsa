@@ -431,21 +431,21 @@ export class TaskDialog extends Dialog {
     let change_task = task ? task.isNew() : true;
 
     return (
-      <Layout float className="form-horizontal">
-        <FormGroup title={_('Name')}>
+      <Layout flex="column">
+        <FormGroup title={_('Name')} flex>
           <TextField name="name"
             value={name} size="30"
             onChange={this.onNameChange}
             maxLength="80"/>
         </FormGroup>
 
-        <FormGroup title={_('Comment')}>
+        <FormGroup title={_('Comment')} flex>
           <TextField name="comment" value={comment}
             size="30" maxLength="400"
             onChange={this.onCommentChange}/>
         </FormGroup>
 
-        <FormGroup title={_('Scan Targets')}>
+        <FormGroup title={_('Scan Targets')} flex>
           <FormItem>
             <Select2 name="target_id" disabled={!change_task}
               onChange={this.onTargetIdChange} value={target_id}>
@@ -462,7 +462,7 @@ export class TaskDialog extends Dialog {
         </FormGroup>
 
         <FormGroup condition={capabilities.mayOp('get_alerts')}
-          title={_('Alerts')}>
+          title={_('Alerts')} flex>
           <FormItem>
             <Select2 name="alert_ids" multiple="multiple" id="alert_ids"
               onChange={this.onAlertIdsChange} value={alert_ids}>
@@ -476,7 +476,7 @@ export class TaskDialog extends Dialog {
         </FormGroup>
 
         <FormGroup condition={capabilities.mayOp('get_schedules')}
-          title={_('Schedule')}>
+          title={_('Schedule')} flex>
           <FormItem>
             <Select2 name="schedule_id" value={schedule_id}
               onChange={this.onScheduleChange}>
@@ -495,18 +495,18 @@ export class TaskDialog extends Dialog {
           </FormItem>
         </FormGroup>
 
-        <FormGroup title={_('Add results to Assets')}>
+        <FormGroup title={_('Add results to Assets')} flex>
           <YesNoRadio value={in_assets} onChange={this.onInAssetChange} />
         </FormGroup>
 
-        <div className={classes('offset-container offset-2',
+        <Layout flex="column" className={classes('offset-container offset-2',
           in_assets === 1 ? '' : 'disabled')}>
-          <FormGroup title={_('Apply Overrides')}>
+          <FormGroup title={_('Apply Overrides')} flex>
             <YesNoRadio value={apply_overrides} disabled={in_assets !== 1}
               onChange={this.onApplyOverridesChange}/>
           </FormGroup>
 
-          <FormGroup title={_('Min QoD')}>
+          <FormGroup title={_('Min QoD')} flex>
             <FormItem>
               <Spinner name="min_qod" value={min_qod} size="4"
                 onChange={this.onMinQodChange}
@@ -514,13 +514,13 @@ export class TaskDialog extends Dialog {
             </FormItem>
             <FormItem>%</FormItem>
           </FormGroup>
-        </div>
+        </Layout>
 
-        <FormGroup title={_('Alterable Task')} condition={change_task}>
+        <FormGroup title={_('Alterable Task')} condition={change_task} flex>
           <YesNoRadio value={alterable} onChange={this.onAlterableChange}/>
         </FormGroup>
 
-        <FormGroup title={_('Auto Delete Reports')}>
+        <FormGroup title={_('Auto Delete Reports')} flex>
           <Radio title={_('Do not automatically delete reports')}
             name="auto_delete" value="no"
             onChange={this.onAutoDeleteChange}
@@ -541,7 +541,7 @@ export class TaskDialog extends Dialog {
           </Radio>
         </FormGroup>
 
-        <FormGroup title={_('Scanner')}>
+        <FormGroup title={_('Scanner')} flex>
           <Select2 name="scanner_id" value={scanner_id}
             disabled={!change_task}
             onChange={this.onScannerChange}>
@@ -550,22 +550,23 @@ export class TaskDialog extends Dialog {
         </FormGroup>
 
         {use_openvas_scan_config &&
-          <div className="form-group offset-container offset-2">
-            <FormGroup titleSize="4" title={_('Scan Config')}>
+          <Layout flex="column"
+            className="form-group offset-container offset-2">
+            <FormGroup titleSize="4" title={_('Scan Config')} flex>
               <Select2 name="config_id" value={openvas_config_id}
                 disabled={!change_task}
                 onChange={this.onOpenvasScanConfigChange}>
                 {openvas_scan_config_opts}
               </Select2>
             </FormGroup>
-            <FormGroup titleSize="4" title={_('Network Source Interface')}>
+            <FormGroup flex titleSize="4" title={_('Network Source Interface')}>
               <FormItem>
                 <TextField name="source_iface"
                   onChange={this.onSourceIfaceChange}
                   value={source_iface}/>
               </FormItem>
             </FormGroup>
-            <FormGroup titleSize="4" title={_('Order for target hosts')}>
+            <FormGroup flex titleSize="4" title={_('Order for target hosts')}>
               <Select2 name="hosts_ordering" value={hosts_ordering}
                 onChange={this.onHostOrderingChange}>
                 <option value="sequential">
@@ -579,31 +580,32 @@ export class TaskDialog extends Dialog {
                 </option>
               </Select2>
             </FormGroup>
-            <FormGroup titleSize="4"
+            <FormGroup titleSize="4" flex
               title={_('Maximum concurrently executed NVTs per host')}>
               <Spinner name="max_checks" value={max_checks}
                 min="0" size="10" maxLength="10"
                 onChange={this.onMaxChecksChange}/>
             </FormGroup>
-            <FormGroup titleSize="4"
+            <FormGroup titleSize="4" flex
               title={_('Maximum concurrently scanned hosts')}>
               <Spinner name="max_hosts" value={max_hosts}
                 type="int" min="0"
                 size="10" maxLength="10"
                 onChange={this.onMaxHostsChange}/>
             </FormGroup>
-          </div>
+          </Layout>
         }
 
         {is_osp_scanner &&
-          <div className="form-group offset-container offset-2">
-            <FormGroup titleSize="4" title={_('Scan Config')}>
+          <Layout flex="column"
+            className="form-group offset-container offset-2">
+            <FormGroup titleSize="4" title={_('Scan Config')} flex>
               <Select2 name="config_id" value={osp_config_id}
                 onChange={this.onOspScanConfigChange}>
                 {osp_scan_config_opts}
               </Select2>
             </FormGroup>
-          </div>
+          </Layout>
         }
 
         {capabilities.mayOp('get_tags') && capabilities.mayOp('create_task') &&
@@ -611,7 +613,7 @@ export class TaskDialog extends Dialog {
           <h3>{_('Tag')}</h3>
         }
         <FormGroup condition={capabilities.mayOp('get_tags') &&
-          capabilities.mayOp('create_task') && tags.length > 0}>
+          capabilities.mayOp('create_task') && tags.length > 0} flex>
           <FormItem>
             <Checkbox name="add_tag"
               onChange={this.onAddTagChange}
