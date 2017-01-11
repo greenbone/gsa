@@ -153,11 +153,12 @@ export class EntitiesCommand extends HttpCommand {
 
 export class EntityCommand extends HttpCommand {
 
-  constructor(http, cmd, id_name, clazz) {
-    super(http, {cmd});
+  constructor(http, name, clazz) {
+    super(http, {cmd: 'get_' + name});
 
     this.clazz = clazz;
-    this.id_name = id_name;
+    this.name = name;
+    this.id_name = name + '_id';
   }
 
   getParams(params, extra_params = {}) {

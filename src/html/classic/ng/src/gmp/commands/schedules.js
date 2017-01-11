@@ -32,7 +32,7 @@ const log = logger.getLogger('gmp.commands.schedules');
 export class ScheduleCommand extends EntityCommand {
 
   constructor(http) {
-    super(http, 'get_schedule', 'schedule_id', Schedule);
+    super(http, 'schedule', Schedule);
   }
 
   create(args) {

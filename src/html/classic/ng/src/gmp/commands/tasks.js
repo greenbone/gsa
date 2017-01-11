@@ -37,7 +37,7 @@ const log = logger.getLogger('gmp.commands.tasks');
 export class TaskCommand extends EntityCommand {
 
   constructor(http) {
-    super(http, 'get_task', 'task_id', Task);
+    super(http, 'task', Task);
   }
 
   start({id}) {

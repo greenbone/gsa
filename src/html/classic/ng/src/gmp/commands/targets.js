@@ -32,7 +32,7 @@ const log = logger.getLogger('gmp.commands.targets');
 export class TargetCommand extends EntityCommand {
 
   constructor(http) {
-    super(http, 'get_target', 'target_id', Target);
+    super(http, 'target', Target);
   }
 
   create(args) {

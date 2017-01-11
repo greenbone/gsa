@@ -53,7 +53,7 @@ const condition_data_fields = [
 export class AlertCommand extends EntityCommand {
 
   constructor(http) {
-    super(http, 'get_alert', 'alert_id', Alert);
+    super(http, 'alert', Alert);
   }
 
   create(args) {

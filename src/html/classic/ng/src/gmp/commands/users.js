@@ -36,7 +36,7 @@ const log = logger.getLogger('gmp.commands.users');
 export class UserCommand extends EntityCommand {
 
   constructor(http) {
-    super(http, 'get_user', 'user_id', User);
+    super(http, 'user', User);
   }
 
   currentSettings() {

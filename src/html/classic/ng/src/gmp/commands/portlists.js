@@ -32,7 +32,7 @@ const log = logger.getLogger('gmp.commands.portlists');
 export class PortListCommand extends EntityCommand {
 
   constructor(http) {
-    super(http, 'get_port_list', 'port_list_id', PortList);
+    super(http, 'port_list', PortList);
   }
 
   create(args) {

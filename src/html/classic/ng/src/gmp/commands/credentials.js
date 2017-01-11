@@ -32,7 +32,7 @@ const log = logger.getLogger('gmp.commands.credentials');
 export class CredentialCommand extends EntityCommand {
 
   constructor(http) {
-    super(http, 'get_credential', 'credential_id', Credential);
+    super(http, 'credential', Credential);
   }
 
   create(args) {
