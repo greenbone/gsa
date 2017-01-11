@@ -178,6 +178,33 @@ export class EntityCommand extends HttpCommand {
     return this.httpGet({id}).then(xhr => this.getModelFromResponse(xhr));
   }
 
+  clone({id}) {
+    let extra_params = {
+      id, // we need plain 'id' in the submitted form data not 'xyz_id'
+    };
+    return this.httpPost({
+      cmd: 'clone',
+      resource_type: this.name,
+      next: 'get_'  + this.name,
+    }, {
+      extra_params,
+    }).then(xhr => {
+      log.debug('Cloned', this.name);
+      return this.getModelFromResponse(xhr);
+    })
+    .catch(err => {
+      log.error('An error occured while cloning', this.name, id, err);
+      throw err;
+    });
+  }
+
+  delete({id}) {
+    log.debug('Deleting', this.name, id);
+
+    let params = {cmd: 'delete_' + this.name, id};
+    return this.httpPost(params);
+  }
+
   getElementFromResponse(root) {
     throw new Error('getElementFromResponse not implemented in ' +
       this.constructor.name);

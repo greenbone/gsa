@@ -76,13 +76,6 @@ export class TaskCommand extends EntityCommand {
     });
   }
 
-  delete({id}) {
-    log.debug('Deleting task');
-
-    let params = {cmd: 'delete_task', id};
-    return this.httpPost(params);
-  }
-
   resume({id}) {
     return this.httpPost({
       cmd: 'resume_task',
@@ -93,26 +86,6 @@ export class TaskCommand extends EntityCommand {
     })
     .catch(err => {
       log.error('An error occured while resuming the task', id, err);
-      throw err;
-    });
-  }
-
-  clone({id}) {
-    let extra_params = {
-      id, // we need plain 'id' in the submitted form data not 'task_id'
-    };
-    return this.httpPost({
-      cmd: 'clone',
-      resource_type: 'task',
-      next: 'get_task',
-    }, {
-      extra_params,
-    }).then(xhr => {
-      log.debug('Cloned task');
-      return this.getModelFromResponse(xhr);
-    })
-    .catch(err => {
-      log.error('An error occured while cloning the task', id, err);
       throw err;
     });
   }
