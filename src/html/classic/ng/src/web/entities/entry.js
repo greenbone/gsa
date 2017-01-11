@@ -24,6 +24,7 @@
 import React from 'react';
 
 import _ from '../../locale.js';
+import {is_defined, capitalize_first_letter} from '../../utils.js';
 
 import Layout from '../layout.js';
 import SelectionType from '../selectiontype.js';
@@ -34,10 +35,28 @@ import Icon from '../icons/icon.js';
 
 export class EntitiesEntry extends React.Component {
 
-  constructor(...args) {
+  constructor(name, ...args) {
     super(...args);
 
+    this.name = name;
+
     this.onSelectionChange = this.onSelectionChange.bind(this);
+    this.handleDelete = this.handleDelete.bind(this);
+    this.handleClone = this.handleClone.bind(this);
+  }
+
+  getEntityName() {
+    return this.name;
+  }
+
+  getEntity() {
+    let name = this.getEntityName();
+    return this.state[name];
+  }
+
+  getGmp() {
+    let name = this.getEntityName();
+    return this.context.gmp[name];
   }
 
   onSelectionChange(value) {
@@ -54,9 +73,33 @@ export class EntitiesEntry extends React.Component {
     }
   }
 
+  handleClone() {
+    let gmp = this.getGmp();
+    let entity = this.getEntity();
+    let {onCloned} = this.props;
+
+    gmp.clone(entity).then(e => {
+      if (is_defined(onCloned)) {
+        onCloned(e);
+      }
+    });
+  }
+
+  handleDelete() {
+    let gmp = this.getGmp();
+    let entity = this.getEntity();
+    let {onDelete} = this.props;
+
+    gmp.delete(entity).then(() => {
+      if (is_defined(onDelete)) {
+        onDelete(entity);
+      }
+    });
+  }
+
   renderSelection() {
     return (
-      <td>
+      <td className="table-actions">
         <Layout flex align={['center', 'center']}>
           <Checkbox onChange={this.onSelectionChange}/>
         </Layout>
@@ -66,6 +109,34 @@ export class EntitiesEntry extends React.Component {
 
   renderTableButtons() {
     return null;
+  }
+
+  renderDeleteButton() {
+    let {capabilities} = this.context;
+    let name = this.getEntityName();
+    let entity = this.getEntity();
+    let uname = capitalize_first_letter(name);
+
+    if (capabilities.mayDelete(name) && entity.isWriteable() &&
+      !entity.isInUse()) {
+      return this.renderDeleteButtonActive();
+    }
+
+    let title; // FIXME translation of entity name doesn't work here currently
+    if (entity.isInUse()) {
+      title = _('{{entity}} is still in use', {entity: uname});
+    }
+    else if (!entity.isWriteable()) {
+      title = _('{{entity}} is not writable', {entity: uname});
+    }
+    else if (!capabilities.mayDelete(name)) { // eslint-disable-line no-negated-condition
+      title = _('Permission to move {{entity}} to tashcan denied',
+        {entity: uname});
+    }
+    else {
+      title = _('Cannot move to tashcan');
+    }
+    return this.renderDeleteButtonInActive(title);
   }
 
   renderDeleteButtonActive() {
@@ -82,6 +153,30 @@ export class EntitiesEntry extends React.Component {
     );
   }
 
+  renderEditButton() {
+    let {capabilities} = this.context;
+    let name = this.getEntityName();
+    let entity = this.getEntity();
+    let uname = capitalize_first_letter(name);
+
+    if (capabilities.mayEdit(name) && entity.isWriteable()) {
+      return this.renderEditButtonActive();
+    }
+
+    let title; // FIXME translation of entity name doesn't work here currently
+    if (!entity.isWriteable()) {
+      title = _('{{entity}} is not writable', {entity: uname});
+    }
+    else if (!capabilities.mayEdit(name)) { // eslint-disable-line no-negated-condition
+
+      title = _('Permission to edit {{entity}} denied', {entity: uname});
+    }
+    else {
+      title = _('Cannot modify {{entity}}');
+    }
+    return this.renderEditButtonInActive(title);
+  }
+
   renderEditButtonActive() {
     return (
       <Icon size="small" img="edit.svg" title={_('Edit')}
@@ -95,6 +190,13 @@ export class EntitiesEntry extends React.Component {
     );
   }
 
+  renderCloneButton() {
+    let {capabilities} = this.context;
+    let name = this.getEntityName();
+    return capabilities.mayClone(name) ?
+      this.renderCloneButtonActive() : this.renderCloneButtonInActive();
+  }
+
   renderCloneButtonActive() {
     return (
       <Icon size="small" img="clone.svg" title={_('Clone')}
@@ -102,10 +204,10 @@ export class EntitiesEntry extends React.Component {
     );
   }
 
-  renderCloneButtonInActive(title) {
+  renderCloneButtonInActive() {
     return (
       <Icon size="small" img="clone_inactive.svg"
-        title={title}/>
+        title={_('Permission to clone denied')}/>
     );
   }
 
@@ -120,6 +222,8 @@ EntitiesEntry.propTypes = {
   selection: React.PropTypes.string,
   onSelected: React.PropTypes.func,
   onDeselected: React.PropTypes.func,
+  onDelete: React.PropTypes.func,
+  onCloned: React.PropTypes.func,
 };
 
 

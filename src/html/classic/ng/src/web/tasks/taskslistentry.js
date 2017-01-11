@@ -43,21 +43,15 @@ import {SLAVE_SCANNER_TYPE} from '../../gmp/commands/scanners.js';
 export class TasksListEntry extends EntitiesEntry {
 
   constructor(props) {
-    super(props);
+    super('task', props);
     this.state = {task: this.props.task};
     this.progress = this.progress.bind(this);
     this.startTask = this.startTask.bind(this);
     this.stopTask = this.stopTask.bind(this);
     this.resumeTask = this.resumeTask.bind(this);
-    this.handleDelete = this.handleDelete.bind(this);
-    this.handleClone = this.handleClone.bind(this);
     this.handleEdit = this.handleEdit.bind(this);
     this.reportDate = this.reportDate.bind(this);
     this.onSave = this.onSave.bind(this);
-  }
-
-  getEntity() {
-    return this.state.task;
   }
 
   progress(value) {
@@ -81,32 +75,16 @@ export class TasksListEntry extends EntitiesEntry {
   }
 
   startTask() {
-    let {gmp} = this.context;
-    gmp.task.start(this.state.task).then(task => {
-      this.setState({task: task});
+    let gmp = this.getGmp();
+    gmp.start(this.state.task).then(task => {
+      this.setState({task});
     });
   }
 
   stopTask() {
-    let {gmp} = this.context;
-    gmp.task.stop(this.state.task).then(task => {
-      this.setState({task: task});
-    });
-  }
-
-  handleDelete() {
-    let {gmp} = this.context;
-    gmp.task.delete(this.state.task).then(() => {
-      if (is_defined(this.props.onDelete)) {
-        this.props.onDelete(this.state.task);
-      }
-    });
-  }
-
-  handleClone() {
-    let {gmp} = this.context;
-    gmp.task.clone(this.state.task).then(task => {
-      this.props.onCloned(task);
+    let gmp = this.getGmp();
+    gmp.stop(this.state.task).then(task => {
+      this.setState({task});
     });
   }
 
@@ -115,65 +93,21 @@ export class TasksListEntry extends EntitiesEntry {
   }
 
   resumeTask() {
-    let {gmp} = this.context;
-    gmp.task.resume(this.state.task).then(task => {
+    let gmp = this.getGmp();
+    gmp.resume(this.state.task).then(task => {
       this.setState({task});
     });
   }
 
   onSave() {
-    let {gmp} = this.context;
-    gmp.task.get(this.state.task).then(task => {
+    let gmp = this.getGmp();
+    gmp.get(this.state.task).then(task => {
       this.setState({task});
     });
   }
 
   componentWillReceiveProps(new_props) {
     this.setState({task: new_props.task});
-  }
-
-  renderDeleteButton(task) {
-    let {capabilities} = this.context;
-
-    if (capabilities.mayOp('delete_task') && task.isWriteable() &&
-      !task.isInUse()) {
-      return this.renderDeleteButtonActive();
-    }
-
-    let title;
-    if (task.isInUse()) {
-      title = _('Task is still in use');
-    }
-    else if (!task.isWriteable()) {
-      title = _('Task is not writable');
-    }
-    else if (!capabilities.mayOp('delete_task')) { // eslint-disable-line no-negated-condition
-      title = _('Permission to move Task to tashcan denied');
-    }
-    else {
-      title = _('Cannot move to tashcan');
-    }
-    return this.renderDeleteButtonInActive(title);
-  }
-
-  renderEditButton(task) {
-    let {capabilities} = this.context;
-    if (capabilities.mayOp('modify_task') && task.isWriteable()) {
-      return this.renderEditButtonActive();
-    }
-
-    let title;
-    if (!task.isWriteable()) {
-      title = _('Task is not writable');
-    }
-    else if (!capabilities.mayOp('modify_task')) { // eslint-disable-line no-negated-condition
-
-      title = _('Permission to edit Task denied');
-    }
-    else {
-      title = _('Cannot modify Task');
-    }
-    return this.renderEditButtonInActive(title);
   }
 
   renderStartButton(task) {
@@ -282,7 +216,6 @@ export class TasksListEntry extends EntitiesEntry {
 
   renderTableButtons() {
     let task = this.getEntity();
-    let {capabilities} = this.context;
     return (
       <td className="table-actions">
         {this.renderScheduleIcon(task) || this.renderStartButton(task)}
@@ -293,12 +226,9 @@ export class TasksListEntry extends EntitiesEntry {
         }
 
         {this.renderResumeButton(task)}
-        {this.renderDeleteButton(task)}
+        {this.renderDeleteButton()}
 
-        {capabilities.mayClone('task') ?
-          this.renderCloneButtonActive() :
-          this.renderCloneButtonInActive(_('Permission to clone denied'))
-        }
+        {this.renderCloneButton()}
 
         {this.renderEditButton(task)}
 
@@ -420,8 +350,6 @@ TasksListEntry.contextTypes = {
 
 TasksListEntry.propTypes = {
   task: React.PropTypes.object.isRequired,
-  onDelete: React.PropTypes.func,
-  onCloned: React.PropTypes.func,
 };
 
 export default TasksListEntry;

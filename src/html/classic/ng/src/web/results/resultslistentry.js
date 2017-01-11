@@ -34,9 +34,16 @@ import EntitiesEntry from '../entities/entry.js';
 
 export class ResultsListEntry extends EntitiesEntry {
 
+  constructor(...args) {
+    super('result', ...args);
+  }
 
   getEntity() {
     return this.props.result;
+  }
+
+  renderTableButtons() {
+    return null;
   }
 
   render() {
