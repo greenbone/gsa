@@ -222,59 +222,6 @@ export class TasksCommand extends EntitiesCommand {
   getEntitiesResponse(root) {
     return root.get_tasks.get_tasks_response;
   }
-
-  delete(tasks) {
-    return this.deleteByIds(map(tasks, task => task.id))
-      .then(() => tasks);
-  }
-
-  deleteByIds(ids) {
-    let params = {
-      cmd: 'bulk_delete',
-      resource_type: 'task',
-    };
-    for (let id of ids) {
-      params['bulk_selected:' + id] = 1;
-    }
-    return this.httpPost(params).then(() => ids);
-  }
-
-  deleteByFilter(filter) {
-    // FIXME change gmp to allow deletion by filter
-    let deleted;
-    return this.get(filter).then(tasks => {
-      deleted = tasks;
-      return this.delete(tasks);
-    }).then(() => deleted);
-  }
-
-  export(tasks) {
-    return this.exportByIds(map(tasks, task => task.id));
-  }
-
-  exportByIds(ids) {
-    let params = {
-      cmd: 'process_bulk',
-      resource_type: 'task',
-      bulk_select: 1,
-      'bulk_export.x': 1,
-    };
-    for (let id of ids) {
-      params['bulk_selected:' + id] = 1;
-    }
-    return this.httpPost(params, {plain: true});
-  }
-
-  exportByFilter(filter) {
-    let params = {
-      cmd: 'process_bulk',
-      resource_type: 'task',
-      bulk_select: 0,
-      'bulk_export.x': 1,
-      filter,
-    };
-    return this.httpPost(params, {plain: true});
-  }
 }
 
 register_command('task', TaskCommand);

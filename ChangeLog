@@ -1,6 +1,13 @@
 2017-01-11 Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/gmp/command.js,
+	src/html/classic/ng/src/gmp/commands/results.js,
+	src/html/classic/ng/src/gmp/commands/tasks.js: Move export and delete methods
+	to EntitesCommand base class as generic methods.
+
+2017-01-11 Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/src/gmp/command.js,
 	src/html/classic/ng/src/gmp/commands/alerts.js,
 	src/html/classic/ng/src/gmp/commands/credentials.js,
 	src/html/classic/ng/src/gmp/commands/filters.js,

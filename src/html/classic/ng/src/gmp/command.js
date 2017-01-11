@@ -156,6 +156,59 @@ export class EntitiesCommand extends HttpCommand {
         this.getCollectionListFromRoot(root)
     );
   }
+
+  export(entities) {
+    return this.exportByIds(map(entities, entity => entity.id));
+  }
+
+  exportByIds(ids) {
+    let params = {
+      cmd: 'process_bulk',
+      resource_type: this.name,
+      bulk_select: 1,
+      'bulk_export.x': 1,
+    };
+    for (let id of ids) {
+      params['bulk_selected:' + id] = 1;
+    }
+    return this.httpPost(params, {plain: true});
+  }
+
+  exportByFilter(filter) {
+    let params = {
+      cmd: 'process_bulk',
+      resource_type: this.name,
+      bulk_select: 0,
+      'bulk_export.x': 1,
+      filter,
+    };
+    return this.httpPost(params, {plain: true});
+  }
+
+  delete(entities) {
+    return this.deleteByIds(map(entities, entity => entity.id))
+      .then(() => entities);
+  }
+
+  deleteByIds(ids) {
+    let params = {
+      cmd: 'bulk_delete',
+      resource_type: this.name,
+    };
+    for (let id of ids) {
+      params['bulk_selected:' + id] = 1;
+    }
+    return this.httpPost(params).then(() => ids);
+  }
+
+  deleteByFilter(filter) {
+    // FIXME change gmp to allow deletion by filter
+    let deleted;
+    return this.get(filter).then(entities => {
+      deleted = entities;
+      return this.delete(entities);
+    }).then(() => deleted);
+  }
 }
 
 export class EntityCommand extends HttpCommand {
