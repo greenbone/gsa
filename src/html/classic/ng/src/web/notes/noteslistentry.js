@@ -1,0 +1,104 @@
+/* Greenbone Security Assistant
+ *
+ * Authors:
+ * Björn Ricks <bjoern.ricks@greenbone.net>
+ *
+ * Copyright:
+ * Copyright (C) 2017 Greenbone Networks GmbH
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
+
+import React from 'react';
+
+import _ from '../../locale.js';
+
+import Layout from '../layout.js';
+import LegacyLink from '../legacylink.js';
+
+import EntitiesEntry from '../entities/entry.js';
+
+import Icon from '../icons/icon.js';
+
+export class NotesListEntry extends EntitiesEntry {
+
+  constructor(props) {
+    super('note', props);
+
+    this.state = {
+      note: this.props.note,
+    };
+
+    this.handleEdit = this.handleEdit.bind(this);
+  }
+
+  componentWillReceiveProps(new_props) {
+    this.setState({note: new_props.note});
+  }
+
+  handleEdit() {
+  }
+
+  renderTableButtons() {
+    let note = this.getEntity();
+    return (
+      <td>
+        <Layout flex align={['center', 'center']}>
+
+          {this.renderDeleteButton()}
+          {this.renderCloneButton()}
+          {this.renderEditButton()}
+
+          <LegacyLink cmd="export_note" note_id={note.id}>
+            <Icon size="small" img="download.svg" title={_('Export')}/>
+          </LegacyLink>
+        </Layout>
+      </td>
+    );
+  }
+
+  render() {
+    let note = this.getEntity();
+    return (
+      <tr>
+        <td>
+          <LegacyLink cmd="get_note" note_id={note.id}>
+            {note.text}
+          </LegacyLink>
+        </td>
+        <td>
+          {note.nvt ? note.nvt.name : ""}
+        </td>
+        <td>
+          {note.isActive() ? _('yes') : _('no')}
+        </td>
+        {this.renderTableActions()}
+      </tr>
+    );
+  }
+}
+
+NotesListEntry.contextTypes = {
+  gmp: React.PropTypes.object.isRequired,
+  capabilities: React.PropTypes.object.isRequired,
+};
+
+NotesListEntry.propTypes = {
+  note: React.PropTypes.object.isRequired,
+};
+
+export default NotesListEntry;
+
+// vim: set ts=2 sw=2 tw=80:
