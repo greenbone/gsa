@@ -174,7 +174,7 @@ export class Dialog extends React.Component {
     this.setState({[name]: value});
   }
 
-  renderOptions(list, selected_id, default_opt_value, default_opt = '--') {
+  renderOptions(list, default_opt_value, default_opt = '--') {
     return render_options(list, default_opt_value, default_opt);
   }
 

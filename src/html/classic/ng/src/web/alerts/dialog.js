@@ -142,7 +142,7 @@ export class AlertDialog extends Dialog {
 
     let {capabilities} = this.context;
 
-    let filter_opts = this.renderOptions(filters, filter_id, 0);
+    let filter_opts = this.renderOptions(filters, 0);
 
     return (
       <Layout float className="form-horizontal">

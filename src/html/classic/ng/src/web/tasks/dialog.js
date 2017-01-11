@@ -414,12 +414,12 @@ export class TaskDialog extends Dialog {
 
     let target_opts = this.renderOptions(targets);
 
-    let schedule_opts = this.renderOptions(schedules, schedule_id, 0);
+    let schedule_opts = this.renderOptions(schedules, 0);
 
     let scanner_opts = this.renderOptions(scanners);
 
     let osp_scan_config_opts = is_osp_scanner && this.renderOptions(
-      scan_configs[OSP_SCAN_CONFIG_TYPE], osp_config_id);
+      scan_configs[OSP_SCAN_CONFIG_TYPE]);
 
     let openvas_scan_config_opts = use_openvas_scan_config &&
       this.renderOptions(

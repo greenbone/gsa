@@ -179,16 +179,12 @@ export class TargetDialog extends Dialog {
       value.type === USERNAME_PASSWORD_CREDENTIAL_TYPE);
     let snmp_credentials = credentials.filter(snmp_credential_filter);
 
-    let port_list_opts = this.renderOptions(port_lists, port_list_id);
+    let port_list_opts = this.renderOptions(port_lists);
 
-    let ssh_credential_opts = this.renderOptions(ssh_credentials,
-      ssh_credential_id, 0);
-    let smb_credential_opts = this.renderOptions(up_credentials,
-      smb_credential_id, 0);
-    let esxi_credential_opts = this.renderOptions(up_credentials,
-      esxi_credential_id, 0);
-    let snmp_credential_opts = this.renderOptions(snmp_credentials,
-      snmp_credential_id, 0);
+    let ssh_credential_opts = this.renderOptions(ssh_credentials, 0);
+    let smb_credential_opts = this.renderOptions(up_credentials, 0);
+    let esxi_credential_opts = this.renderOptions(up_credentials, 0);
+    let snmp_credential_opts = this.renderOptions(snmp_credentials, 0);
 
     return (
       <Layout float className="form-horizontal">
