@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,43 +23,9 @@
 
 import React from 'react';
 
-import {classes, is_defined} from '../utils.js';
+import {classes} from '../../utils.js';
 
 import './css/table.css';
-
-export const TableRow = props => {
-  let {items = [], ...other} = props;
-  let data = items.map((item, i) => {
-    return <th key={i}>{item}</th>;
-  });
-  return (
-    <tr {...other}>
-      {data}
-      {props.children}
-    </tr>
-  );
-};
-
-export const TableHead = props => {
-  let {width, ...other} = props;
-  let style = {};
-
-  if (is_defined(width)) {
-    style.width = width;
-  }
-  return (
-    <th style={style} {...other}></th>
-  );
-};
-
-TableHead.propTypes = {
-  width: React.PropTypes.string,
-};
-
-
-TableRow.propTypes = {
-  items: React.PropTypes.array,
-};
 
 export const Table = props => {
   let {header, footer, children, className} = props;
@@ -90,19 +56,6 @@ Table.propTypes = {
     React.PropTypes.array,
     React.PropTypes.object,
   ]),
-  className: React.PropTypes.string,
-};
-
-export const StrippedTable = props => {
-  let {className, ...other} = props;
-
-  className = classes(className, 'table-stripped');
-  return (
-    <Table className={className} {...other}/>
-  );
-};
-
-StrippedTable.propTypes = {
   className: React.PropTypes.string,
 };
 

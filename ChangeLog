@@ -1,5 +1,20 @@
 2017-01-11 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/entities/footer.js,
+	src/html/classic/ng/src/web/entities/table.js,
+	src/html/classic/ng/src/web/results/results.js,
+	src/html/classic/ng/src/web/css/table.css,
+	src/html/classic/ng/src/web/table/css/table.css,
+	src/html/classic/ng/src/web/table/head.js,
+	src/html/classic/ng/src/web/table/row.js,
+	src/html/classic/ng/src/web/table/stripped.js,
+	src/html/classic/ng/src/web/table.js,
+	src/html/classic/ng/src/web/table/table.js,
+	src/html/classic/ng/src/web/tasks/tasks.js: Move table.js to a table subdir
+	and split out components into seperate js modules.
+
+2017-01-11 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/dashboard/assets.js,
 	src/html/classic/ng/src/web/dashboard/controls.js,
 	src/html/classic/ng/src/web/dashboard/dashboard.js,

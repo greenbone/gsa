@@ -29,7 +29,6 @@ import  _ from '../../locale.js';
 import Toolbar from '../toolbar.js';
 import Section from '../section.js';
 import PowerFilter from '../powerfilter.js';
-import {TableRow, TableHead} from '../table.js';
 import Layout from '../layout.js';
 import Sort from '../sortby.js';
 import SelectionType from '../selectiontype.js';
@@ -46,6 +45,9 @@ import Download from '../form/download.js';
 import Icon from '../icons/icon.js';
 import HelpIcon from '../icons/helpicon.js';
 import OverridesIcon from '../icons/overridesicon.js';
+
+import TableRow from '../table/row.js';
+import TableHead from '../table/head.js';
 
 import ResultCharts from './charts.js';
 import ResultsFilterDialog from './filterdialog.js';

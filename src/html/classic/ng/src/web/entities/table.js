@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,9 +26,10 @@ import React from 'react';
 import _ from '../../locale.js';
 import {has_value} from '../../utils.js';
 
-import {StrippedTable} from '../table.js';
 import Pagination from '../pagination.js';
 import Layout from '../layout.js';
+
+import StrippedTable from '../table/stripped.js';
 
 export const EntitiesTable = props => {
   let {filter, header, footer, entries, counts, emptyTitle} = props;

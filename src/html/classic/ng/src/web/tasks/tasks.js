@@ -29,7 +29,6 @@ import  _ from '../../locale.js';
 import Section from '../section.js';
 import Toolbar from '../toolbar.js';
 import PowerFilter from '../powerfilter.js';
-import {TableRow, TableHead} from '../table.js';
 import Layout from '../layout.js';
 import Sort from '../sortby.js';
 import SelectionType from '../selectiontype.js';
@@ -49,6 +48,9 @@ import OverridesIcon from '../icons/overridesicon.js';
 
 import IconMenu from '../menu/iconmenu.js';
 import MenuEntry from '../menu/menuentry.js';
+
+import TableRow from '../table/row.js';
+import TableHead from '../table/head.js';
 
 import TaskWizard from '../wizard/taskwizard.js';
 import AdvancedTaskWizard from '../wizard/advancedtaskwizard.js';
