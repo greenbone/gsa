@@ -30,23 +30,7 @@ import Result from '../models/result.js';
 export class ResultsCommand extends EntitiesCommand {
 
   constructor(http) {
-    super(http, 'get_results', Result);
-  }
-
-  getElementsFromResponse(response) {
-    return response.result;
-  }
-
-  getCountsFromResponse(response) {
-    let es = response.results;
-    let ec = response.result_count;
-    return {
-      first: es._start,
-      rows: es._max,
-      length: ec.page,
-      all: ec.__text,
-      filtered: ec.filtered,
-    };
+    super(http, 'result', Result);
   }
 
   getEntitiesResponse(root) {

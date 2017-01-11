@@ -21,30 +21,14 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {EntitiesCommand, EntityCommand, register_command} from '../command.js';
+import {EntitiesCommand, register_command} from '../command.js';
 
 import Report from '../models/report.js';
 
 export class ReportsCommand extends EntitiesCommand {
 
   constructor(http) {
-    super(http, 'get_reports', Report);
-  }
-
-  getElementsFromResponse(response) {
-    return response.report;
-  }
-
-  getCountsFromResponse(response) {
-    let es = response.reports;
-    let ec = response.report_count;
-    return {
-      first: es._start,
-      rows: es._max,
-      length: ec.page,
-      all: ec.__text,
-      filtered: ec.filtered,
-    };
+    super(http, 'report', Report);
   }
 
   getEntitiesResponse(root) {
@@ -52,7 +36,6 @@ export class ReportsCommand extends EntitiesCommand {
   }
 }
 
-register_command('report', EntityCommand, 'get_report', 'report_id', Report);
 register_command('reports', ReportsCommand);
 
 // vim: set ts=2 sw=2 tw=80:

@@ -62,11 +62,7 @@ export class FilterCommand extends EntityCommand {
 export class FiltersCommand extends EntitiesCommand {
 
   constructor(http) {
-    super(http, 'get_filters', Filter);
-  }
-
-  getElementsFromResponse(response) {
-    return response.filter;
+    super(http, 'filter', Filter);
   }
 
   getEntitiesResponse(root) {

@@ -216,23 +216,7 @@ export class TaskCommand extends EntityCommand {
 export class TasksCommand extends EntitiesCommand {
 
   constructor(http) {
-    super(http, 'get_tasks', Task);
-  }
-
-  getElementsFromResponse(response) {
-    return response.task;
-  }
-
-  getCountsFromResponse(response) {
-    let es = response.tasks;
-    let ec = response.task_count;
-    return {
-      first: es._start,
-      rows: es._max,
-      length: ec.page,
-      all: ec.__text,
-      filtered: ec.filtered,
-    };
+    super(http, 'task', Task);
   }
 
   getEntitiesResponse(root) {

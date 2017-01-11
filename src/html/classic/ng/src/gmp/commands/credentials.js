@@ -69,23 +69,7 @@ export class CredentialCommand extends EntityCommand {
 export class CredentialsCommand extends EntitiesCommand {
 
   constructor(http) {
-    super(http, 'get_credentials', Credential);
-  }
-
-  getElementsFromResponse(response) {
-    return response.credential;
-  }
-
-  getCountsFromResponse(response) {
-    let es = response.credentials;
-    let ec = response.credential_count;
-    return {
-      first: es._start,
-      rows: es._max,
-      length: ec.page,
-      all: ec.__text,
-      filtered: ec.filtered,
-    };
+    super(http, 'credential', Credential);
   }
 
   getEntitiesResponse(root) {

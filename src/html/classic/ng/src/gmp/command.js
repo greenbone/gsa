@@ -82,10 +82,11 @@ export class HttpCommand {
 
 export class EntitiesCommand extends HttpCommand {
 
-  constructor(http, cmd, clazz) {
-    super(http, {cmd});
+  constructor(http, name, clazz) {
+    super(http, {cmd: 'get_' + name + 's'});
 
     this.clazz = clazz;
+    this.name = name;
   }
 
   getParams(params, extra_params = {}) {
@@ -104,8 +105,7 @@ export class EntitiesCommand extends HttpCommand {
   }
 
   getElementsFromResponse(response) {
-    throw new Error('getElementsFromResponse not implemented in ' +
-      this.constructor.name);
+    return response[this.name];
   }
 
   getEntitiesFromRespone(response) {
@@ -118,8 +118,15 @@ export class EntitiesCommand extends HttpCommand {
   }
 
   getCountsFromResponse(response) {
-    throw new Error('getCountsFromResponse not implemented in ' +
-      this.constructor.name);
+    let es = response[this.name + 's'];
+    let ec = response[this.name + '_count'];
+    return {
+      first: es._start,
+      rows: es._max,
+      length: ec.page,
+      all: ec.__text,
+      filtered: ec.filtered,
+    };
   }
 
   getCollectionCountsFromResponse(response) {

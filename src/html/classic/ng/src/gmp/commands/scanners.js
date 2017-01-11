@@ -24,7 +24,7 @@
 import {translate as _} from '../../locale.js';
 import {parse_int} from '../../utils.js';
 
-import {EntitiesCommand, EntityCommand, register_command} from '../command.js';
+import {EntitiesCommand, register_command} from '../command.js';
 
 import Scanner from '../models/scanner.js';
 
@@ -63,23 +63,7 @@ export function scanner_type_name(scanner_type) {
 export class ScannersCommand extends EntitiesCommand {
 
   constructor(http) {
-    super('get_scanners', http);
-  }
-
-  getElementsFromResponse(response) {
-    return response.scanner;
-  }
-
-  getCountsFromResponse(response) {
-    let es = response.scanners;
-    let ec = response.scanner_count;
-    return {
-      first: es._start,
-      rows: es._max,
-      length: ec.page,
-      all: ec.__text,
-      filtered: ec.filtered,
-    };
+    super(http, 'scanner', Scanner);
   }
 
   getEntitiesResponse(root) {
@@ -87,8 +71,6 @@ export class ScannersCommand extends EntitiesCommand {
   }
 }
 
-register_command('scanner', EntityCommand, 'get_scanner', 'scanner_id',
-  Scanner);
 register_command('scanners', ScannersCommand);
 
 // vim: set ts=2 sw=2 tw=80:

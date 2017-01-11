@@ -57,23 +57,7 @@ export class PortListCommand extends EntityCommand {
 export class PortListsCommand extends EntitiesCommand {
 
   constructor(http) {
-    super(http, 'get_port_lists', PortList);
-  }
-
-  getElementsFromResponse(response) {
-    return response.port_list;
-  }
-
-  getCountsFromResponse(response) {
-    let es = response.port_lists;
-    let ec = response.port_list_count;
-    return {
-      first: es._start,
-      rows: es._max,
-      length: ec.page,
-      all: ec.__text,
-      filtered: ec.filtered,
-    };
+    super(http, 'port_list', PortList);
   }
 
   getEntitiesResponse(root) {

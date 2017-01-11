@@ -101,7 +101,7 @@ export class AlertCommand extends EntityCommand {
 export class AlertsCommand extends EntitiesCommand {
 
   constructor(http) {
-    super(http, 'get_alerts', Alert);
+    super(http, 'alert', Alert);
   }
 
   getElementsFromResponse(response) {
@@ -110,18 +110,6 @@ export class AlertsCommand extends EntitiesCommand {
 
   getEntitiesResponse(root) {
     return root.get_alerts.get_alerts_response;
-  }
-
-  getCountsFromResponse(response) {
-    let es = response.alerts;
-    let ec = response.alert_count;
-    return {
-      first: es._start,
-      rows: es._max,
-      length: ec.page,
-      all: ec.__text,
-      filtered: ec.filtered,
-    };
   }
 }
 
