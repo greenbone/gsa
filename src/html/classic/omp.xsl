@@ -17476,7 +17476,7 @@ should not have received it.
           <td><xsl:value-of select="gsa:i18n ('Scanner')"/>:</td>
           <td>
             <a href="/omp?cmd=get_scanner&amp;scanner_id={$config/scanner/@id}&amp;token={/envelope/token}" title="{gsa:i18n ('Scanner Details')}">
-              <xsl:value-of select="$config/scanner"/>
+              <xsl:value-of select="$config/scanner/text()"/>
             </a>
           </td>
         </tr>
@@ -18022,9 +18022,19 @@ should not have received it.
       </xsl:choose>
     </td>
     <td class="table-actions">
-      <xsl:call-template name="restore-icon">
-        <xsl:with-param name="id" select="@id"/>
-      </xsl:call-template>
+      <xsl:choose>
+        <xsl:when test="not (gsa:may-op ('restore'))"/>
+        <xsl:when test="scanner/trash = '0'">
+          <xsl:call-template name="restore-icon">
+            <xsl:with-param name="id" select="@id"/>
+          </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+          <img src="/img/restore_inactive.svg" alt="{gsa:i18n ('Restore')}"
+               title="{gsa:i18n ('Scanner')}{gsa:i18n (' must be restored first.', 'Trashcan')}"
+               class="icon icon-sm"/>
+        </xsl:otherwise>
+      </xsl:choose>
       <xsl:choose>
         <xsl:when test="in_use='0'">
           <xsl:call-template name="trash-delete-icon">
@@ -19686,6 +19696,54 @@ should not have received it.
         </xsl:call-template>
       </xsl:if>
     </xsl:if>
+  </div>
+
+  <div class="section-header">
+    <a href="#" class="toggle-action-icon icon icon-sm icon-action"
+      data-target="#using-box2" data-name="Configs using this Scanner"
+      data-variable="using-box2--collapsed">
+        <img src="/img/fold.svg"/>
+    </a>
+    <h2>
+      <a href="/omp?cmd=get_configs&amp;token={/envelope/token}"
+         title="{gsa:i18n ('Configs')}">
+        <img class="icon icon-sm" src="/img/config.svg" alt="Configs"/>
+      </a>
+      <xsl:value-of select="gsa:i18n ('Configs using this Scanner')"/>
+      <xsl:text> </xsl:text>
+      <xsl:choose>
+        <xsl:when test="count(configs/config) != 0">
+          (<xsl:value-of select="count(configs/config)"/>)
+        </xsl:when>
+        <xsl:otherwise>
+          (<xsl:value-of select="gsa:i18n ('none')"/>)
+        </xsl:otherwise>
+      </xsl:choose>
+    </h2>
+  </div>
+
+  <div class="section-box" id="using-box2">
+    <table class="gbntable">
+      <tr class="gbntablehead2">
+        <td><xsl:value-of select="gsa:i18n('Name')"/></td>
+      </tr>
+      <xsl:for-each select="configs/config">
+        <tr class="{gsa:table-row-class(position())}">
+          <xsl:choose>
+            <xsl:when test="boolean (permissions) and count (permissions/permission) = 0">
+              <td><xsl:value-of select="name"/> (<xsl:value-of select="gsa:i18n('Unavailable')"/>, <xsl:value-of select="gsa:i18n('UUID')"/>: <xsl:value-of select="@id"/>)</td>
+            </xsl:when>
+            <xsl:otherwise>
+              <td>
+                <a href="/omp?cmd=get_config&amp;config_id={@id}&amp;token={/envelope/token}" title="{gsa:i18n ('Details')}">
+                  <xsl:value-of select="name"/>
+                </a>
+              </td>
+            </xsl:otherwise>
+          </xsl:choose>
+        </tr>
+      </xsl:for-each>
+    </table>
   </div>
 
   <div class="section-header">
