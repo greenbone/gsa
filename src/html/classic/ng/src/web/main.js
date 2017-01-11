@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,10 +25,10 @@ import React from 'react';
 
 import {StickyContainer} from 'react-sticky';
 
+import {is_defined} from '../utils.js';
+
 import Header from './header.js';
 import Footer from './footer.js';
-
-import Capabilities from '../gmp/models/capabilities.js';
 
 import './css/main.css';
 
@@ -37,9 +37,7 @@ export class Main extends React.Component {
   constructor(...args) {
     super(...args);
 
-    this.state = {
-      capabilities: new Capabilities(),
-    };
+    this.state = {};
   }
 
   componentDidMount() {
@@ -57,6 +55,14 @@ export class Main extends React.Component {
 
   render() {
     let {children} = this.props;
+    let {capabilities} = this.state;
+
+    if (!is_defined(capabilities)) {
+      // only show content after caps have been loaded
+      // this avoids ugly re-rendering of parts of the ui (e.g. the menu)
+      return null;
+    }
+
     return (
       <StickyContainer id="main">
         <Header/>

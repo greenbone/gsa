@@ -1,3 +1,9 @@
+2017-01-11 Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/src/web/main.js: Only render main gui after login if
+	capabilities have been loaded. This avoids re-rendering of gui elements which
+	depend on the capabilities like the main menu.
+
 2017-01-10 Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/alerts/dialog.js
