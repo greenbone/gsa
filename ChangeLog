@@ -1,5 +1,9 @@
 2017-01-11 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt: Update NG js install files.
+
+2017-01-11 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/app.js,
 	src/html/classic/ng/src/web/notes/notes.js,
 	src/html/classic/ng/src/web/notes/noteslistentry.js: Add draft of notes list

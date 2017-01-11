@@ -61,6 +61,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/gmp/commands/credentials.js
      ${NG_SRC_DIR}/src/gmp/commands/filters.js
      ${NG_SRC_DIR}/src/gmp/commands/login.js
+     ${NG_SRC_DIR}/src/gmp/commands/notes.js
      ${NG_SRC_DIR}/src/gmp/commands/portlists.js
      ${NG_SRC_DIR}/src/gmp/commands/reports.js
      ${NG_SRC_DIR}/src/gmp/commands/results.js
@@ -78,6 +79,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/gmp/models/credential.js
      ${NG_SRC_DIR}/src/gmp/models/filter.js
      ${NG_SRC_DIR}/src/gmp/models/login.js
+     ${NG_SRC_DIR}/src/gmp/models/note.js
      ${NG_SRC_DIR}/src/gmp/models/nvt.js
      ${NG_SRC_DIR}/src/gmp/models/portlist.js
      ${NG_SRC_DIR}/src/gmp/models/report.js
@@ -158,6 +160,8 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/menu/menuentry.js
      ${NG_SRC_DIR}/src/web/menu/menu.js
      ${NG_SRC_DIR}/src/web/notes/charts.js
+     ${NG_SRC_DIR}/src/web/notes/notes.js
+     ${NG_SRC_DIR}/src/web/notes/noteslistentry.js
      ${NG_SRC_DIR}/src/web/nvts/charts.js
      ${NG_SRC_DIR}/src/web/os/charts.js
      ${NG_SRC_DIR}/src/web/ovaldefs/charts.js
@@ -178,7 +182,10 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/severityclasslabels.js
      ${NG_SRC_DIR}/src/web/solutiontype.js
      ${NG_SRC_DIR}/src/web/sortby.js
-     ${NG_SRC_DIR}/src/web/table.js
+     ${NG_SRC_DIR}/src/web/table/head.js
+     ${NG_SRC_DIR}/src/web/table/row.js
+     ${NG_SRC_DIR}/src/web/table/stripped.js
+     ${NG_SRC_DIR}/src/web/table/table.js
      ${NG_SRC_DIR}/src/web/targets/dialog.js
      ${NG_SRC_DIR}/src/web/tasks/charts.js
      ${NG_SRC_DIR}/src/web/tasks/dialog.js
