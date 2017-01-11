@@ -27,7 +27,8 @@ import _ from '../../locale.js';
 
 import Section from '../section.js';
 
-import {Dashboard, DashboardControls} from './dashboard.js';
+import Dashboard from './dashboard.js';
+import DashboardControls from './controls.js';
 
 import HostCharts from '../hosts/charts.js';
 import OsCharts from '../os/charts.js';

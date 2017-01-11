@@ -27,7 +27,8 @@ import _ from '../../locale.js';
 
 import Section from '../section.js';
 
-import {Dashboard, DashboardControls} from './dashboard.js';
+import Dashboard from './dashboard.js';
+import DashboardControls from './controls.js';
 
 import NvtCharts from '../nvts/charts.js';
 import OvaldefCharts from '../ovaldefs/charts.js';

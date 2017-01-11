@@ -1,5 +1,17 @@
 2017-01-11 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/dashboard/assets.js,
+	src/html/classic/ng/src/web/dashboard/controls.js,
+	src/html/classic/ng/src/web/dashboard/dashboard.js,
+	src/html/classic/ng/src/web/dashboard/scans.js,
+	src/html/classic/ng/src/web/dashboard/secinfo.js,
+	src/html/classic/ng/src/web/home.js,
+	src/html/classic/ng/src/web/results/results.js,
+	src/html/classic/ng/src/web/tasks/tasks.js: Move DashboardControls component
+	into an own js module.
+
+2017-01-11 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/main.js: Only render main gui after login if
 	capabilities have been loaded. This avoids re-rendering of gui elements which
 	depend on the capabilities like the main menu.

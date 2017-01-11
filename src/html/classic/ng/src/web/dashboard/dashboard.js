@@ -28,7 +28,7 @@ import logger from '../../log.js';
 
 import './css/dashboard.css';
 
-const log = logger.getLogger('web.dashboard');
+const log = logger.getLogger('web.dashboard.dashboard');
 
 export class Dashboard extends React.Component {
 
@@ -126,10 +126,6 @@ Dashboard.defaultProps = {
 
 Dashboard.contextTypes = {
   gmp: React.PropTypes.object.isRequired,
-};
-
-export const DashboardControls = props => {
-  return <div id="dashboard-controls" className="dashboard-controls"></div>;
 };
 
 export default Dashboard;

@@ -38,7 +38,8 @@ import EntitiesComponent from '../entities/component.js';
 import EntitiesFooter from '../entities/footer.js';
 import EntitiesTable from '../entities/table.js';
 
-import {Dashboard, DashboardControls} from '../dashboard/dashboard.js';
+import Dashboard from '../dashboard/dashboard.js';
+import DashboardControls from '../dashboard/controls.js';
 
 import Download from '../form/download.js';
 

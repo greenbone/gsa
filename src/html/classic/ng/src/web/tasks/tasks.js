@@ -34,7 +34,8 @@ import Layout from '../layout.js';
 import Sort from '../sortby.js';
 import SelectionType from '../selectiontype.js';
 
-import {Dashboard, DashboardControls} from '../dashboard/dashboard.js';
+import Dashboard from '../dashboard/dashboard.js';
+import DashboardControls from '../dashboard/controls.js';
 
 import EntitiesComponent from '../entities/component.js';
 import EntitiesFooter from '../entities/footer.js';

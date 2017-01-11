@@ -27,7 +27,8 @@ import _ from '../../locale.js';
 
 import Section from '../section.js';
 
-import {Dashboard, DashboardControls} from './dashboard.js';
+import Dashboard from './dashboard.js';
+import DashboardControls from './controls.js';
 
 import TaskCharts from '../tasks/charts.js';
 import ReportCharts from '../reports/charts.js';
@@ -59,3 +60,5 @@ export const ScansDashboard = () => {
 };
 
 export default ScansDashboard;
+
+// vim: set ts=2 sw=2 tw=80:
