@@ -30,7 +30,7 @@ import Layout from '../layout.js';
 import SeverityBar from '../severitybar.js';
 import LegacyLink from '../legacylink.js';
 
-import Checkbox from '../form/checkbox.js';
+import EntitiesEntry from '../entities/entry.js';
 
 import Icon from '../icons/icon.js';
 
@@ -40,7 +40,7 @@ import TaskStatusBar from './statusbar.js';
 
 import {SLAVE_SCANNER_TYPE} from '../../gmp/commands/scanners.js';
 
-export class TasksListEntry extends React.Component {
+export class TasksListEntry extends EntitiesEntry {
 
   constructor(props) {
     super(props);
@@ -49,11 +49,15 @@ export class TasksListEntry extends React.Component {
     this.startTask = this.startTask.bind(this);
     this.stopTask = this.stopTask.bind(this);
     this.resumeTask = this.resumeTask.bind(this);
-    this.deleteTask = this.deleteTask.bind(this);
-    this.cloneTask = this.cloneTask.bind(this);
+    this.handleDelete = this.handleDelete.bind(this);
+    this.handleClone = this.handleClone.bind(this);
+    this.handleEdit = this.handleEdit.bind(this);
     this.reportDate = this.reportDate.bind(this);
     this.onSave = this.onSave.bind(this);
-    this.onSelectionChange = this.onSelectionChange.bind(this);
+  }
+
+  getEntity() {
+    return this.state.task;
   }
 
   progress(value) {
@@ -90,7 +94,7 @@ export class TasksListEntry extends React.Component {
     });
   }
 
-  deleteTask() {
+  handleDelete() {
     let {gmp} = this.context;
     gmp.task.delete(this.state.task).then(() => {
       if (is_defined(this.props.onDelete)) {
@@ -99,17 +103,21 @@ export class TasksListEntry extends React.Component {
     });
   }
 
+  handleClone() {
+    let {gmp} = this.context;
+    gmp.task.clone(this.state.task).then(task => {
+      this.props.onCloned(task);
+    });
+  }
+
+  handleEdit() {
+    this.edit_dialog.show();
+  }
+
   resumeTask() {
     let {gmp} = this.context;
     gmp.task.resume(this.state.task).then(task => {
       this.setState({task});
-    });
-  }
-
-  cloneTask() {
-    let {gmp} = this.context;
-    gmp.task.clone(this.state.task).then(task => {
-      this.props.onCloned(task);
     });
   }
 
@@ -120,32 +128,8 @@ export class TasksListEntry extends React.Component {
     });
   }
 
-  onSelectionChange(value) {
-    let {onDeselected, onSelected} = this.props;
-    let {task} = this.state;
-
-    if (value) {
-      if (onSelected) {
-        onSelected(task);
-      }
-    }
-    else if (onDeselected) {
-      onDeselected(task);
-    }
-  }
-
   componentWillReceiveProps(new_props) {
     this.setState({task: new_props.task});
-  }
-
-  renderSelection(task) {
-    return (
-      <td>
-        <Layout flex align={['center', 'center']}>
-          <Checkbox onChange={this.onSelectionChange}/>
-        </Layout>
-      </td>
-    );
   }
 
   renderDeleteButton(task) {
@@ -153,10 +137,7 @@ export class TasksListEntry extends React.Component {
 
     if (capabilities.mayOp('delete_task') && task.isWriteable() &&
       !task.isInUse()) {
-      return (
-        <Icon onClick={this.deleteTask} size="small" img="trashcan.svg"
-          title={_('Delete')}/>
-      );
+      return this.renderDeleteButtonActive();
     }
 
     let title;
@@ -172,19 +153,13 @@ export class TasksListEntry extends React.Component {
     else {
       title = _('Cannot move to tashcan');
     }
-    return (
-      <Icon size="small" img="trashcan_inactive.svg"
-        title={title}/>
-    );
+    return this.renderDeleteButtonInActive(title);
   }
 
   renderEditButton(task) {
     let {capabilities} = this.context;
     if (capabilities.mayOp('modify_task') && task.isWriteable()) {
-      return (
-        <Icon size="small" img="edit.svg" title={_('Edit')}
-          onClick={() => { this.edit_dialog.show(); }}/>
-      );
+      return this.renderEditButtonActive();
     }
 
     let title;
@@ -198,9 +173,7 @@ export class TasksListEntry extends React.Component {
     else {
       title = _('Cannot modify Task');
     }
-    return (
-      <Icon size="small" img="edit_inactive.svg" title={title}/>
-    );
+    return this.renderEditButtonInActive(title);
   }
 
   renderStartButton(task) {
@@ -307,7 +280,8 @@ export class TasksListEntry extends React.Component {
     );
   }
 
-  renderTableAction(task) {
+  renderTableButtons() {
+    let task = this.getEntity();
     let {capabilities} = this.context;
     return (
       <td className="table-actions">
@@ -322,10 +296,8 @@ export class TasksListEntry extends React.Component {
         {this.renderDeleteButton(task)}
 
         {capabilities.mayClone('task') ?
-          <Icon size="small" img="clone.svg" title={_('Clone')}
-            onClick={this.cloneTask}/> :
-              <Icon size="small" img="clone_inactive.svg"
-                title={_('Permission to clone denied')}/>
+          this.renderCloneButtonActive() :
+          this.renderCloneButtonInActive(_('Permission to clone denied'))
         }
 
         {this.renderEditButton(task)}
@@ -343,8 +315,7 @@ export class TasksListEntry extends React.Component {
 
   render() {
     let {gmp} = this.context;
-    let {task} = this.state;
-    let {selection = false} = this.props;
+    let task = this.getEntity();
 
     let report_id;
     if (is_defined(task.current_report)) {
@@ -436,7 +407,7 @@ export class TasksListEntry extends React.Component {
             <Trend name={task.trend}/>
           </Layout>
         </td>
-        {selection ? this.renderSelection(task) : this.renderTableAction(task)}
+        {this.renderTableActions()}
       </tr>
     );
   }
@@ -449,11 +420,8 @@ TasksListEntry.contextTypes = {
 
 TasksListEntry.propTypes = {
   task: React.PropTypes.object.isRequired,
-  selection: React.PropTypes.bool,
   onDelete: React.PropTypes.func,
   onCloned: React.PropTypes.func,
-  onSelected: React.PropTypes.func,
-  onDeselected: React.PropTypes.func,
 };
 
 export default TasksListEntry;

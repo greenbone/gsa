@@ -31,7 +31,6 @@ import Toolbar from '../toolbar.js';
 import PowerFilter from '../powerfilter.js';
 import Layout from '../layout.js';
 import Sort from '../sortby.js';
-import SelectionType from '../selectiontype.js';
 
 import Dashboard from '../dashboard/dashboard.js';
 import DashboardControls from '../dashboard/controls.js';
@@ -161,7 +160,7 @@ export class Tasks extends EntitiesComponent {
     return entities.map(task => {
       return (
         <TasksListEntry key={task.id} task={task}
-          selection={selection_type === SelectionType.SELECTION_USER}
+          selection={selection_type}
           onSelected={this.onSelect}
           onDeselected={this.onDeselect}
           onDelete={this.reload}

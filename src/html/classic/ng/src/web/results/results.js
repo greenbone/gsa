@@ -161,7 +161,7 @@ export class Results extends EntitiesComponent {
       return (
         <ResultsListEntry key={result.id}
           result={result}
-          selection={selection_type === SelectionType.SELECTION_USER}
+          selection={selection_type}
           onSelected={this.onSelect}
           onDeselected={this.onDeselect}/>
       );

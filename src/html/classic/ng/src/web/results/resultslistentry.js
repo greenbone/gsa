@@ -30,31 +30,17 @@ import LegacyLink from '../legacylink.js';
 import SeverityBar from '../severitybar.js';
 import SolutionType from '../solutiontype.js';
 
-import Checkbox from '../form/checkbox.js';
+import EntitiesEntry from '../entities/entry.js';
 
-export class ResultsListEntry extends React.Component {
+export class ResultsListEntry extends EntitiesEntry {
 
-  constructor(...args) {
-    super(...args);
 
-    this.onSelectionChange = this.onSelectionChange.bind(this);
-  }
-
-  onSelectionChange(value) {
-    let {onDeselected, onSelected, result} = this.props;
-
-    if (value) {
-      if (onSelected) {
-        onSelected(result);
-      }
-    }
-    else if (onDeselected) {
-      onDeselected(result);
-    }
+  getEntity() {
+    return this.props.result;
   }
 
   render() {
-    let {result, selection} = this.props;
+    let result = this.getEntity();
 
     return (
       <tr>
@@ -96,23 +82,14 @@ export class ResultsListEntry extends React.Component {
         <td>
           {datetime(result.modification_time)}
         </td>
-        {selection && (
-          <td>
-            <Layout flex align={['center', 'center']}>
-              <Checkbox onChange={this.onSelectionChange}/>
-            </Layout>
-          </td>
-        )}
+        {this.renderTableActions()}
       </tr>
     );
   }
 }
 
 ResultsListEntry.propTypes = {
-  result: React.PropTypes.object,
-  selection: React.PropTypes.bool,
-  onSelected: React.PropTypes.func,
-  onDeselected: React.PropTypes.func,
+  result: React.PropTypes.object.isRequired,
 };
 
 export default ResultsListEntry;
