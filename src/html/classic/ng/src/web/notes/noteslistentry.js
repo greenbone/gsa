@@ -30,8 +30,6 @@ import LegacyLink from '../legacylink.js';
 
 import EntitiesEntry from '../entities/entry.js';
 
-import Icon from '../icons/icon.js';
-
 export class NotesListEntry extends EntitiesEntry {
 
   constructor(props) {
@@ -52,7 +50,6 @@ export class NotesListEntry extends EntitiesEntry {
   }
 
   renderTableButtons() {
-    let note = this.getEntity();
     return (
       <td>
         <Layout flex align={['center', 'center']}>
@@ -60,10 +57,8 @@ export class NotesListEntry extends EntitiesEntry {
           {this.renderDeleteButton()}
           {this.renderCloneButton()}
           {this.renderEditButton()}
+          {this.renderDownloadButton()}
 
-          <LegacyLink cmd="export_note" note_id={note.id}>
-            <Icon size="small" img="download.svg" title={_('Export')}/>
-          </LegacyLink>
         </Layout>
       </td>
     );

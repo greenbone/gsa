@@ -28,6 +28,7 @@ import {is_defined, capitalize_first_letter} from '../../utils.js';
 
 import Layout from '../layout.js';
 import SelectionType from '../selectiontype.js';
+import LegacyLink from '../legacylink.js';
 
 import Checkbox from '../form/checkbox.js';
 
@@ -208,6 +209,22 @@ export class EntitiesEntry extends React.Component {
     return (
       <Icon size="small" img="clone_inactive.svg"
         title={_('Permission to clone denied')}/>
+    );
+  }
+
+  renderDownloadButton() {
+    let name = this.getEntityName();
+    let entity = this.getEntity();
+
+    let props = {
+      cmd: 'export_' + name,
+    };
+    props[name + '_id'] = entity.id;
+
+    return (
+      <LegacyLink className="icon icon-sm" {...props}>
+        <Icon size="small" img="download.svg" title={_('Export')}/>
+      </LegacyLink>
     );
   }
 

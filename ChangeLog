@@ -1,3 +1,10 @@
+2017-01-12 Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/src/web/entities/entry.js,
+	src/html/classic/ng/src/web/notes/noteslistentry.js,
+	src/html/classic/ng/src/web/tasks/taskslistentry.js: Move rendering of the
+	download/export button into entity module.
+
 2017-01-11  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/omp.xsl (html-config-table): Get only the text from

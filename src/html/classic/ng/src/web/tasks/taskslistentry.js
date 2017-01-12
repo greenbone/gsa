@@ -231,10 +231,7 @@ export class TasksListEntry extends EntitiesEntry {
         {this.renderCloneButton()}
 
         {this.renderEditButton(task)}
-
-        <LegacyLink cmd="export_task" task_id={task.id}>
-          <Icon size="small" img="download.svg" title={_('Export')}/>
-        </LegacyLink>
+        {this.renderDownloadButton()}
 
         <TaskDialog task={task} ref={ref => this.edit_dialog = ref}
           title={_('Edit task {{task}}', {task: task.name})}
