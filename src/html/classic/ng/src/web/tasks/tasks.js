@@ -236,7 +236,7 @@ export class Tasks extends EntitiesComponent {
             counts={counts}
             filter={filter}
             emptyTitle={_('No tasks available')}
-            entries={this.renderRows()}
+            rows={this.renderRows()}
             onFirstClick={this.onFirst}
             onLastClick={this.onLast}
             onNextClick={this.onNext}
