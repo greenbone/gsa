@@ -27,6 +27,7 @@ import  _ from '../locale.js';
 import {is_defined, parse_int, map} from '../utils.js';
 
 import Dialog from './dialog.js';
+import Layout from './layout.js';
 
 import FormGroup from './form/formgroup.js';
 import FormItem from './form/formitem.js';
@@ -251,6 +252,24 @@ export class FilterDialog extends Dialog {
             onChange={this.onSortOrderChange}/>
         </FormItem>
       </FormGroup>
+    );
+  }
+
+  /**
+   * Default filter dialog form
+   *
+   * Override to specify different content
+   *
+   * @return Node default dialog content form
+   */
+  renderContent() {
+    return (
+      <Layout flex="column">
+        {this.renderFilter()}
+        {this.renderFirstResult()}
+        {this.renderResultsPerPage()}
+        {this.renderSortBy()}
+      </Layout>
     );
   }
 }
