@@ -1,5 +1,14 @@
 2017-01-12 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/css/layout.css: Add css class for flex-start.
+
+	* src/html/classic/ng/src/web/layout.js: Refactor Layout to use Higher Order
+	Component (HOC) pattern. For details about the pattern see
+	https://www.sitepoint.com/react-higher-order-components/
+	or https://medium.com/@dan_abramov/mixins-are-dead-long-live-higher-order-components-94a0d2f9e750
+
+2017-01-12 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/notes/notes.js: Add filter dialog to notes page.
 
 2017-01-12 Björn Ricks <bjoern.ricks@greenbone.net>

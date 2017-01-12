@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,47 +31,57 @@ const LAYOUT_PROPNAMES = [
   'flex', 'align', 'grow', 'shrink', 'basis', 'float',
 ];
 
-export const Layout = props => {
-  let {className, flex, align, grow, shrink, basis, float, ...other} = props;
+export const withLayout = (Component, defaults) => {
+  return function(props) {
+    let {className, flex, align, grow, shrink, basis, float, ...other} = props; // eslint-disable-line
+    let css = className;
+    let style = {};
 
-  let css = className;
-  let style = {};
 
-  if (is_defined(flex)) {
-    if (is_empty(flex) || flex === true) {
-      flex = 'row';
-    }
-    css = classes('flex', flex, css);
-
-    if (is_defined(align)) {
-      if (is_array(align)) {
-        css = classes('justify-' + align[0], 'align-' + align[1], css);
+    if (is_defined(flex)) {
+      if (is_empty(flex) || flex === true) {
+        flex = 'row';
       }
-      else {
-        css = classes('justify-' + align, css);
+      css = classes('flex', flex, css);
+
+      if (!is_defined(align) && is_defined(defaults)) {
+        align = defaults.align;
+      }
+
+      if (is_defined(align)) {
+        if (is_array(align)) {
+          css = classes('justify-' + align[0], 'align-' + align[1], css);
+        }
+        else {
+          css = classes('justify-' + align, css);
+        }
       }
     }
-  }
-  else if (is_defined(float)) {
-    css = classes('float', css);
-  }
+    else if (is_defined(float)) {
+      css = classes('float', css);
+    }
 
-  if (is_defined(grow)) {
-    style.flexGrow = grow;
-  }
-  if (is_defined(shrink)) {
-    style.flexShring = shrink;
-  }
-  if (is_defined(basis)) {
-    style.flexBasis = basis;
-  }
+    if (is_defined(grow)) {
+      style.flexGrow = grow;
+    }
+    if (is_defined(shrink)) {
+      style.flexShring = shrink;
+    }
+    if (is_defined(basis)) {
+      style.flexBasis = basis;
+    }
 
+    return <Component {...other} className={css} style={style}/>;
+  };
+};
+
+const LayoutContainer = props => {
   return (
-    <div {...other} className={css} style={style}/>
+    <div {...props}/>
   );
 };
 
-Layout.propTypes = {
+LayoutContainer.propTypes = {
   className: React.PropTypes.string,
   flex: React.PropTypes.oneOf(['row', 'column', true]),
   float: React.PropTypes.bool,
@@ -105,6 +115,8 @@ export const get_layout_props = props => {
 
   return values;
 };
+
+export const Layout = withLayout(LayoutContainer);
 
 export default Layout;
 
