@@ -66,7 +66,7 @@ export class Results extends EntitiesComponent {
   getSectionTitle() {
     let entities = this.getEntities();
     if (!entities) {
-      return _('Tasks');
+      return _('Results');
     }
     let counts = this.getCounts();
     return _('Results ({{filtered}} of {{all}})', counts);

@@ -1,5 +1,10 @@
 2017-01-12 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/results/results.js: Fix displaying the default
+	section title when the results will be loaded.
+
+2017-01-12 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/form/formgroup.js: Use HOC withLayout for
 	FormGroup. This allows setting all layout props on FormGroup components
 	without having to implement the layout logic again.
