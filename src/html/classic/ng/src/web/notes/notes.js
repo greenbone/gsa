@@ -26,6 +26,7 @@ import React from 'react';
 import  _ from '../../locale.js';
 import {is_defined} from '../../utils.js';
 
+import FilterDialog from '../filterdialog.js';
 import Section from '../section.js';
 import Sort from '../sortby.js';
 import Toolbar from '../toolbar.js';
@@ -49,6 +50,12 @@ import NotesCharts from './charts.js';
 import NotesListRow from './noteslistrow.js';
 
 import {NOTES_FILTER_FILTER} from '../../gmp/commands/filters.js';
+
+const SORT_FIELDS = [
+  ['text', _('Text')],
+  ['nvt', _('Nvt')],
+  ['active', _('Active')],
+];
 
 export class Notes extends EntitiesComponent {
 
@@ -153,6 +160,12 @@ export class Notes extends EntitiesComponent {
             onResetClick={this.onFilterReset}
             onEditClick={() => this.filter_dialog.show()}
             onUpdate={this.onFilterUpdate}/>
+
+          <FilterDialog
+            sortFields={SORT_FIELDS}
+            filter={filter}
+            ref={ref => this.filter_dialog = ref}
+            onSave={this.onFilterUpdate}/>
         </Toolbar>
 
         <Section title={this.getSectionTitle()}
