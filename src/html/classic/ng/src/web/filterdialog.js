@@ -24,7 +24,7 @@
 import React from 'react';
 
 import  _ from '../locale.js';
-import {is_defined} from '../utils.js';
+import {is_defined, parse_int, map} from '../utils.js';
 
 import Dialog from './dialog.js';
 
@@ -44,6 +44,7 @@ export class FilterDialog extends Dialog {
     super(...args);
 
     this.onFilterValueChange = this.onFilterValueChange.bind(this);
+    this.onFilterIntValueChange = this.onFilterIntValueChange.bind(this);
     this.onFilterStringChange = this.onFilterStringChange.bind(this);
     this.onSortFieldChange = this.onSortFieldChange.bind(this);
     this.onSortOrderChange = this.onSortOrderChange.bind(this);
@@ -99,6 +100,15 @@ export class FilterDialog extends Dialog {
     }
 
     return gmp.promise.resolve(filter);
+  }
+
+  getSortFields() {
+    return this.props.sortFields;
+  }
+
+  onFilterIntValueChange(value, name) {
+    value = parse_int(value);
+    this.onFilterValueChange(value, name);
   }
 
   onFilterValueChange(value, name) {
@@ -203,6 +213,15 @@ export class FilterDialog extends Dialog {
 
   }
 
+  renderSortFieldOptions() {
+    let fields = this.getSortFields();
+    return map(fields, field => {
+      let value = field[0];
+      let title = field[1];
+      return <option key={value} value={value}>{title}</option>;
+    });
+  }
+
   renderSortBy() {
     let {sort_order, sort_field} = this.state;
     return (
@@ -238,6 +257,7 @@ export class FilterDialog extends Dialog {
 
 FilterDialog.propTypes = {
   filter: React.PropTypes.object,
+  sortFields: React.PropTypes.array,
 };
 
 

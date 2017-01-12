@@ -31,17 +31,19 @@ import FilterDialog from '../filterdialog.js';
 import FormGroup from '../form/formgroup.js';
 import TextField from '../form/textfield.js';
 
+const SORT_FIELDS = [
+  ['name', _('Name')],
+  ['status', _('Status')],
+  ['total', _('Reports: Total')],
+  ['last', _('Reports: Last')],
+  ['severity', _('Severity')],
+  ['trend', _('Trend')],
+];
+
 export class TaskFilterDialog extends FilterDialog {
 
-  renderSortFieldOptions() {
-    return [
-      <option key="name" value="name">{_('Name')}</option>,
-      <option key="status" value="status">{_('Status')}</option>,
-      <option key="total" value="total">{_('Reports: Total')}</option>,
-      <option key="last" value="last">{_('Reports: Last')}</option>,
-      <option key="severity" value="severity">{_('Severity')}</option>,
-      <option key="trend" value="trend">{_('Trend')}</option>,
-    ];
+  getSortFields() {
+    return SORT_FIELDS;
   }
 
   renderContent() {

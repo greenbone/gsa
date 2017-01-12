@@ -24,7 +24,6 @@
 import React from 'react';
 
 import  _ from '../../locale.js';
-import {parse_int} from '../../utils.js';
 
 import Layout from '../layout.js';
 import FilterDialog from '../filterdialog.js';
@@ -35,18 +34,27 @@ import FormGroup from '../form/formgroup.js';
 import Checkbox from '../form/checkbox.js';
 import Radio from '../form/radio.js';
 
+const SORT_FIELDS = [
+  ['vulnerability', _('Vulnerability')],
+  ['solution_type', _('Solution type')],
+  ['severity', _('Severity')],
+  ['qod', _('QoD')],
+  ['host', _('Host')],
+  ['location', _('Location')],
+  ['created', _('Created')],
+];
+
+
 export class ResultsFilterDialog extends FilterDialog {
 
   constructor(props) {
     super(props);
 
-    this.handleIntValueChange = this.handleIntValueChange.bind(this);
     this.handleLevelChange = this.handleLevelChange.bind(this);
   }
 
-  handleIntValueChange(value, name) {
-    value = parse_int(value);
-    this.onFilterValueChange(value, name);
+  getSortFields() {
+    return SORT_FIELDS;
   }
 
   handleLevelChange(value, level) {
@@ -64,22 +72,6 @@ export class ResultsFilterDialog extends FilterDialog {
       levels = levels.replace(level, '');
       this.onFilterValueChange(levels, 'levels');
     }
-  }
-
-  renderSortFieldOptions() {
-    return [
-      <option key="vulnerability" value="vulnerability">
-        {_('Vulnerability')}
-      </option>,
-      <option key="solution_type" value="solution_type">
-        {_('Solution type')}
-      </option>,
-      <option key="severity" value="severity">{_('Severity')}</option>,
-      <option key="qod" value="qod">{_('QoD')}</option>,
-      <option key="host" value="host">{_('Host')}</option>,
-      <option key="location" value="location">{_('Location')}</option>,
-      <option key="created" value="created">{_('Created')}</option>,
-    ];
   }
 
   renderContent() {
@@ -100,7 +92,7 @@ export class ResultsFilterDialog extends FilterDialog {
             checkedValue="1" uncheckedValue="0"
             checked={autofp >= 1}
             title={_('Trust vendor security updates')}
-            onChange={this.handleIntValueChange}/>
+            onChange={this.onFilterIntValueChange}/>
           <Layout flex>
             <Radio
               className="inline"
