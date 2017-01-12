@@ -28,9 +28,9 @@ import _ from '../../locale.js';
 import Layout from '../layout.js';
 import LegacyLink from '../legacylink.js';
 
-import EntitiesEntry from '../entities/entry.js';
+import EntityRow from '../entities/row.js';
 
-export class NotesListEntry extends EntitiesEntry {
+export class NotesListRow extends EntityRow {
 
   constructor(props) {
     super('note', props);
@@ -85,15 +85,15 @@ export class NotesListEntry extends EntitiesEntry {
   }
 }
 
-NotesListEntry.contextTypes = {
+NotesListRow.contextTypes = {
   gmp: React.PropTypes.object.isRequired,
   capabilities: React.PropTypes.object.isRequired,
 };
 
-NotesListEntry.propTypes = {
+NotesListRow.propTypes = {
   note: React.PropTypes.object.isRequired,
 };
 
-export default NotesListEntry;
+export default NotesListRow;
 
 // vim: set ts=2 sw=2 tw=80:

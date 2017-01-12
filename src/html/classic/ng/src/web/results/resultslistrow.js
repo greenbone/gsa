@@ -30,9 +30,9 @@ import LegacyLink from '../legacylink.js';
 import SeverityBar from '../severitybar.js';
 import SolutionType from '../solutiontype.js';
 
-import EntitiesEntry from '../entities/entry.js';
+import EntityRow from '../entities/row.js';
 
-export class ResultsListEntry extends EntitiesEntry {
+export class ResultsListRow extends EntityRow {
 
   constructor(...args) {
     super('result', ...args);
@@ -95,10 +95,10 @@ export class ResultsListEntry extends EntitiesEntry {
   }
 }
 
-ResultsListEntry.propTypes = {
+ResultsListRow.propTypes = {
   result: React.PropTypes.object.isRequired,
 };
 
-export default ResultsListEntry;
+export default ResultsListRow;
 
 // vim: set ts=2 sw=2 tw=80:

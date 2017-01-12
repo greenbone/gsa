@@ -30,7 +30,7 @@ import Layout from '../layout.js';
 import SeverityBar from '../severitybar.js';
 import LegacyLink from '../legacylink.js';
 
-import EntitiesEntry from '../entities/entry.js';
+import EntityRow from '../entities/row.js';
 
 import Icon from '../icons/icon.js';
 
@@ -40,7 +40,7 @@ import TaskStatusBar from './statusbar.js';
 
 import {SLAVE_SCANNER_TYPE} from '../../gmp/commands/scanners.js';
 
-export class TasksListEntry extends EntitiesEntry {
+export class TasksListRow extends EntityRow {
 
   constructor(props) {
     super('task', props);
@@ -340,15 +340,15 @@ export class TasksListEntry extends EntitiesEntry {
   }
 }
 
-TasksListEntry.contextTypes = {
+TasksListRow.contextTypes = {
   gmp: React.PropTypes.object.isRequired,
   capabilities: React.PropTypes.object.isRequired,
 };
 
-TasksListEntry.propTypes = {
+TasksListRow.propTypes = {
   task: React.PropTypes.object.isRequired,
 };
 
-export default TasksListEntry;
+export default TasksListRow;
 
 // vim: set ts=2 sw=2 tw=80:

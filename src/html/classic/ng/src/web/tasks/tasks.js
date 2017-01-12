@@ -58,7 +58,7 @@ import ModifyTaskWizard from '../wizard/modifytaskwizard.js';
 import TaskDialog from './dialog.js';
 import TaskFilterDialog from './filterdialog.js';
 import TaskCharts from './charts.js';
-import TasksListEntry from './taskslistentry.js';
+import TasksListRow from './taskslistrow.js';
 
 import {TASKS_FILTER_FILTER} from '../../gmp/commands/filters.js';
 
@@ -148,8 +148,7 @@ export class Tasks extends EntitiesComponent {
     ];
   }
 
-
-  renderEntries() {
+  renderRows() {
     let entities = this.getEntities();
     let {selection_type} = this.state;
 
@@ -159,7 +158,9 @@ export class Tasks extends EntitiesComponent {
 
     return entities.map(task => {
       return (
-        <TasksListEntry key={task.id} task={task}
+        <TasksListRow
+          key={task.id}
+          task={task}
           selection={selection_type}
           onSelected={this.onSelect}
           onDeselected={this.onDeselect}
@@ -235,7 +236,7 @@ export class Tasks extends EntitiesComponent {
             counts={counts}
             filter={filter}
             emptyTitle={_('No tasks available')}
-            entries={this.renderEntries()}
+            entries={this.renderRows()}
             onFirstClick={this.onFirst}
             onLastClick={this.onLast}
             onNextClick={this.onNext}

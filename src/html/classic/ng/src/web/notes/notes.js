@@ -46,7 +46,7 @@ import TableRow from '../table/row.js';
 import TableHead from '../table/head.js';
 
 import NotesCharts from './charts.js';
-import NotesListEntry from './noteslistentry.js';
+import NotesListRow from './noteslistrow.js';
 
 import {NOTES_FILTER_FILTER} from '../../gmp/commands/filters.js';
 
@@ -116,7 +116,7 @@ export class Notes extends EntitiesComponent {
     );
   }
 
-  renderEntries() {
+  renderRows() {
     let entities = this.getEntities();
     let {selection_type} = this.state;
 
@@ -126,7 +126,9 @@ export class Notes extends EntitiesComponent {
 
     return entities.map(note => {
       return (
-        <NotesListEntry key={note.id} note={note}
+        <NotesListRow
+          key={note.id}
+          note={note}
           selection={selection_type}
           onSelected={this.onSelect}
           onDeselected={this.onDeselect}
@@ -171,7 +173,7 @@ export class Notes extends EntitiesComponent {
             counts={counts}
             filter={filter}
             emptyTitle={_('No notes available')}
-            entries={this.renderEntries()}
+            rows={this.renderRows()}
             onFirstClick={this.onFirst}
             onLastClick={this.onLast}
             onNextClick={this.onNext}

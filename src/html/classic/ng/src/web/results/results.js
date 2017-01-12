@@ -51,7 +51,7 @@ import TableHead from '../table/head.js';
 
 import ResultCharts from './charts.js';
 import ResultsFilterDialog from './filterdialog.js';
-import ResultsListEntry from './resultslistentry.js';
+import ResultsListRow from './resultslistrow.js';
 
 import {RESULTS_FILTER_FILTER} from '../../gmp/commands/filters.js';
 
@@ -149,7 +149,7 @@ export class Results extends EntitiesComponent {
     );
   }
 
-  renderEntries() {
+  renderRows() {
     let entities = this.getEntities();
 
     if (!is_defined(entities)) {
@@ -159,7 +159,7 @@ export class Results extends EntitiesComponent {
     let {selection_type} = this.state;
     return entities.map(result => {
       return (
-        <ResultsListEntry key={result.id}
+        <ResultsListRow key={result.id}
           result={result}
           selection={selection_type}
           onSelected={this.onSelect}
@@ -206,7 +206,7 @@ export class Results extends EntitiesComponent {
             counts={counts}
             filter={filter}
             emptyTitle={_('No results available')}
-            entries={this.renderEntries()}
+            rows={this.renderRows()}
             onFirstClick={this.onFirst}
             onLastClick={this.onLast}
             onNextClick={this.onNext}

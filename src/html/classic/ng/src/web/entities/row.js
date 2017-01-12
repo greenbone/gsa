@@ -34,7 +34,7 @@ import Checkbox from '../form/checkbox.js';
 
 import Icon from '../icons/icon.js';
 
-export class EntitiesEntry extends React.Component {
+export class EntityRow extends React.Component {
 
   constructor(name, ...args) {
     super(...args);
@@ -235,7 +235,7 @@ export class EntitiesEntry extends React.Component {
   }
 }
 
-EntitiesEntry.propTypes = {
+EntityRow.propTypes = {
   selection: React.PropTypes.string,
   onSelected: React.PropTypes.func,
   onDeselected: React.PropTypes.func,
@@ -244,6 +244,6 @@ EntitiesEntry.propTypes = {
 };
 
 
-export default EntitiesEntry;
+export default EntityRow;
 
 // vim: set ts=2 sw=2 tw=80:

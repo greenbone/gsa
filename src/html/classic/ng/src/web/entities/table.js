@@ -32,15 +32,15 @@ import Layout from '../layout.js';
 import StrippedTable from '../table/stripped.js';
 
 export const EntitiesTable = props => {
-  let {filter, header, footer, entries, counts, emptyTitle} = props;
+  let {filter, header, footer, rows, counts, emptyTitle} = props;
 
   let filterstring = filter ? filter.toFilterString() : '';
 
-  if (!has_value(entries)) {
+  if (!has_value(rows)) {
     return <div className="entities-table">{_('Loading')}</div>;
   }
 
-  if (entries.length === 0) {
+  if (rows.length === 0) {
     return <div className="entities-table">{emptyTitle}</div>;
   }
 
@@ -57,7 +57,7 @@ export const EntitiesTable = props => {
     <div className="entities-table">
       {pagination}
       <StrippedTable header={header} footer={footer}>
-        {entries}
+        {rows}
       </StrippedTable>
       <Layout flex align="space-between">
         <div className="footnote">
@@ -74,7 +74,7 @@ EntitiesTable.propTypes = {
   filter: React.PropTypes.object,
   header: React.PropTypes.node,
   footer: React.PropTypes.node,
-  entries: React.PropTypes.node,
+  rows: React.PropTypes.node,
   counts: React.PropTypes.object,
   onFirstClick: React.PropTypes.func,
   onLastClick: React.PropTypes.func,
