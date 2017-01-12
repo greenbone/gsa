@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,22 +25,19 @@ import React from 'react';
 
 import {is_defined, classes} from '../../utils.js';
 
-import {Layout, get_layout_props} from '../layout.js';
+import {withLayout} from '../layout.js';
 
 import './css/form.css';
 import './css/formgroup.css';
 
-export const FormGroup = props => {
+export const FormGroupContainer = props => {
   if (is_defined(props.condition) && !props.condition) {
     return null;
   }
 
-  let {title, size} = props;
-  let {align, ...lprops} = get_layout_props(props);
+  let {title, size, className} = props;
 
-  if (!is_defined(align)) {
-    align = ['none', 'center'];
-  }
+  className = classes('form-group', className);
 
   if (title) {
     let title_css = classes('col-' + props.titleSize, 'control-label');
@@ -60,17 +57,18 @@ export const FormGroup = props => {
     css = classes('offset-' + props.offset, css);
   }
   return (
-    <Layout className="form-group" align={align} {...lprops}>
+    <div className={className}>
       {title}
       <div className={css}>
         {props.children}
       </div>
-    </Layout>
+    </div>
   );
 };
 
-FormGroup.propTypes = {
+FormGroupContainer.propTypes = {
   title: React.PropTypes.string,
+  className: React.PropTypes.string,
   condition: React.PropTypes.bool,
   size: React.PropTypes.oneOfType([
     React.PropTypes.string,
@@ -90,10 +88,13 @@ FormGroup.propTypes = {
   ]),
 };
 
-FormGroup.defaultProps = {
+FormGroupContainer.defaultProps = {
   titleSize: 2,
   titleOffset: 0,
 };
+
+export const FormGroup = withLayout(FormGroupContainer,
+  {align: ['start', 'center']});
 
 export default FormGroup;
 
