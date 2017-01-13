@@ -57,6 +57,10 @@ export class Capabilities extends Model {
     return this.mayOp('delete_' + type);
   }
 
+  mayCreate(type) {
+    return this.mayOp('create_' + type);
+  }
+
   setProperties() {};
 
   parseProroperties(elem) {

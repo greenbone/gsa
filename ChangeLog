@@ -1,5 +1,10 @@
 2017-01-13 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/models/capabilities.js: Add method for checking
+	create permissions to Capabilities class.
+
+2017-01-13 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	Refactoring of the (form) layouts
 
 	* src/html/classic/ng/src/web/alerts/dialog.js,
