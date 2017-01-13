@@ -27,44 +27,47 @@ import {classes} from '../../utils.js';
 
 import './css/icon.css';
 
-export const Icon = props => {
-  const {img, href, size = 'small', className, onClick, alt = '',
-    ...other} = props;
-  let css = 'icon';
+export const withIconCss = Component => {
+  return function(props) {
+    let {size = 'small', className, onClick, ...other} = props; //eslint-disable-line
 
-  if (size === 'small') {
-    css = classes('icon', 'icon-sm', className);
-  }
-  else if (size === 'medium') {
-    css = classes('icon', 'icon-m', className);
-  }
-  else if (size === 'large') {
-    css = classes('icon', 'icon-lg', className);
-  }
-  else {
-    css = classes('icon', className);
-  }
+    if (size === 'small') {
+      className = classes('icon', 'icon-sm', className);
+    }
+    else if (size === 'medium') {
+      className = classes('icon', 'icon-m', className);
+    }
+    else if (size === 'large') {
+      className = classes('icon', 'icon-lg', className);
+    }
+    else {
+      className = classes('icon', className);
+    }
 
-  if (onClick) {
-   css = classes(css, 'icon-button');
-  }
+    if (onClick) {
+      className = classes(className, 'icon-button');
+    }
+    return <Component {...other} onClick={onClick} className={className}/>;
+  };
+};
 
+const IconContainer = props => {
+  const {img, href, alt = '', ...other} = props;
   let img_path = process.env.PUBLIC_URL + '/img/' + img; // eslint-disable-line no-process-env,no-undef
 
   if (href) {
     return (
-      <a onClick={onClick} {...other} className={css} href={href}>
+      <a {...other} href={href}>
         <img src={img_path} alt={alt}/>
       </a>
     );
   }
   return (
-    <img onClick={onClick} {...other} alt={alt} className={css}
-      src={img_path}/>
+    <img {...other} alt={alt} src={img_path}/>
   );
 };
 
-Icon.propTypes = {
+IconContainer.propTypes = {
   alt: React.PropTypes.string,
   img: React.PropTypes.string.isRequired,
   size: React.PropTypes.string,
@@ -72,6 +75,8 @@ Icon.propTypes = {
   className: React.PropTypes.string,
   onClick: React.PropTypes.func,
 };
+
+export const Icon = withIconCss(IconContainer);
 
 export default Icon;
 

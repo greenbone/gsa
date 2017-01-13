@@ -1,3 +1,9 @@
+2017-01-13 Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/src/web/icons/icon.js,
+	src/html/classic/ng/src/web/menu/iconmenu.js: Allow to use icon css on icon
+	menu by extractint a withIconCss HOC from Icon component.
+
 2016-01-13  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad_http.c (handler_send_response), src/gsad_http_handler.c

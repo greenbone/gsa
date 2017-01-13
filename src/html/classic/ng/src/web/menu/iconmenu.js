@@ -23,17 +23,20 @@
 
 import React from 'react';
 
-import Icon from '../icons/icon.js';
+import {classes} from '../../utils.js';
+
+import Icon, {withIconCss} from '../icons/icon.js';
 
 import './css/iconmenu.css';
 
-export const IconMenu = props => {
+const IconMenuContainer = props => {
 
-  let {children, onClick, ...other} = props;
-  let css = onClick ? 'icon-menu icon-button' : 'icon-menu';
+  let {children, onClick, className, ...other} = props;
+
+  className = classes('icon-menu', className);
 
   return (
-    <span className={css}>
+    <span className={className}>
       <Icon onClick={onClick} {...other}/>
       <ul>
         {children}
@@ -42,10 +45,13 @@ export const IconMenu = props => {
   );
 };
 
-IconMenu.propTypes = {
+IconMenuContainer.propTypes = {
   img: React.PropTypes.string.isRequired,
+  className: React.PropTypes.string,
   onClick: React.PropTypes.func,
 };
+
+export const IconMenu = withIconCss(IconMenuContainer);
 
 export default IconMenu;
 
