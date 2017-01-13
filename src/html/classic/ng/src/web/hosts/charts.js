@@ -86,7 +86,8 @@ export const HostCharts = props => {
           title-count="count"
           y-fields={['c_count', 'c_count[High]']}
           z-fields={['count', 'count[High]']}
-          type="line"/>
+          type="line"
+          gen-params={{is_timeline: 1}}/>
       </DataSource>
       <DataSource
         name="host-topology-source"

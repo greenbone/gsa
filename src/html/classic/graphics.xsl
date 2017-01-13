@@ -165,7 +165,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       data-y-fields="high_max"
       data-z-fields="high_per_host_max"
       data-chart-title="{gsa:i18n ('Reports: High results timeline')}"
-      data-gen-params='{{"show_stat_type": 0}}'/>
+      data-gen-params='{{"show_stat_type": 0, "is_timeline": 1}}'/>
   </div>
   <div class="dashboard-data-source"
     data-source-name="report-severity-count-source"
@@ -274,10 +274,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
     data-filter-id="{$filt_id}">
     <span class="dashboard-chart"
       data-chart-name="vuln-by-hosts"
-      data-chart-title="{gsa:i18n ('Vulnerabilities by Hosts')}"
+      data-chart-title="{gsa:i18n ('Vulns by Hosts - bar')}"
       data-chart-title-count="count"
       data-chart-type="bar"
       data-chart-template="quantile_histogram"/>
+    <span class="dashboard-chart"
+      data-chart-name="vuln-by-hosts-area"
+      data-chart-title="{gsa:i18n ('Vulns by Hosts - area')}"
+      data-chart-title-count="count"
+      data-chart-type="line"
+      data-gen-params='{{"is_timeline": 0, "y_area": 1, "y2_area": 0}}'
+      data-chart-template="quantile_split"/>
   </div>
 </xsl:template>
 
@@ -339,6 +346,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       data-chart-title-count="count"
       data-y-fields="c_count,c_count[High]"
       data-z-fields="count,count[High]"
+      data-gen-params='{{"is_timeline": 1}}'
       data-chart-type="line"/>
   </div>
   <div class="dashboard-data-source"
@@ -419,7 +427,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       data-chart-name="note-by-created"
       data-chart-title="{gsa:i18n ('Notes by creation time')}"
       data-chart-title-count="count"
-      data-chart-type="line"/>
+      data-chart-type="line"
+      data-gen-params='{{"is_timeline": 1}}'/>
   </div>
   <div class="dashboard-data-source"
     data-source-name="note-text-words-source"
@@ -466,7 +475,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       data-chart-name="override-by-created"
       data-chart-title="{gsa:i18n ('Overrides by creation time')}"
       data-chart-title-count="count"
-      data-chart-type="line"/>
+      data-chart-type="line"
+      data-gen-params='{{"is_timeline": 1}}'/>
   </div>
   <div class="dashboard-data-source"
     data-source-name="override-text-words-source"
@@ -533,7 +543,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       data-chart-name="{$type}-by-created"
       data-chart-title="{gsa-i18n:strformat (gsa:i18n ('%1 by creation time'), $title_type)}"
       data-chart-title-count="count"
-      data-chart-type="line"/>
+      data-chart-type="line"
+      data-gen-params='{{"is_timeline": 1}}'/>
   </div>
 </xsl:template>
 
@@ -772,7 +783,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           data-chart-title="{gsa:i18n ('Reports: Duration timeline')}"
           data-y-fields="duration_mean,duration_max"
           data-z-fields="duration_per_host_mean,duration_per_host_max"
-          data-gen-params='{{"show_stat_type": 0, "y_format": "duration", "y2_format": "duration"}}'/>
+          data-gen-params='{{"is_timeline": 1, "show_stat_type": 0, "y_format": "duration", "y2_format": "duration"}}'/>
       </div>
     </xsl:if>
 

@@ -35,9 +35,18 @@
   * Finds the index of a record by the value of a given field
   */
   function find_record_index(records, value, field) {
-    for (var index in records) {
-      if (records[index][field].getTime() === value.getTime()) {
-        return index;
+    if (gsa.is_defined (value.getTime)) {
+      for (var index in records) {
+        if (records[index][field].getTime() === value.getTime()) {
+          return index;
+        }
+      }
+    }
+    else {
+      for (var index in records) {
+        if (records[index][field] === value) {
+          return index;
+        }
       }
     }
     return -1;
@@ -55,11 +64,11 @@
   LineChartGenerator.prototype.init = function() {
     this.margin = {top: 55, right: 60, bottom: 25, left: 60};
 
-    this.x_scale = d3.time.scale.utc();
+    this.x_scale = d3.scale.linear();
     this.y_scale = d3.scale.linear();
     this.y2_scale = d3.scale.linear();
 
-    this.x_axis = d3.svg.axis().scale(this.x_scale).orient('bottom').ticks(6);
+    this.x_axis = d3.svg.axis().scale(this.x_scale).orient('bottom').ticks(10);
     this.y_axis = d3.svg.axis().scale(this.y_scale).orient('left');
     this.y2_axis = d3.svg.axis().scale(this.y2_scale).orient('right');
 
@@ -73,7 +82,6 @@
 
     this.show_stat_type = true;
 
-    this.setDataTransformFunc(this.timeLine);
     this.setColorScale(d3.scale.category20());
     this.setTitleGenerator(gch.title_static(
       gsa._('Loading line chart ...'), gsa._('Bubble Chart')));
@@ -91,15 +99,33 @@
         .defined(function(d) { return gsa.is_defined(d[field]); });
     }
 
+    function y_area(field, y_scale) {
+      return d3.svg.area()
+        .x(function(d) { return self.x_scale(d[self.x_field]); })
+        .y0(function(d) { return y_scale(0); })
+        .y1(function(d) { return y_scale(d[field]); })
+        .defined(function(d) { return gsa.is_defined(d[field]); });
+    }
+
     self.all_y_fields = self.y_fields.concat(self.y2_fields);
 
     var lines = [];
+    var areas = [];
+    var gradients = [];
     var line_index;
     for (line_index = 0; line_index < self.y_fields.length; line_index++) {
       lines.push(y_line(self.y_fields[line_index], self.y_scale));
+      if (self.y_area)
+        areas.push(y_area(self.y_fields[line_index], self.y_scale));
+      else
+        areas.push(null);
     }
     for (line_index = 0; line_index < self.y2_fields.length; line_index++) {
       lines.push(y_line(self.y2_fields[line_index], self.y2_scale));
+      if (self.y2_area)
+        areas.push(y_area(self.y2_fields[line_index], self.y2_scale));
+      else
+        areas.push(null);
     }
 
     var x_min, x_max;
@@ -114,23 +140,43 @@
     var column_info = data.column_info;
 
     function get_rounded_x(mouse_x) {
-      var rounded_x = self.x_step.round(self.x_scale.invert(mouse_x));
+      var rounded_x;
 
-      if (rounded_x.getTime() > x_max.getTime()) {
-        rounded_x = x_max;
+      if (self.is_timeline) {
+        rounded_x = self.x_step.round(self.x_scale.invert(mouse_x));
+        if (rounded_x.getTime() > x_max.getTime()) {
+          rounded_x = x_max;
+        }
+        else if (rounded_x.getTime() < x_min.getTime()) {
+          rounded_x = x_min;
+        }
       }
-      else if (rounded_x.getTime() < x_min.getTime()) {
-        rounded_x = x_min;
+      else {
+        rounded_x = Math.round (self.x_scale.invert(mouse_x))
+        if (rounded_x > x_max) {
+          rounded_x = x_max;
+        }
+        else if (rounded_x < x_min) {
+          rounded_x = x_min;
+        }
       }
       return rounded_x;
     }
 
     function resize_range_marker_elems() {
       var range_left_line_width = 2;
-      var range_right_line_width = 12;
+      var range_right_line_width = 2;
+      if (self.is_timeline) {
+        range_right_line_width = 12;
+      }
       var y_range = self.y_scale.range();
       var points;
 
+      if (self.range_marker_start === null) {
+        return;
+      }
+
+      // Center area
       self.range_marker_elem.select('.range_marker_c')
         .attr('x', self.x_scale(self.range_marker_start))
         .attr('y', 0)
@@ -139,13 +185,29 @@
             self.x_scale(self.range_marker_start))
         .attr('height', y_range[0] - y_range[1]);
 
+      // Left marker
+      points = [
+        self.x_scale(self.range_marker_start),
+        ',',
+        y_range[1],
+        ' ',
+        self.x_scale(self.range_marker_start),
+        ',',
+        y_range[0],
+        ' ',
+        self.x_scale(self.range_marker_start) - range_left_line_width,
+        ',',
+        y_range[0] - range_left_line_width,
+        ' ',
+        self.x_scale(self.range_marker_start) - range_left_line_width,
+        ',',
+        y_range[1] + range_left_line_width,
+      ];
+      points = points.join('');
       self.range_marker_elem.select('.range_marker_l')
-        .attr('x', self.x_scale(self.range_marker_start) -
-            range_left_line_width)
-        .attr('y', 0)
-        .attr('width', range_left_line_width)
-        .attr('height', y_range[0] - y_range[1]);
+        .attr('points', points);
 
+      // Right Marker
       points = [
         self.x_scale(self.range_marker_end),
         ',',
@@ -164,7 +226,6 @@
         y_range[1] + range_right_line_width,
       ];
       points = points.join('');
-
       self.range_marker_elem.select('.range_marker_r')
         .attr('points', points);
     }
@@ -210,19 +271,29 @@
       var value;
       var url;
 
-      if (self.range_marker_start.getTime() >=
-          self.range_marker_end.getTime()) {
-        start = new Date(self.range_marker_end);
-        end = new Date(self.range_marker_start);
+      if (self.is_timeline) {
+        if (self.range_marker_start.getTime() >=
+            self.range_marker_end.getTime()) {
+          start = new Date(self.range_marker_end);
+          end = new Date(self.range_marker_start);
+        } else {
+          start = new Date(self.range_marker_start);
+          end = new Date(self.range_marker_end);
+        }
+        start.setTime(start.getTime() - 60000);
+        end = self.x_step.offset(end, 1);
+        value = [gch.iso_time_format(start), gch.iso_time_format(end)];
       } else {
-        start = new Date(self.range_marker_start);
-        end = new Date(self.range_marker_end);
+        var step = 1;
+        if (self.range_marker_start >= self.range_marker_end) {
+          start = self.range_marker_end + step;
+          end = self.range_marker_start - step;
+        } else {
+          start = self.range_marker_start - step;
+          end = self.range_marker_end + step;
+        }
+        value = [start, end]
       }
-
-      start.setTime(start.getTime() - 60000);
-      end = self.x_step.offset(end, 1);
-
-      value = [gch.iso_time_format(start), gch.iso_time_format(end)];
 
       if (self.range_marker_resize) {
         url = gch.filtered_list_url(
@@ -288,10 +359,24 @@
         line_x = width / 2;
       }
 
+      var marker_x_changed, info_x_changed;
+      if (self.is_timeline) {
+        marker_x_changed = (self.range_marker_last_x === null ||
+            self.range_marker_last_x.getTime() !== rounded_x.getTime());
+        info_x_changed = (!gsa.is_defined(info_last_x) ||
+            info_last_x.getTime() !== rounded_x.getTime());
+      }
+      else
+      {
+        marker_x_changed =
+            self.range_marker_last_x !== rounded_x;
+        info_x_changed =
+            info_last_x !== rounded_x;
+      }
+
       if (self.range_marker_mouse_down &&
           data.records.length > 1 &&
-          (self.range_marker_last_x === null ||
-           self.range_marker_last_x.getTime() !== rounded_x.getTime()) &&
+          marker_x_changed &&
           (Math.abs(self.range_marker_mouse_start_x - mouse_x) >= 10 ||
            self.range_marker_resize)) {
 
@@ -310,8 +395,7 @@
         resize_range_marker_elems();
       }
 
-      if (!gsa.is_defined(info_last_x) ||
-          info_last_x.getTime() !== rounded_x.getTime()) {
+      if (info_x_changed) {
         var max_line_width;
 
         info_last_x = rounded_x;
@@ -321,27 +405,59 @@
         max_line_width = 0;
 
         if (self.range_marker_resize) {
-          var end_date = self.x_step.offset(self.range_marker_end, 1);
-          end_date.setTime(end_date.getTime() - 1000);
-          var start_time = self.range_marker_start.getTime();
-          var end_time = end_date.getTime();
-          var range_count = 0;
-          for (var index in records) {
-            var record_time = records[index][self.x_field].getTime();
-            if (record_time >= start_time && record_time < end_time) {
-              range_count += records[index].count;
-            } else if (record_time >= end_time) {
-              break;
+          if (self.is_timeline) {
+            var end_date = self.x_step.offset(self.range_marker_end, 1);
+            end_date.setTime(end_date.getTime() - 1000);
+            var start_time = self.range_marker_start.getTime();
+            var end_time = end_date.getTime();
+            var range_count = 0;
+            for (var index in records) {
+              var record_time = records[index][self.x_field].getTime();
+              if (record_time >= start_time && record_time < end_time) {
+                range_count += records[index].count;
+              } else if (record_time >= end_time) {
+                break;
+              }
             }
+            var type = data.column_info.columns.count.type;
+            self.range_info_text_lines[0]
+                .text(gch.date_format(self.range_marker_start));
+            self.range_info_text_lines[1]
+                .text('to ' + gch.date_format(end_date));
+            self.range_info_text_lines[2]
+                .text(gch.resource_type_name_plural(type) + ': ' +
+                    range_count);
           }
-          var type = data.column_info.columns.count.type;
-          self.range_info_text_lines[0]
-              .text(gch.date_format(self.range_marker_start));
-          self.range_info_text_lines[1]
-              .text('to ' + gch.date_format(end_date));
-          self.range_info_text_lines[2]
-              .text(gch.resource_type_name_plural(type) + ': ' +
-                  range_count);
+          else {
+            var type = data.column_info.columns.count.type;
+            var range_count = 0;
+            var x_label = gch.column_label(
+                column_info.columns[self.x_field], true, false,
+                self.show_stat_type)
+            for (var index in records) {
+              var record_val = records[index][self.x_field];
+              if (record_val >= self.range_marker_start &&
+                  record_val <= self.range_marker_end) {
+                range_count += records[index].count;
+              } else if (record_val > self.range_marker_end) {
+                break;
+              }
+            }
+
+            self.range_info_text_lines[0]
+                .text(x_label + ":");
+            if (self.range_marker_start !== self.range_marker_end) {
+              self.range_info_text_lines[1]
+                  .text(self.range_marker_start +
+                      ' to ' + self.range_marker_end);
+            } else {
+              self.range_info_text_lines[1]
+                  .text(self.range_marker_start);
+            }
+            self.range_info_text_lines[2]
+                .text(gch.resource_type_name_plural(type) + ': ' +
+                    range_count);
+          }
         }
 
         var bbox;
@@ -362,6 +478,8 @@
         max_line_width = 0;
         for (line in self.info_text_lines) {
           var d = data.records[line_index];
+          var line_col_info =
+            data.column_info.columns[self.info_text_lines[line].field]
           if (gsa.has_value(d)) {
             d = d[self.info_text_lines[line].field];
 
@@ -372,8 +490,7 @@
                   d = self.duration_tick_format(d);
                   break;
                 default:
-                  d = gch.format_data(d,
-                    data.column_info.columns[self.info_text_lines[line].field]);
+                  d = gch.format_data(d, line_col_info);
               }
             }
             else if (line >= 1) {
@@ -383,21 +500,25 @@
                   d = self.duration_tick_format(d);
                   break;
                 default:
-                  d = gch.format_data(d,
-                    data.column_info.columns[self.info_text_lines[line].field]);
+                  d = gch.format_data(d, line_col_info);
               }
             }
             else {
-              d = gch.format_data(d,
-                data.column_info.columns[self.info_text_lines[line].field]);
+              d = gch.format_data(d, line_col_info);
             }
 
             self.info_text_lines[line].elem.text(d);
           }
           else {
             if (line === '0') {
-              self.info_text_lines[line].elem.text(
-                  gch.format_data(rounded_x, {data_type: 'js_date'}));
+              if (self.is_timeline) {
+                self.info_text_lines[line].elem.text(
+                    gch.format_data(rounded_x, {data_type: 'js_date'}));
+              }
+              else {
+                self.info_text_lines[line].elem.text(
+                    gch.format_data(rounded_x), line_col_info);
+              }
             }
             else {
               self.info_text_lines[line].elem.text('N/A');
@@ -529,6 +650,8 @@
 
     if (update) {
       svg.text('');
+      self.defs = svg.append ('defs');
+
       self.svg = svg.append('g');
 
       self.svg.attr('transform',
@@ -572,6 +695,30 @@
         .style('font-style', 'oblique')
         .attr('transform', 'translate(' + width + ', 0)')
         .call(self.y2_axis);
+
+      for (index = 0; index < self.all_y_fields.length; index++) {
+        gradients[index] = null;
+
+        if (areas[index] === null) {
+          continue;
+        }
+
+        var fill;
+        if (gradients[index]) {
+          fill = 'url(\'#gradient_' + index + '\')';
+        }
+        else {
+          fill = self.scaleColor(self.all_y_fields[index]);
+        }
+
+        var new_path = self.svg.append('path');
+        new_path
+          .attr('id', 'area_' + index)
+          .datum(records)
+          .style('fill', fill)
+          .style('opacity', 0.33)
+          .attr('d', areas[index]);
+      }
 
       for (index = 0; index < self.all_y_fields.length; index++) {
         var new_path = self.svg.append('path');
@@ -632,7 +779,7 @@
           .style('opacity', '0.125');
 
       self.range_marker_elem
-        .append('rect')
+        .append('polygon')
           .attr('class', 'range_marker_l')
           .style('fill', '#008800')
           .style('opacity', '0.25');
@@ -792,6 +939,14 @@
       .call(self.y2_axis)
       .attr('transform', 'translate(' + width + ', 0)');
 
+    for (index = 0; index < areas.length; index++) {
+      if (areas[index] === null)
+        continue;
+      self.svg.select('#area_' + index)
+        .datum(records)
+        .attr('d', areas[index]);
+    }
+
     for (index = 0; index < lines.length; index++) {
       self.svg.select('#line_' + index)
         .datum(records)
@@ -926,6 +1081,19 @@
       this.x_field = gen_params.x_field;
     }
 
+    this.is_timeline = false;
+    this.y_area = false;
+    this.y2_area = false;
+
+    if (gsa.is_defined (gen_params.extra)) {
+      if (gsa.is_defined (gen_params.extra.is_timeline))
+        this.is_timeline = gen_params.extra.is_timeline;
+      if (gsa.is_defined (gen_params.extra.y_area))
+        this.y_area = gen_params.extra.y_area;
+      if (gsa.is_defined (gen_params.extra.y2_area))
+        this.y2_area = gen_params.extra.y2_area;
+    }
+
     if (gen_params.y_fields && gen_params.y_fields[0]  &&
       gen_params.z_fields && gen_params.z_fields[0]) {
       this.y_fields = gen_params.y_fields;
@@ -959,6 +1127,15 @@
     }
     else {
       this.fillers = {};
+    }
+
+    if (this.is_timeline) {
+      this.x_scale = d3.time.scale.utc();
+      this.x_axis = d3.svg.axis().scale(this.x_scale).orient('bottom').ticks(6);
+      this.setDataTransformFunc(this.timeLine);
+    }
+    else if (1) {
+      this.setDataTransformFunc(gch.fill_in_numbered_records);
     }
   };
 

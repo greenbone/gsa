@@ -1,3 +1,42 @@
+2017-01-13  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Add Vulns by hosts area chart.  Generally allow line charts to fill the
+	area under the lines and to have an x axis not using time values.
+
+	* src/html/classic/graphics.xsl (report-charts): Add "is_timeline"
+	gen-param to the timeline chart.
+	(vuln-charts): Change title of "vuln-by-hosts" to "Vulns by host - bar"
+	and add chart "vuln-by-hosts-area".
+	(host-charts, note-charts, override-charts, common-charts)
+	(js-scan-management-top-visualization): Add "is_timeline" gen-param to
+	the timeline chart.
+
+	* src/html/classic/js/gsa_chart_helpers.js (fill_in_numbered_records):
+	New function.
+
+	* src/html/classic/js/gsa_line_chart.js (find_record_index)
+	(LineChartGenerator.prototype.init)
+	(LineChartGenerator.prototype.generate)
+	(LineChartGenerator.prototype.evaluateParams): Use a simple numeric
+	scale for the x axis by default and add a special "timeline" mode for
+	time scales and aggregating by date.  Also add option to fill area
+	under y and y2 data lines.
+
+	* src/html/classic/ng/src/web/dashboard/commoncharts.js: Add gen_param
+	"is_timeline" to timeline chart.
+
+	* src/html/classic/ng/src/web/hosts/charts.js: Add gen_param
+	"is_timeline" to timeline chart.
+
+	* src/html/classic/ng/src/web/notes/charts.js: Add gen_param
+	"is_timeline" to timeline chart.
+
+	* src/html/classic/ng/src/web/overrides/charts.js: Add gen_param
+	"is_timeline" to timeline chart.
+
+	* src/html/classic/ng/src/web/reports/charts.js: Add gen_param
+	"is_timeline" to timeline chart.
+
 2017-01-13 Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/css/login.css,

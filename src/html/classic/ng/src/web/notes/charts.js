@@ -43,7 +43,8 @@ export const NoteCharts = props => {
           name="note-by-created"
           title={_('Notes by creation time')}
           title-count="count"
-          type="line"/>
+          type="line"
+          gen-params={{is_timeline: 1}}/>
       </DataSource>
       <DataSource
         name="note-text-words-source"

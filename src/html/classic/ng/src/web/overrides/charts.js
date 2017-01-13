@@ -43,7 +43,8 @@ export const OverrideCharts = props => {
           name="override-by-created"
           title={_('Overrides by creation time')}
           title-count="count"
-          type="line"/>
+          type="line"
+          gen-params={{is_timeline: 1}}/>
       </DataSource>
       <DataSource
         name="override-text-words-source"

@@ -60,7 +60,8 @@ export const CommonCharts = props => {
           name={type + '-by-created'}
           title={_('{{title}} by creation time', {title: titleType})}
           title-count="count"
-          type="line"/>
+          type="line"
+          gen-params={{is_timeline: 1}}/>
       </DataSource>
     </div>
   );

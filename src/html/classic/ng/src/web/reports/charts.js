@@ -45,7 +45,7 @@ export const ReportCharts = props => {
           y-fields={['high_max']}
           z-fields={['high_per_host_max']}
           title={_('Reports: High results timeline')}
-          gen-params={{show_stat_type: 0}}/>
+          gen-params={{show_stat_type: 0, is_timeline: 1}}/>
       </DataSource>
       <DataSource
         name="report-severity-count-source"
