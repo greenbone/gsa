@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,12 +26,12 @@ import React from 'react';
 import {translate as _} from '../../locale.js';
 import {is_defined} from '../../utils.js';
 
+import Layout from '../layout.js';
 import {render_options} from '../render.js';
 
 import Select2 from '../form/select2.js';
 import Spinner from '../form/spinner.js';
-import FormItem from '../form/formitem.js';
-import {RadioFormItem} from '../form/radio.js';
+import Radio from '../form/radio.js';
 import RadioSelectFormPart from '../form/radioselectformpart.js';
 
 const VALUE = 'Filter count at least';
@@ -65,32 +65,30 @@ export class FilterCountLeastConditionPart extends RadioSelectFormPart {
 
     let filter_opts = render_options(filters);
     return (
-      <RadioFormItem title={_('Filter')}
-        value={VALUE}
-        name="condition"
-        checked={value === VALUE}
-        onChange={this.onCheckedChange}>
-        <FormItem>
-          <Select2
-            value={at_least_filter_id}
-            name="at_least_filter_id"
-            onChange={this.onValueChange}>
-            {filter_opts}
-          </Select2>
-        </FormItem>
-        <FormItem>
+      <Layout flex box>
+        <Radio title={_('Filter')}
+          value={VALUE}
+          name="condition"
+          checked={value === VALUE}
+          onChange={this.onCheckedChange}>
+        </Radio>
+        <Select2
+          value={at_least_filter_id}
+          name="at_least_filter_id"
+          onChange={this.onValueChange}>
+          {filter_opts}
+        </Select2>
+        <Layout flex box>
           {_('matches at least')}
-        </FormItem>
-        <FormItem>
-          <Spinner value={at_least_count}
-            name="at_least_count"
-            type="int" min="0" size="5"
-            onChange={this.onValueChange}/>
-        </FormItem>
-        <FormItem>
+        </Layout>
+        <Spinner value={at_least_count}
+          name="at_least_count"
+          type="int" min="0" size="5"
+          onChange={this.onValueChange}/>
+        <Layout flex box>
           {_('result(s) NVT(s)')}
-        </FormItem>
-      </RadioFormItem>
+        </Layout>
+      </Layout>
     );
   }
 }

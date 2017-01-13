@@ -23,9 +23,10 @@
 
 import React from 'react';
 
-import {translate as _} from '../../locale.js';
+import _ from '../../locale.js';
 import {select_save_id, first, is_defined} from '../../utils.js';
 
+import Layout from '../layout.js';
 import {render_options} from '../render.js';
 
 import CredentialsDialog from '../credentials/dialog.js';
@@ -33,7 +34,6 @@ import CredentialsDialog from '../credentials/dialog.js';
 import Select2 from '../form/select2.js';
 import FormGroup from '../form/formgroup.js';
 import TextField from '../form/textfield.js';
-import FormItem from '../form/formitem.js';
 import FormPart from '../form/formpart.js';
 
 import Icon from '../icons/icon.js';
@@ -109,9 +109,10 @@ export class VeriniceMethodPart extends FormPart {
     let verinice_report_format_opts = render_options(
       report_formats.filter(format => format.extension === 'vna'));
     return (
-      <div>
+      <Layout flex="column" grow="1" box>
         <FormGroup title={_('verinice.PRO URL')}>
           <TextField
+            grow="1"
             size="30" maxLength="256"
             name="verinice_server_url"
             value={verinice_server_url}
@@ -119,19 +120,17 @@ export class VeriniceMethodPart extends FormPart {
         </FormGroup>
 
         <FormGroup title={_('Credential')}>
-          <FormItem>
-            <Select2
-              name="verinice_server_credential"
-              value={verinice_server_credential}
-              onChange={this.onValueChange}>
-              {verinice_credential_opts}
-            </Select2>
-          </FormItem>
-          <FormItem>
+          <Select2
+            name="verinice_server_credential"
+            value={verinice_server_credential}
+            onChange={this.onValueChange}>
+            {verinice_credential_opts}
+          </Select2>
+          <Layout flex box>
             <Icon img="new.svg"
               title={_('Create a credential')}
               onClick={() => { this.credentials_dialog.show(['up']); }}/>
-          </FormItem>
+          </Layout>
         </FormGroup>
 
         <FormGroup title={_('verinice.PRO Report')}>
@@ -145,7 +144,7 @@ export class VeriniceMethodPart extends FormPart {
 
         <CredentialsDialog onSave={this.onAddCredential}
           ref={ref => this.credentials_dialog = ref}/>
-      </div>
+      </Layout>
     );
   }
 }

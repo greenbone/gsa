@@ -31,12 +31,11 @@ import Dialog from '../dialog.js';
 import Layout from '../layout.js';
 
 import FormGroup from '../form/formgroup.js';
-import FormItem from '../form/formitem.js';
 import TextField from '../form/textfield.js';
 import FileField from '../form/filefield.js';
 import YesNoRadio from '../form/yesnoradio.js';
+import Radio from '../form/radio.js';
 import Select2 from '../form/select2.js';
-import {RadioFormItem} from '../form/radio.js';
 
 import Icon from '../icons/icon.js';
 
@@ -187,48 +186,55 @@ export class TargetDialog extends Dialog {
     let snmp_credential_opts = this.renderOptions(snmp_credentials, 0);
 
     return (
-      <Layout float className="form-horizontal">
+      <Layout flex="column">
 
         <FormGroup title={_('Name')}>
           <TextField name="name"
+            grow="1"
             value={name} size="30"
             onChange={this.onValueChange}
             maxLength="80"/>
         </FormGroup>
 
-        <FormGroup title={_('Comment')}>
+        <FormGroup title={_('Comment')} flex="column">
           <TextField name="comment" value={comment}
             size="30" maxLength="400"
             onChange={this.onValueChange}/>
         </FormGroup>
 
-        <FormGroup title={_('Hosts')}>
-          <RadioFormItem value="manual" title={_('Manual')}
-            name="target_source"
-            onChange={this.onValueChange}
-            checked={target_source === 'manual'}>
-            <FormItem>
-              <TextField value={hosts} name="hosts"
-                onChange={this.onValueChange}/>
-            </FormItem>
-          </RadioFormItem>
+        <FormGroup title={_('Hosts')} flex="column">
+          <Layout flex box>
+            <Radio
+              value="manual"
+              title={_('Manual')}
+              name="target_source"
+              onChange={this.onValueChange}
+              checked={target_source === 'manual'}/>
+            <TextField
+              grow="1"
+              disabled={target_source !== 'manual'}
+              value={hosts}
+              name="hosts"
+              onChange={this.onValueChange}/>
+          </Layout>
 
-          <RadioFormItem value="file" title={_('From file')}
-            onChange={this.onValueChange}
-            name="target_source"
-            checked={target_source === 'file'}>
-            <FormItem>
-              <FileField name="file" onChange={this.onValueChange}/>
-            </FormItem>
-          </RadioFormItem>
+          <Layout flex box>
+            <Radio
+              value="file" title={_('From file')}
+              onChange={this.onValueChange}
+              name="target_source"
+              checked={target_source === 'file'}/>
+            <FileField
+              name="file"
+              onChange={this.onValueChange}/>
+          </Layout>
         </FormGroup>
 
         <FormGroup title={_('Exclude Hosts')}>
-          <FormItem>
-            <TextField value={exclude_hosts}
-              name="exclude_hosts"
-              onChange={this.onValueChange}/>
-          </FormItem>
+          <TextField value={exclude_hosts}
+            grow="1"
+            name="exclude_hosts"
+            onChange={this.onValueChange}/>
         </FormGroup>
 
         <FormGroup title={_('Reverse Lookup Only')}>
@@ -245,19 +251,17 @@ export class TargetDialog extends Dialog {
 
         {capabilities.mayOp('get_port_lists') &&
           <FormGroup title={_('Port List')}>
-            <FormItem>
-              <Select2
-                onChange={this.onValueChange}
-                name="port_list_id"
-                value={port_list_id}>
-                {port_list_opts}
-              </Select2>
-            </FormItem>
-            <FormItem>
+            <Select2
+              onChange={this.onValueChange}
+              name="port_list_id"
+              value={port_list_id}>
+              {port_list_opts}
+            </Select2>
+            <Layout box flex>
               <Icon img="new.svg"
                 title={_('Create a new port list')}
                 onClick={() => { this.portlist_dialog.show(); }}/>
-            </FormItem>
+            </Layout>
           </FormGroup>
         }
 
@@ -287,81 +291,72 @@ export class TargetDialog extends Dialog {
 
         {capabilities.mayOp('get_credentials') &&
           <FormGroup title={_('SSH')}>
-            <FormItem>
-              <Select2
-                name="ssh_credential_id"
-                onChange={this.onValueChange}
-                value={ssh_credential_id}>
-                {ssh_credential_opts}
-              </Select2>
-            </FormItem>
-            <FormItem>
+            <Select2
+              box
+              name="ssh_credential_id"
+              onChange={this.onValueChange}
+              value={ssh_credential_id}>
+              {ssh_credential_opts}
+            </Select2>
+            <Layout box flex>
               {_('on port')}
-            </FormItem>
-            <FormItem>
-              <TextField size="6"
-                name="port" value={port}
-                onChange={this.onValueChange}/>
-            </FormItem>
-            <FormItem>
+            </Layout>
+            <TextField size="6"
+              name="port" value={port}
+              onChange={this.onValueChange}/>
+            <Layout box flex>
               <Icon img="new.svg"
                 onClick={() => this.showCredentialsDialog('ssh')}
                 title={_('Create a new credential')}/>
-            </FormItem>
+            </Layout>
           </FormGroup>
         }
 
         {capabilities.mayOp('get_credentials') &&
           <FormGroup title={_('SMB')}>
-            <FormItem>
-              <Select2
-                onChange={this.onValueChange}
-                name="smb_credential_id"
-                value={smb_credential_id}>
-                {smb_credential_opts}
-              </Select2>
-            </FormItem>
-            <FormItem>
+            <Select2
+              onChange={this.onValueChange}
+              name="smb_credential_id"
+              value={smb_credential_id}>
+              {smb_credential_opts}
+            </Select2>
+            <Layout box flex>
               <Icon img="new.svg"
                 onClick={() => this.showCredentialsDialog('smb')}
                 title={_('Create a new credential')}/>
-            </FormItem>
+            </Layout>
           </FormGroup>
         }
 
         {capabilities.mayOp('get_credentials') &&
           <FormGroup title={_('ESXi')}>
-            <FormItem>
-              <Select2
-                onChange={this.onValueChange}
-                name="esxi_credential_id"
-                value={esxi_credential_id}>
-                {esxi_credential_opts}
-              </Select2>
-            </FormItem>
-            <FormItem>
+            <Select2
+              onChange={this.onValueChange}
+              name="esxi_credential_id"
+              value={esxi_credential_id}>
+              {esxi_credential_opts}
+            </Select2>
+            <Layout box flex>
               <Icon img="new.svg"
                 onClick={() => this.showCredentialsDialog('esxi')}
                 title={_('Create a new credential')}/>
-            </FormItem>
+            </Layout>
           </FormGroup>
         }
 
         {capabilities.mayOp('get_credentials') &&
           <FormGroup title={_('SNMP')}>
-            <FormItem>
-              <Select2
-                onChange={this.onValueChange}
-                name="snmp_credential_id"
-                value={snmp_credential_id}>
-                {snmp_credential_opts}
-              </Select2>
-            </FormItem>
-            <FormItem>
+            <Select2
+              onChange={this.onValueChange}
+              name="snmp_credential_id"
+              value={snmp_credential_id}>
+              {snmp_credential_opts}
+            </Select2>
+            <Layout box flex>
               <Icon img="new.svg"
                 onClick={() => this.showCredentialsDialog('snmp')}
                 title={_('Create a new credential')}/>
-            </FormItem>
+            </Layout>
           </FormGroup>
         }
       </Layout>

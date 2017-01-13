@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,10 +25,12 @@ import React from 'react';
 
 import {classes, is_defined} from '../../utils.js';
 
+import {withLayout} from '../layout.js';
+
 import './css/form.css';
 import './css/checkboxradio.css';
 
-export class Checkbox extends React.Component {
+export class CheckboxContainer extends React.Component {
 
   constructor(props) {
     super(props);
@@ -79,7 +81,7 @@ export class Checkbox extends React.Component {
   }
 }
 
-Checkbox.propTypes = {
+CheckboxContainer.propTypes = {
   name: React.PropTypes.string,
   disabled: React.PropTypes.bool,
   title: React.PropTypes.string,
@@ -88,6 +90,8 @@ Checkbox.propTypes = {
   checkedValue: React.PropTypes.any,
   uncheckedValue: React.PropTypes.any,
 };
+
+export const Checkbox = withLayout(CheckboxContainer, {box: true});
 
 export default Checkbox;
 

@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -85,17 +85,18 @@ export class ResultsFilterDialog extends FilterDialog {
 
     return (
       <Layout flex="column">
+
         {this.renderFilter()}
         {this.renderApplyOverrides()}
-        <FormGroup title={_('Auto-FP')} flex>
+
+        <FormGroup title={_('Auto-FP')} flex="column">
           <Checkbox name="autofp"
             checkedValue="1" uncheckedValue="0"
             checked={autofp >= 1}
             title={_('Trust vendor security updates')}
             onChange={this.onFilterIntValueChange}/>
-          <Layout flex>
+          <Layout flex box>
             <Radio
-              className="inline"
               name="autofp"
               value="1"
               disabled={autofp === 0}
@@ -103,7 +104,6 @@ export class ResultsFilterDialog extends FilterDialog {
               title={_('Full CVE match')}
               onChange={this.handleIntValueChange}/>
             <Radio
-              className="inline"
               name="autofp"
               value="2"
               disabled={autofp === 0}
@@ -112,46 +112,47 @@ export class ResultsFilterDialog extends FilterDialog {
               onChange={this.handleIntValueChange}/>
           </Layout>
         </FormGroup>
+
         {this.renderQoD()}
-        <FormGroup title={_('Severity (Class)')} flex>
-          <Layout flex>
-            <Checkbox
-              checked={levels.includes('h')}
-              className="inline"
-              name="h"
-              onChange={this.handleLevelChange}>
-              <LabelHigh/>
-            </Checkbox>
-            <Checkbox
-              checked={levels.includes('m')}
-              className="inline"
-              name="m"
-              onChange={this.handleLevelChange}>
-              <LabelMedium/>
-            </Checkbox>
-            <Checkbox
-              checked={levels.includes('l')}
-              className="inline"
-              name="l"
-              onChange={this.handleLevelChange}>
-              <LabelLow/>
-            </Checkbox>
-            <Checkbox
-              checked={levels.includes('g')}
-              className="inline"
-              name="g"
-              onChange={this.handleLevelChange}>
-              <LabelLog/>
-            </Checkbox>
-            <Checkbox
-              checked={levels.includes('f')}
-              className="inline"
-              name="f"
-              onChange={this.handleLevelChange}>
-              <LabelFalsePositive/>
-            </Checkbox>
-          </Layout>
+
+        <FormGroup title={_('Severity (Class)')}>
+          <Checkbox
+            checked={levels.includes('h')}
+            className="inline"
+            name="h"
+            onChange={this.handleLevelChange}>
+            <LabelHigh/>
+          </Checkbox>
+          <Checkbox
+            checked={levels.includes('m')}
+            className="inline"
+            name="m"
+            onChange={this.handleLevelChange}>
+            <LabelMedium/>
+          </Checkbox>
+          <Checkbox
+            checked={levels.includes('l')}
+            className="inline"
+            name="l"
+            onChange={this.handleLevelChange}>
+            <LabelLow/>
+          </Checkbox>
+          <Checkbox
+            checked={levels.includes('g')}
+            className="inline"
+            name="g"
+            onChange={this.handleLevelChange}>
+            <LabelLog/>
+          </Checkbox>
+          <Checkbox
+            checked={levels.includes('f')}
+            className="inline"
+            name="f"
+            onChange={this.handleLevelChange}>
+            <LabelFalsePositive/>
+          </Checkbox>
         </FormGroup>
+
         {this.renderFirstResult()}
         {this.renderResultsPerPage()}
         {this.renderSortBy()}

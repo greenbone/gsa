@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,13 +30,15 @@ import 'jquery-ui/ui/widgets/datepicker.js';
 
 import _ from '../../locale.js';
 
+import Layout from '../layout.js';
+
 import './css/datepicker.css';
 import '../css/jquery-ui.theme.css';
 import '../css/jquery-ui.structure.css';
 
 /* FIXME: the datepicker should be replaced with a native react datepicker in future */
 
-export class Datepicker extends React.Component {
+class DatePicker extends React.Component {
 
   constructor(...args) {
     super(...args);
@@ -93,19 +95,22 @@ export class Datepicker extends React.Component {
   }
 
   render() {
+    let {onChange, name, value, ...other} = this.props; // eslint-disable-line no-unused-vars
     return (
-      <input className="datepicker-button" size="26"
-        ref={ref => this.button = ref} onClick={this.handleClick}/>
+      <Layout {...other} box>
+        <input className="datepicker-button" size="26"
+          ref={ref => this.button = ref} onClick={this.handleClick}/>
+      </Layout>
     );
   }
 }
 
-Datepicker.propTypes = {
+DatePicker.propTypes = {
   name: React.PropTypes.string,
   value: React.PropTypes.object.isRequired, // moment date object
   onChange: React.PropTypes.func,
 };
 
-export default Datepicker;
+export default DatePicker;
 
 // vim: set ts=2 sw=2 tw=80:

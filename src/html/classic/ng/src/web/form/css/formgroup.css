@@ -25,3 +25,9 @@
 .form-inline .form-group .control-label {
   margin-right: 5px;
 }
+
+.flex.column .form-group {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+}

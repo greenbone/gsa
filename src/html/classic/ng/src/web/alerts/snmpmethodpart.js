@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,8 +23,10 @@
 
 import React from 'react';
 
-import {translate as _} from '../../locale.js';
+import _ from '../../locale.js';
 import {is_defined} from '../../utils.js';
+
+import Layout from '../layout.js';
 
 import FormGroup from '../form/formgroup.js';
 import TextField from '../form/textfield.js';
@@ -55,7 +57,7 @@ export class SnmpMethodPart extends FormPart {
     let {snmp_community, snmp_agent, snmp_message} = this.state;
 
     return (
-      <div>
+      <Layout flex="column" grow="1" box>
         <FormGroup title={_('Community')}>
           <TextField
             size="30" maxLength="301"
@@ -79,7 +81,7 @@ export class SnmpMethodPart extends FormPart {
             value={snmp_message}
             onChange={this.onValueChange}/>
         </FormGroup>
-      </div>
+      </Layout>
     );
   }
 }

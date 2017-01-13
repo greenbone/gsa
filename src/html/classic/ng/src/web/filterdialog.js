@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,7 +30,6 @@ import Dialog from './dialog.js';
 import Layout from './layout.js';
 
 import FormGroup from './form/formgroup.js';
-import FormItem from './form/formitem.js';
 import YesNoRadio from './form/yesnoradio.js';
 import Spinner from './form/spinner.js';
 import Select2 from './form/select2.js';
@@ -145,6 +144,7 @@ export class FilterDialog extends Dialog {
     return (
       <FormGroup title={_('Filter')} flex>
         <TextField
+          grow="1"
           value={filterstring} size="30"
           onChange={this.onFilterStringChange}
           maxLength="80"/>
@@ -156,7 +156,7 @@ export class FilterDialog extends Dialog {
     let {filter} = this.state;
     let apply_overrides = filter.get('apply_overrides');
     return (
-      <FormGroup title={_('Apply Overrides')} flex>
+      <FormGroup title={_('Apply Overrides')}>
         <YesNoRadio
           value={apply_overrides}
           name="apply_overrides"
@@ -169,20 +169,16 @@ export class FilterDialog extends Dialog {
     let {filter} = this.state;
     let min_qod = filter.get('min_qod');
     return (
-      <FormGroup title={_('QoD')} flex>
-        <FormItem>
-          {_('must be at least')}
-        </FormItem>
-        <FormItem>
-          <Spinner
-            type="int"
-            name="min_qod"
-            min="0" max="100"
-            step="1"
-            value={min_qod}
-            size="1"
-            onChange={this.onFilterValueChange}/>
-        </FormItem>
+      <FormGroup title={_('QoD')}>
+        <Layout flex box>{_('must be at least')}</Layout>
+        <Spinner
+          type="int"
+          name="min_qod"
+          min="0" max="100"
+          step="1"
+          value={min_qod}
+          size="1"
+          onChange={this.onFilterValueChange}/>
       </FormGroup>
     );
   }
@@ -191,7 +187,7 @@ export class FilterDialog extends Dialog {
     let {filter} = this.state;
     let first = filter.get('first');
     return (
-      <FormGroup title={_('First result')} flex>
+      <FormGroup title={_('First result')}>
         <Spinner type="int" name="first"
           value={first}
           size="5"
@@ -204,7 +200,7 @@ export class FilterDialog extends Dialog {
     let {filter} = this.state;
     let rows = filter.get('rows');
     return (
-      <FormGroup title={_('Results per page')} flex>
+      <FormGroup title={_('Results per page')}>
         <Spinner type="int" name="rows"
           value={rows}
           size="5"
@@ -226,31 +222,25 @@ export class FilterDialog extends Dialog {
   renderSortBy() {
     let {sort_order, sort_field} = this.state;
     return (
-      <FormGroup title={_('Sort by')} flex>
-        <FormItem>
-          <Select2
-            name="sort_field"
-            value={sort_field}
-            onChange={this.onSortFieldChange}>
-            {this.renderSortFieldOptions()}
-          </Select2>
-        </FormItem>
-        <FormItem>
-          <Radio
-            className="inline"
-            name="sort_order"
-            value="sort"
-            checked={sort_order === 'sort'}
-            title={_('Ascending')}
-            onChange={this.onSortOrderChange}/>
-          <Radio
-            className="inline"
-            name="sort_order"
-            value="sort-reverse"
-            checked={sort_order === 'sort-reverse'}
-            title={_('Descending')}
-            onChange={this.onSortOrderChange}/>
-        </FormItem>
+      <FormGroup title={_('Sort by')}>
+        <Select2
+          name="sort_field"
+          value={sort_field}
+          onChange={this.onSortFieldChange}>
+          {this.renderSortFieldOptions()}
+        </Select2>
+        <Radio
+          name="sort_order"
+          value="sort"
+          checked={sort_order === 'sort'}
+          title={_('Ascending')}
+          onChange={this.onSortOrderChange}/>
+        <Radio
+          name="sort_order"
+          value="sort-reverse"
+          checked={sort_order === 'sort-reverse'}
+          title={_('Descending')}
+          onChange={this.onSortOrderChange}/>
       </FormGroup>
     );
   }

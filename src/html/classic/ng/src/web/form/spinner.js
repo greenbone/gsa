@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,9 +26,11 @@ import React from 'react';
 import {is_defined, autobind, parse_float, includes, KeyCode,
   classes} from '../../utils.js';
 
+import {withLayout} from '../layout.js';
+
 import './css/spinner.css';
 
-export class Spinner extends React.Component {
+class SpinnerContainer extends React.Component {
 
   constructor(props) {
     super(props);
@@ -212,8 +214,9 @@ export class Spinner extends React.Component {
 
   render() {
     let {value, down_active, up_active} = this.state;
-    let {size, type, min, max, disabled, maxLength, name} = this.props;
-    let css = disabled ? 'spinner disabled' : 'spinner';
+    let {size, type, min, max, disabled, maxLength, name,
+      className} = this.props;
+    let css = classes(disabled ? 'spinner disabled' : 'spinner', className);
     return (
       <span className={css}
         onWheel={this.handleMouseWheel}>
@@ -250,7 +253,7 @@ export class Spinner extends React.Component {
   }
 }
 
-Spinner.defaultProps = {
+SpinnerContainer.defaultProps = {
   size: 4,
   maxLenght: 5,
   type: 'int',
@@ -261,7 +264,7 @@ const propTypeInt = React.PropTypes.oneOfType([
   React.PropTypes.string,
 ]);
 
-Spinner.propTypes = {
+SpinnerContainer.propTypes = {
   size: propTypeInt,
   maxLength: propTypeInt,
   min: propTypeInt,
@@ -271,9 +274,12 @@ Spinner.propTypes = {
   name: React.PropTypes.string,
   disabled: React.PropTypes.bool,
   value: propTypeInt,
+  className: React.PropTypes.string,
   onChange: React.PropTypes.func,
 };
 
-export {Spinner as default};
+export const Spinner = withLayout(SpinnerContainer, {box: true});
+
+export default Spinner;
 
 // vim: set ts=2 sw=2 tw=80:

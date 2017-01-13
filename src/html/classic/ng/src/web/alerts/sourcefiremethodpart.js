@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,8 +23,10 @@
 
 import React from 'react';
 
-import {translate as _} from '../../locale.js';
+import _ from '../../locale.js';
 import {is_defined} from '../../utils.js';
+
+import Layout from '../layout.js';
 
 import Spinner from '../form/spinner.js';
 import FormGroup from '../form/formgroup.js';
@@ -57,7 +59,7 @@ export class SourcefireMethodPart extends FormPart {
     let {defense_center_ip, defense_center_port, pkcs12} = this.state;
 
     return (
-      <div>
+      <Layout flex="column" box grow="1">
         <FormGroup title={_('Defense Center IP')}>
           <TextField
             size="30" maxLength="40"
@@ -82,7 +84,7 @@ export class SourcefireMethodPart extends FormPart {
             value={pkcs12}
             onChange={this.onValueChange}/>
         </FormGroup>
-      </div>
+      </Layout>
     );
   }
 }

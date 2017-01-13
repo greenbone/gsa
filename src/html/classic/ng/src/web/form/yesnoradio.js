@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,10 +31,10 @@ import {handle_value_change} from '../form.js';
 
 import Radio from './radio.js';
 
-export const YesNoRadio = ({disabled, onChange, value, name}) => {
+export const YesNoRadio = ({disabled, onChange, value, name, ...other}) => {
   value = parse_int(value);
   return (
-    <Layout flex>
+    <Layout {...other} flex>
       <Radio
         title={_('Yes')}
         className="inline"

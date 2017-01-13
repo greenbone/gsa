@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,9 +26,10 @@ import React from 'react';
 import {translate as _} from '../../locale.js';
 import {is_defined} from '../../utils.js';
 
+import Layout from '../layout.js';
+
 import Select2 from '../form/select2.js';
-import FormItem from '../form/formitem.js';
-import {RadioFormItem} from '../form/radio.js';
+import Radio from '../form/radio.js';
 import RadioSelectFormPart from '../form/radioselectformpart.js';
 
 const VALUE = 'Task run status changed';
@@ -51,24 +52,24 @@ export class TaskEventPart extends RadioSelectFormPart {
     let {status} = this.state;
     let {value} = this.props;
     return (
-      <RadioFormItem title={_('Task run status changed to')}
-        name="event"
-        value={VALUE}
-        checked={value === VALUE}
-        onChange={this.onCheckedChange}>
-        <FormItem>
-          <Select2 onChange={this.onValueChange}
-            name="status"
-            value={status}>
-            <option value="Done">{('Done')}</option>
-            <option value="New">{_('New')}</option>
-            <option value="Requested">{_('Requested')}</option>
-            <option value="Running">{_('Running')}</option>
-            <option value="Stop Requested">{_('Stop Requested')}</option>
-            <option value="Stopped">{_('Stopped')}</option>
-          </Select2>
-        </FormItem>
-      </RadioFormItem>
+      <Layout flex box>
+        <Radio title={_('Task run status changed to')}
+          name="event"
+          value={VALUE}
+          checked={value === VALUE}
+          onChange={this.onCheckedChange}>
+        </Radio>
+        <Select2 onChange={this.onValueChange}
+          name="status"
+          value={status}>
+          <option value="Done">{('Done')}</option>
+          <option value="New">{_('New')}</option>
+          <option value="Requested">{_('Requested')}</option>
+          <option value="Running">{_('Running')}</option>
+          <option value="Stop Requested">{_('Stop Requested')}</option>
+          <option value="Stopped">{_('Stopped')}</option>
+        </Select2>
+      </Layout>
     );
   }
 }

@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,9 +26,10 @@ import React from 'react';
 import {translate as _} from '../../locale.js';
 import {is_defined} from '../../utils.js';
 
+import Layout from '../layout.js';
+
 import Select2 from '../form/select2.js';
-import FormItem from '../form/formitem.js';
-import {RadioFormItem} from '../form/radio.js';
+import Radio from '../form/radio.js';
 import RadioSelectFormPart from '../form/radioselectformpart.js';
 
 const VALUE = 'Severity changed';
@@ -52,22 +53,22 @@ export class SeverityChangedConditionPart extends RadioSelectFormPart {
     let {direction} = this.state;
     let {value} = this.props;
     return (
-      <RadioFormItem title={_('Severity Level')}
-        value={VALUE}
-        name="condition"
-        checked={value === VALUE}
-        onChange={this.onCheckedChange}>
-        <FormItem>
-          <Select2
-            value={direction}
-            name="direction"
-            onChange={this.onValueChange}>
-            <option value="changed">{_('changed')}</option>
-            <option value="increased">{_('increased')}</option>
-            <option value="decreased">{_('decreased')}</option>
-          </Select2>
-        </FormItem>
-      </RadioFormItem>
+      <Layout flex box>
+        <Radio title={_('Severity Level')}
+          value={VALUE}
+          name="condition"
+          checked={value === VALUE}
+          onChange={this.onCheckedChange}>
+        </Radio>
+        <Select2
+          value={direction}
+          name="direction"
+          onChange={this.onValueChange}>
+          <option value="changed">{_('changed')}</option>
+          <option value="increased">{_('increased')}</option>
+          <option value="decreased">{_('decreased')}</option>
+        </Select2>
+      </Layout>
     );
   }
 }

@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,8 +24,9 @@
 import React from 'react';
 
 import {handle_value_change} from '../form.js';
+import {withLayout} from '../layout.js';
 
-export const FileField = ({onChange, ...props}) => {
+const FileFieldContainer = ({onChange, ...props}) => {
   return (
     <input {...props} type="file"
       onChange={event => handle_value_change({
@@ -36,10 +37,12 @@ export const FileField = ({onChange, ...props}) => {
   );
 };
 
-FileField.propTypes = {
+FileFieldContainer.propTypes = {
   name: React.PropTypes.string,
   onChange: React.PropTypes.func,
 };
+
+export const FileField = withLayout(FileFieldContainer, {box: true});
 
 export default FileField;
 

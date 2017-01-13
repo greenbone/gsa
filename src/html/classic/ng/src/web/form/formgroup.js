@@ -25,48 +25,49 @@ import React from 'react';
 
 import {is_defined, classes} from '../../utils.js';
 
-import {withLayout} from '../layout.js';
+import Layout from '../layout';
 
 import './css/form.css';
 import './css/formgroup.css';
 
-export const FormGroupContainer = props => {
-  if (is_defined(props.condition) && !props.condition) {
+export const FormGroup = props => {
+  let {title, size, className, titleSize, titleOffset, offset, condition,
+    flex = "row", ...other} = props;
+
+  if (is_defined(condition) && !condition) {
     return null;
   }
-
-  let {title, size, className} = props;
 
   className = classes('form-group', className);
 
   if (title) {
-    let title_css = classes('col-' + props.titleSize, 'control-label');
+    let title_css = classes('col-' + titleSize, 'control-label');
     if (props.titleOffset) {
-      title_css = classes('offset-' + props.titleOffset, title_css);
+      title_css = classes('offset-' + titleOffset, title_css);
     }
 
     if (!is_defined(size)) {
-      size = 12 - props.titleSize - props.titleOffset;
+      size = 12 - titleSize - titleOffset;
     }
     title = <label className={title_css}>{title}</label>;
   }
 
   let css = is_defined(size) ? 'col-' + size : '';
 
-  if (props.offset) {
-    css = classes('offset-' + props.offset, css);
+  if (offset) {
+    css = classes('offset-' + offset, css);
   }
   return (
     <div className={className}>
       {title}
-      <div className={css}>
+      <Layout {...other} flex={flex} className={css}>
         {props.children}
-      </div>
+      </Layout>
     </div>
   );
 };
 
-FormGroupContainer.propTypes = {
+FormGroup.propTypes = {
   title: React.PropTypes.string,
   className: React.PropTypes.string,
   condition: React.PropTypes.bool,
@@ -86,15 +87,16 @@ FormGroupContainer.propTypes = {
     React.PropTypes.string,
     React.PropTypes.number,
   ]),
+  flex: React.PropTypes.oneOfType([
+    React.PropTypes.string,
+    React.PropTypes.bool,
+  ]),
 };
 
-FormGroupContainer.defaultProps = {
+FormGroup.defaultProps = {
   titleSize: 2,
   titleOffset: 0,
 };
-
-export const FormGroup = withLayout(FormGroupContainer,
-  {align: ['start', 'center']});
 
 export default FormGroup;
 

@@ -46,17 +46,23 @@ export class TaskFilterDialog extends FilterDialog {
     return SORT_FIELDS;
   }
 
-  renderContent() {
+  renderFilter() {
     let {filterstring} = this.state;
+    return (
+      <FormGroup title={_('Name')} flex>
+        <TextField
+          grow="1"
+          value={filterstring} size="30"
+          onChange={this.onFilterStringChange}
+          maxLength="80"/>
+      </FormGroup>
+    );
+  }
 
+  renderContent() {
     return (
       <Layout flex="column">
-        <FormGroup title={_('Name')} flex>
-          <TextField name="name"
-            value={filterstring} size="30"
-            onChange={this.onFilterStringChange}
-            maxLength="80"/>
-        </FormGroup>
+        {this.renderFilter()}
         {this.renderApplyOverrides()}
         {this.renderQoD()}
         {this.renderFirstResult()}

@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -145,22 +145,25 @@ export class AlertDialog extends Dialog {
     let filter_opts = this.renderOptions(filters, 0);
 
     return (
-      <Layout float className="form-horizontal">
+      <Layout flex="column">
 
         <FormGroup title={_('Name')}>
           <TextField name="name"
+            grow="1"
             value={name} size="30"
             onChange={this.onValueChange}
             maxLength="80"/>
         </FormGroup>
 
         <FormGroup title={_('Comment')}>
-          <TextField name="comment" value={comment}
+          <TextField name="comment"
+            value={comment}
+            grow="1"
             size="30" maxLength="400"
             onChange={this.onValueChange}/>
         </FormGroup>
 
-        <FormGroup title={_('Event')}>
+        <FormGroup title={_('Event')} flex="column">
           <TaskEventPart
             value={event}
             onCheckedChange={this.onValueChange}
@@ -174,11 +177,12 @@ export class AlertDialog extends Dialog {
             onDataChange={this.onPartDataChange}/>
         </FormGroup>
 
-        <FormGroup title={_('Condition')}>
+        <FormGroup title={_('Condition')} flex="column">
 
           <Radio title={_('Always')}
             name="condition"
-            value="Always" checked={condition === 'Always'}
+            value="Always"
+            checked={condition === 'Always'}
             onChange={this.onValueChange}/>
 
           {event === 'Task run status changed' &&

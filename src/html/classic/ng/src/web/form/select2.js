@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,6 +25,8 @@ import React from 'react';
 import $ from 'jquery';
 
 import {is_defined, is_array} from '../../utils.js';
+
+import {withLayout} from '../layout.js';
 
 import 'select2';
 
@@ -51,7 +53,7 @@ function equal_array_keys(arr1, arr2) {
   return true;
 }
 
-export class Select2 extends React.Component {
+class Select2Container extends React.Component {
 
   constructor(props) {
     super(props);
@@ -121,18 +123,23 @@ export class Select2 extends React.Component {
   }
 
   render() {
-    let {onChange, value, ...other} = this.props; // eslint-disable-line no-unused-vars
+    let {onChange, value, className, ...other} = this.props; // eslint-disable-line no-unused-vars
     return (
-      <select {...other} ref={ref => this.select = ref}/>
+      <span className={className}>
+        <select {...other} ref={ref => this.select = ref}/>
+      </span>
     );
   }
 }
 
-Select2.propTypes = {
+Select2Container.propTypes = {
   name: React.PropTypes.string,
   onChange: React.PropTypes.func,
   value: React.PropTypes.any,
+  className: React.PropTypes.string
 };
+
+export const Select2 = withLayout(Select2Container, {box: true});
 
 export default Select2;
 

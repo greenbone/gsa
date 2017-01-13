@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -127,7 +127,7 @@ export class AdvancedTaskWizard extends Dialog {
     let esxi_credential_opts = render_options(
       credentials.filter(esxi_credential_filter), '');
     return (
-      <Layout flex>
+      <Layout flex align={['start', 'start']}>
         <Layout basis="40%">
           <div className="wizardess pull-right">
             <Img src="enchantress.svg"/>
@@ -174,121 +174,126 @@ export class AdvancedTaskWizard extends Dialog {
             </p>
           </div>
         </Layout>
-        <Layout basis="0" grow="1">
-          <Layout float className="form-horizontal">
-            <FormGroup>
-              <h3>{_('Quick start: Create a new task')}</h3>
+        <Layout grow="1" basis="0" flex="column">
+          <FormGroup>
+            <h3>{_('Quick start: Create a new task')}</h3>
+          </FormGroup>
+
+          <FormGroup title={_('Task Name')} titleSize="3">
+            <TextField name="task_name"
+              grow="1"
+              onChange={this.onValueChange}
+              value={task_name} size="30" maxLength="80"/>
+          </FormGroup>
+
+          <FormGroup title={_('Scan Config')} titleSize="3">
+            <Select2
+              name="config_id"
+              value={config_id}
+              onChange={this.onValueChange}>
+              {config_opts}
+            </Select2>
+          </FormGroup>
+
+          <FormGroup title={_('Target Host(s)')} titleSize="3">
+            <TextField name="target_hosts"
+              grow="1"
+              onChange={this.onValueChange}
+              value={target_hosts} maxLength="2000"/>
+          </FormGroup>
+
+          <FormGroup title={_('Start Time')} titleSize="3" flex="column">
+            <Radio
+              title={_('Start immediately')}
+              value="2"
+              checked={auto_start === '2'}
+              name="auto_start"
+              onChange={this.onValueChange}>
+            </Radio>
+
+            <Radio
+              title={_('Create Schedule')}
+              value="1"
+              checked={auto_start === '1'}
+              name="auto_start"
+              onChange={this.onValueChange}>
+            </Radio>
+            <FormGroup offset="1" box>
+              <Datepicker
+                name="date"
+                value={date}
+                onChange={this.onValueChange}/>
             </FormGroup>
-
-            <FormGroup title={_('Task Name')} titleSize="3">
-              <TextField name="task_name" onChange={this.onValueChange}
-                value={task_name} size="30" maxLength="80"/>
+            <FormGroup offset="1">
+              <Layout flex box>{_('at')}</Layout>
+              <Spinner type="int" min="0" max="23" size="2"
+                name="start_hour"
+                value={start_hour}
+                onChange={this.onValueChange}/>
+              <Layout flex box>{_('h')}</Layout>
+              <Spinner type="int" min="0" max="59" size="2"
+                name="start_minute"
+                value={start_minute}
+                onChange={this.onValueChange}/>
+              <Layout flex box>{_('m')}</Layout>
             </FormGroup>
-
-            <FormGroup title={_('Scan Config')} titleSize="3">
-              <Select2
-                name="config_id"
-                value={config_id}
-                onChange={this.onValueChange}>
-                {config_opts}
-              </Select2>
-            </FormGroup>
-
-            <FormGroup title={_('Target Host(s)')} titleSize="3">
-              <TextField name="target_hosts" onChange={this.onValueChange}
-                value={target_hosts} maxLength="2000"/>
-            </FormGroup>
-
-            <FormGroup title={_('Start Time')} titleSize="3">
-              <Radio
-                title={_('Start immediately')}
-                value="2"
-                checked={auto_start === '2'}
-                name="auto_start"
-                onChange={this.onValueChange}>
-              </Radio>
-
-              <Radio
-                title={_('Create Schedule')}
-                value="1"
-                checked={auto_start === '1'}
-                name="auto_start"
-                onChange={this.onValueChange}>
-              </Radio>
-              <FormGroup offset="1">
-                <Datepicker
-                  name="date"
-                  value={date}
-                  onChange={this.onValueChange}/>
-              </FormGroup>
-              <FormGroup offset="1">
-                <span>at </span>
-                <Spinner type="int" min="0" max="23" size="2"
-                  name="start_hour"
-                  value={start_hour}
-                  onChange={this.onValueChange}/>
-                <span> h </span>
-                <Spinner type="int" min="0" max="59" size="2"
-                  name="start_minute"
-                  value={start_minute}
-                  onChange={this.onValueChange}/>
-                <span> m</span>
-              </FormGroup>
-              <FormGroup offset="1">
-                <TimeZoneSelect
-                  name="start_timezone"
-                  value={start_timezone}
-                  onChange={this.onValueChange}/>
-              </FormGroup>
-
-              <Radio
-                title={_('Do not start automatically')}
-                value="0"
-                checked={auto_start === '0'}
-                name="auto_start"
-                onChange={this.onValueChange}>
-              </Radio>
-            </FormGroup>
-
-            <FormGroup title={_('SSH Credential')} titleSize="3">
-              <Select2 value={ssh_credential}
-                name="ssh_credential"
-                onChange={this.onValueChange}>
-                {ssh_credential_opts}
-              </Select2>
-              {_(' on port ')}
-              <Spinner min="0" max="65535" size="5"
-                value={ssh_port}
+            <FormGroup offset="1">
+              <TimeZoneSelect
+                name="start_timezone"
+                value={start_timezone}
                 onChange={this.onValueChange}/>
             </FormGroup>
 
-            <FormGroup title={_('SMB Credential')} titleSize="3">
-              <Select2 value={smb_credential}
-                name="smb_credential"
-                onChange={this.onValueChange}>
-                {smb_credential_opts}
-              </Select2>
-            </FormGroup>
+            <Radio
+              title={_('Do not start automatically')}
+              value="0"
+              checked={auto_start === '0'}
+              name="auto_start"
+              onChange={this.onValueChange}>
+            </Radio>
+          </FormGroup>
 
-            <FormGroup title={_('ESXi Credential')} titleSize="3">
-              <Select2 value={esxi_credential}
-                name="esxi_credential"
-                onChange={this.onValueChange}>
-                {esxi_credential_opts}
-              </Select2>
-            </FormGroup>
+          <FormGroup title={_('SSH Credential')} titleSize="3">
+            <Select2 value={ssh_credential}
+              name="ssh_credential"
+              onChange={this.onValueChange}>
+              {ssh_credential_opts}
+            </Select2>
+            <Layout flex box>
+              {_(' on port ')}
+            </Layout>
+            <Spinner min="0" max="65535" size="5"
+              value={ssh_port}
+              onChange={this.onValueChange}/>
+          </FormGroup>
 
-            {capabilities.mayOp('create_alert') &&
-              capabilities.mayOp('get_alerts') &&
-              <FormGroup title={_('Email report to')} titleSize="3">
-                <TextField
-                  name="alert_email"
-                  value={alert_email}
-                  size="30" maxLength="80"
-                  onChange={this.onValueChange}/>
-              </FormGroup>
-            }
-          </Layout>
+          <FormGroup title={_('SMB Credential')} titleSize="3">
+            <Select2 value={smb_credential}
+              name="smb_credential"
+              onChange={this.onValueChange}>
+              {smb_credential_opts}
+            </Select2>
+          </FormGroup>
+
+          <FormGroup title={_('ESXi Credential')} titleSize="3">
+            <Select2 value={esxi_credential}
+              name="esxi_credential"
+              onChange={this.onValueChange}>
+              {esxi_credential_opts}
+            </Select2>
+          </FormGroup>
+
+          {capabilities.mayOp('create_alert') &&
+            capabilities.mayOp('get_alerts') &&
+            <FormGroup title={_('Email report to')} titleSize="3">
+              <TextField
+                name="alert_email"
+                grow="1"
+                value={alert_email}
+                size="30" maxLength="80"
+                onChange={this.onValueChange}/>
+            </FormGroup>
+          }
         </Layout>
       </Layout>
     );

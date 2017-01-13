@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,7 +26,7 @@ import React from 'react';
 import moment from 'moment-timezone';
 
 import {autobind} from '../../utils.js';
-import {translate as _} from '../../locale.js';
+import _ from '../../locale.js';
 
 import Dialog from '../dialog.js';
 import Layout from '../layout.js';
@@ -34,9 +34,8 @@ import Layout from '../layout.js';
 import Select2 from '../form/select2.js';
 import Spinner from '../form/spinner.js';
 import FormGroup from '../form/formgroup.js';
-import FormItem from '../form/formitem.js';
 import TextField from '../form/textfield.js';
-import Datepicker from '../form/datepicker.js';
+import DatePicker from '../form/datepicker.js';
 import TimeZoneSelect from '../form/timezoneselect.js';
 
 const TimeUnitSelect = props => {
@@ -139,10 +138,11 @@ export class ScheduleDialog extends Dialog {
     let {comment, name, hour, minute, date, duration, period, duration_unit,
       period_unit, timezone} = this.state;
     return (
-      <Layout float className="form-horizontal">
+      <Layout flex="column">
 
         <FormGroup title={_('Name')}>
           <TextField name="name"
+            grow="1"
             value={name} size="30"
             onChange={this.onNameChange}
             maxLength="80"/>
@@ -150,22 +150,17 @@ export class ScheduleDialog extends Dialog {
 
         <FormGroup title={_('Comment')}>
           <TextField name="comment" value={comment}
+            grow="1"
             size="30" maxLength="400"
             onChange={this.onCommentChange}/>
         </FormGroup>
 
         <FormGroup title={_('First Time')}>
-          <FormItem>
-            <Datepicker value={date} onChange={this.onDateChange}/>
-          </FormItem>
-          <FormItem>
-            <Spinner type="int" min="0" max="23" size="2"
-              value={hour} onChange={this.onHourChange}/> h
-          </FormItem>
-          <FormItem>
-            <Spinner type="int" min="0" max="59" size="2"
-              value={minute} onChange={this.onMinuteChange}/> m
-          </FormItem>
+          <DatePicker value={date} onChange={this.onDateChange}/>
+          <Spinner type="int" min="0" max="23" size="2"
+            value={hour} onChange={this.onHourChange}/> h
+          <Spinner type="int" min="0" max="59" size="2"
+            value={minute} onChange={this.onMinuteChange}/> m
         </FormGroup>
 
         <FormGroup title={_('Timezone')}>
@@ -173,25 +168,17 @@ export class ScheduleDialog extends Dialog {
         </FormGroup>
 
         <FormGroup title={_('Period')}>
-          <FormItem>
-            <Spinner type="int" min="0" size="3"
-              value={period} onChange={this.onPeriodChange}/>
-          </FormItem>
-          <FormItem>
-            <TimeUnitSelect value={period_unit}
-              onChange={this.onPeriodUnitChange}/>
-          </FormItem>
+          <Spinner type="int" min="0" size="3"
+            value={period} onChange={this.onPeriodChange}/>
+          <TimeUnitSelect value={period_unit}
+            onChange={this.onPeriodUnitChange}/>
         </FormGroup>
 
         <FormGroup title={_('Duration')}>
-          <FormItem>
-            <Spinner type="int" min="0" size="3"
-              value={duration} onChange={this.onDurationChange}/>
-          </FormItem>
-          <FormItem>
-            <TimeUnitSelect value={duration_unit}
-              onChange={this.onDurationUnitChange}/>
-          </FormItem>
+          <Spinner type="int" min="0" size="3"
+            value={duration} onChange={this.onDurationChange}/>
+          <TimeUnitSelect value={duration_unit}
+            onChange={this.onDurationUnitChange}/>
         </FormGroup>
       </Layout>
     );

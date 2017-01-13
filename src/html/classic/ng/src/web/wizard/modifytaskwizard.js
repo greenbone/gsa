@@ -87,7 +87,7 @@ export class ModifyTaskWizard extends Dialog {
     let task_opts = render_options(tasks);
     let {capabilities} = this.context;
     return (
-      <Layout flex>
+      <Layout flex align={['start', 'start']}>
         <Layout basis="40%">
           <div className="wizardess pull-right">
             <Img src="enchantress.svg"/>
@@ -114,71 +114,70 @@ export class ModifyTaskWizard extends Dialog {
             </div>
           </div>
         </Layout>
-        <Layout basis="0" grow="1">
-          <Layout float className="form-horizontal">
-            <h1>{_('Quick edit: Modify a task')}</h1>
-            <FormGroup title={_('Task')} titleSize="3">
-              <Select2 name="task_id"
-                value={task_id}
-                onChange={this.onValueChange}>
-                {task_opts}
-              </Select2>
+        <Layout basis="0" grow="1" flex="column">
+          <h1>{_('Quick edit: Modify a task')}</h1>
+          <FormGroup title={_('Task')} titleSize="3">
+            <Select2 name="task_id"
+              value={task_id}
+              onChange={this.onValueChange}>
+              {task_opts}
+            </Select2>
+          </FormGroup>
+
+          <FormGroup title={_('Start Time')} titleSize="3" flex="column">
+            <Radio
+              title={_('Do not change')}
+              value="0"
+              checked={reschedule === '0'}
+              name="reschedule"
+              onChange={this.onValueChange}>
+            </Radio>
+
+            <Radio
+              title={_('Create Schedule')}
+              value="1"
+              checked={reschedule === '1'}
+              name="reschedule"
+              onChange={this.onValueChange}>
+            </Radio>
+            <FormGroup offset="1">
+              <Datepicker
+                name="date"
+                value={date}
+                onChange={this.onValueChange}/>
             </FormGroup>
-
-            <FormGroup title={_('Start Time')} titleSize="3">
-              <Radio
-                title={_('Do not change')}
-                value="0"
-                checked={reschedule === '0'}
-                name="reschedule"
-                onChange={this.onValueChange}>
-              </Radio>
-
-              <Radio
-                title={_('Create Schedule')}
-                value="1"
-                checked={reschedule === '1'}
-                name="reschedule"
-                onChange={this.onValueChange}>
-              </Radio>
-              <FormGroup offset="1">
-                <Datepicker
-                  name="date"
-                  value={date}
-                  onChange={this.onValueChange}/>
-              </FormGroup>
-              <FormGroup offset="1">
-                <span>at </span>
-                <Spinner type="int" min="0" max="23" size="2"
-                  name="start_hour"
-                  value={start_hour}
-                  onChange={this.onValueChange}/>
-                <span> h </span>
-                <Spinner type="int" min="0" max="59" size="2"
-                  name="start_minute"
-                  value={start_minute}
-                  onChange={this.onValueChange}/>
-                <span> m</span>
-              </FormGroup>
-              <FormGroup offset="1">
-                <TimeZoneSelect
-                  name="start_timezone"
-                  value={start_timezone}
-                  onChange={this.onValueChange}/>
-              </FormGroup>
+            <FormGroup offset="1">
+              <Layout flex box>{_('at')}</Layout>
+              <Spinner type="int" min="0" max="23" size="2"
+                name="start_hour"
+                value={start_hour}
+                onChange={this.onValueChange}/>
+              <Layout flex box>{_('h')}</Layout>
+              <Spinner type="int" min="0" max="59" size="2"
+                name="start_minute"
+                value={start_minute}
+                onChange={this.onValueChange}/>
+              <Layout flex box>{_('m')}</Layout>
             </FormGroup>
+            <FormGroup offset="1">
+              <TimeZoneSelect
+                name="start_timezone"
+                value={start_timezone}
+                onChange={this.onValueChange}/>
+            </FormGroup>
+          </FormGroup>
 
-            {capabilities.mayOp('create_alert') &&
-              capabilities.mayOp('get_alerts') &&
-              <FormGroup title={_('Email report to')} titleSize="3">
-                <TextField
-                  name="alert_email"
-                  value={alert_email}
-                  size="30" maxLength="80"
-                  onChange={this.onValueChange}/>
-              </FormGroup>
-            }
-          </Layout>
+          {capabilities.mayOp('create_alert') &&
+            capabilities.mayOp('get_alerts') &&
+            <FormGroup title={_('Email report to')} titleSize="3">
+              <TextField
+                grow="1"
+                name="alert_email"
+                value={alert_email}
+                size="30" maxLength="80"
+                onChange={this.onValueChange}/>
+            </FormGroup>
+          }
         </Layout>
       </Layout>
     );

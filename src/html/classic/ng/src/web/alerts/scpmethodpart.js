@@ -23,16 +23,16 @@
 
 import React from 'react';
 
-import {translate as _} from '../../locale.js';
+import _ from '../../locale.js';
 import {select_save_id, is_defined} from '../../utils.js';
 
+import Layout from '../layout.js';
 import {render_options} from '../render.js';
 
 import CredentialsDialog from '../credentials/dialog.js';
 
 import Select2 from '../form/select2.js';
 import FormGroup from '../form/formgroup.js';
-import FormItem from '../form/formitem.js';
 import TextField from '../form/textfield.js';
 import TextArea from '../form/textarea.js';
 import FormPart from '../form/formpart.js';
@@ -85,25 +85,24 @@ export class ScpMethodPart extends FormPart {
     let scp_credential_opts = render_options(credentials);
     let scp_report_format_opts = render_options(report_formats);
     return (
-      <div>
+      <Layout flex="column" box grow="1">
         <FormGroup title={_('Credential')}>
-          <FormItem>
-            <Select2
-              name="scp_credential"
-              value={scp_credential}
-              onChange={this.onValueChange}>
-              {scp_credential_opts}
-            </Select2>
-          </FormItem>
-          <FormItem>
+          <Select2
+            name="scp_credential"
+            value={scp_credential}
+            onChange={this.onValueChange}>
+            {scp_credential_opts}
+          </Select2>
+          <Layout flex box>
             <Icon img="new.svg"
               title={_('Create a credential')}
               onClick={() => { this.credentials_dialog.show(['up']); }}/>
-          </FormItem>
+          </Layout>
         </FormGroup>
 
         <FormGroup title={_('Host')}>
           <TextField
+            grow="1"
             name="scp_host"
             value={scp_host}
             onChange={this.onValueChange}
@@ -136,7 +135,7 @@ export class ScpMethodPart extends FormPart {
 
         <CredentialsDialog onSave={this.props.onAddCredential}
           ref={ref => this.credentials_dialog = ref}/>
-      </div>
+      </Layout>
     );
   }
 }

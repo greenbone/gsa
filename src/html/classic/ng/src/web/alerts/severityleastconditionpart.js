@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,9 +26,10 @@ import React from 'react';
 import {translate as _} from '../../locale.js';
 import {is_defined} from '../../utils.js';
 
+import Layout from '../layout.js';
+
 import Spinner from '../form/spinner.js';
-import FormItem from '../form/formitem.js';
-import {RadioFormItem} from '../form/radio.js';
+import Radio from '../form/radio.js';
 import RadioSelectFormPart from '../form/radioselectformpart.js';
 
 const VALUE = 'Severity at least';
@@ -51,21 +52,21 @@ export class SeverityLeastConditionPart extends RadioSelectFormPart {
     let {severity} = this.state;
     let {value} = this.props;
     return (
-      <RadioFormItem title={_('Severity at least')}
-        value={VALUE}
-        checked={value === VALUE}
-        name="condition"
-        onChange={this.onCheckedChange}>
-        <FormItem>
-          <Spinner
-            value={severity}
-            name="severity"
-            type="float"
-            min="0"
-            size="5"
-            onChange={this.onValueChange}/>
-        </FormItem>
-      </RadioFormItem>
+      <Layout flex box>
+        <Radio title={_('Severity at least')}
+          value={VALUE}
+          checked={value === VALUE}
+          name="condition"
+          onChange={this.onCheckedChange}>
+        </Radio>
+        <Spinner
+          value={severity}
+          name="severity"
+          type="float"
+          min="0"
+          size="5"
+          onChange={this.onValueChange}/>
+      </Layout>
     );
   }
 }

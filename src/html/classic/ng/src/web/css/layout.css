@@ -188,4 +188,12 @@
   align-items: flex-start;
 }
 
+.flex.row > .box + .box {
+  margin-left: 10px;
+}
+
+.flex.column > .box + .box {
+  margin-top: 5px;
+}
+
 /* vim: set ts=2 sw=2 tw=80:*/

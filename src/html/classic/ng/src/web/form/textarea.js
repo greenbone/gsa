@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,8 +26,10 @@ import React from 'react';
 import {classes} from '../../utils.js';
 
 import {handle_change} from '../form.js';
+import {withLayout} from '../layout.js';
 
-export const TextArea = ({className, value = '', onChange, name, ...props}) => {
+const TextAreaContainer =
+  ({className, value = '', onChange, name, ...props}) => {
   className = classes('form-control', className);
   return (
     <textarea {...props}
@@ -37,12 +39,14 @@ export const TextArea = ({className, value = '', onChange, name, ...props}) => {
   );
 };
 
-TextArea.propTypes = {
+TextAreaContainer.propTypes = {
   className: React.PropTypes.string,
   name: React.PropTypes.string,
   value: React.PropTypes.any,
   onChange: React.PropTypes.func,
 };
+
+export const TextArea = withLayout(TextAreaContainer, {box: true});
 
 export default TextArea;
 

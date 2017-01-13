@@ -25,9 +25,10 @@ import React from 'react';
 
 import {classes} from '../../utils.js';
 
+import {withLayout} from '../layout.js';
 import {handle_change} from '../form.js';
 
-export const Field = ({className, type, value = '', onChange, name,
+const FieldContainer = ({className, type, value = '', onChange, name,
   ...props}) => {
   className = classes('form-control', className);
   return (
@@ -36,13 +37,15 @@ export const Field = ({className, type, value = '', onChange, name,
   );
 };
 
-Field.propTypes = {
+FieldContainer.propTypes = {
   className: React.PropTypes.string,
   name: React.PropTypes.string,
   type: React.PropTypes.string,
   value: React.PropTypes.any,
   onChange: React.PropTypes.func,
 };
+
+export const Field = withLayout(FieldContainer, {box: true});
 
 export default Field;
 

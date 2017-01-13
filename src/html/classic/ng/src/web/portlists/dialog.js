@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,16 +24,15 @@
 import React from 'react';
 
 import {extend} from '../../utils.js';
-import {translate as _} from '../../locale.js';
+import _ from '../../locale.js';
 
 import Dialog from '../dialog.js';
 import Layout from '../layout.js';
 
 import FormGroup from '../form/formgroup.js';
-import FormItem from '../form/formitem.js';
 import TextField from '../form/textfield.js';
 import FileField from '../form/filefield.js';
-import {RadioFormItem} from '../form/radio.js';
+import Radio from '../form/radio.js';
 
 export class PortListsDialog extends Dialog {
 
@@ -69,10 +68,11 @@ export class PortListsDialog extends Dialog {
     let {name, comment, from_file, port_range} = this.state;
 
     return (
-      <Layout float className="form-horizontal">
+      <Layout flex="column">
 
         <FormGroup title={_('Name')}>
           <TextField name="name"
+            grow="1"
             value={name} size="30"
             onChange={this.onValueChange}
             maxLength="80"/>
@@ -80,32 +80,35 @@ export class PortListsDialog extends Dialog {
 
         <FormGroup title={_('Comment')}>
           <TextField name="comment" value={comment}
+            grow="1"
             size="30" maxLength="400"
             onChange={this.onValueChange}/>
         </FormGroup>
 
-        <FormGroup title={_('Port Ranges')}>
-          <RadioFormItem title={_('Manual')}
-            value="0"
-            name="from_file"
-            onChange={this.onValueChange}
-            checked={from_file !== 1}>
-            <FormItem>
-              <TextField value={port_range} onChange={this.onValueChange}
-                name="port_range"
-                size="30" maxLength="400"/>
-            </FormItem>
-          </RadioFormItem>
+        <FormGroup title={_('Port Ranges')} flex="column">
+          <Layout flex box>
+            <Radio title={_('Manual')}
+              value="0"
+              name="from_file"
+              onChange={this.onValueChange}
+              checked={from_file !== '1'}/>
+            <TextField
+              grow="1"
+              disabled={from_file === '1'}
+              value={port_range}
+              onChange={this.onValueChange}
+              name="port_range"
+              size="30" maxLength="400"/>
+          </Layout>
 
-          <RadioFormItem title={_('From file')}
-            value="1"
-            name="from_file"
-            onChange={this.onValueChange}
-            checked={from_file === 1}>
-            <FormItem>
-              <FileField name="file" onChange={this.onValueChange}/>
-            </FormItem>
-          </RadioFormItem>
+          <Layout flex box>
+            <Radio title={_('From file')}
+              value="1"
+              name="from_file"
+              onChange={this.onValueChange}
+              checked={from_file === '1'}/>
+            <FileField name="file" onChange={this.onValueChange}/>
+          </Layout>
         </FormGroup>
       </Layout>
     );

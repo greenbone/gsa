@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,15 +26,15 @@ import React from 'react';
 import {translate as _} from '../../locale.js';
 import {select_save_id, is_defined} from '../../utils.js';
 
+import Layout from '../layout.js';
 import {render_options} from '../render.js';
 
 import Select2 from '../form/select2.js';
 import FormGroup from '../form/formgroup.js';
-import FormItem from '../form/formitem.js';
 import TextArea from '../form/textarea.js';
 import TextField from '../form/textfield.js';
 import FormPart from '../form/formpart.js';
-import {RadioFormItem} from '../form/radio.js';
+import Radio from '../form/radio.js';
 
 const TASK_SUBJECT = '[OpenVAS-Manager] Task \'$n\': $e';
 const SECINFO_SUBJECT = '[OpenVAS-Manager] $T $q $S since $d';
@@ -173,10 +173,11 @@ export class EmailMethodPart extends FormPart {
     let attach_format_opts = render_options(report_formats);
 
     return (
-      <div>
+      <Layout flex="column" grow="1">
 
         <FormGroup title={_('To Address')}>
           <TextField
+            grow="1"
             name="to_address"
             value={to_address}
             onChange={this.onValueChange}/>
@@ -184,6 +185,7 @@ export class EmailMethodPart extends FormPart {
 
         <FormGroup title={_('From Address')}>
           <TextField
+            grow="1"
             name="from_address"
             value={from_address}
             onChange={this.onValueChange}/>
@@ -191,6 +193,7 @@ export class EmailMethodPart extends FormPart {
 
         <FormGroup title={_('Subject')}>
           <TextField
+            grow="1"
             name="subject"
             size="30"
             maxLength="80"
@@ -198,62 +201,66 @@ export class EmailMethodPart extends FormPart {
             value={subject}/>
         </FormGroup>
 
-        <FormGroup title={_('Content')}>
-          <RadioFormItem title={_('Simple Notice')}
+        <FormGroup title={_('Content')} flex="column">
+          <Radio title={_('Simple Notice')}
             name="notice"
             onChange={this.onValueChange}
             checked={notice === '1'}
             value="1"/>
           {capabilities.mayOp('get_report_formats') &&
-            <div>
-              <RadioFormItem
-                name="notice"
-                title={task ? _('Include report') :
-                  _('Include list of resources with message:')}
-                onChange={this.onValueChange}
-                checked={notice === '0'}
-                value="0">
-                <FormItem>
-                  <Select2
-                    name="notice_report_format"
-                    value={notice_report_format}
-                    onChange={this.onValueChange}>
-                    {report_format_opts}
-                  </Select2>
-                </FormItem>
-              </RadioFormItem>
+            <Layout flex="column" box>
+              <Layout flex box>
+                <Radio
+                  name="notice"
+                  title={task ? _('Include report') :
+                    _('Include list of resources with message:')}
+                  onChange={this.onValueChange}
+                  checked={notice === '0'}
+                  value="0">
+                </Radio>
+                <Select2
+                  name="notice_report_format"
+                  value={notice_report_format}
+                  onChange={this.onValueChange}>
+                  {report_format_opts}
+                </Select2>
+              </Layout>
               <TextArea name="message"
                 className="form-control"
                 rows="8" cols="50"
                 onChange={this.onValueChange}
                 value={message}/>
+            </Layout>
+          }
 
-              <RadioFormItem
-                name="notice"
-                title={task ? _('Attach report') :
-                  _('Attach list of resources with message:')}
-                onChange={this.onValueChange}
-                checked={notice === '2'}
-                value="2">
-                <FormItem>
-                  <Select2
-                    name="notice_attach_format"
-                    value={notice_attach_format}
-                    onChange={this.onValueChange}>
-                    {attach_format_opts}
-                  </Select2>
-                </FormItem>
-              </RadioFormItem>
+          {capabilities.mayOp('get_report_formats') &&
+            <Layout flex="column" box>
+              <Layout flex box>
+                <Radio
+                  name="notice"
+                  title={task ? _('Attach report') :
+                    _('Attach list of resources with message:')}
+                  onChange={this.onValueChange}
+                  checked={notice === '2'}
+                  value="2">
+                </Radio>
+                <Select2
+                  name="notice_attach_format"
+                  value={notice_attach_format}
+                  onChange={this.onValueChange}>
+                  {attach_format_opts}
+                </Select2>
+              </Layout>
               <TextArea name="message_attach"
                 className="form-control"
                 rows="8" cols="50"
                 onChange={this.onValueChange}
                 value={message_attach}/>
-            </div>
+            </Layout>
           }
         </FormGroup>
 
-      </div>
+      </Layout>
     );
   }
 };

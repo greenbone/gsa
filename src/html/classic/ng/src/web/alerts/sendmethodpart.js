@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,14 +23,14 @@
 
 import React from 'react';
 
-import {translate as _} from '../../locale.js';
+import _ from '../../locale.js';
 import {select_save_id} from '../../utils.js';
 
+import Layout from '../layout.js';
 import {render_options} from '../render.js';
 
 import Select2 from '../form/select2.js';
 import FormGroup from '../form/formgroup.js';
-import FormItem from '../form/formitem.js';
 import TextField from '../form/textfield.js';
 import FormPart from '../form/formpart.js';
 
@@ -60,27 +60,23 @@ export class SendMethodPart extends FormPart {
 
     let send_report_format_opts = render_options(report_formats);
     return (
-      <div>
+      <Layout flex="column" box grow="1">
         <FormGroup title={_('Send to host')}>
-          <FormItem>
-            <TextField
-              name="send_host"
-              value={send_host}
-              size="30"
-              maxLength="256"
-              onChange={this.onValueChange}/>
-          </FormItem>
-          <FormItem>
+          <TextField
+            name="send_host"
+            value={send_host}
+            size="30"
+            maxLength="256"
+            onChange={this.onValueChange}/>
+          <Layout flex box>
             {_('on port')}
-          </FormItem>
-          <FormItem>
-            <TextField
-              name="send_port"
-              value={send_port}
-              maxLength="6"
-              size="6"
-              onChange={this.onValueChange}/>
-          </FormItem>
+          </Layout>
+          <TextField
+            name="send_port"
+            value={send_port}
+            maxLength="6"
+            size="6"
+            onChange={this.onValueChange}/>
         </FormGroup>
 
         <FormGroup title={_('Report')}>
@@ -91,7 +87,7 @@ export class SendMethodPart extends FormPart {
             {send_report_format_opts}
           </Select2>
         </FormGroup>
-      </div>
+      </Layout>
     );
   }
 }

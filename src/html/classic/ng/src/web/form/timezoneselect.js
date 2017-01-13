@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,12 +25,14 @@ import React from 'react';
 
 import  _ from '../../locale.js';
 import {map} from '../../utils.js';
+import timezones from '../../timezones.js';
+
+import {withLayout} from '../layout.js';
 
 import Select2 from './select2.js';
 
-import timezones from '../../timezones.js';
 
-export class TimeZoneSelect extends React.Component {
+class TimeZoneSelectContainer extends React.Component {
   render() {
     let value = this.props.value ? this.props.value : undefined;
 
@@ -49,13 +51,15 @@ export class TimeZoneSelect extends React.Component {
   }
 }
 
-TimeZoneSelect.propTypes = {
+TimeZoneSelectContainer.propTypes = {
   value: React.PropTypes.string,
 };
 
-TimeZoneSelect.defaultProps = {
+TimeZoneSelectContainer.defaultProps = {
   value: 'UTC',
 };
+
+export const TimeZoneSelect = withLayout(TimeZoneSelectContainer, {box: true});
 
 export default TimeZoneSelect;
 

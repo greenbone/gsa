@@ -25,12 +25,12 @@ import React from 'react';
 
 import {classes, is_defined} from '../../utils.js';
 
-import FormItem from './formitem.js';
+import {withLayout} from '../layout.js';
 
 import './css/form.css';
 import './css/checkboxradio.css';
 
-export class Radio extends React.Component {
+class RadioContainer extends React.Component {
 
   constructor(...args) {
     super(...args);
@@ -67,7 +67,7 @@ export class Radio extends React.Component {
   }
 }
 
-Radio.propTypes = {
+RadioContainer.propTypes = {
   name: React.PropTypes.string,
   className: React.PropTypes.string,
   disabled: React.PropTypes.bool,
@@ -75,26 +75,8 @@ Radio.propTypes = {
   onChange: React.PropTypes.func,
 };
 
-export class RadioFormItem extends Radio {
-
-  render() {
-    let {title, children, ...other} = this.props;
-
-    return (
-      <div className="radio">
-        <FormItem>
-          <label>
-            <input {...other} type="radio" onChange={this.handleChange}/>
-            <span>
-              {title}
-            </span>
-          </label>
-        </FormItem>
-        {children}
-      </div>
-    );
-  }
-}
+export const Radio = withLayout(RadioContainer,
+  {align: ['start', 'center'], box: true, flex: true});
 
 export default Radio;
 

@@ -28,25 +28,28 @@ import {classes, is_defined, is_empty, is_array} from '../utils.js';
 import './css/layout.css';
 
 const LAYOUT_PROPNAMES = [
-  'flex', 'align', 'grow', 'shrink', 'basis', 'float',
+  'flex', 'align', 'grow', 'shrink', 'basis', 'float', 'box', 'offset',
 ];
 
-export const withLayout = (Component, defaults) => {
+export const withLayout = (Component, defaults = {}) => {
   return function(props) {
-    let {className, flex, align, grow, shrink, basis, float, ...other} = props; // eslint-disable-line
+    /* eslint-disable */
+    let {className, flex, align, grow, shrink, basis, float, box, offset,
+      style = {}, ...other} = props;
+    /* esline-enable */
     let css = className;
-    let style = {};
 
+    flex = is_defined(flex) ? flex : defaults.flex;
+    box = is_defined(box) ? box : defaults.box;
 
     if (is_defined(flex)) {
+
+      align = is_defined(align) ? align : defaults.align;
+
       if (is_empty(flex) || flex === true) {
         flex = 'row';
       }
       css = classes('flex', flex, css);
-
-      if (!is_defined(align) && is_defined(defaults)) {
-        align = defaults.align;
-      }
 
       if (is_defined(align)) {
         if (is_array(align)) {
@@ -56,16 +59,33 @@ export const withLayout = (Component, defaults) => {
           css = classes('justify-' + align, css);
         }
       }
+      else {
+        // use sane defaults
+        if (flex === 'row') {
+          css = classes('justify-start', 'align-center', css);
+        }
+        else {
+          css = classes('justify-center', 'align-stretch', css);
+        }
+      }
     }
     else if (is_defined(float)) {
       css = classes('float', css);
+    }
+
+    if (box) {
+      css = classes('box', css);
+    }
+
+    if (is_defined(offset)) {
+      css = classes('offset-' + offset, css);
     }
 
     if (is_defined(grow)) {
       style.flexGrow = grow;
     }
     if (is_defined(shrink)) {
-      style.flexShring = shrink;
+      style.flexShrink = shrink;
     }
     if (is_defined(basis)) {
       style.flexBasis = basis;
@@ -85,6 +105,7 @@ LayoutContainer.propTypes = {
   className: React.PropTypes.string,
   flex: React.PropTypes.oneOf(['row', 'column', true]),
   float: React.PropTypes.bool,
+  box: React.PropTypes.bool,
   align: React.PropTypes.oneOfType([
     React.PropTypes.string,
     React.PropTypes.array,
@@ -98,6 +119,10 @@ LayoutContainer.propTypes = {
     React.PropTypes.number,
   ]),
   basis: React.PropTypes.string,
+  offset: React.PropTypes.oneOfType([
+    React.PropTypes.string,
+    React.PropTypes.number,
+  ]),
 };
 
 export const get_layout_props = props => {

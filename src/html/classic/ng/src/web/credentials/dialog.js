@@ -24,7 +24,7 @@
 import React from 'react';
 
 import {autobind, map, is_defined, first, extend} from '../../utils.js';
-import {translate as _} from '../../locale.js';
+import _ from '../../locale.js';
 
 import Dialog from '../dialog.js';
 import Layout from '../layout.js';
@@ -117,53 +117,56 @@ export class CredentialsDialog extends Dialog {
     return (
       <Layout flex="column">
 
-        <FormGroup title={_('Name')} flex>
+        <FormGroup title={_('Name')}>
           <TextField name="name"
+            grow="1"
             value={name} size="30"
             onChange={this.onValueChange}
             maxLength="80"/>
         </FormGroup>
 
-        <FormGroup title={_('Comment')} flex>
-          <TextField name="comment" value={comment}
+        <FormGroup title={_('Comment')}>
+          <TextField name="comment"
+            grow="1"
+            value={comment}
             size="30" maxLength="400"
             onChange={this.onValueChange}/>
         </FormGroup>
 
-        <FormGroup title={_('Type')} flex>
+        <FormGroup title={_('Type')}>
           <Select2 onChange={this.onTypeChange} value={base}>
             {type_opts}
           </Select2>
         </FormGroup>
 
-        <FormGroup title={_('Allow insecure user')} flex>
+        <FormGroup title={_('Allow insecure user')}>
           <YesNoRadio value={allow_insecure}
             name="allow_insecure"
             onChange={this.onValueChange}/>
         </FormGroup>
 
-        <FormGroup title={_('Auto-generate')} flex
+        <FormGroup title={_('Auto-generate')}
           condition={base === 'up' || base === 'usk'}>
           <YesNoRadio value={autogenerate}
             name="autogenerate"
             onChange={this.onValueChange}/>
         </FormGroup>
 
-        <FormGroup title={_('SNMP Community')} flex
+        <FormGroup title={_('SNMP Community')}
           condition={base === 'snmp'}>
           <PasswordField value={community}
             name="community"
             onChange={this.onValueChange}/>
         </FormGroup>
 
-        <FormGroup title={_('Username')} flex
+        <FormGroup title={_('Username')}
           condition={base === 'up' || base === 'usk' || base === 'snmp'}>
           <TextField value={credential_login}
             name="credential_login"
             onChange={this.onValueChange}/>
         </FormGroup>
 
-        <FormGroup title={_('Password')} flex
+        <FormGroup title={_('Password')}
           condition={base === 'up' || base === 'snmp'}>
           <PasswordField value={lsc_password}
             disabled={autogenerate === 1}
@@ -171,7 +174,7 @@ export class CredentialsDialog extends Dialog {
             onChange={this.onValueChange}/>
         </FormGroup>
 
-        <FormGroup title={_('Passphrase')} flex
+        <FormGroup title={_('Passphrase')}
           condition={base === 'usk'}>
           <PasswordField value={passphrase}
             disabled={autogenerate === 1}
@@ -179,68 +182,64 @@ export class CredentialsDialog extends Dialog {
             onChange={this.onValueChange}/>
         </FormGroup>
 
-        <FormGroup title={_('Privacy Password')} flex
+        <FormGroup title={_('Privacy Password')}
           condition={base === 'snmp'}>
           <PasswordField value={privacy_password}
             name="privacy_password"
             onChange={this.onValueChange}/>
         </FormGroup>
 
-        <FormGroup title={_('Certificate')} flex
+        <FormGroup title={_('Certificate')}
           condition={base === 'cc'}>
           <FileField name="certificate" onChange={this.onValueChange}/>
         </FormGroup>
 
-        <FormGroup title={_('Private Key')} flex
+        <FormGroup title={_('Private Key')}
           condition={base === 'usk' || base === 'cc'}>
           <FileField name="private_key" onChange={this.onValueChange}/>
         </FormGroup>
 
         <FormGroup title={_('Auth Algorithm')}
-          condition={base === 'snmp'} flex>
-          <Layout flex>
-            <Radio
-              className="inline"
-              value="md5"
-              title="MD5"
-              checked={auth_algorithm === 'md5'}
-              name="auth_algorithm"
-              onChange={this.onValueChange}/>
-            <Radio
-              className="inline"
-              value="sha1"
-              title="SHA1"
-              checked={auth_algorithm === 'sha1'}
-              name="auth_algorithm"
-              onChange={this.onValueChange}/>
-          </Layout>
+          condition={base === 'snmp'}>
+          <Radio
+            className="inline"
+            value="md5"
+            title="MD5"
+            checked={auth_algorithm === 'md5'}
+            name="auth_algorithm"
+            onChange={this.onValueChange}/>
+          <Radio
+            className="inline"
+            value="sha1"
+            title="SHA1"
+            checked={auth_algorithm === 'sha1'}
+            name="auth_algorithm"
+            onChange={this.onValueChange}/>
         </FormGroup>
 
         <FormGroup title={_('Privacy Algorithm')}
-          condition={base === 'snmp'} flex>
-          <Layout flex>
-            <Radio
-              className="inline"
-              value="aes"
-              title="AED"
-              checked={privacy_algorithm === 'aes'}
-              name="privacy_algorithm"
-              onChange={this.onValueChange}/>
-            <Radio
-              className="inline"
-              value="des"
-              title="DES"
-              checked={privacy_algorithm === 'des'}
-              name="privacy_algorithm"
-              onChange={this.onValueChange}/>
-            <Radio
-              className="inline"
-              value=""
-              title={_('None')}
-              checked={privacy_algorithm === ''}
-              name="privacy_algorithm"
-              onChange={this.onValueChange}/>
-          </Layout>
+          condition={base === 'snmp'}>
+          <Radio
+            className="inline"
+            value="aes"
+            title="AED"
+            checked={privacy_algorithm === 'aes'}
+            name="privacy_algorithm"
+            onChange={this.onValueChange}/>
+          <Radio
+            className="inline"
+            value="des"
+            title="DES"
+            checked={privacy_algorithm === 'des'}
+            name="privacy_algorithm"
+            onChange={this.onValueChange}/>
+          <Radio
+            className="inline"
+            value=""
+            title={_('None')}
+            checked={privacy_algorithm === ''}
+            name="privacy_algorithm"
+            onChange={this.onValueChange}/>
         </FormGroup>
 
       </Layout>

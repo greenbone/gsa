@@ -1,3 +1,56 @@
+2017-01-13 Björn Ricks <bjoern.ricks@greenbone.net>
+
+	Refactoring of the (form) layouts
+
+	* src/html/classic/ng/src/web/alerts/dialog.js,
+	src/html/classic/ng/src/web/alerts/emailmethodpart.js,
+	src/html/classic/ng/src/web/alerts/filtercountchangedconditionpart.js,
+	src/html/classic/ng/src/web/alerts/filtercountleastconditionpart.js,
+	src/html/classic/ng/src/web/alerts/httpmethodpart.js,
+	src/html/classic/ng/src/web/alerts/scpmethodpart.js,
+	src/html/classic/ng/src/web/alerts/secinfoeventpart.js,
+	src/html/classic/ng/src/web/alerts/sendmethodpart.js,
+	src/html/classic/ng/src/web/alerts/severitychangedconditionpart.js,
+	src/html/classic/ng/src/web/alerts/severityleastconditionpart.js,
+	src/html/classic/ng/src/web/alerts/snmpmethodpart.js,
+	src/html/classic/ng/src/web/alerts/sourcefiremethodpart.js,
+	src/html/classic/ng/src/web/alerts/starttaskmethodpart.js,
+	src/html/classic/ng/src/web/alerts/taskeventpart.js,
+	src/html/classic/ng/src/web/alerts/verinicemethodpart.js,
+	src/html/classic/ng/src/web/credentials/dialog.js,
+	src/html/classic/ng/src/web/css/layout.css,
+	src/html/classic/ng/src/web/filterdialog.js,
+	src/html/classic/ng/src/web/form/checkbox.js,
+	src/html/classic/ng/src/web/form/css/checkboxradio.css,
+	src/html/classic/ng/src/web/form/css/form.css,
+	src/html/classic/ng/src/web/form/css/formgroup.css,
+	src/html/classic/ng/src/web/form/css/formitem.css,
+	src/html/classic/ng/src/web/form/datepicker.js,
+	src/html/classic/ng/src/web/form/field.js,
+	src/html/classic/ng/src/web/form/filefield.js,
+	src/html/classic/ng/src/web/form/formgroup.js,
+	src/html/classic/ng/src/web/form/formitem.js,
+	src/html/classic/ng/src/web/form/radio.js,
+	src/html/classic/ng/src/web/form/select2.js,
+	src/html/classic/ng/src/web/form/spinner.js,
+	src/html/classic/ng/src/web/form/textarea.js,
+	src/html/classic/ng/src/web/form/timezoneselect.js,
+	src/html/classic/ng/src/web/form/yesnoradio.js,
+	src/html/classic/ng/src/web/layout.js,
+	src/html/classic/ng/src/web/portlists/dialog.js,
+	src/html/classic/ng/src/web/results/filterdialog.js,
+	src/html/classic/ng/src/web/schedules/dialog.js,
+	src/html/classic/ng/src/web/targets/dialog.js,
+	src/html/classic/ng/src/web/tasks/dialog.js,
+	src/html/classic/ng/src/web/tasks/filterdialog.js,
+	src/html/classic/ng/src/web/wizard/advancedtaskwizard.js,
+	src/html/classic/ng/src/web/wizard/modifytaskwizard.js: With this change there
+	is only flexbox layout for forms. This finally allows to center elements more
+	easily without the many many quirks and shortcommings of the old layout. It is
+	even much easier to understand because you only have choose between horizontal
+	(Layout flex="row") and vertical (Layout flex="column") alignment. No more
+	FormItems or even RadioFormItems and inline css classes.
+
 2017-01-12 Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/results/results.js: Fix displaying the default
