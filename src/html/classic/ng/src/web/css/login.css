@@ -3,7 +3,7 @@
   height: 100%;
 }
 
-.login main {
+.login .main {
   background: #393637;
   height: 100%;
 }
@@ -14,11 +14,11 @@
   color: #393637;
 }
 
-.login main .greenbone-icon {
+.login .main .greenbone-icon {
   width: 400px;
 }
 
-.login .box {
+.login .login-panel {
   margin-top: 30px;
   margin-bottom: 30px;
   padding: 10px;

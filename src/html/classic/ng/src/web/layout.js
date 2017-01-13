@@ -35,7 +35,7 @@ export const withLayout = (Component, defaults = {}) => {
   return function(props) {
     /* eslint-disable */
     let {className, flex, align, grow, shrink, basis, float, box, offset,
-      style = {}, ...other} = props;
+      style = {}, wrap, ...other} = props;
     /* esline-enable */
     let css = className;
 
@@ -49,7 +49,7 @@ export const withLayout = (Component, defaults = {}) => {
       if (is_empty(flex) || flex === true) {
         flex = 'row';
       }
-      css = classes('flex', flex, css);
+      css = classes('flex', flex, wrap ? 'wrap' : undefined, css);
 
       if (is_defined(align)) {
         if (is_array(align)) {

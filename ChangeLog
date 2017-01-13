@@ -1,5 +1,12 @@
 2017-01-13 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/css/login.css,
+	src/html/classic/ng/src/web/layout.js,
+	src/html/classic/ng/src/web/login.js: Use flexbox layout also for the login
+	page and form.
+
+2017-01-13 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/tasks/tasks.js,
 	src/html/classic/ng/src/web/toolbar.js: Also use flexbox layout for the
 	toolbar.

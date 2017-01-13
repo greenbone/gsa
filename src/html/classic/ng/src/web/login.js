@@ -120,10 +120,10 @@ export class Login extends React.Component {
     return (
       <Layout flex="column" className="login">
         <Header/>
-        <main className="auto flex row wrap align-center justify-space-around">
+        <Layout flex align={['space-around', 'center']} wrap className="main">
           <LoginForm onSubmit={this.onSubmit} error={message}/>
           <LogoBox/>
-        </main>
+        </Layout>
         <Footer className="none"/>
       </Layout>
     );
@@ -181,34 +181,40 @@ class LoginForm extends React.Component {
     let {error} = this.props;
     let {username, password} = this.state;
     return (
-      <div className="none">
+      <Layout flex="column">
         {error &&
-          <div className="box">
+          <div className="login-panel">
             <p className="error">{error}</p>
           </div>
         }
-        <Layout flex align="space-arround" className="box">
+        <Layout flex align="space-around" className="login-panel">
           <Icon img="login-label.png" className="none" size="default"/>
-          <Layout float className="form-horizontal">
-            <FormGroup title={_('Username')} titleSize="4">
-              <TextField name="username" placeholder={_('e.g. johndoe')}
-                value={username}
-                autoFocus="autofocus"
-                tabIndex="1"
-                onChange={this.onUserNameChange}/>
-            </FormGroup>
-            <FormGroup title={_('Password')} titleSize="4">
-              <PasswordField name="password" placeholder={_('Password')}
-                value={password}
-                onKeyDown={this.onKeyDown}
-                onChange={this.onPasswordChange}/>
-            </FormGroup>
+          <Layout flex="column" align="space-around" grow="1">
+            <Layout flex="column">
+              <FormGroup title={_('Username')} titleSize="4">
+                <TextField name="username"
+                  grow="1"
+                  placeholder={_('e.g. johndoe')}
+                  value={username}
+                  autoFocus="autofocus"
+                  tabIndex="1"
+                  onChange={this.onUserNameChange}/>
+              </FormGroup>
+              <FormGroup title={_('Password')} titleSize="4">
+                <PasswordField name="password"
+                  grow="1"
+                  placeholder={_('Password')}
+                  value={password}
+                  onKeyDown={this.onKeyDown}
+                  onChange={this.onPasswordChange}/>
+              </FormGroup>
+            </Layout>
             <FormGroup size="6" offset="6">
               <SubmitButton title={_('Login')} onClick={this.onSubmit}/>
             </FormGroup>
           </Layout>
         </Layout>
-      </div>
+      </Layout>
     );
   }
 }
