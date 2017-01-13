@@ -362,6 +362,7 @@ handler_send_response (http_connection_t *connection,
   if (attach_remove_sid (response, sid) == MHD_NO)
     {
       cmd_response_data_free (response_data);
+      MHD_destroy_response (response);
       return MHD_NO;
     }
 
@@ -401,6 +402,7 @@ handler_send_response (http_connection_t *connection,
        * application error" out of the log. */
       send_response (connection, BAD_REQUEST_PAGE, MHD_HTTP_NOT_ACCEPTABLE,
                      NULL, GSAD_CONTENT_TYPE_TEXT_HTML, NULL, 0);
+      MHD_destroy_response (response);
       return MHD_YES;
     }
   MHD_destroy_response (response);

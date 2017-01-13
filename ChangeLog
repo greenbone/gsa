@@ -1,3 +1,9 @@
+2016-01-13  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/gsad_http.c (handler_send_response), src/gsad_http_handler.c
+	(handle_request), src/gsad_omp.c (get_aggregate_omp)
+	(get_my_settings_omp): Fix memory leaks.
+
 2017-01-13 Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/tasks/tasks.js: Only show create task icon if

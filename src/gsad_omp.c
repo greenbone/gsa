@@ -7525,7 +7525,6 @@ get_aggregate_omp (openvas_connection_t *connection, credentials_t * credentials
   const char *first_group, *max_groups;
   const char *mode;
   gchar *filter_escaped, *command_escaped, *response;
-  entity_t entity;
   GString *xml, *command;
   int ret;
 
@@ -7649,7 +7648,7 @@ get_aggregate_omp (openvas_connection_t *connection, credentials_t * credentials
   g_string_append (xml, command_escaped);
   g_free (command_escaped);
 
-  ret = omp (connection, credentials, &response, &entity, response_data, command->str);
+  ret = omp (connection, credentials, &response, NULL, response_data, command->str);
   g_string_free (command, TRUE);
   switch (ret)
     {
@@ -7682,7 +7681,7 @@ get_aggregate_omp (openvas_connection_t *connection, credentials_t * credentials
     }
 
   g_string_append (xml, response);
-
+  g_free (response);
   g_string_append (xml, "</get_aggregate>");
 
   return xsl_transform_omp (connection, credentials, params, g_string_free (xml, FALSE),
@@ -18526,8 +18525,7 @@ get_my_settings_omp (openvas_connection_t *connection, credentials_t *
 {
   GString *commands;
   int ret;
-  entity_t entity;
-  gchar *response;
+  gchar *response = NULL, *settings;
 
   commands = g_string_new ("<commands>");
   if (command_enabled (credentials, "GET_ALERTS"))
@@ -18551,9 +18549,7 @@ get_my_settings_omp (openvas_connection_t *connection, credentials_t *
   g_string_append (commands, "</commands>");
 
   /* Get Filters and other resource lists. */
-  response = NULL;
-  entity = NULL;
-  ret = omp (connection, credentials, &response, &entity, response_data,
+  ret = omp (connection, credentials, &response, NULL, response_data,
              commands->str);
   g_string_free (commands, TRUE);
   switch (ret)
@@ -18587,9 +18583,11 @@ get_my_settings_omp (openvas_connection_t *connection, credentials_t *
                              "Diagnostics: Internal Error.",
                              "/omp?cmd=get_alerts", response_data);
     }
-  free_entity (entity);
 
-  return get_my_settings (connection, credentials, params, response, response_data);
+  settings = get_my_settings (connection, credentials, params, response,
+                              response_data);
+  g_free (response);
+  return settings;
 }
 
 /**

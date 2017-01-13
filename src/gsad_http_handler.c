@@ -1096,6 +1096,7 @@ handle_request(void *cls, http_connection_t *connection,
 {
   gsad_connection_info_t *con_info;
   http_handler_t *handlers;
+  char *full_url;
 
   handlers = (http_handler_t*)cls;
   con_info = *con_cls;
@@ -1160,7 +1161,9 @@ handle_request(void *cls, http_connection_t *connection,
         }
     }
 
-  g_debug ("============= url: %s\n", reconstruct_url (connection, url));
+  full_url = reconstruct_url (connection, url);
+  g_debug ("============= url: %s\n", full_url);
+  g_free (full_url);
 
   if (handlers != NULL) {
     return http_handler_start (connection, method, url, con_info, handlers,
