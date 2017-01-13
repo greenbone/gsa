@@ -1,5 +1,10 @@
 2017-01-13 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/tasks/tasks.js: Only show create task icon if
+	the user has create permissions.
+
+2017-01-13 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/models/capabilities.js: Add method for checking
 	create permissions to Capabilities class.
 

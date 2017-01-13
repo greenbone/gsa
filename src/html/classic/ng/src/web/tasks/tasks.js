@@ -189,8 +189,10 @@ export class Tasks extends EntitiesComponent {
                 onClick={ () => this.modify_task_wizard.show()}/>
             </IconMenu>
           }
-          <Icon img="new.svg" title={_('New Task')}
-            onClick={() => { this.create_dialog.show(); }}/>
+          {caps.mayCreate('task') &&
+            <Icon img="new.svg" title={_('New Task')}
+              onClick={() => { this.create_dialog.show(); }}/>
+          }
           {caps.mayOp('run_wizard') &&
             <div>
               <TaskWizard ref={ref => this.task_wizard = ref}
