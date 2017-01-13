@@ -177,33 +177,36 @@ export class Tasks extends EntitiesComponent {
     return (
       <div>
         <Toolbar>
-          <HelpIcon page="tasks"/>
-          {caps.mayOp('run_wizard') &&
-            <IconMenu img="wizard.svg" title={_('Wizard')}
-              onClick={() => this.task_wizard.show()}>
-              <MenuEntry title={_('Task Wizard')}
-                onClick={() => this.task_wizard.show()}/>
-              <MenuEntry title={_('Advanced Task Wizard')}
-                onClick={() => this.advanced_task_wizard.show()}/>
-              <MenuEntry title={_('Modify Task Wizard')}
-                onClick={ () => this.modify_task_wizard.show()}/>
-            </IconMenu>
-          }
-          {caps.mayCreate('task') &&
-            <Icon img="new.svg" title={_('New Task')}
-              onClick={() => { this.create_dialog.show(); }}/>
-          }
-          {caps.mayOp('run_wizard') &&
-            <div>
-              <TaskWizard ref={ref => this.task_wizard = ref}
-                onSave={this.reload}
-                onNewClick={() => this.create_dialog.show()}/>
-              <AdvancedTaskWizard ref={ref => this.advanced_task_wizard = ref}
-                onSave={this.reload}/>
-              <ModifyTaskWizard ref={ref => this.modify_task_wizard = ref}
-                onSave={this.reload}/>
-            </div>
-          }
+          <Layout flex>
+            <HelpIcon page="tasks"/>
+            {caps.mayOp('run_wizard') &&
+              <IconMenu img="wizard.svg" size="small" title={_('Wizard')}
+                onClick={() => this.task_wizard.show()}>
+                <MenuEntry title={_('Task Wizard')}
+                  onClick={() => this.task_wizard.show()}/>
+                <MenuEntry title={_('Advanced Task Wizard')}
+                  onClick={() => this.advanced_task_wizard.show()}/>
+                <MenuEntry title={_('Modify Task Wizard')}
+                  onClick={ () => this.modify_task_wizard.show()}/>
+              </IconMenu>
+            }
+            {caps.mayCreate('task') &&
+              <Icon img="new.svg" title={_('New Task')}
+                onClick={() => { this.create_dialog.show(); }}/>
+            }
+            {caps.mayOp('run_wizard') &&
+              <div>
+                <TaskWizard ref={ref => this.task_wizard = ref}
+                  onSave={this.reload}
+                  onNewClick={() => this.create_dialog.show()}/>
+                <AdvancedTaskWizard ref={ref => this.advanced_task_wizard = ref}
+                  onSave={this.reload}/>
+                <ModifyTaskWizard ref={ref => this.modify_task_wizard = ref}
+                  onSave={this.reload}/>
+              </div>
+            }
+          </Layout>
+
           <TaskDialog ref={ref => this.create_dialog = ref}
             title={_('Create new Task')} onClose={this.reload}
             onSave={this.reload}/>

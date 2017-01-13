@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,11 +23,14 @@
 
 import React from 'react';
 
+import Layout from './layout.js';
+
 export const Toolbar = props => {
   return (
-    <div className="toolbar">
+    <Layout flex align={['space-between', 'start']} {...props}
+      className="toolbar">
       {props.children}
-    </div>
+    </Layout>
   );
 };
 
