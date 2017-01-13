@@ -1,5 +1,11 @@
 2017-01-13 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/tasks/tasks.js,
+	src/html/classic/ng/src/web/toolbar.js: Also use flexbox layout for the
+	toolbar.
+
+2017-01-13 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/icons/icon.js,
 	src/html/classic/ng/src/web/menu/iconmenu.js: Allow to use icon css on icon
 	menu by extractint a withIconCss HOC from Icon component.
