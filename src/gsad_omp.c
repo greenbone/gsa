@@ -20934,8 +20934,14 @@ new_permissions (openvas_connection_t *connection, credentials_t * credentials, 
     }
 
   related = params_values (params, "related:");
-  params_iterator_init (&related_iterator, related);
-  while (params_iterator_next (&related_iterator, &related_id, &related_param))
+  if (related)
+    {
+      params_iterator_init (&related_iterator, related);
+    }
+
+  while (related
+         && params_iterator_next (&related_iterator,
+                                  &related_id, &related_param))
     {
       const char* related_type;
       gchar *get_command;
