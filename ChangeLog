@@ -1,3 +1,19 @@
+2017-01-16  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/js/gsa_chart_helpers.js (html_table_from_records):
+	Use regex to check stylesheet URLs and include ng main.[...].css.
+	(clone_svg): Use document.createElementNS to create new elements
+	to ensure correct capitalization of tagName.  Remove href attributes
+	only from "a" elements.  Add workarounds for missing "xlink" prefix
+	and quotes in url(...) styles.
+	(svg_from_elem): Use regex to check stylesheet URLs and include ng 
+	main.[...].css.
+
+	* src/html/classic/js/gsa_gantt_chart.js
+	(GanttChartGenerator.prototype.generate): Add xlink:href attribute
+	for gradients to ensure they work when exported.  Fix y2 attribute of
+	gradients.
+
 2016-01-16  Hani Benhabiles <hani.benhabiles@greenbone.net>
 
 	* src/gsad_http_handler.c (handle_setup_user, handle_omp_post),

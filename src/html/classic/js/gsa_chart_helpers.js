@@ -2906,8 +2906,8 @@
 
     for (var sheet_i = 0; sheet_i < document.styleSheets.length; sheet_i++) {
       href = document.styleSheets[sheet_i].href;
-      if (href && href.indexOf('/gsa-style.css',
-            href.length - '/gsa-style.css'.length) !== -1) {
+      if (href.match (/\/main\.[0-9a-z]*\.css$/) ||
+          href.match (/\/gsa-style.css$/)) {
         break;
       }
     }
@@ -2986,23 +2986,35 @@
     }
     else {
       // replace "a" elems with "g"
+      // Use createElementNS to ensure correct capitalization of tagName.
       if (elem.tagName === 'a') {
-        clone = $('<g/>');
+        clone = $(document.createElementNS("http://www.w3.org/2000/svg", 'g'));
       }
       else {
-        clone = $('<' + elem.tagName + '/>');
+        clone = $(document.createElementNS("http://www.w3.org/2000/svg",
+             elem.tagName));
       }
 
       for (var attr_index = 0;
            attr_index < elem.attributes.length;
            attr_index++) {
         var attribute = elem.attributes[attr_index];
-        // remove href attributes
-        if (attribute.name !== 'href') {
-          clone.attr(attribute.prefix ?
-              attribute.prefix + ':' + attribute.name :
-              attribute.name,
-              attribute.value);
+        if (attribute.name !== 'href' || elem.tagName !== 'a') {
+          var prefix;
+          var value;
+
+          if (attribute.prefix)
+            prefix = attribute.prefix;
+          else if (attribute.name === 'href')
+            prefix = 'xlink'; // Workaround for missing attribute prefix
+          else
+            prefix = null;
+
+          // Remove quotes from "url(...)" styles.
+          value = attribute.value.replace(/"/g, '');
+
+          clone.attr(prefix ? prefix + ':' + attribute.name : attribute.name,
+              value);
         }
       }
 
@@ -3045,9 +3057,9 @@
 
     for (var sheet_i = 0; !gsa.is_defined(stylesheet)  &&
         sheet_i < document.styleSheets.length; sheet_i++) {
-      if (document.styleSheets[sheet_i].href.indexOf('/gsa-style.css',
-            document.styleSheets[sheet_i]
-            .href.length - '/gsa-style.css'.length) !== -1) {
+      var sheet_url = document.styleSheets[sheet_i].href;
+      if (sheet_url.match (/\/main\.[0-9a-z]*\.css$/) ||
+          sheet_url.match (/\/gsa-style.css$/)) {
         stylesheet = document.styleSheets[sheet_i];
       }
     }
@@ -3084,6 +3096,7 @@
       '<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" ' +
       '"http://www.w3.org/TR/SVG/DTD/svg10.dtd"> ' +
       '<svg xmlns="http://www.w3.org/2000/svg"' +
+      ' xmlns:xlink="http://www.w3.org/1999/xlink"' +
       ' viewBox="0 ' + (title !== null ? '-14' : '0') + ' ' + width + ' ' +
       height + '"' +
       ' width="' + width + '"' +

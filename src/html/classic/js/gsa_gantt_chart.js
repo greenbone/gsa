@@ -167,10 +167,11 @@
       var defs = svg.append('defs');
       var gradient1 = defs.append('linearGradient')
         .attr('id', 'green_fill_gradient')
+        .attr('xlink:href', '#green_fill_gradient')
         .attr('x1', '0%')
         .attr('x2', '100%')
         .attr('y1', '0%')
-        .attr('y1', '0%');
+        .attr('y2', '0%');
 
       gradient1.append('stop')
         .attr('offset', '0%')
@@ -189,10 +190,11 @@
 
       var gradient2 = defs.append('linearGradient')
         .attr('id', 'green_stroke_gradient')
+        .attr('xlink:href', '#green_stroke_gradient')
         .attr('x1', '0%')
         .attr('x2', '100%')
         .attr('y1', '0%')
-        .attr('y1', '0%');
+        .attr('y2', '0%');
 
       gradient2.append('stop')
         .attr('offset', '0%')
