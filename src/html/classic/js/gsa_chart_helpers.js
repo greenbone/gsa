@@ -1789,7 +1789,9 @@
 
     var n_bins = Math.ceil(Math.log2(total_count)) + 1;
     var bin_width = Math.round ((max_value - min_value) / n_bins);
-    n_bins = (max_value - min_value) / bin_width;
+    if (bin_width <= 0)
+      bin_width = 1;
+    n_bins = Math.floor ((max_value - min_value) / bin_width) + 1;
 
     var bins = [];
     var bins_long = [];

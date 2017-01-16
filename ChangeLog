@@ -1,5 +1,11 @@
 2017-01-16  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
+	* src/html/classic/js/gsa_chart_helpers.js (data_quantile_histogram):
+	Make bin width and count calculation work better with small numbers
+	of values.
+
+2017-01-16  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
 	* src/html/classic/js/gsa_chart_helpers.js (html_table_from_records):
 	Use regex to check stylesheet URLs and include ng main.[...].css.
 	(clone_svg): Use document.createElementNS to create new elements
