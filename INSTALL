@@ -14,7 +14,7 @@ some supported platforms.
 
 Prerequisites:
 * libgvm_base >= 1.0.0
-* libopenvas_omp, libopenvas_base, libopenvas_misc >= 9.0.0
+* libopenvas_omp, libopenvas_misc >= 9.0.0
 * gnutls >= 3.2.15
 * libgcrypt
 * cmake >= 2.8
