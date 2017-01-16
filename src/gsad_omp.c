@@ -2095,6 +2095,7 @@ get_many (openvas_connection_t *connection, const char *type,
         g_tree_replace (credentials->last_filt_ids, filter_type,
                         g_strdup (given_filt_id));
       filt_id = given_filt_id;
+      g_free (filter_type);
     }
   else
     {

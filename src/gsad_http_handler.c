@@ -495,21 +495,6 @@ handle_setup_user (http_connection_t *connection,
       || (ret == USER_BAD_MISSING_TOKEN)
       || (ret == USER_IP_ADDRESS_MISSMATCH))
     {
-      gchar *full_url;
-      gboolean export = is_export (connection);;
-
-      if (!export && strncmp (url, LOGOUT_URL, strlen (LOGOUT_URL)))
-        {
-          full_url = reconstruct_url (connection, url);
-          if (full_url && g_utf8_validate (full_url, -1, NULL) == FALSE)
-            {
-              g_free (full_url);
-              full_url = NULL;
-            }
-        }
-      else
-        full_url = NULL;
-
       if (ret == USER_EXPIRED_TOKEN)
         {
           if (strncmp (url, LOGOUT_URL, strlen (LOGOUT_URL)))
@@ -676,7 +661,9 @@ handle_omp_post (http_connection_t *connection,
 
   response_data = cmd_response_data_new ();
 
-  return exec_omp_post (connection, con_info, client_address, response_data);
+  ret = exec_omp_post (connection, con_info, client_address, response_data);
+  cmd_response_data_free (response_data);
+  return ret;
 }
 
 int
