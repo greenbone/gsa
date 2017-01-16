@@ -76,6 +76,7 @@ openvas_validator_rule_free (validator_rule_t *rule)
     {
       g_free (rule->alias_for);
       g_free (rule->regex);
+      g_free (rule);
     }
 }
 

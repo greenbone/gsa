@@ -1,3 +1,7 @@
+2016-01-16  Hani Benhabiles <hani.benhabiles@greenbone.net>
+
+	* src/validator.c (openvas_validator_rule_free): Fix memory leak.
+
 2017-01-16  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/js/gsa_chart_helpers.js (data_quantile_histogram):
