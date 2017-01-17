@@ -283,7 +283,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       data-chart-title="{gsa:i18n ('Vulns by Hosts - area')}"
       data-chart-title-count="count"
       data-chart-type="line"
-      data-gen-params='{{"is_timeline": 0, "y_area": 1, "y2_area": 0}}'
+      data-gen-params='{{"is_timeline": 0, "y_area": 1, "y2_area": 0, "quantile_fill": 1, "fill_in_missing": 1}}'
       data-chart-template="quantile_split"/>
   </div>
 </xsl:template>

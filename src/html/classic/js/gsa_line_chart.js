@@ -703,6 +703,59 @@
           continue;
         }
 
+        if (self.quantile_fill) {
+          var gradient = self.defs.append('linearGradient');
+          gradient
+              .attr('x1', '0%')
+              .attr('x2', '100%')
+              .attr('y1', '0')
+              .attr('y2', '0')
+              .attr('id', 'gradient_' + index)
+              .attr('xlink:href', '#gradient_' + index)
+
+          gradients[index] = gradient;
+          var q_info = gch.data_quantile_info(data.records,
+                                              self.all_y_fields[index],
+                                              self.x_field);
+          gradient.append('stop')
+            .attr('offset', '0%')
+            .style('stop-color', gch.quantiles_colors_gradient(0.0))
+            .style('stop-opacity', '1.0');
+
+          var prev_percent = 0;
+          var prev_quantile = 0.0;
+
+          gradient.append('stop')
+            .attr('offset', '0%')
+            .style('stop-color',
+                   gch.quantiles_colors_gradient(0.0))
+            .style('stop-opacity', '1.0');
+
+          for (var q_index = 0; q_index < q_info.quantiles.length; q_index++) {
+            var q_value = q_info.quantile_values[q_index];
+            var percent = 100 * (q_value - q_info.min_value) /
+                          (q_info.max_value - q_info.min_value);
+            var quantile = q_info.quantiles[q_index];
+            if (percent !== prev_percent) {
+              if (q_index > 0) {
+                gradient.append('stop')
+                  .attr('offset', percent.toFixed(5) + '%')
+                  .style('stop-color',
+                        gch.quantiles_colors_gradient(prev_quantile))
+                  .style('stop-opacity', '1.0');
+              }
+              gradient.append('stop')
+                .attr('offset', percent.toFixed(5) + '%')
+                .style('stop-color',
+                      gch.quantiles_colors_gradient(quantile))
+                .style('stop-opacity', '1.0');
+
+              prev_quantile = quantile;
+              prev_percent = percent;
+            }
+          }
+        }
+
         var fill;
         if (gradients[index]) {
           fill = 'url(\'#gradient_' + index + '\')';
@@ -1084,14 +1137,23 @@
     this.is_timeline = false;
     this.y_area = false;
     this.y2_area = false;
+    this.quantile_fill = 0;
+    this.fill_in_missing = 0;
 
     if (gsa.is_defined (gen_params.extra)) {
       if (gsa.is_defined (gen_params.extra.is_timeline))
         this.is_timeline = gen_params.extra.is_timeline;
+      if (! this.is_timeline &&
+          gsa.is_defined (gen_params.extra.fill_in_missing))
+        this.fill_in_missing = gen_params.extra.fill_in_missing;
+
       if (gsa.is_defined (gen_params.extra.y_area))
         this.y_area = gen_params.extra.y_area;
       if (gsa.is_defined (gen_params.extra.y2_area))
         this.y2_area = gen_params.extra.y2_area;
+
+      if (gsa.is_defined (gen_params.extra.quantile_fill))
+        this.quantile_fill = gen_params.extra.quantile_fill;
     }
 
     if (gen_params.y_fields && gen_params.y_fields[0]  &&
@@ -1134,7 +1196,7 @@
       this.x_axis = d3.svg.axis().scale(this.x_scale).orient('bottom').ticks(6);
       this.setDataTransformFunc(this.timeLine);
     }
-    else if (1) {
+    else if (this.fill_in_missing) {
       this.setDataTransformFunc(gch.fill_in_numbered_records);
     }
   };
@@ -1143,11 +1205,11 @@
     var self = this;
     var fill_empty_records = false;
 
-    // FIXME: make filling an explicit option
     if (self.y_fields[0].substr(0, 5) === 'count' ||
           self.y_fields[0].substr(0, 7) === 'c_count' ||
           self.y2_fields[0].substr(0, 5) === 'count' ||
-          self.y2_fields[0].substr(0, 7) === 'c_count') {
+          self.y2_fields[0].substr(0, 7) === 'c_count' ||
+          self.fill_in_missing) {
       fill_empty_records = true;
     }
 

@@ -331,6 +331,21 @@
                       d3.hcl('#ff0000')]);  // maximum High);
   };
 
+  /*
+   * Quantiles gradient.
+   */
+  gch.quantiles_colors_gradient =
+      d3.scale.linear()
+        .domain([0, 0.05, 0.25, 0.50, 0.75, 0.95, 1.00])
+        .range([d3.hsl('#008644'), // 0.00
+                d3.hsl('#55B200'), // 0.05
+                d3.hsl('#94D800'), // 0.25
+                d3.hsl('#E6E600'), // 0.50
+                d3.hsl('#EDBA00'), // 0.75
+                d3.hsl('#EC6E00'), // 0.95
+                d3.hsl('#D63900')] // 1.00
+              );
+
   /* Bar CSS styles */
 
   /**
@@ -386,17 +401,7 @@
    * @return  Function returning the CSS style for a CVSS score.
    */
   gch.quantile_bar_style = function quantile_bar_style(field) {
-    var color_scale =
-      d3.scale.linear()
-        .domain([0, 0.05, 0.25, 0.50, 0.75, 0.95, 1.00])
-        .range([d3.hsl('#008644'), // 0.00
-                d3.hsl('#55B200'), // 0.05
-                d3.hsl('#94D800'), // 0.25
-                d3.hsl('#E6E600'), // 0.50
-                d3.hsl('#EDBA00'), // 0.75
-                d3.hsl('#EC6E00'), // 0.95
-                d3.hsl('#D63900')] // 1.00
-              );
+    var color_scale = gch.quantiles_colors_gradient;
 
     var func = function(d) {
       var value = d[field];
@@ -1717,6 +1722,73 @@
   };
 
   /**
+   * Get quantiles and related data for a given value and count field:
+   *  - Minimum and maximum value
+   *  - Total count
+   *  - values at each quantile
+   *  - quantiles for each record index
+   */
+  gch.data_quantile_info = function(records, count_field, value_field) {
+    if (!gsa.is_defined(count_field))
+      count_field = "count";
+    if (!gsa.is_defined(value_field))
+      value_field = "value"
+    var q_info = {
+                    count_field : count_field,
+                    value_field : value_field,
+                    min_value : +Infinity,
+                    max_value : -Infinity,
+                    total_count : 0,
+                    quantiles : [0.05, 0.25, 0.50, 0.75, 0.95],
+                    quantile_values : [],
+                    record_quantiles : []
+                  };
+
+    gsa.for_each (records, function (record) {
+      if (record[value_field] < q_info.min_value)
+        q_info.min_value = record[value_field];
+
+      if (record[value_field] > q_info.max_value)
+        q_info.max_value = record[value_field];
+
+      q_info.total_count += record[count_field];
+    });
+
+    var temp_total = 0;
+    var min_q_index = 0;
+
+    for (var record_index = 0; record_index < records.length;
+         record_index++) {
+      var record = records[record_index];
+      temp_total += record[count_field];
+      for (var q_index = min_q_index;
+           q_index < q_info.quantiles.length; q_index++) {
+        var nq = q_info.total_count * q_info.quantiles[q_index];
+        if (nq < temp_total && q_info.quantile_values[q_index] === undefined) {
+          min_q_index = q_index + 1;
+          q_info.quantile_values[q_index] = record[value_field];
+        }
+      }
+    }
+
+    for (var record_index = 0; record_index < records.length;
+         record_index ++) {
+      var record = records[record_index];
+      var value = record[value_field];
+
+      for (q_index = q_info.quantiles.length - 1; q_index >= 0; q_index--) {
+        if (Number(q_info.quantile_values[q_index]) >= Number (value)) {
+          q_info.record_quantiles[record_index] = q_info.quantiles[q_index]
+        }
+      }
+      if (q_info.record_quantiles[record_index] === undefined)
+        q_info.record_quantiles[record_index] = 1.0;
+    }
+
+    return q_info;
+  }
+
+  /**
    * Transforms data into a quantile histogram.
    *
    * @param old_data  The original data.
@@ -1742,50 +1814,12 @@
     var max_value = -Infinity;
     var total_count = 0;
 
-    // Get min and max value and total count
-    gsa.for_each (old_data.records, function (record) {
-      if (record[value_field] < min_value)
-        min_value = record[value_field];
-
-      if (record[value_field] > max_value)
-        max_value = record[value_field];
-
-      total_count += record[count_field];
-    });
-
-    var temp_total = 0;
-    var quantiles = [0.05, 0.25, 0.50, 0.75, 0.95];
-    var quantile_values = [];
-    var record_quantiles = [];
-    var min_q_index = 0;
-
     // Get quantile values
-    for (var record_index = 0; record_index < old_data.records.length;
-         record_index++) {
-      var record = old_data.records[record_index];
-      temp_total += record[count_field];
-      for (var q_index = min_q_index; q_index < quantiles.length; q_index++) {
-        var nq = total_count * quantiles[q_index];
-        if (nq < temp_total && quantile_values[q_index] === undefined) {
-          min_q_index = q_index + 1;
-          quantile_values[q_index] = record[value_field];
-        }
-      }
-    }
-
-    for (var record_index = 0; record_index < old_data.records.length;
-         record_index ++) {
-      var record = old_data.records[record_index];
-      var value = record[value_field];
-
-      for (q_index = quantiles.length - 1; q_index >= 0; q_index--) {
-        if (Number(quantile_values[q_index]) >= Number (value)) {
-          record_quantiles[record_index] = quantiles[q_index]
-        }
-      }
-      if (record_quantiles[record_index] === undefined)
-        record_quantiles[record_index] = 1.0;
-    }
+    var q_info = gch.data_quantile_info(old_data.records, count_field,
+                                        value_field);
+    var min_value = q_info.min_value;
+    var max_value = q_info.max_value;
+    var total_count = q_info.total_count;
 
     var n_bins = Math.ceil(Math.log2(total_count)) + 1;
     var bin_width = Math.round ((max_value - min_value) / n_bins);
@@ -1874,10 +1908,10 @@
 
       if (new_record['min_' + value_field + '_quantile'] === undefined) {
         new_record['min_' + value_field + '_quantile'] =
-          record_quantiles[record_index];
+          q_info.record_quantiles[record_index];
       }
       new_record['max_' + value_field + '_quantile'] =
-        record_quantiles[record_index];
+        q_info.record_quantiles[record_index];
     }
 
     for (var record_index in records) {

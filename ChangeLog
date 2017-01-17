@@ -1,3 +1,24 @@
+2017-01-17  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/graphics.xsl (vuln-charts): Add gen_params
+	quantile_fill and fill_in_missing for chart vuln-by-hosts-area.
+
+	* src/html/classic/js/gsa_chart_helpers.js (quantiles_colors_gradient):
+	New color scale function.
+	(quantile_bar_style): Use quantiles_colors_gradient instead of defining
+	colors here.
+	(data_quantile_info): New function for calculating quantile info.
+	(data_quantile_histogram): Use data_quantile_info instead of doing
+	calculations here.
+
+	* src/html/classic/js/gsa_line_chart.js
+	(LineChartGenerator.prototype.generate): Use multi-colored fill for
+	areas when quantile_fill gen_param is set.
+	(LineChartGenerator.prototype.evaluateParams): Handle new gen_params
+	quantile_fill and fill_in_missing.
+	(LineChartGenerator.prototype.timeLine): Fill in missing records
+	if fill_in_missing gen_param is true.
+
 2017-01-17 Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/menu/menubar.js: Link notes menu entry to ng
