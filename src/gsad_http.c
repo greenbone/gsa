@@ -343,7 +343,7 @@ send_response (http_connection_t *connection, const char *content,
  *
  * @param[in]  connection     Connection handle, e.g. used to send response.
  * @param[in]  response       Response.
- * @param[in]  response_data  Response data strurct
+ * @param[in]  response_data  Response data struct. Response data will be freed.
  * @param[in]  sid            Session ID, or NULL. "0" to remove session.
  *
  * @return MHD_YES on success, else MHD_NO.
@@ -416,7 +416,7 @@ handler_send_response (http_connection_t *connection,
  *
  * @param[in]  connection     Connection handle, e.g. used to send response.
  * @param[in]  data           Data to send in response
- * @param[in]  response_data  Response data strurct
+ * @param[in]  response_data  Response data struct. Response data will be freed.
  * @param[in]  sid            Session ID, or NULL. "0" to remove session.
  *
  * @return MHD_YES on success, else MHD_NO.

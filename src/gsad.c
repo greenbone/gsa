@@ -1299,16 +1299,13 @@ params_mhd_validate (void *params)
  * @param[in]   con             HTTP connection
  * @param[in]   con_info        Connection info.
  * @param[in]   client_address  Client address.
- * @param[out]  response_data   Response data.  Return info is written
- *                              into here.
  *
  * @return MHD_YES on success, MHD_NO on error.
  */
 int
 exec_omp_post (http_connection_t *con,
                gsad_connection_info_t *con_info,
-               const char *client_address,
-               cmd_response_data_t *response_data)
+               const char *client_address)
 {
   int ret;
   user_t *user;
@@ -1318,6 +1315,7 @@ exec_omp_post (http_connection_t *con,
   gboolean xml_flag;
   authentication_reason_t auth_reason;
   openvas_connection_t connection;
+  cmd_response_data_t *response_data;
 
   params_mhd_validate (con_info->params);
 
@@ -1405,6 +1403,8 @@ exec_omp_post (http_connection_t *con,
 
   /* Check the session. */
 
+  response_data = cmd_response_data_new ();
+
   if (params_value (con_info->params, "token") == NULL)
     {
       cmd_response_data_set_status_code (response_data,
@@ -1458,12 +1458,16 @@ exec_omp_post (http_connection_t *con,
 
       /* @todo Validate caller. */
 
+      cmd_response_data_free (response_data);
+
       return handler_send_reauthentication(con, MHD_HTTP_UNAUTHORIZED,
                                            SESSION_EXPIRED, xml_flag);
     }
 
   if (ret == USER_BAD_MISSING_COOKIE || ret == USER_IP_ADDRESS_MISSMATCH)
     {
+      cmd_response_data_free (response_data);
+
       return handler_send_reauthentication(con, MHD_HTTP_UNAUTHORIZED,
                                            BAD_MISSING_COOKIE, xml_flag);
     }
@@ -1476,6 +1480,9 @@ exec_omp_post (http_connection_t *con,
                     : (ret == USER_GUEST_LOGIN_ERROR
                       ? LOGIN_ERROR
                       : LOGIN_FAILED);
+
+      cmd_response_data_free (response_data);
+
       return handler_send_reauthentication(con, MHD_HTTP_SERVICE_UNAVAILABLE,
                                            auth_reason, xml_flag);
     }
@@ -1520,6 +1527,7 @@ exec_omp_post (http_connection_t *con,
       case 0:
         break;
       case -1:
+        cmd_response_data_free (response_data);
         return handler_send_reauthentication (con, MHD_HTTP_SERVICE_UNAVAILABLE,
                                               GMP_SERVICE_DOWN,
                                               params_value_bool
@@ -1897,16 +1905,13 @@ params_mhd_add (void *params, enum MHD_ValueKind kind, const char *name,
  * @param[in]   con                  HTTP Connection
  * @param[in]   con_info             Connection info.
  * @param[in]   credentials          User credentials.
- * @param[out]  response_data        Response data.  Return info is written
- *                                   into here.
  *
  * @return MHD_YES on success, MHD_NO on error.
  */
 int
 exec_omp_get (http_connection_t *con,
               gsad_connection_info_t *con_info,
-              credentials_t *credentials,
-              cmd_response_data_t *response_data)
+              credentials_t *credentials)
 {
   const char *cmd = NULL;
   const int CMD_MAX_SIZE = 27;   /* delete_trash_lsc_credential */
@@ -1915,6 +1920,9 @@ exec_omp_get (http_connection_t *con,
   char *res = NULL;
   gsize res_len = 0;
   http_response_t *response;
+  cmd_response_data_t *response_data;
+
+  response_data = cmd_response_data_new ();
 
   cmd = params_value (params, "cmd");
 
@@ -1964,6 +1972,7 @@ exec_omp_get (http_connection_t *con,
       case 0:
         break;
       case -1:
+        cmd_response_data_free (response_data);
         return handler_send_reauthentication (con,
                                               MHD_HTTP_SERVICE_UNAVAILABLE,
                                               GMP_SERVICE_DOWN,

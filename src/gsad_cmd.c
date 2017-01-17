@@ -74,6 +74,11 @@ cmd_response_data_new ()
 void
 cmd_response_data_free (cmd_response_data_t* data)
 {
+  if (!data)
+    {
+      return;
+    }
+
   if (data->content_disposition)
     {
       g_free (data->content_disposition);
@@ -90,6 +95,8 @@ cmd_response_data_free (cmd_response_data_t* data)
     }
 
   g_free (data);
+
+  data = NULL;
 }
 
 /**

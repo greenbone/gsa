@@ -1,3 +1,15 @@
+2017-01-17 Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/gsad.c, src/gsad_http.c, src/gsad_http.h, src/gsad_http_handler.c
+	(exec_omp_post, exec_omp_get):
+	Remove cmd_response_data_t parameter from exec_omp_post and exec_omp_get
+	functions. Instead allocate and free them internally. Update docstrings to
+	reflect cmd_response_data_t parameter handling.
+
+	* src/gsad_cmd.c (cmd_response_data_free): Don't crash if NULL is
+	passed to cmd_response_data_free function. Set passed data pointer to NULL
+	after the memory has been freed.
+
 2017-01-17  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	* INSTALL: Make use of 'sudo' consistent. Symbolize shell of

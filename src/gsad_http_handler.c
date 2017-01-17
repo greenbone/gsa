@@ -601,11 +601,7 @@ handle_omp_get (http_connection_t *connection,
   int ret;
   credentials_t *credentials = (credentials_t*)data;
 
-  cmd_response_data_t *response_data;
-
-  response_data = cmd_response_data_new ();
-
-  ret = exec_omp_get (connection, con_info, credentials, response_data);
+  ret = exec_omp_get (connection, con_info, credentials);
 
   credentials_free (credentials);
   return ret;
@@ -620,7 +616,6 @@ handle_omp_post (http_connection_t *connection,
   const gchar *sid, *accept_language;
   int ret;
   char client_address[INET6_ADDRSTRLEN];
-  cmd_response_data_t *response_data;
 
   sid = MHD_lookup_connection_value (connection,
                                      MHD_COOKIE_KIND,
@@ -659,11 +654,7 @@ handle_omp_post (http_connection_t *connection,
       return MHD_YES;
     }
 
-  response_data = cmd_response_data_new ();
-
-  ret = exec_omp_post (connection, con_info, client_address, response_data);
-  cmd_response_data_free (response_data);
-  return ret;
+  return exec_omp_post (connection, con_info, client_address);
 }
 
 int
