@@ -73,8 +73,13 @@ export class Dialog extends React.Component {
     };
   }
 
-  show() {
+  loadData() {
+    // overwrite to load data via gmp
     this.setState({visible: true, error: undefined});
+  }
+
+  show() {
+    this.loadData();
   }
 
   hide() {

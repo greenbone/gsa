@@ -27,6 +27,7 @@ import  _ from '../../locale.js';
 import {is_defined} from '../../utils.js';
 
 import FilterDialog from '../filterdialog.js';
+import Layout from '../layout.js';
 import Section from '../section.js';
 import Sort from '../sortby.js';
 import Toolbar from '../toolbar.js';
@@ -41,6 +42,7 @@ import EntitiesFooter from '../entities/footer.js';
 
 import Download from '../form/download.js';
 
+import Icon from '../icons/icon.js';
 import HelpIcon from '../icons/helpicon.js';
 
 import TableRow from '../table/row.js';
@@ -48,6 +50,7 @@ import TableHead from '../table/head.js';
 
 import NotesCharts from './charts.js';
 import NotesListRow from './noteslistrow.js';
+import NoteDialog from './dialog.js';
 
 import {NOTES_FILTER_FILTER} from '../../gmp/commands/filters.js';
 
@@ -148,11 +151,24 @@ export class Notes extends EntitiesComponent {
   render() {
     let {filters, filter} = this.state;
     let counts = this.getCounts();
+    let caps = this.context.capabilities;
 
     return (
       <div>
         <Toolbar>
-          <HelpIcon page="notes"/>
+          <Layout flex>
+            <HelpIcon page="notes"/>
+
+            {caps.mayCreate('note') &&
+              <Icon img="new.svg" title={_('New Note')}
+                onClick={() => { this.create_dialog.show(); }}/>
+            }
+          </Layout>
+
+          <NoteDialog ref={ref => this.create_dialog = ref}
+            title={_('Create new Note')} onClose={this.reload}
+            onSave={this.reload}/>
+
           <PowerFilter
             filter={filter}
             filters={filters}

@@ -1,5 +1,11 @@
 2017-01-17 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/dialog.js,
+	src/html/classic/ng/src/web/notes/dialog.js,
+	src/html/classic/ng/src/web/notes/notes.js: Add create note dialog.
+
+2017-01-17 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/commands/notes.js: Add create api for note gmp
 	command.
 
