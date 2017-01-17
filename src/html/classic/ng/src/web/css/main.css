@@ -2,7 +2,7 @@ html, body, #app, #app > div, #main {
   height: 100%;
 }
 
-main {
+main, .main {
   padding: 5px 10px;
 }
 
