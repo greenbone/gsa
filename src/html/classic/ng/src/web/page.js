@@ -30,9 +30,9 @@ import {is_defined} from '../utils.js';
 import Header from './header.js';
 import Footer from './footer.js';
 
-import './css/main.css';
+import './css/page.css';
 
-export class Main extends React.Component {
+export class Page extends React.Component {
 
   constructor(...args) {
     super(...args);
@@ -64,7 +64,7 @@ export class Main extends React.Component {
     }
 
     return (
-      <StickyContainer id="main">
+      <StickyContainer id="page">
         <Header/>
         <main>
           {children}
@@ -75,14 +75,14 @@ export class Main extends React.Component {
   }
 }
 
-Main.childContextTypes = {
+Page.childContextTypes = {
   capabilities: React.PropTypes.object,
 };
 
-Main.contextTypes = {
+Page.contextTypes = {
   gmp: React.PropTypes.object.isRequired,
 };
 
-export default Main;
+export default Page;
 
 // vim: set ts=2 sw=2 tw=80:

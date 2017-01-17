@@ -1,8 +1,8 @@
-html, body, #app, #app > div, #main {
+html, body, #app, #app > div, #page {
   height: 100%;
 }
 
-main, .main {
+main, .page {
   padding: 5px 10px;
 }
 

@@ -34,7 +34,7 @@ import {is_defined, get_severity_levels} from '../utils.js';
 import _ from '../locale.js';
 
 import Login from './login.js';
-import Main from './main.js';
+import Page from './page.js';
 import Home from './home.js';
 import Task from './tasks/task.js';
 import Tasks from './tasks/tasks.js';
@@ -136,7 +136,7 @@ ReactDOM.render(
     <Route component={App}>
       <Route path="/login" component={Login}/>
       <Route path="/ng/login" component={Login}/>
-      <Route path="/ng" component={Main}>
+      <Route path="/ng" component={Page}>
         <IndexRoute component={Home} onEnter={is_logged_in}/>
         <Route path="tasks" component={Tasks} onEnter={is_logged_in}/>
         <Route path="tasks/:id" component={Task} onEnter={is_logged_in}/>
