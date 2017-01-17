@@ -1,5 +1,13 @@
 2017-01-17 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/form/text.js,
+	src/html/classic/ng/src/web/tasks/dialog.js,
+	src/html/classic/ng/src/web/wizard/advancedtaskwizard.js,
+	src/html/classic/ng/src/web/wizard/modifytaskwizard.js: Introduce new Text
+	form component. It allows easiert formatting of text within formulars.
+
+2017-01-17 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/gsad.xsl (html-gsa-navigation): Fix url to scans dashboard
 
 2017-01-17 Björn Ricks <bjoern.ricks@greenbone.net>

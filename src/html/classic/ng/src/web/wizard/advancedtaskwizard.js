@@ -39,6 +39,7 @@ import FormGroup from '../form/formgroup.js';
 import TextField from '../form/textfield.js';
 import Radio from '../form/radio.js';
 import Datepicker from '../form/datepicker.js';
+import Text from '../form/text.js';
 import TimeZoneSelect from '../form/timezoneselect.js';
 
 import {ssh_credential_filter, smb_credential_filter, esxi_credential_filter
@@ -225,17 +226,17 @@ export class AdvancedTaskWizard extends Dialog {
                 onChange={this.onValueChange}/>
             </FormGroup>
             <FormGroup offset="1">
-              <Layout flex box>{_('at')}</Layout>
+              <Text>{_('at')}</Text>
               <Spinner type="int" min="0" max="23" size="2"
                 name="start_hour"
                 value={start_hour}
                 onChange={this.onValueChange}/>
-              <Layout flex box>{_('h')}</Layout>
+              <Text>{_('h')}</Text>
               <Spinner type="int" min="0" max="59" size="2"
                 name="start_minute"
                 value={start_minute}
                 onChange={this.onValueChange}/>
-              <Layout flex box>{_('m')}</Layout>
+              <Text>{_('m')}</Text>
             </FormGroup>
             <FormGroup offset="1">
               <TimeZoneSelect
@@ -259,9 +260,9 @@ export class AdvancedTaskWizard extends Dialog {
               onChange={this.onValueChange}>
               {ssh_credential_opts}
             </Select2>
-            <Layout flex box>
+            <Text>
               {_(' on port ')}
-            </Layout>
+            </Text>
             <Spinner min="0" max="65535" size="5"
               value={ssh_port}
               onChange={this.onValueChange}/>

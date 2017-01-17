@@ -36,6 +36,7 @@ import Select2 from '../form/select2.js';
 import Spinner from '../form/spinner.js';
 import FormGroup from '../form/formgroup.js';
 import Radio from '../form/radio.js';
+import Text from '../form/text.js';
 import TextField from '../form/textfield.js';
 import TimeZoneSelect from '../form/timezoneselect.js';
 import Datepicker from '../form/datepicker.js';
@@ -147,17 +148,17 @@ export class ModifyTaskWizard extends Dialog {
                 onChange={this.onValueChange}/>
             </FormGroup>
             <FormGroup offset="1">
-              <Layout flex box>{_('at')}</Layout>
+              <Text>{_('at')}</Text>
               <Spinner type="int" min="0" max="23" size="2"
                 name="start_hour"
                 value={start_hour}
                 onChange={this.onValueChange}/>
-              <Layout flex box>{_('h')}</Layout>
+              <Text>{_('h')}</Text>
               <Spinner type="int" min="0" max="59" size="2"
                 name="start_minute"
                 value={start_minute}
                 onChange={this.onValueChange}/>
-              <Layout flex box>{_('m')}</Layout>
+              <Text>{_('m')}</Text>
             </FormGroup>
             <FormGroup offset="1">
               <TimeZoneSelect

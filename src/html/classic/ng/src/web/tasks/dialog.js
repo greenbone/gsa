@@ -42,6 +42,7 @@ import FormGroup from '../form/formgroup.js';
 import Checkbox from '../form/checkbox.js';
 import Radio from '../form/radio.js';
 import YesNoRadio from '../form/yesnoradio.js';
+import Text from '../form/text.js';
 import TextField from '../form/textfield.js';
 
 import Icon from '../icons/icon.js';
@@ -535,9 +536,9 @@ export class TaskDialog extends Dialog {
               value={auto_delete_data}
               disabled={auto_delete !== 'keep'}
               onChange={this.onAutoDeleteDataChange}/>
-            <Layout flex box>
+            <Text>
               {_('reports')}
-            </Layout>
+            </Text>
           </Layout>
         </FormGroup>
 
@@ -623,9 +624,9 @@ export class TaskDialog extends Dialog {
             value={tag_name}>
             {tag_opts}
           </Select2>
-          <Layout box flex>
+          <Text>
             {_('with Value')}
-          </Layout>
+          </Text>
           <TextField name="tag_value"
             value={tag_value}
             onChange={this.onTagValueChange}/>
