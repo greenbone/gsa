@@ -21,9 +21,13 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+import logger from '../../log.js';
+
 import {EntityCommand, EntitiesCommand, register_command} from '../command.js';
 
 import Note from '../models/note.js';
+
+const log = logger.getLogger('gmp.commands.notes');
 
 export class NoteCommand extends EntityCommand {
 
@@ -33,6 +37,30 @@ export class NoteCommand extends EntityCommand {
 
   getElementFromResponse(root) {
     return root.get_note.get_notes_response.note;
+  }
+
+  create(args) {
+    let {oid, active = '-1', days = 30, hosts = '', hosts_manual = '',
+      note_result_id = '', note_result_uuid = '', port = '', port_manual = '',
+      severity = '', note_task_id = '', note_task_uuid = '', text} = args;
+    log.debug('Creating new note', args);
+    return this.httpPost({
+      cmd: 'create_note',
+      next: 'get_note',
+      oid,
+      active,
+      days,
+      hosts,
+      hosts_manual,
+      note_result_id,
+      note_result_uuid,
+      note_task_id,
+      note_task_uuid,
+      port,
+      port_manual,
+      severity,
+      text,
+    }).then(xhr => this.getModelFromResponse(xhr));
   }
 }
 
