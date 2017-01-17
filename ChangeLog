@@ -1,3 +1,8 @@
+2017-01-17  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	* INSTALL: Make use of 'sudo' consistent. Symbolize shell of
+	unprivileged user with '$' instead of '#'.
+
 2017-01-17 Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/css/section.css: Remove unused css classes.
