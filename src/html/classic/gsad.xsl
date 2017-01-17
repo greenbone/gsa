@@ -419,7 +419,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
       <xsl:variable name="items" xmlns="">
         <xsl:if test="gsa:may-op ('GET_TASKS') or gsa:may-op ('GET_REPORTS') or gsa:may-op ('GET_RESULTS') or gsa:may-op ('GET_NOTES') or gsa:may-op ('GET_OVERRIDES')">
           <item>
-            <url>/ng/dashboards/tasks</url>
+            <url>/ng/dashboards/scans</url>
             <name><xsl:value-of select="gsa:i18n ('Dashboard')"/></name>
           </item>
         </xsl:if>
