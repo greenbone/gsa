@@ -1,3 +1,9 @@
+2017-01-17 Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/js/gsa_chart_helpers.js (html_table_from_records): Fix
+	checking html page for stylesheet href if stylesheets are inline and don't
+	have a href attribute.
+
 2017-01-16  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* CMakeLists.txt, INSTALL, src/CMakeLists.txt: Removed handling of

@@ -2908,8 +2908,13 @@
 
     for (var sheet_i = 0; sheet_i < document.styleSheets.length; sheet_i++) {
       href = document.styleSheets[sheet_i].href;
-      if (href.match (/\/main\.[0-9a-z]*\.css$/) ||
-          href.match (/\/gsa-style.css$/)) {
+
+      if (!gsa.has_value(href)) {
+        continue;
+      }
+
+      if (href.match(/\/main\.[0-9a-z]*\.css$/) ||
+          href.match(/\/gsa-style.css$/)) {
         break;
       }
     }
