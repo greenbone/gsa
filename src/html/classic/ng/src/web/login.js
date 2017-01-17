@@ -30,6 +30,7 @@ import logger from '../log.js';
 import Header from './header.js';
 import Footer from './footer.js';
 import Layout from './layout.js';
+import Main from './main.js';
 
 import FormGroup from './form/formgroup.js';
 import TextField from './form/textfield.js';
@@ -120,10 +121,10 @@ export class Login extends React.Component {
     return (
       <Layout flex="column" className="login">
         <Header/>
-        <Layout flex align={['space-around', 'center']} wrap className="main">
+        <Main flex align={['space-around', 'center']} wrap>
           <LoginForm onSubmit={this.onSubmit} error={message}/>
           <LogoBox/>
-        </Layout>
+        </Main>
         <Footer className="none"/>
       </Layout>
     );

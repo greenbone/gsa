@@ -2,7 +2,7 @@ html, body, #app, #app > div, #page {
   height: 100%;
 }
 
-main, .page {
+.page {
   padding: 5px 10px;
 }
 

@@ -29,6 +29,7 @@ import {is_defined} from '../utils.js';
 
 import Header from './header.js';
 import Footer from './footer.js';
+import Main from './main.js';
 
 import './css/page.css';
 
@@ -66,9 +67,9 @@ export class Page extends React.Component {
     return (
       <StickyContainer id="page">
         <Header/>
-        <main>
+        <Main>
           {children}
-        </main>
+        </Main>
         <Footer/>
       </StickyContainer>
     );
