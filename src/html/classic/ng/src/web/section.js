@@ -48,8 +48,8 @@ Section.propTypes = {
 
 export const SectionHeader = props => {
   return (
-    <Layout flex className="section-header">
-      <h2 className="auto">
+    <Layout flex align={['space-between', 'end']} className="section-header">
+      <h2>
         <Icon size="large" img={props.img}/>
         {props.title}
       </h2>

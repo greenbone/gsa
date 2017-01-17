@@ -1,5 +1,13 @@
 2017-01-17 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/css/section.css: Remove unused css classes.
+
+	* src/html/classic/ng/src/web/section.js: Fix layout of items in the section
+	header e.g. the dashboard controls. Always show them on the bottom of the
+	section header.
+
+2017-01-17 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/css/main.css,
 	src/html/classic/ng/src/web/css/page.css,
 	src/html/classic/ng/src/web/login.js,
