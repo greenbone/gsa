@@ -451,9 +451,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
         <divider/>
         <xsl:if test="gsa:may-op ('GET_NOTES')">
           <item>
-            <page>get_notes</page>
+            <url>/ng/notes</url>
             <name><xsl:value-of select="gsa:i18n ('Notes')"/></name>
-            <filter>sort=nvt</filter>
           </item>
         </xsl:if>
         <xsl:if test="gsa:may-op ('GET_OVERRIDES')">

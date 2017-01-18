@@ -4991,7 +4991,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:value-of select="gsa:i18n ('Notes')"/>:
         </td>
         <td>
-          <a href="/omp?cmd=get_notes&amp;filter=task_id={@id} sort=nvt&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+          <a href="/ng/notes?filter=task_id={@id} sort=nvt&amp;filt_id={/envelope/params/filt_id}"
              title="{gsa-i18n:strformat (gsa:i18n ('Notes on Task %1'), name)}">
             <xsl:value-of select="count (../../get_notes_response/note)"/>
           </a>
@@ -22590,7 +22590,7 @@ should not have received it.
     <tr>
       <td><xsl:value-of select="gsa:i18n ('Notes')"/>:</td>
       <td>
-        <a href="/omp?cmd=get_notes&amp;filter=nvt_id={@oid} sort=nvt&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+        <a href="/ng/notes?filter=nvt_id={@oid} sort=nvt&amp;filt_id={/envelope/params/filt_id}"
            title="{gsa-i18n:strformat (gsa:i18n ('Notes on NVT %1'), name)}">
           <xsl:value-of select="count (../../../get_notes_response/note)"/>
         </a>
@@ -23846,7 +23846,7 @@ should not have received it.
   <div class="section-header">
     <xsl:call-template name="minor-details"/>
     <h1>
-      <a href="/omp?cmd=get_notes&amp;token={/envelope/token}"
+      <a href="/ng/notes"
          title="{gsa:i18n ('Notes')}">
         <img class="icon icon-lg" src="/img/note.svg" alt="Notes"/>
       </a>
