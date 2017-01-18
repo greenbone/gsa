@@ -1,5 +1,10 @@
 2017-01-18 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/utils.js: Add function to shorten strings to a fixed
+	length.
+
+2017-01-18 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/utils.js,
 	src/html/classic/ng/src/web/app.js,
 	src/html/classic/ng/src/web/render.js,

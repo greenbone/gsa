@@ -257,4 +257,17 @@ export function capitalize_first_letter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
+export function shorten(text, length = 60) {
+  if (!is_defined(text)) {
+    return '';
+  }
+
+  if (text.length < length) {
+    return text;
+  }
+
+  return text.substr(0, length) + '...';
+
+}
+
 // vim: set ts=2 sw=2 tw=80:
