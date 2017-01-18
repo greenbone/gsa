@@ -2466,16 +2466,21 @@
       filter_info: old_data.filter_info
     };
 
+    if (!old_data.records || old_data.records.length === 0) {
+      return new_data;
+    }
+
     var x_field = params && params.x_field ? params.x_field : 'value';
 
     var step = 1;
     var old_index = 0;
-    var firs_record = old_data.records[0]
+    var first_record = old_data.records[0];
     var value = gsa.parse_float(first_record[x_field]);
     var prev_record;
     var record;
     var new_record;
     var col_info;
+    var field;
 
     while (old_index < old_data.records.length) {
       record = old_data.records[old_index];
@@ -2510,7 +2515,7 @@
     }
 
     return new_data;
-  }
+  };
 
   /*
    * In-chart link generator functions
