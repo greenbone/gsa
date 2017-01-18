@@ -1140,20 +1140,25 @@
     this.quantile_fill = 0;
     this.fill_in_missing = 0;
 
-    if (gsa.is_defined (gen_params.extra)) {
-      if (gsa.is_defined (gen_params.extra.is_timeline))
+    if (gsa.is_defined(gen_params.extra)) {
+      if (gsa.is_defined(gen_params.extra.is_timeline)) {
         this.is_timeline = gen_params.extra.is_timeline;
-      if (! this.is_timeline &&
-          gsa.is_defined (gen_params.extra.fill_in_missing))
+      }
+      if (!this.is_timeline &&
+          gsa.is_defined(gen_params.extra.fill_in_missing)) {
         this.fill_in_missing = gen_params.extra.fill_in_missing;
+      }
 
-      if (gsa.is_defined (gen_params.extra.y_area))
+      if (gsa.is_defined(gen_params.extra.y_area)) {
         this.y_area = gen_params.extra.y_area;
-      if (gsa.is_defined (gen_params.extra.y2_area))
+      }
+      if (gsa.is_defined (gen_params.extra.y2_area)) {
         this.y2_area = gen_params.extra.y2_area;
+      }
 
-      if (gsa.is_defined (gen_params.extra.quantile_fill))
+      if (gsa.is_defined(gen_params.extra.quantile_fill)) {
         this.quantile_fill = gen_params.extra.quantile_fill;
+      }
     }
 
     if (gen_params.y_fields && gen_params.y_fields[0]  &&
