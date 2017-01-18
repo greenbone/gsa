@@ -1,5 +1,11 @@
 2017-01-18 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/models/note.js: Fix parsing note texts and add
+	isExcerpt and isOrphan methods to Note model class. Also parse severity as
+	float, result and task as Model class instances.
+
+2017-01-18 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/utils.js: Add function to shorten strings to a fixed
 	length.
 

@@ -21,6 +21,8 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+import {is_defined, is_empty, parse_float} from '../../utils.js';
+
 import Model from '../model.js';
 
 import Nvt from './nvt.js';
@@ -34,7 +36,23 @@ export class Note extends Model {
       ret.nvt = new Nvt(ret.nvt);
     }
 
-    ret.text = ret.text.__text;
+    if (is_defined(ret.text.__text)) {
+      ret.text =  ret.text.__text;
+      ret.text_excerpt = ret.text.__excerpt;
+    }
+    else {
+      ret.text_excerpt = '0';
+    }
+
+    ret.severity = is_empty(ret.severity) ? undefined :
+      parse_float(ret.severity);
+
+    if (is_defined(ret.task)) {
+      ret.task = new Model(ret.task);
+    }
+    if (is_defined(ret.result)) {
+      ret.result = new Model(ret.result);
+    }
     return ret;
   }
 
@@ -48,6 +66,14 @@ export class Note extends Model {
 
   isInUse() {
     return this.in_use === '1';
+  }
+
+  isOrphan() {
+    return this.orphan === '1';
+  }
+
+  isExcerpt() {
+    return this.text_excerpt === '1';
   }
 }
 
