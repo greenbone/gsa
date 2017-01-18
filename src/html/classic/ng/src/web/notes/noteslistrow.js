@@ -24,6 +24,7 @@
 import React from 'react';
 
 import _ from '../../locale.js';
+import {shorten} from '../../utils.js';
 
 import Layout from '../layout.js';
 import LegacyLink from '../legacylink.js';
@@ -70,7 +71,10 @@ export class NotesListRow extends EntityRow {
       <tr>
         <td>
           <LegacyLink cmd="get_note" note_id={note.id}>
-            {note.text}
+            {note.isOrphan() &&
+              <div><b>{_('Orphan')}</b></div>
+            }
+            {shorten(note.text)}
           </LegacyLink>
         </td>
         <td>
