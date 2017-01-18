@@ -62,6 +62,25 @@ export class NoteCommand extends EntityCommand {
       text,
     }).then(xhr => this.getModelFromResponse(xhr));
   }
+
+  save(args) {
+    let {note_id, active = '-1', days = 30, hosts = '', note_result_id = '',
+      port = '', severity = '', note_task_id = '', text} = args;
+    log.debug('Saving note', args);
+    return this.httpPost({
+      cmd: 'save_note',
+      next: 'get_note',
+      note_id,
+      active,
+      days,
+      hosts,
+      note_result_id,
+      note_task_id,
+      port,
+      severity,
+      text,
+    }).then(xhr => this.getModelFromResponse(xhr));
+  }
 }
 
 export class NotesCommand extends EntitiesCommand {

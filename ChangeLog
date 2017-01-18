@@ -1,5 +1,10 @@
 2017-01-18 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/commands/notes.js: Implement save method for
+	note gmp commands. This allows updating notes via gmp.
+
+2017-01-18 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/notes/noteslistrow.js: Add missing functionality
 	from old note list text column to ng. Display if a note is orphaned and
 	shorten note text to 60 characters in the table.
