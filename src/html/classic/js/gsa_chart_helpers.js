@@ -2466,49 +2466,36 @@
       filter_info: old_data.filter_info
     };
 
-    var x_field = 'value';
-    if (params) {
-      if (params.x_field) {
-        x_field = params.x_field;
-      }
-    }
+    var x_field = params && params.x_field ? params.x_field : 'value';
 
     var step = 1;
     var old_index = 0;
-    var value = Number(old_data.records[0][x_field]);
-    var prev_values = {};
-    var fields = [];
-    for (var field in old_data.records[0]) {
-      if (field !== x_field) {
-        fields.push(field);
-      }
-    }
-    var fillers = {};
+    var firs_record = old_data.records[0]
+    var value = gsa.parse_float(first_record[x_field]);
+    var prev_record;
+    var record;
+    var new_record;
+    var col_info;
 
     while (old_index < old_data.records.length) {
-      if (Number(old_data.records[old_index][x_field]) <= value) {
-        new_data.records.push(old_data.records[old_index]);
-        for (field in old_data.column_info.columns) {
-          prev_values[field] = old_data.records[old_index][field];
-        }
-        old_index ++;
+      record = old_data.records[old_index];
+
+      if (gsa.parse_float(record[x_field]) <= value) {
+        new_data.records.push(record);
+        prev_record = record;
+        old_index++;
       }
       else {
-        var new_record = {};
+        new_record = {};
         new_record[x_field] = value;
 
         for (field in old_data.column_info.columns) {
+          col_info = old_data.column_info.columns[field];
           if (field !== x_field) {
-            if (fillers[field] === '!previous') {
-              new_record[field] = prev_values[field] ? prev_values[field] : 0;
+            if (col_info.stat === 'c_count') {
+              new_record[field] = prev_record[field] ? prev_record[field] : 0;
             }
-            else if (gsa.has_value(fillers[field])) {
-              new_record[field] = fillers[field];
-            }
-            else if (old_data.column_info.columns[field].stat === 'c_count') {
-              new_record[field] = prev_values[field] ? prev_values[field] : 0;
-            }
-            else if (old_data.column_info.columns[field].stat === 'count') {
+            else if (col_info.stat === 'count') {
               new_record[field] = 0;
             }
             else {
