@@ -1,5 +1,10 @@
 2017-01-18 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/gsad_omp.c (get_many): Set notes and overrides sort order to nvt by
+	default. Sorting by name as default doesn't apply to both types.
+
+2017-01-18 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/notes/dialog.js,
 	src/html/classic/ng/src/web/notes/noteslistrow.js: Allow editing of existing
 	notes by implmenting the edit note dialog.

@@ -2259,6 +2259,10 @@ get_many (openvas_connection_t *connection, const char *type,
                                     ? autofp_value
                                     : "0");
             }
+          else if (strcmp (type, "note") == 0 || strcmp (type, "override") == 0)
+            {
+              filter = "rows=-2 sort=nvt";
+            }
           else if (strcmp (type, "task"))
             filter = "rows=-2";
           else
