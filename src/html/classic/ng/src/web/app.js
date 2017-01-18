@@ -30,16 +30,21 @@ import {Router, Route, IndexRoute, Redirect, browserHistory
 import Gmp from '../gmp/gmp.js';
 import {HttpInterceptor} from '../gmp/http.js';
 
-import {is_defined, get_severity_levels} from '../utils.js';
+import {is_defined} from '../utils.js';
 import _ from '../locale.js';
 
 import Login from './login.js';
 import Page from './page.js';
 import Home from './home.js';
+import {get_severity_levels} from './render.js';
+
 import Task from './tasks/task.js';
 import Tasks from './tasks/tasks.js';
+
 import Results from './results/results.js';
+
 import Notes from './notes/notes.js';
+
 import ScansDashboard from './dashboard/scans.js';
 import AssetsDashboard from './dashboard/assets.js';
 import SecinfoDashboard from './dashboard/secinfo.js';

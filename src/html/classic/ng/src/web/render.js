@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,8 +21,10 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+import d3 from 'd3';
 import React from 'react';
 
+import _ from '../locale.js';
 import {is_defined, map} from '../utils.js';
 
 export function render_options(list, default_opt_value, default_opt = '--') {
@@ -39,6 +41,103 @@ export function render_options(list, default_opt_value, default_opt = '--') {
     );
   }
   return options;
+}
+
+export const cvss_number_format = d3.format('0.1f');
+
+export function cvss_risk_factor(score, type) {
+  if (type === 'classic') {
+    if (score === 0) {
+      return 'Log';
+    }
+    if (score > 0 && score <= 2) {
+      return 'Low';
+    }
+    if (score > 2 && score <= 5) {
+      return 'Medium';
+    }
+    if (score > 5 && score <= 10) {
+      return 'High';
+    }
+    return 'None';
+  }
+  if (type === 'pci-dss') {
+    if (score === 0 && score < 4) {
+      return 'Log';
+    }
+    else if (score >= 4) {
+      return 'High';
+    }
+    return 'None';
+  }
+
+  if (score === 0) {
+    return 'Log';
+  }
+  else if (score > 0 && score < 4) {
+    return 'Low';
+  }
+  else if (score >= 4 && score < 7) {
+    return 'Medium';
+  }
+  else if (score >= 7 && score <= 10) {
+    return 'High';
+  }
+  return 'None';
+}
+
+export function result_cvss_risk_factor(score) {
+  if (score > 0) {
+    return _(cvss_risk_factor(score));
+  }
+  if (score === 0) {
+    return _('Log');
+  }
+  if (score === -1) {
+    return _('False Positive');
+  }
+  if (score === -2) {
+    return _('Debug');
+  }
+  if (score === -3) {
+    return _('Error');
+  }
+  return _('N/A');
+}
+
+export function get_severity_levels(type) {
+  if (type === 'classic') {
+    return {
+      max_high: 10.0,
+      min_high: 5.1,
+      max_medium: 5.0,
+      min_medium: 2.1,
+      max_low: 2.0,
+      min_low: 0.1,
+      max_log: 0.0,
+    };
+  }
+  if (type === 'pci-dss') {
+    return {
+      max_high: 10.0,
+      min_high: 4.0,
+      max_medium: 3.9,
+      min_medium: 3.9,
+      max_low: 3.9,
+      min_low: 3.9,
+      max_log: 3.9,
+    };
+  }
+
+  return {
+    max_high: 10.0,
+    min_high: 7.0,
+    max_medium: 6.9,
+    min_medium: 4.0,
+    max_low: 3.9,
+    min_low: 0.1,
+    max_log: 0.0,
+  };
 }
 
 // vim: set ts=2 sw=2 tw=80:

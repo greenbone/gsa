@@ -23,70 +23,12 @@
 
 import React from 'react';
 
-import {parse_float, is_defined, cvss_number_format} from '../utils.js';
-import {translate as _} from '../locale.js';
+import {parse_float, is_defined} from '../utils.js';
+import _ from '../locale.js';
+
+import {result_cvss_risk_factor, cvss_number_format} from './render.js';
 
 import './css/statusbar.css';
-
-function cvss_risk_factor(score, type) {
-  if (type === 'classic') {
-    if (score === 0) {
-      return 'Log';
-    }
-    if (score > 0 && score <= 2) {
-      return 'Low';
-    }
-    if (score > 2 && score <= 5) {
-      return 'Medium';
-    }
-    if (score > 5 && score <= 10) {
-      return 'High';
-    }
-    return 'None';
-  }
-  if (type === 'pci-dss') {
-    if (score === 0 && score < 4) {
-      return 'Log';
-    }
-    else if (score >= 4) {
-      return 'High';
-    }
-    return 'None';
-  }
-
-  if (score === 0) {
-    return 'Log';
-  }
-  else if (score > 0 && score < 4) {
-    return 'Low';
-  }
-  else if (score >= 4 && score < 7) {
-    return 'Medium';
-  }
-  else if (score >= 7 && score <= 10) {
-    return 'High';
-  }
-  return 'None';
-}
-
-function result_cvss_risk_factor(score) {
-  if (score > 0) {
-    return _(cvss_risk_factor(score));
-  }
-  if (score === 0) {
-    return _('Log');
-  }
-  if (score === -1) {
-    return _('False Positive');
-  }
-  if (score === -2) {
-    return _('Debug');
-  }
-  if (score === -3) {
-    return _('Error');
-  }
-  return _('N/A');
-}
 
 export const SeverityBar = props => {
   let {severity, scale = 10} = props;

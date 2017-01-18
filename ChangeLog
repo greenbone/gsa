@@ -1,5 +1,14 @@
 2017-01-18 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/utils.js,
+	src/html/classic/ng/src/web/app.js,
+	src/html/classic/ng/src/web/render.js,
+	src/html/classic/ng/src/web/severitybar.js: Move severity helper
+	functions cvss_number_format, cvss_risk_factor and result_cvss_risk_factor
+	into render js module.
+
+2017-01-18 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_chart_helpers.js (gch.fill_in_numbered_records):
 	Avoid crash if data doesn't contain any values and fix function.
 

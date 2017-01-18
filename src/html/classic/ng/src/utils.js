@@ -21,8 +21,6 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import d3 from 'd3';
-
 const x2js = new window.X2JS();
 
 export const is_array = Array.isArray;
@@ -255,46 +253,8 @@ export function convert_data(prefix, data, fields) {
   return converted;
 }
 
-
-export function get_severity_levels(type) {
-  if (type === 'classic') {
-    return {
-      max_high: 10.0,
-      min_high: 5.1,
-      max_medium: 5.0,
-      min_medium: 2.1,
-      max_low: 2.0,
-      min_low: 0.1,
-      max_log: 0.0,
-    };
-  }
-  if (type === 'pci-dss') {
-    return {
-      max_high: 10.0,
-      min_high: 4.0,
-      max_medium: 3.9,
-      min_medium: 3.9,
-      max_low: 3.9,
-      min_low: 3.9,
-      max_log: 3.9,
-    };
-  }
-
-  return {
-    max_high: 10.0,
-    min_high: 7.0,
-    max_medium: 6.9,
-    min_medium: 4.0,
-    max_low: 3.9,
-    min_low: 0.1,
-    max_log: 0.0,
-  };
-}
-
 export function capitalize_first_letter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
-
-export const cvss_number_format = d3.format('0.1f');
 
 // vim: set ts=2 sw=2 tw=80:
