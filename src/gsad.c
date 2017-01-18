@@ -1314,7 +1314,7 @@ exec_omp_post (http_connection_t *con,
   const gchar *cmd, *caller, *language, *password;
   gboolean xml_flag;
   authentication_reason_t auth_reason;
-  openvas_connection_t connection;
+  gvm_connection_t connection;
   cmd_response_data_t *response_data;
 
   params_mhd_validate (con_info->params);
@@ -1764,7 +1764,7 @@ exec_omp_post (http_connection_t *con,
   ret = handler_create_response (con, res, response_data, new_sid);
 
   credentials_free (credentials);
-  openvas_connection_close (&connection);
+  gvm_connection_close (&connection);
   g_free (new_sid);
 
   return ret;
@@ -1916,7 +1916,7 @@ exec_omp_get (http_connection_t *con,
   const char *cmd = NULL;
   const int CMD_MAX_SIZE = 27;   /* delete_trash_lsc_credential */
   params_t *params = con_info->params;
-  openvas_connection_t connection;
+  gvm_connection_t connection;
   char *res = NULL;
   gsize res_len = 0;
   http_response_t *response;
@@ -2307,7 +2307,7 @@ exec_omp_get (http_connection_t *con,
       add_guest_chart_content_security_headers (response);
     }
 
-  openvas_connection_close (&connection);
+  gvm_connection_close (&connection);
 
   return handler_send_response (con, response, response_data, credentials->sid);
 }

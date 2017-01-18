@@ -1,3 +1,25 @@
+2017-01-18  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	Rename type and function calls with changing from module
+	"openvas_server" to "serverutils".
+
+	* src/gsad.c: Use gvm_connection_t instead of openvas_connection_t,
+	gvm_connection_close instead of openvas_connection_close.
+	
+	* src/gsad_http_handler.c: Use gvm_connection_t instead of
+	openvas_connection_t.
+
+	* src/gsad_omp.c: Include gvm/util/serverutils.h instead of
+	openvas/misc/openvas_server.h.
+	Use gvm_connection_t instead of openvas_connection_t,
+	gvm_connection_sendf instead of openvas_connection_sendf,
+	gvm_connection_sendf_xml instead of openvas_connection_sendf_xml,
+	gvm_connection_close instead of openvas_connection_close.
+
+	* src/gsad_omp.h: Include gvm/util/serverutils.h instead of
+	openvas/misc/openvas_server.h.
+	Use gvm_connection_t instead of openvas_connection_t.
+
 2017-01-18 Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/gsad.xsl, src/html/classic/omp.xsl: Link to ng for notes.

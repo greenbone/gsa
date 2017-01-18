@@ -832,7 +832,7 @@ handle_system_report (http_connection_t *connection,
   credentials_t *credentials = (credentials_t*)data;
   const char *slave_id;
   char *res;
-  openvas_connection_t con;
+  gvm_connection_t con;
   cmd_response_data_t *response_data;
 
   g_debug("Request for system report url %s", url);

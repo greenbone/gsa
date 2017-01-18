@@ -59,10 +59,10 @@
 #include "gsad_base.h" /* for xsl_transform */
 #include "xslt_i18n.h"
 
-#include <gvm/util/fileutils.h>
 #include <gvm/base/cvss.h>
+#include <gvm/util/fileutils.h>
+#include <gvm/util/serverutils.h> /* for gvm_connection_t */
 
-#include <openvas/misc/openvas_server.h>
 #include <openvas/omp/omp.h>
 #include <openvas/omp/xml.h>
 
@@ -131,181 +131,181 @@ int manager_port = 9390;
 /* Headers. */
 
 static int
-omp (openvas_connection_t *, credentials_t *, gchar **, entity_t *,
+omp (gvm_connection_t *, credentials_t *, gchar **, entity_t *,
      cmd_response_data_t*, const char *);
 
 static int
-ompf (openvas_connection_t *, credentials_t *, gchar **, entity_t *,
+ompf (gvm_connection_t *, credentials_t *, gchar **, entity_t *,
       cmd_response_data_t*,
       const char *, ...);
 
-static char *edit_role (openvas_connection_t *, credentials_t *, params_t *,
+static char *edit_role (gvm_connection_t *, credentials_t *, params_t *,
                         const char *, cmd_response_data_t*);
 
-static char *edit_task (openvas_connection_t *, credentials_t *, params_t *,
+static char *edit_task (gvm_connection_t *, credentials_t *, params_t *,
                         const char *, cmd_response_data_t*);
 
-static char *get_alert (openvas_connection_t *, credentials_t *, params_t *,
+static char *get_alert (gvm_connection_t *, credentials_t *, params_t *,
                         const char *, cmd_response_data_t*);
 
-static char *get_alerts (openvas_connection_t *, credentials_t *, params_t *,
+static char *get_alerts (gvm_connection_t *, credentials_t *, params_t *,
                          const char *, cmd_response_data_t*);
 
-static char *get_agent (openvas_connection_t *, credentials_t *, params_t *,
+static char *get_agent (gvm_connection_t *, credentials_t *, params_t *,
                         const char *, cmd_response_data_t*);
 
-static char *get_agents (openvas_connection_t *, credentials_t *, params_t *,
+static char *get_agents (gvm_connection_t *, credentials_t *, params_t *,
                          const char *, cmd_response_data_t*);
 
-static char *get_asset (openvas_connection_t *, credentials_t *, params_t *,
+static char *get_asset (gvm_connection_t *, credentials_t *, params_t *,
                         const char *, cmd_response_data_t*);
 
-static char *get_assets (openvas_connection_t *, credentials_t *, params_t *,
+static char *get_assets (gvm_connection_t *, credentials_t *, params_t *,
                          const char *, cmd_response_data_t*);
 
-static char *get_assets_chart (openvas_connection_t *, credentials_t *,
+static char *get_assets_chart (gvm_connection_t *, credentials_t *,
                                params_t *, const char *, cmd_response_data_t*);
 
 
-static char *get_task (openvas_connection_t *, credentials_t *, params_t *,
+static char *get_task (gvm_connection_t *, credentials_t *, params_t *,
                        const char *, cmd_response_data_t*);
 
-static char *get_tasks (openvas_connection_t *, credentials_t *, params_t *,
+static char *get_tasks (gvm_connection_t *, credentials_t *, params_t *,
                         const char *, cmd_response_data_t*);
 
-static char *get_tasks_chart (openvas_connection_t *, credentials_t *,
+static char *get_tasks_chart (gvm_connection_t *, credentials_t *,
                               params_t *, const char *, cmd_response_data_t*);
 
-static char *get_trash (openvas_connection_t *, credentials_t *, params_t *,
+static char *get_trash (gvm_connection_t *, credentials_t *, params_t *,
                         const char *, cmd_response_data_t*);
 
-static char *get_config_family (openvas_connection_t *, credentials_t *,
+static char *get_config_family (gvm_connection_t *, credentials_t *,
                                 params_t *, int, cmd_response_data_t*);
 
-static char *get_config (openvas_connection_t *, credentials_t *, params_t *,
+static char *get_config (gvm_connection_t *, credentials_t *, params_t *,
                          const char *, int, cmd_response_data_t*);
 
-static char *get_configs (openvas_connection_t *, credentials_t *, params_t *,
+static char *get_configs (gvm_connection_t *, credentials_t *, params_t *,
                           const char *, cmd_response_data_t*);
 
-static char *get_filter (openvas_connection_t *, credentials_t *, params_t *,
+static char *get_filter (gvm_connection_t *, credentials_t *, params_t *,
                          const char *, cmd_response_data_t*);
 
-static char *get_filters (openvas_connection_t *, credentials_t *, params_t *,
+static char *get_filters (gvm_connection_t *, credentials_t *, params_t *,
                           const char *, cmd_response_data_t*);
 
-static char *get_group (openvas_connection_t *, credentials_t *, params_t *,
+static char *get_group (gvm_connection_t *, credentials_t *, params_t *,
                         const char *, cmd_response_data_t*);
 
-static char *get_groups (openvas_connection_t *, credentials_t *, params_t *,
+static char *get_groups (gvm_connection_t *, credentials_t *, params_t *,
                          const char *, cmd_response_data_t*);
 
-static char *get_credential (openvas_connection_t *, credentials_t *,
+static char *get_credential (gvm_connection_t *, credentials_t *,
                              params_t *, const char *, cmd_response_data_t*);
 
-static char *get_credentials (openvas_connection_t *, credentials_t *,
+static char *get_credentials (gvm_connection_t *, credentials_t *,
                               params_t *, const char *, cmd_response_data_t*);
 
-static char *get_notes (openvas_connection_t *, credentials_t *, params_t *,
+static char *get_notes (gvm_connection_t *, credentials_t *, params_t *,
                         const char *, cmd_response_data_t*);
 
-static char *get_note (openvas_connection_t *, credentials_t *, params_t *,
+static char *get_note (gvm_connection_t *, credentials_t *, params_t *,
                        const char *, cmd_response_data_t*);
 
-static char *get_nvts (openvas_connection_t *, credentials_t *credentials,
+static char *get_nvts (gvm_connection_t *, credentials_t *credentials,
                        params_t *, const char *, const char *,
                        cmd_response_data_t*);
 
-static char *get_overrides (openvas_connection_t *, credentials_t *, params_t *,
+static char *get_overrides (gvm_connection_t *, credentials_t *, params_t *,
                             const char *, cmd_response_data_t*);
 
-static char *get_override (openvas_connection_t *, credentials_t *, params_t *,
+static char *get_override (gvm_connection_t *, credentials_t *, params_t *,
                            const char *, cmd_response_data_t*);
 
-static char *get_permission (openvas_connection_t *, credentials_t *,
+static char *get_permission (gvm_connection_t *, credentials_t *,
                              params_t *, const char *, cmd_response_data_t*);
 
-static char *get_permissions (openvas_connection_t *, credentials_t *,
+static char *get_permissions (gvm_connection_t *, credentials_t *,
                               params_t *, const char *, cmd_response_data_t*);
 
-static char *get_port_list (openvas_connection_t *, credentials_t *, params_t *,
+static char *get_port_list (gvm_connection_t *, credentials_t *, params_t *,
                             const char *, cmd_response_data_t*);
 
-static char *get_port_lists (openvas_connection_t *, credentials_t *,
+static char *get_port_lists (gvm_connection_t *, credentials_t *,
                              params_t *, const char *, cmd_response_data_t*);
 
-static char *edit_port_list (openvas_connection_t *, credentials_t *,
+static char *edit_port_list (gvm_connection_t *, credentials_t *,
                              params_t *, const char *, cmd_response_data_t*);
 
-static char *get_tag (openvas_connection_t *, credentials_t *, params_t *,
+static char *get_tag (gvm_connection_t *, credentials_t *, params_t *,
                       const char *, cmd_response_data_t*);
 
-static char *get_tags (openvas_connection_t *, credentials_t *, params_t *,
+static char *get_tags (gvm_connection_t *, credentials_t *, params_t *,
                        const char *, cmd_response_data_t*);
 
-static char *get_target (openvas_connection_t *, credentials_t *, params_t *,
+static char *get_target (gvm_connection_t *, credentials_t *, params_t *,
                          const char *, cmd_response_data_t*);
 
-static char *get_targets (openvas_connection_t *, credentials_t *, params_t *,
+static char *get_targets (gvm_connection_t *, credentials_t *, params_t *,
                           const char *, cmd_response_data_t*);
 
-static char *get_report (openvas_connection_t *connection,
+static char *get_report (gvm_connection_t *connection,
                          credentials_t * credentials,
                          params_t *params, const char *commands,
                          const char *extra_xml,
                          int *error, cmd_response_data_t* response_data);
 
-static char *get_report_format (openvas_connection_t *, credentials_t *,
+static char *get_report_format (gvm_connection_t *, credentials_t *,
                                 params_t *, const char *, cmd_response_data_t*);
 
-static char *get_report_formats (openvas_connection_t *, credentials_t *,
+static char *get_report_formats (gvm_connection_t *, credentials_t *,
                                  params_t *, const char *,
                                  cmd_response_data_t*);
 
-static char *get_report_section (openvas_connection_t *, credentials_t *,
+static char *get_report_section (gvm_connection_t *, credentials_t *,
                                  params_t *, const char *,
                                  cmd_response_data_t*);
 
-static char *get_reports (openvas_connection_t *, credentials_t *, params_t *,
+static char *get_reports (gvm_connection_t *, credentials_t *, params_t *,
                           const char *, cmd_response_data_t*);
 
-static char *get_result_page (openvas_connection_t *, credentials_t *,
+static char *get_result_page (gvm_connection_t *, credentials_t *,
                               params_t *, const char *, cmd_response_data_t*);
 
-static char *get_results (openvas_connection_t *, credentials_t *, params_t *,
+static char *get_results (gvm_connection_t *, credentials_t *, params_t *,
                           const char *, cmd_response_data_t*);
 
-static char *get_role (openvas_connection_t *, credentials_t *, params_t *,
+static char *get_role (gvm_connection_t *, credentials_t *, params_t *,
                        const char *, cmd_response_data_t*);
 
-static char *get_roles (openvas_connection_t *, credentials_t *, params_t *,
+static char *get_roles (gvm_connection_t *, credentials_t *, params_t *,
                         const char *, cmd_response_data_t*);
 
-static char *get_scanner (openvas_connection_t *, credentials_t *, params_t *,
+static char *get_scanner (gvm_connection_t *, credentials_t *, params_t *,
                           const char *, cmd_response_data_t*);
 
-static char *get_scanners (openvas_connection_t *, credentials_t *, params_t *,
+static char *get_scanners (gvm_connection_t *, credentials_t *, params_t *,
                            const char *, cmd_response_data_t*);
 
-static char *get_schedule (openvas_connection_t *, credentials_t *, params_t *,
+static char *get_schedule (gvm_connection_t *, credentials_t *, params_t *,
                            const char *, cmd_response_data_t*);
 
-static char *get_schedules (openvas_connection_t *, credentials_t *, params_t *,
+static char *get_schedules (gvm_connection_t *, credentials_t *, params_t *,
                             const char *, cmd_response_data_t*);
 
-static char *get_user (openvas_connection_t *, credentials_t *, params_t *,
+static char *get_user (gvm_connection_t *, credentials_t *, params_t *,
                        const char *, cmd_response_data_t*);
 
-static char *get_users (openvas_connection_t *, credentials_t *, params_t *,
+static char *get_users (gvm_connection_t *, credentials_t *, params_t *,
                         const char *, cmd_response_data_t*);
 
-static char *get_vulns (openvas_connection_t *, credentials_t *, params_t *,
+static char *get_vulns (gvm_connection_t *, credentials_t *, params_t *,
                         const char *, cmd_response_data_t*);
 
-static char *wizard (openvas_connection_t *, credentials_t *, params_t *,
+static char *wizard (gvm_connection_t *, credentials_t *, params_t *,
                      const char *, cmd_response_data_t*);
 
-static char *wizard_get (openvas_connection_t *, credentials_t *, params_t *,
+static char *wizard_get (gvm_connection_t *, credentials_t *, params_t *,
                          const char *, cmd_response_data_t*);
 
 int token_user_remove (const char *);
@@ -316,12 +316,12 @@ static gchar *next_page_url (credentials_t *, params_t *, const char *,
                              const char *, const char *, const char *,
                              const char *);
 
-static gchar *action_result_page (openvas_connection_t *, credentials_t *,
+static gchar *action_result_page (gvm_connection_t *, credentials_t *,
                                   params_t *, cmd_response_data_t *,
                                   const char*, const char*, const char*,
                                   const char*);
 
-static gchar* response_from_entity (openvas_connection_t *, credentials_t*,
+static gchar* response_from_entity (gvm_connection_t *, credentials_t*,
                                     params_t *, entity_t, int, const char*,
                                     const char *, const char*, const char*,
                                     const char *, cmd_response_data_t *);
@@ -447,7 +447,7 @@ find_by_value (gchar *key, gchar *value,  find_by_value_t *data)
  *         -3 could not read entity from server.
  */
 static int
-filter_exists (openvas_connection_t *connection, const char *filt_id)
+filter_exists (gvm_connection_t *connection, const char *filt_id)
 {
   entity_t entity;
 
@@ -457,8 +457,8 @@ filter_exists (openvas_connection_t *connection, const char *filt_id)
     return 1;
 
   /* check if filter still exists */
-  if (openvas_connection_sendf (connection, "<get_filters filter_id='%s'/>",
-                                filt_id))
+  if (gvm_connection_sendf (connection, "<get_filters filter_id='%s'/>",
+                            filt_id))
     {
       return -2;
     }
@@ -483,7 +483,7 @@ filter_exists (openvas_connection_t *connection, const char *filt_id)
  * @return Result of XSL transformation.
  */
 static char *
-xsl_transform_omp (openvas_connection_t *connection,
+xsl_transform_omp (gvm_connection_t *connection,
                    credentials_t * credentials, params_t *params, gchar * xml,
                    cmd_response_data_t *response_data)
 {
@@ -767,7 +767,7 @@ member1 (params_t *params, const char *string)
  * @return XSL transformed error message on failure, NULL on success.
  */
 static char *
-check_modify_config (openvas_connection_t *connection,
+check_modify_config (gvm_connection_t *connection,
                      credentials_t *credentials, params_t *params,
                      const char* next, const char* fail_next, int* success,
                      cmd_response_data_t *response_data)
@@ -926,7 +926,7 @@ set_http_status_from_entity (entity_t entity,
  *         error.
  */
 static int
-omp (openvas_connection_t *connection, credentials_t *credentials,
+omp (gvm_connection_t *connection, credentials_t *credentials,
      gchar **response, entity_t *entity_return,
      cmd_response_data_t *response_data, const char *command)
 {
@@ -936,7 +936,7 @@ omp (openvas_connection_t *connection, credentials_t *credentials,
   if (entity_return)
     *entity_return = NULL;
 
-  ret = openvas_connection_sendf (connection, "%s", command);
+  ret = gvm_connection_sendf (connection, "%s", command);
   if (ret == -1)
     {
       return 1;
@@ -969,7 +969,7 @@ omp (openvas_connection_t *connection, credentials_t *credentials,
  *         3 command failed, 4 connect error.
  */
 static int
-simple_ompf (openvas_connection_t *connection, const gchar *message_operation,
+simple_ompf (gvm_connection_t *connection, const gchar *message_operation,
              credentials_t *credentials, gchar **response,
              cmd_response_data_t *response_data,
              const char *format, ...)
@@ -1089,7 +1089,7 @@ simple_ompf (openvas_connection_t *connection, const gchar *message_operation,
  *         2 read error.
  */
 static int
-ompf (openvas_connection_t *connection, credentials_t *credentials,
+ompf (gvm_connection_t *connection, credentials_t *credentials,
       gchar **response, entity_t *entity_return,
       cmd_response_data_t *response_data, const char *format, ...)
 {
@@ -1118,7 +1118,7 @@ ompf (openvas_connection_t *connection, credentials_t *credentials,
  * @return     -1 internal error, 0 success, 1 send error, 2 read error.
  */
 static int
-setting_get_value (openvas_connection_t *connection, const char *setting_id,
+setting_get_value (gvm_connection_t *connection, const char *setting_id,
                    gchar **value, cmd_response_data_t *response_data)
 {
   int ret;
@@ -1128,9 +1128,9 @@ setting_get_value (openvas_connection_t *connection, const char *setting_id,
 
   *value = NULL;
 
-  ret = openvas_connection_sendf (connection,
-                                  "<get_settings setting_id=\"%s\"/>",
-                                  setting_id);
+  ret = gvm_connection_sendf (connection,
+                              "<get_settings setting_id=\"%s\"/>",
+                              setting_id);
   if (ret)
     return 1;
 
@@ -1445,7 +1445,7 @@ next_page_url (credentials_t *credentials, params_t *params,
  * @return Result of XSL transformation.
  */
 static gchar *
-action_result_page (openvas_connection_t *connection,
+action_result_page (gvm_connection_t *connection,
                     credentials_t *credentials, params_t *params,
                     cmd_response_data_t *response_data,
                     const char* action, const char* status,
@@ -1481,7 +1481,7 @@ action_result_page (openvas_connection_t *connection,
  * @return Result of XSL transformation.
  */
 gchar *
-message_invalid (openvas_connection_t *connection,
+message_invalid (gvm_connection_t *connection,
                  credentials_t *credentials, params_t *params,
                  cmd_response_data_t *response_data, const char *message,
                  const char *status, const char *op_name, const char *next_cmd)
@@ -1506,7 +1506,7 @@ message_invalid (openvas_connection_t *connection,
  * @param[in]  connection     Connection to manager
  */
 static gchar*
-response_from_entity (openvas_connection_t *connection,
+response_from_entity (gvm_connection_t *connection,
                       credentials_t* credentials, params_t *params,
                       entity_t entity, int no_redirect,
                       const char* override_next, const char *default_next,
@@ -1565,7 +1565,7 @@ response_from_entity (openvas_connection_t *connection,
  * @return Result of XSL transformation.
  */
 static char *
-generate_page (openvas_connection_t *connection, credentials_t *credentials,
+generate_page (gvm_connection_t *connection, credentials_t *credentials,
                params_t *params, gchar *response, const gchar *next,
                cmd_response_data_t* response_data)
 {
@@ -1781,7 +1781,7 @@ generate_page (openvas_connection_t *connection, credentials_t *credentials,
  * @return Result of XSL transformation.
  */
 static char *
-next_page (openvas_connection_t *connection, credentials_t *credentials,
+next_page (gvm_connection_t *connection, credentials_t *credentials,
            params_t *params, gchar *response,
            cmd_response_data_t* response_data)
 {
@@ -1809,7 +1809,7 @@ next_page (openvas_connection_t *connection, credentials_t *credentials,
  * @return Result of XSL transformation.
  */
 char *
-get_one (openvas_connection_t *connection, const char *type,
+get_one (gvm_connection_t *connection, const char *type,
          credentials_t * credentials, params_t *params,
          const char *extra_xml, const char *extra_attribs,
          cmd_response_data_t* response_data)
@@ -1905,19 +1905,19 @@ get_one (openvas_connection_t *connection, const char *type,
 
   /* Get the resource. */
 
-  if (openvas_connection_sendf (connection,
-                                "<get_%ss"
-                                " %s_id=\"%s\""
-                                " sort_field=\"%s\""
-                                " sort_order=\"%s\""
-                                " details=\"1\""
-                                " %s/>",
-                                type,
-                                type,
-                                id,
-                                sort_field ? sort_field : "name",
-                                sort_order ? sort_order : "ascending",
-                                extra_attribs ? extra_attribs : "")
+  if (gvm_connection_sendf (connection,
+                            "<get_%ss"
+                            " %s_id=\"%s\""
+                            " sort_field=\"%s\""
+                            " sort_order=\"%s\""
+                            " details=\"1\""
+                            " %s/>",
+                            type,
+                            type,
+                            id,
+                            sort_field ? sort_field : "name",
+                            sort_order ? sort_order : "ascending",
+                            extra_attribs ? extra_attribs : "")
       == -1)
     {
       g_string_free (xml, TRUE);
@@ -1944,14 +1944,14 @@ get_one (openvas_connection_t *connection, const char *type,
 
   /* Get tag names */
 
-  if (openvas_connection_sendf (connection,
-                                "<get_tags"
-                                " filter=\"resource_type=%s"
-                                "          first=1"
-                                "          rows=-1\""
-                                " names_only=\"1\""
-                                "/>",
-                                type)
+  if (gvm_connection_sendf (connection,
+                            "<get_tags"
+                            " filter=\"resource_type=%s"
+                            "          first=1"
+                            "          rows=-1\""
+                            " names_only=\"1\""
+                            "/>",
+                            type)
       == -1)
     {
       g_string_free (xml, TRUE);
@@ -1983,20 +1983,20 @@ get_one (openvas_connection_t *connection, const char *type,
   if ((strcmp (type, "user") == 0)
       || (strcmp (type, "group") == 0)
       || (strcmp (type, "role") == 0))
-    ret = openvas_connection_sendf (connection,
-                                    "<get_permissions"
-                                    " filter=\"subject_uuid=%s"
-                                    "          and not resource_uuid=&quot;&quot;"
-                                    "          or resource_uuid=%s"
-                                    "          first=1 rows=-1\"/>",
-                                    id,
-                                    id);
+    ret = gvm_connection_sendf (connection,
+                                "<get_permissions"
+                                " filter=\"subject_uuid=%s"
+                                "          and not resource_uuid=&quot;&quot;"
+                                "          or resource_uuid=%s"
+                                "          first=1 rows=-1\"/>",
+                                id,
+                                id);
   else
-    ret = openvas_connection_sendf (connection,
-                                    "<get_permissions"
-                                    " filter=\"resource_uuid=%s"
-                                    "          first=1 rows=-1\"/>",
-                                    id);
+    ret = gvm_connection_sendf (connection,
+                                "<get_permissions"
+                                " filter=\"resource_uuid=%s"
+                                "          first=1 rows=-1\"/>",
+                                id);
   if (ret == -1)
     {
       g_string_free (xml, TRUE);
@@ -2044,7 +2044,7 @@ get_one (openvas_connection_t *connection, const char *type,
  * @return Result of XSL transformation.
  */
 static char *
-get_many (openvas_connection_t *connection, const char *type,
+get_many (gvm_connection_t *connection, const char *type,
           credentials_t *credentials, params_t *params,
           const char *extra_xml, const char *extra_attribs,
           cmd_response_data_t* response_data)
@@ -2316,12 +2316,12 @@ get_many (openvas_connection_t *connection, const char *type,
                                      sort_order ? sort_order : "ascending");
 
   g_free (built_filter);
-  if (openvas_connection_sendf (connection,
-                                "<get_%s%s%s %s/>",
-                                type_many->str,
-                                strcmp (type, "report") ? "" : " details=\"0\"",
-                                request,
-                                extra_attribs ? extra_attribs : "")
+  if (gvm_connection_sendf (connection,
+                            "<get_%s%s%s %s/>",
+                            type_many->str,
+                            strcmp (type, "report") ? "" : " details=\"0\"",
+                            request,
+                            extra_attribs ? extra_attribs : "")
       == -1)
     {
       g_free(request);
@@ -2357,7 +2357,7 @@ get_many (openvas_connection_t *connection, const char *type,
 
       g_string_append (xml, "<filters>");
 
-      if (openvas_connection_sendf_xml
+      if (gvm_connection_sendf_xml
            (connection,
             "<get_filters"
             " filter=\"rows=-1 type=%s or type=\"/>",
@@ -2395,7 +2395,7 @@ get_many (openvas_connection_t *connection, const char *type,
     {
       /* Get the Wizard Rows setting. */
 
-      if (openvas_connection_sendf_xml
+      if (gvm_connection_sendf_xml
            (connection,
             "<get_settings"
             " setting_id=\"20f3034c-e709-11e1-87e7-406186ea4fc5\"/>",
@@ -2432,16 +2432,16 @@ get_many (openvas_connection_t *connection, const char *type,
     {
       /* Get tag names */
 
-      if (openvas_connection_sendf (connection,
-                                    "<get_tags"
-                                    " filter=\"resource_type=%s"
-                                    "          first=1"
-                                    "          rows=-1\""
-                                    " names_only=\"1\""
-                                    "/>",
-                                    strcmp (type, "info")
-                                      ? type
-                                      : params_value (params, "info_type"))
+      if (gvm_connection_sendf (connection,
+                                "<get_tags"
+                                " filter=\"resource_type=%s"
+                                "          first=1"
+                                "          rows=-1\""
+                                " names_only=\"1\""
+                                "/>",
+                                strcmp (type, "info")
+                                  ? type
+                                  : params_value (params, "info_type"))
           == -1)
         {
           g_string_free (xml, TRUE);
@@ -2488,7 +2488,7 @@ get_many (openvas_connection_t *connection, const char *type,
  * @return Result of XSL transformation.
  */
 char *
-edit_resource (openvas_connection_t *connection, const char *type,
+edit_resource (gvm_connection_t *connection, const char *type,
                credentials_t *credentials, params_t *params,
                const char *extra_get_attribs, const char *extra_xml,
                cmd_response_data_t* response_data)
@@ -2512,18 +2512,18 @@ edit_resource (openvas_connection_t *connection, const char *type,
                            "/omp?cmd=get_tasks", response_data);
     }
 
-  if (openvas_connection_sendf (connection,
-                                /* TODO: Remove redundant COMMANDS. */
-                                "<commands>"
-                                "<get_%ss"
-                                " %s"
-                                " %s_id=\"%s\""
-                                " details=\"1\"/>"
-                                "</commands>",
-                                type,
-                                extra_get_attribs ? extra_get_attribs : "",
-                                type,
-                                resource_id)
+  if (gvm_connection_sendf (connection,
+                            /* TODO: Remove redundant COMMANDS. */
+                            "<commands>"
+                            "<get_%ss"
+                            " %s"
+                            " %s_id=\"%s\""
+                            " details=\"1\"/>"
+                            "</commands>",
+                            type,
+                            extra_get_attribs ? extra_get_attribs : "",
+                            type,
+                            resource_id)
       == -1)
     {
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
@@ -2658,7 +2658,7 @@ format_file_name (gchar* fname_format, credentials_t* credentials,
  * @return Resource XML on success.  HTML result of XSL transformation on error.
  */
 char *
-export_resource (openvas_connection_t *connection, const char *type,
+export_resource (gvm_connection_t *connection, const char *type,
                  credentials_t * credentials, params_t *params,
                  cmd_response_data_t* response_data)
 {
@@ -2686,18 +2686,18 @@ export_resource (openvas_connection_t *connection, const char *type,
 
   subtype = params_value (params, "subtype");
 
-  if (openvas_connection_sendf (connection,
-                                "<get_%ss"
-                                " %s_id=\"%s\""
-                                "%s%s%s"
-                                " export=\"1\""
-                                " details=\"1\"/>",
-                                type,
-                                type,
-                                resource_id,
-                                subtype ? " type=\"" : "",
-                                subtype ? subtype : "",
-                                subtype ? "\"" : "")
+  if (gvm_connection_sendf (connection,
+                            "<get_%ss"
+                            " %s_id=\"%s\""
+                            "%s%s%s"
+                            " export=\"1\""
+                            " details=\"1\"/>",
+                            type,
+                            type,
+                            resource_id,
+                            subtype ? " type=\"" : "",
+                            subtype ? subtype : "",
+                            subtype ? "\"" : "")
       == -1)
     {
       g_string_free (xml, TRUE);
@@ -2817,7 +2817,7 @@ export_resource (openvas_connection_t *connection, const char *type,
  * @return XML on success.  HTML result of XSL transformation on error.
  */
 static char *
-export_many (openvas_connection_t *connection, const char *type,
+export_many (gvm_connection_t *connection, const char *type,
              credentials_t * credentials, params_t *params,
              cmd_response_data_t* response_data)
 {
@@ -2835,14 +2835,14 @@ export_many (openvas_connection_t *connection, const char *type,
 
   if (strcmp (type, "info") == 0)
     {
-      if (openvas_connection_sendf (connection,
-                                    "<get_info"
-                                    " type=\"%s\""
-                                    " export=\"1\""
-                                    " details=\"1\""
-                                    " filter=\"%s\"/>",
-                                    params_value (params, "info_type"),
-                                    filter_escaped ? filter_escaped : "")
+      if (gvm_connection_sendf (connection,
+                                "<get_info"
+                                " type=\"%s\""
+                                " export=\"1\""
+                                " details=\"1\""
+                                " filter=\"%s\"/>",
+                                params_value (params, "info_type"),
+                                filter_escaped ? filter_escaped : "")
           == -1)
         {
           g_free (filter_escaped);
@@ -2858,14 +2858,14 @@ export_many (openvas_connection_t *connection, const char *type,
     }
   else if (strcmp (type, "asset") == 0)
     {
-      if (openvas_connection_sendf (connection,
-                                    "<get_assets"
-                                    " type=\"%s\""
-                                    " export=\"1\""
-                                    " details=\"1\""
-                                    " filter=\"%s\"/>",
-                                    params_value (params, "asset_type"),
-                                    filter_escaped ? filter_escaped : "")
+      if (gvm_connection_sendf (connection,
+                                "<get_assets"
+                                " type=\"%s\""
+                                " export=\"1\""
+                                " details=\"1\""
+                                " filter=\"%s\"/>",
+                                params_value (params, "asset_type"),
+                                filter_escaped ? filter_escaped : "")
           == -1)
         {
           g_free (filter_escaped);
@@ -2881,13 +2881,13 @@ export_many (openvas_connection_t *connection, const char *type,
     }
   else
     {
-      if (openvas_connection_sendf (connection,
-                                    "<get_%ss"
-                                    " export=\"1\""
-                                    " details=\"1\""
-                                    " filter=\"%s\"/>",
-                                    type,
-                                    filter_escaped ? filter_escaped : "")
+      if (gvm_connection_sendf (connection,
+                                "<get_%ss"
+                                " export=\"1\""
+                                " details=\"1\""
+                                " filter=\"%s\"/>",
+                                type,
+                                filter_escaped ? filter_escaped : "")
           == -1)
         {
           g_free (filter_escaped);
@@ -2999,7 +2999,7 @@ export_many (openvas_connection_t *connection, const char *type,
  * @return Result of XSL transformation.
  */
 char *
-delete_resource (openvas_connection_t *connection, const char *type,
+delete_resource (gvm_connection_t *connection, const char *type,
                  credentials_t * credentials, params_t *params, int ultimate,
                  const char *get, cmd_response_data_t* response_data)
 {
@@ -3052,14 +3052,14 @@ delete_resource (openvas_connection_t *connection, const char *type,
 
   /* Delete the resource and get all resources. */
 
-  if (openvas_connection_sendf (connection,
-                                "<delete_%s %s_id=\"%s\" ultimate=\"%i\"%s%s/>",
-                                type,
-                                type,
-                                resource_id,
-                                !!ultimate,
-                                extra_attribs ? " " : "",
-                                extra_attribs ? extra_attribs : "")
+  if (gvm_connection_sendf (connection,
+                            "<delete_%s %s_id=\"%s\" ultimate=\"%i\"%s%s/>",
+                            type,
+                            type,
+                            resource_id,
+                            !!ultimate,
+                            extra_attribs ? " " : "",
+                            extra_attribs ? extra_attribs : "")
       == -1)
     {
       g_free (resource_id);
@@ -3123,7 +3123,7 @@ delete_resource (openvas_connection_t *connection, const char *type,
  * @return Result of XSL transformation.
  */
 char *
-resource_action (openvas_connection_t *connection, credentials_t *credentials,
+resource_action (gvm_connection_t *connection, credentials_t *credentials,
                  params_t *params, const char *type, const char *action,
                  cmd_response_data_t* response_data)
 {
@@ -3273,7 +3273,7 @@ resource_action (openvas_connection_t *connection, credentials_t *credentials,
  * @return NULL on success, else error message page HTML.
  */
 static char *
-setting_get_value_error (openvas_connection_t *connection,
+setting_get_value_error (gvm_connection_t *connection,
                          credentials_t *credentials,
                          const gchar *setting_id,
                          gchar **value,
@@ -3346,7 +3346,7 @@ setting_get_value_error (openvas_connection_t *connection,
  * @return Result of XSL transformation.
  */
 static char *
-new_task (openvas_connection_t *connection, credentials_t * credentials,
+new_task (gvm_connection_t *connection, credentials_t * credentials,
           const char *message, params_t *params,
           const char *extra_xml, cmd_response_data_t* response_data)
 {
@@ -3466,9 +3466,9 @@ new_task (openvas_connection_t *connection, credentials_t * credentials,
   g_free (osp_scanner);
 
   /* Get list of targets. */
-  if (openvas_connection_sendf (connection,
-                                "<get_targets"
-                                " filter=\"rows=-1 sort=name\"/>")
+  if (gvm_connection_sendf (connection,
+                            "<get_targets"
+                            " filter=\"rows=-1 sort=name\"/>")
       == -1)
     {
       g_string_free (xml, TRUE);
@@ -3494,9 +3494,9 @@ new_task (openvas_connection_t *connection, credentials_t * credentials,
     }
 
   /* Get configs to select in new task UI. */
-  if (openvas_connection_sendf (connection,
-                                "<get_configs"
-                                " filter=\"rows=-1 sort=name\"/>")
+  if (gvm_connection_sendf (connection,
+                            "<get_configs"
+                            " filter=\"rows=-1 sort=name\"/>")
       == -1)
     {
       g_string_free (xml, TRUE);
@@ -3524,9 +3524,9 @@ new_task (openvas_connection_t *connection, credentials_t * credentials,
   if (command_enabled (credentials, "GET_ALERTS"))
     {
       /* Get alerts to select in new task UI. */
-      if (openvas_connection_sendf (connection,
-                                    "<get_alerts"
-                                    " filter=\"rows=-1 sort=name\"/>")
+      if (gvm_connection_sendf (connection,
+                                "<get_alerts"
+                                " filter=\"rows=-1 sort=name\"/>")
           == -1)
         {
           g_string_free (xml, TRUE);
@@ -3555,7 +3555,7 @@ new_task (openvas_connection_t *connection, credentials_t * credentials,
   if (command_enabled (credentials, "GET_SCHEDULES"))
     {
       /* Get schedules to select in new task UI. */
-      if (openvas_connection_sendf
+      if (gvm_connection_sendf
            (connection,
             "<get_schedules"
             " filter=\"rows=-1 sort=name\"/>")
@@ -3587,9 +3587,9 @@ new_task (openvas_connection_t *connection, credentials_t * credentials,
   if (command_enabled (credentials, "GET_SCANNERS"))
     {
       /* Get scanners to select in new task UI. */
-      if (openvas_connection_sendf (connection,
-                                    "<get_scanners"
-                                    " filter=\"rows=-1\"/>")
+      if (gvm_connection_sendf (connection,
+                                "<get_scanners"
+                                " filter=\"rows=-1\"/>")
           == -1)
         {
           g_string_free (xml, TRUE);
@@ -3623,8 +3623,8 @@ new_task (openvas_connection_t *connection, credentials_t * credentials,
     {
       /* Get groups for Observer Groups. */
 
-      if (openvas_connection_sendf (connection,
-                                    "<get_groups/>")
+      if (gvm_connection_sendf (connection,
+                                "<get_groups/>")
           == -1)
         {
           g_string_free (xml, TRUE);
@@ -3654,9 +3654,9 @@ new_task (openvas_connection_t *connection, credentials_t * credentials,
     {
       /* Get tag names. */
 
-      if (openvas_connection_sendf (connection,
-                                    "<get_tags names_only=\"1\""
-                                    " filter=\"resource_type=task rows=-1\"/>")
+      if (gvm_connection_sendf (connection,
+                                "<get_tags names_only=\"1\""
+                                " filter=\"resource_type=task rows=-1\"/>")
           == -1)
         {
           g_string_free (xml, TRUE);
@@ -3710,7 +3710,7 @@ new_task (openvas_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-new_task_omp (openvas_connection_t *connection, credentials_t * credentials,
+new_task_omp (gvm_connection_t *connection, credentials_t * credentials,
               params_t *params, cmd_response_data_t* response_data)
 {
   return new_task (connection, credentials, NULL, params, NULL, response_data);
@@ -3729,7 +3729,7 @@ new_task_omp (openvas_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 static char *
-new_container_task (openvas_connection_t *connection,
+new_container_task (gvm_connection_t *connection,
                     credentials_t * credentials, const char *message,
                     params_t *params, const char *extra_xml,
                     cmd_response_data_t* response_data)
@@ -3762,7 +3762,7 @@ new_container_task (openvas_connection_t *connection,
  * @return Result of XSL transformation.
  */
 char *
-new_container_task_omp (openvas_connection_t *connection,
+new_container_task_omp (gvm_connection_t *connection,
                         credentials_t * credentials, params_t *params,
                         cmd_response_data_t* response_data)
 {
@@ -3782,7 +3782,7 @@ new_container_task_omp (openvas_connection_t *connection,
  * @return Result of XSL transformation.
  */
 static char *
-upload_report (openvas_connection_t *connection, credentials_t *credentials,
+upload_report (gvm_connection_t *connection, credentials_t *credentials,
                params_t *params, const char *extra_xml,
                cmd_response_data_t* response_data)
 {
@@ -3827,7 +3827,7 @@ upload_report (openvas_connection_t *connection, credentials_t *credentials,
  * @return Result of XSL transformation.
  */
 char *
-upload_report_omp (openvas_connection_t *connection, credentials_t *credentials,
+upload_report_omp (gvm_connection_t *connection, credentials_t *credentials,
                    params_t *params, cmd_response_data_t* response_data)
 {
   return upload_report (connection, credentials, params, NULL, response_data);
@@ -3844,7 +3844,7 @@ upload_report_omp (openvas_connection_t *connection, credentials_t *credentials,
  * @return Result of XSL transformation.
  */
 char *
-create_report_omp (openvas_connection_t *connection,
+create_report_omp (gvm_connection_t *connection,
                    credentials_t *credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
@@ -3989,7 +3989,7 @@ create_report_omp (openvas_connection_t *connection,
  * @return Result of XSL transformation.
  */
 char *
-import_report_omp (openvas_connection_t *connection,
+import_report_omp (gvm_connection_t *connection,
                    credentials_t * credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
@@ -4010,7 +4010,7 @@ CHECK_PARAM_INVALID (name, "Create Task", "new_task")
  * @return Result of XSL transformation.
  */
 char *
-create_container_task_omp (openvas_connection_t *connection,
+create_container_task_omp (gvm_connection_t *connection,
                            credentials_t * credentials, params_t *params,
                            cmd_response_data_t* response_data)
 {
@@ -4095,7 +4095,7 @@ create_container_task_omp (openvas_connection_t *connection,
  * @return Result of XSL transformation.
  */
 char *
-create_task_omp (openvas_connection_t *connection, credentials_t * credentials,
+create_task_omp (gvm_connection_t *connection, credentials_t * credentials,
                  params_t *params, cmd_response_data_t* response_data)
 {
   entity_t entity;
@@ -4452,7 +4452,7 @@ create_task_omp (openvas_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-delete_task_omp (openvas_connection_t *connection, credentials_t * credentials,
+delete_task_omp (gvm_connection_t *connection, credentials_t * credentials,
                  params_t *params, cmd_response_data_t* response_data)
 {
   return delete_resource (connection, "task", credentials, params, 0, NULL,
@@ -4471,7 +4471,7 @@ delete_task_omp (openvas_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-edit_task (openvas_connection_t *connection, credentials_t * credentials,
+edit_task (gvm_connection_t *connection, credentials_t * credentials,
            params_t *params, const char *extra_xml,
            cmd_response_data_t* response_data)
 {
@@ -4504,34 +4504,34 @@ edit_task (openvas_connection_t *connection, credentials_t * credentials,
   if (next == NULL)
     next = "get_task";
 
-  if (openvas_connection_sendf (connection,
-                                "<commands>"
-                                "<get_tasks task_id=\"%s\" details=\"1\" />"
-                                "<get_targets"
-                                " filter=\"rows=-1 sort=name\"/>"
-                                "<get_configs"
-                                " filter=\"rows=-1 sort=name\"/>"
-                                "%s"
-                                "%s"
-                                "%s"
-                                "%s"
-                                "</commands>",
-                                task_id,
-                                command_enabled (credentials, "GET_ALERTS")
-                                 ? "<get_alerts"
-                                   " filter=\"rows=-1 sort=name\"/>"
-                                 : "",
-                                command_enabled (credentials, "GET_SCHEDULES")
-                                 ? "<get_schedules"
-                                   " filter=\"rows=-1 sort=name\"/>"
-                                 : "",
-                                command_enabled (credentials, "GET_SCANNERS")
-                                 ? "<get_scanners"
-                                   " filter=\"rows=-1\"/>"
-                                 : "",
-                                command_enabled (credentials, "GET_GROUPS")
-                                 ? "<get_groups/>"
-                                 : "")
+  if (gvm_connection_sendf (connection,
+                            "<commands>"
+                            "<get_tasks task_id=\"%s\" details=\"1\" />"
+                            "<get_targets"
+                            " filter=\"rows=-1 sort=name\"/>"
+                            "<get_configs"
+                            " filter=\"rows=-1 sort=name\"/>"
+                            "%s"
+                            "%s"
+                            "%s"
+                            "%s"
+                            "</commands>",
+                            task_id,
+                            command_enabled (credentials, "GET_ALERTS")
+                             ? "<get_alerts"
+                               " filter=\"rows=-1 sort=name\"/>"
+                             : "",
+                            command_enabled (credentials, "GET_SCHEDULES")
+                             ? "<get_schedules"
+                               " filter=\"rows=-1 sort=name\"/>"
+                             : "",
+                            command_enabled (credentials, "GET_SCANNERS")
+                             ? "<get_scanners"
+                               " filter=\"rows=-1\"/>"
+                             : "",
+                            command_enabled (credentials, "GET_GROUPS")
+                             ? "<get_groups/>"
+                             : "")
       == -1)
     {
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
@@ -4598,7 +4598,7 @@ edit_task (openvas_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-edit_task_omp (openvas_connection_t *connection, credentials_t * credentials,
+edit_task_omp (gvm_connection_t *connection, credentials_t * credentials,
                params_t *params, cmd_response_data_t* response_data)
 {
   return edit_task (connection, credentials, params, NULL, response_data);
@@ -4615,7 +4615,7 @@ edit_task_omp (openvas_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-save_task_omp (openvas_connection_t *connection, credentials_t * credentials,
+save_task_omp (gvm_connection_t *connection, credentials_t * credentials,
                params_t *params, cmd_response_data_t* response_data)
 {
   gchar *html, *response, *format;
@@ -4862,7 +4862,7 @@ save_task_omp (openvas_connection_t *connection, credentials_t * credentials,
  *
  * @return Result of XSL transformation.
  */
-char * save_container_task_omp (openvas_connection_t *connection,
+char * save_container_task_omp (gvm_connection_t *connection,
                                 credentials_t *credentials, params_t *params,
                                 cmd_response_data_t *response_data)
 {
@@ -4965,7 +4965,7 @@ char * save_container_task_omp (openvas_connection_t *connection,
  * @return Note XML on success.  HTML result of XSL transformation on error.
  */
 char *
-export_task_omp (openvas_connection_t *connection, credentials_t *credentials,
+export_task_omp (gvm_connection_t *connection, credentials_t *credentials,
                  params_t *params, cmd_response_data_t *response_data)
 {
   return export_resource (connection, "task", credentials, params,
@@ -4983,7 +4983,7 @@ export_task_omp (openvas_connection_t *connection, credentials_t *credentials,
  * @return Tasks XML on success.  HTML result of XSL transformation
  *         on error.
  */
-char * export_tasks_omp (openvas_connection_t *connection,
+char * export_tasks_omp (gvm_connection_t *connection,
                          credentials_t *credentials, params_t *params,
                          cmd_response_data_t *response_data)
 {
@@ -5002,7 +5002,7 @@ char * export_tasks_omp (openvas_connection_t *connection,
  * @return Result of XSL transformation.
  */
 char *
-stop_task_omp (openvas_connection_t *connection, credentials_t * credentials,
+stop_task_omp (gvm_connection_t *connection, credentials_t * credentials,
                params_t *params, cmd_response_data_t* response_data)
 {
   return resource_action (connection, credentials, params, "task", "stop",
@@ -5020,7 +5020,7 @@ stop_task_omp (openvas_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-resume_task_omp (openvas_connection_t *connection, credentials_t *credentials,
+resume_task_omp (gvm_connection_t *connection, credentials_t *credentials,
                  params_t *params, cmd_response_data_t *response_data)
 {
   return resource_action (connection, credentials, params, "task", "resume",
@@ -5038,7 +5038,7 @@ resume_task_omp (openvas_connection_t *connection, credentials_t *credentials,
  * @return Result of XSL transformation.
  */
 char *
-start_task_omp (openvas_connection_t *connection, credentials_t * credentials,
+start_task_omp (gvm_connection_t *connection, credentials_t * credentials,
                 params_t *params, cmd_response_data_t* response_data)
 {
   return resource_action (connection, credentials, params, "task", "start",
@@ -5056,7 +5056,7 @@ start_task_omp (openvas_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-move_task_omp (openvas_connection_t *connection, credentials_t * credentials,
+move_task_omp (gvm_connection_t *connection, credentials_t * credentials,
                params_t *params, cmd_response_data_t* response_data)
 {
   gchar *command, *response, *html;
@@ -5134,7 +5134,7 @@ move_task_omp (openvas_connection_t *connection, credentials_t * credentials,
  * @return XSL transformed NVT details response or error message.
  */
 static char*
-get_nvts (openvas_connection_t *connection, credentials_t *credentials,
+get_nvts (gvm_connection_t *connection, credentials_t *credentials,
           params_t *params, const char *commands,
           const char *extra_xml, cmd_response_data_t* response_data)
 {
@@ -5152,24 +5152,24 @@ get_nvts (openvas_connection_t *connection, credentials_t *credentials,
                            "/omp?cmd=get_tasks", response_data);
     }
 
-  if (openvas_connection_sendf (connection,
-                                "<commands>"
-                                "%s"
-                                "<get_nvts"
-                                " nvt_oid=\"%s\""
-                                " details=\"1\""
-                                " preferences=\"1\"/>"
-                                "<get_notes"
-                                " nvt_oid=\"%s\""
-                                " sort_field=\"notes.text\"/>"
-                                "<get_overrides"
-                                " nvt_oid=\"%s\""
-                                " sort_field=\"overrides.text\"/>"
-                                "</commands>",
-                                commands ? commands : "",
-                                oid,
-                                oid,
-                                oid)
+  if (gvm_connection_sendf (connection,
+                            "<commands>"
+                            "%s"
+                            "<get_nvts"
+                            " nvt_oid=\"%s\""
+                            " details=\"1\""
+                            " preferences=\"1\"/>"
+                            "<get_notes"
+                            " nvt_oid=\"%s\""
+                            " sort_field=\"notes.text\"/>"
+                            "<get_overrides"
+                            " nvt_oid=\"%s\""
+                            " sort_field=\"overrides.text\"/>"
+                            "</commands>",
+                            commands ? commands : "",
+                            oid,
+                            oid,
+                            oid)
         == -1)
     {
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
@@ -5198,13 +5198,13 @@ get_nvts (openvas_connection_t *connection, credentials_t *credentials,
 
   /* Get tag names */
 
-  if (openvas_connection_sendf (connection,
-                                "<get_tags"
-                                " filter=\"resource_type=nvt"
-                                "          first=1"
-                                "          rows=-1\""
-                                " names_only=\"1\""
-                                "/>")
+  if (gvm_connection_sendf (connection,
+                            "<get_tags"
+                            " filter=\"resource_type=nvt"
+                            "          first=1"
+                            "          rows=-1\""
+                            " names_only=\"1\""
+                            "/>")
       == -1)
     {
       g_string_free (xml, TRUE);
@@ -5247,7 +5247,7 @@ get_nvts (openvas_connection_t *connection, credentials_t *credentials,
  * @return XSL transformed SecInfo response or error message.
  */
 char *
-get_info (openvas_connection_t *connection, credentials_t *credentials,
+get_info (gvm_connection_t *connection, credentials_t *credentials,
           params_t *params, const char *extra_xml,
           cmd_response_data_t* response_data)
 {
@@ -5375,7 +5375,7 @@ get_info (openvas_connection_t *connection, credentials_t *credentials,
  * @return Result of XSL transformation.
  */
 char *
-get_info_omp (openvas_connection_t *connection, credentials_t * credentials,
+get_info_omp (gvm_connection_t *connection, credentials_t * credentials,
               params_t *params, cmd_response_data_t* response_data)
 {
   return get_info (connection, credentials, params, NULL, response_data);
@@ -5392,7 +5392,7 @@ get_info_omp (openvas_connection_t *connection, credentials_t * credentials,
  * @return XSL transformed NVT details response or error message.
  */
 char*
-get_nvts_omp (openvas_connection_t *connection, credentials_t *credentials,
+get_nvts_omp (gvm_connection_t *connection, credentials_t *credentials,
               params_t *params, cmd_response_data_t* response_data)
 {
   return get_nvts (connection, credentials, params, NULL, NULL, response_data);
@@ -5462,7 +5462,7 @@ params_toggle_overrides (params_t *params, const char *overrides)
  * @return Result of XSL transformation.
  */
 static char *
-get_tasks (openvas_connection_t *connection, credentials_t *credentials, params_t *params, const char *extra_xml,
+get_tasks (gvm_connection_t *connection, credentials_t *credentials, params_t *params, const char *extra_xml,
            cmd_response_data_t* response_data)
 {
   const char *overrides, *schedules_only, *ignore_pagination;
@@ -5504,7 +5504,7 @@ get_tasks (openvas_connection_t *connection, credentials_t *credentials, params_
  * @return Result of XSL transformation.
  */
 char *
-get_tasks_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+get_tasks_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                cmd_response_data_t* response_data)
 {
   return get_tasks (connection, credentials, params, NULL, response_data);
@@ -5522,7 +5522,7 @@ get_tasks_omp (openvas_connection_t *connection, credentials_t * credentials, pa
  * @return Result of XSL transformation.
  */
 static char *
-get_tasks_chart (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
+get_tasks_chart (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
                  const char *extra_xml, cmd_response_data_t* response_data)
 {
   return xsl_transform_omp (connection, credentials, params, g_strdup ("<get_tasks_chart/>"),
@@ -5540,7 +5540,7 @@ get_tasks_chart (openvas_connection_t *connection, credentials_t *credentials, p
  * @return Result of XSL transformation.
  */
 char *
-get_tasks_chart_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+get_tasks_chart_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                      cmd_response_data_t* response_data)
 {
   return get_tasks_chart (connection, credentials, params, NULL, response_data);
@@ -5559,7 +5559,7 @@ get_tasks_chart_omp (openvas_connection_t *connection, credentials_t * credentia
  * @return Result of XSL transformation.
  */
 static char *
-get_task (openvas_connection_t *connection, credentials_t *credentials,
+get_task (gvm_connection_t *connection, credentials_t *credentials,
           params_t *params, const char *extra_xml,
           cmd_response_data_t* response_data)
 {
@@ -5580,7 +5580,7 @@ get_task (openvas_connection_t *connection, credentials_t *credentials,
 
   notes = command_enabled (credentials, "GET_NOTES");
   get_overrides = command_enabled (credentials, "GET_OVERRIDES");
-  if (openvas_connection_sendf
+  if (gvm_connection_sendf
        (connection,
         "<commands>"
         "<get_tasks"
@@ -5686,10 +5686,10 @@ get_task (openvas_connection_t *connection, credentials_t *credentials,
 
                   if (resource_id != NULL && strcmp (resource_id, ""))
                     {
-                      if (openvas_connection_sendf (connection,
-                                                    "<get_alerts"
-                                                    " alert_id=\"%s\"/>",
-                                                    resource_id))
+                      if (gvm_connection_sendf (connection,
+                                                "<get_alerts"
+                                                " alert_id=\"%s\"/>",
+                                                resource_id))
                         {
                           g_string_free (xml, TRUE);
                           g_string_free (commands_xml, TRUE);
@@ -5730,10 +5730,10 @@ get_task (openvas_connection_t *connection, credentials_t *credentials,
 
                   if (resource_id != NULL && strcmp (resource_id, ""))
                     {
-                      if (openvas_connection_sendf (connection,
-                                                    "<get_targets"
-                                                    " target_id=\"%s\"/>",
-                                                    resource_id))
+                      if (gvm_connection_sendf (connection,
+                                                "<get_targets"
+                                                " target_id=\"%s\"/>",
+                                                resource_id))
                         {
                           g_string_free (xml, TRUE);
                           g_string_free (commands_xml, TRUE);
@@ -5778,9 +5778,9 @@ get_task (openvas_connection_t *connection, credentials_t *credentials,
 
   if (command_enabled (credentials, "GET_SCANNERS"))
     {
-      if (openvas_connection_sendf (connection,
-                                    "<get_scanners"
-                                    " filter=\"first=1 rows=-1 type=4\"/>")
+      if (gvm_connection_sendf (connection,
+                                "<get_scanners"
+                                " filter=\"first=1 rows=-1 type=4\"/>")
           == -1)
         {
           g_string_free (xml, TRUE);
@@ -5808,13 +5808,13 @@ get_task (openvas_connection_t *connection, credentials_t *credentials,
 
   /* Get tag names */
 
-  if (openvas_connection_sendf (connection,
-                                "<get_tags"
-                                " filter=\"resource_type=task"
-                                "          first=1"
-                                "          rows=-1\""
-                                " names_only=\"1\""
-                                "/>")
+  if (gvm_connection_sendf (connection,
+                            "<get_tags"
+                            " filter=\"resource_type=task"
+                            "          first=1"
+                            "          rows=-1\""
+                            " names_only=\"1\""
+                            "/>")
       == -1)
     {
       g_string_free (xml, TRUE);
@@ -5843,12 +5843,12 @@ get_task (openvas_connection_t *connection, credentials_t *credentials,
 
   g_string_append (xml, "<permissions>");
 
-  if (openvas_connection_sendf (connection,
-                                "<get_permissions"
-                                " filter=\"name:^.*(task)s?$"
-                                "          and resource_uuid=%s"
-                                "          first=1 rows=-1\"/>",
-                                task_id)
+  if (gvm_connection_sendf (connection,
+                            "<get_permissions"
+                            " filter=\"name:^.*(task)s?$"
+                            "          and resource_uuid=%s"
+                            "          first=1 rows=-1\"/>",
+                            task_id)
       == -1)
     {
       g_string_free (xml, TRUE);
@@ -5893,7 +5893,7 @@ get_task (openvas_connection_t *connection, credentials_t *credentials,
  * @return Result of XSL transformation.
  */
 char *
-get_task_omp (openvas_connection_t *connection, credentials_t * credentials,
+get_task_omp (gvm_connection_t *connection, credentials_t * credentials,
               params_t *params, cmd_response_data_t* response_data)
 {
   return get_task (connection, credentials, params, NULL, response_data);
@@ -5911,7 +5911,7 @@ get_task_omp (openvas_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 static char *
-new_credential (openvas_connection_t *connection, credentials_t *credentials,
+new_credential (gvm_connection_t *connection, credentials_t *credentials,
                 params_t *params, const char *extra_xml,
                 cmd_response_data_t* response_data)
 {
@@ -5936,7 +5936,7 @@ new_credential (openvas_connection_t *connection, credentials_t *credentials,
  * @return Result of XSL transformation.
  */
 char *
-create_credential_omp (openvas_connection_t *connection,
+create_credential_omp (gvm_connection_t *connection,
                        credentials_t * credentials, params_t *params,
                        cmd_response_data_t* response_data)
 {
@@ -6247,7 +6247,7 @@ create_credential_omp (openvas_connection_t *connection,
  * @return Result of XSL transformation.
  */
 static char *
-get_credential (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+get_credential (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                 const char *extra_xml, cmd_response_data_t* response_data)
 {
   return get_one (connection, "credential", credentials, params, extra_xml,
@@ -6265,7 +6265,7 @@ get_credential (openvas_connection_t *connection, credentials_t * credentials, p
  * @return Result of XSL transformation.
  */
 char *
-get_credential_omp (openvas_connection_t *connection,
+get_credential_omp (gvm_connection_t *connection,
                     credentials_t * credentials, params_t *params,
                     cmd_response_data_t* response_data)
 {
@@ -6286,7 +6286,7 @@ get_credential_omp (openvas_connection_t *connection,
  * @return 0 success, 1 failure.
  */
 int
-download_credential_omp (openvas_connection_t *connection,
+download_credential_omp (gvm_connection_t *connection,
                          credentials_t * credentials,
                          params_t *params,
                          char ** html,
@@ -6314,12 +6314,12 @@ download_credential_omp (openvas_connection_t *connection,
       return 1;
     }
 
-  if (openvas_connection_sendf (connection,
-                                "<get_credentials"
-                                " credential_id=\"%s\""
-                                " format=\"%s\"/>",
-                                credential_id,
-                                format)
+  if (gvm_connection_sendf (connection,
+                            "<get_credentials"
+                            " credential_id=\"%s\""
+                            " format=\"%s\"/>",
+                            credential_id,
+                            format)
       == -1)
     {
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
@@ -6471,7 +6471,7 @@ download_credential_omp (openvas_connection_t *connection,
  *         on error.
  */
 char *
-export_credential_omp (openvas_connection_t *connection,
+export_credential_omp (gvm_connection_t *connection,
                        credentials_t * credentials, params_t *params,
                        cmd_response_data_t* response_data)
 {
@@ -6491,7 +6491,7 @@ export_credential_omp (openvas_connection_t *connection,
  *         on error.
  */
 char *
-export_credentials_omp (openvas_connection_t *connection,
+export_credentials_omp (gvm_connection_t *connection,
                         credentials_t * credentials, params_t *params,
                         cmd_response_data_t* response_data)
 {
@@ -6512,7 +6512,7 @@ export_credentials_omp (openvas_connection_t *connection,
  * @return 0 success, 1 failure.
  */
 static char *
-get_credentials (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+get_credentials (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                  const char *extra_xml, cmd_response_data_t* response_data)
 {
   return get_many (connection, "credential", credentials, params, extra_xml, NULL,
@@ -6530,7 +6530,7 @@ get_credentials (openvas_connection_t *connection, credentials_t * credentials, 
  * @return 0 success, 1 failure.
  */
 char *
-get_credentials_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+get_credentials_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                      cmd_response_data_t* response_data)
 {
   return get_credentials (connection, credentials, params, NULL, response_data);
@@ -6547,7 +6547,7 @@ get_credentials_omp (openvas_connection_t *connection, credentials_t * credentia
  * @return Result of XSL transformation.
  */
 char *
-delete_credential_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+delete_credential_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                        cmd_response_data_t* response_data)
 {
   return delete_resource (connection, "credential", credentials, params, 0,
@@ -6565,7 +6565,7 @@ delete_credential_omp (openvas_connection_t *connection, credentials_t * credent
  * @return Result of XSL transformation.
  */
 char *
-new_credential_omp (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
+new_credential_omp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
                     cmd_response_data_t* response_data)
 {
   return new_credential (connection, credentials, params, NULL, response_data);
@@ -6583,7 +6583,7 @@ new_credential_omp (openvas_connection_t *connection, credentials_t *credentials
  * @return Result of XSL transformation.
  */
 static char *
-edit_credential (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+edit_credential (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                  const char *extra_xml, cmd_response_data_t* response_data)
 {
   return edit_resource (connection, "credential", credentials, params, NULL, extra_xml,
@@ -6601,7 +6601,7 @@ edit_credential (openvas_connection_t *connection, credentials_t * credentials, 
  * @return Result of XSL transformation.
  */
 char *
-edit_credential_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+edit_credential_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                      cmd_response_data_t* response_data)
 {
   return edit_credential (connection, credentials, params, NULL, response_data);
@@ -6618,7 +6618,7 @@ edit_credential_omp (openvas_connection_t *connection, credentials_t * credentia
  * @return Result of XSL transformation.
  */
 char *
-save_credential_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+save_credential_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                      cmd_response_data_t* response_data)
 {
   int ret, change_password, change_passphrase;
@@ -6825,7 +6825,7 @@ save_credential_omp (openvas_connection_t *connection, credentials_t * credentia
  * @return Result of XSL transformation.
  */
 static char *
-new_agent (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
+new_agent (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
            const char *extra_xml, cmd_response_data_t* response_data)
 {
   GString *xml;
@@ -6848,7 +6848,7 @@ new_agent (openvas_connection_t *connection, credentials_t *credentials, params_
  * @return Result of XSL transformation.
  */
 char *
-new_agent_omp (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
+new_agent_omp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
                cmd_response_data_t* response_data)
 {
   return new_agent (connection, credentials, params, NULL, response_data);
@@ -6865,7 +6865,7 @@ new_agent_omp (openvas_connection_t *connection, credentials_t *credentials, par
  * @return Result of XSL transformation.
  */
 char *
-create_agent_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+create_agent_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                   cmd_response_data_t* response_data)
 {
   entity_t entity;
@@ -7003,7 +7003,7 @@ create_agent_omp (openvas_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-delete_agent_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+delete_agent_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                   cmd_response_data_t* response_data)
 {
   return delete_resource (connection, "agent", credentials, params, 0, "get_agents",
@@ -7024,7 +7024,7 @@ delete_agent_omp (openvas_connection_t *connection, credentials_t * credentials,
  * @return 0 success, 1 failure.
  */
 int
-download_agent_omp (openvas_connection_t *connection,
+download_agent_omp (gvm_connection_t *connection,
                     credentials_t * credentials,
                     params_t *params,
                     char ** html,
@@ -7053,10 +7053,10 @@ download_agent_omp (openvas_connection_t *connection,
 
   /* Send the request. */
 
-  if (openvas_connection_sendf (connection,
-                                "<get_agents agent_id=\"%s\" format=\"%s\"/>",
-                                agent_id,
-                                format)
+  if (gvm_connection_sendf (connection,
+                            "<get_agents agent_id=\"%s\" format=\"%s\"/>",
+                            agent_id,
+                            format)
       == -1)
     {
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
@@ -7188,7 +7188,7 @@ download_agent_omp (openvas_connection_t *connection,
  * @return Result of XSL transformation.
  */
 char *
-edit_agent (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+edit_agent (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
             const char *extra_xml, cmd_response_data_t* response_data)
 {
   return edit_resource (connection, "agent", credentials, params, NULL, extra_xml,
@@ -7206,7 +7206,7 @@ edit_agent (openvas_connection_t *connection, credentials_t * credentials, param
  * @return Result of XSL transformation.
  */
 char *
-edit_agent_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+edit_agent_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                 cmd_response_data_t* response_data)
 {
   return edit_agent (connection, credentials, params, NULL, response_data);
@@ -7223,7 +7223,7 @@ edit_agent_omp (openvas_connection_t *connection, credentials_t * credentials, p
  * @return Result of XSL transformation.
  */
 char *
-save_agent_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+save_agent_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                 cmd_response_data_t* response_data)
 {
   int ret;
@@ -7309,7 +7309,7 @@ save_agent_omp (openvas_connection_t *connection, credentials_t * credentials, p
  * @return Result of XSL transformation.
  */
 char *
-get_agent (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+get_agent (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
             const char *extra_xml, cmd_response_data_t* response_data)
 {
   return get_one (connection, "agent", credentials, params, extra_xml, NULL, response_data);
@@ -7326,7 +7326,7 @@ get_agent (openvas_connection_t *connection, credentials_t * credentials, params
  * @return Result of XSL transformation.
  */
 char *
-get_agent_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+get_agent_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                cmd_response_data_t* response_data)
 {
   return get_agent (connection, credentials, params, NULL, response_data);
@@ -7344,7 +7344,7 @@ get_agent_omp (openvas_connection_t *connection, credentials_t * credentials, pa
  * @return Result of XSL transformation.
  */
 char *
-get_agents (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+get_agents (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
             const char *extra_xml, cmd_response_data_t* response_data)
 {
   return get_many (connection, "agent", credentials, params, extra_xml, NULL,
@@ -7362,7 +7362,7 @@ get_agents (openvas_connection_t *connection, credentials_t * credentials, param
  * @return Result of XSL transformation.
  */
 char *
-get_agents_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+get_agents_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                 cmd_response_data_t* response_data)
 {
   return get_agents (connection, credentials, params, NULL, response_data);
@@ -7379,7 +7379,7 @@ get_agents_omp (openvas_connection_t *connection, credentials_t * credentials, p
  * @return Result of XSL transformation.
  */
 char *
-verify_agent_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+verify_agent_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                   cmd_response_data_t* response_data)
 {
   gchar *html, *response;
@@ -7475,7 +7475,7 @@ verify_agent_omp (openvas_connection_t *connection, credentials_t * credentials,
  * @return Agent XML on success.  HTML result of XSL transformation on error.
  */
 char *
-export_agent_omp (openvas_connection_t *connection,
+export_agent_omp (gvm_connection_t *connection,
                   credentials_t * credentials, params_t *params,
                   cmd_response_data_t* response_data)
 {
@@ -7495,7 +7495,7 @@ export_agent_omp (openvas_connection_t *connection,
  *         on error.
  */
 char *
-export_agents_omp (openvas_connection_t *connection,
+export_agents_omp (gvm_connection_t *connection,
                    credentials_t * credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
@@ -7514,7 +7514,7 @@ export_agents_omp (openvas_connection_t *connection,
  * @return The aggregate.
  */
 char *
-get_aggregate_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+get_aggregate_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
   params_t *data_columns, *text_columns;
@@ -7705,7 +7705,7 @@ get_aggregate_omp (openvas_connection_t *connection, credentials_t * credentials
  * @return Result of XSL transformation.
  */
 static char *
-new_alert (openvas_connection_t *connection, credentials_t *credentials, params_t *params, const char *extra_xml,
+new_alert (gvm_connection_t *connection, credentials_t *credentials, params_t *params, const char *extra_xml,
            cmd_response_data_t* response_data)
 {
   GString *xml;
@@ -7904,14 +7904,14 @@ new_alert (openvas_connection_t *connection, credentials_t *credentials, params_
  * @return Result of XSL transformation.
  */
 char *
-new_alert_omp (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
+new_alert_omp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
                cmd_response_data_t* response_data)
 {
   return new_alert (connection, credentials, params, NULL, response_data);
 }
 
 char *
-get_alerts (openvas_connection_t *connection, credentials_t *, params_t *, const char *, cmd_response_data_t*);
+get_alerts (gvm_connection_t *connection, credentials_t *, params_t *, const char *, cmd_response_data_t*);
 
 /**
  * @brief Send event data for an alert.
@@ -8128,7 +8128,7 @@ append_alert_method_data (GString *xml, params_t *data, const char *method)
  * @return Result of XSL transformation.
  */
 char *
-create_alert_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+create_alert_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                   cmd_response_data_t* response_data)
 {
   int ret;
@@ -8270,7 +8270,7 @@ create_alert_omp (openvas_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-delete_alert_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+delete_alert_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                   cmd_response_data_t* response_data)
 {
   return delete_resource (connection, "alert", credentials, params, 0, "get_alerts",
@@ -8289,7 +8289,7 @@ delete_alert_omp (openvas_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-get_alert (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+get_alert (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
            const char *extra_xml, cmd_response_data_t* response_data)
 {
   gchar *html;
@@ -8457,7 +8457,7 @@ get_alert (openvas_connection_t *connection, credentials_t * credentials, params
  * @return Result of XSL transformation.
  */
 char *
-get_alert_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+get_alert_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                cmd_response_data_t* response_data)
 {
   return get_alert (connection, credentials, params, NULL, response_data);
@@ -8475,7 +8475,7 @@ get_alert_omp (openvas_connection_t *connection, credentials_t * credentials, pa
  * @return Result of XSL transformation.
  */
 char *
-get_alerts (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+get_alerts (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
             const char *extra_xml, cmd_response_data_t* response_data)
 {
   gchar *html;
@@ -8597,7 +8597,7 @@ get_alerts (openvas_connection_t *connection, credentials_t * credentials, param
  * @return Result of XSL transformation.
  */
 char *
-get_alerts_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+get_alerts_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                 cmd_response_data_t* response_data)
 {
   return get_alerts (connection, credentials, params, NULL, response_data);
@@ -8615,7 +8615,7 @@ get_alerts_omp (openvas_connection_t *connection, credentials_t * credentials, p
  * @return Result of XSL transformation.
  */
 char *
-edit_alert (openvas_connection_t *connection, credentials_t * credentials,
+edit_alert (gvm_connection_t *connection, credentials_t * credentials,
             params_t *params, const char *extra_xml,
             cmd_response_data_t* response_data)
 {
@@ -8641,11 +8641,11 @@ edit_alert (openvas_connection_t *connection, credentials_t * credentials,
   if (next == NULL)
     next = "get_alerts";
 
-  if (openvas_connection_sendf (connection,
-                                "<get_alerts"
-                                " alert_id=\"%s\""
-                                " details=\"1\"/>",
-                                alert_id)
+  if (gvm_connection_sendf (connection,
+                            "<get_alerts"
+                            " alert_id=\"%s\""
+                            " details=\"1\"/>",
+                            alert_id)
       == -1)
     {
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
@@ -8687,9 +8687,9 @@ edit_alert (openvas_connection_t *connection, credentials_t * credentials,
     {
       /* Get the report formats. */
 
-      if (openvas_connection_sendf (connection,
-                                    "<get_report_formats"
-                                    " filter=\"rows=-1\"/>")
+      if (gvm_connection_sendf (connection,
+                                "<get_report_formats"
+                                " filter=\"rows=-1\"/>")
           == -1)
         {
           g_string_free (xml, TRUE);
@@ -8719,8 +8719,8 @@ edit_alert (openvas_connection_t *connection, credentials_t * credentials,
     {
       /* Get filters. */
 
-      if (openvas_connection_sendf (connection,
-                                    "<get_filters filter=\"rows=-1\"/>")
+      if (gvm_connection_sendf (connection,
+                                "<get_filters filter=\"rows=-1\"/>")
           == -1)
         {
           g_string_free (xml, TRUE);
@@ -8752,11 +8752,11 @@ edit_alert (openvas_connection_t *connection, credentials_t * credentials,
     {
       /* Get tasks. */
 
-      if (openvas_connection_sendf (connection,
-                                    "<get_tasks"
-                                    " schedules_only=\"1\""
-                                    " filter=\"owner=any permission=start_task"
-                                    "          rows=-1\"/>")
+      if (gvm_connection_sendf (connection,
+                                "<get_tasks"
+                                " schedules_only=\"1\""
+                                " filter=\"owner=any permission=start_task"
+                                "          rows=-1\"/>")
           == -1)
         {
           g_string_free (xml, TRUE);
@@ -8788,10 +8788,10 @@ edit_alert (openvas_connection_t *connection, credentials_t * credentials,
 
   if (command_enabled (credentials, "GET_CREDENTIALS"))
     {
-      if (openvas_connection_sendf (connection,
-                                    "<get_credentials"
-                                    " filter=\"type=up owner=any permission=any"
-                                    "          rows=-1\"/>")
+      if (gvm_connection_sendf (connection,
+                                "<get_credentials"
+                                " filter=\"type=up owner=any permission=any"
+                                "          rows=-1\"/>")
           == -1)
         {
           g_string_free (xml, TRUE);
@@ -8838,7 +8838,7 @@ edit_alert (openvas_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-edit_alert_omp (openvas_connection_t *connection, credentials_t * credentials,
+edit_alert_omp (gvm_connection_t *connection, credentials_t * credentials,
                 params_t *params, cmd_response_data_t* response_data)
 {
   return edit_alert (connection, credentials, params, NULL, response_data);
@@ -8855,7 +8855,7 @@ edit_alert_omp (openvas_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-save_alert_omp (openvas_connection_t *connection, credentials_t * credentials,
+save_alert_omp (gvm_connection_t *connection, credentials_t * credentials,
                 params_t *params, cmd_response_data_t* response_data)
 {
   GString *xml;
@@ -8999,7 +8999,7 @@ save_alert_omp (openvas_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-test_alert_omp (openvas_connection_t *connection, credentials_t * credentials,
+test_alert_omp (gvm_connection_t *connection, credentials_t * credentials,
                 params_t *params, cmd_response_data_t* response_data)
 {
   gchar *html, *response;
@@ -9021,9 +9021,9 @@ test_alert_omp (openvas_connection_t *connection, credentials_t * credentials,
 
   /* Test the alert. */
 
-  if (openvas_connection_sendf (connection,
-                                "<test_alert alert_id=\"%s\"/>",
-                                alert_id)
+  if (gvm_connection_sendf (connection,
+                            "<test_alert alert_id=\"%s\"/>",
+                            alert_id)
       == -1)
     {
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
@@ -9069,7 +9069,7 @@ test_alert_omp (openvas_connection_t *connection, credentials_t * credentials,
  * @return Alert XML on success.  HTML result of XSL transformation on error.
  */
 char *
-export_alert_omp (openvas_connection_t *connection,
+export_alert_omp (gvm_connection_t *connection,
                   credentials_t * credentials, params_t *params,
                   cmd_response_data_t* response_data)
 {
@@ -9089,7 +9089,7 @@ export_alert_omp (openvas_connection_t *connection,
  *         on error.
  */
 char *
-export_alerts_omp (openvas_connection_t *connection,
+export_alerts_omp (gvm_connection_t *connection,
                    credentials_t * credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
@@ -9109,7 +9109,7 @@ export_alerts_omp (openvas_connection_t *connection,
  * @return Result of XSL transformation.
  */
 static char *
-new_target (openvas_connection_t *connection, credentials_t *credentials,
+new_target (gvm_connection_t *connection, credentials_t *credentials,
             params_t *params, const char *extra_xml,
             cmd_response_data_t* response_data)
 {
@@ -9184,9 +9184,9 @@ new_target (openvas_connection_t *connection, credentials_t *credentials,
     {
       /* Get the credentials. */
 
-      if (openvas_connection_sendf (connection,
-                                    "<get_credentials"
-                                    " filter=\"rows=-1 sort=name\"/>")
+      if (gvm_connection_sendf (connection,
+                                "<get_credentials"
+                                " filter=\"rows=-1 sort=name\"/>")
           == -1)
         {
           g_string_free (xml, TRUE);
@@ -9216,9 +9216,9 @@ new_target (openvas_connection_t *connection, credentials_t *credentials,
     {
       /* Get the port lists. */
 
-      if (openvas_connection_sendf (connection,
-                                    "<get_port_lists"
-                                    " filter=\"rows=-1 sort=name\"/>")
+      if (gvm_connection_sendf (connection,
+                                "<get_port_lists"
+                                " filter=\"rows=-1 sort=name\"/>")
           == -1)
         {
           g_string_free (xml, TRUE);
@@ -9269,7 +9269,7 @@ new_target (openvas_connection_t *connection, credentials_t *credentials,
  * @return Result of XSL transformation.
  */
 char *
-new_target_omp (openvas_connection_t *connection, credentials_t *credentials,
+new_target_omp (gvm_connection_t *connection, credentials_t *credentials,
                 params_t *params, cmd_response_data_t* response_data)
 {
   return new_target (connection, credentials, params, NULL, response_data);
@@ -9286,7 +9286,7 @@ new_target_omp (openvas_connection_t *connection, credentials_t *credentials,
  * @return Result of XSL transformation.
  */
 char *
-create_target_omp (openvas_connection_t *connection, credentials_t *
+create_target_omp (gvm_connection_t *connection, credentials_t *
                    credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
@@ -9508,7 +9508,7 @@ create_target_omp (openvas_connection_t *connection, credentials_t *
  * @return Result of XSL transformation.
  */
 char *
-clone_omp (openvas_connection_t *connection, credentials_t *credentials,
+clone_omp (gvm_connection_t *connection, credentials_t *credentials,
            params_t *params, cmd_response_data_t* response_data)
 {
   gchar *html, *response;
@@ -9528,14 +9528,14 @@ clone_omp (openvas_connection_t *connection, credentials_t *credentials,
 
   if (alterable && strcmp (alterable, "0"))
     {
-      if (openvas_connection_sendf (connection,
-                                    "<create_%s>"
-                                    "<copy>%s</copy>"
-                                    "<alterable>1</alterable>"
-                                    "</create_%s>",
-                                    type,
-                                    id,
-                                    type)
+      if (gvm_connection_sendf (connection,
+                                "<create_%s>"
+                                "<copy>%s</copy>"
+                                "<alterable>1</alterable>"
+                                "</create_%s>",
+                                type,
+                                id,
+                                type)
           == -1)
         {
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
@@ -9547,13 +9547,13 @@ clone_omp (openvas_connection_t *connection, credentials_t *credentials,
                                "/omp?cmd=get_tasks", response_data);
         }
     }
-  else if (openvas_connection_sendf (connection,
-                                     "<create_%s>"
-                                     "<copy>%s</copy>"
-                                     "</create_%s>",
-                                     type,
-                                     id,
-                                     type)
+  else if (gvm_connection_sendf (connection,
+                                 "<create_%s>"
+                                 "<copy>%s</copy>"
+                                 "</create_%s>",
+                                 type,
+                                 id,
+                                 type)
            == -1)
     {
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
@@ -9642,7 +9642,7 @@ clone_omp (openvas_connection_t *connection, credentials_t *credentials,
  * @return Result of XSL transformation.
  */
 char *
-delete_target_omp (openvas_connection_t *connection, credentials_t *
+delete_target_omp (gvm_connection_t *connection, credentials_t *
                    credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
@@ -9661,7 +9661,7 @@ delete_target_omp (openvas_connection_t *connection, credentials_t *
  * @return Result of XSL transformation.
  */
 char *
-delete_trash_agent_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+delete_trash_agent_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                         cmd_response_data_t* response_data)
 {
   return delete_resource (connection, "agent", credentials, params, 1, "get_trash",
@@ -9679,7 +9679,7 @@ delete_trash_agent_omp (openvas_connection_t *connection, credentials_t * creden
  * @return Result of XSL transformation.
  */
 char *
-delete_trash_config_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+delete_trash_config_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                          cmd_response_data_t* response_data)
 {
   return delete_resource (connection, "config", credentials, params, 1, "get_trash",
@@ -9697,7 +9697,7 @@ delete_trash_config_omp (openvas_connection_t *connection, credentials_t * crede
  * @return Result of XSL transformation.
  */
 char *
-delete_trash_alert_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+delete_trash_alert_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                         cmd_response_data_t* response_data)
 {
   return delete_resource (connection, "alert", credentials, params, 1, "get_trash",
@@ -9715,7 +9715,7 @@ delete_trash_alert_omp (openvas_connection_t *connection, credentials_t * creden
  * @return Result of XSL transformation.
  */
 char *
-delete_trash_credential_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+delete_trash_credential_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                              cmd_response_data_t* response_data)
 {
   return delete_resource (connection, "credential", credentials, params, 1, "get_trash",
@@ -9733,7 +9733,7 @@ delete_trash_credential_omp (openvas_connection_t *connection, credentials_t * c
  * @return Result of XSL transformation.
  */
 char *
-delete_trash_report_format_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+delete_trash_report_format_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                                 cmd_response_data_t* response_data)
 {
   return delete_resource (connection, "report_format", credentials, params, 1, "get_trash",
@@ -9751,7 +9751,7 @@ delete_trash_report_format_omp (openvas_connection_t *connection, credentials_t 
  * @return Result of XSL transformation.
  */
 char *
-delete_trash_schedule_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+delete_trash_schedule_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                            cmd_response_data_t* response_data)
 {
   return delete_resource (connection, "schedule", credentials, params, 1, "get_trash",
@@ -9769,7 +9769,7 @@ delete_trash_schedule_omp (openvas_connection_t *connection, credentials_t * cre
  * @return Result of XSL transformation.
  */
 char *
-delete_trash_target_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+delete_trash_target_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                          cmd_response_data_t* response_data)
 {
   return delete_resource (connection, "target", credentials, params, 1, "get_trash",
@@ -9787,7 +9787,7 @@ delete_trash_target_omp (openvas_connection_t *connection, credentials_t * crede
  * @return Result of XSL transformation.
  */
 char *
-delete_trash_task_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+delete_trash_task_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                        cmd_response_data_t* response_data)
 {
   return delete_resource (connection, "task", credentials, params, 1, "get_trash",
@@ -9806,7 +9806,7 @@ delete_trash_task_omp (openvas_connection_t *connection, credentials_t * credent
  * @return Result of XSL transformation.
  */
 char *
-restore_omp (openvas_connection_t *connection, credentials_t * credentials,
+restore_omp (gvm_connection_t *connection, credentials_t * credentials,
              params_t *params, cmd_response_data_t* response_data)
 {
   GString *xml;
@@ -9832,10 +9832,10 @@ restore_omp (openvas_connection_t *connection, credentials_t * credentials,
 
   /* Restore the resource. */
 
-  if (openvas_connection_sendf (connection,
-                                "<restore"
-                                " id=\"%s\"/>",
-                                target_id)
+  if (gvm_connection_sendf (connection,
+                            "<restore"
+                            " id=\"%s\"/>",
+                            target_id)
       == -1)
     {
       g_string_free (xml, TRUE);
@@ -9883,7 +9883,7 @@ restore_omp (openvas_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-empty_trashcan_omp (openvas_connection_t *connection, credentials_t *
+empty_trashcan_omp (gvm_connection_t *connection, credentials_t *
                     credentials, params_t *params,
                     cmd_response_data_t* response_data)
 {
@@ -9898,8 +9898,8 @@ empty_trashcan_omp (openvas_connection_t *connection, credentials_t *
 
   /* Empty the trash. */
 
-  if (openvas_connection_sendf (connection,
-                                "<empty_trashcan/>")
+  if (gvm_connection_sendf (connection,
+                            "<empty_trashcan/>")
       == -1)
     {
       g_string_free (xml, TRUE);
@@ -9946,7 +9946,7 @@ empty_trashcan_omp (openvas_connection_t *connection, credentials_t *
  * @return Result of XSL transformation.
  */
 static char *
-new_tag (openvas_connection_t *connection, credentials_t *credentials,
+new_tag (gvm_connection_t *connection, credentials_t *credentials,
          params_t *params, const char *extra_xml,
          cmd_response_data_t* response_data)
 {
@@ -9999,7 +9999,7 @@ new_tag (openvas_connection_t *connection, credentials_t *credentials,
  * @return Result of XSL transformation.
  */
 char *
-new_tag_omp (openvas_connection_t *connection, credentials_t *credentials,
+new_tag_omp (gvm_connection_t *connection, credentials_t *credentials,
              params_t *params, cmd_response_data_t* response_data)
 {
   return new_tag (connection, credentials, params, NULL, response_data);
@@ -10016,7 +10016,7 @@ new_tag_omp (openvas_connection_t *connection, credentials_t *credentials,
  * @return Result of XSL transformation.
  */
 char *
-create_tag_omp (openvas_connection_t *connection, credentials_t *credentials,
+create_tag_omp (gvm_connection_t *connection, credentials_t *credentials,
                 params_t *params, cmd_response_data_t* response_data)
 {
   char *ret;
@@ -10115,7 +10115,7 @@ create_tag_omp (openvas_connection_t *connection, credentials_t *credentials,
  * @return Result of XSL transformation.
  */
 char *
-delete_tag_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+delete_tag_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                 cmd_response_data_t* response_data)
 {
   return delete_resource (connection, "tag", credentials, params, 0, NULL, response_data);
@@ -10132,7 +10132,7 @@ delete_tag_omp (openvas_connection_t *connection, credentials_t * credentials, p
  * @return Result of XSL transformation.
  */
 char *
-delete_trash_tag_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+delete_trash_tag_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                       cmd_response_data_t* response_data)
 {
   return delete_resource (connection, "tag", credentials, params, 1, "get_trash",
@@ -10151,7 +10151,7 @@ delete_trash_tag_omp (openvas_connection_t *connection, credentials_t * credenti
  * @return Result of XSL transformation.
  */
 char *
-edit_tag (openvas_connection_t *connection, credentials_t * credentials,
+edit_tag (gvm_connection_t *connection, credentials_t * credentials,
           params_t *params, const char *extra_xml,
           cmd_response_data_t* response_data)
 {
@@ -10171,11 +10171,11 @@ edit_tag (openvas_connection_t *connection, credentials_t * credentials,
                            "/omp?cmd=get_tags", response_data);
     }
 
-  if (openvas_connection_sendf (connection,
-                                "<get_tags"
-                                " tag_id=\"%s\""
-                                "/>",
-                                tag_id)
+  if (gvm_connection_sendf (connection,
+                            "<get_tags"
+                            " tag_id=\"%s\""
+                            "/>",
+                            tag_id)
       == -1)
     {
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
@@ -10228,7 +10228,7 @@ edit_tag (openvas_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-edit_tag_omp (openvas_connection_t *connection, credentials_t * credentials,
+edit_tag_omp (gvm_connection_t *connection, credentials_t * credentials,
               params_t *params, cmd_response_data_t* response_data)
 {
   return edit_tag (connection, credentials, params, NULL, response_data);
@@ -10245,7 +10245,7 @@ edit_tag_omp (openvas_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-save_tag_omp (openvas_connection_t *connection, credentials_t * credentials,
+save_tag_omp (gvm_connection_t *connection, credentials_t * credentials,
               params_t *params, cmd_response_data_t* response_data)
 {
   gchar *response;
@@ -10351,7 +10351,7 @@ save_tag_omp (openvas_connection_t *connection, credentials_t * credentials,
  *         on error.
  */
 char *
-export_tag_omp (openvas_connection_t *connection, credentials_t * credentials,
+export_tag_omp (gvm_connection_t *connection, credentials_t * credentials,
                 params_t *params, cmd_response_data_t* response_data)
 {
   return export_resource (connection, "tag", credentials, params,
@@ -10370,7 +10370,7 @@ export_tag_omp (openvas_connection_t *connection, credentials_t * credentials,
  *         on error.
  */
 char *
-export_tags_omp (openvas_connection_t *connection, credentials_t * credentials,
+export_tags_omp (gvm_connection_t *connection, credentials_t * credentials,
                  params_t *params, cmd_response_data_t* response_data)
 {
   return export_many (connection, "tag", credentials, params,
@@ -10389,7 +10389,7 @@ export_tags_omp (openvas_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 static char *
-get_tag (openvas_connection_t *connection, credentials_t * credentials,
+get_tag (gvm_connection_t *connection, credentials_t * credentials,
          params_t *params, const char *extra_xml,
          cmd_response_data_t* response_data)
 {
@@ -10408,7 +10408,7 @@ get_tag (openvas_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-get_tag_omp (openvas_connection_t *connection, credentials_t * credentials,
+get_tag_omp (gvm_connection_t *connection, credentials_t * credentials,
              params_t *params, cmd_response_data_t* response_data)
 {
   return get_tag (connection, credentials, params, NULL, response_data);
@@ -10426,7 +10426,7 @@ get_tag_omp (openvas_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 static char *
-get_tags (openvas_connection_t *connection, credentials_t * credentials,
+get_tags (gvm_connection_t *connection, credentials_t * credentials,
           params_t *params, const char *extra_xml,
           cmd_response_data_t* response_data)
 {
@@ -10445,7 +10445,7 @@ get_tags (openvas_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-get_tags_omp (openvas_connection_t *connection, credentials_t * credentials,
+get_tags_omp (gvm_connection_t *connection, credentials_t * credentials,
               params_t *params, cmd_response_data_t* response_data)
 {
   return get_tags (connection, credentials, params, NULL, response_data);
@@ -10462,7 +10462,7 @@ get_tags_omp (openvas_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-toggle_tag_omp (openvas_connection_t *connection, credentials_t * credentials,
+toggle_tag_omp (gvm_connection_t *connection, credentials_t * credentials,
                 params_t *params, cmd_response_data_t* response_data)
 {
   gchar *html, *response;
@@ -10496,12 +10496,12 @@ toggle_tag_omp (openvas_connection_t *connection, credentials_t * credentials,
 
   /* Delete the resource and get all resources. */
 
-  if (openvas_connection_sendf (connection,
-                                "<modify_tag tag_id=\"%s\">"
-                                "<active>%s</active>"
-                                "</modify_tag>",
-                                tag_id,
-                                enable)
+  if (gvm_connection_sendf (connection,
+                            "<modify_tag tag_id=\"%s\">"
+                            "<active>%s</active>"
+                            "</modify_tag>",
+                            tag_id,
+                            enable)
       == -1)
     {
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
@@ -10554,7 +10554,7 @@ toggle_tag_omp (openvas_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-edit_target (openvas_connection_t *connection, credentials_t * credentials,
+edit_target (gvm_connection_t *connection, credentials_t * credentials,
              params_t *params, const char *extra_xml,
              cmd_response_data_t* response_data)
 {
@@ -10582,11 +10582,11 @@ edit_target (openvas_connection_t *connection, credentials_t * credentials,
   if (next == NULL)
     next = "get_target";
 
-  if (openvas_connection_sendf (connection,
-                                "<get_targets"
-                                " target_id=\"%s\""
-                                " details=\"1\"/>",
-                                target_id)
+  if (gvm_connection_sendf (connection,
+                            "<get_targets"
+                            " target_id=\"%s\""
+                            " details=\"1\"/>",
+                            target_id)
       == -1)
     {
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
@@ -10633,9 +10633,9 @@ edit_target (openvas_connection_t *connection, credentials_t * credentials,
     {
       /* Get the credentials. */
 
-      if (openvas_connection_sendf (connection,
-                                    "<get_credentials"
-                                    " filter=\"rows=-1 sort=name\"/>")
+      if (gvm_connection_sendf (connection,
+                                "<get_credentials"
+                                " filter=\"rows=-1 sort=name\"/>")
           == -1)
         {
           g_string_free (xml, TRUE);
@@ -10665,9 +10665,9 @@ edit_target (openvas_connection_t *connection, credentials_t * credentials,
     {
       /* Get the port lists. */
 
-      if (openvas_connection_sendf (connection,
-                                    "<get_port_lists"
-                                    " filter=\"rows=-1 sort=name\"/>")
+      if (gvm_connection_sendf (connection,
+                                "<get_port_lists"
+                                " filter=\"rows=-1 sort=name\"/>")
           == -1)
         {
           g_string_free (xml, TRUE);
@@ -10712,7 +10712,7 @@ edit_target (openvas_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-edit_target_omp (openvas_connection_t *connection, credentials_t * credentials,
+edit_target_omp (gvm_connection_t *connection, credentials_t * credentials,
                  params_t *params, cmd_response_data_t* response_data)
 {
   return edit_target (connection, credentials, params, NULL, response_data);
@@ -10730,7 +10730,7 @@ edit_target_omp (openvas_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 static char *
-get_target (openvas_connection_t *connection, credentials_t * credentials,
+get_target (gvm_connection_t *connection, credentials_t * credentials,
             params_t *params, const char *extra_xml,
             cmd_response_data_t* response_data)
 {
@@ -10749,7 +10749,7 @@ get_target (openvas_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-get_target_omp (openvas_connection_t *connection, credentials_t * credentials,
+get_target_omp (gvm_connection_t *connection, credentials_t * credentials,
                 params_t *params, cmd_response_data_t* response_data)
 {
   return get_target (connection, credentials, params, NULL, response_data);
@@ -10767,7 +10767,7 @@ get_target_omp (openvas_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 static char *
-get_targets (openvas_connection_t *connection, credentials_t * credentials,
+get_targets (gvm_connection_t *connection, credentials_t * credentials,
              params_t *params, const char *extra_xml,
              cmd_response_data_t* response_data)
 {
@@ -10786,7 +10786,7 @@ get_targets (openvas_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-get_targets_omp (openvas_connection_t *connection, credentials_t * credentials,
+get_targets_omp (gvm_connection_t *connection, credentials_t * credentials,
                  params_t *params, cmd_response_data_t* response_data)
 {
   return get_targets (connection, credentials, params, NULL, response_data);
@@ -10803,7 +10803,7 @@ get_targets_omp (openvas_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-save_target_omp (openvas_connection_t *connection, credentials_t * credentials,
+save_target_omp (gvm_connection_t *connection, credentials_t * credentials,
                  params_t *params, cmd_response_data_t* response_data)
 {
   gchar *html, *response;
@@ -11015,7 +11015,7 @@ save_target_omp (openvas_connection_t *connection, credentials_t * credentials,
 
     /* Modify the target. */
 
-    ret = openvas_connection_sendf (connection, "%s", command->str);
+    ret = gvm_connection_sendf (connection, "%s", command->str);
     g_string_free (command, TRUE);
 
     if (ret == -1)
@@ -11065,7 +11065,7 @@ save_target_omp (openvas_connection_t *connection, credentials_t * credentials,
  *         on error.
  */
 char *
-export_target_omp (openvas_connection_t *connection, credentials_t *
+export_target_omp (gvm_connection_t *connection, credentials_t *
                    credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
@@ -11085,7 +11085,7 @@ export_target_omp (openvas_connection_t *connection, credentials_t *
  *         on error.
  */
 char *
-export_targets_omp (openvas_connection_t *connection, credentials_t *
+export_targets_omp (gvm_connection_t *connection, credentials_t *
                     credentials, params_t *params,
                     cmd_response_data_t* response_data)
 {
@@ -11105,7 +11105,7 @@ export_targets_omp (openvas_connection_t *connection, credentials_t *
  * @return Result of XSL transformation.
  */
 static char *
-new_config (openvas_connection_t *connection, credentials_t *credentials,
+new_config (gvm_connection_t *connection, credentials_t *credentials,
             params_t *params, const char *extra_xml,
             cmd_response_data_t* response_data)
 {
@@ -11173,7 +11173,7 @@ new_config (openvas_connection_t *connection, credentials_t *credentials,
  * @return Result of XSL transformation.
  */
 char *
-new_config_omp (openvas_connection_t *connection, credentials_t *credentials,
+new_config_omp (gvm_connection_t *connection, credentials_t *credentials,
                 params_t *params, cmd_response_data_t* response_data)
 {
   return new_config (connection, credentials, params, NULL, response_data);
@@ -11191,7 +11191,7 @@ new_config_omp (openvas_connection_t *connection, credentials_t *credentials,
  * @return Result of XSL transformation.
  */
 static char *
-upload_config (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
+upload_config (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
                const char *extra_xml, cmd_response_data_t* response_data)
 {
   GString *xml;
@@ -11216,7 +11216,7 @@ upload_config (openvas_connection_t *connection, credentials_t *credentials, par
  * @return Result of XSL transformation.
  */
 char *
-upload_config_omp (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
+upload_config_omp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
   return upload_config (connection, credentials, params, NULL, response_data);
@@ -11233,7 +11233,7 @@ upload_config_omp (openvas_connection_t *connection, credentials_t *credentials,
  * @return Result of XSL transformation.
  */
 char *
-create_config_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+create_config_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
   gchar *html, *response;
@@ -11321,7 +11321,7 @@ create_config_omp (openvas_connection_t *connection, credentials_t * credentials
  * @return Result of XSL transformation.
  */
 char *
-import_config_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+import_config_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
   const char *no_redirect;
@@ -11396,7 +11396,7 @@ import_config_omp (openvas_connection_t *connection, credentials_t * credentials
  * @return Result of XSL transformation.
  */
 static char *
-get_configs (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
+get_configs (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
              const char *extra_xml, cmd_response_data_t* response_data)
 {
   return get_many (connection, "config", credentials, params, extra_xml, NULL,
@@ -11414,7 +11414,7 @@ get_configs (openvas_connection_t *connection, credentials_t *credentials, param
  * @return Result of XSL transformation.
  */
 char *
-get_configs_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+get_configs_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                  cmd_response_data_t* response_data)
 {
   return get_configs (connection, credentials, params, NULL, response_data);
@@ -11433,7 +11433,7 @@ get_configs_omp (openvas_connection_t *connection, credentials_t * credentials, 
  * @return Result of XSL transformation.
  */
 static char *
-get_config (openvas_connection_t *connection, credentials_t * credentials,
+get_config (gvm_connection_t *connection, credentials_t * credentials,
             params_t *params, const char *extra_xml, int edit,
             cmd_response_data_t* response_data)
 {
@@ -11452,13 +11452,13 @@ get_config (openvas_connection_t *connection, credentials_t * credentials,
     g_string_append (xml, extra_xml);
   /* Get the config families. */
 
-  if (openvas_connection_sendf (connection,
-                                "<get_configs"
-                                " config_id=\"%s\""
-                                " families=\"1\""
-                                " tasks=\"1\""
-                                " preferences=\"1\"/>",
-                                config_id)
+  if (gvm_connection_sendf (connection,
+                            "<get_configs"
+                            " config_id=\"%s\""
+                            " families=\"1\""
+                            " tasks=\"1\""
+                            " preferences=\"1\"/>",
+                            config_id)
       == -1)
     {
       g_string_free (xml, TRUE);
@@ -11485,7 +11485,7 @@ get_config (openvas_connection_t *connection, credentials_t * credentials,
 
   /* Get all the families. */
 
-  if (openvas_connection_sendf (connection, "<get_nvt_families/>") == -1)
+  if (gvm_connection_sendf (connection, "<get_nvt_families/>") == -1)
     {
       g_string_free (xml, TRUE);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
@@ -11512,7 +11512,7 @@ get_config (openvas_connection_t *connection, credentials_t * credentials,
   if (edit)
     {
       /* Get OSP scanners */
-      if (openvas_connection_sendf (connection, "<get_scanners filter=\"type=1\"/>")
+      if (gvm_connection_sendf (connection, "<get_scanners filter=\"type=1\"/>")
           == -1)
         {
           g_string_free (xml, TRUE);
@@ -11540,7 +11540,7 @@ get_config (openvas_connection_t *connection, credentials_t * credentials,
     }
 
   /* Get Credentials */
-  if (openvas_connection_sendf (connection, "<get_credentials/>") == -1)
+  if (gvm_connection_sendf (connection, "<get_credentials/>") == -1)
     {
       g_string_free (xml, TRUE);
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
@@ -11567,12 +11567,12 @@ get_config (openvas_connection_t *connection, credentials_t * credentials,
 
   g_string_append (xml, "<permissions>");
 
-  if (openvas_connection_sendf (connection,
-                                "<get_permissions"
-                                " filter=\"name:^.*(config)s?$"
-                                "          and resource_uuid=%s"
-                                "          first=1 rows=-1\"/>",
-                                config_id)
+  if (gvm_connection_sendf (connection,
+                            "<get_permissions"
+                            " filter=\"name:^.*(config)s?$"
+                            "          and resource_uuid=%s"
+                            "          first=1 rows=-1\"/>",
+                            config_id)
       == -1)
     {
       g_string_free (xml, TRUE);
@@ -11617,7 +11617,7 @@ get_config (openvas_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-get_config_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+get_config_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                 cmd_response_data_t* response_data)
 {
   return get_config (connection, credentials, params, NULL, 0, response_data);
@@ -11634,7 +11634,7 @@ get_config_omp (openvas_connection_t *connection, credentials_t * credentials, p
  * @return Result of XSL transformation.
  */
 static char *
-edit_config (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+edit_config (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
              const char *extra_xml, cmd_response_data_t* response_data)
 {
   return get_config (connection, credentials, params, extra_xml, 1, response_data);
@@ -11651,7 +11651,7 @@ edit_config (openvas_connection_t *connection, credentials_t * credentials, para
  * @return Result of XSL transformation.
  */
 char *
-edit_config_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+edit_config_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                  cmd_response_data_t* response_data)
 {
   return edit_config (connection, credentials, params, NULL, response_data);
@@ -11668,7 +11668,7 @@ edit_config_omp (openvas_connection_t *connection, credentials_t * credentials, 
  * @return Result of XSL transformation.
  */
 char *
-sync_config_omp (openvas_connection_t *connection, credentials_t * credentials,
+sync_config_omp (gvm_connection_t *connection, credentials_t * credentials,
                  params_t *params, cmd_response_data_t* response_data)
 {
   GString *xml;
@@ -11678,8 +11678,8 @@ sync_config_omp (openvas_connection_t *connection, credentials_t * credentials,
   config_id = params_value (params, "config_id");
   CHECK_PARAM (config_id, "Synchronize Config", get_configs);
 
-  if (openvas_connection_sendf (connection, "<sync_config config_id=\"%s\"/>",
-                                config_id)
+  if (gvm_connection_sendf (connection, "<sync_config config_id=\"%s\"/>",
+                            config_id)
       == -1)
     {
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
@@ -11732,7 +11732,7 @@ sync_config_omp (openvas_connection_t *connection, credentials_t * credentials,
  * @return HTML result of XSL transformation.
  */
 static char *
-save_osp_prefs (openvas_connection_t *connection, credentials_t *credentials,
+save_osp_prefs (gvm_connection_t *connection, credentials_t *credentials,
                 params_t *params, const char *next, const char *fail_next,
                 int *success, cmd_response_data_t* response_data)
 {
@@ -11760,14 +11760,14 @@ save_osp_prefs (openvas_connection_t *connection, credentials_t *credentials,
 
       /* Send the name without the osp_pref_ prefix. */
       param_name = ((char *) param_name) + 9;
-      if (openvas_connection_sendf (connection,
-                                    "<modify_config config_id=\"%s\">"
-                                    "<preference><name>%s</name>"
-                                    "<value>%s</value></preference>"
-                                    "</modify_config>",
-                                    config_id,
-                                    (char *) param_name,
-                                    value)
+      if (gvm_connection_sendf (connection,
+                                "<modify_config config_id=\"%s\">"
+                                "<preference><name>%s</name>"
+                                "<value>%s</value></preference>"
+                                "</modify_config>",
+                                config_id,
+                                (char *) param_name,
+                                value)
           == -1)
         {
           g_free (value);
@@ -11800,7 +11800,7 @@ save_osp_prefs (openvas_connection_t *connection, credentials_t *credentials,
  * @return Following page.
  */
 char *
-save_config_omp (openvas_connection_t *connection, credentials_t * credentials,
+save_config_omp (gvm_connection_t *connection, credentials_t * credentials,
                  params_t *params, cmd_response_data_t* response_data)
 {
   int omp_ret;
@@ -11821,25 +11821,25 @@ save_config_omp (openvas_connection_t *connection, credentials_t * credentials,
   /* Save name and comment. */
 
   if (scanner_id)
-    omp_ret = openvas_connection_sendf_xml (connection,
-                                            "<modify_config config_id=\"%s\">"
-                                            "<name>%s</name>"
-                                            "<comment>%s</comment>"
-                                            "<scanner>%s</scanner>"
-                                            "</modify_config>",
-                                            params_value (params, "config_id"),
-                                            name,
-                                            comment,
-                                            scanner_id);
+    omp_ret = gvm_connection_sendf_xml (connection,
+                                        "<modify_config config_id=\"%s\">"
+                                        "<name>%s</name>"
+                                        "<comment>%s</comment>"
+                                        "<scanner>%s</scanner>"
+                                        "</modify_config>",
+                                        params_value (params, "config_id"),
+                                        name,
+                                        comment,
+                                        scanner_id);
   else
-    omp_ret = openvas_connection_sendf_xml (connection,
-                                            "<modify_config config_id=\"%s\">"
-                                            "<name>%s</name>"
-                                            "<comment>%s</comment>"
-                                            "</modify_config>",
-                                            params_value (params, "config_id"),
-                                            name,
-                                            comment);
+    omp_ret = gvm_connection_sendf_xml (connection,
+                                        "<modify_config config_id=\"%s\">"
+                                        "<name>%s</name>"
+                                        "<comment>%s</comment>"
+                                        "</modify_config>",
+                                        params_value (params, "config_id"),
+                                        name,
+                                        comment);
 
   if (omp_ret == -1)
     {
@@ -11880,16 +11880,16 @@ save_config_omp (openvas_connection_t *connection, credentials_t * credentials,
                                      param->value_size)
                   : g_strdup ("");
 
-          if (openvas_connection_sendf (connection,
-                                        "<modify_config config_id=\"%s\">"
-                                        "<preference>"
-                                        "<name>%s</name>"
-                                        "<value>%s</value>"
-                                        "</preference>"
-                                        "</modify_config>",
-                                        params_value (params, "config_id"),
-                                        param_name,
-                                        value)
+          if (gvm_connection_sendf (connection,
+                                    "<modify_config config_id=\"%s\">"
+                                    "<preference>"
+                                    "<name>%s</name>"
+                                    "<value>%s</value>"
+                                    "</preference>"
+                                    "</modify_config>",
+                                    params_value (params, "config_id"),
+                                    param_name,
+                                    value)
               == -1)
             {
               g_free (value);
@@ -11927,14 +11927,14 @@ save_config_omp (openvas_connection_t *connection, credentials_t * credentials,
 
   trends = params_values (params, "trend:");
 
-  if (openvas_connection_sendf (connection,
-                                "<modify_config config_id=\"%s\">"
-                                "<family_selection>"
-                                "<growing>%i</growing>",
-                                params_value (params, "config_id"),
-                                trends
-                                && params_value (params, "trend")
-                                && strcmp (params_value (params, "trend"), "0"))
+  if (gvm_connection_sendf (connection,
+                            "<modify_config config_id=\"%s\">"
+                            "<family_selection>"
+                            "<growing>%i</growing>",
+                            params_value (params, "config_id"),
+                            trends
+                            && params_value (params, "trend")
+                            && strcmp (params_value (params, "trend"), "0"))
       == -1)
     {
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
@@ -11956,14 +11956,14 @@ save_config_omp (openvas_connection_t *connection, credentials_t * credentials,
 
       params_iterator_init (&iter, selects);
       while (params_iterator_next (&iter, &family, &param))
-        if (openvas_connection_sendf (connection,
-                                      "<family>"
-                                      "<name>%s</name>"
-                                      "<all>1</all>"
-                                      "<growing>%i</growing>"
-                                      "</family>",
-                                      family,
-                                      trends && member1 (trends, family))
+        if (gvm_connection_sendf (connection,
+                                  "<family>"
+                                  "<name>%s</name>"
+                                  "<all>1</all>"
+                                  "<growing>%i</growing>"
+                                  "</family>",
+                                  family,
+                                  trends && member1 (trends, family))
             == -1)
           {
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
@@ -11988,13 +11988,13 @@ save_config_omp (openvas_connection_t *connection, credentials_t * credentials,
           if (param->value_size == 0) continue;
           if (param->value[0] == '0') continue;
           if (selects && member (selects, family)) continue;
-          if (openvas_connection_sendf (connection,
-                                        "<family>"
-                                        "<name>%s</name>"
-                                        "<all>0</all>"
-                                        "<growing>1</growing>"
-                                        "</family>",
-                                        family)
+          if (gvm_connection_sendf (connection,
+                                    "<family>"
+                                    "<name>%s</name>"
+                                    "<all>0</all>"
+                                    "<growing>1</growing>"
+                                    "</family>",
+                                    family)
               == -1)
             {
               response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
@@ -12008,9 +12008,9 @@ save_config_omp (openvas_connection_t *connection, credentials_t * credentials,
         }
     }
 
-  if (openvas_connection_sendf (connection,
-                                "</family_selection>"
-                                "</modify_config>")
+  if (gvm_connection_sendf (connection,
+                            "</family_selection>"
+                            "</modify_config>")
       == -1)
     {
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
@@ -12041,7 +12041,7 @@ save_config_omp (openvas_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 static char *
-get_config_family (openvas_connection_t *connection, credentials_t *
+get_config_family (gvm_connection_t *connection, credentials_t *
                    credentials, params_t *params, int edit,
                    cmd_response_data_t* response_data)
 {
@@ -12078,15 +12078,15 @@ get_config_family (openvas_connection_t *connection, credentials_t *
   sort_field = params_value (params, "sort_field");
   sort_order = params_value (params, "sort_order");
 
-  if (openvas_connection_sendf (connection,
-                                "<get_nvts"
-                                " config_id=\"%s\" details=\"1\""
-                                " family=\"%s\" timeout=\"1\" preference_count=\"1\""
-                                " sort_field=\"%s\" sort_order=\"%s\"/>",
-                                config_id,
-                                family,
-                                sort_field ? sort_field : "nvts.name",
-                                sort_order ? sort_order : "ascending")
+  if (gvm_connection_sendf (connection,
+                            "<get_nvts"
+                            " config_id=\"%s\" details=\"1\""
+                            " family=\"%s\" timeout=\"1\" preference_count=\"1\""
+                            " sort_field=\"%s\" sort_order=\"%s\"/>",
+                            config_id,
+                            family,
+                            sort_field ? sort_field : "nvts.name",
+                            sort_order ? sort_order : "ascending")
       == -1)
     {
       g_string_free (xml, TRUE);
@@ -12117,19 +12117,19 @@ get_config_family (openvas_connection_t *connection, credentials_t *
 
       g_string_append (xml, "<all>");
 
-      if (openvas_connection_sendf (connection,
-                                    "<get_nvts"
-                                    " details=\"1\""
-                                    " timeout=\"1\""
-                                    " family=\"%s\""
-                                    " preferences_config_id=\"%s\""
-                                    " preference_count=\"1\""
-                                    " sort_field=\"%s\""
-                                    " sort_order=\"%s\"/>",
-                                    family,
-                                    config_id,
-                                    sort_field ? sort_field : "nvts.name",
-                                    sort_order ? sort_order : "ascending")
+      if (gvm_connection_sendf (connection,
+                                "<get_nvts"
+                                " details=\"1\""
+                                " timeout=\"1\""
+                                " family=\"%s\""
+                                " preferences_config_id=\"%s\""
+                                " preference_count=\"1\""
+                                " sort_field=\"%s\""
+                                " sort_order=\"%s\"/>",
+                                family,
+                                config_id,
+                                sort_field ? sort_field : "nvts.name",
+                                sort_order ? sort_order : "ascending")
           == -1)
         {
           g_string_free (xml, TRUE);
@@ -12173,7 +12173,7 @@ get_config_family (openvas_connection_t *connection, credentials_t *
  * @return Result of XSL transformation.
  */
 char *
-get_config_family_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+get_config_family_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                        cmd_response_data_t* response_data)
 {
   return get_config_family (connection, credentials, params, 0, response_data);
@@ -12190,7 +12190,7 @@ get_config_family_omp (openvas_connection_t *connection, credentials_t * credent
  * @return Result of XSL transformation.
  */
 char *
-edit_config_family_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+edit_config_family_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                         cmd_response_data_t* response_data)
 {
   return get_config_family (connection, credentials, params, 1, response_data);
@@ -12207,7 +12207,7 @@ edit_config_family_omp (openvas_connection_t *connection, credentials_t * creden
  * @return Result of XSL transformation.
  */
 char *
-save_config_family_omp (openvas_connection_t *connection, credentials_t *
+save_config_family_omp (gvm_connection_t *connection, credentials_t *
                         credentials, params_t *params,
                         cmd_response_data_t* response_data)
 {
@@ -12231,12 +12231,12 @@ save_config_family_omp (openvas_connection_t *connection, credentials_t *
 
   /* Set the NVT selection. */
 
-  if (openvas_connection_sendf (connection,
-                                "<modify_config config_id=\"%s\">"
-                                "<nvt_selection>"
-                                "<family>%s</family>",
-                                config_id,
-                                family)
+  if (gvm_connection_sendf (connection,
+                            "<modify_config config_id=\"%s\">"
+                            "<nvt_selection>"
+                            "<family>%s</family>",
+                            config_id,
+                            family)
       == -1)
     {
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
@@ -12257,9 +12257,9 @@ save_config_family_omp (openvas_connection_t *connection, credentials_t *
 
       params_iterator_init (&iter, nvts);
       while (params_iterator_next (&iter, &name, &param))
-        if (openvas_connection_sendf (connection,
-                                      "<nvt oid=\"%s\"/>",
-                                      name)
+        if (gvm_connection_sendf (connection,
+                                  "<nvt oid=\"%s\"/>",
+                                  name)
             == -1)
           {
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
@@ -12272,9 +12272,9 @@ save_config_family_omp (openvas_connection_t *connection, credentials_t *
           }
     }
 
-  if (openvas_connection_sendf (connection,
-                                "</nvt_selection>"
-                                "</modify_config>")
+  if (gvm_connection_sendf (connection,
+                            "</nvt_selection>"
+                            "</modify_config>")
       == -1)
     {
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
@@ -12305,7 +12305,7 @@ save_config_family_omp (openvas_connection_t *connection, credentials_t *
  * @return Result of XSL transformation.
  */
 static char *
-get_config_nvt (openvas_connection_t *connection, credentials_t * credentials,
+get_config_nvt (gvm_connection_t *connection, credentials_t * credentials,
                 params_t *params, int edit, cmd_response_data_t* response_data)
 {
   GString *xml;
@@ -12340,15 +12340,15 @@ get_config_nvt (openvas_connection_t *connection, credentials_t * credentials,
   sort_field = params_value (params, "sort_field");
   sort_order = params_value (params, "sort_order");
 
-  if (openvas_connection_sendf (connection,
-                                "<get_nvts"
-                                " config_id=\"%s\" nvt_oid=\"%s\""
-                                " details=\"1\" preferences=\"1\""
-                                " sort_field=\"%s\" sort_order=\"%s\"/>",
-                                config_id,
-                                nvt,
-                                sort_field ? sort_field : "nvts.name",
-                                sort_order ? sort_order : "ascending")
+  if (gvm_connection_sendf (connection,
+                            "<get_nvts"
+                            " config_id=\"%s\" nvt_oid=\"%s\""
+                            " details=\"1\" preferences=\"1\""
+                            " sort_field=\"%s\" sort_order=\"%s\"/>",
+                            config_id,
+                            nvt,
+                            sort_field ? sort_field : "nvts.name",
+                            sort_order ? sort_order : "ascending")
       == -1)
     {
       g_string_free (xml, TRUE);
@@ -12375,11 +12375,11 @@ get_config_nvt (openvas_connection_t *connection, credentials_t * credentials,
 
   g_string_append (xml, "</get_config_nvt_response>");
 
-  if (openvas_connection_sendf (connection,
-                                "<get_notes"
-                                " nvt_oid=\"%s\""
-                                " sort_field=\"notes.text\"/>",
-                                nvt)
+  if (gvm_connection_sendf (connection,
+                            "<get_notes"
+                            " nvt_oid=\"%s\""
+                            " sort_field=\"notes.text\"/>",
+                            nvt)
       == -1)
     {
       g_string_free (xml, TRUE);
@@ -12404,11 +12404,11 @@ get_config_nvt (openvas_connection_t *connection, credentials_t * credentials,
                            "/omp?cmd=get_configs", response_data);
     }
 
-  if (openvas_connection_sendf (connection,
-                                "<get_overrides"
-                                " nvt_oid=\"%s\""
-                                " sort_field=\"overrides.text\"/>",
-                                nvt)
+  if (gvm_connection_sendf (connection,
+                            "<get_overrides"
+                            " nvt_oid=\"%s\""
+                            " sort_field=\"overrides.text\"/>",
+                            nvt)
       == -1)
     {
       g_string_free (xml, TRUE);
@@ -12448,7 +12448,7 @@ get_config_nvt (openvas_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-get_config_nvt_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+get_config_nvt_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                     cmd_response_data_t* response_data)
 {
   return get_config_nvt (connection, credentials, params, 0, response_data);
@@ -12465,7 +12465,7 @@ get_config_nvt_omp (openvas_connection_t *connection, credentials_t * credential
  * @return Result of XSL transformation.
  */
 char *
-edit_config_nvt_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+edit_config_nvt_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                      cmd_response_data_t* response_data)
 {
   return get_config_nvt (connection, credentials, params, 1, response_data);
@@ -12482,7 +12482,7 @@ edit_config_nvt_omp (openvas_connection_t *connection, credentials_t * credentia
  * @return Result of XSL transformation.
  */
 char *
-save_config_nvt_omp (openvas_connection_t *connection, credentials_t *
+save_config_nvt_omp (gvm_connection_t *connection, credentials_t *
                      credentials, params_t *params,
                      cmd_response_data_t* response_data)
 {
@@ -12620,27 +12620,27 @@ save_config_nvt_omp (openvas_connection_t *connection, credentials_t *
 
               if (strcmp (timeout, "0") == 0)
                 /* Leave out the value to clear the preference. */
-                ret = openvas_connection_sendf (connection,
-                                                "<modify_config"
-                                                " config_id=\"%s\">"
-                                                "<preference>"
-                                                "<name>%s</name>"
-                                                "</preference>"
-                                                "</modify_config>",
-                                                config_id,
-                                                preference_name_escaped);
+                ret = gvm_connection_sendf (connection,
+                                            "<modify_config"
+                                            " config_id=\"%s\">"
+                                            "<preference>"
+                                            "<name>%s</name>"
+                                            "</preference>"
+                                            "</modify_config>",
+                                            config_id,
+                                            preference_name_escaped);
               else
-                ret = openvas_connection_sendf (connection,
-                                                "<modify_config"
-                                                " config_id=\"%s\">"
-                                                "<preference>"
-                                                "<name>%s</name>"
-                                                "<value>%s</value>"
-                                                "</preference>"
-                                                "</modify_config>",
-                                                config_id,
-                                                preference_name_escaped,
-                                                value);
+                ret = gvm_connection_sendf (connection,
+                                            "<modify_config"
+                                            " config_id=\"%s\">"
+                                            "<preference>"
+                                            "<name>%s</name>"
+                                            "<value>%s</value>"
+                                            "</preference>"
+                                            "</modify_config>",
+                                            config_id,
+                                            preference_name_escaped,
+                                            value);
 
               g_free (preference_name_escaped);
             }
@@ -12649,19 +12649,19 @@ save_config_nvt_omp (openvas_connection_t *connection, credentials_t *
               gchar *preference_name_escaped;
               preference_name_escaped = g_markup_escape_text (preference_name,
                                                               -1);
-              ret = openvas_connection_sendf (connection,
-                                              "<modify_config"
-                                              " config_id=\"%s\">"
-                                              "<preference>"
-                                              "<nvt oid=\"%s\"/>"
-                                              "<name>%s</name>"
-                                              "<value>%s</value>"
-                                              "</preference>"
-                                              "</modify_config>",
-                                              config_id,
-                                              params_value (params, "oid"),
-                                              preference_name_escaped,
-                                              value);
+              ret = gvm_connection_sendf (connection,
+                                          "<modify_config"
+                                          " config_id=\"%s\">"
+                                          "<preference>"
+                                          "<nvt oid=\"%s\"/>"
+                                          "<name>%s</name>"
+                                          "<value>%s</value>"
+                                          "</preference>"
+                                          "</modify_config>",
+                                          config_id,
+                                          params_value (params, "oid"),
+                                          preference_name_escaped,
+                                          value);
               g_free (preference_name_escaped);
             }
 
@@ -12705,7 +12705,7 @@ save_config_nvt_omp (openvas_connection_t *connection, credentials_t *
  * @return Result of XSL transformation.
  */
 char *
-delete_config_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+delete_config_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
   return delete_resource (connection, "config", credentials, params, 0, "get_configs",
@@ -12723,7 +12723,7 @@ delete_config_omp (openvas_connection_t *connection, credentials_t * credentials
  * @return Config XML on success.  HTML result of XSL transformation on error.
  */
 char *
-export_config_omp (openvas_connection_t *connection,
+export_config_omp (gvm_connection_t *connection,
                    credentials_t * credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
@@ -12743,7 +12743,7 @@ export_config_omp (openvas_connection_t *connection,
  *         on error.
  */
 char *
-export_configs_omp (openvas_connection_t *connection,
+export_configs_omp (gvm_connection_t *connection,
                     credentials_t * credentials, params_t *params,
                     cmd_response_data_t* response_data)
 {
@@ -12761,7 +12761,7 @@ export_configs_omp (openvas_connection_t *connection,
  * @return Note XML on success.  HTML result of XSL transformation on error.
  */
 char *
-export_note_omp (openvas_connection_t *connection, credentials_t * credentials,
+export_note_omp (gvm_connection_t *connection, credentials_t * credentials,
                  params_t *params, cmd_response_data_t* response_data)
 {
   return export_resource (connection, "note", credentials, params,
@@ -12780,7 +12780,7 @@ export_note_omp (openvas_connection_t *connection, credentials_t * credentials,
  *         on error.
  */
 char *
-export_notes_omp (openvas_connection_t *connection, credentials_t * credentials,
+export_notes_omp (gvm_connection_t *connection, credentials_t * credentials,
                   params_t *params, cmd_response_data_t* response_data)
 {
   return export_many (connection, "note", credentials, params,
@@ -12798,7 +12798,7 @@ export_notes_omp (openvas_connection_t *connection, credentials_t * credentials,
  * @return Override XML on success.  HTML result of XSL transformation on error.
  */
 char *
-export_override_omp (openvas_connection_t *connection,
+export_override_omp (gvm_connection_t *connection,
                      credentials_t * credentials, params_t *params,
                      cmd_response_data_t* response_data)
 {
@@ -12818,7 +12818,7 @@ export_override_omp (openvas_connection_t *connection,
  *         on error.
  */
 char *
-export_overrides_omp (openvas_connection_t *connection,
+export_overrides_omp (gvm_connection_t *connection,
                       credentials_t * credentials, params_t *params,
                       cmd_response_data_t* response_data)
 {
@@ -12838,7 +12838,7 @@ export_overrides_omp (openvas_connection_t *connection,
  *         error.
  */
 char *
-export_port_list_omp (openvas_connection_t *connection,
+export_port_list_omp (gvm_connection_t *connection,
                       credentials_t * credentials, params_t *params,
                       cmd_response_data_t* response_data)
 {
@@ -12858,7 +12858,7 @@ export_port_list_omp (openvas_connection_t *connection,
  *         on error.
  */
 char *
-export_port_lists_omp (openvas_connection_t *connection,
+export_port_lists_omp (gvm_connection_t *connection,
                        credentials_t * credentials, params_t *params,
                        cmd_response_data_t* response_data)
 {
@@ -12877,7 +12877,7 @@ export_port_lists_omp (openvas_connection_t *connection,
  * @return Config XML on success.  HTML result of XSL transformation on error.
  */
 char *
-export_preference_file_omp (openvas_connection_t *connection,
+export_preference_file_omp (gvm_connection_t *connection,
                             credentials_t * credentials, params_t *params,
                             cmd_response_data_t* response_data)
 {
@@ -12895,14 +12895,14 @@ export_preference_file_omp (openvas_connection_t *connection,
     g_string_append (xml, GSAD_MESSAGE_INVALID_PARAM ("Export Preference File"));
   else
     {
-      if (openvas_connection_sendf (connection,
-                                    "<get_preferences"
-                                    " config_id=\"%s\""
-                                    " nvt_oid=\"%s\""
-                                    " preference=\"%s\"/>",
-                                    config_id,
-                                    oid,
-                                    preference_name)
+      if (gvm_connection_sendf (connection,
+                                "<get_preferences"
+                                " config_id=\"%s\""
+                                " nvt_oid=\"%s\""
+                                " preference=\"%s\"/>",
+                                config_id,
+                                oid,
+                                preference_name)
           == -1)
         {
           g_string_free (xml, TRUE);
@@ -12976,7 +12976,7 @@ export_preference_file_omp (openvas_connection_t *connection,
  *         on error.
  */
 char *
-export_report_format_omp (openvas_connection_t *connection,
+export_report_format_omp (gvm_connection_t *connection,
                           credentials_t * credentials, params_t *params,
                           cmd_response_data_t* response_data)
 {
@@ -12996,7 +12996,7 @@ export_report_format_omp (openvas_connection_t *connection,
  *         on error.
  */
 char *
-export_report_formats_omp (openvas_connection_t *connection,
+export_report_formats_omp (gvm_connection_t *connection,
                            credentials_t * credentials, params_t *params,
                            cmd_response_data_t* response_data)
 {
@@ -13015,7 +13015,7 @@ export_report_formats_omp (openvas_connection_t *connection,
  * @return Result of XSL transformation.
  */
 char *
-delete_report_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+delete_report_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
   return delete_resource (connection, "report", credentials, params, 0, NULL,
@@ -13036,7 +13036,7 @@ delete_report_omp (openvas_connection_t *connection, credentials_t * credentials
  * @return Report.
  */
 char *
-get_report (openvas_connection_t *connection, credentials_t * credentials,
+get_report (gvm_connection_t *connection, credentials_t * credentials,
             params_t *params, const char *commands,
             const char *extra_xml, int *error,
             cmd_response_data_t* response_data)
@@ -13186,7 +13186,7 @@ get_report (openvas_connection_t *connection, credentials_t * credentials,
   commands_xml = g_string_new ("");
   if (commands)
     {
-      if (openvas_connection_sendf (connection, "%s", commands)
+      if (gvm_connection_sendf (connection, "%s", commands)
           == -1)
         {
           g_string_free (commands_xml, TRUE);
@@ -13292,28 +13292,28 @@ get_report (openvas_connection_t *connection, credentials_t * credentials,
                            "  sort-reverse=severity");
 
       if (ignore_filter)
-        ret = openvas_connection_sendf_xml (connection,
-                                            "<get_reports"
-                                            " report_id=\"%s\""
-                                            " filter=\"first=1 rows=-1"
-                                            "  result_hosts_only=0"
-                                            "  apply_overrides=1"
-                                            "  notes=1 overrides=1"
-                                            "  sort-reverse=severity\""
-                                            " alert_id=\"%s\"/>",
-                                            report_id,
-                                            alert_id);
+        ret = gvm_connection_sendf_xml (connection,
+                                        "<get_reports"
+                                        " report_id=\"%s\""
+                                        " filter=\"first=1 rows=-1"
+                                        "  result_hosts_only=0"
+                                        "  apply_overrides=1"
+                                        "  notes=1 overrides=1"
+                                        "  sort-reverse=severity\""
+                                        " alert_id=\"%s\"/>",
+                                        report_id,
+                                        alert_id);
       else
-        ret = openvas_connection_sendf_xml (connection,
-                                            "<get_reports"
-                                            " report_id=\"%s\""
-                                            " ignore_pagination=\"%d\""
-                                            " filter=\"%s\""
-                                            " alert_id=\"%s\"/>",
-                                            report_id,
-                                            ignore_pagination,
-                                            esc_filter ? esc_filter : "",
-                                            alert_id);
+        ret = gvm_connection_sendf_xml (connection,
+                                        "<get_reports"
+                                        " report_id=\"%s\""
+                                        " ignore_pagination=\"%d\""
+                                        " filter=\"%s\""
+                                        " alert_id=\"%s\"/>",
+                                        report_id,
+                                        ignore_pagination,
+                                        esc_filter ? esc_filter : "",
+                                        alert_id);
       if (ret == -1)
         {
           g_string_free (commands_xml, TRUE);
@@ -13378,25 +13378,25 @@ get_report (openvas_connection_t *connection, credentials_t * credentials,
       || sscanf (max_results, "%u", &max) != 1)
     max_results = G_STRINGIFY (RESULTS_PER_PAGE);
 
-  if (openvas_connection_sendf (connection,
-                                "<get_reports"
-                                "%s%s"
-                                " details=\"%i\""
-                                "%s%s%s",
-                                (type && (strcmp (type, "prognostic") == 0))
-                                 ? " type=\"prognostic\""
-                                 : "",
-                                (type && (strcmp (type, "assets") == 0))
-                                 ? " type=\"assets\""
-                                 : "",
-                                (type
-                                 && (strcmp (type, "assets") == 0)
-                                 && host)
-                                || delta_report_id
-                                || strcmp (report_section, "summary"),
-                                host ? " host=\"" : "",
-                                host ? host : "",
-                                host ? "\"" : "")
+  if (gvm_connection_sendf (connection,
+                            "<get_reports"
+                            "%s%s"
+                            " details=\"%i\""
+                            "%s%s%s",
+                            (type && (strcmp (type, "prognostic") == 0))
+                             ? " type=\"prognostic\""
+                             : "",
+                            (type && (strcmp (type, "assets") == 0))
+                             ? " type=\"assets\""
+                             : "",
+                            (type
+                             && (strcmp (type, "assets") == 0)
+                             && host)
+                            || delta_report_id
+                            || strcmp (report_section, "summary"),
+                            host ? " host=\"" : "",
+                            host ? host : "",
+                            host ? "\"" : "")
       == -1)
     {
       g_string_free (delta_states, TRUE);
@@ -13545,15 +13545,15 @@ get_report (openvas_connection_t *connection, credentials_t * credentials,
           return g_string_free (xml, FALSE);
         }
 
-      if (openvas_connection_sendf_xml (connection,
-                                        " host_search_phrase=\"%s\""
-                                        " host_levels=\"%s\""
-                                        " host_first_result=\"%s\""
-                                        " host_max_results=\"%s\"",
-                                        host_search_phrase,
-                                        host_levels,
-                                        host_first_result,
-                                        host_max_results))
+      if (gvm_connection_sendf_xml (connection,
+                                    " host_search_phrase=\"%s\""
+                                    " host_levels=\"%s\""
+                                    " host_first_result=\"%s\""
+                                    " host_max_results=\"%s\"",
+                                    host_search_phrase,
+                                    host_levels,
+                                    host_first_result,
+                                    host_max_results))
         {
           g_string_free (delta_states, TRUE);
           g_string_free (commands_xml, TRUE);
@@ -13584,59 +13584,59 @@ get_report (openvas_connection_t *connection, credentials_t * credentials,
       filt_id = "-2";
 
   if (ignore_filter)
-    ret = openvas_connection_sendf_xml (connection,
-                                        " filt_id=\"0\""
-                                        " filter=\"first=1 rows=-1"
-                                        "  result_hosts_only=0 apply_overrides=1"
-                                        "  notes=1 overrides=1"
-                                        "  sort-reverse=severity\""
-                                        " report_id=\"%s\""
-                                        " delta_report_id=\"%s\""
-                                        " format_id=\"%s\"/>",
-                                        (type && ((strcmp (type, "assets") == 0)
-                                                  || (strcmp (type, "prognostic")
-                                                      == 0)))
-                                          ? ""
-                                          : report_id,
-                                        delta_report_id ? delta_report_id : "0",
-                                        format_id ? format_id : "");
+    ret = gvm_connection_sendf_xml (connection,
+                                    " filt_id=\"0\""
+                                    " filter=\"first=1 rows=-1"
+                                    "  result_hosts_only=0 apply_overrides=1"
+                                    "  notes=1 overrides=1"
+                                    "  sort-reverse=severity\""
+                                    " report_id=\"%s\""
+                                    " delta_report_id=\"%s\""
+                                    " format_id=\"%s\"/>",
+                                    (type && ((strcmp (type, "assets") == 0)
+                                              || (strcmp (type, "prognostic")
+                                                  == 0)))
+                                      ? ""
+                                      : report_id,
+                                    delta_report_id ? delta_report_id : "0",
+                                    format_id ? format_id : "");
   else
-    ret = openvas_connection_sendf_xml (connection,
-                                        " ignore_pagination=\"%d\""
-                                        " filt_id=\"%s\""
-                                        " filter=\"%s\""
-                                        " pos=\"%s\""
-                                        " notes_details=\"1\""
-                                        " overrides_details=\"1\""
-                                        " report_id=\"%s\""
-                                        " delta_report_id=\"%s\""
-                                        " format_id=\"%s\"/>",
-                                        ignore_pagination,
-                                        filt_id ? filt_id : "0",
-                                        built_filter ? built_filter : "",
-                                        pos ? pos : "1",
-                                        (type && ((strcmp (type, "assets") == 0)
-                                                  || (strcmp (type, "prognostic")
-                                                      == 0)))
-                                         ? ""
-                                         : report_id,
-                                        delta_report_id ? delta_report_id : "0",
-                                        format_id ? format_id : "",
-                                        first_result,
-                                        max_results,
-                                        sort_field ? sort_field : "severity",
-                                        sort_order
-                                         ? sort_order
-                                         : ((sort_field == NULL
-                                            || strcmp (sort_field, "type") == 0
-                                            || strcmp (sort_field, "severity") == 0)
-                                           ? "descending"
-                                           : "ascending"),
-                                        levels->str,
-                                        delta_states->str,
-                                        search_phrase,
-                                        min_qod,
-                                        zone);
+    ret = gvm_connection_sendf_xml (connection,
+                                    " ignore_pagination=\"%d\""
+                                    " filt_id=\"%s\""
+                                    " filter=\"%s\""
+                                    " pos=\"%s\""
+                                    " notes_details=\"1\""
+                                    " overrides_details=\"1\""
+                                    " report_id=\"%s\""
+                                    " delta_report_id=\"%s\""
+                                    " format_id=\"%s\"/>",
+                                    ignore_pagination,
+                                    filt_id ? filt_id : "0",
+                                    built_filter ? built_filter : "",
+                                    pos ? pos : "1",
+                                    (type && ((strcmp (type, "assets") == 0)
+                                              || (strcmp (type, "prognostic")
+                                                  == 0)))
+                                     ? ""
+                                     : report_id,
+                                    delta_report_id ? delta_report_id : "0",
+                                    format_id ? format_id : "",
+                                    first_result,
+                                    max_results,
+                                    sort_field ? sort_field : "severity",
+                                    sort_order
+                                     ? sort_order
+                                     : ((sort_field == NULL
+                                        || strcmp (sort_field, "type") == 0
+                                        || strcmp (sort_field, "severity") == 0)
+                                       ? "descending"
+                                       : "ascending"),
+                                    levels->str,
+                                    delta_states->str,
+                                    search_phrase,
+                                    min_qod,
+                                    zone);
   if (ret == -1)
     {
       g_string_free (delta_states, TRUE);
@@ -14011,7 +14011,7 @@ get_report (openvas_connection_t *connection, credentials_t * credentials,
       if ((type && (strcmp (type, "prognostic") == 0))
           && (command_enabled (credentials, "GET_REPORT_FORMATS")))
         {
-          if (openvas_connection_sendf
+          if (gvm_connection_sendf
                (connection,
                 "<get_report_formats"
                 " filter=\"rows=-1 sort=name\"/>")
@@ -14050,9 +14050,9 @@ get_report (openvas_connection_t *connection, credentials_t * credentials,
 
               g_string_append (xml, "<filters>");
 
-              if (openvas_connection_sendf_xml (connection,
-                                                "<get_filters"
-                                                " filter=\"type=result\"/>")
+              if (gvm_connection_sendf_xml (connection,
+                                            "<get_filters"
+                                            " filter=\"type=result\"/>")
                   == -1)
                 {
                   g_string_free (xml, TRUE);
@@ -14127,9 +14127,9 @@ get_report (openvas_connection_t *connection, credentials_t * credentials,
 
       if (task_id)
         {
-          if (openvas_connection_sendf (connection,
-                                        "<get_tasks task_id=\"%s\" details=\"0\" />",
-                                        task_id)
+          if (gvm_connection_sendf (connection,
+                                    "<get_tasks task_id=\"%s\" details=\"0\" />",
+                                    task_id)
               == -1)
             {
               g_free (task_id);
@@ -14191,7 +14191,7 @@ get_report (openvas_connection_t *connection, credentials_t * credentials,
 
           /* Get all the report formats. */
 
-          if (openvas_connection_sendf
+          if (gvm_connection_sendf
                (connection,
                 "<get_report_formats"
                 " filter=\"rows=-1 sort=name\"/>")
@@ -14224,7 +14224,7 @@ get_report (openvas_connection_t *connection, credentials_t * credentials,
 
       if (command_enabled (credentials, "GET_ALERTS"))
         {
-          if (openvas_connection_sendf
+          if (gvm_connection_sendf
                (connection,
                 "<get_alerts"
                 " filter=\"rows=-1 sort=name\"/>")
@@ -14261,9 +14261,9 @@ get_report (openvas_connection_t *connection, credentials_t * credentials,
 
           g_string_append (xml, "<filters>");
 
-          if (openvas_connection_sendf_xml (connection,
-                                            "<get_filters"
-                                            " filter=\"type=result\"/>")
+          if (gvm_connection_sendf_xml (connection,
+                                        "<get_filters"
+                                        " filter=\"type=result\"/>")
               == -1)
             {
               g_string_free (xml, TRUE);
@@ -14295,13 +14295,13 @@ get_report (openvas_connection_t *connection, credentials_t * credentials,
 
       /* Get tag names */
 
-      if (openvas_connection_sendf (connection,
-                                    "<get_tags"
-                                    " filter=\"resource_type=report"
-                                    "          first=1"
-                                    "          rows=-1\""
-                                    " names_only=\"1\""
-                                    "/>")
+      if (gvm_connection_sendf (connection,
+                                "<get_tags"
+                                " filter=\"resource_type=report"
+                                "          first=1"
+                                "          rows=-1\""
+                                " names_only=\"1\""
+                                "/>")
           == -1)
         {
           g_string_free (xml, TRUE);
@@ -14342,7 +14342,7 @@ get_report (openvas_connection_t *connection, credentials_t * credentials,
  * @return Report.
  */
 char *
-get_report_omp (openvas_connection_t *connection, credentials_t * credentials,
+get_report_omp (gvm_connection_t *connection, credentials_t * credentials,
                 params_t *params, cmd_response_data_t* response_data)
 {
   char *result;
@@ -14367,7 +14367,7 @@ get_report_omp (openvas_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 static char *
-get_reports (openvas_connection_t *connection, credentials_t * credentials,
+get_reports (gvm_connection_t *connection, credentials_t * credentials,
              params_t *params, const char *extra_xml,
              cmd_response_data_t* response_data)
 {
@@ -14393,7 +14393,7 @@ get_reports (openvas_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-get_reports_omp (openvas_connection_t *connection, credentials_t * credentials,
+get_reports_omp (gvm_connection_t *connection, credentials_t * credentials,
                  params_t *params, cmd_response_data_t* response_data)
 {
   return get_reports (connection, credentials, params, NULL, response_data);
@@ -14410,7 +14410,7 @@ get_reports_omp (openvas_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 static char *
-get_report_section (openvas_connection_t *connection,
+get_report_section (gvm_connection_t *connection,
                     credentials_t * credentials, params_t *params,
                     const char *extra_xml, cmd_response_data_t* response_data)
 {
@@ -14524,7 +14524,7 @@ get_report_section (openvas_connection_t *connection,
  * @return Result of XSL transformation.
  */
 char *
-get_report_section_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+get_report_section_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                         cmd_response_data_t* response_data)
 {
   return get_report_section (connection, credentials, params, NULL, response_data);
@@ -14541,7 +14541,7 @@ get_report_section_omp (openvas_connection_t *connection, credentials_t * creden
  * @return SSL Certificate.
  */
 char *
-download_ssl_cert (openvas_connection_t *connection,
+download_ssl_cert (gvm_connection_t *connection,
                    credentials_t * credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
@@ -14583,7 +14583,7 @@ download_ssl_cert (openvas_connection_t *connection,
  * @return CA Certificate.
  */
 char *
-download_ca_pub (openvas_connection_t *connection, credentials_t * credentials,
+download_ca_pub (gvm_connection_t *connection, credentials_t * credentials,
                  params_t *params, cmd_response_data_t* response_data)
 {
   const char *ca_pub;
@@ -14616,7 +14616,7 @@ download_ca_pub (openvas_connection_t *connection, credentials_t * credentials,
  * @return Certificate.
  */
 char *
-download_key_pub (openvas_connection_t *connection, credentials_t * credentials,
+download_key_pub (gvm_connection_t *connection, credentials_t * credentials,
                   params_t *params, cmd_response_data_t* response_data)
 {
   const char *key_pub;
@@ -14651,7 +14651,7 @@ download_key_pub (openvas_connection_t *connection, credentials_t * credentials,
  *         on error.
  */
 char *
-export_result_omp (openvas_connection_t *connection,
+export_result_omp (gvm_connection_t *connection,
                    credentials_t * credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
@@ -14671,7 +14671,7 @@ export_result_omp (openvas_connection_t *connection,
  *         on error.
  */
 char *
-export_results_omp (openvas_connection_t *connection, credentials_t *
+export_results_omp (gvm_connection_t *connection, credentials_t *
                     credentials, params_t *params,
                     cmd_response_data_t* response_data)
 {
@@ -14691,7 +14691,7 @@ export_results_omp (openvas_connection_t *connection, credentials_t *
  * @return Result of XSL transformation.
  */
 char *
-get_results (openvas_connection_t *connection, credentials_t * credentials,
+get_results (gvm_connection_t *connection, credentials_t * credentials,
              params_t *params, const char *extra_xml,
              cmd_response_data_t* response_data)
 {
@@ -14717,7 +14717,7 @@ get_results (openvas_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-get_results_omp (openvas_connection_t *connection, credentials_t *credentials,
+get_results_omp (gvm_connection_t *connection, credentials_t *credentials,
                  params_t *params, cmd_response_data_t* response_data)
 {
   return get_results (connection,
@@ -14745,7 +14745,7 @@ get_results_omp (openvas_connection_t *connection, credentials_t *credentials,
  * @return Result of XSL transformation.
  */
 static char *
-get_result (openvas_connection_t *connection, credentials_t *credentials,
+get_result (gvm_connection_t *connection, credentials_t *credentials,
             params_t * params, const char *result_id, const char *task_id,
             const char *task_name, const char *apply_overrides,
             const char *commands, const char *report_id, const char *autofp,
@@ -14773,28 +14773,28 @@ get_result (openvas_connection_t *connection, credentials_t *credentials,
 
   /* Get the result. */
 
-  if (openvas_connection_sendf (connection,
-                                "<commands>"
-                                "%s"
-                                "<get_results"
-                                " result_id=\"%s\""
-                                "%s%s%s"
-                                " filter=\"autofp=%s"
-                                " apply_overrides=%s"
-                                " overrides=%s"
-                                " notes=1\""
-                                " overrides_details=\"1\""
-                                " notes_details=\"1\""
-                                " details=\"1\"/>"
-                                "</commands>",
-                                commands ? commands : "",
-                                result_id,
-                                task_id ? " task_id=\"" : "",
-                                task_id ? task_id : "",
-                                task_id ? "\"" : "",
-                                autofp,
-                                apply_overrides,
-                                apply_overrides)
+  if (gvm_connection_sendf (connection,
+                            "<commands>"
+                            "%s"
+                            "<get_results"
+                            " result_id=\"%s\""
+                            "%s%s%s"
+                            " filter=\"autofp=%s"
+                            " apply_overrides=%s"
+                            " overrides=%s"
+                            " notes=1\""
+                            " overrides_details=\"1\""
+                            " notes_details=\"1\""
+                            " details=\"1\"/>"
+                            "</commands>",
+                            commands ? commands : "",
+                            result_id,
+                            task_id ? " task_id=\"" : "",
+                            task_id ? task_id : "",
+                            task_id ? "\"" : "",
+                            autofp,
+                            apply_overrides,
+                            apply_overrides)
       == -1)
     {
       g_string_free (xml, TRUE);
@@ -14819,13 +14819,13 @@ get_result (openvas_connection_t *connection, credentials_t *credentials,
 
   /* Get tag names */
 
-  if (openvas_connection_sendf (connection,
-                                "<get_tags"
-                                " filter=\"resource_type=result"
-                                "          first=1"
-                                "          rows=-1\""
-                                " names_only=\"1\""
-                                "/>")
+  if (gvm_connection_sendf (connection,
+                            "<get_tags"
+                            " filter=\"resource_type=result"
+                            "          first=1"
+                            "          rows=-1\""
+                            " names_only=\"1\""
+                            "/>")
       == -1)
     {
       g_string_free (xml, TRUE);
@@ -14868,7 +14868,7 @@ get_result (openvas_connection_t *connection, credentials_t *credentials,
  * @return Result of XSL transformation.
  */
 char *
-get_result_omp (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
+get_result_omp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
                 cmd_response_data_t* response_data)
 {
   return get_result (connection, credentials, params,
@@ -14895,7 +14895,7 @@ get_result_omp (openvas_connection_t *connection, credentials_t *credentials, pa
  * @return Result of XSL transformation.
  */
 static char *
-get_result_page (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
+get_result_page (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
                  const char *extra_xml, cmd_response_data_t* response_data)
 {
   return get_result (connection, credentials, params,
@@ -14923,7 +14923,7 @@ get_result_page (openvas_connection_t *connection, credentials_t *credentials, p
  * @return Result of XSL transformation.
  */
 static char *
-get_notes (openvas_connection_t *connection, credentials_t *credentials, params_t *params, const char *extra_xml,
+get_notes (gvm_connection_t *connection, credentials_t *credentials, params_t *params, const char *extra_xml,
            cmd_response_data_t* response_data)
 {
   return get_many (connection, "note", credentials, params, extra_xml, NULL, response_data);
@@ -14940,7 +14940,7 @@ get_notes (openvas_connection_t *connection, credentials_t *credentials, params_
  * @return Result of XSL transformation.
  */
 char *
-get_notes_omp (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
+get_notes_omp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
                cmd_response_data_t* response_data)
 {
   return get_notes (connection, credentials, params, NULL, response_data);
@@ -14958,7 +14958,7 @@ get_notes_omp (openvas_connection_t *connection, credentials_t *credentials, par
  * @return Result of XSL transformation.
  */
 static char *
-get_note (openvas_connection_t *connection, credentials_t *credentials, params_t *params, const char *extra_xml,
+get_note (gvm_connection_t *connection, credentials_t *credentials, params_t *params, const char *extra_xml,
           cmd_response_data_t* response_data)
 {
   return get_one (connection, "note", credentials, params, extra_xml, NULL, response_data);
@@ -14975,7 +14975,7 @@ get_note (openvas_connection_t *connection, credentials_t *credentials, params_t
  * @return Result of XSL transformation.
  */
 char *
-get_note_omp (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
+get_note_omp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
               cmd_response_data_t* response_data)
 {
   return get_note (connection, credentials, params, NULL, response_data);
@@ -14993,7 +14993,7 @@ get_note_omp (openvas_connection_t *connection, credentials_t *credentials, para
  * @return Result of XSL transformation.
  */
 char *
-new_note (openvas_connection_t *connection, credentials_t *credentials,
+new_note (gvm_connection_t *connection, credentials_t *credentials,
           params_t *params, const char *extra_xml,
           cmd_response_data_t* response_data)
 {
@@ -15041,10 +15041,10 @@ new_note (openvas_connection_t *connection, credentials_t *credentials,
       if (extra_xml)
         g_string_append (xml, extra_xml);
 
-      if (openvas_connection_sendf (connection,
-                                    "<get_tasks"
-                                    " schedules_only=\"1\""
-                                    " details=\"0\"/>")
+      if (gvm_connection_sendf (connection,
+                                "<get_tasks"
+                                " schedules_only=\"1\""
+                                " details=\"0\"/>")
           == -1)
         {
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
@@ -15073,15 +15073,15 @@ new_note (openvas_connection_t *connection, credentials_t *credentials,
                                 g_string_free (xml, FALSE), response_data);
     }
 
-  if (openvas_connection_sendf (connection,
-                                "<get_results"
-                                " result_id=\"%s\""
-                                " task_id=\"%s\""
-                                " notes_details=\"1\""
-                                " notes=\"1\""
-                                " result_hosts_only=\"1\"/>",
-                                result_id,
-                                task_id)
+  if (gvm_connection_sendf (connection,
+                            "<get_results"
+                            " result_id=\"%s\""
+                            " task_id=\"%s\""
+                            " notes_details=\"1\""
+                            " notes=\"1\""
+                            " result_hosts_only=\"1\"/>",
+                            result_id,
+                            task_id)
       == -1)
     {
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
@@ -15172,7 +15172,7 @@ new_note (openvas_connection_t *connection, credentials_t *credentials,
  * @return Result of XSL transformation.
  */
 char *
-new_note_omp (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
+new_note_omp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
               cmd_response_data_t* response_data)
 {
   return new_note (connection, credentials, params, NULL, response_data);
@@ -15189,7 +15189,7 @@ new_note_omp (openvas_connection_t *connection, credentials_t *credentials, para
  * @return Result of XSL transformation.
  */
 char *
-create_note_omp (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
+create_note_omp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
                  cmd_response_data_t* response_data)
 {
   char *ret;
@@ -15350,7 +15350,7 @@ create_note_omp (openvas_connection_t *connection, credentials_t *credentials, p
  * @return Result of XSL transformation.
  */
 char *
-delete_note_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+delete_note_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                  cmd_response_data_t* response_data)
 {
   return delete_resource (connection, "note", credentials, params, 0, NULL, response_data);
@@ -15367,7 +15367,7 @@ delete_note_omp (openvas_connection_t *connection, credentials_t * credentials, 
  * @return Result of XSL transformation.
  */
 char *
-delete_trash_note_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+delete_trash_note_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                        cmd_response_data_t* response_data)
 {
   return delete_resource (connection, "note", credentials, params, 1, "get_trash",
@@ -15386,7 +15386,7 @@ delete_trash_note_omp (openvas_connection_t *connection, credentials_t * credent
  * @return Result of XSL transformation.
  */
 char *
-edit_note (openvas_connection_t *connection, credentials_t *credentials,
+edit_note (gvm_connection_t *connection, credentials_t *credentials,
            params_t *params, const char *extra_xml,
            cmd_response_data_t* response_data)
 {
@@ -15395,12 +15395,12 @@ edit_note (openvas_connection_t *connection, credentials_t *credentials,
 
   note_id = params_value (params, "note_id");
 
-  if (openvas_connection_sendf (connection,
-                                "<get_notes"
-                                " note_id=\"%s\""
-                                " details=\"1\""
-                                " result=\"1\"/>",
-                                note_id)
+  if (gvm_connection_sendf (connection,
+                            "<get_notes"
+                            " note_id=\"%s\""
+                            " details=\"1\""
+                            " result=\"1\"/>",
+                            note_id)
       == -1)
     {
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
@@ -15449,7 +15449,7 @@ edit_note (openvas_connection_t *connection, credentials_t *credentials,
  * @return Result of XSL transformation.
  */
 char *
-edit_note_omp (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
+edit_note_omp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
                cmd_response_data_t* response_data)
 {
   return edit_note (connection, credentials, params, NULL, response_data);
@@ -15466,7 +15466,7 @@ edit_note_omp (openvas_connection_t *connection, credentials_t *credentials, par
  * @return Result of XSL transformation.
  */
 char *
-save_note_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+save_note_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                cmd_response_data_t* response_data)
 {
   gchar *response;
@@ -15598,7 +15598,7 @@ save_note_omp (openvas_connection_t *connection, credentials_t * credentials, pa
  * @return Result of XSL transformation.
  */
 static char *
-get_overrides (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
+get_overrides (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
                const char *extra_xml, cmd_response_data_t* response_data)
 {
   return get_many (connection, "override", credentials, params, extra_xml, NULL,
@@ -15616,7 +15616,7 @@ get_overrides (openvas_connection_t *connection, credentials_t *credentials, par
  * @return Result of XSL transformation.
  */
 char *
-get_overrides_omp (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
+get_overrides_omp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
   return get_overrides (connection, credentials, params, NULL, response_data);
@@ -15634,7 +15634,7 @@ get_overrides_omp (openvas_connection_t *connection, credentials_t *credentials,
  * @return Result of XSL transformation.
  */
 static char *
-get_override (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
+get_override (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
               const char *extra_xml, cmd_response_data_t* response_data)
 {
   return get_one (connection, "override", credentials, params, extra_xml, NULL,
@@ -15652,7 +15652,7 @@ get_override (openvas_connection_t *connection, credentials_t *credentials, para
  * @return Result of XSL transformation.
  */
 char *
-get_override_omp (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
+get_override_omp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
                   cmd_response_data_t* response_data)
 {
   return get_override (connection, credentials, params, NULL, response_data);
@@ -15670,7 +15670,7 @@ get_override_omp (openvas_connection_t *connection, credentials_t *credentials, 
  * @return Result of XSL transformation.
  */
 char *
-new_override (openvas_connection_t *connection, credentials_t *credentials,
+new_override (gvm_connection_t *connection, credentials_t *credentials,
               params_t *params, const char *extra_xml,
               cmd_response_data_t* response_data)
 {
@@ -15718,10 +15718,10 @@ new_override (openvas_connection_t *connection, credentials_t *credentials,
       if (extra_xml)
         g_string_append (xml, extra_xml);
 
-      if (openvas_connection_sendf (connection,
-                                    "<get_tasks"
-                                    " schedules_only=\"1\""
-                                    " details=\"0\"/>")
+      if (gvm_connection_sendf (connection,
+                                "<get_tasks"
+                                " schedules_only=\"1\""
+                                " details=\"0\"/>")
           == -1)
         {
           response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
@@ -15750,17 +15750,17 @@ new_override (openvas_connection_t *connection, credentials_t *credentials,
                                 response_data);
     }
 
-  if (openvas_connection_sendf (connection,
-                                "<get_results"
-                                " result_id=\"%s\""
-                                " task_id=\"%s\""
-                                " notes_details=\"1\""
-                                " notes=\"1\""
-                                " overrides_details=\"1\""
-                                " overrides=\"1\""
-                                " result_hosts_only=\"1\"/>",
-                                result_id,
-                                task_id)
+  if (gvm_connection_sendf (connection,
+                            "<get_results"
+                            " result_id=\"%s\""
+                            " task_id=\"%s\""
+                            " notes_details=\"1\""
+                            " notes=\"1\""
+                            " overrides_details=\"1\""
+                            " overrides=\"1\""
+                            " result_hosts_only=\"1\"/>",
+                            result_id,
+                            task_id)
       == -1)
     {
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
@@ -15851,7 +15851,7 @@ new_override (openvas_connection_t *connection, credentials_t *credentials,
  * @return Result of XSL transformation.
  */
 char *
-new_override_omp (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
+new_override_omp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
                   cmd_response_data_t* response_data)
 {
   return new_override (connection, credentials, params, NULL, response_data);
@@ -15868,7 +15868,7 @@ new_override_omp (openvas_connection_t *connection, credentials_t *credentials, 
  * @return Result of XSL transformation.
  */
 char *
-create_override_omp (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
+create_override_omp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
                      cmd_response_data_t* response_data)
 {
   char *ret;
@@ -16057,7 +16057,7 @@ create_override_omp (openvas_connection_t *connection, credentials_t *credential
  * @return Result of XSL transformation.
  */
 char *
-delete_override_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+delete_override_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                      cmd_response_data_t* response_data)
 {
   return delete_resource (connection, "override", credentials, params, 0, NULL,
@@ -16075,7 +16075,7 @@ delete_override_omp (openvas_connection_t *connection, credentials_t * credentia
  * @return Result of XSL transformation.
  */
 char *
-delete_trash_override_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+delete_trash_override_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                            cmd_response_data_t* response_data)
 {
   return delete_resource (connection, "override", credentials, params, 1, "get_trash",
@@ -16094,7 +16094,7 @@ delete_trash_override_omp (openvas_connection_t *connection, credentials_t * cre
  * @return Result of XSL transformation.
  */
 char *
-edit_override (openvas_connection_t *connection, credentials_t *credentials,
+edit_override (gvm_connection_t *connection, credentials_t *credentials,
                params_t *params, const char *extra_xml,
                cmd_response_data_t* response_data)
 {
@@ -16103,12 +16103,12 @@ edit_override (openvas_connection_t *connection, credentials_t *credentials,
 
   override_id = params_value (params, "override_id");
 
-  if (openvas_connection_sendf (connection,
-                                "<get_overrides"
-                                " override_id=\"%s\""
-                                " details=\"1\""
-                                " result=\"1\"/>",
-                                override_id)
+  if (gvm_connection_sendf (connection,
+                            "<get_overrides"
+                            " override_id=\"%s\""
+                            " details=\"1\""
+                            " result=\"1\"/>",
+                            override_id)
       == -1)
     {
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
@@ -16157,7 +16157,7 @@ edit_override (openvas_connection_t *connection, credentials_t *credentials,
  * @return Result of XSL transformation.
  */
 char *
-edit_override_omp (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
+edit_override_omp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
   return edit_override (connection, credentials, params, NULL, response_data);
@@ -16174,7 +16174,7 @@ edit_override_omp (openvas_connection_t *connection, credentials_t *credentials,
  * @return Result of XSL transformation.
  */
 char *
-save_override_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+save_override_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
   gchar *response;
@@ -16318,7 +16318,7 @@ save_override_omp (openvas_connection_t *connection, credentials_t * credentials
  * @return Result of XSL transformation.
  */
 static char *
-get_scanners (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
+get_scanners (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
                const char *extra_xml, cmd_response_data_t* response_data)
 {
   return get_many (connection, "scanner", credentials, params, extra_xml, NULL,
@@ -16336,7 +16336,7 @@ get_scanners (openvas_connection_t *connection, credentials_t *credentials, para
  * @return Result of XSL transformation.
  */
 char *
-get_scanners_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+get_scanners_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                   cmd_response_data_t* response_data)
 {
   return get_scanners (connection, credentials, params, NULL, response_data);
@@ -16354,7 +16354,7 @@ get_scanners_omp (openvas_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 static char *
-get_scanner (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+get_scanner (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
               const char *extra_xml, cmd_response_data_t* response_data)
 {
   return get_one (connection, "scanner", credentials, params, extra_xml, NULL,
@@ -16372,7 +16372,7 @@ get_scanner (openvas_connection_t *connection, credentials_t * credentials, para
  * @return Result of XSL transformation.
  */
 char *
-get_scanner_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+get_scanner_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                  cmd_response_data_t* response_data)
 {
   return get_scanner (connection, credentials, params, NULL, response_data);
@@ -16389,7 +16389,7 @@ get_scanner_omp (openvas_connection_t *connection, credentials_t * credentials, 
  * @return Scanner XML on success.  HTML result of XSL transformation on error.
  */
 char *
-export_scanner_omp (openvas_connection_t *connection,
+export_scanner_omp (gvm_connection_t *connection,
                     credentials_t * credentials, params_t *params,
                     cmd_response_data_t* response_data)
 {
@@ -16408,7 +16408,7 @@ export_scanner_omp (openvas_connection_t *connection,
  * @return Scanners XML on success. HTML result of XSL transformation on error.
  */
 char *
-export_scanners_omp (openvas_connection_t *connection,
+export_scanners_omp (gvm_connection_t *connection,
                      credentials_t *credentials, params_t *params,
                      cmd_response_data_t* response_data)
 {
@@ -16428,15 +16428,15 @@ export_scanners_omp (openvas_connection_t *connection,
  * @return Result of XSL transformation.
  */
 static char *
-new_scanner (openvas_connection_t *connection, credentials_t *credentials,
+new_scanner (gvm_connection_t *connection, credentials_t *credentials,
              params_t *params, const char *extra_xml,
              cmd_response_data_t* response_data)
 {
   GString *xml;
 
-  if (openvas_connection_sendf (connection,
-                                "<get_credentials"
-                                " filter=\"first=1 rows=-1\" />")
+  if (gvm_connection_sendf (connection,
+                            "<get_credentials"
+                            " filter=\"first=1 rows=-1\" />")
       == -1)
     {
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
@@ -16479,7 +16479,7 @@ new_scanner (openvas_connection_t *connection, credentials_t *credentials,
  * @return Result of XSL transformation.
  */
 char *
-new_scanner_omp (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
+new_scanner_omp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
                  cmd_response_data_t* response_data)
 {
   return new_scanner (connection, credentials, params, NULL, response_data);
@@ -16496,7 +16496,7 @@ new_scanner_omp (openvas_connection_t *connection, credentials_t *credentials, p
  * @return Result of XSL transformation.
  */
 char *
-verify_scanner_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+verify_scanner_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                     cmd_response_data_t* response_data)
 {
   gchar *html, *response;
@@ -16588,7 +16588,7 @@ verify_scanner_omp (openvas_connection_t *connection, credentials_t * credential
  * @return Result of XSL transformation.
  */
 char *
-create_scanner_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+create_scanner_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                     cmd_response_data_t* response_data)
 {
   int ret;
@@ -16686,7 +16686,7 @@ create_scanner_omp (openvas_connection_t *connection, credentials_t * credential
  * @return Result of XSL transformation.
  */
 char *
-delete_scanner_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+delete_scanner_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                     cmd_response_data_t* response_data)
 {
   return delete_resource (connection, "scanner", credentials, params, 0, "get_scanners",
@@ -16704,7 +16704,7 @@ delete_scanner_omp (openvas_connection_t *connection, credentials_t * credential
  * @return Result of XSL transformation.
  */
 char *
-delete_trash_scanner_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+delete_trash_scanner_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                           cmd_response_data_t* response_data)
 {
   return delete_resource (connection, "scanner", credentials, params, 1, "get_trash",
@@ -16723,7 +16723,7 @@ delete_trash_scanner_omp (openvas_connection_t *connection, credentials_t * cred
  * @return Result of XSL transformation.
  */
 char *
-edit_scanner (openvas_connection_t *connection, credentials_t * credentials,
+edit_scanner (gvm_connection_t *connection, credentials_t * credentials,
               params_t *params, char *extra_xml,
               cmd_response_data_t* response_data)
 {
@@ -16747,12 +16747,12 @@ edit_scanner (openvas_connection_t *connection, credentials_t * credentials,
   if (next == NULL)
     next = "get_scanner";
 
-  if (openvas_connection_sendf (connection,
-                                "<commands>"
-                                "<get_scanners scanner_id=\"%s\" details=\"1\" />"
-                                "<get_credentials filter=\"first=1 rows=-1\" />"
-                                "</commands>",
-                                scanner_id)
+  if (gvm_connection_sendf (connection,
+                            "<commands>"
+                            "<get_scanners scanner_id=\"%s\" details=\"1\" />"
+                            "<get_credentials filter=\"first=1 rows=-1\" />"
+                            "</commands>",
+                            scanner_id)
       == -1)
     {
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
@@ -16805,7 +16805,7 @@ edit_scanner (openvas_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-edit_scanner_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+edit_scanner_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                   cmd_response_data_t* response_data)
 {
   return edit_scanner (connection, credentials, params, NULL, response_data);
@@ -16822,7 +16822,7 @@ edit_scanner_omp (openvas_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-save_scanner_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+save_scanner_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                   cmd_response_data_t* response_data)
 {
   gchar *response = NULL;
@@ -16970,7 +16970,7 @@ save_scanner_omp (openvas_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 static char *
-get_schedule (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+get_schedule (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
               const char *extra_xml, cmd_response_data_t* response_data)
 {
   return get_one (connection, "schedule", credentials, params, extra_xml, "tasks=\"1\"",
@@ -16988,7 +16988,7 @@ get_schedule (openvas_connection_t *connection, credentials_t * credentials, par
  * @return Result of XSL transformation.
  */
 char *
-get_schedule_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+get_schedule_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                   cmd_response_data_t* response_data)
 {
   return get_schedule (connection, credentials, params, NULL, response_data);
@@ -17006,7 +17006,7 @@ get_schedule_omp (openvas_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 static char *
-get_schedules (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
+get_schedules (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
                const char *extra_xml, cmd_response_data_t* response_data)
 {
   return get_many (connection, "schedule", credentials, params, extra_xml, NULL,
@@ -17024,7 +17024,7 @@ get_schedules (openvas_connection_t *connection, credentials_t *credentials, par
  * @return Result of XSL transformation.
  */
 char *
-get_schedules_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+get_schedules_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
   return get_schedules (connection, credentials, params, NULL, response_data);
@@ -17042,7 +17042,7 @@ get_schedules_omp (openvas_connection_t *connection, credentials_t * credentials
  * @return Result of XSL transformation.
  */
 static char *
-new_schedule (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
+new_schedule (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
               const char *extra_xml, cmd_response_data_t* response_data)
 {
   GString *xml;
@@ -17087,7 +17087,7 @@ new_schedule (openvas_connection_t *connection, credentials_t *credentials, para
  * @return Result of XSL transformation.
  */
 char *
-new_schedule_omp (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
+new_schedule_omp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
                   cmd_response_data_t* response_data)
 {
   return new_schedule (connection, credentials, params, NULL, response_data);
@@ -17104,7 +17104,7 @@ new_schedule_omp (openvas_connection_t *connection, credentials_t *credentials, 
  * @return Result of XSL transformation.
  */
 char *
-create_schedule_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+create_schedule_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                      cmd_response_data_t* response_data)
 {
   char *ret;
@@ -17236,7 +17236,7 @@ create_schedule_omp (openvas_connection_t *connection, credentials_t * credentia
  * @return Result of XSL transformation.
  */
 char *
-delete_schedule_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+delete_schedule_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                      cmd_response_data_t* response_data)
 {
   return delete_resource (connection, "schedule", credentials, params, 0, "get_schedules",
@@ -17254,7 +17254,7 @@ delete_schedule_omp (openvas_connection_t *connection, credentials_t * credentia
  * @return Result of XSL transformation.
  */
 char *
-get_system_reports_omp (openvas_connection_t *connection,
+get_system_reports_omp (gvm_connection_t *connection,
                         credentials_t * credentials, params_t *params,
                         cmd_response_data_t* response_data)
 {
@@ -17337,9 +17337,9 @@ get_system_reports_omp (openvas_connection_t *connection,
 
   /* Get the system reports. */
 
-  if (openvas_connection_sendf (connection,
-                                "<get_system_reports brief=\"1\" slave_id=\"%s\"/>",
-                                slave_id ? slave_id : "0")
+  if (gvm_connection_sendf (connection,
+                            "<get_system_reports brief=\"1\" slave_id=\"%s\"/>",
+                            slave_id ? slave_id : "0")
       == -1)
     {
       g_string_free (xml, TRUE);
@@ -17368,9 +17368,9 @@ get_system_reports_omp (openvas_connection_t *connection,
     {
       /* Get the OMP scanners. */
 
-      if (openvas_connection_sendf (connection,
-                                    "<get_scanners"
-                                    " filter=\"sort=name rows=-1 type=4\"/>")
+      if (gvm_connection_sendf (connection,
+                                "<get_scanners"
+                                " filter=\"sort=name rows=-1 type=4\"/>")
           == -1)
         {
           g_string_free (xml, TRUE);
@@ -17415,7 +17415,7 @@ get_system_reports_omp (openvas_connection_t *connection,
  * @return Image, or NULL.
  */
 char *
-get_system_report_omp (openvas_connection_t *connection,
+get_system_report_omp (gvm_connection_t *connection,
                        credentials_t *credentials, const char *url,
                        params_t *params,
                        cmd_response_data_t* response_data)
@@ -17504,9 +17504,9 @@ get_system_report_omp (openvas_connection_t *connection,
       g_free (start_time_str);
       g_free (end_time_str);
 
-      if (openvas_connection_sendf (connection,
-                                    "%s",
-                                    omp_command)
+      if (gvm_connection_sendf (connection,
+                                "%s",
+                                omp_command)
           == -1)
         {
           g_free (omp_command);
@@ -17576,7 +17576,7 @@ get_system_report_omp (openvas_connection_t *connection,
  * @return Result of XSL transformation.
  */
 static char *
-get_report_format (openvas_connection_t *connection, credentials_t *
+get_report_format (gvm_connection_t *connection, credentials_t *
                    credentials, params_t *params,
                    const char *extra_xml, cmd_response_data_t* response_data)
 {
@@ -17595,7 +17595,7 @@ get_report_format (openvas_connection_t *connection, credentials_t *
  * @return Result of XSL transformation.
  */
 char *
-get_report_format_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+get_report_format_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                        cmd_response_data_t* response_data)
 {
   return get_report_format (connection, credentials, params, NULL, response_data);
@@ -17613,7 +17613,7 @@ get_report_format_omp (openvas_connection_t *connection, credentials_t * credent
  * @return Result of XSL transformation.
  */
 static char *
-get_report_formats (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+get_report_formats (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                     const char *extra_xml, cmd_response_data_t* response_data)
 {
   return get_many (connection, "report_format", credentials, params, extra_xml, NULL,
@@ -17631,7 +17631,7 @@ get_report_formats (openvas_connection_t *connection, credentials_t * credential
  * @return Result of XSL transformation.
  */
 char *
-get_report_formats_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+get_report_formats_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                         cmd_response_data_t* response_data)
 {
   return get_report_formats (connection, credentials, params, NULL, response_data);
@@ -17649,7 +17649,7 @@ get_report_formats_omp (openvas_connection_t *connection, credentials_t * creden
  * @return Result of XSL transformation.
  */
 static char *
-new_report_format (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
+new_report_format (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
                    const char *extra_xml, cmd_response_data_t* response_data)
 {
   GString *xml;
@@ -17672,7 +17672,7 @@ new_report_format (openvas_connection_t *connection, credentials_t *credentials,
  * @return Result of XSL transformation.
  */
 char *
-new_report_format_omp (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
+new_report_format_omp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
                        cmd_response_data_t* response_data)
 {
   return new_report_format (connection, credentials, params, NULL, response_data);
@@ -17689,7 +17689,7 @@ new_report_format_omp (openvas_connection_t *connection, credentials_t *credenti
  * @return Result of XSL transformation.
  */
 char *
-delete_report_format_omp (openvas_connection_t *connection,
+delete_report_format_omp (gvm_connection_t *connection,
                           credentials_t *credentials, params_t *params,
                           cmd_response_data_t* response_data)
 {
@@ -17709,7 +17709,7 @@ delete_report_format_omp (openvas_connection_t *connection,
  * @return Result of XSL transformation.
  */
 static char *
-edit_report_format (openvas_connection_t *connection,
+edit_report_format (gvm_connection_t *connection,
                     credentials_t *credentials,
                     params_t *params, const char *extra_xml,
                     cmd_response_data_t* response_data)
@@ -17747,7 +17747,7 @@ edit_report_format (openvas_connection_t *connection,
  * @return Result of XSL transformation.
  */
 char *
-edit_report_format_omp (openvas_connection_t *connection,
+edit_report_format_omp (gvm_connection_t *connection,
                         credentials_t *credentials, params_t *params,
                         cmd_response_data_t* response_data)
 {
@@ -17766,7 +17766,7 @@ edit_report_format_omp (openvas_connection_t *connection,
  * @return Result of XSL transformation.
  */
 char *
-import_report_format_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+import_report_format_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                           cmd_response_data_t* response_data)
 {
   const char* no_redirect;
@@ -17843,7 +17843,7 @@ import_report_format_omp (openvas_connection_t *connection, credentials_t * cred
  * @return Result of XSL transformation.
  */
 char *
-save_report_format_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+save_report_format_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                         cmd_response_data_t* response_data)
 {
   int ret;
@@ -18139,7 +18139,7 @@ save_report_format_omp (openvas_connection_t *connection, credentials_t * creden
  * @return Result of XSL transformation.
  */
 char *
-verify_report_format_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+verify_report_format_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                           cmd_response_data_t* response_data)
 {
   int ret;
@@ -18237,7 +18237,7 @@ verify_report_format_omp (openvas_connection_t *connection, credentials_t * cred
  * @return Result of XSL transformation.
  */
 char *
-run_wizard_omp (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
+run_wizard_omp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
                 cmd_response_data_t* response_data)
 {
   const char *no_redirect, *name;
@@ -18335,8 +18335,8 @@ run_wizard_omp (openvas_connection_t *connection, credentials_t *credentials, pa
 #define GET_TRASH_RESOURCE(capability, command, name)                         \
   if (command_enabled (credentials, capability))                              \
       {                                                                       \
-        if (openvas_connection_sendf                                          \
-             (connection,                                                    \
+        if (gvm_connection_sendf                                              \
+             (connection,                                                     \
               "<" command                                                     \
               " filter=\"rows=-1 sort=name\""                                 \
               " trash=\"1\"/>")                                               \
@@ -18354,7 +18354,7 @@ run_wizard_omp (openvas_connection_t *connection, credentials_t *credentials, pa
                      "/omp?cmd=get_trash", response_data);                    \
           }                                                                   \
                                                                               \
-        if (read_string_c (connection, &xml))                                \
+        if (read_string_c (connection, &xml))                                 \
           {                                                                   \
             g_string_free (xml, TRUE);                                        \
             response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR; \
@@ -18380,7 +18380,7 @@ run_wizard_omp (openvas_connection_t *connection, credentials_t *credentials, pa
  * @return Result of XSL transformation.
  */
 char *
-get_trash (openvas_connection_t *connection, credentials_t * credentials,
+get_trash (gvm_connection_t *connection, credentials_t * credentials,
            params_t *params, const char *extra_xml,
            cmd_response_data_t* response_data)
 {
@@ -18446,7 +18446,7 @@ get_trash (openvas_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-get_trash_omp (openvas_connection_t *connection, credentials_t * credentials,
+get_trash_omp (gvm_connection_t *connection, credentials_t * credentials,
                params_t *params, cmd_response_data_t* response_data)
 {
   return get_trash (connection, credentials, params, NULL, response_data);
@@ -18464,7 +18464,7 @@ get_trash_omp (openvas_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 static char *
-get_my_settings (openvas_connection_t *connection, credentials_t * credentials,
+get_my_settings (gvm_connection_t *connection, credentials_t * credentials,
                  params_t *params, const char *extra_xml,
                  cmd_response_data_t* response_data)
 {
@@ -18477,10 +18477,10 @@ get_my_settings (openvas_connection_t *connection, credentials_t * credentials,
 
   /* Get the settings. */
 
-  if (openvas_connection_sendf (connection,
-                                "<get_settings"
-                                " sort_field=\"name\""
-                                " sort_order=\"ascending\"/>")
+  if (gvm_connection_sendf (connection,
+                            "<get_settings"
+                            " sort_field=\"name\""
+                            " sort_order=\"ascending\"/>")
       == -1)
     {
       g_string_free (xml, TRUE);
@@ -18524,7 +18524,7 @@ get_my_settings (openvas_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-get_my_settings_omp (openvas_connection_t *connection, credentials_t *
+get_my_settings_omp (gvm_connection_t *connection, credentials_t *
                      credentials, params_t *params,
                      cmd_response_data_t* response_data)
 {
@@ -18607,7 +18607,7 @@ get_my_settings_omp (openvas_connection_t *connection, credentials_t *
  * @return Result of XSL transformation.
  */
 static char *
-edit_my_settings (openvas_connection_t *connection, credentials_t * credentials,
+edit_my_settings (gvm_connection_t *connection, credentials_t * credentials,
                   params_t *params, const char *extra_xml,
                   cmd_response_data_t* response_data)
 {
@@ -18685,10 +18685,10 @@ edit_my_settings (openvas_connection_t *connection, credentials_t * credentials,
 
   /* Get the settings. */
 
-  if (openvas_connection_sendf (connection,
-                                "<get_settings"
-                                " sort_field=\"name\""
-                                " sort_order=\"ascending\"/>")
+  if (gvm_connection_sendf (connection,
+                            "<get_settings"
+                            " sort_field=\"name\""
+                            " sort_order=\"ascending\"/>")
       == -1)
     {
       g_string_free (xml, TRUE);
@@ -18732,7 +18732,7 @@ edit_my_settings (openvas_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-edit_my_settings_omp (openvas_connection_t *connection, credentials_t *
+edit_my_settings_omp (gvm_connection_t *connection, credentials_t *
                       credentials, params_t *params,
                       cmd_response_data_t* response_data)
 {
@@ -18752,7 +18752,7 @@ edit_my_settings_omp (openvas_connection_t *connection, credentials_t *
  * @return 0 on success, -1 on error.
  */
 static int
-send_settings_filters (openvas_connection_t *connection, params_t *data,
+send_settings_filters (gvm_connection_t *connection, params_t *data,
                        params_t *changed, GString *xml, int *modify_failed_flag,
                        cmd_response_data_t* response_data)
 {
@@ -18776,12 +18776,12 @@ send_settings_filters (openvas_connection_t *connection, params_t *data,
                                           strlen (param->value));
               else
                 base64 = g_strdup("");
-              if (openvas_connection_sendf_xml (connection,
-                                                "<modify_setting setting_id=\"%s\">"
-                                                "<value>%s</value>"
-                                                "</modify_setting>",
-                                                uuid,
-                                                base64))
+              if (gvm_connection_sendf_xml (connection,
+                                            "<modify_setting setting_id=\"%s\">"
+                                            "<value>%s</value>"
+                                            "</modify_setting>",
+                                            uuid,
+                                            base64))
                 {
                   g_free (base64);
                   return -1;
@@ -18828,7 +18828,7 @@ send_settings_filters (openvas_connection_t *connection, params_t *data,
  * @return Result of XSL transformation.
  */
 char *
-save_my_settings_omp (openvas_connection_t *connection, credentials_t *
+save_my_settings_omp (gvm_connection_t *connection, credentials_t *
                       credentials, params_t *params,
                       const char *accept_language, char **timezone,
                       char **password, char **severity, char **language,
@@ -18925,12 +18925,12 @@ save_my_settings_omp (openvas_connection_t *connection, credentials_t *
 
       passwd_64 = g_base64_encode ((guchar*) passwd, strlen (passwd));
 
-      if (openvas_connection_sendf (connection,
-                                    "<modify_setting>"
-                                    "<name>Password</name>"
-                                    "<value>%s</value>"
-                                    "</modify_setting>",
-                                    passwd_64 ? passwd_64 : "")
+      if (gvm_connection_sendf (connection,
+                                "<modify_setting>"
+                                "<name>Password</name>"
+                                "<value>%s</value>"
+                                "</modify_setting>",
+                                passwd_64 ? passwd_64 : "")
           == -1)
         {
           g_free (passwd_64);
@@ -18979,12 +18979,12 @@ save_my_settings_omp (openvas_connection_t *connection, credentials_t *
     {
       text_64 = g_base64_encode ((guchar*) text, strlen (text));
 
-      if (openvas_connection_sendf (connection,
-                                    "<modify_setting>"
-                                    "<name>Timezone</name>"
-                                    "<value>%s</value>"
-                                    "</modify_setting>",
-                                    text_64 ? text_64 : "")
+      if (gvm_connection_sendf (connection,
+                                "<modify_setting>"
+                                "<name>Timezone</name>"
+                                "<value>%s</value>"
+                                "</modify_setting>",
+                                text_64 ? text_64 : "")
           == -1)
         {
           g_free (text_64);
@@ -19043,13 +19043,13 @@ save_my_settings_omp (openvas_connection_t *connection, credentials_t *
     {
       max_64 = g_base64_encode ((guchar*) max, strlen (max));
 
-      if (openvas_connection_sendf (connection,
-                                    "<modify_setting"
-                                    " setting_id"
-                                    "=\"5f5a8712-8017-11e1-8556-406186ea4fc5\">"
-                                    "<value>%s</value>"
-                                    "</modify_setting>",
-                                    max_64 ? max_64 : "")
+      if (gvm_connection_sendf (connection,
+                                "<modify_setting"
+                                " setting_id"
+                                "=\"5f5a8712-8017-11e1-8556-406186ea4fc5\">"
+                                "<value>%s</value>"
+                                "</modify_setting>",
+                                max_64 ? max_64 : "")
           == -1)
         {
           g_free (max_64);
@@ -19093,13 +19093,13 @@ save_my_settings_omp (openvas_connection_t *connection, credentials_t *
     {
       fname_64 = g_base64_encode ((guchar*) details_fname, strlen (details_fname));
 
-      if (openvas_connection_sendf (connection,
-                                    "<modify_setting"
-                                    " setting_id"
-                                    "=\"a6ac88c5-729c-41ba-ac0a-deea4a3441f2\">"
-                                    "<value>%s</value>"
-                                    "</modify_setting>",
-                                    fname_64 ? fname_64 : "")
+      if (gvm_connection_sendf (connection,
+                                "<modify_setting"
+                                " setting_id"
+                                "=\"a6ac88c5-729c-41ba-ac0a-deea4a3441f2\">"
+                                "<value>%s</value>"
+                                "</modify_setting>",
+                                fname_64 ? fname_64 : "")
           == -1)
         {
           g_free (fname_64);
@@ -19143,13 +19143,13 @@ save_my_settings_omp (openvas_connection_t *connection, credentials_t *
     {
       fname_64 = g_base64_encode ((guchar*) list_fname, strlen (list_fname));
 
-      if (openvas_connection_sendf (connection,
-                                    "<modify_setting"
-                                    " setting_id"
-                                    "=\"0872a6ed-4f85-48c5-ac3f-a5ef5e006745\">"
-                                    "<value>%s</value>"
-                                    "</modify_setting>",
-                                    fname_64 ? fname_64 : "")
+      if (gvm_connection_sendf (connection,
+                                "<modify_setting"
+                                " setting_id"
+                                "=\"0872a6ed-4f85-48c5-ac3f-a5ef5e006745\">"
+                                "<value>%s</value>"
+                                "</modify_setting>",
+                                fname_64 ? fname_64 : "")
           == -1)
         {
           g_free (fname_64);
@@ -19193,13 +19193,13 @@ save_my_settings_omp (openvas_connection_t *connection, credentials_t *
     {
       fname_64 = g_base64_encode ((guchar*) report_fname, strlen (report_fname));
 
-      if (openvas_connection_sendf (connection,
-                                    "<modify_setting"
-                                    " setting_id"
-                                    "=\"e1a2ae0b-736e-4484-b029-330c9e15b900\">"
-                                    "<value>%s</value>"
-                                    "</modify_setting>",
-                                    fname_64 ? fname_64 : "")
+      if (gvm_connection_sendf (connection,
+                                "<modify_setting"
+                                " setting_id"
+                                "=\"e1a2ae0b-736e-4484-b029-330c9e15b900\">"
+                                "<value>%s</value>"
+                                "</modify_setting>",
+                                fname_64 ? fname_64 : "")
           == -1)
         {
           g_free (fname_64);
@@ -19243,13 +19243,13 @@ save_my_settings_omp (openvas_connection_t *connection, credentials_t *
     {
       lang_64 = g_base64_encode ((guchar*) lang, strlen (lang));
 
-      if (openvas_connection_sendf (connection,
-                                    "<modify_setting"
-                                    " setting_id"
-                                    "=\"6765549a-934e-11e3-b358-406186ea4fc5\">"
-                                    "<value>%s</value>"
-                                    "</modify_setting>",
-                                    lang_64 ? lang_64 : "")
+      if (gvm_connection_sendf (connection,
+                                "<modify_setting"
+                                " setting_id"
+                                "=\"6765549a-934e-11e3-b358-406186ea4fc5\">"
+                                "<value>%s</value>"
+                                "</modify_setting>",
+                                lang_64 ? lang_64 : "")
           == -1)
         {
           g_free (lang_64);
@@ -19344,13 +19344,13 @@ save_my_settings_omp (openvas_connection_t *connection, credentials_t *
                     ? g_base64_encode ((guchar*) text, strlen (text))
                     : g_strdup (""));
 
-      if (openvas_connection_sendf (connection,
-                                    "<modify_setting"
-                                    " setting_id"
-                                    "=\"f16bb236-a32d-4cd5-a880-e0fcf2599f59\">"
-                                    "<value>%s</value>"
-                                    "</modify_setting>",
-                                    text_64 ? text_64 : "")
+      if (gvm_connection_sendf (connection,
+                                "<modify_setting"
+                                " setting_id"
+                                "=\"f16bb236-a32d-4cd5-a880-e0fcf2599f59\">"
+                                "<value>%s</value>"
+                                "</modify_setting>",
+                                text_64 ? text_64 : "")
           == -1)
         {
           g_free (text_64);
@@ -19409,13 +19409,13 @@ save_my_settings_omp (openvas_connection_t *connection, credentials_t *
                     ? g_base64_encode ((guchar*) text, strlen (text))
                     : g_strdup (""));
 
-      if (openvas_connection_sendf (connection,
-                                    "<modify_setting"
-                                    " setting_id"
-                                    "=\"77ec2444-e7f2-4a80-a59b-f4237782d93f\">"
-                                    "<value>%s</value>"
-                                    "</modify_setting>",
-                                    text_64 ? text_64 : "")
+      if (gvm_connection_sendf (connection,
+                                "<modify_setting"
+                                " setting_id"
+                                "=\"77ec2444-e7f2-4a80-a59b-f4237782d93f\">"
+                                "<value>%s</value>"
+                                "</modify_setting>",
+                                text_64 ? text_64 : "")
           == -1)
         {
           g_free (text_64);
@@ -19462,13 +19462,13 @@ save_my_settings_omp (openvas_connection_t *connection, credentials_t *
                     ? g_base64_encode ((guchar*) text, strlen (text))
                     : g_strdup (""));
 
-      if (openvas_connection_sendf (connection,
-                                    "<modify_setting"
-                                    " setting_id"
-                                    "=\"7eda49c5-096c-4bef-b1ab-d080d87300df\">"
-                                    "<value>%s</value>"
-                                    "</modify_setting>",
-                                    text_64 ? text_64 : "")
+      if (gvm_connection_sendf (connection,
+                                "<modify_setting"
+                                " setting_id"
+                                "=\"7eda49c5-096c-4bef-b1ab-d080d87300df\">"
+                                "<value>%s</value>"
+                                "</modify_setting>",
+                                text_64 ? text_64 : "")
           == -1)
         {
           g_free (text_64);
@@ -19526,7 +19526,7 @@ save_my_settings_omp (openvas_connection_t *connection, credentials_t *
  * @return Result of XSL transformation.
  */
 char *
-get_protocol_doc_omp (openvas_connection_t *connection, credentials_t *
+get_protocol_doc_omp (gvm_connection_t *connection, credentials_t *
                       credentials, params_t *params,
                       cmd_response_data_t* response_data)
 {
@@ -19538,7 +19538,7 @@ get_protocol_doc_omp (openvas_connection_t *connection, credentials_t *
 
   /* Get the resource. */
 
-  if (openvas_connection_sendf (connection, "<help format=\"XML\"/>")
+  if (gvm_connection_sendf (connection, "<help format=\"XML\"/>")
       == -1)
     {
       g_string_free (xml, TRUE);
@@ -19583,7 +19583,7 @@ get_protocol_doc_omp (openvas_connection_t *connection, credentials_t *
  * @return XML on success.  HTML result of XSL transformation on error.
  */
 char *
-export_omp_doc_omp (openvas_connection_t *connection,
+export_omp_doc_omp (gvm_connection_t *connection,
                     credentials_t * credentials, params_t *params,
                     cmd_response_data_t* response_data)
 {
@@ -19597,9 +19597,9 @@ export_omp_doc_omp (openvas_connection_t *connection,
             ? params_value (params, "protocol_format")
             : "xml";
 
-  if (openvas_connection_sendf (connection,
-                                "<help format=\"%s\"/>",
-                                format)
+  if (gvm_connection_sendf (connection,
+                            "<help format=\"%s\"/>",
+                            format)
       == -1)
     {
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
@@ -19684,7 +19684,7 @@ export_omp_doc_omp (openvas_connection_t *connection,
  * @return Result of XSL transformation.
  */
 static char *
-get_group (openvas_connection_t *connection, credentials_t * credentials,
+get_group (gvm_connection_t *connection, credentials_t * credentials,
            params_t *params, const char *extra_xml,
            cmd_response_data_t* response_data)
 {
@@ -19703,7 +19703,7 @@ get_group (openvas_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-get_group_omp (openvas_connection_t *connection, credentials_t * credentials,
+get_group_omp (gvm_connection_t *connection, credentials_t * credentials,
                params_t *params, cmd_response_data_t* response_data)
 {
   return get_group (connection, credentials, params, NULL, response_data);
@@ -19721,7 +19721,7 @@ get_group_omp (openvas_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 static char *
-get_groups (openvas_connection_t *connection, credentials_t * credentials,
+get_groups (gvm_connection_t *connection, credentials_t * credentials,
             params_t *params, const char *extra_xml,
             cmd_response_data_t* response_data)
 {
@@ -19740,7 +19740,7 @@ get_groups (openvas_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-get_groups_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+get_groups_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                 cmd_response_data_t* response_data)
 {
   return get_groups (connection, credentials, params, NULL, response_data);
@@ -19758,7 +19758,7 @@ get_groups_omp (openvas_connection_t *connection, credentials_t * credentials, p
  * @return Result of XSL transformation.
  */
 static char *
-new_group (openvas_connection_t *connection, credentials_t *credentials, params_t *params, const char *extra_xml,
+new_group (gvm_connection_t *connection, credentials_t *credentials, params_t *params, const char *extra_xml,
            cmd_response_data_t* response_data)
 {
   GString *xml;
@@ -19781,7 +19781,7 @@ new_group (openvas_connection_t *connection, credentials_t *credentials, params_
  * @return Result of XSL transformation.
  */
 char *
-new_group_omp (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
+new_group_omp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
                cmd_response_data_t* response_data)
 {
   return new_group (connection, credentials, params, NULL, response_data);
@@ -19798,7 +19798,7 @@ new_group_omp (openvas_connection_t *connection, credentials_t *credentials, par
  * @return Result of XSL transformation.
  */
 char *
-delete_trash_group_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+delete_trash_group_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                         cmd_response_data_t* response_data)
 {
   return delete_resource (connection, "group", credentials, params, 1, "get_trash",
@@ -19816,7 +19816,7 @@ delete_trash_group_omp (openvas_connection_t *connection, credentials_t * creden
  * @return Result of XSL transformation.
  */
 char *
-delete_group_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+delete_group_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                   cmd_response_data_t* response_data)
 {
   return delete_resource (connection, "group", credentials, params, 0,
@@ -19834,7 +19834,7 @@ delete_group_omp (openvas_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-create_group_omp (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
+create_group_omp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
                   cmd_response_data_t* response_data)
 {
   gchar *html, *response, *command, *specials_element;
@@ -19939,7 +19939,7 @@ create_group_omp (openvas_connection_t *connection, credentials_t *credentials, 
  * @return Result of XSL transformation.
  */
 char *
-edit_group (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+edit_group (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
             const char *extra_xml, cmd_response_data_t* response_data)
 {
   return edit_resource (connection, "group", credentials, params, NULL, extra_xml,
@@ -19957,7 +19957,7 @@ edit_group (openvas_connection_t *connection, credentials_t * credentials, param
  * @return Result of XSL transformation.
  */
 char *
-edit_group_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+edit_group_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                 cmd_response_data_t* response_data)
 {
   return edit_group (connection, credentials, params, NULL, response_data);
@@ -19974,7 +19974,7 @@ edit_group_omp (openvas_connection_t *connection, credentials_t * credentials, p
  * @return Group XML on success.  HTML result of XSL transformation on error.
  */
 char *
-export_group_omp (openvas_connection_t *connection, credentials_t * credentials,
+export_group_omp (gvm_connection_t *connection, credentials_t * credentials,
                   params_t *params, cmd_response_data_t* response_data)
 {
   return export_resource (connection, "group", credentials, params,
@@ -19993,7 +19993,7 @@ export_group_omp (openvas_connection_t *connection, credentials_t * credentials,
  *         on error.
  */
 char *
-export_groups_omp (openvas_connection_t *connection,
+export_groups_omp (gvm_connection_t *connection,
                    credentials_t * credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
@@ -20011,7 +20011,7 @@ export_groups_omp (openvas_connection_t *connection,
  * @return Result of XSL transformation.
  */
 char *
-save_group_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+save_group_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                 cmd_response_data_t* response_data)
 {
   int ret;
@@ -20104,7 +20104,7 @@ save_group_omp (openvas_connection_t *connection, credentials_t * credentials, p
  * @return Result of XSL transformation.
  */
 char *
-get_permission (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+get_permission (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                 const char *extra_xml, cmd_response_data_t* response_data)
 {
   return get_one (connection, "permission", credentials, params, extra_xml, "alerts=\"1\"",
@@ -20122,7 +20122,7 @@ get_permission (openvas_connection_t *connection, credentials_t * credentials, p
  * @return Result of XSL transformation.
  */
 char *
-get_permission_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+get_permission_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                     cmd_response_data_t* response_data)
 {
   return get_permission (connection, credentials, params, NULL, response_data);
@@ -20140,7 +20140,7 @@ get_permission_omp (openvas_connection_t *connection, credentials_t * credential
  * @return Result of XSL transformation.
  */
 static char *
-get_permissions (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+get_permissions (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                  const char *extra_xml, cmd_response_data_t* response_data)
 {
   return get_many (connection, "permission", credentials, params, extra_xml, NULL,
@@ -20158,7 +20158,7 @@ get_permissions (openvas_connection_t *connection, credentials_t * credentials, 
  * @return Result of XSL transformation.
  */
 char *
-get_permissions_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+get_permissions_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                      cmd_response_data_t* response_data)
 {
   return get_permissions (connection, credentials, params, NULL, response_data);
@@ -20175,7 +20175,7 @@ get_permissions_omp (openvas_connection_t *connection, credentials_t * credentia
  * @return Result of XSL transformation.
  */
 char *
-delete_trash_permission_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+delete_trash_permission_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                              cmd_response_data_t* response_data)
 {
   return delete_resource (connection, "permission", credentials, params, 1, "get_trash",
@@ -20193,7 +20193,7 @@ delete_trash_permission_omp (openvas_connection_t *connection, credentials_t * c
  * @return Result of XSL transformation.
  */
 char *
-delete_permission_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+delete_permission_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                        cmd_response_data_t* response_data)
 {
   return delete_resource (connection, "permission", credentials, params, 0, NULL,
@@ -20212,7 +20212,7 @@ delete_permission_omp (openvas_connection_t *connection, credentials_t * credent
  * @return Result of XSL transformation.
  */
 char *
-new_permission (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+new_permission (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                 const char *extra_xml, cmd_response_data_t* response_data)
 {
   GString *xml;
@@ -20374,7 +20374,7 @@ new_permission (openvas_connection_t *connection, credentials_t * credentials, p
  * @return Result of XSL transformation.
  */
 char *
-new_permission_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+new_permission_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                     cmd_response_data_t* response_data)
 {
   return new_permission (connection, credentials, params, NULL, response_data);
@@ -20391,7 +20391,7 @@ new_permission_omp (openvas_connection_t *connection, credentials_t * credential
  * @return Result of XSL transformation.
  */
 char *
-create_permission_omp (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
+create_permission_omp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
                        cmd_response_data_t* response_data)
 {
   int ret;
@@ -20735,7 +20735,7 @@ create_permission_omp (openvas_connection_t *connection, credentials_t *credenti
  * @return Result of XSL transformation.
  */
 char *
-new_permissions (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+new_permissions (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                  const char *extra_xml, cmd_response_data_t* response_data)
 {
   GString *xml;
@@ -21021,7 +21021,7 @@ new_permissions (openvas_connection_t *connection, credentials_t * credentials, 
  * @return Result of XSL transformation.
  */
 char *
-new_permissions_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+new_permissions_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                      cmd_response_data_t* response_data)
 {
   return new_permissions (connection, credentials, params, NULL, response_data);
@@ -21038,7 +21038,7 @@ new_permissions_omp (openvas_connection_t *connection, credentials_t * credentia
  * @return Result of XSL transformation.
  */
 char *
-create_permissions_omp (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
+create_permissions_omp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
                         cmd_response_data_t* response_data)
 {
   int ret;
@@ -21554,7 +21554,7 @@ create_permissions_omp (openvas_connection_t *connection, credentials_t *credent
  * @return Result of XSL transformation.
  */
 char *
-edit_permission (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+edit_permission (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                  const char *extra_xml, cmd_response_data_t* response_data)
 {
   gchar *html;
@@ -21716,7 +21716,7 @@ edit_permission (openvas_connection_t *connection, credentials_t * credentials, 
  * @return Result of XSL transformation.
  */
 char *
-edit_permission_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+edit_permission_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                      cmd_response_data_t* response_data)
 {
   return edit_permission (connection, credentials, params, NULL, response_data);
@@ -21733,7 +21733,7 @@ edit_permission_omp (openvas_connection_t *connection, credentials_t * credentia
  * @return Permission XML on success.  HTML result of XSL transformation on error.
  */
 char *
-export_permission_omp (openvas_connection_t *connection,
+export_permission_omp (gvm_connection_t *connection,
                        credentials_t * credentials, params_t *params,
                        cmd_response_data_t* response_data)
 {
@@ -21753,7 +21753,7 @@ export_permission_omp (openvas_connection_t *connection,
  *         on error.
  */
 char *
-export_permissions_omp (openvas_connection_t *connection,
+export_permissions_omp (gvm_connection_t *connection,
                         credentials_t * credentials, params_t *params,
                         cmd_response_data_t* response_data)
 {
@@ -21772,7 +21772,7 @@ export_permissions_omp (openvas_connection_t *connection,
  * @return Result of XSL transformation.
  */
 char *
-save_permission_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+save_permission_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                      cmd_response_data_t* response_data)
 {
   gchar *html, *response;
@@ -21889,7 +21889,7 @@ save_permission_omp (openvas_connection_t *connection, credentials_t * credentia
  * @return Result of XSL transformation.
  */
 static char *
-new_port_list (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
+new_port_list (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
                const char *extra_xml, cmd_response_data_t* response_data)
 {
   GString *xml;
@@ -21913,7 +21913,7 @@ new_port_list (openvas_connection_t *connection, credentials_t *credentials, par
  * @return Result of XSL transformation.
  */
 static char *
-upload_port_list (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
+upload_port_list (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
                   const char *extra_xml, cmd_response_data_t* response_data)
 {
   GString *xml;
@@ -21938,7 +21938,7 @@ upload_port_list (openvas_connection_t *connection, credentials_t *credentials, 
  * @return Result of XSL transformation.
  */
 char *
-upload_port_list_omp (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
+upload_port_list_omp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
                       cmd_response_data_t* response_data)
 {
   return upload_port_list (connection, credentials, params, NULL, response_data);
@@ -21955,7 +21955,7 @@ upload_port_list_omp (openvas_connection_t *connection, credentials_t *credentia
  * @return Result of XSL transformation.
  */
 char *
-create_port_list_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+create_port_list_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                       cmd_response_data_t* response_data)
 {
   gchar *html, *response;
@@ -22043,7 +22043,7 @@ create_port_list_omp (openvas_connection_t *connection, credentials_t * credenti
  * @return Result of XSL transformation.
  */
 static char *
-new_port_range (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
+new_port_range (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
                const char *extra_xml, cmd_response_data_t* response_data)
 {
   GString *xml;
@@ -22066,7 +22066,7 @@ new_port_range (openvas_connection_t *connection, credentials_t *credentials, pa
  * @return Result of XSL transformation.
  */
 char *
-new_port_range_omp (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
+new_port_range_omp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
   return new_port_range (connection, credentials, params, NULL, response_data);
@@ -22083,7 +22083,7 @@ new_port_range_omp (openvas_connection_t *connection, credentials_t *credentials
  * @return Result of XSL transformation.
  */
 char *
-create_port_range_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+create_port_range_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                        cmd_response_data_t* response_data)
 {
   int ret;
@@ -22174,7 +22174,7 @@ create_port_range_omp (openvas_connection_t *connection, credentials_t * credent
  * @return Result of XSL transformation.
  */
 static char *
-get_port_list (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+get_port_list (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                const char * extra_xml, cmd_response_data_t* response_data)
 {
   return get_one (connection, "port_list", credentials, params, extra_xml,
@@ -22192,7 +22192,7 @@ get_port_list (openvas_connection_t *connection, credentials_t * credentials, pa
  * @return Result of XSL transformation.
  */
 char *
-get_port_list_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+get_port_list_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
   return get_port_list (connection, credentials, params, NULL, response_data);
@@ -22210,7 +22210,7 @@ get_port_list_omp (openvas_connection_t *connection, credentials_t * credentials
  * @return Result of XSL transformation.
  */
 static char *
-get_port_lists (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+get_port_lists (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                 const char *extra_xml, cmd_response_data_t* response_data)
 {
   return get_many (connection, "port_list", credentials, params, extra_xml, NULL,
@@ -22228,7 +22228,7 @@ get_port_lists (openvas_connection_t *connection, credentials_t * credentials, p
  * @return Result of XSL transformation.
  */
 char *
-get_port_lists_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+get_port_lists_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                     cmd_response_data_t* response_data)
 {
   return get_port_lists (connection, credentials, params, NULL, response_data);
@@ -22245,7 +22245,7 @@ get_port_lists_omp (openvas_connection_t *connection, credentials_t * credential
  * @return Result of XSL transformation.
  */
 char *
-new_port_list_omp (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
+new_port_list_omp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
   return new_port_list (connection, credentials, params, NULL, response_data);
@@ -22263,7 +22263,7 @@ new_port_list_omp (openvas_connection_t *connection, credentials_t *credentials,
  * @return Result of XSL transformation.
  */
 char *
-edit_port_list (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+edit_port_list (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                 const char *extra_xml, cmd_response_data_t* response_data)
 {
   return edit_resource (connection, "port_list", credentials, params, NULL, extra_xml,
@@ -22281,7 +22281,7 @@ edit_port_list (openvas_connection_t *connection, credentials_t * credentials, p
  * @return Result of XSL transformation.
  */
 char *
-edit_port_list_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+edit_port_list_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                     cmd_response_data_t* response_data)
 {
   return edit_port_list (connection, credentials, params, NULL, response_data);
@@ -22298,7 +22298,7 @@ edit_port_list_omp (openvas_connection_t *connection, credentials_t * credential
  * @return Result of XSL transformation.
  */
 char *
-save_port_list_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+save_port_list_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                     cmd_response_data_t* response_data)
 {
   int ret;
@@ -22383,7 +22383,7 @@ save_port_list_omp (openvas_connection_t *connection, credentials_t * credential
  * @return Result of XSL transformation.
  */
 char *
-delete_port_list_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+delete_port_list_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                       cmd_response_data_t* response_data)
 {
   return delete_resource (connection, "port_list", credentials, params, 0, "get_port_lists",
@@ -22401,7 +22401,7 @@ delete_port_list_omp (openvas_connection_t *connection, credentials_t * credenti
  * @return Result of XSL transformation.
  */
 char *
-delete_trash_port_list_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+delete_trash_port_list_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                             cmd_response_data_t* response_data)
 {
   return delete_resource (connection, "port_list", credentials, params, 1, "get_trash",
@@ -22419,7 +22419,7 @@ delete_trash_port_list_omp (openvas_connection_t *connection, credentials_t * cr
  * @return Result of XSL transformation.
  */
 char *
-delete_port_range_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+delete_port_range_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                        cmd_response_data_t* response_data)
 {
   return delete_resource (connection, "port_range", credentials, params, 1,
@@ -22437,7 +22437,7 @@ delete_port_range_omp (openvas_connection_t *connection, credentials_t * credent
  * @return Result of XSL transformation.
  */
 char *
-import_port_list_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+import_port_list_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                       cmd_response_data_t* response_data)
 {
   const char *no_redirect;
@@ -22518,7 +22518,7 @@ import_port_list_omp (openvas_connection_t *connection, credentials_t * credenti
  * @return Result of XSL transformation.
  */
 static char *
-new_role (openvas_connection_t *connection, credentials_t *credentials, params_t *params, const char *extra_xml,
+new_role (gvm_connection_t *connection, credentials_t *credentials, params_t *params, const char *extra_xml,
           cmd_response_data_t* response_data)
 {
   GString *xml;
@@ -22541,7 +22541,7 @@ new_role (openvas_connection_t *connection, credentials_t *credentials, params_t
  * @return Result of XSL transformation.
  */
 char *
-new_role_omp (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
+new_role_omp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
               cmd_response_data_t* response_data)
 {
   return new_role (connection, credentials, params, NULL, response_data);
@@ -22558,7 +22558,7 @@ new_role_omp (openvas_connection_t *connection, credentials_t *credentials, para
  * @return Result of XSL transformation.
  */
 char *
-delete_trash_role_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+delete_trash_role_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                        cmd_response_data_t* response_data)
 {
   return delete_resource (connection, "role", credentials, params, 1, "get_trash",
@@ -22576,7 +22576,7 @@ delete_trash_role_omp (openvas_connection_t *connection, credentials_t * credent
  * @return Result of XSL transformation.
  */
 char *
-delete_role_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+delete_role_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                  cmd_response_data_t* response_data)
 {
   return delete_resource (connection, "role", credentials, params, 0, "get_roles",
@@ -22594,7 +22594,7 @@ delete_role_omp (openvas_connection_t *connection, credentials_t * credentials, 
  * @return Result of XSL transformation.
  */
 char *
-create_role_omp (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
+create_role_omp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
                  cmd_response_data_t* response_data)
 {
   char *ret;
@@ -22679,7 +22679,7 @@ create_role_omp (openvas_connection_t *connection, credentials_t *credentials, p
  * @return Result of XSL transformation.
  */
 char *
-edit_role (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+edit_role (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
            const char *extra_xml, cmd_response_data_t* response_data)
 {
   gchar *html;
@@ -22794,7 +22794,7 @@ edit_role (openvas_connection_t *connection, credentials_t * credentials, params
  * @return Result of XSL transformation.
  */
 char *
-edit_role_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+edit_role_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                cmd_response_data_t* response_data)
 {
   return edit_role (connection, credentials, params, NULL, response_data);
@@ -22812,7 +22812,7 @@ edit_role_omp (openvas_connection_t *connection, credentials_t * credentials, pa
  * @return Result of XSL transformation.
  */
 static char *
-get_role (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+get_role (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
           const char *extra_xml, cmd_response_data_t* response_data)
 {
   return get_one (connection, "role", credentials, params, extra_xml, NULL, response_data);
@@ -22829,7 +22829,7 @@ get_role (openvas_connection_t *connection, credentials_t * credentials, params_
  * @return Result of XSL transformation.
  */
 char *
-get_role_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+get_role_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
               cmd_response_data_t* response_data)
 {
   return get_role (connection, credentials, params, NULL, response_data);
@@ -22847,7 +22847,7 @@ get_role_omp (openvas_connection_t *connection, credentials_t * credentials, par
  * @return Result of XSL transformation.
  */
 static char *
-get_roles (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+get_roles (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
            const char *extra_xml, cmd_response_data_t* response_data)
 {
   return get_many (connection, "role", credentials, params, extra_xml, NULL, response_data);
@@ -22864,7 +22864,7 @@ get_roles (openvas_connection_t *connection, credentials_t * credentials, params
  * @return Result of XSL transformation.
  */
 char *
-get_roles_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+get_roles_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                cmd_response_data_t* response_data)
 {
   return get_roles (connection, credentials, params, NULL, response_data);
@@ -22881,7 +22881,7 @@ get_roles_omp (openvas_connection_t *connection, credentials_t * credentials, pa
  * @return Role XML on success.  HTML result of XSL transformation on error.
  */
 char *
-export_role_omp (openvas_connection_t *connection, credentials_t * credentials,
+export_role_omp (gvm_connection_t *connection, credentials_t * credentials,
                  params_t *params, cmd_response_data_t* response_data)
 {
   return export_resource (connection, "role", credentials, params,
@@ -22900,7 +22900,7 @@ export_role_omp (openvas_connection_t *connection, credentials_t * credentials,
  *         on error.
  */
 char *
-export_roles_omp (openvas_connection_t *connection, credentials_t * credentials,
+export_roles_omp (gvm_connection_t *connection, credentials_t * credentials,
                   params_t *params, cmd_response_data_t* response_data)
 {
   return export_many (connection, "role", credentials, params, response_data);
@@ -22917,7 +22917,7 @@ export_roles_omp (openvas_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-save_role_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+save_role_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                cmd_response_data_t* response_data)
 {
   int ret;
@@ -23009,7 +23009,7 @@ save_role_omp (openvas_connection_t *connection, credentials_t * credentials, pa
  * @return Result of XSL transformation.
  */
 char *
-get_feeds_omp (openvas_connection_t *connection, credentials_t * credentials,
+get_feeds_omp (gvm_connection_t *connection, credentials_t * credentials,
                params_t *params, cmd_response_data_t* response_data)
 {
   entity_t entity;
@@ -23019,10 +23019,10 @@ get_feeds_omp (openvas_connection_t *connection, credentials_t * credentials,
   struct tm *tm;
   gchar current_timestamp[30];
 
-  if (openvas_connection_sendf (connection,
-                                "<commands>"
-                                "<get_feeds/>"
-                                "</commands>")
+  if (gvm_connection_sendf (connection,
+                            "<commands>"
+                            "<get_feeds/>"
+                            "</commands>")
       == -1)
     {
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
@@ -23084,7 +23084,7 @@ get_feeds_omp (openvas_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 static char*
-sync_feed (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+sync_feed (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
            const char *sync_cmd, const char *action,
            const char *feed_name,
            cmd_response_data_t* response_data)
@@ -23096,9 +23096,9 @@ sync_feed (openvas_connection_t *connection, credentials_t * credentials, params
 
   no_redirect = params_value (params, "no_redirect");
 
-  if (openvas_connection_sendf (connection,
-                                "<%s/>",
-                                sync_cmd)
+  if (gvm_connection_sendf (connection,
+                            "<%s/>",
+                            sync_cmd)
       == -1)
     {
       response_data->http_status_code = MHD_HTTP_INTERNAL_SERVER_ERROR;
@@ -23151,7 +23151,7 @@ sync_feed (openvas_connection_t *connection, credentials_t * credentials, params
  * @return Result of XSL transformation.
  */
 char *
-sync_feed_omp (openvas_connection_t *connection, credentials_t * credentials,
+sync_feed_omp (gvm_connection_t *connection, credentials_t * credentials,
                params_t *params, cmd_response_data_t* response_data)
 {
   return sync_feed (connection, credentials, params,
@@ -23170,7 +23170,7 @@ sync_feed_omp (openvas_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-sync_scap_omp (openvas_connection_t *connection, credentials_t * credentials,
+sync_scap_omp (gvm_connection_t *connection, credentials_t * credentials,
                params_t *params, cmd_response_data_t* response_data)
 {
   return sync_feed (connection, credentials, params,
@@ -23189,7 +23189,7 @@ sync_scap_omp (openvas_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-sync_cert_omp (openvas_connection_t *connection, credentials_t * credentials,
+sync_cert_omp (gvm_connection_t *connection, credentials_t * credentials,
                params_t *params, cmd_response_data_t* response_data)
 {
   return sync_feed (connection, credentials, params,
@@ -23212,7 +23212,7 @@ sync_cert_omp (openvas_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-get_filter (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+get_filter (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
             const char *extra_xml, cmd_response_data_t* response_data)
 {
   return get_one (connection, "filter", credentials, params, extra_xml, "alerts=\"1\"",
@@ -23230,7 +23230,7 @@ get_filter (openvas_connection_t *connection, credentials_t * credentials, param
  * @return Result of XSL transformation.
  */
 char *
-get_filter_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+get_filter_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                 cmd_response_data_t* response_data)
 {
   return get_filter (connection, credentials, params, NULL, response_data);
@@ -23248,7 +23248,7 @@ get_filter_omp (openvas_connection_t *connection, credentials_t * credentials, p
  * @return Result of XSL transformation.
  */
 char *
-get_filters (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+get_filters (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
              const char *extra_xml, cmd_response_data_t* response_data)
 {
   return get_many (connection, "filter", credentials, params, extra_xml, NULL,
@@ -23266,7 +23266,7 @@ get_filters (openvas_connection_t *connection, credentials_t * credentials, para
  * @return Result of XSL transformation.
  */
 char *
-get_filters_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+get_filters_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                  cmd_response_data_t* response_data)
 {
   return get_filters (connection, credentials, params, NULL, response_data);
@@ -23284,7 +23284,7 @@ get_filters_omp (openvas_connection_t *connection, credentials_t * credentials, 
  * @return Result of XSL transformation.
  */
 static char *
-new_filter (openvas_connection_t *connection, credentials_t *credentials, params_t *params, const char *extra_xml,
+new_filter (gvm_connection_t *connection, credentials_t *credentials, params_t *params, const char *extra_xml,
             cmd_response_data_t* response_data)
 {
   GString *xml;
@@ -23307,7 +23307,7 @@ new_filter (openvas_connection_t *connection, credentials_t *credentials, params
  * @return Result of XSL transformation.
  */
 char *
-create_filter_omp (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
+create_filter_omp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
   gchar *html, *response;
@@ -23406,7 +23406,7 @@ create_filter_omp (openvas_connection_t *connection, credentials_t *credentials,
  * @return Result of XSL transformation.
  */
 char *
-delete_trash_filter_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+delete_trash_filter_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                          cmd_response_data_t* response_data)
 {
   return delete_resource (connection, "filter", credentials, params, 1, "get_trash",
@@ -23424,7 +23424,7 @@ delete_trash_filter_omp (openvas_connection_t *connection, credentials_t * crede
  * @return Result of XSL transformation.
  */
 char *
-delete_filter_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+delete_filter_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
   param_t *filt_id, *id;
@@ -23478,7 +23478,7 @@ delete_filter_omp (openvas_connection_t *connection, credentials_t * credentials
  * @return Result of XSL transformation.
  */
 char *
-edit_filter (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+edit_filter (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
              const char *extra_xml, cmd_response_data_t* response_data)
 {
   return edit_resource (connection, "filter", credentials, params, NULL, extra_xml,
@@ -23496,7 +23496,7 @@ edit_filter (openvas_connection_t *connection, credentials_t * credentials, para
  * @return Result of XSL transformation.
  */
 char *
-edit_filter_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+edit_filter_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                  cmd_response_data_t* response_data)
 {
   return edit_filter (connection, credentials, params, NULL, response_data);
@@ -23513,7 +23513,7 @@ edit_filter_omp (openvas_connection_t *connection, credentials_t * credentials, 
  * @return Filter XML on success.  HTML result of XSL transformation on error.
  */
 char *
-export_filter_omp (openvas_connection_t *connection,
+export_filter_omp (gvm_connection_t *connection,
                    credentials_t * credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
@@ -23533,7 +23533,7 @@ export_filter_omp (openvas_connection_t *connection,
  *         on error.
  */
 char *
-export_filters_omp (openvas_connection_t *connection,
+export_filters_omp (gvm_connection_t *connection,
                     credentials_t * credentials, params_t *params,
                     cmd_response_data_t* response_data)
 {
@@ -23552,7 +23552,7 @@ export_filters_omp (openvas_connection_t *connection,
  * @return Result of XSL transformation.
  */
 char *
-new_filter_omp (openvas_connection_t *connection, credentials_t *credentials, params_t *params,
+new_filter_omp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
                 cmd_response_data_t* response_data)
 {
   return new_filter (connection, credentials, params, NULL, response_data);
@@ -23569,7 +23569,7 @@ new_filter_omp (openvas_connection_t *connection, credentials_t *credentials, pa
  * @return Result of XSL transformation.
  */
 char *
-save_filter_omp (openvas_connection_t *connection, credentials_t * credentials,
+save_filter_omp (gvm_connection_t *connection, credentials_t * credentials,
                  params_t *params, cmd_response_data_t* response_data)
 {
   entity_t entity;
@@ -23594,18 +23594,18 @@ save_filter_omp (openvas_connection_t *connection, credentials_t * credentials,
 
     /* Modify the filter. */
 
-    ret = openvas_connection_sendf_xml (connection,
-                                        "<modify_filter filter_id=\"%s\">"
-                                        "<name>%s</name>"
-                                        "<comment>%s</comment>"
-                                        "<term>%s</term>"
-                                        "<type>%s</type>"
-                                        "</modify_filter>",
-                                        filter_id,
-                                        name,
-                                        comment,
-                                        term,
-                                        type);
+    ret = gvm_connection_sendf_xml (connection,
+                                    "<modify_filter filter_id=\"%s\">"
+                                    "<name>%s</name>"
+                                    "<comment>%s</comment>"
+                                    "<term>%s</term>"
+                                    "<type>%s</type>"
+                                    "</modify_filter>",
+                                    filter_id,
+                                    name,
+                                    comment,
+                                    term,
+                                    type);
 
     if (ret == -1)
       {
@@ -23661,7 +23661,7 @@ save_filter_omp (openvas_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-edit_schedule (openvas_connection_t *connection, credentials_t * credentials,
+edit_schedule (gvm_connection_t *connection, credentials_t * credentials,
                params_t *params, const char *extra_xml,
                cmd_response_data_t* response_data)
 {
@@ -23680,7 +23680,7 @@ edit_schedule (openvas_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-edit_schedule_omp (openvas_connection_t *connection, credentials_t *
+edit_schedule_omp (gvm_connection_t *connection, credentials_t *
                    credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
@@ -23698,7 +23698,7 @@ edit_schedule_omp (openvas_connection_t *connection, credentials_t *
  * @return Schedule XML on success.  HTML result of XSL transformation on error.
  */
 char *
-export_schedule_omp (openvas_connection_t *connection,
+export_schedule_omp (gvm_connection_t *connection,
                      credentials_t * credentials, params_t *params,
                      cmd_response_data_t* response_data)
 {
@@ -23717,7 +23717,7 @@ export_schedule_omp (openvas_connection_t *connection,
  * @return Schedules XML on success. HTML result of XSL transformation on error.
  */
 char *
-export_schedules_omp (openvas_connection_t *connection,
+export_schedules_omp (gvm_connection_t *connection,
                       credentials_t * credentials, params_t *params,
                       cmd_response_data_t* response_data)
 {
@@ -23736,7 +23736,7 @@ export_schedules_omp (openvas_connection_t *connection,
  * @return Result of XSL transformation.
  */
 char *
-save_schedule_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+save_schedule_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
   gchar *response;
@@ -23873,7 +23873,7 @@ save_schedule_omp (openvas_connection_t *connection, credentials_t * credentials
  * @return Result of XSL transformation.
  */
 static char *
-new_user (openvas_connection_t *connection, credentials_t *credentials, params_t *params, const char *extra_xml,
+new_user (gvm_connection_t *connection, credentials_t *credentials, params_t *params, const char *extra_xml,
           cmd_response_data_t* response_data)
 {
   GString *xml;
@@ -24033,7 +24033,7 @@ new_user (openvas_connection_t *connection, credentials_t *credentials, params_t
  * @return Result of XSL transformation.
  */
 char *
-new_user_omp (openvas_connection_t *connection, credentials_t *credentials,
+new_user_omp (gvm_connection_t *connection, credentials_t *credentials,
               params_t *params, cmd_response_data_t* response_data)
 {
   return new_user (connection, credentials, params, NULL, response_data);
@@ -24050,7 +24050,7 @@ new_user_omp (openvas_connection_t *connection, credentials_t *credentials,
  * @return Result of XSL transformation.
  */
 char *
-delete_user_omp (openvas_connection_t *connection, credentials_t * credentials,
+delete_user_omp (gvm_connection_t *connection, credentials_t * credentials,
                  params_t *params, cmd_response_data_t* response_data)
 {
   return delete_resource (connection, "user", credentials, params, 0,
@@ -24069,7 +24069,7 @@ delete_user_omp (openvas_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 static char *
-delete_user_confirm (openvas_connection_t *connection, credentials_t
+delete_user_confirm (gvm_connection_t *connection, credentials_t
                      *credentials, params_t *params,
                      const char *extra_xml, cmd_response_data_t* response_data)
 {
@@ -24138,7 +24138,7 @@ delete_user_confirm (openvas_connection_t *connection, credentials_t
  * @return Result of XSL transformation.
  */
 char *
-delete_user_confirm_omp (openvas_connection_t *connection, credentials_t *
+delete_user_confirm_omp (gvm_connection_t *connection, credentials_t *
                          credentials, params_t *params,
                          cmd_response_data_t* response_data)
 {
@@ -24158,7 +24158,7 @@ delete_user_confirm_omp (openvas_connection_t *connection, credentials_t *
  * @return Result of XSL transformation.
  */
 char *
-get_user (openvas_connection_t *connection, credentials_t * credentials,
+get_user (gvm_connection_t *connection, credentials_t * credentials,
           params_t *params, const char *extra_xml,
           cmd_response_data_t* response_data)
 {
@@ -24226,7 +24226,7 @@ get_user (openvas_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-get_user_omp (openvas_connection_t *connection, credentials_t * credentials,
+get_user_omp (gvm_connection_t *connection, credentials_t * credentials,
               params_t *params, cmd_response_data_t* response_data)
 {
   return get_user (connection, credentials, params, NULL, response_data);
@@ -24244,7 +24244,7 @@ get_user_omp (openvas_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 static char *
-get_users (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+get_users (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
            const char *extra_xml, cmd_response_data_t* response_data)
 {
   gchar *html;
@@ -24311,7 +24311,7 @@ get_users (openvas_connection_t *connection, credentials_t * credentials, params
  * @return Result of XSL transformation.
  */
 char *
-get_users_omp (openvas_connection_t *connection, credentials_t * credentials, params_t *params,
+get_users_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
                cmd_response_data_t* response_data)
 {
   return get_users (connection, credentials, params, NULL, response_data);
@@ -24328,7 +24328,7 @@ get_users_omp (openvas_connection_t *connection, credentials_t * credentials, pa
  * @return Result of XSL transformation.
  */
 char *
-create_user_omp (openvas_connection_t *connection, credentials_t * credentials,
+create_user_omp (gvm_connection_t *connection, credentials_t * credentials,
                  params_t *params, cmd_response_data_t* response_data)
 {
   const char *no_redirect;
@@ -24490,7 +24490,7 @@ create_user_omp (openvas_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-edit_user (openvas_connection_t *connection, credentials_t * credentials,
+edit_user (gvm_connection_t *connection, credentials_t * credentials,
            params_t *params, const char *extra_xml,
            cmd_response_data_t* response_data)
 {
@@ -24647,7 +24647,7 @@ edit_user (openvas_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-edit_user_omp (openvas_connection_t *connection, credentials_t * credentials,
+edit_user_omp (gvm_connection_t *connection, credentials_t * credentials,
                params_t *params, cmd_response_data_t* response_data)
 {
   return edit_user (connection, credentials, params, NULL, response_data);
@@ -24664,7 +24664,7 @@ edit_user_omp (openvas_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-get_vulns_omp (openvas_connection_t *connection, credentials_t * credentials,
+get_vulns_omp (gvm_connection_t *connection, credentials_t * credentials,
                params_t *params, cmd_response_data_t* response_data)
 {
   return get_vulns (connection, credentials, params, NULL, response_data);
@@ -24682,7 +24682,7 @@ get_vulns_omp (openvas_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 static char *
-get_vulns (openvas_connection_t *connection, credentials_t * credentials,
+get_vulns (gvm_connection_t *connection, credentials_t * credentials,
            params_t *params, const char *extra_xml,
            cmd_response_data_t* response_data)
 {
@@ -24691,7 +24691,7 @@ get_vulns (openvas_connection_t *connection, credentials_t * credentials,
 }
 
 char *
-auth_settings_omp (openvas_connection_t *connection, credentials_t *
+auth_settings_omp (gvm_connection_t *connection, credentials_t *
                    credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
@@ -24769,7 +24769,7 @@ auth_settings_omp (openvas_connection_t *connection, credentials_t *
  * @return Result of XSL transformation.
  */
 char *
-save_user_omp (openvas_connection_t *connection, credentials_t *credentials,
+save_user_omp (gvm_connection_t *connection, credentials_t *credentials,
                params_t *params, char **password_return, char **modified_user,
                int *logout_user, cmd_response_data_t *response_data)
 {
@@ -24998,7 +24998,7 @@ save_user_omp (openvas_connection_t *connection, credentials_t *credentials,
  * @return Note XML on success.  HTML result of XSL transformation on error.
  */
 char *
-export_user_omp (openvas_connection_t *connection, credentials_t * credentials,
+export_user_omp (gvm_connection_t *connection, credentials_t * credentials,
                  params_t *params, cmd_response_data_t *response_data)
 {
   return export_resource (connection, "user", credentials, params,
@@ -25017,7 +25017,7 @@ export_user_omp (openvas_connection_t *connection, credentials_t * credentials,
  *         on error.
  */
 char *
-export_users_omp (openvas_connection_t *connection, credentials_t * credentials,
+export_users_omp (gvm_connection_t *connection, credentials_t * credentials,
                   params_t *params, cmd_response_data_t* response_data)
 {
   return export_many (connection, "user", credentials, params,
@@ -25025,7 +25025,7 @@ export_users_omp (openvas_connection_t *connection, credentials_t * credentials,
 }
 
 char *
-cvss_calculator (openvas_connection_t *connection, credentials_t * credentials,
+cvss_calculator (gvm_connection_t *connection, credentials_t * credentials,
                  params_t *params, cmd_response_data_t* response_data)
 {
   GString *xml;
@@ -25121,7 +25121,7 @@ cvss_calculator (openvas_connection_t *connection, credentials_t * credentials,
  * @return XSL transformed dashboard.
  */
 char *
-dashboard (openvas_connection_t *connection, credentials_t * credentials,
+dashboard (gvm_connection_t *connection, credentials_t * credentials,
            params_t *params, cmd_response_data_t* response_data)
 {
   GString *xml;
@@ -25280,7 +25280,7 @@ dashboard (openvas_connection_t *connection, credentials_t * credentials,
  * @return XSL transformated list of users and configuration.
  */
 char*
-save_auth_omp (openvas_connection_t *connection, credentials_t* credentials,
+save_auth_omp (gvm_connection_t *connection, credentials_t* credentials,
                params_t *params, cmd_response_data_t* response_data)
 {
   int ret;
@@ -25412,7 +25412,7 @@ save_auth_omp (openvas_connection_t *connection, credentials_t* credentials,
  * @return SAVE_CHART_PREFERENCE OMP response.
  */
 char*
-save_chart_preference_omp (openvas_connection_t *connection,
+save_chart_preference_omp (gvm_connection_t *connection,
                            credentials_t* credentials, params_t *params,
                            gchar **pref_id, gchar **pref_value,
                            cmd_response_data_t* response_data)
@@ -25528,7 +25528,7 @@ save_chart_preference_omp (openvas_connection_t *connection,
  * @return Result of XSL transformation.
  */
 char *
-wizard (openvas_connection_t *connection, credentials_t *credentials,
+wizard (gvm_connection_t *connection, credentials_t *credentials,
         params_t *params, const char *extra_xml,
         cmd_response_data_t* response_data)
 {
@@ -25552,12 +25552,12 @@ wizard (openvas_connection_t *connection, credentials_t *credentials,
                           name);
 
   /* Try to run init mode of the wizard */
-  if (openvas_connection_sendf_xml (connection,
-                                    "<run_wizard read_only=\"1\">"
-                                    "<name>%s</name>"
-                                    "<mode>init</mode>"
-                                    "</run_wizard>",
-                                    name)
+  if (gvm_connection_sendf_xml (connection,
+                                "<run_wizard read_only=\"1\">"
+                                "<name>%s</name>"
+                                "<mode>init</mode>"
+                                "</run_wizard>",
+                                name)
       == -1)
     {
       g_string_free (xml, TRUE);
@@ -25584,9 +25584,9 @@ wizard (openvas_connection_t *connection, credentials_t *credentials,
 
   /* Get the setting. */
 
-  if (openvas_connection_sendf_xml (connection,
-                                    "<get_settings"
-                                    " setting_id=\"20f3034c-e709-11e1-87e7-406186ea4fc5\"/>")
+  if (gvm_connection_sendf_xml (connection,
+                                "<get_settings"
+                                " setting_id=\"20f3034c-e709-11e1-87e7-406186ea4fc5\"/>")
       == -1)
     {
       g_string_free (xml, TRUE);
@@ -25628,7 +25628,7 @@ wizard (openvas_connection_t *connection, credentials_t *credentials,
  * @return Result of XSL transformation.
  */
 char *
-wizard_omp (openvas_connection_t *connection, credentials_t *credentials,
+wizard_omp (gvm_connection_t *connection, credentials_t *credentials,
             params_t *params, cmd_response_data_t* response_data)
 {
   return wizard (connection, credentials, params, NULL, response_data);
@@ -25646,7 +25646,7 @@ wizard_omp (openvas_connection_t *connection, credentials_t *credentials,
  * @return Result of XSL transformation.
  */
 char *
-wizard_get (openvas_connection_t *connection, credentials_t *credentials,
+wizard_get (gvm_connection_t *connection, credentials_t *credentials,
             params_t *params, const char *extra_xml,
             cmd_response_data_t* response_data)
 {
@@ -25754,7 +25754,7 @@ wizard_get (openvas_connection_t *connection, credentials_t *credentials,
  * @return Result of XSL transformation.
  */
 char *
-wizard_get_omp (openvas_connection_t *connection, credentials_t *credentials,
+wizard_get_omp (gvm_connection_t *connection, credentials_t *credentials,
                 params_t *params, cmd_response_data_t* response_data)
 {
   return wizard_get (connection, credentials, params, NULL, response_data);
@@ -25771,7 +25771,7 @@ wizard_get_omp (openvas_connection_t *connection, credentials_t *credentials,
  * @return Result of XSL transformation.
  */
 char *
-process_bulk_omp (openvas_connection_t *connection, credentials_t *credentials,
+process_bulk_omp (gvm_connection_t *connection, credentials_t *credentials,
                   params_t *params, cmd_response_data_t* response_data)
 {
   GString *bulk_string;
@@ -26061,7 +26061,7 @@ process_bulk_omp (openvas_connection_t *connection, credentials_t *credentials,
  * @return Result of XSL transformation.
  */
 char *
-bulk_delete_omp (openvas_connection_t *connection, credentials_t * credentials,
+bulk_delete_omp (gvm_connection_t *connection, credentials_t * credentials,
                  params_t *params, cmd_response_data_t* response_data)
 {
   const char *no_redirect, *type;
@@ -26123,8 +26123,8 @@ bulk_delete_omp (openvas_connection_t *connection, credentials_t * credentials,
 
   /* Delete the resources and get all resources. */
 
-  if (openvas_connection_sendf_xml (connection,
-                                    commands_xml->str)
+  if (gvm_connection_sendf_xml (connection,
+                                commands_xml->str)
       == -1)
     {
       g_string_free (commands_xml, TRUE);
@@ -26187,7 +26187,7 @@ bulk_delete_omp (openvas_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 static char *
-new_host (openvas_connection_t *connection, credentials_t *credentials,
+new_host (gvm_connection_t *connection, credentials_t *credentials,
           params_t *params, const char *extra_xml,
           cmd_response_data_t* response_data)
 {
@@ -26212,7 +26212,7 @@ new_host (openvas_connection_t *connection, credentials_t *credentials,
  * @return Result of XSL transformation.
  */
 char *
-new_host_omp (openvas_connection_t *connection, credentials_t *credentials,
+new_host_omp (gvm_connection_t *connection, credentials_t *credentials,
               params_t *params, cmd_response_data_t* response_data)
 {
   return new_host (connection, credentials, params, NULL, response_data);
@@ -26229,7 +26229,7 @@ new_host_omp (openvas_connection_t *connection, credentials_t *credentials,
  * @return Result of XSL transformation.
  */
 char *
-create_host_omp (openvas_connection_t *connection, credentials_t * credentials,
+create_host_omp (gvm_connection_t *connection, credentials_t * credentials,
                  params_t *params, cmd_response_data_t* response_data)
 {
   int ret;
@@ -26322,7 +26322,7 @@ create_host_omp (openvas_connection_t *connection, credentials_t * credentials,
  * @return XSL transformed asset response or error message.
  */
 char *
-get_asset (openvas_connection_t *connection, credentials_t *credentials,
+get_asset (gvm_connection_t *connection, credentials_t *credentials,
            params_t *params, const char *extra_xml,
            cmd_response_data_t* response_data)
 {
@@ -26400,7 +26400,7 @@ get_asset (openvas_connection_t *connection, credentials_t *credentials,
  * @return Result of XSL transformation.
  */
 char *
-get_asset_omp (openvas_connection_t *connection, credentials_t * credentials,
+get_asset_omp (gvm_connection_t *connection, credentials_t * credentials,
                params_t *params, cmd_response_data_t* response_data)
 {
   return get_asset (connection, credentials, params, NULL, response_data);
@@ -26418,7 +26418,7 @@ get_asset_omp (openvas_connection_t *connection, credentials_t * credentials,
  * @return XSL transformed assets response or error message.
  */
 char *
-get_assets (openvas_connection_t *connection, credentials_t *credentials,
+get_assets (gvm_connection_t *connection, credentials_t *credentials,
             params_t *params, const char *extra_xml,
             cmd_response_data_t* response_data)
 {
@@ -26479,7 +26479,7 @@ get_assets (openvas_connection_t *connection, credentials_t *credentials,
  * @return Result of XSL transformation.
  */
 char *
-get_assets_omp (openvas_connection_t *connection, credentials_t * credentials,
+get_assets_omp (gvm_connection_t *connection, credentials_t * credentials,
                 params_t *params, cmd_response_data_t* response_data)
 {
   return get_assets (connection, credentials, params, NULL, response_data);
@@ -26496,7 +26496,7 @@ get_assets_omp (openvas_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-create_asset_omp (openvas_connection_t *connection, credentials_t *credentials,
+create_asset_omp (gvm_connection_t *connection, credentials_t *credentials,
                   params_t *params, cmd_response_data_t* response_data)
 {
   char *ret;
@@ -26575,7 +26575,7 @@ create_asset_omp (openvas_connection_t *connection, credentials_t *credentials,
  * @return Result of XSL transformation.
  */
 char *
-delete_asset_omp (openvas_connection_t *connection, credentials_t * credentials,
+delete_asset_omp (gvm_connection_t *connection, credentials_t * credentials,
                   params_t *params, cmd_response_data_t* response_data)
 {
   gchar *html, *response, *resource_id;
@@ -26613,11 +26613,11 @@ delete_asset_omp (openvas_connection_t *connection, credentials_t * credentials,
 
   /* Delete the resource and get all resources. */
 
-  if (openvas_connection_sendf (connection,
-                                "<delete_asset %s_id=\"%s\"/>",
-                                params_value (params, "asset_id")
-                                 ? "asset" : "report",
-                                resource_id)
+  if (gvm_connection_sendf (connection,
+                            "<delete_asset %s_id=\"%s\"/>",
+                            params_value (params, "asset_id")
+                             ? "asset" : "report",
+                            resource_id)
       == -1)
     {
       g_free (resource_id);
@@ -26691,7 +26691,7 @@ delete_asset_omp (openvas_connection_t *connection, credentials_t * credentials,
  * @return Asset XML on success.  HTML result of XSL transformation on error.
  */
 char *
-export_asset_omp (openvas_connection_t *connection, credentials_t * credentials,
+export_asset_omp (gvm_connection_t *connection, credentials_t * credentials,
                   params_t *params, cmd_response_data_t* response_data)
 {
   return export_resource (connection, "asset", credentials, params,
@@ -26710,7 +26710,7 @@ export_asset_omp (openvas_connection_t *connection, credentials_t * credentials,
  *         on error.
  */
 char *
-export_assets_omp (openvas_connection_t *connection, credentials_t *
+export_assets_omp (gvm_connection_t *connection, credentials_t *
                    credentials, params_t *params,
                    cmd_response_data_t* response_data)
 {
@@ -26730,7 +26730,7 @@ export_assets_omp (openvas_connection_t *connection, credentials_t *
  * @return Result of XSL transformation.
  */
 char *
-edit_asset (openvas_connection_t *connection, credentials_t *credentials,
+edit_asset (gvm_connection_t *connection, credentials_t *credentials,
             params_t *params, const char *extra_xml,
             cmd_response_data_t* response_data)
 {
@@ -26819,7 +26819,7 @@ edit_asset (openvas_connection_t *connection, credentials_t *credentials,
  * @return Result of XSL transformation.
  */
 char *
-edit_asset_omp (openvas_connection_t *connection, credentials_t * credentials,
+edit_asset_omp (gvm_connection_t *connection, credentials_t * credentials,
                 params_t *params, cmd_response_data_t* response_data)
 {
   return edit_asset (connection, credentials, params, NULL, response_data);
@@ -26836,7 +26836,7 @@ edit_asset_omp (openvas_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 char *
-save_asset_omp (openvas_connection_t *connection, credentials_t * credentials,
+save_asset_omp (gvm_connection_t *connection, credentials_t * credentials,
                 params_t *params, cmd_response_data_t* response_data)
 {
   int ret;
@@ -26918,7 +26918,7 @@ save_asset_omp (openvas_connection_t *connection, credentials_t * credentials,
  * @return Result of XSL transformation.
  */
 static char *
-get_assets_chart (openvas_connection_t *connection, credentials_t *credentials,
+get_assets_chart (gvm_connection_t *connection, credentials_t *credentials,
                   params_t *params, const char *extra_xml,
                   cmd_response_data_t* response_data)
 {
@@ -26937,7 +26937,7 @@ get_assets_chart (openvas_connection_t *connection, credentials_t *credentials,
  * @return Result of XSL transformation.
  */
 char *
-get_assets_chart_omp (openvas_connection_t *connection, credentials_t *
+get_assets_chart_omp (gvm_connection_t *connection, credentials_t *
                       credentials, params_t *params,
                       cmd_response_data_t* response_data)
 {
@@ -26994,7 +26994,7 @@ connect_unix (const gchar *path)
  * @return 0 success, -1 failed to connect.
  */
 int
-openvas_connection_open (openvas_connection_t *connection,
+openvas_connection_open (gvm_connection_t *connection,
                          const gchar *address,
                          int port)
 {
@@ -27005,9 +27005,9 @@ openvas_connection_open (openvas_connection_t *connection,
 
   if (manager_use_tls)
     {
-      connection->socket = openvas_server_open (&connection->session,
-                                                address,
-                                                port);
+      connection->socket = gvm_server_open (&connection->session,
+                                            address,
+                                            port);
       connection->credentials = NULL;
     }
   else
@@ -27041,7 +27041,7 @@ authenticate_omp (const gchar * username, const gchar * password,
                   gchar **capabilities, gchar **language, gchar **pw_warning,
                   GTree **chart_prefs, gchar **autorefresh)
 {
-  openvas_connection_t connection;
+  gvm_connection_t connection;
   int auth;
   omp_authenticate_info_opts_t auth_opts;
 
@@ -27095,20 +27095,20 @@ authenticate_omp (const gchar * username, const gchar * password,
             break;
           case 1:
           case 2:
-            openvas_connection_close (&connection);
+            gvm_connection_close (&connection);
             return 2;
           default:
-            openvas_connection_close (&connection);
+            gvm_connection_close (&connection);
             return -1;
         }
 
       /* Request help. */
 
-      ret = openvas_connection_sendf (&connection,
-                                      "<help format=\"XML\" type=\"brief\"/>");
+      ret = gvm_connection_sendf (&connection,
+                                  "<help format=\"XML\" type=\"brief\"/>");
       if (ret)
         {
-          openvas_connection_close (&connection);
+          gvm_connection_close (&connection);
           return 2;
         }
 
@@ -27117,7 +27117,7 @@ authenticate_omp (const gchar * username, const gchar * password,
       entity = NULL;
       if (read_entity_and_text_c (&connection, &entity, &response))
         {
-          openvas_connection_close (&connection);
+          gvm_connection_close (&connection);
           return 2;
         }
 
@@ -27139,19 +27139,19 @@ authenticate_omp (const gchar * username, const gchar * password,
         }
       else
         {
-          openvas_connection_close (&connection);
+          gvm_connection_close (&connection);
           g_free (response);
           return -1;
         }
 
       /* Get the chart preferences */
 
-      ret = openvas_connection_sendf (&connection,
-                                      "<get_settings"
-                                      " filter='name~\"Dashboard\"'/>");
+      ret = gvm_connection_sendf (&connection,
+                                  "<get_settings"
+                                  " filter='name~\"Dashboard\"'/>");
       if (ret)
         {
-          openvas_connection_close (&connection);
+          gvm_connection_close (&connection);
           return 2;
         }
 
@@ -27159,7 +27159,7 @@ authenticate_omp (const gchar * username, const gchar * password,
       entity = NULL;
       if (read_entity_and_text_c (&connection, &entity, &response))
         {
-          openvas_connection_close (&connection);
+          gvm_connection_close (&connection);
           return 2;
         }
 
@@ -27203,7 +27203,7 @@ authenticate_omp (const gchar * username, const gchar * password,
         {
           free_entity (entity);
           g_free (response);
-          openvas_connection_close (&connection);
+          gvm_connection_close (&connection);
           return -1;
         }
 
@@ -27220,19 +27220,19 @@ authenticate_omp (const gchar * username, const gchar * password,
             break;
           case 1:
           case 2:
-            openvas_connection_close (&connection);
+            gvm_connection_close (&connection);
             return 2;
           default:
-            openvas_connection_close (&connection);
+            gvm_connection_close (&connection);
             return -1;
         }
 
-      openvas_connection_close (&connection);
+      gvm_connection_close (&connection);
       return 0;
     }
   else
     {
-      openvas_connection_close (&connection);
+      gvm_connection_close (&connection);
       return 1;
     }
 }
@@ -27248,7 +27248,7 @@ authenticate_omp (const gchar * username, const gchar * password,
  */
 int
 manager_connect (credentials_t *credentials,
-                 openvas_connection_t *connection,
+                 gvm_connection_t *connection,
                  cmd_response_data_t *response_data)
 {
   omp_authenticate_info_opts_t auth_opts;
@@ -27274,7 +27274,7 @@ manager_connect (credentials_t *credentials,
   if (omp_authenticate_info_ext_c (connection, auth_opts))
     {
       g_debug ("authenticate failed!\n");
-      openvas_connection_close (connection);
+      gvm_connection_close (connection);
       return -2;
     }
 
