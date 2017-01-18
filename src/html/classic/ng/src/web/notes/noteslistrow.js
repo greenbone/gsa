@@ -31,6 +31,8 @@ import LegacyLink from '../legacylink.js';
 
 import EntityRow from '../entities/row.js';
 
+import NoteDialog from './dialog.js';
+
 export class NotesListRow extends EntityRow {
 
   constructor(props) {
@@ -41,6 +43,7 @@ export class NotesListRow extends EntityRow {
     };
 
     this.handleEdit = this.handleEdit.bind(this);
+    this.onSave = this.onSave.bind(this);
   }
 
   componentWillReceiveProps(new_props) {
@@ -48,9 +51,18 @@ export class NotesListRow extends EntityRow {
   }
 
   handleEdit() {
+    this.edit_dialog.show();
+  }
+
+  onSave() {
+    let gmp = this.getGmp();
+    gmp.get(this.state.note).then(note => {
+      this.setState({note});
+    });
   }
 
   renderTableButtons() {
+    let note = this.getEntity();
     return (
       <td>
         <Layout flex align={['center', 'center']}>
@@ -60,6 +72,9 @@ export class NotesListRow extends EntityRow {
           {this.renderEditButton()}
           {this.renderDownloadButton()}
 
+          <NoteDialog note={note} ref={ref => this.edit_dialog = ref}
+            title={_('Edit note {{note}}', {note: note.name})}
+            onSave={this.onSave}/>
         </Layout>
       </td>
     );

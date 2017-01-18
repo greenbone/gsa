@@ -23,12 +23,12 @@
 
 import React from 'react';
 
-import _ from '../../locale.js';
-import {extend} from '../../utils.js';
+import _, {datetime} from '../../locale.js';
+import {extend, is_defined, is_empty, shorten} from '../../utils.js';
 
 import Dialog from '../dialog.js';
 import Layout from '../layout.js';
-import {render_options} from '../render.js';
+import {render_options, result_cvss_risk_factor} from '../render.js';
 
 import FormGroup from '../form/formgroup.js';
 import Text from '../form/text.js';
@@ -47,6 +47,7 @@ export class NoteDialog extends Dialog {
       oid: '1.3.6.1.4.1.25623.1.0.',
       hosts: '',
       hosts_manual: '',
+      note: this.props.note,
       note_result_id: '',
       note_result_uuid: '',
       note_task_id: '',
@@ -62,12 +63,51 @@ export class NoteDialog extends Dialog {
 
   loadData() {
     let {gmp} = this.context;
-    gmp.tasks.get().then(tasks => this.setState({tasks, visible: true}));
+
+    if (this.state.note) {
+      // request all note details which haven't been included in get_notes
+      // response
+      gmp.note.get(this.props.note).then(note => {
+        console.log(note);
+        let active = '0';
+        if (note.isActive()) {
+          if (is_empty(note.end_time)) {
+            active = '-1';
+          }
+          else {
+            active = '-2';
+          }
+        }
+        this.setState({
+          active,
+          hosts: note.hosts,
+          port: note.port,
+          note,
+          note_id: note.id,
+          note_task_id: note.task ? note.task.id : undefined,
+          note_result_id: note.result ? note.result.id : undefined,
+          severity: note.severity,
+          text: note.text,
+          visible: true,
+        });
+      });
+    }
+    else {
+      gmp.tasks.get().then(tasks => this.setState({tasks, visible: true}));
+    }
   }
 
   save() {
+    let {note} = this.state;
     let {gmp} = this.context;
-    let promise = gmp.note.create(this.state);
+    let promise;
+
+    if (note) {
+      promise = gmp.note.save(this.state);
+    }
+    else {
+      promise = gmp.note.create(this.state);
+    }
 
     return promise.then(() => {
       this.close();
@@ -81,23 +121,54 @@ export class NoteDialog extends Dialog {
   renderContent() {
     let {active, days, oid, hosts, hosts_manual, text, port, port_manual,
       severity, note_result_id, note_result_uuid, note_task_id, note_task_uuid,
-      tasks,
+      tasks, note,
     } = this.state;
+
+    let is_edit = is_defined(note);
+
+    let nvt_name = '';
+    if (is_edit && note.nvt && note.nvt.name) {
+      if (note.nvt.name.length > 70) {
+        nvt_name = (
+          <abbr title={note.nvt.name + ' (' + note.nvt.oid + ')'}>
+            {shorten(note.nvt.name, 70)}
+          </abbr>
+        );
+      }
+      else {
+        nvt_name = note.nvt.name;
+      }
+    }
 
     return (
       <Layout flex="column">
-        <FormGroup title={_('NVT OID')}>
-          <TextField name="oid"
-            value={oid}
-            onChange={this.onValueChange}/>
-        </FormGroup>
+        {is_edit ?
+          <FormGroup title={_('NVT Name')}>
+            {nvt_name}
+          </FormGroup> :
+            <FormGroup title={_('NVT OID')}>
+              <TextField name="oid"
+                value={oid}
+                onChange={this.onValueChange}/>
+            </FormGroup>
+        }
         <FormGroup title={_('Active')} flex="column">
           <Radio name="active"
             value="-1"
             checked={active === '-1'}
             title={_('yes, always')}
             onChange={this.onValueChange}/>
-          <Layout flex>
+          {is_edit && note.isActive() && !is_empty(note.end_time) &&
+            <Layout flex box>
+              <Radio name="active"
+                value="-2"
+                checked={active === '-2'}
+                title={_('yes, until')}
+                onChange={this.onValueChange}/>
+              <Text>{datetime(note.end_time)}</Text>
+            </Layout>
+          }
+          <Layout flex box>
             <Radio name="active"
               value="1"
               checked={active === '1'}
@@ -122,14 +193,28 @@ export class NoteDialog extends Dialog {
             checked={hosts === ''}
             onChange={this.onValueChange}>
           </Radio>
-          <Radio name="hosts"
-            value="--"
-            checked={hosts === '--'}
-            onChange={this.onValueChange}>
-          </Radio>
-          <TextField name="hosts_manual"
-            value={hosts_manual}
-            onChange={this.onValueChange}/>
+          {is_edit && !is_empty(note.hosts) &&
+            <Layout flex box>
+              <Radio name="hosts"
+                value={note.hosts}
+                title={note.hosts}
+                checked={hosts === note.hosts}
+                onChange={this.onValueChange}>
+              </Radio>
+            </Layout>
+          }
+          {!is_edit &&
+            <Layout flex box>
+              <Radio name="hosts"
+                value="--"
+                checked={hosts === '--'}
+                onChange={this.onValueChange}>
+              </Radio>
+              <TextField name="hosts_manual"
+                value={hosts_manual}
+                onChange={this.onValueChange}/>
+            </Layout>
+          }
         </FormGroup>
         <FormGroup title={_('Location')}>
           <Radio name="port"
@@ -138,34 +223,68 @@ export class NoteDialog extends Dialog {
             checked={port === ''}
             onChange={this.onValueChange}>
           </Radio>
-          <Radio name="port"
-            value="--"
-            checked={port === '--'}
-            onChange={this.onValueChange}>
-          </Radio>
-          <TextField name="port_manual"
-            value={port_manual}
-            onChange={this.onValueChange}/>
+          {is_edit && !is_empty(note.port) &&
+            <Layout flex box>
+              <Radio name="port"
+                value={note.port}
+                title={note.port}
+                checked={port === note.port}
+                onChange={this.onValueChange}>
+              </Radio>
+            </Layout>
+          }
+          {!is_edit &&
+            <Layout flex box>
+              <Radio name="port"
+                value="--"
+                checked={port === '--'}
+                onChange={this.onValueChange}>
+              </Radio>
+              <TextField name="port_manual"
+                value={port_manual}
+                onChange={this.onValueChange}/>
+            </Layout>
+          }
         </FormGroup>
         <FormGroup title={_('Severity')}>
           <Radio name="severity"
             value=""
             title={_('Any')}
-            checked={severity === ''}
+            checked={is_empty(severity)}
             onChange={this.onValueChange}>
           </Radio>
-          <Radio name="severity"
-            value="0.1"
-            title={_('> 0.0')}
-            checked={severity === '0.1'}
-            onChange={this.onValueChange}>
-          </Radio>
-          <Radio name="severity"
-            value="0.0"
-            title={_('Log')}
-            checked={severity === '0.0'}
-            onChange={this.onValueChange}>
-          </Radio>
+          {is_edit && note.severity > 0.0 &&
+            <Radio name="severity"
+              value={0.1}
+              title={_('> 0.0')}
+              checked={!is_empty(severity) && severity > 0.0}
+              onChange={this.onValueChange}>
+            </Radio>
+          }
+          {is_edit && note.severity <= 0.0 &&
+            <Radio name="severity"
+              value={note.severity}
+              title={result_cvss_risk_factor(note.severity)}
+              checked={!is_empty(severity) && severity <= 0.0}
+              onChange={this.onValueChange}>
+            </Radio>
+          }
+          {!is_edit &&
+            <Layout flex box>
+              <Radio name="severity"
+                value="0.1"
+                title={_('> 0.0')}
+                checked={severity === '0.1'}
+                onChange={this.onValueChange}>
+              </Radio>
+              <Radio name="severity"
+                value="0.0"
+                title={_('Log')}
+                checked={severity === '0.0'}
+                onChange={this.onValueChange}>
+              </Radio>
+            </Layout>
+          }
         </FormGroup>
         <FormGroup title={_('Task')}>
           <Radio name="note_task_id"
@@ -173,17 +292,26 @@ export class NoteDialog extends Dialog {
             title={_('Any')}
             checked={note_task_id === ''}
             onChange={this.onValueChange}/>
-          <Layout flex box>
+          {is_edit && note.task && !is_empty(note.task.id) &&
             <Radio name="note_task_id"
-              value="0"
-              checked={note_task_id === '0'}
+              value={note.task.id}
+              title={note.task.name}
+              checked={note_task_id === note.task.id}
               onChange={this.onValueChange}/>
-            <Select2 name="note_task_uuid"
-              value={note_task_uuid}
-              onChange={this.onValueChange}>
-              {render_options(tasks)}
-            </Select2>
-          </Layout>
+          }
+          {!is_edit &&
+            <Layout flex box>
+              <Radio name="note_task_id"
+                value="0"
+                checked={note_task_id === '0'}
+                onChange={this.onValueChange}/>
+              <Select2 name="note_task_uuid"
+                value={note_task_uuid}
+                onChange={this.onValueChange}>
+                {render_options(tasks)}
+              </Select2>
+            </Layout>
+          }
         </FormGroup>
         <FormGroup title={_('Result')}>
           <Radio name="note_result_id"
@@ -191,16 +319,25 @@ export class NoteDialog extends Dialog {
             title={_('Any')}
             checked={note_result_id === ''}
             onChange={this.onValueChange}/>
-          <Layout flex box>
+          {is_edit && note.result && !is_empty(note.result.id) &&
             <Radio name="note_result_id"
-              value="0"
-              title={_('UUID')}
-              checked={note_result_id === '0'}
+              value={note.result.id}
+              title={note.result.id}
+              checked={note_result_id === note.result.id}
               onChange={this.onValueChange}/>
-            <TextField name="note_result_uuid"
-              value={note_result_uuid}
-              onChange={this.onValueChange}/>
-          </Layout>
+          }
+          {!is_edit &&
+            <Layout flex box>
+              <Radio name="note_result_id"
+                value="0"
+                title={_('UUID')}
+                checked={note_result_id === '0'}
+                onChange={this.onValueChange}/>
+              <TextField name="note_result_uuid"
+                value={note_result_uuid}
+                onChange={this.onValueChange}/>
+            </Layout>
+          }
         </FormGroup>
         <FormGroup title={_('Text')}>
           <TextArea name="text"
