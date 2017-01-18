@@ -1,5 +1,17 @@
 2017-01-18  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
+	* src/gsad.c: Remove unneeded include.
+
+	* src/gsad_http.c: Include gvm/util/xmlutils.h instead of
+	openvas/omp/xml.h.
+
+	* src/gsad_http_handler.c: Include gvm/util/xmlutils.h instead of
+	openvas/omp/xml.h.
+
+	* src/gsad_omp.c: Remove unneeded include.
+	
+2017-01-18  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
 	Rename type and function calls with changing from module
 	"openvas_server" to "serverutils".
 

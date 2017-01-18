@@ -64,7 +64,6 @@
 #include <gvm/util/serverutils.h> /* for gvm_connection_t */
 
 #include <openvas/omp/omp.h>
-#include <openvas/omp/xml.h>
 
 /*
  * XSLT includes
