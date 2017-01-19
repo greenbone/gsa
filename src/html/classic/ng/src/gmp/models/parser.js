@@ -21,56 +21,25 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {is_defined, extend} from '../../utils.js';
+import {is_defined, is_empty, parse_float} from '../../utils.js';
 
-import Model from '../model.js';
-
-import Nvt from './nvt.js';
-import {parse_severity, parse_text} from './parser.js';
-
-export class Note extends Model {
-
-  parseProperties(elem) {
-    let ret = super.parseProperties(elem);
-
-    if (ret.nvt) {
-      ret.nvt = new Nvt(ret.nvt);
-    }
-
-    ret = extend(ret, parse_text(ret.text));
-
-    ret.severity = parse_severity(ret.severity);
-
-    if (is_defined(ret.task)) {
-      ret.task = new Model(ret.task);
-    }
-    if (is_defined(ret.result)) {
-      ret.result = new Model(ret.result);
-    }
-    return ret;
-  }
-
-  isActive() {
-    return this.active === '1';
-  }
-
-  isWriteable() {
-    return this.writeable !== '0';
-  }
-
-  isInUse() {
-    return this.in_use === '1';
-  }
-
-  isOrphan() {
-    return this.orphan === '1';
-  }
-
-  isExcerpt() {
-    return this.text_excerpt === '1';
-  }
+export function parse_severity(value) {
+  return is_empty(value) ? undefined : parse_float(value);
 }
 
-export default Note;
+export function parse_text(text) {
+  if (is_defined(text.__text)) {
+    return {
+      text: text.__text,
+      text_excerpt: text.__excerpt,
+    };
+  }
+
+  return {
+    text,
+    text_excerpt: '0',
+  };
+}
 
 // vim: set ts=2 sw=2 tw=80:
+
