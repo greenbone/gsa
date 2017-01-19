@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,8 +23,8 @@
 
 import React from 'react';
 
-import {parse_float, is_defined} from '../utils.js';
 import _ from '../locale.js';
+import {parse_float, is_defined} from '../utils.js';
 
 import {result_cvss_risk_factor, cvss_number_format} from './render.js';
 
@@ -34,25 +34,22 @@ export const SeverityBar = props => {
   let {severity, scale = 10} = props;
   let cvss = parse_float(severity);
   let threat = result_cvss_risk_factor(cvss);
-  let title = threat;
+  let title = _(threat);
   let width = 10 * scale;
   let fill = is_defined(cvss) && cvss > 0 ? cvss * scale : 0;
   let style = {width: fill + 'px'};
 
   let text;
   if (cvss < 0) {
-    text = threat;
+    text = title;
   }
   else {
-    text = cvss_number_format(cvss) + ' (' + threat + ')';
+    text = cvss_number_format(cvss) + ' (' + title + ')';
   }
 
   let css;
   if (threat === 'Log') {
     css = 'statusbar gray';
-  }
-  else if (threat === 'Low') {
-    css = 'statusbar done';
   }
   else if (threat === 'Medium') {
     css = 'statusbar request';
@@ -86,3 +83,5 @@ SeverityBar.propTypes = {
 };
 
 export default SeverityBar;
+
+// vim: set ts=2 sw=2 tw=80:

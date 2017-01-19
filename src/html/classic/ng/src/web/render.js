@@ -27,6 +27,21 @@ import React from 'react';
 import _ from '../locale.js';
 import {is_defined, map} from '../utils.js';
 
+/* eslint-disable no-unused-vars */
+/* add variables for translation message extractions */
+
+const LOG = _('Log');
+const LOW = _('Low');
+const MEDIUM = _('Medium');
+const HIGH = _('High');
+const NONE = _('None');
+const FALSE_POSITIVE = _('False Positive');
+const ERROR = _('Error');
+const DEBUG = _('Debug');
+const N_A = _('N/A');
+
+/* eslint-enable no-unused-vars */
+
 export function render_options(list, default_opt_value, default_opt = '--') {
   let options = map(list, entry => {
     return (
@@ -88,21 +103,21 @@ export function cvss_risk_factor(score, type) {
 
 export function result_cvss_risk_factor(score) {
   if (score > 0) {
-    return _(cvss_risk_factor(score));
+    return cvss_risk_factor(score);
   }
   if (score === 0) {
-    return _('Log');
+    return 'Log';
   }
   if (score === -1) {
-    return _('False Positive');
+    return 'False Positive';
   }
   if (score === -2) {
-    return _('Debug');
+    return 'Debug';
   }
   if (score === -3) {
-    return _('Error');
+    return 'Error';
   }
-  return _('N/A');
+  return 'N/A';
 }
 
 export function get_severity_levels(type) {
