@@ -21,9 +21,13 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+import logger from '../../log.js';
+
 import {EntityCommand, EntitiesCommand, register_command} from '../command.js';
 
 import Override from '../models/override.js';
+
+const log = logger.getLogger('gmp.commands.overrides');
 
 export class OverrideCommand extends EntityCommand {
 
@@ -33,6 +37,36 @@ export class OverrideCommand extends EntityCommand {
 
   getElementFromResponse(root) {
     return root.get_override.get_overrides_response.override;
+  }
+
+  create(args) {
+    let {oid, active = '-1', days = 30, hosts = '', hosts_manual = '',
+      override_result_id = '', override_result_uuid = '', port = '',
+      port_manual = '', severity = '', override_task_id = '',
+      override_task_uuid = '', text, custom_severity = '0',
+      new_severity = '', new_severity_from_list = '-1.0'} = args;
+
+    log.debug('Creating new override', args);
+    return this.httpPost({
+      cmd: 'create_override',
+      next: 'get_override',
+      oid,
+      active,
+      custom_severity,
+      new_severity,
+      new_severity_from_list,
+      days,
+      hosts,
+      hosts_manual,
+      override_result_id,
+      override_result_uuid,
+      override_task_id,
+      override_task_uuid,
+      port,
+      port_manual,
+      severity,
+      text,
+    }).then(xhr => this.getModelFromResponse(xhr));
   }
 }
 

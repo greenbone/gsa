@@ -26,6 +26,7 @@ import React from 'react';
 import _ from '../../locale.js';
 import {is_defined} from '../../utils.js';
 
+import Layout from '../layout.js';
 import Sort from '../sortby.js';
 
 import Dashboard from '../dashboard/dashboard.js';
@@ -33,10 +34,13 @@ import Dashboard from '../dashboard/dashboard.js';
 import EntitiesComponent from '../entities/component.js';
 import EntitiesFooter from '../entities/footer.js';
 
+import Icon from '../icons/icon.js';
+
 import TableRow from '../table/row.js';
 import TableHead from '../table/head.js';
 
 import OverridesCharts from './charts.js';
+import OverrideDialog from './dialog.js';
 import OverridesListRow from './overrideslistrow.js';
 
 import {OVERRIDES_FILTER_FILTER} from '../../gmp/commands/filters.js';
@@ -113,6 +117,28 @@ export class Overrides extends EntitiesComponent {
         onDownloadClick={this.onDownloadBulk}
         onSelectionTypeChange={this.onSelectionTypeChange}>
       </EntitiesFooter>
+    );
+  }
+
+  renderToolbarIconButtons() {
+    let caps = this.context.capabilities;
+    return (
+      <Layout flex>
+        {this.renderHelpIcon()}
+
+        {caps.mayCreate('override') &&
+          <Icon img="new.svg" title={_('New Override')}
+            onClick={() => { this.create_dialog.show(); }}/>
+        }
+      </Layout>
+    );
+  }
+
+  renderCreateDialog() {
+    return (
+      <OverrideDialog ref={ref => this.create_dialog = ref}
+        title={_('Create new Override')} onClose={this.reload}
+        onSave={this.reload}/>
     );
   }
 
