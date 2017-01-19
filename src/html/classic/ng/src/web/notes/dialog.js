@@ -68,7 +68,6 @@ export class NoteDialog extends Dialog {
       // request all note details which haven't been included in get_notes
       // response
       gmp.note.get(this.props.note).then(note => {
-        console.log(note);
         let active = '0';
         if (note.isActive()) {
           if (is_empty(note.end_time)) {
