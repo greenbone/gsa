@@ -38,6 +38,8 @@ import Page from './page.js';
 import Home from './home.js';
 import {get_severity_levels} from './render.js';
 
+import Overrides from './overrides/overrides.js';
+
 import Task from './tasks/task.js';
 import Tasks from './tasks/tasks.js';
 
@@ -147,6 +149,7 @@ ReactDOM.render(
         <Route path="tasks/:id" component={Task} onEnter={is_logged_in}/>
         <Route path="results" component={Results} onEnter={is_logged_in}/>
         <Route path="notes" component={Notes} onEnter={is_logged_in}/>
+        <Route path="overrides" component={Overrides} onEnter={is_logged_in}/>
         <Route path="dashboards/scans" component={ScansDashboard}
           onEnter={is_logged_in}/>
         <Route path="dashboards/assets" component={AssetsDashboard}

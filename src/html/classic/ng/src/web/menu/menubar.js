@@ -72,8 +72,7 @@ export const MenuBar = (props, context) => {
               caps="get_vulns"/>
             <MenuEntry section title={_('Notes')} to="notes"
               caps="get_notes"/>
-            <MenuEntry legacy title={_('Overrides')} cmd="get_overrides"
-              filter="sort=nvt" caps="get_overrides"/>
+            <MenuEntry title={_('Overrides')} to="overrides"/>
           </Menu>
         }
         {caps.mayOp('get_assets') &&
