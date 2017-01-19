@@ -113,6 +113,10 @@ export class TasksListRow extends EntityRow {
   renderStartButton(task) {
     let {capabilities} = this.context;
 
+    if (task.isRunning()) {
+      return null;
+    }
+
     if (!capabilities.mayOp('start_task')) {
       return (
         <Icon size="small" img="start_inactive.svg"
