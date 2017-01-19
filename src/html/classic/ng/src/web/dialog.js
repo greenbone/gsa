@@ -62,12 +62,13 @@ export class Dialog extends React.Component {
   }
 
   defaultState() {
+    let {title, footer, width = 800} = this.props;
     return {
       visible: false,
       error: undefined,
-      width: this.props.width,
-      title: this.props.title,
-      footer: this.props.footer,
+      width,
+      title,
+      footer,
       posX: undefined,
       posY: undefined,
     };
@@ -170,7 +171,7 @@ export class Dialog extends React.Component {
         this.props.onSave(data);
       }
     }).catch(error => {
-      log.debug('' + error);
+      log.error('' + error);
     });
   }
 
