@@ -38,6 +38,7 @@ import './commands/users.js';
 import './commands/filters.js';
 import './commands/results.js';
 import './commands/notes.js';
+import './commands/overrides.js';
 
 import {GmpHttp, TIMEOUT, build_server_url, build_url_params} from './http.js';
 import {get_commands} from './command.js';
