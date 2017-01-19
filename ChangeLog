@@ -1,5 +1,11 @@
 2017-01-19 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/notes/dialog.js,
+	src/html/classic/ng/src/web/render.js: Move rendering of the nvt name from
+	nodes into render module. It will be used in overrides too.
+
+2017-01-19 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/form/select2.js: Handle disabled property
 	correctly in Select2 component. If the disabled property is changed the
 	select2 component must be updated.

@@ -25,7 +25,7 @@ import d3 from 'd3';
 import React from 'react';
 
 import _ from '../locale.js';
-import {is_defined, map} from '../utils.js';
+import {is_defined, map, shorten} from '../utils.js';
 
 /* eslint-disable no-unused-vars */
 /* add variables for translation message extractions */
@@ -153,6 +153,22 @@ export function get_severity_levels(type) {
     min_low: 0.1,
     max_log: 0.0,
   };
+}
+
+export function render_nvt_name(nvt) {
+  if (!is_defined(nvt) || !is_defined(nvt.name)) {
+    return '';
+  }
+
+  if (nvt.name.length < 70) {
+    return name;
+  }
+
+  return (
+    <abbr title={nvt.name + ' (' + nvt.oid + ')'}>
+      {shorten(nvt.name, 70)}
+    </abbr>
+  );
 }
 
 // vim: set ts=2 sw=2 tw=80:
