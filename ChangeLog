@@ -1,5 +1,10 @@
 2017-01-19 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/notes/dialog.js: Disable text and select fields
+	if their corresponding radio is not selected.
+
+2017-01-19 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/notes/dialog.js,
 	src/html/classic/ng/src/web/render.js: Move rendering of the nvt name from
 	nodes into render module. It will be used in overrides too.

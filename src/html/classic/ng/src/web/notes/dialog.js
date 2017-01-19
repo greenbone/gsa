@@ -197,6 +197,7 @@ export class NoteDialog extends Dialog {
                 onChange={this.onValueChange}>
               </Radio>
               <TextField name="hosts_manual"
+                disabled={hosts !== '--'}
                 value={hosts_manual}
                 onChange={this.onValueChange}/>
             </Layout>
@@ -228,6 +229,7 @@ export class NoteDialog extends Dialog {
               </Radio>
               <TextField name="port_manual"
                 value={port_manual}
+                disabled={port !== '--'}
                 onChange={this.onValueChange}/>
             </Layout>
           }
@@ -293,6 +295,7 @@ export class NoteDialog extends Dialog {
                 onChange={this.onValueChange}/>
               <Select2 name="note_task_uuid"
                 value={note_task_uuid}
+                disabled={note_task_id !== '0'}
                 onChange={this.onValueChange}>
                 {render_options(tasks)}
               </Select2>
@@ -321,6 +324,7 @@ export class NoteDialog extends Dialog {
                 onChange={this.onValueChange}/>
               <TextField name="note_result_uuid"
                 value={note_result_uuid}
+                disabled={note_result_id !== '0'}
                 onChange={this.onValueChange}/>
             </Layout>
           }
