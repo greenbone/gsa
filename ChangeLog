@@ -1,5 +1,10 @@
 2017-01-19 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/commands/overrides.js: Add NoteCommand for
+	handling single note entities via gmp.
+
+2017-01-19 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/commands/filters.js,
 	src/html/classic/ng/src/gmp/commands/overrides.js,
 	src/html/classic/ng/src/gmp/gmp.js,

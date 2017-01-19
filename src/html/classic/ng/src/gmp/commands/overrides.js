@@ -21,9 +21,20 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {EntitiesCommand, register_command} from '../command.js';
+import {EntityCommand, EntitiesCommand, register_command} from '../command.js';
 
 import Override from '../models/override.js';
+
+export class OverrideCommand extends EntityCommand {
+
+  constructor(http) {
+    super(http, 'override', Override);
+  }
+
+  getElementFromResponse(root) {
+    return root.get_override.get_overrides_response.override;
+  }
+}
 
 export class OverridesCommand extends EntitiesCommand {
 
@@ -36,6 +47,7 @@ export class OverridesCommand extends EntitiesCommand {
   }
 };
 
+register_command('override', OverrideCommand);
 register_command('overrides', OverridesCommand);
 
 // vim: set ts=2 sw=2 tw=80:
