@@ -26,24 +26,15 @@ import React from 'react';
 import  _ from '../../locale.js';
 import {is_defined} from '../../utils.js';
 
-import FilterDialog from '../filterdialog.js';
 import Layout from '../layout.js';
-import Section from '../section.js';
 import Sort from '../sortby.js';
-import Toolbar from '../toolbar.js';
-import PowerFilter from '../powerfilter.js';
 
 import Dashboard from '../dashboard/dashboard.js';
-import DashboardControls from '../dashboard/controls.js';
 
 import EntitiesComponent from '../entities/component.js';
-import EntitiesTable from '../entities/table.js';
 import EntitiesFooter from '../entities/footer.js';
 
-import Download from '../form/download.js';
-
 import Icon from '../icons/icon.js';
-import HelpIcon from '../icons/helpicon.js';
 
 import TableRow from '../table/row.js';
 import TableHead from '../table/head.js';
@@ -62,25 +53,16 @@ const SORT_FIELDS = [
 
 export class Notes extends EntitiesComponent {
 
-  getGmp() {
-    return this.context.gmp.notes;
-  }
-
-  loadFilters() {
-    this.context.gmp.filters.get(NOTES_FILTER_FILTER).then(filters => {
-      this.setState({filters});
+  constructor(props) {
+    super(props, {
+      name: 'notes',
+      icon_name: 'note.svg',
+      download_name: 'notes.xml',
+      title: _('Notes'),
+      empty_title: _('No notes available'),
+      filter_filter: NOTES_FILTER_FILTER,
+      sort_fields: SORT_FIELDS,
     });
-  }
-
-  getSectionTitle() {
-    let entities = this.getEntities();
-
-    if (!entities) {
-      return _('Notes');
-    }
-
-    let counts = this.getCounts();
-    return _('Notes ({{filtered}} of {{all}})', counts);
   }
 
   renderHeader() {
@@ -126,92 +108,53 @@ export class Notes extends EntitiesComponent {
     );
   }
 
-  renderRows() {
-    let entities = this.getEntities();
+  renderRow(note) {
     let {selection_type} = this.state;
-
-    if (!is_defined(entities)) {
-      return null;
-    }
-
-    return entities.map(note => {
-      return (
-        <NotesListRow
-          key={note.id}
-          note={note}
-          selection={selection_type}
-          onSelected={this.onSelect}
-          onDeselected={this.onDeselect}
-          onDelete={this.reload}
-          onCloned={this.reload}/>
-      );
-    });
+    return (
+      <NotesListRow
+        key={note.id}
+        note={note}
+        selection={selection_type}
+        onSelected={this.onSelect}
+        onDeselected={this.onDeselect}
+        onDelete={this.reload}
+        onCloned={this.reload}/>
+    );
   }
 
-  render() {
-    let {filters, filter} = this.state;
-    let counts = this.getCounts();
-    let caps = this.context.capabilities;
-
+  renderCreateDialog() {
     return (
-      <div>
-        <Toolbar>
-          <Layout flex>
-            <HelpIcon page="notes"/>
+      <NoteDialog ref={ref => this.create_dialog = ref}
+        title={_('Create new Note')} onClose={this.reload}
+        onSave={this.reload}/>
+    );
+  }
 
-            {caps.mayCreate('note') &&
-              <Icon img="new.svg" title={_('New Note')}
-                onClick={() => { this.create_dialog.show(); }}/>
-            }
-          </Layout>
+  renderDashboard() {
+    let {filter} = this.state;
+    return (
+      <Dashboard hide-filter-select
+        filter={filter}
+        config-pref-id="ce7b121-c609-47b0-ab57-fd020a0336f4"
+        default-controllers-string={'note-by-active-days|note-by-created|' +
+        'note-by-text-words'}
+        default-controller-string="note-by-active-days">
+        <NotesCharts filter={filter}/>
+      </Dashboard>
+    );
+  }
 
-          <NoteDialog ref={ref => this.create_dialog = ref}
-            title={_('Create new Note')} onClose={this.reload}
-            onSave={this.reload}/>
+  renderToolbarIconButtons() {
+    let caps = this.context.capabilities;
+    return (
+      <Layout flex>
+        {this.renderHelpIcon()}
 
-          <PowerFilter
-            filter={filter}
-            filters={filters}
-            onFilterCreated={this.onFilterCreated}
-            onResetClick={this.onFilterReset}
-            onEditClick={() => this.filter_dialog.show()}
-            onUpdate={this.onFilterUpdate}/>
-
-          <FilterDialog
-            sortFields={SORT_FIELDS}
-            filter={filter}
-            ref={ref => this.filter_dialog = ref}
-            onSave={this.onFilterUpdate}/>
-        </Toolbar>
-
-        <Section title={this.getSectionTitle()}
-          img="note.svg"
-          extra={<DashboardControls/>}>
-          <Dashboard hide-filter-select
-            filter={filter}
-            config-pref-id="ce7b121-c609-47b0-ab57-fd020a0336f4"
-            default-controllers-string={'note-by-active-days|note-by-created|' +
-              'note-by-text-words'}
-            default-controller-string="note-by-active-days">
-            <NotesCharts filter={filter}/>
-          </Dashboard>
-
-          <EntitiesTable
-            header={this.renderHeader()}
-            footer={this.renderFooter()}
-            counts={counts}
-            filter={filter}
-            emptyTitle={_('No notes available')}
-            rows={this.renderRows()}
-            onFirstClick={this.onFirst}
-            onLastClick={this.onLast}
-            onNextClick={this.onNext}
-            onPreviousClick={this.onPrevious}/>
-
-          <Download ref={ref => this.download = ref}
-            filename="notes.xml"/>
-        </Section>
-      </div>
+        {caps.mayCreate('note') &&
+          <Icon img="new.svg" title={_('New Note')}
+            onClick={() => { this.create_dialog.show(); }}/>
+        }
+      </Layout>
     );
   }
 }

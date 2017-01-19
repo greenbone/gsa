@@ -24,9 +24,22 @@
 import React from 'react';
 
 import {is_defined} from '../../utils.js';
+import _ from '../../locale.js';
 import logger from '../../log.js';
 
+import DashboardControls from '../dashboard/controls.js';
+import FilterDialog from '../filterdialog.js';
+import Layout from '../layout.js';
+import PowerFilter from '../powerfilter.js';
+import Section from '../section.js';
 import SelectionType from '../selectiontype.js';
+import Toolbar from '../toolbar.js';
+
+import EntitiesTable from '../entities/table.js';
+
+import Download from '../form/download.js';
+
+import HelpIcon from '../icons/helpicon.js';
 
 import Filter from '../../gmp/models/filter.js';
 
@@ -34,8 +47,15 @@ const log = logger.getLogger('web.entities.component');
 
 export class EntitiesComponent extends React.Component {
 
-  constructor(props) {
+  constructor(props, options = {}) {
     super(props);
+
+    this.name = options.name;
+    this.icon_name = options.icon_name;
+    this.title = options.title;
+    this.filters_filter = options.filters_filter;
+    this.sort_fields = options.sort_fields;
+    this.download_name = options.download_name;
 
     this.state = {
       filters: [],
@@ -51,6 +71,7 @@ export class EntitiesComponent extends React.Component {
     this.onFilterReset = this.onFilterReset.bind(this);
     this.onFilterUpdate = this.onFilterUpdate.bind(this);
     this.onFilterCreated = this.onFilterCreated.bind(this);
+    this.onFilterEditClick = this.onFilterEditClick.bind(this);
     this.onToggleOverrides = this.onToggleOverrides.bind(this);
     this.onSortChange = this.onSortChange.bind(this);
     this.onDownloadBulk = this.onDownloadBulk.bind(this);
@@ -58,6 +79,26 @@ export class EntitiesComponent extends React.Component {
     this.onSelect = this.onSelect.bind(this);
     this.onDeselect = this.onDeselect.bind(this);
     this.onSelectionTypeChange = this.onSelectionTypeChange.bind(this);
+  }
+
+  renderDashboard() {
+    return null;
+  }
+
+  renderHeader() {
+    return null;
+  }
+
+  renderFooter() {
+    return null;
+  }
+
+  renderRow(entity) {
+    return null;
+  }
+
+  renderCreateDialog() {
+    return null;
   }
 
   load(filter) {
@@ -73,6 +114,28 @@ export class EntitiesComponent extends React.Component {
         this.setState({selected: entities});
       }
     });
+  }
+
+  loadFilters() {
+    this.context.gmp.filters.get(this.filters_filter).then(filters => {
+      this.setState({filters});
+    });
+  }
+
+  getGmp() {
+    return this.context.gmp[this.name];
+  }
+
+  getSectionTitle() {
+    let entities = this.getEntities();
+
+    if (!entities) {
+      return this.title;
+    }
+
+    let counts = this.getCounts();
+    return _('{{title}} ({{filtered}} of {{all}})',
+      {title: this.title, ...counts});
   }
 
   componentDidMount() {
@@ -245,6 +308,10 @@ export class EntitiesComponent extends React.Component {
     this.setState({selection_type: value, selected});
   }
 
+  onFilterEditClick() {
+    this.filter_dialog.show();
+  }
+
   getEntities() {
     return this.state.entities;
   }
@@ -257,10 +324,120 @@ export class EntitiesComponent extends React.Component {
     return {};
   }
 
-  getGmp() {
-    return null;
+  renderHelpIcon() {
+    return (
+      <HelpIcon page={this.name}/>
+    );
   }
 
+  renderToolbarIconButtons() {
+    return (
+      <Layout flex>
+        {this.renderHelpIcon()}
+      </Layout>
+    );
+  }
+
+  renderPowerFilter() {
+    let {filters, filter} = this.state;
+    return (
+      <PowerFilter
+        filter={filter}
+        filters={filters}
+        onFilterCreated={this.onFilterCreated}
+        onResetClick={this.onFilterReset}
+        onEditClick={this.onFilterEditClick}
+        onUpdate={this.onFilterUpdate}/>
+    );
+
+  }
+
+  renderFilterDialog() {
+    let {filter} = this.state;
+    return (
+      <FilterDialog
+        sortFields={this.sort_fields}
+        filter={filter}
+        ref={ref => this.filter_dialog = ref}
+        onSave={this.onFilterUpdate}/>
+    );
+  }
+
+  renderToolbar() {
+    return (
+      <Toolbar>
+        {this.renderToolbarIconButtons()}
+        {this.renderPowerFilter()}
+      </Toolbar>
+    );
+  }
+  renderRows() {
+    let entities = this.getEntities();
+
+    if (!is_defined(entities)) {
+      return null;
+    }
+
+    return entities.map(entity => {
+      return this.renderRow(entity);
+    });
+  }
+
+  renderEntitiesTable() {
+    let {filter} = this.state;
+    let counts = this.getCounts();
+    return (
+      <EntitiesTable
+        header={this.renderHeader()}
+        footer={this.renderFooter()}
+        counts={counts}
+        filter={filter}
+        emptyTitle={this.empty_title}
+        rows={this.renderRows()}
+        onFirstClick={this.onFirst}
+        onLastClick={this.onLast}
+        onNextClick={this.onNext}
+        onPreviousClick={this.onPrevious}/>
+    );
+  }
+
+  renderDownload() {
+    return (
+      <Download ref={ref => this.download = ref}
+        filename={this.download_name}/>
+    );
+  }
+
+  renderSection() {
+    return (
+      <Section title={this.getSectionTitle()}
+        img={this.icon_name}
+        extra={<DashboardControls/>}>
+        {this.renderDashboard()}
+        {this.renderEntitiesTable()}
+        {this.renderDownload()}
+      </Section>
+    );
+  }
+
+  renderDialogs() {
+    return (
+      <span>
+        {this.renderFilterDialog()}
+        {this.renderCreateDialog()}
+      </span>
+    );
+  }
+
+  render() {
+    return (
+      <div>
+        {this.renderToolbar()}
+        {this.renderSection()}
+        {this.renderDialogs()}
+      </div>
+    );
+  }
 }
 
 export default EntitiesComponent;
