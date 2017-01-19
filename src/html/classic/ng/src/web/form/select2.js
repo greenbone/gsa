@@ -80,7 +80,8 @@ class Select2Container extends React.Component {
   shouldComponentUpdate(nextProps, nextState) {
     // only update componentn if value or options have changed
     return this.props.value !== nextProps.value ||
-      !equal_array_keys(this.props.children, nextProps.children);
+      !equal_array_keys(this.props.children, nextProps.children) ||
+      this.props.disabled !== nextProps.disabled;
   }
 
   componentDidUpdate(prevProps) {
@@ -133,6 +134,7 @@ class Select2Container extends React.Component {
 }
 
 Select2Container.propTypes = {
+  disabled: React.PropTypes.bool,
   name: React.PropTypes.string,
   onChange: React.PropTypes.func,
   value: React.PropTypes.any,
