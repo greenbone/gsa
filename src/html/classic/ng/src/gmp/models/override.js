@@ -21,7 +21,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {extend} from '../../utils.js';
+import {extend, is_defined} from '../../utils.js';
 
 import Model from '../model.js';
 
@@ -43,6 +43,12 @@ export class Override extends Model {
 
     ret = extend(ret, parse_text(ret.text));
 
+    if (is_defined(ret.task)) {
+      ret.task = new Model(ret.task);
+    }
+    if (is_defined(ret.result)) {
+      ret.result = new Model(ret.result);
+    }
     return ret;
   }
 

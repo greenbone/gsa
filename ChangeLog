@@ -1,5 +1,10 @@
 2017-01-20 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/models/override.js: Parse nvt and task as Model
+	class instances in Override model. This sets correct id properties for both.
+
+2017-01-20 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/render.js: Fix render_nvt_name function.
 
 2017-01-20 Björn Ricks <bjoern.ricks@greenbone.net>
