@@ -5002,7 +5002,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
           <xsl:value-of select="gsa:i18n ('Overrides')"/>:
         </td>
         <td>
-          <a href="/omp?cmd=get_overrides&amp;filter=task_id={@id} sort=nvt&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+          <a href="/ng/overrides?filter=task_id={@id}&amp;filt_id={/envelope/params/filt_id}"
              title="{gsa-i18n:strformat (gsa:i18n ('Overrides on Task %1'), name)}">
             <xsl:value-of select="count (../../get_overrides_response/override)"/>
           </a>
@@ -22599,7 +22599,7 @@ should not have received it.
     <tr>
       <td><xsl:value-of select="gsa:i18n ('Overrides')"/>:</td>
       <td>
-        <a href="/omp?cmd=get_overrides&amp;filter=nvt_id={@oid} sort=nvt&amp;filt_id={/envelope/params/filt_id}&amp;token={/envelope/token}"
+        <a href="/ng/overrides?filter=nvt_id={@oid}&amp;filt_id={/envelope/params/filt_id}"
            title="{gsa-i18n:strformat (gsa:i18n ('Overrides on NVT %1'), name)}">
           <xsl:value-of select="count (../../../get_overrides_response/override)"/>
         </a>
@@ -25148,7 +25148,7 @@ should not have received it.
   <div class="section-header">
     <xsl:call-template name="minor-details"/>
     <h1>
-      <a href="/omp?cmd=get_overrides&amp;token={/envelope/token}"
+      <a href="/ng/get_overrides"
          title="{gsa:i18n ('Overrides')}">
         <img class="icon icon-lg" src="/img/override.svg" alt="Overrides"/>
       </a>

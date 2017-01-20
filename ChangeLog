@@ -1,5 +1,10 @@
 2017-01-20 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/gsad.xsl, src/html/classic/omp.xsl: Always link to ng for
+	overrides.
+
+2017-01-20 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/overrides/dialog.js,
 	src/html/classic/ng/src/web/overrides/overrideslistrow.js: Implement editing
 	of Overrides via a dialog.
