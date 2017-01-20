@@ -1,5 +1,11 @@
 2017-01-20 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/entities/component.js,
+	src/html/classic/ng/src/web/entities/css/component.css: Add fade in animation
+	of large icons on entities pages.
+
+2017-01-20 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/section.js: Allow to set a css class name on
 	Section component.
 

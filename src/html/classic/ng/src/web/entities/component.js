@@ -43,6 +43,8 @@ import HelpIcon from '../icons/helpicon.js';
 
 import Filter from '../../gmp/models/filter.js';
 
+import './css/component.css';
+
 const log = logger.getLogger('web.entities.component');
 
 export class EntitiesComponent extends React.Component {
@@ -419,6 +421,7 @@ export class EntitiesComponent extends React.Component {
   renderSection() {
     return (
       <Section title={this.getSectionTitle()}
+        className="entities-section"
         img={this.icon_name}
         extra={<DashboardControls/>}>
         {this.renderDashboard()}
