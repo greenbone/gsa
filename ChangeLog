@@ -1,3 +1,11 @@
+2017-01-20  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* src/gsad_user.c: Include gvm/util/uuidutils.h instead of
+	openvas/misc/openvas_uuid.h.
+	Use gvm_uuid_make instead of openvas_uuid_make.
+
+	* src/gsad.c: Remove unneeded include.
+
 2017-01-20 Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/gmp/http.js: Add own handler for resolve case in

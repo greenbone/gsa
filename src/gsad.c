@@ -72,7 +72,6 @@
 #include <locale.h>
 #include <netinet/in.h>
 #include <openvas/misc/openvas_logging.h>
-#include <openvas/misc/openvas_uuid.h>
 #include <pthread.h>
 #include <pwd.h> /* for getpwnam */
 #include <grp.h> /* for setgroups */

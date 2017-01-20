@@ -31,7 +31,7 @@
 #include <assert.h> /* for asset */
 #include <string.h> /* for strcmp */
 
-#include <openvas/misc/openvas_uuid.h> /* for openvas_uuid_make */
+#include <gvm/util/uuidutils.h> /* for gvm_uuid_make */
 
 
 /**
@@ -87,8 +87,8 @@ user_add (const gchar *username, const gchar *password, const gchar *timezone,
         }
     }
   user = g_malloc (sizeof (user_t));
-  user->cookie = openvas_uuid_make ();
-  user->token = openvas_uuid_make ();
+  user->cookie = gvm_uuid_make ();
+  user->token = gvm_uuid_make ();
   user->username = g_strdup (username);
   user->password = g_strdup (password);
   user->role = g_strdup (role);
