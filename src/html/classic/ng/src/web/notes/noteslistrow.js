@@ -42,16 +42,11 @@ export class NotesListRow extends EntityRow {
       note: this.props.note,
     };
 
-    this.handleEdit = this.handleEdit.bind(this);
     this.onSave = this.onSave.bind(this);
   }
 
   componentWillReceiveProps(new_props) {
     this.setState({note: new_props.note});
-  }
-
-  handleEdit() {
-    this.edit_dialog.show();
   }
 
   onSave() {
@@ -61,8 +56,16 @@ export class NotesListRow extends EntityRow {
     });
   }
 
-  renderTableButtons() {
+  renderEditDialog() {
     let note = this.getEntity();
+    return (
+      <NoteDialog note={note} ref={ref => this.edit_dialog = ref}
+        title={_('Edit note {{note}}', {note: shorten(note.text)})}
+        onSave={this.onSave}/>
+    );
+  }
+
+  renderTableButtons() {
     return (
       <td>
         <Layout flex align={['center', 'center']}>
@@ -72,9 +75,7 @@ export class NotesListRow extends EntityRow {
           {this.renderEditButton()}
           {this.renderDownloadButton()}
 
-          <NoteDialog note={note} ref={ref => this.edit_dialog = ref}
-            title={_('Edit note {{note}}', {note: note.name})}
-            onSave={this.onSave}/>
+          {this.renderEditDialog()}
         </Layout>
       </td>
     );

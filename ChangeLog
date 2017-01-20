@@ -1,5 +1,11 @@
 2017-01-20 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/entities/row.js,
+	src/html/classic/ng/src/web/notes/noteslistrow.js: Move handling of edit click
+	into EntityRow component.
+
+2017-01-20 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/http.js: Allow easier debugging of unsuccessful
 	http requests.
 

@@ -44,6 +44,11 @@ export class EntityRow extends React.Component {
     this.onSelectionChange = this.onSelectionChange.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
     this.handleClone = this.handleClone.bind(this);
+    this.handleEdit = this.handleEdit.bind(this);
+  }
+
+  renderEditDialog() {
+    return null;
   }
 
   getEntityName() {
@@ -96,6 +101,10 @@ export class EntityRow extends React.Component {
         onDelete(entity);
       }
     });
+  }
+
+  handleEdit() {
+    this.edit_dialog.show();
   }
 
   renderSelection() {
