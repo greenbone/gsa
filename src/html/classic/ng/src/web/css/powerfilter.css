@@ -6,3 +6,7 @@
 .powerfilter .form-group .control-label {
     margin-right: 5px;
 }
+
+.powerfilter .footnote {
+  height: 1em;
+}
