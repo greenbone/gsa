@@ -731,12 +731,12 @@
                    gch.quantiles_colors_gradient(0.0))
             .style('stop-opacity', '1.0');
 
-          for (var q_index = 0; q_index < q_info.quantiles.length; q_index++) {
-            var q_value = q_info.quantile_values[q_index];
+          for (var q_index = 0; q_index < records.length; q_index++) {
+            var q_value = records[q_index][self.x_field];
             var percent = 100 * (q_value - q_info.min_value) /
                           (q_info.max_value - q_info.min_value);
-            var quantile = q_info.quantiles[q_index];
-            if (percent !== prev_percent) {
+            var quantile = q_info.record_quantiles[q_index];
+            if (quantile !== prev_quantile) {
               if (q_index > 0) {
                 gradient.append('stop')
                   .attr('offset', percent.toFixed(5) + '%')

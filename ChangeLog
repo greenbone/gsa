@@ -1,3 +1,9 @@
+2017-01-20  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/js/gsa_line_chart.js
+	(LineChartGenerator.prototype.generate): Select quantile colors based
+	on record_quantiles in quantile info.
+
 2017-01-20 Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/entities/component.js: Avoid overlapping loading
