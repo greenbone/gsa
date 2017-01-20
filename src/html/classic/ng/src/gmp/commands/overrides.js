@@ -68,6 +68,30 @@ export class OverrideCommand extends EntityCommand {
       text,
     }).then(xhr => this.getModelFromResponse(xhr));
   }
+
+  save(args) {
+    let {override_id, active = '-1', days = 30, hosts = '',
+      override_result_id = '', custom_severity = '0', new_severity = '',
+      new_severity_from_list = '', port = '', severity = '',
+      override_task_id = '', text} = args;
+    log.debug('Saving override', args);
+    return this.httpPost({
+      cmd: 'save_override',
+      next: 'get_override',
+      override_id,
+      active,
+      days,
+      hosts,
+      override_result_id,
+      override_task_id,
+      port,
+      severity,
+      custom_severity,
+      new_severity,
+      new_severity_from_list,
+      text,
+    }).then(xhr => this.getModelFromResponse(xhr));
+  }
 }
 
 export class OverridesCommand extends EntitiesCommand {
