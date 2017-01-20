@@ -62,6 +62,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/gmp/commands/filters.js
      ${NG_SRC_DIR}/src/gmp/commands/login.js
      ${NG_SRC_DIR}/src/gmp/commands/notes.js
+     ${NG_SRC_DIR}/src/gmp/commands/overrides.js
      ${NG_SRC_DIR}/src/gmp/commands/portlists.js
      ${NG_SRC_DIR}/src/gmp/commands/reports.js
      ${NG_SRC_DIR}/src/gmp/commands/results.js
@@ -80,7 +81,9 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/gmp/models/filter.js
      ${NG_SRC_DIR}/src/gmp/models/login.js
      ${NG_SRC_DIR}/src/gmp/models/note.js
+     ${NG_SRC_DIR}/src/gmp/models/override.js
      ${NG_SRC_DIR}/src/gmp/models/nvt.js
+     ${NG_SRC_DIR}/src/gmp/models/parser.js
      ${NG_SRC_DIR}/src/gmp/models/portlist.js
      ${NG_SRC_DIR}/src/gmp/models/report.js
      ${NG_SRC_DIR}/src/gmp/models/result.js
@@ -122,6 +125,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/entities/table.js
      ${NG_SRC_DIR}/src/web/filterdialog.js
      ${NG_SRC_DIR}/src/web/footer.js
+     ${NG_SRC_DIR}/src/web/footnote.js
      ${NG_SRC_DIR}/src/web/form.js
      ${NG_SRC_DIR}/src/web/form/checkbox.js
      ${NG_SRC_DIR}/src/web/form/datepicker.js
@@ -159,8 +163,13 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/menu/menuentry.js
      ${NG_SRC_DIR}/src/web/menu/menu.js
      ${NG_SRC_DIR}/src/web/notes/charts.js
+     ${NG_SRC_DIR}/src/web/notes/dialog.js
      ${NG_SRC_DIR}/src/web/notes/notes.js
      ${NG_SRC_DIR}/src/web/notes/noteslistentry.js
+     ${NG_SRC_DIR}/src/web/overrides/charts.js
+     ${NG_SRC_DIR}/src/web/overrides/dialog.js
+     ${NG_SRC_DIR}/src/web/overrides/overrides.js
+     ${NG_SRC_DIR}/src/web/overrides/overrideslistentry.js
      ${NG_SRC_DIR}/src/web/nvts/charts.js
      ${NG_SRC_DIR}/src/web/os/charts.js
      ${NG_SRC_DIR}/src/web/ovaldefs/charts.js
