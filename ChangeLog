@@ -1,5 +1,14 @@
 2017-01-20 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/entities/row.js,
+	src/html/classic/ng/src/web/notes/noteslistrow.js,
+	src/html/classic/ng/src/web/overrides/overrideslistrow.js,
+	src/html/classic/ng/src/web/tasks/taskslistrow.js: Move generic
+	componentDidMount and onSave methods up into EntityRow class. Also implement
+	common default renderTableButtons method in EntityRow.
+
+2017-01-20 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/models/override.js: Parse nvt and task as Model
 	class instances in Override model. This sets correct id properties for both.
 

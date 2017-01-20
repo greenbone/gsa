@@ -26,7 +26,6 @@ import React from 'react';
 import _ from '../../locale.js';
 import {shorten} from '../../utils.js';
 
-import Layout from '../layout.js';
 import LegacyLink from '../legacylink.js';
 
 import EntityRow from '../entities/row.js';
@@ -41,19 +40,6 @@ export class NotesListRow extends EntityRow {
     this.state = {
       note: this.props.note,
     };
-
-    this.onSave = this.onSave.bind(this);
-  }
-
-  componentWillReceiveProps(new_props) {
-    this.setState({note: new_props.note});
-  }
-
-  onSave() {
-    let gmp = this.getGmp();
-    gmp.get(this.state.note).then(note => {
-      this.setState({note});
-    });
   }
 
   renderEditDialog() {
@@ -62,22 +48,6 @@ export class NotesListRow extends EntityRow {
       <NoteDialog note={note} ref={ref => this.edit_dialog = ref}
         title={_('Edit note {{note}}', {note: shorten(note.text)})}
         onSave={this.onSave}/>
-    );
-  }
-
-  renderTableButtons() {
-    return (
-      <td>
-        <Layout flex align={['center', 'center']}>
-
-          {this.renderDeleteButton()}
-          {this.renderCloneButton()}
-          {this.renderEditButton()}
-          {this.renderDownloadButton()}
-
-          {this.renderEditDialog()}
-        </Layout>
-      </td>
     );
   }
 

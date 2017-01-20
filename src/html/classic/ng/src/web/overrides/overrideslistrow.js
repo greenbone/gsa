@@ -43,21 +43,6 @@ export class OverridesListRow extends EntityRow {
     };
   }
 
-  renderTableButtons() {
-    return (
-      <td>
-        <Layout flex align={['center', 'center']}>
-
-          {this.renderDeleteButton()}
-          {this.renderCloneButton()}
-          {this.renderEditButton()}
-          {this.renderDownloadButton()}
-
-        </Layout>
-      </td>
-    );
-  }
-
   renderSeverity(severity) {
     if (is_defined(severity)) {
       if (severity <= 0) {

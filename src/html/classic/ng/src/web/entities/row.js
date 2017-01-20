@@ -42,6 +42,7 @@ export class EntityRow extends React.Component {
     this.name = name;
 
     this.onSelectionChange = this.onSelectionChange.bind(this);
+    this.onSave = this.onSave.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
     this.handleClone = this.handleClone.bind(this);
     this.handleEdit = this.handleEdit.bind(this);
@@ -63,6 +64,23 @@ export class EntityRow extends React.Component {
   getGmp() {
     let name = this.getEntityName();
     return this.context.gmp[name];
+  }
+
+  componentWillReceiveProps(new_props) {
+    let state = {};
+    let name = this.getEntityName();
+    state[name] = new_props[name];
+    this.setState(state);
+  }
+
+  onSave() {
+    let gmp = this.getGmp();
+    let entity = this.getEntity();
+    gmp.get(entity).then(nentity => {
+      let state = {};
+      state[this.getEntityName()] = nentity;
+      this.setState(state);
+    });
   }
 
   onSelectionChange(value) {
@@ -118,7 +136,17 @@ export class EntityRow extends React.Component {
   }
 
   renderTableButtons() {
-    return null;
+    return (
+      <td>
+        <Layout flex align={['center', 'center']}>
+          {this.renderDeleteButton()}
+          {this.renderCloneButton()}
+          {this.renderEditButton()}
+          {this.renderDownloadButton()}
+        </Layout>
+        {this.renderEditDialog()}
+      </td>
+    );
   }
 
   renderDeleteButton() {

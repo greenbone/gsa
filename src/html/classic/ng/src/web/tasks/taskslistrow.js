@@ -44,14 +44,13 @@ export class TasksListRow extends EntityRow {
 
   constructor(props) {
     super('task', props);
+
     this.state = {task: this.props.task};
     this.progress = this.progress.bind(this);
     this.startTask = this.startTask.bind(this);
     this.stopTask = this.stopTask.bind(this);
     this.resumeTask = this.resumeTask.bind(this);
-    this.handleEdit = this.handleEdit.bind(this);
     this.reportDate = this.reportDate.bind(this);
-    this.onSave = this.onSave.bind(this);
   }
 
   progress(value) {
@@ -88,26 +87,11 @@ export class TasksListRow extends EntityRow {
     });
   }
 
-  handleEdit() {
-    this.edit_dialog.show();
-  }
-
   resumeTask() {
     let gmp = this.getGmp();
     gmp.resume(this.state.task).then(task => {
       this.setState({task});
     });
-  }
-
-  onSave() {
-    let gmp = this.getGmp();
-    gmp.get(this.state.task).then(task => {
-      this.setState({task});
-    });
-  }
-
-  componentWillReceiveProps(new_props) {
-    this.setState({task: new_props.task});
   }
 
   renderStartButton(task) {
@@ -218,28 +202,37 @@ export class TasksListRow extends EntityRow {
     );
   }
 
+  renderEditDialog() {
+    let task = this.getEntity();
+
+    return (
+      <TaskDialog task={task} ref={ref => this.edit_dialog = ref}
+        title={_('Edit task {{task}}', {task: task.name})}
+        onSave={this.onSave}/>
+    );
+  }
+
   renderTableButtons() {
     let task = this.getEntity();
     return (
       <td className="table-actions">
-        {this.renderScheduleIcon(task) || this.renderStartButton(task)}
+        <Layout flex align={['center', 'center']}>
+          {this.renderScheduleIcon(task) || this.renderStartButton(task)}
 
-        {task.isRunning() &&
-          <Icon onClick={this.stopTask} size="small" img="stop.svg"
-            title={_('Stop')}/>
-        }
+          {task.isRunning() &&
+            <Icon onClick={this.stopTask} size="small" img="stop.svg"
+              title={_('Stop')}/>
+          }
 
-        {this.renderResumeButton(task)}
-        {this.renderDeleteButton()}
+          {this.renderResumeButton(task)}
+          {this.renderDeleteButton()}
 
-        {this.renderCloneButton()}
+          {this.renderCloneButton()}
 
-        {this.renderEditButton(task)}
-        {this.renderDownloadButton()}
-
-        <TaskDialog task={task} ref={ref => this.edit_dialog = ref}
-          title={_('Edit task {{task}}', {task: task.name})}
-          onSave={this.onSave}/>
+          {this.renderEditButton(task)}
+          {this.renderDownloadButton()}
+        </Layout>
+        {this.renderEditDialog()}
       </td>
     );
   }
