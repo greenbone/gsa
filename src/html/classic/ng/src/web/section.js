@@ -30,8 +30,9 @@ import Icon from './icons/icon.js';
 import './css/section.css';
 
 export const Section = props => {
+  let {className} = props;
   return (
-    <section>
+    <section className={className}>
       <SectionHeader img={props.img} title={props.title}>
         {props.extra}
       </SectionHeader>
@@ -41,6 +42,7 @@ export const Section = props => {
 };
 
 Section.propTypes = {
+  className: React.PropTypes.string,
   img: React.PropTypes.string.isRequired,
   title: React.PropTypes.string.isRequired,
   extra: React.PropTypes.element,

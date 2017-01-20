@@ -1,3 +1,8 @@
+2017-01-20 Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/src/web/section.js: Allow to set a css class name on
+	Section component.
+
 2017-01-20  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/js/gsa_line_chart.js
