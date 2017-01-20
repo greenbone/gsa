@@ -26,6 +26,7 @@ import React from 'react';
 import _ from '../../locale.js';
 import {has_value} from '../../utils.js';
 
+import FootNote from '../footnote.js';
 import Pagination from '../pagination.js';
 import Layout from '../layout.js';
 
@@ -60,9 +61,9 @@ export const EntitiesTable = props => {
         {rows}
       </StrippedTable>
       <Layout flex align="space-between">
-        <div className="footnote">
+        <FootNote>
           {_('(Applied filter: {{filter}})', {filter: filterstring})}
-        </div>
+        </FootNote>
         {pagination}
       </Layout>
     </div>

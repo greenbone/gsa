@@ -27,6 +27,7 @@ import _ from '../locale.js';
 import {KeyCode, autobind, is_defined} from '../utils.js';
 import logger from '../log.js';
 
+import FootNote from './footnote.js';
 import Layout from './layout.js';
 import {render_options} from './render.js';
 
@@ -207,9 +208,9 @@ export class PowerFilter extends React.Component {
               }
             </Layout>
           </Layout>
-          <div className="footnote">
+          <FootNote>
             {filterstring}
-          </div>
+          </FootNote>
         </Layout>
       </Layout>
     );

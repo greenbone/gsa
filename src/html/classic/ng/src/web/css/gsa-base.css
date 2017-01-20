@@ -125,30 +125,6 @@ p {
   white-space: nowrap;
 }
 
-.footnote {
-  font-size:10px;
-  color: #787878;
-  text-align:left;
-}
-
-.footnote a {
-  font-size:10px;
-  color: #787878;
-  text-decoration: none;
-}
-
-.footnote a:hover {
-  font-size:10px;
-  color: #787878;
-  text-decoration: underline;
-}
-
-.footnote a:focus {
-  font-size:10px;
-  color: #787878;
-  text-decoration: underline;
-}
-
 .invisible {
   visibility: hidden !important;
 }

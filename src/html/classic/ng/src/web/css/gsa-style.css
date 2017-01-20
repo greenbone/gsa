@@ -1105,10 +1105,6 @@ select[multiple] {
   display: inline-block;
 }
 
-.toolbar .footnote {
-  max-width: 500px;
-}
-
 .toolbar > div[class*="col-"] {
   /* remove padding from col-* elements */
   padding-left: 0px;
