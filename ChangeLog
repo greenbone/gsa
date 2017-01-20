@@ -1,5 +1,10 @@
 2017-01-20 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/http.js: Add own handler for resolve case in
+	Http class. This will allow to intercept and maybe cancel requests in future.
+
+2017-01-20 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/entities/component.js,
 	src/html/classic/ng/src/web/entities/css/component.css: Add fade in animation
 	of large icons on entities pages.

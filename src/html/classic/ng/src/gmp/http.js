@@ -99,7 +99,7 @@ export class Http {
 
       xhr.onload = function() {
         if (this.status >= 200 && this.status < 300) {
-          resolve(this);
+          self.handleResolve(resolve, this);
         } else {
           self.handleReject(reject, this);
         }
@@ -120,6 +120,10 @@ export class Http {
       interceptor.responseError(xhr);
     }
     reject(xhr);
+  }
+
+  handleResolve(resolve, xhr) {
+    resolve(xhr);
   }
 }
 
