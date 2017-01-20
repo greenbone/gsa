@@ -1,5 +1,10 @@
 2017-01-20 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/public/config.js: Add sane defaults for logging in
+	config.js file. This allows easier switching to debug output.
+
+2017-01-20 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/CMakeLists.txt: Add new js files as dependency for
 	building the final js bundle.
 
