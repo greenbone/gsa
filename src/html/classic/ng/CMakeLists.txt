@@ -147,7 +147,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/icons/exporticon.js
      ${NG_SRC_DIR}/src/web/icons/helpicon.js
      ${NG_SRC_DIR}/src/web/icons/icon.js
-     ${NG_SRC_DIR}/src/web/icons/overridesicon.js
      ${NG_SRC_DIR}/src/web/icons/trashicon.js
      ${NG_SRC_DIR}/src/web/img.js
      ${NG_SRC_DIR}/src/web/layout.js

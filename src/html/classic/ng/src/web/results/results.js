@@ -37,7 +37,6 @@ import Dashboard from '../dashboard/dashboard.js';
 
 
 import Icon from '../icons/icon.js';
-import OverridesIcon from '../icons/overridesicon.js';
 
 import TableRow from '../table/row.js';
 import TableHead from '../table/head.js';
@@ -69,8 +68,6 @@ export class Results extends EntitiesComponent {
     }
 
     let {selection_type} = this.state;
-    let filter = entities.getFilter();
-    let overrides = filter.get('apply_overrides');
     return (
       <TableRow key="1">
         <TableHead>
@@ -91,8 +88,6 @@ export class Results extends EntitiesComponent {
             <Sort by="severity" onClick={this.onSortChange}>
               {_('Severity')}
             </Sort>
-            <OverridesIcon overrides={overrides}
-              onClick={this.onToggleOverrides}/>
           </Layout>
         </TableHead>
         <TableHead width="6em">

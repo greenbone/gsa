@@ -72,7 +72,6 @@ export class EntitiesComponent extends React.Component {
     this.onFilterUpdate = this.onFilterUpdate.bind(this);
     this.onFilterCreated = this.onFilterCreated.bind(this);
     this.onFilterEditClick = this.onFilterEditClick.bind(this);
-    this.onToggleOverrides = this.onToggleOverrides.bind(this);
     this.onSortChange = this.onSortChange.bind(this);
     this.onDownloadBulk = this.onDownloadBulk.bind(this);
     this.onDeleteBulk = this.onDeleteBulk.bind(this);
@@ -225,14 +224,6 @@ export class EntitiesComponent extends React.Component {
     }
 
     filter.set(sort, field);
-
-    this.load(filter);
-  }
-
-  onToggleOverrides() {
-    let {filter} = this.state;
-    let overrides = filter.get('apply_overrides');
-    filter.set('apply_overrides', overrides ? 0 : 1, '=');
 
     this.load(filter);
   }

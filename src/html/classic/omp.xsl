@@ -3329,81 +3329,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
   </a>
 </xsl:template>
 
-<xsl:template name="result-overrides-icon-img">
-  <xsl:param name="overrides"/>
-  <xsl:choose>
-    <xsl:when test="$overrides = 1">
-      <img src="/img/overrides_enabled.svg"
-        alt="{gsa:i18n('Overrides are Applied')}"
-        value="Overrides are Applied"
-        title="{gsa:i18n('Overrides are Applied')}"
-        class="icon icon-sm"/>
-    </xsl:when>
-    <xsl:otherwise>
-      <img src="/img/overrides_disabled.svg"
-        alt="{gsa:i18n('No Overrides')}"
-        value="No Overrides"
-        title="{gsa:i18n('No Overrides')}"
-        class="icon icon-sm"/>
-    </xsl:otherwise>
-  </xsl:choose>
-</xsl:template>
-
-<xsl:template match="report" mode="result-overrides-icon">
-  <xsl:variable name="details">
-    <xsl:choose>
-      <xsl:when test="/envelope/params/details &gt; 0">1</xsl:when>
-      <xsl:otherwise>0</xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-
-  <xsl:variable name="overrides">
-    <xsl:choose>
-      <xsl:when test="filters/keywords/keyword[column = 'apply_overrides']/value = 0">0</xsl:when>
-      <xsl:otherwise>1</xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-  <xsl:variable name="link-overrides">
-    <xsl:choose>
-      <xsl:when test="$overrides = 0">1</xsl:when>
-      <xsl:otherwise>0</xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-  <xsl:variable name="host" select="/envelope/params/host"/>
-  <xsl:variable name="pos" select="/envelope/params/pos"/>
-  <xsl:variable name="delta" select="delta/report/@id"/>
-  <xsl:variable name="apply_filter" select="/envelope/params/apply_filter"/>
-
-  <xsl:variable name="link">
-    <xsl:choose>
-      <xsl:when test="@type='prognostic'">
-        <xsl:value-of select="concat('/omp?cmd=get_report&amp;type=prognostic&amp;host=', $host, '&amp;pos=',$pos ,'&amp;details=', $details, '&amp;apply_filter=', $apply_filter, '&amp;filter=apply_overrides=', $link-overrides, ' ', filters/term, '&amp;filt_id=', /envelope/params/filt_id, '&amp;token=', /envelope/token)"/>
-      </xsl:when>
-      <xsl:when test="@type='delta'">
-        <xsl:value-of select="concat('/omp?cmd=get_report&amp;report_id=', @id, '&amp;delta_report_id=', $delta, '&amp;details=', $details, '&amp;apply_filter=', $apply_filter, '&amp;filter=apply_overrides=', $link-overrides, ' ', filters/term, '&amp;token=', /envelope/token)"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="concat('/omp?cmd=get_report&amp;report_id=', @id, '&amp;details=', $details, '&amp;apply_filter=', $apply_filter, '&amp;filter=apply_overrides=', $link-overrides, ' ', filters/term, '&amp;filt_id=&amp;token=', /envelope/token)"/>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-  <xsl:variable name="title">
-    <xsl:choose>
-      <xsl:when test="$overrides='1'">
-        <xsl:value-of select="'Overrides are Applied'"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="'No Overrides'"/>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-  <a href="{$link}" title="{$title}">
-    <xsl:call-template name="result-overrides-icon-img">
-      <xsl:with-param name="overrides" select="$overrides"/>
-    </xsl:call-template>
-  </a>
-</xsl:template>
-
 <xsl:template match="report" mode="filterbox">
   <input type="hidden" name="build_filter" value="0"/>
   <div id="filterbox" style="display: none;">
@@ -28968,61 +28893,6 @@ should not have received it.
         <name><xsl:value-of select="gsa:i18n('Severity', 'Severity Short')"/></name>
         <field>severity</field>
         <sort-reverse/>
-        <html>
-          <before>
-            <xsl:choose>
-              <xsl:when test="/envelope/params/bulk_select = 1">
-                <div class="pull-right">
-                  <xsl:choose>
-                    <xsl:when test="filters/keywords/keyword[column='apply_overrides']/value = 0">
-                      <img src="/img/overrides_disabled.svg"
-                        alt="{gsa:i18n ('No Overrides')}"
-                        title="{gsa:i18n ('No Overrides')}"
-                        class="icon icon-sm"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <img src="/img/overrides_enabled.svg"
-                        alt="{gsa:i18n ('Overrides are Applied')}"
-                        title="{gsa:i18n ('Overrides are Applied')}"
-                        class="icon icon-sm"/>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                </div>
-              </xsl:when>
-              <xsl:otherwise>
-                <div class="pull-right">
-                  <form method="get" action="">
-                    <input type="hidden" name="token" value="{/envelope/token}"/>
-                    <input type="hidden" name="cmd" value="get_reports"/>
-                    <input type="hidden" name="filter" value="{filters/term}"/>
-                    <xsl:choose>
-                      <xsl:when test="filters/keywords/keyword[column='apply_overrides']/value = 0">
-                        <input type="hidden" name="overrides" value="1"/>
-                        <input type="image"
-                          name="No Overrides"
-                          src="/img/overrides_disabled.svg"
-                          alt="{gsa:i18n ('No Overrides')}"
-                          value="No Overrides"
-                          title="{gsa:i18n ('No Overrides')}"
-                          class="icon icon-sm"/>
-                      </xsl:when>
-                      <xsl:otherwise>
-                        <input type="hidden" name="overrides" value="0"/>
-                        <input type="image"
-                          name="Overrides are Applied"
-                          src="/img/overrides_enabled.svg"
-                          alt="{gsa:i18n ('Overrides are Applied')}"
-                          value="Overrides are Applied"
-                          title="{gsa:i18n ('Overrides are Applied')}"
-                          class="icon icon-sm"/>
-                      </xsl:otherwise>
-                    </xsl:choose>
-                  </form>
-                </div>
-              </xsl:otherwise>
-            </xsl:choose>
-          </before>
-        </html>
       </column>
       <column>
         <!-- Special case that is translated in the severity-label template -->
@@ -29970,41 +29840,9 @@ should not have received it.
             <xsl:with-param name="name" select="'severity'"/>
             <xsl:with-param name="label-text" select="gsa:i18n ('Severity')"/>
           </xsl:apply-templates>
-          <div class="pull-right">
-            <xsl:apply-templates select="../../." mode="result-overrides-icon"/>
-          </div>
         </xsl:when>
         <xsl:otherwise>
           <xsl:value-of select="gsa:i18n ('Severity')"/>
-          <div class="pull-right form-inline">
-            <form method="get" action="">
-              <input type="hidden" name="token" value="{/envelope/token}"/>
-              <input type="hidden" name="cmd" value="get_result"/>
-              <input type="hidden" name="result_id" value="{@id}"/>
-              <input type="hidden" name="task_id" value="{/envelope/params/task_id}"/>
-              <input type="hidden" name="report_id" value="{/envelope/params/report_id}"/>
-              <input type="hidden" name="filter" value="{filters/term}"/>
-              <xsl:choose>
-                <xsl:when test="/envelope/params/apply_overrides = 0">
-                  <input type="hidden" name="apply_overrides" value="1"/>
-                  <input type="image" name="No Overrides" value="No Overrides"
-                         src="/img/overrides_disabled.svg"
-                         alt="{gsa:i18n ('No Overrides')}"
-                         title="{gsa:i18n ('No Overrides')}"
-                         class="icon icon-sm"/>
-                </xsl:when>
-                <xsl:otherwise>
-                  <input type="hidden" name="apply_overrides" value="0"/>
-                  <input type="image" name="Overrides are Applied"
-                         value="Overrides are Applied"
-                         src="/img/overrides_enabled.svg"
-                         alt="{gsa:i18n ('Overrides are Applied')}"
-                         title="{gsa:i18n ('Overrides are Applied')}"
-                         class="icon icon-sm"/>
-                </xsl:otherwise>
-              </xsl:choose>
-            </form>
-          </div>
         </xsl:otherwise>
       </xsl:choose>
     </td>

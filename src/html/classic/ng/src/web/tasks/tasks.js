@@ -35,7 +35,6 @@ import EntitiesComponent from '../entities/component.js';
 import EntitiesFooter from '../entities/footer.js';
 
 import Icon from '../icons/icon.js';
-import OverridesIcon from '../icons/overridesicon.js';
 
 import IconMenu from '../menu/iconmenu.js';
 import MenuEntry from '../menu/menuentry.js';
@@ -86,8 +85,6 @@ export class Tasks extends EntitiesComponent {
       return null;
     }
 
-    let filter = entities.getFilter();
-    let overrides = filter.get('apply_overrides');
     return [
       <TableRow key="1">
         <TableHead rowSpan="2">
@@ -106,8 +103,6 @@ export class Tasks extends EntitiesComponent {
             <Sort by="severity" onClick={this.onSortChange}>
               {_('Severity')}
             </Sort>
-            <OverridesIcon overrides={overrides}
-              onClick={this.onToggleOverrides}/>
           </Layout>
         </TableHead>
         <TableHead rowSpan="2" width="6em">
