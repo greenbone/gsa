@@ -161,7 +161,7 @@ export function render_nvt_name(nvt) {
   }
 
   if (nvt.name.length < 70) {
-    return name;
+    return nvt.name;
   }
 
   return (
