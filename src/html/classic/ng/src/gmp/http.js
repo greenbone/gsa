@@ -93,6 +93,10 @@ export class Http {
       xhr.timeout = self.timeout;
       xhr.withCredentials = true; // allow to set Cookies
 
+      /* add request data for easier debugging of responses */
+      xhr.uri = uri;
+      xhr.formdata = formdata;
+
       xhr.onload = function() {
         if (this.status >= 200 && this.status < 300) {
           resolve(this);
