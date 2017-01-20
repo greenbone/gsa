@@ -1,5 +1,11 @@
 2017-01-20 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/entities/component.js: Avoid overlapping loading
+	of data due to running background timer. This also avoids starting two or more
+	parallel reloads if the loading takes longer then the reload interval.
+
+2017-01-20 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/public/config.js: Add sane defaults for logging in
 	config.js file. This allows easier switching to debug output.
 

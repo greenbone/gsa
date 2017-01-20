@@ -64,6 +64,7 @@ export class EntitiesComponent extends React.Component {
     };
 
     this.reload = this.reload.bind(this);
+    this.handleTimer = this.handleTimer.bind(this);
     this.onFirst = this.onFirst.bind(this);
     this.onLast = this.onLast.bind(this);
     this.onNext = this.onNext.bind(this);
@@ -101,6 +102,8 @@ export class EntitiesComponent extends React.Component {
   }
 
   load(filter) {
+    this.clearTimer(); // remove possible running timer
+
     let gmp = this.getGmp();
     gmp.get(filter).then(entities => {
       let {selection_type} = this.state;
@@ -112,6 +115,8 @@ export class EntitiesComponent extends React.Component {
       if (selection_type !== SelectionType.SELECTION_USER) {
         this.setState({selected: entities});
       }
+
+      this.startTimer();
     });
   }
 
@@ -138,9 +143,7 @@ export class EntitiesComponent extends React.Component {
   }
 
   componentDidMount() {
-    let {gmp} = this.context;
     let filter_string = this.props.location.query.filter;
-    let refresh = gmp.globals.autorefresh;
     let filter;
 
     if (filter_string) {
@@ -149,18 +152,32 @@ export class EntitiesComponent extends React.Component {
 
     this.load(filter);
     this.loadFilters();
-
-    if (refresh) {
-      log.debug('Setting reload interval', refresh);
-      this.timer = window.setInterval(this.reload, refresh * 1000);
-    }
   }
 
   componentWillUnmount() {
-    if (is_defined(this.timer)) {
-      log.debug('Clearing reload interval');
-      window.clearInterval(this.timer);
+    this.clearTimer();
+  }
+
+  startTimer() {
+    let {gmp} = this.context;
+    let refresh = gmp.globals.autorefresh;
+    if (refresh) {
+      this.timer = window.setTimeout(this.handleTimer, refresh * 1000);
+      log.debug('Started reload timer with id', this.timer, 'and interval',
+        refresh);
     }
+  }
+
+  clearTimer() {
+    if (is_defined(this.timer)) {
+      log.debug('Clearing reload timer with id', this.timer);
+      window.clearTimeout(this.timer);
+    }
+  }
+
+  handleTimer() {
+    this.timer = undefined;
+    this.reload();
   }
 
   reload() {
