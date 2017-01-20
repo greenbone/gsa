@@ -33,6 +33,8 @@ import SeverityBar from '../severitybar.js';
 
 import EntityRow from '../entities/row.js';
 
+import OverrideDialog from './dialog.js';
+
 export class OverridesListRow extends EntityRow {
 
   constructor(props) {
@@ -41,6 +43,17 @@ export class OverridesListRow extends EntityRow {
     this.state = {
       override: this.props.override,
     };
+  }
+
+  renderEditDialog() {
+    let override = this.getEntity();
+    return (
+      <OverrideDialog override={override}
+        ref={ref => this.edit_dialog = ref}
+        title={_('Edit override {{override}}',
+          {override: shorten(override.text)})}
+        onSave={this.onSave}/>
+    );
   }
 
   renderSeverity(severity) {

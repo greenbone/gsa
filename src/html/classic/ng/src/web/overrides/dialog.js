@@ -24,7 +24,7 @@
 import React from 'react';
 
 import _, {datetime} from '../../locale.js';
-import {is_defined, extend, is_empty} from '../../utils.js';
+import {is_defined, extend, is_empty, includes} from '../../utils.js';
 
 import Dialog from '../dialog.js';
 import Layout from '../layout.js';
@@ -54,7 +54,7 @@ export class OverrideDialog extends Dialog {
       severity: '',
       custom_severity: '0',
       new_severity: '',
-      new_severity_from_list: '-1.0',
+      new_severity_from_list: -1,
       override_result_id: '',
       override_result_uuid: '',
       override_task_id: '',
@@ -68,6 +68,46 @@ export class OverrideDialog extends Dialog {
     let {gmp} = this.context;
 
     if (this.state.override) {
+      // request all override details which haven't been included in
+      // get_overrides response
+      gmp.override.get(this.state.override).then(override => {
+        let active = '0';
+        if (override.isActive()) {
+          if (is_empty(override.end_time)) {
+            active = '-1';
+          }
+          else {
+            active = '-2';
+          }
+        }
+
+        let custom_severity = '0';
+        let new_severity_from_list = '';
+        let new_severity = '';
+
+        if (includes([10, 5, 2, 0, -1], override.new_severity)) {
+          new_severity_from_list = override.new_severity;
+        }
+        else {
+          custom_severity = '1';
+          new_severity = override.new_severity;
+        }
+        this.setState({
+          active,
+          hosts: override.hosts,
+          port: override.port,
+          override,
+          override_id: override.id,
+          override_task_id: override.task ? override.task.id : undefined,
+          override_result_id: override.result ? override.result.id : undefined,
+          severity: override.severity,
+          custom_severity,
+          new_severity,
+          new_severity_from_list,
+          text: override.text,
+          visible: true,
+        });
+      });
     }
     else {
       gmp.tasks.get().then(tasks => this.setState({tasks, visible: true}));
@@ -265,12 +305,14 @@ export class OverrideDialog extends Dialog {
             value={new_severity_from_list}
             disabled={custom_severity !== '0'}
             onChange={this.onValueChange}>
-
-            <option value="10.0">10.0 ({_('High')})</option>
-            <option value="5.0">5.0 ({_('Medium')}</option>
-            <option value="2.0">2.0 ({_('Low')}</option>
-            <option value="0.0">{_('Log')}</option>
-            <option value="-1.0">{_('False Positive')}</option>
+            {is_edit &&
+              <option value="">--</option>
+            }
+            <option value={10.0}>10.0 ({_('High')})</option>
+            <option value={5.0}>5.0 ({_('Medium')}</option>
+            <option value={2.0}>2.0 ({_('Low')}</option>
+            <option value={0.0}>{_('Log')}</option>
+            <option value={-1.0}>{_('False Positive')}</option>
           </Select2>
           <Radio name="custom_severity"
             value="1"
