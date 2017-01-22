@@ -3126,6 +3126,15 @@ main (int argc, char **argv)
   /* Set to ensure that recursion is left out, in case two threads log
    * concurrently. */
   g_log_set_always_fatal (G_LOG_FATAL_MASK);
+  /* Enable GNUTLS debugging if requested via env variable.  */
+  {
+    const char *s;
+    if ((s=getenv ("OPENVAS_GNUTLS_DEBUG")))
+      {
+        gnutls_global_set_log_function (log_func_for_gnutls);
+        gnutls_global_set_log_level (atoi (s));
+      }
+  }
 
 #ifdef GSAD_SVN_REVISION
   g_message ("Starting GSAD version %s (SVN revision %i)\n",
