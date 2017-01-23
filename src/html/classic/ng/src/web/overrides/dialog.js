@@ -201,10 +201,13 @@ export class OverrideDialog extends Dialog {
             <Layout flex box>
               <Radio name="hosts"
                 value={override.hosts}
-                title={override.hosts}
-                checked={hosts === override.hosts}
+                checked={!is_empty(hosts)}
                 onChange={this.onValueChange}>
               </Radio>
+              <TextField name="hosts"
+                disabled={is_empty(hosts)}
+                value={hosts}
+                onChange={this.onValueChange}/>
             </Layout>
           }
           {!is_edit &&
@@ -233,10 +236,13 @@ export class OverrideDialog extends Dialog {
             <Layout flex box>
               <Radio name="port"
                 value={override.port}
-                title={override.port}
-                checked={port === override.port}
+                checked={!is_empty(port)}
                 onChange={this.onValueChange}>
               </Radio>
+              <TextField name="port"
+                value={port}
+                disabled={is_empty(port)}
+                onChange={this.onValueChange}/>
             </Layout>
           }
           {!is_edit &&

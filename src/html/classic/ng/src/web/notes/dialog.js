@@ -183,10 +183,13 @@ export class NoteDialog extends Dialog {
             <Layout flex box>
               <Radio name="hosts"
                 value={note.hosts}
-                title={note.hosts}
-                checked={hosts === note.hosts}
+                checked={!is_empty(hosts)}
                 onChange={this.onValueChange}>
               </Radio>
+              <TextField name="hosts"
+                disabled={is_empty(hosts)}
+                value={hosts}
+                onChange={this.onValueChange}/>
             </Layout>
           }
           {!is_edit &&
@@ -214,10 +217,13 @@ export class NoteDialog extends Dialog {
             <Layout flex box>
               <Radio name="port"
                 value={note.port}
-                title={note.port}
-                checked={port === note.port}
+                checked={!is_empty(port)}
                 onChange={this.onValueChange}>
               </Radio>
+              <TextField name="port"
+                value={port}
+                disabled={is_empty(port)}
+                onChange={this.onValueChange}/>
             </Layout>
           }
           {!is_edit &&
