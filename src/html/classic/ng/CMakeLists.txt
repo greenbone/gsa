@@ -93,6 +93,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/gmp/models/target.js
      ${NG_SRC_DIR}/src/gmp/models/task.js
      ${NG_SRC_DIR}/src/gmp/models/user.js
+     ${NG_SRC_DIR}/src/gmp/promise.js
      ${NG_SRC_DIR}/src/web/alerts/dialog.js
      ${NG_SRC_DIR}/src/web/alerts/emailmethodpart.js
      ${NG_SRC_DIR}/src/web/alerts/filtercountchangedconditionpart.js

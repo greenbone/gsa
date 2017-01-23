@@ -23,10 +23,27 @@
 
 import logger from '../log.js';
 
-import {is_defined, has_value, extend, xml2json,
-  PromiseFactory} from '../utils.js';
+import {is_defined, has_value, extend, xml2json} from '../utils.js';
+
+import {PromiseFactory} from './promise.js';
 
 const log = logger.getLogger('gmp.http');
+
+class Rejection {
+
+  constructor(reason, xhr) {
+    this.reason = reason;
+    this.xhr = xhr;
+  }
+
+  isError() {
+    return this.reason === 'error';
+  }
+
+  isTimeout() {
+    return this.reason === 'timeout';
+  }
+}
 
 export const TIMEOUT = 10000; // 10 sec
 
@@ -50,16 +67,10 @@ export class Http {
 
   constructor(url, timeout, promise_factory) {
     this.url = url;
-    this.timeout = timeout;
-    this.promise_factory = promise_factory;
+    this.timeout = is_defined(timeout) ? timeout : TIMEOUT;
+    this.promise_factory = is_defined(promise_factory) ? promise_factory :
+      new PromiseFactory();
     this.params = {};
-
-    if (!is_defined(timeout)) {
-      this.timeout = TIMEOUT;
-    }
-    if (!is_defined(promise_factory)) {
-      this.promise_factory = new PromiseFactory();
-    }
 
     this.interceptors = [];
   }
@@ -87,8 +98,12 @@ export class Http {
       uri += '?' + build_url_params(extend({}, this.params, args));
     }
 
+    let xhr;
+
     let promise = this.promise_factory.create(function(resolve, reject) {
-      let xhr = new XMLHttpRequest();
+      xhr = new XMLHttpRequest();
+
+      xhr.open(method, uri, true);
 
       xhr.timeout = self.timeout;
       xhr.withCredentials = true; // allow to set Cookies
@@ -108,22 +123,40 @@ export class Http {
       xhr.onerror = function() {
         self.handleReject(reject, this);
       };
-      xhr.open(method, uri, true);
+
+      xhr.ontimeout = function() {
+        self.handleTimeout(reject, this);
+      };
+
+      xhr.onabort = function() {
+        self.handleCancel(reject, this);
+      };
+
       xhr.send(formdata);
     });
 
     return promise;
   }
 
+  handleResolve(resolve, xhr) {
+    resolve(xhr);
+  }
+
   handleReject(reject, xhr) {
     for (let interceptor of this.interceptors) {
       interceptor.responseError(xhr);
     }
-    reject(xhr);
+    reject(new Rejection('error', xhr));
   }
 
-  handleResolve(resolve, xhr) {
-    resolve(xhr);
+  handleTimeout(reject, xhr) {
+    reject(new Rejection('timeout', xhr));
+  }
+
+  handleCancel(reject, xhr) {
+    // canceling the promise is currently not possible but should be supported
+    // in future
+    reject(new Rejection('cancel', xhr));
   }
 }
 

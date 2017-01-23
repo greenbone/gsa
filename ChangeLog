@@ -1,5 +1,17 @@
 2017-01-23 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/gmp/gmp.js,
+	src/html/classic/ng/src/gmp/http.js,
+	src/html/classic/ng/src/gmp/promise.js,
+	src/html/classic/ng/src/utils.js: Move PromiseFactory from utils to an own
+	module. Improve Http class to support timeouts and prepare it for cancelling
+	request promises. Cancelling isn't possible at the moment. It would require to
+	use a promise libary because cancelling promises has been withdrawn from
+	ecma script standardization. E.g. bluebird library would support cancelling.
+
+2017-01-23 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/CMakeLists.txt: Add list of css files for ng. Building
 	ng depends on the css files because changes on theses files must cause a
 	rebuild of the bundles. Whitout rebuilding the css changes wouldn't be

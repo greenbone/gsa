@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -76,19 +76,6 @@ export function includes(array, value) {
     return array.indexOf(value) !== -1;
   }
   return array.includes(value);
-}
-
-export class PromiseFactory {
-  constructor(promise) {
-    this.promise = promise || Promise;
-  }
-
-  create(func) {
-    if (is_object(this.promise)) {
-      return this.promise(func);
-    }
-    return new this.promise(func);
-  }
 }
 
 export function xml2json(...args) {
