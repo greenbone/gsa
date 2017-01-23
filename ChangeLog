@@ -1,5 +1,10 @@
 2017-01-23 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/http.js: Fix error responses. The error handling
+	of http requests is still far from perfect.
+
+2017-01-23 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/notes/dialog.js,
 	src/html/classic/ng/src/web/overrides/dialog.js: Allow to edit hosts and
 	location/port in override and note dialogs if their value is not "Any"

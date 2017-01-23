@@ -208,11 +208,17 @@ export class GmpHttp extends Http {
           'url', this.url, xhr);
         throw error;
       }
-    }, xhr => {
-      if (xhr.responseXML) {
-        throw xml2json(xhr.responseXML).envelope;
+    }, rej => {
+      if (rej.isError()) {
+        if (rej.xhr.responseXML) {
+          throw xml2json(rej.xhr.responseXML).envelope;
+        }
+        throw rej.xhr;
       }
-      throw xhr;
+      else if (rej.isTimeout()) {
+        throw new Error('A timeout for the request occured');
+      }
+      throw rej;
     });
   }
 }
