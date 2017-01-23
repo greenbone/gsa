@@ -71,7 +71,6 @@
 #include <langinfo.h>
 #include <locale.h>
 #include <netinet/in.h>
-#include <openvas/misc/openvas_logging.h>
 #include <pthread.h>
 #include <pwd.h> /* for getpwnam */
 #include <grp.h> /* for setgroups */
@@ -94,6 +93,7 @@
 #include <gvm/util/fileutils.h>
 #include <gvm/base/networking.h> /* for ipv6_is_enabled */
 #include <gvm/base/pidfile.h>
+#include <gvm/base/logging.h>
 
 #include "gsad_base.h"
 #include "gsad_params.h"
