@@ -92,9 +92,7 @@ export class NoteDialog extends Dialog {
         });
       });
     }
-    else {
-      gmp.tasks.get().then(tasks => this.setState({tasks, visible: true}));
-    }
+    gmp.tasks.get().then(tasks => this.setState({tasks, visible: true}));
   }
 
   save() {
@@ -111,10 +109,10 @@ export class NoteDialog extends Dialog {
 
     return promise.then(() => {
       this.close();
-    }, xhr => {
-      this.showErrorMessage(xhr.action_result.message);
+    }, root => {
+      this.showErrorMessage(root.action_result.message);
       throw new Error('Saving note failed. Reason: ' +
-        xhr.action_result.message);
+        root.action_result.message);
     });
   }
 
@@ -287,11 +285,18 @@ export class NoteDialog extends Dialog {
             checked={note_task_id === ''}
             onChange={this.onValueChange}/>
           {is_edit && note.task && !is_empty(note.task.id) &&
-            <Radio name="note_task_id"
-              value={note.task.id}
-              title={note.task.name}
-              checked={note_task_id === note.task.id}
-              onChange={this.onValueChange}/>
+            <Layout flex box>
+              <Radio name="note_task_id"
+                value={note.task.id}
+                checked={!is_empty(note_task_id)}
+                onChange={this.onValueChange}/>
+              <Select2 name="note_task_id"
+                value={note_task_id}
+                disabled={is_empty(note_task_id)}
+                onChange={this.onValueChange}>
+                {render_options(tasks)}
+              </Select2>
+            </Layout>
           }
           {!is_edit &&
             <Layout flex box>

@@ -109,9 +109,8 @@ export class OverrideDialog extends Dialog {
         });
       });
     }
-    else {
-      gmp.tasks.get().then(tasks => this.setState({tasks, visible: true}));
-    }
+
+    gmp.tasks.get().then(tasks => this.setState({tasks, visible: true}));
   }
 
   save() {
@@ -128,10 +127,10 @@ export class OverrideDialog extends Dialog {
 
     return promise.then(() => {
       this.close();
-    }, xhr => {
-      this.showErrorMessage(xhr.action_result.message);
+    }, root => {
+      this.showErrorMessage(root.action_result.message);
       throw new Error('Saving override failed. Reason: ' +
-        xhr.action_result.message);
+        root.action_result.message);
     });
   }
 
@@ -339,11 +338,18 @@ export class OverrideDialog extends Dialog {
             checked={override_task_id === ''}
             onChange={this.onValueChange}/>
           {is_edit && override.task && !is_empty(override.task.id) &&
-            <Radio name="override_task_id"
-              value={override.task.id}
-              title={override.task.name}
-              checked={override_task_id === override.task.id}
-              onChange={this.onValueChange}/>
+            <Layout flex box>
+              <Radio name="override_task_id"
+                value={override.task.id}
+                checked={!is_empty(override_task_id)}
+                onChange={this.onValueChange}/>
+              <Select2 name="override_task_id"
+                value={override_task_id}
+                disabled={is_empty(override_task_id)}
+                onChange={this.onValueChange}>
+                {render_options(tasks)}
+              </Select2>
+            </Layout>
           }
           {!is_edit &&
             <Layout flex box>

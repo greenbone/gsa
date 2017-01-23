@@ -1,5 +1,11 @@
 2017-01-23 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/notes/dialog.js,
+	src/html/classic/ng/src/web/overrides/dialog.js: Allow to change task in edit
+	override and edit note dialogs if the task is not "any".
+
+2017-01-23 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/http.js: Fix error responses. The error handling
 	of http requests is still far from perfect.
 
