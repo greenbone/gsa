@@ -1,5 +1,11 @@
 2017-01-23 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/gsad_omp.c (get_many): Allow to pass details parameter to omp many
+	requests. For reports the details parameter is always 0. I don't see any
+	reason for this but this is the original behaviour.
+
+2017-01-23 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/gmp/gmp.js,
 	src/html/classic/ng/src/gmp/http.js,

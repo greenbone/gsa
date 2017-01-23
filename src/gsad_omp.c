@@ -2058,6 +2058,7 @@ get_many (gvm_connection_t *connection, const char *type,
   const char *overrides, *autofp, *autofp_value, *min_qod;
   const char *level_high, *level_medium, *level_low, *level_log;
   const char *level_false_positive;
+  const char *details;
 
   no_filter_history = params_value(params, "no_filter_history")
                         ? atoi (params_value(params, "no_filter_history"))
@@ -2082,6 +2083,10 @@ get_many (gvm_connection_t *connection, const char *type,
   level_low = params_value (params, "level_low");
   level_log = params_value (params, "level_log");
   level_false_positive = params_value (params, "level_false_positive");
+  details = params_value (params, "details");
+
+  if (details == NULL || strcmp (details, "") == 0)
+    details = "0";
 
   if (strcasecmp (type, "info") == 0)
     filter_type = g_strdup (params_value (params, "info_type"));
@@ -2316,9 +2321,9 @@ get_many (gvm_connection_t *connection, const char *type,
 
   g_free (built_filter);
   if (gvm_connection_sendf (connection,
-                            "<get_%s%s%s %s/>",
+                            "<get_%s details=\"%s\" %s %s/>",
                             type_many->str,
-                            strcmp (type, "report") ? "" : " details=\"0\"",
+                            strcmp (type, "report") ? details : "0",
                             request,
                             extra_attribs ? extra_attribs : "")
       == -1)
