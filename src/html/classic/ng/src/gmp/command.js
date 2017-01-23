@@ -109,7 +109,7 @@ export class EntitiesCommand extends HttpCommand {
   }
 
   getEntitiesFromRespone(response) {
-    return  map(this.getElementsFromResponse(response),
+    return map(this.getElementsFromResponse(response),
       element => new this.clazz(element));
   }
 
@@ -151,8 +151,8 @@ export class EntitiesCommand extends HttpCommand {
     return root;
   }
 
-  get(filter) {
-    return this.httpGet({filter}).then(root =>
+  get(filter, params) {
+    return this.httpGet({filter, ...params}).then(root =>
         this.getCollectionListFromRoot(root)
     );
   }
