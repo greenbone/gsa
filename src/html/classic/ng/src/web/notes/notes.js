@@ -48,6 +48,8 @@ import {NOTES_FILTER_FILTER} from '../../gmp/commands/filters.js';
 const SORT_FIELDS = [
   ['text', _('Text')],
   ['nvt', _('Nvt')],
+  ['hosts', _('Hosts')],
+  ['port', _('Location')],
   ['active', _('Active')],
 ];
 
@@ -63,6 +65,11 @@ export class Notes extends EntitiesComponent {
       filter_filter: NOTES_FILTER_FILTER,
       sort_fields: SORT_FIELDS,
     });
+  }
+
+  getGmpPromise(filter) {
+    let gmp = this.getGmp();
+    return gmp.get(filter, {details: 1});
   }
 
   renderHeader() {
@@ -82,6 +89,16 @@ export class Notes extends EntitiesComponent {
         <TableHead>
           <Sort by="nvt" onClick={this.onSortChange}>
             {_('NVT')}
+          </Sort>
+        </TableHead>
+        <TableHead>
+          <Sort by="hosts" onClick={this.onSortChange}>
+            {_('Hosts')}
+          </Sort>
+        </TableHead>
+        <TableHead>
+          <Sort by="port" onClick={this.onSortChange}>
+            {_('Location')}
           </Sort>
         </TableHead>
         <TableHead>

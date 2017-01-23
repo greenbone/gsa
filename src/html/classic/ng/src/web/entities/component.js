@@ -106,8 +106,8 @@ export class EntitiesComponent extends React.Component {
   load(filter) {
     this.clearTimer(); // remove possible running timer
 
-    let gmp = this.getGmp();
-    gmp.get(filter).then(entities => {
+    let promise = this.getGmpPromise(filter);
+    promise.then(entities => {
       let {selection_type} = this.state;
 
       filter = entities.getFilter();
@@ -130,6 +130,11 @@ export class EntitiesComponent extends React.Component {
 
   getGmp() {
     return this.context.gmp[this.name];
+  }
+
+  getGmpPromise(filter) {
+    let gmp = this.getGmp();
+    return gmp.get(filter);
   }
 
   getSectionTitle() {

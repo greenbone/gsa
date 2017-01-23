@@ -66,6 +66,12 @@ export class NotesListRow extends EntityRow {
         <td>
           {note.nvt ? note.nvt.name : ""}
         </td>
+        <td title={note.hosts}>
+          {shorten(note.hosts)}
+        </td>
+        <td title={note.port}>
+          {shorten(note.port)}
+        </td>
         <td>
           {note.isActive() ? _('yes') : _('no')}
         </td>

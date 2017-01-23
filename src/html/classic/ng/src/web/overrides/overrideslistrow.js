@@ -71,12 +71,19 @@ export class OverridesListRow extends EntityRow {
     return (
       <tr>
         <td>
-          <LegacyLink cmd="get_override" override_id={override.id}>
+          <LegacyLink cmd="get_override" override_id={override.id}
+            title={override.text}>
             {shorten(override.text)}
           </LegacyLink>
         </td>
         <td>
           {override.nvt ? override.nvt.name : ""}
+        </td>
+        <td title={override.hosts}>
+          {shorten(override.hosts)}
+        </td>
+        <td title={override.port}>
+          {shorten(override.port)}
         </td>
         <td>
           {this.renderSeverity(override.severity)}

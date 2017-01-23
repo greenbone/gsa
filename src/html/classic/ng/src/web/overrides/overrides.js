@@ -48,6 +48,8 @@ import {OVERRIDES_FILTER_FILTER} from '../../gmp/commands/filters.js';
 const SORT_FIELDS = [
   ['text', _('Text')],
   ['nvt', _('Nvt')],
+  ['hosts', _('Hosts')],
+  ['port', _('Location')],
   ['severity', _('From')],
   ['new_severity', _('To')],
   ['active', _('Active')],
@@ -67,6 +69,11 @@ export class Overrides extends EntitiesComponent {
     });
   }
 
+  getGmpPromise(filter) {
+    let gmp = this.getGmp();
+    return gmp.get(filter, {details: 1});
+  }
+
   renderHeader() {
     let entities = this.getEntities();
 
@@ -84,6 +91,16 @@ export class Overrides extends EntitiesComponent {
         <TableHead>
           <Sort by="nvt" onClick={this.onSortChange}>
             {_('NVT')}
+          </Sort>
+        </TableHead>
+        <TableHead>
+          <Sort by="hosts" onClick={this.onSortChange}>
+            {_('Hosts')}
+          </Sort>
+        </TableHead>
+        <TableHead>
+          <Sort by="port" onClick={this.onSortChange}>
+            {_('Location')}
           </Sort>
         </TableHead>
         <TableHead>
@@ -111,7 +128,7 @@ export class Overrides extends EntitiesComponent {
   renderFooter() {
     let {selection_type} = this.state;
     return (
-      <EntitiesFooter span="6" download trash
+      <EntitiesFooter span="8" download trash
         selectionType={selection_type}
         onTrashClick={this.onDeleteBulk}
         onDownloadClick={this.onDownloadBulk}
