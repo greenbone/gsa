@@ -210,6 +210,43 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/wizard/taskwizard.js
      PARENT_SCOPE)
 
+
+set (NG_CSS_SRC_FILES
+     ${NG_SRC_DIR}/src/web/css/button.css
+     ${NG_SRC_DIR}/src/web/css/dialog.css
+     ${NG_SRC_DIR}/src/web/css/footer.css
+     ${NG_SRC_DIR}/src/web/css/footnote.css
+     ${NG_SRC_DIR}/src/web/css/gsa-base.css
+     ${NG_SRC_DIR}/src/web/css/jquery-ui.structure.css
+     ${NG_SRC_DIR}/src/web/css/jquery-ui.theme.css
+     ${NG_SRC_DIR}/src/web/css/layout.css
+     ${NG_SRC_DIR}/src/web/css/login.css
+     ${NG_SRC_DIR}/src/web/css/main.css
+     ${NG_SRC_DIR}/src/web/css/page.css
+     ${NG_SRC_DIR}/src/web/css/pagination.css
+     ${NG_SRC_DIR}/src/web/css/powerfilter.css
+     ${NG_SRC_DIR}/src/web/css/section.css
+     ${NG_SRC_DIR}/src/web/css/severityclasslabels.css
+     ${NG_SRC_DIR}/src/web/css/sortby.css
+     ${NG_SRC_DIR}/src/web/css/statusbar.css
+     ${NG_SRC_DIR}/src/web/css/titlebar.css
+     ${NG_SRC_DIR}/src/web/dashboard/css/dashboard.css
+     ${NG_SRC_DIR}/src/web/entities/css/component.css
+     ${NG_SRC_DIR}/src/web/form/css/checkboxradio.css
+     ${NG_SRC_DIR}/src/web/form/css/datepicker.css
+     ${NG_SRC_DIR}/src/web/form/css/form.css
+     ${NG_SRC_DIR}/src/web/form/css/formgroup.css
+     ${NG_SRC_DIR}/src/web/form/css/select2.css
+     ${NG_SRC_DIR}/src/web/form/css/spinner.css
+     ${NG_SRC_DIR}/src/web/icons/css/icon.css
+     ${NG_SRC_DIR}/src/web/menu/css/iconmenu.css
+     ${NG_SRC_DIR}/src/web/menu/css/menubar.css
+     ${NG_SRC_DIR}/src/web/menu/css/menu.css
+     ${NG_SRC_DIR}/src/web/menu/css/menuentry.css
+     ${NG_SRC_DIR}/src/web/table/css/table.css
+     ${NG_SRC_DIR}/src/web/wizard/css/wizard.css
+     )
+
 set (NG_FILES
      ${NG_BUILD_DIR}/config.js
      ${NG_BUILD_DIR}/index.html)
@@ -231,6 +268,7 @@ add_custom_command (OUTPUT ${NG_FILES}
                              ${NG_PKG_FILES}
                              ${NG_SRC_FILES}
                              ${NG_JS_SRC_FILES}
+                             ${NG_CSS_SRC_FILES}
                     COMMENT "Build gsa-ng install files")
 
 add_custom_target (gsa-ng ALL

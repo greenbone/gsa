@@ -1,3 +1,10 @@
+2017-01-23 Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/CMakeLists.txt: Add list of css files for ng. Building
+	ng depends on the css files because changes on theses files must cause a
+	rebuild of the bundles. Whitout rebuilding the css changes wouldn't be
+	included in the production bundles.
+
 2017-01-23  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
 
 	* src/gsad.c: Include gvm/base/logging.h instead of
