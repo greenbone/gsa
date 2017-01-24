@@ -1,5 +1,15 @@
 2017-01-24 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/credentials/dialog.js,
+	src/html/classic/ng/src/web/form/css/form.css,
+	src/html/classic/ng/src/web/form/css/formgroup.css,
+	src/html/classic/ng/src/web/form/yesnoradio.js,
+	src/html/classic/ng/src/web/powerfilter.js,
+	src/html/classic/ng/src/web/results/filterdialog.js: Cleanup css classes for
+	form based layout. Remove unsed styles and update styles for form-group.
+
+2017-01-24 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/commands/notes.js,
 	src/html/classic/ng/src/gmp/commands/overrides.js,
 	src/html/classic/ng/src/web/notes/dialog.js,

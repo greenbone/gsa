@@ -1,6 +1,6 @@
 /* formulars */
 
-form, .form-horizontal {
+form {
   font-size: 12px;
 }
 
@@ -16,27 +16,9 @@ label {
   max-width: 100%;
 }
 
-.form-inline {
-  display: inline-block;
-}
-
-.form-inline .form-control {
-  display: inline-block;
-  width: auto;
-  vertical-align: middle;
-}
-
 .control-label {
   font-weight: bold;
   text-align: right;
-}
-
-.form-horizontal .control-label {
-  margin-bottom: 0;
-  margin-top: 5px;
-  display: inline-block;
-  max-width: 100%;
-  vertical-align: middle;
 }
 
 .form-control {
@@ -64,26 +46,12 @@ textarea.form-control {
   height: auto;
 }
 
-.form-control-static {
-  padding-top: 5px;
-  padding-bottom: 5px;
-  margin-bottom: 0;
-}
-
 .offset-container  {
   margin-bottom: 20px;
 }
 
 .offset-container .control-label {
   text-align: left;
-}
-
-.form-horizontal .disabled {
-  color: gray;
-}
-
-.form-horizontal h4 {
-  margin-bottom: 1em;
 }
 
 /* vim: set ts=2 sw=2 tw=80: */

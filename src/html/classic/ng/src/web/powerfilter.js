@@ -34,6 +34,7 @@ import {render_options} from './render.js';
 import Icon from './icons/icon.js';
 import HelpIcon from './icons/helpicon.js';
 
+import FormGroup from './form/formgroup.js';
 import Select2 from './form/select2.js';
 import TextField from './form/textfield.js';
 
@@ -165,7 +166,7 @@ export class PowerFilter extends React.Component {
       <Layout flex align={['end', 'center']} className="powerfilter">
         <Layout flex="column" align={['center', 'start']}>
           <Layout flex align={['end', 'center']}>
-            <Layout flex align={['start', 'center']} className="form-group">
+            <FormGroup flex align={['start', 'center']}>
               <label className="control-label">
                 <b>{_('Filter')}</b>
               </label>
@@ -173,8 +174,8 @@ export class PowerFilter extends React.Component {
                 value={userfilter}
                 onKeyDown={this.onUserFilterKeyPress}
                 onChange={this.onValueChange}/>
-            </Layout>
-            <Layout flex align={['start', 'center']} className="form-group">
+            </FormGroup>
+            <FormGroup flex align={['start', 'center']}>
               <Icon img="refresh.svg" title={_('Update Filter')}
                 onClick={this.onUpdateFilter}/>
               <Icon img="delete.svg" title={_('Reset Filter')}
@@ -182,15 +183,15 @@ export class PowerFilter extends React.Component {
               <HelpIcon page="powerfilter" />
               <Icon img="edit.svg" title={_('Edit Filter')}
                 onClick={this.props.onEditClick}/>
-            </Layout>
-            <Layout flex align={['start', 'center']} className="form-group">
+            </FormGroup>
+            <FormGroup flex align={['start', 'center']}>
               {capabilities.mayOp('create_filter') &&
                 <TextField name="filtername" size="10" maxLength="80"
                   value={filtername}
                   onChange={this.onValueChange}/>
               }
-            </Layout>
-            <Layout flex align={['start', 'center']} className="form-group">
+            </FormGroup>
+            <FormGroup flex align={['start', 'center']}>
               {can_create ?
                 <Icon img="new.svg"
                   title={_('Create new filter from current term')}
@@ -198,15 +199,15 @@ export class PowerFilter extends React.Component {
                     <Icon img="new_inactive.svg"
                       title={_('Please insert a filter name')}/>
                 }
-            </Layout>
-            <Layout flex align={['start', 'center']} className="form-group">
+            </FormGroup>
+            <FormGroup flex align={['start', 'center']}>
               {capabilities.mayOp('get_filters') &&
                 <Select2 value={namedfilterid}
                   onChange={this.onNamedFilterChange}>
                   {filter_opts}
                 </Select2>
               }
-            </Layout>
+            </FormGroup>
           </Layout>
           <FootNote>
             {filterstring}

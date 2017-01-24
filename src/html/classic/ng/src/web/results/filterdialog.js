@@ -118,35 +118,30 @@ export class ResultsFilterDialog extends FilterDialog {
         <FormGroup title={_('Severity (Class)')}>
           <Checkbox
             checked={levels.includes('h')}
-            className="inline"
             name="h"
             onChange={this.handleLevelChange}>
             <LabelHigh/>
           </Checkbox>
           <Checkbox
             checked={levels.includes('m')}
-            className="inline"
             name="m"
             onChange={this.handleLevelChange}>
             <LabelMedium/>
           </Checkbox>
           <Checkbox
             checked={levels.includes('l')}
-            className="inline"
             name="l"
             onChange={this.handleLevelChange}>
             <LabelLow/>
           </Checkbox>
           <Checkbox
             checked={levels.includes('g')}
-            className="inline"
             name="g"
             onChange={this.handleLevelChange}>
             <LabelLog/>
           </Checkbox>
           <Checkbox
             checked={levels.includes('f')}
-            className="inline"
             name="f"
             onChange={this.handleLevelChange}>
             <LabelFalsePositive/>

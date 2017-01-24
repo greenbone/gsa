@@ -37,7 +37,6 @@ export const YesNoRadio = ({disabled, onChange, value, name, ...other}) => {
     <Layout {...other} flex>
       <Radio
         title={_('Yes')}
-        className="inline"
         value="1"
         checked={value === 1} disabled={disabled}
         onChange={val => handle_value_change({
@@ -48,7 +47,6 @@ export const YesNoRadio = ({disabled, onChange, value, name, ...other}) => {
         })}/>
       <Radio
         title={_('No')}
-        className="inline"
         value="0"
         checked={value === 0} disabled={disabled}
         onChange={val => handle_value_change({

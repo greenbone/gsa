@@ -202,14 +202,12 @@ export class CredentialsDialog extends Dialog {
         <FormGroup title={_('Auth Algorithm')}
           condition={base === 'snmp'}>
           <Radio
-            className="inline"
             value="md5"
             title="MD5"
             checked={auth_algorithm === 'md5'}
             name="auth_algorithm"
             onChange={this.onValueChange}/>
           <Radio
-            className="inline"
             value="sha1"
             title="SHA1"
             checked={auth_algorithm === 'sha1'}
@@ -220,21 +218,18 @@ export class CredentialsDialog extends Dialog {
         <FormGroup title={_('Privacy Algorithm')}
           condition={base === 'snmp'}>
           <Radio
-            className="inline"
             value="aes"
             title="AED"
             checked={privacy_algorithm === 'aes'}
             name="privacy_algorithm"
             onChange={this.onValueChange}/>
           <Radio
-            className="inline"
             value="des"
             title="DES"
             checked={privacy_algorithm === 'des'}
             name="privacy_algorithm"
             onChange={this.onValueChange}/>
           <Radio
-            className="inline"
             value=""
             title={_('None')}
             checked={privacy_algorithm === ''}
