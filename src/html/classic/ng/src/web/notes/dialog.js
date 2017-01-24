@@ -320,11 +320,17 @@ export class NoteDialog extends Dialog {
             checked={note_result_id === ''}
             onChange={this.onValueChange}/>
           {is_edit && note.result && !is_empty(note.result.id) &&
-            <Radio name="note_result_id"
-              value={note.result.id}
-              title={note.result.id}
-              checked={note_result_id === note.result.id}
-              onChange={this.onValueChange}/>
+            <Layout flex box>
+              <Radio name="note_result_id"
+                value={note.result.id}
+                checked={!is_empty(note_result_id)}
+                onChange={this.onValueChange}/>
+              <TextField name="note_result_id"
+                value={note_result_id}
+                size="34"
+                disabled={is_empty(note_result_id)}
+                onChange={this.onValueChange}/>
+            </Layout>
           }
           {!is_edit &&
             <Layout flex box>
@@ -335,6 +341,7 @@ export class NoteDialog extends Dialog {
                 onChange={this.onValueChange}/>
               <TextField name="note_result_uuid"
                 value={note_result_uuid}
+                size="34"
                 disabled={note_result_id !== '0'}
                 onChange={this.onValueChange}/>
             </Layout>

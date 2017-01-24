@@ -374,11 +374,17 @@ export class OverrideDialog extends Dialog {
             checked={override_result_id === ''}
             onChange={this.onValueChange}/>
           {is_edit && override.result && !is_empty(override.result.id) &&
-            <Radio name="override_result_id"
-              value={override.result.id}
-              title={override.result.id}
-              checked={override_result_id === override.result.id}
-              onChange={this.onValueChange}/>
+            <Layout flex box>
+              <Radio name="override_result_id"
+                value={override.result.id}
+                checked={!is_empty(override_result_id)}
+                onChange={this.onValueChange}/>
+              <TextField name="override_result_id"
+                value={override_result_id}
+                size="34"
+                disabled={is_empty(override_result_id)}
+                onChange={this.onValueChange}/>
+            </Layout>
           }
           {!is_edit &&
             <Layout flex box>
@@ -389,6 +395,7 @@ export class OverrideDialog extends Dialog {
                 onChange={this.onValueChange}/>
               <TextField name="override_result_uuid"
                 value={override_result_uuid}
+                size="34"
                 disabled={override_result_id !== '0'}
                 onChange={this.onValueChange}/>
             </Layout>
