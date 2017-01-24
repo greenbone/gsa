@@ -15470,18 +15470,21 @@ edit_note_omp (gvm_connection_t *connection, credentials_t *credentials, params_
  * @return Result of XSL transformation.
  */
 char *
-save_note_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
-               cmd_response_data_t* response_data)
+save_note_omp (gvm_connection_t *connection, credentials_t * credentials,
+               params_t *params, cmd_response_data_t* response_data)
 {
   gchar *response;
   entity_t entity;
   const char *no_redirect;
   const char *note_id, *text, *hosts, *port, *severity, *note_task_id;
-  const char *note_result_id, *active, *days;
+  const char *note_result_id, *active, *days, *oid;
   char *ret;
 
   no_redirect = params_value (params, "no_redirect");
   note_id = params_value (params, "note_id");
+
+  oid = params_value (params, "oid");
+  CHECK_PARAM_INVALID (oid, "Create Note", "new_note");
 
   text = params_value (params, "text");
   if (text == NULL)
@@ -15538,6 +15541,7 @@ save_note_omp (gvm_connection_t *connection, credentials_t * credentials, params
                 "<text>%s</text>"
                 "<task id=\"%s\"/>"
                 "<result id=\"%s\"/>"
+                "<nvt oid=\"%s\"/>"
                 "</modify_note>",
                 note_id,
                 strcmp (active, "1")
@@ -15548,7 +15552,8 @@ save_note_omp (gvm_connection_t *connection, credentials_t * credentials, params
                 severity ? severity : "",
                 text ? text : "",
                 note_task_id,
-                note_result_id))
+                note_result_id,
+                oid))
     {
       case 0:
       case -1:
@@ -16178,14 +16183,14 @@ edit_override_omp (gvm_connection_t *connection, credentials_t *credentials, par
  * @return Result of XSL transformation.
  */
 char *
-save_override_omp (gvm_connection_t *connection, credentials_t * credentials, params_t *params,
-                   cmd_response_data_t* response_data)
+save_override_omp (gvm_connection_t *connection, credentials_t * credentials,
+                   params_t *params, cmd_response_data_t* response_data)
 {
   gchar *response;
   entity_t entity;
   const char *no_redirect, *override_id, *text, *hosts, *port;
   const char *severity, *custom_severity, *new_severity;
-  const char *override_task_id, *override_result_id, *active, *days;
+  const char *override_task_id, *override_result_id, *active, *days, *oid;
   char *ret;
 
   no_redirect = params_value (params, "no_redirect");
@@ -16227,6 +16232,7 @@ save_override_omp (gvm_connection_t *connection, credentials_t * credentials, pa
 
   active = params_value (params, "active");
   days = params_value (params, "days");
+  oid = params_value (params, "oid");
 
   CHECK_PARAM_INVALID (override_task_id, "Save Override", "edit_override");
   CHECK_PARAM_INVALID (override_result_id, "Save Override", "edit_override");
@@ -16238,6 +16244,7 @@ save_override_omp (gvm_connection_t *connection, credentials_t * credentials, pa
   CHECK_PARAM_INVALID (severity, "Save Override", "edit_override");
   CHECK_PARAM_INVALID (new_severity, "Save Override", "edit_override");
   CHECK_PARAM_INVALID (days, "Save Override", "edit_override");
+  CHECK_PARAM_INVALID (oid, "Save Override", "edit_override");
 
   response = NULL;
   entity = NULL;
@@ -16247,6 +16254,7 @@ save_override_omp (gvm_connection_t *connection, credentials_t * credentials, pa
                 response_data,
                 "<modify_override override_id=\"%s\">"
                 "<active>%s</active>"
+                "<nvt oid=\"%s\"/>"
                 "<hosts>%s</hosts>"
                 "<port>%s</port>"
                 "<severity>%s</severity>"
@@ -16259,6 +16267,7 @@ save_override_omp (gvm_connection_t *connection, credentials_t * credentials, pa
                 strcmp (active, "1")
                  ? active
                  : (days ? days : "-1"),
+                oid,
                 hosts ? hosts : "",
                 port ? port : "",
                 severity ? severity : "",
