@@ -70,7 +70,7 @@ export class OverrideCommand extends EntityCommand {
   }
 
   save(args) {
-    let {override_id, active = '-1', days = 30, hosts = '',
+    let {oid, override_id, active = '-1', days = 30, hosts = '',
       override_result_id = '', custom_severity = '0', new_severity = '',
       new_severity_from_list = '', port = '', severity = '',
       override_task_id = '', text} = args;
@@ -78,6 +78,7 @@ export class OverrideCommand extends EntityCommand {
     return this.httpPost({
       cmd: 'save_override',
       next: 'get_override',
+      oid,
       override_id,
       active,
       days,

@@ -64,12 +64,14 @@ export class NoteCommand extends EntityCommand {
   }
 
   save(args) {
-    let {note_id, active = '-1', days = 30, hosts = '', note_result_id = '',
-      port = '', severity = '', note_task_id = '', text} = args;
+    let {oid, note_id, active = '-1', days = 30, hosts = '',
+      note_result_id = '', port = '', severity = '', note_task_id = '',
+      text} = args;
     log.debug('Saving note', args);
     return this.httpPost({
       cmd: 'save_note',
       next: 'get_note',
+      oid,
       note_id,
       active,
       days,

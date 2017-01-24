@@ -82,6 +82,7 @@ export class NoteDialog extends Dialog {
           active,
           hosts: note.hosts,
           port: note.port,
+          oid: note.nvt ? note.nvt.oid : undefined,
           note,
           note_id: note.id,
           note_task_id: note.task ? note.task.id : undefined,
@@ -127,8 +128,22 @@ export class NoteDialog extends Dialog {
     return (
       <Layout flex="column">
         {is_edit ?
-          <FormGroup title={_('NVT Name')}>
-            {render_nvt_name(note.nvt)}
+          <FormGroup title={_('NVT')} flex="column">
+            <Radio name="oid"
+              value={note.nvt.oid}
+              title={render_nvt_name(note.nvt)}
+              checked={oid === note.nvt.oid}
+              onChange={this.onValueChange}/>
+            <Layout flex box>
+              <Radio name="oid"
+                value="1.3.6.1.4.1.25623.1.0."
+                checked={oid !== note.nvt.oid}
+                onChange={this.onValueChange}/>
+              <TextField name="oid"
+                value={oid}
+                disabled={oid === note.nvt.oid}
+                onChange={this.onValueChange}/>
+            </Layout>
           </FormGroup> :
             <FormGroup title={_('NVT OID')}>
               <TextField name="oid"

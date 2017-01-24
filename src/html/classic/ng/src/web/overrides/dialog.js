@@ -96,6 +96,7 @@ export class OverrideDialog extends Dialog {
           active,
           hosts: override.hosts,
           port: override.port,
+          oid: override.nvt ? override.nvt.oid : undefined,
           override,
           override_id: override.id,
           override_task_id: override.task ? override.task.id : undefined,
@@ -144,8 +145,22 @@ export class OverrideDialog extends Dialog {
     return (
       <Layout flex="column">
         {is_edit ?
-          <FormGroup title={_('NVT Name')}>
-            {render_nvt_name(override.nvt)}
+          <FormGroup title={_('NVT')} flex="column">
+            <Radio name="oid"
+              value={override.nvt.oid}
+              title={render_nvt_name(override.nvt)}
+              checked={oid === override.nvt.oid}
+              onChange={this.onValueChange}/>
+            <Layout flex box>
+              <Radio name="oid"
+                value="1.3.6.1.4.1.25623.1.0."
+                checked={oid !== override.nvt.oid}
+                onChange={this.onValueChange}/>
+              <TextField name="oid"
+                value={oid}
+                disabled={oid === override.nvt.oid}
+                onChange={this.onValueChange}/>
+            </Layout>
           </FormGroup> :
             <FormGroup title={_('NVT OID')}>
               <TextField name="oid"
