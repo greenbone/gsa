@@ -1,3 +1,13 @@
+2017-01-24  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	Remove dependency to libopenvas_misc which is not required
+	anymore for GSA.
+
+	* CMakeLists.txt, src/CMakeLists.txt: Remove consideration
+	of LIBOPENVAS_MISC.
+
+	* INSTALL: Require libgvm_utl instead of libopenvas_misc.
+
 2017-01-24 Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/credentials/dialog.js,

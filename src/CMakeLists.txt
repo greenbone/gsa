@@ -31,7 +31,7 @@ include_directories (${LIBMICROHTTPD_INCLUDE_DIRS} ${LIBXML_INCLUDE_DIRS}
                      ${LIBGVM_BASE_INCLUDE_DIRS}
                      ${LIBGVM_UTIL_INCLUDE_DIRS}
                      ${LIBOPENVAS_OMP_INCLUDE_DIRS}
-                     ${LIBOPENVAS_MISC_INCLUDE_DIRS} ${LIBXSLT_INCLUDE_DIRS}
+                     ${LIBXSLT_INCLUDE_DIRS}
                      ${GNUTLS_INCLUDE_DIRS})
 
 find_package (Threads)
@@ -42,19 +42,19 @@ add_library (gsad_base STATIC gsad_base.c)
 target_link_libraries (gsad_base ${LIBMICROHTTPD_LDFLAGS} ${LIBXML_LDFLAGS}
                        ${GLIB_LDFLAGS} ${GTHREAD_LDFLAGS} ${LIBEXSLT_LDFLAGS}
                        ${LIBXSLT_LDFLAGS} ${LIBOPENVAS_OMP_LDFLAGS}
-                       ${LIBOPENVAS_MISC_LDFLAGS} ${GNUTLS_LDFLAGS})
+                       ${GNUTLS_LDFLAGS})
 
 add_library (gsad_omp STATIC gsad_omp.c)
 target_link_libraries (gsad_omp ${LIBMICROHTTPD_LDFLAGS} ${LIBXML_LDFLAGS}
                        ${GLIB_LDFLAGS} ${GTHREAD_LDFLAGS} ${LIBEXSLT_LDFLAGS}
                        ${LIBXSLT_LDFLAGS} ${LIBOPENVAS_OMP_LDFLAGS}
-                       ${LIBOPENVAS_MISC_LDFLAGS} ${GNUTLS_LDFLAGS})
+                       ${GNUTLS_LDFLAGS})
 
 add_library (gsad_xslt_ext STATIC xslt_i18n.c)
 target_link_libraries (gsad_omp ${LIBMICROHTTPD_LDFLAGS} ${LIBXML_LDFLAGS}
                        ${GLIB_LDFLAGS} ${GTHREAD_LDFLAGS} ${LIBEXSLT_LDFLAGS}
                        ${LIBXSLT_LDFLAGS} ${LIBOPENVAS_OMP_LDFLAGS}
-                       ${LIBOPENVAS_MISC_LDFLAGS} ${GNUTLS_LDFLAGS})
+                       ${GNUTLS_LDFLAGS})
 
 ## Program
 
