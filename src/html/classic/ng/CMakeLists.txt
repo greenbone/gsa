@@ -54,6 +54,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/log.js
      ${NG_SRC_DIR}/src/timezones.js
      ${NG_SRC_DIR}/src/utils.js
+     ${NG_SRC_DIR}/src/gmp/cache.js
      ${NG_SRC_DIR}/src/gmp/collectioncounts.js
      ${NG_SRC_DIR}/src/gmp/collectionlist.js
      ${NG_SRC_DIR}/src/gmp/command.js

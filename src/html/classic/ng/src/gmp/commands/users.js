@@ -39,9 +39,13 @@ export class UserCommand extends EntityCommand {
     super(http, 'user', User);
   }
 
-  currentSettings() {
+  currentSettings(options = {}) {
+    let {cache = true, ...other} = options;
     return this.httpGet({
-      cmd: 'get_my_settings'
+      cmd: 'get_my_settings',
+    }, {
+      cache,
+      ...other,
     }).then(xhr => {
       let settings = new Settings();
       for_each(xhr.get_my_settings.get_settings_response.setting, setting => {
@@ -56,9 +60,13 @@ export class UserCommand extends EntityCommand {
     });
   }
 
-  currentCapabilities() {
+  currentCapabilities(options = {}) {
+    let {cache = true, ...other} = options;
     return this.httpGet({
-      cmd: 'get_my_settings'
+      cmd: 'get_my_settings',
+    }, {
+      cache,
+      ...other,
     }).then(xhr => {
       let caps = xhr.capabilities.help_response.schema.command;
       log.debug('Capabilities loaded', caps);
@@ -66,9 +74,13 @@ export class UserCommand extends EntityCommand {
     });
   }
 
-  currentChartPreferences() {
+  currentChartPreferences(options = {}) {
+    let {cache = true, ...other} = options;
     return this.httpGet({
-      cmd: 'get_my_settings'
+      cmd: 'get_my_settings',
+    }, {
+      cache,
+      ...other,
     }).then(xhr => {
       let prefs = xhr.chart_preferences.chart_preference;
       log.debug('ChartPreferences loaded', prefs);

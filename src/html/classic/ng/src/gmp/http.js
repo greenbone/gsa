@@ -27,6 +27,7 @@ import _ from '../locale.js';
 
 import {is_defined, has_value, extend, xml2json} from '../utils.js';
 
+import Cache from './cache.js';
 import {PromiseFactory} from './promise.js';
 
 const log = logger.getLogger('gmp.http');
@@ -83,15 +84,25 @@ export class Http {
     this.params = {};
 
     this.interceptors = [];
+    this.cache = new Cache();
   }
 
-  request(method, {args, data, uri = this.url, ...other}) {
+  request(method, {args, data, uri = this.url, cache = false, force = false,
+    ...other}) {
     let self = this;
     let formdata;
 
     method = method.toUpperCase();
 
-    if (data  && (method === 'POST' || method === 'PUT')) {
+    if (args) {
+      uri += '?' + build_url_params(extend({}, this.params, args));
+    }
+
+    if (method === 'GET' && cache && !force && this.cache.has(uri)) {
+      return this.promise_factory.promise.resolve(this.cache.get(uri));
+    }
+
+    if (data && (method === 'POST' || method === 'PUT')) {
       formdata = new FormData();
       let pdata = extend({}, this.params, data);
       for (let key in pdata) {
@@ -104,11 +115,8 @@ export class Http {
       }
     }
 
-    if (args) {
-      uri += '?' + build_url_params(extend({}, this.params, args));
-    }
-
     let xhr;
+    let options = {uri, formdata, cache, force, ...other};
 
     let promise = this.promise_factory.create(function(resolve, reject) {
       xhr = new XMLHttpRequest();
@@ -120,22 +128,22 @@ export class Http {
 
       xhr.onload = function() {
         if (this.status >= 200 && this.status < 300) {
-          self.handleSuccess(resolve, reject, this, {uri, formdata, ...other});
+          self.handleSuccess(resolve, reject, this, options);
         } else {
-          self.handleError(resolve, reject, this, {uri, formdata, ...other});
+          self.handleError(resolve, reject, this, options);
         }
       };
 
       xhr.onerror = function() {
-        self.handleError(resolve, reject, this, {uri, formdata, ...other});
+        self.handleError(resolve, reject, this, options);
       };
 
       xhr.ontimeout = function() {
-        self.handleTimeout(resolve, reject, this, {uri, formdata, ...other});
+        self.handleTimeout(resolve, reject, this, options);
       };
 
       xhr.onabort = function() {
-        self.handleCancel(resolve, reject, this, {uri, formdata, ...other});
+        self.handleCancel(resolve, reject, this, options);
       };
 
       xhr.send(formdata);
@@ -146,7 +154,11 @@ export class Http {
 
   handleSuccess(resolve, reject, xhr, options) {
     try {
-      resolve(this.transformSuccess(xhr, options));
+      let data = this.transformSuccess(xhr, options);
+      if (options.cache && options.uri) {
+        this.cache.set(options.uri, data);
+      }
+      resolve(data);
     }
     catch (error) {
       log.error('Error while transforming success response', error);
@@ -200,6 +212,10 @@ export class Http {
 
   transformRejection(rej, options) {
     return rej;
+  }
+
+  clearCache() {
+    this.cache.clear();
   }
 }
 

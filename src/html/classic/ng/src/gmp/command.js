@@ -63,19 +63,18 @@ export class HttpCommand {
   }
 
   httpGet(params, options = {}) {
-    let {extra_params, plain} = options;
+    let {extra_params, ...other} = options;
     return this.http.request('get', {
-      plain,
       args: this.getParams(params, extra_params),
+      ...other,
     });
   }
 
   httpPost(params, options = {}) {
-    let {extra_params, args, plain} = options;
+    let {extra_params, ...other} = options;
     return this.http.request('post', {
-      args,
-      plain,
       data: this.getParams(params, extra_params),
+      ...other,
     });
   }
 }
@@ -234,8 +233,9 @@ export class EntityCommand extends HttpCommand {
     return new this.clazz(this.getElementFromResponse(root));
   }
 
-  get({id}) {
-    return this.httpGet({id}).then(xhr => this.getModelFromResponse(xhr));
+  get({id}, options) {
+    return this.httpGet({id}, options).then(
+      xhr => this.getModelFromResponse(xhr));
   }
 
   clone({id}) {

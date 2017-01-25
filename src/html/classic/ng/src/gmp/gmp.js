@@ -93,6 +93,8 @@ export class Gmp {
       this.username = username;
       this.globals = login;
 
+      this.http.clearCache();
+
       return this.token;
     });
   }
