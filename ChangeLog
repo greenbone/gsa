@@ -1,5 +1,10 @@
 2017-01-25 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/results/results.js: Remove text from solution
+	type column and reduce the size of the column.
+
+2017-01-25 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/http.js: Refactor http response handling to be
 	more flexible. Allow to transform responses without having to chain promises.
 

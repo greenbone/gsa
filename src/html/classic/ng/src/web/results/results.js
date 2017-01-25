@@ -75,13 +75,12 @@ export class Results extends EntitiesComponent {
             {_('Vulnerability')}
           </Sort>
         </TableHead>
-        <TableHead width="10em">
-          <Sort by="solution_type" onClick={this.onSortChange}>
-            <Layout flex align="space-between">
+        <TableHead width="5em">
+          <Layout flex align="center">
+            <Sort by="solution_type" onClick={this.onSortChange}>
               <Icon title={_('Solution type')} img="solution_type.svg"/>
-              {_('Solution type')}
-            </Layout>
-          </Sort>
+            </Sort>
+          </Layout>
         </TableHead>
         <TableHead width="10em">
           <Layout flex align="space-between">
