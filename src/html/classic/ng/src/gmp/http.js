@@ -85,7 +85,7 @@ export class Http {
     this.interceptors = [];
   }
 
-  request(method, {args, data, uri = this.url}) {
+  request(method, {args, data, uri = this.url, ...other}) {
     let self = this;
     let formdata;
 
@@ -118,28 +118,24 @@ export class Http {
       xhr.timeout = self.timeout;
       xhr.withCredentials = true; // allow to set Cookies
 
-      /* add request data for easier debugging of responses */
-      xhr.uri = uri;
-      xhr.formdata = formdata;
-
       xhr.onload = function() {
         if (this.status >= 200 && this.status < 300) {
-          self.handleResolve(resolve, this);
+          self.handleSuccess(resolve, reject, this, {uri, formdata, ...other});
         } else {
-          self.handleReject(reject, this);
+          self.handleError(resolve, reject, this, {uri, formdata, ...other});
         }
       };
 
       xhr.onerror = function() {
-        self.handleReject(reject, this);
+        self.handleError(resolve, reject, this, {uri, formdata, ...other});
       };
 
       xhr.ontimeout = function() {
-        self.handleTimeout(reject, this);
+        self.handleTimeout(resolve, reject, this, {uri, formdata, ...other});
       };
 
       xhr.onabort = function() {
-        self.handleCancel(reject, this);
+        self.handleCancel(resolve, reject, this, {uri, formdata, ...other});
       };
 
       xhr.send(formdata);
@@ -148,26 +144,62 @@ export class Http {
     return promise;
   }
 
-  handleResolve(resolve, xhr) {
-    resolve(xhr);
+  handleSuccess(resolve, reject, xhr, options) {
+    try {
+      resolve(this.transformSuccess(xhr, options));
+    }
+    catch (error) {
+      log.error('Error while transforming success response', error);
+      reject(error);
+    }
   }
 
-  handleReject(reject, xhr) {
+  handleError(resolve, reject, xhr, options) {
     for (let interceptor of this.interceptors) {
       interceptor.responseError(xhr);
     }
-    reject(new Rejection(xhr, 'error'));
+    let rej = new Rejection(xhr, 'error');
+    try {
+      reject(this.transformRejection(rej, options));
+    }
+    catch (error) {
+      log.error('Error while transforming error rejection', error);
+      reject(error);
+    }
   }
 
-  handleTimeout(reject, xhr) {
-    reject(new Rejection(xhr, 'timeout',
-      _('A timeout for the request to uri {{uri}} occured.', {uri: xhr.uri})));
+  handleTimeout(resolve, reject, xhr, options) {
+    let rej = new Rejection(xhr, 'timeout',
+      _('A timeout for the request to uri {{uri}} occured.',
+        {uri: options.uri}));
+    try {
+      reject(this.transformRejection(rej, options));
+    }
+    catch (error) {
+      log.error('Error while transforming timeout rejection', error);
+      reject(rej);
+    }
   }
 
-  handleCancel(reject, xhr) {
+  handleCancel(resolve, reject, xhr, options) {
     // canceling the promise is currently not possible but should be supported
     // in future
-    reject(new Rejection(xhr, 'cancel'));
+    let rej = new Rejection(xhr, 'cancel');
+    try {
+      reject(this.transformRejection(rej, options));
+    }
+    catch (error) {
+      log.error('Error while transforming cancel rejection', error);
+      reject(error);
+    }
+  }
+
+  transformSuccess(xhr, options) {
+    return xhr;
+  }
+
+  transformRejection(rej, options) {
+    return rej;
   }
 }
 
@@ -206,38 +238,38 @@ export class GmpHttp extends Http {
     this.params.token = token;
   }
 
-  request(method, {plain = false, ...options}) {
-    return super.request(method, options).then(xhr => {
-      if (plain) {
-        return xhr;
-      }
-      try {
-        return xml2json(xhr.responseXML).envelope;
-      }
-      catch (error) {
-        log.error('An error occured while converting gmp response to js for ' +
-          'url', this.url, xhr);
-        throw new Rejection(xhr, 'error',  _('An error occured while ' +
-          'converting gmp response to js for uri {{uri}}', {uri: xhr.uri}));
-      }
-    }, rej => {
-      if (rej.isError && rej.isError() && rej.xhr && rej.xhr.responseXML) {
-        let message;
-        let root = xml2json(rej.xhr.responseXML).envelope;
+  transformSuccess(xhr, {plain = false, ...options}) {
+    if (plain) {
+      return xhr;
+    }
+    try {
+      return xml2json(xhr.responseXML).envelope;
+    }
+    catch (error) {
+      log.error('An error occured while converting gmp response to js for ' +
+        'url', this.url, xhr);
+      throw new Rejection(xhr, 'error',  _('An error occured while ' +
+        'converting gmp response to js for uri {{uri}}', {uri: xhr.uri}));
+    }
+  }
 
-        if (is_defined(root.gsad_response)) {
-          message = root.gsad_response.message;
-        }
-        else if (is_defined(root.action_result)) {
-          message = root.action_result.message;
-        }
-        else {
-          message = _('Unkown Error');
-        }
-        throw rej.setMessage(message);
+  transformRejection(rej, options) {
+    if (rej.isError && rej.isError() && rej.xhr && rej.xhr.responseXML) {
+      let message;
+      let root = xml2json(rej.xhr.responseXML).envelope;
+
+      if (is_defined(root.gsad_response)) {
+        message = root.gsad_response.message;
       }
-      throw rej;
-    });
+      else if (is_defined(root.action_result)) {
+        message = root.action_result.message;
+      }
+      else {
+        message = _('Unkown Error');
+      }
+      return rej.setMessage(message);
+    }
+    return rej;
   }
 }
 // vim: set ts=2 sw=2 tw=80:

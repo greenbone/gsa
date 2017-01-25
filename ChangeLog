@@ -1,5 +1,10 @@
 2017-01-25 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/http.js: Refactor http response handling to be
+	more flexible. Allow to transform responses without having to chain promises.
+
+2017-01-25 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/dialog.js: Only log errors while saving in
 	dialogs once.
 
