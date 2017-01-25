@@ -1,5 +1,10 @@
 2017-01-25 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/dialog.js: Only log errors while saving in
+	dialogs once.
+
+2017-01-25 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/http.js,
 	src/html/classic/ng/src/web/dialog.js,
 	src/html/classic/ng/src/web/notes/dialog.js,

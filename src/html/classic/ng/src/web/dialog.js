@@ -104,7 +104,6 @@ export class Dialog extends React.Component {
   }
 
   showErrorMessageFromRejection(rej) {
-    log.error('Response:', rej.message, rej.stack, rej);
     this.showErrorMessage(rej.message);
   }
 
@@ -161,7 +160,7 @@ export class Dialog extends React.Component {
         this.props.onSave(data);
       }
     }).catch(error => {
-      log.error('' + error);
+      log.error('Error while saving data.', error.message, error.stack, error);
     });
   }
 
