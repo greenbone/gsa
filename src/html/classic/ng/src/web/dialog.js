@@ -103,19 +103,9 @@ export class Dialog extends React.Component {
     this.setState({error: message});
   }
 
-  showErrorMessageFromResponse(xhr) {
-    let message;
-    if (is_defined(xhr.gsad_response)) {
-      message = xhr.gsad_response.message;
-    }
-    else if (is_defined(xhr.action_result)) {
-      message = xhr.action_result.message;
-    }
-    else {
-      message = _('Unkown Error');
-    }
-    log.error('Response error', message, xhr);
-    this.showErrorMessage(message);
+  showErrorMessageFromRejection(rej) {
+    log.error('Response:', rej.message, rej.stack, rej);
+    this.showErrorMessage(rej.message);
   }
 
   onClose(event) {

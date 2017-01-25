@@ -110,10 +110,9 @@ export class NoteDialog extends Dialog {
 
     return promise.then(() => {
       this.close();
-    }, root => {
-      this.showErrorMessage(root.action_result.message);
-      throw new Error('Saving note failed. Reason: ' +
-        root.action_result.message);
+    }, rej => {
+      this.showErrorMessageFromRejection(rej);
+      throw rej;
     });
   }
 

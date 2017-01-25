@@ -64,9 +64,9 @@ export class AdvancedTaskWizard extends Dialog {
   save() {
     let {gmp} = this.context;
     return gmp.wizard.runQuickTask(this.state).then(() => this.close(),
-      xhr => {
-        this.showErrorMessageFromResponse(xhr);
-        throw new Error('Running advanced task wizard failed.');
+      rej => {
+        this.showErrorMessageFromRejection(rej);
+        throw rej;
       });
   }
 

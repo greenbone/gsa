@@ -75,9 +75,9 @@ export class ModifyTaskWizard extends Dialog {
   save() {
     let {gmp} = this.context;
     return gmp.wizard.runModifyTask(this.state).then(() => this.close(),
-      xhr => {
-        this.showErrorMessageFromResponse(xhr);
-        throw new Error('Running modify task wizard failed.');
+      rej => {
+        this.showErrorMessageFromRejection(rej);
+        throw rej;
       });
   }
 

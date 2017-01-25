@@ -23,6 +23,8 @@
 
 import logger from '../log.js';
 
+import _ from '../locale.js';
+
 import {is_defined, has_value, extend, xml2json} from '../utils.js';
 
 import {PromiseFactory} from './promise.js';
@@ -31,9 +33,12 @@ const log = logger.getLogger('gmp.http');
 
 class Rejection {
 
-  constructor(reason, xhr) {
+  constructor(xhr, reason = 'error', message = '') {
+    this.name = 'Rejection';
+    this.message = message;
     this.reason = reason;
     this.xhr = xhr;
+    this.stack = (new Error()).stack;
   }
 
   isError() {
@@ -42,6 +47,11 @@ class Rejection {
 
   isTimeout() {
     return this.reason === 'timeout';
+  }
+
+  setMessage(message) {
+    this.message = message;
+    return this;
   }
 }
 
@@ -146,17 +156,18 @@ export class Http {
     for (let interceptor of this.interceptors) {
       interceptor.responseError(xhr);
     }
-    reject(new Rejection('error', xhr));
+    reject(new Rejection(xhr, 'error'));
   }
 
   handleTimeout(reject, xhr) {
-    reject(new Rejection('timeout', xhr));
+    reject(new Rejection(xhr, 'timeout',
+      _('A timeout for the request to uri {{uri}} occured.', {uri: xhr.uri})));
   }
 
   handleCancel(reject, xhr) {
     // canceling the promise is currently not possible but should be supported
     // in future
-    reject(new Rejection('cancel', xhr));
+    reject(new Rejection(xhr, 'cancel'));
   }
 }
 
@@ -206,17 +217,24 @@ export class GmpHttp extends Http {
       catch (error) {
         log.error('An error occured while converting gmp response to js for ' +
           'url', this.url, xhr);
-        throw error;
+        throw new Rejection(xhr, 'error',  _('An error occured while ' +
+          'converting gmp response to js for uri {{uri}}', {uri: xhr.uri}));
       }
     }, rej => {
-      if (rej.isError()) {
-        if (rej.xhr.responseXML) {
-          throw xml2json(rej.xhr.responseXML).envelope;
+      if (rej.isError && rej.isError() && rej.xhr && rej.xhr.responseXML) {
+        let message;
+        let root = xml2json(rej.xhr.responseXML).envelope;
+
+        if (is_defined(root.gsad_response)) {
+          message = root.gsad_response.message;
         }
-        throw rej.xhr;
-      }
-      else if (rej.isTimeout()) {
-        throw new Error('A timeout for the request occured');
+        else if (is_defined(root.action_result)) {
+          message = root.action_result.message;
+        }
+        else {
+          message = _('Unkown Error');
+        }
+        throw rej.setMessage(message);
       }
       throw rej;
     });

@@ -73,9 +73,9 @@ export class TaskWizard extends Dialog {
   save() {
     let {gmp} = this.context;
     return gmp.wizard.runQuickFirstScan(this.state).then(() => this.close(),
-      xhr => {
-        this.showErrorMessageFromResponse(xhr);
-        throw new Error('Running quick start task wizard failed');
+      rej => {
+        this.showErrorMessageFromRejection(rej);
+        throw rej;
       });
   }
 
