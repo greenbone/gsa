@@ -1,5 +1,13 @@
 2017-01-25 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/gmp.js,
+	src/html/classic/ng/src/web/app.js,
+	src/html/classic/ng/src/web/header.js,
+	src/html/classic/ng/src/web/login.js: Move handling of window.gsa and it's
+	token to Gmp class instead of handling the token in the web components.
+
+2017-01-25 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/gmp/cache.js,
 	src/html/classic/ng/src/gmp/command.js,

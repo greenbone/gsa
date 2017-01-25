@@ -66,10 +66,6 @@ function is_logged_in(next_state, replace) {
   }
 }
 
-if (!is_defined(window.gsa)) {
-  window.gsa = {};
-}
-
 if (!is_defined(window.gsa._)) {
   window.gsa._ = _;
 }
@@ -98,7 +94,6 @@ class App extends React.Component {
     super(props);
 
     gmp.addInterceptor(new AppHttpInterceptor(this));
-    window.gsa.token = gmp.token;
   }
 
   getChildContext() {

@@ -70,6 +70,10 @@ export class Gmp {
       this.token = this.storage.token;
     }
 
+    if (!is_defined(window.gsa)) {
+      window.gsa = {};
+    }
+
     let commands = get_commands();
     for (let name in commands) { // eslint-disable-line guard-for-in
       let cmd = commands[name];
@@ -138,6 +142,7 @@ export class Gmp {
       delete this.storage.token;
     }
     this.http.token = token;
+    window.gsa.token = token;
   }
 
   get username() {

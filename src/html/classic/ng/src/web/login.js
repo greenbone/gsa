@@ -59,8 +59,6 @@ export class Login extends React.Component {
     let {router, gmp} = this.context;
 
     gmp.login(username, password).then(token => {
-      window.gsa.token = token;
-
       let {location} = this.props;
       if (location && location.state && location.state.next &&
           location.state.next !== location.pathname) {

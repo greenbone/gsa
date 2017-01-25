@@ -46,8 +46,6 @@ export class Header extends React.Component {
     .catch(() => {
       router.push('/login?type=logout');
     });
-
-    window.gsa.token = undefined;
   }
 
   render() {
