@@ -82,7 +82,7 @@ pkg_check_modules (GLIB REQUIRED glib-2.0>=2.32)
 pkg_check_modules (LIBEXSLT REQUIRED libexslt)
 pkg_check_modules (LIBGVM_BASE REQUIRED libgvm_base>=1.0.0)
 pkg_check_modules (LIBGVM_UTIL REQUIRED libgvm_util>=1.0.0)
-pkg_check_modules (LIBOPENVAS_OMP REQUIRED libopenvas_omp>=9.0.0)
+pkg_check_modules (LIBGVM_GMP REQUIRED libgvm_gmp>=1.0.0)
 pkg_check_modules (LIBXSLT REQUIRED libxslt)
 pkg_check_modules (GNUTLS REQUIRED gnutls>=3.2.15)
 
@@ -102,14 +102,14 @@ endif (NOT LIBGCRYPT)
 
 if (NOT LIBMICROHTTPD_FOUND OR NOT LIBXML_FOUND OR NOT GLIB_FOUND OR
     (GTHREAD_REQUIRED AND NOT GTHREAD_FOUND) OR NOT LIBEXSLT_FOUND OR NOT
-    LIBOPENVAS_OMP_FOUND OR NOT LIBXSLT_FOUND OR NOT GNUTLS_FOUND OR NOT
+    LIBGVM_GMP_FOUND OR NOT LIBXSLT_FOUND OR NOT GNUTLS_FOUND OR NOT
     LIBGCRYPT)
   message (FATAL_ERROR "One or more required libraries was not found "
     "(see message above), please install the missing "
     "libraries and run cmake again.")
 endif (NOT LIBMICROHTTPD_FOUND OR NOT LIBXML_FOUND OR NOT GLIB_FOUND OR
   (GTHREAD_REQUIRED AND NOT GTHREAD_FOUND) OR NOT LIBEXSLT_FOUND OR NOT
-  LIBOPENVAS_OMP_FOUND OR NOT LIBXSLT_FOUND OR NOT GNUTLS_FOUND OR NOT LIBGCRYPT)
+  LIBGVM_GMP_FOUND OR NOT LIBXSLT_FOUND OR NOT GNUTLS_FOUND OR NOT LIBGCRYPT)
 
 ## Retrieve svn revision (at configure time)
 #  Not using Subversion_WC_INFO, as it would have to connect to the repo
@@ -179,7 +179,7 @@ set (CPACK_PACKAGE_VERSION "${PROJECT_VERSION_STRING}${PROJECT_VERSION_SVN}")
 
 set (CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-${CPACK_PACKAGE_VERSION}")
 set (CPACK_SOURCE_PACKAGE_FILE_NAME "${PROJECT_NAME}-${CPACK_PACKAGE_VERSION}")
-set (CPACK_PACKAGE_VENDOR "The OpenVAS Project")
+set (CPACK_PACKAGE_VENDOR "Greenbone Networks")
 set (CPACK_SOURCE_IGNORE_FILES
 "${CMAKE_BINARY_DIR}"
 "/.svn/"

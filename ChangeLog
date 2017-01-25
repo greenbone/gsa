@@ -1,3 +1,14 @@
+2017-01-25  Jan-Oliver Wagner <jan-oliver.wagner@greenbone.net>
+
+	* CMakeLists.txt, INSTALL, src/CMakeLists.txt : Consider library gmp
+	of gvm-libs instead of omp from openvas-libraries.
+
+	* src/gsad_omp.c: Include gvm/gmp/gmp.h instead of openvas/omp/omp.h.
+	Use gmp_authenticate_info_opts_t instead of
+	omp_authenticate_info_opts_t, gmp_authenticate_info_opts_defaults
+	instead of omp_authenticate_info_opts_defaults,
+	gmp_authenticate_info_ext_c instead of omp_authenticate_info_ext_c.
+
 2017-01-25 Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/menu/menubar.js: Don't required capabilities in

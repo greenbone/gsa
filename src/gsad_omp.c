@@ -62,8 +62,7 @@
 #include <gvm/base/cvss.h>
 #include <gvm/util/fileutils.h>
 #include <gvm/util/serverutils.h> /* for gvm_connection_t */
-
-#include <openvas/omp/omp.h>
+#include <gvm/gmp/gmp.h>
 
 /*
  * XSLT includes
@@ -18892,14 +18891,14 @@ save_my_settings_omp (gvm_connection_t *connection, credentials_t *
           || (strcmp (changed_value, "") && strcmp (changed_value, "0"))))
     {
       gchar *passwd_64;
-      omp_authenticate_info_opts_t auth_opts;
+      gmp_authenticate_info_opts_t auth_opts;
 
       /* Send Password setting */
 
-      auth_opts = omp_authenticate_info_opts_defaults;
+      auth_opts = gmp_authenticate_info_opts_defaults;
       auth_opts.username = credentials->username;
       auth_opts.password = old_passwd;
-      switch (omp_authenticate_info_ext_c (connection, auth_opts))
+      switch (gmp_authenticate_info_ext_c (connection, auth_opts))
         {
           case 0:
             break;
@@ -27056,7 +27055,7 @@ authenticate_omp (const gchar * username, const gchar * password,
 {
   gvm_connection_t connection;
   int auth;
-  omp_authenticate_info_opts_t auth_opts;
+  gmp_authenticate_info_opts_t auth_opts;
 
   if (openvas_connection_open (&connection,
                                manager_address,
@@ -27078,7 +27077,7 @@ authenticate_omp (const gchar * username, const gchar * password,
   sleep (20);
 #endif
 
-  auth_opts = omp_authenticate_info_opts_defaults;
+  auth_opts = gmp_authenticate_info_opts_defaults;
   auth_opts.username = username;
   auth_opts.password = password;
   auth_opts.role = role;
@@ -27086,7 +27085,7 @@ authenticate_omp (const gchar * username, const gchar * password,
   auth_opts.timezone = timezone;
   auth_opts.pw_warning = pw_warning;
 
-  auth = omp_authenticate_info_ext_c (&connection, auth_opts);
+  auth = gmp_authenticate_info_ext_c (&connection, auth_opts);
   if (auth == 0)
     {
       entity_t entity;
@@ -27264,7 +27263,7 @@ manager_connect (credentials_t *credentials,
                  gvm_connection_t *connection,
                  cmd_response_data_t *response_data)
 {
-  omp_authenticate_info_opts_t auth_opts;
+  gmp_authenticate_info_opts_t auth_opts;
 
   if (openvas_connection_open (connection,
                                manager_address,
@@ -27281,10 +27280,10 @@ manager_connect (credentials_t *credentials,
 #endif
 
 
-  auth_opts = omp_authenticate_info_opts_defaults;
+  auth_opts = gmp_authenticate_info_opts_defaults;
   auth_opts.username = credentials->username;
   auth_opts.password = credentials->password;
-  if (omp_authenticate_info_ext_c (connection, auth_opts))
+  if (gmp_authenticate_info_ext_c (connection, auth_opts))
     {
       g_debug ("authenticate failed!\n");
       gvm_connection_close (connection);
