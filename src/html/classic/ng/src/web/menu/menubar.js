@@ -163,7 +163,7 @@ export const MenuBar = (props, context) => {
 
 MenuBar.contextTypes = {
   gmp: React.PropTypes.object.isRequired,
-  capabilities: React.PropTypes.object.isRequired,
+  capabilities: React.PropTypes.object,
 };
 
 export default MenuBar;
