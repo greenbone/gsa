@@ -28,7 +28,6 @@ import _ from '../../locale.js';
 
 import Layout from '../layout.js';
 
-import {handle_value_change} from './form.js';
 import Radio from './radio.js';
 
 export const YesNoRadio = ({disabled, onChange, value, name, ...other}) => {
@@ -38,23 +37,17 @@ export const YesNoRadio = ({disabled, onChange, value, name, ...other}) => {
       <Radio
         title={_('Yes')}
         value="1"
-        checked={value === 1} disabled={disabled}
-        onChange={val => handle_value_change({
-          value: val,
-          on_change: onChange,
-          conversion: parse_int,
-          name,
-        })}/>
+        checked={value === 1}
+        convert={parse_int}
+        onChange={onChange}
+        disabled={disabled}/>
       <Radio
         title={_('No')}
         value="0"
-        checked={value === 0} disabled={disabled}
-        onChange={val => handle_value_change({
-          value: val,
-          on_change: onChange,
-          conversion: parse_int,
-          name,
-        })}/>
+        convert={parse_int}
+        checked={value === 0}
+        onChange={onChange}
+        disabled={disabled}/>
     </Layout>
   );
 };

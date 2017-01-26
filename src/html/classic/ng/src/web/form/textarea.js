@@ -27,27 +27,26 @@ import {classes} from '../../utils.js';
 
 import {withLayout} from '../layout.js';
 
-import {handle_change} from './form.js';
+import {withChangeHandler} from './form.js';
 
-const TextAreaComponent =
-  ({className, value = '', onChange, name, ...props}) => {
+const TextAreaComponent = ({className, value = '', ...props}) => {
   className = classes('form-control', className);
   return (
     <textarea {...props}
       value={value}
-      className={className}
-      onChange={event => handle_change({event, on_change: onChange, name})}/>
+      className={className}/>
   );
 };
 
 TextAreaComponent.propTypes = {
   className: React.PropTypes.string,
-  name: React.PropTypes.string,
   value: React.PropTypes.any,
-  onChange: React.PropTypes.func,
 };
 
-export const TextArea = withLayout(TextAreaComponent, {box: true});
+export const TextArea = withLayout(
+  withChangeHandler(TextAreaComponent),
+  {box: true}
+);
 
 export default TextArea;
 

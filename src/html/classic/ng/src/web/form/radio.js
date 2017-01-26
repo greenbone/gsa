@@ -27,45 +27,31 @@ import {classes, is_defined} from '../../utils.js';
 
 import {withLayout} from '../layout.js';
 
+import {withChangeHandler} from './form.js';
+
 import './css/form.css';
 import './css/checkboxradio.css';
 
-class RadioComponent extends React.Component {
+const RadioComponent = props => {
 
-  constructor(...args) {
-    super(...args);
+  let {title, children, className, disabled, ...other} = props;
 
-    this.handleChange = this.handleChange.bind(this);
-  }
+  className = classes(className, 'radio', disabled ? 'disabled' : '');
 
-  handleChange(event) {
-    let {onChange, name} = this.props;
-
-    if (onChange) {
-      onChange(event.target.value, name);
-    }
-  }
-
-  render() {
-    let {title, children, className, disabled, ...other} = this.props;
-
-    className = classes(className, 'radio', disabled ? 'disabled' : '');
-
-    return (
-      <div className={className}>
-        <label>
-          <input {...other} type="radio" onChange={this.handleChange}/>
-          {is_defined(title) &&
-            <span>
-              {title}
-            </span>
-          }
-          {children}
-        </label>
-      </div>
-    );
-  }
-}
+  return (
+    <div className={className}>
+      <label>
+        <input {...other} type="radio"/>
+        {is_defined(title) &&
+          <span>
+            {title}
+          </span>
+        }
+        {children}
+      </label>
+    </div>
+  );
+};
 
 RadioComponent.propTypes = {
   name: React.PropTypes.string,
@@ -75,7 +61,7 @@ RadioComponent.propTypes = {
   onChange: React.PropTypes.func,
 };
 
-export const Radio = withLayout(RadioComponent,
+export const Radio = withLayout(withChangeHandler(RadioComponent),
   {align: ['start', 'center'], box: true, flex: true});
 
 export default Radio;

@@ -27,59 +27,47 @@ import {classes, is_defined} from '../../utils.js';
 
 import {withLayout} from '../layout.js';
 
+import {withChangeHandler} from './form.js';
+
 import './css/form.css';
 import './css/checkboxradio.css';
 
-export class CheckboxComponent extends React.Component {
+const convert_checked = (value, props) => {
+  let {checkedValue, uncheckedValue} = props;
 
-  constructor(props) {
-    super(props);
-
-    this.handleChange = this.handleChange.bind(this);
+  if (value && is_defined(checkedValue)) {
+    value = checkedValue;
   }
-
-  handleChange(event) {
-    let {checked} = event.target;
-    let {onChange, name, checkedValue, uncheckedValue} = this.props;
-
-    let value = checked;
-
-    if (value && is_defined(checkedValue)) {
-      value = checkedValue;
-    }
-    else if (!value && is_defined(uncheckedValue)) {
-      value = uncheckedValue;
-    }
-
-    if (onChange) {
-      onChange(value, name);
-    }
+  else if (!value && is_defined(uncheckedValue)) {
+    value = uncheckedValue;
   }
+  return value;
+};
 
-  render() {
-    let {title, className, children, disabled, ...other} = this.props;
+export const CheckboxComponent = props => {
 
-    /* remove additional props to keep react quiet */
-    delete other.checkedValue;
-    delete other.uncheckedValue;
+  let {title, className, children, disabled, ...other} = props;
 
-    className = classes(className, 'checkbox', disabled ? 'disabled' : '');
+  /* remove additional props to keep react quiet */
+  delete other.checkedValue;
+  delete other.uncheckedValue;
 
-    return (
-      <div className={className}>
-        <label>
-          <input {...other} onChange={this.handleChange} type="checkbox" />
-          {is_defined(title) &&
-            <span>
-              {title}
-            </span>
-          }
-          {children}
-        </label>
-      </div>
-    );
-  }
-}
+  className = classes(className, 'checkbox', disabled ? 'disabled' : '');
+
+  return (
+    <div className={className}>
+      <label>
+        <input {...other} type="checkbox" />
+        {is_defined(title) &&
+          <span>
+            {title}
+          </span>
+        }
+        {children}
+      </label>
+    </div>
+  );
+};
 
 CheckboxComponent.propTypes = {
   name: React.PropTypes.string,
@@ -91,7 +79,11 @@ CheckboxComponent.propTypes = {
   uncheckedValue: React.PropTypes.any,
 };
 
-export const Checkbox = withLayout(CheckboxComponent, {box: true});
+export const Checkbox = withLayout(
+  withChangeHandler(CheckboxComponent, convert_checked,
+    event => event.target.checked),
+  {box: true}
+);
 
 export default Checkbox;
 

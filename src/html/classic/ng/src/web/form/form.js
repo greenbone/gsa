@@ -21,6 +21,8 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+import React from 'react';
+
 export function handle_value_change({value, on_change, conversion, name}) {
   if (on_change) {
     if (conversion) {
@@ -35,5 +37,31 @@ export function handle_value_change({value, on_change, conversion, name}) {
 export function handle_change({event, on_change, conversion, name}) {
   handle_value_change({value: event.target.value, on_change, conversion, name});
 }
+
+const noop_convert = value => value;
+const value_name = event => event.target.name;
+
+export const withChangeHandler = (Component, convert_func = noop_convert,
+  value_func = value_name) => {
+
+  const ChangeHandler = ({onChange, convert = convert_func, ...props}) => {
+
+    const handleChange = event => {
+      if (onChange) {
+        onChange(convert(value_func(event), props), props.name);
+      }
+    };
+
+    return <Component {...props} onChange={handleChange}/>;
+  };
+
+  ChangeHandler.propTypes = {
+    convert: React.PropTypes.func,
+    name: React.PropTypes.string,
+    onChange: React.PropTypes.func,
+  };
+
+  return ChangeHandler;
+};
 
 // vim: set ts=2 sw=2 tw=80:

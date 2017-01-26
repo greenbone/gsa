@@ -27,26 +27,24 @@ import {classes} from '../../utils.js';
 
 import {withLayout} from '../layout.js';
 
-import {handle_change} from './form.js';
+import {withChangeHandler} from './form.js';
 
-const FieldComponent = ({className, type, value = '', onChange, name,
-  ...props}) => {
+const FieldComponent = ({className, value = '', ...props}) => {
   className = classes('form-control', className);
   return (
-    <input {...props} className={className} value={value} type={type}
-      onChange={event => handle_change({event, on_change: onChange, name})}/>
+    <input {...props} className={className} value={value}/>
   );
 };
 
 FieldComponent.propTypes = {
   className: React.PropTypes.string,
-  name: React.PropTypes.string,
-  type: React.PropTypes.string,
   value: React.PropTypes.any,
-  onChange: React.PropTypes.func,
 };
 
-export const Field = withLayout(FieldComponent, {box: true});
+export const Field = withLayout(
+  withChangeHandler(FieldComponent),
+  {box: true}
+);
 
 export default Field;
 

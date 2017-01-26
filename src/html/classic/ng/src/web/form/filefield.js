@@ -25,25 +25,19 @@ import React from 'react';
 
 import {withLayout} from '../layout.js';
 
-import {handle_value_change} from './form.js';
+import {withChangeHandler} from './form.js';
 
-const FileFieldComponent = ({onChange, ...props}) => {
+const FileFieldComponent = props => {
   return (
-    <input {...props} type="file"
-      onChange={event => handle_value_change({
-        value: event.target.files[0],
-        on_change: onChange,
-        name: name,
-      })}/>
+    <input {...props} type="file"/>
   );
 };
 
-FileFieldComponent.propTypes = {
-  name: React.PropTypes.string,
-  onChange: React.PropTypes.func,
-};
-
-export const FileField = withLayout(FileFieldComponent, {box: true});
+export const FileField = withLayout(
+  withChangeHandler(FileFieldComponent, value => value,
+    event => event.target.files[0]),
+  {box: true}
+);
 
 export default FileField;
 
