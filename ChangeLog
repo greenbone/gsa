@@ -1,5 +1,10 @@
 2017-01-26 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/gsad_omp.c (get_many): Don't free filter_type if it is used as a key for
+	the g_tree. g_tree will free it when the tree is destroyed.
+
+2017-01-26 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/form/form.js: Remove now unsed functions
 	handle_change and handle_value_change. Both got replaced by withChangeHandler
 	HOC.
