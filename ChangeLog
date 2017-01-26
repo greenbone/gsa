@@ -1,5 +1,10 @@
 2017-01-26 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/login.js: Use only one event handler in for
+	fields in LoginForm.
+
+2017-01-26 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/form/form.js: Use correct property for getting
 	the value from an event for withChangeHandler HOC.
 

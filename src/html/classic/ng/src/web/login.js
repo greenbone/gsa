@@ -162,12 +162,8 @@ class LoginForm extends React.Component {
     this.props.onSubmit(username, password);
   }
 
-  onUserNameChange(username) {
-    this.setState({username});
-  }
-
-  onPasswordChange(password) {
-    this.setState({password});
+  onValueChange(value, name) {
+    this.setState({[name]: value});
   }
 
   onKeyDown(event) {
@@ -197,7 +193,7 @@ class LoginForm extends React.Component {
                   value={username}
                   autoFocus="autofocus"
                   tabIndex="1"
-                  onChange={this.onUserNameChange}/>
+                  onChange={this.onValueChange}/>
               </FormGroup>
               <FormGroup title={_('Password')} titleSize="4">
                 <PasswordField name="password"
@@ -205,7 +201,7 @@ class LoginForm extends React.Component {
                   placeholder={_('Password')}
                   value={password}
                   onKeyDown={this.onKeyDown}
-                  onChange={this.onPasswordChange}/>
+                  onChange={this.onValueChange}/>
               </FormGroup>
             </Layout>
             <FormGroup size="6" offset="6">
