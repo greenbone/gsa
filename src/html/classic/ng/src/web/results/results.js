@@ -30,7 +30,7 @@ import Layout from '../layout.js';
 import Sort from '../sortby.js';
 import SelectionType from '../selectiontype.js';
 
-import EntitiesComponent from '../entities/component.js';
+import EntitiesListPage from '../entities/listpage.js';
 import EntitiesFooter from '../entities/footer.js';
 
 import Dashboard from '../dashboard/dashboard.js';
@@ -47,7 +47,7 @@ import ResultsListRow from './resultslistrow.js';
 
 import {RESULTS_FILTER_FILTER} from '../../gmp/commands/filters.js';
 
-export class Results extends EntitiesComponent {
+export class Results extends EntitiesListPage {
 
   constructor(props) {
     super(props, {

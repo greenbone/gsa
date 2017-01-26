@@ -47,7 +47,7 @@ import './css/component.css';
 
 const log = logger.getLogger('web.entities.component');
 
-export class EntitiesComponent extends React.Component {
+export class EntitiesListPage extends React.Component {
 
   constructor(props, options = {}) {
     super(props);
@@ -456,6 +456,6 @@ export class EntitiesComponent extends React.Component {
   }
 }
 
-export default EntitiesComponent;
+export default EntitiesListPage;
 
 // vim: set ts=2 sw=2 tw=80:

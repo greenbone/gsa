@@ -31,7 +31,7 @@ import Sort from '../sortby.js';
 
 import Dashboard from '../dashboard/dashboard.js';
 
-import EntitiesComponent from '../entities/component.js';
+import EntitiesListPage from '../entities/listpage.js';
 import EntitiesFooter from '../entities/footer.js';
 
 import Icon from '../icons/icon.js';
@@ -53,7 +53,7 @@ import TasksListRow from './taskslistrow.js';
 
 import {TASKS_FILTER_FILTER} from '../../gmp/commands/filters.js';
 
-export class Tasks extends EntitiesComponent {
+export class Tasks extends EntitiesListPage {
 
   constructor(props) {
     super(props, {
