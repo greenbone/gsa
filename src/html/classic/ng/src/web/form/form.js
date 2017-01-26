@@ -23,21 +23,6 @@
 
 import React from 'react';
 
-export function handle_value_change({value, on_change, conversion, name}) {
-  if (on_change) {
-    if (conversion) {
-      on_change(conversion(value), name);
-    }
-    else {
-      on_change(value, name);
-    }
-  }
-}
-
-export function handle_change({event, on_change, conversion, name}) {
-  handle_value_change({value: event.target.value, on_change, conversion, name});
-}
-
 const noop_convert = value => value;
 const value_name = event => event.target.name;
 
