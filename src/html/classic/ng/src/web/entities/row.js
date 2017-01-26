@@ -30,9 +30,9 @@ import Layout from '../layout.js';
 import SelectionType from '../selectiontype.js';
 import LegacyLink from '../legacylink.js';
 
-import Checkbox from '../form/checkbox.js';
-
 import Icon from '../icons/icon.js';
+
+import EntitySelection from './selection.js';
 
 export class EntityRow extends React.Component {
 
@@ -41,7 +41,6 @@ export class EntityRow extends React.Component {
 
     this.name = name;
 
-    this.onSelectionChange = this.onSelectionChange.bind(this);
     this.onSave = this.onSave.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
     this.handleClone = this.handleClone.bind(this);
@@ -83,20 +82,6 @@ export class EntityRow extends React.Component {
     });
   }
 
-  onSelectionChange(value) {
-    let {onDeselected, onSelected} = this.props;
-    let {entity} = this.getEntity();
-
-    if (value) {
-      if (onSelected) {
-        onSelected(entity);
-      }
-    }
-    else if (onDeselected) {
-      onDeselected(entity);
-    }
-  }
-
   handleClone() {
     let gmp = this.getGmp();
     let entity = this.getEntity();
@@ -126,10 +111,13 @@ export class EntityRow extends React.Component {
   }
 
   renderSelection() {
+    let entity = this.getEntity();
+    let {onDeselected, onSelected} = this.props;
     return (
       <td className="table-actions">
         <Layout flex align={['center', 'center']}>
-          <Checkbox onChange={this.onSelectionChange}/>
+          <EntitySelection entity={entity} onSelected={onSelected}
+            onDeselected={onDeselected}/>
         </Layout>
       </td>
     );
