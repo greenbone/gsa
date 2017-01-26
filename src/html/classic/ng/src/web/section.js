@@ -23,6 +23,8 @@
 
 import React from 'react';
 
+import {is_string} from '../utils.js';
+
 import Layout from './layout.js';
 
 import Icon from './icons/icon.js';
@@ -43,7 +45,10 @@ export const Section = props => {
 
 Section.propTypes = {
   className: React.PropTypes.string,
-  img: React.PropTypes.string.isRequired,
+  img: React.PropTypes.oneOfType([
+    React.PropTypes.string,
+    React.PropTypes.element,
+  ]).isRequired,
   title: React.PropTypes.string.isRequired,
   extra: React.PropTypes.element,
 };
@@ -52,7 +57,9 @@ export const SectionHeader = props => {
   return (
     <Layout flex align={['space-between', 'end']} className="section-header">
       <h2>
-        <Icon size="large" img={props.img}/>
+        {is_string(props.img) ?
+          <Icon size="large" img={props.img}/> : props.img
+        }
         {props.title}
       </h2>
       {props.children}
@@ -61,10 +68,13 @@ export const SectionHeader = props => {
 };
 
 SectionHeader.propTypes = {
-  img: React.PropTypes.string.isRequired,
+  img: React.PropTypes.oneOfType([
+    React.PropTypes.string,
+    React.PropTypes.element,
+  ]).isRequired,
   title: React.PropTypes.string.isRequired,
 };
 
-export {Section as default};
+export default Section;
 
 // vim: set ts=2 sw=2 tw=80:
