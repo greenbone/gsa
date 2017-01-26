@@ -128,12 +128,12 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/filterdialog.js
      ${NG_SRC_DIR}/src/web/footer.js
      ${NG_SRC_DIR}/src/web/footnote.js
-     ${NG_SRC_DIR}/src/web/form.js
      ${NG_SRC_DIR}/src/web/form/checkbox.js
      ${NG_SRC_DIR}/src/web/form/datepicker.js
      ${NG_SRC_DIR}/src/web/form/download.js
      ${NG_SRC_DIR}/src/web/form/field.js
      ${NG_SRC_DIR}/src/web/form/filefield.js
+     ${NG_SRC_DIR}/src/web/form/form.js
      ${NG_SRC_DIR}/src/web/form/formgroup.js
      ${NG_SRC_DIR}/src/web/form/formitem.js
      ${NG_SRC_DIR}/src/web/form/formpart.js

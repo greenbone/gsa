@@ -27,8 +27,8 @@ import {parse_int} from '../../utils.js';
 import _ from '../../locale.js';
 
 import Layout from '../layout.js';
-import {handle_value_change} from '../form.js';
 
+import {handle_value_change} from './form.js';
 import Radio from './radio.js';
 
 export const YesNoRadio = ({disabled, onChange, value, name, ...other}) => {

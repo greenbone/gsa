@@ -30,7 +30,7 @@ import {withLayout} from '../layout.js';
 import './css/form.css';
 import './css/checkboxradio.css';
 
-export class CheckboxContainer extends React.Component {
+export class CheckboxComponent extends React.Component {
 
   constructor(props) {
     super(props);
@@ -81,7 +81,7 @@ export class CheckboxContainer extends React.Component {
   }
 }
 
-CheckboxContainer.propTypes = {
+CheckboxComponent.propTypes = {
   name: React.PropTypes.string,
   disabled: React.PropTypes.bool,
   title: React.PropTypes.string,
@@ -91,7 +91,7 @@ CheckboxContainer.propTypes = {
   uncheckedValue: React.PropTypes.any,
 };
 
-export const Checkbox = withLayout(CheckboxContainer, {box: true});
+export const Checkbox = withLayout(CheckboxComponent, {box: true});
 
 export default Checkbox;
 

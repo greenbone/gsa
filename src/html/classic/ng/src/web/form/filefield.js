@@ -23,10 +23,11 @@
 
 import React from 'react';
 
-import {handle_value_change} from '../form.js';
 import {withLayout} from '../layout.js';
 
-const FileFieldContainer = ({onChange, ...props}) => {
+import {handle_value_change} from './form.js';
+
+const FileFieldComponent = ({onChange, ...props}) => {
   return (
     <input {...props} type="file"
       onChange={event => handle_value_change({
@@ -37,12 +38,12 @@ const FileFieldContainer = ({onChange, ...props}) => {
   );
 };
 
-FileFieldContainer.propTypes = {
+FileFieldComponent.propTypes = {
   name: React.PropTypes.string,
   onChange: React.PropTypes.func,
 };
 
-export const FileField = withLayout(FileFieldContainer, {box: true});
+export const FileField = withLayout(FileFieldComponent, {box: true});
 
 export default FileField;
 

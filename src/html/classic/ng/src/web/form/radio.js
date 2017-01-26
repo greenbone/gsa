@@ -30,7 +30,7 @@ import {withLayout} from '../layout.js';
 import './css/form.css';
 import './css/checkboxradio.css';
 
-class RadioContainer extends React.Component {
+class RadioComponent extends React.Component {
 
   constructor(...args) {
     super(...args);
@@ -67,7 +67,7 @@ class RadioContainer extends React.Component {
   }
 }
 
-RadioContainer.propTypes = {
+RadioComponent.propTypes = {
   name: React.PropTypes.string,
   className: React.PropTypes.string,
   disabled: React.PropTypes.bool,
@@ -75,7 +75,7 @@ RadioContainer.propTypes = {
   onChange: React.PropTypes.func,
 };
 
-export const Radio = withLayout(RadioContainer,
+export const Radio = withLayout(RadioComponent,
   {align: ['start', 'center'], box: true, flex: true});
 
 export default Radio;

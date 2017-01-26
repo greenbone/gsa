@@ -95,13 +95,13 @@ export const withLayout = (Component, defaults = {}) => {
   };
 };
 
-const LayoutContainer = props => {
+const LayoutComponent = props => {
   return (
     <div {...props}/>
   );
 };
 
-LayoutContainer.propTypes = {
+LayoutComponent.propTypes = {
   className: React.PropTypes.string,
   flex: React.PropTypes.oneOf(['row', 'column', true]),
   float: React.PropTypes.bool,
@@ -141,7 +141,7 @@ export const get_layout_props = props => {
   return values;
 };
 
-export const Layout = withLayout(LayoutContainer);
+export const Layout = withLayout(LayoutComponent);
 
 export default Layout;
 

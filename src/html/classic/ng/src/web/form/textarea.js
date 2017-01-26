@@ -25,10 +25,11 @@ import React from 'react';
 
 import {classes} from '../../utils.js';
 
-import {handle_change} from '../form.js';
 import {withLayout} from '../layout.js';
 
-const TextAreaContainer =
+import {handle_change} from './form.js';
+
+const TextAreaComponent =
   ({className, value = '', onChange, name, ...props}) => {
   className = classes('form-control', className);
   return (
@@ -39,14 +40,14 @@ const TextAreaContainer =
   );
 };
 
-TextAreaContainer.propTypes = {
+TextAreaComponent.propTypes = {
   className: React.PropTypes.string,
   name: React.PropTypes.string,
   value: React.PropTypes.any,
   onChange: React.PropTypes.func,
 };
 
-export const TextArea = withLayout(TextAreaContainer, {box: true});
+export const TextArea = withLayout(TextAreaComponent, {box: true});
 
 export default TextArea;
 

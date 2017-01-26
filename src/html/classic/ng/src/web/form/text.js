@@ -25,11 +25,11 @@ import React from 'react';
 
 import {withLayout} from '../layout.js';
 
-const TextContainer = props => {
+const TextComponent = props => {
   return <span {...props} />;
 };
 
-export const Text = withLayout(TextContainer, {box: true});
+export const Text = withLayout(TextComponent, {box: true});
 
 export default Text;
 

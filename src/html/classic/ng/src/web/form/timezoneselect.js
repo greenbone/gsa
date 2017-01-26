@@ -32,34 +32,32 @@ import {withLayout} from '../layout.js';
 import Select2 from './select2.js';
 
 
-class TimeZoneSelectContainer extends React.Component {
-  render() {
-    let value = this.props.value ? this.props.value : undefined;
+const TimeZoneSelectComponent = props => {
+  let value = this.props.value ? this.props.value : undefined;
 
-    let timezone_opts = map(timezones, zone => {
-      return <option key={zone.name} value={zone.name}>{zone.name}</option>;
-    });
+  let timezone_opts = map(timezones, zone => {
+    return <option key={zone.name} value={zone.name}>{zone.name}</option>;
+  });
 
-    return (
-      <Select2 {...this.props} value={value}>
-        <option value="UTC">
-          {_('Coordinated Universal Time/UTC')}
-        </option>
-        {timezone_opts}
-      </Select2>
-    );
-  }
-}
+  return (
+    <Select2 {...this.props} value={value}>
+      <option value="UTC">
+        {_('Coordinated Universal Time/UTC')}
+      </option>
+      {timezone_opts}
+    </Select2>
+  );
+};
 
-TimeZoneSelectContainer.propTypes = {
+TimeZoneSelectComponent.propTypes = {
   value: React.PropTypes.string,
 };
 
-TimeZoneSelectContainer.defaultProps = {
+TimeZoneSelectComponent.defaultProps = {
   value: 'UTC',
 };
 
-export const TimeZoneSelect = withLayout(TimeZoneSelectContainer, {box: true});
+export const TimeZoneSelect = withLayout(TimeZoneSelectComponent, {box: true});
 
 export default TimeZoneSelect;
 

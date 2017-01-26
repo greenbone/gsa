@@ -53,7 +53,7 @@ function equal_array_keys(arr1, arr2) {
   return true;
 }
 
-class Select2Container extends React.Component {
+class Select2Component extends React.Component {
 
   constructor(props) {
     super(props);
@@ -133,7 +133,7 @@ class Select2Container extends React.Component {
   }
 }
 
-Select2Container.propTypes = {
+Select2Component.propTypes = {
   disabled: React.PropTypes.bool,
   name: React.PropTypes.string,
   onChange: React.PropTypes.func,
@@ -141,7 +141,7 @@ Select2Container.propTypes = {
   className: React.PropTypes.string
 };
 
-export const Select2 = withLayout(Select2Container, {box: true});
+export const Select2 = withLayout(Select2Component, {box: true});
 
 export default Select2;
 

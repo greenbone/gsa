@@ -30,7 +30,7 @@ import {withLayout} from '../layout.js';
 
 import './css/spinner.css';
 
-class SpinnerContainer extends React.Component {
+class SpinnerComponent extends React.Component {
 
   constructor(props) {
     super(props);
@@ -253,7 +253,7 @@ class SpinnerContainer extends React.Component {
   }
 }
 
-SpinnerContainer.defaultProps = {
+SpinnerComponent.defaultProps = {
   size: 4,
   maxLenght: 5,
   type: 'int',
@@ -264,7 +264,7 @@ const propTypeInt = React.PropTypes.oneOfType([
   React.PropTypes.string,
 ]);
 
-SpinnerContainer.propTypes = {
+SpinnerComponent.propTypes = {
   size: propTypeInt,
   maxLength: propTypeInt,
   min: propTypeInt,
@@ -278,7 +278,7 @@ SpinnerContainer.propTypes = {
   onChange: React.PropTypes.func,
 };
 
-export const Spinner = withLayout(SpinnerContainer, {box: true});
+export const Spinner = withLayout(SpinnerComponent, {box: true});
 
 export default Spinner;
 
