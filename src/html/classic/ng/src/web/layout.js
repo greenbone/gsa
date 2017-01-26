@@ -32,11 +32,9 @@ const LAYOUT_PROPNAMES = [
 ];
 
 export const withLayout = (Component, defaults = {}) => {
-  return function(props) {
-    /* eslint-disable */
+  const LayoutWrapper = props => {
     let {className, flex, align, grow, shrink, basis, float, box, offset,
       style = {}, wrap, ...other} = props;
-    /* esline-enable */
     let css = className;
 
     flex = is_defined(flex) ? flex : defaults.flex;
@@ -59,14 +57,12 @@ export const withLayout = (Component, defaults = {}) => {
           css = classes('justify-' + align, css);
         }
       }
+      // use sane defaults
+      else if (flex === 'row') {
+        css = classes('justify-start', 'align-center', css);
+      }
       else {
-        // use sane defaults
-        if (flex === 'row') {
-          css = classes('justify-start', 'align-center', css);
-        }
-        else {
-          css = classes('justify-center', 'align-stretch', css);
-        }
+        css = classes('justify-center', 'align-stretch', css);
       }
     }
     else if (is_defined(float)) {
@@ -93,36 +89,40 @@ export const withLayout = (Component, defaults = {}) => {
 
     return <Component {...other} className={css} style={style}/>;
   };
+
+  LayoutWrapper.propTypes = {
+    className: React.PropTypes.string,
+    flex: React.PropTypes.oneOf(['row', 'column', true]),
+    float: React.PropTypes.bool,
+    wrap: React.PropTypes.bool,
+    box: React.PropTypes.bool,
+    align: React.PropTypes.oneOfType([
+      React.PropTypes.string,
+      React.PropTypes.array,
+    ]),
+    grow: React.PropTypes.oneOfType([
+      React.PropTypes.string,
+      React.PropTypes.number,
+    ]),
+    shrink: React.PropTypes.oneOfType([
+      React.PropTypes.string,
+      React.PropTypes.number,
+    ]),
+    basis: React.PropTypes.string,
+    offset: React.PropTypes.oneOfType([
+      React.PropTypes.string,
+      React.PropTypes.number,
+    ]),
+    style: React.PropTypes.object,
+  };
+
+  return LayoutWrapper;
 };
 
 const LayoutComponent = props => {
   return (
     <div {...props}/>
   );
-};
-
-LayoutComponent.propTypes = {
-  className: React.PropTypes.string,
-  flex: React.PropTypes.oneOf(['row', 'column', true]),
-  float: React.PropTypes.bool,
-  box: React.PropTypes.bool,
-  align: React.PropTypes.oneOfType([
-    React.PropTypes.string,
-    React.PropTypes.array,
-  ]),
-  grow: React.PropTypes.oneOfType([
-    React.PropTypes.string,
-    React.PropTypes.number,
-  ]),
-  shrink: React.PropTypes.oneOfType([
-    React.PropTypes.string,
-    React.PropTypes.number,
-  ]),
-  basis: React.PropTypes.string,
-  offset: React.PropTypes.oneOfType([
-    React.PropTypes.string,
-    React.PropTypes.number,
-  ]),
 };
 
 export const get_layout_props = props => {

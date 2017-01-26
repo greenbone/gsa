@@ -1,5 +1,10 @@
 2017-01-26 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/layout.js: Allow to use react property
+	validation with withLayout HOC.
+
+2017-01-26 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/form/timezoneselect.js: Fix
 	TimeZoneSelectComponent. Remove missing part during conversion from a class
 	component to a stateless function component.
