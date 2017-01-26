@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,10 +24,10 @@
 import React from 'react';
 
 const noop_convert = value => value;
-const value_name = event => event.target.name;
+const target_value = event => event.target.value;
 
 export const withChangeHandler = (Component, convert_func = noop_convert,
-  value_func = value_name) => {
+  value_func = target_value) => {
 
   const ChangeHandler = ({onChange, convert = convert_func, ...props}) => {
 
