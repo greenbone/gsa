@@ -25,7 +25,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-10-13 09:38+0200\n"
-"PO-Revision-Date: 2016-10-21 09:42+0200\n"
+"PO-Revision-Date: 2017-01-17 15:19+0200\n"
 "Last-Translator: Tameem <tameem.eissa@greenbone.net>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: ar\n"
@@ -35,7 +35,7 @@ msgstr ""
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
 "X-Generator: Pootle 2.5.1.3\n"
-"X-POOTLE-MTIME: 1477039335.365047\n"
+"X-POOTLE-MTIME: 1484662791.226998\n"
 
 # 
 #: classic/graphics.xsl:87
@@ -85,8 +85,9 @@ msgid "Results by Severity Class"
 msgstr "النتائج حسب صنف الخطورة"
 
 #: classic/graphics.xsl:227
+#, fuzzy
 msgid "Results vulnerability word cloud"
-msgstr ""
+msgstr "النتائج الثغرات كلمات على شكل خيمة"
 
 #: classic/graphics.xsl:242
 msgid "Results description word cloud"
@@ -114,31 +115,32 @@ msgstr "طوبولوجيا الأجهزة المضيفة"
 
 #: classic/graphics.xsl:332
 msgid "Operating Systems by CVSS"
-msgstr ""
+msgstr "أنظمة التشغيل حسب الـ CVSS"
 
 #: classic/graphics.xsl:337
 msgid "Operating Systems by Severity Class"
-msgstr ""
+msgstr "أنظمة التشغيل حسب صنف الخطورة"
 
 #: classic/graphics.xsl:365
 msgid "Operating Systems by Vulnerability Score"
-msgstr ""
+msgstr "أنظمة التشغيل حسب درجة العرضة للهجوم"
 
 #: classic/graphics.xsl:382
 msgid "Notes by creation time"
-msgstr ""
+msgstr "التدوينات حسب زمن الإنشاء"
 
 #: classic/graphics.xsl:395
+#, fuzzy
 msgid "Notes text word cloud"
-msgstr ""
+msgstr "Notes text word cloud"
 
 #: classic/graphics.xsl:410
 msgid "Notes by active days"
-msgstr ""
+msgstr "التدوينات حسب الأيام النشطة"
 
 #: classic/graphics.xsl:429
 msgid "Overrides by creation time"
-msgstr ""
+msgstr "التجاوزات حسب زمن الإنشاء"
 
 #: classic/graphics.xsl:442
 msgid "Overrides text word cloud"
@@ -146,7 +148,7 @@ msgstr ""
 
 #: classic/graphics.xsl:457
 msgid "Overrides by active days"
-msgstr ""
+msgstr "التجاوزات حسب الأيام النشطة"
 
 #: classic/graphics.xsl:478
 #, fuzzy
@@ -155,15 +157,15 @@ msgstr "%1 حسب CVSS "
 
 #: classic/graphics.xsl:484
 msgid "%1 by Severity Class"
-msgstr ""
+msgstr "%1 حسب صنف الخطورة "
 
 #: classic/graphics.xsl:496
 msgid "%1 by creation time"
-msgstr ""
+msgstr "%1 من زمن الإنشاء "
 
 #: classic/graphics.xsl:522
 msgid "NVTs by Family"
-msgstr ""
+msgstr "NVTs حسب العائلة"
 
 #: classic/graphics.xsl:535
 msgid "NVTs by QoD type"
@@ -183,239 +185,241 @@ msgstr "عناصر الـ SecInfo حسب النوع"
 
 #: classic/graphics.xsl:733
 msgid "Reports: Duration timeline"
-msgstr ""
+msgstr "تقارير: الجدول الزمني للمدة"
 
 #: classic/graphics.xsl:1132 classic/gsad.xsl:405 classic/gsad.xsl:415
 #: classic/gsad.xsl:463 classic/gsad.xsl:492
 msgid "Dashboard"
-msgstr ""
+msgstr "لوحة الأدوات"
 
 #: classic/graphics.xsl:1211
 msgid "Scans Dashboard"
-msgstr ""
+msgstr "لوحة تحرير المسح"
 
 #: classic/graphics.xsl:1306
 msgid "Assets Dashboard"
-msgstr ""
+msgstr "لوحة تحرير الممتلكات"
 
 #: classic/graphics.xsl:1393
 msgid "SecInfo Dashboard"
-msgstr ""
+msgstr " لوحة تحرير الـ SecInfo"
 
 #: classic/omp.xsl:697
 msgid "Report: Prognostic Results"
-msgstr ""
+msgstr "التقرير: نتائج تكهنية"
 
 #: classic/omp.xsl:698
 msgid "Report: Delta Results"
-msgstr ""
+msgstr "تقرير: نتائج دلتا"
 
 #: classic/omp.xsl:699 classic/omp.xsl:32719 classic/omp.xsl:32725
 #: classic/omp.xsl:33228 classic/omp.xsl:33460
 msgid "Report: Results"
-msgstr ""
+msgstr "تقرير: نتائج"
 
 #: classic/omp.xsl:700
 msgid "Report: Prognostic Summary and Download"
-msgstr ""
+msgstr "تقرير: الخلاصة التكهنية والتحميل"
 
 #: classic/omp.xsl:701
 msgid "Report: Delta Summary and Download"
-msgstr ""
+msgstr "تقرير: خلاصة دلتا والتحميل"
 
 #: classic/omp.xsl:702
 msgid "Report: Summary and Download"
-msgstr ""
+msgstr "تقرير: الخلاصة والتحميل"
 
 #: classic/omp.xsl:703
 msgid "Report: Prognostic Hosts"
-msgstr ""
+msgstr "تقرير : المضيفين التكهنيين"
 
 #: classic/omp.xsl:704
 msgid "Report: Hosts"
-msgstr ""
+msgstr "تقرير: المضيفين"
 
 #: classic/omp.xsl:705 classic/omp.xsl:32744
 msgid "Report: Ports"
-msgstr ""
+msgstr "تقرير: المنافذ"
 
 #: classic/omp.xsl:706
 msgid "Report: Operating Systems"
-msgstr ""
+msgstr "تقرير: أنظمة التشغيل"
 
 #: classic/omp.xsl:707
 msgid "Report: Prognostic Applications"
-msgstr ""
+msgstr "تقرير: التطبيقات التكهنية"
 
 #: classic/omp.xsl:708
 msgid "Report: Applications"
-msgstr ""
+msgstr "تقرير: التطبيقات"
 
 #: classic/omp.xsl:709
 msgid "Report: Vulnerabilities"
-msgstr ""
+msgstr "تقرير: الثغرات"
 
 #: classic/omp.xsl:710
 msgid "Report: CVEs"
-msgstr ""
+msgstr "تقارير: CVEs"
 
 #: classic/omp.xsl:711
 msgid "Report: Closed CVEs"
-msgstr ""
+msgstr "تقرير: CVEs مغلقة"
 
 #: classic/omp.xsl:712
 msgid "Report: Topology"
-msgstr ""
+msgstr "تقرير: الطبولوجي"
 
 #: classic/omp.xsl:713
 msgid "Report: SSL Certificates"
-msgstr ""
+msgstr "تقرير: شهادات SSL"
 
 #: classic/omp.xsl:714
 msgid "Report: Error Messages"
-msgstr ""
+msgstr "تقرير : رسائل الخطأ"
 
 #: classic/omp.xsl:733
 msgid "has super access to "
-msgstr ""
+msgstr "لديه حق وصول سوبر ل."
 
 #: classic/omp.xsl:741
 msgid "has super access to all users"
-msgstr ""
+msgstr "لديه حق وصول سوبر لكل المستخدمين"
 
 #: classic/omp.xsl:744 classic/dynamic_strings.xsl:633
 msgid "may login"
-msgstr ""
+msgstr "يمكنه تسجيل الدخول"
 
 #: classic/omp.xsl:747
+#, fuzzy
 msgid "may run multiple OMP commands in one"
-msgstr ""
+msgstr "يمكنه تنفيذ عدة أوامر OMP في آن واحد"
 
 #: classic/omp.xsl:750
 msgid "has all permissions"
-msgstr ""
+msgstr "لديه كل السماحيات"
 
 #: classic/omp.xsl:753 classic/dynamic_strings.xsl:709
 msgid "may empty the trashcan"
-msgstr ""
+msgstr "يمكن تفريغ سلة المهملات"
 
 #: classic/omp.xsl:756
 msgid "may get the dependencies of NVTs"
-msgstr ""
+msgstr "يمكنه الحصول على إعتمادات الـ NVTs"
 
 #: classic/omp.xsl:759 classic/dynamic_strings.xsl:747
+#, fuzzy
 msgid "may get NVT feed version information"
-msgstr ""
+msgstr "يمكنه الحصول على معلومات خاصة بإصدار تلقيم الـ NVT"
 
 #: classic/omp.xsl:762
 msgid "may get version information"
-msgstr ""
+msgstr "يمكنه الحصول على معلومات الإصدار"
 
 #: classic/omp.xsl:765 classic/dynamic_strings.xsl:765
 msgid "may get the help text"
-msgstr ""
+msgstr "يمكنه الحصول على نص مساعد"
 
 #: classic/omp.xsl:768 classic/dynamic_strings.xsl:793
 msgid "has write access to the authentication configuration"
-msgstr ""
+msgstr "لديه حق الكتابة لإعدادات الوثوقية"
 
 #: classic/omp.xsl:771 classic/dynamic_strings.xsl:816
 msgid "may restore items from the trashcan"
-msgstr ""
+msgstr "يمكن استعادة عناصر من سلة المحذوفات"
 
 #: classic/omp.xsl:778 classic/dynamic_strings.xsl:742
 msgid "has read access to SecInfo"
-msgstr ""
+msgstr "لديه حق القراءة للـ SecInfo"
 
 #: classic/omp.xsl:804 classic/dynamic_strings.xsl:706
 msgid "may get details about the authentication configuration"
-msgstr ""
+msgstr "يمكنه الحصول على تفاصيل إعدادات الوثوقية"
 
 #: classic/omp.xsl:808
 msgid "may get details about %1"
-msgstr ""
+msgstr "يمكنه الحصول على تفاصيل 1%"
 
 #: classic/omp.xsl:820 classic/dynamic_strings.xsl:831
 msgid "may sync the CERT feed"
-msgstr ""
+msgstr "يمكن مزامنة تلقيم الـ CERT"
 
 #: classic/omp.xsl:823 classic/dynamic_strings.xsl:832
 msgid "may sync the NVT feed"
-msgstr ""
+msgstr "يمكن مزامنة تلقيم الـ NVT"
 
 #: classic/omp.xsl:826 classic/dynamic_strings.xsl:833
 msgid "may sync the SCAP feed"
-msgstr ""
+msgstr "ممكن مزامنة تلقيم الـ SCAP"
 
 #: classic/omp.xsl:830 classic/dynamic_strings.xsl:834
 msgid "may sync %1"
-msgstr ""
+msgstr "ممكن مزامنة 1%"
 
 #: classic/omp.xsl:959
 msgid "Send feedback to"
-msgstr ""
+msgstr "أرسل انطباع إلى "
 
 #: classic/omp.xsl:959
 msgid "Feedback"
-msgstr ""
+msgstr "الانطباع"
 
 #: classic/omp.xsl:996 classic/omp.xsl:3214
 msgctxt "Pagination"
 msgid "First"
-msgstr ""
+msgstr "الأول"
 
 #: classic/omp.xsl:999 classic/omp.xsl:1014 classic/omp.xsl:3222
 #: classic/omp.xsl:3223
 msgctxt "Pagination"
 msgid "Already on first page"
-msgstr ""
+msgstr "موجود مسبقا في الصفحة الأولى"
 
 #: classic/omp.xsl:1006 classic/omp.xsl:1011 classic/omp.xsl:3218
 msgctxt "Pagination"
 msgid "Previous"
-msgstr ""
+msgstr "السابق"
 
 #: classic/omp.xsl:1021 classic/omp.xsl:3226
 msgid "%1 - %2 of %3"
-msgstr ""
+msgstr "%1 %2 من %3"
 
 #: classic/omp.xsl:1030 classic/omp.xsl:3231
 msgctxt "Pagination"
 msgid "Next"
-msgstr ""
+msgstr "التالي"
 
 #: classic/omp.xsl:1033 classic/omp.xsl:1043 classic/omp.xsl:3239
 #: classic/omp.xsl:3240
 msgctxt "Pagination"
 msgid "Already on last page"
-msgstr ""
+msgstr "موجود مسبقا في الصفحة الأخيرة"
 
 #: classic/omp.xsl:1040 classic/omp.xsl:3235
 msgctxt "Pagination"
 msgid "Last"
-msgstr ""
+msgstr "الأخير"
 
 #: classic/omp.xsl:1156 classic/omp.xsl:1294 classic/omp.xsl:10917
 #: classic/omp.xsl:12267 classic/omp.xsl:12883 classic/omp.xsl:13079
 #: classic/omp.xsl:13301 classic/omp.xsl:14091 classic/omp.xsl:35587
 #: classic/dynamic_strings.xsl:85
 msgid "Filter"
-msgstr ""
+msgstr "المرشّح"
 
 #: classic/omp.xsl:1166 classic/omp.xsl:3901
 msgid "Update Filter"
-msgstr ""
+msgstr "تحديثالمرشّح"
 
 #: classic/omp.xsl:1168 classic/omp.xsl:3087 classic/omp.xsl:3090
 #: classic/omp.xsl:3091 classic/omp.xsl:3904 classic/omp.xsl:29390
 #: classic/omp.xsl:29393 classic/omp.xsl:35459 classic/omp.xsl:35461
 msgctxt "Action Verb"
 msgid "Update"
-msgstr ""
+msgstr "تحديث"
 
 #: classic/omp.xsl:1171
 msgid "Reset Filter"
-msgstr ""
+msgstr "تصفير المرشّح"
 
 #: classic/omp.xsl:1176 classic/omp.xsl:1792 classic/omp.xsl:2524
 #: classic/omp.xsl:3059 classic/omp.xsl:3247 classic/omp.xsl:3905
@@ -434,7 +438,7 @@ msgstr ""
 #: classic/omp.xsl:38729 classic/omp.xsl:38783 classic/omp.xsl:39025
 #: classic/omp.xsl:39932 classic/gsad.xsl:705
 msgid "Help"
-msgstr ""
+msgstr "مساعدة"
 
 #: classic/omp.xsl:1176 classic/omp.xsl:3905
 msgid "Powerfilter"
@@ -443,7 +447,7 @@ msgstr ""
 #: classic/omp.xsl:1236 classic/omp.xsl:13437 classic/omp.xsl:13440
 #: classic/dynamic_strings.xsl:404
 msgid "New Filter"
-msgstr ""
+msgstr "مرشح جديد"
 
 #: classic/omp.xsl:1308 classic/omp.xsl:4682 classic/omp.xsl:12676
 #: classic/omp.xsl:13191 classic/omp.xsl:14203 classic/omp.xsl:24115
@@ -451,36 +455,36 @@ msgstr ""
 #: classic/omp.xsl:25738 classic/omp.xsl:26165 classic/omp.xsl:29833
 #: classic/omp.xsl:35722 classic/wizard.xsl:503 classic/dynamic_strings.xsl:64
 msgid "Task"
-msgstr ""
+msgstr "مهمَّة"
 
 #: classic/omp.xsl:1325 classic/omp.xsl:3485
 msgid "Show delta results"
-msgstr ""
+msgstr "إظهار نتائح دلتا"
 
 #: classic/omp.xsl:1339 classic/omp.xsl:3497
 msgctxt "Delta Result"
 msgid "same"
-msgstr ""
+msgstr "نفس"
 
 #: classic/omp.xsl:1353 classic/omp.xsl:3511
 msgctxt "Delta Result"
 msgid "new"
-msgstr ""
+msgstr "جديد"
 
 #: classic/omp.xsl:1367 classic/omp.xsl:3525
 msgctxt "Delta Result"
 msgid "gone"
-msgstr ""
+msgstr "رحل"
 
 #: classic/omp.xsl:1381 classic/omp.xsl:3539
 msgctxt "Delta Result"
 msgid "changed"
-msgstr ""
+msgstr "تم تغييره"
 
 #: classic/omp.xsl:1400 classic/omp.xsl:3078 classic/omp.xsl:3082
 #: classic/omp.xsl:29380 classic/omp.xsl:29384
 msgid "Apply overrides"
-msgstr ""
+msgstr "تنفيذ التجاوزات"
 
 #: classic/omp.xsl:1420 classic/omp.xsl:3573
 msgid "Auto-FP"
@@ -488,67 +492,67 @@ msgstr ""
 
 #: classic/omp.xsl:1433 classic/omp.xsl:3584
 msgid "Trust vendor security updates"
-msgstr ""
+msgstr "الثقة بالتحديثات الأمنية للمزود"
 
 #: classic/omp.xsl:1447 classic/omp.xsl:3596
 msgid "Full CVE match"
-msgstr ""
+msgstr "تطابق تام للـ CVE"
 
 #: classic/omp.xsl:1460 classic/omp.xsl:3607
 msgid "Partial CVE match"
-msgstr ""
+msgstr "تطابق CVE  جزئي"
 
 #: classic/omp.xsl:1469 classic/omp.xsl:3629
 msgid "Show Notes"
-msgstr ""
+msgstr "إظهار الملاحظات"
 
 #: classic/omp.xsl:1489 classic/omp.xsl:3645
 msgid "Show Overrides"
-msgstr ""
+msgstr "إظهار التجاوزات"
 
 #: classic/omp.xsl:1509 classic/omp.xsl:3654 classic/omp.xsl:3660
 msgid "Only show hosts that have results"
-msgstr ""
+msgstr "فقط أظهر المضيفين الذين لديهم نتائج"
 
 #: classic/omp.xsl:1529 classic/omp.xsl:3937 classic/omp.xsl:22008
 #: classic/omp.xsl:30885 classic/omp.xsl:30889 classic/omp.xsl:32028
 msgid "QoD"
-msgstr ""
+msgstr "QoD"
 
 #: classic/omp.xsl:1534
 msgctxt "QoD"
 msgid "must be at least"
-msgstr ""
+msgstr "يجب أن تكون على الأقل"
 
 #: classic/omp.xsl:1545 classic/omp.xsl:3728 classic/omp.xsl:18660
 #: classic/omp.xsl:18923 classic/omp.xsl:19383 classic/omp.xsl:37444
 #: classic/omp.xsl:38063
 msgid "Timezone"
-msgstr ""
+msgstr "المنطقة الزّمنيّة"
 
 #: classic/omp.xsl:1569
 msgid "Severity (Class)"
-msgstr ""
+msgstr "الخطورة (صنف)"
 
 #: classic/omp.xsl:1658
 msgid "First result"
-msgstr ""
+msgstr "النتيجة الأولى"
 
 #: classic/omp.xsl:1680 classic/omp.xsl:3113 classic/omp.xsl:3547
 msgid "Results per page"
-msgstr ""
+msgstr "نتائج بالصفحة"
 
 #: classic/omp.xsl:1695
 msgid "Sort by"
-msgstr ""
+msgstr "الفرز حسب"
 
 #: classic/omp.xsl:1755 classic/omp.xsl:15695
 msgid "Ascending"
-msgstr ""
+msgstr "تصاعدي"
 
 #: classic/omp.xsl:1766 classic/omp.xsl:15699
 msgid "Descending"
-msgstr ""
+msgstr "تنازلي"
 
 #: classic/omp.xsl:1806 classic/omp.xsl:12144 classic/omp.xsl:12256
 #: classic/omp.xsl:12302 classic/omp.xsl:12330 classic/omp.xsl:12893
@@ -562,21 +566,21 @@ msgstr ""
 #: classic/omp.xsl:31357 classic/omp.xsl:35188 classic/omp.xsl:35202
 #: classic/omp.xsl:35222
 msgid "Details"
-msgstr ""
+msgstr "التفاصيل"
 
 #: classic/omp.xsl:1836 classic/dynamic_strings.xsl:199
 msgid "Filter Details"
-msgstr ""
+msgstr "تفاصيل المرشحات"
 
 #: classic/omp.xsl:1980
 msgid "Cannot move to trashcan."
-msgstr ""
+msgstr "لا يمكن نقلها لسلة المهملات"
 
 #: classic/omp.xsl:1985 classic/omp.xsl:2215 classic/omp.xsl:6008
 #: classic/omp.xsl:17889 classic/omp.xsl:34965 classic/omp.xsl:34973
 msgctxt "Action Verb"
 msgid "To Trashcan"
-msgstr ""
+msgstr "إلى سلة المهملات"
 
 #: classic/omp.xsl:1999 classic/omp.xsl:2017 classic/omp.xsl:6030
 #: classic/omp.xsl:16640 classic/omp.xsl:16813 classic/omp.xsl:17101
@@ -590,7 +594,7 @@ msgstr ""
 #: classic/omp.xsl:39553 classic/omp.xsl:39571
 msgctxt "Action Verb"
 msgid "Edit"
-msgstr ""
+msgstr "تحرير"
 
 #: classic/omp.xsl:2029 classic/omp.xsl:2044 classic/omp.xsl:2045
 #: classic/omp.xsl:2052 classic/omp.xsl:2058 classic/omp.xsl:5902
@@ -600,18 +604,18 @@ msgstr ""
 #: classic/omp.xsl:30556
 msgctxt "Action Verb"
 msgid "Clone"
-msgstr ""
+msgstr "استنساخ"
 
 #: classic/omp.xsl:2060 classic/omp.xsl:17860 classic/omp.xsl:30284
 #: classic/omp.xsl:30558
 msgid "Permission to clone denied"
-msgstr ""
+msgstr "رُفضت السماحية للاستنساخ"
 
 #: classic/omp.xsl:2071 classic/omp.xsl:30291 classic/omp.xsl:30565
 #: classic/omp.xsl:39591 classic/omp.xsl:39683
 msgctxt "Action Verb"
 msgid "Export"
-msgstr ""
+msgstr "تصدير"
 
 #: classic/omp.xsl:2089 classic/omp.xsl:2090 classic/omp.xsl:2109
 #: classic/omp.xsl:2111 classic/omp.xsl:2121 classic/omp.xsl:2122
@@ -626,59 +630,59 @@ msgstr ""
 #: classic/omp.xsl:36428 classic/omp.xsl:38805 classic/omp.xsl:39053
 #: classic/omp.xsl:39542 classic/omp.xsl:39675
 msgid "Delete"
-msgstr ""
+msgstr "حدف"
 
 #: classic/omp.xsl:2141 classic/omp.xsl:2142 classic/omp.xsl:8224
 #: classic/omp.xsl:12266 classic/omp.xsl:16068 classic/omp.xsl:20328
 #: classic/omp.xsl:20712
 msgid "Restore"
-msgstr ""
+msgstr "استعادة"
 
 #: classic/omp.xsl:2160 classic/omp.xsl:2161 classic/omp.xsl:4562
 #: classic/omp.xsl:4566 classic/omp.xsl:4572 classic/omp.xsl:4590
 msgid "Resume"
-msgstr ""
+msgstr "معاودة "
 
 #: classic/omp.xsl:2172 classic/omp.xsl:4457 classic/omp.xsl:4516
 #: classic/omp.xsl:4533
 msgctxt "Action Verb"
 msgid "Start"
-msgstr ""
+msgstr "البدء"
 
 #: classic/omp.xsl:2201 classic/omp.xsl:2202
 msgctxt "Action Verb"
 msgid "Stop"
-msgstr ""
+msgstr "أوقف"
 
 #: classic/omp.xsl:2214
 msgid "Moving to trashcan..."
-msgstr ""
+msgstr "نقل إلى سلة المهملات"
 
 #: classic/omp.xsl:2216 classic/omp.xsl:34966
 msgctxt "Action Verb"
 msgid "Move To Trashcan"
-msgstr ""
+msgstr "نقل الى سلة المهملات"
 
 #: classic/omp.xsl:2412 classic/omp.xsl:25281 classic/omp.xsl:25680
 msgctxt "Severity"
 msgid "High"
-msgstr ""
+msgstr "عالي"
 
 #: classic/omp.xsl:2415 classic/omp.xsl:25282 classic/omp.xsl:25687
 msgctxt "Severity"
 msgid "Medium"
-msgstr ""
+msgstr "متوسط"
 
 #: classic/omp.xsl:2418 classic/omp.xsl:25283 classic/omp.xsl:25694
 msgctxt "Severity"
 msgid "Low"
-msgstr ""
+msgstr "منخفض"
 
 #: classic/omp.xsl:2421 classic/omp.xsl:24105 classic/omp.xsl:25262
 #: classic/omp.xsl:25284 classic/omp.xsl:25701
 msgctxt "Severity"
 msgid "Log"
-msgstr ""
+msgstr "سجل"
 
 #: classic/omp.xsl:2424
 msgctxt "Severity"
@@ -687,49 +691,49 @@ msgstr ""
 
 #: classic/omp.xsl:2524
 msgid "User Tags list"
-msgstr ""
+msgstr "قائمة الوسمات للمستخدم"
 
 #: classic/omp.xsl:2531
 msgid "New tag"
-msgstr ""
+msgstr "وسم جديد"
 
 #: classic/omp.xsl:2534 classic/omp.xsl:2542 classic/omp.xsl:2550
 msgid "Add tag"
-msgstr ""
+msgstr "إضافة وسم"
 
 #: classic/omp.xsl:2539 classic/omp.xsl:2547 classic/omp.xsl:14228
 #: classic/omp.xsl:14231 classic/dynamic_strings.xsl:405
 msgid "New Tag"
-msgstr ""
+msgstr "وسم جديد"
 
 #: classic/omp.xsl:2556 classic/omp.xsl:13875 classic/omp.xsl:14236
 #: classic/omp.xsl:14237 classic/omp.xsl:30296 classic/omp.xsl:30571
 #: classic/omp.xsl:36057 classic/dynamic_strings.xsl:118 classic/gsad.xsl:604
 msgid "Tags"
-msgstr ""
+msgstr "الأوسمة"
 
 #: classic/omp.xsl:2559
 msgid "User Tags"
-msgstr ""
+msgstr "أوسمة المستخدم"
 
 #: classic/omp.xsl:2565
 msgctxt "Tags"
 msgid "none"
-msgstr ""
+msgstr "لايوجد"
 
 #: classic/omp.xsl:2577
 msgid "Adding Tag..."
-msgstr ""
+msgstr "إضافة وسم"
 
 #: classic/omp.xsl:2588 classic/omp.xsl:2606 classic/omp.xsl:2607
 #: classic/omp.xsl:6854
 msgid "Add Tag"
-msgstr ""
+msgstr "إضافة وسم"
 
 #: classic/omp.xsl:2601 classic/omp.xsl:6869
 msgctxt "Tag"
 msgid "with Value"
-msgstr ""
+msgstr "مع قيمة"
 
 #: classic/omp.xsl:2656 classic/omp.xsl:2917 classic/omp.xsl:4464
 #: classic/omp.xsl:4691 classic/omp.xsl:4705 classic/omp.xsl:4729
@@ -776,7 +780,7 @@ msgstr ""
 #: classic/omp.xsl:38834 classic/omp.xsl:38968 classic/omp.xsl:39200
 #: classic/omp.xsl:39358 classic/omp.xsl:39405
 msgid "Name"
-msgstr ""
+msgstr "اسم"
 
 #: classic/omp.xsl:2657 classic/omp.xsl:13736 classic/omp.xsl:13891
 #: classic/omp.xsl:14295 classic/omp.xsl:14451 classic/omp.xsl:17128
@@ -784,7 +788,7 @@ msgstr ""
 #: classic/omp.xsl:35692 classic/omp.xsl:36937 classic/omp.xsl:37009
 #: classic/omp.xsl:37441 classic/omp.xsl:38060 classic/omp.xsl:39201
 msgid "Value"
-msgstr ""
+msgstr "القيمة"
 
 #: classic/omp.xsl:2658 classic/omp.xsl:4695 classic/omp.xsl:6333
 #: classic/omp.xsl:6497 classic/omp.xsl:7736 classic/omp.xsl:8498
@@ -804,7 +808,7 @@ msgstr ""
 #: classic/omp.xsl:34816 classic/omp.xsl:35142 classic/omp.xsl:35603
 #: classic/omp.xsl:38756 classic/omp.xsl:38979 classic/omp.xsl:39110
 msgid "Comment"
-msgstr ""
+msgstr "التعليق"
 
 #: classic/omp.xsl:2659 classic/omp.xsl:2923 classic/omp.xsl:5587
 #: classic/omp.xsl:13397 classic/omp.xsl:16583 classic/omp.xsl:17129
@@ -819,37 +823,37 @@ msgstr ""
 #: classic/omp.xsl:35695 classic/omp.xsl:35711 classic/omp.xsl:35727
 #: classic/omp.xsl:39204
 msgid "Actions"
-msgstr ""
+msgstr "الأفعال"
 
 #: classic/omp.xsl:2706 classic/dynamic_strings.xsl:200
 msgid "Tag Details"
-msgstr ""
+msgstr "تفاصيل الوسم"
 
 #: classic/omp.xsl:2786 classic/omp.xsl:2793 classic/omp.xsl:2800
 #: classic/omp.xsl:14380 classic/dynamic_strings.xsl:618
 msgid "Edit Tag"
-msgstr ""
+msgstr "تحرير الوسم"
 
 #: classic/omp.xsl:2816
 msgid "Toggling Tag..."
-msgstr ""
+msgstr "تبديل الوسم"
 
 #: classic/omp.xsl:2819 classic/omp.xsl:2820
 msgid "Enable Tag"
-msgstr ""
+msgstr "تفعيل الوسم"
 
 #: classic/omp.xsl:2823 classic/omp.xsl:2824
 msgid "Disable Tag"
-msgstr ""
+msgstr "تعطيل الوسم"
 
 #: classic/omp.xsl:2891 classic/omp.xsl:27016
 msgid "Create Multiple Permissions"
-msgstr ""
+msgstr "إنشاء صلاحيات متعددة"
 
 #: classic/omp.xsl:2899 classic/omp.xsl:2902 classic/omp.xsl:27265
 #: classic/omp.xsl:35994 classic/dynamic_strings.xsl:119 classic/gsad.xsl:610
 msgid "Permissions"
-msgstr ""
+msgstr "صلاحيات"
 
 #: classic/omp.xsl:2908
 msgctxt "Permissions"
@@ -863,35 +867,35 @@ msgstr ""
 #: classic/omp.xsl:27805 classic/omp.xsl:29142 classic/omp.xsl:34941
 #: classic/omp.xsl:35183 classic/omp.xsl:35217
 msgid "Description"
-msgstr ""
+msgstr "الوصف"
 
 #: classic/omp.xsl:2919 classic/omp.xsl:13744 classic/omp.xsl:13926
 #: classic/omp.xsl:14302 classic/omp.xsl:14458 classic/omp.xsl:26885
 #: classic/omp.xsl:27439 classic/omp.xsl:27469 classic/omp.xsl:27664
 #: classic/omp.xsl:35693
 msgid "Resource Type"
-msgstr ""
+msgstr "نوع المصدر"
 
 #: classic/omp.xsl:2920 classic/omp.xsl:27315 classic/omp.xsl:27440
 #: classic/omp.xsl:27473
 msgid "Resource"
-msgstr ""
+msgstr "المورد"
 
 #: classic/omp.xsl:2921 classic/omp.xsl:27441 classic/omp.xsl:27477
 msgctxt "Permission"
 msgid "Subject Type"
-msgstr ""
+msgstr "نوع الموضوع"
 
 #: classic/omp.xsl:2922 classic/omp.xsl:26878 classic/omp.xsl:27442
 #: classic/omp.xsl:27481 classic/omp.xsl:27575
 msgctxt "Permission"
 msgid "Subject"
-msgstr ""
+msgstr "الموضوع"
 
 #: classic/omp.xsl:2949 classic/omp.xsl:4451 classic/omp.xsl:7884
 #: classic/omp.xsl:7885
 msgid "Import Report"
-msgstr ""
+msgstr "تقرير الاستيراد"
 
 #: classic/omp.xsl:2964 classic/omp.xsl:10777 classic/omp.xsl:10850
 #: classic/omp.xsl:11787 classic/omp.xsl:11891 classic/omp.xsl:12658
@@ -899,23 +903,24 @@ msgstr ""
 #: classic/omp.xsl:14147 classic/omp.xsl:29411 classic/omp.xsl:34312
 #: classic/omp.xsl:34347
 msgid "Report"
-msgstr ""
+msgstr "تقرير"
 
 #: classic/omp.xsl:2968
 msgid "Container Task"
-msgstr ""
+msgstr "المهمة الحاوية"
 
 #: classic/omp.xsl:2983
 msgid "Create a new container task"
-msgstr ""
+msgstr "إنشاء مهمة حاوية جديدة"
 
 #: classic/omp.xsl:2991 classic/omp.xsl:4807 classic/omp.xsl:33769
 msgid "Add to Assets"
-msgstr ""
+msgstr "إضافة إلى الممتلكات"
 
 #: classic/omp.xsl:2994 classic/omp.xsl:33751
 msgid "Add to Assets with QoD>=%1%% and Overrides enabled"
 msgstr ""
+"أضف إلى الممتلكات كل ما فيه الـ QoD >= %1%% وفيه أمكانية الكتابة فوق مفعلة"
 
 #: classic/omp.xsl:2998 classic/omp.xsl:4842 classic/omp.xsl:6619
 #: classic/omp.xsl:6653 classic/omp.xsl:6697 classic/omp.xsl:7427
@@ -932,7 +937,7 @@ msgstr ""
 #: classic/omp.xsl:28801 classic/omp.xsl:28888 classic/omp.xsl:28952
 #: classic/omp.xsl:28962 classic/omp.xsl:29047 classic/omp.xsl:29131
 msgid "yes"
-msgstr ""
+msgstr "نعم"
 
 #: classic/omp.xsl:3002 classic/omp.xsl:4839 classic/omp.xsl:6638
 #: classic/omp.xsl:6662 classic/omp.xsl:6712 classic/omp.xsl:7437
@@ -945,11 +950,11 @@ msgstr ""
 #: classic/omp.xsl:28798 classic/omp.xsl:28885 classic/omp.xsl:28956
 #: classic/omp.xsl:28966 classic/omp.xsl:29044 classic/omp.xsl:29128
 msgid "no"
-msgstr ""
+msgstr "لا"
 
 #: classic/omp.xsl:3058
 msgid "Host Filtering"
-msgstr ""
+msgstr "ترشّح المضيف"
 
 #: classic/omp.xsl:3059 classic/omp.xsl:3247 classic/omp.xsl:14622
 #: classic/omp.xsl:14928 classic/omp.xsl:15251 classic/omp.xsl:15644
@@ -964,7 +969,7 @@ msgstr ""
 #: classic/omp.xsl:39297 classic/omp.xsl:39312 classic/omp.xsl:39432
 #: classic/omp.xsl:39639 classic/gsad.xsl:468
 msgid "Hosts"
-msgstr ""
+msgstr "مضيفين"
 
 #: classic/omp.xsl:3077 classic/omp.xsl:3081 classic/omp.xsl:3394
 #: classic/omp.xsl:3396 classic/omp.xsl:8336 classic/omp.xsl:8337
@@ -974,16 +979,16 @@ msgstr ""
 #: classic/omp.xsl:30862 classic/omp.xsl:31979 classic/omp.xsl:31980
 #: classic/omp.xsl:32004 classic/omp.xsl:32006
 msgid "No Overrides"
-msgstr ""
+msgstr "لا يوجد تجاوزات"
 
 #: classic/omp.xsl:3119
 msgid "Text phrase"
-msgstr ""
+msgstr "عبارة النص"
 
 #: classic/omp.xsl:3125 classic/omp.xsl:3125 classic/omp.xsl:3735
 #: classic/omp.xsl:3735
 msgid "Apply"
-msgstr ""
+msgstr "تطبيق"
 
 #: classic/omp.xsl:3128 classic/omp.xsl:3738 classic/omp.xsl:3933
 #: classic/omp.xsl:16579 classic/omp.xsl:16707 classic/omp.xsl:22794
@@ -997,37 +1002,37 @@ msgstr ""
 #: classic/omp.xsl:33934 classic/omp.xsl:35725 classic/omp.xsl:39161
 #: classic/omp.xsl:39374 classic/omp.xsl:39414
 msgid "Severity"
-msgstr ""
+msgstr "الخطورة"
 
 #: classic/omp.xsl:3206
 msgid "Filtered Hosts"
-msgstr ""
+msgstr "مضيفين مرشحين"
 
 #: classic/omp.xsl:3254
 msgid "No hosts available for Prognostic Report"
-msgstr ""
+msgstr "لا يوجد مضيفين متاحين للتقرير التكهني"
 
 #: classic/omp.xsl:3262
 msgid "No SCAP data available for Prognostic Report"
-msgstr ""
+msgstr "لا يوجد معطيات SCAP متاحة للتقرير التكهني"
 
 #: classic/omp.xsl:3271 classic/omp.xsl:3272 classic/omp.xsl:29352
 #: classic/omp.xsl:29358 classic/omp.xsl:29359 classic/omp.xsl:32314
 #: classic/omp.xsl:32316
 msgid "Prognostic Report"
-msgstr ""
+msgstr "التقرير التكهني"
 
 #: classic/omp.xsl:3280
 msgid "0 hosts"
-msgstr ""
+msgstr "0 مضيف"
 
 #: classic/omp.xsl:3316 classic/omp.xsl:3317
 msgid "Collapse details of all vulnerabilities"
-msgstr ""
+msgstr "طي تفاصيل كل الثغرات"
 
 #: classic/omp.xsl:3322 classic/omp.xsl:3323
 msgid "Expand to full details of all vulnerabilities"
-msgstr ""
+msgstr "التوسيع لإظهار تفاصيل كاملة لكل الثغرات"
 
 #: classic/omp.xsl:3387 classic/omp.xsl:3389 classic/omp.xsl:8342
 #: classic/omp.xsl:8343 classic/omp.xsl:8371 classic/omp.xsl:8373
@@ -1036,7 +1041,7 @@ msgstr ""
 #: classic/omp.xsl:31985 classic/omp.xsl:31986 classic/omp.xsl:32014
 #: classic/omp.xsl:32016
 msgid "Overrides are Applied"
-msgstr ""
+msgstr "إمكانية الكتابة فوق تم تنفيذها"
 
 #: classic/omp.xsl:3564 classic/omp.xsl:4817 classic/omp.xsl:6646
 #: classic/omp.xsl:7472
@@ -1093,7 +1098,7 @@ msgstr ""
 #: classic/omp.xsl:22727 classic/omp.xsl:22877 classic/omp.xsl:23142
 #: classic/omp.xsl:23331 classic/omp.xsl:23779
 msgid "ID"
-msgstr ""
+msgstr "المعرّف"
 
 #: classic/omp.xsl:4140 classic/omp.xsl:5822 classic/omp.xsl:13752
 #: classic/omp.xsl:16678 classic/omp.xsl:17448 classic/omp.xsl:17933
@@ -1103,7 +1108,7 @@ msgstr ""
 #: classic/omp.xsl:23786 classic/omp.xsl:30299 classic/omp.xsl:30576
 msgctxt "Date"
 msgid "Modified"
-msgstr ""
+msgstr "معدلة"
 
 #: classic/omp.xsl:4144 classic/omp.xsl:5818 classic/omp.xsl:16674
 #: classic/omp.xsl:17444 classic/omp.xsl:17929 classic/omp.xsl:21980
@@ -1113,32 +1118,32 @@ msgstr ""
 #: classic/omp.xsl:32042 classic/omp.xsl:39202
 msgctxt "Date"
 msgid "Created"
-msgstr ""
+msgstr "أُنشئ"
 
 #: classic/omp.xsl:4148 classic/omp.xsl:5826
 msgid "Owner"
-msgstr ""
+msgstr "المالك"
 
 #: classic/omp.xsl:4170 classic/omp.xsl:5508
 msgid "%1 of %2"
-msgstr ""
+msgstr "%1 من %2"
 
 #: classic/omp.xsl:4238 classic/omp.xsl:8411 classic/omp.xsl:9866
 #: classic/omp.xsl:39702
 msgid "Applied filter:"
-msgstr ""
+msgstr " المرشّح المطبق"
 
 #: classic/omp.xsl:4253
 msgid "The report is empty. This can happen for the following reasons:"
-msgstr ""
+msgstr "التقرير فارغ: هذا يمكن أن يحدث للأسباب التالية"
 
 #: classic/omp.xsl:4259
 msgid "The scan just started and no results have arrived yet."
-msgstr ""
+msgstr "المسح بدأ للتو ولا يوجد بعد نتائج"
 
 #: classic/omp.xsl:4265 classic/omp.xsl:4280
 msgid "Click here to reload this page and update the status."
-msgstr ""
+msgstr "انقر هنا لتحميل الصفحة من جديد وتحديث الحالة"
 
 #: classic/omp.xsl:4274
 msgid "The scan is still running and no results have arrived yet."
@@ -1180,11 +1185,11 @@ msgstr ""
 
 #: classic/omp.xsl:4342
 msgid "Add log messages to the filter"
-msgstr ""
+msgstr "إضافة سجل رسائل للمرشح"
 
 #: classic/omp.xsl:4345
 msgid "Include log messages in your filter setting."
-msgstr ""
+msgstr "تضمين رسائل سجل في إعداد المرشح"
 
 #: classic/omp.xsl:4355
 msgid "You are using keywords setting a minimum limit on severity."
@@ -1402,13 +1407,13 @@ msgstr ""
 #: classic/omp.xsl:14175 classic/omp.xsl:16661 classic/omp.xsl:16663
 #: classic/omp.xsl:17944 classic/wizard.xsl:228 classic/dynamic_strings.xsl:77
 msgid "Scan Config"
-msgstr ""
+msgstr "إعدادات المسح"
 
 #: classic/omp.xsl:4930 classic/omp.xsl:6378 classic/omp.xsl:7288
 #: classic/omp.xsl:13170 classic/omp.xsl:14189 classic/omp.xsl:20750
 #: classic/omp.xsl:34442 classic/wizard.xsl:421 classic/dynamic_strings.xsl:82
 msgid "Slave"
-msgstr ""
+msgstr "التابع"
 
 #: classic/omp.xsl:4956 classic/omp.xsl:6430 classic/omp.xsl:7660
 msgid "Order for target hosts"
@@ -1457,7 +1462,7 @@ msgstr ""
 #: classic/omp.xsl:29539 classic/omp.xsl:29829 classic/omp.xsl:35723
 #: classic/omp.xsl:37151
 msgid "Status"
-msgstr ""
+msgstr "الحالة"
 
 #: classic/omp.xsl:5012
 msgid "Duration of last scan"
@@ -1506,11 +1511,11 @@ msgstr ""
 #: classic/omp.xsl:33207 classic/omp.xsl:35976 classic/dynamic_strings.xsl:96
 #: classic/gsad.xsl:441
 msgid "Notes"
-msgstr ""
+msgstr "الملاحظات"
 
 #: classic/omp.xsl:5072
 msgid "Notes on Task %1"
-msgstr ""
+msgstr "الملاحطات على المهمة 1%"
 
 #: classic/omp.xsl:5079 classic/omp.xsl:17313 classic/omp.xsl:23474
 #: classic/omp.xsl:26021 classic/omp.xsl:30973 classic/omp.xsl:30974
@@ -1518,7 +1523,7 @@ msgstr ""
 #: classic/omp.xsl:33218 classic/omp.xsl:35985 classic/dynamic_strings.xsl:97
 #: classic/gsad.xsl:448
 msgid "Overrides"
-msgstr ""
+msgstr "تجاوز"
 
 #: classic/omp.xsl:5083
 msgid "Overrides on Task %1"
@@ -1665,7 +1670,7 @@ msgstr ""
 
 #: classic/omp.xsl:6524
 msgid "Create a new target"
-msgstr ""
+msgstr "إنشاء هدف جديدة"
 
 #: classic/omp.xsl:6545 classic/omp.xsl:7241 classic/omp.xsl:34583
 #: classic/omp.xsl:34655
@@ -1721,7 +1726,7 @@ msgstr ""
 
 #: classic/omp.xsl:7092
 msgid "Create a new scan config"
-msgstr ""
+msgstr "إنشاء إعداد مسح جديد"
 
 #: classic/omp.xsl:7104 classic/omp.xsl:7197 classic/omp.xsl:15251
 #: classic/omp.xsl:15287 classic/omp.xsl:15298 classic/omp.xsl:15325
@@ -1731,7 +1736,7 @@ msgstr ""
 
 #: classic/omp.xsl:7186
 msgid "Create a new scan target"
-msgstr ""
+msgstr "إنشاء هدف مسح جديد"
 
 #: classic/omp.xsl:7324
 msgid "Create a slave"
@@ -1821,7 +1826,7 @@ msgstr ""
 #: classic/omp.xsl:18262 classic/omp.xsl:18274 classic/omp.xsl:35570
 #: classic/omp.xsl:35572 classic/omp.xsl:35726
 msgid "Trend"
-msgstr ""
+msgstr "إتجاه"
 
 #: classic/omp.xsl:8478 classic/dynamic_strings.xsl:396
 msgid "New Credential"
@@ -2250,13 +2255,13 @@ msgstr ""
 #: classic/omp.xsl:23134 classic/omp.xsl:23159 classic/dynamic_strings.xsl:102
 #: classic/gsad.xsl:513
 msgid "CERT-Bund Advisories"
-msgstr ""
+msgstr "CERT-Bund Advisories"
 
 #: classic/omp.xsl:10332 classic/omp.xsl:11127 classic/omp.xsl:23322
 #: classic/omp.xsl:23323 classic/omp.xsl:23348 classic/dynamic_strings.xsl:103
 #: classic/gsad.xsl:517
 msgid "DFN-CERT Advisories"
-msgstr ""
+msgstr "DFN-CERT Advisories"
 
 #: classic/omp.xsl:10333 classic/omp.xsl:14119 classic/omp.xsl:22897
 #: classic/dynamic_strings.xsl:70
@@ -2430,7 +2435,7 @@ msgstr ""
 #: classic/omp.xsl:11132 classic/omp.xsl:22868 classic/omp.xsl:22869
 #: classic/omp.xsl:22894 classic/dynamic_strings.xsl:101 classic/gsad.xsl:509
 msgid "OVAL Definitions"
-msgstr ""
+msgstr "تعاريف الـ OVAL "
 
 #: classic/omp.xsl:11587
 msgid "Log Level"
@@ -2527,7 +2532,7 @@ msgstr ""
 #: classic/omp.xsl:13093 classic/omp.xsl:14105 classic/omp.xsl:30049
 #: classic/dynamic_strings.xsl:65
 msgid "Note"
-msgstr ""
+msgstr "ملاحظة"
 
 #: classic/omp.xsl:13100 classic/omp.xsl:14126 classic/dynamic_strings.xsl:66
 msgid "Override"
@@ -2565,7 +2570,7 @@ msgstr ""
 
 #: classic/omp.xsl:13156 classic/gsad.xsl:528
 msgid "SecInfo"
-msgstr ""
+msgstr "SecInfo"
 
 #: classic/omp.xsl:13198 classic/omp.xsl:14210 classic/omp.xsl:26731
 #: classic/omp.xsl:27588 classic/omp.xsl:36462 classic/dynamic_strings.xsl:88
@@ -2663,11 +2668,11 @@ msgstr ""
 
 #: classic/omp.xsl:14077 classic/omp.xsl:23162 classic/dynamic_strings.xsl:71
 msgid "CERT-Bund Advisory"
-msgstr ""
+msgstr "CERT-Bund Advisory"
 
 #: classic/omp.xsl:14084 classic/omp.xsl:23351 classic/dynamic_strings.xsl:72
 msgid "DFN-CERT Advisory"
-msgstr ""
+msgstr "DFN-CERT Advisory"
 
 #: classic/omp.xsl:14112 classic/omp.xsl:17126 classic/omp.xsl:23803
 #: classic/omp.xsl:24922 classic/omp.xsl:24942 classic/omp.xsl:26251
@@ -2729,7 +2734,7 @@ msgstr ""
 
 #: classic/omp.xsl:14771 classic/omp.xsl:15051 classic/omp.xsl:15371
 msgid "Scan Config Default"
-msgstr ""
+msgstr "إعدادات المسح الإفتراضي"
 
 #: classic/omp.xsl:14787 classic/omp.xsl:15096 classic/omp.xsl:15416
 #: classic/omp.xsl:16190
@@ -2782,15 +2787,15 @@ msgstr ""
 
 #: classic/omp.xsl:15707 classic/wizard.xsl:343
 msgid "SSH Credential"
-msgstr ""
+msgstr "إعتمادات الـ SSH"
 
 #: classic/omp.xsl:15712 classic/wizard.xsl:366
 msgid "SMB Credential"
-msgstr ""
+msgstr "إعتمادات الـ SMB"
 
 #: classic/omp.xsl:15717 classic/wizard.xsl:387
 msgid "ESXi Credential"
-msgstr ""
+msgstr "إعتمادات الـ ESXi"
 
 #: classic/omp.xsl:15722
 msgid "SNMP Credential"
@@ -2816,7 +2821,7 @@ msgstr "المهام التي تستخدم هذا الهدف"
 
 #: classic/omp.xsl:16431 classic/omp.xsl:17829 classic/dynamic_strings.xsl:397
 msgid "New Scan Config"
-msgstr ""
+msgstr "إعداد مسح جديد"
 
 #: classic/omp.xsl:16460
 msgctxt "Scan Config"
@@ -2836,14 +2841,14 @@ msgstr ""
 #: classic/omp.xsl:16502 classic/omp.xsl:16505 classic/omp.xsl:16529
 #: classic/omp.xsl:17835
 msgid "Import Scan Config"
-msgstr ""
+msgstr "إستيراد إعداد مسح"
 
 #: classic/omp.xsl:16510 classic/omp.xsl:16511 classic/omp.xsl:16657
 #: classic/omp.xsl:16685 classic/omp.xsl:17427 classic/omp.xsl:17455
 #: classic/omp.xsl:17866 classic/omp.xsl:17867 classic/omp.xsl:17941
 #: classic/omp.xsl:35940 classic/dynamic_strings.xsl:109 classic/gsad.xsl:554
 msgid "Scan Configs"
-msgstr ""
+msgstr "إعدادات المسح"
 
 #: classic/omp.xsl:16523
 msgid "Import XML config"
@@ -2851,7 +2856,7 @@ msgstr ""
 
 #: classic/omp.xsl:16555 classic/omp.xsl:17576
 msgid "Edit Scan Config Family"
-msgstr ""
+msgstr "تحرير عائلة إعداد المسح"
 
 #: classic/omp.xsl:16563 classic/omp.xsl:16697 classic/omp.xsl:17302
 #: classic/omp.xsl:23460 classic/dynamic_strings.xsl:76
@@ -2903,7 +2908,7 @@ msgstr ""
 
 #: classic/omp.xsl:16657 classic/omp.xsl:16688 classic/omp.xsl:17595
 msgid "Scan Config Family Details"
-msgstr ""
+msgstr "تفاصيل عائلة إعداد المسح"
 
 #: classic/omp.xsl:16670 classic/omp.xsl:17440
 msgid "Config ID"
@@ -2925,7 +2930,7 @@ msgstr ""
 #: classic/omp.xsl:16779 classic/omp.xsl:16785 classic/omp.xsl:17296
 #: classic/omp.xsl:17427 classic/omp.xsl:17458
 msgid "Scan Config NVT Details"
-msgstr ""
+msgstr "تفاصيل إعداد مسح الـ NVT"
 
 #: classic/omp.xsl:16800 classic/omp.xsl:16838 classic/omp.xsl:16867
 msgid "File attached."
@@ -2933,7 +2938,7 @@ msgstr ""
 
 #: classic/omp.xsl:16812
 msgid "Edit Scan Config NVT Details"
-msgstr ""
+msgstr "تحرير تفاصيل إعداد المسح للـ NVT"
 
 #: classic/omp.xsl:16818 classic/omp.xsl:16820 classic/omp.xsl:16881
 #: classic/omp.xsl:16883 classic/omp.xsl:17107 classic/omp.xsl:17109
@@ -3008,7 +3013,7 @@ msgstr ""
 
 #: classic/omp.xsl:17392
 msgid "Edit Scan Config NVT"
-msgstr ""
+msgstr "تحرير NVT إعداد المسح"
 
 #: classic/omp.xsl:17399 classic/omp.xsl:17466 classic/omp.xsl:23813
 msgid "Preferences"
@@ -3016,7 +3021,7 @@ msgstr ""
 
 #: classic/omp.xsl:17431 classic/omp.xsl:17433
 msgid "Scan Config Family"
-msgstr ""
+msgstr "عائلة إعداد المسح"
 
 #: classic/omp.xsl:17509 classic/omp.xsl:17612 classic/omp.xsl:17680
 #: classic/omp.xsl:17683 classic/omp.xsl:17781
@@ -3093,24 +3098,24 @@ msgstr ""
 
 #: classic/omp.xsl:17825 classic/dynamic_strings.xsl:192
 msgid "Scan Config Details"
-msgstr ""
+msgstr "تفاصيل إعداد المسح"
 
 #: classic/omp.xsl:17884 classic/omp.xsl:17885 classic/omp.xsl:17897
 #: classic/dynamic_strings.xsl:440
 msgid "Scan Config is not writable"
-msgstr ""
+msgstr "إعداد المسح غير قابل للتحرير"
 
 #: classic/omp.xsl:17886
 msgid "Cannot move Scan Config to trashcan"
-msgstr ""
+msgstr "لا يمكن نقل إعداد المسح إلى سلة المهملات"
 
 #: classic/omp.xsl:17903 classic/omp.xsl:18125 classic/dynamic_strings.xsl:610
 msgid "Edit Scan Config"
-msgstr ""
+msgstr "تحرير إعداد المسح"
 
 #: classic/omp.xsl:17909 classic/dynamic_strings.xsl:270
 msgid "Export Scan Config as XML"
-msgstr ""
+msgstr "تصدير إعداد المسح كلمف XML"
 
 #: classic/omp.xsl:17915 classic/omp.xsl:17916
 msgid "Sync Config"
@@ -3188,7 +3193,7 @@ msgstr ""
 
 #: classic/omp.xsl:18518 classic/dynamic_strings.xsl:420
 msgid "Scan Config is still in use"
-msgstr ""
+msgstr "إعداد المسح لا يزال قيد الاستخدام"
 
 #: classic/omp.xsl:18598 classic/dynamic_strings.xsl:399
 msgid "New Schedule"
@@ -3688,7 +3693,7 @@ msgstr ""
 
 #: classic/omp.xsl:23128
 msgid "CERT-Bund Details"
-msgstr ""
+msgstr "تفاصيل الـ CERT-Bund"
 
 #: classic/omp.xsl:23185
 msgid "Software"
@@ -3708,7 +3713,7 @@ msgstr ""
 
 #: classic/omp.xsl:23219
 msgid "CERT-Bund risk rating"
-msgstr ""
+msgstr "تصنيف خطورة الـ CERT-Bund"
 
 #: classic/omp.xsl:23225
 msgid "Reference"
@@ -3738,17 +3743,19 @@ msgstr ""
 
 #: classic/omp.xsl:23295
 msgid "CERT-Bund advisory not found"
-msgstr ""
+msgstr "CERT-Bund advisory غير موجود"
 
 #: classic/omp.xsl:23296
 msgid ""
 "No CERT-Bund advisory with the requested ID could be found in the SCAP "
 "database."
 msgstr ""
+"لم يتم العثور على الـ CERT-Bund advisory ذو الرقم المطلوب في قاعدة بيانات "
+"الـ SCAP"
 
 #: classic/omp.xsl:23317 classic/dynamic_strings.xsl:188
 msgid "DFN-CERT Advisory Details"
-msgstr ""
+msgstr "تفاصيل الـ DFN-CERT Advisory"
 
 #: classic/omp.xsl:23368
 msgid "Advisory link"
@@ -3761,13 +3768,15 @@ msgstr ""
 
 #: classic/omp.xsl:23438
 msgid "DFN-CERT advisory not found"
-msgstr ""
+msgstr "DFN-CERT advisory غير موجود"
 
 #: classic/omp.xsl:23439
 msgid ""
 "No DFN-CERT advisory with the requested ID could be found in the SCAP "
 "database."
 msgstr ""
+"لم يتم العثور على الـ DFN-CERT advisory ذو الرقم المطلوب في قاعدة بيانات الـ "
+"SCAP"
 
 #: classic/omp.xsl:23468
 msgid "Notes on NVT %1"
@@ -3810,7 +3819,7 @@ msgstr ""
 #: classic/omp.xsl:31170 classic/omp.xsl:31173 classic/omp.xsl:31178
 #: classic/omp.xsl:31181
 msgid "Add Note"
-msgstr ""
+msgstr "إضافة ملاحظة"
 
 #: classic/omp.xsl:23768 classic/omp.xsl:23770 classic/omp.xsl:31195
 #: classic/omp.xsl:31197 classic/omp.xsl:31202 classic/omp.xsl:31205
@@ -3821,7 +3830,7 @@ msgstr ""
 
 #: classic/omp.xsl:23838 classic/dynamic_strings.xsl:392
 msgid "New Note"
-msgstr ""
+msgstr "ملاحظة جديدة"
 
 #: classic/omp.xsl:23885 classic/omp.xsl:24290 classic/omp.xsl:24742
 #: classic/omp.xsl:25041 classic/omp.xsl:25469 classic/omp.xsl:26044
@@ -3924,7 +3933,7 @@ msgstr ""
 #: classic/omp.xsl:30182 classic/omp.xsl:30189 classic/omp.xsl:30196
 #: classic/omp.xsl:30203 classic/dynamic_strings.xsl:605
 msgid "Edit Note"
-msgstr ""
+msgstr "تحرير ملاحظة"
 
 #: classic/omp.xsl:24325 classic/omp.xsl:24781 classic/omp.xsl:25504
 #: classic/omp.xsl:26083
@@ -3940,7 +3949,7 @@ msgstr ""
 
 #: classic/omp.xsl:24546
 msgid "Save Note"
-msgstr ""
+msgstr "احفظ ملاحظة"
 
 #: classic/omp.xsl:24603 classic/omp.xsl:24685 classic/omp.xsl:24840
 #: classic/omp.xsl:24865
@@ -3961,7 +3970,7 @@ msgstr ""
 
 #: classic/omp.xsl:24722
 msgid "Note for NVT"
-msgstr ""
+msgstr "ملاحظة للـ NVT"
 
 #: classic/omp.xsl:24791 classic/omp.xsl:26093
 msgctxt "Note or Override"
@@ -3983,7 +3992,7 @@ msgstr ""
 
 #: classic/omp.xsl:24899
 msgid "Permissions for this Note"
-msgstr ""
+msgstr "سماحيات لهذه الملاحظة"
 
 #: classic/omp.xsl:24994 classic/dynamic_strings.xsl:393
 msgid "New Override"
@@ -4883,7 +4892,7 @@ msgstr ""
 
 #: classic/omp.xsl:34324
 msgid "Scan 1 status"
-msgstr ""
+msgstr "حالة المسح 1"
 
 #: classic/omp.xsl:34353
 msgid "Scan 2 started"
@@ -4895,7 +4904,7 @@ msgstr ""
 
 #: classic/omp.xsl:34361
 msgid "Scan 2 status"
-msgstr ""
+msgstr "حالة المسح 2"
 
 #: classic/omp.xsl:34386
 msgid "Scan initiated"
@@ -4915,7 +4924,7 @@ msgstr ""
 
 #: classic/omp.xsl:34418
 msgid "Scan status"
-msgstr ""
+msgstr "حالة ال Feed"
 
 #: classic/omp.xsl:34508 classic/omp.xsl:34577 classic/omp.xsl:34580
 #: classic/omp.xsl:34650 classic/omp.xsl:34653
@@ -5185,7 +5194,7 @@ msgstr ""
 
 #: classic/omp.xsl:37141 classic/gsad.xsl:646
 msgid "Feed Status"
-msgstr ""
+msgstr "حالة الـ Feed"
 
 #: classic/omp.xsl:37148
 msgctxt "Feed"
@@ -5234,7 +5243,7 @@ msgstr ""
 
 #: classic/omp.xsl:37257
 msgid "No status info available"
-msgstr ""
+msgstr "لا معلومات عن الحالة."
 
 #: classic/omp.xsl:37263
 msgid "OMP Error"
@@ -5296,11 +5305,11 @@ msgstr ""
 
 #: classic/omp.xsl:37551 classic/omp.xsl:38232
 msgid "Default OpenVAS Scan Config"
-msgstr ""
+msgstr "إعداد المسح الافتراضي للـ OpenVAS"
 
 #: classic/omp.xsl:37563 classic/omp.xsl:38245
 msgid "Default OSP Scan Config"
-msgstr ""
+msgstr "إعداد المسح الافتراضي للـ OSP"
 
 #: classic/omp.xsl:37577 classic/omp.xsl:38260
 msgid "Default SSH Credential"
@@ -5308,7 +5317,7 @@ msgstr ""
 
 #: classic/omp.xsl:37589 classic/omp.xsl:38273
 msgid "Default SMB Credential"
-msgstr ""
+msgstr "إعتمادات الـ SMB الإفتراضية"
 
 #: classic/omp.xsl:37601 classic/omp.xsl:38286
 msgid "Default ESXi Credential"
@@ -5372,7 +5381,7 @@ msgstr ""
 
 #: classic/omp.xsl:37777 classic/omp.xsl:38483
 msgid "Notes Filter"
-msgstr ""
+msgstr "مرشح الملاحظات"
 
 #: classic/omp.xsl:37786 classic/omp.xsl:38494
 msgid "Overrides Filter"
@@ -5440,15 +5449,15 @@ msgstr ""
 
 #: classic/omp.xsl:37930 classic/omp.xsl:38670 classic/dynamic_strings.xsl:319
 msgid "CERT-Bund Filter"
-msgstr ""
+msgstr "مرشح الـ CERT-Bund "
 
 #: classic/omp.xsl:37939 classic/omp.xsl:38681 classic/dynamic_strings.xsl:320
 msgid "DFN-CERT Filter"
-msgstr ""
+msgstr "مرشح الـ DFN-CERT"
 
 #: classic/omp.xsl:37948 classic/omp.xsl:38693 classic/dynamic_strings.xsl:322
 msgid "All SecInfo Filter"
-msgstr ""
+msgstr "جميع مرشحات الـ SecInfo"
 
 #: classic/omp.xsl:37959
 msgid "Default CA Cert (immutable)"
@@ -5494,7 +5503,7 @@ msgstr ""
 
 #: classic/omp.xsl:38822 classic/gsad.xsl:472
 msgid "Operating Systems"
-msgstr ""
+msgstr "أنظمة التشغيل"
 
 #: classic/omp.xsl:38850
 msgid "Latest Severity"
@@ -5755,15 +5764,15 @@ msgstr ""
 
 #: classic/wizard.xsl:59 classic/wizard.xsl:167
 msgid "Task Wizard"
-msgstr ""
+msgstr "معالج المهمة"
 
 #: classic/wizard.xsl:66 classic/wizard.xsl:451
 msgid "Advanced Task Wizard"
-msgstr ""
+msgstr "معالج المهمة المتقدم"
 
 #: classic/wizard.xsl:73 classic/wizard.xsl:618
 msgid "Modify Task Wizard"
-msgstr ""
+msgstr "تعديل معالج المهمة"
 
 #: classic/wizard.xsl:89
 msgid "Welcome to the scan task management!"
@@ -5783,23 +5792,23 @@ msgstr ""
 
 #: classic/wizard.xsl:105
 msgid "Quick start: Immediately scan an IP address"
-msgstr ""
+msgstr "بداية سريعة: قم بمسح عنوان IP حالاً"
 
 #: classic/wizard.xsl:108
 msgid "IP address or hostname:"
-msgstr ""
+msgstr "عنوان IP أو اسم المضيف"
 
 #: classic/wizard.xsl:131
 msgid "The default address is either your computer or your network gateway."
-msgstr ""
+msgstr "العنوان الافتراضي إما أن يكون جهازك أو عنوان بوابة شبكية"
 
 #: classic/wizard.xsl:134
 msgid "As a short-cut I will do the following for you:"
-msgstr ""
+msgstr "كاختصار سأقوم بعمل التالي من أجلك:"
 
 #: classic/wizard.xsl:136
 msgid "Create a new Target"
-msgstr ""
+msgstr "إنشاء هدف جديد"
 
 #: classic/wizard.xsl:137
 msgid "Create a new Task"
@@ -5821,20 +5830,25 @@ msgid ""
 "you can already jump into the scan report via the link in the Reports Total "
 "column and review the results collected so far."
 msgstr ""
+"في الحقيقة, يجب عليك أن لا تستريح. حالما يصبح تقدم المسح أكثر من واحد "
+"بالمئة, تستطيع الذهاب مباشرة إلى تقرير المسح عبر الرابط في عمود التقارير "
+"الكلية وعرض النتائج المجموعة حتى الآن."
 
 #: classic/wizard.xsl:146
 msgid ""
 "When creating the Target and Task I will use the defaults as configured in "
 "\"My Settings\"."
 msgstr ""
+"عند إنشاء الهدف والمسح سوف أستخدم الإعدادت الإفتراضية كما قد تم إعدادها في \""
+"إعداداتي\""
 
 #: classic/wizard.xsl:149
 msgid "By clicking the New Task icon"
-msgstr ""
+msgstr "بالضغط على إيقونة \"مهمة جديدة\""
 
 #: classic/wizard.xsl:157
 msgid "you can create a new Task yourself."
-msgstr ""
+msgstr "يمكنك إنشاء مهمة جديدة بنفسه"
 
 #: classic/wizard.xsl:196
 msgid ""
@@ -5846,6 +5860,8 @@ msgid ""
 "All you need to do is enter a name for the new task and the IP address or "
 "host name of the target, and select a scan configuration."
 msgstr ""
+"كل ما عليك فعله هو أن تدخل اسم المهمة الجديدة والعنوان الشبكي أو اسم المضيف "
+"للهدف, واختيار إعدادات المسح."
 
 #: classic/wizard.xsl:198
 msgid ""
@@ -5853,6 +5869,8 @@ msgid ""
 " for a later date and time, or just create the task so you can run it "
 "manually later."
 msgstr ""
+"يمكنك إختيار فيما إذا أردتني أن أنفذ المسح مباشرة, جدول المهمة من أجل تاريخ "
+"ووقت آخر, أو فقط أنشئ المهمة بحيث يمكنك تنفيذها يدويا فيما بعد."
 
 #: classic/wizard.xsl:199
 msgid ""
@@ -5860,24 +5878,28 @@ msgid ""
 "credentials, but you can also run an unauthenticated scan by not selecting "
 "any credentials."
 msgstr ""
+"من أجل تنفيذ مسح موثوق, عليك اختيار اعتمادات الـ  SSH  و (أو) SMB, لكن "
+"تستطيع أيضا تنفيذ مسح غير موثوق عن طريق عدم اختيار أي اعتمادات."
 
 #: classic/wizard.xsl:202
 msgid ""
 "If you enter an email address in the \"Email report to\" field, a report of "
 "the scan will be sent to this address once it is finished."
 msgstr ""
+"إذا أدخلت بريد الكتروني في حقل \"إرسال تقرير إلى البريد\", سيتم إرسال تقرير "
+"المسح إلى هذا البريد ريثما تتم عملية المسح. "
 
 #: classic/wizard.xsl:206
 msgid "Finally, you can select a slave which will run the scan."
-msgstr ""
+msgstr "في النهاية يمكنك اختيار خادم الذي سيقوم بعملية المسح."
 
 #: classic/wizard.xsl:209
 msgid "For any other setting I will apply the defaults from \"My Settings\"."
-msgstr ""
+msgstr "من أجل إعدادا آخر سأقوم بتطبيق الإعدادات الإفتراضية من \"إعداداتي\""
 
 #: classic/wizard.xsl:215
 msgid "Quick start: Create a new task"
-msgstr ""
+msgstr "بداية سريعة: إنشاء مهمة جديدة"
 
 #: classic/wizard.xsl:219
 msgid "Task Name"
@@ -5885,7 +5907,7 @@ msgstr ""
 
 #: classic/wizard.xsl:249
 msgid "Target Host(s)"
-msgstr ""
+msgstr "المضيف(المضيفين) الهدف"
 
 #: classic/wizard.xsl:258 classic/wizard.xsl:523
 msgid "Start time"
@@ -5893,19 +5915,19 @@ msgstr ""
 
 #: classic/wizard.xsl:264
 msgid "Start immediately"
-msgstr ""
+msgstr "البدء في الحال"
 
 #: classic/wizard.xsl:270 classic/wizard.xsl:535
 msgid "Create Schedule"
-msgstr ""
+msgstr "إنشاء مجدولة"
 
 #: classic/wizard.xsl:335
 msgid "Do not start automatically"
-msgstr ""
+msgstr "لا تبدأ تلقائياً"
 
 #: classic/wizard.xsl:410 classic/wizard.xsl:601
 msgid "Email report to"
-msgstr ""
+msgstr "إرسال بريد الكتروني إلى "
 
 #: classic/wizard.xsl:479
 msgid ""
@@ -5914,20 +5936,24 @@ msgid ""
 "will then create them for you automatically and assign them to the selected "
 "task."
 msgstr ""
+"سأقوم بتحرير مهمة موجودة لأجلك. الاختلاف مع صندوق تحرير المهمة هو انه هنا "
+"تستطيع إدخال القيم للعناصر المرتبطة مباشرة. سوف أقوم بعدها بإنشائهم تلقائيا "
+"لأجلك و إدراجهم للمهمة المحددة."
 
 #: classic/wizard.xsl:483
 msgid "Please be aware that"
-msgstr ""
+msgstr "الرجاء الإنتباه أن"
 
 #: classic/wizard.xsl:486
 msgid "setting a start time overwrites a possibly already existing one,"
-msgstr ""
+msgstr "إعداد وقت بداية يقوم بالكتابة فوق واحدة موجودة مسبقا"
 
 #: classic/wizard.xsl:489
 msgid ""
 "setting an Email Address means adding an additional Alert, not replacing an "
 "existing one."
 msgstr ""
+"إعداد إيميل ألكتروني يعني إضافة منبه إضافي, وليس استبدال منبه موجود مسبقا"
 
 #: classic/wizard.xsl:500
 msgid "Quick edit: Modify a task"
@@ -5975,11 +6001,11 @@ msgstr ""
 
 #: classic/dynamic_strings.xsl:78
 msgid "Scan Configuration"
-msgstr ""
+msgstr "إعدادات المسح"
 
 #: classic/dynamic_strings.xsl:104
 msgid "All SecInfo Information"
-msgstr ""
+msgstr "جميع معلومات الـ SecInfo"
 
 #: classic/dynamic_strings.xsl:108
 msgid "Configs"
@@ -5987,7 +6013,7 @@ msgstr ""
 
 #: classic/dynamic_strings.xsl:110
 msgid "Scan Configurations"
-msgstr ""
+msgstr "إعدادات المسح"
 
 #: classic/dynamic_strings.xsl:127
 msgid "Global Task"
@@ -6019,11 +6045,11 @@ msgstr ""
 
 #: classic/dynamic_strings.xsl:134
 msgid "Global Scan Config"
-msgstr ""
+msgstr "إعداد المسح العام"
 
 #: classic/dynamic_strings.xsl:135
 msgid "Global Scan Configuration"
-msgstr ""
+msgstr "إعدادات المسح العمومية"
 
 #: classic/dynamic_strings.xsl:136
 msgid "Global Alert"
@@ -6107,7 +6133,7 @@ msgstr ""
 
 #: classic/dynamic_strings.xsl:160
 msgid "Scan Config owned by %1"
-msgstr ""
+msgstr "إعداد المسح ممتلك بنسبة 1%"
 
 #: classic/dynamic_strings.xsl:161
 msgid "Alert owned by %1"
@@ -6167,7 +6193,7 @@ msgstr ""
 
 #: classic/dynamic_strings.xsl:187
 msgid "CERT-Bund Advisory Details"
-msgstr ""
+msgstr "تفاصيل الـ CERT-Bund Advisory"
 
 #: classic/dynamic_strings.xsl:190
 msgid "Port List Details"
@@ -6239,11 +6265,11 @@ msgstr ""
 
 #: classic/dynamic_strings.xsl:219
 msgid "View details of CERT-Bund Advisory %1"
-msgstr ""
+msgstr "1% عرض تفاصيل الـ CERT-Bund Advisory    "
 
 #: classic/dynamic_strings.xsl:220
 msgid "View details of DFN-CERT Advisory %1"
-msgstr ""
+msgstr "1% عرض تفاصيل الـ DFN-CERT Advisory"
 
 #: classic/dynamic_strings.xsl:221
 msgid "View details of Target %1"
@@ -6259,7 +6285,7 @@ msgstr ""
 
 #: classic/dynamic_strings.xsl:224
 msgid "View details of Scan Config %1"
-msgstr ""
+msgstr "إظهار تفاصيل إعداد المسح 1%"
 
 #: classic/dynamic_strings.xsl:225
 msgid "View details of Alert %1"
@@ -6327,7 +6353,7 @@ msgstr ""
 
 #: classic/dynamic_strings.xsl:247
 msgid "Export Scan Config"
-msgstr ""
+msgstr "تصدير إعداد المسح"
 
 #: classic/dynamic_strings.xsl:248
 msgid "Export Alert"
@@ -6487,7 +6513,7 @@ msgstr ""
 
 #: classic/dynamic_strings.xsl:326
 msgid "Scan Config Filter"
-msgstr ""
+msgstr "فلترة إعداد المسح"
 
 #: classic/dynamic_strings.xsl:327
 msgid "Alert Filter"
@@ -6555,7 +6581,7 @@ msgstr ""
 
 #: classic/dynamic_strings.xsl:347
 msgid "Permissions for Scan Config \"%1\""
-msgstr ""
+msgstr "سماحيات لإعداد المسح 1%"
 
 #: classic/dynamic_strings.xsl:348
 msgid "Permissions for Alert \"%1\""
@@ -6630,8 +6656,9 @@ msgid "New Info Filter from current term"
 msgstr ""
 
 #: classic/dynamic_strings.xsl:370
+#, fuzzy
 msgid "New All SecInfo Filter from current term"
-msgstr ""
+msgstr "كل مرشحات الـ SecInfo  من المصطلح الحالي"
 
 #: classic/dynamic_strings.xsl:371
 msgid "New Target Filter from current term"
@@ -6647,7 +6674,7 @@ msgstr ""
 
 #: classic/dynamic_strings.xsl:374
 msgid "New Scan Config Filter from current term"
-msgstr ""
+msgstr "مرشح إعداد مسح جديد من العنصر الحالي"
 
 #: classic/dynamic_strings.xsl:375
 msgid "New Alert Filter from current term"
@@ -6811,7 +6838,7 @@ msgstr ""
 
 #: classic/dynamic_strings.xsl:461
 msgid "Scan Config cannot be deleted"
-msgstr ""
+msgstr "إعداد المسح لايمكن مسحه"
 
 #: classic/dynamic_strings.xsl:462
 msgid "Alert cannot be deleted"
@@ -6887,7 +6914,7 @@ msgstr ""
 
 #: classic/dynamic_strings.xsl:482
 msgid "Scan Config cannot be moved to the trashcan"
-msgstr ""
+msgstr "إعداد المسح لايمكن نقله إلى سلة المهملات"
 
 #: classic/dynamic_strings.xsl:483
 msgid "Alert cannot be moved to the trashcan"
@@ -6959,7 +6986,7 @@ msgstr ""
 
 #: classic/dynamic_strings.xsl:503
 msgid "Permission to move Scan Config to trashcan denied"
-msgstr ""
+msgstr "تم منع السماحية لنقل إعداد المسح إلى سلة المهملات"
 
 #: classic/dynamic_strings.xsl:504
 msgid "Permission to move Alert to trashcan denied"
@@ -7031,7 +7058,7 @@ msgstr ""
 
 #: classic/dynamic_strings.xsl:524
 msgid "Permission to edit Scan Config denied"
-msgstr ""
+msgstr "تم منع السماحية لتحرير إعداد المسح"
 
 #: classic/dynamic_strings.xsl:525
 msgid "Permission to edit Alert denied"
@@ -7111,7 +7138,7 @@ msgstr ""
 
 #: classic/dynamic_strings.xsl:545
 msgid "Cannot modify Scan Config"
-msgstr ""
+msgstr "لا يمكن تعديل إعداد المسح"
 
 #: classic/dynamic_strings.xsl:546
 msgid "Cannot modify Alert"
@@ -7191,7 +7218,7 @@ msgstr ""
 
 #: classic/dynamic_strings.xsl:566
 msgid "Scan Config may not be cloned"
-msgstr ""
+msgstr "إعداد المسح ربما لا يتم نسخه"
 
 #: classic/dynamic_strings.xsl:567
 msgid "Alert may not be cloned"
@@ -7271,7 +7298,7 @@ msgstr ""
 
 #: classic/dynamic_strings.xsl:587
 msgid "Scan Config must be owned or global"
-msgstr ""
+msgstr "إعداد المسح يجب أن يكون مملوك أو عمومي"
 
 #: classic/dynamic_strings.xsl:588
 msgid "Alert must be owned or global"
@@ -7335,7 +7362,7 @@ msgstr ""
 
 #: classic/dynamic_strings.xsl:640
 msgid "may create a new scan config"
-msgstr ""
+msgstr "يمكن إنشاء إعداد مسح جديد"
 
 #: classic/dynamic_strings.xsl:641
 msgid "may create a new filter"
@@ -7399,7 +7426,7 @@ msgstr ""
 
 #: classic/dynamic_strings.xsl:656
 msgid "may create a new target"
-msgstr ""
+msgstr "ربما ينشئ هدف جديد"
 
 #: classic/dynamic_strings.xsl:657
 msgid "may create a new task"
@@ -7419,7 +7446,7 @@ msgstr ""
 
 #: classic/dynamic_strings.xsl:663
 msgid "may delete scan config %1"
-msgstr ""
+msgstr "يمكن حذف إعداد المسح 1%"
 
 #: classic/dynamic_strings.xsl:664
 msgid "may delete filter %1"
@@ -7503,7 +7530,7 @@ msgstr ""
 
 #: classic/dynamic_strings.xsl:685
 msgid "may delete an existing scan config"
-msgstr ""
+msgstr "يمكن حذف إعداد مسح موجود"
 
 #: classic/dynamic_strings.xsl:686
 msgid "may delete an existing filter"
@@ -7587,7 +7614,7 @@ msgstr ""
 
 #: classic/dynamic_strings.xsl:714
 msgid "has read access to scan config %1"
-msgstr ""
+msgstr "يوجد حق القراءة لإعداد المسح 1%"
 
 #: classic/dynamic_strings.xsl:715
 msgid "has read access to filter %1"
@@ -7679,7 +7706,7 @@ msgstr ""
 
 #: classic/dynamic_strings.xsl:738
 msgid "has read access to scan configs"
-msgstr ""
+msgstr "لديه حق القراءة لإعداد المسح"
 
 #: classic/dynamic_strings.xsl:739
 msgid "has read access to feeds"
@@ -7699,7 +7726,7 @@ msgstr ""
 
 #: classic/dynamic_strings.xsl:744
 msgid "has read access to notes"
-msgstr ""
+msgstr "لديه حق الوصول للملاحظات"
 
 #: classic/dynamic_strings.xsl:745
 msgid "has read access to NVTs"
@@ -7779,7 +7806,7 @@ msgstr ""
 
 #: classic/dynamic_strings.xsl:770
 msgid "has write access to scan config %1"
-msgstr ""
+msgstr "لديه حق الكتابة لإعداد المسح 1%"
 
 #: classic/dynamic_strings.xsl:771
 msgid "has write access to filter %1"
@@ -7867,7 +7894,7 @@ msgstr ""
 
 #: classic/dynamic_strings.xsl:794
 msgid "has write access to scan configs"
-msgstr ""
+msgstr "لديه حق الكتابة لإعداد المسح "
 
 #: classic/dynamic_strings.xsl:795
 msgid "has write access to filters"
@@ -7883,7 +7910,7 @@ msgstr ""
 
 #: classic/dynamic_strings.xsl:798
 msgid "has write access to notes"
-msgstr ""
+msgstr "لديه حق الكتابة للملاحظات"
 
 #: classic/dynamic_strings.xsl:799
 msgid "has write access to overrides"
@@ -8115,8 +8142,8 @@ msgstr[5] ""
 #: classic/dynamic_strings.xsl:293
 msgid "Export %1 filtered Scan Config as XML"
 msgid_plural "Export %1 filtered Scan Configs as XML"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "تصدير 1% من إعداد المسح المفلترة كملف XML"
+msgstr[1] "تصدير 1% من إعدادات المسح المفلترة كملف XML"
 msgstr[2] ""
 msgstr[3] ""
 msgstr[4] ""
@@ -8315,8 +8342,8 @@ msgstr[5] ""
 #: classic/dynamic_strings.xsl:856
 msgid "%1 Scan Config will be deleted"
 msgid_plural "%1 Scan Configs will be deleted"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1% من إعداد المسح سيتم حذفها"
+msgstr[1] "1% من إعداد المسح سيتم حذفها"
 msgstr[2] ""
 msgstr[3] ""
 msgstr[4] ""
@@ -8515,8 +8542,8 @@ msgstr[5] ""
 #: classic/dynamic_strings.xsl:880
 msgid "%1 Scan Config will be moved to the trashcan"
 msgid_plural "%1 Scan Configs will be moved to the trashcan"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1% من إعداد المسح سيتم نقلها إلى سلة المهلمات"
+msgstr[1] "1% من إعدادات المسح سيتم نقلها إلى سلة المهلمات"
 msgstr[2] ""
 msgstr[3] ""
 msgstr[4] ""
@@ -8690,7 +8717,7 @@ msgstr ""
 
 #: classic/gsad.xsl:522
 msgid "All SecInfo"
-msgstr ""
+msgstr "جميع الـ SecInfo"
 
 #: classic/gsad.xsl:616
 msgid "Configuration"

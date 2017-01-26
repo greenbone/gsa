@@ -1,3 +1,16 @@
+2017-01-26  Michael Wiegand <michael.wiegand@greenbone.net>
+
+	Updated translations for Arabic and Brazilian Portuguese from
+	translate.greenbone.net.
+
+	* src/po/gsad_js-ar.po: Updated.
+
+	* src/po/gsad_js-pt_BR.po: Updated.
+
+	* src/po/gsad_xsl-ar.po: Updated.
+
+	* src/po/gsad_xsl-pt_BR.po: Updated.
+
 2017-01-16  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Backport r27225.

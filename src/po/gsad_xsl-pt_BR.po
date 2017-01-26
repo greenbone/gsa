@@ -25,7 +25,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-10-13 11:00+0200\n"
-"PO-Revision-Date: 2016-10-17 14:22+0200\n"
+"PO-Revision-Date: 2016-11-12 00:35+0200\n"
 "Last-Translator: Natan <natan673@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: pt_BR\n"
@@ -34,7 +34,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Pootle 2.5.1.3\n"
-"X-POOTLE-MTIME: 1476710527.134127\n"
+"X-POOTLE-MTIME: 1478907335.966357\n"
 
 # 
 #: classic/graphics.xsl:87
@@ -1027,7 +1027,7 @@ msgstr ""
 
 #: classic/omp.xsl:3322 classic/omp.xsl:3323
 msgid "Expand to full details of all vulnerabilities"
-msgstr ""
+msgstr "Expandir para detalhe completo de todas as vulnerabilidades"
 
 #: classic/omp.xsl:3387 classic/omp.xsl:3389 classic/omp.xsl:8342
 #: classic/omp.xsl:8343 classic/omp.xsl:8371 classic/omp.xsl:8373
@@ -2605,7 +2605,7 @@ msgstr "Filtros"
 #: classic/omp.xsl:13318 classic/omp.xsl:13395 classic/omp.xsl:13419
 #: classic/omp.xsl:13473 classic/omp.xsl:13548
 msgid "Term"
-msgstr ""
+msgstr "Termo"
 
 #: classic/omp.xsl:13340
 msgid "Alerts using this Filter"

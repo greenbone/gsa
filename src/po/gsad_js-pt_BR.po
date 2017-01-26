@@ -25,7 +25,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-10-10 16:12+0200\n"
-"PO-Revision-Date: 2016-10-17 10:15+0200\n"
+"PO-Revision-Date: 2016-11-12 00:22+0200\n"
 "Last-Translator: Natan <natan673@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: pt_BR\n"
@@ -34,7 +34,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Pootle 2.5.1.3\n"
-"X-POOTLE-MTIME: 1476695706.693986\n"
+"X-POOTLE-MTIME: 1478906535.638736\n"
 
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/greenbone.js:590
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/greenbone.js:1276
@@ -107,7 +107,7 @@ msgstr "{{subject}} {{subject_id}} {{description}}  {{id}}"
 
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/greenbone.js:1881
 msgid "{{subject}} {{subject_id}} {{description}}"
-msgstr ""
+msgstr "{{subject}} {{subject_id}} {{description}}"
 
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_bar_chart.js:68
 msgid "Loading bar chart ..."
@@ -176,23 +176,23 @@ msgstr "OVAL definição"
 
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_chart_helpers.js:1463
 msgid "CERT-Bund Advisory"
-msgstr ""
+msgstr "CERT-Bund Advisory"
 
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_chart_helpers.js:1465
 msgid "DFN-CERT Advisory"
-msgstr ""
+msgstr "DFN-CERT Advisory"
 
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_chart_helpers.js:1467
 msgid "SecInfo Item"
-msgstr ""
+msgstr "SecInfo Item"
 
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_chart_helpers.js:1483
 msgid "DFN-CERT Advisories"
-msgstr ""
+msgstr "DFN-CERT Advisories"
 
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_chart_helpers.js:1485
 msgid "CERT-Bund Advisories"
-msgstr ""
+msgstr "CERT-Bund Advisories"
 
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_chart_helpers.js:1529
 #, fuzzy
@@ -226,7 +226,7 @@ msgstr "Nenhum"
 
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_chart_helpers.js:2020
 msgid "Exploit"
-msgstr ""
+msgstr "Explorar"
 
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_chart_helpers.js:2023
 msgid "Remote vulnerability"
@@ -254,7 +254,7 @@ msgstr "Sonda remota"
 
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_chart_helpers.js:2041
 msgid "Unreliable rem. banner"
-msgstr ""
+msgstr "Rem. banner não confiável"
 
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_chart_helpers.js:2044
 msgid "Unreliable exec. version"
@@ -391,7 +391,7 @@ msgstr "Gráfico desconhecido"
 
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_donut_chart.js:64
 msgid "Loading donut chart ..."
-msgstr ""
+msgstr "Carregando gráfico de rosquinha ..."
 
 #: /home/timo/openvas/src/proj1-trunk/gsa/src/html/classic/js/gsa_donut_chart.js:64
 msgid "Donut Chart"
