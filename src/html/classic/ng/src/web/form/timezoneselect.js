@@ -32,15 +32,14 @@ import {withLayout} from '../layout.js';
 import Select2 from './select2.js';
 
 
-const TimeZoneSelectComponent = props => {
-  let value = this.props.value ? this.props.value : undefined;
+const TimeZoneSelectComponent = ({value, ...props}) => {
 
   let timezone_opts = map(timezones, zone => {
     return <option key={zone.name} value={zone.name}>{zone.name}</option>;
   });
 
   return (
-    <Select2 {...this.props} value={value}>
+    <Select2 {...props} value={value}>
       <option value="UTC">
         {_('Coordinated Universal Time/UTC')}
       </option>
