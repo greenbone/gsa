@@ -1,5 +1,12 @@
 2017-01-27 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/loginpage.js: Always display an error message if
+	an error during login occured. Now all kind of errors are handled and
+	displayed with a different message. Before only "Bad login information" was
+	shown which is very confusing and non informative.
+
+2017-01-27 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/commands/login.js: Add better error messages if
 	http request for login fails.
 

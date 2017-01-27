@@ -24,7 +24,7 @@
 import React from 'react';
 
 import _ from '../locale.js';
-import {autobind, KeyCode} from '../utils.js';
+import {autobind, KeyCode, is_empty} from '../utils.js';
 import logger from '../log.js';
 
 import Header from './header.js';
@@ -67,9 +67,9 @@ export class LoginPage extends React.Component {
       else {
         router.replace('/ng');
       }
-    }, err => {
-      log.error(err);
-      this.setState({error: true});
+    }, rej => {
+      log.error(rej);
+      this.setState({error: rej});
     });
   }
 
@@ -81,6 +81,7 @@ export class LoginPage extends React.Component {
 
   render() {
     let {type} = this.props.location.query;
+    let {error} = this.state;
     let message;
 
     switch (type) {
@@ -112,8 +113,13 @@ export class LoginPage extends React.Component {
         break;
     }
 
-    if (this.state.error) {
-      message = _('Bad login information');
+    if (error) {
+      if (is_empty(error.message)) {
+        message = _('Unkown error on login');
+      }
+      else {
+        message = error.message;
+      }
     }
 
     return (
