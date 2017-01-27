@@ -1,5 +1,10 @@
 2017-01-27 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/css/layout.css: Add css for flex layout property
+	align-items: stretch. stretch is the default but was missing and already used.
+
+2017-01-27 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/model.js: Only parse properties of a response
 	element if a element is available. The old check for an available
 	parseProperties method didn't make sense because it was always true. Not it is

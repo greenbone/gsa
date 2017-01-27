@@ -188,6 +188,10 @@
   align-items: flex-start;
 }
 
+.flex.align-stretch {
+  align-items: stretch;
+}
+
 .flex.row > .box + .box {
   margin-left: 10px;
 }
