@@ -1,5 +1,12 @@
 2017-01-27 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/model.js: Only parse properties of a response
+	element if a element is available. The old check for an available
+	parseProperties method didn't make sense because it was always true. Not it is
+	possible to create a model instance without parsing an element.
+
+2017-01-27 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/web/app.js,
 	src/html/classic/ng/src/web/dashboard/assets.js,

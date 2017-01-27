@@ -48,7 +48,7 @@ export class Model {
   }
 
   updateFromElement(elem) {
-    if (is_defined(this.parseProperties)) {
+    if (is_defined(elem)) {
       let properties = this.parseProperties(elem);
       this.setProperties(properties);
     }
