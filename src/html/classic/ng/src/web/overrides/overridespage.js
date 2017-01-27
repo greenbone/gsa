@@ -23,7 +23,7 @@
 
 import React from 'react';
 
-import  _ from '../../locale.js';
+import _ from '../../locale.js';
 import {is_defined} from '../../utils.js';
 
 import Layout from '../layout.js';
@@ -39,30 +39,32 @@ import Icon from '../icons/icon.js';
 import TableRow from '../table/row.js';
 import TableHead from '../table/head.js';
 
-import NotesCharts from './charts.js';
-import NotesListRow from './noteslistrow.js';
-import NoteDialog from './dialog.js';
+import OverridesCharts from './charts.js';
+import OverrideDialog from './dialog.js';
+import OverridesListRow from './overrideslistrow.js';
 
-import {NOTES_FILTER_FILTER} from '../../gmp/commands/filters.js';
+import {OVERRIDES_FILTER_FILTER} from '../../gmp/commands/filters.js';
 
 const SORT_FIELDS = [
   ['text', _('Text')],
   ['nvt', _('Nvt')],
   ['hosts', _('Hosts')],
   ['port', _('Location')],
+  ['severity', _('From')],
+  ['new_severity', _('To')],
   ['active', _('Active')],
 ];
 
-export class Notes extends EntitiesListPage {
+export class OverridesPage extends EntitiesListPage {
 
   constructor(props) {
     super(props, {
-      name: 'notes',
-      icon_name: 'note.svg',
-      download_name: 'notes.xml',
-      title: _('Notes'),
-      empty_title: _('No notes available'),
-      filter_filter: NOTES_FILTER_FILTER,
+      name: 'overrides',
+      icon_name: 'override.svg',
+      download_name: 'overrides.xml',
+      title: _('Overrides'),
+      empty_title: _('No overrides available'),
+      filter_filter: OVERRIDES_FILTER_FILTER,
       sort_fields: SORT_FIELDS,
     });
   }
@@ -102,6 +104,16 @@ export class Notes extends EntitiesListPage {
           </Sort>
         </TableHead>
         <TableHead>
+          <Sort by="severity" onClick={this.onSortChange}>
+            {_('From')}
+          </Sort>
+        </TableHead>
+        <TableHead width="10em">
+          <Sort by="new_severity" onClick={this.onSortChange}>
+            {_('To')}
+          </Sort>
+        </TableHead>
+        <TableHead>
           <Sort by="active" onClick={this.onSortChange}>
             {_('Active')}
           </Sort>
@@ -125,12 +137,35 @@ export class Notes extends EntitiesListPage {
     );
   }
 
-  renderRow(note) {
-    let {selection_type} = this.state;
+  renderToolbarIconButtons() {
+    let caps = this.context.capabilities;
     return (
-      <NotesListRow
-        key={note.id}
-        note={note}
+      <Layout flex>
+        {this.renderHelpIcon()}
+
+        {caps.mayCreate('override') &&
+          <Icon img="new.svg" title={_('New Override')}
+            onClick={() => { this.create_dialog.show(); }}/>
+        }
+      </Layout>
+    );
+  }
+
+  renderCreateDialog() {
+    return (
+      <OverrideDialog ref={ref => this.create_dialog = ref}
+        title={_('Create new Override')} onClose={this.reload}
+        onSave={this.reload}/>
+    );
+  }
+
+  renderRow(override) {
+    let {selection_type} = this.state;
+
+    return (
+      <OverridesListRow
+        key={override.id}
+        override={override}
         selection={selection_type}
         onSelected={this.onSelect}
         onDeselected={this.onDeselect}
@@ -139,48 +174,26 @@ export class Notes extends EntitiesListPage {
     );
   }
 
-  renderCreateDialog() {
-    return (
-      <NoteDialog ref={ref => this.create_dialog = ref}
-        title={_('Create new Note')} onClose={this.reload}
-        onSave={this.reload}/>
-    );
-  }
-
   renderDashboard() {
     let {filter} = this.state;
     return (
       <Dashboard hide-filter-select
         filter={filter}
-        config-pref-id="ce7b121-c609-47b0-ab57-fd020a0336f4"
-        default-controllers-string={'note-by-active-days|note-by-created|' +
-        'note-by-text-words'}
-        default-controller-string="note-by-active-days">
-        <NotesCharts filter={filter}/>
+        config-pref-id="054862fe-0781-4527-b1aa-2113bcd16ce7"
+        default-controllers-string={'override-by-active-days|' +
+          'override-by-created|override-by-text-words'}
+        default-controller-string="override-by-active-days">
+        <OverridesCharts filter={filter}/>
       </Dashboard>
-    );
-  }
-
-  renderToolbarIconButtons() {
-    let caps = this.context.capabilities;
-    return (
-      <Layout flex>
-        {this.renderHelpIcon()}
-
-        {caps.mayCreate('note') &&
-          <Icon img="new.svg" title={_('New Note')}
-            onClick={() => { this.create_dialog.show(); }}/>
-        }
-      </Layout>
     );
   }
 }
 
-Notes.contextTypes = {
+OverridesPage.contextTypes = {
   gmp: React.PropTypes.object.isRequired,
   capabilities: React.PropTypes.object.isRequired,
 };
 
-export default Notes;
+export default OverridesPage;
 
 // vim: set ts=2 sw=2 tw=80:

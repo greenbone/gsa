@@ -111,6 +111,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/alerts/taskeventpart.js
      ${NG_SRC_DIR}/src/web/alerts/verinicemethodpart.js
      ${NG_SRC_DIR}/src/web/app.js
+     ${NG_SRC_DIR}/src/web/assetspage.js
      ${NG_SRC_DIR}/src/web/button.js
      ${NG_SRC_DIR}/src/web/credentials/dialog.js
      ${NG_SRC_DIR}/src/web/certbund/charts.js
@@ -159,7 +160,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/layout.js
      ${NG_SRC_DIR}/src/web/legacylink.js
      ${NG_SRC_DIR}/src/web/link.js
-     ${NG_SRC_DIR}/src/web/login.js
+     ${NG_SRC_DIR}/src/web/loginpage.js
      ${NG_SRC_DIR}/src/web/main.js
      ${NG_SRC_DIR}/src/web/menu/iconmenu.js
      ${NG_SRC_DIR}/src/web/menu/menubar.js
@@ -167,15 +168,17 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/menu/menu.js
      ${NG_SRC_DIR}/src/web/notes/charts.js
      ${NG_SRC_DIR}/src/web/notes/dialog.js
-     ${NG_SRC_DIR}/src/web/notes/notes.js
+     ${NG_SRC_DIR}/src/web/notes/notespage.js
      ${NG_SRC_DIR}/src/web/notes/noteslistentry.js
+     ${NG_SRC_DIR}/src/web/nvts/charts.js
      ${NG_SRC_DIR}/src/web/overrides/charts.js
      ${NG_SRC_DIR}/src/web/overrides/dialog.js
-     ${NG_SRC_DIR}/src/web/overrides/overrides.js
+     ${NG_SRC_DIR}/src/web/overrides/overridespage.js
      ${NG_SRC_DIR}/src/web/overrides/overrideslistentry.js
-     ${NG_SRC_DIR}/src/web/nvts/charts.js
      ${NG_SRC_DIR}/src/web/os/charts.js
      ${NG_SRC_DIR}/src/web/ovaldefs/charts.js
+     ${NG_SRC_DIR}/src/web/page.js
+     ${NG_SRC_DIR}/src/web/pagenotfound.js
      ${NG_SRC_DIR}/src/web/pagination.js
      ${NG_SRC_DIR}/src/web/portlists/dialog.js
      ${NG_SRC_DIR}/src/web/powerfilter.js
@@ -183,9 +186,11 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/reports/charts.js
      ${NG_SRC_DIR}/src/web/results/charts.js
      ${NG_SRC_DIR}/src/web/results/filterdialog.js
-     ${NG_SRC_DIR}/src/web/results/results.js
+     ${NG_SRC_DIR}/src/web/results/resultspage.js
      ${NG_SRC_DIR}/src/web/results/resultslistentry.js
+     ${NG_SRC_DIR}/src/web/scanspage.js
      ${NG_SRC_DIR}/src/web/schedules/dialog.js
+     ${NG_SRC_DIR}/src/web/secinfopage.js
      ${NG_SRC_DIR}/src/web/secinfo/charts.js
      ${NG_SRC_DIR}/src/web/section.js
      ${NG_SRC_DIR}/src/web/selectiontype.js
@@ -203,7 +208,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/tasks/filterdialog.js
      ${NG_SRC_DIR}/src/web/tasks/statusbar.js
      ${NG_SRC_DIR}/src/web/tasks/task.js
-     ${NG_SRC_DIR}/src/web/tasks/tasks.js
+     ${NG_SRC_DIR}/src/web/tasks/taskspage.js
      ${NG_SRC_DIR}/src/web/tasks/taskslistentry.js
      ${NG_SRC_DIR}/src/web/tasks/trend.js
      ${NG_SRC_DIR}/src/web/titlebar.js

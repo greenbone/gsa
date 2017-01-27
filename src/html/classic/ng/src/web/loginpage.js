@@ -43,7 +43,7 @@ import './css/login.css';
 
 const log = logger.getLogger('web.login');
 
-export class Login extends React.Component {
+export class LoginPage extends React.Component {
 
   constructor(props) {
     super(props);
@@ -123,13 +123,13 @@ export class Login extends React.Component {
           <LoginForm onSubmit={this.onSubmit} error={message}/>
           <LogoBox/>
         </Main>
-        <Footer className="none"/>
+        <Footer/>
       </Layout>
     );
   }
 }
 
-Login.contextTypes = {
+LoginPage.contextTypes = {
   router: React.PropTypes.object.isRequired,
   gmp: React.PropTypes.object.isRequired,
 };
@@ -219,6 +219,6 @@ LoginForm.propTypes = {
   error: React.PropTypes.string,
 };
 
-export default Login;
+export default LoginPage;
 
 // vim: set ts=2 sw=2 tw=80:

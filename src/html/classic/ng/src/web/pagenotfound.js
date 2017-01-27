@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,32 +23,26 @@
 
 import React from 'react';
 
-import _ from '../../locale.js';
+import _ from '../locale.js';
 
-import Section from '../section.js';
+import Footer from './footer.js';
+import Header from './header.js';
+import Layout from './layout.js';
+import Main from './main.js';
 
-import Dashboard from './dashboard.js';
-import DashboardControls from './controls.js';
-
-import HostCharts from '../hosts/charts.js';
-import OsCharts from '../os/charts.js';
-
-export const AssetsDashboard = () => {
+export const PageNotFound = () => {
   return (
-    <Section title={_('Assets Dashboard')} img="asset.svg"
-      extra={<DashboardControls/>}>
-      <Dashboard
-        config-pref-id="0320e0db-bf30-4d4f-9379-b0a022d07cf7"
-        default-controllers-string={'host-by-most-vulnerable|' +
-          'host-by-topology|os-by-most-vulnerable#os-by-severity-class|' +
-          'host-by-modification-time'}
-        default-controller-string="host-by-severity-class"
-        max-components="8">
-        <HostCharts/>
-        <OsCharts/>
-      </Dashboard>
-    </Section>
+    <Layout flex="column" style={{height: '100%'}}>
+      <Header/>
+      <Main flex align={['center', 'center']} grow="1"
+        style={{height: '100%'}}>
+        <h1>{_('Page Not Found.')}</h1>
+      </Main>
+      <Footer/>
+    </Layout>
   );
 };
 
-export default AssetsDashboard;
+export default PageNotFound;
+
+// vim: set ts=2 sw=2 tw=80:

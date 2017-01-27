@@ -47,7 +47,7 @@ import ResultsListRow from './resultslistrow.js';
 
 import {RESULTS_FILTER_FILTER} from '../../gmp/commands/filters.js';
 
-export class Results extends EntitiesListPage {
+export class ResultsPage extends EntitiesListPage {
 
   constructor(props) {
     super(props, {
@@ -172,10 +172,10 @@ export class Results extends EntitiesListPage {
   }
 }
 
-Results.contextTypes = {
+ResultsPage.contextTypes = {
   gmp: React.PropTypes.object.isRequired,
 };
 
-export default Results;
+export default ResultsPage;
 
 // vim: set ts=2 sw=2 tw=80:

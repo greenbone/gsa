@@ -23,22 +23,22 @@
 
 import React from 'react';
 
-import _ from '../../locale.js';
+import _ from '../locale.js';
 
-import Section from '../section.js';
+import Section from './section.js';
 
-import Dashboard from './dashboard.js';
-import DashboardControls from './controls.js';
+import Dashboard from './dashboard/dashboard.js';
+import DashboardControls from './dashboard/controls.js';
 
-import NvtCharts from '../nvts/charts.js';
-import OvaldefCharts from '../ovaldefs/charts.js';
-import CertBundCharts from '../certbund/charts.js';
-import CveCharts from '../cves/charts.js';
-import CpeCharts from '../cpes/charts.js';
-import DfnCertCharts from '../dfncert/charts.js';
-import SecinfoCharts from '../secinfo/charts.js';
+import CertBundCharts from './certbund/charts.js';
+import CpeCharts from './cpes/charts.js';
+import CveCharts from './cves/charts.js';
+import DfnCertCharts from './dfncert/charts.js';
+import NvtCharts from './nvts/charts.js';
+import OvaldefCharts from './ovaldefs/charts.js';
+import AllSecinfoCharts from './secinfo/charts.js';
 
-export const SecinfoDashboard = () => {
+export const SecinfoPage = () => {
   return (
     <Section title={_('SecInfo Dashboard')} img="allinfo.svg"
       extra={<DashboardControls/>}>
@@ -55,10 +55,10 @@ export const SecinfoDashboard = () => {
         <CveCharts/>
         <CpeCharts/>
         <DfnCertCharts/>
-        <SecinfoCharts/>
+        <AllSecinfoCharts/>
       </Dashboard>
     </Section>
   );
 };
 
-export default SecinfoDashboard;
+export default SecinfoPage;

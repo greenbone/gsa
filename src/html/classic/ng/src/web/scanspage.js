@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,21 +23,21 @@
 
 import React from 'react';
 
-import _ from '../../locale.js';
+import _ from '../locale.js';
 
-import Section from '../section.js';
+import Section from './section.js';
 
-import Dashboard from './dashboard.js';
-import DashboardControls from './controls.js';
+import Dashboard from './dashboard/dashboard.js';
+import DashboardControls from './dashboard/controls.js';
 
-import TaskCharts from '../tasks/charts.js';
-import ReportCharts from '../reports/charts.js';
-import ResultCharts from '../results/charts.js';
-import NoteCharts from '../notes/charts.js';
-import OverrideCharts from '../overrides/charts.js';
-import VulnCharts from '../vulns/charts.js';
+import TaskCharts from './tasks/charts.js';
+import ReportCharts from './reports/charts.js';
+import ResultCharts from './results/charts.js';
+import NoteCharts from './notes/charts.js';
+import OverrideCharts from './overrides/charts.js';
+import VulnCharts from './vulns/charts.js';
 
-export const ScansDashboard = () => {
+export const ScansPage = () => {
   return (
     <Section title={_('Scans Dashboard')} img="scan.svg"
       extra={<DashboardControls/>}>
@@ -59,6 +59,6 @@ export const ScansDashboard = () => {
   );
 };
 
-export default ScansDashboard;
+export default ScansPage;
 
 // vim: set ts=2 sw=2 tw=80:

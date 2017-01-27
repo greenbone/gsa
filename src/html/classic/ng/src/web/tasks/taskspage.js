@@ -53,7 +53,7 @@ import TasksListRow from './taskslistrow.js';
 
 import {TASKS_FILTER_FILTER} from '../../gmp/commands/filters.js';
 
-export class Tasks extends EntitiesListPage {
+export class TasksPage extends EntitiesListPage {
 
   constructor(props) {
     super(props, {
@@ -213,11 +213,11 @@ export class Tasks extends EntitiesListPage {
   }
 }
 
-Tasks.contextTypes = {
+TasksPage.contextTypes = {
   gmp: React.PropTypes.object.isRequired,
   capabilities: React.PropTypes.object.isRequired,
 };
 
-export default Tasks;
+export default TasksPage;
 
 // vim: set ts=2 sw=2 tw=80:

@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,23 +33,22 @@ import {HttpInterceptor} from '../gmp/http.js';
 import {is_defined} from '../utils.js';
 import _ from '../locale.js';
 
-import Login from './login.js';
+import AssetsPage from './assetspage.js';
+import HomePage from './homepage.js';
+import LoginPage from './loginpage.js';
 import Page from './page.js';
-import Home from './home.js';
+import PageNotFound from './pagenotfound.js';
+import ScansPage from './scanspage.js';
+import SecinfoPage from './secinfopage.js';
 import {get_severity_levels} from './render.js';
 
-import Overrides from './overrides/overrides.js';
+import OverridesPage from './overrides/overridespage.js';
 
-import Task from './tasks/task.js';
-import Tasks from './tasks/tasks.js';
+import TasksPage from './tasks/taskspage.js';
 
-import Results from './results/results.js';
+import ResultsPage from './results/resultspage.js';
 
-import Notes from './notes/notes.js';
-
-import ScansDashboard from './dashboard/scans.js';
-import AssetsDashboard from './dashboard/assets.js';
-import SecinfoDashboard from './dashboard/secinfo.js';
+import NotesPage from './notes/notespage.js';
 
 import './css/gsa-base.css';
 
@@ -117,14 +116,6 @@ class App extends React.Component {
   }
 }
 
-const PageNotFound = () => {
-  return (
-    <div>
-      <h1>{_('Page Not Found.')}</h1>
-    </div>
-  );
-};
-
 App.childContextTypes = {
   gmp: React.PropTypes.object,
 };
@@ -136,25 +127,25 @@ App.contextTypes = {
 ReactDOM.render(
   <Router history={browserHistory}>
     <Route component={App}>
-      <Route path="/login" component={Login}/>
-      <Route path="/ng/login" component={Login}/>
+      <Route path="/login" component={LoginPage}/>
+      <Route path="/ng/login" component={LoginPage}/>
       <Route path="/ng" component={Page}>
-        <IndexRoute component={Home} onEnter={is_logged_in}/>
-        <Route path="tasks" component={Tasks} onEnter={is_logged_in}/>
-        <Route path="tasks/:id" component={Task} onEnter={is_logged_in}/>
-        <Route path="results" component={Results} onEnter={is_logged_in}/>
-        <Route path="notes" component={Notes} onEnter={is_logged_in}/>
-        <Route path="overrides" component={Overrides} onEnter={is_logged_in}/>
-        <Route path="dashboards/scans" component={ScansDashboard}
+        <IndexRoute component={HomePage} onEnter={is_logged_in}/>
+        <Route path="tasks" component={TasksPage} onEnter={is_logged_in}/>
+        <Route path="results" component={ResultsPage} onEnter={is_logged_in}/>
+        <Route path="notes" component={NotesPage} onEnter={is_logged_in}/>
+        <Route path="overrides" component={OverridesPage}
           onEnter={is_logged_in}/>
-        <Route path="dashboards/assets" component={AssetsDashboard}
+        <Route path="dashboards/scans" component={ScansPage}
           onEnter={is_logged_in}/>
-        <Route path="dashboards/secinfo" component={SecinfoDashboard}
+        <Route path="dashboards/assets" component={AssetsPage}
+          onEnter={is_logged_in}/>
+        <Route path="dashboards/secinfo" component={SecinfoPage}
           onEnter={is_logged_in}/>
       </Route>
+      <Route path="*" component={PageNotFound} />
     </Route>
     <Redirect from="/" to="/ng"/>
-    <Route path="*" component={PageNotFound} />
   </Router>,
   document.getElementById('app')
 );
