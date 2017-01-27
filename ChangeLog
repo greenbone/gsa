@@ -1,5 +1,9 @@
 2017-01-27 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/app.js: Restore redirect from / to /ng.
+
+2017-01-27 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/loginpage.js: Always display an error message if
 	an error during login occured. Now all kind of errors are handled and
 	displayed with a different message. Before only "Bad login information" was

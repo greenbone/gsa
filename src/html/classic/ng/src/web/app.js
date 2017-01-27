@@ -143,9 +143,9 @@ ReactDOM.render(
         <Route path="dashboards/secinfo" component={SecinfoPage}
           onEnter={is_logged_in}/>
       </Route>
+      <Redirect from="/" to="/ng"/>
       <Route path="*" component={PageNotFound} />
     </Route>
-    <Redirect from="/" to="/ng"/>
   </Router>,
   document.getElementById('app')
 );
