@@ -21,6 +21,8 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+import _ from '../../locale.js';
+
 import {HttpCommand} from '../command.js';
 
 import Login from '../models/login.js';
@@ -38,7 +40,18 @@ export class LoginCommand extends HttpCommand {
     return this.httpPost({
       login: username,
       password
-    }).then(xhr => new Login(xhr));
+    }).then(xhr => new Login(xhr), rej => {
+      if (rej.isError && rej.isError() && rej.xhr) {
+        if (rej.xhr.status === 401) {
+          rej.setMessage(_('Bad login information'));
+        }
+        else if (rej.xhr.status === 404) {
+          // likely the config is wrong for the server address
+          rej.setMessage(_('Could not connect to server'));
+        }
+      }
+      throw rej;
+    });
   }
 }
 
