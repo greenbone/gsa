@@ -26,6 +26,7 @@ import React from 'react';
 import {Sticky} from 'react-sticky';
 
 import _ from '../../locale.js';
+import {is_defined} from '../../utils.js';
 
 import Link from '../link.js';
 
@@ -40,7 +41,7 @@ export const MenuBar = (props, context) => {
   let {gmp} = context;
   let caps = context.capabilities;
 
-  if (!gmp.isLoggedIn()) {
+  if (!gmp.isLoggedIn() || !is_defined(caps)) {
     return null;
   }
 
