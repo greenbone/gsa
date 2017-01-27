@@ -137,7 +137,7 @@ LoginPage.contextTypes = {
 
 const LogoBox = () => {
   return (
-    <Icon className="none greenbone-icon" size="default" img="greenbone.svg"/>
+    <Icon className="greenbone-icon" size="default" img="greenbone.svg"/>
   );
 };
 
@@ -183,7 +183,7 @@ class LoginForm extends React.Component {
           </div>
         }
         <Layout flex align="space-around" className="login-panel">
-          <Icon img="login-label.png" className="none" size="default"/>
+          <Icon img="login-label.png" size="default"/>
           <Layout flex="column" align="space-around" grow="1">
             <Layout flex="column">
               <FormGroup title={_('Username')} titleSize="4">
