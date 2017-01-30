@@ -15184,54 +15184,42 @@ new_note_omp (gvm_connection_t *connection, credentials_t *credentials, params_t
 }
 
 /**
- * @brief Create a note, get report, XSL transform the result.
+ * @brief Get a port from request params
  *
- * @param[in]  connection     Connection to manager.
- * @param[in]  credentials  Username and password for authentication.
- * @param[in]  params       Request parameters.
- * @param[out] response_data  Extra data return for the HTTP response.
+ * @param[in]  params  Request parameters.
  *
- * @return Result of XSL transformation.
+ * @return The port
  */
-char *
-create_note_omp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
-                 cmd_response_data_t* response_data)
+const char *
+get_port_from_params(params_t *params)
 {
-  char *ret;
-  gchar *response;
-  const char *no_redirect, *oid, *severity, *port, *hosts;
-  const char *text, *task_id, *note_result_id;
-  /* For get_report. */
-  const char *active, *days;
-  entity_t entity;
-
-  no_redirect = params_value (params, "no_redirect");
-  oid = params_value (params, "oid");
-  CHECK_PARAM_INVALID (oid, "Create Note", "new_note");
-
-  if (params_valid (params, "severity"))
-    severity = params_value (params, "severity");
-  else if (params_given (params, "severity")
-           && strcmp (params_original_value (params, "severity"), ""))
-    severity = NULL;
-  else
-    severity = "";
-  CHECK_PARAM_INVALID (severity, "Create Note", "new_note");
+  const char *port;
 
   port = params_value (params, "port");
+
+  if (port == NULL)
+    return "";
+
+  if (strcmp (port, "--") == 0)
+    port = params_value (params, "port_manual");
+
   if (port == NULL)
     port = "";
-  if (strcmp (port, "--") == 0)
-    {
-      int num = -1;
 
-      port = params_value (params, "port_manual");
-      if (port)
-        num = atoi (port);
-      if (num < 0 || num > 65535)
-        port = NULL;
-    }
-  CHECK_PARAM_INVALID (port, "Create Note", "new_note");
+  return port;
+}
+
+/**
+ * @brief Get hosts from request params
+ *
+ * @param[in]  params  Request parameters.
+ *
+ * @return The hosts
+ */
+const char *
+get_hosts_from_params(params_t *params)
+{
+  const char *hosts;
 
   if (params_valid (params, "hosts"))
     {
@@ -15252,29 +15240,115 @@ create_note_omp (gvm_connection_t *connection, credentials_t *credentials, param
     hosts = NULL;
   else
     hosts = "";
-  CHECK_PARAM_INVALID (hosts, "Create Note", "new_note");
 
-  if (params_valid (params, "note_task_id"))
-    {
-      task_id = params_value (params, "note_task_id");
-      if (task_id && (strcmp (task_id, "0") == 0))
-        task_id = params_value (params, "note_task_uuid");
-    }
-  else if (params_given (params, "note_task_id")
-           && strcmp (params_original_value (params, "note_task_id"), ""))
-    task_id = NULL;
+  return hosts;
+}
+
+/**
+ * @brief Get task_id from request params
+ *
+ * @param[in]  params  Request parameters.
+ *
+ * @return The task_id
+ */
+const char *
+get_task_id_from_params(params_t *params)
+{
+  const char *task_id;
+
+  task_id = params_value (params, "task_id");
+
+  if (task_id && (strcmp (task_id, "0") == 0))
+    task_id = params_value (params, "task_uuid");
+
+  return task_id;
+}
+
+/**
+ * @brief Get severity from request params
+ *
+ * @param[in]  params  Request parameters.
+ *
+ * @return The severity
+ */
+const char *
+get_severity_from_params(params_t *params)
+{
+  const char *severity;
+
+  if (params_valid (params, "severity"))
+    severity = params_value (params, "severity");
+  else if (params_given (params, "severity")
+           && strcmp (params_original_value (params, "severity"), ""))
+    severity = NULL;
   else
-    task_id = "";
+    severity = "";
+
+  return severity;
+}
+
+/**
+ * @brief Get result_id from request params
+ *
+ * @param[in]  params  Request parameters.
+ *
+ * @return The result_id
+ */
+const char *
+get_result_id_from_params(params_t *params)
+{
+  const char *result_id;
+
+  result_id = params_value (params, "result_id");
+
+  if (result_id && (strcmp (result_id, "0") == 0))
+    {
+      result_id = params_value (params, "result_uuid");
+    }
+
+  return result_id;
+}
+
+/**
+ * @brief Create a note, get report, XSL transform the result.
+ *
+ * @param[in]  connection     Connection to manager.
+ * @param[in]  credentials  Username and password for authentication.
+ * @param[in]  params       Request parameters.
+ * @param[out] response_data  Extra data return for the HTTP response.
+ *
+ * @return Result of XSL transformation.
+ */
+char *
+create_note_omp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
+                 cmd_response_data_t* response_data)
+{
+  char *ret;
+  gchar *response;
+  const char *no_redirect, *oid, *severity, *port, *hosts;
+  const char *text, *task_id, *result_id;
+  /* For get_report. */
+  const char *active, *days;
+  entity_t entity;
+
+  no_redirect = params_value (params, "no_redirect");
+  oid = params_value (params, "oid");
+  CHECK_PARAM_INVALID (oid, "Create Note", "new_note");
+
+  port = get_port_from_params (params);
+  hosts = get_hosts_from_params (params);
+  task_id = get_task_id_from_params (params);
+  severity = get_severity_from_params (params);
+  result_id = get_result_id_from_params (params);
+
+  CHECK_PARAM_INVALID (severity, "Create Note", "new_note");
+  CHECK_PARAM_INVALID (hosts, "Create Note", "new_note");
 
   active = params_value (params, "active");
   CHECK_PARAM_INVALID (active, "Create Note", "new_note");
 
   text = params_value (params, "text");
   days = params_value (params, "days");
-
-  note_result_id = params_value (params, "note_result_id");
-  if (note_result_id && (strcmp (note_result_id, "0") == 0))
-    note_result_id = params_value (params, "note_result_uuid");
 
   response = NULL;
   entity = NULL;
@@ -15301,7 +15375,7 @@ create_note_omp (gvm_connection_t *connection, credentials_t *credentials, param
                 severity,
                 text ? text : "",
                 task_id,
-                note_result_id))
+                result_id))
     {
       case 0:
       case -1:
@@ -15477,55 +15551,31 @@ save_note_omp (gvm_connection_t *connection, credentials_t * credentials,
   gchar *response;
   entity_t entity;
   const char *no_redirect;
-  const char *note_id, *text, *hosts, *port, *severity, *note_task_id;
-  const char *note_result_id, *active, *days, *oid;
+  const char *note_id, *text, *hosts, *port, *severity, *task_id;
+  const char *result_id, *active, *days, *oid;
   char *ret;
 
   no_redirect = params_value (params, "no_redirect");
   note_id = params_value (params, "note_id");
 
   oid = params_value (params, "oid");
-  CHECK_PARAM_INVALID (oid, "Create Note", "new_note");
 
   text = params_value (params, "text");
   if (text == NULL)
     params_given (params, "text") || (text = "");
 
-  if (params_valid (params, "hosts"))
-    hosts = params_value (params, "hosts");
-  else if (strcmp (params_original_value (params, "hosts"), ""))
-    hosts = NULL;
-  else
-    hosts = "";
-
-  if (params_valid (params, "port"))
-    port = params_value (params, "port");
-  else if (strcmp (params_original_value (params, "port"), ""))
-    port = NULL;
-  else
-    port = "";
-
-  if (params_valid (params, "severity"))
-    severity = params_value (params, "severity");
-  else if (strcmp (params_original_value (params, "severity"), ""))
-    severity = NULL;
-  else
-    severity = "";
-
-  note_task_id = params_value (params, "note_task_id");
-  note_result_id = params_value (params, "note_result_id");
+  port = get_port_from_params (params);
+  hosts = get_hosts_from_params (params);
+  task_id = get_task_id_from_params (params);
+  severity = get_severity_from_params (params);
+  result_id = get_result_id_from_params (params);
 
   active = params_value (params, "active");
   days = params_value (params, "days");
 
-  CHECK_PARAM_INVALID (note_task_id, "Save Note", "edit_note");
-  CHECK_PARAM_INVALID (note_result_id, "Save Note", "edit_note");
+  CHECK_PARAM_INVALID (oid, "Save Note", "get_note");
   CHECK_PARAM_INVALID (active, "Save Note", "edit_note");
   CHECK_PARAM_INVALID (note_id, "Save Note", "edit_note");
-  CHECK_PARAM_INVALID (text, "Save Note", "edit_note");
-  CHECK_PARAM_INVALID (hosts, "Save Note", "edit_note");
-  CHECK_PARAM_INVALID (port, "Save Note", "edit_note");
-  CHECK_PARAM_INVALID (severity, "Save Note", "edit_note");
   CHECK_PARAM_INVALID (days, "Save Note", "edit_note");
 
   response = NULL;
@@ -15552,8 +15602,8 @@ save_note_omp (gvm_connection_t *connection, credentials_t * credentials,
                 port ? port : "",
                 severity ? severity : "",
                 text ? text : "",
-                note_task_id,
-                note_result_id,
+                task_id ? task_id : "",
+                result_id ? result_id : "",
                 oid))
     {
       case 0:
@@ -15885,7 +15935,7 @@ create_override_omp (gvm_connection_t *connection, credentials_t *credentials, p
   gchar *response;
   const char *no_redirect;
   const char *oid, *severity, *custom_severity, *new_severity, *port, *hosts;
-  const char *text, *task_id, *override_result_id;
+  const char *text, *task_id, *result_id;
   /* For get_report. */
   const char *active, *days;
   entity_t entity;
@@ -15894,14 +15944,11 @@ create_override_omp (gvm_connection_t *connection, credentials_t *credentials, p
   oid = params_value (params, "oid");
   CHECK_PARAM_INVALID (oid, "Create Override", "new_override");
 
-  if (params_valid (params, "severity"))
-    severity = params_value (params, "severity");
-  else if (params_given (params, "severity")
-           && strcmp (params_original_value (params, "severity"), ""))
-    severity = NULL;
-  else
-    severity = "";
-  CHECK_PARAM_INVALID (severity, "Create Override", "new_override");
+  port = get_port_from_params (params);
+  hosts = get_hosts_from_params (params);
+  task_id = get_task_id_from_params (params);
+  severity = get_severity_from_params (params);
+  result_id = get_result_id_from_params (params);
 
   custom_severity = params_value (params, "custom_severity");
   CHECK_PARAM_INVALID (custom_severity, "Create Override", "new_override");
@@ -15931,60 +15978,12 @@ create_override_omp (gvm_connection_t *connection, credentials_t *credentials, p
       CHECK_PARAM_INVALID (new_severity, "Create Override", "new_override");
     }
 
-  port = params_value (params, "port");
-  if (port == NULL)
-    port = "";
-  if (strcmp (port, "--") == 0)
-    {
-      int num = -1;
-
-      port = params_value (params, "port_manual");
-      if (port)
-        num = atoi (port);
-      if (num < 0 || num > 65535)
-        port = NULL;
-    }
-  CHECK_PARAM_INVALID (port, "Create Override", "new_override");
-
-  if (params_valid (params, "hosts"))
-    {
-      hosts = params_value (params, "hosts");
-      if (strcmp (hosts, "--") == 0)
-        {
-          if (params_valid (params, "hosts_manual"))
-            hosts = params_value (params, "hosts_manual");
-          else if (params_given (params, "hosts_manual")
-                   && strcmp (params_original_value (params, "hosts_manual"),
-                              ""))
-            hosts = NULL;
-          else
-            hosts = "";
-        }
-    }
-  else if (strcmp (params_original_value (params, "hosts"), ""))
-    hosts = NULL;
-  else
-    hosts = "";
-  CHECK_PARAM_INVALID (hosts, "Create Override", "new_override");
-
-  if (params_valid (params, "override_task_id"))
-    {
-      task_id = params_value (params, "override_task_id");
-      if (task_id && (strcmp (task_id, "0") == 0))
-        task_id = params_value (params, "override_task_uuid");
-    }
-  else
-    task_id = "";
 
   active = params_value (params, "active");
   CHECK_PARAM_INVALID (active, "Create Override", "new_override");
 
   text = params_value (params, "text");
   days = params_value (params, "days");
-
-  override_result_id = params_value (params, "override_result_id");
-  if (override_result_id && (strcmp (override_result_id, "0") == 0))
-    override_result_id = params_value (params, "override_result_uuid");
 
   response = NULL;
   entity = NULL;
@@ -16007,13 +16006,13 @@ create_override_omp (gvm_connection_t *connection, credentials_t *credentials, p
                  ? active
                  : (days ? days : "-1"),
                 oid,
-                hosts,
-                port,
-                severity,
+                hosts ? hosts : "",
+                port ? port : "",
+                severity ? severity : "",
                 new_severity,
                 text ? text : "",
-                task_id,
-                override_result_id))
+                task_id ? task_id : "",
+                result_id ? result_id : ""))
     {
       case 0:
       case -1:
@@ -16191,36 +16190,21 @@ save_override_omp (gvm_connection_t *connection, credentials_t * credentials,
   entity_t entity;
   const char *no_redirect, *override_id, *text, *hosts, *port;
   const char *severity, *custom_severity, *new_severity;
-  const char *override_task_id, *override_result_id, *active, *days, *oid;
+  const char *task_id, *result_id, *active, *days, *oid;
   char *ret;
 
   no_redirect = params_value (params, "no_redirect");
   override_id = params_value (params, "override_id");
 
+  port = get_port_from_params (params);
+  hosts = get_hosts_from_params (params);
+  task_id = get_task_id_from_params (params);
+  severity = get_severity_from_params (params);
+  result_id = get_result_id_from_params (params);
+
   text = params_value (params, "text");
   if (text == NULL)
     params_given (params, "text") || (text = "");
-
-  if (params_valid (params, "hosts"))
-    hosts = params_value (params, "hosts");
-  else if (strcmp (params_original_value (params, "hosts"), ""))
-    hosts = NULL;
-  else
-    hosts = "";
-
-  if (params_valid (params, "port"))
-    port = params_value (params, "port");
-  else if (strcmp (params_original_value (params, "port"), ""))
-    port = NULL;
-  else
-    port = "";
-
-  if (params_valid (params, "severity"))
-    severity = params_value (params, "severity");
-  else if (strcmp (params_original_value (params, "severity"), ""))
-    severity = NULL;
-  else
-    severity = "";
 
   custom_severity = params_value (params, "custom_severity");
   if (custom_severity && strcmp (custom_severity, "0") != 0)
@@ -16228,21 +16212,12 @@ save_override_omp (gvm_connection_t *connection, credentials_t * credentials,
   else
     new_severity = params_value (params, "new_severity_from_list");
 
-  override_task_id = params_value (params, "override_task_id");
-  override_result_id = params_value (params, "override_result_id");
-
   active = params_value (params, "active");
   days = params_value (params, "days");
   oid = params_value (params, "oid");
 
-  CHECK_PARAM_INVALID (override_task_id, "Save Override", "edit_override");
-  CHECK_PARAM_INVALID (override_result_id, "Save Override", "edit_override");
   CHECK_PARAM_INVALID (active, "Save Override", "edit_override");
   CHECK_PARAM_INVALID (override_id, "Save Override", "edit_override");
-  CHECK_PARAM_INVALID (text, "Save Override", "edit_override");
-  CHECK_PARAM_INVALID (hosts, "Save Override", "edit_override");
-  CHECK_PARAM_INVALID (port, "Save Override", "edit_override");
-  CHECK_PARAM_INVALID (severity, "Save Override", "edit_override");
   CHECK_PARAM_INVALID (new_severity, "Save Override", "edit_override");
   CHECK_PARAM_INVALID (days, "Save Override", "edit_override");
   CHECK_PARAM_INVALID (oid, "Save Override", "edit_override");
@@ -16274,8 +16249,8 @@ save_override_omp (gvm_connection_t *connection, credentials_t * credentials,
                 severity ? severity : "",
                 new_severity,
                 text ? text : "",
-                override_task_id,
-                override_result_id))
+                task_id ? task_id : "",
+                result_id ? result_id : ""))
     {
       case 0:
       case -1:

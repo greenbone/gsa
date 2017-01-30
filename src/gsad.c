@@ -614,6 +614,7 @@ init_validator ()
   openvas_validator_add (validator, "howto_install",  "(?s)^.*$");
   openvas_validator_add (validator, "id",             "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "id_optional",    "^(--|[a-z0-9\\-]+)$");
+  openvas_validator_add (validator, "optional_id", "^[a-z0-9\\-]*$");
   openvas_validator_add (validator, "id_or_empty",    "^(|[a-z0-9\\-]+)$");
   openvas_validator_add (validator, "id_list:name",    "^ *[0-9]+ *$");
   openvas_validator_add (validator, "id_list:value",    "^[[:alnum:]\\-_ ]+:[a-z0-9\\-]+$");
@@ -636,9 +637,7 @@ init_validator ()
   openvas_validator_add (validator, "minute",     "^[0-5]{0,1}[0-9]{1,1}$");
   openvas_validator_add (validator, "month",      "^((0??[1-9])|1[012])$");
   openvas_validator_add (validator, "note_id",    "^[a-z0-9\\-]+$");
-  openvas_validator_add (validator, "note_result_id", "^[a-z0-9\\-]*$");
   openvas_validator_add (validator, "override_id",    "^[a-z0-9\\-]+$");
-  openvas_validator_add (validator, "override_result_id", "^[a-z0-9\\-]*$");
   openvas_validator_add (validator, "name",       "^[#-_[:alnum:], \\./]{1,80}$");
   openvas_validator_add (validator, "info_name",  "(?s)^.*$");
   openvas_validator_add (validator, "info_type",  "(?s)^.*$");
@@ -683,7 +682,6 @@ init_validator ()
                                     "|topology|ssl_certs|cves)$");
   openvas_validator_add (validator, "result_id",        "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "role",             "^[[:alnum:] ]{1,40}$");
-  openvas_validator_add (validator, "optional_task_id", "^[a-z0-9\\-]*$");
   openvas_validator_add (validator, "permission",       "^([_a-z]{1,1000}|Super)$");
   openvas_validator_add (validator, "port_list_id",     "^[a-z0-9\\-]+$");
   openvas_validator_add (validator, "port_range_id",    "^[a-z0-9\\-]+$");
@@ -750,6 +748,7 @@ init_validator ()
 
   /* Beware, the rule must be defined before the alias. */
 
+  openvas_validator_alias (validator, "optional_task_id", "optional_id");
   openvas_validator_alias (validator, "add_tag", "boolean");
   openvas_validator_alias (validator, "alert_id_2", "alert_id");
   openvas_validator_alias (validator, "alert_id_optional:name",  "number");
@@ -850,9 +849,6 @@ init_validator ()
   openvas_validator_alias (validator, "next_subtype", "info_type");
   openvas_validator_alias (validator, "next_xml",      "boolean");
   openvas_validator_alias (validator, "notes",        "boolean");
-  openvas_validator_alias (validator, "note_task_id", "optional_task_id");
-  openvas_validator_alias (validator, "note_task_uuid", "note_task_id");
-  openvas_validator_alias (validator, "note_result_uuid", "note_result_id");
   openvas_validator_alias (validator, "no_chart_links",        "boolean");
   openvas_validator_alias (validator, "no_filter_history", "boolean");
   openvas_validator_alias (validator, "no_redirect", "boolean");
@@ -861,9 +857,6 @@ init_validator ()
   openvas_validator_alias (validator, "old_password", "password");
   openvas_validator_alias (validator, "original_overrides",  "boolean");
   openvas_validator_alias (validator, "overrides",        "boolean");
-  openvas_validator_alias (validator, "override_task_id", "optional_task_id");
-  openvas_validator_alias (validator, "override_task_uuid", "override_task_id");
-  openvas_validator_alias (validator, "override_result_uuid", "override_result_id");
   openvas_validator_alias (validator, "owner", "name");
   openvas_validator_alias (validator, "passphrase",   "lsc_password");
   openvas_validator_alias (validator, "password:name", "preference_name");
@@ -881,7 +874,9 @@ init_validator ()
   openvas_validator_alias (validator, "restrict_type", "resource_type");
   openvas_validator_alias (validator, "result_hosts_only", "boolean");
   openvas_validator_alias (validator, "result_task_id", "optional_task_id");
+  openvas_validator_alias (validator, "result_uuid", "optional_id");
   openvas_validator_alias (validator, "report_result_id",  "result_id");
+  openvas_validator_alias (validator, "report_uuid",  "result_id");
   openvas_validator_alias (validator, "replace_task_id",   "boolean");
   openvas_validator_alias (validator, "reverse_lookup_only", "boolean");
   openvas_validator_alias (validator, "reverse_lookup_unify", "boolean");
@@ -913,6 +908,7 @@ init_validator ()
   openvas_validator_alias (validator, "subtype", "asset_type");
   openvas_validator_alias (validator, "task_filter",  "filter");
   openvas_validator_alias (validator, "task_filt_id", "filt_id");
+  openvas_validator_alias (validator, "task_uuid", "optional_id");
   openvas_validator_alias (validator, "timeout",      "boolean");
   openvas_validator_alias (validator, "trend:name",   "family");
   openvas_validator_alias (validator, "user_id",      "id");
