@@ -103,7 +103,7 @@ export class EntitiesListPage extends React.Component {
     return null;
   }
 
-  load(filter, options) {
+  load(filter, options = {}) {
     let {cache = true, force = false, refresh} = options;
 
     this.clearTimer(); // remove possible running timer

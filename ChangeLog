@@ -1,5 +1,10 @@
 2017-01-30 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/entities/listpage.js: Don't fail if not
+	options parameter is passed to load method.
+
+2017-01-30 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/entities/listpage.js,
 	src/html/classic/ng/src/web/notes/notespage.js,
 	src/html/classic/ng/src/web/overrides/overridespage.js: Allow caching of
