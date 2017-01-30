@@ -1,5 +1,13 @@
 2017-01-30 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/entities/listpage.js,
+	src/html/classic/ng/src/web/notes/notespage.js,
+	src/html/classic/ng/src/web/overrides/overridespage.js: Allow caching of
+	requests for entities list pages. The data will be loaded from cache first and
+	after 1 sec reloaded from http automatically.
+
+2017-01-30 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/model.js,
 	src/html/classic/ng/src/gmp/models/nvt.js,
 	src/html/classic/ng/src/gmp/models/scanner.js,

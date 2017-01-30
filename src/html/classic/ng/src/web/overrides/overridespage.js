@@ -69,9 +69,9 @@ export class OverridesPage extends EntitiesListPage {
     });
   }
 
-  getGmpPromise(filter) {
+  getGmpPromise(filter, options) {
     let gmp = this.getGmp();
-    return gmp.get(filter, {details: 1});
+    return gmp.get({filter, details: 1}, options);
   }
 
   renderHeader() {

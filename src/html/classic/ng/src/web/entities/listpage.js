@@ -103,10 +103,12 @@ export class EntitiesListPage extends React.Component {
     return null;
   }
 
-  load(filter) {
+  load(filter, options) {
+    let {cache = true, force = false, refresh} = options;
+
     this.clearTimer(); // remove possible running timer
 
-    let promise = this.getGmpPromise(filter);
+    let promise = this.getGmpPromise(filter, {cache, force});
     promise.then(entities => {
       let {selection_type} = this.state;
 
@@ -118,23 +120,32 @@ export class EntitiesListPage extends React.Component {
         this.setState({selected: entities});
       }
 
-      this.startTimer();
+      this.startTimer(refresh);
     });
   }
 
   loadFilters() {
-    this.context.gmp.filters.get(this.filters_filter).then(filters => {
-      this.setState({filters});
-    });
+    this.context.gmp.filters.get({filter: this.filters_filter}, {cache: true})
+      .then(filters => {
+        // display cached filters
+        this.setState({filters});
+      });
+
+    this.context.gmp.filters.get({filter: this.filters_filter},
+      {cache: true, force: true})
+      .then(filters => {
+        // load all filters from backend
+        this.setState({filters});
+      });
   }
 
   getGmp() {
     return this.context.gmp[this.name];
   }
 
-  getGmpPromise(filter) {
+  getGmpPromise(filter, options) {
     let gmp = this.getGmp();
-    return gmp.get(filter);
+    return gmp.get({filter}, options);
   }
 
   getSectionTitle() {
@@ -157,7 +168,7 @@ export class EntitiesListPage extends React.Component {
       filter = Filter.fromString(filter_string);
     }
 
-    this.load(filter);
+    this.load(filter, {refresh: 1}); // use data from cache and reload after 1 sec
     this.loadFilters();
   }
 
@@ -165,9 +176,9 @@ export class EntitiesListPage extends React.Component {
     this.clearTimer();
   }
 
-  startTimer() {
+  startTimer(refresh) {
     let {gmp} = this.context;
-    let refresh = gmp.globals.autorefresh;
+    refresh = is_defined(refresh) ? refresh : gmp.globals.autorefresh;
     if (refresh) {
       this.timer = window.setTimeout(this.handleTimer, refresh * 1000);
       log.debug('Started reload timer with id', this.timer, 'and interval',
@@ -188,7 +199,8 @@ export class EntitiesListPage extends React.Component {
   }
 
   reload() {
-    this.load(this.state.filter);
+    // reload data from backend
+    this.load(this.state.filter, {cache: true, force: true});
   }
 
   onFirst() {
