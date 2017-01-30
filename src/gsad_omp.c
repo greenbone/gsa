@@ -7552,7 +7552,7 @@ get_aggregate_omp (gvm_connection_t *connection, credentials_t * credentials, pa
   first_group = params_value (params, "first_group");
   max_groups = params_value (params, "max_groups");
   mode = params_value (params, "aggregate_mode");
-  if (filter)
+  if (filter && strcmp (filter, ""))
     filter_escaped = g_markup_escape_text (filter, -1);
   else
     {
