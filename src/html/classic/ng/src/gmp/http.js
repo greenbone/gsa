@@ -271,19 +271,20 @@ export class GmpHttp extends Http {
 
   transformRejection(rej, options) {
     if (rej.isError && rej.isError() && rej.xhr && rej.xhr.responseXML) {
-      let message;
+
       let root = xml2json(rej.xhr.responseXML).envelope;
 
-      if (is_defined(root.gsad_response)) {
-        message = root.gsad_response.message;
+      if (is_defined(root))  {
+        if (is_defined(root.gsad_response)) {
+          return rej.setMessage(root.gsad_response.message);
+        }
+
+        if (is_defined(root.action_result)) {
+          return rej.setMessage(root.action_result.message);
+        }
+
+        return rej.setMessage(_('Unkown Error'));
       }
-      else if (is_defined(root.action_result)) {
-        message = root.action_result.message;
-      }
-      else {
-        message = _('Unkown Error');
-      }
-      return rej.setMessage(message);
     }
     return rej;
   }
