@@ -55,10 +55,10 @@ export class OverrideDialog extends Dialog {
       custom_severity: '0',
       new_severity: '',
       new_severity_from_list: -1,
-      override_result_id: '',
-      override_result_uuid: '',
-      override_task_id: '',
-      override_task_uuid: '',
+      result_id: '',
+      result_uuid: '',
+      task_id: '',
+      task_uuid: '',
       tasks: [],
       text: '',
     });
@@ -99,8 +99,10 @@ export class OverrideDialog extends Dialog {
           oid: override.nvt ? override.nvt.oid : undefined,
           override,
           override_id: override.id,
-          override_task_id: override.task ? override.task.id : undefined,
-          override_result_id: override.result ? override.result.id : undefined,
+          task_id: is_empty(override.task.id) ? '' : '0',
+          task_uuid: override.task.id,
+          result_id: is_empty(override.result.id) ? '' : '0',
+          result_uuid: override.result.id,
           severity: override.severity,
           custom_severity,
           new_severity,
@@ -128,20 +130,23 @@ export class OverrideDialog extends Dialog {
 
     return promise.then(() => {
       this.close();
-    }, root => {
-      this.showErrorMessage(root.action_result.message);
-      throw new Error('Saving override failed. Reason: ' +
-        root.action_result.message);
+    }, rej => {
+      this.showErrorMessageFromRejection(rej);
+      throw rej;
     });
   }
 
   renderContent() {
     let {override, oid, active, days, hosts, hosts_manual, port, port_manual,
-      severity, override_result_id, override_result_uuid, override_task_id,
-      override_task_uuid, tasks, text, custom_severity, new_severity,
-      new_severity_from_list,
+      severity, result_id, result_uuid, task_id, task_uuid, tasks, text,
+      custom_severity, new_severity, new_severity_from_list,
     } = this.state;
+
     let is_edit = is_defined(override);
+
+    let override_severity = is_edit && override.severity ?
+      override.severity : 0;
+
     return (
       <Layout flex="column">
         {is_edit ?
@@ -211,32 +216,17 @@ export class OverrideDialog extends Dialog {
             checked={hosts === ''}
             onChange={this.onValueChange}>
           </Radio>
-          {is_edit && !is_empty(override.hosts) &&
-            <Layout flex box>
-              <Radio name="hosts"
-                value={override.hosts}
-                checked={!is_empty(hosts)}
-                onChange={this.onValueChange}>
-              </Radio>
-              <TextField name="hosts"
-                disabled={is_empty(hosts)}
-                value={hosts}
-                onChange={this.onValueChange}/>
-            </Layout>
-          }
-          {!is_edit &&
-            <Layout flex box>
-              <Radio name="hosts"
-                value="--"
-                checked={hosts === '--'}
-                onChange={this.onValueChange}>
-              </Radio>
-              <TextField name="hosts_manual"
-                value={hosts_manual}
-                disabled={hosts !== '--'}
-                onChange={this.onValueChange}/>
-            </Layout>
-          }
+          <Layout flex box>
+            <Radio name="hosts"
+              value="--"
+              checked={hosts === '--'}
+              onChange={this.onValueChange}>
+            </Radio>
+            <TextField name="hosts_manual"
+              value={hosts_manual}
+              disabled={hosts !== '--'}
+              onChange={this.onValueChange}/>
+          </Layout>
         </FormGroup>
 
         <FormGroup title={_('Location')}>
@@ -246,32 +236,17 @@ export class OverrideDialog extends Dialog {
             checked={port === ''}
             onChange={this.onValueChange}>
           </Radio>
-          {is_edit && !is_empty(override.port) &&
-            <Layout flex box>
-              <Radio name="port"
-                value={override.port}
-                checked={!is_empty(port)}
-                onChange={this.onValueChange}>
-              </Radio>
-              <TextField name="port"
-                value={port}
-                disabled={is_empty(port)}
-                onChange={this.onValueChange}/>
-            </Layout>
-          }
-          {!is_edit &&
-            <Layout flex box>
-              <Radio name="port"
-                value="--"
-                checked={port === '--'}
-                onChange={this.onValueChange}>
-              </Radio>
-              <TextField name="port_manual"
-                value={port_manual}
-                disabled={port !== '--'}
-                onChange={this.onValueChange}/>
-            </Layout>
-          }
+          <Layout flex box>
+            <Radio name="port"
+              value="--"
+              checked={port === '--'}
+              onChange={this.onValueChange}>
+            </Radio>
+            <TextField name="port_manual"
+              value={port_manual}
+              disabled={port !== '--'}
+              onChange={this.onValueChange}/>
+          </Layout>
         </FormGroup>
 
         <FormGroup title={_('Severity')}>
@@ -281,21 +256,21 @@ export class OverrideDialog extends Dialog {
             checked={is_empty(severity)}
             onChange={this.onValueChange}>
           </Radio>
-          {is_edit && override.severity > 0.0 &&
-            <Radio name="severity"
-              value={0.1}
-              title={_('> 0.0')}
-              checked={!is_empty(severity) && severity > 0.0}
-              onChange={this.onValueChange}>
-            </Radio>
-          }
-          {is_edit && override.severity <= 0.0 &&
-            <Radio name="severity"
-              value={override.severity}
-              title={result_cvss_risk_factor(override.severity)}
-              checked={!is_empty(severity) && severity <= 0.0}
-              onChange={this.onValueChange}>
-            </Radio>
+          {is_edit &&
+            <Layout flex box>
+              <Radio name="severity"
+                value={0.1}
+                title={_('> 0.0')}
+                checked={!is_empty(severity) && severity > 0.0}
+                onChange={this.onValueChange}>
+              </Radio>
+              <Radio name="severity"
+                value={override_severity}
+                title={result_cvss_risk_factor(override_severity)}
+                checked={!is_empty(severity) && severity <= 0.0}
+                onChange={this.onValueChange}>
+              </Radio>
+            </Layout>
           }
           {!is_edit &&
             <Layout flex box>
@@ -347,74 +322,43 @@ export class OverrideDialog extends Dialog {
         </FormGroup>
 
         <FormGroup title={_('Task')}>
-          <Radio name="override_task_id"
+          <Radio name="task_id"
             value=""
             title={_('Any')}
-            checked={override_task_id === ''}
+            checked={task_id === ''}
             onChange={this.onValueChange}/>
-          {is_edit && override.task && !is_empty(override.task.id) &&
-            <Layout flex box>
-              <Radio name="override_task_id"
-                value={override.task.id}
-                checked={!is_empty(override_task_id)}
-                onChange={this.onValueChange}/>
-              <Select2 name="override_task_id"
-                value={override_task_id}
-                disabled={is_empty(override_task_id)}
-                onChange={this.onValueChange}>
-                {render_options(tasks)}
-              </Select2>
-            </Layout>
-          }
-          {!is_edit &&
-            <Layout flex box>
-              <Radio name="override_task_id"
-                value="0"
-                checked={override_task_id === '0'}
-                onChange={this.onValueChange}/>
-              <Select2 name="override_task_uuid"
-                value={override_task_uuid}
-                disabled={override_task_id !== '0'}
-                onChange={this.onValueChange}>
-                {render_options(tasks)}
-              </Select2>
-            </Layout>
-          }
+          <Layout flex box>
+            <Radio name="task_id"
+              value="0"
+              checked={task_id === '0'}
+              onChange={this.onValueChange}/>
+            <Select2 name="task_uuid"
+              value={task_uuid}
+              disabled={task_id !== '0'}
+              onChange={this.onValueChange}>
+              {render_options(tasks)}
+            </Select2>
+          </Layout>
         </FormGroup>
 
         <FormGroup title={_('Result')}>
-          <Radio name="override_result_id"
+          <Radio name="result_id"
             value=""
             title={_('Any')}
-            checked={override_result_id === ''}
+            checked={result_id === ''}
             onChange={this.onValueChange}/>
-          {is_edit && override.result && !is_empty(override.result.id) &&
-            <Layout flex box>
-              <Radio name="override_result_id"
-                value={override.result.id}
-                checked={!is_empty(override_result_id)}
-                onChange={this.onValueChange}/>
-              <TextField name="override_result_id"
-                value={override_result_id}
-                size="34"
-                disabled={is_empty(override_result_id)}
-                onChange={this.onValueChange}/>
-            </Layout>
-          }
-          {!is_edit &&
-            <Layout flex box>
-              <Radio name="override_result_id"
-                value="0"
-                title={_('UUID')}
-                checked={override_result_id === '0'}
-                onChange={this.onValueChange}/>
-              <TextField name="override_result_uuid"
-                value={override_result_uuid}
-                size="34"
-                disabled={override_result_id !== '0'}
-                onChange={this.onValueChange}/>
-            </Layout>
-          }
+          <Layout flex box>
+            <Radio name="result_id"
+              value="0"
+              title={_('UUID')}
+              checked={result_id === '0'}
+              onChange={this.onValueChange}/>
+            <TextField name="result_uuid"
+              value={result_uuid}
+              size="34"
+              disabled={result_id !== '0'}
+              onChange={this.onValueChange}/>
+          </Layout>
         </FormGroup>
 
         <FormGroup title={_('Text')}>
