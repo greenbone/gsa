@@ -1,5 +1,12 @@
 2017-01-30 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/proptypes.js: Add module for own prop types. React
+	prop types are used in development mode to validate the properties passed to
+	components.
+
+2017-01-30 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/CMakeLists.txt: Fix building bundle if js source files
 	have changed. Setting a cmake variable on the PARENT_SCOPE doesn't set the
 	variable on the current scope. As a result the js source files haven't been

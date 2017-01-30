@@ -181,6 +181,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pagination.js
      ${NG_SRC_DIR}/src/web/portlists/dialog.js
      ${NG_SRC_DIR}/src/web/powerfilter.js
+     ${NG_SRC_DIR}/src/web/proptypes.js
      ${NG_SRC_DIR}/src/web/render.js
      ${NG_SRC_DIR}/src/web/reports/charts.js
      ${NG_SRC_DIR}/src/web/results/charts.js
