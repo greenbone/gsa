@@ -1,5 +1,10 @@
 2017-01-30 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/command.js: Use http params parameter correctly
+	to allow to pass empty and all parameters to the http request.
+
+2017-01-30 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/http.js: Add debug output if response is taken
 	from cache.
 

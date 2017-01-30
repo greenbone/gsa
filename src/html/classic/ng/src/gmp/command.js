@@ -88,7 +88,7 @@ export class EntitiesCommand extends HttpCommand {
     this.name = name;
   }
 
-  getParams(params, extra_params = {}) {
+  getParams(params = {}, extra_params = {}) {
     let {filter, ...other} = params;
     let rparams = super.getParams(other, extra_params);
 
@@ -150,10 +150,10 @@ export class EntitiesCommand extends HttpCommand {
     return root;
   }
 
-  get(filter, params) {
-    return this.httpGet({filter, ...params}).then(root =>
-        this.getCollectionListFromRoot(root)
-    );
+  get(params, options) {
+    return this.httpGet(params, options).then(root => {
+        return this.getCollectionListFromRoot(root);
+    });
   }
 
   export(entities) {
