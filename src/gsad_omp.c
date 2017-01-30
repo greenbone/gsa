@@ -15370,12 +15370,12 @@ create_note_omp (gvm_connection_t *connection, credentials_t *credentials, param
                  ? active
                  : (days ? days : "-1"),
                 oid,
-                hosts,
-                port,
-                severity,
+                hosts ? hosts : "",
+                port ? port : "",
+                severity ? severity : "",
                 text ? text : "",
-                task_id,
-                result_id))
+                task_id ? task_id : "",
+                result_id ? result_id : ""))
     {
       case 0:
       case -1:
@@ -15928,8 +15928,8 @@ new_override_omp (gvm_connection_t *connection, credentials_t *credentials, para
  * @return Result of XSL transformation.
  */
 char *
-create_override_omp (gvm_connection_t *connection, credentials_t *credentials, params_t *params,
-                     cmd_response_data_t* response_data)
+create_override_omp (gvm_connection_t *connection, credentials_t *credentials,
+                     params_t *params, cmd_response_data_t *response_data)
 {
   char *ret;
   gchar *response;

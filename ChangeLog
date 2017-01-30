@@ -1,5 +1,12 @@
 2017-01-30 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/gsad_omp.c (create_note_omp): Send empty strings instead of null to
+	manager if hosts, port, severity, task_id and result_id are not set.
+
+	* src/gsad_omp.c (create_override_omp): Update coding style.
+
+2017-01-30 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/entities/listpage.js: Don't fail if not
 	options parameter is passed to load method.
 
