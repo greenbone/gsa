@@ -1,5 +1,11 @@
 2017-01-30 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/powerfilter.js: Start to make gmp optional for
+	powerfilter. At the end powerfilter should not do any gmp api calls and be
+	nearly stateless.
+
+2017-01-30 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/powerfilter.js: Don't pass event to onResetClick
 	callback of powerfilter. This will allow to use same handler in parent
 	component of powerfilter for reset and update.

@@ -116,7 +116,7 @@ export class PowerFilter extends React.Component {
   onCreateFilter() {
     let {filter, userfilter = '', filtername = ''} = this.state;
 
-    let {onFilterCreated} = this.props;
+    let {onCreateClick} = this.props;
 
     if (userfilter.trim().length === 0 || filtername.trim().length === 0) {
       return;
@@ -124,20 +124,34 @@ export class PowerFilter extends React.Component {
 
     filter = Filter.fromString(userfilter, filter);
 
-    this.context.gmp.filter.create({
-      term: filter.toFilterString(),
-      type: 'task',
-      name: filtername,
-    }).then(f => {
-      this.updateFilter(f);
-      this.setState({filtername: ''});
+    if (onCreateClick) {
+      onCreateClick(filter);
+    }
+    else {
+      this.createFilter(filter);
+    }
+  }
 
-      if (onFilterCreated) {
-        onFilterCreated(f);
-      }
-    }, err => {
-      log.error(err);
-    });
+  createFilter(filter) {
+    let {filtername = ''} = this.state;
+    let {onFilterCreated} = this.props;
+
+    if (this.context.gmp) {
+      this.context.gmp.filter.create({
+        term: filter.toFilterString(),
+        type: 'task',
+        name: filtername,
+      }).then(f => {
+        this.updateFilter(f);
+        this.setState({filtername: ''});
+
+        if (onFilterCreated) {
+          onFilterCreated(f);
+        }
+      }, err => {
+        log.error(err);
+      });
+    }
   }
 
   componentWillReceiveProps(props) {
@@ -232,12 +246,13 @@ PowerFilter.propTypes = {
   ]),
   onResetClick: React.PropTypes.func,
   onEditClick: React.PropTypes.func,
+  onCreateClick: React.PropTypes.func,
   onUpdate: React.PropTypes.func,
   onFilterCreated: React.PropTypes.func,
 };
 
 PowerFilter.contextTypes = {
-  gmp: React.PropTypes.object.isRequired,
+  gmp: React.PropTypes.object,
   capabilities: React.PropTypes.object.isRequired,
 };
 
