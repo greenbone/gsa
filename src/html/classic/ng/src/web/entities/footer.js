@@ -54,15 +54,17 @@ export const EntitiesFooter = props => {
               {_('Apply to all filtered')}
             </option>
           </Select2>
-          {trash &&
-            <TrashIcon onClick={props.onTrashClick}
-              selectionType={selectionType}/>
-          }
-          {download &&
-            <ExportIcon onClick={props.onDownloadClick}
-              selectionType={selectionType}/>
-          }
-          {props.children}
+          <Layout flex box>
+            {trash &&
+              <TrashIcon onClick={props.onTrashClick}
+                selectionType={selectionType}/>
+            }
+            {download &&
+              <ExportIcon onClick={props.onDownloadClick}
+                selectionType={selectionType}/>
+            }
+            {props.children}
+          </Layout>
         </Layout>
       </td>
     </TableRow>

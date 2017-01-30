@@ -1,5 +1,13 @@
 2017-01-30 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/css/powerfilter.css: Add small padding above the
+	filter string in the powerfilter.
+
+	* src/html/classic/ng/src/web/entities/footer.js: Add space between list
+	content selection and icons.
+
+2017-01-30 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/js/gsa_dashboard.js: Add Cache class and use it in
 	DataSource. This will allow setting the cache in ng. Also add missing colons
 	at end of lines.
