@@ -21,23 +21,26 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+import {extend} from '../../utils.js';
+
 import Model from '../model.js';
 
 export class Nvt extends Model {
 
   parseProperties(elem) {
-    elem.oid = elem._oid;
+    let copy = extend({}, elem);
+    copy.oid = copy._oid;
 
     let tags = {};
-    if (elem.tags) {
-      let splited = elem.tags.split('|');
+    if (copy.tags) {
+      let splited = copy.tags.split('|');
       for (let t of splited) {
         let [key, value] = t.split('=');
         tags[key] = value;
       }
     }
-    elem.tags = tags;
-    return elem;
+    copy.tags = tags;
+    return copy;
   }
 }
 

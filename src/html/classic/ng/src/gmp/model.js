@@ -21,7 +21,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {is_defined} from '../utils.js';
+import {is_defined, extend} from '../utils.js';
 
 export class Model {
 
@@ -56,9 +56,9 @@ export class Model {
   }
 
   parseProperties(elem) {
-    elem.id = elem._id;
-    delete elem._id;
-    return elem;
+    let copy = extend({}, elem);
+    copy.id = elem._id;
+    return copy;
   }
 }
 

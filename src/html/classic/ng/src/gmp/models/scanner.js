@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,9 +28,9 @@ import Model from '../model.js';
 export class Scanner extends Model {
 
   parseProperties(elem) {
-    elem.id = elem._id;
-    elem.type = parse_int(elem.type);
-    return elem;
+    let ret = super.parseProperties(elem);
+    ret.type = parse_int(ret.type);
+    return ret;
   }
 }
 

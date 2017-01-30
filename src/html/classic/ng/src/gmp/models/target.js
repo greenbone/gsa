@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 Greenbone Networks GmbH
+ * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,9 +28,9 @@ import PortList from './portlist.js';
 export class Target extends Model {
 
   parseProperties(elem) {
-    elem.id = elem._id;
-    elem.port_list = new PortList(elem.port_list);
-    return elem;
+    let ret = super.parseProperties(elem);
+    ret.port_list = new PortList(ret.port_list);
+    return ret;
   }
 
 }
