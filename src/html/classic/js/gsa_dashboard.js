@@ -46,6 +46,23 @@
 
   var log = gsa.log;
 
+  function Cache() {
+    this._cache = {};
+  }
+
+  Cache.prototype.get = function(key) {
+    return this._cache[key];
+  };
+
+  Cache.prototype.set = function(key, value) {
+    this._cache[key] = value;
+    return this;
+  };
+
+  Cache.prototype.clear = function() {
+    this._cache = {};
+  };
+
   var EMPTY_FILTER = {id: '', name: '--', term: '', type: null};
 
   function EventNode(event_node) {
@@ -75,7 +92,8 @@
   EventNode.prototype.off = function(event_name) {
     this.event_node.off(event_name);
     return this;
-  }
+  };
+
   /**
    * Trigger event
    *
@@ -713,7 +731,7 @@
   Dashboard.prototype.setConfig = function(config) {
     this.config = config;
     this.prev_config = config ? JSON.stringify(config) : '';
-  }
+  };
 
   Dashboard.prototype.saveConfig = function() {
     this.config = this.getConfig();
@@ -1683,12 +1701,12 @@
       this.current_controller.on('data_source_changed',
         this.onDataSourceChanged);
     }
-  }
+  };
 
   DashboardDisplay.prototype.onDataSourceChanged = function() {
     log.debug('data source changed', this.id);
     this.redraw();
-  }
+  };
 
   /**
    * Gets a menu item or creates it if it does not exist.
@@ -2722,7 +2740,6 @@
 
     this.requesting_controllers = {};
     this.active_requests = {};
-    this.cached_data = {};
     this.column_info = {};
     this.data = {};
     this.params = {
@@ -2742,6 +2759,9 @@
    * Initializes a data source.
    */
   DataSource.prototype.init = function() {
+    this.cache = gsa.is_defined(this.options.cache) ?
+      this.options.cache : new Cache();
+
     if (gsa.is_defined(this.options.filter)) {
       this._setFilter(this.options.filter);
     }
@@ -2841,12 +2861,12 @@
 
   DataSource.prototype._setFilter = function(filter) {
     this.params.filter = filter;
-    this.cached_data = {};
+    this.cache.clear();
   };
 
   DataSource.prototype.getFilter = function() {
     return this.params.filter;
-  }
+  };
 
   /**
    * Adds a request from a controller to a data source.
@@ -3066,7 +3086,7 @@
    */
   DataSource.prototype.addData = function(data, filter_id) {
     filter_id = gsa.is_defined(filter_id) ? filter_id : '';
-    this.cached_data[filter_id] = data;
+    this.cache.set(filter_id, data);
     return this;
   };
 
@@ -3079,7 +3099,7 @@
    */
   DataSource.prototype.getData = function(filter_id) {
     filter_id = gsa.is_defined(filter_id) ? filter_id : '';
-    return this.cached_data[filter_id];
+    return this.cache.get(filter_id);
   };
 
   /**
@@ -3108,7 +3128,7 @@
   /* Dashboard helper function */
 
   function create_hostname() {
-    var url = ''
+    var url = '';
     var config = global.config;
     var protocol;
     var server;
