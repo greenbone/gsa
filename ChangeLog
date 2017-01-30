@@ -1,3 +1,10 @@
+2017-01-30  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	Backport r27401.
+
+	* src/gsad_omp.c (get_aggregate_omp): Handle empty filter strings as if
+	there is no filter given.
+
 2017-01-26  Michael Wiegand <michael.wiegand@greenbone.net>
 
 	Updated translations for Arabic and Brazilian Portuguese from

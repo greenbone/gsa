@@ -7766,7 +7766,7 @@ get_aggregate_omp (credentials_t * credentials, params_t *params,
   first_group = params_value (params, "first_group");
   max_groups = params_value (params, "max_groups");
   mode = params_value (params, "aggregate_mode");
-  if (filter)
+  if (filter && strcmp (filter, ""))
     filter_escaped = g_markup_escape_text (filter, -1);
   else
     {
