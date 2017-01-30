@@ -99,6 +99,12 @@ export class PowerFilter extends React.Component {
     }
   }
 
+  onResetClick() {
+    if (this.props.onResetClick) {
+      this.props.onResetClick();
+    }
+  }
+
   onNamedFilterChange(value) {
     let {filters} = this.props;
 
@@ -179,7 +185,7 @@ export class PowerFilter extends React.Component {
               <Icon img="refresh.svg" title={_('Update Filter')}
                 onClick={this.onUpdateFilter}/>
               <Icon img="delete.svg" title={_('Reset Filter')}
-                onClick={this.props.onResetClick}/>
+                onClick={this.onResetClick}/>
               <HelpIcon page="powerfilter" />
               <Icon img="edit.svg" title={_('Edit Filter')}
                 onClick={this.props.onEditClick}/>
