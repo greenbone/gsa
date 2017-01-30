@@ -1,5 +1,12 @@
 2017-01-30 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt: Fix building bundle if js source files
+	have changed. Setting a cmake variable on the PARENT_SCOPE doesn't set the
+	variable on the current scope. As a result the js source files haven't been
+	used as dependencies for running build in the ng directory.
+
+2017-01-30 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/gsad_omp.c (create_note_omp): Send empty strings instead of null to
 	manager if hosts, port, severity, task_id and result_id are not set.
 

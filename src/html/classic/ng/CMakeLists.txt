@@ -137,7 +137,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/form/filefield.js
      ${NG_SRC_DIR}/src/web/form/form.js
      ${NG_SRC_DIR}/src/web/form/formgroup.js
-     ${NG_SRC_DIR}/src/web/form/formitem.js
      ${NG_SRC_DIR}/src/web/form/formpart.js
      ${NG_SRC_DIR}/src/web/form/passwordfield.js
      ${NG_SRC_DIR}/src/web/form/radio.js
@@ -150,7 +149,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/form/timezoneselect.js
      ${NG_SRC_DIR}/src/web/form/yesnoradio.js
      ${NG_SRC_DIR}/src/web/header.js
-     ${NG_SRC_DIR}/src/web/home.js
+     ${NG_SRC_DIR}/src/web/homepage.js
      ${NG_SRC_DIR}/src/web/hosts/charts.js
      ${NG_SRC_DIR}/src/web/icons/exporticon.js
      ${NG_SRC_DIR}/src/web/icons/helpicon.js
@@ -169,12 +168,12 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/notes/charts.js
      ${NG_SRC_DIR}/src/web/notes/dialog.js
      ${NG_SRC_DIR}/src/web/notes/notespage.js
-     ${NG_SRC_DIR}/src/web/notes/noteslistentry.js
+     ${NG_SRC_DIR}/src/web/notes/noteslistrow.js
      ${NG_SRC_DIR}/src/web/nvts/charts.js
      ${NG_SRC_DIR}/src/web/overrides/charts.js
      ${NG_SRC_DIR}/src/web/overrides/dialog.js
      ${NG_SRC_DIR}/src/web/overrides/overridespage.js
-     ${NG_SRC_DIR}/src/web/overrides/overrideslistentry.js
+     ${NG_SRC_DIR}/src/web/overrides/overrideslistrow.js
      ${NG_SRC_DIR}/src/web/os/charts.js
      ${NG_SRC_DIR}/src/web/ovaldefs/charts.js
      ${NG_SRC_DIR}/src/web/page.js
@@ -187,7 +186,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/results/charts.js
      ${NG_SRC_DIR}/src/web/results/filterdialog.js
      ${NG_SRC_DIR}/src/web/results/resultspage.js
-     ${NG_SRC_DIR}/src/web/results/resultslistentry.js
+     ${NG_SRC_DIR}/src/web/results/resultslistrow.js
      ${NG_SRC_DIR}/src/web/scanspage.js
      ${NG_SRC_DIR}/src/web/schedules/dialog.js
      ${NG_SRC_DIR}/src/web/secinfopage.js
@@ -209,13 +208,17 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/tasks/statusbar.js
      ${NG_SRC_DIR}/src/web/tasks/task.js
      ${NG_SRC_DIR}/src/web/tasks/taskspage.js
-     ${NG_SRC_DIR}/src/web/tasks/taskslistentry.js
+     ${NG_SRC_DIR}/src/web/tasks/taskslistrow.js
      ${NG_SRC_DIR}/src/web/tasks/trend.js
      ${NG_SRC_DIR}/src/web/titlebar.js
      ${NG_SRC_DIR}/src/web/toolbar.js
      ${NG_SRC_DIR}/src/web/wizard/advancedtaskwizard.js
      ${NG_SRC_DIR}/src/web/wizard/modifytaskwizard.js
      ${NG_SRC_DIR}/src/web/wizard/taskwizard.js
+     )
+
+set (NG_JS_SRC_FILES
+     ${NG_JS_SRC_FILES}
      PARENT_SCOPE)
 
 
@@ -260,7 +263,6 @@ set (NG_FILES
      ${NG_BUILD_DIR}/index.html)
 
 
-
 add_custom_command (OUTPUT node-modules.stamp
                     DEPENDS ${NG_PKG_FILES}
                     COMMAND ${INSTALLER} "install"
@@ -269,8 +271,9 @@ add_custom_command (OUTPUT node-modules.stamp
                     COMMENT "Install gsa-ng js dependencies")
 
 
-add_custom_command (OUTPUT ${NG_FILES}
+add_custom_command (OUTPUT bundle.stamp
                     COMMAND ${INSTALLER} run build
+                    COMMAND cmake -E touch ${CMAKE_CURRENT_BINARY_DIR}/bundle.stamp
                     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
                     DEPENDS  ${CMAKE_CURRENT_BINARY_DIR}/node-modules.stamp
                              ${NG_PKG_FILES}
@@ -280,7 +283,8 @@ add_custom_command (OUTPUT ${NG_FILES}
                     COMMENT "Build gsa-ng install files")
 
 add_custom_target (gsa-ng ALL
-                   DEPENDS node-modules.stamp ${NG_FILES})
+                   DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/node-modules.stamp
+                           ${CMAKE_CURRENT_BINARY_DIR}/bundle.stamp)
 
 install (FILES ${NG_FILES}
          DESTINATION ${NG_DEST_DIR})
