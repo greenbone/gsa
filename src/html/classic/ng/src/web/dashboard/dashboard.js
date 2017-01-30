@@ -55,6 +55,8 @@ export class Dashboard extends React.Component {
       initialized: false,
       id,
     };
+
+    this.onConfigSaved = this.onConfigSaved.bind(this);
   }
 
   getChildContext() {
@@ -91,9 +93,18 @@ export class Dashboard extends React.Component {
 
       dashboard.init();
       dashboard.initDisplays();
+      dashboard.onConfigSaved = this.onConfigSaved;
 
       this.setState({initialized: true});
     });
+  }
+
+  onConfigSaved() {
+    let {gmp} = this.context;
+    // override cache with current saved config
+    // this is a bit "hackish" and should be absolete when dashboards are
+    // completely converted to react and gmp api
+    gmp.user.currentChartPreferences({force: true});
   }
 
   render() {

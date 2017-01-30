@@ -742,6 +742,10 @@
       this.config_pref_request.post(form_data);
 
       this.prev_config = json_config;
+
+      if (this.onConfigSaved) {
+        this.onConfigSaved(this.config);
+      }
     }
     this._configUnchanged();
     return this;

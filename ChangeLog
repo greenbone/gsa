@@ -1,3 +1,11 @@
+2017-01-30 Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/js/gsa_dashboard.js (Dashboard.prototype.saveConfig):
+	Add callback function onConfigSaved to dashboard.
+
+	* src/html/classic/ng/src/web/dashboard/dashboard.js: Reload dashboard config
+	when it has been saved to override cached config.
+
 2017-01-30  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/gsad_omp.c (get_aggregate_omp): Handle empty filter strings as if
