@@ -1,5 +1,12 @@
 2017-01-30 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/commands/notes.js,
+	src/html/classic/ng/src/gmp/commands/overrides.js: saving and creating notes
+	and overrides now behave the same. Therefore use only one codepath for saving
+	and creating.
+
+2017-01-30 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/gsad.c (init_validator): Introduce optional_id regex validation.
 	Use same parameter names and validator for save/create note and override.
 

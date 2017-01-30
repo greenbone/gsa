@@ -40,17 +40,26 @@ export class OverrideCommand extends EntityCommand {
   }
 
   create(args) {
-    let {oid, active = '-1', days = 30, hosts = '', hosts_manual = '',
-      override_result_id = '', override_result_uuid = '', port = '',
-      port_manual = '', severity = '', override_task_id = '',
-      override_task_uuid = '', text, custom_severity = '0',
-      new_severity = '', new_severity_from_list = '-1.0'} = args;
+    return this._save({cmd: 'create_override', ...args});
+  }
 
-    log.debug('Creating new override', args);
+  save(args) {
+    return this._save({cmd: 'save_override', ...args});
+  }
+
+  _save(args) {
+    let {cmd, oid, override_id, active = '-1', days = 30, hosts = '',
+      hosts_manual = '', result_id = '', result_uuid = '', port = '',
+      port_manual = '', severity = '', task_id = '', task_uuid = '', text,
+      custom_severity = '0', new_severity = '',
+      new_severity_from_list = '-1.0'} = args;
+
+    log.debug('Saving override', args);
     return this.httpPost({
-      cmd: 'create_override',
+      cmd,
       next: 'get_override',
       oid,
+      override_id,
       active,
       custom_severity,
       new_severity,
@@ -58,38 +67,13 @@ export class OverrideCommand extends EntityCommand {
       days,
       hosts,
       hosts_manual,
-      override_result_id,
-      override_result_uuid,
-      override_task_id,
-      override_task_uuid,
+      result_id,
+      result_uuid,
+      task_id,
+      task_uuid,
       port,
       port_manual,
       severity,
-      text,
-    }).then(xhr => this.getModelFromResponse(xhr));
-  }
-
-  save(args) {
-    let {oid, override_id, active = '-1', days = 30, hosts = '',
-      override_result_id = '', custom_severity = '0', new_severity = '',
-      new_severity_from_list = '', port = '', severity = '',
-      override_task_id = '', text} = args;
-    log.debug('Saving override', args);
-    return this.httpPost({
-      cmd: 'save_override',
-      next: 'get_override',
-      oid,
-      override_id,
-      active,
-      days,
-      hosts,
-      override_result_id,
-      override_task_id,
-      port,
-      severity,
-      custom_severity,
-      new_severity,
-      new_severity_from_list,
       text,
     }).then(xhr => this.getModelFromResponse(xhr));
   }

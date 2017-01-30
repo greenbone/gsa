@@ -40,45 +40,34 @@ export class NoteCommand extends EntityCommand {
   }
 
   create(args) {
-    let {oid, active = '-1', days = 30, hosts = '', hosts_manual = '',
-      note_result_id = '', note_result_uuid = '', port = '', port_manual = '',
-      severity = '', note_task_id = '', note_task_uuid = '', text} = args;
-    log.debug('Creating new note', args);
-    return this.httpPost({
-      cmd: 'create_note',
-      next: 'get_note',
-      oid,
-      active,
-      days,
-      hosts,
-      hosts_manual,
-      note_result_id,
-      note_result_uuid,
-      note_task_id,
-      note_task_uuid,
-      port,
-      port_manual,
-      severity,
-      text,
-    }).then(xhr => this.getModelFromResponse(xhr));
+    return this._save({cmd: 'create_note', ...args});
   }
 
   save(args) {
-    let {oid, note_id, active = '-1', days = 30, hosts = '',
-      note_result_id = '', port = '', severity = '', note_task_id = '',
+    return this._save({cmd: 'save_note', ...args});
+  }
+
+  _save(args) {
+    let {cmd, oid, note_id, active = '-1', days = 30, hosts = '',
+      hosts_manual = '', result_id = '', result_uuid = '', port = '',
+      port_manual = '', severity = '', task_id = '', task_uuid = '',
       text} = args;
     log.debug('Saving note', args);
     return this.httpPost({
-      cmd: 'save_note',
+      cmd,
       next: 'get_note',
       oid,
       note_id,
       active,
       days,
       hosts,
-      note_result_id,
-      note_task_id,
+      hosts_manual,
+      result_id,
+      result_uuid,
+      task_id,
+      task_uuid,
       port,
+      port_manual,
       severity,
       text,
     }).then(xhr => this.getModelFromResponse(xhr));
