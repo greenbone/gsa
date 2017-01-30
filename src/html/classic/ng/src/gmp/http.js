@@ -99,6 +99,7 @@ export class Http {
     }
 
     if (method === 'GET' && cache && !force && this.cache.has(uri)) {
+      log.debug('Using http response for uri', uri, 'from cache');
       return this.promise_factory.promise.resolve(this.cache.get(uri));
     }
 
