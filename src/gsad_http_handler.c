@@ -904,8 +904,7 @@ handle_system_report (http_connection_t *connection,
 
   credentials_free (credentials);
 
-  return handler_create_response (connection, res, response_data,
-                                  credentials->sid);
+  return handler_create_response (connection, res, response_data, NULL);
 }
 
 int
