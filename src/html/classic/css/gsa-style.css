@@ -1750,4 +1750,40 @@ select[multiple] {
 .permission-description {
   margin-top: 5px;
 }
+
+.performance-presets {
+  margin-top: 5px;
+  margin-bottom: 10px;
+}
+
+.performance-presets ul {
+  list-style: none;
+  display: inline;
+  padding-left: 0;
+  margin-left: 0;
+}
+
+.performance-presets ul li {
+  display: inline;
+}
+
+.performance-presets ul li + li {
+  padding-right: 5px;
+  padding-left: 5px;
+  border-left: 1px solid black;
+}
+.performance-presets ul li:first-child {
+  padding-right: 5px;
+}
+
+.performance-presets ul li > a {
+  color: blue;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.performance-presets ul li > a.active {
+  color: black;
+  text-decoration: none;
+}
 /* vim: set ts=2 sw=2 tw=80:*/
