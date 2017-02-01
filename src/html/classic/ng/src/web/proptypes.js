@@ -28,8 +28,20 @@ export const component = React.PropTypes.oneOfType([
   React.PropTypes.object,
 ]);
 
+export const number = React.PropTypes.oneOfType([
+  React.PropTypes.number,
+  React.PropTypes.string,
+]);
+
+export const icon =  React.PropTypes.oneOfType([
+  React.PropTypes.string,
+  React.PropTypes.element,
+]);
+
 export default {
   component,
+  number,
+  icon,
 };
 
 // vim: set ts=2 sw=2 tw=80:
