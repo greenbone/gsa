@@ -23,20 +23,20 @@
 
 import React from 'react';
 
-import  _ from '../locale.js';
-import {is_defined, parse_int, map} from '../utils.js';
+import  _ from '../../locale.js';
+import {is_defined, parse_int} from '../../utils.js';
 
-import Dialog from './dialog.js';
-import Layout from './layout.js';
+import Dialog from '../dialog.js';
+import Layout from '../layout.js';
 
-import FormGroup from './form/formgroup.js';
-import YesNoRadio from './form/yesnoradio.js';
-import Spinner from './form/spinner.js';
-import Select2 from './form/select2.js';
-import TextField from './form/textfield.js';
-import Radio from './form/radio.js';
+import ApplyOverridesGroup from './applyoverridesgroup.js';
+import FilterStringGroup from './filterstringgroup.js';
+import FirstResultGroup from './firstresultgroup.js';
+import MinQodGroup from './minqodgroup.js';
+import ResultsPerPageGroup from './resultsperpagegroup.js';
+import SortByGroup from './sortbygroup.js';
 
-import Filter from '../gmp/models/filter.js';
+import Filter from '../../gmp/models/filter.js';
 
 export class FilterDialog extends Dialog {
 
@@ -142,13 +142,8 @@ export class FilterDialog extends Dialog {
   renderFilter() {
     let {filterstring} = this.state;
     return (
-      <FormGroup title={_('Filter')} flex>
-        <TextField
-          grow="1"
-          value={filterstring} size="30"
-          onChange={this.onFilterStringChange}
-          maxLength="80"/>
-      </FormGroup>
+      <FilterStringGroup filter={filterstring}
+        onChange={this.onFilterStringChange}/>
     );
   }
 
@@ -156,30 +151,16 @@ export class FilterDialog extends Dialog {
     let {filter} = this.state;
     let apply_overrides = filter.get('apply_overrides');
     return (
-      <FormGroup title={_('Apply Overrides')}>
-        <YesNoRadio
-          value={apply_overrides}
-          name="apply_overrides"
-          onChange={this.onFilterValueChange}/>
-      </FormGroup>
+      <ApplyOverridesGroup overrides={apply_overrides}
+        onChange={this.onFilterValueChange}/>
     );
   }
 
   renderQoD() {
     let {filter} = this.state;
-    let min_qod = filter.get('min_qod');
     return (
-      <FormGroup title={_('QoD')}>
-        <Layout flex box>{_('must be at least')}</Layout>
-        <Spinner
-          type="int"
-          name="min_qod"
-          min="0" max="100"
-          step="1"
-          value={min_qod}
-          size="1"
-          onChange={this.onFilterValueChange}/>
-      </FormGroup>
+      <MinQodGroup filter={filter}
+        onChange={this.onFilterValueChange}/>
     );
   }
 
@@ -187,12 +168,8 @@ export class FilterDialog extends Dialog {
     let {filter} = this.state;
     let first = filter.get('first');
     return (
-      <FormGroup title={_('First result')}>
-        <Spinner type="int" name="first"
-          value={first}
-          size="5"
-          onChange={this.onFilterValueChange}/>
-      </FormGroup>
+      <FirstResultGroup first={first}
+        onChange={this.onFilterValueChange}/>
     );
   }
 
@@ -200,48 +177,21 @@ export class FilterDialog extends Dialog {
     let {filter} = this.state;
     let rows = filter.get('rows');
     return (
-      <FormGroup title={_('Results per page')}>
-        <Spinner type="int" name="rows"
-          value={rows}
-          size="5"
-          onChange={this.onFilterValueChange}/>
-      </FormGroup>
+      <ResultsPerPageGroup rows={rows}
+        onChange={this.onFilterValueChange}/>
     );
 
-  }
-
-  renderSortFieldOptions() {
-    let fields = this.getSortFields();
-    return map(fields, field => {
-      let value = field[0];
-      let title = field[1];
-      return <option key={value} value={value}>{title}</option>;
-    });
   }
 
   renderSortBy() {
     let {sort_order, sort_field} = this.state;
     return (
-      <FormGroup title={_('Sort by')}>
-        <Select2
-          name="sort_field"
-          value={sort_field}
-          onChange={this.onSortFieldChange}>
-          {this.renderSortFieldOptions()}
-        </Select2>
-        <Radio
-          name="sort_order"
-          value="sort"
-          checked={sort_order === 'sort'}
-          title={_('Ascending')}
-          onChange={this.onSortOrderChange}/>
-        <Radio
-          name="sort_order"
-          value="sort-reverse"
-          checked={sort_order === 'sort-reverse'}
-          title={_('Descending')}
-          onChange={this.onSortOrderChange}/>
-      </FormGroup>
+      <SortByGroup
+        fields={this.getSortFields()}
+        by={sort_field}
+        order={sort_order}
+        onSortByChange={this.onSortFieldChange}
+        onSortOrderChange={this.onSortOrderChange}/>
     );
   }
 
@@ -267,6 +217,117 @@ export class FilterDialog extends Dialog {
 FilterDialog.propTypes = {
   filter: React.PropTypes.object,
   sortFields: React.PropTypes.array,
+};
+
+export const withFilterDialog = FilterDialogComponent => {
+  class FilterDialogWrapper extends React.Component {
+    constructor(...args) {
+      super(...args);
+
+      this.state = {};
+
+      this.setFilter(this.props.filter);
+
+      this.handleSave = this.handleSave.bind(this);
+      this.onFilterValueChange = this.onFilterValueChange.bind(this);
+      this.onFilterStringChange = this.onFilterStringChange.bind(this);
+      this.onSortByChange = this.onSortByChange.bind(this);
+      this.onSortOrderChange = this.onSortOrderChange.bind(this);
+      this.onValueChange = this.onValueChange.bind(this);
+    }
+
+    setFilter(filter) {
+      if (!is_defined(filter)) {
+        return;
+      }
+
+      this.orig_filter = filter;
+
+      this.setState({
+        filter: filter.copy(),
+      });
+    }
+
+    show() {
+      let {filter} = this.props;
+      this.setFilter(filter);
+      this.dialog.show();
+    }
+
+    handleSave() {
+      let {filter} = this.state;
+
+      if (filter.equals(this.orig_filter)) {
+        filter = this.orig_filter;
+      }
+
+      if (this.props.onFilterUpdate) {
+        this.props.onFilterUpdate(filter);
+      }
+
+      this.dialog.close();
+    }
+
+    onFilterValueChange(value, name, relation = '=') {
+      let {filter} = this.state;
+      filter.set(name, value, relation);
+      this.setState({filter});
+    }
+
+    onFilterStringChange(value) {
+      let {filter} = this.state;
+      filter = Filter.fromString(value, filter);
+      this.setState({filter});
+    }
+
+    onValueChange(value, name) {
+      this.setState({[name]: value});
+    }
+
+    onSortByChange(value) {
+      let {filter} = this.state;
+
+      filter.setSortBy(value);
+      this.setState({filter});
+    }
+
+    onSortOrderChange(value) {
+      let {filter} = this.state;
+      filter.setSortOrder(value);
+      this.setState({filter});
+    }
+
+    render() {
+      let {filter} = this.state;
+      return (
+        <Dialog
+          ref={ref => this.dialog = ref}
+          title={_('Update Filter')}
+          footer={_('Update')}
+          width={800}
+          onSaveClick={this.handleSave}>
+          {filter &&
+            <FilterDialogComponent {...this.props}
+              onFilterValueChange={this.onFilterValueChange}
+              onFilterStringChange={this.onFilterStringChange}
+              onSortOrderChange={this.onSortOrderChange}
+              onSortByChange={this.onSortByChange}
+              onValueChange={this.onValueChange}
+              filter={filter}/>
+          }
+        </Dialog>
+      );
+    }
+  };
+
+  FilterDialogWrapper.propTypes = {
+    visible: React.PropTypes.bool,
+    ref: React.PropTypes.func,
+    filter: React.PropTypes.object,
+    onFilterUpdate: React.PropTypes.func,
+  };
+
+  return FilterDialogWrapper;
 };
 
 

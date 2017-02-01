@@ -23,24 +23,24 @@
 
 import React from 'react';
 
-import _ from '../locale.js';
-import {KeyCode, autobind, is_defined} from '../utils.js';
-import logger from '../log.js';
+import _ from '../../locale.js';
+import {KeyCode, autobind, is_defined} from '../../utils.js';
+import logger from '../../log.js';
 
-import FootNote from './footnote.js';
-import Layout from './layout.js';
-import {render_options} from './render.js';
+import FootNote from '../footnote.js';
+import Layout from '../layout.js';
+import {render_options} from '../render.js';
 
-import Icon from './icons/icon.js';
-import HelpIcon from './icons/helpicon.js';
+import Icon from '../icons/icon.js';
+import HelpIcon from '../icons/helpicon.js';
 
-import FormGroup from './form/formgroup.js';
-import Select2 from './form/select2.js';
-import TextField from './form/textfield.js';
+import FormGroup from '../form/formgroup.js';
+import Select2 from '../form/select2.js';
+import TextField from '../form/textfield.js';
 
-import CollectionList from '../gmp/collectionlist.js';
+import CollectionList from '../../gmp/collectionlist.js';
 
-import Filter from '../gmp/models/filter.js';
+import Filter from '../../gmp/models/filter.js';
 
 import './css/powerfilter.css';
 
@@ -172,7 +172,7 @@ export class PowerFilter extends React.Component {
   render() {
     let {capabilities} = this.context;
     let {userfilter = '', filter, filtername = ''} = this.state;
-    let {filters} = this.props;
+    let {filters, onEditClick, onResetClick} = this.props;
     let namedfilterid = filter && filter.id ? filter.id : DEFAULT_FILTER_ID;
 
     let filterstring = filter ? filter.toFilterExtraString() : '';
@@ -198,11 +198,18 @@ export class PowerFilter extends React.Component {
             <FormGroup flex align={['start', 'center']}>
               <Icon img="refresh.svg" title={_('Update Filter')}
                 onClick={this.onUpdateFilter}/>
-              <Icon img="delete.svg" title={_('Reset Filter')}
-                onClick={this.onResetClick}/>
+
+              {onResetClick &&
+                <Icon img="delete.svg" title={_('Reset Filter')}
+                  onClick={this.onResetClick}/>
+              }
+
               <HelpIcon page="powerfilter" />
-              <Icon img="edit.svg" title={_('Edit Filter')}
-                onClick={this.props.onEditClick}/>
+
+              {onEditClick &&
+                <Icon img="edit.svg" title={_('Edit Filter')}
+                  onClick={onEditClick}/>
+              }
             </FormGroup>
             <FormGroup flex align={['start', 'center']}>
               {capabilities.mayOp('create_filter') &&

@@ -127,7 +127,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/entities/listpage.js
      ${NG_SRC_DIR}/src/web/entities/selection.js
      ${NG_SRC_DIR}/src/web/entities/table.js
-     ${NG_SRC_DIR}/src/web/filterdialog.js
      ${NG_SRC_DIR}/src/web/footer.js
      ${NG_SRC_DIR}/src/web/footnote.js
      ${NG_SRC_DIR}/src/web/form/checkbox.js
@@ -180,7 +179,14 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/pagenotfound.js
      ${NG_SRC_DIR}/src/web/pagination.js
      ${NG_SRC_DIR}/src/web/portlists/dialog.js
-     ${NG_SRC_DIR}/src/web/powerfilter.js
+     ${NG_SRC_DIR}/src/web/powerfilter/applyoverridesgroup.js
+     ${NG_SRC_DIR}/src/web/powerfilter/dialog.js
+     ${NG_SRC_DIR}/src/web/powerfilter/filterstringgroup.js
+     ${NG_SRC_DIR}/src/web/powerfilter/firstresultgroup.js
+     ${NG_SRC_DIR}/src/web/powerfilter/minqodgroup.js
+     ${NG_SRC_DIR}/src/web/powerfilter/powerfilter.js
+     ${NG_SRC_DIR}/src/web/powerfilter/resultsperpagegroup.js
+     ${NG_SRC_DIR}/src/web/powerfilter/sortbygroup.js
      ${NG_SRC_DIR}/src/web/proptypes.js
      ${NG_SRC_DIR}/src/web/render.js
      ${NG_SRC_DIR}/src/web/reports/charts.js
@@ -236,7 +242,6 @@ set (NG_CSS_SRC_FILES
      ${NG_SRC_DIR}/src/web/css/main.css
      ${NG_SRC_DIR}/src/web/css/page.css
      ${NG_SRC_DIR}/src/web/css/pagination.css
-     ${NG_SRC_DIR}/src/web/css/powerfilter.css
      ${NG_SRC_DIR}/src/web/css/section.css
      ${NG_SRC_DIR}/src/web/css/severityclasslabels.css
      ${NG_SRC_DIR}/src/web/css/sortby.css
@@ -255,6 +260,7 @@ set (NG_CSS_SRC_FILES
      ${NG_SRC_DIR}/src/web/menu/css/menubar.css
      ${NG_SRC_DIR}/src/web/menu/css/menu.css
      ${NG_SRC_DIR}/src/web/menu/css/menuentry.css
+     ${NG_SRC_DIR}/src/web/powerfilter/css/powerfilter.css
      ${NG_SRC_DIR}/src/web/table/css/table.css
      ${NG_SRC_DIR}/src/web/wizard/css/wizard.css
      )

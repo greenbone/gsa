@@ -1,5 +1,31 @@
 2017-02-01 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/entities/listpage.js,
+	src/html/classic/ng/src/web/powerfilter/applyoverridesgroup.js,
+	src/html/classic/ng/src/web/css/powerfilter.css,
+	src/html/classic/ng/src/web/powerfilter/css/powerfilter.css,
+	src/html/classic/ng/src/web/filterdialog.js,
+	src/html/classic/ng/src/web/powerfilter/dialog.js,
+	src/html/classic/ng/src/web/powerfilter/filterstringgroup.js,
+	src/html/classic/ng/src/web/powerfilter/firstresultgroup.js,
+	src/html/classic/ng/src/web/powerfilter/minqodgroup.js,
+	src/html/classic/ng/src/web/powerfilter.js,
+	src/html/classic/ng/src/web/powerfilter/powerfilter.js,
+	src/html/classic/ng/src/web/powerfilter/resultsperpagegroup.js,
+	src/html/classic/ng/src/web/powerfilter/sortbygroup.js,
+	src/html/classic/ng/src/web/results/filterdialog.js,
+	src/html/classic/ng/src/web/results/resultspage.js,
+	src/html/classic/ng/src/web/tasks/filterdialog.js: Start to refactor
+	filter edit dialogs. Implement a withFilterDialog higher order component which
+	will replace the FilterDialog class at the end. As a first step the
+	ResultsFilterDialog is converted to use this new withFilterDialog HOC.
+	To be able to resuse as much as possible the old renderXyz methods of
+	FilterDialog are extracted into own Components. Therefore the powerfilter
+	related code is moved into a powerfilter sub directory.
+
+2017-02-01 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/form/yesnoradio.js: Allow to set name property
 	for value event handler callback of YesNoRadio component.
 

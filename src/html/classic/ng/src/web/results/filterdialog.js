@@ -26,13 +26,20 @@ import React from 'react';
 import  _ from '../../locale.js';
 
 import Layout from '../layout.js';
-import FilterDialog from '../filterdialog.js';
 import {LabelHigh, LabelMedium, LabelLow, LabelLog, LabelFalsePositive
 } from '../severityclasslabels.js';
 
 import FormGroup from '../form/formgroup.js';
 import Checkbox from '../form/checkbox.js';
 import Radio from '../form/radio.js';
+
+import ApplyOverridesGroup from '../powerfilter/applyoverridesgroup.js';
+import FilterStringGroup from '../powerfilter/filterstringgroup.js';
+import FirstResultGroup from '../powerfilter/firstresultgroup.js';
+import MinQodGroup from '../powerfilter/minqodgroup.js';
+import ResultsPerPageGroup from '../powerfilter/resultsperpagegroup.js';
+import SortByGroup from '../powerfilter/sortbygroup.js';
+import {withFilterDialog} from '../powerfilter/dialog.js';
 
 const SORT_FIELDS = [
   ['vulnerability', _('Vulnerability')],
@@ -44,17 +51,12 @@ const SORT_FIELDS = [
   ['created', _('Created')],
 ];
 
-
-export class ResultsFilterDialog extends FilterDialog {
+export class ResultsFilterDialogContainer extends React.Component {
 
   constructor(props) {
     super(props);
 
     this.handleLevelChange = this.handleLevelChange.bind(this);
-  }
-
-  getSortFields() {
-    return SORT_FIELDS;
   }
 
   handleLevelChange(value, level) {
@@ -74,8 +76,14 @@ export class ResultsFilterDialog extends FilterDialog {
     }
   }
 
-  renderContent() {
-    let {filter} = this.state;
+  render() {
+    let {filter, onFilterStringChange, onFilterValueChange,
+      onSortOrderChange, onSortByChange} = this.props;
+
+    if (!filter) {
+      return null;
+    }
+
     let autofp = filter.get('autofp');
     let levels = filter.get('levels');
 
@@ -86,8 +94,10 @@ export class ResultsFilterDialog extends FilterDialog {
     return (
       <Layout flex="column">
 
-        {this.renderFilter()}
-        {this.renderApplyOverrides()}
+        <FilterStringGroup name="filterstring" filter={filter}
+          onChange={onFilterStringChange}/>
+
+        <ApplyOverridesGroup filter={filter} onChange={onFilterValueChange}/>
 
         <FormGroup title={_('Auto-FP')} flex="column">
           <Checkbox name="autofp"
@@ -113,7 +123,9 @@ export class ResultsFilterDialog extends FilterDialog {
           </Layout>
         </FormGroup>
 
-        {this.renderQoD()}
+        <MinQodGroup name="min_qod"
+          filter={filter}
+          onChange={onFilterValueChange}/>
 
         <FormGroup title={_('Severity (Class)')}>
           <Checkbox
@@ -148,13 +160,35 @@ export class ResultsFilterDialog extends FilterDialog {
           </Checkbox>
         </FormGroup>
 
-        {this.renderFirstResult()}
-        {this.renderResultsPerPage()}
-        {this.renderSortBy()}
+        <FirstResultGroup
+          filter={filter}
+          onChange={onFilterValueChange}/>
+
+        <ResultsPerPageGroup
+          filter={filter}
+          onChange={onFilterValueChange}/>
+
+        <SortByGroup
+          filter={filter}
+          fields={SORT_FIELDS}
+          onSortOrderChange={onSortOrderChange}
+          onSortByChange={onSortByChange}/>
       </Layout>
     );
   }
 }
+
+ResultsFilterDialogContainer.propTypes = {
+  filter: React.PropTypes.object,
+  onSortByChange: React.PropTypes.func,
+  onSortOrderChange: React.PropTypes.func,
+  onFilterValueChange: React.PropTypes.func,
+  onFilterStringChange: React.PropTypes.func,
+};
+
+
+export const ResultsFilterDialog = withFilterDialog(
+  ResultsFilterDialogContainer);
 
 export default ResultsFilterDialog;
 

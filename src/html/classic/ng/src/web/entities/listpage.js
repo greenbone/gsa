@@ -28,9 +28,7 @@ import _ from '../../locale.js';
 import logger from '../../log.js';
 
 import DashboardControls from '../dashboard/controls.js';
-import FilterDialog from '../filterdialog.js';
 import Layout from '../layout.js';
-import PowerFilter from '../powerfilter.js';
 import Section from '../section.js';
 import SelectionType from '../selectiontype.js';
 import Toolbar from '../toolbar.js';
@@ -40,6 +38,9 @@ import EntitiesTable from '../entities/table.js';
 import Download from '../form/download.js';
 
 import HelpIcon from '../icons/helpicon.js';
+
+import FilterDialog from '../powerfilter/dialog.js';
+import PowerFilter from '../powerfilter/powerfilter.js';
 
 import Filter from '../../gmp/models/filter.js';
 

@@ -26,10 +26,11 @@ import React from 'react';
 import  _ from '../../locale.js';
 
 import Layout from '../layout.js';
-import FilterDialog from '../filterdialog.js';
 
 import FormGroup from '../form/formgroup.js';
 import TextField from '../form/textfield.js';
+
+import FilterDialog from '../powerfilter/dialog.js';
 
 const SORT_FIELDS = [
   ['name', _('Name')],
