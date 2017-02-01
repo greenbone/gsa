@@ -24,199 +24,49 @@
 import React from 'react';
 
 import  _ from '../../locale.js';
-import {is_defined, parse_int} from '../../utils.js';
+import {is_defined} from '../../utils.js';
 
 import Dialog from '../dialog.js';
 import Layout from '../layout.js';
 
-import ApplyOverridesGroup from './applyoverridesgroup.js';
 import FilterStringGroup from './filterstringgroup.js';
 import FirstResultGroup from './firstresultgroup.js';
-import MinQodGroup from './minqodgroup.js';
 import ResultsPerPageGroup from './resultsperpagegroup.js';
 import SortByGroup from './sortbygroup.js';
 
 import Filter from '../../gmp/models/filter.js';
 
-export class FilterDialog extends Dialog {
+const DefaultFilterDialogComponent = props => {
 
-  constructor(...args) {
-    super(...args);
-
-    this.onFilterValueChange = this.onFilterValueChange.bind(this);
-    this.onFilterIntValueChange = this.onFilterIntValueChange.bind(this);
-    this.onFilterStringChange = this.onFilterStringChange.bind(this);
-    this.onSortFieldChange = this.onSortFieldChange.bind(this);
-    this.onSortOrderChange = this.onSortOrderChange.bind(this);
-  }
-
-  defaultState() {
-    let state = super.defaultState();
-
-    state.title = _('Update Filter');
-    state.footer = _('Update');
-    state.filter = undefined;
-    state.filterstring = '';
-    state.width = 800;
-
-    return state;
-  }
-
-  show() {
-    let {filter} = this.props;
-
-    this.orig_filter = filter;
-
-    filter = filter.copy();
-
-    let sort_order = 'sort-reverse';
-    let sort_field = filter.get(sort_order);
-
-    if (!is_defined(sort_field)) {
-      sort_order = 'sort';
-      sort_field = filter.get(sort_order);
-    }
-
-    this.setState({
-      visible: true,
-      error: undefined,
-      filter,
-      filterstring: filter ? filter.toFilterCriteriaString() : '',
-      sort_order,
-      sort_field,
-    });
-  }
-
-  save() {
-    let {gmp} = this.context;
-    let {filter, filterstring} = this.state;
-
-    filter = Filter.fromString(filterstring, filter);
-
-    this.close();
-
-    if (filter.equals(this.orig_filter)) {
-      filter = this.orig_filter;
-    }
-
-    return gmp.promise.resolve(filter);
-  }
-
-  getSortFields() {
-    return this.props.sortFields;
-  }
-
-  onFilterIntValueChange(value, name) {
-    value = parse_int(value);
-    this.onFilterValueChange(value, name);
-  }
-
-  onFilterValueChange(value, name) {
-    let {filter} = this.state;
-    filter.set(name, value, '=');
-    this.setState({filter});
-  }
-
-  onFilterStringChange(value) {
-    this.setState({filterstring: value});
-  }
-
-  onSortFieldChange(value) {
-    let {sort_order, filter} = this.state;
-
-    filter.set(sort_order, value);
-    this.setState({filter, sort_field: value});
-  }
-
-  onSortOrderChange(value) {
-    let {sort_order, sort_field, filter} = this.state;
-
-    if (sort_order === value) {
-      return;
-    }
-
-    filter.set(value, sort_field);
-    this.setState({sort_order: value, filter});
-  }
-
-  renderFilter() {
-    let {filterstring} = this.state;
-    return (
-      <FilterStringGroup filter={filterstring}
-        onChange={this.onFilterStringChange}/>
-    );
-  }
-
-  renderApplyOverrides() {
-    let {filter} = this.state;
-    let apply_overrides = filter.get('apply_overrides');
-    return (
-      <ApplyOverridesGroup overrides={apply_overrides}
-        onChange={this.onFilterValueChange}/>
-    );
-  }
-
-  renderQoD() {
-    let {filter} = this.state;
-    return (
-      <MinQodGroup filter={filter}
-        onChange={this.onFilterValueChange}/>
-    );
-  }
-
-  renderFirstResult() {
-    let {filter} = this.state;
-    let first = filter.get('first');
-    return (
-      <FirstResultGroup first={first}
-        onChange={this.onFilterValueChange}/>
-    );
-  }
-
-  renderResultsPerPage() {
-    let {filter} = this.state;
-    let rows = filter.get('rows');
-    return (
-      <ResultsPerPageGroup rows={rows}
-        onChange={this.onFilterValueChange}/>
-    );
-
-  }
-
-  renderSortBy() {
-    let {sort_order, sort_field} = this.state;
-    return (
+  let {filter, filterstring, sortFields, onFilterStringChange,
+    onFilterValueChange, onSortByChange, onSortOrderChange} = props;
+  return (
+    <Layout flex="column">
+      <FilterStringGroup
+        filter={filterstring}
+        onChange={onFilterStringChange}/>
+      <FirstResultGroup
+        filter={filter}
+        onChange={onFilterValueChange}/>
+      <ResultsPerPageGroup filter={filter}
+        onChange={onFilterValueChange}/>
       <SortByGroup
-        fields={this.getSortFields()}
-        by={sort_field}
-        order={sort_order}
-        onSortByChange={this.onSortFieldChange}
-        onSortOrderChange={this.onSortOrderChange}/>
-    );
-  }
+        fields={sortFields}
+        filter={filter}
+        onSortByChange={onSortByChange}
+        onSortOrderChange={onSortOrderChange}/>
+    </Layout>
+  );
+};
 
-  /**
-   * Default filter dialog form
-   *
-   * Override to specify different content
-   *
-   * @return Node default dialog content form
-   */
-  renderContent() {
-    return (
-      <Layout flex="column">
-        {this.renderFilter()}
-        {this.renderFirstResult()}
-        {this.renderResultsPerPage()}
-        {this.renderSortBy()}
-      </Layout>
-    );
-  }
-}
-
-FilterDialog.propTypes = {
+DefaultFilterDialogComponent.propTypes = {
   filter: React.PropTypes.object,
+  filterstring: React.PropTypes.string,
   sortFields: React.PropTypes.array,
+  onSortByChange: React.PropTypes.func,
+  onSortOrderChange: React.PropTypes.func,
+  onFilterValueChange: React.PropTypes.func,
+  onFilterStringChange: React.PropTypes.func,
 };
 
 export const withFilterDialog = FilterDialogComponent => {
@@ -330,6 +180,7 @@ export const withFilterDialog = FilterDialogComponent => {
   return FilterDialogWrapper;
 };
 
+export const FilterDialog = withFilterDialog(DefaultFilterDialogComponent);
 
 export default FilterDialog;
 
