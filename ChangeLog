@@ -1,5 +1,10 @@
 2017-02-01 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/form/yesnoradio.js: Allow to set name property
+	for value event handler callback of YesNoRadio component.
+
+2017-02-01 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/dashboard/dashboard.js: Create a withDashboard
 	higher order component. It allows easier creation of different dashboards.
 

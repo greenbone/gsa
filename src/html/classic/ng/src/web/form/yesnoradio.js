@@ -37,6 +37,7 @@ export const YesNoRadio = ({disabled, onChange, value, name, ...other}) => {
       <Radio
         title={_('Yes')}
         value="1"
+        name={name}
         checked={value === 1}
         convert={parse_int}
         onChange={onChange}
@@ -44,6 +45,7 @@ export const YesNoRadio = ({disabled, onChange, value, name, ...other}) => {
       <Radio
         title={_('No')}
         value="0"
+        name={name}
         convert={parse_int}
         checked={value === 0}
         onChange={onChange}
