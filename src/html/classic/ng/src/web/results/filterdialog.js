@@ -51,7 +51,7 @@ const SORT_FIELDS = [
   ['created', _('Created')],
 ];
 
-export class ResultsFilterDialogContainer extends React.Component {
+class ResultsFilterDialogComponent extends React.Component {
 
   constructor(props) {
     super(props);
@@ -60,19 +60,20 @@ export class ResultsFilterDialogContainer extends React.Component {
   }
 
   handleLevelChange(value, level) {
-    let {filter} = this.state;
+    let {filter, onFilterValueChange} = this.props;
     let levels = filter.get('levels');
+
     if (!levels) {
       levels = '';
     }
 
     if (value && !levels.includes(level)) {
       levels += level;
-      this.onFilterValueChange(levels, 'levels');
+      onFilterValueChange(levels, 'levels');
     }
     else if (!value && level.includes(level)) {
       levels = levels.replace(level, '');
-      this.onFilterValueChange(levels, 'levels');
+      onFilterValueChange(levels, 'levels');
     }
   }
 
@@ -190,7 +191,7 @@ ResultsFilterDialogComponent.propTypes = {
 
 
 export const ResultsFilterDialog = withFilterDialog(
-  ResultsFilterDialogContainer);
+  ResultsFilterDialogComponent);
 
 export default ResultsFilterDialog;
 
