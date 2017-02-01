@@ -1,5 +1,10 @@
 2017-02-01 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/dialog.js: Start to simplify Dialog class. At
+	the end it shouldn't be necessary to derive from this class anymore.
+
+2017-02-01 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/models/filter.js: Add Filter method to get and
 	set sorting.
 

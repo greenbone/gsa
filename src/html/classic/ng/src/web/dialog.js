@@ -40,19 +40,13 @@ export class Dialog extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      visible: is_defined(props.show) ? props.show : false,
-      error: props.error,
-    };
-
     this.show = this.show.bind(this);
-    this.hide = this.hide.bind(this);
     this.close = this.close.bind(this);
-    this.onClose = this.onClose.bind(this);
+    this.handleClose = this.handleClose.bind(this);
     this.onOuterClick = this.onOuterClick.bind(this);
     this.onKeyDown = this.onKeyDown.bind(this);
     this.onErrorClose = this.onErrorClose.bind(this);
-    this.onSave = this.onSave.bind(this);
+    this.handleSave = this.handleSave.bind(this);
     this.onValueChange = this.onValueChange.bind(this);
     this.onMouseMove = this.onMouseMove.bind(this);
     this.onMouseDown = this.onMouseDown.bind(this);
@@ -83,20 +77,13 @@ export class Dialog extends React.Component {
     this.loadData();
   }
 
-  hide() {
+  close() {
     this.setState(this.defaultState());
   }
 
   save() {
     let {gmp} = this.context;
     return gmp.promise.resolve();
-  }
-
-  close() {
-    this.hide();
-    if (this.props.onClose) {
-      this.props.onClose();
-    }
   }
 
   showErrorMessage(message) {
@@ -107,20 +94,27 @@ export class Dialog extends React.Component {
     this.showErrorMessage(rej.message);
   }
 
-  onClose(event) {
-    event.preventDefault();
-    this.close();
+  handleClose(event) {
+    if (this.props.onCloseClick) {
+      this.props.onCloseClick();
+    }
+    else {
+      this.close();
+      if (this.props.onClose) {
+        this.props.onClose();
+      }
+    }
   }
 
   onOuterClick(event) {
     if (event.target === event.currentTarget) {
-      this.onClose(event);
+      this.handleClose(event);
     }
   }
 
   onKeyDown(event) {
     if (event.keyCode === KeyCode.ESC) {
-      this.onClose(event);
+      this.handleClose(event);
     }
   }
 
@@ -153,15 +147,22 @@ export class Dialog extends React.Component {
     this.setState({error: undefined});
   }
 
-  onSave(event) {
+  handleSave(event) {
     event.preventDefault();
-    this.save().then(data => {
-      if (this.props.onSave) {
-        this.props.onSave(data);
-      }
-    }).catch(error => {
-      log.error('Error while saving data.', error.message, error.stack, error);
-    });
+
+    if (this.props.onSaveClick) {
+      this.props.onSaveClick();
+    }
+    else {
+      this.save().then(data => {
+        if (this.props.onSave) {
+          this.props.onSave(data);
+        }
+      }).catch(error => {
+        log.error('Error while saving data.',
+          error.message, error.stack, error);
+      });
+    }
   }
 
   onValueChange(value, name) {
@@ -177,7 +178,7 @@ export class Dialog extends React.Component {
     let {title} = this.state;
 
     return (
-      <DialogTitle onCloseClick={this.onClose} title={title}
+      <DialogTitle onCloseClick={this.handleClose} title={title}
         onMouseDown={this.onMouseDown}/>
     );
   }
@@ -186,7 +187,7 @@ export class Dialog extends React.Component {
     let {footer} = this.state;
 
     return (
-      <DialogFooter onSaveClick={this.onSave} title={footer}/>
+      <DialogFooter onSaveClick={this.handleSave} title={footer}/>
     );
   }
 
@@ -240,13 +241,15 @@ export class Dialog extends React.Component {
 }
 
 Dialog.propTypes = {
-  show: React.PropTypes.bool,
+  visible: React.PropTypes.bool,
   title: React.PropTypes.string,
   footer: React.PropTypes.string,
   showTitle: React.PropTypes.bool,
   showFooter: React.PropTypes.bool,
   onSave: React.PropTypes.func,
+  onSaveClick: React.PropTypes.func,
   onClose: React.PropTypes.func,
+  onCloseClick: React.PropTypes.func,
   width: React.PropTypes.string,
   error: React.PropTypes.string,
 };
