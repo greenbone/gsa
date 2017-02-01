@@ -77,7 +77,7 @@ export class ResultsFilterDialogContainer extends React.Component {
   }
 
   render() {
-    let {filter, onFilterStringChange, onFilterValueChange,
+    let {filter, filterstring, onFilterStringChange, onFilterValueChange,
       onSortOrderChange, onSortByChange} = this.props;
 
     if (!filter) {
@@ -94,7 +94,8 @@ export class ResultsFilterDialogContainer extends React.Component {
     return (
       <Layout flex="column">
 
-        <FilterStringGroup name="filterstring" filter={filter}
+        <FilterStringGroup name="filterstring"
+          filter={filterstring}
           onChange={onFilterStringChange}/>
 
         <ApplyOverridesGroup filter={filter} onChange={onFilterValueChange}/>
@@ -178,8 +179,9 @@ export class ResultsFilterDialogContainer extends React.Component {
   }
 }
 
-ResultsFilterDialogContainer.propTypes = {
+ResultsFilterDialogComponent.propTypes = {
   filter: React.PropTypes.object,
+  filterstring: React.PropTypes.string,
   onSortByChange: React.PropTypes.func,
   onSortOrderChange: React.PropTypes.func,
   onFilterValueChange: React.PropTypes.func,

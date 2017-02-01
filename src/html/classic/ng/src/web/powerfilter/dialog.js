@@ -245,6 +245,7 @@ export const withFilterDialog = FilterDialogComponent => {
 
       this.setState({
         filter: filter.copy(),
+        filterstring: filter.toFilterCriteriaString(),
       });
     }
 
@@ -255,7 +256,9 @@ export const withFilterDialog = FilterDialogComponent => {
     }
 
     handleSave() {
-      let {filter} = this.state;
+      let {filter, filterstring} = this.state;
+
+      filter = Filter.fromString(filterstring, filter);
 
       if (filter.equals(this.orig_filter)) {
         filter = this.orig_filter;
@@ -275,9 +278,7 @@ export const withFilterDialog = FilterDialogComponent => {
     }
 
     onFilterStringChange(value) {
-      let {filter} = this.state;
-      filter = Filter.fromString(value, filter);
-      this.setState({filter});
+      this.setState({filterstring: value});
     }
 
     onValueChange(value, name) {
@@ -298,7 +299,7 @@ export const withFilterDialog = FilterDialogComponent => {
     }
 
     render() {
-      let {filter} = this.state;
+      let {filter, filterstring} = this.state;
       return (
         <Dialog
           ref={ref => this.dialog = ref}
@@ -313,6 +314,7 @@ export const withFilterDialog = FilterDialogComponent => {
               onSortOrderChange={this.onSortOrderChange}
               onSortByChange={this.onSortByChange}
               onValueChange={this.onValueChange}
+              filterstring={filterstring}
               filter={filter}/>
           }
         </Dialog>
@@ -321,8 +323,6 @@ export const withFilterDialog = FilterDialogComponent => {
   };
 
   FilterDialogWrapper.propTypes = {
-    visible: React.PropTypes.bool,
-    ref: React.PropTypes.func,
     filter: React.PropTypes.object,
     onFilterUpdate: React.PropTypes.func,
   };
