@@ -1,5 +1,10 @@
 2017-02-01 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/dashboard/dashboard.js: Create a withDashboard
+	higher order component. It allows easier creation of different dashboards.
+
+2017-02-01 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/proptypes.js: Add number and icon proptypes.
 
 2017-02-01 Björn Ricks <bjoern.ricks@greenbone.net>

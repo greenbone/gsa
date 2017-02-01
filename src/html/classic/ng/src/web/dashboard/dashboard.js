@@ -102,7 +102,7 @@ export class Dashboard extends React.Component {
   onConfigSaved() {
     let {gmp} = this.context;
     // override cache with current saved config
-    // this is a bit "hackish" and should be absolete when dashboards are
+    // this is a bit "hackish" and should be obsolete when dashboards are
     // completely converted to react and gmp api
     gmp.user.currentChartPreferences({force: true});
   }
@@ -137,6 +137,24 @@ Dashboard.defaultProps = {
 
 Dashboard.contextTypes = {
   gmp: React.PropTypes.object.isRequired,
+};
+
+export const withDashboard = (Charts, options = {}) => {
+
+  const DashboardWrapper = props => {
+    let {filter, ...other} = props;
+    return (
+      <Dashboard {...options} {...other}>
+        <Charts filter={filter}/>
+      </Dashboard>
+    );
+  };
+
+  DashboardWrapper.propTypes = {
+    filter: React.PropTypes.object,
+  };
+
+  return DashboardWrapper;
 };
 
 export default Dashboard;
