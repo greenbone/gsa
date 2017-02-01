@@ -1,3 +1,16 @@
+2017-02-01 Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/gsad_omp.c (get_system_reports_omp, get_system_report_omp): Reintroduce
+	range_type parameter. If the parameter is duration duration will be used for
+	the system report time range. Otherwise start and end time.
+
+	* src/html/classic/js/greenbone-init.js: Change range_type input field value
+	to start from start if start/end time spinners or datepickers have been
+	changed. Also fix some coding style glitches.
+
+	* src/html/classic/omp.xsl (duration-link, get_system_reports_response): Add
+	range_type parameter.
+
 2017-01-31 Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/gsad_http_handler.c (handle_system_report): Fix setting the GSAD_SID

@@ -9,7 +9,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2015 - 2016 Greenbone Networks GmbH
+ * Copyright (C) 2015 - 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,14 +40,26 @@
 
   gsa.on_ready = on_ready;
 
-  function set_datepicker_date(elem, date) {
+  function set_datepicker_date(elem, date, old_date) {
     var elem_year = elem.find('.datepicker-year');
     var elem_month = elem.find('.datepicker-month');
     var elem_day = elem.find('.datepicker-day');
 
+    // only update form if date has changed
+    if (old_date && date.getDate() === old_date.getDate() &&
+      date.getMonth() === old_date.getMonth() &&
+      date.getFullYear() === old_date.getFullYear()) {
+        return;
+    }
+
     elem_day.val(date.getDate());
     elem_month.val(date.getMonth() + 1);
     elem_year.val(date.getFullYear());
+
+    // trigger change events
+    elem_day.trigger('change');
+    elem_month.trigger('change');
+    elem_year.trigger('change');
   }
 
   function moment_to_timezone_date(moment_date) {
@@ -121,7 +133,7 @@
       var params = {
         resource_type: type_name,
       };
-      params [this.name + '.x'] = '0';
+      params[this.name + '.x'] = '0';
 
       elem.on('click', function(event) {
         event.preventDefault();
@@ -249,7 +261,7 @@
           }
         },
         function(jqXHR) {
-          if (jqXHR.status == 0 && jqXHR.readyState == 0) {
+          if (jqXHR.status === 0 && jqXHR.readyState === 0) {
             // Request was aborted. Do not show error dialog.
             return;
           }
@@ -308,12 +320,12 @@
         max_date = undefined;
       }
       else if (limit_type === 'backward') {
-        min_date = '-3Y'
+        min_date = '-3Y';
         max_date = cur_date;
       }
       else {
         min_date = cur_date;
-        max_date = '+3Y'
+        max_date = '+3Y';
       }
 
       if (elem_year.length && gsa.is_defined(elem_year.val())) {
@@ -344,7 +356,7 @@
         onClose: function() {
           var date = button.datepicker('getDate');
           if (gsa.has_value(date)) {
-            set_datepicker_date(elem, date);
+            set_datepicker_date(elem, date, cur_date);
           }
         },
       });
@@ -368,45 +380,20 @@
       });
     });
 
-    doc.find('.systemsettings-set-date').each(function() {
+    doc.find('.system-report').each(function() {
       var elem = $(this);
+      var range_type = elem.find('input[name="range_type"]');
 
-      elem.on('click', function(event) {
-        var tz = elem.data('timezone');
-        var duration = elem.data('duration');
+      function change_range_type() {
+        range_type.val('from_start');
+      }
 
-        var form = $(elem.data('form'));
-
-        var f_start_date = $(elem.data('start-date'));
-        var f_start_hour = $(elem.data('start-hour'));
-        var f_start_minute = $(elem.data('start-minute'));
-
-        var f_end_date = $(elem.data('end-date'));
-        var f_end_hour = $(elem.data('end-hour'));
-        var f_end_minute = $(elem.data('end-minute'));
-
-        var sdp = f_start_date.find('.datepicker-button').first();
-        var edp = f_end_date.find('.datepicker-button').first();
-
-        var e_mom = moment().tz(tz);
-        var s_mom = e_mom.clone().subtract(1, elem.data('duration'));
-
-        var s_date = moment_to_timezone_date(s_mom);
-        var e_date = moment_to_timezone_date(e_mom);
-
-        sdp.datepicker('setDate', s_date);
-        edp.datepicker('setDate', e_date);
-        set_datepicker_date(f_start_date, s_date);
-        set_datepicker_date(f_end_date, e_date);
-
-        f_start_hour.val(s_mom.hours());
-        f_end_hour.val(e_mom.hours());
-
-        f_start_minute.val(s_mom.minutes());
-        f_end_minute.val(e_mom.minutes());
-
-        form.submit();
+      elem.find('.performance-spinner').spinner({
+        spin: change_range_type,
+        change: change_range_type,
       });
+
+      elem.find('.datepicker-day').on('change', change_range_type);
     });
 
     doc.find('.setting-control').each(function() {
@@ -456,7 +443,7 @@
       if (!global.autorefresh_enabled) {
         var autorefresh_off = autorefresh.find('option[value="0"]');
         autorefresh.prop('disabled', 'disabled');
-        autorefresh_off.prop ('selected', 'selected');
+        autorefresh_off.prop('selected', 'selected');
       }
     }
 

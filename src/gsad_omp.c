@@ -17252,7 +17252,7 @@ get_system_reports_omp (gvm_connection_t *connection,
   struct tm *now_broken;
   struct tm start_time, end_time;
 
-  const char *slave_id, *duration;
+  const char *slave_id, *duration, *range_type;
   const char *start_year, *start_month, *start_day, *start_hour, *start_minute;
   const char *end_year, *end_month, *end_day, *end_hour, *end_minute;
 
@@ -17262,6 +17262,10 @@ get_system_reports_omp (gvm_connection_t *connection,
   now_broken = localtime (&now);
 
   duration = params_value (params, "duration");
+  range_type = params_value (params, "range_type");
+
+  if (!range_type)
+    range_type = "from_start";
 
   xml = g_string_new ("<get_system_reports>");
 
@@ -17269,11 +17273,23 @@ get_system_reports_omp (gvm_connection_t *connection,
                           "<slave id=\"%s\"/>",
                           slave_id ? slave_id : "0");
 
-  if (duration && strcmp (duration, ""))
+  if (strcmp (range_type, "duration") == 0)
     {
+      end_time.tm_year = now_broken->tm_year;
+      end_time.tm_mon = now_broken->tm_mon;
+      end_time.tm_mday = now_broken->tm_mday;
+      end_time.tm_hour = now_broken->tm_hour;
+      end_time.tm_min = now_broken->tm_min;
+
+      start_time.tm_year = now_broken->tm_year;
+      start_time.tm_mon = now_broken->tm_mon;
+      start_time.tm_mday = now_broken->tm_mday;
+      start_time.tm_hour = now_broken->tm_hour;
+      start_time.tm_min = now_broken->tm_min;
+
       g_string_append_printf (xml,
                               "<duration>%s</duration>",
-                              duration);
+                              duration ? duration : "");
     }
   else
     {
@@ -17305,34 +17321,38 @@ get_system_reports_omp (gvm_connection_t *connection,
       end_time.tm_hour = end_hour ? atoi (end_hour) : now_broken->tm_hour;
       end_time.tm_min = end_minute ? atoi (end_minute) : now_broken->tm_min;
 
-      g_string_append_printf (xml,
-                              "<start_time>"
-                              "<minute>%i</minute>"
-                              "<hour>%i</hour>"
-                              "<day_of_month>%i</day_of_month>"
-                              "<month>%i</month>"
-                              "<year>%i</year>"
-                              "</start_time>",
-                              start_time.tm_min,
-                              start_time.tm_hour,
-                              start_time.tm_mday,
-                              start_time.tm_mon + 1,
-                              start_time.tm_year + 1900);
-
-      g_string_append_printf (xml,
-                              "<end_time>"
-                              "<minute>%i</minute>"
-                              "<hour>%i</hour>"
-                              "<day_of_month>%i</day_of_month>"
-                              "<month>%i</month>"
-                              "<year>%i</year>"
-                              "</end_time>",
-                              end_time.tm_min,
-                              end_time.tm_hour,
-                              end_time.tm_mday,
-                              end_time.tm_mon + 1,
-                              end_time.tm_year + 1900);
     }
+
+    g_string_append_printf (xml,
+                            "<start_time>"
+                            "<minute>%i</minute>"
+                            "<hour>%i</hour>"
+                            "<day_of_month>%i</day_of_month>"
+                            "<month>%i</month>"
+                            "<year>%i</year>"
+                            "</start_time>",
+                            start_time.tm_min,
+                            start_time.tm_hour,
+                            start_time.tm_mday,
+                            start_time.tm_mon + 1,
+                            start_time.tm_year + 1900);
+
+
+    g_string_append_printf (xml,
+                            "<end_time>"
+                            "<minute>%i</minute>"
+                            "<hour>%i</hour>"
+                            "<day_of_month>%i</day_of_month>"
+                            "<month>%i</month>"
+                            "<year>%i</year>"
+                            "</end_time>"
+                            "<range_type>%s</range_type>",
+                            end_time.tm_min,
+                            end_time.tm_hour,
+                            end_time.tm_mday,
+                            end_time.tm_mon + 1,
+                            end_time.tm_year + 1900,
+                            range_type);
 
 
 

@@ -34150,7 +34150,7 @@ should not have received it.
     </xsl:choose>
   </xsl:variable>
 
-  <a href="/omp?cmd=get_system_reports&amp;slave_id={$slave_id}&amp;duration={$duration}&amp;token={/envelope/token}" class="{$css}">
+  <a href="/omp?cmd=get_system_reports&amp;slave_id={$slave_id}&amp;duration={$duration}&amp;token={/envelope/token}&amp;range_type=duration" class="{$css}">
     <xsl:value-of select="$title"/>
   </a>
 </xsl:template>
@@ -34241,11 +34241,12 @@ should not have received it.
     </h1>
   </div>
 
-  <div class="section-box">
+  <div class="section-box system-report">
     <form action="" method="get" class="form-horizontal container" id="timeselect">
       <input type="hidden" name="token" value="{/envelope/token}"/>
       <input type="hidden" name="cmd" value="get_system_reports"/>
       <input type="hidden" name="duration" value="{$duration}"/>
+      <input type="hidden" name="range_type" value="{../range_type}"/>
 
       <div class="col-8">
         <div class="form-group">
@@ -34266,7 +34267,7 @@ should not have received it.
                   id="start-hour"
                   value="{../start_time/hour}"
                   size="2"
-                  class="spinner"
+                  class="performance-spinner"
                   data-type="int"
                   min="0"
                   max="23"
@@ -34279,7 +34280,7 @@ should not have received it.
                   id="start-minute"
                   value="{../start_time/minute}"
                   size="2"
-                  class="spinner"
+                  class="performance-spinner"
                   data-type="int"
                   min="0"
                   max="59"
@@ -34307,7 +34308,7 @@ should not have received it.
                   id="end-hour"
                   value="{../end_time/hour}"
                   size="2"
-                  class="spinner"
+                  class="performance-spinner"
                   data-type="int"
                   min="0"
                   max="23"
@@ -34320,7 +34321,7 @@ should not have received it.
                   id="end-minute"
                   value="{../end_time/minute}"
                   size="2"
-                  class="spinner"
+                  class="performance-spinner"
                   data-type="int"
                   min="0"
                   max="59"
