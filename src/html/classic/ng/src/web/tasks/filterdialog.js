@@ -27,10 +27,13 @@ import  _ from '../../locale.js';
 
 import Layout from '../layout.js';
 
-import FormGroup from '../form/formgroup.js';
-import TextField from '../form/textfield.js';
-
-import FilterDialog from '../powerfilter/dialog.js';
+import ApplyOverridesGroup from '../powerfilter/applyoverridesgroup.js';
+import FilterStringGroup from '../powerfilter/filterstringgroup.js';
+import FirstResultGroup from '../powerfilter/firstresultgroup.js';
+import MinQodGroup from '../powerfilter/minqodgroup.js';
+import ResultsPerPageGroup from '../powerfilter/resultsperpagegroup.js';
+import SortByGroup from '../powerfilter/sortbygroup.js';
+import {withFilterDialog} from '../powerfilter/dialog.js';
 
 const SORT_FIELDS = [
   ['name', _('Name')],
@@ -41,38 +44,57 @@ const SORT_FIELDS = [
   ['trend', _('Trend')],
 ];
 
-export class TaskFilterDialog extends FilterDialog {
+const TaskFilterDialogComponent = props => {
 
-  getSortFields() {
-    return SORT_FIELDS;
+  let {filter, filterstring, onFilterStringChange, onFilterValueChange,
+    onSortOrderChange, onSortByChange} = props;
+
+  if (!filter) {
+    return null;
   }
 
-  renderFilter() {
-    let {filterstring} = this.state;
-    return (
-      <FormGroup title={_('Name')} flex>
-        <TextField
-          grow="1"
-          value={filterstring} size="30"
-          onChange={this.onFilterStringChange}
-          maxLength="80"/>
-      </FormGroup>
-    );
-  }
+  return (
+    <Layout flex="column">
+      <FilterStringGroup
+        name="filterstring"
+        filter={filterstring}
+        onChange={onFilterStringChange}/>
 
-  renderContent() {
-    return (
-      <Layout flex="column">
-        {this.renderFilter()}
-        {this.renderApplyOverrides()}
-        {this.renderQoD()}
-        {this.renderFirstResult()}
-        {this.renderResultsPerPage()}
-        {this.renderSortBy()}
-      </Layout>
-    );
-  }
-}
+      <ApplyOverridesGroup
+        filter={filter}
+        onChange={onFilterValueChange}/>
+
+      <MinQodGroup name="min_qod"
+        filter={filter}
+        onChange={onFilterValueChange}/>
+
+      <FirstResultGroup
+        filter={filter}
+        onChange={onFilterValueChange}/>
+
+      <ResultsPerPageGroup
+        filter={filter}
+        onChange={onFilterValueChange}/>
+
+      <SortByGroup
+        filter={filter}
+        fields={SORT_FIELDS}
+        onSortOrderChange={onSortOrderChange}
+        onSortByChange={onSortByChange}/>
+    </Layout>
+  );
+};
+
+TaskFilterDialogComponent.propTypes = {
+  filter: React.PropTypes.object,
+  filterstring: React.PropTypes.string,
+  onSortByChange: React.PropTypes.func,
+  onSortOrderChange: React.PropTypes.func,
+  onFilterValueChange: React.PropTypes.func,
+  onFilterStringChange: React.PropTypes.func,
+};
+
+export const TaskFilterDialog = withFilterDialog(TaskFilterDialogComponent);
 
 export default TaskFilterDialog;
 

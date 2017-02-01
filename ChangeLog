@@ -1,5 +1,11 @@
 2017-02-01 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/tasks/filterdialog.js,
+	src/html/classic/ng/src/web/tasks/taskspage.js: Refactor TaskFilterDialog to
+	use withFilterDialog HOC.
+
+2017-02-01 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/results/filterdialog.js: Update
 	ResultFilterDialog: Fix handling of levels, rename ResultFilterDialogContainer
 	to ResultFilterDialogComponent and don't export ResultsFilterDialogComponent.
