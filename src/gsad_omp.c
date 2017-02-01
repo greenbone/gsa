@@ -18096,7 +18096,7 @@ get_system_reports_omp (credentials_t * credentials, params_t *params,
   struct tm *now_broken;
   struct tm start_time, end_time;
 
-  const char *slave_id;
+  const char *slave_id, *duration, *range_type;
   const char *start_year, *start_month, *start_day, *start_hour, *start_minute;
   const char *end_year, *end_month, *end_day, *end_hour, *end_minute;
 
@@ -18105,33 +18105,11 @@ get_system_reports_omp (credentials_t * credentials, params_t *params,
   now = time (NULL);
   now_broken = localtime (&now);
 
-  start_year = params_value (params, "start_year");
-  start_month = params_value (params, "start_month");
-  start_day = params_value (params, "start_day");
-  start_hour = params_value (params, "start_hour");
-  start_minute = params_value (params, "start_minute");
+  duration = params_value (params, "duration");
+  range_type = params_value (params, "range_type");
 
-  end_year = params_value (params, "end_year");
-  end_month = params_value (params, "end_month");
-  end_day = params_value (params, "end_day");
-  end_hour = params_value (params, "end_hour");
-  end_minute = params_value (params, "end_minute");
-
-  start_time.tm_year = start_year ? atoi (start_year) - 1900
-                                  : now_broken->tm_year;
-  start_time.tm_mon = start_month ? atoi (start_month) - 1
-                                  : now_broken->tm_mon;
-  start_time.tm_mday = start_day ? atoi (start_day) : now_broken->tm_mday;
-  start_time.tm_hour = start_hour ? atoi (start_hour) : now_broken->tm_hour;
-  start_time.tm_min = start_minute ? atoi (start_minute) : now_broken->tm_min;
-
-  end_time.tm_year = end_year ? atoi (end_year) - 1900
-                                : now_broken->tm_year;
-  end_time.tm_mon = end_month ? atoi (end_month) - 1
-                                : now_broken->tm_mon;
-  end_time.tm_mday = end_day ? atoi (end_day) : now_broken->tm_mday;
-  end_time.tm_hour = end_hour ? atoi (end_hour) : now_broken->tm_hour;
-  end_time.tm_min = end_minute ? atoi (end_minute) : now_broken->tm_min;
+  if (!range_type)
+    range_type = "from_start";
 
   switch (manager_connect (credentials, &connection, &html,
                            response_data))
@@ -18157,7 +18135,54 @@ get_system_reports_omp (credentials_t * credentials, params_t *params,
   g_string_append_printf (xml,
                           "<slave id=\"%s\"/>",
                           slave_id ? slave_id : "0");
+  if (strcmp (range_type, "duration") == 0)
+    {
+      end_time.tm_year = now_broken->tm_year;
+      end_time.tm_mon = now_broken->tm_mon;
+      end_time.tm_mday = now_broken->tm_mday;
+      end_time.tm_hour = now_broken->tm_hour;
+      end_time.tm_min = now_broken->tm_min;
 
+      start_time.tm_year = now_broken->tm_year;
+      start_time.tm_mon = now_broken->tm_mon;
+      start_time.tm_mday = now_broken->tm_mday;
+      start_time.tm_hour = now_broken->tm_hour;
+      start_time.tm_min = now_broken->tm_min;
+
+      g_string_append_printf (xml,
+                              "<duration>%s</duration>",
+                              duration ? duration : "");
+    }
+  else
+    {
+      start_year = params_value (params, "start_year");
+      start_month = params_value (params, "start_month");
+      start_day = params_value (params, "start_day");
+      start_hour = params_value (params, "start_hour");
+      start_minute = params_value (params, "start_minute");
+
+      end_year = params_value (params, "end_year");
+      end_month = params_value (params, "end_month");
+      end_day = params_value (params, "end_day");
+      end_hour = params_value (params, "end_hour");
+      end_minute = params_value (params, "end_minute");
+
+      start_time.tm_year = start_year ? atoi (start_year) - 1900
+                                      : now_broken->tm_year;
+      start_time.tm_mon = start_month ? atoi (start_month) - 1
+                                      : now_broken->tm_mon;
+      start_time.tm_mday = start_day ? atoi (start_day) : now_broken->tm_mday;
+      start_time.tm_hour = start_hour ? atoi (start_hour) : now_broken->tm_hour;
+      start_time.tm_min = start_minute ? atoi (start_minute) : now_broken->tm_min;
+
+      end_time.tm_year = end_year ? atoi (end_year) - 1900
+                                    : now_broken->tm_year;
+      end_time.tm_mon = end_month ? atoi (end_month) - 1
+                                    : now_broken->tm_mon;
+      end_time.tm_mday = end_day ? atoi (end_day) : now_broken->tm_mday;
+      end_time.tm_hour = end_hour ? atoi (end_hour) : now_broken->tm_hour;
+      end_time.tm_min = end_minute ? atoi (end_minute) : now_broken->tm_min;
+    }
 
   g_string_append_printf (xml,
                           "<start_time>"
@@ -18285,10 +18310,12 @@ get_system_report_omp (credentials_t *credentials, const char *url,
   char name[501];
   time_t now;
   struct tm *now_broken;
-  const char *slave_id;
+  const char *slave_id, *duration;
   const char *start_year, *start_month, *start_day, *start_hour, *start_minute;
   const char *end_year, *end_month, *end_day, *end_hour, *end_minute;
   struct tm start_time, end_time;
+  gchar *start_time_str, *end_time_str;
+  gchar *omp_command;
 
   *content_length = 0;
 
@@ -18297,79 +18324,94 @@ get_system_report_omp (credentials_t *credentials, const char *url,
 
   slave_id = params_value (params, "slave_id");
 
-  now = time (NULL);
-  now_broken = localtime (&now);
-
-  start_year = params_value (params, "start_year");
-  start_month = params_value (params, "start_month");
-  start_day = params_value (params, "start_day");
-  start_hour = params_value (params, "start_hour");
-  start_minute = params_value (params, "start_minute");
-
-  end_year = params_value (params, "end_year");
-  end_month = params_value (params, "end_month");
-  end_day = params_value (params, "end_day");
-  end_hour = params_value (params, "end_hour");
-  end_minute = params_value (params, "end_minute");
-
-  start_time.tm_year = start_year ? atoi (start_year) - 1900
-                                  : now_broken->tm_year;
-  start_time.tm_mon = start_month ? atoi (start_month) - 1
-                                  : now_broken->tm_mon;
-  start_time.tm_mday = start_day ? atoi (start_day) : now_broken->tm_mday;
-  start_time.tm_hour = start_hour ? atoi (start_hour) : now_broken->tm_hour;
-  start_time.tm_min = start_minute ? atoi (start_minute) : now_broken->tm_min;
-  start_time.tm_zone = now_broken->tm_zone;
-
-  end_time.tm_year = end_year ? atoi (end_year) - 1900
-                                : now_broken->tm_year;
-  end_time.tm_mon = end_month ? atoi (end_month) - 1
-                                : now_broken->tm_mon;
-  end_time.tm_mday = end_day ? atoi (end_day) : now_broken->tm_mday;
-  end_time.tm_hour = end_hour ? atoi (end_hour) : now_broken->tm_hour;
-  end_time.tm_min = end_minute ? atoi (end_minute) : now_broken->tm_min;
-  end_time.tm_zone = now_broken->tm_zone;
-
   /* fan/report.png */
   if (sscanf (url, "%500[^ /]./report.png", name) == 1)
     {
-      gchar *omp_command;
+      duration = params_value (params, "duration");
 
       if (manager_connect (credentials, &connection, NULL,
                            response_data))
         return NULL;
 
-      gchar *start_time_str, *end_time_str;
+      if (duration && strcmp (duration, ""))
+        {
+          omp_command = g_markup_printf_escaped ("<get_system_reports"
+                                                 " name=\"%s\""
+                                                 " duration=\"%s\""
+                                                 " slave_id=\"%s\"/>",
+                                                 name,
+                                                 duration,
+                                                 slave_id ? slave_id : "0");
+        }
+      else
+        {
+          now = time (NULL);
+          now_broken = localtime (&now);
+
+          start_year = params_value (params, "start_year");
+          start_month = params_value (params, "start_month");
+          start_day = params_value (params, "start_day");
+          start_hour = params_value (params, "start_hour");
+          start_minute = params_value (params, "start_minute");
+
+          end_year = params_value (params, "end_year");
+          end_month = params_value (params, "end_month");
+          end_day = params_value (params, "end_day");
+          end_hour = params_value (params, "end_hour");
+          end_minute = params_value (params, "end_minute");
+
+          start_time.tm_year = start_year ? atoi (start_year) - 1900
+                                          : now_broken->tm_year;
+          start_time.tm_mon = start_month ? atoi (start_month) - 1
+                                          : now_broken->tm_mon;
+          start_time.tm_mday = start_day ? atoi (start_day)
+                                         : now_broken->tm_mday;
+          start_time.tm_hour = start_hour ? atoi (start_hour)
+                                          : now_broken->tm_hour;
+          start_time.tm_min = start_minute ? atoi (start_minute)
+                                           : now_broken->tm_min;
+          start_time.tm_zone = now_broken->tm_zone;
+
+          end_time.tm_year = end_year ? atoi (end_year) - 1900
+                                        : now_broken->tm_year;
+          end_time.tm_mon = end_month ? atoi (end_month) - 1
+                                        : now_broken->tm_mon;
+          end_time.tm_mday = end_day ? atoi (end_day) : now_broken->tm_mday;
+          end_time.tm_hour = end_hour ? atoi (end_hour) : now_broken->tm_hour;
+          end_time.tm_min = end_minute ? atoi (end_minute) : now_broken->tm_min;
+          end_time.tm_zone = now_broken->tm_zone;
 
 
-      start_time_str
-      = g_strdup_printf ("%04d-%02d-%02dT%02d:%02d:00",
-                          start_time.tm_year + 1900,
-                          start_time.tm_mon + 1,
-                          start_time.tm_mday,
-                          start_time.tm_hour,
-                          start_time.tm_min);
 
-      end_time_str
-      = g_strdup_printf ("%04d-%02d-%02dT%02d:%02d:00",
-                          end_time.tm_year + 1900,
-                          end_time.tm_mon + 1,
-                          end_time.tm_mday,
-                          end_time.tm_hour,
-                          end_time.tm_min);
+          start_time_str
+          = g_strdup_printf ("%04d-%02d-%02dT%02d:%02d:00",
+                              start_time.tm_year + 1900,
+                              start_time.tm_mon + 1,
+                              start_time.tm_mday,
+                              start_time.tm_hour,
+                              start_time.tm_min);
 
-      omp_command
-      = g_markup_printf_escaped ("<get_system_reports"
-                                  " name=\"%s\""
-                                  " start_time=\"%s\""
-                                  " end_time=\"%s\""
-                                  " slave_id=\"%s\"/>",
-                                  name,
-                                  start_time_str,
-                                  end_time_str,
-                                  slave_id ? slave_id : "0");
-      g_free (start_time_str);
-      g_free (end_time_str);
+          end_time_str
+          = g_strdup_printf ("%04d-%02d-%02dT%02d:%02d:00",
+                              end_time.tm_year + 1900,
+                              end_time.tm_mon + 1,
+                              end_time.tm_mday,
+                              end_time.tm_hour,
+                              end_time.tm_min);
+
+          omp_command
+          = g_markup_printf_escaped ("<get_system_reports"
+                                      " name=\"%s\""
+                                      " start_time=\"%s\""
+                                      " end_time=\"%s\""
+                                      " slave_id=\"%s\"/>",
+                                      name,
+                                      start_time_str,
+                                      end_time_str,
+                                      slave_id ? slave_id : "0");
+          g_free (start_time_str);
+          g_free (end_time_str);
+        }
 
       if (openvas_connection_sendf (&connection,
                                     "%s",

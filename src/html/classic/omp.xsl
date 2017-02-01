@@ -34624,6 +34624,7 @@ should not have received it.
 <!-- BEGIN SYSTEM REPORTS MANAGEMENT -->
 
 <xsl:template match="system_report">
+  <xsl:variable name="duration" select="../../duration"/>
   <tr>
     <td>
       <h1><xsl:value-of select="title"/></h1>
@@ -34635,12 +34636,37 @@ should not have received it.
         <xsl:when test="report/@format = 'txt'">
           <pre style="margin-left: 5%"><xsl:value-of select="report/text()"/></pre>
         </xsl:when>
+        <xsl:when test="$duration">
+          <img src="/system_report/{name}/report.{report/@format}?slave_id={../../slave/@id}&amp;duration={$duration}&amp;token={/envelope/token}"/>
+        </xsl:when>
         <xsl:otherwise>
           <img src="/system_report/{name}/report.{report/@format}?slave_id={../../slave/@id}&amp;start_year={../../start_time/year}&amp;start_month={../../start_time/month}&amp;start_day={../../start_time/day_of_month}&amp;start_hour={../../start_time/hour}&amp;start_minute={../../start_time/minute}&amp;end_year={../../end_time/year}&amp;end_month={../../end_time/month}&amp;end_day={../../end_time/day_of_month}&amp;end_hour={../../end_time/hour}&amp;end_minute={../../end_time/minute}&amp;token={/envelope/token}"/>
         </xsl:otherwise>
       </xsl:choose>
     </td>
   </tr>
+</xsl:template>
+
+<xsl:template name="duration-link">
+  <xsl:param name="duration" select="3600"/>
+  <xsl:param name="current" select="../../duration"/>
+  <xsl:param name="slave_id" select="../slave/@id"/>
+  <xsl:param name="title"/>
+
+  <xsl:variable name="css">
+    <xsl:choose>
+      <xsl:when test="$duration = $current">
+        <xsl:value-of select="'active'"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="''"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
+  <a href="/omp?cmd=get_system_reports&amp;slave_id={$slave_id}&amp;duration={$duration}&amp;token={/envelope/token}&amp;range_type=duration" class="{$css}">
+    <xsl:value-of select="$title"/>
+  </a>
 </xsl:template>
 
 <xsl:template match="get_system_reports_response">
@@ -34666,74 +34692,54 @@ should not have received it.
       <img src="/img/wizard.svg" class="icon icon-sm"/>
       <ul>
         <li>
-          <a class="systemsettings-set-date"
-            data-form="#timeselect"
-            data-timezone="{/envelope/timezone}"
-            data-start-date="#start-date"
-            data-end-date="#end-date"
-            data-start-hour="#start-hour"
-            data-end-hour="#end-hour"
-            data-start-minute="#start-minute"
-            data-end-minute="#end-minute"
-            data-duration="hour">
-            <xsl:value-of select="gsa:i18n ('Report for last hour')"/>
-          </a>
+          <xsl:call-template name="duration-link">
+            <xsl:with-param name="duration">3600</xsl:with-param>
+            <xsl:with-param name="current" select="$duration"/>
+            <xsl:with-param name="slave_id" select="../slave/@id"/>
+            <xsl:with-param name="title">
+              <xsl:value-of select="gsa:i18n ('Report for last hour')"/>
+            </xsl:with-param>
+          </xsl:call-template>
         </li>
         <li>
-          <a class="systemsettings-set-date"
-            data-form="#timeselect"
-            data-timezone="{/envelope/timezone}"
-            data-start-date="#start-date"
-            data-end-date="#end-date"
-            data-start-hour="#start-hour"
-            data-end-hour="#end-hour"
-            data-start-minute="#start-minute"
-            data-end-minute="#end-minute"
-            data-duration="day">
-            <xsl:value-of select="gsa:i18n ('Report for last day')"/>
-          </a>
+          <xsl:call-template name="duration-link">
+            <xsl:with-param name="duration">86400</xsl:with-param>
+            <xsl:with-param name="current" select="$duration"/>
+            <xsl:with-param name="slave_id" select="../slave/@id"/>
+            <xsl:with-param name="title">
+              <xsl:value-of select="gsa:i18n ('Report for last day')"/>
+            </xsl:with-param>
+          </xsl:call-template>
         </li>
         <li>
-          <a class="systemsettings-set-date"
-            data-form="#timeselect"
-            data-timezone="{/envelope/timezone}"
-            data-start-date="#start-date"
-            data-end-date="#end-date"
-            data-start-hour="#start-hour"
-            data-end-hour="#end-hour"
-            data-start-minute="#start-minute"
-            data-end-minute="#end-minute"
-            data-duration="week">
-            <xsl:value-of select="gsa:i18n ('Report for last week')"/>
-          </a>
+          <xsl:call-template name="duration-link">
+            <xsl:with-param name="duration">604800</xsl:with-param>
+            <xsl:with-param name="current" select="$duration"/>
+            <xsl:with-param name="slave_id" select="../slave/@id"/>
+            <xsl:with-param name="title">
+              <xsl:value-of select="gsa:i18n ('Report for last week')"/>
+            </xsl:with-param>
+          </xsl:call-template>
         </li>
         <li>
-          <a class="systemsettings-set-date"
-            data-form="#timeselect"
-            data-timezone="{/envelope/timezone}"
-            data-start-date="#start-date"
-            data-end-date="#end-date"
-            data-start-hour="#start-hour"
-            data-end-hour="#end-hour"
-            data-start-minute="#start-minute"
-            data-end-minute="#end-minute"
-            data-duration="month">
-            <xsl:value-of select="gsa:i18n ('Report for last month')"/>
-          </a>
+          <xsl:call-template name="duration-link">
+            <xsl:with-param name="duration">2678400</xsl:with-param>
+            <xsl:with-param name="current" select="$duration"/>
+            <xsl:with-param name="slave_id" select="../slave/@id"/>
+            <xsl:with-param name="title">
+              <xsl:value-of select="gsa:i18n ('Report for last month')"/>
+            </xsl:with-param>
+          </xsl:call-template>
         </li>
         <li>
-          <a class="systemsettings-set-date"
-            data-form="#timeselect"
-            data-timezone="{/envelope/timezone}"
-            data-start-date="#start-date"
-            data-end-date="#end-date"
-            data-start-hour="#start-hour"
-            data-end-hour="#end-hour"
-            data-start-minute="#start-minute"
-            data-end-minute="#end-minute"
-            data-duration="year">
-            <xsl:value-of select="gsa:i18n ('Report for last year')"/>
-          </a>
+          <xsl:call-template name="duration-link">
+            <xsl:with-param name="duration">31536000</xsl:with-param>
+            <xsl:with-param name="current" select="$duration"/>
+            <xsl:with-param name="slave_id" select="../slave/@id"/>
+            <xsl:with-param name="title">
+              <xsl:value-of select="gsa:i18n ('Report for last year')"/>
+            </xsl:with-param>
+          </xsl:call-template>
         </li>
       </ul>
     </span>
@@ -34749,10 +34755,12 @@ should not have received it.
     </h1>
   </div>
 
-  <div class="section-box">
+  <div class="section-box system-report">
     <form action="" method="get" class="form-horizontal container" id="timeselect">
       <input type="hidden" name="token" value="{/envelope/token}"/>
       <input type="hidden" name="cmd" value="get_system_reports"/>
+      <input type="hidden" name="duration" value="{$duration}"/>
+      <input type="hidden" name="range_type" value="{../range_type}"/>
 
       <div class="col-8">
         <div class="form-group">
@@ -34773,7 +34781,7 @@ should not have received it.
                   id="start-hour"
                   value="{../start_time/hour}"
                   size="2"
-                  class="spinner"
+                  class="performance-spinner"
                   data-type="int"
                   min="0"
                   max="23"
@@ -34786,7 +34794,7 @@ should not have received it.
                   id="start-minute"
                   value="{../start_time/minute}"
                   size="2"
-                  class="spinner"
+                  class="performance-spinner"
                   data-type="int"
                   min="0"
                   max="59"
@@ -34814,7 +34822,7 @@ should not have received it.
                   id="end-hour"
                   value="{../end_time/hour}"
                   size="2"
-                  class="spinner"
+                  class="performance-spinner"
                   data-type="int"
                   min="0"
                   max="23"
@@ -34827,7 +34835,7 @@ should not have received it.
                   id="end-minute"
                   value="{../end_time/minute}"
                   size="2"
-                  class="spinner"
+                  class="performance-spinner"
                   data-type="int"
                   min="0"
                   max="59"
@@ -34837,6 +34845,67 @@ should not have received it.
             </div>
           </div>
         </div>
+
+        <div class="form-group">
+          <label class="col-2 control-label">
+            <xsl:value-of select="gsa:i18n ('Report for last')"/>
+          </label>
+          <div class="col-10 performance-presets">
+            <ul>
+              <li>
+                <xsl:call-template name="duration-link">
+                  <xsl:with-param name="duration">3600</xsl:with-param>
+                  <xsl:with-param name="current" select="$duration"/>
+                  <xsl:with-param name="slave_id" select="../slave/@id"/>
+                  <xsl:with-param name="title">
+                    <xsl:value-of select="gsa:i18n ('hour')"/>
+                  </xsl:with-param>
+                </xsl:call-template>
+              </li>
+              <li>
+                <xsl:call-template name="duration-link">
+                  <xsl:with-param name="duration">86400</xsl:with-param>
+                  <xsl:with-param name="current" select="$duration"/>
+                  <xsl:with-param name="slave_id" select="../slave/@id"/>
+                  <xsl:with-param name="title">
+                    <xsl:value-of select="gsa:i18n ('day')"/>
+                  </xsl:with-param>
+                </xsl:call-template>
+              </li>
+              <li>
+                <xsl:call-template name="duration-link">
+                  <xsl:with-param name="duration">604800</xsl:with-param>
+                  <xsl:with-param name="current" select="$duration"/>
+                  <xsl:with-param name="slave_id" select="../slave/@id"/>
+                  <xsl:with-param name="title">
+                    <xsl:value-of select="gsa:i18n ('week')"/>
+                  </xsl:with-param>
+                </xsl:call-template>
+              </li>
+              <li>
+                <xsl:call-template name="duration-link">
+                  <xsl:with-param name="duration">2678400</xsl:with-param>
+                  <xsl:with-param name="current" select="$duration"/>
+                  <xsl:with-param name="slave_id" select="../slave/@id"/>
+                  <xsl:with-param name="title">
+                    <xsl:value-of select="gsa:i18n ('month')"/>
+                  </xsl:with-param>
+                </xsl:call-template>
+              </li>
+              <li>
+                <xsl:call-template name="duration-link">
+                  <xsl:with-param name="duration">31536000</xsl:with-param>
+                  <xsl:with-param name="current" select="$duration"/>
+                  <xsl:with-param name="slave_id" select="../slave/@id"/>
+                  <xsl:with-param name="title">
+                    <xsl:value-of select="gsa:i18n ('year')"/>
+                  </xsl:with-param>
+                </xsl:call-template>
+              </li>
+            </ul>
+          </div>
+        </div>
+
         <xsl:if test="gsa:may-op ('get_scanners') and count(../get_scanners_response/scanner)">
           <div class="form-group">
             <label class="col-2 control-label">
@@ -34844,7 +34913,7 @@ should not have received it.
             </label>
             <div class="col-10">
               <div id="small_form" class="pull-left">
-                <select name="slave_id" onchange="switch_slave.submit ()">
+                <select name="slave_id" onchange="$('#timeselect').submit()">
                   <xsl:variable name="slave_id">
                     <xsl:value-of select="../slave/@id"/>
                   </xsl:variable>

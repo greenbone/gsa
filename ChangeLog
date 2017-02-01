@@ -1,3 +1,21 @@
+2017-02-01  Björn Ricks <bjoern.ricks@greenbone.net>
+
+	Backport r27411 and r27418
+
+	* src/gsad_omp.c, src/html/classic/css/gsa-style.css,
+	src/html/classic/omp.xsl: Reenable duration parameter for performance graphs.
+
+	* src/gsad_omp.c (get_system_reports_omp, get_system_report_omp): Reintroduce
+	range_type parameter. If the parameter is duration duration will be used for
+	the system report time range. Otherwise start and end time.
+
+	* src/html/classic/js/greenbone-init.js: Change range_type input field value
+	to start from start if start/end time spinners or datepickers have been
+	changed.
+
+	* src/html/classic/omp.xsl (duration-link, get_system_reports_response): Add
+	range_type parameter.
+
 2017-01-30  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	Backport r27401.
