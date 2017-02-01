@@ -672,6 +672,52 @@ export class Filter extends Model {
   }
 
   /**
+   * Returns the sort order of the current filter
+   *
+   * @return {String} The sort order. 'sort' or 'sort-reverse'.
+   */
+  getSortOrder() {
+    return this.has('sort-reverse') ? 'sort-reverse' : 'sort';
+  }
+
+  /**
+   * Returns the sort by field name of the current filter
+   *
+   * @return {String} The sort order. 'sort' or 'sort-reverse'.
+   */
+  getSortBy() {
+    let order = this.getSortOrder();
+    return this.get(order);
+  }
+
+  /**
+   * Set the current sort order
+   *
+   * @param {String} value  New sort order. 'sort' or 'sort-reverse'.
+   *
+   * @return {Filter} This filter.
+   */
+  setSortOrder(value) {
+    let sortby = this.getSortBy();
+    value = value === 'sort-reverse' ? 'sort-reverse' : 'sort';
+    this.set(value, sortby);
+    return this;
+  }
+
+  /**
+   * Set the current sort field
+   *
+   * @param {String} value  New sort field
+   *
+   * @return {Filter} This filter.
+   */
+  setSortBy(value) {
+    let order = this.getSortOrder();
+    this.set(order, value);
+    return this;
+  }
+
+  /**
    * Parses FilterTerms from filterstring and adds them to this Filter
    *
    * @param {String} filterstring  Filter representation as a string
