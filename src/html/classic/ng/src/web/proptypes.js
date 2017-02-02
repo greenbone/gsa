@@ -28,6 +28,16 @@ export const component = React.PropTypes.oneOfType([
   React.PropTypes.object,
 ]);
 
+export const componentOrFalse = React.PropTypes.oneOfType([
+  component,
+  React.PropTypes.oneOf([false]),
+]);
+
+export const componentOrElement = React.PropTypes.oneOfType([
+  component,
+  React.PropTypes.element,
+]);
+
 export const number = React.PropTypes.oneOfType([
   React.PropTypes.number,
   React.PropTypes.string,
@@ -40,6 +50,8 @@ export const icon =  React.PropTypes.oneOfType([
 
 export default {
   component,
+  componentOrFalse,
+  componentOrElement,
   number,
   icon,
 };
