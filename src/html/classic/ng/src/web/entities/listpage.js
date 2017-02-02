@@ -387,7 +387,7 @@ export class EntitiesListPage extends React.Component {
         sortFields={this.sort_fields}
         filter={filter}
         ref={ref => this.filter_dialog = ref}
-        onFilterUpdate={this.onFilterUpdate}/>
+        onFilterChanged={this.onFilterUpdate}/>
     );
   }
 

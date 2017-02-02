@@ -167,7 +167,7 @@ export class TasksPage extends EntitiesListPage {
         <TaskFilterDialog
           filter={filter}
           ref={ref => this.filter_dialog = ref}
-          onFilterUpdate={this.onFilterUpdate}/>
+          onFilterChanged={this.onFilterUpdate}/>
       </span>
     );
   }

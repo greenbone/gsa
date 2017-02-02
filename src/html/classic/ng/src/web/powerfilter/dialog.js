@@ -59,7 +59,7 @@ const DefaultFilterDialogComponent = props => {
   );
 };
 
-DefaultFilterDialogComponent.propTypes = {
+export const DefaultFilterDialogPropTypes = {
   filter: React.PropTypes.object,
   filterstring: React.PropTypes.string,
   sortFields: React.PropTypes.array,
@@ -68,6 +68,8 @@ DefaultFilterDialogComponent.propTypes = {
   onFilterValueChange: React.PropTypes.func,
   onFilterStringChange: React.PropTypes.func,
 };
+
+DefaultFilterDialogComponent.propTypes = DefaultFilterDialogPropTypes;
 
 export const withFilterDialog = FilterDialogComponent => {
   class FilterDialogWrapper extends React.Component {
@@ -110,12 +112,8 @@ export const withFilterDialog = FilterDialogComponent => {
 
       filter = Filter.fromString(filterstring, filter);
 
-      if (filter.equals(this.orig_filter)) {
-        filter = this.orig_filter;
-      }
-
-      if (this.props.onFilterUpdate) {
-        this.props.onFilterUpdate(filter);
+      if (this.props.onFilterChanged && !filter.equals(this.orig_filter)) {
+        this.props.onFilterChanged(filter);
       }
 
       this.dialog.close();
@@ -174,7 +172,7 @@ export const withFilterDialog = FilterDialogComponent => {
 
   FilterDialogWrapper.propTypes = {
     filter: React.PropTypes.object,
-    onFilterUpdate: React.PropTypes.func,
+    onFilterChanged: React.PropTypes.func,
   };
 
   return FilterDialogWrapper;

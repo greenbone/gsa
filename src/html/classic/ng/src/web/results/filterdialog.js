@@ -39,7 +39,8 @@ import FirstResultGroup from '../powerfilter/firstresultgroup.js';
 import MinQodGroup from '../powerfilter/minqodgroup.js';
 import ResultsPerPageGroup from '../powerfilter/resultsperpagegroup.js';
 import SortByGroup from '../powerfilter/sortbygroup.js';
-import {withFilterDialog} from '../powerfilter/dialog.js';
+import {withFilterDialog, DefaulFilterDialogPropTypes
+} from '../powerfilter/dialog.js';
 
 const SORT_FIELDS = [
   ['vulnerability', _('Vulnerability')],
@@ -180,15 +181,7 @@ class ResultsFilterDialogComponent extends React.Component {
   }
 }
 
-ResultsFilterDialogComponent.propTypes = {
-  filter: React.PropTypes.object,
-  filterstring: React.PropTypes.string,
-  onSortByChange: React.PropTypes.func,
-  onSortOrderChange: React.PropTypes.func,
-  onFilterValueChange: React.PropTypes.func,
-  onFilterStringChange: React.PropTypes.func,
-};
-
+ResultsFilterDialogComponent.propTypes = DefaulFilterDialogPropTypes;
 
 export const ResultsFilterDialog = withFilterDialog(
   ResultsFilterDialogComponent);

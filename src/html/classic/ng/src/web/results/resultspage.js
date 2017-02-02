@@ -167,7 +167,7 @@ export class ResultsPage extends EntitiesListPage {
       <ResultsFilterDialog
         filter={filter}
         ref={ref => this.filter_dialog = ref}
-        onFilterUpdate={this.onFilterUpdate}/>
+        onFilterChanged={this.onFilterUpdate}/>
     );
   }
 }
