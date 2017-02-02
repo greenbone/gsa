@@ -24,10 +24,7 @@
 import {is_defined, extend, map} from '../utils.js';
 import logger from '../log.js';
 
-import CollectionList from './collectionlist.js';
-import CollectionCounts from './collectioncounts.js';
-
-import Filter from './models/filter.js';
+import {parse_collection_list} from './models/parser.js';
 
 const log = logger.getLogger('gmp.command');
 
@@ -103,46 +100,9 @@ export class EntitiesCommand extends HttpCommand {
     return rparams;
   }
 
-  getElementsFromResponse(response) {
-    return response[this.name];
-  }
-
-  getEntitiesFromRespone(response) {
-    return map(this.getElementsFromResponse(response),
-      element => new this.clazz(element));
-  }
-
-  getFilterFromResponse(response) {
-    return new Filter(response.filters);
-  }
-
-  getCountsFromResponse(response) {
-    let es = response[this.name + 's'];
-    let ec = response[this.name + '_count'];
-    return {
-      first: es._start,
-      rows: es._max,
-      length: ec.page,
-      all: ec.__text,
-      filtered: ec.filtered,
-    };
-  }
-
-  getCollectionCountsFromResponse(response) {
-    return new CollectionCounts(this.getCountsFromResponse(response));
-  }
-
-  getCollectionListFromResponse(response) {
-    return new CollectionList({
-      entries: this.getEntitiesFromRespone(response),
-      filter: this.getFilterFromResponse(response),
-      counts: this.getCollectionCountsFromResponse(response),
-    });
-  }
-
   getCollectionListFromRoot(root) {
     let response = this.getEntitiesResponse(root);
-    return this.getCollectionListFromResponse(response);
+    return parse_collection_list(response, this.name, this.clazz);
   }
 
   getEntitiesResponse(root) {
