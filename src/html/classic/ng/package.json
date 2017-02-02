@@ -30,6 +30,7 @@
     "extends": "react-app"
   },
   "dependencies": {
+    "babel-polyfill": "^6.22.0",
     "d3": "^3.5.17",
     "i18next": "^5.0.0",
     "i18next-browser-languagedetector": "^1.0.0",
