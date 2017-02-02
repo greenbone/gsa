@@ -27,6 +27,7 @@ import {KeyCode, is_defined} from '../utils.js';
 import {translate as _} from '../locale.js';
 import logger from '../log.js';
 
+import PropTypes from './proptypes.js';
 import {render_options} from './render.js';
 
 import Button from './button.js';
@@ -250,7 +251,7 @@ Dialog.propTypes = {
   onSaveClick: React.PropTypes.func,
   onClose: React.PropTypes.func,
   onCloseClick: React.PropTypes.func,
-  width: React.PropTypes.string,
+  width: PropTypes.number,
   error: React.PropTypes.string,
 };
 
