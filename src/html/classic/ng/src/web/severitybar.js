@@ -26,6 +26,7 @@ import React from 'react';
 import _ from '../locale.js';
 import {parse_float, is_defined} from '../utils.js';
 
+import PropTypes from './proptypes.js';
 import {result_cvss_risk_factor, cvss_number_format} from './render.js';
 
 import './css/statusbar.css';
@@ -72,14 +73,8 @@ export const SeverityBar = props => {
 };
 
 SeverityBar.propTypes = {
-  severity: React.PropTypes.oneOfType([
-    React.PropTypes.string,
-    React.PropTypes.number,
-  ]),
-  scale: React.PropTypes.oneOfType([
-    React.PropTypes.string,
-    React.PropTypes.number,
-  ]),
+  severity: PropTypes.number,
+  scale: PropTypes.number,
 };
 
 export default SeverityBar;
