@@ -257,4 +257,10 @@ export function shorten(text, length = 60) {
 
 }
 
+export function exclude(object, func) {
+  return extend({}, ...Object.keys(object)
+    .filter(key => !func(key))
+    .map(key => ({[key]: object[key]})));
+}
+
 // vim: set ts=2 sw=2 tw=80:
