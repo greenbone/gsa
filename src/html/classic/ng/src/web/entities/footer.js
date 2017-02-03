@@ -26,6 +26,7 @@ import React from 'react';
 import _ from '../../locale.js';
 
 import Layout from '../layout.js';
+import PropTypes from '../proptypes.js';
 import SelectionType from '../selectiontype.js';
 
 import ExportIcon from '../icons/exporticon.js';
@@ -72,10 +73,7 @@ export const EntitiesFooter = props => {
 };
 
 EntitiesFooter.propTypes = {
-  span: React.PropTypes.oneOfType([
-    React.PropTypes.number,
-    React.PropTypes.string,
-  ]),
+  span: PropTypes.number,
   selectionType: React.PropTypes.string.isRequired,
   download: React.PropTypes.bool,
   trash: React.PropTypes.bool,
