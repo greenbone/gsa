@@ -38,6 +38,7 @@ import Icon from '../icons/icon.js';
 
 import TableRow from '../table/row.js';
 import TableHead from '../table/head.js';
+import TableHeader from '../table/header.js';
 
 import OverridesCharts from './charts.js';
 import OverrideDialog from './dialog.js';
@@ -82,46 +83,48 @@ export class OverridesPage extends EntitiesListPage {
     }
 
     return (
-      <TableRow>
-        <TableHead>
-          <Sort by="text" onClick={this.onSortChange}>
-            {_('Text')}
-          </Sort>
-        </TableHead>
-        <TableHead>
-          <Sort by="nvt" onClick={this.onSortChange}>
-            {_('NVT')}
-          </Sort>
-        </TableHead>
-        <TableHead>
-          <Sort by="hosts" onClick={this.onSortChange}>
-            {_('Hosts')}
-          </Sort>
-        </TableHead>
-        <TableHead>
-          <Sort by="port" onClick={this.onSortChange}>
-            {_('Location')}
-          </Sort>
-        </TableHead>
-        <TableHead>
-          <Sort by="severity" onClick={this.onSortChange}>
-            {_('From')}
-          </Sort>
-        </TableHead>
-        <TableHead width="10em">
-          <Sort by="new_severity" onClick={this.onSortChange}>
-            {_('To')}
-          </Sort>
-        </TableHead>
-        <TableHead>
-          <Sort by="active" onClick={this.onSortChange}>
-            {_('Active')}
-          </Sort>
-        </TableHead>
-        <TableHead width="10em">
-          {_('Actions')}
-        </TableHead>
-      </TableRow>
+      <TableHeader>
+        <TableRow>
+          <TableHead>
+            <Sort by="text" onClick={this.onSortChange}>
+              {_('Text')}
+            </Sort>
+          </TableHead>
+          <TableHead>
+            <Sort by="nvt" onClick={this.onSortChange}>
+              {_('NVT')}
+            </Sort>
+          </TableHead>
+          <TableHead>
+            <Sort by="hosts" onClick={this.onSortChange}>
+              {_('Hosts')}
+            </Sort>
+          </TableHead>
+          <TableHead>
+            <Sort by="port" onClick={this.onSortChange}>
+              {_('Location')}
+            </Sort>
+          </TableHead>
+          <TableHead>
+            <Sort by="severity" onClick={this.onSortChange}>
+              {_('From')}
+            </Sort>
+          </TableHead>
+          <TableHead width="10em">
+            <Sort by="new_severity" onClick={this.onSortChange}>
+              {_('To')}
+            </Sort>
+          </TableHead>
+          <TableHead>
+            <Sort by="active" onClick={this.onSortChange}>
+              {_('Active')}
+            </Sort>
+          </TableHead>
+          <TableHead width="10em">
+            {_('Actions')}
+          </TableHead>
+        </TableRow>
+      </TableHeader>
     );
   }
 

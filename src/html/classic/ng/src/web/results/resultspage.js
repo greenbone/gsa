@@ -35,11 +35,11 @@ import EntitiesFooter from '../entities/footer.js';
 
 import Dashboard from '../dashboard/dashboard.js';
 
-
 import Icon from '../icons/icon.js';
 
 import TableRow from '../table/row.js';
 import TableHead from '../table/head.js';
+import TableHeader from '../table/header.js';
 
 import ResultCharts from './charts.js';
 import ResultsFilterDialog from './filterdialog.js';
@@ -69,50 +69,52 @@ export class ResultsPage extends EntitiesListPage {
 
     let {selection_type} = this.state;
     return (
-      <TableRow key="1">
-        <TableHead>
-          <Sort by="vulnerability" onClick={this.onSortChange}>
-            {_('Vulnerability')}
-          </Sort>
-        </TableHead>
-        <TableHead width="5em">
-          <Layout flex align="center">
-            <Sort by="solution_type" onClick={this.onSortChange}>
-              <Icon title={_('Solution type')} img="solution_type.svg"/>
+      <TableHeader>
+        <TableRow>
+          <TableHead>
+            <Sort by="vulnerability" onClick={this.onSortChange}>
+              {_('Vulnerability')}
             </Sort>
-          </Layout>
-        </TableHead>
-        <TableHead width="10em">
-          <Layout flex align="space-between">
-            <Sort by="severity" onClick={this.onSortChange}>
-              {_('Severity')}
+          </TableHead>
+          <TableHead width="5em">
+            <Layout flex align="center">
+              <Sort by="solution_type" onClick={this.onSortChange}>
+                <Icon title={_('Solution type')} img="solution_type.svg"/>
+              </Sort>
+            </Layout>
+          </TableHead>
+          <TableHead width="10em">
+            <Layout flex align="space-between">
+              <Sort by="severity" onClick={this.onSortChange}>
+                {_('Severity')}
+              </Sort>
+            </Layout>
+          </TableHead>
+          <TableHead width="6em">
+            <Sort by="qod" onClick={this.onSortChange}>
+              {_('QoD')}
             </Sort>
-          </Layout>
-        </TableHead>
-        <TableHead width="6em">
-          <Sort by="qod" onClick={this.onSortChange}>
-            {_('QoD')}
-          </Sort>
-        </TableHead>
-        <TableHead width="10em">
-          <Sort by="host" onClick={this.onSortChange}>
-            {_('Host')}
-          </Sort>
-        </TableHead>
-        <TableHead width="10em">
-          <Sort by="location" onClick={this.onSortChange}>
-            {_('Location')}
-          </Sort>
-        </TableHead>
-        <TableHead width="20em">
-          <Sort by="created" onClick={this.onSortChange}>
-            {_('Created')}
-          </Sort>
-        </TableHead>
-        {selection_type === SelectionType.SELECTION_USER &&
-          <TableHead width="6em">{_('Actions')}</TableHead>
-        }
-      </TableRow>
+          </TableHead>
+          <TableHead width="10em">
+            <Sort by="host" onClick={this.onSortChange}>
+              {_('Host')}
+            </Sort>
+          </TableHead>
+          <TableHead width="10em">
+            <Sort by="location" onClick={this.onSortChange}>
+              {_('Location')}
+            </Sort>
+          </TableHead>
+          <TableHead width="20em">
+            <Sort by="created" onClick={this.onSortChange}>
+              {_('Created')}
+            </Sort>
+          </TableHead>
+          {selection_type === SelectionType.SELECTION_USER &&
+            <TableHead width="6em">{_('Actions')}</TableHead>
+          }
+        </TableRow>
+      </TableHeader>
     );
   }
 

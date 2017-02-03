@@ -1,3 +1,17 @@
+2017-02-03 Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/notes/notespage.js,
+	src/html/classic/ng/src/web/overrides/overridespage.js
+	src/html/classic/ng/src/web/results/resultspage.js,
+	src/html/classic/ng/src/web/tasks/taskspage.js,
+	src/html/classic/ng/src/web/table/data.js,
+	src/html/classic/ng/src/web/table/header.js,
+	src/html/classic/ng/src/web/table/table.js: Add new components for table:
+	TableHeader and TableData. TableHader encapsulates the <thead> and the
+	TableData the <td> html element. Additionally TableData is styleable with the
+	layout properties.
+
 2017-02-02 Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/gmp/command.js,

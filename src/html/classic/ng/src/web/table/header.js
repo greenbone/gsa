@@ -4,7 +4,7 @@
  * Björn Ricks <bjoern.ricks@greenbone.net>
  *
  * Copyright:
- * Copyright (C) 2016 - 2017 Greenbone Networks GmbH
+ * Copyright (C) 2017 Greenbone Networks GmbH
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,40 +23,10 @@
 
 import React from 'react';
 
-import {classes} from '../../utils.js';
-
-import './css/table.css';
-
-export const Table = props => {
-  let {header, footer, children, className} = props;
-
-  className = classes(className, 'table');
-
-  return (
-    <table className={className}>
-      {header}
-      <tbody>
-        {children}
-      </tbody>
-      <tfoot>
-        {footer}
-      </tfoot>
-    </table>
-  );
+export const TableHeader = props => {
+  return <thead {...props}/>;
 };
 
-Table.propTypes = {
-  header: React.PropTypes.oneOfType([
-    React.PropTypes.array,
-    React.PropTypes.object,
-  ]),
-  footer: React.PropTypes.oneOfType([
-    React.PropTypes.array,
-    React.PropTypes.object,
-  ]),
-  className: React.PropTypes.string,
-};
-
-export default Table;
+export default TableHeader;
 
 // vim: set ts=2 sw=2 tw=80:

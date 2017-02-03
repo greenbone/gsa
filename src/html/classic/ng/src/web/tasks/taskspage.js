@@ -41,6 +41,7 @@ import MenuEntry from '../menu/menuentry.js';
 
 import TableRow from '../table/row.js';
 import TableHead from '../table/head.js';
+import TableHeader from '../table/header.js';
 
 import TaskWizard from '../wizard/taskwizard.js';
 import AdvancedTaskWizard from '../wizard/advancedtaskwizard.js';
@@ -85,46 +86,48 @@ export class TasksPage extends EntitiesListPage {
       return null;
     }
 
-    return [
-      <TableRow key="1">
-        <TableHead rowSpan="2">
-          <Sort by="name" onClick={this.onSortChange}>
-            {_('Name')}
-          </Sort>
-        </TableHead>
-        <TableHead rowSpan="2" width="10em">
-          <Sort by="status" onClick={this.onSortChange}>
-            {_('Status')}
-          </Sort>
-        </TableHead>
-        <TableHead colSpan="2">{_('Reports')}</TableHead>
-        <TableHead rowSpan="2" width="10em">
-          <Layout flex align="space-between">
-            <Sort by="severity" onClick={this.onSortChange}>
-              {_('Severity')}
+    return (
+      <TableHeader>
+        <TableRow>
+          <TableHead rowSpan="2">
+            <Sort by="name" onClick={this.onSortChange}>
+              {_('Name')}
             </Sort>
-          </Layout>
-        </TableHead>
-        <TableHead rowSpan="2" width="6em">
-          <Sort by="trend" onClick={this.onSortChange}>
-            {_('Trend')}
-          </Sort>
-        </TableHead>
-        <TableHead rowSpan="2" width="10em">{_('Actions')}</TableHead>
-      </TableRow>,
-      <TableRow key="2">
-        <TableHead>
-          <Sort by="total" onClick={this.onSortChange}>
-            {_('Total')}
-          </Sort>
-        </TableHead>
-        <TableHead>
-          <Sort by="last" onClick={this.onSortChange}>
-            {_('Last')}
-          </Sort>
-        </TableHead>
-      </TableRow>
-    ];
+          </TableHead>
+          <TableHead rowSpan="2" width="10em">
+            <Sort by="status" onClick={this.onSortChange}>
+              {_('Status')}
+            </Sort>
+          </TableHead>
+          <TableHead colSpan="2">{_('Reports')}</TableHead>
+          <TableHead rowSpan="2" width="10em">
+            <Layout flex align="space-between">
+              <Sort by="severity" onClick={this.onSortChange}>
+                {_('Severity')}
+              </Sort>
+            </Layout>
+          </TableHead>
+          <TableHead rowSpan="2" width="6em">
+            <Sort by="trend" onClick={this.onSortChange}>
+              {_('Trend')}
+            </Sort>
+          </TableHead>
+          <TableHead rowSpan="2" width="10em">{_('Actions')}</TableHead>
+        </TableRow>
+        <TableRow>
+          <TableHead>
+            <Sort by="total" onClick={this.onSortChange}>
+              {_('Total')}
+            </Sort>
+          </TableHead>
+          <TableHead>
+            <Sort by="last" onClick={this.onSortChange}>
+              {_('Last')}
+            </Sort>
+          </TableHead>
+        </TableRow>
+      </TableHeader>
+    );
   }
 
   renderRow(task) {
