@@ -27,8 +27,9 @@ import {translate as _, short_date} from '../../locale.js';
 import {is_defined, is_string, is_empty} from '../../utils.js';
 
 import Layout from '../layout.js';
-import SeverityBar from '../severitybar.js';
 import LegacyLink from '../legacylink.js';
+import SeverityBar from '../severitybar.js';
+import StatusBar from '../statusbar.js';
 
 import EntityRow from '../entities/row.js';
 
@@ -36,7 +37,6 @@ import Icon from '../icons/icon.js';
 
 import TaskDialog from './dialog.js';
 import Trend from './trend.js';
-import TaskStatusBar from './statusbar.js';
 
 import {SLAVE_SCANNER_TYPE} from '../../gmp/commands/scanners.js';
 
@@ -283,11 +283,11 @@ export class TasksListRow extends EntityRow {
             {report_id ? (
               <LegacyLink cmd="get_report" report_id={report_id}
                 result_hosts_only="1" notes="1">
-                <TaskStatusBar status={task.status}
+                <StatusBar status={task.status}
                   progress={this.progress(task.progress)}/>
               </LegacyLink>
             ) :
-              <TaskStatusBar status={task.status}
+              <StatusBar status={task.status}
                 progress={this.progress(task.progress)}/>
             }
           </Layout>
