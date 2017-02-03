@@ -1,5 +1,11 @@
 2017-02-03 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/models/report.js: Extend the parsing of the
+	Report model. Add a ReportReport model (The report response is really mixed up
+	and strange).
+
+2017-02-03 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/tasks/taskslistrow.js: Fix import for moved
 	StatusBar component.
 
