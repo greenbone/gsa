@@ -204,6 +204,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/severityclasslabels.js
      ${NG_SRC_DIR}/src/web/solutiontype.js
      ${NG_SRC_DIR}/src/web/sortby.js
+     ${NG_SRC_DIR}/src/web/statusbar.js
      ${NG_SRC_DIR}/src/web/table/data.js
      ${NG_SRC_DIR}/src/web/table/head.js
      ${NG_SRC_DIR}/src/web/table/header.js
@@ -214,7 +215,6 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/tasks/charts.js
      ${NG_SRC_DIR}/src/web/tasks/dialog.js
      ${NG_SRC_DIR}/src/web/tasks/filterdialog.js
-     ${NG_SRC_DIR}/src/web/tasks/statusbar.js
      ${NG_SRC_DIR}/src/web/tasks/task.js
      ${NG_SRC_DIR}/src/web/tasks/taskspage.js
      ${NG_SRC_DIR}/src/web/tasks/taskslistrow.js

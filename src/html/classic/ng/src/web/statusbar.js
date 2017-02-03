@@ -23,9 +23,9 @@
 
 import React from 'react';
 
-import '../css/statusbar.css';
+import './css/statusbar.css';
 
-const TaskStatusBar = props => {
+const StatusBar = props => {
   let {status = 'Unknown', progress = '0'} = props;
   let text = status;
   let st = status.toLowerCase();
@@ -65,12 +65,12 @@ const TaskStatusBar = props => {
   );
 };
 
-TaskStatusBar.propTypes = {
+StatusBar.propTypes = {
   status: React.PropTypes.string,
   progress: React.PropTypes.string,
   suffix: React.PropTypes.string,
 };
 
-export default TaskStatusBar;
+export default StatusBar;
 
 // vim: set ts=2 sw=2 tw=80:
