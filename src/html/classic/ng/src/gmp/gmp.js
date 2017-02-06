@@ -25,7 +25,7 @@ import {is_defined, is_empty} from '../utils.js';
 
 import logger from '../log.js';
 
-import {PromiseFactory} from './promise.js';
+import PromiseFactory from './promise.js';
 
 import './commands/tasks.js';
 import './commands/reports.js';
@@ -55,7 +55,7 @@ export class Gmp {
 
     this._commands = {};
 
-    this.promise_factory = new PromiseFactory();
+    this.promise_factory = PromiseFactory;
 
     this.server = is_defined(server) ? server : window.location.host;
     this.protocol = is_defined(protocol) ? protocol : window.location.protocol;

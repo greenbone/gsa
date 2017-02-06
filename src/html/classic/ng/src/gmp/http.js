@@ -28,7 +28,7 @@ import _ from '../locale.js';
 import {is_defined, has_value, extend, xml2json} from '../utils.js';
 
 import Cache from './cache.js';
-import {PromiseFactory} from './promise.js';
+import PromiseFactory from './promise.js';
 
 const log = logger.getLogger('gmp.http');
 
@@ -76,12 +76,11 @@ export function build_url_params(params) {
 
 export class Http {
 
-  constructor(url, timeout, promise_factory) {
+  constructor(url, timeout = TIMEOUT, promise_factory = PromiseFactory) {
     this.url = url;
-    this.timeout = is_defined(timeout) ? timeout : TIMEOUT;
-    this.promise_factory = is_defined(promise_factory) ? promise_factory :
-      new PromiseFactory();
     this.params = {};
+    this.timeout = timeout;
+    this.promise_factory = promise_factory;
 
     this.interceptors = [];
     this.cache = new Cache();

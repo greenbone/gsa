@@ -1,3 +1,11 @@
+2017-02-06 Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/src/gmp/gmp.js,
+	src/html/classic/ng/src/gmp/http.js,
+	src/html/classic/ng/src/gmp/promise.js: Simplify promise usage by using a
+	default promise factory. This allows to create new promises from a factory
+	without having to pass a gmp instance via context.
+
 2017-02-06  Timo Pollmeier <timo.pollmeier@greenbone.net>
 
 	* src/html/classic/css/gsa-style.css (div.label_high, div.label_medium)

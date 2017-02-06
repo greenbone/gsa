@@ -26,7 +26,11 @@ import {is_object} from '../utils.js';
 export class PromiseFactory {
 
   constructor(promise) {
-    this.promise = promise || Promise;
+    this.promise = promise || window.Promise;
+  }
+
+  setPromise(promise) {
+    this.promise = promise;
   }
 
   create(func) {
@@ -36,5 +40,9 @@ export class PromiseFactory {
     return new this.promise(func);
   }
 }
+
+const promise = new PromiseFactory();
+
+export default promise;
 
 // vim: set ts=2 sw=2 tw=80:
