@@ -37,12 +37,12 @@ export class Titlebar extends React.Component {
     let {onLogoutClick} = this.props;
 
     const gb = (
-      <Icon img="greenbone.svg"
+      <Icon img="greenbone.svg" size="default"
         alt="Greenbone Security Assistant"
         className="greenbone-icon"/>
     );
     const gsa = (
-      <Icon img="gsa.svg"
+      <Icon img="gsa.svg" size="default"
         alt="Greenbone Security Assistant"
         className="greenbone-text"/>
     );

@@ -53,7 +53,7 @@ export const withIconCss = Component => {
   IconCss.propTypes = {
     className: React.PropTypes.string,
     size: React.PropTypes.oneOf([
-      'small', 'medium', 'large',
+      'small', 'medium', 'large', 'default',
     ]),
     onClick: React.PropTypes.func,
   };
