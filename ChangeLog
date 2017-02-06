@@ -1,5 +1,10 @@
 2017-02-06 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/titlebar.js: Remove size="default" from Icons in
+	the titlebar. Setting size to default has no effect.
+
+2017-02-06 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/web/icons/deleteicon.js: Add new DeleteIcon component.
 
