@@ -24,32 +24,34 @@
 import React from 'react';
 
 import _ from '../../locale.js';
+import {is_defined} from '../../utils.js';
 
 import Icon from './icon.js';
 
 import SelectionType from '../selectiontype.js';
 
 export const TrashIcon = props => {
-  let {selectionType} = props;
-  let title;
-  if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
-    title = _('Move page contents to trashcan');
-  }
-  else if (selectionType === SelectionType.SELECTION_USER) {
-    title = _('Move selection to trashcan');
-  }
-  else if (selectionType === SelectionType.SELECTION_FILTER) {
-    title = _('Move all filtered to trashcan');
+  let {selectionType, title, ...other} = props;
+  if (!is_defined(title)) {
+    if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
+      title = _('Move page contents to trashcan');
+    }
+    else if (selectionType === SelectionType.SELECTION_USER) {
+      title = _('Move selection to trashcan');
+    }
+    else if (selectionType === SelectionType.SELECTION_FILTER) {
+      title = _('Move all filtered to trashcan');
+    }
   }
   return (
     <Icon img="trashcan.svg"
-      title={title}
-      onClick={props.onClick}/>
+      title={title} {...other}/>
   );
 };
 
 TrashIcon.propTypes = {
-  selectionType: React.PropTypes.string.isRequired,
+  title: React.PropTypes.string,
+  selectionType: React.PropTypes.string,
   onClick: React.PropTypes.func,
 };
 

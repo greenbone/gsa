@@ -28,8 +28,8 @@ import {classes} from '../../utils.js';
 import './css/icon.css';
 
 export const withIconCss = Component => {
-  return function(props) {
-    let {size = 'small', className, onClick, ...other} = props; //eslint-disable-line
+  function IconCss(props) {
+    let {size = 'small', className, onClick, ...other} = props;
 
     if (size === 'small') {
       className = classes('icon', 'icon-sm', className);
@@ -49,34 +49,62 @@ export const withIconCss = Component => {
     }
     return <Component {...other} onClick={onClick} className={className}/>;
   };
+
+  IconCss.propTypes = {
+    className: React.PropTypes.string,
+    size: React.PropTypes.oneOf([
+      'small', 'medium', 'large',
+    ]),
+    onClick: React.PropTypes.func,
+  };
+
+  return IconCss;
 };
 
-const IconContainer = props => {
-  const {img, href, alt = '', ...other} = props;
-  let img_path = process.env.PUBLIC_URL + '/img/' + img; // eslint-disable-line no-process-env,no-undef
+class IconComponent extends React.Component {
 
-  if (href) {
+  constructor(...args) {
+    super(...args);
+
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  handleClick() {
+    let {value, onClick} = this.props;
+
+    if (onClick) {
+      onClick(value);
+    }
+  }
+
+  render() {
+    const {img, href, alt = '', value, onClick, ...other} = this.props; // eslint-disable-line no-unused-vars
+    let img_path = process.env.PUBLIC_URL + '/img/' + img; // eslint-disable-line no-process-env,no-undef
+
+    if (href) {
+      return (
+        <a {...other} onClick={this.handleClick} href={href}>
+          <img src={img_path} alt={alt}/>
+        </a>
+      );
+    }
     return (
-      <a {...other} href={href}>
-        <img src={img_path} alt={alt}/>
-      </a>
+      <img {...other} onClick={this.handleClick} alt={alt} src={img_path}/>
     );
   }
-  return (
-    <img {...other} alt={alt} src={img_path}/>
-  );
-};
+}
 
-IconContainer.propTypes = {
+IconComponent.propTypes = {
   alt: React.PropTypes.string,
   img: React.PropTypes.string.isRequired,
   size: React.PropTypes.string,
   href: React.PropTypes.string,
+  value: React.PropTypes.any,
   className: React.PropTypes.string,
   onClick: React.PropTypes.func,
 };
 
-export const Icon = withIconCss(IconContainer);
+export const Icon = withIconCss(IconComponent);
 
 export default Icon;
 

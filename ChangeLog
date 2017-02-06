@@ -1,3 +1,13 @@
+2017-02-06 Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/src/web/icons/exporticon.js
+	src/html/classic/ng/src/web/icons/icon.js,
+	src/html/classic/ng/src/web/icons/trashicon.js: Allow to pass a value property
+	to all icon components. The value will be passed to the onClick event handler.
+	Change withIconCss HOC to check the passed properties in development mode.
+	Also rename IconContainer to IconComponent. Allow to set a title on
+	TrashIcons.
+
 2017-02-03 Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/entities/footer.js: Use own number PropType for

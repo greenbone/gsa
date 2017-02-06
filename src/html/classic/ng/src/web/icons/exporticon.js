@@ -29,8 +29,7 @@ import Icon from './icon.js';
 
 import SelectionType from '../selectiontype.js';
 
-export const ExportIcon = props => {
-  let {selectionType} = props;
+export const ExportIcon = ({selectionType, ...other}) => {
   let download_title;
   if (selectionType === SelectionType.SELECTION_PAGE_CONTENTS) {
     download_title = _('Export page contents');
@@ -43,8 +42,7 @@ export const ExportIcon = props => {
   }
   return (
     <Icon img="download.svg"
-      title={download_title}
-      onClick={props.onClick}/>
+      title={download_title} {...other}/>
   );
 };
 
@@ -52,7 +50,6 @@ ExportIcon.propTypes = {
   selectionType: React.PropTypes.string.isRequired,
   onClick: React.PropTypes.func,
 };
-
 
 export default ExportIcon;
 
