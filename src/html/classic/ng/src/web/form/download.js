@@ -39,6 +39,10 @@ export class Download extends React.Component {
     }
   }
 
+  setFilename(name) {
+    this.anchor.download = name;
+  }
+
   setData(data) {
     let blob =  new Blob([data], {type: 'application/octet-stream'});
 

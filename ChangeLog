@@ -1,5 +1,11 @@
 2017-02-06 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/form/download.js: Add method setFilename to
+	Download component. By using the ref mechanism this will allow to change the
+	filename via a function call.
+
+2017-02-06 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/titlebar.js: Remove size="default" from Icons in
 	the titlebar. Setting size to default has no effect.
 
