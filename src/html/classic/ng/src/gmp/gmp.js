@@ -164,14 +164,6 @@ export class Gmp {
     this.storage.globals = JSON.stringify(values);
   }
 
-  get promise() {
-    return this.promise_factory.promise;
-  }
-
-  set promise(value) {
-    this.promise_factory.promise = value;
-  }
-
   get interceptors() {
     return this.http.interceptors;
   }

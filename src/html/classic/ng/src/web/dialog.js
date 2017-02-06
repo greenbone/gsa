@@ -32,6 +32,8 @@ import {render_options} from './render.js';
 
 import Button from './button.js';
 
+import PromiseFactory from '../gmp/promise.js';
+
 import './css/dialog.css';
 
 const log = logger.getLogger('web.dialog');
@@ -83,8 +85,7 @@ export class Dialog extends React.Component {
   }
 
   save() {
-    let {gmp} = this.context;
-    return gmp.promise.resolve();
+    return PromiseFactory.resolve();
   }
 
   showErrorMessage(message) {

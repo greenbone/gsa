@@ -1,5 +1,13 @@
 2017-02-06 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/gmp.js,
+	src/html/classic/ng/src/gmp/promise.js,
+	src/html/classic/ng/src/web/dashboard/dashboard.js,
+	src/html/classic/ng/src/web/dialog.js: Don't use gmp for getting the promise
+	class. Use the PromiseFactory now.
+
+2017-02-06 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/icons/icon.js,
 	src/html/classic/ng/src/web/titlebar.js: Re-add Icon size="default". Because
 	size will be small if no size property is set on an icon there must be a

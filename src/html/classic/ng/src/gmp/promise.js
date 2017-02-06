@@ -39,6 +39,18 @@ export class PromiseFactory {
     }
     return new this.promise(func);
   }
+
+  all(...args) {
+    return this.promise.all(...args);
+  }
+
+  reject(...args) {
+    return this.promise.reject(...args);
+  }
+
+  resolve(...args) {
+    return this.promise.resolve(...args);
+  }
 }
 
 const promise = new PromiseFactory();

@@ -26,6 +26,8 @@ import React from 'react';
 import {is_defined, for_each} from '../../utils.js';
 import logger from '../../log.js';
 
+import PromiseFactory from '../../gmp/promise.js';
+
 import './css/dashboard.css';
 
 const log = logger.getLogger('web.dashboard.dashboard');
@@ -78,7 +80,7 @@ export class Dashboard extends React.Component {
       promises.push(gmp.filters.get());
     }
 
-    gmp.promise.all(promises).then(([prefs, filters]) => {
+    PromiseFactory.all(promises).then(([prefs, filters]) => {
       let pref = prefs.get(pref_id);
 
       for_each(filters, filter => {
