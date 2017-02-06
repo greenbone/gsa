@@ -150,6 +150,7 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/header.js
      ${NG_SRC_DIR}/src/web/homepage.js
      ${NG_SRC_DIR}/src/web/hosts/charts.js
+     ${NG_SRC_DIR}/src/web/icons/deleteicon.js
      ${NG_SRC_DIR}/src/web/icons/exporticon.js
      ${NG_SRC_DIR}/src/web/icons/helpicon.js
      ${NG_SRC_DIR}/src/web/icons/icon.js
