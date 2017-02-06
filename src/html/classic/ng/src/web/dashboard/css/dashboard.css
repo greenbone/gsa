@@ -179,7 +179,7 @@
 .charts-bar:link,
 .charts-bar:visited,
 .charts-bar:active {
-  background: #595959 url('/static/img/p_bar_bg.png') repeat-x;
+  background: #454545;
   display: block;
   font-size: 75%;
   color: white;

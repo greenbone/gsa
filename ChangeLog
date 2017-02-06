@@ -1,3 +1,28 @@
+2017-02-06  Timo Pollmeier <timo.pollmeier@greenbone.net>
+
+	* src/html/classic/css/gsa-style.css (div.label_high, div.label_medium)
+	(div.label_low, div.label_log, div.label_none, .progressbar_box)
+	(.progressbar_bar, .progressbar_bar_done, .progressbar_bar_new)
+	(.progressbar_bar_error, .progressbar_bar_request)
+	(.progressbar_bar_gray, .charts-bar:link, .charts-bar:visited)
+	(.charts-bar:active): Change image backgrounds to simple colors.
+
+	* src/html/classic/css/gsa-style.css (div.label_high, div.label_medium)
+	(div.label_low, div.label_log, div.label_none, .progressbar_box)
+	(.progressbar_bar, .progressbar_bar_done, .progressbar_bar_new)
+	(.progressbar_bar_error, .progressbar_bar_request)
+	(.progressbar_bar_gray, .charts-bar:link, .charts-bar:visited)
+	(.charts-bar:active): Change image backgrounds to simple colors.
+
+	* src/html/classic/ng/src/web/css/statusbar.css
+	(.statusbar.statusbar-box, .statusbar.done, .statusbar.new)
+	(.statusbar.error, .statusbar.request, .statusbar.running): Change
+	image backgrounds to simple colors.
+
+	* src/html/classic/ng/src/web/dashboard/css/dashboard.css
+	(.charts-bar:link, .charts-bar:visited, .charts-bar:active): Change
+	image backgrounds to simple colors.
+
 2017-02-06 Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/form/download.js: Add method setFilename to

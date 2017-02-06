@@ -97,7 +97,7 @@ div.label_high {
   text-align: center;
   font-weight: normal;
   font-style: normal;
-  background: #C83814 url('/img/p_bar_error.png') repeat-x;
+  background: #C83814;
   color: white;
   padding: 0px;
   border: 1px outset #C83814;
@@ -108,7 +108,7 @@ div.label_medium {
   text-align: center;
   font-weight: normal;
   font-style: normal;
-  background: #F0A519 url('/img/p_bar_request.png') repeat-x;
+  background: #F0A519;
   color: white;
   padding: 0px;
   border: 1px outset #F0A519;
@@ -119,7 +119,7 @@ div.label_low {
   text-align: center;
   font-weight: normal;
   font-style: normal;
-  background: #4F91C7 url('/img/p_bar_done.png') repeat-x;
+  background: #4F91C7;
   color: white;
   padding: 0px;
   border: 1px outset #4F91C7;
@@ -130,7 +130,7 @@ div.label_log {
   text-align: center;
   font-weight: normal;
   font-style: normal;
-  background: #595959 url('/img/p_bar_bg.png') repeat-x;
+  background: #595959;
   color: white;
   padding: 0px;
   border: 1px outset #191919;
@@ -141,7 +141,7 @@ div.label_none {
   text-align: center;
   font-weight: normal;
   font-style: normal;
-  background: #595959 url('/img/p_bar_bg.png') repeat-x;
+  background: #595959;
   color: white;
   padding: 0px;
   border: 1px outset #191919;
@@ -161,7 +161,7 @@ div.label_none {
 
   height:12px;
   width:100px;
-  background: #454545 url('/img/p_bar_bg.png');
+  background: #454545;
   vertical-align:middle;
   text-align:center;
   border:1px solid #999999;
@@ -169,32 +169,32 @@ div.label_none {
 
 .progressbar_bar {
   height:12px;
-  background:#70C000 url('/img/p_bar.png');
+  background: #70C000;
 }
 
 .progressbar_bar_done {
   height: 12px;
-  background:#CCCCCC url('/img/p_bar_done.png');
+  background: #4F91C7;
 }
 
 .progressbar_bar_new {
   height: 12px;
-  background: #df8e31 url('/img/p_bar_new.png');
+  background: #99BE48;
 }
 
 .progressbar_bar_error {
   height: 12px;
-  background: #bd3309 url('/img/p_bar_error.png');
+  background: #C83814;
 }
 
 .progressbar_bar_request {
   height: 12px;
-  background: #bd8634 url('/img/p_bar_request.png');
+  background: #F0A519;
 }
 
 .progressbar_bar_gray {
   height: 12px;
-  background: silver url('/img/p_bar_gray.png');
+  background: silver;
 }
 
 .progressbar_text {
@@ -1256,7 +1256,7 @@ select[multiple] {
 .charts-bar:link,
 .charts-bar:visited,
 .charts-bar:active {
-  background: #595959 url('/img/p_bar_bg.png') repeat-x;
+  background: #595959;
   display: block;
   font-size: 75%;
   color: white;
