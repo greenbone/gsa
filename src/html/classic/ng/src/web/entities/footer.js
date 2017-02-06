@@ -29,6 +29,7 @@ import Layout from '../layout.js';
 import PropTypes from '../proptypes.js';
 import SelectionType from '../selectiontype.js';
 
+import DeleteIcon from '../icons/deleteicon.js';
 import ExportIcon from '../icons/exporticon.js';
 import TrashIcon from '../icons/trashicon.js';
 
@@ -36,35 +37,48 @@ import Select2 from '../form/select2.js';
 
 import TableRow from '../table/row.js';
 
+import './css/footer.css';
+
 export const EntitiesFooter = props => {
-  let {span, selectionType, download, trash} = props;
+
+  let {span, selectionType, download, trash, children, onTrashClick,
+    onDeleteClick, onSelectionTypeChange, onDownloadClick,
+    selection = true} = props;
+  let deleteEntities = props.delete;
   return (
     <TableRow>
       <td colSpan={span}>
         <Layout flex align={['end', 'center']}>
-          <Select2
-            value={selectionType}
-            onChange={props.onSelectionTypeChange}>
-            <option value={SelectionType.SELECTION_PAGE_CONTENTS}>
-              {_('Apply to page contents')}
-            </option>
-            <option value={SelectionType.SELECTION_USER}>
-              {_('Apply to selection')}
-            </option>
-            <option value={SelectionType.SELECTION_FILTER}>
-              {_('Apply to all filtered')}
-            </option>
-          </Select2>
+          {selection &&
+            <Select2
+              value={selectionType}
+              onChange={onSelectionTypeChange}>
+              <option value={SelectionType.SELECTION_PAGE_CONTENTS}>
+                {_('Apply to page contents')}
+              </option>
+              <option value={SelectionType.SELECTION_USER}>
+                {_('Apply to selection')}
+              </option>
+              <option value={SelectionType.SELECTION_FILTER}>
+                {_('Apply to all filtered')}
+              </option>
+            </Select2>
+          }
           <Layout flex box>
             {trash &&
-              <TrashIcon onClick={props.onTrashClick}
+              <TrashIcon onClick={onTrashClick}
                 selectionType={selectionType}/>
             }
             {download &&
-              <ExportIcon onClick={props.onDownloadClick}
+              <ExportIcon onClick={onDownloadClick}
+                selectionType={selectionType}
+                value={download}/>
+            }
+            {deleteEntities &&
+              <DeleteIcon onClick={onDeleteClick}
                 selectionType={selectionType}/>
             }
-            {props.children}
+            {children}
           </Layout>
         </Layout>
       </td>
@@ -74,12 +88,18 @@ export const EntitiesFooter = props => {
 
 EntitiesFooter.propTypes = {
   span: PropTypes.number,
-  selectionType: React.PropTypes.string.isRequired,
-  download: React.PropTypes.bool,
+  selection: React.PropTypes.bool,
+  selectionType: React.PropTypes.string,
+  download: React.PropTypes.oneOfType([
+    React.PropTypes.bool,
+    React.PropTypes.string,
+  ]),
+  delete: React.PropTypes.bool,
   trash: React.PropTypes.bool,
   onSelectionTypeChange: React.PropTypes.func,
   onDownloadClick: React.PropTypes.func,
   onTrashClick: React.PropTypes.func,
+  onDeleteClick: React.PropTypes.func,
 };
 
 

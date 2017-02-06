@@ -25,6 +25,14 @@
 
 2017-02-06 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/entities/css/footer.css,
+	src/html/classic/ng/src/web/entities/footer.js: Allow to disable selection in
+	footer. Set min height of footer to 22px. Allow to set a filename for the
+	download via the download prop. Add delete bulk to footer.
+
+2017-02-06 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/form/download.js: Add method setFilename to
 	Download component. By using the ref mechanism this will allow to change the
 	filename via a function call.

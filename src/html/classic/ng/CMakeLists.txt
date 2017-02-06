@@ -252,6 +252,7 @@ set (NG_CSS_SRC_FILES
      ${NG_SRC_DIR}/src/web/css/titlebar.css
      ${NG_SRC_DIR}/src/web/dashboard/css/dashboard.css
      ${NG_SRC_DIR}/src/web/entities/css/component.css
+     ${NG_SRC_DIR}/src/web/entities/css/footer.css
      ${NG_SRC_DIR}/src/web/form/css/checkboxradio.css
      ${NG_SRC_DIR}/src/web/form/css/datepicker.css
      ${NG_SRC_DIR}/src/web/form/css/form.css
