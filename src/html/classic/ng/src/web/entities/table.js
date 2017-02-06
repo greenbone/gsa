@@ -81,9 +81,7 @@ EntitiesTable.propTypes = {
   onLastClick: React.PropTypes.func,
   onPreviousClick: React.PropTypes.func,
   onNextClick: React.PropTypes.func,
-  onToggleOverridesClick: React.PropTypes.func,
 };
-
 
 export default EntitiesTable;
 
