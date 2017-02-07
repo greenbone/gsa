@@ -1,5 +1,12 @@
 2017-02-07 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/tasks/containerdialog.js,
+	src/html/classic/ng/src/web/tasks/taskspage.j: Start to fix container task
+	handling by adding the create container task dialog component.
+
+2017-02-07 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/models/task.js: Parse progress already in Task
 	model.
 

@@ -34,8 +34,6 @@ import Dashboard from '../dashboard/dashboard.js';
 import EntitiesListPage from '../entities/listpage.js';
 import EntitiesFooter from '../entities/footer.js';
 
-import Icon from '../icons/icon.js';
-
 import IconMenu from '../menu/iconmenu.js';
 import MenuEntry from '../menu/menuentry.js';
 
@@ -48,6 +46,7 @@ import AdvancedTaskWizard from '../wizard/advancedtaskwizard.js';
 import ModifyTaskWizard from '../wizard/modifytaskwizard.js';
 
 import TaskDialog from './dialog.js';
+import ContainerTaskDialog from './containerdialog.js';
 import TaskFilterDialog from './filterdialog.js';
 import TaskCharts from './charts.js';
 import TasksListRow from './taskslistrow.js';
@@ -64,6 +63,21 @@ export class TasksPage extends EntitiesListPage {
       title: _('Tasks'),
       empty_title: _('No tasks available'),
       filter_filter: TASKS_FILTER_FILTER,
+    });
+
+    this.handleCreateContainerTask = this.handleCreateContainerTask.bind(this);
+    this.showContainerTaskDialog = this.showContainerTaskDialog.bind(this);
+  }
+
+  handleCreateContainerTask(data) {
+    let {gmp} = this.context;
+    return gmp.task.createContainer(data).then(() => this.reload());
+  }
+
+  showContainerTaskDialog() {
+    this.create_container_dialog.show({
+      name: _('unnamed'),
+      comment: '',
     });
   }
 
@@ -166,6 +180,12 @@ export class TasksPage extends EntitiesListPage {
             title={_('Create new Task')} onClose={this.reload}
             onSave={this.reload}/>
         }
+        {caps.mayCreate('task') &&
+          <ContainerTaskDialog
+            ref={ref => this.create_container_dialog = ref}
+            title={_('Create Container Task')}
+            onSave={this.handleCreateContainerTask}/>
+        }
 
         <TaskFilterDialog
           filter={filter}
@@ -182,7 +202,7 @@ export class TasksPage extends EntitiesListPage {
         {this.renderHelpIcon()}
 
         {caps.mayOp('run_wizard') &&
-          <IconMenu img="wizard.svg" size="small" title={_('Wizard')}
+          <IconMenu img="wizard.svg" size="small"
             onClick={() => this.task_wizard.show()}>
             <MenuEntry title={_('Task Wizard')}
               onClick={() => this.task_wizard.show()}/>
@@ -194,8 +214,13 @@ export class TasksPage extends EntitiesListPage {
         }
 
         {caps.mayCreate('task') &&
-          <Icon img="new.svg" title={_('New Task')}
-            onClick={() => { this.create_dialog.show(); }}/>
+          <IconMenu img="new.svg" size="small"
+            onClick={this.showContainerTaskDialog}>
+            <MenuEntry title={_('New Task')}
+              onClick={() => { this.create_dialog.show(); }}/>
+            <MenuEntry title={_('New Container Task')}
+              onClick={this.showContainerTaskDialog}/>
+          </IconMenu>
         }
       </Layout>
     );
