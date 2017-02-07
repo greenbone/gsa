@@ -48,12 +48,20 @@ export const icon =  React.PropTypes.oneOfType([
   React.PropTypes.element,
 ]);
 
+export const yesno = React.PropTypes.oneOf([
+  "1", "0", 1, 0,
+]);
+
+export const id = React.PropTypes.string; // TODO improve checking for uuid
+
 export default {
   component,
   componentOrFalse,
   componentOrElement,
   number,
   icon,
+  id,
+  yesno,
 };
 
 // vim: set ts=2 sw=2 tw=80:
