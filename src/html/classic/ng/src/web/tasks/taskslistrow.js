@@ -24,7 +24,7 @@
 import React from 'react';
 
 import {translate as _, short_date} from '../../locale.js';
-import {is_defined, is_string, is_empty} from '../../utils.js';
+import {is_defined, is_empty} from '../../utils.js';
 
 import Layout from '../layout.js';
 import LegacyLink from '../legacylink.js';
@@ -40,30 +40,20 @@ import Trend from './trend.js';
 
 import {SLAVE_SCANNER_TYPE} from '../../gmp/commands/scanners.js';
 
+const task_status = task => {
+  return task.isContainer() ? 'Container' : task.status;
+};
+
 export class TasksListRow extends EntityRow {
 
   constructor(props) {
     super('task', props);
 
     this.state = {task: this.props.task};
-    this.progress = this.progress.bind(this);
     this.startTask = this.startTask.bind(this);
     this.stopTask = this.stopTask.bind(this);
     this.resumeTask = this.resumeTask.bind(this);
     this.reportDate = this.reportDate.bind(this);
-  }
-
-  progress(value) {
-    if (!is_defined(value)) {
-      return '0';
-    }
-    if (is_string(value)) {
-      return value;
-    }
-    if (is_defined(value.__text)) {
-      return value.__text;
-    }
-    return '0';
   }
 
   reportDate(report) {
@@ -97,7 +87,7 @@ export class TasksListRow extends EntityRow {
   renderStartButton(task) {
     let {capabilities} = this.context;
 
-    if (task.isRunning()) {
+    if (task.isRunning() || task.isContainer()) {
       return null;
     }
 
@@ -159,10 +149,22 @@ export class TasksListRow extends EntityRow {
     }
     return (
       <LegacyLink cmd="get_schedule" schedule_id={schedule.id}
-        title={title} className="icon">
+        title={title} className="icon icon-sm">
         <Icon size="small" img="scheduled.svg"
           alt={_('Schedule Details')}/>
       </LegacyLink>
+    );
+  }
+
+  renderImportButton(task) {
+    if (!task.isContainer()) {
+      return null;
+    }
+
+    return (
+      <Icon img="upload.svg"
+        alt={_('Import Report')}
+        title={_('Import Report')}/>
     );
   }
 
@@ -217,7 +219,10 @@ export class TasksListRow extends EntityRow {
     return (
       <td className="table-actions">
         <Layout flex align={['center', 'center']}>
-          {this.renderScheduleIcon(task) || this.renderStartButton(task)}
+          {this.renderScheduleIcon(task) ||
+            this.renderStartButton(task) ||
+            this.renderImportButton(task)
+          }
 
           {task.isRunning() &&
             <Icon onClick={this.stopTask} size="small" img="stop.svg"
@@ -283,12 +288,12 @@ export class TasksListRow extends EntityRow {
             {report_id ? (
               <LegacyLink cmd="get_report" report_id={report_id}
                 result_hosts_only="1" notes="1">
-                <StatusBar status={task.status}
-                  progress={this.progress(task.progress)}/>
+                <StatusBar status={task_status(task)}
+                  progress={task.progress}/>
               </LegacyLink>
             ) :
-              <StatusBar status={task.status}
-                progress={this.progress(task.progress)}/>
+              <StatusBar status={task_status(task)}
+                progress={task.progress}/>
             }
           </Layout>
         </td>

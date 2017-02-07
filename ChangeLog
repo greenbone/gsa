@@ -1,5 +1,12 @@
 2017-02-07 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/tasks/taskslistrow.js: Don't display start icon
+	for container tasks. Instead display the import report button. Currently the
+	button isn't connected to an action. Also display 'Container' as status bar
+	for a container task.
+
+2017-02-07 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/web/tasks/containerdialog.js,
 	src/html/classic/ng/src/web/tasks/taskspage.j: Start to fix container task
