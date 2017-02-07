@@ -21,13 +21,26 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-import {is_array, parse_int, map} from '../../utils.js';
+import {is_array, is_string, is_defined, parse_int, map} from '../../utils.js';
 
 import Model from '../model.js';
 
 import Report from './report.js';
 import Schedule from './schedule.js';
 import Scanner from './scanner.js';
+
+function parse_progress(value) {
+  if (!is_defined(value)) {
+    return '0';
+  }
+  if (is_string(value)) {
+    return value;
+  }
+  if (is_defined(value.__text)) {
+    return value.__text;
+  }
+  return '0';
+}
 
 export class Task extends Model {
 
@@ -107,6 +120,8 @@ export class Task extends Model {
     }
 
     elem.schedule_periods = parse_int(elem.schedule_periods);
+
+    elem.progress = parse_progress(elem.progress);
 
     return elem;
   }
