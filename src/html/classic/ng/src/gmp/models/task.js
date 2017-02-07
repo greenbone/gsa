@@ -55,7 +55,7 @@ export class Task extends Model {
   }
 
   isContainer() {
-    return this.id === '';
+    return this.target && this.target.id === '';
   }
 
   isInUse() {
