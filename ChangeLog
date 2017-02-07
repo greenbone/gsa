@@ -1,5 +1,10 @@
 2017-02-07 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/commands/reports.js: Implement import report gmp
+	api.
+
+2017-02-07 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/dialog.js: Rename showErrorMessage method of
 	Dialog component to setErrorMessage and use es6 for default property values.
 

@@ -21,9 +21,13 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+import logger from '../../log.js';
+
 import {EntitiesCommand, register_command} from '../command.js';
 
 import Report from '../models/report.js';
+
+const log = logger.getLogger('gmp.commands.reports');
 
 export class ReportsCommand extends EntitiesCommand {
 
@@ -33,6 +37,18 @@ export class ReportsCommand extends EntitiesCommand {
 
   getEntitiesResponse(root) {
     return root.get_reports.get_reports_response;
+  }
+
+  import(args) {
+    let {task_id, in_assets = 1, xml_file} = args;
+    log.debug('Importing report', args);
+    return this.httpPost({
+      cmd: 'import_report',
+      next: 'get_report',
+      task_id,
+      in_assets,
+      xml_file,
+    });
   }
 }
 
