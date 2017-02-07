@@ -30,7 +30,9 @@ import logger from '../../log.js';
 import PropTypes from '../proptypes.js';
 import {render_options} from '../render.js';
 
-import Button from '../button.js';
+import DialogError from './error.js';
+import DialogFooter from './footer.js';
+import DialogTitle from './title.js';
 
 import PromiseFactory from '../../gmp/promise.js';
 
@@ -258,65 +260,6 @@ Dialog.propTypes = {
 
 Dialog.contextTypes = {
   gmp: React.PropTypes.object.isRequired,
-};
-
-export const DialogTitle = props => {
-  return (
-    <div className="dialog-titlebar" onMouseDown={props.onMouseDown}>
-      <span className="dialog-title-text">{props.title}</span>
-      {props.showClose &&
-        <Button className="dialog-close-button"
-          onClick={props.onCloseClick}
-          title={_('Close')}>x</Button>
-      }
-    </div>
-  );
-};
-
-DialogTitle.propTypes = {
-  showClose: React.PropTypes.bool,
-  onCloseClick: React.PropTypes.func,
-  onMouseDown: React.PropTypes.func,
-  title: React.PropTypes.string,
-};
-
-DialogTitle.defaultProps = {
-  showClose: true,
-};
-
-export const DialogFooter = props => {
-  let title = props.title ? props.title : _('Save');
-  return (
-    <div className="dialog-footer">
-      <Button className="dialog-save-button"
-        onClick={props.onSaveClick}
-        title={title}>{title}</Button>
-    </div>
-  );
-};
-
-DialogFooter.propTypes = {
-  title: React.PropTypes.string,
-  onSaveClick: React.PropTypes.func,
-};
-
-export const DialogError = props => {
-  if (!props.error) {
-    return null;
-  }
-  return (
-    <div className="dialog-error">
-      <span className="dialog-error-text">{props.error}</span>
-      <button type="button" className="button dialog-close-button"
-        onClick={props.onCloseClick}
-        title={_('Close')}>x</button>
-    </div>
-  );
-};
-
-DialogError.propTypes = {
-  error: React.PropTypes.string,
-  onCloseClick: React.PropTypes.func,
 };
 
 export default Dialog;
