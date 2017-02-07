@@ -88,12 +88,12 @@ export class Dialog extends React.Component {
     return PromiseFactory.resolve();
   }
 
-  showErrorMessage(message) {
+  setErrorMessage(message) {
     this.setState({error: message});
   }
 
   showErrorMessageFromRejection(rej) {
-    this.showErrorMessage(rej.message);
+    this.setErrorMessage(rej.message);
   }
 
   handleClose(event) {
@@ -146,7 +146,7 @@ export class Dialog extends React.Component {
   }
 
   onErrorClose() {
-    this.setState({error: undefined});
+    this.setErrorMessage();
   }
 
   handleSave(event) {
@@ -203,7 +203,7 @@ export class Dialog extends React.Component {
 
   render() {
     let {visible = false, error, width, posX, posY} = this.state;
-    let {children, showTitle, showFooter} = this.props;
+    let {children, showTitle = true, showFooter = true} = this.props;
     let style = {};
 
     if (!visible) {
@@ -254,11 +254,6 @@ Dialog.propTypes = {
   onCloseClick: React.PropTypes.func,
   width: PropTypes.number,
   error: React.PropTypes.string,
-};
-
-Dialog.defaultProps = {
-  showTitle: true,
-  showFooter: true,
 };
 
 Dialog.contextTypes = {
