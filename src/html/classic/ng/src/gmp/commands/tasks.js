@@ -178,6 +178,16 @@ export class TaskCommand extends EntityCommand {
     });
   }
 
+  createContainer(args) {
+    let {name, comment} = args;
+    log.debug('Creating container task', args);
+    return this.httpPost({
+      cmd: 'create_container_task',
+      name,
+      comment,
+    });
+  }
+
   save(args) {
     let {id, name, comment = '', target_id, schedule_id = 0, in_assets,
       apply_overrides, min_qod, alterable, auto_delete, auto_delete_data,
