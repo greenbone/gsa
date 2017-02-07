@@ -26,8 +26,9 @@ import React from 'react';
 import  _ from '../../locale.js';
 import {is_defined} from '../../utils.js';
 
-import Dialog from '../dialog.js';
 import Layout from '../layout.js';
+
+import Dialog from '../dialog/dialog.js';
 
 import FilterStringGroup from './filterstringgroup.js';
 import FirstResultGroup from './firstresultgroup.js';

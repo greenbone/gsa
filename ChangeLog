@@ -1,5 +1,25 @@
 2017-02-07 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/alerts/dialog.js,
+	src/html/classic/ng/src/web/credentials/dialog.js,
+	src/html/classic/ng/src/web/css/dialog.css,
+	src/html/classic/ng/src/web/dialog/css/dialog.css,
+	src/html/classic/ng/src/web/dialog.js,
+	src/html/classic/ng/src/web/dialog/dialog.js,
+	src/html/classic/ng/src/web/notes/dialog.js,
+	src/html/classic/ng/src/web/overrides/dialog.js,
+	src/html/classic/ng/src/web/portlists/dialog.js,
+	src/html/classic/ng/src/web/powerfilter/dialog.js,
+	src/html/classic/ng/src/web/schedules/dialog.js,
+	src/html/classic/ng/src/web/targets/dialog.js,
+	src/html/classic/ng/src/web/tasks/dialog.js,
+	src/html/classic/ng/src/web/wizard/advancedtaskwizard.js,
+	src/html/classic/ng/src/web/wizard/modifytaskwizard.js,
+	src/html/classic/ng/src/web/wizard/taskwizard.js: Move Dialog component into
+	web/dialog sub directory.
+
+2017-02-07 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/proptypes.js: Add additional proptypes for yesno
 	form values and id properties.
 

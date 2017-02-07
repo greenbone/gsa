@@ -28,8 +28,9 @@ import moment from 'moment-timezone';
 import {autobind} from '../../utils.js';
 import _ from '../../locale.js';
 
-import Dialog from '../dialog.js';
 import Layout from '../layout.js';
+
+import Dialog from '../dialog/dialog.js';
 
 import Select2 from '../form/select2.js';
 import Spinner from '../form/spinner.js';

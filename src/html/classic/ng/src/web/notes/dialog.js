@@ -26,10 +26,11 @@ import React from 'react';
 import _, {datetime} from '../../locale.js';
 import {extend, is_defined, is_empty} from '../../utils.js';
 
-import Dialog from '../dialog.js';
 import Layout from '../layout.js';
 import {render_options, result_cvss_risk_factor, render_nvt_name,
 } from '../render.js';
+
+import Dialog from '../dialog/dialog.js';
 
 import FormGroup from '../form/formgroup.js';
 import Text from '../form/text.js';

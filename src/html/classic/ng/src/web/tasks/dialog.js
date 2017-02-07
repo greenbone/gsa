@@ -33,8 +33,9 @@ import {OSP_SCANNER_TYPE, OPENVAS_SCANNER_TYPE, OSP_SCAN_CONFIG_TYPE,
   OPENVAS_CONFIG_FULL_AND_FAST_ID,
   SLAVE_SCANNER_TYPE} from '../../gmp/commands/scanners.js';
 
-import Dialog from '../dialog.js';
 import Layout from '../layout.js';
+
+import Dialog from '../dialog/dialog.js';
 
 import Select2 from '../form/select2.js';
 import Spinner from '../form/spinner.js';

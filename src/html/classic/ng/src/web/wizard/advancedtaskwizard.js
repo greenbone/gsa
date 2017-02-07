@@ -29,9 +29,10 @@ import _ from '../../locale.js';
 import {is_defined, select_save_id, extend} from '../../utils.js';
 
 import Img from '../img.js';
-import Dialog from '../dialog.js';
 import Layout from '../layout.js';
 import {render_options} from '../render.js';
+
+import Dialog from '../dialog/dialog.js';
 
 import Select2 from '../form/select2.js';
 import Spinner from '../form/spinner.js';

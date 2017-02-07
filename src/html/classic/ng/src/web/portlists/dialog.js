@@ -26,8 +26,9 @@ import React from 'react';
 import {extend} from '../../utils.js';
 import _ from '../../locale.js';
 
-import Dialog from '../dialog.js';
 import Layout from '../layout.js';
+
+import Dialog from '../dialog/dialog.js';
 
 import FormGroup from '../form/formgroup.js';
 import TextField from '../form/textfield.js';

@@ -27,8 +27,9 @@ import _ from '../../locale.js';
 import {extend} from '../../utils.js';
 import logger from '../../log.js';
 
-import Dialog from '../dialog.js';
 import Layout from '../layout.js';
+
+import Dialog from '../dialog/dialog.js';
 
 import Select2 from '../form/select2.js';
 import FormGroup from '../form/formgroup.js';

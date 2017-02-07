@@ -23,16 +23,16 @@
 
 import React from 'react';
 
-import {KeyCode, is_defined} from '../utils.js';
-import {translate as _} from '../locale.js';
-import logger from '../log.js';
+import {KeyCode, is_defined} from '../../utils.js';
+import _ from '../../locale.js';
+import logger from '../../log.js';
 
-import PropTypes from './proptypes.js';
-import {render_options} from './render.js';
+import PropTypes from '../proptypes.js';
+import {render_options} from '../render.js';
 
-import Button from './button.js';
+import Button from '../button.js';
 
-import PromiseFactory from '../gmp/promise.js';
+import PromiseFactory from '../../gmp/promise.js';
 
 import './css/dialog.css';
 
