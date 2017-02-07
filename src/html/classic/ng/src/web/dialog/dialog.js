@@ -262,6 +262,89 @@ Dialog.contextTypes = {
   gmp: React.PropTypes.object.isRequired,
 };
 
+export const withDialog = (Component, options = {}) => {
+
+  class DialogWrapper extends React.Component {
+
+    constructor(...args) {
+      super(...args);
+
+      this.state = {
+        data: {},
+      };
+
+      this.handleSave = this.handleSave.bind(this);
+      this.onValueChange = this.onValueChange.bind(this);
+    }
+
+    setError(error) {
+      this.dialog.showErrorMessageFromRejection(error);
+    }
+
+    show(data) {
+      if (!is_defined(data)) {
+        data = {};
+      }
+      this.setState({data});
+      this.dialog.show();
+    }
+
+    onValueChange(value, name) {
+      let {data} = this.state;
+      data[name] = value;
+      this.setState({data});
+    }
+
+    handleSave() {
+      let {data} = this.state;
+      let {onSave} = this.props;
+
+      if (onSave) {
+        let promise = onSave(data);
+        if (is_defined(promise)) {
+          promise.then(
+            () => this.dialog.close(),
+            error => this.setError(error)
+          );
+        }
+        else {
+          onSave(data);
+          this.dialog.close();
+        }
+      }
+    }
+
+    render() {
+      let {data} = this.state;
+      let {title = options.title, footer = options.footer, onClose,
+        ...other} = this.props; // eslint-disable-line no-unused-vars
+      return (
+        <Dialog
+          ref={ref => this.dialog = ref}
+          title={title}
+          footer={footer}
+          width={800}
+          onCloseClick={onClose}
+          onSaveClick={this.handleSave}>
+          <Component
+            {...other}
+            {...data}
+            onValueChange={this.onValueChange}/>
+        </Dialog>
+      );
+    }
+  };
+
+  DialogWrapper.propTypes = {
+    title: React.PropTypes.string,
+    footer: React.PropTypes.string,
+    onSave: React.PropTypes.func,
+    onClose: React.PropTypes.func,
+  };
+
+  return DialogWrapper;
+};
+
 export default Dialog;
 
 // vim: set ts=2 sw=2 tw=80:
