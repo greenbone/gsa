@@ -122,7 +122,10 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/dashboard/chart.js
      ${NG_SRC_DIR}/src/web/dashboard/commoncharts.js
      ${NG_SRC_DIR}/src/web/dfncert/charts.js
-     ${NG_SRC_DIR}/src/web/dialog.js
+     ${NG_SRC_DIR}/src/web/dialog/dialog.js
+     ${NG_SRC_DIR}/src/web/dialog/error.js
+     ${NG_SRC_DIR}/src/web/dialog/footer.js
+     ${NG_SRC_DIR}/src/web/dialog/title.js
      ${NG_SRC_DIR}/src/web/entities/footer.js
      ${NG_SRC_DIR}/src/web/entities/listpage.js
      ${NG_SRC_DIR}/src/web/entities/selection.js
@@ -234,7 +237,6 @@ set (NG_JS_SRC_FILES
 
 set (NG_CSS_SRC_FILES
      ${NG_SRC_DIR}/src/web/css/button.css
-     ${NG_SRC_DIR}/src/web/css/dialog.css
      ${NG_SRC_DIR}/src/web/css/footer.css
      ${NG_SRC_DIR}/src/web/css/footnote.css
      ${NG_SRC_DIR}/src/web/css/gsa-base.css
@@ -251,6 +253,7 @@ set (NG_CSS_SRC_FILES
      ${NG_SRC_DIR}/src/web/css/statusbar.css
      ${NG_SRC_DIR}/src/web/css/titlebar.css
      ${NG_SRC_DIR}/src/web/dashboard/css/dashboard.css
+     ${NG_SRC_DIR}/src/web/dialog/css/dialog.css
      ${NG_SRC_DIR}/src/web/entities/css/component.css
      ${NG_SRC_DIR}/src/web/entities/css/footer.css
      ${NG_SRC_DIR}/src/web/form/css/checkboxradio.css
