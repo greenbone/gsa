@@ -32,7 +32,7 @@ import Layout from '../layout.js';
 
 import StrippedTable from '../table/stripped.js';
 
-export const EntitiesTable = props => {
+export const EntitiesListTable = props => {
   let {filter, header, footer, rows, counts, emptyTitle} = props;
 
   let filterstring = filter ? filter.toFilterString() : '';
@@ -70,7 +70,7 @@ export const EntitiesTable = props => {
   );
 };
 
-EntitiesTable.propTypes = {
+EntitiesListTable.propTypes = {
   emptyTitle: React.PropTypes.string,
   filter: React.PropTypes.object,
   header: React.PropTypes.node,
@@ -83,6 +83,6 @@ EntitiesTable.propTypes = {
   onNextClick: React.PropTypes.func,
 };
 
-export default EntitiesTable;
+export default EntitiesListTable;
 
 // vim: set ts=2 sw=2 tw=80:

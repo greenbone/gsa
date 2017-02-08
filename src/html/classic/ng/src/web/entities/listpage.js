@@ -33,7 +33,7 @@ import Section from '../section.js';
 import SelectionType from '../selectiontype.js';
 import Toolbar from '../toolbar.js';
 
-import EntitiesTable from '../entities/table.js';
+import EntitiesListTable from '../entities/listtable.js';
 
 import Download from '../form/download.js';
 
@@ -415,7 +415,7 @@ export class EntitiesListPage extends React.Component {
     let {filter} = this.state;
     let counts = this.getCounts();
     return (
-      <EntitiesTable
+      <EntitiesListTable
         header={this.renderHeader()}
         footer={this.renderFooter()}
         counts={counts}

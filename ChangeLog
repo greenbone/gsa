@@ -1,5 +1,12 @@
 2017-02-08 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/entities/listpage.js,
+	src/html/classic/ng/src/web/entities/table.js,
+	src/html/classic/ng/src/web/entities/listtable.js: Rename EntitiesTable to
+	EntitiesListTable. There will be a new EntitiesTable in future.
+
+2017-02-08 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/commands/reports.js: Move importing a report
 	from ReportsCommand to a new ReportCommand. Import only handles importing one
 	report.
