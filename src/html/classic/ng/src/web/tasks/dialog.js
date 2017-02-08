@@ -41,7 +41,6 @@ import Select2 from '../form/select2.js';
 import Spinner from '../form/spinner.js';
 import FormGroup from '../form/formgroup.js';
 import Checkbox from '../form/checkbox.js';
-import Radio from '../form/radio.js';
 import YesNoRadio from '../form/yesnoradio.js';
 import Text from '../form/text.js';
 import TextField from '../form/textfield.js';
@@ -51,6 +50,9 @@ import Icon from '../icons/icon.js';
 import ScheduleDialog from '../schedules/dialog.js';
 import TargetsDialog from '../targets/dialog.js';
 import AlertDialog from '../alerts/dialog.js';
+
+import AddResultsToAssetsGroup from './addresultstoassetsgroup.js';
+import AutoDeleteReportsGroup from './autodeletereportsgroup.js';
 
 const log = logger.getLogger('web.tasks.dialog');
 
@@ -430,9 +432,10 @@ export class TaskDialog extends Dialog {
           </Layout>
         </FormGroup>
 
-        <FormGroup title={_('Add results to Assets')}>
-          <YesNoRadio value={in_assets} onChange={this.onValueChange} />
-        </FormGroup>
+
+        <AddResultsToAssetsGroup
+          inAssets={in_assets}
+          onChange={this.onValueChange}/>
 
         <Layout flex="column"
           offset="2"
@@ -467,28 +470,10 @@ export class TaskDialog extends Dialog {
             onChange={this.onValueChange}/>
         </FormGroup>
 
-        <FormGroup title={_('Auto Delete Reports')} flex="column">
-          <Radio title={_('Do not automatically delete reports')}
-            name="auto_delete" value="no"
-            onChange={this.onValueChange}
-            checked={auto_delete !== 'keep'}/>
-          <Layout flex box>
-            <Radio name="auto_delete" value="keep"
-              onChange={this.onValueChange}
-              title={_('Automatically delete oldest reports but always' +
-                ' keep newest')}
-              checked={auto_delete === 'keep'}>
-            </Radio>
-            <Spinner type="int" min="0"
-              name="auto_delete_data"
-              value={auto_delete_data}
-              disabled={auto_delete !== 'keep'}
-              onChange={this.onValueChange}/>
-            <Text>
-              {_('reports')}
-            </Text>
-          </Layout>
-        </FormGroup>
+        <AutoDeleteReportsGroup
+          autoDelete={auto_delete}
+          autoDeleteData={auto_delete_data}
+          onChange={this.onValueChange}/>
 
         <FormGroup title={_('Scanner')}>
           <Select2

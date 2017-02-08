@@ -216,6 +216,8 @@ set (NG_JS_SRC_FILES
      ${NG_SRC_DIR}/src/web/table/stripped.js
      ${NG_SRC_DIR}/src/web/table/table.js
      ${NG_SRC_DIR}/src/web/targets/dialog.js
+     ${NG_SRC_DIR}/src/web/tasks/addresultstoassetsgroup.js
+     ${NG_SRC_DIR}/src/web/tasks/autodeletereportsgroup.js
      ${NG_SRC_DIR}/src/web/tasks/charts.js
      ${NG_SRC_DIR}/src/web/tasks/containerdialog.js
      ${NG_SRC_DIR}/src/web/tasks/dialog.js
