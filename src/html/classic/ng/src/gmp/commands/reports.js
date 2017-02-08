@@ -23,7 +23,7 @@
 
 import logger from '../../log.js';
 
-import {EntitiesCommand, register_command} from '../command.js';
+import {EntitiesCommand, EntityCommand, register_command} from '../command.js';
 
 import Report from '../models/report.js';
 
@@ -37,6 +37,13 @@ export class ReportsCommand extends EntitiesCommand {
 
   getEntitiesResponse(root) {
     return root.get_reports.get_reports_response;
+  }
+}
+
+export class ReportCommand extends EntityCommand {
+
+  constructor(http) {
+    super(http, 'report', Report);
   }
 
   import(args) {
@@ -52,6 +59,7 @@ export class ReportsCommand extends EntitiesCommand {
   }
 }
 
+register_command('report', ReportCommand);
 register_command('reports', ReportsCommand);
 
 // vim: set ts=2 sw=2 tw=80:
