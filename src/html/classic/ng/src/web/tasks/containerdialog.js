@@ -26,13 +26,18 @@ import React from 'react';
 import _ from '../../locale.js';
 
 import Layout from '../layout.js';
+import PropTypes from '../proptypes.js';
 
 import {withDialog} from '../dialog/dialog.js';
 
 import FormGroup from '../form/formgroup.js';
 import TextField from '../form/textfield.js';
 
-const ContainerTaskDialog = ({onValueChange, name, comment}) => {
+import AddResultsToAssetsGroup from './addresultstoassetsgroup.js';
+import AutoDeleteReportsGroup from './autodeletereportsgroup.js';
+
+const ContainerTaskDialog = ({onValueChange, name, comment, task, in_assets,
+    auto_delete, auto_delete_data = 5}) => {
   return (
     <Layout flex="column">
       <FormGroup title={_('Name')}>
@@ -53,13 +58,30 @@ const ContainerTaskDialog = ({onValueChange, name, comment}) => {
           maxLength="400"
           onChange={onValueChange}/>
       </FormGroup>
+      {task &&
+        <AddResultsToAssetsGroup
+          inAssets={in_assets}
+          onChange={onValueChange}/>
+      }
+      {task &&
+        <AutoDeleteReportsGroup
+          autoDelete={auto_delete}
+          autoDeleteData={auto_delete_data}
+          onChange={onValueChange}/>
+      }
     </Layout>
   );
 };
 
 ContainerTaskDialog.propTypes = {
+  task: React.PropTypes.object,
   name: React.PropTypes.string,
   comment: React.PropTypes.string,
+  in_assets: PropTypes.yesno,
+  auto_delete: React.PropTypes.oneOf([
+    'keep', 'no',
+  ]),
+  auto_delete_data: PropTypes.number,
   onValueChange: React.PropTypes.func,
 };
 

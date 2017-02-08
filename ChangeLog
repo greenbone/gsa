@@ -1,5 +1,10 @@
 2017-02-08 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/tasks/containerdialog.js: Extend
+	ContainerTaskDialog to allow editing of container tasks.
+
+2017-02-08 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/tasks/autodeletereportsgroup.js: Set min value
 	for auto delete oldest reports to 1. A value of 0 is always interpreted as
 	"use default of 5". Therefore it can't be zero.
