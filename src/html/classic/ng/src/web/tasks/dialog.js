@@ -134,18 +134,23 @@ export class TaskDialog extends Dialog {
           alert_ids: map(task.alerts, alert => alert.id),
           alerts,
           alterable: task.alterable,
+          apply_overrides: task.apply_overrides,
+          auto_delete: task.auto_delete,
+          auto_delete_data: task.auto_delete_data,
           comment: task.comment,
-          config_id: task.config.id,
-          osp_config_id,
-          openvas_config_id,
+          config_id: task.isAlterable() ? task.config.id : 0,
+          in_assets: task.in_assets,
+          osp_config_id: task.isAlterable() ? osp_config_id : 0,
+          openvas_config_id: task.isAlterable() ? openvas_config_id : 0,
+          min_qod: task.min_qod,
           name: task.name,
           scan_configs: sorted_scan_configs,
-          scanner_id: task.scanner.id,
+          scanner_id: task.isAlterable() ? task.scanner.id : 0,
           scanner_type: task.scanner.type,
           scanners,
           schedule_id,
           schedules,
-          target_id: task.isContainer() ? 0 : task.target.id,
+          target_id: task.isAlterable() ?  task.target.id : 0,
           targets,
           task: task,
           visible: true,
@@ -216,10 +221,9 @@ export class TaskDialog extends Dialog {
 
     return promise.then(() => {
       this.close();
-    }, xhr => {
-      this.showErrorMessage(xhr.action_result.message);
-      throw new Error('Saving task failed. Reason: ' +
-        xhr.action_result.message);
+    }, error => {
+      this.showErrorMessageFromRejection(error);
+      throw error;
     });
   }
 
@@ -228,66 +232,21 @@ export class TaskDialog extends Dialog {
     this.loadData();
   }
 
-  onInAssetChange(value) {
-    log.debug('on inasset change', value);
-    this.setState({in_assets: value});
-  }
-
-  onApplyOverridesChange(value) {
-    log.debug('on applyoverrides change', value);
-    this.setState({apply_overrides: value});
-  }
-
-  onAlterableChange(alterable) {
-    log.debug('on alterable change', alterable);
-    this.setState({alterable});
-  }
-
-  onAutoDeleteChange(auto_delete) {
-    log.debug('on autodelete change', auto_delete);
-    this.setState({auto_delete});
-  }
-
-  onAutoDeleteDataChange(value) {
-    log.debug('on autodeletedata change', value);
-    this.setState({auto_delete_data: value});
-  }
-
   onAddTagChange(value) {
     log.debug('on tagvalue change', value);
     this.setState({add_tag: value ? 1 : 0});
-  }
-
-  onTagValueChange(tag_value) {
-    log.debug('on tagvalue change', tag_value);
-    this.setState({tag_value});
-  }
-
-  onTagNameChange(value) {
-    log.debug('on tagname change', value);
-    this.setState({tag_name: value});
-  }
-
-  onSourceIfaceChange(source_iface) {
-    log.debug('on sourceiface change', source_iface);
-    this.setState({source_iface});
   }
 
   onTargetIdChange(value) {
     let {task} = this.state;
 
     if (task) {
-      if (task.isContainer() || !task.isNew()) {
+      if (task.isContainer() || !task.isAlterable()) {
         value = 0;
       }
     }
     log.debug('on targetid change', value);
     this.setState({target_id: value});
-  }
-
-  onMinQodChange(value) {
-    log.debug('on minqod change', value);
-    this.setState({min_qod: value});
   }
 
   onScannerChange(value) {
@@ -317,44 +276,9 @@ export class TaskDialog extends Dialog {
     this.setState({config_id: value, osp_config_id: value});
   }
 
-  onScheduleChange(value) {
-    log.debug('on schedule change', value);
-    this.setState({schedule_id: value});
-  }
-
   onSchedulePeriodsChange(value) {
     log.debug('on schedule periods change', value);
     this.setState({schedule_periods: value ? 1 : 0});
-  }
-
-  onHostOrderingChange(value) {
-    log.debug('on hostordering change', value);
-    this.setState({hosts_ordering: value});
-  }
-
-  onMaxChecksChange(value) {
-    log.debug('on maxchecks change', value);
-    this.setState({max_checks: value});
-  }
-
-  onMaxHostsChange(value) {
-    log.debug('on maxhosts change', value);
-    this.setState({max_hosts: value});
-  }
-
-  onNameChange(name) {
-    log.debug('on name change', name);
-    this.setState({name});
-  }
-
-  onCommentChange(comment) {
-    log.debug('on comment change', comment);
-    this.setState({comment: comment});
-  }
-
-  onAlertIdsChange(value) {
-    log.debug('on alertids change', value);
-    this.setState({alert_ids: value});
   }
 
   onAddNewSchedule(schedule) {
@@ -431,29 +355,36 @@ export class TaskDialog extends Dialog {
 
     let alert_opts = this.renderOptions(alerts);
 
-    let change_task = task ? task.isNew() : true;
+    let change_task = task ? task.isAlterable() : true;
 
     return (
       <Layout flex="column">
 
         <FormGroup title={_('Name')}>
-          <TextField name="name"
+          <TextField
+            name="name"
             grow="1"
-            value={name} size="30"
-            onChange={this.onNameChange}
+            value={name}
+            size="30"
+            onChange={this.onValueChange}
             maxLength="80"/>
         </FormGroup>
 
         <FormGroup title={_('Comment')}>
-          <TextField name="comment" value={comment}
+          <TextField
+            name="comment"
+            value={comment}
             grow="1"
             size="30" maxLength="400"
-            onChange={this.onCommentChange}/>
+            onChange={this.onValueChange}/>
         </FormGroup>
 
         <FormGroup title={_('Scan Targets')}>
-          <Select2 name="target_id" disabled={!change_task}
-            onChange={this.onTargetIdChange} value={target_id}>
+          <Select2
+            name="target_id"
+            disabled={!change_task}
+            onChange={this.onTargetIdChange}
+            value={target_id}>
             {target_opts}
           </Select2>
           {change_task &&
@@ -467,8 +398,12 @@ export class TaskDialog extends Dialog {
 
         <FormGroup condition={capabilities.mayOp('get_alerts')}
           title={_('Alerts')}>
-          <Select2 name="alert_ids" multiple="multiple" id="alert_ids"
-            onChange={this.onAlertIdsChange} value={alert_ids}>
+          <Select2
+            name="alert_ids"
+            multiple="multiple"
+            id="alert_ids"
+            onChange={this.onValueChange}
+            value={alert_ids}>
             {alert_opts}
           </Select2>
           <Layout flex box>
@@ -479,8 +414,10 @@ export class TaskDialog extends Dialog {
 
         <FormGroup condition={capabilities.mayOp('get_schedules')}
           title={_('Schedule')}>
-          <Select2 name="schedule_id" value={schedule_id}
-            onChange={this.onScheduleChange}>
+          <Select2
+            name="schedule_id"
+            value={schedule_id}
+            onChange={this.onValueChange}>
             {schedule_opts}
           </Select2>
           <Checkbox name="schedule_periods"
@@ -494,7 +431,7 @@ export class TaskDialog extends Dialog {
         </FormGroup>
 
         <FormGroup title={_('Add results to Assets')}>
-          <YesNoRadio value={in_assets} onChange={this.onInAssetChange} />
+          <YesNoRadio value={in_assets} onChange={this.onValueChange} />
         </FormGroup>
 
         <Layout flex="column"
@@ -502,32 +439,42 @@ export class TaskDialog extends Dialog {
           className={classes('offset-container',
             in_assets === 1 ? '' : 'disabled')}>
           <FormGroup title={_('Apply Overrides')}>
-            <YesNoRadio value={apply_overrides} disabled={in_assets !== 1}
-              onChange={this.onApplyOverridesChange}/>
+            <YesNoRadio
+              name="apply_overrides"
+              value={apply_overrides}
+              disabled={in_assets !== 1}
+              onChange={this.onValueChange}/>
           </FormGroup>
 
           <FormGroup title={_('Min QoD')}>
-            <Spinner name="min_qod"
+            <Spinner
+              name="min_qod"
               value={min_qod}
               size="4"
-              onChange={this.onMinQodChange}
-              disabled={in_assets !== 1} type="float" min="0" max="100"/>
+              onChange={this.onValueChange}
+              disabled={in_assets !== 1}
+              type="int"
+              min="0" max="100"/>
             <Layout box float>%</Layout>
           </FormGroup>
         </Layout>
 
         <FormGroup title={_('Alterable Task')} condition={change_task}>
-          <YesNoRadio value={alterable} onChange={this.onAlterableChange}/>
+          <YesNoRadio
+            name="alterable"
+            value={alterable}
+            disabled={!task.isNew()}
+            onChange={this.onValueChange}/>
         </FormGroup>
 
         <FormGroup title={_('Auto Delete Reports')} flex="column">
           <Radio title={_('Do not automatically delete reports')}
             name="auto_delete" value="no"
-            onChange={this.onAutoDeleteChange}
+            onChange={this.onValueChange}
             checked={auto_delete !== 'keep'}/>
           <Layout flex box>
             <Radio name="auto_delete" value="keep"
-              onChange={this.onAutoDeleteChange}
+              onChange={this.onValueChange}
               title={_('Automatically delete oldest reports but always' +
                 ' keep newest')}
               checked={auto_delete === 'keep'}>
@@ -536,7 +483,7 @@ export class TaskDialog extends Dialog {
               name="auto_delete_data"
               value={auto_delete_data}
               disabled={auto_delete !== 'keep'}
-              onChange={this.onAutoDeleteDataChange}/>
+              onChange={this.onValueChange}/>
             <Text>
               {_('reports')}
             </Text>
@@ -544,7 +491,9 @@ export class TaskDialog extends Dialog {
         </FormGroup>
 
         <FormGroup title={_('Scanner')}>
-          <Select2 name="scanner_id" value={scanner_id}
+          <Select2
+            name="scanner_id"
+            value={scanner_id}
             disabled={!change_task}
             onChange={this.onScannerChange}>
             {scanner_opts}
@@ -564,13 +513,16 @@ export class TaskDialog extends Dialog {
                 </Select2>
               </FormGroup>
               <FormGroup titleSize="4" title={_('Network Source Interface')}>
-                <TextField name="source_iface"
-                  onChange={this.onSourceIfaceChange}
-                  value={source_iface}/>
+                <TextField
+                  name="source_iface"
+                  value={source_iface}
+                  onChange={this.onValueChange}/>
               </FormGroup>
               <FormGroup titleSize="4" title={_('Order for target hosts')}>
-                <Select2 name="hosts_ordering" value={hosts_ordering}
-                  onChange={this.onHostOrderingChange}>
+                <Select2
+                  name="hosts_ordering"
+                  value={hosts_ordering}
+                  onChange={this.onValueChange}>
                   <option value="sequential">
                     {_('Sequential')}
                   </option>
@@ -584,16 +536,22 @@ export class TaskDialog extends Dialog {
               </FormGroup>
               <FormGroup titleSize="4"
                 title={_('Maximum concurrently executed NVTs per host')}>
-                <Spinner name="max_checks" value={max_checks}
-                  min="0" size="10" maxLength="10"
-                  onChange={this.onMaxChecksChange}/>
+                <Spinner
+                  name="max_checks"
+                  value={max_checks}
+                  min="0" size="10"
+                  maxLength="10"
+                  onChange={this.onValueChange}/>
               </FormGroup>
               <FormGroup titleSize="4"
                 title={_('Maximum concurrently scanned hosts')}>
-                <Spinner name="max_hosts" value={max_hosts}
+                <Spinner
+                  name="max_hosts"
+                  value={max_hosts}
                   type="int" min="0"
-                  size="10" maxLength="10"
-                  onChange={this.onMaxHostsChange}/>
+                  size="10"
+                  maxLength="10"
+                  onChange={this.onValueChange}/>
               </FormGroup>
             </Layout>
           </Layout>
@@ -621,16 +579,19 @@ export class TaskDialog extends Dialog {
           <Checkbox name="add_tag"
             onChange={this.onAddTagChange}
             checked={add_tag === 1} title={_('Add Tag:')}/>
-          <Select2 name="tag_name" onChange={this.onTagNameChange}
+          <Select2
+            name="tag_name"
+            onChange={this.onValueChange}
             value={tag_name}>
             {tag_opts}
           </Select2>
           <Text>
             {_('with Value')}
           </Text>
-          <TextField name="tag_value"
+          <TextField
+            name="tag_value"
             value={tag_value}
-            onChange={this.onTagValueChange}/>
+            onChange={this.onValueChange}/>
         </FormGroup>
 
       </Layout>

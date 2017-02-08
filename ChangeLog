@@ -1,5 +1,12 @@
 2017-02-08 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/tasks/dialog.js: Fix and import TaskDialog:
+	Use onValueChange event handler for most form fields. Set missing
+	initialization values for editing a task. Use isAlterable instead of isNew for
+	checking if a task may be changed.
+
+2017-02-08 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/gmp/models/task.js: Change meaning of isNew method
 	to task is in state new and add isAlterable method. A task is alterable if its
 	state is new or alterable is set to 1.
