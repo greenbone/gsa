@@ -52,7 +52,9 @@ export const AutoDeleteReportsGroup = ({autoDelete, autoDeleteData,
             ' keep newest')}
           checked={autoDelete === 'keep'}>
         </Radio>
-        <Spinner type="int" min="0"
+        <Spinner
+          type="int"
+          min="1"
           name="auto_delete_data"
           value={autoDeleteData}
           disabled={autoDelete !== 'keep'}
