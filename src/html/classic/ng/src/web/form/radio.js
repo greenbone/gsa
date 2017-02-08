@@ -41,7 +41,7 @@ const RadioComponent = props => {
   return (
     <div className={className}>
       <label>
-        <input {...other} type="radio"/>
+        <input {...other} disabled={disabled} type="radio"/>
         {is_defined(title) &&
           <span>
             {title}

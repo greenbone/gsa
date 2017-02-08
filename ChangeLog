@@ -1,5 +1,10 @@
 2017-02-08 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/form/radio.js: Fix disabling of radio input
+	fields.
+
+2017-02-08 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/dialog/dialog.js: Allow to pass addional options
 	to dialog show methods. This is required to be able to change the footer and
 	the title of a dialog.
