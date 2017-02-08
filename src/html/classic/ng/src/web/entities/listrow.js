@@ -34,7 +34,7 @@ import Icon from '../icons/icon.js';
 
 import EntitySelection from './selection.js';
 
-export class EntityRow extends React.Component {
+export class EntityListRow extends React.Component {
 
   constructor(name, ...args) {
     super(...args);
@@ -260,7 +260,7 @@ export class EntityRow extends React.Component {
   }
 }
 
-EntityRow.propTypes = {
+EntityListRow.propTypes = {
   selection: React.PropTypes.string,
   onSelected: React.PropTypes.func,
   onDeselected: React.PropTypes.func,
@@ -269,6 +269,6 @@ EntityRow.propTypes = {
 };
 
 
-export default EntityRow;
+export default EntityListRow;
 
 // vim: set ts=2 sw=2 tw=80:

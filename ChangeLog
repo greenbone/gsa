@@ -1,5 +1,17 @@
 2017-02-08 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/CMakeLists.txt,
+	src/html/classic/ng/src/web/entities/row.js,
+	src/html/classic/ng/src/web/entities/listrow.js,
+	src/html/classic/ng/src/web/notes/noteslistrow.js,
+	src/html/classic/ng/src/web/overrides/overrideslistrow.js,
+	src/html/classic/ng/src/web/results/resultslistrow.js,
+	src/html/classic/ng/src/web/tasks/taskslistrow.js: Rename EntityRow to
+	EntityListRow. All Entit(y|ies)List.+ components are now considered legacy and
+	should not be used for new pages.
+
+2017-02-08 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/dialog/dialog.js: Allow to use title and footer
 	from props again.
 

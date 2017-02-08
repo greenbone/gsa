@@ -28,11 +28,11 @@ import {shorten} from '../../utils.js';
 
 import LegacyLink from '../legacylink.js';
 
-import EntityRow from '../entities/row.js';
+import EntityListRow from '../entities/listrow.js';
 
 import NoteDialog from './dialog.js';
 
-export class NotesListRow extends EntityRow {
+export class NotesListRow extends EntityListRow {
 
   constructor(props) {
     super('note', props);

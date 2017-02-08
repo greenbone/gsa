@@ -31,11 +31,11 @@ import LegacyLink from '../legacylink.js';
 import {result_cvss_risk_factor} from '../render.js';
 import SeverityBar from '../severitybar.js';
 
-import EntityRow from '../entities/row.js';
+import EntityListRow from '../entities/listrow.js';
 
 import OverrideDialog from './dialog.js';
 
-export class OverridesListRow extends EntityRow {
+export class OverridesListRow extends EntityListRow {
 
   constructor(props) {
     super('override', props);

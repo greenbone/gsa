@@ -30,9 +30,9 @@ import LegacyLink from '../legacylink.js';
 import SeverityBar from '../severitybar.js';
 import SolutionType from '../solutiontype.js';
 
-import EntityRow from '../entities/row.js';
+import EntityListRow from '../entities/listrow.js';
 
-export class ResultsListRow extends EntityRow {
+export class ResultsListRow extends EntityListRow {
 
   constructor(...args) {
     super('result', ...args);

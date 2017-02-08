@@ -31,7 +31,7 @@ import LegacyLink from '../legacylink.js';
 import SeverityBar from '../severitybar.js';
 import StatusBar from '../statusbar.js';
 
-import EntityRow from '../entities/row.js';
+import EntityListRow from '../entities/listrow.js';
 
 import Icon from '../icons/icon.js';
 
@@ -44,7 +44,7 @@ const task_status = task => {
   return task.isContainer() ? 'Container' : task.status;
 };
 
-export class TasksListRow extends EntityRow {
+export class TasksListRow extends EntityListRow {
 
   constructor(props) {
     super('task', props);
