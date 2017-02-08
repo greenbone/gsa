@@ -79,7 +79,7 @@ export class Dialog extends React.Component {
   }
 
   show(options = {}) {
-    let {title, footer} = options;
+    let {title = this.props.title, footer = this.props.footer} = options;
     this.setState({title, footer});
     this.loadData();
   }
