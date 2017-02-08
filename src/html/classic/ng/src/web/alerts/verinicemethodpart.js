@@ -36,7 +36,7 @@ import FormGroup from '../form/formgroup.js';
 import TextField from '../form/textfield.js';
 import FormPart from '../form/formpart.js';
 
-import Icon from '../icons/icon.js';
+import NewIcon from '../icons/newicon.js';
 
 function select_report_id(report_formats, report_id) {
   if (is_defined(report_id)) {
@@ -127,7 +127,7 @@ export class VeriniceMethodPart extends FormPart {
             {verinice_credential_opts}
           </Select2>
           <Layout flex box>
-            <Icon img="new.svg"
+            <NewIcon
               title={_('Create a credential')}
               onClick={() => { this.credentials_dialog.show(['up']); }}/>
           </Layout>

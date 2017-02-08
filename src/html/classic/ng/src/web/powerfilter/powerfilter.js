@@ -33,6 +33,7 @@ import {render_options} from '../render.js';
 
 import Icon from '../icons/icon.js';
 import HelpIcon from '../icons/helpicon.js';
+import NewIcon from '../icons/newicon.js';
 
 import FormGroup from '../form/formgroup.js';
 import Select2 from '../form/select2.js';
@@ -220,7 +221,7 @@ export class PowerFilter extends React.Component {
             </FormGroup>
             <FormGroup flex align={['start', 'center']}>
               {can_create ?
-                <Icon img="new.svg"
+                <NewIcon
                   title={_('Create new filter from current term')}
                   onClick={this.onCreateFilter}/> :
                     <Icon img="new_inactive.svg"

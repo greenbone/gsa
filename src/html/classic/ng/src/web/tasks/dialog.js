@@ -45,7 +45,7 @@ import YesNoRadio from '../form/yesnoradio.js';
 import Text from '../form/text.js';
 import TextField from '../form/textfield.js';
 
-import Icon from '../icons/icon.js';
+import NewIcon from '../icons/newicon.js';
 
 import ScheduleDialog from '../schedules/dialog.js';
 import TargetsDialog from '../targets/dialog.js';
@@ -391,7 +391,7 @@ export class TaskDialog extends Dialog {
           </Select2>
           {change_task &&
             <Layout flex box>
-              <Icon img="new.svg"
+              <NewIcon
                 onClick={() => this.targets_dialog.show()}
                 title={_('Create a new target')}/>
             </Layout>
@@ -409,7 +409,7 @@ export class TaskDialog extends Dialog {
             {alert_opts}
           </Select2>
           <Layout flex box>
-            <Icon title={_('Create a new alert')} img="new.svg"
+            <NewIcon title={_('Create a new alert')}
               onClick={() => {this.alert_dialog.show();}}/>
           </Layout>
         </FormGroup>
@@ -427,7 +427,7 @@ export class TaskDialog extends Dialog {
             onChange={this.onSchedulePeriodsChange}
             title={_('Once')}/>
           <Layout flex box>
-            <Icon img="new.svg" title={_('Create a new schedule')}
+            <NewIcon title={_('Create a new schedule')}
               onClick={() => { this.schedule_dialog.show(); }}/>
           </Layout>
         </FormGroup>

@@ -34,7 +34,7 @@ import Dashboard from '../dashboard/dashboard.js';
 import EntitiesListPage from '../entities/listpage.js';
 import EntitiesFooter from '../entities/footer.js';
 
-import Icon from '../icons/icon.js';
+import NewIcon from '../icons/newicon.js';
 
 import TableRow from '../table/row.js';
 import TableHead from '../table/head.js';
@@ -147,7 +147,7 @@ export class OverridesPage extends EntitiesListPage {
         {this.renderHelpIcon()}
 
         {caps.mayCreate('override') &&
-          <Icon img="new.svg" title={_('New Override')}
+          <NewIcon title={_('New Override')}
             onClick={() => { this.create_dialog.show(); }}/>
         }
       </Layout>

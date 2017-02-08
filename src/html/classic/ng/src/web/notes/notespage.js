@@ -34,7 +34,7 @@ import Dashboard from '../dashboard/dashboard.js';
 import EntitiesListPage from '../entities/listpage.js';
 import EntitiesFooter from '../entities/footer.js';
 
-import Icon from '../icons/icon.js';
+import NewIcon from '../icons/newicon.js';
 
 import TableRow from '../table/row.js';
 import TableHead from '../table/head.js';
@@ -171,7 +171,7 @@ export class NotesPage extends EntitiesListPage {
         {this.renderHelpIcon()}
 
         {caps.mayCreate('note') &&
-          <Icon img="new.svg" title={_('New Note')}
+          <NewIcon title={_('New Note')}
             onClick={() => { this.create_dialog.show(); }}/>
         }
       </Layout>

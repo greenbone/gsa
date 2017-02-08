@@ -37,7 +37,7 @@ import TextField from '../form/textfield.js';
 import TextArea from '../form/textarea.js';
 import FormPart from '../form/formpart.js';
 
-import Icon from '../icons/icon.js';
+import NewIcon from '../icons/newicon.js';
 
 export class ScpMethodPart extends FormPart {
 
@@ -94,7 +94,7 @@ export class ScpMethodPart extends FormPart {
             {scp_credential_opts}
           </Select2>
           <Layout flex box>
-            <Icon img="new.svg"
+            <NewIcon
               title={_('Create a credential')}
               onClick={() => { this.credentials_dialog.show(['up']); }}/>
           </Layout>

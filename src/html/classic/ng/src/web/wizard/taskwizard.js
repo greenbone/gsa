@@ -33,7 +33,7 @@ import Dialog from '../dialog/dialog.js';
 
 import TextField from '../form/textfield.js';
 
-import Icon from '../icons/icon.js';
+import NewIcon from '../icons/newicon.js';
 
 import './css/wizard.css';
 
@@ -134,9 +134,8 @@ export class TaskWizard extends Dialog {
           </p>
           <p>
             {_('By clicking the New Task icon')}
-            <Icon
+            <NewIcon
               title={_('New Task')}
-              img="new.svg"
               onClick={this.onNewClick}/>
             {_('you can create a new Task yourself.')}
           </p>

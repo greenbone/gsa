@@ -38,7 +38,7 @@ import YesNoRadio from '../form/yesnoradio.js';
 import Radio from '../form/radio.js';
 import Select2 from '../form/select2.js';
 
-import Icon from '../icons/icon.js';
+import NewIcon from '../icons/newicon.js';
 
 import {SSH_CREDENTIAL_TYPES, SMB_CREDENTIAL_TYPES, ESXI_CREDENTIAL_TYPES,
   SNMP_CREDENTIAL_TYPES, USERNAME_PASSWORD_CREDENTIAL_TYPE,
@@ -259,7 +259,7 @@ export class TargetDialog extends Dialog {
               {port_list_opts}
             </Select2>
             <Layout box flex>
-              <Icon img="new.svg"
+              <NewIcon
                 title={_('Create a new port list')}
                 onClick={() => { this.portlist_dialog.show(); }}/>
             </Layout>
@@ -306,7 +306,7 @@ export class TargetDialog extends Dialog {
               name="port" value={port}
               onChange={this.onValueChange}/>
             <Layout box flex>
-              <Icon img="new.svg"
+              <NewIcon
                 onClick={() => this.showCredentialsDialog('ssh')}
                 title={_('Create a new credential')}/>
             </Layout>
@@ -322,7 +322,7 @@ export class TargetDialog extends Dialog {
               {smb_credential_opts}
             </Select2>
             <Layout box flex>
-              <Icon img="new.svg"
+              <NewIcon
                 onClick={() => this.showCredentialsDialog('smb')}
                 title={_('Create a new credential')}/>
             </Layout>
@@ -338,7 +338,7 @@ export class TargetDialog extends Dialog {
               {esxi_credential_opts}
             </Select2>
             <Layout box flex>
-              <Icon img="new.svg"
+              <NewIcon
                 onClick={() => this.showCredentialsDialog('esxi')}
                 title={_('Create a new credential')}/>
             </Layout>
@@ -354,7 +354,7 @@ export class TargetDialog extends Dialog {
               {snmp_credential_opts}
             </Select2>
             <Layout box flex>
-              <Icon img="new.svg"
+              <NewIcon
                 onClick={() => this.showCredentialsDialog('snmp')}
                 title={_('Create a new credential')}/>
             </Layout>
