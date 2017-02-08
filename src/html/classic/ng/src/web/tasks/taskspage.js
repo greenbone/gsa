@@ -65,19 +65,35 @@ export class TasksPage extends EntitiesListPage {
       filter_filter: TASKS_FILTER_FILTER,
     });
 
-    this.handleCreateContainerTask = this.handleCreateContainerTask.bind(this);
+    this.handleSaveContainerTask = this.handleSaveContainerTask.bind(this);
     this.showContainerTaskDialog = this.showContainerTaskDialog.bind(this);
   }
 
-  handleCreateContainerTask(data) {
+  handleSaveContainerTask(data) {
     let {gmp} = this.context;
-    return gmp.task.createContainer(data).then(() => this.reload());
+    let promise;
+
+    if (is_defined(data.task)) {
+      promise = gmp.task.saveContainer(data);
+    }
+    else {
+      promise = gmp.task.createContainer(data);
+    }
+
+    return promise.then(() => this.reload());
   }
 
-  showContainerTaskDialog() {
-    this.create_container_dialog.show({
-      name: _('unnamed'),
-      comment: '',
+  showContainerTaskDialog(task) {
+    this.container_dialog.show({
+      task,
+      name: task ? task.name : _('unnamed'),
+      comment: task ? task.comment : '',
+      id: task ? task.id : undefined,
+      in_assets: task ? task.in_assets : undefined,
+      auto_delete: task ? task.auto_delete : undefined,
+      auto_delete_data: task ? task.auto_delete_data : undefined,
+    }, {
+      title: task ? _('Edit Container Task') : _('New Container Task'),
     });
   }
 
@@ -154,7 +170,8 @@ export class TasksPage extends EntitiesListPage {
         onSelected={this.onSelect}
         onDeselected={this.onDeselect}
         onDelete={this.reload}
-        onCloned={this.reload}/>
+        onCloned={this.reload}
+        onEditContainerTask={this.showContainerTaskDialog}/>
     );
   }
 
@@ -182,9 +199,9 @@ export class TasksPage extends EntitiesListPage {
         }
         {caps.mayCreate('task') &&
           <ContainerTaskDialog
-            ref={ref => this.create_container_dialog = ref}
+            ref={ref => this.container_dialog = ref}
             title={_('Create Container Task')}
-            onSave={this.handleCreateContainerTask}/>
+            onSave={this.handleSaveContainerTask}/>
         }
 
         <TaskFilterDialog

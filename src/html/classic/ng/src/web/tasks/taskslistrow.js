@@ -214,6 +214,19 @@ export class TasksListRow extends EntityRow {
     );
   }
 
+  handleEdit() {
+    let task = this.getEntity();
+    if (task.isContainer()) {
+      let {onEditContainerTask} = this.props;
+      if (onEditContainerTask) {
+        onEditContainerTask(task);
+      }
+    }
+    else {
+      this.edit_dialog.show();
+    }
+  }
+
   renderTableButtons() {
     let task = this.getEntity();
     return (
@@ -349,6 +362,8 @@ TasksListRow.contextTypes = {
 
 TasksListRow.propTypes = {
   task: React.PropTypes.object.isRequired,
+  onEditContainerTask: React.PropTypes.func,
+  onSaveContainerTask: React.PropTypes.func,
 };
 
 export default TasksListRow;
