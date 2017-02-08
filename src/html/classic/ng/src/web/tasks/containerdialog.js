@@ -86,6 +86,8 @@ ContainerTaskDialog.propTypes = {
 };
 
 
-export default withDialog(ContainerTaskDialog);
+export default withDialog(ContainerTaskDialog, {
+  title: _('Create Container Task'),
+});
 
 // vim: set ts=2 sw=2 tw=80:

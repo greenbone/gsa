@@ -200,7 +200,6 @@ export class TasksPage extends EntitiesListPage {
         {caps.mayCreate('task') &&
           <ContainerTaskDialog
             ref={ref => this.container_dialog = ref}
-            title={_('Create Container Task')}
             onSave={this.handleSaveContainerTask}/>
         }
 

@@ -1,5 +1,11 @@
 2017-02-08 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/tasks/containerdialog.js,
+	src/html/classic/ng/src/web/tasks/taskspage.js: Set default title on
+	ContainerTaskDialog directly.
+
+2017-02-08 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/web/entities/row.js,
 	src/html/classic/ng/src/web/entities/listrow.js,
