@@ -144,10 +144,11 @@ export class Task extends Model {
             elem.min_qod = parse_int(pref.value);
             break;
           case 'auto_delete':
-            elem.auto_delete = pref.value;
+            elem.auto_delete = pref.value === 'keep' ? 'keep' : 'no';
             break;
           case 'auto_delete_data':
-            elem.auto_delete_data = pref.value;
+            elem.auto_delete_data = pref.value === '0' ?
+              5 : parse_int(pref.value);
             break;
           default:
             break;

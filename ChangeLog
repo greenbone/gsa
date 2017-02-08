@@ -1,5 +1,10 @@
 2017-02-08 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/gmp/models/task.js: Use same meaning for task auto_delete and
+	auto_delete_data as in the omp.xsl file.
+
+2017-02-08 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/menu/menuentry.js: Don't pass event object to
 	MenuEntry onClick event handler.
 
