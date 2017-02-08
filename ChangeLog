@@ -1,3 +1,11 @@
+2017-02-08 Björn Ricks <bjoern.ricks@greenbone.net>
+
+	* src/html/classic/ng/src/gmp/models/task.js: Change meaning of isNew method
+	to task is in state new and add isAlterable method. A task is alterable if its
+	state is new or alterable is set to 1.
+	Also parse params for apply_overrides, min_qod, in_assets, auto_delete and
+	auto_delete_data.
+
 2017-02-07 Björn Ricks <bjoern.ricks@greenbone.net>
 
 	* src/html/classic/ng/src/web/tasks/taskslistrow.js: Don't display start icon

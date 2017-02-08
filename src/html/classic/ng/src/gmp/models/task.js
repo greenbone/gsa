@@ -42,6 +42,10 @@ function parse_progress(value) {
   return '0';
 }
 
+function parse_yesno(value) {
+  return value === 'yes' ? 1 : 0;
+}
+
 export class Task extends Model {
 
   isActive() {
@@ -64,7 +68,11 @@ export class Task extends Model {
   }
 
   isNew() {
-    return this.status === 'New' || this.alterable !== 0;
+    return this.status === 'New';
+  }
+
+  isAlterable() {
+    return this.isNew() || this.alterable !== 0;
   }
 
   isContainer() {
@@ -122,6 +130,30 @@ export class Task extends Model {
     elem.schedule_periods = parse_int(elem.schedule_periods);
 
     elem.progress = parse_progress(elem.progress);
+
+    if (elem.preferences && is_array(elem.preferences.preference)) {
+      for (const pref of elem.preferences.preference) {
+        switch (pref.scanner_name) {
+          case 'in_assets':
+            elem.in_assets = parse_yesno(pref.value);
+            break;
+          case 'assets_apply_overrides':
+            elem.apply_overrides = parse_yesno(pref.value);
+            break;
+          case 'assets_min_qod':
+            elem.min_qod = parse_int(pref.value);
+            break;
+          case 'auto_delete':
+            elem.auto_delete = pref.value;
+            break;
+          case 'auto_delete_data':
+            elem.auto_delete_data = pref.value;
+            break;
+          default:
+            break;
+        }
+      }
+    }
 
     return elem;
   }
