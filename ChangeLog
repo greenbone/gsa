@@ -1,5 +1,11 @@
 2017-02-08 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/commands/tasks.js: Set comment to empty string
+	per default for createContainer method in TaskCommand. Also return the created
+	Task model from the method's promise.
+
+2017-02-08 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/web/alerts/scpmethodpart.js,
 	src/html/classic/ng/src/web/alerts/verinicemethodpart.js,

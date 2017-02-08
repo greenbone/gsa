@@ -179,13 +179,14 @@ export class TaskCommand extends EntityCommand {
   }
 
   createContainer(args) {
-    let {name, comment} = args;
+    let {name, comment = ''} = args;
     log.debug('Creating container task', args);
     return this.httpPost({
       cmd: 'create_container_task',
+      next: 'get_task',
       name,
       comment,
-    });
+    }).then(root => this.getModelFromResponse(root));
   }
 
   save(args) {
