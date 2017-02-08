@@ -30,6 +30,16 @@ import {is_defined, is_array} from '../../utils.js';
 
 import './css/menuentry.css';
 
+// don't pass event to handler
+const handler_wrapper = handler => {
+  if (handler) {
+    return () => {
+      handler();
+    };
+  }
+  return undefined;
+};
+
 export const MenuEntry = (props, context) => {
   let {to, title, legacy, section, onClick, caps, ...other} = props;
   let entry;
@@ -61,7 +71,7 @@ export const MenuEntry = (props, context) => {
     entry = title;
   }
   return (
-    <li className={css} onClick={onClick}>{entry}</li>
+    <li className={css} onClick={handler_wrapper(onClick)}>{entry}</li>
   );
 };
 
