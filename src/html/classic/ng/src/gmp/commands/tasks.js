@@ -218,6 +218,21 @@ export class TaskCommand extends EntityCommand {
     });
   }
 
+  saveContainer(args) {
+    let {name, comment = '', in_assets = '1', auto_delete = 'no',
+      auto_delete_data, id} = args;
+    log.debug('Saving container task', args);
+    return this.httpPost({
+      cmd: 'save_container_task',
+      name,
+      comment,
+      in_assets,
+      auto_delete,
+      auto_delete_data,
+      task_id: id,
+    });
+  }
+
   getElementFromResponse(root) {
     return root.get_task.commands_response.get_tasks_response.task;
   }
