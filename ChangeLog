@@ -1,5 +1,11 @@
 2017-02-08 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/web/dialog/dialog.js: Allow to pass addional options
+	to dialog show methods. This is required to be able to change the footer and
+	the title of a dialog.
+
+2017-02-08 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/CMakeLists.txt,
 	src/html/classic/ng/src/web/tasks/addresultstoassetsgroup.js,
 	src/html/classic/ng/src/web/tasks/autodeletereportsgroup.js,

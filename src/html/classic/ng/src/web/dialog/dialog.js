@@ -78,7 +78,9 @@ export class Dialog extends React.Component {
     this.setState({visible: true, error: undefined});
   }
 
-  show() {
+  show(options = {}) {
+    let {title, footer} = options;
+    this.setState({title, footer});
     this.loadData();
   }
 
@@ -281,12 +283,12 @@ export const withDialog = (Component, options = {}) => {
       this.dialog.showErrorMessageFromRejection(error);
     }
 
-    show(data) {
+    show(data, opts) {
       if (!is_defined(data)) {
         data = {};
       }
       this.setState({data});
-      this.dialog.show();
+      this.dialog.show(opts);
     }
 
     onValueChange(value, name) {
@@ -316,8 +318,8 @@ export const withDialog = (Component, options = {}) => {
 
     render() {
       let {data} = this.state;
-      let {title = options.title, footer = options.footer, onClose,
-        ...other} = this.props; // eslint-disable-line no-unused-vars
+      let {onClose, title = options.title, footer = options.footer,
+        ...other} = this.props;
       return (
         <Dialog
           ref={ref => this.dialog = ref}
