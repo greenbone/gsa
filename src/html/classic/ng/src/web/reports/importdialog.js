@@ -40,7 +40,7 @@ import YesNoRadio from '../form/yesnoradio.js';
 import NewIcon from '../icons/newicon.js';
 
 const ImportDialog = props => {
-  let {onValueChange, tasks, in_assets = 1, task_id,
+  let {onValueChange, tasks, in_assets = 1, task_id, newContainerTask = true,
     onNewContainerTaskClick} = props;
 
   return (
@@ -56,11 +56,13 @@ const ImportDialog = props => {
           onChange={onValueChange}>
           {render_options(tasks)}
         </Select2>
-        <Layout flex box>
-          <NewIcon
-            title={_('Create new Container Task')}
-            onClick={onNewContainerTaskClick}/>
-        </Layout>
+        {newContainerTask &&
+          <Layout flex box>
+            <NewIcon
+              title={_('Create new Container Task')}
+              onClick={onNewContainerTaskClick}/>
+          </Layout>
+        }
       </FormGroup>
       <FormGroup title={_('Add to Assets')}>
         <Layout flex="column">
@@ -81,6 +83,7 @@ ImportDialog.propTypes = {
   in_assets: PropTypes.yesno,
   task_id: PropTypes.id,
   tasks: React.PropTypes.array,
+  newContainerTask: React.PropTypes.bool,
   onValueChange: React.PropTypes.func,
   onNewContainerTaskClick: React.PropTypes.func,
 };
