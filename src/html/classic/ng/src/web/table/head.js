@@ -25,20 +25,30 @@ import React from 'react';
 
 import {is_defined} from '../../utils.js';
 
+import Sort from '../sortby.js';
+
 export const TableHead = props => {
-  let {width, ...other} = props;
+  let {width, sortby, onSortChange, children, ...other} = props;
   let style = {};
 
   if (is_defined(width)) {
     style.width = width;
   }
   return (
-    <th style={style} {...other}></th>
+    <th style={style} {...other}>
+      {sortby ?
+        <Sort by={sortby} onClick={onSortChange}>
+          {children}
+        </Sort> : children
+      }
+    </th>
   );
 };
 
 TableHead.propTypes = {
   width: React.PropTypes.string,
+  sortby: React.PropTypes.string,
+  onSortChange: React.PropTypes.func,
 };
 
 export default TableHead;
