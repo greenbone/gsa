@@ -758,6 +758,12 @@ export class Filter extends Model {
 
 }
 
+export const TASKS_FILTER_FILTER = Filter.fromString('type=task');
+export const RESULTS_FILTER_FILTER = Filter.fromString('type=result');
+export const NOTES_FILTER_FILTER = Filter.fromString('type=notes');
+export const OVERRIDES_FILTER_FILTER = Filter.fromString('type=overrides');
+export const REPORTS_FILTER_FILTER = Filter.fromString('type=reports');
+
 export default Filter;
 
 // vim: set ts=2 sw=2 tw=80:

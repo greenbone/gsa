@@ -45,7 +45,7 @@ import ResultCharts from './charts.js';
 import ResultsFilterDialog from './filterdialog.js';
 import ResultsListRow from './resultslistrow.js';
 
-import {RESULTS_FILTER_FILTER} from '../../gmp/commands/filters.js';
+import {RESULTS_FILTER_FILTER} from '../../gmp/models/filter.js';
 
 export class ResultsPage extends EntitiesListPage {
 

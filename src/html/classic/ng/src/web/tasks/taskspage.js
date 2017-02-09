@@ -51,7 +51,7 @@ import TaskFilterDialog from './filterdialog.js';
 import TaskCharts from './charts.js';
 import TasksListRow from './taskslistrow.js';
 
-import {TASKS_FILTER_FILTER} from '../../gmp/commands/filters.js';
+import {TASKS_FILTER_FILTER} from '../../gmp/models/filter.js';
 
 export class TasksPage extends EntitiesListPage {
 

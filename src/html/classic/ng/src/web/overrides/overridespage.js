@@ -44,7 +44,7 @@ import OverridesCharts from './charts.js';
 import OverrideDialog from './dialog.js';
 import OverridesListRow from './overrideslistrow.js';
 
-import {OVERRIDES_FILTER_FILTER} from '../../gmp/commands/filters.js';
+import {OVERRIDES_FILTER_FILTER} from '../../gmp/models/filter.js';
 
 const SORT_FIELDS = [
   ['text', _('Text')],

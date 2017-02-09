@@ -1,5 +1,15 @@
 2017-02-09 Björn Ricks <bjoern.ricks@greenbone.net>
 
+	* src/html/classic/ng/src/gmp/commands/filters.js,
+	src/html/classic/ng/src/gmp/models/filter.js,
+	src/html/classic/ng/src/web/notes/notespage.js,
+	src/html/classic/ng/src/web/overrides/overridespage.js,
+	src/html/classic/ng/src/web/results/resultspage.js,
+	src/html/classic/ng/src/web/tasks/taskspage.js: Move filters filter from
+	filters command to model module. Also add a filter filter for reports.
+
+2017-02-09 Björn Ricks <bjoern.ricks@greenbone.net>
+
 	* src/html/classic/ng/src/web/table/head.js: Allow to disable sort in
 	TableHead components without complaining about wrong property type.
 

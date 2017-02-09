@@ -44,7 +44,7 @@ import NotesCharts from './charts.js';
 import NotesListRow from './noteslistrow.js';
 import NoteDialog from './dialog.js';
 
-import {NOTES_FILTER_FILTER} from '../../gmp/commands/filters.js';
+import {NOTES_FILTER_FILTER} from '../../gmp/models/filter.js';
 
 const SORT_FIELDS = [
   ['text', _('Text')],

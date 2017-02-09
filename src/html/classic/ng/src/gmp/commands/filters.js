@@ -28,11 +28,6 @@ import {EntitiesCommand, EntityCommand, register_command} from '../command.js';
 
 import Filter from '../models/filter.js';
 
-export const TASKS_FILTER_FILTER = Filter.fromString('type=task');
-export const RESULTS_FILTER_FILTER = Filter.fromString('type=result');
-export const NOTES_FILTER_FILTER = Filter.fromString('type=notes');
-export const OVERRIDES_FILTER_FITLER = Filter.fromString('type=overrides');
-
 const log = logger.getLogger('gmp.commands.filters');
 
 export class FilterCommand extends EntityCommand {
